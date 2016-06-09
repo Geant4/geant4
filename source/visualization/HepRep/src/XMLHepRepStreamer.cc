@@ -193,11 +193,11 @@ bool XMLHepRepStreamer::write(HepRepPoint* point) {
     return true;
 }
 
-bool XMLHepRepStreamer::write(HepRepAttribute* attribute) {
+bool XMLHepRepStreamer::write(HepRepAttribute*) {
     return true;
 }
 
-bool XMLHepRepStreamer::write(HepRepDefinition* definition) {
+bool XMLHepRepStreamer::write(HepRepDefinition*) {
     return true;
 }
 

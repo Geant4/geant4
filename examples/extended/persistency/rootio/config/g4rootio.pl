@@ -11,9 +11,9 @@
 #  and type "help".
 #
 #    % g4rootio.pl
-#    fadscpp> help
-#    fadscpp> set help
-#    fadscpp> quit
+#    g4rootio> help
+#    g4rootio> set help
+#    g4rootio> quit
 #
 #  To run in batchmode, specify the name of the file which contains
 #  the *.rootio file information.
@@ -2002,7 +2002,7 @@ sub fads_create_io_header_file{
   print(OUT " : public ${array_io_base}\n");
   print(OUT "{\n");
   print(OUT "    public:\n");
-  print(OUT "      ${class_io}(G4std::string detName, G4std::string colName);\n");
+  print(OUT "      ${class_io}(std::string detName, std::string colName);\n");
   print(OUT "      ~${class_io}();\n");
   print(OUT "\n");
   print(OUT "    public:\n");
@@ -2010,8 +2010,8 @@ sub fads_create_io_header_file{
   print(OUT "      bool Retrieve( ${collection_base_class}*& hc);\n");
   print(OUT "\n");
   print(OUT "    private:\n");
-  print(OUT "      G4std::string       f_branchName;\n");
-  print(OUT "      G4std::string       f_branchDesc;\n");
+  print(OUT "      std::string       f_branchName;\n");
+  print(OUT "      std::string       f_branchDesc;\n");
   print(OUT "      G4RootTransManager* f_transMan;\n");
   print(OUT "      ${class_array}* f_hc;\n");
   print(OUT "      int f_nev;\n");
@@ -2047,7 +2047,7 @@ sub fads_create_io_source_file{
   print(OUT "\n");
   print(OUT "static ${catalog}<${class_io}> ${entry_object}(\"${sdet_name}\");\n");
   print(OUT "\n");
-  print(OUT "${class_io}::${class_io}(G4std::string detName, G4std::string colName)\n");
+  print(OUT "${class_io}::${class_io}(std::string detName, std::string colName)\n");
   print(OUT " : ${array_io_base}(detName, colName), f_nev(0)\n");
   print(OUT "{\n");
   print(OUT "  f_branchName = colName + \".\";\n");

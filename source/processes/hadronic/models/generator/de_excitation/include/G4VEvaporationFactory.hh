@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationFactory.hh,v 1.3 2002/12/12 19:17:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VEvaporationFactory.hh,v 1.5 2003/06/16 17:06:12 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -33,7 +33,7 @@
 
 
 #include "G4VEvaporationChannel.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4VEvaporationFactory
 {
@@ -42,22 +42,22 @@ public:
   virtual ~G4VEvaporationFactory();
 
 private:
-  G4VEvaporationFactory(const G4VEvaporationFactory & val) {};
+  G4VEvaporationFactory(const G4VEvaporationFactory & ) {};
   const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val);
   G4bool operator==(const G4VEvaporationFactory & val) const;
   G4bool operator!=(const G4VEvaporationFactory & val) const;
 
 public:
   
-  G4std::vector<G4VEvaporationChannel*> * GetChannel();
+  std::vector<G4VEvaporationChannel*> * GetChannel();
 
 protected:
-  virtual G4std::vector<G4VEvaporationChannel*> * CreateChannel() = 0;
+  virtual std::vector<G4VEvaporationChannel*> * CreateChannel() = 0;
 
 
 
 private:
-  G4std::vector<G4VEvaporationChannel*> * _channel;
+  std::vector<G4VEvaporationChannel*> * _channel;
 
   struct DeleteFragment 
   {

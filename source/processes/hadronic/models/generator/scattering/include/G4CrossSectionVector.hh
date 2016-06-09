@@ -40,10 +40,10 @@
 #define G4CROSSSECTIONVECTOR_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4CrossSectionSourcePtr.hh"
 
-typedef G4std::vector<G4CrossSectionSourcePtr> G4CrossSectionVector;
+typedef std::vector<G4CrossSectionSourcePtr> G4CrossSectionVector;
 
 #endif
 

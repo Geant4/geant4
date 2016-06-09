@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.7 2002/02/24 01:47:55 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.9 2003/06/16 17:13:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -38,8 +38,6 @@
 // other OpenGL's, as far as I'm aware.   John Allison 18/9/96.
 #define CENTERLINE_CLPP  /* CenterLine C++ workaround: */
 // Also seems to be required for HP's CC and AIX xlC, at least.
-
-#include <GL/gl.h>
 
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
@@ -68,7 +66,7 @@ G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
   fSceneCount--;
 }
 
-#include "g4std/iomanip"
+#include <iomanip>
 
 void G4OpenGLImmediateSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
@@ -81,7 +79,7 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives
   G4cout << "G4OpenGLTransform3D matrix:";
   for (int i = 0; i < 16; i++) {
     if ((i % 4) == 0) G4cout << '\n';
-    G4cout << G4std::setw (15) << m[i];
+    G4cout << std::setw (15) << m[i];
   }
   G4cout << G4endl;
   *****************************************/

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Mag_EqRhs.cc,v 1.8 2003/04/02 08:53:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //  This is the standard right-hand side for equation of motion  
 //    in a pure Magnetic Field .

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SampleResonance.hh,v 1.5 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SampleResonance.hh,v 1.6 2003/06/16 17:09:40 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4SampleResonance_h
@@ -37,7 +37,7 @@
 // ------------------------------------------------------------
 
 #include "globals.hh"
-#include "g4std/map"
+#include <map>
 #include "G4ParticleDefinition.hh"
 
 
@@ -65,8 +65,8 @@ private:
 
 public:  
 
-  typedef G4std::map<const G4ParticleDefinition*, G4double, G4std::less<const G4ParticleDefinition*> >::const_iterator minMassMapIterator; 
-  typedef G4std::map<const G4ParticleDefinition*, G4double, G4std::less<const G4ParticleDefinition*> > minMassMapType;
+  typedef std::map<const G4ParticleDefinition*, G4double, std::less<const G4ParticleDefinition*> >::const_iterator minMassMapIterator; 
+  typedef std::map<const G4ParticleDefinition*, G4double, std::less<const G4ParticleDefinition*> > minMassMapType;
 
 private:
 

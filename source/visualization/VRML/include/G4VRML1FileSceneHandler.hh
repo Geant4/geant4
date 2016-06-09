@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1FileSceneHandler.hh,v 1.12 2002/12/11 15:57:53 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VRML1FileSceneHandler.hh,v 1.13 2003/06/16 17:13:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4VRML1FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
@@ -30,7 +30,7 @@
 #ifndef G4VRML1FILE_SCENE_HANDLER_HH
 #define G4VRML1FILE_SCENE_HANDLER_HH
 
-#include "g4std/fstream"
+#include <fstream>
 
 #include "globals.hh"
 #include "G4LogicalVolume.hh"
@@ -120,7 +120,7 @@ private:
 	G4String fCurrentDEF;
 
 	G4VRML1File& fSystem;	// Graphics system for this scene.
-	G4std::ofstream     fDest ;
+	std::ofstream     fDest ;
 	G4bool       fFlagDestOpen ;
 
 	G4int        fMaxFileNum   ;	

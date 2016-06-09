@@ -30,7 +30,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4VAngularDistribution.hh"
 #include "G4KineticTrackVector.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4XDeltaDeltaTable.hh"
 #include "G4ConcreteNNTwoBodyResonance.hh"
 

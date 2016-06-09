@@ -46,7 +46,7 @@
 #ifndef G4LossTableBuilder_h
 #define G4LossTableBuilder_h 1
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
 
@@ -60,7 +60,7 @@ public:
 
   ~G4LossTableBuilder() {};
 
-  G4PhysicsTable* BuildDEDXTable(const G4std::vector<G4PhysicsTable*>&);
+  G4PhysicsTable* BuildDEDXTable(const std::vector<G4PhysicsTable*>&);
 
   G4PhysicsTable* BuildRangeTable(const G4PhysicsTable* dedxTable);
 

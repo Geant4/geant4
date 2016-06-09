@@ -285,4 +285,4 @@ make clean とすると他の一時的ファイルとともに消去される。
 
 手動で実行する場合は
 
-% $G4PEX_DIR/config/fadsrootio.pl rootio/Pers01CalorHit.rootio
+% $G4PEX_DIR/config/g4rootio.pl rootio/Pers01CalorHit.rootio

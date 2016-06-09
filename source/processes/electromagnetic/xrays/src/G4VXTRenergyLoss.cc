@@ -21,8 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.8 2003/03/21 08:01:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+
+// $Id: G4VXTRenergyLoss.cc,v 1.11 2003/06/20 15:10:20 grichine Exp $
+// GEANT4 tag $Name: geant4-05-02 $
+//
+// History:
+// 2001-2002 R&D by V.Grichine
+// 19.06.03 V. Grichine, modifications in BuildTable for the integration 
+//                       in respect of angle: range is increased, accuracy is
+//                       improved
 //
 
 #include "G4Timer.hh"
@@ -65,7 +72,7 @@ G4double G4VXTRenergyLoss::fCofTR     = fine_structure_const/pi ;
 //
 // Constructor, destructor
 
-G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope, 
+G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 				   G4Material* foilMat,G4Material* gasMat,
                                     G4double a, G4double b,
                                     G4int n,const G4String& processName) :
@@ -84,7 +91,7 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fPlateThick = a ;
   fGasThick   = b ;
 
-  fTotalDist  = fPlateNumber*(fPlateThick+fGasThick) ;  
+  fTotalDist  = fPlateNumber*(fPlateThick+fGasThick) ;
   G4cout<<"total radiator thickness = "<<fTotalDist/cm<<" cm"<<G4endl ;
 
   // index of plate material
@@ -131,7 +138,7 @@ G4VXTRenergyLoss::~G4VXTRenergyLoss()
    {
      delete[] fPlatePhotoAbsCof[i] ;
    }
-   delete[] fPlatePhotoAbsCof ; 
+   delete[] fPlatePhotoAbsCof ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -141,7 +148,7 @@ G4VXTRenergyLoss::~G4VXTRenergyLoss()
 
 G4bool G4VXTRenergyLoss::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return  ( particle.GetPDGCharge() != 0.0 ) ; 
+  return  ( particle.GetPDGCharge() != 0.0 ) ;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -149,8 +156,8 @@ G4bool G4VXTRenergyLoss::IsApplicable(const G4ParticleDefinition& particle)
 // GetContinuousStepLimit
 //
 
-G4double 
-G4VXTRenergyLoss::GetContinuousStepLimit(const G4Track& aTrack,
+G4double
+G4VXTRenergyLoss::GetContinuousStepLimit(const G4Track& ,
 				         G4double  ,
 				         G4double  ,
                                          G4double& )
@@ -164,7 +171,7 @@ G4VXTRenergyLoss::GetContinuousStepLimit(const G4Track& aTrack,
 //
 // Build integral energy distribution of XTR photons
 
-void G4VXTRenergyLoss::BuildTable() 
+void G4VXTRenergyLoss::BuildTable()
 {
   G4int iTkin, iTR, iPlace ;
   G4double radiatorCof = 1.0 ;           // for tuning of XTR yield
@@ -196,21 +203,22 @@ void G4VXTRenergyLoss::BuildTable()
 
      fMaxThetaTR = 25.0/(fGamma*fGamma) ;  // theta^2
 
-     fTheMinAngle = 1.0e-6 ; // was 5.e-6, e-5, e-4
+     fTheMinAngle = 1.0e-3 ; // was 5.e-6, e-6 !!!, e-5, e-4
  
      if( fMaxThetaTR > fTheMaxAngle )    fMaxThetaTR = fTheMaxAngle ; 
      else
      {
        if( fMaxThetaTR < fTheMinAngle )  fMaxThetaTR = fTheMinAngle ;
      }
-
-     G4PhysicsLinearVector* angleVector = new G4PhysicsLinearVector(        0.0,
-                                                                    fMaxThetaTR,
-                                                                    fBinTR      ) ;
+G4PhysicsLinearVector* angleVector = new G4PhysicsLinearVector(0.0,
+                                                               fMaxThetaTR,
+                                                               fBinTR      );
 
      G4double energySum = 0.0 ;
      G4double angleSum  = 0.0 ;
-     G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral ;
+
+G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral;
+
      energyVector->PutValue(fBinTR-1,energySum) ;
      angleVector->PutValue(fBinTR-1,angleSum)   ;
 
@@ -499,11 +507,13 @@ G4double G4VXTRenergyLoss::SpectralAngleXTRdEdx(G4double varAngle)
 G4double G4VXTRenergyLoss::SpectralXTRdEdx(G4double energy)
 {
   fEnergy = energy ;
-  G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral ;
+G4Integrator<G4VXTRenergyLoss,G4double(G4VXTRenergyLoss::*)(G4double)> integral ;
   return integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
                              0.0,0.3*fMaxThetaTR) +
          integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
-	                     0.3*fMaxThetaTR,fMaxThetaTR) ;
+                             0.3*fMaxThetaTR,0.6*fMaxThetaTR) +         
+         integral.Legendre96(this,&G4VXTRenergyLoss::SpectralAngleXTRdEdx,
+	                     0.6*fMaxThetaTR,fMaxThetaTR) ;
 } 
  
 //////////////////////////////////////////////////////////////////////////
@@ -795,8 +805,8 @@ G4double G4VXTRenergyLoss::GetPlateZmuProduct( G4double omega ,
 
 void G4VXTRenergyLoss::GetPlateZmuProduct() 
 {
-  G4std::ofstream outPlate("plateZmu.dat", G4std::ios::out ) ;
-  outPlate.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outPlate("plateZmu.dat", std::ios::out ) ;
+  outPlate.setf( std::ios::scientific, std::ios::floatfield );
 
   G4int i ;
   G4double omega, varAngle, gamma ;
@@ -830,8 +840,8 @@ G4double G4VXTRenergyLoss::GetGasZmuProduct( G4double omega ,
 
 void G4VXTRenergyLoss::GetGasZmuProduct() 
 {
-  G4std::ofstream outGas("gasZmu.dat", G4std::ios::out ) ;
-  outGas.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outGas("gasZmu.dat", std::ios::out ) ;
+  outGas.setf( std::ios::scientific, std::ios::floatfield );
   G4int i ;
   G4double omega, varAngle, gamma ;
   gamma = 10000. ;
@@ -933,11 +943,11 @@ void G4VXTRenergyLoss::GetNumberOfPhotons()
   G4int iTkin ;
   G4double gamma, numberE ;
 
-  G4std::ofstream outEn("numberE.dat", G4std::ios::out ) ;
-  outEn.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outEn("numberE.dat", std::ios::out ) ;
+  outEn.setf( std::ios::scientific, std::ios::floatfield );
 
-  G4std::ofstream outAng("numberAng.dat", G4std::ios::out ) ;
-  outAng.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outAng("numberAng.dat", std::ios::out ) ;
+  outAng.setf( std::ios::scientific, std::ios::floatfield );
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
   {

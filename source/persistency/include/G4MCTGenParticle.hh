@@ -26,14 +26,14 @@
 #define MCT_GEN_PARTICLE_H
 
 #include "G4Types.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 #include "CLHEP/HepMC/GenEvent.h"
 #include "CLHEP/HepMC/GenParticle.h"
 
 class HepMC::GenEvent;
 class HepMC::GenParticle;
 
-typedef G4std::pair<HepMC::GenEvent*, HepMC::GenParticle*> G4MCTGenParticle;
+typedef std::pair<HepMC::GenEvent*, HepMC::GenParticle*> G4MCTGenParticle;
 
 #endif
 

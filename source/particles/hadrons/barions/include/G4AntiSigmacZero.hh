@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiSigmacZero.hh,v 1.9 2002/12/16 11:15:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------

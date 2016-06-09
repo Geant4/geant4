@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.41 2003/04/25 13:28:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VUserPhysicsList.cc,v 1.45 2003/06/19 13:20:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -30,18 +30,15 @@
 //
 // ------------------------------------------------------------
 //	History
-//        first version                   09 Jan. 1998 by H.Kurashige 
-//        modified                        24 Jan. 1998 by H.Kurashige 
-//        modified                        06 June 1998  by H.Kurashige 
-//        add G4ParticleWithCuts::SetEnergyRange
-//                                        18 June 1998  by H.Kurashige 
-//       modifeid for short lived particles 27  June 1998  by H.Kurashige
-//       G4BestUnit on output             12 nov. 1998  mma  
-//       Added RemoveProcessManager        9 Feb. 1999 by H.Kurashige
-//       Fixed RemoveProcessManager       15 Apr. 1999 by H.Kurashige
-//       Removed ConstructAllParticles()  15 Apr. 1999 by H.Kurashige
-//       modified                         08, Mar 2001 by H.Kurashige
-//       modified for CUTS per REGION     10, Oct 2002 by H.Kurashige
+//       first version                    09 Jan 1998 by H.Kurashige
+//       Added SetEnergyRange             18 Jun 1998 by H.Kurashige 
+//       Change for short lived particles 27 Jun 1998 by H.Kurashige
+//       G4BestUnit on output             12 nov 1998 by M.Maire
+//       Added RemoveProcessManager        9 Feb 1999 by H.Kurashige
+//       Fixed RemoveProcessManager       15 Apr 1999 by H.Kurashige
+//       Removed ConstructAllParticles()  15 Apr 1999 by H.Kurashige
+//       Modified for CUTS per REGION     10 Oct 2002 by H.Kurashige
+//       Check if particle IsShortLived   18 Jun 2003 by V.Ivanchenko
 // ------------------------------------------------------------
 
 #include "globals.hh"
@@ -61,8 +58,8 @@
 #include "G4MaterialCutsCouple.hh"
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
-#include "g4std/fstream"
+#include <iomanip>
+#include <fstream>
 
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()
@@ -151,7 +148,7 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
   newParticle->SetProcessManager(newManager);
 
 #ifdef G4VERBOSE
-  if (verboseLevel >2){
+ if (verboseLevel >2){
     G4cout << "G4VUserPhysicsList::AddProcessManager: ";
     G4cout  << "adds ProcessManager to ";
     G4cout  << newParticle->GetParticleName() << G4endl;
@@ -402,21 +399,19 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       G4cout << " for " << particle->GetParticleName() << G4endl;
     }
 #endif
-  G4int j;
   // Rebuild the physics tables for every process for this particle type
-  G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
-  for ( j=0; j < pVector->size(); ++j) {
-    (*pVector)[j]->BuildPhysicsTable(*particle);
-  }
-  for ( j=0; j < pVector->size(); ++j) {
-    // temporary addition to make the integral schema
-    BuildIntegralPhysicsTable((*pVector)[j], particle);
+  // if particle is not ShortLived
+  if(!particle->IsShortLived()) {
+    G4ProcessVector* pVector = particle->GetProcessManager()->GetProcessList();
+    for (G4int j=0; j < pVector->size(); ++j) {
+      (*pVector)[j]->BuildPhysicsTable(*particle);
+    }
   }
 }
 
 ///////////////////////////////////////////////////////////////
 void  G4VUserPhysicsList::BuildIntegralPhysicsTable(G4VProcess* process,
-						    G4ParticleDefinition* particle) 
+						    G4ParticleDefinition* particle)
 {
   //*********************************************************************
   // temporary addition to make the integral schema of electromagnetic
@@ -431,7 +426,7 @@ void  G4VUserPhysicsList::BuildIntegralPhysicsTable(G4VProcess* process,
        (process->GetProcessName() == "IMuIoni") ||
        (process->GetProcessName() == "IMuBrems") ||
        (process->GetProcessName() == "IMuPairProd")  ) {
-#ifdef G4VERBOSE  
+#ifdef G4VERBOSE
     if (verboseLevel>2){
       G4cout << "G4VUserPhysicsList::BuildIntegralPhysicsTable  ";
       G4cout << " BuildPhysicsTable is invoked for ";

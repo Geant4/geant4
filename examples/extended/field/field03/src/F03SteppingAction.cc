@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03SteppingAction.cc,v 1.4 2001/11/07 16:36:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F03SteppingAction.cc,v 1.5 2003/06/16 16:49:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -32,7 +32,7 @@
 #include "F03SteppingAction.hh"
 #include "F03SteppingMessenger.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
-// $Id: G4eBremsstrahlungSpectrum.hh,v 1.5 2003/02/28 08:41:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eBremsstrahlungSpectrum.hh,v 1.6 2003/05/25 14:35:41 pia Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +39,7 @@
 // 29.11.01  V.Ivanchenko    Parametrisation is updated
 // 21.02.03  V.Ivanchenko    Energy bins are defined in the constructor
 // 28.02.03  V.Ivanchenko    Filename is defined in the constructor
+// 25.05.03  MGP             Data member xp contained by value, not a reference
 //
 // -------------------------------------------------------------------
 
@@ -115,7 +116,8 @@ private:
   G4double                    lowestE;
   size_t                      length;
   G4int                       verbose;
-  const G4DataVector&         xp;
+  // const G4DataVector&         xp;
+  const G4DataVector          xp;
 };
 
 #endif

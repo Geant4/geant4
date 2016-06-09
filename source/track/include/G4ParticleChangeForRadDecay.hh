@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForRadDecay.hh,v 1.4 2001/10/24 05:41:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleChangeForRadDecay.hh,v 1.5 2003/06/03 08:56:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -54,8 +54,8 @@ class G4ParticleChangeForRadDecay: public G4ParticleChange
 
   protected:
     // hide copy constructor and assignment operaor as protected
-    G4ParticleChangeForRadDecay(const G4ParticleChangeForRadDecay &right){}
-    G4ParticleChangeForRadDecay & operator=(const G4ParticleChangeForRadDecay &right){return *this;}
+    G4ParticleChangeForRadDecay(const G4ParticleChangeForRadDecay &) : G4ParticleChange() {}
+    G4ParticleChangeForRadDecay & operator=(const G4ParticleChangeForRadDecay &){return *this;}
 
 
   public: // with description

@@ -64,9 +64,9 @@ void G4BEChargedChannel::calculateProbability()
   G4double levelParam = getLevelDensityParameter();
   G4double s        = 2 * sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
   G4double constant = A / 2 * ( 2 * spin + 1 ) * ( 1 + coulombFactor() );
-  G4double eye1     = ( pow( s, 2 ) - 3 * s + 3 ) / ( 4 * pow( levelParam, 2 ) ) * exp( s );
+  G4double eye1     = ( pow( s, 2. ) - 3 * s + 3 ) / ( 4 * pow( levelParam, 2. ) ) * exp( s );
 
-  emissionProbability = constant * pow( residualA, 0.6666666 ) * eye1;
+  emissionProbability = constant * pow( G4double(residualA), 0.6666666 ) * eye1;
 
   if ( verboseLevel >= 6 )
     G4cout << "G4BEChargedChannel : calculateProbability for " << getName() << G4endl
@@ -100,8 +100,8 @@ G4double G4BEChargedChannel::sampleKineticEnergy()
 //    randExp2 = RandExponential::shoot( 1 );
 //    levelParam = getLevelDensityParameter();
 //    s = 2 * sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
-//    kineticEnergyAv = 2 * ( pow( s, 3 ) - 6.0 * pow( s, 2 ) + 15.0 * s - 15.0 )  / 
-//        ( ( 2.0 * pow( s, 2 ) - 6.0 * s + 6.0 ) * levelParam );
+//    kineticEnergyAv = 2 * ( pow( s, 3. ) - 6.0 * pow( s, 2. ) + 15.0 * s - 15.0 )  / 
+//        ( ( 2.0 * pow( s, 2. ) - 6.0 * s + 6.0 ) * levelParam );
   
 //    kineticEnergy = 0.5 * ( randExp1 + randExp2 ) * kineticEnergyAv + getThresh() - getQ();
 

@@ -36,7 +36,7 @@
 #include "G4ParticleTable.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-  void G4NeutronHPElasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+  void G4NeutronHPElasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & )
   {
     G4String tString = "/FS/";
     G4bool dbool;
@@ -51,7 +51,7 @@
       hasXsec = false;
       return;
     }
-    G4std::ifstream theData(filename, G4std::ios::in);
+    std::ifstream theData(filename, std::ios::in);
     theData >> repFlag >> targetMass >> frameFlag;
     if(repFlag==1)
     {

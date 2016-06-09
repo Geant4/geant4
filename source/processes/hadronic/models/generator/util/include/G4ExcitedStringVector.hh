@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringVector.hh,v 1.7 2002/12/12 19:17:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ExcitedStringVector.hh,v 1.8 2003/06/16 17:09:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4ExcitedStringVector_h
 #define G4ExcitedStringVector_h 1
@@ -35,9 +35,9 @@
 // ------------------------------------------------------------
 
 #include "G4ExcitedString.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4ExcitedString *> G4ExcitedStringVector;
+typedef std::vector<G4ExcitedString *> G4ExcitedStringVector;
 struct DeleteString { void operator()(G4ExcitedString* aS){delete aS;} };
 
 #endif

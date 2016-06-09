@@ -76,21 +76,21 @@ G4ProtonField::~G4ProtonField()
 { }
 
 
-const G4ProtonField & G4ProtonField::operator=(const G4ProtonField & right)
+const G4ProtonField & G4ProtonField::operator=(const G4ProtonField & )
 {
   G4Exception("G4ProtonField::operator= meant not to be accessible");
   return *this;
 }
 
 
-G4int G4ProtonField::operator==(const G4ProtonField & right) const
+G4int G4ProtonField::operator==(const G4ProtonField & ) const
 {
   G4Exception("G4ProtonField::operator== meant not to be accessible");
   return 0;
 }
 
 
-G4int G4ProtonField::operator!=(const G4ProtonField & right) const
+G4int G4ProtonField::operator!=(const G4ProtonField & ) const
 {
   G4Exception("G4ProtonField::operator!= meant not to be accessible");
   return 1;
@@ -101,7 +101,7 @@ G4double G4ProtonField::GetField(const G4ThreeVector & aPosition)
 {
 //G4cout << " Fermi Potential " << (fermiMom*fermiMom)/(2*proton_mass_c2) <<G4endl;
   G4double x = aPosition.mag();
-  G4int index = static_cast<G4int>(x/(0.3*fermi) );
+  size_t index = static_cast<size_t>(x/(0.3*fermi) );
   if(index+2>theFermiMomBuffer.size()) return theFermiMomBuffer.back();
   G4double y1 = theFermiMomBuffer[index];
   G4double y2 = theFermiMomBuffer[index+1];

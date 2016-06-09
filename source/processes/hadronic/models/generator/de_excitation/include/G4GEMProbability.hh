@@ -36,6 +36,7 @@
 #include "G4VLevelDensityParameter.hh"
 #include "G4EvaporationLevelDensityParameter.hh"
 #include "G4VCoulombBarrier.hh"
+#include "G4PairingCorrection.hh"
 
 class G4GEMProbability : public G4VEmissionProbability
 {
@@ -70,28 +71,38 @@ public:
 
     G4double GetCoulombBarrier(const G4Fragment& fragment) const 
         {
-            if (theCoulombBarrierPtr) return theCoulombBarrierPtr->GetCoulombBarrier(
-                static_cast<G4int>(fragment.GetA()-theA),static_cast<G4int>(fragment.GetZ()-theZ),fragment.GetExcitationEnergy());
-            else return 0.0;
+            if (theCoulombBarrierPtr) 
+	      {
+		G4int Acompound = static_cast<G4int>(fragment.GetA());
+		G4int Zcompound = static_cast<G4int>(fragment.GetZ());
+		return theCoulombBarrierPtr->GetCoulombBarrier(Acompound-theA, Zcompound-theZ,
+							       fragment.GetExcitationEnergy()-
+							       G4PairingCorrection::GetInstance()->
+							       GetPairingCorrection(Acompound,Zcompound));
+	      }
+            else 
+	      {
+		return 0.0;
+	      }
         }
     
 
-    virtual G4double CalcAlphaParam(const G4Fragment & fragment) const {return 1.0;}
-    virtual G4double CalcBetaParam(const G4Fragment & fragment) const {return 1.0;}
+    virtual G4double CalcAlphaParam(const G4Fragment & ) const {return 1.0;}
+    virtual G4double CalcBetaParam(const G4Fragment & ) const {return 1.0;}
     
 protected:
   
-    void SetExcitationEnergiesPtr(G4std::vector<G4double> * anExcitationEnergiesPtr) 
+    void SetExcitationEnergiesPtr(std::vector<G4double> * anExcitationEnergiesPtr) 
         {
             ExcitationEnergies = anExcitationEnergiesPtr;
         }
   
-    void SetExcitationSpinsPtr(G4std::vector<G4double> * anExcitationSpinsPtr)
+    void SetExcitationSpinsPtr(std::vector<G4double> * anExcitationSpinsPtr)
         {
             ExcitationSpins = anExcitationSpinsPtr;
         }
 
-    void SetExcitationLifetimesPtr(G4std::vector<G4double> * anExcitationLifetimesPtr)
+    void SetExcitationLifetimesPtr(std::vector<G4double> * anExcitationLifetimesPtr)
         {
             ExcitationLifetimes = anExcitationLifetimesPtr;
         }
@@ -119,7 +130,7 @@ private:
 
     G4double CalcProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy,
                              const G4double V);
-    virtual G4double CCoeficient(const G4double aZ) const {return 0.0;};
+    virtual G4double CCoeficient(const G4double ) const {return 0.0;};
 
     
     G4double I0(const G4double t);
@@ -142,13 +153,13 @@ private:
 
     
     // Resonances Energy
-    G4std::vector<G4double> * ExcitationEnergies;
+    std::vector<G4double> * ExcitationEnergies;
     
     // Resonances Spin 
-    G4std::vector<G4double> * ExcitationSpins;
+    std::vector<G4double> * ExcitationSpins;
 
     // Resonances half lifetime
-    G4std::vector<G4double> * ExcitationLifetimes;
+    std::vector<G4double> * ExcitationLifetimes;
 
 
     // Normalization

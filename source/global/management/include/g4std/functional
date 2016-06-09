@@ -5,19 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: functional,v 1.3 1999/11/16 17:43:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: functional,v 1.4 2003/06/06 16:17:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- functional ----------------
 //
 #ifndef G4_FUNCTIONAL_H
 #define G4_FUNCTIONAL_H
 
-#ifdef G4USE_OLDSTL
-  #include <function.h>
-#else
-  #include <functional>
-#endif /* G4USE_OLDSTL */
+#include <functional>
 
 #endif /* G4_FUNCTIONAL_H */
 

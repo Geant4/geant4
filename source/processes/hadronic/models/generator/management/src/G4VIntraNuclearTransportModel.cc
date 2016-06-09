@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntraNuclearTransportModel.cc,v 1.6 2002/12/12 19:17:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VIntraNuclearTransportModel.cc,v 1.7 2003/05/30 14:09:58 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // $Id: G4VIntraNuclearTransportModel.cc,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -48,7 +48,7 @@ G4VIntraNuclearTransportModel::G4VIntraNuclearTransportModel() :
 }
 
 G4VIntraNuclearTransportModel::
-G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right)
+G4VIntraNuclearTransportModel(const G4VIntraNuclearTransportModel& right) : G4HadronicInteraction()
 {
  the3DNucleus = right.Get3DNucleus();
  theDeExcitation = right.GetDeExcitation();

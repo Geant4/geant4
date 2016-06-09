@@ -22,8 +22,8 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.32 2003/04/24 14:19:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LowEnergyRayleigh.cc,v 1.33 2003/05/20 20:16:13 pia Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -103,7 +103,7 @@ G4LowEnergyRayleigh::~G4LowEnergyRayleigh()
   delete formFactorData;
 }
 
-void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   crossSectionHandler->Clear();
@@ -192,7 +192,7 @@ G4bool G4LowEnergyRayleigh::IsApplicable(const G4ParticleDefinition& particle)
 }
 
 G4double G4LowEnergyRayleigh::GetMeanFreePath(const G4Track& track, 
-					      G4double previousStepSize, 
+					      G4double, // previousStepSize
 					      G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();

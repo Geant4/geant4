@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElementData.hh,v 1.6 2002/12/12 19:18:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPElementData.hh,v 1.7 2003/06/03 09:31:45 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -58,13 +58,13 @@ public:
   
   void Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew);
   
-  inline G4NeutronHPVector * GetData(G4NeutronHPFissionData * theP)
+  inline G4NeutronHPVector * GetData(G4NeutronHPFissionData * )
     {return theFissionData;}
-  inline G4NeutronHPVector * GetData(G4NeutronHPCaptureData * theP)
+  inline G4NeutronHPVector * GetData(G4NeutronHPCaptureData * )
     {return theCaptureData;}
-  inline G4NeutronHPVector * GetData(G4NeutronHPElasticData * theP)
+  inline G4NeutronHPVector * GetData(G4NeutronHPElasticData * )
     {return theElasticData;}
-  inline G4NeutronHPVector * GetData(G4NeutronHPInelasticData * theP)
+  inline G4NeutronHPVector * GetData(G4NeutronHPInelasticData * )
     {return theInelasticData;}
 
   G4NeutronHPVector * MakePhysicsVector(G4Element * theElement,

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.13 2003/03/17 11:13:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SteppingVerbose.cc,v 1.14 2003/06/16 17:13:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -106,17 +106,17 @@ void G4SteppingVerbose::AtRestDoItInvoked()
        for( size_t lp1=(*fSecondary).size()-fN2ndariesAtRestDoIt;
                    lp1<(*fSecondary).size(); lp1++) {
          G4cout << "      "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length") << " "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length") << " "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length") << " "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy") << " "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time") << " "
-                << G4std::setw(18)
+                << std::setw(18)
                 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
        }
      }
@@ -158,17 +158,17 @@ void G4SteppingVerbose::AlongStepDoItAllDone()
       if((*fSecondary).size()>0){
          for(size_t lp1=0; lp1<(*fSecondary).size(); lp1++){
            G4cout << "      "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")  << " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length")  << " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length")  << " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy") << " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time")      << " "
-                  << G4std::setw(18)
+                  << std::setw(18)
                   << (*fSecondary)[lp1]->GetDefinition()->GetParticleName()      << G4endl;
 	       }
 	    }
@@ -216,17 +216,17 @@ void G4SteppingVerbose::PostStepDoItAllDone()
       if((*fSecondary).size()>0){
 	      for(size_t lp1=0; lp1<(*fSecondary).size(); lp1++){
           G4cout  << "      "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length") << " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length") << " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length") << " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy") << " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime() , "Time") << " "
-                  << G4std::setw(18)
+                  << std::setw(18)
                   << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
 	      }
 	    }
@@ -246,35 +246,35 @@ void G4SteppingVerbose::StepInfo()
     if( verboseLevel >= 3 ){
       G4cout << G4endl;
 #ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE      
-      G4cout << G4std::setw( 5) << "#Step#" << " "
-	     << G4std::setw( 8) << "X"      << "     " << G4std::setw( 8) << "Y"      << "     "  
-	     << G4std::setw( 8) << "Z"      << "     "
-	     << G4std::setw( 9) << "KineE"  << "     " << G4std::setw( 8) << "dE"     << "     "  
-	     << G4std::setw(12) << "StepLeng"   << " " << G4std::setw(12) << "TrackLeng"  << " "
-	     << G4std::setw(12) << "NextVolume" << " " << G4std::setw( 8) << "ProcName"   << G4endl;	       
+      G4cout << std::setw( 5) << "#Step#" << " "
+	     << std::setw( 8) << "X"      << "     " << std::setw( 8) << "Y"      << "     "  
+	     << std::setw( 8) << "Z"      << "     "
+	     << std::setw( 9) << "KineE"  << "     " << std::setw( 8) << "dE"     << "     "  
+	     << std::setw(12) << "StepLeng"   << " " << std::setw(12) << "TrackLeng"  << " "
+	     << std::setw(12) << "NextVolume" << " " << std::setw( 8) << "ProcName"   << G4endl;	       
 #else
-      G4cout << G4std::setw( 5) << "#Step#"      << " "
-	     << G4std::setw( 8) << "X(mm)"      << " " << G4std::setw( 8) << "Y(mm)"      << " "  
-	     << G4std::setw( 8) << "Z(mm)"      << " "
-	     << G4std::setw( 9) << "KinE(MeV)"  << " " << G4std::setw( 8) << "dE(MeV)"    << " "  
-	     << G4std::setw( 8) << "StepLeng"   << " " << G4std::setw( 9) << "TrackLeng"  << " "  
-	     << G4std::setw(11) << "NextVolume" << " " << G4std::setw( 8) << "ProcName"   << G4endl;
+      G4cout << std::setw( 5) << "#Step#"      << " "
+	     << std::setw( 8) << "X(mm)"      << " " << std::setw( 8) << "Y(mm)"      << " "  
+	     << std::setw( 8) << "Z(mm)"      << " "
+	     << std::setw( 9) << "KinE(MeV)"  << " " << std::setw( 8) << "dE(MeV)"    << " "  
+	     << std::setw( 8) << "StepLeng"   << " " << std::setw( 9) << "TrackLeng"  << " "  
+	     << std::setw(11) << "NextVolume" << " " << std::setw( 8) << "ProcName"   << G4endl;
 #endif	     
     }
-    G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
-	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().x() , "Length") << " "
-	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().y() , "Length") << " "
-	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().z() , "Length") << " "
-	         << G4std::setw( 9) << G4BestUnit(fTrack->GetKineticEnergy() , "Energy") << " "
-	         << G4std::setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(), "Energy") << " "
-	         << G4std::setw( 8) << G4BestUnit(fStep->GetStepLength() , "Length") << " "
-	         << G4std::setw( 9) << G4BestUnit(fTrack->GetTrackLength() , "Length") << " ";
+    G4cout << std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
+	         << std::setw( 8) << G4BestUnit(fTrack->GetPosition().x() , "Length") << " "
+	         << std::setw( 8) << G4BestUnit(fTrack->GetPosition().y() , "Length") << " "
+	         << std::setw( 8) << G4BestUnit(fTrack->GetPosition().z() , "Length") << " "
+	         << std::setw( 9) << G4BestUnit(fTrack->GetKineticEnergy() , "Energy") << " "
+	         << std::setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(), "Energy") << " "
+	         << std::setw( 8) << G4BestUnit(fStep->GetStepLength() , "Length") << " "
+	         << std::setw( 9) << G4BestUnit(fTrack->GetTrackLength() , "Length") << " ";
 
     // Put cut comment here
     if( fTrack->GetNextVolume() != 0 ) { 
-      G4cout << G4std::setw(11) << fTrack->GetNextVolume()->GetName() << " ";
+      G4cout << std::setw(11) << fTrack->GetNextVolume()->GetName() << " ";
     } else {
-      G4cout << G4std::setw(11) << "OutOfWorld" << " ";
+      G4cout << std::setw(11) << "OutOfWorld" << " ";
     }
     if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != NULL){
       G4cout << fStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName();
@@ -287,26 +287,26 @@ void G4SteppingVerbose::StepInfo()
       G4int tN2ndariesTot = fN2ndariesAtRestDoIt + fN2ndariesAlongStepDoIt + fN2ndariesPostStepDoIt;
       if(tN2ndariesTot>0){
         G4cout << "    :----- List of 2ndaries - "
-	             << "#SpawnInStep=" << G4std::setw(3) << tN2ndariesTot 
-	             << "(Rest=" << G4std::setw(2) << fN2ndariesAtRestDoIt
-	             << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
-	             << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
+	             << "#SpawnInStep=" << std::setw(3) << tN2ndariesTot 
+	             << "(Rest=" << std::setw(2) << fN2ndariesAtRestDoIt
+	             << ",Along=" << std::setw(2) << fN2ndariesAlongStepDoIt
+	             << ",Post="  << std::setw(2) << fN2ndariesPostStepDoIt
 	             << "), "
-	             << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
+	             << "#SpawnTotal=" << std::setw(3) << (*fSecondary).size()
 	             << " ---------------"
 	             << G4endl;
 
 	      for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; lp1<(*fSecondary).size(); lp1++){
 	        G4cout << "    : "
-		             << G4std::setw( 9)
+		             << std::setw( 9)
 		             << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
-		             << G4std::setw( 9)
+		             << std::setw( 9)
 		             << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length")<< " "
-		             << G4std::setw( 9)
+		             << std::setw( 9)
 		             << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length") << " "
-		             << G4std::setw( 9)
+		             << std::setw( 9)
 		             << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy")<< " "
-		             << G4std::setw(18)
+		             << std::setw(18)
 		             << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
 	      }
 	      G4cout << "    :-----------------------------" << "----------------------------------"
@@ -337,7 +337,7 @@ void G4SteppingVerbose::DPSLUserLimit()
   if( verboseLevel > 5 ){
     G4cout << G4endl << G4endl;
     G4cout << "=== Defined Physical Step Length (DPSL)"             << G4endl;
-    G4cout << "    ++ProposedStep(UserLimit) = " << G4std::setw( 9) << physIntLength
+    G4cout << "    ++ProposedStep(UserLimit) = " << std::setw( 9) << physIntLength
 	         << " : ProcName = User defined maximum allowed Step"     << G4endl;
   }
 }
@@ -348,7 +348,7 @@ void G4SteppingVerbose::DPSLPostStep()
   CopyState();
 
   if( verboseLevel > 5 ){
-    G4cout << "    ++ProposedStep(PostStep ) = " << G4std::setw( 9) << physIntLength
+    G4cout << "    ++ProposedStep(PostStep ) = " << std::setw( 9) << physIntLength
            << " : ProcName = " << fCurrentProcess->GetProcessName() << " (";
     if(fCondition==ExclusivelyForced){
       G4cout << "ExclusivelyForced)" << G4endl;
@@ -372,7 +372,7 @@ void G4SteppingVerbose::DPSLAlongStep()
 
   if( verboseLevel > 5 ){
     G4cout << "    ++ProposedStep(AlongStep) = " 
-	   << G4std::setw( 9) << G4BestUnit(physIntLength , "Length")
+	   << std::setw( 9) << G4BestUnit(physIntLength , "Length")
 	   << " : ProcName = "
 	   << fCurrentProcess->GetProcessName() 
 	   << " (";
@@ -399,42 +399,42 @@ void G4SteppingVerbose::TrackingStarted()
   if( verboseLevel > 0 ){
 
 #ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE
-    G4cout << G4std::setw( 5) << "Step#"  << " "
-           << G4std::setw( 8) << "X"      << "     "
-	         << G4std::setw( 8) << "Y"      << "     "  
-	         << G4std::setw( 8) << "Z"      << "     "
-	         << G4std::setw( 9) << "KineE"  << "     "
-	         << G4std::setw( 8) << "dE"     << "     "  
-	         << G4std::setw(12) << "StepLeng"   << " "  
-	         << G4std::setw(12) << "TrackLeng"  << " "
-	         << G4std::setw(12) << "NextVolume" << " "
-	         << G4std::setw( 8) << "ProcName"   << G4endl;	     
+    G4cout << std::setw( 5) << "Step#"  << " "
+           << std::setw( 8) << "X"      << "     "
+	         << std::setw( 8) << "Y"      << "     "  
+	         << std::setw( 8) << "Z"      << "     "
+	         << std::setw( 9) << "KineE"  << "     "
+	         << std::setw( 8) << "dE"     << "     "  
+	         << std::setw(12) << "StepLeng"   << " "  
+	         << std::setw(12) << "TrackLeng"  << " "
+	         << std::setw(12) << "NextVolume" << " "
+	         << std::setw( 8) << "ProcName"   << G4endl;	     
 #else
-    G4cout << G4std::setw( 5) << "Step#"      << " "
-	         << G4std::setw( 8) << "X(mm)"      << " "
-	         << G4std::setw( 8) << "Y(mm)"      << " "  
-	         << G4std::setw( 8) << "Z(mm)"      << " "
-	         << G4std::setw( 9) << "KinE(MeV)"  << " "
-	         << G4std::setw( 8) << "dE(MeV)"    << " "  
-	         << G4std::setw( 8) << "StepLeng"   << " "  
-	         << G4std::setw( 9) << "TrackLeng"  << " "
-	         << G4std::setw(11) << "NextVolume" << " "
-	         << G4std::setw( 8) << "ProcName"   << G4endl;	     
+    G4cout << std::setw( 5) << "Step#"      << " "
+	         << std::setw( 8) << "X(mm)"      << " "
+	         << std::setw( 8) << "Y(mm)"      << " "  
+	         << std::setw( 8) << "Z(mm)"      << " "
+	         << std::setw( 9) << "KinE(MeV)"  << " "
+	         << std::setw( 8) << "dE(MeV)"    << " "  
+	         << std::setw( 8) << "StepLeng"   << " "  
+	         << std::setw( 9) << "TrackLeng"  << " "
+	         << std::setw(11) << "NextVolume" << " "
+	         << std::setw( 8) << "ProcName"   << G4endl;	     
 #endif
 
-    G4cout << G4std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
-	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().x(),"Length")<< " "
-	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().y(),"Length") << " "
-	         << G4std::setw( 8) << G4BestUnit(fTrack->GetPosition().z(),"Length")<< " "
-	         << G4std::setw( 9) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")<< " "
-	         << G4std::setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy") << " "
-	         << G4std::setw( 8) << G4BestUnit(fStep->GetStepLength(),"Length")<< " "
-	         << G4std::setw( 9) << G4BestUnit(fTrack->GetTrackLength(),"Length") << " ";
+    G4cout << std::setw( 5) << fTrack->GetCurrentStepNumber() << " "
+	         << std::setw( 8) << G4BestUnit(fTrack->GetPosition().x(),"Length")<< " "
+	         << std::setw( 8) << G4BestUnit(fTrack->GetPosition().y(),"Length") << " "
+	         << std::setw( 8) << G4BestUnit(fTrack->GetPosition().z(),"Length")<< " "
+	         << std::setw( 9) << G4BestUnit(fTrack->GetKineticEnergy(),"Energy")<< " "
+	         << std::setw( 8) << G4BestUnit(fStep->GetTotalEnergyDeposit(),"Energy") << " "
+	         << std::setw( 8) << G4BestUnit(fStep->GetStepLength(),"Length")<< " "
+	         << std::setw( 9) << G4BestUnit(fTrack->GetTrackLength(),"Length") << " ";
 
     if(fTrack->GetNextVolume()){
-      G4cout << G4std::setw(11) << fTrack->GetNextVolume()->GetName() << " ";
+      G4cout << std::setw(11) << fTrack->GetNextVolume()->GetName() << " ";
     } else {
-      G4cout << G4std::setw(11) << "OutOfWorld" << " ";
+      G4cout << std::setw(11) << "OutOfWorld" << " ";
     }
     G4cout << "initStep" << G4endl;
   }
@@ -469,17 +469,17 @@ void G4SteppingVerbose::AlongStepDoItOneByOne()
     if(fN2ndariesAlongStepDoIt>0){
        for(size_t lp1=(*fSecondary).size()-fN2ndariesAlongStepDoIt; lp1<(*fSecondary).size(); lp1++){
           G4cout  << "      "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetPosition().y() , "Length")<< " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetPosition().z() , "Length")<< " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy() , "Energy")<< " "
-                  << G4std::setw( 9)
+                  << std::setw( 9)
                   << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime() , "Time")<< " "
-                  << G4std::setw(18)
+                  << std::setw(18)
                   << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
 	     }
 	  }
@@ -512,17 +512,17 @@ void G4SteppingVerbose::PostStepDoItOneByOne()
     if(fN2ndariesPostStepDoIt>0){
       for(size_t lp1=(*fSecondary).size()-fN2ndariesPostStepDoIt; lp1<(*fSecondary).size(); lp1++){
          G4cout << "      "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x() , "Length")<< " "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(), "Length") << " "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(), "Length") << " "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(), "Energy") << " "
-                << G4std::setw( 9)
+                << std::setw( 9)
                 << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(), "Time") << " "
-                << G4std::setw(18)
+                << std::setw(18)
                 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName() << G4endl;
 	    }
     }
@@ -543,82 +543,82 @@ void G4SteppingVerbose::VerboseTrack()
 
   G4cout << "      -----------------------------------------------" 
        << G4endl;
-  G4cout << "        G4Track Information  " << G4std::setw(20) << G4endl;
+  G4cout << "        G4Track Information  " << std::setw(20) << G4endl;
   G4cout << "      -----------------------------------------------" 
        << G4endl;
 
   G4cout << "        Step number         : " 
-       << G4std::setw(20) << fTrack->GetCurrentStepNumber()
+       << std::setw(20) << fTrack->GetCurrentStepNumber()
        << G4endl; 
 #ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE
   G4cout << "        Position - x        : " 
-       << G4std::setw(20) << G4BestUnit(fTrack->GetPosition().x(), "Length")
+       << std::setw(20) << G4BestUnit(fTrack->GetPosition().x(), "Length")
        << G4endl; 
   G4cout << "        Position - y        : " 
-       << G4std::setw(20) << G4BestUnit(fTrack->GetPosition().y(), "Length")
+       << std::setw(20) << G4BestUnit(fTrack->GetPosition().y(), "Length")
        << G4endl; 
   G4cout << "        Position - z        : " 
-       << G4std::setw(20) << G4BestUnit(fTrack->GetPosition().z(), "Length")
+       << std::setw(20) << G4BestUnit(fTrack->GetPosition().z(), "Length")
        << G4endl;
   G4cout << "        Global Time         : " 
-       << G4std::setw(20) << G4BestUnit(fTrack->GetGlobalTime(), "Time")
+       << std::setw(20) << G4BestUnit(fTrack->GetGlobalTime(), "Time")
        << G4endl;
   G4cout << "        Local Time          : " 
-       << G4std::setw(20) << G4BestUnit(fTrack->GetLocalTime(), "Time")
+       << std::setw(20) << G4BestUnit(fTrack->GetLocalTime(), "Time")
        << G4endl;
 #else
   G4cout << "        Position - x (mm)   : " 
-       << G4std::setw(20) << fTrack->GetPosition().x() /mm
+       << std::setw(20) << fTrack->GetPosition().x() /mm
        << G4endl; 
   G4cout << "        Position - y (mm)   : " 
-       << G4std::setw(20) << fTrack->GetPosition().y() /mm
+       << std::setw(20) << fTrack->GetPosition().y() /mm
        << G4endl; 
   G4cout << "        Position - z (mm)   : " 
-       << G4std::setw(20) << fTrack->GetPosition().z() /mm
+       << std::setw(20) << fTrack->GetPosition().z() /mm
        << G4endl;
   G4cout << "        Global Time (ns)    : " 
-       << G4std::setw(20) << fTrack->GetGlobalTime() /ns
+       << std::setw(20) << fTrack->GetGlobalTime() /ns
        << G4endl;
   G4cout << "        Local Time (ns)     : " 
-       << G4std::setw(20) << fTrack->GetLocalTime() /ns
+       << std::setw(20) << fTrack->GetLocalTime() /ns
        << G4endl;
 #endif
   G4cout << "        Momentum Direct - x : " 
-       << G4std::setw(20) << fTrack->GetMomentumDirection().x()
+       << std::setw(20) << fTrack->GetMomentumDirection().x()
        << G4endl;
   G4cout << "        Momentum Direct - y : " 
-       << G4std::setw(20) << fTrack->GetMomentumDirection().y()
+       << std::setw(20) << fTrack->GetMomentumDirection().y()
        << G4endl;
   G4cout << "        Momentum Direct - z : " 
-       << G4std::setw(20) << fTrack->GetMomentumDirection().z()
+       << std::setw(20) << fTrack->GetMomentumDirection().z()
        << G4endl;
 #ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE
   G4cout << "        Kinetic Energy      : " 
 #else
   G4cout << "        Kinetic Energy (MeV): " 
 #endif
-       << G4std::setw(20) << G4BestUnit(fTrack->GetKineticEnergy(), "Energy")
+       << std::setw(20) << G4BestUnit(fTrack->GetKineticEnergy(), "Energy")
        << G4endl;
   G4cout << "        Polarization - x    : " 
-       << G4std::setw(20) << fTrack->GetPolarization().x()
+       << std::setw(20) << fTrack->GetPolarization().x()
        << G4endl;
   G4cout << "        Polarization - y    : " 
-       << G4std::setw(20) << fTrack->GetPolarization().y()
+       << std::setw(20) << fTrack->GetPolarization().y()
        << G4endl;
   G4cout << "        Polarization - z    : " 
-       << G4std::setw(20) << fTrack->GetPolarization().z()
+       << std::setw(20) << fTrack->GetPolarization().z()
        << G4endl;
   G4cout << "        Track Length        : " 
-       << G4std::setw(20) << G4BestUnit(fTrack->GetTrackLength(), "Length")
+       << std::setw(20) << G4BestUnit(fTrack->GetTrackLength(), "Length")
        << G4endl;
   G4cout << "        Track ID #          : " 
-       << G4std::setw(20) << fTrack->GetTrackID()
+       << std::setw(20) << fTrack->GetTrackID()
        << G4endl;
   G4cout << "        Parent Track ID #   : " 
-       << G4std::setw(20) << fTrack->GetParentID()
+       << std::setw(20) << fTrack->GetParentID()
        << G4endl;
   G4cout << "        Next Volume         : " 
-       << G4std::setw(20);
+       << std::setw(20);
        if( fTrack->GetNextVolume() != 0 ) { 
          G4cout << fTrack->GetNextVolume()->GetName() << " ";
        } else {
@@ -626,7 +626,7 @@ void G4SteppingVerbose::VerboseTrack()
        }
        G4cout << G4endl;
   G4cout << "        Track Status        : " 
-       << G4std::setw(20);
+       << std::setw(20);
        if( fTrack->GetTrackStatus() == fAlive ){
          G4cout << " Alive";
        } else if( fTrack->GetTrackStatus() == fStopButAlive ){
@@ -643,44 +643,44 @@ void G4SteppingVerbose::VerboseTrack()
        G4cout << G4endl;
 #ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE
   G4cout << "        Vertex - x          : " 
-       << G4std::setw(20) << G4BestUnit(fTrack->GetVertexPosition().x(),"Length")
+       << std::setw(20) << G4BestUnit(fTrack->GetVertexPosition().x(),"Length")
        << G4endl; 
   G4cout << "        Vertex - y          : " 
-       << G4std::setw(20) << G4BestUnit(fTrack->GetVertexPosition().y(),"Length")
+       << std::setw(20) << G4BestUnit(fTrack->GetVertexPosition().y(),"Length")
        << G4endl; 
   G4cout << "        Vertex - z          : " 
-       << G4std::setw(20) << G4BestUnit(fTrack->GetVertexPosition().z(),"Length")
+       << std::setw(20) << G4BestUnit(fTrack->GetVertexPosition().z(),"Length")
        << G4endl;
 #else
   G4cout << "        Vertex - x (mm)     : " 
-       << G4std::setw(20) << fTrack->GetVertexPosition().x()/mm
+       << std::setw(20) << fTrack->GetVertexPosition().x()/mm
        << G4endl; 
   G4cout << "        Vertex - y (mm)     : " 
-       << G4std::setw(20) << fTrack->GetVertexPosition().y()/mm
+       << std::setw(20) << fTrack->GetVertexPosition().y()/mm
        << G4endl; 
   G4cout << "        Vertex - z (mm)     : " 
-       << G4std::setw(20) << fTrack->GetVertexPosition().z()/mm
+       << std::setw(20) << fTrack->GetVertexPosition().z()/mm
        << G4endl;
 #endif
   G4cout << "        Vertex - Px (MomDir): " 
-       << G4std::setw(20) << fTrack->GetVertexMomentumDirection().x()
+       << std::setw(20) << fTrack->GetVertexMomentumDirection().x()
        << G4endl;
   G4cout << "        Vertex - Py (MomDir): " 
-       << G4std::setw(20) << fTrack->GetVertexMomentumDirection().y()
+       << std::setw(20) << fTrack->GetVertexMomentumDirection().y()
        << G4endl;
   G4cout << "        Vertex - Pz (MomDir): " 
-       << G4std::setw(20) << fTrack->GetVertexMomentumDirection().z()
+       << std::setw(20) << fTrack->GetVertexMomentumDirection().z()
        << G4endl;
 #ifdef G4_USE_G4BESTUNIT_FOR_VERBOSE
   G4cout << "        Vertex - KineE      : " 
 #else
   G4cout << "        Vertex - KineE (MeV): " 
 #endif
-       << G4std::setw(20) << G4BestUnit(fTrack->GetVertexKineticEnergy(),"Energy")
+       << std::setw(20) << G4BestUnit(fTrack->GetVertexKineticEnergy(),"Energy")
        << G4endl;
   
   G4cout << "        Creator Process     : " 
-       << G4std::setw(20);
+       << std::setw(20);
   if( fTrack->GetCreatorProcess() == NULL){
     G4cout << " Event Generator" << G4endl;
   } else {
@@ -723,57 +723,57 @@ void G4SteppingVerbose::ShowStep() const
 // Show G4StepPoint specific information
    G4cout << "      -------------------------------------------------------" 
         << "----------------" <<  G4endl;
-   G4cout << "        StepPoint Information  " << G4std::setw(20) << "PreStep" 
-                                             << G4std::setw(20) << "PostStep" << G4endl;
+   G4cout << "        StepPoint Information  " << std::setw(20) << "PreStep" 
+                                             << std::setw(20) << "PostStep" << G4endl;
    G4cout << "      -------------------------------------------------------" 
         << "----------------" <<  G4endl;
    G4cout << "         Position - x (mm)   : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetPosition().x() 
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetPosition().x() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetPosition().x() 
+        << std::setw(20) << fStep->GetPostStepPoint()->GetPosition().x() << G4endl;
    G4cout << "         Position - y (mm)   : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetPosition().y() 
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetPosition().y() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetPosition().y() 
+        << std::setw(20) << fStep->GetPostStepPoint()->GetPosition().y() << G4endl;
    G4cout << "         Position - z (mm)   : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetPosition().z() 
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetPosition().z() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetPosition().z() 
+        << std::setw(20) << fStep->GetPostStepPoint()->GetPosition().z() << G4endl;
    G4cout << "         Global Time (ns)    : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetGlobalTime()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetGlobalTime() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetGlobalTime()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetGlobalTime() << G4endl;
    G4cout << "         Local Time (ns)     : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetLocalTime() 
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetLocalTime() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetLocalTime() 
+        << std::setw(20) << fStep->GetPostStepPoint()->GetLocalTime() << G4endl;
    G4cout << "         Proper Time (ns)    : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetProperTime()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetProperTime() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetProperTime()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetProperTime() << G4endl;
    G4cout << "         Momentum Direct - x : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetMomentumDirection().x()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetMomentumDirection().x() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetMomentumDirection().x()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetMomentumDirection().x() << G4endl;
    G4cout << "         Momentum Direct - y : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetMomentumDirection().y()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetMomentumDirection().y() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetMomentumDirection().y()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetMomentumDirection().y() << G4endl;
    G4cout << "         Momentum Direct - z : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetMomentumDirection().z()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetMomentumDirection().z() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetMomentumDirection().z()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetMomentumDirection().z() << G4endl;
    G4cout << "         Momentum - x (MeV/c): " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetMomentum().x()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetMomentum().x() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetMomentum().x()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetMomentum().x() << G4endl;
    G4cout << "         Momentum - y (MeV/c): " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetMomentum().y()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetMomentum().y() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetMomentum().y()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetMomentum().y() << G4endl;
    G4cout << "         Momentum - z (MeV/c): " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetMomentum().z()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetMomentum().z() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetMomentum().z()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetMomentum().z() << G4endl;
    G4cout << "         Total Energy (MeV)  : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetTotalEnergy()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetTotalEnergy() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetTotalEnergy()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetTotalEnergy() << G4endl;
    G4cout << "         Kinetic Energy (MeV): " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetKineticEnergy()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetKineticEnergy() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetKineticEnergy()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetKineticEnergy() << G4endl;
    G4cout << "         Velocity (mm/ns)    : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetVelocity()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetVelocity() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetVelocity()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetVelocity() << G4endl;
    G4cout << "         Volume Name         : "
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName();
+        << std::setw(20) << fStep->GetPreStepPoint()->GetPhysicalVolume()->GetName();
    if (fStep->GetPostStepPoint()->GetPhysicalVolume())
    {
       volName = fStep->GetPostStepPoint()->GetPhysicalVolume()->GetName();
@@ -782,60 +782,60 @@ void G4SteppingVerbose::ShowStep() const
    {
       volName = "OutOfWorld";
    }
-   G4cout << G4std::setw(20) << volName << G4endl;
+   G4cout << std::setw(20) << volName << G4endl;
    G4cout << "         Safety (mm)         : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetSafety()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetSafety() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetSafety()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetSafety() << G4endl;
    G4cout << "         Polarization - x    : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetPolarization().x()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetPolarization().x() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetPolarization().x()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetPolarization().x() << G4endl;
    G4cout << "         Polarization - y    : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetPolarization().y()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetPolarization().y() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetPolarization().y()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetPolarization().y() << G4endl;
    G4cout << "         Polarization - Z    : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetPolarization().z()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetPolarization().z() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetPolarization().z()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetPolarization().z() << G4endl;
    G4cout << "         Weight              : " 
-        << G4std::setw(20) << fStep->GetPreStepPoint()->GetWeight()
-        << G4std::setw(20) << fStep->GetPostStepPoint()->GetWeight() << G4endl;
+        << std::setw(20) << fStep->GetPreStepPoint()->GetWeight()
+        << std::setw(20) << fStep->GetPostStepPoint()->GetWeight() << G4endl;
    G4cout << "         Step Status         : " ;
         G4StepStatus  tStepStatus = fStep->GetPreStepPoint()->GetStepStatus();
         if( tStepStatus == fGeomBoundary ){
-           G4cout << G4std::setw(20) << "Geom Limit";
+           G4cout << std::setw(20) << "Geom Limit";
         } else if ( tStepStatus == fAlongStepDoItProc ){
-          G4cout << G4std::setw(20) << "AlongStep Proc.";
+          G4cout << std::setw(20) << "AlongStep Proc.";
         } else if ( tStepStatus == fPostStepDoItProc ){
-           G4cout << G4std::setw(20) << "PostStep Proc";
+           G4cout << std::setw(20) << "PostStep Proc";
         } else if ( tStepStatus == fAtRestDoItProc ){
-           G4cout << G4std::setw(20) << "AtRest Proc";
+           G4cout << std::setw(20) << "AtRest Proc";
         } else if ( tStepStatus == fUndefined ){
-           G4cout << G4std::setw(20) << "Undefined";
+           G4cout << std::setw(20) << "Undefined";
         }
 
         tStepStatus = fStep->GetPostStepPoint()->GetStepStatus();
         if( tStepStatus == fGeomBoundary ){
-           G4cout << G4std::setw(20) << "Geom Limit";
+           G4cout << std::setw(20) << "Geom Limit";
         } else if ( tStepStatus == fAlongStepDoItProc ){
-           G4cout << G4std::setw(20) << "AlongStep Proc.";
+           G4cout << std::setw(20) << "AlongStep Proc.";
         } else if ( tStepStatus == fPostStepDoItProc ){
-           G4cout << G4std::setw(20) << "PostStep Proc";
+           G4cout << std::setw(20) << "PostStep Proc";
         } else if ( tStepStatus == fAtRestDoItProc ){
-           G4cout << G4std::setw(20) << "AtRest Proc";
+           G4cout << std::setw(20) << "AtRest Proc";
         } else if ( tStepStatus == fUndefined ){
-           G4cout << G4std::setw(20) << "Undefined";
+           G4cout << std::setw(20) << "Undefined";
         }
 
         G4cout << G4endl;
         G4cout << "         Process defined Step: " ;
         if( fStep->GetPreStepPoint()->GetProcessDefinedStep() == NULL ){
- 	   G4cout << G4std::setw(20) << "Undefined";
+ 	   G4cout << std::setw(20) << "Undefined";
         } else {
-  	   G4cout << G4std::setw(20) << fStep->GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName();
+  	   G4cout << std::setw(20) << fStep->GetPreStepPoint()->GetProcessDefinedStep()->GetProcessName();
         }
         if( fStep->GetPostStepPoint()->GetProcessDefinedStep() == NULL){
-  	   G4cout << G4std::setw(20) << "Undefined";
+  	   G4cout << std::setw(20) << "Undefined";
         } else {
- 	   G4cout << G4std::setw(20) << fStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName(); 
+ 	   G4cout << std::setw(20) << fStep->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName(); 
         }
 
    G4cout << G4endl;

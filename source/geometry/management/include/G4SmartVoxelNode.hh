@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelNode.hh,v 1.7 2002/04/19 08:20:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SmartVoxelNode.hh,v 1.8 2003/06/16 16:51:58 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4SmartVoxelNode
 //
@@ -39,7 +39,7 @@
 // G4int fmaxEquivalent
 //   - Min and maximum nodes with same contents. Set by constructor
 //     and set methods.
-// G4std::vector<G4int> fcontents
+// std::vector<G4int> fcontents
 //   - Vector of no.s of volumes inside the node.
 
 // History:
@@ -53,9 +53,9 @@
 #include "voxeldefs.hh"
 
 #include "G4VPhysicalVolume.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4int> G4SliceVector;
+typedef std::vector<G4int> G4SliceVector;
 
 class G4SmartVoxelNode
 {

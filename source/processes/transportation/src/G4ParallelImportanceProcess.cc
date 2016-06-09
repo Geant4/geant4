@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.9 2003/04/02 16:59:18 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParallelImportanceProcess.cc,v 1.14 2003/06/16 17:12:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -31,10 +31,12 @@
 //
 // ----------------------------------------------------------------------
 
+#include "G4Types.hh"
+#include <strstream>
 #include "G4ParallelImportanceProcess.hh"
 #include "G4VImportanceSplitExaminer.hh"
-#include "g4std/strstream"
 #include "G4VTrackTerminator.hh"
+#include "G4ImportancePostStepDoIt.hh"
 
 G4ParallelImportanceProcess::
 G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
@@ -44,14 +46,23 @@ G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitEx
 			    const G4String &aName)
  : 
   G4ParallelTransport(pgeodriver, aStepper, aName),
-  fTrackTerminator(TrackTerminator ? TrackTerminator : this),
   fParticleChange(G4ParallelTransport::fParticleChange),
   fImportanceSplitExaminer(aImportanceSplitExaminer),
-  fImportancePostStepDoIt(*fTrackTerminator)
-{}
+  fImportancePostStepDoIt(0)
+{
+  if (TrackTerminator) {
+    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
+  }
+  else {
+    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
+  }
+
+}
 
 G4ParallelImportanceProcess::~G4ParallelImportanceProcess()
-{}
+{
+  delete fImportancePostStepDoIt;
+}
 
 
 G4VParticleChange *G4ParallelImportanceProcess::
@@ -65,7 +76,7 @@ PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
   // get new weight and number of clones
   G4Nsplit_Weight nw(fImportanceSplitExaminer.Examine(aTrack.GetWeight()));
 
-  fImportancePostStepDoIt.DoIt(aTrack, fParticleChange, nw);
+  fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
   return fParticleChange;
 }
   

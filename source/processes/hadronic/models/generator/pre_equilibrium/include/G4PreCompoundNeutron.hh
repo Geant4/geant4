@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundNeutron.hh,v 1.12 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PreCompoundNeutron.hh,v 1.13 2003/03/24 13:56:49 larazb Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
@@ -30,7 +30,7 @@
 #ifndef G4PreCompoundNeutron_h
 #define G4PreCompoundNeutron_h 1
 
-#include "G4VPreCompoundNucleon.hh"
+#include "G4PreCompoundNucleon.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Neutron.hh"
 #include "G4PreCompoundParameters.hh"
@@ -39,70 +39,65 @@
 #include "G4NeutronCoulombBarrier.hh"
 
 
-class G4PreCompoundNeutron : public G4VPreCompoundNucleon
+class G4PreCompoundNeutron : public G4PreCompoundNucleon
 {
 public:
   // default constructor
-  G4PreCompoundNeutron() : G4VPreCompoundNucleon(1,0,&theNeutronCoulomBarrier,"Neutron") {}
+  G4PreCompoundNeutron() : G4PreCompoundNucleon(1,0,&theNeutronCoulomBarrier,"Neutron") {}
 
   // copy constructor
-  G4PreCompoundNeutron(const G4PreCompoundNeutron &right): G4VPreCompoundNucleon(right) {}
+  G4PreCompoundNeutron(const G4PreCompoundNeutron &right): G4PreCompoundNucleon(right) {}
 
   // destructor
   ~G4PreCompoundNeutron() {}
 
   // operators  
   const G4PreCompoundNeutron & operator=(const G4PreCompoundNeutron &right) {
-    if (&right != this) this->G4VPreCompoundNucleon::operator=(right);
+    if (&right != this) this->G4PreCompoundNucleon::operator=(right);
     return *this;
   }
 
   G4bool operator==(const G4PreCompoundNeutron &right) const
-  { return G4VPreCompoundNucleon::operator==(right);}
+  { return G4PreCompoundNucleon::operator==(right);}
   
   G4bool operator!=(const G4PreCompoundNeutron &right) const
-  { return G4VPreCompoundNucleon::operator!=(right);}
+  { return G4PreCompoundNucleon::operator!=(right);}
 
 
-    G4ReactionProduct * GetReactionProduct() const
-	{
-	    G4ReactionProduct * theReactionProduct = 
-		new G4ReactionProduct(G4Neutron::NeutronDefinition());
-	    theReactionProduct->SetMomentum(GetMomentum().vect());
-	    theReactionProduct->SetTotalEnergy(GetMomentum().e());
+  G4ReactionProduct * GetReactionProduct() const
+  {
+    G4ReactionProduct * theReactionProduct = 
+      new G4ReactionProduct(G4Neutron::NeutronDefinition());
+    theReactionProduct->SetMomentum(GetMomentum().vect());
+    theReactionProduct->SetTotalEnergy(GetMomentum().e());
 #ifdef PRECOMPOUND_TEST
-	    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
+    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
 #endif
-	    return theReactionProduct;
-	}
-    
+    return theReactionProduct;
+  }
+  
 private:
-    virtual G4double GetAlpha()
-	{
-	    return 0.76+2.2/pow(GetRestA(),1.0/3.0);
-	}
-
-    virtual G4double GetBeta() 
-	{
-	    return (2.12/pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
-	}
-
-    virtual G4bool IsItPossible(const G4Fragment& aFragment)
-	{
-	    return ((aFragment.GetNumberOfParticles()-aFragment.GetNumberOfCharged()) >= 1);  
-	}
-    
+  virtual G4double GetAlpha()
+  {
+    return 0.76+2.2/pow(GetRestA(),1.0/3.0);
+  }
+  
+  virtual G4double GetBeta() 
+  {
+    return (2.12/pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
+  }
+  
+  virtual G4bool IsItPossible(const G4Fragment& aFragment)
+  {
+    return ((aFragment.GetNumberOfParticles()-aFragment.GetNumberOfCharged()) >= 1);  
+  }
+  
 
 private:
-
+  
   G4NeutronCoulombBarrier theNeutronCoulomBarrier;
 
 };
 
 #endif
- 
-
-
-
-
 

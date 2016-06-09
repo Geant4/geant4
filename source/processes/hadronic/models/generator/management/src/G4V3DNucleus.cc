@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4V3DNucleus.cc,v 1.5 2002/12/12 19:17:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4V3DNucleus.cc,v 1.6 2003/05/30 14:09:58 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G4V3DNucleus.hh"
 
@@ -30,7 +30,7 @@ G4V3DNucleus::G4V3DNucleus()
 {
 }
 
-G4V3DNucleus::G4V3DNucleus(const G4V3DNucleus &right)
+G4V3DNucleus::G4V3DNucleus(const G4V3DNucleus &)
 {
 }
 
@@ -40,19 +40,19 @@ G4V3DNucleus::~G4V3DNucleus()
 }
 
 
-const G4V3DNucleus & G4V3DNucleus::operator=(const G4V3DNucleus &right)
+const G4V3DNucleus & G4V3DNucleus::operator=(const G4V3DNucleus &)
 {
   G4Exception("G4V3DNucleus::operator= meant to not be accessable"); // needs to be looked at @@
   return *this;
 }
 
 
-int G4V3DNucleus::operator==(const G4V3DNucleus &right) const
+int G4V3DNucleus::operator==(const G4V3DNucleus &) const
 {
   return 0;
 }
 
-int G4V3DNucleus::operator!=(const G4V3DNucleus &right) const
+int G4V3DNucleus::operator!=(const G4V3DNucleus &) const
 {
   return 1;
 }

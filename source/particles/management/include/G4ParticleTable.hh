@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh,v 1.15 2001/07/11 10:01:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleTable.hh,v 1.16 2003/06/16 16:58:05 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -50,7 +50,7 @@
 #include "G4ParticleDefinition.hh"
 
 
-#include "g4std/map"
+#include <map>
 #include "G4ParticleTableIterator.hh"
 
 class G4UImessenger;

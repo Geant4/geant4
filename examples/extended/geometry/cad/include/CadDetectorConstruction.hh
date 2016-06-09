@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: CadDetectorConstruction.hh,v 1.1 2002/06/20 10:00:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 
 #ifndef CadDetectorConstruction_h

@@ -23,13 +23,13 @@
 // ====================================================================
 //
 //   H02PrimaryGeneratorAction.hh
-//   $Id: H02PrimaryGeneratorAction.hh,v 1.1 2002/05/28 14:10:53 murakami Exp $
+//   $Id: H02PrimaryGeneratorAction.hh,v 1.2 2003/06/16 16:48:31 gunter Exp $
 //
 // ====================================================================
 #ifndef H02_PRIMARY_GENERATOR_ACTION_H
 #define H02_PRIMARY_GENERATOR_ACTION_H
 
-#include "g4std/map"
+#include <map>
 #include "globals.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 

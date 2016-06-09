@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceFinder.cc,v 1.9 2002/11/04 10:43:07 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ImportanceFinder.cc,v 1.11 2003/06/16 16:51:05 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -31,7 +31,8 @@
 //
 // ----------------------------------------------------------------------
 
-#include "g4std/strstream"
+#include "G4Types.hh"
+#include <strstream>
 #include "G4VParallelStepper.hh"
 #include "G4ImportanceFinder.hh"
 #include "G4VIStore.hh"
@@ -50,7 +51,7 @@ G4ImportanceFinder::GetImportance(const G4GeometryCell &gCell) const
   G4double  imp = fIStore.GetImportance(gCell);
   // importances < 0 are not allowed
   if (imp < 0) {
-    G4std::ostrstream os;
+    std::ostrstream os;
     os << "imp < 0: GeometryCell = " << gCell  << '\0';
     Error(os.str());
   }

@@ -51,7 +51,7 @@
 #include "globals.hh"
 #include "G4RadioactiveDecayRate.hh"
 
-#include "g4std/vector"
+#include <vector>
 ////////////////////////////////////////////////////////////////////////////////
 //
 class G4RadioactiveDecayRateVector
@@ -62,7 +62,7 @@ class G4RadioactiveDecayRateVector
   //   calculate their radioactivity at any given time
   // class description - end
 public:
-  typedef G4std::vector<G4RadioactiveDecayRate> G4RadioactiveDecayRates;
+  typedef std::vector<G4RadioactiveDecayRate> G4RadioactiveDecayRates;
   
 public:
   //Constructors

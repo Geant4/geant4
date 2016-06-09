@@ -62,11 +62,11 @@ class G4QGSParticipants : public G4VParticipants
       
   protected:
     struct DeleteInteractionContent {void operator()(G4InteractionContent*aC){delete aC;}};
-    G4std::vector<G4InteractionContent*> theInteractions;
+    std::vector<G4InteractionContent*> theInteractions;
     struct DeleteSplitableHadron{void operator()(G4VSplitableHadron*aS){delete aS;}};
-    G4std::vector<G4VSplitableHadron*>   theTargets; 
+    std::vector<G4VSplitableHadron*>   theTargets; 
     struct DeletePartonPair{void operator()(G4PartonPair*aP){delete aP;}};
-    G4std::vector<G4PartonPair*>   thePartonPairs;
+    std::vector<G4PartonPair*>   thePartonPairs;
   
     G4SingleDiffractiveExcitation theSingleDiffExcitation;
     G4DiffractiveExcitation theDiffExcitaton;

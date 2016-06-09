@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: clGeometry.cc,v 1.2 2001/07/11 09:58:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: clGeometry.cc,v 1.3 2003/06/16 16:49:10 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
 // controls whether drawing is to be Done or not
 
-#include "g4std/fstream"
+#include <fstream>
 #include <math.h>
 #include "G4ios.hh"
 
@@ -70,7 +70,7 @@ G4int main(int argc, char** argv)
   if (argc >= 2) {
     // Process the command line
     inFile = argv[1];
-    G4std::ifstream in(inFile);
+    std::ifstream in(inFile);
     if (!in) {
       G4cerr << "Cannot open input file \"" << inFile << "\"" << G4endl;
       return EXIT_FAILURE;
@@ -78,7 +78,7 @@ G4int main(int argc, char** argv)
   }
   if (argc >= 3) {
     macroFile = argv[2];
-    G4std::ifstream mac(macroFile);
+    std::ifstream mac(macroFile);
     if (!mac) {
       G4cout << "Cannot open macro file """ << macroFile << """" << G4endl;
       return 2;

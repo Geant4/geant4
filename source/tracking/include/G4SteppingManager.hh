@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.23 2003/04/11 11:43:30 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SteppingManager.hh,v 1.24 2003/06/16 17:13:09 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 //---------------------------------------------------------------
 //
@@ -54,8 +54,8 @@ class G4SteppingManager;
 class G4VSensitiveDetector;
 
 #include "G4ios.hh"                   // Include from 'system'
-#include "g4std/iomanip"              // Include from 'system'
-#include "g4std/vector"               // Include from 'system'
+#include <iomanip>              // Include from 'system'
+#include <vector>               // Include from 'system'
 #include "globals.hh"                 // Include from 'global'
 #include "Randomize.hh"               // Include from 'global'
 
@@ -76,11 +76,11 @@ class G4VSensitiveDetector;
 #include "G4TouchableHistoryHandle.hh"      // Include from 'geometry'
 
 // 
-   typedef G4std::vector<G4int> 
+   typedef std::vector<G4int> 
              G4SelectedAtRestDoItVector;
-   typedef G4std::vector<G4int> 
+   typedef std::vector<G4int> 
              G4SelectedAlongStepDoItVector;
-   typedef G4std::vector<G4int>
+   typedef std::vector<G4int>
              G4SelectedPostStepDoItVector;
 
    static const size_t SizeOfSelectedDoItVector=100;
@@ -485,7 +485,7 @@ public: //without description
   }
 
   inline G4double G4SteppingManager::CalculateSafety(){
-    return G4std::max( endpointSafety -
+    return std::max( endpointSafety -
 		(endpointSafOrigin - fPostStepPoint->GetPosition()).mag(),
 	        0.);
   }

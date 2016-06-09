@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KineticTrackVector.hh,v 1.7 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4KineticTrackVector.hh,v 1.8 2003/06/16 17:09:36 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // Modified at 8-Oct-1998 by Maxim Komogorov. Methods BoostBeam,Boost,Shift
 // were added.
@@ -32,9 +32,9 @@
 
 #include "globals.hh"
 #include "G4KineticTrack.hh"
-#include "g4std/vector"
+#include <vector>
 
-class G4KineticTrackVector : public G4std::vector<G4KineticTrack *>
+class G4KineticTrackVector : public std::vector<G4KineticTrack *>
     {
 public:
   G4KineticTrackVector();

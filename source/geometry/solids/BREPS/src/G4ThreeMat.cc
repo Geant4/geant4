@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ThreeMat.cc,v 1.6 2001/07/11 09:59:48 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ThreeMat.cc,v 1.7 2003/06/16 16:53:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -86,7 +86,7 @@ const char* G4ThreeMat::NameOf() const
 }
 
 
-G4std::ostream& operator<<( G4std::ostream& os, const G4ThreeMat& m )
+std::ostream& operator<<( std::ostream& os, const G4ThreeMat& m )
 {
   // overwrite output operator << to Print out G4ThreeMat objects
   // using the PrintOn function defined below
@@ -95,9 +95,9 @@ G4std::ostream& operator<<( G4std::ostream& os, const G4ThreeMat& m )
 }
 
 
-void G4ThreeMat::PrintOn( G4std::ostream& os ) const
+void G4ThreeMat::PrintOn( std::ostream& os ) const
 {
-  // printing function using C++ G4std::ostream class
+  // printing function using C++ std::ostream class
   os << "[ " << element[0][0] << "\t" 
      << element[0][1] << "\t"
      << element[0][2] << "\n  "

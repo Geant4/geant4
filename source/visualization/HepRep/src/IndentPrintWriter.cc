@@ -51,7 +51,7 @@ IndentPrintWriter& IndentPrintWriter::operator<< (const char* s) {
     return *this;
 }
 
-IndentPrintWriter& IndentPrintWriter::operator<< (ostream& (*pf)(ostream&)) {
+IndentPrintWriter& IndentPrintWriter::operator<< (ostream& (*)(ostream&)) {
     *out << endl;
     indented = false;
     return *this;

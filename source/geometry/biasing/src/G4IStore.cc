@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IStore.cc,v 1.12 2003/04/03 10:45:51 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.cc,v 1.9 2002/11/04 10:43:07 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ImportanceAlgorithm.cc,v 1.11 2003/06/16 16:51:04 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -31,7 +31,8 @@
 //
 // ----------------------------------------------------------------------
 
-#include "g4std/strstream"
+#include "G4Types.hh"
+#include <strstream>
 #include "Randomize.hh"
 
 #include "G4ImportanceAlgorithm.hh"
@@ -60,7 +61,7 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
     }
     G4double ipre_over_ipost = ipre/ipost;
     if ((ipre_over_ipost<0.25 || ipre_over_ipost> 4) && !fWorned) {
-      G4std::ostrstream os;
+      std::ostrstream os;
       os << "Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = "
 	 << ipre_over_ipost << '\0' << G4endl;
       Warning(os.str());

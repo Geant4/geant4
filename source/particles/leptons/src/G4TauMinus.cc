@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauMinus.cc,v 1.8 2002/03/08 08:48:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TauMinus.cc,v 1.9 2003/06/16 16:58:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -33,8 +33,8 @@
 //      7 July 1996                   H.Kurashige 
 // **********************************************************************
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4TauMinus.hh"
 

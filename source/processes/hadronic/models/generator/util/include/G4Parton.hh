@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Parton.hh,v 1.14 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Parton.hh,v 1.15 2003/06/16 17:09:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4Parton_h
@@ -39,7 +39,7 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
-#include "g4std/iostream"
+#include <iostream>
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"
 

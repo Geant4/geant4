@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTableMessenger.cc,v 1.4 2001/07/11 10:01:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DecayTableMessenger.cc,v 1.5 2003/06/16 16:58:24 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -51,7 +51,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"                 // Include from 'system'
-#include "g4std/iomanip"                  // Include from 'system'
+#include <iomanip>                  // Include from 'system'
 
 G4DecayTableMessenger::G4DecayTableMessenger(G4ParticleTable* pTable)
                      :theParticleTable(pTable)

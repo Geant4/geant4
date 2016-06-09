@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.cc,v 1.19 2002/12/16 11:29:23 stesting Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em2RunAction.cc,v 1.21 2003/06/18 09:34:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -43,7 +43,7 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
-#include "g4std/iomanip"
+#include <iomanip>
 #include <assert.h>
 
 #include "Randomize.hh"
@@ -355,12 +355,8 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
   //print
   // 
 
-#ifdef G4USE_STD_NAMESPACE
-  G4std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-#else 
-  G4long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-#endif
+  std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(std::ios::fixed,std::ios::floatfield);
   G4int  prec = G4cout.precision(2);
   
   G4cout << "                 LATERAL PROFILE                   "
@@ -373,13 +369,13 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
    {
      G4double inf=i*dLradl, sup=inf+dLradl;
        
-     G4cout << G4std::setw(8) << inf << "->" 
-            << G4std::setw(5) << sup << " radl: " 
-            << G4std::setw(7) << MeanELongit[i] << "%  " 
-            << G4std::setw(9) << rmsELongit[i] << "%       "
-            << "      0->" << G4std::setw(5) << sup << " radl: " 
-            << G4std::setw(7) << MeanELongitCumul[i] << "%  " 
-            << G4std::setw(7) << rmsELongitCumul[i] << "% " 
+     G4cout << std::setw(8) << inf << "->" 
+            << std::setw(5) << sup << " radl: " 
+            << std::setw(7) << MeanELongit[i] << "%  " 
+            << std::setw(9) << rmsELongit[i] << "%       "
+            << "      0->" << std::setw(5) << sup << " radl: " 
+            << std::setw(7) << MeanELongitCumul[i] << "%  " 
+            << std::setw(7) << rmsELongitCumul[i] << "% " 
             <<G4endl;
    }
    
@@ -395,28 +391,28 @@ void Em2RunAction::EndOfRunAction(const G4Run* aRun)
    {
      G4double inf=i*dRradl, sup=inf+dRradl;
        
-     G4cout << G4std::setw(8) << inf << "->" 
-            << G4std::setw(5) << sup << " radl: " 
-            << G4std::setw(7) << MeanERadial[i] << "%  " 
-            << G4std::setw(9) << rmsERadial[i] << "%       "
-            << "      0->" << G4std::setw(5) << sup << " radl: " 
-            << G4std::setw(7) << MeanERadialCumul[i] << "%  " 
-            << G4std::setw(7) << rmsERadialCumul[i] << "% " 
+     G4cout << std::setw(8) << inf << "->" 
+            << std::setw(5) << sup << " radl: " 
+            << std::setw(7) << MeanERadial[i] << "%  " 
+            << std::setw(9) << rmsERadial[i] << "%       "
+            << "      0->" << std::setw(5) << sup << " radl: " 
+            << std::setw(7) << MeanERadialCumul[i] << "%  " 
+            << std::setw(7) << rmsERadialCumul[i] << "% " 
             <<G4endl;
    }  
   G4cout << G4endl;
-  G4cout << G4std::setw(37) << "SUMMARY" << G4endl;
-  G4cout << G4std::setw(42) << "energy deposit : " 
-         << G4std::setw(7)  << MeanELongitCumul[nLbin-1] << " % E0 +- "
-         << G4std::setw(7)  <<  rmsELongitCumul[nLbin-1] << " % E0" << G4endl;
-  G4cout << G4std::setw(42) << "charged traklen: " 
-         << G4std::setw(7)  << MeanChargTrLength << " radl +- "
-         << G4std::setw(7)  <<  rmsChargTrLength << " radl" << G4endl;
-  G4cout << G4std::setw(42) << "neutral traklen: " 
-         << G4std::setw(7)  << MeanNeutrTrLength << " radl +- "
-         << G4std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
+  G4cout << std::setw(37) << "SUMMARY" << G4endl;
+  G4cout << std::setw(42) << "energy deposit : " 
+         << std::setw(7)  << MeanELongitCumul[nLbin-1] << " % E0 +- "
+         << std::setw(7)  <<  rmsELongitCumul[nLbin-1] << " % E0" << G4endl;
+  G4cout << std::setw(42) << "charged traklen: " 
+         << std::setw(7)  << MeanChargTrLength << " radl +- "
+         << std::setw(7)  <<  rmsChargTrLength << " radl" << G4endl;
+  G4cout << std::setw(42) << "neutral traklen: " 
+         << std::setw(7)  << MeanNeutrTrLength << " radl +- "
+         << std::setw(7)  <<  rmsNeutrTrLength << " radl" << G4endl;
                  
-  G4cout.setf(mode,G4std::ios::floatfield);
+  G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
 
   // show Rndm status

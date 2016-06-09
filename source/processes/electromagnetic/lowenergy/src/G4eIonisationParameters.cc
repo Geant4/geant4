@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.19 2002/05/30 17:53:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eIonisationParameters.cc,v 1.20 2003/06/16 17:00:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -50,8 +50,8 @@
 #include "G4SemiLogInterpolation.hh"
 #include "G4Material.hh"
 #include "G4DataVector.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 
 G4eIonisationParameters:: G4eIonisationParameters(G4int minZ, G4int maxZ)
@@ -65,7 +65,7 @@ G4eIonisationParameters:: G4eIonisationParameters(G4int minZ, G4int maxZ)
 G4eIonisationParameters::~G4eIonisationParameters()
 { 
   // Reset the map of data sets: remove the data sets from the map 
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos;
 
   for (pos = param.begin(); pos != param.end(); ++pos)
     {
@@ -89,7 +89,7 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
 {
   G4double value = 0.;
   G4int id = Z*100 + parameterIndex;
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
 
   pos = param.find(id);
   if (pos!= param.end()) {
@@ -99,7 +99,7 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
     if(shellIndex < nShells) { 
       const G4VEMDataSet* component = dataSet->GetComponent(shellIndex);
       const G4DataVector ener = component->GetEnergies(0);
-      G4double ee = G4std::max(ener.front(),G4std::min(ener.back(),e));
+      G4double ee = std::max(ener.front(),std::min(ener.back(),e));
       value = component->FindValue(ee);
     } else {
       G4cout << "WARNING: G4IonisationParameters::FindParameter "
@@ -119,14 +119,14 @@ G4double G4eIonisationParameters::Parameter(G4int Z, G4int shellIndex,
 G4double G4eIonisationParameters::Excitation(G4int Z, G4double e) const
 {
   G4double value = 0.;
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
 
   pos = excit.find(Z);
   if (pos!= excit.end()) {
     G4VEMDataSet* dataSet = (*pos).second;
 
     const G4DataVector ener = dataSet->GetEnergies(0);
-    G4double ee = G4std::max(ener.front(),G4std::min(ener.back(),e));
+    G4double ee = std::max(ener.front(),std::min(ener.back(),e));
     value = dataSet->FindValue(ee);
   } else {
     G4cout << "WARNING: G4IonisationParameters::Excitation "
@@ -186,12 +186,12 @@ void G4eIonisationParameters::LoadData()
     
     G4int Z = (G4int)activeZ[i];
     char nameChar[100] = {""};
-    G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+    std::ostrstream ost(nameChar, 100, std::ios::out);
     ost << pathString << Z << ".dat";
     G4String name(nameChar);  
     
-    G4std::ifstream file(name);
-    G4std::filebuf* lsdp = file.rdbuf();
+    std::ifstream file(name);
+    std::filebuf* lsdp = file.rdbuf();
   
     if (! (lsdp->is_open()) ) {
       G4String excep = G4String("G4IonisationParameters - data file: ")
@@ -210,7 +210,7 @@ void G4eIonisationParameters::LoadData()
     // The shell terminates with the pattern: -1   -1
     // The file terminates with the pattern: -2   -2
 
-    G4std::vector<G4VEMDataSet*> p;
+    std::vector<G4VEMDataSet*> p;
     for (size_t k=0; k<length; k++) 
       {
 	G4VDataSetAlgorithm* inter = new G4LinLogLogInterpolation();
@@ -219,7 +219,7 @@ void G4eIonisationParameters::LoadData()
       }
 
     G4int shell = 0;
-    G4std::vector<G4DataVector*> a;
+    std::vector<G4DataVector*> a;
     for (size_t j=0; j<length; j++) 
       {
 	G4DataVector* aa = new G4DataVector();
@@ -279,12 +279,12 @@ void G4eIonisationParameters::LoadData()
 
   G4String pathString_a(path);
   G4String name_a = pathString_a + G4String("/ioni/ion-ex-av.dat");  
-  G4std::ifstream file_a(name_a);
-  G4std::filebuf* lsdp_a = file_a.rdbuf();
+  std::ifstream file_a(name_a);
+  std::filebuf* lsdp_a = file_a.rdbuf();
   G4String pathString_b(path);
   G4String name_b = pathString_b + G4String("/ioni/ion-ex-sig.dat");  
-  G4std::ifstream file_b(name_b);
-  G4std::filebuf* lsdp_b = file_b.rdbuf();
+  std::ifstream file_b(name_b);
+  std::filebuf* lsdp_b = file_b.rdbuf();
   
   if (! (lsdp_a->is_open()) ) {
      G4String excep = G4String("G4eIonisationParameters: cannot open file ")
@@ -368,7 +368,7 @@ void G4eIonisationParameters::PrintData() const
   G4cout << G4endl;
 
   size_t nZ = activeZ.size();
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
 
   for (size_t i=0; i<nZ; i++) {
     G4int Z = (G4int)activeZ[i];      

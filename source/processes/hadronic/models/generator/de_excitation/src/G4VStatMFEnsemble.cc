@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStatMFEnsemble.cc,v 1.6 2002/12/12 19:17:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VStatMFEnsemble.cc,v 1.7 2003/05/30 13:23:27 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -31,7 +31,7 @@
 
 
 // Copy constructor
-G4VStatMFEnsemble::G4VStatMFEnsemble(const G4VStatMFEnsemble & right)
+G4VStatMFEnsemble::G4VStatMFEnsemble(const G4VStatMFEnsemble & )
 {
     G4Exception("G4VStatMFEnsemble::copy_constructor meant to not be accessable");
 }
@@ -39,21 +39,21 @@ G4VStatMFEnsemble::G4VStatMFEnsemble(const G4VStatMFEnsemble & right)
 // Operators
 
 G4VStatMFEnsemble & G4VStatMFEnsemble::
-operator=(const G4VStatMFEnsemble & right)
+operator=(const G4VStatMFEnsemble & )
 {
     G4Exception("G4VStatMFEnsemble::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4VStatMFEnsemble::operator==(const G4VStatMFEnsemble & right) const
+G4bool G4VStatMFEnsemble::operator==(const G4VStatMFEnsemble & ) const
 {
     G4Exception("G4VStatMFEnsemble::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4VStatMFEnsemble::operator!=(const G4VStatMFEnsemble & right) const
+G4bool G4VStatMFEnsemble::operator!=(const G4VStatMFEnsemble & ) const
 {
     G4Exception("G4VStatMFEnsemble::operator!= meant to not be accessable");
     return true;

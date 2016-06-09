@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConicalSurface.hh,v 1.8 2001/07/11 09:59:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ConicalSurface.hh,v 1.9 2003/06/16 16:52:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4ConicalSurface
@@ -74,7 +74,7 @@ public:  // with description
   virtual const char* NameOf() const;
     // Returns the class name.
 
-  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
+  virtual void PrintOn( std::ostream& os = G4cout ) const;
     // Printing function, streaming surface's attributes.
 
   virtual G4double HowNear( const G4Vector3D& x ) const;

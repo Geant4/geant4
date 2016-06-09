@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.cc,v 1.10 2002/01/17 10:49:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Timer.cc,v 1.11 2003/06/06 16:17:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -77,8 +77,8 @@ void G4Exception(const char* s=0);
    }
 #endif /* WIN32 */
 
-// Print timer status n G4std::ostream
-G4std::ostream& operator << (G4std::ostream& os, const G4Timer& t)
+// Print timer status n std::ostream
+std::ostream& operator << (std::ostream& os, const G4Timer& t)
 {
     if (t.IsValid())
 	{

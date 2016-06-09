@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4oEXPO.h,v 1.4 2001/07/11 09:56:44 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */

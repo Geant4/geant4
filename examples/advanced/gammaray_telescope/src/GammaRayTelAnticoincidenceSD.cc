@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceSD.cc,v 1.4 2001/11/29 11:19:18 griccard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: GammaRayTelAnticoincidenceSD.cc,v 1.5 2003/05/30 15:09:00 flongo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -74,7 +74,7 @@ GammaRayTelAnticoincidenceSD::~GammaRayTelAnticoincidenceSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelAnticoincidenceSD::Initialize(G4HCofThisEvent*HCE)
+void GammaRayTelAnticoincidenceSD::Initialize(G4HCofThisEvent*)
 {
   AnticoincidenceCollection = new GammaRayTelAnticoincidenceHitsCollection
     (SensitiveDetectorName,collectionName[0]);
@@ -92,7 +92,7 @@ void GammaRayTelAnticoincidenceSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool GammaRayTelAnticoincidenceSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool GammaRayTelAnticoincidenceSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 { 
   
   G4double edep = aStep->GetTotalEnergyDeposit();

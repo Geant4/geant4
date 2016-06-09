@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3EvaporationProbability.hh,v 1.5 2002/12/12 19:17:07 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4He3EvaporationProbability.hh,v 1.8 2003/06/16 17:05:09 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
@@ -56,18 +56,18 @@ private:
 private:
 
   virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
-  { return 1.0 + CCoeficient(G4double(fragment.GetZ()-GetZ()));}
+  { return 1.0 + CCoeficient(static_cast<G4double>(fragment.GetZ()-GetZ()));}
 	
-  virtual G4double CalcBetaParam(const G4Fragment & fragment) const 
+  virtual G4double CalcBetaParam(const G4Fragment & ) const 
   { return 0.0; }
 
 	
   G4double CCoeficient(const G4double aZ) const;
 
   // Excitation energy levels 
-  G4std::vector<G4double> ExcitEnergies;
+  std::vector<G4double> ExcitEnergies;
   // Spin of excitation energy levels 
-  G4std::vector<G4int> ExcitSpins;
+  std::vector<G4int> ExcitSpins;
 };
 
 

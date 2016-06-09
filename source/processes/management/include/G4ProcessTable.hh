@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: G4ProcessTable.hh,v 1.7 2001/07/11 10:08:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProcessTable.hh,v 1.8 2003/06/16 17:12:29 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -47,7 +47,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4ProcTblElement.hh"
 #include "G4ProcessVector.hh"
@@ -126,8 +126,8 @@ class G4ProcessTable
   // These methods are provided to activate or inactivate processes
 
  public:
-  typedef G4std::vector<G4ProcTblElement*>  G4ProcTableVector;
-  typedef G4std::vector<G4String> G4ProcNameVector;
+  typedef std::vector<G4ProcTblElement*>  G4ProcTableVector;
+  typedef std::vector<G4String> G4ProcNameVector;
 
  public: // with description
   G4ProcNameVector*  GetNameList();

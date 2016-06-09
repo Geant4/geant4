@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003/02/20 11:35:21 vnivanch Exp $
+$Id: History,v 1.6 2003/05/21 14:05:00 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-02-03 V.Ivant (testem8-V05-01-00)
+ - Fix warnings and change input parameters for updated PAI 
 
 20-02-03 V.Ivant (testem8-V05-00-00)
  - Migration to cut per region

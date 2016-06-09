@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Ray.cc,v 1.9 2003/03/28 13:12:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

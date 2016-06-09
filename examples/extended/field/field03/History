@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2003/02/20 09:14:37 vnivanch Exp $
+$Id: History,v 1.6 2003/06/25 17:33:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 25th, 2003 - G.Cosmo (fieldex-V05-01-00)
+--------------------------------------------
+- Fixed mechanism for update of geometry in detector-construction.
+- Corrected GetFieldValue in ElectroMagneticField class. (J.Apostolakis).
+- Fixed pedantic warnings ...
 
 Feb 20th, 2003 - V.Ivanchenko (field-V05-00-00)
 -------------------------------------------------

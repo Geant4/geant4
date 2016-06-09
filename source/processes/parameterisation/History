@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2002/11/20 17:05:46 gcosmo Exp $
+$Id: History,v 1.17 2003/05/21 16:32:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 21, 2003 G. Cosmo - param-V05-01-00
+        o Fixed pedantic warnings on Linux-g++.
+        o Call base class in copy-constructor of G4FastStep.
 
 Nov 20, 2002 G. Cosmo - param-V04-01-02
 	o Patched access to public static data in G4FastStep.cc

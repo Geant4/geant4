@@ -23,7 +23,7 @@
 
 #include "G4RadioactiveDecayMode.hh"
 
-G4std::istream &operator >> (G4std::istream &s, G4RadioactiveDecayMode &q)
+std::istream &operator >> (std::istream &s, G4RadioactiveDecayMode &q)
 {
   G4String a;
   s >> a;

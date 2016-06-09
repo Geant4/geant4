@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionMesonBaryon.hh,v 1.5 2002/12/12 19:17:37 gunter Exp $ //
+// $Id: G4CollisionMesonBaryon.hh,v 1.7 2003/06/16 17:07:54 gunter Exp $ //
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -44,7 +44,7 @@
 #include "G4CollisionComposite.hh"
 #include "G4CollisionVector.hh"
 #include "G4VCrossSectionSource.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4KineticTrack;
 
@@ -62,8 +62,8 @@ public:
 
 protected:
 
-  G4std::vector<G4String> result;
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const
+  std::vector<G4String> result;
+  virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
     G4Exception("Tried to call G4CollisionNNToDeltaDelta::GetListOfColliders. Please find out why!");
     return result;

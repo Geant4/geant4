@@ -62,7 +62,7 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
   G4double m1 = trk1.GetActualMass();
   G4double m2 = trk2.GetActualMass();
 
-  G4std::vector<const G4ParticleDefinition*> OutputDefinitions = GetOutgoingParticles();
+  std::vector<const G4ParticleDefinition*> OutputDefinitions = GetOutgoingParticles();
   if (OutputDefinitions.size() != 2)
     G4Exception("G4VScatteringCollision: Too many output particles!");
 
@@ -151,7 +151,7 @@ double G4VScatteringCollision::SampleResonanceMass(const double poleMass,
   if(minMass > maxMass) minMass = 0;
 
   if (gamma < 1E-10*GeV)
-    return G4std::max(minMass,G4std::min(maxMass, poleMass));
+    return std::max(minMass,std::min(maxMass, poleMass));
   else {
     double fmin = BrWigInt0(minMass, gamma, poleMass);
     double fmax = BrWigInt0(maxMass, gamma, poleMass);

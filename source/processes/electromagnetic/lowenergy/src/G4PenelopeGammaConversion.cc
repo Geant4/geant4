@@ -101,7 +101,7 @@ G4PenelopeGammaConversion::~G4PenelopeGammaConversion()
   delete rangeTest;
 }
 
-void G4PenelopeGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4PenelopeGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   crossSectionHandler->Clear();
@@ -203,7 +203,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
   //electron kinematics
   G4double costheta_el,costheta_po;
   G4double phi_el,phi_po;
-  G4double electronKineEnergy = G4std::max(0.,electronTotEnergy - electron_mass_c2) ; 
+  G4double electronKineEnergy = std::max(0.,electronTotEnergy - electron_mass_c2) ; 
   costheta_el = G4UniformRand()*2.0-1.0;
   G4double kk = sqrt(electronKineEnergy*(electronKineEnergy+2.*electron_mass_c2));
   costheta_el = (costheta_el*electronTotEnergy+kk)/(electronTotEnergy+costheta_el*kk);
@@ -213,7 +213,7 @@ G4VParticleChange* G4PenelopeGammaConversion::PostStepDoIt(const G4Track& aTrack
   G4double dirZ_el = costheta_el;
 
   //positron kinematics
-  G4double positronKineEnergy = G4std::max(0.,positronTotEnergy - electron_mass_c2) ;
+  G4double positronKineEnergy = std::max(0.,positronTotEnergy - electron_mass_c2) ;
   costheta_po = G4UniformRand()*2.0-1.0;
   kk = sqrt(positronKineEnergy*(positronKineEnergy+2.*electron_mass_c2));
   costheta_po = (costheta_po*positronTotEnergy+kk)/(positronTotEnergy+costheta_po*kk);
@@ -280,8 +280,8 @@ G4bool G4PenelopeGammaConversion::IsApplicable(const G4ParticleDefinition& parti
 }
 
 G4double G4PenelopeGammaConversion::GetMeanFreePath(const G4Track& track,
-						     G4double previousStepSize,
-						     G4ForceCondition*)
+						    G4double, // previousStepSize
+						    G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();
@@ -351,8 +351,8 @@ G4double G4PenelopeGammaConversion::GetScreeningRadius(G4double Z)
     }
   G4String pathString(path);
   G4String pathFile = pathString + "/penelope/pp-pen.dat";
-  G4std::ifstream file(pathFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(pathFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (!(lsdp->is_open()))
     {

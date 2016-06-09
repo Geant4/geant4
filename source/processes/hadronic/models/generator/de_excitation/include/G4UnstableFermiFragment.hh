@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnstableFermiFragment.hh,v 1.8 2002/12/12 19:17:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UnstableFermiFragment.hh,v 1.9 2003/06/16 17:06:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -30,7 +30,7 @@
 #ifndef G4UnstableFermiFragment_h
 #define G4UnstableFermiFragment_h 1
 
-#include "g4std/deque"
+#include <deque>
 
 #include "G4VFermiFragment.hh"
 #include "Randomize.hh"
@@ -55,7 +55,7 @@ private:
   
 public:
 
-  G4std::deque<G4LorentzVector*> *
+  std::deque<G4LorentzVector*> *
   FragmentsMomentum(G4double KinE, const G4int K, const G4double * Masses);
 
 private:

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.18 2002/10/28 11:36:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4IntersectionSolid.cc,v 1.19 2003/06/16 16:53:16 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -112,8 +112,8 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
           ->CalculateExtent( pAxis, pVoxelLimit, pTransform, minB, maxB);
   if(retA && retB)
   {
-    pMin = G4std::max( minA, minB ) ; 
-    pMax = G4std::min( maxA, maxB ) ;
+    pMin = std::max( minA, minB ) ; 
+    pMax = std::min( maxA, maxB ) ;
     out  = true ;
   }
   else out = false ;
@@ -421,7 +421,7 @@ G4IntersectionSolid::DistanceToIn( const G4ThreeVector& p) const
     }
     else
     {
-      dist =  G4std::min(fPtrSolidA->DistanceToIn(p),
+      dist =  std::min(fPtrSolidA->DistanceToIn(p),
                     fPtrSolidB->DistanceToIn(p) ) ; 
     }
   }
@@ -468,7 +468,7 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
   G4double distA = fPtrSolidA->DistanceToOut(p,v,calcNorm,&validNormA,&nA) ;
   G4double distB = fPtrSolidB->DistanceToOut(p,v,calcNorm,&validNormB,&nB) ;
 
-  G4double dist = G4std::min(distA,distB) ; 
+  G4double dist = std::min(distA,distB) ; 
 
   if( calcNorm )
   {
@@ -508,7 +508,7 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p ) const
   }
 #endif
 
-  return G4std::min(fPtrSolidA->DistanceToOut(p),
+  return std::min(fPtrSolidA->DistanceToOut(p),
                     fPtrSolidB->DistanceToOut(p) ) ; 
 
 }

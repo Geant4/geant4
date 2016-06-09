@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3Vector.cc,v 1.4 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcmdWith3Vector.cc,v 1.5 2003/06/16 16:55:36 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
 #include "G4UIcmdWith3Vector.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4UIcmdWith3Vector::G4UIcmdWith3Vector
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -46,7 +46,7 @@ G4ThreeVector G4UIcmdWith3Vector::GetNew3VectorValue(const char* paramString)
   G4double vx;
   G4double vy;
   G4double vz;
-  G4std::istrstream is((char*)paramString);
+  std::istrstream is((char*)paramString);
   is >> vx >> vy >> vz;
   return G4ThreeVector(vx,vy,vz);
 }
@@ -54,7 +54,7 @@ G4ThreeVector G4UIcmdWith3Vector::GetNew3VectorValue(const char* paramString)
 G4String G4UIcmdWith3Vector::ConvertToString(G4ThreeVector vec)
 {
   char st[100];
-  G4std::ostrstream os(st,100);
+  std::ostrstream os(st,100);
   os << vec.x() << " " << vec.y() << " " << vec.z() << '\0';
   G4String vl = st;
   return vl;

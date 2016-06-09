@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.hh,v 1.10 2002/12/12 19:14:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QDecayChan.hh,v 1.11 2003/06/16 17:04:04 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QDecayChan ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -32,7 +32,7 @@
 #ifndef G4QDecayChan_h
 #define G4QDecayChan_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 #include "G4QPDGCodeVector.hh"
 
@@ -74,7 +74,7 @@ private:
 };
 
 // Not member operators
-G4std::ostream&   operator<<(G4std::ostream& lhs, G4QDecayChan& rhs);
+std::ostream&   operator<<(std::ostream& lhs, G4QDecayChan& rhs);
 //----------------------------------------------------------------------------------------
 
 inline G4int G4QDecayChan::operator==(const G4QDecayChan& rhs) const {return this==&rhs;}

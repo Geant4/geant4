@@ -20,38 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
-
 /**
  * @author Mark Donszelmann
  */
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/strstream"
-#include "g4std/fstream"
+#include <vector>
+#include <strstream>
+#include <fstream>
 
 //HepRep
 #include "HEPREP/HepRep.h"
@@ -129,10 +105,10 @@ void G4HepRepSceneHandler::open() {
         writer = heprepFactory->createHepRepWriter(&G4cerr);
     } else {
         char fname [256];
-        G4std::ostrstream ost(fname, 256);
-        ost << GetScene()->GetName() << "-" << fileNo++ << ".heprep" << G4std::ends;
+        std::ostrstream ost(fname, 256);
+        ost << GetScene()->GetName() << "-" << fileNo++ << ".heprep" << std::ends;
 
-        out = new G4std::ofstream(fname);
+        out = new std::ofstream(fname);
         writer = heprepFactory->createHepRepWriter(out);
     }
 
@@ -362,7 +338,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 }
 
 
-void G4HepRepSceneHandler::AddPrimitive (const G4Text& text) {
+void G4HepRepSceneHandler::AddPrimitive (const G4Text&) {
 #ifdef DEBUG
     G4cout << "G4HepRepSceneHandler::AddPrimitive(G4Text&) " << G4endl;
 #endif
@@ -393,7 +369,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 
 //Method for handling G4NURBS objects for drawing solids.
 //Knots and Ctrl Pnts MUST be arrays of GLfloats.
-void G4HepRepSceneHandler::AddPrimitive (const G4NURBS& nurb) {
+void G4HepRepSceneHandler::AddPrimitive (const G4NURBS&) {
 #ifdef DEBUG
     G4cout << "G4HepRepSceneHandler::AddPrimitive(G4NURBS&) " << G4endl;
 #endif

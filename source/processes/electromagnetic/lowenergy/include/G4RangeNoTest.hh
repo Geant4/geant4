@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RangeNoTest.hh,v 1.2 2003/01/22 18:42:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RangeNoTest.hh,v 1.3 2003/05/20 20:03:34 pia Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -56,10 +56,10 @@ public:
 
   virtual ~G4RangeNoTest() { }
 
-  virtual G4bool Escape(const G4ParticleDefinition* particle,
-			const G4MaterialCutsCouple* couple,
-			G4double energy,
-			G4double safety) const { return true; }
+  virtual G4bool Escape(const G4ParticleDefinition*,       // particle
+			const G4MaterialCutsCouple*,       // couple,
+			G4double,                          // energy,
+			G4double ) const { return true; }  // safety
 
 private:
 

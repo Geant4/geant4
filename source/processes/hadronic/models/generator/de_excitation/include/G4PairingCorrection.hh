@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PairingCorrection.hh,v 1.6 2002/12/12 19:17:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PairingCorrection.hh,v 1.8 2003/06/16 17:05:55 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -63,10 +63,10 @@ public:
       PCorrection = theCameronGilbertPairingCorrections->GetPairingCorrection(A,Z);
     else {
       const G4double PairingConstant = 12.0*MeV;
-      G4double Pair = (1.0 - G4double(Z) + 2.0*(Z/2)) + (1.0 - G4double(N) + 2.0*(N/2));
-      PCorrection = Pair*PairingConstant/sqrt(G4double(A));
+      G4double Pair = (1.0 - static_cast<G4double>(Z) + 2.0*(Z/2)) + (1.0 - static_cast<G4double>(N) + 2.0*(N/2));
+      PCorrection = Pair*PairingConstant/sqrt(static_cast<G4double>(A));
     }
-    return G4std::max(PCorrection,0.0);
+    return std::max(PCorrection,0.0);
   }
 
 
@@ -74,8 +74,8 @@ public:
   {
     const G4double PairingConstant = 14.0*MeV;
     const G4int N = A - Z;
-    G4double Pair = (1.0 - G4double(Z) + 2.0*(Z/2)) + (1.0 - G4double(N) + 2.0*(N/2));
-    G4double PCorrection = Pair*PairingConstant/sqrt(G4double(A));
+    G4double Pair = (1.0 - static_cast<G4double>(Z) + 2.0*(Z/2)) + (1.0 - static_cast<G4double>(N) + 2.0*(N/2));
+    G4double PCorrection = Pair*PairingConstant/sqrt(static_cast<G4double>(A));
     return PCorrection;
   }
 

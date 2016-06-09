@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationFactory.cc,v 1.2 2002/12/12 19:17:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VEvaporationFactory.cc,v 1.4 2003/06/16 17:06:52 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -30,21 +30,21 @@
 #include "G4VEvaporationFactory.hh"
 
 const G4VEvaporationFactory & 
-G4VEvaporationFactory::operator=(const G4VEvaporationFactory & val)
+G4VEvaporationFactory::operator=(const G4VEvaporationFactory & )
 {
   G4Exception("G4VEvaporationFactory::operator= meant to not be accessable.");
   return *this;
 }
 
 G4bool 
-G4VEvaporationFactory::operator==(const G4VEvaporationFactory & val) const
+G4VEvaporationFactory::operator==(const G4VEvaporationFactory & ) const
 {
   G4Exception("G4VEvaporationFactory::operator== meant to not be accessable.");
   return false;
 }
 
 G4bool 
-G4VEvaporationFactory::operator!=(const G4VEvaporationFactory & val) const
+G4VEvaporationFactory::operator!=(const G4VEvaporationFactory & ) const
 {
   G4Exception("G4VEvaporationFactory::operator!= meant to not be accessable.");
   return true;
@@ -56,13 +56,13 @@ G4VEvaporationFactory::operator!=(const G4VEvaporationFactory & val) const
 G4VEvaporationFactory::~G4VEvaporationFactory()
 {
   if (_channel != 0)
-    G4std::for_each(_channel->begin(), _channel->end(), 
+    std::for_each(_channel->begin(), _channel->end(), 
 		    DeleteFragment());
   delete _channel;
 }
 
 
-G4std::vector<G4VEvaporationChannel*> * 
+std::vector<G4VEvaporationChannel*> * 
 G4VEvaporationFactory::GetChannel()
 {
   // Lazy initialization

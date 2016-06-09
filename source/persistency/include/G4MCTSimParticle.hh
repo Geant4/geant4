@@ -26,9 +26,9 @@
 #define MCT_SIM_PARTICLE_H
 
 #include "G4Types.hh"
-#include "g4std/vector"
+#include <vector>
 #include <string>
-#include "g4std/iostream"
+#include <iostream>
 #include "CLHEP/Vector/LorentzVector.h"
 
 // ====================================================================
@@ -39,14 +39,14 @@
 class G4MCTSimVertex;
 class G4MCTSimParticle;
 
-typedef G4std::vector<G4MCTSimParticle*> SimParticleList;
+typedef std::vector<G4MCTSimParticle*> SimParticleList;
 
 class G4MCTSimParticle {
 protected:
   G4MCTSimParticle* parentParticle;
-  G4std::vector<G4MCTSimParticle*> associatedParticleList;
+  std::vector<G4MCTSimParticle*> associatedParticleList;
 
-  G4std::string name;
+  std::string name;
   int pdgID;
   int trackID;
   int parentTrackID;
@@ -57,9 +57,9 @@ protected:
   
 public:
   G4MCTSimParticle();
-  G4MCTSimParticle(G4std::string aname, int apcode, int atid, int ptid,
+  G4MCTSimParticle(std::string aname, int apcode, int atid, int ptid,
 		 const HepLorentzVector& p);
-  G4MCTSimParticle(G4std::string aname, int apcode, int atid, int ptid,
+  G4MCTSimParticle(std::string aname, int apcode, int atid, int ptid,
 		 const HepLorentzVector& p, const G4MCTSimVertex* v);
   virtual ~G4MCTSimParticle();
  
@@ -71,8 +71,8 @@ public:
   void SetParentParticle(const G4MCTSimParticle* p);
   G4MCTSimParticle* GetParentParticle() const;
 
-  void SetParticleName(G4std::string aname);
-  const G4std::string& GetParticleName() const;
+  void SetParticleName(std::string aname);
+  const std::string& GetParticleName() const;
 
   void SetPdgID(int id);
   int GetPdgID() const;
@@ -102,8 +102,8 @@ public:
   int GetTreeLevel() const;  
   void SetStoreFlagToParentTree(G4bool q=true);
 
-  void Print(G4std::ostream& ostr= G4std::cout, G4bool qrevorder=false) const;
-  void PrintSingle(G4std::ostream& ostr= G4std::cout) const;
+  void Print(std::ostream& ostr= std::cout, G4bool qrevorder=false) const;
+  void PrintSingle(std::ostream& ostr= std::cout) const;
 };
 
 // ====================================================================
@@ -137,10 +137,10 @@ inline void G4MCTSimParticle::SetParentParticle(const G4MCTSimParticle* p)
 inline G4MCTSimParticle* G4MCTSimParticle::GetParentParticle() const
 { return parentParticle; }
 
-inline void G4MCTSimParticle::SetParticleName(G4std::string aname) 
+inline void G4MCTSimParticle::SetParticleName(std::string aname) 
 { name= aname; }
 
-inline const G4std::string& G4MCTSimParticle::GetParticleName() const 
+inline const std::string& G4MCTSimParticle::GetParticleName() const 
 { return name; }
 
 inline  void G4MCTSimParticle::SetPdgID(int id) { pdgID= id; }

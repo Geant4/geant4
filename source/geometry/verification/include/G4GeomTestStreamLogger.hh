@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestStreamLogger.hh,v 1.3 2002/04/19 08:23:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeomTestStreamLogger.hh,v 1.4 2003/06/16 16:54:36 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -47,7 +47,7 @@ class G4GeomTestStreamLogger : public G4GeomTestLogger
 {
   public:  // with description
 
-    G4GeomTestStreamLogger( G4std::ostream &o,
+    G4GeomTestStreamLogger( std::ostream &o,
                             G4int theMaxPointsPerError=20 );
     virtual ~G4GeomTestStreamLogger();
       // Constructors and virtual destructor
@@ -76,7 +76,7 @@ class G4GeomTestStreamLogger : public G4GeomTestLogger
         PrintPos(const G4ThreeVector pos, G4bool useUnit=true )
           : p(pos), unit(useUnit) {;}
     
-        void Print( G4std::ostream & ) const;
+        void Print( std::ostream & ) const;
   
       private:
         G4ThreeVector p;
@@ -89,20 +89,20 @@ class G4GeomTestStreamLogger : public G4GeomTestLogger
         VolumeNameAndCopy( const G4VPhysicalVolume *theVolume )
           : volume(theVolume) {;}
     
-        void Print( G4std::ostream & ) const;
+        void Print( std::ostream & ) const;
   
       private:
         const G4VPhysicalVolume *volume;
     };
   
-    friend G4std::ostream &operator<<( G4std::ostream &,
+    friend std::ostream &operator<<( std::ostream &,
                            const G4GeomTestStreamLogger::PrintPos & );
-    friend G4std::ostream &operator<<( G4std::ostream &,
+    friend std::ostream &operator<<( std::ostream &,
                            const G4GeomTestStreamLogger::VolumeNameAndCopy & );
   
   protected:
 
-    G4std::ostream &out;
+    std::ostream &out;
     G4int maxPointsPerError;
 };
 

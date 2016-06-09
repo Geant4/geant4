@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em3PhysicsListMessenger.hh,v 1.4 2003/02/20 15:52:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

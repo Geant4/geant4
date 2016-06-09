@@ -98,10 +98,10 @@
 #include "G4NuclearLevelManager.hh"
 #include "G4NuclearLevelStore.hh"
 
-#include "g4std/vector"
-#include "g4std/strstream"
-#include "g4std/algorithm"
-#include "g4std/fstream"
+#include <vector>
+#include <strstream>
+#include <algorithm>
+#include <fstream>
 
 const G4double   G4RadioactiveDecay::levelTolerance =2.0*keV;
 
@@ -219,7 +219,7 @@ G4bool G4RadioactiveDecay::IsLoaded(const G4ParticleDefinition &
   // Check whether the radioactive decay data on the ion have already been
   // loaded.
   //
-  return G4std::binary_search(LoadedNuclei.begin(),
+  return std::binary_search(LoadedNuclei.begin(),
 		       LoadedNuclei.end(),
 		       aParticle.GetParticleName());
 }
@@ -238,7 +238,7 @@ void G4RadioactiveDecay::SelectAVolume(const G4String aVolume)
     volume=(*theLogicalVolumes)[i];
     if (volume->GetName() == aVolume) {
       ValidVolumes.push_back(aVolume);
-      G4std::sort(ValidVolumes.begin(), ValidVolumes.end());
+      std::sort(ValidVolumes.begin(), ValidVolumes.end());
       // sort need for performing binary_search
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>0)
@@ -263,11 +263,11 @@ void G4RadioactiveDecay::DeselectAVolume(const G4String aVolume)
   for (size_t i = 0; i < theLogicalVolumes->size(); i++){
     volume=(*theLogicalVolumes)[i];
     if (volume->GetName() == aVolume) {
-      G4std::vector<G4String>::iterator location;
-      location = G4std::find(ValidVolumes.begin(),ValidVolumes.end(),aVolume);
+      std::vector<G4String>::iterator location;
+      location = std::find(ValidVolumes.begin(),ValidVolumes.end(),aVolume);
       if (location != ValidVolumes.end()) {
 	ValidVolumes.erase(location);
-	G4std::sort(ValidVolumes.begin(), ValidVolumes.end());
+	std::sort(ValidVolumes.begin(), ValidVolumes.end());
       }else{
 	G4cerr << " DeselectVolume:" << aVolume << " is not in the list"<< G4endl; 
       }	  
@@ -304,7 +304,7 @@ void G4RadioactiveDecay::SelectAllVolumes()
       G4cout << "         RDM Applies to Volume "  << volume->GetName() << G4endl;
 #endif
   }
-  G4std::sort(ValidVolumes.begin(), ValidVolumes.end());
+  std::sort(ValidVolumes.begin(), ValidVolumes.end());
   // sort needed in order to allow binary_search
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -622,17 +622,17 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 
   G4String dirName = getenv("G4RADIOACTIVEDATA");
   LoadedNuclei.push_back(theParentNucleus.GetParticleName());
-  G4std::sort( LoadedNuclei.begin(), LoadedNuclei.end() );
+  std::sort( LoadedNuclei.begin(), LoadedNuclei.end() );
   // sort needed to allow binary_search
 
   char val[100];
-  G4std::ostrstream os(val,100);
+  std::ostrstream os(val,100);
   os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
   G4String file(val);
 
   
 
-  G4std::ifstream DecaySchemeFile(file);
+  std::ifstream DecaySchemeFile(file);
 
   if (!DecaySchemeFile)
     //
@@ -684,7 +684,7 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
       inputLine = inputLine.strip(1);
       if (inputChars[0] != '#' && inputLine.length() != 0)
 	{
-	  G4std::istrstream tmpStream(inputLine);
+	  std::istrstream tmpStream(inputLine);
 	  if (inputChars[0] == 'P')
 	    //
 	    //
@@ -731,7 +731,7 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 		      //
 		      {
 			G4ITDecayChannel *anITChannel = new G4ITDecayChannel
-			  (GetVerboseLevel(), &theParentNucleus, b);
+			  (GetVerboseLevel(), (const G4Ions*) &theParentNucleus, b);
 			theDecayTable->Insert(anITChannel);
 			break;
 		      }
@@ -900,7 +900,7 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
     // Decay mode is isomeric transition.
     //
     G4ITDecayChannel *anITChannel = new G4ITDecayChannel
-      (GetVerboseLevel(), &theParentNucleus, 1);
+      (GetVerboseLevel(), (const G4Ions*) &theParentNucleus, 1);
     theDecayTable->Insert(anITChannel);
   }
   //
@@ -940,8 +940,8 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
 //
 //
 void G4RadioactiveDecay::SetDecayRate(G4int theZ, G4int theA, G4double theE, 
-				       G4int theG, G4std::vector<G4double> theRates, 
-				       G4std::vector<G4double> theTaos)
+				       G4int theG, std::vector<G4double> theRates, 
+				       std::vector<G4double> theTaos)
 { 
   //fill the decay rate vector 
   theDecayRate.SetZ(theZ);
@@ -969,8 +969,8 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
   theDecayRateVector.clear();
   
   G4int nGeneration = 0;
-  G4std::vector<G4double> rates;
-  G4std::vector<G4double> taos;
+  std::vector<G4double> rates;
+  std::vector<G4double> taos;
   
   // start rate is -1.
   rates.push_back(-1.);
@@ -1010,8 +1010,8 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
   G4int AD = 0;
   G4int ZD = 0;
   G4double EP = 0.;
-  G4std::vector<G4double> TP;
-  G4std::vector<G4double> RP;
+  std::vector<G4double> TP;
+  std::vector<G4double> RP;
   G4ParticleDefinition *theDaughterNucleus;
   G4double daughterExcitation;
   G4ParticleDefinition *aParentNucleus;
@@ -1102,7 +1102,7 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 	    //
 	    
 	    theITChannel =  new G4ITDecayChannel
-	      (0, aParentNucleus, brs[0]);
+	      (0, (const G4Ions*) aParentNucleus, brs[0]);
 	    
 	    theDecayTable->Insert(theITChannel);
 	    break;
@@ -1232,7 +1232,7 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 //
 void G4RadioactiveDecay::SetSourceTimeProfile(G4String filename)
 {
-  G4std::ifstream infile ( filename, G4std::ios::in );
+  std::ifstream infile ( filename, std::ios::in );
   if ( !infile ) G4Exception ( "Unable to open source data file" );
   
   float bin, flux;
@@ -1259,7 +1259,7 @@ void G4RadioactiveDecay::SetSourceTimeProfile(G4String filename)
 //
 void G4RadioactiveDecay::SetDecayBias(G4String filename)
 {
-  G4std::ifstream infile ( filename, G4std::ios::in);
+  std::ifstream infile ( filename, std::ios::in);
   if ( !infile ) G4Exception ( "Unable to open bias data file" );
   
   float bin, flux;
@@ -1297,7 +1297,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 
   // First check whether RDM applies to the current logical volume
   //
-  if(!G4std::binary_search(ValidVolumes.begin(),
+  if(!std::binary_search(ValidVolumes.begin(),
 		    ValidVolumes.end(), 
 		    theTrack.GetVolume()->GetLogicalVolume()->GetName()))
     {
@@ -1488,8 +1488,8 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	G4int PZ;
 	G4int PA;
 	G4double PE;
-	G4std::vector<G4double> PT;
-	G4std::vector<G4double> PR;
+	std::vector<G4double> PT;
+	std::vector<G4double> PR;
 	G4double taotime;
 	G4double decayRate;
 	
@@ -1501,8 +1501,8 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	G4int ndecaych;
 	G4DynamicParticle* asecondaryparticle;
 	//	G4DecayProducts* products = NULL;
-	G4std::vector<G4DynamicParticle*> secondaryparticles;
-	G4std::vector<G4double> pw;
+	std::vector<G4DynamicParticle*> secondaryparticles;
+	std::vector<G4double> pw;
 	pw.clear();
 	//now apply the nucleus splitting
 	//

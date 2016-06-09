@@ -23,8 +23,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: lArCal.cc,v 1.4 2002/12/17 15:53:08 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: lArCal.cc,v 1.5 2003/05/26 12:51:17 pmendez Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -114,7 +114,7 @@ int main(int argc,char** argv) {
 
   //  runManager->SetUserAction(new FCALRunAction);
   
-  runManager->SetUserAction(new FCALTBEventAction(StepAction,RunAction));
+  runManager->SetUserAction(new FCALTBEventAction(StepAction));
   
   
 #endif
@@ -128,7 +128,7 @@ int main(int argc,char** argv) {
   if (session)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
-      UI->ApplyCommand("/control/execute prerunN03.mac");    
+      //      UI->ApplyCommand("/control/execute prerunlArcal.mac");    
 #ifdef G4UI_USE_XM
       // Customize the G4UIXm menubar with a macro file :
       UI->ApplyCommand("/control/execute gui.mac");

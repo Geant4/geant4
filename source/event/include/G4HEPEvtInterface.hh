@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtInterface.hh,v 1.6 2001/07/11 09:58:48 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HEPEvtInterface.hh,v 1.7 2003/06/16 16:50:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4HEPEvtInterface_h
 #define G4HEPEvtInterface_h 1
 
-#include "g4std/fstream"
-#include "g4std/vector"
+#include <fstream>
+#include <vector>
 #include "globals.hh"
 #include "G4VPrimaryGenerator.hh"
 #include "G4HEPEvtParticle.hh"
@@ -85,8 +85,8 @@ class G4HEPEvtInterface:public G4VPrimaryGenerator
 
   private:
     G4String fileName;
-    G4std::ifstream inputFile;
-    G4std::vector<G4HEPEvtParticle*> HPlist;
+    std::ifstream inputFile;
+    std::vector<G4HEPEvtParticle*> HPlist;
 };
 
 #endif

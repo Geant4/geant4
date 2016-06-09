@@ -21,72 +21,67 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.hh,v 1.8 2003/03/06 17:55:08 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em5PhysicsList.hh,v 1.9 2003/04/30 14:12:34 maire Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old Em5PhysicsList
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em5PhysicsList_h
 #define Em5PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
+class G4VPhysicsConstructor;
 class Em5DetectorConstruction;
+class Em5StepMax;
 class Em5PhysicsListMessenger;
-class Em5StepCut;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em5PhysicsList: public G4VUserPhysicsList
+class Em5PhysicsList: public G4VModularPhysicsList
 {
   public:
-    Em5PhysicsList( Em5DetectorConstruction*);
+    Em5PhysicsList(Em5DetectorConstruction*);
    ~Em5PhysicsList();
 
-  protected:
-    // Construct particle and physics
     void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
-
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBarions();
-
-  protected:
-  // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
     
-  public:
-
-    void SetGammaCut(G4double);
-    void SetElectronCut(G4double);
-    void GetRange(G4double);
-
-    void SetMaxStep(G4double);
+    void SetCuts();
+    void SetCutForGamma   (G4double);
+    void SetCutForElectron(G4double);
+    void SetCutForPositron(G4double);
+    
+    void AddPhysicsList(const G4String& name);    
+    void ConstructProcess();
+    
+    void AddStepMax();
+    Em5StepMax* GetStepMaxProcess() {return stepMaxProcess;}
+    
+    G4double GetRange(G4double);
+    
 
   private:
-
     G4double cutForGamma;
     G4double cutForElectron;
-    G4double currentDefaultCut;
-
-    Em5DetectorConstruction* pDet;
-    Em5PhysicsListMessenger* physicsListMessenger;
-    Em5StepCut* pStepCut;
+    G4double cutForPositron;
+    
+    Em5DetectorConstruction* pDet;        
+    Em5PhysicsListMessenger* pMessenger;
+        
+    G4VPhysicsConstructor* particleList;
+    G4VPhysicsConstructor* generalPhysicsList;    
+    G4VPhysicsConstructor* emPhysicsList;
+    G4String               emName;
+    Em5StepMax*            stepMaxProcess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 

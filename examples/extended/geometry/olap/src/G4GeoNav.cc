@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeoNav.cc,v 1.1 2002/06/04 07:40:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeoNav.cc,v 1.2 2003/06/16 16:49:25 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -67,7 +67,7 @@ G4LogicalVolume * G4GeoNav::NextLV()
 
 
 G4int G4GeoNav::FilterLV(const G4String & aRegexStr,
-                         G4std::vector<G4LogicalVolume*> & result, 
+                         std::vector<G4LogicalVolume*> & result, 
                          G4bool stopAtFirst)
 {
   regex_t aRegex;
@@ -85,7 +85,7 @@ G4int G4GeoNav::FilterLV(const G4String & aRegexStr,
 
 
 void G4GeoNav::FindLV(regex_t * aRegex, LVTree::node_t * node, 
-                      G4std::vector<G4LogicalVolume*>& result,
+                      std::vector<G4LogicalVolume*>& result,
                       G4bool stopAtFirst)
 {
   if( !regexec(aRegex, node->data()->GetName().data(), 0,0,0))
@@ -106,7 +106,7 @@ void G4GeoNav::FindLV(regex_t * aRegex, LVTree::node_t * node,
 
 }	
 
-G4int G4GeoNav::PathLV(G4std::vector<G4LogicalVolume*> & result)
+G4int G4GeoNav::PathLV(std::vector<G4LogicalVolume*> & result)
 {
    result.push_back(theCurLV->data());
    G4int level=1;
@@ -123,7 +123,7 @@ G4int G4GeoNav::PathLV(G4std::vector<G4LogicalVolume*> & result)
 	      	   
 		      
 G4int G4GeoNav::Tokenize(const G4String & aStr,
-                         G4std::vector<G4String>& tokens)
+                         std::vector<G4String>& tokens)
 {
     G4String::size_type c = aStr.size();
     G4String::size_type idx = 0;
@@ -137,7 +137,7 @@ G4int G4GeoNav::Tokenize(const G4String & aStr,
     }   
           
     // scan for '/'
-    G4std::vector<G4int> pos;
+    std::vector<G4int> pos;
     pos.push_back(0); // begin of input  
     G4String sep("/");
        
@@ -188,14 +188,14 @@ G4int G4GeoNav::Tokenize(const G4String & aStr,
 
 G4LogicalVolume * G4GeoNav::ChangeLV(const G4String & aRegExp)
 {
-    G4std::vector<G4String> tokens;
+    std::vector<G4String> tokens;
     G4int c = Tokenize(aRegExp,tokens);
     
     LVTree::node_t * anItem = theCurLV;
     LVTree::node_t * anItemBefore = theCurLV;   
     if (c) {
       
-      G4std::vector<G4String>::iterator it = tokens.begin();
+      std::vector<G4String>::iterator it = tokens.begin();
       if (*it==G4String("/"))
       {                        // absolute or relative
          anItem = theRootLV;
@@ -270,7 +270,7 @@ G4LogicalVolume * G4GeoNav::ChangeLV(const G4String & aRegExp)
   return 0;  
 }
 
-G4int G4GeoNav::PwdLV(G4std::vector<G4LogicalVolume *>& result)
+G4int G4GeoNav::PwdLV(std::vector<G4LogicalVolume *>& result)
 {
    result.push_back(theCurLV->data());
    LVTree::node_t * temp = theCurLV;
@@ -287,14 +287,14 @@ void G4GeoNav::RecursiveFill(LVTree::node_t* node)
 {
    G4LogicalVolume * lv = node->data();
    
-   G4std::set<G4LogicalVolume*> lvset;
+   std::set<G4LogicalVolume*> lvset;
    
    for ( G4int i=0; i<lv->GetNoDaughters(); ++i)
    {
      lvset.insert(lv->GetDaughter(i)->GetLogicalVolume());  
    }
    
-   G4std::set<G4LogicalVolume*>::iterator it = lvset.begin();
+   std::set<G4LogicalVolume*>::iterator it = lvset.begin();
    for(;it!=lvset.end();++it)
    {
       LVTree::node_t * newnode = new LVTree::node_t(node, *it);
@@ -304,7 +304,7 @@ void G4GeoNav::RecursiveFill(LVTree::node_t* node)
 
 }
 
-G4int G4GeoNav::LsLV(G4std::vector<G4LogicalVolume *>& result)
+G4int G4GeoNav::LsLV(std::vector<G4LogicalVolume *>& result)
 {
   G4int c=0;
   LVTree::node_t * n = theCurLV->firstChild();

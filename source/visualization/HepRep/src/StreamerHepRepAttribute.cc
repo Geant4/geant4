@@ -76,15 +76,15 @@ bool StreamerHepRepAttribute::addAttValue(string key, double red, double green, 
     return addAttValue(new DefaultHepRepAttValue(key, color, showLabel));
 }
 
-HepRepAttValue* StreamerHepRepAttribute::getAttValueFromNode(string lowerCaseName) {
+HepRepAttValue* StreamerHepRepAttribute::getAttValueFromNode(string) {
     return NULL;
 }
 
-HepRepAttValue* StreamerHepRepAttribute::removeAttValue(string key) {
+HepRepAttValue* StreamerHepRepAttribute::removeAttValue(string) {
     return NULL;
 }
 
-HepRepAttValue* StreamerHepRepAttribute::getAttValue(string name) {
+HepRepAttValue* StreamerHepRepAttribute::getAttValue(string) {
     return NULL;
 }
 

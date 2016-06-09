@@ -40,7 +40,7 @@
 #define G4RESONANCEWIDTH_HH
 
 #include "globals.hh"
-#include "g4std/map"
+#include <map>
 
 class G4PhysicsVector;
 

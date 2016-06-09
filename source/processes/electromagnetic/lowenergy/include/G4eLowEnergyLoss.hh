@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.hh,v 1.10 2003/02/07 15:39:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eLowEnergyLoss.hh,v 1.12 2003/06/16 16:59:55 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 
@@ -148,10 +148,9 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
 
   protected:
 
-    virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(
-                    const G4MaterialCutsCouple* couple,
-	  		  G4double incidentEnergy,
-			  G4double eLoss) { return 0; };
+    virtual std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* ,
+							    G4double, G4double) // incidentEnergy, eLoss
+  { return 0; };
 
     G4PhysicsTable* theLossTable;
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.cc,v 1.10 2003/04/05 17:33:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em5SteppingAction.cc,v 1.13 2003/06/16 16:47:52 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -41,7 +41,7 @@
 #include "G4EventManager.hh"
 #include "Em5SteppingMessenger.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4UImanager.hh"
 
 #ifndef G4NOHIST
@@ -113,12 +113,11 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
         eventaction->AddCharged() ;
         eventaction->AddE() ;
         Tsec = track->GetKineticEnergy() ;  // !!!!!!!!!!!!
-        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!
+        Tsec += aStep->GetTotalEnergyDeposit() ;        // !!!!!!!!!!!!		 	  	
 #ifndef G4NOHIST
         if(runaction->GetHisto(7) != 0)
            runaction->GetHisto(7)->fill(Tsec/MeV) ;
 #endif
-
     }
     else
     if(((track->GetDynamicParticle()->GetDefinition()->
@@ -183,6 +182,22 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
            wg = cn/sin(Theta) ;
            runaction->GetHisto(2)->fill(Theta/deg,wg) ;
         }
+#endif
+	
+       // theta projected plot (deg) .............................
+       G4double vx=aStep->GetTrack()->GetMomentumDirection().x() ;
+       G4double vy=aStep->GetTrack()->GetMomentumDirection().y() ;
+       G4double vplane = sqrt(vx*vx+vy*vy) ;
+       G4double thpr = 0. ;
+       if(vplane > 0.)
+       {
+         vx /= vplane ;
+         thpr = acos(vx) ;
+         if(vy < 0.) thpr *= -1. ;
+       }
+#ifndef G4NOHIST
+       if(runaction->GetHisto(10) != 0)
+          runaction->GetHisto(10)->fill(thpr/deg) ;
 #endif
 
        Ttrans = track->GetKineticEnergy() ;

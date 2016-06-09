@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRest.hh,v 1.6 2002/12/12 19:18:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PiMinusAbsorptionAtRest.hh,v 1.7 2003/05/30 10:50:52 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -86,7 +86,7 @@ protected:
 
   // zero mean lifetime
   G4double GetMeanLifeTime(const G4Track& aTrack,
-			   G4ForceCondition* condition) 
+			   G4ForceCondition* ) 
   {
      G4double result = 0;
      if(aTrack.GetMaterial()->GetNumberOfElements() == 1)

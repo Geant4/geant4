@@ -39,8 +39,8 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 G4AugerData::G4AugerData()
 {
@@ -61,16 +61,16 @@ G4AugerData::G4AugerData()
 G4AugerData::~G4AugerData()
 { 
   /*
-  G4std::map<G4int,G4std::vector<G4AugerTransition>,G4std::less<G4int> >::iterator pos;
+  std::map<G4int,std::vector<G4AugerTransition>,std::less<G4int> >::iterator pos;
 
   for (pos = augerTransitionTable.begin(); pos != augerTransitionTable.end(); pos++)
     {
-      G4std::vector<G4AugerTransition> dataSet = (*pos).second;
+      std::vector<G4AugerTransition> dataSet = (*pos).second;
       delete dataSet;
     }
   for (pos = energyMap.begin(); pos != energyMap.end(); pos++)
     {
-      G4std::map<G4Int,G4DataVector*,G4std::less<G4int>>* dataMap = (*pos).second;
+      std::map<G4Int,G4DataVector*,std::less<G4int>>* dataMap = (*pos).second;
       for (pos2 = newIdProbabilityMap.begin(); pos2 != idMap.end(); pos2++)
 	{
 	  G4DataVector* dataSet = (*pos2).second;
@@ -79,7 +79,7 @@ G4AugerData::~G4AugerData()
     }
   for (pos = probabilityMap.begin(); pos != probabilityMap.end(); pos++)
     {
-      G4std::map<G4Int,G4DataVector*,G4std::less<G4int>>* dataMap = (*pos).second;
+      std::map<G4Int,G4DataVector*,std::less<G4int>>* dataMap = (*pos).second;
       for (pos2 = newIdProbabilityMap.begin(); pos2 != idMap.end(); pos2++)
 	{
 	  G4DataVector* dataSet = (*pos2).second;
@@ -119,7 +119,7 @@ G4int G4AugerData::VacancyId(G4int Z, G4int vacancyIndex) const
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
-    G4std::vector<G4AugerTransition> dataSet = (*element).second;
+    std::vector<G4AugerTransition> dataSet = (*element).second;
     n = (G4int) dataSet[vacancyIndex].FinalShellId();
   }
   
@@ -139,7 +139,7 @@ size_t G4AugerData::NumberOfTransitions(G4int Z, G4int vacancyIndex) const
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
-    G4std::vector<G4AugerTransition> dataSet = (*element).second;
+    std::vector<G4AugerTransition> dataSet = (*element).second;
     n = (G4int)dataSet[vacancyIndex].TransitionOriginatingShellIds()->size();
   }
  return  n;
@@ -155,8 +155,8 @@ size_t G4AugerData::NumberOfAuger(G4int Z, G4int initIndex, G4int vacancyId) con
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
-    G4std::vector<G4AugerTransition> dataSet = (*element).second;
-    const G4std::vector<G4int>* temp =  dataSet[initIndex].AugerOriginatingShellIds(vacancyId);
+    std::vector<G4AugerTransition> dataSet = (*element).second;
+    const std::vector<G4int>* temp =  dataSet[initIndex].AugerOriginatingShellIds(vacancyId);
     n = temp->size();
   }
   return n;
@@ -170,7 +170,7 @@ size_t G4AugerData::AugerShellId(G4int Z, G4int vacancyIndex, G4int transId, G4i
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
-    G4std::vector<G4AugerTransition> dataSet = (*element).second;
+    std::vector<G4AugerTransition> dataSet = (*element).second;
     n = dataSet[vacancyIndex].AugerOriginatingShellId(augerIndex,transId);
   }
   return n;
@@ -185,7 +185,7 @@ G4int G4AugerData::StartShellId(G4int Z, G4int vacancyIndex, G4int transitionShe
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
-    G4std::vector<G4AugerTransition> dataSet = (*element).second;
+    std::vector<G4AugerTransition> dataSet = (*element).second;
      n = dataSet[vacancyIndex].TransitionOriginatingShellId(transitionShellIndex);
   }
    
@@ -202,7 +202,7 @@ G4double G4AugerData::StartShellEnergy(G4int Z, G4int vacancyIndex, G4int transi
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
-    G4std::vector<G4AugerTransition> dataSet = (*element).second;
+    std::vector<G4AugerTransition> dataSet = (*element).second;
     n = dataSet[vacancyIndex].AugerTransitionEnergy(augerIndex,transitionId);
       
   }
@@ -219,7 +219,7 @@ G4double G4AugerData::StartShellProb(G4int Z, G4int vacancyIndex,G4int transitio
   else {
     trans_Table::const_iterator element = augerTransitionTable.find(Z);
     if (element == augerTransitionTable.end()) {G4Exception("G4AugerData::augerTransitionTable: Data not Loaded");}
-    G4std::vector<G4AugerTransition> dataSet = (*element).second;
+    std::vector<G4AugerTransition> dataSet = (*element).second;
     n = dataSet[vacancyIndex].AugerTransitionProbability(augerIndex, transitionId);
 
 
@@ -228,12 +228,12 @@ G4double G4AugerData::StartShellProb(G4int Z, G4int vacancyIndex,G4int transitio
      return n;
 }
 
-G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
+std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 { 
   // Build the complete string identifying the file with the data set
   
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   if(Z != 0){
     ost << "au-tr-pr-"<< Z << ".dat";
   }
@@ -251,8 +251,8 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
   
   G4String pathString(path);
   G4String dirFile = pathString + "/auger/" + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
     {
@@ -266,17 +266,17 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
   G4int s = 0;
   
   G4int vacId = 0;
-  G4std::vector<G4int>* initIds = new G4std::vector<G4int>;
-  G4std::vector<G4int>* newIds = new G4std::vector<G4int>;
+  std::vector<G4int>* initIds = new std::vector<G4int>;
+  std::vector<G4int>* newIds = new std::vector<G4int>;
   G4DataVector* transEnergies = new G4DataVector;
   G4DataVector* transProbabilities = new G4DataVector;
-  G4std::vector<G4AugerTransition> augerTransitionVector;
-  G4std::map<G4int,G4std::vector<G4int>,G4std::less<G4int> >* newIdMap = 
-    new G4std::map<G4int,G4std::vector<G4int>,G4std::less<G4int> >;
-  G4std::map<G4int,G4DataVector,G4std::less<G4int> >* newEnergyMap =
-    new G4std::map<G4int,G4DataVector,G4std::less<G4int> >;
-  G4std::map<G4int,G4DataVector,G4std::less<G4int> >* newProbabilityMap = 
-    new G4std::map<G4int,G4DataVector,G4std::less<G4int> >;
+  std::vector<G4AugerTransition> augerTransitionVector;
+  std::map<G4int,std::vector<G4int>,std::less<G4int> >* newIdMap = 
+    new std::map<G4int,std::vector<G4int>,std::less<G4int> >;
+  std::map<G4int,G4DataVector,std::less<G4int> >* newEnergyMap =
+    new std::map<G4int,G4DataVector,std::less<G4int> >;
+  std::map<G4int,G4DataVector,std::less<G4int> >* newProbabilityMap = 
+    new std::map<G4int,G4DataVector,std::less<G4int> >;
 
   
   do {
@@ -296,7 +296,7 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    
 	    
 	    
-	    G4std::vector<G4int>::iterator vectorIndex = initIds->begin();
+	    std::vector<G4int>::iterator vectorIndex = initIds->begin();
 
 	    vacId = *vectorIndex;
 	    
@@ -304,7 +304,7 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    
 
 
-	    G4std::vector<G4int> identifiers;
+	    std::vector<G4int> identifiers;
 	    for (vectorIndex = initIds->begin()+1 ; vectorIndex != initIds->end(); ++vectorIndex){
 
 	      identifiers.push_back(*vectorIndex);
@@ -334,13 +334,13 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    delete newIds;
 	    delete transEnergies;	    
 	    delete transProbabilities;
-	    initIds = new G4std::vector<G4int>;
-	    newIds = new G4std::vector<G4int>;
+	    initIds = new std::vector<G4int>;
+	    newIds = new std::vector<G4int>;
             transEnergies = new G4DataVector;
 	    transProbabilities = new G4DataVector;
-	    newIdMap = new G4std::map<G4int,G4std::vector<G4int>,G4std::less<G4int> >;
-	    newEnergyMap = new G4std::map<G4int,G4DataVector,G4std::less<G4int> >;
-	    newProbabilityMap = new G4std::map<G4int,G4DataVector,G4std::less<G4int> >;	
+	    newIdMap = new std::map<G4int,std::vector<G4int>,std::less<G4int> >;
+	    newEnergyMap = new std::map<G4int,G4DataVector,std::less<G4int> >;
+	    newProbabilityMap = new std::map<G4int,G4DataVector,std::less<G4int> >;	
 	    
 
 
@@ -399,7 +399,7 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 	    }
 	    else {
 
-	      G4std::vector<G4int>::iterator vectorIndex = (initIds->end())-1;
+	      std::vector<G4int>::iterator vectorIndex = (initIds->end())-1;
 	      if((G4int)a != *vectorIndex){
 
 
@@ -418,7 +418,7 @@ G4std::vector<G4AugerTransition> G4AugerData::LoadData(G4int Z)
 		  delete newIds;
 		  delete transEnergies;
 		  delete transProbabilities;
-		  newIds = new G4std::vector<G4int>;
+		  newIds = new std::vector<G4int>;
 		  transEnergies = new G4DataVector;
 		  transProbabilities = new G4DataVector;
 		}
@@ -520,16 +520,16 @@ void G4AugerData::PrintData(G4int Z)
 }
 G4AugerTransition* G4AugerData::GetAugerTransition(G4int Z,G4int vacancyShellIndex)
     {
-      G4std::vector<G4AugerTransition>* dataSet = &augerTransitionTable[Z];
-      G4std::vector<G4AugerTransition>::iterator vectorIndex = dataSet->begin() + vacancyShellIndex;
+      std::vector<G4AugerTransition>* dataSet = &augerTransitionTable[Z];
+      std::vector<G4AugerTransition>::iterator vectorIndex = dataSet->begin() + vacancyShellIndex;
 
       G4AugerTransition* augerTransition = &(*vectorIndex);
       return augerTransition;
     }
   
-G4std::vector<G4AugerTransition>* G4AugerData::GetAugerTransitions(G4int Z)
+std::vector<G4AugerTransition>* G4AugerData::GetAugerTransitions(G4int Z)
   {
-    G4std::vector<G4AugerTransition>* dataSet = &augerTransitionTable[Z];
+    std::vector<G4AugerTransition>* dataSet = &augerTransitionTable[Z];
     return dataSet;
   }
  

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.43 2003/04/26 20:04:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4hIonisation.cc,v 1.44 2003/06/16 17:02:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //---------------- G4hIonisation physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997
@@ -356,7 +356,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
   //
   if (tau > taul)
     {
-     G4double rcut = G4std::min(DeltaThreshold/Tmax, 1.);
+     G4double rcut = std::min(DeltaThreshold/Tmax, 1.);
      dEdx = log(2.*electron_mass_c2*bg2*Tmax/Eexc2)
             +log(rcut)-(1.+rcut)*beta2;
 

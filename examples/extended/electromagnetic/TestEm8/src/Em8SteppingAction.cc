@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8SteppingAction.cc,v 1.4 2001/07/11 09:57:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em8SteppingAction.cc,v 1.5 2003/06/16 16:48:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -41,7 +41,7 @@
 #include "G4EventManager.hh"
 #include "Em8SteppingMessenger.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

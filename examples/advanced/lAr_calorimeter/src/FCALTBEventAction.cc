@@ -23,8 +23,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.cc,v 1.5 2003/02/14 15:55:20 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: FCALTBEventAction.cc,v 1.7 2003/06/16 16:46:35 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -41,7 +41,7 @@
 
 #include "FCALCalorHit.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -136,22 +136,13 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
     G4double OutOfWorld2 = StepAction->GetOutOfWorldTracks(i,j);
 
 
+
 #ifdef G4ANALYSIS_USE
 
     FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-    analysis->analyseEnergyDep(OutOfWorld);
+    analysis->getfhisto_1()->fill(OutOfWorld);
 
 #endif
-
-    //    RunAction->GetHisto(1)->fill(OutOfWorld);
-
-
-//    RunAction->GetTuple(1)->fill(0,OutOfWorld);
-//    RunAction->GetTuple(1)->fill(1,i);
-//    RunAction->GetTuple(1)->fill(2,j);
-//
-//    
-//    RunAction->GetTuple(1)->addRow();
 
   } 
 
@@ -185,18 +176,8 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
 
 #ifdef G4ANALYSIS_USE
     FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-    analysis->analyseEnergyDep(Secondary);
+    analysis->getfhisto_2()->fill(Secondary);
 #endif
-
-//    RunAction->GetHisto(2)->fill(Secondary);
-//
-//    RunAction->GetTuple(2)->fill(0,Secondary);
-//    RunAction->GetTuple(2)->fill(1,i);
-//    RunAction->GetTuple(2)->fill(2,j);
-//    
-//    
-//    RunAction->GetTuple(2)->addRow();
-    
 
   }
   SecndTracks.close();
@@ -224,24 +205,13 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
   EdepFCAL.close();
 
 
-#ifdef G4ANALYSIS_USE
   FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
-  analysis->analyseEnergyDep(EmEdep);
-  analysis->analyseEnergyDep(HadEdep);
+  analysis->getfhisto_3()->fill(EmEdep);
+  analysis->getfhisto_4()->fill(HadEdep);
 
-#endif
+  G4cout<<"EmEdep is="<<EmEdep<<G4endl;
+  G4cout<<"HadEdep is="<<HadEdep<<G4endl;
 
-//  RunAction->GetHisto(3)->fill(EmEdep);
-//  RunAction->GetHisto(4)->fill(HadEdep);
-//
-//
-//  RunAction->GetTuple(3)->fill(0,EmEdep);
-//  RunAction->GetTuple(3)->fill(1,HadEdep);
-//  
-//    
-//    
-//  RunAction->GetTuple(3)->addRow();
-    
 
 
   G4cout << "Edep in FCAL1 FCAl2 : " << StepAction->GetEdepFCAL("FCALEm") << " ";

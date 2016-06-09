@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.cc,v 1.7 2003/04/02 08:52:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ClassicalRK4.cc,v 1.8 2003/06/16 16:51:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G4ClassicalRK4.hh"
 #include "G4ThreeVector.hh"
@@ -36,7 +36,7 @@ G4ClassicalRK4::G4ClassicalRK4(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
   : G4MagErrorStepper(EqRhs, numberOfVariables)
     // fNumberOfVariables(numberOfVariables)
 {
-   unsigned int noVariables= G4std::max(numberOfVariables,8); // For Time .. 7+1
+   unsigned int noVariables= std::max(numberOfVariables,8); // For Time .. 7+1
  
    dydxm = new G4double[noVariables];
    dydxt = new G4double[noVariables]; 

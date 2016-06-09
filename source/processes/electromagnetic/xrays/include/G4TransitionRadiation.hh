@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransitionRadiation.hh,v 1.6 2001/07/11 10:03:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TransitionRadiation.hh,v 1.7 2003/06/03 08:11:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4TransitionRadiation  -- header file
 //
@@ -40,8 +40,9 @@
 // CERN, CN Division, ASD Group
 // History:
 // 18.12.97, V. Grichine (Vladimir.Grichine@cern.ch)
-// 02.02.00, V.Grichine, new data fEnergy and fVarAngle for double 
+// 02.02.00, V.Grichine, new data fEnergy and fVarAngle for double
 //                       numerical integration in inherited classes
+// 03.06.03, V.Ivanchenko fix compilation warnings
 
 #ifndef G4TransitionRadiation_h
 #define G4TransitionRadiation_h
@@ -51,7 +52,7 @@
 #include "G4Material.hh"
 // #include "G4OpBoundaryProcess.hh"
 
-class G4TransitionRadiation : public   G4VDiscreteProcess    
+class G4TransitionRadiation : public   G4VDiscreteProcess
 {
 public:
 
@@ -79,17 +80,17 @@ public:
           return ( aParticleType.GetPDGCharge() != 0.0 );
         }
 
-	G4double GetMeanFreePath(const G4Track& aTrack,
-				 G4double previousStepSize,
+	G4double GetMeanFreePath(const G4Track&,
+				 G4double,
 				 G4ForceCondition* condition)
         {
           *condition = Forced;
 	  return DBL_MAX;      // so TR doesn't limit mean free path
         }
 
-	G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-				       const G4Step&  aStep)
-        { 
+	G4VParticleChange* PostStepDoIt(const G4Track&,
+				        const G4Step&)
+        {
           ClearNumberOfInteractionLengthLeft();
           return &aParticleChange;
         }
@@ -144,6 +145,6 @@ G4double fSigma1 ;                   // plasma energy Sq of matter1
 G4double fSigma2 ;                   // plasma energy Sq of matter2
 
 
-} ;    
+} ;
 
 #endif   // G4TransitionRadiation_h

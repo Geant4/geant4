@@ -12,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: ExpDict.h,v 1.3 2000/01/21 13:42:30 gcosmo Exp $  */ 
+/* $Id: ExpDict.h,v 1.4 2003/06/06 17:07:28 gcosmo Exp $  */ 
 
 #ifdef __OSTORE__
 #include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
@@ -691,16 +691,16 @@ class Schema : public Dictionary_instance {
     { return _typeList.AddNode(td); }
 
     // the whole schema
-    void GenerateExpress(G4std::ostream& out) const;
+    void GenerateExpress(std::ostream& out) const;
 
     // USE, REFERENCE definitions
-    void GenerateUseRefExpress(G4std::ostream& out) const;
+    void GenerateUseRefExpress(std::ostream& out) const;
 
     // TYPE definitions
-    void GenerateTypesExpress(G4std::ostream& out) const;
+    void GenerateTypesExpress(std::ostream& out) const;
 
     // Entity definitions
-    void GenerateEntitiesExpress(G4std::ostream& out) const;
+    void GenerateEntitiesExpress(std::ostream& out) const;
 };
 
 typedef Schema SchemaDescriptor;

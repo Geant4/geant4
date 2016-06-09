@@ -50,7 +50,7 @@
 
 //    
 
-G4VLowEnergyModel::G4VLowEnergyModel(const G4String& name)
+G4VLowEnergyModel::G4VLowEnergyModel(const G4String& ) // argument is name
 {;}
 
 //    

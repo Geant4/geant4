@@ -31,27 +31,27 @@
 #include "G4ConstantLevelDensityParameter.hh"
 
 G4ConstantLevelDensityParameter::
-G4ConstantLevelDensityParameter(const G4ConstantLevelDensityParameter& right) :
-  EvapLevelDensityParameter(0.125*(1./MeV))
+G4ConstantLevelDensityParameter(const G4ConstantLevelDensityParameter& ) :
+ G4VLevelDensityParameter(),  EvapLevelDensityParameter(0.125*(1./MeV))
 {
   G4Exception("G4ConstantLevelDensityParameter::copy_constructor meant to not be accessable");
 }
 
 
 const G4ConstantLevelDensityParameter & G4ConstantLevelDensityParameter::
-operator=(const G4ConstantLevelDensityParameter &right)
+operator=(const G4ConstantLevelDensityParameter &)
 {
   G4Exception("G4ConstantLevelDensityParameter::operator= meant to not be accessable");
   return *this;
 }
 
 
-G4bool G4ConstantLevelDensityParameter::operator==(const G4ConstantLevelDensityParameter &right) const
+G4bool G4ConstantLevelDensityParameter::operator==(const G4ConstantLevelDensityParameter &) const
 {
   return false;
 }
 
-G4bool G4ConstantLevelDensityParameter::operator!=(const G4ConstantLevelDensityParameter &right) const
+G4bool G4ConstantLevelDensityParameter::operator!=(const G4ConstantLevelDensityParameter &) const
 {
   return true;
 }

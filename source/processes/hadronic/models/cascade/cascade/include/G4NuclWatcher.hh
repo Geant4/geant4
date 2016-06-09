@@ -26,8 +26,8 @@
 #include "globals.hh"
 #endif
 
-#include "g4std/algorithm"
-#include "g4std/vector"
+#include <algorithm>
+#include <vector>
 #include <math.h>
 
 class G4NuclWatcher {
@@ -35,9 +35,9 @@ class G4NuclWatcher {
 public:
 
   G4NuclWatcher(G4double z, 
-		G4std::vector<G4double> expa, 
-		G4std::vector<G4double> expcs, 
-		G4std::vector<G4double> experr, 
+		std::vector<G4double> expa, 
+		std::vector<G4double> expcs, 
+		std::vector<G4double> experr, 
 		G4bool check, 
 		G4bool nucl)
     : nuclz(z),
@@ -89,12 +89,12 @@ public:
     return izotop_chsq; 
   };
 
-  G4std::pair<G4double, G4double> getAverageRatio() const { 
+  std::pair<G4double, G4double> getAverageRatio() const { 
 
-    return G4std::pair<G4double, G4double>(average_ratio, aver_rat_err); 
+    return std::pair<G4double, G4double>(average_ratio, aver_rat_err); 
   };
 
-  G4std::pair<G4double, G4double> getExpCs() const {
+  std::pair<G4double, G4double> getExpCs() const {
 
     G4double cs = 0.0;
     G4double err = 0.0;
@@ -105,7 +105,7 @@ public:
       err += exper_err[iz];
     };
 
-    return G4std::pair<G4double, G4double>(cs, err);
+    return std::pair<G4double, G4double>(cs, err);
   };
 
   G4bool to_check() const { 
@@ -118,7 +118,7 @@ public:
     return nucleable; 
   };
 
-  G4std::pair<G4double, G4double> getInuclCs() const {
+  std::pair<G4double, G4double> getInuclCs() const {
 
     G4double cs = 0.0;
     G4double err = 0.0;
@@ -128,7 +128,7 @@ public:
       err += simulated_errors[iz];
     };
 
-    return G4std::pair<G4double, G4double>(cs, err);
+    return std::pair<G4double, G4double>(cs, err);
   };
 
   void print() {
@@ -146,7 +146,7 @@ public:
     G4double exp_cs_err = 0.0;
     G4double inucl_cs = 0.0;
     G4double inucl_cs_err = 0.0;
-    G4std::vector<G4bool> not_used(simulated_cs.size(), true);
+    std::vector<G4bool> not_used(simulated_cs.size(), true);
     G4int nmatched = exper_as.size();
     G4int nused = simulated_cs.size();
     G4double lhood = 0.0;
@@ -253,19 +253,19 @@ private:
 
   G4double aver_matched;
 
-  G4std::vector<G4double> exper_as;
+  std::vector<G4double> exper_as;
 
-  G4std::vector<G4double> exper_cs;
+  std::vector<G4double> exper_cs;
 
-  G4std::vector<G4double> exper_err;
+  std::vector<G4double> exper_err;
 
-  G4std::vector<G4double> simulated_as;
+  std::vector<G4double> simulated_as;
 
-  G4std::vector<G4double> simulated_cs;
+  std::vector<G4double> simulated_cs;
 
-  G4std::vector<G4double> simulated_errors;
+  std::vector<G4double> simulated_errors;
 
-  G4std::vector<G4double> simulated_prob;
+  std::vector<G4double> simulated_prob;
 
   G4bool checkable;
 

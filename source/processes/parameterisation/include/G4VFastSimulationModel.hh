@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFastSimulationModel.hh,v 1.4 2001/07/11 10:08:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VFastSimulationModel.hh,v 1.5 2003/05/21 16:32:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -116,7 +116,7 @@ public: // With description
   // -- A default dummy implementation is provided.
 
   virtual 
-  G4bool AtRestModelTrigger(const G4FastTrack& fastTrack) {return false;}
+  G4bool AtRestModelTrigger(const G4FastTrack&) {return false;}
   // You have to return "true" when the dynamics conditions to trigger your
   // parameterisation are fulfiled. The G4FastTrack provides you access to 
   // the current G4Track, gives simple access to envelope related features 
@@ -127,7 +127,7 @@ public: // With description
   // easily check how far you are from the envelope boundary. 
 
   virtual 
-  void   AtRestDoIt  (const G4FastTrack& fastTrack, G4FastStep& fastStep) {}
+  void   AtRestDoIt  (const G4FastTrack&, G4FastStep&) {}
   // Your parameterisation properly said. The G4FastTrack reference provides 
   // input informations. The final state of the particles after parameterisation
   // has to be returned through the G4FastStep reference. This final state is 

@@ -49,7 +49,7 @@ public:
   
 private:
   G4IsoResult() {}
-  G4IsoResult & operator = (const G4IsoResult & aResult) { return *this;}
+  G4IsoResult & operator = (const G4IsoResult & ) { return *this;}
 
 private:
   G4String theIsoName;

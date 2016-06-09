@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AntiBMesonZero.hh,v 1.8 2002/12/16 11:15:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------

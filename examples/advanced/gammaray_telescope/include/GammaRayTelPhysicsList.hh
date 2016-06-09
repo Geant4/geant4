@@ -20,79 +20,27 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: GammaRayTelPhysicsList.hh,v 1.3 2001/07/11 09:56:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//      CERN Geneva Switzerland
-//
-//
-//      ------------ GammaRayTelPhysicsList  ------
-//           by R.Giannitrapani, F.Longo & G.Santin (13 nov 2000)
-//
-// ************************************************************
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef GammaRayTelPhysicsList_h
 #define GammaRayTelPhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class GammaRayTelPhysicsList: public G4VUserPhysicsList
+class GammaRayTelPhysicsList: public G4VModularPhysicsList
 {
-  public:
-    GammaRayTelPhysicsList();
-   ~GammaRayTelPhysicsList();
+public:
+  GammaRayTelPhysicsList();
+  virtual ~GammaRayTelPhysicsList();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
-  protected:
-    // Construct particle and physics
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
- 
-    virtual void SetCuts();
 
-  public:
-    // Set/Get cut values 
-    void      SetCutForGamma(G4double);
-    void      SetCutForElectron(G4double);
-    void      SetCutForProton(G4double);           
-    G4double  GetCutForGamma() const;
-    G4double  GetCutForElectron() const;
-    G4double  GetCutForProton() const;
-    
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
-
-  protected:
-  // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
-
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron; 
-    G4double cutForProton;
-    G4double currentDefaultCut;
 };
 
+
 #endif
-
-
-
-
-
-
-
 
 
 

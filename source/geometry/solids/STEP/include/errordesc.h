@@ -13,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: errordesc.h,v 1.4 2000/01/21 13:42:39 gcosmo Exp $  */ 
+/* $Id: errordesc.h,v 1.5 2003/06/06 17:07:31 gcosmo Exp $  */ 
 
 #ifdef __OSTORE__
 #include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
@@ -24,7 +24,7 @@
 #endif
 
 #include <scl_string.h>
-#include "g4std/iostream"
+#include <iostream>
 
 typedef enum Severity {
     SEVERITY_MAX	= -5,
@@ -63,7 +63,7 @@ enum  DebugLevel  {
  ** Description:  
  **	the error is a detailed error message + a severity level
  **	also keeps a user message separately
- **	detailed message gets sent to G4std::ostream
+ **	detailed message gets sent to std::ostream
  **	uses SCLstring class to keep the user messages
  **	keeps severity of error
  **	created with or without error
@@ -71,13 +71,13 @@ enum  DebugLevel  {
  ******************************************************************/
 
 class ErrorDescriptor {
-//  friend     G4std::istream &operator<< ( G4std::istream&, ErrorDescriptor& );
+//  friend     std::istream &operator<< ( std::istream&, ErrorDescriptor& );
   protected:
   
     Severity	_severity;
 
     static DebugLevel	_debug_level;
-    static G4std::ostream* _out; // note this will not be persistent
+    static std::ostream* _out; // note this will not be persistent
     
     SCLstring *_userMsg;
     SCLstring *_detailMsg;
@@ -87,7 +87,7 @@ class ErrorDescriptor {
 			  DebugLevel d  = DEBUG_OFF);
     ~ErrorDescriptor () { delete _userMsg; delete _detailMsg; }
 
-    void PrintContents(G4std::ostream &out = G4cout) const;
+    void PrintContents(std::ostream &out = G4cout) const;
 
     void ClearErrorMsg() {
 	_severity = SEVERITY_NULL;
@@ -126,7 +126,7 @@ class ErrorDescriptor {
 
     DebugLevel debug_level() const        { return _debug_level; }
     void debug_level(DebugLevel d)   { _debug_level = d; }
-    void SetOutput(G4std::ostream *o)      { _out = o; }
+    void SetOutput(std::ostream *o)      { _out = o; }
 
 #ifdef __OSTORE__
     static os_typespec* get_os_typespec();

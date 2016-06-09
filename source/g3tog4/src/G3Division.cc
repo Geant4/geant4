@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.cc,v 1.14 2001/11/21 14:25:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3Division.cc,v 1.15 2003/06/16 16:50:48 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 
@@ -199,7 +199,7 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "TRD1" ) {
       if (fIAxis == 1){
-        fHighRange = G4std::max(Rpar[0]*cm, Rpar[1]*cm);
+        fHighRange = std::max(Rpar[0]*cm, Rpar[1]*cm);
       }
       else if( fIAxis == 2) {
        fHighRange = Rpar[2]*cm;
@@ -211,10 +211,10 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "TRD2" ) {
       if (fIAxis == 1){
-        fHighRange = G4std::max(Rpar[0]*cm, Rpar[1]*cm);
+        fHighRange = std::max(Rpar[0]*cm, Rpar[1]*cm);
       }
       else if( fIAxis == 2) {
-        fHighRange = G4std::max(Rpar[2]*cm, Rpar[3]*cm);
+        fHighRange = std::max(Rpar[2]*cm, Rpar[3]*cm);
       }
       else if( fIAxis == 3) {
        fHighRange = Rpar[4]*cm;
@@ -262,8 +262,8 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "CONE" ) {
       if (fIAxis == 1){
-        fHighRange = G4std::max(Rpar[2]*cm,Rpar[4]*cm);
-        fLowRange = G4std::max(Rpar[1]*cm,Rpar[3]*cm);
+        fHighRange = std::max(Rpar[2]*cm,Rpar[4]*cm);
+        fLowRange = std::max(Rpar[1]*cm,Rpar[3]*cm);
         fAxis = kRho;
       }
       else if( fIAxis == 2) {
@@ -279,8 +279,8 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "CONS" ) {
       if (fIAxis == 1){
-        fHighRange = G4std::max(Rpar[2]*cm,Rpar[4]*cm);
-        fLowRange = G4std::max(Rpar[1]*cm,Rpar[3]*cm);
+        fHighRange = std::max(Rpar[2]*cm,Rpar[4]*cm);
+        fLowRange = std::max(Rpar[1]*cm,Rpar[3]*cm);
         fAxis = kRho;
       }
       else if( fIAxis == 2) {
@@ -303,13 +303,13 @@ void G3Division::SetRangeAndAxis()
         fAxis = kRho;
       }
       else if( fIAxis == 2) {
-       fLowRange = G4std::min(Rpar[2]*deg,Rpar[3]*deg);
-       fHighRange = G4std::max(Rpar[2]*deg,Rpar[3]*deg);
+       fLowRange = std::min(Rpar[2]*deg,Rpar[3]*deg);
+       fHighRange = std::max(Rpar[2]*deg,Rpar[3]*deg);
        fAxis = kPhi;
       }
       else if( fIAxis == 3) {
-       fLowRange = G4std::min(Rpar[4]*deg,Rpar[5]*deg);
-       fHighRange = G4std::max(Rpar[4]*deg,Rpar[5]*deg);
+       fLowRange = std::min(Rpar[4]*deg,Rpar[5]*deg);
+       fHighRange = std::max(Rpar[4]*deg,Rpar[5]*deg);
        fAxis = kPhi; // ?????? 
       }
     }
@@ -342,10 +342,10 @@ void G3Division::SetRangeAndAxis()
             DzArray[i] = Rpar[i4]*cm;
             Rmin[i] = Rpar[i5]*cm;
             Rmax[i] = Rpar[i6]*cm;
-            rangelo[0] = G4std::min(rangelo[0], Rmin[i]);
-            rangehi[0] = G4std::max(rangehi[0], Rmax[i]);
-            rangelo[2] = G4std::min(rangelo[2], DzArray[i]);
-            rangehi[2] = G4std::max(rangehi[2], DzArray[i]);
+            rangelo[0] = std::min(rangelo[0], Rmin[i]);
+            rangehi[0] = std::max(rangehi[0], Rmax[i]);
+            rangelo[2] = std::min(rangelo[2], DzArray[i]);
+            rangehi[2] = std::max(rangehi[2], DzArray[i]);
         }
         for (i=0;i<nz;i++){
             assert(Rmin[i]>=0 && Rmax[i]>=Rmin[i]);
@@ -388,10 +388,10 @@ void G3Division::SetRangeAndAxis()
             DzArray[i] = Rpar[i4]*cm;
             Rmin[i] = Rpar[i5]*cm;
             Rmax[i] = Rpar[i6]*cm;
-            rangelo[0] = G4std::min(rangelo[0], Rmin[i]);
-            rangehi[0] = G4std::max(rangehi[0], Rmax[i]);
-            rangelo[2] = G4std::min(rangelo[2], DzArray[i]);
-            rangehi[2] = G4std::max(rangehi[2], DzArray[i]);
+            rangelo[0] = std::min(rangelo[0], Rmin[i]);
+            rangehi[0] = std::max(rangehi[0], Rmax[i]);
+            rangelo[2] = std::min(rangelo[2], DzArray[i]);
+            rangehi[2] = std::max(rangehi[2], DzArray[i]);
         }
         for (i=0;i<nz;i++){
             assert(Rmin[i]>=0 && Rmax[i]>=Rmin[i]);

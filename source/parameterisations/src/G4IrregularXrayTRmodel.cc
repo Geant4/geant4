@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IrregularXrayTRmodel.cc,v 1.5 2003/02/12 08:48:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4IrregularXrayTRmodel.cc,v 1.6 2003/05/21 16:39:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 
@@ -213,8 +213,7 @@ void G4IrregularXrayTRmodel::DoIt( const G4FastTrack& fastTrack ,
 // mean absorption length of XTR photons in coresponding material.
 
 G4double 
-G4IrregularXrayTRmodel::GetStackFactor( G4double energy, 
-                                         G4double gamma, G4double varAngle )
+G4IrregularXrayTRmodel::GetStackFactor( G4double energy, G4double, G4double )
 {
   G4double result, plateFactor, gasFactor, factor ;
 

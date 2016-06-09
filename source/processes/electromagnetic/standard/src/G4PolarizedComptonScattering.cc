@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.9 2002/04/09 17:34:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PolarizedComptonScattering.cc,v 1.10 2003/05/26 16:13:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------- G4PolarizedComptonScattering physics process ----------------------
@@ -204,7 +204,7 @@ G4ThreeVector G4PolarizedComptonScattering::SetNewPolarization(
 					     G4double sinsqrth,
 					     G4double phi, 
 					     G4double costheta, 
-					     G4ThreeVector& GammaPolarization0) 
+					     G4ThreeVector&) 
 {
   G4double cosphi = cos(phi), sinphi = sin(phi);
   ////  G4double ParallelIntensityPolar = EnergyRate + 1./EnergyRate

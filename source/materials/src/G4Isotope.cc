@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc,v 1.12 2002/02/26 17:34:34 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Isotope.cc,v 1.15 2003/06/18 08:12:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Isotope.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -92,7 +92,7 @@ G4Isotope & G4Isotope::operator=(const G4Isotope& right)
   {
     fName = right.fName;
     fZ = right.fZ;
-    fN = right.fZ;
+    fN = right.fN;
     fA = right.fA;
   }
   return *this;
@@ -114,31 +114,27 @@ G4int G4Isotope::operator!=(const G4Isotope &right) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope* isotope)
+std::ostream& operator<<(std::ostream& flux, G4Isotope* isotope)
 {
-#ifdef G4USE_STD_NAMESPACE
-  G4std::ios::fmtflags mode = flux.flags();
-  flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
-#else
-  long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
-#endif
-  long prec = flux.precision(3);
+  std::ios::fmtflags mode = flux.flags();
+  flux.setf(std::ios::fixed,std::ios::floatfield);
+  G4long prec = flux.precision(3);
     
   flux
-    << " Isotope: " << G4std::setw(5) << isotope->fName 
-    << "   Z = " << G4std::setw(2)    << isotope->fZ 
-    << "   N = " << G4std::setw(3)    << isotope->fN
-    << "   A = " << G4std::setw(6) << G4std::setprecision(2) 
+    << " Isotope: " << std::setw(5) << isotope->fName 
+    << "   Z = " << std::setw(2)    << isotope->fZ 
+    << "   N = " << std::setw(3)    << isotope->fN
+    << "   A = " << std::setw(6) << std::setprecision(2) 
     << (isotope->fA)/(g/mole) << " g/mole";
 
   flux.precision(prec);       
-  flux.setf(mode,G4std::ios::floatfield);       
+  flux.setf(mode,std::ios::floatfield);       
   return flux;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope& isotope)
+ std::ostream& operator<<(std::ostream& flux, G4Isotope& isotope)
 {
   flux << &isotope;        
   return flux;
@@ -146,7 +142,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Isotope* isotope)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
      
-G4std::ostream& operator<<(G4std::ostream& flux, G4IsotopeTable IsotopeTable)
+std::ostream& operator<<(std::ostream& flux, G4IsotopeTable IsotopeTable)
 {
  //Dump info for all known isotopes
    flux 

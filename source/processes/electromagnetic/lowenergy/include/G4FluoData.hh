@@ -43,8 +43,8 @@
 #define G4FLUODATA_HH 1
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 
 class G4FluoTransition;
 class G4DataVector;
@@ -86,7 +86,7 @@ public:
 
   //void BuildFluoTransitionTable();
 
-  //G4std::vector<G4FluoTransition*> GetFluoTransitions(G4int Z);
+  //std::vector<G4FluoTransition*> GetFluoTransitions(G4int Z);
   //G4FluoTransition GetFluoTransition(G4int Z, G4int shellId);
 
 private:
@@ -95,12 +95,12 @@ private:
   G4FluoData& operator=(const G4FluoData& right);
   G4FluoData(const G4FluoData&);
 
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> > idMap;
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> > energyMap;
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> > probabilityMap;
-  G4std::vector<G4int> nInitShells;
+  std::map<G4int,G4DataVector*,std::less<G4int> > idMap;
+  std::map<G4int,G4DataVector*,std::less<G4int> > energyMap;
+  std::map<G4int,G4DataVector*,std::less<G4int> > probabilityMap;
+  std::vector<G4int> nInitShells;
   G4int numberOfVacancies;
-  G4std::map<G4int,G4std::vector<G4FluoTransition*>,G4std::less<G4int> > fluoTransitionTable;  
+  std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> > fluoTransitionTable;  
 };
 
 #endif

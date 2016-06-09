@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCrossSections.cc,v 1.10 2002/12/12 19:16:50 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HadronCrossSections.cc,v 1.11 2003/06/16 17:03:06 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections
@@ -1499,7 +1499,7 @@ G4HadronCrossSections::GetCaptureCrossSection(
    G4double ek = aParticle->GetKineticEnergy()/GeV;
    if (ek > 0.0327) return 0.;
 
-   G4double ekx = G4std::max(ek, 1.e-9);
+   G4double ekx = std::max(ek, 1.e-9);
    G4double z = anElement->GetZ();
    G4int izno = static_cast<G4int> (z + 0.01);
    if (izno > 100) izno = 100;      // Not in GHESIG
@@ -1553,7 +1553,7 @@ G4HadronCrossSections::GetFissionCrossSection(
    G4double z43ba;
    if (j == 4) {
       z43ba = pow(z, 4./3.)/a;
-      z43ba = G4std::max(-67. + 38.7*z43ba, 0.);
+      z43ba = std::max(-67. + 38.7*z43ba, 0.);
    }
    else {
       z43ba = 1.;

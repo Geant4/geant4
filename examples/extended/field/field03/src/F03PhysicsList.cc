@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03PhysicsList.cc,v 1.5 2003/02/20 09:14:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F03PhysicsList.cc,v 1.6 2003/06/16 16:49:06 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 
 #include "G4Timer.hh"
@@ -41,7 +41,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
                
 #include "G4FastSimulationManagerProcess.hh"
 

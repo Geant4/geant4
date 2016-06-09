@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.hh,v 1.6 2002/04/19 08:20:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VoxelLimits.hh,v 1.7 2003/06/16 16:52:02 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4VoxelLimits
 //
@@ -54,7 +54,7 @@
 #include "geomdefs.hh"
 
 #include "G4ThreeVector.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 #include <assert.h>
 
@@ -131,7 +131,7 @@ class G4VoxelLimits
 
 #include "G4VoxelLimits.icc"
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VoxelLimits& pLim);
+std::ostream& operator << (std::ostream& os, const G4VoxelLimits& pLim);
   // Print the limits to the stream in the form:
   //  "{(xmin,xmax) (ymin,ymax) (zmin,zmax)}"
   // Replace (xmin,xmax) by (-,-)  when not limited.

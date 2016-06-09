@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutron.cc,v 1.12 2002/12/16 11:15:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4AntiNeutron.cc,v 1.13 2003/06/16 16:56:51 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -32,8 +32,8 @@
 //      4th April 1996, G.Cosmo
 //                          H.Kurashige 7 July 1996
 // **********************************************************************
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4AntiNeutron.hh"
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em2DetectorMessenger.cc,v 1.11 2003/02/14 14:21:28 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
  

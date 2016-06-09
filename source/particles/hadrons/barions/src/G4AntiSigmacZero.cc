@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacZero.cc,v 1.11 2002/12/16 11:15:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4AntiSigmacZero.cc,v 1.12 2003/06/16 16:57:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -35,8 +35,8 @@
 //  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4AntiSigmacZero.hh"
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPProduct.hh,v 1.7 2002/12/12 19:18:16 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPProduct.hh,v 1.8 2003/06/16 17:11:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPProduct_h
 #define G4NeutronHPProduct_h 1
@@ -31,7 +31,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
 #include "G4ReactionProductVector.hh"
@@ -54,7 +54,7 @@ class G4NeutronHPProduct
     if(theDist != NULL) delete theDist;
   }
   
-  inline void Init(G4std::ifstream & aDataFile)
+  inline void Init(std::ifstream & aDataFile)
   {
     aDataFile >> theMassCode>>theMass>>theIsomerFlag>>theDistLaw
               >> theGroundStateQValue>>theActualStateQValue;

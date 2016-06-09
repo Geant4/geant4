@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroNucleon.cc,v 1.9 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroNucleon.cc,v 1.11 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,21 +32,21 @@
 // Operators
 
 G4StatMFMacroNucleon & G4StatMFMacroNucleon::
-operator=(const G4StatMFMacroNucleon & right)
+operator=(const G4StatMFMacroNucleon & )
 {
     G4Exception("G4StatMFMacroNucleon::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMFMacroNucleon::operator==(const G4StatMFMacroNucleon & right) const
+G4bool G4StatMFMacroNucleon::operator==(const G4StatMFMacroNucleon & ) const
 {
     G4Exception("G4StatMFMacroNucleon::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4StatMFMacroNucleon::operator!=(const G4StatMFMacroNucleon & right) const
+G4bool G4StatMFMacroNucleon::operator!=(const G4StatMFMacroNucleon & ) const
 {
     G4Exception("G4StatMFMacroNucleon::operator!= meant to not be accessable");
     return true;
@@ -100,13 +100,15 @@ G4double G4StatMFMacroNucleon::CalcEntropy(const G4double T, const G4double Free
     G4double NeutronEntropy = 0.0;
     if (_NeutronMeanMultiplicity > 0.0)
 	NeutronEntropy = _NeutronMeanMultiplicity*(5./2.+
-						   log(2.0*G4double(theA)*FreeVol/(lambda3*_NeutronMeanMultiplicity)));
+						   log(2.0*static_cast<G4double>(theA)*FreeVol/
+						       (lambda3*_NeutronMeanMultiplicity)));
 								
 								
     G4double ProtonEntropy = 0.0;
     if (_ProtonMeanMultiplicity > 0.0)
 	ProtonEntropy = _ProtonMeanMultiplicity*(5./2.+
-						 log(2.0*G4double(theA)*FreeVol/(lambda3*_ProtonMeanMultiplicity)));
+						 log(2.0*static_cast<G4double>(theA)*FreeVol/
+						     (lambda3*_ProtonMeanMultiplicity)));
 								
 								
     return NeutronEntropy+ProtonEntropy;

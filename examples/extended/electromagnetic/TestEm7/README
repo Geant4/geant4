@@ -1,0 +1,138 @@
+$Id: README,v 1.1 2003/04/22 16:25:03 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm7 
+                            -------
+     This example is devoted to the energy deposited by particles which
+     are absorbed in a given material (Bragg peak).
+     
+     Also it computes the dose deposited in small 'test volumes' called tallies.
+     
+     In addition, it illustrates how to use the concept of 'process' in order 
+     to implement a constraint on the step size of the particle trajectories.
+	
+ 1- GEOMETRY DEFINITION
+ 
+     The geometry consists of a single block of a homogenous material,
+     placed in a world.
+     	
+     Three parameters define the geometry :
+ 	- the material of the box,
+	- the thickness of the box (sizeX),
+	- the  tranverse dimension of the box (sizeYZ).
+	
+     The default is 20 cm of water.
+     	 	
+     In addition a transverse uniform magnetic field can be applied.
+ 	
+     The default geometry is constructed in DetectorConstruction class,
+     but all of the above parameters can be changed interactively via
+     the commands defined in the DetectorMessenger class.
+     
+     The size, matter, positions of several test-volumes (tallies) can be
+     defined via UI commands : /testem/det/tally...    
+ 	
+ 2- PHYSICS LIST
+ 
+    Physics Lists are subdivided on 4 following modules:
+    1. "particles" - particle definitions  
+    2. "general" - decays and transportation  
+    3. "standard" (alternative) - standard EM physics
+    4. "model"    (alternative) - standard EM physics using model approach
+    
+    Notice that there is an example of definition of a static ion : IonC12
+    (see PhysListParticle.cc) and an example of use : ionC12.mac
+ 		
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+     The primary kinematic consists of a single particle which hits the
+     block perpendicular to the input face. The type of the particle
+     and its energy are set in the PrimaryGeneratorAction class, and can
+     changed via the G4 build-in commands of ParticleGun class (see
+     the macros provided with this example).
+     The default is proton 160 MeV
+     	
+     In addition one can define randomly the impact point of the incident
+     particle. The corresponding interactive command is built in
+     PrimaryGeneratorMessenger class.
+	 	
+     A RUN is a set of events.
+ 	
+ 				
+ 4- VISUALIZATION
+ 
+     The Visualization Manager is set in the main().
+     The initialisation of the drawing is done via the command
+     > /control/execute vis.mac
+ 	
+     The detector has a default view which is a longitudinal view of the box.
+ 	
+     The tracks are drawn at the end of event, and erased at the end of run.
+     Optionaly one can choose to draw all particles, only the charged one,
+     or none. This command is defined in EventActionMessenger class.
+     
+		  	
+ 5- HOW TO START ?
+ 
+     - compile and link to generate an executable
+	% cd geant4/examples/extended/electromagnetic/TestEm7 
+ 	% gmake
+ 		
+     - execute Test  in 'batch' mode from macro files
+ 	% TestEm7    run01.mac
+ 		
+     - execute Test  in 'interactive mode' with visualization
+ 	% TestEm7 
+ 		....
+ 	Idle> type your commands
+ 		....
+ 	Idle> exit
+
+
+ 6- HISTOGRAM OF THE BRAGG PEAK
+ 
+     Testem7 computes the total energy deposited along the trajectory of 
+     the incident particle : the so-called Bragg peak.
+     
+     In order to control the accuracy of the deposition, the user can limit
+     the maximum allowed for the step size of charged particles.
+     (command /testem/stepMax )
+ 
+     The result is a 1D histogram (saved as testem7.paw) which is the total
+     energy deposited along the trajectory of the incident particle.
+     
+     The bin size is egal to stepMax. The number of bins is determined by 
+     the thickness of the absorber (with a minimum of 100 bins).
+     The total energy deposited is plotted in MeV/mm.  
+     
+     Note that histograms are disabled via the flag G4NOHIST in GNUmakefile.
+     
+  7- DOSE IN 'TEST-VOLUMES'
+  
+     The energy deposited in the test-volumes (tallies) defined in
+     DetectorConstruction are printed at EndOfRun, both in MeV and gray.
+     
+     Notice that the doses are not re initialized between runs, i.e. they are
+     cumulative over the runs. (idem for the histogram of the Bragg peak.)   
+
+ 8- Using the Anaphe implementation of the AIDA 3.0 histograms:
+ --------------------------------------------------------------
+
+ In order to use the Anaphe implementation of the AIDA 3.0 interfaces, 
+ the 'aida-config' command (which is used in the GNUmakefile) is 
+ available at:
+ /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/aida-config 
+
+ In order to run the executable, you need to source the following
+ script (once):
+ $HOME/bin/setupAnaphe.csh  (or $HOME/bin/setupAnaphe)
+
+ At cern 'setupAnaphe' is available at: 
+ /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
+ (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)
+

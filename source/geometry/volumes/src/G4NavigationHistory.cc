@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.6 2002/08/06 10:35:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NavigationHistory.cc,v 1.7 2003/06/16 16:54:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // G4NavigationHistory Implementation
@@ -52,8 +52,8 @@ G4NavigationHistory::~G4NavigationHistory()
   // delete fNavHistory(0);
 }
 
-G4std::ostream&
-operator << (G4std::ostream& os, const G4NavigationHistory& nav)
+std::ostream&
+operator << (std::ostream& os, const G4NavigationHistory& nav)
 {
   G4cout << "History depth=" << nav.GetDepth() << G4endl;
   for ( G4int i=0; i<=nav.GetDepth(); i++ )

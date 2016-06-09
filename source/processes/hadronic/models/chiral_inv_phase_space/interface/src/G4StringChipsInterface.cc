@@ -23,7 +23,7 @@
 #include "G4StringChipsInterface.hh"
 #include "globals.hh"
 #include "G4Pair.hh"
-#include "g4std/list"
+#include <list>
 #include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
 #include "G4LorentzRotation.hh"
@@ -66,8 +66,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4double theEnergyLostInFragmentation = theEnergyLossPerFermi*pathlength/fermi;
   
   // now select all particles in range
-  G4std::list<G4Pair<G4double, G4KineticTrack *> > theSorted;
-  G4std::list<G4Pair<G4double, G4KineticTrack *> >::iterator current;
+  std::list<G4Pair<G4double, G4KineticTrack *> > theSorted;
+  std::list<G4Pair<G4double, G4KineticTrack *> >::iterator current;
   for(unsigned int secondary = 0; secondary<theSecondaries->size(); secondary++)
   {
     G4LorentzVector a4Mom = theSecondaries->operator[](secondary)->Get4Momentum();
@@ -111,7 +111,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4int nAD = 0;
   G4int nAU = 0;
   G4int nAS = 0;
-  G4std::list<G4Pair<G4double, G4KineticTrack *> >::iterator firstEscaping = theSorted.begin();
+  std::list<G4Pair<G4double, G4KineticTrack *> >::iterator firstEscaping = theSorted.begin();
   G4double runningEnergy = 0;
   G4int particleCount = 0;
   G4LorentzVector theLow = (*(theSorted.begin())).second->Get4Momentum();
@@ -158,7 +158,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
           theSec->SetMomentum(current4Mom.vect());
           theResult->push_back(theSec);
         }
-        G4std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
+        std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
         delete secondaries;
       }
       continue;
@@ -284,7 +284,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   {
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
     output = pan->Fragment();
-    G4std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
+    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
     projHV.clear();
     delete pan;
   }
@@ -330,11 +330,11 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
         theSec->SetMomentum(current4Mom.vect());
         theResult->push_back(theSec);
       }
-      G4std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
+      std::for_each(secondaries->begin(), secondaries->end(), DeleteKineticTrack());
       delete secondaries;
     }
   }
-  G4std::for_each(theSecondaries->begin(), theSecondaries->end(), DeleteKineticTrack());
+  std::for_each(theSecondaries->begin(), theSecondaries->end(), DeleteKineticTrack());
   delete theSecondaries;
     
   // now add the quasmon output

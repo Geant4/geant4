@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.5 2001/07/11 10:09:07 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ASCIITreeMessenger.cc,v 1.6 2003/05/30 13:01:23 johna Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  5th April 2001
@@ -56,13 +56,11 @@ G4ASCIITreeMessenger::~G4ASCIITreeMessenger() {
   delete fpDirectory;
 }
 
-G4String G4ASCIITreeMessenger::GetCurrentValue
-(G4UIcommand* command) {
+G4String G4ASCIITreeMessenger::GetCurrentValue(G4UIcommand*) {
   return "0";
 }
 
-void G4ASCIITreeMessenger::SetNewValue
-(G4UIcommand* command, G4String newValue) {
+void G4ASCIITreeMessenger::SetNewValue(G4UIcommand*, G4String newValue) {
   fpASCIITree->SetVerbosity
     (fpCommandVerbose->GetNewIntValue(newValue));
   G4cout << "G4ASCIITree verbosity now "

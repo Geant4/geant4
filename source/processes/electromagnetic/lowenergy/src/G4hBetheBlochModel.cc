@@ -85,7 +85,7 @@ G4double G4hBetheBlochModel::TheValue(const G4DynamicParticle* particle,
 
 G4double G4hBetheBlochModel::TheValue(const G4ParticleDefinition* aParticle,
        		                      const G4Material* material,
-                                            G4double kineticEnergy) 
+				      G4double kineticEnergy) 
 {
   G4double particleMass = aParticle->GetPDGMass() ;
   G4double eloss  = BetheBlochFormula(material,kineticEnergy,particleMass) ;
@@ -96,8 +96,8 @@ G4double G4hBetheBlochModel::TheValue(const G4ParticleDefinition* aParticle,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hBetheBlochModel::HighEnergyLimit(
-                             const G4ParticleDefinition* aParticle,
-                             const G4Material* material) const
+                             const G4ParticleDefinition* ,
+                             const G4Material* ) const
 {
   return highEnergyLimit ;
 }
@@ -116,7 +116,7 @@ G4double G4hBetheBlochModel::LowEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hBetheBlochModel::HighEnergyLimit(
-                             const G4ParticleDefinition* aParticle) const
+                             const G4ParticleDefinition* ) const
 {
   return highEnergyLimit ;
 }
@@ -124,23 +124,23 @@ G4double G4hBetheBlochModel::HighEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hBetheBlochModel::LowEnergyLimit(
-                             const G4ParticleDefinition* aParticle) const
+                             const G4ParticleDefinition* ) const
 {
   return lowEnergyLimit ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4hBetheBlochModel::IsInCharge(const G4DynamicParticle* particle,
-		                      const G4Material* material) const
+G4bool G4hBetheBlochModel::IsInCharge(const G4DynamicParticle* ,
+		                      const G4Material* ) const
 {
   return true ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4hBetheBlochModel::IsInCharge(const G4ParticleDefinition* aParticle,
-		                      const G4Material* material) const
+G4bool G4hBetheBlochModel::IsInCharge(const G4ParticleDefinition* ,
+		                      const G4Material* ) const
 {
   return true ;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04GeneralPhysics.cc,v 1.3 2002/01/09 17:24:15 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN04GeneralPhysics.cc,v 1.4 2003/06/16 16:49:53 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -30,7 +30,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 ExN04GeneralPhysics::ExN04GeneralPhysics(const G4String& name)
                      :  G4VPhysicsConstructor(name)

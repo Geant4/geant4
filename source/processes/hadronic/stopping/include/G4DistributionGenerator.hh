@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DistributionGenerator.hh,v 1.7 2002/12/12 19:18:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DistributionGenerator.hh,v 1.8 2003/06/16 17:11:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -41,7 +41,7 @@
 #ifndef G4DISTRIBUTIONGENERATOR_HH
 #define G4DISTRIBUTIONGENERATOR_HH
 
-#include "g4std/vector" 
+#include <vector> 
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -52,8 +52,8 @@ class G4DistributionGenerator
 public:
 
   // Constructor
-  G4DistributionGenerator(G4std::vector<G4double>& x,
-  			  G4std::vector<G4double>& values);
+  G4DistributionGenerator(std::vector<G4double>& x,
+  			  std::vector<G4double>& values);
   G4DistributionGenerator();
 
   // Destructor
@@ -69,8 +69,8 @@ private:
   // Copy constructor
   //  G4DistributionGenerator(const G4DistributionGenerator& );
 
-  G4std::vector<G4double> _x;
-  G4std::vector<G4double> _cumProb;
+  std::vector<G4double> _x;
+  std::vector<G4double> _cumProb;
 
 };
  

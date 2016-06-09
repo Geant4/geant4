@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticleVector.hh,v 1.9 2002/12/12 19:18:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DynamicParticleVector.hh,v 1.10 2003/06/16 17:12:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //	History: first implementation, alternative to G4FastVector
@@ -37,9 +37,9 @@
 #include "G4ios.hh"
 
 #include "G4DynamicParticle.hh"
-#include "g4std/vector" 
+#include <vector> 
 
-typedef G4std::vector<G4DynamicParticle *> G4DynamicParticleVector;
+typedef std::vector<G4DynamicParticle *> G4DynamicParticleVector;
 struct DeleteDynamicParticle {void operator()(G4DynamicParticle*aP) {delete aP;}};
 
 #endif

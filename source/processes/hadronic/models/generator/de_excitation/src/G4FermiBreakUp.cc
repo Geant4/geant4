@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiBreakUp.cc,v 1.9 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FermiBreakUp.cc,v 1.11 2003/05/30 13:23:24 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -34,7 +34,7 @@ G4FermiBreakUp::G4FermiBreakUp()
 {
 }
 
-G4FermiBreakUp::G4FermiBreakUp(const G4FermiBreakUp &right)
+G4FermiBreakUp::G4FermiBreakUp(const G4FermiBreakUp &) : G4VFermiBreakUp()
 {
     G4Exception("G4FermiBreakUp::copy_constructor meant to not be accessable");
 }
@@ -45,19 +45,19 @@ G4FermiBreakUp::~G4FermiBreakUp()
 }
 
 
-const G4FermiBreakUp & G4FermiBreakUp::operator=(const G4FermiBreakUp &right)
+const G4FermiBreakUp & G4FermiBreakUp::operator=(const G4FermiBreakUp &)
 {
     G4Exception("G4FermiBreakUp::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4FermiBreakUp::operator==(const G4FermiBreakUp &right) const
+G4bool G4FermiBreakUp::operator==(const G4FermiBreakUp &) const
 {
     return false;
 }
 
-G4bool G4FermiBreakUp::operator!=(const G4FermiBreakUp &right) const
+G4bool G4FermiBreakUp::operator!=(const G4FermiBreakUp &) const
 {
     return true;
 }
@@ -76,14 +76,14 @@ G4FragmentVector * G4FermiBreakUp::BreakItUp(const G4Fragment &theNucleus)
     // Total energy of nucleus in nucleus rest frame 
     G4double TotalEnergyRF = theNucleus.GetExcitationEnergy() +
 	G4ParticleTable::GetParticleTable()->GetIonTable()->
-	GetIonMass(theNucleus.GetZ(),theNucleus.GetA());
+	GetIonMass(static_cast<G4int>(theNucleus.GetZ()),static_cast<G4int>(theNucleus.GetA()));
 
     G4FermiConfigurationList theConfigurationList;
 
 
-	// Split the nucleus
-    G4bool Split = theConfigurationList.Initialize(theNucleus.GetA(), 
-						   theNucleus.GetZ(),
+    // Split the nucleus
+    G4bool Split = theConfigurationList.Initialize(static_cast<G4int>(theNucleus.GetA()), 
+						   static_cast<G4int>(theNucleus.GetZ()),
 						   TotalEnergyRF);
     if ( !Split ) {
 	G4FragmentVector * theResult = new G4FragmentVector;

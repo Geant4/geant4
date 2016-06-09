@@ -65,7 +65,7 @@ public:
 
   G4bool operator== (const G4CrossSectionSourcePtr& right) const;
 
-  G4bool operator< (const G4CrossSectionSourcePtr& right) { return false; }  
+  G4bool operator< (const G4CrossSectionSourcePtr& ) { return false; }  
 
 private:  
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.4 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.5 2003/06/16 16:55:40 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -45,7 +45,7 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(const char* paramString)
   G4double vl;
   char unts[30];
   
-  G4std::istrstream is((char*)paramString);
+  std::istrstream is((char*)paramString);
   is >> vl >> unts;
   G4String unt = unts;
   
@@ -57,7 +57,7 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleRawValue(const char* paramString
   G4double vl;
   char unts[30];
   
-  G4std::istrstream is((char*)paramString);
+  std::istrstream is((char*)paramString);
   is >> vl >> unts;
   
   return vl;
@@ -68,7 +68,7 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewUnitValue(const char* paramString)
   G4double vl;
   char unts[30];
   
-  G4std::istrstream is((char*)paramString);
+  std::istrstream is((char*)paramString);
   is >> vl >> unts;
   G4String unt = unts;
   
@@ -82,7 +82,7 @@ G4String G4UIcmdWithADoubleAndUnit::ConvertToString
   G4double uv = ValueOf(unitName);
   
   char st[50];
-  G4std::ostrstream os(st,50);
+  std::ostrstream os(st,50);
   os << dblValue/uv << " " << unitName << '\0';
   G4String vl = st;
   return vl;

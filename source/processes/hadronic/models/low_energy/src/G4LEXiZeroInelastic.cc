@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEXiZeroInelastic.cc,v 1.5 2002/12/12 19:18:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LEXiZeroInelastic.cc,v 1.6 2003/06/16 17:10:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: XiZero Inelastic Process
  // J.L. Chuma, TRIUMF, 20-Feb-1997
@@ -171,7 +171,7 @@
       counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=G4std::max(0,np-2); nm<=(np+1); ++nm )
+        for( nm=std::max(0,np-2); nm<=(np+1); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -192,7 +192,7 @@
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=G4std::max(0,np-1); nm<=(np+2); ++nm )
+        for( nm=std::max(0,np-1); nm<=(np+2); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -234,7 +234,7 @@
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np )
       {
-        for( nm=G4std::max(0,np-2); nm<=(np+1) && ran>=excs; ++nm )
+        for( nm=std::max(0,np-2); nm<=(np+1) && ran>=excs; ++nm )
         {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
@@ -243,7 +243,7 @@
               nt = np+nm+nz;
               if( nt>0 && nt<=numSec )
               {
-                test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                 if( fabs(dum) < 1.0 )
                 {
@@ -311,7 +311,7 @@
       counter = -1;
       for( np=0; np<numSec/3 && ran>=excs; ++np )
       {
-        for( nm=G4std::max(0,np-1); nm<=(np+2) && ran>=excs; ++nm )
+        for( nm=std::max(0,np-1); nm<=(np+2) && ran>=excs; ++nm )
         {
           for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
           {
@@ -320,7 +320,7 @@
               nt = np+nm+nz;
               if( nt>0 && nt<=numSec )
               {
-                test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                 dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                 if( fabs(dum) < 1.0 )
                 {

@@ -82,7 +82,7 @@ G4double G4NeutronHPKallbachMannSyst::A(G4double anEnergy)
     G4int ZA = theTargetZ;
     G4double ea = epsa+SeparationEnergy(Ac, Nc, AA, ZA);
     G4double Et1 = 130*MeV;
-    G4double R1 = G4std::min(ea, Et1);
+    G4double R1 = std::min(ea, Et1);
     // theProductEnergy is still in CMS!!!
     G4double epsb = theProductEnergy*(theProductMass+theResidualMass)/theResidualMass;
     G4int AB = theResidualA;
@@ -90,7 +90,7 @@ G4double G4NeutronHPKallbachMannSyst::A(G4double anEnergy)
     G4double eb = epsb+SeparationEnergy(Ac, Nc, AB, ZB );
   G4double X1 = R1*eb/ea; 
     G4double Et3 = 41*MeV;
-    G4double R3 = G4std::min(ea, Et3);
+    G4double R3 = std::min(ea, Et3);
   G4double X3 = R3*eb/ea;
   G4double Ma = 1;
   G4double mb(0);
@@ -125,9 +125,9 @@ G4double G4NeutronHPKallbachMannSyst::SeparationEnergy(G4int Ac, G4int Nc, G4int
   G4int Zc = Ac-Nc;
   result = 15.68*(Ac-AA);
   result += -28.07*((Nc-Zc)*(Nc-Zc)/Ac - (NA-ZA)*(NA-ZA)/AA);
-  result += -18.56*(pow(Ac, 2./3.) - pow(AA, 2./3.));
-  result +=  33.22*((Nc-Zc)*(Nc-Zc)/pow(Ac, 4./3.) - (NA-ZA)*(NA-ZA)/pow(AA, 4./3.));
-  result += -0.717*(Zc*Zc/pow(Ac,1./3.)-ZA*ZA/pow(AA,1./3.));
+  result += -18.56*(pow(G4double(Ac), 2./3.) - pow(G4double(AA), 2./3.));
+  result +=  33.22*((Nc-Zc)*(Nc-Zc)/pow(G4double(Ac), 4./3.) - (NA-ZA)*(NA-ZA)/pow(G4double(AA), 4./3.));
+  result += -0.717*(Zc*Zc/pow(G4double(Ac),1./3.)-ZA*ZA/pow(G4double(AA),1./3.));
   result +=  1.211*(Zc*Zc/Ac-ZA*ZA/AA);
   G4double totalBinding(0);
   G4int productA = theTargetA+1-theResidualA;

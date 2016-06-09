@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.10 2003/03/13 16:56:40 pandola Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PenelopeCompton.cc,v 1.16 2003/06/16 17:00:19 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Luciano Pandola
 //
@@ -33,7 +33,10 @@
 //                            from SUN
 //                            Modified some variables to lowercase initial 
 // 10 Mar 2003 V.Ivanchenko   Remove CutPerMaterial warning
-// 13 Mar 2003 L.Pandola      Code "cleaned"   
+// 13 Mar 2003 L.Pandola      Code "cleaned"  
+// 20 Mar 2003 L.Pandola      ReadData() changed (performance improved) 
+// 26 Mar 2003 L.Pandola      Added fluorescence
+// 24 May 2003 MGP            Removed memory leak
 //
 // -------------------------------------------------------------------
 
@@ -58,6 +61,10 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4VRangeTest.hh"
 #include "G4RangeTest.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4AtomicTransitionManager.hh"
+#include "G4AtomicShell.hh"
+#include "G4AtomicDeexcitation.hh"
 #include "G4PenelopeIntegrator.hh"
 #include "G4MaterialCutsCouple.hh"
 
@@ -70,7 +77,8 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     intrinsicHighEnergyLimit(100*GeV),
     energyForIntegration(0.0),
     ZForIntegration(1),
-    nBins(200)
+    nBins(200),
+    cutForLowEnergySecondaryPhotons(250.0*eV)
 {
   if (lowEnergyLimit < intrinsicLowEnergyLimit ||
       highEnergyLimit > intrinsicHighEnergyLimit)
@@ -79,12 +87,12 @@ G4PenelopeCompton::G4PenelopeCompton(const G4String& processName)
     }
 
   meanFreePathTable = 0;
-  ionizationEnergy = new G4std::vector<G4DataVector*>;
-  hartreeFunction  = new G4std::vector<G4DataVector*>;
-  occupationNumber = new G4std::vector<G4DataVector*>;
+  ionizationEnergy = new std::vector<G4DataVector*>;
+  hartreeFunction  = new std::vector<G4DataVector*>;
+  occupationNumber = new std::vector<G4DataVector*>;
   rangeTest = new G4RangeTest;
 
-  ReadData(); //Legge i dati da file!
+  ReadData(); //Read data from file
 
   if (verboseLevel > 0)
     {
@@ -101,12 +109,27 @@ G4PenelopeCompton::~G4PenelopeCompton()
   delete meanFreePathTable;
   delete rangeTest;
   delete matCrossSections;
+
+   for (size_t i=0; i<ionizationEnergy->size(); i++)
+    {
+      delete (*ionizationEnergy)[i];
+    }
   delete ionizationEnergy;
+
+  for (size_t j=0; j<hartreeFunction->size(); j++)
+    {
+      delete (*hartreeFunction)[j];
+    }
   delete hartreeFunction;
-  delete occupationNumber;
+
+  for (size_t k=0; k<occupationNumber->size(); k++)
+    {
+      delete (*occupationNumber)[k];
+    }
+   delete occupationNumber;
 }
 
-void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& )
 {
   G4DataVector energyVector;
   G4double dBin = log10(highEnergyLimit/lowEnergyLimit)/nBins;
@@ -126,7 +149,7 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
   G4DataVector* energies;
   G4DataVector* data;
 
-  matCrossSections = new G4std::vector<G4VEMDataSet*>;
+  matCrossSections = new std::vector<G4VEMDataSet*>;
 
   
   G4int m;
@@ -382,7 +405,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	    {
 	      fpzmax = 1.0-AF*0.2;
 	    }
-	  fpz = 1.0+AF*G4std::max(G4std::min(pzomc,0.2),-0.2);
+	  fpz = 1.0+AF*std::max(std::min(pzomc,0.2),-0.2);
 	}while ((fpzmax*G4UniformRand())>fpz);
   
       //Energy of the scattered photon
@@ -426,9 +449,10 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 
   // Kinematics of the scattered electron 
 
+  
   G4double diffEnergy = photonEnergy0*(1-epsilon);
   ionEnergy = (*((*ionizationEnergy)[Z-1]))[iosc];
-  G4double eKineticEnergy = diffEnergy - ionEnergy;
+  //G4double eKineticEnergy = diffEnergy - ionEnergy;
   G4double Q2 = pow(photonEnergy0,2)+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
   G4double cosThetaE; //scattering angle for the electron
   if (Q2 > 1.0e-12)
@@ -441,10 +465,62 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     }
   G4double sinThetaE = sqrt(1-pow(cosThetaE,2));
 
-  // Generate the electron only if with large enough range w.r.t. cuts and safety
+ 
+ 
+  const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+  const G4AtomicShell* shell = transitionManager->Shell(Z,iosc);
+  G4double bindingEnergy = shell->BindingEnergy();
+  G4int shellId = shell->ShellId();
+  //G4cout << bindingEnergy/keV << " " << ionEnergy/keV << " keV" << G4endl;
+  ionEnergy = std::max(bindingEnergy,ionEnergy); //protection against energy non-conservation 
+  G4double eKineticEnergy = diffEnergy - ionEnergy;
 
+  size_t nTotPhotons=0;
+  G4int nPhotons=0;
+
+  const G4ProductionCutsTable* theCoupleTable=
+    G4ProductionCutsTable::GetProductionCutsTable();
+  size_t indx = couple->GetIndex();
+  G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[indx];
+  cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
+
+  G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
+  cute = std::min(cutForLowEnergySecondaryPhotons,cute);
+  
+  std::vector<G4DynamicParticle*>* photonVector=0;
+  G4DynamicParticle* aPhoton;
+  G4AtomicDeexcitation deexcitationManager;
+
+  if (Z>5 && (ionEnergy > cutg || ionEnergy > cute))
+    {
+      photonVector = deexcitationManager.GenerateParticles(Z,shellId);
+      nTotPhotons = photonVector->size();
+      for (size_t k=0;k<nTotPhotons;k++){
+	aPhoton = (*photonVector)[k];
+	if (aPhoton)
+	  {
+	    G4double itsCut = cutg;
+	    if (aPhoton->GetDefinition() == G4Electron::Electron()) itsCut = cute;
+	    G4double itsEnergy = aPhoton->GetKineticEnergy();
+	    if (itsEnergy > itsCut && itsEnergy <= ionEnergy)
+	      {
+		nPhotons++;
+		ionEnergy -= itsEnergy;
+	      }
+	    else
+	      {
+		delete aPhoton;
+		(*photonVector)[k]=0;
+	      }
+	  }
+      }
+    }
+  G4double energyDeposit =ionEnergy; //il deposito locale e' quello che rimane
+  G4int nbOfSecondaries=nPhotons;
+
+  // Generate the electron only if with large enough range w.r.t. cuts and safety 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
-
+  G4DynamicParticle* electron = 0;
   if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
     {
       G4double xEl = sinThetaE * cos(phi+pi); 
@@ -452,17 +528,33 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       G4double zEl = cosThetaE;
       G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
    
-      G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
-							   eDirection,eKineticEnergy) ;
-      aParticleChange.SetNumberOfSecondaries(1);
-      aParticleChange.AddSecondary(electron);
-      aParticleChange.SetLocalEnergyDeposit(0.); 
+      electron = new G4DynamicParticle (G4Electron::Electron(),
+					eDirection,eKineticEnergy) ;
+      nbOfSecondaries++;
     }
   else
     {
-      aParticleChange.SetNumberOfSecondaries(0);
-      aParticleChange.SetLocalEnergyDeposit(eKineticEnergy);
+      
+      energyDeposit += eKineticEnergy;
     }
+
+  aParticleChange.SetNumberOfSecondaries(nbOfSecondaries);
+  if (electron) aParticleChange.AddSecondary(electron);
+  for (size_t ll=0;ll<nTotPhotons;ll++)
+    {
+      aPhoton = (*photonVector)[ll];
+      if (aPhoton) aParticleChange.AddSecondary(aPhoton);
+    }
+  delete photonVector;
+  if (energyDeposit < 0)
+    {
+      G4cout << "WARNING-" 
+	     << "G4PenelopeCompton::PostStepDoIt - Negative energy deposit"
+	     << G4endl;
+      energyDeposit=0;
+    }
+  aParticleChange.SetLocalEnergyDeposit(energyDeposit);
+  
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
@@ -473,7 +565,7 @@ G4bool G4PenelopeCompton::IsApplicable(const G4ParticleDefinition& particle)
 }
 
 G4double G4PenelopeCompton::GetMeanFreePath(const G4Track& track, 
-					    G4double previousStepSize, 
+					    G4double, // previousStepSize
 					    G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
@@ -498,46 +590,44 @@ void G4PenelopeCompton::ReadData()
       G4Exception(excep);
     }
   G4String pathString(path);
-  G4String pathFile = pathString + "/penelope/comptondata.dat";
-  G4std::ifstream file(pathFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  G4String pathFile = pathString + "/penelope/compton-pen.dat";
+  std::ifstream file(pathFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (!(lsdp->is_open()))
     {
       G4String excep = "G4PenelopeCompton - data file " + pathFile + " not found!";
       G4Exception(excep);
     }
-  file.close();
-  
-  //This algorithm is slow and unelegant!
-  //It must be improved.
-  G4int k1,k2;
+
+  G4int k1,test,test1;
   G4double a1,a2;
-  G4int Z=0;
+  G4int Z=1,nLevels=0;
   G4DataVector* f;
   G4DataVector* u;
   G4DataVector* j;
-  for(Z=1;Z<93;Z++) {
+
+  do{
     f = new G4DataVector;
     u = new G4DataVector;
     j = new G4DataVector;
-    G4std::ifstream file(pathFile);
-    k1=1;
-    while (k1>0)
-      {
-	file >> k1 >> k2 >> a1 >> a2;
-	if(k1 == Z)
-	  {
-	    f->push_back((G4double) k2);
-	    u->push_back(a1);
-	    j->push_back(a2);
-	  }
-      }
-    file.close();
+    file >> Z >> nLevels;
+    for (G4int h=0;h<nLevels;h++){
+      file >> k1 >> a1 >> a2;
+      f->push_back((G4double) k1);
+      u->push_back(a1);
+      j->push_back(a2);
+    }
     ionizationEnergy->push_back(u);
     hartreeFunction->push_back(j);
     occupationNumber->push_back(f);
-  }
+    file >> test >> test1; //-1 -1 close the data for each Z
+    if (test > 0) {
+      G4String excep = "G4PenelopeCompton - data file corrupted!";
+      G4Exception(excep);
+    }
+  }while (test != -2); //the very last Z is closed with -2 instead of -1
+
   //(*((*ionizationEnergy)[Z-1]))[i] contains the ionization energy of the i-th level of
   //the element Z
 };

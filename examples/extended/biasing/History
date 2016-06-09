@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2003/03/11 14:27:29 dressel Exp $
+$Id: History,v 1.24 2003/06/25 13:01:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 25th, 2003  G. Cosmo - exbiasing-V05-01-00
+- Added disclaimer of liability where needed.
 
 Mar 11th, 2003  M. Dressel - exbiasing-V05-00-01
 - changed the replica number of the world volume from -1 to 0

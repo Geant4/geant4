@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   H01PythiaInterface.cc
-//   $Id: H01PythiaInterface.cc,v 1.1 2002/11/19 10:31:40 murakami Exp $
+//   $Id: H01PythiaInterface.cc,v 1.2 2003/06/16 16:48:28 gunter Exp $
 //
 // ====================================================================
 #include "H01PythiaInterface.hh"
@@ -138,7 +138,7 @@ void H01PythiaInterface::SetRandomSeed(G4int iseed)
 }
 
 //////////////////////////////////////////////////////////////////////
-void H01PythiaInterface::PrintRandomStatus(G4std::ostream& ostr) const
+void H01PythiaInterface::PrintRandomStatus(std::ostream& ostr) const
 //////////////////////////////////////////////////////////////////////
 {
   ostr << "# Pythia random numbers status" << G4endl;

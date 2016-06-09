@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.9 2002/11/27 12:44:10 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenGLStoredViewer.cc,v 1.10 2003/06/10 17:13:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -33,8 +33,6 @@
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4OpenGLStoredViewer.hh"
-
-#include <GL/gl.h>
 
 #include "G4ios.hh"
 

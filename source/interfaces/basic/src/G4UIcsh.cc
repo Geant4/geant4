@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcsh.cc,v 1.6 2002/02/26 02:09:08 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcsh.cc,v 1.7 2003/06/16 16:56:01 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4UIcsh.hh"
@@ -46,7 +46,7 @@ G4String G4UIcsh::GetCommandLine(const char* msg)
 //////////////////////////////////
 {
   MakePrompt(msg);
-  G4cout << promptString << G4std::flush;
+  G4cout << promptString << std::flush;
 
   G4String newCommand;
   newCommand.readLine(G4cin, FALSE);

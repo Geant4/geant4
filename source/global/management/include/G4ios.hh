@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.hh,v 1.6 2001/07/11 10:00:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ios.hh,v 1.7 2003/06/06 16:17:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ---------------------------------------------------------------
@@ -46,12 +46,12 @@
 #include <stdlib.h>
 #endif
 
-#include "g4std/iostream"
+#include <iostream>
 
-extern G4std::ostream G4cout;
-extern G4std::ostream G4cerr;
+extern std::ostream G4cout;
+extern std::ostream G4cerr;
 
-#define G4cin G4std::cin
-#define G4endl G4std::endl
+#define G4cin std::cin
+#define G4endl std::endl
 
 #endif

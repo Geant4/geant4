@@ -14,7 +14,7 @@ int pr_obj_errors = 0;
 * and is not subject to copyright.
 */
 
-/* $Id: STEPfile.cc,v 1.5 2000/11/20 18:14:58 gcosmo Exp $ */ 
+/* $Id: STEPfile.cc,v 1.6 2003/06/06 17:07:32 gcosmo Exp $ */ 
 
 /********************************************************************
  TODO LIST:
@@ -34,7 +34,7 @@ int pr_obj_errors = 0;
 #include <s_HEADER_SCHEMA.h>
 
 // STEPundefined contains
-// void PushPastString (G4std::istream& in, SCLstring &s, ErrorDescriptor *err)
+// void PushPastString (std::istream& in, SCLstring &s, ErrorDescriptor *err)
 #include <STEPundefined.h> 
 
 /***************************
@@ -77,21 +77,21 @@ STEPfile::SetFileName (const char* newName)
 /***************************
 function:     ReadHeader
 returns:      Severity
-parameters:   (G4std::istream&) The input stream from which the file is read.
+parameters:   (std::istream&) The input stream from which the file is read.
 description:
    This function reads in the header section of an exchange file. It
    can read it in either version (N279) or (Part 21, July 1992). It
    parses the header section, popluates the _headerInstances, and
    returns an error descriptor.
    It expects to find the "HEADER;" symbol at the beginning of the
-   G4std::istream.
+   std::istream.
 side effects: The function  gobbles all characters up to and including the
    next "ENDSEC;" from in. 
    The STEPfile::_headerInstances may change.
 ***************************/
 
 Severity 
-STEPfile::ReadHeader (G4std::istream& in) 
+STEPfile::ReadHeader (std::istream& in) 
 {
     SCLstring cmtStr;
 
@@ -127,7 +127,7 @@ STEPfile::ReadHeader (G4std::istream& in)
 	}
 	  
 	//check for user defined instances
-	//if it is userDefined, the '!' does not get put back on the G4std::istream
+	//if it is userDefined, the '!' does not get put back on the std::istream
 	in.get(c);
 	if (c == '!') { userDefined = 1; }
 	else          { in.putback(c);   }
@@ -209,12 +209,12 @@ STEPfile::ReadHeader (G4std::istream& in)
 			break;			    
 		}
 
-		//read the values from the G4std::istream
+		//read the values from the std::istream
 		objsev = obj->STEPread(fileid,0,(InstMgr*)0,in);
 		if( !cmtStr.is_null() )
 		    obj->AddP21Comment(cmtStr);
 
-		in >> G4std::ws;
+		in >> std::ws;
 		c = in.peek(); // check for semicolon or keyword 'ENDSEC'
 		if(c != 'E')
 		    in >> c; // read the semicolon
@@ -602,7 +602,7 @@ STEPfile::EntityWfState(char c)
     //  starts at the data section
 
 int
-STEPfile::ReadData1(G4std::istream& in)
+STEPfile::ReadData1(std::istream& in)
 {
     int endsec = 0;
     _entsNotCreated = 0;
@@ -713,7 +713,7 @@ STEPfile::ReadData1(G4std::istream& in)
     {
 	int x = 0;
 	G4cout << 
-	    "\nSTEPfile::ReadData1(G4std::istream& in) os_database ptrs in entities:"
+	    "\nSTEPfile::ReadData1(std::istream& in) os_database ptrs in entities:"
 	     << G4endl;
 	SCLP23(Application_instance) *STEPent = 0;
 	while (x < instance_count)
@@ -751,7 +751,7 @@ STEPfile::ReadData1(G4std::istream& in)
 #if bzpoibujqoiwejsdlfj
 
 int
-STEPfile::ReadData1(G4std::istream& in)
+STEPfile::ReadData1(std::istream& in)
 {
     int endsec = 0;
     _entsNotCreated = 0;
@@ -907,7 +907,7 @@ STEPfile::ReadData1(G4std::istream& in)
 #endif
 
 int
-STEPfile::ReadWorkingData1 (G4std::istream& in)
+STEPfile::ReadWorkingData1 (std::istream& in)
 {
     return ReadData1(in);
 
@@ -965,7 +965,7 @@ STEPfile::ReadWorkingData1 (G4std::istream& in)
 	      return instance_count;
 	  }
 
-	  in >> G4std::ws;
+	  in >> std::ws;
 	  in >> c;
 	  if( c != ENTITY_NAME_DELIM)
 	  {
@@ -1053,13 +1053,13 @@ STEPfile::ReadWorkingData1 (G4std::istream& in)
 
 /******************************************************************
  ** Procedure:  ReadData2
- ** Parameters:  G4std::istream
+ ** Parameters:  std::istream
  ** Returns:  number of valid instances read
  ** Description:  reads in the data portion of the instances 
  **               in an exchange file
  ******************************************************************/
 int
-STEPfile::ReadData2 (G4std::istream& in, int useTechCor)
+STEPfile::ReadData2 (std::istream& in, int useTechCor)
 {
     _entsInvalid = 0;
     _entsIncomplete = 0;
@@ -1201,7 +1201,7 @@ STEPfile::ReadData2 (G4std::istream& in, int useTechCor)
 
 #if xpqosdblkxfnvkbybbbbb
 int
-STEPfile::ReadData2 (G4std::istream& in)
+STEPfile::ReadData2 (std::istream& in)
 {
     _entsInvalid = 0;
     _entsIncomplete = 0;
@@ -1347,7 +1347,7 @@ STEPfile::ReadData2 (G4std::istream& in)
 #ifdef junk
 // old version 8/23/94
 int
-STEPfile::ReadData2 (G4std::istream& in)
+STEPfile::ReadData2 (std::istream& in)
 {
     _errorCount = 0;  // reset error count
     _warningCount = 0;  // reset error count
@@ -1394,7 +1394,7 @@ STEPfile::ReadData2 (G4std::istream& in)
 #endif
 
 int
-STEPfile::ReadWorkingData2 (G4std::istream& in, int useTechCor)
+STEPfile::ReadWorkingData2 (std::istream& in, int useTechCor)
 {
     return ReadData2 (in, useTechCor);
 #ifdef junk
@@ -1477,7 +1477,7 @@ STEPfile::ReadWorkingData2 (G4std::istream& in, int useTechCor)
  */
 
 int
-STEPfile::FindDataSection (G4std::istream& in)  
+STEPfile::FindDataSection (std::istream& in)  
 {
     ErrorDescriptor errs;
     SCLP23(String) tmp;
@@ -1508,7 +1508,7 @@ STEPfile::FindDataSection (G4std::istream& in)
 		    if (c == 'A')
 		    {
 			in.get(c);	// read 'A'
-			in >> G4std::ws; // may want to skip comments or print control directives?
+			in >> std::ws; // may want to skip comments or print control directives?
 			c = in.peek();	// look for semicolon
 			if (c == ';')
 			{
@@ -1541,7 +1541,7 @@ STEPfile::FindDataSection (G4std::istream& in)
 }
 
 int
-STEPfile::FindHeaderSection (G4std::istream& in)  
+STEPfile::FindHeaderSection (std::istream& in)  
 {
     char buf[BUFSIZ];
     char *b = buf;
@@ -1570,23 +1570,23 @@ STEPfile::FindHeaderSection (G4std::istream& in)
 /***************************
  description:
     This function creates an instance based on the KEYWORD
-    read from the G4std::istream.
+    read from the std::istream.
     It expects an ENTITY_NAME (int) from the first set of
-    characters on the G4std::istream. If the (int) is not found,
+    characters on the std::istream. If the (int) is not found,
     ENTITY_NULL is returned.
 
   side effects:
-    The function leaves the G4std::istream set to the end of the stream 
+    The function leaves the std::istream set to the end of the stream 
     of characters representing the ENTITY_INSTANCE. It attempts to
     recover on errors by reading up to and including the next ';'.
 
 an ENTITY_INSTANCE consists of:
    '#'(int)'=' [SCOPE] SIMPLE_RECORD ';' ||
    '#'(int)'=' [SCOPE] SUBSUPER_RECORD ';'
-The '#' is read from the G4std::istream before CreateInstance is called.
+The '#' is read from the std::istream before CreateInstance is called.
 ***************************/
 SCLP23(Application_instance) *
-STEPfile::CreateInstance(G4std::istream& in, G4std::ostream &out) 
+STEPfile::CreateInstance(std::istream& in, std::ostream &out) 
 {
     SCLstring tmpbuf;
     SCLstring objnm;
@@ -1627,7 +1627,7 @@ STEPfile::CreateInstance(G4std::istream& in, G4std::ostream &out)
     }
 
     ReadTokenSeparator(in);
-    c = in.peek(); // peek at the next character on the G4std::istream
+    c = in.peek(); // peek at the next character on the std::istream
 
     //check for optional "&SCOPE" construct
     if (c == '&')  // TODO check this out
@@ -1636,7 +1636,7 @@ STEPfile::CreateInstance(G4std::istream& in, G4std::ostream &out)
 	if (s < SEVERITY_WARNING) 
 	    {  return ENTITY_NULL;  }
 	ReadTokenSeparator(in);
-	c = in.peek(); // peek at next char on G4std::istream again
+	c = in.peek(); // peek at next char on std::istream again
     }
 
     //check for subtype/supertype record
@@ -1751,15 +1751,15 @@ STEPfile::CreateInstance(G4std::istream& in, G4std::ostream &out)
     instance to the instance manager.
  side-effects:
     It first searches for "&SCOPE" and reads all characters
-    from the G4std::istream up to and including "ENDSCOPE"
+    from the std::istream up to and including "ENDSCOPE"
  returns: ErrorDescriptor
-    >= SEVERITY_WARNING: the G4std::istream was read up to and including the
+    >= SEVERITY_WARNING: the std::istream was read up to and including the
                       "ENDSCOPE" and the export list /#1, ... #N/
-    <  SEVERITY_WARNING: the G4std::istream was read up to and including the next ";"
+    <  SEVERITY_WARNING: the std::istream was read up to and including the next ";"
     < SEVERITY_BUG: fatal
 **************************************************/
 Severity
-STEPfile::CreateScopeInstances(G4std::istream& in, SCLP23(Application_instance_ptr) ** scopelist)
+STEPfile::CreateScopeInstances(std::istream& in, SCLP23(Application_instance_ptr) ** scopelist)
 {
     Severity rval = SEVERITY_NULL;
     SCLP23(Application_instance) * se;
@@ -1860,7 +1860,7 @@ STEPfile::CreateScopeInstances(G4std::istream& in, SCLP23(Application_instance_p
 }
 
 SCLP23(Application_instance) *
-STEPfile::CreateSubSuperInstance(G4std::istream& in, int fileid, ErrorDescriptor &e)
+STEPfile::CreateSubSuperInstance(std::istream& in, int fileid, ErrorDescriptor &e)
 {
     SCLstring tmpstr;
     SCLP23(Application_instance) * obj = ENTITY_NULL;
@@ -1876,7 +1876,7 @@ STEPfile::CreateSubSuperInstance(G4std::istream& in, int fileid, ErrorDescriptor
     SCLstring *entNmArr[enaSize]; // array of entity type names
     int enaIndex = 0;
 
-    in >> G4std::ws;
+    in >> std::ws;
     in.get(c); // read the open paren
     c = in.peek(); // see if you have closed paren (ending the record)
     while(in.good() && (c != ')') && (enaIndex < enaSize) )
@@ -1894,7 +1894,7 @@ STEPfile::CreateSubSuperInstance(G4std::istream& in, int fileid, ErrorDescriptor
 	    buf.set_null();
 	    enaIndex++;
 	}
-	in >> G4std::ws;
+	in >> std::ws;
 	c = in.peek(); // see if you have closed paren (ending the record)
 	  // If someone separates the entities with commas (or some other 
 	  // garbage or a comment) this will keep the read function from 
@@ -1932,13 +1932,13 @@ STEPfile::CreateSubSuperInstance(G4std::istream& in, int fileid, ErrorDescriptor
 /**************************************************
  description:
     This function reads the SCOPE list for an entity instance,
-    and reads the values for each instance from the G4std::istream.
+    and reads the values for each instance from the std::istream.
  side-effects:
     It first searches for "&SCOPE" and reads all characters
-    from the G4std::istream up to and including "ENDSCOPE"
+    from the std::istream up to and including "ENDSCOPE"
 **************************************************/
 Severity
-STEPfile::ReadScopeInstances (G4std::istream& in)
+STEPfile::ReadScopeInstances (std::istream& in)
 {
     Severity rval = SEVERITY_NULL;
     SCLP23(Application_instance) * se;
@@ -2024,7 +2024,7 @@ STEPfile::ReadScopeInstances (G4std::istream& in)
 
 /*
 Severity
-STEPfile::ReadSubSuperInstance (G4std::istream& in)
+STEPfile::ReadSubSuperInstance (std::istream& in)
 {
   SCLstring tmp;
   SkipInstance(in, tmp);
@@ -2034,7 +2034,7 @@ STEPfile::ReadSubSuperInstance (G4std::istream& in)
     
 #ifdef junk
 void
-ReadEntityError(char c, int i, G4std::istream& in)
+ReadEntityError(char c, int i, std::istream& in)
 {
     char errStr[BUFSIZ];
     errStr[0] = '\0';
@@ -2083,7 +2083,7 @@ ReadEntityError(char c, int i, G4std::istream& in)
 	}
 	if(in.good() && (c == ')') )
 	{
-	    in >> G4std::ws; // skip whitespace
+	    in >> std::ws; // skip whitespace
 	    in.get(c);
 	    tmp.Append(c);
 //	    G4cerr << c;
@@ -2104,14 +2104,14 @@ ReadEntityError(char c, int i, G4std::istream& in)
 /*****************************************************
  description:
  This function populates a SCLP23(Application_instance) with the values read from 
- the G4std::istream.
+ the std::istream.
 
  This function must keeps track of error messages encountered when
  reading the SCLP23(Application_instance). It passes SCLP23(Application_instance) error information onto
  the STEPfile ErrorDescriptor.
 *****************************************************/
 SCLP23(Application_instance) *
-STEPfile::ReadInstance(G4std::istream& in, G4std::ostream& out, SCLstring &cmtStr, 
+STEPfile::ReadInstance(std::istream& in, std::ostream& out, SCLstring &cmtStr, 
 		       int useTechCor)
 {
     Severity sev = SEVERITY_NULL;
@@ -2181,7 +2181,7 @@ STEPfile::ReadInstance(G4std::istream& in, G4std::ostream& out, SCLstring &cmtSt
 
     ReadTokenSeparator(in, &cmtStr);
 
-    //peek at the next character on the G4std::istream
+    //peek at the next character on the std::istream
     c = in.peek();
 
     //check for optional "&SCOPE" construct
@@ -2374,7 +2374,7 @@ STEPfile::MakeBackupFile()
 /***************************
 ***************************/
 Severity
-STEPfile::WriteExchangeFile(G4std::ostream& out, int validate, int clearError, 
+STEPfile::WriteExchangeFile(std::ostream& out, int validate, int clearError, 
 			    int writeComments) 
 {
     Severity rval = SEVERITY_NULL;
@@ -2422,7 +2422,7 @@ STEPfile::WriteExchangeFile(const char* filename, int validate, int clearError,
 	  }
     }
     
-    G4std::ostream* out =  OpenOutputFile(filename);
+    std::ostream* out =  OpenOutputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) return _error.severity();
     rval = WriteExchangeFile(*out, 0, 0, writeComments);
     CloseOutputFile(out);
@@ -2433,7 +2433,7 @@ STEPfile::WriteExchangeFile(const char* filename, int validate, int clearError,
 /***************************
 ***************************/
 Severity
-STEPfile::WriteValuePairsFile(G4std::ostream& out, int validate, int clearError, 
+STEPfile::WriteValuePairsFile(std::ostream& out, int validate, int clearError, 
 			      int writeComments, int mixedCase) 
 {
     Severity rval = SEVERITY_NULL;
@@ -2521,7 +2521,7 @@ STEPfile::HeaderIdOld (const char* name)
 /***************************
 ***************************/
 void
-STEPfile::WriteHeader(G4std::ostream& out) 
+STEPfile::WriteHeader(std::ostream& out) 
 {
     out << "HEADER;\n";
 
@@ -2552,7 +2552,7 @@ STEPfile::WriteHeader(G4std::ostream& out)
 /***************************
 ***************************/
 void
-STEPfile::WriteHeaderInstance(SCLP23(Application_instance)* obj, G4std::ostream& out)
+STEPfile::WriteHeaderInstance(SCLP23(Application_instance)* obj, std::ostream& out)
 {
     SCLstring tmp;
     if(obj->P21CommentRep())
@@ -2570,7 +2570,7 @@ STEPfile::WriteHeaderInstance(SCLP23(Application_instance)* obj, G4std::ostream&
 /***************************
 ***************************/
 void
-STEPfile::WriteHeaderInstanceFileName (G4std::ostream& out)
+STEPfile::WriteHeaderInstanceFileName (std::ostream& out)
 {
 // Get the FileName instance from _headerInstances
     SCLP23(Application_instance) *se = 0;
@@ -2622,7 +2622,7 @@ STEPfile::WriteHeaderInstanceFileName (G4std::ostream& out)
 	  (SCLP23(Application_instance)*)fn = _headerInstances->GetApplication_instance(mn);
       }
 
-// Write the values for the FileName instance to the G4std::ostream    
+// Write the values for the FileName instance to the std::ostream    
 	SCLstring tmp;
     out << StrToUpper (fn->EntityName()) << "(";
 
@@ -2674,7 +2674,7 @@ STEPfile::WriteHeaderInstanceFileName (G4std::ostream& out)
 
 
 void
-STEPfile::WriteHeaderInstanceFileDescription (G4std::ostream& out) 
+STEPfile::WriteHeaderInstanceFileDescription (std::ostream& out) 
 {
 // Get the FileDescription instance from _headerInstances
     SCLP23(Application_instance) *se = 0;
@@ -2704,7 +2704,7 @@ STEPfile::WriteHeaderInstanceFileDescription (G4std::ostream& out)
       {
 	  (SCLP23(Application_instance)*)fd = _headerInstances->GetApplication_instance(mn);
       }
-// Write the values for the FileDescription instance to the G4std::ostream    
+// Write the values for the FileDescription instance to the std::ostream    
     out << StrToUpper (fd->EntityName()) << "(";
 
     //write description
@@ -2721,7 +2721,7 @@ STEPfile::WriteHeaderInstanceFileDescription (G4std::ostream& out)
 }
 
 void
-STEPfile::WriteHeaderInstanceFileSchema (G4std::ostream& out) 
+STEPfile::WriteHeaderInstanceFileSchema (std::ostream& out) 
 {
 // Get the FileName instance from _headerInstances
     SCLP23(Application_instance) *se = 0;
@@ -2751,7 +2751,7 @@ STEPfile::WriteHeaderInstanceFileSchema (G4std::ostream& out)
       {
 	  (SCLP23(Application_instance)*)fs = _headerInstances->GetApplication_instance(mn);
       }
-// Write the values for the FileName instance to the G4std::ostream    
+// Write the values for the FileName instance to the std::ostream    
     out << StrToUpper (fs->EntityName()) << "(";
 
     // write schema_identifiers
@@ -2766,7 +2766,7 @@ STEPfile::WriteHeaderInstanceFileSchema (G4std::ostream& out)
 ***************************/
 
 void
-STEPfile::WriteData(G4std::ostream& out, int writeComments) 
+STEPfile::WriteData(std::ostream& out, int writeComments) 
 {
     char currSch[BUFSIZ];
     currSch[0] = '\0';
@@ -2786,7 +2786,7 @@ STEPfile::WriteData(G4std::ostream& out, int writeComments)
 ***************************/
 
 void
-STEPfile::WriteValuePairsData(G4std::ostream& out, int writeComments, int mixedCase)
+STEPfile::WriteValuePairsData(std::ostream& out, int writeComments, int mixedCase)
 {
     char currSch[BUFSIZ];
     currSch[0] = '\0';
@@ -2803,7 +2803,7 @@ STEPfile::WriteValuePairsData(G4std::ostream& out, int writeComments, int mixedC
 }    
 
 Severity 
-STEPfile::AppendFile (G4std::istream* in, int useTechCor) 
+STEPfile::AppendFile (std::istream* in, int useTechCor) 
 {
     Severity rval = SEVERITY_NULL;
     char errbuf[BUFSIZ];
@@ -2814,7 +2814,7 @@ STEPfile::AppendFile (G4std::istream* in, int useTechCor)
     
     ReadTokenSeparator(*in);
     SCLstring keywd = GetKeyword(*in, "; #", _error);
-    // get the delimiter off the G4std::istream
+    // get the delimiter off the std::istream
     char c;
     in->get(c);
     
@@ -2904,7 +2904,7 @@ STEPfile::AppendFile (G4std::istream* in, int useTechCor)
     // reset the error count so you\'re not counting things twice:
     _errorCount = 0;
 //    delete in; // yikes -- deleted by caller
-    G4std::istream * in2;
+    std::istream * in2;
     if (! ((in2 = OpenInputFile ()) && (in2 -> good ())) )
       {  //  if the stream is not readable, there's an error
 	  _error.AppendToUserMsg ("Cannot open file for 2nd pass -- No data read.\n");
@@ -2970,7 +2970,7 @@ STEPfile::AppendFile (G4std::istream* in, int useTechCor)
       {
 	  ReadTokenSeparator(*in2);
 	  keywd = GetKeyword (*in2,";", _error);
-	  //yank the ";" from the G4std::istream
+	  //yank the ";" from the std::istream
 	  //if (';' == in2->peek()) in2->get();
 	  char c; in2->get(c); if (c == ';') ;
       }
@@ -2993,7 +2993,7 @@ STEPfile::AppendFile (G4std::istream* in, int useTechCor)
 /***************************
 ***************************/
 Severity
-STEPfile::WriteWorkingFile(G4std::ostream& out, int clearError, int writeComments)
+STEPfile::WriteWorkingFile(std::ostream& out, int clearError, int writeComments)
 {
     SetFileType (WORKING_SESSION);
     if(clearError)
@@ -3023,7 +3023,7 @@ STEPfile::WriteWorkingFile(const char* filename, int clearError,
 {
     if(clearError)
       _error.ClearErrorMsg();
-    G4std::ostream* out =  OpenOutputFile(filename);
+    std::ostream* out =  OpenOutputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) return _error.severity();
     Severity rval = WriteWorkingFile(*out, 0, writeComments);
     CloseOutputFile(out);
@@ -3035,7 +3035,7 @@ STEPfile::WriteWorkingFile(const char* filename, int clearError,
 /***************************
 ***************************/
 void
-STEPfile::WriteWorkingData(G4std::ostream& out, int writeComments) 
+STEPfile::WriteWorkingData(std::ostream& out, int writeComments) 
 {
     char currSch[BUFSIZ];
     currSch[0] = '\0';

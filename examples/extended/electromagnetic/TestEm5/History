@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2003/04/17 06:51:27 vnivanch Exp $
+$Id: History,v 1.28 2003/06/06 15:55:44 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-06-03 mma (testem5-V05-01-01)
+- new histogram (ID=11) for the projeted angle at exit.
+  In geant3 as well. Bug corrected in gustep.
+- new macros for multiple Scattering tests: run61,71,81,91
+- proper deletion of old geometry when it is updated.
+- fix compilation warnings.
+     
+30-04-03 mma (testem5-V05-01-00)
+- modular PhysicsList
+- class StepCut becomes StepMax (as in TestEm7)
 
 17-04-03 V.Ivant (testem5-V05-00-06)
 - Fix crash out of WorldVolume

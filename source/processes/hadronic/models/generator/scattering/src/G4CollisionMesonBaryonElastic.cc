@@ -27,7 +27,7 @@
 #include "G4PionZero.hh"
 #include "G4PionMinus.hh"
 #include "G4PionPlus.hh"
-#include "g4std/vector"
+#include <vector>
 G4CollisionMesonBaryonElastic::G4CollisionMesonBaryonElastic()
 {
   angularDistribution = new G4AngularDistribution(false);
@@ -60,8 +60,8 @@ G4String G4CollisionMesonBaryonElastic::
    return "Meson Baryon Elastic Collision"; 
  }
 
-const G4std::vector<G4String>& G4CollisionMesonBaryonElastic::
- GetListOfColliders(G4int whichOne) const
+const std::vector<G4String>& G4CollisionMesonBaryonElastic::
+ GetListOfColliders(G4int ) const
  {
    G4Exception("Called G4CollisionMesonBaryonElastic::GetListOfColliders");
    return dummy;

@@ -6,120 +6,101 @@
                              README
                       ---------------------
 
-0. Introduction.
-
-Brachytherapy example simulates energy deposition in a Phantom filled with
+------------------------------------------------------------------------
+----> Introduction.                                                     |
+                                                                       
+Brachytherapy example simulates energy deposit in a Phantom filled with |
 soft tissue for: 
-1) Ir   brachytherapy source.
-2) I   brachytherapy source.
-3) Leipzig Applicator.
+1) Iridium source (endocavitary brachytherapy).                         |
+2) Iodium  source (interstitial brachytherapy).                         
+3) Leipzig Applicator (superficial brachytherapy).                      |
+------------------------------------------------------------------------
+----> 1.Experimental set-up.                                            |
 
-1.Technical information.
+The default source is an Ir-131 source put in the center of the Phantom.|  
+The Phantom is a box (dimension:30cm), it is gridded in 
+voxels (1.mm dimension)                                                 |
+-------------------------------------------------------------------------
+----> 2.SET-UP 
+                                                                        |
+ -example enviroment with the compiler 3.2                              
+ -a standard Geant4 example GNUmakefile is provided                     |
 
-The default source is an Ir source put in the center of the Phantom.   
-The Phantom is a box (dimension:30cm)
+setup with:                                                             |
+compiler = gcc-3.2
+G4SYSTEM = linux-g++                                                    |
 
-2.How to run the example.
- 
-    - run "Brachy" executable.  
-    - you can run the example in batch or interative mode.
+The following environment variables need to be set:                     |
 
-Default:  batch mode with 1000 events
+G4LEDATA: points to low energy data base - G4EMLOW2.2                   |
 
+setup for analysis with AIDA 3.0/Anaphe 5.0.5 for user with account     |
+on lxplus:
+                                                                        |
+setenv G4ANALYSIS_USE  1
+setenv G4ANALYSIS_BUILD  1                                              |
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
+setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/    |
 
-In interative mode, you can choose:
+ Please take a look to the Anaphe/Lizard web page                       |
+        http://anaphe.web.cern.ch/anaphe 
+ for more info                                                          |
 
-1)Ir source:
-idle>/run/beamOn NumberOfEvents and then
-idle>  exit
+------------------------------------------------------------------------
+----> 3.How to run the example.                                         |
 
-2)Leipzig Applicator:
-idle>/geom/switch Leipzig 
-idle>/run/beamOn NumberOfEvents and then
+- batch mode:
+  $G4WORDIR/bin/Linux-g++/Brachy IridiumSourceMacro.mac                 |
+  $G4WORDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac       
+  $G4WORDIR/bin/Linux-g++/Brachy LeipzigSourceMacro.mac  
+                                                                        |
+- Interative mode:                                                      
+  3) $G4WORDIR/bin/Linux-g++/Brachy                                     |
+
+-->possible different configurations for interactive mode:              |
+
+1)Ir source:                                                            |
+idle>/run/beamOn NumberOfEvents      ...and then
+idle>exit                                                               |
+
+2)Leipzig Applicator:                                                   |
+idle>/source/switch Leipzig                                           
+idle>/run/beamOn NumberOfEvents     ...and then                         |
 idle> exit
-
-3) I source:
-idle>/geom/switch Iodium
+                                                                        |
+3) Iodium  source:
+idle>/source/switch Iodium                                              |
 idle>/run/energy Iodium
-idle>/run/beamOn NumberOfEvents 
+idle>/run/beamOn NumberOfEvents     ...and then                         |
 idle>exit
+                                                                        |
+*Before the run you can also change the absorber material of the 
+Phantom:                                                                |
+idle>/phantom/selectMaterial  materialName
+                                                                        |
+- batch mode: executable Brachy macroFile.mac 
+  a macro is provided as example: IodiumSourceMacro.mac                 |
+  (ex. $G4WORKDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac)   
+------------------------------------------------------------------------
+----> 4. Simulation output                                              |
 
-Before the run you can also change the absorber material of the Phantom:
-idle>/detecor/setMaterial name
-
-4)simulation output: brachytherapy.hbk
+if ANALYSIS_USE = 1 in the set-up, the output is brachytherapy.hbk      | 
  It contains:
- 1)1Dhistogram with the primary particle energy 
- 2)2Dhistogram with the distribution of energy in the plane (x,z,energy)
- 3)Ntuple with the energy deposit in the Phantom
+ 1)1Dhistogram with the primary particle energy                         |
+ 2)2Dhistogram with the distribution of energy in the plane 
+   (x,z,energy) containing the source (YThickness = 1. mm)              |
+ 3)Ntuple with the 3D energy deposit in the Phantom                    
+                                                                        |
+Units:   the energy deposit is in MeV;
+         x, y, z in mm for both 2D-histogram and ntuple                 |
+------------------------------------------------------------------------
+----> 5.Visualisation                                                   | 
 
+a macro is provided ad example of visulisation:  VisualisationMacro.mac |
+run $G4WORKDIR/bin/Linux-g++/Brachy VisualisationMacro.mac
+------------------------------------------------------------------------
 
-5)the default visualization is with Dawn 
+for comments, advices, doubts and questions: guatelli@ge.infn.it
+for more info http://www.ge.infn.it/geant4/examples/index.html
 
-A standard Geant4 example GNUmakefile is provided.
-
-
--------------------------enviroment with the compiler 2.95.2 on lxplus---------
-
-
-setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW1.1
-setenv G4INSTALL /...
-setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/1.7.5
-#
-# ---- Linux setup ----
-#
-
-  setenv G4SYSTEM Linux-g++
- 
-#choose where you want to put the G4-libraries and G4workdir
-
-  setenv G4LIB ....
-  setenv G4WORKDIR ...
-
-
----visualization-----
-
-
-
-# ---- set up VRMLview
-setenv G4VIS_BUILD_VRMLFILE_DRIVER  1
-setenv G4VIS_USE_VRML               1
-setenv G4VIS_USE_VRMLFILE           1
-setenv G4VRMLFILE_MAX_FILE_NUM     100
-setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
-setenv G4VIS_USE_VRML               1
-setenv G4VIS_USE_VRMLFILE           1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
-
-# ---- set up OpenGL or Mesa 
-setenv G4VIS_BUILD_OPENGLX_DRIVER   1
-setenv G4VIS_USE_OPENGLX            1
-setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
-
-# ---- set up DAWN
-setenv G4VIS_BUILD_DAWN_DRIVER      1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER  1  
-setenv G4VIS_USE_DAWN               1
-setenv G4VIS_USE_DAWNFILE           1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
-
-setenv LD_LIBRARY_PATH $OGLHOME/lib
-
------------------------------------------------------------------------------------
-
-
-# ---- Analysis----
-
-setenv G4ANALYSIS_BUILD  1
-setenv PATH "${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.1/bin"
-setenv G4ANALYSIS_AIDA_CONFIG_LIBS "-L/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.1/lib -lAnaphe_AIDA_AnalysisFactory_native -lAnaphe_AIDA_Annotation_native -lAnaphe_AIDA_Histogram_native -lAnaphe_AIDA_Tree_native -lAnaphe_AIDA_HBookStore -lg2c-forMinuit -lHepUtilities -lCLHEP -lAnaphe_AIDA_Tuple_native"
-setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS "-I/afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp -I/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.1/include"
-setenv ANAPHE5_REL_DIR /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp 
-setenv LD_LIBRARY_PATH /afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.1/lib:$LD_LIBRARY_PATH
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:"/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.1/lib"
-
-
-
-
-
-
+last modified: Susanna Guatelli 28/5/2003

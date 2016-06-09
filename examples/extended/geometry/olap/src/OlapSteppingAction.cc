@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapSteppingAction.cc,v 1.1 2002/06/04 07:40:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: OlapSteppingAction.cc,v 1.2 2003/06/16 16:49:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -43,10 +43,10 @@
 #include "G4VSolid.hh"
 #include "SolidAnalyser.hh"
 
-G4std::ostream&
-operator << (G4std::ostream& os, G4std::vector<OlapStepInfo*>& vec) 
+std::ostream&
+operator << (std::ostream& os, std::vector<OlapStepInfo*>& vec) 
 {
-   G4std::vector<OlapStepInfo*>::iterator it = vec.begin();
+   std::vector<OlapStepInfo*>::iterator it = vec.begin();
    while (it!=vec.end())
    {
       G4VPhysicalVolume * pv = (*it)->theHist.GetTopVolume();
@@ -57,8 +57,8 @@ operator << (G4std::ostream& os, G4std::vector<OlapStepInfo*>& vec)
    return os;
 }
 
-G4std::ostream&
-operator << (G4std::ostream& os, const OlapStepInfo& aStepInfo)
+std::ostream&
+operator << (std::ostream& os, const OlapStepInfo& aStepInfo)
 {
   //G4cout << "History depth="<<aStepInfo.theHist.GetDepth()<< G4endl;
   for (G4int i=0;i<=aStepInfo.theHist.GetDepth();i++)
@@ -66,7 +66,7 @@ operator << (G4std::ostream& os, const OlapStepInfo& aStepInfo)
       G4VSolid * solid =
         aStepInfo.theHist.GetVolume(i)->GetLogicalVolume()->GetSolid();
       SolidAnalyser * solAna = SolidAnalyser::GetSolidAnalyser();
-      G4std::vector< G4std::pair<G4String,G4double> > param;
+      std::vector< std::pair<G4String,G4double> > param;
       solAna->GetParam(solid,param);
 
       os << "["<<i<<"]: " ;
@@ -115,7 +115,7 @@ operator << (G4std::ostream& os, const OlapStepInfo& aStepInfo)
       // solid specification
       
       os << " " << solid->GetEntityType() << ": "; 		  
-      G4std::vector< G4std::pair<G4String,G4double> >::iterator it =
+      std::vector< std::pair<G4String,G4double> >::iterator it =
          param.begin();
       while ( it != param.end() )
       {

@@ -12,7 +12,6 @@ ifeq ($(G4SYSTEM),SGI-CC)
       CCFLAGS   := -g
     endif
   endif
-  G4_HAVE_BOOL := yes
   CXXFLAGS  += -ptused
   FC        := f77
   FCLIBS    := -lftn
@@ -26,8 +25,7 @@ ifeq ($(G4SYSTEM),SGI-CC)
   ifndef OGLLIBS
     OGLLIBS   := -L/usr/lib -lGLU -lGL
   endif
-  G4USE_STD_NAMESPACE := yes
-  CPPFLAGS += -DSOCKET_IRIX_SOLARIS -DG4USE_STD_NAMESPACE
+  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
 
   define build-granular-shared-lib
     @echo "Shared Libraries not supported on $(G4SYSTEM)

@@ -42,7 +42,7 @@
 #include "G4Circle.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 G4Allocator<DMXScintHit> DMXScintHitAllocator;
 
@@ -100,7 +100,7 @@ void DMXScintHit::Draw()
 void DMXScintHit::Print()
 {
 
-  G4cout << "      LXe hit ENERGY: " << G4std::setw(5) << G4BestUnit(edep,"Energy") 
+  G4cout << "      LXe hit ENERGY: " << std::setw(5) << G4BestUnit(edep,"Energy") 
 	 << ", at " << G4BestUnit(pos,"Length") << G4endl;
 }
 

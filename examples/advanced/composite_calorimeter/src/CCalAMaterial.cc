@@ -75,7 +75,8 @@ CCalAMaterial::~CCalAMaterial() {
   //The base class destructor is called?
 }
 
-CCalAMaterial::CCalAMaterial(const CCalAMaterial& mat){
+CCalAMaterial::CCalAMaterial(const CCalAMaterial& mat) 
+  : CCalMaterial( mat ) {
   name    = mat.name;
   density = mat.density;
   nElem   = mat.nElem;
@@ -115,7 +116,7 @@ void CCalAMaterial::computeAeff(int nconst,
     aEff += weights[i] * constituents[i]->Aeff();
 }
 
-G4std::ostream& operator<<(G4std::ostream& os, const CCalAMaterial& mat) {
+std::ostream& operator<<(std::ostream& os, const CCalAMaterial& mat) {
   os << mat.name << G4endl;
   os << "Density= " << mat.density << " g/cm3. Number of Elements: "
      << mat.nElem 

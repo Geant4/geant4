@@ -74,21 +74,21 @@ G4NeutronField::~G4NeutronField()
 { }
 
 
-const G4NeutronField & G4NeutronField::operator=(const G4NeutronField & right)
+const G4NeutronField & G4NeutronField::operator=(const G4NeutronField & )
 {
   G4Exception("G4NeutronField::operator= meant not to be accessible");
   return *this;
 }
 
 
-G4int G4NeutronField::operator==(const G4NeutronField & right) const
+G4int G4NeutronField::operator==(const G4NeutronField & ) const
 {
   G4Exception("G4NeutronField::operator== meant not to be accessible");
   return 0;
 }
 
 
-G4int G4NeutronField::operator!=(const G4NeutronField & right) const
+G4int G4NeutronField::operator!=(const G4NeutronField & ) const
 {
   G4Exception("G4NeutronField::operator!= meant not to be accessible");
   return 1;
@@ -98,7 +98,7 @@ G4int G4NeutronField::operator!=(const G4NeutronField & right) const
 G4double G4NeutronField::GetField(const G4ThreeVector & aPosition)
 {
   G4double x = aPosition.mag();
-  G4int index = static_cast<G4int>(x/(0.3*fermi) );
+  size_t index = static_cast<size_t>(x/(0.3*fermi) );
   if(index+2>theFermiMomBuffer.size()) return theFermiMomBuffer.back();
   G4double y1 = theFermiMomBuffer[index];
   G4double y2 = theFermiMomBuffer[index+1];

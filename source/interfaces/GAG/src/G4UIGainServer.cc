@@ -22,15 +22,15 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.5 2002/12/05 16:33:42 asaim Exp $
-// $Name: geant4-05-01 $
+// $Id: G4UIGainServer.cc,v 1.7 2003/06/16 16:55:52 gunter Exp $
+// $Name: geant4-05-02 $
 //
 #ifndef WIN32
 
 #include "G4UIGainServer.hh"
 #include <netdb.h>
 
-#include "g4std/strstream"
+#include <strstream>
 #include "G4StateManager.hh"
 #include "G4UIcommandTree.hh"
 #include "G4UIcommand.hh"
@@ -262,7 +262,7 @@ G4String G4UIGainServer::GetCommand()
       G4String ss = nC(1,nC.length()-1);
       G4int vl;
       const char* tt = ss;
-      G4std::istrstream is((char*)tt);
+      std::istrstream is((char*)tt);
       is >> vl;
       G4int nh = UI->GetNumberOfHistory();
       if(vl>=0 && vl<nh)
@@ -323,7 +323,7 @@ G4int G4UIGainServer::ReceiveG4cout(G4String coutString)
 
 
 
-  //G4std::cout << coutString << G4std::flush;
+  //std::cout << coutString << std::flush;
   //return 0;
 }
 
@@ -338,7 +338,7 @@ G4int G4UIGainServer::ReceiveG4cerr(G4String cerrString)
 
 
 
-  //G4std::cerr << cerrString << G4std::flush;
+  //std::cerr << cerrString << std::flush;
   //return 0;
 }
 
@@ -404,8 +404,11 @@ void G4UIGainServer::WaitingConnection(){
     len = sizeof(caddr);
 
     for(int i=1;i<=2;i++){
-      //        if((socketD[i] = accept(socketD[0], (struct sockaddr *)&caddr,(int *)&len))<0){
+#ifndef __APPLE__
         if((socketD[i] = accept(socketD[0], (struct sockaddr *)&caddr,(socklen_t *)&len))<0){
+#else
+        if((socketD[i] = accept(socketD[0], (struct sockaddr *)&caddr,(int *)&len))<0){
+#endif
             G4cerr<<"accept:"<<i<<G4endl;
             exit(1);
         }
@@ -533,7 +536,7 @@ void G4UIGainServer::TerminalHelp(G4String newCommand){
     G4UIcommandTree* treeTop = UI->GetTree();
     unsigned i = newCommand.index(" ");
     
-    if(i!=G4std::string::npos){
+    if(i!=std::string::npos){
         G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
         newValue.strip(G4String::both);
         if(newValue(0)!='/'){
@@ -564,7 +567,7 @@ void G4UIGainServer::TerminalHelp(G4String newCommand){
     floor[iFloor]->ListCurrentWithNum();
     while(1){
         int i;
-        G4cout<<G4endl <<"Type the number (0:end, -n:n level back) :"<<G4std::flush;
+        G4cout<<G4endl <<"Type the number (0:end, -n:n level back) :"<<std::flush;
         G4cin >> i;
         if(!G4cin.good()){
             G4cin.clear();

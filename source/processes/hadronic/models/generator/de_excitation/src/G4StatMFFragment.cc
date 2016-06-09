@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFFragment.cc,v 1.10 2002/12/12 19:17:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFFragment.cc,v 1.12 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,7 +32,7 @@
 
 
 // Copy constructor
-G4StatMFFragment::G4StatMFFragment(const G4StatMFFragment & right)
+G4StatMFFragment::G4StatMFFragment(const G4StatMFFragment & )
 {
     G4Exception("G4StatMFFragment::copy_constructor meant to not be accessable");
 }
@@ -40,21 +40,21 @@ G4StatMFFragment::G4StatMFFragment(const G4StatMFFragment & right)
 // Operators
 
 G4StatMFFragment & G4StatMFFragment::
-operator=(const G4StatMFFragment & right)
+operator=(const G4StatMFFragment & )
 {
     G4Exception("G4StatMFFragment::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMFFragment::operator==(const G4StatMFFragment & right) const
+G4bool G4StatMFFragment::operator==(const G4StatMFFragment & ) const
 {
 //	G4Exception("G4StatMFFragment::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4StatMFFragment::operator!=(const G4StatMFFragment & right) const
+G4bool G4StatMFFragment::operator!=(const G4StatMFFragment & ) const
 {
 //	G4Exception("G4StatMFFragment::operator!= meant to not be accessable");
     return true;
@@ -81,7 +81,8 @@ G4double G4StatMFFragment::GetEnergy(const G4double T) const
 	G4Exception(
 	    "G4StatMFFragment::GetEnergy: Wrong values for A and Z!");
     }
-    G4double BulkEnergy = G4NucleiProperties::GetMassExcess(theA,theZ);
+    G4double BulkEnergy = G4NucleiProperties::GetMassExcess(static_cast<G4int>(theA),
+							    static_cast<G4int>(theZ));
 	
     if (theA < 4) return BulkEnergy - GetCoulombEnergy();
 	
@@ -120,7 +121,7 @@ G4Fragment * G4StatMFFragment::GetFragment(const G4double T)
 
     G4LorentzVector FourMomentum(_momentum,sqrt(_momentum.mag2()+(M+U)*(M+U)));
 
-    G4Fragment * theFragment = new G4Fragment(theA,theZ,FourMomentum);
+    G4Fragment * theFragment = new G4Fragment(static_cast<G4int>(theA),static_cast<G4int>(theZ),FourMomentum);
 
     return theFragment;
 }

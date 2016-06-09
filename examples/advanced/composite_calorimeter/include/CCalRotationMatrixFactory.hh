@@ -28,12 +28,12 @@
 #ifndef CCalRotationMatrixFactory_h
 #define CCalRotationMatrixFactory_h 1
 
-#include "g4std/map"
+#include <map>
 #include "G4RotationMatrix.hh"
 
 typedef G4RotationMatrix* G4RotationMatrixPtr;
-typedef G4std::map<G4String, G4RotationMatrixPtr, G4std::less<G4String> > G4RotationMatrixTable;
-typedef G4std::map<G4String, G4RotationMatrixPtr, G4std::less<G4String> >::iterator G4RotationMatrixTableIterator;
+typedef std::map<G4String, G4RotationMatrixPtr, std::less<G4String> > G4RotationMatrixTable;
+typedef std::map<G4String, G4RotationMatrixPtr, std::less<G4String> >::iterator G4RotationMatrixTableIterator;
 
 
 //typedef RWTPtrOrderedVector<G4RotationMatrix> G4RotationMatrixTable;
@@ -63,5 +63,5 @@ private:
   G4RotationMatrixTable theMatrices; //Where the matrices are stored.
 };
 
-G4std::ostream& operator<<(G4std::ostream&, const G4RotationMatrix &);
+std::ostream& operator<<(std::ostream&, const G4RotationMatrix &);
 #endif

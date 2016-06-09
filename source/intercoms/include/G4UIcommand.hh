@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh,v 1.12 2002/11/27 18:05:33 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcommand.hh,v 1.13 2003/06/16 16:55:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -33,7 +33,7 @@
 class G4UImessenger;
 #include "globals.hh"
 #include "G4ApplicationState.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4UItokenNum.hh"
 
 // class description:
@@ -89,9 +89,9 @@ class G4UIcommand
       G4String commandPath;
       G4String commandName;
       G4String rangeString;
-      G4std::vector<G4UIparameter*> parameter;
-      G4std::vector<G4String> commandGuidance;
-      G4std::vector<G4ApplicationState> availabelStateList;
+      std::vector<G4UIparameter*> parameter;
+      std::vector<G4String> commandGuidance;
+      std::vector<G4ApplicationState> availabelStateList;
 
   public: // with description
       inline void SetRange(const char* rs)
@@ -116,7 +116,7 @@ class G4UIcommand
       { return parameter.size(); }
       inline G4UIparameter * GetParameter(G4int i) const
       { return parameter[i]; }
-      inline G4std::vector<G4ApplicationState>* GetStateList()
+      inline std::vector<G4ApplicationState>* GetStateList()
       { return &availabelStateList; }
   public: // with description
       inline void SetParameter(G4UIparameter *const newParameter)
@@ -184,7 +184,7 @@ class G4UIcommand
     G4int bp;                      // buffer pointer for rangeBuf
     tokenNum token;
     yystype yylval;
-    G4std::vector<yystype>  newVal;
+    std::vector<yystype>  newVal;
     G4int paramERR;
 };
 

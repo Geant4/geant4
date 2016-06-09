@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlacedSolid.hh,v 1.8 2002/11/06 23:28:53 radoone Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PlacedSolid.hh,v 1.9 2003/06/16 16:52:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4PlacedSolid
@@ -60,7 +60,7 @@ public:  // with description
   inline G4ThreeVector*    GetTranslation() const;
     // Accessors.
 
-  G4std::ostream& StreamInfo(G4std::ostream& os) const;
+  std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
 private:

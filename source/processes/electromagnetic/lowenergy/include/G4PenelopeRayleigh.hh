@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PenelopeRayleigh.hh,v 1.3 2003/03/13 16:53:50 pandola Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Luciano Pandola
 //

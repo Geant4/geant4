@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.32 2003/04/02 08:53:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ChordFinder.cc,v 1.36 2003/06/25 09:04:23 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // 25.02.97 John Apostolakis,  design and implimentation 
@@ -35,7 +35,7 @@
 // #include "G4Field.hh"
                                        // #include "G4MagIntegratorStepper.hh"
 #include "G4MagIntegratorDriver.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 //  For the moment fDeltaChord is a constant!
 
@@ -94,14 +94,10 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   G4FieldTrack yEnd( yCurrent);
   G4double  startCurveLen= yCurrent.GetCurveLength();
 
-#ifdef G4DEBUG_FIELD
-  static G4bool dbg= false; 
-  if( dbg ) 
-    G4cerr << "Entered AdvanceChordLimited with:\n yCurrent: " << yCurrent
-           << " and initial Step=stepMax=" <<  stepMax << " mm. " << G4endl;
-#endif
-
-  stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep);
+  G4double nextStep;
+  //            *************
+  stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep, &nextStep);
+  //            *************
   G4bool good_advance;
   if ( dyErr < epsStep * stepPossible )
   {
@@ -112,11 +108,9 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   else
   {
      // Advance more accurately to "end of chord"
-     good_advance = fIntgrDriver->AccurateAdvance(yCurrent, stepPossible, epsStep);
-     #ifdef G4DEBUG_FIELD
-     if (dbg) G4cerr << "Accurate advance to end of chord attemped"
-                     << "with result " << good_advance << G4endl ;
-     #endif
+     //                           ***************
+     good_advance = fIntgrDriver->AccurateAdvance(yCurrent, stepPossible, epsStep, nextStep);
+     //                           ***************
      if ( ! good_advance ){ 
        // In this case the driver could not do the full distance
        stepPossible= yCurrent.GetCurveLength()-startCurveLen;
@@ -139,13 +133,14 @@ G4double
 G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
                                      G4double     stepMax,
                                      G4FieldTrack&   yEnd, // Endpoint
-                                     G4double&      dyErr, // Error of endpoint
-                                     G4double  )
+                                     G4double&   dyErrPos, // Error of endpoint
+                                     G4double    epsStep,
+			             G4double*  pStepForAccuracy)
   // Returns Length of Step taken
 {
   // G4int       stepRKnumber=0;
   G4FieldTrack yCurrent=  yStart;  
-  G4double    stepTrial;
+  G4double    stepTrial, stepForAccuracy;
   G4double    dydx[G4FieldTrack::ncompSVEC]; 
 
   //  1.)  Try to "leap" to end of interval
@@ -153,82 +148,76 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   //     2a.)  If d_chord is not good enough, find one that is.
   
   G4bool    validEndPoint= false;
-  G4double  dChordStep, oldStepTrial, stepOfLastGoodChord;
+  G4double  dChordStep, lastStepLength; //  stepOfLastGoodChord;
 
   fIntgrDriver-> GetDerivatives( yCurrent, dydx )  ;
 
   G4int     noTrials=0;
+  const  G4double safetyFactor= (1-perThousand);  // TO-DO:  = 0.975 or 0.95;
 
-  stepTrial = G4std::min( stepMax, 
-                          (1-perThousand)*fLastStepEstimate_Unconstrained );
+  stepTrial = std::min( stepMax, 
+                          safetyFactor * fLastStepEstimate_Unconstrained );
 
+  G4double newStepEst_Uncons= 0.0; 
   do
   { 
-     G4double stepForChord; // , stepForAccuracy;
- 
+     G4double stepForChord;  
      yCurrent = yStart;    // Always start from initial point
 
-     fIntgrDriver->QuickAdvance( yCurrent, dydx, stepTrial, dChordStep, dyErr);
-
-     // First debug print
+     //            ************
+     fIntgrDriver->QuickAdvance( yCurrent, dydx, stepTrial, 
+				 dChordStep, dyErrPos);
+     //            ************
 
      // We check whether the criterion is met here.
      validEndPoint = AcceptableMissDist(dChordStep); 
-                      //  && (dyErr < eps) ;
+                      //  && (dyErrPos < eps) ;
 
-     oldStepTrial = stepTrial; 
+     lastStepLength = stepTrial; 
 
      // This method estimates to step size for a good chord.
-     stepForChord = NewStep(stepTrial, dChordStep,
-                            fLastStepEstimate_Unconstrained );
+     stepForChord = NewStep(stepTrial, dChordStep, newStepEst_Uncons );
 
      if( ! validEndPoint ) {
-        if( (stepForChord <= oldStepTrial) || (stepTrial<=0.0) )
+        if( (stepForChord <= lastStepLength) || (stepTrial<=0.0) )
           stepTrial = stepForChord;
         else
           stepTrial *= 0.1;
-#if 0
-        // Possible complementary approach:
-        // Get the driver to calculate the new step size, if it is needed
-        stepForAccuracy =
-            fIntgrDriver->ComputeNewStepSize( dyErr/(epsStep*oldStepTrial), 
-                                              stepTrial );
-        stepTrial = G4std::min(stepForChord, stepForAccuracy);
-#endif
 
         // if(dbg) G4cerr<<"Dchord too big. Try new hstep="<<stepTrial<<G4endl;
      }
-#ifdef  TEST_CHORD_PRINT
-     G4cout.precision(5);
-     G4cout << " ChF/fnc: notrial " << G4std::setw( 3) << noTrials 
-            << " this_step= "       << G4std::setw(10) << oldStepTrial;
-     if( fabs( (dChordStep / fDeltaChord) - 1.0 ) < 0.001 ){
-       G4cout.precision(8);
-       G4cout << " dChordStep=  "     << G4std::setw(12) << dChordStep;
-     }else{
-       G4cout.precision(6);
-       G4cout << " dChordStep=  "     << G4std::setw(12) << dChordStep;
-     }
-     if( dChordStep > fDeltaChord )
-       G4cout << " d+";
-     else
-       G4cout << " d-";
-     G4cout.precision(5);
-     G4cout <<  " new_step= "       << G4std::setw(10)
-            << fLastStepEstimate_Unconstrained
-            << " new_step_constr= " << G4std::setw(10)
-            << stepTrial << G4endl;
-#endif
+     // #ifdef  TEST_CHORD_PRINT
+     // TestChordPrint( noTrials, lastStepLength, dChordStep, stepTrial );
+     // #endif
+
      noTrials++; 
   }
   while( ! validEndPoint );   // End of do-while  RKD 
 
-  stepOfLastGoodChord = stepTrial;
+  if( newStepEst_Uncons > 0.0  ){ 
+     fLastStepEstimate_Unconstrained= newStepEst_Uncons;
+  }
+
+  // stepOfLastGoodChord = stepTrial;
+
+  if( pStepForAccuracy ){ 
+     // Calculate the step size required for accuracy, if it is needed
+     G4double dyErr_relative = dyErrPos/(epsStep*lastStepLength);
+     if( dyErr_relative > 1.0 ) {
+        stepForAccuracy =
+	   fIntgrDriver->ComputeNewStepSize( dyErr_relative,
+					     lastStepLength );
+     }else{
+        stepForAccuracy = 0.0;   // Convention to show step was ok 
+     }
+     *pStepForAccuracy = stepForAccuracy;
+  }
+
 #ifdef  TEST_CHORD_PRINT
   static int dbg=0;
   if( dbg ) 
     G4cout << "ChordF/FindNextChord:  NoTrials= " << noTrials 
-           << " StepForGoodChord=" << G4std::setw(10) << stepTrial << G4endl;
+           << " StepForGoodChord=" << std::setw(10) << stepTrial << G4endl;
 #endif
 
   yEnd=  yCurrent;  
@@ -359,7 +348,7 @@ G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
               - CurveA_PointVelocity.GetCurveLength();  
 
   // const 
-  G4double  integrationInaccuracyLimit= G4std::max( perMillion, 0.5*eps_step ); 
+  G4double  integrationInaccuracyLimit= std::max( perMillion, 0.5*eps_step ); 
   if( curve_length < ABdist * (1. - integrationInaccuracyLimit) ){ 
 #ifdef G4DEBUG_FIELD
     G4cerr << " Warning in G4ChordFinder::ApproxCurvePoint: "
@@ -430,4 +419,26 @@ G4ChordFinder::ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
   return Current_PointVelocity;
 }
 
-
+void
+G4ChordFinder::TestChordPrint( G4int    noTrials, 
+			       G4int    lastStepTrial, 
+			       G4double dChordStep, 
+			       G4double nextStepTrial )
+{
+     G4int oldprec= G4cout.precision(5);
+     G4cout << " ChF/fnc: notrial " << std::setw( 3) << noTrials 
+            << " this_step= "       << std::setw(10) << lastStepTrial;
+     if( fabs( (dChordStep / fDeltaChord) - 1.0 ) < 0.001 ){
+             G4cout.precision(8);
+     }else{  G4cout.precision(6); }
+     G4cout << " dChordStep=  "     << std::setw(12) << dChordStep;
+     if( dChordStep > fDeltaChord ) { G4cout << " d+"; }
+     else                           { G4cout << " d-"; }
+     G4cout.precision(5);
+     G4cout <<  " new_step= "       << std::setw(10)
+            << fLastStepEstimate_Unconstrained
+            << " new_step_constr= " << std::setw(10)
+            << lastStepTrial << G4endl;
+     G4cout << " nextStepTrial = " << std::setw(10) << nextStepTrial << G4endl;
+     G4cout.precision(oldprec);
+}

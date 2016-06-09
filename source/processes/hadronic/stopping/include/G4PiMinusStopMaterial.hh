@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopMaterial.hh,v 1.8 2002/12/12 19:18:37 gunter Exp $
+// $Id: G4PiMinusStopMaterial.hh,v 1.9 2003/06/16 17:11:52 gunter Exp $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -69,10 +69,10 @@ public:
   virtual ~G4PiMinusStopMaterial();
 
   // Definitions of absorption products
-  virtual G4std::vector<G4ParticleDefinition*>* DefinitionVector();
+  virtual std::vector<G4ParticleDefinition*>* DefinitionVector();
 
   // 4-vectors of absorption products
-  virtual G4std::vector<G4LorentzVector*>* P4Vector(const G4double binding, 
+  virtual std::vector<G4LorentzVector*>* P4Vector(const G4double binding, 
 						   const G4double mass);
 
   // Number of final nucleons, out of generated absorption products
@@ -80,8 +80,8 @@ public:
 
 protected:
    
-  G4std::vector<G4ParticleDefinition* >* _definitions;
-  G4std::vector<G4LorentzVector* >* _momenta; 
+  std::vector<G4ParticleDefinition* >* _definitions;
+  std::vector<G4LorentzVector* >* _momenta; 
   G4DistributionGenerator* _distributionE;
   G4DistributionGenerator* _distributionAngle;
   G4double theR; 

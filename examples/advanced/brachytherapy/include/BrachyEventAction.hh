@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyEventAction.hh,v 1.11 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyEventAction.hh,v 1.13 2003/05/27 08:37:54 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Code developed by:
 //  S.Guatelli
@@ -38,41 +38,25 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+
 class BrachyDetectorConstruction; 
 class BrachyAnalysisManager;
-class BrachyPrimaryGeneratorActionI;
-class BrachyPrimaryGeneratorActionIr;
 class BrachyEventAction : public G4UserEventAction
 {
 public:
-BrachyEventAction(G4String&);
-~BrachyEventAction();
+  BrachyEventAction(G4String&);
+  ~BrachyEventAction();
 
 public:
-void BeginOfEventAction(const G4Event*);
-void EndOfEventAction(const G4Event*);
+  void BeginOfEventAction(const G4Event*);
+  void EndOfEventAction(const G4Event*);
 
 private:
-G4double  EnergyDep;
- G4int m_NumVoxelX;
- G4int m_NumVoxelZ;
-
-G4double VoxelWidth_Z;
-G4double VoxelWidth_X;
-
-private:
-G4int m_HitsCollectionID;
-G4String       drawFlag;
-G4int          j;
-G4int i;
-G4int k;
-G4double x;
-G4double z;
-G4double y;
-G4String      SDname;
-G4int  printModulo;
-BrachyDetectorConstruction* pDetector;      
-
+  G4String drawFlag; //Visualisation flag
+  G4int hitsCollectionID; 
+  BrachyDetectorConstruction* detector;
+  G4int numberOfVoxelZ; 
+  G4double voxelWidthZ;     
 };
 
 #endif

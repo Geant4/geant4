@@ -24,10 +24,10 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4ParticleLargerEkin.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
-typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 	 
 G4InuclCollider::G4InuclCollider()
   : verboseLevel(2) {
@@ -122,12 +122,12 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  G4cout << " degenerated? " << convertToTargetRestFrame.trivial() << G4endl;
 	}
 
-	G4std::vector<G4double> bmom(4, 0.0);
+	std::vector<G4double> bmom(4, 0.0);
 
 	bmom[3] = convertToTargetRestFrame.getTRSMomentum();
 
 	G4InuclNuclei ntarget(at, zt);
-	G4std::vector<G4double> tmom(4, 0.0);
+	std::vector<G4double> tmom(4, 0.0);
 
 	ntarget.setMomentum(tmom);
 	ntarget.setEnergy();
@@ -208,14 +208,14 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	 
 	  // convert to the LAB       
 	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();       
-	  G4std::vector<G4InuclElementaryParticle> particles = 
+	  std::vector<G4InuclElementaryParticle> particles = 
 	    TRFoutput.getOutgoingParticles();
 
 	  if(!particles.empty()) { 
 	    particleIterator ipart;
 	    for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
 
-	      G4std::vector<G4double> mom = ipart->getMomentum();
+	      std::vector<G4double> mom = ipart->getMomentum();
 
 	      if(withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
@@ -223,15 +223,15 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	      mom = convertToTargetRestFrame.backToTheLab(ipart->getMomentum());
 	      ipart->setMomentum(mom); 
 	    };
-	    G4std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	    std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 	  };
            
-	  G4std::vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();
+	  std::vector<G4InuclNuclei> nucleus = TRFoutput.getNucleiFragments();
 
 	  if(!nucleus.empty()) { 
 	    nucleiIterator inuc;
 	    for(inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
-	      G4std::vector<G4double> mom = inuc->getMomentum(); 
+	      std::vector<G4double> mom = inuc->getMomentum(); 
 	      if(withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
 	      inuc->setMomentum(mom);

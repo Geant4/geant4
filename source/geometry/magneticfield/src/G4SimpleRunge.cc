@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.cc,v 1.6 2002/11/29 23:17:16 japost Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SimpleRunge.cc,v 1.7 2003/06/16 16:51:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //  Simple Runge:
 //
@@ -50,7 +50,7 @@ G4SimpleRunge::G4SimpleRunge(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
     fNumberOfVariables(numberOfVariables)
 {
    
-   unsigned int noVariables= G4std::max(numberOfVariables,
+   unsigned int noVariables= std::max(numberOfVariables,
 					GetNumberOfStateVariables()); 
                                              // To deal with Time >= 7+1 
    dydxTemp = new G4double[noVariables] ;

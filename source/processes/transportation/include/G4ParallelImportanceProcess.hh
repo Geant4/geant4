@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.hh,v 1.8 2002/10/16 16:26:58 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParallelImportanceProcess.hh,v 1.9 2003/06/13 09:27:04 dressel Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4ParallelImportanceProcess
@@ -39,11 +39,12 @@
 #define G4ParallelImportanceProcess_hh G4ParallelImportanceProcess_hh
 
 #include "G4ParallelTransport.hh"
-#include "G4ImportancePostStepDoIt.hh"
 #include "G4VTrackTerminator.hh"
 
+class G4ImportancePostStepDoIt;
 class G4VImportanceSplitExaminer;
 class G4Nsplit_Weight;
+
 
 class G4ParallelImportanceProcess : public G4ParallelTransport, public G4VTrackTerminator
 {
@@ -78,10 +79,9 @@ private:
 
 private:
 
-  const G4VTrackTerminator *fTrackTerminator;
   G4ParticleChange *fParticleChange;
   const G4VImportanceSplitExaminer &fImportanceSplitExaminer;  
-  G4ImportancePostStepDoIt fImportancePostStepDoIt;
+  G4ImportancePostStepDoIt *fImportancePostStepDoIt;
 };
 
 #endif

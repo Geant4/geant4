@@ -12,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiSelect.h,v 1.1 2000/01/21 13:42:45 gcosmo Exp $ */
+/* $Id: sdaiSelect.h,v 1.2 2003/06/06 17:07:32 gcosmo Exp $ */
 
 /*
 
@@ -95,13 +95,13 @@ class SCLP23_NAME(Select) {
 
   // reading and writing
         const char * STEPwrite (SCLstring& s, const char *currSch =0) const;
-        void STEPwrite (G4std::ostream& out =G4cout, const char *currSch =0) const;
+        void STEPwrite (std::ostream& out =G4cout, const char *currSch =0) const;
 
   // IMS 8/2/95: added as part of new select implementation
-        virtual void STEPwrite_verbose (G4std::ostream& out =G4cout, const char * =0)
+        virtual void STEPwrite_verbose (std::ostream& out =G4cout, const char * =0)
 	               const;
     
-        virtual void STEPwrite_content (G4std::ostream& out, const char * =0) const =0;
+        virtual void STEPwrite_content (std::ostream& out, const char * =0) const =0;
 //	char * asStr() const;
 
 
@@ -110,12 +110,12 @@ class SCLP23_NAME(Select) {
         virtual Severity StrToVal_content (const char *, 
 					   InstMgr * instances =0) =0;
 
-	Severity STEPread(G4std::istream& in, ErrorDescriptor *err, 
+	Severity STEPread(std::istream& in, ErrorDescriptor *err, 
 			  InstMgr * instances =0, const char* utype =0, 
 			  int addFileId =0, const char * =NULL);
 
 		// abstract function
-        virtual Severity STEPread_content (G4std::istream& in =G4cin,
+        virtual Severity STEPread_content (std::istream& in =G4cin,
 					   InstMgr * instances =0,
 					   const char *utype =0,
 					   int addFileId =0,

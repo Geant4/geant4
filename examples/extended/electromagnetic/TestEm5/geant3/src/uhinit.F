@@ -17,6 +17,10 @@ C
         CALL HBOOK1(3,'angle distribution at exit(deg)'
      +  ,NHI3,HIS3(1),HIS3(2),0.)
       ENDIF
+      IF(NHI11.GT.0) THEN
+        CALL HBOOK1(11,'proj. angle distribution at exit(deg)'
+     +  ,NHI11,HIS11(1),HIS11(2),0.)
+      ENDIF
       IF(NHI4.GT.0) THEN
         CALL HBOOK1(4,'lateral distribution at exit(mm)'
      +  ,NHI4,HIS4(1),HIS4(2),0.)

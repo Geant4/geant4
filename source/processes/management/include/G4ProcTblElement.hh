@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcTblElement.hh,v 1.9 2001/07/11 10:08:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProcTblElement.hh,v 1.10 2003/06/16 17:12:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -42,7 +42,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4ParticleDefinition.hh"
 #include "G4VProcess.hh"
@@ -72,7 +72,7 @@ class G4ProcTblElement
 
   protected:
     // Use STL Vector 
-    typedef G4std::vector<G4ProcessManager*> G4ProcMgrVector;
+    typedef std::vector<G4ProcessManager*> G4ProcMgrVector;
 
     G4int Length() const ;
     void  Insert(G4ProcessManager* aProcMgr);

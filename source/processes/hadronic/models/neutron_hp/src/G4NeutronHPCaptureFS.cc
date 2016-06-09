@@ -147,7 +147,7 @@
     return &theResult;
   }
 
-  void G4NeutronHPCaptureFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+  void G4NeutronHPCaptureFS::Init (G4double A, G4double Z, G4String & dirName, G4String & )
   {
     G4String tString = "/FS/";
     G4bool dbool;
@@ -162,7 +162,7 @@
       hasXsec = false;
       return;
     }
-    G4std::ifstream theData(filename, G4std::ios::in);
+    std::ifstream theData(filename, std::ios::in);
     
     hasFSData = theFinalStatePhotons.InitMean(theData); 
     if(hasFSData)

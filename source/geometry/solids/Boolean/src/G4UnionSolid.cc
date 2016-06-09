@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc,v 1.21 2002/10/28 11:36:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UnionSolid.cc,v 1.22 2003/06/16 16:53:19 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -118,8 +118,8 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
                                          pTransform, minB, maxB);
   if( touchesA || touchesB )
   {
-    pMin = G4std::min( minA, minB ); 
-    pMax = G4std::max( maxA, maxB );
+    pMin = std::min( minA, minB ); 
+    pMax = std::max( maxA, maxB );
     out  = true ; 
   }
   else out = false ;
@@ -230,7 +230,7 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
   }
 #endif
 
-  return G4std::min(fPtrSolidA->DistanceToIn(p,v),
+  return std::min(fPtrSolidA->DistanceToIn(p,v),
                     fPtrSolidB->DistanceToIn(p,v) ) ;
 }
 
@@ -257,7 +257,7 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p) const
 #endif
   G4double distA = fPtrSolidA->DistanceToIn(p) ;
   G4double distB = fPtrSolidB->DistanceToIn(p) ;
-  G4double safety = G4std::min(distA,distB) ;
+  G4double safety = std::min(distA,distB) ;
   if(safety < 0.0) safety = 0.0 ;
   return safety ;
 }
@@ -385,7 +385,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
        (positionA == kInside  && positionB == kSurface ) ||
        (positionA == kSurface && positionB == kInside  )     )
     {     
-      distout= G4std::max(fPtrSolidA->DistanceToOut(p),
+      distout= std::max(fPtrSolidA->DistanceToOut(p),
                           fPtrSolidB->DistanceToOut(p) ) ;
     }
     else

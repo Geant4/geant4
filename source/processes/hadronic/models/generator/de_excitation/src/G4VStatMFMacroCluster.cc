@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStatMFMacroCluster.cc,v 1.7 2002/12/12 19:17:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VStatMFMacroCluster.cc,v 1.9 2003/05/30 13:23:27 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,7 +32,7 @@
 
 
 // Copy constructor
-G4VStatMFMacroCluster::G4VStatMFMacroCluster(const G4VStatMFMacroCluster & right)
+G4VStatMFMacroCluster::G4VStatMFMacroCluster(const G4VStatMFMacroCluster & )
 {
     G4Exception("G4VStatMFMacroCluster::copy_constructor meant to not be accessable");
 }
@@ -40,21 +40,21 @@ G4VStatMFMacroCluster::G4VStatMFMacroCluster(const G4VStatMFMacroCluster & right
 // Operators
 
 G4VStatMFMacroCluster & G4VStatMFMacroCluster::
-operator=(const G4VStatMFMacroCluster & right)
+operator=(const G4VStatMFMacroCluster & )
 {
     G4Exception("G4VStatMFMacroCluster::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4VStatMFMacroCluster::operator==(const G4VStatMFMacroCluster & right) const
+G4bool G4VStatMFMacroCluster::operator==(const G4VStatMFMacroCluster & ) const
 {
 //	G4Exception("G4VStatMFMacroCluster::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4VStatMFMacroCluster::operator!=(const G4VStatMFMacroCluster & right) const
+G4bool G4VStatMFMacroCluster::operator!=(const G4VStatMFMacroCluster & ) const
 {
 //	G4Exception("G4VStatMFMacroCluster::operator!= meant to not be accessable");
     return true;
@@ -67,6 +67,6 @@ G4double G4VStatMFMacroCluster::CalcInvLevelDensity(void)
     // Epsilon0*(1 + 3 /(Af - 1))
     if (theA == 1) return 0.0;
     else return
-	     G4StatMFParameters::GetEpsilon0()*(1.0+3.0/(G4double(theA) - 1.0));
+	     G4StatMFParameters::GetEpsilon0()*(1.0+3.0/(static_cast<G4double>(theA-1)));
 }
 

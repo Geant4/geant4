@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPundefined.cc,v 1.4 2000/01/21 13:42:58 gcosmo Exp $ */
+/* $Id: STEPundefined.cc,v 1.5 2003/06/06 17:07:33 gcosmo Exp $ */
 
 #include <stdio.h> // to get the BUFSIZ #define
 #include <STEPundefined.h>
@@ -30,7 +30,7 @@ SCLundefined::StrToVal(const char *s, ErrorDescriptor *err)
 }
 
 Severity 
-SCLundefined::StrToVal(G4std::istream &in, ErrorDescriptor *err)
+SCLundefined::StrToVal(std::istream &in, ErrorDescriptor *err)
 {
     return STEPread(in, err);
 }
@@ -38,20 +38,20 @@ SCLundefined::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 Severity 
 SCLundefined::STEPread(const char *s, ErrorDescriptor *err)
 {
-    G4std::istrstream in((char *) s);
+    std::istrstream in((char *) s);
     return STEPread(in, err);
 }
 
 Severity 
-SCLundefined::STEPread(G4std::istream &in, ErrorDescriptor *err)
+SCLundefined::STEPread(std::istream &in, ErrorDescriptor *err)
 {
     char c = '\0';
-    G4std::strstream ss;
+    std::strstream ss;
     SCLstring str;
 
     int terminal = 0;
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
     in >> c;
     if(c == '$')
     {
@@ -108,7 +108,7 @@ SCLundefined::STEPread(G4std::istream &in, ErrorDescriptor *err)
 //	  if (!in.readable ()) terminal =1;
     }	  
 
-    ss << G4std::ends;
+    ss << std::ends;
     val = ss.str();
 
     err->GreaterSeverity(SEVERITY_NULL);
@@ -135,7 +135,7 @@ SCLundefined::STEPwrite(SCLstring &s)
 }
 
 void 
-SCLundefined::	STEPwrite (G4std::ostream& out)
+SCLundefined::	STEPwrite (std::ostream& out)
 {
     if(val.rep())
 	out << val.chars();
@@ -186,7 +186,7 @@ SCLundefined::is_null ()
 
 /*
 int
-SCLundefined::STEPread(G4std::istream& in )  
+SCLundefined::STEPread(std::istream& in )  
 {
     char c ='\0';
     char buf [BUFSIZ];

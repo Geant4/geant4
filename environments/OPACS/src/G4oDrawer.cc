@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4oDrawer.cc,v 1.7 2001/07/11 09:56:45 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 /*
   From geant4/visualization/management/src/G4VisManager.cc.

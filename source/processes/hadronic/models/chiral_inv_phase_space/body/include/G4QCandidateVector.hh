@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidateVector.hh,v 1.12 2002/12/12 19:14:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QCandidateVector.hh,v 1.13 2003/06/16 17:04:01 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -33,9 +33,9 @@
 #define G4QCandidateVector_h 1
 
 #include "G4QCandidate.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4QCandidate *> G4QCandidateVector;
+typedef std::vector<G4QCandidate *> G4QCandidateVector;
 struct DeleteQCandidate{ void operator()(G4QCandidate * aQ){delete aQ;}};
 
 #endif

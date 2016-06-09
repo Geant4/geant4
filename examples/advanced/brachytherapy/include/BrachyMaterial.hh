@@ -21,33 +21,50 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyMaterial.hh,v 1.2 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyMaterial.hh,v 1.5 2003/05/27 08:37:54 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //    **********************************
 //    *                                *
 //    *      BrachyMaterial.hh          *
 //    *                                *
 //    **********************************
-//This class manages the elments and materials nedded by the simulation
-// set-up
+//
+//Code developed by: Susanna Guatelli
+//
+//This class manages the elements and materials needed by the simulation
+// set-up ...
 //
 #ifndef BrachyMaterial_H
 #define BrachyMaterial_H 1
 #include "globals.hh"
 class G4Material;
 
-
 class BrachyMaterial
-{ public:
+{ 
+public:
   BrachyMaterial();
   ~ BrachyMaterial();
 
 public:
   void  DefineMaterials();
+  G4Material* GetMat(G4String); //returns the material
 
-public:
-  G4Material* GetMat(G4String);
+private:
+  G4Material* matW; 
+  G4Material* matplexiglass;
+  G4Material* matPb;
+  G4Material* matir192;
+  G4Material* Titanium;
+  G4Material* matAir;
+  G4Material* matH2O;
+  G4Material* soft;
+  G4Material* matsteel;
+  G4Material* gold;
+  G4Material* matI; 
+  G4Material* ceramic;
+  G4Material*Vacuum; 
+  G4Material* bone;
+  G4Material* muscle;
 };
-
 #endif

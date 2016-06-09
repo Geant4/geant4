@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXViewer.cc,v 1.7 2002/02/24 01:48:04 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenGLImmediateXViewer.cc,v 1.8 2003/06/10 17:13:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -37,13 +37,14 @@
 
 #include "G4ios.hh"
 
-G4OpenGLImmediateXViewer::G4OpenGLImmediateXViewer (G4OpenGLImmediateSceneHandler& scene,
-						const G4String&  name):
-G4OpenGLViewer (scene),
-G4OpenGLXViewer (scene),
-G4OpenGLImmediateViewer (scene),
-G4VViewer (scene, scene.IncrementViewCount (), name) {
-
+G4OpenGLImmediateXViewer::
+G4OpenGLImmediateXViewer (G4OpenGLImmediateSceneHandler& scene,
+			  const G4String&  name)
+ : G4VViewer (scene, scene.IncrementViewCount (), name),
+   G4OpenGLViewer (scene),
+   G4OpenGLXViewer (scene),
+   G4OpenGLImmediateViewer (scene)
+{
   if (fViewId < 0) return;  // In case error in base class instantiation.
 
 // ensure a suitable window was found

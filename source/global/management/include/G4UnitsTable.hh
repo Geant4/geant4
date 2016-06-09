@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.hh,v 1.12 2002/11/20 11:25:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UnitsTable.hh,v 1.13 2003/06/06 16:17:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // -----------------------------------------------------------------
@@ -51,11 +51,11 @@
 #define G4UnitsTable_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ThreeVector.hh"
 
 class G4UnitsCategory;
-typedef G4std::vector<G4UnitsCategory*> G4UnitsTable;
+typedef std::vector<G4UnitsCategory*> G4UnitsTable;
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,7 +109,7 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-typedef G4std::vector<G4UnitDefinition*> G4UnitsContainer;
+typedef std::vector<G4UnitDefinition*> G4UnitsContainer;
 
 class G4UnitsCategory
 {
@@ -166,7 +166,7 @@ public:  // without description
 public:  // with description 
    
     friend
-    G4std::ostream&  operator<<(G4std::ostream&,G4BestUnit VU);
+    std::ostream&  operator<<(std::ostream&,G4BestUnit VU);
       // Default format to print the objet VU above.
 
 private:

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IrregularXTRdEdx.cc,v 1.3 2001/09/18 09:02:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4IrregularXTRdEdx.cc,v 1.4 2003/06/16 16:56:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 
@@ -74,7 +74,7 @@ G4IrregularXTRdEdx::GetStackFactor( G4double energy,
 
   G4complex R  = OneInterfaceXTRdEdx(energy,gamma,varAngle)
                  * G4double(fPlateNumber) ;
-  result       = 2.0*G4std::real(R) ;
+  result       = 2.0*std::real(R) ;
 
   return      result ;
 }

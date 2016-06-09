@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCtable.cc,v 1.6 2001/07/13 15:00:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HCtable.cc,v 1.7 2003/06/16 16:50:16 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4HCtable.hh"
@@ -43,7 +43,7 @@ G4int G4HCtable::Registor(G4String SDname,G4String HCname)
 G4int G4HCtable::GetCollectionID(G4String HCname)
 {
   G4int i = -1;
-  if(HCname.index("/")==G4std::string::npos) // HCname only
+  if(HCname.index("/")==std::string::npos) // HCname only
   {
     for(size_t j=0;j<HClist.size();j++)
     {

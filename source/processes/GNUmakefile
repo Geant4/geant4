@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.20 2002/11/18 10:31:54 hpw Exp $
+# $Id: GNUmakefile,v 1.21 2003/05/21 13:02:58 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -50,7 +50,7 @@ SUBLIBS += G4hadronic_qgstring
 SUBLIBS += G4hadronic_man_gen G4hadronic_preequ G4hadronic_string_common
 SUBLIBS += G4hadronic_stringfrag G4hadronic_util_gen
 SUBLIBS += G4hadronic_radioactivedecay
-SUBLIBS += G4hadronic_leading_particle
+SUBLIBS += G4hadronic_bert_cascade G4hadronic_leading_particle
 
 ifndef G4INSTALL
   G4INSTALL = ../..

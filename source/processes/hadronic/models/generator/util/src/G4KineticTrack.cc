@@ -61,15 +61,18 @@ static G4double  G4KineticTrack_Gmass, G4KineticTrack_xmass1;
 
 G4KineticTrack::G4KineticTrack() :
                 theDefinition(0),
-                theFormationTime(0.0),
-                thePosition(0.0, 0.0, 0.0),
-                the4Momentum(0.0,0.0,0.0,0.0),
-                theInitialCoordinates(0.0,0.0,0.0,0.0),
+                theFormationTime(0),
+                thePosition(0),
+                the4Momentum(0),
+		theFermi3Momentum(0),
+		theTotal4Momentum(0),
+		theNucleon(0),
                 nChannels(0),
-                theActualMass(0.0),            
+                theActualMass(0),            
                 theActualWidth(0),            
                 theDaughterMass(0),
-                theDaughterWidth(0)
+                theDaughterWidth(0),
+		theStateToNucleus(undefined)
 {
 ////////////////
 //    DEBUG   //
@@ -88,14 +91,16 @@ G4KineticTrack::G4KineticTrack() :
 //   Copy constructor
 //
 
-G4KineticTrack::G4KineticTrack(const G4KineticTrack &right)
+G4KineticTrack::G4KineticTrack(const G4KineticTrack &right) : G4VKineticNucleon()
 {
  G4int i;
  theDefinition = right.GetDefinition();
  theFormationTime = right.GetFormationTime();
  thePosition = right.GetPosition();
- the4Momentum = right.Get4Momentum();
- theInitialCoordinates = right.GetInitialCoordinates();
+ the4Momentum = right.GetTrackingMomentum();
+ theFermi3Momentum = right.theFermi3Momentum;
+ theTotal4Momentum = right.theTotal4Momentum;
+ theNucleon=right.theNucleon;
  nChannels = right.GetnChannels();
  theActualMass = right.GetActualMass();
  theActualWidth = new G4double[nChannels];
@@ -105,6 +110,7 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right)
   }
   theDaughterMass = 0;
   theDaughterWidth = 0;
+  theStateToNucleus=right.theStateToNucleus;
  
 ////////////////
 //    DEBUG   //
@@ -126,11 +132,15 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
                                G4double aFormationTime,
                                G4ThreeVector aPosition,
                                G4LorentzVector& a4Momentum) :
-                theFormationTime(aFormationTime),
+                theDefinition(aDefinition),
+		theFormationTime(aFormationTime),
                 thePosition(aPosition),
-                the4Momentum(a4Momentum)
+                the4Momentum(a4Momentum),
+		theFermi3Momentum(0),
+		theTotal4Momentum(a4Momentum),
+		theNucleon(0),
+		theStateToNucleus(undefined)
 {
-  theDefinition = aDefinition;
   if(G4KaonZero::KaonZero() == theDefinition ||
     G4AntiKaonZero::AntiKaonZero() == theDefinition)
   {
@@ -143,12 +153,6 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
       theDefinition = G4KaonZeroLong::KaonZeroLong();
     }
   }
-//
-//   Initialize the InitialCoordinates 4vector
-//
-
- theInitialCoordinates.setVect(thePosition);
- theInitialCoordinates.setT(theFormationTime); 
 
 //
 //      Get the number of decay channels
@@ -398,6 +402,25 @@ G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
 
 }
 
+G4KineticTrack::G4KineticTrack(G4Nucleon * nucleon,
+                                G4ThreeVector aPosition,
+                                G4LorentzVector& a4Momentum)
+  :     theDefinition(nucleon->GetDefinition()),
+	theFormationTime(0),
+	thePosition(aPosition),
+	the4Momentum(a4Momentum),
+	theFermi3Momentum(nucleon->GetMomentum()),
+        theNucleon(nucleon),
+	nChannels(0),
+	theActualMass(nucleon->GetDefinition()->GetPDGMass()),
+	theActualWidth(0),
+	theDaughterMass(0),
+	theDaughterWidth(0),
+	theStateToNucleus(undefined)
+{
+	theFermi3Momentum.setE(0);
+	Set4Momentum(a4Momentum);
+}
 
 
 G4KineticTrack::~G4KineticTrack()
@@ -416,8 +439,13 @@ const G4KineticTrack& G4KineticTrack::operator=(const G4KineticTrack& right)
     {
      theDefinition = right.GetDefinition();
      theFormationTime = right.GetFormationTime();
-     thePosition = right.GetPosition();
-     the4Momentum = right.Get4Momentum();  
+//     thePosition = right.GetPosition();
+     the4Momentum = right.the4Momentum;  
+     the4Momentum = right.GetTrackingMomentum();
+     theFermi3Momentum = right.theFermi3Momentum;
+     theTotal4Momentum = right.theTotal4Momentum;
+     theNucleon=right.theNucleon;
+     theStateToNucleus=right.theStateToNucleus;
      if (theActualWidth != 0) delete [] theActualWidth;
      nChannels = right.GetnChannels();      
      theActualWidth = new G4double[nChannels];
@@ -534,18 +562,18 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4DynamicParticle* theDynamicParticle;
      G4double theFormationTime = 0.0;
      G4ThreeVector thePosition = this->GetPosition();
-     G4LorentzVector the4Momentum;
+     G4LorentzVector momentum;
      G4KineticTrackVector* theDecayProductList = new G4KineticTrackVector;
      G4int dEntries = theDecayProducts->entries();
      for (G4int i=dEntries; i > 0; i--)
         {
          theDynamicParticle = theDecayProducts->PopProducts();
          theDefinition = theDynamicParticle->GetDefinition();
-         the4Momentum = toMoving*theDynamicParticle->Get4Momentum();
+         momentum = toMoving*theDynamicParticle->Get4Momentum();
          theDecayProductList->push_back(new G4KineticTrack (theDefinition,
                                                          theFormationTime,
                                                          thePosition,
-                                                         the4Momentum));
+                                                         momentum));
          delete theDynamicParticle;
         }
      delete theDecayProducts;
@@ -566,7 +594,7 @@ G4double G4KineticTrack::IntegrandFunction1(G4double xmass) const
   G4double gamma2 = theDaughterWidth[1];
   
   G4double result = (1. / (2 * mass)) *
-    sqrt(G4std::max((((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
+    sqrt(std::max((((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
 	     ((mass * mass) - (mass1 - xmass) * (mass1 - xmass))),0.0)) *
     BrWig(gamma2, mass2, xmass);
   return result;
@@ -579,7 +607,7 @@ G4double G4KineticTrack::IntegrandFunction2(G4double xmass) const
   G4double mass2 = theDaughterMass[1];
   G4double gamma2 = theDaughterWidth[1];
   G4double result = (1. / (2 * mass)) *
-    sqrt(G4std::max((((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
+    sqrt(std::max((((mass * mass) - (mass1 + xmass) * (mass1 + xmass)) *
 	     ((mass * mass) - (mass1 - xmass) * (mass1 - xmass))),0.0)) *
     BrWig(gamma2, mass2, xmass);
  return result;

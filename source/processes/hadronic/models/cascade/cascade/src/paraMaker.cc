@@ -22,7 +22,7 @@
 
 #include "G4InuclSpecialFunctions.hh"
 
-G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> > G4InuclSpecialFunctions::paraMaker(G4double Z) {
+std::pair<std::vector<G4double>, std::vector<G4double> > G4InuclSpecialFunctions::paraMaker(G4double Z) {
   G4int verboseLevel = 1;
 
   if (verboseLevel > 3) {
@@ -37,8 +37,8 @@ G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> > G4InuclSpecialFun
   const G4double CP[5] = {0.50, 0.28, 0.20, 0.15, 0.10};
   const G4double AA[5] = {0.68, 0.82, 0.91, 0.97, 0.98};
   const G4double CA[5] = {0.10, 0.10, 0.10, 0.08, 0.06};
-  G4std::vector<G4double> AK(6);
-  G4std::vector<G4double> CPA(6);
+  std::vector<G4double> AK(6);
+  std::vector<G4double> CPA(6);
   AK[0] = 0.0;
   CPA[0] = 0.0;
   G4double AK2 = 0.0;
@@ -87,10 +87,10 @@ G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> > G4InuclSpecialFun
   AK[4] = AK6 - 0.06;
   CPA[4] = 4.0 * CP6 / 3.0;
 
-  return G4std::pair<G4std::vector<G4double>, G4std::vector<G4double> >(AK, CPA);
+  return std::pair<std::vector<G4double>, std::vector<G4double> >(AK, CPA);
 }
 
-G4std::pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4double Z) {
+std::pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4double Z) {
   G4int verboseLevel = 1;
 
   if (verboseLevel > 3) {
@@ -126,5 +126,5 @@ G4std::pair<G4double, G4double> G4InuclSpecialFunctions::paraMakerTruncated(G4do
     };
   };
 
-  return G4std::pair<G4double, G4double>(AK2, CP2);
+  return std::pair<G4double, G4double>(AK2, CP2);
 }

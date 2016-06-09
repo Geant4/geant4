@@ -27,7 +27,7 @@
 
    G4double G4ProtonInelasticCrossSection::
    GetCrossSection(const G4DynamicParticle* aPart, 
-                   const G4Element* anEle, G4double aTemperature)
+                   const G4Element* anEle, G4double )
    {
       G4double atomicNumber = anEle->GetN();
       G4double nOfProtons = anEle->GetZ();

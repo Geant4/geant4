@@ -25,7 +25,7 @@
 // Description: CCalVisManager visualisation manager for the example
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "g4std/iostream"
+#include <iostream>
 
 #ifdef G4VIS_USE
 #include "CCalVisManager.hh"

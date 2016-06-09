@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestErrorList.hh,v 1.1 2001/10/17 12:59:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeomTestErrorList.hh,v 1.2 2003/06/16 16:54:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -42,7 +42,7 @@
 #ifndef G4GeomTestErrorList_hh
 #define G4GeomTestErrorList_hh
 
-#include "g4std/vector"
+#include <vector>
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -95,7 +95,7 @@ class G4GeomTestErrorList
       private:
         G4ThreeVector s1, s2;
     };
-    G4std::vector<Segment> segments;
+    std::vector<Segment> segments;
       // List of error segments
 
     const G4VPhysicalVolume *mother;

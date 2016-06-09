@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRofstream.hh,v 1.5 2001/07/11 10:08:44 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FRofstream.hh,v 1.6 2003/06/16 17:13:28 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
-#include"g4std/fstream"
+#include <fstream>
 
 #if !defined G4_FR_OFSTREAM_HH
 #define      G4_FR_OFSTREAM_HH
@@ -65,7 +65,7 @@ class G4FRofstream {
 
  protected:
 	G4bool flag_file_open ;
-	G4std::ofstream fout ;
+	std::ofstream fout ;
 } ;
 
 
@@ -98,7 +98,7 @@ inline  G4bool  G4FRofstream::DoesFileExist ( const char* filename )
 {
 	G4bool status = false ;
 
-	G4std::ifstream fout_tmp( filename ) ; 
+	std::ifstream fout_tmp( filename ) ; 
 	if( fout_tmp ) { status = true ; }
 	fout_tmp.close();
 

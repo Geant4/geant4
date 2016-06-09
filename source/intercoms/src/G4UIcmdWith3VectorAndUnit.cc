@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.4 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcmdWith3VectorAndUnit.cc,v 1.5 2003/06/16 16:55:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
 #include "G4UIcmdWith3VectorAndUnit.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -50,7 +50,7 @@ G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorValue(const char* paramStr
   G4double vy;
   G4double vz;
   char unts[30];
-  G4std::istrstream is((char*)paramString);
+  std::istrstream is((char*)paramString);
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   G4double uv = ValueOf(unt);
@@ -63,7 +63,7 @@ G4ThreeVector G4UIcmdWith3VectorAndUnit::GetNew3VectorRawValue(const char* param
   G4double vy;
   G4double vz;
   char unts[30];
-  G4std::istrstream is((char*)paramString);
+  std::istrstream is((char*)paramString);
   is >> vx >> vy >> vz >> unts;
   return G4ThreeVector(vx,vy,vz);
 }
@@ -74,7 +74,7 @@ G4double G4UIcmdWith3VectorAndUnit::GetNewUnitValue(const char* paramString)
   G4double vy;
   G4double vz;
   char unts[30];
-  G4std::istrstream is((char*)paramString);
+  std::istrstream is((char*)paramString);
   is >> vx >> vy >> vz >> unts;
   G4String unt = unts;
   return ValueOf(unt);
@@ -87,7 +87,7 @@ G4String G4UIcmdWith3VectorAndUnit::ConvertToString
   G4double uv = ValueOf(unitName);
   
   char st[100];
-  G4std::ostrstream os(st,100);
+  std::ostrstream os(st,100);
   os << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv
      << " " << unitName << '\0';
   G4String vl = st;

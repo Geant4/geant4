@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -26,7 +26,7 @@
 #define G4NuclearLevelStore_hh 1
 
 #include "G4NuclearLevelManager.hh"
-#include "g4std/map"
+#include <map>
 
 class G4NuclearLevelStore
 {
@@ -47,7 +47,7 @@ private:
   G4String GenerateKey(const G4int Z, const G4int A);
 
 
-  static G4std::map<G4String,G4NuclearLevelManager*> theManagers;
+  static std::map<G4String,G4NuclearLevelManager*> theManagers;
   static G4String dirName;
 
 };

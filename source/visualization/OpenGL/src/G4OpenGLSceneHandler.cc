@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.17 2002/12/11 15:57:58 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.18 2003/06/10 17:13:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -39,9 +39,6 @@
 // other OpenGL's, as far as I'm aware.   John Allison 18/9/96.
 #define CENTERLINE_CLPP  /* CenterLine C++ workaround: */
 // Also seems to be required for HP's CC and AIX xlC, at least.
-
-#include <GL/gl.h>
-#include <GL/glu.h>
 
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"

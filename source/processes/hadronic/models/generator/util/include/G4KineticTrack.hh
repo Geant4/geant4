@@ -40,6 +40,7 @@
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4VKineticNucleon.hh"
+#include "G4Nucleon.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VDecayChannel.hh"
 
@@ -60,6 +61,9 @@ class G4KineticTrack : public G4VKineticNucleon
       G4KineticTrack(G4ParticleDefinition* aDefinition,
                      G4double aFormationTime,
                      G4ThreeVector aPosition, 
+                     G4LorentzVector& a4Momentum);
+      G4KineticTrack(G4Nucleon * nucleon,
+                     G4ThreeVector aPosition,
                      G4LorentzVector& a4Momentum);
 
       ~G4KineticTrack();
@@ -84,9 +88,14 @@ class G4KineticTrack : public G4VKineticNucleon
       void Update4Momentum(G4double aEnergy);			// update E and p, not changing mass
       void Update4Momentum(const G4ThreeVector & aMomentum);	// idem
 
-      const G4LorentzVector& GetInitialCoordinates() const;
-
+      const G4LorentzVector& GetTrackingMomentum() const;
+      
       G4double SampleResidualLifetime();
+      
+      void Hit(); 
+      void SetNucleon(G4Nucleon * aN) {theNucleon = aN;}
+            
+      G4bool IsParticipant() const; 
 
       G4KineticTrackVector* Decay();
      
@@ -95,6 +104,12 @@ class G4KineticTrack : public G4VKineticNucleon
 
       G4double GetActualMass() const;
       G4int GetnChannels() const;
+      
+//   position relativ to nucleus "state"
+      enum CascadeState {undefined, outside, going_in, inside, going_out, gone_out, miss_nucleus };
+      
+      CascadeState SetState(const CascadeState new_state);
+      CascadeState GetState() const;
       
   private:
 
@@ -113,8 +128,7 @@ class G4KineticTrack : public G4VKineticNucleon
       G4double IntegrateCMMomentum(const G4double lowerLimit ,const G4double polemass) const;
 
       G4double IntegrateCMMomentum2() const;
-
-
+      
   public:
       
       G4double BrWig(const G4double Gamma, 
@@ -144,25 +158,24 @@ public:
       G4ThreeVector thePosition;
 
       G4LorentzVector the4Momentum;
+      G4LorentzVector theFermi3Momentum;
+      G4LorentzVector theTotal4Momentum;
       
-      G4LorentzVector theInitialCoordinates;
-
+      G4Nucleon * theNucleon;
+      
       G4int nChannels;
       
       G4double theActualMass;
             
       G4double* theActualWidth;
 
-
-
-  private:
-
-      // Temporary storage for daughter masses and widths
+     // Temporary storage for daughter masses and widths
       // (needed because Integrand Function cannot take > 1 argument)
-
       G4double* theDaughterMass;
-
       G4double* theDaughterWidth;
+
+      CascadeState theStateToNucleus;
+
 };
 
 
@@ -204,15 +217,23 @@ inline void G4KineticTrack::SetPosition(const G4ThreeVector aPosition)
 }
 
 
-
 inline const G4LorentzVector& G4KineticTrack::Get4Momentum() const
 {
-  return the4Momentum;
+  return theTotal4Momentum;
+}
+
+inline const G4LorentzVector& G4KineticTrack::GetTrackingMomentum() const
+{
+   return the4Momentum;
 }
 
 inline void G4KineticTrack::Set4Momentum(const G4LorentzVector& a4Momentum)
 {
   the4Momentum = a4Momentum;
+  G4double m = a4Momentum.mag();
+  theTotal4Momentum=the4Momentum+theFermi3Momentum;
+  G4double p=theTotal4Momentum.vect().mag();
+  theTotal4Momentum.setE(sqrt(m*m+p*p));
 }
 
 inline void G4KineticTrack::Update4Momentum(G4double aEnergy)
@@ -225,21 +246,15 @@ inline void G4KineticTrack::Update4Momentum(G4double aEnergy)
   {
       aEnergy=GetActualMass();
   }
-  the4Momentum = G4LorentzVector(newP*the4Momentum.vect().unit(), aEnergy);
+  Set4Momentum(G4LorentzVector(newP*the4Momentum.vect().unit(), aEnergy));
 }
 
 inline void G4KineticTrack::Update4Momentum(const G4ThreeVector & aMomentum)
 {
   G4double newE=sqrt(the4Momentum.mag2() + aMomentum.mag2());
-  the4Momentum = G4LorentzVector(aMomentum, newE);
+  Set4Momentum(G4LorentzVector(aMomentum, newE));
 }
 
-
-
-inline const G4LorentzVector& G4KineticTrack::GetInitialCoordinates() const
-{
-  return theInitialCoordinates;
-}
 
 
 
@@ -320,6 +335,37 @@ inline G4double G4KineticTrack::BrWig(const G4double Gamma, const G4double rmass
   G4double Norm = twopi;
   return (Gamma/((mass-rmass)*(mass-rmass)+Gamma*Gamma/4.))/Norm;
 }
+      
+inline      
+void G4KineticTrack::Hit() 
+{
+  if(theNucleon) 
+  {
+    theNucleon->Hit(1);
+  }
+}
+
+inline
+G4bool G4KineticTrack::IsParticipant() const 
+{ 
+  if(!theNucleon) return true;
+  return theNucleon->AreYouHit(); 
+}
+
+inline 
+G4KineticTrack::CascadeState G4KineticTrack::GetState() const
+{
+	return theStateToNucleus;
+}
+
+inline
+G4KineticTrack::CascadeState G4KineticTrack::SetState(const CascadeState new_state)
+{
+	CascadeState old_state=theStateToNucleus;
+	theStateToNucleus=new_state;
+	return old_state;
+}
+
 #endif
 
 

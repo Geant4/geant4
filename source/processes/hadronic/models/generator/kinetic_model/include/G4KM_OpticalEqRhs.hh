@@ -71,9 +71,9 @@ inline G4KM_OpticalEqRhs::~G4KM_OpticalEqRhs()
 
 
 // Here by design, but it is unnecessary for nuclear fields
-inline void G4KM_OpticalEqRhs::SetChargeMomentumMass(G4double particleCharge,
-						     G4double MomentumXc,
-						     G4double MassXc2)
+inline void G4KM_OpticalEqRhs::SetChargeMomentumMass(G4double ,
+						     G4double ,
+						     G4double )
 { }
 
 #endif

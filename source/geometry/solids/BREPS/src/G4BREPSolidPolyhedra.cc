@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.24 2003/03/28 13:11:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.25 2003/06/16 16:52:49 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -61,7 +61,7 @@
 #include "G4BREPSolidPolyhedra.hh"
 #include "G4FPlane.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
 					   G4double start_angle,
@@ -133,12 +133,12 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
       )
     {
       // ERROR! Invalid sequence of z-values
-      G4std::ostrstream msgstr;
+      std::ostrstream msgstr;
       msgstr << G4endl
              << "ERROR: The unordered, non-increasing or non-decreasing sequence of z_values detected!\a"
              << G4endl
              << "Check z_values with indexes: "
-             << idx << " " << (idx+1) << G4endl << G4std::ends;
+             << idx << " " << (idx+1) << G4endl << std::ends;
       G4Exception( msgstr.str() );
     }
   }
@@ -180,12 +180,12 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         // Check for possible intersection
         if( RMAX[idx-1] < RMAX[idx+1] || RMIN[idx-1] > RMIN[idx+1] ) {
           // ERROR! The surface conflict!
-          G4std::ostrstream msgstr;
+          std::ostrstream msgstr;
           msgstr << G4endl
                  << "ERROR: The unordered sequence of z_values detected with conflicting RMAX or RMIN values!\a"
                  << G4endl
                  << "Check z_values with indexes: "
-                 << (idx-1) << " " << idx << " " << (idx+1) << G4endl << G4std::ends;
+                 << (idx-1) << " " << idx << " " << (idx+1) << G4endl << std::ends;
           G4Exception( msgstr.str() );
         }
       }
@@ -301,10 +301,10 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
         // At this point is guaranteed that each RMIN[i] < RMAX[i]
         // where i in in interval 0 < i < num_z_planes-1. So:
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] ) {
-          G4std::strstream s;
+          std::strstream s;
           s << G4endl  << "G4BREPSolidPolyhedra::G4BREPSolidPolyhedra() - The values "
                        << "of RMIN[" << a << "] & RMAX[" << a+1 << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
-                       << "make an invalid configuration of G4BREPSolidPolyhedra " << name.c_str() << "!" << G4endl << G4std::ends;
+                       << "make an invalid configuration of G4BREPSolidPolyhedra " << name.c_str() << "!" << G4endl << std::ends;
           G4Exception( s.str() );
         }
 
@@ -990,7 +990,7 @@ G4double G4BREPSolidPolyhedra::DistanceToOut(const G4ThreeVector& Pt) const
 }
 
 // Streams solid contents to output stream.
-G4std::ostream& G4BREPSolidPolyhedra::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BREPSolidPolyhedra::StreamInfo(std::ostream& os) const
 {  
   G4BREPSolid::StreamInfo( os )
   << "\n start_angle:   " << constructorParams.start_angle

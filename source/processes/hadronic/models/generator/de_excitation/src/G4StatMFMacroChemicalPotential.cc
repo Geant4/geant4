@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroChemicalPotential.cc,v 1.8 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroChemicalPotential.cc,v 1.11 2003/06/16 17:06:41 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,20 +32,20 @@
 
 // operators definitions
 G4StatMFMacroChemicalPotential & 
-G4StatMFMacroChemicalPotential::operator=(const G4StatMFMacroChemicalPotential & right) 
+G4StatMFMacroChemicalPotential::operator=(const G4StatMFMacroChemicalPotential & ) 
 {
     G4Exception("G4StatMFMacroChemicalPotential::operator= meant to not be accessable");
     return *this;
 }
 
-G4bool G4StatMFMacroChemicalPotential::operator==(const G4StatMFMacroChemicalPotential & right) const 
+G4bool G4StatMFMacroChemicalPotential::operator==(const G4StatMFMacroChemicalPotential & ) const 
 {
     G4Exception("G4StatMFMacroChemicalPotential::operator== meant to not be accessable");
     return false;
 }
 
 
-G4bool G4StatMFMacroChemicalPotential::operator!=(const G4StatMFMacroChemicalPotential & right) const 
+G4bool G4StatMFMacroChemicalPotential::operator!=(const G4StatMFMacroChemicalPotential & ) const 
 {
     G4Exception("G4StatMFMacroChemicalPotential::operator!= meant to not be accessable");
     return true;
@@ -101,7 +101,7 @@ G4double G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu(void)
 
 G4double G4StatMFMacroChemicalPotential::CalcMeanZ(const G4double nu)
 {
-  G4std::vector<G4VStatMFMacroCluster*>::iterator i;
+  std::vector<G4VStatMFMacroCluster*>::iterator i;
   for (i= _theClusters->begin()+1; i != _theClusters->end(); ++i) 
     { 
       (*i)->CalcZARatio(nu);
@@ -116,7 +116,7 @@ G4double G4StatMFMacroChemicalPotential::CalcMeanZ(const G4double nu)
   G4int n = 1;
   for (i = _theClusters->begin(); i != _theClusters->end(); ++i)
     {
-      MeanZ += G4double(n++) *
+      MeanZ += static_cast<G4double>(n++) *
 	(*i)->GetZARatio() *
 	(*i)->GetMeanMultiplicity(); 
     }

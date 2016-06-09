@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.cc,v 1.9 2001/07/11 10:00:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PhysicsLinearVector.cc,v 1.10 2003/06/06 16:17:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 //--------------------------------------------------------------------
@@ -107,7 +107,7 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin,
 G4PhysicsLinearVector::~G4PhysicsLinearVector(){}
 
 
-G4bool G4PhysicsLinearVector::Retrieve(G4std::ifstream& fIn, G4bool ascii)
+G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success){

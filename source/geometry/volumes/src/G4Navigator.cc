@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.35 2003/03/17 13:42:33 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.36 2003/06/16 16:54:55 gunter Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -32,7 +32,7 @@
 
 #include "G4Navigator.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 // ********************************************************************
 // Constructor
@@ -531,14 +531,14 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
 
 #ifdef G4VERBOSE
-  G4std::cout.precision(8);
+  std::cout.precision(8);
   if( fVerbose > 1 ) 
   {
     G4cout << "*** G4Navigator::ComputeStep: ***" << G4endl; 
-    G4std::cout.precision(8);
+    std::cout.precision(8);
     G4cout << " I was called with the following arguments: " << G4endl
-           << " Globalpoint = " << G4std::setw(25) << pGlobalpoint  << G4endl
-           << " Direction   = " << G4std::setw(25) << pDirection    << G4endl
+           << " Globalpoint = " << std::setw(25) << pGlobalpoint  << G4endl
+           << " Direction   = " << std::setw(25) << pDirection    << G4endl
            << " ProposedStepLength= " << pCurrentProposedStepLength << G4endl;
   }
   if( fVerbose > 2 )
@@ -966,7 +966,7 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 #ifdef G4VERBOSE
   if( fVerbose > 1 ) 
   {
-    G4std::cout.precision(8);
+    std::cout.precision(8);
     G4cout << "Upon exiting my state is: " << G4endl;
     PrintState();
     G4cout << " and I return a value of Safety = " << newSafety << G4endl;
@@ -1003,24 +1003,24 @@ void  G4Navigator::PrintState()
   if( ( 1 < fVerbose) && (fVerbose < 4) )
   {
     G4cout.precision(3);
-    G4cout << G4std::setw(24) << " ExitNormal "  << " "     
-           << G4std::setw( 5) << " Valid "       << " "     
-           << G4std::setw( 9) << " Exiting "     << " "      
-           << G4std::setw( 9) << " Entering"     << " " 
-           << G4std::setw(15) << " Blocked:Volume "  << " "   
-           << G4std::setw( 9) << " ReplicaNo"        << " "  
-           << G4std::setw( 8) << " LastStepZero  "   << " "   
+    G4cout << std::setw(24) << " ExitNormal "  << " "     
+           << std::setw( 5) << " Valid "       << " "     
+           << std::setw( 9) << " Exiting "     << " "      
+           << std::setw( 9) << " Entering"     << " " 
+           << std::setw(15) << " Blocked:Volume "  << " "   
+           << std::setw( 9) << " ReplicaNo"        << " "  
+           << std::setw( 8) << " LastStepZero  "   << " "   
            << G4endl;   
-    G4cout << G4std::setw(24)  << fExitNormal       << " "
-           << G4std::setw( 5)  << fValidExitNormal  << " "   
-           << G4std::setw( 9)  << fExiting          << " "
-           << G4std::setw( 9)  << fEntering         << " ";
+    G4cout << std::setw(24)  << fExitNormal       << " "
+           << std::setw( 5)  << fValidExitNormal  << " "   
+           << std::setw( 9)  << fExiting          << " "
+           << std::setw( 9)  << fEntering         << " ";
     if (fBlockedPhysicalVolume==0 )
-      G4cout << G4std::setw(15) << "None";
+      G4cout << std::setw(15) << "None";
     else
-      G4cout << G4std::setw(15)<< fBlockedPhysicalVolume->GetName();
-      G4cout << G4std::setw( 9)  << fBlockedReplicaNo  << " "
-             << G4std::setw( 8)  << fLastStepWasZero   << " "
+      G4cout << std::setw(15)<< fBlockedPhysicalVolume->GetName();
+      G4cout << std::setw( 9)  << fBlockedReplicaNo  << " "
+             << std::setw( 8)  << fLastStepWasZero   << " "
              << G4endl;   
   }
   if( fVerbose > 2 ) 
@@ -1036,7 +1036,7 @@ void  G4Navigator::PrintState()
 // Operator <<
 // ********************************************************************
 //
-G4std::ostream& operator << (G4std::ostream &os,const G4Navigator &n)
+std::ostream& operator << (std::ostream &os,const G4Navigator &n)
 {
   os << "Current History: " << G4endl << n.fHistory;
   return os;

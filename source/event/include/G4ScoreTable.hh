@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ScoreTable.hh,v 1.1 2002/10/28 10:06:01 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ScoreTable.hh,v 1.2 2003/06/16 16:50:29 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4ScoreTable
@@ -39,9 +39,9 @@
 #ifndef G4ScoreTable_hh
 #define G4ScoreTable_hh G4ScoreTable_hh
 
-#include "g4std/iostream"
-#include "g4std/iomanip"
-#include "g4std/vector"
+#include <iostream>
+#include <iomanip>
+#include <vector>
 
 #include "globals.hh"
 #include "G4CellScorerStore.hh"
@@ -57,17 +57,17 @@ public: // with description
   ~G4ScoreTable();
 
   void Print(const G4MapGeometryCellCellScorer &cs, 
-	     G4std::ostream *out = 0);
+	     std::ostream *out = 0);
     // create the table and print it to the ouput stream.
 
-  void PrintHeader(G4std::ostream *out);
+  void PrintHeader(std::ostream *out);
     // print the table header, done by the above Print() function
 
   void PrintTable(const G4MapGeometryCellCellScorer &cs,
-		  G4std::ostream *out);
+		  std::ostream *out);
     // print the table contend, done by the above Print() function
 
-  G4std::string FillString(const G4std::string &name, 
+  std::string FillString(const std::string &name, 
 			   char c, G4int n, G4bool back = true);
     // create a string of length n, by filling up
     // name with the char c.
@@ -79,7 +79,7 @@ private:
   G4String CreateName(const G4GeometryCell &gCell);
   void PrintLine(const G4String &name,
 		 const G4CellScoreValues &sc_scores,
-		 G4std::ostream *out);
+		 std::ostream *out);
   const G4VIStore *fIStore;
   G4int FieldName;
   G4int FieldValue;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.22 2001/09/10 10:56:55 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.24 2003/06/16 17:14:24 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -35,7 +35,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4VVisCommandSceneHandler::G4VVisCommandSceneHandler () {}
 
@@ -85,12 +85,12 @@ G4VisCommandSceneHandlerAttach::~G4VisCommandSceneHandlerAttach () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneHandlerAttach::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneHandlerAttach::GetCurrentValue (G4UIcommand*) {
   G4Scene* pScene = fpVisManager -> GetCurrentScene ();
   return pScene ? pScene -> GetName () : G4String("");
 }
 
-void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
+void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand*,
 						  G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
@@ -206,13 +206,12 @@ G4VisCommandSceneHandlerCreate::~G4VisCommandSceneHandlerCreate () {
 
 G4String G4VisCommandSceneHandlerCreate::NextName () {
   char nextName [20];
-  G4std::ostrstream ost (nextName, 20);
-  ost << "scene-handler-" << fId << G4std::ends;
+  std::ostrstream ost (nextName, 20);
+  ost << "scene-handler-" << fId << std::ends;
   return nextName;
 }
 
-G4String G4VisCommandSceneHandlerCreate::GetCurrentValue
-(G4UIcommand* command) {
+G4String G4VisCommandSceneHandlerCreate::GetCurrentValue(G4UIcommand*) {
 
   G4String graphicsSystemName;
   const G4VGraphicsSystem* graphicsSystem =
@@ -234,13 +233,13 @@ G4String G4VisCommandSceneHandlerCreate::GetCurrentValue
   return graphicsSystemName + " " + NextName ();
 }
 
-void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
+						  G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String graphicsSystem, newName;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> graphicsSystem >> newName;
 
   const G4GraphicsSystemList& gsl =
@@ -348,14 +347,14 @@ G4VisCommandSceneHandlerList::~G4VisCommandSceneHandlerList () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneHandlerList::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneHandlerList::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand* command,
-					 G4String newValue) {
+void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand*,
+						G4String newValue) {
   G4String name, verbosityString;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> name >> verbosityString;
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);
@@ -403,7 +402,7 @@ G4VisCommandSceneHandlerRemove::~G4VisCommandSceneHandlerRemove () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneHandlerRemove::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneHandlerRemove::GetCurrentValue (G4UIcommand*) {
   G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   if (sceneHandler) {
     return sceneHandler -> GetName ();
@@ -413,8 +412,8 @@ G4String G4VisCommandSceneHandlerRemove::GetCurrentValue (G4UIcommand* command) 
   }
 }
 
-void G4VisCommandSceneHandlerRemove::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandSceneHandlerRemove::SetNewValue (G4UIcommand*,
+						  G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -477,8 +476,7 @@ G4VisCommandSceneHandlerSelect::~G4VisCommandSceneHandlerSelect () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneHandlerSelect::GetCurrentValue 
-(G4UIcommand* command) {
+G4String G4VisCommandSceneHandlerSelect::GetCurrentValue (G4UIcommand*) {
   G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   if (sceneHandler) {
     return sceneHandler -> GetName ();
@@ -488,8 +486,8 @@ G4String G4VisCommandSceneHandlerSelect::GetCurrentValue
   }
 }
 
-void G4VisCommandSceneHandlerSelect::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandSceneHandlerSelect::SetNewValue (G4UIcommand*,
+						  G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.22 2003/04/28 22:54:37 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.23 2003/06/16 17:12:53 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -209,7 +209,7 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     //G4String cValue = G4String(next())+" "+G4String(next());
     //G4double newCut = setCutCmd->GetNewDoubleValue(cValue); 
     //thePhysicsList->SetCutsForRegion(newCut,rName);
-    G4std::istrstream is(newValue);
+    std::istrstream is(newValue);
     char regName[50];
     G4double cVal;
     char uniName[10];

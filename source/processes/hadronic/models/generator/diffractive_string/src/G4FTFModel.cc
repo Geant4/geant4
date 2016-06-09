@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.10 2002/12/12 19:17:26 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FTFModel.cc,v 1.12 2003/06/16 17:06:56 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 // ------------------------------------------------------------
@@ -62,7 +62,7 @@ G4FTFModel::~G4FTFModel()
 {}
 
 
-const G4FTFModel & G4FTFModel::operator=(const G4FTFModel &right)
+const G4FTFModel & G4FTFModel::operator=(const G4FTFModel &)
 {
 	G4Exception("G4FTFModel::operator= is not meant to be accessed ");
 	return *this;
@@ -108,18 +108,18 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	G4ExcitedStringVector * strings;
 	strings = new G4ExcitedStringVector();
 	
-	G4std::vector<G4VSplitableHadron *> primaries;
-	G4std::vector<G4VSplitableHadron *> targets;
+	std::vector<G4VSplitableHadron *> primaries;
+	std::vector<G4VSplitableHadron *> targets;
 	
 	theParticipants.StartLoop();    // restart a loop 
 	while ( theParticipants.Next() ) 
 	{
 	    const G4InteractionContent & interaction=theParticipants.GetInteraction();
                  //  do not allow for duplicates ...
-	    if ( primaries.end() == G4std::find(primaries.begin(), primaries.end(), interaction.GetProjectile()) )
+	    if ( primaries.end() == std::find(primaries.begin(), primaries.end(), interaction.GetProjectile()) )
 	    	primaries.push_back(interaction.GetProjectile());
 		
-	    if ( targets.end() == G4std::find(targets.begin(), targets.end(),interaction.GetTarget()) ) 
+	    if ( targets.end() == std::find(targets.begin(), targets.end(),interaction.GetTarget()) ) 
 	    	targets.push_back(interaction.GetTarget());
 	}
 	    
@@ -140,9 +140,9 @@ G4ExcitedStringVector * G4FTFModel::BuildStrings()
 	    strings->push_back(theExcitation->String(targets[ahadron], isProjectile));
 	}
 
-	G4std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
+	std::for_each(primaries.begin(), primaries.end(), DeleteVSplitableHadron());
 	primaries.clear();
-	G4std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
+	std::for_each(targets.begin(), targets.end(), DeleteVSplitableHadron());
 	targets.clear();
 	
 	return strings;

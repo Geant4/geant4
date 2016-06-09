@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FConicalSurface.hh,v 1.11 2001/07/11 09:59:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FConicalSurface.hh,v 1.12 2003/06/16 16:52:35 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4FConicalSurface
@@ -87,7 +87,7 @@ class G4FConicalSurface : public G4Surface
   virtual const char* Name() const;
     // Returns the class type name.
 
-  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
+  virtual void PrintOn( std::ostream& os = G4cout ) const;
     // Printing function.
 
   G4int operator==( const G4FConicalSurface& c ) const;

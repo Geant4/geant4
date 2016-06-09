@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Fancy3DNucleus.hh,v 1.14 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Fancy3DNucleus.hh,v 1.15 2003/06/16 17:09:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4Fancy3DNucleus_h
 #define G4Fancy3DNucleus_h 1
@@ -41,7 +41,7 @@
 #include "G4Nucleon.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4Fancy3DNucleus : public G4V3DNucleus
 {
@@ -68,7 +68,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
       void Init(G4double theA, G4double theZ);
       G4bool StartLoop();
       G4Nucleon * GetNextNucleon();
-      const G4std::vector<G4Nucleon *> & GetNucleons();
+      const std::vector<G4Nucleon *> & GetNucleons();
       G4int GetMassNumber();
       G4double GetMass();
       G4int GetCharge();
@@ -89,7 +89,7 @@ class G4Fancy3DNucleus : public G4V3DNucleus
   G4int myA;
   G4int myZ;
   G4Nucleon * theNucleons;
-  G4std::vector<G4Nucleon *> theRWNucleons;  // should not have two...
+  std::vector<G4Nucleon *> theRWNucleons;  // should not have two...
   struct DeleteNucleon{ void operator()(G4Nucleon *aN){delete aN;} };
   G4int currentNucleon;
   G4VNuclearDensity * theDensity;

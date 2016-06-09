@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: clparse.cc,v 1.14 2001/10/11 12:36:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: clparse.cc,v 1.15 2003/06/16 16:50:58 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // modified by I.Hrivnacova
 // added G3SensVol
 
 #include "globals.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4Tokenizer.hh"
 #include "G3toG4.hh"
 #include "G3EleTable.hh"
@@ -40,13 +40,13 @@
 #include "G3DetTable.hh"
 #include "G3SensVolVector.hh"
 
-G4std::ofstream ofile;
+std::ofstream ofile;
 
 extern "C" {
 #include <stdlib.h>
 }
 
-extern G4std::ofstream ofile;
+extern std::ofstream ofile;
 
 G3VolTable G3Vol;
 G3MatTable G3Mat; // material G3 ID <-> G4 pointer table
@@ -109,7 +109,7 @@ void G3CLRead(G4String & fname, char *select = 0){
 
   G4int count = 0;
   G4int ntokens = 0;
-  G4std::ifstream istr(fname);
+  std::ifstream istr(fname);
     
   while (line.readLine(istr) && ! istr.eof()){
       count++;

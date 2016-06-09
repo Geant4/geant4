@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.16 2003/02/13 08:37:49 jwellisc Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.18 2003/06/16 17:03:04 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
@@ -56,7 +56,7 @@ G4double  G4ElectroNuclearCrossSection::lastSig=0.;// Last value of the Cross Se
 
 // The main member function giving the gamma-A cross section (E in GeV, CS in mb)
 G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* aPart,
-                                                       const G4Element* anEle, G4double T)
+                                                       const G4Element* anEle, G4double )
 {
   static const G4int nE=336; // !!  If you change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
@@ -69,14 +69,14 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
   static const G4double mel=0.5109989;       // Mass of electron in MeV
   static const G4double lmel=log(mel);       // Log of electron mass
   // Associative memory for acceleration
-  static G4std::vector <G4int> colN;       // Vector of N for calculated nucleus
-  static G4std::vector <G4int> colZ;       // Vector of Z for calculated nucleus
-  static G4std::vector <G4int> colF;       // Vector of LastZeroPosition in the J-functions
-  static G4std::vector <G4double> colTH;   // Vector of energy thresholds
-  static G4std::vector <G4double> colH;    // Vector of high energy coefficient
-  static G4std::vector <G4double*> J1;    // Vector of pointers to the J1 functions
-  static G4std::vector <G4double*> J2;    // Vector of pointers to the J2 functions
-  static G4std::vector <G4double*> J3;    // Vector of pointers to the J3 functions
+  static std::vector <G4int> colN;       // Vector of N for calculated nucleus
+  static std::vector <G4int> colZ;       // Vector of Z for calculated nucleus
+  static std::vector <G4int> colF;       // Vector of LastZeroPosition in the J-functions
+  static std::vector <G4double> colTH;   // Vector of energy thresholds
+  static std::vector <G4double> colH;    // Vector of high energy coefficient
+  static std::vector <G4double*> J1;    // Vector of pointers to the J1 functions
+  static std::vector <G4double*> J2;    // Vector of pointers to the J2 functions
+  static std::vector <G4double*> J3;    // Vector of pointers to the J3 functions
   // *** End of Static Definitions (Associative Memory) ***
   const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
   const G4int targetAtomicNumber = static_cast<int>(anEle->GetN()+.499); //@@ Nat mixture (?!)

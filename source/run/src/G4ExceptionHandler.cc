@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExceptionHandler.cc,v 1.2 2002/12/04 21:52:40 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ExceptionHandler.cc,v 1.3 2003/05/21 21:06:01 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -47,15 +47,13 @@ G4ExceptionHandler::~G4ExceptionHandler()
 {
 }
 
-G4ExceptionHandler::G4ExceptionHandler(const G4ExceptionHandler &right)
+G4ExceptionHandler::G4ExceptionHandler(const G4ExceptionHandler &)
+:G4VExceptionHandler()
 {
-   *this = right;
 }
 
-G4ExceptionHandler& G4ExceptionHandler::operator=(const G4ExceptionHandler &right)
+G4ExceptionHandler& G4ExceptionHandler::operator=(const G4ExceptionHandler &)
 {
-   if (&right == this) return *this;
-   *this = right;
    return *this;
 }
 

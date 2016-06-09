@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.hh,v 1.7 2002/12/12 19:16:49 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PhotoNuclearCrossSection.hh,v 1.9 2003/06/16 17:03:01 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // GEANT4 physics class: G4PhotoNuclearCrossSection -- header file
@@ -41,7 +41,7 @@
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4NucleiPropertiesTable.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
 {
@@ -54,7 +54,7 @@ public:
 
   ~G4PhotoNuclearCrossSection() {}
 
-  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
+  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* )
   {
 	//return theHadronCrossSections->IsApplicable(aParticle, anElement);
 	// Possible prototype

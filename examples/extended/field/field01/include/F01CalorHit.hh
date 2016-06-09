@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01CalorHit.hh,v 1.2 2001/07/11 09:57:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F01CalorHit.hh,v 1.3 2003/06/25 17:40:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -46,7 +46,7 @@ class F01CalorHit : public G4VHit
      ~F01CalorHit();
       F01CalorHit(const F01CalorHit&);
       const F01CalorHit& operator=(const F01CalorHit&);
-      int operator==(const F01CalorHit&) const;
+      G4int operator==(const F01CalorHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

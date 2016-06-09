@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPrimaryGeneratorActionI.hh,v 1.2 2002/11/18 15:18:37 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyPrimaryGeneratorActionI.hh,v 1.5 2003/06/16 16:45:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //
@@ -38,35 +38,32 @@
 #ifndef BrachyPrimaryGeneratorActionI_h
 #define BrachyPrimaryGeneratorActionI_h 1
 
+#include "globals.hh"
+#include <vector>
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4RadioactiveDecay.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
+
 class G4ParticleGun;
 class G4Run;
 class G4Event;
 class BrachyAnalysisManager;
 class BrachyPrimaryGeneratorAction;
-//class BrachyPrimaryGeneratorMessenger;
+
 class BrachyPrimaryGeneratorActionI : public  G4VUserPrimaryGeneratorAction
 {
  public:
-	BrachyPrimaryGeneratorActionI();
+      BrachyPrimaryGeneratorActionI();
       ~BrachyPrimaryGeneratorActionI();
 
  public:
       void GeneratePrimaries(G4Event* anEvent);
-  
-  G4double GetEnergy();
+      G4double GetEnergy();
+
  private:
-      G4ParticleGun* m_pParticleGun;
-    
-	G4RadioactiveDecay *m_pRadioactiveDecay;
-        G4double Energy;
-       
-  //    BrachyPrimaryGeneratorMessenger* gunMessenger; 
-   G4std::vector<G4double> vettore;
+      G4ParticleGun* particleGun;
+      G4double primaryParticleEnergy;
+      std::vector<G4double> energySpectrum;
 };
 
 #endif
-
 

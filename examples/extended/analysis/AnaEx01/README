@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2001/12/03 07:49:17 barrand Exp $
+$Id: README,v 1.12 2003/06/20 14:55:44 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -93,19 +93,24 @@ $Id: README,v 1.11 2001/12/03 07:49:17 barrand Exp $
   To plot some histograms, spawn the Lab interactive tool with :
    csh> onx
   (DOS> onx     (for Windows))
- click in File/Python to map a file chooser, choose AnaEx01.py
- to execute the AnaEx01.py that contains a Python script that
- do some analysis over the AnaEx01.root file (it gets an histo, plots it
- in a first drawing region, gets the tuple, books and fills another histo
- from the tuple colum and plots it in another drawing region).
+ click in 'File/File/import' to map a file chooser, choose AnaEx01.py
+ to execute the AnaEx01.py. You can also execute this script by issuing an :
+       import AnaEx01
+ in the command prompt.
+  This file contains a Python script that
+ do some analysis over the AnaEx01.root file by using the AIDA interfaces.
+ This script gets an histo (EAbs) and  plots it in a first drawing region.
+ Then it gets the 'AnaEx01' tuple, books and fills another histo
+ from the tuple colum 'EAbs' and plots it a secon drawing region.
 
   The AnaEx01.C file could also be used, within the ROOT tool, 
  to see a projection of the first column of the tuple contained
  in the AnaEx01.root file. For example :
      csh> root
      root[0] .X AnaEx01.C
+ Note that the HCL 'EAbs' histogram could not be seen with ROOT.
 
   The OpenScientist URL is : http://www.lal.in2p3.fr/OpenScientist
-  OpenScientist is installed at CERN under /afs/cern.ch/sw/contrib.
+ OpenScientist is installed at CERN under /afs/cern.ch/sw/contrib.
 
 

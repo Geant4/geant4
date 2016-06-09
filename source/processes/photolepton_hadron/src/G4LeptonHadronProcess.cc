@@ -44,7 +44,7 @@
 //-----------------------------------------------------------------------------
   G4VParticleChange* 
   G4LeptonHadronProcess::GeneralPostStepDoIt( const G4Track &leptonTrack,
-                                              const G4Step &aStep )
+                                              const G4Step & )
 //-----------------------------------------------------------------------------
   {
     targetNucleus.ChooseParameters(leptonTrack.GetMaterial());

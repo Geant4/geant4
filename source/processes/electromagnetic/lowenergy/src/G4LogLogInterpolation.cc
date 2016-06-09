@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.cc,v 1.4 2002/05/28 09:20:19 pia Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LogLogInterpolation.cc,v 1.5 2003/06/25 14:24:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -65,7 +65,7 @@ G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin,
       G4double d1 = data[bin];
       G4double d2 = data[bin+1];
       value = (log10(d1)*log10(e2/x) + log10(d2)*log10(x/e1)) / log10(e2/e1);
-      value = pow(10,value);
+      value = pow(10.,value);
     }
   else
     {

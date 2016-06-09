@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Field.hh,v 1.6 2001/11/08 17:31:07 grichine Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4Field

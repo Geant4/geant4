@@ -27,8 +27,8 @@
 #include "G4VPDigitsCollectionIO.hh"
 
 // Implementation of Constructor #1
-G4VPDigitsCollectionIO::G4VPDigitsCollectionIO( G4std::string detName,
-                                                G4std::string colName )
+G4VPDigitsCollectionIO::G4VPDigitsCollectionIO( std::string detName,
+                                                std::string colName )
  : m_verbose(0), f_detName(detName), f_colName(colName)
 {}
 

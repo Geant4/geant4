@@ -1,4 +1,4 @@
-# $Id: TestEm1.in,v 1.9 2003/03/26 17:49:54 vnivanch Exp $
+# $Id: TestEm1.in,v 1.12 2003/06/03 09:59:55 vnivanch Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -10,10 +10,12 @@
 #
 /testem/phys/setGCut 2.20 mm
 /testem/phys/setECut 6.05 mum
+/testem/phys/setPCut 6.05 mum
 #
 /run/initialize
 #
-/process/eLoss/StepFunction 0.183 170 micrometer
+/process/eLoss/StepFunction 0.183 1.70 micrometer
+#/process/eLoss/integral  false
 #
 /run/verbose 2
 #

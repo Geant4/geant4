@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.icc,v 1.8 2002/12/16 11:59:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleChangeForTransport.icc,v 1.9 2003/06/16 17:12:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 inline 
@@ -115,13 +115,13 @@ inline void G4ParticleChangeForTransport::Initialize(const G4Track& track)
 
 inline void
 G4ParticleChangeForTransport::
-SetPointerToVectorOfAuxiliaryPoints( G4std::vector<G4ThreeVector>*
+SetPointerToVectorOfAuxiliaryPoints( std::vector<G4ThreeVector>*
                                      theNewVectorPointer )
 {
   fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
 }
 
-inline G4std::vector<G4ThreeVector>*
+inline std::vector<G4ThreeVector>*
 G4ParticleChangeForTransport::GetPointerToVectorOfAuxiliaryPoints() const
 {
   return fpVectorOfAuxiliaryPointsPointer;

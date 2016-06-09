@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 // 
-// $Id: Em1PhysicsList.cc,v 1.11 2003/03/27 11:16:20 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em1PhysicsList.cc,v 1.12 2003/06/03 09:59:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,12 +42,14 @@
 #include "Em1DetectorConstruction.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Material.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em1PhysicsList::Em1PhysicsList(Em1DetectorConstruction* p) 
 : G4VModularPhysicsList()
 {
+  G4LossTableManager::Instance();
   pDet = p;
   
   currentDefaultCut   = 1.0*mm;

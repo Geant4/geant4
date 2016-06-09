@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.11 2002/12/12 19:14:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QParticle.hh,v 1.12 2003/06/16 17:04:12 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -32,7 +32,7 @@
 #ifndef G4QParticle_h
 #define G4QParticle_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 #include "G4QDecayChanVector.hh"
 
@@ -84,7 +84,7 @@ private:
 };
 
 // Not member operators
-G4std::ostream&   operator<<(G4std::ostream& lhs, G4QParticle& rhs);
+std::ostream&   operator<<(std::ostream& lhs, G4QParticle& rhs);
 // Not member functions
 //----------------------------------------------------------------------------------------
 

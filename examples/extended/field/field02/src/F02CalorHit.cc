@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02CalorHit.cc,v 1.2 2001/07/11 09:58:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F02CalorHit.cc,v 1.3 2003/06/25 17:33:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -49,6 +49,7 @@ F02CalorHit::~F02CalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F02CalorHit::F02CalorHit(const F02CalorHit& right)
+  : G4VHit()
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -65,9 +66,9 @@ const F02CalorHit& F02CalorHit::operator=(const F02CalorHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int F02CalorHit::operator==(const F02CalorHit& right) const
+G4int F02CalorHit::operator==(const F02CalorHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

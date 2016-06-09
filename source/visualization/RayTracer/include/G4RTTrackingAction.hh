@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTTrackingAction.hh,v 1.4 2001/07/11 10:09:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RTTrackingAction.hh,v 1.5 2003/05/30 13:01:20 johna Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
@@ -62,7 +62,7 @@ class G4RTTrackingAction : public G4UserTrackingAction
 
 // Member functions
    virtual void PreUserTrackingAction(const G4Track* aTrack);
-   virtual void PostUserTrackingAction(const G4Track* aTrack){;}
+   virtual void PostUserTrackingAction(const G4Track*){;}
 
 
 };

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.hh,v 1.10 2002/12/12 19:17:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FermiConfiguration.hh,v 1.11 2003/06/16 17:05:06 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -30,7 +30,7 @@
 #ifndef G4FermiConfiguration_h
 #define G4FermiConfiguration_h 1
 
-#include "g4std/deque"
+#include <deque>
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -76,7 +76,7 @@ private:
   G4double CoulombBarrier(void);
 
 
-  G4std::deque<G4LorentzVector*>* FragmentsMomentum(G4double KineticEnergy);
+  std::deque<G4LorentzVector*>* FragmentsMomentum(G4double KineticEnergy);
   
   G4double RNKSI(const G4int K);
 
@@ -208,7 +208,7 @@ private:
   //  G4VFermiFragment * theConfiguration[MaxConfigSize];
 
   //  G4int Index[MaxConfigSize];
-  G4std::vector<G4int> Index;
+  std::vector<G4int> Index;
 
 
     struct DeleteFragment 

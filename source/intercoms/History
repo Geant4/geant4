@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2003/01/20 14:17:19 johna Exp $
+$Id: History,v 1.54 2003/06/07 16:41:03 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 07, 2003, G.Cosmo (intercoms-V05-01-02)
+- G4UItokenNum.hh: corrected implementation of operator=().
+
+Jun 04, 2003, G.Cosmo (intercoms-V05-01-01)
+- G4UItokenNum.hh: fixed longstanding bug in the definition of the
+  struct "yystype": defined operator= and copy-constructor, defined
+  default constructor with default initialisation of members.
+  The fix makes happy Valgrind, concerning the usage of uninitialised
+  values.
+
+May 21, 2003, M.Asai (intercoms-V05-01-00)
+- Clean up unused variables appeared in arguments.
 
 Jan 20, 2003, J.Allison (intercoms-V05-00-00, co-works vis-V05-00-00)
 - Added G4VVisManager::Draw methods for hits and trajectories.

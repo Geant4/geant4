@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SolidAnalyser.cc,v 1.2 2002/06/04 09:23:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: SolidAnalyser.cc,v 1.3 2003/06/16 16:49:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -34,7 +34,7 @@
 //
 #include "SolidAnalyser.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4Box.hh"
 #include "G4Cons.hh"
@@ -67,7 +67,7 @@ SolidAnalyser * SolidAnalyser::GetSolidAnalyser()
 
 
 G4int SolidAnalyser::GetParam(const G4VSolid * s,
-             G4std::vector<G4std::pair<G4String,G4double> > & result ) const
+             std::vector<std::pair<G4String,G4double> > & result ) const
 {
    const G4Box * box = dynamic_cast<const G4Box*>(s);   
    if ( box ) return GetParam(box,result);
@@ -95,146 +95,146 @@ G4int SolidAnalyser::GetParam(const G4VSolid * s,
 
 // default parameters for not implemented solids
 G4int SolidAnalyser::NotImplemented(const G4VSolid * s,
-         G4std::vector<G4std::pair<G4String,G4double> > & result) const
+         std::vector<std::pair<G4String,G4double> > & result) const
 {
    G4String temp = s->GetEntityType() + G4String(": not impl.");
-   result.push_back(G4std::make_pair(temp,-1.0));
+   result.push_back(std::make_pair(temp,-1.0));
    return -1;
 }
 
 // G4Box
 G4int SolidAnalyser::GetParam(const G4Box * s,
-          G4std::vector<G4std::pair<G4String,G4double> > & result) const
+          std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(G4std::make_pair(G4String("x/2"), s->GetXHalfLength()));
-   result.push_back(G4std::make_pair(G4String("y/2"), s->GetYHalfLength()));
-   result.push_back(G4std::make_pair(G4String("z/2"), s->GetZHalfLength()));
+   result.push_back(std::make_pair(G4String("x/2"), s->GetXHalfLength()));
+   result.push_back(std::make_pair(G4String("y/2"), s->GetYHalfLength()));
+   result.push_back(std::make_pair(G4String("z/2"), s->GetZHalfLength()));
    return 3;
 }
 
 // G4Cons
 G4int SolidAnalyser::GetParam(const G4Cons * s,
-           G4std::vector<G4std::pair<G4String,G4double> > & result) const
+           std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(G4std::make_pair(G4String("z/2"),
+   result.push_back(std::make_pair(G4String("z/2"),
                     s->GetZHalfLength()));
-   result.push_back(G4std::make_pair(G4String("rInZ-"),
+   result.push_back(std::make_pair(G4String("rInZ-"),
                     s->GetInnerRadiusMinusZ()));
-   result.push_back(G4std::make_pair(G4String("rInZ+"),
+   result.push_back(std::make_pair(G4String("rInZ+"),
                     s->GetInnerRadiusPlusZ()));
-   result.push_back(G4std::make_pair(G4String("rOutZ-"),
+   result.push_back(std::make_pair(G4String("rOutZ-"),
                     s->GetOuterRadiusMinusZ()));
-   result.push_back(G4std::make_pair(G4String("rOutZ+"),
+   result.push_back(std::make_pair(G4String("rOutZ+"),
                     s->GetOuterRadiusPlusZ()));
-   result.push_back(G4std::make_pair(G4String("startPhi"),
+   result.push_back(std::make_pair(G4String("startPhi"),
                     s->GetStartPhiAngle()));
-   result.push_back(G4std::make_pair(G4String("deltaPhi"),
+   result.push_back(std::make_pair(G4String("deltaPhi"),
                     s->GetDeltaPhiAngle()));
    return 7;
 }
 
 // G4Polycone
 G4int SolidAnalyser::GetParam(const G4Polycone * s,
-           G4std::vector<G4std::pair<G4String,G4double> > & result) const
+           std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(G4std::make_pair(G4String("startPhi"), s->GetStartPhi()));
-   result.push_back(G4std::make_pair(G4String("endPhi"), s->GetEndPhi()));
+   result.push_back(std::make_pair(G4String("startPhi"), s->GetStartPhi()));
+   result.push_back(std::make_pair(G4String("endPhi"), s->GetEndPhi()));
    
    G4int nr = s->GetNumRZCorner();   
    G4String temp("nrRZ");
-   result.push_back(G4std::make_pair(temp, G4double(nr)));
+   result.push_back(std::make_pair(temp, G4double(nr)));
    for (G4int i=0; i<nr; i++)
    {
-      G4std::ostrstream sstr_r, sstr_z;      
+      std::ostrstream sstr_r, sstr_z;      
       G4PolyconeSideRZ sideRz = s->GetCorner(i);
       sstr_z << "z_" << i << '\0';
       sstr_r << "r_" << i << '\0';
       G4String z_str(sstr_z.str());
       G4String r_str(sstr_r.str());
-      result.push_back(G4std::make_pair(z_str, sideRz.z));
-      result.push_back(G4std::make_pair(r_str, sideRz.r));
+      result.push_back(std::make_pair(z_str, sideRz.z));
+      result.push_back(std::make_pair(r_str, sideRz.r));
    }
    return 3 + 2*nr;
 }
 
 // G4Polyhedra
 G4int SolidAnalyser::GetParam(const G4Polyhedra * s,
-         G4std::vector<G4std::pair<G4String,G4double> > & result) const
+         std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(G4std::make_pair(G4String("startPhi"), s->GetStartPhi()));
-   result.push_back(G4std::make_pair(G4String("endPhi"), s->GetEndPhi()));
-   result.push_back(G4std::make_pair(G4String("nrSide"),
+   result.push_back(std::make_pair(G4String("startPhi"), s->GetStartPhi()));
+   result.push_back(std::make_pair(G4String("endPhi"), s->GetEndPhi()));
+   result.push_back(std::make_pair(G4String("nrSide"),
                     G4double(s->GetNumSide())));
    
    G4int nr = s->GetNumRZCorner();   
 
-   result.push_back(G4std::make_pair(G4String("nrRZ"), G4double(nr)));
+   result.push_back(std::make_pair(G4String("nrRZ"), G4double(nr)));
       
    for (G4int i=0; i<nr; i++)
    {
-      G4std::ostrstream sstr_r, sstr_z;      
+      std::ostrstream sstr_r, sstr_z;      
       G4PolyhedraSideRZ sideRz = s->GetCorner(i);
       sstr_z << "z_" << i << '\0';
       sstr_r << "r_" << i << '\0';
       G4String z_str(sstr_z.str());
       G4String r_str(sstr_r.str());
-      result.push_back(G4std::make_pair(z_str, sideRz.z));
-      result.push_back(G4std::make_pair(r_str, sideRz.r));
+      result.push_back(std::make_pair(z_str, sideRz.z));
+      result.push_back(std::make_pair(r_str, sideRz.r));
    }   
    return 4 + 2*nr;
 }
 
 // G4Trap
 G4int SolidAnalyser::GetParam(const G4Trap * s,
-            G4std::vector<G4std::pair<G4String,G4double> > & result) const
+            std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(G4std::make_pair(G4String("z/2"), s->GetZHalfLength()));
+   result.push_back(std::make_pair(G4String("z/2"), s->GetZHalfLength()));
 
-   result.push_back(G4std::make_pair(G4String("x/2_1"), s->GetXHalfLength1()));
-   result.push_back(G4std::make_pair(G4String("x/2_2"), s->GetXHalfLength2()));
-   result.push_back(G4std::make_pair(G4String("y/2_1"), s->GetYHalfLength1()));
-   result.push_back(G4std::make_pair(G4String("tanAlpha_1"),s->GetTanAlpha1()));
+   result.push_back(std::make_pair(G4String("x/2_1"), s->GetXHalfLength1()));
+   result.push_back(std::make_pair(G4String("x/2_2"), s->GetXHalfLength2()));
+   result.push_back(std::make_pair(G4String("y/2_1"), s->GetYHalfLength1()));
+   result.push_back(std::make_pair(G4String("tanAlpha_1"),s->GetTanAlpha1()));
    
-   result.push_back(G4std::make_pair(G4String("x/2_3"), s->GetXHalfLength3()));
-   result.push_back(G4std::make_pair(G4String("x/2_4"), s->GetXHalfLength4()));
-   result.push_back(G4std::make_pair(G4String("y/2_2"), s->GetYHalfLength2()));
-   result.push_back(G4std::make_pair(G4String("tanAlpha_2"),s->GetTanAlpha2()));
+   result.push_back(std::make_pair(G4String("x/2_3"), s->GetXHalfLength3()));
+   result.push_back(std::make_pair(G4String("x/2_4"), s->GetXHalfLength4()));
+   result.push_back(std::make_pair(G4String("y/2_2"), s->GetYHalfLength2()));
+   result.push_back(std::make_pair(G4String("tanAlpha_2"),s->GetTanAlpha2()));
 
    return 9;
 }
 
 // G4Trd
 G4int SolidAnalyser::GetParam(const G4Trd * s,
-             G4std::vector<G4std::pair<G4String,G4double> > & result) const
+             std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(G4std::make_pair(G4String("z/2"), s->GetZHalfLength()));
+   result.push_back(std::make_pair(G4String("z/2"), s->GetZHalfLength()));
 
-   result.push_back(G4std::make_pair(G4String("x/2_1"), s->GetXHalfLength1()));
-   result.push_back(G4std::make_pair(G4String("x/2_2"), s->GetXHalfLength2()));
-   result.push_back(G4std::make_pair(G4String("y/2_1"), s->GetYHalfLength1()));
-   result.push_back(G4std::make_pair(G4String("y/2_2"), s->GetYHalfLength2()));
+   result.push_back(std::make_pair(G4String("x/2_1"), s->GetXHalfLength1()));
+   result.push_back(std::make_pair(G4String("x/2_2"), s->GetXHalfLength2()));
+   result.push_back(std::make_pair(G4String("y/2_1"), s->GetYHalfLength1()));
+   result.push_back(std::make_pair(G4String("y/2_2"), s->GetYHalfLength2()));
    return 5;
 }
 
 // G4Tubs
 G4int SolidAnalyser::GetParam(const G4Tubs * s,
-           G4std::vector<G4std::pair<G4String,G4double> > & result) const
+           std::vector<std::pair<G4String,G4double> > & result) const
 {
-   result.push_back(G4std::make_pair(G4String("z/2"), s->GetZHalfLength()));
-   result.push_back(G4std::make_pair(G4String("rIn"), s->GetInnerRadius()));
-   result.push_back(G4std::make_pair(G4String("rOut"), s->GetOuterRadius()));
-   result.push_back(G4std::make_pair(G4String("startPhi"),
+   result.push_back(std::make_pair(G4String("z/2"), s->GetZHalfLength()));
+   result.push_back(std::make_pair(G4String("rIn"), s->GetInnerRadius()));
+   result.push_back(std::make_pair(G4String("rOut"), s->GetOuterRadius()));
+   result.push_back(std::make_pair(G4String("startPhi"),
                     s->GetStartPhiAngle()));
-   result.push_back(G4std::make_pair(G4String("deltaPhi"),
+   result.push_back(std::make_pair(G4String("deltaPhi"),
                     s->GetDeltaPhiAngle()));
    
    return 5;
 }
 
-G4std::ostream & operator<<(G4std::ostream& flux, 
-                            G4std::vector<G4std::pair<G4String,G4double> > & v)
+std::ostream & operator<<(std::ostream& flux, 
+                            std::vector<std::pair<G4String,G4double> > & v)
 {
-   G4std::vector<G4std::pair<G4String,G4double> >::iterator it = v.begin();
+   std::vector<std::pair<G4String,G4double> >::iterator it = v.begin();
    while ( it != v.end() )
    {
       flux << (*it).first << '=' << (*it).second << "<br/>" << G4endl;

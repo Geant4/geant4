@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingBox3D.cc,v 1.7 2003/03/28 13:11:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BoundingBox3D.cc,v 1.8 2003/06/16 16:52:52 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -80,12 +80,12 @@ void G4BoundingBox3D::Init(const G4Point3D& p1, const G4Point3D& p2)
   // Maybe temporary
   // Create a BBox bigger than the reality
 
-  box_min.setX( G4std::min(p1.x(), p2.x()) - kCarTolerance );
-  box_min.setY( G4std::min(p1.y(), p2.y()) - kCarTolerance );
-  box_min.setZ( G4std::min(p1.z(), p2.z()) - kCarTolerance );
-  box_max.setX( G4std::max(p1.x(), p2.x()) + kCarTolerance );
-  box_max.setY( G4std::max(p1.y(), p2.y()) + kCarTolerance );
-  box_max.setZ( G4std::max(p1.z(), p2.z()) + kCarTolerance );
+  box_min.setX( std::min(p1.x(), p2.x()) - kCarTolerance );
+  box_min.setY( std::min(p1.y(), p2.y()) - kCarTolerance );
+  box_min.setZ( std::min(p1.z(), p2.z()) - kCarTolerance );
+  box_max.setX( std::max(p1.x(), p2.x()) + kCarTolerance );
+  box_max.setY( std::max(p1.y(), p2.y()) + kCarTolerance );
+  box_max.setZ( std::max(p1.z(), p2.z()) + kCarTolerance );
   
   // Calc half spaces
   GeantBox = (box_max - box_min)*0.5;

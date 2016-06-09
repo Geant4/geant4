@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.12 2002/05/15 05:47:49 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EventManager.cc,v 1.13 2003/05/21 20:52:53 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //
@@ -63,11 +63,9 @@ G4EventManager::G4EventManager()
 }
 
 // private -> never called
-G4EventManager::G4EventManager(const G4EventManager &right) { }
-G4EventManager& G4EventManager::operator=(const G4EventManager& right)
-{ 
-  return *this;
-}
+G4EventManager::G4EventManager(const G4EventManager&) {;}
+G4EventManager& G4EventManager::operator=(const G4EventManager&)
+{ return *this; }
 
 G4EventManager::~G4EventManager()
 {

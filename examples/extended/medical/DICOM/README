@@ -1,0 +1,104 @@
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|                        DicomG4                          |
++                                                         +
+|                        README                           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+The DICOM application has been developed by the Geant4 users:
+Louis Archambault,*Luc Beaulieu, +Vincent Hubert-Tremblay.
+
+*Centre Hospitalier Universitaire de Quebec (CHUQ),
+Hotel-Dieu de Quebec, departement de Radio-oncologie
+11 cote du palais. Quebec, QC, Canada, G1R 2J6
+tel (418) 525-4444 #6720
+fax (418) 691 5268
+web : thomson.phy.ulaval.ca/phys_med 
+
++ Université Laval, Québec (QC) Canada
+
+This example illustrates a preliminary version of a Geant4 interface
+to the DICOM image format.
+The example consists in creating an image from dicom files.
+
+--->1) Introduction
+
+DICOM images are read and used as Geometry for simulation. 
+
+Three file .dcm give the experimental set-up 
+(in terms of tissues and  tissue geometry position) are read. 
+It is possible to visualise the reproduced experimental  
+set-up thanks to the use of visualisation packages.
+ 
+You can find the phantom reproduced in the image PhantomCT.jpg.
+In the application  the phantom is placed on a table.
+ 
+---> 2) Installation:
+
+ -example enviroment with the compiler 3.2                              
+ -a standard Geant4 example GNUmakefile is provided            
+
+setup with:                                                    
+compiler = gcc-3.2
+G4SYSTEM = linux-g++  
+
+The following environment variables need to be set:            
+G4LEDATA: points to low energy data base - G4EMLOW2.2      
+
+visualisation package: OpenGL
+
+---> 3) Run the example:
+
+- batch mode:
+  -dicom vis.mac :the geometry is visualised with OPENGL
+  -dicom run.mac :no geometry visualisation
+
+- interactive mode:
+dicom
+the file default.mac is read in order to visualise the phantom.
+
+--->4) Some details :
+
+The DICOM images pixel values represent CT (Hounsfield) numbers and they should be
+converted, first, to a given density and then to a material type.  The relation between
+CT number and density is more or less linear.  The one used in this program is represented
+in the table below.
+
+           #####################################################
+           #     Density Range                   Material      #
+           #---------------------------------------------------#
+           #       mg/cm3                            -         #
+           #---------------------------------------------------#
+           #  [ 0.207 , 0.227 ]                 Lungs (inhale) #
+           #  [ 0.481 , 0.534 ]                 Lungs (exhale) #
+           #  [ 0.919 , 0.979 ]                 Adipose        #
+           #  ] 0.979 , 1.004 ]                 Breast         #
+           #  ] 1.004 , 1.043 ]                 Phantom        #
+           #  ] 1.043 , 1.109 ]                 Liver          #
+           #  ] 1.109 , 1.113 ]                 Muscle         #
+           #  ] 1.113 , 1.217 ]                 Trabecular Bone#
+           #  [ 1.496 , 1.654 ]                 Dense Bone     #
+           #####################################################
+
+Data taken from the International Commission on Radiation Units and measurements (ICRU)
+report 46 was used to build the materials (lung, liver, breast, bones, ...)
+
+5) Contacts
+
+If you have any questions or wish to notify of updates and/or modification
+please contact:
+ 	
+*Louis Archambault at louis.archambault@phy.ulaval.ca
+ 
+*Luc Beaulieu at beaulieu@phy.ulaval.ca
+
++ Vincent Hubert-Tremblay
+   <tigre.2@sympatico.ca> or <vihut@phy.ulaval.ca>
+
+*Centre Hospitalier Universitaire de Quebec (CHUQ),
+Hotel-Dieu de Quebec, departement de Radio-oncologie
+11 cote du palais. Quebec, QC, Canada, G1R 2J6
+tel (418) 525-4444 #6720
+fax (418) 691 5268
+web : thomson.phy.ulaval.ca/phys_med 
+
++ Université Laval, Québec (QC) Canada

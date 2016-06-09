@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InterpolationManager.hh,v 1.8 2002/12/12 19:18:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4InterpolationManager.hh,v 1.9 2003/06/16 17:10:29 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4InterpolationManager_h
 #define G4InterpolationManager_h 1
@@ -30,7 +30,7 @@
 #include "globals.hh"
 #include "G4InterpolationScheme.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4InterpolationManager
 {
@@ -96,7 +96,7 @@ class G4InterpolationManager
      nEntries = aRange;
    }
    
-   inline void Init(G4std::ifstream & aDataFile)
+   inline void Init(std::ifstream & aDataFile)
    {
      delete [] start;
      delete [] range;

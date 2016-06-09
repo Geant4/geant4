@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTable.hh,v 1.16 2001/07/11 09:58:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3VolTable.hh,v 1.17 2003/06/16 16:50:44 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------
 // Class description:
@@ -47,7 +47,7 @@
 #ifndef G3VOLTABLE_HH
 #define G3VOLTABLE_HH 1
 
-#include "g4std/map"
+#include <map>
 #include "G3VolTableEntry.hh"
 
 class G4LogicalVolume;
@@ -75,7 +75,7 @@ private:
 
   G3VolTableEntry* G3toG4TopVTE;
   G4String _FirstKey;
-  G4std::map<G4String, G3VolTableEntry*, G4std::less<G4String> > VTD;
+  std::map<G4String, G3VolTableEntry*, std::less<G4String> > VTD;
   G4int _NG3Pos;
 };
 

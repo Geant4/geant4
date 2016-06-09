@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCtable.hh,v 1.6 2001/07/11 09:58:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HCtable.hh,v 1.7 2003/06/16 16:50:10 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4HCtable_H
@@ -30,7 +30,7 @@
 
 #include "globals.hh"
 //#include "g4rw/tvordvec.h"
-#include "g4std/vector"
+#include <vector>
 
 // class description:
 //
@@ -55,8 +55,8 @@ class G4HCtable
     G4int GetCollectionID(G4String HCname);
 
   private:
-    G4std::vector<G4String> SDlist;
-    G4std::vector<G4String> HClist;
+    std::vector<G4String> SDlist;
+    std::vector<G4String> HClist;
 
   public:
     inline G4int entries() const

@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: Em5RunMessenger.hh,v 1.5 2001/11/28 16:08:18 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em5RunMessenger.hh,v 1.7 2003/05/30 10:28:04 urban Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
@@ -96,6 +96,10 @@ class Em5RunMessenger: public G4UImessenger
    G4UIcmdWithAnInteger*      setnbinThCmd; 
    G4UIcmdWithADoubleAndUnit* setThlowCmd; 
    G4UIcmdWithADoubleAndUnit* setThhighCmd; 
+
+   G4UIcmdWithAnInteger*      setnbinThprojCmd;
+   G4UIcmdWithADoubleAndUnit* setThlowprojCmd;
+   G4UIcmdWithADoubleAndUnit* setThhighprojCmd;
 
    G4UIcmdWithAnInteger*      setnbinThbackCmd; 
    G4UIcmdWithADoubleAndUnit* setThlowbackCmd; 

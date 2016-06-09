@@ -12,8 +12,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
 # choice of GNU compilers:
   CXX       := g++2
 # CXX       := g++3
-  GNU_GCC = 1
-  CXXFLAGS  := -Wall -ansi -pedantic -pipe -fno-for-scope -DGNU_GCC
+  CXXFLAGS  := -Wall -ansi -pedantic -pipe
 # optionally add verbose flag
 # CXXFLAGS  += -v
   ifdef G4OPTIMISE
@@ -58,8 +57,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   OIVFLAGS  += -I$(OIHOME)/include 
-  G4USE_STD_NAMESPACE := yes
-  CPPFLAGS += -DG4USE_STD_NAMESPACE
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \

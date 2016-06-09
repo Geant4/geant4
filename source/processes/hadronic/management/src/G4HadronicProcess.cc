@@ -22,9 +22,12 @@
 //
 //
 //
- // HPW to implement the choosing of an element for scattering.
-#include "g4std/fstream"
-#include "g4std/strstream"
+// HPW to implement the choosing of an element for scattering.
+
+#include "G4Types.hh"
+
+#include <fstream>
+#include <strstream>
 #include <stdlib.h>
 #include "G4HadronicProcess.hh"
 #include "G4EffectiveCharge.hh"
@@ -58,7 +61,7 @@
     G4double aTemp = aMaterial->GetTemperature();
     G4double crossSectionTotal = 0;
     G4int i;
-    G4std::vector<G4double> runningSum;
+    std::vector<G4double> runningSum;
     for( i=0; i < numberOfElements; ++i )
     {
       runningSum.push_back(theAtomicNumberDensity[i] *
@@ -84,7 +87,7 @@
   }
  
  G4VParticleChange *G4HadronicProcess::GeneralPostStepDoIt(
-  const G4Track &aTrack, const G4Step &aStep )
+  const G4Track &aTrack, const G4Step &)
   {
     const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
     G4Material *aMaterial = aTrack.GetMaterial();
@@ -181,7 +184,7 @@
   }
   
   G4IsoResult * G4HadronicProcess::
-  ExtractResidualNucleus(const G4Track & aTrack,
+  ExtractResidualNucleus(const G4Track & ,
                          const G4Nucleus & aNucleus,
                          G4VParticleChange * aResult)
   {
@@ -214,7 +217,7 @@
     
     // prepare the IsoResult.
     char the1[100] = {""};
-    G4std::ostrstream ost1(the1, 100, G4std::ios::out);
+    std::ostrstream ost1(the1, 100, std::ios::out);
     ost1 <<Z<<"_"<<A<<"\0";
     G4String * biff = new G4String(the1);
     G4IsoResult * theResult = new G4IsoResult(*biff, aNucleus);

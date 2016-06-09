@@ -131,7 +131,7 @@ G4double G4AntiNeutronAnnihilationAtRest::AtRestGetPhysicalInteractionLength(
 
 G4VParticleChange* G4AntiNeutronAnnihilationAtRest::AtRestDoIt(
                                             const G4Track& track,
-					    const G4Step& stepData
+					    const G4Step& 
 					    )
 //
 // Handles AntiNeutrons at rest; an AntiNeutron can either create secondaries
@@ -279,7 +279,7 @@ void G4AntiNeutronAnnihilationAtRest::GenerateSecondaries()
   }
 
   // --- LIMIT THE VALUE OF NGKINE IN CASE OF OVERFLOW ---
-  ngkine = G4int(G4std::min(ngkine,G4int(MAX_SECONDARIES)));
+  ngkine = G4int(std::min(ngkine,G4int(MAX_SECONDARIES)));
 
 } // GenerateSecondaries
 

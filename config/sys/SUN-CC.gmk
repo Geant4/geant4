@@ -19,7 +19,6 @@ ifeq ($(G4SYSTEM),SUN-CC)
     CCFLAGS  += -KPIC
   endif
   G4RUNPATHOPTION := -R
-  G4_HAVE_BOOL := yes
   CFRONT_G4TEMPLATE_REPOSITORY  := true
   FC     := f77
   SHEXT  := so
@@ -45,18 +44,16 @@ ifeq ($(G4SYSTEM),SUN-CC)
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   LOADLIBS += -lsocket -lnsl
   CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
-  G4USE_STD_NAMESPACE := yes
-  CPPFLAGS += -DG4USE_STD_NAMESPACE
 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
     cd $(G4TMPDIR); \
-     $(CXX) -G $(CXXTEMPLATE_FLAGS) -o $$libdir/$(@F) -h $(@F) *.o
+     $(CXX) -G $(CXXTEMPLATE_FLAGS) -o $$libdir/$(@F) -h $(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
     cd $(G4TMP)/$(G4SYSTEM); \
-     $(CXX) -G $(CXXTEMPLATE_FLAGS) -o $$libdir/$(@F) -h $(@F) \
+     $(CXX) -G $(CXXTEMPLATE_FLAGS) -o $$libdir/$(@F) -h $(@F) $(INTYLIBS) \
                $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 endif

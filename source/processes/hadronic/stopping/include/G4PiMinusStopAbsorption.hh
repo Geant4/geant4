@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4PiMinusStopAbsorption.hh,v 1.8 2002/12/12 19:18:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

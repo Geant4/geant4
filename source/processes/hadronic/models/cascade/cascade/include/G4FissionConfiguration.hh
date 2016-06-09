@@ -23,7 +23,7 @@
 #define G4FISSION_CONFIGURATION_HH
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class G4FissionConfiguration {
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionLevelDensityParameter.cc,v 1.7 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FissionLevelDensityParameter.cc,v 1.8 2003/05/30 13:23:24 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -33,14 +33,14 @@
 
 
 G4FissionLevelDensityParameter::
-G4FissionLevelDensityParameter(const G4FissionLevelDensityParameter &right)
+G4FissionLevelDensityParameter(const G4FissionLevelDensityParameter &) : G4VLevelDensityParameter()
 {
     G4Exception("G4FissionLevelDensityParameter::copy_constructor meant to not be accessable");
 }
 
 
 const G4FissionLevelDensityParameter & G4FissionLevelDensityParameter::
-operator=(const G4FissionLevelDensityParameter &right)
+operator=(const G4FissionLevelDensityParameter &)
 {
     G4Exception("G4FissionLevelDensityParameter::operator= meant to not be accessable");
     return *this;
@@ -48,13 +48,13 @@ operator=(const G4FissionLevelDensityParameter &right)
 
 
 G4bool G4FissionLevelDensityParameter::
-operator==(const G4FissionLevelDensityParameter &right) const
+operator==(const G4FissionLevelDensityParameter &) const
 {
     return false;
 }
 
 G4bool G4FissionLevelDensityParameter::
-operator!=(const G4FissionLevelDensityParameter &right) const
+operator!=(const G4FissionLevelDensityParameter &) const
 {
     return true;
 }

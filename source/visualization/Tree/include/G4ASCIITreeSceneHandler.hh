@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.10 2001/08/24 20:41:26 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ASCIITreeSceneHandler.hh,v 1.11 2003/06/16 17:13:46 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  5th April 2001
@@ -35,7 +35,7 @@
 
 #include "G4VTreeSceneHandler.hh"
 
-#include "g4std/set"
+#include <set>
 
 class G4VPhysicalVolume;
 
@@ -50,13 +50,13 @@ protected:
   virtual void RequestPrimitives(const G4VSolid&);
   // Overrides G4VScenehandler::RequestPrimitives and implements dump
   // of leaves of the geometry heirachy.
-  G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> > fLVSet;
+  std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> > fLVSet;
   typedef
-  G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> >::iterator
+  std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> >::iterator
   LVSetIterator;
-  G4std::set<G4VPhysicalVolume*,G4std::less<G4VPhysicalVolume*> > fReplicaSet;
+  std::set<G4VPhysicalVolume*,std::less<G4VPhysicalVolume*> > fReplicaSet;
   typedef
-  G4std::set<G4VPhysicalVolume*,G4std::less<G4VPhysicalVolume*> >::iterator
+  std::set<G4VPhysicalVolume*,std::less<G4VPhysicalVolume*> >::iterator
   ReplicaSetIterator;
 };
 

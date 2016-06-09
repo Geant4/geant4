@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopAbsorption.cc,v 1.12 2002/12/12 19:18:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PiMinusStopAbsorption.cc,v 1.13 2003/06/16 17:12:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -40,7 +40,7 @@
 
 
 #include "G4PiMinusStopAbsorption.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -81,7 +81,7 @@ G4PiMinusStopAbsorption::~G4PiMinusStopAbsorption()
 
 G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
 {
-  G4std::vector<G4ParticleDefinition*>* defNucleons = _materialAlgo->DefinitionVector();
+  std::vector<G4ParticleDefinition*>* defNucleons = _materialAlgo->DefinitionVector();
 
   G4double newA = _nucleusA;
   G4double newZ = _nucleusZ;
@@ -104,7 +104,7 @@ G4DynamicParticleVector* G4PiMinusStopAbsorption::DoAbsorption()
   G4double mass = G4NucleiProperties::GetNuclearMass(static_cast<G4int>(newA),static_cast<G4int>(newZ));
 
 
-  G4std::vector<G4LorentzVector*>* p4Nucleons = _materialAlgo->P4Vector(binding,mass);
+  std::vector<G4LorentzVector*>* p4Nucleons = _materialAlgo->P4Vector(binding,mass);
 
   if (defNucleons != 0 && p4Nucleons != 0)
     {
@@ -202,7 +202,7 @@ G4double G4PiMinusStopAbsorption::Energy()
   
   if (_level > 0)
     {
-      G4std::cout << "E products " <<  productEnergy  
+      std::cout << "E products " <<  productEnergy  
 	   << " Binding " << productBinding << " " << temp << " "
 	   << " Tnucleus " << tNucleus 
 	   << " energy = " << energy << G4endl;

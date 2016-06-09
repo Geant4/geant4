@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclearShellModelDensity.cc,v 1.8 2002/12/12 19:17:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NuclearShellModelDensity.cc,v 1.9 2003/06/25 14:44:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4NuclearShellModelDensity.hh"
@@ -32,7 +32,7 @@ G4NuclearShellModelDensity::G4NuclearShellModelDensity(G4double anA, G4double aZ
         const G4double r0sq=0.8133*fermi*fermi;
 	theA = G4int(anA);
 	theZ = G4int(aZ);
-	theRsquare= r0sq * pow(theA, 2./3. );
+	theRsquare= r0sq * pow(G4double(theA), 2./3. );
 	Setrho0(pow(1./(pi*theRsquare),3./2.));
 }
 

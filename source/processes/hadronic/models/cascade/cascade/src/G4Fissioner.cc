@@ -77,8 +77,8 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
 
     TEM += DTEM;
   
-    G4std::vector<G4double> AL1(2, -0.15);
-    G4std::vector<G4double> BET1(2, 0.05);
+    std::vector<G4double> AL1(2, -0.15);
+    std::vector<G4double> BET1(2, 0.05);
     G4FissionStore fissionStore;
     G4double R12 = pow(A1, one_third) + pow(A2, one_third); 
   
@@ -88,7 +88,7 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
       G4double X3 = 1.0 / pow(A1, one_third);
       G4double X4 = 1.0 / pow(A2, one_third);
       Z1 = G4int(getZopt(A1, A2, Z, X3, X4, R12)) - 1.0;
-      G4std::vector<G4double> EDEF1(2);
+      std::vector<G4double> EDEF1(2);
       G4double Z2 = Z - Z1;
       G4double VPOT, VCOUL;
 
@@ -140,11 +140,11 @@ G4CollisionOutput G4Fissioner::collide(G4InuclParticle* bullet,
       G4double mass2 = nuclei2.getMass();
       G4double EK = config.ekin;
       G4double pmod = sqrt(0.001 * EK * mass1 * mass2 / mass_in);
-      G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+      std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
       G4double Fi = randomPHI();
       G4double P1 = pmod * COS_SIN.second;
-      G4std::vector<G4double> mom1(4);
-      G4std::vector<G4double> mom2(4);
+      std::vector<G4double> mom1(4);
+      std::vector<G4double> mom2(4);
 
       mom1[1] = P1 * cos(Fi);
       mom1[2] = P1 * sin(Fi);
@@ -220,14 +220,14 @@ G4double G4Fissioner::getZopt(G4double A1,
 }	     
 
 void G4Fissioner::potentialMinimization(G4double& VP, 
-					G4std::vector<G4double> & ED,
+					std::vector<G4double> & ED,
 					G4double& VC, 
 					G4double AF, 
 					G4double AS, 
 					G4double ZF, 
 					G4double ZS,
-					G4std::vector<G4double>& AL1, 
-					G4std::vector<G4double>& BET1, 
+					std::vector<G4double>& AL1, 
+					std::vector<G4double>& BET1, 
 					G4double& R12) const {
 
   if (verboseLevel > 3) {

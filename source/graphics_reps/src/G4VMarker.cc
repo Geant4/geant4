@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.cc,v 1.7 2001/07/11 10:01:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VMarker.cc,v 1.8 2003/06/16 16:55:25 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -76,7 +76,7 @@ G4VMarker& G4VMarker::operator = (const G4VMarker& right) {
   return *this;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VMarker& marker) {
+std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
   os << "G4VMarker: position: " << marker.fPosition
      << ", world size: " << marker.fWorldSize
      << ", screen size: " << marker.fScreenSize << '\n'

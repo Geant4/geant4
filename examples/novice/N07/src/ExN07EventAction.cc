@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07EventAction.cc,v 1.3 2003/04/08 15:47:01 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN07EventAction.cc,v 1.5 2003/06/16 16:50:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "ExN07EventAction.hh"
@@ -53,7 +53,7 @@ ExN07EventAction::ExN07EventAction()
 ExN07EventAction::~ExN07EventAction()
 {;}
 
-void ExN07EventAction::BeginOfEventAction(const G4Event* evt)
+void ExN07EventAction::BeginOfEventAction(const G4Event*)
 {
   for(size_t i=0;i<6;i++)
   {
@@ -125,7 +125,7 @@ void ExN07EventAction::EndOfEventAction(const G4Event* evt)
         G4cout << "Calor-C : SensitiveGap" << G4endl; break;
     }
     G4cout
-       << "  total energy deposition : " << G4std::setw(7)
+       << "  total energy deposition : " << std::setw(7)
        << G4BestUnit(totE,"Energy") << G4endl;
     G4cout
        << "  number of particles generated :" << G4endl
@@ -133,13 +133,13 @@ void ExN07EventAction::EndOfEventAction(const G4Event* evt)
        << "    e- " << ExN07StackingAction::GetNElectron(i) 
        << "    e+ " << ExN07StackingAction::GetNPositron(i) << G4endl;
     G4cout
-       << "  minimum kinetic energy of generated secondaries :" << G4endl << G4std::setw(7)
+       << "  minimum kinetic energy of generated secondaries :" << G4endl << std::setw(7)
        << "    gamma " << G4BestUnit(ExN07StackingAction::GetEMinGamma(i),"Energy") 
        << "    e- " << G4BestUnit(ExN07StackingAction::GetEMinElectron(i),"Energy") 
        << "    e+ " << G4BestUnit(ExN07StackingAction::GetEMinPositron(i),"Energy")
        << G4endl;
     G4cout
-       << "  total track length of e+/e- : " << G4std::setw(7)
+       << "  total track length of e+/e- : " << std::setw(7)
        << G4BestUnit(totL,"Length") << G4endl;
     G4cout
        << "  number of steps of e+/e- : " << nStep

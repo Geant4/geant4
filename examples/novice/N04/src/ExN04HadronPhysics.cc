@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04HadronPhysics.cc,v 1.6 2003/03/28 09:35:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN04HadronPhysics.cc,v 1.10 2003/06/16 16:49:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "ExN04HadronPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 ExN04HadronPhysics::ExN04HadronPhysics(const G4String& name)
@@ -77,7 +77,8 @@ void ExN04HadronPhysics::ConstructProcess()
   G4cout << "You are using the ExN04HadronPhysics" << G4endl;
   G4cout << " - Note that this hadronic physics list is not optimized for any particular usage" << G4endl;
   G4cout << " - If you wish to have a starting point tailored for a particular area of work," << G4endl;
-  G4cout << "   please one of the available physics lists by use-case." << G4endl;
+  G4cout << "   please use one of the available physics lists by use-case." << G4endl;
+  G4cout << "   More information can also be found from the Geant4 HyperNews." << G4endl;
   G4cout << "" << G4endl;
   // Elastic Process
   theElasticModel = new G4LElastic();

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMF.cc,v 1.14 2002/12/12 19:17:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMF.cc,v 1.17 2003/06/16 17:06:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -40,7 +40,7 @@ G4StatMF::~G4StatMF() {} //{if (_theEnsemble != 0) delete _theEnsemble;}
 
 
 // Copy constructor
-G4StatMF::G4StatMF(const G4StatMF & right)
+G4StatMF::G4StatMF(const G4StatMF & ) : G4VMultiFragmentation()
 {
     G4Exception("G4StatMF::copy_constructor meant to not be accessable");
 }
@@ -48,21 +48,21 @@ G4StatMF::G4StatMF(const G4StatMF & right)
 
 // Operators
 
-G4StatMF & G4StatMF::operator=(const G4StatMF & right)
+G4StatMF & G4StatMF::operator=(const G4StatMF & )
 {
     G4Exception("G4StatMF::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMF::operator==(const G4StatMF & right)
+G4bool G4StatMF::operator==(const G4StatMF & )
 {
     G4Exception("G4StatMF::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4StatMF::operator!=(const G4StatMF & right)
+G4bool G4StatMF::operator!=(const G4StatMF & )
 {
     G4Exception("G4StatMF::operator!= meant to not be accessable");
     return true;
@@ -86,7 +86,7 @@ G4FragmentVector * G4StatMF::BreakItUp(const G4Fragment &theFragment)
   // Maximun average multiplicity: M_0 = 2.6 for A ~ 200 
   // and M_0 = 3.3 for A <= 110
   G4double MaxAverageMultiplicity = 
-    G4StatMFParameters::GetMaxAverageMultiplicity(theFragment.GetA());
+    G4StatMFParameters::GetMaxAverageMultiplicity(static_cast<G4int>(theFragment.GetA()));
 
 	
     // We'll use two kinds of ensembles
@@ -223,7 +223,7 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
   G4double Z = theFragment.GetZ();
   G4double U = theFragment.GetExcitationEnergy();
   
-  G4double T = G4std::max(Temperature,0.0012*MeV);
+  G4double T = std::max(Temperature,0.0012*MeV);
   
   G4double Ta = T;
   G4double Tb = T;
@@ -300,7 +300,7 @@ G4bool G4StatMF::FindTemperatureOfBreakingChannel(const G4Fragment & theFragment
 G4double G4StatMF::CalcEnergy(const G4double A, const G4double Z, const G4StatMFChannel * aChannel,
 			      const G4double T)
 {
-    G4double MassExcess0 = G4NucleiProperties::GetMassExcess(A,Z);
+    G4double MassExcess0 = G4NucleiProperties::GetMassExcess(static_cast<G4int>(A),static_cast<G4int>(Z));
 	
     G4double Coulomb = (3./5.)*(elm_coupling*Z*Z)*pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.)/
 	(G4StatMFParameters::Getr0()*pow(A,1./3.));

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCrossSections.hh,v 1.8 2002/12/12 19:16:49 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HadronCrossSections.hh,v 1.9 2003/06/03 09:21:38 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // GEANT4 Hadron physics class -- header file
@@ -105,7 +105,7 @@ public:
    }
 
    G4bool IsApplicable(const G4DynamicParticle* aParticle,
-                       const G4Element* anElement)
+                       const G4Element* )
    {
       return (GetParticleCode(aParticle) > 0);
    }

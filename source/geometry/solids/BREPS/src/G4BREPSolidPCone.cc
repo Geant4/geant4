@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.29 2003/03/28 13:11:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BREPSolidPCone.cc,v 1.32 2003/06/16 16:52:48 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -36,7 +36,8 @@
 // outer conical surfaces are defined using common Z planes. 
 // ----------------------------------------------------------------------
 
-#include "g4std/strstream"
+#include "G4Types.hh"
+#include <strstream>
 
 #include "G4BREPSolidPCone.hh"
 #include "G4FCylindricalSurface.hh"
@@ -152,7 +153,7 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         // where i in in interval 0 < i < num_z_planes-1. So:
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] ) {
           char msgbuf[512];
-          G4std::ostrstream os(msgbuf,512);
+          std::ostrstream os(msgbuf,512);
           os << G4endl << "G4BREPSolidPCone::G4BREPSolidPCone() - The values "
                        << "of RMIN[" << a << "] & RMAX[" << a+1 << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
                        << "make an invalid configuration of G4BREPSolidPCone " << name.c_str() << "!" << G4endl;
@@ -554,7 +555,7 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
     }
   }
   
-  // calcul of the normal at this point
+  // calculation of the normal at this point
   if ( normflag ) {
     norm = SurfaceVec[iplane]->SurfaceNormal(Pt);
 
@@ -563,7 +564,7 @@ G4ThreeVector G4BREPSolidPCone::SurfaceNormal(const G4ThreeVector& Pt) const
 
     return n;
   } else {
-    G4cout << "Warning ... PCone not able to return normal .. " << G4endl;
+    // G4cout << "Warning ... PCone not able to return normal .. " << G4endl;
     return ( G4ThreeVector(1,0,0));
   }
 }
@@ -784,7 +785,7 @@ G4double G4BREPSolidPCone::DistanceToOut(const G4ThreeVector& Pt) const
 }
 
 // Streams solid contents to output stream.
-G4std::ostream& G4BREPSolidPCone::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BREPSolidPCone::StreamInfo(std::ostream& os) const
 {  
   G4BREPSolid::StreamInfo( os )
   << "\n start_angle:   " << constructorParams.start_angle

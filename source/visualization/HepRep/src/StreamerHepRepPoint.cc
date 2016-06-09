@@ -52,7 +52,7 @@ HepRepAttValue* StreamerHepRepPoint::getAttValue(string lowerCaseName) {
     return (value != NULL) ? value : instance->getAttValue(lowerCaseName);
 }
 
-HepRepPoint* StreamerHepRepPoint::copy(HepRepInstance* parent) {
+HepRepPoint* StreamerHepRepPoint::copy(HepRepInstance*) {
     return NULL;
 }
 
@@ -97,15 +97,15 @@ double StreamerHepRepPoint::getEta() {
     return -0.5*log((1.-ct)/(1.+ct));
 }
 
-double StreamerHepRepPoint::getX(double xVertex, double yVertex, double zVertex) {
+double StreamerHepRepPoint::getX(double xVertex, double, double) {
     return x - xVertex;
 }
 
-double StreamerHepRepPoint::getY(double xVertex, double yVertex, double zVertex) {
+double StreamerHepRepPoint::getY(double, double yVertex, double) {
     return y - yVertex;
 }
 
-double StreamerHepRepPoint::getZ(double xVertex, double yVertex, double zVertex) {
+double StreamerHepRepPoint::getZ(double, double, double zVertex) {
     return z - zVertex;
 }
 

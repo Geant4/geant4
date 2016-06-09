@@ -50,7 +50,7 @@ bool CCalSensAssign::assign() {
   bool result = false;
 
   CCalSensitiveDetectors* sensDets = CCalSensitiveDetectors::getInstance();
-  for (G4std::map<G4String,G4VSensitiveDetector*>::const_iterator sens_it = sens_.begin();
+  for (std::map<G4String,G4VSensitiveDetector*>::const_iterator sens_it = sens_.begin();
        sens_it!=sens_.end(); ++sens_it) {
     G4String name = sens_it->first;
     G4VSensitiveDetector* sens = sens_it->second;

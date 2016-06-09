@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelLimits.cc,v 1.7 2002/04/19 08:20:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VoxelLimits.cc,v 1.8 2003/06/16 16:52:12 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4VoxelLimits
 // 
@@ -281,7 +281,7 @@ G4int G4VoxelLimits::OutCode( const G4ThreeVector& pVec ) const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VoxelLimits& pLim)
+std::ostream& operator << (std::ostream& os, const G4VoxelLimits& pLim)
 {
     os << "{";
     if (pLim.IsXLimited())

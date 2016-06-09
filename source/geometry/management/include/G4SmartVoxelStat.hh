@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4SmartVoxelStat.hh,v 1.1 2001/10/22 16:08:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SmartVoxelStat.hh,v 1.2 2003/06/16 16:51:59 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -39,7 +39,7 @@
 #define G4SmartVoxelStat_hh
 
 #include "globals.hh"
-#include "g4std/functional"
+#include <functional>
 
 class G4LogicalVolume;
 class G4SmartVoxelHeader;
@@ -102,7 +102,7 @@ class G4SmartVoxelStat
     //
     // Functor objects for sorting
     //
-    struct ByCpu : public G4std::binary_function< const G4SmartVoxelStat,
+    struct ByCpu : public std::binary_function< const G4SmartVoxelStat,
                                                   const G4SmartVoxelStat,
                                                         G4bool >
     {
@@ -112,7 +112,7 @@ class G4SmartVoxelStat
       }
     };
   
-    struct ByMemory : public G4std::binary_function< const G4SmartVoxelStat,
+    struct ByMemory : public std::binary_function< const G4SmartVoxelStat,
                                                      const G4SmartVoxelStat, 
                                                            G4bool >
     {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.20 2002/11/08 18:27:40 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Trajectory.cc,v 1.22 2003/06/16 17:13:24 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // ---------------------------------------------------------------
@@ -45,7 +45,7 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4Allocator<G4Trajectory> aTrajectoryAllocator;
 
@@ -69,7 +69,7 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
    positionRecord->push_back(new G4TrajectoryPoint(aTrack->GetPosition()));
 }
 
-G4Trajectory::G4Trajectory(G4Trajectory & right)
+G4Trajectory::G4Trajectory(G4Trajectory & right):G4VTrajectory()
 {
   ParticleName = right.ParticleName;
   PDGCharge = right.PDGCharge;
@@ -98,7 +98,7 @@ G4Trajectory::~G4Trajectory()
   delete positionRecord;
 }
 
-void G4Trajectory::ShowTrajectory(G4std::ostream& os) const
+void G4Trajectory::ShowTrajectory(std::ostream& os) const
 {
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::ShowTrajectory(os);
@@ -112,10 +112,10 @@ void G4Trajectory::DrawTrajectory(G4int i_mode) const
   // ... or override with your own code here.
 }
 
-const G4std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
+const std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
 {
   G4bool isNew;
-  G4std::map<G4String,G4AttDef>* store
+  std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4Trajectory",isNew);
   if (isNew) {
 
@@ -145,37 +145,37 @@ const G4std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
   return store;
 }
 
-G4std::vector<G4AttValue>* G4Trajectory::CreateAttValues() const
+std::vector<G4AttValue>* G4Trajectory::CreateAttValues() const
 {
   char c[100];
-  G4std::ostrstream s(c,100);
+  std::ostrstream s(c,100);
 
-  G4std::vector<G4AttValue>* values = new G4std::vector<G4AttValue>;
+  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
-  s.seekp(G4std::ios::beg);
-  s << fTrackID << G4std::ends;
+  s.seekp(std::ios::beg);
+  s << fTrackID << std::ends;
   values->push_back(G4AttValue("ID",c,""));
 
-  s.seekp(G4std::ios::beg);
-  s << fParentID << G4std::ends;
+  s.seekp(std::ios::beg);
+  s << fParentID << std::ends;
   values->push_back(G4AttValue("PID",c,""));
 
   values->push_back(G4AttValue("PN",ParticleName,""));
 
-  s.seekp(G4std::ios::beg);
-  s << PDGCharge << G4std::ends;
+  s.seekp(std::ios::beg);
+  s << PDGCharge << std::ends;
   values->push_back(G4AttValue("Ch",c,""));
 
-  s.seekp(G4std::ios::beg);
-  s << PDGEncoding << G4std::ends;
+  s.seekp(std::ios::beg);
+  s << PDGEncoding << std::ends;
   values->push_back(G4AttValue("PDG",c,""));
 
-  s.seekp(G4std::ios::beg);
-  s << G4BestUnit(initialMomentum,"Energy") << G4std::ends;
+  s.seekp(std::ios::beg);
+  s << G4BestUnit(initialMomentum,"Energy") << std::ends;
   values->push_back(G4AttValue("IMom",c,""));
 
-  s.seekp(G4std::ios::beg);
-  s << GetPointEntries() << G4std::ends;
+  s.seekp(std::ios::beg);
+  s << GetPointEntries() << std::ends;
   values->push_back(G4AttValue("NTP",c,""));
 
   return values;

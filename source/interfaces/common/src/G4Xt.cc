@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Xt.cc,v 1.9 2002/11/06 08:12:58 barrand Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G.Barrand
 

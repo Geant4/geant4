@@ -36,11 +36,7 @@
     G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, aFSType, result);
     filename = aFile.GetName();
 //    if(filename=="") return false;
-#ifdef G4USE_STD_NAMESPACE
-    G4std::ifstream theChannel(filename);
-#else
-    ifstream theChannel(filename,ios::in|ios::nocreate);
-#endif
+    std::ifstream theChannel(filename);
     
     if(Z==1 && (aFile.GetZ()!=Z || abs(aFile.GetA()-A)>0.0001) )
     {

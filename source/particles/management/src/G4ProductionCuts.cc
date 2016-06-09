@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.cc,v 1.6 2003/04/10 02:51:19 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProductionCuts.cc,v 1.7 2003/06/16 16:58:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // --------------------------------------------------------------
@@ -31,7 +31,7 @@
 // --------------------------------------------------------------
 
 #include "G4ProductionCuts.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 const G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
 const G4ParticleDefinition* G4ProductionCuts::electDef = 0;

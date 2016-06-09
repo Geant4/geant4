@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em3VisManager.cc,v 1.7 2002/11/13 21:39:52 duns Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // John Allison 24th January 1998.

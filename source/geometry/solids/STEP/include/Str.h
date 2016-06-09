@@ -13,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: Str.h,v 1.4 2000/01/21 13:42:37 gcosmo Exp $  */ 
+/* $Id: Str.h,v 1.5 2003/06/06 17:07:29 gcosmo Exp $  */ 
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -43,7 +43,7 @@ int          StrCmpIns (const char *, const char *);
 char *       EntityClassName ( char * oldname);
 
 extern Severity CheckRemainingInput
-   (G4std::istream &in, ErrorDescriptor *err, 
+   (std::istream &in, ErrorDescriptor *err, 
     const char *typeName, // used in error message
     const char *tokenList); // e.g. ",)"
 

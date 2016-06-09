@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   H02MuonHit.cc
-//   $Id: H02MuonHit.cc,v 1.1 2002/11/19 10:36:20 murakami Exp $
+//   $Id: H02MuonHit.cc,v 1.2 2003/06/16 16:48:50 gunter Exp $
 //
 // ====================================================================
 #include "H02MuonHit.hh"
@@ -31,7 +31,7 @@
 #include "G4Circle.hh"
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 G4Allocator<H02MuonHit> H02MuonHitAllocator;
 

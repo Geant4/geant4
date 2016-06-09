@@ -36,7 +36,7 @@
 // -------------------------------------------------------------------
 #include <stdlib.h>
 #include "G4VProcess.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 #include "AIDA/IManagedObject.h"
 #include "AIDA/IAnalysisFactory.h"

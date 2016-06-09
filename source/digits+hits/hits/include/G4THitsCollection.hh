@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsCollection.hh,v 1.11 2002/10/18 14:36:11 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4THitsCollection.hh,v 1.12 2003/06/16 16:50:23 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4THitsCollection_h
@@ -32,7 +32,7 @@
 #include "G4Allocator.hh"
 #include "globals.hh"
 //#include "g4rw/tpordvec.h"
-#include "g4std/vector"
+#include <vector>
 
 // class description:
 //
@@ -79,15 +79,15 @@ template <class T> class G4THitsCollection : public G4HitsCollection
 
   public: // with description
       inline T* operator[](size_t i) const
-      { return (*((G4std::vector<T*>*)theCollection))[i]; }
+      { return (*((std::vector<T*>*)theCollection))[i]; }
       //  Returns a pointer to a concrete hit object.
-      inline G4std::vector<T*>* GetVector() const
-      { return (G4std::vector<T*>*)theCollection; }
+      inline std::vector<T*>* GetVector() const
+      { return (std::vector<T*>*)theCollection; }
       //  Returns a collection vector.
       inline G4int insert(T* aHit)
       {
-        G4std::vector<T*>*theHitsCollection 
-          = (G4std::vector<T*>*)theCollection;
+        std::vector<T*>*theHitsCollection 
+          = (std::vector<T*>*)theCollection;
         theHitsCollection->push_back(aHit);
         return theHitsCollection->size();
       }
@@ -95,17 +95,17 @@ template <class T> class G4THitsCollection : public G4HitsCollection
       // collection is returned.
       inline G4int entries() const
       {
-        G4std::vector<T*>*theHitsCollection
-          = (G4std::vector<T*>*)theCollection;
+        std::vector<T*>*theHitsCollection
+          = (std::vector<T*>*)theCollection;
         return theHitsCollection->size();
       }
       //  Returns the number of hit objects stored in this collection
 
   public:
       virtual G4VHit* GetHit(size_t i) const
-      { return (*((G4std::vector<T*>*)theCollection))[i]; }
+      { return (*((std::vector<T*>*)theCollection))[i]; }
       virtual size_t GetSize() const
-      { return ((G4std::vector<T*>*)theCollection)->size(); }
+      { return ((std::vector<T*>*)theCollection)->size(); }
 
 };
 
@@ -123,23 +123,23 @@ template <class T> inline void G4THitsCollection<T>::operator delete(void* anHC)
 
 template <class T> G4THitsCollection<T>::G4THitsCollection()
 { 
-  G4std::vector<T*> * theHitsCollection
-    = new G4std::vector<T*>;
+  std::vector<T*> * theHitsCollection
+    = new std::vector<T*>;
   theCollection = (void*)theHitsCollection;
 }
 
 template <class T> G4THitsCollection<T>::G4THitsCollection(G4String detName,G4String colNam)
 : G4HitsCollection(detName,colNam)
 { 
-  G4std::vector<T*> * theHitsCollection
-    = new G4std::vector<T*>;
+  std::vector<T*> * theHitsCollection
+    = new std::vector<T*>;
   theCollection = (void*)theHitsCollection;
 }
 
 template <class T> G4THitsCollection<T>::~G4THitsCollection()
 {
-  G4std::vector<T*> * theHitsCollection 
-    = (G4std::vector<T*>*)theCollection;
+  std::vector<T*> * theHitsCollection 
+    = (std::vector<T*>*)theCollection;
   //theHitsCollection->clearAndDestroy();
   for(size_t i=0;i<theHitsCollection->size();i++)
   { delete (*theHitsCollection)[i]; }
@@ -152,8 +152,8 @@ template <class T> G4int G4THitsCollection<T>::operator==(const G4THitsCollectio
 
 template <class T> void G4THitsCollection<T>::DrawAllHits() 
 {
-  G4std::vector<T*> * theHitsCollection 
-    = (G4std::vector<T*>*)theCollection;
+  std::vector<T*> * theHitsCollection 
+    = (std::vector<T*>*)theCollection;
   size_t n = theHitsCollection->size();
   for(size_t i=0;i<n;i++)
   { (*theHitsCollection)[i]->Draw(); }
@@ -161,8 +161,8 @@ template <class T> void G4THitsCollection<T>::DrawAllHits()
 
 template <class T> void G4THitsCollection<T>::PrintAllHits() 
 {
-  G4std::vector<T*> * theHitsCollection 
-    = (G4std::vector<T*>*)theCollection;
+  std::vector<T*> * theHitsCollection 
+    = (std::vector<T*>*)theCollection;
   size_t n = theHitsCollection->size();
   for(size_t i=0;i<n;i++)
   { (*theHitsCollection)[i]->Print(); }

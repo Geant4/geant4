@@ -40,11 +40,11 @@
 
 #include "globals.hh"
 #include "G4VCrossSectionSource.hh"
-#include "g4std/algorithm"
-#include "g4std/map"
-#include "g4std/vector"
+#include <algorithm>
+#include <map>
+#include <vector>
 
-typedef G4std::pair<G4String,G4String> G4StringPair;
+typedef std::pair<G4String,G4String> G4StringPair;
 
 class G4KineticTrack;
 class G4ParticleDefinition;
@@ -93,8 +93,8 @@ private:
   static const G4double gammapPDGFit[5];
   static const G4double gammagammaPDGFit[5];
 
-  G4std::map <G4StringPair, G4std::vector<G4double>, G4std::less<G4StringPair> > xMap;
-  typedef G4std::map <G4StringPair, G4std::vector<G4double>, G4std::less<G4StringPair> > PairDoubleMap;
+  std::map <G4StringPair, std::vector<G4double>, std::less<G4StringPair> > xMap;
+  typedef std::map <G4StringPair, std::vector<G4double>, std::less<G4StringPair> > PairDoubleMap;
 
   //  G4double eMinFit;
   //  G4double eMaxFit;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTableA.cc,v 1.4 2001/10/15 09:58:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NucleiPropertiesTheoreticalTableA.cc,v 1.5 2003/05/19 17:10:25 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -38,7 +38,7 @@ G4int G4NucleiPropertiesTheoreticalTable::shortTable[G4NucleiPropertiesTheoretic
 
 G4NucleiPropertiesTheoreticalTable G4NucleiPropertiesTheoreticalTable::theInstance(2.5);
 // Default constructor
-G4NucleiPropertiesTheoreticalTable::G4NucleiPropertiesTheoreticalTable(G4double dummy)
+G4NucleiPropertiesTheoreticalTable::G4NucleiPropertiesTheoreticalTable(G4double )
 {
 	G4int j = 0;
 	

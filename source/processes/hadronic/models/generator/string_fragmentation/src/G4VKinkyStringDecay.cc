@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VKinkyStringDecay.cc,v 1.8 2002/12/12 19:17:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //  Maxim Komogorov
 //
 // -----------------------------------------------------------------------------

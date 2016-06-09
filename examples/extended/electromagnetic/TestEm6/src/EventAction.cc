@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.1 2002/05/23 13:30:41 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: EventAction.cc,v 1.2 2003/06/10 11:49:18 maire Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -69,7 +69,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event* evt)
+void EventAction::EndOfEventAction(const G4Event*)
 {
   if (G4VVisManager::GetConcreteInstance())
   {

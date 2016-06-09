@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.hh,v 1.7 2003/04/03 15:31:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NURBS.hh,v 1.8 2003/06/16 16:55:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 // Olivier Crumeyrolle  12 September 1996
 
@@ -336,7 +336,7 @@ class G4NURBS : public G4VVisPrim
   // external representation for t_KnotVectorGenFlag
   // as a << overload.
   // (used in errors report)
-  friend G4std::ostream & operator << (G4std::ostream & inout_OutStream,
+  friend std::ostream & operator << (std::ostream & inout_OutStream,
 				t_KnotVectorGenFlag in_KVGFlag);
 
   G4NURBS (t_order in_Uorder, t_order in_Vorder,
@@ -407,7 +407,7 @@ class G4NURBS : public G4VVisPrim
 };
 
 // external representation for t_KnotVectorGenFlag
-G4std::ostream & operator << (G4std::ostream & inout_OutStream,
+std::ostream & operator << (std::ostream & inout_OutStream,
                               G4NURBS::t_KnotVectorGenFlag in_KVGFlag);
 
 
@@ -415,7 +415,7 @@ G4std::ostream & operator << (G4std::ostream & inout_OutStream,
 // writted with public access functions
 // do not depends on protected part
 
-G4std::ostream & operator << (G4std::ostream & inout_outStream,
+std::ostream & operator << (std::ostream & inout_outStream,
                               const G4NURBS & in_kNurb);
 
 /***********************************************************************

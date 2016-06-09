@@ -23,10 +23,10 @@
 #define G4LowEXsection_h
 
 #include "G4Pair.hh"
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 
-class G4LowEXsection : public G4std::vector<G4Pair<double,double> >
+class G4LowEXsection : public std::vector<G4Pair<double,double> >
 {
 public:
   G4LowEXsection() {}

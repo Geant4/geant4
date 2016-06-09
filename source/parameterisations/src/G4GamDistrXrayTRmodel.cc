@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4GamDistrXrayTRmodel.cc,v 1.3 2001/07/11 10:01:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GamDistrXrayTRmodel.cc,v 1.4 2003/06/16 16:56:36 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
-#include "g4std/complex"
+#include <complex>
 
 #include "G4GamDistrXrayTRmodel.hh"
 #include "Randomize.hh"
@@ -91,21 +91,21 @@ G4GamDistrXrayTRmodel::GetStackFactor( G4double energy,
   G4complex Ca(1.0+0.5*fPlateThick*Ma/fAlphaPlate,fPlateThick/Za/fAlphaPlate) ; 
   G4complex Cb(1.0+0.5*fGasThick*Mb/fAlphaGas,fGasThick/Zb/fAlphaGas) ; 
 
-  G4complex Ha = G4std::pow(Ca,-fAlphaPlate) ;  
-  G4complex Hb = G4std::pow(Cb,-fAlphaGas) ;
+  G4complex Ha = std::pow(Ca,-fAlphaPlate) ;  
+  G4complex Hb = std::pow(Cb,-fAlphaGas) ;
   G4complex H  = Ha*Hb ;
 
   G4complex F1 = ( 0.5*(1+Qa)*(1.0+H) - Ha - Qa*Hb )/(1.0-H) ;
 
   G4complex F2 = (1.0-Ha)*(Qa-Ha)*Hb/(1.0-H)/(Q-H) ;
 
-  F2          *= pow(Q,G4double(fPlateNumber)) - G4std::pow(H,fPlateNumber) ;
+  F2          *= pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
 
   result      = ( 1 - pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
 
-  result     *= 2.0*G4std::real(F1) ;
+  result     *= 2.0*std::real(F1) ;
 
-  result     += 2.0*G4std::real(F2) ;
+  result     += 2.0*std::real(F2) ;
 
   return      result ;
 }

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NuclearShellModelDensity.hh,v 1.7 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NuclearShellModelDensity_h
 #define G4NuclearShellModelDensity_h 1

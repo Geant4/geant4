@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.16 2003/04/11 11:48:40 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleDefinition.cc,v 1.17.2.1 2003/06/16 17:18:49 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -116,7 +116,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 #endif
 }
 
-G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &right)
+G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &)
 {
   G4Exception("You call Copy Constructor of G4ParticleDefinition ");
 }
@@ -296,7 +296,7 @@ void G4ParticleDefinition::SetRangeCut(G4double aCut, const G4Material*)
   defaultCuts->SetProductionCut(aCut,this);
 }
 
-void G4ParticleDefinition::SetRangeCutVector(G4std::vector<G4double>& vec)
+void G4ParticleDefinition::SetRangeCutVector(std::vector<G4double>& vec)
 {
   G4cerr << "Warning : you invoked G4ParticleDefinition::SetRangeCutVector." << G4endl;
   G4cerr << " This method is obsolete and will be removed soon." << G4endl;

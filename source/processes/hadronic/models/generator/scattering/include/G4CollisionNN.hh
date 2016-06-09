@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNN.hh,v 1.4 2002/12/12 19:17:37 gunter Exp $ //
+// $Id: G4CollisionNN.hh,v 1.5 2003/06/16 17:07:57 gunter Exp $ //
 
 #ifndef G4CollisionNN_h
 #define G4CollisionNN_h
@@ -30,7 +30,7 @@
 #include "G4GeneralNNCollision.hh"
 #include "G4CollisionVector.hh"
 #include "G4VCrossSectionSource.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4KineticTrack;
 
@@ -58,7 +58,7 @@ protected:
 
   virtual const G4CollisionVector* GetComponents() const { return components; } 
 
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const;  
+  virtual const std::vector<G4String>& GetListOfColliders(G4int whichOne) const;  
 
 private:  
 
@@ -66,8 +66,8 @@ private:
 
   G4VCrossSectionSource* crossSectionSource;
 
-  G4std::vector<G4String> colliders1;
-  G4std::vector<G4String> colliders2;
+  std::vector<G4String> colliders1;
+  std::vector<G4String> colliders2;
 };
 
 #endif

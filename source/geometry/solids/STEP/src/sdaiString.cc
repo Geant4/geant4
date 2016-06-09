@@ -9,10 +9,10 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiString.cc,v 1.2 2001/11/29 16:46:51 gcosmo Exp $ */
+/* $Id: sdaiString.cc,v 1.3 2003/06/06 17:07:36 gcosmo Exp $ */
 
 #include <sdai.h>
-#include "g4std/strstream"
+#include <strstream>
 
 
 SCLP23(String)& 
@@ -23,7 +23,7 @@ SCLP23(String)::operator= (const char* s)
 }
 
 void 
-SCLP23(String)::STEPwrite (G4std::ostream& out) const
+SCLP23(String)::STEPwrite (std::ostream& out) const
 {
     const char *str = 0;
 // strings that exist but do not contain any chars should be written as '',
@@ -83,21 +83,17 @@ SCLP23(String)::StrToVal (const char * s)
 //  STEPread reads a string in exchange file format
 //  starting with a single quote
 Severity 
-SCLP23(String)::STEPread (G4std::istream& in, ErrorDescriptor *err)
+SCLP23(String)::STEPread (std::istream& in, ErrorDescriptor *err)
 {
     int foundEndQuote = 0; // need so this string is not ok: 'hi''
     set_null ();  // clear the old string
     char c;
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
     in >> c;
 
-	// remember the current format state to restore the previous settings
-#ifdef G4USE_STD_NAMESPACE
+    // remember the current format state to restore the previous settings
     std::ios::fmtflags flags = in.flags();
-#else
-    long int flags = in.flags();
-#endif
-    in.unsetf(G4std::ios::skipws);
+    in.unsetf(std::ios::skipws);
 
     if (c == STRING_DELIM)
     {
@@ -148,6 +144,6 @@ SCLP23(String)::STEPread (G4std::istream& in, ErrorDescriptor *err)
 Severity 
 SCLP23(String)::STEPread (const char *s, ErrorDescriptor *err)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return STEPread (in, err);
 }

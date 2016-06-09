@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.cc,v 1.6 2001/07/13 15:00:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HCofThisEvent.cc,v 1.7 2003/06/16 16:50:25 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4HCofThisEvent.hh"
@@ -31,12 +31,12 @@ G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
 
 G4HCofThisEvent::G4HCofThisEvent()
 {
-  HC = new G4std::vector<G4VHitsCollection*>;
+  HC = new std::vector<G4VHitsCollection*>;
 }
 
 G4HCofThisEvent::G4HCofThisEvent(G4int cap)
 {
-  HC = new G4std::vector<G4VHitsCollection*>;
+  HC = new std::vector<G4VHitsCollection*>;
   for(G4int i=0;i<cap;i++)
   {
     HC->push_back((G4VHitsCollection*)0);

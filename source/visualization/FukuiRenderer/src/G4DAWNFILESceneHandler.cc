@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.12 2002/09/02 04:39:21 stanaka Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.13 2003/06/16 17:13:29 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.
@@ -33,7 +33,7 @@
 // #define DEBUG_FR_SCENE
 
      //----- header files
-#include "g4std/fstream"
+#include <fstream>
 #include <stdlib.h>
 #include <string.h>
 #include "globals.hh"
@@ -170,7 +170,7 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 		}
 
 		// check validity of the file name
-		G4std::ifstream  fin ; 
+		std::ifstream  fin ; 
 		fin.open(fG4PrimFileName) ;
 		if(!fin) { 
 			// new file	

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04EMPhysics.cc,v 1.1 2002/03/05 15:22:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN04EMPhysics.cc,v 1.2 2003/06/16 16:49:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -30,7 +30,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 ExN04EMPhysics::ExN04EMPhysics(const G4String& name)

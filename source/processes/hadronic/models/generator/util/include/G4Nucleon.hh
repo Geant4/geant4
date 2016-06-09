@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Nucleon.hh,v 1.6 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Nucleon.hh,v 1.9 2003/06/16 17:09:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4Nucleon_h
 #define G4Nucleon_h 1
@@ -79,6 +79,11 @@ class G4Nucleon : public G4VKineticNucleon
            void Boost(const G4LorentzVector & aMomentum);
 
     inline void Hit(G4VSplitableHadron * aHit) { theSplitableHadron=aHit;}
+    inline void Hit(G4int ) 
+    { 
+      theSplitableHadron=reinterpret_cast<G4VSplitableHadron *>(1111); 
+      // G4cout << "$%$#%@%$#@%@%%% "<<theSplitableHadron<<G4endl;
+    }
     inline G4VSplitableHadron * GetSplitableHadron() const { return theSplitableHadron;}
     
     inline G4bool AreYouHit() const 
@@ -99,7 +104,7 @@ class G4Nucleon : public G4VKineticNucleon
 
 };
 
-G4std::ostream & operator << (G4std::ostream &, const G4Nucleon&);
+std::ostream & operator << (std::ostream &, const G4Nucleon&);
 
 inline int G4Nucleon::operator==(const G4Nucleon &right) const
 {

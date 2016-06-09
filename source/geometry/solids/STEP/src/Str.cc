@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: Str.cc,v 1.4 2000/01/21 13:43:06 gcosmo Exp $  */ 
+/* $Id: Str.cc,v 1.5 2003/06/06 17:07:35 gcosmo Exp $  */ 
 
 #include <Str.h>
 
@@ -175,8 +175,8 @@ StrCmpIns( const char *strA, const char *strB )
 // this function can push the file pointer up to but not past the delimiter
 // (i.e. not removing the delimiter from the input stream).  If you have a
 // string containing a single value and you expect the whole string to contain
-// a valid value, you can change the string to an G4std::istrstream, read the value 
-// then send the G4std::istrstream to this function with tokenList set to null 
+// a valid value, you can change the string to an std::istrstream, read the value 
+// then send the std::istrstream to this function with tokenList set to null 
 // and this function will set an error for you if any input remains following
 // the value.
 
@@ -199,7 +199,7 @@ StrCmpIns( const char *strA, const char *strB )
 //	  no way to know when to stop.
 
 Severity 
-CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err, 
+CheckRemainingInput(std::istream &in, ErrorDescriptor *err, 
 		    const char *typeName, // used in error message
 		    const char *tokenList) // e.g. ",)"
 {
@@ -216,7 +216,7 @@ CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err,
 	// preceding a delimiter if you are expecting one.
 
 	in.clear(); // clear the istreams error
-	in >> G4std::ws; // skip whitespace
+	in >> std::ws; // skip whitespace
 	if(in.eof()) // no input following the desired input (or following the 
 	{	     // missing desired input)
 	    return err->severity();
@@ -299,7 +299,7 @@ CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err,
 	return err->severity();
     }
     else
-    { // badbit set (in.bad()) means there was a problem when reading G4std::istream
+    { // badbit set (in.bad()) means there was a problem when reading std::istream
       // this is bad news... it means the input stream is hopelessly messed up
 	err->GreaterSeverity(SEVERITY_INPUT_ERROR);
 	sprintf(name, "Invalid %s value.\n", typeName);

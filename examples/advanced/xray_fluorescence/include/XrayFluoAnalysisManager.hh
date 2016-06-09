@@ -41,7 +41,7 @@
 //#define XrayFluoAnalysisManager_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ThreeVector.hh"
 #include "XrayFluoDataSet.hh"
 #include "AIDA/IHistogram1D.h"

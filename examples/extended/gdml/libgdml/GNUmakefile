@@ -1,4 +1,5 @@
-# $Id: GNUmakefile,v 1.1.1.1 2002/05/31 00:34:42 radoone Exp $
+
+# $Id: GNUmakefile,v 1.2 2003/05/06 17:50:30 radoone Exp $
 # --------------------------------------------------------------
 # Makes libraries for each GDML subdomain: 
 #         saxana schema management processes subscribers.

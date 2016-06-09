@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IntersectingCone.hh,v 1.5 2002/10/28 11:47:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------------

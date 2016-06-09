@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundFragmentVector.hh,v 1.6 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PreCompoundFragmentVector.hh,v 1.8 2003/06/16 17:07:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -34,54 +34,40 @@
 #include "G4VPreCompoundFragment.hh"
 
 
+
 class G4PreCompoundFragmentVector 
 {
-  typedef G4std::vector<G4VPreCompoundFragment*>  pcfvector;
+  typedef std::vector<G4VPreCompoundFragment*>  pcfvector;
 public:
-  G4PreCompoundFragmentVector();
-  ~G4PreCompoundFragmentVector();
-	
+  inline G4PreCompoundFragmentVector(pcfvector * avector);
+  inline ~G4PreCompoundFragmentVector();
+  
 private:
   G4PreCompoundFragmentVector(const G4PreCompoundFragmentVector &right);
   const G4PreCompoundFragmentVector& 
   operator=(const G4PreCompoundFragmentVector &right);
   G4bool operator==(const G4PreCompoundFragmentVector &right) const;
   G4bool operator!=(const G4PreCompoundFragmentVector &right) const;	
-    
+  
 public:
 
   inline void Initialize(const G4Fragment & aFragment);
+  inline void ResetStage();
+  inline void SetVector(pcfvector * avector);
+
   G4double CalculateProbabilities(const G4Fragment & aFragment);
 	
   G4VPreCompoundFragment * ChooseFragment(void);
 		
 private:
 
-  pcfvector theChannels;
+  pcfvector * theChannels;
 
   G4double TotalEmissionProbability;
-
-  struct DeleteFragment 
-  {
-    template<typename T>
-    void operator()(const T* ptr) const
-    {
-      delete ptr;
-    }
-  };
 
 };
 
 #include "G4PreCompoundFragmentVector.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
 

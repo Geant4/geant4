@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapManager.cc,v 1.1 2002/06/04 07:40:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: OlapManager.cc,v 1.2 2003/06/16 16:49:28 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -34,7 +34,7 @@
 //
 #include <stdlib.h>
 
-#include "g4std/vector"
+#include <vector>
 
 #include "OlapManager.hh"
 #include "OlapDetConstr.hh"
@@ -55,7 +55,7 @@ OlapManager::OlapManager() :
    theMessenger = new OlapManagerMessenger(this);
    theLVStore = G4LogicalVolumeStore::GetInstance();
    // for SUN
-   //G4std::vector<G4LogicalVolume*>::iterator aIt = theLVStore->begin();
+   //std::vector<G4LogicalVolume*>::iterator aIt = theLVStore->begin();
    //G4LogicalVolumeStore::iterator aIt = theLVStore->begin();
 
    theRunManager = G4RunManager::GetRunManager();
@@ -76,7 +76,7 @@ OlapManager::OlapManager() :
    // instantiate the logical volume tree & add it to the Gui
    theGeoNav = new G4GeoNav(theDet->GetFullWorld()->GetLogicalVolume());
    
-   G4std::vector<G4LogicalVolume*>::iterator aIt2;
+   std::vector<G4LogicalVolume*>::iterator aIt2;
    for (aIt2=theLVStore->begin(); aIt2 != theLVStore->end(); aIt2++)
      NoOlapMap[*aIt2] = false;
 }
@@ -245,7 +245,7 @@ void OlapManager::ListLV(const G4String & aRegexStr)
 {
     G4cout << "logical volumes matching " << aRegexStr << ":" <<G4endl;
     
-    G4std::vector<G4LogicalVolume *> aLVVec;
+    std::vector<G4LogicalVolume *> aLVVec;
     G4int c = theGeoNav->FilterLV(aRegexStr,aLVVec);
  
     for(G4int i=0; i<c; i++)
@@ -257,7 +257,7 @@ void OlapManager::ListLV(const G4String & aRegexStr)
 
 void OlapManager::LsLV()
 {
-   G4std::vector<G4LogicalVolume *> lvs;
+   std::vector<G4LogicalVolume *> lvs;
    G4int c = theGeoNav->LsLV(lvs);
    for (G4int i = 0; i<c; i++)
       G4cout << "   " << (lvs[i])->GetName() << G4endl;
@@ -265,7 +265,7 @@ void OlapManager::LsLV()
 
 void OlapManager::PwdLV()
 {
-    G4std::vector<G4LogicalVolume *> lvs;
+    std::vector<G4LogicalVolume *> lvs;
     theGeoNav->PwdLV(lvs);
     G4String temp;
     G4cout << "/ = ";
@@ -296,7 +296,7 @@ void OlapManager::ChangeLV(const G4String & aDir)
 
 void OlapManager::GotoLV(const G4String & aRegexStr)
 {
-    G4std::vector<G4LogicalVolume*> lvs; 
+    std::vector<G4LogicalVolume*> lvs; 
     if (theGeoNav->FilterLV(aRegexStr,lvs,true))
     {
        G4cout << "new world: " << (lvs[0])->GetName() << G4endl;
@@ -343,15 +343,15 @@ void OlapManager::SetGrid(G4int x, G4int y, G4int z)
 void OlapManager::notifyNewWorld(G4LogicalVolume* nw)
 {
    //G4cout << G4endl << "NewWorld-Notif: " << nw->GetName() << G4endl;
-   G4std::set<OlapNotify*>::iterator i = theNotifs.begin();
+   std::set<OlapNotify*>::iterator i = theNotifs.begin();
    for(;i!=theNotifs.end();++i)
      (*i)->worldChanged(nw);   
 }
 
 
-void OlapManager::notifyOlaps(const G4std::vector<OlapInfo*> & ov)
+void OlapManager::notifyOlaps(const std::vector<OlapInfo*> & ov)
 {
-   G4std::set<OlapNotify*>::iterator i = theNotifs.begin();
+   std::set<OlapNotify*>::iterator i = theNotifs.begin();
    for(;i!=theNotifs.end();++i) 
      (*i)->overlaps(ov);   
 }

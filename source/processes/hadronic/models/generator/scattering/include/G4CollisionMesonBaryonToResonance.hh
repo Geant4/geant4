@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionMesonBaryonToResonance.hh,v 1.7 2002/12/12 19:17:37 gunter Exp $ //
+// $Id: G4CollisionMesonBaryonToResonance.hh,v 1.9 2003/06/16 17:07:56 gunter Exp $ //
 
 #ifndef G4CollisionMesonBaryonToResonance_h
 #define G4CollisionMesonBaryonToResonance_h
@@ -31,7 +31,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4VAngularDistribution.hh"
 #include "G4KineticTrackVector.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4XpipNTotal.hh"
 #include "G4XpimNTotal.hh"
 #include "G4PionPlus.hh"
@@ -76,10 +76,10 @@ public:
 
 protected:
   
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const
+  virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
     G4Exception("Tried to call G4CollisionMesonBaryonToResonance::GetListOfColliders. Please find out why!");
-    G4std::vector<G4String> * aList = new G4std::vector<G4String>;
+    std::vector<G4String> * aList = new std::vector<G4String>;
     return *aList;
   } 
 private:

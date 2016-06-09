@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.39 2003/02/07 15:39:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LowEnergyIonisation.hh,v 1.40 2003/06/16 16:59:44 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: A. Forti
 //
@@ -96,7 +96,7 @@ protected:
 
 protected:
 
-  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
+  virtual std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
 							  G4double incidentEnergy,
 							  G4double eLoss);
 

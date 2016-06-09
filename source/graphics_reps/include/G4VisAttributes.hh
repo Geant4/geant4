@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.10 2002/11/20 14:18:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisAttributes.hh,v 1.11 2003/06/16 16:55:14 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  23rd October 1996
@@ -49,7 +49,7 @@
 #define __G4VISATTRIBUTES_HH__
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4Colour.hh"
 #include "G4Color.hh"
@@ -59,7 +59,7 @@ class G4AttDef;
 
 class G4VisAttributes {
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4VisAttributes& a);
+  friend std::ostream& operator << (std::ostream& os, const G4VisAttributes& a);
 
 public: // With description
 
@@ -86,8 +86,8 @@ public: // With description
   G4double        GetLineWidth                   () const;
   G4bool          IsForceDrawingStyle            () const;
   ForcedDrawingStyle GetForcedDrawingStyle       () const;
-  const G4std::vector<G4AttValue>* GetAttValues  () const;
-  const G4std::vector<G4AttDef>*   GetAttDefs    () const;
+  const std::vector<G4AttValue>* GetAttValues  () const;
+  const std::vector<G4AttDef>*   GetAttDefs    () const;
 
   void SetVisibility         (G4bool);
   void SetDaughtersInvisible (G4bool);
@@ -101,8 +101,8 @@ public: // With description
   void SetLineWidth          (G4double);
   void SetForceWireframe     (G4bool);
   void SetForceSolid         (G4bool);
-  void SetAttValues          (const G4std::vector<G4AttValue>*);
-  void SetAttDefs            (const G4std::vector<G4AttDef>*);
+  void SetAttValues          (const std::vector<G4AttValue>*);
+  void SetAttDefs            (const std::vector<G4AttDef>*);
 
 private:
 
@@ -114,8 +114,8 @@ private:
                                    // pixels for screen, 0.1 mm for paper.
   G4bool      fForceDrawingStyle;  // To switch on forced drawing style.
   ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
-  const G4std::vector<G4AttValue>* fAttValues;  // For picking, etc.
-  const G4std::vector<G4AttDef>*   fAttDefs;    // Corresponding definitions.
+  const std::vector<G4AttValue>* fAttValues;  // For picking, etc.
+  const std::vector<G4AttDef>*   fAttDefs;    // Corresponding definitions.
 };
 
 #include "G4VisAttributes.icc"

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.17 2002/04/09 17:34:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GammaConversion.cc,v 1.18 2003/06/16 17:02:09 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //------------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996
@@ -43,7 +43,7 @@
 // 28-03-97 protection in BuildPhysicsTable, M.Maire
 // 19-06-97 correction in ComputeCrossSectionPerAtom, L.Urban
 // 04-06-98 in DoIt, secondary production condition:
-//            range>G4std::min(threshold,safety)
+//            range>std::min(threshold,safety)
 // 13-08-98 new methods SetBining() PrintInfo()
 // 28-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 11-07-01 PostStepDoIt - sampling epsil: power(rndm,0.333333)
@@ -267,11 +267,11 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
    // limits of the screening variable
    G4double screenfac = 136.*epsil0/(anElement->GetIonisation()->GetZ3());
    G4double screenmax = exp ((42.24 - FZ)/8.368) - 0.952 ;
-   G4double screenmin = G4std::min(4.*screenfac,screenmax);
+   G4double screenmin = std::min(4.*screenfac,screenmax);
 
    // limits of the energy sampling
    G4double epsil1 = 0.5 - 0.5*sqrt(1. - screenmin/screenmax) ;
-   G4double epsilmin = G4std::max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin;
+   G4double epsilmin = std::max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin;
 
    //
    // sample the energy rate of the created electron (or positron) 
@@ -281,8 +281,8 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
 
    G4double F10 = ScreenFunction1(screenmin) - FZ;
    G4double F20 = ScreenFunction2(screenmin) - FZ;
-   G4double NormF1 = G4std::max(F10*epsilrange*epsilrange,0.); 
-   G4double NormF2 = G4std::max(1.5*F20,0.);
+   G4double NormF1 = std::max(F10*epsilrange*epsilrange,0.); 
+   G4double NormF2 = std::max(1.5*F20,0.);
 
    do {
         if ( NormF1/(NormF1+NormF2) > G4UniformRand() )
@@ -342,7 +342,7 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
 
    aParticleChange.SetNumberOfSecondaries(2); 
 
-   G4double ElectKineEnergy = G4std::max(0.,ElectTotEnergy - electron_mass_c2);
+   G4double ElectKineEnergy = std::max(0.,ElectTotEnergy - electron_mass_c2);
    G4double localEnergyDeposit = 0.;
 
    if (ElectKineEnergy > fminimalEnergy)
@@ -360,7 +360,7 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
 
    // the e+ is always created (even with Ekine=0) for further annihilation.
 
-   G4double PositKineEnergy = G4std::max(0.,PositTotEnergy - electron_mass_c2);
+   G4double PositKineEnergy = std::max(0.,PositTotEnergy - electron_mass_c2);
    if (PositKineEnergy < fminimalEnergy)
      { localEnergyDeposit += PositKineEnergy; PositKineEnergy = 0.;}
 

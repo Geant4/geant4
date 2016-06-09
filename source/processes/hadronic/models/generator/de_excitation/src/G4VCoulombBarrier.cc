@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCoulombBarrier.cc,v 1.5 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VCoulombBarrier.cc,v 1.7 2003/06/16 17:06:51 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
 
 
 #include "G4VCoulombBarrier.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4VCoulombBarrier::G4VCoulombBarrier(const G4int anA, const G4int aZ)
 {
@@ -38,7 +38,7 @@ G4VCoulombBarrier::G4VCoulombBarrier(const G4int anA, const G4int aZ)
 	theZ = aZ;
     } else {
 	char errMessage[1024];
-	G4std::ostrstream errOs(errMessage,1024);
+	std::ostrstream errOs(errMessage,1024);
 	errOs << "G4VCoulombBarrier::G4VCoulombBarrier: ";
 	errOs << "Wrong values for ";
 	errOs << "A = " << anA << " ";
@@ -48,24 +48,24 @@ G4VCoulombBarrier::G4VCoulombBarrier(const G4int anA, const G4int aZ)
 }
 
 
-G4VCoulombBarrier::G4VCoulombBarrier(const G4VCoulombBarrier & right)
+G4VCoulombBarrier::G4VCoulombBarrier(const G4VCoulombBarrier & )
 {
     G4Exception("G4VCoulombBarrier::copy_constructor meant to not be accessable.");
 }
 
 
-const G4VCoulombBarrier & G4VCoulombBarrier::operator=(const G4VCoulombBarrier & right)
+const G4VCoulombBarrier & G4VCoulombBarrier::operator=(const G4VCoulombBarrier & )
 {
     G4Exception("G4VCoulombBarrier::operator= meant to not be accessable.");
     return *this;
 }
 
-G4bool G4VCoulombBarrier::operator==(const G4VCoulombBarrier & right) const 
+G4bool G4VCoulombBarrier::operator==(const G4VCoulombBarrier & ) const 
 {
     return false;
 }
 
-G4bool G4VCoulombBarrier::operator!=(const G4VCoulombBarrier & right) const 
+G4bool G4VCoulombBarrier::operator!=(const G4VCoulombBarrier & ) const 
 {
     return true;
 }

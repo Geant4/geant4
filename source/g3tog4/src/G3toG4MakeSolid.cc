@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3toG4MakeSolid.cc,v 1.9 2001/07/16 15:38:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
 

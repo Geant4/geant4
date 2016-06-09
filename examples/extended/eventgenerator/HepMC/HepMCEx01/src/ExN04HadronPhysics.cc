@@ -23,7 +23,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 
 ExN04HadronPhysics::ExN04HadronPhysics(const G4String& name)

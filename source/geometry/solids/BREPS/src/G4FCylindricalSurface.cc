@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FCylindricalSurface.cc,v 1.12 2001/07/11 09:59:45 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FCylindricalSurface.cc,v 1.13 2003/06/16 16:52:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -92,7 +92,7 @@ const char* G4FCylindricalSurface::NameOf() const
 }
 
 
-void G4FCylindricalSurface::PrintOn( G4std::ostream& os ) const
+void G4FCylindricalSurface::PrintOn( std::ostream& os ) const
 { 
   os << "G4FCylindricalSurface with origin: " << origin << "\t"
      << "and axis: " << Position.GetAxis() << "\n"
@@ -250,7 +250,7 @@ G4double G4FCylindricalSurface::HowNear( const G4Vector3D& x ) const
   if ( ((Zinter >= downcorner.z()) && (Zinter <=upcorner.z())) ) {
     hownear = fabs( radius - xd.x() );
   } else {
-    hownear = G4std::min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
+    hownear = std::min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
   }
 
   return hownear;

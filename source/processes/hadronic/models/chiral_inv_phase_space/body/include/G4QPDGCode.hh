@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.12 2002/12/12 19:14:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QPDGCode.hh,v 1.13 2003/06/16 17:04:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -32,7 +32,7 @@
 #ifndef G4QPDGCode_h
 #define G4QPDGCode_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
@@ -102,8 +102,8 @@ private:
 };
 
 // Not member operators
-G4std::ostream&   operator<<(G4std::ostream& lhs, G4QPDGCode& rhs);
-G4std::ostream&   operator<<(G4std::ostream& lhs, const G4QPDGCode& rhs);
+std::ostream&   operator<<(std::ostream& lhs, G4QPDGCode& rhs);
+std::ostream&   operator<<(std::ostream& lhs, const G4QPDGCode& rhs);
 G4int      operator+(const G4QPDGCode& lhs, const G4QPDGCode& rhs);
 G4int      operator+(const G4QPDGCode& lhs, const G4int&      rhs);
 G4int      operator+(const G4int&      lhs, const G4QPDGCode& rhs);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterSD.cc,v 1.4 2001/11/29 11:19:18 griccard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: GammaRayTelCalorimeterSD.cc,v 1.5 2003/05/30 15:09:00 flongo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -75,7 +75,7 @@ GammaRayTelCalorimeterSD::~GammaRayTelCalorimeterSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelCalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void GammaRayTelCalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   CalorimeterCollection = new GammaRayTelCalorimeterHitsCollection
     (SensitiveDetectorName,collectionName[0]);
@@ -88,7 +88,7 @@ void GammaRayTelCalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool GammaRayTelCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool GammaRayTelCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 { 
   
   G4double edep = aStep->GetTotalEnergyDeposit();

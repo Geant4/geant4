@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.12 2003/01/22 18:42:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VCrossSectionHandler.hh,v 1.13 2003/06/16 16:59:51 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -47,8 +47,8 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
-#include "g4std/map"
-#include "g4std/vector"
+#include <map>
+#include <vector>
 #include "G4MaterialCutsCouple.hh"
 
 class G4VDataSetAlgorithm;
@@ -106,7 +106,7 @@ protected:
   void ActiveElements();
 
   // Factory method
-  virtual G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
+  virtual std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
 								       const G4DataVector* energyCuts = 0) = 0;
 
   // Factory method
@@ -135,9 +135,9 @@ private:
 
   G4DataVector activeZ;
 
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > dataMap;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> > dataMap;
 
-  G4std::vector<G4VEMDataSet*>* crossSections;
+  std::vector<G4VEMDataSet*>* crossSections;
 };
 
 #endif

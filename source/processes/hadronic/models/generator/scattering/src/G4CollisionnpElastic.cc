@@ -77,7 +77,7 @@ G4bool G4CollisionnpElastic::IsInCharge(const G4KineticTrack& trk1,
 }
 
 
-const G4std::vector<G4String>& G4CollisionnpElastic::GetListOfColliders(G4int whichOne) const
+const std::vector<G4String>& G4CollisionnpElastic::GetListOfColliders(G4int whichOne) const
 {
   if (whichOne == 1) 
     {

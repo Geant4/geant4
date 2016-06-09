@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaEvaporationProbability.cc,v 1.5 2002/12/12 19:17:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4AlphaEvaporationProbability.cc,v 1.8 2003/06/16 17:06:13 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -35,12 +35,12 @@ G4AlphaEvaporationProbability::G4AlphaEvaporationProbability() :
     G4EvaporationProbability(4,2,4) // A,Z,Gamma
 {
     //  const G4int NumExcitedStates = 31+1;
-    G4std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
-    G4std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
+    std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
+    std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
     ExcitEnergies.reserve(NumExcitedStatesEnergy);
     ExcitSpins.reserve(NumExcitedStatesSpin);
     ExcitEnergies.insert(ExcitEnergies.begin(),NumExcitedStatesEnergy,0.0);
-    ExcitSpins.insert(ExcitSpins.begin(),NumExcitedStatesSpin,0.0);
+    ExcitSpins.insert(ExcitSpins.begin(),NumExcitedStatesSpin,0);
 //    for (G4int i = 0; i < NumExcitedStates; i++) {
 //      ExcitEnergies(i) = 0.0;
 //      ExcitSpins(i) = 0;
@@ -63,7 +63,7 @@ G4AlphaEvaporationProbability::G4AlphaEvaporationProbability() :
 }
 
 
-G4AlphaEvaporationProbability::G4AlphaEvaporationProbability(const G4AlphaEvaporationProbability &right)
+G4AlphaEvaporationProbability::G4AlphaEvaporationProbability(const G4AlphaEvaporationProbability &): G4EvaporationProbability()
 {
     G4Exception("G4AlphaEvaporationProbability::copy_constructor meant to not be accessable");
 }
@@ -72,19 +72,19 @@ G4AlphaEvaporationProbability::G4AlphaEvaporationProbability(const G4AlphaEvapor
 
 
 const G4AlphaEvaporationProbability & G4AlphaEvaporationProbability::
-operator=(const G4AlphaEvaporationProbability &right)
+operator=(const G4AlphaEvaporationProbability &) 
 {
     G4Exception("G4AlphaEvaporationProbability::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4AlphaEvaporationProbability::operator==(const G4AlphaEvaporationProbability &right) const
+G4bool G4AlphaEvaporationProbability::operator==(const G4AlphaEvaporationProbability &) const
 {
     return false;
 }
 
-G4bool G4AlphaEvaporationProbability::operator!=(const G4AlphaEvaporationProbability &right) const
+G4bool G4AlphaEvaporationProbability::operator!=(const G4AlphaEvaporationProbability &) const
 {
     return true;
 }

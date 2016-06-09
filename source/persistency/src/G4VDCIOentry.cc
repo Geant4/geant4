@@ -30,7 +30,7 @@
 #include "G4DCIOcatalog.hh"
 
 // Implementation of Constructor #1
-G4VDCIOentry::G4VDCIOentry(G4std::string n)
+G4VDCIOentry::G4VDCIOentry(std::string n)
  : m_name(n)
 {
   G4DCIOcatalog* c = G4DCIOcatalog::GetDCIOcatalog();

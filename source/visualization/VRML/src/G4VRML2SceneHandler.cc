@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.8 2002/06/23 03:31:51 stanaka Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VRML2SceneHandler.cc,v 1.9 2003/06/16 17:14:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4VRML2SceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -38,7 +38,7 @@
 //#define DEBUG_FR_SCENE
 
 #include <unistd.h>
-#include "g4std/fstream"
+#include <fstream>
 #include <math.h>
 
 #include "globals.hh"

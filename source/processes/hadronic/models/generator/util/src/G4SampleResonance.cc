@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SampleResonance.cc,v 1.5 2002/12/12 19:17:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SampleResonance.cc,v 1.6 2003/06/16 17:09:46 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -34,7 +34,7 @@
 
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 #include "G4SampleResonance.hh"
 #include "G4DecayTable.hh"
 #include "Randomize.hh"
@@ -122,7 +122,7 @@ G4double G4SampleResonance::SampleMass(const G4double poleMass,
 
   if ( gamma < DBL_EPSILON ) 
     {
-      returnMass = G4std::max(minMass, G4std::min(maxMass, poleMass));
+      returnMass = std::max(minMass, std::min(maxMass, poleMass));
     } 
   else 
     {

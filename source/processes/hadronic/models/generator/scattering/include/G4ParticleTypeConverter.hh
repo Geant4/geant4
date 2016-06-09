@@ -27,7 +27,7 @@
 #include "G4KineticTrack.hh"
 #include "G4ParticleDefinition.hh"
 
-#include "g4std/map"
+#include <map>
 
 class G4ParticleTypeConverter
 {
@@ -54,8 +54,8 @@ public:
 
 private:
 
-  typedef G4std::vector<G4std::pair<const G4ParticleDefinition*, GenericType> >::const_iterator MapIterator; 
-  G4std::vector<G4std::pair<const G4ParticleDefinition*, GenericType> > defMap;
+  typedef std::vector<std::pair<const G4ParticleDefinition*, GenericType> >::const_iterator MapIterator; 
+  std::vector<std::pair<const G4ParticleDefinition*, GenericType> > defMap;
 
 };
 

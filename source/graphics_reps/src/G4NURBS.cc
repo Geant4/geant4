@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.cc,v 1.6 2003/04/03 15:31:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NURBS.cc,v 1.7 2003/06/16 16:55:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -51,7 +51,7 @@ G4VVisPrim & G4NURBS::operator = (const G4VVisPrim &right)
   return G4VVisPrim::operator = (right);
 }
 
-G4std::ostream & operator << (G4std::ostream & inout_outStream,
+std::ostream & operator << (std::ostream & inout_outStream,
                               const G4NURBS & in_kNurb)
 {
   inout_outStream
@@ -374,7 +374,7 @@ G4bool G4NURBS::MakeKnotVector(t_Dir & io_d, t_KnotVectorGenFlag in_KVGFlag)
 }
 
 
-G4std::ostream & operator << (G4std::ostream & io_ostr,
+std::ostream & operator << (std::ostream & io_ostr,
                               G4NURBS::t_KnotVectorGenFlag in_f)
 {
   switch (in_f) 

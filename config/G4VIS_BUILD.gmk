@@ -1,4 +1,4 @@
-# $Id: G4VIS_BUILD.gmk,v 1.11 2001/11/06 13:16:39 johna Exp $
+# $Id: G4VIS_BUILD.gmk,v 1.12 2003/06/11 13:18:56 gunter Exp $
 # -------------------------------------------------------------
 # Visualization-specific CPPFLAGS for BUILD phase.
 #   John Allison, 24th January 1998.
@@ -67,5 +67,51 @@ endif
 ifdef G4VIS_BUILD_VRML_DRIVER
   CPPFLAGS += -DG4VIS_BUILD_VRML_DRIVER
 endif
+
+ifdef G4LIB_BUILD_SHARED
+# build shared libs MUST resolve external libs at library build time
+  ifdef G4VIS_BUILD_DAWN_DRIVER
+    G4VIS_USE_DAWN = 1
+  endif
+
+  ifdef G4VIS_BUILD_OPACS_DRIVER
+    G4VIS_USE_OPACS = 1
+  endif
+
+  ifdef G4VIS_BUILD_OPENGLX_DRIVER
+    G4VIS_USE_OPENGLX = 1
+  endif
+
+  ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
+    G4VIS_USE_OPENGLWIN32 = 1
+  endif
+
+  ifdef G4VIS_BUILD_OPENGLXM_DRIVER
+    G4VIS_USE_OPENGLXM = 1
+  endif
+
+  ifdef G4VIS_BUILD_OPENGL_DRIVER
+    G4VIS_USE_OPENGL = 1
+  endif
+
+  ifdef G4VIS_BUILD_OIX_DRIVER
+    G4VIS_USE_OIX = 1
+  endif
+
+  ifdef G4VIS_BUILD_OIWIN32_DRIVER
+    G4VIS_USE_OIWIN32 = 1
+  endif
+
+  ifdef G4VIS_BUILD_OI_DRIVER
+    G4VIS_USE_OI = 1
+  endif
+
+  ifdef G4VIS_BUILD_VRML_DRIVER
+    G4VIS_USE_VRML = 1
+  endif
+
+include $(G4INSTALL)/config/G4VIS_USE.gmk
+
+endif  # G4LIB_BUILD_SHARED
 
 endif #G4VIS_NONE

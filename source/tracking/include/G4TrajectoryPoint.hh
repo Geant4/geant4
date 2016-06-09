@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.hh,v 1.10 2002/10/28 11:10:57 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TrajectoryPoint.hh,v 1.11 2003/06/16 17:13:12 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -80,8 +80,8 @@ public: // without description
    { return fPosition; };
 
 // Get method for HEPRep style attributes
-   virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const;
-   virtual G4std::vector<G4AttValue>* CreateAttValues() const;
+   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+   virtual std::vector<G4AttValue>* CreateAttValues() const;
 
 //---------
    private:

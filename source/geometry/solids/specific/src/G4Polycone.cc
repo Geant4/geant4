@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.8 2003/03/28 09:52:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Polycone.cc,v 1.8.2.1 2003/06/16 17:18:41 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -444,7 +444,7 @@ G4GeometryType  G4Polycone::GetEntityType() const
 //
 // Stream object contents to an output stream
 //
-G4std::ostream& G4Polycone::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

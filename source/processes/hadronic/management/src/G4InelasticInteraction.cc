@@ -54,7 +54,7 @@
     for( i=2; i<=nm; i++ )nmf += log((double)i);
     for( i=2; i<=nz; i++ )nzf += log((double)i);
     G4double r;
-    r = G4std::min( expxu, G4std::max( expxl, -(np-nm+nz+b)*(np-nm+nz+b)/(2*c*c*n*n)-npf-nmf-nzf ) );
+    r = std::min( expxu, std::max( expxl, -(np-nm+nz+b)*(np-nm+nz+b)/(2*c*c*n*n)-npf-nmf-nzf ) );
     return exp(r);
   }
 
@@ -155,7 +155,7 @@
     for( G4int i=iBegin; i<=numSec; ++i )
     {
       temp = pi*i/(2.0*n*n);
-      test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(i*i)/(n*n) ) ) );
+      test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(i*i)/(n*n) ) ) );
       if( temp < 1.0 )
       {
         if( test >= 1.0e-10 )anpn += temp*test;
@@ -227,7 +227,7 @@
       //
       tkin = targetNucleus.EvaporationEffects( ek );
       ekOrg -= tkin;
-      ekOrg = G4std::max( 0.0001*GeV, ekOrg );
+      ekOrg = std::max( 0.0001*GeV, ekOrg );
       modifiedOriginal.SetKineticEnergy( ekOrg );
       G4double amas = originalIncident->GetDefinition()->GetPDGMass();
       G4double et = ekOrg + amas;

@@ -1,0 +1,30 @@
+# $Id: heprep.mac,v 1.1 2003/06/10 12:51:48 maire Exp $
+#
+# Macro file for "exampleN03.cc"
+#
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute heprep.mac
+#
+# Produces heprep2 file(s)
+#
+/control/verbose 0
+/control/saveHistory
+#
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+#
+# muon 300 MeV to the direction (1.,0.,0.)
+# 3 events
+#
+/vis/scene/create
+/vis/open HepRepXML
+#/vis/viewer/flush
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/scene/add/volume world
+/vis/scene/add/trajectories
+/run/beamOn 1
+#/vis/viewer/flush
+/run/beamOn 10
+#/vis/viewer/flush

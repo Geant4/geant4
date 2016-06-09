@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.cc,v 1.4 2003/02/06 18:53:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VCurvedTrajectoryFilter.cc,v 1.5 2003/06/16 16:54:59 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 #include "G4VCurvedTrajectoryFilter.hh"
 
@@ -35,10 +35,10 @@ G4VCurvedTrajectoryFilter::~G4VCurvedTrajectoryFilter()
 {
 }
 
-G4std::vector<G4ThreeVector>* 
+std::vector<G4ThreeVector>* 
 G4VCurvedTrajectoryFilter::GimmeThePointsAndForgetThem()
 {
-  G4std::vector<G4ThreeVector>* tmp = fpFilteredPoints;
+  std::vector<G4ThreeVector>* tmp = fpFilteredPoints;
   // ParticleChangeForTransport invokes this method (via
   // PropagatorInField) at every Step, even if the step did not
   // involve PropagatorInField. Must, therefore, ensure that points
@@ -62,5 +62,5 @@ G4VCurvedTrajectoryFilter::CreateNewTrajectorySegment( )
     G4cout << "!!!!!!!! Filter: auxiliary points are being memory leaked !!!!!"
            << G4endl;
   }
-  fpFilteredPoints = new G4std::vector<G4ThreeVector>;
+  fpFilteredPoints = new std::vector<G4ThreeVector>;
 }    

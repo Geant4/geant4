@@ -83,16 +83,16 @@ void G4ionIonisation::InitialiseProcess()
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
 
-  G4VEmFluctuationModel* fm = new G4IonFluctuations();
+  flucModel = new G4IonFluctuations();
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(2.0*MeV);
-  AddEmModel(1, em, fm);
+  AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
   em1->SetLowEnergyLimit(2.0*MeV);
   em1->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(2, em1, fm);
+  AddEmModel(2, em1, flucModel);
 
 }
 
@@ -107,7 +107,7 @@ const G4ParticleDefinition* G4ionIonisation::DefineBaseParticle(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ionIonisation::PrintInfoDefinition() const
+void G4ionIonisation::PrintInfoDefinition() 
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 
@@ -125,5 +125,6 @@ void G4ionIonisation::SetSubCutoff(G4bool val)
   subCutoff = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 

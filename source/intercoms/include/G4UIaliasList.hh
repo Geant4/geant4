@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIaliasList.hh,v 1.4 2002/04/26 22:03:34 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIaliasList.hh,v 1.5 2003/06/16 16:55:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4UIaliasList_h
@@ -30,7 +30,7 @@
 
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 // class description:
 //
@@ -59,8 +59,8 @@ class G4UIaliasList
       G4int FindAliasID(const char* aliasName);
 
   private:
-      G4std::vector<G4String*> alias;
-      G4std::vector<G4String*> value;
+      std::vector<G4String*> alias;
+      std::vector<G4String*> value;
 
 };
 

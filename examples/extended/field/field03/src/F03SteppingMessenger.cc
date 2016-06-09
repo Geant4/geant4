@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03SteppingMessenger.cc,v 1.3 2001/10/15 17:20:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F03SteppingMessenger.cc,v 1.4 2003/06/25 17:19:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -52,7 +52,7 @@ F03SteppingMessenger::~F03SteppingMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void F03SteppingMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void F03SteppingMessenger::SetNewValue(G4UIcommand*, G4String)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

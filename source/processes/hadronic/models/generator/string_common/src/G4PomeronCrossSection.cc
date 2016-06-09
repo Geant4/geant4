@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PomeronCrossSection.cc,v 1.8 2002/12/12 19:17:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PomeronCrossSection.cc,v 1.10 2003/06/03 09:36:40 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4PomeronCrossSection.hh"
@@ -49,49 +49,49 @@ G4PomeronCrossSection::G4PomeronCrossSection(const G4ParticleDefinition * partic
 
 //**********************************************************************************************
 
-G4PomeronCrossSection::G4PomeronCrossSection(const G4Proton * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4Proton * )
 {
 	InitForNucleon();
 }
-G4PomeronCrossSection::G4PomeronCrossSection(const G4Neutron * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4Neutron * )
 {
 	InitForNucleon();
 }
 
-G4PomeronCrossSection::G4PomeronCrossSection(const G4PionPlus * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4PionPlus * )
 {
 	InitForPion();
 }
-G4PomeronCrossSection::G4PomeronCrossSection(const G4PionMinus * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4PionMinus * )
 {
 	InitForPion();
 }
-G4PomeronCrossSection::G4PomeronCrossSection(const G4PionZero * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4PionZero * )
 {
 	InitForPion();
 }
 
-G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonPlus * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonPlus * )
 {
 	InitForKaon();
 }
-G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonMinus * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonMinus * )
 {
 	InitForKaon();
 }
-G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonZero * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonZero * )
 {
 	InitForKaon();
 }
-G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonZeroLong * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonZeroLong * )
 {
 	InitForKaon();
 }
-G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonZeroShort * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4KaonZeroShort * )
 {
 	InitForKaon();
 }
-G4PomeronCrossSection::G4PomeronCrossSection(const G4Gamma * particle)
+G4PomeronCrossSection::G4PomeronCrossSection(const G4Gamma * )
 {
 	InitForGamma();
 }
@@ -285,7 +285,7 @@ inline G4double G4PomeronCrossSection::LambdaSoft(const G4double s)
     return pomeron_Rsquare+pomeron_Alphaprime*log(s/pomeron_S);
     }
     
-inline G4double G4PomeronCrossSection::LambdaHard(const G4double s)
+inline G4double G4PomeronCrossSection::LambdaHard(const G4double /*s*/)
     {
     return pomeron_Rsquare; //+pomeron_Alphaprime*log(s/pomeron_S);
     }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.10 2002/11/11 18:26:35 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4XXXSceneHandler.cc,v 1.11 2003/05/30 13:01:26 johna Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  5th April 2001
@@ -379,7 +379,7 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   } while (notLastFace);  
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
+void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4XXXDEBUG
   G4cout <<
     "G4XXXSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."

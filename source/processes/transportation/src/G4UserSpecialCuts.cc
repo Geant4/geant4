@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UserSpecialCuts.cc,v 1.9 2003/04/07 14:14:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------
 // History

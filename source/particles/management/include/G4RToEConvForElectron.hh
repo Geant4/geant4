@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForElectron.hh,v 1.2 2002/12/16 11:15:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RToEConvForElectron.hh,v 1.3 2003/06/16 16:58:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // ------------------------------------------------------------
@@ -41,7 +41,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VRangeToEnergyConverter.hh"
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapRunAction.hh,v 1.1 2002/06/04 07:40:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: OlapRunAction.hh,v 1.2 2003/06/16 16:49:21 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -35,8 +35,8 @@
 #ifndef OlapRunAction_h
 #define OlapRunAction_h
 
-#include "g4std/vector"
-#include "g4std/fstream"
+#include <vector>
+#include <fstream>
 #include "G4UserRunAction.hh"
 #include "OlapEventAction.hh"
 #include "OlapLogManager.hh"
@@ -53,10 +53,10 @@ public:
    void EndOfRunAction(const G4Run* aRun);
    void DrawOlaps();
    
-   G4std::vector<OlapInfo *> theOlaps;
+   std::vector<OlapInfo *> theOlaps;
 
 private:
 
-   G4std::ofstream FILE;
+   std::ofstream FILE;
 };
 #endif

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.6 2002/07/23 08:50:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TransportationManager.icc,v 1.7 2003/06/13 09:30:06 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 //  GEANT 4  inlined function members implementation
 // ------------------------------------------------------------
@@ -62,8 +62,3 @@ void G4TransportationManager::SetPropagatorInField(
    fPropagatorInField = newFieldPropagator;
 }
 
-inline
-void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
-{
-   fFieldManager = newFieldManager; 
-}

@@ -14,11 +14,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-03/01/03 Fan Lei
-- bug (test18) fix in G4NuclraDecayChannel.cc
+12 Jun 2003 Gabriele Cosmo (radiative_decay-V05-01-00)
+- Fix in G4ITDecayChannel.hh and G4RadioactiveDecay.cc for porting
+  on Windows .NET compiler: changed signature in constructor for
+  G4ITDecayChannel to use G4Ions instead of G4ParticleDefinition.
+
+03 Jan 2003 Fan Lei
+- bug (test18) fix in G4NuclearDecayChannel.cc
 
 15 Nov 2002 Fan Lei ((radiative_decay-V04-01-01)
-- Added linked to atomic relaxation model after EC and IT/IC(internal conversion).
+- Added linked to atomic relaxation model after EC and
+  IT/IC(internal conversion).
 - updated GNUMakefile to include electromagnetic/lowenergy/include
 - Updated the database
 

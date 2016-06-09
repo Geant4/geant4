@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4KL3DecayChannel.hh,v 1.4 2001/07/11 10:01:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // ------------------------------------------------------------

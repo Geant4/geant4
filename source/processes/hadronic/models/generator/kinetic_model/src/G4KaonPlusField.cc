@@ -49,21 +49,21 @@ G4KaonPlusField::~G4KaonPlusField()
 { }
 
 
-const G4KaonPlusField & G4KaonPlusField::operator=(const G4KaonPlusField & right)
+const G4KaonPlusField & G4KaonPlusField::operator=(const G4KaonPlusField & )
 {
   G4Exception("G4KaonPlusField::operator= meant not to be accessible");
   return *this;
 }
 
 
-G4int G4KaonPlusField::operator==(const G4KaonPlusField & right) const
+G4int G4KaonPlusField::operator==(const G4KaonPlusField & ) const
 {
   G4Exception("G4KaonPlusField::operator== meant not to be accessible");
   return 0;
 }
 
 
-G4int G4KaonPlusField::operator!=(const G4KaonPlusField & right) const
+G4int G4KaonPlusField::operator!=(const G4KaonPlusField & ) const
 {
   G4Exception("G4KaonPlusField::operator!= meant not to be accessible");
   return 1;
@@ -78,8 +78,8 @@ G4double G4KaonPlusField::GetField(const G4ThreeVector & aPosition)
 
   G4double kaonMass = G4KaonPlus::KaonPlus()->GetPDGMass();
 
-  G4double A = theNucleus->GetMassNumber();
-  G4double Z = theNucleus->GetCharge();
+  G4int A = static_cast<G4int>(theNucleus->GetMassNumber()+.1);
+  G4int Z = static_cast<G4int>(theNucleus->GetCharge()+.1);
   G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = kaonMass*nucleusMass/(kaonMass+nucleusMass);

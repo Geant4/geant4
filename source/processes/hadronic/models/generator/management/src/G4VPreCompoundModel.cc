@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.cc,v 1.5 2002/12/12 19:17:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPreCompoundModel.cc,v 1.6 2003/05/30 14:09:58 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4VPreCompoundModel.hh"
@@ -34,18 +34,18 @@ G4VPreCompoundModel::G4VPreCompoundModel(G4ExcitationHandler *const value):
 
 
 const G4VPreCompoundModel & 
-G4VPreCompoundModel::operator=(const G4VPreCompoundModel &right)
+G4VPreCompoundModel::operator=(const G4VPreCompoundModel &)
 {
   G4Exception("G4VPreCompoundModel::operator= meant to not be accessable");
   return *this;
 }
 
-G4bool G4VPreCompoundModel::operator==(const G4VPreCompoundModel &right) const
+G4bool G4VPreCompoundModel::operator==(const G4VPreCompoundModel &) const
 {
   return false;
 }
 
-G4bool G4VPreCompoundModel::operator!=(const G4VPreCompoundModel &right) const
+G4bool G4VPreCompoundModel::operator!=(const G4VPreCompoundModel &) const
 {
   return true;
 }

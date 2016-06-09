@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPolynomExpansion.hh,v 1.7 2002/12/12 19:18:16 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPPolynomExpansion.hh,v 1.8 2003/06/16 17:11:02 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPPolynomExpansion_h
 #define G4NeutronHPPolynomExpansion_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4NeutronHPPolynomExpansion
 {
@@ -44,7 +44,7 @@ class G4NeutronHPPolynomExpansion
     if(theCoeff!=NULL) delete [] theCoeff;
   }
   
-  inline void Init(G4std::ifstream & theData)
+  inline void Init(std::ifstream & theData)
   {
     theData >> nPoly;
     theCoeff = new G4double[nPoly];

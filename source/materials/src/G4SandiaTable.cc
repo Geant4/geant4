@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.14 2001/10/17 07:59:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SandiaTable.cc,v 1.16 2003/06/16 16:56:26 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
@@ -46,7 +46,7 @@ G4double G4SandiaTable::fSandiaCofPerAtom[4];
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4SandiaTable::G4SandiaTable(G4int matIndex)
+G4SandiaTable::G4SandiaTable(G4int)
 { 
   fMatSandiaMatrix = 0 ; 
   fPhotoAbsorptionCof = 0 ;
@@ -114,7 +114,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
      {
        IonizationPot = GetIonizationPot(Z[elm]);
        for (G4int row=fCumulInterval[Z[elm]-1];row<fCumulInterval[Z[elm]];row++)
-         tmp1[interval1++] = G4std::max(fSandiaTable[row][0]*keV,IonizationPot);
+         tmp1[interval1++] = std::max(fSandiaTable[row][0]*keV,IonizationPot);
      }
         
   //       

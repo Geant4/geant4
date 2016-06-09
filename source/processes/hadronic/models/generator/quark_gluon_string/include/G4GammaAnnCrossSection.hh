@@ -24,7 +24,7 @@
 #define G4GammaAnnCrossSection_h
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4VAnnihilationCrossSection.hh"
 #include "G4ASCCrossSection.hh"
 
@@ -38,7 +38,7 @@ class G4GammaAnnCrossSection : public G4VAnnihilationCrossSection
     
   private:
   
-    G4std::vector<G4ASCCrossSection*> theGammaNucXSections;
+    std::vector<G4ASCCrossSection*> theGammaNucXSections;
 };
 
 #endif

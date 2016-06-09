@@ -35,7 +35,7 @@
 
 
 #include "G4ExcitationHandler.hh"
-#include "g4std/list"
+#include <list>
 
 //#define debugphoton
 
@@ -53,7 +53,7 @@ G4ExcitationHandler::G4ExcitationHandler():
   thePhotonEvaporation = new G4PhotonEvaporation;
 }
 
-G4ExcitationHandler::G4ExcitationHandler(const G4ExcitationHandler &right)
+G4ExcitationHandler::G4ExcitationHandler(const G4ExcitationHandler &)
 {
   G4Exception("G4ExcitationHandler::copy_constructor: is meant to not be accessable! ");
 }
@@ -68,7 +68,7 @@ G4ExcitationHandler::~G4ExcitationHandler()
 }
 
 
-const G4ExcitationHandler & G4ExcitationHandler::operator=(const G4ExcitationHandler &right)
+const G4ExcitationHandler & G4ExcitationHandler::operator=(const G4ExcitationHandler &)
 {
   G4Exception("G4ExcitationHandler::operator=: is meant to not be accessable! ");
 
@@ -76,13 +76,13 @@ const G4ExcitationHandler & G4ExcitationHandler::operator=(const G4ExcitationHan
 }
 
 
-G4bool G4ExcitationHandler::operator==(const G4ExcitationHandler &right) const
+G4bool G4ExcitationHandler::operator==(const G4ExcitationHandler &) const
 {
   G4Exception("G4ExcitationHandler::operator==: is meant to not be accessable! ");
   return false;
 } 
 
-G4bool G4ExcitationHandler::operator!=(const G4ExcitationHandler &right) const
+G4bool G4ExcitationHandler::operator!=(const G4ExcitationHandler &) const
 {
   G4Exception("G4ExcitationHandler::operator!=: is meant to not be accessable! ");
   return true;
@@ -95,7 +95,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
   G4FragmentVector * theResult = 0; 
   G4double exEnergy = theInitialState.GetExcitationEnergy();
   G4double A = theInitialState.GetA();
-  G4int Z = G4int(theInitialState.GetZ());
+  G4int Z = static_cast<G4int>(theInitialState.GetZ());
   G4FragmentVector* theTempResult = 0; 
   G4Fragment theExcitedNucleus;
 //  G4cerr << "Excitation energy in deexcitation"<<theInitialState.GetExcitationEnergy()<<G4endl;
@@ -123,9 +123,9 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
     // De-Excitation loop
     // ------------------
     // Check if there are excited fragments
-    G4std::list<G4Fragment*> theResultList;
+    std::list<G4Fragment*> theResultList;
     G4FragmentVector::iterator j;
-    G4std::list<G4Fragment*>::iterator i;
+    std::list<G4Fragment*>::iterator i;
     for (j = theResult->begin(); j != theResult->end();j++) 
       theResultList.push_back(*j);
     theResult->clear();
@@ -133,7 +133,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
       exEnergy = (*i)->GetExcitationEnergy();
       if (exEnergy > 0.0) {
 	A = (*i)->GetA();
-	Z = G4int((*i)->GetZ());
+	Z = static_cast<G4int>((*i)->GetZ());
 	theExcitedNucleus = *(*i);
 	// try to de-excite this fragment
 	if(A<GetMaxA()&&Z<GetMaxZ() ){ //&&
@@ -162,7 +162,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
 	} else { // If not :
 	  // it doesn't matter, we Follow with the next fragment but
 	  // I have to clean up
-	  G4std::for_each(theTempResult->begin(),theTempResult->end(),DeleteFragment());
+	  std::for_each(theTempResult->begin(),theTempResult->end(),DeleteFragment());
 	  delete theTempResult;
 	}
       }
@@ -181,8 +181,8 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
   // which are excited.
 
   theTempResult = 0;
-  G4std::list<G4Fragment*> theResultList;
-  G4std::list<G4Fragment*>::iterator j;
+  std::list<G4Fragment*> theResultList;
+  std::list<G4Fragment*>::iterator j;
   G4FragmentVector::iterator i;
   for (i = theResult->begin(); i != theResult->end();i++) 
     theResultList.push_back(*i);
@@ -213,7 +213,7 @@ G4ReactionProductVector * G4ExcitationHandler::BreakItUp(const G4Fragment &theIn
       }
       // In other case, just clean theTempResult and continue
       else {
-	G4std::for_each(theTempResult->begin(), theTempResult->end(), DeleteFragment());
+	std::for_each(theTempResult->begin(), theTempResult->end(), DeleteFragment());
 	delete theTempResult;
 #ifdef debugphoton
 	G4cout << "G4ExcitationHandler: Gamma Evaporation could not deexcite the nucleus: \n"
@@ -289,8 +289,8 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
   G4FragmentVector::iterator i;
   for (i = theFragmentVector->begin(); i != theFragmentVector->end(); i++) {
     //    std::cout << (*i) <<'\n';
-    theFragmentA = G4int((*i)->GetA());
-    theFragmentZ = G4int((*i)->GetZ());
+    theFragmentA = static_cast<G4int>((*i)->GetA());
+    theFragmentZ = static_cast<G4int>((*i)->GetZ());
     theFragmentMomentum = (*i)->GetMomentum();
     theKindOfFragment = 0;
     if (theFragmentA == 0 && theFragmentZ == 0) {       // photon
@@ -324,7 +324,7 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
   }
   if (theFragmentVector != 0)
     { 
-      G4std::for_each(theFragmentVector->begin(), theFragmentVector->end(), DeleteFragment());
+      std::for_each(theFragmentVector->begin(), theFragmentVector->end(), DeleteFragment());
       delete theFragmentVector;
     }
   G4ReactionProductVector::iterator debugit;
@@ -345,9 +345,9 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
       }
   }
   G4ReactionProduct* tmpPtr=0;
-  theReactionProductVector->erase(G4std::remove_if(theReactionProductVector->begin(),
+  theReactionProductVector->erase(std::remove_if(theReactionProductVector->begin(),
 						   theReactionProductVector->end(),
-						   G4std::bind2nd(G4std::equal_to<G4ReactionProduct*>(),
+						   std::bind2nd(std::equal_to<G4ReactionProduct*>(),
 								  tmpPtr)),
 				  theReactionProductVector->end());
   return theReactionProductVector;
@@ -367,8 +367,8 @@ void G4ExcitationHandler::CheckConservation(const G4Fragment & theInitialState,
     G4LorentzVector tmp = (*h)->GetMomentum();
     ProductsEnergy += tmp.e();
     ProductsMomentum += tmp.vect();
-    ProductsA += G4int((*h)->GetA());
-    ProductsZ += G4int((*h)->GetZ());
+    ProductsA += static_cast<G4int>((*h)->GetA());
+    ProductsZ += static_cast<G4int>((*h)->GetZ());
   }
 
   if (ProductsA != theInitialState.GetA()) {

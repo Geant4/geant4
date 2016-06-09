@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroManager.hh,v 1.7 2002/12/12 19:17:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMicroManager.hh,v 1.8 2003/06/16 17:06:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -99,7 +99,7 @@ private:
 
 
     // Partitions vector
-    G4std::vector<G4StatMFMicroPartition*> _Partition;
+    std::vector<G4StatMFMicroPartition*> _Partition;
 	
 
     // Statistical weight

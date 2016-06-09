@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VGCellFinder.hh,v 1.1 2002/10/16 14:30:00 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4VGCellFinder

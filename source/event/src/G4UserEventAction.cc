@@ -21,17 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserEventAction.cc,v 1.4 2001/07/11 09:58:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UserEventAction.cc,v 1.5 2003/05/21 20:52:54 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4UserEventAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 
-void G4UserEventAction::BeginOfEventAction(const G4Event* anEvent)
+void G4UserEventAction::BeginOfEventAction(const G4Event*)
 {;}
 
-void G4UserEventAction::EndOfEventAction(const G4Event* anEvent)
+void G4UserEventAction::EndOfEventAction(const G4Event*)
 {;}
 

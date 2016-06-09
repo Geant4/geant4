@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannelList.hh,v 1.6 2002/12/12 19:18:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPChannelList.hh,v 1.7 2003/06/16 17:10:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -65,7 +65,7 @@ class G4NeutronHPChannelList
     G4int i;
     for(i=0; i<nChannels; i++)
     {
-      result+=G4std::max(0., theChannels[i]->GetXsec(anEnergy));
+      result+=std::max(0., theChannels[i]->GetXsec(anEnergy));
     }
     return result;
   }

@@ -46,17 +46,17 @@
 
 #include "G4DataVector.hh"
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 
 class G4AugerTransition {
 
 public:
 
-  G4AugerTransition(G4int finalShell, G4std::vector<G4int> transIds,
-		    const G4std::map<G4int, G4std::vector<G4int>, G4std::less<G4int> >* idMap,
-		    const G4std::map<G4int, G4DataVector, G4std::less<G4int> >* energyMap,
-		    const G4std::map<G4int, G4DataVector, G4std::less<G4int> >* probabilityMap);
+  G4AugerTransition(G4int finalShell, std::vector<G4int> transIds,
+		    const std::map<G4int, std::vector<G4int>, std::less<G4int> >* idMap,
+		    const std::map<G4int, G4DataVector, std::less<G4int> >* energyMap,
+		    const std::map<G4int, G4DataVector, std::less<G4int> >* probabilityMap);
 
   ~G4AugerTransition();
   
@@ -67,11 +67,11 @@ public:
 // Returns the ids of the shells from wich an auger electron culd came from, given the shell
 // from wich the transition electron comes from.
 
-  const G4std::vector<G4int>* AugerOriginatingShellIds(G4int startShellId) const;
+  const std::vector<G4int>* AugerOriginatingShellIds(G4int startShellId) const;
 
 // Returns the ids of the shells from wich an electron cuuld fill the vacancy in finalShellId
 
-  const G4std::vector<G4int>* TransitionOriginatingShellIds() const;
+  const std::vector<G4int>* TransitionOriginatingShellIds() const;
 
 // Returns the energiess of the possible auger electrons, given th shell
 // from wich the transition electron comes from.
@@ -110,10 +110,10 @@ public:
 private:
 
   G4int finalShellId;
-  G4std::map<G4int,G4std::vector<G4int>,G4std::less<G4int> >  augerOriginatingShellIdsMap;
-  G4std::map<G4int,G4DataVector,G4std::less<G4int> >  augerTransitionEnergiesMap;
-  G4std::map<G4int,G4DataVector,G4std::less<G4int> >  augerTransitionProbabilitiesMap;
-  G4std::vector<G4int> transitionOriginatingShellIds;
+  std::map<G4int,std::vector<G4int>,std::less<G4int> >  augerOriginatingShellIdsMap;
+  std::map<G4int,G4DataVector,std::less<G4int> >  augerTransitionEnergiesMap;
+  std::map<G4int,G4DataVector,std::less<G4int> >  augerTransitionProbabilitiesMap;
+  std::vector<G4int> transitionOriginatingShellIds;
   
 };
 

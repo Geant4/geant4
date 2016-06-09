@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.18 2002/10/28 15:18:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Sphere.cc,v 1.19 2003/06/16 16:53:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4Sphere
 //
@@ -1874,10 +1874,10 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
   //
   const G4double  fractionTolerance = 1.0e-14;
-  const G4double  flexRadMaxTolerance = G4std::max(kRadTolerance, 
+  const G4double  flexRadMaxTolerance = std::max(kRadTolerance, 
                      fractionTolerance * fRmax);
   const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
-  const G4double  flexRadMinTolerance = G4std::max(kRadTolerance, 
+  const G4double  flexRadMinTolerance = std::max(kRadTolerance, 
                      fractionTolerance * fRmin);
   const G4double  Rmin_minus= (fRmin>0) ? fRmin-flexRadMinTolerance*0.5 : 0 ;
 
@@ -2725,7 +2725,7 @@ G4GeometryType G4Sphere::GetEntityType() const
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4Sphere::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Sphere::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

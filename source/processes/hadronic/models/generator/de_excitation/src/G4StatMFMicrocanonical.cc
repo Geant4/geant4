@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.cc,v 1.11 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMicroCanonical.cc,v 1.14 2003/06/16 17:06:45 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -34,7 +34,7 @@
 
 // Copy constructor
 G4StatMFMicroCanonical::G4StatMFMicroCanonical(const G4StatMFMicroCanonical &
-					       right)
+					       ) : G4VStatMFEnsemble()
 {
     G4Exception("G4StatMFMicroCanonical::copy_constructor meant to not be accessable");
 }
@@ -42,21 +42,21 @@ G4StatMFMicroCanonical::G4StatMFMicroCanonical(const G4StatMFMicroCanonical &
 // Operators
 
 G4StatMFMicroCanonical & G4StatMFMicroCanonical::
-operator=(const G4StatMFMicroCanonical & right)
+operator=(const G4StatMFMicroCanonical & )
 {
     G4Exception("G4StatMFMicroCanonical::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMFMicroCanonical::operator==(const G4StatMFMicroCanonical & right) const
+G4bool G4StatMFMicroCanonical::operator==(const G4StatMFMicroCanonical & ) const
 {
     G4Exception("G4StatMFMicroCanonical::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4StatMFMicroCanonical::operator!=(const G4StatMFMicroCanonical & right) const
+G4bool G4StatMFMicroCanonical::operator!=(const G4StatMFMicroCanonical & ) const
 {
     G4Exception("G4StatMFMicroCanonical::operator!= meant to not be accessable");
     return true;
@@ -78,7 +78,7 @@ G4StatMFMicroCanonical::~G4StatMFMicroCanonical()
 {
   // garbage collection
   if (!_ThePartitionManagerVector.empty()) {
-    G4std::for_each(_ThePartitionManagerVector.begin(),
+    std::for_each(_ThePartitionManagerVector.begin(),
 		    _ThePartitionManagerVector.end(),
 		    DeleteFragment());
   }
@@ -91,7 +91,7 @@ G4StatMFMicroCanonical::~G4StatMFMicroCanonical()
 void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment) 
 {
   
-  G4std::vector<G4StatMFMicroManager*>::iterator it;
+  std::vector<G4StatMFMicroManager*>::iterator it;
 
   // Excitation Energy 
   G4double U = theFragment.GetExcitationEnergy();
@@ -150,7 +150,7 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   }
   
   // W is the total probability
-  W = G4std::accumulate(_ThePartitionManagerVector.begin(),
+  W = std::accumulate(_ThePartitionManagerVector.begin(),
 			_ThePartitionManagerVector.end(),
 			W,SumProbabilities());
   
@@ -211,7 +211,7 @@ G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment &
   const G4double U = theFragment.GetExcitationEnergy();
   const G4double A13 = pow(A,1.0/3.0);
   
-  G4double Ta = G4std::max(sqrt(U/(0.125*A)),0.0012*MeV); 
+  G4double Ta = std::max(sqrt(U/(0.125*A)),0.0012*MeV); 
   G4double Tb = Ta;
   
   G4double ECompoundNucleus = CalcFreeInternalEnergy(theFragment,Ta);
@@ -219,7 +219,7 @@ G4double G4StatMFMicroCanonical::CalcEntropyOfCompoundNucleus(const G4Fragment &
   G4double Db = 0.0;
   
   
-  G4double InvLevelDensity = CalcInvLevelDensity(A);
+  G4double InvLevelDensity = CalcInvLevelDensity(static_cast<G4int>(A));
   
   
   // bracketing the solution
@@ -291,7 +291,7 @@ G4StatMFChannel *  G4StatMFMicroCanonical::ChooseAandZ(const G4Fragment & theFra
     } else {
 	
 	G4double AccumWeight = _WCompoundNucleus;
-	G4std::vector<G4StatMFMicroManager*>::iterator it;
+	std::vector<G4StatMFMicroManager*>::iterator it;
 	for (it = _ThePartitionManagerVector.begin(); it != _ThePartitionManagerVector.end(); ++it) {
 	    AccumWeight += (*it)->GetProbability();
 	    if (RandNumber < AccumWeight) {

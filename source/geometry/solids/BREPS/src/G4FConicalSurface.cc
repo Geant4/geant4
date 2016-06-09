@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FConicalSurface.cc,v 1.15 2001/07/11 09:59:44 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FConicalSurface.cc,v 1.16 2003/06/16 16:52:56 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -147,9 +147,9 @@ void G4FConicalSurface::CalcBBox()
 }
 
 
-void G4FConicalSurface::PrintOn( G4std::ostream& os ) const
+void G4FConicalSurface::PrintOn( std::ostream& os ) const
 { 
-  //  printing function using C++ G4std::ostream class
+  //  printing function using C++ std::ostream class
   os << "G4FConicalSurface with origin: " << origin << "\t"
      << "and axis: " << Position.GetAxis() << "\n"
      << "\t small radius: " << small_radius 
@@ -370,7 +370,7 @@ G4double G4FConicalSurface::HowNear( const G4Vector3D& x ) const
     hownear = fabs(m*xd.x()-xd.z()+q)/sqrt(1+m*m);
     return hownear;
   } else {
-    hownear = G4std::min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
+    hownear = std::min ( (xd-upcorner).mag() , (xd-downcorner).mag() );
     return hownear;
   }
 

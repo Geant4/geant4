@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.10 2003/03/25 17:03:03 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.11 2003/06/16 16:53:17 gunter Exp $
 //
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids
@@ -484,7 +484,7 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4ReflectedSolid::StreamInfo(G4std::ostream& os) const
+std::ostream& G4ReflectedSolid::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for Reflected solid - " << GetName() << " ***\n"

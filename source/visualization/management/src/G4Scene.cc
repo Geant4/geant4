@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.11 2001/08/24 20:47:41 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Scene.cc,v 1.13 2003/06/16 17:14:15 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -122,12 +122,14 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
 	fEndOfEventModelList [i] -> GetGlobalDescription ()) break;
   }
   if (i < nModels) {
+    delete fEndOfEventModelList[i];
+    fEndOfEventModelList[i] = pModel;
     if (warn) {
-      G4cout << "G4Scene::AddEndOfEventModel: model \""
+      G4cout << "G4Scene::AddEndOfEventModel: a model \""
 	     << pModel -> GetGlobalDescription ()
 	     << "\"\n  is already in the run-duration list of scene \""
-	     << fName
-	     << "\"."
+	     << fName <<
+	"\".\n  The old model has been deleted; this new model replaces it."
 	     << G4endl;
     }
     return false;
@@ -146,7 +148,7 @@ void G4Scene::Clear () {
   }
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4Scene& s) {
+std::ostream& operator << (std::ostream& os, const G4Scene& s) {
 
   size_t i;
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.20 2002/07/19 17:32:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eIonisationSpectrum.cc,v 1.22 2003/06/16 17:00:35 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -74,15 +74,15 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 					    G4double tMax, 
 					    G4double e,
 					    G4int shell,
-				      const G4ParticleDefinition* part) const
+					    const G4ParticleDefinition* ) const
 {
   // Please comment what Probability does and what are the three 
   // functions mentioned below
   // Describe the algorithms used
 
   G4double eMax = MaxEnergyOfSecondaries(e);
-  G4double t0 = G4std::max(tMin, lowestE);
-  G4double tm = G4std::min(tMax, eMax);
+  G4double t0 = std::max(tMin, lowestE);
+  G4double tm = std::min(tMax, eMax);
   if(t0 >= tm) return 0.0;
 
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
@@ -92,8 +92,8 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
 
   G4double energy = e + bindingEnergy;
 
-  G4double x1 = G4std::min(0.5,(t0 + bindingEnergy)/energy);
-  G4double x2 = G4std::min(0.5,(tm + bindingEnergy)/energy);
+  G4double x1 = std::min(0.5,(t0 + bindingEnergy)/energy);
+  G4double x2 = std::min(0.5,(tm + bindingEnergy)/energy);
 
   if(verbose > 1 || (Z==4 && e>= 1.0 && e<= 0.0)) {
     G4cout << "G4eIonisationSpectrum::Probability: Z= " << Z
@@ -160,15 +160,15 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
 					      G4double tMax, 
 					      G4double e,
 					      G4int shell,
-				        const G4ParticleDefinition* part) const
+					      const G4ParticleDefinition* ) const
 {
   // Please comment what AverageEnergy does and what are the three 
   // functions mentioned below
   // Describe the algorithms used
 
   G4double eMax = MaxEnergyOfSecondaries(e);
-  G4double t0 = G4std::max(tMin, lowestE);
-  G4double tm = G4std::min(tMax, eMax);
+  G4double t0 = std::max(tMin, lowestE);
+  G4double tm = std::min(tMax, eMax);
   if(t0 >= tm) return 0.0;
 
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
@@ -178,8 +178,8 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
 
   G4double energy = e + bindingEnergy;
 
-  G4double x1 = G4std::min(0.5,(t0 + bindingEnergy)/energy);
-  G4double x2 = G4std::min(0.5,(tm + bindingEnergy)/energy);
+  G4double x1 = std::min(0.5,(t0 + bindingEnergy)/energy);
+  G4double x2 = std::min(0.5,(tm + bindingEnergy)/energy);
 
   if(verbose > 1) {
     G4cout << "G4eIonisationSpectrum::AverageEnergy: Z= " << Z
@@ -242,12 +242,12 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 					     G4double tMax, 
 				             G4double e,
 				             G4int shell,
-				       const G4ParticleDefinition* part) const
+					     const G4ParticleDefinition* ) const
 {
   // Please comment what SampleEnergy does
   G4double tDelta = 0.0;
-  G4double t0 = G4std::max(tMin, lowestE);
-  G4double tm = G4std::min(tMax, MaxEnergyOfSecondaries(e));
+  G4double t0 = std::max(tMin, lowestE);
+  G4double tm = std::min(tMax, MaxEnergyOfSecondaries(e));
   if(t0 > tm) return tDelta;
 
   G4double bindingEnergy = (G4AtomicTransitionManager::Instance())->
@@ -257,8 +257,8 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
   G4double energy = e + bindingEnergy;
 
-  G4double x1 = G4std::min(0.5,(t0 + bindingEnergy)/energy);
-  G4double x2 = G4std::min(0.5,(tm + bindingEnergy)/energy);
+  G4double x1 = std::min(0.5,(t0 + bindingEnergy)/energy);
+  G4double x2 = std::min(0.5,(tm + bindingEnergy)/energy);
   if(x1 >= x2) return tDelta;
 
   if(verbose > 1) {
@@ -287,11 +287,11 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   p[iMax-1] = Function(p[3], p);
 
   G4double aria1 = 0.0;
-  G4double a1 = G4std::max(x1,p[1]);
-  G4double a2 = G4std::min(x2,p[3]);
+  G4double a1 = std::max(x1,p[1]);
+  G4double a2 = std::min(x2,p[3]);
   if(a1 < a2) aria1 = IntSpectrum(a1, a2, p);
   G4double aria2 = 0.0;
-  G4double a3 = G4std::max(x1,p[3]);
+  G4double a3 = std::max(x1,p[3]);
   G4double a4 = x2;
   if(a3 < a4) aria2 = IntSpectrum(a3, a4, p);
 
@@ -349,7 +349,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
   } else {
 
-    amaj = G4std::max(p[iMax-1], Function(0.5, p)) * factor;
+    amaj = std::max(p[iMax-1], Function(0.5, p)) * factor;
     a1 = 1./a3;
     a2 = 1./a4;
 
@@ -460,7 +460,7 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
 
   // Integral over aria with parametrised formula 
 
-  x1 = G4std::max(xMin, p[3]);
+  x1 = std::max(xMin, p[3]);
   if(x1 >= xMax) return sum;
   x2 = xMax;
 
@@ -541,7 +541,7 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
 
   // Integral over aria with parametrised formula 
 
-  x1 = G4std::max(xMin, p[3]);
+  x1 = std::max(xMin, p[3]);
   if(x1 >= xMax) return sum;
   x2 = xMax;
 
@@ -563,6 +563,10 @@ void G4eIonisationSpectrum::PrintData() const
   theParam->PrintData();
 }
 
+G4double G4eIonisationSpectrum::MaxEnergyOfSecondaries(G4double kineticEnergy,
+						       G4int, // Z = 0,
+						       const G4ParticleDefinition* ) const
+  { return 0.5 * kineticEnergy; };
 
 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScoreComposer.cc,v 1.3 2003/04/23 08:01:57 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4CellScoreComposer.cc,v 1.4 2003/06/16 16:50:15 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -97,7 +97,7 @@ void G4CellScoreComposer::SetImportnace(G4double importance){
   fSCScoreValues.fImportance = importance;
 };
 
-G4std::ostream& operator<<(G4std::ostream &out, 
+std::ostream& operator<<(std::ostream &out, 
                            const G4CellScoreComposer &ps) {
   G4CellScoreValues scores =  ps.GetStandardCellScoreValues();
   out << "Tracks entering: " << scores.fSumTracksEntering << G4endl;

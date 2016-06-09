@@ -89,7 +89,7 @@ G4PersistencyCenter* G4PersistencyCenter::GetPersistencyCenter()
 
 
 // Implementation of SelectSystem
-void G4PersistencyCenter::SelectSystem(G4std::string systemName)
+void G4PersistencyCenter::SelectSystem(std::string systemName)
 {
   int st = 0;
 
@@ -107,7 +107,7 @@ void G4PersistencyCenter::SelectSystem(G4std::string systemName)
     G4cout<<" G4PersistencyCenter: \"ROOT\" Persistency Package is selected."
           <<G4endl;
     // G4UImanager *man=G4UImanager::GetUIpointer();
-    // G4std::string libs="Cint:Core:Tree:Rint:Matrix:Physics:fadsROOT";
+    // std::string libs="Cint:Core:Tree:Rint:Matrix:Physics:fadsROOT";
     // st = man->ApplyCommand("/load "+libs);
     if ( st == 0 ) {
       pm = GetPersistencyManager("ROOT");
@@ -117,7 +117,7 @@ void G4PersistencyCenter::SelectSystem(G4std::string systemName)
   {
     G4cout<<" G4PersistencyCenter: \"ODBMS\" package is selected."<<G4endl;
     // G4UImanager *man=G4UImanager::GetUIpointer();
-    // G4std::string libs="fadsODBMS";
+    // std::string libs="fadsODBMS";
     // st = man->ApplyCommand("/load "+libs);
     if ( st == 0 ) {
       pm = GetPersistencyManager("ODBMS");
@@ -131,7 +131,7 @@ void G4PersistencyCenter::SelectSystem(G4std::string systemName)
 }
 
 // Implementation of SetHepMCObjyReaderFile
-void G4PersistencyCenter::SetHepMCObjyReaderFile(G4std::string file)
+void G4PersistencyCenter::SetHepMCObjyReaderFile(std::string file)
 {
   if ( SetReadFile("HepMC", file) ) {
     SetRetrieveMode("HepMC", true);
@@ -139,7 +139,7 @@ void G4PersistencyCenter::SetHepMCObjyReaderFile(G4std::string file)
 }
 
 // Implementation of CurrentHepMCObjyReaderFile
-G4std::string G4PersistencyCenter::CurrentHepMCObjyReaderFile()
+std::string G4PersistencyCenter::CurrentHepMCObjyReaderFile()
 {
   if ( CurrentRetrieveMode("HepMC") ) {
     return CurrentReadFile("HepMC");
@@ -149,7 +149,7 @@ G4std::string G4PersistencyCenter::CurrentHepMCObjyReaderFile()
 }
 
 // Implementation of SetStoreMode
-void G4PersistencyCenter::SetStoreMode(G4std::string objName, StoreMode mode)
+void G4PersistencyCenter::SetStoreMode(std::string objName, StoreMode mode)
 {
   if ( (*(f_writeFileName.find(objName))).second != "" ) {
     f_writeFileMode[objName] = mode;
@@ -160,7 +160,7 @@ void G4PersistencyCenter::SetStoreMode(G4std::string objName, StoreMode mode)
 }
 
 // Implementation of SetRetrieveMode
-void G4PersistencyCenter::SetRetrieveMode(G4std::string objName, G4bool mode)
+void G4PersistencyCenter::SetRetrieveMode(std::string objName, G4bool mode)
 {
   if ( (*(f_readFileName.find(objName))).second != "" ) {
     f_readFileMode[objName] = mode;
@@ -171,7 +171,7 @@ void G4PersistencyCenter::SetRetrieveMode(G4std::string objName, G4bool mode)
 }
 
 // Implementation of CurrentStoreMode
-StoreMode G4PersistencyCenter::CurrentStoreMode(G4std::string objName)
+StoreMode G4PersistencyCenter::CurrentStoreMode(std::string objName)
 {
 
 
@@ -183,7 +183,7 @@ StoreMode G4PersistencyCenter::CurrentStoreMode(G4std::string objName)
 }
 
 // Implementation of CurrentRetrieveMode
-G4bool G4PersistencyCenter::CurrentRetrieveMode(G4std::string objName)
+G4bool G4PersistencyCenter::CurrentRetrieveMode(std::string objName)
 {
   if ( (*(f_readFileName.find(objName))).second != "" ) {
     return f_readFileMode[objName];
@@ -193,7 +193,7 @@ G4bool G4PersistencyCenter::CurrentRetrieveMode(G4std::string objName)
 }
 
 // Implementation of SetWriteFile
-G4bool G4PersistencyCenter::SetWriteFile(G4std::string objName, G4std::string writeFileName)
+G4bool G4PersistencyCenter::SetWriteFile(std::string objName, std::string writeFileName)
 {
   if ( (*(f_writeFileName.find(objName))).second != "" ) {
     f_writeFileName[objName] = writeFileName;
@@ -206,7 +206,7 @@ G4bool G4PersistencyCenter::SetWriteFile(G4std::string objName, G4std::string wr
 }
 
 // Implementation of SetReadFile
-G4bool G4PersistencyCenter::SetReadFile(G4std::string objName, G4std::string readFileName)
+G4bool G4PersistencyCenter::SetReadFile(std::string objName, std::string readFileName)
 {
 #ifndef WIN32
   if ( f_ut.FileExists(readFileName) )
@@ -224,7 +224,7 @@ G4bool G4PersistencyCenter::SetReadFile(G4std::string objName, G4std::string rea
 }
 
 // Implementation of CurrentWriteFile
-G4std::string G4PersistencyCenter::CurrentWriteFile(G4std::string objName)
+std::string G4PersistencyCenter::CurrentWriteFile(std::string objName)
 {
   if ( (*(f_writeFileName.find(objName))).second != "" ) {
     return f_writeFileName[objName];
@@ -234,7 +234,7 @@ G4std::string G4PersistencyCenter::CurrentWriteFile(G4std::string objName)
 }
 
 // Implementation of CurrentReadFile
-G4std::string G4PersistencyCenter::CurrentReadFile(G4std::string objName)
+std::string G4PersistencyCenter::CurrentReadFile(std::string objName)
 {
   if ( (*(f_readFileName.find(objName))).second != "" ) {
     return f_readFileName[objName];
@@ -244,7 +244,7 @@ G4std::string G4PersistencyCenter::CurrentReadFile(G4std::string objName)
 }
 
 // Implementation of CurrentObject
-G4std::string G4PersistencyCenter::CurrentObject(G4std::string file)
+std::string G4PersistencyCenter::CurrentObject(std::string file)
 {
   FileMap::iterator itr;
   for ( itr = f_readFileName.begin(); itr != f_readFileName.end(); itr++ ) {
@@ -257,7 +257,7 @@ G4std::string G4PersistencyCenter::CurrentObject(G4std::string file)
 }
 
 // Implementation of AddHCIOmanager
-void G4PersistencyCenter::AddHCIOmanager(G4std::string detName, G4std::string colName)
+void G4PersistencyCenter::AddHCIOmanager(std::string detName, std::string colName)
 {
   G4HCIOcatalog* ioc = G4HCIOcatalog::GetHCIOcatalog();
 
@@ -271,18 +271,18 @@ void G4PersistencyCenter::AddHCIOmanager(G4std::string detName, G4std::string co
 }
 
 // Implementation of CurrentHCIOmanager
-G4std::string G4PersistencyCenter::CurrentHCIOmanager()
+std::string G4PersistencyCenter::CurrentHCIOmanager()
 {
   G4HCIOcatalog* ioc = G4HCIOcatalog::GetHCIOcatalog();
   return ioc->CurrentHCIOmanager();
 }
 
 // Implementation of AddDCIOmanager
-void G4PersistencyCenter::AddDCIOmanager(G4std::string detName)
+void G4PersistencyCenter::AddDCIOmanager(std::string detName)
 {
   G4DCIOcatalog* ioc = G4DCIOcatalog::GetDCIOcatalog();
 
-  G4std::string colName = "";
+  std::string colName = "";
   G4VDCIOentry* ioe = ioc->GetEntry(detName);
   if ( ioe != 0 ) {
     ioe->CreateDCIOmanager(detName, colName);
@@ -293,7 +293,7 @@ void G4PersistencyCenter::AddDCIOmanager(G4std::string detName)
 }
 
 // Implementation of CurrentDCIOmanager
-G4std::string G4PersistencyCenter::CurrentDCIOmanager()
+std::string G4PersistencyCenter::CurrentDCIOmanager()
 {
   G4DCIOcatalog* ioc = G4DCIOcatalog::GetDCIOcatalog();
   return ioc->CurrentDCIOmanager();
@@ -306,8 +306,8 @@ void G4PersistencyCenter::PrintAll()
   G4cout << G4endl;
 
   ObjMap::iterator itr;
-  G4std::string name;
-  G4std::string file;
+  std::string name;
+  std::string file;
   StoreMode   mode;
 
   G4cout << "Output object types and file names:" << G4endl;
@@ -372,14 +372,14 @@ void G4PersistencyCenter::PrintAll()
 
 // Implementation of SetPersistencyManager
 void G4PersistencyCenter::SetPersistencyManager(G4PersistencyManager* pm,
-                                                  G4std::string name)
+                                                  std::string name)
 {
   f_currentManager=pm;
   f_currentSystemName=name;
 }
 
 // Implementation of GetPersistencyManager
-G4PersistencyManager* G4PersistencyCenter::GetPersistencyManager(G4std::string nam)
+G4PersistencyManager* G4PersistencyCenter::GetPersistencyManager(std::string nam)
 {
   if (f_theCatalog.find(nam)!=f_theCatalog.end())
     return f_theCatalog[nam];
@@ -407,12 +407,12 @@ void G4PersistencyCenter::SetVerboseLevel(int v)
 }
 
 // Implementation of PadString
-G4std::string G4PersistencyCenter::PadString(G4std::string name, unsigned int width)
+std::string G4PersistencyCenter::PadString(std::string name, unsigned int width)
 {
   if ( name.length() > width ) {
     return name.substr(0,width-1) + "#";
   } else {
-    G4std::string wname = name;
+    std::string wname = name;
     for ( unsigned int i=0; i < width-name.length(); i++) wname = wname + " ";
     return wname;
   }

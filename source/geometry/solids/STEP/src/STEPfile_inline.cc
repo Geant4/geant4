@@ -11,7 +11,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPfile_inline.cc,v 1.7 2000/11/20 18:14:58 gcosmo Exp $ */ 
+/* $Id: STEPfile_inline.cc,v 1.8 2003/06/06 17:07:33 gcosmo Exp $ */ 
 
 #include <STEPfile.h>
 #include <s_HEADER_SCHEMA.h>
@@ -129,7 +129,7 @@ STEPfile::ReadExchangeFile(const char* filename, int useTechCor)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
-    G4std::istream* in = OpenInputFile(filename);
+    std::istream* in = OpenInputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) 
       {	  
 	CloseInputFile(in);
@@ -150,7 +150,7 @@ STEPfile::AppendExchangeFile (const char* filename, int useTechCor)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
-    G4std::istream* in = OpenInputFile(filename);
+    std::istream* in = OpenInputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) 
       {	      
 	CloseInputFile(in);
@@ -167,7 +167,7 @@ STEPfile::ReadWorkingFile(const char* filename, int useTechCor)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
-    G4std::istream* in = OpenInputFile(filename);
+    std::istream* in = OpenInputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) 
       {	  
 	CloseInputFile(in);
@@ -190,7 +190,7 @@ STEPfile::AppendWorkingFile(const char* filename, int useTechCor)
 {
     _error.ClearErrorMsg();
     _errorCount = 0;
-    G4std::istream* in = OpenInputFile(filename);
+    std::istream* in = OpenInputFile(filename);
     if (_error.severity() < SEVERITY_WARNING) 
       {	      
 	CloseInputFile(in);
@@ -206,7 +206,7 @@ STEPfile::AppendWorkingFile(const char* filename, int useTechCor)
 
 
 /******************************************************/
-G4std::istream*
+std::istream*
 STEPfile::OpenInputFile (const char* filename)
 {
     //  if there's no filename to use, fail
@@ -226,10 +226,10 @@ STEPfile::OpenInputFile (const char* filename)
 	      return (0);
 	  }
     }
-    //  G4std::istream* in = new G4std::istream(FileName(), io_readonly, a_useonly);
+    //  std::istream* in = new std::istream(FileName(), io_readonly, a_useonly);
     // port 29-Mar-1994 kcm
-    G4std::istream* in = new G4std::ifstream(FileName());
-    // default for G4std::ostream is readonly and protections are set to 644 
+    std::istream* in = new std::ifstream(FileName());
+    // default for std::ostream is readonly and protections are set to 644 
 //    if ( !in || !(in -> readable ()) )
     if ( !in || !(in -> good ()) )
       {
@@ -244,7 +244,7 @@ STEPfile::OpenInputFile (const char* filename)
 
 /******************************************************/
 void
-STEPfile::CloseInputFile(G4std::istream* in)
+STEPfile::CloseInputFile(std::istream* in)
 {
     delete in;
 }
@@ -254,7 +254,7 @@ STEPfile::CloseInputFile(G4std::istream* in)
 
 /*
 void
-STEPfile::ReadWhiteSpace (G4std::istream& in)
+STEPfile::ReadWhiteSpace (std::istream& in)
 {
 
   char c = ' ';
@@ -267,7 +267,7 @@ STEPfile::ReadWhiteSpace (G4std::istream& in)
 
 /***************************
 ***************************/
-G4std::ofstream*
+std::ofstream*
 STEPfile::OpenOutputFile(const char* filename)
 {
     if (!filename) 
@@ -291,10 +291,10 @@ STEPfile::OpenOutputFile(const char* filename)
 
     if (_currentDir->FileExists(TruncFileName(FileName())))
 	MakeBackupFile();
-//    G4std::ostream* out  = new G4std::ostream(FileName(), io_writeonly, a_create);  
+//    std::ostream* out  = new std::ostream(FileName(), io_writeonly, a_create);  
     // - port 29-Mar-1994 kcm
-    G4std::ofstream* out  = new G4std::ofstream(FileName());  
-    // default for G4std::ostream is writeonly and protections are set to 644 
+    std::ofstream* out  = new std::ofstream(FileName());  
+    // default for std::ostream is writeonly and protections are set to 644 
     if (!out) 
       {
 	  _error.AppendToUserMsg("unable to open file for output\n");
@@ -304,7 +304,7 @@ STEPfile::OpenOutputFile(const char* filename)
 }
 
 void
-STEPfile::CloseOutputFile(G4std::ostream* out) 
+STEPfile::CloseOutputFile(std::ostream* out) 
 {
     delete out;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGAG.hh,v 1.5 2001/07/11 10:01:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIGAG.hh,v 1.6 2003/06/16 16:55:49 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4UIGAG.hh
 // GAG(Geant4 adaptive GUI) interface class
@@ -36,8 +36,8 @@
 
 #include "G4UIsession.hh"
 #include "G4UImanager.hh"
-#include "g4std/fstream"
-#include "g4std/vector"
+#include <fstream>
+#include <vector>
 
 enum UImode { terminal_mode , java_mode, tcl_mode };
 enum ChangeOfTree  { notChanged=0, added, deleted, addedAndDeleted };
@@ -117,12 +117,12 @@ class G4UIGAG : public G4UIsession
     void GetNewTreeStructure( G4UIcommandTree*,int recursiveLevel);
     void GetNewTreeValues( G4UIcommandTree*,int recursiveLevel);
     
-    G4std::vector<G4String> previousTreeCommands;
-    G4std::vector<G4String> newTreeCommands;
-    G4std::vector<G4String> previousTreeParams;
-    G4std::vector<G4String> newTreeParams;
-    G4std::vector<G4UIcommand*> previousTreePCP;
-    G4std::vector<G4UIcommand*> newTreePCP;
+    std::vector<G4String> previousTreeCommands;
+    std::vector<G4String> newTreeCommands;
+    std::vector<G4String> previousTreeParams;
+    std::vector<G4String> newTreeParams;
+    std::vector<G4UIcommand*> previousTreePCP;
+    std::vector<G4UIcommand*> newTreePCP;
 
 };
 

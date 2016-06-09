@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.36 2003/04/24 14:19:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LowEnergyCompton.cc,v 1.37 2003/05/20 20:16:13 pia Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -105,7 +105,7 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
   delete rangeTest;
 }
 
-void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   crossSectionHandler->Clear();
@@ -117,7 +117,7 @@ void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 }
 
 G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
-						    const G4Step&  aStep)
+						    const G4Step& aStep)
 {
   // The scattered gamma energy is sampled according to Klein - Nishina formula.
   // then accepted or rejected depending on the Scattering Function multiplied
@@ -245,7 +245,7 @@ G4bool G4LowEnergyCompton::IsApplicable(const G4ParticleDefinition& particle)
 }
 
 G4double G4LowEnergyCompton::GetMeanFreePath(const G4Track& track,
-					     G4double previousStepSize,
+					     G4double, // previousStepSize
 					     G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();

@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuBremsstrahlungModel.cc,v 1.10 2003/06/16 17:01:47 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -70,7 +72,7 @@ G4double G4MuBremsstrahlungModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
+G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition*,
                                                  const G4String& nam)
   : G4VEmModel(nam),
   highKinEnergy(100.*TeV),
@@ -159,7 +161,7 @@ G4double G4MuBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 {
   if(kineticEnergy < lowKinEnergy) return 0.0;
 
-  G4double cut = G4std::min(cutEnergy, kineticEnergy);
+  G4double cut = std::min(cutEnergy, kineticEnergy);
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
@@ -333,7 +335,7 @@ G4double G4MuBremsstrahlungModel::CrossSection(const G4Material* material,
                                                      G4double maxEnergy)
 {
   G4double cross = 0.0;
-  G4double tmax = G4std::min(maxEnergy, kineticEnergy);
+  G4double tmax = std::min(maxEnergy, kineticEnergy);
   G4double cut  = cutEnergy;
   if(cut >= tmax) return cross;
 
@@ -461,7 +463,7 @@ G4DynamicParticle* G4MuBremsstrahlungModel::SampleSecondary(
 {
   G4double kineticEnergy     = dp->GetKineticEnergy();
   // check against insufficient energy
-  G4double tmax = G4std::min(kineticEnergy, maxEnergy);
+  G4double tmax = std::min(kineticEnergy, maxEnergy);
   if(tmin >= tmax) return 0;
 
   static G4double ysmall = -100. ;
@@ -565,13 +567,13 @@ G4DynamicParticle* G4MuBremsstrahlungModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
+std::vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* aGamma = SampleSecondary(couple,dp,tmin,maxEnergy);
   vdp->push_back(aGamma);
 

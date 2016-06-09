@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.11 2003/04/02 16:59:15 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MassImportanceProcess.cc,v 1.14 2003/06/13 09:35:09 dressel Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -34,6 +34,8 @@
 #include "G4MassImportanceProcess.hh"
 #include "G4VImportanceAlgorithm.hh"
 #include "G4GeometryCell.hh"
+#include "G4ImportancePostStepDoIt.hh"
+#include "G4VTrackTerminator.hh"
 
 G4MassImportanceProcess::
 G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
@@ -42,11 +44,16 @@ G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 			const G4String &aName)
  : G4VProcess(aName),
    fParticleChange(new G4ParticleChange),
-   fTrackTerminator(TrackTerminator ? TrackTerminator : this),
    fImportanceAlgorithm(aImportanceAlgorithm),
    fImportanceFinder(aIstore),
-   fImportancePostStepDoIt(*fTrackTerminator)
+   fImportancePostStepDoIt(0)
 {
+  if (TrackTerminator) {
+    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
+  }
+  else {
+    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
+  }
   if (!fParticleChange) {
     G4Exception("ERROR:G4MassImportanceProcess::G4MassImportanceProcess: new failed to create G4ParticleChange!");
   }
@@ -55,6 +62,7 @@ G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 
 G4MassImportanceProcess::~G4MassImportanceProcess()
 {
+  delete fImportancePostStepDoIt;
   delete fParticleChange;
 }
 
@@ -91,7 +99,7 @@ G4MassImportanceProcess::PostStepDoIt(const G4Track &aTrack,
       Calculate(fImportanceFinder.GetImportance(prekey),
 		fImportanceFinder.GetImportance(postkey), 
 		aTrack.GetWeight());
-    fImportancePostStepDoIt.DoIt(aTrack, fParticleChange, nw);
+    fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
   }
   return fParticleChange;
 }

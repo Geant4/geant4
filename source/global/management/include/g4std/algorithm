@@ -5,19 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: algorithm,v 1.3 1999/11/16 17:42:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: algorithm,v 1.4 2003/06/06 16:17:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- algorithm ----------------
 //
 #ifndef G4_ALGORITHM_H
 #define G4_ALGORITHM_H
 
-#ifdef G4USE_OLDSTL
-  #include <algo.h>
-#else
-  #include <algorithm>
-#endif /* G4USE_OLDSTL */
+#include <algorithm>
 
 #endif /* G4_ALGORITHM_H */
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialCutsCouple.cc,v 1.4 2003/04/10 02:51:19 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MaterialCutsCouple.cc,v 1.5 2003/06/16 16:58:29 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // --------------------------------------------------------------
@@ -31,7 +31,7 @@
 // --------------------------------------------------------------
 
 #include "G4MaterialCutsCouple.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include "G4Material.hh"
 #include "G4ProductionCuts.hh"

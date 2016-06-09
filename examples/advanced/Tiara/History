@@ -1,0 +1,36 @@
+# $Id: History,v 1.8 2003/06/20 15:34:37 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: geant4-05-02 $
+# -------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+Jun  20th, 2003 M.Dressel - Tiara-V05-01-04
+- using CLHEP units replacing G4Dimensions.hh
+
+Jun  18th, 2003 M.Dressel - Tiara-V05-01-03
+- change environment configuration for swig
+
+Jun  17th, 2003 M.Dressel - Tiara-V05-01-02
+- changes for rh73 with gcc-2.95.2 and rh73 with gcc-3.2
+
+June 16th, 2003 M.Dressel - Tiara-V05-01-01
+- building with gmake supported, cvs meta info  added
+
+
+June 12th, 2003 M.Dressel - Tiara-V05-01-00
+- Created
+

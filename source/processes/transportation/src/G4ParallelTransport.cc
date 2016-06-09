@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.9 2003/04/02 16:59:18 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParallelTransport.cc,v 1.11 2003/06/16 17:12:44 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -31,10 +31,11 @@
 //
 // ----------------------------------------------------------------------
 
+#include "G4Types.hh"
+#include <strstream>
 #include "G4ParallelTransport.hh"
 #include "G4VPGeoDriver.hh"
 #include "G4VParallelStepper.hh"
-#include "g4std/strstream"
 
 
 G4ParallelTransport::G4ParallelTransport(G4VPGeoDriver &pgeodriver,
@@ -109,7 +110,7 @@ G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
 {
   if (!(aStep.GetStepLength() > 0.)) {
     char st[1000];
-    G4std::ostrstream os(st,1000);
+    std::ostrstream os(st,1000);
     os << "G4PArallelTransport::InitPostDoIt: StepLength() == 0.\n"
        << "pos: " << aTrack.GetPosition() << ", " 
        << "dir: " << aTrack.GetMomentumDirection() << "\n"

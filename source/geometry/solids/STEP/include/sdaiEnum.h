@@ -12,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiEnum.h,v 1.1 2000/01/21 13:42:44 gcosmo Exp $ */
+/* $Id: sdaiEnum.h,v 1.2 2003/06/06 17:07:32 gcosmo Exp $ */
 #if 0
 
 #ifdef PART26
@@ -41,7 +41,7 @@
 
 //class STEPenumeration  {
 class SCLP23_NAME(Enum)  {
-    friend     G4std::ostream &operator<< ( G4std::ostream&, const SCLP23_NAME(Enum)& );
+    friend     std::ostream &operator<< ( std::ostream&, const SCLP23_NAME(Enum)& );
   protected:
     int v;	//  integer value of enumeration instance 
 	//  mapped to a symbolic value in the elements
@@ -53,7 +53,7 @@ class SCLP23_NAME(Enum)  {
 
   public:
 
-    void PrintContents(G4std::ostream &out = G4cout) const 
+    void PrintContents(std::ostream &out = G4cout) const 
 	    { DebugDisplay(out); }
     
     virtual int no_elements () const =0;
@@ -65,18 +65,18 @@ class SCLP23_NAME(Enum)  {
 			    int optional, char *tokenList,
 			    int needDelims = 0, int clearError = 1);
 
-    Severity EnumValidLevel(G4std::istream &in, ErrorDescriptor *err, 
+    Severity EnumValidLevel(std::istream &in, ErrorDescriptor *err, 
 			    int optional, char *tokenList,
 			    int needDelims = 0, int clearError = 1);
 
     const int asInt () const {	return v;    }
     
     const char * asStr (SCLstring &s) const;
-    void STEPwrite (G4std::ostream& out = G4cout)  const;
+    void STEPwrite (std::ostream& out = G4cout)  const;
     const char * STEPwrite (SCLstring &s) const;
 
     Severity StrToVal (const char * s, ErrorDescriptor *err, int optional = 1);
-    Severity STEPread(G4std::istream& in, ErrorDescriptor *err, int optional = 1);
+    Severity STEPread(std::istream& in, ErrorDescriptor *err, int optional = 1);
     Severity STEPread(const char *s, ErrorDescriptor *err, int optional = 1);
 
     virtual int put (int val);
@@ -92,7 +92,7 @@ class SCLP23_NAME(Enum)  {
     virtual int exists() const; // return 0 if unset otherwise return 1
     virtual void nullify(); // change the receiver to an unset status
 			// unset is generated to be 1 greater than last element
-    void DebugDisplay (G4std::ostream& out =G4cout) const;
+    void DebugDisplay (std::ostream& out =G4cout) const;
 
 #ifdef __OSTORE__
     static os_typespec* get_os_typespec();
@@ -102,7 +102,7 @@ class SCLP23_NAME(Enum)  {
 #endif
 
   protected:
-    virtual Severity ReadEnum(G4std::istream& in, ErrorDescriptor *err, 
+    virtual Severity ReadEnum(std::istream& in, ErrorDescriptor *err, 
 			      int AssignVal = 1, int needDelims = 1);
 };
 
@@ -183,7 +183,7 @@ public SCLP23_NAME(Enum)  {
   protected:
     virtual int set_value (const int n);
     virtual int set_value (const char * n);
-    virtual Severity ReadEnum(G4std::istream& in, ErrorDescriptor *err, 
+    virtual Severity ReadEnum(std::istream& in, ErrorDescriptor *err, 
 			      int AssignVal = 1, int needDelims = 1);
 
 }

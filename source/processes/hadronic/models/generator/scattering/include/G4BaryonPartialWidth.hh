@@ -41,7 +41,7 @@
 
 #include "globals.hh"
 #include "G4ResonancePartialWidth.hh"
-#include "g4std/map"
+#include <map>
 
 class G4PhysicsVector;
 
@@ -63,7 +63,7 @@ private:
   G4BaryonPartialWidth(const G4BaryonPartialWidth& right);
   G4BaryonPartialWidth& operator=(const G4BaryonPartialWidth& right);
 
-  G4std::map<G4String, G4double*, G4std::less<G4String> > wMap;
+  std::map<G4String, G4double*, std::less<G4String> > wMap;
 
   static const G4double energies[120];
 

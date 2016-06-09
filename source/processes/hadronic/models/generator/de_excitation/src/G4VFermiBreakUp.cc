@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFermiBreakUp.cc,v 1.6 2002/12/12 19:17:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VFermiBreakUp.cc,v 1.7 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -34,7 +34,7 @@ G4VFermiBreakUp::G4VFermiBreakUp()
 {
 }
 
-G4VFermiBreakUp::G4VFermiBreakUp(const G4VFermiBreakUp &right)
+G4VFermiBreakUp::G4VFermiBreakUp(const G4VFermiBreakUp &)
 {
     G4Exception("G4VFermiBreakUp::copy_constructor meant to not be accessable");
 }
@@ -45,19 +45,19 @@ G4VFermiBreakUp::~G4VFermiBreakUp()
 }
 
 
-const G4VFermiBreakUp & G4VFermiBreakUp::operator=(const G4VFermiBreakUp &right)
+const G4VFermiBreakUp & G4VFermiBreakUp::operator=(const G4VFermiBreakUp &)
 {
     G4Exception("G4VFermiBreakUp::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4VFermiBreakUp::operator==(const G4VFermiBreakUp &right) const
+G4bool G4VFermiBreakUp::operator==(const G4VFermiBreakUp &) const
 {
     return false;
 }
 
-G4bool G4VFermiBreakUp::operator!=(const G4VFermiBreakUp &right) const
+G4bool G4VFermiBreakUp::operator!=(const G4VFermiBreakUp &) const
 {
     return true;
 }

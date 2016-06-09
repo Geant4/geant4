@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01SteppingAction.cc,v 1.5 2001/11/16 14:31:13 barrand Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: AnaEx01SteppingAction.cc,v 1.6 2003/06/20 14:55:45 gbarrand Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

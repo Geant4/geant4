@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElastic.cc,v 1.7 2002/12/12 19:18:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
 //
 // Physics model class G4LElastic
 //
@@ -39,15 +37,20 @@
 #include "globals.hh"
 #include "G4LElastic.hh"
 #include "Randomize.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 
 G4VParticleChange*
 G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 {
+   // G4cout << "entering elastic scattering"<<G4endl; 
+   if(getenv("debug_LElastic")) verboseLevel = 5;
    theParticleChange.Initialize(aTrack);
 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
    G4double atno2 = targetNucleus.GetN();
+   G4double zTarget = targetNucleus.GetZ();
 
 // Elastic scattering off Hydrogen
 
@@ -171,14 +174,47 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    if (verboseLevel > 1)
       G4cout << "rr=" << rr << G4endl;
    G4double cost = 1. - rr;
-   G4double sint = sqrt(G4std::max(rr*(2. - rr), 0.));
+   G4double sint = sqrt(std::max(rr*(2. - rr), 0.));
    if (sint == 0.) return &theParticleChange;
-   if (verboseLevel > 1)
+    if (verboseLevel > 1)
       G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << G4endl;
 // Scattered particle referred to axis of incident particle
-   G4double px = p*sint*sin(phi);
-   G4double py = p*sint*cos(phi);
-   G4double pz = p*cost;
+   G4double m1=aParticle->GetDefinition()->GetPDGMass();
+   G4int Z=static_cast<G4int>(zTarget+.5);
+   G4int A=static_cast<G4int>(atno2);
+   if(G4UniformRand()<atno2-A) A++;
+   //G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
+   G4double m2=G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
+// non relativistic approximation
+   G4double a=1+m2/m1;
+   G4double b=-2.*p*cost;
+   G4double c=p*p*(1-m2/m1);
+   G4double p1 = (-b+sqrt(b*b-4.*a*c))/(2.*a);
+   G4double px = p1*sint*sin(phi);
+   G4double py = p1*sint*cos(phi);
+   G4double pz = p1*cost;
+
+// relativistic calculation
+   G4double etot = sqrt(m1*m1+p*p)+m2;
+   a = etot*etot-p*p*cost*cost;
+   b = 2*p*p*(m1*cost*cost-etot);
+   c = p*p*p*p*sint*sint;
+   
+   G4double de = (-b-sqrt(std::max(0.0,b*b-4.*a*c)))/(2.*a);
+   G4double e1 = sqrt(p*p+m1*m1)-de;
+   G4double p12=e1*e1-m1*m1;
+   p1 = sqrt(std::max(0.0,p12));
+   px = p1*sint*sin(phi);
+   py = p1*sint*cos(phi);
+   pz = p1*cost;
+
+   if (verboseLevel > 1) 
+   {
+     G4cout << "Relevant test "<<p<<" "<<p1<<" "<<cost<<" "<<de<<G4endl;
+     G4cout << "p1/p = "<<p1/p<<" "<<m1<<" "<<m2<<" "<<a<<" "<<b<<" "<<c<<G4endl;
+     G4cout << "rest = "<< b*b<<" "<<4.*a*c<<" "<<G4endl;
+     G4cout << "make p1 = "<< p12<<" "<<e1*e1<<" "<<m1*m1<<" "<<G4endl;
+   }
 // Incident particle
    G4double pxinc = p*(aParticle->GetMomentumDirection().x());
    G4double pyinc = p*(aParticle->GetMomentumDirection().y());
@@ -187,23 +223,50 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       G4cout << "NOM SCAT " << px << " " << py << " " << pz << G4endl;
       G4cout << "INCIDENT " << pxinc << " " << pyinc << " " << pzinc << G4endl;
    }
-
+  
 // Transform scattered particle to reflect direction of incident particle
    G4double pxnew, pynew, pznew;
    Defs1(p, px, py, pz, pxinc, pyinc, pzinc, &pxnew, &pynew, &pznew);
 // Normalize:
-   pxnew = pxnew/p;
-   pynew = pynew/p;
-   pznew = pznew/p;
+   G4double pxre=pxinc-pxnew;
+   G4double pyre=pyinc-pynew;
+   G4double pzre=pzinc-pznew;
+   G4ThreeVector it0(pxnew*GeV, pynew*GeV, pznew*GeV);
+   if(p1>0)
+   {
+     pxnew = pxnew/p1;
+     pynew = pynew/p1;
+     pznew = pznew/p1;
+   }
+   else
+   {
+     //G4double pphi = 2*pi*G4UniformRand();
+     //G4double ccth = 2*G4UniformRand()-1;
+     pxnew = 0;//sin(acos(ccth))*sin(pphi);
+     pynew = 0;//sin(acos(ccth))*cos(phi);
+     pznew = 1;//ccth;
+   }
    if (verboseLevel > 1) {
       G4cout << "DoIt: returning new momentum vector" << G4endl;
       G4cout << pxnew << " " << pynew << " " << pznew << G4endl;
    }
 
    if (aSecondary)
+   {
       aSecondary->SetMomentumDirection(pxnew, pynew, pznew);
+   }
    else
+   {
+      theParticleChange.SetNumberOfSecondaries(1);
       theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
+      theParticleChange.SetEnergyChange(sqrt(m1*m1+it0.mag2())-m1);
+      G4ParticleDefinition * theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
+      G4ThreeVector it(pxre*GeV, pyre*GeV, pzre*GeV);
+      G4DynamicParticle * aSec = 
+	  new G4DynamicParticle(theDef, it.unit(), it.mag2()/(2.*m2));
+      theParticleChange.AddSecondary(aSec);
+     // G4cout << "Final check ###### "<<p<<" "<<it.mag()<<" "<<p1<<G4endl;
+   }
 
    return &theParticleChange;
 }
@@ -371,8 +434,9 @@ G4LElastic::Defs1(G4double p, G4double px, G4double py, G4double pz,
       *pznew =     -sint*px                 +cost*pz;
    }
    else {
-      *pxnew = px;
-      *pynew = py;
-      *pznew = pz;
+       G4double cost=pzinc/p;
+       *pxnew = cost*px;
+       *pynew = py;
+       *pznew = cost*pz;
    }
 }

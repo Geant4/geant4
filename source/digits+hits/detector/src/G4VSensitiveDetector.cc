@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.cc,v 1.6 2003/03/06 00:35:40 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VSensitiveDetector.cc,v 1.8 2003/06/16 16:50:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
@@ -32,7 +32,7 @@ G4VSensitiveDetector::G4VSensitiveDetector(G4String name)
 :verboseLevel(0),active(true),ROgeometry(0)
 {
   size_t sLast = name.last('/');
-  if(sLast==G4std::string::npos)
+  if(sLast==std::string::npos)
   { // detector name only
     SensitiveDetectorName = name;
     thePathName = "/";
@@ -50,6 +50,12 @@ G4VSensitiveDetector::G4VSensitiveDetector(G4String name)
 
 G4VSensitiveDetector::G4VSensitiveDetector(const G4VSensitiveDetector &right)
 {
+  SensitiveDetectorName = right.SensitiveDetectorName;
+  thePathName = right.thePathName;
+  fullPathName = right.fullPathName;
+  verboseLevel = right.verboseLevel;
+  active = right.active;
+  ROgeometry = right.ROgeometry;
 }
 
 G4VSensitiveDetector::~G4VSensitiveDetector()
@@ -58,17 +64,23 @@ G4VSensitiveDetector::~G4VSensitiveDetector()
 
 const G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetector &right)
 {
-    return *this;
+  SensitiveDetectorName = right.SensitiveDetectorName;
+  thePathName = right.thePathName;
+  fullPathName = right.fullPathName;
+  verboseLevel = right.verboseLevel;
+  active = right.active;
+  ROgeometry = right.ROgeometry;
+  return *this;
 }
 
 G4int G4VSensitiveDetector::operator==(const G4VSensitiveDetector &right) const
 {
-   return false;
+   return (this==&right);
 }
 
 G4int G4VSensitiveDetector::operator!=(const G4VSensitiveDetector &right) const
 {
-   return true;
+   return (this!=&right);
 }
 
 G4int G4VSensitiveDetector::GetCollectionID(G4int i)
@@ -79,11 +91,11 @@ G4int G4VSensitiveDetector::GetCollectionID(G4int i)
 //----- following methoods are abstract methods to be
 //----- implemented in the concrete classes
 
-void G4VSensitiveDetector::Initialize(G4HCofThisEvent*HCE)
+void G4VSensitiveDetector::Initialize(G4HCofThisEvent*)
 {
 }
 
-void G4VSensitiveDetector::EndOfEvent(G4HCofThisEvent*HCE)
+void G4VSensitiveDetector::EndOfEvent(G4HCofThisEvent*)
 {
 }
 

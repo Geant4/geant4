@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02DetectorConstruction.cc,v 1.5 2001/10/26 13:42:45 grichine Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F02DetectorConstruction.cc,v 1.8 2003/06/25 17:33:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -44,6 +44,10 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4ios.hh"
 
@@ -71,6 +75,8 @@ F02DetectorConstruction::F02DetectorConstruction()
 
   detectorMessenger = new F02DetectorMessenger(this);
   
+  DefineMaterials();
+
   //  fEmField = new F02ElectroMagneticField() ;
 }
 
@@ -90,7 +96,6 @@ F02DetectorConstruction::~F02DetectorConstruction()
 
 G4VPhysicalVolume* F02DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructCalorimeter();
 }
 
@@ -115,7 +120,7 @@ void F02DetectorConstruction::DefineMaterials()
   a = 1.01*g/mole;
   G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
 
-  a = 6.01*g/mole;
+  a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
 
   a = 14.01*g/mole;
@@ -224,14 +229,19 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
   ComputeCalorParameters();
   PrintCalorParameters();
       
+  // Cleanup old geometry
+
+  if (physiWorld)
+  {
+    G4PhysicalVolumeStore::GetInstance()->Clean();
+    G4LogicalVolumeStore::GetInstance()->Clean();
+    G4SolidStore::GetInstance()->Clean();
+  }
+
   // World
   
-  if(solidWorld) delete solidWorld ;
-  if(logicWorld) delete logicWorld ;
-  if(physiWorld) delete physiWorld ;
-
   solidWorld = new G4Tubs("World",				//its name
-                   0.,WorldSizeR,WorldSizeZ/2.,0.,twopi)       ;//its size
+                   0.,WorldSizeR,WorldSizeZ/2.,0.,twopi);       //its size
                          
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid
                                    WorldMaterial,	//its material
@@ -248,10 +258,6 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
 
   if (AbsorberThickness > 0.) 
   { 
-      if(solidAbsorber) delete solidAbsorber ;
-      if(logicAbsorber) delete logicAbsorber ;
-      if(physiAbsorber) delete physiAbsorber ;
-
       solidAbsorber = new G4Tubs("Absorber",		
                           0.,AbsorberRadius,AbsorberThickness/2.,0.,twopi); 
                           
@@ -266,7 +272,6 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
                                         physiWorld,       
                                         false,             
                                         0);                
-                                        
   }
                                  
   // Sensitive Detectors: Absorber 

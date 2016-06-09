@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.13 2001/07/27 22:33:01 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DAWNFILEViewer.cc,v 1.14 2003/06/16 17:13:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Satoshi TANAKA
 // DAWNFILE view - opens window, hard copy, etc.
@@ -185,8 +185,8 @@ void G4DAWNFILEViewer::ShowView( void )
 } // G4DAWNFILEViewer::ShowView()
 
 
-	//----- G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( G4std::ostream& out ) 
-void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( G4std::ostream& out ) 
+	//----- G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( std::ostream& out ) 
+void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( std::ostream& out ) 
 {
 ///////////////////////
 //#if defined DEBUG_FR_VIEW
@@ -271,7 +271,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 
 	//########### Generation of the file .DAWN.history for DAWN GUI
 		//-----
-	G4std::ofstream gui_out (".DAWN_1.history") ; 
+	std::ofstream gui_out (".DAWN_1.history") ; 
 
 	// ######### P1 
 

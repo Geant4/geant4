@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4MultipleScattering.hh,v 1.16 2003/04/18 12:44:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //------------- G4MultipleScattering physics process --------------------------
 //               by Laszlo Urban, March 2001

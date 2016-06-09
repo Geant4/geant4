@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2003/04/30 13:57:45 gcosmo Exp $
+$Id: History,v 1.70 2003/06/26 13:47:18 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th June 2003  Gabriele Cosmo (examples-V05-01-01)
+- Updated reference outputs.
+- Included fixes to GNUmakefiles for porting on Darwin in GDML example.
+
+30th May 2003  Gabriele Cosmo (examples-V05-01-00)
+- Updated reference outputs.
 
 30th April 2003  Gabriele Cosmo (examples-V05-00-02)
 - Includes fixes/improvements part of release 5.1.

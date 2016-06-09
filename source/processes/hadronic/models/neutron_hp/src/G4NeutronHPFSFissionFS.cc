@@ -36,7 +36,7 @@
 #include "G4LorentzVector.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-  void G4NeutronHPFSFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
+  void G4NeutronHPFSFissionFS::Init (G4double A, G4double Z, G4String & dirName, G4String & )
   {
     G4String tString = "/FS/";
     G4bool dbool;
@@ -49,11 +49,8 @@
       hasXsec = false;
       return;
     }
-#ifdef G4USE_STD_NAMESPACE
-    G4std::ifstream theData(filename, G4std::ios::in);
-#else
-    ifstream theData(filename, ios::in|ios::nocreate);
-#endif
+    std::ifstream theData(filename, std::ios::in);
+
     // here it comes
     G4int infoType, dataType;
     hasFSData = false; 

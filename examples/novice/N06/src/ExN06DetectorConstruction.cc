@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN06DetectorConstruction.cc,v 1.11 2003/04/17 21:11:13 gum Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -88,13 +88,13 @@ void CCaloOrganization::unpackindex(const unsigned int& idx, int& det,
 }
 
 
-int CCaloOrganization::getUnitWithMaxEnergy(G4std::map<int,float,G4std::less<int> >& themap){
+int CCaloOrganization::getUnitWithMaxEnergy(std::map<int,float,std::less<int> >& themap){
 
   //look for max
   int UnitWithMaxEnergy = 0;
   float maxEnergy = 0.;
 	
-  for(G4std::map<int,float,G4std::less<int> >::iterator iter = themap.begin();
+  for(std::map<int,float,std::less<int> >::iterator iter = themap.begin();
       iter != themap.end(); iter++){
 	    
     if(	maxEnergy < (*iter).second) {
@@ -115,7 +115,7 @@ int CCaloOrganization::getUnitWithMaxEnergy(G4std::map<int,float,G4std::less<int
 
 float CCaloOrganization::energyInMatrix(int nCellInEta, int nCellInPhi,
 					int crystalWithMaxEnergy, 
-					G4std::map<int,float,G4std::less<int> >& themap){
+					std::map<int,float,std::less<int> >& themap){
 
   int det,z,eta,phi;
   this->unpackindex(crystalWithMaxEnergy, det, z, eta, phi);

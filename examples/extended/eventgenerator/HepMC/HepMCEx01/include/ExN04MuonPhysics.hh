@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN04MuonPhysics.hh,v 1.2 2002/11/19 10:15:51 murakami Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------

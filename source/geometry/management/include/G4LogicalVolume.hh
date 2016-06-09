@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.12 2003/04/03 10:26:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LogicalVolume.hh,v 1.14 2003/06/16 16:51:48 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4LogicalVolume
@@ -55,7 +55,7 @@
 //
 // Data members:
 //
-//    G4std::vector<G4VPhysicalVolume*> fDaughters
+//    std::vector<G4VPhysicalVolume*> fDaughters
 //    - Vector of daughters. Given initial size of 0.
 //    G4FieldManager* fFieldManager
 //    - Pointer (possibly 0) to (magnetic or other) field manager object.
@@ -110,7 +110,7 @@
 #include "globals.hh"
 #include "G4Region.hh"
 #include "G4VPhysicalVolume.hh"  // Need operator == for vector fdaughters
-#include "g4std/vector"
+#include <vector>
 #include <assert.h>
 
 // Forward declarations
@@ -127,7 +127,7 @@ class G4MaterialCutsCouple;
 
 class G4LogicalVolume
 {
-  typedef G4std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
+  typedef std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
 
   public:  // with description
   
@@ -170,6 +170,9 @@ class G4LogicalVolume
     inline void RemoveDaughter(const G4VPhysicalVolume* p);
       // Remove the volume p from the List of daughter of the current
       // logical volume.
+    inline void ClearDaughters();
+      // Clear the list of daughters. Used by the phys-volume store when
+      // the geometry tree is cleared, since modified at run-time.
 
     inline G4VSolid* GetSolid() const;
     inline void SetSolid(G4VSolid *pSolid);

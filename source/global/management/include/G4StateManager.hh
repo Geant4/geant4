@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.hh,v 1.7 2002/08/19 18:20:11 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StateManager.hh,v 1.8 2003/06/06 16:17:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -49,7 +49,7 @@
 #ifndef G4StateManager_h
 #define G4StateManager_h 1
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4ApplicationState.hh"
 #include "G4VStateDependent.hh"
@@ -124,7 +124,7 @@ private:
   static G4StateManager* theStateManager;
   G4ApplicationState theCurrentState;
   G4ApplicationState thePreviousState;
-  G4std::vector<G4VStateDependent*> theDependentsList;
+  std::vector<G4VStateDependent*> theDependentsList;
   G4VStateDependent* theBottomDependent;
   G4int suppressAbortion;
   const char* msgptr;

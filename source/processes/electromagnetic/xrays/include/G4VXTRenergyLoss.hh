@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.4 2003/01/23 11:26:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VXTRenergyLoss.hh,v 1.5 2003/06/16 17:02:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@
 #define G4VXTRenergyLoss_h 1
 
 
-#include "g4std/complex"
+#include <complex>
 #include "globals.hh"
 #include "Randomize.hh"
 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.7 2003/04/25 11:43:59 ribon Exp $
+$Id: README,v 1.8 2003/06/12 15:25:20 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,7 +13,7 @@ $Id: README,v 1.7 2003/04/25 11:43:59 ribon Exp $
  by the CMS Collaboration to validate Geant4 against real data taken 
  (in 1996) in a CMS Hadron calorimeter test-beam.
  The name "Composite" for this example emphasizes that, although the 
- test-beam had the goal of study the hadronic calorimeter response, 
+ test-beam had the goal of studying the hadronic calorimeter response, 
  part of the data was taken with the presence of the electromagnetic 
  crystal calorimeter in front of the hadronic calorimeter, to better 
  reproduce the situation as in the real CMS experiment. 
@@ -234,21 +234,21 @@ $Id: README,v 1.7 2003/04/25 11:43:59 ribon Exp $
  By the default, one of the ufficial High Energy Physics List for 
  Calorimetry, QGSC, is used in this example. However, it is 
  very easy to use instead either LHEP or QGSP. To do so, it is
- enough to copy one file (and then, of course, rebuild the executable)
- as follows:
-     >  cp src/CCalPhysicsList.cc-LHEP src/CCalPhysicsList.cc
- if you want to use LHEP, or 
-     >  cp src/CCalPhysicsList.cc-QGSP src/CCalPhysicsList.cc
- if you want to use QGSP.
- (The fact that by default QGSC is used means that the file
-  src/CCalPhysicsList.cc  that you find in the Repository is
-  a copy of src/CCalPhysicsList.cc-QGSC)
+ enough to comment/uncomment a line in the main CompositeCalorimeter.cc :
+ for example, if you want to use LHEP instead of the default QGSC
+ you have to change it as follows:
+
+  //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
+  runManager->SetUserInitialization(new LHEP);     // LHEP     
+  // runManager->SetUserInitialization(new QGSP);     // QGSP   
+  // runManager->SetUserInitialization(new QGSC);     // QGSC
+  //***endLOOKHERE***
 
  Notice that, for most of the cases (and certainly also in this case
  in which we don't even take into account the beam profile, noise
  and digitization!) the faster LHEP Physics List would be good enough
  for calorimetry studies. However, we prefer to use, as default, the
- more sophisticated (but slower) QGSP Physics List for the learning 
+ more sophisticated (but slower) QGSC Physics List for the learning 
  purposes of this example.
 
  Please refer to the Web page:
@@ -258,10 +258,9 @@ $Id: README,v 1.7 2003/04/25 11:43:59 ribon Exp $
  for more information on these (and others) Physics Lists.
  Please notice that, for the time being, some classes, which can be
  downloaded from the above Web page, have to be included in the 
- include/ and src/ subdirectories of this example. However, soon
- (probably with the next December release) these classes will be
- distributed with Geant4 and therefore their explicit inclusion
- in the example will no longer be necessary.
+ include/ and src/ subdirectories of this example. However, hopefully
+ soon, these classes will be distributed with Geant4 and therefore their 
+ explicit inclusion in the example will no longer be necessary.
 
 
 5. Particle Generator
@@ -497,40 +496,47 @@ No Noise and Digitization
   CCalPrimaryGeneratorMessenger
 	User action for primaries generator.	 
 
-  CCalPhysicsList
-  EMPhysics
-  G4EMBuilder
-  G4ElectroNuclearBuilder
-  G4HadronQEDBuilder
-  G4LEPNeutronBuilder
-  G4LEPPiKBuilder
-  G4LEPProtonBuilder
-  G4LHEPNeutronBuilder
-  G4LHEPPiKBuilder
-  G4LHEPProtonBuilder
-  G4MiscLHEPBuilder
-  G4NeutronBuilder
-  G4NeutronHPBuilder
-  G4PiKBuilder
-  G4PrecoNeutronBuilder
-  G4PrecoProtonBuilder
-  G4ProtonBuilder
-  G4QGSCNeutronBuilder
-  G4QGSCPiKBuilder
-  G4QGSCProtonBuilder
-  G4QGSPNeutronBuilder
-  G4QGSPPiKBuilder
-  G4QGSPProtonBuilder
-  G4StoppingHadronBuilder
-  G4VNeutronBuilder
-  G4VPiKBuilder
-  G4VProtonBuilder
-  GeneralPhysics
-  HadronPhysicsLHEP
-  HadronPhysicsQGSC
-  HadronPhysicsQGSP
-  IonPhysics
-  MuonPhysics
+  EMModelPhysics.hh
+  EMPhysics.hh
+  G4DataQuestionaire.hh
+  G4EMBuilder.hh
+  G4EMModelBuilder.hh
+  G4HadronModelQEDBuilder.hh
+  G4HadronQEDBuilder.hh
+  G4LEPNeutronBuilder.hh
+  G4LEPPiKBuilder.hh
+  G4LEPProtonBuilder.hh
+  G4LHEPNeutronBuilder.hh
+  G4LHEPPiKBuilder.hh
+  G4LHEPProtonBuilder.hh
+  G4MiscLHEPBuilder.hh
+  G4NeutronBuilder.hh
+  G4NeutronHPBuilder.hh
+  G4PiKBuilder.hh
+  G4PrecoNeutronBuilder.hh
+  G4PrecoProtonBuilder.hh
+  G4ProtonBuilder.hh
+  G4QGSCNeutronBuilder.hh
+  G4QGSCPiKBuilder.hh
+  G4QGSCProtonBuilder.hh
+  G4QGSPNeutronBuilder.hh
+  G4QGSPPiKBuilder.hh
+  G4QGSPProtonBuilder.hh
+  G4StoppingHadronBuilder.hh
+  G4VNeutronBuilder.hh
+  G4VPiKBuilder.hh
+  G4VProtonBuilder.hh
+  GeneralPhysics.hh
+  HadronPhysicsLHEP.hh
+  HadronPhysicsQGSC.hh
+  HadronPhysicsQGSP.hh
+  IonModelPhysics.hh
+  IonPhysics.hh
+  LHEP.hh
+  MuonModelPhysics.hh
+  MuonPhysics.hh
+  QGSC.hh
+  QGSP.hh
 	Determination of particles and processes active in this example.
         The following three major Physics Lists for High Energy 
         Calorimetry can been selected: LHEP, QGSC, QGSP. 

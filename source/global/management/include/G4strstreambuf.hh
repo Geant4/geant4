@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.9 2003/03/27 16:41:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4strstreambuf.hh,v 1.10 2003/06/06 16:17:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ---------------------------------------------------------------
@@ -34,7 +34,8 @@
 #ifndef G4STRSTREAM_HH
 #define G4STRSTREAM_HH
 
-#include "g4std/strstream"
+#include "G4Types.hh"
+#include <strstream>
 #include "globals.hh"     
 #include "G4coutDestination.hh"
 
@@ -42,10 +43,10 @@ class G4strstreambuf;
 extern G4strstreambuf G4coutbuf;
 extern G4strstreambuf G4cerrbuf;
 
-class G4strstreambuf : public G4std::streambuf
+class G4strstreambuf : public std::streambuf
 {
 
-  typedef G4std::streambuf std_streambuf;
+  typedef std::streambuf std_streambuf;
 
   public:
 

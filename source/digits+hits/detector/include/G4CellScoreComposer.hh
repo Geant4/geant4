@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScoreComposer.hh,v 1.1 2002/10/28 10:01:50 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4CellScoreComposer.hh,v 1.2 2003/06/16 16:50:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4CellScoreComposer
@@ -77,7 +77,7 @@ private:
   mutable G4CellScoreValues fSCScoreValues;
 };
 
-G4std::ostream& operator<<(G4std::ostream &out, 
+std::ostream& operator<<(std::ostream &out, 
                            const G4CellScoreComposer &ps);
 
 

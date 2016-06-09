@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.hh,v 1.8 2001/07/11 10:08:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProcessManager.hh,v 1.9 2003/06/16 17:12:28 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -67,7 +67,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VProcess.hh"
 #include "G4ProcessVector.hh"
@@ -273,7 +273,7 @@ class G4ProcessManager
       G4ProcessVector* theProcVector[SizeOfProcVectorArray];
       // vector for processes with GetPhysicalInteractionLength/DoIt
 
-      typedef G4std::vector<G4ProcessAttribute*> G4ProcessAttrVector; 
+      typedef std::vector<G4ProcessAttribute*> G4ProcessAttrVector; 
       G4ProcessAttrVector*  theAttrVector;
       // vector for process attribute  
 

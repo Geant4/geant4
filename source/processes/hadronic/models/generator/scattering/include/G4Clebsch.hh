@@ -41,7 +41,7 @@
 #define G4CLEBSCH_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4Clebsch 
 {
@@ -59,7 +59,7 @@ public:
 			 G4int isoIn2, G4int iso3In2, 
 			 G4int jOut) const;
 
-  G4std::vector<G4double> GenerateIso3(G4int isoIn1, G4int iso3In1, 
+  std::vector<G4double> GenerateIso3(G4int isoIn1, G4int iso3In1, 
 				       G4int isoIn2, G4int iso3In2, 
 				       G4int isoOut1,G4int isoOut2) const;
 
@@ -70,7 +70,7 @@ public:
   G4double Wigner3J(G4double j1, G4double j2, G4double j3, 
 		    G4double m1, G4double m2, G4double m3) const;
   
-  const G4std::vector<G4double>& GetLogs() const;
+  const std::vector<G4double>& GetLogs() const;
   
   // Calculates the normalized Clebsch-Gordan coefficient, that is the prob 
   // of isospin decomposition of (J,m) into J1, J2, m1, m2
@@ -85,7 +85,7 @@ private:
   G4Clebsch(const G4Clebsch &right);
   G4Clebsch& operator=(const G4Clebsch &right);  
 
-  G4std::vector<G4double> logs;
+  std::vector<G4double> logs;
 
 };
 

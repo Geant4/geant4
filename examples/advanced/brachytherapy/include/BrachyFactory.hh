@@ -20,9 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//  Code developed by: Susanna Guatelli
 //
-// $Id: BrachyFactory.hh,v 1.2 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyFactory.hh,v 1.4 2003/05/22 17:20:41 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //    **********************************
 //    *                                *
@@ -30,41 +31,38 @@
 //    *                                *
 //    **********************************
 //
-// this is the abstract class which manages the sources
+// this is the abstract class which manages the sources' realisation
+// in terms of geometry and primary particle generated in the radioactive core
 
 #ifndef BrachyFactory_h
 #define BrachyFactory_h 1
+
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4RadioactiveDecay.hh"
+
 class G4ParticleGun;
 class G4Run;
 class G4Event;
+class G4VPhysicalVolume;
 class BrachyAnalysisManager;
 
 class BrachyFactory
 {
 public:
+
   BrachyFactory();
- virtual ~BrachyFactory();
-  virtual  G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction()=0;
-  virtual void CreateSource(G4VPhysicalVolume*)=0;
-  virtual void CleanSource()=0;
+  virtual ~BrachyFactory();
+
+  //Source primary particles' management ...
+  virtual G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction() = 0;
+
+  // ...
+  // this function manages the creation of the source in terms of 
+  // geometry ...
+  virtual void CreateSource(G4VPhysicalVolume*) = 0;
+
+  // ...
+  // This function deletes the source in the geometry (phantom); to be
+  // used when the user needs to substitute one source with another one ...
+  virtual void CleanSource() = 0;
 };
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

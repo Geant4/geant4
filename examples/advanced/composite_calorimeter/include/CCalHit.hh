@@ -41,14 +41,14 @@
 #ifndef CCalHit_h
 #define CCalHit_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "CLHEP/Vector/ThreeVector.h"
 #include "globals.hh"
 
 
 class CCalHit {
 
-  friend G4std::ostream& operator<< (G4std::ostream&, const CCalHit&);
+  friend std::ostream& operator<< (std::ostream&, const CCalHit&);
   
 public:
   
@@ -56,7 +56,7 @@ public:
   ~CCalHit();
   CCalHit(const CCalHit &right);
   const CCalHit& operator=(const CCalHit &right);
-  int operator==(const CCalHit &right){return 0;}
+  int operator==(const CCalHit &){return 0;}
   
   void print();
   

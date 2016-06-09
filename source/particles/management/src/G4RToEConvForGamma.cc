@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForGamma.cc,v 1.4 2003/01/07 23:52:24 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RToEConvForGamma.cc,v 1.5 2003/06/16 16:58:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // --------------------------------------------------------------
@@ -37,8 +37,8 @@
 #include "G4PhysicsLogVector.hh"
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
-#include "g4std/strstream"
+#include <iomanip>
+#include <strstream>
 
 G4RToEConvForGamma::G4RToEConvForGamma() : G4VRangeToEnergyConverter()
 {    

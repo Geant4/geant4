@@ -20,8 +20,19 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: BrachyFactoryI.hh,v 1.3 2002/12/13 09:25:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+//    *******************************
+//    *                             *
+//    *    BrachyFactoryI.cc        *
+//    *                             *
+//    *******************************
+//
+//
+// Code developed by:
+//  S.Guatelli
+//
+// 
+// $Id: BrachyFactoryI.hh,v 1.5 2003/05/22 17:20:41 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -29,10 +40,10 @@
 #define BrachyFactoryI_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4RadioactiveDecay.hh"
-#include"BrachyDetectorConstructionI.hh"
-#include"BrachyFactory.hh"
+#include "BrachyDetectorConstructionI.hh"
+#include "BrachyFactory.hh"
 #include "G4RunManager.hh"
+
 class G4ParticleGun;
 class G4Run;
 class G4Event;
@@ -40,17 +51,20 @@ class BrachyAnalysisManager;
 class BrachyFactory;
 class BrachyPrimaryGeneratorActionI;
 class BrachyDetectorConstructionI;
+
+// This class manages the creation of Bebig Isoseed I-125 source 
+// used in interstitial brachytherapy ...
 class BrachyFactoryI:public BrachyFactory
 {
 public:
   BrachyFactoryI();
  ~BrachyFactoryI();
+
   G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction();
   void CreateSource(G4VPhysicalVolume*);
- void CleanSource();
-private:
-  BrachyDetectorConstructionI* pIodio;
- 
+  void CleanSource();
 
+private:
+  BrachyDetectorConstructionI* iodiumSource;
 };
 #endif

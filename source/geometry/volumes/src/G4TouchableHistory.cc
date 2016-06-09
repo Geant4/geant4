@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4TouchableHistory.cc,v 1.6 2002/08/06 10:35:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4TouchableHistory Implementation

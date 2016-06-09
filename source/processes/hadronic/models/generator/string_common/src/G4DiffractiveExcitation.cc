@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc,v 1.12 2002/12/12 19:17:55 gunter Exp $
+// $Id: G4DiffractiveExcitation.cc,v 1.14 2003/06/16 17:09:25 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -222,7 +222,7 @@ G4ExcitedString * G4DiffractiveExcitation::
 	G4double tm1=hadron->Get4Momentum().minus() +
 	  ( Pend.perp2()-Pstart.perp2() ) / hadron->Get4Momentum().plus();
 
-	G4double tm2= sqrt( G4std::max(0., sqr(tm1) -
+	G4double tm2= sqrt( std::max(0., sqr(tm1) -
 	     4. * Pend.perp2() * hadron->Get4Momentum().minus()
 	      /  hadron->Get4Momentum().plus() ));
 
@@ -296,7 +296,7 @@ G4ThreeVector G4DiffractiveExcitation::GaussianPt(G4double widthSquare, G4double
 	return G4ThreeVector (pt2*cos(phi), pt2*sin(phi), 0.);    
 }
 
-G4DiffractiveExcitation::G4DiffractiveExcitation(const G4DiffractiveExcitation &right)
+G4DiffractiveExcitation::G4DiffractiveExcitation(const G4DiffractiveExcitation &)
 :
 widthOfPtSquare(0) , minExtraMass(0),
 minmass(0)
@@ -310,20 +310,20 @@ G4DiffractiveExcitation::~G4DiffractiveExcitation()
 }
 
 
-const G4DiffractiveExcitation & G4DiffractiveExcitation::operator=(const G4DiffractiveExcitation &right)
+const G4DiffractiveExcitation & G4DiffractiveExcitation::operator=(const G4DiffractiveExcitation &)
 {
 	G4Exception("G4DiffractiveExcitation = operator meant to be called");
 	return *this;
 }
 
 
-int G4DiffractiveExcitation::operator==(const G4DiffractiveExcitation &right) const
+int G4DiffractiveExcitation::operator==(const G4DiffractiveExcitation &) const
 {
 	G4Exception("G4DiffractiveExcitation == operator meant to be called");
 	return false;
 }
 
-int G4DiffractiveExcitation::operator!=(const G4DiffractiveExcitation &right) const
+int G4DiffractiveExcitation::operator!=(const G4DiffractiveExcitation &) const
 {
 	G4Exception("G4DiffractiveExcitation != operator meant to be called");
 	return true;

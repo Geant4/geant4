@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polymarker.cc,v 1.7 2001/07/11 10:01:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Polymarker.cc,v 1.8 2003/06/16 16:55:24 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  November 1996
@@ -54,7 +54,7 @@ G4Polymarker & G4Polymarker::operator = (const G4Polymarker &right) {
   return *this;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4Polymarker& marker) {
+std::ostream& operator << (std::ostream& os, const G4Polymarker& marker) {
   os << "G4Polymarker: type: ";
   switch (marker.fMarkerType) {
   case G4Polymarker::line:

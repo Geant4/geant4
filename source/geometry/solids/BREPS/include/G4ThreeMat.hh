@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ThreeMat.hh,v 1.8 2001/07/11 09:59:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ThreeMat.hh,v 1.9 2003/06/16 16:52:42 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4ThreeMat
@@ -61,12 +61,12 @@ public:  // with description
   G4int operator==( const G4ThreeMat& m ) const;
     // Equality operator.
 
-  friend G4std::ostream& operator<<( G4std::ostream& os, const G4ThreeMat& m );
+  friend std::ostream& operator<<( std::ostream& os, const G4ThreeMat& m );
 
   virtual const char* NameOf() const;
     // Returns the class name.
 
-  virtual void PrintOn( G4std::ostream& os = G4cout ) const;
+  virtual void PrintOn( std::ostream& os = G4cout ) const;
     // Printing functions (derived classes do not need to overwrite operator <<).
 
   G4double Determinant() const;

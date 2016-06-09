@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUIshell.cc,v 1.7 2002/04/26 21:28:26 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VUIshell.cc,v 1.8 2003/06/16 16:56:04 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4UImanager.hh"
@@ -298,7 +298,7 @@ void G4VUIshell::ListCommand(const G4String& dir,
   // waring : not matched
   if(!isMatch && candidate.empty()) 
     G4cout << "<" << input 
-	   << ">: No such directory or command" << G4std::flush;
+	   << ">: No such directory or command" << std::flush;
 
   // display
   G4UIArrayString arrayString(stream);

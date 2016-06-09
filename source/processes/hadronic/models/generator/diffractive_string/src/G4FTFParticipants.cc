@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.cc,v 1.7 2002/12/12 19:17:26 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FTFParticipants.cc,v 1.8 2003/05/30 13:27:19 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -48,7 +48,7 @@ G4FTFParticipants::G4FTFParticipants()
 {
 }
 
-G4FTFParticipants::G4FTFParticipants(const G4FTFParticipants &right)
+G4FTFParticipants::G4FTFParticipants(const G4FTFParticipants &): G4VParticipants()
 {
 }
 

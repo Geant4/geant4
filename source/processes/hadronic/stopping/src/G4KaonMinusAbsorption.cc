@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinusAbsorption.cc,v 1.6 2002/12/12 19:18:37 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4KaonMinusAbsorption.cc,v 1.8 2003/06/16 17:12:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -132,7 +132,7 @@ G4double G4KaonMinusAbsorption::AtRestGetPhysicalInteractionLength(
 
 G4VParticleChange* G4KaonMinusAbsorption::AtRestDoIt(
                                     const G4Track& track,
-				    const G4Step& stepData
+				    const G4Step& 
 				    )
 //
 // Handles KaonMinus at rest; a KaonMinus can either create secondaries or
@@ -278,7 +278,7 @@ void G4KaonMinusAbsorption::GenerateSecondaries()
   }
 
   // --- LIMIT THE VALUE OF NGKINE IN CASE OF OVERFLOW ---
-  ngkine = G4int(G4std::min(ngkine,G4int(MAX_SECONDARIES)));
+  ngkine = G4int(std::min(ngkine,G4int(MAX_SECONDARIES)));
 
 } // GenerateSecondaries
 

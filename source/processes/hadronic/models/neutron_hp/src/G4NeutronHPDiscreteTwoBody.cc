@@ -37,7 +37,7 @@
 #include "G4NeutronHPVector.hh"
 #include "G4NeutronHPLegendreStore.hh"
 
-G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4double massCode, G4double mass)
+G4ReactionProduct * G4NeutronHPDiscreteTwoBody::Sample(G4double anEnergy, G4double massCode, G4double )
 { // Interpolation still only for the most used parts; rest to be Done @@@@@
    G4ReactionProduct * result = new G4ReactionProduct;
    G4int Z = static_cast<G4int>(massCode/1000);

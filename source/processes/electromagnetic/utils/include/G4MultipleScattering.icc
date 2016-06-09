@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.icc,v 1.9 2003/04/18 12:44:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MultipleScattering.icc,v 1.11 2003/06/16 14:43:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //------------ G4MultipleScattering physics process ---------------------------
 //              by Laszlo Urban, March 2001
@@ -36,6 +36,7 @@
 // 11-09-01 G4MultipleScatteringx put as default: G4MultipleScattering (mma)
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
 // 18-04-03 Change signature of  GetTransportMeanFreePath (V.Ivanchenko)
+// 16-06-03: ShortLived are not applicable any more (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -44,7 +45,7 @@
 inline
 G4bool G4MultipleScattering::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return(particle.GetPDGCharge() != 0.);
+  return(particle.GetPDGCharge() != 0. && !particle.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,7 +68,7 @@ inline G4double G4MultipleScattering::AlongStepGetPhysicalInteractionLength(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4MultipleScattering::GetMeanFreePath(
-                                            const G4Track& track,
+                                            const G4Track&,
                                             G4double,
                                             G4ForceCondition* condition)
 

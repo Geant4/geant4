@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VClusterModel.hh,v 1.5 2003/01/23 11:30:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VClusterModel.hh,v 1.6 2003/06/16 16:56:29 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@
 
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4PAIonisation.hh"
 #include "G4VFastSimulationModel.hh"
@@ -83,8 +83,8 @@ protected:
   G4Navigator*    fNavigator ;
   G4bool          fNavigatorSetup ;
 
-  G4std::vector<G4ThreeVector> fClusterPositionVector ; 
-  G4std::vector<G4double>      fClusterEnergyVector ; 
+  std::vector<G4ThreeVector> fClusterPositionVector ; 
+  std::vector<G4double>      fClusterEnergyVector ; 
 };
 
 #endif

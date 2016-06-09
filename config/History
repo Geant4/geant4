@@ -1,5 +1,5 @@
-$Id: History,v 1.210 2003/01/22 18:02:21 gcosmo Exp $
-$Name: geant4-05-01 $
+$Id: History,v 1.218 2003/06/26 07:54:59 gcosmo Exp $
+$Name: geant4-05-02 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,39 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th June 2003  Gabriele Cosmo (config-V05-01-05)
+- Added UI32LIBS to interactivity.gmk to handle UI libraries on WIN32
+  platforms.
+- Added libraries for OpenGL and UI to default setup of WIN32-VC and
+  WIN32-VC7. Removed some obsolete compilation options.
+
+18th June 2003  Gabriele Cosmo (config-V05-01-04)
+- Removed flag G4USE_STD_NAMESPACE from specific setups in sys.
+  Follows migration from G4std apported in source/global and whole code.
+
+16th June 2003  Gabriele Cosmo
+- binmake.gmk: added module geometry/divisions in $INCFLAGS list.
+
+11th June 2003  Gunter Folger (config-V05-01-03)
+- G4VIS_BUILD.gmk, G4VIS_USE.gmk, G4UI_BUILD.gmk, G4UI_USE.gmk, and
+  sys/{Linux-g++,SU-CC}.gmk:
+  When building shared libraries needing external libs like OpenGL..., 
+  add these at shared library building, so these libs know about these 
+  dependency and have this resolved.
+
+6th June 2003  Gabriele Cosmo (config-V05-01-02)
+- architecture.gmk and specific setups in sys: get rid of G4_HAVE_BOOL
+  macro. Now using default 'bool' type, defined in all supported compilers.
+
+28th May 2003  Gabriele Cosmo (config-V05-01-01)
+- architecture.gmk, binmake.gmk: added flags G4LIB_BUILD_STEP/G4USE_STEP
+  to make optional the compilation of the STEP library and interface module.
+  By default the libraries will not be built.
+
+31st March 2003  Gabriele Cosmo (config-V05-01-00)
+- Added more strict compiler options for Linux-g++ platform.
+- Removed obsolete usage of GNU_GCC specific option for g++ compilers.
 
 22nd January 2003  Gabriele Cosmo (config-V05-00-00)
 - Added experimental setup WIN32-VC7.gmk for Windows .NET VC++ compiler.

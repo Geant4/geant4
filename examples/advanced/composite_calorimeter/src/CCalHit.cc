@@ -26,7 +26,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #include "CCalHit.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 
 CCalHit::CCalHit() : 
@@ -98,7 +98,7 @@ void CCalHit::print() {
 }
 
 
-G4std::ostream& operator<<(G4std::ostream& os, const CCalHit& hit) {
+std::ostream& operator<<(std::ostream& os, const CCalHit& hit) {
   os << " Data of this CCalHit are:"<< G4endl
      << " \t Time slice ID: " << hit.getTimeSliceID() << G4endl
      << " \t Energy of primary particle (ID = " << hit.getTrackID()

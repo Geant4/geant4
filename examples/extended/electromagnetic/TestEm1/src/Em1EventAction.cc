@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em1EventAction.cc,v 1.6 2001/11/29 11:28:07 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em1EventAction.cc,v 1.7 2003/06/03 09:59:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -72,15 +72,15 @@ void Em1EventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em1EventAction::EndOfEventAction(const G4Event* evt)
+void Em1EventAction::EndOfEventAction(const G4Event*)
 {
-  if (drawFlag != "none") G4cout << " Energy deposit: " 
+  if (drawFlag != "none") G4cout << " Energy deposit: "
                                  << G4BestUnit(TotalEnergyDeposit,"Energy")
                                  << G4endl;
 
   if (G4VVisManager::GetConcreteInstance())
   {
-   const G4Event* evt = fpEventManager->GetConstCurrentEvent(); 
+   const G4Event* evt = fpEventManager->GetConstCurrentEvent();
    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
    G4int n_trajectories = 0;
    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  

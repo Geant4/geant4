@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4WeightCutOffProcess.hh,v 1.2 2002/10/16 16:26:59 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightCutOffProcess

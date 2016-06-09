@@ -29,7 +29,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4CrossSectionVector.hh"
 #include "G4PhysicsVector.hh"
-#include "g4std/map"
+#include <map>
 
 class G4KineticTrack;
 
@@ -74,7 +74,7 @@ private:
   static const G4double _eMinTable;
   static const G4double _eStepLog;
 
-  G4std::map <G4String, G4PhysicsVector*, G4std::less<G4String> > xMap;
+  std::map <G4String, G4PhysicsVector*, std::less<G4String> > xMap;
 
   G4double _eMin;
   G4double _eMax;

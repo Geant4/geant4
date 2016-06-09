@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapEventAction.hh,v 1.1 2002/06/04 07:40:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: OlapEventAction.hh,v 1.2 2003/06/16 16:49:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -35,7 +35,7 @@
 #ifndef OlapEventAction_h
 #define OlapEventAction_h
 
-#include "g4std/vector"
+#include <vector>
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -66,15 +66,15 @@ public:
    G4ThreeVector v1, v2;
    G4int axis;
      // geantino ray travelling parallel to that axis detected the olap
-   G4std::vector<OlapStepInfo *> stAB;
-   G4std::vector<OlapStepInfo *> stBA;
+   std::vector<OlapStepInfo *> stAB;
+   std::vector<OlapStepInfo *> stBA;
    G4String info;
    G4int probNot ;	    
    G4LogicalVolume* originalMother;
 };
 
-G4std::ostream & 
-   operator<<(G4std::ostream& flux,  OlapInfo & oi);
+std::ostream & 
+   operator<<(std::ostream& flux,  OlapInfo & oi);
 
 
 // ------------==============-------------==============----------------
@@ -94,8 +94,8 @@ public:
    
    OlapRunAction * theRunAction; 
    OlapDetConstr * theDet;
-   G4std::vector<OlapStepInfo*> ABSteps;
-   G4std::vector<OlapStepInfo*> BASteps;
+   std::vector<OlapStepInfo*> ABSteps;
+   std::vector<OlapStepInfo*> BASteps;
    G4bool dontDelete;
 };
 #endif

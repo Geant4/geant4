@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.17 2002/10/28 11:36:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SubtractionSolid.cc,v 1.18 2003/06/16 16:53:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -401,7 +401,7 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p ) const
   }
   else
   {
-     dist= G4std::min(fPtrSolidA->DistanceToOut(p),
+     dist= std::min(fPtrSolidA->DistanceToOut(p),
                       fPtrSolidB->DistanceToIn(p) ) ; 
   }
   return dist; 

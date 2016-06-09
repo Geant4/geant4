@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.hh,v 1.10 2002/12/12 19:17:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMicroCanonical.hh,v 1.12 2003/06/16 17:06:06 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -30,7 +30,7 @@
 #ifndef G4StatMFMicroCanonical_h
 #define G4StatMFMicroCanonical_h 1
 
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VStatMFEnsemble.hh"
 #include "G4StatMFMicroPartition.hh"
@@ -95,7 +95,7 @@ private:
     // This is a vector of partitions managers for partitions of different 
     // multiplicities:
     
-    G4std::vector<G4StatMFMicroManager*> _ThePartitionManagerVector;
+    std::vector<G4StatMFMicroManager*> _ThePartitionManagerVector;
 	
 
 
@@ -112,11 +112,11 @@ private:
     }
   };
 
-  class SumProbabilities : public G4std::binary_function<G4double,G4double,G4double>
+  class SumProbabilities : public std::binary_function<G4double,G4double,G4double>
   {
   public:
     SumProbabilities() : total(0.0) {}
-    G4double operator() (G4double& probSoFar, G4StatMFMicroManager*& manager)
+    G4double operator() (G4double& /* probSoFar*/, G4StatMFMicroManager*& manager)
     { 
       total += manager->GetProbability();
       return total;

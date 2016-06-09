@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Assembly.hh,v 1.8 2001/07/11 09:59:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Assembly.hh,v 1.9 2003/06/16 16:52:21 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4Assembly
@@ -43,11 +43,11 @@
 #ifndef G4ASSEMBLY_HH
 #define G4ASSEMBLY_HH
 
-#include "g4std/vector"
+#include <vector>
 #include "G4PlacedSolid.hh"
 #include "G4BREPSolid.hh"
 
-typedef G4std::vector<G4PlacedSolid*> G4PlacedVector;  
+typedef std::vector<G4PlacedSolid*> G4PlacedVector;  
 
 class G4Assembly
 {

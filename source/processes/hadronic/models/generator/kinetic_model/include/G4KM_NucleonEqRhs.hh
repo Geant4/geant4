@@ -81,9 +81,9 @@ inline G4KM_NucleonEqRhs::~G4KM_NucleonEqRhs()
 
 // Here by design, but it is unnecessary for nuclear fields
 inline void
-G4KM_NucleonEqRhs::SetChargeMomentumMass(G4double particleCharge,
-					 G4double MomentumXc,
-					 G4double MassXc2)
+G4KM_NucleonEqRhs::SetChargeMomentumMass(G4double ,
+					 G4double ,
+					 G4double )
 { }
 
 #endif

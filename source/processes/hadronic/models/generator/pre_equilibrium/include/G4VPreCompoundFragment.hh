@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.hh,v 1.13 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPreCompoundFragment.hh,v 1.15 2003/06/16 17:07:14 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
@@ -30,7 +30,7 @@
 #define G4VPreCompoundFragment_h 1
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
 #include "G4Fragment.hh"
@@ -49,11 +49,11 @@ protected:
   G4VPreCompoundFragment() {};
     
 public:  
-    // copy constructor
-    G4VPreCompoundFragment(const G4VPreCompoundFragment &right);
+  // copy constructor
+  G4VPreCompoundFragment(const G4VPreCompoundFragment &right);
     
-    // constructor  
-    G4VPreCompoundFragment(const G4double anA, const G4double aZ,
+  // constructor  
+  G4VPreCompoundFragment(const G4double anA, const G4double aZ,
 			 G4VCoulombBarrier * aCoulombBarrier,
 			 const G4String &  aName);
   
@@ -70,47 +70,28 @@ public:
   
   G4int operator!=(const G4VPreCompoundFragment &right) const;
   
-  friend G4std::ostream& 
-  operator<<(G4std::ostream&, const G4VPreCompoundFragment*);
-  friend G4std::ostream& 
-  operator<<(G4std::ostream&, const G4VPreCompoundFragment&);
-    
+  friend std::ostream& 
+  operator<<(std::ostream&, const G4VPreCompoundFragment*);
+  friend std::ostream& 
+  operator<<(std::ostream&, const G4VPreCompoundFragment&);
+  
   // =====================
   // Pure Virtual methods
   // =====================
   virtual G4ReactionProduct * GetReactionProduct() const = 0; 	
   
-protected:
-  virtual G4double 
-  ProbabilityDistributionFunction(const G4double K, 
-				  const G4Fragment & aFragment) = 0;
-    
-public:
-    
   // Initialization method
   void Initialize(const G4Fragment & aFragment);
     
-  // ================================================
   // Methods for calculating the emission probability
-  // ================================================
+  // ------------------------------------------------
   
   // Calculates the total (integrated over kinetic energy) emission
   // probability of a fragment
-  G4double CalcEmissionProbability(const G4Fragment & aFragment);
+  virtual G4double CalcEmissionProbability(const G4Fragment & aFragment) = 0;
   
-  G4double GetKineticEnergy(const G4Fragment & aFragment);
+  virtual G4double GetKineticEnergy(const G4Fragment & aFragment) = 0;
 
-private:	
-  // This method performs integration for probability function over 
-  // fragment kinetic energy
-  G4double IntegrateEmissionProbability(const G4double & Low, 
-					const G4double & Up, 
-					const G4Fragment & aFragment);	
-    
-    // ============================
-    // Data members access methods
-    // ============================
-    
 public:
   inline const G4double GetA() const;
   
@@ -126,6 +107,8 @@ public:
   
   inline const G4double GetMaximalKineticEnergy() const;
   
+  inline const G4double GetEnergyThreshold() const;
+
   inline const G4double GetEmissionProbability() const;
   
   inline const G4double GetNuclearMass() const;
@@ -136,17 +119,23 @@ public:
   
   inline const G4LorentzVector GetMomentum() const;
   
-  inline void SetMomentum(const G4LorentzVector & value);
+  inline void  SetMomentum(const G4LorentzVector & value);
   
-  inline void SetFragmentName(const G4String& aName);
+  inline void  SetFragmentName(const G4String& aName);
   
   inline const G4String GetName() const;
-  
-  
+ 
+  inline void ResetStage();
+
+  inline G4int GetStage() const;
+
+  inline void IncrementStage();
+
+
   // =============
   // Data members
   // =============
-  
+
 private:
   
   G4double theA;
@@ -156,28 +145,25 @@ private:
   G4double theRestNucleusA;
   
   G4double theRestNucleusZ;
-  
+protected:  
   G4double theCoulombBarrier;
-  
+private:
   G4VCoulombBarrier * theCoulombBarrierPtr;
   
   G4double theBindingEnergy;
   
   G4double theMaximalKineticEnergy;
   
+protected:
   G4double theEmissionProbability;
-  
+private:  
   G4LorentzVector theMomentum;
   
   G4String theFragmentName;
-  
+
+  G4int theStage;    
 };
 
 #include "G4VPreCompoundFragment.icc"
 
 #endif
-
-
-
-
-

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.11 2002/11/07 02:29:58 gum Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MaterialPropertiesTable.hh,v 1.12 2003/06/16 16:56:19 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@
 /////////////
 
 #include <math.h>
-#include "g4std/map"
+#include <map>
 #include "globals.hh"
 #include "G4MaterialPropertyVector.hh"
 
@@ -133,13 +133,13 @@ private:
 	// Private Data members
 	/////////////////////////
 
-	G4std::map<G4String, G4MaterialPropertyVector*, G4std::less<G4String> > MPT;
-	typedef G4std::map<G4String, G4MaterialPropertyVector*,
-	  G4std::less<G4String> >::iterator MPTiterator;
+	std::map<G4String, G4MaterialPropertyVector*, std::less<G4String> > MPT;
+	typedef std::map<G4String, G4MaterialPropertyVector*,
+	  std::less<G4String> >::iterator MPTiterator;
 
-        G4std::map< G4String, G4double, G4std::less<G4String> > MPTC;
-        typedef G4std::map< G4String, G4double,
-          G4std::less<G4String> >::iterator MPTCiterator;
+        std::map< G4String, G4double, std::less<G4String> > MPTC;
+        typedef std::map< G4String, G4double,
+          std::less<G4String> >::iterator MPTCiterator;
 
 };
 

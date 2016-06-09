@@ -133,7 +133,7 @@ G4bool CCalG4Able::operator==(const CCalG4Able& right) const {
 
 //========================================================================
 //Global operators
-G4std::ostream& operator<<(G4std::ostream& os, const CCalG4Able& det) {
+std::ostream& operator<<(std::ostream& os, const CCalG4Able& det) {
   if (det.detPhysicalVolume)
     os << "Physical volume already constructed." << G4endl;
   else

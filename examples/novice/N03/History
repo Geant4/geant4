@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2003/03/25 17:13:07 maire Exp $
+$Id: History,v 1.62 2003/06/10 12:51:47 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+10-06-03 mma (exampleN03-V05-01-02)
+- mv heprep.mac in visTutor
+- back to eventAction.cc 1.17
+
+28-05-03 G.Cosmo (exampleN03-V05-01-01)
+- Get rid of pedantic warnings ...
+
+21-05-03 V.Ivant (exampleN03-V05-01-00)
+- ExN03DetectorConstruction: properly delete volumes and solids
+  when geometry setup is updated.
+
+08-04-03  mma (exampleN03-V05-00-06)
+- DefineMaterials: H2O->SetMeanExcitationEnergy(75*eV)
      
 25-03-03  mma (exampleN03-V05-00-05)
 - Use G4PVPlacement and G4PVReplica constructors in logical mother.

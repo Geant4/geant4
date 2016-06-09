@@ -61,7 +61,7 @@
 enum G4RadioactiveDecayMode
   {ERROR=-1, IT=0, BetaMinus=1, BetaPlus=2, KshellEC=3, LshellEC=4, MshellEC=5, Alpha=6};
 
-G4std::istream &operator >> (G4std::istream &s, G4RadioactiveDecayMode &q);
+std::istream &operator >> (std::istream &s, G4RadioactiveDecayMode &q);
 
 ////////////////////////////////////////////////////////////////////////////////
 #endif

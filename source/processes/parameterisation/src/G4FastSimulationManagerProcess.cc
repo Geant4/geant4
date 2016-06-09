@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManagerProcess.cc,v 1.7 2001/10/26 14:43:36 mverderi Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FastSimulationManagerProcess.cc,v 1.8 2003/05/21 16:32:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -250,7 +250,7 @@ G4FastSimulationManagerProcess::PostStepGetPhysicalInteractionLength(
 //------------------------------------
 G4VParticleChange* G4FastSimulationManagerProcess::PostStepDoIt(
      const G4Track& track,
-     const G4Step&  Step)
+     const G4Step& )
 {
   if (fFastSimulationTrigger) 
     {
@@ -417,8 +417,7 @@ G4double G4FastSimulationManagerProcess::AlongStepGetPhysicalInteractionLength(
 
 G4VParticleChange* G4FastSimulationManagerProcess::AlongStepDoIt(
 				             const G4Track& track,
-				             const G4Step&  Step
-				             )
+				             const G4Step& )
 {
   // Dummy ParticleChange ie: does nothing
   pParticleChange->Initialize(track);
@@ -521,8 +520,7 @@ G4FastSimulationManagerProcess::AtRestGetPhysicalInteractionLength(
 //
 //-----------------------------------------------
 G4VParticleChange* G4FastSimulationManagerProcess::AtRestDoIt(
-     const G4Track& track,
-     const G4Step& Step)
+     const G4Track&, const G4Step&)
 {
   return fFastSimulationManager->InvokeAtRestDoIt();
 }

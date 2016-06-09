@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.cc,v 1.6 2001/07/11 10:09:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PhysicalVolumeSearchScene.cc,v 1.7 2003/05/30 13:01:32 johna Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  10th August 1998.
@@ -57,7 +57,7 @@ void G4PhysicalVolumeSearchScene::EstablishSpecials
 					&fpCurrentLV);
 }
 
-void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid& solid) {
+void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {
 
   /**************************************************
   G4cout << "Required volume: \"" << fRequiredPhysicalVolumeName

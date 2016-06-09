@@ -12,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: scl_string.h,v 1.4 2000/01/21 13:42:42 gcosmo Exp $ */
+/* $Id: scl_string.h,v 1.5 2003/06/06 17:07:31 gcosmo Exp $ */
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -56,7 +56,7 @@ public:
   int newBufSize (int len) const;
 
 public:
-    void PrintContents(G4std::ostream &out = G4cout) const;
+    void PrintContents(std::ostream &out = G4cout) const;
 	// returns 1 if _strBuf is a null ptr or if it is an empty string ("")
     int is_null() const;
 	// returns 1 if _strBuf is a null ptr, and 0 otherwise

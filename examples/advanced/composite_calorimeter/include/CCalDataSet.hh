@@ -24,7 +24,7 @@
 #define CCalDataSet_h
 
 #include "G4NeutronHPInterpolator.hh"
-#include "g4std/vector"
+#include <vector>
 
 // by JPW, working, but to be cleaned up. @@@@
 

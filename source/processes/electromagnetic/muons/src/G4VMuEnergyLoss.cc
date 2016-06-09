@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.28 2003/04/26 12:11:14 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VMuEnergyLoss.cc,v 1.29 2003/06/16 17:01:52 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
@@ -365,8 +365,8 @@ void G4VMuEnergyLoss::BuildDEDXTable(
 
    //  if((subSecFlag) && (aParticleType.GetParticleName()=="mu+"))
    //  {
-   //    G4cout << G4std::setw(20) << (*theMaterialTable)[mat]->GetName()
-   //         << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
+   //    G4cout << std::setw(20) << (*theMaterialTable)[mat]->GetName()
+   //         << std::setw(15) << MinDeltaEnergy[mat]/keV ;
    //      if(LowerLimitForced[mat])
    //           G4cout << "  lower limit forced." << G4endl;
    //      else
@@ -445,7 +445,7 @@ G4double G4VMuEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
                     *KineticEnergy+RangeCoeffC ;
 
   //   compute the Step limit ..............
-     G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+     G4double r = std::min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
      if(fRangeNow>r)
        {
@@ -558,7 +558,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
         postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
 
-        safety = G4std::min(presafety,postsafety) ;
+        safety = std::min(presafety,postsafety) ;
         if (safety < rcut)
         {
 
@@ -597,7 +597,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
           {
             T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
                                              G4Electron::Electron(),
-                                             G4std::min(presafety,postsafety),
+                                             std::min(presafety,postsafety),
                                              couple) ;
 
         // absolute lower limit for T0

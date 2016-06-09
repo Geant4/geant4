@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.12 2002/11/11 18:08:21 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.14 2003/06/10 17:58:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -34,12 +34,17 @@
 #ifndef G4OPENGLSCENEHANDLER_HH
 #define G4OPENGLSCENEHANDLER_HH
 
-#include "G4VSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 
+#ifdef WIN32
+  #include <windows.h>
+#endif
 #include <GL/gl.h>
+#include <GL/glu.h>
+
+#include "G4VSceneHandler.hh"
+#include "G4OpenGLViewer.hh"
 
 // Base class for various OpenGLScene classes.
 class G4OpenGLSceneHandler: public G4VSceneHandler {

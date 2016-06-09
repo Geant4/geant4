@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.7 2002/10/28 11:43:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Cons.hh,v 1.8 2003/06/16 16:53:22 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -127,7 +127,7 @@ class G4Cons : public G4CSGSolid
 
         G4GeometryType  GetEntityType() const;
 
-        G4std::ostream& StreamInfo(G4std::ostream& os) const;
+        std::ostream& StreamInfo(std::ostream& os) const;
 
   // Visualisation functions
 

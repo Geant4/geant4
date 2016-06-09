@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LineSection.cc,v 1.6 2001/12/04 15:10:01 grichine Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // typedef double    G4double;  
 

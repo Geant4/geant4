@@ -30,8 +30,8 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: BrachyPhantomROGeometry.cc,v 1.3 2002/11/18 15:18:38 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyPhantomROGeometry.cc,v 1.6 2003/05/27 08:37:55 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "BrachyPhantomROGeometry.hh"
 #include "BrachyDummySD.hh"
@@ -47,87 +47,144 @@
 #include "G4ThreeVector.hh"
 #include "G4Material.hh"
 
-//....
-
-BrachyPhantomROGeometry::BrachyPhantomROGeometry(G4String aString,G4double DetDimX,G4double DetDimZ,G4int NumVoxelX,G4int NumVoxelZ)
-: G4VReadOutGeometry(aString),m_DetDimX(DetDimX),m_DetDimZ(DetDimZ),m_NumVoxelX(NumVoxelX),m_NumVoxelZ(NumVoxelZ)
+BrachyPhantomROGeometry::BrachyPhantomROGeometry(G4String aString,
+                                                 G4double phantomDimX,
+                                                 G4double phantomDimZ,
+                                                 G4int numberOfVoxelsX,
+                                                 G4int numberOfVoxelsZ):
+  G4VReadOutGeometry(aString),
+  phantomDimensionX(phantomDimX),
+  phantomDimensionZ(phantomDimZ),
+  numberOfVoxelsAlongX(numberOfVoxelsX),
+  numberOfVoxelsAlongZ(numberOfVoxelsZ)
 {
 }
-
-//....
 
 BrachyPhantomROGeometry::~BrachyPhantomROGeometry()
 {
 }
 
-//....
-
 G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
 {
  
-// A dummy material is used to fill the volumes of the readout geometry.
- // (It will be allowed to set a NULL pointer in volumes of such virtual
- // division in future, since this material is irrelevant for tracking.)
+  // A dummy material is used to fill the volumes of the readout geometry.
+  // (It will be allowed to set a NULL pointer in volumes of such virtual
+  // division in future, since this material is irrelevant for tracking.)
 
- G4Material* dummyMat  = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+  G4Material* dummyMat = new G4Material(name="dummyMat", 1., 1.*g/mole, 1.*g/cm3);
 
- // Slice thickness is the average of Voxel X and Z sizes
- G4double DetVoxel_y = (m_DetDimX/m_NumVoxelX+m_DetDimZ/m_NumVoxelZ)/2.0;
+  G4double worldDimensionX = 4.0*m;
+  G4double worldDimensionY = 4.0*m;
+  G4double worldDimensionZ = 4.0*m;
 
- G4double ExpHall_x = 4.0*m;
- G4double ExpHall_y = 4.0*m;
- G4double ExpHall_z = 4.0*m;
+  G4double halfPhantomDimensionX = phantomDimensionX/2;
+  G4double halfPhantomDimensionZ = phantomDimensionZ/2;
+  G4double halfPhantomDimensionY = phantomDimensionX/2 ;
 
- G4double Det_x = m_DetDimX/2;
- G4double Det_y = DetVoxel_y;
- G4double Det_z = m_DetDimZ/2;
- G4double Det_y2 =m_DetDimX/2 ;
+  // variables for x division ...
+  G4double halfXVoxelDimensionX = halfPhantomDimensionX/numberOfVoxelsAlongX;
+  G4double halfXVoxelDimensionZ = halfPhantomDimensionZ;
+  G4double voxelXThickness = 2*halfXVoxelDimensionX;
 
- G4double DetVoxelX_x = Det_x/m_NumVoxelX;
- G4double DetVoxelX_y = DetVoxel_y; 
- G4double DetVoxelX_z = Det_z;
- G4double DetVoxelX_dx = 2*DetVoxelX_x;
+  // variables for z and y division ...
+  G4double halfZVoxelDimensionX = halfPhantomDimensionX; 
+  G4double halfZVoxelDimensionZ = halfPhantomDimensionZ/numberOfVoxelsAlongZ;
+  G4double voxelZThickness = 2*halfZVoxelDimensionZ;
 
- G4double DetVoxelZ_x = Det_x;
- G4double DetVoxelZ_y = DetVoxel_y; 
- G4double DetVoxelZ_z = Det_z/m_NumVoxelZ;
- G4double DetVoxelZ_dz = 2*DetVoxelZ_z;
+  // world volume of ROGeometry ...
+  G4Box *ROWorld = new G4Box("ROWorld",
+			     worldDimensionX,
+			     worldDimensionY,
+			     worldDimensionZ);
 
- G4Box *ROExpHall = new G4Box("ROExpHall",ExpHall_x,ExpHall_y,ExpHall_z);
- G4LogicalVolume *ROExpHallLog = new G4LogicalVolume(ROExpHall,dummyMat,"ROExpHallLog",0,0,0);
- G4VPhysicalVolume *ROExpHallPhys = new G4PVPlacement(0,G4ThreeVector(),"ROExpHallPhys",ROExpHallLog,0,false,0);
+  G4LogicalVolume *ROWorldLog = new G4LogicalVolume(ROWorld,
+						    dummyMat,
+						    "ROWorldLog",
+						    0,0,0);
+
+  G4VPhysicalVolume *ROWorldPhys = new G4PVPlacement(0,
+						     G4ThreeVector(),
+						     "ROWorldPhys",
+						     ROWorldLog,
+						     0,false,0);
   
- G4Box *RODetector = new G4Box("RODetector", Det_x, Det_y2, Det_z);
- G4LogicalVolume *RODetectorLog = new G4LogicalVolume(RODetector,dummyMat,"RODetectorLog",0,0,0);
- G4VPhysicalVolume *RODetectorPhys = new G4PVPlacement(0,G4ThreeVector(),"DetectorPhys",RODetectorLog,ROExpHallPhys,false,0);
+  // phantom ROGeometry ... 
+  G4Box *ROPhantom = new G4Box("ROPhantom", 
+			       halfPhantomDimensionX, 
+			       halfPhantomDimensionY, 
+			       halfPhantomDimensionZ);
 
+  G4LogicalVolume *ROPhantomLog = new G4LogicalVolume(ROPhantom,
+						      dummyMat,
+						      "ROPhantomLog",
+						      0,0,0);
+
+  G4VPhysicalVolume *ROPhantomPhys = new G4PVPlacement(0,
+						       G4ThreeVector(),
+						       "PhantomPhys",
+                                                       ROPhantomLog,
+                                                       ROWorldPhys,
+                                                       false,0);
  
- // ReadOut Voxel division
+  // ROGeomtry: Voxel division
  
- // X division first...
+  // X division first... 
+  G4Box *ROPhantomXDivision = new G4Box("ROPhantomXDivision",
+					halfXVoxelDimensionX,
+					halfXVoxelDimensionZ,
+					halfXVoxelDimensionZ);
+
+  G4LogicalVolume *ROPhantomXDivisionLog = new G4LogicalVolume(ROPhantomXDivision,
+							       dummyMat,
+							       "ROPhantomXDivisionLog",
+							       0,0,0);
+
+  G4VPhysicalVolume *ROPhantomXDivisionPhys = new G4PVReplica("ROPhantomXDivisionPhys",
+                                                              ROPhantomXDivisionLog,
+                                                              ROPhantomPhys,
+                                                              kXAxis,
+                                                              numberOfVoxelsAlongX,
+                                                              voxelXThickness);
+  // ...then Z division
   
- G4Box *RODetectorXDivision = new G4Box("RODetectorXDivision",DetVoxelX_x,DetVoxelX_z,DetVoxelX_z);
- G4LogicalVolume *RODetectorXDivisionLog = new G4LogicalVolume(RODetectorXDivision,dummyMat,"RODetectorXDivisionLog",0,0,0);
- G4VPhysicalVolume *RODetectorXDivisionPhys = new G4PVReplica("RODetectorXDivisionPhys",RODetectorXDivisionLog,RODetectorPhys,kXAxis,m_NumVoxelX,DetVoxelX_dx);
+  G4Box *ROPhantomZDivision = new G4Box("ROPhantomZDivision",
+					halfZVoxelDimensionX,
+					halfZVoxelDimensionX, 
+					halfZVoxelDimensionZ);
 
+  G4LogicalVolume *ROPhantomZDivisionLog = new G4LogicalVolume(ROPhantomZDivision,
+							       dummyMat,
+							       "ROPhantomZDivisionLog",
+							       0,0,0);
 
-// ...then Z division
-  
- G4Box *RODetectorZDivision = new G4Box("RODetectorZDivision",DetVoxelZ_x,DetVoxelZ_x,DetVoxelZ_z);
- G4LogicalVolume *RODetectorZDivisionLog = new G4LogicalVolume(RODetectorZDivision,dummyMat,"RODetectorZDivisionLog",0,0,0);
- G4VPhysicalVolume *RODetectorZDivisionPhys = new G4PVReplica("RODetectorZDivisionPhys",RODetectorZDivisionLog,RODetectorXDivisionPhys,kZAxis,m_NumVoxelZ,DetVoxelZ_dz);
+  G4VPhysicalVolume *ROPhantomZDivisionPhys = new G4PVReplica("ROPhantomZDivisionPhys",
+							      ROPhantomZDivisionLog,
+							      ROPhantomXDivisionPhys,
+							      kZAxis,
+							      numberOfVoxelsAlongZ,
+							      voxelZThickness);
+  // ...then Y  division
 
- // ...then Y  division
+  G4Box *ROPhantomYDivision = new G4Box("ROPhantomYDivision",
+					halfZVoxelDimensionX, 
+					halfZVoxelDimensionX,
+					halfZVoxelDimensionX);
 
- G4Box *RODetectorYDivision = new G4Box("RODetectorYDivision",DetVoxelZ_x,DetVoxelZ_y,DetVoxelZ_x);
- G4LogicalVolume *RODetectorYDivisionLog = new G4LogicalVolume(RODetectorYDivision,dummyMat,"RODetectorYDivisionLog",0,0,0);
+  G4LogicalVolume *ROPhantomYDivisionLog = new G4LogicalVolume(ROPhantomYDivision,
+							       dummyMat,
+							       "ROPhantomYDivisionLog",
+							       0,0,0);
  
- G4VPhysicalVolume *RODetectorYDivisionPhys = new G4PVReplica("RODetectorYDivisionPhys",RODetectorYDivisionLog,RODetectorZDivisionPhys,kYAxis,m_NumVoxelZ,DetVoxelZ_dz);
+  ROPhantomYDivisionPhys = new G4PVReplica("ROPhantomYDivisionPhys",
+							      ROPhantomYDivisionLog,
+							      ROPhantomZDivisionPhys,
+							      kYAxis,
+							      numberOfVoxelsAlongZ,
+							      voxelZThickness);
+  BrachyDummySD *dummySD = new BrachyDummySD;
+  ROPhantomYDivisionLog->SetSensitiveDetector(dummySD);
 
- BrachyDummySD *dummySD = new BrachyDummySD;
- RODetectorYDivisionLog->SetSensitiveDetector(dummySD);
-
- return ROExpHallPhys;
+  return ROWorldPhys;
 }
 
 

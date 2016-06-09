@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.hh,v 1.10 2002/07/23 08:50:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NavigationHistory.hh,v 1.11 2003/06/16 16:54:45 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4NavigationHistory
 //
@@ -48,16 +48,16 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4NavigationLevel.hh"
 
-#include "g4std/vector"
-#include "g4std/iostream"
+#include <vector>
+#include <iostream>
 
 class G4NavigationHistory
 {
 
  public:  // with description
 
-  friend G4std::ostream&
-  operator << (G4std::ostream &os, const G4NavigationHistory &h);
+  friend std::ostream&
+  operator << (std::ostream &os, const G4NavigationHistory &h);
 
   G4NavigationHistory();
     // Constructor: sizes history lists & resets histories.
@@ -138,7 +138,7 @@ class G4NavigationHistory
 
  private:
 
-  G4std::vector<G4NavigationLevel>  fNavHistory;
+  std::vector<G4NavigationLevel>  fNavHistory;
 
   G4int fStackDepth;
     // Depth of stack: effectively depth in geometrical tree

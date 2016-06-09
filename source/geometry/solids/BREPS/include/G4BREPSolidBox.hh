@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidBox.hh,v 1.6 2002/11/06 23:28:45 radoone Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BREPSolidBox.hh,v 1.7 2003/06/16 16:52:23 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BREPSolidBox
@@ -63,7 +63,7 @@ public: // with description
     // Determines if the point Pt is inside, outside or on the surface
     // of the solid.
 
-  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+  virtual std::ostream& StreamInfo(std::ostream& os) const;
     // Streams solid contents to output stream.
 
 private:

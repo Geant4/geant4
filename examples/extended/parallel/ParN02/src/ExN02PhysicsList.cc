@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.1 2002/03/05 15:22:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN02PhysicsList.cc,v 1.2 2003/06/16 16:49:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +38,7 @@
 #include "G4ParticleTable.hh"
 #include "G4Material.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

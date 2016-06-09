@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MuBremsstrahlung.cc,v 1.27 2003/04/29 04:58:32 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //--------------- G4MuBremsstrahlung physics process ---------------------------

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNeutronYield.hh,v 1.7 2002/12/12 19:18:15 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPNeutronYield.hh,v 1.8 2003/06/16 17:10:58 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPNeutronYield_h
 #define G4NeutronHPNeutronYield_h 1
@@ -46,7 +46,7 @@ class G4NeutronHPNeutronYield
   
   G4double GetTargetMass() { return targetMass; }
   
-  void InitMean(G4std::ifstream & aDataFile)
+  void InitMean(std::ifstream & aDataFile)
   {
     G4int iflag;
     aDataFile >> targetMass >>iflag;
@@ -61,7 +61,7 @@ class G4NeutronHPNeutronYield
     }
   }
 
-  void InitPrompt(G4std::ifstream & aDataFile)
+  void InitPrompt(std::ifstream & aDataFile)
   { 
     hasPromptData = true;
     G4int iflag;
@@ -77,7 +77,7 @@ class G4NeutronHPNeutronYield
     }
   }
  
-  void InitDelayed(G4std::ifstream & aDataFile)
+  void InitDelayed(std::ifstream & aDataFile)
   {
     hasDelayedData = true;
     G4int iflag;

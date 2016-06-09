@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN07EventAction.hh,v 1.2 2003/04/08 15:47:00 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef ExN07EventAction_h

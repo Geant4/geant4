@@ -65,8 +65,8 @@
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -295,9 +295,9 @@ void DMXEventAction::writeScintHitsToFile(void) {
 
   //  G4String filename="hits.out";
   G4String filename=runAct->GetsavehitsFile();
-  G4std::ofstream hitsfile(filename, G4std::ios::app);
+  std::ofstream hitsfile(filename, std::ios::app);
   if(!event_id) {
-    G4std::ofstream hitsfile(filename);
+    std::ofstream hitsfile(filename);
     hitsfile <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
 	     << G4endl;
     hitsfile <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
@@ -310,20 +310,20 @@ void DMXEventAction::writeScintHitsToFile(void) {
     if(hitsfile.is_open()) {
 
 
-      hitsfile << G4std::setiosflags(G4std::ios::fixed)
-	       << G4std::setprecision(4)
-	       << G4std::setiosflags(G4std::ios::left)
-	       << G4std::setw(6)
+      hitsfile << std::setiosflags(std::ios::fixed)
+	       << std::setprecision(4)
+	       << std::setiosflags(std::ios::left)
+	       << std::setw(6)
 	       << event_id << "\t"
 	       << energy_pri/MeV << "\t" 
 	       << totEnergy/MeV << "\t"
 	       << S_hits  << "\t"
-	       << G4std::setiosflags(G4std::ios::scientific) 
-	       << G4std::setprecision(2)
+	       << std::setiosflags(std::ios::scientific) 
+	       << std::setprecision(2)
 	       << firstLXeHitTime/nanosecond << "\t"
 	       << P_hits << "\t"
-	       << G4std::setiosflags(G4std::ios::fixed) 
-	       << G4std::setprecision(4)
+	       << std::setiosflags(std::ios::fixed) 
+	       << std::setprecision(4)
 	       << aveTimePmtHits/nanosecond << "\t"
 	       << *seeds     << "\t"
 	       << *(seeds+1) << "\t"
@@ -357,15 +357,15 @@ void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) {
 
   //  G4String filename="pmt.out";
   G4String filename=runAct->GetsavepmtFile();
-  G4std::ofstream pmtfile(filename, G4std::ios::app);
+  std::ofstream pmtfile(filename, std::ios::app);
   G4double x; G4double y; G4double z;
 
   if(pmtfile.is_open()) {
     pmtfile << "Hit#    X, mm   Y, mm   Z, mm" << G4endl;       
-    pmtfile << G4std::setiosflags(G4std::ios::fixed)
-	    << G4std::setprecision(3)
-	    << G4std::setiosflags(G4std::ios::left)
-	    << G4std::setw(6);
+    pmtfile << std::setiosflags(std::ios::fixed)
+	    << std::setprecision(3)
+	    << std::setiosflags(std::ios::left)
+	    << std::setw(6);
     for (G4int i=0; i<P_hits; i++)
       {
 	x = ((*hits)[i]->GetPos()).x()/mm;

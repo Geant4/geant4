@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuPairProductionModel.cc,v 1.11 2003/06/16 17:01:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,6 +41,7 @@
 // 24-01-03 Fix for compounds (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add model (V.Ivanchenko)
+// 06-06-03 Fix in cross section calculation for high energy (V.Ivanchenko)
 
 //
 // Class Description:
@@ -70,7 +73,7 @@ G4double G4MuPairProductionModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
+G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
                                                  const G4String& nam)
   : G4VEmModel(nam),
   minPairEnergy(4.*electron_mass_c2),
@@ -152,13 +155,13 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
   for (size_t ii=0; ii<partialSumSigma.size(); ii++){
     G4DataVector* a=partialSumSigma[ii];
     if ( a )  delete a;    
-  } 
+  }
   partialSumSigma.clear();
   for (size_t i=0; i<numOfCouples; i++) {
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
     G4DataVector* dv = ComputePartialSumSigma(material, fixedEnergy,
-                             G4std::min(cuts[i], 0.25*highKinEnergy));
+                             std::min(cuts[i], 0.25*highKinEnergy));
     partialSumSigma.push_back(dv);
   }
   if(!samplingTablesAreFilled) MakeSamplingTables();
@@ -168,7 +171,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MuPairProductionModel::ComputeDEDX(const G4Material* material,
-                                              const G4ParticleDefinition* p,
+                                              const G4ParticleDefinition*,
                                                     G4double kineticEnergy,
                                                     G4double cutEnergy)
 {
@@ -251,7 +254,6 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
 G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
                                            G4double tkin,
                                            G4double Z,
-                                           G4double A,
                                            G4double cut)
 
 {
@@ -278,8 +280,6 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
   G4double hhh = (bbb-aaa)/float(kkk);
   G4double x = aaa;
 
-  //  G4cout << "###Cross tkin= " << tkin << " cut= " << cut << " kkk= " << kkk << G4endl;
-
   for(G4int l=0; l<kkk; l++)
   {
 
@@ -289,12 +289,15 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
 
       cross += ep*wgi[i]*ComputeDMicroscopicCrossSection(tkin, Z, ep);
     }
-    aaa += hhh;
+    x += hhh;
   }
 
   cross *=hhh;
   if(cross < 0.0) cross = 0.0;
-
+  /*
+  G4cout << "###Cross tkin= " << tkin << " cut= " << cut << " kkk= " << kkk
+         << " cross= " << cross << G4endl;
+*/
   return cross;
 }
 
@@ -326,13 +329,7 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
 
   if(tmn <= 0.) return cross;
 
-  //  G4cout << "a= " << a << " b= " << b << " tmn= " << tmn << G4endl;
-
-
   tmn = log(tmn);
-
-  //  G4cout << "a= " << a << " b= " << b << " tmn= " << tmn << G4endl;
-
 
   // Gaussian integration in ln(1-ro) ( with 8 points)
   for (G4int i=0; i<7; i++)
@@ -483,14 +480,14 @@ G4double G4MuPairProductionModel::ComputeDDMicroscopicCrossSection(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
-                                               const G4ParticleDefinition* p,
+                                               const G4ParticleDefinition*,
                                                      G4double kineticEnergy,
                                                      G4double cutEnergy,
                                                      G4double maxEnergy)
 {
   G4double cross = 0.0;
 
-  G4double tmax = G4std::min(maxEnergy, kineticEnergy);
+  G4double tmax = std::min(maxEnergy, kineticEnergy);
   if(cutEnergy >= tmax) return cross;
 
   const G4ElementVector* theElementVector = material->GetElementVector() ;
@@ -499,15 +496,14 @@ G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4double A = (*theElementVector)[i]->GetA()/(g/mole) ;
-
-    G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, A, cutEnergy);
+    G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, cutEnergy);
 
     if(maxEnergy < kineticEnergy) {
-      cr -= ComputeMicroscopicCrossSection(kineticEnergy, Z, A, maxEnergy);
+      cr -= ComputeMicroscopicCrossSection(kineticEnergy, Z, maxEnergy);
     }
     cross += theAtomNumDensityVector[i] * cr;
   }
+//G4cout << "e= " << kineticEnergy << " sigma= " << cross << G4endl;
 
   return cross;
 }
@@ -533,10 +529,8 @@ G4DataVector* G4MuPairProductionModel::ComputePartialSumSigma(
   for (G4int i=0; i<nElements; i++ ) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    G4double A = (*theElementVector)[i]->GetA()/(g/mole) ;
-
     cross += theAtomNumDensityVector[i] * ComputeMicroscopicCrossSection(kineticEnergy,
-              Z, A, cut);
+              Z, cut);
     dv->push_back(cross);
   }
   return dv;
@@ -626,7 +620,7 @@ G4DynamicParticle* G4MuPairProductionModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
+std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* aDynamicParticle,
                                    G4double minEnergy,
@@ -761,7 +755,7 @@ G4std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
    aParticle2->SetKineticEnergy(PositKineEnergy);
 
 
-  G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   vdp->push_back(aParticle1);
   vdp->push_back(aParticle2);
 

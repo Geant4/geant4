@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2003/02/27 19:30:05 gcosmo Exp $
+$Id: README,v 1.5 2003/06/06 14:56:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -48,6 +48,8 @@ Novice level examples
    - EM shower parametrisation
  ExampleN06
    - Optical photon processes
+ ExampleN07
+   - Regions and parameterised materials
 
 Extended level examples
  analysis
@@ -86,6 +88,8 @@ Advanced level examples
  lAr_calorimeter
    - Simulation of the Liquid Argon Calorimeter of the ATLAS
      Detector at LHC.
+ Rich
+   - Rich Test Beam Simulation.
  underground_physics
    - Setup of an underground dark matter experiment.
  xray_fluorescence

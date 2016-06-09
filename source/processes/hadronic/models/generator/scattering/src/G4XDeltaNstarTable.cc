@@ -432,7 +432,7 @@ const G4PhysicsVector* G4XDeltaNstarTable::CrossSectionTable(const G4String& par
     {
       // Cross section table for the requested particle available in the Map
       G4PhysicsFreeVector* sigmaVector = new G4PhysicsFreeVector(sizeDeltaNstar);
-      G4std::map <G4String, G4double*, G4std::less<G4String> >::const_iterator iter;
+      std::map <G4String, G4double*, std::less<G4String> >::const_iterator iter;
       G4double* sigmaPointer = 0;
       for (iter = xMap.begin(); iter != xMap.end(); ++iter)
 	{

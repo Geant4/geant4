@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GHEKinematicsVector.hh,v 1.5 2002/12/12 19:18:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GHEKinematicsVector.hh,v 1.6 2003/06/16 17:12:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998
@@ -109,7 +109,7 @@ class G4GHEKinematicsVector
    {
      momentum      = mom;
      energy        = sqrt(mass*mass + momentum.mag2());
-     kineticEnergy = G4std::max(0.,energy - mass);
+     kineticEnergy = std::max(0.,energy - mass);
      return;
    }
 
@@ -132,7 +132,7 @@ class G4GHEKinematicsVector
      momentum.setY( y );
      momentum.setZ( z );
      energy        = sqrt(mass*mass + momentum.mag2());
-     kineticEnergy = G4std::max(0.,energy-mass);
+     kineticEnergy = std::max(0.,energy-mass);
      return;
    }
 
@@ -150,7 +150,7 @@ class G4GHEKinematicsVector
      momentum.setX( x );
      momentum.setY( y );
      energy = sqrt(mass*mass + momentum.mag2());
-     kineticEnergy = G4std::max(0.,energy-mass);
+     kineticEnergy = std::max(0.,energy-mass);
      return;
    }
 
@@ -166,7 +166,7 @@ class G4GHEKinematicsVector
    {
      momentum.setZ( z );
      energy = sqrt(mass*mass + momentum.mag2());
-     kineticEnergy = G4std::max(0.,energy-mass);
+     kineticEnergy = std::max(0.,energy-mass);
      return;
    }
 
@@ -262,10 +262,10 @@ class G4GHEKinematicsVector
   inline
   void SetMassAndUpdate( G4double m )
   {
-    kineticEnergy = G4std::max(0., energy - m);
+    kineticEnergy = std::max(0., energy - m);
     mass = m;
     energy = kineticEnergy + mass;
-    G4double momnew = sqrt(G4std::max(0., energy*energy - mass*mass));
+    G4double momnew = sqrt(std::max(0., energy*energy - mass*mass));
     if ( momnew == 0.0) 
        {
          momentum.setX( 0.0 );
@@ -361,7 +361,7 @@ class G4GHEKinematicsVector
        mass = -1. * sqrt( -b );
      else
        mass = sqrt( b );
-     kineticEnergy = G4std::max(0.,energy - mass);
+     kineticEnergy = std::max(0.,energy - mass);
      charge        = p1.charge + p2.charge;
      code          = p1.code   + p2.code;
      particleDef   = p1.particleDef;
@@ -377,7 +377,7 @@ class G4GHEKinematicsVector
        mass = -1. * sqrt( -b );
      else
        mass = sqrt( b );
-     kineticEnergy = G4std::max(0.,energy - mass);
+     kineticEnergy = std::max(0.,energy - mass);
      charge        = p1.charge - p2.charge;
      code          = p1.code   - p2.code;
      particleDef   = p1.particleDef;
@@ -393,7 +393,7 @@ class G4GHEKinematicsVector
      momentum.setZ( p1.momentum.z()+a*p2.momentum.z() );
      energy = sqrt( sqr(p1.mass) + momentum.mag2() );
      mass = p1.mass;
-     kineticEnergy = G4std::max(0.,energy - mass);
+     kineticEnergy = std::max(0.,energy - mass);
      timeOfFlight  = p1.timeOfFlight;
      side          = p1.side;
      flag          = p1.flag;

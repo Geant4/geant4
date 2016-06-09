@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.48 2002/12/13 08:19:32 mkossov Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QEnvironment.cc,v 1.48.2.2 2003/06/25 10:18:58 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -273,15 +273,15 @@ G4QEnvironment::~G4QEnvironment()
 #ifdef debug
   G4cout<<"~G4QEnvironment: before theQCandidates nC="<<theQCandidates.size()<<G4endl;
 #endif
-  G4std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
+  std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
 #ifdef debug
   G4cout<<"~G4QEnvironment: before theQuasmons nQ="<<theQuasmons.size()<<G4endl;
 #endif
-  G4std::for_each(theQuasmons.begin(), theQuasmons.end(), DeleteQuasmon());
+  std::for_each(theQuasmons.begin(), theQuasmons.end(), DeleteQuasmon());
 #ifdef debug
   G4cout<<"~G4QEnvironment: before theQHadrons nH="<<theQHadrons.size()<<G4endl;
 #endif
-  G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
+  std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
 #ifdef debug
   G4cout<<"~G4QEnvironment: === DONE ==="<<G4endl;
 #endif
@@ -523,7 +523,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
           }
 		} // End of the LOOP over projectiles                                                    ^ ^
 	  } // End of LOOP over "output" of annihilation                                             ^ ^
-      G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // DESTROING output >------^
+      std::for_each(output->begin(), output->end(), DeleteQHadron()); // DESTROING output >------^
       output->clear();                             //                                            ^ ^
       delete output;                               // =============================================^
       if(!efFlag)                                  // => Not Energy Flux case: MultyQuasmon case ^
@@ -541,7 +541,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 #ifdef pdebug
 	    G4cout<<"G4QEnvironment::CreateQ: before input.clearAndDestroy()"<<G4endl; //      ^     ^
 #endif
-        G4std::for_each(input.begin(), input.end(), DeleteQHadron());//DESTROING input >---^-----^
+        std::for_each(input.begin(), input.end(), DeleteQHadron());//DESTROING input >---^-----^
         input.clear();                             //                                      ^
         theEnvironment = muq->GetEnvironment();    // Get residual Environment after interaction
         G4QuasmonVector* outQ = muq->GetQuasmons();// Copy of quasmons **!!DESTROY!!** <---^-----+
@@ -552,7 +552,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
           G4QHadron* curH = new G4QHadron(outH->operator[](kh)); // Copy to destroy tmp    ^  ^  ^
           theQHadrons.push_back(curH);             // Fill new Hadrons in theQHadrons      ^  ^  ^
 		}
-        G4std::for_each(outH->begin(), outH->end(), DeleteQHadron());// >------------------^==^  ^
+        std::for_each(outH->begin(), outH->end(), DeleteQHadron());// >------------------^==^  ^
         outH->clear();                             //                                      ^  ^  ^
         delete outH;                               // >====================================^==^  ^
 #ifdef pdebug
@@ -569,7 +569,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
           G4Quasmon* curQ = new G4Quasmon(outQ->operator[](mh)); // Copy to destroy temporary (?)^
           theQuasmons.push_back(curQ);             // Fill new Quasmon-copies in theQuasmons     ^
 	    }
-        G4std::for_each(outQ->begin(), outQ->end(), DeleteQuasmon()); // >-----------------------^
+        std::for_each(outQ->begin(), outQ->end(), DeleteQuasmon()); // >-----------------------^
         outQ->clear();                             //                                            ^
         delete outQ;                               // >==========================================^
 #ifdef pdebug
@@ -783,7 +783,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 #endif
     if(nPDG==90000000)
     {
-      G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
+      std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
       theQHadrons.clear();
       return theQHadrons;
     }
@@ -923,14 +923,14 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
                     theQHadrons.push_back(curH); // Fill hadron-copy (delete equivalent)     ^   ^
                     delete curout->operator[](ih); // >-* Necessary to delete instances **>--^   ^
                   } // End of LOOP over Hadrons of the Quasmon                               ^   ^
-                  G4std::for_each(curout->begin(), curout->end(), DeleteQHadron()); // >-----^   ^
+                  std::for_each(curout->begin(), curout->end(), DeleteQHadron()); // >-----^   ^
                   curout->clear();               //                                          ^   ^
                   delete curout;                 // >*Necessary to delete Vector structure*>=^   ^
                   break;                         // @@ ??                                    ^   ^
 	            } // End of check for existing output Hadrons in the Quasmon                 ^   ^
                 else                             //                                          ^   ^
                 {
-                  G4std::for_each(curout->begin(), curout->end(), DeleteQHadron()); // >-----^   ^
+                  std::for_each(curout->begin(), curout->end(), DeleteQHadron()); // >-----^   ^
                   curout->clear();               //                                          ^   ^
                   delete curout;                 // >Necessary to delete Vector structure>---^   ^
 				}
@@ -948,7 +948,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 #endif
               G4QHadron* evH = new G4QHadron(totPDG,tot4M); // Create a Hadron for ResidualNucl  ^
               EvaporateResidual(evH);            // Try to evaporate residual (delete equiv.)    ^
-              G4std::for_each(output->begin(), output->end(), DeleteQHadron());// >--------------^
+              std::for_each(output->begin(), output->end(), DeleteQHadron());// >--------------^
               output->clear();                   //                                              ^
               delete output;                     // >============================================^
               CleanUp();                         //                                              ^
@@ -962,7 +962,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 	        }
 		  } // End of PANIC treatment                                                            ^
 		} // End of trouble handling with Quasmon decay in Vacuum                                ^
-        G4std::for_each(output->begin(), output->end(), DeleteQHadron());// >--------------------^
+        std::for_each(output->begin(), output->end(), DeleteQHadron());// >--------------------^
         output->clear();                         //                                              ^
         delete output;                           // >============================================^
 	  } // End of check for the already decayed Quasmon
@@ -1151,7 +1151,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
               //if(eCount==1 && CheckGroundState(pQ,true))  //                                     ^
               if(eCount==1 && CheckGroundState(pQ))         //                                     ^
               {
-                G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >-------------^
+                std::for_each(output->begin(), output->end(), DeleteQHadron()); // >-------------^
                 output->clear();                     //                                            ^
                 delete output;                       // >==========================================^
                 pQ->KillQuasmon();               // If BackFusion succeeded, kill the Quasmon      ^
@@ -1209,7 +1209,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 			  {
                 //if(eCount==1 && DecayInEnvQ(pQ)) //                                              ^
                 //{
-                //  G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >---------^
+                //  std::for_each(output->begin(), output->end(), DeleteQHadron()); // >---------^
                 //  output->clear();                     //                                        ^
                 //  delete output;                       // >======================================^
                 //  pQ->KillQuasmon();                                                             ^
@@ -1255,7 +1255,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
                   //if(eCount==1 && CheckGroundState(pQ, true)) //  BackFusion attempt             ^
                   if(eCount==1 && CheckGroundState(pQ)) //  BackFusion attempt                     ^
                   {
-                    G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >---------^
+                    std::for_each(output->begin(), output->end(), DeleteQHadron()); // >---------^
                     output->clear();                     //                                        ^
                     delete output;                       // >======================================^
                     pQ->KillQuasmon();           //                                                ^
@@ -1264,7 +1264,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 #ifdef pdebug
 		          G4cout<<"G4QEnv::HadrQEnv: Cann't resolve PANIC, try to Evaporate"<<G4endl;//    ^
 #endif
-                  G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >-->-->-----^
+                  std::for_each(output->begin(), output->end(), DeleteQHadron()); // >-->-->-----^
                   output->clear();                     //                                          ^
                   delete output;                       // >========================================^
                   force=true;                    // Make the force decision                        ^
@@ -1272,7 +1272,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 			    }                                //                                  |             ^
 			  }                                  //                                  |             ^
 			}                                    //                                  |             ^
-            G4std::for_each(output->begin(), output->end(), DeleteQHadron()); // >---|-------------^
+            std::for_each(output->begin(), output->end(), DeleteQHadron()); // >---|-------------^
             output->clear();                     //                                  |             ^
             delete output;                       // >================================|=============^
 		  }                                      //                                  |

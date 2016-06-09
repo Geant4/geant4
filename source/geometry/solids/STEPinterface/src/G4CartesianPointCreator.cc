@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CartesianPointCreator.cc,v 1.4 2002/11/21 16:49:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4CartesianPointCreator

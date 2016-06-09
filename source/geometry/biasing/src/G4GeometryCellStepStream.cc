@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellStepStream.cc,v 1.1 2002/10/22 13:18:47 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeometryCellStepStream.cc,v 1.2 2003/06/16 16:51:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,14 +35,14 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4GeometryCellStep.hh"
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCell &tk)
+std::ostream& operator<<(std::ostream &out, const G4GeometryCell &tk)
 {
   out << "Volume name = " << tk.GetPhysicalVolume().GetName() << ", ";
   out << "Replica number = " << tk.GetReplicaNumber();
   return out;
 }
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCellStep &ps)
+std::ostream& operator<<(std::ostream &out, const G4GeometryCellStep &ps)
 {
   out << "PreGeometryCell : " <<  ps.GetPreGeometryCell() << " ";
   out << "PostGeometryCell: " <<  ps.GetPostGeometryCell() << " ";

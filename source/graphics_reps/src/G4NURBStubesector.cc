@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStubesector.cc,v 1.6 2003/04/03 15:31:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NURBStubesector.cc,v 1.7 2003/06/16 16:55:21 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -31,7 +31,7 @@
 // OC 290896
 
 #include "G4NURBStubesector.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
                                      G4double DZ, G4double PHI1, G4double PHI2)
@@ -180,7 +180,7 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
 
   // creating the nurbs identity
   mpwhoami = new char [200];
-  G4std::ostrstream  tmpstr(mpwhoami, 200);
+  std::ostrstream  tmpstr(mpwhoami, 200);
   tmpstr << "Tubs" << " \tPHI1=" << PHI1 << " ; PHI2=" << PHI2 << '\0';
   // could be more sophisticated, reallocating
   // mpwhoami to the exact length

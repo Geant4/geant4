@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDStructure.hh,v 1.7 2001/07/13 15:00:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SDStructure.hh,v 1.8 2003/06/16 16:50:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4SDStructure_h
@@ -32,7 +32,7 @@
 #include "globals.hh"
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4HCofThisEvent;
 
@@ -63,8 +63,8 @@ class G4SDStructure
       G4String ExtractDirName(G4String aPath);
 
   private:
-      G4std::vector<G4SDStructure*> structure;
-      G4std::vector<G4VSensitiveDetector*> detector;
+      std::vector<G4SDStructure*> structure;
+      std::vector<G4VSensitiveDetector*> detector;
       G4String pathName;
       G4String dirName;
       G4int verboseLevel;

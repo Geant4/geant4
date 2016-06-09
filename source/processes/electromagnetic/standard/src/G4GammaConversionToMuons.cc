@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GammaConversionToMuons.cc,v 1.4 2002/08/07 10:53:25 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002

@@ -44,7 +44,7 @@
 #define G4SHELLVACANCY_HH 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4VEMDataSet;
 class G4MaterialCutsCouple;
@@ -57,7 +57,7 @@ public:
 
   ~G4ShellVacancy();
 
-  G4std::vector<G4int> GenerateNumberOfIonisations(const G4MaterialCutsCouple* couple,
+  std::vector<G4int> GenerateNumberOfIonisations(const G4MaterialCutsCouple* couple,
 						   G4double incidentEnergy,
 						   G4double eLoss) const;
 
@@ -70,7 +70,7 @@ private:
 			               G4double energy, 
 			               G4double eLoss) const;
   
-  G4std::vector<G4VEMDataSet*> xsis;
+  std::vector<G4VEMDataSet*> xsis;
 };
 
 #endif

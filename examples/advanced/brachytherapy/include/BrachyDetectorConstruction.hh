@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstruction.hh,v 1.13 2002/11/18 15:18:35 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyDetectorConstruction.hh,v 1.15 2003/05/22 17:20:40 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //  
 //    ****************************************
 //    *                                      *
@@ -53,110 +53,64 @@ class BrachyPhantomSD;
 class BrachyPhantomROGeometry;
 class G4VPhysicalVolume;
 class BrachyMaterial;
-class BrachyFactoryIr;
-class BrachyFactoryI;
-class BrachyFactoryLeipzig;
+class BrachyFactory;
 class BrachyVoxelParameterisation;
+
 class BrachyDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-    BrachyDetectorConstruction(G4String&);
-    ~BrachyDetectorConstruction();
 
+  BrachyDetectorConstruction(G4String&);
+  ~BrachyDetectorConstruction();
 
-private:
-G4int* pVoxel;
-G4double m_BoxDimX;
-G4double m_BoxDimY;
-G4double m_BoxDimZ;
-G4int NumVoxelX;
-G4int NumVoxelZ;
-G4double dimVoxel;
-G4String m_SDName;
-G4int detectorChoice;
-G4double ExpHall_x ;
-G4double ExpHall_y ;
-G4double ExpHall_z ;
+  G4VPhysicalVolume*   Construct();  
+  void SwitchBrachytherapicSeed(); //Change radiactive source through GUI
+  void SelectBrachytherapicSeed(G4String val);
+  void ConstructPhantom(); 
+  void ConstructSensitiveDetector();
+  void PrintDetectorParameters(); 
+  void SetPhantomMaterial(G4String); 
 
+  const G4double VoxelWidth_X(){return phantomDimensionX/numberOfVoxelsAlongX;}
+  const G4double VoxelWidth_Z(){return phantomDimensionZ/numberOfVoxelsAlongZ;}
+  const G4int   GetNumVoxelX()  {return  numberOfVoxelsAlongX;}
+  const G4int   GetNumVoxelZ()  {return numberOfVoxelsAlongZ;}
+  const G4double GetDimX()      {return phantomDimensionX;}
+  const G4double GetBoxDim_Z()  {return  phantomDimensionZ;}
 
-BrachyPhantomSD* pPhantomSD;
-BrachyPhantomROGeometry*   pPhantomROGeometry;
-
-
-BrachyFactoryLeipzig* factoryLeipzig;
-BrachyFactoryI* factoryI;
-BrachyFactoryIr* factoryIr;
-BrachyMaterial* pMat;
-
-
-public:
-void PrintDetectorParameters(); 
-void SetAbsorberMaterial(G4String);
-
-const   G4double VoxelWidth_X() {return m_BoxDimX/NumVoxelX;};//num voxel
-const   G4double VoxelWidth_Z() {return m_BoxDimZ/NumVoxelZ;};
-const   G4int   GetNumVoxelX(){return NumVoxelX;};
-const   G4int   GetNumVoxelZ(){return NumVoxelZ;};
-const   G4double GetDimX(){return m_BoxDimX;};
-
-const   G4double GetBoxDim_Z() {return  m_BoxDimZ;};
-
-void SwitchDetector();
+  void ComputeDimVoxel() {dimVoxel = phantomDimensionX/numberOfVoxelsAlongX;}
 
 private:
+  
+  G4int detectorChoice; //Select brachytherapic seed
+  BrachyPhantomSD* phantomSD;//pointer to sensitive detector
+  BrachyPhantomROGeometry* phantomROGeometry;//pointer to ROGeometry
+  BrachyFactory* factory;
 
-BrachyDetectorMessenger* detectorMessenger; 
+  // World ...
+  G4Box*             World;        //pointer to the solid World 
+  G4LogicalVolume*   WorldLog;     //pointer to the logical World
+  G4VPhysicalVolume* WorldPhys;    //pointer to the physical World
 
-G4Box*             ExpHall;    //pointer to the solid World 
-G4LogicalVolume*   ExpHallLog;    //pointer to the logical World
-G4VPhysicalVolume* ExpHallPhys;    //pointer to the physical World
-
-G4Box*             solidVoxel;  
-G4LogicalVolume*   logicVoxel;  
-G4VPhysicalVolume* physiVoxel;  
-
-
-G4Box*              Phantom;
-G4LogicalVolume*    PhantomLog;
-G4VPhysicalVolume*   PhantomPhys;
-G4Box* Voxel;
-G4LogicalVolume*  VoxelLog;
-G4VPhysicalVolume* VoxelPhys;
-
-
-G4Material*            AbsorberMaterial;
-
-
-void  ConstructPhantom();
-void ConstructSensitiveDetector();
-
-private:
-G4VPhysicalVolume*   Construct();  
-
- void ComputeDimVoxel();
-
-
-public:
-
- G4VPhysicalVolume* ConstructDetector();
-void SelectDetector(G4String val);
-
-
-
+  // Phantom ... 
+  G4Box*              Phantom;  //pointer to solid phantom
+  G4LogicalVolume*    PhantomLog; //pointer to logic phantom
+  G4VPhysicalVolume*  PhantomPhys; //pointer to physical phantom
+  G4Material*         phantomAbsorberMaterial;
+ 
+  G4double phantomDimensionX; //Phantom XDimension
+  G4double phantomDimensionY; //Phantom YDimension
+  G4double phantomDimensionZ; //Phantom ZDimension  
+  G4int numberOfVoxelsAlongX; //Number of voxels along x axis
+  G4int numberOfVoxelsAlongZ; //Number of voxels along z axis 
+  G4double Worldx ; //World XDimension
+  G4double Worldy ; //World YDimension
+  G4double Worldz ; //World XDimension
+  G4String sensitiveDetectorName; 
+  BrachyDetectorMessenger* detectorMessenger; 
+  BrachyMaterial* pMaterial; 
+   
+  G4double dimVoxel;   
 };
 
-inline void BrachyDetectorConstruction::ComputeDimVoxel()
-{
-dimVoxel=m_BoxDimX/NumVoxelX; 
-
-}
-
 #endif
-
-
-
-
-
-
-
-

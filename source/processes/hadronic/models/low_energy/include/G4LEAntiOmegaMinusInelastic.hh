@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LEAntiOmegaMinusInelastic.hh,v 1.6 2002/12/12 19:18:04 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: Low Energy AntiOmegaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997

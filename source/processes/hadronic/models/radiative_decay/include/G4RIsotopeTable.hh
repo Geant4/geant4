@@ -54,7 +54,7 @@
 #include "G4IonTable.hh"
 #include "G4DecayTable.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -66,8 +66,8 @@ class G4RIsotopeTable : public G4VIsotopeTable
   // class description - end
 public:
   //
-  typedef G4std::vector<G4IsotopeProperty*> G4IsotopeList;
-  typedef G4std::vector<G4String>           G4IsotopeNameList;
+  typedef std::vector<G4IsotopeProperty*> G4IsotopeList;
+  typedef std::vector<G4String>           G4IsotopeNameList;
 
 public:
   // constructor

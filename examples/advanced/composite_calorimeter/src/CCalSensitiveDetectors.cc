@@ -48,13 +48,13 @@ void CCalSensitiveDetectors::registerVolume (const G4String& string,
 #endif
 }
 
-G4std::vector<G4LogicalVolume*> CCalSensitiveDetectors::getVolumes (const G4String& string, 
+std::vector<G4LogicalVolume*> CCalSensitiveDetectors::getVolumes (const G4String& string, 
 							     bool exist) {
 
   mmslv::const_iterator mmscite;
-  G4std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
+  std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
   mmsdi = theLVs.equal_range(string);
-  G4std::vector<G4LogicalVolume*> lvs;
+  std::vector<G4LogicalVolume*> lvs;
   for (mmscite = mmsdi.first; mmscite != mmsdi.second; mmscite++ ) {
     lvs.push_back(const_cast<G4LogicalVolume*>((*mmscite).second));
   }
@@ -71,7 +71,7 @@ bool CCalSensitiveDetectors::setSensitive(const G4String& string,
 
   bool result=false;
   mmslv::const_iterator mmscite;
-  G4std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
+  std::pair<mmslv::iterator, mmslv::iterator> mmsdi;
   mmsdi = theLVs.equal_range(string);
   for (mmscite = mmsdi.first; mmscite != mmsdi.second; mmscite++ ) {
     G4LogicalVolume* lv = const_cast<G4LogicalVolume*>((*mmscite).second);

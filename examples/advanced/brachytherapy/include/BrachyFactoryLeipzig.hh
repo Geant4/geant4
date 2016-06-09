@@ -21,22 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyFactoryLeipzig.hh,v 1.2 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyFactoryLeipzig.hh,v 1.4 2003/05/22 17:20:41 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //    **********************************
 //    *                                *
 //    *      BrachyFactoryLeipzig.hh   *
 //    *                                *
 //    **********************************
+//code developed by: Susanna Guatelli
 //
-//
+// This class manages the creation of iridum source used in superficial
+// brachytherapy ...
 #ifndef BrachyFactoryLeipzig_h
 #define BrachyFactoryLeipzig_h 1
+
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4RadioactiveDecay.hh"
-#include"BrachyFactory.hh"
+#include "BrachyFactory.hh"
 #include "G4RunManager.hh"
+
 class G4ParticleGun;
 class G4Run;
 class G4Event;
@@ -45,15 +48,17 @@ class BrachyFactory;
 class BrachyPrimaryGeneratorActionIr;
 class BrachyDetectorConstructionLeipzig;
 
-class BrachyFactoryLeipzig:public BrachyFactory
+class BrachyFactoryLeipzig : public BrachyFactory
 {
 public:
   BrachyFactoryLeipzig();
  ~BrachyFactoryLeipzig();
+
   G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction();
   void CreateSource(G4VPhysicalVolume*);
   void CleanSource();
+
 private:
-  BrachyDetectorConstructionLeipzig* pLeipzig;
+  BrachyDetectorConstructionLeipzig* leipzigSource;
 };
 #endif

@@ -23,13 +23,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALRunAction.hh,v 1.6 2003/02/17 18:02:07 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: FCALRunAction.hh,v 1.7 2003/05/26 12:51:18 pmendez Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 #ifndef FCALRunAction_h
 #define FCALRunAction_h 1
@@ -50,8 +51,9 @@ class FCALRunAction : public G4UserRunAction
   public:
     void BeginOfRunAction(const G4Run*);
 
-};
+    void EndOfRunAction(const G4Run*);
 
+};
 
 
 #endif

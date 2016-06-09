@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.hh,v 1.6 2002/10/14 07:42:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PVReplica.hh,v 1.7 2003/05/13 18:37:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4PVReplica
@@ -35,19 +35,11 @@
 // volume.
 // 
 // G4PVReplica(const G4String& pName,
-//	       G4LogicalVolume *pLogical,
-//	       G4VPhysicalVolume *pMother,
+//                   G4LogicalVolume *pLogical,
+//                   G4LogicalVolume *pMother,
 //             const EAxis pAxis,
 //             const G4int nReplicas,
-//	       const G4double width,
-//             const G4double offset=0);
-//
-// G4PVReplica(const G4String& pName,
-//	       G4LogicalVolume *pLogical,
-//	       G4LogicalVolume *pMother,
-//             const EAxis pAxis,
-//             const G4int nReplicas,
-//	       const G4double width,
+//             const G4double width,
 //             const G4double offset=0);
 //
 // Replication may occur along:
@@ -86,35 +78,40 @@ class G4PVReplica : public G4VPhysicalVolume
   public:  // with description
 
     G4PVReplica(const G4String& pName,
-		G4LogicalVolume* pLogical,
-		G4VPhysicalVolume* pMother,
+                      G4LogicalVolume* pLogical,
+                      G4LogicalVolume* pMother,
                 const EAxis pAxis,
                 const G4int nReplicas,
-		const G4double width,
+                const G4double width,
                 const G4double offset=0);
 
+  public:  // without description
+
     G4PVReplica(const G4String& pName,
-		G4LogicalVolume* pLogical,
-		G4LogicalVolume* pMother,
+                      G4LogicalVolume* pLogical,
+                      G4VPhysicalVolume* pMother,
                 const EAxis pAxis,
                 const G4int nReplicas,
-		const G4double width,
+                const G4double width,
                 const G4double offset=0);
+
+  public:  // with description
 
     virtual ~G4PVReplica();
 
-    virtual G4bool IsMany() const;
+    G4bool IsMany() const;
+    G4bool IsReplicated() const;
+
     virtual G4int GetCopyNo() const;
     virtual void  SetCopyNo(G4int CopyNo);
-    virtual G4bool IsReplicated() const;
     virtual G4bool IsParameterised() const;
     virtual G4VPVParameterisation* GetParameterisation() const;
     virtual G4int GetMultiplicity() const;
     virtual void GetReplicationData(EAxis& axis,
-                                   G4int& nReplicas,
-				   G4double& width,
-                                   G4double& offset,
-                                   G4bool& consuming) const;
+                                    G4int& nReplicas,
+                                    G4double& width,
+                                    G4double& offset,
+                                    G4bool& consuming) const;
     virtual void Setup(G4VPhysicalVolume *pMother);
 
  private:
@@ -122,7 +119,7 @@ class G4PVReplica : public G4VPhysicalVolume
     void CheckAndSetParameters(
                          const EAxis pAxis,
                          const G4int nReplicas,
-		         const G4double width,
+                         const G4double width,
                          const G4double offset);
 
     G4PVReplica(const G4PVReplica&);

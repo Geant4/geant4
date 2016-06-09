@@ -28,7 +28,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4VAngularDistribution.hh"
 #include "G4KineticTrackVector.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4CollisionNNToNDelta1620 : public G4GeneralNNCollision
 {
@@ -41,10 +41,10 @@ public:
 
 
   virtual G4String GetName() const { return "NN -> N Delta(1620) Collision"; }
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const
+  virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
     G4Exception("Tried to call G4CollisionNNToNDelta1620::GetListOfColliders. Please find out why!");
-    G4std::vector<G4String> * aList = new G4std::vector<G4String>;
+    std::vector<G4String> * aList = new std::vector<G4String>;
     return *aList;
   } 
   

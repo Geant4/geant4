@@ -50,7 +50,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 
-#include "g4std/vector"
+#include <vector>
 ////////////////////////////////////////////////////////////////////////////////
 //
 class G4RadioactiveDecayRate
@@ -90,17 +90,17 @@ public: // with description
   inline G4int GetA() const { return A;}
   inline G4double GetE() const { return E;}
   inline G4int GetGeneration() const { return generation;}
-  inline G4std::vector<G4double> GetDecayRateC() const
+  inline std::vector<G4double> GetDecayRateC() const
    {  return decayRateC; }
-  inline G4std::vector<G4double> GetTaos() const {  return taos; }
+  inline std::vector<G4double> GetTaos() const {  return taos; }
 
   inline void SetZ(G4int value) {Z = value;}
   inline void SetA(G4int value) {A = value;}
   inline void SetE(G4double value) {E = value;}
   inline void SetGeneration(G4int value) {generation = value;}
-  inline void SetDecayRateC(G4std::vector<G4double> value)
+  inline void SetDecayRateC(std::vector<G4double> value)
     {decayRateC = value;}
-  inline void SetTaos(G4std::vector<G4double> value) {taos = value;}
+  inline void SetTaos(std::vector<G4double> value) {taos = value;}
 
 protected:
 
@@ -108,8 +108,8 @@ protected:
   G4int                   A;
   G4double                E;
   G4int                   generation;
-  G4std::vector<G4double> decayRateC;
-  G4std::vector<G4double> taos;
+  std::vector<G4double> decayRateC;
+  std::vector<G4double> taos;
 
 public:
 

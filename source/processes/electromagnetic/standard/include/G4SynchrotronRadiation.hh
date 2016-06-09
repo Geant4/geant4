@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.hh,v 1.7 2002/04/09 17:34:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SynchrotronRadiation.hh,v 1.8 2003/05/26 16:13:14 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -138,7 +138,7 @@ class G4SynchrotronRadiation : public G4VDiscreteProcess
 
 inline G4double 
 G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
-                                               G4double previousStepSize,
+                                               G4double,
                                                G4ForceCondition* condition)
 {
    const G4DynamicParticle* aDynamicParticle;

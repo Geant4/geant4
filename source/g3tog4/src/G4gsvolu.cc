@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsvolu.cc,v 1.8 2001/07/11 09:59:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4gsvolu.cc,v 1.9 2003/06/16 16:50:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by I.Hrivnacova, 13.10.99
 
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G3VolTable.hh"
 #include "globals.hh"
 #include "G3toG4.hh"
@@ -74,7 +74,7 @@ void G4gsvolu(G4String vname, G4String shape, G4int nmed, G4double* Rpar,
   /*
   G4cout << "Creating logical volume " << vname << " shape " << shape
   	 << " nmed " << nmed << " #pars "<< npar << " parameters (cm): ";
-  for (int ipar=0; ipar< npar; ipar++) G4cout << G4std::setw(8) << Rpar[ipar];
+  for (int ipar=0; ipar< npar; ipar++) G4cout << std::setw(8) << Rpar[ipar];
   G4cout << G4endl;
   */
   if (G3Vol.GetVTE(vname)) {

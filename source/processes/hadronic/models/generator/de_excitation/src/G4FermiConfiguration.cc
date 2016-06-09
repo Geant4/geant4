@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.10 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FermiConfiguration.cc,v 1.12 2003/06/16 17:06:25 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -476,7 +476,8 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
   
     // Avalaible kinetic energy of system.
     G4double AvalKineticEnergy = theNucleus.GetExcitationEnergy() +
-	G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ(),theNucleus.GetA());
+	G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(static_cast<G4int>(theNucleus.GetZ()),
+								       static_cast<G4int>(theNucleus.GetA()));
   
     G4int i;
     for (i = 0; i < K; i++) 
@@ -484,7 +485,7 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
   
   
     // Calculate Momenta of K fragments
-    G4std::deque<G4LorentzVector*>* MomentumComponents = 
+    std::deque<G4LorentzVector*>* MomentumComponents = 
 	FragmentsMomentum(AvalKineticEnergy);
 
   
@@ -511,7 +512,7 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
   
     if (!MomentumComponents->empty())
     {
-	G4std::for_each(MomentumComponents->begin(),MomentumComponents->end(),
+	std::for_each(MomentumComponents->begin(),MomentumComponents->end(),
 			DeleteFragment());
     }
 
@@ -522,7 +523,7 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
 
 
 
-G4std::deque<G4LorentzVector*>* 
+std::deque<G4LorentzVector*>* 
 G4FermiConfiguration::FragmentsMomentum(G4double KineticEnergy)
 {
     // Calculates momentum for K fragments (Kopylov's method of sampling is used)
@@ -532,8 +533,8 @@ G4FermiConfiguration::FragmentsMomentum(G4double KineticEnergy)
     G4int K = Index.size();
 
   
-    G4std::deque<G4LorentzVector*>* MomentumList = 
-	new G4std::deque<G4LorentzVector*>(K);
+    std::deque<G4LorentzVector*>* MomentumList = 
+	new std::deque<G4LorentzVector*>(K);
   
     G4double AvalaibleMass = 0; 
     for (G4int i=0; i<K; i++) AvalaibleMass += theListOfFragments[Index[i]-1]->GetFragmentMass();

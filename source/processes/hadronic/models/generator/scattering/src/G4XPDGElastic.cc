@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XPDGElastic.cc,v 1.5 2002/12/12 19:17:53 gunter Exp $ //
+// $Id: G4XPDGElastic.cc,v 1.6 2003/06/16 17:09:22 gunter Exp $ //
 // -------------------------------------------------------------------
 //      
 // PDG  Elastic cross section 
@@ -78,23 +78,23 @@ G4XPDGElastic::G4XPDGElastic()
   G4String KMinus = G4KaonMinus::KaonMinusDefinition()->GetParticleName();
   G4String antiproton = G4AntiProton::AntiProtonDefinition()->GetParticleName();
   
-  G4std::pair<G4String,G4String> pp(proton,proton);
-  G4std::pair<G4String,G4String> pn(proton,neutron);
-  G4std::pair<G4String,G4String> piPlusp(piPlus,proton);
-  G4std::pair<G4String,G4String> piMinusp(piMinus,proton);
-  G4std::pair<G4String,G4String> KPlusp(KPlus,proton);
-  G4std::pair<G4String,G4String> KMinusp(KMinus,proton);
-  G4std::pair<G4String,G4String> nn(neutron,neutron);
-  G4std::pair<G4String,G4String> ppbar(proton,antiproton);
-  G4std::pair<G4String,G4String> npbar(antiproton,neutron);
+  std::pair<G4String,G4String> pp(proton,proton);
+  std::pair<G4String,G4String> pn(proton,neutron);
+  std::pair<G4String,G4String> piPlusp(piPlus,proton);
+  std::pair<G4String,G4String> piMinusp(piMinus,proton);
+  std::pair<G4String,G4String> KPlusp(KPlus,proton);
+  std::pair<G4String,G4String> KMinusp(KMinus,proton);
+  std::pair<G4String,G4String> nn(neutron,neutron);
+  std::pair<G4String,G4String> ppbar(proton,antiproton);
+  std::pair<G4String,G4String> npbar(antiproton,neutron);
 
-  G4std::vector<G4double> ppData;
-  G4std::vector<G4double> pPiPlusData;
-  G4std::vector<G4double> pPiMinusData;
-  G4std::vector<G4double> pKPlusData;
-  G4std::vector<G4double> pKMinusData;
-  G4std::vector<G4double> ppbarData;
-  G4std::vector<G4double> npbarData;
+  std::vector<G4double> ppData;
+  std::vector<G4double> pPiPlusData;
+  std::vector<G4double> pPiMinusData;
+  std::vector<G4double> pKPlusData;
+  std::vector<G4double> pKMinusData;
+  std::vector<G4double> ppbarData;
+  std::vector<G4double> npbarData;
 
   G4int i;
   for (i=0; i<2; i++) 
@@ -161,7 +161,7 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
   G4double m1 = def1->GetPDGMass();
   G4double m2 = def2->GetPDGMass();
-  G4double m = G4std::max(m1,m2);
+  G4double m = std::max(m1,m2);
   //  if (m1 > m) m = m1;
   
   G4double pLab = 0.;
@@ -178,11 +178,11 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
       if ( (enc1 < 0 && enc2 >0) || (enc2 < 0 && enc1 >0) ) coeff = 1.;
       
       // Order the pair: first is the lower mass particle, second is the higher mass one
-      G4std::pair<G4String,G4String> trkPair(def1->GetParticleName(),def2->GetParticleName());
+      std::pair<G4String,G4String> trkPair(def1->GetParticleName(),def2->GetParticleName());
       if (def1->GetPDGMass() > def2->GetPDGMass())
-	trkPair = G4std::pair<G4String,G4String>(def2->GetParticleName(),def1->GetParticleName());
+	trkPair = std::pair<G4String,G4String>(def2->GetParticleName(),def1->GetParticleName());
       
-      G4std::vector<G4double> data; 
+      std::vector<G4double> data; 
       G4double pMinFit = 0.;
       G4double pMaxFit = 0.;
       G4double aFit = 0.;
@@ -200,7 +200,7 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
 	  PairDoubleMap::const_iterator iter;
 	  for (iter = xMap.begin(); iter != xMap.end(); ++iter)
 	    {
-	      G4std::pair<G4String,G4String> thePair = (*iter).first;
+	      std::pair<G4String,G4String> thePair = (*iter).first;
 	      if (thePair == trkPair)
 		{
 		  data = (*iter).second;

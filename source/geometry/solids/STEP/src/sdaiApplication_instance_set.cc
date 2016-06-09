@@ -126,7 +126,7 @@ int SCLP23(Application_instance__set)::Index (SCLP23(Application_instance_ptr) v
 
 SCLP23(Application_instance_ptr)& SCLP23(Application_instance__set)::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }

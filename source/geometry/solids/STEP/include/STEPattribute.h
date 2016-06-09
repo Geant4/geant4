@@ -12,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPattribute.h,v 1.5 2000/11/20 18:14:54 gcosmo Exp $ */
+/* $Id: STEPattribute.h,v 1.6 2003/06/06 17:07:28 gcosmo Exp $ */
 
 #include <sclprefixes.h>
 
@@ -34,8 +34,10 @@
 // in STEPaggregate.cc and STEPattribute.cc
 #define REAL_NUM_PRECISION 15
 
+// Commented out following declarations, since not used and
+// causing clashes with system headers on some compilers.... - GC
 //typedef unsigned short BOOLEAN;
-typedef double real;  
+//typedef double real;  
 
 class InstMgr;
 // Commented out following declaration, since meaningless - GC
@@ -51,7 +53,7 @@ class TypeDescriptor;
 class AttrDescriptor;
 class EntityDescriptor;
 
-#include "g4std/strstream"
+#include <strstream>
 //#include <ExpDict.h>
 
 //#define s_String	char *
@@ -61,12 +63,12 @@ extern int SetErrOnNull(const char *attrValue, ErrorDescriptor *error);
 ////////////////////
 
 extern Severity 
-CheckRemainingInput(G4std::istream &in, ErrorDescriptor *err, 
+CheckRemainingInput(std::istream &in, ErrorDescriptor *err, 
 		    const char *typeName, // used in error message
 		    const char *tokenList); // e.g. ",)"
 
 extern SCLP23(Application_instance) *
-ReadEntityRef(G4std::istream &in, ErrorDescriptor *err, char *tokenList, 
+ReadEntityRef(std::istream &in, ErrorDescriptor *err, char *tokenList, 
 	      InstMgr * instances, int addFileId);
 
 extern SCLP23(Application_instance) *
@@ -95,18 +97,18 @@ extern SCLP23(Application_instance) *STEPread_reference (const char * s, ErrorDe
 				       InstMgr * instances, int addFileId);
 ////////////////////
 
-extern int   QuoteInString(G4std::istream& in);
+extern int   QuoteInString(std::istream& in);
 
 extern void  AppendChar(char c, int& index, char *&s, int& sSize);
 
 extern void 
-PushPastString (G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
+PushPastString (std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 extern void 
-PushPastImbedAggr (G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
+PushPastImbedAggr (std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 extern void 
-PushPastAggr1Dim(G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
+PushPastAggr1Dim(std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 //extern  Severity ValidateEntityType(SCLP23(Application_instance) *se, 
 //					const AttrDescriptor *ad, 
@@ -114,7 +116,7 @@ PushPastAggr1Dim(G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 class STEPattribute {
 
-    friend G4std::ostream &operator<< ( G4std::ostream&, STEPattribute& );
+    friend std::ostream &operator<< ( std::ostream&, STEPattribute& );
 
 // The CenterLine compiler couldn't handle this friend declaration.
 // Here is the error
@@ -154,7 +156,7 @@ class STEPattribute {
 	} ptr;
 
   protected:
-    char SkipBadAttr(G4std::istream& in, char *StopChars);
+    char SkipBadAttr(std::istream& in, char *StopChars);
     void AddErrorInfo();
 
   public:
@@ -163,12 +165,12 @@ class STEPattribute {
 
     Severity StrToVal(const char *s, InstMgr *instances =0, 
 		      int addFileId =0);
-    Severity STEPread(G4std::istream& in = G4cin, InstMgr *instances =0, 
+    Severity STEPread(std::istream& in = G4cin, InstMgr *instances =0, 
 		      int addFileId =0, const char * =NULL);
 
     const char * asStr(SCLstring &, const char * =0) const;
                       // return the attr value as a string
-    void STEPwrite(G4std::ostream& out = G4cout, const char * =0);
+    void STEPwrite(std::ostream& out = G4cout, const char * =0);
 
     int ShallowCopy(STEPattribute *sa);
 

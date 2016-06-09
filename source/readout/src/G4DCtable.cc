@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCtable.cc,v 1.6 2001/10/18 20:28:19 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DCtable.cc,v 1.7 2003/06/16 17:12:48 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4DCtable.hh"
@@ -43,7 +43,7 @@ G4int G4DCtable::Registor(G4String DMname,G4String DCname)
 G4int G4DCtable::GetCollectionID(G4String DCname)
 {
   G4int i = -1;
-  if(DCname.index("/")==G4std::string::npos) // DCname only
+  if(DCname.index("/")==std::string::npos) // DCname only
   {
     for(int j=0;j<int(DClist.size());j++)
     {

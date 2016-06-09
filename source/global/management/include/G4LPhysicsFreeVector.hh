@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LPhysicsFreeVector.hh,v 1.7 2001/07/11 10:00:49 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------------

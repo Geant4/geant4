@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.cc,v 1.6 2001/10/24 18:42:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleMessenger.cc,v 1.7 2003/06/16 16:58:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -42,7 +42,7 @@
 //---------------------------------------------------------------
 
 #include "G4ios.hh"                 // Include from 'system'
-#include "g4std/iomanip"                  // Include from 'system'
+#include <iomanip>                  // Include from 'system'
 
 #include "G4ParticleMessenger.hh"
 #include "G4UImanager.hh"
@@ -114,7 +114,7 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     while( (*piter)() ){
       G4ParticleDefinition *particle = piter->value();
       if ((newValues=="all") || (newValues==particle->GetParticleType())) {
-        G4cout << G4std::setw(19) << particle->GetParticleName();
+        G4cout << std::setw(19) << particle->GetParticleName();
 	if ((counter++)%4 == 3) {
 	  G4cout << G4endl;
 	} else {

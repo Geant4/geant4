@@ -21,98 +21,99 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTriton.hh,v 1.12 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PreCompoundTriton.hh,v 1.13 2003/03/24 13:56:53 larazb Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
 #ifndef G4PreCompoundTriton_h
 #define G4PreCompoundTriton_h 1
 
-#include "G4VPreCompoundIon.hh"
+#include "G4PreCompoundIon.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Triton.hh"
 
 #include "G4TritonCoulombBarrier.hh"
 
 
-class G4PreCompoundTriton : public G4VPreCompoundIon
+class G4PreCompoundTriton : public G4PreCompoundIon
 {
 public:
   // default constructor
-  G4PreCompoundTriton():G4VPreCompoundIon(3,1,&theTritonCoulombBarrier,"Triton") {}
+  G4PreCompoundTriton():G4PreCompoundIon(3,1,&theTritonCoulombBarrier,"Triton") {}
 
   // copy constructor
-  G4PreCompoundTriton(const G4PreCompoundTriton &right): G4VPreCompoundIon(right) {}
+  G4PreCompoundTriton(const G4PreCompoundTriton &right): G4PreCompoundIon(right) {}
 
   // destructor
   ~G4PreCompoundTriton() {}
 
   // operators  
   const G4PreCompoundTriton & operator=(const G4PreCompoundTriton &right) {
-    if (&right != this) this->G4VPreCompoundIon::operator=(right);
+    if (&right != this) this->G4PreCompoundIon::operator=(right);
     return *this;
   }
 
   G4bool operator==(const G4PreCompoundTriton &right) const
-  { return G4VPreCompoundIon::operator==(right);}
+  { return G4PreCompoundIon::operator==(right);}
 
   
   G4bool operator!=(const G4PreCompoundTriton &right) const
-  { return G4VPreCompoundIon::operator!=(right);}
+  { return G4PreCompoundIon::operator!=(right);}
 
 
-    G4ReactionProduct * GetReactionProduct() const
-	{
-            G4ReactionProduct * theReactionProduct =
-                new G4ReactionProduct(G4Triton::TritonDefinition());
-            theReactionProduct->SetMomentum(GetMomentum().vect());
-            theReactionProduct->SetTotalEnergy(GetMomentum().e());
+  G4ReactionProduct * GetReactionProduct() const
+  {
+    G4ReactionProduct * theReactionProduct =
+      new G4ReactionProduct(G4Triton::TritonDefinition());
+    theReactionProduct->SetMomentum(GetMomentum().vect());
+    theReactionProduct->SetTotalEnergy(GetMomentum().e());
 #ifdef PRECOMPOUND_TEST
-            theReactionProduct->SetCreatorModel("G4PrecompoundModel");
+    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
 #endif
-            return theReactionProduct;
-        }   
+    return theReactionProduct;
+  }   
     
 private:
-    virtual G4double GetAlpha()
-	{
-	    G4double C = 0.0;
-	    G4double aZ = GetZ() + GetRestZ();
-	    if (aZ >= 70) {
-		C = 0.10;
-	    } else {
-		C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
-	    }
+  virtual G4double GetAlpha()
+  {
+    G4double C = 0.0;
+    G4double aZ = GetZ() + GetRestZ();
+    if (aZ >= 70) 
+      {
+	C = 0.10;
+      } 
+    else 
+      {
+	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
+      }
  
-	    return 1.0 + C/3.0;
-	}
+    return 1.0 + C/3.0;
+  }
 
-    virtual G4double GetBeta()
-	{
-	    return -GetCoulombBarrier();
-	}
+  virtual G4double GetBeta()
+  {
+    return -GetCoulombBarrier();
+  }
 
-    virtual G4double FactorialFactor(const G4double N, const G4double P)
-	{
-	    return 
-		(N-3.0)*(P-2.0)*(
-		    (((N-2.0)*(P-1.0))/2.0) *(
-			(((N-1.0)*P)/3.0) 
-			)
-		    );
-	}
+  virtual G4double FactorialFactor(const G4double N, const G4double P)
+  {
+    return 
+      (N-3.0)*(P-2.0)*(
+		       (((N-2.0)*(P-1.0))/2.0) *(
+						 (((N-1.0)*P)/3.0) 
+						 )
+		       );
+  }
 
-    virtual G4double CoalescenceFactor(const G4double A)
-	{
-	    return 243.0/(A*A);
-	}    
+  virtual G4double CoalescenceFactor(const G4double A)
+  {
+    return 243.0/(A*A);
+  }    
 private:
 
-    G4TritonCoulombBarrier theTritonCoulombBarrier;
+  G4TritonCoulombBarrier theTritonCoulombBarrier;
 
 };
 
 #endif
- 
-

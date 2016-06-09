@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.5 2002/12/12 19:17:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LundStringFragmentation.cc,v 1.6 2003/05/30 14:36:44 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -44,7 +44,7 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 //    {
 //    }
 
-G4LundStringFragmentation::G4LundStringFragmentation(const G4LundStringFragmentation &right)
+G4LundStringFragmentation::G4LundStringFragmentation(const G4LundStringFragmentation &) : G4VLongitudinalStringDecay()
    {
    }
 
@@ -55,7 +55,7 @@ G4LundStringFragmentation::~G4LundStringFragmentation()
 
 //****************************************************************************************
 
-const G4LundStringFragmentation & G4LundStringFragmentation::operator=(const G4LundStringFragmentation &right)
+const G4LundStringFragmentation & G4LundStringFragmentation::operator=(const G4LundStringFragmentation &)
    {
      G4Exception("G4LundStringFragmentation::operator= meant to not be accessable");
      return *this;
@@ -73,7 +73,7 @@ int G4LundStringFragmentation::operator!=(const G4LundStringFragmentation &right
 
 //****************************************************************************************
 
-G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py)
+G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int ,  G4ParticleDefinition* pHadron, G4double Px, G4double Py)
     {
     const G4double  alund = 0.7/GeV/GeV; 
 

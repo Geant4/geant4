@@ -85,7 +85,7 @@
 #include "XrayTelSteppingAction.hh"
 #include "XrayTelPrimaryGeneratorAction.hh"
 #include <iostream.h>
-#include "g4std/vector"
+#include <vector>
 
 int main( int argc, char** argv )
 {

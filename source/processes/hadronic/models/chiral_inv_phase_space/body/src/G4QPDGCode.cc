@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.28 2002/12/12 19:14:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QPDGCode.cc,v 1.30 2003/06/25 14:12:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QPDGCode ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -74,7 +74,7 @@ const G4QPDGCode& G4QPDGCode::operator=(const G4QPDGCode& rhs)
 G4QPDGCode::~G4QPDGCode() {}
 
 // Standard output for QPDGCode
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QPDGCode& rhs)
+std::ostream& operator<<(std::ostream& lhs, G4QPDGCode& rhs)
 //       =========================================
 {
   lhs << "[ PDG=" << rhs.GetPDGCode() << ", Q=" << rhs.GetQCode() << "]";
@@ -82,7 +82,7 @@ G4std::ostream& operator<<(G4std::ostream& lhs, G4QPDGCode& rhs)
 }
 
 // Standard output for const QPDGCode
-G4std::ostream& operator<<(G4std::ostream& lhs, const G4QPDGCode& rhs)
+std::ostream& operator<<(std::ostream& lhs, const G4QPDGCode& rhs)
 //       ===============================================
 {
   lhs << "[ PDG=" << rhs.GetPDGCode() << ", Q=" << rhs.GetQCode() << "]";
@@ -745,7 +745,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   else 
   {
     if(G4NucleiPropertiesTable::IsInTable(Z,A)) m=k+G4NucleiProperties::GetNuclearMass(A,Z);
-    else m+=-sh[Z]-sh[N]+b1*D*D*pow(A,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(A,b9)+b6/A);
+    else m+=-sh[Z]-sh[N]+b1*D*D*pow(G4double(A),b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(G4double(A),b9)+b6/A);
   }
   G4double maxM= k+Z*mP+N*mN+S*mL+.001;       // @@ .001 ?? Wings of the Mass parabola
   if(m>maxM) m=maxM;

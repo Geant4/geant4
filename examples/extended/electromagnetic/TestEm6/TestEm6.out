@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-01 $
-                                (30-Apr-2003)
+ Geant4 version $Name: geant4-05-02 $
+                                (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -50,13 +50,13 @@ PhysicsList::SetCuts:CutLength : 1 km
 #
 /run/beamOn 5
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [1e+06 (mm)]   is too big  
+The cut in range [1e+06 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e-
-The cut in range [1e+06 (mm)]   is too big  
+The cut in range [1e+06 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for e+
-The cut in range [1e+06 (mm)]   is too big  
+The cut in range [1e+06 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.79769e+305GeV 
 
 GammaToMuPair:  gamma->mu+mu- Bethe Heitler process.
@@ -188,7 +188,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -84.8 m       0 fm      0 fm     92 TeV     0 eV      0 fm      0 fm         Iron    initStep
     1    213 m   -1.55 cm   1.33 cm   34.6 TeV  57.4 TeV   298 m     298 m          Iron      MuIoni
-    2    250 m   -1.63 cm   1.37 cm   26.6 TeV  8.03 TeV    37 m     335 m    OutOfWorld  Transportation
+    2    250 m    -1.7 cm   1.42 cm   26.6 TeV  8.03 TeV    37 m     335 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -197,12 +197,12 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -84.8 m       0 fm      0 fm   8.02 TeV     0 eV      0 fm      0 fm         Iron    initStep
     1   80.8 m   -5.03 cm   4.92 cm    4.4 TeV  3.62 TeV   166 m     166 m          Iron      MuIoni
-    2    215 m   -8.01 mm  -2.18 cm   2.74 TeV  1.65 TeV   135 m     300 m          Iron      MuIoni
-    3    250 m   -1.58 cm  -2.31 cm   2.45 TeV   296 GeV  34.6 m     335 m    OutOfWorld  Transportation
+    2    215 m   -1.76 mm  -3.43 cm   2.74 TeV  1.65 TeV   135 m     300 m          Iron      MuIoni
+    3    250 m   -1.42 cm  -3.81 cm   2.45 TeV   296 GeV  34.6 m     335 m    OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.02s Real=0.75s Sys=0.01s
+  User=0s Real=2.9s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

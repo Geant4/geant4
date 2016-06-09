@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedLambdaConstructor.cc,v 1.5 2001/07/11 10:02:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ExcitedLambdaConstructor.cc,v 1.7 2003/05/20 10:05:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -95,7 +95,7 @@ G4DecayTable* G4ExcitedLambdaConstructor::CreateDecayTable(
 
 G4DecayTable*  G4ExcitedLambdaConstructor::AddLambdaGammaMode( 
 				   G4DecayTable* decayTable, const G4String& nameParent,
-				    G4double br, G4int iIso3, G4bool fAnti)
+				    G4double br, G4int , G4bool fAnti)
 {
   G4VDecayChannel* mode;
 
@@ -113,7 +113,7 @@ G4DecayTable*  G4ExcitedLambdaConstructor::AddLambdaGammaMode(
 }
 G4DecayTable*  G4ExcitedLambdaConstructor::AddLambdaEtaMode( 
 				   G4DecayTable* decayTable, const G4String& nameParent,
-				    G4double br, G4int iIso3, G4bool fAnti)
+				    G4double br, G4int , G4bool fAnti)
 {
   G4VDecayChannel* mode;
 
@@ -132,7 +132,7 @@ G4DecayTable*  G4ExcitedLambdaConstructor::AddLambdaEtaMode(
 
 G4DecayTable*  G4ExcitedLambdaConstructor::AddLambdaOmegaMode( 
 				   G4DecayTable* decayTable, const G4String& nameParent,
-				    G4double br, G4int iIso3, G4bool fAnti)
+				    G4double br, G4int , G4bool fAnti)
 {
   G4VDecayChannel* mode;
 
@@ -151,7 +151,7 @@ G4DecayTable*  G4ExcitedLambdaConstructor::AddLambdaOmegaMode(
 
 G4DecayTable*  G4ExcitedLambdaConstructor::AddNKMode( 
 				    G4DecayTable* decayTable, const G4String& nameParent,
-				    G4double br, G4int iIso3, G4bool fAnti)
+				    G4double br, G4int , G4bool fAnti)
 {
   G4VDecayChannel* mode;
 
@@ -194,7 +194,7 @@ G4DecayTable*  G4ExcitedLambdaConstructor::AddNKMode(
 
 G4DecayTable*  G4ExcitedLambdaConstructor::AddNKStarMode( 
 				    G4DecayTable* decayTable, const G4String& nameParent,
-				    G4double br, G4int iIso3, G4bool fAnti)
+				    G4double br, G4int , G4bool fAnti)
 {
   G4VDecayChannel* mode;
 
@@ -237,7 +237,7 @@ G4DecayTable*  G4ExcitedLambdaConstructor::AddNKStarMode(
 
 G4DecayTable*  G4ExcitedLambdaConstructor::AddSigmaPiMode( 
 				    G4DecayTable* decayTable, const G4String& nameParent,
-				    G4double br, G4int iIso3, G4bool fAnti)
+				    G4double br, G4int , G4bool fAnti)
 {
   G4VDecayChannel* mode;
 
@@ -293,7 +293,7 @@ G4DecayTable*  G4ExcitedLambdaConstructor::AddSigmaPiMode(
 
 G4DecayTable*  G4ExcitedLambdaConstructor::AddSigmaStarPiMode( 
 				    G4DecayTable* decayTable, const G4String& nameParent,
-				    G4double br, G4int iIso3, G4bool fAnti)
+				    G4double br, G4int , G4bool fAnti)
 {
   G4VDecayChannel* mode;
 

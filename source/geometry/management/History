@@ -1,4 +1,4 @@
-$Id: History,v 1.58 2003/04/07 13:31:49 gcosmo Exp $
+$Id: History,v 1.60 2003/05/22 15:46:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 19, 2003  G. Cosmo                     geommng-V05-01-01
+- G4LogicalVolume.cc: notify removal of root-logical-volume from G4Region
+  in case of deletion of a logical-volume from the destructor, instead that
+  from DeRegister() method.
+- G4LogicalVolumeStore.cc: removed redundant check and call to
+  RemoveRootLogicalVolume() from Clean() method.
+- G4Region.cc: removed redundant calls to ScanVolumeTree() and
+  UpdateMaterials() from RemoveRootLogicalVolume() method.
+
+May 13, 2003  G. Cosmo                     geommng-V05-01-00
+- G4LogicalVolume: added method ClearDaughters() to be used for resetting
+  the list of daughters to a logical volume in the use-case when only the
+  physical volume store is cleared at run-time.
+- GVPhysicalVolume:
+  o Added pointer to mother logical volume (will replace in future releases
+    the pointer to mother physical volume) and related accessors.
+  o Standardised registration mechanism as daughter for constructor using
+    the pointer to the mother's PV.
+- G4PhysicalVolumeStore:
+  o Added notification mechanism to logical volumes in the Clean() method
+    to update the list of daughters.
+  o Update mother's LV list of daughters when deregistering a volume.
+- G4PVPlacement/Replica/Parameterised: standardised registration mechanism
+  as daughter for constructor using the pointer to the mother's PV.
 
 April 3, 2003  M. Dressel                  geommng-V05-00-09
 - G4LogicalVolume: added method for scanning recursively the volume tree

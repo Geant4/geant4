@@ -49,7 +49,7 @@ G4double G4PenelopeIntegrator<T,F>::Calculate(T& typeT, F f,
 			  1.7614007139152118e-02};
 
   //Error control
-  G4double Ctol = G4std::min(G4std::max(MaxError,1e-13),1e-02);
+  G4double Ctol = std::min(std::max(MaxError,1e-13),1e-02);
   G4double Ptol = 0.01*Ctol;
   G4double Err=1e35;
   //Gauss integration from LowPoint to HighPoint
@@ -105,7 +105,7 @@ G4double G4PenelopeIntegrator<T,F>::Calculate(T& typeT, F f,
     s2=d*a;
     icall=icall+4*npoints;
     s12=s1+s2;
-    if (abs(s12-si)<G4std::max(Ptol*abs(s12),1e-35)){
+    if (abs(s12-si)<std::max(Ptol*abs(s12),1e-35)){
       sumga=sumga+s12;
     }
     else
@@ -128,7 +128,7 @@ G4double G4PenelopeIntegrator<T,F>::Calculate(T& typeT, F f,
 	return sumga;
 	  }
    }
-   Err=abs(sumr)/G4std::max(abs(sumr+sumga),1e-35);
+   Err=abs(sumr)/std::max(abs(sumr+sumga),1e-35);
    if (Err < Ctol || LHN == 0) return sumga; //end of cycle
    LH=LHN;
    for (G4int i=0;i<LH;i++){

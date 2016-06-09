@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.hh,v 1.6 2002/10/16 16:26:58 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MassImportanceProcess.hh,v 1.7 2003/06/13 09:27:04 dressel Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4MassImportanceProcess
@@ -40,12 +40,13 @@
 #define G4MassImportanceProcess_hh G4MassImportanceProcess_hh
 
 #include "G4VProcess.hh"
-#include "G4ImportancePostStepDoIt.hh"
-#include "G4VTrackTerminator.hh"
 #include "G4ImportanceFinder.hh"
+#include "G4VTrackTerminator.hh"
 
+class G4ImportancePostStepDoIt;
 class G4VImportanceAlgorithm;
 class G4VIStore;
+
 
 class G4MassImportanceProcess : public G4VProcess, public G4VTrackTerminator
 {
@@ -104,10 +105,9 @@ private:
 private:
 
   G4ParticleChange *fParticleChange;
-  const G4VTrackTerminator *fTrackTerminator;
   const G4VImportanceAlgorithm &fImportanceAlgorithm;
   G4ImportanceFinder fImportanceFinder;
-  G4ImportancePostStepDoIt fImportancePostStepDoIt;
+  G4ImportancePostStepDoIt *fImportancePostStepDoIt;
 };
 
 #endif

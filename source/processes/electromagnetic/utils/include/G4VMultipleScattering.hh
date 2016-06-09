@@ -94,7 +94,7 @@ public:
      // class.It limits the step near to boundaries only
      // and invokes the method GetContinuousStepLimit at every step.
 
-  virtual void PrintInfoDefinition() const;
+  virtual void PrintInfoDefinition();
   // Print out of the class parameters
 
   void SetBinning(G4int nbins);
@@ -233,7 +233,7 @@ inline void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* co
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VMultipleScattering::GetMeanFreePath(const G4Track& track,
+inline G4double G4VMultipleScattering::GetMeanFreePath(const G4Track&,
                                                              G4double,
                                                              G4ForceCondition* cond)
 {

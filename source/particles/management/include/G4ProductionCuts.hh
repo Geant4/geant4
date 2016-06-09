@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.hh,v 1.8 2003/04/10 02:51:18 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProductionCuts.hh,v 1.10 2003/06/16 16:58:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -41,7 +41,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ParticleDefinition.hh"
 
 enum G4ProductionCutsIndex
@@ -76,6 +76,7 @@ class G4ProductionCuts
   // Set Cuts methods
   void              SetProductionCut(G4double cut, G4int index = -1);
   void              SetProductionCut(G4double cut, G4ParticleDefinition* ptcl);
+  void              SetProductionCut(G4double cut, const G4String& pName);
   // Set the productionCut in range with an index to particle type
   // if index is omitted, the value is applied to all particles
 
@@ -85,10 +86,10 @@ class G4ProductionCuts
   G4double          GetProductionCut(const G4String& name) const;
   // Get the productionCut in range with a name of particle type
   
-  void              SetProductionCuts(G4std::vector<G4double>&);
+  void              SetProductionCuts(std::vector<G4double>&);
   // Set the vector of production cuts in range for all particles
 
-  const G4std::vector<G4double>&   GetProductionCuts() const;
+  const std::vector<G4double>&   GetProductionCuts() const;
   // Get the vector of production cuts in range for all particles
 
   G4bool           IsModified() const;
@@ -103,7 +104,7 @@ class G4ProductionCuts
   static G4int GetIndex(const G4ParticleDefinition* ptcl);
 
   protected:
-  G4std::vector<G4double>         fRangeCuts;
+  std::vector<G4double>         fRangeCuts;
   G4bool                          isModified;
 
   private:
@@ -165,6 +166,13 @@ void  G4ProductionCuts::SetProductionCut(G4double cut, G4ParticleDefinition* ptc
 }
 
 inline
+void  G4ProductionCuts::SetProductionCut(G4double cut, const G4String& pName)
+{
+  G4int idx = GetIndex(pName);
+  if(idx>=0) SetProductionCut(cut,idx);
+}
+
+inline
 G4double  G4ProductionCuts::GetProductionCut(G4int index) const
 {
   G4double cut=-1.0;
@@ -181,7 +189,7 @@ G4double  G4ProductionCuts::GetProductionCut(const G4String& name) const
 }
 
 inline
-void  G4ProductionCuts::SetProductionCuts(G4std::vector<G4double>& cut)
+void  G4ProductionCuts::SetProductionCuts(std::vector<G4double>& cut)
 {
   for(G4int i = 0; (i<NumberOfG4CutIndex); i++) {
     fRangeCuts[i] = cut[i];
@@ -190,7 +198,7 @@ void  G4ProductionCuts::SetProductionCuts(G4std::vector<G4double>& cut)
 }
 
 inline
-const G4std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const
+const std::vector<G4double>&   G4ProductionCuts::GetProductionCuts() const
 {
   return fRangeCuts;
 }

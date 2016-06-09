@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01CalorimeterSD.cc,v 1.4 2001/11/07 16:36:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F01CalorimeterSD.cc,v 1.5 2003/06/25 17:40:46 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -61,7 +61,7 @@ F01CalorimeterSD::~F01CalorimeterSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void F01CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void F01CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   CalCollection = new F01CalorHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
@@ -70,7 +70,7 @@ void F01CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool F01CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool F01CalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   G4double stepl = 0.;

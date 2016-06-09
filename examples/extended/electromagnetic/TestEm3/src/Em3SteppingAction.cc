@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Em3SteppingAction.cc,v 1.5 2001/10/22 10:58:59 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em3SteppingAction.cc,v 1.6 2003/06/03 10:36:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,11 +44,11 @@ Em3SteppingAction::~Em3SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3SteppingAction::UserSteppingAction(const G4Step* aStep)
+void Em3SteppingAction::UserSteppingAction(const G4Step*)
 {
 ////  G4double destep   = aStep->GetTotalEnergyDeposit();
 ////  G4double response = BirkAttenuation(aStep);
-////  G4cout << " Destep: " << destep/keV << " keV"   
+////  G4cout << " Destep: " << destep/keV << " keV"
 ////         << " response after Birk: "  << response/keV << " keV" << G4endl;
 }
 
@@ -58,7 +58,7 @@ G4double Em3SteppingAction::BirkAttenuation(const G4Step* aStep)
 {
  //Example of Birk attenuation law in organic scintillators.
  //adapted from Geant3 PHYS337. See MIN 80 (1970) 239-244
- //  
+ //
  const G4String myMaterial = "Scintillator";
  const G4double birk1 = 0.013*g/(MeV*cm2);
  //
@@ -73,7 +73,7 @@ G4double Em3SteppingAction::BirkAttenuation(const G4Step* aStep)
      birk1*destep/((material->GetDensity())*(aStep->GetStepLength()));
      response = destep/(1. + correction);
    }
- return response;   
+ return response;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.cc,v 1.7 2003/02/19 08:24:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: B02DetectorConstruction.cc,v 1.8 2003/06/16 16:47:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
-#include "g4std/strstream"
+#include <strstream>
 #include "globals.hh"
 
 #include "B02DetectorConstruction.hh"

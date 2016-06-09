@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapManager.hh,v 1.2 2002/06/04 09:23:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: OlapManager.hh,v 1.3 2003/06/16 16:49:19 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -35,9 +35,9 @@
 #ifndef OlapManager_h
 #define OlapManager_h
 
-#include "g4std/vector"
-#include "g4std/map"
-#include "g4std/set"
+#include <vector>
+#include <map>
+#include <set>
 
 #include "globals.hh"
 #include "G4LogicalVolumeStore.hh"
@@ -84,10 +84,10 @@ public:
    void Interrupt() { interrupt=true ; } 
    void registerNotification(OlapNotify*n) { theNotifs.insert(n); }
    void notifyNewWorld(G4LogicalVolume*);
-   void notifyOlaps(const G4std::vector<OlapInfo*> &);
+   void notifyOlaps(const std::vector<OlapInfo*> &);
    void deRegisterNotification(OlapNotify*n) { ; }
    // FIXME: handle completly different in next redesign!
-   G4std::map<G4LogicalVolume *, G4bool> NoOlapMap; 
+   std::map<G4LogicalVolume *, G4bool> NoOlapMap; 
 
 private:
 
@@ -104,11 +104,11 @@ private:
    G4bool polyMode;
    G4RunManager * theRunManager;
    G4LogicalVolumeStore * theLVStore;
-   G4std::vector<G4LogicalVolume*>::iterator theLVit;
-   G4std::vector<G4LogicalVolume*> theLVs;
+   std::vector<G4LogicalVolume*>::iterator theLVit;
+   std::vector<G4LogicalVolume*> theLVs;
    static OlapManager * theInstance;  
    G4GeoNav * theGeoNav;
-   G4std::set<OlapNotify*> theNotifs;
+   std::set<OlapNotify*> theNotifs;
    G4bool interrupt;
 };
 #endif

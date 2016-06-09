@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.12 2003/01/22 18:47:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VCrossSectionHandler.cc,v 1.13 2003/06/16 17:00:28 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -47,10 +47,10 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "Randomize.hh"
-#include "g4std/map"
-#include "g4std/vector"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <map>
+#include <vector>
+#include <fstream>
+#include <strstream>
 
 
 G4VCrossSectionHandler::G4VCrossSectionHandler()
@@ -81,7 +81,7 @@ G4VCrossSectionHandler::~G4VCrossSectionHandler()
 {
   delete interpolation;
   interpolation = 0;
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos;
 
   for (pos = dataMap.begin(); pos != dataMap.end(); ++pos)
     {
@@ -132,7 +132,7 @@ void G4VCrossSectionHandler::Initialise(G4VDataSetAlgorithm* algorithm,
 
 void G4VCrossSectionHandler::PrintData() const
 {
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
 
   for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
     {
@@ -161,7 +161,7 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
       // Build the complete string identifying the file with the data set
       
       char nameChar[100] = {""};
-      G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+      std::ostrstream ost(nameChar, 100, std::ios::out);
       
       ost << fileName << Z << ".dat";
       
@@ -176,8 +176,8 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
       
       G4String pathString(path);
       G4String dirFile = pathString + "/" + name;
-      G4std::ifstream file(dirFile);
-      G4std::filebuf* lsdp = file.rdbuf();
+      std::ifstream file(dirFile);
+      std::filebuf* lsdp = file.rdbuf();
       
       if (! (lsdp->is_open()) )
 	{
@@ -234,7 +234,7 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
       // Build the complete string identifying the file with the data set
       
       char nameChar[100] = {""};
-      G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+      std::ostrstream ost(nameChar, 100, std::ios::out);
 
       ost << fileName << Z << ".dat";
       
@@ -249,8 +249,8 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
       
       G4String pathString(path);
       G4String dirFile = pathString + "/" + name;
-      G4std::ifstream file(dirFile);
-      G4std::filebuf* lsdp = file.rdbuf();
+      std::ifstream file(dirFile);
+      std::filebuf* lsdp = file.rdbuf();
       
       if (! (lsdp->is_open()) )
 	{
@@ -300,7 +300,7 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
 void G4VCrossSectionHandler::Clear()
 {
   // Reset the map of data sets: remove the data sets from the map 
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos;
 
   if(! dataMap.empty())
     {
@@ -327,7 +327,7 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy) const
 {
   G4double value = 0.;
   
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
   pos = dataMap.find(Z);
   if (pos!= dataMap.end())
     {
@@ -351,7 +351,7 @@ G4double G4VCrossSectionHandler::FindValue(G4int Z, G4double energy,
 {
   G4double value = 0.;
 
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
   pos = dataMap.find(Z);
   if (pos!= dataMap.end())
     {
@@ -425,7 +425,7 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 
   if (crossSections != 0)
     {  // Reset the list of cross sections
-      G4std::vector<G4VEMDataSet*>::iterator mat;
+      std::vector<G4VEMDataSet*>::iterator mat;
       if (! crossSections->empty())
 	{
 	  for (mat = crossSections->begin(); mat!= crossSections->end(); ++mat)
@@ -591,7 +591,7 @@ G4int G4VCrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   G4double partialSum = 0.;
 
   G4VEMDataSet* dataSet = 0;
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
   pos = dataMap.find(Z);
   // The following is a workaround for STL ObjectSpace implementation,
   // which does not support the standard and does not accept
@@ -650,7 +650,7 @@ G4int G4VCrossSectionHandler::NumberOfComponents(G4int Z) const
 {
   G4int n = 0;
 
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
   pos = dataMap.find(Z);
   if (pos!= dataMap.end())
     {

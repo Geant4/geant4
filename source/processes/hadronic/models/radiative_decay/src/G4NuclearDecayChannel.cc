@@ -364,7 +364,7 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
     G4AtomicDeexcitation* atomDeex = new G4AtomicDeexcitation();
     //no Auger electron generation 
     atomDeex->ActivateAugerElectronProduction(0);
-    G4std::vector<G4DynamicParticle*>* armProducts = atomDeex->GenerateParticles(aZ,eShell);
+    std::vector<G4DynamicParticle*>* armProducts = atomDeex->GenerateParticles(aZ,eShell);
 
     // pop up the daughter before insertion
     dynamicDaughter = products->PopProducts();

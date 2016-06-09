@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelRunAction.cc,v 1.8 2002/11/14 10:55:17 flongo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: GammaRayTelRunAction.cc,v 1.10 2003/06/16 16:46:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -51,7 +51,7 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-extern G4std::ofstream outFile;
+extern std::ofstream outFile;
 
 GammaRayTelRunAction::GammaRayTelRunAction()
 {
@@ -68,12 +68,13 @@ GammaRayTelRunAction::~GammaRayTelRunAction()
 
 void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
-  char name[15];
 
   // Open the file for the tracks of this run
 
-#ifdef G4STORE_DATA
+  char name[15];
   sprintf(name,"Tracks_%d.dat", aRun->GetRunID());
+
+#ifdef G4STORE_DATA
   outFile.open(name);
 #endif
 
@@ -87,7 +88,8 @@ void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
   // If analysis is used reset the histograms
 #ifdef G4ANALYSIS_USE
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-  analysis->BeginOfRun(aRun->GetRunID());
+  //  analysis->BeginOfRun(aRun->GetRunID());
+  analysis->BeginOfRun();
 #endif
 }
 
@@ -95,6 +97,11 @@ void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 
 void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
 {
+  char name[15];
+  sprintf(name,"Tracks_%d.dat", aRun->GetRunID());
+  G4cout << "End of Run " << G4endl;
+  G4cout << "File " << name << G4endl;
+
   // Run ended, update the visualization
   if (G4VVisManager::GetConcreteInstance()) {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");

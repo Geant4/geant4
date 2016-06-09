@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.hh,v 1.10 2002/04/19 07:10:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OrderedTable.hh,v 1.11 2003/06/06 16:17:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,7 +31,7 @@
 // Sep. 1996  : M.Maire 
 // Jan. 2001  : H.Kurashige
 //              - G4ValVector is replaced with G4DataVector 
-//              - Migrated to G4std::vector<G4DataVector*>.
+//              - Migrated to std::vector<G4DataVector*>.
 // Sep. 2001  : H.Kurashige
 //              - Add
 //                 G4bool Store(const G4String&, G4bool)
@@ -49,10 +49,10 @@
 #define G4OrderedTable_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 class G4DataVector;
 
-class G4OrderedTable : public G4std::vector<G4DataVector*> 
+class G4OrderedTable : public std::vector<G4DataVector*> 
 {
 
  public: // with description
@@ -76,7 +76,7 @@ class G4OrderedTable : public G4std::vector<G4DataVector*>
   G4bool Retrieve(const G4String& filename, G4bool ascii=false);
     // Retrieves OrderedTable from a file (returns false in case of failure).
 
-  friend G4std::ostream& operator<<(G4std::ostream& out, G4OrderedTable& table);
+  friend std::ostream& operator<<(std::ostream& out, G4OrderedTable& table);
 
 };
 

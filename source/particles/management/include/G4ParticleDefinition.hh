@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.18 2003/04/11 11:48:39 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleDefinition.hh,v 1.18.2.1 2003/06/16 17:18:47 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -52,7 +52,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4ProcessManager;
 class G4DecayTable;
@@ -102,7 +102,7 @@ class G4ParticleDefinition
   // These methods concerning cut values are obsolete
   //    virtual void          SetCuts(G4double );
   //    virtual void          SetRangeCut(G4double ,const G4Material*);
-  //    virtual void          SetRangeCutVector(G4std::vector<G4double>&);
+  //    virtual void          SetRangeCutVector(std::vector<G4double>&);
   //    virtual G4double*     GetEnergyCuts() const; 
   //    virtual G4double      GetEnergyThreshold(const G4Material* ) const ;
   //    virtual G4double*     GetLengthCuts() const;
@@ -327,7 +327,7 @@ class G4ParticleDefinition
       // Set the range of aCut for all materials
       void SetRangeCut(G4double aCut, const G4Material*);
       // Set the cut range of aCut for a material
-      void SetRangeCutVector(G4std::vector<G4double>&);
+      void SetRangeCutVector(std::vector<G4double>&);
       // Set the vector of range cuts for all material
 
       G4double* GetLengthCuts() const;

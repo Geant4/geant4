@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestStreamLogger.cc,v 1.5 2002/04/19 08:23:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeomTestStreamLogger.cc,v 1.6 2003/06/16 16:54:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -34,7 +34,7 @@
 #include "G4GeomTestStreamLogger.hh"
 #include "G4VSolid.hh"
 #include "G4VPhysicalVolume.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include "G4GeomTestOverlapList.hh"
 #include "G4GeomTestOvershootList.hh"
@@ -42,7 +42,7 @@
 //
 // Constructor and destructor
 //
-G4GeomTestStreamLogger::G4GeomTestStreamLogger( G4std::ostream &o,
+G4GeomTestStreamLogger::G4GeomTestStreamLogger( std::ostream &o,
                                                 G4int theMaxPointsPerError )
   : out(o), maxPointsPerError(theMaxPointsPerError)
 {;}
@@ -55,15 +55,15 @@ G4GeomTestStreamLogger::~G4GeomTestStreamLogger()
 //
 // Utility class for printing a 3 vector position
 //
-void G4GeomTestStreamLogger::PrintPos::Print( G4std::ostream &o ) const
+void G4GeomTestStreamLogger::PrintPos::Print( std::ostream &o ) const
 {
-  o << G4std::setprecision(6) << G4std::setw(14) << p.x()/cm;
-  o << G4std::setprecision(6) << G4std::setw(14) << p.y()/cm;
-  o << G4std::setprecision(6) << G4std::setw(14) << p.z()/cm;
+  o << std::setprecision(6) << std::setw(14) << p.x()/cm;
+  o << std::setprecision(6) << std::setw(14) << p.y()/cm;
+  o << std::setprecision(6) << std::setw(14) << p.z()/cm;
   if (unit) o << " cm";
 }
 
-G4std::ostream &operator<<(      G4std::ostream &o,
+std::ostream &operator<<(      std::ostream &o,
                            const G4GeomTestStreamLogger::PrintPos &p )
 {
   p.Print(o);
@@ -76,12 +76,12 @@ G4std::ostream &operator<<(      G4std::ostream &o,
 // Utility class for printing a volume's name and copy number
 //
 void
-G4GeomTestStreamLogger::VolumeNameAndCopy::Print( G4std::ostream &o ) const
+G4GeomTestStreamLogger::VolumeNameAndCopy::Print( std::ostream &o ) const
 {
         o << volume->GetName() << "[" << volume->GetCopyNo() << "]";
 }
 
-G4std::ostream &operator<<( G4std::ostream &o,
+std::ostream &operator<<( std::ostream &o,
                             const G4GeomTestStreamLogger::VolumeNameAndCopy &p )
 {
   p.Print(o);
@@ -99,7 +99,7 @@ void G4GeomTestStreamLogger::SolidProblem( const G4VSolid *solid,
   out << "GeomTest Error: SolidProblem\n"
       << "    " << message << "\n"
       << "    Solid name = " << solid->GetName() << "\n"
-      << "    Local position = " << PrintPos(point) << G4std::endl;
+      << "    Local position = " << PrintPos(point) << std::endl;
 }
 
 
@@ -108,7 +108,7 @@ void G4GeomTestStreamLogger::SolidProblem( const G4VSolid *solid,
 //
 void G4GeomTestStreamLogger::NoProblem( const G4String &message )
 {
-  out << message << G4std::endl;
+  out << message << std::endl;
 }
 
 
@@ -177,7 +177,7 @@ G4GeomTestStreamLogger::OverlappingDaughters(const G4GeomTestOverlapList *list)
     PrintSegmentListElement( s1, s2 );
   }
   
-  out << G4std::endl;
+  out << std::endl;
 }
 
 
@@ -237,7 +237,7 @@ OvershootingDaughter( const G4GeomTestOvershootList *list )
     PrintSegmentListElement( s1, s2 );
   }
   
-  out << G4std::endl;
+  out << std::endl;
 }
 
 
@@ -266,7 +266,7 @@ void G4GeomTestStreamLogger::PrintSegmentListHeader()
 void G4GeomTestStreamLogger::PrintSegmentListElement( const G4ThreeVector &s1,
                                                       const G4ThreeVector &s2 )
 {
-  out << "    " << G4std::setprecision(6) << G4std::setw(14)
+  out << "    " << std::setprecision(6) << std::setw(14)
       << (s1-s2).mag()/cm
       << "    " << PrintPos(s1,false) << "   " << PrintPos(s2,false) << "\n";
 }

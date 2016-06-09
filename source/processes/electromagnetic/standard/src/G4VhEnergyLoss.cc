@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.45 2003/04/26 12:11:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VhEnergyLoss.cc,v 1.46 2003/06/16 17:02:13 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 // -----------------------------------------------------------------------------
@@ -411,7 +411,7 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
 
  // compute the (random) Step limit
  //
- G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+ G4double r = std::min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
  G4double StepLimit;
  if (fRangeNow > r)
@@ -526,7 +526,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                                                    ->GetNavigatorForTracking();
      G4double postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
-     G4double safety = G4std::min(presafety,postsafety);
+     G4double safety = std::min(presafety,postsafety);
 
      if (safety < rcut)
       {
@@ -565,7 +565,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
          {
           G4double T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
                                              G4Electron::Electron(),
-                                             G4std::min(presafety,postsafety),
+                                             std::min(presafety,postsafety),
                                              couple);
           // absolute lower limit for T0
     	  if((T0<MinDeltaEnergyNow)||(LowerLimitForced[index]))

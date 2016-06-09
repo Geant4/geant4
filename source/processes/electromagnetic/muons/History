@@ -1,4 +1,4 @@
-$Id: History,v 1.44 2003/04/29 07:24:24 vnivanch Exp $
+$Id: History,v 1.51 2003/06/06 17:42:52 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 June 03: V.Ivant (muons-V05-01-06)
+-Bug fix in cross section at high energies in G4MuPairProductionSTD
+
+03 June 03: V.Ivant (muons-V05-01-05)
+-Update STD initialisation
+
+03 June 03: V.Ivant (muons-V05-01-04)
+-Fix compilation warnings for pedantic compiler options
+
+26 May 03: V.Ivant (muons-V05-01-03)
+-Fix compilation warnings for pedantic compiler options
+
+23 May 03: V.Ivant (muons-V05-01-02)
+-Fix initialisation for STD: for integral Bohr fluctuations
+
+12 May 03: V.Ivant (muons-V05-01-01)
+-remove extra printout at initialisation
+
+09 May 03: V.Ivant (muons-V05-01-00)
+-remove extra printout at initialisation
 
 28 Apr 03: V.Ivant (muons-V05-00-08)
 -fix leak in retrieve tables

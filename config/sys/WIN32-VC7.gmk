@@ -1,9 +1,8 @@
 #
-# ------ WIN32/VC ------    Visual-C++ 7.0 .NET
-#                            experimental setup
+# ------ WIN32/VC ------    Visual-C++ 7 .NET
+#                           experimental setup
 ifeq ($(G4SYSTEM),WIN32-VC7)
   CXX       := CL
-  G4_HAVE_BOOL := yes
   ifdef G4OPTIMISE
     CXXFLAGS  += -Ox
   else
@@ -11,15 +10,8 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
       CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
     endif
   endif
-  CXXFLAGS += -MD -GR -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
-  CXXFLAGS += -D_WIN32 -DOS
+  CXXFLAGS += -MD -GR -GX -Zm200 -nologo -DWIN32
   CPPFLAGS += -DWIN32 -DXPNET
-  #
-  # Use ISO standard version.
-  #
-  G4USE_STD_NAMESPACE := yes 
-  CPPFLAGS += -DG4USE_STD_NAMESPACE
-
   LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
 
   AR := LIB
@@ -30,7 +22,10 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
     OGLFLAGS  :=
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -lGLU  -lGL
+    OGLLIBS   := glu32.lib opengl32.lib
+  endif
+  ifndef UI32LIBS
+    UI32LIBS  := gdi32.lib user32.lib
   endif
 
   define build-granular-shared-lib

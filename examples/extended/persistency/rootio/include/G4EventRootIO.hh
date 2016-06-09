@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4EventRootIO.hh,v 1.3 2002/12/13 14:45:41 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // File: G4EventRootIO.hh
 //

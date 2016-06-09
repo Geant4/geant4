@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.15 2003/03/25 17:13:08 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN03DetectorConstruction.cc,v 1.17 2003/05/21 15:26:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -47,6 +47,10 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
@@ -70,8 +74,9 @@ ExN03DetectorConstruction::ExN03DetectorConstruction()
   CalorSizeYZ       = 10.*cm;
   ComputeCalorParameters();
 
-  // create commands for interactive definition of the calorimeter  
+  // create commands for interactive definition of the calorimeter
   detectorMessenger = new ExN03DetectorMessenger(this);
+  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,7 +88,6 @@ ExN03DetectorConstruction::~ExN03DetectorConstruction()
 
 G4VPhysicalVolume* ExN03DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructCalorimeter();
 }
 
@@ -149,11 +153,13 @@ G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
 //
 // define a material from elements.   case 1: chemical molecule
 //
- 
+
 density = 1.000*g/cm3;
 G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
 H2O->AddElement(H, natoms=2);
 H2O->AddElement(O, natoms=1);
+// overwrite computed meanExcitationEnergy with ICRU recommended value 
+H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
 density = 1.032*g/cm3;
 G4Material* Sci = new G4Material(name="Scintillator", density, ncomponents=2);
@@ -235,10 +241,15 @@ G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
 {
-  // complete the Calor parameters definition 
+
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
+  // complete the Calor parameters definition
   ComputeCalorParameters();
    
   //     
@@ -275,7 +286,7 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
     				       
       physiCalor = new G4PVPlacement(0,			//no rotation
                                      G4ThreeVector(),	//at (0,0,0)
-                                     logicCalor,	//its logical volume				     
+                                     logicCalor,	//its logical volume
                                      "Calorimeter",	//its name
                                      logicWorld,	//its mother  volume
                                      false,		//no boolean operation
@@ -351,7 +362,7 @@ G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
                                    false,                  //no boulean operat
                                    0);                     //copy number
     } 
-   
+
   //                               
   // Sensitive Detectors: Absorber and Gap
   //
@@ -402,22 +413,22 @@ void ExN03DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
   if (pttoMaterial)
      {AbsorberMaterial = pttoMaterial;
-      logicAbsorber->SetMaterial(pttoMaterial); 
+      if(logicAbsorber) logicAbsorber->SetMaterial(pttoMaterial);
       PrintCalorParameters();
-     }             
+     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN03DetectorConstruction::SetGapMaterial(G4String materialChoice)
 {
-  // search the material by its name 
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);  
+  // search the material by its name
+  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   if (pttoMaterial)
      {GapMaterial = pttoMaterial;
-      logicGap->SetMaterial(pttoMaterial); 
+      if(logicGap) logicGap->SetMaterial(pttoMaterial);
       PrintCalorParameters();
-     }             
+     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -426,7 +437,7 @@ void ExN03DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   // change Absorber thickness and recompute the calorimeter parameters
   AbsorberThickness = val;
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -434,7 +445,7 @@ void ExN03DetectorConstruction::SetGapThickness(G4double val)
 {
   // change Gap thickness and recompute the calorimeter parameters
   GapThickness = val;
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -442,7 +453,7 @@ void ExN03DetectorConstruction::SetCalorSizeYZ(G4double val)
 {
   // change the transverse size and recompute the calorimeter parameters
   CalorSizeYZ = val;
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -456,13 +467,13 @@ void ExN03DetectorConstruction::SetNbOfLayers(G4int val)
 void ExN03DetectorConstruction::SetMagField(G4double fieldValue)
 {
   //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr 
+  G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
+
   if(magField) delete magField;		//delete the existing magn field
-  
+
   if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
+  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
     G4TransportationManager::GetTransportationManager()->GetPropagatorInField()
@@ -474,7 +485,7 @@ void ExN03DetectorConstruction::SetMagField(G4double fieldValue)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 void ExN03DetectorConstruction::UpdateGeometry()
 {
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());

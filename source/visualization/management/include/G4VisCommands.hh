@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisCommands.hh,v 1.3 2001/08/05 02:29:02 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // /vis/ top level commands - John Allison  5th February 2001
 

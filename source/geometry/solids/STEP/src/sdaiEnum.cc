@@ -15,11 +15,11 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiEnum.cc,v 1.1 2000/01/21 13:43:17 gcosmo Exp $  */
+/* $Id: sdaiEnum.cc,v 1.2 2003/06/06 17:07:36 gcosmo Exp $  */
 
-//static char rcsid[] ="$Id: sdaiEnum.cc,v 1.1 2000/01/21 13:43:17 gcosmo Exp $";
+//static char rcsid[] ="$Id: sdaiEnum.cc,v 1.2 2003/06/06 17:07:36 gcosmo Exp $";
 
-#include "g4std/strstream"
+#include <strstream>
 
 //#ifndef SCLP23(TRUE)
 //#ifndef SCLP23(FALSE)
@@ -216,7 +216,7 @@ SCLP23(LOGICAL)::set_value (const char * n)  {
 
 
 Severity 
-SCLP23(LOGICAL)::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
+SCLP23(LOGICAL)::ReadEnum(std::istream& in, ErrorDescriptor *err, int AssignVal,
 			  int needDelims)
 {
     if(AssignVal)
@@ -229,7 +229,7 @@ SCLP23(LOGICAL)::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVa
 
     int validDelimiters = 1;
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
 
     if( in.good() )
     {
@@ -346,7 +346,7 @@ SCLP23(LOGICAL)::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVa
 	    err->AppendToUserMsg(messageBuf);
 	}
     }
-    else // hit eof (assuming there was no error state for G4std::istream passed in)
+    else // hit eof (assuming there was no error state for std::istream passed in)
     {
 	err->GreaterSeverity(SEVERITY_INCOMPLETE);
     }
@@ -532,7 +532,7 @@ SCLP23(Enum)::nullify() // change the receiver to an unset status
 
 /******************************************************************
  ** Procedure:  DebugDisplay
- ** Parameters:  G4std::ostream& out
+ ** Parameters:  std::ostream& out
  ** Returns:  
  ** Description:  prints out some information on the enumerated 
  **               item for debugging purposes
@@ -540,7 +540,7 @@ SCLP23(Enum)::nullify() // change the receiver to an unset status
  ** Status:  ok 2/1/91
  ******************************************************************/
 void
-SCLP23(Enum)::DebugDisplay (G4std::ostream& out) const 
+SCLP23(Enum)::DebugDisplay (std::ostream& out) const 
 {
     SCLstring tmp;
     out << "Current " << Name() << " value: " << G4endl 
@@ -575,7 +575,7 @@ SCLP23(Enum)::DebugDisplay (G4std::ostream& out) const
 // true or false => non-matching delimiters are flagged as an error
 
 Severity 
-SCLP23(Enum)::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
+SCLP23(Enum)::ReadEnum(std::istream& in, ErrorDescriptor *err, int AssignVal,
 			  int needDelims)
 {
     if(AssignVal)
@@ -588,7 +588,7 @@ SCLP23(Enum)::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
 
     int validDelimiters = 1;
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
 
     if( in.good() )
     {
@@ -705,7 +705,7 @@ SCLP23(Enum)::ReadEnum(G4std::istream& in, ErrorDescriptor *err, int AssignVal,
 	    err->AppendToUserMsg(messageBuf);
 	}
     }
-    else // hit eof (assuming there was no error state for G4std::istream passed in)
+    else // hit eof (assuming there was no error state for std::istream passed in)
     {
 	err->GreaterSeverity(SEVERITY_INCOMPLETE);
     }
@@ -724,7 +724,7 @@ SCLP23(Enum)::StrToVal (const char * s)
 Severity 
 SCLP23(Enum)::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 {
-    G4std::istrstream in ((char *)s); // sz defaults to length of s
+    std::istrstream in ((char *)s); // sz defaults to length of s
 
     Severity sev = ReadEnum(in, err, 1, 0);
     if( (err->severity() == SEVERITY_INCOMPLETE) && optional)
@@ -737,13 +737,13 @@ SCLP23(Enum)::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 Severity
 SCLP23(Enum)::STEPread (const char *s, ErrorDescriptor *err, int optional)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return STEPread (in, err, optional);
 }
 
 // reads an enumerated value in STEP file format 
 Severity
-SCLP23(Enum)::STEPread (G4std::istream& in, ErrorDescriptor *err, int optional)
+SCLP23(Enum)::STEPread (std::istream& in, ErrorDescriptor *err, int optional)
 {
     Severity sev = ReadEnum(in, err, 1, 1);
     if( (err->severity() == SEVERITY_INCOMPLETE) && optional)
@@ -766,7 +766,7 @@ SCLP23(Enum)::asStr (SCLstring &s) const  {
 }
 
 void 
-SCLP23(Enum)::STEPwrite (G4std::ostream& out)  const  {
+SCLP23(Enum)::STEPwrite (std::ostream& out)  const  {
     if( is_null() )
 	out << '$';
     else
@@ -813,14 +813,14 @@ SCLP23(Enum)::set_elements (const char * const e [])  {
 }
 #endif
 Severity 
-SCLP23(Enum)::EnumValidLevel(G4std::istream &in, ErrorDescriptor *err,
+SCLP23(Enum)::EnumValidLevel(std::istream &in, ErrorDescriptor *err,
 				int optional, char *tokenList, 
 				int needDelims, int clearError)
 {
     if(clearError)
 	err->ClearErrorMsg();
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
     char c = ' '; 
     c = in.peek();
     if(c == '$' || in.eof())
@@ -857,7 +857,7 @@ SCLP23(Enum)::EnumValidLevel(const char *value, ErrorDescriptor *err,
 				int optional, char *tokenList, 
 				int needDelims, int clearError)
 {
-    G4std::istrstream in((char *)value);
+    std::istrstream in((char *)value);
     return EnumValidLevel (in, err, optional, tokenList, needDelims,
 			   clearError);
 /*
@@ -994,7 +994,7 @@ SCLP23(Enum)::operator= (const SCLP23(Enum)& Senum)
     return *this;
 }
 
-G4std::ostream &operator<< ( G4std::ostream& out, const SCLP23(Enum)& a )
+std::ostream &operator<< ( std::ostream& out, const SCLP23(Enum)& a )
 {
     SCLstring tmp;
     out << a.asStr( tmp );
@@ -1071,7 +1071,7 @@ SCLP23(Enum)::StrToVal (const char * s, ErrorDescriptor *err, int optional)
 
 
 Severity
-SCLP23(Enum)::STEPread (G4std::istream& in, ErrorDescriptor *err, int optional)
+SCLP23(Enum)::STEPread (std::istream& in, ErrorDescriptor *err, int optional)
 {
     char enumValue [BUFSIZ];
     char c;

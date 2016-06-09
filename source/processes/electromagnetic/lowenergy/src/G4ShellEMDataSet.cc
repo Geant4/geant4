@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.8 2002/05/28 09:20:21 pia Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ShellEMDataSet.cc,v 1.10 2003/06/16 17:00:26 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -36,8 +36,8 @@
 #include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 
 G4ShellEMDataSet::G4ShellEMDataSet(G4int Z,
@@ -71,7 +71,7 @@ G4ShellEMDataSet::~G4ShellEMDataSet()
   delete algorithm;
 }
 
-G4double G4ShellEMDataSet::FindValue(G4double e, G4int id) const
+G4double G4ShellEMDataSet::FindValue(G4double e, G4int ) const
 {
   // Returns the sum over the shells corresponding to e
   G4double value = 0.;
@@ -103,7 +103,7 @@ void G4ShellEMDataSet::LoadData(const G4String& fileName)
   // Build the complete string identifying the file with the data set
   
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   
   if (z != 0)  ost << fileName << z << ".dat";
   else   ost << fileName << ".dat";
@@ -120,8 +120,8 @@ void G4ShellEMDataSet::LoadData(const G4String& fileName)
   G4String pathString(path);
   G4String separator("/" );
   G4String dirFile = pathString + separator + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
 
   if (! (lsdp->is_open()) )
     {

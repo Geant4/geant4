@@ -21,17 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmixt.cc,v 1.8 2001/07/11 09:59:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4gsmixt.cc,v 1.10 2003/06/16 16:50:56 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by I.Hrivnacova, 27 Sep 99
 
-#include "g4std/iomanip"
-#include "g4std/strstream"
-#include "g4std/iomanip"
-#include <math.h>
-
 #include "globals.hh"
+#include <iomanip>
+#include <strstream>
+#include <iomanip>
+
 #include "G3toG4.hh"
 #include "G3EleTable.hh"
 #include "G3MatTable.hh"
@@ -139,15 +138,15 @@ void G4gsmixt(G4int imate, G4String name, G4double a[], G4double z[],
       G4cerr << "G4gsmixt: for mixture '" << name 
 	     << "' some |weights|>1 : " << G4endl;
       for (G4int i=0;i<nlmat; i++) {
-	G4cerr << "Component " << G4std::setw(3) << i+1 << " fraction: "
-	       << G4std::setw(10) << wmat[i] << G4endl;
+	G4cerr << "Component " << std::setw(3) << i+1 << " fraction: "
+	       << std::setw(10) << wmat[i] << G4endl;
       }
     } else if (nlmat<0) {
       G4cerr << "G4gsmixt: for mixture '" << name 
 	     << "' some #natoms are non-integer: " << G4endl;
       for (G4int i=0;i<nlmat; i++) {
-	G4cerr << "Component " << G4std::setw(3) << i+1 << " #atoms "
-	       << G4std::setw(10) << wmat[i] << G4endl;
+	G4cerr << "Component " << std::setw(3) << i+1 << " #atoms "
+	       << std::setw(10) << wmat[i] << G4endl;
       }
     } else {
       G4cerr << "G4gsmixt: Number of components for mixture '" 

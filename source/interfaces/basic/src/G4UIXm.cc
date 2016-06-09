@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc,v 1.8 2002/11/06 08:12:37 barrand Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIXm.cc,v 1.11 2003/06/16 16:56:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G.Barrand
 
@@ -30,7 +30,8 @@
 
 #ifdef G4UI_BUILD_XM_SESSION
 
-#include "g4std/strstream"
+#include "G4Types.hh"
+#include <strstream>
 
 #include <string.h>
 
@@ -365,7 +366,7 @@ void G4UIXm::keyHandler (
  Widget a_widget
 ,XtPointer a_tag
 ,XEvent* a_event
-,Boolean* a_dispatch
+,Boolean*
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -382,7 +383,7 @@ void G4UIXm::keyHandler (
 }
 /***************************************************************************/
 void clearButtonCallback (
- Widget a_widget
+ Widget
 ,XtPointer a_tag
 ,XtPointer
 )

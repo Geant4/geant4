@@ -40,8 +40,8 @@
 #include "XrayFluoDataSet.hh"
 #include "G4DataVector.hh"
 #include "G4LogLogInterpolation.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 #include "XrayFluoNormalization.hh"
 #include "XrayFluoAnalysisManager.hh"
 
@@ -85,7 +85,7 @@ XrayFluoRunAction::XrayFluoRunAction()
 
 XrayFluoRunAction::~XrayFluoRunAction()
 {
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::iterator pos;
+  std::map<G4int,G4DataVector*,std::less<G4int> >::iterator pos;
   
   for (pos = energyMap.begin(); pos != energyMap.end(); pos++)
     {
@@ -136,15 +136,17 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
 void XrayFluoRunAction::EndOfRunAction(const G4Run* aRun )
 {
 
-  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-
-
-  // Run ended, update the visualization
-  if (G4VVisManager::GetConcreteInstance()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+  if (aRun){
+    
+    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+    
+    
+    // Run ended, update the visualization
+    if (G4VVisManager::GetConcreteInstance()) {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+    }
+    analysis->finish();
   }
-   analysis->finish();
- 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -197,9 +199,9 @@ G4double XrayFluoRunAction::GetInfData(G4double energy, G4double random)
   
   if (Z >= zMin && Z <= zMax)
     {
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
       pos = energyMap.find(Z);
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posData;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator posData;
       posData = dataMap.find(Z);
       if (pos!= energyMap.end())
 	{
@@ -239,9 +241,9 @@ G4double XrayFluoRunAction::GetSupData(G4double energy, G4double random)
   if (Z>zMax) {Z=zMax;}
   if (Z >= zMin && Z <= zMax)
     {
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
       pos = energyMap.find(Z);
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posData;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator posData;
       posData = dataMap.find(Z);
       if (pos!= energyMap.end())
 	{
@@ -272,7 +274,7 @@ G4double XrayFluoRunAction::GetSupData(G4double energy, G4double random)
 void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
 {
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   
   ost << fileName <<".dat";
   
@@ -282,8 +284,8 @@ void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
   
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
     {
@@ -334,7 +336,7 @@ void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
 void XrayFluoRunAction::ReadResponse(const G4String& fileName)
 {
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   
   
   ost << fileName<<".dat";
@@ -345,8 +347,8 @@ void XrayFluoRunAction::ReadResponse(const G4String& fileName)
   
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
     {

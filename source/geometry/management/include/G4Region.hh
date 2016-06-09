@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.4 2003/01/30 07:58:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Region.hh,v 1.5 2003/06/16 16:51:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4Region
 //
@@ -46,14 +46,14 @@ class G4ProductionCuts;
 class G4LogicalVolume;
 class G4Material;
 
-#include "g4std/vector"
+#include <vector>
 
 #include "globals.hh"
 
 class G4Region
 {
-    typedef G4std::vector<G4LogicalVolume*> G4RootLVList;
-    typedef G4std::vector<G4Material*> G4MaterialList;
+    typedef std::vector<G4LogicalVolume*> G4RootLVList;
+    typedef std::vector<G4Material*> G4MaterialList;
 
   public:  // with description
 
@@ -81,9 +81,9 @@ class G4Region
     inline void SetProductionCuts(G4ProductionCuts* cut);
     inline G4ProductionCuts* GetProductionCuts() const;
 
-    inline G4std::vector<G4LogicalVolume*>::iterator
+    inline std::vector<G4LogicalVolume*>::iterator
            GetRootLogicalVolumeIterator();
-    inline G4std::vector<G4Material*>::const_iterator
+    inline std::vector<G4Material*>::const_iterator
            GetMaterialIterator() const;
       // Return iterators to lists of root logical volumes and materials.
 

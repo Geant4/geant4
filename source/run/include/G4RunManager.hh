@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.32 2003/04/23 17:54:27 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RunManager.hh,v 1.34 2003/06/16 17:12:49 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -86,7 +86,7 @@ class G4ExceptionHandler;
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 ////////#include <signal.h>
 
 class G4RunManager
@@ -133,12 +133,16 @@ class G4RunManager
     // If the user forget the second invokation, G4RunManager will invoke BeamOn()
     // method will invoke this method. (Note that this feature is not valid for the
     // first initialization.)
-    virtual void DefineWorldVolume(G4VPhysicalVolume * worldVol);
-    //  Usually, this method is invoked from InitializeGeometry() protected method
-    // of this class. But, in case all of geometry has already created and kept in
-    // the ODBMS, the pointer to the world physical volume can be set by this method.
+    virtual void DefineWorldVolume(G4VPhysicalVolume * worldVol,
+                                   G4bool topologyIsChanged=true);
+    //  This method must be invoked if the geometry setup has been changed between
+    // runs. The flag 'topologyIsChanged' will specify if the geometry topology is
+    // different from the original one used in the previous run; if not, it must be
+    // set to false, so that the original optimisation and navigation history is
+    // preserved. This method is invoked also at initialisation.
     virtual void ResetNavigator() const;
-    // Resets state of navigator for tracking, needed for geometry updates.
+    //  Resets the state of the navigator for tracking; needed for geometry updates.
+    // It forces the optimisation and navigation history to be reset.
     virtual void AbortRun(G4bool softAbort=false);
     //  This method safely aborts the current event loop even if an event is in progress.
     // This method is available for Geant4 states of GeomClosed and EventProc. The state
@@ -241,7 +245,7 @@ class G4RunManager
 
     G4Run* currentRun;
     G4Event* currentEvent;
-    G4std::vector<G4Event*>* previousEvents;
+    std::vector<G4Event*>* previousEvents;
     G4int n_perviousEventsToBeStored;
     G4int numberOfEventToBeProcessed;
 

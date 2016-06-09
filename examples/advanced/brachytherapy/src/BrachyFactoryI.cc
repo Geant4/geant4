@@ -29,55 +29,42 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactoryI.cc,v 1.2 2002/11/18 15:18:38 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyFactoryI.cc,v 1.4 2003/05/22 17:20:43 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "BrachyFactoryI.hh"
-#include"BrachyPrimaryGeneratorActionI.hh"
-#include"BrachyDetectorConstructionI.hh"
+#include "BrachyPrimaryGeneratorActionI.hh"
+#include "BrachyDetectorConstructionI.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4IonTable.hh"
-#include "G4RadioactiveDecay.hh"
 #include "G4UImanager.hh"
 #include "globals.hh"
-#include <math.h>
 #include "G4RunManager.hh" 
 
 BrachyFactoryI:: BrachyFactoryI()
 {
-   pIodio=new  BrachyDetectorConstructionI();
+  iodiumSource = new BrachyDetectorConstructionI();
 }
 
-BrachyFactoryI:: ~BrachyFactoryI()
+BrachyFactoryI::~BrachyFactoryI()
 {
- 
-delete pIodio;
+  delete iodiumSource;
 }
- 
 
 G4VUserPrimaryGeneratorAction*  BrachyFactoryI::CreatePrimaryGeneratorAction()
-
 { 
-  
-   
-  G4VUserPrimaryGeneratorAction*    pIodium =new BrachyPrimaryGeneratorActionI();
- if(pIodium) return pIodium ;
-
-
- 
-
+  G4VUserPrimaryGeneratorAction* iodiumPrimaryParticle = 
+                                          new BrachyPrimaryGeneratorActionI();
+  return iodiumPrimaryParticle;
 }
 
 void BrachyFactoryI::CreateSource(G4VPhysicalVolume* mother)
 {
-
-  pIodio -> ConstructIodium(mother);
-
+  iodiumSource->ConstructIodium(mother);
 }
 
 void BrachyFactoryI::CleanSource()
 {;}
-

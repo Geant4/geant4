@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4StringModel.hh,v 1.6 2002/12/12 19:17:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4StringModel_h
 #define G4StringModel_h 1

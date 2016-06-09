@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.8 2002/11/20 14:18:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisAttributes.cc,v 1.9 2003/06/16 16:55:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  23rd October 1996
@@ -80,7 +80,7 @@ const G4VisAttributes& G4VisAttributes::GetInvisible() {
   return Invisible;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VisAttributes& a) {
+std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
   
   os << "G4VisAttributes: ";
   if (&a){

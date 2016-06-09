@@ -159,7 +159,7 @@
         cost1 = -1.0 + 2.0*G4UniformRand();
         eka = 1.0 + 2.0*cost1*A + A*A;
       }
-      G4double cost = G4std::min( 1.0, G4std::max( -1.0, (A*cost1+1.0)/sqrt(eka) ) );
+      G4double cost = std::min( 1.0, std::max( -1.0, (A*cost1+1.0)/sqrt(eka) ) );
       eka /= (1.0+A)*(1.0+A);
       G4double ek = currentKinetic*MeV/GeV;
       G4double amas = currentMass*MeV/GeV;
@@ -297,7 +297,7 @@
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -360,7 +360,7 @@
       nm = np = nz = 0;
       if( targetParticle.GetDefinition() == aNeutron )
       {
-        test = exp( G4std::min( expxu, G4std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
+        test = exp( std::min( expxu, std::max( expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
         w0 = test/2.0;
         wm = test;
         if( G4UniformRand() < w0/(w0+wm) )
@@ -368,10 +368,10 @@
         else
           nm = 1;
       } else { // target is a proton
-        test = exp( G4std::min( expxu, G4std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
+        test = exp( std::min( expxu, std::max( expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test/2.0;        
-        test = exp( G4std::min( expxu, G4std::max( expxl, -(-1.0+b[0])*(-1.0+b[0])/(2.0*c*c) ) ) );
+        test = exp( std::min( expxu, std::max( expxl, -(-1.0+b[0])*(-1.0+b[0])/(2.0*c*c) ) ) );
         wm = test/2.0;
         wt = w0+wp+wm;
         wp += w0;
@@ -393,7 +393,7 @@
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=G4std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+          for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -402,7 +402,7 @@
                 nt = np+nm+nz;
                 if( nt > 0 )
                 {
-                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 ) {
                     if( test >= 1.0e-10 )excs += dum*test;
@@ -433,7 +433,7 @@
                 nt = np+nm+nz;
                 if( (nt>=1) && (nt<=numSec) )
                 {
-                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 ) {
                     if( test >= 1.0e-10 )excs += dum*test;

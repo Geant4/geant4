@@ -21,6 +21,8 @@
 // ********************************************************************
 //
 //
+// $Id: G4PreCompoundModel.hh,v 1.21 2003/06/16 17:07:12 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
@@ -35,9 +37,8 @@
 #define G4PreCompoundModel_h 1
 
 #include "G4VPreCompoundModel.hh"
-#include "G4PreCompoundTransitions.hh"
-#include "G4PreCompoundEmission.hh"
 #include "G4LorentzVector.hh"
+
 
 #include "G4NucleiProperties.hh"
 #include "G4PreCompoundParameters.hh"
@@ -53,60 +54,61 @@ class G4PreCompoundModel : public G4VPreCompoundModel
 {
 public:
     
-    G4PreCompoundModel(G4ExcitationHandler * const value) : 
-	G4VPreCompoundModel(value) {};
+  G4PreCompoundModel(G4ExcitationHandler * const value) : 
+    G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false) {}
 
-    ~G4PreCompoundModel() {};
+  ~G4PreCompoundModel() {}
 
 private:
-    G4PreCompoundModel() {};
+  G4PreCompoundModel() {}
 
-    G4PreCompoundModel(const G4PreCompoundModel &right) : G4VPreCompoundModel() {};
+  G4PreCompoundModel(const G4PreCompoundModel &) : G4VPreCompoundModel() {}
 
-    const G4PreCompoundModel& operator=(const G4PreCompoundModel &right);
-    G4bool operator==(const G4PreCompoundModel &right) const;
-    G4bool operator!=(const G4PreCompoundModel &right) const;
+  const G4PreCompoundModel& operator=(const G4PreCompoundModel &right);
+  G4bool operator==(const G4PreCompoundModel &right) const;
+  G4bool operator!=(const G4PreCompoundModel &right) const;
 
 public:
-    G4VParticleChange * ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus);
+  G4VParticleChange * ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus);
 
-    G4ReactionProductVector* DeExcite(const G4Fragment& aFragment) const;
+  G4ReactionProductVector* DeExcite(const G4Fragment& aFragment) const;
 
 #ifdef PRECOMPOUND_TEST
-    static G4Fragment GetInitialFragmentForTest()
-	{ return G4PreCompoundModel::theInitialFragmentForTest; }
-    static G4std::vector<G4String*> * GetCreatorModels()
-	{ return &G4PreCompoundModel::theCreatorModels; }
+  static G4Fragment GetInitialFragmentForTest()
+  { return G4PreCompoundModel::theInitialFragmentForTest; }
+  static std::vector<G4String*> * GetCreatorModels()
+  { return &G4PreCompoundModel::theCreatorModels; }
 #endif
+
+  inline void UseHETCEmission() { useHETCEmission = true; }
+  inline void UseDefaultEmission() { useHETCEmission = false; }
+  inline void UseGNASHTransition() { useGNASHTransition = true; }
+  inline void UseDefaultTransition() { useGNASHTransition = false; }
 
 private:  
 
-    void PerformEquilibriumEmission(const G4Fragment & aFragment, 
-				    G4ReactionProductVector * theResult) const;
+  void PerformEquilibriumEmission(const G4Fragment & aFragment, 
+				  G4ReactionProductVector * theResult) const;
 
 #ifdef debug				  
-    void CheckConservation(const G4Fragment & theInitialState,
-			   const G4Fragment & aFragment,
-			   G4ReactionProductVector * Result) const;
+  void CheckConservation(const G4Fragment & theInitialState,
+			 const G4Fragment & aFragment,
+			 G4ReactionProductVector * Result) const;
 #endif
 
-    G4ParticleChange theResult;
+  //==============
+  // Data Members 
+  //==============
+
+  G4ParticleChange theResult;
+  G4bool           useHETCEmission;
+  G4bool           useGNASHTransition;
 
 #ifdef PRECOMPOUND_TEST
-    static G4Fragment theInitialFragmentForTest;
-    static G4std::vector<G4String*> theCreatorModels;
+  static G4Fragment theInitialFragmentForTest;
+  static std::vector<G4String*> theCreatorModels;
 #endif
 
 };
 #endif
-
-
-
-
-
-
-
-
-
-
 

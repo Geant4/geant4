@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Exception.cc,v 1.15 2002/12/05 02:32:21 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Exception.cc,v 1.16 2003/06/06 16:17:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -74,7 +74,7 @@ void G4Exception(const char* originOfException,
   }
 }
 
-void G4Exception(G4std::string s)
+void G4Exception(std::string s)
 {
   G4Exception(s.c_str());
 }

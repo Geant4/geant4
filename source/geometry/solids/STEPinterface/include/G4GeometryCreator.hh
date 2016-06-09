@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCreator.hh,v 1.7 2001/07/11 10:00:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeometryCreator.hh,v 1.8 2003/06/16 16:53:47 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4GeometryCreator
@@ -41,15 +41,15 @@
 #define G4GEOMETRYCREATOR_HH
 
 #include <schema.h>
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4PlacedSolid.hh"
 #include "G4Surface.hh"
 #include "G4BREPSolid.hh"
 
-typedef G4std::vector<G4PlacedSolid*> G4PlacedSolidVector;
-typedef G4std::vector<G4Surface*> G4SurfaceVector;
-typedef G4std::vector<G4BREPSolid*> G4SolidVector;
+typedef std::vector<G4PlacedSolid*> G4PlacedSolidVector;
+typedef std::vector<G4Surface*> G4SurfaceVector;
+typedef std::vector<G4BREPSolid*> G4SolidVector;
 
 class G4GeometryCreator
 {

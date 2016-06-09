@@ -131,7 +131,7 @@ void G4RKPropagation::Init(G4V3DNucleus * nucleus)
   theNucleus = nucleus;
   theOuterRadius = theNucleus->GetOuterRadius();
 
-  theFieldMap = new G4std::map <G4int, G4VNuclearField*, G4std::less<G4int> >;
+  theFieldMap = new std::map <G4int, G4VNuclearField*, std::less<G4int> >;
 
   (*theFieldMap)[G4Proton::Proton()->GetPDGEncoding()] = new G4ProtonField(theNucleus);
   (*theFieldMap)[G4Neutron::Neutron()->GetPDGEncoding()] = new G4NeutronField(theNucleus);
@@ -146,7 +146,7 @@ void G4RKPropagation::Init(G4V3DNucleus * nucleus)
   (*theFieldMap)[G4SigmaMinus::SigmaMinus()->GetPDGEncoding()] = new G4SigmaMinusField(theNucleus);
   (*theFieldMap)[G4SigmaZero::SigmaZero()->GetPDGEncoding()] = new G4SigmaZeroField(theNucleus);
 
-  theEquationMap = new G4std::map <G4int, G4Mag_EqRhs*, G4std::less<G4int> >;
+  theEquationMap = new std::map <G4int, G4Mag_EqRhs*, std::less<G4int> >;
 
 // theField needed by the design of G4Mag_eqRhs
   theField = new G4KM_DummyField;		//Field not needed for integration
@@ -247,13 +247,13 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 
 // Loop over tracks
 
-  G4std::vector<G4KineticTrack *>::iterator i;
+  std::vector<G4KineticTrack *>::iterator i;
   for(i = active.begin(); i != active.end(); ++i)
   {
     G4double currTimeStep = timeStep;
     G4KineticTrack * kt = *i;
     G4int encoding = kt->GetDefinition()->GetPDGEncoding();
-    G4std::map <G4int, G4VNuclearField*, G4std::less<G4int> >::iterator fieldIter= theFieldMap->find(encoding);
+    std::map <G4int, G4VNuclearField*, std::less<G4int> >::iterator fieldIter= theFieldMap->find(encoding);
 
     G4VNuclearField* currentField=0;
     if ( fieldIter != theFieldMap->end() ) currentField=fieldIter->second;
@@ -382,7 +382,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
       {
         G4double velocity=kt->Get4Momentum().vect().mag()/kt->Get4Momentum().e()*c_light;
 	G4double t_min=0.1*fermi/velocity;
-	t_out=G4std::max(abs(t_out),t_min); // avoid transport by 0 step not taking it out..
+	t_out=std::max(abs(t_out),t_min); // avoid transport by 0 step not taking it out..
 	if(t_in < 0 && t_out >= 0)   //still inside, transport safely out.
 	{
 	  G4ThreeVector savePos = kt->GetPosition();
@@ -467,7 +467,7 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
 //    G4cout << "currTimeStep = " << currTimeStep << G4endl;
     if(!driver->AccurateAdvance(track, timeStep, eps))
     {  // cannot track this particle
-      G4std::cerr << "G4RKPropagation::FieldTransport() warning: integration error."
+      std::cerr << "G4RKPropagation::FieldTransport() warning: integration error."
          << G4endl << "position " << kt->GetPosition() << " 4mom " <<kt->Get4Momentum()
 	 <<G4endl << " timestep " <<timeStep 
 		  << G4endl;
@@ -577,11 +577,11 @@ G4bool G4RKPropagation::GetSphereIntersectionTimes(const G4KineticTrack * kt,
 //----------------------------------------------------------------------------
 void G4RKPropagation::delete_FieldsAndMap(
 //----------------------------------------------------------------------------
-	G4std::map <G4int, G4VNuclearField *, G4std::less<G4int> > * aMap)
+	std::map <G4int, G4VNuclearField *, std::less<G4int> > * aMap)
 {
   if(aMap)
   {
-    G4std::map <G4int, G4VNuclearField *, G4std::less<G4int> >::iterator cur;
+    std::map <G4int, G4VNuclearField *, std::less<G4int> >::iterator cur;
     for(cur = aMap->begin(); cur != aMap->end(); ++cur)
       delete (*cur).second;
 
@@ -594,11 +594,11 @@ void G4RKPropagation::delete_FieldsAndMap(
 //----------------------------------------------------------------------------
 void G4RKPropagation::delete_EquationsAndMap(
 //----------------------------------------------------------------------------
-	G4std::map <G4int, G4Mag_EqRhs *, G4std::less<G4int> > * aMap)
+	std::map <G4int, G4Mag_EqRhs *, std::less<G4int> > * aMap)
 {
   if(aMap)
   {
-    G4std::map <G4int, G4Mag_EqRhs *, G4std::less<G4int> >::iterator cur;
+    std::map <G4int, G4Mag_EqRhs *, std::less<G4int> >::iterator cur;
     for(cur = aMap->begin(); cur != aMap->end(); ++cur)
       delete (*cur).second;
 

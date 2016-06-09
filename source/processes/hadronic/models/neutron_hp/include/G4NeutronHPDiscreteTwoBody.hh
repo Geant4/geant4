@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDiscreteTwoBody.hh,v 1.7 2002/12/12 19:18:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPDiscreteTwoBody.hh,v 1.8 2003/06/16 17:10:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPDiscreteTwoBody_h
 #define G4NeutronHPDiscreteTwoBody_h 1
 
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
 #include "G4NeutronHPLegendreTable.hh"
@@ -48,7 +48,7 @@ class G4NeutronHPDiscreteTwoBody : public G4VNeutronHPEnergyAngular
     if(theCoeff!=NULL) delete [] theCoeff;
   }
   
-  void Init(G4std::ifstream & aDataFile)
+  void Init(std::ifstream & aDataFile)
   {
     aDataFile >> nEnergy;
     theManager.Init(aDataFile);

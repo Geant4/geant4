@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3Pos.cc,v 1.8 2001/07/11 09:58:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // modified by I.Hrivnacova, 13.10.99
 

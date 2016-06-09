@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5EventActionMessenger.cc,v 1.6 2002/12/16 16:30:08 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em5EventActionMessenger.cc,v 1.7 2003/05/30 10:28:05 urban Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

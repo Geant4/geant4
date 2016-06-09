@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SensitiveVolumeList.icc,v 1.5 2001/07/11 09:58:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SensitiveVolumeList.icc,v 1.6 2003/06/16 16:50:13 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -----------------------------------------------------------
 //      Inline functions of GEANT 4 class header file.
@@ -36,14 +36,14 @@
 
 //Get and Set Operations for Has Relationships
 
-      inline const G4std::vector<G4VPhysicalVolume*>& G4SensitiveVolumeList::get_the_G4VPhysicalVolume_list() const { return the_G4VPhysicalVolume_list; }
+      inline const std::vector<G4VPhysicalVolume*>& G4SensitiveVolumeList::get_the_G4VPhysicalVolume_list() const { return the_G4VPhysicalVolume_list; }
 
-      inline void G4SensitiveVolumeList::set_the_G4VPhysicalVolume_list(const G4std::vector<G4VPhysicalVolume*> value) { the_G4VPhysicalVolume_list = value; }
+      inline void G4SensitiveVolumeList::set_the_G4VPhysicalVolume_list(const std::vector<G4VPhysicalVolume*> value) { the_G4VPhysicalVolume_list = value; }
 
 
-      inline const G4std::vector<G4LogicalVolume*>& G4SensitiveVolumeList::get_the_G4LogicalVolume() const { return the_G4LogicalVolume_list; }
+      inline const std::vector<G4LogicalVolume*>& G4SensitiveVolumeList::get_the_G4LogicalVolume() const { return the_G4LogicalVolume_list; }
 
-      inline void G4SensitiveVolumeList::set_the_G4LogicalVolume(const G4std::vector<G4LogicalVolume*> value) { the_G4LogicalVolume_list = value; }
+      inline void G4SensitiveVolumeList::set_the_G4LogicalVolume(const std::vector<G4LogicalVolume*> value) { the_G4LogicalVolume_list = value; }
 
 
 

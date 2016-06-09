@@ -3,7 +3,6 @@
 #
 ifeq ($(G4SYSTEM),WIN32-VC)
   CXX       := CL
-  G4_HAVE_BOOL := yes
   ifdef G4OPTIMISE
     CXXFLAGS  += -Ox
   else
@@ -11,23 +10,9 @@ ifeq ($(G4SYSTEM),WIN32-VC)
       CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
     endif
   endif
-  CXXFLAGS += -MD -GR -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
-  CXXFLAGS += -D_WIN32 -DOS
+  CXXFLAGS += -MD -GR -GX -Zm200 -nologo -DWIN32
   CPPFLAGS += -DWIN32
-  #
-  # Use ISO standard version.
-  #
-  G4USE_STD_NAMESPACE := yes 
-  CPPFLAGS += -DG4USE_STD_NAMESPACE
-
   LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
-
-  #
-  # Should set $LIB environment to include VC++ Studio lib directories, e.g.
-  #
-  #       $(LIB_PATH)"c:\ProgramFiles\DevStudio\vc\lib" \
-  #       $(LIB_PATH)'\\srv1_info\v2\vc50pro1\DEVSTUDIO\VC\LIB' \
-  #       $(LIB_PATH)'\\srv1_info\v2\DecFtn5\x86\df\lib'
       
   AR := LIB
   ECHO := echo -e
@@ -37,7 +22,10 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     OGLFLAGS  :=
   endif
   ifndef OGLLIBS
-    OGLLIBS   := -lGLU  -lGL
+    OGLLIBS   := glu32.lib opengl32.lib
+  endif
+  ifndef UI32LIBS
+    UI32LIBS  := gdi32.lib user32.lib
   endif
 
   define build-granular-shared-lib

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandlerFunc.icc,v 1.12 2003/02/17 06:52:18 stanaka Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VRML2SceneHandlerFunc.icc,v 1.13 2003/05/30 13:01:25 johna Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4VRML2SceneHandlerFunc.icc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -246,7 +246,7 @@ void G4VRML2SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 } 
 
 
-void G4VRML2SCENEHANDLER::AddPrimitive(const G4NURBS& nurb)
+void G4VRML2SCENEHANDLER::AddPrimitive(const G4NURBS&)
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive nurbs" << "\n" ;
@@ -256,7 +256,7 @@ void G4VRML2SCENEHANDLER::AddPrimitive(const G4NURBS& nurb)
 	VRMLBeginModeling () ;
 }
 
-void G4VRML2SCENEHANDLER::AddPrimitive( const G4Text& text ) 
+void G4VRML2SCENEHANDLER::AddPrimitive( const G4Text& ) 
 {
 #if defined DEBUG_SCENE_FUNC
 	G4cerr << "***** AddPrimitive text" << "\n" ;

@@ -41,7 +41,7 @@ template <class T> class G4HCIOentryT
  : public G4VHCIOentry
 {
     public: // With description
-      G4HCIOentryT<T>(G4std::string n)
+      G4HCIOentryT<T>(std::string n)
        : G4VHCIOentry(n), f_manager(0)
       {
          if ( m_verbose > 2 ) {
@@ -55,7 +55,7 @@ template <class T> class G4HCIOentryT
       // Destructor
 
     public: // With description
-      void CreateHCIOmanager(G4std::string detName, G4std::string colName)
+      void CreateHCIOmanager(std::string detName, std::string colName)
       {
         if ( f_manager == 0 ) {
           f_manager = new T( detName, colName );

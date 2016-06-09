@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.20 2002/11/27 12:33:28 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisCommandsViewerSet.cc,v 1.21 2003/06/16 17:14:26 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -414,7 +414,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4String cullingOption, stringFlag, unit;
     G4double density;
     G4bool boolFlag;
-    G4std::istrstream is ((char*)newValue.data());
+    std::istrstream is ((char*)newValue.data());
     is >> cullingOption >> stringFlag >> density >> unit;
     boolFlag = GetNewBoolValue(stringFlag);
     if (cullingOption == "global") {
@@ -637,7 +637,7 @@ void G4VisCommandsViewerSet::SetNewValue
     else if (newValue[iPos] == 'p') {  // "perspective"
       G4String dummy;
       G4String unit;
-      G4std::istrstream is ((char*)newValue.data());
+      std::istrstream is ((char*)newValue.data());
       is >> dummy >> fieldHalfAngle >> unit;
       fieldHalfAngle *= ValueOf(unit);
       if (fieldHalfAngle > 89.5 * deg || fieldHalfAngle <= 0.0) {
@@ -675,7 +675,7 @@ void G4VisCommandsViewerSet::SetNewValue
     G4String choice, unit;
     G4double x, y, z, nx, ny, nz;
     const char* t = newValue;
-    G4std::istrstream is ((char*)t);
+    std::istrstream is ((char*)t);
     is >> choice >> x >> y >> z >> unit >> nx >> ny >> nz;
 
     G4int iSelector = -1;

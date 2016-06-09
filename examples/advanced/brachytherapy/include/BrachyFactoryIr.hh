@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyFactoryIr.hh,v 1.2 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyFactoryIr.hh,v 1.4 2003/05/22 17:20:41 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //    **********************************
 //    *                                *
@@ -34,10 +34,11 @@
 //
 #ifndef BrachyFactoryIr_h
 #define BrachyFactoryIr_h 1
+
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4RadioactiveDecay.hh"
-#include"BrachyFactory.hh"
+#include "BrachyFactory.hh"
 #include "G4RunManager.hh"
+
 class G4ParticleGun;
 class G4Run;
 class G4Event;
@@ -46,15 +47,19 @@ class BrachyFactory;
 class BrachyPrimaryGeneratorActionIr;
 class BrachyDetectorConstructionIr;
 
-class BrachyFactoryIr:public BrachyFactory
+// This class manages the creation of iridum source used in endocavitary
+// brachytherapy ...
+class BrachyFactoryIr : public BrachyFactory
 {
 public:
   BrachyFactoryIr();
- ~BrachyFactoryIr();
- G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction();
+  ~BrachyFactoryIr();
+
+  G4VUserPrimaryGeneratorAction* CreatePrimaryGeneratorAction();
   void CreateSource(G4VPhysicalVolume*);
   void CleanSource();
+
 private:
-  BrachyDetectorConstructionIr* pIridio;
+  BrachyDetectorConstructionIr* iridiumSource;
 };
 #endif

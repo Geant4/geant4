@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsrotm.cc,v 1.9 2001/07/11 09:59:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G3toG4.hh"
 #include "G3RotTable.hh"

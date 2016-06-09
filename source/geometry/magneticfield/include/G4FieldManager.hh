@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.8 2002/07/24 10:43:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FieldManager.hh,v 1.9 2003/06/20 22:59:59 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //  
 // class G4FieldManager
@@ -65,27 +65,52 @@
 #include "G4MagneticField.hh"
 #include "G4ChordFinder.hh"
 
+class    G4Track;  // Forward reference for parameter configuration
+
 class G4FieldManager
 {
   public:  // with description
 
-     G4FieldManager();
-     G4FieldManager(G4MagneticField *detectorField);
-    ~G4FieldManager();
+     G4FieldManager();     // Useless unless SetField method is added
+     G4FieldManager(G4Field       *detectorField, 
+		    G4ChordFinder *pChordFinder, 
+		    G4bool        fieldChangesEnergy);
+          // New general constructor for any field
+     G4FieldManager(G4MagneticField *detectorMagneticField);
+          // Creates ChordFinder
+          //   - assumes pure magnetic field (so Energy constant)
+     virtual ~G4FieldManager();
 
      inline G4bool          SetDetectorField(G4Field *detectorField);
      inline const G4Field*  GetDetectorField() const;
      inline G4bool          DoesFieldExist() const;
+        // Set, get and check the field object
 
      void            CreateChordFinder(G4MagneticField *detectorMagField);
      inline void     SetChordFinder(G4ChordFinder *aChordFinder);
      inline G4ChordFinder*  GetChordFinder();
+     inline const G4ChordFinder*  GetChordFinder() const;
+        // Create, set or get the associated Chord Finder
+
+     virtual void   ConfigureForTrack( const G4Track * ); 
+        // Setup the choice of the configurable parameters 
+        //    relying on the current track's energy, particle identity, ..
+        //  
+        //    Note: In addition to the values of member variables, 
+        //         a user can change the ChordFinder, the field, ...
+
+     // Alternative approach
+     // virtual G4FieldTrack* VariantConfiguration( const G4Track *)
+        // Return a variant field manager, only if different,
+        //  for tracks with particular criteria (E, pT, id, ...)
 
   public:  // without description
 
+     // virtual ?
      inline G4double GetDeltaIntersection() const;
        // Accuracy for boundary intersection.
 
+     // virtual ?
      inline G4double GetDeltaOneStep() const;
        // Accuracy for one tracking/physics step.
 
@@ -96,10 +121,11 @@ class G4FieldManager
      inline void     SetDeltaOneStep(G4double valueD1step); 
      inline void     SetDeltaIntersection(G4double valueDintersection); 
 
-     inline G4bool   DoesFieldChangeEnergy();
+     inline G4bool   DoesFieldChangeEnergy() const;
      inline void     SetFieldChangesEnergy(G4bool value);
        //  For electric field this should be true
        //  For magnetic field this should be false
+
   private:
 
      G4FieldManager(const G4FieldManager&);

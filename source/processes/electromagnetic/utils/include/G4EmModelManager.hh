@@ -40,6 +40,7 @@
 // 13-02-03 The set of models is defined for region (V.Ivanchenko)
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 // 13-04-03 Add startFromNull (V.Ivanchenko)
+// 13-05-03 Add calculation of precise range (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -70,7 +71,7 @@ public:
 
 private:
 
-  G4RegionModels(G4int nMod, G4std::vector<G4int>& list, G4DataVector& lowE);
+  G4RegionModels(G4int nMod, std::vector<G4int>& list, G4DataVector& lowE);
 
   ~G4RegionModels();
 
@@ -130,6 +131,8 @@ public:
 
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
 
+  void FillDEDXVectorForPreciseRange(G4PhysicsVector*, const G4MaterialCutsCouple*);
+
   void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
                         G4bool startFromNull = true);
 
@@ -168,18 +171,18 @@ private:
   G4DataVector                theCuts;
   G4DataVector                theSubCuts;
 
-  G4std::vector<G4VEmModel*>                models;
-  G4std::vector<G4VEmFluctuationModel*>     flucModels;
-  G4std::vector<const G4Region*>            regions;
-  G4std::vector<G4int>                      orderOfModels;
+  std::vector<G4VEmModel*>                models;
+  std::vector<G4VEmFluctuationModel*>     flucModels;
+  std::vector<const G4Region*>            regions;
+  std::vector<G4int>                      orderOfModels;
   G4DataVector                              upperEkin;
 
   G4int                       nEmModels;
   G4int                       nRegions;
   G4int                       nCouples;
 
-  G4std::vector<G4int>                      idxOfRegionModels;
-  G4std::vector<G4RegionModels*>            setOfRegionModels;
+  std::vector<G4int>                      idxOfRegionModels;
+  std::vector<G4RegionModels*>            setOfRegionModels;
 
   G4double                    minSubRange;
 

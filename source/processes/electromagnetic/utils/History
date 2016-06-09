@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2003/04/28 15:33:28 vnivanch Exp $
+$Id: History,v 1.104 2003/06/16 14:45:10 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,47 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 June 03: V.Ivant (utils-V05-01-07)
+- ShortLived particles are not applicable for msc
+
+04 June 03: V.Ivant (utils-V05-01-06)
+- Fix compilation warnings
+- Update STD initialisation 
+
+28 May 03: V.Ivant (utils-V05-01-05)
+- Remove absolete msc STD classes and add msc model (V.Ivanchenko)
+- Fix misprint for msc at Tev energy (L.Urban)
+
+26 May 03: V.Ivant (utils-V05-01-04)
+- Fix compilation warnings for pedantic compiler option
+
+26 May 03: V.Ivant (utils-V05-01-03)
+- replaced msc STD with model variant
+- remove debug printout from G4VEnergyLossSTD for ions
+- fix minor problem in nuclear formfactor calculations for msc
+
+23 May 03: V.Ivant (utils-V05-01-02)
+- Fix initialisation of integral approach - correct definition
+  of STD fluctuation model
+- Remove tracking cut from STD
+- Establish limits on eloss for Bohr and Ion fluctuations for STD
+
+23 May 03: L.Urban (utils-V05-01-01)
+- MultipleScattering and MultipleScatteringSTD :
+- IMPORTANT change in the angle distribution for muons/hadrons
+  the width of the central part now is corresponds to the value
+  can be computed from the HighLand formula (no change of this
+  kind for e+/e-) --> small change in the width for low to
+  medium energy (protons - 1 MeV - few hundred MeV) but change up to
+  20 -25 % for high energy.
+- minor correction in the angle sampling algorithm, affects 
+  e+/e- too --> small change for very small and very big
+  stepsize/range values.
+
+15 May 03: V.Ivant (utils-V05-01-00)
+- add precise range calculation for STD
+- defauld step parameters for STD set to be the same as standard
 
 28 Apr 03: V.Ivant (utils-V05-00-13)
 - add control on range for msc (effective for ions)

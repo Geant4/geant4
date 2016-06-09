@@ -27,7 +27,7 @@
 
 using namespace std;
 
-XMLWriter::XMLWriter(ostream* out, string indentString, string defaultNameSpace)
+XMLWriter::XMLWriter(ostream* out, string, string defaultNameSpace)
     : defaultNameSpace(defaultNameSpace) {
     writer = new IndentPrintWriter(out);
     writer->setIndentString("  ");
@@ -94,7 +94,7 @@ void XMLWriter::closeDoc() {
 }
 
 void XMLWriter::printComment(string comment) {
-    if (comment.find("--") >= 0) {
+    if (comment.find("--") != string::npos) {
         cerr << "XMLWriter::printComment '--' sequence not allowed in comment" << endl;
     }
     *writer << "<!--" << normalizeText(comment).c_str() << "-->" << endl;
@@ -279,7 +279,7 @@ string XMLWriter::normalizeText(string s) {
     return str;
 }
 
-void XMLWriter::checkNameValid(string s) {
+void XMLWriter::checkNameValid(string) {
 // Could be added.
 //    if (!XMLCharacterProperties.validName(s)) throw new RuntimeException("Invalid name: "+s);
 }

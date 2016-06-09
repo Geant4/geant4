@@ -47,9 +47,9 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
-#include "g4std/vector"
+#include <fstream>
+#include <iomanip>
+#include <vector>
 
 #ifdef G4ANALYSIS_USE
 #include "DMXAnalysisManager.hh"

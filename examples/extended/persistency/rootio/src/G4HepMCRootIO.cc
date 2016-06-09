@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4HepMCRootIO.cc,v 1.4 2002/12/13 14:45:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // File: G4HepMCRootIO.cc
 //

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRdEdx.cc,v 1.8 2003/02/12 08:48:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VXTRdEdx.cc,v 1.9 2003/06/16 16:56:42 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4Timer.hh"
@@ -32,7 +32,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "globals.hh"
-#include "g4std/complex"
+#include <complex>
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"

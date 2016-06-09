@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Transportation.hh,v 1.7 2002/08/29 15:32:00 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------

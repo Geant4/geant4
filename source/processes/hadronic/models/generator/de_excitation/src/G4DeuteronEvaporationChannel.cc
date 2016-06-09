@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DeuteronEvaporationChannel.cc,v 1.5 2002/12/12 19:17:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DeuteronEvaporationChannel.cc,v 1.6 2003/05/30 13:23:23 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
@@ -31,13 +31,13 @@
 #include "G4DeuteronEvaporationChannel.hh"
 
 
-const G4DeuteronEvaporationChannel & G4DeuteronEvaporationChannel::operator=(const G4DeuteronEvaporationChannel & right)
+const G4DeuteronEvaporationChannel & G4DeuteronEvaporationChannel::operator=(const G4DeuteronEvaporationChannel & )
 {
     G4Exception("G4DeuteronEvaporationChannel::operator= meant to not be accessable");
     return *this;
 }
 
-G4DeuteronEvaporationChannel::G4DeuteronEvaporationChannel(const G4DeuteronEvaporationChannel & right)
+G4DeuteronEvaporationChannel::G4DeuteronEvaporationChannel(const G4DeuteronEvaporationChannel & ) : G4EvaporationChannel()
 {
     G4Exception("G4DeuteronEvaporationChannel::CopyConstructor meant to not be accessable");
 }

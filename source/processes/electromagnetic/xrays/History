@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2003/03/21 08:01:33 gcosmo Exp $
+$Id: History,v 1.25 2003/06/20 15:58:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 June 03: V.Ivant (xrays-V05-01-01)
+-modifications in BuildTable: angle range 0-0.3, Legendre96
+ integration in0-0.3-0.6-1.0*fMaxThetaTR" in G4VXTRenergyLoss.cc
+ by V.Grichine
+
+03 June 03: V.Ivant (xrays-V05-01-00)
+-Fix compilation warnings for pedantic compiler options
 
 21 March 03: G. Cosmo (xrays-V05-00-04)
 - G4VXTRenergyLoss.cc: fix for porting on Windows .NET compiler.

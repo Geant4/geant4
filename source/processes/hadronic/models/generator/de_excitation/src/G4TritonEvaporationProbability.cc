@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonEvaporationProbability.cc,v 1.5 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TritonEvaporationProbability.cc,v 1.8 2003/06/16 17:06:49 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -34,12 +34,12 @@
 G4TritonEvaporationProbability::G4TritonEvaporationProbability() :
     G4EvaporationProbability(3,1,6) // A,Z,Gamma
 {
-    G4std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
-    G4std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
+    std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
+    std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
     ExcitEnergies.reserve(NumExcitedStatesEnergy);
     ExcitSpins.reserve(NumExcitedStatesSpin);
     ExcitEnergies.insert(ExcitEnergies.begin(),NumExcitedStatesEnergy,0.0);
-    ExcitSpins.insert(ExcitSpins.begin(),NumExcitedStatesSpin,0.0);
+    ExcitSpins.insert(ExcitSpins.begin(),NumExcitedStatesSpin,0);
 
 	
     ExcitEnergies[15] = 6.26*MeV;
@@ -66,7 +66,7 @@ G4TritonEvaporationProbability::G4TritonEvaporationProbability() :
     SetExcitationSpinsPtr(&ExcitSpins);	
 }
 
-G4TritonEvaporationProbability::G4TritonEvaporationProbability(const G4TritonEvaporationProbability &right)
+G4TritonEvaporationProbability::G4TritonEvaporationProbability(const G4TritonEvaporationProbability &) : G4EvaporationProbability()
 {
     G4Exception("G4TritonEvaporationProbability::copy_constructor meant to not be accessable");
 }
@@ -75,19 +75,19 @@ G4TritonEvaporationProbability::G4TritonEvaporationProbability(const G4TritonEva
 
 
 const G4TritonEvaporationProbability & G4TritonEvaporationProbability::
-operator=(const G4TritonEvaporationProbability &right)
+operator=(const G4TritonEvaporationProbability &)
 {
     G4Exception("G4TritonEvaporationProbability::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4TritonEvaporationProbability::operator==(const G4TritonEvaporationProbability &right) const
+G4bool G4TritonEvaporationProbability::operator==(const G4TritonEvaporationProbability &) const
 {
     return false;
 }
 
-G4bool G4TritonEvaporationProbability::operator!=(const G4TritonEvaporationProbability &right) const
+G4bool G4TritonEvaporationProbability::operator!=(const G4TritonEvaporationProbability &) const
 {
     return true;
 }

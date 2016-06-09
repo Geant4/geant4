@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGainServer.hh,v 1.3 2002/06/14 02:17:58 yhajime Exp $
-// $Name: geant4-05-01 $
+// $Id: G4UIGainServer.hh,v 1.4 2003/06/16 16:55:50 gunter Exp $
+// $Name: geant4-05-02 $
 //
 
 
@@ -38,8 +38,8 @@
 #include <netinet/in.h>
 #include <unistd.h>
 
-#include "g4std/iostream"
-#include "g4std/fstream"
+#include <iostream>
+#include <fstream>
 #include "globals.hh"
 #include "G4UImanager.hh"
 #include "G4VBasicShell.hh"
@@ -88,12 +88,12 @@ private:
   void GetNewTreeStructure( G4UIcommandTree*,int recursiveLevel);
   void GetNewTreeValues( G4UIcommandTree*,int recursiveLevel);
   
-  G4std::vector<G4String> previousTreeCommands;
-  G4std::vector<G4String> newTreeCommands;
-  G4std::vector<G4String> previousTreeParams;
-  G4std::vector<G4String> newTreeParams;
-  G4std::vector<G4UIcommand*> previousTreePCP;
-  G4std::vector<G4UIcommand*> newTreePCP;
+  std::vector<G4String> previousTreeCommands;
+  std::vector<G4String> newTreeCommands;
+  std::vector<G4String> previousTreeParams;
+  std::vector<G4String> newTreeParams;
+  std::vector<G4UIcommand*> previousTreePCP;
+  std::vector<G4UIcommand*> newTreePCP;
 
 public:
   // These methods are implementation of corresponding virtual methods

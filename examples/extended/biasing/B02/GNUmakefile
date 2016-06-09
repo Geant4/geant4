@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2002/11/19 15:03:58 mdressel Exp $
+# $Id: GNUmakefile,v 1.8 2003/06/20 15:32:09 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -22,13 +22,11 @@ endif
 all: lib bin
 
 
-# set this variable to your Anaphe instalation.
-ANAPHE_SCRIPTS_PATH:=share/LHCXX/5.0.1/scripts
 
 CPPFLAGS +=
 #LDFLAGS += -L/usr/local/lib
 
 include $(G4INSTALL)/config/binmake.gmk
 
-CPPFLAGS += `$(ANAPHETOP)/$(ANAPHE_SCRIPTS_PATH)/aida-config -i`
-LDFLAGS += `$(ANAPHETOP)/$(ANAPHE_SCRIPTS_PATH)/aida-config -l`
+CPPFLAGS += `aida-config -i`
+LDFLAGS += `aida-config -l`

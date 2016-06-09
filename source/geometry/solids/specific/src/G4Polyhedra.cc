@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.6 2003/03/28 09:52:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Polyhedra.cc,v 1.6.2.1 2003/06/16 17:18:44 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -498,7 +498,7 @@ G4GeometryType G4Polyhedra::GetEntityType() const
 //
 // Stream object contents to an output stream
 //
-G4std::ostream& G4Polyhedra::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Polyhedra::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

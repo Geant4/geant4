@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.cc,v 1.2 2002/04/19 07:10:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OrderedTable.cc,v 1.3 2003/06/06 16:17:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -34,18 +34,18 @@
 
 #include "G4DataVector.hh"
 #include "G4OrderedTable.hh"
-#include "g4std/iostream"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 
 
 G4OrderedTable::G4OrderedTable()
-  : G4std::vector<G4DataVector*>()
+  : std::vector<G4DataVector*>()
 {
 }
 
 G4OrderedTable::G4OrderedTable(size_t capacity)
-  : G4std::vector<G4DataVector*>(capacity, (G4DataVector*)(0) )
+  : std::vector<G4DataVector*>(capacity, (G4DataVector*)(0) )
 {
 }
 
@@ -56,15 +56,13 @@ G4OrderedTable::~G4OrderedTable()
 G4bool G4OrderedTable::Store(const G4String& fileName,
 			     G4bool          ascii)
 {
-  G4std::ofstream fOut;  
+  std::ofstream fOut;  
   
   // open output file //
-#ifdef G4USE_STD_NAMESPACE
   if (!ascii)
-    fOut.open(fileName, G4std::ios::out|G4std::ios::binary);
+    fOut.open(fileName, std::ios::out|std::ios::binary);
   else
-#endif
-    fOut.open(fileName, G4std::ios::out);
+    fOut.open(fileName, std::ios::out);
 
   // check if the file has been opened successfully 
   if (!fOut) {
@@ -104,14 +102,12 @@ G4bool G4OrderedTable::Store(const G4String& fileName,
 G4bool G4OrderedTable::Retrieve(const G4String& fileName,
 				G4bool          ascii)
 {
-  G4std::ifstream fIn;  
+  std::ifstream fIn;  
   // open input file //
-#ifdef G4USE_STD_NAMESPACE
   if (ascii)
-    fIn.open(fileName,G4std::ios::in|G4std::ios::binary);
+    fIn.open(fileName,std::ios::in|std::ios::binary);
   else
-#endif
-    fIn.open(fileName,G4std::ios::in);
+    fIn.open(fileName,std::ios::in);
 
   // check if the file has been opened successfully 
   if (!fIn) {
@@ -172,14 +168,14 @@ G4bool G4OrderedTable::Retrieve(const G4String& fileName,
   return true;
 }
 
-G4std::ostream& operator<<(G4std::ostream& out, 
-			   G4OrderedTable& right)
+std::ostream& operator<<(std::ostream& out, 
+			 G4OrderedTable& right)
 {
   // Printout Data Vector
   G4OrderedTableIterator itr;
   size_t i=0;
   for (itr=right.begin(); itr!=right.end(); ++itr) {
-    out << G4std::setw(8) << i << "-th Vector   ";
+    out << std::setw(8) << i << "-th Vector   ";
     out << ": Type    " << G4DataVector::T_G4DataVector << G4endl;
     out << *(*itr);
     i +=1;

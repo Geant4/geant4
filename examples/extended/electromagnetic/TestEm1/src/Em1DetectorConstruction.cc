@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: Em1DetectorConstruction.cc,v 1.13 2003/03/27 11:16:20 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em1DetectorConstruction.cc,v 1.15 2003/05/16 16:56:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -40,6 +40,10 @@
 #include "G4UniformMagField.hh"
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4RunManager.hh"
 
@@ -163,8 +167,11 @@ void Em1DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* Em1DetectorConstruction::ConstructVolumes()
 {
-  if(lBox) delete lBox;
-  if(pBox) delete pBox;
+  // Cleanup old geometry
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
   G4Box*
   sBox = new G4Box("Container",				//its name
                    BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions
@@ -251,13 +258,7 @@ void Em1DetectorConstruction::SetMagField(G4double fieldValue)
 
 void Em1DetectorConstruction::UpdateGeometry()
 {
-  G4bool first = true;
-  if (pBox) first = false;
-  G4VPhysicalVolume* v = ConstructVolumes();
-  G4RunManager* rm = G4RunManager::GetRunManager();
-  rm->GeometryHasBeenModified();
-  rm->DefineWorldVolume(v);
-  if (!first) rm->ResetNavigator();
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

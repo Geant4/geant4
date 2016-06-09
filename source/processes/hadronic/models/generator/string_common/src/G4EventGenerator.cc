@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventGenerator.cc,v 1.5 2002/12/12 19:17:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EventGenerator.cc,v 1.6 2003/05/30 14:43:20 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4EventGenerator
 #include "G4EventGenerator.hh"
@@ -33,7 +33,7 @@ G4EventGenerator::G4EventGenerator()
    SetMaxEnergy (0 *GeV);
 }
 
-G4EventGenerator::G4EventGenerator(const G4EventGenerator &right)
+G4EventGenerator::G4EventGenerator(const G4EventGenerator &) : G4HadronicInteraction()
 {
 }
 
@@ -43,19 +43,19 @@ G4EventGenerator::~G4EventGenerator()
 }
 
 
-const G4EventGenerator & G4EventGenerator::operator=(const G4EventGenerator &right)
+const G4EventGenerator & G4EventGenerator::operator=(const G4EventGenerator &)
 {
   G4Exception("G4EventGenerator::operator= meant to not be accessable");
   return *this;
 }
 
 
-int G4EventGenerator::operator==(const G4EventGenerator &right) const
+int G4EventGenerator::operator==(const G4EventGenerator &) const
 {
   return 0;
 }
 
-int G4EventGenerator::operator!=(const G4EventGenerator &right) const
+int G4EventGenerator::operator!=(const G4EventGenerator &) const
 {
   return 1;
 }

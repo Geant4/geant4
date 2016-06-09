@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VInteractorManager.hh,v 1.7 2001/07/11 10:01:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VInteractorManager.hh,v 1.8 2003/06/16 16:56:06 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G.Barrand
 
@@ -30,7 +30,7 @@
 #define G4VINTERACTORMANAGER_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 typedef void*  G4Interactor;
 typedef G4bool (*G4DispatchFunction)(void*);
@@ -82,10 +82,10 @@ private:
   int                    argc;
   char**                 argv;
   G4Interactor           mainInteractor;
-  G4std::vector<G4DispatchFunction> dispatchers;
-  G4std::vector<G4SecondaryLoopAction> preActions;
-  G4std::vector<G4SecondaryLoopAction> postActions;
-  G4std::vector<G4Interactor> shells;
+  std::vector<G4DispatchFunction> dispatchers;
+  std::vector<G4SecondaryLoopAction> preActions;
+  std::vector<G4SecondaryLoopAction> postActions;
+  std::vector<G4Interactor> shells;
   G4bool                 secondaryLoopEnabled;
   G4bool                 alreadyInSecondaryLoop;
   int                    exitSecondaryLoop;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BMesonZero.cc,v 1.11 2002/12/16 11:15:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BMesonZero.cc,v 1.12 2003/06/16 16:57:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -34,8 +34,8 @@
 // ----------------------------------------------------------------
 
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4BMesonZero.hh"
 

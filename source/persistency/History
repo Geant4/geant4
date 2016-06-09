@@ -15,6 +15,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 June, 03   G.Cosmo (persistency-V05-01-01)
+- Fixes for inclusion of <strstream> in G4MCTSimParticle.cc and
+  G4MCTSimVertex.cc in view of the g4std wrappers migration.
+- Fixed warning on SUN-CC for G4PersistencyCenterMessenger.
+
+30 May, 03   G.Cosmo (persistency-V05-01-00)
+- Fixed few pedantic warnings...
+
 05 February, 03   G.Cosmo (persistency-V05-00-00)
 - Corrected inclusion of headers for constant and units from CLHEP.
 

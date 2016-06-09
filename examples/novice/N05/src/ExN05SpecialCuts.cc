@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05SpecialCuts.cc,v 1.5 2002/01/09 17:24:20 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN05SpecialCuts.cc,v 1.6 2003/05/28 11:20:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+//	GEANT 4 class implementation file 
 //
 // ------------------------------------------------------------
 //                  15 April 1998  M.Maire
@@ -49,27 +49,22 @@ ExN05SpecialCuts::~ExN05SpecialCuts()
 {                                     
 }                                     
 
-G4VParticleChange* ExN05SpecialCuts::PostStepDoIt(
-			     const G4Track& aTrack,
-			     const G4Step& 
-			    )
-//
-// Stop the current particle, if requested by G4UserLimits 
-// 			    			    			    
+G4VParticleChange*
+ExN05SpecialCuts::PostStepDoIt( const G4Track& aTrack, const G4Step& )
 {
-   aParticleChange.Initialize(aTrack);
-   aParticleChange.SetEnergyChange(0.) ;
-   aParticleChange.SetLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
-   aParticleChange.SetStatusChange(fStopButAlive);
-   return &aParticleChange;
+  //
+  // Stop the current particle, if requested by G4UserLimits 
+  // 			    			    			    
+  aParticleChange.Initialize(aTrack);
+  aParticleChange.SetEnergyChange(0.) ;
+  aParticleChange.SetLocalEnergyDeposit (aTrack.GetKineticEnergy()) ;
+  aParticleChange.SetStatusChange(fStopButAlive);
+  return &aParticleChange;
 }
 
-G4double ExN05SpecialCuts::PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            )
+G4double
+ExN05SpecialCuts::
+PostStepGetPhysicalInteractionLength(const G4Track&,G4double,G4ForceCondition*)
 {
   return DBL_MAX;
 }
-

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.12 2003/03/28 15:16:15 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em3DetectorConstruction.cc,v 1.17 2003/06/16 16:47:42 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
@@ -45,6 +45,10 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 #include "G4UserLimits.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -85,7 +89,7 @@ Em3DetectorConstruction::Em3DetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3DetectorConstruction::~Em3DetectorConstruction()
-{ 
+{
   delete userLimits;
   delete detectorMessenger;
 }
@@ -131,11 +135,17 @@ void Em3DetectorConstruction::DefineMaterials()
   a = 28.09*g/mole;
   G4Element* Si = new G4Element(name="Silicon",symbol="Si" , z= 14., a);
 
+  a = 72.59*g/mole;
+  G4Element* Ge = new G4Element(name="Germanium", symbol="Ge",z=32., a);
+
   a = 126.90*g/mole;
   G4Element* I  = new G4Element(name="Iodine"  ,symbol="I" , z= 53., a);
 
   a = 132.90*g/mole;
   G4Element* Cs = new G4Element(name="Cesium" ,symbol="Cs" , z= 55., a);
+
+  a = 208.98*g/mole;
+  G4Element* Bi = new G4Element(name="Bismuth"  , symbol="Bi",z=83., a);
 
   //
   // define an Element from isotopes, by relative abundance
@@ -152,41 +162,44 @@ void Em3DetectorConstruction::DefineMaterials()
   // define simple materials
   //
 
+  G4Material* ma;
   density = 70.8*mg/cm3;
   a = 1.008*g/mole;
-  G4Material* lH2 = new G4Material(name="liquidH2", z=1., a, density);
+  ma = new G4Material(name="liquidH2", z=1., a, density);
 
   density = 2.700*g/cm3;
   a = 26.98*g/mole;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
+  ma = new G4Material(name="Aluminium", z=13., a, density);
 
   density = 1.390*g/cm3;
   a = 39.95*g/mole;
-  G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
+  ma = new G4Material(name="liquidArgon", z=18., a, density);
+  G4Material* lAr = ma;
 
   density = 7.870*g/cm3;
   a = 55.85*g/mole;
-  G4Material* Fe = new G4Material(name="Iron"     , z=26., a, density);
+  ma = new G4Material(name="Iron"     , z=26., a, density);
 
   density = 8.960*g/cm3;
   a = 63.55*g/mole;
-  G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
+  ma = new G4Material(name="Copper"   , z=29., a, density);
 
   density = 19.30*g/cm3;
   a = 183.85*g/mole;
-  G4Material* W = new G4Material(name="Tungsten"  , z=74., a, density);
+  ma = new G4Material(name="Tungsten"  , z=74., a, density);
 
   density = 19.32*g/cm3;
   a = 196.97*g/mole;
-  G4Material* Au = new G4Material(name="Gold"     , z=79., a, density);
+  ma = new G4Material(name="Gold"     , z=79., a, density);
 
   density = 11.35*g/cm3;
   a = 207.19*g/mole;
-  G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
+  ma = new G4Material(name="Lead"     , z=82., a, density);
+  G4Material* Pb = ma;
 
   density = 18.95*g/cm3;
   a = 238.03*g/mole;
-  G4Material* Ur = new G4Material(name="Uranium"  , z=92., a, density);
+  ma = new G4Material(name="Uranium"  , z=92., a, density);
 
   //
   // define a material from elements.   case 1: chemical molecule
@@ -224,7 +237,13 @@ void Em3DetectorConstruction::DefineMaterials()
   G4Material* CsI = new G4Material(name="CsI", density, ncomponents=2);
   CsI->AddElement(Cs, natoms=1);
   CsI->AddElement(I , natoms=1);
-  CsI->GetIonisation()->SetMeanExcitationEnergy(415.689*eV);
+  CsI->GetIonisation()->SetMeanExcitationEnergy(553.1*eV);
+
+  density = 7.10*g/cm3;
+  G4Material* BGO = new G4Material(name="BGO", density, ncomponents=3);
+  BGO->AddElement(O , natoms=12);
+  BGO->AddElement(Ge, natoms= 3);
+  BGO->AddElement(Bi, natoms= 4);
 
   //
   // define a material from elements.   case 2: mixture by fractional mass
@@ -304,12 +323,14 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   // complete the Calor parameters definition
   ComputeCalorParameters();
 
+  // Cleanup old geometry
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
   //
   // World
   //
-  if(solidWorld) delete solidWorld;
-  if(logicWorld) delete logicWorld;
-  if(physiWorld) delete physiWorld;
 
   solidWorld = new G4Box("World",				//its name
                    WorldSizeX/2,WorldSizeYZ/2,WorldSizeYZ/2);	//its size
@@ -329,9 +350,6 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //
   // Calorimeter
   //
-  if(solidCalor) delete solidCalor;
-  if(logicCalor) delete logicCalor;
-  if(physiCalor) delete physiCalor;
 
   solidCalor = new G4Box("Calorimeter",				     //its name
     		       CalorThickness/2,CalorSizeYZ/2,CalorSizeYZ/2);//size
@@ -351,9 +369,6 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //
   // Layers
   //
-  if(solidLayer) delete solidLayer;
-  if(logicLayer) delete logicLayer;
-  if(physiLayer) delete physiLayer;
 
   solidLayer = new G4Box("Layer",		                      //its name
                        LayerThickness/2,CalorSizeYZ/2,CalorSizeYZ/2); //size
@@ -380,12 +395,6 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   //
   // Absorbers
   //
-  for (G4int j=0; j<MaxAbsor; j++)
-     {
-       if(solidAbsor[j]) delete solidAbsor[j];
-       if(logicAbsor[j]) delete logicAbsor[j];
-       if(physiAbsor[j]) delete physiAbsor[j];
-     }
 
   G4double xfront = -0.5*LayerThickness;
   for (G4int k=0; k<NbOfAbsor; k++)
@@ -446,8 +455,8 @@ void Em3DetectorConstruction::PrintCalorParameters()
          << "\n ---> The calorimeter is " << NbOfLayers << " layers of:";
   for (G4int i=0; i<NbOfAbsor; i++)
      {
-      G4cout << "\n \t" << G4std::setw(12) << AbsorMaterial[i]->GetName() <<": "
-              << G4std::setw(6) << G4BestUnit(AbsorThickness[i],"Length");
+      G4cout << "\n \t" << std::setw(12) << AbsorMaterial[i]->GetName() <<": "
+              << std::setw(6) << G4BestUnit(AbsorThickness[i],"Length");
      }
   G4cout << "\n-------------------------------------------------------------\n";
 }
@@ -568,13 +577,7 @@ void Em3DetectorConstruction::SetMaxStepSize(G4double val)
 
 void Em3DetectorConstruction::UpdateGeometry()
 {
-  G4bool first = true;
-  if (physiWorld) first = false;
-  G4VPhysicalVolume* v = ConstructCalorimeter();
-  G4RunManager* rm = G4RunManager::GetRunManager();
-  rm->GeometryHasBeenModified();
-  rm->DefineWorldVolume(v);
-  if (!first) rm->ResetNavigator();
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

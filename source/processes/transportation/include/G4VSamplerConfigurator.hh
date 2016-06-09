@@ -22,8 +22,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSamplerConfigurator.hh,v 1.3 2002/12/12 19:18:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VSamplerConfigurator.hh,v 1.4 2003/06/16 17:12:41 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4VSamplerConfigurator
@@ -44,7 +44,7 @@
 #define G4VSamplerConfigurator_hh G4VSamplerConfigurator_hh
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 class G4VTrackTerminator;
 
 
@@ -59,7 +59,7 @@ public:
     // return a G4VTrackTerminator or 0
 };
 
-typedef G4std::vector<G4VSamplerConfigurator *> G4Configurators;
+typedef std::vector<G4VSamplerConfigurator *> G4Configurators;
 
 
 #endif

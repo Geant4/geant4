@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLabAngularEnergy.hh,v 1.7 2002/12/12 19:18:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPLabAngularEnergy.hh,v 1.8 2003/06/16 17:10:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPLabAngularEnergy_h
 #define G4NeutronHPLabAngularEnergy_h 1
 
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 #include "G4Neutron.hh"
 #include "G4NeutronHPInterpolator.hh"
@@ -63,7 +63,7 @@ class G4NeutronHPLabAngularEnergy : public G4VNeutronHPEnergyAngular
   
   public:
   
-  void Init(G4std::ifstream & aDataFile);
+  void Init(std::ifstream & aDataFile);
      G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
   G4double MeanEnergyOfThisInteraction()
   {

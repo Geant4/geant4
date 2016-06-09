@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenGLStoredWin32Viewer.hh,v 1.5 2002/10/16 10:44:14 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Class G4OpenGLStoredWin32Viewer : a class derived from

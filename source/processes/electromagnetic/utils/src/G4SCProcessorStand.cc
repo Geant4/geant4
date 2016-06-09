@@ -89,7 +89,7 @@ void G4SCProcessorStand::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
+std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
                     const G4Step&    step,
 			  G4double&  tmax,
                           G4double&  meanLoss,
@@ -129,7 +129,7 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
   G4double presafety  = pre->GetSafety();
   G4ThreeVector postpoint = step.GetPostStepPoint()->GetPosition();
   G4double postsafety = navigator->ComputeSafety(postpoint);
-  G4double safety = G4std::min(presafety,postsafety);
+  G4double safety = std::min(presafety,postsafety);
   if(safety >= rcut) return 0;
 
 
@@ -141,7 +141,7 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
   G4double length = step.GetStepLength();
   G4double inv_v = (ekin + mass)/(c_light*dp->GetTotalMomentum());
 
-  G4std::vector<G4Track*>* vtr = new G4std::vector<G4Track*>;
+  std::vector<G4Track*>* vtr = new std::vector<G4Track*>;
 
   do {
 
@@ -150,7 +150,7 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
     if (fragment > 1.0) break;
 
     dt += del * inv_v;
-    G4std::vector<G4DynamicParticle*>* newp =
+    std::vector<G4DynamicParticle*>* newp =
            currentModel->SampleSecondaries(couple, dp, subcut, cut);
     if (newp) {
 

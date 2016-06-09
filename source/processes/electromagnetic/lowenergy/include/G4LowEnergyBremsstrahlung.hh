@@ -22,8 +22,8 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.31 2003/02/21 17:05:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.33 2003/05/20 23:33:25 pia Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: A. Forti
 //
@@ -35,6 +35,7 @@
 //                              and consistency with design
 // 29 Nov 2001  V.Ivanchenko    New parametrisation of EEDL data
 // 21 Feb 2003  V.Ivanchenko    Energy bins for spectrum are defined here
+// 24 Mar 2003  P.Rodrigues     Changes to accommodate new angular generators
 //
 // -------------------------------------------------------------------
 
@@ -60,13 +61,18 @@ class G4VParticleChange;
 class G4VEMDataSet;
 class G4VEnergySpectrum;
 class G4VCrossSectionHandler;
+class G4VBremAngularDistribution;
 
 class G4LowEnergyBremsstrahlung : public G4eLowEnergyLoss
 { 
 public:
  
   G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem");
-  
+
+  // Commented out for release 5.2 (June 2003), allowing no interface change
+  // G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem",
+  //			       G4VBremAngularDistribution* distribution = 0);
+
   ~G4LowEnergyBremsstrahlung();
   
   G4bool IsApplicable(const G4ParticleDefinition&);
@@ -77,6 +83,9 @@ public:
 				  const G4Step& step);
  
   void SetCutForLowEnSecPhotons(G4double cut);
+
+  // Temporary for release 5.2 (June 2003), allowing no interface change
+  void SetAngularGenerator(G4VBremAngularDistribution* distribution);
   
   void PrintInfoDefinition();
         
@@ -98,6 +107,7 @@ private:
   G4VEMDataSet* theMeanFreePath;
   G4VEnergySpectrum* energySpectrum;
   G4DataVector  energyBins;
+  G4VBremAngularDistribution* angularDistribution;
 
   // Lower limit for generation of gamma in this model
   G4DataVector cutForSecondaryPhotons;

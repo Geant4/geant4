@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include "G4LowEIonFragmentation.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
 G4int G4LowEIonFragmentation::hits = 0;
 G4int G4LowEIonFragmentation::totalTries = 0;
@@ -152,9 +152,9 @@ ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus)
     G4Fragment initialState2;
     initialState2.SetA(aProjectileA-particlesFromProjectile);
     initialState2.SetZ(aProjectileZ-chargedFromProjectile);
-    initialState2.SetNumberOfHoles((aProjectileA-particlesFromProjectile)/2);
-    initialState2.SetNumberOfParticles((aProjectileZ-chargedFromProjectile)/2);
-    initialState2.SetNumberOfCharged((aProjectileZ-chargedFromProjectile)/2);
+    initialState2.SetNumberOfHoles(static_cast<G4int>((aProjectileA-particlesFromProjectile)/2.0));
+    initialState2.SetNumberOfParticles(static_cast<G4int>((aProjectileZ-chargedFromProjectile)/2.0));
+    initialState2.SetNumberOfCharged(static_cast<G4int>((aProjectileZ-chargedFromProjectile)/2.0));
 
 
     initialState2.SetMomentum(residual4Momentum);
@@ -188,10 +188,10 @@ ApplyYourself(const G4Track & thePrimary, G4Nucleus & theNucleus)
   }
   
   // clean up
-  G4std::for_each(thePreCompoundResult->begin(), thePreCompoundResult->end(), DeleteReactionProduct());
+  std::for_each(thePreCompoundResult->begin(), thePreCompoundResult->end(), DeleteReactionProduct());
   if(theExcitationResult) 
   {
-    G4std::for_each(theExcitationResult->begin(), theExcitationResult->end(), DeleteReactionProduct());
+    std::for_each(theExcitationResult->begin(), theExcitationResult->end(), DeleteReactionProduct());
   }
   delete thePreCompoundResult;
   if(theExcitationResult) delete theExcitationResult;

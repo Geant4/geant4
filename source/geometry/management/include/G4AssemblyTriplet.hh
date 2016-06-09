@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AssemblyTriplet.hh,v 1.5 2001/07/11 09:59:16 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Class G4AssemblyTriplet

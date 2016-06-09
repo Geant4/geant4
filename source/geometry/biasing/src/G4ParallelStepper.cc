@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParallelStepper.cc,v 1.10 2003/04/03 08:01:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

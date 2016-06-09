@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.3 2001/10/30 08:33:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HadronBuilder.cc,v 1.4 2003/06/16 17:09:29 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -37,8 +37,8 @@
 #include "G4ParticleTable.hh"
 
 G4HadronBuilder::G4HadronBuilder(G4double mesonMix, G4double barionMix,
-		     G4std::vector<double> scalarMesonMix,
-		     G4std::vector<double> vectorMesonMix)
+		     std::vector<double> scalarMesonMix,
+		     std::vector<double> vectorMesonMix)
 {
 	mesonSpinMix=mesonMix;	     
 	barionSpinMix=barionMix;
@@ -111,7 +111,7 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	
 	G4int id1= black->GetPDGEncoding();
 	G4int id2= white->GetPDGEncoding();
-//	G4int ifl1= G4std::max(abs(id1), abs(id2));
+//	G4int ifl1= std::max(abs(id1), abs(id2));
 	if ( abs(id1) < abs(id2) )
 	   {
 	   G4int xchg = id1; 
@@ -213,10 +213,10 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 	G4int kflb = abs(ifl2);
 	G4int kflc = abs(ifl3);
 
-	G4int kfld = G4std::max(kfla,kflb);
-	      kfld = G4std::max(kfld,kflc);
-	G4int kflf = G4std::min(kfla,kflb);
-	      kflf = G4std::min(kflf,kflc);
+	G4int kfld = std::max(kfla,kflb);
+	      kfld = std::max(kfld,kflc);
+	G4int kflf = std::min(kfla,kflb);
+	      kflf = std::min(kflf,kflc);
 
 	G4int kfle = kfla + kflb + kflc - kfld - kflf;
 

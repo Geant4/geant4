@@ -33,8 +33,8 @@
 // -------------------------------------------------------------------
 
 #include "XrayFluoDataSet.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 #include "G4VDataSetAlgorithm.hh"
 
 XrayFluoDataSet::XrayFluoDataSet(G4int Z,
@@ -75,6 +75,7 @@ XrayFluoDataSet::~XrayFluoDataSet()
 
 G4double XrayFluoDataSet::FindValue(G4double e, G4int id) const
 {
+  id = id;
   G4double value;
   G4double e0 = (*energies)[0];
   // Protections
@@ -127,7 +128,7 @@ void XrayFluoDataSet::LoadData(const G4String& fileName)
   // Build the complete string identifying the file with the data set
   
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   
   ost << fileName <<".dat";
   
@@ -137,8 +138,8 @@ void XrayFluoDataSet::LoadData(const G4String& fileName)
  
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
 	{

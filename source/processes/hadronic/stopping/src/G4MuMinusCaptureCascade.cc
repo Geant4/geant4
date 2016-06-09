@@ -222,7 +222,7 @@ G4int G4MuMinusCaptureCascade::DoCascade(const G4double Z, const G4double massA,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z, G4double massA, 
+void G4MuMinusCaptureCascade::DoBoundMuonMinusDecay(G4double Z, G4double /* massA*/, 
                                                     G4int* nCascade, 
                                                     G4GHEKinematicsVector* Cascade)
 {

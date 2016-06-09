@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: B03ImportanceDetectorConstruction.hh,v 1.1 2002/11/08 17:35:18 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: B03ImportanceDetectorConstruction.hh,v 1.2 2003/06/16 16:47:22 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef B03ImportanceDetectorConstruction_hh 
 #define B03ImportanceDetectorConstruction_hh  B03ImportanceDetectorConstruction_hh 
 
 #include "globals.hh"
-#include "g4std/map"
+#include <map>
 #include "B03PVolumeStore.hh"
 class G4VPhysicalVolume;
 

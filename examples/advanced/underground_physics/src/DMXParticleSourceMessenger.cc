@@ -57,10 +57,10 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"               
+#include <fstream>
+#include <iomanip>               
 #include "G4Tokenizer.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 ///////////////////////////////////////////////////////////////////////////////
 DMXParticleSourceMessenger::DMXParticleSourceMessenger

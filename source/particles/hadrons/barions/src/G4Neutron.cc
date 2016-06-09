@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.14 2002/12/16 11:15:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Neutron.cc,v 1.15 2003/06/16 16:57:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -33,8 +33,8 @@
 //                          H.Kurashige 7 July 1996
 //      add neutron life time    Oct 17 2000 
 // **********************************************************************
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Neutron.hh"
 #include "G4NeutronBetaDecayChannel.hh"

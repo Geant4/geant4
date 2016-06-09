@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.8 2002/12/12 19:18:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.9 2003/05/30 11:32:34 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
 #include "G4Gamma.hh"
@@ -37,7 +37,7 @@
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
 
-G4ReactionProduct * G4NeutronHPNBodyPhaseSpace::Sample(G4double anEnergy, G4double massCode, G4double mass)
+G4ReactionProduct * G4NeutronHPNBodyPhaseSpace::Sample(G4double anEnergy, G4double massCode, G4double )
 {
    G4ReactionProduct * result = new G4ReactionProduct;
    G4int Z = static_cast<G4int>(massCode/1000);

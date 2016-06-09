@@ -36,6 +36,7 @@
 // 28-12-02 add method Dispersion (V.Ivanchenko)
 // 07-02-03 change signature (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 23-05-03 Add control on parthalogical cases (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -56,9 +57,12 @@
 
 G4IonFluctuations::G4IonFluctuations(const G4String& nam)
  :G4VEmFluctuationModel(nam),
+  particle(0),
   minNumberInteractionsBohr(10.0),
   theBohrBeta2(50.0*keV/proton_mass_c2),
-  minFraction(0.2)
+  minFraction(0.2),
+  xmin(0.2),
+  minLoss(0.000001*eV)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,6 +88,7 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
                                                      G4double& length,
                                                      G4double& meanLoss)
 {
+  if(meanLoss <= minLoss) return meanLoss;
 
   if(dp->GetDefinition() != particle) {
     particle       = dp->GetDefinition();
@@ -94,27 +99,37 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
 
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
+  G4double navr = minNumberInteractionsBohr;
 
   // Gaussian fluctuation
+  G4bool gauss = true;
   if (meanLoss >= minNumberInteractionsBohr*tmax) {
+    navr = meanLoss*meanLoss/siga;
+    if (navr < minNumberInteractionsBohr) gauss = false;
+  }
 
+  if(gauss) {
     // Increase fluctuations for big fractional energy loss
+
     if ( meanLoss > minFraction*kineticEnergy ) {
       G4double gam = (kineticEnergy - meanLoss)/particleMass + 1.0;
       G4double b2  = 1.0 - 1.0/(gam*gam);
+      if(b2 < xmin*beta2) b2 = xmin*beta2;
       G4double x   = b2/beta2;
       G4double x3  = 1.0/(x*x*x);
       siga *= 0.25*(1.0 + x)*(x3 + (1.0/b2 - 0.5)/(1.0/beta2 - 0.5) );
     }
     siga = sqrt(siga);
+
+    G4double lossmax = meanLoss+meanLoss;
     do {
-     loss = G4RandGauss::shoot(meanLoss,siga);
-    } while (loss < 0. || loss > 2.*meanLoss);
+      loss = G4RandGauss::shoot(meanLoss,siga);
+    } while (0.0 > loss || loss > lossmax);
 
   // Poisson fluctuations
   } else {
-    G4double navr = meanLoss*meanLoss/siga;
-    G4double n    = (G4double)G4Poisson(navr);
+
+    G4double n    = (G4double)(G4Poisson(navr));
     loss = meanLoss*n/navr;
   }
 

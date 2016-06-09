@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRunManager.cc,v 1.4 2002/12/05 01:07:00 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ParRunManager.cc,v 1.5 2003/06/16 16:49:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 //                   Parallel Library for Geant4
@@ -62,7 +62,7 @@
 #include "ParRandomState.hh"
 
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 // Define static data members of ParRunManager
 // They are set by ImportDoEventLoopLocals

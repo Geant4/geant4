@@ -65,7 +65,7 @@ void G4Analyser::setInelCsec(G4double csec,
   }
 }
 
-void G4Analyser::setWatchers(const G4std::vector<G4NuclWatcher>& watchers) {
+void G4Analyser::setWatchers(const std::vector<G4NuclWatcher>& watchers) {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4Analyser::setWatchers" << G4endl;
@@ -106,7 +106,7 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
   }
 
   if (withNuclei) {
-    G4std::vector<G4InuclNuclei> nucleus = output.getNucleiFragments();
+    std::vector<G4InuclNuclei> nucleus = output.getNucleiFragments();
 
     if (nucleus.size() >= 0) {
       G4int nbig = 0;
@@ -129,7 +129,7 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
 
       if (nbig > 1) fissy_prob += 1.0;
       eventNumber += 1.0;
-      G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+      std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
       averageMultiplicity += particles.size();
 
       for (G4int i = 0; i < G4int(particles.size()); i++) {
@@ -176,7 +176,7 @@ void G4Analyser::analyse(const G4CollisionOutput& output) {
 
   } else {
     eventNumber += 1.0;
-    G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
+    std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
     averageMultiplicity += particles.size();
 
     for (G4int i = 0; i < G4int(particles.size()); i++) {
@@ -294,14 +294,14 @@ void G4Analyser::handleWatcherStatistics() {
     ana_watchers[iw].print();
 
     if (ana_watchers[iw].to_check()) {
-      G4std::pair<G4double, G4double> rat_err = ana_watchers[iw].getAverageRatio();
+      std::pair<G4double, G4double> rat_err = ana_watchers[iw].getAverageRatio();
       averat += rat_err.first;
       ave_err += rat_err.second;
       gl_chsq += ana_watchers[iw].getChsq();   
-      G4std::pair<G4double, G4double> cs_err = ana_watchers[iw].getExpCs();
+      std::pair<G4double, G4double> cs_err = ana_watchers[iw].getExpCs();
       tot_exper += cs_err.first;
       tot_exper_err += cs_err.second;
-      G4std::pair<G4double, G4double> inucl_cs_err = ana_watchers[iw].getInuclCs();
+      std::pair<G4double, G4double> inucl_cs_err = ana_watchers[iw].getInuclCs();
       tot_inucl += inucl_cs_err.first;
       tot_inucl_err += inucl_cs_err.second;
       G4double iz_checked = ana_watchers[iw].getNmatched();

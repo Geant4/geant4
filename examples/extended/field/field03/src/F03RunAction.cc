@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03RunAction.cc,v 1.5 2001/11/07 16:36:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F03RunAction.cc,v 1.7 2003/06/25 17:19:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "F03RunAction.hh"
@@ -32,7 +32,7 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include "Randomize.hh"
 
@@ -72,7 +72,7 @@ void F03RunAction::BeginOfRunAction(const G4Run* aRun)
 
 /////////////////////////////////////////////////////////////////////////////
 
-void F03RunAction::EndOfRunAction(const G4Run* aRun)
+void F03RunAction::EndOfRunAction(const G4Run*)
 {
   if (G4VVisManager::GetConcreteInstance())
   {

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VGaussianQuadrature.hh,v 1.4 2001/07/11 10:00:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Class description:
 //

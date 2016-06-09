@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.hh,v 1.2 2002/05/28 09:15:26 pia Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ShellData.hh,v 1.3 2003/06/16 16:59:48 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -42,8 +42,8 @@
 #define G4SHELLDATA_HH 1
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 
 class G4DataVector;
 
@@ -76,9 +76,9 @@ private:
    G4int zMin;
   G4int zMax; 
 
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> > idMap;
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> > bindingMap;
-  G4std::vector<G4int> nShells;
+  std::map<G4int,G4DataVector*,std::less<G4int> > idMap;
+  std::map<G4int,G4DataVector*,std::less<G4int> > bindingMap;
+  std::vector<G4int> nShells;
 
 };
  

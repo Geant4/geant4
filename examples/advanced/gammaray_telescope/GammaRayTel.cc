@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.9 2002/06/18 18:45:39 griccard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: GammaRayTel.cc,v 1.11 2003/06/16 16:46:19 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -63,7 +63,7 @@
 
 /* This global file is used to store relevant data for
    analysis with external tools */
-G4std::ofstream outFile;
+std::ofstream outFile;
 
 // This is the main function 
 int main(int argc, char** argv)
@@ -134,8 +134,11 @@ int main(int argc, char** argv)
 	      UI->ApplyCommand(command+macroFileName);
 	    }
 	}
-      else  UI->ApplyCommand("/control/execute prerunGammaRayTel.mac");
-      session->SessionStart();
+      else  
+	{
+	  UI->ApplyCommand("/control/execute prerunGammaRayTel.mac");
+	  session->SessionStart();
+	}
       delete session;
     }
 

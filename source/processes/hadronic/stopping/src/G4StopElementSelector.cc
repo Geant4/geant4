@@ -48,7 +48,7 @@
 //-----------------------------------------------------------------------------
 
 #include "G4StopElementSelector.hh"
-#include "g4std/vector"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -130,7 +130,7 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
 {
   // Initialized data
 
-  //  static G4std::vector<G4double> zeff(100);
+  //  static std::vector<G4double> zeff(100);
     static G4double zeff[100] = {
     1.,1.98,2.95,3.89,4.8,5.72,6.61,7.49,8.32,9.12,9.95,10.69,11.48,12.22,
     12.91,13.64,14.24,14.89,15.53,16.15,16.75,17.38,18.04,18.49,
@@ -147,7 +147,7 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
   // Atomizdat, 1978. (Experimental capture velocities)
 
   const size_t ListZE = 65;
-  //  static G4std::vector<G4int> ListZExp[ListZE] = {
+  //  static std::vector<G4int> ListZExp[ListZE] = {
   static G4int ListZExp[ListZE] = {
       3,  4,  5,  6,  7,  8,  9, 10, 11, 12,
      13, 14, 15, 16, 17, 18, 19, 20, 22, 23,
@@ -156,7 +156,7 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
      50, 51, 52, 53, 55, 56, 57, 58, 59, 60,
      62, 64, 65, 67, 72, 73, 74, 80, 81, 82,
      83, 90, 92, 93};
-  //  static G4std::vector<G4double> ListCaptureVel[ListZE] = {
+  //  static std::vector<G4double> ListCaptureVel[ListZE] = {
   static G4double ListCaptureVel[ListZE] = {
      0.0057, 0.010, 0.0258, 0.0371, 0.0644,
      0.0974, 0.144, 0.250,  0.386,  0.479,
@@ -210,7 +210,7 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double  G4StopElementSelector::GetMuonDecayRate(G4double Z, G4double A)
+G4double  G4StopElementSelector::GetMuonDecayRate(G4double Z, G4double /* A */)
 {
   // Decay time on K-shell 
   // N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.

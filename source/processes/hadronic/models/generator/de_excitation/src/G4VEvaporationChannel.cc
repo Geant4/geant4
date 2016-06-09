@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationChannel.cc,v 1.6 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VEvaporationChannel.cc,v 1.7 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -30,7 +30,7 @@
 
 #include "G4VEvaporationChannel.hh"
 
-G4VEvaporationChannel::G4VEvaporationChannel(const G4VEvaporationChannel &right)
+G4VEvaporationChannel::G4VEvaporationChannel(const G4VEvaporationChannel &)
 {
  G4Exception("G4VEvaporationChannel::copy_constructor meant to not be accessable");
 }
@@ -38,7 +38,7 @@ G4VEvaporationChannel::G4VEvaporationChannel(const G4VEvaporationChannel &right)
 
 
 
-const G4VEvaporationChannel & G4VEvaporationChannel::operator=(const G4VEvaporationChannel &right)
+const G4VEvaporationChannel & G4VEvaporationChannel::operator=(const G4VEvaporationChannel &)
 {
   G4Exception("G4VEvaporationChannel::operator= meant to not be accessable");
   return *this;

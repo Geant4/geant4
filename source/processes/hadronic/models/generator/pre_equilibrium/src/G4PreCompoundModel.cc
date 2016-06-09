@@ -21,33 +21,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.23 2002/12/12 19:17:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PreCompoundModel.cc,v 1.29 2003/06/16 17:07:29 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
 #include "G4PreCompoundModel.hh"
+#include "G4PreCompoundEmission.hh"
+#include "G4PreCompoundTransitions.hh"
+#include "G4GNASHTransitions.hh"
 
-#include "G4EvaporationLevelDensityParameter.hh"
 
 #ifdef PRECOMPOUND_TEST
 G4Fragment G4PreCompoundModel::theInitialFragmentForTest;
-G4std::vector<G4String*> G4PreCompoundModel::theCreatorModels;
+std::vector<G4String*> G4PreCompoundModel::theCreatorModels;
 #endif
 
-const G4PreCompoundModel & G4PreCompoundModel::operator=(const G4PreCompoundModel &right)
+const G4PreCompoundModel & G4PreCompoundModel::operator=(const G4PreCompoundModel &)
 {
   G4Exception("G4PreCompoundModel::operator= meant to not be accessable");
   return *this;
 }
 
 
-G4bool G4PreCompoundModel::operator==(const G4PreCompoundModel &right) const
+G4bool G4PreCompoundModel::operator==(const G4PreCompoundModel &) const
 {
   return false;
 }
 
-G4bool G4PreCompoundModel::operator!=(const G4PreCompoundModel &right) const
+G4bool G4PreCompoundModel::operator!=(const G4PreCompoundModel &) const
 {
   return true;
 }
@@ -63,12 +65,12 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   
   // prepare fragment
   G4Fragment anInitialState;
-  G4int anA=G4int(theNucleus.GetN());
+  G4int anA=static_cast<G4int>(theNucleus.GetN());
   anA += thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber();
   anInitialState.SetA(anA);
   
-  G4int aZ=G4int(theNucleus.GetZ());
-  aZ += G4int(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge());
+  G4int aZ=static_cast<G4int>(theNucleus.GetZ());
+  aZ += static_cast<G4int>(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge());
   anInitialState.SetZ(aZ);
   
   // Assume the projectile is a nucleon
@@ -77,16 +79,16 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   anInitialState.SetNumberOfParticles(1+thePrimary.GetDynamicParticle()->GetDefinition()->GetBaryonNumber());
   
   // Number of Charged Excited Particles
-  anInitialState.SetNumberOfCharged(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge() + 
-				    G4int(0.5+G4UniformRand()));
+  anInitialState.SetNumberOfCharged(static_cast<G4int>(thePrimary.GetDynamicParticle()->GetDefinition()->GetPDGCharge()) + 
+				    static_cast<G4int>(0.5+G4UniformRand()));
   
   // Number of Holes 
   anInitialState.SetNumberOfHoles(1);
   
   // pre-compound nucleus energy.
   G4double anEnergy = 0;
-  G4double nucleusMass =  G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(theNucleus.GetZ(),
-                                                                                         theNucleus.GetN());
+  G4double nucleusMass =  G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(static_cast<G4int>(theNucleus.GetZ()),
+                                                                                         static_cast<G4int>(theNucleus.GetN()));
   anEnergy =  nucleusMass + thePrimary.GetTotalEnergy();
   
   // Momentum
@@ -105,7 +107,7 @@ G4VParticleChange * G4PreCompoundModel::ApplyYourself(const G4Track & thePrimary
   G4ReactionProductVector * result = DeExcite(aFragment);
 
 #ifdef PRECOMPOUND_TEST
-  for (G4std::vector<G4String*>::iterator icm = theCreatorModels.begin(); 
+  for (std::vector<G4String*>::iterator icm = theCreatorModels.begin(); 
        icm != theCreatorModels.end(); ++icm )
     {
       delete (*icm);
@@ -147,7 +149,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
   
   if (aFragment.GetA() < 5) {
     G4ReactionProduct * theRP = new G4ReactionProduct(G4ParticleTable::GetParticleTable()->
-						      GetIon(aFragment.GetZ(),aFragment.GetA(),
+						      GetIon(static_cast<G4int>(aFragment.GetZ()),
+							     static_cast<G4int>(aFragment.GetA()),
 							     aFragment.GetExcitationEnergy()));
     theRP->SetMomentum(aFragment.GetMomentum().vect());
     theRP->SetTotalEnergy(aFragment.GetMomentum().e());	  
@@ -155,32 +158,43 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
     return Result;
   }
   
-  G4PreCompoundEmission aEmission(theInitialState);
-	
+  G4PreCompoundEmission aEmission;
+  if (useHETCEmission) aEmission.SetHETCModel();
+  aEmission.SetUp(theInitialState);
+
+  G4VPreCompoundTransitions * aTransition = 0;
+  if (useGNASHTransition) 
+    {
+      aTransition = new G4GNASHTransitions;
+    }
+  else 
+    {
+      aTransition = new G4PreCompoundTransitions;
+    }
+
+
   // Main loop. It is performed until equilibrium deexcitation.
   for (;;) {
     // Initialize fragment according with the nucleus parameters
     aEmission.Initialize(aFragment);
 
     // Equilibrium exciton number
-    //      G4EvaporationLevelDensityParameter theLDP;
-    //      G4double EquilibriumExcitonNumber = 
-    //        sqrt(1.19*theLDP.LevelDensityParameter(aFragment.GetA(),aFragment.GetZ(),
-    //  					     aFragment.GetExcitationEnergy())*
-    //  	   aFragment.GetA()*
-    //  	   aFragment.GetExcitationEnergy()+0.5);
-    G4double g = 0.595*aFragment.GetA()*
-      G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+    //    G4EvaporationLevelDensityParameter theLDP;
+    //    G4double g = (6.0/pi2)*aFragment.GetA()*
+    //      theLDP.LevelDensityParameter(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()),
+    //				   aFragment.GetExcitationEnergy());
 
-    G4int EquilibriumExcitonNumber = G4int(sqrt(2.0*g*aFragment.GetExcitationEnergy()) 
-					   + 0.5);
+    G4double g = (6.0/pi2)*aFragment.GetA()*
+      G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+    G4int EquilibriumExcitonNumber = static_cast<G4int>(sqrt(2.0*g*aFragment.GetExcitationEnergy())
+    					   + 0.5);
     
     // Loop for transitions, it is performed while there are preequilibrium transitions.
     G4bool ThereIsTransition = false;
     do 
       {
 	if (aFragment.GetNumberOfExcitons() < EquilibriumExcitonNumber && 
-	    aFragment.GetA() > 4) 
+	    aFragment.GetA() > 4 && Result->size() < 2) 
 	  {
 	    //  	if (aFragment.GetNumberOfParticles() < 1) {
 	    //  	  aFragment.SetNumberOfHoles(aFragment.GetNumberOfHoles()+1);
@@ -198,13 +212,14 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 		CheckConservation(theInitialState,aFragment,Result);
 #endif // ------------------- debug -----------------------------------------
 		PerformEquilibriumEmission(aFragment,Result);
+		delete aTransition;
 		return Result;
 	      }
 	    
-	    G4PreCompoundTransitions aTransition(aFragment);
+	    //	    G4PreCompoundTransitions aTransition(aFragment);
 	
 	    // Sum of transition probabilities
-	    G4double TotalTransitionProbability = aTransition.GetTotalProbability();
+	    G4double TotalTransitionProbability = aTransition->CalculateProbability(aFragment);
 	
 	    // Sum of all probabilities
 	    G4double TotalProbability = TotalEmissionProbability + TotalTransitionProbability;
@@ -216,7 +231,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 		ThereIsTransition = true;
 		
 		// Perform the transition
-		aFragment = aTransition.PerformTransition(aFragment);
+		aFragment = aTransition->PerformTransition(aFragment);
 	      } 
 	    else 
 	      {
@@ -234,6 +249,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
 	    CheckConservation(theInitialState,aFragment,Result);
 #endif
 	    PerformEquilibriumEmission(aFragment,Result);
+	    delete aTransition;
 	    return Result;
 	  }
       } while (ThereIsTransition);   // end of do loop
@@ -263,15 +279,15 @@ void G4PreCompoundModel::CheckConservation(const G4Fragment & theInitialState,
 {
   G4double ProductsEnergy = aFragment.GetMomentum().e();
   G4ThreeVector ProductsMomentum = aFragment.GetMomentum();
-  G4int ProductsA = G4int(aFragment.GetA());
-  G4int ProductsZ = G4int(aFragment.GetZ());
+  G4int ProductsA = static_cast<G4int>(aFragment.GetA());
+  G4int ProductsZ = static_cast<G4int>(aFragment.GetZ());
   for (G4ReactionProductVector::iterator h = Result->begin(); 
        h != Result->end(); ++h) 
     {
       ProductsEnergy += (*h)->GetTotalEnergy();
       ProductsMomentum += (*h)->GetMomentum();
-      ProductsA += G4int((*h)->GetDefinition()->GetBaryonNumber());
-      ProductsZ += G4int((*h)->GetDefinition()->GetPDGCharge());
+      ProductsA += static_cast<G4int>((*h)->GetDefinition()->GetBaryonNumber());
+      ProductsZ += static_cast<G4int>((*h)->GetDefinition()->GetPDGCharge());
     }
 
   if (ProductsA != theInitialState.GetA()) 

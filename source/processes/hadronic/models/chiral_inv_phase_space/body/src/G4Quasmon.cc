@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.46 2002/12/12 13:25:54 mkossov Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Quasmon.cc,v 1.48 2003/06/25 10:19:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -148,11 +148,11 @@ G4Quasmon::~G4Quasmon()
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor before theQCandidates delete"<<G4endl;
 #endif
-  G4std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
+  std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor before theQHadrons"<<G4endl;
 #endif
-  G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
+  std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
 #ifdef sdebug
   G4cout<<"G4Quasmon::Destructor === DONE ==="<<G4endl;
 #endif

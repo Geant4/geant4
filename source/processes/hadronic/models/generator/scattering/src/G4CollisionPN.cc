@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionPN.cc,v 1.2 2002/12/12 19:17:50 gunter Exp $ //
+// $Id: G4CollisionPN.cc,v 1.3 2003/06/16 17:09:09 gunter Exp $ //
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -93,7 +93,7 @@ G4CollisionPN::~G4CollisionPN()
 }
 
 
-const G4std::vector<G4String>& G4CollisionPN::GetListOfColliders(G4int whichOne) const
+const std::vector<G4String>& G4CollisionPN::GetListOfColliders(G4int whichOne) const
 {
   if (whichOne == 1) 
     {

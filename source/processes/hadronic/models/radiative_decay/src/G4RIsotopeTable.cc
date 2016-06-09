@@ -65,9 +65,9 @@
 */
 #include "G4ios.hh"
 #include "globals.hh"
-#include "g4std/iomanip"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <iomanip>
+#include <fstream>
+#include <strstream>
 
 const G4double G4RIsotopeTable::levelTolerance = 2.0*keV;
 
@@ -93,7 +93,7 @@ G4int G4RIsotopeTable::GetVerboseLevel() const
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4bool G4RIsotopeTable::FindIsotope(G4IsotopeProperty* property)
+G4bool G4RIsotopeTable::FindIsotope(G4IsotopeProperty* )
 {
   // do nothing, it is here just for the compiler
   // it is required by the base class
@@ -157,9 +157,9 @@ G4String G4RIsotopeTable::GetIsotopeName(G4int Z, G4int A, G4double E)
 {
   G4String name;
   char val[50];
-  G4std::ostrstream os(val,50);
-  os.setf(G4std::ios::fixed);
-  os <<"A"<< A << "Z" << Z <<'[' << G4std::setprecision(1) << E/keV << ']' << '\0';
+  std::ostrstream os(val,50);
+  os.setf(std::ios::fixed);
+  os <<"A"<< A << "Z" << Z <<'[' << std::setprecision(1) << E/keV << ']' << '\0';
   name = val;
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>0) {
@@ -177,10 +177,10 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
   //  G4double  levelTolerance = 1.0 * keV ;
   G4String dirName = getenv("G4RADIOACTIVEDATA");
   char val[100];
-  G4std::ostrstream os(val,100);
+  std::ostrstream os(val,100);
   os <<dirName <<"/z" <<Z <<".a" <<A <<'\0';
   G4String file(val);
-  G4std::ifstream DecaySchemeFile(file);
+  std::ifstream DecaySchemeFile(file);
 
   if (!DecaySchemeFile )
   {
@@ -209,7 +209,7 @@ G4double G4RIsotopeTable::GetMeanLifeTime (G4int Z, G4int A, G4double& aE)
 
       if (inputChars[0] != '#' && inputLine.length() != 0)
       {
-        G4std::istrstream tmpstream(inputLine);
+        std::istrstream tmpstream(inputLine);
  //       tmpstream = inputLine;
         tmpstream >>recordType >>a >>b;
         if (recordType == "P")

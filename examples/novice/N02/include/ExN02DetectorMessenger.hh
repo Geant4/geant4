@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN02DetectorMessenger.hh,v 1.7 2002/12/16 16:31:43 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

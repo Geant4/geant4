@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.11 2002/08/06 10:35:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TransportationManager.cc,v 1.12 2003/06/13 09:27:34 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // G4TransportationManager 
@@ -79,4 +79,14 @@ G4TransportationManager* G4TransportationManager::GetTransportationManager()
      fTransportationManager = &theInstance;
    
    return fTransportationManager;
+}
+
+void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
+{
+   fFieldManager = newFieldManager; 
+
+   // Message the PropagatorInField, 
+   //     which also maintains this information (to be reviewed)
+   if( fPropagatorInField )
+      fPropagatorInField -> SetDetectorFieldManager( newFieldManager );
 }

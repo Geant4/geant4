@@ -40,12 +40,12 @@
 #ifndef G4FastSimulationVector_h
 #define G4FastSimulationVector_h 1
 
-#include "g4std/vector"
+#include <vector>
 
 template<class T>
-class G4FastSimulationVector : public G4std::vector<T*>
+class G4FastSimulationVector : public std::vector<T*>
 {
-  typedef G4std::vector<T*> std_pvector;
+  typedef std::vector<T*> std_pvector;
   typedef typename std_pvector::iterator iterator;
   typedef typename std_pvector::const_iterator const_iterator;
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.cc,v 1.8 2002/06/17 10:13:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VRML2FileSceneHandler.cc,v 1.9 2003/06/16 17:13:59 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4VRML2FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -30,7 +30,7 @@
 
 //#define DEBUG_FR_SCENE
 
-#include "g4std/fstream"
+#include <fstream>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -164,7 +164,7 @@ void G4VRML2FileSceneHandler::connectPort()
 		}
 
 		// check validity of the file name
-		G4std::ifstream  fin ; 
+		std::ifstream  fin ; 
 		fin.open(fVRMLFileName) ;
 		if(!fin) { 
 			// new file	

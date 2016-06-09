@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Nucleon.cc,v 1.6 2002/12/12 19:17:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Nucleon.cc,v 1.8 2003/06/16 17:09:45 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G4Nucleon.hh"
 
@@ -44,9 +44,7 @@ G4Nucleon::~G4Nucleon()
 
 void G4Nucleon::Boost(const G4LorentzVector & aMomentum)
 {
-
 //   see e.g. CERNLIB short writeup U101 for the algorithm
-
 	G4double mass=aMomentum.mag();
 	G4double factor=
 	    ( theMomentum.vect()*aMomentum.vect()/(aMomentum.e()+mass) - theMomentum.e() ) / mass;
@@ -55,8 +53,8 @@ void G4Nucleon::Boost(const G4LorentzVector & aMomentum)
 	theMomentum.setVect(factor*aMomentum.vect() + theMomentum.vect());
 }
 
-#include "g4std/iostream"
-G4std::ostream & operator << (G4std::ostream &s, const G4Nucleon& nucleon)
+#include <iostream>
+std::ostream & operator << (std::ostream &s, const G4Nucleon& nucleon)
 {
 //	s<< nucleon.GetDefinition()->GetParticleName() 
 //	 << "  is " << nucleon.AreYouHit() ? " " : "not" 

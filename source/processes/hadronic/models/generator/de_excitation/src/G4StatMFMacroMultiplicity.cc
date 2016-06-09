@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiplicity.cc,v 1.7 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroMultiplicity.cc,v 1.10 2003/06/16 17:06:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,20 +32,20 @@
 
 // operators definitions
 G4StatMFMacroMultiplicity & 
-G4StatMFMacroMultiplicity::operator=(const G4StatMFMacroMultiplicity & right) 
+G4StatMFMacroMultiplicity::operator=(const G4StatMFMacroMultiplicity & ) 
 {
     G4Exception("G4StatMFMacroMultiplicity::operator= meant to not be accessable");
     return *this;
 }
 
-G4bool G4StatMFMacroMultiplicity::operator==(const G4StatMFMacroMultiplicity & right) const 
+G4bool G4StatMFMacroMultiplicity::operator==(const G4StatMFMacroMultiplicity & ) const 
 {
     G4Exception("G4StatMFMacroMultiplicity::operator== meant to not be accessable");
     return false;
 }
 
 
-G4bool G4StatMFMacroMultiplicity::operator!=(const G4StatMFMacroMultiplicity & right) const 
+G4bool G4StatMFMacroMultiplicity::operator!=(const G4StatMFMacroMultiplicity & ) const 
 {
     G4Exception("G4StatMFMacroMultiplicity::operator!= meant to not be accessable");
     return true;
@@ -129,11 +129,11 @@ G4double G4StatMFMacroMultiplicity::CalcMeanA(const G4double mu)
 	
  
   G4int n = 1;
- for (G4std::vector<G4VStatMFMacroCluster*>::iterator i = _theClusters->begin(); 
+ for (std::vector<G4VStatMFMacroCluster*>::iterator i = _theClusters->begin(); 
       i != _theClusters->end(); ++i) 
    {
      G4double multip = (*i)->CalcMeanMultiplicity(V0*_Kappa,mu,_ChemPotentialNu,_MeanTemperature);
-     MeanA += multip*G4double(n++);
+     MeanA += multip*static_cast<G4double>(n++);
      _MeanMultiplicity += multip;
    }
 

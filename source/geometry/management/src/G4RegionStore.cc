@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.4 2003/02/07 11:46:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RegionStore.cc,v 1.5 2003/06/16 16:52:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4RegionStore
 //
@@ -49,7 +49,7 @@ G4bool G4RegionStore::locked = false;
 // ***************************************************************************
 //
 G4RegionStore::G4RegionStore()
-  : G4std::vector<G4Region*>()
+  : std::vector<G4Region*>()
 {
   reserve(20);
 }
@@ -85,7 +85,7 @@ void G4RegionStore::Clean()
 
   size_t i=0;
   G4RegionStore* store = GetInstance();
-  G4std::vector<G4Region*>::iterator pos;
+  std::vector<G4Region*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Solids ... ";

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.cc,v 1.6 2001/07/11 10:08:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleChangeForLoss.cc,v 1.6.12.1 2003/06/16 17:19:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -154,7 +154,7 @@ void G4ParticleChangeForLoss::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Kinetic Energy (MeV): " 
-       << G4std::setw(20) << theEnergyChange/MeV
+       << std::setw(20) << theEnergyChange/MeV
        << G4endl;
 }
 

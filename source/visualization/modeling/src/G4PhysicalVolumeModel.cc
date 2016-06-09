@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.20 2001/08/24 20:34:25 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.21 2003/06/16 17:14:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  31st December 1997.
@@ -42,7 +42,7 @@
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4TransportationManager.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
 (G4VPhysicalVolume*          pVPV,
@@ -65,8 +65,8 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fppCurrentLV    (0)
 {
   const int len = 8; char a [len];
-  G4std::ostrstream o (a, len); o.seekp (G4std::ios::beg);
-  o << fpTopPV -> GetCopyNo () << G4std::ends;
+  std::ostrstream o (a, len); o.seekp (std::ios::beg);
+  o << fpTopPV -> GetCopyNo () << std::ends;
   fGlobalTag = fpTopPV -> GetName () + "." + a;
   fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
@@ -139,9 +139,9 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const {
   const int len = 8; char a [len];
-  G4std::ostrstream o (a, len); o.seekp (G4std::ios::beg);
+  std::ostrstream o (a, len); o.seekp (std::ios::beg);
   if (fpCurrentPV) {
-    o << fpCurrentPV -> GetCopyNo () << G4std::ends;
+    o << fpCurrentPV -> GetCopyNo () << std::ends;
     return fpCurrentPV -> GetName () + "." + a;
   }
   else {

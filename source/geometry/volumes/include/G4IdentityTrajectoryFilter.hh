@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IdentityTrajectoryFilter.hh,v 1.2 2003/02/06 18:53:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class GIdentityTrajectoryFilter

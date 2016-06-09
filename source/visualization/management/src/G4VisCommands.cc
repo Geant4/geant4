@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.6 2001/09/10 10:54:30 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisCommands.cc,v 1.7 2003/05/30 13:01:28 johna Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -53,7 +53,7 @@ G4VisCommandEnable::~G4VisCommandEnable () {
   delete fpCommand1;
 }
 
-G4String G4VisCommandEnable::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandEnable::GetCurrentValue (G4UIcommand*) {
   return G4String();
 }
 
@@ -83,11 +83,11 @@ G4VisCommandVerbose::~G4VisCommandVerbose () {
   delete fpCommand;
 }
 
-G4String G4VisCommandVerbose::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandVerbose::GetCurrentValue (G4UIcommand*) {
   return G4String();
 }
 
-void G4VisCommandVerbose::SetNewValue (G4UIcommand* command,
+void G4VisCommandVerbose::SetNewValue (G4UIcommand*,
 				       G4String newValue) {
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(newValue);

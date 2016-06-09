@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.hh,v 1.3 2002/05/28 09:15:26 pia Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EMDataSet.hh,v 1.4 2003/05/20 20:03:34 pia Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -76,8 +76,8 @@ public:
 
   void PrintData() const;
 
-  const G4DataVector& GetEnergies(G4int i) const { return *energies; }
-  const G4DataVector& GetData(G4int i) const { return *data; }
+  const G4DataVector& GetEnergies(G4int) const { return *energies; }
+  const G4DataVector& GetData(G4int) const { return *data; }
 
 private:
 

@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Em3CalorHit.cc,v 1.4 2001/10/22 10:58:54 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em3CalorHit.cc,v 1.5 2003/06/03 10:36:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,7 @@ G4Allocator<Em3CalorHit> Em3CalorHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3CalorHit::Em3CalorHit()
+Em3CalorHit::Em3CalorHit():G4VHit()
 {
    for (G4int i=0; i<MaxAbsor; i++)
       { EdepAbs[i] = TrackLengthAbs[i] = 0.;}
@@ -48,7 +48,7 @@ Em3CalorHit::~Em3CalorHit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3CalorHit::Em3CalorHit(const Em3CalorHit& right)
+Em3CalorHit::Em3CalorHit(const Em3CalorHit& right):G4VHit()
 {
   for (G4int i=0; i<MaxAbsor; i++)
      { EdepAbs[i]        = right.EdepAbs[i];
@@ -63,13 +63,6 @@ const Em3CalorHit& Em3CalorHit::operator=(const Em3CalorHit& right)
      { EdepAbs[i]        = right.EdepAbs[i];
        TrackLengthAbs[i] = right.TrackLengthAbs[i];}
   return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-int Em3CalorHit::operator==(const Em3CalorHit& right) const
-{
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

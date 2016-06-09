@@ -1,9 +1,12 @@
-# $Id: G4VIS_USE.gmk,v 1.14 2002/11/22 11:53:09 gcosmo Exp $
+# $Id: G4VIS_USE.gmk,v 1.16 2003/06/11 13:18:57 gunter Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
 
 ifndef G4VIS_NONE
+
+ifndef G4VIS_USE_INCLUDED
+G4VIS_USE_INCLUDED = 1
 
 ifndef VISLIBS 
  VISLIBS :=
@@ -106,15 +109,6 @@ endif
 
 G4VIS_USE   = 1
 CPPFLAGS += -DG4VIS_USE
-ifdef G4_SOLVE_TEMPLATES
-  G4_SOLVE_VIS_TEMPLATES = 1
-endif
-ifdef GNU_GCC
-  G4_SOLVE_VIS_TEMPLATES = 1
-endif
-ifdef G4_SOLVE_VIS_TEMPLATES
-  CPPFLAGS += -DG4_SOLVE_VIS_TEMPLATES
-endif
 ifneq ($(G4INCLUDE_EXEC),1)
   CPPFLAGS += -I$(G4BASE)/visualization/management/include
   CPPFLAGS += -I$(G4BASE)/visualization/modeling/include
@@ -122,4 +116,5 @@ endif
 VISLIBS  += -lG4vis_management
 VISLIBS  += -lG4modeling
 
+endif # G4VIS_USE_INCLUDED
 endif # G4VIS_NONE

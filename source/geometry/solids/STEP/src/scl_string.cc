@@ -10,13 +10,13 @@
 * and is not subject to copyright.
 */
 
-/* $Id: scl_string.cc,v 1.4 2001/04/20 19:07:14 gcosmo Exp $ */
+/* $Id: scl_string.cc,v 1.5 2003/06/06 17:07:35 gcosmo Exp $ */
 
 #include <scl_string.h>
 #include <stdio.h>
 /*******************************************************************/
 void 
-SCLstring::PrintContents(G4std::ostream &out) const
+SCLstring::PrintContents(std::ostream &out) const
 {
     if(_strBuf)
     {

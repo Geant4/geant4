@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.19 2002/10/24 15:10:43 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VSceneHandler.hh,v 1.20 2003/06/16 17:14:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  19th July 1996.
@@ -56,7 +56,7 @@ class G4VSceneHandler: public G4VGraphicsScene {
 
 public: // With description
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s);
+  friend std::ostream& operator << (std::ostream& os, const G4VSceneHandler& s);
 
   enum MarkerSizeType {world, screen};
 

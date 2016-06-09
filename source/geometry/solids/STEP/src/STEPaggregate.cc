@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPaggregate.cc,v 1.5 2000/11/20 18:14:57 gcosmo Exp $ */
+/* $Id: STEPaggregate.cc,v 1.6 2003/06/06 17:07:32 gcosmo Exp $ */
 
 #include <stdio.h> 
 
@@ -25,7 +25,7 @@ const int Real_Num_Precision = REAL_NUM_PRECISION; // from STEPattribute.h
 
 #define STRING_DELIM '\''
 
-// static char rcsid[] = "$Id: STEPaggregate.cc,v 1.5 2000/11/20 18:14:57 gcosmo Exp $";
+// static char rcsid[] = "$Id: STEPaggregate.cc,v 1.6 2003/06/06 17:07:32 gcosmo Exp $";
 
 /******************************************************************
 **	  Functions for manipulating aggregate attributes
@@ -72,7 +72,7 @@ STEPaggregate::AggrValidLevel(const char *value, ErrorDescriptor *err,
     if(clearError)
 	err->ClearErrorMsg();
 
-    G4std::istrstream in ((char *)value); // sz defaults to length of s
+    std::istrstream in ((char *)value); // sz defaults to length of s
 
     ReadValue(in, err, elem_type, insts, addFileId, 0, 0);
     CheckRemainingInput(in, err, elem_type->AttrTypeName(buf), tokenList);
@@ -83,7 +83,7 @@ STEPaggregate::AggrValidLevel(const char *value, ErrorDescriptor *err,
 
     // require exchange file format
 Severity 
-STEPaggregate::AggrValidLevel(G4std::istream &in, ErrorDescriptor *err, 
+STEPaggregate::AggrValidLevel(std::istream &in, ErrorDescriptor *err, 
 			      const TypeDescriptor *elem_type, InstMgr *insts, 
 			      int optional, char *tokenList, int addFileId, 
 			      int clearError)
@@ -102,7 +102,7 @@ STEPaggregate::AggrValidLevel(G4std::istream &in, ErrorDescriptor *err,
 // if exchangeFileFormat == 1 then paren delims are required.
 
 Severity 
-STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
+STEPaggregate::ReadValue(std::istream &in, ErrorDescriptor *err,
 			 const TypeDescriptor *elem_type, InstMgr *insts,
 			 int addFileId, int assignVal, int exchangeFileFormat,
 			 const char *)
@@ -118,7 +118,7 @@ STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
     char c;
     int validDelims = 1;
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
 
     c = in.peek(); // does not advance input
 
@@ -148,7 +148,7 @@ STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 
     STEPnode * item = 0;
 
-    in >> G4std::ws;
+    in >> std::ws;
     // take a peek to see if there are any elements before committing to an 
     // element
     c = in.peek(); // does not advance input
@@ -188,7 +188,7 @@ STEPaggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 	if(assignVal) // pass the node to STEPaggregate
 	    AddNode (item);
 
-	in >> G4std::ws; // skip white space (although should already be skipped)
+	in >> std::ws; // skip white space (although should already be skipped)
 	in.get(c); // read delim
 
 	// CheckRemainingInput should have left the input right at the delim
@@ -237,14 +237,14 @@ STEPaggregate::StrToVal(const char *s, ErrorDescriptor *err,
 			const TypeDescriptor *elem_type, InstMgr *insts,
 			int addFileId)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return ReadValue(in, err, elem_type, insts, addFileId, 1, 0);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 Severity
-STEPaggregate::STEPread(G4std::istream& in, ErrorDescriptor *err,
+STEPaggregate::STEPread(std::istream& in, ErrorDescriptor *err,
 			const TypeDescriptor *elem_type, InstMgr *insts,
 			int addFileId, const char *currSch)
 {
@@ -273,7 +273,7 @@ STEPaggregate::asStr(SCLstring & s) const
 }
 
 void
-STEPaggregate::STEPwrite(G4std::ostream& out, const char *currSch) const
+STEPaggregate::STEPwrite(std::ostream& out, const char *currSch) const
 {
     if(!_null)
     {
@@ -335,7 +335,7 @@ STEPnode::StrToVal(const char *s, ErrorDescriptor *err)
 }
 
 Severity
-STEPnode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
+STEPnode::StrToVal(std::istream &in, ErrorDescriptor *err)
 {
     // defined in subtypes
   G4cerr << "Internal error:  " << __FILE__ << ": " <<  __LINE__ << "\n" ;
@@ -367,7 +367,7 @@ STEPnode::STEPread(const char *s, ErrorDescriptor *err)
 }
 
 Severity 
-STEPnode::STEPread(G4std::istream &in, ErrorDescriptor *err)
+STEPnode::STEPread(std::istream &in, ErrorDescriptor *err)
 {
   G4cerr << "Internal error:  " << __FILE__ << ": " <<  __LINE__ << "\n" ;
   G4cerr << "function:  STEPnode::STEPread called instead of virtual function.\n"
@@ -418,7 +418,7 @@ STEPnode::STEPwrite (SCLstring &s, const char *currSch)
 }
 
 void 
-STEPnode::STEPwrite (G4std::ostream& out)
+STEPnode::STEPwrite (std::ostream& out)
 {
   G4cerr << "Internal error:  " << __FILE__ << ": " <<  __LINE__ << "\n" ;
  G4cerr << "function:  STEPnode::STEPwrite called instead of virtual function.\n"
@@ -517,7 +517,7 @@ GenericAggrNode::StrToVal(const char *s, ErrorDescriptor *err)
 
 //TODO
 Severity 
-GenericAggrNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
+GenericAggrNode::StrToVal(std::istream &in, ErrorDescriptor *err)
 {
     return value.STEPread(in, err);
 }
@@ -525,12 +525,12 @@ GenericAggrNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 Severity 
 GenericAggrNode::STEPread(const char *s, ErrorDescriptor *err)
 {
-    G4std::istrstream in((char *) s);
+    std::istrstream in((char *) s);
     return value.STEPread(in, err);
 }
 
 Severity 
-GenericAggrNode::STEPread(G4std::istream &in, ErrorDescriptor *err)
+GenericAggrNode::STEPread(std::istream &in, ErrorDescriptor *err)
 {
     return value.STEPread(in, err);
 }
@@ -557,7 +557,7 @@ GenericAggrNode::STEPwrite(SCLstring &s, const char *currSch)
 }
 
 void
-GenericAggrNode::STEPwrite (G4std::ostream& out)
+GenericAggrNode::STEPwrite (std::ostream& out)
 {
     value.STEPwrite(out);
 }
@@ -579,7 +579,7 @@ EntityAggregate::~EntityAggregate ()
 // if exchangeFileFormat == 1 then delims are required.
 
 Severity
-EntityAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
+EntityAggregate::ReadValue(std::istream &in, ErrorDescriptor *err,
 			   const TypeDescriptor *elem_type, InstMgr *insts,
 			   int addFileId, int assignVal,
 			   int exchangeFileFormat, const char *)
@@ -595,7 +595,7 @@ EntityAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
     char c;
     int validDelims = 1;
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
 
     c = in.peek(); // does not advance input
 
@@ -625,7 +625,7 @@ EntityAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 
     EntityNode * item = 0;
 
-    in >> G4std::ws;
+    in >> std::ws;
     // take a peek to see if there are any elements before committing to an 
     // element
     c = in.peek(); // does not advance input
@@ -671,7 +671,7 @@ EntityAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 	if(assignVal)
 	    AddNode (item);
 
-	in >> G4std::ws; // skip white space (although should already be skipped)
+	in >> std::ws; // skip white space (although should already be skipped)
 	in.get(c); // read delim
 
 	// CheckRemainingInput should have left the input right at the delim
@@ -806,7 +806,7 @@ EntityNode::StrToVal(const char *s, ErrorDescriptor *err,
 }
 
 Severity 
-EntityNode::StrToVal(G4std::istream &in, ErrorDescriptor *err, 
+EntityNode::StrToVal(std::istream &in, ErrorDescriptor *err, 
 		     const TypeDescriptor *elem_type,
 		     InstMgr *insts, int addFileId)
 {
@@ -818,12 +818,12 @@ EntityNode::STEPread(const char *s, ErrorDescriptor *err,
 		     const TypeDescriptor *elem_type, 
 		     InstMgr *insts, int addFileId)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return STEPread(in, err, elem_type, insts, addFileId);
 }
 
 Severity 
-EntityNode::STEPread(G4std::istream &in, ErrorDescriptor *err, 
+EntityNode::STEPread(std::istream &in, ErrorDescriptor *err, 
 		     const TypeDescriptor *elem_type,
 		     InstMgr *insts, int addFileId)
 {
@@ -876,7 +876,7 @@ EntityNode::STEPwrite(SCLstring &s, const char *)
 }
 
 void 
-EntityNode::STEPwrite(G4std::ostream& out)
+EntityNode::STEPwrite(std::ostream& out)
 {
     if (!node || (node == S_ENTITY_NULL))     //  nothing
       out << "$";
@@ -902,7 +902,7 @@ SelectAggregate::~SelectAggregate ()
 // if exchangeFileFormat == 1 then delims are required.
 
 Severity
-SelectAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
+SelectAggregate::ReadValue(std::istream &in, ErrorDescriptor *err,
 			   const TypeDescriptor *elem_type, InstMgr *insts,
 			   int addFileId, int assignVal,
 			   int exchangeFileFormat, const char *currSch)
@@ -918,7 +918,7 @@ SelectAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
     char c;
     int validDelims = 1;
 
-    in >> G4std::ws; // skip white space
+    in >> std::ws; // skip white space
 
     c = in.peek(); // does not advance input
 
@@ -948,7 +948,7 @@ SelectAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 
     SelectNode * item = 0;
 
-    in >> G4std::ws;
+    in >> std::ws;
     // take a peek to see if there are any elements before committing to an 
     // element
     c = in.peek(); // does not advance input
@@ -989,7 +989,7 @@ SelectAggregate::ReadValue(G4std::istream &in, ErrorDescriptor *err,
 	if(assignVal)
 	    AddNode (item);
 
-	in >> G4std::ws; // skip white space (although should already be skipped)
+	in >> std::ws; // skip white space (although should already be skipped)
 	in.get(c); // read delim
 
 	// CheckRemainingInput should have left the input right at the delim
@@ -1105,14 +1105,14 @@ SelectNode::StrToVal(const char *s, ErrorDescriptor *err,
 	node = S_ENTITY_NULL;
 */
 	// KC you will have to decide what to do here
-    G4std::istrstream in((char*)s);
+    std::istrstream in((char*)s);
     if (err->severity( node->STEPread(in, err, insts) ) != SEVERITY_NULL)
 	err->AppendToDetailMsg (node ->Error ());
     return err->severity();
 }
 
 Severity 
-SelectNode::StrToVal(G4std::istream &in, ErrorDescriptor *err, 
+SelectNode::StrToVal(std::istream &in, ErrorDescriptor *err, 
 		     const TypeDescriptor *elem_type,
 		     InstMgr *insts, int addFileId, const char *currSch)
 {
@@ -1124,12 +1124,12 @@ SelectNode::STEPread(const char *s, ErrorDescriptor *err,
 		     const TypeDescriptor *elem_type, 
 		     InstMgr *insts, int addFileId)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return STEPread(in, err, elem_type, insts, addFileId);
 }
 
 Severity 
-SelectNode::STEPread(G4std::istream &in, ErrorDescriptor *err, 
+SelectNode::STEPread(std::istream &in, ErrorDescriptor *err, 
 		     const TypeDescriptor *elem_type,
 		     InstMgr *insts, int addFileId, const char *currSch)
 {
@@ -1171,7 +1171,7 @@ SelectNode::STEPwrite(SCLstring &s, const char *currSch)
 }
 
 void 
-SelectNode::STEPwrite(G4std::ostream& out)
+SelectNode::STEPwrite(std::ostream& out)
 {
     if ( !node || (node->is_null()) )     //  nothing
       out << "$";
@@ -1291,7 +1291,7 @@ StringNode::StrToVal(const char *s, ErrorDescriptor *err)
 // this function assumes you will check for garbage following input
 
 Severity 
-StringNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
+StringNode::StrToVal(std::istream &in, ErrorDescriptor *err)
 {
     return value.STEPread(in, err);
 }
@@ -1301,7 +1301,7 @@ StringNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 Severity 
 StringNode::STEPread(const char *s, ErrorDescriptor *err)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
 
     value.STEPread(in, err);
     CheckRemainingInput(in, err, "string", ",)");
@@ -1311,7 +1311,7 @@ StringNode::STEPread(const char *s, ErrorDescriptor *err)
 // this function assumes you will check for garbage following input
 
 Severity 
-StringNode::STEPread(G4std::istream &in, ErrorDescriptor *err)
+StringNode::STEPread(std::istream &in, ErrorDescriptor *err)
 {
     return value.STEPread(in, err);
 }
@@ -1333,7 +1333,7 @@ StringNode::STEPwrite (SCLstring &s, const char *)
 }
 
 void
-StringNode::STEPwrite (G4std::ostream& out)
+StringNode::STEPwrite (std::ostream& out)
 {
     value.STEPwrite(out);
 }
@@ -1442,7 +1442,7 @@ BinaryNode::StrToVal(const char *s, ErrorDescriptor *err)
 // this function assumes you will check for garbage following input
 
 Severity 
-BinaryNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
+BinaryNode::StrToVal(std::istream &in, ErrorDescriptor *err)
 {
     return value.STEPread(in, err);
 }
@@ -1453,7 +1453,7 @@ BinaryNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 Severity 
 BinaryNode::STEPread(const char *s, ErrorDescriptor *err)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
 
     value.STEPread(in, err);
     CheckRemainingInput(in, err, "binary", ",)");
@@ -1463,7 +1463,7 @@ BinaryNode::STEPread(const char *s, ErrorDescriptor *err)
 // this function assumes you will check for garbage following input
 
 Severity 
-BinaryNode::STEPread(G4std::istream &in, ErrorDescriptor *err)
+BinaryNode::STEPread(std::istream &in, ErrorDescriptor *err)
 {
     return value.STEPread(in, err);
 }
@@ -1483,7 +1483,7 @@ BinaryNode::STEPwrite (SCLstring &s, const char *)
 }
 
 void
-BinaryNode::STEPwrite (G4std::ostream& out)
+BinaryNode::STEPwrite (std::ostream& out)
 {
     value.STEPwrite(out);
 }
@@ -1659,7 +1659,7 @@ EnumNode::StrToVal(const char *s, ErrorDescriptor *err)
 // this function assumes you will check for garbage following input
 
 Severity 
-EnumNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
+EnumNode::StrToVal(std::istream &in, ErrorDescriptor *err)
 {
     return node->STEPread(in, err);
 }
@@ -1670,7 +1670,7 @@ EnumNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
 Severity 
 EnumNode::STEPread(const char *s, ErrorDescriptor *err)
 {
-    G4std::istrstream in((char *)s); // sz defaults to length of s
+    std::istrstream in((char *)s); // sz defaults to length of s
 
     int nullable = 0;
     node->STEPread (in, err,  nullable);
@@ -1681,7 +1681,7 @@ EnumNode::STEPread(const char *s, ErrorDescriptor *err)
 // this function assumes you will check for garbage following input
 
 Severity 
-EnumNode::STEPread(G4std::istream &in, ErrorDescriptor *err)
+EnumNode::STEPread(std::istream &in, ErrorDescriptor *err)
 {
     int nullable = 0;
     node->STEPread (in, err,  nullable);
@@ -1721,7 +1721,7 @@ EnumNode::STEPwrite (SCLstring &s, const char *)
 }
 
 void 
-EnumNode::STEPwrite (G4std::ostream& out)
+EnumNode::STEPwrite (std::ostream& out)
 {
 //    out << '.' << asStr() << '.';
     node->STEPwrite(out);
@@ -1931,7 +1931,7 @@ RealNode::StrToVal(const char *s, ErrorDescriptor *err)
 }
 
 Severity 
-RealNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
+RealNode::StrToVal(std::istream &in, ErrorDescriptor *err)
 {
     if( ReadReal(value, in, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
@@ -1958,7 +1958,7 @@ RealNode::STEPread(const char *s, ErrorDescriptor *err)
 }
 
 Severity 
-RealNode::STEPread(G4std::istream &in, ErrorDescriptor *err)
+RealNode::STEPread(std::istream &in, ErrorDescriptor *err)
 {
     if( ReadReal(value, in, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
@@ -1994,7 +1994,7 @@ RealNode::STEPwrite(SCLstring &s, const char *)
 }
 
 void 
-RealNode::STEPwrite(G4std::ostream& out)
+RealNode::STEPwrite(std::ostream& out)
 {
     SCLstring s;
     out << STEPwrite(s);
@@ -2038,7 +2038,7 @@ IntNode::StrToVal(const char *s, ErrorDescriptor *err)
 }
 
 Severity 
-IntNode::StrToVal(G4std::istream &in, ErrorDescriptor *err)
+IntNode::StrToVal(std::istream &in, ErrorDescriptor *err)
 {
     if( ReadInteger(value, in, err, (char*)(",)")) )// returns true if value is assigned
 	_null = 0;
@@ -2064,7 +2064,7 @@ IntNode::STEPread(const char *s, ErrorDescriptor *err)
 }
 
 Severity 
-IntNode::STEPread(G4std::istream &in, ErrorDescriptor *err)
+IntNode::STEPread(std::istream &in, ErrorDescriptor *err)
 {
     if( ReadInteger(value, in, err, (char*)(",)")) ) // returns true if value is assigned
 	_null = 0;
@@ -2098,7 +2098,7 @@ IntNode::STEPwrite(SCLstring &s, const char *)
 }
 
 void 
-IntNode::STEPwrite(G4std::ostream& out)
+IntNode::STEPwrite(std::ostream& out)
 {
     SCLstring s;
     out << STEPwrite(s);

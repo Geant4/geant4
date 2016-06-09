@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4EqMagElectricField.hh,v 1.6 2001/07/11 09:59:07 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4EqMagElectricField

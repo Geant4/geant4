@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackVector.hh,v 1.8 2001/07/11 10:08:41 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TrackVector.hh,v 1.9 2003/06/16 17:13:10 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -43,11 +43,11 @@
 #ifndef G4TrackVector_h
 #define G4TrackVector_h 1
 
-#include "g4std/vector"
+#include <vector>
 #include "G4Track.hh"              // Include form 'tracking'
 
 ///////////////////////////////////////////////////
-typedef G4std::vector<G4Track*> G4TrackVector;
+typedef std::vector<G4Track*> G4TrackVector;
 ///////////////////////////////////////////////////
 
 #endif

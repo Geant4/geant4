@@ -48,21 +48,21 @@ G4SigmaMinusField::~G4SigmaMinusField()
 { }
 
 
-const G4SigmaMinusField & G4SigmaMinusField::operator=(const G4SigmaMinusField & right)
+const G4SigmaMinusField & G4SigmaMinusField::operator=(const G4SigmaMinusField & )
 {
   G4Exception("G4SigmaMinusField::operator= meant not to be accessible");
   return *this;
 }
 
 
-G4int G4SigmaMinusField::operator==(const G4SigmaMinusField & right) const
+G4int G4SigmaMinusField::operator==(const G4SigmaMinusField & ) const
 {
   G4Exception("G4SigmaMinusField::operator== meant not to be accessible");
   return 0;
 }
 
 
-G4int G4SigmaMinusField::operator!=(const G4SigmaMinusField & right) const
+G4int G4SigmaMinusField::operator!=(const G4SigmaMinusField & ) const
 {
   G4Exception("G4SigmaMinusField::operator!= meant not to be accessible");
   return 1;
@@ -77,8 +77,8 @@ G4double G4SigmaMinusField::GetField(const G4ThreeVector & aPosition)
 
   G4double sigmaMinusMass = G4SigmaMinus::SigmaMinus()->GetPDGMass();
 
-  G4double A = theNucleus->GetMassNumber();
-  G4double Z = theNucleus->GetCharge();
+  G4int A = static_cast<G4int>(theNucleus->GetMassNumber()+.1);
+  G4int Z = static_cast<G4int>(theNucleus->GetCharge()+.1);
   G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = sigmaMinusMass*nucleusMass/(sigmaMinusMass+nucleusMass);

@@ -59,8 +59,8 @@
 #define G4LossTableManager_h 1
 
 
-#include "g4std/map"
-#include "g4std/vector"
+#include <map>
+#include <vector>
 #include "globals.hh"
 #include "G4LossTableBuilder.hh"
 #include "G4VEnergyLossSTD.hh"
@@ -134,6 +134,8 @@ public:
 
   void SetStepLimits(G4double v1, G4double v2);
 
+  void SetBuildPreciseRange(G4bool val);
+
   G4EnergyLossMessenger* GetMessenger();
 
 private:
@@ -151,16 +153,16 @@ private:
   static G4LossTableManager* theInstance;
 
   typedef const G4ParticleDefinition* PD;
-  G4std::map<PD,G4VEnergyLossSTD*,G4std::less<PD> > loss_map;
+  std::map<PD,G4VEnergyLossSTD*,std::less<PD> > loss_map;
 
-  G4std::vector<G4VEnergyLossSTD*> loss_vector;
-  G4std::vector<PD> part_vector;
-  G4std::vector<PD> base_part_vector;
-  G4std::vector<G4bool> tables_are_built;
-  G4std::vector<G4PhysicsTable*> dedx_vector;
-  G4std::vector<G4PhysicsTable*> range_vector;
-  G4std::vector<G4PhysicsTable*> inv_range_vector;
-  G4std::vector<G4VMultipleScattering*> msc_vector;
+  std::vector<G4VEnergyLossSTD*> loss_vector;
+  std::vector<PD> part_vector;
+  std::vector<PD> base_part_vector;
+  std::vector<G4bool> tables_are_built;
+  std::vector<G4PhysicsTable*> dedx_vector;
+  std::vector<G4PhysicsTable*> range_vector;
+  std::vector<G4PhysicsTable*> inv_range_vector;
+  std::vector<G4VMultipleScattering*> msc_vector;
 
   // cash
   G4VEnergyLossSTD*    currentLoss;
@@ -176,7 +178,11 @@ private:
   G4bool subCutoffFlag;
   G4bool rndmStepFlag;
   G4bool integral;
+  G4bool integralActive;
   G4bool all_tables_are_stored;
+  G4bool buildPreciseRange;
+  G4bool minEnergyActive;
+  G4bool maxEnergyActive;
 
   G4double minSubRange;
   G4double maxRangeVariation;
@@ -201,7 +207,7 @@ inline G4double G4LossTableManager::GetDEDX(
           const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
-    G4std::map<PD, G4VEnergyLossSTD*,G4std::less<PD> >::const_iterator pos;
+    std::map<PD, G4VEnergyLossSTD*,std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentParticle = aParticle;
       currentLoss = (*pos).second;
@@ -220,7 +226,7 @@ inline G4double G4LossTableManager::GetRange(
           const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
-    G4std::map<PD, G4VEnergyLossSTD*, G4std::less<PD> >::const_iterator pos;
+    std::map<PD, G4VEnergyLossSTD*, std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentParticle = aParticle;
       currentLoss = (*pos).second;
@@ -239,7 +245,7 @@ inline G4double G4LossTableManager::GetEnergy(
           const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
-    G4std::map<PD,G4VEnergyLossSTD*,G4std::less<PD> >::const_iterator pos;
+    std::map<PD,G4VEnergyLossSTD*,std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentParticle = aParticle;
       currentLoss = (*pos).second;
@@ -259,7 +265,7 @@ inline  G4double G4LossTableManager::GetDEDXDispersion(
 {
   const G4ParticleDefinition* aParticle = dp->GetDefinition();
   if(aParticle != currentParticle) {
-    G4std::map<PD,G4VEnergyLossSTD*,G4std::less<PD> >::const_iterator pos;
+    std::map<PD,G4VEnergyLossSTD*,std::less<PD> >::const_iterator pos;
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentParticle = aParticle;
       currentLoss = (*pos).second;

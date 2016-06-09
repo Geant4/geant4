@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.21 2002/12/04 21:29:49 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProcessManager.cc,v 1.22 2003/06/16 17:12:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -41,11 +41,11 @@
 #include "G4ProcessManagerMessenger.hh"
 #include "G4ProcessManager.hh"
 #include "G4StateManager.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4ProcessTable.hh"
 #include "G4ios.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 
 
@@ -63,7 +63,7 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
 		verboseLevel(1)
 {
   char errMsg[1024];
-  G4std::ostrstream errOs(errMsg,1024);
+  std::ostrstream errOs(errMsg,1024);
   // create the process List
   theProcessList = new G4ProcessVector();
   if ( theProcessList == 0) {
@@ -928,12 +928,12 @@ void G4ProcessManager::DumpInfo()
       G4cout << "  Ordering::      " << G4endl;
       G4cout << "  index           ";
       for (G4int idx2 = 0; idx2 <6 ; idx2++) {
-	G4cout << G4std::setw(8) << pAttr->idxProcVector[idx2] <<":";
+	G4cout << std::setw(8) << pAttr->idxProcVector[idx2] <<":";
       }
       G4cout << G4endl;
       G4cout << "  parameter       ";
       for (G4int idx3 = 0; idx3 <6 ; idx3++) {
-	G4cout << G4std::setw(8) << pAttr->ordProcVector[idx3] <<":";
+	G4cout << std::setw(8) << pAttr->ordProcVector[idx3] <<":";
       }
       G4cout << G4endl;
     }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.30 2003/01/22 18:47:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eLowEnergyLoss.cc,v 1.31 2003/06/16 17:00:36 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //  
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -459,7 +459,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   aParticleChange.SetEnergyChange(finalT);
 
   // Deexcitation of ionised atoms
-  G4std::vector<G4DynamicParticle*>* deexcitationProducts = 0;
+  std::vector<G4DynamicParticle*>* deexcitationProducts = 0;
   if (theFluo) deexcitationProducts = DeexciteAtom(couple,E,edep);
 
   size_t nSecondaries = 0;

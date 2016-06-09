@@ -31,7 +31,7 @@ G4int G4SPBaryon::FindQuark(G4int diQuark) const
   G4double sum = GetProbability(diQuark);
   G4double random = G4UniformRand();
   G4double running = 0;
-  typedef G4std::vector<G4SPPartonInfo *>::const_iterator iter;
+  typedef std::vector<G4SPPartonInfo *>::const_iterator iter;
   iter i;
   for(i = thePartonInfo.begin(); i!=thePartonInfo.end(); i++)
   {
@@ -51,7 +51,7 @@ G4int G4SPBaryon::FindQuark(G4int diQuark) const
 G4double G4SPBaryon::GetProbability(G4int diQuark) const
 {
   G4double sum = 0;
-  typedef G4std::vector<G4SPPartonInfo *>::const_iterator iter;
+  typedef std::vector<G4SPPartonInfo *>::const_iterator iter;
   iter i;
   for(i = thePartonInfo.begin(); i!=thePartonInfo.end(); i++)
   {
@@ -67,7 +67,7 @@ G4int G4SPBaryon::
 MatchDiQuarkAndGetQuark(const G4SPBaryon & aBaryon, G4int & aDiQuark) const
 {
   G4int    result=0;
-  typedef G4std::vector<G4SPPartonInfo *>::const_iterator iter;
+  typedef std::vector<G4SPPartonInfo *>::const_iterator iter;
   iter i;
   G4double running = 0;
   G4double total = 0;
@@ -89,7 +89,7 @@ MatchDiQuarkAndGetQuark(const G4SPBaryon & aBaryon, G4int & aDiQuark) const
 void G4SPBaryon::
 SampleQuarkAndDiquark(G4int & quark, G4int & diQuark) const
 {
-  typedef G4std::vector<G4SPPartonInfo *>::const_iterator iter;
+  typedef std::vector<G4SPPartonInfo *>::const_iterator iter;
   G4double random = G4UniformRand();
   G4double sum = 0;
   iter i;
@@ -116,7 +116,7 @@ SampleQuarkAndDiquark(G4int & quark, G4int & diQuark) const
 void G4SPBaryon::
 FindDiquark(G4int quark, G4int & diQuark) const
 {
-  typedef G4std::vector<G4SPPartonInfo *>::const_iterator iter;
+  typedef std::vector<G4SPPartonInfo *>::const_iterator iter;
   G4double sum = 0;
   iter i;  
   for(i=thePartonInfo.begin() ; i!=thePartonInfo.end(); i++)

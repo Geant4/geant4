@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FermiMomentum.hh,v 1.7 2003/02/12 10:20:21 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4FermiMomentum_h
 #define G4FermiMomentum_h 1

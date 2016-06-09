@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomROGeometry.hh,v 1.3 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyPhantomROGeometry.hh,v 1.5 2003/05/27 08:37:54 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //    ************************************
 //    *                                  *
@@ -39,18 +39,21 @@
 
 class BrachyPhantomROGeometry : public G4VReadOutGeometry
 {
-  public:
-	BrachyPhantomROGeometry(G4String aString,G4double DetDimX,G4double DetDimZ,G4int NumVoxelX,G4int NumVoxelZ);
-  	~BrachyPhantomROGeometry();
+public:
+  BrachyPhantomROGeometry(G4String aString,
+			  G4double phantomDimX,
+			  G4double phantomDimZ,
+			  G4int numberOfVoxelsX,
+			  G4int numberOfVoxelsZ);
+  ~BrachyPhantomROGeometry();
+private:
+  G4VPhysicalVolume* Build();
 
-   private:
-	const G4double m_DetDimX;
-	const G4double m_DetDimZ;
-	const G4int m_NumVoxelX;
-	const G4int m_NumVoxelZ;
-
-  private:
-  	G4VPhysicalVolume* Build();
+private:
+  const G4double phantomDimensionX;
+  const G4double phantomDimensionZ;
+  const G4int numberOfVoxelsAlongX;
+  const G4int numberOfVoxelsAlongZ; 
+  G4VPhysicalVolume *ROPhantomYDivisionPhys;
 };
-
 #endif

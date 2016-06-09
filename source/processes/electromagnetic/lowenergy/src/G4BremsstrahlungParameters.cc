@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.16 2003/02/28 08:42:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BremsstrahlungParameters.cc,v 1.17 2003/06/16 17:00:04 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
@@ -44,8 +44,8 @@
 #include "G4EMDataSet.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4Material.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 
 G4BremsstrahlungParameters:: G4BremsstrahlungParameters(const G4String& name,
@@ -61,7 +61,7 @@ G4BremsstrahlungParameters:: G4BremsstrahlungParameters(const G4String& name,
 G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
 {
   // Reset the map of data sets: remove the data sets from the map
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos;
 
   for (pos = param.begin(); pos != param.end(); ++pos)
     {
@@ -80,14 +80,14 @@ G4double G4BremsstrahlungParameters::Parameter(G4int parameterIndex,
 {
   G4double value = 0.;
   G4int id = Z*length + parameterIndex;
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
 
   pos = param.find(id);
   if (pos!= param.end()) {
 
     G4VEMDataSet* dataSet = (*pos).second;
     const G4DataVector ener = dataSet->GetEnergies(0);
-    G4double ee = G4std::max(ener.front(),G4std::min(ener.back(),energy));
+    G4double ee = std::max(ener.front(),std::min(ener.back(),energy));
     value = dataSet->FindValue(ee);
 
   } else {
@@ -145,8 +145,8 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
 
   G4String pathString_a(path);
   G4String name_a = pathString_a + name;
-  G4std::ifstream file_a(name_a);
-  G4std::filebuf* lsdp_a = file_a.rdbuf();
+  std::ifstream file_a(name_a);
+  std::filebuf* lsdp_a = file_a.rdbuf();
 
   if (! (lsdp_a->is_open()) )
     {
@@ -169,7 +169,7 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
   data       = new G4DataVector();
   G4int z    = 0;
 
-  G4std::vector<G4DataVector*> a;
+  std::vector<G4DataVector*> a;
   for (size_t j=0; j<length; j++) {
     G4DataVector* aa = new G4DataVector();
     a.push_back(aa);
@@ -262,7 +262,7 @@ void G4BremsstrahlungParameters::PrintData() const
   G4cout << G4endl;
 
   size_t nZ = activeZ.size();
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
 
   for (size_t j=0; j<nZ; j++) {
     G4int Z = (G4int)activeZ[j];

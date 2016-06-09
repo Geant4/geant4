@@ -40,7 +40,7 @@
 #include "G4V3DNucleus.hh"
 #include "G4FermiMomentum.hh"
 #include "G4VNuclearDensity.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4ProtonField: public G4VNuclearField
 {
@@ -79,7 +79,7 @@ private:
   G4FermiMomentum theFermi;
   const G4VNuclearDensity * theDensity;
 
-  G4std::vector<G4double> theFermiMomBuffer;
+  std::vector<G4double> theFermiMomBuffer;
 };
 
 #endif

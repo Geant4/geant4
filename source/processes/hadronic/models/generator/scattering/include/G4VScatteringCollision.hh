@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScatteringCollision.hh,v 1.3 2002/12/12 19:17:43 gunter Exp $ //
+// $Id: G4VScatteringCollision.hh,v 1.4 2003/06/16 17:08:48 gunter Exp $ //
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -70,7 +70,7 @@ public:
 
 protected:
 
-  virtual const G4std::vector<const G4ParticleDefinition*> & GetOutgoingParticles() const = 0;
+  virtual const std::vector<const G4ParticleDefinition*> & GetOutgoingParticles() const = 0;
 
 private:  
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: isotopeSubscriber.cc,v 1.3 2002/06/03 12:09:35 radoone Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------

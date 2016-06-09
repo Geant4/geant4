@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.cc,v 1.8 2002/12/12 19:17:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QGSMFragmentation.cc,v 1.9 2003/05/30 14:36:44 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -41,7 +41,7 @@ arho(0.5), aphi(0.), an(-0.5), ala(-0.75), aksi(-1.), alft(0.5)
    {
    }
 
-G4QGSMFragmentation::G4QGSMFragmentation(const G4QGSMFragmentation &right) :
+G4QGSMFragmentation::G4QGSMFragmentation(const G4QGSMFragmentation &) : G4VLongitudinalStringDecay(),
 arho(0.5), aphi(0.), an(-0.5), ala(-0.75), aksi(-1.), alft(0.5)
    {
    }
@@ -52,7 +52,7 @@ G4QGSMFragmentation::~G4QGSMFragmentation()
 
 //****************************************************************************************
 
-const G4QGSMFragmentation & G4QGSMFragmentation::operator=(const G4QGSMFragmentation &right)
+const G4QGSMFragmentation & G4QGSMFragmentation::operator=(const G4QGSMFragmentation &)
    {
     G4Exception("G4QGSMFragmentation::operator= meant to not be accessable");
     return *this;
@@ -70,7 +70,7 @@ int G4QGSMFragmentation::operator!=(const G4QGSMFragmentation &right) const
  
 //****************************************************************************************
 
-G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py)
+G4double G4QGSMFragmentation::GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* , G4double , G4double )
 {    
   G4double z;    
   G4double theA(0), d1, d2, yf;

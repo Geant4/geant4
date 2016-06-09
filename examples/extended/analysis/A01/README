@@ -10,5 +10,4 @@ to generate event output.
 You can link this example with a specific AIDA compliant
 analysis implementation. See other READMEs.
 
-README.JAIDA for linking JAS-AIDA to Geant4.
-http://java.freehep.org/jaida/RelatedProjects.html
+README.JAIDA for linking JAIDA to Geant4.

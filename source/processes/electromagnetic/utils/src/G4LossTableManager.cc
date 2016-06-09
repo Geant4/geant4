@@ -41,6 +41,7 @@
 // 25-03-03 Add deregistration (V.Ivanchenko)
 // 02-04-03 Change messenger (V.Ivanchenko)
 // 26-04-03 Fix retrieve tables (V.Ivanchenko)
+// 13-05-03 Add calculation of precise range (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -109,6 +110,10 @@ G4LossTableManager::G4LossTableManager()
   theElectron  = G4Electron::Electron();
   tableBuilder = new G4LossTableBuilder();
   integral = true;
+  integralActive = false;
+  buildPreciseRange = false;
+  minEnergyActive = false;
+  maxEnergyActive = false;
   verbose = 0;
 }
 
@@ -148,6 +153,9 @@ void G4LossTableManager::Register(G4VEnergyLossSTD* p)
   inv_range_vector.push_back(0);
   tables_are_built.push_back(false);
   all_tables_are_built = false;
+  if(integralActive) p->SetIntegral(integral);
+  if(minEnergyActive) p->SetMinKinEnergy(minKinEnergy);
+  if(maxEnergyActive) p->SetMaxKinEnergy(maxKinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -443,9 +451,9 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
   }
 
   // Check is it new particle or all tables have to be rebuilt
-  G4std::vector<G4PhysicsTable*> list;
+  std::vector<G4PhysicsTable*> list;
   list.clear();
-  G4std::vector<G4VEnergyLossSTD*> loss_list;
+  std::vector<G4VEnergyLossSTD*> loss_list;
   loss_list.clear();
   G4VEnergyLossSTD* em = 0;
   G4int iem = 0;
@@ -490,11 +498,24 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
   em->SetDEDXTable(dedx);
   dedx_vector[iem] = dedx;
   G4PhysicsTable* range = tableBuilder->BuildRangeTable(dedx);
-  em->SetRangeTable(range);
-  range_vector[iem] = range;
   G4PhysicsTable* invrange = tableBuilder->BuildInverseRangeTable(dedx, range);
   em->SetInverseRangeTable(invrange);
   inv_range_vector[iem] = invrange;
+  if(buildPreciseRange) {
+    range->clearAndDestroy();
+    std::vector<G4PhysicsTable*> newlist;
+    for (G4int i=0; i<n_dedx; i++) {
+      newlist.push_back(loss_list[i]->BuildDEDXTableForPreciseRange());
+    }
+    G4PhysicsTable* dedxForRange = newlist[0];
+    if (1 < n_dedx) dedxForRange = tableBuilder->BuildDEDXTable(newlist);
+    range = tableBuilder->BuildRangeTable(dedx);
+    for(G4int j=0; j<n_dedx; j++) {
+      newlist[j]->clearAndDestroy();
+    }
+  }
+  em->SetRangeTable(range);
+  range_vector[iem] = range;
 
   loss_map[aParticle] = em;
   for (G4int j=0; j<n_dedx; j++) {
@@ -539,9 +560,10 @@ void G4LossTableManager::SetSubCutoff(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4LossTableManager::SetIntegral(G4bool val) 
+void G4LossTableManager::SetIntegral(G4bool val)
 {
   integral = val;
+  integralActive = true;
   for(G4int i=0; i<n_loss; i++) {
     loss_vector[i]->SetIntegral(val);
   }
@@ -559,7 +581,7 @@ void G4LossTableManager::SetMinSubRange(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4LossTableManager::SetRandomStep(G4bool val) 
+void G4LossTableManager::SetRandomStep(G4bool val)
 {
   rndmStepFlag = val;
   for(G4int i=0; i<n_loss; i++) {
@@ -571,6 +593,7 @@ void G4LossTableManager::SetRandomStep(G4bool val)
 
 void G4LossTableManager::SetMinEnergy(G4double val)
 {
+  minEnergyActive = true;
   minKinEnergy = val;
   for(G4int i=0; i<n_loss; i++) {
     loss_vector[i]->SetMinKinEnergy(val);
@@ -581,6 +604,7 @@ void G4LossTableManager::SetMinEnergy(G4double val)
 
 void G4LossTableManager::SetMaxEnergy(G4double val)
 {
+  maxEnergyActive = true;
   maxKinEnergy = val;
   for(G4int i=0; i<n_loss; i++) {
     loss_vector[i]->SetMaxKinEnergy(val);
@@ -596,6 +620,13 @@ void G4LossTableManager::SetStepLimits(G4double v1, G4double v2)
   for(G4int i=0; i<n_loss; i++) {
     loss_vector[i]->SetStepLimits(v1, v2);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4LossTableManager::SetBuildPreciseRange(G4bool val)
+{
+  buildPreciseRange = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

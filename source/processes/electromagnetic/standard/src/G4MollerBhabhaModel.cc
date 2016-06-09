@@ -86,21 +86,21 @@ void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::HighEnergyLimit(const G4ParticleDefinition* p)
+G4double G4MollerBhabhaModel::HighEnergyLimit(const G4ParticleDefinition*)
 {
   return highKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::LowEnergyLimit(const G4ParticleDefinition* p)
+G4double G4MollerBhabhaModel::LowEnergyLimit(const G4ParticleDefinition*)
 {
   return lowKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition* p,
+G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition*,
                                            const G4MaterialCutsCouple* couple)
 {
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
@@ -135,8 +135,11 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4Material* material,
   G4double Zeff  = electronDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th    = 0.25*sqrt(Zeff)*keV;
   G4double tkin  = kineticEnergy;
-  if (kineticEnergy < th) tkin = th;
-
+  G4bool   lowEnergy = false;
+  if (kineticEnergy < th) {
+    tkin = th;
+    lowEnergy = true;
+  }
   G4double tau   = tkin/electron_mass_c2;
   G4double gam   = tau + 1.0;
   G4double gamma2= gam*gam;
@@ -147,8 +150,8 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4Material* material,
   eexc          /= electron_mass_c2;
   G4double eexc2 = eexc*eexc; 
 
+  G4double d = std::min(cutEnergy, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
   G4double dedx;
-  G4double d = G4std::min(cutEnergy, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
 
   // electron
   if (isElectron) {
@@ -188,10 +191,10 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4Material* material,
 
   // lowenergy extrapolation
 
-  if (kineticEnergy < tkin) {
+  if (lowEnergy) {
 
-    if (kineticEnergy >= lowLimit) dedx *= sqrt(kineticEnergy/tkin);
-    else                           dedx *= sqrt(kineticEnergy*tkin)/lowLimit;
+    if (kineticEnergy >= lowLimit) dedx *= sqrt(tkin/kineticEnergy);
+    else                           dedx *= sqrt(tkin*kineticEnergy)/lowLimit;
 
   }
   return dedx;
@@ -208,7 +211,7 @@ G4double G4MollerBhabhaModel::CrossSection(const G4Material* material,
   if(!particle) SetParticle(p);
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  tmax = G4std::min(maxEnergy, tmax);
+  tmax = std::min(maxEnergy, tmax);
 
   if(cutEnergy < tmax) {
     
@@ -257,7 +260,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  G4double tmax = G4std::min(maxEnergy, MaxSecondaryEnergy(dp));
+  G4double tmax = std::min(maxEnergy, MaxSecondaryEnergy(dp));
   if(tmin >= tmax) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
@@ -284,6 +287,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
       x = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
       y = 1.0 - x;
       z = 1.0 - g*x + x*x*(1.0 - g + (1.0 - g*y)/(y*y));
+      /*
       if(z > grej) {
         G4cout << "G4MollerBhabhaModel::SampleSecondary Warning! "
                << "Majorant " << grej << " < "
@@ -291,6 +295,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
                << " e-e- scattering"
                << G4endl;
       }
+      */
     } while(grej * G4UniformRand() > z);
 
   //Bhabha (e+e-) scattering
@@ -324,6 +329,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
       z += y*b4;
       z *= beta2;
       z += 1.0;
+      /*
       if(z > grej) {
         G4cout << "G4MollerBhabhaModel::SampleSecondary Warning! "
                << "Majorant " << grej << " < "
@@ -331,6 +337,7 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
                << " e+e- scattering"
                << G4endl;
       }
+      */
     } while(grej * G4UniformRand() > z);
   }
 
@@ -358,13 +365,13 @@ G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
+std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 

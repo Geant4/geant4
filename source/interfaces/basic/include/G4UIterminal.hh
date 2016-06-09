@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.hh,v 1.7 2001/07/11 10:01:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIterminal.hh,v 1.8 2003/06/16 16:55:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4UIterminal_h
 #define G4UIterminal_h 1
 
-#include "g4std/fstream"
+#include <fstream>
 #include "G4UImanager.hh"
 #include "G4VBasicShell.hh"
 #include "G4VUIshell.hh"

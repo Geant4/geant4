@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonDist.hh,v 1.7 2002/12/12 19:18:16 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPPhotonDist.hh,v 1.8 2003/06/16 17:11:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -30,7 +30,7 @@
 #ifndef G4NeutronHPPhotonDist_h
 #define G4NeutronHPPhotonDist_h 1
 #include "globals.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4NeutronHPVector.hh"
@@ -92,13 +92,13 @@ public:
      if(thePhotonTransitionFraction != NULL) delete thePhotonTransitionFraction;
   }
   
-  G4bool InitMean(G4std::ifstream & aDataFile);
+  G4bool InitMean(std::ifstream & aDataFile);
     
-  void InitAngular(G4std::ifstream & aDataFile);
+  void InitAngular(std::ifstream & aDataFile);
   
-  void InitEnergies(G4std::ifstream & aDataFile);
+  void InitEnergies(std::ifstream & aDataFile);
   
-  void InitPartials(G4std::ifstream & aDataFile);
+  void InitPartials(std::ifstream & aDataFile);
   
   G4ReactionProductVector * GetPhotons(G4double anEnergy);
   

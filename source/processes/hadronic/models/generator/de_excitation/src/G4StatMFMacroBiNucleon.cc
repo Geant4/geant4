@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroBiNucleon.cc,v 1.10 2002/12/12 19:17:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroBiNucleon.cc,v 1.13 2003/06/25 14:41:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,21 +32,21 @@
 // Operators
 
 G4StatMFMacroBiNucleon & G4StatMFMacroBiNucleon::
-operator=(const G4StatMFMacroBiNucleon & right)
+operator=(const G4StatMFMacroBiNucleon & )
 {
     G4Exception("G4StatMFMacroBiNucleon::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMFMacroBiNucleon::operator==(const G4StatMFMacroBiNucleon & right) const
+G4bool G4StatMFMacroBiNucleon::operator==(const G4StatMFMacroBiNucleon & ) const
 {
     G4Exception("G4StatMFMacroBiNucleon::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4StatMFMacroBiNucleon::operator!=(const G4StatMFMacroBiNucleon & right) const
+G4bool G4StatMFMacroBiNucleon::operator!=(const G4StatMFMacroBiNucleon & ) const
 {
     G4Exception("G4StatMFMacroBiNucleon::operator!= meant to not be accessable");
     return true;
@@ -67,13 +67,13 @@ G4double G4StatMFMacroBiNucleon::CalcMeanMultiplicity(const G4double FreeVol, co
     
     const G4double BindingE = G4NucleiPropertiesTable::GetBindingEnergy(1,theA); //old value was 2.796*MeV
     G4double exponent = (BindingE + theA*(mu+nu*theZARatio) - 
-			 Coulomb*theZARatio*theZARatio*pow(theA,5./3.))/T;
+			 Coulomb*theZARatio*theZARatio*pow(G4double(theA),5./3.))/T;
 
     // To avoid numerical problems
     if (exponent < -700.0) exponent = -700.0;
     else if (exponent > 700.0) exponent = 700.0;
 
-    _MeanMultiplicity = (degeneracy*FreeVol*G4double(theA)*sqrt(G4double(theA))/lambda3)*
+    _MeanMultiplicity = (degeneracy*FreeVol*static_cast<G4double>(theA)*sqrt(static_cast<G4double>(theA))/lambda3)*
 	exp(exponent);
 			 
     return _MeanMultiplicity;
@@ -103,7 +103,8 @@ G4double G4StatMFMacroBiNucleon::CalcEntropy(const G4double T, const G4double Fr
     if (_MeanMultiplicity > 0.0)
 	// Is this formula correct?
 	Entropy = _MeanMultiplicity*(5./2.+
-				     log(3.0*G4double(theA)*sqrt(G4double(theA))*FreeVol/
+				     log(3.0*static_cast<G4double>(theA)*
+					 sqrt(static_cast<G4double>(theA))*FreeVol/
 					 (lambda3*_MeanMultiplicity)));
 								
 								

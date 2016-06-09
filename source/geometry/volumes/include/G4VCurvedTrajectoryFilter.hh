@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.hh,v 1.4 2003/02/06 18:53:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VCurvedTrajectoryFilter.hh,v 1.5 2003/06/16 16:54:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4VCurevedTrajectoryFilter
@@ -50,7 +50,7 @@
 #define G4VCurvedTrajectoryFilter_hh
 
 #include "G4ThreeVector.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4TransportationManager.hh"
 
 class G4VCurvedTrajectoryFilter
@@ -72,11 +72,11 @@ public:  // with description
     // rejecting. Derived classes should implement the filtering algorithm
     // in this method.
 
-  G4std::vector<G4ThreeVector>* GimmeThePointsAndForgetThem();
+  std::vector<G4ThreeVector>* GimmeThePointsAndForgetThem();
   
 protected:
 
-  G4std::vector<G4ThreeVector>* fpFilteredPoints;
+  std::vector<G4ThreeVector>* fpFilteredPoints;
 };
 
 #endif  /* End of ifndef G4VCurvedTrajectoryFilter_hh */

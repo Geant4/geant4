@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: instmgr.cc,v 1.5 2000/01/21 13:43:12 gcosmo Exp $ */ 
+/* $Id: instmgr.cc,v 1.6 2003/06/06 17:07:35 gcosmo Exp $ */ 
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -253,8 +253,8 @@ MgrNode *InstMgr::Append(SCLP23(Application_instance) *se, stateEnum listState)
 #ifdef __OSTORE__
     mn = new (os_segment::of(this), MgrNode::get_os_typespec()) 
 	MgrNode(se, listState);
-    G4cout << "Appended entity: " << G4std::flush;
-    G4cout << se->EntityName() << G4endl << G4std::flush;
+    G4cout << "Appended entity: " << std::flush;
+    G4cout << se->EntityName() << G4endl << std::flush;
 #else
 */
     mn = new MgrNode(se, listState);

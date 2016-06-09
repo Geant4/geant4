@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4O16GEMProbability.hh,v 1.1 2002/06/06 17:52:05 larazb Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4O16GEMProbability.hh,v 1.2 2003/06/16 17:05:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
@@ -62,11 +62,11 @@ private:
   
   
   // Excitation energy levels 
-  G4std::vector<G4double> ExcitEnergies;
+  std::vector<G4double> ExcitEnergies;
   // Spin of excitation energy levels 
-  G4std::vector<G4double> ExcitSpins;
+  std::vector<G4double> ExcitSpins;
   
-  G4std::vector<G4double> ExcitLifetimes;
+  std::vector<G4double> ExcitLifetimes;
   
 };
 

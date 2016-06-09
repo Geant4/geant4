@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -34,6 +34,8 @@
 //      Creation date: 23 October 1998
 //
 //      Modifications: 
+//
+//      02 May 2003,   Vladimir Ivanchenko change interface to G4NuclearlevelManager
 //      
 // -------------------------------------------------------------------
 //
@@ -80,7 +82,9 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
   if (_verbose > 1)
     G4cout << "G4ContinuumGammaDeexcitation::CreateTransition - Created" << G4endl;
 
-  return new G4ContinuumGammaTransition(*_levelManager,Z,A,excitation,_verbose );
+  G4VGammaTransition* gt =  new G4ContinuumGammaTransition(_levelManager,Z,A,excitation,_verbose );
+
+  return gt;
 }
     
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.9 2002/08/19 20:20:18 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PrimaryParticle.cc,v 1.10 2003/05/21 20:52:53 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4PrimaryParticle.hh"
@@ -90,12 +90,12 @@ void G4PrimaryParticle::SetG4code(G4ParticleDefinition* Gcode)
 }
 
 const G4PrimaryParticle & 
-G4PrimaryParticle::operator=(const G4PrimaryParticle &right)
+G4PrimaryParticle::operator=(const G4PrimaryParticle &)
 { return *this; }
 G4int G4PrimaryParticle::operator==(const G4PrimaryParticle &right) const
-{ return false; }
+{ return (this==&right); }
 G4int G4PrimaryParticle::operator!=(const G4PrimaryParticle &right) const
-{ return true; }
+{ return (this!=&right); }
 
 void G4PrimaryParticle::Print() const
 {

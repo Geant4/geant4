@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3EventAction.cc,v 1.13 2002/06/05 12:13:04 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em3EventAction.cc,v 1.14 2003/05/09 09:28:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -74,30 +74,29 @@ Em3EventAction::~Em3EventAction()
 void Em3EventAction::BeginOfEventAction(const G4Event* evt)
 {   
  G4int evtNb = evt->GetEventID();
- 
+
  //survey printing
- if (evtNb%printModulo == 0) 
+ if (evtNb%printModulo == 0)
     G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
 
- // initialize Hits collection    
+ // initialize Hits collection
  if (calorimeterCollID==-1)
   {
     G4SDManager * SDman = G4SDManager::GetSDMpointer();
     calorimeterCollID = SDman->GetCollectionID("CalCollection");
-  } 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3EventAction::EndOfEventAction(const G4Event* evt)
-{ 
+{
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   Em3CalorHitsCollection* CHC = NULL;
   G4int NbHits=0;
   G4int NbOfAbsor=Detector->GetNbOfAbsor();
-  G4double Ebeam = Em3Kin->GetParticleGun()->GetParticleEnergy();
   G4double totEAbs, totLAbs;
-       
+
   if (HCE) CHC = (Em3CalorHitsCollection*)(HCE->GetHC(calorimeterCollID));
 
   if (CHC)
@@ -107,19 +106,20 @@ void Em3EventAction::EndOfEventAction(const G4Event* evt)
         {totEAbs=totLAbs=0.;
          for (G4int j=0;j<NbHits;j++)
             {
-	     totEAbs += (*CHC)[j]->GetEdepAbs(k); 
-             totLAbs += (*CHC)[j]->GetTrakAbs(k);     
+	     totEAbs += (*CHC)[j]->GetEdepAbs(k);
+             totLAbs += (*CHC)[j]->GetTrakAbs(k);
             }
          Em3Run->fillPerEvent(k,totEAbs,totLAbs);
-	 
-#ifndef G4NOHIST        
+
+#ifndef G4NOHIST
          //fill histo
-         //	 
+         //
+         G4double Ebeam = Em3Kin->GetParticleGun()->GetParticleEnergy();
 	 Em3Run->GetHisto(k)->fill(totEAbs/Ebeam);
-#endif  	 	 
+#endif
        }
     }
-    
+
   if (G4VVisManager::GetConcreteInstance())
     {
      G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();

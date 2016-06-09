@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ProcessesCount.hh,v 1.7 2001/10/26 12:51:24 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ProcessesCount.hh,v 1.8 2003/06/16 16:47:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,7 +36,7 @@
 #define ProcessesCount_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,7 +58,7 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef G4std::vector<OneProcessCount*> ProcessesCount;
+typedef std::vector<OneProcessCount*> ProcessesCount;
 
 #endif
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.cc,v 1.6 2001/12/04 11:40:28 flongo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: GammaRayTelTrackerSD.cc,v 1.7 2003/05/30 15:09:00 flongo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -77,7 +77,7 @@ GammaRayTelTrackerSD::~GammaRayTelTrackerSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*HCE)
+void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*)
 {
   TrackerCollection = new GammaRayTelTrackerHitsCollection
     (SensitiveDetectorName,collectionName[0]);

@@ -32,7 +32,7 @@ G4ExcitedStringDecay::G4ExcitedStringDecay(G4VLongitudinalStringDecay * aStringD
 : theStringDecay(aStringDecay)
 {}
 
-G4ExcitedStringDecay::G4ExcitedStringDecay(const G4ExcitedStringDecay &right)
+G4ExcitedStringDecay::G4ExcitedStringDecay(const G4ExcitedStringDecay &) : G4VStringFragmentation()
 {
 } 
 
@@ -40,18 +40,18 @@ G4ExcitedStringDecay::~G4ExcitedStringDecay()
 {
 }
 
-const G4ExcitedStringDecay & G4ExcitedStringDecay::operator=(const G4ExcitedStringDecay &right)
+const G4ExcitedStringDecay & G4ExcitedStringDecay::operator=(const G4ExcitedStringDecay &)
 {
   G4Exception("G4ExcitedStringDecay::operator= meant to not be accessable");
   return *this;
 }
 
-int G4ExcitedStringDecay::operator==(const G4ExcitedStringDecay &right) const
+int G4ExcitedStringDecay::operator==(const G4ExcitedStringDecay &) const
 {
   return 0;
 }
 
-int G4ExcitedStringDecay::operator!=(const G4ExcitedStringDecay &right) const
+int G4ExcitedStringDecay::operator!=(const G4ExcitedStringDecay &) const
 {
   return 1;
 }

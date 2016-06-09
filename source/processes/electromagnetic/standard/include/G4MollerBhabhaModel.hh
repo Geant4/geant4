@@ -93,7 +93,7 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+  std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
@@ -126,7 +126,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MollerBhabhaModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition* p,
+          const G4ParticleDefinition*,
                 G4double kinEnergy) 
 {
   G4double tmax = kinEnergy;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.12 2002/12/12 19:17:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPartonStringModel.cc,v 1.14 2003/06/16 17:09:26 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -45,7 +45,7 @@ G4VPartonStringModel::G4VPartonStringModel()
 	ShortLived.ConstructParticle();
 }
 
-G4VPartonStringModel::G4VPartonStringModel(const G4VPartonStringModel &right)
+G4VPartonStringModel::G4VPartonStringModel(const G4VPartonStringModel &) : G4VHighEnergyGenerator()
 {
 }
 
@@ -55,19 +55,19 @@ G4VPartonStringModel::~G4VPartonStringModel()
 }
 
 
-const G4VPartonStringModel & G4VPartonStringModel::operator=(const G4VPartonStringModel &right)
+const G4VPartonStringModel & G4VPartonStringModel::operator=(const G4VPartonStringModel &)
 {
   G4Exception("G4VPartonStringModel::operator= meant to not be accessable");
   return *this;
 }
 
 
-int G4VPartonStringModel::operator==(const G4VPartonStringModel &right) const
+int G4VPartonStringModel::operator==(const G4VPartonStringModel &) const
 {
  return 0;
 }
 
-int G4VPartonStringModel::operator!=(const G4VPartonStringModel &right) const
+int G4VPartonStringModel::operator!=(const G4VPartonStringModel &) const
 {
   return 1;
 }
@@ -106,7 +106,7 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   }
   
   theResult = stringFragmentationModel->FragmentStrings(strings);
-  G4std::for_each(strings->begin(), strings->end(), DeleteString() );
+  std::for_each(strings->begin(), strings->end(), DeleteString() );
   delete strings;
 
   return theResult;

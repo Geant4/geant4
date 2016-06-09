@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.14 2002/04/09 17:34:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eplusAnnihilation.cc,v 1.15 2003/05/26 16:13:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -176,7 +176,7 @@ G4double G4eplusAnnihilation::ComputeCrossSectionPerAtom
  
  
 G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
-                                                     const G4Step&  aStep)
+                                                     const G4Step& )
 //
 // The secondaries Gamma energies are sampled using the Heitler cross section.
 //  
@@ -280,7 +280,7 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
-                                                  const G4Step&  aStep)
+                                                  const G4Step& )
 //
 // Performs the e+ e- annihilation when both particles are assumed at rest.
 // It generates two back to back photons with energy = electron_mass.

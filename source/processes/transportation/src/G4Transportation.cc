@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.36 2003/04/02 10:09:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Transportation.cc,v 1.38 2003/06/21 01:34:02 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -130,7 +130,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //
      if ( DoesGlobalFieldExist() )
      {
-        fFieldPropagator->GetChordFinder()->ResetStepEstimate();
+        G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
+        if( chordF ) chordF->ResetStepEstimate();
      }
 
      // We need to update the current transportation's touchable handle
@@ -172,21 +173,24 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   G4ParticleDefinition* pParticleDef   = pParticle->GetDefinition() ;
   G4double              particleCharge = pParticleDef->GetPDGCharge() ; 
 
-  G4bool   fieldExertsForce = false ;
   fGeometryLimitedStep = false ;
   // fEndGlobalTimeComputed = false ;
 
   // There is no need to locate the current volume. It is Done elsewhere:
   //   On track construction 
   //   By the tracking, after all AlongStepDoIts, in "Relocation"
-  // Does the particle have an (EM) field force exerting upon it?
+
+  // Check whether the particle have an (EM) field force exerting upon it
   //
+  G4FieldManager* fieldMgr=0;
+  G4bool          fieldExertsForce = false ;
   if( (particleCharge != 0.0) )
   {
-     fieldExertsForce = DoesGlobalFieldExist() ;
-     //
-     // Future: will/can also check whether current volume's field is Zero or
-     // set by the user (in the logical volume) to be zero.
+     fieldMgr= fFieldPropagator->FindAndSetFieldManager( track.GetVolume() ); 
+     if (fieldMgr != 0) {
+        // If the field manager has no field, there is no field !
+        fieldExertsForce = (fieldMgr->GetDetectorField() != 0);
+     } 
   }
 
   // Choose the calculation of the transportation: Field or not 
@@ -248,7 +252,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      fMomentumChanged           = false ; 
      fEndGlobalTimeComputed     = false ;
   }
-  else
+  else   //  A field exerts force
   {
      G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
      G4ThreeVector  EndUnitMomentum ;
@@ -258,6 +262,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      fFieldPropagator->SetChargeMomentumMass( particleCharge,    // in e+ units
                                               momentumMagnitude, // in Mev/c 
                                               restMass           ) ;  
+
+     // Message the field Manager, to configure it for this track
+     fieldMgr->ConfigureForTrack( &track );
 
      G4ThreeVector spin        = track.GetPolarization() ;
      G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
@@ -309,9 +316,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      fTransportEndMomentumDir = aFieldTrack.GetMomentumDir() ;
 
      fTransportEndKineticEnergy  = aFieldTrack.GetKineticEnergy() ; 
-
-     // if( (track.GetKineticEnergy() - fTransportEndKineticEnergy) 
-     //      > perMillion * fTransportEndKineticEnergy             ){
 
      if( fFieldPropagator->GetCurrentFieldManager()->DoesFieldChangeEnergy() )
      {

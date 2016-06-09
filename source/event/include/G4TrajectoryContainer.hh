@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.hh,v 1.10 2002/06/08 20:36:18 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TrajectoryContainer.hh,v 1.11 2003/06/16 16:50:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // G4TrajectoryContainer
@@ -40,9 +40,9 @@
 #include "globals.hh"
 #include "G4VTrajectory.hh"
 #include "G4Allocator.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4VTrajectory*> TrajectoryVector;
+typedef std::vector<G4VTrajectory*> TrajectoryVector;
 
 class G4TrajectoryContainer
 {

@@ -29,12 +29,12 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.9 2002/12/12 19:16:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyAnalysisManager.cc,v 1.11 2003/06/16 16:45:02 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifdef  G4ANALYSIS_USE
 #include <stdlib.h>
-#include "g4std/fstream"
+#include <fstream>
 #include "BrachyAnalysisManager.hh"
 
 #include "G4ios.hh"
@@ -53,45 +53,38 @@
 BrachyAnalysisManager* BrachyAnalysisManager::instance = 0;
 
 BrachyAnalysisManager::BrachyAnalysisManager() : 
-  aFact(0), theTree(0), histFact(0), tupFact(0)
+  aFact(0), theTree(0), histFact(0), tupFact(0),h1(0),h2(0),ntuple(0)
   
-
 {
   //build up  the  factories
-   aFact = AIDA_createAnalysisFactory();
+  aFact = AIDA_createAnalysisFactory();
 
-   AIDA::ITreeFactory *treeFact = aFact->createTreeFactory();
+  AIDA::ITreeFactory *treeFact = aFact->createTreeFactory(); 
  
+  //parameters for the TreeFactory
  
-  
- //parameters for the TreeFactory
- 
-  std::string fileName="brachytherapy.hbk";
+  std::string fileName = "brachytherapy.hbk";
   theTree = treeFact->create(fileName,"hbook",false, true);
 
   delete treeFact;
  
   histFact = aFact->createHistogramFactory( *theTree );
-  tupFact  = aFact->createTupleFactory    ( *theTree );
- 
+  tupFact  = aFact->createTupleFactory    ( *theTree ); 
 }
-
-
 
 BrachyAnalysisManager::~BrachyAnalysisManager() 
 { 
   delete tupFact;
-  tupFact=0;
+  tupFact = 0;
 
-   delete histFact;
-  histFact=0;
+  delete histFact;
+  histFact = 0;
 
   delete theTree;
-  histFact=0;
+  histFact = 0;
 
   delete aFact;
   aFact = 0;
-
 }
 
 BrachyAnalysisManager* BrachyAnalysisManager::getInstance()
@@ -100,64 +93,70 @@ BrachyAnalysisManager* BrachyAnalysisManager::getInstance()
   return instance;
 }
 
-
 void BrachyAnalysisManager::book() 
 {
+  //creating a 1D histogram ...
+  h1 = histFact->createHistogram2D("10","Energy, pos", //histoID,histo name
+				    300 ,-150.,150.,   //bins'number,xmin,xmax 
+                                    300,-150.,150.    );//bins'number,ymin,ymax 
+  //creating a 2D histogram ...
+  h2 = histFact->createHistogram1D("20","Initial Energy", //histoID,histo name 
+				  100,0.,1.); //bins' number, xmin, xmax
+
+  //defining the ntuple columns' name ...
+  std::string columnNames = "float energy; float x; float y; float z";
+  std::string options = "";
   
-  h1 = histFact->createHistogram2D("10","Energy, pos",300 ,-150.,150.,300,-150.,150.);
-
-
- h2= histFact->createHistogram1D("20","Initial Energy", 100,0.,4.);
-
- std::string columnNames = "float energy, float x,float y, float z";
- std::string options = "";
- if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
- // check for non-zero ...
- if (ntuple) G4cout<<"The Ntuple is non-zero"<<G4endl;
+  //creating a ntuple ...
+  if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
+  // check for non-zero ...
+  if (ntuple) G4cout<<"The Ntuple is non-zero"<<G4endl;
 }
  
-
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-void BrachyAnalysisManager::fill_Tuple(G4double xx,G4double yy, G4double zz,G4float en)
+void BrachyAnalysisManager::FillNtupleWithEnergy(G4double xx,
+                                                 G4double yy, 
+                                                 G4double zz,
+                                                 G4float en)
 {
-
-  //ntuple = dynamic_cast<ITuple *> ( theTree->find("1") );
-
-  if (ntuple == 0) {
-    cout << "AAAAAAAGH" << endl;
-    return;
-  }
-
-  ntuple->fill(1, en);// fill ( int column, double value )
-  ntuple->fill(2, xx);
-  ntuple->fill(3, yy);
-  ntuple->fill(4, zz);
+  if (ntuple == 0) 
+   {
+     G4cout << "AAAAAAAGH..... The Ntuple is 0" << G4endl;
+     return;
+    }
+  
+  G4int indexX = ntuple->findColumn( "x" );
+  G4int indexY = ntuple->findColumn( "y" );
+  G4int indexZ = ntuple->findColumn( "z" );
+  G4int indexEnergy = ntuple->findColumn( "energy" );
+  ntuple->fill(indexEnergy, en);// fill ( int column, double value )
+  ntuple->fill(indexX, xx);
+  ntuple->fill(indexY, yy);
+  ntuple->fill(indexZ, zz);
 
   ntuple->addRow();
-
 }
 
-void BrachyAnalysisManager::hist(G4double x,G4double z, G4float enn)
-{ 
-  h1->fill(x,z,enn);
- 
-}
-
-void BrachyAnalysisManager::Spectrum(G4double Init_En)
+void BrachyAnalysisManager::FillHistogramWithEnergy(G4double x,
+                                                    G4double z, 
+                                                    G4float energyDeposit)
 {
-  h2->fill(Init_En);
+  //2DHistrogram: energy deposit in a voxel which center is fixed in position (x,z)  
+  h1->fill(x,z,energyDeposit);
+}
+
+void BrachyAnalysisManager::PrimaryParticleEnergySpectrum(G4double primaryParticleEnergy)
+{
+  //1DHisotgram: energy spectrum of primary particles  
+  h2->fill(primaryParticleEnergy);
 }
 
 void BrachyAnalysisManager::finish() 
 {  
-  // write all histograms to file
+  // write all histograms to file ...
   theTree->commit();
 
-  // close (will again commit)
+  // close (will again commit) ...
   theTree->close();
-
 }
 #endif
 

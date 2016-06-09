@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonMinus.cc,v 1.7 2001/10/16 08:16:17 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MuonMinus.cc,v 1.8 2003/06/16 16:57:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -37,8 +37,8 @@
 //  Add MuonMinusDefinition(), H.Kurashige 4 July 1996
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4MuonMinus.hh"
 

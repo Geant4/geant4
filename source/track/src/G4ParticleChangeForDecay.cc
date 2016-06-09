@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.cc,v 1.7 2001/08/16 08:17:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleChangeForDecay.cc,v 1.7.12.1 2003/06/16 17:19:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -146,7 +146,7 @@ void G4ParticleChangeForDecay::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Time (ns)           : " 
-       << G4std::setw(20) << theTimeChange/ns
+       << std::setw(20) << theTimeChange/ns
        << G4endl;
 }
 

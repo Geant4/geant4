@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.20 2002/05/17 17:59:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SmartVoxelHeader.cc,v 1.21 2003/06/16 16:52:09 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4SmartVoxelHeader
@@ -1247,7 +1247,7 @@ G4bool G4SmartVoxelHeader::AllSlicesEqual() const
 // Streaming operator for debugging.
 // ***************************************************************************
 //
-G4std::ostream& operator << (G4std::ostream& s, const G4SmartVoxelHeader& h)
+std::ostream& operator << (std::ostream& s, const G4SmartVoxelHeader& h)
 {
   s << "Axis = " << G4int(h.faxis) << G4endl;
   G4SmartVoxelProxy *collectNode=0, *collectHead=0;

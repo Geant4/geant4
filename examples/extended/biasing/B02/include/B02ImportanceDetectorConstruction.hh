@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.hh,v 1.2 2003/03/11 13:54:17 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: B02ImportanceDetectorConstruction.hh,v 1.3 2003/06/16 16:47:15 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef B02ImportanceDetectorConstruction_hh 
 #define B02ImportanceDetectorConstruction_hh  B02ImportanceDetectorConstruction_hh 
 
 #include "globals.hh"
-#include "g4std/map"
+#include <map>
 #include "G4GeometryCell.hh"
 #include "B02PVolumeStore.hh"
 

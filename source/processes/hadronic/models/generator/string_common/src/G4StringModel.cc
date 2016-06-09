@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StringModel.cc,v 1.5 2002/12/12 19:17:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StringModel.cc,v 1.6 2003/05/30 14:43:20 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4StringModel
 #include "G4StringModel.hh"
@@ -34,7 +34,7 @@ G4StringModel::G4StringModel()
 	theGenerator=NULL;
 }
 
-G4StringModel::G4StringModel(const G4StringModel &right)
+G4StringModel::G4StringModel(const G4StringModel &) : G4VHighEnergyGenerator()
 {
 }
 
@@ -44,19 +44,19 @@ G4StringModel::~G4StringModel()
 }
 
 
-const G4StringModel & G4StringModel::operator=(const G4StringModel &right)
+const G4StringModel & G4StringModel::operator=(const G4StringModel &)
 {
   G4Exception("G4StringModel::operator= meant to not be accessable");
   return *this;
 }
 
 
-int G4StringModel::operator==(const G4StringModel &right) const
+int G4StringModel::operator==(const G4StringModel &) const
 {
   return 0;
 }
 
-int G4StringModel::operator!=(const G4StringModel &right) const
+int G4StringModel::operator!=(const G4StringModel &) const
 {
   return 1;
 }

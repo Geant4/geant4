@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeProperty.cc,v 1.3 2001/07/11 10:02:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4IsotopeProperty.cc,v 1.4 2003/06/16 16:58:28 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include "G4IsotopeProperty.hh"
 #include "G4DecayTable.hh"
@@ -102,7 +102,7 @@ void G4IsotopeProperty::DumpInfo() const
   G4cout << "AtomicNumber: " << fAtomicNumber << G4endl;
   G4cout << "AtomicMass: " << fAtomicMass << G4endl;
   G4cout << "Spin: " << fISpin << "/2" << G4endl;
-  G4cout << "Excited Energy: " << G4std::setprecision(1) << fEnergy/keV << "[keV]" << G4endl;
+  G4cout << "Excited Energy: " << std::setprecision(1) << fEnergy/keV << "[keV]" << G4endl;
   G4cout << "Life Time: " << fLifeTime/ns << "[ns]" << G4endl;
   if (fDecayTable != 0) {
     fDecayTable->DumpInfo();

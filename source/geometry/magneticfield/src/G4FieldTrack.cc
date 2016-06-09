@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.4 2001/07/11 09:59:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FieldTrack.cc,v 1.5 2003/06/16 16:51:12 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G4FieldTrack.hh"
 
-G4std::ostream& operator<<( G4std::ostream& os, G4FieldTrack& SixVec)
+std::ostream& operator<<( std::ostream& os, G4FieldTrack& SixVec)
 {
      G4double *SixV = SixVec.SixVector;
      os << " X= " << SixV[0] << " " << SixV[1] << " " << SixV[2] << " ";

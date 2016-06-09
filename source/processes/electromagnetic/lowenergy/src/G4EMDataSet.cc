@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.7 2003/02/24 00:36:10 pia Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EMDataSet.cc,v 1.9 2003/06/16 17:00:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -34,8 +34,8 @@
 
 #include "G4EMDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 // Constructor
 
@@ -80,7 +80,7 @@ G4EMDataSet::~G4EMDataSet()
 }
 
 
-G4double G4EMDataSet::FindValue(G4double e, G4int id) const
+G4double G4EMDataSet::FindValue(G4double e, G4int) const
 {
   G4double value = 0.;
   if ( !(energies->empty()) )
@@ -144,7 +144,7 @@ void G4EMDataSet::LoadData(const G4String& fileName)
   // Build the complete string identifying the file with the data set
   
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   
   ost << fileName << z << ".dat";
   
@@ -161,8 +161,8 @@ void G4EMDataSet::LoadData(const G4String& fileName)
   G4String separator("/");
 
   G4String dirFile = pathString + separator + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
 	{
@@ -223,10 +223,10 @@ void G4EMDataSet::PrintData() const
 }
 
 
-const G4VEMDataSet* G4EMDataSet::GetComponent(G4int i) const 
+const G4VEMDataSet* G4EMDataSet::GetComponent(G4int) const 
 { return 0; }
 
-void G4EMDataSet::AddComponent(G4VEMDataSet* dataSet) 
+void G4EMDataSet::AddComponent(G4VEMDataSet*) 
 { }
 
 size_t G4EMDataSet::NumberOfComponents() const 

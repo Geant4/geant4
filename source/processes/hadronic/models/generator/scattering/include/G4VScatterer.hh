@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VScatterer.hh,v 1.2 2002/12/12 19:17:42 gunter Exp $ //
+// $Id: G4VScatterer.hh,v 1.3 2003/06/16 17:08:47 gunter Exp $ //
 //
 //
 // -------------------------------------------------------------------
@@ -49,7 +49,7 @@
 #define G4VSCATTERER_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4KineticTrackVector.hh"
 
 class G4KineticTrack;

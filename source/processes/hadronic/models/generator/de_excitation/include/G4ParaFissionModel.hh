@@ -85,7 +85,7 @@ public:
     G4FragmentVector * theFissionResult = theFission.BreakUp(anInitialState);
     
     // deexcite the fission fragments and fill result
-    G4std::vector<G4DynamicParticle *> theResult;
+    std::vector<G4DynamicParticle *> theResult;
     G4int ll = theFissionResult->size();
     for(G4int i=0; i<ll; i++)
     {

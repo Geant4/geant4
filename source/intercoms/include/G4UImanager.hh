@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.19 2002/05/14 01:40:10 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UImanager.hh,v 1.20 2003/06/16 16:55:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4UImanager_h
@@ -30,8 +30,8 @@
 
 #include "globals.hh"
 
-#include "g4std/vector"
-#include "g4std/fstream"
+#include <vector>
+#include <fstream>
 #include "G4VStateDependent.hh"
 #include "G4UIcommandStatus.hh"
 class G4UIcommandTree;
@@ -145,9 +145,9 @@ class G4UImanager : public G4VStateDependent
       G4String savedParameters;
       G4UIcommand * savedCommand;
       G4int verboseLevel;
-      G4std::ofstream historyFile;
+      std::ofstream historyFile;
       G4bool saveHistory;
-      G4std::vector<G4String> histVec;
+      std::vector<G4String> histVec;
       G4UIaliasList* aliasList;
       G4int maxHistSize;
       G4bool pauseAtBeginOfEvent;

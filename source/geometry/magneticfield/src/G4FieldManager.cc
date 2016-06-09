@@ -21,14 +21,29 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc,v 1.7 2002/07/24 10:43:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FieldManager.cc,v 1.8 2003/06/20 23:02:45 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G4FieldManager.hh"
 
 G4FieldManager::G4FieldManager()
    : fDetectorField(0), fChordFinder(0), fAllocatedChordFinder(false),
      fFieldChangesEnergy(false), fDefault_Delta_One_Step_Value(0.25*mm),
+     fDefault_Delta_Intersection_Val(0.1*mm)
+{ 
+   fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
+   fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
+}
+
+G4FieldManager::G4FieldManager(G4Field       *detectorField, 
+			       G4ChordFinder *pChordFinder, 
+			       G4bool        fieldChangesEnergy
+			      )
+   : fDetectorField(detectorField), 
+     fChordFinder(pChordFinder), 
+     fAllocatedChordFinder(false),
+     fFieldChangesEnergy(fieldChangesEnergy), 
+     fDefault_Delta_One_Step_Value(0.25*mm),
      fDefault_Delta_Intersection_Val(0.1*mm)
 { 
    fDelta_One_Step_Value= fDefault_Delta_One_Step_Value;
@@ -45,6 +60,11 @@ G4FieldManager::G4FieldManager(G4MagneticField *detectorField)
    fDelta_Intersection_Val= fDefault_Delta_Intersection_Val;
 }
 
+void G4FieldManager::ConfigureForTrack( const G4Track * ) 
+{
+   // Default is to do nothing!
+   ;
+}
 
 G4FieldManager::~G4FieldManager()
 {

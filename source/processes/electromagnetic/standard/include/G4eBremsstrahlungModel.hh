@@ -93,7 +93,7 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+  std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
@@ -113,7 +113,7 @@ private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
-  G4double ComputeBremLoss(G4double Z, G4double tkin, G4double cut, G4double x);  
+  G4double ComputeBremLoss(G4double Z, G4double tkin, G4double cut);  
 
   G4double PositronCorrFactorLoss(G4double Z, G4double tkin, G4double cut);
 
@@ -146,7 +146,7 @@ private:
   G4double LPMconstant;
   G4bool   isElectron;
   G4bool   theLPMflag;
-  G4std::vector<G4DataVector*> partialSumSigma;
+  std::vector<G4DataVector*> partialSumSigma;
 
 };
 

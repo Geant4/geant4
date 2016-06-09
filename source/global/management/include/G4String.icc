@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.4 2003/03/25 14:56:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4String.icc,v 1.5 2003/06/06 16:17:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -99,17 +99,17 @@ G4bool G4SubString::operator==(G4String s) const
 
 G4bool G4SubString::operator==(const char* s) const
 {
-  return mystring->substr(mystart,extent) == G4std::string(s) ? true:false;
+  return mystring->substr(mystart,extent) == std::string(s) ? true:false;
 }
 
 G4bool G4SubString::operator!=(G4String s) const
 {
-  return mystring->substr(mystart,extent) != G4std::string(s) ? true:false;
+  return mystring->substr(mystart,extent) != std::string(s) ? true:false;
 }
 
 G4bool G4SubString::operator!=(const char* s) const
 {
-  return mystring->substr(mystart,extent) != G4std::string(s) ? true:false;
+  return mystring->substr(mystart,extent) != std::string(s) ? true:false;
 }
 
 str_size G4SubString::length() const
@@ -150,7 +150,7 @@ G4String::G4String ( const G4String& s )
 G4String::G4String ( const G4SubString& s )
  : std_string(*(s.mystring),s.mystart,s.extent) {}
 
-G4String::G4String ( const G4std::string &s )
+G4String::G4String ( const std::string &s )
  : std_string(s) {}
 
 G4String& G4String::operator=(const G4String& s)
@@ -159,7 +159,7 @@ G4String& G4String::operator=(const G4String& s)
   return *this;
 }
 
-G4String& G4String::operator=(const G4std::string &s)
+G4String& G4String::operator=(const std::string &s)
 {
   std_string::operator=(s);
   return *this;
@@ -199,7 +199,7 @@ G4String& G4String::operator+=(const char*s)
   return *this;
 }
 
-G4String& G4String::operator+=(const G4std::string &s)
+G4String& G4String::operator+=(const std::string &s)
 {
   std_string::operator+=(s);
   return *this;
@@ -246,9 +246,6 @@ G4String::operator const char*() const
 
 G4int G4String::strcasecompare(const char* s1, const char* s2) const
 {
-#ifndef G4USE_STD_NAMESPACE
-    return strcasecmp(s1,s2);
-#else
   char* buf1 = new char[strlen(s1)+1];
   char* buf2 = new char[strlen(s2)+1];
 
@@ -261,7 +258,6 @@ G4int G4String::strcasecompare(const char* s1, const char* s2) const
   delete [] buf1;
   delete [] buf2;
   return res;
-#endif
 }
 
 G4int G4String::compareTo(const char* s, caseCompare mode)
@@ -292,12 +288,12 @@ G4String& G4String::append(const G4String& s)
   return *this;
 }
 
-G4std::istream&
-G4String::readLine (G4std::istream& s, G4bool skipWhite)
+std::istream&
+G4String::readLine (std::istream& s, G4bool skipWhite)
 {
   char tmp[1024];
   if ( skipWhite ) {
-    s >> G4std::ws;
+    s >> std::ws;
     s.getline(tmp,1024);
     *this=tmp;
   }
@@ -344,7 +340,7 @@ G4int G4String::last(char c) const
   return rfind(c);
 }
 
-G4bool G4String::contains(G4std::string s) const
+G4bool G4String::contains(std::string s) const
 {
   G4int i=std_string::find(s);
   if(i != G4int(std_string::npos))

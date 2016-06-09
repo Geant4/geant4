@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.8 2002/07/23 08:50:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LogicalSkinSurface.hh,v 1.9 2003/06/16 16:54:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4LogicalSkinSurface
 //
@@ -44,7 +44,7 @@
 #include "G4LogicalSurface.hh"
 #include "G4LogicalVolume.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
@@ -81,12 +81,12 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     G4LogicalVolume* LogVolume;
       // Logical Volume pointer on side 1.
 
-    static G4std::vector<G4LogicalSkinSurface*> theSurfaceTable;
+    static std::vector<G4LogicalSkinSurface*> theSurfaceTable;
       // The static Table of Surfaces.
 
 };
 
-typedef G4std::vector<G4LogicalSkinSurface*> G4LogicalSkinSurfaceTable;
+typedef std::vector<G4LogicalSkinSurface*> G4LogicalSkinSurfaceTable;
 
 // ********************************************************************
 // Inline methods

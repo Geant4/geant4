@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.9 2003/01/22 18:47:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.10 2003/06/16 17:00:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -71,12 +71,12 @@ G4eIonisationCrossSectionHandler::~G4eIonisationCrossSectionHandler()
 }
 
 
-G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectionsForMaterials(
+std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectionsForMaterials(
                         const G4DataVector& energyVector,
                         const G4DataVector* energyCuts)
 {
   G4int verbose = 0;
-  G4std::vector<G4VEMDataSet*>* set = new G4std::vector<G4VEMDataSet*>;
+  std::vector<G4VEMDataSet*>* set = new std::vector<G4VEMDataSet*>;
 
   G4DataVector* energies;
   G4DataVector* cs;

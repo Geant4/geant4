@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02StepCut.hh,v 1.3 2001/10/15 17:20:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F02StepCut.hh,v 1.4 2003/06/25 17:33:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -85,9 +85,8 @@ class F02StepCut : public G4VDiscreteProcess
 
 inline G4double F02StepCut::PostStepGetPhysicalInteractionLength(
                              const G4Track& aTrack,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            )
+                             G4double,
+                             G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
@@ -113,10 +112,9 @@ inline G4VParticleChange* F02StepCut::PostStepDoIt(
    return &aParticleChange;
 }
 
-inline G4double F02StepCut::GetMeanFreePath(const G4Track& aTrack,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            )
+inline G4double F02StepCut::GetMeanFreePath(const G4Track&,
+                             G4double,
+                             G4ForceCondition*)
 {
   return 0.;
 }

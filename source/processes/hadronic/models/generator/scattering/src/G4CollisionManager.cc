@@ -60,7 +60,7 @@ void G4CollisionManager::AddCollision(G4double time, G4KineticTrack * proj,
 
 void G4CollisionManager::RemoveCollision(G4CollisionInitialState * collision)
 {
-  theCollisionList->erase(G4std::find(theCollisionList->begin(),
+  theCollisionList->erase(std::find(theCollisionList->begin(),
 				      theCollisionList->end(),
 				      collision));
   delete collision;
@@ -76,8 +76,8 @@ void G4CollisionManager::RemoveTracksCollisions(G4KineticTrackVector * ktv)
     return;
 
   G4CollisionInitialState * collision;
-  G4std::vector<G4CollisionInitialState *>::iterator collIter, collIter2;
-  G4std::vector<G4KineticTrack *>::iterator trackIter;
+  std::vector<G4CollisionInitialState *>::iterator collIter, collIter2;
+  std::vector<G4KineticTrack *>::iterator trackIter;
   G4ListOfCollisions toRemove;
 
   for(collIter = theCollisionList->begin();
@@ -99,7 +99,7 @@ void G4CollisionManager::RemoveTracksCollisions(G4KineticTrackVector * ktv)
   for(collIter = toRemove.begin(); collIter != toRemove.end(); ++collIter)
   {
     collision = *collIter;
-    collIter2 = G4std::find(theCollisionList->begin(),
+    collIter2 = std::find(theCollisionList->begin(),
 			    theCollisionList->end(), collision);
     theCollisionList->erase(collIter2);  // remove from list...
     delete collision;                    // ...and delete the collision
@@ -109,7 +109,7 @@ void G4CollisionManager::RemoveTracksCollisions(G4KineticTrackVector * ktv)
 
 void G4CollisionManager::ClearAndDestroy()
 {
-  G4std::vector<G4CollisionInitialState *>::iterator i;
+  std::vector<G4CollisionInitialState *>::iterator i;
   for(i = theCollisionList->begin(); i != theCollisionList->end(); ++i)
     delete *i;
   theCollisionList->clear();
@@ -120,7 +120,7 @@ G4CollisionInitialState * G4CollisionManager::GetNextCollision()
 {
   G4CollisionInitialState * theNext=0;
   G4double nextTime = DBL_MAX;
-  G4std::vector<G4CollisionInitialState *>::iterator i;
+  std::vector<G4CollisionInitialState *>::iterator i;
   for(i = theCollisionList->begin(); i != theCollisionList->end(); ++i)
   {
     if(nextTime > (*i)->GetCollisionTime())
@@ -153,7 +153,7 @@ G4CollisionInitialState * G4CollisionManager::GetNextCollision()
 
 void G4CollisionManager::Print()
 {
-  G4std::vector<G4CollisionInitialState *>::iterator i;
+  std::vector<G4CollisionInitialState *>::iterator i;
 
   G4cout << "CollisionManager: " << theCollisionList->size()
 	 << " entries at " << theCollisionList << G4endl;

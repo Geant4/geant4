@@ -1,10 +1,12 @@
-# $Id: G4UI_USE.gmk,v 1.6 2002/11/22 11:53:02 gcosmo Exp $
+# $Id: G4UI_USE.gmk,v 1.7 2003/06/11 13:18:56 gunter Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for interfaces USE phase.
 #   John Allison, 6th July 1998.
 
 ########################### interfaces/basic #######################
-
+ifndef G4UI_USE_INCLUDED
+  G4UI_USE_INCLUDED = 1
+  
 ifndef G4UI_NONE
 
 UILIBS :=
@@ -95,3 +97,4 @@ ifndef G4UI_USE
 endif
 
 endif #G4UI_NONE
+endif # G4UI_USE_INCLUDED

@@ -73,7 +73,7 @@ G4double G4VhElectronicStoppingPower::HeEffChargeSquare(
   static G4double c[6] = {0.2865,  0.1266, -0.001429,
                           0.02402,-0.01135, 0.001475} ;
 
-  G4double e = log( G4std::max( 1.0, kineticEnergyHe/(keV*GetHeMassAMU()))) ; 
+  G4double e = log( std::max( 1.0, kineticEnergyHe/(keV*GetHeMassAMU()))) ; 
   G4double x = c[0] ;
   G4double y = 1.0 ;
   for (G4int i=1; i<6; i++) {

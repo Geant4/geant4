@@ -39,7 +39,7 @@ template <class T> class G4PersistencyManagerT
  : public G4PersistencyManager
 {
     public: // With description
-      G4PersistencyManagerT(G4PersistencyCenter* pc, G4std::string n)
+      G4PersistencyManagerT(G4PersistencyCenter* pc, std::string n)
        : G4PersistencyManager(pc, n), pm(0)
       {
          if ( m_verbose > 2 ) {

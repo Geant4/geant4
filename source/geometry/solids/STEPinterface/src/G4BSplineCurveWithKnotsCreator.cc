@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.9 2003/03/28 15:47:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BSplineCurveWithKnotsCreator.cc,v 1.10 2003/06/16 16:53:49 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BSplineCurveWithKnotsCreator
@@ -35,7 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include <instmgr.h>
-#include "g4std/vector"
+#include <vector>
 #include "G4BSplineCurveWithKnotsCreator.hh"
 #include "G4GeometryTable.hh"
 #include "G4BSplineCurve.hh"
@@ -64,8 +64,8 @@ void G4BSplineCurveWithKnotsCreator::CreateG4Geometry(STEPentity& Ent)
 
   G4int             degree;
   G4Point3DVector   controlPointsList;
-  G4std::vector<G4double>    knots;
-  G4std::vector<G4double>    weightsData;
+  std::vector<G4double>    knots;
+  std::vector<G4double>    weightsData;
   G4BSplineCurve*   bSpline = new G4BSplineCurve();
 
   // degree

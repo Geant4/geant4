@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPEnAngCorrelation.hh,v 1.7 2002/12/12 19:18:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPEnAngCorrelation.hh,v 1.8 2003/06/16 17:10:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPEnAngCorrelation_h
 #define G4NeutronHPEnAngCorrelation_h 1
@@ -31,7 +31,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 #include "G4NeutronHPProduct.hh"
 #include "G4ReactionProduct.hh"
@@ -50,7 +50,7 @@ class G4NeutronHPEnAngCorrelation
     if(theProducts!=NULL) delete [] theProducts;
   }
   
-  inline void Init(G4std::ifstream & aDataFile)
+  inline void Init(std::ifstream & aDataFile)
   {
     inCharge = true;
     aDataFile>>targetMass>>frameFlag>>nProducts;

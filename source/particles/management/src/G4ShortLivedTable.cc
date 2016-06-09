@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.10 2001/07/11 10:02:04 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ShortLivedTable.cc,v 1.11 2003/06/16 16:58:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -39,7 +39,7 @@
 
 #include "G4ios.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 
 G4ShortLivedTable::G4ShortLivedTable()

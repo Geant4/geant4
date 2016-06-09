@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-01 $
-                                (30-Apr-2003)
+ Geant4 version $Name: geant4-05-02 $
+                                (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -174,58 +174,58 @@ gas material = Air
 plate plasma energy = 29.55 eV
 gas plasma energy = 0.731967 eV
 Regular X-ray TR  radiator EM process is called
-0	fGamma = 107.6	sumE = 0.1933
-1	fGamma = 123.4	sumE = 0.2553
-2	fGamma = 141.5	sumE = 0.3303
-3	fGamma = 162.3	sumE = 0.4171
-4	fGamma = 186.2	sumE = 0.5041
-5	fGamma = 213.7	sumE = 0.5873
-6	fGamma = 245.2	sumE = 0.6919
-7	fGamma = 281.3	sumE = 0.8242
-8	fGamma = 322.9	sumE = 0.914
-9	fGamma = 370.5	sumE = 1.058
-10	fGamma = 425.3	sumE = 1.179
-11	fGamma = 488.2	sumE = 1.277
-12	fGamma = 560.3	sumE = 1.423
-13	fGamma = 643.2	sumE = 1.53
-14	fGamma = 738.3	sumE = 1.64
-15	fGamma = 847.6	sumE = 1.77
-16	fGamma = 973	sumE = 1.943
-17	fGamma = 1117	sumE = 2.024
-18	fGamma = 1282	sumE = 2.251
-19	fGamma = 1472	sumE = 2.413
-20	fGamma = 1690	sumE = 2.628
-21	fGamma = 1940	sumE = 2.842
-22	fGamma = 2228	sumE = 2.938
-23	fGamma = 2558	sumE = 3.031
-24	fGamma = 2936	sumE = 3.432
-25	fGamma = 3371	sumE = 3.327
-26	fGamma = 3871	sumE = 3.48
-27	fGamma = 4444	sumE = 3.561
-28	fGamma = 5102	sumE = 3.472
-29	fGamma = 5858	sumE = 3.698
-30	fGamma = 6726	sumE = 3.649
-31	fGamma = 7722	sumE = 3.826
-32	fGamma = 8866	sumE = 3.921
-33	fGamma = 1.018e+04	sumE = 4.137
-34	fGamma = 1.169e+04	sumE = 4.02
-35	fGamma = 1.342e+04	sumE = 4.187
-36	fGamma = 1.541e+04	sumE = 4.157
-37	fGamma = 1.769e+04	sumE = 4.105
-38	fGamma = 2.031e+04	sumE = 4.082
-39	fGamma = 2.332e+04	sumE = 4.096
-40	fGamma = 2.677e+04	sumE = 4.138
-41	fGamma = 3.074e+04	sumE = 4.222
-42	fGamma = 3.529e+04	sumE = 4.274
-43	fGamma = 4.052e+04	sumE = 4.305
-44	fGamma = 4.652e+04	sumE = 4.324
-45	fGamma = 5.342e+04	sumE = 4.336
-46	fGamma = 6.133e+04	sumE = 4.341
-47	fGamma = 7.042e+04	sumE = 4.343
-48	fGamma = 8.085e+04	sumE = 4.344
-49	fGamma = 9.283e+04	sumE = 4.343
+0	fGamma = 107.6	sumE = 0.1939
+1	fGamma = 123.4	sumE = 0.2562
+2	fGamma = 141.5	sumE = 0.3312
+3	fGamma = 162.3	sumE = 0.4127
+4	fGamma = 186.2	sumE = 0.5086
+5	fGamma = 213.7	sumE = 0.606
+6	fGamma = 245.2	sumE = 0.7458
+7	fGamma = 281.3	sumE = 0.8992
+8	fGamma = 322.9	sumE = 1.071
+9	fGamma = 370.5	sumE = 1.216
+10	fGamma = 425.3	sumE = 1.423
+11	fGamma = 488.2	sumE = 1.546
+12	fGamma = 560.3	sumE = 1.857
+13	fGamma = 643.2	sumE = 2.068
+14	fGamma = 738.3	sumE = 2.186
+15	fGamma = 847.6	sumE = 2.529
+16	fGamma = 973	sumE = 2.738
+17	fGamma = 1117	sumE = 3.213
+18	fGamma = 1282	sumE = 3.92
+19	fGamma = 1472	sumE = 3.717
+20	fGamma = 1690	sumE = 4.394
+21	fGamma = 1940	sumE = 4.373
+22	fGamma = 2228	sumE = 5.599
+23	fGamma = 2558	sumE = 5.115
+24	fGamma = 2936	sumE = 6.031
+25	fGamma = 3371	sumE = 5.996
+26	fGamma = 3871	sumE = 6.794
+27	fGamma = 4444	sumE = 7.16
+28	fGamma = 5102	sumE = 6.72
+29	fGamma = 5858	sumE = 6.38
+30	fGamma = 6726	sumE = 6.386
+31	fGamma = 7722	sumE = 7.062
+32	fGamma = 8866	sumE = 6.933
+33	fGamma = 1.018e+04	sumE = 7.159
+34	fGamma = 1.169e+04	sumE = 7.213
+35	fGamma = 1.342e+04	sumE = 6.817
+36	fGamma = 1.541e+04	sumE = 7.552
+37	fGamma = 1.769e+04	sumE = 7.114
+38	fGamma = 2.031e+04	sumE = 6.976
+39	fGamma = 2.332e+04	sumE = 6.661
+40	fGamma = 2.677e+04	sumE = 6.809
+41	fGamma = 3.074e+04	sumE = 6.807
+42	fGamma = 3.529e+04	sumE = 6.856
+43	fGamma = 4.052e+04	sumE = 6.88
+44	fGamma = 4.652e+04	sumE = 6.943
+45	fGamma = 5.342e+04	sumE = 7.002
+46	fGamma = 6.133e+04	sumE = 7.048
+47	fGamma = 7.042e+04	sumE = 7.084
+48	fGamma = 8.085e+04	sumE = 7.114
+49	fGamma = 9.283e+04	sumE = 7.138
 
-total time for build X-ray TR energy loss tables = 74.17 s
+total time for build X-ray TR energy loss tables = 111.86 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -239,8 +239,15 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+PAI mat name  = Ar7CH4
+PAI mat index = 28
 
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+
+e-:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins.
         Step function: finalRange(mm)= 1,  dRoverRange= 0.2
@@ -250,12 +257,47 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+PAI mat name  = Ar7CH4
+PAI mat index = 28
 
-hIoni:    Knock-on electron cross sections . 
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+
+proton:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
         Step function: finalRange(mm)= 1,  dRoverRange= 0.2
+PAI mat name  = Ar7CH4
+PAI mat index = 28
+
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+PAI mat name  = Ar7CH4
+PAI mat index = 28
+
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+PAI mat name  = Ar7CH4
+PAI mat index = 28
+
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
+PAI mat name  = Ar7CH4
+PAI mat index = 28
+
+PAI matcuts name  = Ar7CH4
+PAI matcuts index = 3
+
+PAI DeltaCutInKineticEnergyNow = 0.99 keV
 
 ========= Table of registered couples ==============================
 
@@ -299,25 +341,25 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.4199 +- 0.978724  mm  
+    mean charged track length   in absorber=24.0667 +- 0.999523  mm  
 
-            mean energy deposit in absorber=0.0066657 +- 0.000200206  MeV 
+            mean energy deposit in absorber=0.0053188 +- 0.000141656  MeV 
 
- mean number of steps in absorber (charged) =1.227 +- 0.0164156      
- mean number of steps in absorber (neutral) =1.981 +- 0.0448847      
+ mean number of steps in absorber (charged) =1.251 +- 0.0168523      
+ mean number of steps in absorber (neutral) =2.263 +- 0.0473691      
 
-   mean number of charged secondaries = 0.203 +- 0.0142755
+   mean number of charged secondaries = 0.229 +- 0.0151182
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.203  and e+s =0
+   mean number of e-s =0.229  and e+s =0
 
-(number) transmission coeff=0.16  reflection coeff=0.006
+(number) transmission coeff=0.18  reflection coeff=0.002
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1545544388, 618057029
+ Current couple of seeds = 1657761120, 607392201
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

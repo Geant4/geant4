@@ -164,13 +164,13 @@ G4double G4PenelopeInterpolator::CalculateMomentum(G4double UpperLimit,
   G4double RMom=0.0;
   if (UpperLimit < (*x)[0]) return RMom;
   G4int iend=0;
-  G4double xt=G4std::min(UpperLimit,(*x)[nOfData-1]);
+  G4double xt=std::min(UpperLimit,(*x)[nOfData-1]);
   G4double x1,x2,y1,y2;
   G4double xtc,dx,dy,a1,b1,ds;
   for (i=0;i<(nOfData-1);i++){
-    x1=G4std::max((*x)[i],eps);
+    x1=std::max((*x)[i],eps);
     y1=(*y)[i];
-    x2=G4std::max((*x)[i+1],eps);
+    x2=std::max((*x)[i+1],eps);
     y2=(*y)[i+1];
     if (xt < x2) 
       {

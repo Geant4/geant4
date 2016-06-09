@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.6 2002/10/16 10:44:15 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.7 2003/06/10 17:13:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from G4OpenGLWin32Viewer and
@@ -31,8 +31,6 @@
 #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
 
 #include "G4OpenGLImmediateWin32Viewer.hh"
-
-#include <GL/gl.h>
 
 #include "G4ios.hh"
 

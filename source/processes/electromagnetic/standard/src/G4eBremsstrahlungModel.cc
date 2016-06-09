@@ -39,7 +39,8 @@
 // 23-12-02  Change interface in order to move to cut per region (V.Ivanchenko)
 // 24-01-03  Fix for compounds (V.Ivanchenko)
 // 27-01-03  Make models region aware (V.Ivanchenko)
-// 13-02-03 Add name (V.Ivanchenko)
+// 13-02-03  Add name (V.Ivanchenko)
+// 09-05-03  Fix problem of supression function + optimise sampling (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -147,7 +148,7 @@ void G4eBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
     const G4Material* material = couple->GetMaterial();
     G4DataVector* dv = ComputePartialSumSigma(material, 0.5*highKinEnergy,
-                             G4std::min(cuts[i], 0.25*highKinEnergy));
+                             std::min(cuts[i], 0.25*highKinEnergy));
     partialSumSigma.push_back(dv);
   }
 
@@ -164,11 +165,10 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
   if(kineticEnergy < lowKinEnergy) return 0.0;
 
   const G4double thigh = 100.*GeV;
-  const G4double xhigh = log(thigh/electron_mass_c2);
+  
+  G4double cut = std::min(cutEnergy, kineticEnergy);
 
-  G4double cut = G4std::min(cutEnergy, kineticEnergy);
-
-  G4double x, rate, loss;
+  G4double rate, loss;
   const G4double factorHigh = 36./(1450.*GeV);
   const G4double coef1 = -0.5;
   const G4double coef2 = 2./9.;
@@ -188,27 +188,33 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
     // loss for MinKinEnergy<KineticEnergy<=100 GeV
     if (kineticEnergy <= thigh) {
 
-      x = log(totalEnergy/electron_mass_c2);
-      loss = ComputeBremLoss(Z, kineticEnergy, cut, x) ;
+      //      x = log(totalEnergy/electron_mass_c2);
+      loss = ComputeBremLoss(Z, kineticEnergy, cut) ;
       if (!isElectron) loss *= PositronCorrFactorLoss(Z, kineticEnergy, cut);
 
     // extrapolation for KineticEnergy>100 GeV
-    } else if(cut < thigh) {
-
-      loss = ComputeBremLoss(Z, thigh, cut, xhigh) ;
-      if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, cut) ;
-      rate = cut/kineticEnergy;
-      loss *= (1. + coef1*rate + coef2*rate*rate);
-      rate = cut/thigh;
-      loss /= (1.+coef1*rate+coef2*rate*rate);
-
     } else {
+      
+      //      G4double xhigh = log(thigh/electron_mass_c2);
+      G4double cuthigh = thigh*0.5;
 
-      loss = ComputeBremLoss(Z, thigh, 0.5*thigh, xhigh) ;
-      if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, 0.5*thigh) ;
-      rate = cut/kineticEnergy;
-      loss *= (1. + coef1*rate + coef2*rate*rate);
-      loss *= cut*factorHigh;
+      if (cut < thigh) {
+
+        loss = ComputeBremLoss(Z, thigh, cut) ;
+        if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, cut) ;
+        rate = cut/totalEnergy;
+        loss *= (1. + coef1*rate + coef2*rate*rate);
+        rate = cut/thigh;
+        loss /= (1.+coef1*rate+coef2*rate*rate);
+
+      } else {
+
+        loss = ComputeBremLoss(Z, thigh, cuthigh) ;
+        if (!isElectron) loss *= PositronCorrFactorLoss(Z, thigh, cuthigh) ;
+        rate = cut/totalEnergy;
+        loss *= (1. + coef1*rate + coef2*rate*rate);
+        loss *= cut*factorHigh;
+      }
     }
     loss *= natom;
 
@@ -262,7 +268,7 @@ G4double G4eBremsstrahlungModel::ComputeDEDX(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
-                                                 G4double Cut, G4double x)
+                                                 G4double Cut)
 
 // compute loss due to soft brems
 {
@@ -392,8 +398,8 @@ G4double G4eBremsstrahlungModel::CrossSection(const G4Material* material,
 {
   if(!particle) SetParticle(p);
   G4double cross = 0.0;
-  G4double tmax = G4std::min(maxEnergy, kineticEnergy);
-  G4double cut  = G4std::max(cutEnergy, minThreshold);
+  G4double tmax = std::min(maxEnergy, kineticEnergy);
+  G4double cut  = std::max(cutEnergy, minThreshold);
   if(cut >= tmax) return cross;
 
   const G4ElementVector* theElementVector = material->GetElementVector() ;
@@ -614,7 +620,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
-                                   G4double maxEnergy)
+                                   G4double tmax)
 // The emitted gamma energy is sampled using a parametrized formula from L. Urban.
 // This parametrization is derived from :
 //    cross-section values of Seltzer and Berger for electron energies 1 keV - 10 GeV,
@@ -628,8 +634,8 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
 //    (Nuc Phys 20(1960),15).
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double tmax = G4std::min(maxEnergy, kineticEnergy);
-  if(tmin >= tmax) return 0;
+  //  G4double tmax = std::min(maxEnergy, kineticEnergy);
+  //  if(tmin >= tmax) tmin = tmax;
 
 //
 // GEANT4 internal units.
@@ -654,6 +660,8 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
      bl10 = 1.19253E-01, bl11 = 4.07467E-02, bl12 =-1.30718E-03,
      bl20 =-1.59391E-02, bl21 = 7.27752E-03, bl22 =-1.94405E-04;
 
+  static const G4double tlow = 1.*MeV;
+
   G4double gammaEnergy;
   G4bool LPMOK = false;
   const G4Material* material = couple->GetMaterial();
@@ -668,10 +676,12 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
 
   // limits of the energy sampling
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
-  G4ThreeVector momentum = dp->GetMomentumDirection();
+  G4ThreeVector direction = dp->GetMomentumDirection();
   G4double xmin     = tmin/kineticEnergy;
   G4double xmax     = tmax/kineticEnergy;
-  G4double kappa    = log(xmax)/log(xmin);
+  G4double kappa    = 0.0;
+  if(xmax >= 1.) xmax = 1.;
+  else     kappa    = log(xmax)/log(xmin);
   G4double epsilmin = tmin/totalEnergy;
   G4double epsilmax = tmax/totalEnergy;
 
@@ -683,87 +693,101 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
   G4double U  = log(kineticEnergy/electron_mass_c2);
   G4double U2 = U*U;
 
+  // precalculated parameters
+  G4double ah, bh;
+  G4double screenfac = 0.0;
+
+  if (kineticEnergy > tlow) {
+       
+    G4double ah1 = ah10 + ZZ* (ah11 + ZZ* ah12);
+    G4double ah2 = ah20 + ZZ* (ah21 + ZZ* ah22);
+    G4double ah3 = ah30 + ZZ* (ah31 + ZZ* ah32);
+
+    G4double bh1 = bh10 + ZZ* (bh11 + ZZ* bh12);
+    G4double bh2 = bh20 + ZZ* (bh21 + ZZ* bh22);
+    G4double bh3 = bh30 + ZZ* (bh31 + ZZ* bh32);
+
+    ah = 1.   + (ah1*U2 + ah2*U + ah3) / (U2*U);
+    bh = 0.75 + (bh1*U2 + bh2*U + bh3) / (U2*U);
+
+    // limit of the screening variable
+    screenfac =
+       136.*electron_mass_c2/((anElement->GetIonisation()->GetZ3())*totalEnergy);
+    G4double screenmin = screenfac*epsilmin/(1.-epsilmin);
+
+    // Compute the maximum of the rejection function
+    G4double F1 = std::max(ScreenFunction1(screenmin) - FZ ,0.);
+    G4double F2 = std::max(ScreenFunction2(screenmin) - FZ ,0.);
+    grejmax = (F1 - epsilmin* (F1*ah - bh*epsilmin*F2))/(42.392 - FZ);
+
+  } else {  
+
+    G4double al0 = al00 + ZZ* (al01 + ZZ* al02);
+    G4double al1 = al10 + ZZ* (al11 + ZZ* al12);
+    G4double al2 = al20 + ZZ* (al21 + ZZ* al22);
+ 
+    G4double bl0 = bl00 + ZZ* (bl01 + ZZ* bl02);
+    G4double bl1 = bl10 + ZZ* (bl11 + ZZ* bl12);
+    G4double bl2 = bl20 + ZZ* (bl21 + ZZ* bl22);
+ 
+    ah = al0 + al1*U + al2*U2;
+    bh = bl0 + bl1*U + bl2*U2;
+
+    // Compute the maximum of the rejection function
+    grejmax = std::max(1. + xmin* (ah + bh*xmin), 1.+ah+bh);
+    G4double xm = -ah/(2.*bh);
+    if ( xmin < xm && xm < xmax) grejmax = std::max(grejmax, 1.+ xm* (ah + bh*xm));
+  }
+
   //
   //  sample the energy rate of the emitted gamma for electron kinetic energy > 1 MeV
   //
-
+ 
   do {
-   if (kineticEnergy > 1.*MeV)
-     {
-       // parameters
-       G4double ah1 = ah10 + ZZ* (ah11 + ZZ* ah12),
-                ah2 = ah20 + ZZ* (ah21 + ZZ* ah22),
-                ah3 = ah30 + ZZ* (ah31 + ZZ* ah32);
+    if (kineticEnergy > tlow) {
+      do {
+        q = G4UniformRand();
+        x = pow(xmin, q + kappa*(1.0 - q));
+        epsil = x*kineticEnergy/totalEnergy;
+        G4double screenvar = screenfac*epsil/(1.0-epsil);
+        G4double F1 = std::max(ScreenFunction1(screenvar) - FZ ,0.);
+        G4double F2 = std::max(ScreenFunction2(screenvar) - FZ ,0.);
+        migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));
+        greject = migdal*(F1 - epsil* (ah*F1 - bh*epsil*F2))/(42.392 - FZ);      
+	/*
+	if ( greject > grejmax ) {
+            G4cout << "### G4eBremsstrahlungModel Warning: Majoranta exceeded! " 
+                   << greject << " > " << grejmax
+                   << " x= " << x 
+		   << " e= " << kineticEnergy
+                   << G4endl;
+	}
+	*/
+	
+      } while( greject < G4UniformRand()*grejmax );
 
-       G4double bh1 = bh10 + ZZ* (bh11 + ZZ* bh12),
-                bh2 = bh20 + ZZ* (bh21 + ZZ* bh22),
-                bh3 = bh30 + ZZ* (bh31 + ZZ* bh32);
+    } else {  
 
-       G4double ah = 1.   + (ah1*U2 + ah2*U + ah3) / (U2*U);
-       G4double bh = 0.75 + (bh1*U2 + bh2*U + bh3) / (U2*U);
-
-       // limit of the screening variable
-       G4double screenfac =
-       136.*electron_mass_c2/((anElement->GetIonisation()->GetZ3())*totalEnergy);
-       G4double screenmin = screenfac*epsilmin/(1.-epsilmin);
-
-       // Compute the maximum of the rejection function
-       G4double F1 = G4std::max(ScreenFunction1(screenmin) - FZ ,0.);
-       G4double F2 = G4std::max(ScreenFunction2(screenmin) - FZ ,0.);
-       grejmax = (F1 - epsilmin* (F1*ah - bh*epsilmin*F2))/(42.392 - FZ);
-
-       // sample the energy rate of the emitted Gamma
-       G4double screenvar;
-
-       do {
-             q = G4UniformRand();
-             x = pow(xmin, q + kappa*(1.0 - q));
-             epsil = x*kineticEnergy/totalEnergy;
-             screenvar = screenfac*epsil/(1-epsil);
-             F1 = G4std::max(ScreenFunction1(screenvar) - FZ ,0.);
-             F2 = G4std::max(ScreenFunction2(screenvar) - FZ ,0.);
-             migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));
-             greject = migdal*(F1 - epsil* (ah*F1 - bh*epsil*F2))/(42.392 - FZ);      
-
-        }  while( greject < G4UniformRand()*grejmax );
-
+      do {
+        q = G4UniformRand();
+        x = pow(xmin, q + kappa*(1.0 - q));
+        migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));  
+        greject = migdal*(1. + x* (ah + bh*x));
+	/*
+	if ( greject > grejmax ) {
+	  G4cout << "### G4eBremsstrahlungModel Warning: Majoranta exceeded! " 
+                 << greject << " > " << grejmax 
+                 << " x= " << x 
+		 << " e= " << kineticEnergy
+                 << G4endl;
+	}
+	*/
+      } while( greject < G4UniformRand()*grejmax );
     }
-
-   else
-     {  
-       // sample the energy rate of the emitted gamma for electron kinetic energy < 1 MeV
-       //
-       // parameters
-       G4double al0 = al00 + ZZ* (al01 + ZZ* al02),
-                al1 = al10 + ZZ* (al11 + ZZ* al12),
-                al2 = al20 + ZZ* (al21 + ZZ* al22);
- 
-       G4double bl0 = bl00 + ZZ* (bl01 + ZZ* bl02),
-                bl1 = bl10 + ZZ* (bl11 + ZZ* bl12),
-                bl2 = bl20 + ZZ* (bl21 + ZZ* bl22);
- 
-       G4double al = al0 + al1*U + al2*U2;
-       G4double bl = bl0 + bl1*U + bl2*U2;
-
-       // Compute the maximum of the rejection function
-       grejmax = G4std::max(1. + xmin* (al + bl*xmin), 1.+al+bl);
-       G4double xm = -al/(2.*bl);
-       if ((xmin < xm)&&(xm < 1.)) grejmax = G4std::max(grejmax, 1.+ xm* (al + bl*xm));
-
-       // sample the energy rate of the emitted Gamma 
-
-       do {
-             q = G4UniformRand();
-             x = pow(xmin, q + kappa*(1.0 - q));
-             migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));  
-             greject = migdal*(1. + x* (al + bl*x));
-        }  while( greject < G4UniformRand()*grejmax );
-     }
   
     gammaEnergy = x*kineticEnergy; 
 
-    if(theLPMflag)
-      {
+    if (theLPMflag) {
      // take into account the supression due to the LPM effect
       if (G4UniformRand() <= SupressionFunction(material,kineticEnergy,gammaEnergy))
         LPMOK = true ;
@@ -771,10 +795,6 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
     else LPMOK = true ;
 
   } while (!LPMOK) ;
-
-
-  //protection: DO NOT PRODUCE a gamma with energy 0. !
-  if (gammaEnergy <= 0.) return 0; 
 
   //
   //  angles of the emitted gamma. ( Z - axis along the parent particle)
@@ -795,7 +815,7 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
   G4double phi = twopi * G4UniformRand() ;
 
   G4ThreeVector gammaDirection(sint*cos(phi),sint*sin(phi), cos(theta));
-  gammaDirection.rotateUz(momentum);
+  gammaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for the Gamma
   G4DynamicParticle* g = new G4DynamicParticle();
@@ -808,17 +828,13 @@ G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
+                             const G4MaterialCutsCouple*,
+                             const G4DynamicParticle*,
+                                   G4double,
+                                   G4double)
 {
-  G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
-  G4DynamicParticle* g = SampleSecondary(couple,dp,tmin,maxEnergy);
-  vdp->push_back(g);
-
-  return vdp;
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -832,14 +848,16 @@ const G4Element* G4eBremsstrahlungModel::SelectRandomAtom(
   G4int nElements = material->GetNumberOfElements();
   const G4ElementVector* theElementVector = material->GetElementVector();
   if(1 == nElements) return (*theElementVector)[0];
-  else if(1 > nElements) return 0;
 
   G4DataVector* dv = partialSumSigma[couple->GetIndex()];
   G4double rval = G4UniformRand()*((*dv)[nElements-1]);
   for (G4int i=0; i<nElements; i++) {
     if (rval <= (*dv)[i]) return (*theElementVector)[i];
   }
-  return (*theElementVector)[nElements-1];
+  G4cout << "G4eBremsstrahlungModel::SelectRandomAtom: WARNING !!! - No elements found in "
+         << material->GetName()
+         << G4endl;
+  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -874,16 +892,14 @@ G4double G4eBremsstrahlungModel::SupressionFunction(const G4Material* material,
       G4double LPMgEnergyLimit = totEnergySquare/LPMEnergy ;
       G4double LPMgEnergyLimit2 = LPMgEnergyLimit*LPMgEnergyLimit;
       G4double splim = LPMgEnergyLimit2/
-        (LPMgEnergyLimit2+MigdalConstant*totEnergySquare*
-                                   electronDensity) ;
+        (LPMgEnergyLimit2+MigdalConstant*totEnergySquare*electronDensity);
       G4double w = 1.+1./splim ;
-      G4double cnorm = 2./(sqrt(w*w+4.)-w) ;
 
       if ((1.-sp) < 1.e-6) w = s2lpm*(3.-sp);
       else                 w = s2lpm*(1.+1./sp);
 
-      supr = 0.5*cnorm*(sqrt(w*w+4.*s2lpm)-w)/sp ;
-    
+      supr = (sqrt(w*w+4.*s2lpm)-w)/(sqrt(w*w+4.)-w) ;
+      supr /= sp;    
     } 
     
   } 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.hh,v 1.1 2001/10/17 12:59:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeomTestSegment.hh,v 1.2 2003/06/16 16:54:35 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -43,7 +43,7 @@
 #include "G4ThreeVector.hh"
 #include "G4GeomTestPoint.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4VSolid;
 class G4GeomTestLogger;
@@ -74,7 +74,7 @@ class G4GeomTestSegment
     const G4VSolid * solid;
     const G4ThreeVector p0,v;
   
-    G4std::vector<G4GeomTestPoint> points;
+    std::vector<G4GeomTestPoint> points;
 };
 
 #endif

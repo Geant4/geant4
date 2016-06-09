@@ -215,13 +215,13 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
   
   if (_applyARM && _vShellNumber != -1) 
     {
-      G4int aZ = G4int(_discrDeexcitation->GetNucleus().GetZ());
+      G4int aZ = static_cast<G4int>(_discrDeexcitation->GetNucleus().GetZ());
       G4int eShell = _vShellNumber+1;
       if ( eShell > 0 ) {
 	G4AtomicDeexcitation* atomDeex = new G4AtomicDeexcitation();
 	// no auger electron for now
 	atomDeex->ActivateAugerElectronProduction(0);
-	G4std::vector<G4DynamicParticle*>* armProducts = atomDeex->GenerateParticles(aZ,eShell);
+	std::vector<G4DynamicParticle*>* armProducts = atomDeex->GenerateParticles(aZ,eShell);
 	G4DynamicParticle* aParticle;	
 	if (_verbose > 0)
 	  G4cout << " = BreakItUp = " << armProducts->size()
@@ -329,8 +329,8 @@ void G4PhotonEvaporation::CheckConservation(const G4Fragment & theInitialState,
     G4LorentzVector tmp = (*h)->GetMomentum();
     ProductsEnergy += tmp.e();
     ProductsMomentum += tmp.vect();
-    ProductsA += G4int((*h)->GetA());
-    ProductsZ += G4int((*h)->GetZ());
+    ProductsA += static_cast<G4int>((*h)->GetA());
+    ProductsZ += static_cast<G4int>((*h)->GetZ());
   }
 
   if (ProductsA != theInitialState.GetA()) {

@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPAngular.hh,v 1.7 2002/12/12 19:18:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPAngular.hh,v 1.8 2003/06/16 17:10:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPAngular_h
 #define G4NeutronHPAngular_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ReactionProduct.hh"
 #include "Randomize.hh"
 #include "G4NeutronHPLegendreStore.hh"
@@ -46,7 +46,7 @@ class G4NeutronHPAngular
   } 
   ~G4NeutronHPAngular(){}
   
-  void Init(G4std::ifstream & aDataFile);
+  void Init(std::ifstream & aDataFile);
   
   void SampleAndUpdate(G4ReactionProduct & aNeutron);
     

@@ -28,7 +28,7 @@ G4DiffractiveStringBuilder::G4DiffractiveStringBuilder()
    {
    }
 
-G4DiffractiveStringBuilder::G4DiffractiveStringBuilder(const G4DiffractiveStringBuilder &right)
+G4DiffractiveStringBuilder::G4DiffractiveStringBuilder(const G4DiffractiveStringBuilder &)
    {
    }
 

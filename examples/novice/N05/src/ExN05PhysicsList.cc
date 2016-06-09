@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PhysicsList.cc,v 1.7 2002/01/09 17:24:20 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN05PhysicsList.cc,v 1.8 2003/06/16 16:50:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -38,7 +38,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 #include "G4FastSimulationManagerProcess.hh"
 

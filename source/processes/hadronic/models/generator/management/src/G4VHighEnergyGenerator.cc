@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHighEnergyGenerator.cc,v 1.5 2002/12/12 19:17:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VHighEnergyGenerator.cc,v 1.6 2003/05/30 14:09:58 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"
@@ -31,7 +31,7 @@ G4VHighEnergyGenerator::G4VHighEnergyGenerator()
 {
 }
 
-G4VHighEnergyGenerator::G4VHighEnergyGenerator(const G4VHighEnergyGenerator &right)
+G4VHighEnergyGenerator::G4VHighEnergyGenerator(const G4VHighEnergyGenerator &)
 {
 }
 
@@ -41,19 +41,19 @@ G4VHighEnergyGenerator::~G4VHighEnergyGenerator()
 }
 
 
-const G4VHighEnergyGenerator & G4VHighEnergyGenerator::operator=(const G4VHighEnergyGenerator &right)
+const G4VHighEnergyGenerator & G4VHighEnergyGenerator::operator=(const G4VHighEnergyGenerator &)
 {
   G4Exception("G4VHighEnergyGenerator::operator= meant to not be accessable");
   return *this;
 }
 
 
-int G4VHighEnergyGenerator::operator==(const G4VHighEnergyGenerator &right) const
+int G4VHighEnergyGenerator::operator==(const G4VHighEnergyGenerator &) const
 {
   return 0;
 }
 
-int G4VHighEnergyGenerator::operator!=(const G4VHighEnergyGenerator &right) const
+int G4VHighEnergyGenerator::operator!=(const G4VHighEnergyGenerator &) const
 {
   return 1;
 }

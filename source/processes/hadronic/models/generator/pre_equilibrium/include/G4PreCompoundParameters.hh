@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundParameters.hh,v 1.9 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PreCompoundParameters.hh,v 1.10 2003/03/24 13:56:50 larazb Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 

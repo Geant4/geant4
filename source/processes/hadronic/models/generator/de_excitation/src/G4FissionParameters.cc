@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.cc,v 1.9 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FissionParameters.cc,v 1.11 2003/06/16 17:06:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -73,8 +73,8 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
     }
   
     if (w == 0.0) {
-	G4double w1 = G4std::max(1.03*wa - FasymAsym, 0.0001);
-	G4double w2 = G4std::max(1.0 - FsymA1A2*wa,   0.0001);
+	G4double w1 = std::max(1.03*wa - FasymAsym, 0.0001);
+	G4double w2 = std::max(1.0 - FsymA1A2*wa,   0.0001);
     
 	w = w1/w2;
 
@@ -84,25 +84,25 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
 }
 
 
-G4FissionParameters::G4FissionParameters(const G4FissionParameters &right)
+G4FissionParameters::G4FissionParameters(const G4FissionParameters &)
 {
     G4Exception("G4FissionParameters::copy_constructor meant to not be accessable");
 }
 
 
-const G4FissionParameters & G4FissionParameters::operator=(const G4FissionParameters &right)
+const G4FissionParameters & G4FissionParameters::operator=(const G4FissionParameters &)
 {
     G4Exception("G4FissionParameters::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4FissionParameters::operator==(const G4FissionParameters &right) const
+G4bool G4FissionParameters::operator==(const G4FissionParameters &) const
 {
     return false;
 }
 
-G4bool G4FissionParameters::operator!=(const G4FissionParameters &right) const
+G4bool G4FissionParameters::operator!=(const G4FissionParameters &) const
 {
     return true;
 }

@@ -21,27 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.hh,v 1.17 2003/03/10 10:50:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- G4hIonisation physics process -----------
-//                by V. Grichine, 30 Nov 1997 
-// ************************************************************
-// It is the first implementation of the NEW IONISATION     
-// PROCESS. ( delta rays + continuous energy loss)
-// It calculates the ionisation for charged hadrons.      
-// ************************************************************
 //
-// corrected by V. Grichine on 24/11/97
-// 12.07.00 V.Grichine GetFreePath and GetdEdx were added
-// 22.09.00 V.Grichine and K.Assamagan new function GetEnergyTransfer(G4d,G4i)
-// 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// R&D since 1996: Vladimir.Grichine@cern.ch
+//
+//
+// 29.04.03 V.Grichine, corrections for cuts per region
+// 28.05.01 V. Ivanchenko minor changes to provide ANSI -wall compilation 
+// 22.09.00 V. Grichine and K.Assamagan new function GetEnergyTransfer(G4d,G4i)
+// 12.07.00 V. Grichine GetFreePath and GetdEdx were added
+// 24.11.97 V. Grichine corrections 
 
  
 #ifndef G4PAIonisation_h
@@ -59,12 +52,17 @@
 #include "G4PhysicsLinearVector.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsVector.hh"
+class G4LogicalVolume;
+class G4MaterialCutsCouple;
 
 
 class G4PAIonisation : public G4VPAIenergyLoss
 
 {
   public:
+
+     G4PAIonisation( G4LogicalVolume* lV,
+                     const G4String& processName = "PAIonisation");
 
      G4PAIonisation( const G4String& materialName,
                      const G4String& processName = "PAIonisation");
@@ -88,7 +86,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
 
-     G4VParticleChange *PostStepDoIt( const G4Track& track,
+     G4VParticleChange* PostStepDoIt( const G4Track& track,
                                       const G4Step& Step      ) ;
 
 
@@ -127,11 +125,17 @@ class G4PAIonisation : public G4VPAIenergyLoss
     G4double GetLossWithFluct(G4double Step,
                               const G4DynamicParticle *aParticle,
                               G4Material *aMaterial) ;
+    G4double GetAlongStepDelta(G4double Step,
+                              const G4DynamicParticle *aParticle,
+                              G4Material *aMaterial) ;
 
     G4double GetRandomEnergyTransfer( G4double scaledTkin ) ;
-    G4double GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer  ) ;
+    G4double GetPostStepTransfer( G4double scaledTkin ) ;
 
-  //    static
+    G4double GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer  ) ;
+    G4double GetdNdxCut( G4int iPlace, G4double cutTransfer) ;
+
+  //    static                                   
 
     static G4double GetMaxKineticEnergy();
     static G4double GetMinKineticEnergy();
@@ -144,17 +148,17 @@ class G4PAIonisation : public G4VPAIenergyLoss
 
     // Compute Sandia photoabsorption coefficient matrix
     void ComputeSandiaPhotoAbsCof() ;
+ 
 
   private:
 
-    G4PhysicsLogVector* GetProtonEnergyVector();
-
-  private:
 
     //  private data members
-
+    G4LogicalVolume*  fLogicalVolume;
     size_t fMatIndex ;  // index of material, where dE/dx is calculated
-
+    size_t fMatCutsIndex ;  // index of material, where dE/dx is calculated
+    G4Material* fMaterial;
+    G4MaterialCutsCouple* fMaterialCutsCouple;
     G4PhysicsTable* theMeanFreePathTable;
 
     // LowestKineticEnergy = lower limit of particle kinetic energy
@@ -166,7 +170,14 @@ class G4PAIonisation : public G4VPAIenergyLoss
     static const G4double HighestKineticEnergy;
     static G4int TotBin;
     static G4PhysicsLogVector* fProtonEnergyVector ;
+    G4PhysicsLogVector* fLambdaVector ;
+    G4PhysicsLogVector* fdNdxCutVector ;
+    G4PhysicsLogVector* fdEdxVector ;
 
+    // cut in range
+
+    G4double* CutInRange ;
+    G4double* lastCutInRange ;
 
     // particles , cuts in kinetic energy
 
@@ -174,7 +185,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
     const G4Proton* theProton;
     const G4AntiProton* theAntiProton;
 
-    const G4std::vector<G4double>* DeltaCutInKineticEnergy ;
+    const std::vector<G4double>* DeltaCutInKineticEnergy ;
 
     G4double DeltaCutInKineticEnergyNow ;
 
@@ -186,6 +197,9 @@ class G4PAIonisation : public G4VPAIenergyLoss
 
 };
 
+ 
 #include "G4PAIonisation.icc"
-
+ 
 #endif
+ 
+

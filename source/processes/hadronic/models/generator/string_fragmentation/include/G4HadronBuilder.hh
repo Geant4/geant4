@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.hh,v 1.2 2001/10/30 08:33:26 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HadronBuilder.hh,v 1.3 2003/06/16 17:09:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -37,7 +37,7 @@
 #define G4HadronBuilder_h 1
 
 #include "globals.hh"
-#include <g4std/vector>
+#include <vector>
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleDefinition.hh"
 
@@ -52,8 +52,8 @@ public:
 
 //  ctor
      G4HadronBuilder(G4double mesonMix, G4double barionMix,
-		     G4std::vector<double> scalarMesonMix,
-		     G4std::vector<double> vectorMesonMix); 
+		     std::vector<double> scalarMesonMix,
+		     std::vector<double> vectorMesonMix); 
 
 private:
 
@@ -67,8 +67,8 @@ private:
      
      G4double mesonSpinMix;
      G4double barionSpinMix;
-     G4std::vector<double> scalarMesonMixings;
-     G4std::vector<double> vectorMesonMixings;
+     std::vector<double> scalarMesonMixings;
+     std::vector<double> vectorMesonMixings;
           
 };
 

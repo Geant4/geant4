@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02PVolumeStore.cc,v 1.1 2002/11/08 14:52:17 dressel Exp $
+// $Id: B02PVolumeStore.cc,v 1.2 2003/06/16 16:47:19 gunter Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -32,7 +32,7 @@
 // ----------------------------------------------------------------------
 
 #include "B02PVolumeStore.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 
 #include "G4VPhysicalVolume.hh"
@@ -78,14 +78,14 @@ G4String B02PVolumeStore::GetPNames() const {
        it != fSetGeometryCell.end(); ++it) {
     const G4VPhysicalVolume &vol = it->GetPhysicalVolume();
     char st[200];
-    G4std::ostrstream os(st,200);
+    std::ostrstream os(st,200);
     os << vol.GetName() << "_" << it->GetReplicaNumber() 
        << "\n" << '\0';
     G4String cellname(st);
     
     //    G4String cellname(vol.GetName());
     //    cellname += G4String("_");
-    //    cellname += G4std::str(it->GetReplicaNumber());
+    //    cellname += std::str(it->GetReplicaNumber());
 
     NameString += cellname;
   }

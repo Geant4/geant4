@@ -127,6 +127,21 @@
   metalAl->AddElement(Al, 1);
 
 
+  // photocathode aluminium
+  G4Material* cathmetalAl = new G4Material
+    (name="CathodeMetalAluminium", density=2.700*g/cm3, ncomponents=1);
+  cathmetalAl->AddElement(Al, 1);
+
+  G4double cathmetal_PP[NUMENTRIES]   = { 5.0*eV, 6.69*eV, 7.50*eV };
+  G4double cathmetal_RIND[NUMENTRIES] = { 1.51, 1.57, 1.61 };     // ref index
+  G4double cathmetal_ABSL[NUMENTRIES] = { 1.e-20*m,  1.e-20*m,  1.e-20*m };// atten length
+//  G4double cathmetal_ABSL[NUMENTRIES] = { 3.0*cm, 3.0*cm, 3.0*cm };// atten length
+  G4MaterialPropertiesTable *cathmetal_mt = new G4MaterialPropertiesTable();
+  cathmetal_mt->AddProperty("RINDEX", cathmetal_PP, cathmetal_RIND,NUMENTRIES);
+  cathmetal_mt->AddProperty("ABSLENGTH", cathmetal_PP, cathmetal_ABSL, NUMENTRIES);
+  cathmetalAl->SetMaterialPropertiesTable(cathmetal_mt);
+
+
   // iron
   G4Element* Fe = new G4Element
     (name="Iron"  ,symbol="Fe" , z= 26., a=55.85*g/mole);  
@@ -246,7 +261,8 @@ jacketflange_mat = ssteel;
       vacuum_mat = vacuum;
       copper_mat = metalCu;
       vessel_mat = ssteel;
-         GXe_mat = GXe;
+//         GXe_mat = GXe;
+         GXe_mat = LXe;
     CuShield_mat = metalCu;
          LXe_mat = LXe;
        alpha_mat = metalPb;
@@ -255,4 +271,4 @@ jacketflange_mat = ssteel;
       mirror_mat = metalAl;
         grid_mat = LXe;
          pmt_mat = quartz;
-      phcath_mat = metalAl;
+      phcath_mat = cathmetalAl;

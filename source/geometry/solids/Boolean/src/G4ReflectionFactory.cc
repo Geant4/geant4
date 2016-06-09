@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.6 2003/03/25 17:03:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ReflectionFactory.cc,v 1.9 2003/06/12 12:47:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
 
@@ -82,6 +82,7 @@ G4ReflectionFactory::G4ReflectionFactory()
   // Protected singleton constructor.
   // ---
 
+  fScalePrecision = 10.*kCarTolerance;
   fInstance = this;
 }
 
@@ -543,6 +544,14 @@ G4bool G4ReflectionFactory::IsReflection(const G4Scale3D& scale) const
 
 //_____________________________________________________________________________
 
+const G4ReflectedVolumesMap&
+G4ReflectionFactory::GetReflectedVolumesMap() const
+{
+  return fReflectedLVMap;
+}
+
+//_____________________________________________________________________________
+
 void G4ReflectionFactory::PrintConstituentLVMap()
 {
   // temporary - for debugging purpose
@@ -571,7 +580,7 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
     for (G4int j=0; j<4; j++) 
       diff += abs(scale(i,j) - fScale(i,j));  
 
-  if (diff > kCarTolerance*10.)
+  if (diff > fScalePrecision)
   {
     G4cout << "ERROR - G4ReflectionFactory::CheckScale()" << G4endl
            << "        Unexpected scale. Difference: " << diff << G4endl;
@@ -580,6 +589,20 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
     G4Exception("G4ReflectionFactory::CheckScale() - unexpected scale");
   }
 }    
+
+//_____________________________________________________________________________
+
+void G4ReflectionFactory::SetScalePrecision(G4double scaleValue)
+{
+  fScalePrecision = scaleValue;
+}
+
+//_____________________________________________________________________________
+
+G4double G4ReflectionFactory::GetScalePrecision() const
+{
+  return fScalePrecision;
+}
 
 //_____________________________________________________________________________
 

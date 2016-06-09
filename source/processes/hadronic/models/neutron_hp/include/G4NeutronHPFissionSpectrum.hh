@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionSpectrum.hh,v 1.7 2002/12/12 19:18:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPFissionSpectrum.hh,v 1.8 2003/06/16 17:10:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPFissionSpectrum_h
 #define G4NeutronHPFissionSpectrum_h 1
@@ -31,7 +31,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4VNeutronHPEDis.hh"
 
 // we will need a List of these .... one per term.
@@ -47,7 +47,7 @@ class G4NeutronHPFissionSpectrum : public G4VNeutronHPEDis
   {
   }
   
-  inline void Init(G4std::ifstream & aDataFile)
+  inline void Init(std::ifstream & aDataFile)
   {
     theFractionalProb.Init(aDataFile, eV);
     theThetaDist.Init(aDataFile, eV);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceSD.hh,v 1.3 2001/11/29 11:19:17 griccard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: GammaRayTelAnticoincidenceSD.hh,v 1.4 2003/05/30 15:08:47 flongo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -54,7 +54,7 @@ public:
   ~GammaRayTelAnticoincidenceSD();
   
   void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step* astep,G4TouchableHistory* ROHist);
+  G4bool ProcessHits(G4Step* astep,G4TouchableHistory*);
   void EndOfEvent(G4HCofThisEvent*);
   void clear();
   void DrawAll();

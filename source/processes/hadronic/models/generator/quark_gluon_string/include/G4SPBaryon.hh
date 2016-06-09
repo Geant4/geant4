@@ -47,7 +47,7 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4SPPartonInfo.hh"
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 
 class G4SPBaryon
@@ -93,7 +93,7 @@ class G4SPBaryon
   private:
   
   G4ParticleDefinition * theDefinition;
-  G4std::vector<G4SPPartonInfo *> thePartonInfo;
+  std::vector<G4SPPartonInfo *> thePartonInfo;
 };
 
 #endif

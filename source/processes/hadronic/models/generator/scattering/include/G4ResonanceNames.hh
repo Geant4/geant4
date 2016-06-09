@@ -39,8 +39,8 @@
 #define G4RESONANCENAMES_HH
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 
 class G4ParticleDefinition;
 
@@ -56,17 +56,17 @@ public:
   G4bool operator==(const G4ResonanceNames& right) const;
   G4bool operator!=(const G4ResonanceNames& right) const;
 
-  const G4std::vector<G4String> NstarNames() const { return nameNstar; }
+  const std::vector<G4String> NstarNames() const { return nameNstar; }
 
-  const G4std::vector<G4String> DeltastarNames() const { return nameDeltastar; }
+  const std::vector<G4String> DeltastarNames() const { return nameDeltastar; }
 
-  const G4std::vector<G4String> DeltaNames() const { return nameDelta; }
+  const std::vector<G4String> DeltaNames() const { return nameDelta; }
 
-  const G4std::vector<G4String> LambdaNames() const { return nameLambda; }
+  const std::vector<G4String> LambdaNames() const { return nameLambda; }
 
-  const G4std::vector<G4String> SigmaNames() const { return nameSigma; }
+  const std::vector<G4String> SigmaNames() const { return nameSigma; }
 
-  const G4std::vector<G4String> XiNames() const { return nameSigma; }
+  const std::vector<G4String> XiNames() const { return nameSigma; }
 
   const G4String ShortName(const G4String& name);
 
@@ -80,18 +80,18 @@ private:
   G4ResonanceNames(const G4ResonanceNames& right);
   G4ResonanceNames& operator=(const G4ResonanceNames& right);
 
-  G4std::vector<G4String> nameNstar;
-  G4std::vector<G4String> nameDeltastar;
-  G4std::vector<G4String> nameDelta;
-  G4std::vector<G4String> nameLambda;
-  G4std::vector<G4String> nameSigma;
-  G4std::vector<G4String> nameXi;
+  std::vector<G4String> nameNstar;
+  std::vector<G4String> nameDeltastar;
+  std::vector<G4String> nameDelta;
+  std::vector<G4String> nameLambda;
+  std::vector<G4String> nameSigma;
+  std::vector<G4String> nameXi;
 
   // Lowest resonance among each category (N*, Delta, Lambda, Sigma, Xi)
-  G4std::map<G4String, G4ParticleDefinition*, G4std::less<G4String> > lowResMap;
+  std::map<G4String, G4ParticleDefinition*, std::less<G4String> > lowResMap;
 
   // Resonance short names
-  G4std::map<G4String, G4String, G4std::less<G4String> > shortMap;
+  std::map<G4String, G4String, std::less<G4String> > shortMap;
 
 };
   

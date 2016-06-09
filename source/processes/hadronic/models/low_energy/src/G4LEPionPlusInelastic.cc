@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEPionPlusInelastic.cc,v 1.8 2002/12/12 19:18:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LEPionPlusInelastic.cc,v 1.9 2003/06/16 17:10:22 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
  // Hadronic Process: PionPlus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Nov-1996
@@ -169,7 +169,7 @@
       for( i=0; i<numSec; ++i )protnorm[i] = 0.0;
       counter = -1;
       for( np=0; np<(numSec/3); ++np ) {
-        for( nm=G4std::max(0,np-2); nm<=np; ++nm ) {
+        for( nm=std::max(0,np-2); nm<=np; ++nm ) {
           for( nz=0; nz<numSec/3; ++nz ) {
             if( ++counter < numMul ) {
               nt = np+nm+nz;
@@ -185,7 +185,7 @@
       for( i=0; i<numSec; ++i )neutnorm[i] = 0.0;
       counter = -1;
       for( np=0; np<numSec/3; ++np ) {
-        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm ) {
+        for( nm=std::max(0,np-1); nm<=(np+1); ++nm ) {
           for( nz=0; nz<numSec/3; ++nz ) {
             if( ++counter < numMul ) {
               nt = np+nm+nz;
@@ -218,7 +218,7 @@
       // charge exchange reaction is included in inelastic cross section
       
       const G4double cech[] = {1.,0.95,0.79,0.32,0.19,0.16,0.14,0.12,0.10,0.08};
-      G4int iplab = G4int(G4std::min( 9.0, pOriginal/GeV*5.0 ));
+      G4int iplab = G4int(std::min( 9.0, pOriginal/GeV*5.0 ));
       if( G4UniformRand() <= cech[iplab] )
       {
         if( targetParticle.GetDefinition() == aNeutron )
@@ -238,7 +238,7 @@
       
       nm = np = nz = 0;
       if( targetParticle.GetDefinition() == aProton ) {
-        test = exp( G4std::min( expxu, G4std::max( expxl, -sqr(1.0+b[0])/(2.0*c*c) ) ) );
+        test = exp( std::min( expxu, std::max( expxl, -sqr(1.0+b[0])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test;        
         if( G4UniformRand() < w0/(w0+wp) )
@@ -246,10 +246,10 @@
         else
           np = 1;
       } else { // target is a neutron
-        test = exp( G4std::min( expxu, G4std::max( expxl, -sqr(1.0+b[1])/(2.0*c*c) ) ) );
+        test = exp( std::min( expxu, std::max( expxl, -sqr(1.0+b[1])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test;        
-        test = exp( G4std::min( expxu, G4std::max( expxl, -sqr(-1.0+b[1])/(2.0*c*c) ) ) );
+        test = exp( std::min( expxu, std::max( expxl, -sqr(-1.0+b[1])/(2.0*c*c) ) ) );
         wm = test;
         wt = w0+wp+wm;
         wp = w0+wp;
@@ -274,12 +274,12 @@
       if( targetParticle.GetDefinition() == aProton ) {
         counter = -1;
         for( np=0; (np<numSec/3) && (ran>=excs); ++np ) {
-          for( nm=G4std::max(0,np-2); (nm<=np) && (ran>=excs); ++nm ) {
+          for( nm=std::max(0,np-2); (nm<=np) && (ran>=excs); ++nm ) {
             for( nz=0; (nz<numSec/3) && (ran>=excs); ++nz ) {
               if( ++counter < numMul ) {
                 nt = np+nm+nz;
                 if( nt > 0 ) {
-                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 ) {
                     if( test >= 1.0e-10 )excs += dum*test;
@@ -300,12 +300,12 @@
       } else { // target must be a neutron
         counter = -1;
         for( np=0; (np<numSec/3) && (ran>=excs); ++np ) {
-          for( nm=G4std::max(0,np-1); (nm<=(np+1)) && (ran>=excs); ++nm ) {
+          for( nm=std::max(0,np-1); (nm<=(np+1)) && (ran>=excs); ++nm ) {
             for( nz=0; (nz<numSec/3) && (ran>=excs); ++nz ) {
               if( ++counter < numMul ) {
                 nt = np+nm+nz;
                 if( (nt>=1) && (nt<=numSec) ) {
-                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 ) {
                     if( test >= 1.0e-10 )excs += dum*test;

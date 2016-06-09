@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TheoFSGenerator.cc,v 1.10 2003/02/04 10:16:02 jwellisc Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TheoFSGenerator.cc,v 1.12 2003/06/16 17:06:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4TheoFSGenerator
 #include "G4DynamicParticle.hh"
@@ -35,7 +35,7 @@ G4TheoFSGenerator::G4TheoFSGenerator()
  theParticleChange = new G4ParticleChange;
 }
 
-G4TheoFSGenerator::G4TheoFSGenerator(const G4TheoFSGenerator &right)
+G4TheoFSGenerator::G4TheoFSGenerator(const G4TheoFSGenerator &) : G4HadronicInteraction()
 {
 }
 
@@ -46,19 +46,19 @@ G4TheoFSGenerator::~G4TheoFSGenerator()
 }
 
 
-const G4TheoFSGenerator & G4TheoFSGenerator::operator=(const G4TheoFSGenerator &right)
+const G4TheoFSGenerator & G4TheoFSGenerator::operator=(const G4TheoFSGenerator &)
 {
   G4Exception("G4CrossSectionBase::operator= meant to not be accessable");
   return *this;
 }
 
 
-int G4TheoFSGenerator::operator==(const G4TheoFSGenerator &right) const
+int G4TheoFSGenerator::operator==(const G4TheoFSGenerator &) const
 {
   return 0;
 }
 
-int G4TheoFSGenerator::operator!=(const G4TheoFSGenerator &right) const
+int G4TheoFSGenerator::operator!=(const G4TheoFSGenerator &) const
 {
   return 1;
 }
@@ -86,7 +86,7 @@ G4VParticleChange * G4TheoFSGenerator::ApplyYourself(const G4Track & thePrimary,
   
   G4ReactionProductVector * theTransportResult = NULL;
   G4int hitCount = 0;
-  const G4std::vector<G4Nucleon *> & they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
+  const std::vector<G4Nucleon *> & they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
   for(size_t them=0; them<they.size(); them++)
   {
     if(they[them]->AreYouHit()) hitCount ++;

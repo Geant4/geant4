@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UnionSolid.hh,v 1.7 2002/10/28 11:36:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4UnionSolid

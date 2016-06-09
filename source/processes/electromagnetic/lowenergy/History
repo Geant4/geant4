@@ -1,4 +1,4 @@
-$Id: History,v 1.180 2003/04/26 19:06:24 vnivanch Exp $
+$Id: History,v 1.184 2003/06/25 14:26:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.06-2003   G.Cosmo, tag emlowen-V05-01-04
+             Added disclaimer of liability where needed.
+             Fixed argument to pow() in G4LinLogLogInterpolation.cc
+             and G4LogLogInterpolation.cc to allow for porting on .NET 7.1 compiler.
+
+20.05-2003   MGP, tag emlowen-V05-01-03
+             Removed memory leaks in G4PenelopeCompton and 
+             G4PenelopeBremsstrahlung
+             Corrected design flaw in private interface of 
+             G4eBremsstrahlungSpectrum
+
+20.05-2003   MGP, tag emlowen-V05-01-02
+             Design iteration in G4LowEnergyBremsstrahlung: abstract class for 
+             angular distribution + implementation in G4ModifiedTsai
+             (physics unchanged)
+
+20.05-2003   MGP, tag emlowen-V05-01-01
+             G4PenelopeCompton triggers atomic relaxation
+
+20.05-2003   MGP, tag emlowen-V05-01-00
+             Removed compilation warnings related to config-V05-01-00
 
 26.04-2003   VI, tag emlowen-V05-00-17
              Fixes of stepLimit 

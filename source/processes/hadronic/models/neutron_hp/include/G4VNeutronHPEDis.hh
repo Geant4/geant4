@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNeutronHPEDis.hh,v 1.7 2002/12/12 19:18:17 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VNeutronHPEDis.hh,v 1.8 2003/06/16 17:11:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4VNeutronHPEDis_h
 #define G4VNeutronHPEDis_h 1
@@ -31,7 +31,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4VNeutronHPEDis
 {
@@ -43,7 +43,7 @@ class G4VNeutronHPEDis
   {
   }
   
-  virtual void Init(G4std::ifstream & theData) = 0;
+  virtual void Init(std::ifstream & theData) = 0;
   
   virtual G4double GetFractionalProbability(G4double anEnergy) = 0;
   

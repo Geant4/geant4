@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh,v 1.14 2002/11/27 12:32:32 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VVisCommand.hh,v 1.15 2003/06/16 17:14:10 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -33,7 +33,7 @@
 #include "G4VisManager.hh"
 #include "G4UImessenger.hh"
 #include "G4ThreeVector.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4UIcommand;
 class G4UIcmdWithAString;
@@ -59,13 +59,13 @@ public:
 
 protected:
   static G4VisManager* fpVisManager;
-  static  G4std::vector<G4UIcommand*> sceneNameCommands;
-  typedef G4std::vector<G4UIcommand*>::iterator sceneNameCommandsIterator; 
-  static  G4std::vector<G4UIcommand*> sceneHandlerNameCommands;
-  typedef G4std::vector<G4UIcommand*>::iterator
+  static  std::vector<G4UIcommand*> sceneNameCommands;
+  typedef std::vector<G4UIcommand*>::iterator sceneNameCommandsIterator; 
+  static  std::vector<G4UIcommand*> sceneHandlerNameCommands;
+  typedef std::vector<G4UIcommand*>::iterator
     sceneHandlerNameCommandsIterator;
-  static  G4std::vector<G4UIcommand*> viewerNameCommands;
-  typedef G4std::vector<G4UIcommand*>::iterator viewerNameCommandsIterator; 
+  static  std::vector<G4UIcommand*> viewerNameCommands;
+  typedef std::vector<G4UIcommand*>::iterator viewerNameCommandsIterator; 
 };
 
 #include "G4VVisCommand.icc"

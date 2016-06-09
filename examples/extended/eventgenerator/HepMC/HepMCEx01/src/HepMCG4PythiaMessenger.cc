@@ -23,13 +23,13 @@
 // ====================================================================
 //
 //   HepMCG4PythiaMessenger.cc
-//   $Id: HepMCG4PythiaMessenger.cc,v 1.1 2002/05/28 14:00:40 murakami Exp $
+//   $Id: HepMCG4PythiaMessenger.cc,v 1.2 2003/06/16 16:48:17 gunter Exp $
 //
 // ====================================================================
 #include "HepMCG4PythiaMessenger.hh"
 #include "HepMCG4PythiaInterface.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
@@ -147,7 +147,7 @@ void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command,
 
   } else if (command == cpyinit) { // /pyinit ...
     const char* strvaluelist= newValues.c_str();
-    G4std::istrstream is((char*)strvaluelist);
+    std::istrstream is((char*)strvaluelist);
     G4String sframe, sbeam, starget; G4double dwin;
     is >> sframe >> sbeam >> starget >> dwin;
     gen-> CallPyinit(sframe, sbeam, starget, dwin);
@@ -169,14 +169,14 @@ void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command,
 
   } else if (command == cpyrget) { // /pyrget ...
     const char* strvaluelist= newValues.c_str();
-    G4std::istrstream is((char*)strvaluelist);
+    std::istrstream is((char*)strvaluelist);
     G4int lun, move;
     is >> lun >> move;
     gen-> CallPyrget(lun, move);
 
   } else if (command == cpyrset) { // /pyrset ...
     const char* strvaluelist= newValues.c_str();
-    G4std::istrstream is((char*)strvaluelist);
+    std::istrstream is((char*)strvaluelist);
     G4int lun, move;
     is >> lun >> move;
     gen-> CallPyrset(lun, move);
@@ -187,7 +187,7 @@ void HepMCG4PythiaMessenger::SetNewValue(G4UIcommand* command,
       gen-> PrintRandomStatus();
     } else {
       // to a file (overwrite mode)
-      G4std::ofstream ofs;
+      std::ofstream ofs;
       ofs.open(s.c_str(), std::ios::out);  
       //ofs.open(randomStatusFileName.c_str(), std::ios::out|std::ios::app);
       ofs.setf(std::ios::fixed | std::ios::showpoint);

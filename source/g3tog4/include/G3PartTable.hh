@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3PartTable.hh,v 1.8 2001/07/11 09:58:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3PartTable.hh,v 1.9 2003/06/16 16:50:41 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------
 // Class description:
@@ -34,7 +34,7 @@
 
 #ifndef G3PARTTABLE_HH
 #define G3PARTTABLE_HH 1
-#include "g4std/map"
+#include <map>
 #include "G4ParticleDefinition.hh"
 
 class G3PartTable
@@ -50,7 +50,7 @@ public:  // with description
 
 private:
 
-  G4std::map<G4String, G4ParticleDefinition*, G4std::less<G4String> > PTD;
+  std::map<G4String, G4ParticleDefinition*, std::less<G4String> > PTD;
   void HashID(G4int partid, G4String* _HID);
   void HashID(G4int partid, G4String& _HID);
 };

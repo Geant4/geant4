@@ -37,6 +37,7 @@
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added creation time evaluation for products of evaporation
+//        02 May 2003,   Vladimir Ivanchenko change interface to G4NuclearlevelManager
 //      
 // -------------------------------------------------------------------
 //
@@ -52,20 +53,20 @@
 //
 
 G4ContinuumGammaTransition::G4ContinuumGammaTransition(
-                            const G4NuclearLevelManager& levelManager,
+                            const G4NuclearLevelManager* levelManager,
 			    G4int Z, G4int A,
 			    G4double excitation,
 			    G4int verbose):
   _nucleusA(A), _nucleusZ(Z), _excitation(excitation), _levelManager(levelManager) 
 {
-  const G4PtrLevelVector* levels = levelManager.GetLevels();
+  const G4PtrLevelVector* levels = _levelManager->GetLevels();
   G4double eTolerance = 0.;
   if (levels != 0)
   {
-    G4int lastButOne = levelManager.NumberOfLevels() - 2;
+    G4int lastButOne = _levelManager->NumberOfLevels() - 2;
     if (lastButOne >= 0)
     {
-      eTolerance = levelManager.MaxLevelEnergy() - levels->operator[](lastButOne)->Energy();
+      eTolerance = _levelManager->MaxLevelEnergy() - levels->operator[](lastButOne)->Energy();
       if (eTolerance < 0.) eTolerance = 0.;
     }
   }
@@ -74,13 +75,13 @@ G4ContinuumGammaTransition::G4ContinuumGammaTransition(
   _eGamma = 0.;
   _gammaCreationTime = 0.;
 
-  _maxLevelE = levelManager.MaxLevelEnergy() + eTolerance;
-  _minLevelE = levelManager.MinLevelEnergy();
+  _maxLevelE = _levelManager->MaxLevelEnergy() + eTolerance;
+  _minLevelE = _levelManager->MinLevelEnergy();
 
   // Energy range for photon generation; upper limit is defined 5*Gamma(GDR) from GDR peak
   _eMin = 0.001 * MeV;
   // Giant Dipole Resonance energy
-  G4double energyGDR = (40.3 / pow(_nucleusA,0.2) ) * MeV;
+  G4double energyGDR = (40.3 / pow(G4double(_nucleusA),0.2) ) * MeV;
   // Giant Dipole Resonance width
   G4double widthGDR = 0.30 * energyGDR;
   // Extend 
@@ -138,7 +139,7 @@ void G4ContinuumGammaTransition::SelectGamma()
   
   if (finalExcitation < _maxLevelE && finalExcitation > 0.) 
     {
-      G4double levelE = _levelManager.NearestLevel(finalExcitation)->Energy();
+      G4double levelE = _levelManager->NearestLevel(finalExcitation)->Energy();
       G4double diff = finalExcitation - levelE;
       _eGamma = _eGamma + diff;
     }  
@@ -196,7 +197,7 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
   //  G4double sigma0 = 2.5 * _nucleusA * millibarn;  
   G4double sigma0 = 2.5 * _nucleusA;  
 
-  G4double Egdp = (40.3 / pow(_nucleusA,0.2) )*MeV;
+  G4double Egdp = (40.3 / pow(G4double(_nucleusA),0.2) )*MeV;
   G4double GammaR = 0.30 * Egdp;
  
   G4double normC = 1.0 / (pi * hbarc)*(pi * hbarc);
@@ -223,7 +224,7 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
 G4double G4ContinuumGammaTransition::GammaTime()
 {
 
-  G4double GammaR = 0.30 * (40.3 / pow(_nucleusA,0.2) )*MeV;
+  G4double GammaR = 0.30 * (40.3 / pow(G4double(_nucleusA),0.2) )*MeV;
   G4double tau = hbar_Planck/GammaR;
 
   G4double tMin = 0;

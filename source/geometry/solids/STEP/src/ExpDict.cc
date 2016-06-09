@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: ExpDict.cc,v 1.6 2000/11/20 18:14:56 gcosmo Exp $  */ 
+/* $Id: ExpDict.cc,v 1.7 2003/06/06 17:07:32 gcosmo Exp $  */ 
 #include <memory.h>
 #include <math.h>
 #include <stdio.h>
@@ -134,7 +134,7 @@ int Explicit_item_id__set::Index (Explicit_item_id_ptr v) {
 
 Explicit_item_id_ptr& Explicit_item_id__set::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }
@@ -226,7 +226,7 @@ int Implicit_item_id__set::Index (Implicit_item_id_ptr v) {
 
 Implicit_item_id_ptr& Implicit_item_id__set::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }
@@ -318,7 +318,7 @@ int Interface_spec__set::Index (Interface_spec_ptr v) {
 
 Interface_spec_ptr& Interface_spec__set::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }
@@ -406,7 +406,7 @@ Schema::AddProcedure(const char * p)
 
 // the whole schema
 void 
-Schema::GenerateExpress(G4std::ostream& out) const
+Schema::GenerateExpress(std::ostream& out) const
 {
     SCLstring tmp;
     out << G4endl << "(* Generating: " << Name() << " *)" << G4endl;
@@ -453,7 +453,7 @@ Schema::GenerateExpress(G4std::ostream& out) const
 
 // USE, REFERENCE definitions
 void 
-Schema::GenerateUseRefExpress(G4std::ostream& out) const
+Schema::GenerateUseRefExpress(std::ostream& out) const
 {
     int i,k;
     int intf_count;
@@ -551,7 +551,7 @@ Schema::GenerateUseRefExpress(G4std::ostream& out) const
 
 // TYPE definitions
 void 
-Schema::GenerateTypesExpress(G4std::ostream& out) const
+Schema::GenerateTypesExpress(std::ostream& out) const
 {
     TypeDescItr tdi(_typeList);
     tdi.ResetItr();
@@ -567,7 +567,7 @@ Schema::GenerateTypesExpress(G4std::ostream& out) const
 
 // Entity definitions
 void 
-Schema::GenerateEntitiesExpress(G4std::ostream& out) const
+Schema::GenerateEntitiesExpress(std::ostream& out) const
 {
     EntityDescItr edi(_entList);
     edi.ResetItr();
@@ -1282,13 +1282,13 @@ EntityDescriptor::FindLongestAttribute()
     while( attrPtr != 0)
     {
 	if(attrPtr->AttrDesc()->IsEntityType())
-	    maxAttrLen = G4std::max(maxAttrLen, 
+	    maxAttrLen = std::max(maxAttrLen, 
 		    (strlen(attrPtr->AttrDesc()->EntityType()->Name()) +
 		      strlen(attrPtr->AttrDesc()->Name()) + 3
 		     )
 		    );
 	else
-	    maxAttrLen = G4std::max(maxAttrLen, 
+	    maxAttrLen = std::max(maxAttrLen, 
 	      (strlen(attrPtr->AttrDesc()->DomainType()->NameOrDescription()) +
 	       strlen(attrPtr->AttrDesc()->Name()) + 3
 	      )
@@ -1402,7 +1402,7 @@ int Where_rule__list::Index (Where_rule_ptr v) {
 
 Where_rule_ptr& Where_rule__list::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }
@@ -1513,7 +1513,7 @@ int Uniqueness_rule__set::Index (Uniqueness_rule_ptr v) {
 
 Uniqueness_rule_ptr& Uniqueness_rule__set::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }
@@ -1641,7 +1641,7 @@ int Global_rule__set::Index (Global_rule_ptr v) {
 
 Global_rule_ptr& Global_rule__set::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }

@@ -40,15 +40,14 @@ CCalAnalysis* CCalAnalysis::instance = 0;
  
 CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 
-  int i=0;
-  for (i=0; i<28; i++) {
+  for (int i=0; i<28; i++) {
     hcalE[i] = 0;
   }
-  for (i=0; i<70; i++) {
+  for (int i=0; i<70; i++) {
     lateralProfile[i] = 0;
   }
-  for (i=0; i<49; i++) {ecalE[i] = 0;}
-  for (i=0; i<numberOfTimeSlices; i++) {timeHist[i] = 0;}
+  for (int i=0; i<49; i++) {ecalE[i] = 0;}
+  for (int i=0; i<numberOfTimeSlices; i++) {timeHist[i] = 0;}
 
   analysisFactory = AIDA_createAnalysisFactory();
   if (analysisFactory) {
@@ -72,11 +71,11 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 	if (tupleFactory) {
 	  // Create a tuple :
 	  G4String tag2, tag = "float";
-	  for (i=0; i<28; i++) {
+	  for (int i=0; i<28; i++) {
 	    tag2 = tag + " hcal" + i + ",";
 	    tag  = tag2;
 	  }
-	  for (i=0; i<49; i++) {
+	  for (int i=0; i<49; i++) {
 	    tag2 = tag + " ecal" + i + ",";
 	    tag  = tag2;
 	  }
@@ -103,7 +102,7 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 	    hcalE[i] = histoFactory->createHistogram1D(id, ntupletag, 100, 0., 1.0);
 	  }
 	  // Energy deposits in Ecal towers
-	  for (i = 0; i<49; i++) {
+	  for (int i = 0; i<49; i++) {
 	    sprintf(id, "%d",i+200);
 	    sprintf(ntupletag, "Energy Deposit in Ecal Tower%d   in GeV",i);
 	    ecalE[i] = histoFactory->createHistogram1D(id, ntupletag, 100, 0., 100.0);
@@ -113,14 +112,14 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 					    100, 0., 100.0);
 
 	  // Time slices	  
-	  for (i=0; i<numberOfTimeSlices; i++){
+	  for (int i=0; i<numberOfTimeSlices; i++){
 	    sprintf(id, "%d",i+300);
 	    sprintf(ntupletag, "Time slice %d nsec energy profile   in GeV",i);
 	    timeHist[i] =  histoFactory->createHistogram1D(id, ntupletag, 100, 0., 100.0);
 	  }
 
 	  // Profile of lateral energy deposit in Hcal
-	  for (i = 0; i<70; i++) {
+	  for (int i = 0; i<70; i++) {
 	    sprintf(id, "%d",i+400);
 	    sprintf(ntupletag, "Lateral energy profile at %d cm  in GeV",i);
 	    lateralProfile[i] = histoFactory->createHistogram1D(id, ntupletag, 100, 0., 10.0);
@@ -266,12 +265,11 @@ void CCalAnalysis::setNtuple(float* hcalE, float* ecalE, float elab,
   AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("1") );
   if (ntuple) {
     char tag[10];
-    int i=0;
-    for (i=0; i<28; i++) {
+    for (int i=0; i<28; i++) {
       sprintf (tag, "hcal%d", i);
       ntuple->fill(tuple->findColumn(tag),hcalE[i]);
     }
-    for (i=0; i<49; i++) {
+    for (int i=0; i<49; i++) {
       sprintf (tag, "ecal%d", i);
       ntuple->fill(tuple->findColumn(tag),ecalE[i]);
     }
@@ -292,22 +290,21 @@ void CCalAnalysis::setNtuple(float* hcalE, float* ecalE, float elab,
    of each run; here we put the inizialization so that the histograms have 
    always the right dimensions depending from the detector geometry
 */
-void CCalAnalysis::BeginOfRun(G4int n)  { 
+void CCalAnalysis::BeginOfRun(G4int )  { 
   
-  int i=0;  
   /*
   if (energy) energy->reset();
-  for (i=0; i<28; i++) {
+  for (int i=0; i<28; i++) {
     if (hcalE[i]) hcalE[i]->reset();
   }
-  for (i=0; i<70; i++) {
+  for (int i=0; i<70; i++) {
     if (lateralProfile[i]) lateralProfile[i]->reset();
   }
-  for (i=0; i<49; i++) {
+  for (int i=0; i<49; i++) {
     if (ecalE[i]) ecalE[i]->reset();
   }
   */
-  for (i=0; i<numberOfTimeSlices; i++) {
+  for (int i=0; i<numberOfTimeSlices; i++) {
     if (timeHist[i]) timeHist[i]->reset();
   }
 
@@ -315,7 +312,7 @@ void CCalAnalysis::BeginOfRun(G4int n)  {
 
 
 //  This member is called at the end of each run 
-void CCalAnalysis::EndOfRun(G4int n)  {
+void CCalAnalysis::EndOfRun(G4int )  {
 
   if (tree) {
     tree->commit();
@@ -330,7 +327,6 @@ void CCalAnalysis::EndOfEvent(G4int flag) {
 
 #ifdef debug
   G4cout << " Check if empty histograms " << G4endl;
-  int i=0;  
   if ( energy ) {
     if ( energy->allEntries() == 0 ) {
       G4cout << "EMPTY HISTO  energy " << G4endl;
@@ -340,7 +336,7 @@ void CCalAnalysis::EndOfEvent(G4int flag) {
   } else {
       G4cout << "UNDEFINED HISTO  energy " << G4endl;
   }
-  for (i=0; i<28; i++) {
+  for (int i=0; i<28; i++) {
     if ( hcalE[i] ) {
       if ( hcalE[i]->allEntries() == 0 ) {
 	G4cout << "EMPTY HISTO  hcal " << i << G4endl;
@@ -351,7 +347,7 @@ void CCalAnalysis::EndOfEvent(G4int flag) {
       G4cout << "UNDEFINED HISTO  hcal " << i << G4endl;
     }
   }
-  for (i=0; i<70; i++) {
+  for (int i=0; i<70; i++) {
     if ( lateralProfile[i] ) {
       if ( lateralProfile[i]->allEntries() == 0 ) {
 	G4cout << "EMPTY HISTO  lateralProfile " << i << G4endl;
@@ -363,7 +359,7 @@ void CCalAnalysis::EndOfEvent(G4int flag) {
       G4cout << "UNDEFINED HISTO  lateralProfile " << i << G4endl;
     }
   }
-  for (i=0; i<49; i++) {
+  for (int i=0; i<49; i++) {
     if ( ecalE[i] ) {
       if ( ecalE[i]->allEntries() == 0 ) {
 	G4cout << "EMPTY HISTO  ecalE " << i << G4endl;
@@ -374,7 +370,7 @@ void CCalAnalysis::EndOfEvent(G4int flag) {
       G4cout << "UNDEFINED HISTO  hcal " << i << G4endl;
     }
   }
-  for (i=0; i<numberOfTimeSlices; i++) {
+  for (int i=0; i<numberOfTimeSlices; i++) {
     if ( timeHist[i] ) {
       if ( timeHist[i]->allEntries() == 0 ) {
 	G4cout << "EMPTY HISTO  timeHist " << i << G4endl;

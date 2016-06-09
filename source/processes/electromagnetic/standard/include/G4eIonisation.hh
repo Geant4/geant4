@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.hh,v 1.17 2003/01/17 18:55:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eIonisation.hh,v 1.18 2003/06/16 17:02:02 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //--------------- G4eIonisation physics process --------------------------------
 //                by Laszlo Urban, 20 March 1997 
@@ -151,7 +151,7 @@ class G4eIonisation : public G4VeEnergyLoss
     G4double HighestKineticEnergy;
     G4int    TotBin;
 
-    const G4std::vector<G4double>* secondaryEnergyCuts;
+    const std::vector<G4double>* secondaryEnergyCuts;
 
   public:  // with description
 

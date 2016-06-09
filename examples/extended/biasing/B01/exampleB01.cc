@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.16 2002/11/07 13:50:29 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: exampleB01.cc,v 1.17 2003/06/16 16:47:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -45,7 +45,7 @@
 
 // --------------------------------------------------------------
 
-#include "g4std/iostream"
+#include <iostream>
 
 #include "G4VPhysicalVolume.hh"
 #include "G4RunManager.hh"
@@ -66,7 +66,7 @@
 
 int main(int argc, char **argv)
 {  
-  G4std::ostream *myout = &G4cout;
+  std::ostream *myout = &G4cout;
   G4int numberOfEvent = 100;
 
   G4long myseed = 345354;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.39.4.1 2003/03/31 14:34:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PropagatorInField.cc,v 1.49 2003/06/25 13:12:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -38,7 +38,7 @@
 
 #include "G4PropagatorInField.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4ThreeVector.hh"
 #include "G4VCurvedTrajectoryFilter.hh"
  
@@ -57,10 +57,11 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
     fVerboseLevel(0),
     fEpsilonMinDefault(5.0e-7),
     fEpsilonMaxDefault(0.05),
-    fmax_loop_count(10000),
+    fMax_loop_count(1000),
     fNoZeroStep(0), 
-  fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
-  fpTrajectoryFilter( 0 )
+    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
+    fSetFieldMgr(false),
+    fpTrajectoryFilter( 0 )
 {
   fEpsilonMin = fEpsilonMinDefault;
   fEpsilonMax = fEpsilonMaxDefault;
@@ -71,6 +72,9 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
   fFull_CurveLen_of_LastAttempt = -1; 
   fLast_ProposedStepLength = -1;
   fLargestAcceptableStep = 1000.0 * meter;
+
+  fPreviousSftOrigin= G4ThreeVector(0.,0.,0.);
+  fPreviousSafety= 0.0;
 }
 
 G4PropagatorInField::~G4PropagatorInField()
@@ -88,6 +92,10 @@ G4PropagatorInField::ComputeStep(
                 G4double&          currentSafety,                // IN/OUT
                 G4VPhysicalVolume* pPhysVol)
 {
+  // If CurrentProposedStepLength is too small for finding Chords
+  // just forget.
+  if(CurrentProposedStepLength<kCarTolerance) return DBL_MAX;
+
   // Introducing smooth trajectory display (jacek 01/11/2002)
   if (fpTrajectoryFilter) {
     fpTrajectoryFilter->CreateNewTrajectorySegment();
@@ -105,16 +113,14 @@ G4PropagatorInField::ComputeStep(
   G4double      NewSafety;
   fParticleIsLooping = false;
 
-  // Set the field manager if the volume has one, else use the global one
+  // If not yet done, 
+  //   Set the field manager to the local  one if the volume has one, 
+  //                      or to the global one if not
   //
-  fCurrentFieldMgr = fDetectorFieldMgr;
-  if( pPhysVol)
-  {
-    G4FieldManager *newFieldMgr = 0;
-    newFieldMgr= pPhysVol->GetLogicalVolume()->GetFieldManager(); 
-    if ( newFieldMgr ) 
-      fCurrentFieldMgr = newFieldMgr;
-  }
+  if( !fSetFieldMgr ) FindAndSetFieldManager( pPhysVol ); 
+  // For the next call, the field manager must again be set
+  fSetFieldMgr= false;
+
   GetChordFinder()->SetChargeMomentumMass(fCharge, fInitialMomentumModulus, fMass);  
 
   G4FieldTrack  CurrentState(pFieldTrack);
@@ -132,13 +138,17 @@ G4PropagatorInField::ComputeStep(
     G4double trialProposedStep = 1.e2 * ( 10.0 * cm + 
       fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) );
-    CurrentProposedStepLength= G4std::min( trialProposedStep,
+    CurrentProposedStepLength= std::min( trialProposedStep,
                                            fLargestAcceptableStep ); 
   }
   epsilon = GetDeltaOneStep() / CurrentProposedStepLength;
+  // G4double raw_epsilon= epsilon;
   if( epsilon < fEpsilonMin ) epsilon = fEpsilonMin;
   if( epsilon > fEpsilonMax ) epsilon = fEpsilonMax;
   SetEpsilonStep( epsilon );
+
+  // G4cout << "G4PiF: Epsilon of current step - raw= " << raw_epsilon
+  //        << " final= " << epsilon << G4endl;
 
   //  Shorten the proposed step in case of earlier problems (zero steps)
   // 
@@ -232,61 +242,36 @@ G4PropagatorInField::ComputeStep(
     //  CurrentState is updated with the final position and velocity. 
     //
     G4ThreeVector  EndPointB = CurrentState.GetPosition(); 
+    G4ThreeVector  InterSectionPointE;
+    G4double       LinearStepLength;
+ 
+    // Intersect chord AB with geometry
+    intersects= IntersectChord( SubStartPoint, EndPointB, NewSafety,
+				LinearStepLength, InterSectionPointE );
+    // E <- Intersection Point of chord AB and either volume A's surface 
+    //                                  or a daughter volume's surface ..
 
-    // Calculate the direction and length of the chord AB
-     
-    G4ThreeVector  ChordAB_Vector = EndPointB - SubStartPoint;
-    G4double       ChordAB_Length = ChordAB_Vector.mag();  // Magnitude (norm)
-    G4ThreeVector  ChordAB_Dir =    ChordAB_Vector.unit();
-
-    // Check whether any volumes are encountered by the chord AB
-     
-    G4double LinearStepLength = 
-        fNavigator->ComputeStep( SubStartPoint, ChordAB_Dir,
-                                 ChordAB_Length, NewSafety );
-    if( first_substep )
-    {
-      currentSafety = NewSafety;
-    }
-    // It might also be possible to update safety in other steps, but
-    // it must be done with care.  J.Apostolakis  August 5th, 1997
-
-    intersects = (LinearStepLength <= ChordAB_Length); 
-      // G4Navigator contracts to return k_infinity if len==asked
-      // and it did not find a surface boundary at that length
-    LinearStepLength = G4std::min( LinearStepLength, ChordAB_Length);
+    if( first_substep ) { 
+       currentSafety = NewSafety;
+    } // Updating safety in other steps is potential future extention
 
     if( intersects )
     {
-      // E <- Intersection Point of chord AB and either volume A's surface 
-      //                                  or a daughter volume's surface ..
+       G4FieldTrack IntersectPointVelct_G(CurrentState);  // FT-Def-Construct
 
-      G4ThreeVector pointE = SubStartPoint + LinearStepLength * ChordAB_Dir;
-
-      G4FieldTrack IntersectPointVelct_G(CurrentState);  // FT-Def-Construct
-
-      // Find the intersection point of AB true path with the surface
-      // of vol(A) given our current "estimate" point E. 
-  
-      G4bool found_intersection = 
-        LocateIntersectionPoint( SubStepStartState, CurrentState, 
-                                 pointE, IntersectPointVelct_G );
-      if( found_intersection )
-      {        
-        End_PointAndTangent= IntersectPointVelct_G;  // G is our EndPoint ...
-        StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
-                                   - OriginalState.GetCurveLength();
-         // which is Zero now.
-#ifdef G4DEBUG_FIELD
-        if( Verbose() > 0 )
-          G4cout << " Found intersection after Step of length "
-                 << StepTaken << G4endl;
-#endif
-      }
-      else
-      {
-        intersects= false;  // "Minor" chords do not intersect
-      }
+       // Find the intersection point of AB true path with the surface
+       //   of vol(A), if it exists. Start with point E as first "estimate".
+       G4bool found_intersection = 
+         LocateIntersectionPoint( SubStepStartState, CurrentState, 
+                                  InterSectionPointE, IntersectPointVelct_G );
+       // intersects = intersects & found_intersection;
+       if( found_intersection ) {        
+          End_PointAndTangent= IntersectPointVelct_G;  // G is our EndPoint ...
+	  StepTaken = TruePathLength = IntersectPointVelct_G.GetCurveLength()
+                                      - OriginalState.GetCurveLength();
+       } else {
+          intersects= false;  // "Minor" chords do not intersect
+       }
     }
     if( !intersects )
     {
@@ -304,11 +289,8 @@ G4PropagatorInField::ComputeStep(
     if( fNoZeroStep > fActionThreshold_NoZeroSteps )
     {
       printStatus( SubStepStartState,  // or OriginalState,
-                   CurrentState,
-                   CurrentProposedStepLength, 
-                   NewSafety,  
-                   do_loop_count, 
-                   pPhysVol );
+                   CurrentState,  CurrentProposedStepLength, 
+                   NewSafety,     do_loop_count,  pPhysVol );
     }
 #endif
 
@@ -316,9 +298,9 @@ G4PropagatorInField::ComputeStep(
 
   } while( (!intersects )
         && (StepTaken + kCarTolerance < CurrentProposedStepLength)  
-        && ( do_loop_count < GetMaxLoopCount() ) );
+        && ( do_loop_count < fMax_loop_count ) );
 
-  if( do_loop_count >= GetMaxLoopCount() )
+  if( do_loop_count >= fMax_loop_count  )
   {
     G4cout << "G4PropagateInField: Warning: Particle is looping - " 
            << " tracking in field will be stopped. " << G4endl;
@@ -335,9 +317,6 @@ G4PropagatorInField::ComputeStep(
   {
     // Chord AB or "minor chords" do not intersect
     // B is the endpoint Step of the current Step.
-    // [ But if we were angle limited we could use B 
-    //   as a new starting point ? ]
-    //  On return we specify the endpoint, point B
     //
     End_PointAndTangent = CurrentState; 
     TruePathLength = StepTaken;
@@ -366,11 +345,14 @@ G4PropagatorInField::ComputeStep(
 #endif
 
 #ifdef G4DEBUG_FIELD
-  if( fNoZeroStep )
-  {
-    G4cout << " PiF: Step returning= " << StepTaken << G4endl;
-    G4cout << " ------------------------------------------------------- "
-           << G4endl;
+  // static G4std::vector<G4int>  ZeroStepNumberHist(fAbandonThreshold+1);
+  if( fNoZeroStep ){
+     // ZeroStepNumberHist[fNoZeroStep]++; 
+     if( fNoZeroStep > fActionThreshold_NoZeroSteps ){
+        G4cout << " PiF: Step returning=" << StepTaken << G4endl;
+	G4cout << " ------------------------------------------------------- "
+	       << G4endl;
+     }
   }
 #endif
 
@@ -384,17 +366,14 @@ G4PropagatorInField::ComputeStep(
     fNoZeroStep = 0;
 
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
+     G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
+            << " Zero progress for "  << fNoZeroStep << " attempted steps." 
+	    << G4endl;
 #ifdef G4VERBOSE
-    G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
-           << " No progress after "  << fNoZeroStep << " trial steps. "
-           << G4endl;
-    G4cout << " Particle will be killed." << G4endl; 
-#else
-    G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
-           << " Particle that is stuck will be killed." << G4endl;
+     G4cout << " Particle that is stuck will be killed." << G4endl;
 #endif
-    fNoZeroStep = 0; 
-    fParticleIsLooping = true;
+     fNoZeroStep = 0; 
+     fParticleIsLooping = true;
   }
   return TruePathLength;
 }
@@ -500,62 +479,41 @@ G4PropagatorInField::LocateIntersectionPoint(
       // called at the start of the physical Step
 
       first_step = false;
-       
-      // Calculate the length and direction of the chord AF
-      //
-      G4ThreeVector  ChordAF_Vector = CurrentF_Point - Point_A;
-      G4double       ChordAF_Length = ChordAF_Vector.mag();  
-      G4ThreeVector  ChordAF_Dir    = ChordAF_Vector.unit();
-
-      G4double stepLength = fNavigator->ComputeStep( Point_A, ChordAF_Dir,
-                                                     ChordAF_Length, NewSafety);
-
-      G4bool Intersects_AF = (stepLength <= ChordAF_Length);
-      stepLength = G4std::min(stepLength, ChordAF_Length);
+      G4ThreeVector PointG;   // Candidate intersection point
+      G4double stepLengthAF; 
+      G4bool Intersects_AF = IntersectChord( Point_A,   CurrentF_Point,
+					     NewSafety, stepLengthAF,
+					     PointG
+					     );
       if( Intersects_AF )
       {
-        // There is an intersection of AF with a volume boundary
-        // G <- First Intersection of Chord AF 
-        //
-        G4ThreeVector PointG = Point_A + stepLength * ChordAF_Dir;
-
         // G is our new Candidate for the intersection point.
         // It replaces  "E" and we will repeat the test to see if
         // it is a good enough approximate point for us.
         //       B    <- F
         //       E    <- G
-        //
         CurrentB_PointVelocity = ApproxIntersecPointV;
         CurrentE_Point = PointG;  
-       }
-       else  // not Intersects_AF
-       {  
+      }
+      else  // not Intersects_AF
+      {  
          // In this case:
          // There is NO intersection of AF with a volume boundary.
          // We must continue the search in the segment FB!
+         fNavigator->LocateGlobalPointWithinVolume( CurrentF_Point );
 
+	 G4double stepLengthFB;
+	 G4ThreeVector PointH;
          // Check whether any volumes are encountered by the chord FB
          // ---------------------------------------------------------
-         // Calculate the length and direction of the chord AF
-         //
-         G4ThreeVector  ChordFB_Vector = Point_B - CurrentF_Point;
-         G4double       ChordFB_Length = ChordFB_Vector.mag();  
-         G4ThreeVector  ChordFB_Dir    = ChordFB_Vector.unit();
-
-         fNavigator->LocateGlobalPointWithinVolume( CurrentF_Point );
-         G4double stepLength =
-           fNavigator->ComputeStep( CurrentF_Point, ChordFB_Dir,
-                                    ChordFB_Length, NewSafety);
-
-         G4bool Intersects_FB = stepLength <= ChordFB_Length;
-         stepLength = G4std::min(stepLength, ChordFB_Length);
+	 G4bool Intersects_FB = 
+	   IntersectChord( CurrentF_Point, Point_B, 
+			   NewSafety,      stepLengthFB,  PointH );
 
          if( Intersects_FB )
          { 
            // There is an intersection of FB with a volume boundary
            // H <- First Intersection of Chord FB 
-           //
-           G4ThreeVector PointH = CurrentF_Point + stepLength * ChordFB_Dir;
 
            // H is our new Candidate for the intersection point.
            // It replaces  "E" and we will repeat the test to see if
@@ -591,29 +549,14 @@ G4PropagatorInField::LocateIntersectionPoint(
                    - CurrentA_PointVelocity.GetCurveLength();
        if( curveDist*(curveDist+2*perMillion ) < linDistSq )
        {
-         // Re-integrate to obtain a new B
-         //
-         G4FieldTrack newEndpoint = CurrentA_PointVelocity;
-         GetChordFinder()->GetIntegrationDriver()
-           ->AccurateAdvance(newEndpoint, curveDist, fEpsilonStep);
-         CurrentB_PointVelocity = newEndpoint;
-
-#ifdef G4DEBUG_FIELD
-         static G4int noInaccuracyWarnings = 0; 
-         G4int maxNoWarnings = 10;
-         if ( (noInaccuracyWarnings < maxNoWarnings ) 
-           || (Verbose() > 1) )
-         {
-           G4cerr << "G4PropagatorInField::LocateIntersectionPoint():"
-                  << G4endl
-                  << "  Warning: Integration inaccuracy requires " << G4endl
-                  << " an adjustment in the step's endpoint "      << G4endl
-                  << "   Two mid-points are further apart than their "
-                  <<         "curve length difference"             << G4endl 
-                  << "   Dist = "       << sqrt(linDistSq)
-                  << " curve length = " << curveDist               << G4endl; 
-         }
-#endif
+          // Re-integrate to obtain a new B
+          //
+          G4FieldTrack newEndPoint=
+	          ReEstimateEndpoint( CurrentA_PointVelocity,
+				      CurrentB_PointVelocity,
+				      linDistSq,    // to avoid recalculation
+				      curveDist );
+ 	  CurrentB_PointVelocity = newEndPoint;
        }
        if( curveDist < 0.0 )
        {
@@ -668,20 +611,20 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
     static G4int noPrecision= 4;
     G4cout.precision(noPrecision);
     // G4cout.setf(ios_base::fixed,ios_base::floatfield);
-    G4cout << G4std::setw( 6)  << " " 
-           << G4std::setw( 25) << " Current Position  and  Direction" << " "
+    G4cout << std::setw( 6)  << " " 
+           << std::setw( 25) << " Current Position  and  Direction" << " "
            << G4endl; 
-    G4cout << G4std::setw( 5) << "Step#" << " "
-           << G4std::setw( 9) << "X(mm)" << " "
-           << G4std::setw( 9) << "Y(mm)" << " "  
-           << G4std::setw( 9) << "Z(mm)" << " "
-           << G4std::setw( 7) << " N_x " << " "
-           << G4std::setw( 7) << " N_y " << " "
-           << G4std::setw( 7) << " N_z " << " "
-           << G4std::setw( 9) << "StepLen" << " "  
-           << G4std::setw(12) << "PhsStep" << " "  
-           << G4std::setw(12) << "StartSafety" << " "  
-           << G4std::setw(18) << "NextVolume" << " "
+    G4cout << std::setw( 5) << "Step#" << " "
+           << std::setw( 9) << "X(mm)" << " "
+           << std::setw( 9) << "Y(mm)" << " "  
+           << std::setw( 9) << "Z(mm)" << " "
+           << std::setw( 7) << " N_x " << " "
+           << std::setw( 7) << " N_y " << " "
+           << std::setw( 7) << " N_z " << " "
+           << std::setw( 9) << "StepLen" << " "  
+           << std::setw(12) << "PhsStep" << " "  
+           << std::setw(12) << "StartSafety" << " "  
+           << std::setw(18) << "NextVolume" << " "
            << G4endl;
 
      // Recurse to print the start values
@@ -692,32 +635,32 @@ G4PropagatorInField::printStatus( const G4FieldTrack&        StartFT,
    {
      G4cout.precision(3);
      if( stepNo >= 0)
-       G4cout << G4std::setw( 5) << stepNo << " ";
+       G4cout << std::setw( 5) << stepNo << " ";
      else
-       G4cout << G4std::setw( 5) << "Start" << " ";
-     G4cout << G4std::setw( 9) << CurrentPosition.x() << " "
-            << G4std::setw( 9) << CurrentPosition.y() << " "
-            << G4std::setw( 9) << CurrentPosition.z() << " "
-            << G4std::setw( 7) << CurrentUnitVelocity.x() << " "
-            << G4std::setw( 7) << CurrentUnitVelocity.y() << " "
-            << G4std::setw( 7) << CurrentUnitVelocity.z() << " ";
-     G4cout << G4std::setw( 9) << step_len << " "; 
+       G4cout << std::setw( 5) << "Start" << " ";
+     G4cout << std::setw( 9) << CurrentPosition.x() << " "
+            << std::setw( 9) << CurrentPosition.y() << " "
+            << std::setw( 9) << CurrentPosition.z() << " "
+            << std::setw( 7) << CurrentUnitVelocity.x() << " "
+            << std::setw( 7) << CurrentUnitVelocity.y() << " "
+            << std::setw( 7) << CurrentUnitVelocity.z() << " ";
+     G4cout << std::setw( 9) << step_len << " "; 
      if( requestStep != -1.0 ) 
-       G4cout << G4std::setw( 12) << requestStep << " ";
+       G4cout << std::setw( 12) << requestStep << " ";
      else
-       G4cout << G4std::setw( 12) << "InitialStep" << " "; 
-     G4cout << G4std::setw(12) << safety << " ";
+       G4cout << std::setw( 12) << "InitialStep" << " "; 
+     G4cout << std::setw(12) << safety << " ";
 
      if( startVolume != 0)
      {
-       G4cout << G4std::setw(12) << startVolume->GetName() << " ";
+       G4cout << std::setw(12) << startVolume->GetName() << " ";
      }
      else
      {
        if( step_len != -1 )
-         G4cout << G4std::setw(12) << "OutOfWorld" << " ";
+         G4cout << std::setw(12) << "OutOfWorld" << " ";
        else
-         G4cout << G4std::setw(12) << "NotGiven" << " ";
+         G4cout << std::setw(12) << "NotGiven" << " ";
      }
 
      G4cout << G4endl;
@@ -756,8 +699,126 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
          << G4endl;
 }
 
+G4bool
+G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA, 
+				     G4ThreeVector  EndPointB,
+				     G4double      &NewSafety,
+				     G4double      &LinearStepLength,
+				     G4ThreeVector &IntersectionPoint
+				   )
+{
+    // Calculate the direction and length of the chord AB
+    G4ThreeVector  ChordAB_Vector = EndPointB - StartPointA;
+    G4double       ChordAB_Length = ChordAB_Vector.mag();  // Magnitude (norm)
+    G4ThreeVector  ChordAB_Dir =    ChordAB_Vector.unit();
+    G4bool intersects;
 
-G4std::vector<G4ThreeVector>*
+    G4ThreeVector OriginShift = StartPointA - fPreviousSftOrigin ;
+    G4double      MagSqShift  = OriginShift.mag2() ;
+    G4double      currentSafety;
+    G4bool        doCallNav= false;
+
+    if( MagSqShift >= sqr(fPreviousSafety) )
+    {
+	currentSafety = 0.0 ;
+    }else{
+	currentSafety = fPreviousSafety - sqrt(MagSqShift) ;
+    }
+
+    if( ChordAB_Length <= currentSafety )
+    {
+       // The Step is guaranteed to be taken
+
+       LinearStepLength = ChordAB_Length;
+       intersects = false;
+
+       NewSafety= currentSafety;
+    }
+    else
+    {
+       doCallNav= true; 
+       // Check whether any volumes are encountered by the chord AB
+       LinearStepLength = 
+        fNavigator->ComputeStep( StartPointA, ChordAB_Dir,
+                                 ChordAB_Length, NewSafety );
+       intersects = (LinearStepLength <= ChordAB_Length); 
+       // G4Navigator contracts to return k_infinity if len==asked
+       // and it did not find a surface boundary at that length
+       LinearStepLength = std::min( LinearStepLength, ChordAB_Length);
+
+       // Save the last calculated safety!
+       fPreviousSftOrigin = StartPointA;
+       fPreviousSafety= NewSafety;
+
+       if( intersects ){
+          // Intersection Point of chord AB and either volume A's surface 
+          //                                or a daughter volume's surface ..
+          IntersectionPoint = StartPointA + LinearStepLength * ChordAB_Dir;
+       }
+    }
+
+#ifdef DEBUG_INTERSECTS_CHORD
+    // printIntersection( 
+    // StartPointA, EndPointB, LinearStepLength, IntersectionPoint, NewSafety
+
+    G4cout << "Start="  << std::setw(12) << StartPointA       << " "
+	   << "End= "   << std::setw(8) << EndPointB         << " "
+	   << "StepIn=" << std::setw(8) << LinearStepLength  << " "
+	   << "NewSft=" << std::setw(8) << NewSafety
+	   << "NavCall" << doCallNav      << "  "
+	   << "In T/F " << intersects     << "  " 
+	   << "IntrPt=" << std::setw(8) << IntersectionPoint << " " 
+	   << G4endl;
+#endif
+
+    return intersects;
+}
+
+G4FieldTrack G4PropagatorInField::
+ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,  
+		    const G4FieldTrack &EstimatedEndStateB,	
+		    double              linearDistSq,
+		    double              curveDist
+		  )
+{
+  G4FieldTrack newEndPoint( CurrentStateA );
+  GetChordFinder()->GetIntegrationDriver()
+                  ->AccurateAdvance(newEndPoint, curveDist, fEpsilonStep);
+  // EstimatedEndStateB = newEndpoint;
+
+#ifdef G4DEBUG_FIELD
+  static G4int noInaccuracyWarnings = 0; 
+  G4int maxNoWarnings = 10;
+  if (  (noInaccuracyWarnings < maxNoWarnings ) 
+       || (Verbose() > 1) )
+    {
+      G4cerr << "G4PropagatorInField::LocateIntersectionPoint():"
+	     << G4endl
+	     << " Warning: Integration inaccuracy requires" 
+	     <<   " an adjustment in the step's endpoint."  << G4endl
+	     << "   Two mid-points are further apart than their"
+	     <<   " curve length difference"                << G4endl 
+	     << "   Dist = "       << sqrt(linearDistSq)
+	     << " curve length = " << curveDist             << G4endl; 
+      G4cerr << " Correction applied is " 
+	     << (newEndPoint.GetPosition()-EstimatedEndStateB.GetPosition()).mag()
+	     << G4endl;
+    }
+#endif
+  return newEndPoint;
+}
+
+// Access the points which have passed through the filter. The
+// points are stored as ThreeVectors for the initial impelmentation
+// only (jacek 30/10/2002)
+// Responsibility for deleting the points lies with
+// SmoothTrajectoryPoint, which is the points' final
+// destination. The points pointer is set to NULL, to ensure that
+// the points are not re-used in subsequent steps, therefore THIS
+// METHOD MUST BE CALLED EXACTLY ONCE PER STEP. (jacek 08/11/2002)
+
+
+std::vector<G4ThreeVector>*
 G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const {
   // NB, GimmeThePointsAndForgetThem really forgets them, so it can
   // only be called (exactly) once for each step.
@@ -768,8 +829,35 @@ G4PropagatorInField::GimmeTrajectoryVectorAndForgetIt() const {
   }
 }
 
-
 void 
 G4PropagatorInField::SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter) {
   fpTrajectoryFilter = filter;
+}
+
+
+void G4PropagatorInField::ClearPropagatorState()
+{
+  G4Exception("G4PropagatorInField::ClearPropagatorState is not yet implemented");
+
+}
+
+G4FieldManager* 
+G4PropagatorInField::FindAndSetFieldManager( G4VPhysicalVolume* pCurrentPhysicalVolume)
+{
+  G4FieldManager* currentFieldMgr;
+
+  currentFieldMgr = fDetectorFieldMgr;
+  if( pCurrentPhysicalVolume)
+  {
+     G4FieldManager *newFieldMgr = 0;
+     newFieldMgr= pCurrentPhysicalVolume->GetLogicalVolume()->GetFieldManager();
+     if ( newFieldMgr ) 
+        currentFieldMgr = newFieldMgr;
+  }
+  fCurrentFieldMgr= currentFieldMgr;
+
+  // Flag that field manager has been set.
+  fSetFieldMgr= true;
+
+  return currentFieldMgr;
 }

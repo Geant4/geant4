@@ -36,8 +36,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.10 2002/12/12 19:16:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyRunAction.cc,v 1.12 2003/05/22 17:20:44 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "BrachyRunAction.hh"
@@ -61,49 +61,45 @@
 #include "BrachyRunAction.hh"
 BrachyRunAction::BrachyRunAction(G4String &SDNAME)
 {
-  SDname=SDNAME;
-  pDet=new BrachyDetectorConstruction(SDname);
-  pRun= new BrachyRunMessenger(this);
+  sensitiveDetectorName = SDNAME;
+  detector = new BrachyDetectorConstruction(sensitiveDetectorName);
+  runMessenger = new BrachyRunMessenger(this);
 }
 
 BrachyRunAction::~BrachyRunAction()
-{ delete pDet; 
-  delete pDetector;
-  delete pRun;
-}
-void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
 { 
-
+  delete runMessenger;
+  delete detector; 
+}
+void BrachyRunAction::BeginOfRunAction(const G4Run*)
+{ 
 #ifdef G4ANALYSIS_USE
-BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
-   analysis->book();
+  BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
+  analysis->book();
 #endif  
-   G4RunManager*  pRunManager=G4RunManager::GetRunManager() ;
+  G4RunManager* runManager = G4RunManager::GetRunManager();
 
-    if(pRunManager)
-     { switch(a)
-       { case 1:
-              factory=new BrachyFactoryI;
-       break;
-
-       default:   
-          factory=new BrachyFactoryIr; 
-       }
+  if(runManager)
+    { switch(sourceChoice)
+      {
+        case 1:
+	  factory = new BrachyFactoryI;
+	  break;
+        default:   
+	  factory = new BrachyFactoryIr; 
+      }      
+    G4VUserPrimaryGeneratorAction* sourcePrimaryParicle = 
+                                     factory->CreatePrimaryGeneratorAction();
       
-       G4VUserPrimaryGeneratorAction* irPrimary=factory->CreatePrimaryGeneratorAction();
-      
-  
-      if(irPrimary)
-        { pRunManager->SetUserAction (irPrimary);}
-        
-     }
+    if(sourcePrimaryParicle)runManager->SetUserAction(sourcePrimaryParicle);     
+    }
 }
 
 void BrachyRunAction::SelectEnergy(G4int choice)
-{a=choice;
-if (a==1)factory=new BrachyFactoryI;
-  else factory=new BrachyFactoryIr; 
- 
+{
+  sourceChoice = choice;
+  if (sourceChoice == 1)factory = new BrachyFactoryI;
+  else factory = new BrachyFactoryIr; 
 }
 
 void BrachyRunAction::EndOfRunAction(const G4Run* aRun)
@@ -111,18 +107,12 @@ void BrachyRunAction::EndOfRunAction(const G4Run* aRun)
 #ifdef G4ANALYSIS_USE
   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
 #endif
- 
-
-
-
-   G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
+  G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
   
 #ifdef G4ANALYSIS_USE      
-      analysis->finish();
+  analysis->finish();
 #endif
-      delete factory;
-
-      
+  delete factory;    
 }
 
 

@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   H01PythiaInterface.hh
-//   $Id: H01PythiaInterface.hh,v 1.1 2002/11/19 10:30:55 murakami Exp $
+//   $Id: H01PythiaInterface.hh,v 1.2 2003/06/16 16:48:20 gunter Exp $
 //
 //   A generic interface class with Pythia event generator via HepMC.
 //
@@ -74,7 +74,7 @@ public:
 
   // random numbers operations
   void SetRandomSeed(G4int iseed);
-  void PrintRandomStatus(G4std::ostream& ostr=G4cout) const;
+  void PrintRandomStatus(std::ostream& ostr=G4cout) const;
 
   // setup user parameters (empty in default).
   // Implement your parameters in a delived class if you want.

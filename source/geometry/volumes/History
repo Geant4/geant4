@@ -1,4 +1,4 @@
-$Id: History,v 1.97 2003/03/31 14:39:31 gcosmo Exp $
+$Id: History,v 1.104 2003/06/25 13:17:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,55 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 25th, 2003     G. Folger - geomvol-V05-01-04
+- Added disclaimer of liability where needed.
+
+June 21st, 2003     J. Apostolakis - geomvol-V05-01-03
+- G4PropagatorInField (the tag requires "field-V05-01-05"):
+  Likeliest to cause effect on Users is this:
+  *************************************************************************
+  * Changed default value of "maximum step count" to 1,000 (from 10,000)  *
+  *   --> this may cause more particles to be recognised to loop earlier, *
+  *          as this parameter controls this too.                         *
+  *************************************************************************
+  Also neccessary fixes and improvements:
+   1) Added new method FindAndSetFieldManager() to find the current field manager 
+        and set it for the Propagator.
+   2) Added new method SetDetectorFieldManager(), 
+         so as to have it updated when the global field manager is changed.
+   3) Added new state variable to insure that the current field Manager 
+         has been set for the current step
+      The flag ensures that the method FindAndSetFieldManager() is always
+      called once for each call to ComputeStep().
+ - G4TransportationManager: corrected the method SetFieldManager().
+   It now messages the current global PropagatorInField to notify it 
+ - Changes from "g4std" to <std> incorporated.
+
+May 26th, 2003      J. Apostolakis - geomvol-V05-01-02
+- G4PropagatorInField:  use safety in G4PropagatorInField.
+    (Adds to the state of this class).
+  Reinstates the changes in "geomvol-V04-01-08"
+
+May 20th, 2003      G. Cosmo - geomvol-V05-01-01
+- G4GeometryMessenger[.hh.cc]:
+  o Added new commands for controlling geometry overlaps: added recursion
+    to line_test and cylinder_test; added possibility to customise the
+    resolution and shape of grid/cylinder for the test; added ability to
+    select depth of recursion in the geometry tree.
+  o Added explicit call to OpenGeometry() in method CheckGeometry() to
+    force cleanup of voxelisation when command navigator/reset is called.
+- Coworks with tag "geomver-V05-01-00" for geometry/verification.
+- Does NOT include changes in "geomvol-V04-01-08".
+
+May 8th, 2003       G. Cosmo - geomvol-V05-01-00
+- G4PropagatorInField.cc: fix in ComputeStep() to avoid step computation
+  if proposed step length is too small (less than kCarTolerance).
+  Fixes problem report #485.
+- Does NOT include changes in "geomvol-V04-01-08".
+
 Mar 31st, 2003      G. Cosmo - geomvol-V05-00-03
 - Fixed trivial strict pedantic warnings.
+- Does NOT include changes in "geomvol-V04-01-08".
 
 Mar 17th, 2003      G. Cosmo - geomvol-V05-00-02
 - G4Navigator[.hh.cc]: added 'inline' specifier in declaration of

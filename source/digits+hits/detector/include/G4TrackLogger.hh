@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TrackLogger.hh,v 1.1 2002/10/28 10:01:50 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TrackLogger.hh,v 1.2 2003/06/16 16:50:14 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4TrackLogger
@@ -40,7 +40,7 @@
 #define G4TrackLogger_hh G4TrackLogger_hh
 
 #include "globals.hh"
-#include "g4std/set"
+#include <set>
 
 class G4TrackLogger {
 public:
@@ -54,7 +54,7 @@ public:
   G4bool FirstEnterance(G4int trid);
     // returns true if the track is new to this event.
 
-  typedef G4std::set<G4int > TrackIDsSet;
+  typedef std::set<G4int > TrackIDsSet;
     // log for the track ids.
 
 private:

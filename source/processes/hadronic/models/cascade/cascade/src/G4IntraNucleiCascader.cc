@@ -28,9 +28,9 @@
 #include "G4ParticleLargerEkin.hh"
 #include "G4NucleiModel.hh"
 #include "G4CascadParticle.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
-typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 G4IntraNucleiCascader::G4IntraNucleiCascader()
   : verboseLevel(1) {
@@ -64,7 +64,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   G4InuclNuclei* bnuclei = dynamic_cast<G4InuclNuclei*>(bullet);
   G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4NucleiModel model(tnuclei);
-  G4std::vector<G4double> momentum_in = bullet->getMomentum();
+  std::vector<G4double> momentum_in = bullet->getMomentum();
 
   momentum_in[0] += tnuclei->getMass();
 
@@ -82,9 +82,9 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
     itry++;
     model.reset();
 
-    G4std::vector<G4CascadParticle> cascad_particles;
+    std::vector<G4CascadParticle> cascad_particles;
     G4ExitonConfiguration theExitonConfiguration;
-    G4std::vector<G4InuclElementaryParticle> output_particles;
+    std::vector<G4InuclElementaryParticle> output_particles;
     G4double afin = tnuclei->getA();
     G4double zfin = tnuclei->getZ();
    
@@ -104,7 +104,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       afin += ab;
       zfin += zb;
 
-      G4std::pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> > 
+      std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> > 
 	all_particles = model.initializeCascad(bnuclei, tnuclei);
 
       cascad_particles = all_particles.first;
@@ -131,7 +131,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
       };
     }; 
 
-    G4std::vector<G4CascadParticle> new_cascad_particles;
+    std::vector<G4CascadParticle> new_cascad_particles;
     G4int iloop = 0;
 
     while (!cascad_particles.empty() && !model.empty()) {
@@ -194,7 +194,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	for (G4int i = 0; i < G4int(new_cascad_particles.size()); i++) 
 	  cascad_particles.push_back(new_cascad_particles[i]);
 
-	G4std::pair<G4int, G4int> holes = model.getTypesOfNucleonsInvolved();
+	std::pair<G4int, G4int> holes = model.getTypesOfNucleonsInvolved();
 
 	theExitonConfiguration.incrementHoles(holes.first);
 
@@ -210,12 +210,12 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	     << " output_particles  " << output_particles.size() <<  G4endl;
     }
 
-    G4std::vector<G4double> momentum_out(4, 0.0);
+    std::vector<G4double> momentum_out(4, 0.0);
     particleIterator ipart;
 
     for (ipart = output_particles.begin(); ipart != output_particles.end(); ipart++) {
 
-      G4std::vector<G4double> mom = ipart->getMomentum();
+      std::vector<G4double> mom = ipart->getMomentum();
 
       for (G4int j = 0; j < 4; j++) momentum_out[j] += mom[j];
 
@@ -253,7 +253,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	}
 
 	if (goodCase(afin, zfin, Eex, ekin_in)) { // ok, exitation energy > cut
-	  G4std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
+	  std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
 	  output.addOutgoingParticles(output_particles);
 	  outgoing_nuclei.setMomentum(momentum_out);
 	  outgoing_nuclei.setEnergy();
@@ -285,7 +285,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 	output_particles.push_back(last_particle);
       }; 
 
-      G4std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
+      std::sort(output_particles.begin(), output_particles.end(), G4ParticleLargerEkin());
       output.addOutgoingParticles(output_particles);
 
       return output;
@@ -296,7 +296,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
 
   // special branch to avoid the cascad generation but to get the input for evaporation etc
 
-  G4std::vector<G4double> momentum_out(4, 0.0);
+  std::vector<G4double> momentum_out(4, 0.0);
   G4InuclNuclei outgoing_nuclei(169, 69);
 
   outgoing_nuclei.setMomentum(momentum_out);

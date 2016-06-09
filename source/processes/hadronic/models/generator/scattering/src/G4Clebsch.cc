@@ -58,7 +58,7 @@ G4bool G4Clebsch::operator!=(const G4Clebsch &right) const
 }
 
 
-const G4std::vector<G4double>& G4Clebsch::GetLogs() const
+const std::vector<G4double>& G4Clebsch::GetLogs() const
 {
   return logs;
 }
@@ -73,14 +73,14 @@ G4double G4Clebsch::Weight(G4int isoIn1,  G4int iso3In1,
   
   G4int m = iso3In1 + iso3In2;
 
-  G4int jMinIn = G4std::max(abs(isoIn1 - isoIn2), abs(m));
+  G4int jMinIn = std::max(abs(isoIn1 - isoIn2), abs(m));
   G4int jMaxIn = isoIn1 + isoIn2;
 
-  G4int jMinOut = G4std::max(abs(isoOut1 - isoOut2), abs(m));
+  G4int jMinOut = std::max(abs(isoOut1 - isoOut2), abs(m));
   G4int jMaxOut = isoOut1 + isoOut2;
 
-  G4int jMin = G4std::max(jMinIn,jMinOut);
-  G4int jMax = G4std::min(jMaxIn,jMaxOut);
+  G4int jMin = std::max(jMinIn,jMinOut);
+  G4int jMax = std::min(jMaxIn,jMaxOut);
 
   G4int j;
   for (j=jMin; j<=jMax; j+=2)
@@ -131,7 +131,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
   G4double value = 0.;
 
   G4double sigma = j1 + j2 + j3;
-  G4std::vector<G4double> n;
+  std::vector<G4double> n;
   n.push_back(-j1 + j2 + j3);      // n0
   n.push_back(j1 - m1);            // n1
   n.push_back(j1 + m1);            // n2
@@ -203,7 +203,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
       sign *= (G4int) pow(-1.,sigma);
     }
 
-    const G4std::vector<G4double> logVector = GetLogs();
+    const std::vector<G4double> logVector = GetLogs();
     size_t n1 = static_cast<size_t>(n[0]);
 
     // Some boundary checks
@@ -238,7 +238,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
     if (sigma1 < 0. || sigma1 > logEntries)
       G4Exception("G4Clebsch::Wigner3J - Outside logVector boundaries, sigma");
 
-    G4double ls = logVector[sigma1];
+    G4double ls = logVector[static_cast<G4int>(sigma1)];
     G4double hlp1 = (l2 + l3 + l4 +l7 -ls -l1 -l5 -l9 -l6 -l8) / 2.;
     G4int expon = static_cast<G4int>(r6 + r8);
     G4double sgn = pow(-1., expon);
@@ -253,7 +253,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
 
     G4double hlp2 = l6 - logVector[n61] + l8 - logVector[n81];
     G4double sum = exp(hlp2);
-    G4std::vector<G4double> s;
+    std::vector<G4double> s;
     s.push_back(sum);
     n1 = (size_t)r1;
     for (i=1; i<=n1; i++)
@@ -284,11 +284,11 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
 
 
 
-G4std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1, 
+std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1, 
 						G4int isoIn2, G4int iso3In2, 
 						G4int isoA,   G4int isoB) const
 {
-  G4std::vector<G4double> temp;
+  std::vector<G4double> temp;
 
   // ---- Special cases first ----
 
@@ -318,7 +318,7 @@ G4std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
   }
   
   // Number of possible states, in 
-  G4int jMinIn = G4std::max(abs(isoIn1 - isoIn2), abs(iso3));
+  G4int jMinIn = std::max(abs(isoIn1 - isoIn2), abs(iso3));
   G4int jMaxIn = isoIn1 + isoIn2;
 
   // Number of possible states, out
@@ -334,12 +334,12 @@ G4std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
        if(jTmp < jMinOut) jMinOut = jTmp;
      }
    }
-   jMinOut = G4std::max(jMinOut, abs(iso3));
+   jMinOut = std::max(jMinOut, abs(iso3));
    G4int jMaxOut = isoA + isoB;
 
    // Possible in and out common states 
-   G4int jMin  =  G4std::max(jMinIn, jMinOut);
-   G4int jMax  =  G4std::min(jMaxIn, jMaxOut);
+   G4int jMin  =  std::max(jMinIn, jMinOut);
+   G4int jMax  =  std::min(jMaxIn, jMaxOut);
    if (jMin > jMax)
    {
      G4Exception ("G4Clebsch::GenerateIso3 - jMin > JMax");
@@ -360,7 +360,7 @@ G4std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
    // Loop over all possible combinations of isoIn1, isoIn2, iso3In11, iso3In2, jTot
    // to get the probability of each of the in-channel couplings
 
-   G4std::vector<G4double> clebsch;
+   std::vector<G4double> clebsch;
 
    for(j=jMin; j<=jMax; j+=2)
      {
@@ -384,7 +384,7 @@ G4std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
 
    // Generate a normalized pdf 
 
-   G4std::vector<G4double> clebschPdf;
+   std::vector<G4double> clebschPdf;
    G4double previous = clebsch[0];
    clebschPdf.push_back(previous/sum);
    for (j=1; j<nJ; j++)
@@ -410,18 +410,18 @@ G4std::vector<G4double> G4Clebsch::GenerateIso3(G4int isoIn1, G4int iso3In1,
 
    // Generate iso3Out
 
-   G4std::vector<G4double> mMin;
+   std::vector<G4double> mMin;
    mMin.push_back(-isoA);
    mMin.push_back(-isoB);
 
-   G4std::vector<G4double> mMax;
+   std::vector<G4double> mMax;
    mMax.push_back(isoA);
    mMax.push_back(isoB);
 
    // Calculate the possible |J_i M_i> combinations and their probability
 
-   G4std::vector<G4double> m1Out;
-   G4std::vector<G4double> m2Out;
+   std::vector<G4double> m1Out;
+   std::vector<G4double> m2Out;
 
    const G4int size = 20;
    G4double prbout[size][size];

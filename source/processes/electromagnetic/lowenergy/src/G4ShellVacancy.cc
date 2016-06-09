@@ -60,14 +60,14 @@ void G4ShellVacancy::AddXsiTable(G4VEMDataSet* set)
   xsis.push_back(set);
 }
 
-G4std::vector<G4int> G4ShellVacancy::GenerateNumberOfIonisations(const G4MaterialCutsCouple*
+std::vector<G4int> G4ShellVacancy::GenerateNumberOfIonisations(const G4MaterialCutsCouple*
 								 couple,
 								 G4double
 								 incidentEnergy,
 								 G4double eLoss) const
 
 {
-  G4std::vector<G4int> numberOfIonisations;
+  std::vector<G4int> numberOfIonisations;
   const G4Material* material = couple->GetMaterial();
   G4int numberOfElements = material->GetNumberOfElements();
 

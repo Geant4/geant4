@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StableFermiFragment.cc,v 1.6 2002/12/12 19:17:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StableFermiFragment.cc,v 1.7 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -34,7 +34,7 @@ G4StableFermiFragment::G4StableFermiFragment()
 {
 }
 
-G4StableFermiFragment::G4StableFermiFragment(const G4StableFermiFragment &right)
+G4StableFermiFragment::G4StableFermiFragment(const G4StableFermiFragment &) : G4VFermiFragment()
 {
     G4Exception("G4StableFermiFragment::copy_constructor meant to not be accessable");
 }
@@ -45,19 +45,19 @@ G4StableFermiFragment::~G4StableFermiFragment()
 }
 
 
-const G4StableFermiFragment & G4StableFermiFragment::operator=(const G4StableFermiFragment &right)
+const G4StableFermiFragment & G4StableFermiFragment::operator=(const G4StableFermiFragment &)
 {
     G4Exception("G4StableFermiFragment::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StableFermiFragment::operator==(const G4StableFermiFragment &right) const
+G4bool G4StableFermiFragment::operator==(const G4StableFermiFragment &) const
 {
     return false;
 }
 
-G4bool G4StableFermiFragment::operator!=(const G4StableFermiFragment &right) const
+G4bool G4StableFermiFragment::operator!=(const G4StableFermiFragment &) const
 {
     return true;
 }

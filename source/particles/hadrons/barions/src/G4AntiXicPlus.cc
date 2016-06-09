@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicPlus.cc,v 1.7 2001/10/15 10:10:54 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4AntiXicPlus.cc,v 1.8 2003/06/16 16:57:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -36,8 +36,8 @@
 //  Modified PDG encoding           H.Kurashige 24 Sep. 98
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4AntiXicPlus.hh"
 

@@ -22,18 +22,18 @@
 //
 #include "G4FieldPropagation.hh"
 
-const G4FieldPropagation & G4FieldPropagation::operator=(const G4FieldPropagation &right)
+const G4FieldPropagation & G4FieldPropagation::operator=(const G4FieldPropagation &)
 {
    G4Exception("G4FieldPropagation::operator= meant to be private");
    return *this;
 }
 
-int G4FieldPropagation::operator==(const G4FieldPropagation &right) const
+int G4FieldPropagation::operator==(const G4FieldPropagation &) const
 {
    return 1;
 }
 
-int G4FieldPropagation::operator!=(const G4FieldPropagation &right) const
+int G4FieldPropagation::operator!=(const G4FieldPropagation &) const
 {
    return 0;
 }

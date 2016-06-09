@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.hh,v 1.8 2001/09/19 10:54:47 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProcessVector.hh,v 1.9 2003/06/16 17:12:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -37,7 +37,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4VProcess;
 
@@ -94,7 +94,7 @@ class G4ProcessVector
 
   protected:
     // Use STL Vector 
-    typedef G4std::vector<G4VProcess*> G4ProcVector;
+    typedef std::vector<G4VProcess*> G4ProcVector;
 
     G4ProcVector * pProcVector;
 };

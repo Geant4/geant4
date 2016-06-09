@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.18 2002/02/12 01:48:53 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Track.cc,v 1.19 2003/05/20 22:24:41 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -126,10 +126,9 @@ G4Track & G4Track::operator=(const G4Track &right)
    fVtxKineticEnergy = right.fVtxKineticEnergy;
    fVtxMomentumDirection = right.fVtxMomentumDirection;
 
-   // CreatorProcess is not copied 
+   // CreatorProcess and UserInformation are not copied 
    fpCreatorProcess = 0;
-    
-   fpUserInformation = right.fpUserInformation;
+   fpUserInformation = 0;
   }
   return *this;
 }

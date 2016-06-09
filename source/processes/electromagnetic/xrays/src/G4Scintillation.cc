@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.16 2002/11/26 00:52:13 gum Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Scintillation.cc,v 1.18 2003/06/16 17:02:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -47,6 +47,7 @@
 //              > change: aSecondaryPosition=x0+rand*aStep.GetDeltaPosition();
 //                        aSecondaryTrack->SetTouchable(0);
 //              2001-09-17, migration of Materials to pure STL (mma) 
+//              2003-06-03, V.Ivanchenko fix compilation warnings
 //
 // mail:        gum@triumf.ca
 //
@@ -233,10 +234,10 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  G4double YieldRatio = aMaterialPropertiesTable->
                                           GetConstProperty("YIELDRATIO");
                  if ( ExcitationRatio == 1.0 ) {
-                    Num = G4int (G4std::min(YieldRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(YieldRatio,1.0) * NumPhotons);
                  }
                  else {
-                    Num = G4int (G4std::min(ExcitationRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(ExcitationRatio,1.0) * NumPhotons);
                  }
                  ScintillationTime   = aMaterialPropertiesTable->
                                           GetConstProperty("FASTTIMECONSTANT");
@@ -522,7 +523,7 @@ void G4Scintillation::BuildThePhysicsTable()
 	// will be inserted in the table(s) according to the
 	// position of the material in the material table.
 
-	theFastIntegralTable->insertAt(i,aPhysicsOrderedFreeVector); 
+	theFastIntegralTable->insertAt(i,aPhysicsOrderedFreeVector);
         theSlowIntegralTable->insertAt(i,bPhysicsOrderedFreeVector);
 
 	}
@@ -532,7 +533,7 @@ void G4Scintillation::BuildThePhysicsTable()
 // ---------------
 //
 
-G4double G4Scintillation::GetMeanFreePath(const G4Track& aTrack,
+G4double G4Scintillation::GetMeanFreePath(const G4Track&,
                                           G4double ,
                                           G4ForceCondition* condition)
 {
@@ -546,7 +547,7 @@ G4double G4Scintillation::GetMeanFreePath(const G4Track& aTrack,
 // ---------------
 //
 
-G4double G4Scintillation::GetMeanLifeTime(const G4Track& aTrack,
+G4double G4Scintillation::GetMeanLifeTime(const G4Track&,
                                           G4ForceCondition* condition)
 {
         *condition = StronglyForced;

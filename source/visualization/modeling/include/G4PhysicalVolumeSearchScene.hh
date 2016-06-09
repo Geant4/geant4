@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.10 2002/10/24 14:53:38 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.11 2003/05/30 13:01:31 johna Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  10th August 1998.
@@ -76,7 +76,7 @@ public:
   ////////////////////////////////////////////////////////////////
   // Functions not used but required by the abstract interface.
 
-  virtual void BeginPrimitives (const G4Transform3D& objectTransformation) {}
+  virtual void BeginPrimitives (const G4Transform3D&) {}
   virtual void EndPrimitives () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Scale&)       {}

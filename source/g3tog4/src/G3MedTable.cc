@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3MedTable.cc,v 1.14 2003/01/27 10:45:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by I.Hrivnacova, 27 Sep 99
 

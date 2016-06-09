@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.13 2002/12/11 16:08:20 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.14 2003/06/16 17:13:41 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // J Kallenbach  27th Aug 1996
@@ -34,7 +34,7 @@
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
-#include "g4std/map"
+#include <map>
 
 #include "G4VSceneHandler.hh"
 
@@ -107,8 +107,8 @@ private:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   //
-  G4std::map <const G4VPhysicalVolume*, SoSeparator*,
-    G4std::less <const G4VPhysicalVolume*> > SeparatorMap;
+  std::map <const G4VPhysicalVolume*, SoSeparator*,
+    std::less <const G4VPhysicalVolume*> > SeparatorMap;
   SoSeparator *root;
   SoSeparator *staticRoot;
   SoSeparator *transientRoot;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3GEMChannel.cc,v 1.1 2002/06/06 18:01:31 larazb Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4He3GEMChannel.cc,v 1.2 2003/05/30 13:23:24 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
@@ -31,13 +31,13 @@
 #include "G4He3GEMChannel.hh"
 
 
-const G4He3GEMChannel & G4He3GEMChannel::operator=(const G4He3GEMChannel & right)
+const G4He3GEMChannel & G4He3GEMChannel::operator=(const G4He3GEMChannel & )
 {
     G4Exception("G4He3GEMChannel::operator= meant to not be accessable");
     return *this;
 }
 
-G4He3GEMChannel::G4He3GEMChannel(const G4He3GEMChannel & right)
+G4He3GEMChannel::G4He3GEMChannel(const G4He3GEMChannel & ): G4GEMChannel()
 {
     G4Exception("G4He3GEMChannel::CopyConstructor meant to not be accessable");
 }

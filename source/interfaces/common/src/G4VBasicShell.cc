@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.cc,v 1.9 2002/04/26 21:28:26 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VBasicShell.cc,v 1.10 2003/06/16 16:56:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VBasicShell.hh"
 #include "G4StateManager.hh"
@@ -33,7 +33,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcommandStatus.hh"
 #include "G4UImanager.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4VBasicShell::G4VBasicShell()
 :currentDirectory("/")
@@ -51,7 +51,7 @@ G4String G4VBasicShell::ModifyToFullPathCommand(const char* aCommandLine)
   G4String commandString;
   G4String parameterString;
   size_t i = commandLine.index(" ");
-  if( i != G4std::string::npos )
+  if( i != std::string::npos )
   {
     commandString = (G4String)commandLine(0,i);
     parameterString = " ";
@@ -111,7 +111,7 @@ G4UIcommand* G4VBasicShell::FindCommand(const char* commandName)
   G4String commandLine = (G4String)rawCommandLine.strip(G4String::both);
   G4String commandString;
   size_t i = commandLine.index(" ");
-  if( i != G4std::string::npos )
+  if( i != std::string::npos )
   { commandString = (G4String)commandLine(0,i); }
   else
   { commandString = commandLine; }
@@ -168,7 +168,7 @@ G4String G4VBasicShell::Complete(G4String commandName)
   G4String rawCommandLine = commandName;
   G4String commandLine = rawCommandLine.strip(G4String::both);
   size_t i = commandLine.index(" ");
-  if( i != G4std::string::npos ) return rawCommandLine; // Already entering parameters, 
+  if( i != std::string::npos ) return rawCommandLine; // Already entering parameters, 
                                             // assume command path is correct.
   G4String commandString = commandLine; 
   G4String targetCom = ModifyPath(commandString);
@@ -186,13 +186,13 @@ G4String G4VBasicShell::FindMatchingPath(
   G4String empty = "";
   if(aTree==NULL) return empty;
   G4String pathName = aTree->GetPathName();
-  if( aCommandPath.index( pathName ) == G4std::string::npos ) return empty;
+  if( aCommandPath.index( pathName ) == std::string::npos ) return empty;
   G4String remainingPath = aCommandPath;
   remainingPath.remove(0,pathName.length());
   size_t i = remainingPath.first('/');
-  if( i == G4std::string::npos ) {
+  if( i == std::string::npos ) {
     // Look for number of matching commands :
-    G4std::vector<G4UIcommand*> commands;
+    std::vector<G4UIcommand*> commands;
     G4int n_commandEntry = aTree->GetCommandEntry();
     for( G4int i_thCommand = 1; i_thCommand <= n_commandEntry; i_thCommand++ ) {
       G4UIcommand* cmd = aTree->GetCommand(i_thCommand);
@@ -212,7 +212,7 @@ G4String G4VBasicShell::FindMatchingPath(
       return empty;
     }
     // Look for sub tree :
-    G4std::vector<G4UIcommandTree*> trees;
+    std::vector<G4UIcommandTree*> trees;
     G4String nextPath = pathName;
     nextPath.append(remainingPath);
     G4int n_treeEntry = aTree->GetTreeEntry();
@@ -330,7 +330,7 @@ void G4VBasicShell::ApplyShellCommand (
     G4String ss = command(1,command.length()-1);
     G4int vl;
     const char* tt = ss;
-    G4std::istrstream is((char*)tt);
+    std::istrstream is((char*)tt);
     is >> vl;
     G4int nh = UI->GetNumberOfHistory();
     if(vl>=0 && vl<nh) { 
@@ -408,7 +408,7 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   if(UI==NULL) return;
   G4UIcommandTree * treeTop = UI->GetTree();
   size_t i = newCommand.index(" ");
-  if( i != G4std::string::npos )
+  if( i != std::string::npos )
   {
     G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
     newValue.strip(G4String::both);
@@ -442,7 +442,7 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   floor[iFloor]->ListCurrentWithNum();
   // 1998 Oct 2 non-number input
   while(1){
-   //G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<G4std::flush;
+   //G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<std::flush;
     G4cout << G4endl << "Type the number ( 0:end, -n:n level back ) : "<<G4endl;
     G4int i;
     if(!GetHelpChoice(i)){

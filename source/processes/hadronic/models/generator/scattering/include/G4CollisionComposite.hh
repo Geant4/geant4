@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.hh,v 1.8 2002/12/13 13:04:42 gcosmo Exp $
+// $Id: G4CollisionComposite.hh,v 1.9 2003/06/16 17:07:53 gunter Exp $
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -83,7 +83,7 @@ private:
 private:
 
   G4CollisionVector components;
-  G4std::vector<G4CrossSectionBuffer> theBuffer;
+  std::vector<G4CrossSectionBuffer> theBuffer;
   
   static const G4int nPoints;
   static G4double theT[];

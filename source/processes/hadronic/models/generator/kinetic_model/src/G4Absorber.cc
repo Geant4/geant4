@@ -84,7 +84,7 @@ G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
   G4double charge0 = kt.GetDefinition()->GetPDGCharge();
   G4ThreeVector pos = kt.GetPosition();
 
-  G4std::vector<G4KineticTrack *>::iterator iter;
+  std::vector<G4KineticTrack *>::iterator iter;
   for(iter = tgt.begin(); iter != tgt.end(); ++iter)
   {
     G4KineticTrack * curr = *iter;

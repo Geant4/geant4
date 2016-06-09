@@ -9,17 +9,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPattribute.cc,v 1.5 2000/01/21 13:42:56 gcosmo Exp $ */
-
-//static char rcsid[] ="$Id: STEPattribute.cc,v 1.5 2000/01/21 13:42:56 gcosmo Exp $";
-
-
-// Added inclusion of 'stream.h' for non-ISO setup - GC
-#ifndef G4USE_STD_NAMESPACE
-  #ifndef WIN32
-    #include <stream.h>
-  #endif
-#endif
+/* $Id: STEPattribute.cc,v 1.6 2003/06/06 17:07:32 gcosmo Exp $ */
 
 #include <read_func.h>
 #include <STEPattribute.h>
@@ -114,7 +104,7 @@ STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
 	return _error.severity (SEVERITY_INPUT_ERROR);
     }
 
-    G4std::istrstream in ((char *)s); // sz defaults to length of s
+    std::istrstream in ((char *)s); // sz defaults to length of s
     int valAssigned = 0;
 
     // read in value for attribute
@@ -203,7 +193,7 @@ STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
  ** Returns:  Severity, which indicates success, or failure
  **         value >= SEVERITY_WARNING means program can continue parsing input,
  **         value <= SEVERITY_INPUT_ERROR  is fatal read error
- ** Description:  the value of the attribute is read from G4std::istream
+ ** Description:  the value of the attribute is read from std::istream
  **               the format expected is STEP exchange file
  **          modified to accept '$' as value for OPTIONAL ATTRIBUTE,
  **             (since this function is used for reading files in both
@@ -214,7 +204,7 @@ STEPattribute::StrToVal (const char* s, InstMgr * instances, int addFileId)
 // the delim separating the last attribute from the end of the entity (')').
 
 Severity
-STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId,
+STEPattribute::STEPread (std::istream& in, InstMgr * instances, int addFileId,
 			 const char *currSch)
 {
     char errStr[BUFSIZ];
@@ -232,7 +222,7 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId,
     //  set the value to be null (reinitialize the attribute value)
     set_null();
 
-    in >> G4std::ws; // skip whitespace
+    in >> std::ws; // skip whitespace
     in >> c;
     in.putback (c);    //  leave input stream alone
 
@@ -246,7 +236,7 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId,
     {
 	if(c == '*')
 	{
-	    in.get(c);  // take * off the G4std::istream
+	    in.get(c);  // take * off the std::istream
 	    _error.severity(SEVERITY_WARNING);
 	    sprintf(errStr, "  WARNING: attribute %s of type %s, %s",
 		    aDesc->Name(), aDesc->TypeName(),
@@ -269,7 +259,7 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId,
     {
 	if(c == '*')
 	{
-	    in.get(c);  // take * off the G4std::istream
+	    in.get(c);  // take * off the std::istream
 	    _error.severity(SEVERITY_NULL);
 	}
 	else
@@ -309,7 +299,7 @@ STEPattribute::STEPread (G4std::istream& in, InstMgr * instances, int addFileId,
 /*
       case '*':
       {
-	  in.get(c);  // take * off the G4std::istream
+	  in.get(c);  // take * off the std::istream
 	  if( IsDerived() )
 	    _error.severity(SEVERITY_NULL);
 	  else if( aDesc->AttrType() == AttrType_Redefining )  
@@ -556,7 +546,7 @@ STEPattribute::asStr (SCLstring& str, const char *currSch) const
 // The output is in physical file format.
 
 void
-STEPattribute::STEPwrite (G4std::ostream& out, const char *currSch)
+STEPattribute::STEPwrite (std::ostream& out, const char *currSch)
 { 
     // The attribute has been derived by a subtype's attribute
     if ( IsDerived() ) {
@@ -1084,13 +1074,13 @@ STEPattribute::ValidLevel (const char *attrValue, ErrorDescriptor *error,
   
 /******************************************************************
  ** Procedure:  operator <<
- ** Parameters:  G4std::ostream & out -- output stream
+ ** Parameters:  std::ostream & out -- output stream
  **              STEPattribute & a -- attribute to output
- ** Returns:  G4std::ostream &
+ ** Returns:  std::ostream &
  ** Description:  overloads the output operator to print an attribute 
  ******************************************************************/
 
-G4std::ostream &operator<< ( G4std::ostream& out, STEPattribute& a )
+std::ostream &operator<< ( std::ostream& out, STEPattribute& a )
 {
     a.STEPwrite (out);
     return out;
@@ -1138,19 +1128,13 @@ STEPattribute::AddErrorInfo()
 // if it hits one of StopChars it puts it back.
 // RETURNS: the last char it read.
 char
-STEPattribute::SkipBadAttr(G4std::istream& in, char *StopChars)
+STEPattribute::SkipBadAttr(std::istream& in, char *StopChars)
 {
 
-// turn skipping whitespace off
-#ifdef G4USE_STD_NAMESPACE
-    in.unsetf(G4std::ios::skipws);
-#else
-    #ifndef WIN32
-      int sk = in.skip(0);  
-    #endif
-#endif
+    // turn skipping whitespace off
+    in.unsetf(std::ios::skipws);
 
-	// read bad data until end of this attribute or entity.
+    // read bad data until end of this attribute or entity.
     char *foundCh = 0;
     char c = '\0';
     char errStr[BUFSIZ];
@@ -1176,14 +1160,8 @@ STEPattribute::SkipBadAttr(G4std::istream& in, char *StopChars)
     }
     in.putback (c);
 
-// set skip whitespace to its original state
-#ifdef G4USE_STD_NAMESPACE
-    in.setf(G4std::ios::skipws);
-#else
-    #ifndef WIN32
-      in.skip(sk);
-    #endif
-#endif
+    // set skip whitespace to its original state
+    in.setf(std::ios::skipws);
 
     return c;
 }

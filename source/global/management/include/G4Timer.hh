@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Timer.hh,v 1.11 2001/07/11 10:00:52 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Timer.hh,v 1.12 2003/06/06 16:17:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -55,7 +55,7 @@
 //
 // Operators:
 //
-// G4std::ostream& operator << (G4std::ostream& os, const G4Timer& t);
+// std::ostream& operator << (std::ostream& os, const G4Timer& t);
 //   Print the elapsed real,system and usertimes on os. Prints **s for times
 //   if !IsValid
 //
@@ -122,7 +122,7 @@ private:
     tms fStartTimes,fEndTimes;
 };
 
-G4std::ostream& operator << (G4std::ostream& os, const G4Timer& t);
+std::ostream& operator << (std::ostream& os, const G4Timer& t);
 
 // Inline functions:
 

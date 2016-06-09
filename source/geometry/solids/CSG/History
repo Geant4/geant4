@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2003/02/14 09:50:02 gcosmo Exp $
+$Id: History,v 1.54 2003/06/25 13:05:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 25, 2003   G.Folger                  geom-csg-V05-01-00
+- Added disclaimer of liability where needed.
 
 Feb 03, 2003   G.Cosmo                   geom-csg-V05-00-00
 - G4Cons.cc: enhanced treatment of phi-sections,

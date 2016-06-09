@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CurveVector.hh,v 1.5 2001/07/11 09:59:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4CurveVector.hh,v 1.6 2003/06/16 16:52:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4CurveVector
@@ -37,9 +37,9 @@
 #ifndef included_G4CurveVector
 #define included_G4CurveVector
 
-#include "g4std/vector"
+#include <vector>
 #include "G4Curve.hh"
 
-typedef G4std::vector<G4Curve*> G4CurveVector;
+typedef std::vector<G4Curve*> G4CurveVector;
 
 #endif

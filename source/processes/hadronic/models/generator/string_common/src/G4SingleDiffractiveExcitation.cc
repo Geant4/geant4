@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SingleDiffractiveExcitation.cc,v 1.10 2002/12/12 19:17:55 gunter Exp $
+// $Id: G4SingleDiffractiveExcitation.cc,v 1.11 2003/05/30 14:43:20 hpw Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -236,8 +236,8 @@ G4ThreeVector G4SingleDiffractiveExcitation::GaussianPt(G4double widthSquare, G4
 	return G4ThreeVector (pt2*cos(phi), pt2*sin(phi), 0.);    
 }
 
-G4SingleDiffractiveExcitation::G4SingleDiffractiveExcitation(const G4SingleDiffractiveExcitation &right)
-:
+G4SingleDiffractiveExcitation::G4SingleDiffractiveExcitation(const G4SingleDiffractiveExcitation &)
+: G4DiffractiveExcitation(),
 widthOfPtSquare(0) , minExtraMass(0),
 minmass(0)
 {
@@ -250,20 +250,20 @@ G4SingleDiffractiveExcitation::~G4SingleDiffractiveExcitation()
 }
 
 
-const G4SingleDiffractiveExcitation & G4SingleDiffractiveExcitation::operator=(const G4SingleDiffractiveExcitation &right)
+const G4SingleDiffractiveExcitation & G4SingleDiffractiveExcitation::operator=(const G4SingleDiffractiveExcitation &)
 {
 	G4Exception("G4SingleDiffractiveExcitation = operator meant to be called");
 	return *this;
 }
 
 
-int G4SingleDiffractiveExcitation::operator==(const G4SingleDiffractiveExcitation &right) const
+int G4SingleDiffractiveExcitation::operator==(const G4SingleDiffractiveExcitation &) const
 {
 	G4Exception("G4SingleDiffractiveExcitation == operator meant to be called");
 	return false;
 }
 
-int G4SingleDiffractiveExcitation::operator!=(const G4SingleDiffractiveExcitation &right) const
+int G4SingleDiffractiveExcitation::operator!=(const G4SingleDiffractiveExcitation &) const
 {
 	G4Exception("G4SingleDiffractiveExcitation != operator meant to be called");
 	return true;

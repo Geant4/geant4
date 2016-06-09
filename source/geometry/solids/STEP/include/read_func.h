@@ -8,11 +8,11 @@
 // print Error information for debugging purposes
 extern void PrintErrorState(ErrorDescriptor &err);
 
-// print G4std::istream error information for debugging purposes
-extern void IStreamState(G4std::istream &in);
+// print std::istream error information for debugging purposes
+extern void IStreamState(std::istream &in);
 
 extern int 
-ReadInteger(SCLP23(Integer) &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadInteger(SCLP23(Integer) &val, std::istream &in, ErrorDescriptor *err, 
 	    char *tokenList);
 
 extern int 
@@ -27,10 +27,10 @@ extern char *
 WriteReal(SCLP23(Real) val, SCLstring &s);
 
 extern void
-WriteReal(SCLP23(Real) val, G4std::ostream &out);
+WriteReal(SCLP23(Real) val, std::ostream &out);
 
 extern int
-ReadReal(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadReal(SCLP23(Real) &val, std::istream &in, ErrorDescriptor *err, 
 	 char *tokenList);
 
 extern int
@@ -42,7 +42,7 @@ RealValidLevel (const char *attrValue, ErrorDescriptor *err,
 		int clearError, int optional, char *tokenList);
 
 extern int
-ReadNumber(SCLP23(Real) &val, G4std::istream &in, ErrorDescriptor *err, 
+ReadNumber(SCLP23(Real) &val, std::istream &in, ErrorDescriptor *err, 
 	   char *tokenList);
 
 extern int
@@ -56,45 +56,45 @@ NumberValidLevel (const char *attrValue, ErrorDescriptor *err,
 
 ////////////////////
 
-extern int   QuoteInString(G4std::istream& in);
+extern int   QuoteInString(std::istream& in);
 
 extern void 
-PushPastString (G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
+PushPastString (std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 extern void 
-PushPastImbedAggr (G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
+PushPastImbedAggr (std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 extern void 
-PushPastAggr1Dim(G4std::istream& in, SCLstring &s, ErrorDescriptor *err);
+PushPastAggr1Dim(std::istream& in, SCLstring &s, ErrorDescriptor *err);
 
 ////////////////////
 
 extern Severity 
-FindStartOfInstance(G4std::istream& in, SCLstring&  inst);
+FindStartOfInstance(std::istream& in, SCLstring&  inst);
 
 	//  used for instances that aren\'t valid - reads to next \';\'
 extern Severity 
-SkipInstance (G4std::istream& in, SCLstring & inst);
+SkipInstance (std::istream& in, SCLstring & inst);
 
 extern const char *
-SkipSimpleRecord(G4std::istream &in, SCLstring &buf, ErrorDescriptor *err);
+SkipSimpleRecord(std::istream &in, SCLstring &buf, ErrorDescriptor *err);
 
  // this includes entity names
 extern const char *
-ReadStdKeyword(G4std::istream& in, SCLstring &buf, int skipInitWS = 1);
+ReadStdKeyword(std::istream& in, SCLstring &buf, int skipInitWS = 1);
 
 extern const char* 
-GetKeyword(G4std::istream& in, const char* delims, ErrorDescriptor &err);
+GetKeyword(std::istream& in, const char* delims, ErrorDescriptor &err);
 
 extern int 
-FoundEndSecKywd(G4std::istream& in, ErrorDescriptor &err);
+FoundEndSecKywd(std::istream& in, ErrorDescriptor &err);
 
 extern const char *ReadComment(SCLstring &ss, const char *s);
 
-extern const char *ReadComment(G4std::istream& in, SCLstring &s);
+extern const char *ReadComment(std::istream& in, SCLstring &s);
 
-extern Severity    ReadPcd(G4std::istream& in);   //print control directive
+extern Severity    ReadPcd(std::istream& in);   //print control directive
 
-extern void        ReadTokenSeparator(G4std::istream& in, SCLstring *comments = 0);
+extern void        ReadTokenSeparator(std::istream& in, SCLstring *comments = 0);
 
 #endif

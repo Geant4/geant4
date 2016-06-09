@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCollision.hh,v 1.6 2002/12/12 19:17:42 gunter Exp $ //
+// $Id: G4VCollision.hh,v 1.7 2003/06/16 17:08:46 gunter Exp $ //
 
 #ifndef G4VCollision_h
 #define G4VCollision_h
@@ -78,7 +78,7 @@ protected:
 
   virtual const G4VAngularDistribution* GetAngularDistribution() const = 0;
 
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const = 0;
+  virtual const std::vector<G4String>& GetListOfColliders(G4int whichOne) const = 0;
 
 
 private:  

@@ -83,12 +83,11 @@ Notes:
 
 The source code and some binary libraries are available through our "Source
 Code" Web page:
-- see our <A href="http://wwwinfo.cern.ch/asd/geant4/geant4.html">Geant4
-  Home Page</A>.
+- see our Geant4 Home Page (http://cern.ch/geant4).
 
-Please refer to <A
-href="http://wwwinfo.cern.ch/asd/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
-User Documentation</A> for further information about using Geant4.
+Please refer to the Geant4 User Documentation
+(http://cern.ch/geant4/G4UsersDocuments/Overview/html)
+for further information about using Geant4.
 
 
 Contents
@@ -130,8 +129,7 @@ Platforms configured but not tested and not supported:
 
 Geant4 1.0 requires the installation of CLHEP 1.4. 
 
-See <A href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">
-CLHEP 1.4</A>.  
+See CLHEP 1.4 (http://cern.ch/clhep/INSTALLATION/clhep.html).
 
 Be aware, for the platforms listed below, the standard CLHEP installation
 will use ISO-ANSI setup:
@@ -156,7 +154,7 @@ The following versions of STL have been tested:
    ObjectSpace STL on
           DEC, HP, NT and SUN.
 
-          See <A href="http://www.objectspace.com/">ObjectSpace</A>.
+          See ObjectSpace (http://www.objectspace.com).
 
 This is selected at installation/compile time by the environment variable
 G4USE_OSPACE in the case of the latter - see documentation.

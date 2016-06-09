@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em4DetectorConstruction.cc,v 1.5 2003/04/01 16:36:37 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

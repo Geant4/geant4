@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuBremsstrahlungSTD.cc,v 1.8 2003/06/06 17:42:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,7 +64,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBremsstrahlungSTD::G4MuBremsstrahlungSTD(const G4String& name) 
+G4MuBremsstrahlungSTD::G4MuBremsstrahlungSTD(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
     theBaseParticle(0)
@@ -72,12 +74,12 @@ G4MuBremsstrahlungSTD::G4MuBremsstrahlungSTD(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuBremsstrahlungSTD::~G4MuBremsstrahlungSTD() 
+G4MuBremsstrahlungSTD::~G4MuBremsstrahlungSTD()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlungSTD::InitialiseProcess() 
+void G4MuBremsstrahlungSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Gamma::Gamma());
 
@@ -103,7 +105,7 @@ const G4ParticleDefinition* G4MuBremsstrahlungSTD::DefineBaseParticle(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuBremsstrahlungSTD::PrintInfoDefinition() const
+void G4MuBremsstrahlungSTD::PrintInfoDefinition() 
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 

@@ -97,7 +97,7 @@ G4QGSMSplitableHadron::G4QGSMSplitableHadron(const G4Nucleon & aNucleon, G4bool 
 
 G4QGSMSplitableHadron::~G4QGSMSplitableHadron(){}
 
-const G4QGSMSplitableHadron & G4QGSMSplitableHadron::operator=(const G4QGSMSplitableHadron &right)
+const G4QGSMSplitableHadron & G4QGSMSplitableHadron::operator=(const G4QGSMSplitableHadron &)
 {
   G4Exception("G4QGSMSplitableHadron::operator= meant to not be accessable");
   return *this;
@@ -145,7 +145,7 @@ void G4QGSMSplitableHadron::DiffractiveSplitUp()
   RightMom.setPy(HadronMom.py() - pt.y());
 
   G4double Local1 = HadronMom.minus() + (RightMom.perp2() - LeftMom.perp2())/HadronMom.plus();
-  G4double Local2 = sqrt(G4std::max(0., sqr(Local1) - 4.*RightMom.perp2()*HadronMom.minus()/HadronMom.plus()));
+  G4double Local2 = sqrt(std::max(0., sqr(Local1) - 4.*RightMom.perp2()*HadronMom.minus()/HadronMom.plus()));
   if (Direction) Local2 = -Local2;
   G4double RightMinus   = 0.5*(Local1 + Local2);
   G4double LeftMinus = HadronMom.minus() - RightMinus;
@@ -382,7 +382,7 @@ G4ThreeVector G4QGSMSplitableHadron::GaussianPt(G4double widthSquare, G4double m
 }
 
 G4Parton * G4QGSMSplitableHadron::
-BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode, G4int nSeaPair)
+BuildSeaQuark(G4bool isAntiQuark, G4int aPDGCode, G4int /* nSeaPair*/)
 {
   if (isAntiQuark) aPDGCode*=-1;
   G4Parton* result = new G4Parton(aPDGCode);   

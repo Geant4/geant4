@@ -20,31 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
-// $Id: G4HepRepFileSceneHandler.cc,v 1.11 2003/01/24 21:18:48 perl Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.11.2.1.2.2 2003/06/25 10:20:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -256,10 +233,10 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
     G4cout << "G4HepRepFileSceneHandler::AddThis(G4VTrajectory&) " << G4endl;
 #endif
 
-  G4std::vector<G4AttValue>* attValues = traj.CreateAttValues();
-  G4std::vector<G4AttValue>::iterator iAttVal;
-  const G4std::map<G4String,G4AttDef>* attDefs = traj.GetAttDefs();
-  G4std::map<G4String,G4AttDef>::const_iterator iAttDef;
+  std::vector<G4AttValue>* attValues = traj.CreateAttValues();
+  std::vector<G4AttValue>::iterator iAttVal;
+  const std::map<G4String,G4AttDef>* attDefs = traj.GetAttDefs();
+  std::map<G4String,G4AttDef>::const_iterator iAttDef;
   G4int i;
 
   // Open the HepRep output file if it is not already open.
@@ -314,9 +291,9 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
     // different Types.
     if (traj.GetPointEntries()>0) {
       G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
-      G4std::vector<G4AttValue>* pointAttValues
+      std::vector<G4AttValue>* pointAttValues
 	= aTrajectoryPoint->CreateAttValues();
-      const G4std::map<G4String,G4AttDef>* pointAttDefs
+      const std::map<G4String,G4AttDef>* pointAttDefs
 	= aTrajectoryPoint->GetAttDefs();
       if (pointAttValues && pointAttDefs) {
 	for (iAttVal = pointAttValues->begin();
@@ -357,7 +334,7 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
   if (attValues && attDefs) {
     for (iAttVal = attValues->begin();
 	 iAttVal != attValues->end(); ++iAttVal) {
-      G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+      std::map<G4String,G4AttDef>::const_iterator iAttDef =
 	attDefs->find(iAttVal->GetName());
       if (iAttDef == attDefs->end()) {
 	G4cout << "G4HepRepFileSceneHandler::AddThis(traj):"
@@ -403,16 +380,16 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
     hepRepXMLWriter->addInstance();
 
   // Copy the current trajectory point's G4AttValues to HepRepAttValues.
-    G4std::vector<G4AttValue>* pointAttValues
+    std::vector<G4AttValue>* pointAttValues
       = aTrajectoryPoint->CreateAttValues();
-    const G4std::map<G4String,G4AttDef>* pointAttDefs
+    const std::map<G4String,G4AttDef>* pointAttDefs
       = aTrajectoryPoint->GetAttDefs();
 
     if (pointAttValues && pointAttDefs) {
-      G4std::vector<G4AttValue>::iterator iAttVal;
+      std::vector<G4AttValue>::iterator iAttVal;
       for (iAttVal = pointAttValues->begin();
 	   iAttVal != pointAttValues->end(); ++iAttVal) {
-	G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	std::map<G4String,G4AttDef>::const_iterator iAttDef =
 	  pointAttDefs->find(iAttVal->GetName());
 	if (iAttDef == pointAttDefs->end()) {
 	  G4cout << "\nG4VTrajectory::ShowTrajectory:"
@@ -484,7 +461,11 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
   }
 }
 
+#ifdef G4HEPREPFILEDEBUG
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
+#else
+void G4HepRepFileSceneHandler::AddPrimitive(const G4Text&) {
+#endif
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) called:"
@@ -565,7 +546,7 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
   } while (notLastFace);
 }
 
-void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
+void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS&) {
 #ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."

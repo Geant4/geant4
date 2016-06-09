@@ -24,7 +24,7 @@
 // and all its terms.
 //
 // $Id: FCALTBEventAction.hh,v 1.7 2003/02/14 15:54:43 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

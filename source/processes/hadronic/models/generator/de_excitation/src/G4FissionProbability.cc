@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc,v 1.8 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FissionProbability.cc,v 1.10 2003/05/30 13:23:24 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -34,7 +34,7 @@
 
 
 
-G4FissionProbability::G4FissionProbability(const G4FissionProbability &right)
+G4FissionProbability::G4FissionProbability(const G4FissionProbability &) : G4VEmissionProbability()
 {
     G4Exception("G4FissionProbability::copy_constructor meant to not be accessable");
 }
@@ -42,19 +42,19 @@ G4FissionProbability::G4FissionProbability(const G4FissionProbability &right)
 
 
 
-const G4FissionProbability & G4FissionProbability::operator=(const G4FissionProbability &right)
+const G4FissionProbability & G4FissionProbability::operator=(const G4FissionProbability &)
 {
     G4Exception("G4FissionProbability::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4FissionProbability::operator==(const G4FissionProbability &right) const
+G4bool G4FissionProbability::operator==(const G4FissionProbability &) const
 {
     return false;
 }
 
-G4bool G4FissionProbability::operator!=(const G4FissionProbability &right) const
+G4bool G4FissionProbability::operator!=(const G4FissionProbability &) const
 {
     return true;
 }
@@ -68,12 +68,18 @@ G4double G4FissionProbability::EmissionProbability(const G4Fragment & fragment, 
     G4double Z = fragment.GetZ();
     G4double U = fragment.GetExcitationEnergy();
   
-    G4double Ucompound = U - G4PairingCorrection::GetInstance()->GetPairingCorrection(G4int(A),G4int(Z));
-    G4double Ufission = U - G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(G4int(A),G4int(Z));
+    G4double Ucompound = U - G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(A),
+										      static_cast<G4int>(Z));
+    G4double Ufission = U - G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(static_cast<G4int>(A),
+											    static_cast<G4int>(Z));
   
-    G4double SystemEntropy = 2.0*sqrt(theEvapLDP.LevelDensityParameter(A,Z,Ucompound)*Ucompound);
+    G4double SystemEntropy = 2.0*sqrt(theEvapLDP.LevelDensityParameter(static_cast<G4int>(A),
+								       static_cast<G4int>(Z),
+								       Ucompound)*Ucompound);
 	
-    G4double afission = theFissLDP.LevelDensityParameter(A,Z,Ufission);
+    G4double afission = theFissLDP.LevelDensityParameter(static_cast<G4int>(A),
+							 static_cast<G4int>(Z),
+							 Ufission);
 
     G4double Cf = 2.0*sqrt(afission*MaximalKineticEnergy);
 

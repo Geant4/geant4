@@ -22,7 +22,7 @@
 //
 //
 // $Id: F02StepCut.cc,v 1.2 2001/07/11 09:58:04 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "F02StepCut.hh"

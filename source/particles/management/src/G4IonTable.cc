@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.33 2003/03/10 08:43:53 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4IonTable.cc,v 1.35 2003/06/16 16:58:26 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -52,10 +52,10 @@
 #include "G4VIsotopeTable.hh"
 
 #include "G4ios.hh"
-#include "g4std/iostream"               
-#include "g4std/iomanip"               
+#include <iostream>               
+#include <iomanip>               
 
-#include "g4std/strstream"
+#include <strstream>
 
 
 ////////////////////
@@ -167,7 +167,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E, G4int 
 ////////////////////
 // -- GetIon methods  ------
 ////////////////////
-G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
+G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int , G4int )
 {
   return GetIon(Z, A);
 }
@@ -270,9 +270,9 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
     return "?";
   }
   char val[50];
-  G4std::ostrstream os(val,50);
-  os.setf(G4std::ios::fixed);
-  os << A << '[' << G4std::setprecision(1) << E/keV << ']' << '\0';
+  std::ostrstream os(val,50);
+  os.setf(std::ios::fixed);
+  os << A << '[' << std::setprecision(1) << E/keV << ']' << '\0';
   name += val;
   return name;
 }
@@ -459,7 +459,7 @@ void  G4IonTable::AddProcessManager(const G4String& name)
 {
   // create command string for addProcManager
   char cmdAdd[60];
-  G4std::ostrstream osAdd(cmdAdd,60);
+  std::ostrstream osAdd(cmdAdd,60);
   osAdd << "/run/particle/addProcManager "<< name << '\0';
 
   // set /control/verbose 0
@@ -473,7 +473,7 @@ void  G4IonTable::AddProcessManager(const G4String& name)
   G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
 }
 
-#include "g4std/vector"     
+#include <vector>     
 
 ////////////////////
 void  G4IonTable::RegisterIsotopeTable(G4VIsotopeTable* table)
@@ -489,7 +489,7 @@ G4VIsotopeTable* G4IonTable::GetIsotopeTable() const
 
 
 ////////////////////
-G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int J)
+G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E, G4int )
 {
   if (fIsotopeTable ==0) return 0;
 

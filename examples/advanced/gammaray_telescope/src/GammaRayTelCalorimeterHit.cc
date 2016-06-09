@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterHit.cc,v 1.2 2001/07/11 09:56:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: GammaRayTelCalorimeterHit.cc,v 1.3 2003/05/30 15:09:00 flongo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -58,6 +58,7 @@ GammaRayTelCalorimeterHit::~GammaRayTelCalorimeterHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelCalorimeterHit::GammaRayTelCalorimeterHit(const GammaRayTelCalorimeterHit& right)
+  :G4VHit()
 {
   EdepCAL = right.EdepCAL; 
   CALBarNumber = right.CALBarNumber;
@@ -82,7 +83,7 @@ const GammaRayTelCalorimeterHit& GammaRayTelCalorimeterHit::operator=(const Gamm
 
 int GammaRayTelCalorimeterHit::operator==(const GammaRayTelCalorimeterHit& right) const
 {
-  return 0;
+  return((EdepCAL==right.EdepCAL)&&(CALBarNumber==right.CALBarNumber)&&(CALPlaneNumber==right.CALPlaneNumber)&&(IsCALPlane==right.IsCALPlane)&& (pos==right.pos));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

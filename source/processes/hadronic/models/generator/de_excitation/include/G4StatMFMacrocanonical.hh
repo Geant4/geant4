@@ -59,7 +59,7 @@ private:
 
 
     // copy constructor
-    G4StatMFMacroCanonical(const G4StatMFMacroCanonical &right) : G4VStatMFEnsemble() {};
+    G4StatMFMacroCanonical(const G4StatMFMacroCanonical &) : G4VStatMFEnsemble() {};
 
 
     // operators
@@ -82,11 +82,11 @@ private:
     void CalculateTemperature(const G4Fragment & theFragment);
 
     // Determines fragments multiplicities and compute total fragment multiplicity
-    G4double ChooseA(const G4double A, G4std::vector<G4double> & ANumbers);
+    G4double ChooseA(const G4double A, std::vector<G4double> & ANumbers);
 	
     // Samples charges of fragments
     G4StatMFChannel * ChooseZ(const G4int & Z, 
-			      G4std::vector<G4double> & FragmentsA);
+			      std::vector<G4double> & FragmentsA);
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -102,7 +102,7 @@ private:
     G4double _Kappa;
 
     // Clusters
-    G4std::vector<G4VStatMFMacroCluster*> _theClusters;
+    std::vector<G4VStatMFMacroCluster*> _theClusters;
 
   struct DeleteFragment 
   {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StateManager.cc,v 1.8 2002/12/05 02:32:21 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StateManager.cc,v 1.9 2003/06/06 16:17:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -54,7 +54,7 @@ G4StateManager::~G4StateManager()
   {
     state = theDependentsList.back();
     theDependentsList.pop_back();
-    for (G4std::vector<G4VStateDependent*>::iterator
+    for (std::vector<G4VStateDependent*>::iterator
          i=theDependentsList.begin(); i!=theDependentsList.end(); i++)
     {
       if (*i==state)
@@ -134,7 +134,7 @@ G4bool
 G4StateManager::DeregisterDependent(G4VStateDependent* aDependent)
 {
   G4VStateDependent* tmp = 0;
-  G4std::vector<G4VStateDependent*>::iterator i;
+  std::vector<G4VStateDependent*>::iterator i;
   for (i=theDependentsList.begin(); i!=theDependentsList.end(); i++)
     {
       if (**i==*aDependent) 
@@ -198,7 +198,7 @@ G4VStateDependent*
 G4StateManager::RemoveDependent(const G4VStateDependent* aDependent)
 {
   G4VStateDependent* tmp = 0;
-  G4std::vector<G4VStateDependent*>::iterator i;
+  std::vector<G4VStateDependent*>::iterator i;
   for (i=theDependentsList.begin(); i!=theDependentsList.end(); i++)
     {
       if (**i==*aDependent) 

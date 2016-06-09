@@ -22,7 +22,7 @@
 //
 //
 // $Id: G3MedTableEntry.hh,v 1.5 2001/07/11 09:58:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------
 // Class description:

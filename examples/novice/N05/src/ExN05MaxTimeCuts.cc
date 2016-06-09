@@ -21,15 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05MaxTimeCuts.cc,v 1.5 2002/01/09 17:24:20 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN05MaxTimeCuts.cc,v 1.6 2003/05/28 11:20:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
 // --------------------------------------------------------------
 //                   15 April 1998 M.Maire
 // --------------------------------------------------------------
@@ -53,7 +50,8 @@ ExN05MaxTimeCuts::ExN05MaxTimeCuts(const G4String& aName)
 ExN05MaxTimeCuts::~ExN05MaxTimeCuts()
 {}
 
-ExN05MaxTimeCuts::ExN05MaxTimeCuts(ExN05MaxTimeCuts& right)
+ExN05MaxTimeCuts::ExN05MaxTimeCuts(ExN05MaxTimeCuts&)
+  : ExN05SpecialCuts()
 {}
 
  

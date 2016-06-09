@@ -31,7 +31,7 @@
 #include "G4Clebsch.hh"
 #include "G4ResonanceNames.hh"
 
-#include "g4std/map"
+#include <map>
 
 class G4ParticleDefinition;
 class G4PhysicsVector;

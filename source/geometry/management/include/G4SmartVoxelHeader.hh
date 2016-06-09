@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.hh,v 1.7 2002/05/15 10:06:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SmartVoxelHeader.hh,v 1.8 2003/06/16 16:51:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4SmartVoxelHeader
 //
@@ -39,7 +39,7 @@
 // G4double fmaxExtent
 // G4double fminExtent
 //   - Minimum and maximum coordiantes along the axis
-// G4std::vector<G4SmartVoxelProxy*> fslices
+// std::vector<G4SmartVoxelProxy*> fslices
 //   - The slices along the axis
 //
 // G4int fminEquivalent
@@ -63,7 +63,7 @@
 
 #include "G4ios.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 // Forward declarations
 class G4LogicalVolume;
@@ -71,10 +71,10 @@ class G4VoxelLimits;
 class G4VPhysicalVolume;
 
 // Typedefs
-typedef G4std::vector<G4SmartVoxelProxy*> G4ProxyVector;
-typedef G4std::vector<G4SmartVoxelNode*> G4NodeVector;
-typedef G4std::vector<G4int> G4VolumeNosVector;
-typedef G4std::vector<G4double> G4VolumeExtentVector;
+typedef std::vector<G4SmartVoxelProxy*> G4ProxyVector;
+typedef std::vector<G4SmartVoxelNode*> G4NodeVector;
+typedef std::vector<G4int> G4VolumeNosVector;
+typedef std::vector<G4double> G4VolumeExtentVector;
 
 class G4SmartVoxelHeader
 {
@@ -119,8 +119,8 @@ class G4SmartVoxelHeader
 
     G4bool operator == (const G4SmartVoxelHeader& pHead) const;
 
-    friend G4std::ostream&
-    operator << (G4std::ostream&s, const G4SmartVoxelHeader& h);
+    friend std::ostream&
+    operator << (std::ostream&s, const G4SmartVoxelHeader& h);
 
   protected:
 

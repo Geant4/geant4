@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.11 2002/10/01 04:30:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.13 2003/05/20 10:05:37 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -42,8 +42,8 @@
 #include "G4DecayTable.hh"
 
 
-G4ExcitedMesonConstructor::G4ExcitedMesonConstructor(G4int nStates,
-						       G4int isoSpin)
+G4ExcitedMesonConstructor::G4ExcitedMesonConstructor(G4int ,
+						       G4int )
     :   type("meson"), leptonNumber(0), baryonNumber(0)
 {
 }
@@ -1077,7 +1077,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::Add3PiMode(
 
 G4DecayTable*  G4ExcitedMesonConstructor::Add4PiMode( 
                                     G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4int iIso)
+                                    G4double br, G4int iIso3, G4int )
 {
   G4VDecayChannel* mode;
 
@@ -1114,7 +1114,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::Add4PiMode(
 
 G4DecayTable*  G4ExcitedMesonConstructor::Add2PiEtaMode( 
                                     G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4int iIso)
+                                    G4double br, G4int , G4int iIso)
 {
   // f1-->eta + pi + pi mode
 
@@ -1136,7 +1136,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::Add2PiEtaMode(
 
 G4DecayTable*  G4ExcitedMesonConstructor::Add2EtaMode( 
                                     G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4int iIso)
+                                    G4double br, G4int , G4int iIso)
 {
   if (iIso!=0) return decayTable;
 
@@ -1264,7 +1264,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::Add2PiRhoMode(
 
 G4DecayTable*  G4ExcitedMesonConstructor::AddKKStarMode( 
                                     G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4int iIso)
+                                    G4double br, G4int , G4int iIso)
 {
   // X(I=0,J=1)-->K + Anti-K*, Anti_K + K* mode
 
@@ -1298,7 +1298,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::AddKKStarMode(
 
 G4DecayTable*  G4ExcitedMesonConstructor::Add2KMode( 
                                     G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4int iIso)
+                                    G4double br, G4int iIso3, G4int )
 {
   G4VDecayChannel* mode;
 
@@ -1329,7 +1329,7 @@ G4DecayTable*  G4ExcitedMesonConstructor::Add2KMode(
 
 G4DecayTable*  G4ExcitedMesonConstructor::Add2KPiMode( 
                                     G4DecayTable* decayTable, const G4String& nameParent,
-                                    G4double br, G4int iIso3, G4int iIso)
+                                    G4double br, G4int , G4int iIso)
 {
 
   // X(I=0)-->KKpi 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3CalorHit.hh,v 1.4 2001/10/22 10:58:46 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em3CalorHit.hh,v 1.5 2003/06/03 10:36:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -47,7 +47,6 @@ class Em3CalorHit : public G4VHit
      ~Em3CalorHit();
       Em3CalorHit(const Em3CalorHit&);
       const Em3CalorHit& operator=(const Em3CalorHit&);
-      int operator==(const Em3CalorHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

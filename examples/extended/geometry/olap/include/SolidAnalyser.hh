@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SolidAnalyser.hh,v 1.1 2002/06/04 07:40:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: SolidAnalyser.hh,v 1.2 2003/06/16 16:49:23 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -37,8 +37,8 @@
 #ifndef SolidAnalyser_h
 #define SolidAnalyser_h
 
-#include "g4std/vector"
-#include "g4std/algorithm"
+#include <vector>
+#include <algorithm>
 
 #include "globals.hh"
 
@@ -63,37 +63,37 @@ public:
    
    // user method to retrieve information
    G4int GetParam(const G4VSolid *,
-                  G4std::vector<G4std::pair<G4String,G4double> > & ) const;
+                  std::vector<std::pair<G4String,G4double> > & ) const;
    
    ~SolidAnalyser();
 
 protected:   
    G4int  GetParam(const G4Box *,
-                   G4std::vector<G4std::pair<G4String,G4double> > & ) const;
+                   std::vector<std::pair<G4String,G4double> > & ) const;
    G4int  GetParam(const G4Cons *,
-                   G4std::vector<G4std::pair<G4String,G4double> > & ) const;
+                   std::vector<std::pair<G4String,G4double> > & ) const;
    G4int  GetParam(const G4Polycone  *,
-                   G4std::vector<G4std::pair<G4String,G4double> > & ) const;
+                   std::vector<std::pair<G4String,G4double> > & ) const;
    G4int  GetParam(const G4Polyhedra *,
-                   G4std::vector<G4std::pair<G4String,G4double> > & ) const;
+                   std::vector<std::pair<G4String,G4double> > & ) const;
    G4int  GetParam(const G4Trap *,
-                   G4std::vector<G4std::pair<G4String,G4double> > & ) const;
+                   std::vector<std::pair<G4String,G4double> > & ) const;
    G4int  GetParam(const G4Trd *,
-                   G4std::vector<G4std::pair<G4String,G4double> > & ) const;
+                   std::vector<std::pair<G4String,G4double> > & ) const;
    G4int  GetParam(const G4Tubs *,
-                   G4std::vector<G4std::pair<G4String,G4double> > & ) const;
+                   std::vector<std::pair<G4String,G4double> > & ) const;
    
 private:
 
    SolidAnalyser();
    
    G4int NotImplemented(const G4VSolid *,
-                       G4std::vector<G4std::pair<G4String,G4double> > & ) const;
+                       std::vector<std::pair<G4String,G4double> > & ) const;
 
    static SolidAnalyser * theInstance;
 };
 
-G4std::ostream & operator<<(G4std::ostream& flux,
-                            G4std::vector<G4std::pair<G4String,G4double> >& v);
+std::ostream & operator<<(std::ostream& flux,
+                            std::vector<std::pair<G4String,G4double> >& v);
 
 #endif

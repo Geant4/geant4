@@ -61,7 +61,7 @@
   }
     
   #include "G4NeutronHPThermalBoost.hh"
-  G4ParticleChange * G4NeutronHPChannelList::ApplyYourself(const G4Element * anElement, const G4Track & aTrack)
+  G4ParticleChange * G4NeutronHPChannelList::ApplyYourself(const G4Element * , const G4Track & aTrack)
   {
     G4NeutronHPThermalBoost aThermalE;
     G4int i, ii;

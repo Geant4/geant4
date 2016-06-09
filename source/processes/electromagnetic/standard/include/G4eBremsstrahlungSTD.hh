@@ -74,7 +74,7 @@ public:
   G4eBremsstrahlungSTD(const G4String& name = "eBrem");
 
   ~G4eBremsstrahlungSTD();
- 
+
   G4bool IsApplicable(const G4ParticleDefinition& p) 
     {return (&p == G4Electron::Electron() || &p == G4Positron::Positron());};
 
@@ -82,7 +82,7 @@ public:
                                     const G4Material*, G4double cut)
   {return cut;};
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&, 
 			           G4double&,
 			           G4double&,
@@ -95,7 +95,7 @@ public:
                                    G4double&,
                                    G4double&);
 
-  void PrintInfoDefinition() const;
+  void PrintInfoDefinition();
   // Print out of the class parameters
 
 protected:

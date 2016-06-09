@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2002/12/06 17:00:07 gcosmo Exp $
+$Id: History,v 1.4 2003/05/30 11:15:02 gcosmo Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 May, 03  G.Cosmo (persistencyEx-V05-01-00)
+- Tagged and included updates to README and scripts which were on the HEAD.
+
+17 March, 03  J.Allison
+- Added HepRep to Pers01VisManager.cc.
 
 06 December, 02   G.Cosmo (persistencyEx-V04-01-01)
 - Migration to new G4ApplicationState for messengers.

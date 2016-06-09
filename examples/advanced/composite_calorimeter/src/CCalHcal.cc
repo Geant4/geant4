@@ -26,7 +26,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalHcal.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 #include "CCalutils.hh"
 
 //#define debug
@@ -74,7 +74,7 @@ int CCalHcal::readFile() {
   G4cout << " ==> Opening file " << File() << " to read elements..."
        << G4endl;
 
-  G4std::ifstream is;
+  std::ifstream is;
   bool ok = openGeomFile(is, pathName, File());
   if (!ok)
     return 0;

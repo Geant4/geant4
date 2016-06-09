@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.7 2003/04/04 14:33:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EnergyLossMessenger.cc,v 1.9 2003/06/16 17:02:45 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
@@ -40,7 +40,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -113,6 +113,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   IntegCmd->SetParameterName("integ",true);
   IntegCmd->SetDefaultValue(true);
   IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  rangeCmd = new G4UIcmdWithABool("/process/eLoss/preciseRange",this);
+  rangeCmd->SetGuidance("Switch true/false the precise range calculation.");
+  rangeCmd->SetParameterName("range",true);
+  rangeCmd->SetDefaultValue(true);
+  rangeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -128,6 +134,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete MinEnCmd;
   delete MaxEnCmd;
   delete IntegCmd;
+  delete rangeCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -159,7 +166,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      G4double v1,v2;
      char unts[30];
      const char* t = newValue;
-     G4std::istrstream is((char*)t);
+     std::istrstream is((char*)t);
      is >> v1 >> v2 >> unts;
      G4String unt = unts;
      v2 *= G4UIcommand::ValueOf(unt);
@@ -176,6 +183,9 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
   if (command == IntegCmd) {
     lossTables->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
+  }
+  if (command == rangeCmd) {
+    lossTables->SetBuildPreciseRange(IntegCmd->GetNewBoolValue(newValue));
   }
 
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.hh,v 1.8 2003/01/17 18:54:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VMuEnergyLoss.hh,v 1.9 2003/06/16 17:01:45 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
 //
@@ -54,8 +54,8 @@
 #define G4VMuEnergyLoss_h 1
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4VEnergyLoss.hh"

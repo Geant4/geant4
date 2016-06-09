@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LogicalSkinSurface.cc,v 1.8 2002/08/06 08:23:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // G4LogicalSkinSurface Implementation

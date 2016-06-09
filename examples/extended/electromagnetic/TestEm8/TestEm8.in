@@ -34,7 +34,7 @@
 #/calor/cutE 3.0 mm
 #
 /run/initialize
-/run/particle/dumpCutValues
+#/run/dumpCouples
 #
 /gun/particle e-
 # 
@@ -42,7 +42,7 @@
 #
 /gun/energy 9000.0 MeV
 #
-#/tracking/verbose 2
+/tracking/verbose 0
 #
 /run/beamOn 1000
 #

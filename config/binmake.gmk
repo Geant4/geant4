@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.86 2003/01/22 18:02:03 gcosmo Exp $
+# $Id: binmake.gmk,v 1.88 2003/06/16 15:28:28 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -95,8 +95,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/solids/specific/include \
               -I$(G4BASE)/geometry/solids/BREPS/include \
               -I$(G4BASE)/geometry/solids/Boolean/include \
-              -I$(G4BASE)/geometry/solids/STEP/include \
-              -I$(G4BASE)/geometry/solids/STEPinterface/include \
+              -I$(G4BASE)/geometry/divisions/include \
               -I$(G4BASE)/geometry/volumes/include \
               -I$(G4BASE)/geometry/verification/include \
               -I$(G4BASE)/geometry/magneticfield/include \
@@ -111,8 +110,12 @@ ifndef INCFLAGS
               -I$(G4BASE)/event/include \
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include
+  ifdef G4USE_STEP
+    INCFLAGS += -I$(G4BASE)/geometry/solids/STEP/include \
+                -I$(G4BASE)/geometry/solids/STEPinterface/include
+  endif
   ifdef G4USE_G3TOG4
-    INCFLAGS +=  -I$(G4BASE)/g3tog4/include
+    INCFLAGS += -I$(G4BASE)/g3tog4/include
   endif
  endif
 endif

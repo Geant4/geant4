@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN07PhysicsList.cc,v 1.2 2003/04/09 23:20:59 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "ExN07PhysicsList.hh"

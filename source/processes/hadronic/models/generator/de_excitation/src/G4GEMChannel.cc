@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.cc,v 1.3 2002/11/12 02:10:57 larazb Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GEMChannel.cc,v 1.6 2003/06/25 14:41:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -85,12 +85,12 @@ G4GEMChannel::~G4GEMChannel()
 
 
 
-G4GEMChannel::G4GEMChannel(const G4GEMChannel & right)
+G4GEMChannel::G4GEMChannel(const G4GEMChannel & ) : G4VEvaporationChannel()
 {
     G4Exception("G4GEMChannel::copy_costructor meant to not be accessable");
 }
 
-const G4GEMChannel & G4GEMChannel::operator=(const G4GEMChannel & right)
+const G4GEMChannel & G4GEMChannel::operator=(const G4GEMChannel & )
 {
     G4Exception("G4GEMChannel::operator= meant to not be accessable");
     return *this;
@@ -113,8 +113,8 @@ G4bool G4GEMChannel::operator!=(const G4GEMChannel & right) const
 void G4GEMChannel::Initialize(const G4Fragment & fragment)
 {
 
-    G4int anA = G4int(fragment.GetA());
-    G4int aZ = G4int(fragment.GetZ());
+    G4int anA = static_cast<G4int>(fragment.GetA());
+    G4int aZ = static_cast<G4int>(fragment.GetZ());
     AResidual = anA - A;
     ZResidual = aZ - Z;
     
@@ -124,26 +124,41 @@ void G4GEMChannel::Initialize(const G4Fragment & fragment)
     
     // We only take into account channels which are physically allowed
     if (AResidual <= 0 || ZResidual <= 0 || AResidual < ZResidual ||
-        (AResidual == ZResidual && AResidual > 1) || ExEnergy <= 0.0) {
+        (AResidual == ZResidual && AResidual > 1) || ExEnergy <= 0.0) 
+      {
         CoulombBarrier = 0.0;
         MaximalKineticEnergy = -1000.0*MeV;
         EmissionProbability = 0.0;
-    } else {
+      } 
+    else 
+      {
         // Coulomb Barrier calculation
         CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(AResidual,ZResidual,ExEnergy);
+
+//  	std::cout << "\tfragment (" << A << ',' << Z << ") residual (" << AResidual << ',' << ZResidual << ')'; 
+//  	std::cout << " U = " << fragment.GetExcitationEnergy();
+//  	std::cout << " delta = " << G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
+//  	std::cout << " U-delta = " << ExEnergy;
+//  	std::cout << " V = " << CoulombBarrier;
         
         // Maximal Kinetic Energy
         MaximalKineticEnergy = CalcMaximalKineticEnergy(G4ParticleTable::GetParticleTable()->
                                                         GetIonTable()->GetNucleusMass(aZ,anA)+ExEnergy);
+
+//  	std::cout << " Tmax-V = " << MaximalKineticEnergy << '\n';
 		
         // Emission probability
-        if (MaximalKineticEnergy <= 0.0) EmissionProbability = 0.0;
-        else { 
-            // Total emission probability for this channel
-            EmissionProbability = theEvaporationProbabilityPtr->EmissionProbability(fragment,MaximalKineticEnergy);
-        }
-    }
-	
+        if (MaximalKineticEnergy <= 0.0) 
+	  {
+	    EmissionProbability = 0.0;
+	  }
+	else 
+	  { 
+	    // Total emission probability for this channel
+	    EmissionProbability = theEvaporationProbabilityPtr->EmissionProbability(fragment,MaximalKineticEnergy);
+	  }
+      }
+    
     return;
 }
 
@@ -170,7 +185,8 @@ G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
     // ** And now the residual nucleus ** 
     G4double theExEnergy = theNucleus.GetExcitationEnergy();
     G4double theMass = G4ParticleTable::GetParticleTable()->
-        GetIonTable()->GetNucleusMass(theNucleus.GetZ(),theNucleus.GetA());
+        GetIonTable()->GetNucleusMass(static_cast<G4int>(theNucleus.GetZ()),
+				      static_cast<G4int>(theNucleus.GetA()));
     G4double ResidualEnergy = theMass + (theExEnergy - EvaporatedKineticEnergy) - EvaporatedMass;
 	
     G4LorentzVector ResidualMomentum(-momentum,ResidualEnergy);
@@ -236,8 +252,10 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
 	
     G4double NuclearMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass(Z,A);
 
-    G4double a = theLevelDensityPtr->LevelDensityParameter(fragment.GetA(),fragment.GetZ(),U);
-    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(fragment.GetA(),fragment.GetZ());
+    G4double a = theLevelDensityPtr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
+							   static_cast<G4int>(fragment.GetZ()),U);
+    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
+									       static_cast<G4int>(fragment.GetZ()));
     
     G4double Alpha = theEvaporationProbabilityPtr->CalcAlphaParam(fragment);
     G4double Beta = theEvaporationProbabilityPtr->CalcBetaParam(fragment);
@@ -249,19 +267,22 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
     G4double E0 = Ex - T*(log(T*MeV) - log(a/MeV)/4.0 - 1.25*log(Ux*MeV) + 2.0*sqrt(a*Ux));
 
     G4double InitialLevelDensity;
-    if ( U < Ex ) {
+    if ( U < Ex ) 
+      {
         InitialLevelDensity = (pi/12.0)*exp((U-E0)/T)/T;
-    } else {
+      } 
+    else 
+      {
         InitialLevelDensity = (pi/12.0)*exp(2*sqrt(a*(U-delta0)))/pow(a*pow(U-delta0,5.0),1.0/4.0);
-    }
+      }
 
     const G4double Spin = theEvaporationProbabilityPtr->GetSpin();
     G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
     G4double RN = 0.0;
     if (A > 4) 
     {
-	G4double R1 = pow(fragment.GetA()-A,1.0/3.0);
-	G4double R2 = pow(A,1.0/3.0);
+	G4double R1 = pow(G4double(fragment.GetA()-A),1.0/3.0);
+	G4double R2 = pow(G4double(A),1.0/3.0);
 	RN = 1.12*(R1 + R2) - 0.86*((R1+R2)/(R1*R2));
 	RN *= fermi;
     }
@@ -269,7 +290,7 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
     {
 	RN = 1.5*fermi;
     }
-    G4double GeometricalXS = pi*RN*RN*pow(fragment.GetA()-A,2./3.); 
+    G4double GeometricalXS = pi*RN*RN*pow(G4double(fragment.GetA()-A),2./3.); 
     
 
     G4double ConstantFactor = g*GeometricalXS*Alpha/InitialLevelDensity;
@@ -277,17 +298,26 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
     G4double theEnergy = MaximalKineticEnergy + CoulombBarrier;
     G4double KineticEnergy;
     G4double Probability;
-    do {
+
+//      std::cout << "\t\tEjectile (" << A << ',' << Z << ") V = " << CoulombBarrier 
+//  	      << " Beta = " << Beta << " V+Beta = " << CoulombBarrier+Beta << '\n';
+
+    do 
+      {
         KineticEnergy =  CoulombBarrier + G4UniformRand()*MaximalKineticEnergy;
         Probability = ConstantFactor*(KineticEnergy + Beta);
-        if ( theEnergy-KineticEnergy < Ex) {
+        if ( theEnergy-KineticEnergy < Ex) 
+	  {
             Probability *= exp((theEnergy-KineticEnergy-E0)/T)/T;
-        } else {
+	  } 
+	else 
+	  {
             Probability *= exp(2*sqrt(a*(theEnergy-KineticEnergy-delta0)))/
-                pow(a*pow(theEnergy-KineticEnergy-delta0,5.0),1.0/4.0);
-        }
+	      pow(a*pow(theEnergy-KineticEnergy-delta0,5.0),1.0/4.0);
+	  }
         Probability /= Normalization;
-    } while (G4UniformRand() > Probability);
+    }
+    while (G4UniformRand() > Probability);
 
 
     //  ---------------------------------------------------------------------------------------------------

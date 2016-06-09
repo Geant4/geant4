@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VInteractorManager.cc,v 1.11 2001/12/03 08:07:45 barrand Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VInteractorManager.cc,v 1.12 2003/06/16 16:56:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G.Barrand
 
 #include <stdlib.h>
 #include <string.h>
 
-#include "g4std/algorithm"
+#include <algorithm>
 
 #include "G4VInteractorManager.hh"
 
@@ -153,7 +153,7 @@ void G4VInteractorManager::AddDispatcher (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_dispatcher==NULL) return;
-  if(G4std::find(dispatchers.begin(),dispatchers.end(),a_dispatcher)!=dispatchers.end()) return;
+  if(std::find(dispatchers.begin(),dispatchers.end(),a_dispatcher)!=dispatchers.end()) return;
   dispatchers.push_back(a_dispatcher);
 }
 /***************************************************************************/
@@ -163,7 +163,7 @@ void G4VInteractorManager::RemoveDispatcher (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4std::vector<G4DispatchFunction>::iterator it;
+  std::vector<G4DispatchFunction>::iterator it;
   for (it = dispatchers.begin(); it != dispatchers.end(); it++) {
     if (*it == a_dispatcher) {
       dispatchers.erase(it);
@@ -195,7 +195,7 @@ void G4VInteractorManager::AddSecondaryLoopPreAction (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_preAction==NULL) return;
-  if(G4std::find(preActions.begin(),preActions.end(),a_preAction)!=preActions.end()) return;
+  if(std::find(preActions.begin(),preActions.end(),a_preAction)!=preActions.end()) return;
   preActions.push_back(a_preAction);
 }
 /***************************************************************************/
@@ -217,7 +217,7 @@ void G4VInteractorManager::AddSecondaryLoopPostAction (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_postAction==NULL) return;
-  if(G4std::find(postActions.begin(),postActions.end(),a_postAction)!=postActions.end()) return;
+  if(std::find(postActions.begin(),postActions.end(),a_postAction)!=postActions.end()) return;
   postActions.push_back(a_postAction);
 }
 /***************************************************************************/
@@ -290,7 +290,7 @@ void G4VInteractorManager::AddShell (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_shell==NULL) return;
-  if(G4std::find(shells.begin(),shells.end(),a_shell)!=shells.end()) return;
+  if(std::find(shells.begin(),shells.end(),a_shell)!=shells.end()) return;
   shells.push_back(a_shell);
 }
 /***************************************************************************/
@@ -300,7 +300,7 @@ void G4VInteractorManager::RemoveShell (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {  
-  G4std::vector<G4Interactor>::iterator it;
+  std::vector<G4Interactor>::iterator it;
   for (it = shells.begin(); it != shells.end(); it++) {
     if (*it == a_shell) {
       shells.erase(it);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisPrim.cc,v 1.7 2001/07/11 10:01:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VVisPrim.cc,v 1.8 2003/06/16 16:55:26 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  August 1995
@@ -61,6 +61,6 @@ G4bool G4VVisPrim::operator == (const G4VVisPrim& right) const{
   return G4Visible::operator == (right);
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VVisPrim& prim) {
+std::ostream& operator << (std::ostream& os, const G4VVisPrim& prim) {
   return os << (G4Visible) prim;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDStructure.cc,v 1.7 2002/11/27 19:03:42 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SDStructure.cc,v 1.9 2003/06/16 16:50:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 // G4SDStructure
@@ -55,7 +55,7 @@ G4SDStructure::~G4SDStructure()
 
 G4int G4SDStructure::operator==(const G4SDStructure &right) const
 {
-  return false;
+  return (this==&right);
 }
 
 void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD, 
@@ -114,7 +114,7 @@ G4String G4SDStructure::ExtractDirName(G4String aName)
 {
   G4String subD = aName;
   G4int i = aName.first('/');
-  if( i != G4int(G4std::string::npos) ) subD.remove(i+1);
+  if( i != G4int(std::string::npos) ) subD.remove(i+1);
   return subD;
 }
 
@@ -122,7 +122,7 @@ void G4SDStructure::Activate(G4String aName, G4bool sensitiveFlag)
 {
   G4String aPath = aName;
   aPath.remove(0,pathName.length());
-  if( aPath.first('/') != G4int(G4std::string::npos) )
+  if( aPath.first('/') != G4int(std::string::npos) )
   {  // Command is ordered for a subdirectory.
     G4String subD = ExtractDirName(aPath);
     G4SDStructure* tgtSDS = FindSubDirectory(subD);
@@ -164,7 +164,7 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName)
 {
   G4String aPath = aName;
   aPath.remove(0,pathName.length());
-  if( aPath.first('/') != G4int(G4std::string::npos) )
+  if( aPath.first('/') != G4int(std::string::npos) )
   { // SD exists in sub-directory
     G4String subD = ExtractDirName(aPath);
     G4SDStructure* tgtSDS = FindSubDirectory(subD);

@@ -91,7 +91,7 @@ G4KaonMinusAbsorptionAtRest::~G4KaonMinusAbsorptionAtRest()
 
 
 G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
-(const G4Track& track, const G4Step& Step)
+(const G4Track& track, const G4Step& )
 {
   stoppedHadron = track.GetDynamicParticle();
   
@@ -186,7 +186,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   G4double newZ = nucleus->GetZ();
   G4double newA = nucleus->GetN();
 
-  G4double bDiff = G4NucleiPropertiesTable::GetBindingEnergy(Z,A) - 
+  G4double bDiff = G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(Z),static_cast<G4int>(A)) - 
     G4NucleiPropertiesTable::GetBindingEnergy(static_cast<G4int>(newZ), static_cast<G4int>(newA));
 
   //  G4double mass = G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(newZ),static_cast<G4int>(newA));

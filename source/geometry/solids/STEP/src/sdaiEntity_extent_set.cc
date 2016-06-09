@@ -174,7 +174,7 @@ SCLP23(Entity_extent__set)::retrieve(int index)
 #ifndef __OSTORE__
 SCLP23(Entity_extent_ptr)& SCLP23(Entity_extent__set)::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }
@@ -307,7 +307,7 @@ int Entity_extent__set::Index (Entity_extent_ptr v) {
 
 Entity_extent_ptr& Entity_extent__set::operator[] (int index) {
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }

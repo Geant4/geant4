@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.hh,v 1.8 2002/10/28 11:43:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Trd.hh,v 1.9 2003/06/16 16:53:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -126,7 +126,7 @@ class G4Trd : public G4CSGSolid
 
     G4GeometryType GetEntityType() const;
 
-    G4std::ostream& StreamInfo( G4std::ostream& os ) const;
+    std::ostream& StreamInfo( std::ostream& os ) const;
 
     // Visualisation functions
 

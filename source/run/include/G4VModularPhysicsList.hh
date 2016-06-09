@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.hh,v 1.4 2002/05/29 12:11:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VModularPhysicsList.hh,v 1.5 2003/06/16 17:12:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -49,7 +49,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VUserPhysicsList.hh"
 #include "G4VPhysicsConstructor.hh"
@@ -85,7 +85,7 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
 
   protected: // with description
    // vector of pointers to G4VPhysicsConstructor
-   typedef G4std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
+   typedef std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
    G4PhysConstVector* physicsVector;
 };
    

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FluoTransition.hh,v 1.2 ????
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -45,13 +45,13 @@
 
 #include "G4DataVector.hh"
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4FluoTransition {
 
 public:
 
-  G4FluoTransition(G4int,const G4std::vector<G4int>&,const G4DataVector&,
+  G4FluoTransition(G4int,const std::vector<G4int>&,const G4DataVector&,
 		     const G4DataVector&);
 
   ~G4FluoTransition();
@@ -61,7 +61,7 @@ public:
   // in an atom of a given material
 
   // Returns the identities of the originating shells for the transitions 
-  const G4std::vector<G4int>& OriginatingShellIds() const;
+  const std::vector<G4int>& OriginatingShellIds() const;
   
   // Return the energies of the transitions
   const G4DataVector& TransitionEnergies() const;
@@ -86,7 +86,7 @@ public:
 private:
 
   G4int finalShellId;
-  G4std::vector<G4int> originatingShellIds;
+  std::vector<G4int> originatingShellIds;
   G4DataVector transitionEnergies;
   G4DataVector transitionProbabilities;
   

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.13 2002/10/28 15:18:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Para.cc,v 1.14 2003/06/16 16:53:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4Para
 //
@@ -1116,7 +1116,7 @@ G4GeometryType G4Para::GetEntityType() const
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4Para::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Para::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

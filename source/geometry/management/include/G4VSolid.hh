@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.11 2002/10/28 11:25:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VSolid.hh,v 1.12 2003/06/16 16:52:01 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4VSolid
@@ -77,9 +77,9 @@ class G4VisExtent;
 class G4DisplacedSolid;
 
 #include "G4ThreeVector.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4ThreeVector> G4ThreeVectorList;
+typedef std::vector<G4ThreeVector> G4ThreeVectorList;
 typedef G4String   G4GeometryType;
 
 class G4VSolid
@@ -95,7 +95,7 @@ class G4VSolid
     inline G4bool operator==( const G4VSolid& s ) const;
       // Return true only if addresses are the same.
 
-    friend G4std::ostream& operator<< ( G4std::ostream& os, const G4VSolid& e );
+    friend std::ostream& operator<< ( std::ostream& os, const G4VSolid& e );
       // Streaming operator, using DumpInfo().
 
     inline G4String GetName() const;
@@ -168,7 +168,7 @@ class G4VSolid
       // Provide identification of the class of an object.
       // (required for persistency and STEP interface)
 
-    virtual G4std::ostream& StreamInfo(G4std::ostream& os) const = 0;
+    virtual std::ostream& StreamInfo(std::ostream& os) const = 0;
       // Dumps contents of the solid to a stream.
     inline void DumpInfo() const;
       // Dumps contents of the solid to the standard output.

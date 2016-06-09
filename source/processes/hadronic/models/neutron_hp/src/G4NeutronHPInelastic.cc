@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.13 2002/12/12 19:18:25 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPInelastic.cc,v 1.14 2003/05/30 11:32:34 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G4NeutronHPInelastic.hh"
 
@@ -102,7 +102,7 @@
   
   #include "G4NeutronHPThermalBoost.hh"
   
-  G4VParticleChange * G4NeutronHPInelastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
+  G4VParticleChange * G4NeutronHPInelastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& )
   {
     G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();

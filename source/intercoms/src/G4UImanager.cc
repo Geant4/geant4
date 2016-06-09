@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.27 2002/12/04 18:30:43 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UImanager.cc,v 1.29 2003/06/16 16:55:45 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ---------------------------------------------------------------------
@@ -40,7 +40,7 @@
 #include "G4UIaliasList.hh"
 #include "G4Tokenizer.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 
 G4UImanager * G4UImanager::fUImanager = 0;
@@ -95,13 +95,14 @@ G4UImanager::~G4UImanager()
   fUImanager = NULL;
 }
 
-G4UImanager::G4UImanager(const G4UImanager &right) { }
+G4UImanager::G4UImanager(const G4UImanager &)
+:G4VStateDependent(true) {;}
 const G4UImanager & G4UImanager::operator=(const G4UImanager &right)
 { return right; }
 G4int G4UImanager::operator==(const G4UImanager &right) const
-{ return false; }
+{ return (this==&right); }
 G4int G4UImanager::operator!=(const G4UImanager &right) const
-{ return true; }
+{ return (this!=&right); }
 
 G4String G4UImanager::GetCurrentValues(const char * aCommand)
 {
@@ -160,7 +161,7 @@ const char * aParameterName, G4bool reGet)
      GetCurrentStringValue( aCommand, aParameterName, reGet );
   G4int value;
   const char* t = targetParameter;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> value;
   return value;
 }
@@ -172,7 +173,7 @@ G4int parameterNumber, G4bool reGet)
      GetCurrentStringValue( aCommand, parameterNumber, reGet );
   G4int value;
   const char* t = targetParameter;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> value;
   return value;
 }
@@ -184,7 +185,7 @@ const char * aParameterName, G4bool reGet)
      GetCurrentStringValue( aCommand, aParameterName, reGet );
   G4double value;
   const char* t = targetParameter;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> value;
   return value;
 }
@@ -196,7 +197,7 @@ G4int parameterNumber, G4bool reGet)
      GetCurrentStringValue( aCommand, parameterNumber, reGet );
   G4double value;
   const char* t = targetParameter;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> value;
   return value;
 }
@@ -232,7 +233,7 @@ void G4UImanager::LoopS(const char* valueList)
   c1 += " ";
   c1 += parameterToken();
   const char* t1 = c1;
-  G4std::istrstream is((char*)t1);
+  std::istrstream is((char*)t1);
   G4double d1;
   G4double d2;
   G4double d3;
@@ -247,7 +248,7 @@ void G4UImanager::Loop(const char * macroFile,const char * variableName,
   for(G4double d=initialValue;d<=finalValue;d+=stepSize)
   {
     char st[20];
-    G4std::ostrstream os(st,20);
+    std::ostrstream os(st,20);
     os << d << '\0';
     cd += st;
     cd += " ";
@@ -293,13 +294,13 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
   G4String aCommand = aCmd;
   G4int ia = aCommand.index("{");
   G4int iz = aCommand.index("#");
-  while((ia != G4int(G4std::string::npos))&&((iz==G4int(G4std::string::npos))||(ia<iz)))
+  while((ia != G4int(std::string::npos))&&((iz==G4int(std::string::npos))||(ia<iz)))
   {
     G4int ibx = -1;
     while(ibx<0)
     {
       G4int ib = aCommand.index("}");
-      if( ib == G4int(G4std::string::npos) )
+      if( ib == G4int(std::string::npos) )
       {
         G4cerr << aCommand << G4endl;
         for(G4int iz=0;iz<ia;iz++) G4cerr << " ";
@@ -310,7 +311,7 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
       G4String ps = aCommand(ia+1,aCommand.length()-(ia+1));
       G4int ic = ps.index("{");
       G4int id = ps.index("}");
-      if(ic!=G4int(G4std::string::npos) && ic < id)
+      if(ic!=G4int(std::string::npos) && ic < id)
       { ia+=ic+1; }
       else
       { ibx = ib; }
@@ -349,7 +350,7 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   G4String commandParameter;
 
   G4int i = aCommand.index(" ");
-  if( i != G4int(G4std::string::npos) )
+  if( i != G4int(std::string::npos) )
   {
     commandString = aCommand(0,i);
     commandParameter = aCommand(i+1,aCommand.length()-(i+1));

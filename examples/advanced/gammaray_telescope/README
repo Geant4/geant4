@@ -1,4 +1,4 @@
-$Id: README,v 1.18 2002/12/08 18:08:10 flongo Exp $
+$Id: README,v 1.19 2003/05/29 13:32:52 flongo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,7 +8,7 @@ $Id: README,v 1.18 2002/12/08 18:08:10 flongo Exp $
                             gammaray_telescope
                             ------------------
                      F.Longo, R.Giannitrapani & G.Santin
-                     December 2002
+                     June 2003
 
 --------------------------------------------------------------
 Acknowledgments to GEANT4 people, in particular to R.Nartallo, 
@@ -43,9 +43,7 @@ The main features of this example are
 
   d) Histograming facilities are presently provided for the Linux 
      environment either by using the AIDA interfaces, or through 
-     the Anaphe/Lizard system. The AIDA compliant version has not 
-     been tested by the developers and is here as a example of 
-     "forward compatibility" on how to use analysis.
+     the Anaphe/Lizard system. 
 
   e) User interfaces via Xmotif or normal terminal provided
 
@@ -85,20 +83,14 @@ The main features of this example are
   set the following variables 
 
   setenv G4ANALYSIS_USE               1 # Use the analysis tools
-  setenv G4ANALYSIS_USE_NTUPLE        1 # Use the ntuple
 
   and be sure to have the right path to the Anaphe library (or to another AIDA
   compliant implementation), inserting this on the .tcshrc:
 
- (on a CERN machine with the gcc-2.95 compiler)
+ (on a CERN machine with the gcc-2.95.2 or gcc-3.2 compiler)
 
-  ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/* ~/bin/. 
-  (to be done once)
-	
-
-  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/5.0.2/bin
-  source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/install/sharedstart.csh
-
+  source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
+  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/
 
 2. Sample run
 -------------
@@ -129,11 +121,25 @@ The main features of this example are
  It is composed of a Payload with three main detectors, a Tracker (TKR), a
  Calorimeter (CAL) and an Anticoincidence system (ACD). 
 
- The standard configuration is made of a TKR of 15 Layers of Si detectors, 
- with Lead converter, and a CAL of 8 layers of CsI. 4 lateral panels and a 
- top layer of plastic scintillator (ACT and ACL) complete the configuration.
+ The standard configuration is made of a TKR of 15 Layers of 2 views made of
+ 4*4 Si single sided silicon detectors with Lead converter, and a CAL of 
+ 5 layers of CsI, each made of 2 views of 12 CsI bars orthogonally posed.
+ 4 lateral panels and a top layer of plastic scintillator (ACL and ACT) 
+ complete the configuration.
  The Si detectors are composed of two silicon planes subdivided in strips
  aligned along the X axis in one plane and along the Y axis for the other.
+
+ The following baseline configuration is adopted:
+ 
+ GEOMETRICAL PARAMETER 			VALUE
+
+ Converter thickness 			300 microns  
+ Silicon Thickness 			400 microns
+ Silicon Tile Size XY                   9   cm
+ Silicon Pitch                          200.micrometer 
+ Views Distance                         1.  mm
+ CAL Bar Thickness  			1.5 cm
+ ACD Thickness                          1.  cm
 
  It is possible to modify in some way this configuration using the 
  commands defined in GammaRayTelDetectorMessenger. 
@@ -143,18 +149,24 @@ The main features of this example are
 4. Physics processes
 --------------------
 
- This example uses the standard Electromagnetic processes.
+ This example uses a modular physics list, with a sample of Hadronic processes 
+ (see the web page http://cmsdoc.cern.ch/~hpw/GHAD/HomePage/ for more adeguate
+ physics lists), the Standard or the LowEnergy Electromagnetic processes.
 
 5. Particle Generator
 ---------------------
 
  The GammaRayTelParticleGenerationAction and its Messenger let the user define
  the incident flux of particles, from a specific direction or from an 
- isotropic background. The user can define also between two spectral options:
+ isotropic background. In the first case particles are generated on a spherical 
+ surface which diameter is perpendicular to the arrival direction. In the second
+ case the arrival directions are isotropic.
+
+ The user can define also between two spectral options:
  monochromatic or with a power-law dependence. The particle
  generator parameters are accessible throught the UI tree "/gun/" (use the
  UI help for more information). We are planning to include, in the next
- release of this example, the new General Particle Source module of G4.
+ releases of this example, the General Particle Source module of G4.
  
 6. ReadOutGeometry
 ------------------
@@ -186,12 +198,13 @@ The main features of this example are
  implementation in Anaphe; please look at their documentation for more details.
  Keep in mind that the actual implementation of the analysis tools in GammaRayTel
  is of a pedagogical nature, so we kept it as simple as possible. 
- Further improvements will follow in future releases. The actual analysis produces  
- some histograms (see next section) and an ntuple. Both the histograms and 
- the ntuple are saved at the end of the run in the file "gammaraytel.hbook". You 
- can than analyze offline the contents of such a file; the GammaRayTel contains
- also a very simple python script that can be used with Lizard to plot the
- histograms  See the Lizard documentation on how to access the ntuple.
+
+ The actual analysis produces some histograms (see next section) and an ntuple. 
+ Both the histograms and the ntuple are saved at the end of the run in the file 
+ "gammaraytel.hbook". You can than analyze offline the contents of such a file; 
+ the GammaRayTel contains also a very simple python script that can be used with 
+ Lizard to plot the histograms  See the Lizard documentation on how to access 
+ the ntuple.
  Please note that in a multiple run session, the last run always override the 
  hbook file.
 
@@ -219,10 +232,7 @@ The main features of this example are
  only when there is some hit in an event.
 
  In this example we only show the use of very basic feature of this new 
- simulation/analysis framework; histogramming and analysis in Geant4 
- are in an evolving phase, so expect some changes and/or improvements 
- for next releases. 
-
+ simulation/analysis framework.
 
 10. Digi
 --------
@@ -250,8 +260,22 @@ The main features of this example are
 	parameters modification via the User Interface
 	
   GammaRayTelPhysicsList
-	Determination of particles and processes active in this
-	example
+	Determination of modular physics classes
+
+  GammaRayTelGeneralPhysics
+	Decay processes
+
+  GammaRayTelEMPhysics
+	Std and LowE physics processes (for gamma & e-/e+)
+
+  GammaRayTelMuonPhysics
+	Muon & its processes
+
+  GammaRayTelIonPhysics
+	Ions and their processes
+
+  GammaRayTelHadronPhysics
+	Sample of hadronic processes
 
   GammaRayTelTelVisManager
 	Visualization manager class

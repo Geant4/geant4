@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10EventAction.cc,v 1.3 2001/11/21 11:57:14 mverderi Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em10EventAction.cc,v 1.4 2003/06/16 16:47:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -116,9 +116,9 @@ void Em10EventAction::EndOfEventAction(const G4Event* evt)
       }
   if(verboselevel==2)
     G4cout
-       << "   Absorber: total energy: " << G4std::setw(7) << 
+       << "   Absorber: total energy: " << std::setw(7) << 
                              G4BestUnit(totEAbs,"Energy")
-       << "       total track length: " << G4std::setw(7) <<
+       << "       total track length: " << std::setw(7) <<
                              G4BestUnit(totLAbs,"Length")
        << G4endl;           
 

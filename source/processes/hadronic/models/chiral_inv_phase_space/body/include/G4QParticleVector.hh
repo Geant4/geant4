@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticleVector.hh,v 1.9 2002/12/12 19:14:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QParticleVector.hh,v 1.10 2003/06/16 17:04:13 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -33,9 +33,9 @@
 #define G4QParticleVector_h 1
 
 #include "G4QParticle.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4QParticle *> G4QParticleVector;
+typedef std::vector<G4QParticle *> G4QParticleVector;
 struct DeleteQParticle{ void operator()(G4QParticle *aN){delete aN;} };
 
 #endif

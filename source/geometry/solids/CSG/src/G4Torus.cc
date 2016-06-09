@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.28 2002/10/28 15:18:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Torus.cc,v 1.29 2003/06/16 16:53:40 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4Torus
@@ -2250,7 +2250,7 @@ G4GeometryType G4Torus::GetEntityType() const
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4Torus::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Torus::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

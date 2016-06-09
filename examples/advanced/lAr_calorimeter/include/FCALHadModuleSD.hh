@@ -24,7 +24,7 @@
 // and all its terms.
 //
 // $Id: FCALHadModuleSD.hh,v 1.5 2002/12/17 15:53:21 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4gsdetv.cc,v 1.9 2003/04/03 11:30:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 
 #include "G4ios.hh"
 #include "G3toG4.hh"

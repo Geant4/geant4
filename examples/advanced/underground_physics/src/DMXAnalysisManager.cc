@@ -212,11 +212,11 @@ void DMXAnalysisManager::Finish()
 {
 
   // Committing the transaction with the tree
-  G4std::cout << "Committing..." << G4std::endl;
+  std::cout << "Committing..." << std::endl;
   // write all histograms to file
   tree->commit();
 
-  G4std::cout << "Closing the tree..." << G4std::endl;
+  std::cout << "Closing the tree..." << std::endl;
 
   // close (will again commit)
   tree->close();

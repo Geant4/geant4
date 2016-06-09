@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03CalorHit.cc,v 1.5 2002/01/09 17:24:12 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN03CalorHit.cc,v 1.6 2003/05/28 10:08:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -49,6 +49,7 @@ ExN03CalorHit::~ExN03CalorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN03CalorHit::ExN03CalorHit(const ExN03CalorHit& right)
+  : G4VHit()
 {
   EdepAbs = right.EdepAbs; TrackLengthAbs = right.TrackLengthAbs;
   EdepGap = right.EdepGap; TrackLengthGap = right.TrackLengthGap;
@@ -65,9 +66,9 @@ const ExN03CalorHit& ExN03CalorHit::operator=(const ExN03CalorHit& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int ExN03CalorHit::operator==(const ExN03CalorHit& right) const
+G4int ExN03CalorHit::operator==(const ExN03CalorHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

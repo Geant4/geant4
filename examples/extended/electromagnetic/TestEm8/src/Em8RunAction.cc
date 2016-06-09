@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunAction.cc,v 1.6 2001/07/11 09:57:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em8RunAction.cc,v 1.8 2003/06/16 16:48:02 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -34,7 +34,7 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include "Randomize.hh"
 #ifndef G4NOHIST
@@ -417,20 +417,20 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      {
       E += dStep ;
       dnorm = distStep[iss]/norm;
-      G4cout << G4std::setw(5) << iss << G4std::setw(10) << E << 
-                G4std::setw(12) << distStep[iss] <<
-                G4std::setw(12) << dnorm << G4endl ;
+      G4cout << std::setw(5) << iss << std::setw(10) << E << 
+                std::setw(12) << distStep[iss] <<
+                std::setw(12) << dnorm << G4endl ;
      }
      G4cout << G4endl;
    }     
   }
   if(nbinEn > 0)
   {
-    G4std::ofstream fileOut("distribution.out", G4std::ios::out ) ;
-    fileOut.setf( G4std::ios::scientific, G4std::ios::floatfield );
+    std::ofstream fileOut("distribution.out", std::ios::out ) ;
+    fileOut.setf( std::ios::scientific, std::ios::floatfield );
 
-    G4std::ofstream normOut("normDist.out", G4std::ios::out ) ;
-    normOut.setf( G4std::ios::scientific, G4std::ios::floatfield );
+    std::ofstream normOut("normDist.out", std::ios::out ) ;
+    normOut.setf( std::ios::scientific, std::ios::floatfield );
 
     G4double E , dnorm, norm,fmax,Emp,width ;
     Emp=-999.999 ;
@@ -455,9 +455,9 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
         }
         dnorm = distEn[ien]/norm;
 
-        G4cout << G4std::setw(5) << ien << G4std::setw(10) << E/keV << 
-                  G4std::setw(12) << distEn[ien] <<
-                  G4std::setw(12) << dnorm << G4endl ;
+        G4cout << std::setw(5) << ien << std::setw(10) << E/keV << 
+                  std::setw(12) << distEn[ien] <<
+                  std::setw(12) << dnorm << G4endl ;
 
         fileOut << E/keV << "\t"<< distEn[ien] << G4endl ;
         normOut << E/keV << "\t"<< dnorm << G4endl ;
@@ -490,8 +490,8 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
 
         if(distEn[i2] >= 0.5*fmax)   E2=E ;
       }
-      G4cout << " Emp = " << G4std::setw(15) << Emp/MeV << "   width="
-            << G4std::setw(15) << (E2-E1)/MeV <<   "  MeV " << G4endl;
+      G4cout << " Emp = " << std::setw(15) << Emp/MeV << "   width="
+            << std::setw(15) << (E2-E1)/MeV <<   "  MeV " << G4endl;
       G4cout << G4endl ;
     }     
   }
@@ -518,9 +518,9 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      {
       E += dTt ;
       dnorm = distTt[itt]/norm;
-      G4cout << G4std::setw(5) << itt << G4std::setw(10) << E << 
-                G4std::setw(12) << distTt[itt] <<
-                G4std::setw(12) << dnorm << G4endl ;
+      G4cout << std::setw(5) << itt << std::setw(10) << E << 
+                std::setw(12) << distTt[itt] <<
+                std::setw(12) << dnorm << G4endl ;
      }
      G4cout << G4endl;
    }     
@@ -548,9 +548,9 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      {
       E += dTb ;
       dnorm = distTb[itt]/norm;
-      G4cout << G4std::setw(5) << itt << G4std::setw(10) << E << 
-                G4std::setw(12) << distTb[itt] <<
-                G4std::setw(12) << dnorm << G4endl ;
+      G4cout << std::setw(5) << itt << std::setw(10) << E << 
+                std::setw(12) << distTb[itt] <<
+                std::setw(12) << dnorm << G4endl ;
      }
      G4cout << G4endl;
    }     
@@ -569,9 +569,9 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      {
       E += dTsec ;
       dnorm = distTsec[itt]/norm;
-      G4cout << G4std::setw(5) << itt << G4std::setw(10) << E << 
-                G4std::setw(12) << distTsec[itt] <<
-                G4std::setw(12) << dnorm << G4endl ;
+      G4cout << std::setw(5) << itt << std::setw(10) << E << 
+                std::setw(12) << distTsec[itt] <<
+                std::setw(12) << dnorm << G4endl ;
      }
      G4cout << G4endl;
    }     
@@ -597,9 +597,9 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      {
       R+= dR  ;
       dnorm = distR[ier]/norm;
-      G4cout << G4std::setw(5) << ier << G4std::setw(10) << R  <<
-                G4std::setw(12) << distR[ier] <<
-                G4std::setw(12) << dnorm << G4endl ;
+      G4cout << std::setw(5) << ier << std::setw(10) << R  <<
+                std::setw(12) << distR[ier] <<
+                std::setw(12) << dnorm << G4endl ;
      }
      G4cout << G4endl;
    }
@@ -635,10 +635,10 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
       fnorm = fac0*distTh[ien] ;
       if( fnorm > pere)
         Thpere = Th ; 
-      G4cout << G4std::setw(5) << ien << G4std::setw(10) << Thdeg << "   " <<
-                G4std::setw(10) << Th << "  " <<   
-                G4std::setw(12) << distTh[ien] << "  " <<
-                G4std::setw(12) << dnorm << "  " << G4std::setw(12) << fnorm <<G4endl ;
+      G4cout << std::setw(5) << ien << std::setw(10) << Thdeg << "   " <<
+                std::setw(10) << Th << "  " <<   
+                std::setw(12) << distTh[ien] << "  " <<
+                std::setw(12) << dnorm << "  " << std::setw(12) << fnorm <<G4endl ;
      }
      Thmean /= sum ;
      G4cout << G4endl;
@@ -681,10 +681,10 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
       fnormb = fac0b*distThback[ien] ;
       if( fnormb > pereb)
         Thpereb = Thb ;
-      G4cout << G4std::setw(5) << ien << G4std::setw(10) << Thdegb << "   " <<
-                G4std::setw(10) << Thb << "  " <<
-                G4std::setw(12) << distThback[ien] << "  " <<
-                G4std::setw(12) << dnormb << "  " << G4std::setw(12) << fnormb <<G4endl ;
+      G4cout << std::setw(5) << ien << std::setw(10) << Thdegb << "   " <<
+                std::setw(10) << Thb << "  " <<
+                std::setw(12) << distThback[ien] << "  " <<
+                std::setw(12) << dnormb << "  " << std::setw(12) << fnormb <<G4endl ;
      }
      Thmeanb /= sumb ;
      G4cout << G4endl;
@@ -712,9 +712,9 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
      {
       E *= fact ;
       dnorm = distGamma[itt]/norm;
-      G4cout << G4std::setw(5) << itt << G4std::setw(13) << E << 
-                G4std::setw(12) << distGamma[itt] <<
-                G4std::setw(15) << dnorm << G4endl ;
+      G4cout << std::setw(5) << itt << std::setw(13) << E << 
+                std::setw(12) << distGamma[itt] <<
+                std::setw(15) << dnorm << G4endl ;
      }
      G4cout << G4endl;
    }     
@@ -735,9 +735,9 @@ void Em8RunAction::EndOfRunAction(const G4Run* aRun)
       z+= dz  ;
       if(abs(z)<1.e-12) z=0.;
       dnorm = distvertexz[iez]/norm;
-      G4cout << G4std::setw(5) << iez << G4std::setw(10) << z  <<
-                G4std::setw(12) << distvertexz[iez] <<
-                G4std::setw(12) << dnorm << G4endl ;
+      G4cout << std::setw(5) << iez << std::setw(10) << z  <<
+                std::setw(12) << distvertexz[iez] <<
+                std::setw(12) << dnorm << G4endl ;
      }
      G4cout << G4endl;
    }
@@ -844,11 +844,11 @@ void Em8RunAction::FillNbOfSteps(G4double ns)
 
 void Em8RunAction::FillEn(G4double En)
 {
-#ifndef G4NOHIST
+  // #ifndef G4NOHIST
   G4double bin ;
   G4int ibin;
 
-  if(histo2)
+  //  if(histo2)
   {
     entryEn += 1. ;
  
@@ -860,9 +860,9 @@ void Em8RunAction::FillEn(G4double En)
       ibin= (G4int)bin ;
       distEn[ibin] += 1. ;
     }
-    histo2->accumulate(En/keV) ; // was /MeV
+    // histo2->accumulate(En/keV) ; // was /MeV
   }
-#endif
+  // #endif
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -1009,7 +1009,7 @@ void Em8RunAction::FillTh(G4double Th)
       {  
         G4double thdeg=Th*180./pi;
         G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << G4std::setw(12) << G4std::setprecision(4) << thdeg << G4endl;
+               << std::setw(12) << std::setprecision(4) << thdeg << G4endl;
         wg=0. ; 
       }
       distTh[ibin] += wg  ;
@@ -1050,7 +1050,7 @@ void Em8RunAction::FillThBack(G4double Th)
       {  
         G4double thdeg=Th*180./pi;
         G4cout << "theta < 0.001*dth (from plot excluded) theta="
-               << G4std::setw(12) << G4std::setprecision(4) << thdeg << G4endl;
+               << std::setw(12) << std::setprecision(4) << thdeg << G4endl;
         wg=0. ; 
       }
       distThback[ibin] += wg  ;

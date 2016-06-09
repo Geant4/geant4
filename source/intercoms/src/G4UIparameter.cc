@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.cc,v 1.11 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIparameter.cc,v 1.12 2003/06/16 16:55:47 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4UIparameter.hh"
@@ -109,7 +109,7 @@ void G4UIparameter::List()
 void G4UIparameter::SetDefaultValue(G4int theDefaultValue)
 {
   char defVal[20];
-  G4std::ostrstream os(defVal,20);
+  std::ostrstream os(defVal,20);
   os << theDefaultValue << '\0';
   defaultValue = defVal;
 }
@@ -117,7 +117,7 @@ void G4UIparameter::SetDefaultValue(G4int theDefaultValue)
 void G4UIparameter::SetDefaultValue(G4double theDefaultValue)
 {
   char defVal[20];
-  G4std::ostrstream os(defVal,20);
+  std::ostrstream os(defVal,20);
   os << theDefaultValue << '\0';
   defaultValue = defVal;
 }
@@ -158,7 +158,7 @@ G4int G4UIparameter::
 RangeCheck(const char* newValue) {
     yystype result;
     bp = 0;                   // reset buffer pointer for G4UIpGetc()
-    G4std::istrstream is((char*)newValue); 
+    std::istrstream is((char*)newValue); 
     char type = toupper( parameterType );
     switch (type) {
         case 'D': { is >> newVal.D; } break;
@@ -217,7 +217,7 @@ TypeCheck(const char* newValue)
 
 
 G4int G4UIparameter::
-IsInt(const char* buf, short maxDigits)  // do not allow any G4std::ws
+IsInt(const char* buf, short maxDigits)  // do not allow any std::ws
 {
     const char* p= buf;
     G4int length=0;
@@ -674,7 +674,7 @@ Yylex()         // reads input and returns token number KR486
                    c=='e' || c=='E' || c=='+' || c=='-');
          G4UIpUngetc(c);
 	 const char* t = buf;
-	 G4std::istrstream is((char*)t);
+	 std::istrstream is((char*)t);
          if ( IsInt(buf.data(),20) ) {
              is >> yylval.I;
              return  CONSTINT;

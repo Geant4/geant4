@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4BuildGeom.cc,v 1.15 2001/07/16 15:38:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BuildGeom.cc,v 1.16 2003/06/16 16:50:55 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // modified by I. Hrivnacova, 13.10.99 
 
-#include "g4std/iomanip"
-#include "g4std/fstream"
+#include <iomanip>
+#include <fstream>
 #include "globals.hh"
 #include "G3toG4.hh"
 #include "G3MatTable.hh"
@@ -43,7 +43,7 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 
-extern G4std::ofstream ofile;
+extern std::ofstream ofile;
 
 void G3CLRead(G4String &, char *);
 void checkVol(G4LogicalVolume*, G4int);
@@ -126,8 +126,8 @@ void checkVol(G4LogicalVolume* _lvol, G4int level)
   for (G4int idau=0; idau<ndau; idau++){
     _pdvol = _lvol-> GetDaughter(idau);
     _ldvol = _pdvol -> GetLogicalVolume();
-    G4cout << "G4VPhysical volume " << G4std::setw(5) << _pdvol -> GetName() 
-	 << " (G4LogicalVolume " << G4std::setw(5) << _ldvol->GetName() << ")" 
+    G4cout << "G4VPhysical volume " << std::setw(5) << _pdvol -> GetName() 
+	 << " (G4LogicalVolume " << std::setw(5) << _ldvol->GetName() << ")" 
 	 << G4endl;
     checkVol(_ldvol, level);
   }

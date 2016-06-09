@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VisCommandsCompound.hh,v 1.7 2001/07/11 10:09:15 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 

@@ -1160,7 +1160,7 @@ G4BaryonPartialWidth::~G4BaryonPartialWidth()
 G4PhysicsVector* G4BaryonPartialWidth::MassDependentWidth(const G4String& name) const
 {
   // NOTE: the returned pointer is owned by the client
-  G4std::map <G4String, G4double*, G4std::less<G4String> >::const_iterator iter;
+  std::map <G4String, G4double*, std::less<G4String> >::const_iterator iter;
 
   if ((iter=wMap.find(name)) != wMap.end())
     {

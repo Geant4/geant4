@@ -29,7 +29,7 @@
 
 #include "G4VTreeSceneHandler.hh"
 
-#include "g4std/set"
+#include <set>
 
 class G4VPhysicalVolume;
 
@@ -85,13 +85,13 @@ protected:
   void RequestPrimitives(const G4VSolid&);
   // Overrides G4VScenehandler::RequestPrimitives and implements dump
   // of leaves of the geometry heirachy.
-  G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> > fLVSet;
+  std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> > fLVSet;
   typedef
-  G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> >::iterator
+  std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> >::iterator
   LVSetIterator;
-  G4std::set<G4VPhysicalVolume*,G4std::less<G4VPhysicalVolume*> > fReplicaSet;
+  std::set<G4VPhysicalVolume*,std::less<G4VPhysicalVolume*> > fReplicaSet;
   typedef
-  G4std::set<G4VPhysicalVolume*,G4std::less<G4VPhysicalVolume*> >::iterator
+  std::set<G4VPhysicalVolume*,std::less<G4VPhysicalVolume*> >::iterator
   ReplicaSetIterator;
 
 /////////////////////////////

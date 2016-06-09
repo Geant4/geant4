@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4OpenInventorX.cc,v 1.5 2001/07/11 10:09:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996

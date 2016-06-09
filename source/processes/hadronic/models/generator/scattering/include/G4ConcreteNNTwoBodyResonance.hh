@@ -30,7 +30,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4VAngularDistribution.hh"
 #include "G4KineticTrackVector.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4XDeltaDeltaTable.hh"
 
 class G4ConcreteNNTwoBodyResonance : public G4VScatteringCollision
@@ -49,10 +49,10 @@ public:
   virtual G4bool IsInCharge(const G4KineticTrack& trk1, 
 			    const G4KineticTrack& trk2) const;
 
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const
+  virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
     G4Exception("Tried to call G4ConcreteNNTwoBodyResonance::GetListOfColliders. Please find out why!");
-    G4std::vector<G4String> * aList = new G4std::vector<G4String>;
+    std::vector<G4String> * aList = new std::vector<G4String>;
     return *aList;
   } 
   
@@ -69,7 +69,7 @@ protected:
 
   virtual const G4VCrossSectionSource* GetCrossSectionSource() const { return crossSectionSource; }
 
-  virtual const G4std::vector<const G4ParticleDefinition*> & GetOutgoingParticles() const
+  virtual const std::vector<const G4ParticleDefinition*> & GetOutgoingParticles() const
   {
     return theOutGoing;
   }
@@ -79,7 +79,7 @@ private:
   G4VCrossSectionSource* crossSectionSource;
   const G4ParticleDefinition* thePrimary1;
   const G4ParticleDefinition* thePrimary2;
-  G4std::vector<const G4ParticleDefinition*> theOutGoing;
+  std::vector<const G4ParticleDefinition*> theOutGoing;
 
 };
 

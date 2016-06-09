@@ -197,7 +197,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
 void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
 {
   G4LorentzVector p4Gamma = gamma->GetMomentum();
-  G4ThreeVector pGamma(p4Gamma);
+  G4ThreeVector pGamma(p4Gamma.vect());
   
   G4double eGamma = 0.;
   if (_transition != 0)
@@ -211,12 +211,20 @@ void G4VGammaDeexcitation::UpdateNucleus(const G4Fragment*  gamma)
 
 // New tetravector calculation:
 
-  G4double Mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(_nucleus.GetZ(),_nucleus.GetA());
+//  G4double Mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(_nucleus.GetZ(),_nucleus.GetA());
+  G4double m1 = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(static_cast<G4int>(_nucleus.GetZ()),
+									       static_cast<G4int>(_nucleus.GetA()));
+  G4double m2 = _nucleus.GetZ() *  G4Proton::Proton()->GetPDGMass() + 
+    (_nucleus.GetA()- _nucleus.GetZ())*G4Neutron::Neutron()->GetPDGMass();
+
+  G4double Mass = std::min(m1,m2);
+
+
   G4double newExcitation = p4Nucleus.mag() - Mass - eGamma;
   if(newExcitation < 0)
     newExcitation = 0;
   
-  G4ThreeVector p3Residual(G4ThreeVector(p4Nucleus) - pGamma);
+  G4ThreeVector p3Residual(p4Nucleus.vect() - pGamma);
   G4double newEnergy = sqrt(p3Residual * p3Residual +
 			    (Mass + newExcitation) * (Mass + newExcitation));
   G4LorentzVector p4Residual(p3Residual, newEnergy);

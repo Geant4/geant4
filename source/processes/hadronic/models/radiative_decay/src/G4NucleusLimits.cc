@@ -118,7 +118,7 @@ G4NucleusLimits::~G4NucleusLimits ()
 {;}
 ////////////////////////////////////////////////////////////////////////////////
 //
-G4std::ostream &operator << (G4std::ostream &s, const G4NucleusLimits &q)
+std::ostream &operator << (std::ostream &s, const G4NucleusLimits &q)
 //
 //
 // Definition of the insertion operator << to provide the nucleus limits to

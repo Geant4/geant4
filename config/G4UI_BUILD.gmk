@@ -1,4 +1,4 @@
-# $Id: G4UI_BUILD.gmk,v 1.2 2001/08/11 22:36:47 johna Exp $
+# $Id: G4UI_BUILD.gmk,v 1.3 2003/06/11 13:18:56 gunter Exp $
 # -------------------------------------------------------------
 # Interfaces-specific CPPFLAGS for BUILD phase.
 #   John Allison, 6th July 1998.
@@ -49,6 +49,30 @@ endif
 ########################### interfaces/XVT - not currently implemented #####
 
 ############################################################################
+
+ifdef G4LIB_BUILD_SHARED
+
+   ifdef G4UI_BUILD_XM_SESSION
+     G4UI_USE_XM = 1
+   endif
+
+   ifdef G4UI_BUILD_XAW_SESSION
+     G4UI_USE_XAW = 1
+   endif
+
+   ifdef G4UI_BUILD_WIN32_SESSION
+     G4UI_USE_WIN32 = 1
+   endif
+
+   ########################### interfaces/OPACS #######################
+
+   ifdef G4UI_BUILD_WO_SESSION
+     G4UI_USE_WO = 1
+   endif
+
+  include $(G4INSTALL)/config/G4UI_USE.gmk
+
+endif # G4LIB_BUILD_SHARED
 
 endif #G4UI_NONE
 

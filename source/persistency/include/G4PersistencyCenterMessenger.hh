@@ -63,7 +63,8 @@ class G4PersistencyCenterMessenger
 
     private:
       G4PersistencyCenter*    pc;
-      G4UIdirectory*        directory;
+      G4UIdirectory*        directory, *subdir1, *subdir2,
+                            *subdir3, *subdir4, *subdir5;
       G4UIcmdWithAnInteger* verboseCmd;
       G4UIcmdWithAString*   select;
       G4UIcmdWithAString*   regHitIO;

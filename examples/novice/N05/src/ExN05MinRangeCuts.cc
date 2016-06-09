@@ -21,15 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05MinRangeCuts.cc,v 1.4 2002/01/09 17:24:20 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN05MinRangeCuts.cc,v 1.5 2003/05/28 11:20:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
-//
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
 // --------------------------------------------------------------
 //                   15 April 1998 M.Maire
 // --------------------------------------------------------------
@@ -53,7 +50,8 @@ ExN05MinRangeCuts::ExN05MinRangeCuts(const G4String& aName)
 ExN05MinRangeCuts::~ExN05MinRangeCuts()
 {}
 
-ExN05MinRangeCuts::ExN05MinRangeCuts(ExN05MinRangeCuts& right)
+ExN05MinRangeCuts::ExN05MinRangeCuts(ExN05MinRangeCuts&)
+  : ExN05SpecialCuts()
 {}
 
  

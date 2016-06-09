@@ -41,18 +41,18 @@ HepRepType* StreamerHepRepType::getSuperType() {
     return parent;
 }
 
-HepRepAttDef* StreamerHepRepType::getAttDef(string key) {
+HepRepAttDef* StreamerHepRepType::getAttDef(string) {
     return NULL;
 }
 
 /**
  * searched for a value with given name. Search up the type tree if needed.
  */
-HepRepAttValue* StreamerHepRepType::getAttValue(string key) {
+HepRepAttValue* StreamerHepRepType::getAttValue(string) {
     return NULL;
 }
 
-HepRepType* StreamerHepRepType::copy(HepRep* heprep, HepRepType* type) {
+HepRepType* StreamerHepRepType::copy(HepRep*, HepRepType*) {
     return NULL;
 }
 
@@ -76,7 +76,7 @@ void StreamerHepRepType::setInfoURL(string info) {
     this->infoURL = info;
 }
 
-bool StreamerHepRepType::addType(HepRepType* type) {
+bool StreamerHepRepType::addType(HepRepType*) {
     return true;
 }
 

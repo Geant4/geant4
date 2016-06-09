@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HELambdaInelastic.cc,v 1.8 2002/12/12 19:18:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HELambdaInelastic.cc,v 1.9 2003/06/16 17:09:56 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
@@ -242,7 +242,7 @@ G4HELambdaInelastic::FirstIntInCasLambda( G4bool &inElastic,
        counter = -1;
        for( np=0; np<(numSec/3); np++ ) 
           {
-            for( nm=G4std::max(0,np-2); nm<=(np+1); nm++ ) 
+            for( nm=std::max(0,np-2); nm<=(np+1); nm++ ) 
                {
                  for( nz=0; nz<numSec/3; nz++ ) 
                     {
@@ -263,7 +263,7 @@ G4HELambdaInelastic::FirstIntInCasLambda( G4bool &inElastic,
        counter = -1;
        for( np=0; np<numSec/3; np++ ) 
           {
-            for( nm=G4std::max(0,np-1); nm<=(np+2); nm++ ) 
+            for( nm=std::max(0,np-1); nm<=(np+2); nm++ ) 
                {
                  for( nz=0; nz<numSec/3; nz++ ) 
                     {
@@ -296,7 +296,7 @@ G4HELambdaInelastic::FirstIntInCasLambda( G4bool &inElastic,
    if( !inElastic ) 
      {                                     // quasi-elastic scattering, no pions produced
        G4double cech[] = {0.50, 0.45, 0.40, 0.35, 0.30, 0.25, 0.06, 0.04, 0.005, 0.};
-       G4int iplab = G4int( G4std::min( 9.0, incidentTotalMomentum*2.5 ) );
+       G4int iplab = G4int( std::min( 9.0, incidentTotalMomentum*2.5 ) );
        if( G4UniformRand() < cech[iplab]/pow(atomicWeight,0.42) ) 
          {                                           
            G4double ran = G4UniformRand();
@@ -376,7 +376,7 @@ G4HELambdaInelastic::FirstIntInCasLambda( G4bool &inElastic,
 
    for( nt=1; nt<=numSec; nt++ ) 
      {
-       test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+       test = exp( std::min( expxu, std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
        dum = M_PI*nt/(2.0*n*n);
        if( fabs(dum) < 1.0 )
          if( test >= 1.0e-10 )anpn += dum*test;
@@ -391,7 +391,7 @@ G4HELambdaInelastic::FirstIntInCasLambda( G4bool &inElastic,
        counter = -1;
        for( np=0; np<numSec/3; np++ ) 
           {
-            for( nm=G4std::max(0,np-2); nm<=(np+1); nm++ ) 
+            for( nm=std::max(0,np-2); nm<=(np+1); nm++ ) 
                {
                  for( nz=0; nz<numSec/3; nz++ ) 
                     {
@@ -400,7 +400,7 @@ G4HELambdaInelastic::FirstIntInCasLambda( G4bool &inElastic,
                           nt = np+nm+nz;
                           if( (nt>0) && (nt<=numSec) ) 
                             {
-                              test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+                              test = exp( std::min( expxu, std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
                               dum = (M_PI/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                               if( fabs(dum) < 1.0 ) 
                                     if( test >= 1.0e-10 )excs += dum*test;
@@ -422,7 +422,7 @@ G4HELambdaInelastic::FirstIntInCasLambda( G4bool &inElastic,
        counter = -1;
        for( np=0; np<numSec/3; np++ ) 
           {
-            for( nm=G4std::max(0,np-1); nm<=(np+2); nm++ ) 
+            for( nm=std::max(0,np-1); nm<=(np+2); nm++ ) 
                {
                  for( nz=0; nz<numSec/3; nz++ ) 
                     {
@@ -431,7 +431,7 @@ G4HELambdaInelastic::FirstIntInCasLambda( G4bool &inElastic,
                           nt = np+nm+nz;
                           if( (nt>=1) && (nt<=numSec) ) 
                             {
-                              test = exp( G4std::min( expxu, G4std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
+                              test = exp( std::min( expxu, std::max( expxl, -(M_PI/4.0)*(nt*nt)/(n*n) ) ) );
                               dum = (M_PI/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                               if( fabs(dum) < 1.0 ) 
                                   if( test >= 1.0e-10 )excs += dum*test;

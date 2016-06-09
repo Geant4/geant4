@@ -30,8 +30,8 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.3 2002/11/18 15:18:38 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyPhantomSD.cc,v 1.5 2003/05/26 09:20:14 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "BrachyPhantomSD.hh"
 #include "BrachyPhantomHit.hh"
@@ -49,102 +49,88 @@
 //....
 
 BrachyPhantomSD::BrachyPhantomSD(G4String name, G4int NumVoxelX, G4int NumVoxelZ)
-	:G4VSensitiveDetector(name),m_NumVoxelX(NumVoxelX),m_NumVoxelZ(NumVoxelZ)
+	:G4VSensitiveDetector(name),numberOfVoxelsX(NumVoxelX),numberOfVoxelsZ(NumVoxelZ)
 {
  G4String HCname;
- collectionName.insert(HCname="PhantomHitsCollection");
- m_pVoxelID = new G4int[NumVoxelX*NumVoxelZ*NumVoxelZ];
- m_pPhantomHitsCollection = NULL;
+ collectionName.insert(HCname = "PhantomHitsCollection");
+ voxelID = new G4int[numberOfVoxelsX * numberOfVoxelsZ * numberOfVoxelsZ];
+  phantomHitsCollection = NULL;
 }
-
-//....
 
 BrachyPhantomSD::~BrachyPhantomSD()
 {
- delete[] m_pVoxelID;
+ delete[] voxelID;
 }
 
-//....
-
-void BrachyPhantomSD::Initialize(G4HCofThisEvent*HCE)
+void BrachyPhantomSD::Initialize(G4HCofThisEvent*)
 {
-  G4int m_NumVoxelY=300;
- m_pPhantomHitsCollection = new BrachyPhantomHitsCollection(SensitiveDetectorName,collectionName[0]);
+  G4int numberOfVoxelsY = 300;
+  phantomHitsCollection = new BrachyPhantomHitsCollection(SensitiveDetectorName,collectionName[0]);
 
- for(G4int k=0;k<m_NumVoxelZ;k++)
- 	for(G4int i=0;i<m_NumVoxelX;i++)
-            for(G4int j=0;j<m_NumVoxelY;j++)
- 		m_pVoxelID[i+k*m_NumVoxelX+j*m_NumVoxelY*m_NumVoxelY] = -1;
-
+  for(G4int k=0;k<numberOfVoxelsZ;k++)
+    for(G4int i=0;i<numberOfVoxelsX;i++)
+      for(G4int j=0;j<numberOfVoxelsY;j++)
+	voxelID[i+k*numberOfVoxelsX+j*numberOfVoxelsY*numberOfVoxelsY] = -1;
 }
-
-//....
 
 G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 {
- if(!ROhist)
-	return false;
+  if(!ROhist)
+    return false;
 
- if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() != "PhantomPhys")
-	return false;
+  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() != "PhantomPhys")
+    return false;
 
- G4double edep = aStep->GetTotalEnergyDeposit();
- if(edep==0.)
-	return false;
+  G4double energyDeposit = aStep->GetTotalEnergyDeposit();
+  if(energyDeposit == 0.)
+    return false;
 
- G4VPhysicalVolume* physVol = ROhist->GetVolume();
- G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
+  G4VPhysicalVolume* physVol = ROhist->GetVolume();
+  //G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
   
- // Read Voxel indexes: i is the x index, k is the z index
- G4int k = ROhist->GetReplicaNumber(1);
- G4int i = ROhist->GetReplicaNumber(2);
- G4int j= ROhist->GetReplicaNumber();
- if(m_pVoxelID[i+k*m_NumVoxelX+j*m_NumVoxelX*m_NumVoxelX]==-1)
- 	{
-	BrachyPhantomHit* PhantomHit = new BrachyPhantomHit(physVol->GetLogicalVolume(),i,j,k);
+  // Read Voxel indexes: i is the x index, k is the z index
+  G4int k = ROhist->GetReplicaNumber(1);
+  G4int i = ROhist->GetReplicaNumber(2);
+  G4int j= ROhist->GetReplicaNumber();
+  if(voxelID[i+k*numberOfVoxelsX+j*numberOfVoxelsX*numberOfVoxelsX] == -1)
+    {
+      BrachyPhantomHit* PhantomHit = new BrachyPhantomHit(physVol->GetLogicalVolume(),i,j,k);
       
-	G4RotationMatrix rotM;
-        if(physVol->GetObjectRotation())
-		rotM = *(physVol->GetObjectRotation());
+      G4RotationMatrix rotM;
+      if(physVol->GetObjectRotation())
+	rotM = *(physVol->GetObjectRotation());
       
-	PhantomHit->SetEdep(edep);
-        PhantomHit->SetPos(physVol->GetTranslation());
-        PhantomHit->SetRot(rotM);
+      PhantomHit->SetEdep(energyDeposit);
+      PhantomHit->SetPos(physVol->GetTranslation());
+      PhantomHit->SetRot(rotM);
 
-        G4int VoxelID = m_pPhantomHitsCollection->insert(PhantomHit);
-        m_pVoxelID[i+k*m_NumVoxelX+j*m_NumVoxelX*m_NumVoxelX] = VoxelID - 1;
-	}
- else
-	(*m_pPhantomHitsCollection)[m_pVoxelID[i+k*m_NumVoxelX+j*m_NumVoxelX*m_NumVoxelX]]->AddEdep(edep);
+      G4int VoxelID = phantomHitsCollection->insert(PhantomHit);
+      voxelID[i+k*numberOfVoxelsX+j*numberOfVoxelsX*numberOfVoxelsX] = VoxelID - 1;
+    }
+  else
+    (*phantomHitsCollection)
+         [voxelID[i+k*numberOfVoxelsX+j*numberOfVoxelsX*numberOfVoxelsX]]->AddEdep(energyDeposit);
 
- return true;
+  return true;
 }
-
-//....
 
 void BrachyPhantomSD::EndOfEvent(G4HCofThisEvent*HCE)
 {
   static G4int HCID = -1;
   if(HCID<0)
-  	{ 
-	HCID = GetCollectionID(0); 
-	}
-  HCE->AddHitsCollection(HCID,m_pPhantomHitsCollection);
+    { 
+      HCID = GetCollectionID(0); 
+    }
+  HCE->AddHitsCollection(HCID,phantomHitsCollection);
 }
-
-//....
 
 void BrachyPhantomSD::clear()
 {
 } 
 
-//....
-
 void BrachyPhantomSD::DrawAll()
 {
-} 
-
-//....
+}
 
 void BrachyPhantomSD::PrintAll()
 {

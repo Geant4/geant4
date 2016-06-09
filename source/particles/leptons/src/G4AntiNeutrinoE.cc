@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiNeutrinoE.cc,v 1.11 2002/12/16 11:15:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4AntiNeutrinoE.cc,v 1.12 2003/06/16 16:57:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -32,8 +32,8 @@
 //      4th April 1996, G.Cosmo        by H.Kurashige,7  July 1996
 // **********************************************************************
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4AntiNeutrinoE.hh"
 

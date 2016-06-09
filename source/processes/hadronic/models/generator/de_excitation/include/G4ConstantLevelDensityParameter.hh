@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConstantLevelDensityParameter.hh,v 1.6 2002/12/12 19:17:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ConstantLevelDensityParameter.hh,v 1.7 2003/05/30 13:23:22 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations (photon evaporation)
 // by C. Dallapiccola (Nov 1998) 
@@ -47,7 +47,7 @@ private:
   G4bool operator!=(const G4ConstantLevelDensityParameter &right) const;
   
 public:
-  G4double LevelDensityParameter(const G4int A,const G4int Z,const G4double U) const 
+  G4double LevelDensityParameter(const G4int A,const G4int /*Z*/,const G4double /*U*/) const 
     {return A * EvapLevelDensityParameter;}
 
 private:

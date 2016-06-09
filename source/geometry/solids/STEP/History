@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2002/07/04 16:17:48 gcosmo Exp $
+$Id: History,v 1.11 2003/06/06 17:10:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 6, 2003  Gabriele Cosmo (STEP-V05-01-00)
+- STEPattribute.h: commented unused definition of 'real' since clashing
+  with system headers.
+- STEPattribute.cc, sdaiString.cc: removed usage of G4USE_STD_NAMESPACE
+  macro, according to migration from g4std wrappers.
+- Replaced usage of G4std:: with std::
+- Replaced inclusion of g4std wrappers with real std headers.
 
 July 4, 2002  Gabriele Cosmo (STEP-V04-01-00)
 - GNUmakefile: parse 'g++' string in G4SYSTEM to detect non-ISO setup for

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SurfaceBoundary.cc,v 1.11 2003/03/28 13:12:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

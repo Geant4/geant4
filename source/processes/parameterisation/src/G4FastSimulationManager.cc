@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4FastSimulationManager.cc,v 1.8 2002/11/15 11:41:56 stesting Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //---------------------------------------------------------------
 //

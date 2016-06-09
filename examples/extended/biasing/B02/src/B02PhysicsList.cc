@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: B02PhysicsList.cc,v 1.3 2002/11/08 14:47:48 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: B02PhysicsList.cc,v 1.4 2003/06/16 16:47:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "globals.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 #include "B02PhysicsList.hh"
 

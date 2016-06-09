@@ -82,7 +82,7 @@ void G4MCTGenEvent::ClearEvent()
 }
 
 ////////////////////////////////////////////////////////////
-void G4MCTGenEvent::Print(G4std::ostream& ostr) const
+void G4MCTGenEvent::Print(std::ostream& ostr) const
 ////////////////////////////////////////////////////////////
 {
   int nev= eventList.size();

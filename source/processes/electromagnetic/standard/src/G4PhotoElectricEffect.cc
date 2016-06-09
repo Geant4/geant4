@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.28 2003/01/15 12:10:31 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PhotoElectricEffect.cc,v 1.29 2003/06/16 17:02:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -34,7 +34,7 @@
 // 13-03-97, adapted for the new physics scheme, M.Maire
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
 // 04-06-98, in DoIt, secondary production condition:
-//                        range > G4std::min(threshold,safety)
+//                        range > std::min(threshold,safety)
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of Atomic shells in PostStepDoIt
 // 06-01-99, use Sandia crossSection below 50 keV, V.Grichine mma

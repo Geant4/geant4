@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh,v 1.9 2002/11/09 03:05:13 japost Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ChordFinder.hh,v 1.10 2003/06/20 22:37:11 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4ChordFinder
@@ -99,12 +99,20 @@ class G4ChordFinder
 		              G4double     stepMax,
 			      G4FieldTrack& yEnd,
 			      G4double&    dyErr,      //  Error of endpoint 
-			      G4double     epsStep );  
+			      G4double     epsStep,
+			      G4double*  pNextStepForAccuracy= 0);  
 
       void     PrintDchordTrial(G4int     noTrials, 
 				G4double  stepTrial, 
 				G4double  oldStepTrial, 
 				G4double  dChordStep);
+  public:  // no description 
+      void     TestChordPrint( G4int    noTrials, 
+			       G4int    lastStepTrial, 
+			       G4double dChordStep, 
+			       G4double nextStepTrial );
+        //   Printing for monitoring ...
+
    private:  // ............................................................
 
       G4ChordFinder(const G4ChordFinder&);

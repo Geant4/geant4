@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLTransform3D.cc,v 1.4 2001/07/11 10:08:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenGLTransform3D.cc,v 1.6 2003/06/10 17:41:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Andrew Walkden  24th October 1996
@@ -30,8 +30,6 @@
 // from G4Transform3D.
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
-
-#include <GL/gl.h>
 
 #include "G4OpenGLTransform3D.hh"
 

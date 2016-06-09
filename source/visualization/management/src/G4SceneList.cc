@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4SceneList.cc,v 1.5 2001/07/11 10:09:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 
 #include "G4SceneList.hh"
 

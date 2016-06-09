@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADouble.cc,v 1.4 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcmdWithADouble.cc,v 1.5 2003/06/16 16:55:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
 #include "G4UIcmdWithADouble.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4UIcmdWithADouble::G4UIcmdWithADouble
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -40,7 +40,7 @@ G4UIcmdWithADouble::G4UIcmdWithADouble
 G4double G4UIcmdWithADouble::GetNewDoubleValue(const char* paramString)
 {
   G4double vl;
-  G4std::istrstream is((char*)paramString);
+  std::istrstream is((char*)paramString);
   is >> vl;
   return vl;
 }
@@ -48,7 +48,7 @@ G4double G4UIcmdWithADouble::GetNewDoubleValue(const char* paramString)
 G4String G4UIcmdWithADouble::ConvertToString(G4double dblValue)
 {
   char st[20];
-  G4std::ostrstream os(st,20);
+  std::ostrstream os(st,20);
   os << dblValue << '\0';
   G4String vl = st;
   return vl;

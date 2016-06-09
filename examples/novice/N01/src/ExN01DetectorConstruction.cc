@@ -22,7 +22,7 @@
 //
 //
 // $Id: ExN01DetectorConstruction.cc,v 1.7 2003/03/25 14:40:07 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "ExN01DetectorConstruction.hh"

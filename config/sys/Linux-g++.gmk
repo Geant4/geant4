@@ -1,11 +1,10 @@
 #
-# ------ GNU/LINUX ------ gcc 2.95.2
+# ------ GNU/LINUX ------ gcc 2.95.2 / gcc 3.2
 #
 ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++
-  GNU_GCC = 1
-  CXXFLAGS  := -Wall -ansi -pedantic -pipe -fno-for-scope -DGNU_GCC
-#  CXXFLAGS  := -pipe -fno-for-scope -DGNU_GCC
+  CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
@@ -46,17 +45,15 @@ ifeq ($(G4SYSTEM),Linux-g++)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   OIVFLAGS  += -I$(OIHOME)/include 
-  G4USE_STD_NAMESPACE := yes
-  CPPFLAGS += -DG4USE_STD_NAMESPACE
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) *.o
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) \
                     $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 

@@ -28,7 +28,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4CrossSectionVector.hh"
 #include "G4LowEXsection.hh"
-#include "g4std/map"
+#include <map>
 
 class G4KineticTrack;
 
@@ -62,8 +62,8 @@ private:
   static const G4double npTot[29];
   static const G4int tableSize;
 
-  G4std::map <G4String, G4LowEXsection *, G4std::less<G4String> > theCrossSections;
-  typedef G4std::map <G4String, G4LowEXsection*, G4std::less<G4String> > LowEMap;
+  std::map <G4String, G4LowEXsection *, std::less<G4String> > theCrossSections;
+  typedef std::map <G4String, G4LowEXsection*, std::less<G4String> > LowEMap;
 
 };
 

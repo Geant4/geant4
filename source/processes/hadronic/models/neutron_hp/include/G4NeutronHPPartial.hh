@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPartial.hh,v 1.8 2002/12/12 19:18:15 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPPartial.hh,v 1.9 2003/06/16 17:10:59 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPPartial_h
 #define G4NeutronHPPartial_h 1
@@ -49,20 +49,20 @@ class G4NeutronHPPartial
     T = new G4double[n2];
     X = new G4double[n1];
     data = new G4NeutronHPVector[n1];
-    nData = G4std::max(n1,n2);
+    nData = std::max(n1,n2);
   }  
   
-  void InitInterpolation(G4int i, G4std::ifstream & aDataFile)
+  void InitInterpolation(G4int i, std::ifstream & aDataFile)
   {
     data[i].InitInterpolation(aDataFile);
   }
   
-  void InitInterpolation(G4std::ifstream & aDataFile)
+  void InitInterpolation(std::ifstream & aDataFile)
   {
     theManager.Init(aDataFile);
   }
   
-  void Init(G4std::ifstream & aDataFile)
+  void Init(std::ifstream & aDataFile)
   {
     G4int i;
     G4double e;
@@ -75,7 +75,7 @@ class G4NeutronHPPartial
     }  
   }
   
-  void InitData(G4int i, G4std::ifstream & aDataFile, G4double unit=1.)
+  void InitData(G4int i, std::ifstream & aDataFile, G4double unit=1.)
   {
     G4int ii;
     G4double eg, pg;

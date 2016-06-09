@@ -10,9 +10,9 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiApplication_instance.cc,v 1.2 2000/11/20 18:15:04 gcosmo Exp $ */
+/* $Id: sdaiApplication_instance.cc,v 1.3 2003/06/06 17:07:35 gcosmo Exp $ */
 
-//static char rcsid[] ="$Id: sdaiApplication_instance.cc,v 1.2 2000/11/20 18:15:04 gcosmo Exp $";
+//static char rcsid[] ="$Id: sdaiApplication_instance.cc,v 1.3 2003/06/06 17:07:35 gcosmo Exp $";
 
 #include <sdai.h>
 //#include <STEPentity.h>
@@ -164,7 +164,7 @@ SCLP23(Application_instance)::AddP21Comment(SCLstring &s, int replace)
 }
 
 void 
-SCLP23(Application_instance)::STEPwrite_reference (G4std::ostream& out)
+SCLP23(Application_instance)::STEPwrite_reference (std::ostream& out)
 {  
   out << "#" << STEPfile_id; 
 }
@@ -378,13 +378,13 @@ void SCLP23(Application_instance)::EnforceOptionality(int on)
 */
 /******************************************************************
  ** Procedure:  beginSTEPwrite
- ** Parameters:  G4std::ostream& out -- stream to write to
+ ** Parameters:  std::ostream& out -- stream to write to
  ** Returns:  
  ** Side Effects:  writes out the SCOPE section for an entity
  ** Status:  stub 
  ******************************************************************/
 
-void SCLP23(Application_instance)::beginSTEPwrite(G4std::ostream& out)
+void SCLP23(Application_instance)::beginSTEPwrite(std::ostream& out)
 {
     out << "begin STEPwrite ... \n" ;
     out.flush();
@@ -399,7 +399,7 @@ void SCLP23(Application_instance)::beginSTEPwrite(G4std::ostream& out)
 
 /******************************************************************
  ** Procedure:  STEPwrite
- ** Parameters:  G4std::ostream& out -- stream to write to
+ ** Parameters:  std::ostream& out -- stream to write to
  ** Returns:  
  ** Side Effects:  writes out the data associated with an instance 
                    in STEP format
@@ -408,7 +408,7 @@ void SCLP23(Application_instance)::beginSTEPwrite(G4std::ostream& out)
  ******************************************************************/
 
 void
-SCLP23(Application_instance)::STEPwrite(G4std::ostream& out, const char *currSch, 
+SCLP23(Application_instance)::STEPwrite(std::ostream& out, const char *currSch, 
 					int writeComments)
 {
     SCLstring tmp;
@@ -428,14 +428,14 @@ SCLP23(Application_instance)::STEPwrite(G4std::ostream& out, const char *currSch
     out << ");\n";
 }
 
-void SCLP23(Application_instance)::endSTEPwrite(G4std::ostream& out)
+void SCLP23(Application_instance)::endSTEPwrite(std::ostream& out)
 {
     out << "end STEPwrite ... \n" ;
     out.flush();
 }
 
 void
-SCLP23(Application_instance)::WriteValuePairs(G4std::ostream& out, 
+SCLP23(Application_instance)::WriteValuePairs(std::ostream& out, 
 					      const char *currSch, 
 					      int writeComments, int mixedCase)
 {
@@ -569,14 +569,14 @@ SCLP23(Application_instance)::PrependEntityErrMsg()
  ** Procedure:  SCLP23(Application_instance)::STEPread_error
  ** Parameters:  char c --  character which caused error
  **     int i --  index of attribute which caused error
- **     G4std::istream& in  --  input stream for recovery
+ **     std::istream& in  --  input stream for recovery
  ** Returns:  
  ** Description:  reports the error found, reads until it finds the end of an
  **     instance. i.e. a close quote followed by a semicolon optionally having
  **     whitespace between them.
  ******************************************************************/
 void
-SCLP23(Application_instance)::STEPread_error(char c, int i, G4std::istream& in)
+SCLP23(Application_instance)::STEPread_error(char c, int i, std::istream& in)
 {
     char errStr[BUFSIZ];
     errStr[0] = '\0';
@@ -634,7 +634,7 @@ SCLP23(Application_instance)::STEPread_error(char c, int i, G4std::istream& in)
 	}
 	if(in.good() && (c == ')') )
 	{
-	    in >> G4std::ws; // skip whitespace
+	    in >> std::ws; // skip whitespace
 	    in.get(c);
 	    tmp.Append(c);
 //	    G4cerr << c;
@@ -667,14 +667,14 @@ SCLP23(Application_instance)::STEPread_error(char c, int i, G4std::istream& in)
  ** Parameters:  int id
  **              int idIncrement
  **              InstMgr instances
- **              G4std::istream& in
+ **              std::istream& in
  ** Side Effects:  gobbles up input stream
  ** Status:
  ******************************************************************/
 
 Severity
 SCLP23(Application_instance)::STEPread(int id,  int idIncr, 
-				       InstMgr * instance_set, G4std::istream& in,
+				       InstMgr * instance_set, std::istream& in,
 				       const char *currSch, int useTechCor)
 {
     STEPfile_id = id;
@@ -686,7 +686,7 @@ SCLP23(Application_instance)::STEPread(int id,  int idIncr,
 
     ClearError(1);
 
-    in >> G4std::ws;
+    in >> std::ws;
     in >> c; // read the open paren
     if( c != '(' )
     {
@@ -695,7 +695,7 @@ SCLP23(Application_instance)::STEPread(int id,  int idIncr,
 		       "  Missing initial open paren... Trying to recover.\n");
 	in.putback(c); // assume you can recover by reading 1st attr value
     }
-    in >> G4std::ws;
+    in >> std::ws;
 
     int n = attributes.list_length();
     if( n == 0)  // no attributes
@@ -708,12 +708,12 @@ SCLP23(Application_instance)::STEPread(int id,  int idIncr,
     for (i = 0 ; i < n; i++) {
 	if( attributes[i].aDesc->AttrType() == AttrType_Redefining )
 	{
-	    in >> G4std::ws;
+	    in >> std::ws;
 	    c = in.peek();
 	    if(!useTechCor) // i.e. use pre-technical corrigendum encoding
 	    {
 		in >> c; // read what should be the '*'
-		in >> G4std::ws;
+		in >> std::ws;
 		if(c == '*')
 		{
 		    in >> c; // read the delimiter i.e. ',' or ')'
@@ -758,7 +758,7 @@ SCLP23(Application_instance)::STEPread(int id,  int idIncr,
 		  in >> c;
 		G4cout << "Entity #" << STEPfile_id 
 		  << " skipping redefined attribute "
-		    << attributes[i].aDesc->Name() << G4endl << G4endl << G4std::flush;
+		    << attributes[i].aDesc->Name() << G4endl << G4endl << std::flush;
 	    }
 	    // increment counter to read following attr since these attrs 
 	    // aren't written or read => there won't be a delimiter either
@@ -859,7 +859,7 @@ SCLP23(Application_instance)::STEPread(int id,  int idIncr,
 	}
 	if(in.good() && (c == ')') )
 	{
-	    in >> G4std::ws; // skip whitespace
+	    in >> std::ws; // skip whitespace
 	    in.get(c);
 	    tmp.Append(c);
 //	    G4cerr << c;
@@ -882,14 +882,14 @@ SCLP23(Application_instance)::STEPread(int id,  int idIncr,
 ///////////////////////////////////////////////////////////////////////////////
 
 SCLP23(Application_instance) *
-ReadEntityRef(G4std::istream &in, ErrorDescriptor *err, char *tokenList, 
+ReadEntityRef(std::istream &in, ErrorDescriptor *err, char *tokenList, 
 	      InstMgr * instances, int addFileId)
 {
     char c;
     char errStr[BUFSIZ];
     errStr[0] = '\0';
     
-    in >> G4std::ws;
+    in >> std::ws;
     in >> c;
     switch (c)
     {
@@ -986,7 +986,7 @@ SCLP23(Application_instance) *
 ReadEntityRef(const char * s, ErrorDescriptor *err, char *tokenList, 
 	      InstMgr * instances, int addFileId)
 {
-    G4std::istrstream in((char *)s);
+    std::istrstream in((char *)s);
     return ReadEntityRef(in, err, tokenList, instances, addFileId);
 }
 
@@ -1218,7 +1218,7 @@ SCLP23(Application_instance)::AttributeCount ()  {
 #ifdef OBSOLETE
 Severity 
 SCLP23(Application_instance)::ReadAttrs(int id, int addFileId, 
-		       class InstMgr * instance_set, G4std::istream& in)
+		       class InstMgr * instance_set, std::istream& in)
 {
     char c ='\0';
     char errStr[BUFSIZ];
@@ -1281,7 +1281,7 @@ SCLP23(Application_instance)::ReadAttrs(int id, int addFileId,
 	}
 	else if(c == ')')
 	{
-	    in >> G4std::ws;
+	    in >> std::ws;
 	    char z = in.peek();
 	    if (z == ';')
 	    {

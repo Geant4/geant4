@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.cc,v 1.11 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcommandTree.cc,v 1.12 2003/06/16 16:55:44 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4UIcommandTree.hh"
 #include "G4StateManager.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 
 G4UIcommandTree::G4UIcommandTree()
@@ -69,7 +69,7 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
     return;
   }
   G4int i = remainingPath.first('/');
-  if( i == G4int(G4std::string::npos) )
+  if( i == G4int(std::string::npos) )
   {
     // Find command
     G4int n_commandEntry = command.size();
@@ -114,7 +114,7 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
   else
   {
     G4int i = remainingPath.first('/');
-    if( i == G4int(G4std::string::npos) )
+    if( i == G4int(std::string::npos) )
     {
       // Find command
       G4int n_commandEntry = command.size();
@@ -155,11 +155,11 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
 G4UIcommand * G4UIcommandTree::FindPath(const char* commandPath)
 {
   G4String remainingPath = commandPath;
-  if( remainingPath.index( pathName ) == G4std::string::npos )
+  if( remainingPath.index( pathName ) == std::string::npos )
   { return NULL; }
   remainingPath.remove(0,pathName.length());
   G4int i = remainingPath.first('/');
-  if( i == G4int(G4std::string::npos) )
+  if( i == G4int(std::string::npos) )
   {
     // Find command
     G4int n_commandEntry = command.size();
@@ -246,7 +246,7 @@ G4String G4UIcommandTree::CreateFileName(const char* pName)
 {
   G4String fn = pName;
   G4int idxs;
-  while((idxs=fn.index("/"))!=G4int(G4std::string::npos))
+  while((idxs=fn.index("/"))!=G4int(std::string::npos))
   { fn(idxs) = '_'; }
   fn += ".html";
   return fn;
@@ -277,7 +277,7 @@ G4String G4UIcommandTree::ModStr(const char* strS)
 void G4UIcommandTree::CreateHTML()
 {
   G4String ofileName = CreateFileName(pathName);
-  G4std::ofstream oF(ofileName, G4std::ios::out);
+  std::ofstream oF(ofileName, std::ios::out);
 
   oF << "<html><head><title>Commands in " << ModStr(pathName) << "</title></head>" << G4endl;
   oF << "<body bgcolor=\"#ffffff\"><h2>" << ModStr(pathName) << "</h2><p>" << G4endl;
@@ -317,7 +317,7 @@ void G4UIcommandTree::CreateHTML()
     { oF << ModStr(cmd->GetGuidanceLine(i)) << "<br>" << G4endl; }
     if(!(cmd->GetRange()).isNull())
     { oF << "<p><dd>Range : " << ModStr(cmd->GetRange()) << G4endl; }
-    G4std::vector<G4ApplicationState>* availabelStateList = cmd->GetStateList();
+    std::vector<G4ApplicationState>* availabelStateList = cmd->GetStateList();
     if(availabelStateList->size()==6)
     { oF << "<p><dd>Available at all Geant4 states." << G4endl; }
     else

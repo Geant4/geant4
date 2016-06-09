@@ -21,17 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTable.cc,v 1.20 2001/07/11 09:58:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3VolTable.cc,v 1.21 2003/06/16 16:50:52 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // modified by I.Hrivnacova, 13.10.99
 
-#include "g4std/iomanip"
+#include <iomanip>
 #include "globals.hh"
 #include "G3VolTable.hh"
 #include "G3Pos.hh"
 
-typedef G4std::map<G4String, G3VolTableEntry*, G4std::less<G4String> >
+typedef std::map<G4String, G3VolTableEntry*, std::less<G4String> >
 ::iterator VTDiterator;
 
 G3VolTable::G3VolTable() 
@@ -63,7 +63,7 @@ G3VolTable::PrintAll(){
     VTEStat();
     for (VTDiterator v=VTD.begin(); v != VTD.end(); v++){
       G3VolTableEntry* VTE = (*v).second;
-      G4cout << "G3VolTable element " << G4std::setw(3) << i++ << " name "
+      G4cout << "G3VolTable element " << std::setw(3) << i++ << " name "
 	     << VTE->GetName() << " has " << VTE->GetNoDaughters() 
 	     << " daughters" << G4endl;
     }

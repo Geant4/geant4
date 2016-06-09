@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXrayTRmodel.cc,v 1.5 2001/09/18 09:02:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VXrayTRmodel.cc,v 1.7 2003/06/16 16:56:44 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4Timer.hh"
@@ -32,7 +32,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "globals.hh"
-#include "g4std/complex"
+#include <complex>
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"
@@ -155,7 +155,7 @@ G4bool G4VXrayTRmodel::IsApplicable(const G4ParticleDefinition& particle)
 // to check distance from boundaries, see below  to allow the decision)
 //
 
-G4bool G4VXrayTRmodel::ModelTrigger(const G4FastTrack& fastTrack) 
+G4bool G4VXrayTRmodel::ModelTrigger(const G4FastTrack&) 
 {
   //  G4double mass = fastTrack.GetPrimaryTrack()->GetDefinition()->GetPDGMass() ;
   //  G4double kinEnergy = fastTrack.GetPrimaryTrack()->GetKineticEnergy() ;
@@ -485,8 +485,8 @@ G4double G4VXrayTRmodel::GetPlateZmuProduct( G4double omega ,
 
 void G4VXrayTRmodel::GetPlateZmuProduct() 
 {
-  G4std::ofstream outPlate("plateZmu.dat", G4std::ios::out ) ;
-  outPlate.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outPlate("plateZmu.dat", std::ios::out ) ;
+  outPlate.setf( std::ios::scientific, std::ios::floatfield );
 
   G4int i ;
   G4double omega, varAngle, gamma ;
@@ -520,8 +520,8 @@ G4double G4VXrayTRmodel::GetGasZmuProduct( G4double omega ,
 
 void G4VXrayTRmodel::GetGasZmuProduct() 
 {
-  G4std::ofstream outGas("gasZmu.dat", G4std::ios::out ) ;
-  outGas.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outGas("gasZmu.dat", std::ios::out ) ;
+  outGas.setf( std::ios::scientific, std::ios::floatfield );
   G4int i ;
   G4double omega, varAngle, gamma ;
   gamma = 10000. ;
@@ -623,11 +623,11 @@ void G4VXrayTRmodel::GetNumberOfPhotons()
   G4int iTkin ;
   G4double gamma, numberE ;
 
-  G4std::ofstream outEn("numberE.dat", G4std::ios::out ) ;
-  outEn.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outEn("numberE.dat", std::ios::out ) ;
+  outEn.setf( std::ios::scientific, std::ios::floatfield );
 
-  G4std::ofstream outAng("numberAng.dat", G4std::ios::out ) ;
-  outAng.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  std::ofstream outAng("numberAng.dat", std::ios::out ) ;
+  outAng.setf( std::ios::scientific, std::ios::floatfield );
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
   {

@@ -5,19 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: iomanip,v 1.3 1999/11/16 17:43:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: iomanip,v 1.4 2003/06/06 16:17:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- iomanip ----------------
 //
 #ifndef G4_IOMANIP_H
 #define G4_IOMANIP_H
 
-#ifndef G4USE_STD_NAMESPACE
-  #include <iomanip.h>
-#else
-  #include <iomanip>
-#endif
+#include <iomanip>
 
 #endif /* G4_IOMANIP_H */
 

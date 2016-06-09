@@ -30,7 +30,7 @@ G4PartonPair::G4PartonPair(G4Parton* P1, G4Parton* P2, G4int Type, G4int aDirect
     Direction = aDirection;
     }
 
-G4PartonPair::G4PartonPair(const G4PartonPair &right)
+G4PartonPair::G4PartonPair(const G4PartonPair &)
     {
     G4Exception("You can not make a copy of this object");
     }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Fancy3DNucleus.cc,v 1.26 2003/02/12 10:20:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Fancy3DNucleus.cc,v 1.28 2003/06/25 14:19:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -38,7 +38,7 @@
 #include "G4NucleiPropertiesTable.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
 G4Fancy3DNucleus::G4Fancy3DNucleus()
  : nucleondistance(0.8*fermi)
@@ -84,7 +84,7 @@ void G4Fancy3DNucleus::Init(G4double theA, G4double theZ)
   if(theNucleons!=NULL) delete [] theNucleons;
 
 // this was delected already:
-//  G4std::for_each(theRWNucleons.begin(), theRWNucleons.end(), DeleteNucleon());
+//  std::for_each(theRWNucleons.begin(), theRWNucleons.end(), DeleteNucleon());
   theRWNucleons.clear();
 
   myZ = G4int(theZ);
@@ -135,7 +135,7 @@ G4Nucleon * G4Fancy3DNucleus::GetNextNucleon()
 }
 
 
-const G4std::vector<G4Nucleon *> & G4Fancy3DNucleus::GetNucleons()
+const std::vector<G4Nucleon *> & G4Fancy3DNucleus::GetNucleons()
 {
 	if ( theRWNucleons.size()==0 )
 	{
@@ -432,13 +432,13 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 
 // find all possible changes in momentum, changing only the component parallel to sum
 	G4ThreeVector testDir=sum.unit();
-	G4std::vector<G4Fancy3DNucleusHelper> testSums;		// Sorted on delta.mag()
+	std::vector<G4Fancy3DNucleusHelper> testSums;		// Sorted on delta.mag()
 
 	for ( G4int aNucleon=0; aNucleon < myA-1; aNucleon++){
 		G4ThreeVector delta=2*((momentum[aNucleon]*testDir)* testDir);
 		testSums.push_back(G4Fancy3DNucleusHelper(delta,delta.mag(),aNucleon));
 	}
-	G4std::sort(testSums.begin(), testSums.end());
+	std::sort(testSums.begin(), testSums.end());
 
 //    reduce Momentum Sum until the next would be allowed.
 	G4int index=testSums.size();
@@ -508,6 +508,6 @@ G4bool G4Fancy3DNucleus::ReduceSum(G4ThreeVector * momentum, G4double *pFermiM)
 
 G4double G4Fancy3DNucleus::CoulombBarrier()
 {
-  G4double coulombBarrier = (1.44/1.14) * MeV * myZ / (1.0 + pow(myA,1./3.));
+  G4double coulombBarrier = (1.44/1.14) * MeV * myZ / (1.0 + pow(G4double(myA),1./3.));
   return coulombBarrier;
 }

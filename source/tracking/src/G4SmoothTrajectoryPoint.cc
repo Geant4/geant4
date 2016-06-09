@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.8 2002/12/06 12:16:44 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.10 2003/06/16 17:13:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // ---------------------------------------------------------------
@@ -37,7 +37,7 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
 
@@ -54,13 +54,14 @@ G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos)
 }
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos,
-						 G4std::vector<G4ThreeVector>* auxiliaryPoints)
+						 std::vector<G4ThreeVector>* auxiliaryPoints)
 : fPosition(pos),
   fAuxiliaryPointVector(auxiliaryPoints)
 {}
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right)
-: fPosition(right.fPosition),fAuxiliaryPointVector(right.fAuxiliaryPointVector)
+: G4VTrajectoryPoint(),
+  fPosition(right.fPosition),fAuxiliaryPointVector(right.fAuxiliaryPointVector)
 {
 }
 
@@ -72,11 +73,11 @@ G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint()
 }
 
 
-const G4std::map<G4String,G4AttDef>*
+const std::map<G4String,G4AttDef>*
 G4SmoothTrajectoryPoint::GetAttDefs() const
 {
   G4bool isNew;
-  G4std::map<G4String,G4AttDef>* store
+  std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4SmoothTrajectoryPoint",isNew);
   if (isNew) {
     G4String Pos("Pos");
@@ -89,25 +90,25 @@ G4SmoothTrajectoryPoint::GetAttDefs() const
   return store;
 }
 
-G4std::vector<G4AttValue>* G4SmoothTrajectoryPoint::CreateAttValues() const
+std::vector<G4AttValue>* G4SmoothTrajectoryPoint::CreateAttValues() const
 {
   char c[100];
-  G4std::ostrstream s(c,100);
+  std::ostrstream s(c,100);
 
-  G4std::vector<G4AttValue>* values = new G4std::vector<G4AttValue>;
+  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
   if (fAuxiliaryPointVector) {
-    G4std::vector<G4ThreeVector>::iterator iAux;
+    std::vector<G4ThreeVector>::iterator iAux;
     for (iAux = fAuxiliaryPointVector->begin();
 	 iAux != fAuxiliaryPointVector->end(); ++iAux) {
-      s.seekp(G4std::ios::beg);
-      s << G4BestUnit(*iAux,"Length") << G4std::ends;
+      s.seekp(std::ios::beg);
+      s << G4BestUnit(*iAux,"Length") << std::ends;
       values->push_back(G4AttValue("Aux",c,""));
     }
   }
 
-  s.seekp(G4std::ios::beg);
-  s << G4BestUnit(fPosition,"Length") << G4std::ends;
+  s.seekp(std::ios::beg);
+  s << G4BestUnit(fPosition,"Length") << std::ends;
   values->push_back(G4AttValue("Pos",c,""));
 
   return values;

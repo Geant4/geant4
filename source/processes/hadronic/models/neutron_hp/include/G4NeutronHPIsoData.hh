@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPIsoData.hh,v 1.10 2002/12/12 19:18:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPIsoData.hh,v 1.11 2003/06/16 17:10:48 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPIsoData_h
 #define G4NeutronHPIsoData_h 1
@@ -33,8 +33,8 @@
  
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 #include <stdlib.h>
 #include "G4NeutronHPVector.hh"
 #include "G4NeutronHPNames.hh"
@@ -56,7 +56,7 @@ public:
   
   inline G4double GetXsec(G4double energy)
   {
-    return G4std::max(0., theChannelData->GetXsec(energy));
+    return std::max(0., theChannelData->GetXsec(energy));
   }
   G4bool Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType);
   

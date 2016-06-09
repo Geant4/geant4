@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03CalorHit.hh,v 1.5 2002/01/09 17:24:11 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN03CalorHit.hh,v 1.6 2003/05/28 10:08:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -43,10 +43,10 @@ class ExN03CalorHit : public G4VHit
  public:
 
    ExN03CalorHit();
-  ~ExN03CalorHit();
+   ~ExN03CalorHit();
    ExN03CalorHit(const ExN03CalorHit&);
    const ExN03CalorHit& operator=(const ExN03CalorHit&);
-   int operator==(const ExN03CalorHit&) const;
+   G4int operator==(const ExN03CalorHit&) const;
 
    inline void* operator new(size_t);
    inline void  operator delete(void*);
@@ -95,5 +95,3 @@ inline void ExN03CalorHit::operator delete(void* aHit)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

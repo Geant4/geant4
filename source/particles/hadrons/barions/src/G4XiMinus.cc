@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XiMinus.cc,v 1.8 2001/10/16 08:16:01 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4XiMinus.cc,v 1.9 2003/06/16 16:57:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -34,8 +34,8 @@
 //  Added particle definitions, H.Kurashige, 14 Feb 1997
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4XiMinus.hh"
 

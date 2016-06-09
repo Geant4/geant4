@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKineticNucleon.cc,v 1.5 2002/12/12 19:17:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VKineticNucleon.cc,v 1.6 2003/05/30 14:09:58 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G4VKineticNucleon.hh"
 
@@ -30,7 +30,7 @@ G4VKineticNucleon::G4VKineticNucleon()
 {
 }
 
-G4VKineticNucleon::G4VKineticNucleon(const G4VKineticNucleon &right)
+G4VKineticNucleon::G4VKineticNucleon(const G4VKineticNucleon &)
 {
 }
 

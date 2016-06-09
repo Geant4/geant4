@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2003/02/12 08:49:13 gcosmo Exp $
+$Id: History,v 1.7 2003/05/21 16:40:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 21st, 2003 G.Cosmo - (parmodels-V05-01-00)
+----------------------
+- Fixed pedantic warnings in G4IrregularXrayTRmodel.cc and G4VXrayTRmodel.cc.
 
 Feb 12th, 2003 G.Cosmo - (parmodels-V05-00-01)
 ----------------------

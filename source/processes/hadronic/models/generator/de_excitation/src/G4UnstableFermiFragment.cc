@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnstableFermiFragment.cc,v 1.8 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UnstableFermiFragment.cc,v 1.10 2003/06/16 17:06:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -34,7 +34,7 @@ G4UnstableFermiFragment::G4UnstableFermiFragment()
 {
 }
 
-G4UnstableFermiFragment::G4UnstableFermiFragment(const G4UnstableFermiFragment &right)
+G4UnstableFermiFragment::G4UnstableFermiFragment(const G4UnstableFermiFragment &) : G4VFermiFragment()
 {
   G4Exception("G4UnstableFermiFragment::copy_constructor meant to not be accessable");
 }
@@ -45,31 +45,31 @@ G4UnstableFermiFragment::~G4UnstableFermiFragment()
 }
 
   
-const G4UnstableFermiFragment & G4UnstableFermiFragment::operator=(const G4UnstableFermiFragment &right)
+const G4UnstableFermiFragment & G4UnstableFermiFragment::operator=(const G4UnstableFermiFragment &)
 {
   G4Exception("G4UnstableFermiFragment::operator= meant to not be accessable");
   return *this;
 }
 
 
-G4bool G4UnstableFermiFragment::operator==(const G4UnstableFermiFragment &right) const
+G4bool G4UnstableFermiFragment::operator==(const G4UnstableFermiFragment &) const
 {
   return false;
 }
 
-G4bool G4UnstableFermiFragment::operator!=(const G4UnstableFermiFragment &right) const
+G4bool G4UnstableFermiFragment::operator!=(const G4UnstableFermiFragment &) const
 {
   return true;
 }
 
 
-G4std::deque<G4LorentzVector*> *
+std::deque<G4LorentzVector*> *
 G4UnstableFermiFragment::FragmentsMomentum(G4double KinE, const G4int K, const G4double * Masses)
   // Calculates momentum for K fragments (Kopylov's method of sampling is used)
   // KinetEnergy is the available kinetic energy
 {  
-  G4std::deque<G4LorentzVector*>* MomentumList = 
-    new G4std::deque<G4LorentzVector*>(K);
+  std::deque<G4LorentzVector*>* MomentumList = 
+    new std::deque<G4LorentzVector*>(K);
 
 
   G4double AvalaibleMass = 0; 

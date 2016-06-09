@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.hh,v 1.16 2003/04/12 17:54:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EnergyLossTables.hh,v 1.17 2003/06/16 17:02:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // $Id:
 //
@@ -31,7 +31,7 @@
 #ifndef included_G4EnergyLossTables
 #define included_G4EnergyLossTables
 
-#include "g4std/map"
+#include <map>
 #include "globals.hh"
 
 #include "G4PhysicsTable.hh"
@@ -202,7 +202,7 @@ private:
   static void CPRWarning();
   static void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
-  typedef G4std::map<K,G4EnergyLossTablesHelper,G4std::less<K> > helper_map;
+  typedef std::map<K,G4EnergyLossTablesHelper,std::less<K> > helper_map;
   static helper_map dict;
 
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.hh,v 1.6 2001/11/29 19:01:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eIonisationParameters.hh,v 1.7 2003/06/16 16:59:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V. Ivanchenko 
@@ -51,7 +51,7 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
-#include "g4std/map"
+#include <map>
 
 class G4VDataSetAlgorithm;
 class G4VEMDataSet;
@@ -85,8 +85,8 @@ private:
   G4DataVector activeZ;
 
   // Parameters of the energy spectra
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > excit;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> > param;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> > excit;
 
   size_t length;
 };

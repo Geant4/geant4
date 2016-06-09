@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.3 2003/03/28 11:16:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.4 2003/06/16 17:00:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 // --------------------------------------------------------------
 //
@@ -70,8 +70,8 @@ void G4PenelopeBremsstrahlungAngular::InterpolationTableForZ()
     }
   G4String pathString(path);
   G4String pathFile = pathString + "/penelope/br-ang-pen.dat";
-  G4std::ifstream file(pathFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(pathFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (!(lsdp->is_open()))
     {
@@ -107,7 +107,7 @@ void G4PenelopeBremsstrahlungAngular::InterpolationTableForZ()
   }
  
   
-  //G4std::ofstream fil("matrice.dat",G4std::ios::app);
+  //std::ofstream fil("matrice.dat",std::ios::app);
   //fil << "Numero atomico: " << Zmat << G4endl;
   //for (i=0;i<NumberofEPoints;i++)
   //{
@@ -169,7 +169,7 @@ G4double G4PenelopeBremsstrahlungAngular::ExtractCosTheta(G4double e1,G4double e
   
   
   G4double RK=20.0*e2/e1;
-  G4int ik=G4std::min((G4int) RK,19);
+  G4int ik=std::min((G4int) RK,19);
   
   G4double P10=0,P11=0,P1=0;
   G4double P20=0,P21=0,P2=0;
@@ -211,8 +211,8 @@ G4double G4PenelopeBremsstrahlungAngular::ExtractCosTheta(G4double e1,G4double e
   P2=P20+(RK-(G4double) ik)*(P21-P20);
   
   //Sampling from the Lorenz-trasformed dipole distributions
-  P1=G4std::min(exp(P1)/beta,1.0);
-  G4double betap = G4std::min(G4std::max(beta*(1.0+P2/beta),0.0),0.9999);
+  P1=std::min(exp(P1)/beta,1.0);
+  G4double betap = std::min(std::max(beta*(1.0+P2/beta),0.0),0.9999);
   
   G4double cdt=0,testf=0;
   

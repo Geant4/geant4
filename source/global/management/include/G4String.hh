@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.3 2002/03/25 15:32:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4String.hh,v 1.4 2003/06/06 16:17:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -44,17 +44,13 @@
 #include <stdio.h>
 #include <string>
 #include "G4Types.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 #ifdef WIN32
   #define strcasecmp _stricmp
 #endif
 
-#ifdef G4USE_STD_NAMESPACE
-  typedef G4std::string::size_type str_size;
-#else
-  typedef size_t str_size;
-#endif
+typedef std::string::size_type str_size;
 
 class G4String;
 
@@ -101,10 +97,10 @@ private:
 };
  
 
-class G4String : public G4std::string
+class G4String : public std::string
 {
 
-  typedef G4std::string std_string;
+  typedef std::string std_string;
 
 public: 
 
@@ -116,11 +112,11 @@ public:
   inline G4String ( const char * );
   inline G4String ( const G4String& );
   inline G4String ( const G4SubString& );
-  inline G4String ( const G4std::string & );
+  inline G4String ( const std::string & );
   virtual ~G4String () {}
 
   inline G4String& operator=(const G4String&);
-  inline G4String& operator=(const G4std::string &);
+  inline G4String& operator=(const std::string &);
   inline G4String& operator=(const char*);
 
   inline char operator () (str_size) const; 
@@ -128,7 +124,7 @@ public:
 
   inline G4String& operator+=(const G4SubString&);
   inline G4String& operator+=(const char*);
-  inline G4String& operator+=(const G4std::string &);
+  inline G4String& operator+=(const std::string &);
   inline G4String& operator+=(const char&);
   inline G4bool operator==(const G4String&) const;
   inline G4bool operator==(const char*) const;
@@ -145,7 +141,7 @@ public:
   inline G4String& prepend (const char*);
   inline G4String& append (const G4String&);
 
-  inline G4std::istream& readLine (G4std::istream&, G4bool skipWhite=true);
+  inline std::istream& readLine (std::istream&, G4bool skipWhite=true);
   
   inline G4String& replace (unsigned int, unsigned int, 
                              const char*, unsigned int );
@@ -157,7 +153,7 @@ public:
   inline G4int first(char) const;
   inline G4int last(char) const;
 
-  inline G4bool contains(G4std::string) const;
+  inline G4bool contains(std::string) const;
   inline G4bool contains(char) const;
 
   // stripType = 0 beginning

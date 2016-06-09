@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IdentityTrajectoryFilter.cc,v 1.4 2003/02/06 18:53:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 
 #include "G4IdentityTrajectoryFilter.hh"
 

@@ -155,14 +155,14 @@ G4PiNuclearCrossSection()
 G4PiNuclearCrossSection::
 ~G4PiNuclearCrossSection()
 {
-  G4std::for_each(thePimData.begin(), thePimData.end(), G4PiData::Delete());
-  G4std::for_each(thePipData.begin(), thePipData.end(), G4PiData::Delete());
+  std::for_each(thePimData.begin(), thePimData.end(), G4PiData::Delete());
+  std::for_each(thePipData.begin(), thePipData.end(), G4PiData::Delete());
 }
 
 G4double G4PiNuclearCrossSection::
 GetCrossSection(const G4DynamicParticle* aParticle, 
                 const G4Element* anElement,
-                G4double T)
+                G4double )
 {
   // precondition
   G4bool ok = false;
@@ -202,7 +202,7 @@ GetCrossSection(const G4DynamicParticle* aParticle,
   {
     if(theZ[it]==Z)
     {
-      G4std::vector<G4PiData *> * theData = &thePimData;
+      std::vector<G4PiData *> * theData = &thePimData;
       if(thePipData[it]->AppliesTo(kineticEnergy))
       {
         theData = &thePipData;
@@ -211,12 +211,12 @@ GetCrossSection(const G4DynamicParticle* aParticle,
     }
     else
     {
-      G4std::vector<G4PiData *> * theLData = &thePimData;
+      std::vector<G4PiData *> * theLData = &thePimData;
       if(thePipData[it-1]->AppliesTo(kineticEnergy))
       {
         theLData = &thePipData;
       }
-      G4std::vector<G4PiData *> * theHData = &thePimData;
+      std::vector<G4PiData *> * theHData = &thePimData;
       if(thePipData[it]->AppliesTo(kineticEnergy))
       {
         theHData = &thePipData;
@@ -236,8 +236,8 @@ G4double G4PiNuclearCrossSection::
 Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
 {
   G4double result = 0;
-  G4double r1 = x1/pow(Z1, 2./3.)*pow(Z, 2./3.);
-  G4double r2 = x2/pow(Z2, 2./3.)*pow(Z, 2./3.);
+  G4double r1 = x1/pow(G4double(Z1), 2./3.)*pow(G4double(Z), 2./3.);
+  G4double r2 = x2/pow(G4double(Z2), 2./3.)*pow(G4double(Z), 2./3.);
   result = (r1+r2)/2.;
   return result;
 }

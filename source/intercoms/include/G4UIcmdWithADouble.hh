@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UIcmdWithADouble.hh,v 1.5 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 

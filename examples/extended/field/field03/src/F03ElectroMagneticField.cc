@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03ElectroMagneticField.cc,v 1.3 2001/10/15 17:20:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: F03ElectroMagneticField.cc,v 1.4 2003/06/25 16:42:22 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //  
 //   User Field class implementation.
@@ -216,14 +216,16 @@ void F03ElectroMagneticField::SetFieldValue(G4ThreeVector fieldVector)
     // UpdateField();
    
     fieldMgr->SetDetectorField(this);
+
+    // To-do: when making this a factory, change above "this" to "fMagneticfield"
   }
   else 
   {
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
 
-    G4MagneticField* fMagneticField = 0;
-    fieldMgr->SetDetectorField(fMagneticField);
+    G4MagneticField* pZeroMagneticField = 0;
+    fieldMgr->SetDetectorField( pZeroMagneticField);
   }
 }
 
@@ -236,3 +238,11 @@ G4FieldManager*  F03ElectroMagneticField::GetGlobalFieldManager()
   return G4TransportationManager::GetTransportationManager()
 	                        ->GetFieldManager();
 }
+
+
+void  F03ElectroMagneticField::GetFieldValue( const  G4double Point[3],
+		       G4double *Bfield ) const
+{
+  return fMagneticField->GetFieldValue( Point, Bfield );
+}
+  

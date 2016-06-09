@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh,v 1.12 2001/08/14 18:35:19 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VViewer.hh,v 1.13 2003/06/16 17:14:09 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  27th March 1996
@@ -44,7 +44,7 @@ class G4VViewer {
 
 public: // With description
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4VViewer& v);
+  friend std::ostream& operator << (std::ostream& os, const G4VViewer& v);
 
   G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name = "");
   virtual ~G4VViewer ();

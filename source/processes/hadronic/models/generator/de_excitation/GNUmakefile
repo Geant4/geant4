@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2002/11/15 16:56:38 flei Exp $
+# $Id: GNUmakefile,v 1.5 2003/06/18 09:03:26 gcosmo Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -10,8 +10,6 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
-
-G4TMPDIR = $(G4TMP)/$(G4SYSTEM)/$(name)
 
 ifdef PRECOMPOUND_TEST
   CPPFLAGS += -DPRECOMPOUND_TEST

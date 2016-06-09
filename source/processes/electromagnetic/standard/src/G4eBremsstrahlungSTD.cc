@@ -55,6 +55,7 @@
 // 30-04-02 V.Ivanchenko update to new design
 // 23-12-02 Change interface in order to move to cut per region (VI)
 // 26-12-02 Secondary production moved to derived classes (VI)
+// 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -67,6 +68,9 @@
 #include "G4UniversalFluctuation.hh"
 #include "G4UnitsTable.hh"
 
+#include "G4ProductionCutsTable.hh"
+#include "G4MaterialCutsCouple.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eBremsstrahlungSTD::G4eBremsstrahlungSTD(const G4String& name) 
@@ -77,7 +81,7 @@ G4eBremsstrahlungSTD::G4eBremsstrahlungSTD(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4eBremsstrahlungSTD::~G4eBremsstrahlungSTD() 
+G4eBremsstrahlungSTD::~G4eBremsstrahlungSTD()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -102,7 +106,7 @@ void G4eBremsstrahlungSTD::InitialiseProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlungSTD::PrintInfoDefinition() const
+void G4eBremsstrahlungSTD::PrintInfoDefinition() 
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 

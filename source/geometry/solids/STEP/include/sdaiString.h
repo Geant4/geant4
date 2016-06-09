@@ -11,7 +11,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiString.h,v 1.1 2000/01/21 13:42:46 gcosmo Exp $ */
+/* $Id: sdaiString.h,v 1.2 2003/06/06 17:07:32 gcosmo Exp $ */
 
 /*
 #ifdef __OSTORE__
@@ -46,11 +46,11 @@ public:
 
   // format for STEP
   const char * asStr (SCLstring & s) const  {  return s = chars ();  }
-  void STEPwrite (G4std::ostream& out =G4cout)  const;
+  void STEPwrite (std::ostream& out =G4cout)  const;
   void STEPwrite (SCLstring &s) const;
 
   Severity StrToVal (const char *s);
-  Severity STEPread (G4std::istream& in, ErrorDescriptor *err);
+  Severity STEPread (std::istream& in, ErrorDescriptor *err);
   Severity STEPread (const char *s, ErrorDescriptor *err);
 
 #ifdef __OSTORE__

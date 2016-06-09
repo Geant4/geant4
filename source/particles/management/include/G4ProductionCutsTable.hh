@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.7 2003/04/10 02:51:18 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProductionCutsTable.hh,v 1.8 2003/06/16 16:58:13 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -43,7 +43,7 @@ class G4ProductionCuts;
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4MaterialCutsCouple.hh"
 #include "G4Region.hh"
 
@@ -86,10 +86,10 @@ class G4ProductionCutsTable
 
    static G4ProductionCutsTable* fG4ProductionCutsTable;
 
-   typedef G4std::vector<G4MaterialCutsCouple*> G4CoupleTable;
-   typedef G4std::vector<G4MaterialCutsCouple*>::const_iterator CoupleTableIterator;
-   typedef G4std::vector<G4double> G4CutVectorForAParticle;
-   typedef G4std::vector<G4CutVectorForAParticle*> G4CutTable;
+   typedef std::vector<G4MaterialCutsCouple*> G4CoupleTable;
+   typedef std::vector<G4MaterialCutsCouple*>::const_iterator CoupleTableIterator;
+   typedef std::vector<G4double> G4CutVectorForAParticle;
+   typedef std::vector<G4CutVectorForAParticle*> G4CutTable;
    G4CoupleTable coupleTable;
    G4CutTable rangeCutTable;
    G4CutTable energyCutTable;
@@ -105,8 +105,8 @@ class G4ProductionCutsTable
    G4double* energyDoubleVector[NumberOfG4CutIndex];
 
   public: 
-   const G4std::vector<G4double>* GetRangeCutsVector(size_t pcIdx) const;
-   const G4std::vector<G4double>* GetEnergyCutsVector(size_t pcIdx) const;
+   const std::vector<G4double>* GetRangeCutsVector(size_t pcIdx) const;
+   const std::vector<G4double>* GetEnergyCutsVector(size_t pcIdx) const;
 
 // These two vectors are for the backward comparibility
    G4double* GetRangeCutsDoubleVector(size_t pcIdx) const;
@@ -192,13 +192,13 @@ class G4ProductionCutsTable
 };
 
 inline 
- const G4std::vector<G4double>* G4ProductionCutsTable::GetRangeCutsVector(size_t pcIdx) const
+ const std::vector<G4double>* G4ProductionCutsTable::GetRangeCutsVector(size_t pcIdx) const
 { 
   return rangeCutTable[pcIdx]; 
 }
 
 inline 
- const G4std::vector<G4double>* G4ProductionCutsTable::GetEnergyCutsVector(size_t pcIdx) const
+ const std::vector<G4double>* G4ProductionCutsTable::GetEnergyCutsVector(size_t pcIdx) const
 {
  return energyCutTable[pcIdx]; 
 }
@@ -255,7 +255,7 @@ bool G4ProductionCutsTable::IsCoupleUsedInTheRegion(
                                  const G4Region* aRegion) const
 {
   G4ProductionCuts* fProductionCut = aRegion->GetProductionCuts();
-  G4std::vector<G4Material*>::const_iterator mItr = aRegion->GetMaterialIterator();
+  std::vector<G4Material*>::const_iterator mItr = aRegion->GetMaterialIterator();
   size_t nMaterial = aRegion->GetNumberOfMaterials();
   for(size_t iMate=0;iMate<nMaterial;iMate++, mItr++){
     if(aCouple->GetMaterial()==(*mItr) &&

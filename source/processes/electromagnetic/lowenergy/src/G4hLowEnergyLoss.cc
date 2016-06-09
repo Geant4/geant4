@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.19 2003/01/23 11:39:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4hLowEnergyLoss.cc,v 1.20 2003/05/20 20:16:14 pia Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -740,7 +740,7 @@ G4double G4hLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hLowEnergyLoss::BuildRangeCoeffATable(
-                            const G4ParticleDefinition& aParticleType)
+					     const G4ParticleDefinition& )
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
 {
@@ -812,7 +812,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hLowEnergyLoss::BuildRangeCoeffBTable(
-                            const G4ParticleDefinition& aParticleType)
+					     const G4ParticleDefinition& )
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
 {
@@ -883,7 +883,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffBTable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4hLowEnergyLoss::BuildRangeCoeffCTable(
-                            const G4ParticleDefinition& aParticleType)
+					     const G4ParticleDefinition& )
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
 {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.14 2003/01/20 18:16:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MuBremsstrahlung.hh,v 1.15 2003/06/16 17:01:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //--------------- G4MuBremsstrahlung physics process ------------------
 //                by Laszlo Urban, September 1997
@@ -148,7 +148,7 @@ class G4MuBremsstrahlung : public G4VMuEnergyLoss
      G4int    TotBin;
 
 
-     const G4std::vector<G4double>* secondaryEnergyCuts;
+     const std::vector<G4double>* secondaryEnergyCuts;
 
      // tables for sampling
      static G4int nzdat,ntdat,NBIN;

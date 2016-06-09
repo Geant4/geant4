@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4HitsModel.icc,v 1.6 2001/08/24 20:36:14 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 
 inline G4String G4HitsModel::GetCurrentTag () const {
   return fGlobalTag;

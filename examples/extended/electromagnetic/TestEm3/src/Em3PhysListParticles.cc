@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em3PhysListParticles.cc,v 1.3 2003/03/10 18:16:49 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $ 
+// GEANT4 tag $Name: geant4-05-02 $ 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

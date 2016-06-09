@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em1PrimaryGeneratorMessenger.hh,v 1.1 2001/12/07 11:49:09 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

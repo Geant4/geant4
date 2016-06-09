@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.14 2003/02/20 14:46:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN03PhysicsList.cc,v 1.15 2003/05/21 15:27:00 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -217,10 +217,10 @@ void ExN03PhysicsList::ConstructEM()
       pmanager->SetProcessOrdering(theeplusIonisation,         idxPostStep,2);
       pmanager->SetProcessOrdering(theeplusBremsstrahlung,     idxPostStep,3);
       pmanager->SetProcessOrdering(theeplusAnnihilation,       idxPostStep,4);
-  
-    } else if( particleName == "mu+" || 
+
+    } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
-    //muon  
+    //muon
       G4VProcess* aMultipleScattering = new G4MultipleScattering();
       G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
       G4VProcess* aPairProduction     = new G4MuPairProduction();
@@ -242,10 +242,10 @@ void ExN03PhysicsList::ConstructEM()
       pmanager->SetProcessOrdering(aBremsstrahlung,     idxPostStep,3);
       pmanager->SetProcessOrdering(aPairProduction,     idxPostStep,4);
 
-     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
+    } else if ((!particle->IsShortLived()) &&
+	       (particle->GetPDGCharge() != 0.0) &&
 	       (particle->GetParticleName() != "chargedgeantino")) {
-     // all others charged particles except geantino     
+     // all others charged particles except geantino
      G4VProcess* aMultipleScattering = new G4MultipleScattering();
      G4VProcess* anIonisation        = new G4hIonisation();
      //

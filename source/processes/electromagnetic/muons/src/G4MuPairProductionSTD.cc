@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuPairProductionSTD.cc,v 1.10 2003/06/16 17:01:51 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -29,13 +31,13 @@
 // File name:     G4MuPairProductionSTD
 //
 // Author:        Laszlo Urban
-// 
+//
 // Creation date: 30.05.1998
 //
-// Modifications: 
+// Modifications:
 //
 // 04-06-98 in DoIt,secondary production condition:
-//          range>G4std::min(threshold,safety)
+//          range>std::min(threshold,safety)
 // 26-10-98 new stuff from R. Kokoulin + cleanup , L.Urban
 // 06-05-99 bug fixed , L.Urban
 // 10-02-00 modifications+bug fix , new e.m. structure, L.Urban
@@ -47,7 +49,7 @@
 // 26-09-01 completion of store/retrieve PhysicsTable
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
 // 29-10-01 all static functions no more inlined (mma)
-// 07-11-01 particleMass becomes a local variable (mma)      
+// 07-11-01 particleMass becomes a local variable (mma)
 // 19-08-02 V.Ivanchenko update to new design
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
@@ -109,12 +111,13 @@ const G4ParticleDefinition* G4MuPairProductionSTD::DefineBaseParticle(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuPairProductionSTD::PrintInfoDefinition() const
+void G4MuPairProductionSTD::PrintInfoDefinition()
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 
   G4cout << "      Parametrised model "
          << G4endl;
+//  G4cout << *(LambdaTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

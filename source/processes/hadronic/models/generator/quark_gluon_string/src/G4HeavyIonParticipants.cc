@@ -24,7 +24,7 @@
 #include "G4HeavyIonParticipants.hh"
 #include "G4LorentzVector.hh"
 #include "G4Pair.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
 // Class G4HeavyIonParticipants 
 
@@ -38,7 +38,7 @@ G4HeavyIonParticipants::G4HeavyIonParticipants() : theDiffExcitaton(0.7*GeV, 250
 }
 
 G4HeavyIonParticipants::G4HeavyIonParticipants(const G4HeavyIonParticipants &right)
-: nCutMax(right.nCutMax),ThersholdParameter(right.ThersholdParameter),
+: G4VParticipants(), nCutMax(right.nCutMax),ThersholdParameter(right.ThersholdParameter),
   QGSMThershold(right.QGSMThershold),theNucleonRadius(right.theNucleonRadius)
 {
 }
@@ -60,7 +60,7 @@ void G4HeavyIonParticipants::BuildInteractions(const G4ReactionProduct  &thePrim
   ModelMode = SOFT;
  
   // first find the collisions HPW
-  G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
+  std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
   theInteractions.clear();
   G4int totalCuts = 0;
   G4double impactUsed = 0;
@@ -197,11 +197,11 @@ void G4HeavyIonParticipants::BuildInteractions(const G4ReactionProduct  &thePrim
   PerformDiffractiveCollisions();
   
   // clean-up, if necessary
-  G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
+  std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
   theInteractions.clear();
-  G4std::for_each(theTargets.begin(), theTargets.end(), DeleteSplitableHadron());
+  std::for_each(theTargets.begin(), theTargets.end(), DeleteSplitableHadron());
   theTargets.clear();
-  G4std::for_each(theProjectiles.begin(), theProjectiles.end(), DeleteSplitableHadron());
+  std::for_each(theProjectiles.begin(), theProjectiles.end(), DeleteSplitableHadron());
   theProjectiles.clear();
 }
 
@@ -238,7 +238,7 @@ void G4HeavyIonParticipants::PerformDiffractiveCollisions()
 
 void G4HeavyIonParticipants::PerformSoftCollisions()
 {
-  G4std::vector<G4InteractionContent*>::iterator i;
+  std::vector<G4InteractionContent*>::iterator i;
   for(i = theInteractions.begin(); i != theInteractions.end(); i++)   
   {
     G4InteractionContent* anIniteraction = *i;

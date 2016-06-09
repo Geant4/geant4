@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlacedPolyhedron.hh,v 1.9 2001/07/11 10:01:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PlacedPolyhedron.hh,v 1.10 2003/06/16 16:55:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 
 // Class Description:
@@ -36,7 +36,7 @@
 
 #include "G4Polyhedron.hh"
 #include "G4Transform3D.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4PlacedPolyhedron {
 
@@ -68,6 +68,6 @@ private:
 
 };
 
-typedef G4std::vector<G4PlacedPolyhedron> G4PlacedPolyhedronList;
+typedef std::vector<G4PlacedPolyhedron> G4PlacedPolyhedronList;
 
 #endif /* G4PLACEDPOLYHEDRON_HH */

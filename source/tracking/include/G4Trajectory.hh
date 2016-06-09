@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.17 2002/10/28 11:10:57 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Trajectory.hh,v 1.18 2003/06/16 17:13:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -54,7 +54,7 @@ class G4Trajectory;
 #include "G4Allocator.hh"
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"               // Include from 'system'
-#include "g4std/vector"            // G4RWTValOrderedVector
+#include <vector>            // G4RWTValOrderedVector
 #include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
 #include "G4TrajectoryPoint.hh"     // Include from 'tracking'
@@ -63,7 +63,7 @@ class G4Trajectory;
 
 class G4Polyline;                   // Forward declaration.
 
-typedef G4std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
+typedef std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
 ///////////////////
 class G4Trajectory : public G4VTrajectory
 ///////////////////
@@ -102,7 +102,7 @@ public: // with description
    { return initialMomentum; }
 
 // Other member functions
-   virtual void ShowTrajectory(G4std::ostream& os=G4cout) const;
+   virtual void ShowTrajectory(std::ostream& os=G4cout) const;
    virtual void DrawTrajectory(G4int i_mode=0) const;
    virtual void AppendStep(const G4Step* aStep);
    virtual int GetPointEntries() const { return positionRecord->size(); }
@@ -112,8 +112,8 @@ public: // with description
 
    G4ParticleDefinition* GetParticleDefinition();
 
-   virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const;
-   virtual G4std::vector<G4AttValue>* CreateAttValues() const;
+   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+   virtual std::vector<G4AttValue>* CreateAttValues() const;
 
 //---------
    private:

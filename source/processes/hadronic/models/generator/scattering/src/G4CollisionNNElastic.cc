@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNElastic.cc,v 1.5 2002/12/12 19:17:48 gunter Exp $ //
+// $Id: G4CollisionNNElastic.cc,v 1.6 2003/06/16 17:09:08 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNElastic.hh"
@@ -80,7 +80,7 @@ G4bool G4CollisionNNElastic::IsInCharge(const G4KineticTrack& trk1,
 }
 
 
-const G4std::vector<G4String>& G4CollisionNNElastic::GetListOfColliders(G4int whichOne) const
+const std::vector<G4String>& G4CollisionNNElastic::GetListOfColliders(G4int whichOne) const
 {
   if (whichOne == 1) 
     {

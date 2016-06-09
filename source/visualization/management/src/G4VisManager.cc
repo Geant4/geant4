@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.49 2003/01/20 14:12:36 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisManager.cc,v 1.50 2003/06/16 17:14:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -629,13 +629,13 @@ void G4VisManager::GeometryHasChanged () {
   G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* pScene = sceneList [iScene];
-    G4std::vector<G4VModel*>& modelList = pScene -> SetRunDurationModelList ();
+    std::vector<G4VModel*>& modelList = pScene -> SetRunDurationModelList ();
 
     if (modelList.size ()) {
       G4bool modelInvalid;
       do {  // Remove, if required, one at a time.
 	modelInvalid = false;
-	G4std::vector<G4VModel*>::iterator iterModel;
+	std::vector<G4VModel*>::iterator iterModel;
 	for (iterModel = modelList.begin();
 	     iterModel != modelList.end();
 	     ++iterModel) {
@@ -1012,7 +1012,7 @@ void G4VisManager::EndOfEvent () {
     ClearTransientStoreIfMarked();
     fVisManagerModelingParameters
       = *(fpSceneHandler -> CreateModelingParameters ());
-    const G4std::vector<G4VModel*>& EOEModelList =
+    const std::vector<G4VModel*>& EOEModelList =
       fpScene -> GetEndOfEventModelList ();
     for (size_t i = 0; i < EOEModelList.size (); i++) {
       G4VModel* pModel = EOEModelList [i];
@@ -1123,7 +1123,7 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
   else {
     G4int intVerbosity;
     const char* t = s;
-    G4std::istrstream is((char*)t);
+    std::istrstream is((char*)t);
     is >> intVerbosity;
     if (!is) {
       G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""

@@ -22,8 +22,8 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.30 2003/04/24 14:19:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.32 2003/06/16 17:00:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -109,7 +109,7 @@ G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
   delete rangeTest;
 }
 
-void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& )
 {
 
   crossSectionHandler->Clear();
@@ -171,11 +171,11 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
       // Limits of the screening variable
       G4double screenFactor = 136. * epsilon0 / (element->GetIonisation()->GetZ3()) ;
       G4double screenMax = exp ((42.24 - fZ)/8.368) - 0.952 ;
-      G4double screenMin = G4std::min(4.*screenFactor,screenMax) ;
+      G4double screenMin = std::min(4.*screenFactor,screenMax) ;
 
       // Limits of the energy sampling
       G4double epsilon1 = 0.5 - 0.5 * sqrt(1. - screenMin / screenMax) ;
-      G4double epsilonMin = G4std::max(epsilon0,epsilon1);
+      G4double epsilonMin = std::max(epsilon0,epsilon1);
       G4double epsilonRange = 0.5 - epsilonMin ;
 
       // Sample the energy rate of the created electron (or positron)
@@ -184,8 +184,8 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 
       G4double f10 = ScreenFunction1(screenMin) - fZ;
       G4double f20 = ScreenFunction2(screenMin) - fZ;
-      G4double normF1 = G4std::max(f10 * epsilonRange * epsilonRange,0.);
-      G4double normF2 = G4std::max(1.5 * f20,0.);
+      G4double normF1 = std::max(f10 * epsilonRange * epsilonRange,0.);
+      G4double normF2 = std::max(1.5 * f20,0.);
 
       do {
 	if (normF1 / (normF1 + normF2) > G4UniformRand() )
@@ -254,7 +254,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   G4double localEnergyDeposit = 0. ;
   
   aParticleChange.SetNumberOfSecondaries(2) ; 
-  G4double electronKineEnergy = G4std::max(0.,electronTotEnergy - electron_mass_c2) ;
+  G4double electronKineEnergy = std::max(0.,electronTotEnergy - electron_mass_c2) ;
   
   // Generate the electron only if with large enough range w.r.t. cuts and safety
   
@@ -276,7 +276,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
     }
 
   // The e+ is always created (even with kinetic energy = 0) for further annihilation
-  G4double positronKineEnergy = G4std::max(0.,positronTotEnergy - electron_mass_c2) ;
+  G4double positronKineEnergy = std::max(0.,positronTotEnergy - electron_mass_c2) ;
 
   // Is the local energy deposit correct, if the positron is always created?
   if (! (rangeTest->Escape(G4Positron::Positron(),couple,positronKineEnergy,safety)))
@@ -310,7 +310,7 @@ G4bool G4LowEnergyGammaConversion::IsApplicable(const G4ParticleDefinition& part
 }
 
 G4double G4LowEnergyGammaConversion::GetMeanFreePath(const G4Track& track, 
-						     G4double previousStepSize, 
+						     G4double, // previousStepSize
 						     G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();

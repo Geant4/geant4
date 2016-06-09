@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.hh,v 1.10 2002/12/12 19:17:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMicroPartition.hh,v 1.12 2003/06/17 13:53:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -30,7 +30,7 @@
 #ifndef G4StatMFMicroPartition_h
 #define G4StatMFMicroPartition_h 1
 
-#include  "g4std/vector"
+#include  <vector>
 
 #include "globals.hh"
 #include "G4StatMFParameters.hh"
@@ -132,10 +132,10 @@ private:
     G4double _Entropy;
 	
     // The partition itself
-    G4std::vector<G4int> _thePartition;
+    std::vector<G4int> _thePartition;
 	
 	
-    G4std::vector<G4double> _theCoulombFreeEnergy;
+    std::vector<G4double> _theCoulombFreeEnergy;
 
 };
 

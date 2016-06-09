@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.16 2002/02/26 17:34:34 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Element.hh,v 1.17 2003/06/16 16:56:13 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 // class description
@@ -72,7 +72,7 @@
 #define G4ELEMENT_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ios.hh"
 #include "G4Isotope.hh"
 #include "G4AtomicShells.hh"
@@ -179,9 +179,9 @@ public:  // with description
     
   // printing methods
   //    
-  friend G4std::ostream& operator<<(G4std::ostream&, G4Element*);    
-  friend G4std::ostream& operator<<(G4std::ostream&, G4Element&);    
-  friend G4std::ostream& operator<<(G4std::ostream&, G4ElementTable);
+  friend std::ostream& operator<<(std::ostream&, G4Element*);    
+  friend std::ostream& operator<<(std::ostream&, G4Element&);    
+  friend std::ostream& operator<<(std::ostream&, G4ElementTable);
 
 public:  // without description
 

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -41,6 +41,7 @@
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added half-life, angular momentum, parity, emissioni type
 //              reading from experimental data. 
+//        02 May 2003,   Vladimir Ivanchenko remove rublic copy contructor
 //      
 // -------------------------------------------------------------------
 
@@ -51,7 +52,7 @@
 #include "G4PtrLevelVector.hh"
 #include "G4NuclearLevel.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4NuclearLevelManager 
 {
@@ -60,7 +61,7 @@ public:
 
   G4NuclearLevelManager();
   G4NuclearLevelManager(const G4int Z, const G4int A, const G4String& filename);
-  G4NuclearLevelManager(const G4NuclearLevelManager & right);  
+  //  G4NuclearLevelManager(const G4NuclearLevelManager & right);  
 
   ~G4NuclearLevelManager();
   
@@ -88,7 +89,7 @@ private:
   G4bool operator==(const G4NuclearLevelManager &right) const;
   G4bool operator!=(const G4NuclearLevelManager &right) const;
 
-  G4bool Read(G4std::ifstream& aDataFile);
+  G4bool Read(std::ifstream& aDataFile);
  
   void MakeLevels();
 

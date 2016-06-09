@@ -1,0 +1,26 @@
+# $Id: run09.mac,v 1.1 2003/04/11 14:30:33 vnivanch Exp $
+#
+# Macro file for "TestEm2.cc" 
+# (can be run in batch, without graphic)
+#
+# Gold; electron 1 MeV
+#
+/control/verbose 2
+#
+/testem/phys/addPhysics  model
+#/testem/phys/addPhysics  standard
+/testem/phys/setCuts 0.01 mm
+/testem/det/setAbsor 1 Water  1.0 mm
+/testem/det/setAbsor 0 Gold   10.0 mm
+#
+/run/initialize
+/process/eLoss/integral false
+#
+/run/verbose 1
+/tracking/verbose 0
+#
+/gun/particle e-
+/gun/energy 1 MeV
+/run/beamOn 1000
+
+

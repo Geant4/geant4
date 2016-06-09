@@ -22,7 +22,7 @@
 //
 //
 // $Id: EXPO.cc,v 1.9 2001/07/11 09:56:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include <stdlib.h>
 

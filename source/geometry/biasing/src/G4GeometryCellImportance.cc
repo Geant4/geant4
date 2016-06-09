@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryCellImportance.cc,v 1.3 2002/10/22 13:18:46 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeometryCellImportance.cc,v 1.4 2003/06/16 16:51:02 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -34,7 +34,7 @@
 #include "G4GeometryCellImportance.hh"
 #include "G4GeometryCellStepStream.hh"
 
-G4std::ostream& operator<<(G4std::ostream &out, const G4GeometryCellImportance &gCelli)
+std::ostream& operator<<(std::ostream &out, const G4GeometryCellImportance &gCelli)
 {
   for (G4GeometryCellImportance::const_iterator it = gCelli.begin();
        it != gCelli.end(); ++it) {

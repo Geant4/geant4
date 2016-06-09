@@ -29,11 +29,11 @@
 //
       
    G4VParticleChange* G4GeneratorPrecompoundInterface::
-   ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
+   ApplyYourself(const G4Track& , G4Nucleus& )
    {
-     G4std::cout << "G4GeneratorPrecompoundInterface: ApplyYourself interface called stand-allone."<< G4endl;
-     G4std::cout << "This class is only a mediator between generator and precompound"<<G4endl;
-     G4std::cout << "Please remove from your physics list."<<G4endl;
+     std::cout << "G4GeneratorPrecompoundInterface: ApplyYourself interface called stand-allone."<< G4endl;
+     std::cout << "This class is only a mediator between generator and precompound"<<G4endl;
+     std::cout << "Please remove from your physics list."<<G4endl;
      G4Exception("SEVERE: G4GeneratorPrecompoundInterface model interface called stand-allone.");
      return new G4ParticleChange;
    }
@@ -71,7 +71,7 @@
 	 delete secondaries;
        }
      }
-     G4std::for_each(result1->begin(), result1->end(), DeleteKineticTrack());
+     std::for_each(result1->begin(), result1->end(), DeleteKineticTrack());
      delete result1;
      
      
@@ -177,7 +177,7 @@
      }
      // now return
      
-     G4std::for_each(result->begin(), result->end(), DeleteKineticTrack());
+     std::for_each(result->begin(), result->end(), DeleteKineticTrack());
      delete result;
      return theTotalResult;
    }

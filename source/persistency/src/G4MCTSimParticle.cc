@@ -22,10 +22,11 @@
 //   G4MCTSimParticle.cc
 //
 // ====================================================================
-#include "g4std/strstream"
-#include "g4std/iomanip"
+
+#include "globals.hh"
+#include <strstream>
+#include <iomanip>
 #include "G4ios.hh"
-#include <CLHEP/Units/SystemOfUnits.h>
 #include "G4MCTSimParticle.hh"
 #include "G4MCTSimVertex.hh"
 
@@ -46,7 +47,7 @@ G4MCTSimParticle::G4MCTSimParticle()
 }
 
 /////////////////////////////////////////////////////////////
-G4MCTSimParticle::G4MCTSimParticle(G4std::string aname, int apcode, 
+G4MCTSimParticle::G4MCTSimParticle(std::string aname, int apcode, 
 			       int atid, int ptid,
 			       const HepLorentzVector& p)
   : parentParticle(0), 
@@ -59,7 +60,7 @@ G4MCTSimParticle::G4MCTSimParticle(G4std::string aname, int apcode,
 }
 
 /////////////////////////////////////////////////////////////
-G4MCTSimParticle::G4MCTSimParticle(G4std::string aname, int apcode, 
+G4MCTSimParticle::G4MCTSimParticle(std::string aname, int apcode, 
 			       int atid, int ptid,
 			       const HepLorentzVector& p,
 			       const G4MCTSimVertex* v )
@@ -128,29 +129,29 @@ void G4MCTSimParticle::SetStoreFlagToParentTree(G4bool q)
 
 
 //////////////////////////////////////////////////////////
-void G4MCTSimParticle::PrintSingle(G4std::ostream& ostr) const
+void G4MCTSimParticle::PrintSingle(std::ostream& ostr) const
 //////////////////////////////////////////////////////////
 {
   char stp[20];
-  G4std::ostrstream os(stp,20);
+  std::ostrstream os(stp,20);
   char cqp=' ';
   if(storeFlag) cqp='+';
   os << cqp << trackID << '\0';
-  G4std::string stid(stp);
-  ostr << G4std::setw(6) << stid;
-  //ostr << G4std::setw(4) << trackID;
+  std::string stid(stp);
+  ostr << std::setw(6) << stid;
+  //ostr << std::setw(4) << trackID;
 
   if(primaryFlag) ostr << "*";
   else ostr << " ";
-  ostr << "<" << G4std::setw(5) << parentTrackID;
-  ostr.setf(G4std::ios::fixed);
+  ostr << "<" << std::setw(5) << parentTrackID;
+  ostr.setf(std::ios::fixed);
   ostr << ": P(" 
-      << G4std::setw(7) << G4std::setprecision(3) << momentumAtVertex.x()/GeV 
-      << "," << G4std::setw(7) << G4std::setprecision(3) 
+      << std::setw(7) << std::setprecision(3) << momentumAtVertex.x()/GeV 
+      << "," << std::setw(7) << std::setprecision(3) 
       << momentumAtVertex.y()/GeV  
-      << "," << G4std::setw(7) << G4std::setprecision(3) 
+      << "," << std::setw(7) << std::setprecision(3) 
       << momentumAtVertex.z()/GeV 
-      << "," << G4std::setw(7) << G4std::setprecision(3) 
+      << "," << std::setw(7) << std::setprecision(3) 
       << momentumAtVertex.e()/GeV << ") @";
   ostr << name << "(" << pdgID << ")";
 
@@ -158,24 +159,24 @@ void G4MCTSimParticle::PrintSingle(G4std::ostream& ostr) const
     ostr << " %" << vertex-> GetCreatorProcessName() << G4endl;
 
     char stv[20];
-    G4std::ostrstream osv(stv,20);
+    std::ostrstream osv(stv,20);
     char cqv=' ';
     if(vertex->GetStoreFlag()) cqv='+';
     osv << cqv << vertex-> GetID() << '\0';
-    G4std::string svid(stv);
-    ostr << "       " << G4std::setw(6) << svid;
-    //ostr << "      " << G4std::setw(4) << vertex-> GetID();
-    ostr.unsetf(G4std::ios::fixed);
-    ostr.setf(G4std::ios::scientific|G4std::ios::right|G4std::ios::showpoint);
-    ostr << "- X(" << G4std::setw(9) << G4std::setprecision(2) 
+    std::string svid(stv);
+    ostr << "       " << std::setw(6) << svid;
+    //ostr << "      " << std::setw(4) << vertex-> GetID();
+    ostr.unsetf(std::ios::fixed);
+    ostr.setf(std::ios::scientific|std::ios::right|std::ios::showpoint);
+    ostr << "- X(" << std::setw(9) << std::setprecision(2) 
 	<< vertex-> GetPosition().x()/mm 
-	<< "," << G4std::setw(9) << G4std::setprecision(2) 
+	<< "," << std::setw(9) << std::setprecision(2) 
 	<< vertex-> GetPosition().y()/mm
-	<< "," << G4std::setw(9) << G4std::setprecision(2) 
+	<< "," << std::setw(9) << std::setprecision(2) 
 	<< vertex-> GetPosition().z()/mm 
-	<< "," << G4std::setw(9) << G4std::setprecision(2) 
+	<< "," << std::setw(9) << std::setprecision(2) 
 	<< vertex-> GetTime()/ns << ")";
-    ostr.unsetf(G4std::ios::scientific);
+    ostr.unsetf(std::ios::scientific);
     
     ostr << " @" << vertex-> GetVolumeName()
 	<< "-" << vertex-> GetVolumeNumber();
@@ -185,7 +186,7 @@ void G4MCTSimParticle::PrintSingle(G4std::ostream& ostr) const
 }
 
 ////////////////////////////////////////////////////////////////////
-void G4MCTSimParticle::Print(G4std::ostream& ostr, G4bool qrevorder) const
+void G4MCTSimParticle::Print(std::ostream& ostr, G4bool qrevorder) const
 ////////////////////////////////////////////////////////////////////
 {
   PrintSingle(ostr);

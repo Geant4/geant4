@@ -13,7 +13,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPfile.h,v 1.5 2000/02/14 13:44:02 gcosmo Exp $ */ 
+/* $Id: STEPfile.h,v 1.6 2003/06/06 17:07:28 gcosmo Exp $ */ 
 
 #ifdef __OSTORE__
 #include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
@@ -26,7 +26,7 @@
 /*#include <math.h>*/
 #include <instmgr.h>
 #include <Registry.h>
-#include "g4std/fstream"
+#include <fstream>
 #include <dirobj.h>
 #include <errordesc.h>
 #include <time.h>
@@ -147,17 +147,17 @@ class STEPfile
     Severity ReadWorkingFile (const char* filename =0, int useTechCor =1);
     Severity AppendWorkingFile (const char* filename =0, int useTechCor =1);
 
-    Severity AppendFile (G4std::istream* in, int useTechCor =1) ;
+    Severity AppendFile (std::istream* in, int useTechCor =1) ;
 
-    Severity WriteExchangeFile (G4std::ostream& out, int validate =1,
+    Severity WriteExchangeFile (std::ostream& out, int validate =1,
 				int clearError = 1, int writeComments = 1);
     Severity WriteExchangeFile (const char* filename =0, int validate =1, 
 				int clearError = 1, int writeComments = 1);
-    Severity WriteValuePairsFile(G4std::ostream& out, int validate =1, 
+    Severity WriteValuePairsFile(std::ostream& out, int validate =1, 
 				 int clearError =1, 
 				 int writeComments = 1, int mixedCase = 1);
 
-    Severity WriteWorkingFile (G4std::ostream& out, int clearError = 1, 
+    Severity WriteWorkingFile (std::ostream& out, int clearError = 1, 
 			       int writeComments = 1);
     Severity WriteWorkingFile (const char* filename =0, int clearError = 1, 
 			       int writeComments = 1);
@@ -175,10 +175,10 @@ class STEPfile
     char *schemaName( char * ); // returns and copies out schema name from
                                 // header instances
 //called by ReadExchangeFile
-    G4std::istream* OpenInputFile (const char* filename = "");
-    void CloseInputFile(G4std::istream* in);
+    std::istream* OpenInputFile (const char* filename = "");
+    void CloseInputFile(std::istream* in);
     
-    Severity ReadHeader(G4std::istream& in);
+    Severity ReadHeader(std::istream& in);
 
     InstMgr* HeaderConvertToNew(InstMgr& oldinst);
     Severity HeaderVerifyInstances(InstMgr* im);
@@ -190,50 +190,50 @@ class STEPfile
     int HeaderId (const char* nm ="\0");
     int HeaderIdOld (const char* nm ="\0");
 
-    int ReadData1 (G4std::istream& in); // first pass to create instances
+    int ReadData1 (std::istream& in); // first pass to create instances
 	// second pass to read instances
-    int ReadData2 (G4std::istream& in, int useTechCor =1);
+    int ReadData2 (std::istream& in, int useTechCor =1);
 
 // obsolete
-    int ReadWorkingData1 (G4std::istream& in);
-    int ReadWorkingData2 (G4std::istream& in, int useTechCor =1);
+    int ReadWorkingData1 (std::istream& in);
+    int ReadWorkingData2 (std::istream& in, int useTechCor =1);
 
-    void ReadRestOfFile(G4std::istream& in);
+    void ReadRestOfFile(std::istream& in);
 
 	// create instance - used by ReadData1()
-    SCLP23(Application_instance) *  CreateInstance(G4std::istream& in, G4std::ostream& out);
+    SCLP23(Application_instance) *  CreateInstance(std::istream& in, std::ostream& out);
 	// create complex instance - used by CreateInstance()
-    SCLP23(Application_instance) * CreateSubSuperInstance(G4std::istream& in, int fileid,
+    SCLP23(Application_instance) * CreateSubSuperInstance(std::istream& in, int fileid,
 					ErrorDescriptor &);
 
 	// read the instance - used by ReadData2()
-    SCLP23(Application_instance) * ReadInstance(G4std::istream& in, G4std::ostream& out, 
+    SCLP23(Application_instance) * ReadInstance(std::istream& in, std::ostream& out, 
 					SCLstring &cmtStr, int useTechCor =1);
 
   //  reading scopes are still incomplete
   //  these functions are stubs
-    Severity CreateScopeInstances(G4std::istream& in, SCLP23(Application_instance_ptr) ** scopelist);
-    Severity ReadScopeInstances(G4std::istream& in);
-//    Severity ReadSubSuperInstance(G4std::istream& in);
+    Severity CreateScopeInstances(std::istream& in, SCLP23(Application_instance_ptr) ** scopelist);
+    Severity ReadScopeInstances(std::istream& in);
+//    Severity ReadSubSuperInstance(std::istream& in);
 
-    int FindDataSection (G4std::istream& in);
-    int FindHeaderSection (G4std::istream& in);
+    int FindDataSection (std::istream& in);
+    int FindHeaderSection (std::istream& in);
 
 // writing working session files
-    void WriteWorkingData(G4std::ostream& out, int writeComments = 1);
+    void WriteWorkingData(std::ostream& out, int writeComments = 1);
 
 //called by WriteExchangeFile
-    G4std::ofstream* OpenOutputFile(const char* filename =0);
-    void CloseOutputFile(G4std::ostream* out);
+    std::ofstream* OpenOutputFile(const char* filename =0);
+    void CloseOutputFile(std::ostream* out);
 
-    void WriteHeader (G4std::ostream& out);
-    void WriteHeaderInstance (SCLP23(Application_instance) *obj, G4std::ostream& out);
-    void WriteHeaderInstanceFileName (G4std::ostream& out);
-    void WriteHeaderInstanceFileDescription (G4std::ostream& out);
-    void WriteHeaderInstanceFileSchema (G4std::ostream& out);
+    void WriteHeader (std::ostream& out);
+    void WriteHeaderInstance (SCLP23(Application_instance) *obj, std::ostream& out);
+    void WriteHeaderInstanceFileName (std::ostream& out);
+    void WriteHeaderInstanceFileDescription (std::ostream& out);
+    void WriteHeaderInstanceFileSchema (std::ostream& out);
 
-    void WriteData (G4std::ostream& out, int writeComments = 1);
-    void WriteValuePairsData(G4std::ostream& out, int writeComments = 1, 
+    void WriteData (std::ostream& out, int writeComments = 1);
+    void WriteValuePairsData(std::ostream& out, int writeComments = 1, 
 			     int mixedCase = 1);
     
     int IncrementFileId (int fileid);
@@ -241,7 +241,7 @@ class STEPfile
     void SetFileIdIncrement ();
     void MakeBackupFile();
 
-//    void ReadWhiteSpace(G4std::istream& in);
+//    void ReadWhiteSpace(std::istream& in);
 };
 
 //inline functions

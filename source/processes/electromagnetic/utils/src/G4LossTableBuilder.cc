@@ -50,7 +50,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PhysicsTable* G4LossTableBuilder::BuildDEDXTable(
-                const G4std::vector<G4PhysicsTable*>& list)    
+                const std::vector<G4PhysicsTable*>& list)    
 {   
   size_t n_processes = list.size();
 
@@ -112,7 +112,8 @@ G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
     G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
 
     G4double dedx1  = pv->GetValue(elow, b);
-    G4double range  = 0.5*elow/dedx1;
+       G4double range  = 0.5*elow/dedx1;
+    // G4double range  = elow/dedx1;
     v->PutValue(0,range);
     G4double energy1 = elow;
 
@@ -142,7 +143,7 @@ G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PhysicsTable* G4LossTableBuilder::BuildInverseRangeTable(
-                      const G4PhysicsTable* dedxTable,
+                      const G4PhysicsTable*,
                       const G4PhysicsTable* rangeTable)
 // Build inverse range table from the energy loss table
 {

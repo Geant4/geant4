@@ -23,8 +23,8 @@
 // Code developed by:
 //  S.Guatelli
 //
-// $Id: BrachyRunMessenger.cc,v 1.3 2002/12/08 22:40:55 stesting Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyRunMessenger.cc,v 1.4 2003/05/22 17:20:44 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 //
@@ -34,63 +34,40 @@
 //    *                             *
 //    *******************************
 
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
 #include "BrachyRunMessenger.hh"
-#include"BrachyFactoryIr.hh"
 #include "BrachyRunAction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 BrachyRunMessenger::BrachyRunMessenger( BrachyRunAction* pBrachyRun):
- pRun(pBrachyRun)
+ runManager(pBrachyRun)
 { 
-
-  mydetDir = new G4UIdirectory("/run/");
-  mydetDir->SetGuidance("Control gamma energy.");
-  selDetCmd=new G4UIcmdWithAString("/run/energy",this);
+  runDir = new G4UIdirectory("/run/");
+  runDir->SetGuidance("Control gamma energy.");
   
- 
-  
-  selDetCmd->SetGuidance("Select the energy of gamma emitted by the source.");
-  selDetCmd->SetGuidance(" Iodium:  Iodium Source ");
-  selDetCmd->SetGuidance("  Iridium: Iridium  Source  "  );
-  selDetCmd->SetParameterName("choice",true);
-  selDetCmd->SetDefaultValue("Iridium");
-  selDetCmd->SetCandidates("Iridium / Iodium");
-  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
- 
- }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  primaryParticleEnergySpectrumCmd = 
+                              new G4UIcmdWithAString("/run/energy",this);
+  primaryParticleEnergySpectrumCmd->SetGuidance("Select the energy of gamma emitted by the source.");
+  primaryParticleEnergySpectrumCmd->SetGuidance(" Iodium:  Iodium Source ");
+  primaryParticleEnergySpectrumCmd->SetGuidance("  Iridium: Iridium  Source  "  );
+  primaryParticleEnergySpectrumCmd->SetParameterName("choice",true);
+  primaryParticleEnergySpectrumCmd->SetDefaultValue("Iridium");
+  primaryParticleEnergySpectrumCmd->SetCandidates("Iridium / Iodium");
+  primaryParticleEnergySpectrumCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+}
 
 BrachyRunMessenger::~BrachyRunMessenger()
 {
- 
-  delete selDetCmd; 
-  delete   mydetDir;
-  //delete detDir;
+  delete primaryParticleEnergySpectrumCmd; 
+  delete runDir;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void BrachyRunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  
-
- if( command == selDetCmd )
-  {if (newValue== "Iodium") pRun->SelectEnergy(1);
-    else  pRun->SelectEnergy(0);
-  }
-   
+ if(command == primaryParticleEnergySpectrumCmd)
+  {
+   if (newValue == "Iodium") runManager->SelectEnergy(1);
+   else  runManager->SelectEnergy(0);
+  }   
 }
 

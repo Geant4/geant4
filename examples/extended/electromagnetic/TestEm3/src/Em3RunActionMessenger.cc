@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.cc,v 1.10 2002/12/12 11:19:39 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em3RunActionMessenger.cc,v 1.12 2003/06/16 16:47:45 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -59,12 +59,12 @@ Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
   //    
   G4UIparameter* VminPrm = new G4UIparameter("Vmin",'d',false);
   VminPrm->SetGuidance("Vmin=Emin/Ebeam");
-  VminPrm->SetParameterRange("Vmin>=0.&&Vmin<=1.");
+  VminPrm->SetParameterRange("Vmin>=0.&&Vmin<=1.1");
   HistoCmd->SetParameter(VminPrm);
   //    
   G4UIparameter* VmaxPrm = new G4UIparameter("Vmax",'d',false);
   VmaxPrm->SetGuidance("Vmax=Emax/Ebeam");
-  VmaxPrm->SetParameterRange("Vmax>=0.&&Vmax<=1.");
+  VmaxPrm->SetParameterRange("Vmax>=0.&&Vmax<=1.1");
   HistoCmd->SetParameter(VmaxPrm);  
   //
   HistoCmd->AvailableForStates(G4State_Idle);    
@@ -84,7 +84,7 @@ void Em3RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == HistoCmd)
    { G4int idh,nbins; G4double vmin,vmax;
      const char* t = newValue;
-     G4std::istrstream is((char*)t);
+     std::istrstream is((char*)t);
      is >> idh >> nbins >> vmin >> vmax;
      Em3Run->SetHisto (idh,nbins,vmin,vmax);
    }         

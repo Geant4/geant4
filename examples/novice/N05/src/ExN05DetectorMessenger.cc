@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05DetectorMessenger.cc,v 1.5 2002/12/05 01:07:02 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN05DetectorMessenger.cc,v 1.6 2003/06/16 16:50:01 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -32,9 +32,9 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
-#include "g4std/strstream"
+#include <strstream>
 
 ExN05DetectorMessenger::ExN05DetectorMessenger(ExN05DetectorConstruction * myDet) : myDetector(myDet)
 { 
@@ -104,7 +104,7 @@ G4String ExN05DetectorMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String returnValue('\0');
   char line[255];
-  G4std::ostrstream os(line,255);
+  std::ostrstream os(line,255);
   
   if( command == SwitchCmd ) { 
     if ( myDetector->IsUseUserLimits() )returnValue = "on";

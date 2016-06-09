@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.4 2003/03/28 11:16:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.5 2003/06/16 17:00:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 // --------------------------------------------------------------
 //
@@ -44,7 +44,7 @@
 #include "Randomize.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4PenelopeBremsstrahlungContinuous::G4PenelopeBremsstrahlungContinuous (G4int Zed,G4double taglio,G4double e1,
 									G4double e2,
@@ -83,12 +83,12 @@ void G4PenelopeBremsstrahlungContinuous::LoadFromFile()
  G4String pathString(path);
  G4String filename = "br-pen-cont-";
  char nameChar[100] = {""};
- G4std::ostrstream ost(nameChar, 100, G4std::ios::out); 
+ std::ostrstream ost(nameChar, 100, std::ios::out); 
  ost << filename << Zmat << ".dat";
  G4String name(nameChar);
  G4String dirFile = pathString + "/penelope/" + name;
- G4std::ifstream file(dirFile);
- G4std::filebuf* lsdp = file.rdbuf();
+ std::ifstream file(dirFile);
+ std::filebuf* lsdp = file.rdbuf();
  if (!(lsdp->is_open()))
      {
       G4String excep = "G4PenelopeBremsstrahlungContinuous - data file " + name + " not found!";
@@ -203,7 +203,7 @@ void G4PenelopeBremsstrahlungContinuous::PrepareInterpolationTable()
 G4double G4PenelopeBremsstrahlungContinuous::CalculateStopping(G4double e1)
   //Stopping power expressed in MeV/mm*2
 {
-  G4double Xel=G4std::max(log(e1),ExtendedLogEnergy[0]);
+  G4double Xel=std::max(log(e1),ExtendedLogEnergy[0]);
   G4double Xe=1.0+(Xel-ExtendedLogEnergy[0])*DLFC;
   G4int Ke = (G4int) Xe; 
   G4double Xek = Xe-Ke; 
@@ -231,7 +231,7 @@ G4double G4PenelopeBremsstrahlungContinuous::CalculateStopping(G4double e1)
   G4double XS2A = interpolator1->CalculateMomentum(wcre,1);
   delete interpolator1;
   for (size_t k=0;k<NumberofKPoints;k++){
-    pY[k] = p0[G4std::min(Ke+1,(G4int) NumberofExtendedEGrid-1)][k];
+    pY[k] = p0[std::min(Ke+1,(G4int) NumberofExtendedEGrid-1)][k];
   }
   G4PenelopeInterpolator* interpolator2 = new G4PenelopeInterpolator (pK,pY,NumberofKPoints);
   G4double XS1B = interpolator2->CalculateMomentum(wcre,0);

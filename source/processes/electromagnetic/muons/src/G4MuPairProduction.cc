@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.33 2003/04/29 04:58:33 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MuPairProduction.cc,v 1.36 2003/06/16 17:01:49 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //--------------- G4MuPairProduction physics process ---------------------------
 //                by Laszlo Urban, May 1998
 //------------------------------------------------------------------------------
 // 04-06-98 in DoIt,secondary production condition:
-//          range>G4std::min(threshold,safety)
+//          range>std::min(threshold,safety)
 // 26/10/98 new stuff from R. Kokoulin + cleanup , L.Urban
 // 06/05/99 bug fixed , L.Urban
 // 10/02/00 modifications+bug fix , new e.m. structure, L.Urban
@@ -123,6 +123,12 @@ void G4MuPairProduction::BuildPhysicsTable(
                                const G4ParticleDefinition& aParticleType)
 //  just call BuildLossTable+BuildLambdaTable
 {
+  /*
+  G4cout << "G4MuPairProduction: theLossTable= " << theLossTable
+        << " for " << aParticleType.GetParticleName()
+        << " cutsWereMod= "  << CutsWhereModified()
+        << G4endl;
+  */ 
   if( !CutsWhereModified() && theLossTable) return;
 
   LowestKineticEnergy  = GetLowerBoundEloss() ;
@@ -150,6 +156,12 @@ void G4MuPairProduction::BuildPhysicsTable(
   G4VMuEnergyLoss::BuildDEDXTable(aParticleType);
 
   if(&aParticleType==G4MuonPlus::MuonPlus()) PrintInfoDefinition();
+  /*
+  G4cout << "G4MuPairProduction: theLossTable= " << theLossTable
+         << " theLambda= " << theMeanFreePathTable
+         << " for " << aParticleType.GetParticleName()
+         << G4endl;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -288,8 +300,13 @@ G4double G4MuPairProduction::ComputePairLoss(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuPairProduction::BuildLambdaTable(
-                                   const G4ParticleDefinition& ParticleType)
+                                   const G4ParticleDefinition& aParticleType)
 {
+  /*
+  G4cout << "G4MuPairProduction::BuildLambdaTable= " << theMeanFreePathTable
+        << " for " << aParticleType.GetParticleName()
+        << G4endl;
+  */  
   G4double LowEdgeEnergy , Value;
   G4double FixedEnergy = (LowestKineticEnergy + HighestKineticEnergy)/2. ;
 
@@ -320,15 +337,20 @@ void G4MuPairProduction::BuildLambdaTable(
     for ( G4int i = 0 ; i < NbinLambda ; i++ )
     {
        LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
-       Value = ComputeMeanFreePath( &ParticleType, LowEdgeEnergy, couple);
+       Value = ComputeMeanFreePath( &aParticleType, LowEdgeEnergy, couple);
        ptrVector->PutValue( i , Value ) ;
     }
 
     theMeanFreePathTable->insertAt( J , ptrVector );
 
      // Compute the PartialSumSigma table at a given fixed energy
-    ComputePartialSumSigma( &ParticleType, FixedEnergy, couple) ;
+    ComputePartialSumSigma( &aParticleType, FixedEnergy, couple) ;
   }
+  /*
+  G4cout << "Is done theTable= " << theMeanFreePathTable
+        << " for " << aParticleType.GetParticleName()
+        << G4endl;  
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

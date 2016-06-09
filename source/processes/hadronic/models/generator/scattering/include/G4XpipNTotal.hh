@@ -26,7 +26,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4KineticTrack.hh"
 #include "G4Pair.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4XpipNTotal : public G4VCrossSectionSource
 {
@@ -38,6 +38,6 @@ public:
   virtual G4String Name() const {return "G4XpipNTotal";}
 private:
   G4XPDGTotal thePDGData;
-  G4std::vector<G4Pair<double,double> > theLowEData;
+  std::vector<G4Pair<double,double> > theLowEData;
 };
 #endif

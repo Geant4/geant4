@@ -70,7 +70,7 @@ G4IonYangFluctuationModel::~G4IonYangFluctuationModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4IonYangFluctuationModel::TheValue(const G4DynamicParticle* particle,
-                	                    const G4Material* material) 
+					     const G4Material* material) 
 {
   G4double energy = particle->GetKineticEnergy() ;
   G4double mass = particle->GetMass() ;
@@ -83,10 +83,9 @@ G4double G4IonYangFluctuationModel::TheValue(const G4DynamicParticle* particle,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFluctuationModel::TheValue(
-                                   const G4ParticleDefinition* aParticle,
-       		                   const G4Material* material,
-                                         G4double kineticEnergy) 
+G4double G4IonYangFluctuationModel::TheValue(const G4ParticleDefinition* aParticle,
+					     const G4Material* material,
+					     G4double kineticEnergy) 
 {
   G4double mass = aParticle->GetPDGMass() ;
   G4double charge = (aParticle->GetPDGCharge())/eplus ;
@@ -98,9 +97,23 @@ G4double G4IonYangFluctuationModel::TheValue(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFluctuationModel::HighEnergyLimit(
-                             const G4ParticleDefinition* aParticle,
-                             const G4Material* material) const
+G4double G4IonYangFluctuationModel::HighEnergyLimit(const G4ParticleDefinition*,
+						    const G4Material*) const
+{
+  return 1.0*TeV ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4IonYangFluctuationModel::LowEnergyLimit(const G4ParticleDefinition* ,
+						   const G4Material* ) const
+{
+  return 0.0 ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4IonYangFluctuationModel::HighEnergyLimit(const G4ParticleDefinition* ) const
 {
   return 1.0*TeV ;
 }
@@ -108,53 +121,33 @@ G4double G4IonYangFluctuationModel::HighEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4IonYangFluctuationModel::LowEnergyLimit(
-                              const G4ParticleDefinition* aParticle,
-                              const G4Material* material) const
-{
-  return 0.0 ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4IonYangFluctuationModel::HighEnergyLimit(
-                              const G4ParticleDefinition* aParticle) const
-{
-  return 1.0*TeV ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4IonYangFluctuationModel::LowEnergyLimit(
-                              const G4ParticleDefinition* aParticle) const
+                              const G4ParticleDefinition* ) const
 {
   return 0.0 ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4IonYangFluctuationModel::IsInCharge(
-                                  const G4DynamicParticle* particle,
-    		                  const G4Material* material) const
+G4bool G4IonYangFluctuationModel::IsInCharge(const G4DynamicParticle*,
+					     const G4Material* ) const
 {
   return true ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4IonYangFluctuationModel::IsInCharge(
-                                  const G4ParticleDefinition* aParticle,
-      		                  const G4Material* material) const
+G4bool G4IonYangFluctuationModel::IsInCharge(const G4ParticleDefinition* ,
+					     const G4Material* ) const
 {
   return true ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonYangFluctuationModel::YangFluctuationModel(
-                                    const G4Material* material,
-                                          G4double kineticEnergy,
-                                          G4double particleMass,
-                                          G4double charge) const
+G4double G4IonYangFluctuationModel::YangFluctuationModel(const G4Material* material,
+							 G4double kineticEnergy,
+							 G4double particleMass,
+							 G4double charge) const
 {
   // The aproximation of energy loss fluctuations 
   // Q.Yang et al., NIM B61(1991)149-155.

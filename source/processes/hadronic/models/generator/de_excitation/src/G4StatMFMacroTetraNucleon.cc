@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTetraNucleon.cc,v 1.10 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroTetraNucleon.cc,v 1.12 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -31,7 +31,7 @@
 
 // Copy constructor
 G4StatMFMacroTetraNucleon::
-G4StatMFMacroTetraNucleon(const G4StatMFMacroTetraNucleon & right) :
+G4StatMFMacroTetraNucleon(const G4StatMFMacroTetraNucleon & ) :
     G4VStatMFMacroCluster(0)  // Beacuse the def. constr. of base class is private
 {
     G4Exception("G4StatMFMacroTetraNucleon::copy_constructor meant to not be accessable");
@@ -40,21 +40,21 @@ G4StatMFMacroTetraNucleon(const G4StatMFMacroTetraNucleon & right) :
 // Operators
 
 G4StatMFMacroTetraNucleon & G4StatMFMacroTetraNucleon::
-operator=(const G4StatMFMacroTetraNucleon & right)
+operator=(const G4StatMFMacroTetraNucleon & )
 {
     G4Exception("G4StatMFMacroTetraNucleon::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMFMacroTetraNucleon::operator==(const G4StatMFMacroTetraNucleon & right) const
+G4bool G4StatMFMacroTetraNucleon::operator==(const G4StatMFMacroTetraNucleon & ) const
 {
     G4Exception("G4StatMFMacroTetraNucleon::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4StatMFMacroTetraNucleon::operator!=(const G4StatMFMacroTetraNucleon & right) const
+G4bool G4StatMFMacroTetraNucleon::operator!=(const G4StatMFMacroTetraNucleon & ) const
 {
     G4Exception("G4StatMFMacroTetraNucleon::operator!= meant to not be accessable");
     return true;
@@ -80,7 +80,8 @@ G4double G4StatMFMacroTetraNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 			 Coulomb*theZARatio*theZARatio*pow(theA,5./3.))/T;
     if (exponent > 700.0) exponent = 700.0;
     
-    _MeanMultiplicity = ( degeneracy*FreeVol* G4double(theA)* sqrt(G4double(theA))/lambda3)* 
+    _MeanMultiplicity = ( degeneracy*FreeVol* static_cast<G4double>(theA)* 
+			  sqrt(static_cast<G4double>(theA))/lambda3)* 
 	exp(exponent);
 			 
     return _MeanMultiplicity;	
@@ -93,7 +94,7 @@ G4double G4StatMFMacroTetraNucleon::CalcEnergy(const G4double T)
 	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 									
     return _Energy  = -G4NucleiPropertiesTable::GetBindingEnergy(2,theA) + 
-	Coulomb * theZARatio * theZARatio * pow(G4double(theA),5./3.) +
+	Coulomb * theZARatio * theZARatio * pow(static_cast<G4double>(theA),5./3.) +
 	(3./2.) * T +
 	theA * T*T/_InvLevelDensity;
 							

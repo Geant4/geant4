@@ -292,13 +292,13 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
 
     G4double excEnergy = material->GetIonisation()->GetMeanExcitationEnergy();
 
-    tCut = G4std::max(tCut,excEnergy);
+    tCut = std::max(tCut,excEnergy);
     cutForDelta.push_back(tCut);
 
     // the cut cannot be below lowest limit
     tCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[j];
     if(tCut > HighestKineticEnergy) tCut = HighestKineticEnergy;
-    tCut = G4std::max(tCut,minGammaEnergy);
+    tCut = std::max(tCut,minGammaEnergy);
     cutForGamma.push_back(tCut);
   }
 
@@ -538,7 +538,7 @@ void G4hLowEnergyIonisation::BuildDataForFluorescence(
         G4double cross   = 0.;
         G4double cross1  = 0.;
         G4double eAverage= 0.;
-        G4double tmin = G4std::min(tCut,tmax);
+        G4double tmin = std::min(tCut,tmax);
         G4double rel;
 
         for (G4int n=0; n<nShells; n++) {
@@ -726,8 +726,8 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetMeanFreePath(const G4Track& trackData,
-                                                   G4double previousStepSize,
-                                              enum G4ForceCondition* condition)
+						 G4double, // previousStepSize
+						 enum G4ForceCondition* condition)
 {
    const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
    const G4MaterialCutsCouple* couple = trackData.GetMaterialCutsCouple();
@@ -818,7 +818,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   dx        /= (chargeSquare*massRatio) ;
 
   stepLimit  = fRangeNow ;
-  G4double r = G4std::min(finalRange, couple->GetProductionCuts()
+  G4double r = std::min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
 
   if (fRangeNow > r) {
@@ -946,10 +946,10 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   G4double edep = kineticEnergy-finalT;
 
   // Deexcitation only of ionised atoms
-  eloss = G4std::min(edep, eloss);
+  eloss = std::min(edep, eloss);
 
   G4double hMass = particle->GetMass();
-  G4std::vector<G4DynamicParticle*>* newpart = 0;
+  std::vector<G4DynamicParticle*>* newpart = 0;
   G4DynamicParticle* part = 0;
 
   if(theFluo) newpart = DeexciteAtom(couple, kineticEnergy, hMass, eloss);
@@ -1112,7 +1112,7 @@ G4double G4hLowEnergyIonisation::DeltaRaysEnergy(
   tmax = 2.*electron_mass_c2*bg2/(1.0+2.0*gamma*rateMass+rateMass*rateMass) ;
 
   // Validity range for delta electron cross section
-  G4double deltaCut = G4std::max(deltaCutNow, eexc);
+  G4double deltaCut = std::max(deltaCutNow, eexc);
 
   if ( deltaCut < tmax) {
     x = deltaCut / tmax ;
@@ -1223,7 +1223,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   // Generation of Fluorescence and Auger
   size_t nSecondaries = 0;
   size_t totalNumber  = 1;
-  G4std::vector<G4DynamicParticle*>* secondaryVector = 0;
+  std::vector<G4DynamicParticle*>* secondaryVector = 0;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
 
@@ -1338,7 +1338,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>*
+std::vector<G4DynamicParticle*>*
 G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 				           G4double incidentEnergy,
 				           G4double hMass,
@@ -1361,7 +1361,7 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
   G4double beta2 = 1.0 - 1.0/(gamma*gamma);
   G4double r     = electron_mass_c2/hMass;
   G4double tmax  = 2.*electron_mass_c2*(gamma*gamma - 1.)/(1. + 2.*gamma*r + r*r);
-  G4double tcut  = G4std::min(tmax,cutForDelta[index]);
+  G4double tcut  = std::min(tmax,cutForDelta[index]);
   const G4AtomicTransitionManager* transitionManager =
                              G4AtomicTransitionManager::Instance();
 
@@ -1384,9 +1384,9 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 
   // create vector of tracks of secondary particles
 
-  G4std::vector<G4DynamicParticle*>* partVector =
-         new G4std::vector<G4DynamicParticle*>;
-  G4std::vector<G4DynamicParticle*>* secVector = 0;
+  std::vector<G4DynamicParticle*>* partVector =
+         new std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* secVector = 0;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
   G4double e, tkin, grej;
@@ -1396,7 +1396,7 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
   // sample secondaries
 
   G4double etot = 0.0;
-  G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(couple,
+  std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(couple,
                                          incidentEnergy, eLoss);
 
   for (size_t i=0; i<nElements; i++) {
@@ -1476,7 +1476,7 @@ G4int G4hLowEnergyIonisation::SelectRandomAtom(const G4MaterialCutsCouple* coupl
   }
 
   const G4ElementVector* theElementVector = material->GetElementVector();
-  G4std::vector<G4double> p;
+  std::vector<G4double> p;
   G4int index = couple->GetIndex();
 
   G4double norm = 0.0;
@@ -1723,7 +1723,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   if(meanLoss < minLoss) return meanLoss ;
 
   // Validity range for delta electron cross section
-  G4double threshold = G4std::max(deltaCutInKineticEnergyNow,ipotFluct);
+  G4double threshold = std::max(deltaCutInKineticEnergyNow,ipotFluct);
   G4double loss, siga;
 
   G4double rmass = electron_mass_c2/particleMass;
@@ -1809,7 +1809,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
+          p3 = std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -1828,7 +1828,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+          p3 = std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -1857,7 +1857,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0,G4int(G4RandGauss::shoot(a1,siga)+0.5));
+        p1 = std::max(0,G4int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
@@ -1866,7 +1866,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0,G4int(G4RandGauss::shoot(a2,siga)+0.5));
+        p2 = std::max(0,G4int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1885,7 +1885,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
+        p3 = std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);
@@ -2001,8 +2001,8 @@ void G4hLowEnergyIonisation::PrintInfoDefinition() const
         G4cout << G4endl;
       }
 
-      G4cout << G4std::setw(20) << material->GetName()
-	     << G4std::setw(15) << eexc/keV << G4endl;
+      G4cout << std::setw(20) << material->GetName()
+	     << std::setw(15) << eexc/keV << G4endl;
     }
   }
 }

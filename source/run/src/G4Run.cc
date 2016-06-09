@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Run.cc,v 1.5 2003/04/23 17:54:31 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4Run.hh"

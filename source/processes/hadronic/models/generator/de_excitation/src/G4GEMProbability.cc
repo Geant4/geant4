@@ -32,7 +32,7 @@
 
 
 
-G4GEMProbability::G4GEMProbability(const G4GEMProbability &right)
+G4GEMProbability::G4GEMProbability(const G4GEMProbability &) : G4VEmissionProbability()
 {
     G4Exception("G4GEMProbability::copy_constructor meant to not be accessable");
 }
@@ -41,19 +41,19 @@ G4GEMProbability::G4GEMProbability(const G4GEMProbability &right)
 
 
 const G4GEMProbability & G4GEMProbability::
-operator=(const G4GEMProbability &right)
+operator=(const G4GEMProbability &)
 {
   G4Exception("G4GEMProbability::operator= meant to not be accessable");
   return *this;
 }
 
 
-G4bool G4GEMProbability::operator==(const G4GEMProbability &right) const
+G4bool G4GEMProbability::operator==(const G4GEMProbability &) const
 {
   return false;
 }
 
-G4bool G4GEMProbability::operator!=(const G4GEMProbability &right) const
+G4bool G4GEMProbability::operator!=(const G4GEMProbability &) const
 {
   return true;
 }
@@ -93,17 +93,19 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
 G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment, 
                                            const G4double MaximalKineticEnergy,
                                            const G4double V)
-    // Calculate integrated probability (width) for rvaporation channel
+    // Calculate integrated probability (width) for evaporation channel
 {
-    G4double ResidualA = G4double(fragment.GetA() - theA);
-    //    G4double ResidualZ = G4double(fragment.GetZ() - theZ);
+    G4double ResidualA = static_cast<G4double>(fragment.GetA() - theA);
+    //    G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
     G4double U = fragment.GetExcitationEnergy();
 	
     G4double NuclearMass = G4ParticleTable::GetParticleTable()->
         GetIonTable()->GetNucleusMass(theZ,theA);
 
-    G4double a = theEvapLDPptr->LevelDensityParameter(fragment.GetA(),fragment.GetZ(),U);
-    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(fragment.GetA(),fragment.GetZ());
+    G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
+						      static_cast<G4int>(fragment.GetZ()),U);
+    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
+									       static_cast<G4int>(fragment.GetZ()));
     
     G4double Alpha = CalcAlphaParam(fragment);
     G4double Beta = CalcBetaParam(fragment);
@@ -140,7 +142,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
     if (theA > 4) 
     {
 	G4double R1 = pow(ResidualA,1.0/3.0);
-	G4double R2 = pow(theA,1.0/3.0);
+	G4double R2 = pow(G4double(theA),1.0/3.0);
 	RN = 1.12*(R1 + R2) - 0.86*((R1+R2)/(R1*R2));
 	RN *= fermi;
     }
@@ -151,7 +153,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
     G4double GeometricalXS = pi*RN*RN*pow(ResidualA,2./3.); 
 
 
-    Width *= pi*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
+    Width *= sqrt(pi)*g*GeometricalXS*Alpha/(12.0*InitialLevelDensity); 
     return Width;
 }
 

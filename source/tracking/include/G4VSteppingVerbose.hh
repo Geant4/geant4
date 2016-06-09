@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.hh,v 1.14 2002/12/04 23:00:50 tsasaki Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VSteppingVerbose.hh,v 1.15 2003/06/16 17:13:13 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //  
 //---------------------------------------------------------------
@@ -47,7 +47,7 @@
 class G4SteppingManager;
 
 #include "globals.hh"                 // Include from 'global'
-#include "g4std/vector"
+#include <vector>
 
 class G4Navigator;
 class G4VPhysicalVolume;
@@ -160,11 +160,11 @@ protected:
 
   G4int verboseLevel;
 
-  typedef G4std::vector<G4int> 
+  typedef std::vector<G4int> 
              G4SelectedAtRestDoItVector;
-  typedef G4std::vector<G4int> 
+  typedef std::vector<G4int> 
              G4SelectedAlongStepDoItVector;
-  typedef G4std::vector<G4int>
+  typedef std::vector<G4int>
              G4SelectedPostStepDoItVector;
   G4SelectedAtRestDoItVector* fSelectedAtRestDoItVector;
   G4SelectedAlongStepDoItVector* fSelectedAlongStepDoItVector;

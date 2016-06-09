@@ -88,6 +88,8 @@ private:
   G4double minNumberInteractionsBohr;
   G4double theBohrBeta2;
   G4double minFraction;
+  G4double xmin;
+  G4double minLoss;
   // cash
   G4double kineticEnergy;
   G4double beta2;

@@ -33,7 +33,7 @@ StreamerHepRep::StreamerHepRep(HepRepWriter* streamer) {
 StreamerHepRep::~StreamerHepRep() {
 }
 
-HepRep* StreamerHepRep::copy(HepRepSelectFilter* filter) {
+HepRep* StreamerHepRep::copy(HepRepSelectFilter*) {
     return NULL;
 }
 
@@ -46,14 +46,14 @@ bool StreamerHepRep::addLayer(string layer) {
     return true;
 }
 
-bool StreamerHepRep::addTypeTree(HepRepTypeTree* typeTree) {
+bool StreamerHepRep::addTypeTree(HepRepTypeTree*) {
     return true;
 }
 
-void StreamerHepRep::removeTypeTree(HepRepTypeTree* typeTree) {
+void StreamerHepRep::removeTypeTree(HepRepTypeTree*) {
 }
 
-HepRepTypeTree* StreamerHepRep::getTypeTree(string name, string version) {
+HepRepTypeTree* StreamerHepRep::getTypeTree(string, string) {
     return NULL;
 }
 
@@ -61,35 +61,35 @@ vector<HepRepTypeTree*>* StreamerHepRep::getTypeTrees() {
     return NULL;
 }
 
-HepRepType* StreamerHepRep::getType(string name) {
+HepRepType* StreamerHepRep::getType(string) {
     return NULL;
 }
 
-bool StreamerHepRep::addInstanceTree(HepRepInstanceTree* instanceTree) {
+bool StreamerHepRep::addInstanceTree(HepRepInstanceTree*) {
     return true;
 }
 
-void StreamerHepRep::removeInstanceTree(HepRepInstanceTree* instanceTree) {
+void StreamerHepRep::removeInstanceTree(HepRepInstanceTree*) {
 }
 
-HepRepInstanceTree* StreamerHepRep::getInstanceTreeTop(string name, string version) {
+HepRepInstanceTree* StreamerHepRep::getInstanceTreeTop(string, string) {
     return NULL;
 }
 
-HepRepInstanceTree* StreamerHepRep::getInstances(string name, string version,
-                                       vector<string> typeNames) {
+HepRepInstanceTree* StreamerHepRep::getInstances(string, string,
+                                       vector<string>) {
     return NULL;
 }
 
 HepRepInstanceTree* StreamerHepRep::getInstancesAfterAction(
-                                string name,
-                                string version,
-                                vector<string> typeNames,
-                                vector<HepRepAction*> actions,
-                                bool getPoints,
-                                bool getDrawAtts,
-                                bool getNonDrawAtts,
-                                vector<string> invertAtts) {
+                                string,
+                                string,
+                                vector<string>,
+                                vector<HepRepAction*>,
+                                bool,
+                                bool,
+                                bool,
+                                vector<string>) {
     return NULL;
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.hh,v 1.8 2002/07/23 08:50:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LogicalBorderSurface.hh,v 1.9 2003/06/16 16:54:42 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4LogicalBorderSurface
 //
@@ -44,7 +44,7 @@
 #include  "G4LogicalSurface.hh"
 #include "G4VPhysicalVolume.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4Event;
 class G4VPhysicalVolume;
@@ -73,7 +73,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
     inline void SetVolume2( G4VPhysicalVolume* vol2 );
       // To use with care!
 
-    static const G4std::vector<G4LogicalBorderSurface*> * GetSurfaceTable();
+    static const std::vector<G4LogicalBorderSurface*> * GetSurfaceTable();
     static size_t GetNumberOfBorderSurfaces();
     static void DumpInfo(); 
       // To handle the table of surfaces.
@@ -92,11 +92,11 @@ class G4LogicalBorderSurface : public G4LogicalSurface
     G4VPhysicalVolume* Volume1;  // Physical Volume pointer on side 1
     G4VPhysicalVolume* Volume2;  // Physical Volume pointer on side 2
 
-    static G4std::vector<G4LogicalBorderSurface*> theBorderSurfaceTable;
+    static std::vector<G4LogicalBorderSurface*> theBorderSurfaceTable;
       // The static Table of Surfaces.
 };
 
-typedef G4std::vector<G4LogicalBorderSurface*> G4LogicalBorderSurfaceTable;
+typedef std::vector<G4LogicalBorderSurface*> G4LogicalBorderSurfaceTable;
 
 // ********************************************************************
 // Inline methods

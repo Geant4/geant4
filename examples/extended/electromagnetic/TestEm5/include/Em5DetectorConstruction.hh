@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.hh,v 1.4 2001/10/16 11:56:27 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em5DetectorConstruction.hh,v 1.5 2003/04/30 14:12:32 maire Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

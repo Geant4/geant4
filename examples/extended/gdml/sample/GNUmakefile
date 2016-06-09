@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2002/08/19 07:30:22 radoone Exp $
+# $Id: GNUmakefile,v 1.5 2003/05/06 17:50:31 radoone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for GDML sample module. Radovan Chytracek, 30/05/2002.
 # --------------------------------------------------------------
@@ -24,7 +24,7 @@ CPPFLAGS    += \
 
 EXTRALIBS   += \
               -lGDMLsaxana \
-              -L $(XERCESCROOT)/lib -lxerces-c \
+              -L$(XERCESCROOT)/lib -lxerces-c \
               -lGDMLmanagement \
               -lGDMLschema \
               -lGDMLprocesses \

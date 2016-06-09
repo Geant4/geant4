@@ -57,8 +57,8 @@
 //-----------------------------------------------------------------------------
   G4double
   G4MuonNucleusProcess::GetMeanFreePath( const G4Track &muonTrack,
-                                         G4double previousStepSize,
-                                         G4ForceCondition *condition )
+                                         G4double,
+                                         G4ForceCondition * )
 //-----------------------------------------------------------------------------
   {
     G4Material *aMaterial  = muonTrack.GetMaterial();

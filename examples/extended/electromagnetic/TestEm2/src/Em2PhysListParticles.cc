@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em2PhysListParticles.cc,v 1.2 2002/12/16 11:29:23 stesting Exp $
-// GEANT4 tag $Name: geant4-05-01 $ 
+// GEANT4 tag $Name: geant4-05-02 $ 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

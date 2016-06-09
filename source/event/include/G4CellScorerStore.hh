@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScorerStore.hh,v 1.1 2002/10/28 10:06:00 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4CellScorerStore.hh,v 1.2 2003/06/16 16:50:26 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4CellScorerStore
@@ -43,7 +43,7 @@
 #ifndef G4CellScorerStore_hh
 #define G4CellScorerStore_hh G4CellScorerStore_hh
 
-#include "g4std/map"
+#include <map>
 #include "G4GeometryCell.hh"
 
 #include "globals.hh"
@@ -52,7 +52,7 @@
 
 class G4CellScorer;
 
-typedef G4std::map<G4GeometryCell, G4CellScorer *, G4GeometryCellComp> G4MapGeometryCellCellScorer;
+typedef std::map<G4GeometryCell, G4CellScorer *, G4GeometryCellComp> G4MapGeometryCellCellScorer;
 
 class G4CellScorerStore : public G4VCellScorerStore {
 public: // with description

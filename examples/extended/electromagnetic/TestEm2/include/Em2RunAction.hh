@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2RunAction.hh,v 1.13 2002/12/16 11:29:22 stesting Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em2RunAction.hh,v 1.14 2003/06/16 16:47:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -42,9 +42,9 @@
 #include "G4Positron.hh"
 #include "globals.hh"
 
-#include "g4std/vector"
+#include <vector>
 
-typedef  G4std::vector<G4double> MyVector;
+typedef  std::vector<G4double> MyVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

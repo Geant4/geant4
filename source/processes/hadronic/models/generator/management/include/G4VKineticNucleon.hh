@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKineticNucleon.hh,v 1.5 2002/12/12 19:17:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VKineticNucleon.hh,v 1.6 2003/05/30 14:09:57 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4VKineticNucleon_h
 #define G4VKineticNucleon_h 1
@@ -72,7 +72,7 @@ inline G4KineticTrackVector* G4VKineticNucleon::Decay()
   return NULL;
 }
 
-inline const G4VKineticNucleon& G4VKineticNucleon::operator=(const G4VKineticNucleon& right)
+inline const G4VKineticNucleon& G4VKineticNucleon::operator=(const G4VKineticNucleon& )
 {
 	return *this;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidOpenPCone.cc,v 1.7 2002/11/06 23:29:36 radoone Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BREPSolidOpenPCone.cc,v 1.8 2003/06/16 16:52:47 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -82,7 +82,7 @@ void G4BREPSolidOpenPCone::DescribeYourselfTo (G4VGraphicsScene& scene) const
 }
 
 // Streams solid contents to output stream.
-G4std::ostream& G4BREPSolidOpenPCone::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BREPSolidOpenPCone::StreamInfo(std::ostream& os) const
 {  
   G4IntersectionSolid::StreamInfo( os );
 

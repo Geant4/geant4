@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.hh,v 1.8 2003/02/28 08:41:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BremsstrahlungParameters.hh,v 1.9 2003/06/16 16:59:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V. Ivanchenko (Vladimir.Ivantchenko@cern.ch)
@@ -52,7 +52,7 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
-#include "g4std/map"
+#include <map>
 
 class G4VEMDataSet;
 class G4VDataSetAlgorithm;
@@ -79,7 +79,7 @@ private:
 
   void LoadData(const G4String& name);
 
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
+  std::map<G4int,G4VEMDataSet*,std::less<G4int> > param;
 
   G4DataVector paramC;
   G4DataVector activeZ;

@@ -27,11 +27,11 @@
 #include "G4PersistencyManager.hh"
 
 // Addtional Include:
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4PersistencyCenter.hh"
 
 // Implementation of Constructor #1
-G4PersistencyManager::G4PersistencyManager(G4PersistencyCenter* pc, G4std::string n)
+G4PersistencyManager::G4PersistencyManager(G4PersistencyCenter* pc, std::string n)
  : f_pc(pc), nameMgr(n), f_is_initialized(false)
 {
   m_verbose = f_pc->VerboseLevel();
@@ -133,8 +133,8 @@ G4bool G4PersistencyManager::Store(const G4Event* evt)
     return false;
   }
 
-  G4std::string file;
-  G4std::string obj;
+  std::string file;
+  std::string obj;
 
 #ifndef WIN32
 
@@ -313,11 +313,11 @@ G4bool G4PersistencyManager::Retrieve(G4Event*& evt)
   }
 
   G4bool st = false;
-  G4std::string file;
+  std::string file;
 
   // Retrieve a G4EVENT
   //
-  G4std::string obj = "Hits";
+  std::string obj = "Hits";
   if ( f_pc->CurrentRetrieveMode(obj) == true ) {
     file = f_pc->CurrentReadFile(obj);
     if ( TransactionManager()->SelectReadFile(obj, file) ) {
@@ -380,11 +380,11 @@ G4bool G4PersistencyManager::Retrieve(HepMC::GenEvent*& evt, int id)
   }
 
   G4bool st = false;
-  G4std::string file;
+  std::string file;
 
   // Retrieve a HepMC GenEvent
   //
-  G4std::string obj = "HepMC";
+  std::string obj = "HepMC";
   if ( f_pc->CurrentRetrieveMode(obj) == true ) {
     file = f_pc->CurrentReadFile(obj);
     if ( TransactionManager()->SelectReadFile(obj, file) ) {

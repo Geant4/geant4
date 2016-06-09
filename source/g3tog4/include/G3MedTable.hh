@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTable.hh,v 1.11 2003/01/27 10:45:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3MedTable.hh,v 1.12 2003/06/16 16:50:40 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------
 // Class description:
@@ -43,13 +43,13 @@
 
 #include "globals.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4Material;
 class G4MagneticField;
 class G4UserLimits;
 
-typedef G4std::vector<G3MedTableEntry*>  G3MediumVector;
+typedef std::vector<G3MedTableEntry*>  G3MediumVector;
 
 class G3MedTable
 {

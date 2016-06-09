@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2003/01/24 21:18:48 perl Exp $
+$Id: History,v 1.25.2.2 2003/05/30 13:14:50 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,18 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+30th May 2003  John Allison
+- Eliminated pedantic warnings at head (johna-030530) and on
+  geant4-05-01-ref-02 (vis-V05-01-00).
+
+29th May 2003 Mark Donszelmann and Joseph Perl (mark-joseph-050329)
+- Modified G4HepRepSceneHandler (HEPREP2) to write more complete heprep, including
+  attributes.
+- Copied new Streamer from FREEHEP library.
+
+28th February 2003  Joseph Perl
+- Modified G4HepRepFileSceneHandler to allow some volumes to be initially invisible.
 
 24th January 2003  Joseph Perl
 - Modified G4HepRepFileSceneHandler:AddThis (const G4VTrajectory& traj)

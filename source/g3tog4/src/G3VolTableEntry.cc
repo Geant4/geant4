@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTableEntry.cc,v 1.10 2001/11/08 16:08:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3VolTableEntry.cc,v 1.11 2003/06/16 16:50:53 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // modified by I.Hrivnacova, 13.10.99
 
@@ -207,7 +207,7 @@ void G3VolTableEntry::SetHasMANY(G4bool hasMANY) {
 void G3VolTableEntry::ClearG3PosCopy(G4int copy) {
   if (fG3Pos.size()>0 && copy>=0 && copy<G4int(fG3Pos.size())) {
     G3Pos* tmp=0;
-     G4std::vector<G3Pos*>::iterator it=fG3Pos.begin();
+     std::vector<G3Pos*>::iterator it=fG3Pos.begin();
      for(G4int j=0;j<copy;j++) it++;
      if(it!=fG3Pos.end()) {
          tmp = fG3Pos[copy];
@@ -346,7 +346,7 @@ G3VolTableEntry::GetMasterClone(){
   return master;
 }
 
-G4std::vector<G3VolTableEntry*>*
+std::vector<G3VolTableEntry*>*
 G3VolTableEntry::GetOverlaps(){
   return &fOverlaps;
 }

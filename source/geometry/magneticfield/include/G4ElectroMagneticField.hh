@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ElectroMagneticField.hh,v 1.7 2003/04/02 08:49:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4ElectroMagneticField

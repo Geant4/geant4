@@ -70,13 +70,14 @@ C
         if(ipart.eq.1) call hfill(10,log10(1000.*gekin),0.,1.)
         if(ipart.eq.ikine) then
           tra=1.
+        if(NUMED.eq.1) then
 *
           call hfill(5,1000.*gekin,0.,1.)
 
-          if((1-vect(4)).gt.1.e-6) then
+          if((1-vect(4)).gt.1.e-4) then
             theta=acos(vect(4))
           else
-            theta=sqrt(2.*(1.-vect(4)))
+            theta=sqrt(vect(5)**2+vect(6)**2)
           endif
           if(nhi3.gt.0) then
             h1=his3(1)/facdeg
@@ -103,10 +104,31 @@ C
             theta = facdeg*theta
             call hfill(3,theta,0.,w)
           endif
+          if(nhi11.gt.0) then
+C           proj.angle distribution plot
+            vx = vect(4)
+            vy = vect(5)
+            vplane = sqrt(vx*vx+vy*vy)
+            thpr = 0.
+            if(vplane.gt.0.) then
+              vx = vx/vplane
+              vy = vy/vplane
+              if((1.-vx).gt.1.e-4) then
+                thpr = acos(vx)
+                if(vy.lt.0.) thpr = -thpr
+              else
+                thpr = vy
+              endif
+            endif
+            thpr = 90.*thpr/PIBY2
+            call hfill(11,thpr,0.,1.)
+          endif
           call hfill(4,10.*R,0.,1.)
+        endif
         endif
        endif
       endif
+
       if((r.le.YZABSO).and.(xo.gt.X1ABSO).and.(x.le.X1ABSO)) then
        if(vect(4).lt.0.) then
         if(ipart.eq.ikine) then
@@ -146,6 +168,7 @@ C
           EDEP = EDEP+DESTEP
         ENDIF
 C
+      NMOLD = NUMED
       ITOLD=IEVENT
       XO=X
       RO=R

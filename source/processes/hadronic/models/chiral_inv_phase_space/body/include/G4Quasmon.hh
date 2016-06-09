@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.20 2002/12/12 13:25:52 mkossov Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Quasmon.hh,v 1.22 2003/06/25 10:18:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -137,7 +137,7 @@ inline G4QContent      G4Quasmon::GetQC()        const {return valQ;}
 inline G4QPDGCode      G4Quasmon::GetQPDG()      const {return G4QPDGCode(valQ);}
 inline G4int           G4Quasmon::GetStatus()    const {return status;}
 inline void            G4Quasmon::ClearOutput()        
-      {G4std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
+      {std::for_each(theQHadrons.begin(), theQHadrons.end(), DeleteQHadron());
        theQHadrons.clear();
       }
 inline void            G4Quasmon::KillEnvironment()
@@ -170,7 +170,7 @@ inline void G4Quasmon::ClearQuasmon()
   valQ  = zeroQC;
   q4Mom = nothing;
   status= 0;
-  G4std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
+  std::for_each(theQCandidates.begin(), theQCandidates.end(), DeleteQCandidate());
   theQCandidates.clear();
 
 }

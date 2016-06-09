@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.hh,v 1.6 2002/11/08 23:44:36 jacek Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SmoothTrajectoryPoint.hh,v 1.7 2003/06/16 17:13:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -55,7 +55,7 @@ public: // without description
    // No auxiliary points setter, so must set the points in the
    // constructor already (jacek 31/10/2002)
    G4SmoothTrajectoryPoint(G4ThreeVector pos,
-			   G4std::vector<G4ThreeVector>* auxiliaryPoints);
+			   std::vector<G4ThreeVector>* auxiliaryPoints);
    G4SmoothTrajectoryPoint(G4ThreeVector pos);
    G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right);
    virtual ~G4SmoothTrajectoryPoint();
@@ -69,12 +69,12 @@ public: // without description
 // Get/Set functions
    inline const G4ThreeVector GetPosition() const
    { return fPosition; }
-   inline const G4std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
+   inline const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
    { return fAuxiliaryPointVector; }
 
 // Get method for HEPRep style attributes
-   virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const;
-   virtual G4std::vector<G4AttValue>* CreateAttValues() const;
+   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+   virtual std::vector<G4AttValue>* CreateAttValues() const;
 
 //---------
    private:
@@ -82,7 +82,7 @@ public: // without description
 
 // Member data
    G4ThreeVector fPosition;
-   G4std::vector<G4ThreeVector>* fAuxiliaryPointVector;
+   std::vector<G4ThreeVector>* fAuxiliaryPointVector;
 
 
 };

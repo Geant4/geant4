@@ -97,13 +97,13 @@ void G4LorentzConvertor::toTheCenterOfMass() {
   gapp = ga * pscm;
 }
 
-G4std::vector<G4double> G4LorentzConvertor::rotate(const G4std::vector<G4double> mom) const {
+std::vector<G4double> G4LorentzConvertor::rotate(const std::vector<G4double> mom) const {
 
   if (verboseLevel > 3) {
-    G4cout << " >>> G4LorentzConvertor::rotate(G4std::vector<G4double>)" << G4endl;
+    G4cout << " >>> G4LorentzConvertor::rotate(std::vector<G4double>)" << G4endl;
   }
 
-  G4std::vector<G4double> mom_rot(4);
+  std::vector<G4double> mom_rot(4);
 
   if (verboseLevel > 3) {
     G4cout << " ga " << ga << " gbpp " << gbpp << " gapp " << gapp << G4endl;  
@@ -134,16 +134,16 @@ G4std::vector<G4double> G4LorentzConvertor::rotate(const G4std::vector<G4double>
   return mom_rot;
 }
 
-G4std::vector<G4double> G4LorentzConvertor::rotate(const G4std::vector<G4double> mom1, 
-					    const G4std::vector<G4double> mom) const {
+std::vector<G4double> G4LorentzConvertor::rotate(const std::vector<G4double> mom1, 
+					    const std::vector<G4double> mom) const {
 
   if (verboseLevel > 3) {
-    G4cout << " >>> G4LorentzConvertor::rotate(G4std::vector<G4double>,G4std::vector<G4double>)" << G4endl;
+    G4cout << " >>> G4LorentzConvertor::rotate(std::vector<G4double>,std::vector<G4double>)" << G4endl;
   }
 
   const G4double small = 1.0e-10;
 
-  G4std::vector<G4double> mom_rot(4);
+  std::vector<G4double> mom_rot(4);
 
   G4double pp = 0.0;
 
@@ -237,7 +237,7 @@ void G4LorentzConvertor::toTheTargetRestFrame() {
   gapp = ga * pscm;   
 }
 
-G4std::vector<G4double> G4LorentzConvertor::backToTheLab(const G4std::vector<G4double>& mom) const {
+std::vector<G4double> G4LorentzConvertor::backToTheLab(const std::vector<G4double>& mom) const {
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4LorentzConvertor::backToTheLab" << G4endl;
@@ -251,7 +251,7 @@ G4std::vector<G4double> G4LorentzConvertor::backToTheLab(const G4std::vector<G4d
     G4cout << " v2 " << v2 << G4endl;   
   }
 
-  G4std::vector<G4double> mom1(4);
+  std::vector<G4double> mom1(4);
 
   if(v2 < small) {
     mom1 = mom;

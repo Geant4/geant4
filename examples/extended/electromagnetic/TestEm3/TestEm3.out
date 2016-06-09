@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-01 $
-                                (30-Apr-2003)
+ Geant4 version $Name: geant4-05-02 $
+                                (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -124,6 +124,7 @@ userDetector->Construct() start.
  	        Lead:    2.3 mm 
  	 liquidArgon:    5.7 mm 
 -------------------------------------------------------------
+World is registered to the default region.
 physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
@@ -228,18 +229,18 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            2k Calorimeter
+     100.00         0.01         0.01            2k Calorimeter
        0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      91.70          1k         1       50         50         0.00    Calorimeter
+      91.70          1k         1       50         50         0.01    Calorimeter
        8.30          0k         1        3          4         0.00    Layer
 Start Run processing.
 
@@ -249,19 +250,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=40.4s Real=81.35s Sys=7.73s
+  User=43.58s Real=54.43s Sys=7.24s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 814.21 MeV +- 14.84 MeV       56.35 cm  +-  1.16 cm 
- Absorber1 ( liquidArgon) : 173.44 MeV +- 12.26 MeV       85.79 cm  +-  6.20 cm 
+ Absorber0 (        Lead) : 811.00 MeV +- 37.53 MeV       56.07 cm  +-  2.61 cm 
+ Absorber1 ( liquidArgon) : 174.06 MeV +- 13.45 MeV       86.05 cm  +-  6.85 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1971361462, 1401170872
+ Current couple of seeds = 101412830, 1192091677
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

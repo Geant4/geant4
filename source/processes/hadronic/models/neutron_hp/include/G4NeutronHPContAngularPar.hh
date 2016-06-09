@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPContAngularPar.hh,v 1.7 2002/12/12 19:18:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPContAngularPar.hh,v 1.8 2003/06/16 17:10:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPContAngularPar_h
 #define G4NeutronHPContAngularPar_h 1
 
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 #include "G4NeutronHPList.hh"
 #include "G4ReactionProduct.hh"
@@ -49,7 +49,7 @@ class G4NeutronHPContAngularPar
     if(theAngular!=NULL) delete [] theAngular;
   }
   
-  void Init(G4std::ifstream & aDataFile);
+  void Init(std::ifstream & aDataFile);
   
   G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass, 
                              G4int angularRep, G4int interpol);

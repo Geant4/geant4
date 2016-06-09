@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporation.cc,v 1.6 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VEvaporation.cc,v 1.7 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) writen from G4Evaporation.cc (May 1998)
@@ -32,7 +32,7 @@
 #include "G4VEvaporation.hh"
 
 
-G4VEvaporation::G4VEvaporation(const G4VEvaporation &right)
+G4VEvaporation::G4VEvaporation(const G4VEvaporation &)
 {
  G4Exception("G4VEvaporation::copy_constructor meant to not be accessable");
 }
@@ -40,19 +40,19 @@ G4VEvaporation::G4VEvaporation(const G4VEvaporation &right)
 
 
 
-const G4VEvaporation & G4VEvaporation::operator=(const G4VEvaporation &right)
+const G4VEvaporation & G4VEvaporation::operator=(const G4VEvaporation &)
 {
   G4Exception("G4VEvaporation::operator= meant to not be accessable");
   return *this;
 }
 
 
-G4bool G4VEvaporation::operator==(const G4VEvaporation &right) const
+G4bool G4VEvaporation::operator==(const G4VEvaporation &) const
 {
   return false;
 }
 
-G4bool G4VEvaporation::operator!=(const G4VEvaporation &right) const
+G4bool G4VEvaporation::operator!=(const G4VEvaporation &) const
 {
   return true;
 }

@@ -48,7 +48,7 @@ class G4NuclearDecayChannel : public G4GeneralPhaseSpaceDecay
   
 public: // with description
 
-  G4NuclearDecayChannel (const G4RadioactiveDecayMode &theMode, G4int Verbose) :
+  G4NuclearDecayChannel (const G4RadioactiveDecayMode &, G4int Verbose) :
     G4GeneralPhaseSpaceDecay (Verbose) {;}
   // default constructor
   //

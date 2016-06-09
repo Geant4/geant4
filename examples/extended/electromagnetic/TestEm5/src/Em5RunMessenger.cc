@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunMessenger.cc,v 1.7 2002/12/16 16:30:08 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em5RunMessenger.cc,v 1.8 2003/05/30 10:28:05 urban Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -163,6 +163,18 @@ Em5RunMessenger::Em5RunMessenger(Em5RunAction* RA)
   setThhighCmd->SetGuidance("set upper limit for Theta transmitted plot ");
   setThhighCmd->SetParameterName("Thhigh",false);
 
+  setnbinThprojCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinThproj",this);
+  setnbinThprojCmd->SetGuidance("set nb of bins in Thetaproj transmitted plot");
+  setnbinThprojCmd->SetParameterName("nbinThproj",false);
+
+  setThlowprojCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setThlowproj",this);
+  setThlowprojCmd->SetGuidance("set lower limit for Thetaproj transmitted plot ");
+  setThlowprojCmd->SetParameterName("Thlowproj",false);
+
+  setThhighprojCmd = new G4UIcmdWithADoubleAndUnit("/testem/plots/setThhighproj",this);
+  setThhighprojCmd->SetGuidance("set upper limit for Thetaproj transmitted plot ");
+  setThhighprojCmd->SetParameterName("Thhighproj",false);
+
   setnbinThbackCmd = new G4UIcmdWithAnInteger("/testem/plots/setnbinThback",this);
   setnbinThbackCmd->SetGuidance("set nb of bins in backscattering Theta plot");
   setnbinThbackCmd->SetParameterName("nbinThback",false);
@@ -218,6 +230,10 @@ Em5RunMessenger::~Em5RunMessenger()
   delete setThlowCmd;
   delete setThhighCmd;
 
+  delete setnbinThprojCmd;
+  delete setThlowprojCmd;
+  delete setThhighprojCmd;
+	
   delete setnbinThbackCmd;
   delete setThlowbackCmd;
   delete setThhighbackCmd;
@@ -340,6 +356,18 @@ void Em5RunMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
   if( command == setThhighCmd)
     runAction
     ->SetThhigh( setThhighCmd->GetNewDoubleValue(newValues));
+
+  if( command == setnbinThprojCmd)
+    runAction
+    ->SetnbinThproj(setnbinThprojCmd->GetNewIntValue(newValues));
+
+  if( command == setThlowprojCmd)
+    runAction
+    ->SetThlowproj( setThlowprojCmd->GetNewDoubleValue(newValues));
+
+  if( command == setThhighprojCmd)
+    runAction
+    ->SetThhighproj( setThhighprojCmd->GetNewDoubleValue(newValues));
 
   if( command == setnbinThbackCmd)
     runAction

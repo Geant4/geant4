@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polymarker.hh,v 1.7 2001/07/11 10:01:03 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Polymarker.hh,v 1.8 2003/06/16 16:55:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  November 1996
@@ -42,7 +42,7 @@ class G4Polymarker: public G4VMarker, public G4Point3DList {
 
 public: // With description
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4Polymarker& marker);
+  friend std::ostream& operator << (std::ostream& os, const G4Polymarker& marker);
   enum MarkerType {line, dots, circles, squares};
   G4Polymarker ();
   virtual ~G4Polymarker ();

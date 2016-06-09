@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Point3DList.hh,v 1.10 2001/08/20 23:28:42 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Point3DList.hh,v 1.11 2003/06/16 16:55:09 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  July 1995
@@ -34,17 +34,17 @@
 #ifndef G4POINT3DLIST_HH
 #define G4POINT3DLIST_HH
 
-#include "g4std/vector"
+#include <vector>
 #include "G4Point3D.hh"
-#include "g4std/iostream"
+#include <iostream>
 
-class G4Point3DList: public G4std::vector<G4Point3D> {
+class G4Point3DList: public std::vector<G4Point3D> {
   
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4Point3DList& points);
+  friend std::ostream& operator << (std::ostream& os, const G4Point3DList& points);
   
 public:
 
-  typedef G4std::vector<G4Point3D>::iterator iterator;
+  typedef std::vector<G4Point3D>::iterator iterator;
 
   virtual ~G4Point3DList();
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3MatTable.hh,v 1.11 2001/07/16 15:38:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3MatTable.hh,v 1.12 2003/06/16 16:50:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------
 // Class description:
@@ -41,11 +41,11 @@
 
 #include "globals.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4Material;
 
-typedef G4std::vector<G3MatTableEntry*>  G3MaterialVector;
+typedef std::vector<G3MatTableEntry*>  G3MaterialVector;
 
 class G3MatTable
 {

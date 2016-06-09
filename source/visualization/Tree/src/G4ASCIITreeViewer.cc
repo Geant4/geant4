@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeViewer.cc,v 1.5 2002/12/11 16:08:50 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ASCIITreeViewer.cc,v 1.6 2003/06/16 17:13:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 #include "G4ASCIITreeViewer.hh"
 
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4ASCIITreeViewer::G4ASCIITreeViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):

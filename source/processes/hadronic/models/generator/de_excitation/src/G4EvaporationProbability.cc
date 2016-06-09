@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.cc,v 1.8 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EvaporationProbability.cc,v 1.10 2003/05/30 13:23:24 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -34,7 +34,7 @@
 
 
 
-G4EvaporationProbability::G4EvaporationProbability(const G4EvaporationProbability &right)
+G4EvaporationProbability::G4EvaporationProbability(const G4EvaporationProbability &) : G4VEmissionProbability()
 {
     G4Exception("G4EvaporationProbability::copy_constructor meant to not be accessable");
 }
@@ -43,19 +43,19 @@ G4EvaporationProbability::G4EvaporationProbability(const G4EvaporationProbabilit
 
 
 const G4EvaporationProbability & G4EvaporationProbability::
-operator=(const G4EvaporationProbability &right)
+operator=(const G4EvaporationProbability &)
 {
     G4Exception("G4EvaporationProbability::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4EvaporationProbability::operator==(const G4EvaporationProbability &right) const
+G4bool G4EvaporationProbability::operator==(const G4EvaporationProbability &) const
 {
     return false;
 }
 
-G4bool G4EvaporationProbability::operator!=(const G4EvaporationProbability &right) const
+G4bool G4EvaporationProbability::operator!=(const G4EvaporationProbability &) const
 {
     return true;
 }
@@ -89,17 +89,18 @@ G4double G4EvaporationProbability::CalcProbability(const G4Fragment & fragment,
 						   const G4double MaximalKineticEnergy)
     // Calculate integrated probability (width) for rvaporation channel
 {	
-    G4double ResidualA = G4double(fragment.GetA() - theA);
-    G4double ResidualZ = G4double(fragment.GetZ() - theZ);
+    G4double ResidualA = static_cast<G4double>(fragment.GetA() - theA);
+    G4double ResidualZ = static_cast<G4double>(fragment.GetZ() - theZ);
     G4double U = fragment.GetExcitationEnergy();
 	
     G4double NuclearMass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetNucleusMass(theZ,theA);
 
 
-    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(fragment.GetA(),fragment.GetZ());
+    G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(static_cast<G4int>(fragment.GetA()),
+									       static_cast<G4int>(fragment.GetZ()));
 
-    G4double SystemEntropy = 2.0*sqrt(theEvapLDPptr->LevelDensityParameter(fragment.GetA(),
-									   fragment.GetZ(),U)*
+    G4double SystemEntropy = 2.0*sqrt(theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(fragment.GetA()),
+									   static_cast<G4int>(fragment.GetZ()),U)*
 				      (U-delta0));
 								  
     // compute the integrated probability of evaporation channel
@@ -109,8 +110,10 @@ G4double G4EvaporationProbability::CalcProbability(const G4Fragment & fragment,
     G4double Beta = CalcBetaParam(fragment);
 	
     G4double Rmax = MaximalKineticEnergy;
-    G4double a = theEvapLDPptr->LevelDensityParameter(ResidualA,ResidualZ,Rmax);
-    G4double GlobalFactor = G4double(Gamma) * (Alpha/(a*a)) *
+    G4double a = theEvapLDPptr->LevelDensityParameter(static_cast<G4int>(ResidualA),
+						      static_cast<G4int>(ResidualZ),
+						      Rmax);
+    G4double GlobalFactor = static_cast<G4double>(Gamma) * (Alpha/(a*a)) *
 	(NuclearMass*RN*RN*pow(ResidualA,2./3.))/
 	(2.*pi* hbar_Planck*hbar_Planck);
     G4double Term1 = (2.0*Beta*a-3.0)/2.0 + Rmax*a;

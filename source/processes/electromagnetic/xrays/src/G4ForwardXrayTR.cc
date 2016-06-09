@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.9 2003/03/10 11:34:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ForwardXrayTR.cc,v 1.10 2003/06/03 08:11:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4ForwardXrayTR class -- implementation file
 
@@ -36,6 +36,7 @@
 // 2nd version 17.12.97 V. Grichine
 // 17-09-01, migration of Materials to pure STL (mma)
 // 10-03-03, migration to "cut per region" (V.Ivanchenko)
+// 03.06.03, V.Ivanchenko fix compilation warnings
 
 #include "G4ForwardXrayTR.hh"
 
@@ -897,7 +898,7 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
 
 
 G4double
-G4ForwardXrayTR::GetThetaTR(G4int iMat, G4int jMat, G4int iTkin) const
+G4ForwardXrayTR::GetThetaTR(G4int, G4int, G4int) const
 {
   G4double theta = 0.0 ;
 

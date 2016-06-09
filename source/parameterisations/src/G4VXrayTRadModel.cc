@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXrayTRadModel.cc,v 1.4 2003/02/12 08:48:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VXrayTRadModel.cc,v 1.5 2003/06/16 16:56:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4Timer.hh"
@@ -30,7 +30,7 @@
 #include "G4VXrayTRadModel.hh"
 
 #include "globals.hh"
-#include "g4std/complex"
+#include <complex>
 #include "G4Poisson.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"

@@ -25,7 +25,7 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "G4Pair.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4CrossSectionBuffer
 {
@@ -108,7 +108,7 @@ class G4CrossSectionBuffer
     }
   
   private:
-  G4std::vector<G4Pair<G4double, G4double> > theData;
+  std::vector<G4Pair<G4double, G4double> > theData;
   
   const G4ParticleDefinition * theA;
   const G4ParticleDefinition * theB;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh,v 1.8 2002/12/12 19:17:26 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FTFParticipants.hh,v 1.9 2003/06/16 17:06:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4FTFParticipants_h
@@ -37,7 +37,7 @@
 // ------------------------------------------------------------
 
 #include "G4VParticipants.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4Nucleon.hh"
 #include "G4V3DNucleus.hh"
 #include "G4Fancy3DNucleus.hh"
@@ -64,7 +64,7 @@ class G4FTFParticipants : public G4VParticipants
       
   private:
 
-      G4std::vector<G4InteractionContent *> theInteractions;
+      std::vector<G4InteractionContent *> theInteractions;
   
       G4int currentInteraction;
 

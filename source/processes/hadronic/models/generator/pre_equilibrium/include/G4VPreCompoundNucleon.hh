@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundNucleon.hh,v 1.9 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPreCompoundNucleon.hh,v 1.10 2003/03/24 13:56:57 larazb Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
@@ -46,29 +46,30 @@ public:
     G4VPreCompoundFragment(right) {}
 
   // constructor  
-    G4VPreCompoundNucleon(const G4double anA, 
-			  const G4double aZ, 
-			  G4VCoulombBarrier* aCoulombBarrier,
-			  const G4String & aName): 
-	G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
+  G4VPreCompoundNucleon(const G4double anA, 
+			const G4double aZ, 
+			G4VCoulombBarrier* aCoulombBarrier,
+			const G4String & aName): 
+    G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
 
-    virtual ~G4VPreCompoundNucleon() {}
+  virtual ~G4VPreCompoundNucleon() {}
 
-    // operators  
-    const G4VPreCompoundNucleon & 
-    operator=(const G4VPreCompoundNucleon &right) {
-	if (&right != this) this->G4VPreCompoundFragment::operator=(right);
-	return *this;
-    }
+  // operators  
+  const G4VPreCompoundNucleon & 
+  operator=(const G4VPreCompoundNucleon &right) {
+    if (&right != this) this->G4VPreCompoundFragment::operator=(right);
+    return *this;
+  }
 
-    G4bool operator==(const G4VPreCompoundNucleon &right) const 
-	{ return G4VPreCompoundFragment::operator==(right);}
+  G4bool operator==(const G4VPreCompoundNucleon &right) const 
+  { return G4VPreCompoundFragment::operator==(right);}
     
-    G4bool operator!=(const G4VPreCompoundNucleon &right) const 
-	{ return G4VPreCompoundFragment::operator!=(right);}
+  G4bool operator!=(const G4VPreCompoundNucleon &right) const 
+  { return G4VPreCompoundFragment::operator!=(right);}
     
-    virtual G4double ProbabilityDistributionFunction(const G4double eKin,
-						     const G4Fragment& aFragment);
+  virtual G4double ProbabilityDistributionFunction(const G4double eKin,
+						   const G4Fragment& aFragment);
+
     
 protected:
   virtual G4double GetAlpha() = 0;

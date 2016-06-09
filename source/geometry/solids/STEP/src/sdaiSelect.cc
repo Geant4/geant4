@@ -10,19 +10,19 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiSelect.cc,v 1.1 2000/01/21 13:43:18 gcosmo Exp $ */
+/* $Id: sdaiSelect.cc,v 1.2 2003/06/06 17:07:36 gcosmo Exp $ */
 
 #include <stdio.h> // to get the BUFSIZ #define
 #include <ExpDict.h>
-#include "g4std/strstream"
+#include <strstream>
 //#include <STEPentity.h>
 #include <scl_string.h>
 #include <sdai.h>
 #include <STEPattribute.h>
 
 #ifdef  SCL_LOGGING 
-#include "g4std/fstream"
-    extern G4std::ofstream *logStream;
+#include <fstream>
+    extern std::ofstream *logStream;
 #endif 
 
 /**********
@@ -199,7 +199,7 @@ SCLP23(Select)::SelectValidLevel(const char *attrValue, ErrorDescriptor *err,
 //      (attrValue, CurrentUnderlyingType () -> Name (), err, im);
 //  else 
 
-  G4std::istrstream strtmp (attrValue);
+  std::istrstream strtmp (attrValue);
   s = tmp -> STEPread (strtmp, err, im);
   delete tmp;
   return s;
@@ -260,7 +260,7 @@ SCLP23(Select)::StrToVal(const char *Val, const char *selectType,
 	  case INTEGER_TYPE:
 	  default:
 	  {
-	      G4std::istrstream strtmp (Val);
+	      std::istrstream strtmp (Val);
 	      err->GreaterSeverity( STEPread_content (strtmp) );
 	      if(_error.severity() != SEVERITY_NULL)
 		  err->AppendFromErrorArg(&_error);
@@ -272,7 +272,7 @@ SCLP23(Select)::StrToVal(const char *Val, const char *selectType,
 
 // updated to Technical Corrigendum. DAS 2/4/97
 Severity
-SCLP23(Select)::STEPread (G4std::istream& in, ErrorDescriptor *err,
+SCLP23(Select)::STEPread (std::istream& in, ErrorDescriptor *err,
 			  InstMgr *instances, const char* utype,
 			  int addFileId, const char *currSch)
 {
@@ -294,7 +294,7 @@ SCLP23(Select)::STEPread (G4std::istream& in, ErrorDescriptor *err,
     {
 	if( SetUnderlyingType( CanBeSet( utype, currSch ) ) )
 	{  //  assign the value to the underlying type
-	    in >> G4std::ws; // skip white space
+	    in >> std::ws; // skip white space
 	    if( (underlying_type->Type() == REFERENCE_TYPE) &&
 	        (underlying_type->NonRefType() == sdaiSELECT) )
 	    {   // See comments below for a similar code segment.
@@ -307,7 +307,7 @@ SCLP23(Select)::STEPread (G4std::istream& in, ErrorDescriptor *err,
 	}
 	return err->severity();
     }
-    in >> G4std::ws;
+    in >> std::ws;
     in >> c;
 //  c = in.peek();
 
@@ -348,7 +348,7 @@ SCLP23(Select)::STEPread (G4std::istream& in, ErrorDescriptor *err,
 	    // appear first ("selX("), so even if we read a valid element of
 	    // selX, selX can't be the underlying type.  That can only be the
 	    // case if "selX" appears first and is what we just read.
-	    in >> G4std::ws; // skip white space
+	    in >> std::ws; // skip white space
 	    if( (underlying_type->Type() == REFERENCE_TYPE) &&
 	        (underlying_type->NonRefType() == sdaiSELECT) )
 	    {
@@ -379,7 +379,7 @@ SCLP23(Select)::STEPread (G4std::istream& in, ErrorDescriptor *err,
 	    }
 	    err->AppendToDetailMsg (Error ());
 	    err->GreaterSeverity( severity () );
-	    in >> G4std::ws >> c;  
+	    in >> std::ws >> c;  
 	    if( c != ')' )
 	    {
 		err->AppendToDetailMsg( 
@@ -601,7 +601,7 @@ SCLP23(Select)::STEPread (G4std::istream& in, ErrorDescriptor *err,
 
 // updated to Technical Corrigendum DAS Feb 4, 1997
 void
-SCLP23(Select)::STEPwrite(G4std::ostream& out, const char *currSch)  const
+SCLP23(Select)::STEPwrite(std::ostream& out, const char *currSch)  const
 {
     if (!exists ()) {
 	out << "$";
@@ -668,7 +668,7 @@ SCLP23(Select)::STEPwrite(G4std::ostream& out, const char *currSch)  const
 }
 
 void
-SCLP23(Select)::STEPwrite_verbose(G4std::ostream& out, const char *currSch) const
+SCLP23(Select)::STEPwrite_verbose(std::ostream& out, const char *currSch) const
 {
     SCLstring tmp;
     out << StrToUpper( CurrentUnderlyingType()->Name(currSch), tmp) << "(";
@@ -679,9 +679,9 @@ SCLP23(Select)::STEPwrite_verbose(G4std::ostream& out, const char *currSch) cons
 const char *
 SCLP23(Select)::STEPwrite(SCLstring& s, const char *currSch)  const
 {
-  G4std::strstream buf;
+  std::strstream buf;
   STEPwrite (buf, currSch);
-  buf << G4std::ends;  // have to add the terminating \0 char
+  buf << std::ends;  // have to add the terminating \0 char
   char * tmp;
   tmp = buf.str ();
   s = tmp;
@@ -700,10 +700,10 @@ SCLP23(Select)::STEPwrite(SCLstring& s, const char *currSch)  const
 char* 
 SCLP23(Select)::asStr()  const
 {
-  G4std::strstream buf;
+  std::strstream buf;
   STEPwrite (buf);
 /*  STEPwrite_content (buf);*/
-  buf << G4std::ends;  // have to add the terminating \0 char
+  buf << std::ends;  // have to add the terminating \0 char
   return buf.str ();  // need to delete this space
 }
 #endif

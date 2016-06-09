@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundModel.hh,v 1.7 2002/12/12 19:17:30 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPreCompoundModel.hh,v 1.8 2003/05/30 14:09:57 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4VPreCompoundModel_h
@@ -56,7 +56,7 @@ protected:
   G4VPreCompoundModel() {};
 private:
   // copy constructor
-  G4VPreCompoundModel(const G4VPreCompoundModel &right) {};
+  G4VPreCompoundModel(const G4VPreCompoundModel &) : G4HadronicInteraction() {};
   // operators
   const G4VPreCompoundModel& operator=(const G4VPreCompoundModel &right);
   G4bool operator==(const G4VPreCompoundModel &right) const;

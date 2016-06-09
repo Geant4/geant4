@@ -22,7 +22,7 @@
 //
 //
 // $Id: AnaEx01PrimaryGeneratorMessenger.cc,v 1.4 2002/12/05 00:24:22 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

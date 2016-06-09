@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.7 2003/02/18 01:49:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Triton.cc,v 1.8 2003/06/16 16:57:25 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -35,8 +35,8 @@
 //  Add  G4Triton::TritonDefinition()  by H.Kurashige 27 June 1996
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Triton.hh"
 

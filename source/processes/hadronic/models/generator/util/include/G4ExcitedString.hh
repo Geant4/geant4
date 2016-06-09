@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedString.hh,v 1.10 2002/12/12 19:17:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ExcitedString.hh,v 1.11 2003/06/16 17:09:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4ExcitedString_h
@@ -44,7 +44,7 @@
 #include "G4Parton.hh"
 #include "G4PartonVector.hh"
 #include "G4KineticTrack.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
 class G4ExcitedString 
 {
@@ -162,7 +162,7 @@ void G4ExcitedString::InsertParton(G4Parton *aParton, const G4Parton * addafter)
 	
 	if ( addafter != NULL ) 
 	{
-	   insert_index=G4std::find(thePartons.begin(), thePartons.end(), addafter);
+	   insert_index=std::find(thePartons.begin(), thePartons.end(), addafter);
 	   if (insert_index == thePartons.end())		// No object addafter in thePartons
 	   {
 	   	G4Exception("G4ExcitedString::InsertParton called with invalid second argument");

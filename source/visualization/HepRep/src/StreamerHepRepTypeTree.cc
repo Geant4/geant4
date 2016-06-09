@@ -41,11 +41,11 @@ HepRepTreeID* StreamerHepRepTypeTree::copy() {
     return DefaultHepRepTreeID::copy();
 }
 
-HepRepTypeTree* StreamerHepRepTypeTree::copy(HepRep* heprep) {
+HepRepTypeTree* StreamerHepRepTypeTree::copy(HepRep*) {
     return NULL;
 }
 
-bool StreamerHepRepTypeTree::addType(HepRepType* type) {
+bool StreamerHepRepTypeTree::addType(HepRepType*) {
     return true;
 }
 

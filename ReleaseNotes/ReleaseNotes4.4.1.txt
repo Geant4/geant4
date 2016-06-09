@@ -247,11 +247,11 @@ to the related History files):
 
 The code and some binary libraries are available through our "Source Code"
 Web page:
-- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+- see our Geant4 Home Page (http://cern.ch/geant4).
 
-Please refer to <A
-href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
-User Documentation</A> for further information about using Geant4.
+Please refer to the Geant4 User Documentation
+(http://cern.ch/geant4/G4UsersDocuments/Overview/html)
+for further information about using Geant4.
 
 
 Contents
@@ -292,8 +292,8 @@ Platforms configured but not tested and not supported:
 
 Geant4 4.1 requires the installation of CLHEP. 
 
-See <A href="http://wwwinfo.cern.ch/asd/lhc++/INSTALLATION/clhep.html">
-CLHEP</A>. Tests have been performed with CLHEP 1.7.5.0. However, first
+See CLHEP (http://cern.ch/clhep/INSTALLATION/clhep.html).
+Tests have been performed with CLHEP 1.7.5.0. However, first
 level porting has also been verified on CLHEP 1.8.0.0.
 
 By default, the CLHEP installation scripts will activate ISO/ANSI C++ features
@@ -306,14 +306,13 @@ These include:
     Objectivity 6.1.3
     HepODBMS 0.3.3.1
     CLHEP 1.7.5.0
-  (see: <A href="http://cern.ch/anaphe">ANAPHE</A>)
+  (see: http://cern.ch/anaphe)
 - JAS 2.2.5 
-  (see: <A href="http://jas.freehep.org">JAS</A>)
+  (see: http://jas.freehep.org)
 - Open Scientist v8
-  (see: <A href="http://www.lal.in2p3.fr/OpenScientist/v8/welcome.html">Open Scientist</A>)
+  (see: http://www.lal.in2p3.fr/OpenScientist/v8/welcome.html)
 
-AIDA headers can be downloaded from:
-  <A href="http://aida.freehep.org">AIDA</A>
+AIDA headers can be downloaded from:  http://aida.freehep.org
 
 
 3. The Standard Template Library
@@ -362,7 +361,7 @@ For a complete list of outstanding run-time problems and to submit any
 problem you may find running this version of Geant4, please refer to the
 Geant4 Problem Reporting System, available on the Web at this address:
 
-    http://wwwinfo.cern.ch/asd/cgi-bin/geant4/problemreport
+    http://cern.ch/geant4/problemreport
 
 
 7. Compilation Warnings

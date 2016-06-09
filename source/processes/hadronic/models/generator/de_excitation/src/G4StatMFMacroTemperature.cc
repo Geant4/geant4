@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.cc,v 1.10 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroTemperature.cc,v 1.12 2003/06/16 17:06:44 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -32,20 +32,20 @@
 
 // operators definitions
 G4StatMFMacroTemperature & 
-G4StatMFMacroTemperature::operator=(const G4StatMFMacroTemperature & right) 
+G4StatMFMacroTemperature::operator=(const G4StatMFMacroTemperature & ) 
 {
     G4Exception("G4StatMFMacroTemperature::operator= meant to not be accessable");
     return *this;
 }
 
-G4bool G4StatMFMacroTemperature::operator==(const G4StatMFMacroTemperature & right) const 
+G4bool G4StatMFMacroTemperature::operator==(const G4StatMFMacroTemperature & ) const 
 {
     G4Exception("G4StatMFMacroTemperature::operator== meant to not be accessable");
     return false;
 }
 
 
-G4bool G4StatMFMacroTemperature::operator!=(const G4StatMFMacroTemperature & right) const 
+G4bool G4StatMFMacroTemperature::operator!=(const G4StatMFMacroTemperature & ) const 
 {
     G4Exception("G4StatMFMacroTemperature::operator!= meant to not be accessable");
     return true;
@@ -59,7 +59,7 @@ G4double G4StatMFMacroTemperature::CalcTemperature(void)
 {
     // Temperature
     G4double Ta = 0.00012; 
-    G4double Tb = G4std::max(sqrt(_ExEnergy/(theA*0.12)),0.01*MeV);
+    G4double Tb = std::max(sqrt(_ExEnergy/(theA*0.12)),0.01*MeV);
     
     G4double fTa = this->operator()(Ta); 
     G4double fTb = this->operator()(Tb); 
@@ -117,7 +117,7 @@ G4double G4StatMFMacroTemperature::FragsExcitEnergy(const G4double T)
 
     // Average total fragment energy
     G4double AverageEnergy = 0.0;
-    G4std::vector<G4VStatMFMacroCluster*>::iterator i;
+    std::vector<G4VStatMFMacroCluster*>::iterator i;
     for (i =  _theClusters->begin(); i != _theClusters->end(); ++i) 
       {
 	AverageEnergy += (*i)->GetMeanMultiplicity() * (*i)->CalcEnergy(T);

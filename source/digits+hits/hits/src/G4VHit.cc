@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHit.cc,v 1.4 2001/07/13 15:00:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VHit.cc,v 1.5 2003/06/03 08:58:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 // G4VHit
@@ -35,7 +35,7 @@ G4VHit::G4VHit()
 G4VHit::~G4VHit()
 {;}
 
-G4int G4VHit::operator==(const G4VHit &right) const
+G4int G4VHit::operator==(const G4VHit &) const
 { return false; }
 
 void G4VHit::Draw()

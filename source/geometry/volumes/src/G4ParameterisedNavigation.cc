@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.8 2003/03/31 14:39:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParameterisedNavigation.cc,v 1.9 2003/06/16 16:54:56 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4ParameterisedNavigation Implementation
@@ -359,7 +359,7 @@ ComputeVoxelSafety(const G4ThreeVector& localPoint,
   maxCurCommonDelta = fVoxelSliceWidth-minCurCommonDelta;
   plusVoxelSafety   = minCurNodeNoDelta*fVoxelSliceWidth+minCurCommonDelta;
   minusVoxelSafety  = maxCurNodeNoDelta*fVoxelSliceWidth+maxCurCommonDelta;
-  voxelSafety = G4std::min(plusVoxelSafety,minusVoxelSafety);
+  voxelSafety = std::min(plusVoxelSafety,minusVoxelSafety);
 
   if ( voxelSafety<0 )
   {

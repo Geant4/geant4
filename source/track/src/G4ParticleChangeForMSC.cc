@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.8 2001/08/16 08:17:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleChangeForMSC.cc,v 1.8.12.1 2003/06/16 17:19:36 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -166,22 +166,22 @@ void G4ParticleChangeForMSC::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Position - x (mm)   : " 
-       << G4std::setw(20) << thePositionChange.x()/mm
+       << std::setw(20) << thePositionChange.x()/mm
        << G4endl; 
   G4cout << "        Position - y (mm)   : " 
-       << G4std::setw(20) << thePositionChange.y()/mm
+       << std::setw(20) << thePositionChange.y()/mm
        << G4endl; 
   G4cout << "        Position - z (mm)   : " 
-       << G4std::setw(20) << thePositionChange.z()/mm
+       << std::setw(20) << thePositionChange.z()/mm
        << G4endl;
   G4cout << "     Momentum Direction - x : " 
-       << G4std::setw(20) << theMomentumDirectionChange.x()
+       << std::setw(20) << theMomentumDirectionChange.x()
        << G4endl;
   G4cout << "     Momentum Direction - y : " 
-       << G4std::setw(20) << theMomentumDirectionChange.y()
+       << std::setw(20) << theMomentumDirectionChange.y()
        << G4endl;
   G4cout << "     Momentum Direction - z : " 
-       << G4std::setw(20) << theMomentumDirectionChange.z()
+       << std::setw(20) << theMomentumDirectionChange.z()
        << G4endl;
 }
 

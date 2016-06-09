@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh,v 1.7 2002/10/14 07:42:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPhysicalVolume.hh,v 1.8 2003/05/13 18:38:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4VPhysicalVolume
@@ -57,10 +57,10 @@ class G4VPhysicalVolume
   public:  // with description
 
     G4VPhysicalVolume(G4RotationMatrix *pRot,
-		      const G4ThreeVector &tlate,
-		      const G4String &pName,
-		      G4LogicalVolume *pLogical,
-		      G4VPhysicalVolume *pMother);
+                const G4ThreeVector &tlate,
+                const G4String &pName,
+                      G4LogicalVolume *pLogical,
+                      G4VPhysicalVolume *pMother);
       // Initialise volume, positioned in a frame which is rotated by *pRot, 
       // relative to the coordinate system of the mother volume pMother.
       // The center of the object is then placed at tlate in the new
@@ -121,6 +121,11 @@ class G4VPhysicalVolume
     inline void SetMother(G4VPhysicalVolume *pMother);
       // Set the mother volume. Must not be called when geometry closed.
 
+    inline G4LogicalVolume* GetMotherLogical() const;
+      // Return the current mother lofigal volume pointer.
+    inline void SetMotherLogical(G4LogicalVolume *pMother);
+      // Set the mother logical volume. Must not be called when geometry closed.
+
     inline G4String GetName() const;
       // Return the volume's name.
     inline void SetName(const G4String& pName);
@@ -148,10 +153,10 @@ class G4VPhysicalVolume
       // Return replicas parameterisation object (able to compute dimensions
       // and transformations of replicas), or NULL if not applicable.
     virtual void GetReplicationData(EAxis& axis,
-                                   G4int& nReplicas,
-				   G4double& width,
-                                   G4double& offset,
-                                   G4bool& consuming) const = 0;
+                                    G4int& nReplicas,
+                                    G4double& width,
+                                    G4double& offset,
+                                    G4bool& consuming) const = 0;
       // Return replication information. No-op for no replicated volumes.
     virtual void Setup(G4VPhysicalVolume *pMother) = 0;
       // Perform any initialisation/setup necessary for the given volume.
@@ -171,11 +176,12 @@ class G4VPhysicalVolume
 
   private:
 
-    G4LogicalVolume *flogical;	// The logical volume representing the
-				// physical and tracking attributes of
-                                // the volume
-    G4String fname;		// name of the volume
-    G4VPhysicalVolume *fmother;	// The current moher volume
+    G4LogicalVolume *flogical;   // The logical volume representing the
+                                 // physical and tracking attributes of
+                                 // the volume
+    G4String fname;              // The name of the volume
+    G4VPhysicalVolume *fpmother; // The current mother physical volume
+    G4LogicalVolume   *flmother; // The current mother logical volume
 };
 
 #include "G4VPhysicalVolume.icc"

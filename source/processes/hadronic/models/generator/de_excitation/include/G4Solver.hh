@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Solver.hh,v 1.7 2002/12/12 19:17:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara

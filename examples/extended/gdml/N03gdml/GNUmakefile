@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2002/06/11 15:48:31 radoone Exp $
+# $Id: GNUmakefile,v 1.4 2003/05/06 17:50:27 radoone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -28,7 +28,7 @@ EXTRALIBS   += \
               -lGDMLschema \
               -lGDMLprocesses \
               -lGDMLsubscribers \
-              -L $(XERCESCROOT)/lib -lxerces-c
+              -L$(XERCESCROOT)/lib -lxerces-c
           
 EXTRALIBSSOURCEDIRS += \
                        $(GDMLLIBROOT)/saxana \

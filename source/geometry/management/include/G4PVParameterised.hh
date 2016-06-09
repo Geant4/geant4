@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.hh,v 1.6 2002/10/14 07:42:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PVParameterised.hh,v 1.7 2003/05/13 18:37:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4PVParameterised
@@ -47,38 +47,42 @@ class G4PVParameterised : public G4PVReplica
   public:  // with description
 
     G4PVParameterised(const G4String& pName,
-		G4LogicalVolume* pLogical,
-		G4VPhysicalVolume* pMother,
-                const EAxis pAxis,
-                const G4int nReplicas,
-		G4VPVParameterisation *pParam);
+                            G4LogicalVolume* pLogical,
+                            G4LogicalVolume* pMotherLogical,
+                      const EAxis pAxis,
+                      const G4int nReplicas,
+                            G4VPVParameterisation *pParam);
       // Replicate the volume nReplicas Times using the paramaterisation pParam,
-      // within the mother volume pMother. The positioning of the replicas is
-      // dominant along the specified axis.
+      // within the mother volume pMotherLogical.
+      // The positioning of the replicas is dominant along the specified axis.
+
+  public:  // without description
 
     G4PVParameterised(const G4String& pName,
-		G4LogicalVolume* pLogical,
-		G4LogicalVolume* pMotherLogical,
-                const EAxis pAxis,
-                const G4int nReplicas,
-		G4VPVParameterisation *pParam);
+                            G4LogicalVolume* pLogical,
+                            G4VPhysicalVolume* pMother,
+                      const EAxis pAxis,
+                      const G4int nReplicas,
+                            G4VPVParameterisation *pParam);
       // Almost exactly similar to first constructor, changing only mother 
-      // pointer's type to LogicalVolume.
+      // pointer's type to PhysicalVolume.
+
+  public:  // with description
 
     virtual ~G4PVParameterised();
       // Virtual empty destructor.
 
-    virtual G4bool IsParameterised() const;
+    G4bool IsParameterised() const;
       // Returns true to identify it is a parameterised physical volume.
 
-    virtual G4VPVParameterisation* GetParameterisation() const;
+    G4VPVParameterisation* GetParameterisation() const;
       // Returns the current pointer to the parameterisation.
 
-    virtual void GetReplicationData(EAxis& axis,
-                                    G4int& nReplicas,
-				    G4double& width,
-                                    G4double& offset,
-                                    G4bool& consuming) const;
+    void GetReplicationData(EAxis& axis,
+                            G4int& nReplicas,
+                            G4double& width,
+                            G4double& offset,
+                            G4bool& consuming) const;
       // Fills arguments with the attributes from the base replica.
 
   private:

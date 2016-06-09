@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNN.cc,v 1.15 2002/12/12 19:17:48 gunter Exp $ //
+// $Id: G4CollisionNN.cc,v 1.17 2003/06/16 17:09:07 gunter Exp $ //
 
 
 #include "globals.hh"
@@ -67,7 +67,7 @@ G4CollisionNN::~G4CollisionNN()
 }
 
 
-const G4std::vector<G4String>& G4CollisionNN::GetListOfColliders(G4int whichOne) const
+const std::vector<G4String>& G4CollisionNN::GetListOfColliders(G4int ) const
 {
 	  G4Exception("G4CollisionNN::GetListOfColliders - Argument outside valid range"); 
 	  return colliders1;

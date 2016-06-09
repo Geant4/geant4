@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.6 2002/10/24 15:28:05 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.11 2003/06/25 09:01:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
@@ -33,15 +33,10 @@
 #ifndef G4OPENGLWIN32VIEWER_HH
 #define G4OPENGLWIN32VIEWER_HH
 
-#include "G4VViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
 #include "globals.hh"
 
-//Win32 includes?
-
-#include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
+#include "G4VViewer.hh"
+#include "G4OpenGLSceneHandler.hh"
 
 class G4OpenGLSceneHandler;
 
@@ -50,14 +45,23 @@ class G4OpenGLWin32Viewer: virtual public G4OpenGLViewer {
 public:
   G4OpenGLWin32Viewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLWin32Viewer ();
+  void SetView ();
+  void ShowView ();
   void FinishView ();
-
 protected:
   void GetWin32Connection ();
   void CreateGLWin32Context ();
   virtual void CreateMainWindow ();
-  G4int WinSize_x, WinSize_y;
-
+protected:
+  G4int WinSize_x;
+  G4int WinSize_y;
+private:
+  static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);
+  static bool SetWindowPixelFormat(HDC);
+private:
+  HWND fWindow;
+  HDC fHDC;
+  HGLRC fHGLRC;
 };
 
 #endif

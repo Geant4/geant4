@@ -42,7 +42,7 @@
 #include "G4V3DNucleus.hh"
 #include "G4KM_DummyField.hh"
 #include "G4Mag_EqRhs.hh"
-#include "g4std/map"
+#include <map>
 
 
 class G4RKPropagation: public G4VFieldPropagation
@@ -70,8 +70,8 @@ public:
 private:
   G4double theOuterRadius;
   G4V3DNucleus * theNucleus;
-  G4std::map <G4int, G4VNuclearField *, G4std::less<G4int> > * theFieldMap;
-  G4std::map <G4int, G4Mag_EqRhs *, G4std::less<G4int> > * theEquationMap;
+  std::map <G4int, G4VNuclearField *, std::less<G4int> > * theFieldMap;
+  std::map <G4int, G4Mag_EqRhs *, std::less<G4int> > * theEquationMap;
   G4KM_DummyField * theField;
 
   G4bool GetSphereIntersectionTimes(const G4double radius,
@@ -84,14 +84,14 @@ private:
   G4bool FreeTransport(G4KineticTrack * track, const G4double timestep);
 
   void delete_FieldsAndMap(
-	G4std::map <G4int, G4VNuclearField *, G4std::less<G4int> > * aMap);
+	std::map <G4int, G4VNuclearField *, std::less<G4int> > * aMap);
   void delete_EquationsAndMap(
-	G4std::map <G4int, G4Mag_EqRhs *, G4std::less<G4int> > * aMap);
+	std::map <G4int, G4Mag_EqRhs *, std::less<G4int> > * aMap);
   
   public:
   inline G4double GetBarrier(G4int encoding) 
   {     
-	G4std::map <G4int, G4VNuclearField *, G4std::less<G4int> >::iterator iter;
+	std::map <G4int, G4VNuclearField *, std::less<G4int> >::iterator iter;
 	iter = theFieldMap->find(encoding);
 	if(iter == theFieldMap->end()) return 0;
 	return (*theFieldMap)[encoding]->GetBarrier();
@@ -99,7 +99,7 @@ private:
   
   inline G4double GetField(G4int encoding,G4ThreeVector pos) 
   { 
-	G4std::map <G4int, G4VNuclearField *, G4std::less<G4int> >::iterator iter;
+	std::map <G4int, G4VNuclearField *, std::less<G4int> >::iterator iter;
 	iter = theFieldMap->find(encoding);
 	if(iter == theFieldMap->end()) return 0;
 	return (*theFieldMap)[encoding]->GetField(pos);

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Xt.hh,v 1.5 2001/07/11 10:01:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //  To unify X11 event treatment between 
 // G4/interfaces Xt sessions and G4/visualizations Xt drivers.

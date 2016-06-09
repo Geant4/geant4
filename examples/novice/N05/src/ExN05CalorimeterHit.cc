@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05CalorimeterHit.cc,v 1.4 2002/01/09 17:24:19 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN05CalorimeterHit.cc,v 1.5 2003/05/28 11:20:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "ExN05CalorimeterHit.hh"
@@ -46,6 +46,7 @@ ExN05CalorimeterHit::~ExN05CalorimeterHit()
 {;}
 
 ExN05CalorimeterHit::ExN05CalorimeterHit(const ExN05CalorimeterHit &right)
+  : G4VHit()
 {
   edep = right.edep;
   pos = right.pos;
@@ -62,9 +63,9 @@ const ExN05CalorimeterHit& ExN05CalorimeterHit::operator=(const ExN05Calorimeter
   return *this;
 }
 
-int ExN05CalorimeterHit::operator==(const ExN05CalorimeterHit &right) const
+G4int ExN05CalorimeterHit::operator==(const ExN05CalorimeterHit &right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 void ExN05CalorimeterHit::Draw()

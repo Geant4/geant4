@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.12 2002/12/04 21:29:49 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProcessTableMessenger.cc,v 1.13 2003/06/16 17:12:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -55,8 +55,8 @@
 
 #include "G4ios.hh"                 
 #include "G4Tokenizer.hh"
-#include "g4std/iomanip"               
-#include "g4std/strstream"
+#include <iomanip>               
+#include <strstream>
 
 /////////////////////////////////////////
 G4int G4ProcessTableMessenger::NumberOfProcessType = 10;
@@ -198,7 +198,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
       tmpVector = theProcessTable->FindProcesses(*itr);
       if ( (type <0) || ( ((*tmpVector)(0)->GetProcessType()) == type) ) {
         if ( counter%4 != 0) G4cout << ",";
-	G4cout << G4std::setw(19) <<*itr;
+	G4cout << std::setw(19) <<*itr;
 	if ((counter++)%4 == 3) {
           G4cout << G4endl;
         }
@@ -216,7 +216,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     G4String tmpS = G4String(next());
     //  inputstream for newValues
     const char* temp = (const char*)(tmpS);
-    G4std::istrstream is((char*)temp);
+    std::istrstream is((char*)temp);
     G4int level;
     is  >>level;
 
@@ -357,7 +357,7 @@ G4String G4ProcessTableMessenger::GetCurrentValue(G4UIcommand * command)
   G4String returnValue('\0');
 
   char line[255];
-  G4std::ostrstream os(line,255);
+  std::ostrstream os(line,255);
   G4UIparameter * param; 
 
   G4int idx; 

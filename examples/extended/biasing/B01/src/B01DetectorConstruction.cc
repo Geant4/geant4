@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.9 2003/03/11 13:54:17 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: B01DetectorConstruction.cc,v 1.10 2003/06/16 16:47:09 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
-#include "g4std/strstream"
+#include <strstream>
 #include "globals.hh"
 
 #include "B01DetectorConstruction.hh"
@@ -164,7 +164,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 		  name, 0, false, 0);
 
 
-  G4std::vector< G4VPhysicalVolume * > physvolumes;
+  std::vector< G4VPhysicalVolume * > physvolumes;
   physvolumes.push_back(pWorldVolume);
 
 
@@ -256,7 +256,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   G4int n = 0;
   G4double imp =1;
   fIStore->AddImportanceGeometryCell(1, *pWorldVolume);
-  for (G4std::vector<G4VPhysicalVolume *>::iterator it =
+  for (std::vector<G4VPhysicalVolume *>::iterator it =
 	 physvolumes.begin();
        it != physvolumes.end(); it++)
   {
@@ -281,7 +281,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
 G4String B01DetectorConstruction::GetCellName(G4int i) {
   char st[200];
-  G4std::ostrstream os(st,200);
+  std::ostrstream os(st,200);
   os << "cell_";
   if (i<10) {
     os << "0";

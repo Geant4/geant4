@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.13 2001/08/14 18:03:14 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.14 2003/06/16 17:13:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -39,8 +39,8 @@
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 #include "G4OpenGLSceneHandler.hh"
-#include "g4std/map"
-#include "g4std/vector"
+#include <map>
+#include <vector>
 
 class G4OpenGLStored;
 
@@ -72,16 +72,16 @@ private:
   
   // PODL = Persistent Object Display List.
   GLint           fTopPODL;       // List which calls the other PODLs.
-  G4std::vector<G4int> fPODLList; 
-  G4std::vector<G4Transform3D> fPODLTransformList; 
+  std::vector<G4int> fPODLList; 
+  std::vector<G4Transform3D> fPODLTransformList; 
   
   // TODL = Transient  Object Display List.
-  G4std::vector<G4int> fTODLList; 
-  G4std::vector<G4Transform3D> fTODLTransformList; 
+  std::vector<G4int> fTODLList; 
+  std::vector<G4Transform3D> fTODLTransformList; 
   
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
-  G4std::map <const G4VSolid*, G4int, G4std::less <const G4VSolid*> > fSolidMap;
+  std::map <const G4VSolid*, G4int, std::less <const G4VSolid*> > fSolidMap;
 };
 
 inline G4int G4OpenGLStoredSceneHandler::GetSceneCount () {

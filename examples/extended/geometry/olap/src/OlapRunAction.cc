@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapRunAction.cc,v 1.2 2002/06/04 09:23:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: OlapRunAction.cc,v 1.4 2003/06/16 16:49:29 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4Run.hh"
 
 #include "globals.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 OlapRunAction::OlapRunAction() 
 { 
@@ -53,7 +53,7 @@ OlapRunAction::~OlapRunAction()
 }
 
             
-void OlapRunAction::BeginOfRunAction(const G4Run* aRun)
+void OlapRunAction::BeginOfRunAction(const G4Run*)
 {
   while ( !theOlaps.empty() )
   {
@@ -74,7 +74,7 @@ void OlapRunAction::EndOfRunAction(const G4Run* aRun)
    
    OlapManager::GetOlapManager()->notifyOlaps(theOlaps);
    
-   G4std::vector<OlapInfo*>::iterator it = theOlaps.begin();
+   std::vector<OlapInfo*>::iterator it = theOlaps.begin();
    G4int i=1;
    while (it!=theOlaps.end())
    {
@@ -110,7 +110,7 @@ void OlapRunAction::EndOfRunAction(const G4Run* aRun)
        fname = logManager->logPath + volume + ".log";
      }
 
-     FILE.open(fname, G4std::ios::app);
+     FILE.open(fname, std::ios::app);
      FILE << "===== collected overlaps of run [" << aRun->GetRunID() << "] " 
           << "(ol=" << theOlaps.size() << ")"<< G4endl;
 
@@ -133,7 +133,7 @@ void OlapRunAction::EndOfRunAction(const G4Run* aRun)
 
 }  
 
-#include "g4std/vector"
+#include <vector>
 #include "G4Circle.hh"
 #include "G4Polyline.hh"
 #include "G4VisAttributes.hh"

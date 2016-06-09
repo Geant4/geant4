@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.9 2001/11/29 11:19:18 griccard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.10 2003/05/28 13:56:33 flongo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -676,7 +676,20 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
     }
   
   
-  
+  // Cuts by Regions 
+
+
+  G4String regName[] = {"Calorimeter","Tracker"};
+
+  G4Region* aCALRegion = new G4Region(regName[0]);
+  G4Region* aTKRRegion = new G4Region(regName[1]);
+
+
+  logicCAL->SetRegion(aCALRegion);
+  logicTKR->SetRegion(aTKRRegion);
+  aCALRegion->AddRootLogicalVolume(logicCAL);
+  aTKRRegion->AddRootLogicalVolume(logicTKR);
+
   // Sensitive Detector Manager
   
   G4SDManager* SDman = G4SDManager::GetSDMpointer();

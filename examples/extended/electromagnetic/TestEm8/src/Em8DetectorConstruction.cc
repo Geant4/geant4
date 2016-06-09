@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.7 2001/10/24 21:30:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em8DetectorConstruction.cc,v 1.9 2003/04/17 13:05:19 grichine Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -137,7 +137,7 @@ G4double temperature, pressure;
   a = 1.01*g/mole;
   G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
 
-  a = 6.01*g/mole;
+  a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
 
   a = 14.01*g/mole;
@@ -482,7 +482,7 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
     //      G4ThreeVector(0.,0.,fStartZ+1.2*fDetThickness),
     //             "RadSlice",fLogicRadSlice,
     //               physiWorld,false,0);
-    
+    /*
   for(i=0;i<fModuleNumber;i++)
   {
     //   rModule = fStartR + fDetThickness + fDetGap + 
@@ -528,7 +528,7 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
     //                        fLogicDetSlice,physiWorld,false,i); 
   }                                            
   G4cout<<G4endl ;
-
+    */
   G4Tubs* solidElectrode = new G4Tubs("Electrode",0.,AbsorberRadius,
                                        fElectrodeThick/2.,0.,twopi); 
                           
@@ -605,8 +605,8 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 
   // Parameterisation
 
-   G4VXrayTRmodel* pTRModel = new G4IrregularXrayTRmodel(logicRadiator,
-            fRadThickness,fGasGap);
+  //   G4VXrayTRmodel* pTRModel = new G4IrregularXrayTRmodel(logicRadiator,
+  //        fRadThickness,fGasGap);
 
   //  G4VXrayTRmodel* pTRModel = new G4FoamXrayTRmodel(logicRadiator,
   //                                    fRadThickness,fGasGap);

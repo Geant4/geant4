@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImplicitEuler.cc,v 1.5 2002/11/29 13:45:21 japost Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ImplicitEuler.cc,v 1.6 2003/06/16 16:51:13 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //  Implicit Euler:
@@ -49,7 +49,7 @@ G4ImplicitEuler::G4ImplicitEuler(G4Mag_EqRhs *EqRhs,
                                  G4int numberOfVariables): 
 G4MagErrorStepper(EqRhs, numberOfVariables)
 {
-  unsigned int noVariables= G4std::max(numberOfVariables,8); // For Time .. 7+1
+  unsigned int noVariables= std::max(numberOfVariables,8); // For Time .. 7+1
   dydxTemp = new G4double[noVariables] ;
   yTemp    = new G4double[noVariables] ;
 }

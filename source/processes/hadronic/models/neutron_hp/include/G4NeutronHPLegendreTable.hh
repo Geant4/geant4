@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLegendreTable.hh,v 1.8 2003/02/12 12:37:52 jwellisc Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPLegendreTable.hh,v 1.9 2003/06/16 17:10:52 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPLegendreTable_h
 #define G4NeutronHPLegendreTable_h 1
 
 #include "globals.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "G4ios.hh"
 #include "G4InterpolationManager.hh"
 
@@ -60,7 +60,7 @@ class G4NeutronHPLegendreTable
     }
   }
   
-  inline void Init(G4std::ifstream & aDataFile) 
+  inline void Init(std::ifstream & aDataFile) 
   {
     G4double eNeu, coeff;
     G4int nPoly;

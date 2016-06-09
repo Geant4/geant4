@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronEvaporationProbability.cc,v 1.5 2002/12/12 19:17:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronEvaporationProbability.cc,v 1.8 2003/06/16 17:06:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -34,12 +34,12 @@
 G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
     G4EvaporationProbability(1,0,2) // A,Z,Gamma
 {
-    G4std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
-    G4std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
+    std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
+    std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
     ExcitEnergies.reserve(NumExcitedStatesEnergy);
     ExcitSpins.reserve(NumExcitedStatesSpin);
     ExcitEnergies.insert(ExcitEnergies.begin(),NumExcitedStatesEnergy,0.0);
-    ExcitSpins.insert(ExcitSpins.begin(),NumExcitedStatesSpin,0.0);
+    ExcitSpins.insert(ExcitSpins.begin(),NumExcitedStatesSpin,0);
 
 	
     ExcitEnergies[ 9] = 3.56*MeV;
@@ -88,7 +88,7 @@ G4NeutronEvaporationProbability::G4NeutronEvaporationProbability() :
 }
 
 
-G4NeutronEvaporationProbability::G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &right)
+G4NeutronEvaporationProbability::G4NeutronEvaporationProbability(const G4NeutronEvaporationProbability &) : G4EvaporationProbability()
 {
     G4Exception("G4NeutronEvaporationProbability::copy_constructor meant to not be accessable");
 }
@@ -97,19 +97,19 @@ G4NeutronEvaporationProbability::G4NeutronEvaporationProbability(const G4Neutron
 
 
 const G4NeutronEvaporationProbability & G4NeutronEvaporationProbability::
-operator=(const G4NeutronEvaporationProbability &right)
+operator=(const G4NeutronEvaporationProbability &)
 {
     G4Exception("G4NeutronEvaporationProbability::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4NeutronEvaporationProbability::operator==(const G4NeutronEvaporationProbability &right) const
+G4bool G4NeutronEvaporationProbability::operator==(const G4NeutronEvaporationProbability &) const
 {
     return false;
 }
 
-G4bool G4NeutronEvaporationProbability::operator!=(const G4NeutronEvaporationProbability &right) const
+G4bool G4NeutronEvaporationProbability::operator!=(const G4NeutronEvaporationProbability &) const
 {
     return true;
 }

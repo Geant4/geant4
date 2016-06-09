@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.15 2003/04/24 14:19:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4CrossSectionHandler.cc,v 1.16 2003/06/16 17:00:06 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -44,10 +44,10 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "Randomize.hh"
-#include "g4std/map"
-#include "g4std/vector"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <map>
+#include <vector>
+#include <fstream>
+#include <strstream>
 
 #include "G4LogLogInterpolation.hh"
 
@@ -57,14 +57,14 @@ G4CrossSectionHandler::G4CrossSectionHandler()
 G4CrossSectionHandler::~G4CrossSectionHandler()
 { }
 
-G4std::vector<G4VEMDataSet*>*
+std::vector<G4VEMDataSet*>*
 G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energyVector,
 						      const G4DataVector*)
 {
   G4DataVector* energies;
   G4DataVector* data;
 
-  G4std::vector<G4VEMDataSet*>* matCrossSections = new G4std::vector<G4VEMDataSet*>;
+  std::vector<G4VEMDataSet*>* matCrossSections = new std::vector<G4VEMDataSet*>;
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();

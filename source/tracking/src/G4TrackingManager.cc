@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackingManager.cc,v 1.13 2002/08/21 22:50:52 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4TrackingManager.cc,v 1.14 2003/06/16 17:13:22 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -71,7 +71,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
 
   // Clear 2ndary particle vector
   //  GimmeSecondaries()->clearAndDestroy();    
-  //  G4std::vector<G4Track*>::iterator itr;
+  //  std::vector<G4Track*>::iterator itr;
   size_t itr;
   //  for(itr=GimmeSecondaries()->begin();itr=GimmeSecondaries()->end();itr++){ 
   for(itr=0;itr<GimmeSecondaries()->size();itr++){ 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.9 2002/10/23 16:26:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PVReplica.cc,v 1.10 2003/05/13 18:37:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4PVReplica Implementation
@@ -49,7 +49,10 @@ G4PVReplica::G4PVReplica( const G4String& pName,
            << G4endl;
     G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup !");
   }
-  if (pMother->GetLogicalVolume()->GetNoDaughters() != 1)
+  G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
+  SetMotherLogical(motherLogical);
+  motherLogical->AddDaughter(this);
+  if (motherLogical->GetNoDaughters() != 1)
   {
     G4cout << "ERROR - A replica or parameterised volume must be" << G4endl
            << "        the only daughter of a given mother volume !" << G4endl
@@ -77,6 +80,7 @@ G4PVReplica::G4PVReplica( const G4String& pName,
     G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup !");
   }
   pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
   if (pMotherLogical->GetNoDaughters() != 1)
   {
     G4cout << "ERROR - A replica or parameterised volume must be" << G4endl
@@ -190,4 +194,5 @@ void G4PVReplica::GetReplicationData( EAxis& axis,
 void G4PVReplica::Setup(G4VPhysicalVolume *pMother)
 {
   SetMother(pMother);
+  if (pMother) SetMotherLogical(pMother->GetLogicalVolume());
 }

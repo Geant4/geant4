@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.1 2001/10/17 12:59:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeomTestSegment.cc,v 1.2 2003/06/16 16:54:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -106,14 +106,14 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
   //
   // Sort
   //
-  G4std::sort( points.begin(), points.end() );
+  std::sort( points.begin(), points.end() );
   
   //
   // Loop over entering/leaving pairs
   //
-  G4std::vector<G4GeomTestPoint>::iterator curr = points.begin();
+  std::vector<G4GeomTestPoint>::iterator curr = points.begin();
   do {
-    G4std::vector<G4GeomTestPoint>::iterator next = curr + 1;
+    std::vector<G4GeomTestPoint>::iterator next = curr + 1;
   
     //
     // Is the next point close by?
@@ -164,7 +164,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
       // Test solid just after last point
       //
       if (curr != points.begin()) {
-        G4std::vector<G4GeomTestPoint>::iterator prev = curr - 1;
+        std::vector<G4GeomTestPoint>::iterator prev = curr - 1;
 
         s = prev->GetDistance();
         p = p0 + s*v;

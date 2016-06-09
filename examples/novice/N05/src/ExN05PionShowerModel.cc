@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.cc,v 1.8 2002/01/09 17:24:20 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN05PionShowerModel.cc,v 1.9 2003/05/28 11:20:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "ExN05PionShowerModel.hh"
 #include "ExN05EnergySpot.hh"
@@ -72,9 +72,10 @@ G4bool ExN05PionShowerModel::IsApplicable(const G4ParticleDefinition& particleTy
     &particleType == G4PionPlus::PionPlusDefinition();
 }
 
-G4bool ExN05PionShowerModel::ModelTrigger(const G4FastTrack& fastTrack)
+G4bool ExN05PionShowerModel::ModelTrigger(const G4FastTrack&)
 {
-  // Applies the parameterisation always: ie as soon as the pion enters the envelope
+  // Applies the parameterisation always:
+  // ie as soon as the pion enters the envelope
   return true;
 }
 

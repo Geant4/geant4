@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.12 2002/10/28 15:18:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Trd.cc,v 1.13 2003/06/16 16:53:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // Implementation for G4Trd class
@@ -79,11 +79,11 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
       // FIX-ME : temporary solution for ZERO or very-small parameters
       //
       G4double  Minimum_length= kCarTolerance/2.;
-      fDx1=G4std::max(pdx1,Minimum_length); 
-      fDx2=G4std::max(pdx2,Minimum_length); 
-      fDy1=G4std::max(pdy1,Minimum_length); 
-      fDy2=G4std::max(pdy2,Minimum_length); 
-      fDz=G4std::max(pdz,Minimum_length);
+      fDx1=std::max(pdx1,Minimum_length); 
+      fDx2=std::max(pdx2,Minimum_length); 
+      fDy1=std::max(pdy1,Minimum_length); 
+      fDy2=std::max(pdy2,Minimum_length); 
+      fDz=std::max(pdz,Minimum_length);
     }
     else
     {
@@ -1240,7 +1240,7 @@ G4GeometryType G4Trd::GetEntityType() const
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4Trd::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Trd::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

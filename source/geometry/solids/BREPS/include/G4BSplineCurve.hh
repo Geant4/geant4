@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BSplineCurve.hh,v 1.10 2001/07/11 09:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BSplineCurve.hh,v 1.11 2003/06/16 16:52:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4BSplineCurve
@@ -47,7 +47,7 @@ class G4BSplineCurve : public G4Curve
 {
 public:
 
-  typedef G4std::vector<G4double> G4doubleVector;
+  typedef std::vector<G4double> G4doubleVector;
 
 public:  // with description
 

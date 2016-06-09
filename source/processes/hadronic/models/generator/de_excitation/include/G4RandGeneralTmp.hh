@@ -94,7 +94,7 @@ public:
 private:
 
   // Private copy constructor. Defining it here disallows use.
-  G4RandGeneralTmp(const G4RandGeneralTmp&){;}
+  G4RandGeneralTmp(const G4RandGeneralTmp&) : HepRandom() {;}
 
   HepRandomEngine* localEngine;
   HepBoolean deleteEngine;

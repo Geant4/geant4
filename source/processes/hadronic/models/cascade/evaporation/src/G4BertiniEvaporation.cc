@@ -70,7 +70,7 @@ void G4BertiniEvaporation::setVerboseLevel( const G4int verbose )
   verboseLevel = verbose;
 
   // Update verbose level to all evaporation channels.
-  G4std::vector< G4BertiniEvaporationChannel * >::iterator iChannel = channelVector.begin();  
+  std::vector< G4BertiniEvaporationChannel * >::iterator iChannel = channelVector.begin();  
   for ( ; iChannel != channelVector.end() ; *iChannel++ )                  
     ( *iChannel )->setVerboseLevel( verboseLevel );
 }
@@ -89,7 +89,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
   G4double mRes; // Mass of residual nucleus.
   G4ThreeVector nucleusMomentumVector;
   G4DynamicParticle *pEmittedParticle;
-  G4std::vector< G4DynamicParticle * > secondaryParticleVector;
+  std::vector< G4DynamicParticle * > secondaryParticleVector;
   G4FragmentVector * result = new G4FragmentVector;
   
   // Read properties of the nucleus.
@@ -115,7 +115,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
   
   // Initialize evaporation channels and calculate sum of emission
   // probabilities.
-  G4std::vector< G4BertiniEvaporationChannel * >::iterator iChannel = channelVector.begin();  
+  std::vector< G4BertiniEvaporationChannel * >::iterator iChannel = channelVector.begin();  
   totalProbability = 0;
   for ( ; iChannel != channelVector.end() ; *iChannel++ )                  
      {
@@ -177,7 +177,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 
 	  const G4int zRes = nucleusZ - pSelectedChannel->getParticleZ(); 
 	  const G4int aRes  = nucleusA - pSelectedChannel->getParticleA(); 
-	  const G4double eBind = G4NucleiProperties::GetBindingEnergy( aRes, zRes );  // Binding energy of the nucleus.
+	  // const G4double eBind = G4NucleiProperties::GetBindingEnergy( aRes, zRes );  // Binding energy of the nucleus.
 	  mRes  = G4NucleiProperties::GetAtomicMass( aRes, zRes ); // Mass of the target nucleus
 	  //      In HETC88:
 	  //   	  eBind = Z * (-0.78244) + A * 8.36755 - cameron ( A , Z );
@@ -328,7 +328,7 @@ G4FragmentVector * G4BertiniEvaporation::BreakItUp( G4LayeredNucleus & nucleus )
 
 void G4BertiniEvaporation::splitBe8( const G4double E,
 				     const G4ThreeVector boostToLab,
-				     G4std::vector< G4DynamicParticle * > & secondaryParticleVector )
+				     std::vector< G4DynamicParticle * > & secondaryParticleVector )
 {
   G4double kineticEnergy; 
   G4double u;
@@ -376,7 +376,7 @@ void G4BertiniEvaporation::splitBe8( const G4double E,
 }
 
 
-void G4BertiniEvaporation::fillResult( G4std::vector<G4DynamicParticle *> secondaryParticleVector,
+void G4BertiniEvaporation::fillResult( std::vector<G4DynamicParticle *> secondaryParticleVector,
 				      G4FragmentVector * aResult )
 {
   // Fill the vector pParticleChange with secondary particles stored in vector.

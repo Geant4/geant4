@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.13 2002/12/12 19:17:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.14 2003/06/16 17:09:28 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -64,8 +64,8 @@ public:
    void SetVectorMesonProbability(G4double aValue);
    void SetSpinThreeHalfBarionProbability(G4double aValue);
    
-   void SetScalarMesonMixings( G4std::vector<G4double> aVector);
-   void SetVectorMesonMixings( G4std::vector<G4double> aVector);
+   void SetScalarMesonMixings( std::vector<G4double> aVector);
+   void SetVectorMesonMixings( std::vector<G4double> aVector);
 
 //   used by G4VKinkyStringDecy..
    G4int SampleQuarkFlavor(void);
@@ -102,8 +102,8 @@ private:
 
    G4double pspin_meson;
    G4double pspin_barion;
-   G4std::vector<G4double> vectorMesonMix;
-   G4std::vector<G4double> scalarMesonMix;
+   std::vector<G4double> vectorMesonMix;
+   std::vector<G4double> scalarMesonMix;
    
    G4bool    PastInitPhase;
    
@@ -114,7 +114,7 @@ private:
 //   G4double MinFragmentationMass(G4ExcitedString * theString,
 //				G4ParticleDefinition*& Hadron1,
 //				G4ParticleDefinition*& Hadron2);
-   typedef G4std::pair<G4ParticleDefinition*, G4ParticleDefinition*> pDefPair;
+   typedef std::pair<G4ParticleDefinition*, G4ParticleDefinition*> pDefPair;
    typedef G4ParticleDefinition * (G4HadronBuilder::*Pcreate)
 		   			(G4ParticleDefinition*, G4ParticleDefinition*);
    G4double FragmentationMass(

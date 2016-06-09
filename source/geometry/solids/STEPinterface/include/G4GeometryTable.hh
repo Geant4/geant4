@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryTable.hh,v 1.7 2002/11/21 16:49:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeometryTable.hh,v 1.8 2003/06/16 16:53:48 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4GeometryTable
@@ -40,11 +40,11 @@
 #ifndef G4GEOMETRYTABLE_HH
 #define G4GEOMETRYTABLE_HH
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4GeometryCreator.hh"
 
-typedef G4std::vector<G4GeometryCreator*> G4CreatorVector;
+typedef std::vector<G4GeometryCreator*> G4CreatorVector;
 
 class G4GeometryTable
 {

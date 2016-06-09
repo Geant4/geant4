@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc,v 1.12 2002/12/12 19:17:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroCanonical.cc,v 1.15 2003/06/16 17:06:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -53,25 +53,25 @@ G4StatMFMacroCanonical::~G4StatMFMacroCanonical()
 {
   // garbage collection
   if (!_theClusters.empty()) {
-    G4std::for_each(_theClusters.begin(),_theClusters.end(),DeleteFragment());
+    std::for_each(_theClusters.begin(),_theClusters.end(),DeleteFragment());
   }
 }
 
 // operators definitions
 G4StatMFMacroCanonical & 
-G4StatMFMacroCanonical::operator=(const G4StatMFMacroCanonical & right) 
+G4StatMFMacroCanonical::operator=(const G4StatMFMacroCanonical & ) 
 {
     G4Exception("G4StatMFMacroCanonical::operator= meant to not be accessable");
     return *this;
 }
 
-G4bool G4StatMFMacroCanonical::operator==(const G4StatMFMacroCanonical & right) const 
+G4bool G4StatMFMacroCanonical::operator==(const G4StatMFMacroCanonical & ) const 
 {
     return false;
 }
 
 
-G4bool G4StatMFMacroCanonical::operator!=(const G4StatMFMacroCanonical & right) const 
+G4bool G4StatMFMacroCanonical::operator!=(const G4StatMFMacroCanonical & ) const 
 {
     return true;
 }
@@ -114,7 +114,7 @@ void G4StatMFMacroCanonical::CalculateTemperature(const G4Fragment & theFragment
   G4double Z = theFragment.GetZ();
 
   // Fragment Multiplicity
-  G4double FragMult = G4std::max((1.0+(2.31/MeV)*(U/A - 3.5*MeV))*A/100.0, 2.0);
+  G4double FragMult = std::max((1.0+(2.31/MeV)*(U/A - 3.5*MeV))*A/100.0, 2.0);
 
 
   // Parameter Kappa
@@ -146,12 +146,12 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseAandZ(const G4Fragment &theFragm
   G4double A = theFragment.GetA();
   G4double Z = theFragment.GetZ();
   
-  G4std::vector<G4double> ANumbers(A);
+  std::vector<G4double> ANumbers(static_cast<G4int>(A));
 
   G4double Multiplicity = ChooseA(A,ANumbers);
 
 
-  G4std::vector<G4double> FragmentsA;
+  std::vector<G4double> FragmentsA;
   
     G4int i = 0;  
     for (i = 0; i < A; i++) 
@@ -183,23 +183,23 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseAandZ(const G4Fragment &theFragm
 	  }
       }
     
-    return ChooseZ(Z,FragmentsA);
+    return ChooseZ(static_cast<G4int>(Z),FragmentsA);
 }
 
 
 
-G4double G4StatMFMacroCanonical::ChooseA(const G4double A, G4std::vector<G4double> & ANumbers)
+G4double G4StatMFMacroCanonical::ChooseA(const G4double A, std::vector<G4double> & ANumbers)
   // Determines fragments multiplicities and compute total fragment multiplicity
 {
   G4double multiplicity = 0.0;
   G4int i;
   
   
-  G4std::vector<G4double> AcumMultiplicity;
-  AcumMultiplicity.reserve(A);
+  std::vector<G4double> AcumMultiplicity;
+  AcumMultiplicity.reserve(static_cast<G4int>(A));
 
   AcumMultiplicity.push_back((*(_theClusters.begin()))->GetMeanMultiplicity());
-  for (G4std::vector<G4VStatMFMacroCluster*>::iterator it = _theClusters.begin()+1;
+  for (std::vector<G4VStatMFMacroCluster*>::iterator it = _theClusters.begin()+1;
        it != _theClusters.end(); ++it)
     {
       AcumMultiplicity.push_back((*it)->GetMeanMultiplicity()+AcumMultiplicity.back());
@@ -223,7 +223,7 @@ G4double G4StatMFMacroCanonical::ChooseA(const G4double A, G4std::vector<G4doubl
       multiplicity++;
       ANumbers[ThisOne] = ANumbers[ThisOne]+1;
       SumA += ThisOne+1;
-      CheckA = G4int(A) - SumA;
+      CheckA = static_cast<G4int>(A) - SumA;
       
     } while (CheckA > 0);
     
@@ -234,10 +234,10 @@ G4double G4StatMFMacroCanonical::ChooseA(const G4double A, G4std::vector<G4doubl
 
 
 G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(const G4int & Z, 
-						  G4std::vector<G4double> & FragmentsA)
+						  std::vector<G4double> & FragmentsA)
     // 
 {
-    G4std::vector<G4double> FragmentsZ;
+    std::vector<G4double> FragmentsZ;
 	
     G4double DeltaZ = 0.0;
     G4double CP = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
@@ -258,7 +258,7 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(const G4int & Z,
 	      if (RandNumber < (*_theClusters.begin())->GetZARatio()) 
 		{
 		  FragmentsZ.push_back(1.0);
-		  SumZ += G4int(FragmentsZ[i]);
+		  SumZ += static_cast<G4int>(FragmentsZ[i]);
 		} 
 	      else FragmentsZ.push_back(0.0);
 	    } 
@@ -274,7 +274,7 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(const G4int & Z,
 	      do 
 		{
 		  RandZ = G4RandGauss::shoot(ZMean,ZDispersion);
-		  z = G4int(RandZ+0.5);
+		  z = static_cast<G4int>(RandZ+0.5);
 		} while (z < 0 || z > A);
 	      FragmentsZ.push_back(z);
 	      SumZ += z;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.cc,v 1.6 2001/07/24 21:39:50 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisExtent.cc,v 1.7 2003/06/16 16:55:28 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // A.Walkden 28/11/95
@@ -64,7 +64,7 @@ G4double G4VisExtent::GetExtentRadius () const {
 	       ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
 }
  
-G4std::ostream& operator << (G4std::ostream& os, const G4VisExtent& e) {
+std::ostream& operator << (std::ostream& os, const G4VisExtent& e) {
   os << "G4VisExtent (bounding box):";
   os << "\n  X limits: " << e.fXmin << ' ' << e.fXmax;
   os << "\n  Y limits: " << e.fYmin << ' ' << e.fYmax;

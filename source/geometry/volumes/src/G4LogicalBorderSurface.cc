@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.8 2002/08/06 08:23:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LogicalBorderSurface.cc,v 1.9 2003/06/16 16:54:53 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // G4LogicalBorderSurface Implementation
@@ -106,7 +106,7 @@ G4LogicalBorderSurface::operator!=(const G4LogicalBorderSurface &right) const
 // Methods
 //
 
-const G4std::vector<G4LogicalBorderSurface*> *
+const std::vector<G4LogicalBorderSurface*> *
 G4LogicalBorderSurface::GetSurfaceTable()
 {
   return &theBorderSurfaceTable;

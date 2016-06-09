@@ -38,12 +38,12 @@ class G4ITDecayChannel : public G4NuclearDecayChannel
   // class  description - end
   public:
     G4ITDecayChannel (G4int Verbose,
-                      const G4ParticleDefinition *theParentNucleus,
+                      const G4Ions *theParentNucleus,
                       G4double theBR) :
       G4NuclearDecayChannel (IT, Verbose, theParentNucleus, theBR, 0.0,
 			     theParentNucleus->GetBaryonNumber(),
 			     int(theParentNucleus->GetPDGCharge()/eplus),
-			     ((const G4Ions*) theParentNucleus)->GetExcitationEnergy())
+			     theParentNucleus->GetExcitationEnergy())
     {
 #ifdef G4VERBOSE
       if (GetVerboseLevel()>1)

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.93 2003/04/12 16:40:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LowEnergyIonisation.cc,v 1.95 2003/06/16 17:00:12 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 // --------------------------------------------------------------
 //
@@ -224,8 +224,7 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
 }
 
 
-void G4LowEnergyIonisation::BuildLossTable(
-                        const G4ParticleDefinition& aParticleType)
+void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& )
 {
   // Build table for energy loss due to soft brems
   // the tables are built for *MATERIALS* binning is taken from LowEnergyLoss
@@ -509,7 +508,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   // Generation of Fluorescence and Auger
   size_t nSecondaries = 0;
   size_t totalNumber  = 1;
-  G4std::vector<G4DynamicParticle*>* secondaryVector = 0;
+  std::vector<G4DynamicParticle*>* secondaryVector = 0;
   G4DynamicParticle* aSecondary = 0;
   G4ParticleDefinition* type = 0;
 
@@ -596,7 +595,7 @@ G4bool G4LowEnergyIonisation::IsApplicable(const G4ParticleDefinition& particle)
    return ( (&particle == G4Electron::Electron()) );
 }
 
-G4std::vector<G4DynamicParticle*>*
+std::vector<G4DynamicParticle*>*
 G4LowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 			                  G4double incidentEnergy,
 			                  G4double eLoss)
@@ -604,8 +603,8 @@ G4LowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
   // create vector of secondary particles
   const G4Material* material = couple->GetMaterial();
 
-  G4std::vector<G4DynamicParticle*>* partVector =
-                                 new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* partVector =
+                                 new std::vector<G4DynamicParticle*>;
 
   if(eLoss > cutForPhotons && eLoss > cutForElectrons) {
 
@@ -615,7 +614,7 @@ G4LowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
     size_t nElements = material->GetNumberOfElements();
     const G4ElementVector* theElementVector = material->GetElementVector();
 
-    G4std::vector<G4DynamicParticle*>* secVector = 0;
+    std::vector<G4DynamicParticle*>* secVector = 0;
     G4DynamicParticle* aSecondary = 0;
     G4ParticleDefinition* type = 0;
     G4double e;
@@ -625,7 +624,7 @@ G4LowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
     // sample secondaries
 
     G4double eTot = 0.0;
-    G4std::vector<G4int> n =
+    std::vector<G4int> n =
            shellVacancy->GenerateNumberOfIonisations(couple,
                                                      incidentEnergy,eLoss);
     for (size_t i=0; i<nElements; i++) {
@@ -682,7 +681,7 @@ G4LowEnergyIonisation::DeexciteAtom(const G4MaterialCutsCouple* couple,
 }
 
 G4double G4LowEnergyIonisation::GetMeanFreePath(const G4Track& track,
-						G4double previousStepSize,
+						G4double , // previousStepSize
 						G4ForceCondition* cond)
 {
    *cond = NotForced;

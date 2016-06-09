@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.cc,v 1.13 2002/01/22 15:23:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MaterialPropertyVector.cc,v 1.14 2003/06/16 16:56:25 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -144,7 +144,7 @@ void G4MaterialPropertyVector::AddElement(G4double aPhotonMomentum,
 	
 	newElement = new G4MPVEntry(aPhotonMomentum, aPropertyValue);
 	MPV.push_back(newElement);
-	G4std::sort(MPV.begin(), MPV.end(), MPVEntry_less());
+	std::sort(MPV.begin(), MPV.end(), MPVEntry_less());
 	NumEntries++; 
 }
 
@@ -155,7 +155,7 @@ void G4MaterialPropertyVector::RemoveElement(G4double aPhotonMomentum)
 
 	newElement = new G4MPVEntry(aPhotonMomentum, DBL_MAX);
 
-	G4std::vector<G4MPVEntry*>::iterator i;
+	std::vector<G4MPVEntry*>::iterator i;
 	for (i = MPV.begin(); i != MPV.end(); i++)
 	  if (**i == *newElement) {success = *i; break;}
 	//	success = MPV.remove(newElement);
@@ -214,7 +214,7 @@ G4MaterialPropertyVector::GetProperty(G4double aPhotonMomentum) const
 
 	temp = 0;
 	//temp = MPV.find(target);
-	G4std::vector<G4MPVEntry*>::const_iterator i;
+	std::vector<G4MPVEntry*>::const_iterator i;
 	for (i = MPV.begin(); i != MPV.end(); i++)
 	  if (**i == *target) {temp = *i; break;}
 	if (temp != 0) {

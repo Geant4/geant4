@@ -30,7 +30,7 @@
 #include "G4HCIOcatalog.hh"
 
 // Implementation of Constructor #1
-G4VHCIOentry::G4VHCIOentry(G4std::string n)
+G4VHCIOentry::G4VHCIOentry(std::string n)
  : m_name(n)
 {
   G4HCIOcatalog* c = G4HCIOcatalog::GetHCIOcatalog();

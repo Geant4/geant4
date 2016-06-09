@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTableMessenger.hh,v 1.6 2001/07/11 10:01:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DecayTableMessenger.hh,v 1.7 2003/05/19 17:10:07 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -72,7 +72,7 @@ class G4DecayTableMessenger: public G4UImessenger
     virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    G4DecayTableMessenger(const G4DecayTableMessenger&){}
+    G4DecayTableMessenger(const G4DecayTableMessenger&):G4UImessenger(){}
     G4DecayTableMessenger & operator = (const G4DecayTableMessenger &){ return *this;}
 
   private:

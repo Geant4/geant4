@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4RTMessenger.cc,v 1.6 2002/12/05 01:37:36 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.hh,v 1.8 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PreCompoundTransitions.hh,v 1.10 2003/05/30 14:05:57 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
@@ -37,25 +37,27 @@
 // TransitionProb3 => probability of transition with  \Delta N = 0
 //                    number of excitons will be the same
 
+#include "G4VPreCompoundTransitions.hh"
+
 #include "globals.hh"
 #include "G4Fragment.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4Proton.hh"
 #include "Randomize.hh"
 
-class G4PreCompoundTransitions
+class G4PreCompoundTransitions : public G4VPreCompoundTransitions
 {
 public:
 
   // Calculates transition probabilities with Delta N = +2 (Trans1) -2 (Trans2) and 0 (Trans3)
-  G4PreCompoundTransitions(const G4Fragment & aFragment);
 
-  ~G4PreCompoundTransitions() {}
+  G4PreCompoundTransitions() : TransitionProb1(0.0), TransitionProb2(0.0), TransitionProb3(0.0) {}
+
+  virtual ~G4PreCompoundTransitions() {}
 
 private:
-  G4PreCompoundTransitions() {}
   
-  G4PreCompoundTransitions(const G4PreCompoundTransitions &right) {};
+  G4PreCompoundTransitions(const G4PreCompoundTransitions &) : G4VPreCompoundTransitions() {};
   
   const G4PreCompoundTransitions& operator=(const G4PreCompoundTransitions &right);
 
@@ -64,10 +66,10 @@ private:
   G4bool operator!=(const G4PreCompoundTransitions &right) const;
 
 public:
-  G4double GetTotalProbability(void)
-  { return TransitionProb1+TransitionProb2+TransitionProb3; }
   
-  G4Fragment PerformTransition(const G4Fragment & aFragment);
+  virtual G4double CalculateProbability(const G4Fragment & aFragment);
+  
+  virtual G4Fragment PerformTransition(const G4Fragment & aFragment);
   
 private:
 	

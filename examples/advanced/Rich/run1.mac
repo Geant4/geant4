@@ -1,0 +1,45 @@
+# $Id: run1.mac,v 1.2 2003/06/12 08:50:50 pmendez Exp $
+#
+# Macro file for "LHCbRichSim.cc"
+# 
+#/vis/open OGLIX
+# (can be run in batch, without graphic)
+/control/verbose 2
+/control/saveHistory
+#
+#run/verbose 4
+#event/verbose 4
+#tracking/verbose 5
+#process/verbose 4
+#particle/process/verbose 4
+#vis/verbose 4
+
+/vis/scene/create
+/vis/sceneHandler/create OGLSXm
+/vis/sceneHandler/create OGLIX
+/vis/viewer/create
+/vis/scene/add/volume
+
+
+/vis/viewer/update
+
+/vis/viewer/viewpointThetaPhi -90. -90.
+/hits/list 
+/hits/activate
+/hits/verbose 4
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
+
+/gun/particle pi-
+/gun/energy 10 GeV
+
+/gun/xvertex 0.000 mm
+/gun/yvertex 0.000 mm
+/gun/zvertex -20.000 mm
+
+/run/beamOn 2
+ 
+
+
+
+

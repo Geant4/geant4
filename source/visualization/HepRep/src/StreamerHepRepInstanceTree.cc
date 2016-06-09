@@ -39,15 +39,15 @@ HepRepTreeID* StreamerHepRepInstanceTree::copy() {
     return DefaultHepRepTreeID::copy();
 }
 
-HepRepInstanceTree* StreamerHepRepInstanceTree::copy(HepRep* heprep, HepRepSelectFilter* filter) {
+HepRepInstanceTree* StreamerHepRepInstanceTree::copy(HepRep*, HepRepSelectFilter*) {
     return NULL;
 }
 
-bool StreamerHepRepInstanceTree::addInstance(HepRepInstance* instance) {
+bool StreamerHepRepInstanceTree::addInstance(HepRepInstance*) {
     return true;
 }
 
-void StreamerHepRepInstanceTree::removeInstance(HepRepInstance* instance) {
+void StreamerHepRepInstanceTree::removeInstance(HepRepInstance*) {
 }
 
 vector<HepRepInstance*>* StreamerHepRepInstanceTree::getInstances() {

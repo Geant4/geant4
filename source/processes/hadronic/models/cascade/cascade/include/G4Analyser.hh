@@ -31,7 +31,7 @@
 #include "G4NuclWatcher.hh"
 //#include "G4ExitonConfiguration.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4Analyser {
 
@@ -40,7 +40,7 @@ public:
   G4Analyser();
   void setInelCsec(G4double csec, 
 		   G4bool withn);
-  void setWatchers(const G4std::vector<G4NuclWatcher>& watchers);
+  void setWatchers(const std::vector<G4NuclWatcher>& watchers);
   void try_watchers(G4double a, 
 		    G4double z, 
 		    G4bool if_nucl);
@@ -70,7 +70,7 @@ private:
   G4double averagePion0;
   G4double averageA;
   G4double averageZ;
-  G4std::vector<G4NuclWatcher> ana_watchers;
+  std::vector<G4NuclWatcher> ana_watchers;
   G4double inel_csec;
   G4bool withNuclei;
 };        

@@ -23,13 +23,13 @@
 // ====================================================================
 //
 //   H02PythiaMessenger.cc
-//   $Id: H02PythiaMessenger.cc,v 1.1 2002/11/19 10:36:20 murakami Exp $
+//   $Id: H02PythiaMessenger.cc,v 1.2 2003/06/16 16:48:54 gunter Exp $
 //
 // ====================================================================
 #include "H02PythiaMessenger.hh"
 #include "H02PythiaInterface.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
@@ -147,7 +147,7 @@ void H02PythiaMessenger::SetNewValue(G4UIcommand* command,
 
   } else if (command == cpyinit) { // /pyinit ...
     const char* strvaluelist= newValues.c_str();
-    G4std::istrstream is((char*)strvaluelist);
+    std::istrstream is((char*)strvaluelist);
     G4String sframe, sbeam, starget; G4double dwin;
     is >> sframe >> sbeam >> starget >> dwin;
     gen-> CallPyinit(sframe, sbeam, starget, dwin);
@@ -169,14 +169,14 @@ void H02PythiaMessenger::SetNewValue(G4UIcommand* command,
 
   } else if (command == cpyrget) { // /pyrget ...
     const char* strvaluelist= newValues.c_str();
-    G4std::istrstream is((char*)strvaluelist);
+    std::istrstream is((char*)strvaluelist);
     G4int lun, move;
     is >> lun >> move;
     gen-> CallPyrget(lun, move);
 
   } else if (command == cpyrset) { // /pyrset ...
     const char* strvaluelist= newValues.c_str();
-    G4std::istrstream is((char*)strvaluelist);
+    std::istrstream is((char*)strvaluelist);
     G4int lun, move;
     is >> lun >> move;
     gen-> CallPyrset(lun, move);
@@ -187,7 +187,7 @@ void H02PythiaMessenger::SetNewValue(G4UIcommand* command,
       gen-> PrintRandomStatus();
     } else {
       // to a file (overwrite mode)
-      G4std::ofstream ofs;
+      std::ofstream ofs;
       ofs.open(s.c_str(), std::ios::out);  
       //ofs.open(randomStatusFileName.c_str(), std::ios::out|std::ios::app);
       ofs.setf(std::ios::fixed | std::ios::showpoint);

@@ -31,7 +31,7 @@
 // Constructors and operators
 //
 
-G4E1Probability100::G4E1Probability100(const G4E1Probability100& right)
+G4E1Probability100::G4E1Probability100(const G4E1Probability100& ) : G4VEmissionProbability()
 {
 
  G4Exception("G4E1Probability100::copy_constructor meant to not be accessible");
@@ -39,21 +39,21 @@ G4E1Probability100::G4E1Probability100(const G4E1Probability100& right)
 }
 
 const G4E1Probability100& G4E1Probability100::
-operator=(const G4E1Probability100& right) 
+operator=(const G4E1Probability100& ) 
 {
 
   G4Exception("G4E1Probability100::operator= meant to not be accessible");
   return *this;
 }
 
-G4bool G4E1Probability100::operator==(const G4E1Probability100& right) const
+G4bool G4E1Probability100::operator==(const G4E1Probability100& ) const
 {
 
   return false;
 
 }
 
-G4bool G4E1Probability100::operator!=(const G4E1Probability100& right) const
+G4bool G4E1Probability100::operator!=(const G4E1Probability100& ) const
 {
 
   return true;
@@ -88,7 +88,9 @@ G4double G4E1Probability100::EmissionProbDensity(const G4Fragment& frag,
   // nuclei).
 
   G4ConstantLevelDensityParameter a;
-  G4double aLevelDensityParam = a.LevelDensityParameter(Afrag,Zfrag,Uexcite);
+  G4double aLevelDensityParam = a.LevelDensityParameter(static_cast<G4int>(Afrag),
+							static_cast<G4int>(Zfrag),
+							Uexcite);
 
   G4double levelDensBef = exp(2.0*sqrt(aLevelDensityParam*Uexcite));
   G4double levelDensAft = exp(2.0*sqrt(aLevelDensityParam*(Uexcite-exciteE)));
@@ -172,7 +174,7 @@ G4double G4E1Probability100::EmissionProbability(const G4Fragment& frag,
 }
 
 G4double G4E1Probability100::EmissionIntegration(const G4Fragment& frag, 
-                             const G4double exciteE,
+                             const G4double ,
                              const G4double lowLim, const G4double upLim,
                              const G4int numIters)
 

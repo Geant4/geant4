@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.cc,v 1.7 2001/07/11 10:01:21 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIWin32.cc,v 1.9 2003/06/16 16:55:59 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G.Barrand
 
@@ -32,11 +32,7 @@
 
 #include <string.h>
 
-#include <windows.h>
-#include <windowsx.h>
-#include <wingdi.h>
-
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4UImanager.hh"
 #include "G4StateManager.hh"
@@ -45,6 +41,8 @@
 #include "G4Win32.hh"
 
 #include "G4UIWin32.hh"
+
+#include <wingdi.h>
 
 #define TEXT_MAX_LINES 300
 

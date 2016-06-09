@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModel.cc,v 1.7 2001/08/24 20:36:29 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VModel.cc,v 1.9 2003/06/16 17:14:32 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  31st December 1997.
@@ -51,11 +51,11 @@ G4String G4VModel::GetCurrentDescription () const {
   return G4String("Default Current Description");
 }
 
-G4bool G4VModel::Validate (G4bool warn) {
+G4bool G4VModel::Validate (G4bool) {
   return true;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VModel& m) {
+std::ostream& operator << (std::ostream& os, const G4VModel& m) {
   os << m.fGlobalDescription;
   os << "\n  Modeling parameters:";
   if (m.fpMP) {

@@ -19,7 +19,6 @@ ifeq ($(G4SYSTEM),HP-aCC)
     FCFLAGS  += +Z
     CCFLAGS  += +Z
   endif
-  G4_HAVE_BOOL := yes
   FC      := f77
   SHEXT   := sl
   FCFLAGS += +E6 +ppu

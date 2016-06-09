@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.13 2002/12/12 19:14:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QNucleus.hh,v 1.14 2003/06/16 17:04:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -116,8 +116,8 @@ private:
   G4double probVect[256];       // Cluster probability ("a#of issues" can be real) Vector
 };
 
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QNucleus& rhs);
-G4std::ostream& operator<<(G4std::ostream& lhs, const G4QNucleus& rhs);
+std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs);
+std::ostream& operator<<(std::ostream& lhs, const G4QNucleus& rhs);
 
 inline G4int G4QNucleus::operator==(const G4QNucleus &right) const  {return this==&right;}
 inline G4int G4QNucleus::operator!=(const G4QNucleus &right) const  {return this!=&right;}

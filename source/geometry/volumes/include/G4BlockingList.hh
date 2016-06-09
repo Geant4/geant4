@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.hh,v 1.7 2002/07/23 08:50:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BlockingList.hh,v 1.8 2003/06/16 16:54:41 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4BlockingList
 //
@@ -47,7 +47,7 @@
 #define G4BLOCKINGLIST_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
 const G4int kBlockingListMaxDefault = 500; // Block up to 511 daughters
                                            // initially
@@ -94,7 +94,7 @@ class G4BlockingList
     G4int fBlockTagNo, fStride;
       // Current blocked volume tag number.
 
-    G4std::vector<G4int> fBlockingList; 
+    std::vector<G4int> fBlockingList; 
       // Blocked volumes: Elements with indices
       // corresponding to blocked volume set to fBlockTagNo.
 

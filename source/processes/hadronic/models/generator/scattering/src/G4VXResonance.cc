@@ -66,7 +66,7 @@ G4bool G4VXResonance::operator!=(const G4VXResonance &right) const
 G4double G4VXResonance::IsospinCorrection(const G4KineticTrack& trk1, 
 					  const G4KineticTrack& trk2,
 					  G4int isoOut1, G4int isoOut2,
-					  G4double iSpinOut1, G4double iSpinOut2) const
+					  G4double /*iSpinOut1*/, G4double /*iSpinOut2*/) const
 {
   G4double result = 0.;
  
@@ -94,7 +94,7 @@ G4double G4VXResonance::IsospinCorrection(const G4KineticTrack& trk1,
     if (factor > DBL_MIN)
     {
       // Randomly select the Isospin3 of the initial state resonances
-      G4std::vector<G4double> iso = clebsch.GenerateIso3(isoIn1,iso3In1, 
+      std::vector<G4double> iso = clebsch.GenerateIso3(isoIn1,iso3In1, 
 						  isoIn2,iso3In2, 
 						  isoProton,isoProton);
       G4int isoA = static_cast<G4int>(iso[0]);

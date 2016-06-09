@@ -251,7 +251,7 @@ private:
                                            G4double step) const;
   // Function to sample electronic losses
 
-  G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
+  std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
 					          G4double incidentEnergy,
 					          G4double hMass,
 					          G4double eLoss);
@@ -305,7 +305,7 @@ private:
   G4AtomicDeexcitation deexcitationManager;
   G4ShellVacancy* shellVacancy;
   G4VhShellCrossSection* shellCS;
-  G4std::vector<G4VEMDataSet*> zFluoDataVector;
+  std::vector<G4VEMDataSet*> zFluoDataVector;
   G4bool theFluo;
 
 };

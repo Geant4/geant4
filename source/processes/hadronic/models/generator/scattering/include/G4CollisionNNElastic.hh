@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNElastic.hh,v 1.3 2002/12/12 19:17:38 gunter Exp $ //
+// $Id: G4CollisionNNElastic.hh,v 1.4 2003/06/16 17:07:58 gunter Exp $ //
 
 #ifndef G4CollisionNNElastic_h
 #define G4CollisionNNElastic_h
@@ -32,7 +32,7 @@
 #include "G4VAngularDistribution.hh"
 #include "G4KineticTrackVector.hh"
 #include "G4VElasticCollision.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4KineticTrack;
 
@@ -59,7 +59,7 @@ protected:
   virtual const G4VCrossSectionSource* GetCrossSectionSource() const { return crossSectionSource; }
   virtual const G4VAngularDistribution* GetAngularDistribution() const { return angularDistribution; }
 
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const;  
+  virtual const std::vector<G4String>& GetListOfColliders(G4int whichOne) const;  
 
 
 private:  
@@ -67,8 +67,8 @@ private:
   G4VCrossSectionSource* crossSectionSource;
   G4VAngularDistribution* angularDistribution;
 
-  G4std::vector<G4String> colliders1;
-  G4std::vector<G4String> colliders2;
+  std::vector<G4String> colliders1;
+  std::vector<G4String> colliders2;
 
 };
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRdEdx.hh,v 1.6 2003/01/23 11:30:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VXTRdEdx.hh,v 1.7 2003/06/16 16:56:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -41,7 +41,7 @@
 #define G4VXTRdEdx_h 1
 
 
-#include "g4std/complex"
+#include <complex>
 #include "globals.hh"
 
 #include "G4PhysicsTable.hh"

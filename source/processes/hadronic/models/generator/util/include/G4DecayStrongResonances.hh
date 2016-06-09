@@ -47,7 +47,7 @@ private:
    G4double theEnergy;
       
 public:
-   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
+   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* )
    {
      // decay the strong resonances
      G4ReactionProductVector * theResult = new G4ReactionProductVector;
@@ -87,7 +87,7 @@ public:
 	 delete secondaries;
        }
      }
-     G4std::for_each(result1->begin(), result1->end(), DeleteKineticTrack());
+     std::for_each(result1->begin(), result1->end(), DeleteKineticTrack());
      delete result1;
      
      // translate to ReactionProducts
@@ -102,7 +102,7 @@ public:
        
        theResult->push_back(it);
      }
-     G4std::for_each(result->begin(), result->end(), DeleteKineticTrack());
+     std::for_each(result->begin(), result->end(), DeleteKineticTrack());
      delete result;
      return theResult;
    }

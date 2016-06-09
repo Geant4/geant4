@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionMesonBaryonElastic.hh,v 1.6 2002/12/12 19:17:37 gunter Exp $ //
+// $Id: G4CollisionMesonBaryonElastic.hh,v 1.8 2003/06/16 17:07:55 gunter Exp $ //
 
 #ifndef G4CollisionMesonBaryonElastic_h
 #define G4CollisionMesonBaryonElastic_h
@@ -31,7 +31,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4VAngularDistribution.hh"
 #include "G4KineticTrackVector.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4VElasticCollision.hh"
 
 class G4KineticTrack;
@@ -56,14 +56,14 @@ protected:
   { return crossSectionSource; }
   virtual const G4VAngularDistribution* GetAngularDistribution() const 
   { return angularDistribution; }
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const;
+  virtual const std::vector<G4String>& GetListOfColliders(G4int ) const;
 
 private:  
 
   G4VCrossSectionSource* crossSectionSource;
   G4VAngularDistribution* angularDistribution;
 
-  G4std::vector<G4String> dummy;
+  std::vector<G4String> dummy;
 
 
 };

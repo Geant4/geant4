@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.cc,v 1.6 2002/12/12 19:17:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4InteractionContent.cc,v 1.7 2003/06/03 09:36:40 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -40,7 +40,7 @@ G4InteractionContent::G4InteractionContent(G4VSplitableHadron *aPrimaryParticipa
 	theProjectile=aPrimaryParticipant;
 }
 
-G4InteractionContent::G4InteractionContent(const G4InteractionContent &right)
+G4InteractionContent::G4InteractionContent(const G4InteractionContent &)
      : theNumberOfHard(0), theNumberOfSoft(0)
 {}
 
@@ -59,7 +59,7 @@ int G4InteractionContent::operator!=(const G4InteractionContent &right) const
 }
 
 
-const G4InteractionContent & G4InteractionContent::operator=(const G4InteractionContent &right)
+const G4InteractionContent & G4InteractionContent::operator=(const G4InteractionContent &)
 {
 	G4Exception("G4InteractionContent::operator= meant to not be accessable");
 	return *this;

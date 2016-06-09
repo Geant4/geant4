@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em4PhysicsList.cc,v 1.5 2001/10/17 14:04:15 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em4PhysicsList.cc,v 1.6 2003/04/11 14:30:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -97,10 +97,10 @@ void Em4PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4MultipleScatteringSTD.hh"
 
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
+#include "G4eIonisationSTD.hh"
+#include "G4eBremsstrahlungSTD.hh"
 #include "G4eplusAnnihilation.hh"
 
 
@@ -124,16 +124,16 @@ void Em4PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
 
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);      
+      pmanager->AddProcess(new G4MultipleScatteringSTD,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisationSTD,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlungSTD,   -1,-1,3);      
 
     } else if (particleName == "e+") {
     //positron
 
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+      pmanager->AddProcess(new G4MultipleScatteringSTD,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisationSTD,       -1, 2,2);
+      pmanager->AddProcess(new G4eBremsstrahlungSTD,   -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);      
     }
   }

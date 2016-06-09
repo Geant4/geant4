@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Visible.hh,v 1.7 2001/07/11 10:01:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Visible.hh,v 1.8 2003/06/16 16:55:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  30th October 1996
@@ -39,13 +39,13 @@
 #define G4VISIBLE_HH
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class G4VisAttributes;
 
 class G4Visible {
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4Visible& v);
+  friend std::ostream& operator << (std::ostream& os, const G4Visible& v);
 
 public: // With description
 

@@ -28,7 +28,7 @@ G4SoftStringBuilder::G4SoftStringBuilder()
    {
    }
 
-G4SoftStringBuilder::G4SoftStringBuilder(const G4SoftStringBuilder &right)
+G4SoftStringBuilder::G4SoftStringBuilder(const G4SoftStringBuilder &)
    {
    }
 

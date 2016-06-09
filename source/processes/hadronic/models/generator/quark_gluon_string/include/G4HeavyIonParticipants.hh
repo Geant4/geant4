@@ -60,12 +60,12 @@ class G4HeavyIonParticipants : public G4VParticipants
     void PerformDiffractiveCollisions();
       
   private:
-    G4std::vector<G4InteractionContent*> theInteractions;
+    std::vector<G4InteractionContent*> theInteractions;
     struct DeleteInteractionContent {void operator()(G4InteractionContent*aC){delete aC;}};
-    G4std::vector<G4VSplitableHadron*>   theTargets; 
-    G4std::vector<G4VSplitableHadron*>   theProjectiles; 
+    std::vector<G4VSplitableHadron*>   theTargets; 
+    std::vector<G4VSplitableHadron*>   theProjectiles; 
     struct DeleteSplitableHadron{void operator()(G4VSplitableHadron*aS){delete aS;}};
-    G4std::vector<G4PartonPair*>   thePartonPairs;
+    std::vector<G4PartonPair*>   thePartonPairs;
     struct DeletePartonPair{void operator()(G4PartonPair*aP){delete aP;}};
     G4Fancy3DNucleus theIncoming;
   

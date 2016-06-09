@@ -12,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPundefined.h,v 1.4 2000/01/21 13:42:33 gcosmo Exp $ */
+/* $Id: STEPundefined.h,v 1.5 2003/06/06 17:07:28 gcosmo Exp $ */
 
 #ifdef __O3DB__
 #include <OpenOODB.h>
@@ -29,15 +29,15 @@ class SCLundefined  {
   public:
 //	INPUT
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err);
 
     virtual Severity STEPread(const char *s, ErrorDescriptor *err);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err);
 
 //	OUTPUT
     virtual const char *asStr(SCLstring &s) const;
     virtual const char *STEPwrite(SCLstring &s);
-    virtual void 	STEPwrite (G4std::ostream& out =G4cout);
+    virtual void 	STEPwrite (std::ostream& out =G4cout);
 
     int set_null ();
     int is_null ();

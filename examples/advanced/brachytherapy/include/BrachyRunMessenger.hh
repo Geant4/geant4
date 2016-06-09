@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyRunMessenger.hh,v 1.2 2002/11/18 15:18:37 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyRunMessenger.hh,v 1.3 2003/05/22 17:20:42 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 //
@@ -35,8 +35,6 @@
 // This class permits to switch the energy of the gamma delivered from the 
 //radionuclides (Iodium/Iridium)
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef BrachyRunMessenger_h
 #define BrachyRunMessenger_h 1
@@ -45,36 +43,22 @@
 #include "G4UImessenger.hh"
 
 class BrachyRunAction;
-class BrachyFactoryIr;
 class BrachyRunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class BrachyRunMessenger: public G4UImessenger
 {
-  public:
-    BrachyRunMessenger(BrachyRunAction* );
-   ~BrachyRunMessenger();
+public:
+  BrachyRunMessenger(BrachyRunAction* );
+  ~BrachyRunMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
   
-  private:
- 
-     BrachyRunAction*  pRun;
-     G4UIcmdWithAString*        selDetCmd;
-    
-    G4UIdirectory*             detDir;
-  G4UIdirectory*           mydetDir;
-    
-  
+private:
+  G4UIdirectory*  runDir;
+  G4UIcmdWithAString* primaryParticleEnergySpectrumCmd;
+  BrachyRunAction*  runManager;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 

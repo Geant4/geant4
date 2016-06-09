@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyPhantomHit.hh,v 1.4 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyPhantomHit.hh,v 1.5 2003/05/22 17:20:41 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //    ********************************
@@ -30,7 +30,11 @@
 //    *    BrachyPhantomHit.hh       *
 //    *                              *
 //    ********************************
-// It manages the hits 
+//
+//Code developed by: S. Guatelli, M.Tropeano
+//
+// It manages the hits and the enrgy deposit in the phantom associated with 
+// each hit ...
 
 #ifndef BrachyPhantomHit_h
 #define BrachyPhantomHit_h 1
@@ -45,56 +49,68 @@
 
 class BrachyPhantomHit : public G4VHit
 {
- public:
-      BrachyPhantomHit(G4LogicalVolume* ,G4int ,G4int ,G4int );
-      ~BrachyPhantomHit();
-      BrachyPhantomHit(const BrachyPhantomHit &right);
-      const BrachyPhantomHit& operator=(const BrachyPhantomHit &right);
-      int operator==(const BrachyPhantomHit &right) const;
+public:
+  BrachyPhantomHit(G4LogicalVolume* ,G4int ,G4int ,G4int );
+  ~BrachyPhantomHit();
+  BrachyPhantomHit(const BrachyPhantomHit &right);
+  const BrachyPhantomHit& operator = (const BrachyPhantomHit &right);
+  int operator == (const BrachyPhantomHit &right) const;
 
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
+  inline void *operator new(size_t);
+  inline void operator delete(void *aHit);
 
-      void Draw();
-      void Print();
+  void Draw();
+  void Print();
 
- private:
-      G4ThreeVector m_Pos;
-      G4RotationMatrix m_Rot;
-      const G4LogicalVolume* m_pLogV;
+private:
+  const G4LogicalVolume* logicalVolume;// Logical volume where the hit happened
+  G4int xHitPosition; // Hit x coordinate 
+  G4int zHitPosition; // Hit z coordinate 
+  G4int yHitPosition; // Hit y coordinate 
+  G4ThreeVector hitPosition; //position of the hit 
+  G4RotationMatrix rotation; // rotation of the logical volume
+  G4double energyDeposit; // energy deposit associated with the hit
 
-      G4double m_Edep;
+public:
+  //...
+  // Set Hit position
+  inline void SetCellID(G4int XID,G4int YID,G4int ZID)
+  {xHitPosition = XID; zHitPosition = ZID;  yHitPosition = YID;  }
+  
+  inline G4int GetXID() // Get hit x coordinate 
+  {return xHitPosition;}
 
-      G4int m_XID;
-      G4int m_ZID;
-     G4int m_YID;
- public:
-      inline void SetCellID(G4int XID,G4int YID,G4int ZID)
- 	{m_XID = XID;m_ZID = ZID;  m_YID = YID;  }
-      inline G4int GetXID() 
-	{return m_XID;}
-      inline G4int GetZID() 
-	{return m_ZID;}
+  inline G4int GetZID() // Get hit z coordinate   
+  {return zHitPosition;}
 
-      inline G4int GetYID() 
-	{return m_YID;}
+  inline G4int GetYID() // Get hit y coordinate  
+  {return yHitPosition;}
    
-    inline void SetEdep(G4double edep)
-      {m_Edep = edep;}
-      inline void AddEdep(G4double edep)
-      {m_Edep += edep;}
-      inline G4double GetEdep()
-      {return m_Edep;}
-      inline void SetPos(G4ThreeVector xyz)
-      {m_Pos = xyz;}
-      inline G4ThreeVector GetPos()
-      {return m_Pos;}
-      inline void SetRot(G4RotationMatrix rmat)
-      {m_Rot = rmat;}
-      inline G4RotationMatrix GetRot()
-      {return m_Rot;}
-      inline const G4LogicalVolume * GetLogV()
-      {return m_pLogV;}
+  inline void SetEdep(G4double edep) //Set hit energy deposit
+  {energyDeposit = edep;}
+
+  inline void AddEdep(G4double edep) // Add energy deposit
+  {energyDeposit += edep;}
+
+  inline G4double GetEdep() // Get energy deposit
+  {return energyDeposit;}
+
+  inline void SetPos(G4ThreeVector xyz) // Set hit position
+  {hitPosition = xyz;}
+
+  inline G4ThreeVector GetPos()  // Get hit position
+  {return hitPosition;}
+
+  inline void SetRot(G4RotationMatrix rmat) //set rotation
+  {rotation = rmat;}
+
+  inline G4RotationMatrix GetRot() //get rotation
+  {return rotation;}
+
+  //...
+  // It returns the logical volume where the hit happened
+  inline const G4LogicalVolume * GetLogicalVolume()
+  {return logicalVolume;}
 };
 
 typedef G4THitsCollection<BrachyPhantomHit> BrachyPhantomHitsCollection;
@@ -102,16 +118,15 @@ extern G4Allocator<BrachyPhantomHit> BrachyPhantomHitAllocator;
 
 inline void* BrachyPhantomHit::operator new(size_t)
 {
- void *aHit;
- aHit = (void *) BrachyPhantomHitAllocator.MallocSingle();
- return aHit;
+  void *aHit;
+  aHit = (void *) BrachyPhantomHitAllocator.MallocSingle();
+  return aHit;
 }
 
 inline void BrachyPhantomHit::operator delete(void *aHit)
 {
- BrachyPhantomHitAllocator.FreeSingle((BrachyPhantomHit*) aHit);
+  BrachyPhantomHitAllocator.FreeSingle((BrachyPhantomHit*) aHit);
 }
-
 #endif
 
 

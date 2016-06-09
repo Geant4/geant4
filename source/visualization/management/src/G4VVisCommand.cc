@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc,v 1.11 2002/11/27 12:32:31 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VVisCommand.cc,v 1.12 2003/06/16 17:14:19 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -31,17 +31,17 @@
 
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4VVisCommand::~G4VVisCommand () {}
 
 G4VisManager* G4VVisCommand::fpVisManager = 0;
 
-G4std::vector <G4UIcommand*> G4VVisCommand::sceneNameCommands;
+std::vector <G4UIcommand*> G4VVisCommand::sceneNameCommands;
 
-G4std::vector <G4UIcommand*> G4VVisCommand::sceneHandlerNameCommands;
+std::vector <G4UIcommand*> G4VVisCommand::sceneHandlerNameCommands;
 
-G4std::vector <G4UIcommand*> G4VVisCommand::viewerNameCommands;
+std::vector <G4UIcommand*> G4VVisCommand::viewerNameCommands;
 
 G4double G4VVisCommand::ValueOf(G4String unitName) {
    return G4UnitDefinition::GetValueOf(unitName);
@@ -60,8 +60,8 @@ G4String G4VVisCommand::ConvertToString
   G4double uv = ValueOf(unitName);
   
   char st[50];
-  G4std::ostrstream os(st,50);
-  os << x/uv << " " << y/uv << " " << unitName << G4std::ends;
+  std::ostrstream os(st,50);
+  os << x/uv << " " << y/uv << " " << unitName << std::ends;
   G4String vl = st;
   return vl;
 }
@@ -69,8 +69,8 @@ G4String G4VVisCommand::ConvertToString
 G4String G4VVisCommand::ConvertToString(const G4ThreeVector& vec)
 {
   char st[100];
-  G4std::ostrstream os(st,100);
-  os << vec.x() << " " << vec.y() << " " << vec.z() << G4std::ends;
+  std::ostrstream os(st,100);
+  os << vec.x() << " " << vec.y() << " " << vec.z() << std::ends;
   G4String vl = st;
   return vl;
 }
@@ -89,7 +89,7 @@ G4int G4VVisCommand::GetNewIntValue(const G4String& paramString)
 {
   G4int vl;
   const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> vl;
   return vl;
 }
@@ -100,7 +100,7 @@ G4ThreeVector G4VVisCommand::GetNew3VectorValue(const G4String& paramString)
   G4double vy;
   G4double vz;
   const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> vx >> vy >> vz;
   return G4ThreeVector(vx,vy,vz);
 }
@@ -113,7 +113,7 @@ void G4VVisCommand::GetNewDoublePairValue(const G4String& paramString,
   char unts[30];
   
   const char* t = paramString;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> x >> y >> unts;
   G4String unt = unts;
 

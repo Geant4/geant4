@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.29 2003/04/26 11:38:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4eIonisation.cc,v 1.31 2003/06/16 17:02:16 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //--------------- G4eIonisation physics process --------------------------------
 //                by Laszlo Urban, 20 March 1997
@@ -64,7 +64,9 @@ G4int    G4eIonisation::NbinLambda = 100;
 G4eIonisation::G4eIonisation(const G4String& processName)
    : G4VeEnergyLoss(processName),
      theMeanFreePathTable(NULL)
-{}
+{
+  verboseLevel = -1;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -281,7 +283,7 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
  if (&aParticleType==G4Electron::Electron())
    {
      Tmax = KineticEnergy/2.;
-     d = G4std::min(DeltaThreshold, Tmax)/particleMass;
+     d = std::min(DeltaThreshold, Tmax)/particleMass;
      dEdx = log(2.*(tau+2.)/Eexcm2)-1.-beta2
             + log((tau-d)*d)+tau/(tau-d)
             + (0.5*d*d+(2.*tau+1.)*log(1.-d/tau))/gamma2;
@@ -290,7 +292,7 @@ G4double G4eIonisation::ComputeRestrictedMeandEdx (
  else        //positron
    {
      Tmax = KineticEnergy;  
-     d = G4std::min(DeltaThreshold, Tmax)/particleMass;
+     d = std::min(DeltaThreshold, Tmax)/particleMass;
      G4double d2=d*d/2., d3=d*d*d/3., d4=d*d*d*d/4.;
      G4double y=1./(1.+gamma);
      dEdx = log(2.*(tau+2.)/Eexcm2)+log(tau*d)

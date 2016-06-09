@@ -335,7 +335,7 @@ G4PhysicsVector* G4BaryonWidth::MassDependentWidth(const G4String& name) const
       // width of the requested particle available in the Map
       G4PhysicsFreeVector* wVector = new G4PhysicsFreeVector(wSize);
       G4String key = name;
-      G4std::map <G4String, G4double*, G4std::less<G4String> >::const_iterator iter;
+      std::map <G4String, G4double*, std::less<G4String> >::const_iterator iter;
       G4double* wPointer=0;
       for (iter = wMap.begin(); iter != wMap.end(); ++iter)
 	{

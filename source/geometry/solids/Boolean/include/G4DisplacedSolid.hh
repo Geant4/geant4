@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.13 2002/10/29 14:13:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DisplacedSolid.hh,v 1.14 2003/06/16 16:53:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4DisplacedSolid
@@ -134,7 +134,7 @@ class G4DisplacedSolid : public G4VSolid
     void  SetObjectTranslation(const G4ThreeVector&); 
       // Get/Set the rotation/translation, as applied to the object.
 
-    G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    std::ostream& StreamInfo(std::ostream& os) const;
 
   public:  // without description
 

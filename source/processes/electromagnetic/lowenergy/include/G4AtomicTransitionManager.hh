@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.hh,v 1.2 ????
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -51,7 +51,7 @@
 #include "G4FluoTransition.hh"
 #include "G4AtomicShell.hh"
 // #include "g4std/map"
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 
 // This class is a singleton
@@ -120,11 +120,11 @@ private:
   
   // the first element of the map is the atomic number Z.
   // the second element is a vector of G4AtomicShell*.
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> > shellTable;
+  std::map<G4int,std::vector<G4AtomicShell*>,std::less<G4int> > shellTable;
   
   // the first element of the map is the atomic number Z.
   // the second element is a vector of G4AtomicTransition*.
-  G4std::map<G4int,G4std::vector<G4FluoTransition*>,G4std::less<G4int> > transitionTable;
+  std::map<G4int,std::vector<G4FluoTransition*>,std::less<G4int> > transitionTable;
  
   // since Augereffect data r stored as a table in G4AugerData, we have here a pointer to an element of that class itself.
 

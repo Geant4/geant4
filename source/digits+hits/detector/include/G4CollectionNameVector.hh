@@ -21,17 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollectionNameVector.hh,v 1.2 2001/07/11 09:58:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4CollectionNameVector.hh,v 1.3 2003/06/16 16:50:09 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4CollectionNameVector_H 
 #define G4CollectionNameVector_H 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 
-class G4CollectionNameVector : public G4std::vector<G4String>
+class G4CollectionNameVector : public std::vector<G4String>
 {
   public:
     G4CollectionNameVector() {;}

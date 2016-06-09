@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DigiManager.hh,v 1.6 2001/07/11 10:08:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DigiManager.hh,v 1.7 2003/06/16 17:12:46 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4DigiManager_h
@@ -38,7 +38,7 @@ class G4DMmessenger;
 class G4RunManager;
 class G4SDManager;
 //#include "g4rw/tpordvec.h"
-#include "g4std/vector"
+#include <vector>
 
 // class description:
 //
@@ -102,7 +102,7 @@ class G4DigiManager
   private: 
       static G4DigiManager * fDManager;
       G4int verboseLevel;
-      G4std::vector<G4VDigitizerModule*> DMtable;
+      std::vector<G4VDigitizerModule*> DMtable;
       G4DCtable* DCtable;
       G4DMmessenger* theMessenger;
       G4RunManager* runManager;

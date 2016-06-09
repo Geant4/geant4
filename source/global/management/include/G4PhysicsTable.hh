@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.hh,v 1.11 2001/07/11 10:00:50 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PhysicsTable.hh,v 1.12 2003/06/06 16:17:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -52,16 +52,16 @@
 #ifndef G4PhysicsTable_h
 #define G4PhysicsTable_h 1
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4ios.hh"
 
 class G4PhysicsVector;
 
-class G4PhysicsTable : public G4std::vector<G4PhysicsVector*> 
+class G4PhysicsTable : public std::vector<G4PhysicsVector*> 
 {
 
-  typedef G4std::vector<G4PhysicsVector*> G4PhysCollection;
+  typedef std::vector<G4PhysicsVector*> G4PhysCollection;
 
  public: // with description
 
@@ -102,7 +102,7 @@ class G4PhysicsTable : public G4std::vector<G4PhysicsVector*>
   G4bool RetrievePhysicsTable(const G4String& filename, G4bool ascii=false);
     // Retrieves Physics from a file (returns false in case of failure).
 
-  friend G4std::ostream& operator<<(G4std::ostream& out, G4PhysicsTable& table);
+  friend std::ostream& operator<<(std::ostream& out, G4PhysicsTable& table);
 
  protected:
 

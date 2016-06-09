@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDigi.cc,v 1.2 2001/12/13 13:44:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: GammaRayTelDigi.cc,v 1.3 2003/05/30 15:09:00 flongo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -55,6 +55,7 @@ GammaRayTelDigi::~GammaRayTelDigi()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelDigi::GammaRayTelDigi(const GammaRayTelDigi& right)
+  :G4VDigi()
 {
   PlaneType = right.PlaneType; 
   PlaneNumber = right.PlaneNumber;
@@ -74,8 +75,8 @@ const GammaRayTelDigi& GammaRayTelDigi::operator=(const GammaRayTelDigi& right)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int GammaRayTelDigi::operator==(const GammaRayTelDigi& right) const
-{
-  return 0;
+{ 
+ return ((PlaneType==right.PlaneType)&&(PlaneNumber==right.PlaneNumber)&&(StripNumber==right.StripNumber)); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

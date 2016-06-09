@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.5 2003/04/24 14:51:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.10 2003/06/16 17:00:16 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 // --------------------------------------------------------------
 //
@@ -33,6 +33,11 @@
 //
 // Modifications:
 // 24.04.2003 V.Ivanchenko - Cut per region mfpt
+// 20.05.2003 MGP          - Removed compilation warnings
+//                           Restored NotForced in GetMeanFreePath
+// 23.05.2003 L.Pandola    - Bug fixed. G4double cast to elements of
+//                           ebins vector (is it necessary?)
+// 23.05.2003 MGP          - Removed memory leak (fix in destructor)
 //
 //----------------------------------------------------------------
 
@@ -67,7 +72,7 @@ G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
   theMeanFreePath(0),
   energySpectrum(0)
 {
-  materialAngularData.clear();
+  // materialAngularData.clear();
   cutForPhotons = 0.;
   verboseLevel = 0;
   LoadAngularData();
@@ -76,9 +81,19 @@ G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
 
 G4PenelopeBremsstrahlung::~G4PenelopeBremsstrahlung()
 {
-  if(crossSectionHandler) delete crossSectionHandler;
-  if(energySpectrum) delete energySpectrum;
-  if(theMeanFreePath) delete theMeanFreePath;
+  delete crossSectionHandler;
+  delete energySpectrum;
+  delete theMeanFreePath;
+
+  for (size_t m=0; m<materialAngularData.size(); m++)
+    {
+      G4AngularData materialData = *(materialAngularData[m]);
+      for (size_t i=0; i<materialData.size(); i++)
+      {
+	delete materialData[i];
+      }
+      delete &materialData;
+    }
 }
 
 
@@ -92,46 +107,48 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   cutForSecondaryPhotons.clear();
 
   // Create and fill BremsstrahlungParameters once
-  if( energySpectrum != 0 ) delete energySpectrum;
+  if ( energySpectrum != 0 ) delete energySpectrum;
   //grid of reduced energy bins for photons  
- 
-  G4DataVector ebins;
-  ebins.push_back(1.0e-12);
-  ebins.push_back(0.05);
-  ebins.push_back(0.075);
-  ebins.push_back(0.1);
-  ebins.push_back(0.125);
-  ebins.push_back(0.15);
-  ebins.push_back(0.2);
-  ebins.push_back(0.25);
-  ebins.push_back(0.3);
-  ebins.push_back(0.35);
-  ebins.push_back(0.40);
-  ebins.push_back(0.45);
-  ebins.push_back(0.50);
-  ebins.push_back(0.55);
-  ebins.push_back(0.60);
-  ebins.push_back(0.65);
-  ebins.push_back(0.70);
-  ebins.push_back(0.75);
-  ebins.push_back(0.80);
-  ebins.push_back(0.85);
-  ebins.push_back(0.90);
-  ebins.push_back(0.925);
-  ebins.push_back(0.95);
-  ebins.push_back(0.97);
-  ebins.push_back(0.99);
-  ebins.push_back(0.995);
-  ebins.push_back(0.999);
-  ebins.push_back(0.9995);  
-  ebins.push_back(0.9999);
-  ebins.push_back(0.99995);
-  ebins.push_back(0.99999);
-  ebins.push_back(1.0);
+  
+  G4DataVector eBins;
+
+  //G4double value;
+  eBins.push_back(1.0e-12);
+  eBins.push_back(0.05);
+  eBins.push_back(0.075);
+  eBins.push_back(0.1);
+  eBins.push_back(0.125);
+  eBins.push_back(0.15);
+  eBins.push_back(0.2);
+  eBins.push_back(0.25);
+  eBins.push_back(0.3);
+  eBins.push_back(0.35);
+  eBins.push_back(0.40);
+  eBins.push_back(0.45);
+  eBins.push_back(0.50);
+  eBins.push_back(0.55);
+  eBins.push_back(0.60);
+  eBins.push_back(0.65);
+  eBins.push_back(0.70);
+  eBins.push_back(0.75);
+  eBins.push_back(0.80);
+  eBins.push_back(0.85);
+  eBins.push_back(0.90);
+  eBins.push_back(0.925);
+  eBins.push_back(0.95);
+  eBins.push_back(0.97);
+  eBins.push_back(0.99);
+  eBins.push_back(0.995);
+  eBins.push_back(0.999);
+  eBins.push_back(0.9995);  
+  eBins.push_back(0.9999);
+  eBins.push_back(0.99995);
+  eBins.push_back(0.99999);
+  eBins.push_back(1.0);
 
  
   const G4String dataName("/penelope/br-sp-pen.dat");
-  energySpectrum = new G4eBremsstrahlungSpectrum(ebins,dataName);
+  energySpectrum = new G4eBremsstrahlungSpectrum(eBins,dataName);
  
   //the shape of the energy spectrum for positron is the same used for the electrons, 
   //as the differential cross section is scaled of a factor f(E,Z) which is independent 
@@ -175,7 +192,7 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   // Build loss table for Bremsstrahlung
 
   BuildLossTable(aParticleType);
-
+ 
   if(verboseLevel > 0) {
     G4cout << "The loss table is built"
            << G4endl;
@@ -191,8 +208,7 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
 
     RecorderOfPositronProcess[CounterOfPositronProcess] = (*this).theLossTable;
     CounterOfPositronProcess++;
-  }
-
+  } 
   // Build mean free path data using cut values
 
   if( theMeanFreePath != 0 ) delete theMeanFreePath;
@@ -211,8 +227,7 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   if(verboseLevel > 0) {
     G4cout << "G4PenelopeBremsstrahlung::BuildPhysicsTable end"
            << G4endl;
-      }
- 
+  }
 }
 
 
@@ -220,7 +235,6 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
 {
   // Build table for energy loss due to soft brems
   // the tables are built for *MATERIALS* binning is taken from LowEnergyLoss
-
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
   size_t totBin = GetNbinEloss();
@@ -254,7 +268,7 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
     const G4Material* material= couple->GetMaterial();
     // the cut cannot be below lowest limit
     G4double tCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[j];
-    tCut = G4std::min(highKineticEnergy, tCut);
+    tCut = std::min(highKineticEnergy, tCut);
     cutForSecondaryPhotons.push_back(tCut);
    
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -304,7 +318,7 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
 
 
 G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
-							   const G4Step& step)
+							  const G4Step& step)
 {
   aParticleChange.Initialize(track);
 
@@ -319,7 +333,6 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
      return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 
   G4int Z = crossSectionHandler->SelectRandomAtom(couple, kineticEnergy);
-
   G4double tGamma = energySpectrum->SampleEnergy(Z, tCut, kineticEnergy, kineticEnergy);
   //bisogna recuperare il puntatore
   G4AngularData* elementData =  materialAngularData[index]; //punta al vettore che contiene i puntatori del materiale
@@ -340,11 +353,11 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
   }while(Z_try != Z);
  
   G4PenelopeBremsstrahlungAngular* finalAngularData = (*elementData)[indexEl];
-
+  
   // Sample gamma angle (Z - axis along the parent particle).
   G4double dirZ = finalAngularData->ExtractCosTheta(kineticEnergy,tGamma);
 
-  //G4std::ofstream fff("prova.dat",G4std::ios::app);
+  //std::ofstream fff("prova.dat",std::ios::app);
   //fff << dirZ << G4endl;
   //fff.close();
 
@@ -412,10 +425,10 @@ G4bool G4PenelopeBremsstrahlung::IsApplicable(const G4ParticleDefinition& partic
 
 
 G4double G4PenelopeBremsstrahlung::GetMeanFreePath(const G4Track& track,
-						    G4double previousStepSize,
+						   G4double, // previousStepSize
 						    G4ForceCondition* cond)
 {
-  //*cond = NotForced;
+  *cond = NotForced;
   G4int index = (track.GetMaterialCutsCouple())->GetIndex();
   const G4VEMDataSet* data = theMeanFreePath->GetComponent(index);
   G4double meanFreePath = data->FindValue(track.GetKineticEnergy());

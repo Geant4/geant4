@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.16 2001/08/14 18:34:47 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VViewer.cc,v 1.17 2003/06/16 17:14:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  27th March 1996
@@ -31,7 +31,7 @@
 #include "G4VViewer.hh"
 
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4VisManager.hh"
 #include "G4VGraphicsSystem.hh"
@@ -49,8 +49,8 @@ fNeedKernelVisit (true)
 {
   if (name == "") {
     char charname [50];
-    G4std::ostrstream ost (charname, 50);
-    ost << fSceneHandler.GetName () << '-' << fViewId << G4std::ends;
+    std::ostrstream ost (charname, 50);
+    ost << fSceneHandler.GetName () << '-' << fViewId << std::ends;
     fName = charname;
   }
   else {
@@ -134,7 +134,7 @@ void G4VViewer::SetViewParameters (const G4ViewParameters& vp) {
   fModified = true;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4VViewer& v) {
+std::ostream& operator << (std::ostream& os, const G4VViewer& v) {
   os << "View " << v.fName << ":\n";
   os << v.fVP;
   return os;

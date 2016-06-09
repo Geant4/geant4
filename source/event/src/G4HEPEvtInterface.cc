@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtInterface.cc,v 1.7 2001/11/20 23:21:41 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HEPEvtInterface.cc,v 1.9 2003/06/16 16:50:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------------
 
-#include "g4std/strstream"
+#include "G4Types.hh"
+#include <strstream>
 
 #include "G4ios.hh"
 #include "G4HEPEvtInterface.hh"

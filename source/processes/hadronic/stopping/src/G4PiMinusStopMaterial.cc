@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopMaterial.cc,v 1.10 2002/12/12 19:18:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PiMinusStopMaterial.cc,v 1.11 2003/06/16 17:12:10 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -42,7 +42,7 @@
 
 #include "G4PiMinusStopMaterial.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 #include "globals.hh"
 #include "Randomize.hh"
@@ -86,7 +86,7 @@ G4PiMinusStopMaterial::~G4PiMinusStopMaterial()
   delete _distributionAngle;
 }
 
-G4std::vector<G4ParticleDefinition*>* G4PiMinusStopMaterial::DefinitionVector()
+std::vector<G4ParticleDefinition*>* G4PiMinusStopMaterial::DefinitionVector()
 {
 
   _definitions->push_back(G4Neutron::Neutron());
@@ -101,7 +101,7 @@ G4std::vector<G4ParticleDefinition*>* G4PiMinusStopMaterial::DefinitionVector()
 
 }
 
-G4std::vector<G4LorentzVector*>* G4PiMinusStopMaterial::P4Vector(const G4double binding,
+std::vector<G4LorentzVector*>* G4PiMinusStopMaterial::P4Vector(const G4double binding,
 								      const G4double massNucleus)
 {
 

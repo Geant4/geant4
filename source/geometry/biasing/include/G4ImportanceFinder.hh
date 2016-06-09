@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ImportanceFinder.hh,v 1.6 2002/10/14 12:36:00 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4ImportanceFinder

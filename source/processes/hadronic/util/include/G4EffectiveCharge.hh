@@ -121,7 +121,7 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
   if( ionCharge < 2.5 ) 
   {
     G4double theHeMassAMU(4.0026);
-    G4double e = log(G4std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ; 
+    G4double e = log(std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ; 
     G4double x = c[0] ;
     G4double y = 1.0 ;
     for (G4int i=1; i<6; i++) 
@@ -160,7 +160,7 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
                             0.38157*y - 0.008983*y*y ) ;     
     if( q < 0.0 ) q = 0.0 ;
 
-    G4double s = 7.6 -  log(G4std::max(1.0, reducedEnergy/keV)) ; 
+    G4double s = 7.6 -  log(std::max(1.0, reducedEnergy/keV)) ; 
     s = 1.0 + ( 0.18 + 0.0015 * z ) * exp( -s*s )/ (ionCharge*ionCharge) ;
 
     // Screen length according to

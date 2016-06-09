@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.hh,v 1.6 2002/11/19 18:03:14 santin Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: XrayTelAnalysis.hh,v 1.7 2003/06/16 16:46:56 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copy of his UserAnalyser class)
@@ -136,7 +136,7 @@ private:
   G4String histFileName;
   G4String histFileType;
 
-  //  G4std::ofstream asciiFile;
+  //  std::ofstream asciiFile;
 
 };
 

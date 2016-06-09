@@ -28,7 +28,7 @@
 
 G4double G4TripathiCrossSection::
 GetCrossSection(const G4DynamicParticle* aPart, 
-                const G4Element*anEle, G4double aTemperature)
+                const G4Element*anEle, G4double )
 {
   G4double result = 0;
   

@@ -27,7 +27,7 @@
 #include "CCalMagneticField.hh"
 #include "CCalutils.hh"
 #include "G4FieldManager.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 //#define ddebug
 //#define debug
@@ -41,7 +41,7 @@ CCalMagneticField::CCalMagneticField(const G4String &filename) :
   G4cout << " ==> Opening file " << filename << " to read magnetic field..."
        << G4endl;
   G4String pathName = getenv("CCAL_GLOBALPATH");
-  G4std::ifstream is;
+  std::ifstream is;
   bool ok = openGeomFile(is, pathName, filename);
 
   if (ok) {

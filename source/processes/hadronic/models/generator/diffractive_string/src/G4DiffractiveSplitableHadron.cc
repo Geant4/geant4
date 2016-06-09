@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc,v 1.8 2002/12/12 19:17:26 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DiffractiveSplitableHadron.cc,v 1.10 2003/06/16 17:06:55 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 // ------------------------------------------------------------
@@ -67,7 +67,7 @@ G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron(const G4VKineticNucle
 G4DiffractiveSplitableHadron::~G4DiffractiveSplitableHadron()
 {}
 
-const G4DiffractiveSplitableHadron & G4DiffractiveSplitableHadron::operator=(const G4DiffractiveSplitableHadron &right)
+const G4DiffractiveSplitableHadron & G4DiffractiveSplitableHadron::operator=(const G4DiffractiveSplitableHadron &)
 {
   G4Exception("G4DiffractiveSplitableHadron::operator= meant to not be accessable");
   return *this;
@@ -122,8 +122,8 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds(G4int PDGcode,G4int * aEnd, 
 	   G4int heavy=  absPDGcode/ 100;
 	   G4int light= (absPDGcode %100)/10;
 	   
-//	    G4int anti= pow(-1 , G4std::max( heavy, light));
-	    G4int anti= 1 -2 * ( G4std::max( heavy, light ) % 2 );
+//	    G4int anti= pow(-1 , std::max( heavy, light));
+	    G4int anti= 1 -2 * ( std::max( heavy, light ) % 2 );
 	    if (PDGcode < 0 ) anti *=-1;
 	    
 	    heavy *= anti;
@@ -196,8 +196,8 @@ G4int G4DiffractiveSplitableHadron::Diquark(G4int aquark,G4int bquark,G4int Spin
 {
 	G4int diquarkPDG;
 	
-	diquarkPDG = G4std::max( abs(aquark), abs(bquark) )*1000 +
-	             G4std::min( abs(aquark), abs(bquark) )*100  +
+	diquarkPDG = std::max( abs(aquark), abs(bquark) )*1000 +
+	             std::min( abs(aquark), abs(bquark) )*100  +
 	             2*Spin + 1;
 	return ( aquark > 0 && bquark > 0 ) ?  diquarkPDG : -1*diquarkPDG;
 }	      

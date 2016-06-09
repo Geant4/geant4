@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.12 2003/04/02 16:59:19 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProcessPlacer.cc,v 1.13 2003/04/23 09:44:34 dressel Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -132,7 +132,7 @@ G4ProcessManager *G4ProcessPlacer::GetProcessManager()
   theParticleIterator = theParticleTable->GetIterator();
   // -------------------------------------------------------
   G4ProcessManager *processmanager = 0;
-  // add parallel transport processe ---------------------------
+  // find process manager ---------------------------
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();

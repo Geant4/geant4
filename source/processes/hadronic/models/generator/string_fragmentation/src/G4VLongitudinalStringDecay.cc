@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.24 2002/06/18 06:44:25 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.26 2003/06/16 17:09:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -110,13 +110,13 @@ G4VLongitudinalStringDecay::~G4VLongitudinalStringDecay()
 
 // Operators
 
-//const  & G4VLongitudinalStringDecay::operator=(const G4VLongitudinalStringDecay &right)
+//const  & G4VLongitudinalStringDecay::operator=(const G4VLongitudinalStringDecay &)
 //    {
 //    }
 
 //----------------------------------------------------------------------------------------------------------
 
-int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &right) const
+int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &) const
     {
 	G4Exception("G4VLongitudinalStringDecay::operator== forbidden");
 	return false;
@@ -124,7 +124,7 @@ int G4VLongitudinalStringDecay::operator==(const G4VLongitudinalStringDecay &rig
 
 //----------------------------------------------------------------------------------------------------------
 
-int G4VLongitudinalStringDecay::operator!=(const G4VLongitudinalStringDecay &right) const
+int G4VLongitudinalStringDecay::operator!=(const G4VLongitudinalStringDecay &) const
     {
 	G4Exception("G4VLongitudinalStringDecay::operator!= forbidden");
 	return true;
@@ -150,7 +150,7 @@ G4VLongitudinalStringDecay::pDefPair G4VLongitudinalStringDecay::CreatePartonPai
       G4int q2  = SampleQuarkFlavor();
       G4int spin = (q1 != q2 && G4UniformRand() <= 0.5)? 1 : 3;
                                      //   convention: quark with higher PDG number is first
-      G4int PDGcode = (G4std::max(q1,q2) * 1000 + G4std::min(q1,q2) * 100 + spin) * NeedParticle;
+      G4int PDGcode = (std::max(q1,q2) * 1000 + std::min(q1,q2) * 100 + spin) * NeedParticle;
       return pDefPair (FindParticle(-PDGcode),FindParticle(PDGcode));
       
 
@@ -258,8 +258,8 @@ G4ParticleDefinition *G4VLongitudinalStringDecay::DiQuarkSplitup(
       pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
       //... Build new Diquark
       G4int QuarkEncoding=QuarkPair.second->GetPDGEncoding();
-      G4int i10  = G4std::max(abs(QuarkEncoding), abs(stableQuarkEncoding));
-      G4int i20  = G4std::min(abs(QuarkEncoding), abs(stableQuarkEncoding));
+      G4int i10  = std::max(abs(QuarkEncoding), abs(stableQuarkEncoding));
+      G4int i20  = std::min(abs(QuarkEncoding), abs(stableQuarkEncoding));
       G4int spin = (i10 != i20 && G4UniformRand() <= 0.5)? 1 : 3;
       G4int NewDecayEncoding = -1*IsParticle*(i10 * 1000 + i20 * 100 + spin);
       created = FindParticle(NewDecayEncoding);
@@ -447,9 +447,9 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::FragmentString(const G4Excited
 	{
 		G4FragmentingString *currentString=new G4FragmentingString(*theStringInCMS);
 
-		G4std::for_each(LeftVector->begin(), LeftVector->end(), DeleteKineticTrack());
+		std::for_each(LeftVector->begin(), LeftVector->end(), DeleteKineticTrack());
 		LeftVector->clear();
-		G4std::for_each(RightVector->begin(), RightVector->end(), DeleteKineticTrack());
+		std::for_each(RightVector->begin(), RightVector->end(), DeleteKineticTrack());
 		RightVector->clear();
 		
 		inner_sucess=true;  // set false on failure..
@@ -486,9 +486,9 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::FragmentString(const G4Excited
 	
 	if ( ! success )
 	{
-		G4std::for_each(LeftVector->begin(), LeftVector->end(), DeleteKineticTrack());
+		std::for_each(LeftVector->begin(), LeftVector->end(), DeleteKineticTrack());
 		LeftVector->clear();
-		G4std::for_each(RightVector->begin(), RightVector->end(), DeleteKineticTrack());
+		std::for_each(RightVector->begin(), RightVector->end(), DeleteKineticTrack());
 		delete RightVector;
 		return LeftVector;
 	}
@@ -740,7 +740,7 @@ void G4VLongitudinalStringDecay::SetSpinThreeHalfBarionProbability(G4double aVal
 
 //----------------------------------------------------------------------------------------------------------
 
-void G4VLongitudinalStringDecay::SetScalarMesonMixings(G4std::vector<G4double> aVector)
+void G4VLongitudinalStringDecay::SetScalarMesonMixings(std::vector<G4double> aVector)
 {
 	if ( PastInitPhase ) {
 		G4Exception("4VLongitudinalStringDecay::SetScalarMesonMixings after FragmentString() not allowed");
@@ -761,7 +761,7 @@ void G4VLongitudinalStringDecay::SetScalarMesonMixings(G4std::vector<G4double> a
 
 //----------------------------------------------------------------------------------------------------------
 
-void G4VLongitudinalStringDecay::SetVectorMesonMixings(G4std::vector<G4double> aVector)
+void G4VLongitudinalStringDecay::SetVectorMesonMixings(std::vector<G4double> aVector)
 {
 	if ( PastInitPhase ) {
 		G4Exception("4VLongitudinalStringDecay::SetVectorMesonMixings after FragmentString() not allowed");

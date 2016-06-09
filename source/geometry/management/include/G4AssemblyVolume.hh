@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.hh,v 1.8 2002/09/10 16:59:44 radoone Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4AssemblyVolume.hh,v 1.9 2003/06/16 16:51:46 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Class G4AssemblyVolume
@@ -47,7 +47,7 @@
 #ifndef G4_ASSEMBLYVOLUME_H
 #define G4_ASSEMBLYVOLUME_H 
 
-#include "g4std/vector"
+#include <vector>
 #include "G4Transform3D.hh"
 #include "G4AssemblyTriplet.hh"
 
@@ -134,12 +134,12 @@ class G4AssemblyVolume
 
  private:    
 
-  G4std::vector<G4AssemblyTriplet> fTriplets;
+  std::vector<G4AssemblyTriplet> fTriplets;
     //
     // Participating volumes represented as a vector of
     // <logical volume, translation, rotation>.
 
-  G4std::vector<G4VPhysicalVolume*> fPVStore;
+  std::vector<G4VPhysicalVolume*> fPVStore;
     //
     // We need to keep list of physical volumes created by MakeImprint() method
     // in order to be able to cleanup the objects when not needed anymore.

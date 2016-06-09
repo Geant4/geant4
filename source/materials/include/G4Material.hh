@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.21 2002/08/06 15:14:29 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Material.hh,v 1.22 2003/06/16 16:56:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 // class description
@@ -84,7 +84,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4Element.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4IonisParamMat.hh"
@@ -223,9 +223,9 @@ public:  // with description
   //
   //printing methods
   //
-  friend G4std::ostream& operator<<(G4std::ostream&, G4Material*);    
-  friend G4std::ostream& operator<<(G4std::ostream&, G4Material&);    
-  friend G4std::ostream& operator<<(G4std::ostream&, G4MaterialTable);
+  friend std::ostream& operator<<(std::ostream&, G4Material*);    
+  friend std::ostream& operator<<(std::ostream&, G4Material&);    
+  friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
     
 public:  // without description 
        

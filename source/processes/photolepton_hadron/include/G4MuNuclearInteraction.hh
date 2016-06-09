@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4MuNuclearInteraction.hh,v 1.4 2001/07/11 10:08:25 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // $Id: 
 // ------------------------------------------------------------

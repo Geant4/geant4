@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-01 $
-                                (30-Apr-2003)
+ Geant4 version $Name: geant4-05-02 $
+                                (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -168,20 +168,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=23.77s Real=40.12s Sys=2.87s
+  User=23.48s Real=32.28s Sys=2.71s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   14.36%       5.72%             0-> 1.11 radl:   14.36%     5.72% 
-    1.11-> 2.22 radl:   26.26%      10.79%             0-> 2.22 radl:   40.62%    13.37% 
-    2.22-> 3.33 radl:   22.19%       9.03%             0-> 3.33 radl:   62.81%    15.91% 
-    3.33-> 4.44 radl:   13.75%       7.33%             0-> 4.44 radl:   76.56%    14.26% 
-    4.44-> 5.55 radl:    8.50%       7.31%             0-> 5.55 radl:   85.06%    10.05% 
-    5.55-> 6.66 radl:    5.11%       5.66%             0-> 6.66 radl:   90.17%     6.73% 
-    6.66-> 7.77 radl:    2.43%       3.31%             0-> 7.77 radl:   92.60%     5.49% 
-    7.77-> 8.88 radl:    1.46%       2.59%             0-> 8.88 radl:   94.06%     3.94% 
-    8.88-> 9.99 radl:    0.77%       2.44%             0-> 9.99 radl:   94.83%     3.01% 
+    0.00-> 1.11 radl:   14.59%       6.17%             0-> 1.11 radl:   14.59%     6.17% 
+    1.11-> 2.22 radl:   23.22%      10.06%             0-> 2.22 radl:   37.82%    12.90% 
+    2.22-> 3.33 radl:   21.18%      10.07%             0-> 3.33 radl:   59.00%    16.67% 
+    3.33-> 4.44 radl:   15.27%       7.88%             0-> 4.44 radl:   74.27%    15.55% 
+    4.44-> 5.55 radl:   10.03%       6.62%             0-> 5.55 radl:   84.30%    13.02% 
+    5.55-> 6.66 radl:    5.16%       5.60%             0-> 6.66 radl:   89.46%    10.50% 
+    6.66-> 7.77 radl:    2.44%       4.09%             0-> 7.77 radl:   91.89%     8.64% 
+    7.77-> 8.88 radl:    1.33%       3.36%             0-> 8.88 radl:   93.23%     6.18% 
+    8.88-> 9.99 radl:    0.88%       2.56%             0-> 9.99 radl:   94.10%     4.76% 
 
 
 
@@ -189,21 +189,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   68.50%       9.87%             0-> 0.11 radl:   68.50%     9.87% 
-    0.11-> 0.22 radl:   14.54%       7.51%             0-> 0.22 radl:   83.05%     6.59% 
-    0.22-> 0.33 radl:    5.46%       3.40%             0-> 0.33 radl:   88.51%     5.19% 
-    0.33-> 0.44 radl:    3.16%       2.72%             0-> 0.44 radl:   91.67%     4.03% 
-    0.44-> 0.56 radl:    1.89%       2.15%             0-> 0.56 radl:   93.55%     3.36% 
-    0.56-> 0.67 radl:    1.27%       1.12%             0-> 0.67 radl:   94.83%     3.01% 
+    0.00-> 0.11 radl:   67.07%      10.66%             0-> 0.11 radl:   67.07%    10.66% 
+    0.11-> 0.22 radl:   15.01%       6.21%             0-> 0.22 radl:   82.07%     8.48% 
+    0.22-> 0.33 radl:    5.96%       4.27%             0-> 0.33 radl:   88.04%     6.95% 
+    0.33-> 0.44 radl:    3.02%       2.50%             0-> 0.44 radl:   91.06%     5.77% 
+    0.44-> 0.56 radl:    1.99%       1.99%             0-> 0.56 radl:   93.05%     5.04% 
+    0.56-> 0.67 radl:    1.05%       0.87%             0-> 0.67 radl:   94.10%     4.76% 
 
                               SUMMARY
-                         energy deposit :   94.83 % E0 +-    3.01 % E0
-                         charged traklen:   13.83 radl +-    0.44 radl
-                         neutral traklen:  204.03 radl +-   17.83 radl
+                         energy deposit :   94.10 % E0 +-    4.76 % E0
+                         charged traklen:   13.74 radl +-    0.70 radl
+                         neutral traklen:  201.02 radl +-   21.34 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 341185374, 166917226
+ Current couple of seeds = 252860250, 1878946438
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

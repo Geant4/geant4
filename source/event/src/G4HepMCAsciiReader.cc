@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   G4HepMCAsciiReader.cc
-//   $Id: G4HepMCAsciiReader.cc,v 1.2 2002/12/03 14:44:32 gcosmo Exp $
+//   $Id: G4HepMCAsciiReader.cc,v 1.3 2003/06/16 16:50:34 gunter Exp $
 //
 // ====================================================================
 
@@ -55,7 +55,7 @@ void G4HepMCAsciiReader::Initialize()
 /////////////////////////////////////
 {
   from.close();
-  from.open(filename.c_str(), G4std::ios::in);
+  from.open(filename.c_str(), std::ios::in);
 }
 
 /////////////////////////////////////////////////////////

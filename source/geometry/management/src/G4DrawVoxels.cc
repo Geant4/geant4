@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4DrawVoxels.cc,v 1.15 2002/04/19 08:20:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4DrawVoxels

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidTorus.cc,v 1.6 2002/11/06 23:29:40 radoone Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4BREPSolidTorus.cc,v 1.7 2003/06/16 16:52:51 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -63,7 +63,7 @@ G4BREPSolidTorus::~G4BREPSolidTorus()
 }
 
 // Streams solid contents to output stream.
-G4std::ostream& G4BREPSolidTorus::StreamInfo(G4std::ostream& os) const
+std::ostream& G4BREPSolidTorus::StreamInfo(std::ostream& os) const
 {
   G4BREPSolid::StreamInfo( os )
   << "\n origin:       " << constructorParams.origin

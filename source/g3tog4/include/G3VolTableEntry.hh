@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTableEntry.hh,v 1.7 2001/11/08 16:07:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3VolTableEntry.hh,v 1.8 2003/06/16 16:50:45 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------
 // Class description:
@@ -69,7 +69,7 @@
 #include "globals.hh"
 #include "G3Pos.hh"
 #include "G3Division.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4LogicalVolume;
 class G4Material;
@@ -135,7 +135,7 @@ class G3VolTableEntry
       // return the first mother - to be removed
     G3VolTableEntry* GetClone(G4int i);
     G3VolTableEntry* GetMasterClone();
-    G4std::vector<G3VolTableEntry*>* GetOverlaps();
+    std::vector<G3VolTableEntry*>* GetOverlaps();
 
   private:
     G4String fVname;
@@ -147,11 +147,11 @@ class G3VolTableEntry
     G4LogicalVolume* fLV;
     G4bool fHasNegPars;
     G4bool fHasMANY;
-    G4std::vector<G3VolTableEntry*> fDaughters;
-    G4std::vector<G3VolTableEntry*> fMothers;
-    G4std::vector<G3VolTableEntry*> fClones;
-    G4std::vector<G3VolTableEntry*> fOverlaps;
-    G4std::vector<G3Pos*> fG3Pos;
+    std::vector<G3VolTableEntry*> fDaughters;
+    std::vector<G3VolTableEntry*> fMothers;
+    std::vector<G3VolTableEntry*> fClones;
+    std::vector<G3VolTableEntry*> fOverlaps;
+    std::vector<G3Pos*> fG3Pos;
     G3Division*  fDivision;
 };
 

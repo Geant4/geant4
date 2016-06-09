@@ -32,15 +32,15 @@
 #include "G4CascadSpecialFunctions.hh"
 #include "G4ElementaryParticleCollider.hh"
 
-#include "g4std/vector"
+#include <vector>
 
 class G4InuclNuclei;
 
 using namespace G4InuclSpecialFunctions;
 using namespace G4CascadSpecialFunctions;
 
-typedef G4std::pair<G4InuclElementaryParticle, G4double> partner;
-typedef G4std::vector<partner> partners;
+typedef std::pair<G4InuclElementaryParticle, G4double> partner;
+typedef std::vector<partner> partners;
 
 class G4NucleiModel {
 
@@ -99,7 +99,7 @@ public:
     return izone < number_of_zones ? zone_potentials[ip0][izone] : 0.0;
   };
 
-  G4std::vector<G4CascadParticle> 
+  std::vector<G4CascadParticle> 
   generateParticleFate(G4CascadParticle& cparticle,
 		       G4ElementaryParticleCollider* theElementaryParticleCollider); 
 
@@ -125,10 +125,10 @@ public:
 
   G4CascadParticle initializeCascad(G4InuclElementaryParticle* particle);
 
-  G4std::pair<G4std::vector<G4CascadParticle>, G4std::vector<G4InuclElementaryParticle> > initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
+  std::pair<std::vector<G4CascadParticle>, std::vector<G4InuclElementaryParticle> > initializeCascad(G4InuclNuclei* bullet, G4InuclNuclei* target);
 
-  G4std::pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
-    return G4std::pair<G4int, G4int>(current_nucl1, current_nucl2);
+  std::pair<G4int, G4int> getTypesOfNucleonsInvolved() const {
+    return std::pair<G4int, G4int>(current_nucl1, current_nucl2);
   };
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
@@ -137,7 +137,7 @@ public:
 
 private: 
 G4int verboseLevel;
-  G4bool passFermi(const G4std::vector<G4InuclElementaryParticle>& particles, 
+  G4bool passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
 
   void boundaryTransition(G4CascadParticle& cparticle);
@@ -159,15 +159,15 @@ G4int verboseLevel;
 
   G4double getRatio(G4int ip) const;
 
-  G4std::vector<G4std::vector<G4double> > nucleon_densities;
+  std::vector<std::vector<G4double> > nucleon_densities;
 
-  G4std::vector<G4std::vector<G4double> > zone_potentials;
+  std::vector<std::vector<G4double> > zone_potentials;
 
-  G4std::vector<G4std::vector<G4double> > fermi_momenta;
+  std::vector<std::vector<G4double> > fermi_momenta;
 
-  G4std::vector<G4double> zone_radii;
+  std::vector<G4double> zone_radii;
 
-  G4std::vector<G4double> binding_energies;
+  std::vector<G4double> binding_energies;
 
   G4double nuclei_radius;
 

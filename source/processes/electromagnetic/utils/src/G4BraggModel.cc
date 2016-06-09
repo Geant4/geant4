@@ -38,6 +38,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 04-06-03 Fix compilation warnings (V.Ivanchenko)
 
 // Class Description:
 //
@@ -106,7 +107,7 @@ G4double G4BraggModel::LowEnergyLimit(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition* p,
+G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition*,
                                     const G4MaterialCutsCouple* couple)
 {
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
@@ -169,7 +170,7 @@ G4double G4BraggModel::CrossSection(const G4Material* material,
 {
 
   G4double cross = 0.0;
-  G4double tmax = G4std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
+  G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   if(cutEnergy < tmax) {
     
     G4double x      = cutEnergy/tmax;
@@ -195,7 +196,7 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
 {
   G4double tmax = MaxSecondaryEnergy(dp);
   G4double xmin = tmin/tmax;
-  G4double xmax = G4std::min(tmax, maxEnergy)/tmax;
+  G4double xmax = std::min(tmax, maxEnergy)/tmax;
   if(xmin >= xmax) return 0;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
@@ -247,13 +248,13 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
+std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 
@@ -274,12 +275,12 @@ G4bool G4BraggModel::HasMaterial(const G4Material* material)
 
   // ICRU Report N49, 1993. Power's model for He.
   const size_t numberOfMolecula = 11 ;
-  static G4String name[numberOfMolecula] = {
+  static G4String molName[numberOfMolecula] = {
     "Al_2O_3",                 "CO_2",                      "CH_4",
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",
     "C_3H_8",                  "SiO_2",                     "H_2O",
-    "H_2O-Gas",                "Graphite" } ;      
-  
+    "H_2O-Gas",                "Graphite" } ;
+
   // Special treatment for water in gas state
   const G4State theState = material->GetState() ;
 
@@ -287,11 +288,11 @@ G4bool G4BraggModel::HasMaterial(const G4Material* material)
   if( theState == kStateGas && myFormula == chFormula) {
     chFormula = G4String("H_2O-Gas");
   }
-  
+
   // Search for the material in the table
   for (size_t i=0; i<numberOfMolecula; i++) {
-      if (chFormula == name[i]) {
-        SetMoleculaNumber(i) ;    
+      if (chFormula == molName[i]) {
+        SetMoleculaNumber(i) ;
 	return true ;
       }
   }
@@ -319,7 +320,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
     G4double T = kineticEnergy/(keV*protonMassAMU) ; 
 
      static G4double a[11][5] = {
-   {1.187E+1, 1.343E+1, 1.069E+4, 7.723E+2, 2.153E-2}, 
+   {1.187E+1, 1.343E+1, 1.069E+4, 7.723E+2, 2.153E-2},
    {7.802E+0, 8.814E+0, 8.303E+3, 7.446E+2, 7.966E-3}, 
    {7.294E+0, 8.284E+0, 5.010E+3, 4.544E+2, 8.153E-3}, 
    {8.646E+0, 9.800E+0, 7.066E+3, 4.581E+2, 9.383E-3}, 
@@ -328,7 +329,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
    {1.604E+1, 1.825E+1, 6.967E+3, 2.307E+3, 3.775E-2}, 
    {8.049E+0, 9.099E+0, 9.257E+3, 3.846E+2, 1.007E-2}, 
    {4.015E+0, 4.542E+0, 3.955E+3, 4.847E+2, 7.904E-3}, 
-   {4.571E+0, 5.173E+0, 4.346E+3, 4.779E+2, 8.572E-3}, 
+   {4.571E+0, 5.173E+0, 4.346E+3, 4.779E+2, 8.572E-3},
    {2.631E+0, 2.601E+0, 1.701E+3, 1.279E+3, 1.638E-2} };
       
 
@@ -480,7 +481,7 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
     // Free electron gas model
   } else if ( T < 10.0 ) { 
     fac = sqrt(T*0.1) ;
-    T =10.0 ;  
+    T =10.0 ;
   }
 
   // Main parametrisation
@@ -585,9 +586,9 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   const size_t numberOfMolecula = 53 ;
 
   // The coffecient from Table.4 of Ziegler & Manoyan
-  const G4double HeEff = 2.8735 ;    
+  const G4double HeEff = 2.8735 ;
   
-  static G4String name[numberOfMolecula] = {
+  static G4String nameOfMol[numberOfMolecula] = {
     "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
     "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
     "C_6H_6",    "C_4H_10",    "C_4H_6",   "C_4H_8O",            "CCl_4",
@@ -600,9 +601,9 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     "(C_3H_6)_N","(C_8H_8)_N", "C_3H_8",   "C_3H_6-Propylene",   "C_3H_6O",
     "C_3H_6S",   "C_4H_4S",    "C_7H_8"
   } ;
-    
+
   static G4double expStopping[numberOfMolecula] = {
-     66.1,  190.4, 258.7,  42.2, 141.5, 
+     66.1,  190.4, 258.7,  42.2, 141.5,
     210.9,  279.6, 198.8,  31.0, 267.5,
     122.8,  311.4, 260.3, 328.9, 391.3,
     206.6,  374.0, 422.0, 432.0, 398.0,
@@ -616,7 +617,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   } ;
 
   static G4double expCharge[numberOfMolecula] = {
-    HeEff, HeEff, HeEff,   1.0, HeEff, 
+    HeEff, HeEff, HeEff,   1.0, HeEff,
     HeEff, HeEff, HeEff,   1.0,   1.0,
       1.0, HeEff, HeEff, HeEff, HeEff,
     HeEff, HeEff, HeEff, HeEff, HeEff,
@@ -630,7 +631,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   } ;
 
   static G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
-    3.0,  7.0, 10.0,  4.0,  6.0,  
+    3.0,  7.0, 10.0,  4.0,  6.0,
     9.0, 12.0,  7.0,  4.0, 24.0,
     12.0, 14.0, 10.0, 13.0,  5.0,
     5.0, 14.0, 18.0, 17.0, 17.0,
@@ -645,9 +646,9 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
 
   // Search for the compaund in the table
   for (size_t i=0; i<numberOfMolecula; i++)
-    { 
-      if(chFormula == name[i]) { 
-        G4double exp125 = expStopping[i] * 
+    {
+      if(chFormula == nameOfMol[i]) {
+        G4double exp125 = expStopping[i] *
 	                  (material->GetTotNbOfAtomsPerVolume()) /
 	                  (expCharge[i] * numberOfAtomsPerMolecula[i]) ;
         SetExpStopPower125(exp125);

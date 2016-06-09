@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundNucleon.cc,v 1.2 2002/12/12 19:17:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPreCompoundNucleon.cc,v 1.5 2003/06/16 17:07:34 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
@@ -47,18 +47,18 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double A0 = (P*P+H*H+P-H)/4.0 - H/2.0;
   G4double A1 = A0 - P/2.0;
 
-  G4double E0 = G4std::max(0.0,U - A0);
+  G4double E0 = std::max(0.0,U - A0);
   if (E0 == 0.0) return 0.0;
-  G4double E1 = G4std::max(0.0,U - eKin - GetBindingEnergy() - A1);
+  G4double E1 = std::max(0.0,U - eKin - GetBindingEnergy() - A1);
 
-  // g = 0.595*a*A
-//  G4EvaporationLevelDensityParameter theLDP;
-  G4double g0 = 0.595*aFragment.GetA() * 
-      G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-//      theLDP.LevelDensityParameter(aFragment.GetA(),aFragment.GetZ(),U);
-  G4double g1 = 0.595*GetRestA() * 
-      G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-//      theLDP.LevelDensityParameter(GetRestA(),GetRestZ(),U);
+  // g = (6.0/pi2)*a*A
+  //  G4EvaporationLevelDensityParameter theLDP;
+  G4double g0 = (6.0/pi2)*aFragment.GetA() * 
+    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  //    theLDP.LevelDensityParameter(G4int(aFragment.GetA()),G4int(aFragment.GetZ()),U);
+  G4double g1 = (6.0/pi2)*GetRestA() * 
+    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+    //    theLDP.LevelDensityParameter(G4int(GetRestA()),G4int(GetRestZ()),U);
 
 
   G4double Probability = 2.0/(hbarc*hbarc*hbarc) * GetReducedMass() * 

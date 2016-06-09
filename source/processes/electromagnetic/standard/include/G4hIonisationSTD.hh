@@ -48,6 +48,9 @@
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 15-02-03 Add control on delta pointer (V.Ivanchenko)
+// 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
+// 16-06-03 ShortLived are not applicable any more (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -67,6 +70,7 @@
 #include "globals.hh"
 
 class G4Material;
+class G4VEmFluctuationModel;
 
 class G4hIonisationSTD : public G4VEnergyLossSTD
 {
@@ -82,7 +86,7 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&,
 			           G4double&,
 			           G4double&,
@@ -97,7 +101,7 @@ public:
 
   void SetSubCutoff(G4bool val);
 
-  void PrintInfoDefinition() const;
+  void PrintInfoDefinition();
   // Print out of the class parameters
 
 protected:
@@ -119,8 +123,10 @@ private:
 
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
+  G4VEmFluctuationModel*      flucModel;
 
   G4bool                      subCutoff;
+  G4bool                      isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -128,7 +134,9 @@ private:
 
 inline G4bool G4hIonisationSTD::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+  return (p.GetPDGCharge() != 0.0 && 
+          p.GetPDGMass() > 10.0*MeV &&
+	 !p.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -158,13 +166,13 @@ inline G4double G4hIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* dy
 
 #include "G4VSubCutoffProcessor.hh"
 
-inline G4std::vector<G4Track*>*  G4hIonisationSTD::SecondariesAlongStep(
+inline std::vector<G4Track*>*  G4hIonisationSTD::SecondariesAlongStep(
                            const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
 {
-  G4std::vector<G4Track*>* newp = 0;
+  std::vector<G4Track*>* newp = 0;
   if(subCutoff) {
     G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
     if (sp) {

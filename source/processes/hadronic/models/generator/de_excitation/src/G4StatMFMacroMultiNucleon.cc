@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroMultiNucleon.cc,v 1.11 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroMultiNucleon.cc,v 1.14 2003/06/16 17:06:42 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -39,7 +39,7 @@ G4StatMFMacroMultiNucleon() :
 
 // Copy constructor
 G4StatMFMacroMultiNucleon::
-G4StatMFMacroMultiNucleon(const G4StatMFMacroMultiNucleon & right) :
+G4StatMFMacroMultiNucleon(const G4StatMFMacroMultiNucleon & ) :
     G4VStatMFMacroCluster(0)  // Beacuse the def. constr. of base class is private
 {
     G4Exception("G4StatMFMacroMultiNucleon::copy_constructor meant to not be accessable");
@@ -48,21 +48,21 @@ G4StatMFMacroMultiNucleon(const G4StatMFMacroMultiNucleon & right) :
 // Operators
 
 G4StatMFMacroMultiNucleon & G4StatMFMacroMultiNucleon::
-operator=(const G4StatMFMacroMultiNucleon & right) 
+operator=(const G4StatMFMacroMultiNucleon & ) 
 {
     G4Exception("G4StatMFMacroMultiNucleon::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMFMacroMultiNucleon::operator==(const G4StatMFMacroMultiNucleon & right) const
+G4bool G4StatMFMacroMultiNucleon::operator==(const G4StatMFMacroMultiNucleon & ) const
 {
     G4Exception("G4StatMFMacroMultiNucleon::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4StatMFMacroMultiNucleon::operator!=(const G4StatMFMacroMultiNucleon & right) const
+G4bool G4StatMFMacroMultiNucleon::operator!=(const G4StatMFMacroMultiNucleon & ) const
 {
     G4Exception("G4StatMFMacroMultiNucleon::operator!= meant to not be accessable");
     return true;
@@ -91,7 +91,9 @@ G4double G4StatMFMacroMultiNucleon::CalcMeanMultiplicity(const G4double FreeVol,
 	
     if (exponent > 30.0) exponent = 30.0;
 	
-    _MeanMultiplicity = G4std::max((FreeVol*G4double(theA)*sqrt(G4double(theA))/lambda3)*exp(exponent),1.0e-30);
+    _MeanMultiplicity = std::max((FreeVol * static_cast<G4double>(theA) * 
+				    sqrt(static_cast<G4double>(theA))/lambda3) *
+				   exp(exponent),1.0e-30);
     return _MeanMultiplicity;	
 }
 
@@ -116,19 +118,19 @@ G4double G4StatMFMacroMultiNucleon::CalcEnergy(const G4double T)
     const G4double Coulomb = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
 	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
 	
-    const G4double A23 = pow(G4double(theA),2./3.);
+    const G4double A23 = pow(static_cast<G4double>(theA),2./3.);
 
     // Volume term 
-    G4double EVol = G4double(theA) * (T*T/_InvLevelDensity - G4StatMFParameters::GetE0());
+    G4double EVol = static_cast<G4double>(theA) * (T*T/_InvLevelDensity - G4StatMFParameters::GetE0());
 	
     // Symmetry term
-//	G4double ESym = G4double(theA) * G4StatMFParameters::GetGamma0() *(1. - 2.* theZARatio * theZARatio);
+//	G4double ESym = static_cast<G4double>(theA) * G4StatMFParameters::GetGamma0() *(1. - 2.* theZARatio * theZARatio);
 	
     // Surface term
     G4double ESurf = A23*(G4StatMFParameters::Beta(T) - T*G4StatMFParameters::DBetaDT(T));
  
     // Coulomb term
-    G4double ECoul = Coulomb*A23*G4double(theA)*theZARatio*theZARatio;
+    G4double ECoul = Coulomb*A23*static_cast<G4double>(theA)*theZARatio*theZARatio;
 	
     // Translational term
     G4double ETrans = (3./2.)*T;
@@ -146,13 +148,14 @@ G4double G4StatMFMacroMultiNucleon::CalcEntropy(const G4double T, const G4double
     G4double Entropy = 0.0;
     if (_MeanMultiplicity > 0.0) {
 	// Volume term
-	G4double SV = 2.0*G4double(theA)*T/_InvLevelDensity;
+	G4double SV = 2.0*static_cast<G4double>(theA)*T/_InvLevelDensity;
 		
 	// Surface term
-	G4double SS = -G4StatMFParameters::DBetaDT(T)*pow(G4double(theA),2./3.);
+	G4double SS = -G4StatMFParameters::DBetaDT(T)*pow(static_cast<G4double>(theA),2./3.);
 		
 	// Translational term
-	G4double ST = (5./2.)+log(FreeVol*sqrt(G4double(theA))*G4double(theA)/(lambda3*_MeanMultiplicity));
+	G4double ST = (5./2.)+log(FreeVol * sqrt(static_cast<G4double>(theA)) * 
+				  static_cast<G4double>(theA)/(lambda3*_MeanMultiplicity));
 		
 		
 	Entropy = _MeanMultiplicity*(SV + SS + ST);

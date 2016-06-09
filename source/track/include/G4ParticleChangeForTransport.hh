@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.10 2002/12/16 11:59:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleChangeForTransport.hh,v 1.11 2003/06/16 17:12:56 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -112,8 +112,8 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     // Prototype implementation of smooth representation of curved trajectories.
     // Auxiliary points are ThreeVectors for now; change to G4AuxiliaryPoints.
 
-    inline void SetPointerToVectorOfAuxiliaryPoints( G4std::vector<G4ThreeVector>* theNewVectorPointer );
-    inline G4std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const;
+    inline void SetPointerToVectorOfAuxiliaryPoints( std::vector<G4ThreeVector>* theNewVectorPointer );
+    inline std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const;
 
   private:
     G4bool     isMomentumChanged;
@@ -124,7 +124,7 @@ class G4ParticleChangeForTransport: public G4ParticleChange
      // currently locates
 
   private:
-    G4std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
+    std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
 };
 
 #include "G4ParticleChangeForTransport.icc"

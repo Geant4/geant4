@@ -48,10 +48,11 @@
 #include "G4PhysicsVector.hh"
 #include "G4Nucleus.hh" 
 #include "G4ReactionProduct.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4VIsotopeProduction.hh"
 #include "G4IsoParticleChange.hh"
 #include "G4HadLeadBias.hh"
+#include "G4VCrossSectionDataSet.hh"
  
  class G4HadronicProcess : public G4VDiscreteProcess
  {
@@ -161,7 +162,7 @@
     G4int isoIsOnAnyway; // true(1), false(-1) or default(0)
     
     G4IsoParticleChange theIsoPC;
-    G4std::vector<G4VIsotopeProduction *> theProductionModels;
+    std::vector<G4VIsotopeProduction *> theProductionModels;
     
     G4VLeadingParticleBiasing * theBias;
 

@@ -17,7 +17,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: sdaiApplication_instance.h,v 1.1 2000/01/21 13:42:43 gcosmo Exp $ */
+/* $Id: sdaiApplication_instance.h,v 1.2 2003/06/06 17:07:31 gcosmo Exp $ */
 
 //#ifdef __OSTORE__
 //#include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
@@ -148,23 +148,23 @@ class SCLP23_NAME(Application_instance) : public SCLP23_NAME(DAObject_SDAI)
 // READ
     virtual Severity STEPread(int id, int addFileId, 
 			      class InstMgr * instance_set,
-			      G4std::istream& in =G4cin, const char *currSch =NULL,
+			      std::istream& in =G4cin, const char *currSch =NULL,
 			      int useTechCor =1);
-    virtual void STEPread_error(char c, int index, G4std::istream& in);
+    virtual void STEPread_error(char c, int index, std::istream& in);
 
 // WRITE
-    virtual void STEPwrite(G4std::ostream& out =G4cout, const char *currSch =NULL,
+    virtual void STEPwrite(std::ostream& out =G4cout, const char *currSch =NULL,
 			   int writeComments = 1);
     virtual const char * STEPwrite(SCLstring &buf, const char *currSch =NULL);
 
-    void WriteValuePairs(G4std::ostream& out, const char *currSch =NULL, 
+    void WriteValuePairs(std::ostream& out, const char *currSch =NULL, 
 			 int writeComments = 1, int mixedCase = 1);
 
-    void	 STEPwrite_reference (G4std::ostream& out =G4cout);
+    void	 STEPwrite_reference (std::ostream& out =G4cout);
     const char * STEPwrite_reference (SCLstring &buf);
 
-    void beginSTEPwrite(G4std::ostream& out =G4cout); // writes out the SCOPE section
-    void endSTEPwrite(G4std::ostream& out =G4cout);
+    void beginSTEPwrite(std::ostream& out =G4cout); // writes out the SCOPE section
+    void endSTEPwrite(std::ostream& out =G4cout);
 
 // MULTIPLE INHERITANCE
     int MultipleInheritance() { return !(headMiEntity == 0); }
@@ -224,7 +224,7 @@ typedef SCLP23_NAME(Application_instance_ptr) SCLP23_NAME(Application_instance_v
 //typedef SCLP23_NAME(Application_instance)* STEPentityH;
 
 //extern SCLP23_NAME(Application_instance) *
-//ReadEntityRef(G4std::istream &in, ErrorDescriptor *err, char *tokenList, 
+//ReadEntityRef(std::istream &in, ErrorDescriptor *err, char *tokenList, 
 //	      InstMgr * instances, int addFileId);
 
 //typedef  SCLP23_NAME(Application_instance) * (* Creator) () const;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.cc,v 1.16 2002/04/18 10:12:01 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ComptonScattering.cc,v 1.17 2003/06/16 17:02:08 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 //------------ G4ComptonScattering physics process -----------------------------
@@ -37,7 +37,7 @@
 // 28-03-97, protection in BuildPhysicsTable, M.Maire
 // 07-04-98, remove 'tracking cut' of the scattered gamma, MMa
 // 04-06-98, in DoIt, secondary production condition:
-//                                     range>G4std::min(threshold,safety)
+//                                     range>std::min(threshold,safety)
 // 13-08-98, new methods SetBining()  PrintInfo()
 // 15-12-98, cross section=0 below 10 keV
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation

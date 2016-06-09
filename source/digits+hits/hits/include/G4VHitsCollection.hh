@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.hh,v 1.10 2002/10/30 16:20:06 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VHitsCollection.hh,v 1.11 2003/05/20 00:50:37 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4VHitsCollection_h
@@ -67,7 +67,7 @@ class G4VHitsCollection
       // GetHit and GetSize are given a default implementation here so
       // that the template G4THitsCollection can be used, but they
       // are re-implemented G4THitsCollection.
-      virtual G4VHit* GetHit(size_t i) const { return 0; } 
+      virtual G4VHit* GetHit(size_t) const { return 0; } 
       virtual size_t GetSize() const { return 0; };
 
 };

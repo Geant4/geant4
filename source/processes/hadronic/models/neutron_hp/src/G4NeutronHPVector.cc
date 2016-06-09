@@ -84,7 +84,7 @@
   
   G4NeutronHPVector::G4NeutronHPVector(G4int n)
   {
-    nPoints=G4std::max(n, 20);
+    nPoints=std::max(n, 20);
     theData = new G4NeutronHPDataPoint[nPoints]; 
     nEntries=0;
     Verbose=0;
@@ -313,7 +313,7 @@
   G4bool G4NeutronHPVector::IsBlocked(G4double aX)
   {
     G4bool result = false;
-    G4std::vector<G4double>::iterator i;
+    std::vector<G4double>::iterator i;
     for(i=theBlocked.begin(); i!=theBlocked.end(); i++)
     {
       G4double aBlock = *i;
@@ -387,7 +387,7 @@
       {
 	if(theIntegral[i]/theIntegral[GetVectorLength()-1]>0.15) 
 	{
-	  result = theData[G4std::min(i+1, GetVectorLength()-1)].GetX();
+	  result = theData[std::min(i+1, GetVectorLength()-1)].GetX();
           the15percentBorderCash = result;
 	  break;
 	}

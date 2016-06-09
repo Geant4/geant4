@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IVRestDiscreteProcess.cc,v 1.7 2003/04/01 16:43:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // $Id: 
 // --------------------------------------------------------------

@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.8 2002/12/12 19:18:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPNBodyPhaseSpace.hh,v 1.9 2003/06/16 17:10:56 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPNBodyPhaseSpace_h
 #define G4NeutronHPNBodyPhaseSpace_h 1
 
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 #include "G4Neutron.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
@@ -49,7 +49,7 @@ class G4NeutronHPNBodyPhaseSpace : public G4VNeutronHPEnergyAngular
     theTotalCount=aCount;
   }
 
-  void Init(G4std::ifstream & aDataFile)
+  void Init(std::ifstream & aDataFile)
   {
     aDataFile >> theTotalMass >> theTotalCount;
     theTotalMass *= G4Neutron::Neutron()->GetPDGMass();

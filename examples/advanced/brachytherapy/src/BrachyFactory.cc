@@ -31,24 +31,13 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactory.cc,v 1.3 2002/12/12 19:16:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyFactory.cc,v 1.4 2003/05/09 16:52:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include"BrachyFactory.hh"
 
-
-
 BrachyFactory::BrachyFactory()
-{  ;}
+{;}
+
 BrachyFactory::~BrachyFactory()
-{
-;
-}
-
-G4VUserPrimaryGeneratorAction* BrachyFactory::CreatePrimaryGeneratorAction()
-{;}
-
-void BrachyFactory::CreateSource(G4VPhysicalVolume* mother)
-{;}
-void BrachyFactory::CleanSource()
 {;}

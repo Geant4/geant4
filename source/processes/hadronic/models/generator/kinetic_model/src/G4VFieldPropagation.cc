@@ -38,25 +38,25 @@
 G4VFieldPropagation::G4VFieldPropagation()
 { }
 
-G4VFieldPropagation::G4VFieldPropagation(const  G4VFieldPropagation &right)
+G4VFieldPropagation::G4VFieldPropagation(const  G4VFieldPropagation &)
 { }
 
 G4VFieldPropagation::~G4VFieldPropagation()
 { }
 
-const G4VFieldPropagation & G4VFieldPropagation::operator=(const G4VFieldPropagation & right)
+const G4VFieldPropagation & G4VFieldPropagation::operator=(const G4VFieldPropagation & )
 {
   G4Exception("G4VFieldPropagation::operator= meant not to be accessible");
   return *this;
 }
 
-G4int G4VFieldPropagation::operator==(const G4VFieldPropagation & right) const
+G4int G4VFieldPropagation::operator==(const G4VFieldPropagation & ) const
 {
   G4Exception("G4VFieldPropagation::operator== meant not to be accessible");
   return 0;
 }
 
-G4int G4VFieldPropagation::operator!=(const G4VFieldPropagation & right) const
+G4int G4VFieldPropagation::operator!=(const G4VFieldPropagation & ) const
 {
   G4Exception("G4VFieldPropagation::operator!= meant not to be accessible");
   return 1;

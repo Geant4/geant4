@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StopDeexcitation.cc,v 1.8 2002/12/12 19:18:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StopDeexcitation.cc,v 1.9 2003/06/16 17:12:16 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998
@@ -40,7 +40,7 @@
 
 
 #include "G4StopDeexcitation.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "globals.hh"
 #include "Randomize.hh"

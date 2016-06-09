@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionBaseFS.hh,v 1.7 2002/12/12 19:18:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPFissionBaseFS.hh,v 1.9 2003/06/16 17:10:41 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPFissionBaseFS_h
 #define G4NeutronHPFissionBaseFS_h 1
@@ -56,7 +56,7 @@ class G4NeutronHPFissionBaseFS : public G4NeutronHPFinalState
 
   virtual G4double GetXsec(G4double anEnergy)
   {
-    return G4std::max(0., theXsection->GetY(anEnergy));
+    return std::max(0., theXsection->GetY(anEnergy));
   }
   virtual G4NeutronHPVector * GetXsec() { return theXsection; }
 
@@ -74,7 +74,7 @@ class G4NeutronHPFissionBaseFS : public G4NeutronHPFinalState
   
   private:
   
-  G4ParticleChange * ApplyYourself(const G4Track & aTrack) {return NULL;}
+  G4ParticleChange * ApplyYourself(const G4Track & ) {return NULL;}
   
   G4NeutronHPVector * theXsection;
   G4NeutronHPEnergyDistribution theEnergyDistribution;

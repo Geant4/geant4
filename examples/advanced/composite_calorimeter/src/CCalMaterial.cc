@@ -171,7 +171,7 @@ void CCalMaterial::closeMaterial() {
   }
 }
 
-G4std::ostream& operator<<(G4std::ostream& os, const CCalMaterial& mat) {
+std::ostream& operator<<(std::ostream& os, const CCalMaterial& mat) {
   os << mat.name << G4endl;
   os << "Density= " << mat.density << " g/cm3. Number of Elements: "
      << mat.nElem << G4endl;

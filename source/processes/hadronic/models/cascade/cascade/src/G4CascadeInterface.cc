@@ -42,8 +42,8 @@
 #include "G4LorentzRotation.hh"
 
 
-typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
+typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 G4CascadeInterface::G4CascadeInterface()
   :verboseLevel(0)  {
@@ -106,7 +106,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   toZ.rotateY(-projectileMomentum.theta());
   G4LorentzRotation toLabFrame = toZ.inverse();
 
-  G4std::vector<G4double> momentumBullet(4);
+  std::vector<G4double> momentumBullet(4);
   momentumBullet[0] =0.;
   momentumBullet[1] =0;
   momentumBullet[2] =0;
@@ -123,7 +123,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   G4InuclNuclei*   target  = NULL;
   G4InuclParticle* targetH = NULL;
 
-  G4std::vector<G4double> targetMomentum(4, 0.0);
+  std::vector<G4double> targetMomentum(4, 0.0);
 
   G4double theNucleusA = theNucleus.GetN();
 
@@ -135,9 +135,9 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 				theNucleus.GetZ());
     target->setEnergy();
 
-    G4std::vector<G4double>  bmom = bullet->getMomentum();
+    std::vector<G4double>  bmom = bullet->getMomentum();
     eInit = sqrt(bmom[0] * bmom[0]);
-    G4std::vector<G4double> tmom = target->getMomentum();
+    std::vector<G4double> tmom = target->getMomentum();
     eInit += sqrt(tmom[0] * tmom[0]);
 
     sumBaryon += theNucleusA;
@@ -177,9 +177,9 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
       sumBaryon += 1;
 
-    G4std::vector<G4double>  bmom = bullet->getMomentum();
+    std::vector<G4double>  bmom = bullet->getMomentum();
     eInit = sqrt(bmom[0] * bmom[0]);
-    G4std::vector<G4double> tmom = targetH->getMomentum();
+    std::vector<G4double> tmom = targetH->getMomentum();
     eInit += sqrt(tmom[0] * tmom[0]);
 
       if (verboseLevel > 2) {
@@ -206,8 +206,8 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   
   // Convert cascade data to use hadronics interface
 
-  G4std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
-  G4std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
+  std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
+  std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
 
   G4int numSecondaries = nucleiFragments.size()+particles.size();
   theResult.SetStatusChange(fStopAndKill);
@@ -219,7 +219,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
     for (ipart = particles.begin(); ipart != particles.end(); ipart++) {
       outgoingParticle = ipart->type();
-      G4std::vector<G4double> mom = ipart->getMomentum();
+      std::vector<G4double> mom = ipart->getMomentum();
       eTot   += sqrt(mom[0] * mom[0]);
 
       G4double ekin = ipart->getKineticEnergy() * GeV;
@@ -305,7 +305,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
     for (ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
       {
 	G4double eKin = ifrag->getKineticEnergy() * GeV;
-	G4std::vector<G4double> mom = ifrag->getMomentum();
+	std::vector<G4double> mom = ifrag->getMomentum();
         eTot   += sqrt(mom[0] * mom[0]);
 
 	G4ThreeVector aMom(mom[1], mom[2], mom[3]);

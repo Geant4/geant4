@@ -1,7 +1,11 @@
-$Id: History,v 1.51 2003/04/03 11:31:15 gcosmo Exp $
+$Id: History,v 1.52 2003/06/04 16:41:51 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V05-01-00 04-Jun-2003 G.Cosmo
+- Fixes for inclusion of <strstream> in G3EleTable.cc, G3PartTable.cc
+  and G4gsmixt.cc in view of the g4std wrappers migration.
 
 g3tog4-V05-00-01 03-Apr-2003 G.Cosmo
 - Cleared trivial strict pedantic warnings.

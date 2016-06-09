@@ -1,5 +1,5 @@
 
-$Id: History,v 1.36 2003/03/25 17:02:01 gcosmo Exp $
+$Id: History,v 1.39 2003/06/12 12:47:50 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Jun 12, 2003   G.Cosmo                   geom-bool-V05-01-02
+  - G4ReflectionFactory:
+    o Made public accessors: GetConstituentLV(), GetReflectedLV(),
+      IsConstituent() and IsReflected().
+    o Added accessor GetReflectedVolumesMap() to access list of
+      reflected volumes.
+
+ May 22, 2003   G.Cosmo                   geom-bool-V05-01-01
+  - Implementations for Set/GetScalePrecision() in G4ReflectionFactory
+    missing! Now fixed.
+
+ May 12, 2003   G.Cosmo                   geom-bool-V05-01-00
+  - Added set/get methods for scale precision in G4ReflectionFactory.
 
  Mar 25, 2003   G.Cosmo                   geom-bool-V05-00-01
   - Fixed trivial strict pedantic warnings in G4ReflectedSolid.cc and

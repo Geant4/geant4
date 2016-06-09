@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.hh,v 1.8 2002/12/12 19:16:49 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ElectroNuclearCrossSection.hh,v 1.10 2003/06/16 17:03:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearCrossSection -- header file
@@ -39,7 +39,7 @@
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4NucleiPropertiesTable.hh"
-#include "g4std/vector"
+#include <vector>
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -55,7 +55,7 @@ public:
 
   ~G4ElectroNuclearCrossSection() {}
 
-  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* anElement)
+  G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* )
   {
 	//return theHadronCrossSections->IsApplicable(aParticle, anElement);
 	// Possible prototype
@@ -139,7 +139,7 @@ inline G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   return dN;
 }
 
-inline G4double G4ElectroNuclearCrossSection::DFun(G4double x) // Original PhoNuc cross section
+inline G4double G4ElectroNuclearCrossSection::DFun(G4double /* x */) // Original PhoNuc cross section
 {
   static const G4double shd=1.0734;                    // HE PomShadowing(D)
   static const G4double poc=0.0375;                    // HE Pomeron coefficient
@@ -151,7 +151,7 @@ inline G4double G4ElectroNuclearCrossSection::DFun(G4double x) // Original PhoNu
   return poc*(lE-pos)+shd*exp(-reg*lE);
 }
 
-inline G4double G4ElectroNuclearCrossSection::Fun(G4double x) // Integrated PhoNuc cross section
+inline G4double G4ElectroNuclearCrossSection::Fun(G4double /* x */) // Integrated PhoNuc cross section
 {
   static const G4double mel=0.5109989;                 // Mass of electron in MeV
   static const G4double lmel=log(mel);                 // Log of electron mass

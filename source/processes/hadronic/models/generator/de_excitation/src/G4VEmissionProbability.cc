@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.cc,v 1.7 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VEmissionProbability.cc,v 1.8 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -32,7 +32,7 @@
 #include "G4VEmissionProbability.hh"
 
 
-G4VEmissionProbability::G4VEmissionProbability(const G4VEmissionProbability &right)
+G4VEmissionProbability::G4VEmissionProbability(const G4VEmissionProbability &)
 {
     G4Exception("G4VEmissionProbability::copy_constructor meant to not be accessable");
 }
@@ -40,19 +40,19 @@ G4VEmissionProbability::G4VEmissionProbability(const G4VEmissionProbability &rig
 
 
 
-const G4VEmissionProbability & G4VEmissionProbability::operator=(const G4VEmissionProbability &right)
+const G4VEmissionProbability & G4VEmissionProbability::operator=(const G4VEmissionProbability &)
 {
     G4Exception("G4VEmissionProbability::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4VEmissionProbability::operator==(const G4VEmissionProbability &right) const
+G4bool G4VEmissionProbability::operator==(const G4VEmissionProbability &) const
 {
     return false;
 }
 
-G4bool G4VEmissionProbability::operator!=(const G4VEmissionProbability &right) const
+G4bool G4VEmissionProbability::operator!=(const G4VEmissionProbability &) const
 {
     return true;
 }

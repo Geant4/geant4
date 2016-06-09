@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIArrayString.cc,v 1.6 2002/10/17 02:40:24 murakami Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIArrayString.cc,v 1.7 2003/06/16 16:55:58 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4UIArrayString.hh"
 
 static const char strESC= '\033';
@@ -179,12 +179,12 @@ void G4UIArrayString::Show(G4int ncol)
         colorWord= word(0,5);
         word.erase(0,5);
       }
-      if(!colorWord.empty()) G4cout << colorWord << G4std::flush;
+      if(!colorWord.empty()) G4cout << colorWord << std::flush;
 
-      G4cout << G4std::setiosflags(G4std::ios::left) << G4std::setw(GetNField(ix)) 
-             << word.c_str() << G4std::flush; 
+      G4cout << std::setiosflags(std::ios::left) << std::setw(GetNField(ix)) 
+             << word.c_str() << std::flush; 
                 // against problem w/ g++ iostream
-      if(ix != nc) G4cout << "  " << G4std::flush;
+      if(ix != nc) G4cout << "  " << std::flush;
       else G4cout << G4endl;      
     }
   }

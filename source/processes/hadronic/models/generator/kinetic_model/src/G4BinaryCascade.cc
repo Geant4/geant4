@@ -48,7 +48,7 @@
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh" 
 
-#include "g4std/algorithm"
+#include <algorithm>
 #include "G4ShortLivedConstructor.hh"
 //
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
@@ -78,7 +78,7 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
 }
 
 
-G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& right)
+G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& ) : G4VIntraNuclearTransportModel()
 {
 }
 
@@ -239,7 +239,8 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
   ClearAndDestroy(&theSecondaryList);
   ClearAndDestroy(&theProjectileList);
   ClearAndDestroy(&theFinalState);
-  G4std::vector<G4KineticTrack *>::iterator iter, jter;
+  std::vector<G4KineticTrack *>::iterator iter, jter;
+  G4int trialcount(0);
   if(nucleus->GetMassNumber() == 1) // 1H1 is special case
   {
     G4ParticleDefinition * aHTarg = G4Proton::ProtonDefinition();
@@ -252,14 +253,15 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
     // G4cout << "the lovely "<< mom << " "<<aHTarg->GetPDGMass()<<G4endl;
     G4KineticTrack aTarget(aHTarg, 0., pos, mom);
     G4bool done(false);
-    while(!done)
+    while(!done && trialcount<1000)
     {
       if(secs)
       {
-       G4std::for_each(secs->begin(), secs->end(), DeleteKineticTrack());
+       std::for_each(secs->begin(), secs->end(), DeleteKineticTrack());
        delete secs;
       }
       secs = theScatterer->Scatter(*(*secondaries).front(), aTarget);
+      trialcount++;
       for(size_t ss=0; secs && ss<secs->size(); ss++)
       {
         if((*secs)[ss]->GetDefinition()->IsShortLived()) done = true;
@@ -420,7 +422,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 
     G4int nsec=0;
     G4double minTimeStep = 1.e-12*ns;   // about 30*fermi/(0.1*c_light);1.e-12*ns
-    G4std::vector<G4KineticTrack *>::iterator i;
+    std::vector<G4KineticTrack *>::iterator i;
     for(i = theSecondaryList.begin(); i != theSecondaryList.end(); ++i)
     {
       G4KineticTrack * kt = *i;
@@ -489,7 +491,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 #endif
 
 //  add left secondaries to FinalSate
-       G4std::vector<G4KineticTrack *>::iterator iter;
+       std::vector<G4KineticTrack *>::iterator iter;
        for ( iter =theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
        {
 	   theFinalState.push_back(*iter);
@@ -513,7 +515,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
     if ( counter > 100 && theCollisionMgr->Entries() == 0)   // no collision, and stepping a while....
     {
         #ifdef debug_1_KineticCascade
-        PrintKTVector(&theSecondaryList,G4std::string("stepping 100 steps"));
+        PrintKTVector(&theSecondaryList,std::string("stepping 100 steps"));
 	#endif
 	FindCollisions(&theSecondaryList);
 	counter=0;
@@ -532,7 +534,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
       G4cerr << "G4BinaryCascade: Warning, have active particles at end" << G4endl;
 #endif
 //  add left secondaries to FinalSate
-       G4std::vector<G4KineticTrack *>::iterator iter;
+       std::vector<G4KineticTrack *>::iterator iter;
        for ( iter =theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
        {
 	   theFinalState.push_back(*iter);
@@ -594,8 +596,8 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 #ifdef debug_G4BinaryCascade
  	  G4cerr << "G4BinaryCascade-Warning: negative excitation energy ";
  	  G4cerr <<ExcitationEnergy<<G4endl;
-	  PrintKTVector(&theFinalState,G4std::string("FinalState"));
-	  PrintKTVector(&theCapturedList,G4std::string("captured"));
+	  PrintKTVector(&theFinalState,std::string("FinalState"));
+	  PrintKTVector(&theCapturedList,std::string("captured"));
 	  G4cout << "negative ExE:Final 4Momentum .mag: " << GetFinal4Momentum()
 	          << " "<< GetFinal4Momentum().mag()<< G4endl
 	          << "negative ExE:FinalNucleusMom  .mag: " << GetFinalNucleusMomentum()
@@ -690,7 +692,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 // add precompound products to products
   if ( precompoundProducts )
   {
-       G4std::vector<G4ReactionProduct *>::iterator j;
+       std::vector<G4ReactionProduct *>::iterator j;
        for(j = precompoundProducts->begin(); j != precompoundProducts->end(); ++j)
        {
 // boost back to system of moving nucleus
@@ -741,7 +743,7 @@ G4double G4BinaryCascade::GetExcitationEnergy()
   #endif
   G4int finalZ = 0;
 
-  G4std::vector<G4KineticTrack *>::iterator i;
+  std::vector<G4KineticTrack *>::iterator i;
   for(i = theTargetList.begin(); i != theTargetList.end(); ++i)
   {
      if((*i)->GetDefinition() == G4Proton::Proton())
@@ -902,7 +904,7 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
  * G4cout << " FindCollisions start" << endl;
  * theCollisionMgr->Print();
  */
-  for(G4std::vector<G4KineticTrack *>::iterator i = secondaries->begin();
+  for(std::vector<G4KineticTrack *>::iterator i = secondaries->begin();
       i != secondaries->end(); ++i)
   {
     pkt = *i;
@@ -910,7 +912,7 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
 //      G4cerr << "G4BinaryCascade::ApplyCollision pre-collision time"
 //             <<pkt->Get4Momentum()<<" "<<pkt->Get4Momentum().boostVector().mag()<<" " <<pkt->GetDefinition()->GetParticleName()
 //	     <<G4endl;
-    for(G4std::vector<G4KineticTrack *>::iterator j = theTargetList.begin();
+    for(std::vector<G4KineticTrack *>::iterator j = theTargetList.begin();
 	j != theTargetList.end(); ++j)
     {
       tkt = *j;
@@ -1036,7 +1038,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
  */
 // debug block
   #ifdef debug_1_KineticCascade
-  PrintKTVector(products,G4std::string(" Scatterer products"));
+  PrintKTVector(products,std::string(" Scatterer products"));
   #endif
 
 //  G4cout << " ======Survive Pauli =====" << G4endl;
@@ -1075,7 +1077,7 @@ G4bool G4BinaryCascade::Absorb()
 
 // Build the vector of G4KineticTracks that must be absorbed
   G4KineticTrackVector absorbList;
-  G4std::vector<G4KineticTrack *>::iterator iter;
+  std::vector<G4KineticTrack *>::iterator iter;
   G4double radius = theOuterRadius+3*fermi;
   for(iter = theSecondaryList.begin();
       iter != theSecondaryList.end(); ++iter)
@@ -1140,7 +1142,7 @@ G4bool G4BinaryCascade::Capture()
 {
   G4KineticTrackVector captured;
   G4bool capture = false;
-  G4std::vector<G4KineticTrack *>::iterator i;
+  std::vector<G4KineticTrack *>::iterator i;
   G4double radius = theOuterRadius + 3*fermi;
 
   G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
@@ -1365,7 +1367,7 @@ void G4BinaryCascade::UpdateTracksAndCollisions(
 			G4KineticTrackVector * oldTarget,
 			G4KineticTrackVector * newSecondaries)
 {
-  G4std::vector<G4KineticTrack *>::iterator iter1, iter2;
+  std::vector<G4KineticTrack *>::iterator iter1, iter2;
 
 // remove old secondaries from the secondary list
   if(oldSecondaries != NULL)
@@ -1375,7 +1377,7 @@ void G4BinaryCascade::UpdateTracksAndCollisions(
       for(iter1 = oldSecondaries->begin(); iter1 != oldSecondaries->end();
 	  ++iter1)
       {
-	iter2 = G4std::find(theSecondaryList.begin(), theSecondaryList.end(),
+	iter2 = std::find(theSecondaryList.begin(), theSecondaryList.end(),
 			    *iter1);
 	theSecondaryList.erase(iter2);
       }
@@ -1390,7 +1392,7 @@ void G4BinaryCascade::UpdateTracksAndCollisions(
     {
       for(iter1 = oldTarget->begin(); iter1 != oldTarget->end(); ++iter1)
       {
-	iter2 = G4std::find(theTargetList.begin(), theTargetList.end(),
+	iter2 = std::find(theTargetList.begin(), theTargetList.end(),
 			    *iter1);
 	theTargetList.erase(iter2);
       }
@@ -1421,9 +1423,9 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   G4bool success=true;
 //  G4cerr <<"G4BinaryCascade::DoTimeStep: enter "<<G4endl;
 //   G4cout << "be4 trsprt....."<< G4endl;
-//   PrintKTVector(&theSecondaryList, G4std::string("DoTimeStep - theSecondaryList"));
-//   PrintKTVector(&theTargetList, G4std::string("DoTimeStep - theTargetList"));
-  G4std::vector<G4KineticTrack *>::iterator iter;
+//   PrintKTVector(&theSecondaryList, std::string("DoTimeStep - theSecondaryList"));
+//   PrintKTVector(&theTargetList, std::string("DoTimeStep - theTargetList"));
+  std::vector<G4KineticTrack *>::iterator iter;
   G4double nucleusSize=theOuterRadius + 3*fermi;
 // Count particles in nucleus
   G4int secondaryBarions=0;
@@ -1453,7 +1455,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
    thePropagator->Transport(theSecondaryList, dummy, theTimeStep);
 //------
 
-//   PrintKTVector(&theSecondaryList,G4std::string("aft trsprt....."));
+//   PrintKTVector(&theSecondaryList,std::string("aft trsprt....."));
 
 // anything went into the nucleus, counting back numbers to find differ
   for ( iter =theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
@@ -1544,7 +1546,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 
 //     G4cerr <<" Exited "<<G4endl;
 
-//     if(addFinals.size() !=0) PrintKTVector(&addFinals,G4std::string("addfinals"));
+//     if(addFinals.size() !=0) PrintKTVector(&addFinals,std::string("addfinals"));
    for ( iter = addFinals.begin(); iter != addFinals.end(); ++iter)
    {
      if(thePrimaryEscape || thePrimaryType != (*iter)->GetDefinition())
@@ -1558,8 +1560,8 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
      }
      theFinalState.push_back(*iter);
    }
-//     if(addFinals.size() !=0) PrintKTVector(&addFinals,G4std::string("addfinals corrected"));
-//     PrintKTVector(&theFinalState,G4std::string("FinalState"));
+//     if(addFinals.size() !=0) PrintKTVector(&addFinals,std::string("addfinals corrected"));
+//     PrintKTVector(&theFinalState,std::string("FinalState"));
   // now update currentZ,A as the change happened to the nucleus.
   if (n_out > 0 )
   {
@@ -1798,7 +1800,7 @@ G4ThreeVector G4BinaryCascade::GetSpherePoint(
 void G4BinaryCascade::ClearAndDestroy(G4KineticTrackVector * ktv)
 //----------------------------------------------------------------------------
 {
-  G4std::vector<G4KineticTrack *>::iterator i;
+  std::vector<G4KineticTrack *>::iterator i;
   for(i = ktv->begin(); i != ktv->end(); ++i)
     delete *i;
   ktv->clear();
@@ -1808,20 +1810,20 @@ void G4BinaryCascade::ClearAndDestroy(G4KineticTrackVector * ktv)
 void G4BinaryCascade::ClearAndDestroy(G4ReactionProductVector * rpv)
 //----------------------------------------------------------------------------
 {
-  G4std::vector<G4ReactionProduct *>::iterator i;
+  std::vector<G4ReactionProduct *>::iterator i;
   for(i = rpv->begin(); i != rpv->end(); ++i)
     delete *i;
   rpv->clear();
 }
 
 //----------------------------------------------------------------------------
-void G4BinaryCascade::PrintKTVector(G4KineticTrackVector * ktv, G4std::string comment)
+void G4BinaryCascade::PrintKTVector(G4KineticTrackVector * ktv, std::string comment)
 //----------------------------------------------------------------------------
 {
   if (comment.size() > 0 ) G4cout << comment << G4endl;
   G4cout << "  vector: " << ktv << ", number of tracks: " << ktv->size()
 	 << G4endl;
-  G4std::vector<G4KineticTrack *>::iterator i;
+  std::vector<G4KineticTrack *>::iterator i;
   G4int count;
 
   for(count = 0, i = ktv->begin(); i != ktv->end(); ++i, ++count)
@@ -1898,7 +1900,7 @@ G4bool G4BinaryCascade::CheckDecay(G4KineticTrackVector * products)
 
 void G4BinaryCascade::PrintWelcomeMessage()
 {
-  G4cout <<"Thank you for using G4KineticCascade. "<<G4endl;
+  G4cout <<"Thank you for using G4BinaryCascade. "<<G4endl;
 }
 
 

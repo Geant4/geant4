@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4He5FermiFragment.cc,v 1.7 2002/12/12 19:17:21 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4He5FermiFragment.cc,v 1.10 2003/06/16 17:06:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -34,7 +34,7 @@ G4He5FermiFragment::G4He5FermiFragment()
 {
 }
 
-G4He5FermiFragment::G4He5FermiFragment(const G4He5FermiFragment &right)
+G4He5FermiFragment::G4He5FermiFragment(const G4He5FermiFragment &) : G4UnstableFermiFragment()
 {
     G4Exception("G4He5FermiFragment::copy_constructor meant to not be accessable");
 }
@@ -45,19 +45,19 @@ G4He5FermiFragment::~G4He5FermiFragment()
 }
 
 
-const G4He5FermiFragment & G4He5FermiFragment::operator=(const G4He5FermiFragment &right)
+const G4He5FermiFragment & G4He5FermiFragment::operator=(const G4He5FermiFragment &)
 {
     G4Exception("G4He5FermiFragment::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4He5FermiFragment::operator==(const G4He5FermiFragment &right) const
+G4bool G4He5FermiFragment::operator==(const G4He5FermiFragment &) const
 {
     return false;
 }
 
-G4bool G4He5FermiFragment::operator!=(const G4He5FermiFragment &right) const
+G4bool G4He5FermiFragment::operator!=(const G4He5FermiFragment &) const
 {
     return true;
 }
@@ -91,7 +91,7 @@ G4FragmentVector * G4He5FermiFragment::GetFragment(const G4LorentzVector & aMome
 	Masses[1] - // neutron
 	Masses[0]; // alpha
 
-    G4std::deque<G4LorentzVector*> * SubFragsMomentum =
+    std::deque<G4LorentzVector*> * SubFragsMomentum =
 	FragmentsMomentum(AvalKineticE, NumSubFrag,Masses);
   
 
@@ -103,7 +103,9 @@ G4FragmentVector * G4He5FermiFragment::GetFragment(const G4LorentzVector & aMome
 	// Lorentz boost
 	SubFragsMomentum->operator[](i)->boost(aMomentum.boostVector());
     
-	theResult->push_back(new G4Fragment(AtomNum[i],Charges[i],*(SubFragsMomentum->operator[](i))));
+	theResult->push_back(new G4Fragment(static_cast<G4int>(AtomNum[i]),
+					    static_cast<G4int>(Charges[i]),
+					    *(SubFragsMomentum->operator[](i))));
     }
   
     //  SubFragsMomentum->clearAndDestroy();

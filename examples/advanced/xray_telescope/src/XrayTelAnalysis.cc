@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.cc,v 1.8 2002/11/19 18:02:42 santin Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: XrayTelAnalysis.cc,v 1.9 2003/06/16 16:46:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copied from his UserAnalyser class)
@@ -38,8 +38,8 @@
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 #include "G4SteppingManager.hh"
 #include "G4ThreeVector.hh"
 
@@ -64,7 +64,7 @@ XrayTelAnalysis::XrayTelAnalysis()
 #endif
 
   asciiFileName="xraytel.out";
-  G4std::ofstream asciiFile(asciiFileName, G4std::ios::app);
+  std::ofstream asciiFile(asciiFileName, std::ios::app);
   if(asciiFile.is_open()) {
     asciiFile << "Energy (keV)  x (mm)    y (mm)    z (mm)" << G4endl << G4endl;
   }
@@ -148,11 +148,11 @@ void XrayTelAnalysis::finish()
 #ifdef G4ANALYSIS_USE
   if (tree) {
     // Committing the transaction with the tree
-    G4std::cout << "Committing..." << G4std::endl;
+    std::cout << "Committing..." << std::endl;
     // write all histograms to file
     tree->commit();
 
-    G4std::cout << "Closing the tree..." << G4std::endl;
+    std::cout << "Closing the tree..." << std::endl;
 
     // close (will again commit)
     tree->close();
@@ -226,27 +226,27 @@ void XrayTelAnalysis::analyseStepping(const G4Track& track, G4bool entering)
 
   // Write to file
   if (entering) {
-    G4std::ofstream asciiFile(asciiFileName, G4std::ios::app);
+    std::ofstream asciiFile(asciiFileName, std::ios::app);
     if(asciiFile.is_open()) {
-      asciiFile << G4std::setiosflags(G4std::ios::fixed)
-		<< G4std::setprecision(3)
-		<< G4std::setiosflags(G4std::ios::right)
-		<< G4std::setw(10);
+      asciiFile << std::setiosflags(std::ios::fixed)
+		<< std::setprecision(3)
+		<< std::setiosflags(std::ios::right)
+		<< std::setw(10);
       asciiFile << eKin;
-      asciiFile << G4std::setiosflags(G4std::ios::fixed)
-		<< G4std::setprecision(3)
-		<< G4std::setiosflags(G4std::ios::right)
-		<< G4std::setw(10);
+      asciiFile << std::setiosflags(std::ios::fixed)
+		<< std::setprecision(3)
+		<< std::setiosflags(std::ios::right)
+		<< std::setw(10);
       asciiFile << x;
-      asciiFile << G4std::setiosflags(G4std::ios::fixed)
-		<< G4std::setprecision(3)
-		<< G4std::setiosflags(G4std::ios::right)
-		<< G4std::setw(10);
+      asciiFile << std::setiosflags(std::ios::fixed)
+		<< std::setprecision(3)
+		<< std::setiosflags(std::ios::right)
+		<< std::setw(10);
       asciiFile << y;
-      asciiFile << G4std::setiosflags(G4std::ios::fixed)
-		<< G4std::setprecision(3)
-		<< G4std::setiosflags(G4std::ios::right)
-		<< G4std::setw(10);
+      asciiFile << std::setiosflags(std::ios::fixed)
+		<< std::setprecision(3)
+		<< std::setiosflags(std::ios::right)
+		<< std::setw(10);
       asciiFile << z
 		<< G4endl;
       asciiFile.close();

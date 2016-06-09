@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.23 2002/10/24 15:12:26 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisCommandsCompound.cc,v 1.25 2003/06/16 17:14:21 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -56,12 +56,11 @@ G4VisCommandDrawTree::~G4VisCommandDrawTree() {
   delete fpCommand;
 }
 
-void G4VisCommandDrawTree::SetNewValue
-(G4UIcommand* command, G4String newValue) {
+void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
 
   G4String pvname, system;
   const char* t = newValue;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> pvname >> system;
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -117,8 +116,7 @@ G4VisCommandDrawView::~G4VisCommandDrawView() {
   delete fpCommand;
 }
 
-void G4VisCommandDrawView::SetNewValue
-(G4UIcommand* command, G4String newValue) {
+void G4VisCommandDrawView::SetNewValue(G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -141,7 +139,7 @@ void G4VisCommandDrawView::SetNewValue
   G4String dolly;
   G4String dollyUnit;
   const char* t = newValue;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> thetaDeg >> phiDeg >> panRight >> panUp >> panUnit
      >> zoomFactor >> dolly >> dollyUnit;
   
@@ -189,8 +187,7 @@ G4VisCommandDrawVolume::~G4VisCommandDrawVolume() {
   delete fpCommand;
 }
 
-void G4VisCommandDrawVolume::SetNewValue
-(G4UIcommand* command, G4String newValue) {
+void G4VisCommandDrawVolume::SetNewValue(G4UIcommand*, G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
@@ -249,10 +246,10 @@ G4VisCommandOpen::~G4VisCommandOpen() {
   delete fpCommand;
 }
 
-void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
+void G4VisCommandOpen::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String systemName, windowSizeHint;
   const char* t = newValue;
-  G4std::istrstream is((char*)t);
+  std::istrstream is((char*)t);
   is >> systemName >> windowSizeHint;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
@@ -284,8 +281,7 @@ G4VisCommandSpecify::~G4VisCommandSpecify() {
   delete fpCommand;
 }
 
-void G4VisCommandSpecify::SetNewValue
-(G4UIcommand* command, G4String newValue) {
+void G4VisCommandSpecify::SetNewValue(G4UIcommand*, G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();

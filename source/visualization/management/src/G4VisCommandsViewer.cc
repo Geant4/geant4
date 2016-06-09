@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.35 2002/04/26 21:23:31 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisCommandsViewer.cc,v 1.37 2003/06/16 17:14:25 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -38,7 +38,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
@@ -103,7 +103,7 @@ G4VisCommandViewerClear::~G4VisCommandViewerClear () {
   delete fpCommand;
 }
 
-G4String G4VisCommandViewerClear::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandViewerClear::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
     return viewer -> GetName ();
@@ -113,8 +113,7 @@ G4String G4VisCommandViewerClear::GetCurrentValue (G4UIcommand* command) {
   }
 }
 
-void G4VisCommandViewerClear::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
+void G4VisCommandViewerClear::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -177,7 +176,7 @@ G4VisCommandViewerCreate::~G4VisCommandViewerCreate () {
 G4String G4VisCommandViewerCreate::NextName () {
   const int charLength = 100;
   char nextName [charLength];
-  G4std::ostrstream ost (nextName, charLength);
+  std::ostrstream ost (nextName, charLength);
   G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   ost << "viewer-" << fId << " (";
   if (sceneHandler) {
@@ -186,11 +185,11 @@ G4String G4VisCommandViewerCreate::NextName () {
   else {
     ost << "no_scene_handlers";
   }
-  ost << ")" << G4std::ends;
+  ost << ")" << std::ends;
   return nextName;
 }
 
-G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand*) {
   G4String currentValue;
   G4VSceneHandler* currentSceneHandler =
     fpVisManager -> GetCurrentSceneHandler ();
@@ -210,14 +209,13 @@ G4String G4VisCommandViewerCreate::GetCurrentValue (G4UIcommand* command) {
   return currentValue;
 }
 
-void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String sceneHandlerName, newName;
   G4int windowSizeHint;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> sceneHandlerName;
 
   // Now need to handle the possibility that the second string
@@ -424,7 +422,7 @@ G4VisCommandViewerFlush::~G4VisCommandViewerFlush () {
 }
 
 G4String G4VisCommandViewerFlush::GetCurrentValue 
-(G4UIcommand* command) {
+(G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
     return viewer -> GetName ();
@@ -434,8 +432,7 @@ G4String G4VisCommandViewerFlush::GetCurrentValue
   }
 }
 
-void G4VisCommandViewerFlush::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandViewerFlush::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -524,7 +521,7 @@ G4String G4VisCommandViewerLights::GetCurrentValue (G4UIcommand* command) {
 }
 
 void G4VisCommandViewerLights::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+					    G4String newValue) {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   if (command == fpCommandLightsThetaPhi) {
     if (verbosity >= G4VisManager::warnings) {
@@ -574,14 +571,13 @@ G4VisCommandViewerList::~G4VisCommandViewerList () {
   delete fpCommand;
 }
 
-G4String G4VisCommandViewerList::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandViewerList::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
-					 G4String newValue) {
+void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String name, verbosityString;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> name >> verbosityString;
   G4String shortName = fpVisManager -> ViewerShortName (name);
   G4VisManager::Verbosity verbosity =
@@ -714,7 +710,7 @@ G4String G4VisCommandViewerPan::GetCurrentValue (G4UIcommand* command) {
 }
 
 void G4VisCommandViewerPan::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+					 G4String newValue) {
 
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
@@ -770,8 +766,7 @@ G4VisCommandViewerRefresh::~G4VisCommandViewerRefresh () {
   delete fpCommand;
 }
 
-G4String G4VisCommandViewerRefresh::GetCurrentValue 
-(G4UIcommand* command) {
+G4String G4VisCommandViewerRefresh::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
     return viewer -> GetName ();
@@ -781,8 +776,7 @@ G4String G4VisCommandViewerRefresh::GetCurrentValue
   }
 }
 
-void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -864,7 +858,7 @@ G4VisCommandViewerRemove::~G4VisCommandViewerRemove () {
   delete fpCommand;
 }
 
-G4String G4VisCommandViewerRemove::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandViewerRemove::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
     return viewer -> GetName ();
@@ -874,8 +868,7 @@ G4String G4VisCommandViewerRemove::GetCurrentValue (G4UIcommand* command) {
   }
 }
 
-void G4VisCommandViewerRemove::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
+void G4VisCommandViewerRemove::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -940,7 +933,7 @@ G4VisCommandViewerReset::~G4VisCommandViewerReset () {
   delete fpCommand;
 }
 
-G4String G4VisCommandViewerReset::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandViewerReset::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
     return viewer -> GetName ();
@@ -950,8 +943,7 @@ G4String G4VisCommandViewerReset::GetCurrentValue (G4UIcommand* command) {
   }
 }
 
-void G4VisCommandViewerReset::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
+void G4VisCommandViewerReset::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -989,8 +981,7 @@ G4VisCommandViewerSelect::~G4VisCommandViewerSelect () {
   delete fpCommand;
 }
 
-G4String G4VisCommandViewerSelect::GetCurrentValue 
-(G4UIcommand* command) {
+G4String G4VisCommandViewerSelect::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
     return viewer -> GetName ();
@@ -1000,8 +991,7 @@ G4String G4VisCommandViewerSelect::GetCurrentValue
   }
 }
 
-void G4VisCommandViewerSelect::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandViewerSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -1064,8 +1054,7 @@ G4VisCommandViewerUpdate::~G4VisCommandViewerUpdate () {
   delete fpCommand1;
 }
 
-G4String G4VisCommandViewerUpdate::GetCurrentValue 
-(G4UIcommand* command) {
+G4String G4VisCommandViewerUpdate::GetCurrentValue (G4UIcommand*) {
   G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
   if (viewer) {
     return viewer -> GetName ();
@@ -1075,8 +1064,7 @@ G4String G4VisCommandViewerUpdate::GetCurrentValue
   }
 }
 
-void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -1160,7 +1148,7 @@ G4String G4VisCommandViewerViewpoint::GetCurrentValue (G4UIcommand* command) {
 }
 
 void G4VisCommandViewerViewpoint::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+					       G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -1230,7 +1218,7 @@ G4String G4VisCommandViewerZoom::GetCurrentValue (G4UIcommand* command) {
 }
 
 void G4VisCommandViewerZoom::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+					  G4String newValue) {
 
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();

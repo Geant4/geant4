@@ -64,7 +64,7 @@
   }
   
   #include "G4NeutronHPThermalBoost.hh"
-  G4VParticleChange * G4NeutronHPCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
+  G4VParticleChange * G4NeutronHPCapture::ApplyYourself(const G4Track& aTrack, G4Nucleus& )
   {
     if(getenv("NeutronHPCapture")) G4cout <<" ####### G4NeutronHPCapture called"<<G4endl;
     G4Material * theMaterial = aTrack.GetMaterial();
@@ -96,7 +96,7 @@
         index = theMaterial->GetElement(i)->GetIndex();
         if(random<=running/sum) break;
       }
-      if(i==n) i=G4std::max(0, n-1);
+      if(i==n) i=std::max(0, n-1);
       delete [] xSec;
     }
     return theCapture[index].ApplyYourself(aTrack);

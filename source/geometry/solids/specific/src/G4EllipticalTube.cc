@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc,v 1.13 2002/10/28 15:18:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EllipticalTube.cc,v 1.14 2003/06/16 16:53:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -702,7 +702,7 @@ G4GeometryType G4EllipticalTube::GetEntityType() const
 //
 // Stream object contents to an output stream
 //
-G4std::ostream& G4EllipticalTube::StreamInfo(G4std::ostream& os) const
+std::ostream& G4EllipticalTube::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

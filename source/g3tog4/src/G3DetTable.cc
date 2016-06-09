@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G3DetTable.cc,v 1.10 2001/07/11 09:58:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3DetTable.cc,v 1.11 2003/06/16 16:50:47 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "globals.hh"
 #include "G3DetTable.hh"
 
-typedef G4std::map<G4String, G3DetTableEntry*, G4std::less<G4String> >
+typedef std::map<G4String, G3DetTableEntry*, std::less<G4String> >
 ::iterator DTDiterator;
 
 G4String 
@@ -98,7 +98,7 @@ G3DetTable::PrintAll(){
     for (DTDiterator i=DTD.begin(); i != DTD.end(); i++) {
       count++;
       G3DetTableEntry* DTE = (*i).second;
-      G4cout << "DTD entry " << G4std::setw(3) << count << " sensitive detector name: " 
+      G4cout << "DTD entry " << std::setw(3) << count << " sensitive detector name: " 
 	     << DTE->GetSD()->GetName() << G4endl;
     }
   }

@@ -24,11 +24,11 @@
 #ifndef G4PiData_h
 #define G4PiData_h
 
-#include "g4std/vector"
-#include "g4std/algorithm"
+#include <vector>
+#include <algorithm>
 #include "globals.hh"
 
-class G4PiData : public G4std::vector<G4std::pair<G4double, G4std::pair<G4double, G4double > > > 
+class G4PiData : public std::vector<std::pair<G4double, std::pair<G4double, G4double > > > 
 {
   public:
     G4PiData(const G4double * aTotal, const G4double * aInelastic, const G4double * anEnergy, G4int nPoints);

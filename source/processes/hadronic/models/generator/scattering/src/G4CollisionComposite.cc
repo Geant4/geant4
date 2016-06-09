@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionComposite.cc,v 1.10 2002/12/12 19:17:47 gunter Exp $ //
+// $Id: G4CollisionComposite.cc,v 1.11 2003/06/16 17:09:04 gunter Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionComposite.hh"
@@ -72,7 +72,7 @@ G4double G4CollisionComposite::CrossSection(const G4KineticTrack& trk1,
 G4KineticTrackVector* G4CollisionComposite::FinalState(const G4KineticTrack& trk1, 
 							  const G4KineticTrack& trk2) const
 {
-  G4std::vector<G4double> cxCache;
+  std::vector<G4double> cxCache;
   G4double partialCxSum = 0.0;
 
   size_t i;

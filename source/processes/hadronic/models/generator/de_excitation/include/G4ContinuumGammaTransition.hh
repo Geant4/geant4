@@ -37,6 +37,7 @@
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added creation time evaluation for products of evaporation
+//        02 May 2003,   Vladimir Ivanchenko change interface to G4NuclearlevelManager
 //      
 // -------------------------------------------------------------------
 //
@@ -56,7 +57,7 @@ class G4ContinuumGammaTransition : public G4VGammaTransition
 public:
 
   // Constructor
-  G4ContinuumGammaTransition(const G4NuclearLevelManager& levelManager,
+  G4ContinuumGammaTransition(const G4NuclearLevelManager* levelManager,
 			     G4int Z, G4int A, G4double excitation,
 			     G4int verbose);
 
@@ -85,7 +86,7 @@ private:
   G4double _minLevelE;
   G4double _excitation;
   G4double _eGamma;
-  G4NuclearLevelManager _levelManager;
+  const G4NuclearLevelManager* _levelManager;
   G4double _gammaCreationTime;
 
 };

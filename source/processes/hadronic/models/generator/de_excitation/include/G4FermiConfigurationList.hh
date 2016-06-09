@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfigurationList.hh,v 1.7 2002/12/12 19:17:06 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FermiConfigurationList.hh,v 1.9 2003/06/16 17:05:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -41,7 +41,7 @@ public:
   G4FermiConfigurationList();
 
   ~G4FermiConfigurationList()
-    {};
+  {};
   
 private:
   G4FermiConfigurationList(const G4FermiConfigurationList &right);
@@ -60,15 +60,15 @@ public:
 private:
 
 
-  enum {MaxNumOfFragments = 6};
+  enum {MaxNumOfFragments = 16};
 
   G4double TotNumOfConfigurations; // NumberOfFragments;
 
   G4double NumOfConfigurations[MaxNumOfFragments]; // NumberOfChannelsPerFragment[MaxNumOfFragments];
 
-  G4std::vector<G4double> NormalizedWeights;
+  std::vector<G4double> NormalizedWeights;
   
-  G4std::vector<G4FermiConfiguration> Configurations;
+  std::vector<G4FermiConfiguration> Configurations;
 };
 
 

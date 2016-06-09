@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasmonVector.hh,v 1.10 2002/12/12 19:14:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QuasmonVector.hh,v 1.11 2003/06/16 17:04:15 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QuasmonVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -33,9 +33,9 @@
 #define G4QuasmonVector_h 1
 
 #include "G4Quasmon.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4Quasmon *> G4QuasmonVector;
+typedef std::vector<G4Quasmon *> G4QuasmonVector;
 struct DeleteQuasmon{ void operator()(G4Quasmon *aN){delete aN;} };
 
 #endif

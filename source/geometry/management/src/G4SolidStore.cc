@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.9 2002/04/26 16:24:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SolidStore.cc,v 1.10 2003/06/16 16:52:10 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4SolidStore
 //
@@ -49,7 +49,7 @@ G4bool G4SolidStore::locked = false;
 // ***************************************************************************
 //
 G4SolidStore::G4SolidStore()
-  : G4std::vector<G4VSolid*>()
+  : std::vector<G4VSolid*>()
 {
   reserve(100);
 }
@@ -87,7 +87,7 @@ void G4SolidStore::Clean()
 
   size_t i=0;
   G4SolidStore* store = GetInstance();
-  G4std::vector<G4VSolid*>::iterator pos;
+  std::vector<G4VSolid*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Solids ... ";

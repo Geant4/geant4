@@ -57,6 +57,7 @@
   
 G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
  :G4VEmFluctuationModel(nam),
+  particle(0),
   minNumberInteractionsBohr(10.0),
   theBohrBeta2(50.0*keV/proton_mass_c2),
   minLoss(0.000001*eV),
@@ -176,7 +177,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+          p3 = std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -195,7 +196,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+          p3 = std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -224,7 +225,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
+        p1 = std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
@@ -233,7 +234,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
+        p2 = std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -252,7 +253,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+        p3 = std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);

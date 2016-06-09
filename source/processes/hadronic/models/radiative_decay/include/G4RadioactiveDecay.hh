@@ -57,7 +57,7 @@
 #include "G4RadioactiveDecayRate.hh"
 #include "G4RadioactiveDecayRateVector.hh"
 #include "G4RIsotopeTable.hh"
-#include "g4std/vector"
+#include <vector>
 
 //class G4UserlimitsForRD;
 
@@ -65,8 +65,8 @@
 //
 class G4RadioactiveDecaymessenger;
 
-typedef G4std::vector<G4RadioactiveDecayRateVector> G4RadioactiveDecayRateTable;
-typedef G4std::vector<G4RadioactiveDecayRate> G4RadioactiveDecayRates;
+typedef std::vector<G4RadioactiveDecayRateVector> G4RadioactiveDecayRateTable;
+typedef std::vector<G4RadioactiveDecayRate> G4RadioactiveDecayRates;
 
 class G4RadioactiveDecay : public G4VRestDiscreteProcess 
 {
@@ -135,8 +135,8 @@ public: // with description
   //
   // used in VR decay mode only 
   //
-  void SetDecayRate(G4int,G4int,G4double, G4int, G4std::vector<G4double>,
-                    G4std::vector<G4double>);
+  void SetDecayRate(G4int,G4int,G4double, G4int, std::vector<G4double>,
+                    std::vector<G4double>);
   // Sets "theDecayRate" with data supplied in the arguements.
   //
   //  //
@@ -239,8 +239,8 @@ private:
   G4double                      DBin[99];
   G4double                      DProfile[99];
 
-  G4std::vector<G4String>              LoadedNuclei;
-  G4std::vector<G4String>              ValidVolumes;
+  std::vector<G4String>              LoadedNuclei;
+  std::vector<G4String>              ValidVolumes;
 
   G4RadioactiveDecayRate        theDecayRate;
   G4RadioactiveDecayRates       theDecayRateVector;

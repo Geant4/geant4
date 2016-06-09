@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuBremsstrahlungSTD.hh,v 1.8 2003/06/16 17:01:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -76,7 +78,7 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&,
 			           G4double&,
 			           G4double&,
@@ -89,7 +91,7 @@ public:
                                    G4double&,
                                    G4double&);
 
-  void PrintInfoDefinition() const;
+  void PrintInfoDefinition();
   // Print out of the class parameters
 
 protected:

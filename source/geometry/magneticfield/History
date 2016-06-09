@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2003/04/02 08:53:38 gcosmo Exp $
+$Id: History,v 1.80 2003/06/25 09:06:10 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,84 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 25th, 2003  J.Apostolakis - field-V05-01-06
+-----------------------------
+Suppressed printing of statistics (by default) in MagIntegrationDriver.
+Fix for unused variables warning in ChordFinder.
+
+Jun 24th, 2003  J.Apostolakis - field-V05-01-05
+-----------------------------
+Fix for problems introduced in field-V05-01-03:
+
+G4ChordFinder
+ - Fixed unitialised variable for next step (now used for optimisation).
+ - Protected assignment of fLastStepEstimate_Unconstrained in case of
+     unitialised value.
+
+Jun 21st, 2003  J.Apostolakis - field-V05-01-04
+-----------------------------
+G4FieldManager:
+  - Revised into 'slightly' abstract class with one (new) virtual method:
+       ConfigureForTrack( const G4Track *)
+    to enable the user to configure it with different accuracy parameters
+    depending on energy, particle id, volume, or other track state.
+
+  Currently by default, no such configuration action is undertaken.
+
+Note:
+  Requestor for such functionality: CMS (P Arce, M Stavrianakou, May/June 2003)
+
+ Its use requires tag transport-V05-01-0? 
+
+Jun 21st, 2003  J.Apostolakis - field-V05-01-03
+-----------------------------
+G4ChordFinder:
+  Revised:
+  * FindNextChord now provides next Step estimate (for accuracy in Integr.)
+  * AdvanceChordLimited to use
+    - above extra argument to FindNextChord
+    - the next Step argument as initial-step suggested to Accurate Advance
+
+G4MagIntegratorDriver
+  * Added extra argument to Accurate Advance:
+      hinitial: suggested initial step size
+
+Note:
+ * Purpose:  performance boost with small/limited changes, 
+     including minor revisions of interfaces.
+
+Jun 20th, 2003  J.Apostolakis - field-V05-01-02
+-----------------------------
+G4MagIntegratorDriver Quick Advance:
+- Took out two unneccessary square roots and two divisions.
+
+Notes:
+ 1) Pure magnetic, electric, spin field test are completed.
+ 2) Purpose:  performance boost with small changes.
+
+Jun 20th, 2003  J.Apostolakis - field-V05-01-01
+-----------------------------
+G4MagIntegratorDriver
+- Corrected neglected conversion to <std> from "G4std"
+
+tests
+- Migrated to <std>
+
+Note: Although tests / field01,2,3 are migrated to <std>, but not yet checked.
+
+Jun 19th, 2003  J.Apostolakis - field-V05-01-00
+----------------------------- 
+G4ChordFinder
+- Correct simple constructor to initialise several member variables
+    including LastStepEstimate_Unconstrained.
+
+G4MagIntegratorDriver
+- Keep simple statistics on number of steps, total error and step size.
+- Took out an unneccessary square root (in loop)
+
+NOTE:    tests field0X are to be migrated.
+Purpose: fixes, small performance boost, simple statistics
 
 Apr 2nd, 2003      G. Cosmo - field-V05-00-01
 ---------------------------

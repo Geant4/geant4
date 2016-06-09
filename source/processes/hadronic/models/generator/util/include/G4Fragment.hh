@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Fragment.hh,v 1.15 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Fragment.hh,v 1.17 2003/06/16 17:09:35 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -31,8 +31,8 @@
 #define G4Fragment_h 1
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
-#include "g4std/vector"
+#include <iomanip>
+#include <vector>
 
 #include "globals.hh"
 #include "G4LorentzVector.hh"
@@ -49,7 +49,7 @@
 class G4ParticleDefinition;
 
 class G4Fragment;     // Forward deckaration
-typedef G4std::vector<G4Fragment*> G4FragmentVector;
+typedef std::vector<G4Fragment*> G4FragmentVector;
 
 class G4Fragment 
 {
@@ -80,8 +80,8 @@ public:
   G4bool operator==(const G4Fragment &right) const;
   G4bool operator!=(const G4Fragment &right) const;
 
-  friend G4std::ostream& operator<<(G4std::ostream&, const G4Fragment*);
-  friend G4std::ostream& operator<<(G4std::ostream&, const G4Fragment&);
+  friend std::ostream& operator<<(std::ostream&, const G4Fragment*);
+  friend std::ostream& operator<<(std::ostream&, const G4Fragment&);
 
   // ============= METHODS ==================
 
@@ -200,7 +200,7 @@ inline G4double G4Fragment::GetExcitationEnergy()  const
   return theExcitationEnergy;
 }
 
-inline void G4Fragment::SetExcitationEnergy(const G4double value)
+inline void G4Fragment::SetExcitationEnergy(const G4double )
 {
   //   theExcitationEnergy = value;
   G4cout << "Warning: G4Fragment::SetExcitationEnergy() is a dummy method. Please, avoid to use it." << G4endl;

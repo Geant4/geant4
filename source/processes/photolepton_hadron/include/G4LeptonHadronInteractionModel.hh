@@ -63,12 +63,10 @@
     private:
 
       inline G4LeptonHadronInteractionModel
-        (const G4LeptonHadronInteractionModel &right) { }
+        (const G4LeptonHadronInteractionModel &) { }
 
-      inline G4LeptonHadronInteractionModel & operator=(
-        const G4LeptonHadronInteractionModel &right)
-      { return *this; }
-
+      inline G4LeptonHadronInteractionModel & operator=
+        (const G4LeptonHadronInteractionModel &) { return *this; }
   };
 
 #endif

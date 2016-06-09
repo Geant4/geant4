@@ -55,7 +55,7 @@ public:
     valid_particle = false;
   };
 
-  G4InuclElementaryParticle(const G4std::vector<G4double>& mom,
+  G4InuclElementaryParticle(const std::vector<G4double>& mom,
 			    G4int type) 
     : G4InuclParticle(mom),
       particleType(type) {
@@ -84,7 +84,7 @@ public:
     particleMass = getParticleMass(ityp);
   };
 
-  void setMomentum(const G4std::vector<G4double>& mom) {
+  void setMomentum(const std::vector<G4double>& mom) {
 
     momentum = mom;
     momentum[0] = sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +

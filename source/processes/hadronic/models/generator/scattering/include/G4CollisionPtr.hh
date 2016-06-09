@@ -65,7 +65,7 @@ public:
 
   G4bool operator== (const G4CollisionPtr& right) const;
 
-  G4bool operator< (const G4CollisionPtr& right) { return false; }  
+  G4bool operator< (const G4CollisionPtr& ) { return false; }  
 
 private:  
 

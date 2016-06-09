@@ -146,7 +146,7 @@ G4HEInelastic::Imax(G4int a, G4int b)
 G4double
 G4HEInelastic::NuclearInelasticity(G4double incidentKineticEnergy,
                                    G4double atomicWeight,
-                                   G4double atomicNumber)
+                                   G4double /* atomicNumber*/)
   {
     G4double expu   = log(MAXFLOAT);
     G4double expl   = -expu;
@@ -5219,7 +5219,7 @@ G4HEInelastic::ElasticScattering(G4bool &successful,
                                  G4int &vecLen,  
                                  G4HEVector incidentParticle,
                                  G4double atomicWeight,
-                                 G4double atomicNumber)
+                                 G4double /* atomicNumber*/)
  {
    if(verboseLevel > 1) G4cout << " G4HEInelastic::ElasticScattering " << G4endl;
 
@@ -5761,7 +5761,7 @@ G4HEInelastic::Alam( G4double a, G4double b, G4double c)
  }    
 
 G4double 
-G4HEInelastic::CalculatePhaseSpaceWeight( G4int npart ) 
+G4HEInelastic::CalculatePhaseSpaceWeight( G4int /* npart */) 
  { G4double wfcn = 1.;
    return wfcn;
  }      

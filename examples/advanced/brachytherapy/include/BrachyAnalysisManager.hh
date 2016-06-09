@@ -25,8 +25,8 @@
 // S.Guatelli
 //
 //
-// $Id: BrachyAnalysisManager.hh,v 1.6 2002/11/27 11:11:22 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyAnalysisManager.hh,v 1.8 2003/06/16 16:44:59 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //    **********************************
 //    *                                *
@@ -34,7 +34,7 @@
 //    *                                *
 //    **********************************
 // 
-
+//
 // the class Analysis creates and managed histograms and ntuples
 //
 #ifdef G4ANALYSIS_USE
@@ -42,57 +42,54 @@
 #define G4PROCESSTESTANALYSIS_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ThreeVector.hh"
 #include "AIDA/IHistogram1D.h"
 #include "AIDA/IHistogram2D.h"
 #include "AIDA/IAnalysisFactory.h"
+
 namespace AIDA{
-class ITree;
-class IHistogramFactory;
-class IAnalysisFactory;
-class ITupleFactory;
-class ITuple;
-class ITreeFactory;
+  class ITree;
+  class IHistogramFactory;
+  class IAnalysisFactory;
+  class ITupleFactory;
+  class ITuple;
+  class ITreeFactory;
 };
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class BrachyAnalysisManager
 {
+private:
+  BrachyAnalysisManager();
+
 public:
 
-~BrachyAnalysisManager();
+  ~BrachyAnalysisManager();
+  static BrachyAnalysisManager* getInstance();
+  void book();
+  void FillNtupleWithEnergy(G4double,G4double,G4double,G4float);
+  void FillHistogramWithEnergy(G4double,G4double,G4float);
+  void PrimaryParticleEnergySpectrum(G4double);
+  void finish();
 
-void book();
+  
+private:
 
-void finish();
-
-static BrachyAnalysisManager* getInstance();
-
-void fill_Tuple(G4double,G4double,G4double,G4float);
-void hist(G4double,G4double,G4float);
-void Spectrum(G4double);
+  //  G4double xx,zz,yy;
+  //G4float  en; 
+  //G4double  x,y,z;
+  static BrachyAnalysisManager* instance;
 
 private:
 
-G4double xx,zz,yy;
-G4float  en; 
-G4double  x,y,z;
-static BrachyAnalysisManager* instance;
-
-private:
-BrachyAnalysisManager();
-
-private:
-
-AIDA::IAnalysisFactory*  aFact;
-AIDA::ITree*             theTree;
-AIDA::IHistogramFactory *histFact;
-AIDA::ITupleFactory     *tupFact;
-AIDA::ITreeFactory      *treeFact;
-AIDA::IHistogram2D *h1;
-AIDA::IHistogram1D *h2;
-AIDA::ITuple *ntuple;
+  AIDA::IAnalysisFactory*  aFact;
+  AIDA::ITree*             theTree;
+  AIDA::IHistogramFactory *histFact;
+  AIDA::ITupleFactory     *tupFact;
+  AIDA::ITreeFactory      *treeFact;
+  AIDA::IHistogram2D *h1;
+  AIDA::IHistogram1D *h2;
+  AIDA::ITuple *ntuple;
 };
 
 #endif

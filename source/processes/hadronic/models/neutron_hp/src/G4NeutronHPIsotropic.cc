@@ -36,11 +36,11 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 
-void G4NeutronHPIsotropic::Init(G4std::ifstream & aDataFile)
+void G4NeutronHPIsotropic::Init(std::ifstream & )
 {
 }
 
-G4ReactionProduct * G4NeutronHPIsotropic::Sample(G4double anEnergy, G4double massCode, G4double mass)
+G4ReactionProduct * G4NeutronHPIsotropic::Sample(G4double anEnergy, G4double massCode, G4double )
 {
    G4ReactionProduct * result = new G4ReactionProduct;
    G4int Z = static_cast<G4int>(massCode/1000);
@@ -85,7 +85,7 @@ G4ReactionProduct * G4NeutronHPIsotropic::Sample(G4double anEnergy, G4double mas
    G4double sinth = sin(theta);
    
 // we need the the Q value of the reaction
-   result->SetKineticEnergy(G4std::max(0.001*MeV, anEnergy+GetQValue()));
+   result->SetKineticEnergy(std::max(0.001*MeV, anEnergy+GetQValue()));
    G4double mtot = result->GetTotalMomentum(); 
    G4ThreeVector tempVector(mtot*sinth*cos(phi), mtot*sinth*sin(phi), mtot*cos(theta) );
    result->SetMomentum(tempVector);

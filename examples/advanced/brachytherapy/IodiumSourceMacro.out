@@ -1,0 +1,116 @@
+**********************************************
+ Geant4 version $Name: geant4-05-02 $
+                                (19-May-2003)
+             Copyright : Geant4 Collaboration
+**********************************************
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+
+
+ User Environment 
+ Using AIDA 3.0 analysis 
+
+
+Bremsstrahlung Angular Generator is Modified Tsai
+Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211)
+Derived from Tsai distribution (Rev Mod Phys 49,421(1977)) 
+
+BrachyPhysicsList::SetCuts:CutLength : 100 mum
+/run/verbose 0
+/event/verbose 0
+/source/switch Iodium
+Now Detector is Iodium
+/run/energy Iodium
+/run/initialize
+/run/beamOn  100
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+G4AugerData for Element no. 6 are loaded
+G4AugerData for Element no. 7 are loaded
+G4AugerData for Element no. 8 are loaded
+G4AugerData for Element no. 11 are loaded
+G4AugerData for Element no. 12 are loaded
+G4AugerData for Element no. 13 are loaded
+G4AugerData for Element no. 14 are loaded
+G4AugerData for Element no. 15 are loaded
+G4AugerData for Element no. 16 are loaded
+G4AugerData for Element no. 17 are loaded
+G4AugerData for Element no. 19 are loaded
+G4AugerData for Element no. 20 are loaded
+G4AugerData for Element no. 22 are loaded
+G4AugerData for Element no. 24 are loaded
+G4AugerData for Element no. 25 are loaded
+G4AugerData for Element no. 26 are loaded
+G4AugerData for Element no. 28 are loaded
+G4AugerData for Element no. 30 are loaded
+G4AugerData for Element no. 53 are loaded
+G4AugerData for Element no. 74 are loaded
+G4AugerData for Element no. 77 are loaded
+G4AugerData for Element no. 79 are loaded
+G4AugerData for Element no. 82 are loaded
+AugerTransitionTable complete
+
+LowEnergyIoni:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parametrised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyBremsstrahlung.
+
+LowEnBrem:  Total cross sections from EEDL database.
+      Gamma energy sampled from a parameterised formula.
+      Implementation of the continuous dE/dx part.
+      At present it can be used for electrons in the energy range [250eV,100GeV].
+      The process must work with G4LowEnergyIonisation.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 990 eV    e- 990 eV    e+ 990 eV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : tissue
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 1.06471 keV    e- 84.2696 keV    e+ 83.2385 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : titanium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 4.09208 keV    e- 165.852 keV    e+ 161.818 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Iodium
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 9.58329 keV    e- 152.158 keV    e+ 148.458 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : gold
+ Range cuts        :  gamma 100 mum    e- 100 mum    e+ 100 mum
+ Energy thresholds :  gamma 40.2739 keV    e- 347.138 keV    e+ 334.551 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+The Ntuple is non-zero
+number of event = 100
+Graphics systems deleted.
+Visualization Manager deleting...

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.13 2001/07/11 10:09:15 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ViewParameters.hh,v 1.14 2003/06/16 17:14:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  19th July 1996
@@ -72,14 +72,14 @@
 #ifndef G4VIEWPARAMETERS_HH
 #define G4VIEWPARAMETERS_HH
 
-#include "g4std/vector"
+#include <vector>
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
 #include "G4Plane3D.hh"
 #include "G4VisAttributes.hh"
 #include "G4VMarker.hh"
 
-typedef G4std::vector<G4Plane3D> G4Planes;
+typedef std::vector<G4Plane3D> G4Planes;
 
 class G4ViewParameters {
 
@@ -97,10 +97,10 @@ public: // With description
     nurbs       // Use G4NURBS.
   };
 
-  friend G4std::ostream& operator << (G4std::ostream&,
+  friend std::ostream& operator << (std::ostream&,
 				      const DrawingStyle&);
 
-  friend G4std::ostream& operator << (G4std::ostream&,
+  friend std::ostream& operator << (std::ostream&,
 				      const G4ViewParameters&);
 
   G4ViewParameters ();

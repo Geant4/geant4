@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2003/03/28 09:35:36 gcosmo Exp $
+$Id: History,v 1.30 2003/05/28 11:00:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-05-03  G.Cosmo (exampleN04-V05-01-01)
+- Get rid of pedantic warnings ...
+
+09-05-03  G.Cosmo (exampleN04-V05-01-00)
+- Still minor correction to text in warning printed from HadronPhysics list.
 
 28-03-03  G.Cosmo (exampleN04-V05-00-02)
 - Corrected text in warning printed from HadronPhysics list.

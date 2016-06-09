@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.hh,v 1.5 2001/11/26 19:15:08 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UItcsh.hh,v 1.6 2003/06/16 16:55:56 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4UItcsh_h
@@ -31,7 +31,7 @@
 #ifndef WIN32
 
 #include <termios.h>
-#include "g4std/vector"
+#include <vector>
 #include "G4VUIshell.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcommandTree.hh"
@@ -100,7 +100,7 @@ protected:
 				 const G4String& str2) const;
 
   // history functionality  (history# is managed in itself)
-  G4std::vector<G4String> commandHistory;
+  std::vector<G4String> commandHistory;
   G4int maxHistory;            // max# of histories stored
   G4int currentHistoryNo;      // global
   G4int relativeHistoryIndex;  // local index relative to current history#

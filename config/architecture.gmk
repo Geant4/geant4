@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.85 2003/01/22 18:02:02 gcosmo Exp $
+# $Id: architecture.gmk,v 1.87 2003/06/06 16:20:57 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -15,7 +15,7 @@
 #
 #          Linux-g++   Linux (Red Hat 7.3), gcc-2.95.2 or gcc-3.2 (default)
 #
-#          SUN-CC      SunOS 5.8, CC 5.3 or 5.4
+#          SUN-CC      SunOS 5.8, CC 5.4
 #
 #          WIN32-VC    Windows/2000/XP and Microsoft Visual C++ 6.0 - SP5
 #                      Adding CYGWIN32 tools
@@ -89,6 +89,14 @@ endif
 ifneq ($(G4LIB_BUILD_G3TOG4),)
   G4LIB_BUILD_G3TOG4 = 1
   G4USE_G3TOG4 = 1
+endif
+
+# Specify if to build the STEP and STEinterface modules or not.
+# Default is NO.
+#
+ifneq ($(G4LIB_BUILD_STEP),)
+  G4LIB_BUILD_STEP = 1
+  G4USE_STEP = 1
 endif
 
 # If not specified, the default path for G4 binaries G4BIN is
@@ -263,12 +271,6 @@ GREP := grep
 # Include architecture dependent setups...
 #
 include $(G4INSTALL)/config/sys/$(G4SYSTEM).gmk
-
-# If compiler recognises implicit C++ type bool...
-#
-ifdef G4_HAVE_BOOL
-  CPPFLAGS += -DG4_HAVE_BOOL
-endif
 
 # If there is no cbrt() function...
 #

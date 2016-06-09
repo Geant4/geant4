@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4UniformMagField.cc,v 1.6 2003/04/02 08:50:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 //

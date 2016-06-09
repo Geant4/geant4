@@ -1,0 +1,271 @@
+# $Id: README,v 1.11 2003/06/18 12:27:46 dressel Exp $
+# -------------------------------------------------------------------
+# GEANT4 tag $Name: geant4-05-02 $
+# -------------------------------------------------------------------
+
+Simulation of the TIARA experiment using importance sampling
+============================================================
+
+This example is a simulation of the neutron shielding experiment TIARA
+see http://idsun1.kek.jp/nakao/research/tiara/tiara.htm.
+The example is meant to provide a realistic example for
+applying geometrical importance sampling (geometrical splitting and 
+Russian roulette).
+In the TIARA experiment neutrons of two different energy distributions 
+created by 43 MeV and 68 MeV protons bombarding a 7Li target are measured
+behind several shields. The simulation starts from the neutron spectra.
+In this example the interactions of the neutrons with the (concrete) 
+shields are simulated and energy dependent neutron fluxes are measured 
+behind the shields. Users may chose to run the simulation for different 
+shielding configuration with or without importance sampling.
+The simulated neutron fluxes are compared to the published 
+experimental data. The efficiency of applying importance sampling
+depends strongly on the shied thickness and importance configuration.
+The efficiency of the simulations may be obtained as FOM values.
+
+See also "Geant4 User's Guide 
+For Application Developers", Chapter "Toolkit Fundamentals"
+Section  "Event Biasing Techniques" and references there.
+
+
+
+The example has been tested on CERN RH 7.3 with the
+gcc-3.2 and gcc-2.95.2 compilers.
+
+Note for system testing without analysis: see points 1, 1.3 and 3.2.
+
+
+
+
+1) Setting the environment
+==========================
+
+You should have Geant4 compiled with:
+"G4LIB_BUILD_SHARED" set to 1.
+You need to set:
+"NeutronHPCrossSections" (e.g. to ${G4INSTALL}/data/G4NDL3.7)
+
+
+Three examples are given of how to set environment variables
+in the three cases:
+
+1.1) Anaphe via AFS (most simple):
+--------------------
+   You have access to afs and you want to use Anaphe for the
+   analysis: 
+   Set the following environment variables:
+   "G4ANALYSIS_USE"
+
+   "ANAPHETOP" (e.g. /afs/cern.ch/sw/lhcxx)
+   "AIDA_DIR"  (e.g. /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp)
+   "ANAPHE_SCRIPTS" (e.g. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.4/scripts)
+
+   Finally source the script envCommon.csh
+
+
+1.2) No afs but a local Anphe and AIDA installation:
+----------------------------------------------------
+   You don't use afs but you have a local installation of Anaphe and AIDA
+   (e.g. from http://anaphe.web.cern.ch/anaphe/.
+   Set the following environment variables:
+   "G4ANALYSIS_USE"
+ 
+   "ANAPHETOP" (e.g. <directory>/Anaphe/release)
+   "AIDA_DIR"  (e.g. <directory>/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
+   "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.5/scripts)
+
+      here <directory> is a place holder for your directory with the
+      respective installations of Anaphe and AIDA
+
+   Finally source the script envCommon.csh
+
+
+1.3) No afs and no Anaphe and no AIDA (e.g. for system testing):
+----------------------------------------------------------------
+   You don't want to use Anaphe and AIDA and you don't have no afs access.
+   Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE).
+
+   Note: python must be built against a "libc". 
+         You may do this by creating a shared library by a command
+         similar to this 
+         "ld -shared -o libpython2.2.so --whole-archive libpython2.2.a /usr/lib/libc.so"
+
+   Set the following environment variables:
+   "PYTHONVERSION" (2.2 or higher)
+   "PYTHON_BASE_DIR" (e.g. to  /usr/)
+
+   "SWIG_VERSION" (e.g. 1.3 or higher)
+   "SWIG_BASE_DIR" (e.g. /users/dressel/local)
+
+   "CLHEP_BASE_DIR" (e.g. to  /users/dressel/CLHEP)
+
+   Finally source the script envCommon.csh
+
+
+2) Building the example
+=======================
+
+Geant4 has to be compiled using G4LIB_BUILD_SHARED 1 and the one of the 
+above environment settings have to be set.
+
+Type "gmake".
+
+
+2.1) In more detail
+-------------------
+
+Geant4 should be compiled into granular shared libraries.
+Therefore before compiling Geant4 set "G4LIB_BUILD_SHARED" to "1".
+
+External packages used in this example are Anaphe, SWIG and Python.
+The Anaphe package comes with SWIG and Python versions used to build
+Anaphe itself. These SWIG and Python versions should also be used with 
+this example if Anaphe is used. 
+
+
+2.2) Cleaning up
+----------------
+To remove the files created by swig ( *_wrap.cc, the corresponding 
+.py files) use "gmake swigClean.
+To remove the directories of compiled code related to this example under 
+$G4WORKDIR/tmp/$G4SYSTEM/ use "gmake tiaraClean".
+
+
+3) Running the example:
+=======================
+
+
+3.1) Using Anaphe
+-----------------
+Change to the sub directory "run" and execute "runSim.py".
+"runSim.py" runs an example configuration which nay be
+changed by the user. The results of the simulation are stored in 
+the directory "simData". 
+The script "runSim.py" periodically prints scoring information to the 
+screen. 
+It also prints out the relative path of a ".shelve" file.
+This file can be used to access results of the simulation.
+
+In case the example was build using analysis
+results may be viewed e.g. using lizard and scripts:
+1) Start python2.2 or lizard
+2) type: import dataAcess
+3) type: p = dataAcess.ExpMcPlot (shelveFileName,detectorposition)
+         where "shelveFileName" is the name (enclosed in quotes) of the
+         shelve file created during the execution of anaSim.py. 
+         The name is printed on the screen during execution of runSim.py.
+         "detectorposition" may be "00, "20" or "40" and stand for the 
+         detectors 00, 20, 40 cm off beam axis respectively. 
+4) type: p.display ()
+5) type: import extractShelve
+6) type: extractShelve.getFluxes (p.she)
+         p.she is the shelve object containing simulation results.
+         This prints the FOM values for the used detectors
+         for two energy regions below and in the peak region.
+         The FOM are should be compared to unbiased simulations. To run 
+         an unbiased simulation set the importance values to one (see  
+         runSim.py)
+  
+Note: the output files written after every run are incremental! Meaning 
+      the file with the highest run number contains the data from 
+      all the runs!
+
+The modules (dataAcess, extractShelve) imported in the above steps are 
+placed in source/py_modules in files named after the module ending with 
+".py".
+
+Since the simulation time used by "runSim.py" is only 5 minutes the
+calculated results have large errors. If you want to see a better result
+do the following changes in "naSim.py".
+Extend the total run time to e,g, 2 hours by setting:
+"totalTime = 2 * myUtils.hour", 
+set the print out period to 30 minutes by setting:
+"timeForOneRun = 30 * myUtils.min".
+
+
+
+
+3.2) Not using Anaphe (mainly for system testing)
+-------------------------------------------------
+Change to the sub directory "run" and execute 
+runSimNoAnalysis.py.
+
+
+
+
+
+4) Content of the directory:
+============================
+
+
+simCommon.csh - a script to setup environment variables
+    in case the above one of the above environment settings have been
+    done beforehand.
+
+GNUmakefile - for building the example
+
+
+data / - directory containing experimental data
+
+      expDataOrig - experimental data taken from 
+                    http://idsun1.kek.jp/nakao/research/tiara/tiara.htm
+
+      expDataConverted  - some of the experimental data and the source
+                    spectra converted into Anaphes DataPointSet
+                    and stored in Anaphes xml format 
+
+
+source / - directory containing the source code
+
+        tiara - C++ source code 
+
+        tiaraPhysicsLists - C++ source code of physics lists
+
+        tiaraPhysicsPackaging - C++ source cod with common 
+                                classes for the physics lists
+
+        CLHEPWrapper - wrapper classes for usage in python
+                     \include\CLHEP.i - specification file for swig
+                     \src\CLHEP_wrap.cc - wrapper created with swig
+
+	G4KernelWrapper - wrapper classes for usage in python
+
+        TiaraWrapper - wrapper classes for usage in python
+
+        py_modules - python modules for running and analysing
+
+	swig.gmk - makefile rules for using swig  
+
+run / - directory for running the example
+       runSim.py - executable example script
+       runSimNoAnalysis.py - executable script for running without 
+                             analysis
+
+
+
+5) Technicalities about this example
+===================================
+
+ This example is composed out of a layer of classes written in C++
+(source/tiara/include, source/tiara/src), a layer of python
+shadow classes created by swig (source/CLHEPWrapper, 
+source/G4KernelWrapper, source/TiaraWrapper) and layer of 
+python modules (source/py_modules). 
+ The C++ layer under source/tiara provides lower level classes closely
+related to the Geant4 kernel. 
+ The shadow classes in the source/*Wrapper directories provide classes 
+that may be instantiated in a python script or session. This way the 
+lower level C++ code can be used directly for scripting in python. The 
+shadow classes are declared in the files with extensions ".i" in the 
+source/*Wrapper/include directories. Swig is used to create C++ code for 
+a library that can be loaded into python and python modules (files with 
+extensions .py in the source/*Wrapper directories). When the python 
+modules created by swig are imported into python (in a session or a 
+script) the corresponding C++ library is automatically loaded as well.
+ The python modules in source/py_modules provide classes and functions
+that may be changed or customized more frequently than the C++ classes
+in source/tiara. These classes complete the construction of geometries
+take care of the procedure of setting up the simulation, the run sequence
+and the analysis after the simulation has been ran.
+ The script runSim.py is an commented example of using the python modules
+to run a simulation.

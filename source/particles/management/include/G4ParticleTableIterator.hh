@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTableIterator.hh,v 1.5 2001/07/11 10:01:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleTableIterator.hh,v 1.6 2003/06/16 16:58:07 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -35,12 +35,12 @@
 #ifndef G4ParticleTableIterator_h
 #define G4ParticleTableIterator_h 1
 
-#include "g4std/map"
+#include <map>
 
 template < class K, class V > class G4ParticleTableIterator
 {
  public:
-  typedef  G4std::map<K, V, G4std::less<K> > Map;
+  typedef  std::map<K, V, std::less<K> > Map;
   G4ParticleTableIterator( Map &adict):
     it(adict.begin()),
     mydict(&adict),

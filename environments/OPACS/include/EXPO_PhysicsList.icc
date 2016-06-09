@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: EXPO_PhysicsList.icc,v 1.5 2001/07/11 09:56:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: EXPO_PhysicsList.icc,v 1.6 2003/06/16 16:44:50 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -45,7 +45,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"                
+#include <iomanip>                
 
 
 EXPO_PhysicsList::EXPO_PhysicsList():  G4VUserPhysicsList()

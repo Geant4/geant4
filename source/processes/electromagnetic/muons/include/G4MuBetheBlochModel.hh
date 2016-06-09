@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuBetheBlochModel.hh,v 1.7 2003/06/16 17:01:36 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -94,7 +96,7 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  virtual G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
@@ -140,7 +142,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition* p,
+          const G4ParticleDefinition*,
                 G4double kinEnergy) 
 {
 

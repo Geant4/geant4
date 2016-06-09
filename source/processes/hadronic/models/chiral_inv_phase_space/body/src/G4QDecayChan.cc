@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.cc,v 1.15 2002/12/12 19:14:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QDecayChan.cc,v 1.16 2003/06/16 17:04:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QDecayChan ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -33,7 +33,7 @@
 //#define pdebug
 
 #include "G4QDecayChanVector.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
 G4QDecayChan::G4QDecayChan(){}
 
@@ -86,7 +86,7 @@ G4QDecayChan::G4QDecayChan(G4QDecayChan* right)
 
 G4QDecayChan::~G4QDecayChan() 
 {
-  G4std::for_each(aVecOfSecHadrons.begin(), aVecOfSecHadrons.end(), DeleteQPDGCode());
+  std::for_each(aVecOfSecHadrons.begin(), aVecOfSecHadrons.end(), DeleteQPDGCode());
 }
 
 // Assignment operator
@@ -106,7 +106,7 @@ const G4QDecayChan& G4QDecayChan::operator=(const G4QDecayChan& right)
 }
 
 // Standard output for QDecayChan
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QDecayChan& rhs)
+std::ostream& operator<<(std::ostream& lhs, G4QDecayChan& rhs)
 //       =========================================
 {
   lhs << "[L=" << rhs.GetDecayChanLimit(); 

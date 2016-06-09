@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2003/04/07 14:14:20 vnivanch Exp $
+$Id: History,v 1.76 2003/06/21 01:34:50 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,50 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jun, 21st, J.Apostolakis  transport-V05-01-05
+------------------------
+**  Requires field-V05-01-04 and geomvol-V05-01-03 **
+- Use new method of PropagatorInField to simplify choice of global/local field,
+    
+- Activate the new capability of a (user derived) field manager to configure 
+   itself with different accuracy parameters depending on track's energy, 
+   particle identity, or other property.
 
-Apr, 7rd, V.Ivanchenko     transport-V05-00-04
+Includes updates of files to use <std> in place of "g4std", as made at the head.
+
+Jun, 13th, M.Dressel       transport-V05-01-04
+--------------------
+added to put the delete fImportancePostStepDoIt in G4MassImportanceProcess
+and G4ParallelImportanceProcess.
+
+Jun, 13th, M.Dressel       transport-V05-01-03
+--------------------
+fixed bug created by last bug fix in G4MassImportanceProcess
+and G4ParallelImportanceProcess.
+
+Jun, 12th, M.Dressel       transport-V05-01-02
+--------------------
+fixed "'this' : used in base member initializer list" in 
+src\G4MassImportanceProcess.cc, src\G4ParallelImportanceProcess.cc
+
+Jun, 4th, G.Cosmo          transport-V05-01-01
 -----------------
-- Migrade to cut per region for G4UserSpecialCuts
+- Fixes for inclusion of <strstream> in G4ParallelImportanceProcess.cc
+  and G4ParallelTransport.cc in view  of the g4std wrappers migration.
+
+May, 13th, J.Apostolakis   transport-V05-01-00
+------------------------
+- Fixes to G4Transportation.cc to accomodate incorrect and
+  missing functionality for two use cases:
+  o a local field when no global field exists  (it was not seen)
+  o overriding an existing global field by a 'zero' field
+    by creating a local field manager that has a null G4Field pointer 
+    (a use case which did not exist.)
+  Further work to verify these use cases work is required.  
+
+Apr, 7th, V.Ivanchenko     transport-V05-00-04
+-----------------
+- Migration to "cuts by region" for G4UserSpecialCuts.
 
 Apr, 3rd, G.Cosmo          transport-V05-00-03
 -----------------

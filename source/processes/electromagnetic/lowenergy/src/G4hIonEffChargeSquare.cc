@@ -86,7 +86,7 @@ G4double G4hIonEffChargeSquare::TheValue(const G4DynamicParticle* particle,
 
 G4double G4hIonEffChargeSquare::TheValue(const G4ParticleDefinition* aParticle,
        		                         const G4Material* material,
-                                               G4double kineticEnergy) 
+					 G4double kineticEnergy) 
 {
   //  SetRateMass(aParticle) ;
   G4double particleMass = aParticle->GetPDGMass() ;
@@ -100,8 +100,8 @@ G4double G4hIonEffChargeSquare::TheValue(const G4ParticleDefinition* aParticle,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::HighEnergyLimit(
-                             const G4ParticleDefinition* aParticle,
-                             const G4Material* material) const
+						const G4ParticleDefinition* ,
+						const G4Material* ) const
 {
   return 1.0*TeV ;
 }
@@ -109,8 +109,8 @@ G4double G4hIonEffChargeSquare::HighEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::LowEnergyLimit(
-                          const G4ParticleDefinition* aParticle,
-                          const G4Material* material) const
+					       const G4ParticleDefinition* ,
+					       const G4Material* ) const
 {
   return 0.0 ;
 }
@@ -118,7 +118,7 @@ G4double G4hIonEffChargeSquare::LowEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::HighEnergyLimit(
-                          const G4ParticleDefinition* aParticle) const
+						const G4ParticleDefinition* ) const
 {
   return 1.0*TeV ;
 }
@@ -126,23 +126,23 @@ G4double G4hIonEffChargeSquare::HighEnergyLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::LowEnergyLimit(
-                          const G4ParticleDefinition* aParticle) const
+					       const G4ParticleDefinition* ) const
 {
   return 0.0 ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4hIonEffChargeSquare::IsInCharge(const G4DynamicParticle* particle,
-		                         const G4Material* material) const
+G4bool G4hIonEffChargeSquare::IsInCharge(const G4DynamicParticle* ,
+		                         const G4Material* ) const
 {
   return true ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4bool G4hIonEffChargeSquare::IsInCharge(const G4ParticleDefinition* aParticle,
-      		                         const G4Material* material) const
+G4bool G4hIonEffChargeSquare::IsInCharge(const G4ParticleDefinition* ,
+      		                         const G4Material* ) const
 {
   return true ;
 }
@@ -150,10 +150,10 @@ G4bool G4hIonEffChargeSquare::IsInCharge(const G4ParticleDefinition* aParticle,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::IonEffChargeSquare(
-                                const G4Material* material,
-                                      G4double kineticEnergy,
-                                      G4double particleMass,
-                                      G4double ionCharge) const
+						   const G4Material* material,
+						   G4double kineticEnergy,
+						   G4double particleMass,
+						   G4double ionCharge) const
 {
   // The aproximation of ion effective charge from: 
   // J.F.Ziegler, J.P. Biersack, U. Littmark
@@ -232,7 +232,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   // Helium ion case
   if( ionCharge < 2.5 ) {
 
-    G4double e = log(G4std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ; 
+    G4double e = log(std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ; 
     G4double x = c[0] ;
     G4double y = 1.0 ;
     for (G4int i=1; i<6; i++) {
@@ -265,7 +265,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
                             0.38157*y - 0.008983*y*y ) ;     
     if( q < 0.0 ) q = 0.0 ;
 
-    G4double s = 7.6 -  log(G4std::max(1.0, reducedEnergy/keV)) ; 
+    G4double s = 7.6 -  log(std::max(1.0, reducedEnergy/keV)) ; 
     s = 1.0 + ( 0.18 + 0.0015 * z ) * exp( -s*s )/ (ionCharge*ionCharge) ;
 
     // Screen length according to

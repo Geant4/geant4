@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVPlacement.cc,v 1.7 2003/03/31 14:18:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PVPlacement.cc,v 1.9 2003/05/14 09:34:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4PVPlacement Implementation
@@ -40,6 +40,12 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
   : G4VPhysicalVolume(pRot,tlate,pName,pLogical,pMother),
     fmany(pMany), fallocatedRotM(false), fcopyNo(pCopyNo)
 {
+  if (pMother)
+  {
+    G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
+    SetMotherLogical(motherLogical);
+    motherLogical->AddDaughter(this);
+  }
 }
 
 G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
@@ -52,7 +58,13 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
                       Transform3D.getTranslation(),pName,pLogical,pMother),
     fmany(pMany), fcopyNo(pCopyNo)
 {
-  fallocatedRotM= (this->GetRotation() != 0);
+  fallocatedRotM = (GetRotation() != 0);
+  if (pMother)
+  {
+    G4LogicalVolume* motherLogical = pMother->GetLogicalVolume();
+    SetMotherLogical(motherLogical);
+    motherLogical->AddDaughter(this);
+  }
 }
 
 //
@@ -70,6 +82,7 @@ G4PVPlacement::G4PVPlacement( G4RotationMatrix *pRot,
   : G4VPhysicalVolume(pRot,tlate,pName,pCurrentLogical,0),
     fmany(pMany), fallocatedRotM(false), fcopyNo(pCopyNo)
 {
+  SetMotherLogical(pMotherLogical);
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
 }
 
@@ -83,9 +96,10 @@ G4PVPlacement::G4PVPlacement( const G4Transform3D &Transform3D,
   : G4VPhysicalVolume(0,Transform3D.getTranslation(),pName,pCurrentLogical,0),
     fmany(pMany), fcopyNo(pCopyNo)
 {
-  this->SetRotation( NewPtrRotMatrix(Transform3D.getRotation().inverse()) );
-  fallocatedRotM= (this->GetRotation() != 0);
+  SetRotation( NewPtrRotMatrix(Transform3D.getRotation().inverse()) );
+  fallocatedRotM = (GetRotation() != 0);
   
+  SetMotherLogical(pMotherLogical);
   if (pMotherLogical) pMotherLogical->AddDaughter(this);
 }
 
@@ -152,11 +166,11 @@ G4RotationMatrix* G4PVPlacement::NewPtrRotMatrix(const G4RotationMatrix &RotMat)
   G4RotationMatrix *pRotMatrix; 
   if ( RotMat.isIdentity() )
   {
-     pRotMatrix= 0;
+     pRotMatrix = 0;
   }
   else
   {
-     pRotMatrix= new G4RotationMatrix(RotMat);
+     pRotMatrix = new G4RotationMatrix(RotMat);
   }
   // fallocatedRotM= ! (RotMat.isIdentity());
     

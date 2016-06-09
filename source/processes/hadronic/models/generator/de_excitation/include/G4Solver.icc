@@ -95,7 +95,7 @@ G4bool G4Solver<Function>::RegulaFalsi(Function & theFunction)
     for (G4int i = 0; i < MaxIter; i++) 
     {
 	G4double c = (a*fb-b*fa)/(fb-fa);
-	G4double delta = G4std::min(abs(c-a),abs(b-c));
+	G4double delta = std::min(abs(c-a),abs(b-c));
 	if (delta < eps) 
 	{
 	    root = c;
@@ -197,7 +197,7 @@ G4bool G4Solver<Function>::Brent(Function & theFunction)
 	    p = abs(p);
 	    G4double min1 = 3.0*xm*q-abs(Tol1*q);
 	    G4double min2 = abs(e*q);
-	    if (2.0*p < G4std::min(min1,min2)) 
+	    if (2.0*p < std::min(min1,min2)) 
 	    {
 		// Interpolation
 		e = d;

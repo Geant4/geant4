@@ -41,6 +41,7 @@
 // 13-02-03 The set of models is defined for region (V.Ivanchenko)
 // 06-03-03 Fix in energy intervals for models (V.Ivanchenko)
 // 13-04-03 Add startFromNull (V.Ivanchenko)
+// 13-05-03 Add calculation of precise range (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -70,7 +71,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4RegionModels::G4RegionModels(G4int nMod, G4std::vector<G4int>& list, G4DataVector& lowE)
+G4RegionModels::G4RegionModels(G4int nMod, std::vector<G4int>& list, G4DataVector& lowE)
 {
   nModelsForRegion      = nMod;
   theListOfModelIndexes = new G4int [nModelsForRegion];
@@ -212,7 +213,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
   // Identify the list of regions with different set of models
   nRegions = 1;
-  G4std::vector<const G4Region*> set;
+  std::vector<const G4Region*> set;
   set.push_back(world);
 
   for (G4int ii=0; ii<nEmModels; ii++) {
@@ -245,7 +246,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
     G4int n = 0;
 
-    G4std::vector<G4int>    modelAtRegion;
+    std::vector<G4int>    modelAtRegion;
     G4DataVector            eLow;
     G4DataVector            eHigh;
     modelAtRegion.clear();
@@ -261,7 +262,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
         G4double tmin = model->LowEnergyLimit(particle);
         G4double tmax = model->HighEnergyLimit(particle);
-        if (n) tmin = G4std::max(tmin, eHigh[n-1]);
+        if (n) tmin = std::max(tmin, eHigh[n-1]);
 
         if(1 < verboseLevel) {
           G4cout << "Model # " << ii << " for region <"
@@ -322,9 +323,9 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
       G4double tcutmin = model->MinEnergyCut(particle, couple);
 
-      cut = G4std::max(cut, tcutmin);
-      G4double x = G4std::max(cut*minSubRange, tcutmin);
-      subcut = G4std::max(subcut, x);
+      cut = std::max(cut, tcutmin);
+      G4double x = std::max(cut*minSubRange, tcutmin);
+      subcut = std::max(subcut, x);
       if(1 < verboseLevel) {
             G4cout << "The model # " << j
                    << "; tcutmin(MeV)= " << tcutmin/MeV
@@ -449,6 +450,104 @@ void G4EmModelManager::FillDEDXVector(G4PhysicsVector* aVector,
   }
 }
 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmModelManager::FillDEDXVectorForPreciseRange(
+                                      G4PhysicsVector* aVector,
+                                const G4MaterialCutsCouple* couple)
+{
+
+  // vectors to provide continues dE/dx
+  G4DataVector factor;
+  G4DataVector dedxLow;
+  G4DataVector dedxHigh;
+
+  G4double e;
+
+  const G4Material* material = couple->GetMaterial();
+  size_t i = couple->GetIndex();
+
+  if(0 < verboseLevel) {
+    G4cout << "G4EmModelManager::FillDEDXVector() for "
+           << material->GetName()
+           << G4endl;
+  }
+
+  G4int reg  = idxOfRegionModels[i];
+  const G4RegionModels* regModels = setOfRegionModels[reg];
+  G4int nmod = regModels->NumberOfModels();
+  factor.resize(nmod);
+  dedxLow.resize(nmod);
+  dedxHigh.resize(nmod);
+
+
+  if(0 < verboseLevel) {
+      G4cout << "There are " << nmod << " models for "
+             << material->GetName()
+	     << " at the region #" << reg
+	     << G4endl;
+  }
+
+
+  // calculate factors to provide continuity of energy loss
+  factor[0] = 1.0;
+  G4int j;
+
+  G4int totBinsLoss = aVector->GetVectorLength();
+
+  dedxLow[0]  = 0.0;
+
+  e = upperEkin[regModels->ModelIndex(0)];
+  dedxHigh[0] = models[regModels->ModelIndex(0)]->ComputeDEDX(material,particle,e,e);
+
+  if(nmod > 1) {
+    for(j=1; j<nmod; j++) {
+
+      e = upperEkin[regModels->ModelIndex(j-1)];
+      dedxLow[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(material,particle,e,e);
+      e = upperEkin[regModels->ModelIndex(j)];
+      dedxHigh[j] = models[regModels->ModelIndex(j)]->ComputeDEDX(material,particle,e,e);
+    }
+
+    for(j=1; j<nmod; j++) {
+      if(dedxLow[j] > 0.0) factor[j] = (dedxHigh[j-1]/dedxLow[j] - 1.0);
+      else                 factor[j] = 0.0;
+    }
+
+    if(1 < verboseLevel) {
+      G4cout << "Loop over " << totBinsLoss << " bins start " << G4endl;
+    }
+  }
+
+  // Calculate energy losses vector
+  for(j=0; j<totBinsLoss; j++) {
+
+    G4double e = aVector->GetLowEdgeEnergy(j);
+    G4double fac = 1.0;
+
+      // Choose a model of energy losses
+    G4int k = 0;
+    if (nmod > 1 && e > upperEkin[regModels->ModelIndex(0)]) {
+      do {
+        k++;
+        fac *= (1.0 + factor[k]*upperEkin[regModels->ModelIndex(k-1)]/e);
+      } while (k<nmod-1 && e < upperEkin[regModels->ModelIndex(k)] );
+    }
+
+    G4double dedx = models[regModels->ModelIndex(k)]->ComputeDEDX(material,particle,e,e)*fac;
+
+    if(dedx < 0.0) dedx = 0.0;
+    if(1 < verboseLevel) {
+        G4cout << "Material= " << material->GetName()
+               << "   E(MeV)= " << e/MeV
+               << "  dEdx(MeV/mm)= " << dedx*mm/MeV
+               << "  fac= " << fac
+               << G4endl;
+    }
+    aVector->PutValue(j, dedx);
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

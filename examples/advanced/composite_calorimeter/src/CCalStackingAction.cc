@@ -188,7 +188,7 @@ void CCalStackingAction::NewStage(){
   }
 }
 
-G4bool CCalStackingAction::trackStartsInCalo(const G4Track* atrack){
+G4bool CCalStackingAction::trackStartsInCalo(const G4Track* ){
 
  /// This method should check that the secondary particle
  /// was produced inside the detector calorimeter and 

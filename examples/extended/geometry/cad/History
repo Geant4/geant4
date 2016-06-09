@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2002/11/18 13:55:19 gcosmo Exp $
+$Id: History,v 1.4 2003/05/28 08:13:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 28, 03 G.Cosmo (cadex-V05-01-00)
+- Set G4USE_STEP flag in GNUmakefile. Updated README.
 
 November 18, 02 G.Cosmo (cadex-V04-01-01)
 - Enhanced corrections for VERTEX_POINT, EDGE_LOOP and POLY_LOOP.

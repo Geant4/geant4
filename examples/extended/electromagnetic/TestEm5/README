@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2002/12/12 13:26:50 maire Exp $
+$Id: README,v 1.8 2003/05/30 10:43:38 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -144,6 +144,8 @@ $Id: README,v 1.7 2002/12/12 13:26:50 maire Exp $
         8.   kinetic energy of the charged secondary particles (MeV)
         9.   z distribution of the secondary charged vertices (mm)
        10.   kinetic energy of the photons escaping the absorber (MeV)
+       11.   projected angle distribution of the primary particle
+             at exit of the absorber (deg) 
 
      Note that histograms are disabled via the flag G4NOHIST in GNUmakefile.
      

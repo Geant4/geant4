@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFermiFragment.cc,v 1.6 2002/12/12 19:17:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VFermiFragment.cc,v 1.7 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -30,25 +30,25 @@
 #include "G4VFermiFragment.hh"
 
 
-G4VFermiFragment::G4VFermiFragment(const G4VFermiFragment &right)
+G4VFermiFragment::G4VFermiFragment(const G4VFermiFragment &)
 {
     G4Exception("G4VFermiFragment::copy_constructor meant to not be accessable");
 }
 
 
-const G4VFermiFragment & G4VFermiFragment::operator=(const G4VFermiFragment &right)
+const G4VFermiFragment & G4VFermiFragment::operator=(const G4VFermiFragment &)
 {
     G4Exception("G4VFermiFragment::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4VFermiFragment::operator==(const G4VFermiFragment &right) const
+G4bool G4VFermiFragment::operator==(const G4VFermiFragment &) const
 {
     return false;
 }
 
-G4bool G4VFermiFragment::operator!=(const G4VFermiFragment &right) const
+G4bool G4VFermiFragment::operator!=(const G4VFermiFragment &) const
 {
     return true;
 }

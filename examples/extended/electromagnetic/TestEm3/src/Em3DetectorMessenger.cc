@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.cc,v 1.9 2003/03/06 11:16:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em3DetectorMessenger.cc,v 1.10 2003/06/16 16:47:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -147,7 +147,7 @@ void Em3DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      G4int num; G4double tick;
      char mat[30],unts[30];
      const char* t = newValue;
-     G4std::istrstream is((char*)t);
+     std::istrstream is((char*)t);
      is >> num >> mat >> tick >> unts;
      G4String material=mat, unt=unts;
      tick *= G4UIcommand::ValueOf(unt);

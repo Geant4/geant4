@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RangeTest.cc,v 1.6 2003/01/22 18:47:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RangeTest.cc,v 1.7 2003/06/16 17:00:24 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -55,7 +55,7 @@ G4bool G4RangeTest::Escape(const G4ParticleDefinition* particle,
   if(idx>0) {
     G4double range = G4EnergyLossTables::GetRange(particle,energy,couple);
     G4double cut = couple->GetProductionCuts()->GetProductionCut(idx);
-    G4double rMin = G4std::min(cut,safety);
+    G4double rMin = std::min(cut,safety);
     value = (range > rMin);
   }
   return value;

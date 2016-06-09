@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ExN04HadronPhysics.hh,v 1.5 2003/03/28 09:35:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN04HadronPhysics.hh,v 1.6 2003/06/16 16:49:51 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
@@ -34,7 +34,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VPhysicsConstructor.hh"
 

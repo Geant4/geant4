@@ -18,7 +18,7 @@
 * values for the EXPRESS base types.
 */
 
-/* $Id: sdai.h,v 1.4 2000/02/14 13:44:03 gcosmo Exp $ */
+/* $Id: sdai.h,v 1.5 2003/06/06 17:07:31 gcosmo Exp $ */
 
 extern const char *SCLversion;
 
@@ -370,7 +370,7 @@ typedef SCLP23(Application_instance)* STEPentityPtr;
 typedef SCLP23(Application_instance)* STEPentityH;
 
 extern SCLP23(Application_instance) *
-ReadEntityRef(G4std::istream &in, ErrorDescriptor *err, char *tokenList, 
+ReadEntityRef(std::istream &in, ErrorDescriptor *err, char *tokenList, 
 	      InstMgr * instances, int addFileId);
 
 #define SdaiInteger SCLP23(Integer)

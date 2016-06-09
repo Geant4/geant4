@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ListOfCollisions.hh,v 1.2 2002/12/12 19:17:41 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ListOfCollisions.hh,v 1.3 2003/06/16 17:08:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // $Id: G4ListOfCollisions.hh,v 1.0 1998/06/30
 // -----------------------------------------------------------------------------
@@ -36,10 +36,10 @@
 #define G4ListOfCollisions_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4CollisionInitialState.hh"
 
-typedef G4std::vector<G4CollisionInitialState*> G4ListOfCollisions;
+typedef std::vector<G4CollisionInitialState*> G4ListOfCollisions;
 struct DeleteCollisionInitialState { void operator()(G4CollisionInitialState *aC) {delete aC;} };
 
 #endif

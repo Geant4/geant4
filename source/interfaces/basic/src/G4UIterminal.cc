@@ -21,11 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.17 2001/11/26 19:15:08 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIterminal.cc,v 1.19 2003/06/16 16:56:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
-#include "g4std/strstream"
+#include "G4Types.hh"
+#include <strstream>
 #include "G4StateManager.hh"
 #include "G4UIcommandTree.hh"
 #include "G4UIcommand.hh"
@@ -204,7 +205,7 @@ G4String G4UIterminal::GetCommand(const char* msg)
     G4String ss= nC(1, nC.length()-1);
     G4int vl;
     const char* tt= ss;
-    G4std::istrstream is((char*)tt);
+    std::istrstream is((char*)tt);
     is >> vl;
     G4int nh= UI-> GetNumberOfHistory();
     if(vl>=0 && vl<nh) { 
@@ -245,7 +246,7 @@ G4String G4UIterminal::GetCommand(const char* msg)
 G4int G4UIterminal::ReceiveG4cout(G4String coutString)
 //////////////////////////////////////////////////////
 {
-  G4std::cout << coutString << G4std::flush;
+  std::cout << coutString << std::flush;
   return 0;
 }
 
@@ -253,7 +254,7 @@ G4int G4UIterminal::ReceiveG4cout(G4String coutString)
 G4int G4UIterminal::ReceiveG4cerr(G4String cerrString)
 //////////////////////////////////////////////////////
 {
-  G4std::cerr << cerrString << G4std::flush;
+  std::cerr << cerrString << std::flush;
   return 0;
 }
 

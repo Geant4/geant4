@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationFactory.cc,v 1.2 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EvaporationFactory.cc,v 1.4 2003/06/16 17:06:21 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -42,21 +42,21 @@
 
 
 const G4EvaporationFactory & 
-G4EvaporationFactory::operator=(const G4EvaporationFactory & val)
+G4EvaporationFactory::operator=(const G4EvaporationFactory & )
 {
   G4Exception("G4EvaporationFactory::operator= meant to not be accessable.");
   return *this;
 }
 
 G4bool 
-G4EvaporationFactory::operator==(const G4EvaporationFactory & val) const
+G4EvaporationFactory::operator==(const G4EvaporationFactory & ) const
 {
   G4Exception("G4EvaporationFactory::operator== meant to not be accessable.");
   return false;
 }
 
 G4bool 
-G4EvaporationFactory::operator!=(const G4EvaporationFactory & val) const
+G4EvaporationFactory::operator!=(const G4EvaporationFactory & ) const
 {
   G4Exception("G4EvaporationFactory::operator!= meant to not be accessable.");
   return true;
@@ -64,11 +64,11 @@ G4EvaporationFactory::operator!=(const G4EvaporationFactory & val) const
 
 
 
-G4std::vector<G4VEvaporationChannel*> * 
+std::vector<G4VEvaporationChannel*> * 
 G4EvaporationFactory::CreateChannel()
 {
-  G4std::vector<G4VEvaporationChannel*> * theChannel = 
-    new G4std::vector<G4VEvaporationChannel*>;
+  std::vector<G4VEvaporationChannel*> * theChannel = 
+    new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(8);
 
   theChannel->push_back( new G4NeutronEvaporationChannel() );  // n

@@ -21,9 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.34 2002/12/11 16:10:06 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
-
+// $Id: G4VisCommandsSceneAdd.cc,v 1.38 2003/06/16 17:14:23 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -50,7 +49,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 // Local function with some frequently used error printing...
 static void G4VisCommandsSceneAddUnsuccessful
@@ -100,8 +99,7 @@ G4String G4VisCommandSceneAddAxes::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
+void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -117,7 +115,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand* command,
   G4String unitString;
   G4double x0, y0, z0, length;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> x0 >> y0 >> z0 >> length >> unitString;
 
   G4double unit = ValueOf(unitString);
@@ -156,12 +154,11 @@ G4VisCommandSceneAddGhosts::~G4VisCommandSceneAddGhosts () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneAddGhosts::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneAddGhosts::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
-					      G4String newValue) {
+void G4VisCommandSceneAddGhosts::SetNewValue(G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -175,6 +172,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   }
   const G4String& currentSceneName = pScene -> GetName ();
 
+  // Gets the G4GlobalFastSimulationManager pointer if any.
   G4VGlobalFastSimulationManager* theGlobalFastSimulationManager;
   if(!(theGlobalFastSimulationManager = 
        G4VGlobalFastSimulationManager::GetConcreteInstance ())){
@@ -184,61 +182,73 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
     return;
   }
   
+  // Gets the G4ParticleTable pointer.
   G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
   
-  if(newValue=="all") {
-    G4VFlavoredParallelWorld* CurrentFlavoredWorld = 0;
-    G4bool successful(false);
-    for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
-	 iParticle++)
-      CurrentFlavoredWorld = theGlobalFastSimulationManager->
-	GetFlavoredWorldForThis(theParticleTable->GetParticle(iParticle));
-    if(CurrentFlavoredWorld)
-      successful = pScene -> AddRunDurationModel
-	(new G4FlavoredParallelWorldModel (CurrentFlavoredWorld), warn);
-    if (successful) {
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "Ghosts have been added to scene \""
-	       << currentSceneName << "\"."
-	       << G4endl;
-      }
-    }
-    else {
-      G4VisCommandsSceneAddUnsuccessful(verbosity);
+  // If "all" (the default) loops on all known particles
+  if(newValue=="all") 
+    {
+      G4VFlavoredParallelWorld* CurrentFlavoredWorld = 0;
+      G4bool successful(false);
+      for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
+	   iParticle++)
+	{
+	  CurrentFlavoredWorld = theGlobalFastSimulationManager->
+	    GetFlavoredWorldForThis(theParticleTable->GetParticle(iParticle));
+	  
+	  if(CurrentFlavoredWorld)
+	    successful = successful || pScene -> 
+	      AddRunDurationModel(new G4FlavoredParallelWorldModel 
+				  (CurrentFlavoredWorld), warn);
+	}
+      if (successful) 
+	{
+	  if (verbosity >= G4VisManager::confirmations) 
+	    G4cout << "Ghosts have been added to scene \""
+		   << currentSceneName << "\"."
+		   << G4endl;
+	  UpdateVisManagerScene (currentSceneName);
+	}
+      else 
+	{
+	  G4cout << "ERROR: There are no ghosts."<<G4endl;
+	  G4VisCommandsSceneAddUnsuccessful(verbosity);
+	}
       return;
     }
-  }
   
+  // Given a particle name looks just for the concerned Ghosts, if any.
   G4ParticleDefinition* currentParticle = 
     theParticleTable->FindParticle(newValue);
-  if (currentParticle == NULL) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: \"" << newValue
-	     << "\": not found this particle name!" << G4endl;
+  
+  if (currentParticle == NULL) 
+    {
+      if (verbosity >= G4VisManager::errors) 
+	G4cout << "ERROR: \"" << newValue
+	       << "\": not found this particle name!" << G4endl;
+      return;
     }
-    return;
-  }
-
+  
   G4VFlavoredParallelWorld* worldForThis =
     theGlobalFastSimulationManager->GetFlavoredWorldForThis(currentParticle);
-  if(worldForThis) {
-    G4bool successful = pScene -> AddRunDurationModel
-      (new G4FlavoredParallelWorldModel (worldForThis), warn);
-    if (successful) {
-      if (verbosity >= G4VisManager::confirmations) {
-	G4cout << "Ghosts have been added to scene \""
-	       << currentSceneName << "\"."
-	       << G4endl;
+  if(worldForThis) 
+    {
+      G4bool successful = pScene -> AddRunDurationModel
+	(new G4FlavoredParallelWorldModel (worldForThis), warn);
+      if (successful) {
+	if (verbosity >= G4VisManager::confirmations) 
+	  G4cout << "Ghosts have been added to scene \""
+		 << currentSceneName << "\"."
+		 << G4endl;
+	UpdateVisManagerScene (currentSceneName);
       }
     }
-  }
-  else {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: There are no ghosts for \""<<newValue<<"\""<<G4endl;
-      G4VisCommandsSceneAddUnsuccessful(verbosity);
-    }
-  }
-  UpdateVisManagerScene (currentSceneName);
+  else 
+    if (verbosity >= G4VisManager::errors) 
+      {
+	G4cout << "ERROR: There are no ghosts for \""<<newValue<<"\""<<G4endl;
+	G4VisCommandsSceneAddUnsuccessful(verbosity);
+      }
 }
 
 
@@ -257,12 +267,11 @@ G4VisCommandSceneAddHits::~G4VisCommandSceneAddHits () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneAddHits::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneAddHits::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand* command,
-						G4String newValue) {
+void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand*, G4String) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -321,7 +330,7 @@ G4String G4VisCommandSceneAddLogicalVolume::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
+void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 						     G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
@@ -338,7 +347,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
   G4String name;
   G4int requestedDepthOfDescent;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> name >> requestedDepthOfDescent;
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
@@ -430,8 +439,7 @@ G4String G4VisCommandSceneAddScale::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
+void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -446,7 +454,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
 
   G4double userLength, red, green, blue, xmid, ymid, zmid;
   G4String userLengthUnit, direction, auto_manual, positionUnit;
-  G4std::istrstream is (newValue);
+  std::istrstream is (newValue);
   is >> userLength >> userLengthUnit >> direction
      >> red >> green >> blue
      >> auto_manual
@@ -457,8 +465,8 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
   xmid *= unit; ymid *= unit; zmid *= unit;
 
   char tempcharstring [50];
-  G4std::ostrstream ost (tempcharstring, 50);
-  ost << userLength << ' ' << userLengthUnit << G4std::ends;
+  std::ostrstream ost (tempcharstring, 50);
+  ost << userLength << ' ' << userLengthUnit << std::ends;
   G4String annotation(tempcharstring);
 
   G4Scale::Direction scaleDirection (G4Scale::x);
@@ -658,8 +666,7 @@ G4String G4VisCommandSceneAddText::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
-					    G4String newValue) {
+void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -675,7 +682,7 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand* command,
   G4String text, unitString;
   G4double x, y, z, font_size, x_offset, y_offset;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> x >> y >> z >> unitString >> font_size >> x_offset >> y_offset >> text;
 
   G4double unit = ValueOf(unitString);
@@ -729,12 +736,12 @@ G4VisCommandSceneAddTrajectories::~G4VisCommandSceneAddTrajectories () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneAddTrajectories::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneAddTrajectories::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand* command,
-					      G4String newValue) {
+void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
+						    G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -749,19 +756,18 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand* command,
 
   G4int drawingMode;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> drawingMode;
   G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
   const G4String& currentSceneName = pScene -> GetName ();
-  G4bool successful = pScene -> AddEndOfEventModel (model, warn);
-  if (successful) {
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Trajectories will be drawn in scene \""
-	     << currentSceneName << "\"."
-	     << G4endl;
-    }
+  pScene -> AddEndOfEventModel (model, warn);
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Trajectories will be drawn with mode "
+	   << drawingMode
+	   << " in scene \""
+	   << currentSceneName << "\"."
+	   << G4endl;
   }
-  else G4VisCommandsSceneAddUnsuccessful(verbosity);
 }
 
 ////////////// /vis/scene/add/volume ///////////////////////////////////////
@@ -799,11 +805,11 @@ G4VisCommandSceneAddVolume::~G4VisCommandSceneAddVolume () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneAddVolume::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneAddVolume::GetCurrentValue (G4UIcommand*) {
   return "world 0 -1";
 }
 
-void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
+void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 					      G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
@@ -821,7 +827,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
   G4int copyNo;
   G4int requestedDepthOfDescent;
   const char* s = newValue;
-  G4std::istrstream is ((char*)s);
+  std::istrstream is ((char*)s);
   is >> name >> copyNo >> requestedDepthOfDescent;
   G4VPhysicalVolume* world =
     G4TransportationManager::GetTransportationManager ()

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SceneHandlerList.hh,v 1.6 2001/07/11 10:09:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SceneHandlerList.hh,v 1.7 2003/06/16 17:14:05 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  May 1996
@@ -30,16 +30,16 @@
 #ifndef G4SCENEHANDLERLIST_HH
 #define G4SCENEHANDLERLIST_HH
 
-#include "g4std/vector"
+#include <vector>
 #include "G4VSceneHandler.hh"
 
-class G4SceneHandlerList: public G4std::vector<G4VSceneHandler*> {
+class G4SceneHandlerList: public std::vector<G4VSceneHandler*> {
 public:
   void remove(G4VSceneHandler*);
 };
 
-typedef G4std::vector<G4VSceneHandler*>::iterator G4SceneHandlerListIterator;
-typedef G4std::vector<G4VSceneHandler*>::const_iterator
+typedef std::vector<G4VSceneHandler*>::iterator G4SceneHandlerListIterator;
+typedef std::vector<G4VSceneHandler*>::const_iterator
         G4SceneHandlerListConstIterator;
 
 #endif

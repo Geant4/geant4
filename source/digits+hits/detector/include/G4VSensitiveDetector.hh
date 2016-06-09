@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.hh,v 1.7 2001/07/13 15:00:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VSensitiveDetector.hh,v 1.8 2003/05/20 00:50:36 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4VSensitiveDetector_h
@@ -63,8 +63,8 @@ class G4VSensitiveDetector
       G4int operator!=(const G4VSensitiveDetector &right) const;
 
   public: // with description
-      virtual void Initialize(G4HCofThisEvent*HCE);
-      virtual void EndOfEvent(G4HCofThisEvent*HCE);
+      virtual void Initialize(G4HCofThisEvent*);
+      virtual void EndOfEvent(G4HCofThisEvent*);
       //  These two methods are invoked at the begining and at the end of each
       // event. The hits collection(s) created by this sensitive detector must
       // be set to the G4HCofThisEvent object at one of these two methods.

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2002/01/10 16:04:37 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2003/06/20 13:03:51 gcosmo Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/volumes library.  Gabriele Cosmo, 16/11/96.
 # --------------------------------------------------------------------
@@ -28,12 +28,4 @@ ifdef G4DEBUG_FIELD
 endif
 
 include $(G4INSTALL)/config/common.gmk
-
-CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
-CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
-
-ifeq ($(G4SYSTEM),SUN-CC4)
-$(G4TMP)/$(G4SYSTEM)/$(name)/G4VoxelNavigation.o: src/G4VoxelNavigation.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4VoxelNavigation.cc
-endif
 

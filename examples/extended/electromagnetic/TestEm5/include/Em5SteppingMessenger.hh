@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingMessenger.hh,v 1.4 2002/12/16 16:30:08 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em5SteppingMessenger.hh,v 1.5 2003/05/30 10:28:04 urban Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

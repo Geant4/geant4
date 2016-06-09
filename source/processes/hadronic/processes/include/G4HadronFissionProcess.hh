@@ -75,8 +75,8 @@ public:
    ~G4HadronFissionProcess();
  
    inline
-   G4double GetMeanFreePath(const G4Track& aTrack, G4double previousStepSize,
-                            G4ForceCondition* condition)
+   G4double GetMeanFreePath(const G4Track& aTrack, G4double ,
+                            G4ForceCondition* )
    {
       return GetMeanFreePathBasic(aTrack.GetDynamicParticle(),
                                   aTrack.GetMaterial());
@@ -106,6 +106,11 @@ public:
    G4CrossSectionDataStore* GetCrossSectionDataStore()
    {
       return theCrossSectionDataStore;
+   }
+
+   void AddDataSet(G4VCrossSectionDataSet * aDataSet)
+   {
+      theCrossSectionDataStore->AddDataSet(aDataSet);
    }
 
   //   void setCrossSectionDataVerboseLevel(G4int value)

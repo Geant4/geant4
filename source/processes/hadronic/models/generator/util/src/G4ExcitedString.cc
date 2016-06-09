@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedString.cc,v 1.7 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ExcitedString.cc,v 1.8 2003/06/16 17:09:41 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 // ------------------------------------------------------------
@@ -36,7 +36,7 @@
 
 // G4ExcitedString
 #include "G4ExcitedString.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
 //G4ExcitedString::G4ExcitedString(const G4ExcitedString &right)
 //{}
@@ -69,7 +69,7 @@ G4ExcitedString::G4ExcitedString(G4KineticTrack * track)
 
 G4ExcitedString::~G4ExcitedString()
 {
-  G4std::for_each(thePartons.begin(), thePartons.end(), DeleteParton());
+  std::for_each(thePartons.begin(), thePartons.end(), DeleteParton());
 }
 
 

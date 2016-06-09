@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCofThisEvent.cc,v 1.6 2001/07/13 15:00:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DCofThisEvent.cc,v 1.7 2003/06/16 16:50:21 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4DCofThisEvent.hh"
@@ -31,12 +31,12 @@ G4Allocator<G4DCofThisEvent> anDCoTHAllocator;
 
 G4DCofThisEvent::G4DCofThisEvent()
 {
-  DC = new G4std::vector<G4VDigiCollection*>;
+  DC = new std::vector<G4VDigiCollection*>;
 }
 
 G4DCofThisEvent::G4DCofThisEvent(G4int cap)
 {
-  DC = new G4std::vector<G4VDigiCollection*>;
+  DC = new std::vector<G4VDigiCollection*>;
   for(G4int i=0;i<cap;i++)
   {
     DC->push_back((G4VDigiCollection*)0);

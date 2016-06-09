@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SceneList.hh,v 1.8 2001/07/11 10:09:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SceneList.hh,v 1.9 2003/06/16 17:14:06 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  9th August 1998
@@ -31,14 +31,14 @@
 #define G4SCENELIST_HH
 
 #include "G4Scene.hh"
-#include "g4std/vector"
+#include <vector>
 
-class G4SceneList: public G4std::vector <G4Scene*> {
+class G4SceneList: public std::vector <G4Scene*> {
 public:
   void remove(G4Scene*);
 };
 
-typedef G4std::vector<G4Scene*>::iterator G4SceneListIterator;
-typedef G4std::vector<G4Scene*>::const_iterator G4SceneListConstIterator;
+typedef std::vector<G4Scene*>::iterator G4SceneListIterator;
+typedef std::vector<G4Scene*>::const_iterator G4SceneListConstIterator;
 
 #endif

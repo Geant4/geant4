@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleVector.hh,v 1.8 2002/12/12 19:18:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleVector.hh,v 1.9 2003/06/16 17:12:21 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4ParticleVector_h
@@ -31,9 +31,9 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4DynamicParticle.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4DynamicParticle *> G4ParticleVector;
+typedef std::vector<G4DynamicParticle *> G4ParticleVector;
 struct DeleteDynamicParticle {void operator()(G4DynamicParticle*aP) {delete aP;}};
 
 #endif

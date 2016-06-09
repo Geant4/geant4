@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.hh,v 1.6 2002/06/07 17:37:44 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIbatch.hh,v 1.7 2003/06/16 16:55:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // $id$
 
@@ -31,7 +31,7 @@
 
 #include "globals.hh"
 #include "G4UIsession.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 class G4UImanager;
 
@@ -61,7 +61,7 @@ class G4UIbatch : public G4UIsession
   private:
       G4UImanager * UImanager;
       G4UIsession * previousSession;
-      G4std::ifstream macroFile;
+      std::ifstream macroFile;
       G4String macroFileName;
       G4bool openFailed;
 };

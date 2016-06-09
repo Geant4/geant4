@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationProbability.hh,v 1.7 2002/12/12 19:17:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EvaporationProbability.hh,v 1.10 2003/06/16 17:05:00 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -64,10 +64,10 @@ public:
 
 protected:
 
-  void SetExcitationEnergiesPtr(G4std::vector<G4double> * anExcitationEnergiesPtr) 
+  void SetExcitationEnergiesPtr(std::vector<G4double> * anExcitationEnergiesPtr) 
   {ExcitationEnergies = anExcitationEnergiesPtr;}
 
-  void SetExcitationSpinsPtr(G4std::vector<G4int> * anExcitationSpinsPtr)
+  void SetExcitationSpinsPtr(std::vector<G4int> * anExcitationSpinsPtr)
   {ExcitationSpins = anExcitationSpinsPtr;}
 
   
@@ -87,10 +87,10 @@ public:
 private:
 
   G4double CalcProbability(const G4Fragment & fragment, const G4double MaximalKineticEnergy);
-  virtual G4double CCoeficient(const G4double aZ) const {return 0.0;};
+  virtual G4double CCoeficient(const G4double ) const {return 0.0;};
 
-  virtual G4double CalcAlphaParam(const G4Fragment & fragment) const {return 1.0;}
-  virtual G4double CalcBetaParam(const G4Fragment & fragment) const {return 1.0;}
+  virtual G4double CalcAlphaParam(const G4Fragment & ) const {return 1.0;}
+  virtual G4double CalcBetaParam(const G4Fragment & ) const {return 1.0;}
 
   // Data Members
 
@@ -104,10 +104,10 @@ private:
   G4double Gamma;
 
   // Discrete Excitation Energies 
-  G4std::vector<G4double> * ExcitationEnergies;
+  std::vector<G4double> * ExcitationEnergies;
 
   //
-  G4std::vector<G4int> * ExcitationSpins;
+  std::vector<G4int> * ExcitationSpins;
 
 };
 

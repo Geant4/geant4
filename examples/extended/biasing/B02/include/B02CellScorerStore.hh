@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B02CellScorerStore.hh,v 1.1 2002/11/08 14:52:16 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: B02CellScorerStore.hh,v 1.2 2003/06/16 16:47:14 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class B02CellScorerStore
@@ -42,7 +42,7 @@
 #ifndef B02CellScorerStore_hh
 #define B02CellScorerStore_hh B02CellScorerStore_hh
 
-#include "g4std/map"
+#include <map>
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
 
@@ -53,9 +53,9 @@ class G4CellScorer;
 class B02CellScorer;
 class IHistogram1D;
 
-typedef G4std::map<G4GeometryCell, G4CellScorer *, G4GeometryCellComp> G4MapGeometryCellCellScorer;
+typedef std::map<G4GeometryCell, G4CellScorer *, G4GeometryCellComp> G4MapGeometryCellCellScorer;
 
-typedef G4std::map<G4GeometryCell,B02CellScorer  *, G4GeometryCellComp> B02MapGeometryCellB02CellScorer;
+typedef std::map<G4GeometryCell,B02CellScorer  *, G4GeometryCellComp> B02MapGeometryCellB02CellScorer;
 
 class B02CellScorerStore : public G4VCellScorerStore {
 public:

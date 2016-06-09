@@ -20,11 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.19 2003/04/15 15:15:48 gunter Exp $ //
+// $Id: G4Scatterer.cc,v 1.19.2.1 2003/06/17 14:57:48 gunter Exp $ //
 //
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ios.hh"
 #include "G4Scatterer.hh"
 #include "G4KineticTrack.hh"

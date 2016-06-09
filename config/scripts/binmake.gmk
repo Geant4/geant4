@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.2 2003/02/21 15:23:26 stesting Exp $
+# $Id: binmake.gmk,v 1.3 2003/05/28 08:03:22 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -95,8 +95,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/solids/specific/include \
               -I$(G4BASE)/geometry/solids/BREPS/include \
               -I$(G4BASE)/geometry/solids/Boolean/include \
-              -I$(G4BASE)/geometry/solids/STEP/include \
-              -I$(G4BASE)/geometry/solids/STEPinterface/include \
               -I$(G4BASE)/geometry/volumes/include \
               -I$(G4BASE)/geometry/verification/include \
               -I$(G4BASE)/geometry/magneticfield/include \
@@ -111,8 +109,12 @@ ifndef INCFLAGS
               -I$(G4BASE)/event/include \
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include
+  ifdef G4USE_STEP
+    INCFLAGS += -I$(G4BASE)/geometry/solids/STEP/include \
+                -I$(G4BASE)/geometry/solids/STEPinterface/include
+  endif
   ifdef G4USE_G3TOG4
-    INCFLAGS +=  -I$(G4BASE)/g3tog4/include
+    INCFLAGS += -I$(G4BASE)/g3tog4/include
   endif
  endif
 endif
@@ -228,7 +230,7 @@ else
 endif
 LDLIBS_PREFINAL += $(LDLIBS4)
 
-ifeq ($(G4SYSTEM),WIN32-VC)
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
   LDLIBS = $(patsubst -l%,lib%.a,$(LDLIBS_PREFINAL))
@@ -331,7 +333,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
 	@echo Making dependency for file $<...
 	@set -e;\
-	g++ $(GPPFLAGS) $(CPPFLAGS) $< |\
+	g++ $(GPPFLAGS) $(CPPFLAGS) -w $< |\
 	sed 's!$(G4TARGET)\.o!$(G4TMPDIR)/exe/& $@!' >$@;\
 	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)

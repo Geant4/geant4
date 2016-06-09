@@ -30,8 +30,8 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.6 2002/11/18 15:18:38 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyPhysicsList.cc,v 1.8 2003/05/26 09:20:14 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "BrachyPhysicsList.hh"
 
@@ -44,7 +44,6 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"              
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 BrachyPhysicsList::BrachyPhysicsList():  G4VUserPhysicsList()
 {
@@ -56,13 +55,9 @@ BrachyPhysicsList::BrachyPhysicsList():  G4VUserPhysicsList()
   SetVerboseLevel(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 BrachyPhysicsList::~BrachyPhysicsList()
 {
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void BrachyPhysicsList::ConstructParticle()
 {
@@ -75,15 +70,12 @@ void BrachyPhysicsList::ConstructParticle()
   ConstructLeptons();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void BrachyPhysicsList::ConstructBosons()
 { 
   // gamma
   G4Gamma::GammaDefinition();
 
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void BrachyPhysicsList::ConstructLeptons()
 {
@@ -92,16 +84,11 @@ void BrachyPhysicsList::ConstructLeptons()
   G4Positron::PositronDefinition();
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void BrachyPhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4MultipleScattering.hh"
 // gamma
@@ -116,8 +103,6 @@ void BrachyPhysicsList::ConstructProcess()
 #include "G4eIonisation.hh" 
 #include "G4eBremsstrahlung.hh" 
 #include "G4eplusAnnihilation.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void BrachyPhysicsList::ConstructEM()
 {
@@ -139,8 +124,8 @@ void BrachyPhysicsList::ConstructEM()
       
     } else if (particleName == "e-") {
       //electron
-     loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
-     loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
+      loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
+      loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
     
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(loweIon,     -1, 2,2);
@@ -157,28 +142,19 @@ void BrachyPhysicsList::ConstructEM()
   }  
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void BrachyPhysicsList::SetCuts()
 {
   if (verboseLevel >0){
     G4cout << "BrachyPhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
-  
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
+
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
   
-  SetCutValueForOthers(defaultCutValue);
-  
   if (verboseLevel>0) DumpCutValuesTable();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void BrachyPhysicsList::SetGammaLowLimit(G4double lowcut)
 {
@@ -187,11 +163,8 @@ void BrachyPhysicsList::SetGammaLowLimit(G4double lowcut)
     G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
   }  
   
-  G4Gamma::SetEnergyRange(lowcut,1e5);
-  
+  G4Gamma::SetEnergyRange(lowcut,1e5);  
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void BrachyPhysicsList::SetElectronLowLimit(G4double lowcut)
 {
@@ -205,8 +178,6 @@ void BrachyPhysicsList::SetElectronLowLimit(G4double lowcut)
   G4Electron::SetEnergyRange(lowcut,1e5);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void BrachyPhysicsList::SetGELowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
@@ -219,7 +190,6 @@ void BrachyPhysicsList::SetGELowLimit(G4double lowcut)
   G4Positron::SetEnergyRange(lowcut,1e5);
 
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void BrachyPhysicsList::SetGammaCut(G4double val)
 {
@@ -227,40 +197,34 @@ void BrachyPhysicsList::SetGammaCut(G4double val)
   cutForGamma = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void BrachyPhysicsList::SetElectronCut(G4double val)
 {
-  //  ResetCuts();
   cutForElectron = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void BrachyPhysicsList::SetPositronCut(G4double val)
 {
-  //  ResetCuts();
   cutForPositron = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void BrachyPhysicsList::SetLowEnSecPhotCut(G4double cut)
+{  
+  G4cout<<"Low energy secondary photons cut is now set to: "
+	<<cut*MeV
+        <<" (MeV)"<<G4endl;
 
-void BrachyPhysicsList::SetLowEnSecPhotCut(G4double cut){
-  
-  G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
   G4cout<<"for processes LowEnergyPhotoElectric, LowEnergyBremsstrahlung, LowEnergyIonisation"<<G4endl;
+
   lowePhot->SetCutForLowEnSecPhotons(cut);
   loweIon->SetCutForLowEnSecPhotons(cut);
   loweBrem->SetCutForLowEnSecPhotons(cut);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void BrachyPhysicsList::SetLowEnSecElecCut(G4double cut){
-  
-  G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
+void BrachyPhysicsList::SetLowEnSecElecCut(G4double cut)
+{  
+  G4cout<<"Low energy secondary electrons cut is now set to: "
+        <<cut*MeV
+        <<" (MeV)"<<G4endl;
   G4cout<<"for processes LowEnergyIonisation"<<G4endl;
   loweIon->SetCutForLowEnSecElectrons(cut);
-
 }
-

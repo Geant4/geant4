@@ -42,9 +42,9 @@
 #define G4PTRLEVELVECTOR_HH
 
 #include "G4NuclearLevel.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4NuclearLevel *> G4PtrLevelVector;
+typedef std::vector<G4NuclearLevel *> G4PtrLevelVector;
 struct DeleteLevel { void operator () (G4NuclearLevel * aL) {delete aL;} };
 
 #endif

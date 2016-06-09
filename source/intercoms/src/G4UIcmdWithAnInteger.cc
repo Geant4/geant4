@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithAnInteger.cc,v 1.4 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcmdWithAnInteger.cc,v 1.5 2003/06/16 16:55:42 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
 #include "G4UIcmdWithAnInteger.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4UIcmdWithAnInteger::G4UIcmdWithAnInteger
 (const char * theCommandPath,G4UImessenger * theMessenger)
@@ -40,7 +40,7 @@ G4UIcmdWithAnInteger::G4UIcmdWithAnInteger
 G4int G4UIcmdWithAnInteger::GetNewIntValue(const char* paramString)
 {
   G4int vl;
-  G4std::istrstream is((char*)paramString);
+  std::istrstream is((char*)paramString);
   is >> vl;
   return vl;
 }
@@ -48,7 +48,7 @@ G4int G4UIcmdWithAnInteger::GetNewIntValue(const char* paramString)
 G4String G4UIcmdWithAnInteger::ConvertToString(G4int intValue)
 {
   char st[20];
-  G4std::ostrstream os(st,20);
+  std::ostrstream os(st,20);
   os << intValue << '\0';
   G4String vl = st;
   return vl;

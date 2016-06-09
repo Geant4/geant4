@@ -1,4 +1,4 @@
-$Id: History,v 1.218 2003/02/17 07:19:37 stanaka Exp $
+$Id: History,v 1.224 2003/06/02 10:42:59 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,23 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+2nd June 2003  John Allison  (vis-V05-01-01)
+- Small fix for pedantic warnings in RayTracer.
+
+30th May 2003  John Allison  (vis-V05-01-00 - does not include HepRep below)
+- Improved README.built_in_commands.  Removed unlikely-to-be-implemented
+  commands.
+- Eliminated pedantic warnings.
+
+28th February 2003  Joseph Perl
+- Minor Fix to HepRep - see History file.
+
+20th January 2003  John Allison
+- Changed "/vis/scene/add/trajectories [<drawing-mode>]" so that if
+  the command is issued more than once on any given scene, the last
+  command takes effect, i.e., so that the last value of drawing-mode
+  takes effect.
 
 17th February 2003 Satoshi Tanaka (vis-V05-00-01)
 - A Small bug fixing of VRML2 driver 

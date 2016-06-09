@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4WeightCutOffConfigurator.cc,v 1.4 2003/04/02 16:59:34 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4WeightCutOffConfigurator

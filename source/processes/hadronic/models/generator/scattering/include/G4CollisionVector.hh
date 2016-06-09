@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionVector.hh,v 1.2 2002/12/12 19:17:39 gunter Exp $ //
+// $Id: G4CollisionVector.hh,v 1.3 2003/06/16 17:08:25 gunter Exp $ //
 // -------------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -41,10 +41,10 @@
 #define G4COLLISIONVECTOR_HH
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4CollisionPtr.hh"
 
-typedef G4std::vector<G4CollisionPtr> G4CollisionVector;
+typedef std::vector<G4CollisionPtr> G4CollisionVector;
 
 #endif
 

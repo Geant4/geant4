@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuPairProductionModel.hh,v 1.9 2003/06/16 17:01:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -94,7 +96,7 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  G4std::vector<G4DynamicParticle*>* SampleSecondaries(
+  std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
@@ -102,6 +104,7 @@ public:
 
   virtual G4double MaxSecondaryEnergy(
 				const G4DynamicParticle* dynParticle);
+
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -113,7 +116,6 @@ private:
 
   G4double ComputeMicroscopicCrossSection(G4double tkin,
                                           G4double Z,
-                                          G4double A,
                                           G4double cut);
 
   G4double ComputeDMicroscopicCrossSection(G4double tkin,
@@ -145,7 +147,7 @@ private:
   static G4double zdat[5],adat[5],tdat[8];
   G4double ya[1001],proba[5][8][1001];
 
-  G4std::vector<G4DataVector*> partialSumSigma;
+  std::vector<G4DataVector*> partialSumSigma;
   G4bool  samplingTablesAreFilled;
 };
 

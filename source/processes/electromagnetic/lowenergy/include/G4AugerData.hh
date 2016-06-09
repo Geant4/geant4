@@ -23,7 +23,7 @@
 //
 //
 // $Id: G4AugerData.hh
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
@@ -45,8 +45,8 @@
 #define G4AUGERDATA_HH 1
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 #include "G4AugerTransition.hh"
 
 class G4DataVector;
@@ -91,7 +91,7 @@ public:
   // and the transition shell Id, returns the ager originating shell Id
   size_t AugerShellId(G4int Z, G4int vacancyIndex, G4int transId, G4int augerIndex) const;
 
-  G4std::vector<G4AugerTransition> LoadData(G4int Z);
+  std::vector<G4AugerTransition> LoadData(G4int Z);
 
   void BuildAugerTransitionTable();
 
@@ -105,22 +105,22 @@ public:
   G4AugerTransition* GetAugerTransition(G4int Z, G4int vacancyShellIndex);
   
   // Given the atomic number returns a vector of possible AugerTransition objects
-  G4std::vector<G4AugerTransition>* GetAugerTransitions(G4int Z);
+  std::vector<G4AugerTransition>* GetAugerTransitions(G4int Z);
 
 private:
 
-  // G4std::map<G4int,G4DataVector*,G4std::less<G4int> > idMap;
+  // std::map<G4int,G4DataVector*,std::less<G4int> > idMap;
 
-  typedef G4std::map<G4int,G4std::vector<G4AugerTransition>,G4std::less<G4int> > trans_Table;
+  typedef std::map<G4int,std::vector<G4AugerTransition>,std::less<G4int> > trans_Table;
    trans_Table augerTransitionTable;
 
   /*
-  G4std::map<G4int,G4std::map<G4Int,G4DataVector*,G4std::less<G4int> >,G4std::less<G4int> > transProbabilityMap;
-  G4std::map<G4int,G4std::map<G4Int,G4DataVector*,G4std::less<G4int> >,G4std::less<G4int> > transAugerIdMap;
+  std::map<G4int,std::map<G4Int,G4DataVector*,std::less<G4int> >,std::less<G4int> > transProbabilityMap;
+  std::map<G4int,std::map<G4Int,G4DataVector*,std::less<G4int> >,std::less<G4int> > transAugerIdMap;
   */
 
-  G4std::vector<G4int> nInitShells;
-  G4std::vector<G4int> numberOfVacancies;
+  std::vector<G4int> nInitShells;
+  std::vector<G4int> numberOfVacancies;
   
 };
 

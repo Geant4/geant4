@@ -38,7 +38,7 @@ G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(0.7*GeV, 250*MeV, 250*
 }
 
 G4QGSParticipants::G4QGSParticipants(const G4QGSParticipants &right)
-: nCutMax(right.nCutMax),ThersholdParameter(right.ThersholdParameter),
+: G4VParticipants(), nCutMax(right.nCutMax),ThersholdParameter(right.ThersholdParameter),
   QGSMThershold(right.QGSMThershold),theNucleonRadius(right.theNucleonRadius)
 {
 }
@@ -64,9 +64,9 @@ void G4QGSParticipants::BuildInteractions(const G4ReactionProduct  &thePrimary)
   PerformDiffractiveCollisions();
   
   // clean-up, if necessary
-  G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
+  std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
   theInteractions.clear();
-  G4std::for_each(theTargets.begin(), theTargets.end(), DeleteSplitableHadron());
+  std::for_each(theTargets.begin(), theTargets.end(), DeleteSplitableHadron());
   theTargets.clear();
   delete aProjectile;
 }
@@ -94,7 +94,7 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
   }
  
   // first find the collisions HPW
-  G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
+  std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
   theInteractions.clear();
   G4int totalCuts = 0;
   G4double impactUsed = 0;
@@ -223,7 +223,7 @@ void G4QGSParticipants::PerformDiffractiveCollisions()
 
 void G4QGSParticipants::PerformSoftCollisions()
 {
-  G4std::vector<G4InteractionContent*>::iterator i;
+  std::vector<G4InteractionContent*>::iterator i;
   for(i = theInteractions.begin(); i != theInteractions.end(); i++)   
   {
     G4InteractionContent* anIniteraction = *i;

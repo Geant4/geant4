@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DeuteronEvaporationProbability.cc,v 1.5 2002/12/12 19:17:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DeuteronEvaporationProbability.cc,v 1.8 2003/06/16 17:06:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -34,12 +34,12 @@
 G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     G4EvaporationProbability(2,1,6) // A,Z,Gamma
 {
-    G4std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
-    G4std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
+    std::vector<G4double>::size_type NumExcitedStatesEnergy = 31+1;
+    std::vector<G4int>::size_type NumExcitedStatesSpin = 31+1;
     ExcitEnergies.reserve(NumExcitedStatesEnergy);
     ExcitSpins.reserve(NumExcitedStatesSpin);
     ExcitEnergies.insert(ExcitEnergies.begin(),NumExcitedStatesEnergy,0.0);
-    ExcitSpins.insert(ExcitSpins.begin(),NumExcitedStatesSpin,0.0);
+    ExcitSpins.insert(ExcitSpins.begin(),NumExcitedStatesSpin,0);
 
 
     ExcitEnergies[15] = 6.18*MeV;
@@ -76,7 +76,7 @@ G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability() :
     SetExcitationSpinsPtr(&ExcitSpins);	
 	
 }
-G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability(const G4DeuteronEvaporationProbability &right)
+G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability(const G4DeuteronEvaporationProbability &) : G4EvaporationProbability()
 {
     G4Exception("G4DeuteronEvaporationProbability::copy_constructor meant to not be accessable");
 }
@@ -85,19 +85,19 @@ G4DeuteronEvaporationProbability::G4DeuteronEvaporationProbability(const G4Deute
 
 
 const G4DeuteronEvaporationProbability & G4DeuteronEvaporationProbability::
-operator=(const G4DeuteronEvaporationProbability &right)
+operator=(const G4DeuteronEvaporationProbability &)
 {
     G4Exception("G4DeuteronEvaporationProbability::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4DeuteronEvaporationProbability::operator==(const G4DeuteronEvaporationProbability &right) const
+G4bool G4DeuteronEvaporationProbability::operator==(const G4DeuteronEvaporationProbability &) const
 {
     return false;
 }
 
-G4bool G4DeuteronEvaporationProbability::operator!=(const G4DeuteronEvaporationProbability &right) const
+G4bool G4DeuteronEvaporationProbability::operator!=(const G4DeuteronEvaporationProbability &) const
 {
     return true;
 }

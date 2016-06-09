@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01GeneralPhysics.cc,v 1.3 2002/12/13 11:34:34 gunter Exp $
+// $Id: A01GeneralPhysics.cc,v 1.4 2003/06/16 16:47:02 gunter Exp $
 // --------------------------------------------------------------
 //
 
@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 A01GeneralPhysics::A01GeneralPhysics(const G4String& name)
                      :  G4VPhysicsConstructor(name)

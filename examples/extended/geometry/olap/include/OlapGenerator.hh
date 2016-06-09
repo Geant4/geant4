@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: OlapGenerator.hh,v 1.1 2002/06/04 07:40:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: OlapGenerator.hh,v 1.2 2003/06/16 16:49:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -35,7 +35,7 @@
 #ifndef OlapGenerator_h
 #define OlapGenerator_h
 
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ThreeVector.hh"
@@ -48,8 +48,8 @@ public:
    OlapGrid();
    void Reset() { for (G4int i=0;i<3;i++) count[i]=0; axis=0; }
    void Next();
-   G4std::vector<G4int> count; // 
-   G4std::vector<G4int> gsize; // gridsize
+   std::vector<G4int> count; // 
+   std::vector<G4int> gsize; // gridsize
    G4int axis, eventsPerRun;
 };
 
@@ -76,7 +76,7 @@ public:
    G4int GetAxis() { return grid.axis; };
    
    OlapGrid grid; // basically a vector of <int>, size==3
-   G4std::vector<G4double> ext;
+   std::vector<G4double> ext;
    G4ThreeVector posAB, posBA;
    G4bool autoinc;
 };

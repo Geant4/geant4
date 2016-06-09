@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.hh,v 1.9 2002/12/12 19:17:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFChannel.hh,v 1.10 2003/06/16 17:06:01 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -30,7 +30,7 @@
 #ifndef G4StatMFChannel_h
 #define G4StatMFChannel_h 1
 
-#include "g4std/deque"
+#include <deque>
 
 #include "G4StatMFParameters.hh"
 #include "G4StatMFFragment.hh"
@@ -49,7 +49,7 @@ public:
     // Destructor
     ~G4StatMFChannel() { 
 	if (!_theFragments.empty()) {
-	  G4std::for_each(_theFragments.begin(),_theFragments.end(),
+	  std::for_each(_theFragments.begin(),_theFragments.end(),
 			  DeleteFragment());
 	}
     }
@@ -113,7 +113,7 @@ private:
 
 private:
 
-    G4std::deque<G4StatMFFragment*> _theFragments;
+    std::deque<G4StatMFFragment*> _theFragments;
 
     G4int _NumOfNeutralFragments;
 	

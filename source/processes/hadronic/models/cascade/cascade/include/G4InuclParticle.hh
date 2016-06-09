@@ -26,8 +26,8 @@
 #include "globals.hh"
 #endif
 
-#include "g4std/iostream"
-#include "g4std/vector"
+#include <iostream>
+#include <vector>
 
 class G4InuclParticle {
 
@@ -37,17 +37,17 @@ public:
 
   virtual ~G4InuclParticle() { };
  
-  G4InuclParticle(const G4std::vector<G4double>& mom) {
+  G4InuclParticle(const std::vector<G4double>& mom) {
 
     setMomentum(mom);
   };
 
-  void setMomentum(const G4std::vector<G4double>& mom) {
+  void setMomentum(const std::vector<G4double>& mom) {
 
     momentum = mom;
   };
 
-  G4std::vector<G4double> getMomentum() const { 
+  std::vector<G4double> getMomentum() const { 
 
     return momentum; 
   };
@@ -71,7 +71,7 @@ public:
 
 protected: 
 
-  G4std::vector<G4double> momentum;
+  std::vector<G4double> momentum;
 
 };        
 

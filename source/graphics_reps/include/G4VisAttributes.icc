@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.icc,v 1.5 2002/10/24 14:36:40 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisAttributes.icc,v 1.6 2003/06/16 16:55:15 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  18th November 1996
@@ -53,12 +53,12 @@ G4VisAttributes::GetForcedDrawingStyle () const {
   return fForcedStyle;
 }
 
-inline const G4std::vector<G4AttValue>*
+inline const std::vector<G4AttValue>*
 G4VisAttributes::GetAttValues () const {
   return fAttValues;
 }
 
-inline const G4std::vector<G4AttDef>* G4VisAttributes::GetAttDefs () const {
+inline const std::vector<G4AttDef>* G4VisAttributes::GetAttDefs () const {
   return fAttDefs;
 }
 
@@ -105,11 +105,11 @@ inline void G4VisAttributes::SetForceSolid (G4bool force) {
 }
 
 inline void G4VisAttributes::SetAttValues
- (const G4std::vector<G4AttValue>* attValues){
+ (const std::vector<G4AttValue>* attValues){
   fAttValues = attValues;
 }
 
 inline void G4VisAttributes::SetAttDefs
- (const G4std::vector<G4AttDef>* attDefs) {
+ (const std::vector<G4AttDef>* attDefs) {
   fAttDefs = attDefs;
 }

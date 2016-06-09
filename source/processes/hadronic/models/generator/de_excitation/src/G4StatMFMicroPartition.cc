@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroPartition.cc,v 1.14 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMicroPartition.cc,v 1.17 2003/06/16 17:06:47 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 // --------------------------------------------------------------------
@@ -32,7 +32,7 @@
 
 
 // Copy constructor
-G4StatMFMicroPartition::G4StatMFMicroPartition(const G4StatMFMicroPartition & right)
+G4StatMFMicroPartition::G4StatMFMicroPartition(const G4StatMFMicroPartition & )
 {
     G4Exception("G4StatMFMicroPartition::copy_constructor meant to not be accessable");
 }
@@ -40,21 +40,21 @@ G4StatMFMicroPartition::G4StatMFMicroPartition(const G4StatMFMicroPartition & ri
 // Operators
 
 G4StatMFMicroPartition & G4StatMFMicroPartition::
-operator=(const G4StatMFMicroPartition & right)
+operator=(const G4StatMFMicroPartition & )
 {
     G4Exception("G4StatMFMicroPartition::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMFMicroPartition::operator==(const G4StatMFMicroPartition & right) const
+G4bool G4StatMFMicroPartition::operator==(const G4StatMFMicroPartition & ) const
 {
 //	G4Exception("G4StatMFMicroPartition::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4StatMFMicroPartition::operator!=(const G4StatMFMicroPartition & right) const
+G4bool G4StatMFMicroPartition::operator!=(const G4StatMFMicroPartition & ) const
 {
 //	G4Exception("G4StatMFMicroPartition::operator!= meant to not be accessable");
     return true;
@@ -181,7 +181,7 @@ G4double G4StatMFMicroPartition::CalcPartitionTemperature(const G4double U,
 	
     // Bracketing the solution
     G4double Ta = 0.001;
-    G4double Tb = G4std::max(sqrt(8.0*U/theA),0.0012*MeV);
+    G4double Tb = std::max(sqrt(8.0*U/theA),0.0012*MeV);
     G4double Tmid = 0.0;
 	
     G4double Da = (U + FreeInternalE0 - GetPartitionEnergy(Ta))/U;
@@ -239,8 +239,8 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(const G4double U,
     G4double ProbA32 = 1.0;	
 	
     for (i = 0; i < _thePartition.size(); i++) {
-	ProbDegeneracy *= GetDegeneracyFactor(G4int(_thePartition[i]));
-   	ProbA32 *= G4double(_thePartition[i])*sqrt(G4double(_thePartition[i]));
+	ProbDegeneracy *= GetDegeneracyFactor(static_cast<G4int>(_thePartition[i]));
+   	ProbA32 *= static_cast<G4double>(_thePartition[i])*sqrt(static_cast<G4double>(_thePartition[i]));
     }
 	
     // Compute entropy
@@ -266,7 +266,7 @@ G4double G4StatMFMicroPartition::CalcPartitionProbability(const G4double U,
     G4double V0 = (4./3.)*pi*theA*G4StatMFParameters::Getr0()*G4StatMFParameters::Getr0()*
 	G4StatMFParameters::Getr0();
     G4double FreeVolume = kappa*V0;
-    G4double TranslationalS = G4std::max(0.0, log(ProbA32/Fact) +
+    G4double TranslationalS = std::max(0.0, log(ProbA32/Fact) +
 					 (_thePartition.size()-1.0)*log(FreeVolume/ThermalWaveLenght3) +
 					 1.5*(_thePartition.size()-1.0) - (3./2.)*log(theA));
 
@@ -298,7 +298,7 @@ G4double G4StatMFMicroPartition::GetDegeneracyFactor(const G4int A)
 G4StatMFChannel * G4StatMFMicroPartition::ChooseZ(const G4double A0, const G4double Z0, const G4double MeanT)
     // Gives fragments charges
 {
-    G4std::vector<G4int> FragmentsZ;
+    std::vector<G4int> FragmentsZ;
 
     G4int ZBalance = 0;
     do {
@@ -312,12 +312,12 @@ G4StatMFChannel * G4StatMFMicroPartition::ChooseZ(const G4double A0, const G4dou
 	    G4double ZDispersion = sqrt(Af * MeanT/CC);
 	    G4int Zf;
 	    do {
-		Zf = G4int(G4RandGauss::shoot(ZMean,ZDispersion));
+		Zf = static_cast<G4int>(G4RandGauss::shoot(ZMean,ZDispersion));
 	    } while (Zf < 0 || Zf > Af);
 	    FragmentsZ.push_back(Zf);
 	    SumZ += Zf;
 	}
-	ZBalance = G4int(Z0) - SumZ;
+	ZBalance = static_cast<G4int>(Z0) - SumZ;
     } while (abs(ZBalance) > 1.1);
     FragmentsZ[0] += ZBalance;
 	

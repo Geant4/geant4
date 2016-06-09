@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstructionIr.hh,v 1.2 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyDetectorConstructionIr.hh,v 1.3 2003/05/22 17:20:41 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //    ****************************************
 //    *                                      *
@@ -42,7 +42,6 @@
 
 
 class G4LogicalVolume;
-
 class G4Tubs;
 class G4Box;
 class G4Sphere;
@@ -54,47 +53,30 @@ class BrachyMaterial;
 
 class BrachyDetectorConstructionIr 
 {
- public:
-	BrachyDetectorConstructionIr();
-	~BrachyDetectorConstructionIr();
-
-
- private:
-     
- G4VisAttributes* simpleCapsuleVisAtt;
-  G4VisAttributes* simpleCapsuleTipVisAtt;
-  G4VisAttributes* simpleIridiumVisAtt;
-  
- 
-
 public:
-  
-  void  CleanIridium();
+  BrachyDetectorConstructionIr();
+  ~BrachyDetectorConstructionIr();
   void  ConstructIridium(G4VPhysicalVolume*);
- private:
+  void  CleanIridium();
 
-  G4Box*              WaterBox;
-  G4LogicalVolume*    WaterBoxLog;
-  G4VPhysicalVolume*   WaterBoxPhys;
+private:   
+  G4Tubs* capsule ;
+  G4LogicalVolume*  capsuleLog;    
+  G4VPhysicalVolume* capsulePhys;
+  G4Sphere* capsuleTip;
+  G4LogicalVolume* capsuleTipLog;
+  G4VPhysicalVolume* capsuleTipPhys;
 
-  G4Tubs* Capsule ;
-  G4LogicalVolume*  CapsuleLog;    //pointer to the logical World
-  G4VPhysicalVolume* CapsulePhys;
- 
-  G4Sphere* CapsuleTip;
-  G4LogicalVolume* CapsuleTipLog;
-  G4VPhysicalVolume* CapsuleTipPhys;
+  G4Tubs* iridiumCore;
+  G4LogicalVolume* iridiumCoreLog;
+  G4VPhysicalVolume* iridiumCorePhys;
+    
+  BrachyMaterial* pMat;    
 
-  G4Tubs* IridiumCore;
-  G4LogicalVolume* IridiumCoreLog;
-  G4VPhysicalVolume* IridiumCorePhys;
-  
-  
-  BrachyMaterial* pMat;   
-  };
-
-
-
+  G4VisAttributes* simpleCapsuleVisAtt;
+  G4VisAttributes*  simpleCapsuleTipVisAtt;
+  G4VisAttributes*  simpleIridiumVisAtt;
+};
 #endif
 
 

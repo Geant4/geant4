@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.icc,v 1.5 2001/10/24 17:46:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MuNuclearInteraction.icc,v 1.6 2003/06/03 07:52:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // $Id: 
 // ---------------------------------------------------------------
@@ -36,7 +36,7 @@
 
 inline G4double G4MuNuclearInteraction::GetMeanFreePath( 
                                                     const G4Track& trackData,
-                                                    G4double previousStepSize,
+                                                    G4double,
                                                     G4ForceCondition* condition)
 {
    const G4DynamicParticle* aDynamicParticle;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.5 2003/03/13 17:04:10 pandola Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PenelopePhotoElectric.cc,v 1.7 2003/06/16 17:00:22 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: L. Pandola
 //
@@ -93,7 +93,7 @@ G4PenelopePhotoElectric::~G4PenelopePhotoElectric()
   delete rangeTest;
 }
 
-void G4PenelopePhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& photon)
+void G4PenelopePhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& )
 {
   
   crossSectionHandler->Clear();
@@ -109,7 +109,7 @@ void G4PenelopePhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& phot
 }
 
 G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
-							  const G4Step& aStep)
+							 const G4Step& aStep)
 {
   // Fluorescence generated according to:
   // J. Stepanek ,"A program to determine the radiation spectra due to a single atomic
@@ -146,8 +146,8 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
   // (Is the electron vector necessary? To be checked)
-  G4std::vector<G4DynamicParticle*>* photonVector = 0;
-  G4std::vector<G4DynamicParticle*> electronVector;
+  std::vector<G4DynamicParticle*>* photonVector = 0;
+  std::vector<G4DynamicParticle*> electronVector;
 
   G4double energyDeposit = 0.0;
 
@@ -188,10 +188,10 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   size_t index = couple->GetIndex();
   G4double cutg = (*(theCoupleTable->GetEnergyCutsVector(0)))[index];
-  cutg = G4std::min(cutForLowEnergySecondaryPhotons,cutg);
+  cutg = std::min(cutForLowEnergySecondaryPhotons,cutg);
   
   G4double cute = (*(theCoupleTable->GetEnergyCutsVector(1)))[index];
-  cute = G4std::min(cutForLowEnergySecondaryPhotons,cute);
+  cute = std::min(cutForLowEnergySecondaryPhotons,cute);
 
   G4DynamicParticle* aPhoton;  
 
@@ -277,8 +277,8 @@ G4bool G4PenelopePhotoElectric::IsApplicable(const G4ParticleDefinition& particl
 }
 
 G4double G4PenelopePhotoElectric::GetMeanFreePath(const G4Track& track, 
-					       G4double previousStepSize, 
-					       G4ForceCondition*)
+						  G4double, // previousStepSize
+						  G4ForceCondition*)
 {
   const G4DynamicParticle* photon = track.GetDynamicParticle();
   G4double energy = photon->GetKineticEnergy();

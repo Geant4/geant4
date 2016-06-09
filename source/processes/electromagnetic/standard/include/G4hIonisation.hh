@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.hh,v 1.21 2003/01/17 18:55:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4hIonisation.hh,v 1.22 2003/06/16 17:02:04 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------- G4hIonisation physics process -------------------------------
 //                 by Laszlo Urban, 30 May 1997 
@@ -156,7 +156,7 @@ class G4hIonisation : public G4VhEnergyLoss
     G4double Tmincut;                      // min energy of d-rays
     G4double initialMass;                  // mass for Lambda table
 
-    const G4std::vector<G4double>* secondaryEnergyCuts;
+    const std::vector<G4double>* secondaryEnergyCuts;
 
   public:  // with description
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.21 2002/12/05 16:25:34 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcommand.cc,v 1.22 2003/06/16 16:55:43 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -131,7 +131,7 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         while(!((anotherToken=parameterToken()).isNull()))
         {
           G4int idxs = anotherToken.index("#");
-          if(idxs==G4int(G4std::string::npos))
+          if(idxs==G4int(std::string::npos))
           {
             aToken += " ";
             aToken += anotherToken;
@@ -346,7 +346,7 @@ void G4UIcommand::List()
 
 
 #include <ctype.h>          // isalpha(), toupper()
-#include "g4std/strstream"
+#include <strstream>
 
 //#include "checkNewValue_debug.icc"
 //#define DEBUG 1
@@ -368,7 +368,7 @@ TypeCheck(const char * t)
 {
     G4String aNewValue;
     char type;
-    G4std::istrstream is((char*)t);
+    std::istrstream is((char*)t);
     for (unsigned i=0; i< parameter.size(); i++) {
         is >> aNewValue;
         type = toupper(parameter[i]->GetParameterType());
@@ -502,7 +502,7 @@ RangeCheck(const char* t) {
     yystype result;
     char type;
     bp = 0;                 // reset buffer pointer for G4UIpGetc()
-    G4std::istrstream is((char*)t);
+    std::istrstream is((char*)t);
     for (unsigned i=0; i< parameter.size(); i++) {
         type= toupper(parameter[i]->GetParameterType());
         switch ( type ) {
@@ -929,7 +929,7 @@ Yylex()         // reads input and returns token number, KR486
                    c=='e' || c=='E' || c=='+' || c=='-');
          G4UIpUngetc(c);
          const char* t = buf;
-	 G4std::istrstream is((char*)t);
+	 std::istrstream is((char*)t);
          if ( IsInt(buf.data(),20) ) {
              is >> yylval.I;
              return  CONSTINT;

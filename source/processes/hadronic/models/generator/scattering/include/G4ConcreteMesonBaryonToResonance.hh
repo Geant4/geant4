@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConcreteMesonBaryonToResonance.hh,v 1.3 2002/12/12 19:17:39 gunter Exp $ //
+// $Id: G4ConcreteMesonBaryonToResonance.hh,v 1.6 2003/06/16 17:08:27 gunter Exp $ //
 
 #ifndef G4ConcreteMesonBaryonToResonance_h
 #define G4ConcreteMesonBaryonToResonance_h
@@ -31,7 +31,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4VAngularDistribution.hh"
 #include "G4KineticTrackVector.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4XNDeltaTable.hh"
 #include "G4ParticleTypeConverter.hh"
 #include "G4BaryonWidth.hh"
@@ -54,10 +54,10 @@ public:
   virtual G4bool IsInCharge(const G4KineticTrack& trk1, 
 			    const G4KineticTrack& trk2) const;
 
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const
+  virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
     G4Exception("Tried to call G4ConcreteNNToNDelta::GetListOfColliders. Please find out why!");
-    G4std::vector<G4String> * aList = new G4std::vector<G4String>;
+    std::vector<G4String> * aList = new std::vector<G4String>;
     return *aList;
   } 
   
@@ -84,9 +84,9 @@ private:
   const G4ParticleDefinition* thePrimary1;
   const G4ParticleDefinition* thePrimary2;
   const G4ParticleDefinition* theSecondary;
-  static G4BaryonWidth theBaryonWidth;
-  static G4BaryonPartialWidth theBaryonPartialWidth;
-  static G4ParticleTypeConverter myConv;
+  static G4BaryonWidth & theBaryonWidth();
+  static G4BaryonPartialWidth & theBaryonPartialWidth();
+  static G4ParticleTypeConverter & myConv();
 };
 
 #endif

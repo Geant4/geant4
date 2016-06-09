@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Fragment.cc,v 1.16 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Fragment.cc,v 1.19 2003/06/18 08:53:05 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -90,7 +90,7 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
                         G4ParticleTable::GetParticleTable()->GetIonTable()
 			->GetIonMass( static_cast<G4int>(theZ), static_cast<G4int>(theA) );
   if( theExcitationEnergy < 0.0 )
-    if( theExcitationEnergy > -10.0 * eV )
+    if( theExcitationEnergy > -10.0 * eV || 0==static_cast<G4int>(theA))
       theExcitationEnergy = 0.0;
     else 
     {
@@ -153,19 +153,15 @@ G4bool G4Fragment::operator!=(const G4Fragment &right) const
 }
 
 
-G4std::ostream& operator << (G4std::ostream &out, const G4Fragment *theFragment)
+std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
 {
-#ifdef G4USE_STD_NAMESPACE
-  G4std::ios::fmtflags old_floatfield = out.flags();
-  out.setf(G4std::ios::floatfield);
-#else
-  long old_floatfield = out.setf(0,G4std::ios::floatfield);
-#endif
+  std::ios::fmtflags old_floatfield = out.flags();
+  out.setf(std::ios::floatfield);
 
   out 
-    << "Fragment: A = " << G4std::setprecision(3) << theFragment->theA 
-    << ", Z = " << G4std::setprecision(3) << theFragment->theZ ;
-  out.setf(G4std::ios::scientific,G4std::ios::floatfield);
+    << "Fragment: A = " << std::setprecision(3) << theFragment->theA 
+    << ", Z = " << std::setprecision(3) << theFragment->theZ ;
+  out.setf(std::ios::scientific,std::ios::floatfield);
   out
     << ", U = " << theFragment->GetExcitationEnergy()/MeV 
     << " MeV" << G4endl
@@ -185,13 +181,13 @@ G4std::ostream& operator << (G4std::ostream &out, const G4Fragment *theFragment)
 	<< ", #Holes = "   << theFragment->numberOfHoles
 	<< ", #Charged = " << theFragment->numberOfCharged;
   }
-  out.setf(old_floatfield,G4std::ios::floatfield);
+  out.setf(old_floatfield,std::ios::floatfield);
 
   return out;
     
 }
 
-G4std::ostream& operator << (G4std::ostream &out, const G4Fragment &theFragment)
+std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 {
   out << &theFragment;
   return out; 
@@ -203,9 +199,9 @@ G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) cons
 {
 	G4double theMaxGroundStateMass = theZ*G4Proton::Proton()->GetPDGMass()+
 	                       (theA-theZ)*G4Neutron::Neutron()->GetPDGMass();
-	G4double U = value.m() - G4std::min(theMaxGroundStateMass, GetGroundStateMass());
+	G4double U = value.m() - std::min(theMaxGroundStateMass, GetGroundStateMass());
 	if( U < 0.0 )
-		if( U > -10.0 * eV )
+		if( U > -10.0 * eV || 0==static_cast<G4int>(theA))
 			U = 0.0;
 		else 
 		{

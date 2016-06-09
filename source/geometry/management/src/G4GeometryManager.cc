@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.12 2002/11/19 17:15:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeometryManager.cc,v 1.13 2003/06/16 16:52:04 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // class G4GeometryManager
 //
@@ -32,7 +32,7 @@
 // 26.07.95 P.Kent Initial version, including optimisation Build
 // ********************************************************************
 
-#include "g4std/iomanip"
+#include <iomanip>
 #include "G4Timer.hh"
 #include "G4GeometryManager.hh"
 
@@ -113,7 +113,7 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts, G4bool verbose)
 {
    G4Timer timer;
    G4Timer allTimer;
-   G4std::vector<G4SmartVoxelStat> stats;
+   std::vector<G4SmartVoxelStat> stats;
    if (verbose) allTimer.Start();
 
    G4LogicalVolumeStore *Store;
@@ -212,7 +212,7 @@ void G4GeometryManager::DeleteOptimisations()
 // ***************************************************************************
 //
 void
-G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> & stats,
+G4GeometryManager::ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
                                      G4double totalCpuTime )
 {
   G4cout << "G4GeometryManager::ReportVoxelStats -- Voxel Statistics"
@@ -229,12 +229,12 @@ G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> & stats,
   G4cout << "    Total memory consumed for geometry optimisation:   "
          << totalMemory/1024 << " kByte" << G4endl;
   G4cout << "    Total CPU time elapsed for geometry optimisation: " 
-         << G4std::setprecision(2) << totalCpuTime << " seconds" << G4endl;
+         << std::setprecision(2) << totalCpuTime << " seconds" << G4endl;
  
   //
   // First list: sort by total CPU time
   //
-  G4std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByCpu() );
+  std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByCpu() );
          
   G4int nPrint = nStat > 10 ? 10 : nStat;
 
@@ -259,23 +259,23 @@ G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> & stats,
     else
       perc = total*100/totalCpuTime;
 
-    G4cout << G4std::setprecision(2) 
-           << G4std::setiosflags(G4std::ios::fixed|G4std::ios::right)
-           << G4std::setw(11) << perc
-           << G4std::setw(13) << total
-           << G4std::setw(13) << system
-           << G4std::setw(13) << (stats[i].GetMemoryUse()+512)/1024
-           << "k " << G4std::setiosflags(G4std::ios::left)
+    G4cout << std::setprecision(2) 
+           << std::setiosflags(std::ios::fixed|std::ios::right)
+           << std::setw(11) << perc
+           << std::setw(13) << total
+           << std::setw(13) << system
+           << std::setw(13) << (stats[i].GetMemoryUse()+512)/1024
+           << "k " << std::setiosflags(std::ios::left)
            << stats[i].GetVolume()->GetName()
-           << G4std::resetiosflags(G4std::ios::floatfield|G4std::ios::adjustfield)
-           << G4std::setprecision(6)
+           << std::resetiosflags(std::ios::floatfield|std::ios::adjustfield)
+           << std::setprecision(6)
            << G4endl;
   }
  
   //
   // Second list: sort by memory use
   //
-  G4std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByMemory() );
+  std::sort( stats.begin(), stats.end(), G4SmartVoxelStat::ByMemory() );
  
   if (nPrint)
   {
@@ -292,18 +292,18 @@ G4GeometryManager::ReportVoxelStats( G4std::vector<G4SmartVoxelStat> & stats,
     G4double totTime = stats[i].GetTotalTime();
     if (totTime < 0) totTime = 0.0;
 
-    G4cout << G4std::setprecision(2) 
-           << G4std::setiosflags(G4std::ios::fixed|G4std::ios::right)
-           << G4std::setw(11) << G4double(memory*100)/G4double(totalMemory)
-           << G4std::setw(11) << memory/1024 << "k "
-           << G4std::setw( 9) << stats[i].GetNumberHeads()
-           << G4std::setw( 9) << stats[i].GetNumberNodes()
-           << G4std::setw(11) << stats[i].GetNumberPointers()
-           << G4std::setw(13) << totTime << "    "
-           << G4std::setiosflags(G4std::ios::left)
+    G4cout << std::setprecision(2) 
+           << std::setiosflags(std::ios::fixed|std::ios::right)
+           << std::setw(11) << G4double(memory*100)/G4double(totalMemory)
+           << std::setw(11) << memory/1024 << "k "
+           << std::setw( 9) << stats[i].GetNumberHeads()
+           << std::setw( 9) << stats[i].GetNumberNodes()
+           << std::setw(11) << stats[i].GetNumberPointers()
+           << std::setw(13) << totTime << "    "
+           << std::setiosflags(std::ios::left)
            << stats[i].GetVolume()->GetName()
-           << G4std::resetiosflags(G4std::ios::floatfield|G4std::ios::adjustfield)
-           << G4std::setprecision(6)
+           << std::resetiosflags(std::ios::floatfield|std::ios::adjustfield)
+           << std::setprecision(6)
            << G4endl;
   }
 }

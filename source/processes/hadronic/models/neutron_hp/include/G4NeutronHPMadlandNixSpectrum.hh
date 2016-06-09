@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.7 2002/12/12 19:18:14 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.8 2003/06/16 17:10:55 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
 #define G4NeutronHPMadlandNixSpectrum_h 1
@@ -31,7 +31,7 @@
 #include "G4NeutronHPVector.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include <math.h>
 #include "G4VNeutronHPEDis.hh"
 
@@ -52,7 +52,7 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
   {
   }
   
-  inline void Init(G4std::ifstream & aDataFile)
+  inline void Init(std::ifstream & aDataFile)
   {
     theFractionalProb.Init(aDataFile);
     aDataFile>> theAvarageKineticPerNucleonForLightFragments;

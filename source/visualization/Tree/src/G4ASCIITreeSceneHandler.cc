@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.11 2001/08/24 20:41:31 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.12 2003/05/30 13:01:23 johna Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  5th April 2001
@@ -70,7 +70,7 @@ void G4ASCIITreeSceneHandler::EndModeling () {
   G4VTreeSceneHandler::EndModeling ();  // To re-use "culling off" code.
 }
 
-void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid& solid) {
+void G4ASCIITreeSceneHandler::RequestPrimitives(const G4VSolid&) {
 
   const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
   const G4int verbosity = pSystem->GetVerbosity();

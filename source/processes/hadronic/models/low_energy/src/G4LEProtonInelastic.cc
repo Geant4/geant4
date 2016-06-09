@@ -224,7 +224,7 @@
       counter = -1;
       for( np=0; np<(numSec/3); ++np )
       {
-        for( nm=G4std::max(0,np-2); nm<=np; ++nm )
+        for( nm=std::max(0,np-2); nm<=np; ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -247,7 +247,7 @@
       counter = -1;
       for( np=0; np<numSec/3; ++np )
       {
-        for( nm=G4std::max(0,np-1); nm<=(np+1); ++nm )
+        for( nm=std::max(0,np-1); nm<=(np+1); ++nm )
         {
           for( nz=0; nz<numSec/3; ++nz )
           {
@@ -287,7 +287,7 @@
       np = nm = nz = 0;
       if( targetParticle.GetDefinition() == aProton )
       {
-        test = exp( G4std::min( expxu, G4std::max(
+        test = exp( std::min( expxu, std::max(
          expxl, -(1.0+b[0])*(1.0+b[0])/(2.0*c*c) ) ) );
         w0 = test/2.0;
         wp = test;
@@ -298,11 +298,11 @@
       }
       else // target is a neutron
       {
-        test = exp( G4std::min( expxu, G4std::max(
+        test = exp( std::min( expxu, std::max(
          expxl, -(1.0+b[1])*(1.0+b[1])/(2.0*c*c) ) ) );
         w0 = test;
         wp = test/2.0;        
-        test = exp( G4std::min( expxu, G4std::max(
+        test = exp( std::min( expxu, std::max(
          expxl, -(-1.0+b[1])*(-1.0+b[1])/(2.0*c*c) ) ) );
         wm = test/2.0;
         wt = w0+wp+wm;
@@ -327,7 +327,7 @@
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=G4std::max(0,np-2); nm<=np && ran>=excs; ++nm )
+          for( nm=std::max(0,np-2); nm<=np && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -336,7 +336,7 @@
                 nt = np+nm+nz;
                 if( nt>0 && nt<=numSec )
                 {
-                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*protmul[counter]*protnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 )
                   {
@@ -360,7 +360,7 @@
         counter = -1;
         for( np=0; np<numSec/3 && ran>=excs; ++np )
         {
-          for( nm=G4std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
+          for( nm=std::max(0,np-1); nm<=(np+1) && ran>=excs; ++nm )
           {
             for( nz=0; nz<numSec/3 && ran>=excs; ++nz )
             {
@@ -369,7 +369,7 @@
                 nt = np+nm+nz;
                 if( nt>0 && nt<=numSec )
                 {
-                  test = exp( G4std::min( expxu, G4std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
+                  test = exp( std::min( expxu, std::max( expxl, -(pi/4.0)*(nt*nt)/(n*n) ) ) );
                   dum = (pi/anpn)*nt*neutmul[counter]*neutnorm[nt-1]/(2.0*n*n);
                   if( fabs(dum) < 1.0 )
                   {

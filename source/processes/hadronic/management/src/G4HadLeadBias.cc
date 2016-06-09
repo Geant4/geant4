@@ -89,7 +89,7 @@
     G4int randomPi0 = static_cast<G4int>((npi0+1)*G4UniformRand());
     G4int randomLepton = static_cast<G4int>((nLepton+1)*G4UniformRand());
     
-    G4std::vector<G4Track*> buffer;
+    std::vector<G4Track*> buffer;
     G4int cMeson(0), cBaryon(0), cpi0(0), cgamma(0), cLepton(0);
     for(i=0; i<result->GetNumberOfSecondaries(); i++)
     {

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstructionLeipzig.hh,v 1.2 2002/11/18 15:18:36 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyDetectorConstructionLeipzig.hh,v 1.3 2003/05/22 17:20:41 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //    ************************************************
@@ -31,7 +31,7 @@
 //    *                                              *
 //    ************************************************
 //
-//Management of Leipzig Applicator
+//Management of Leipzig applicator 
 //
 #ifndef BrachyDetectorConstructionLeipzig_H
 #define BrachyDetectorConstructionLeipzig_H 1
@@ -42,7 +42,6 @@
 
 
 class G4LogicalVolume;
-
 class G4Tubs;
 class G4Box;
 class G4Sphere;
@@ -54,40 +53,33 @@ class BrachyMaterial;
 
 class BrachyDetectorConstructionLeipzig
 {
- public:
-	BrachyDetectorConstructionLeipzig();
-	~BrachyDetectorConstructionLeipzig();
-
-
- private:
-
-   G4VisAttributes* simpleCapsuleVisAtt;
-   G4VisAttributes* simpleCapsuleTipVisAtt;
 public:
-  
+  BrachyDetectorConstructionLeipzig();
+  ~BrachyDetectorConstructionLeipzig(); 
   void  ConstructLeipzig(G4VPhysicalVolume*);
 
- private:G4Tubs* Capsule ;
-  G4LogicalVolume*  CapsuleLog;    //pointer to the logical World
-  G4VPhysicalVolume* CapsulePhys;
+private:
+  G4Tubs* capsule ;
+  G4LogicalVolume*  capsuleLog;    
+  G4VPhysicalVolume* capsulePhys;
  
-  G4Sphere* CapsuleTip;
-  G4LogicalVolume* CapsuleTipLog;
-  G4VPhysicalVolume* CapsuleTipPhys;
+  G4Sphere* capsuleTip;
+  G4LogicalVolume* capsuleTipLog;
+  G4VPhysicalVolume* capsuleTipPhys;
 
-  G4Tubs* IridiumCore;
-  G4LogicalVolume* IridiumCoreLog;
-  G4VPhysicalVolume* IridiumCorePhys;
+  G4Tubs* iridiumCore;
+  G4LogicalVolume* iridiumCoreLog;
+  G4VPhysicalVolume* iridiumCorePhys;
   
-  G4Tubs* Appl1;
-  G4LogicalVolume* Appl1Log ;
-  G4VPhysicalVolume* Appl1Phys;
+  G4Tubs* applicator1;
+  G4LogicalVolume* applicator1Log ;
+  G4VPhysicalVolume* applicator1Phys;
 
-  G4Tubs* Appl2;
-  G4LogicalVolume* Appl2Log ;
-  G4VPhysicalVolume* Appl2Phys;
+  G4Tubs* applicator2;
+  G4LogicalVolume* applicator2Log ;
+  G4VPhysicalVolume* applicator2Phys;
 
-  BrachyMaterial* pMat;   
-  };
+  BrachyMaterial* pMaterial;   
+};
 
 #endif

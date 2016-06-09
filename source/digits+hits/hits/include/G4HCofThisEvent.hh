@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.hh,v 1.7 2001/07/13 15:00:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HCofThisEvent.hh,v 1.8 2003/06/16 16:50:22 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4HCofThisEvent_h
@@ -31,7 +31,7 @@
 #include "globals.hh"
 #include "G4Allocator.hh"
 #include "G4VHitsCollection.hh"
-#include "g4std/vector"
+#include <vector>
 
 // class description:
 //
@@ -56,7 +56,7 @@ class G4HCofThisEvent
       void AddHitsCollection(G4int HCID,G4VHitsCollection * aHC);
 
   private:
-      G4std::vector<G4VHitsCollection*> * HC;
+      std::vector<G4VHitsCollection*> * HC;
 
   public: // with description
       inline G4VHitsCollection* GetHC(G4int i)

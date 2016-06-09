@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.19 2002/12/12 19:14:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QCandidate.cc,v 1.20 2003/06/16 17:04:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QCandidate ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -32,7 +32,7 @@
 //#define debug
 
 #include "G4QCandidate.hh"
-#include "g4std/algorithm"
+#include <algorithm>
 
 G4QCandidate::G4QCandidate() : relativeProbability(0.),integralProbability(0.)
 {
@@ -103,7 +103,7 @@ G4QCandidate::~G4QCandidate()
 #ifdef debug
   G4cout<<"~G4QCandidate: before thePClusters nC="<<thePClusters.entries()<<G4endl;
 #endif
-  G4std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
+  std::for_each(thePClusters.begin(), thePClusters.end(), DeleteQParentCluster());
 #ifdef debug
   G4cout<<"~G4QCandidate: === DONE ==="<<G4endl;
 #endif

@@ -64,37 +64,37 @@ const G4double G4XPDGTotal::gammagammaPDGFit[5] = { 3.,    300.,  0.000156, 0.00
 
 G4XPDGTotal::G4XPDGTotal() 
 {
-  G4std::pair<G4String,G4String> pp(G4Proton::ProtonDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> pp(G4Proton::ProtonDefinition()->GetParticleName(),
 				    G4Proton::ProtonDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> pn(G4Proton::ProtonDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> pn(G4Proton::ProtonDefinition()->GetParticleName(),
 				    G4Neutron::NeutronDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> piPlusp(G4PionPlus::PionPlusDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> piPlusp(G4PionPlus::PionPlusDefinition()->GetParticleName(),
 					 G4Proton::ProtonDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> piMinusp(G4PionMinus::PionMinusDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> piMinusp(G4PionMinus::PionMinusDefinition()->GetParticleName(),
 					  G4Proton::ProtonDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> KPlusp(G4KaonPlus::KaonPlusDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> KPlusp(G4KaonPlus::KaonPlusDefinition()->GetParticleName(),
 					G4Proton::ProtonDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> KPlusn(G4KaonPlus::KaonPlusDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> KPlusn(G4KaonPlus::KaonPlusDefinition()->GetParticleName(),
 					G4Neutron::NeutronDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> KMinusp(G4KaonMinus::KaonMinusDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> KMinusp(G4KaonMinus::KaonMinusDefinition()->GetParticleName(),
 					 G4Proton::ProtonDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> KMinusn(G4KaonMinus::KaonMinusDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> KMinusn(G4KaonMinus::KaonMinusDefinition()->GetParticleName(),
 					 G4Neutron::NeutronDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> gp(G4Gamma::GammaDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> gp(G4Gamma::GammaDefinition()->GetParticleName(),
 				    G4Proton::ProtonDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> gg(G4Gamma::GammaDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> gg(G4Gamma::GammaDefinition()->GetParticleName(),
 				    G4Gamma::GammaDefinition()->GetParticleName());
-  G4std::pair<G4String,G4String> nn(G4Neutron::NeutronDefinition()->GetParticleName(),
+  std::pair<G4String,G4String> nn(G4Neutron::NeutronDefinition()->GetParticleName(),
 				    G4Neutron::NeutronDefinition()->GetParticleName());
  
-  G4std::vector<G4double> nnData;
-  G4std::vector<G4double> ppData;
-  G4std::vector<G4double> pnData;
-  G4std::vector<G4double> pipData;
-  G4std::vector<G4double> KpData;
-  G4std::vector<G4double> KnData;
-  G4std::vector<G4double> gpData;
-  G4std::vector<G4double> ggData;
+  std::vector<G4double> nnData;
+  std::vector<G4double> ppData;
+  std::vector<G4double> pnData;
+  std::vector<G4double> pipData;
+  std::vector<G4double> KpData;
+  std::vector<G4double> KnData;
+  std::vector<G4double> gpData;
+  std::vector<G4double> ggData;
 
   G4int i;
   for (i=0; i<2; i++) 
@@ -166,12 +166,12 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
   if ( (enc1 < 0 && enc2 >0) || (enc2 < 0 && enc1 >0) ) coeff = 1.;
 
   // Order the pair: first is the lower mass particle, second is the higher mass one
-  G4std::pair<G4String,G4String> trkPair(def1->GetParticleName(),def2->GetParticleName());
+  std::pair<G4String,G4String> trkPair(def1->GetParticleName(),def2->GetParticleName());
 
   if (def1->GetPDGMass() > def2->GetPDGMass())
-    trkPair = G4std::pair<G4String,G4String>(def2->GetParticleName(),def1->GetParticleName());
+    trkPair = std::pair<G4String,G4String>(def2->GetParticleName(),def1->GetParticleName());
  
-  G4std::vector<G4double> data;   
+  std::vector<G4double> data;   
       
   if (xMap.find(trkPair) != xMap.end())
     {
@@ -179,7 +179,7 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
       PairDoubleMap::const_iterator iter;
       for (iter = xMap.begin(); iter != xMap.end(); ++iter)
 	{
-	  G4std::pair<G4String,G4String> thePair = (*iter).first;
+	  std::pair<G4String,G4String> thePair = (*iter).first;
 	  if (thePair == trkPair)
 	    {
 	      data = (*iter).second;
@@ -242,7 +242,7 @@ G4bool G4XPDGTotal::IsValid(G4double e) const
 }
 
 
-G4double G4XPDGTotal::PDGTotal(G4double coeff,G4double sqrtS) const 
+G4double G4XPDGTotal::PDGTotal(G4double ,G4double ) const 
 {
   return 0.;
 }

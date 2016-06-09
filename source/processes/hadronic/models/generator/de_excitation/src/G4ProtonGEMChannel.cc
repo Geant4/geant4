@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProtonGEMChannel.cc,v 1.1 2002/06/06 18:03:32 larazb Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProtonGEMChannel.cc,v 1.2 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov. 1999)
@@ -31,13 +31,13 @@
 #include "G4ProtonGEMChannel.hh"
 
 
-const G4ProtonGEMChannel & G4ProtonGEMChannel::operator=(const G4ProtonGEMChannel & right)
+const G4ProtonGEMChannel & G4ProtonGEMChannel::operator=(const G4ProtonGEMChannel & )
 {
     G4Exception("G4ProtonGEMChannel::operator= meant to not be accessable");
     return *this;
 }
 
-G4ProtonGEMChannel::G4ProtonGEMChannel(const G4ProtonGEMChannel & right)
+G4ProtonGEMChannel::G4ProtonGEMChannel(const G4ProtonGEMChannel & ): G4GEMChannel()
 {
     G4Exception("G4ProtonGEMChannel::CopyConstructor meant to not be accessable");
 }

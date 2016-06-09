@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2002/11/27 12:46:55 johna Exp $
+$Id: History,v 1.27 2003/06/25 09:01:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,20 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+23rd June 2003  Guy Barrand  (opengl-V05-01-02)
+- Commit a first implementation of G4OpenGLWin32Viewer.
+
+10th June 2003  Gabriele Cosmo  (opengl-V05-01-01)
+- More fixes for warnings in viewers classes.
+- Added inclusion of <windows.h> for WIN32 platforms when GL headers
+  are included.
+
+05th June 2003  Gabriele Cosmo  (opengl-V05-01-00)
+- Fixes for porting compilation on WIN32:
+  o G4OpenGLWin32Viewer[.hh.cc]: removed inclusion of <GL/glx.h>.
+  o G4OpenGLViewer.cc: replaced local variables near/far with pnear/pfar
+    since declared 'obsolete' in WIN32 platforms.
 
 27th November 2002  John Allison  (vis-V04-01-08)
 - Improved algorithm of CompareForKernelVisit.

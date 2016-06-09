@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc,v 1.12 2002/12/12 19:17:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFChannel.cc,v 1.16 2003/06/16 17:06:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -30,11 +30,11 @@
 #include "G4StatMFChannel.hh"
 #include <numeric>
 
-class SumCoulombEnergy : public G4std::binary_function<G4double,G4double,G4double>
+class SumCoulombEnergy : public std::binary_function<G4double,G4double,G4double>
 {
 public:
   SumCoulombEnergy() : total(0.0) {}
-  G4double operator() (G4double& probSoFar, G4StatMFFragment*& frag)
+  G4double operator() (G4double& , G4StatMFFragment*& frag)
   { 
       total += frag->GetCoulombEnergy();
       return total;
@@ -50,7 +50,7 @@ public:
 
 
 // Copy constructor
-G4StatMFChannel::G4StatMFChannel(const G4StatMFChannel & right)
+G4StatMFChannel::G4StatMFChannel(const G4StatMFChannel & )
 {
     G4Exception("G4StatMFChannel::copy_constructor meant to not be accessable");
 }
@@ -58,21 +58,21 @@ G4StatMFChannel::G4StatMFChannel(const G4StatMFChannel & right)
 // Operators
 
 G4StatMFChannel & G4StatMFChannel::
-operator=(const G4StatMFChannel & right)
+operator=(const G4StatMFChannel & )
 {
     G4Exception("G4StatMFChannel::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMFChannel::operator==(const G4StatMFChannel & right) const
+G4bool G4StatMFChannel::operator==(const G4StatMFChannel & ) const
 {
     //	G4Exception("G4StatMFChannel::operator== meant to not be accessable");
     return false;
 }
  
 
-G4bool G4StatMFChannel::operator!=(const G4StatMFChannel & right) const 
+G4bool G4StatMFChannel::operator!=(const G4StatMFChannel & ) const 
 {
     //	G4Exception("G4StatMFChannel::operator!= meant to not be accessable");
     return true;
@@ -81,12 +81,12 @@ G4bool G4StatMFChannel::operator!=(const G4StatMFChannel & right) const
 
 G4bool G4StatMFChannel::CheckFragments(void)
 {
-    G4std::deque<G4StatMFFragment*>::iterator i;
+    std::deque<G4StatMFFragment*>::iterator i;
     for (i = _theFragments.begin(); 
 	 i != _theFragments.end(); ++i) 
       {
-	G4int A = G4int((*i)->GetA());
-	G4int Z = G4int((*i)->GetZ());
+	G4int A = static_cast<G4int>((*i)->GetA());
+	G4int Z = static_cast<G4int>((*i)->GetZ());
 	if (A > 1 && (Z >= A || Z <= 0) || (A==1 && Z > A) || A <= 0) return false;
     }
     
@@ -102,10 +102,10 @@ void G4StatMFChannel::CreateFragment(const G4double A, const G4double Z)
     // then neutral ones.
 {
     if (Z <= 0.5) {
-	_theFragments.push_back(new G4StatMFFragment(A,Z));
+	_theFragments.push_back(new G4StatMFFragment(static_cast<G4int>(A),static_cast<G4int>(Z)));
 	_NumOfNeutralFragments++;
     } else {
-	_theFragments.push_front(new G4StatMFFragment(A,Z));
+	_theFragments.push_front(new G4StatMFFragment(static_cast<G4int>(A),static_cast<G4int>(Z)));
 	_NumOfChargedFragments++;
     }
 	
@@ -115,7 +115,7 @@ void G4StatMFChannel::CreateFragment(const G4double A, const G4double Z)
 
 G4double G4StatMFChannel::GetFragmentsCoulombEnergy(void)
 {
-    G4double Coulomb = G4std::accumulate(_theFragments.begin(),_theFragments.end(),
+    G4double Coulomb = std::accumulate(_theFragments.begin(),_theFragments.end(),
 					 0.0,SumCoulombEnergy());
 //      G4double Coulomb = 0.0;
 //      for (unsigned int i = 0;i < _theFragments.size(); i++)
@@ -129,9 +129,9 @@ G4double G4StatMFChannel::GetFragmentsEnergy(const G4double T) const
 {
     G4double Energy = 0.0;
 	
-    G4double TranslationalEnergy = (3./2.)*T*G4double(_theFragments.size());
+    G4double TranslationalEnergy = (3./2.)*T*static_cast<G4double>(_theFragments.size());
 
-    G4std::deque<G4StatMFFragment*>::const_iterator i;
+    std::deque<G4StatMFFragment*>::const_iterator i;
     for (i = _theFragments.begin(); i != _theFragments.end(); ++i)
       {
 	Energy += (*i)->GetEnergy(T);
@@ -152,7 +152,7 @@ G4FragmentVector * G4StatMFChannel::GetFragments(const G4double anA,
 
 
     G4FragmentVector * theResult = new G4FragmentVector;
-    G4std::deque<G4StatMFFragment*>::iterator i;
+    std::deque<G4StatMFFragment*>::iterator i;
     for (i = _theFragments.begin(); i != _theFragments.end(); ++i)
 	theResult->push_back((*i)->GetFragment(T));
 
@@ -203,7 +203,7 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
 	
 	// Sample the position of the remaining fragments
 	G4bool ThereAreOverlaps = false;
-	G4std::deque<G4StatMFFragment*>::iterator i;
+	std::deque<G4StatMFFragment*>::iterator i;
 	for (i = _theFragments.begin()+1; i != _theFragments.end(); ++i) 
 	  {
 	    G4int counter = 0;
@@ -213,7 +213,7 @@ void G4StatMFChannel::PlaceFragments(const G4double anA)
 		(*i)->SetPosition(IsotropicVector(R));
 		
 		// Check that there are not overlapping fragments
-		G4std::deque<G4StatMFFragment*>::iterator j;
+		std::deque<G4StatMFFragment*>::iterator j;
 		for (j = _theFragments.begin(); j != i; ++j) 
 		  {
 		    G4ThreeVector FragToFragVector = (*i)->GetPosition() - (*j)->GetPosition();
@@ -244,7 +244,7 @@ void G4StatMFChannel::FragmentsMomenta(const G4int NF, const G4int idx,
     // NF is number of fragments
     // idx is index of first fragment
 {
-    G4double KinE = (3./2.)*T*G4double(NF);
+    G4double KinE = (3./2.)*T*static_cast<G4double>(NF);
 	
     G4ThreeVector p;
 	
@@ -431,7 +431,7 @@ void G4StatMFChannel::SolveEqOfMotion(const G4double anA, const G4double anZ, co
 	0.5*Vel[i].mag2();
     }
   // Scaling of fragment velocities
-  G4double KineticEnergy = (3./2.)*G4double(_theFragments.size())*T;
+  G4double KineticEnergy = (3./2.)*static_cast<G4double>(_theFragments.size())*T;
   G4double Eta = ( CoulombEnergy + KineticEnergy ) / TotalKineticEnergy;
   for (i = 0; i < _NumOfChargedFragments; i++) 
     {

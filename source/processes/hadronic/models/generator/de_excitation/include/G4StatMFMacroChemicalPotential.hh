@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroChemicalPotential.hh,v 1.8 2002/12/12 19:17:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroChemicalPotential.hh,v 1.10 2003/06/16 17:06:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -30,7 +30,7 @@
 #ifndef G4StatMFMacroChemicalPotential_h
 #define G4StatMFMacroChemicalPotential_h 1
 
-#include "g4std/vector"
+#include <vector>
 
 #include "G4StatMFParameters.hh"
 #include "G4VStatMFMacroCluster.hh"
@@ -46,7 +46,7 @@ public:
     G4StatMFMacroChemicalPotential(const G4double anA, const G4double aZ,
 				   const G4double kappa, 
 				   const G4double temp, 
-				   G4std::vector<G4VStatMFMacroCluster*> * ClusterVector) :
+				   std::vector<G4VStatMFMacroCluster*> * ClusterVector) :
 	theA(anA),
 	theZ(aZ),
 	_Kappa(kappa),
@@ -67,7 +67,7 @@ private:
     G4StatMFMacroChemicalPotential() {};
 
     // copy constructor
-    G4StatMFMacroChemicalPotential(const G4StatMFMacroChemicalPotential &right) {};
+    G4StatMFMacroChemicalPotential(const G4StatMFMacroChemicalPotential &) {};
 
 
     // operators
@@ -107,7 +107,7 @@ private:
 	
     G4double _ChemPotentialNu;
 	
-    G4std::vector<G4VStatMFMacroCluster*> * _theClusters; 
+    std::vector<G4VStatMFMacroCluster*> * _theClusters; 
 
 
 };

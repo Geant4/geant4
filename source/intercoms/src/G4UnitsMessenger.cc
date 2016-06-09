@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsMessenger.cc,v 1.4 2002/12/04 18:30:43 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UnitsMessenger.cc,v 1.5 2003/05/21 21:13:30 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -57,7 +57,7 @@ G4UnitsMessenger::~G4UnitsMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4UnitsMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void G4UnitsMessenger::SetNewValue(G4UIcommand* command,G4String)
 {  
   if (command == ListCmd)
     { G4UnitDefinition::PrintUnitsTable(); }

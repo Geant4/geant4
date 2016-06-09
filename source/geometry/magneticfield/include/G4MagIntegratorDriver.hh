@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.12 2002/11/09 02:32:15 japost Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MagIntegratorDriver.hh,v 1.15 2003/06/25 09:02:29 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4MagInt_Driver
@@ -48,7 +48,8 @@ class G4MagInt_Driver
 
      G4bool  AccurateAdvance(G4FieldTrack&  y_current,
 		             G4double hstep,
-			     G4double eps); // Requested y_err/hstep
+			     G4double eps,            // Requested y_err/hstep
+			     G4double hinitial=0.0);  // Suggested 1st interval
        // Above drivers for integrator (Runge-Kutta) with stepsize control. 
        // Integrates ODE starting values y_current
        // from current s (s=s0) to s=s0+h with accuracy eps. 
@@ -62,9 +63,23 @@ class G4MagInt_Driver
 				G4double&    dyerr )  ;
         // QuickAdvance just tries one Step - it does not ensure accuracy.
 
+     G4bool  QuickAdvance(  G4FieldTrack&      y_posvel,         // INOUT
+		            const G4double     dydx[],  
+		                  G4double     hstep,       // In
+			          G4double&    dchord_step,
+   			          G4double&    dyerr_pos_sq,
+			          G4double&    dyerr_mom_rel_sq
+			    // G4double&    dyerr_ener_sq
+			    ) ;
+       // New QuickAdvance that also just tries one Step
+       //    (so also does not ensure accuracy)
+       //    but does return the errors in  position and
+       //        momentum (normalised: Delta_Integration(p^2)/(p^2) )
+
      G4MagInt_Driver( G4double                hminimum, 
 		      G4MagIntegratorStepper *pItsStepper,
-                      G4int                   numberOfComponents=6);
+                      G4int                   numberOfComponents=6,
+		      G4int                   statisticsVerbosity=1);
      ~G4MagInt_Driver();
         // Constructor, destructor.
 
@@ -170,6 +185,9 @@ class G4MagInt_Driver
 			 G4double             dotVelocities);       
        //  Verbose output for debugging
 
+     void PrintStatisticsReport() ;
+       //  Report on the number of steps, maximum errors etc.
+
 #ifdef QUICK_ADV_TWO
      G4bool QuickAdvance(        G4double     yarrin[],     // In
 			   const G4double     dydx[],  
@@ -187,7 +205,7 @@ class G4MagInt_Driver
 
    private:
 
-     G4double hminimum_val;
+     G4double  fMinimumStep;
         // Minimum Step allowed in a Step.
 
      const G4int  fNoIntegrationVariables;  // Number of Variables in integration
@@ -210,6 +228,14 @@ class G4MagInt_Driver
 
      G4int  fVerboseLevel;
         // Verbosity level for printing (debug, ..)
+
+     G4int  fNoTotalSteps, fNoBadSteps, fNoSmallSteps, fNoInitialSmallSteps; 
+     G4double fDyerr_max, fDyerr_mx2;
+     G4double fDyerrPos_smTot, fDyerrVel_smTot, fDyerrPos_lgTot, fDyerrVel_lgTot; 
+     G4double fSumH_sm,   fSumH_lg; 
+        // Step Statistics 
+
+     G4int    fStatisticsVerboseLevel;
 };
 
 #include "G4MagIntegratorDriver.icc"

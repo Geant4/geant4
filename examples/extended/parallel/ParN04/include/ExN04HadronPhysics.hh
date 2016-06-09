@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN04HadronPhysics.hh,v 1.1 2002/03/05 15:22:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN04HadronPhysics.hh,v 1.2 2003/06/16 16:49:35 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -39,7 +39,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 #include "G4VPhysicsConstructor.hh"
 

@@ -23,8 +23,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALPhysicsList.cc,v 1.3 2002/12/12 19:16:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: FCALPhysicsList.cc,v 1.4 2003/06/11 16:29:16 pmendez Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -319,7 +319,7 @@ void FCALPhysicsList::SetCuts()
   SetCutValue(cutForProton, "proton");
   SetCutValue(cutForProton, "anti_proton");
   
-  SetCutValueForOthers(defaultCutValue);
+  //  SetCutValueForOthers(defaultCutValue);
 
   if (verboseLevel>0) DumpCutValuesTable();
 }

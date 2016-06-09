@@ -28,8 +28,8 @@
 
 #include "globals.hh"
 #include "G4ResonanceWidth.hh"
-#include "g4std/map"
-#include "g4std/vector"
+#include <map>
+#include <vector>
 
 class G4PhysicsVector;
 
@@ -56,8 +56,8 @@ private:
   G4BaryonWidth& operator=(const G4BaryonWidth& right);
 
   // Map of PhysicsVectors for width interpolation
-  G4std::map<G4String, G4double*, G4std::less<G4String> > wMap;
-  //  G4std::map<G4String, G4double*, G4std::less<const G4String> > wMap;
+  std::map<G4String, G4double*, std::less<G4String> > wMap;
+  //  std::map<G4String, G4double*, std::less<const G4String> > wMap;
 
   static G4double baryonEnergyTable[120];
 

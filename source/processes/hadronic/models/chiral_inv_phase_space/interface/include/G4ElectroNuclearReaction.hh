@@ -23,7 +23,7 @@
 //
 //
 // $Id: G4ElectroNuclearReaction.hh,v 1.15 2003/02/04 10:17:51 jwellisc Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearReaction -- header file

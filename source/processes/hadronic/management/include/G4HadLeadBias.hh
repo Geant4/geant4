@@ -20,15 +20,15 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HadLeadBias.hh,v 1.3 2002/12/13 09:06:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4HadLeadBias.hh,v 1.4 2003/06/16 17:03:10 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 #ifndef G4HadLeadBias_h
 #define G4HadLeadBias_h
 
 #include "G4VLeadingParticleBiasing.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4VParticleChange.hh"
 
 class G4HadLeadBias : public G4VLeadingParticleBiasing

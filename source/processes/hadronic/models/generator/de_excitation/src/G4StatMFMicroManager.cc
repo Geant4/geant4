@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroManager.cc,v 1.7 2002/12/12 19:17:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMicroManager.cc,v 1.10 2003/06/16 17:06:46 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -33,7 +33,7 @@
 
 
 // Copy constructor
-G4StatMFMicroManager::G4StatMFMicroManager(const G4StatMFMicroManager & right)
+G4StatMFMicroManager::G4StatMFMicroManager(const G4StatMFMicroManager & )
 {
     G4Exception("G4StatMFMicroManager::copy_constructor meant to not be accessable");
 }
@@ -41,20 +41,20 @@ G4StatMFMicroManager::G4StatMFMicroManager(const G4StatMFMicroManager & right)
 // Operators
 
 G4StatMFMicroManager & G4StatMFMicroManager::
-operator=(const G4StatMFMicroManager & right)
+operator=(const G4StatMFMicroManager & )
 {
     G4Exception("G4StatMFMicroManager::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4StatMFMicroManager::operator==(const G4StatMFMicroManager & right) const
+G4bool G4StatMFMicroManager::operator==(const G4StatMFMicroManager & ) const
 {
     return false;
 }
  
 
-G4bool G4StatMFMicroManager::operator!=(const G4StatMFMicroManager & right) const
+G4bool G4StatMFMicroManager::operator!=(const G4StatMFMicroManager & ) const
 {
     return true;
 }
@@ -76,7 +76,7 @@ G4StatMFMicroManager::~G4StatMFMicroManager()
 {
   if (!_Partition.empty()) 
     {
-      G4std::for_each(_Partition.begin(),_Partition.end(),
+      std::for_each(_Partition.begin(),_Partition.end(),
 		      DeleteFragment());
     }
 }
@@ -108,7 +108,7 @@ void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4in
     _MeanEntropy = 0.0;	
 	
     // Keep fragment atomic numbers
-// 	G4int * FragmentAtomicNumbers = new G4int(G4int(A+0.5));
+// 	G4int * FragmentAtomicNumbers = new G4int(static_cast<G4int>(A+0.5));
 //	G4int * FragmentAtomicNumbers = new G4int(m);
     G4int FragmentAtomicNumbers[4];
 	
@@ -116,7 +116,7 @@ void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4in
     // FragmentAtomicNumbers[m-1]>FragmentAtomicNumbers[m-2]>...>FragmentAtomicNumbers[0]
     // Our initial distribution is 
     // FragmentAtomicNumbers[m-1]=A, FragmentAtomicNumbers[m-2]=0, ..., FragmentAtomicNumbers[0]=0
-    FragmentAtomicNumbers[m-1] = G4int(A);
+    FragmentAtomicNumbers[m-1] = static_cast<G4int>(A);
     for (i = 0; i <  (m - 1); i++) FragmentAtomicNumbers[i] = 0;
 
     // We try to distribute A nucleons in partitions of m fragments
@@ -125,7 +125,8 @@ void G4StatMFMicroManager::Initialize(const G4Fragment & theFragment, const G4in
     while (MakePartition(m,FragmentAtomicNumbers)) {
 	// Allowed partitions are stored and its probability calculated
 			
-	G4StatMFMicroPartition * aPartition = new G4StatMFMicroPartition(A,Z);
+	G4StatMFMicroPartition * aPartition = new G4StatMFMicroPartition(static_cast<G4int>(A),
+									 static_cast<G4int>(Z));
 	G4double PartitionProbability = 0.0;
 			
 	for (i = m-1; i >= 0; i--) aPartition->SetPartitionFragment(FragmentAtomicNumbers[i]);
@@ -185,7 +186,7 @@ G4StatMFChannel * G4StatMFMicroManager::ChooseChannel(const G4double A0, const G
     G4double RandNumber = _Normalization * _WW * G4UniformRand();
     G4double AccumWeight = 0.0;
 	
-    for (G4std::vector<G4StatMFMicroPartition*>::iterator i = _Partition.begin();
+    for (std::vector<G4StatMFMicroPartition*>::iterator i = _Partition.begin();
 	 i != _Partition.end(); ++i)
     {
 	AccumWeight += (*i)->GetProbability();

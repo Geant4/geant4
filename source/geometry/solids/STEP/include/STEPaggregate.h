@@ -12,7 +12,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: STEPaggregate.h,v 1.4 2000/01/21 13:42:31 gcosmo Exp $ */
+/* $Id: STEPaggregate.h,v 1.5 2003/06/06 17:07:28 gcosmo Exp $ */
 
 #ifdef __OSTORE__
 #include <ostore/ostore.hh>    // Required to access ObjectStore Class Library
@@ -64,7 +64,7 @@ class STEPaggregate :  public SingleLinkList
 
   protected:
 
-    virtual Severity ReadValue(G4std::istream &in, ErrorDescriptor *err,
+    virtual Severity ReadValue(std::istream &in, ErrorDescriptor *err,
 			       const TypeDescriptor *elem_type,
 			       InstMgr *insts, int addFileId =0,
 			       int assignVal =1, int ExchangeFileFormat =1,
@@ -78,7 +78,7 @@ class STEPaggregate :  public SingleLinkList
 			    int optional, char *tokenList, int addFileId =0,
 			    int clearError =0);
 
-    virtual Severity AggrValidLevel(G4std::istream &in, ErrorDescriptor *err,
+    virtual Severity AggrValidLevel(std::istream &in, ErrorDescriptor *err,
 			    const TypeDescriptor *elem_type, InstMgr *insts,
 			    int optional, char *tokenList, int addFileId =0,
 			    int clearError =0);
@@ -87,13 +87,13 @@ class STEPaggregate :  public SingleLinkList
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err =0,
 			      const TypeDescriptor *elem_type =0,
 			      InstMgr *insts =0, int addFileId = 0);
-    virtual Severity STEPread (G4std::istream& in, ErrorDescriptor *err,
+    virtual Severity STEPread (std::istream& in, ErrorDescriptor *err,
 			       const TypeDescriptor *elem_type =0,
 			       InstMgr *insts =0, int addFileId =0,
 			       const char *currSch =0);
 // OUTPUT
     virtual const char *asStr(SCLstring & s) const;
-    virtual void STEPwrite (G4std::ostream& out =G4cout, const char * =0) const;
+    virtual void STEPwrite (std::ostream& out =G4cout, const char * =0) const;
 
 //    SingleLinkNode * GetHead () const
 //	{ return (STEPnode *) SingleLinkList::GetHead(); }
@@ -144,7 +144,7 @@ typedef  GenericAggregate_ptr GenericAggregate_var;
 class EntityAggregate  :  public  STEPaggregate 
 {
   public:
-    virtual Severity ReadValue(G4std::istream &in, ErrorDescriptor *err, 
+    virtual Severity ReadValue(std::istream &in, ErrorDescriptor *err, 
 			       const TypeDescriptor *elem_type, 
 			       InstMgr *insts, int addFileId =0, 
 			       int assignVal =1, int ExchangeFileFormat =1,
@@ -172,7 +172,7 @@ typedef   EntityAggregate_ptr EntityAggregate_var;
 class SelectAggregate  :  public STEPaggregate 
 {
   public:
-    virtual Severity ReadValue(G4std::istream &in, ErrorDescriptor *err, 
+    virtual Severity ReadValue(std::istream &in, ErrorDescriptor *err, 
 			       const TypeDescriptor *elem_type, 
 			       InstMgr *insts, int addFileId =0, 
 			       int assignVal =1, int ExchangeFileFormat =1,
@@ -352,15 +352,15 @@ class STEPnode :  public SingleLinkNode  {
 
 //	INPUT
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err);
 
     virtual Severity STEPread(const char *s, ErrorDescriptor *err);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err);
 
 //	OUTPUT
     virtual const char *asStr(SCLstring & s);
     virtual const char *STEPwrite(SCLstring &s, const char * =0);
-    virtual void STEPwrite (G4std::ostream& out =G4cout);
+    virtual void STEPwrite (std::ostream& out =G4cout);
 #ifdef __OSTORE__
     static os_typespec* get_os_typespec();
 #endif
@@ -380,15 +380,15 @@ class GenericAggrNode  : public STEPnode {
   public:
 //	INPUT
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err);
 
     virtual Severity STEPread(const char *s, ErrorDescriptor *err);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err);
 
 //	OUTPUT
     virtual const char *asStr(SCLstring & s);
     virtual const char *STEPwrite(SCLstring &s, const char * =0);
-    virtual void 	STEPwrite (G4std::ostream& out =G4cout);
+    virtual void 	STEPwrite (std::ostream& out =G4cout);
 
 //	CONSTRUCTORS
     GenericAggrNode (const char *str);
@@ -414,20 +414,20 @@ class EntityNode  : public STEPnode {
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err, 
 			      const TypeDescriptor *elem_type,
 			      InstMgr *insts, int addFileId = 0);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err, 
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err, 
 			      const TypeDescriptor *elem_type,
 			      InstMgr *insts, int addFileId = 0);
 
     virtual Severity STEPread(const char *s, ErrorDescriptor *err, 
 			      const TypeDescriptor *elem_type,
 			      InstMgr *insts, int addFileId = 0);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err, 
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err, 
 			      const TypeDescriptor *elem_type,
 			      InstMgr *insts, int addFileId = 0);
 //	OUTPUT
     virtual const char *asStr(SCLstring & s);
     virtual const char *STEPwrite (SCLstring &s, const char * =0);
-    virtual void 	STEPwrite (G4std::ostream& out =G4cout);
+    virtual void 	STEPwrite (std::ostream& out =G4cout);
 
 //	CONSTRUCTORS
     EntityNode (SCLP23(Application_instance) * e);
@@ -443,7 +443,7 @@ class EntityNode  : public STEPnode {
 	    << "\n" << _POC_ "\n";
 	return StrToVal(s, err, 0, 0, 0);
     }
-    Severity StrToVal(G4std::istream &in, ErrorDescriptor *err)
+    Severity StrToVal(std::istream &in, ErrorDescriptor *err)
     {
 	G4cerr << "Internal error:  " << __FILE__ <<  __LINE__
 	    << "\n" << _POC_ "\n";
@@ -456,7 +456,7 @@ class EntityNode  : public STEPnode {
 	    << "\n" << _POC_ "\n";
 	return STEPread(s, err, 0, 0, 0);
     }
-    Severity STEPread(G4std::istream &in, ErrorDescriptor *err)
+    Severity STEPread(std::istream &in, ErrorDescriptor *err)
     {
 	G4cerr << "Internal error:  " << __FILE__ <<  __LINE__
 	    << "\n" << _POC_ "\n";
@@ -486,7 +486,7 @@ class SelectNode  : public STEPnode {
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err, 
 			      const TypeDescriptor *elem_type,
 			      InstMgr *insts, int addFileId = 0);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err, 
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err, 
 			      const TypeDescriptor *elem_type,
 			      InstMgr *insts, int addFileId = 0,
 			      const char *currSch =0);
@@ -494,14 +494,14 @@ class SelectNode  : public STEPnode {
     virtual Severity STEPread(const char *s, ErrorDescriptor *err, 
 			      const TypeDescriptor *elem_type,
 			      InstMgr *insts, int addFileId = 0);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err, 
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err, 
 			      const TypeDescriptor *elem_type,
 			      InstMgr *insts, int addFileId = 0,
 			      const char *currSch =0);
 //	OUTPUT
     virtual const char *asStr(SCLstring & s);
     virtual const char *STEPwrite (SCLstring &s, const char * =0);
-    virtual void 	STEPwrite (G4std::ostream& out =G4cout);
+    virtual void 	STEPwrite (std::ostream& out =G4cout);
 
 //	CONSTRUCTORS
     SelectNode(SCLP23(Select) * s);
@@ -517,7 +517,7 @@ class SelectNode  : public STEPnode {
 	     << "\n" << _POC_ "\n";
 	return StrToVal(s, err, 0, 0, 0);
     }
-    Severity StrToVal(G4std::istream &in, ErrorDescriptor *err)
+    Severity StrToVal(std::istream &in, ErrorDescriptor *err)
     {
 	G4cerr << "Internal error:  " << __FILE__ <<  __LINE__
 	     << "\n" << _POC_ "\n";
@@ -530,7 +530,7 @@ class SelectNode  : public STEPnode {
 	     << "\n" << _POC_ "\n";
 	return STEPread(s, err, 0, 0, 0);
     }
-    Severity STEPread(G4std::istream &in, ErrorDescriptor *err)
+    Severity STEPread(std::istream &in, ErrorDescriptor *err)
     {
 	G4cerr << "Internal error:  " << __FILE__ <<  __LINE__
 	     << "\n" << _POC_ "\n";
@@ -557,15 +557,15 @@ class StringNode  : public STEPnode {
   public:
 //	INPUT
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err);
 
     virtual Severity STEPread(const char *s, ErrorDescriptor *err);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err);
 
 //	OUTPUT
     virtual const char *asStr(SCLstring & s);
     virtual const char *STEPwrite (SCLstring &s, const char * =0);
-    virtual void 	STEPwrite (G4std::ostream& out =G4cout);
+    virtual void 	STEPwrite (std::ostream& out =G4cout);
 
 //	CONSTRUCTORS
     StringNode(StringNode& sn);
@@ -595,15 +595,15 @@ class BinaryNode  : public STEPnode {
   public:
 //	INPUT
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err);
 
     virtual Severity STEPread(const char *s, ErrorDescriptor *err);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err);
 
 //	OUTPUT
     virtual const char *asStr(SCLstring & s);
     virtual const char *STEPwrite (SCLstring &s, const char * =0);
-    virtual void 	STEPwrite (G4std::ostream& out =G4cout);
+    virtual void 	STEPwrite (std::ostream& out =G4cout);
 
 //	CONSTRUCTORS
     BinaryNode(BinaryNode& bn);
@@ -632,15 +632,15 @@ class EnumNode  : public STEPnode {
   public:
 //	INPUT
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err);
 
     virtual Severity STEPread(const char *s, ErrorDescriptor *err);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err);
 
 //	OUTPUT
     virtual const char *asStr(SCLstring & s);
     virtual const char *STEPwrite (SCLstring &s, const char * =0);
-    virtual void 	STEPwrite (G4std::ostream& out =G4cout);
+    virtual void 	STEPwrite (std::ostream& out =G4cout);
 
 //	CONSTRUCTORS
     EnumNode(SCLP23(Enum) * e);
@@ -661,15 +661,15 @@ class RealNode  : public STEPnode {
   public:
 //	INPUT
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err);
 
     virtual Severity STEPread(const char *s, ErrorDescriptor *err);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err);
 
 //	OUTPUT
     virtual const char *asStr(SCLstring & s);
     virtual const char *STEPwrite (SCLstring &s, const char * =0);
-    virtual void 	STEPwrite (G4std::ostream& out =G4cout);
+    virtual void 	STEPwrite (std::ostream& out =G4cout);
 
 //	CONSTRUCTORS
     RealNode();
@@ -689,15 +689,15 @@ class IntNode  : public STEPnode {
   public:
 //	INPUT
     virtual Severity StrToVal(const char *s, ErrorDescriptor *err);
-    virtual Severity StrToVal(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity StrToVal(std::istream &in, ErrorDescriptor *err);
 
     virtual Severity STEPread(const char *s, ErrorDescriptor *err);
-    virtual Severity STEPread(G4std::istream &in, ErrorDescriptor *err);
+    virtual Severity STEPread(std::istream &in, ErrorDescriptor *err);
 
 //	OUTPUT
     virtual const char *asStr(SCLstring & s);
     virtual const char *STEPwrite (SCLstring &s, const char * =0);
-    virtual void 	STEPwrite (G4std::ostream& out =G4cout);
+    virtual void 	STEPwrite (std::ostream& out =G4cout);
 
 //	CONSTRUCTORS
     IntNode();

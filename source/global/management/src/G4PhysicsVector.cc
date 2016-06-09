@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.14 2001/11/29 18:59:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PhysicsVector.cc,v 1.15 2003/06/06 16:17:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -41,7 +41,7 @@
 // --------------------------------------------------------------
 
 #include "G4PhysicsVector.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 G4PhysicsVector::G4PhysicsVector()
  : edgeMin(0.), edgeMax(0.), numberOfBin(0),
@@ -96,7 +96,7 @@ G4double G4PhysicsVector::GetLowEdgeEnergy(size_t binNumber) const
   return binVector[binNumber];
 }
 
-G4bool G4PhysicsVector::Store(G4std::ofstream& fOut, G4bool ascii)
+G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 {
   // Ascii mode
   if (ascii) {
@@ -125,7 +125,7 @@ G4bool G4PhysicsVector::Store(G4std::ofstream& fOut, G4bool ascii)
   return true;
 }
 
-G4bool G4PhysicsVector::Retrieve(G4std::ifstream& fIn, G4bool ascii)
+G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   // clear properties;
   lastEnergy=0.;
@@ -184,17 +184,18 @@ G4bool G4PhysicsVector::Retrieve(G4std::ifstream& fIn, G4bool ascii)
   return true;
 }
     
-G4std::ostream& operator<<(G4std::ostream& out, const G4PhysicsVector& pv)
+std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 {
   // binning
-  out << G4std::setprecision(12) << pv.edgeMin;
+  out << std::setprecision(12) << pv.edgeMin;
   out <<" " << pv.edgeMax <<" "  << pv.numberOfBin << G4endl; 
 
   // contents
   size_t i;
   out << pv.dataVector.size() << G4endl; 
   for(i = 0; i < pv.dataVector.size(); i++) {
-    out << G4std::setprecision(12) << pv.binVector[i] <<"  " << pv.dataVector[i] << G4endl;
+    out << std::setprecision(12) << pv.binVector[i] << "  "
+        << pv.dataVector[i] << G4endl;
   }
 
   return out;

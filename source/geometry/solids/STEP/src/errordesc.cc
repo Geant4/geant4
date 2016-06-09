@@ -10,16 +10,16 @@
 * and is not subject to copyright.
 */
 
-/* $Id: errordesc.cc,v 1.4 2000/01/21 13:43:10 gcosmo Exp $  */ 
+/* $Id: errordesc.cc,v 1.5 2003/06/06 17:07:35 gcosmo Exp $  */ 
 
 #include <errordesc.h>
 #include <Str.h>
 
 DebugLevel ErrorDescriptor::_debug_level = DEBUG_OFF;
-G4std::ostream *  ErrorDescriptor::_out = 0;
+std::ostream *  ErrorDescriptor::_out = 0;
 
 void 
-ErrorDescriptor::PrintContents(G4std::ostream &out) const
+ErrorDescriptor::PrintContents(std::ostream &out) const
 {
     SCLstring s;
     out << "Severity: " << severity(s) << G4endl;

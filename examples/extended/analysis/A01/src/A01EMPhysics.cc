@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EMPhysics.cc,v 1.3 2002/12/13 11:34:33 gunter Exp $
+// $Id: A01EMPhysics.cc,v 1.4 2003/06/16 16:47:01 gunter Exp $
 // --------------------------------------------------------------
 //
 
@@ -29,7 +29,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 
 A01EMPhysics::A01EMPhysics(const G4String& name)

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTable.hh,v 1.7 2001/07/11 10:01:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DecayTable.hh,v 1.8 2003/06/16 16:58:02 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // ------------------------------------------------------------
@@ -40,7 +40,7 @@
 #define G4DecayTable_h 1
 
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VDecayChannel.hh"
@@ -53,7 +53,7 @@ class G4DecayTable
  //
 
  public:
-  typedef G4std::vector<G4VDecayChannel*> G4VDecayChannelVector;
+  typedef std::vector<G4VDecayChannel*> G4VDecayChannelVector;
 
   //constructors
  public:

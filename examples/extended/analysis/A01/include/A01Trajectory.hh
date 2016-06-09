@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01Trajectory.hh,v 1.3 2002/12/13 11:34:29 gunter Exp $
+// $Id: A01Trajectory.hh,v 1.4 2003/06/16 16:46:59 gunter Exp $
 // --------------------------------------------------------------
 //
 
@@ -33,14 +33,14 @@ class A01Trajectory;
 #include "G4Allocator.hh"
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"                 // Include from 'system'
-#include "g4std/vector"             //
+#include <vector>             //
 #include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
 #include "G4TrajectoryPoint.hh"     // Include from 'tracking'
 #include "G4Track.hh"
 #include "G4Step.hh"
 
-typedef G4std::vector<G4VTrajectoryPoint*> A01TrajectoryPointContainer;
+typedef std::vector<G4VTrajectoryPoint*> A01TrajectoryPointContainer;
 
 class G4Polyline;                   // Forward declaration.
 

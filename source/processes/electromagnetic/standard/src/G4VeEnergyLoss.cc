@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.30 2003/04/08 18:04:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VeEnergyLoss.cc,v 1.32 2003/06/16 17:02:12 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 // -----------------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 10-03-03 remove tails of old cuts (V.Ivanchenko)
 // 25-03-03 add finalRangeRequested (mma)
 // 08-04-03 finalRange is region aware (V.Ivanchenko)
+// 09-05-03 number of dEdx bins 120 (V.Ivanchenko)
 // -----------------------------------------------------------------------------
 
 
@@ -89,7 +90,7 @@ G4PhysicsTable*  G4VeEnergyLoss::thepRangeCoeffCTable         = 0;
 
 G4double G4VeEnergyLoss::LowerBoundEloss =0.1*keV ;
 G4double G4VeEnergyLoss::UpperBoundEloss = 100.*TeV ;
-G4int    G4VeEnergyLoss::NbinEloss = 150 ;
+G4int    G4VeEnergyLoss::NbinEloss = 120 ;
 G4double G4VeEnergyLoss::RTable,G4VeEnergyLoss::LOGRTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -325,6 +326,14 @@ void G4VeEnergyLoss::BuildDEDXTable(
                               theeRangeCoeffCTable,
                               theInverseRangeElectronTable,
                               LowerBoundEloss,UpperBoundEloss,NbinEloss);
+       /*
+        G4cout << "DEDXTable address= " << theDEDXElectronTable << G4endl;
+        if(theDEDXElectronTable) G4cout << (*theDEDXElectronTable) << G4endl;
+        G4cout << "RangeTable address= " << theRangeElectronTable << G4endl;
+        if(theRangeElectronTable) G4cout << (*theRangeElectronTable) << G4endl;
+        G4cout << "InverseRangeTable address= " << theInverseRangeElectronTable << G4endl;
+        if(theInverseRangeElectronTable) G4cout << (*theInverseRangeElectronTable) << G4endl;
+       */
      }
      if (&aParticleType==G4Positron::Positron())
      {
@@ -511,7 +520,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
       postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
 
-      safety=G4std::min(presafety,postsafety);
+      safety=std::min(presafety,postsafety);
 
       if(safety<rcut)
       {

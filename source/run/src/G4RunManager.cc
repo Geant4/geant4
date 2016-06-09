@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.75 2003/04/24 17:42:06 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RunManager.cc,v 1.81 2003/06/19 13:05:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -41,6 +41,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4GeometryManager.hh"
 #include "G4SDManager.hh"
+#include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -59,7 +60,7 @@
 #include "G4Material.hh"
 #include "G4ExceptionHandler.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4RunManager* G4RunManager::fRunManager = 0;
 
@@ -99,13 +100,13 @@ G4RunManager::G4RunManager()
   eventManager = new G4EventManager();
   timer = new G4Timer();
   runMessenger = new G4RunMessenger(this);
-  previousEvents = new G4std::vector<G4Event*>;
+  previousEvents = new std::vector<G4Event*>;
   defaultRegion = new G4Region("DefaultRegionForTheWorld");
   defaultRegion->SetProductionCuts(G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
-  versionString = " Geant4 version $Name: geant4-05-01 $\n                                (30-Apr-2003)";
+  versionString = " Geant4 version $Name: geant4-05-02 $\n                                (27-June-2003)";
   G4cout 
   << "**********************************************" << G4endl
   << versionString << G4endl
@@ -329,8 +330,8 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
 void G4RunManager::AnalyzeEvent(G4Event* anEvent)
 {
   G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
-  if(fPersM) fPersM->Store(currentEvent);
-  currentRun->RecordEvent(currentEvent);
+  if(fPersM) fPersM->Store(anEvent);
+  currentRun->RecordEvent(anEvent);
 }
 
 void G4RunManager::RunTermination()
@@ -395,7 +396,7 @@ void G4RunManager::InitializeGeometry()
   }
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
-  DefineWorldVolume(userDetector->Construct());
+  DefineWorldVolume(userDetector->Construct(),false);
   geometryInitialized = true;
 }
 
@@ -485,11 +486,10 @@ void G4RunManager::AbortEvent()
   }
 }
 
-void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
+void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
+                                     G4bool topologyIsChanged)
 {
-  // check if this is different from previous
-  //////if(currentWorld==worldVol) return;
-  // The world volume MUST NOT have a region defined by the user.
+  // The world volume MUST NOT have a region defined by the user
   if(worldVol->GetLogicalVolume()->GetRegion())
   {
     if(worldVol->GetLogicalVolume()->GetRegion()!=defaultRegion)
@@ -503,29 +503,41 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
                 "World would have a default region assigned by RunManager.");
     }
   }
-  else
+
+  // Remove old world logical volume from the default region, if exist
+  if(defaultRegion->GetNumberOfRootVolumes())
   {
-  // set the default region to the world
-    G4LogicalVolume* worldLog = worldVol->GetLogicalVolume();
-    worldLog->SetRegion(defaultRegion);
-    defaultRegion->AddRootLogicalVolume(worldLog);
+    if(defaultRegion->GetNumberOfRootVolumes()>size_t(1))
+    {
+      G4Exception("G4RunManager::DefineWorldVolume",
+                "RUN:DefaultRegionHasMoreThanOneVolume",
+                FatalException,
+                "Default world region should have a unique logical volume.");
+    }
+    std::vector<G4LogicalVolume*>::iterator lvItr
+     = defaultRegion->GetRootLogicalVolumeIterator();
+    defaultRegion->RemoveRootLogicalVolume(*lvItr);
+    if(verboseLevel>1) G4cout << (*lvItr)->GetName()
+     << " is removed from the default region." << G4endl;
   }
 
+  // Set the default region to the world
+  G4LogicalVolume* worldLog = worldVol->GetLogicalVolume();
+  worldLog->SetRegion(defaultRegion);
+  defaultRegion->AddRootLogicalVolume(worldLog);
+  if(verboseLevel>1) G4cout << worldLog->GetName()
+   << " is registered to the default region." << G4endl;
+
+  // Set the world volume, notify the Navigator and reset its state
   currentWorld = worldVol; 
-  //geometryNeedsToBeClosed = true;
-  GeometryHasBeenModified();
-
-  // set the world volume to the Navigator
-  //ResetNavigator();
   G4TransportationManager::GetTransportationManager()
-    ->GetNavigatorForTracking()
-    ->SetWorldVolume(worldVol);
-  //ResetNavigator();
+      ->GetNavigatorForTracking()
+      ->SetWorldVolume(worldVol);
+  if (topologyIsChanged) ResetNavigator();
 
-  // Let VisManager know it
+  // Notify the VisManager as well
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager) pVVisManager->GeometryHasChanged();
-
 }
 
 void G4RunManager::ResetNavigator() const
@@ -542,12 +554,20 @@ void G4RunManager::ResetNavigator() const
     return;
   }
   
-  // We have to tweak the navigator's state in case a geometry has been modified between runs
-  // By the following call we ensure that navigator's state is reset properly
+  // We have to tweak the navigator's state in case a geometry has been
+  // modified between runs. By the following calls we ensure that navigator's
+  // state is reset properly. It is required the geometry to be closed
+  // and previous optimisations to be cleared.
+
+  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+  if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
+  geomManager->OpenGeometry();
+  geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
+
   G4ThreeVector center(0,0,0);
-  G4TransportationManager::GetTransportationManager()
-      ->GetNavigatorForTracking()
-      ->LocateGlobalPointAndSetup(center,0,false);  
+  G4Navigator* navigator =
+      G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
+  navigator->LocateGlobalPointAndSetup(center,0,false);
 }
 
 void G4RunManager::rndmSaveThisRun()
@@ -563,7 +583,7 @@ void G4RunManager::rndmSaveThisRun()
   
   G4String fileIn  = randomNumberStatusDir + "currentRun.rndm";
  
-  G4std::ostrstream os;
+  std::ostrstream os;
   os << "run" << runNumber << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();  
 
@@ -583,7 +603,7 @@ void G4RunManager::rndmSaveThisEvent()
   
   G4String fileIn  = randomNumberStatusDir + "currentEvent.rndm";
 
-  G4std::ostrstream os;
+  std::ostrstream os;
   os << "run" << currentRun->GetRunID() << "evt" << currentEvent->GetEventID()
      << ".rndm" << '\0';
   G4String fileOut = randomNumberStatusDir + os.str();       
@@ -596,7 +616,7 @@ void G4RunManager::rndmSaveThisEvent()
 void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
 {
   G4String fileNameWithDirectory;
-  if(fileN.index("/")==G4std::string::npos)
+  if(fileN.index("/")==std::string::npos)
   { fileNameWithDirectory = randomNumberStatusDir+fileN; }
   else
   { fileNameWithDirectory = fileN; }
@@ -624,7 +644,7 @@ void G4RunManager::DumpRegion(G4Region* region) const
   {
     G4cout << "Region " << region->GetName() << G4endl;
     G4cout << " Materials : ";
-    G4std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
+    std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
     size_t nMaterial = region->GetNumberOfMaterials();
     for(size_t iMate=0;iMate<nMaterial;iMate++)
     {
@@ -640,6 +660,3 @@ void G4RunManager::DumpRegion(G4Region* region) const
            << G4endl;
   }
 }
-
-
-

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.14 2002/02/26 17:34:34 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Isotope.hh,v 1.15 2003/06/16 16:56:16 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,10 +55,10 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4Isotope;
-typedef G4std::vector<G4Isotope*> G4IsotopeTable;
+typedef std::vector<G4Isotope*> G4IsotopeTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo......
 
@@ -96,13 +96,13 @@ class G4Isotope
     size_t GetIndex() const {return fIndexInTable;};    
     
     friend
-    G4std::ostream& operator<<(G4std::ostream&, G4Isotope*);
+    std::ostream& operator<<(std::ostream&, G4Isotope*);
     
     friend
-    G4std::ostream& operator<<(G4std::ostream&, G4Isotope&);
+    std::ostream& operator<<(std::ostream&, G4Isotope&);
     
     friend
-    G4std::ostream& operator<<(G4std::ostream&, G4IsotopeTable);
+    std::ostream& operator<<(std::ostream&, G4IsotopeTable);
      
  public:  // without description
  

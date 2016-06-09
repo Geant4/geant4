@@ -26,9 +26,9 @@
 #define MCT_SIM_EVENT_H
 
 #include "G4Types.hh"
-#include "g4std/iostream"
-#include "g4std/vector"
-#include "g4std/map"
+#include <iostream>
+#include <vector>
+#include <map>
  
 // ====================================================================
 //
@@ -38,8 +38,8 @@
 class G4MCTSimParticle;
 class G4MCTSimVertex;
 
-typedef G4std::map<int, G4MCTSimParticle*> G4MCTSimParticleContainer;
-typedef G4std::vector<G4MCTSimVertex*> G4MCTSimVertexContainer;
+typedef std::map<int, G4MCTSimParticle*> G4MCTSimParticleContainer;
+typedef std::vector<G4MCTSimVertex*> G4MCTSimVertexContainer;
 
 class G4MCTSimEvent {
 protected:
@@ -65,7 +65,7 @@ public:
 
   void BuildVertexContainer();
   void ClearEvent();
-  void Print(G4std::ostream& ostr= G4std::cout) const;  
+  void Print(std::ostream& ostr= std::cout) const;  
 
   // iterators
   typedef G4MCTSimParticleContainer::iterator particle_iterator;

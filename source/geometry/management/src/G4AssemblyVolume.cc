@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.13 2002/09/10 17:07:15 radoone Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4AssemblyVolume.cc,v 1.14 2003/06/16 16:52:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -35,7 +35,7 @@
 #include "G4AffineTransform.hh"
 #include "G4AssemblyVolume.hh"
 
-#include "g4std/strstream"
+#include <strstream>
 
 unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
 
@@ -192,7 +192,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // XXX - assembly volume imprint number
     // YYY - the name of a log. volume we want to make a placement of
     // ZZZ - the log. volume index inside the assembly volume
-    G4std::strstream pvName;
+    std::strstream pvName;
     pvName << "av_"
            << GetAssemblyID()
            << "_impr_"
@@ -201,7 +201,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
            << fTriplets[i].GetVolume()->GetName().c_str()
            << "_pv_"
            << i
-           << G4std::ends;
+           << std::ends;
 
     // Create the transformation in this assembly volume
     G4AffineTransform  Ta( fTriplets[i].GetRotation()->inverse(),
@@ -268,7 +268,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // XXX - assembly volume imprint number
     // YYY - the name of a log. volume we want to make a placement of
     // ZZZ - the log. volume index inside the assembly volume
-    G4std::strstream pvName;
+    std::strstream pvName;
     pvName << "av_"
            << GetAssemblyID()
            << "_impr_"
@@ -277,7 +277,7 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
            << fTriplets[i].GetVolume()->GetName().c_str()
            << "_pv_"
            << i
-           << G4std::ends;
+           << std::ends;
 
     G4Transform3D Ta( *(fTriplets[i].GetRotation()),
                       fTriplets[i].GetTranslation()

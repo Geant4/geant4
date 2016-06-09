@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4NormalNavigation.cc,v 1.5 2002/08/06 10:35:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4NormalNavigation Implementation

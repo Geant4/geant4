@@ -29,7 +29,7 @@
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
 
-G4bool G4NeutronHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const G4Element*anE)
+G4bool G4NeutronHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const G4Element*)
 {
   G4bool result = true;
   G4double eKin = aP->GetKineticEnergy();
@@ -104,7 +104,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4int counter = 0;
   G4int failCount = 0;
   G4double buffer = 0;
-  G4int size = G4int(G4std::max(10., aT/60*kelvin));
+  G4int size = G4int(std::max(10., aT/60*kelvin));
   G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
   G4double neutronVMag = neutronVelocity.mag();
   while(counter == 0 || abs(buffer-result/counter) > 0.01*buffer)

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPAngularP.hh,v 1.7 2002/12/12 19:18:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPAngularP.hh,v 1.8 2003/06/16 17:10:31 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPAngularP_h
 #define G4NeutronHPAngularP_h 1
@@ -45,7 +45,7 @@ class G4NeutronHPAngularP
     if(theProb!=NULL) delete [] theProb;
   }
   
-  inline void Init(G4std::ifstream & aDataFile)
+  inline void Init(std::ifstream & aDataFile)
   {
     G4double eNeu, cosTheta, probDist;
     G4int nProb;

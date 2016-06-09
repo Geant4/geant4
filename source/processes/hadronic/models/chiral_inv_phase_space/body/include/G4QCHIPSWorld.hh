@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.hh,v 1.11 2002/12/12 19:14:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QCHIPSWorld.hh,v 1.12 2003/06/16 17:03:59 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QCHIPSWorld ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -32,7 +32,7 @@
 #ifndef G4QCHIPSWorld_h
 #define G4QCHIPSWorld_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 #include "G4QParticleVector.hh"
 

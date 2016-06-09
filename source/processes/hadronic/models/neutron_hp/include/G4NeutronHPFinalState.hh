@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.7 2002/12/12 19:18:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPFinalState.hh,v 1.8 2003/05/30 11:32:33 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPFinalState_h
 #define G4NeutronHPFinalState_h
@@ -49,7 +49,7 @@ public:
   virtual ~G4NeutronHPFinalState(){};
 
   virtual void Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType) = 0;
-  virtual G4ParticleChange * ApplyYourself(const G4Track & theTrack) 
+  virtual G4ParticleChange * ApplyYourself(const G4Track & ) 
   {
     G4Exception("G4ParticleChange * ApplyYourself(const G4Track & theTrack) needs implementation");
     return NULL;
@@ -64,7 +64,7 @@ public:
   G4bool HasFSData() {return hasFSData;}
   G4bool HasAnyData() {return hasAnyData;}
   
-  virtual G4double GetXsec(G4double anEnergy) { return 0; }
+  virtual G4double GetXsec(G4double ) { return 0; }
   virtual G4NeutronHPVector * GetXsec() { return NULL; }
   
   void     SetA_Z(G4double anA, G4double aZ) {theBaseA = anA; theBaseZ = aZ; }

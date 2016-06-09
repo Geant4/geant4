@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc,v 1.3 2002/12/12 13:13:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VTrajectory.cc,v 1.4 2003/06/16 17:13:26 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // ---------------------------------------------------------------
@@ -48,20 +48,20 @@
 #include "G4Polymarker.hh"
 #include "G4Colour.hh"
 
-void G4VTrajectory::ShowTrajectory(G4std::ostream& os) const
+void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 {
   // Makes use of attribute values implemented in the concrete class.
   // Note: the user needs to follow with new-line or end-of-string,
   // depending on the nature of os.
 
-  G4std::vector<G4AttValue>* attValues = CreateAttValues();
+  std::vector<G4AttValue>* attValues = CreateAttValues();
 
   if (!attValues) {
     os << "G4VTrajectory::ShowTrajectory: no attribute values defined.";
     return;
   }
 
-  const G4std::map<G4String,G4AttDef>* attDefs = GetAttDefs();
+  const std::map<G4String,G4AttDef>* attDefs = GetAttDefs();
   if (!attDefs) {
     os << "G4VTrajectory::ShowTrajectory:"
       "\n  ERROR: no attribute definitions for attribute values.";
@@ -70,10 +70,10 @@ void G4VTrajectory::ShowTrajectory(G4std::ostream& os) const
 
   os << "Trajectory:";
 
-  G4std::vector<G4AttValue>::iterator iAttVal;
+  std::vector<G4AttValue>::iterator iAttVal;
   for (iAttVal = attValues->begin();
        iAttVal != attValues->end(); ++iAttVal) {
-    G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+    std::map<G4String,G4AttDef>::const_iterator iAttDef =
       attDefs->find(iAttVal->GetName());
     if (iAttDef == attDefs->end()) {
       os << "G4VTrajectory::ShowTrajectory:"
@@ -92,7 +92,7 @@ void G4VTrajectory::ShowTrajectory(G4std::ostream& os) const
   //Now do trajectory points...
   for (G4int i = 0; i < GetPointEntries(); i++) {
     G4VTrajectoryPoint* aTrajectoryPoint = GetPoint(i);
-    G4std::vector<G4AttValue>* attValues
+    std::vector<G4AttValue>* attValues
       = aTrajectoryPoint->CreateAttValues();
     if (!attValues) {
       os <<
@@ -100,7 +100,7 @@ void G4VTrajectory::ShowTrajectory(G4std::ostream& os) const
 	" for trajectory point defined.";
     }
     else {
-      const G4std::map<G4String,G4AttDef>* attDefs
+      const std::map<G4String,G4AttDef>* attDefs
 	= aTrajectoryPoint->GetAttDefs();
       if (!attDefs) {
 	os << "\nG4VTrajectory::ShowTrajectory:"
@@ -108,10 +108,10 @@ void G4VTrajectory::ShowTrajectory(G4std::ostream& os) const
 	  " for trajectory point defined.";
       }
       else {
-	G4std::vector<G4AttValue>::iterator iAttVal;
+	std::vector<G4AttValue>::iterator iAttVal;
 	for (iAttVal = attValues->begin();
 	     iAttVal != attValues->end(); ++iAttVal) {
-	  G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	  std::map<G4String,G4AttDef>::const_iterator iAttDef =
 	    attDefs->find(iAttVal->GetName());
 	  if (iAttDef == attDefs->end()) {
 	    os << "\nG4VTrajectory::ShowTrajectory:"
@@ -153,7 +153,7 @@ void G4VTrajectory::DrawTrajectory(G4int i_mode) const
 
   for (G4int i = 0; i < GetPointEntries() ; i++) {
     G4VTrajectoryPoint* aTrajectoryPoint = GetPoint(i);
-    const G4std::vector<G4ThreeVector>* auxiliaries
+    const std::vector<G4ThreeVector>* auxiliaries
       = aTrajectoryPoint->GetAuxiliaryPoints();
     if (auxiliaries) {
       for (size_t iAux = 0; iAux < auxiliaries->size(); ++iAux) {

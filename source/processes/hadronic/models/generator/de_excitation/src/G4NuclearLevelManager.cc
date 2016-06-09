@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -37,6 +37,7 @@
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added half-life, angular momentum, parity, emissioni type
 //              reading from experimental data. 
+//        02 May 2003,   Vladimir Ivanchenko remove rublic copy constructor
 //      
 // -------------------------------------------------------------------
 
@@ -46,9 +47,9 @@
 #include "G4NuclearLevel.hh"
 #include "G4ios.hh"
 #include <stdlib.h>
-#include "g4std/fstream"
-#include "g4std/strstream"
-#include "g4std/algorithm"
+#include <fstream>
+#include <strstream>
+#include <algorithm>
 
 G4NuclearLevelManager::G4NuclearLevelManager():
     _nucleusA(0), _nucleusZ(0), _fileName(""), _validity(false), 
@@ -71,7 +72,7 @@ G4NuclearLevelManager::~G4NuclearLevelManager()
   if ( _levels ) {
     if (_levels->size()>0) 
       {
-	G4std::for_each(_levels->begin(), _levels->end(), DeleteLevel());
+	std::for_each(_levels->begin(), _levels->end(), DeleteLevel());
 	_levels->clear();
       }
     delete _levels;
@@ -178,7 +179,7 @@ const G4NuclearLevel* G4NuclearLevelManager::LowestLevel() const
 }
 
 
-G4bool G4NuclearLevelManager::Read(G4std::ifstream& dataFile)
+G4bool G4NuclearLevelManager::Read(std::ifstream& dataFile)
 {
   const G4double minProbability = 0.001;
   
@@ -208,16 +209,32 @@ G4bool G4NuclearLevelManager::Read(G4std::ifstream& dataFile)
       _m4CC += _m3CC;
       _m5CC += _m4CC;
       _nPlusCC += _m5CC;
-      _kCC /= _nPlusCC;
-      _l1CC /= _nPlusCC;
-      _l2CC /= _nPlusCC;
-      _l3CC /= _nPlusCC;
-      _m1CC /= _nPlusCC;
-      _m2CC /= _nPlusCC;
-      _m3CC /= _nPlusCC;
-      _m4CC /= _nPlusCC;
-      _m5CC /= _nPlusCC;
-      _nPlusCC /= _nPlusCC;  
+      if(_nPlusCC!=0)
+      {
+        _kCC /= _nPlusCC;
+        _l1CC /= _nPlusCC;
+        _l2CC /= _nPlusCC;
+        _l3CC /= _nPlusCC;
+        _m1CC /= _nPlusCC;
+        _m2CC /= _nPlusCC;
+        _m3CC /= _nPlusCC;
+        _m4CC /= _nPlusCC;
+        _m5CC /= _nPlusCC;
+        _nPlusCC /= _nPlusCC;  
+      }
+      else
+      {
+        _kCC = 1;
+        _l1CC = 1;
+        _l2CC = 1;
+        _l3CC = 1;
+        _m1CC = 1;
+        _m2CC = 1;
+        _m3CC = 1;
+        _m4CC = 1;
+        _m5CC = 1;
+        _nPlusCC = 1;  
+      }
 	
       // G4cout << "Read " << _levelEnergy << " " << _gammaEnergy << " " << _probability << G4endl;
     }
@@ -233,11 +250,7 @@ G4bool G4NuclearLevelManager::Read(G4std::ifstream& dataFile)
 void G4NuclearLevelManager::MakeLevels()
 {
   _validity = false;
-#ifdef G4USE_STD_NAMESPACE  
-  G4std::ifstream inFile(_fileName, G4std::ios::in);
-#else
-  ifstream inFile(_fileName, ios::in|ios::nocreate);
-#endif
+  std::ifstream inFile(_fileName, std::ios::in);
   if (! inFile) 
     {
       //      G4cout << " G4NuclearLevelManager: (" << _nucleusZ << "," << _nucleusA 
@@ -249,7 +262,7 @@ void G4NuclearLevelManager::MakeLevels()
     {
       if (_levels->size()>0) 
 	{
-	  G4std::vector<G4NuclearLevel*>::iterator pos;
+	  std::vector<G4NuclearLevel*>::iterator pos;
 	  for(pos=_levels->begin(); pos!=_levels->end(); pos++)
 	    if (*pos) delete *pos;
 	  _levels->clear();
@@ -416,7 +429,7 @@ void G4NuclearLevelManager::MakeLevels()
 	_levels->push_back(newLevel);
     }
 
-    //    G4std::sort(_levels->begin(), _levels->end());
+    //    std::sort(_levels->begin(), _levels->end());
 
     return;
 }
@@ -438,7 +451,7 @@ void G4NuclearLevelManager::PrintAll()
     { _levels->operator[](i)->PrintAll(); }
 }
 
-
+/*
 G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 {
     _levelEnergy = right._levelEnergy;
@@ -472,7 +485,7 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 	    _levels->push_back(new G4NuclearLevel(*(right._levels->operator[](i))));
 	  }
 	
-	G4std::sort(_levels->begin(), _levels->end());
+	std::sort(_levels->begin(), _levels->end());
       }
     else 
       {
@@ -480,3 +493,4 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
       }
 }
 
+*/

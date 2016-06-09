@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BosonConstructor.cc,v 1.3 2001/07/11 10:01:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------

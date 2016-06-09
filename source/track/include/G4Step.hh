@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.9 2002/11/01 15:55:30 jacek Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Step.hh,v 1.10 2003/06/16 17:12:58 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -57,7 +57,7 @@
 
 #include <stdlib.h>                 // Include from 'system'
 #include "G4ios.hh"               // Include from 'system'
-#include "g4std/iomanip"                // Include from 'system'
+#include <iomanip>                // Include from 'system'
 #include "globals.hh"               // Include from 'global'
 #include "G4ThreeVector.hh"         // Include from 'global'
 #include "G4VPhysicalVolume.hh"     // Include from 'geometry'
@@ -160,16 +160,16 @@ class G4Step
 public:
   // Auxiliary points are ThreeVectors for now; change to
   // G4VAuxiliaryPoints or some such (jacek 30/10/2002)
-  void SetPointerToVectorOfAuxiliaryPoints( G4std::vector<G4ThreeVector>* theNewVectorPointer ) {
+  void SetPointerToVectorOfAuxiliaryPoints( std::vector<G4ThreeVector>* theNewVectorPointer ) {
     fpVectorOfAuxiliaryPointsPointer = theNewVectorPointer;
   }
-  G4std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const {
+  std::vector<G4ThreeVector>* GetPointerToVectorOfAuxiliaryPoints() const {
     return fpVectorOfAuxiliaryPointsPointer;
   }
 private:
   // Explicity including the word "Pointer" in the name as I keep
   // forgetting the * (jacek 30/10/2002)
-  G4std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
+  std::vector<G4ThreeVector>* fpVectorOfAuxiliaryPointsPointer;
 
 };
 

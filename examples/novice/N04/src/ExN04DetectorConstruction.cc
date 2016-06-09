@@ -141,8 +141,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
                  trkTubs_sphi,trkTubs_dphi);
   G4LogicalVolume * tracker_log
     = new G4LogicalVolume(tracker_tubs,Ar,"trackerT_L",0,0,0);
-  G4VPhysicalVolume * tracker_phys
-    = new G4PVPlacement(0,G4ThreeVector(),tracker_log,"tracker_phys",
+  // G4VPhysicalVolume * tracker_phys =
+      new G4PVPlacement(0,G4ThreeVector(),tracker_log,"tracker_phys",
 			experimentalHall_log,false,0);
   G4VisAttributes* tracker_logVisAtt
     = new G4VisAttributes(G4Colour(1.0,0.0,1.0));
@@ -174,8 +174,8 @@ G4VPhysicalVolume* ExN04DetectorConstruction::Construct()
 		  caloTubs_dz,caloTubs_sphi,caloTubs_dphi);
   G4LogicalVolume * calorimeter_log
     = new G4LogicalVolume(calorimeter_tubs,Scinti,"caloT_L",0,0,0);
-  G4VPhysicalVolume * calorimeter_phys
-    = new G4PVPlacement(0,G4ThreeVector(),calorimeter_log,"caloM_P",
+  // G4VPhysicalVolume * calorimeter_phys =
+      new G4PVPlacement(0,G4ThreeVector(),calorimeter_log,"caloM_P",
 			experimentalHall_log,false,0);
   G4VisAttributes* calorimeter_logVisATT
     = new G4VisAttributes(G4Colour(1.0,1.0,0.0));

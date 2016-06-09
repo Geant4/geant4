@@ -21,8 +21,8 @@
 // ********************************************************************
 //
  //
- // $Id: G4PreEquilibrium.hh,v 1.9 2001/07/11 10:03:54 gunter Exp $
- // GEANT4 tag $Name: geant4-05-01 $
+ // $Id: G4PreEquilibrium.hh,v 1.10 2003/06/16 17:03:58 gunter Exp $
+ // GEANT4 tag $Name: geant4-05-02 $
  //
  // Hadronic Process: Pre-equilibrium HETC 
  // Joseph L. Chuma, TRIUMF, 24-Mar-2000
@@ -33,7 +33,7 @@
 #include "globals.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Nucleus.hh"
-#include "g4std/vector"
+#include <vector>
  
  class G4PreEquilibrium
  {
@@ -70,7 +70,7 @@
      G4int ip4;          // values from 0 to N
    };
    
-#define G4Vector G4std::vector
+#define G4Vector std::vector
    typedef G4Vector< G4DynamicParticle* > DPvector;
    typedef G4Vector< G4double > Dvector;
    typedef G4Vector< G4int > Ivector;

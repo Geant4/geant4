@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfigurationList.cc,v 1.8 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
-//
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
 
@@ -33,78 +30,84 @@
 
 
 G4FermiConfigurationList::G4FermiConfigurationList():
-    TotNumOfConfigurations(0)
+  TotNumOfConfigurations(0)
 {
-    for (G4int i = 0; i < MaxNumOfFragments; i++) NumOfConfigurations[i] = 0;
+  for (G4int i = 0; i < MaxNumOfFragments; i++) NumOfConfigurations[i] = 0;
 }
 
-G4FermiConfigurationList::G4FermiConfigurationList(const G4FermiConfigurationList &right)
+G4FermiConfigurationList::G4FermiConfigurationList(const G4FermiConfigurationList &)
 {
-    G4Exception("G4FermiConfigurationList::copy_constructor meant to not be accessable");
-}
-
-
-const G4FermiConfigurationList & G4FermiConfigurationList::operator=(const G4FermiConfigurationList &right)
-{
-    G4Exception("G4FermiConfigurationList::operator= meant to not be accessable");
-    return *this;
+  G4Exception("G4FermiConfigurationList::copy_constructor meant to not be accessable");
 }
 
 
-G4bool G4FermiConfigurationList::operator==(const G4FermiConfigurationList &right) const
+const G4FermiConfigurationList & G4FermiConfigurationList::operator=(const G4FermiConfigurationList &)
 {
-    return false;
+  G4Exception("G4FermiConfigurationList::operator= meant to not be accessable");
+  return *this;
 }
 
-G4bool G4FermiConfigurationList::operator!=(const G4FermiConfigurationList &right) const
+
+G4bool G4FermiConfigurationList::operator==(const G4FermiConfigurationList &) const
 {
-    return true;
+  return false;
+}
+
+G4bool G4FermiConfigurationList::operator!=(const G4FermiConfigurationList &) const
+{
+  return true;
 }
 
 
 
 G4bool G4FermiConfigurationList::Initialize(const G4int A, const G4int Z, const G4double TotalEnergyRF)
 {
-    //
-    // let's split nucleus into k = 2,...,6 fragments
-    //
-    Configurations.clear();
-    NormalizedWeights.clear();
-    G4FermiConfiguration aConfiguration;
-    G4std::vector<G4double> NOTNormalizedWeights;
-    G4double NormStatWeight = 0.0;
-    for (G4int k = 2; k <= 6; k++) {
-	// Initialize Configuration for k fragments
-	aConfiguration.Initialize(k);
-	G4bool SplitSuccesed;
-	do {
-	    // Splits the nucleus into k fragments
-	    SplitSuccesed = aConfiguration.SplitNucleus(A,Z);
-	    if (SplitSuccesed) {
-		TotNumOfConfigurations++;
-		NumOfConfigurations[k-1]++;
-
-		// Non-Normalized statistical weight for given channel with k fragments
-		G4double StatWeight = aConfiguration.DecayProbability(A,TotalEnergyRF);
-		NormStatWeight += StatWeight;
-		// Statistical weights (it will be normalized...)
-		NOTNormalizedWeights.push_back(StatWeight);	
-
-		// Store configuration
-		Configurations.push_back(aConfiguration);
+  //
+  // let's split nucleus into k = 2,...,A fragments
+  //
+  Configurations.clear();
+  NormalizedWeights.clear();
+  G4FermiConfiguration aConfiguration;
+  std::vector<G4double> NOTNormalizedWeights;
+  G4double NormStatWeight = 0.0;
+  for (G4int k = 2; k <= A; k++) 
+    {
+      // Initialize Configuration for k fragments
+      aConfiguration.Initialize(k);
+      G4bool SplitSuccesed;
+      do 
+	{
+	  // Splits the nucleus into k fragments
+	  SplitSuccesed = aConfiguration.SplitNucleus(A,Z);
+	  if (SplitSuccesed) 
+	    {
+	      TotNumOfConfigurations++;
+	      NumOfConfigurations[k-1]++;
+	    
+	      // Non-Normalized statistical weight for given channel with k fragments
+	      G4double StatWeight = aConfiguration.DecayProbability(A,TotalEnergyRF);
+	      NormStatWeight += StatWeight;
+	      // Statistical weights (it will be normalized...)
+	      NOTNormalizedWeights.push_back(StatWeight);	
+	    
+	      // Store configuration
+	      Configurations.push_back(aConfiguration);
 	    }
-	    // Repeat splitting into k fragments (it may be several posibilities for a choosen K)
-	} while (SplitSuccesed);
+	  // Repeat splitting into k fragments (it may be several posibilities for a choosen K)
+	} 
+      while (SplitSuccesed);
     }
 
-    if (NormStatWeight > 0.0) {
-	// Let's normalize statistical weights of channels
-	for (G4int i = 0; i < TotNumOfConfigurations; i++) 
-	    NormalizedWeights.push_back(NOTNormalizedWeights[i]/NormStatWeight);
-    
-	return true;
+  if (NormStatWeight > 0.0) 
+    {
+      // Let's normalize statistical weights of channels
+      for (G4int i = 0; i < TotNumOfConfigurations; i++) 
+	{
+	  NormalizedWeights.push_back(NOTNormalizedWeights[i]/NormStatWeight);
+	}
+      return true;
     }
-    else return false;
+  else return false;
 
 }
 
@@ -112,14 +115,16 @@ G4bool G4FermiConfigurationList::Initialize(const G4int A, const G4int Z, const 
 
 G4FermiConfiguration G4FermiConfigurationList::ChooseConfiguration(void)
 {
-    G4double RandomWeight =  G4UniformRand();
-    G4double AcumWeight = 0.0;
-    G4int thisConfig = 0;
-    do {
-	AcumWeight += NormalizedWeights[thisConfig];  // We are adding the prob. of each configuration
-	thisConfig++;
-    } while ((thisConfig <= TotNumOfConfigurations) && (AcumWeight < RandomWeight));
+  G4double RandomWeight =  G4UniformRand();
+  G4double AcumWeight = 0.0;
+  G4int thisConfig = 0;
+  do 
+    {
+      AcumWeight += NormalizedWeights[thisConfig];  // We are adding the prob. of each configuration
+      thisConfig++;
+    } 
+  while ((thisConfig <= TotNumOfConfigurations) && (AcumWeight < RandomWeight));
 
-    return Configurations[thisConfig - 1];
+  return Configurations[thisConfig - 1];
 
 }

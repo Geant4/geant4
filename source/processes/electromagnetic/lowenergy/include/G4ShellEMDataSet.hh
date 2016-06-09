@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.hh,v 1.4 2002/05/28 09:15:26 pia Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ShellEMDataSet.hh,v 1.5 2003/06/16 16:59:49 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -46,7 +46,7 @@
 #include "globals.hh"
 #include "G4DataVector.hh"
 #include "G4VEMDataSet.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4EMDataSet;
 class G4VDataSetAlgorithm;
@@ -91,8 +91,8 @@ private:
 
   const G4VDataSetAlgorithm* algorithm; // Not owned pointer 
 
-  // G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > componentsMap;
-  G4std::vector<G4VEMDataSet*> components;
+  // std::map<G4int,G4VEMDataSet*,std::less<G4int> > componentsMap;
+  std::vector<G4VEMDataSet*> components;
   size_t nComponents;
 
   G4double unit1;

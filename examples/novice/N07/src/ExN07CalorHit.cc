@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07CalorHit.cc,v 1.1 2003/03/10 01:43:36 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN07CalorHit.cc,v 1.2 2003/05/21 22:01:17 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "ExN07CalorHit.hh"
@@ -36,7 +36,7 @@ ExN07CalorHit::ExN07CalorHit()
 ExN07CalorHit::~ExN07CalorHit()
 {;}
 
-ExN07CalorHit::ExN07CalorHit(const ExN07CalorHit& right)
+ExN07CalorHit::ExN07CalorHit(const ExN07CalorHit& right):G4VHit()
 {
   Edep = right.Edep;
   TrackLength = right.TrackLength;
@@ -53,7 +53,7 @@ const ExN07CalorHit& ExN07CalorHit::operator=(const ExN07CalorHit& right)
 
 int ExN07CalorHit::operator==(const ExN07CalorHit& right) const
 {
-  return 0;
+  return (this==&right);
 }
 
 void ExN07CalorHit::Draw()

@@ -21,16 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.hh,v 1.10 2001/07/11 10:01:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIWin32.hh,v 1.11 2003/06/16 16:55:54 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4UIWin32_h
 #define G4UIWin32_h 
 
 #if defined(G4UI_BUILD_WIN32_SESSION) || defined(G4UI_USE_WIN32)
 
-#include "g4std/map"
-#include "g4std/vector"
+#include <map>
+#include <vector>
 
 #include "G4VBasicShell.hh"
 #include "G4VInteractiveSession.hh"
@@ -94,7 +94,7 @@ private:
   HWND mainWindow;
   HWND textWindow,editWindow;
   HMENU menuBar,defaultMenu;
-  G4std::map<int,G4String, G4std::less<int> > commands;
+  std::map<int,G4String, std::less<int> > commands;
   void* textBuffer;
   int textRows,textCols;
   static LRESULT CALLBACK MainWindowProc(HWND,UINT,WPARAM,LPARAM);
@@ -102,7 +102,7 @@ private:
   static LRESULT CALLBACK EditWindowProc(HWND,UINT,WPARAM,LPARAM);
   G4bool fHelp;
   G4int fHelpChoice;
-  G4std::vector<G4String> fHistory;
+  std::vector<G4String> fHistory;
   int fHistoryPos;
 };
 

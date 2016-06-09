@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentClusterVector.hh,v 1.9 2002/12/12 19:14:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QParentClusterVector.hh,v 1.10 2003/06/16 17:04:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -33,9 +33,9 @@
 #define G4QParentClusterVector_h 1
 
 #include "G4QParentCluster.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4QParentCluster *> G4QParentClusterVector;
+typedef std::vector<G4QParentCluster *> G4QParentClusterVector;
 struct DeleteQParentCluster{ void operator()(G4QParentCluster *aN){delete aN;} };
 
 #endif

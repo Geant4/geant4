@@ -45,11 +45,11 @@ StreamerHepRepInstance::StreamerHepRepInstance(HepRepWriter* stream, HepRepInsta
 StreamerHepRepInstance::~StreamerHepRepInstance() {
 }
 
-HepRepInstance* StreamerHepRepInstance::copy(HepRep* heprep, HepRepInstance* instance, HepRepSelectFilter* filter) {
+HepRepInstance* StreamerHepRepInstance::copy(HepRep*, HepRepInstance*, HepRepSelectFilter*) {
     return NULL;
 }
 
-HepRepInstance* StreamerHepRepInstance::copy(HepRep* heprep, HepRepInstanceTree* instanceTree, HepRepSelectFilter* filter) {
+HepRepInstance* StreamerHepRepInstance::copy(HepRep*, HepRepInstanceTree*, HepRepSelectFilter*) {
     return NULL;
 }
 
@@ -57,7 +57,7 @@ HepRepType* StreamerHepRepInstance::getType() {
     return type;
 }
 
-bool StreamerHepRepInstance::addPoint(HepRepPoint* point) {
+bool StreamerHepRepInstance::addPoint(HepRepPoint*) {
     return true;
 }
 
@@ -65,17 +65,17 @@ vector<HepRepPoint*>* StreamerHepRepInstance::getPoints() {
     return NULL;
 }
 
-bool StreamerHepRepInstance::addInstance(HepRepInstance* instance) {
+bool StreamerHepRepInstance::addInstance(HepRepInstance*) {
     return true;
 }
 
-void StreamerHepRepInstance::removeInstance(HepRepInstance* instance) {
+void StreamerHepRepInstance::removeInstance(HepRepInstance*) {
 }
 
 vector<HepRepInstance*>* StreamerHepRepInstance::getInstances() {
     return NULL;
 }
 
-HepRepAttValue* StreamerHepRepInstance::getAttValue(string name) {
+HepRepAttValue* StreamerHepRepInstance::getAttValue(string) {
     return NULL;
 }

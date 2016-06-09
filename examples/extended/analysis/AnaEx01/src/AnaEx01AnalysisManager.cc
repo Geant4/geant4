@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.11 2001/11/16 14:31:11 barrand Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: AnaEx01AnalysisManager.cc,v 1.12 2003/06/20 14:55:45 gbarrand Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // Guy Barrand 14th Septembre 2000.
@@ -64,7 +64,7 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager()
     return;
   }
 
-  ITreeFactory* treeFactory = fAnalysisFactory->createTreeFactory();
+  AIDA::ITreeFactory* treeFactory = fAnalysisFactory->createTreeFactory();
   if(!treeFactory) {
     delete fAnalysisFactory;
     fAnalysisFactory = 0;
@@ -72,8 +72,8 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager()
   }
 
   // Create a "tree" to handle histograms.
-  // This tree is associated to a ROOT "store" (in RECREATE mode).
-  fTree = treeFactory->create("AnaEx01.root",false,false,"ROOT");
+  // This tree is associated to a writable ROOT "store".
+  fTree = treeFactory->create("AnaEx01.root","ROOT",0,1);
 
   // Factories are not "managed" by an AIDA analysis system.
   // They must be deleted by the AIDA user code.
@@ -89,13 +89,13 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager()
   fTree->cd("histograms");
       
   // Create an histo factory that will create histo in the tree :
-  IHistogramFactory* histoFactory = 
+  AIDA::IHistogramFactory* histoFactory = 
     fAnalysisFactory->createHistogramFactory(*fTree);
   if(histoFactory) {
-    fEAbs = histoFactory->create1D("EAbs",100,0,100);
-    fLAbs = histoFactory->create1D("LAbs",100,0,100);
-    fEGap = histoFactory->create1D("EGap",100,0,10);
-    fLGap = histoFactory->create1D("LGap",100,0,100);
+    fEAbs = histoFactory->createHistogram1D("EAbs",100,0,100);
+    fLAbs = histoFactory->createHistogram1D("LAbs",100,0,100);
+    fEGap = histoFactory->createHistogram1D("EGap",100,0,10);
+    fLGap = histoFactory->createHistogram1D("LGap",100,0,100);
     delete histoFactory;
   }
     
@@ -104,7 +104,7 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager()
   fTree->cd("tuples");
     
   // Get a tuple factory :
-  ITupleFactory* tupleFactory = 
+  AIDA::ITupleFactory* tupleFactory = 
     fAnalysisFactory->createTupleFactory(*fTree);
   if(tupleFactory) {
     

@@ -21,21 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G3DetTable.hh,v 1.7 2001/07/11 09:58:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3DetTable.hh,v 1.8 2003/06/16 16:50:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G3DetTable class
 
 #ifndef G3DETTABLE_HH
 #define G3DETTABLE_HH 1
 
-#include "g4std/map"
+#include <map>
 #include "globals.hh"
 #include "G3DetTableEntry.hh"
 
 class G3DetTable {
 private:
-  G4std::map<G4String, G3DetTableEntry*, G4std::less<G4String> > DTD;
+  std::map<G4String, G3DetTableEntry*, std::less<G4String> > DTD;
   G4String MakeHash(G4String& set, G4String& det);
 
 public:

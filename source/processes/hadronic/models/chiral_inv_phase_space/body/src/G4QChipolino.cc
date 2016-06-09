@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.15 2002/12/12 19:14:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QChipolino.cc,v 1.16 2003/06/16 17:04:18 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QChipolino ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -499,7 +499,7 @@ const G4QChipolino& G4QChipolino::operator=(const G4QChipolino &right)
 G4QChipolino::~G4QChipolino() {}
 
 // Standard output for G4QChipolino
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QChipolino& rhs)
+std::ostream& operator<<(std::ostream& lhs, G4QChipolino& rhs)
 {//      ===========================================
   lhs<<"{1="<<rhs.GetQPDG1()<<",2="<<rhs.GetQPDG2()<< "}";
   return lhs;

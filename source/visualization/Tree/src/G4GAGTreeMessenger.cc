@@ -51,13 +51,11 @@ G4GAGTreeMessenger::~G4GAGTreeMessenger() {
   delete fpDirectory;
 }
 
-G4String G4GAGTreeMessenger::GetCurrentValue
-(G4UIcommand* command) {
+G4String G4GAGTreeMessenger::GetCurrentValue(G4UIcommand*) {
   return "0";
 }
 
-void G4GAGTreeMessenger::SetNewValue
-(G4UIcommand* command, G4String newValue) {
+void G4GAGTreeMessenger::SetNewValue(G4UIcommand*, G4String newValue) {
   fpGAGTree->SetVerbosity
     (fpCommandVerbose->GetNewIntValue(newValue));
   G4cout << "G4GAGTree verbosity now "

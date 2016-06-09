@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NuclearFermiDensity.cc,v 1.11 2002/12/12 19:17:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NuclearFermiDensity.cc,v 1.12 2003/06/25 14:51:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "G4NuclearFermiDensity.hh"
@@ -34,7 +34,7 @@ G4NuclearFermiDensity::G4NuclearFermiDensity(G4double anA, G4double aZ)
 	const G4double r0=1.16 * ( 1. - 1.16 * pow(anA, -2./3.)) * fermi;
 	theA = G4int(anA);
 	theZ = G4int(aZ);
-	theR= r0 * pow(theA, 1./3. );
+	theR= r0 * pow(anA, 1./3. );
 	Setrho0(3./ (4. * pi * pow(r0,3.) * theA * ( 1. + sqr(a/theR)*pi2 )));
 }
 

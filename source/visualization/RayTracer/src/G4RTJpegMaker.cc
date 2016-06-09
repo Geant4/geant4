@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTJpegMaker.cc,v 1.7 2001/11/22 17:29:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4RTJpegMaker.cc,v 1.9 2003/06/18 08:23:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //
@@ -30,7 +30,7 @@
 #include "G4RTJpeg.hh"
 #include "G4RTJpegMaker.hh"
 #include "G4RTJpegCoder.hh"
-#include "g4std/fstream"
+#include <fstream>
 
 G4RTJpegMaker::G4RTJpegMaker()
 {;}
@@ -62,22 +62,8 @@ void G4RTJpegMaker::CreateFigureFile(G4String fileName,
 
         aFigure.GetJpegData(&jpegAddress,jpegSize);
 
-        G4std::ofstream ofs;
-#ifdef G4USE_STD_NAMESPACE
-        ofs.open(fileName,G4std::ios::out|G4std::ios::trunc|G4std::ios::binary);
-#else
-	ofs.open(fileName,ios::out|ios::trunc);
-#endif
+        std::ofstream ofs;
+        ofs.open(fileName,std::ios::out|std::ios::trunc|std::ios::binary);
         ofs.write(jpegAddress,jpegSize);
         ofs.close();
-
 }
-
-
-
-
-
-
-
-
-

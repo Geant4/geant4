@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.30 2001/11/12 18:22:11 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisCommandsScene.cc,v 1.32 2003/06/16 17:14:22 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -36,7 +36,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4ios.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4VVisCommandScene::G4VVisCommandScene () {}
 
@@ -85,17 +85,16 @@ G4VisCommandSceneCreate::~G4VisCommandSceneCreate () {
 
 G4String G4VisCommandSceneCreate::NextName () {
   char nextName [20];
-  G4std::ostrstream ost (nextName, 20);
-  ost << "scene-" << fId  << G4std::ends;
+  std::ostrstream ost (nextName, 20);
+  ost << "scene-" << fId  << std::ends;
   return nextName;
 }
 
-G4String G4VisCommandSceneCreate::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneCreate::GetCurrentValue (G4UIcommand*) {
   return NextName ();
 }
 
-void G4VisCommandSceneCreate::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandSceneCreate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -150,17 +149,16 @@ G4VisCommandSceneEdit::~G4VisCommandSceneEdit () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneEdit::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneEdit::GetCurrentValue (G4UIcommand*) {
   return CurrentSceneName ();
 }
 
-void G4VisCommandSceneEdit::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandSceneEdit::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String sceneName;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> sceneName;
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
@@ -215,18 +213,17 @@ G4VisCommandSceneEndOfEventAction::~G4VisCommandSceneEndOfEventAction () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneEndOfEventAction::GetCurrentValue
-(G4UIcommand* command) {
+G4String G4VisCommandSceneEndOfEventAction::GetCurrentValue(G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand* command,
+void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
 						     G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String action;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> action;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
@@ -288,14 +285,13 @@ G4VisCommandSceneList::~G4VisCommandSceneList () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneList::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneList::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
-					 G4String newValue) {
+void G4VisCommandSceneList::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String name, verbosityString;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> name >> verbosityString;
   G4VisManager::Verbosity verbosity =
     fpVisManager->GetVerbosityValue(verbosityString);
@@ -381,18 +377,17 @@ G4VisCommandSceneNotifyHandlers::~G4VisCommandSceneNotifyHandlers () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneNotifyHandlers::GetCurrentValue
-(G4UIcommand* command) {
+G4String G4VisCommandSceneNotifyHandlers::GetCurrentValue(G4UIcommand*) {
   return CurrentSceneName ();
 }
 
-void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
+void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 						   G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4String sceneName, refresh_flush;
-  G4std::istrstream is ((char*)newValue.data());
+  std::istrstream is ((char*)newValue.data());
   is >> sceneName >> refresh_flush;
   G4bool flush(false);
   if (refresh_flush(0) == 'f') flush = true;
@@ -489,12 +484,11 @@ G4VisCommandSceneRemove::~G4VisCommandSceneRemove () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneRemove::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneRemove::GetCurrentValue (G4UIcommand*) {
   return CurrentSceneName ();
 }
 
-void G4VisCommandSceneRemove::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandSceneRemove::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
@@ -564,12 +558,11 @@ G4VisCommandSceneSelect::~G4VisCommandSceneSelect () {
   delete fpCommand;
 }
 
-G4String G4VisCommandSceneSelect::GetCurrentValue (G4UIcommand* command) {
+G4String G4VisCommandSceneSelect::GetCurrentValue (G4UIcommand*) {
   return CurrentSceneName ();
 }
 
-void G4VisCommandSceneSelect::SetNewValue (G4UIcommand* command,
-					   G4String newValue) {
+void G4VisCommandSceneSelect::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 

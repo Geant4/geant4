@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.cc,v 1.5 2002/05/28 09:20:21 pia Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ShellData.cc,v 1.6 2003/06/16 17:00:25 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -34,8 +34,8 @@
 
 #include "G4ShellData.hh"
 #include "G4DataVector.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 // Constructor
 
@@ -46,7 +46,7 @@ G4ShellData::G4ShellData(G4int minZ, G4int maxZ)
 // Destructor
 G4ShellData::~G4ShellData()
 {
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::iterator pos;
+  std::map<G4int,G4DataVector*,std::less<G4int> >::iterator pos;
 
   for (pos = idMap.begin(); pos != idMap.end(); ++pos)
     {
@@ -76,7 +76,7 @@ size_t G4ShellData::NumberOfShells(G4int Z) const
 
 const G4DataVector& G4ShellData::ShellIdVector(G4int Z) const
 {
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+  std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
   if (Z < zMin || Z > zMax)
     G4Exception("G4ShellData::ShellIdVector - Z outside boundaries");
   pos = idMap.find(Z);
@@ -90,7 +90,7 @@ G4int G4ShellData::ShellId(G4int Z, G4int shellIndex) const
 
   if (Z >= zMin && Z <= zMax)
     {
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
       pos = idMap.find(Z);
       if (pos!= idMap.end())
 	{
@@ -112,7 +112,7 @@ G4double G4ShellData::BindingEnergy(G4int Z, G4int shellIndex)  const
 
   if (Z >= zMin && Z <= zMax)
     {
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
       pos = bindingMap.find(Z);
       if (pos!= bindingMap.end())
 	{
@@ -136,10 +136,10 @@ void G4ShellData::PrintData() const
 	     << " ---- "
 	     << G4endl;
       G4int nSh = nShells[Z-1];
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posId;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator posId;
       posId = idMap.find(Z);
       G4DataVector* ids = (*posId).second;
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posE;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator posE;
       posE = bindingMap.find(Z);
       G4DataVector* energies = (*posE).second;
       for (G4int i=0; i<nSh; i++)
@@ -161,7 +161,7 @@ void G4ShellData::LoadData(const G4String& fileName)
   // Build the complete string identifying the file with the data set
   
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   
   ost << fileName << ".dat";
   
@@ -176,8 +176,8 @@ void G4ShellData::LoadData(const G4String& fileName)
   
   G4String pathString(path);
   G4String dirFile = pathString + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
 
   if (! (lsdp->is_open()) )
     {

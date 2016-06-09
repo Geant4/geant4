@@ -43,7 +43,7 @@
 //
 
 inline G4double
- G4VPAIenergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
+ G4VPAIenergyLoss::GetConstraints(const G4DynamicParticle *,
                                               G4Material *aMaterial    ) 
 {
   //  G4cout<<"G4VPAIenergyLoss::GetConstraints is called"<<endl ; 
@@ -62,25 +62,6 @@ inline G4double
 //////////////////////////////////////////////////////////////////////////
 //
 //
-
-/* ***********************************************************************
-
-inline G4double G4VPAIenergyLoss::GetContinuousStepLimit(
-                                               const G4Track& track,
-                                               G4double,
-                                               G4double currentMinimumStep,
-                                               G4double&)
-{
- 
-  G4double Step =
-    GetConstraints(track.GetDynamicParticle(),track.GetMaterial()) ;
-
-  if( (Step > 0.0) && (Step < currentMinimumStep) ) currentMinimumStep = Step ;
-
-  return Step ;
-}
-
-*********************************************************** */
 
 inline G4bool G4VPAIenergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)

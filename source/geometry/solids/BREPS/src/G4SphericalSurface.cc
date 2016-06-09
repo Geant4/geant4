@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SphericalSurface.cc,v 1.6 2003/03/28 13:12:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4SphericalSurface.cc,v 1.7 2003/06/16 16:52:58 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -174,9 +174,9 @@ const char* G4SphericalSurface::NameOf() const
   return "G4SphericalSurface";
 }
 
-void G4SphericalSurface::PrintOn( G4std::ostream& os ) const
+void G4SphericalSurface::PrintOn( std::ostream& os ) const
 {  
-  //  printing function using C++ G4std::ostream class
+  //  printing function using C++ std::ostream class
   os << "G4SphericalSurface surface with origin: " << origin << "\t"
      << "radius: " << radius << "\n"
      << "\t local x_axis: " << x_axis

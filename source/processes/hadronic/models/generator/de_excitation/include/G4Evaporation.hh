@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.12 2002/12/12 19:17:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Evaporation.hh,v 1.14 2003/06/16 17:04:57 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -44,7 +44,7 @@ class G4Evaporation : public G4VEvaporation
 {
 public:
   G4Evaporation();
-  G4Evaporation(G4std::vector<G4VEvaporationChannel*> * aChannelsVector) :
+  G4Evaporation(std::vector<G4VEvaporationChannel*> * aChannelsVector) :
     theChannels(aChannelsVector), theChannelFactory(0)
   {};
 	 
@@ -71,15 +71,15 @@ private:
 #endif
 
 
-  G4std::vector<G4VEvaporationChannel*> * theChannels;
+  std::vector<G4VEvaporationChannel*> * theChannels;
   G4VEvaporationFactory * theChannelFactory;
   
   
-  class SumProbabilities : public G4std::binary_function<G4double,G4double,G4double>
+  class SumProbabilities : public std::binary_function<G4double,G4double,G4double>
   {
   public:
     SumProbabilities() : total(0.0) {}
-    G4double operator() (G4double& probSoFar, G4VEvaporationChannel*& frag)
+    G4double operator() (G4double& /* probSoFar */, G4VEvaporationChannel*& frag)
     { 
       total += frag->GetEmissionProbability();
       return total;

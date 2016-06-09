@@ -6,7 +6,7 @@
 #include <STEPattribute.h>
 
 extern const char *
-ReadStdKeyword(G4std::istream& in, SCLstring &buf, int skipInitWS);
+ReadStdKeyword(std::istream& in, SCLstring &buf, int skipInitWS);
 
 #ifdef WIN32
   typedef SDAI::Application_instance StepApplicationInstanceType;
@@ -309,7 +309,7 @@ STEPcomplex::AppendEntity(STEPcomplex *stepc)
 // READ
 Severity 
 STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
-		 G4std::istream& in, const char *currSch, int useTechCor)
+		 std::istream& in, const char *currSch, int useTechCor)
 {
     char c;
     SCLstring typeNm;
@@ -325,18 +325,18 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	stepc = stepc->sc;
     }
 
-    in >> G4std::ws;
+    in >> std::ws;
     in.get(c);
     if(c == '(') // opening paren for subsuperRecord
     {
-	in >> G4std::ws;
+	in >> std::ws;
 	c = in.peek();
 	while(c != ')')
 	{
 	    typeNm.set_null();
-	    in >> G4std::ws;
+	    in >> std::ws;
 	    ReadStdKeyword(in, typeNm, 1); // read the type name
-	    in >> G4std::ws;
+	    in >> std::ws;
 	    c = in.peek();
 	    if(c != '(')
 	    {
@@ -369,7 +369,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 		STEPread_error(c,0,in);
 		return _error.severity();
 	    }
-	    in >> G4std::ws;
+	    in >> std::ws;
 	    c = in.peek();
 	}
 	if(c != ')')
@@ -385,7 +385,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 // READ
 Severity 
 STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
-		 G4std::istream& in, const char *currSch)
+		 std::istream& in, const char *currSch)
 {
     ClearError(1);
     STEPfile_id = id;
@@ -398,12 +398,12 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
     }
 
     char c;
-    in >> G4std::ws;
+    in >> std::ws;
     in.get(c);
     if(c == '(')
     {
 	SCLstring s;
-	in >> G4std::ws;
+	in >> std::ws;
 	in.get(c);
 	while( in && (c != '(') && !isspace(c) ) // get the entity name
 	{
@@ -412,7 +412,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	}
 	if(isspace(c))
 	{
-	    in >> G4std::ws;
+	    in >> std::ws;
 	    in.get(c);
 	}
 //    STEPcomplex *EntityPart(const char *name);
@@ -434,7 +434,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	SCLP23(Application_instance)::STEPread(id, addFileId, instance_set, 
 					       in, currSch);
 	
-	in >> G4std::ws;
+	in >> std::ws;
 	in.get(c);
 	while(c != ')')
 	{
@@ -446,7 +446,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	    }
 	    if(isspace(c))
 	    {
-		in >> G4std::ws;
+		in >> std::ws;
 		in.get(c);
 	    }
 	    if(c != '(')
@@ -469,7 +469,7 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 	    stepc->SCLP23(Application_instance)::STEPread(id, addFileId, 
 							  instance_set, in,
 							  currSch);
-	    in >> G4std::ws;
+	    in >> std::ws;
 	    in.get(c);
 	}
     }
@@ -599,7 +599,7 @@ STEPcomplex::BuildAttrs(const char *s )
 }
 
 void 
-STEPcomplex::STEPread_error(char c, int index, G4std::istream& in)
+STEPcomplex::STEPread_error(char c, int index, std::istream& in)
 {
     G4cout << "STEPcomplex::STEPread_error() \n";
 }
@@ -614,7 +614,7 @@ STEPcomplex::STEPread_error(char c, int index, G4std::istream& in)
 // original names but not according to their renamed names (DAR 6/5/97).
 
 void 
-STEPcomplex::STEPwrite(G4std::ostream& out, const char *currSch, int writeComment)
+STEPcomplex::STEPwrite(std::ostream& out, const char *currSch, int writeComment)
 {
     if(writeComment && p21Comment && !p21Comment->is_null() )
 	out << p21Comment->chars();
@@ -637,11 +637,11 @@ STEPcomplex::STEPwrite(SCLstring &buf, const char *currSch)
     sprintf(instanceInfo, "#%d=", STEPfile_id );
 */
 /*
-    G4std::strstream ss;
+    std::strstream ss;
     ss << "#" << STEPfile_id << "=(";
     WriteExtMapEntities(ss, currSch);
     ss << ");";
-    ss << G4std::ends;
+    ss << std::ends;
 
     char *tmpstr = ss.str();
     buf.Append(tmpstr);
@@ -654,7 +654,7 @@ STEPcomplex::STEPwrite(SCLstring &buf, const char *currSch)
 }
 
 void 
-STEPcomplex::WriteExtMapEntities(G4std::ostream& out, const char *currSch)
+STEPcomplex::WriteExtMapEntities(std::ostream& out, const char *currSch)
 {
     SCLstring tmp;
     out << StrToUpper (EntityName( currSch ), tmp);

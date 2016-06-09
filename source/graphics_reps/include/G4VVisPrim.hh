@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisPrim.hh,v 1.8 2001/07/11 10:01:04 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VVisPrim.hh,v 1.9 2003/06/16 16:55:13 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  August 1995
@@ -36,13 +36,13 @@
 #define G4VVISPRIM_HH
 
 #include "G4Visible.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 class G4VisAttributes;
 
 class G4VVisPrim: public G4Visible {
 
-  friend G4std::ostream& operator << (G4std::ostream& os, const G4VVisPrim& prim);
+  friend std::ostream& operator << (std::ostream& os, const G4VVisPrim& prim);
 
 public: // With description
 

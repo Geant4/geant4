@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.29 2003/01/20 14:12:36 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VisManager.hh,v 1.30 2003/06/16 17:14:14 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -87,8 +87,8 @@
 #include "G4TrajectoriesModel.hh"
 #include "G4ModelingParameters.hh"
 
-#include "g4std/iostream"
-#include "g4std/vector"
+#include <iostream>
+#include <vector>
 
 class G4Scene;
 class G4UIcommand;
@@ -111,11 +111,11 @@ class G4VisManager: public G4VVisManager {
   friend class G4VSceneHandler;
   friend class G4VViewer;
 
-  friend G4std::ostream & operator <<
-  (G4std::ostream &, const G4VGraphicsSystem &);
+  friend std::ostream & operator <<
+  (std::ostream &, const G4VGraphicsSystem &);
 
-  friend G4std::ostream & operator <<
-  (G4std::ostream &, const G4VSceneHandler &);
+  friend std::ostream & operator <<
+  (std::ostream &, const G4VSceneHandler &);
 
   friend class G4VisStateDependent;
 
@@ -343,8 +343,8 @@ protected:
   // examples.  (It is used in the derived user vis managers to print
   // available graphics systems.)  It is initialised to 1 in the
   // constructor and cannot be changed.
-  G4std::vector<G4UImessenger*> fMessengerList;
-  G4std::vector<G4UIcommand*>   fDirectoryList;
+  std::vector<G4UImessenger*> fMessengerList;
+  std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
   G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer construction.
   G4NullModel fVisManagerNullModel;         // As a default.

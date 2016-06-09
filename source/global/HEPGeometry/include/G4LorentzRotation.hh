@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4LorentzRotation.hh,v 1.3 2001/07/11 10:00:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4LorentzRotation_hh
 #define G4LorentzRotation_hh

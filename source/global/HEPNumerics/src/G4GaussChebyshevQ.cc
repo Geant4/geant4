@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4GaussChebyshevQ.cc,v 1.3 2001/07/11 10:00:41 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #include "G4GaussChebyshevQ.hh"
 

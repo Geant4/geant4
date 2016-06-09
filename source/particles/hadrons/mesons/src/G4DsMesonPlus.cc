@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DsMesonPlus.cc,v 1.6 2001/10/15 10:08:24 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DsMesonPlus.cc,v 1.7 2003/06/16 16:57:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -34,8 +34,8 @@
 //  Change both methods to get the pointer into non-inlined H.Kurashige 4 Aug. 1998
 // ----------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4DsMesonPlus.hh"
 

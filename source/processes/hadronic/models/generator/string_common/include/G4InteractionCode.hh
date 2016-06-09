@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4InteractionCode.hh,v 1.5 2002/12/12 19:17:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4InteractionCode_h
 #define G4InteractionCode_h 1

@@ -22,7 +22,7 @@
 //
 //
 // $Id: Em10PhysicsListMessenger.hh,v 1.2 2001/07/11 09:57:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

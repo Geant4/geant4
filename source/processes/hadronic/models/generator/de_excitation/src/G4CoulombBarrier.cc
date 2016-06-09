@@ -21,34 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.cc,v 1.6 2002/12/12 19:17:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4CoulombBarrier.cc,v 1.9 2003/06/16 17:06:17 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
 
 
 #include "G4CoulombBarrier.hh"
-#include "g4std/strstream"
+#include <strstream>
 
-G4CoulombBarrier::G4CoulombBarrier(const G4CoulombBarrier & right)
+G4CoulombBarrier::G4CoulombBarrier(const G4CoulombBarrier & ) : G4VCoulombBarrier()
 {
   G4Exception("G4CoulombBarrier::copy_constructor meant to not be accessable.");
 }
 
 
-const G4CoulombBarrier & G4CoulombBarrier::operator=(const G4CoulombBarrier & right)
+const G4CoulombBarrier & G4CoulombBarrier::operator=(const G4CoulombBarrier & )
 {
   G4Exception("G4CoulombBarrier::operator= meant to not be accessable.");
   return *this;
 }
 
-G4bool G4CoulombBarrier::operator==(const G4CoulombBarrier & right) const 
+G4bool G4CoulombBarrier::operator==(const G4CoulombBarrier & ) const 
 {
   return false;
 }
 
-G4bool G4CoulombBarrier::operator!=(const G4CoulombBarrier & right) const 
+G4bool G4CoulombBarrier::operator!=(const G4CoulombBarrier & ) const 
 {
   return true;
 }
@@ -61,7 +61,7 @@ G4double G4CoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes,
   G4double Barrier = 0.0;
   if (ZRes > ARes || ARes < 1) {
     char errMessage[1024];
-    G4std::ostrstream errOs(errMessage,1024);
+    std::ostrstream errOs(errMessage,1024);
     errOs << "G4CoulombBarrier::GetCoulombBarrier: ";
     errOs << "Wrong values for ";
     errOs << "residual nucleus A = " << ARes << " ";
@@ -71,16 +71,16 @@ G4double G4CoulombBarrier::GetCoulombBarrier(const G4int ARes, const G4int ZRes,
   if (GetA() == 1 && GetZ() == 0) {
     Barrier = 0.0;   // Neutron Coulomb Barrier is 0
   } else {
-    G4double CompoundRadius = CalcCompoundRadius(G4double(ZRes));
-    Barrier = elm_coupling/CompoundRadius * G4double(GetZ())*G4double(ZRes)/
-      (pow(G4double(GetA()),1./3.) + pow(G4double(ARes),1./3.));
+    G4double CompoundRadius = CalcCompoundRadius(static_cast<G4double>(ZRes));
+    Barrier = elm_coupling/CompoundRadius * static_cast<G4double>(GetZ())*static_cast<G4double>(ZRes)/
+      (pow(static_cast<G4double>(GetA()),1./3.) + pow(static_cast<G4double>(ARes),1./3.));
 
     // Barrier penetration coeficient
     G4double K = BarrierPenetrationFactor(ZRes);
 		
     Barrier *= K;
 		
-    Barrier /= (1.0 + sqrt(U/(2.0*G4double(ARes))));
+    Barrier /= (1.0 + sqrt(U/(2.0*static_cast<G4double>(ARes))));
   }
   return Barrier;
 }

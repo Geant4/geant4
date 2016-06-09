@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc,v 1.10 2002/11/20 17:05:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4FastStep.cc,v 1.12 2003/06/16 17:12:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //---------------------------------------------------------------
 //
@@ -247,26 +247,31 @@ CreateSecondaryTrack(const G4DynamicParticle& dynamics,
 
 // G4FastStep should never be Initialized in this way
 // but we must define it to avoid warnings.
-void G4FastStep::Initialize(const G4Track&) {
+void G4FastStep::Initialize(const G4Track&)
+{
   G4Exception("G4FastStep::Initialize(const G4Track&) should never be called,\nyou must use instead the G4FastStep::Initialize(const G4FastTrack&)\nmethod!");
 }
 
-G4FastStep::G4FastStep():G4VParticleChange()
+G4FastStep::G4FastStep()
+  : G4VParticleChange()
 {
-  if (verboseLevel>2) {
+  if (verboseLevel>2)
+  {
     G4cerr << "G4FastStep::G4FastStep() " << G4endl;
   }
 }
 
 G4FastStep::~G4FastStep() 
 {
-  if (verboseLevel>2) {
+  if (verboseLevel>2)
+  {
     G4cerr << "G4FastStep::~G4FastStep() " << G4endl;
   }
 }
 
 // copy and assignment operators are implemented as "shallow copy"
 G4FastStep::G4FastStep(const G4FastStep &right)
+  : G4VParticleChange()
 {
    *this = right;
 }
@@ -392,40 +397,40 @@ void G4FastStep::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Position - x (mm)   : " 
-       << G4std::setw(20) << thePositionChange.x()/mm
+       << std::setw(20) << thePositionChange.x()/mm
        << G4endl; 
   G4cout << "        Position - y (mm)   : " 
-       << G4std::setw(20) << thePositionChange.y()/mm
+       << std::setw(20) << thePositionChange.y()/mm
        << G4endl; 
   G4cout << "        Position - z (mm)   : " 
-       << G4std::setw(20) << thePositionChange.z()/mm
+       << std::setw(20) << thePositionChange.z()/mm
        << G4endl;
   G4cout << "        Time (ns)           : " 
-       << G4std::setw(20) << theTimeChange/ns
+       << std::setw(20) << theTimeChange/ns
        << G4endl;
   G4cout << "        Proper Time (ns)    : " 
-       << G4std::setw(20) << theProperTimeChange/ns
+       << std::setw(20) << theProperTimeChange/ns
        << G4endl;
   G4cout << "        Momentum Direct - x : " 
-       << G4std::setw(20) << theMomentumChange.x()
+       << std::setw(20) << theMomentumChange.x()
        << G4endl;
   G4cout << "        Momentum Direct - y : " 
-       << G4std::setw(20) << theMomentumChange.y()
+       << std::setw(20) << theMomentumChange.y()
        << G4endl;
   G4cout << "        Momentum Direct - z : " 
-       << G4std::setw(20) << theMomentumChange.z()
+       << std::setw(20) << theMomentumChange.z()
        << G4endl;
   G4cout << "        Kinetic Energy (MeV): " 
-       << G4std::setw(20) << theEnergyChange/MeV
+       << std::setw(20) << theEnergyChange/MeV
        << G4endl;
   G4cout << "        Polarization - x    : " 
-       << G4std::setw(20) << thePolarizationChange.x()
+       << std::setw(20) << thePolarizationChange.x()
        << G4endl;
   G4cout << "        Polarization - y    : " 
-       << G4std::setw(20) << thePolarizationChange.y()
+       << std::setw(20) << thePolarizationChange.y()
        << G4endl;
   G4cout << "        Polarization - z    : " 
-       << G4std::setw(20) <<  thePolarizationChange.z()
+       << std::setw(20) <<  thePolarizationChange.z()
        << G4endl;
 }
 

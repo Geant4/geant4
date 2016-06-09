@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.hh,v 1.11 2002/04/19 07:10:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4DataVector.hh,v 1.12 2003/06/06 16:17:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -40,12 +40,12 @@
 #define G4DataVector_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4ios.hh"
-#include "g4std/iostream"
-#include "g4std/fstream"
+#include <iostream>
+#include <fstream>
 
-class G4DataVector : public G4std::vector<G4double> 
+class G4DataVector : public std::vector<G4double> 
 {
 
  public: // with description
@@ -80,11 +80,11 @@ class G4DataVector : public G4std::vector<G4double>
 
   enum {T_G4DataVector = 100};
 
-  G4bool Store(G4std::ofstream& fOut, G4bool ascii=false);
-  G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii=false);
+  G4bool Store(std::ofstream& fOut, G4bool ascii=false);
+  G4bool Retrieve(std::ifstream& fIn, G4bool ascii=false);
   // To store/retrieve persistent data to/from file streams.
 
-  friend G4std::ostream& operator<<(G4std::ostream&, const G4DataVector&);
+  friend std::ostream& operator<<(std::ostream&, const G4DataVector&);
 };
 
 inline

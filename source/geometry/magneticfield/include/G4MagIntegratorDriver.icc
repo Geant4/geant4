@@ -21,20 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.icc,v 1.7 2001/10/25 09:11:09 japost Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MagIntegratorDriver.icc,v 1.8 2003/06/05 16:13:26 japost Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 inline
 G4double G4MagInt_Driver::GetHmin() const
 {
-      return hminimum_val;
+      return fMinimumStep;
 } 
 
 inline
 G4double G4MagInt_Driver::Hmin() const
 {
-      return hminimum_val;
+      return fMinimumStep;
 }
 
 inline
@@ -64,7 +64,7 @@ G4double G4MagInt_Driver::GetErrcon() const
 inline
 void G4MagInt_Driver::SetHmin(G4double newval)
 {
-      hminimum_val = newval;
+      fMinimumStep = newval;
 } 
 
 inline

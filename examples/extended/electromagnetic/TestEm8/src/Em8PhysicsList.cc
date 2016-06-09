@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PhysicsList.cc,v 1.6 2003/02/20 11:35:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em8PhysicsList.cc,v 1.8 2003/06/16 16:48:01 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 
 #include "G4Timer.hh"
@@ -41,7 +41,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
                
 #include "G4FastSimulationManagerProcess.hh"
 
@@ -68,6 +68,7 @@ Em8PhysicsList::Em8PhysicsList(Em8DetectorConstruction* p)
 
   cutForGamma = defaultCutValue ;
   cutForElectron = defaultCutValue ;
+  cutForElectron = 10*mm;
   cutForProton = defaultCutValue ;
 
   SetVerboseLevel(1);
@@ -228,7 +229,7 @@ void Em8PhysicsList::ConstructEM()
 
        pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
                                      pDet->GetLogicalAbsorber(),
-                                    "IonisationByLogVol"),-1,2,2);
+                                    "IonisationByLogVol"),-1,2,-2);
 
        pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3); 
 
@@ -273,39 +274,42 @@ void Em8PhysicsList::ConstructEM()
     {
      // Construct processes for muon+ 
 
-      //   Em8StepCut* muonStepCut = new Em8StepCut();
+      Em8StepCut* muonStepCut = new Em8StepCut();
+       pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
+                                     pDet->GetLogicalAbsorber(),
+                                    "IonisationByLogVol"),-1,2,-2);
 
       // G4MuIonisation* themuIonisation = new G4MuIonisation() ;
-     //  pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+     pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
      //  pmanager->AddProcess(themuIonisation,-1,2,2);
-     //  pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
-     //  pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
+     pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
+     pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
       
       //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;
-      // pmanager->AddProcess( muonStepCut,-1,-1,3);
-      //  muonStepCut->SetMaxStep(MaxChargedStep) ;
+      pmanager->AddProcess( muonStepCut,-1,-1,3);
+     muonStepCut->SetMaxStep(MaxChargedStep) ;
 
     } 
     else if (
-                particleName == "proton"  
+                  particleName == "proton"  
                || particleName == "antiproton"  
                || particleName == "pi+"  
                || particleName == "pi-"  
                || particleName == "kaon+"  
                || particleName == "kaon-"  
-              )
+            )
     {
         Em8StepCut* thehadronStepCut = new Em8StepCut();
 
       //  G4hIonisation* thehIonisation = new G4hIonisation() ; 
-      //   G4MultipleScattering* thehMultipleScattering =
-      //                  new G4MultipleScattering() ;
+      G4MultipleScattering* thehMultipleScattering =
+                     new G4MultipleScattering() ;
 
         pmanager->AddProcess(new G4IonisationByLogicalVolume(particleName,
                                      pDet->GetLogicalAbsorber(),
-                                    "IonisationByLogVolHadr"),-1,2,2);
+                                    "IonisationByLogVolHadr"),-1,2,-2);
 
-      //  pmanager->AddProcess(thehMultipleScattering,-1,1,1);
+        pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       //  pmanager->AddProcess(thehIonisation,-1,2,2);
 
       //  pmanager->AddProcess(new G4PAIonisation("Xenon"),-1,2,2) ;

@@ -36,7 +36,7 @@ G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProd
   // Check reaction threshold  - goes to CheckThreshold
   G4VSplitableHadron* aProjectile = new G4QGSMSplitableHadron(thePrimary, TRUE); // @@@ check the TRUE
 
-  const G4std::vector<G4Nucleon *> & theTargetNuc = theNucleus->GetNucleons();
+  const std::vector<G4Nucleon *> & theTargetNuc = theNucleus->GetNucleons();
   G4LorentzVector aPrimaryMomentum(thePrimary.GetMomentum(), thePrimary.GetTotalEnergy());
   G4double s = (aPrimaryMomentum + theTargetNuc[0]->Get4Momentum()).mag2();
   G4double ThresholdMass = thePrimary.GetMass() + theTargetNuc[0]->GetDefinition()->GetPDGMass(); 
@@ -51,7 +51,7 @@ G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProd
   }
  
   // first find the collisions HPW
-  G4std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
+  std::for_each(theInteractions.begin(), theInteractions.end(), DeleteInteractionContent());
   theInteractions.clear();
   G4int totalCuts = 0;
 

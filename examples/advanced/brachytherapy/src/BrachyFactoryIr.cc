@@ -29,56 +29,44 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyFactoryIr.cc,v 1.2 2002/11/18 15:18:38 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyFactoryIr.cc,v 1.4 2003/05/22 17:20:43 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
+#include "globals.hh"
 #include "BrachyFactoryIr.hh"
-#include"BrachyPrimaryGeneratorActionIr.hh"
+#include "BrachyPrimaryGeneratorActionIr.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4IonTable.hh"
-#include "G4RadioactiveDecay.hh"
 #include "G4UImanager.hh"
-#include "globals.hh"
-#include <math.h>
 #include "G4RunManager.hh" 
-#include"BrachyDetectorMessenger.hh"
-#include"BrachyDetectorConstructionIr.hh"
+#include "BrachyDetectorMessenger.hh"
+#include "BrachyDetectorConstructionIr.hh"
+
 BrachyFactoryIr:: BrachyFactoryIr()
 {
-   pIridio=new  BrachyDetectorConstructionIr();
-
+  iridiumSource=new  BrachyDetectorConstructionIr();
 }
 
 BrachyFactoryIr:: ~BrachyFactoryIr()
 {
-  delete pIridio;
-
+  delete iridiumSource;
 }
  
-
-G4VUserPrimaryGeneratorAction*  BrachyFactoryIr::CreatePrimaryGeneratorAction()
-
-{ 
- 
-   
-  G4VUserPrimaryGeneratorAction*    pIridium =new BrachyPrimaryGeneratorActionIr();
- if(pIridium) return pIridium ;
-
-
+G4VUserPrimaryGeneratorAction*  BrachyFactoryIr::CreatePrimaryGeneratorAction(){
+  G4VUserPrimaryGeneratorAction* iridiumPrimaryParticle =
+                                         new BrachyPrimaryGeneratorActionIr();
+  return iridiumPrimaryParticle;
 }
 
 void BrachyFactoryIr::CreateSource(G4VPhysicalVolume* mother)
 {
-
-  pIridio -> ConstructIridium(mother);
-
+  iridiumSource -> ConstructIridium(mother);
 }
+
 void BrachyFactoryIr::CleanSource()
 {
-
-  pIridio -> CleanIridium();
-
+  iridiumSource -> CleanIridium();
 }

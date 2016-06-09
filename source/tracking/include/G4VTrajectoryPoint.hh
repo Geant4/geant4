@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectoryPoint.hh,v 1.9 2002/10/28 11:10:58 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VTrajectoryPoint.hh,v 1.10 2003/06/16 17:13:16 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -40,8 +40,8 @@
 #define G4VTrajectoryPoint_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 #include "G4ThreeVector.hh"
 
 class G4AttDef;
@@ -63,7 +63,7 @@ class G4VTrajectoryPoint
    virtual const G4ThreeVector GetPosition() const = 0;
 
  // Get method for a vector of auxiliary points
-   virtual const G4std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
+   virtual const std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
    { return 0; }
    // If implemented by a derived class, returns a pointer to a list
    // of auxiliary points, e.g., intermediate points used during the
@@ -71,14 +71,14 @@ class G4VTrajectoryPoint
    // trajectory.  The user must test the validity of this pointer.
 
  // Get method for HEPRep style attribute definitions
-   virtual const G4std::map<G4String,G4AttDef>* GetAttDefs() const
+   virtual const std::map<G4String,G4AttDef>* GetAttDefs() const
    { return 0; }
    // If implemented by a derived class, returns a pointer to a map of
    // attribute definitions for the attribute values below.  The user
    // must test the validity of this pointer.
 
  // Get method for HEPRep style attribute values
-   virtual G4std::vector<G4AttValue>* CreateAttValues() const
+   virtual std::vector<G4AttValue>* CreateAttValues() const
    { return 0; }
    // If implemented by a derived class, returns a pointer to a list
    // of attribute values suitable, e.g., for picking.  Each must

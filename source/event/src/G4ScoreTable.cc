@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreTable.cc,v 1.2 2002/11/04 10:52:39 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ScoreTable.cc,v 1.3 2003/06/16 16:50:36 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -32,11 +32,11 @@
 // ----------------------------------------------------------------------
 
 #include "G4ScoreTable.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 #include "G4VPhysicalVolume.hh"
 #include "G4VIStore.hh"
-#include "g4std/set"
+#include <set>
 #include "G4CellScorer.hh"
 
 
@@ -50,7 +50,7 @@ G4ScoreTable::~G4ScoreTable()
 {}
 void G4ScoreTable::
 Print(const G4MapGeometryCellCellScorer &cs,
-      G4std::ostream *out){
+      std::ostream *out){
   if (!out) {
     out = &G4cout;
   }
@@ -58,9 +58,9 @@ Print(const G4MapGeometryCellCellScorer &cs,
   PrintTable(cs, out);
 }
 
-void G4ScoreTable::PrintHeader(G4std::ostream *out)
+void G4ScoreTable::PrintHeader(std::ostream *out)
 {
-  G4std::vector<G4String> vecScoreName;
+  std::vector<G4String> vecScoreName;
   vecScoreName.push_back("Importance");
   vecScoreName.push_back("Tr.Entering");
   vecScoreName.push_back("Population");
@@ -71,9 +71,9 @@ void G4ScoreTable::PrintHeader(G4std::ostream *out)
   vecScoreName.push_back("Av.Tr.WGT");
 
   // head line
-  G4std::string vname = FillString("Volume name", ' ', FieldName+1);
+  std::string vname = FillString("Volume name", ' ', FieldName+1);
   *out << vname << '|';
-  for (G4std::vector<G4String>::iterator it = vecScoreName.begin();
+  for (std::vector<G4String>::iterator it = vecScoreName.begin();
        it != vecScoreName.end(); it++) {
     vname = FillString((*it),
 		       ' ', 
@@ -87,7 +87,7 @@ void G4ScoreTable::PrintHeader(G4std::ostream *out)
 G4String G4ScoreTable::CreateName(const G4GeometryCell &gCell) {
   
   char st[200];
-  G4std::ostrstream os(st,200);
+  std::ostrstream os(st,200);
   os << gCell.GetPhysicalVolume().GetName()
      << "_rep:" << gCell.GetReplicaNumber()
      << '\0';
@@ -98,11 +98,11 @@ G4String G4ScoreTable::CreateName(const G4GeometryCell &gCell) {
    
 
 void G4ScoreTable::PrintTable(const G4MapGeometryCellCellScorer &mcs,
-				      G4std::ostream *out) {
+				      std::ostream *out) {
   
   // this lines sort the ScoreValues according to the volume 
   // name they belong to
-  G4std::map<G4String , G4CellScoreComposer> MapStringSCScorer;
+  std::map<G4String , G4CellScoreComposer> MapStringSCScorer;
   for (G4MapGeometryCellCellScorer::const_iterator mit = 
 	 mcs.begin();
        mit != mcs.end(); ++mit) {
@@ -119,7 +119,7 @@ void G4ScoreTable::PrintTable(const G4MapGeometryCellCellScorer &mcs,
     MapStringSCScorer[name].SetImportnace(importance);
   }
   // now do the printing
-  for ( G4std::map<G4String , G4CellScoreComposer>::iterator
+  for ( std::map<G4String , G4CellScoreComposer>::iterator
 	  it = MapStringSCScorer.begin();
 	it != MapStringSCScorer.end(); ++it) {
     G4String name((*it).first);
@@ -131,23 +131,23 @@ void G4ScoreTable::PrintTable(const G4MapGeometryCellCellScorer &mcs,
 
 void G4ScoreTable::PrintLine(const G4String &name,
 			     const G4CellScoreValues &sc_scores,
-			     G4std::ostream *out) 
+			     std::ostream *out) 
 {
-  G4std::string fname = FillString(name, '.', FieldName);
+  std::string fname = FillString(name, '.', FieldName);
   *out << fname << " |";
-  *out << G4std::setw(FieldValue) << sc_scores.fImportance 
+  *out << std::setw(FieldValue) << sc_scores.fImportance 
        << " |";
-  *out << G4std::setw(FieldValue) << sc_scores.fSumTracksEntering 
+  *out << std::setw(FieldValue) << sc_scores.fSumTracksEntering 
        << " |"; 
-  *out << G4std::setw(FieldValue) << sc_scores.fSumPopulation << " |"; 
-  *out << G4std::setw(FieldValue) << sc_scores.fSumCollisions << " |"; 
-  *out << G4std::setw(FieldValue) << sc_scores.fSumCollisionsWeight 
+  *out << std::setw(FieldValue) << sc_scores.fSumPopulation << " |"; 
+  *out << std::setw(FieldValue) << sc_scores.fSumCollisions << " |"; 
+  *out << std::setw(FieldValue) << sc_scores.fSumCollisionsWeight 
        << " |"; 
-  *out << G4std::setw(FieldValue) << sc_scores.fNumberWeightedEnergy 
+  *out << std::setw(FieldValue) << sc_scores.fNumberWeightedEnergy 
        << " |"; 
-  *out << G4std::setw(FieldValue) << sc_scores.fFluxWeightedEnergy 
+  *out << std::setw(FieldValue) << sc_scores.fFluxWeightedEnergy 
        << " |"; 
-  *out << G4std::setw(FieldValue) << sc_scores.fAverageTrackWeight*
+  *out << std::setw(FieldValue) << sc_scores.fAverageTrackWeight*
     sc_scores.fImportance
        << " |"; 
   
@@ -155,18 +155,18 @@ void G4ScoreTable::PrintLine(const G4String &name,
 }
 
 
-G4std::string G4ScoreTable::FillString(const G4std::string &name, 
+std::string G4ScoreTable::FillString(const std::string &name, 
 				       char c, G4int n, G4bool back)
 {
-  G4std::string fname("");
+  std::string fname("");
   G4int k = n - name.size();
   if (k > 0) {
     if (back) {
       fname = name;
-      fname += G4std::string(k,c);
+      fname += std::string(k,c);
     }
     else {
-      fname = G4std::string(k,c);
+      fname = std::string(k,c);
       fname += name;
     }
   }

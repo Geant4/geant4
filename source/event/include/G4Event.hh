@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4Event.hh,v 1.6 2002/08/13 18:17:53 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4Event_h

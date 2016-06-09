@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProtonCoulombBarrier.cc,v 1.5 2002/12/12 19:17:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProtonCoulombBarrier.cc,v 1.6 2003/05/30 13:23:25 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -30,24 +30,24 @@
 
 #include "G4ProtonCoulombBarrier.hh"
 
-G4ProtonCoulombBarrier::G4ProtonCoulombBarrier(const G4ProtonCoulombBarrier & right)
+G4ProtonCoulombBarrier::G4ProtonCoulombBarrier(const G4ProtonCoulombBarrier & ) : G4CoulombBarrier()
 {
     G4Exception("G4ProtonCoulombBarrier::copy_constructor meant to not be accessable.");
 }
 
 
-const G4ProtonCoulombBarrier & G4ProtonCoulombBarrier::operator=(const G4ProtonCoulombBarrier & right)
+const G4ProtonCoulombBarrier & G4ProtonCoulombBarrier::operator=(const G4ProtonCoulombBarrier & )
 {
     G4Exception("G4ProtonCoulombBarrier::operator= meant to not be accessable.");
     return *this;
 }
 
-G4bool G4ProtonCoulombBarrier::operator==(const G4ProtonCoulombBarrier & right) const 
+G4bool G4ProtonCoulombBarrier::operator==(const G4ProtonCoulombBarrier & ) const 
 {
     return false;
 }
 
-G4bool G4ProtonCoulombBarrier::operator!=(const G4ProtonCoulombBarrier & right) const 
+G4bool G4ProtonCoulombBarrier::operator!=(const G4ProtonCoulombBarrier & ) const 
 {
     return true;
 }

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc,v 1.13 2002/12/12 19:17:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4CompetitiveFission.cc,v 1.16 2003/06/16 17:06:16 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -47,7 +47,7 @@ G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
     LevelDensityParameter = 0.0;
 }
 
-G4CompetitiveFission::G4CompetitiveFission(const G4CompetitiveFission &right)
+G4CompetitiveFission::G4CompetitiveFission(const G4CompetitiveFission &) : G4VEvaporationChannel()
 {
 }
 
@@ -60,7 +60,7 @@ G4CompetitiveFission::~G4CompetitiveFission()
     if (MyOwnLevelDensity) delete theLevelDensityPtr;
 }
 
-const G4CompetitiveFission & G4CompetitiveFission::operator=(const G4CompetitiveFission &right)
+const G4CompetitiveFission & G4CompetitiveFission::operator=(const G4CompetitiveFission &)
 {
     G4Exception("G4CompetitiveFission::operator= meant to not be accessable");
     return *this;
@@ -81,8 +81,8 @@ G4bool G4CompetitiveFission::operator!=(const G4CompetitiveFission &right) const
 
 void G4CompetitiveFission::Initialize(const G4Fragment & fragment)
 {
-    G4int anA = G4int(fragment.GetA());
-    G4int aZ = G4int(fragment.GetZ());
+    G4int anA = static_cast<G4int>(fragment.GetA());
+    G4int aZ = static_cast<G4int>(fragment.GetZ());
     G4double ExEnergy = fragment.GetExcitationEnergy() - 
 	   G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(anA,aZ);
   
@@ -110,9 +110,9 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
 {
     // Nucleus data
     // Atomic number of nucleus
-    G4int A = G4int(theNucleus.GetA());
+    G4int A = static_cast<G4int>(theNucleus.GetA());
     // Charge of nucleus
-    G4int Z = G4int(theNucleus.GetZ());
+    G4int Z = static_cast<G4int>(theNucleus.GetZ());
     //   Excitation energy (in MeV)
     G4double U = theNucleus.GetExcitationEnergy() - 
 	G4PairingCorrection::GetInstance()->GetFissionPairingCorrection(A,Z);
@@ -189,9 +189,9 @@ G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
   // while (FragmentsExcitationEnergy < 0 && Trials < 100);
   
   // Fragment 1
-    G4double U1 = FragmentsExcitationEnergy * (G4double(A1)/G4double(A));
+    G4double U1 = FragmentsExcitationEnergy * (static_cast<G4double>(A1)/static_cast<G4double>(A));
     // Fragment 2
-    G4double U2 = FragmentsExcitationEnergy * (G4double(A2)/G4double(A));
+    G4double U2 = FragmentsExcitationEnergy * (static_cast<G4double>(A2)/static_cast<G4double>(A));
 
 
     G4double Pmax = sqrt( 2 * ( ( (M1+U1)*(M2+U2) ) /
@@ -264,7 +264,7 @@ G4int G4CompetitiveFission::FissionAtomicNumber(const G4int A, const G4FissionPa
     G4double C2 = 0.0;
     if (w > 1000.0 ) C2 = C2S;
     else if (w < 0.001) C2 = C2A;
-    else C2 =  G4std::max(C2A,C2S);
+    else C2 =  std::max(C2A,C2S);
 
     G4double C1 = A-C2;
     if (C1 < 30.0) {
@@ -296,7 +296,7 @@ G4int G4CompetitiveFission::FissionAtomicNumber(const G4int A, const G4FissionPa
 	Pm = MassDistribution(m,A,theParam); 
     } while (G4UniformRand() > Pm/MassMax);
 
-    return G4int(m+0.5);
+    return static_cast<G4int>(m+0.5);
 }
 
 
@@ -347,21 +347,21 @@ G4int G4CompetitiveFission::FissionCharge(const G4double A,
 	theZ = G4RandGauss::shoot(Zmean,sigma);
     } while (theZ  < 1.0 || theZ > (Z-1.0) || theZ > Af);
     //  return static_cast<G4int>(theZ+0.5);
-    return G4int(theZ+0.5);
+    return static_cast<G4int>(theZ+0.5);
 }
 
 
 
 
 G4double G4CompetitiveFission::FissionKineticEnergy(const G4double A, const G4double Z,
-						    const G4double Af1, const G4double Zf1,
-						    const G4double Af2, const G4double Zf2,
-						    const G4double U, const G4double Tmax,
+						    const G4double Af1, const G4double /*Zf1*/,
+						    const G4double Af2, const G4double /*Zf2*/,
+						    const G4double /*U*/, const G4double Tmax,
 						    const G4FissionParameters & theParam)
     // Gives the kinetic energy of fission products
 {
     // Find maximal value of A for fragments
-    G4double AfMax = G4std::max(Af1,Af2);
+    G4double AfMax = std::max(Af1,Af2);
     if (AfMax < (A/2.0)) AfMax = A - AfMax;
 
     // Weights for symmetric and asymmetric components
@@ -496,8 +496,8 @@ void G4CompetitiveFission::CheckConservation(const G4Fragment & theInitialState,
 	G4LorentzVector tmp = (*h)->GetMomentum();
 	ProductsEnergy += tmp.e();
 	ProductsMomentum += tmp.vect();
-	ProductsA += G4int((*h)->GetA());
-	ProductsZ += G4int((*h)->GetZ());
+	ProductsA += static_cast<G4int>((*h)->GetA());
+	ProductsZ += static_cast<G4int>((*h)->GetZ());
     }
 
     if (ProductsA != theInitialState.GetA()) {

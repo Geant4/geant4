@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4O20GEMProbability.cc,v 1.1 2002/06/06 18:03:31 larazb Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4O20GEMProbability.cc,v 1.2 2003/05/30 13:23:25 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -36,7 +36,7 @@ G4O20GEMProbability::G4O20GEMProbability() :
 {}
 
 
-G4O20GEMProbability::G4O20GEMProbability(const G4O20GEMProbability &right)
+G4O20GEMProbability::G4O20GEMProbability(const G4O20GEMProbability &) : G4GEMProbability()
 {
   G4Exception("G4O20GEMProbability::copy_constructor meant to not be accessable");
 }
@@ -45,19 +45,19 @@ G4O20GEMProbability::G4O20GEMProbability(const G4O20GEMProbability &right)
 
 
 const G4O20GEMProbability & G4O20GEMProbability::
-operator=(const G4O20GEMProbability &right)
+operator=(const G4O20GEMProbability &)
 {
   G4Exception("G4O20GEMProbability::operator= meant to not be accessable");
   return *this;
 }
 
 
-G4bool G4O20GEMProbability::operator==(const G4O20GEMProbability &right) const
+G4bool G4O20GEMProbability::operator==(const G4O20GEMProbability &) const
 {
   return false;
 }
 
-G4bool G4O20GEMProbability::operator!=(const G4O20GEMProbability &right) const
+G4bool G4O20GEMProbability::operator!=(const G4O20GEMProbability &) const
 {
   return true;
 }

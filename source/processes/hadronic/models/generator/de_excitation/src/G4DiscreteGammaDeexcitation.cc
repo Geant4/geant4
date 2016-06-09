@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -53,8 +53,8 @@
 #include "G4NuclearLevelStore.hh"
 
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 
 G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation(): 
@@ -71,8 +71,8 @@ G4DiscreteGammaDeexcitation::~G4DiscreteGammaDeexcitation() {}
 G4VGammaTransition* G4DiscreteGammaDeexcitation::CreateTransition()
 {
   G4Fragment nucleus = GetNucleus();
-  G4int A = G4int(nucleus.GetA());
-  G4int Z = G4int(nucleus.GetZ());
+  G4int A = static_cast<G4int>(nucleus.GetA());
+  G4int Z = static_cast<G4int>(nucleus.GetZ());
 
   if (_nucleusA != A || _nucleusZ != Z) 
     {

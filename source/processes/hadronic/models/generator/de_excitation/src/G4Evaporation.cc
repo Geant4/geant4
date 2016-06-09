@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.10 2002/11/12 02:10:57 larazb Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Evaporation.cc,v 1.16 2003/06/25 10:19:11 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -39,7 +39,7 @@ G4Evaporation::G4Evaporation()
   theChannels = theChannelFactory->GetChannel();
 }
 
-G4Evaporation::G4Evaporation(const G4Evaporation &right)
+G4Evaporation::G4Evaporation(const G4Evaporation &) : G4VEvaporation()
 {
     G4Exception("G4Evaporation::copy_constructor meant to not be accessable.");
 }
@@ -51,19 +51,19 @@ G4Evaporation::~G4Evaporation()
   if (theChannelFactory != 0) delete theChannelFactory;
 }
 
-const G4Evaporation & G4Evaporation::operator=(const G4Evaporation &right)
+const G4Evaporation & G4Evaporation::operator=(const G4Evaporation &)
 {
     G4Exception("G4Evaporation::operator= meant to not be accessable.");
     return *this;
 }
 
 
-G4bool G4Evaporation::operator==(const G4Evaporation &right) const
+G4bool G4Evaporation::operator==(const G4Evaporation &) const
 {
     return false;
 }
 
-G4bool G4Evaporation::operator!=(const G4Evaporation &right) const
+G4bool G4Evaporation::operator!=(const G4Evaporation &) const
 {
     return true;
 }
@@ -102,53 +102,65 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 	
 
     // Starts loop over evaporated particles
-    for (;;) {
+    for (;;) 
+      {
 	// loop over evaporation channels
-	G4std::vector<G4VEvaporationChannel*>::iterator i;
-	for (i=theChannels->begin(); i != theChannels->end(); i++) {
+	std::vector<G4VEvaporationChannel*>::iterator i;
+	for (i=theChannels->begin(); i != theChannels->end(); i++) 
+	  {
 	    (*i)->Initialize(theResidualNucleus);
-	}
-// Can't use this form beacuse Initialize is a non const member function
-//  	for_each(theChannels->begin(),theChannels->end(),
-//  		 bind2nd(mem_fun(&G4VEvaporationChannel::Initialize),theResidualNucleus));
+	  }
+	// Can't use this form beacuse Initialize is a non const member function
+	//  	for_each(theChannels->begin(),theChannels->end(),
+	//  		 bind2nd(mem_fun(&G4VEvaporationChannel::Initialize),theResidualNucleus));
 	// Work out total decay probability by summing over channels 
-  	G4double TotalProbability =  G4std::accumulate(theChannels->begin(),
+  	G4double TotalProbability =  std::accumulate(theChannels->begin(),
 						       theChannels->end(),
 						       0.0,SumProbabilities());
-
-	if (TotalProbability <= 0.0) {
+	
+	if (TotalProbability <= 0.0) 
+	  {
 	    // Will be no evaporation more
 	    // write information about residual nucleus
 	    theResult->push_back(new G4Fragment(theResidualNucleus));
 	    break; 
-	} else {
+	  } 
+	else 
+	  {
 	    // Selection of evaporation channel, fission or gamma
 	    // G4double * EmissionProbChannel = new G4double(TotNumberOfChannels);
-	    G4std::vector<G4double> EmissionProbChannel;
-	
+	    std::vector<G4double> EmissionProbChannel;
+	    EmissionProbChannel.reserve(theChannels->size());
+	    
+
 	    // EmissionProbChannel[0] = theChannels->at(0)->GetEmissionProbability();
 	    EmissionProbChannel.push_back(theChannels->front()->GetEmissionProbability()); // index 0
-			
-	    for (i= (theChannels->begin()+1); i != theChannels->end(); i++) {
+	    
+	    for (i= (theChannels->begin()+1); i != theChannels->end(); i++) 
+	      {
 		// EmissionProbChannel[i] = EmissionProbChannel[i-1] + 
 		// theChannels->at(i)->GetEmissionProbability();
 		EmissionProbChannel.push_back(EmissionProbChannel.back() + (*i)->GetEmissionProbability());
-	    }
+	      }
 
 	    G4double shoot = G4UniformRand() * TotalProbability;
 	    G4int j;
-	    for (j=0; j < TotNumberOfChannels; j++) {
+	    for (j=0; j < TotNumberOfChannels; j++) 
+	      {
 		// if (shoot < EmissionProbChannel[i]) 
 		if (shoot < EmissionProbChannel[j]) 
-		    break;
-	    }
-			
+		  break;
+	      }
+	    
 	    // delete [] EmissionProbChannel;
 	    EmissionProbChannel.clear();
 			
-	    if( j >= TotNumberOfChannels ) {
+	    if( j >= TotNumberOfChannels ) 
+	      {
 		G4Exception( "G4Evaporation::BreakItUp: Can't define emission probability of the channels!" );
-	    } else {
+	      } 
+	    else 
+	      {
 		// Perform break-up
 		G4FragmentVector * theEvaporationResult = (*theChannels)[j]->BreakUp(theResidualNucleus);
 
@@ -190,9 +202,9 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 		  theResidualNucleus.SetCreatorModel(G4String("ResidualNucleus"));
 #endif
 		}
-	    }
-	}
-    }
+	      }
+	  }
+      }
     
 #ifdef debug
     G4cout << "======== Evaporation Conservation Test ===========\n"
@@ -217,8 +229,8 @@ void G4Evaporation::CheckConservation(const G4Fragment & theInitialState,
 	G4LorentzVector tmp = (*h)->GetMomentum();
 	ProductsEnergy += tmp.e();
 	ProductsMomentum += tmp.vect();
-	ProductsA += G4int((*h)->GetA());
-	ProductsZ += G4int((*h)->GetZ());
+	ProductsA += static_cast<G4int>((*h)->GetA());
+	ProductsZ += static_cast<G4int>((*h)->GetZ());
     }
 
     if (ProductsA != theInitialState.GetA()) {

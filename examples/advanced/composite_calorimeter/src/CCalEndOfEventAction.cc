@@ -37,8 +37,8 @@
 #include "G4Event.hh"
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
-#include "g4std/iostream"
-#include "g4std/map"
+#include <iostream>
+#include <map>
 #include "G4RunManager.hh"
 #include "G4UserSteppingAction.hh"
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.cc,v 1.11 2001/10/24 17:46:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MuNuclearInteraction.cc,v 1.12 2003/06/03 07:52:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -241,7 +241,7 @@ G4double G4MuNuclearInteraction::ComputeMicroscopicCrossSection(
 G4double G4MuNuclearInteraction::ComputeDMicroscopicCrossSection(
                                  const G4ParticleDefinition* ParticleType,
                                  G4double KineticEnergy,
-                                 G4double AtomicNumber,G4double AtomicWeight,
+                                 G4double, G4double AtomicWeight,
                                  G4double epsilon)
  // Calculates the differential (D) microscopic cross section 
  //   using the cross section formula of R.P. Kokoulin (18/01/98)

@@ -21,9 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.9 2002/10/28 15:18:40 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.10 2003/06/16 16:53:58 gunter Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -1141,7 +1141,7 @@ G4GeometryType G4Hype::GetEntityType() const
 //
 // Stream object contents to an output stream
 //
-G4std::ostream& G4Hype::StreamInfo(G4std::ostream& os) const
+std::ostream& G4Hype::StreamInfo(std::ostream& os) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

@@ -21,28 +21,6 @@
 // ********************************************************************
 //
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
 
 /**
  * @author Mark Donszelmann
@@ -52,7 +30,7 @@
 #define G4HEPREPSCENEHANDLER_HH 1
 
 #include "globals.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 // HepRep
 #include "HEPREP/HepRep.h"
@@ -139,7 +117,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRepInstance* CreateInstance(HEPREP::HepRepInstance* p, HEPREP::HepRepType* altType);
         bool IsEventData ();
 
-        G4std::ostream* out;
+        std::ostream* out;
         HEPREP::HepRepFactory* heprepFactory;
         HEPREP::HepRepWriter* writer;
         HEPREP::HepRepInstance *parent;

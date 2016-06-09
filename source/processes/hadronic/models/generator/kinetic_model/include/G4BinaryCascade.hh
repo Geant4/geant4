@@ -97,7 +97,7 @@ private:
   void ClearAndDestroy(G4ReactionProductVector * rpv);
 
 // for debugging purpose
-  void PrintKTVector(G4KineticTrackVector * ktv, G4std::string comment=G4std::string(""));
+  void PrintKTVector(G4KineticTrackVector * ktv, std::string comment=std::string(""));
 
 private:
   G4KineticTrackVector theProjectileList;

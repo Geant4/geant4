@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.14 2003/04/29 04:25:58 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProductionCutsTable.cc,v 1.17 2003/06/18 08:16:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // --------------------------------------------------------------
@@ -44,8 +44,8 @@
 #include "G4UnitsTable.hh"
 
 #include "G4ios.hh"
-#include "g4std/iomanip"                
-#include "g4std/fstream"       
+#include <iomanip>                
+#include <fstream>       
 
 
 
@@ -73,7 +73,7 @@ G4ProductionCutsTable::G4ProductionCutsTable()
   defaultProductionCuts = new G4ProductionCuts();
 }
 
-G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& right)
+G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& )
 {;}
 
 G4ProductionCutsTable::~G4ProductionCutsTable()
@@ -109,12 +109,12 @@ void G4ProductionCutsTable::UpdateCoupleTable()
   { (*CoupleItr)->SetUseFlag(false); }
 
   // Update Material-Cut-Couple
-  typedef G4std::vector<G4Region*>::iterator regionIterator;
+  typedef std::vector<G4Region*>::iterator regionIterator;
   for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++)
   { 
     ///////////////////if(!((*rItr)->IsModified())) continue;
     G4ProductionCuts* fProductionCut = (*rItr)->GetProductionCuts();
-    G4std::vector<G4Material*>::const_iterator mItr = (*rItr)->GetMaterialIterator();
+    std::vector<G4Material*>::const_iterator mItr = (*rItr)->GetMaterialIterator();
     size_t nMaterial = (*rItr)->GetNumberOfMaterials();
 
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -164,7 +164,7 @@ void G4ProductionCutsTable::UpdateCoupleTable()
     //  if((*rItr)==theWorldRegion)
     //  {
     //    aCouple->SetUseFlag(false);
-    //    G4std::vector<G4Material*>::const_iterator mItr1 = (*rItr)->GetMaterialIterator();
+    //    std::vector<G4Material*>::const_iterator mItr1 = (*rItr)->GetMaterialIterator();
     //    size_t nMaterial1 = (*rItr)->GetNumberOfMaterials();
     //    for(size_t iMate1=0;iMate1<nMaterial1;iMate1++)
     //    {
@@ -176,7 +176,7 @@ void G4ProductionCutsTable::UpdateCoupleTable()
     // The previous part of the code should be removed once all EM processes 
     // become "Region-aware"
     //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-      G4std::vector<G4LogicalVolume*>::iterator rootLVItr
+      std::vector<G4LogicalVolume*>::iterator rootLVItr
                          = (*rItr)->GetRootLogicalVolumeIterator();
       size_t nRootLV = (*rItr)->GetNumberOfRootVolumes();
       for(size_t iLV=0;iLV<nRootLV;iLV++)
@@ -345,7 +345,7 @@ void G4ProductionCutsTable::DumpCouples() const
     if(aCouple->IsUsed())
     {
       G4cout << " Region(s) which use this couple : " << G4endl;
-      typedef G4std::vector<G4Region*>::iterator regionIterator;
+      typedef std::vector<G4Region*>::iterator regionIterator;
       for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++)
       {
 	if (IsCoupleUsedInTheRegion(aCouple, *rItr) ){
@@ -395,15 +395,13 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
 {
   const G4String fileName = directory + "/" + "material.dat";
   const G4String key = "MATERIAL-V2.0";
-  G4std::ofstream fOut;  
+  std::ofstream fOut;  
 
   // open output file //
-#ifdef G4USE_STD_NAMESPACE
   if (!ascii ) 
-    fOut.open(fileName,G4std::ios::out|G4std::ios::binary);
+    fOut.open(fileName,std::ios::out|std::ios::binary);
   else 
-#endif
-    fOut.open(fileName,G4std::ios::out);
+    fOut.open(fileName,std::ios::out);
 
   
   // check if the file has been opened successfully 
@@ -427,15 +425,15 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
     // number of materials in the table
     fOut  << numberOfMaterial << G4endl;
     
-    fOut.setf(G4std::ios::scientific);
+    fOut.setf(std::ios::scientific);
   
     // material name and density
     for (size_t idx=0; G4int(idx)<numberOfMaterial; ++idx){
-      fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetName();
-      fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
+      fOut << std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetName();
+      fOut << std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
     }
     
-    fOut.unsetf(G4std::ios::scientific);
+    fOut.unsetf(std::ios::scientific);
 
   } else {
     /////////////// Binary mode  /////////////////
@@ -471,15 +469,13 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
 {
   const G4String fileName = directory + "/" + "material.dat";
   const G4String key = "MATERIAL-V2.0";
-  G4std::ifstream fIn;  
+  std::ifstream fIn;  
 
   // open input file //
-#ifdef G4USE_STD_NAMESPACE
   if (!ascii )
-    fIn.open(fileName,G4std::ios::in|G4std::ios::binary);
+    fIn.open(fileName,std::ios::in|std::ios::binary);
   else
-#endif
-    fIn.open(fileName,G4std::ios::in);
+    fIn.open(fileName,std::ios::in);
 
   // check if the file has been opened successfully 
   if (!fIn) {
@@ -562,9 +558,9 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
 #ifdef G4VERBOSE  
       G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
       G4cout << " Inconsistent material name or density" << G4endl;;
-      G4cout << G4std::setw(40) << name;
-      G4cout << G4std::setw(20) << G4std::setiosflags(G4std::ios::scientific) << density << G4endl;
-      G4cout << G4std::resetiosflags(G4std::ios::scientific);
+      G4cout << std::setw(40) << name;
+      G4cout << std::setw(20) << std::setiosflags(std::ios::scientific) << density << G4endl;
+      G4cout << std::resetiosflags(std::ios::scientific);
 #endif   
       fIn.close();
       return false;
@@ -582,16 +578,14 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
 {  
   const G4String fileName = directory + "/" + "couple.dat";
   const G4String key = "COUPLE-V2.0";
-  G4std::ofstream fOut;  
+  std::ofstream fOut;  
   char temp[FixedStringLengthForStore];
 
   // open output file //
-#ifdef G4USE_STD_NAMESPACE
   if (!ascii ) 
-    fOut.open(fileName,G4std::ios::out|G4std::ios::binary);
+    fOut.open(fileName,std::ios::out|std::ios::binary);
   else 
-#endif
-    fOut.open(fileName,G4std::ios::out);
+    fOut.open(fileName,std::ios::out);
   
   
   // check if the file has been opened successfully 
@@ -606,7 +600,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
   if (ascii) {
     /////////////// ASCII mode  /////////////////
     // key word
-    fOut << G4std::setw(FixedStringLengthForStore) <<  key << G4endl;
+    fOut << std::setw(FixedStringLengthForStore) <<  key << G4endl;
     
     // number of couples in the table
     fOut  << numberOfCouples << G4endl;
@@ -638,7 +632,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
     G4String materialName = aCouple->GetMaterial()->GetName();
     G4String regionName = "NONE";
     if (aCouple->IsUsed()){
-      typedef G4std::vector<G4Region*>::iterator regionIterator;
+      typedef std::vector<G4Region*>::iterator regionIterator;
       for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++){
 	if (IsCoupleUsedInTheRegion(aCouple, *rItr) ){
 	  regionName = (*rItr)->GetName();
@@ -653,17 +647,17 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
       fOut  << index << G4endl; 
   
       // material name 
-      fOut << G4std::setw(FixedStringLengthForStore) << materialName<< G4endl;
+      fOut << std::setw(FixedStringLengthForStore) << materialName<< G4endl;
   
       // region name 
-      fOut << G4std::setw(FixedStringLengthForStore) << regionName<< G4endl;
+      fOut << std::setw(FixedStringLengthForStore) << regionName<< G4endl;
 
-      fOut.setf(G4std::ios::scientific);
+      fOut.setf(std::ios::scientific);
       // cut values
       for (size_t idx=0; idx< NumberOfG4CutIndex; idx++) {
-	fOut << G4std::setw(FixedStringLengthForStore) << cutValues[idx]/(mm) << G4endl;
+	fOut << std::setw(FixedStringLengthForStore) << cutValues[idx]/(mm) << G4endl;
       }
-      fOut.unsetf(G4std::ios::scientific);
+      fOut.unsetf(std::ios::scientific);
 
     } else {
       /////////////// Binary mode  /////////////////
@@ -703,15 +697,13 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
 {
   const G4String fileName = directory + "/" + "couple.dat";
   const G4String key = "COUPLE-V2.0";
-  G4std::ifstream fIn;  
+  std::ifstream fIn;  
 
   // open input file //
-#ifdef G4USE_STD_NAMESPACE
   if (!ascii )
-    fIn.open(fileName,G4std::ios::in|G4std::ios::binary);
+    fIn.open(fileName,std::ios::in|std::ios::binary);
   else
-#endif
-    fIn.open(fileName,G4std::ios::in);
+    fIn.open(fileName,std::ios::in);
 
   // check if the file has been opened successfully 
   if (!fIn) {
@@ -846,16 +838,14 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
 {
   const G4String fileName = directory + "/" + "cut.dat";
   const G4String key = "CUT-V2.0";
-  G4std::ofstream fOut;  
+  std::ofstream fOut;  
   char temp[FixedStringLengthForStore];
   
   // open output file //
-#ifdef G4USE_STD_NAMESPACE
   if (!ascii ) 
-    fOut.open(fileName,G4std::ios::out|G4std::ios::binary);
+    fOut.open(fileName,std::ios::out|std::ios::binary);
   else 
-#endif
-    fOut.open(fileName,G4std::ios::out);
+    fOut.open(fileName,std::ios::out);
   
   
   // check if the file has been opened successfully 
@@ -889,18 +879,18 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
 
   
   for (size_t idx=0; idx <NumberOfG4CutIndex; idx++) {
-    const G4std::vector<G4double>* fRange  = GetRangeCutsVector(idx);
-    const G4std::vector<G4double>* fEnergy = GetEnergyCutsVector(idx);
+    const std::vector<G4double>* fRange  = GetRangeCutsVector(idx);
+    const std::vector<G4double>* fEnergy = GetEnergyCutsVector(idx);
     size_t i=0;
     // Loop over all couples
     CoupleTableIterator cItr;
     for (cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++, i++){      
       if (ascii) {
         /////////////// ASCII mode  /////////////////
-        fOut.setf(G4std::ios::scientific);
-        fOut << G4std::setw(20) << (*fRange)[i]/mm  ;
-        fOut << G4std::setw(20) << (*fEnergy)[i]/keV << G4endl;
-        fOut.unsetf(G4std::ios::scientific);
+        fOut.setf(std::ios::scientific);
+        fOut << std::setw(20) << (*fRange)[i]/mm  ;
+        fOut << std::setw(20) << (*fEnergy)[i]/keV << G4endl;
+        fOut.unsetf(std::ios::scientific);
       } else {
 	/////////////// Binary mode  /////////////////
 	G4double cut =  (*fRange)[i];
@@ -920,15 +910,13 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
 {
   const G4String fileName = directory + "/" + "cut.dat";
   const G4String key = "CUT-V2.0";
-  G4std::ifstream fIn;  
+  std::ifstream fIn;  
 
   // open input file //
-#ifdef G4USE_STD_NAMESPACE
   if (!ascii )
-    fIn.open(fileName,G4std::ios::in|G4std::ios::binary);
+    fIn.open(fileName,std::ios::in|std::ios::binary);
   else
-#endif
-    fIn.open(fileName,G4std::ios::in);
+    fIn.open(fileName,std::ios::in);
 
   // check if the file has been opened successfully 
   if (!fIn) {

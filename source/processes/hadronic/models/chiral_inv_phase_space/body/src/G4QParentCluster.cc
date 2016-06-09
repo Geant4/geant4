@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.cc,v 1.14 2002/12/12 19:14:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QParentCluster.cc,v 1.15 2003/06/16 17:04:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QParentCluster ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -86,14 +86,14 @@ const G4QParentCluster& G4QParentCluster::operator=(const G4QParentCluster& rhs)
 G4QParentCluster::~G4QParentCluster() {}
 
 // Standard output for G4QParentCluster
-G4std::ostream& operator<<(G4std::ostream& lhs, G4QParentCluster& rhs)
+std::ostream& operator<<(std::ostream& lhs, G4QParentCluster& rhs)
 {//      ===============================================
   lhs << "[ParClPDG=" << rhs.GetPDGCode() << ", probab=" << rhs.GetProbability() << "]";
   return lhs;
 }
 
 // Standard output for const G4QParentCluster
-G4std::ostream& operator<<(G4std::ostream& lhs, const G4QParentCluster& rhs)
+std::ostream& operator<<(std::ostream& lhs, const G4QParentCluster& rhs)
 {//      ===============================================
   lhs << "[ParClPDG=" << rhs.GetPDGCode() << ", probab=" << rhs.GetProbability() << "]";
   return lhs;

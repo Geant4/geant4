@@ -75,12 +75,12 @@ void G4BENeutronChannel::calculateProbability()
   const G4double levelParam = getLevelDensityParameter();
   
   const G4double s    = 2 * sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
-  const G4double temp = ( pow( s, 2 ) - 3 * s + 3 ) / ( 4 * pow( levelParam, 2 ) ) 
-    + beta() * ( s - 1 ) /  ( 2 * levelParam );
+  // const G4double temp = ( pow( s, 2. ) - 3 * s + 3 ) / ( 4 * pow( levelParam, 2. ) ) 
+  //  + beta() * ( s - 1 ) /  ( 2 * levelParam );
   const G4double eye0 = exp( s ) * ( s - 1 ) /  ( 2 * levelParam );
-  const G4double eye1 = ( pow( s, 2 ) - 3*s +3 ) * exp( s ) / ( 4 * pow( levelParam, 2 ) ) ;
+  const G4double eye1 = ( pow( s, 2. ) - 3*s +3 ) * exp( s ) / ( 4 * pow( levelParam, 2. ) ) ;
   
-  emissionProbability = pow( residualA, 0.666666 ) * alpha() * ( eye1 + beta() * eye0 );
+  emissionProbability = pow( G4double(residualA), 0.666666 ) * alpha() * ( eye1 + beta() * eye0 );
   
   if ( verboseLevel >= 6 )
     G4cout << "G4BENeutronChannel : calculateProbability " << G4endl
@@ -122,9 +122,9 @@ G4double  G4BENeutronChannel::sampleKineticEnergy()
 //    levelParam  = getLevelDensityParameter();
 //    s = 2 * sqrt( levelParam  * ( excitationEnergy - getThresh() - correction ) );
 //    eye0 = 0.5 * ( s - 1 ) * exp( s ) / levelParam;
-//    eye1 = ( pow( s, 2 ) - 3*s + 3 ) * exp( s ) / ( 4 * pow( levelParam, 2 ) );
-//    kineticEnergyAv = 2 * ( pow( s, 3 ) - 6.0 * pow( s, 2 ) + 15.0 * s - 15.0 )  / 
-//        ( ( 2.0 * pow( s, 2 ) - 6.0 * s + 6.0 ) * levelParam );
+//    eye1 = ( pow( s, 2. ) - 3*s + 3 ) * exp( s ) / ( 4 * pow( levelParam, 2. ) );
+//    kineticEnergyAv = 2 * ( pow( s, 3. ) - 6.0 * pow( s, 2. ) + 15.0 * s - 15.0 )  / 
+//        ( ( 2.0 * pow( s, 2. ) - 6.0 * s + 6.0 ) * levelParam );
 //    kineticEnergyAv = ( kineticEnergyAv + beta() ) / ( 1.0 + beta() * eye0
 //  	   / eye1 );
   

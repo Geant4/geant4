@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEIonFragmentation.hh,v 1.7 2002/12/12 19:17:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LowEIonFragmentation.hh,v 1.9 2003/05/30 14:05:57 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by H.P. Wellisch
 
@@ -55,7 +55,7 @@ public:
 
 private:
   
-  G4LowEIonFragmentation(const G4LowEIonFragmentation &right) {};
+  G4LowEIonFragmentation(const G4LowEIonFragmentation &) : G4HadronicInteraction() {};
   
   const G4LowEIonFragmentation& operator=(const G4LowEIonFragmentation &right);
 
@@ -70,7 +70,7 @@ public:
 //    clog << "area/millibarn = "<<area/millibarn<<G4endl;
 //    clog << "hits = "<<hits<<G4endl;
 //    clog << "totalTries = "<<totalTries<<G4endl;
-    return area*G4double(hits)/G4double(totalTries)/millibarn;
+    return area*static_cast<G4double>(hits)/static_cast<G4double>(totalTries)/millibarn;
   }
 private:  
 

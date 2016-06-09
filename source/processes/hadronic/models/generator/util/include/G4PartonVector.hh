@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PartonVector.hh,v 1.7 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PartonVector.hh,v 1.8 2003/06/16 17:09:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4PartonVector_h
 #define G4PartonVector_h 1
@@ -35,9 +35,9 @@
 // ------------------------------------------------------------
 
 #include "G4Parton.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4Parton *> G4PartonVector;
+typedef std::vector<G4Parton *> G4PartonVector;
 struct DeleteParton{ void operator()(G4Parton*aP){delete aP;} };
 
 #endif

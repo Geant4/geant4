@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundIon.cc,v 1.15 2002/12/12 19:17:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPreCompoundIon.cc,v 1.20 2003/06/16 17:07:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
@@ -45,27 +45,27 @@ ProbabilityDistributionFunction(const G4double eKin,
   G4double N = P + H;
 
   G4double A0 = (P*P+H*H+P-H)/4.0 - H/2.0;
-  G4double A1 = A0 + GetA()*(GetA()-2.0*P-1.0)/4.0;
+  G4double A1 = std::max(0.0,A0 + GetA()*(GetA()-2.0*P-1.0)/4.0);
   G4double Aj = GetA()*(GetA()+1.0)/4.0;
 
-  G4double E0 = G4std::max(0.0,U - A0);
+  G4double E0 = std::max(0.0,U - A0);
   if (E0 == 0.0) return 0.0;
-  G4double E1 = G4std::max(0.0,U - eKin - GetBindingEnergy() - A1);
-  G4double Ej = G4std::max(0.0,U + GetBindingEnergy() - Aj);
+  G4double E1 = std::max(0.0,GetMaximalKineticEnergy() + GetCoulombBarrier() - eKin - A1);
+  G4double Ej = std::max(0.0,U + GetBindingEnergy() - Aj);
 
-  // g = 0.595*a*A
-//  G4EvaporationLevelDensityParameter theLDP;
-  G4double g0 = 0.595*aFragment.GetA() * 
-      G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-//      theLDP.LevelDensityParameter(aFragment.GetA(),aFragment.GetZ(),U);
-  G4double g1 = 0.595*GetRestA() * 
-      G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-//      theLDP.LevelDensityParameter(GetRestA(),GetRestZ(),U);
-  G4double gj = 0.595*GetA() *
-      G4PreCompoundParameters::GetAddress()->GetLevelDensity();
-//      theLDP.LevelDensityParameter(GetA(),GetZ(),U);
+  // g = (6.0/pi2)*a*A
+  //  G4EvaporationLevelDensityParameter theLDP;
+  G4double g0 = (6.0/pi2)*aFragment.GetA() * 
+    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  //    theLDP.LevelDensityParameter(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()),U);
+  G4double g1 = (6.0/pi2)*GetRestA() * 
+    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  //    theLDP.LevelDensityParameter(GetRestA(),GetRestZ(),U);
+  G4double gj = (6.0/pi2)*GetA() *
+    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  //    theLDP.LevelDensityParameter(GetA(),GetZ(),U);
 
-  G4double pA = (3.0/4.0) * sqrt(G4std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))))*
+  G4double pA = (3.0/4.0) * sqrt(std::max(0.0, 2.0/(GetReducedMass()*(eKin+GetBindingEnergy()))))*
       GetAlpha()*(eKin+GetBeta())/(r0*pow(GetRestA(),1.0/3.0)) *
       CoalescenceFactor(aFragment.GetA()) * FactorialFactor(N,P);
 

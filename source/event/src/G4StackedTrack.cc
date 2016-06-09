@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.cc,v 1.5 2001/07/13 15:01:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StackedTrack.cc,v 1.6 2003/05/21 20:52:54 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai
@@ -45,11 +45,11 @@ G4StackedTrack::G4StackedTrack(G4Track * newTrack, G4VTrajectory * aTrajectory)
 G4StackedTrack::~G4StackedTrack()
 { }
 
-const G4StackedTrack & G4StackedTrack::operator=(const G4StackedTrack &right)
+const G4StackedTrack & G4StackedTrack::operator=(const G4StackedTrack &)
 { return *this; }
 G4int G4StackedTrack::operator==(const G4StackedTrack &right) const 
-{ return false; }
+{ return (this==&right); }
 G4int G4StackedTrack::operator!=(const G4StackedTrack &right) const 
-{ return true; }
+{ return (this!=&right); }
 
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaGEMProbability.cc,v 1.1 2002/06/06 17:59:07 larazb Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4AlphaGEMProbability.cc,v 1.3 2003/05/30 13:23:23 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
@@ -32,7 +32,7 @@
 #include "G4AlphaGEMProbability.hh"
 
 G4AlphaGEMProbability::G4AlphaGEMProbability() :
-    G4GEMProbability(3,2,0.0) // A,Z,Gamma
+    G4GEMProbability(4,2,0.0) // A,Z,Gamma
 {
     ExcitEnergies.push_back(20.01E+3*keV);
     ExcitSpins.push_back(0.0);
@@ -56,7 +56,7 @@ G4AlphaGEMProbability::G4AlphaGEMProbability() :
 }
 
 
-G4AlphaGEMProbability::G4AlphaGEMProbability(const G4AlphaGEMProbability &right)
+G4AlphaGEMProbability::G4AlphaGEMProbability(const G4AlphaGEMProbability &) : G4GEMProbability()
 {
     G4Exception("G4AlphaGEMProbability::copy_constructor meant to not be accessable");
 }
@@ -65,19 +65,19 @@ G4AlphaGEMProbability::G4AlphaGEMProbability(const G4AlphaGEMProbability &right)
 
 
 const G4AlphaGEMProbability & G4AlphaGEMProbability::
-operator=(const G4AlphaGEMProbability &right)
+operator=(const G4AlphaGEMProbability &)
 {
     G4Exception("G4AlphaGEMProbability::operator= meant to not be accessable");
     return *this;
 }
 
 
-G4bool G4AlphaGEMProbability::operator==(const G4AlphaGEMProbability &right) const
+G4bool G4AlphaGEMProbability::operator==(const G4AlphaGEMProbability &) const
 {
     return false;
 }
 
-G4bool G4AlphaGEMProbability::operator!=(const G4AlphaGEMProbability &right) const
+G4bool G4AlphaGEMProbability::operator!=(const G4AlphaGEMProbability &) const
 {
     return true;
 }

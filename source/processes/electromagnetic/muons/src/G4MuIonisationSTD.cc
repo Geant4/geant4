@@ -20,6 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4MuIonisationSTD.cc,v 1.14 2003/06/06 15:00:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,6 +53,9 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 23-05-03 Define default integral + BohrFluctuations (V.Ivanchenko)
+// 03-06-03 Add SetIntegral method to choose fluctuation model (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -65,6 +70,7 @@
 #include "G4BetheBlochModel.hh"
 #include "G4MuBetheBlochModel.hh"
 #include "G4UniversalFluctuation.hh"
+#include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -73,9 +79,13 @@ G4MuIonisationSTD::G4MuIonisationSTD(const G4String& name)
   : G4VEnergyLossSTD(name),
     theParticle(0),
     theBaseParticle(0),
-    subCutoff(false)
+    subCutoff(false),
+    isInitialised(false)
 {
-  InitialiseProcess();
+  SetDEDXBinning(120);
+  SetLambdaBinning(120);
+  SetMinKinEnergy(0.1*keV);
+  SetMaxKinEnergy(100.0*TeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -89,29 +99,26 @@ void G4MuIonisationSTD::InitialiseProcess()
 {
   SetSecondaryParticle(G4Electron::Electron());
 
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
-
-  G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
+  if(IsIntegral()) flucModel = new G4BohrFluctuations();
+  else             flucModel = new G4UniversalFluctuation();
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(2.*MeV);
-  AddEmModel(1, em, fm);
+  AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
   em1->SetLowEnergyLimit(2.*MeV);
   em1->SetHighEnergyLimit(10.0*GeV);
-  AddEmModel(2, em1, fm);
+  AddEmModel(2, em1, flucModel);
   G4VEmModel* em2 = new G4MuBetheBlochModel();
   em2->SetLowEnergyLimit(10.0*GeV);
   em2->SetHighEnergyLimit(100.0*TeV);
-  AddEmModel(3, em2, fm);
+  AddEmModel(3, em2, flucModel);
 
   mass = (G4MuonPlus::MuonPlus())->GetPDGMass();
   ratio = electron_mass_c2/mass;
   SetVerboseLevel(0);
+  isInitialised = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -120,12 +127,13 @@ const G4ParticleDefinition* G4MuIonisationSTD::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
   if(!theParticle) theParticle = p;
+  if(!isInitialised) InitialiseProcess();
   return theBaseParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuIonisationSTD::PrintInfoDefinition() const
+void G4MuIonisationSTD::PrintInfoDefinition()
 {
   G4VEnergyLossSTD::PrintInfoDefinition();
 
@@ -141,7 +149,7 @@ void G4MuIonisationSTD::SetSubCutoff(G4bool val)
   subCutoff = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 

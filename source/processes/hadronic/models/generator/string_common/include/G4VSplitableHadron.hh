@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.hh,v 1.9 2002/12/12 19:17:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VSplitableHadron.hh,v 1.10 2003/06/16 17:09:24 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4VSplitableHadron_h
@@ -45,7 +45,7 @@ class G4Nucleon;
 class G4Parton;
 class G4VKineticNucleon;
 
-#include "g4std/vector"
+#include <vector>
 
 class G4VSplitableHadron 
 {

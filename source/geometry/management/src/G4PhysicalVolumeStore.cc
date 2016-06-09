@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeStore.cc,v 1.9 2002/04/26 16:24:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PhysicalVolumeStore.cc,v 1.12 2003/06/16 16:52:06 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4PhysicalVolumeStore
 //
@@ -49,7 +49,7 @@ G4bool G4PhysicalVolumeStore::locked = false;
 // ***************************************************************************
 //
 G4PhysicalVolumeStore::G4PhysicalVolumeStore()
-  : G4std::vector<G4VPhysicalVolume*>()
+  : std::vector<G4VPhysicalVolume*>()
 {
   reserve(100);
 }
@@ -67,7 +67,7 @@ G4PhysicalVolumeStore::~G4PhysicalVolumeStore()
 // Delete all elements from the store
 // ***************************************************************************
 //
-void G4PhysicalVolumeStore::Clean()
+void G4PhysicalVolumeStore::Clean(G4bool notifyLV)
 {
   // Do nothing if geometry is closed
   //
@@ -86,11 +86,19 @@ void G4PhysicalVolumeStore::Clean()
 
   size_t i=0;
   G4PhysicalVolumeStore* store = GetInstance();
-  G4std::vector<G4VPhysicalVolume*>::iterator pos;
+  std::vector<G4VPhysicalVolume*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Physical Volumes ... ";
 #endif
+
+  if (notifyLV)
+  {
+    for(pos=store->begin(); pos!=store->end(); pos++)
+    {
+      if (*pos) (*pos)->GetLogicalVolume()->ClearDaughters();
+    }
+  }
 
   for(pos=store->begin(); pos!=store->end(); pos++)
   {
@@ -109,7 +117,7 @@ void G4PhysicalVolumeStore::Clean()
 }
 
 // ***************************************************************************
-// Add Solid to container
+// Add Volume to container
 // ***************************************************************************
 //
 void G4PhysicalVolumeStore::Register(G4VPhysicalVolume* pVolume)
@@ -118,13 +126,16 @@ void G4PhysicalVolumeStore::Register(G4VPhysicalVolume* pVolume)
 }
 
 // ***************************************************************************
-// Remove Solid from container
+// Remove Volume from container and update the list of daughters
+// of the mother's logical volume
 // ***************************************************************************
 //
 void G4PhysicalVolumeStore::DeRegister(G4VPhysicalVolume* pVolume)
 {
   if (!locked)    // Do not de-register if locked !
   {
+    G4LogicalVolume* motherLogical = pVolume->GetMotherLogical();
+    if (motherLogical) motherLogical->RemoveDaughter(pVolume);
     for (iterator i=GetInstance()->begin(); i!=GetInstance()->end(); i++)
     {
       if (**i==*pVolume)

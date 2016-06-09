@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.5 2003/04/01 17:02:21 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: DetectorConstruction.cc,v 1.6 2003/06/10 11:49:18 maire Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -42,6 +42,10 @@
 #include "G4TransportationManager.hh"
 #include "G4RunManager.hh"
 #include "G4UserLimits.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -109,6 +113,10 @@ void DetectorConstruction::DefineMaterials()
   
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+  
   G4Box*
   sBox = new G4Box("Container",				//its name
                    BoxSize/2,BoxSize/2,BoxSize/2);	//its dimensions

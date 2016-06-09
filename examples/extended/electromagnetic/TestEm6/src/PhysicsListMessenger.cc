@@ -22,7 +22,7 @@
 //
 //
 // $Id: PhysicsListMessenger.cc,v 1.4 2003/01/27 09:46:20 hbu Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

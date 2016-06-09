@@ -49,7 +49,7 @@ G4KM_NucleonEqRhs::G4KM_NucleonEqRhs(G4KM_DummyField *field,
 
 
 void G4KM_NucleonEqRhs::EvaluateRhsGivenB(const G4double y[],
-					  const G4double B[3],
+					  const G4double *   ,
 					  G4double dydx[]) const
 {
   G4double yMod = sqrt(y[0]*y[0]+y[1]*y[1]+y[2]*y[2]);

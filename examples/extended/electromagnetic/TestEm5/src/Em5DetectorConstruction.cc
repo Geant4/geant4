@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.cc,v 1.10 2003/04/01 16:51:51 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em5DetectorConstruction.cc,v 1.13 2003/06/06 15:55:51 maire Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -43,6 +43,10 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -164,6 +168,7 @@ density = 1.000*g/cm3;
 G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
 H2O->AddElement(elH, natoms=2);
 H2O->AddElement(elO, natoms=1);
+H2O->GetIonisation()->SetMeanExcitationEnergy(75*eV);
 
 //
 // define a material from elements.   case 2: mixture by fractional mass
@@ -225,7 +230,7 @@ temperature = 2.73*kelvin;
 G4Material* Vacuum = new G4Material("Galactic", z=1., a=1.01*g/mole,density,
                      kStateGas,temperature,pressure);
 		     
-G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+//  ?????? G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   AbsorberMaterial = Si;
@@ -238,7 +243,12 @@ G4VPhysicalVolume* Em5DetectorConstruction::ConstructCalorimeter()
 {
   // complete the Calor parameters definition and Print 
   ComputeCalorParameters();
-
+  
+  // Cleanup old geometry
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+  
   //     
   // World
   //

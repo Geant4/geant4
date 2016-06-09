@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.7 2002/12/12 19:18:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.8 2003/06/16 17:10:46 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPInelasticBaseFS_h
 #define G4NeutronHPInelasticBaseFS_h 1
@@ -68,7 +68,7 @@ class G4NeutronHPInelasticBaseFS : public G4NeutronHPFinalState
   
   virtual G4double GetXsec(G4double anEnergy)
   {
-    return G4std::max(0., theXsection->GetY(anEnergy));
+    return std::max(0., theXsection->GetY(anEnergy));
   }
   virtual G4NeutronHPVector * GetXsec() { return theXsection; }
 

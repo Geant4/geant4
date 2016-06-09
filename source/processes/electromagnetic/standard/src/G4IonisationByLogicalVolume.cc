@@ -42,19 +42,20 @@ G4IonisationByLogicalVolume( const G4String& particleName,
   fVolumeForPAImodel =  volumeForPAImodel ;
   fMaterialNameForPAI = volumeForPAImodel->GetMaterial()->GetName() ;
 
-  fPAIonisation = new G4PAIonisation(fMaterialNameForPAI);
+  //  fPAIonisation = new G4PAIonisation(fMaterialNameForPAI);
+  fPAIonisation = new G4PAIonisation(volumeForPAImodel);
 
   if ( fParticleName == "e+" || fParticleName == "e-" )
   {
-    feIonisation = new G4eIonisation() ;
+    feIonisation = new G4eIonisation(particleName) ;
   }
   else if ( fParticleName == "mu+" || fParticleName == "mu-" )
   {
-    fMuIonisation = new G4MuIonisation() ;
+    fMuIonisation = new G4MuIonisation(particleName) ;
   }
   else
   {
-    fhIonisation = new G4hIonisation() ;
+    fhIonisation = new G4hIonisation(particleName) ;
   }
 
 }

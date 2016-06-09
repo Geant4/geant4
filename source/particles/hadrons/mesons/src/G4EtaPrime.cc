@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.cc,v 1.12 2002/12/16 11:15:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EtaPrime.cc,v 1.13 2003/06/16 16:57:40 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------
@@ -31,8 +31,8 @@
 //      History: first implementation, 8 June 1998 Hisaya Kurashige
 // ----------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4EtaPrime.hh"
 

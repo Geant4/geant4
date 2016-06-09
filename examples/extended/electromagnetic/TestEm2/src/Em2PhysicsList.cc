@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 // 
-// $Id: Em2PhysicsList.cc,v 1.13 2003/03/26 16:23:17 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: Em2PhysicsList.cc,v 1.14 2003/06/03 10:07:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,11 +38,13 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2PhysicsList::Em2PhysicsList() : G4VModularPhysicsList()
 {
+  G4LossTableManager::Instance();
   currentDefaultCut   = 1.0*mm;
   cutForGamma         = currentDefaultCut;
   cutForElectron      = currentDefaultCut;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronCoulombBarrier.hh,v 1.4 2002/12/12 19:17:09 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronCoulombBarrier.hh,v 1.5 2003/05/30 13:23:22 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -48,7 +48,7 @@ private:
   
 private:
 
-	virtual G4double BarrierPenetrationFactor(const G4double aZ) const
+	virtual G4double BarrierPenetrationFactor(const G4double ) const
 	{ return 1.0;}
 
 

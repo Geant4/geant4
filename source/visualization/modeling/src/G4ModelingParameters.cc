@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.5 2001/07/11 10:09:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ModelingParameters.cc,v 1.6 2003/06/16 17:14:30 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  31st December 1997.
@@ -144,7 +144,7 @@ void G4ModelingParameters::PrintDifferences
     G4cout << "Difference in 1st batch." << G4endl;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4ModelingParameters& mp) {
+std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
   os << "Modeling parameters and options:";
 
   os << "\n  Default vis. attributes: " << *mp.fpDefaultVisAttributes;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.icc,v 1.3 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPreCompoundFragment.icc,v 1.4 2003/03/24 13:56:55 larazb Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
@@ -67,6 +67,12 @@ inline const G4double G4VPreCompoundFragment::
 GetMaximalKineticEnergy() const 
 { 
   return theMaximalKineticEnergy;
+}
+
+inline const G4double G4VPreCompoundFragment::
+GetEnergyThreshold() const 
+{ 
+  return theMaximalKineticEnergy - theCoulombBarrier;
 }
     
 inline const G4double G4VPreCompoundFragment::
@@ -124,3 +130,18 @@ GetName() const
   return theFragmentName; 
 }
     
+inline void G4VPreCompoundFragment::ResetStage()
+{
+  theStage = 1;
+}
+
+inline G4int G4VPreCompoundFragment::GetStage() const
+{
+  return theStage;
+}
+
+inline void G4VPreCompoundFragment::IncrementStage()
+{
+  theStage++;
+}
+

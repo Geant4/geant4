@@ -28,7 +28,7 @@
 #include "G4PhysicsVector.hh"
 #include "G4VXResonanceTable.hh"
 
-#include "g4std/map"
+#include <map>
 
 class G4XDeltaNstarTable 
 {
@@ -52,7 +52,7 @@ private:
   G4XDeltaNstarTable(const G4XDeltaNstarTable &right);
   G4XDeltaNstarTable& operator=(const G4XDeltaNstarTable &right);
 
-  G4std::map <G4String, G4double*, G4std::less<G4String> > xMap;
+  std::map <G4String, G4double*, std::less<G4String> > xMap;
   
   static const G4int sizeDeltaNstar;
 

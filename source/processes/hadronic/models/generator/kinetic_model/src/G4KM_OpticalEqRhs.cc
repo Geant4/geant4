@@ -49,8 +49,8 @@ G4KM_OpticalEqRhs::G4KM_OpticalEqRhs(G4KM_DummyField *field,
 
 void G4KM_OpticalEqRhs::SetFactor(G4double mass, G4double opticalParameter)
 {
-  G4double A = theNucleus->GetMassNumber();
-  G4double Z = theNucleus->GetCharge();
+  G4int A = static_cast<G4int>(theNucleus->GetMassNumber()+.1);
+  G4int Z = static_cast<G4int>(theNucleus->GetCharge()+.1);
   G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = mass*nucleusMass/(mass+nucleusMass);
@@ -64,7 +64,7 @@ void G4KM_OpticalEqRhs::SetFactor(G4double mass, G4double opticalParameter)
 }
 
 
-void G4KM_OpticalEqRhs::EvaluateRhsGivenB(const G4double y[], const G4double B[3],
+void G4KM_OpticalEqRhs::EvaluateRhsGivenB(const G4double y[], const G4double *,
 					  G4double dydx[]) const
 {
   G4double yMod = sqrt(y[0]*y[0]+y[1]*y[1]+y[2]*y[2]);

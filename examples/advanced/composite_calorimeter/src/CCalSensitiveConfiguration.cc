@@ -27,7 +27,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalSensitiveConfiguration.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 #include <stdlib.h>
 
 
@@ -88,7 +88,7 @@ CCalSensitiveConfiguration::CCalSensitiveConfiguration():
   }
 
   G4cout << " ==> Opening file " << fileenv << "..." << G4endl;
-  G4std::ifstream is;
+  std::ifstream is;
   bool ok = openGeomFile(is, pathName, fileenv);
   if (!ok)
     exit(-1);

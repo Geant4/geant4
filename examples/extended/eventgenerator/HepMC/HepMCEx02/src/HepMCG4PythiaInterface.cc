@@ -23,7 +23,7 @@
 // ====================================================================
 //
 //   HepMCG4PythiaInterface.cc
-//   $Id: HepMCG4PythiaInterface.cc,v 1.2 2002/11/19 10:25:49 murakami Exp $
+//   $Id: HepMCG4PythiaInterface.cc,v 1.3 2003/06/16 16:48:41 gunter Exp $
 //
 // ====================================================================
 #include "HepMCG4PythiaInterface.hh"
@@ -113,7 +113,7 @@ void HepMCG4PythiaInterface::CallPyrset(G4int lun, G4int move)
 }
 
 //////////////////////////////////////////////////////////////////////////
-void HepMCG4PythiaInterface::PrintRandomStatus(G4std::ostream& ostr) const
+void HepMCG4PythiaInterface::PrintRandomStatus(std::ostream& ostr) const
 //////////////////////////////////////////////////////////////////////////
 {
   ostr << "# Pythia random numbers status" << G4endl;

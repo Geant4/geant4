@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTriNucleon.hh,v 1.7 2002/12/12 19:17:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroTriNucleon.hh,v 1.8 2003/05/30 13:23:22 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -59,7 +59,7 @@ public:
     G4double CalcMeanMultiplicity(const G4double FreeVol, const G4double mu, 
 				  const G4double nu, const G4double T);
 
-    G4double CalcZARatio(const G4double nu) {return theZARatio = 0.5;}
+    G4double CalcZARatio(const G4double ) {return theZARatio = 0.5;}
 
     G4double CalcEnergy(const G4double T);
 	

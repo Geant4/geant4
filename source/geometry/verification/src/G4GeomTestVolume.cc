@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.cc,v 1.5 2002/07/30 07:26:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeomTestVolume.cc,v 1.7 2003/06/16 16:54:40 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -41,10 +41,10 @@
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
 
-#include "g4std/vector"
-#include "g4std/set"
-#include "g4std/algorithm"
-#include "g4std/iomanip"
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <iomanip>
 
 //
 // Constructor
@@ -57,7 +57,6 @@ G4GeomTestVolume::G4GeomTestVolume( const G4VPhysicalVolume *theTarget,
     tolerance(theTolerance),
     extent(theTarget->GetLogicalVolume()->GetSolid()->GetExtent())
 {;}
-
 
 //
 // Destructor
@@ -90,7 +89,6 @@ void G4GeomTestVolume::TestCartGridXYZ( G4int nx, G4int ny, G4int nz )
   TestCartGridZ( nx, ny );
 }
 
-
 //
 // TestCartGridX
 //
@@ -99,7 +97,6 @@ void G4GeomTestVolume::TestCartGridX( G4int ny, G4int nz )
   TestCartGrid( G4ThreeVector(0,1,0), G4ThreeVector(0,0,1),
                 G4ThreeVector(1,0,0), ny, nz );
 }
-
 
 //
 // TestCartGridY
@@ -110,7 +107,6 @@ void G4GeomTestVolume::TestCartGridY( G4int nz, G4int nx )
                 G4ThreeVector(0,1,0), nz, nx );
 }
 
-
 //
 // TestCartGridZ
 //
@@ -120,16 +116,26 @@ void G4GeomTestVolume::TestCartGridZ( G4int nx, G4int ny )
                 G4ThreeVector(0,0,1), nx, ny );
 }
 
-
 //
 // TestRecursiveCartGrid
 //
-void G4GeomTestVolume::TestRecursiveCartGrid( G4int nx, G4int ny, G4int nz )
+void G4GeomTestVolume::TestRecursiveCartGrid( G4int nx, G4int ny, G4int nz,
+                                              G4int slevel, G4int depth )
 {
+  // If reached requested level of depth (i.e. set to 0), exit.
+  // If not depth specified (i.e. set to -1), visit the whole tree.
+  // If requested initial level of depth is not zero, visit from beginning
   //
-  // As long as we aren't a replica, test ourselves
+  if (depth == 0) return;
+  if (depth != -1) depth--;
+  if (slevel != 0) slevel--;
+
   //
-  if (!target->IsReplicated()) {
+  // As long as we aren't a replica and we reached the requested
+  // initial level of depth, test ourselves
+  //
+  if ( (!target->IsReplicated()) && (slevel==0) )
+  {
     TestCartGridXYZ( nx, ny, nz );
     ReportErrors();
   }
@@ -137,12 +143,13 @@ void G4GeomTestVolume::TestRecursiveCartGrid( G4int nx, G4int ny, G4int nz )
   //
   // Loop over unique daughters
   //
-  G4std::set<const G4LogicalVolume *> tested;
-  
+  std::set<const G4LogicalVolume *> tested;
+
   const G4LogicalVolume *logical = target->GetLogicalVolume();
   G4int nDaughter = logical->GetNoDaughters();
   G4int iDaughter;
-  for( iDaughter=0; iDaughter<nDaughter; ++iDaughter) {
+  for( iDaughter=0; iDaughter<nDaughter; ++iDaughter )
+  {
     const G4VPhysicalVolume *daughter =
           logical->GetDaughter(iDaughter);
     const G4LogicalVolume *daughterLogical =
@@ -156,7 +163,7 @@ void G4GeomTestVolume::TestRecursiveCartGrid( G4int nx, G4int ny, G4int nz )
     //
     // Tested already?
     //
-    G4std::pair<G4std::set<const G4LogicalVolume *>::iterator,G4bool>
+    std::pair<std::set<const G4LogicalVolume *>::iterator,G4bool>
            there = tested.insert(daughterLogical);
     if (!there.second) continue;
 
@@ -164,10 +171,73 @@ void G4GeomTestVolume::TestRecursiveCartGrid( G4int nx, G4int ny, G4int nz )
     // Recurse
     //
     G4GeomTestVolume vTest( daughter, logger, tolerance );
-    vTest.TestRecursiveCartGrid(nx,ny,nz);
+    vTest.TestRecursiveCartGrid( nx,ny,nz,slevel,depth );
   }
 }
 
+//
+// TestRecursiveCylinder
+//
+void
+G4GeomTestVolume::TestRecursiveCylinder( G4int nPhi, G4int nZ, G4int nRho,
+                                         G4double fracZ, G4double fracRho,
+                                         G4bool usePhi,
+                                         G4int slevel, G4int depth )
+{
+  // If reached requested level of depth (i.e. set to 0), exit.
+  // If not depth specified (i.e. set to -1), visit the whole tree.
+  // If requested initial level of depth is not zero, visit from beginning
+  //
+  if (depth == 0) return;
+  if (depth != -1) depth--;
+  if (slevel != 0) slevel--;
+
+  //
+  // As long as we aren't a replica and we reached the requested
+  // initial level of depth, test ourselves
+  //
+  if ( (!target->IsReplicated()) && (slevel==0) )
+  {
+    TestCylinder( nPhi, nZ, nRho, fracZ, fracRho, usePhi );
+    ReportErrors();
+  }
+
+  //
+  // Loop over unique daughters
+  //
+  std::set<const G4LogicalVolume *> tested;
+
+  const G4LogicalVolume *logical = target->GetLogicalVolume();
+  G4int nDaughter = logical->GetNoDaughters();
+  G4int iDaughter;
+  for( iDaughter=0; iDaughter<nDaughter; ++iDaughter )
+  {
+    const G4VPhysicalVolume *daughter =
+          logical->GetDaughter(iDaughter);
+    const G4LogicalVolume *daughterLogical =
+          daughter->GetLogicalVolume();
+    
+    //
+    // Skip empty daughters
+    //
+    if (daughterLogical->GetNoDaughters() == 0) continue;
+    
+    //
+    // Tested already?
+    //
+    std::pair<std::set<const G4LogicalVolume *>::iterator,G4bool>
+           there = tested.insert(daughterLogical);
+    if (!there.second) continue;
+
+    //
+    // Recurse
+    //
+    G4GeomTestVolume vTest( daughter, logger, tolerance );
+    vTest.TestRecursiveCylinder( nPhi, nZ, nRho,
+                                 fracZ, fracRho, usePhi,
+                                 slevel, depth );
+  }
+}
 
 //
 // TestCylinder
@@ -179,8 +249,8 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
   //
   // Get size of our volume
   //
-  G4double xMax = G4std::max(extent.GetXmax(),-extent.GetXmin());
-  G4double yMax = G4std::max(extent.GetYmax(),-extent.GetYmin());
+  G4double xMax = std::max(extent.GetXmax(),-extent.GetXmin());
+  G4double yMax = std::max(extent.GetYmax(),-extent.GetYmin());
   G4double rhoMax = sqrt(xMax*xMax + yMax*yMax);
   
   G4double zMax = extent.GetZmax();
@@ -196,7 +266,8 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
   G4double phi = 0;
   G4int iPhi = nPhi;
   if ((iPhi&1) == 0) iPhi++;  // Also use odd number phi slices
-  do {
+  do
+  {
     G4double cosPhi = cos(phi);
     G4double sinPhi = sin(phi);
     
@@ -205,13 +276,15 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
     //
     G4double rho = rhoMax;
     G4int iRho = nRho;
-    do {
+    do
+    {
       G4ThreeVector p(rho*cosPhi,rho*sinPhi,0);
       static G4ThreeVector v(0,0,1);
       
       TestOneLine( p, v );
       
-      if (usePhi) {
+      if (usePhi)
+      {
         //
         // Loop over z
         //
@@ -219,7 +292,8 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
         
         G4double zScale = 1.0;
         G4int iZ=nZ;
-        do {
+        do
+        {
           p.setZ( z0 + zScale*zHalfLength );
           TestOneLine(p,v);
           p.setZ( z0 - zScale*zHalfLength );
@@ -236,7 +310,8 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
     
     G4double zScale = 1.0;
     G4int iZ=nZ;
-    do {
+    do
+    {
       p.setZ( z0 + zScale*zHalfLength );
       
       TestOneLine(p,v);
@@ -248,8 +323,6 @@ void G4GeomTestVolume::TestCylinder( G4int nPhi, G4int nZ, G4int nRho,
     
   } while( phi += deltaPhi, --iPhi );
 }
-
-
 
 //
 // TestCartGrid
@@ -282,10 +355,12 @@ void G4GeomTestVolume::TestCartGrid( const G4ThreeVector &theG1,
     
   G4int i1, i2;
   
-  for(i1=0;i1<=n1;++i1) {
+  for(i1=0;i1<=n1;++i1)
+  {
     G4ThreeVector p1 = (gMin1 + G4double(i1)*delta1)*g1;
     
-    for(i2=0;i2<=n2;++i2) {
+    for(i2=0;i2<=n2;++i2)
+    {
       G4ThreeVector p2 = (gMin2 + G4double(i2)*delta2)*g2;
       
       TestOneLine( p1+p2, v );
@@ -293,7 +368,66 @@ void G4GeomTestVolume::TestCartGrid( const G4ThreeVector &theG1,
   }
 }  
 
+//
+// TestRecursiveLine
+//
+void
+G4GeomTestVolume::TestRecursiveLine( const G4ThreeVector& p,
+                                     const G4ThreeVector& v,
+                                     G4int slevel, G4int depth )
+{
+  // If reached requested level of depth (i.e. set to 0), exit.
+  // If not depth specified (i.e. set to -1), visit the whole tree.
+  // If requested initial level of depth is not zero, visit from beginning
+  //
+  if (depth == 0) return;
+  if (depth != -1) depth--;
+  if (slevel != 0) slevel--;
 
+  //
+  // As long as we aren't a replica and we reached the requested
+  // initial level of depth, test ourselves
+  //
+  if ( (!target->IsReplicated()) && (slevel==0) )
+  {
+    TestOneLine( p, v );
+    ReportErrors();
+  }
+
+  //
+  // Loop over unique daughters
+  //
+  std::set<const G4LogicalVolume *> tested;
+
+  const G4LogicalVolume *logical = target->GetLogicalVolume();
+  G4int nDaughter = logical->GetNoDaughters();
+  G4int iDaughter;
+  for( iDaughter=0; iDaughter<nDaughter; ++iDaughter )
+  {
+    const G4VPhysicalVolume *daughter =
+          logical->GetDaughter(iDaughter);
+    const G4LogicalVolume *daughterLogical =
+          daughter->GetLogicalVolume();
+    
+    //
+    // Skip empty daughters
+    //
+    if (daughterLogical->GetNoDaughters() == 0) continue;
+    
+    //
+    // Tested already?
+    //
+    std::pair<std::set<const G4LogicalVolume *>::iterator,G4bool>
+           there = tested.insert(daughterLogical);
+    if (!there.second) continue;
+
+    //
+    // Recurse
+    //
+    G4GeomTestVolume vTest( daughter, logger, tolerance );
+    vTest.TestRecursiveLine( p, v, slevel, depth );
+  }
+}
 
 //
 // TestOneLine
@@ -306,7 +440,7 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
   //
   // Keep track of intersection points
   //
-  G4std::vector<G4GeomTestVolPoint> points;
+  std::vector<G4GeomTestVolPoint> points;
   
   //
   // Calculate intersections with the mother volume
@@ -319,7 +453,8 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
   // 
   G4int n = targetSegment.GetNumberPoints();
   G4int i;
-  for(i=0;i<n;++i) {
+  for(i=0;i<n;++i)
+  {
     points.push_back( G4GeomTestVolPoint( targetSegment.GetPoint(i), -1 ) );
   } 
 
@@ -329,7 +464,8 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
   const G4LogicalVolume *logical = target->GetLogicalVolume();
   G4int nDaughter = logical->GetNoDaughters();
   G4int iDaughter;
-  for( iDaughter=0; iDaughter<nDaughter; ++iDaughter) {
+  for( iDaughter=0; iDaughter<nDaughter; ++iDaughter)
+  {
     const G4VPhysicalVolume *daughter = 
           logical->GetDaughter(iDaughter);
     
@@ -342,7 +478,8 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
     G4ThreeVector pLocal = translation + p;
     G4ThreeVector vLocal = v;
     
-    if (rotation) {
+    if (rotation)
+    {
       pLocal = (*rotation)*pLocal;
       vLocal = (*rotation)*vLocal;
     }
@@ -359,7 +496,8 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
     //
     G4int n = daughterSegment.GetNumberPoints();
     G4int i;
-    for(i=0;i<n;++i) {
+    for(i=0;i<n;++i)
+    {
       points.push_back( G4GeomTestVolPoint( daughterSegment.GetPoint(i),
             iDaughter, translation, rotation ) );
     } 
@@ -368,7 +506,7 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
   //
   // Now sort the list of intersection points
   //
-  G4std::sort( points.begin(), points.end() );
+  std::sort( points.begin(), points.end() );
   
   //
   // Search for problems:
@@ -387,9 +525,10 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
   //
   // Set true if this point has been analyzed
   //
-  G4std::vector<G4bool> checked( n, false );
+  std::vector<G4bool> checked( n, false );
   
-  for(i=0;i<n;++i) {
+  for(i=0;i<n;++i)
+  {
     if (checked[i]) continue;
   
     G4int iDaug = points[i].GetDaughterIndex();
@@ -400,10 +539,12 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
     //
     G4double iS = points[i].GetDistance();
     G4int j = i;
-    while(++j<n) {
+    while(++j<n)
+    {
       if (iDaug == points[j].GetDaughterIndex()) break;
     }
-    if (j>=n) {
+    if (j>=n)
+    {
       //
       // Unmatched? This shouldn't happen
       //
@@ -422,7 +563,8 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
     // Otherwise, we could have a problem
     //
     G4int k = i;
-    while(++k<j) {
+    while(++k<j)
+    {
       if (checked[k]) continue;
       
       G4bool kEntering = points[k].Entering();
@@ -433,7 +575,8 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
       // Problem found: catagorize
       //
       G4int kDaug = points[k].GetDaughterIndex();
-      if (kDaug < 0) {
+      if (kDaug < 0)
+      {
         //
         // Ignore small overshoots if they are within tolerance
         //
@@ -443,12 +586,13 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
         //
         // We appear to extend outside the mother volume
         //
-        G4std::map<G4long,G4GeomTestOvershootList>::iterator overshoot =
+        std::map<G4long,G4GeomTestOvershootList>::iterator overshoot =
           overshoots.find(iDaug);
-        if (overshoot == overshoots.end()) {
-          G4std::pair<G4std::map<G4long,G4GeomTestOvershootList>::iterator,G4bool>
+        if (overshoot == overshoots.end())
+        {
+          std::pair<std::map<G4long,G4GeomTestOvershootList>::iterator,G4bool>
             result =
-              overshoots.insert( G4std::pair<const G4long,G4GeomTestOvershootList>
+              overshoots.insert( std::pair<const G4long,G4GeomTestOvershootList>
                                (iDaug,G4GeomTestOvershootList(target,iDaug)) );
           assert(result.second);
           overshoot = result.first;
@@ -461,7 +605,8 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
           (*overshoot).second.AddError( points[k].GetPosition(),
                                         points[j].GetPosition() );
       }
-      else {
+      else
+      {
         //
         // Ignore small overlaps if they are within tolerance
         //
@@ -474,12 +619,13 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
         G4long key = iDaug < kDaug ?
                (iDaug*nDaughter + kDaug) : (kDaug*nDaughter + iDaug);
         
-        G4std::map<G4long,G4GeomTestOverlapList>::iterator overlap =
+        std::map<G4long,G4GeomTestOverlapList>::iterator overlap =
           overlaps.find(key);
-        if (overlap == overlaps.end()) {
-          G4std::pair<G4std::map<G4long,G4GeomTestOverlapList>::iterator,G4bool>
+        if (overlap == overlaps.end())
+        {
+          std::pair<std::map<G4long,G4GeomTestOverlapList>::iterator,G4bool>
             result =
-            overlaps.insert( G4std::pair<const G4long,G4GeomTestOverlapList>
+            overlaps.insert( std::pair<const G4long,G4GeomTestOverlapList>
                            (key,G4GeomTestOverlapList(target,iDaug,kDaug)) );
           assert(result.second);
           overlap = result.first;
@@ -494,7 +640,6 @@ void G4GeomTestVolume::TestOneLine( const G4ThreeVector &p,
       }
     }
   }
-  
 }
 
 //
@@ -507,10 +652,12 @@ void G4GeomTestVolume::ReportErrors()
   //
   if (overshoots.empty())
     logger->NoProblem("GeomTest: no daughter volume extending outside mother detected.");
-  else {
-    G4std::map<G4long,G4GeomTestOvershootList>::iterator overshoot =
+  else
+  {
+    std::map<G4long,G4GeomTestOvershootList>::iterator overshoot =
       overshoots.begin();
-    while( overshoot != overshoots.end() ) {
+    while( overshoot != overshoots.end() )
+    {
       logger->OvershootingDaughter( &(*overshoot).second );
       ++overshoot;
     }
@@ -521,16 +668,17 @@ void G4GeomTestVolume::ReportErrors()
   //
   if (overlaps.empty())
     logger->NoProblem("GeomTest: no overlapping daughters detected.");
-  else {
-    G4std::map<G4long,G4GeomTestOverlapList>::iterator overlap =
+  else
+  {
+    std::map<G4long,G4GeomTestOverlapList>::iterator overlap =
       overlaps.begin();
-    while( overlap != overlaps.end() ) {
+    while( overlap != overlaps.end() )
+    {
       logger->OverlappingDaughters( &(*overlap).second );
       ++overlap;
     }
   }
 }
-
 
 //
 // ClearErrors

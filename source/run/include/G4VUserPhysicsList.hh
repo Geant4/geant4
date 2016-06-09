@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.23 2003/04/11 11:36:21 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VUserPhysicsList.hh,v 1.24 2003/05/21 21:06:00 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -184,7 +184,7 @@ class G4VUserPhysicsList
     void DumpCutValues(const G4String &particle_name = "ALL")
    {
     G4cerr << "WARNING !" << G4endl;
-    G4cerr << " DumpCutValues() became obsolete." << G4endl;
+    G4cerr << " Obsolete DumpCutValues() method is invoked for " << particle_name << G4endl;
     G4cerr << " Please use DumpCutValuesTable() instead." << G4endl;
     G4cerr << " This dummy method implementation will be removed soon." << G4endl;
     DumpCutValuesTable();
@@ -310,7 +310,7 @@ class G4VUserPhysicsList
 // Following method is for backward compatibility and removed soon
 ////////////////////////////////////////////////////////////////////////////
   protected:
-   void SetCutValueForOthers(G4double cutValue)
+   void SetCutValueForOthers(G4double)
    {
     G4cerr << "WARNING !" << G4endl;
     G4cerr << " SetCutValueForOthers became obsolete." << G4endl;

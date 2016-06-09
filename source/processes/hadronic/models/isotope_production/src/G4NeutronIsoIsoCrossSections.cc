@@ -67,7 +67,7 @@ Init(G4int A, G4int Z, G4double frac)
   G4int total;
   if(hasInelasticData)
   {
-    G4std::ifstream aDataSet(aName, G4std::ios::in);
+    std::ifstream aDataSet(aName, std::ios::in);
     aDataSet >> dummy >> dummy >> total;
     inelasticData.Init(aDataSet, total, eV);
   }
@@ -78,7 +78,7 @@ Init(G4int A, G4int Z, G4double frac)
   G4NeutronHPVector captureData;
   if(hasCaptureData)
   {
-    G4std::ifstream aDataSet(aName, G4std::ios::in);
+    std::ifstream aDataSet(aName, std::ios::in);
     aDataSet >> dummy >> dummy >> total;
     captureData.Init(aDataSet, total, eV);
   }
@@ -89,7 +89,7 @@ Init(G4int A, G4int Z, G4double frac)
   G4NeutronHPVector elasticData;
   if(hasElasticData)
   {
-    G4std::ifstream aDataSet(aName, G4std::ios::in);
+    std::ifstream aDataSet(aName, std::ios::in);
     aDataSet >> dummy >> dummy >> total;
     elasticData.Init(aDataSet, total, eV);
   }
@@ -103,7 +103,7 @@ Init(G4int A, G4int Z, G4double frac)
   G4NeutronHPVector fissionData;
   if(hasFissionData)
   {
-    G4std::ifstream aDataSet(aName, G4std::ios::in);
+    std::ifstream aDataSet(aName, std::ios::in);
     aDataSet >> dummy >> dummy >> total;
     fissionData.Init(aDataSet, total, eV);
   }
@@ -162,7 +162,7 @@ Init(G4int A, G4int Z, G4double frac)
   aName = dataUsed.GetName();
   if(hasIsotopeProductionData)
   {
-    G4std::ifstream aDataSet(aName, G4std::ios::in);
+    std::ifstream aDataSet(aName, std::ios::in);
     aDataSet>>theNumberOfProducts;
     theProductionData = new G4IsoProdCrossSections * [theNumberOfProducts];
     for(G4int i=0; i<theNumberOfProducts; i++)

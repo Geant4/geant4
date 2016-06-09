@@ -55,7 +55,7 @@ GetXsec(G4double s)
   G4double result = 0;
   // ratios from Phys.Lett.B40:121-126,1972; 22% assigned to higher resonances
 
-  typedef G4std::vector<G4ASCCrossSection*>::iterator iter;
+  typedef std::vector<G4ASCCrossSection*>::iterator iter;
   iter i;
   for(i=theGammaNucXSections.begin(); i!=theGammaNucXSections.end(); i++)
   {

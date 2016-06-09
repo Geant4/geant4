@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroTemperature.hh,v 1.9 2002/12/12 19:17:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4StatMFMacroTemperature.hh,v 1.11 2003/06/16 17:06:05 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -44,7 +44,7 @@ public:
     G4StatMFMacroTemperature(const G4double anA, const G4double aZ, 
 			     const G4double ExEnergy, const G4double FreeE0, 
 			     const G4double kappa, 
-			     G4std::vector<G4VStatMFMacroCluster*> * ClusterVector) :
+			     std::vector<G4VStatMFMacroCluster*> * ClusterVector) :
 	theA(anA),
 	theZ(aZ),
 	_ExEnergy(ExEnergy),
@@ -67,7 +67,7 @@ private:
     G4StatMFMacroTemperature() {};
 
     // copy constructor
-    G4StatMFMacroTemperature(const G4StatMFMacroTemperature &right) {};
+    G4StatMFMacroTemperature(const G4StatMFMacroTemperature &) {};
 
 
     // operators
@@ -117,7 +117,7 @@ private:
 	
     G4double _MeanEntropy;
 	
-    G4std::vector<G4VStatMFMacroCluster*> * _theClusters; 
+    std::vector<G4VStatMFMacroCluster*> * _theClusters; 
 
 
 };

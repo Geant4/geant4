@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: BrachyDetectorConstructionI.hh,v 1.2 2002/11/18 15:18:35 guatelli Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyDetectorConstructionI.hh,v 1.3 2003/05/22 17:20:40 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //    ****************************************
 //    *                                      *
@@ -38,9 +38,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "G4LogicalVolume.hh"
 
-
 class G4LogicalVolume;
-
 class G4Tubs;
 class G4Box;
 class G4Sphere;
@@ -53,48 +51,38 @@ class BrachyMaterial;
 class BrachyDetectorConstructionI
 {
 public:
-    BrachyDetectorConstructionI();
-    ~BrachyDetectorConstructionI();
-
+  BrachyDetectorConstructionI();
+  ~BrachyDetectorConstructionI();
+  void  ConstructIodium(G4VPhysicalVolume*);// Construct iodium source
 
 private:
-G4VisAttributes*   simpleMarkerVisAtt;
-G4VisAttributes* simpleIodiumVisAtt;
+  //air tub ...
+  G4Tubs* defaultTub; 
+  G4LogicalVolume* defaultTubLog;
+  G4VPhysicalVolume* defaultTubPhys;
+  
+  //source titanium capsule ...
+  G4Tubs* capsule ;
+  G4LogicalVolume*  capsuleLog;   
+  G4VPhysicalVolume* capsulePhys;
 
-G4VisAttributes* simpleCapsuleVisAtt;
-G4VisAttributes* simpleCapsuleTipVisAtt;
+  G4Sphere* capsuleTip;
+  G4LogicalVolume* capsuleTipLog;
+  G4VPhysicalVolume* capsuleTipPhys1;
+  G4VPhysicalVolume* capsuleTipPhys2;
 
-public:
+  //radioactive core ...
+  G4Tubs* iodiumCore;
+  G4LogicalVolume* iodiumCoreLog;
+  G4VPhysicalVolume* iodiumCorePhys;
 
+  // golden marker ...
+  G4Tubs* marker;
+  G4LogicalVolume* markerLog;
+  G4VPhysicalVolume* markerPhys;
 
-void  ConstructIodium(G4VPhysicalVolume*);
-private:
-G4Tubs* DefaultTub;
-G4LogicalVolume* DefaultTub_log;
-G4VPhysicalVolume*DefaultTub_Phys;
-
-G4Tubs* Capsule ;
-G4LogicalVolume*  CapsuleLog;    //pointer to the logical World
-G4VPhysicalVolume* CapsulePhys;
-
-G4Sphere* CapsuleTip;
-G4LogicalVolume* CapsuleTipLog;
-G4VPhysicalVolume* CapsuleTipPhys1;
-G4VPhysicalVolume* CapsuleTipPhys2;
-
-G4Tubs* IodiumCore;
-G4LogicalVolume* ICoreLog;
-G4VPhysicalVolume* ICorePhys;
-
-G4Tubs* Marker;
-G4LogicalVolume* MarkerLog;
-G4VPhysicalVolume* MarkerPhys;
-
-BrachyMaterial* pMat;   
+  BrachyMaterial* pMaterial;   
 };
-
-
-
 #endif
 
 

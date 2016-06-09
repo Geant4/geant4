@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.35 2002/10/28 15:18:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Tubs.cc,v 1.36 2003/06/16 16:53:44 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // class G4Tubs
@@ -1622,7 +1622,7 @@ G4GeometryType G4Tubs::GetEntityType() const
 //
 // Stream object contents to an output stream
 
-G4std::ostream& G4Tubs::StreamInfo( G4std::ostream& os ) const
+std::ostream& G4Tubs::StreamInfo( std::ostream& os ) const
 {
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"

@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2002/12/11 17:12:20 maire Exp $
+$Id: README,v 1.10 2003/06/03 10:07:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -39,6 +39,9 @@ $Id: README,v 1.9 2002/12/11 17:12:20 maire Exp $
     2. "general" - decays and transportation  
     3. "standard" (alternative) - standard EM physics
     4. "model"    (alternative) - standard EM physics using model approach
+
+     Model approach for EM physics was introduced in order to provide more
+     flexible way of construction of physics processes. 
       	    
  3- AN EVENT : THE PRIMARY GENERATOR
  

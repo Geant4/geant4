@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.22 2002/08/06 15:14:29 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Material.cc,v 1.24 2003/06/18 08:12:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -62,7 +62,7 @@
 
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 
 G4MaterialTable G4Material::theMaterialTable;
@@ -518,47 +518,43 @@ G4int G4Material::operator!=(const G4Material& right) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-G4std::ostream& operator<<(G4std::ostream& flux, G4Material* material)
+std::ostream& operator<<(std::ostream& flux, G4Material* material)
 {
-#ifdef G4USE_STD_NAMESPACE
-  G4std::ios::fmtflags mode = flux.flags();
-  flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
-#else
-  long mode = flux.setf(G4std::ios::fixed,G4std::ios::floatfield);
-#endif
-  long prec = flux.precision(3);
+  std::ios::fmtflags mode = flux.flags();
+  flux.setf(std::ios::fixed,std::ios::floatfield);
+  G4long prec = flux.precision(3);
   
   flux
-    << " Material: "      << G4std::setw(8) <<  material->fName
+    << " Material: "      << std::setw(8) <<  material->fName
     << " " << material->fChemicalFormula << " "
-    << "  density: "     << G4std::setw(6) << G4std::setprecision(3)  
+    << "  density: "     << std::setw(6) << std::setprecision(3)  
                           << G4BestUnit(material->fDensity,"Volumic Mass") 
-    << "  temperature: " << G4std::setw(6) << G4std::setprecision(2)  
+    << "  temperature: " << std::setw(6) << std::setprecision(2)  
                           << (material->fTemp)/kelvin << " K"
-    << "  pressure: "    << G4std::setw(6) << G4std::setprecision(2)   
+    << "  pressure: "    << std::setw(6) << std::setprecision(2)   
                           << (material->fPressure)/atmosphere << " atm"
-    << "  RadLength: "   << G4std::setw(7)  << G4std::setprecision(3)  
+    << "  RadLength: "   << std::setw(7)  << std::setprecision(3)  
                           << G4BestUnit(material->fRadlen,"Length");
 
   for (size_t i=0; i<material->fNumberOfElements; i++)
   flux 
     << "\n   ---> " << (*(material->theElementVector))[i] 
-    << "  fractionMass: " << G4std::setw(6)<< G4std::setprecision(2) 
+    << "  fractionMass: " << std::setw(6)<< std::setprecision(2) 
                           << (material->fMassFractionVector[i])/perCent << " %" 
-    << "  Abundance "     << G4std::setw(6)<< G4std::setprecision(2) 
+    << "  Abundance "     << std::setw(6)<< std::setprecision(2) 
                           << 100*(material->VecNbOfAtomsPerVolume[i])/
                                  (material->TotNbOfAtomsPerVolume)
                           << " %";
 
   flux.precision(prec);    
-  flux.setf(mode,G4std::ios::floatfield);
+  flux.setf(mode,std::ios::floatfield);
             
   return flux;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- G4std::ostream& operator<<(G4std::ostream& flux, G4Material& material)
+ std::ostream& operator<<(std::ostream& flux, G4Material& material)
 {
   flux << &material;        
   return flux;
@@ -566,7 +562,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Material* material)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
      
-G4std::ostream& operator<<(G4std::ostream& flux, G4MaterialTable MaterialTable)
+std::ostream& operator<<(std::ostream& flux, G4MaterialTable MaterialTable)
 {
  //Dump info for all known materials
    flux << "\n***** Table : Nb of materials = " << MaterialTable.size() 

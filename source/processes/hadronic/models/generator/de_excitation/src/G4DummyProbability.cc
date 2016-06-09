@@ -31,7 +31,7 @@
 // Constructors and operators
 //
 
-G4DummyProbability::G4DummyProbability(const G4DummyProbability& right)
+G4DummyProbability::G4DummyProbability(const G4DummyProbability& ) : G4VEmissionProbability()
 {
 
   G4Exception("G4DummyProbability::copy_constructor meant to not be accessible");
@@ -39,21 +39,21 @@ G4DummyProbability::G4DummyProbability(const G4DummyProbability& right)
 }
 
 const G4DummyProbability& G4DummyProbability::
-operator=(const G4DummyProbability& right) 
+operator=(const G4DummyProbability& ) 
 {
 
   G4Exception("G4DummyProbability::operator= meant to not be accessible");
   return *this;
 }
 
-G4bool G4DummyProbability::operator==(const G4DummyProbability& right) const
+G4bool G4DummyProbability::operator==(const G4DummyProbability& ) const
 {
 
   return false;
 
 }
 
-G4bool G4DummyProbability::operator!=(const G4DummyProbability& right) const
+G4bool G4DummyProbability::operator!=(const G4DummyProbability& ) const
 {
 
   return true;
@@ -63,8 +63,8 @@ G4bool G4DummyProbability::operator!=(const G4DummyProbability& right) const
 // Calculate the emission probability
 //
 
-G4double G4DummyProbability::EmissionProbDensity(const G4Fragment& frag, 
-                                                 const G4double exciteE)
+G4double G4DummyProbability::EmissionProbDensity(const G4Fragment& , 
+                                                 const G4double )
 {
 
   G4double theProb = 0.0;
@@ -73,8 +73,8 @@ G4double G4DummyProbability::EmissionProbDensity(const G4Fragment& frag,
 
 }
 
-G4double G4DummyProbability::EmissionProbability(const G4Fragment& frag, 
-                                                 const G4double exciteE)
+G4double G4DummyProbability::EmissionProbability(const G4Fragment& , 
+                                                 const G4double )
 {
 
   // From nuclear fragment properties and the excitation energy, calculate

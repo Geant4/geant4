@@ -28,7 +28,7 @@
 #include "G4MesonSplitter.hh"
 #include "G4BaryonSplitter.hh"
 #include "Randomize.hh"
-#include "g4std/deque"
+#include <deque>
 
 // based on prototype by Maxim Komogorov
 // Splitting into methods, and centralizing of model parameters HPW Feb 1999
@@ -67,8 +67,8 @@ class G4QGSMSplitableHadron : public G4VSplitableHadron
   // aggregated data
     G4bool Direction; // FALSE is target. - candidate for more detailed design. @@@@ HPW
 
-    G4std::deque<G4Parton *> Color;
-    G4std::deque<G4Parton *> AntiColor;   
+    std::deque<G4Parton *> Color;
+    std::deque<G4Parton *> AntiColor;   
   private:
     // associated classes
     G4MesonSplitter theMesonSplitter;

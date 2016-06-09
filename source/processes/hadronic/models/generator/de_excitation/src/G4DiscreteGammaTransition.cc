@@ -173,12 +173,15 @@ void G4DiscreteGammaTransition::SelectGamma()
 
       // new code by Fan Lei
       //
-      random = G4UniformRand() ;
-      _gammaCreationTime = -(log(random*(exp(-tMax/tau) - exp(-tMin/tau)) + 
-				    exp(-tMin/tau)));
-      //  if(_verbose > 10)
-      //    G4cout << "*---*---* G4DiscreteTransition: _gammaCreationTime = "
-      //	   << _gammaCreationTime/second << G4endl;
+      if (tau != 0 ) 
+      {
+	  random = G4UniformRand() ;
+	  _gammaCreationTime = -(log(random*(exp(-tMax/tau) - exp(-tMin/tau)) + 
+					exp(-tMin/tau)));
+	  //  if(_verbose > 10)
+	  //    G4cout << "*---*---* G4DiscreteTransition: _gammaCreationTime = "
+	  //	   << _gammaCreationTime/second << G4endl;
+       } else { _gammaCreationTime=0.; }
     }
   return;
 }

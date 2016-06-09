@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.hh,v 1.11 2002/12/11 15:57:56 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VRML2FileSceneHandler.hh,v 1.12 2003/06/16 17:13:55 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4VRML2FileSceneHandler.hh
 // Satoshi Tanaka & Yasuhide Sawada
@@ -30,7 +30,7 @@
 #ifndef G4VRML2FILE_SCENE_HANDLER_HH
 #define G4VRML2FILE_SCENE_HANDLER_HH
 
-#include "g4std/fstream"
+#include <fstream>
 
 #include "globals.hh"
 #include "G4LogicalVolume.hh"
@@ -136,7 +136,7 @@ private:
 	static G4int fSceneCount;    // No. of existing scenes.
 
 public: 
-	G4std::ofstream     fDest ;
+	std::ofstream     fDest ;
 
 };
 

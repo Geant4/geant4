@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionSource.cc,v 1.4 2002/12/12 19:17:52 gunter Exp $ //
+// $Id: G4VCrossSectionSource.cc,v 1.5 2003/06/16 17:09:13 gunter Exp $ //
 //
 
 #include "globals.hh"
@@ -175,7 +175,7 @@ const G4double G4VCrossSectionSource::FcrossX(G4double e, G4double e0, G4double 
   if (denom > 0.) 
   {
     G4double value = (2.* eParam * sigma * (e-e0) / denom) * pow(((e0 + eParam) / e), power);
-    result = G4std::max(0., value);
+    result = std::max(0., value);
   }
   return result;
 }     

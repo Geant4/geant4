@@ -44,6 +44,8 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
+// 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
+// 03-06-03 Fix initialisation problem for STD ionisation (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -64,6 +66,7 @@
 
 class G4Material;
 class G4ParticleDefinition;
+class G4VEmFluctuationModel;
 
 class G4eIonisationSTD : public G4VEnergyLossSTD
 {
@@ -79,7 +82,7 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
                                     const G4Material*, G4double cut);
 
-  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+  virtual std::vector<G4Track*>* SecondariesAlongStep(
                              const G4Step&,
 			           G4double&,
 			           G4double&,
@@ -94,7 +97,7 @@ public:
 
   void SetSubCutoff(G4bool val);
 
-  void PrintInfoDefinition() const;
+  void PrintInfoDefinition();
   // Print out of the class parameters
 
 protected:
@@ -112,10 +115,11 @@ private:
   G4eIonisationSTD(const G4eIonisationSTD&);
 
   const G4ParticleDefinition* theElectron;
+  G4VEmFluctuationModel* flucModel;
 
   G4bool subCutoff;
   G4bool isElectron;
-
+  G4bool isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -150,13 +154,13 @@ inline G4double G4eIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* dp
 
 #include "G4VSubCutoffProcessor.hh"
 
-inline G4std::vector<G4Track*>*  G4eIonisationSTD::SecondariesAlongStep(
+inline std::vector<G4Track*>*  G4eIonisationSTD::SecondariesAlongStep(
                            const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
                                  G4double& kinEnergy)
 {
-  G4std::vector<G4Track*>* newp = 0;
+  std::vector<G4Track*>* newp = 0;
   if(subCutoff) {
     G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
     if (sp) {

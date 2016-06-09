@@ -27,7 +27,7 @@
 // --------------------------------------------------------------
 //
 // Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// S.Guatelli
 //
 //    *******************************************
 //    *                                         *
@@ -36,9 +36,11 @@
 //    *******************************************
 //
 //
-// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.3 2002/12/12 19:16:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: BrachyDetectorConstructionLeipzig.cc,v 1.6 2003/05/22 17:20:43 guatelli Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
+
+#include "globals.hh"
 #include "BrachyDetectorConstructionLeipzig.hh"
 #include "G4CSGSolid.hh"
 #include "G4Sphere.hh"
@@ -53,7 +55,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "globals.hh"
 #include "G4MaterialTable.hh"
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
@@ -68,91 +69,97 @@
 #include "BrachyMaterial.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-BrachyDetectorConstructionLeipzig::BrachyDetectorConstructionLeipzig():
-Capsule(0),CapsuleLog(0),CapsulePhys(0),
-CapsuleTip(0),CapsuleTipLog(0),CapsuleTipPhys(0),
-IridiumCore(0),IridiumCoreLog(0),IridiumCorePhys(0),
-Appl1(0),Appl1Log(0),Appl1Phys(0),
-Appl2(0),Appl2Log(0),Appl2Phys(0)
 
+// Leipzig Applicator ...
+
+BrachyDetectorConstructionLeipzig::BrachyDetectorConstructionLeipzig()
+: capsule(0),capsuleLog(0),capsulePhys(0),
+  capsuleTip(0),capsuleTipLog(0),capsuleTipPhys(0),
+  iridiumCore(0),iridiumCoreLog(0),iridiumCorePhys(0),
+  applicator1(0),applicator1Log(0),applicator1Phys(0),
+  applicator2(0),applicator2Log(0),applicator2Phys(0)
 { 
-pMat= new BrachyMaterial() ;
-
+  pMaterial = new BrachyMaterial();
 }
-
-
-//....
 
 BrachyDetectorConstructionLeipzig::~BrachyDetectorConstructionLeipzig()
 { 
-
-delete pMat; 
+  delete pMaterial; 
 }
-void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   WaterBoxPhys)
+
+void  BrachyDetectorConstructionLeipzig::ConstructLeipzig(G4VPhysicalVolume*   mother)
 {
+  G4Colour  red     (1.0, 0.0, 0.0) ;
 
-G4Colour  white   (1.0, 1.0, 1.0) ;
-G4Colour  grey    (0.5, 0.5, 0.5) ;
-G4Colour  lgrey   (.75, .75, .75) ;
-G4Colour  red     (1.0, 0.0, 0.0) ;
-G4Colour  blue    (0.0, 0.0, 1.0) ;
-G4Colour  cyan    (0.0, 1.0, 1.0) ;
-G4Colour  magenta (1.0, 0.0, 1.0) ; 
-G4Colour  yellow  (1.0, 1.0, 0.0) ;
-G4Colour  lblue   (0.0, 0.0, .75);
+  G4Material* capsuleMat = pMaterial->GetMat("Stainless steel");
+  G4Material* iridium = pMaterial->GetMat("Iridium");
+  G4Material* tungsten =pMaterial->GetMat("Tungsten");
 
-G4Material* CapsuleMat=pMat->GetMat("Stainless steel");
-G4Material*IridiumMat=pMat->GetMat("Iridium");
-G4Material* matTung=pMat->GetMat("Tungsten");
+  //Iridium source ...
 
-Capsule = new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
-CapsuleLog = new G4LogicalVolume(Capsule,CapsuleMat,"CapsuleLog");
-CapsulePhys = new G4PVPlacement(0,G4ThreeVector(0,0,-1.975*mm),"CapsulePhys",
-				    CapsuleLog,WaterBoxPhys,false,0);
+  capsule = new G4Tubs("Capsule",0,0.55*mm,3.725*mm,0.*deg,360.*deg);
+  capsuleLog = new G4LogicalVolume(capsule,capsuleMat,"CapsuleLog");
+  capsulePhys = new G4PVPlacement(0,
+                                  G4ThreeVector(0,0,-1.975*mm),
+                                  "CapsulePhys",
+				  capsuleLog,
+                                  mother, //mother volume: phantom
+                                  false,
+                                  0);
 
-// Capsule tip
+  // Capsule tip
+  capsuleTip = new G4Sphere("CapsuleTip",0.*mm,0.55*mm,0.*deg,360.*deg,0.*deg,90.*deg);
+  capsuleTipLog = new G4LogicalVolume(capsuleTip,capsuleMat,"CapsuleTipLog");
+  capsuleTipPhys = new G4PVPlacement(0,
+                                     G4ThreeVector(0.,0.,1.75*mm),
+                                     "CapsuleTipPhys",
+				     capsuleTipLog,
+                                     mother,
+                                     false,
+                                     0);
+  // Iridium core
 
-CapsuleTip = new G4Sphere("CapsuleTip",
-				 0.*mm,0.55*mm,0.*deg,360.*deg,0.*deg,90.*deg);
-CapsuleTipLog = new G4LogicalVolume(CapsuleTip,CapsuleMat,"CapsuleTipLog");
-CapsuleTipPhys = new G4PVPlacement(0,G4ThreeVector(0.,0.,1.75*mm),"CapsuleTipPhys",
-				    CapsuleTipLog,WaterBoxPhys,false,0);
+  iridiumCore = new G4Tubs("IrCore",0,0.30*mm,1.75*mm,0.*deg,360.*deg);
+  iridiumCoreLog = new G4LogicalVolume(iridiumCore,
+                                       iridium,
+                                       "IridiumCoreLog");
+  iridiumCorePhys = new G4PVPlacement(0,
+                                      G4ThreeVector(0.,0.,1.975*mm),
+                                      "IridiumCorePhys",
+				      iridiumCoreLog,
+                                      capsulePhys,
+                                      false,
+                                      0);
+  // Applicator
+  //Leipzig Applicator is given by two different volumes
 
-// Iridium core
+  applicator1 = new G4Tubs("Appl1",5*mm,10.5*mm,12*mm,0.*deg,360.*deg);
+  applicator1Log = new G4LogicalVolume(applicator1,tungsten,"Appl1Log");
+  applicator1Phys = new G4PVPlacement(0,
+                                      G4ThreeVector(0,0,4.0*mm),
+                                      "Appl1Phys", 
+                                      applicator1Log,
+				      mother,
+                                      false,
+                                      0);
 
-IridiumCore = new G4Tubs("IrCore",0,0.30*mm,1.75*mm,0.*deg,360.*deg);
-IridiumCoreLog = new G4LogicalVolume(IridiumCore,IridiumMat,"IridiumCoreLog");
-IridiumCorePhys = new G4PVPlacement(0,G4ThreeVector(0.,0.,1.975*mm),"IridiumCorePhys",
-				    IridiumCoreLog,CapsulePhys,false,0);
-// Applicator
+  applicator2 = new G4Tubs("Appl2",0.55*mm,5.*mm,3.125*mm,0.*deg,360.*deg);
+  applicator2Log = new G4LogicalVolume(applicator2,tungsten,"Appl2");
+  applicator2Phys = new G4PVPlacement(0,
+                                      G4ThreeVector(0,0,-4.875*mm),
+                                      "Appl2Phys",
+                                      applicator2Log,
+				      mother,
+                                      false,
+                                      0);
 
-Appl1 = new G4Tubs("Appl1",5*mm,10.5*mm,12*mm,0.*deg,360.*deg);
-Appl1Log = new G4LogicalVolume(Appl1,matTung,"Appl1");
-Appl1Phys = new G4PVPlacement (0,G4ThreeVector(0,0,4.0*mm),"Appl1Phys", Appl1Log,
-				     WaterBoxPhys,false,0);
+  G4VisAttributes* simpleCapsuleVisAtt= new G4VisAttributes(red); 
+  simpleCapsuleVisAtt->SetVisibility(true); 
+  simpleCapsuleVisAtt->SetForceSolid(true); 
+  capsuleLog->SetVisAttributes(simpleCapsuleVisAtt); 
 
-Appl2 = new G4Tubs("Appl2",0.55*mm,5.*mm,3.125*mm,0.*deg,360.*deg);
-Appl2Log = new G4LogicalVolume(Appl2,matTung,"Appl2");
-Appl2Phys = new G4PVPlacement(0,G4ThreeVector(0,0,-4.875*mm),"Appl2Phys",Appl2Log,
-				     WaterBoxPhys,false,0);
-
-
-simpleCapsuleVisAtt= new G4VisAttributes(red); 
-simpleCapsuleVisAtt->SetVisibility(true); 
-simpleCapsuleVisAtt->SetForceSolid(true); 
-CapsuleLog->SetVisAttributes(simpleCapsuleVisAtt); 
-
-
-//CapsuleTipLog->SetVisAttributes (G4VisAttributes::Invisible); 
-simpleCapsuleTipVisAtt= new G4VisAttributes(red); 
-simpleCapsuleTipVisAtt->SetVisibility(true); 
-simpleCapsuleTipVisAtt->SetForceSolid(true); 
-CapsuleTipLog->SetVisAttributes(simpleCapsuleTipVisAtt); 
-
-
-
+  G4VisAttributes* simpleCapsuleTipVisAtt= new G4VisAttributes(red); 
+  simpleCapsuleTipVisAtt->SetVisibility(true); 
+  simpleCapsuleTipVisAtt->SetForceSolid(true); 
+  capsuleTipLog->SetVisAttributes(simpleCapsuleTipVisAtt);
 }
-
-
-
-

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.hh,v 1.5 2001/07/11 10:01:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ParticleMessenger.hh,v 1.6 2003/05/19 17:10:22 kurasige Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -94,7 +94,7 @@ class G4ParticleMessenger: public G4UImessenger
 
   private:
   //  !!!  can not use "copy constructor" !!!!
-    G4ParticleMessenger(const G4ParticleMessenger&){};
+    G4ParticleMessenger(const G4ParticleMessenger&):G4UImessenger(){};
 
   private:
     G4UIdirectory *             thisDirectory;

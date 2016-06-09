@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.20 2003/03/17 13:42:30 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Navigator.hh,v 1.21 2003/06/16 16:54:46 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // class G4Navigator
@@ -110,13 +110,13 @@
 #include "G4ParameterisedNavigation.hh"
 #include "G4ReplicaNavigation.hh"
 
-#include "g4std/iostream"
+#include <iostream>
 
 class G4Navigator
 {
   public:  // with description
 
-  friend G4std::ostream& operator << (G4std::ostream &os, const G4Navigator &n);
+  friend std::ostream& operator << (std::ostream &os, const G4Navigator &n);
 
   G4Navigator();
     // Constructor - initialisers and setup.

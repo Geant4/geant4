@@ -30,8 +30,8 @@
 #include "G4Proton.hh"
 #include "G4Gamma.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 
 void G4NeutronHPNInelasticFS::Init (G4double A, G4double Z, G4String & dirName, G4String & aFSType)
 {

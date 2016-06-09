@@ -29,7 +29,7 @@
 
 #include "CCalutils.hh"
 
-#include "g4std/fstream"
+#include <fstream>
 #include <stdlib.h>
 
 //#define debug
@@ -194,9 +194,8 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   G4RotationMatrix *rotMat = new G4RotationMatrix();
   rotMat->rotateAxes(xprime, yprime, zprime);
   if (*rotMat == G4RotationMatrix()) {
-    //	G4cerr << "WARNING: Matrix " << name << " will not be created as a rotation matrix." 
-    G4cerr << "WARNING: Matrix " << name << " is = identity matrix. It will not be created as a rotation matrix." 
-	 << G4endl;
+    // G4cerr << "WARNING: Matrix " << name << " will not be created as a rotation matrix." 
+    // G4cerr << "WARNING: Matrix " << name << " is = identity matrix. It will not be created as a rotation matrix." << G4endl;
     delete rotMat;
     rotMat=0;
   } else {
@@ -214,7 +213,7 @@ CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
   
   G4String path = getenv("CCAL_GLOBALPATH");
   G4cout << " ==> Opening file " << file << "..." << G4endl;
-  G4std::ifstream is;
+  std::ifstream is;
   bool ok = openGeomFile(is, path, file);
   if (!ok) {
     G4cerr << "ERROR: Could not open file " << file << " ... Exiting!" << G4endl;
@@ -273,7 +272,7 @@ CCalRotationMatrixFactory::CCalRotationMatrixFactory():theMatrices(){
   G4cout << "       "  << theMatrices.size() << " rotation matrices read in." << G4endl;
 }
 
-G4std::ostream& operator<<(G4std::ostream& os , const G4RotationMatrix & rot){
+std::ostream& operator<<(std::ostream& os , const G4RotationMatrix & rot){
   //  os << "( " << rot.xx() << tab << rot.xy() << tab << rot.xz() << " )" << G4endl;
   //  os << "( " << rot.yx() << tab << rot.yy() << tab << rot.yz() << " )" << G4endl;
   //  os << "( " << rot.zx() << tab << rot.zy() << tab << rot.zz() << " )" << G4endl;

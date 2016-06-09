@@ -21,34 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMCoulombBarrierHE.cc,v 1.2 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GEMCoulombBarrierHE.cc,v 1.6 2003/06/25 14:41:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
 
 
 #include "G4GEMCoulombBarrierHE.hh"
-#include "g4std/strstream"
+#include <strstream>
 
-G4GEMCoulombBarrierHE::G4GEMCoulombBarrierHE(const G4GEMCoulombBarrierHE & right)
+G4GEMCoulombBarrierHE::G4GEMCoulombBarrierHE(const G4GEMCoulombBarrierHE & ) : G4VCoulombBarrier()
 {
   G4Exception("G4GEMCoulombBarrierHE::copy_constructor meant to not be accessable.");
 }
 
 
-const G4GEMCoulombBarrierHE & G4GEMCoulombBarrierHE::operator=(const G4GEMCoulombBarrierHE & right)
+const G4GEMCoulombBarrierHE & G4GEMCoulombBarrierHE::operator=(const G4GEMCoulombBarrierHE & )
 {
   G4Exception("G4GEMCoulombBarrierHE::operator= meant to not be accessable.");
   return *this;
 }
 
-G4bool G4GEMCoulombBarrierHE::operator==(const G4GEMCoulombBarrierHE & right) const 
+G4bool G4GEMCoulombBarrierHE::operator==(const G4GEMCoulombBarrierHE & ) const 
 {
   return false;
 }
 
-G4bool G4GEMCoulombBarrierHE::operator!=(const G4GEMCoulombBarrierHE & right) const 
+G4bool G4GEMCoulombBarrierHE::operator!=(const G4GEMCoulombBarrierHE & ) const 
 {
   return true;
 }
@@ -61,7 +61,7 @@ G4double G4GEMCoulombBarrierHE::GetCoulombBarrier(const G4int ARes, const G4int 
   G4double Barrier = 0.0;
   if (ZRes > ARes || ARes < 1) {
     char errMessage[1024];
-    G4std::ostrstream errOs(errMessage,1024);
+    std::ostrstream errOs(errMessage,1024);
     errOs << "G4GEMCoulombBarrierHE::GetCoulombBarrier: ";
     errOs << "Wrong values for ";
     errOs << "residual nucleus A = " << ARes << " ";
@@ -71,8 +71,8 @@ G4double G4GEMCoulombBarrierHE::GetCoulombBarrier(const G4int ARes, const G4int 
   if (GetZ() == 0) {
     Barrier = 0.0;   // If there is no charge there is neither barrier
   } else {
-    G4double CompoundRadius = CalcCompoundRadius(G4double(ARes));
-    Barrier = ( elm_coupling *G4double(GetZ()) * G4double(ZRes) )/
+    G4double CompoundRadius = CalcCompoundRadius(static_cast<G4double>(ARes));
+    Barrier = ( elm_coupling * static_cast<G4double>(GetZ()) * static_cast<G4double>(ZRes) )/
       (CompoundRadius+3.75*fermi);
     
     // Barrier penetration coeficient
@@ -80,7 +80,7 @@ G4double G4GEMCoulombBarrierHE::GetCoulombBarrier(const G4int ARes, const G4int 
     
 //    Barrier *= K;
     
-    Barrier /= (1.0 + sqrt(U/(2.0*G4double(ARes))));
+    Barrier /= (1.0 + sqrt(U/(2.0*static_cast<G4double>(ARes))));
   }
   return Barrier;
 }
@@ -89,7 +89,7 @@ G4double G4GEMCoulombBarrierHE::GetCoulombBarrier(const G4int ARes, const G4int 
 G4double G4GEMCoulombBarrierHE::CalcCompoundRadius(const G4double ARes) const
 {
     G4double AresOneThird = pow(ARes,1.0/3.0);
-    G4double AejectOneThird = pow(this->GetA(),1.0/3.0);
+    G4double AejectOneThird = pow(G4double(GetA()),1.0/3.0);
 
     G4double Result = 1.12*(AresOneThird + AejectOneThird) - 
 	0.86*(AresOneThird+AejectOneThird)/(AresOneThird*AejectOneThird);

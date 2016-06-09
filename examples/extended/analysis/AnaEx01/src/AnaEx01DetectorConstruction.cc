@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01DetectorConstruction.cc,v 1.3 2001/11/16 14:31:12 barrand Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: AnaEx01DetectorConstruction.cc,v 1.4 2003/06/20 14:55:45 gbarrand Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -53,13 +53,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 AnaEx01DetectorConstruction::AnaEx01DetectorConstruction()
-:solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
- solidCalor(NULL),logicCalor(NULL),physiCalor(NULL),
- solidLayer(NULL),logicLayer(NULL),physiLayer(NULL),
- solidAbsorber(NULL),logicAbsorber(NULL),physiAbsorber(NULL),
- solidGap (NULL),logicGap (NULL),physiGap (NULL),
- AbsorberMaterial(NULL),GapMaterial(NULL),defaultMaterial(NULL),
- magField(NULL),calorimeterSD(NULL)
+:AbsorberMaterial(NULL)
+,GapMaterial(NULL)
+,defaultMaterial(NULL)
+,solidWorld(NULL)
+,logicWorld(NULL)
+,physiWorld(NULL)
+,solidCalor(NULL)
+,logicCalor(NULL)
+,physiCalor(NULL)
+,solidLayer(NULL)
+,logicLayer(NULL)
+,physiLayer(NULL)
+,solidAbsorber(NULL)
+,logicAbsorber(NULL)
+,physiAbsorber(NULL)
+,solidGap(NULL)
+,logicGap(NULL)
+,physiGap(NULL)
+,magField(NULL)
+,calorimeterSD(NULL)
 {
   // default parameter values of the calorimeter
   AbsorberThickness = 10.*mm;
@@ -119,9 +132,6 @@ G4Element* O  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
 a = 28.09*g/mole;
 G4Element* Si = new G4Element(name="Silicon",symbol="Si" , z= 14., a);
 
-a = 55.85*g/mole;
-G4Element* Fe = new G4Element(name="Iron"    ,symbol="Fe", z=26., a);
-
 //
 // define an Element from isotopes, by relative abundance 
 //
@@ -137,17 +147,9 @@ U->AddIsotope(U8, abundance= 10.*perCent);
 // define simple materials
 //
 
-density = 2.700*g/cm3;
-a = 26.98*g/mole;
-G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-
 density = 1.390*g/cm3;
 a = 39.95*g/mole;
 G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
-
-density = 8.960*g/cm3;
-a = 63.55*g/mole;
-G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
 
 density = 11.35*g/cm3;
 a = 207.19*g/mole;

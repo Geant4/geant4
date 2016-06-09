@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPContEnergyAngular.hh,v 1.7 2002/12/12 19:18:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronHPContEnergyAngular.hh,v 1.8 2003/06/16 17:10:35 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 #ifndef G4NeutronHPContEnergyAngular_h
 #define G4NeutronHPContEnergyAngular_h 1
 
 #include "G4ios.hh"
-#include "g4std/fstream"
+#include <fstream>
 #include "globals.hh"
 #include "G4VNeutronHPEnergyAngular.hh"
 #include "G4NeutronHPContAngularPar.hh"
@@ -53,7 +53,7 @@ class G4NeutronHPContEnergyAngular : public G4VNeutronHPEnergyAngular
   
   public:
   
-  void Init(G4std::ifstream & aDataFile)
+  void Init(std::ifstream & aDataFile)
   {
     aDataFile >> theTargetCode >> theAngularRep >> theInterpolation >> nEnergy;
     theAngular = new G4NeutronHPContAngularPar[nEnergy];

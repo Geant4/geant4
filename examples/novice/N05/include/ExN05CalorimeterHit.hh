@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05CalorimeterHit.hh,v 1.5 2002/01/09 17:24:17 ranjard Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN05CalorimeterHit.hh,v 1.6 2003/05/28 11:20:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef ExN05CalorimeterHit_h
@@ -45,7 +45,7 @@ class ExN05CalorimeterHit : public G4VHit
       ~ExN05CalorimeterHit();
       ExN05CalorimeterHit(const ExN05CalorimeterHit &right);
       const ExN05CalorimeterHit& operator=(const ExN05CalorimeterHit &right);
-      int operator==(const ExN05CalorimeterHit &right) const;
+      G4int operator==(const ExN05CalorimeterHit &right) const;
 
 
       inline void *operator new(size_t);
@@ -101,6 +101,3 @@ inline void ExN05CalorimeterHit::operator delete(void *aHit)
 }
 
 #endif
-
-
-

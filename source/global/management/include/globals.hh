@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.22 2003/02/05 15:26:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: globals.hh,v 1.23 2003/06/06 16:17:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 // Global Constants and typedefs
@@ -61,12 +61,12 @@
   #undef abs
 #endif
 
-#include "g4std/algorithm"
+#include <algorithm>
 #ifndef CLHEP_MAX_MIN_DEFINED
   #define CLHEP_MAX_MIN_DEFINED
 #endif
 
-#if defined(WIN32) && defined(G4USE_STD_NAMESPACE) && !defined(XPNET)
+#if defined(WIN32) && !defined(XPNET)
 // For NT with Native STL (used in ISO standard mode)
 // templated functions min and max should be _MIN _MAX
   #define min _MIN
@@ -101,7 +101,7 @@
 #include "G4ExceptionSeverity.hh"
 void G4Exception(const char* issure,const char* errorCode,G4ExceptionSeverity severity,const char* comments);
 void G4Exception(const char* s=0);
-void G4Exception(G4std::string s);
+void G4Exception(std::string s);
 void G4Exception(G4String s);
 
 #endif /* GLOBALS_HH */

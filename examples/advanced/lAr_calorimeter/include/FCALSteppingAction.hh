@@ -24,7 +24,7 @@
 // and all its terms.
 //
 // $Id: FCALSteppingAction.hh,v 1.4 2002/12/17 15:53:22 pmendez Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 

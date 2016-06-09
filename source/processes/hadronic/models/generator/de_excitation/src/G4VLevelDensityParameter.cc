@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLevelDensityParameter.cc,v 1.6 2002/12/12 19:17:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VLevelDensityParameter.cc,v 1.7 2003/05/30 13:23:26 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -33,7 +33,7 @@
 
 
 G4VLevelDensityParameter::
-G4VLevelDensityParameter(const G4VLevelDensityParameter &right)
+G4VLevelDensityParameter(const G4VLevelDensityParameter &)
 {
     G4Exception("G4VLevelDensityParameter::copy_constructor meant to not be accessable");
 }
@@ -42,7 +42,7 @@ G4VLevelDensityParameter(const G4VLevelDensityParameter &right)
 
 
 const G4VLevelDensityParameter & G4VLevelDensityParameter::
-operator=(const G4VLevelDensityParameter &right)
+operator=(const G4VLevelDensityParameter &)
 {
     G4Exception("G4VLevelDensityParameter::operator= meant to not be accessable");
     return *this;
@@ -50,13 +50,13 @@ operator=(const G4VLevelDensityParameter &right)
 
 
 G4bool G4VLevelDensityParameter::
-operator==(const G4VLevelDensityParameter &right) const
+operator==(const G4VLevelDensityParameter &) const
 {
     return false;
 }
 
 G4bool G4VLevelDensityParameter::
-operator!=(const G4VLevelDensityParameter &right) const
+operator!=(const G4VLevelDensityParameter &) const
 {
     return true;
 }

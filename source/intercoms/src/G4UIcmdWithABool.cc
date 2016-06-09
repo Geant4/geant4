@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithABool.cc,v 1.4 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UIcmdWithABool.cc,v 1.5 2003/06/16 16:55:38 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 
 #include "G4UIcmdWithABool.hh"
-#include "g4std/strstream"
+#include <strstream>
 
 G4UIcmdWithABool::G4UIcmdWithABool
 (const char * theCommandPath,G4UImessenger * theMessenger)

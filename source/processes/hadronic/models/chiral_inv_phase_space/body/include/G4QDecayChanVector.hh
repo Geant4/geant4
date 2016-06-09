@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChanVector.hh,v 1.9 2002/12/12 19:14:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QDecayChanVector.hh,v 1.10 2003/06/16 17:04:05 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -33,9 +33,9 @@
 #define G4QDecayChanVector_h 1
 
 #include "G4QDecayChan.hh"
-#include "g4std/vector"
+#include <vector>
 
-typedef G4std::vector<G4QDecayChan *> G4QDecayChanVector;
+typedef std::vector<G4QDecayChan *> G4QDecayChanVector;
 struct DeleteQDecayChan{void operator()(G4QDecayChan *aQ){delete aQ;}};
 
 #endif

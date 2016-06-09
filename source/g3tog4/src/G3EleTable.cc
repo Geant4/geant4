@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G3EleTable.cc,v 1.11 2001/07/16 15:38:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G3EleTable.cc,v 1.13 2003/06/16 16:50:49 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
+#include "G4Types.hh"
 #include "G4strstreambuf.hh"
 #include "G4ios.hh"
 #include "G3EleTable.hh"
@@ -62,7 +63,7 @@ G3EleTable::parse(G4double& Z, char* name, char* sym, G4double& A){
  G4int rc = 0;
   if (Z>0 && Z <=_MaxEle){
     G4int z = (G4int) Z-1;
-    G4std::istrstream in(_EleNames[z]);
+    std::istrstream in(_EleNames[z]);
     in >> name >> sym >> A;
   } else {
     rc = -1;

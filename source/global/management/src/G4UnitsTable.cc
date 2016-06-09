@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.17 2002/11/20 11:25:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4UnitsTable.cc,v 1.18 2003/06/06 16:17:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //
@@ -39,7 +39,7 @@
  
 #include "G4UnitsTable.hh"
 
-#include "g4std/iomanip"
+#include <iomanip>
 
 G4UnitsTable      G4UnitDefinition::theUnitsTable;
 
@@ -160,8 +160,8 @@ void G4UnitDefinition::PrintDefinition()
 {
   G4int nameL = theUnitsTable[CategoryIndex]->GetNameMxLen();
   G4int symbL = theUnitsTable[CategoryIndex]->GetSymbMxLen();
-  G4cout << G4std::setw(nameL) << Name << " (" 
-         << G4std::setw(symbL) << SymbolName << ") = " << Value << G4endl;
+  G4cout << std::setw(nameL) << Name << " (" 
+         << std::setw(symbL) << SymbolName << ") = " << Value << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -397,7 +397,7 @@ G4BestUnit::~G4BestUnit()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
+std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
 {
   G4UnitsTable& theUnitsTable = G4UnitDefinition::GetUnitsTable();
   G4UnitsContainer& List = theUnitsTable[a.IndexOfCategory]
@@ -409,7 +409,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
   G4double rsup(DBL_MAX), rinf(0.);
 
   //for a ThreeVector, choose the best unit for the biggest value 
-  G4double value = G4std::max(G4std::max(fabs(a.Value[0]),fabs(a.Value[1])),
+  G4double value = std::max(std::max(fabs(a.Value[0]),fabs(a.Value[1])),
                               fabs(a.Value[2]));
 
   for (size_t k=0; k<List.size(); k++)
@@ -429,14 +429,10 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
   for (G4int j=0; j<a.nbOfVals; j++) 
      {flux << a.Value[j]/(List[index]->GetValue()) << " ";}
 
-  #ifdef G4USE_STD_NAMESPACE
-    std::ios::fmtflags oldform = flux.flags();
-  #else
-    G4long oldform = flux.flags();
-  #endif
+  std::ios::fmtflags oldform = flux.flags();
 
-  flux.setf(G4std::ios::left,G4std::ios::adjustfield);
-  flux << G4std::setw(len) << List[index]->GetSymbol();       
+  flux.setf(std::ios::left,std::ios::adjustfield);
+  flux << std::setw(len) << List[index]->GetSymbol();       
   flux.flags(oldform);
 
   return flux;

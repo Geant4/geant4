@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VUIshell.hh,v 1.5 2001/11/26 19:15:08 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #ifndef G4VUIshell_h

@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4IonisParamElm.cc,v 1.8 2002/10/17 09:00:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

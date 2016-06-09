@@ -26,8 +26,8 @@
 #define MCT_GEN_EVENT_H
 
 #include "G4Types.hh"
-#include "g4std/iostream"
-#include "g4std/vector"
+#include <iostream>
+#include <vector>
 #include "CLHEP/HepMC/GenEvent.h"
  
 // ====================================================================
@@ -38,7 +38,7 @@
 
 class G4MCTGenEvent {
 protected:
-  G4std::vector<HepMC::GenEvent*> eventList;
+  std::vector<HepMC::GenEvent*> eventList;
 
 public:
   G4MCTGenEvent();
@@ -55,7 +55,7 @@ public:
 
   void ClearEvent();
 
-  void Print(G4std::ostream& ostr= G4std::cout) const;
+  void Print(std::ostream& ostr= std::cout) const;
 };
 
 // ====================================================================

@@ -21,49 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundFragmentVector.cc,v 1.10 2002/12/12 19:17:33 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4PreCompoundFragmentVector.cc,v 1.13 2003/06/16 17:07:27 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
 
 #include "G4PreCompoundFragmentVector.hh"
 
-#include "G4PreCompoundNeutron.hh"
-#include "G4PreCompoundProton.hh"
-#include "G4PreCompoundDeuteron.hh"
-#include "G4PreCompoundTriton.hh"
-#include "G4PreCompoundHe3.hh"
-#include "G4PreCompoundAlpha.hh"
-
-G4PreCompoundFragmentVector::G4PreCompoundFragmentVector() :
-  TotalEmissionProbability(0.0)
-{
-    // neutron 
-    theChannels.push_back(new G4PreCompoundNeutron());
-    // proton
-    theChannels.push_back(new G4PreCompoundProton());
-    // deuterium
-    theChannels.push_back(new G4PreCompoundDeuteron());
-    // triton
-    theChannels.push_back(new G4PreCompoundTriton());
-    // helium3
-    theChannels.push_back(new G4PreCompoundHe3());
-    // alpha
-    theChannels.push_back(new G4PreCompoundAlpha());
-}
-
-
-G4PreCompoundFragmentVector::~G4PreCompoundFragmentVector()
-{
-  G4std::for_each(theChannels.begin(), theChannels.end(), 
-		  DeleteFragment());
-  theChannels.clear();
-}
 
 const G4PreCompoundFragmentVector & 
 G4PreCompoundFragmentVector::
-operator=(const G4PreCompoundFragmentVector &right)
+operator=(const G4PreCompoundFragmentVector &)
 {
     G4Exception("G4PreCompoundFragmentVector::operator= meant to not be accessable");
     return *this;
@@ -71,13 +40,13 @@ operator=(const G4PreCompoundFragmentVector &right)
 
 
 G4bool G4PreCompoundFragmentVector::
-operator==(const G4PreCompoundFragmentVector &right) const
+operator==(const G4PreCompoundFragmentVector &) const
 {
     return false;
 }
 
 G4bool G4PreCompoundFragmentVector::
-operator!=(const G4PreCompoundFragmentVector &right) const
+operator!=(const G4PreCompoundFragmentVector &) const
 {
     return true;
 }
@@ -89,7 +58,7 @@ CalculateProbabilities(const G4Fragment & aFragment)
 {
   TotalEmissionProbability = 0.0;
   pcfvector::iterator aChannel; 
-  for (aChannel=theChannels.begin(); aChannel != theChannels.end(); 
+  for (aChannel=theChannels->begin(); aChannel != theChannels->end(); 
        aChannel++) 
     {
       // Calculate emission probailities
@@ -105,13 +74,13 @@ CalculateProbabilities(const G4Fragment & aFragment)
 G4VPreCompoundFragment * G4PreCompoundFragmentVector::
 ChooseFragment(void)
 {
-  const G4int NumOfFrags = theChannels.size();
-  G4std::vector<G4double> running;
+  const G4int NumOfFrags = theChannels->size();
+  std::vector<G4double> running;
   running.reserve(NumOfFrags);
   
   pcfvector::iterator i;
   G4double accumulation = 0.0;
-  for (i = theChannels.begin(); i != theChannels.end(); ++i) {
+  for (i = theChannels->begin(); i != theChannels->end(); ++i) {
     accumulation += (*i)->GetEmissionProbability();
     running.push_back(accumulation);
   }
@@ -119,34 +88,41 @@ ChooseFragment(void)
   // Choose an emission channel
   G4double aChannel = G4UniformRand()*TotalEmissionProbability;
   G4int ChosenChannel = -1;
-  G4std::vector<G4double>::iterator ich;
+  std::vector<G4double>::iterator ich;
   for (ich = running.begin(); ich != running.end(); ++ich) 
     {
       if (aChannel <= *ich) 
 	{
 #ifdef G4NO_ISO_VECDIST
-          G4std::vector<G4double>::difference_type n = 0;
-          G4std::distance(running.begin(),ich,n);
+          std::vector<G4double>::difference_type n = 0;
+          std::distance(running.begin(),ich,n);
           ChosenChannel = n;
 #else
-	  ChosenChannel = G4std::distance(running.begin(),ich);
+	  ChosenChannel = std::distance(running.begin(),ich);
 #endif
 	  break;
 	}
     }
   running.clear();
   if (ChosenChannel < 0) 
-  {
+    {
       G4cerr
-	  << "G4PreCompoundFragmentVector::ChooseFragment: I can't determine a channel\n"
-	  << "Probabilities: ";
-      for (i = theChannels.begin(); i != theChannels.end(); ++i) 
-      {
+	<< "G4PreCompoundFragmentVector::ChooseFragment: I can't determine a channel\n"
+	<< "Probabilities: ";
+      for (i = theChannels->begin(); i != theChannels->end(); ++i) 
+	{
 	  G4cout << (*i)->GetEmissionProbability() << "  ";
-      }
+	}
       G4cout << '\n';
       return 0;
-  }
-  
-  return theChannels[ChosenChannel];
+    }
+  else
+    {
+      for (i = theChannels->begin(); i != theChannels->end(); ++i) 
+	{
+	  (*i)->IncrementStage();
+	}
+    } 
+
+  return theChannels->operator[](ChosenChannel);
 }

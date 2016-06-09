@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.14 2001/08/05 02:29:12 johna Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ViewParameters.cc,v 1.15 2003/06/16 17:14:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // John Allison  19th July 1996
@@ -272,7 +272,7 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
   }
 }
 
-G4std::ostream& operator << (G4std::ostream& os,
+std::ostream& operator << (std::ostream& os,
 			     const G4ViewParameters::DrawingStyle& style) {
   switch (style) {
   case G4ViewParameters::wireframe:
@@ -288,7 +288,7 @@ G4std::ostream& operator << (G4std::ostream& os,
   return os;
 }
 
-G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
+std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
   os << "View parameters and options:";
 
   os << "\n  Drawing style: " << v.fDrawingStyle;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.hh,v 1.2 2001/10/22 10:41:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4GeomTestVolume.hh,v 1.4 2003/06/16 16:54:37 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -44,7 +44,7 @@
 #include "G4GeomTestOverlapList.hh"
 #include "G4GeomTestOvershootList.hh"
 
-#include "g4std/map"
+#include <map>
 
 class G4VPhysicalVolume;
 class G4GeomTestLogger;
@@ -69,10 +69,27 @@ class G4GeomTestVolume
     void TestCartGridZ( G4int nx=100, G4int ny=100 );
       // Test using a grid of lines parallel to a cartesian axis
   
-    void TestRecursiveCartGrid( G4int nx=100, G4int ny=100, G4int nz=100 );
-      // Test using a grid, recursively, to all daughters,
-      // and their daughters, and their daughters, etc.
-      // Be careful: this could take a long, long time
+    void TestCartGrid( const G4ThreeVector &g1,
+                       const G4ThreeVector &g2,
+                       const G4ThreeVector &v,
+                             G4int n1, 
+                             G4int n2 );
+      // Test using a grid of parallel lines
+      //  g1 = First grid axis
+      //  g2 = Second grid axis
+      //  v  = Direction of lines
+      //  n1 = Number of grid points along g1
+      //  n2 = Number of grid points along g2
+      // The spread of the grid points are automatically calculated
+      // based on the extent of the solid
+
+    void TestRecursiveCartGrid( G4int nx=100, G4int ny=100, G4int nz=100,
+                                G4int sLevel=0, G4int depth=-1 );
+      // Test using a grid, propagating recursively to the daughters, with
+      // possibility of specifying the initial level in the volume tree and
+      // the depth (default is the whole tree).
+      // Be careful: depending on the complexity of the geometry, this
+      // could require long computational time
 
     void TestCylinder( G4int nPhi=90, G4int nZ=50, G4int nRho=50,
                        G4double fracZ=0.8,  G4double fracRho=0.8,
@@ -110,23 +127,27 @@ class G4GeomTestVolume
       //     above two sets and imagine the line through the
       //     intersection and perpendicular to both
 
-    void TestCartGrid( const G4ThreeVector &g1,
-                       const G4ThreeVector &g2,
-                       const G4ThreeVector &v,
-                             G4int n1, 
-                             G4int n2 );
-      // Test using a grid of parallel lines
-      //  g1 = First grid axis
-      //  g2 = Second grid axis
-      //  v  = Direction of lines
-      //  n1 = Number of grid points along g1
-      //  n2 = Number of grid points along g2
-      // The spread of the grid points are automatically calculated
-      // based on the extent of the solid
+    void TestRecursiveCylinder( G4int nPhi=90, G4int nZ=50, G4int nRho=50,
+                                G4double fracZ=0.8,  G4double fracRho=0.8,
+                                G4bool usePhi=false,
+                                G4int sLevel=0, G4int depth=-1 );
+      // Test using a set of lines in a cylindrical pattern of gradually
+      // increasing mesh size, propagating recursively to the daughters, with
+      // possibility of specifying the initial level in the volume tree and
+      // the depth (default is the whole tree).
+      // Be careful: depending on the complexity of the geometry, this
+      // could require long computational time
 
     void TestOneLine( const G4ThreeVector &p, const G4ThreeVector &v );
       // Test using a single line, specified by a point and direction,
       // in the coordinate system of the target volume
+
+    void TestRecursiveLine( const G4ThreeVector &p, const G4ThreeVector &v,
+                            G4int sLevel=0, G4int depth=-1 );
+      // Test using a single line, specified by a point and direction,
+      // propagating recursively to the daughters, with possibility of
+      // specifying the initial level in the volume tree and
+      // the depth (default is the whole tree).
 
     void ReportErrors();
       // Tabulate and report all errors so far encountered
@@ -141,12 +162,12 @@ class G4GeomTestVolume
     G4double tolerance;               // Error tolerance
     G4VisExtent extent;               // Geometric extent of volume
   
-    G4std::map<G4long,G4GeomTestOverlapList> overlaps;
+    std::map<G4long,G4GeomTestOverlapList> overlaps;
       // A list of overlap errors, keyed by the
       // daughter1*numDaughter+daughter2, where daughter1
       // is the smaller of the two daughter indices
 
-    G4std::map<G4long,G4GeomTestOvershootList> overshoots;
+    std::map<G4long,G4GeomTestOvershootList> overshoots;
       // A list of overshoot errors, keyed by the
       // daughter number
 };

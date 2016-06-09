@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundIon.hh,v 1.11 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4VPreCompoundIon.hh,v 1.12 2003/03/24 13:56:56 larazb Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // by V. Lara
 
@@ -41,42 +41,42 @@ protected:
 
 public:
 
-    // copy constructor
-    G4VPreCompoundIon(const G4VPreCompoundIon &right): 
-	G4VPreCompoundFragment(right) {}
+  // copy constructor
+  G4VPreCompoundIon(const G4VPreCompoundIon &right): 
+    G4VPreCompoundFragment(right) {}
     
-    // constructor  
-    G4VPreCompoundIon(const G4double anA, 
-		      const G4double aZ, 
-		      G4VCoulombBarrier* aCoulombBarrier,
-		      const G4String & aName): 
-	G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
+  // constructor  
+  G4VPreCompoundIon(const G4double anA, 
+		    const G4double aZ, 
+		    G4VCoulombBarrier* aCoulombBarrier,
+		    const G4String & aName): 
+    G4VPreCompoundFragment(anA,aZ,aCoulombBarrier,aName) {}
     
-    virtual ~G4VPreCompoundIon() {}
+  virtual ~G4VPreCompoundIon() {}
     
-    // operators  
-    const G4VPreCompoundIon & 
-    operator=(const G4VPreCompoundIon &right) {
-	if (&right != this) this->G4VPreCompoundFragment::operator=(right);
-	return *this;
-    }
+  // operators  
+  const G4VPreCompoundIon & 
+  operator=(const G4VPreCompoundIon &right) {
+    if (&right != this) this->G4VPreCompoundFragment::operator=(right);
+    return *this;
+  }
     
-    G4bool operator==(const G4VPreCompoundIon &right) const 
-	{ return G4VPreCompoundFragment::operator==(right);}
+  G4bool operator==(const G4VPreCompoundIon &right) const 
+  { return G4VPreCompoundFragment::operator==(right);}
     
-    G4bool operator!=(const G4VPreCompoundIon &right) const 
-	{ return G4VPreCompoundFragment::operator!=(right);}
+  G4bool operator!=(const G4VPreCompoundIon &right) const 
+  { return G4VPreCompoundFragment::operator!=(right);}
     
-    virtual G4double ProbabilityDistributionFunction(const G4double eKin,
-						     const G4Fragment& aFragment);
-    
+  virtual G4double ProbabilityDistributionFunction(const G4double eKin,
+						   const G4Fragment& aFragment);
+
 protected:
-    G4bool IsItPossible(const G4Fragment& aFragment) 
-	{
-	    G4int pplus = aFragment.GetNumberOfCharged();   
-	    G4int pneut = aFragment.GetNumberOfParticles()-pplus;
-	    return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
-	}
+  G4bool IsItPossible(const G4Fragment& aFragment) 
+  {
+    G4int pplus = aFragment.GetNumberOfCharged();   
+    G4int pneut = aFragment.GetNumberOfParticles()-pplus;
+    return (pneut >= (GetA()-GetZ()) && pplus >= GetZ());
+  }
 
   virtual G4double GetAlpha() = 0;
   virtual G4double GetBeta() = 0;

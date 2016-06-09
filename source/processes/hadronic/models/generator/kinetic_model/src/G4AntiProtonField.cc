@@ -50,21 +50,21 @@ G4AntiProtonField::~G4AntiProtonField()
 { }
 
 
-const G4AntiProtonField & G4AntiProtonField::operator=(const G4AntiProtonField & right)
+const G4AntiProtonField & G4AntiProtonField::operator=(const G4AntiProtonField & )
 {
   G4Exception("G4AntiProtonField::operator= meant not to be accessible");
   return *this;
 }
 
 
-G4int G4AntiProtonField::operator==(const G4AntiProtonField & right) const
+G4int G4AntiProtonField::operator==(const G4AntiProtonField & ) const
 {
   G4Exception("G4AntiProtonField::operator== meant not to be accessible");
   return 0;
 }
 
 
-G4int G4AntiProtonField::operator!=(const G4AntiProtonField & right) const
+G4int G4AntiProtonField::operator!=(const G4AntiProtonField & ) const
 {
   G4Exception("G4AntiProtonField::operator!= meant not to be accessible");
   return 1;
@@ -80,9 +80,9 @@ G4double G4AntiProtonField::GetField(const G4ThreeVector & aPosition)
   G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProtonDefinition();
   G4double antiProtonMass = anAntiProton->GetPDGMass();
 
-  G4double A = theNucleus->GetMassNumber();
-  G4double Z = theNucleus->GetCharge();
-  G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
+  G4int A = static_cast<G4int>(theNucleus->GetMassNumber()+.1);
+  G4int Z = static_cast<G4int>(theNucleus->GetCharge()+.1);
+  G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(G4int(Z), G4int(A));
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = antiProtonMass*nucleusMass/(antiProtonMass+nucleusMass);
 

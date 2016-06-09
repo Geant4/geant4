@@ -9,25 +9,30 @@
 # Sets some default verbose
 # and initializes the graphic.
 #
-/control/verbose 2
+/control/verbose 1
 /control/saveHistory
-/run/verbose 2
+/run/verbose 1
+
+/control/execute emstd.mac
 
 /gun/particle gamma
 /gun/energy 1 GeV
 /gun/vertexRadius 25. cm
 /gun/sourceType 2
 
+
 # You can modify the geometry of the telescope via a messenger
+
 #/payload/setNbOfTKRLayers 15
 #/payload/update
 
 #
 # Create a scene handler for a specific graphics system
 /vis/open OGLSX
+#/vis/open HepRepFile
 
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi 90 0
+/vis/viewer/set/viewpointThetaPhi 90 0
 
 # Visualize of the whole detector geometry
 /vis/drawVolume

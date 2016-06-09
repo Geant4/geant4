@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: H02PhysicsList.cc,v 1.2 2002/11/19 10:25:49 murakami Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: H02PhysicsList.cc,v 1.3 2003/06/16 16:48:39 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 
@@ -39,7 +39,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-#include "g4std/iomanip"   
+#include <iomanip>   
 
 #include "H02GeneralPhysics.hh"
 #include "H02EMPhysics.hh"

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.15 2002/12/12 19:14:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4QContent.hh,v 1.16 2003/06/16 17:04:03 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -32,7 +32,7 @@
 #ifndef G4QContent_h
 #define G4QContent_h 1
 
-#include "g4std/iostream"
+#include <iostream>
 #include "globals.hh"
 #include "Randomize.hh"
 
@@ -149,8 +149,8 @@ private:            //                       C    S
 };
 
 // Not member operators
-G4std::ostream&   operator<<(G4std::ostream& lhs, G4QContent& rhs);
-G4std::ostream&   operator<<(G4std::ostream& lhs, const G4QContent& rhs);
+std::ostream&   operator<<(std::ostream& lhs, G4QContent& rhs);
+std::ostream&   operator<<(std::ostream& lhs, const G4QContent& rhs);
 G4QContent operator+(const G4QContent& lhs, const G4QContent& rhs);
 G4QContent operator-(const G4QContent& lhs, const G4QContent& rhs);
 G4QContent operator*(const G4QContent& lhs, const G4int&      rhs);

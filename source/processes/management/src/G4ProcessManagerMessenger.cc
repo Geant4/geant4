@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManagerMessenger.cc,v 1.6 2002/12/04 21:29:49 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4ProcessManagerMessenger.cc,v 1.7 2003/06/16 17:12:33 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //
 //---------------------------------------------------------------
@@ -52,9 +52,9 @@
 
 #include "G4ProcessManagerMessenger.hh"
 #include "G4ios.hh"                 // Include from 'system'
-#include "g4std/iomanip"                  // Include from 'system'
+#include <iomanip>                  // Include from 'system'
 
-#include "g4std/strstream"
+#include <strstream>
 
 G4ProcessManagerMessenger::G4ProcessManagerMessenger(G4ParticleTable* pTable)
                         :theParticleTable(pTable),
@@ -172,7 +172,7 @@ void G4ProcessManagerMessenger::SetNewValue(G4UIcommand * command,G4String newVa
     //Commnad   /particle/process/Verbose
     //  inputstream for newValues 
     const char* temp = (const char*)(newValue);
-    G4std::istrstream is((char*)temp);
+    std::istrstream is((char*)temp);
     G4int Verbose, index;
     is  >>Verbose >>index;
     if (index <0) {
@@ -203,7 +203,7 @@ G4String G4ProcessManagerMessenger::GetCurrentValue(G4UIcommand * command)
   }
 
   char line[255];
-  G4std::ostrstream os(line,255);
+  std::ostrstream os(line,255);
   
   if( command==verboseCmd ){
     //Commnad   /particle/process/Verbose

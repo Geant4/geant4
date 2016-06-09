@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationChannel.cc,v 1.14 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4EvaporationChannel.cc,v 1.17 2003/06/25 14:47:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -85,12 +85,12 @@ G4EvaporationChannel::~G4EvaporationChannel()
 
 
 
-G4EvaporationChannel::G4EvaporationChannel(const G4EvaporationChannel & right)
+G4EvaporationChannel::G4EvaporationChannel(const G4EvaporationChannel & ) : G4VEvaporationChannel()
 {
     G4Exception("G4EvaporationChannel::copy_costructor meant to not be accessable");
 }
 
-const G4EvaporationChannel & G4EvaporationChannel::operator=(const G4EvaporationChannel & right)
+const G4EvaporationChannel & G4EvaporationChannel::operator=(const G4EvaporationChannel & )
 {
     G4Exception("G4EvaporationChannel::operator= meant to not be accessable");
     return *this;
@@ -113,8 +113,8 @@ G4bool G4EvaporationChannel::operator!=(const G4EvaporationChannel & right) cons
 void G4EvaporationChannel::Initialize(const G4Fragment & fragment)
 {
 
-    G4int anA = G4int(fragment.GetA());
-    G4int aZ = G4int(fragment.GetZ());
+    G4int anA = static_cast<G4int>(fragment.GetA());
+    G4int aZ = static_cast<G4int>(fragment.GetZ());
     AResidual = anA - A;
     ZResidual = aZ - Z;
 
@@ -179,7 +179,8 @@ G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
     // ** And now the residual nucleus ** 
     G4double theExEnergy = theNucleus.GetExcitationEnergy();
     G4double theMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
-	GetNucleusMass(theNucleus.GetZ(),theNucleus.GetA());
+	GetNucleusMass(static_cast<G4int>(theNucleus.GetZ()),
+		       static_cast<G4int>(theNucleus.GetA()));
     G4double ResidualEnergy = theMass + (theExEnergy - EvaporatedKineticEnergy) - EvaporatedMass;
 	
     G4LorentzVector ResidualMomentum(-momentum,ResidualEnergy);
@@ -268,8 +269,8 @@ G4double G4EvaporationChannel::CalcKineticEnergy(void)
 	G4double Q1 = 1.0;
 	G4double Q2 = 1.0;
 	if (Z == 0) { // for emitted neutron
-	    G4double Beta = (2.12/pow(AResidual,2./3.) - 0.05)*MeV/
-		(0.76 + 2.2/pow(AResidual,1./3.));
+	    G4double Beta = (2.12/pow(G4double(AResidual),2./3.) - 0.05)*MeV/
+		(0.76 + 2.2/pow(G4double(AResidual),1./3.));
 	    Q1 = 1.0 + Beta/(MaximalKineticEnergy);
 	    Q2 = Q1*sqrt(Q1);
 	} 

@@ -1,6 +1,6 @@
 **********************************************
- Geant4 version $Name: geant4-05-01 $
-                                (30-Apr-2003)
+ Geant4 version $Name: geant4-05-02 $
+                                (27-June-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -61,6 +61,7 @@ Current available graphics systems are:
 #
 /testem/phys/setGCut 2.20 mm
 /testem/phys/setECut 6.05 mum
+/testem/phys/setPCut 6.05 mum
 #
 /run/initialize
 
@@ -69,7 +70,8 @@ Current available graphics systems are:
 phot:  Total cross sections from Sandia parametrisation. 
 Em1PhysicsList::SetCuts:CutLength : 1 mm 
 #
-/process/eLoss/StepFunction 0.183 170 micrometer
+/process/eLoss/StepFunction 0.183 1.70 micrometer
+#/process/eLoss/integral  false
 #
 /run/verbose 2
 #
@@ -93,7 +95,7 @@ msc:   Tables of transport mean free paths.
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins.
-        Step function: finalRange(mm)= 0.17,  dRoverRange= 0.183
+        Step function: finalRange(mm)= 0.0017,  dRoverRange= 0.183
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -114,7 +116,7 @@ hIoni:    Knock-on electron cross sections .
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-        Step function: finalRange(mm)= 0.17,  dRoverRange= 0.183
+        Step function: finalRange(mm)= 0.0017,  dRoverRange= 0.183
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -138,8 +140,8 @@ MuPairProd:  theoretical cross sections
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 1 mm 
- Energy thresholds :  gamma 9.98636 keV    e- 9.96618 keV    e+ 568.011 keV
+ Range cuts        :  gamma 2.2 mm     e- 6.05 mum    e+ 6.05 mum
+ Energy thresholds :  gamma 9.98636 keV    e- 9.96618 keV    e+ 9.96618 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -162,18 +164,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=19s Real=30s Sys=5.6s
+  User=29s Real=44s Sys=11s
 
- nb tracks/event   neutral:    27.9700   charged:   706.0200
- nb  steps/event   neutral:   151.6800   charged:  2246.3000
+ nb tracks/event   neutral:    27.9700   charged:   701.2500
+ nb  steps/event   neutral:   147.2700   charged:  3376.9000
 
  nb of process calls per event: 
           eIoni       eBrem       compt        phot        conv     annihil
-      2219.7900     25.0300    123.7100     26.4900      1.4800      1.4800
+      3350.4700     24.8800    119.3000     26.4200      1.5500      1.5500
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 224687272, 1952306832
+ Current couple of seeds = 1487975150, 725420439
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

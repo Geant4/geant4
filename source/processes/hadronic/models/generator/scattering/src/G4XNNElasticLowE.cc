@@ -140,7 +140,7 @@ G4double G4XNNElasticLowE::CrossSection(const G4KineticTrack& trk1, const G4Kine
 
   G4String key = FindKeyParticle(trk1,trk2);
 
-  typedef G4std::map <G4String, G4PhysicsVector*, G4std::less<G4String> > StringPhysMap;
+  typedef std::map <G4String, G4PhysicsVector*, std::less<G4String> > StringPhysMap;
 
   if (xMap.find(key)!= xMap.end())
     {
@@ -178,7 +178,7 @@ void G4XNNElasticLowE::Print() const
   G4String key = G4Proton::ProtonDefinition()->GetParticleName();
   G4PhysicsVector* pp = 0;
 
-  typedef G4std::map <G4String, G4PhysicsVector*, G4std::less<G4String> > StringPhysMap;
+  typedef std::map <G4String, G4PhysicsVector*, std::less<G4String> > StringPhysMap;
   StringPhysMap::const_iterator iter;
 
   for (iter = xMap.begin(); iter != xMap.end(); ++iter)

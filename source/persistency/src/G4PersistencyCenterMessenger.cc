@@ -30,11 +30,11 @@
 G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* p)
  : pc(p)
 {
-  G4std::string name = "/persistency/";
+  std::string name = "/persistency/";
   directory=new G4UIdirectory(name.c_str());
   directory->SetGuidance("Control commands for Persistency package");
 
-  G4std::string cmd = name + "verbose";
+  std::string cmd = name + "verbose";
 
   verboseCmd = new G4UIcmdWithAnInteger(cmd.c_str(),this);
   verboseCmd->SetGuidance("Set the verbose level of G4PersistencyManager.");
@@ -46,7 +46,7 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=3");
 
-  G4std::string vname = name + "select";
+  std::string vname = name + "select";
 
   cmd = vname;
   select = new G4UIcmdWithAString(cmd.c_str(),this);
@@ -56,16 +56,14 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
 
   vname = name + "store/";
 
-  G4UIcommand* directory;
-
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Specifiy object types for store");
+  subdir1 = new G4UIdirectory(vname.c_str());
+  subdir1->SetGuidance("Specifiy object types for store");
 
   wrObj.push_back("HepMC");
   wrObj.push_back("MCTruth");
   wrObj.push_back("Hits");
 
-  G4std::string guidance;
+  std::string guidance;
   int i;
 
   for ( i = 0; i < 3; i++ )
@@ -82,8 +80,8 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
   }
 
   vname += "using/";
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Select I/O manager for store");
+  subdir2 = new G4UIdirectory(vname.c_str());
+  subdir2->SetGuidance("Select I/O manager for store");
 
   cmd = vname + "hitIO";
   regHitIO = new G4UIcmdWithAString(cmd.c_str(),this);
@@ -91,12 +89,12 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
   regHitIO->SetParameterName("Name of Hits I/O Manager", true, true);
 
   vname = name + "set/";
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Set various parameters"); 
+  subdir3 = new G4UIdirectory(vname.c_str());
+  subdir3->SetGuidance("Set various parameters"); 
 
   vname += "writeFile/";
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Set output file names for object types");
+  subdir4 = new G4UIdirectory(vname.c_str());
+  subdir4->SetGuidance("Set output file names for object types");
 
   for ( i = 0; i < 3; i++ )
   {
@@ -108,8 +106,8 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
   }
 
   vname = name + "set/ReadFile/";
-  directory = new G4UIdirectory(vname.c_str());
-  directory->SetGuidance("Set input file names for object types");
+  subdir5 = new G4UIdirectory(vname.c_str());
+  subdir5->SetGuidance("Set input file names for object types");
 
   rdObj.push_back("Hits");
 
@@ -129,6 +127,11 @@ G4PersistencyCenterMessenger::G4PersistencyCenterMessenger(G4PersistencyCenter* 
 G4PersistencyCenterMessenger::~G4PersistencyCenterMessenger()
 {
   delete directory;
+  delete subdir1;
+  delete subdir2;
+  delete subdir3;
+  delete subdir4;
+  delete subdir5;
   delete verboseCmd;
   delete select;
   delete regHitIO;
@@ -244,7 +247,7 @@ G4String G4PersistencyCenterMessenger::GetCurrentValue(G4UIcommand* command)
 }
 
 // Implementation of PopWord
-G4std::string G4PersistencyCenterMessenger::PopWord(G4std::string text, int n, G4std::string delim)
+std::string G4PersistencyCenterMessenger::PopWord(std::string text, int n, std::string delim)
 {
   if ( text.length() <= 0 ) return "";
   int p = 0, p0 = 0;

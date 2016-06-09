@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.8 2002/01/22 15:23:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MaterialPropertyVector.hh,v 1.9 2003/06/16 16:56:20 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -51,8 +51,8 @@
 /////////////
 
 #include "G4MPVEntry.hh"
-#include "g4std/vector"
-#include "g4std/functional"
+#include <vector>
+#include <functional>
 
 // Class Description:
 // A one-to-one mapping from Photon Momentum to some optical property.
@@ -65,7 +65,7 @@
 class G4MaterialPropertyVector {
 
 	struct MPVEntry_less
-	  : public G4std::binary_function<G4MPVEntry*, G4MPVEntry*, G4bool>
+	  : public std::binary_function<G4MPVEntry*, G4MPVEntry*, G4bool>
 	{
 	  G4bool operator()(G4MPVEntry* x, G4MPVEntry* y) { return *x < *y; }
 	};
@@ -162,7 +162,7 @@ private:
         // Private Data Members
 	/////////////////////////
 
-        G4std::vector<G4MPVEntry*> MPV;
+        std::vector<G4MPVEntry*> MPV;
 	G4int NumEntries;
 	G4int CurrentEntry;
 };

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07CalorimeterSD.cc,v 1.1 2003/03/10 01:43:36 asaim Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN07CalorimeterSD.cc,v 1.2 2003/05/21 22:01:17 asaim Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 
 #include "ExN07CalorimeterSD.hh"
@@ -69,7 +69,7 @@ void ExN07CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
   HCE->AddHitsCollection(GapCollID,GapCollection);
 }
 
-G4bool ExN07CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool ExN07CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   
@@ -100,7 +100,7 @@ G4bool ExN07CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
   return true;
 }
 
-void ExN07CalorimeterSD::EndOfEvent(G4HCofThisEvent* HCE)
+void ExN07CalorimeterSD::EndOfEvent(G4HCofThisEvent*)
 {;}
 
 void ExN07CalorimeterSD::clear()

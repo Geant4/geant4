@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.9 2003/01/30 07:57:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4LogicalVolumeStore.cc,v 1.11 2003/06/16 16:52:05 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // G4LogicalVolumeStore
 //
@@ -49,7 +49,7 @@ G4bool G4LogicalVolumeStore::locked = false;
 // ***************************************************************************
 //
 G4LogicalVolumeStore::G4LogicalVolumeStore()
- : G4std::vector<G4LogicalVolume*>()
+ : std::vector<G4LogicalVolume*>()
 {
   reserve(100);
 }
@@ -85,7 +85,7 @@ void G4LogicalVolumeStore::Clean()
 
   size_t i=0;
   G4LogicalVolumeStore* store = GetInstance();
-  G4std::vector<G4LogicalVolume*>::iterator pos;
+  std::vector<G4LogicalVolume*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
   G4cout << "Deleting Logical Volumes ... ";
@@ -128,8 +128,6 @@ void G4LogicalVolumeStore::DeRegister(G4LogicalVolume* pVolume)
     {
       if (**i==*pVolume)
       {
-        if (pVolume->IsRootRegion())
-          pVolume->GetRegion()->RemoveRootLogicalVolume(pVolume);
         GetInstance()->erase(i);
         break;
       }

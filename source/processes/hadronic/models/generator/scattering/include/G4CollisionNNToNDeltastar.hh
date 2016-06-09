@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNDeltastar.hh,v 1.6 2002/12/12 19:17:39 gunter Exp $ //
+// $Id: G4CollisionNNToNDeltastar.hh,v 1.8 2003/06/16 17:08:21 gunter Exp $ //
 
 #ifndef G4CollisionNNToNDeltastar_h
 #define G4CollisionNNToNDeltastar_h
@@ -31,7 +31,7 @@
 #include "G4VCrossSectionSource.hh"
 #include "G4VAngularDistribution.hh"
 #include "G4KineticTrackVector.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4KineticTrack;
 
@@ -48,8 +48,8 @@ public:
 
 protected:
 
-  G4std::vector<G4String> result;
-  virtual const G4std::vector<G4String>& GetListOfColliders(G4int whichOne) const
+  std::vector<G4String> result;
+  virtual const std::vector<G4String>& GetListOfColliders(G4int ) const
   {
     G4Exception("Tried to call G4CollisionNNToNDeltastar::GetListOfColliders. Please find out why!");
     return result;

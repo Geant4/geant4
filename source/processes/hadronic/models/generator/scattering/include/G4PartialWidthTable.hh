@@ -42,7 +42,7 @@
 
 #include "globals.hh"
 #include "G4PhysicsFreeVector.hh"
-#include "g4std/vector"
+#include <vector>
 
 class G4PartialWidthTable 
 {
@@ -74,10 +74,10 @@ private:
   const G4PartialWidthTable& operator=(const G4PartialWidthTable &right);
 
   G4int nEnergies;
-  G4std::vector<G4double> energy;
-  G4std::vector<G4PhysicsFreeVector*> widths;
-  G4std::vector<G4String> daughter1;
-  G4std::vector<G4String> daughter2;
+  std::vector<G4double> energy;
+  std::vector<G4PhysicsFreeVector*> widths;
+  std::vector<G4String> daughter1;
+  std::vector<G4String> daughter2;
 
 };
 

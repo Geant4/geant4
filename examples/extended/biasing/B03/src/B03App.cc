@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: B03App.cc,v 1.4 2003/03/11 13:54:18 dressel Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: B03App.cc,v 1.5 2003/06/16 16:47:24 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------------
 #include "B03App.hh"
-#include "g4std/iostream"
+#include <iostream>
 
 #include "CLHEP/Random/Random.h"
 

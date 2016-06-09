@@ -279,7 +279,7 @@ SCLP23(DAObject__set)::retrieve(int index)
 SCLP23(DAObject_ptr)& SCLP23(DAObject__set)::operator[] (int index) {
 
     Check(index);
-//    _count = G4std::max(_count, index+1);
+//    _count = std::max(_count, index+1);
     _count = ( (_count > index+1) ? _count : (index+1) );
     return _buf[index];
 }

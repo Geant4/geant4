@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.4 2002/11/14 08:41:32 hpw Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Mars5GeV.cc,v 1.5 2003/06/03 09:37:45 hpw Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -75,7 +75,7 @@ G4Mars5GeV::G4Mars5GeV() : G4InelasticInteraction(),
 }
 
 G4VParticleChange* G4Mars5GeV::ApplyYourself(const G4Track& aTrack,
-                                             G4Nucleus& targetNucleus
+                                             G4Nucleus& 
                                             )
 {
 #ifdef G4VERBOSE
@@ -271,7 +271,7 @@ G4bool G4Mars5GeV::CoulombBarrier(G4int pType, G4double  pE){
   return false; 
 }
 
-void G4Mars5GeV::CreateNucleon(G4int ib, G4int pType, G4double  pE)
+void G4Mars5GeV::CreateNucleon(G4int ib, G4int pType, G4double  )
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {

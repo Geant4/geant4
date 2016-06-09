@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.7 2003/02/18 01:49:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4Alpha.cc,v 1.8 2003/06/16 16:57:21 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -36,8 +36,8 @@
 //  Fixed  parameters by H.Kurashige, 25 Apr 1998
 // ----------------------------------------------------------------------
 
-#include "g4std/fstream"
-#include "g4std/iomanip"
+#include <fstream>
+#include <iomanip>
 
 #include "G4Alpha.hh"
 

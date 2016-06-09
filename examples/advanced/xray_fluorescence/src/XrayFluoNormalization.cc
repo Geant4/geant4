@@ -63,7 +63,7 @@ const XrayFluoDataSet* XrayFluoNormalization::Normalize(G4double minIntExtreme, 
 G4double XrayFluoNormalization::Integrate(G4double minIntExtreme, G4double maxIntExtreme, G4int nBins, XrayFluoDataSet* dataSet)
 {
  G4double partialHeight = 0;
- G4double id = 0;
+ G4int id = 0;
  G4double lenghtOfBins = (maxIntExtreme - minIntExtreme)/nBins;
  
  for (G4int i = 0; i<nBins; i++)

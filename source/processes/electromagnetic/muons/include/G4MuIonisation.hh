@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.hh,v 1.14 2003/01/17 18:54:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4MuIonisation.hh,v 1.15 2003/06/16 17:01:40 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------- G4MuIonisation physics process ------------------------------
 //                 by Laszlo Urban, September 1997 
@@ -157,7 +157,7 @@ class G4MuIonisation : public G4VMuEnergyLoss
     G4double HighestKineticEnergy;
     G4int    TotBin;
 
-    const G4std::vector<G4double>* secondaryEnergyCuts;
+    const std::vector<G4double>* secondaryEnergyCuts;
 
   public:  // with description
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02PVolumeStore.hh,v 1.1 2002/11/08 14:52:16 dressel Exp $
+// $Id: B02PVolumeStore.hh,v 1.2 2003/06/16 16:47:16 gunter Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -38,11 +38,11 @@
 #define B02PVolumeStore_hh B02PVolumeStore_hh
 
 #include "globals.hh"
-#include "g4std/set"
+#include <set>
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
 
-typedef G4std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
+typedef std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
 
 class B02PVolumeStore {
 public:

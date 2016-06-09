@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PhysicsList.cc,v 1.8 2003/01/23 15:34:32 maire Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: ExN06PhysicsList.cc,v 1.9 2003/06/16 16:50:05 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ios.hh"
-#include "g4std/iomanip"
+#include <iomanip>
 
 #include "globals.hh"
 #include "ExN06PhysicsList.hh"

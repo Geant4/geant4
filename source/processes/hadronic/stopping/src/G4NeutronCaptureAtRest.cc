@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronCaptureAtRest.cc,v 1.6 2002/12/12 19:18:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-01 $
+// $Id: G4NeutronCaptureAtRest.cc,v 1.8 2003/06/16 17:12:02 gunter Exp $
+// GEANT4 tag $Name: geant4-05-02 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998
@@ -125,7 +125,7 @@ G4double G4NeutronCaptureAtRest::AtRestGetPhysicalInteractionLength(
 
 G4VParticleChange* G4NeutronCaptureAtRest::AtRestDoIt(
                                             const G4Track& track,
-					    const G4Step& stepData
+					    const G4Step& 
 					    )
 //
 // Handles Neutrons at rest; a Neutron can either create secondaries or
@@ -271,7 +271,7 @@ void G4NeutronCaptureAtRest::GenerateSecondaries()
   }
 
   // --- LIMIT THE VALUE OF NGKINE IN CASE OF OVERFLOW ---
-  ngkine = G4int(G4std::min(ngkine,G4int(MAX_SECONDARIES)));
+  ngkine = G4int(std::min(ngkine,G4int(MAX_SECONDARIES)));
 
 } // GenerateSecondaries
 
