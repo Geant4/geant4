@@ -24,7 +24,7 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 #include "G4NeutronHPProduct.hh" 
-#include "Randomize.hh"
+#include "G4Poisson.hh"
 #include "G4Proton.hh"
 
 G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
@@ -34,7 +34,7 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   G4double mean = theYield.GetY(anEnergy);
   G4int multi;
   multi = G4int(mean+0.0001);
-  if(theMassCode==0) multi = RandPoisson::shoot(mean); // @@@@gammas. please X-check this
+  if(theMassCode==0) multi = G4Poisson(mean); // @@@@gammas. please X-check this
   theDist->SetTarget(theTarget);
   theDist->SetNeutron(theNeutron);
   G4int i;

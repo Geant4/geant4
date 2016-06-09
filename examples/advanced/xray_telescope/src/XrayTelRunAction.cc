@@ -64,8 +64,6 @@
 #include "G4VVisManager.hh"
 #include "XrayTelRunAction.hh"
 #include "XrayTelAnalysis.hh"
-#include "SystemOfUnits.h"
-
 
 XrayTelRunAction::XrayTelRunAction()
   :nEnteringTracks(0), totEnteringEnergy(0.)

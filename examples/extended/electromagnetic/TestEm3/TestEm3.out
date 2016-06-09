@@ -1,5 +1,5 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
+ Geant4 version $Name: geant4-05-00-patch-01 $
                                 (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
@@ -228,19 +228,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.01            0k Layer
        0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       91.70          1k         1       50         50         0.00    Calorimeter
-       8.30          0k         1        3          4         0.01    Layer
+       8.30          0k         1        3          4         0.00    Layer
 Start Run processing.
 
 ---> Begin Of Event: 0
@@ -249,7 +249,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=42.38s Real=52.44s Sys=8.28s
+  User=42.11s Real=52.19s Sys=8.63s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 

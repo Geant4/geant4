@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.20 2002/08/19 18:20:11 asaim Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: globals.hh,v 1.22 2003/02/05 15:26:07 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 //
 // Global Constants and typedefs
@@ -66,7 +66,7 @@
   #define CLHEP_MAX_MIN_DEFINED
 #endif
 
-#if defined(WIN32) && defined(G4USE_STD_NAMESPACE)
+#if defined(WIN32) && defined(G4USE_STD_NAMESPACE) && !defined(XPNET)
 // For NT with Native STL (used in ISO standard mode)
 // templated functions min and max should be _MIN _MAX
   #define min _MIN
@@ -95,8 +95,7 @@
 #include "templates.hh"
 
 // System of Units and Physical Constants
-////#include <CLHEP/Units/PhysicalConstants.h>
-#include "PhysicalConstants.h"
+#include <CLHEP/Units/PhysicalConstants.h>
 
 // Global error function
 #include "G4ExceptionSeverity.hh"

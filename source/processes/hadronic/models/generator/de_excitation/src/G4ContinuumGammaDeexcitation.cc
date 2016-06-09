@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -47,6 +47,7 @@
 #include "G4Gamma.hh"
 #include "G4ContinuumGammaTransition.hh"
 #include "G4NuclearLevelManager.hh"
+#include "G4NuclearLevelStore.hh"
 #include "G4Fragment.hh"      
 #include "G4ConstantLevelDensityParameter.hh"
 
@@ -54,7 +55,7 @@
 // Constructor
 //
 
-G4ContinuumGammaDeexcitation::G4ContinuumGammaDeexcitation(): _nucleusZ(0), _nucleusA(0)
+G4ContinuumGammaDeexcitation::G4ContinuumGammaDeexcitation(): _nucleusZ(0), _nucleusA(0), _levelManager(0)
 { }
 
 
@@ -71,7 +72,7 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
 
   if (_nucleusA != A || _nucleusZ != Z)
     {
-      _levelManager.SetNucleus(Z,A);
+      _levelManager = G4NuclearLevelStore::GetInstance()->GetManager(Z,A);
       _nucleusA = A;
       _nucleusZ = Z;
     }
@@ -79,7 +80,7 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
   if (_verbose > 1)
     G4cout << "G4ContinuumGammaDeexcitation::CreateTransition - Created" << G4endl;
 
-  return new G4ContinuumGammaTransition(_levelManager,Z,A,excitation,_verbose );
+  return new G4ContinuumGammaTransition(*_levelManager,Z,A,excitation,_verbose );
 }
     
 
@@ -122,13 +123,13 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition() const
 	  << G4endl;
     }
 
-  if (excitation <= _levelManager.MaxLevelEnergy()) 
+  if (excitation <= _levelManager->MaxLevelEnergy()) 
     {
       canDo = false;  
       if (_verbose > 0)
       G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation " 
 	     << excitation << " below max discrete level " 
-	     << _levelManager.MaxLevelEnergy() << G4endl;
+	     << _levelManager->MaxLevelEnergy() << G4endl;
     }
   
   if (canDo)

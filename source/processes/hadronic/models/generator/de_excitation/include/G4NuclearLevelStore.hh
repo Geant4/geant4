@@ -14,35 +14,41 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-///////////////////////////////////////////////////////////////////////////////
-// File: CCalHcalOrganization.cc
-// Description: Defines numbering schema for the Hadron Calorimeter
-///////////////////////////////////////////////////////////////////////////////
+//
 
-#include "CCalHcalOrganization.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4Step.hh"
-#include "G4StepPoint.hh"
+#ifndef G4NuclearLevelStore_hh 
+#define G4NuclearLevelStore_hh 1
 
-CCalHcalOrganization::~CCalHcalOrganization() {
-  G4cout << " Deleting CCalHcalOrganization" << G4endl;
-}
+#include "G4NuclearLevelManager.hh"
+#include "g4std/map"
+
+class G4NuclearLevelStore
+{
+private:
+  G4NuclearLevelStore();
+
+public:
+
+  static G4NuclearLevelStore* GetInstance();
+
+  G4NuclearLevelManager * GetManager(const G4int Z, const G4int A);
 
 
-unsigned int CCalHcalOrganization::GetUnitID(const G4Step* aStep) const {
+  ~G4NuclearLevelStore();
 
-  G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  if (pv > 0) 
-    pv = pv->GetMother();
-  int idunit=0;
-  if (pv > 0)
-    idunit = pv->GetCopyNo();
+private:
 
-  return idunit;
-}
+  G4String GenerateKey(const G4int Z, const G4int A);
+
+
+  static G4std::map<G4String,G4NuclearLevelManager*> theManagers;
+  static G4String dirName;
+
+};
+#endif

@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -24,11 +24,9 @@
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
 //      CERN, Geneva, Switzerland
 //
-//      File name:     G4NuclearLevel
+//      File name:     G4NuclearLevelManager
 //
 //      Author:        Maria Grazia Pia (pia@genova.infn.it)
 // 
@@ -38,6 +36,7 @@
 //        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
 //              Added K->N+ internal  conversion coefficiencies and their access
 //              functions      
+//      
 //      
 //        15 April 1999, Alessandro Brunengo (Alessandro.Brunengo@ge.infn.it)
 //              Added half-life, angular momentum, parity, emissioni type
@@ -60,19 +59,20 @@ class G4NuclearLevelManager
 public:
 
   G4NuclearLevelManager();
-  G4NuclearLevelManager(G4int Z, G4int A);
+  G4NuclearLevelManager(const G4int Z, const G4int A, const G4String& filename);
+  G4NuclearLevelManager(const G4NuclearLevelManager & right);  
 
   ~G4NuclearLevelManager();
   
-  void SetNucleus(G4int Z, G4int A);
+  void SetNucleus(const G4int Z, const G4int A, const G4String& filename);
 
-  G4bool IsValid(G4int Z, G4int A) const;
+  G4bool IsValid() const;
 
   G4int NumberOfLevels() const;
 
   const G4PtrLevelVector* GetLevels() const;
 
-  const G4NuclearLevel* NearestLevel(G4double energy, G4double eDiffMax=9999.*GeV) const;
+  const G4NuclearLevel* NearestLevel(const G4double energy, const G4double eDiffMax=9999.*GeV) const;
 
   const G4NuclearLevel* LowestLevel() const;
   const G4NuclearLevel* HighestLevel() const;
@@ -81,11 +81,7 @@ public:
   G4double MaxLevelEnergy() const;
 
   void PrintAll();
-
-  G4NuclearLevelManager(const G4NuclearLevelManager &right);  
   
-protected:
-
 private:  
 
   const G4NuclearLevelManager& operator=(const G4NuclearLevelManager &right);
@@ -98,6 +94,8 @@ private:
 
   G4int _nucleusA;
   G4int _nucleusZ;
+  G4String _fileName;
+  G4bool _validity;
   G4PtrLevelVector* _levels;
   
   G4double _levelEnergy;
@@ -120,17 +118,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

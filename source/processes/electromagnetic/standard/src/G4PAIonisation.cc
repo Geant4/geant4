@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.31 2002/11/20 15:41:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PAIonisation.cc,v 1.33 2003/02/12 08:57:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 //
 // **************************************************************
 //
+// 10.01.03 CutInRange for e- not for Particle (VI)
 // 08.11.01 particleMass becomes a local variable (mma)
 // 17.09.01 migration of Materials to pure STL (mma)
 // 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
@@ -42,6 +43,7 @@
 
 #include "G4PAIonisation.hh"
 #include "G4PAIxSection.hh"
+#include "G4Poisson.hh"
 
 const G4double G4PAIonisation:: LowestKineticEnergy = 10.0*keV ; // 100.0*MeV  ;
 const G4double G4PAIonisation::HighestKineticEnergy =  10.*TeV ; // 1000.0*MeV ;  
@@ -187,7 +189,8 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
     G4double Charge = aParticleType.GetPDGCharge();
     //G4double Chargesquare = Charge*Charge ;     
-    CutInRange = aParticleType.GetLengthCuts(); 
+    //    CutInRange = aParticleType.GetLengthCuts(); 
+    CutInRange = (G4Electron::Electron())->GetLengthCuts(); 
 
     //  BuildLossTable(aParticleType) ;
  
@@ -620,8 +623,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 
   if(iTkin == G4PAIonisation::GetBinNumber()) // Fermi plato, try from left
   {
-    numOfCollisions = RandPoisson::
-    shoot((*(*fPAItransferBank)(iPlace))(0)*Step*charge2) ;
+    numOfCollisions =
+      G4Poisson((*(*fPAItransferBank)(iPlace))(0)*Step*charge2) ;
     
     //     G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
@@ -642,8 +645,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
   {
     if(iTkin == 0) // Tkin is too small, trying from right only
     {
-      numOfCollisions = RandPoisson::
-                        shoot((*(*fPAItransferBank)(iPlace+1))(0)*Step*charge2) ;
+      numOfCollisions =
+        G4Poisson((*(*fPAItransferBank)(iPlace+1))(0)*Step*charge2) ;
 
       //  G4cout<<"numOfCollisions = "<<numOfCollisions<<G4endl ;
 
@@ -673,8 +676,8 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
       // G4cout<<"(*(*fPAItransferBank)(iPlace+1))(0) = "<<
       //     (*(*fPAItransferBank)(iPlace+1))(0)<<G4endl ;
 
-      numOfCollisions = RandPoisson::shoot(
-                     ( (*(*fPAItransferBank)(iPlace))(0)*W1 + 
+      numOfCollisions =
+        G4Poisson( ( (*(*fPAItransferBank)(iPlace))(0)*W1 + 
                      (*(*fPAItransferBank)(iPlace+1))(0)*W2 )*Step*charge2) ;
 
       //  G4cout<<"numOfCollisions = "<<numOfCollisions<<endl ;

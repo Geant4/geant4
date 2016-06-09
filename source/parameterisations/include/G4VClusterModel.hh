@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VClusterModel.hh,v 1.4 2001/11/07 10:27:21 radoone Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VClusterModel.hh,v 1.5 2003/01/23 11:30:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -40,13 +40,13 @@
 
 
 #include "globals.hh"
-#include "templates.hh"
+#include "g4std/vector"
+
 #include "G4PAIonisation.hh"
 #include "G4VFastSimulationModel.hh"
 #include "G4Step.hh"
 #include "G4TouchableHandle.hh"
 #include "G4TouchableHistoryHandle.hh"
-#include "g4std/vector"
 
 
 class G4VClusterModel : public G4VFastSimulationModel

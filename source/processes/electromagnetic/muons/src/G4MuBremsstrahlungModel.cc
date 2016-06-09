@@ -29,14 +29,20 @@
 // File name:     G4MuBremsstrahlungModel
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
-// 
+//
 // Creation date: 24.06.2002
 //
-// Modifications: 04.12.02 (VI) Change G4DynamicParticle constructor in PostStepDoIt 
+// Modifications:
 //
-// Class Description: 
+// 04-12-02 Change G4DynamicParticle constructor in PostStepDoIt (V.Ivanchenko)
+// 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
+// 24-01-03 Fix for compounds (V.Ivanchenko)
 //
-// 
+
+//
+// Class Description:
+//
+//
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -72,9 +78,7 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p)
   cutFixed(0.98*keV),
   oldMaterial(0),
   samplingTablesAreFilled(false)
-{
-  partialSumSigma.clear();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,7 +95,7 @@ G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MuBremsstrahlungModel::HighEnergyLimit(const G4ParticleDefinition* p,
-                                            const G4Material*) 
+                                                  const G4Material*)
 {
   return highKinEnergy;
 }
@@ -99,7 +103,7 @@ G4double G4MuBremsstrahlungModel::HighEnergyLimit(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
 G4double G4MuBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p,
-                                           const G4Material*) 
+                                                  const G4Material*)
 {
   return lowKinEnergy;
 }
@@ -107,7 +111,7 @@ G4double G4MuBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition* p,
-                                              const G4Material*) 
+                                               const G4Material*) 
 {
   return minThreshold;
 }
@@ -115,7 +119,7 @@ G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
 G4bool G4MuBremsstrahlungModel::IsInCharge(const G4ParticleDefinition* p,
-	      		                  const G4Material*) 
+                                                  const G4Material*)
 {
   return (p == G4MuonMinus::MuonMinus() || p == G4MuonPlus::MuonPlus());
 }
@@ -313,6 +317,15 @@ G4double G4MuBremsstrahlungModel::CrossSection(const G4Material* material,
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 
   if(material != oldMaterial) {
+    if( !oldMaterial ) partialSumSigma.clear();
+    size_t nMaterials = G4Material::GetNumberOfMaterials();
+    size_t length = partialSumSigma.size();
+    if(length < nMaterials) {
+      for (size_t i=length; i<nMaterials; i++) {
+        G4DataVector* dv = new G4DataVector();
+	partialSumSigma.push_back(dv);
+      }
+    }
     oldMaterial = material;
     G4double fixedEnergy = sqrt(lowKinEnergy*highKinEnergy);
     ComputePartialSumSigma(material, fixedEnergy, cutEnergy);
@@ -348,19 +361,7 @@ void G4MuBremsstrahlungModel::ComputePartialSumSigma(const G4Material* material,
   const G4ElementVector* theElementVector = material->GetElementVector(); 
   const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
 
-  G4DataVector* dv;
-
-  if (index >= partialSumSigma.size()) {
-
-    dv = new G4DataVector();
-    partialSumSigma.push_back(dv);
-
-  } else {
-
-    dv = partialSumSigma[index];
-    dv->clear();
-    if(0 == index) samplingTablesAreFilled = false;
-  }
+  G4DataVector* dv = partialSumSigma[index];
 
   G4double cross = 0.0;
 

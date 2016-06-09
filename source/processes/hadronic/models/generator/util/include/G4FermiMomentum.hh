@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiMomentum.hh,v 1.6 2002/12/12 19:17:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4FermiMomentum.hh,v 1.7 2003/02/12 10:20:21 gunter Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 #ifndef G4FermiMomentum_h
 #define G4FermiMomentum_h 1
@@ -45,8 +45,10 @@ class G4FermiMomentum
 	return constofpmax * cbrt(density * theA);
     }
     
-    inline G4ThreeVector GetMomentum(G4double density)
+    inline G4ThreeVector GetMomentum(G4double density, 
+    				     G4double maxMomentum=-1.)
     { 
+	if (maxMomentum < 0 ) maxMomentum=GetFermiMomentum(density);
 	G4ThreeVector p;
 	
 	do {
@@ -54,7 +56,7 @@ class G4FermiMomentum
 	    		    2.*G4UniformRand()-1.,
 	    		    2.*G4UniformRand()-1.);
 	    } while ( p.mag() > 1. );
-	return p*GetFermiMomentum(density); 
+	return p*maxMomentum; 
      }
 
   private:

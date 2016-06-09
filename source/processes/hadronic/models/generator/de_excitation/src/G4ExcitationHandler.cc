@@ -344,10 +344,11 @@ G4ExcitationHandler::Transform(G4FragmentVector * theFragmentVector) const
 	*debugit = 0;
       }
   }
+  G4ReactionProduct* tmpPtr=0;
   theReactionProductVector->erase(G4std::remove_if(theReactionProductVector->begin(),
 						   theReactionProductVector->end(),
 						   G4std::bind2nd(G4std::equal_to<G4ReactionProduct*>(),
-								  0)),
+								  tmpPtr)),
 				  theReactionProductVector->end());
   return theReactionProductVector;
 }

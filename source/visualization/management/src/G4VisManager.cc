@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.48 2002/11/20 17:19:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4VisManager.cc,v 1.49 2003/01/20 14:12:36 johna Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -368,6 +368,30 @@ void G4VisManager::Draw (const G4Text& text,
     CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (text);
+    fpSceneHandler -> EndPrimitives ();
+  }
+}
+
+void G4VisManager::Draw (const G4VHit& hit,
+			 const G4Transform3D& objectTransform) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    CheckModel();
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddThis (hit);
+    fpSceneHandler -> EndPrimitives ();
+  }
+}
+
+void G4VisManager::Draw (const G4VTrajectory& traj,
+			 G4int i_mode,
+			 const G4Transform3D& objectTransform) {
+  if (IsValidView ()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
+    dummyTrajectoriesModel.SetDrawingMode(i_mode);
+    fpSceneHandler -> BeginPrimitives (objectTransform);
+    fpSceneHandler -> AddThis (traj);
     fpSceneHandler -> EndPrimitives ();
   }
 }

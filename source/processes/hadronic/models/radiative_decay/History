@@ -13,6 +13,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03/01/03 Fan Lei
+- bug (test18) fix in G4NuclraDecayChannel.cc
+
+15 Nov 2002 Fan Lei ((radiative_decay-V04-01-01)
+- Added linked to atomic relaxation model after EC and IT/IC(internal conversion).
+- updated GNUMakefile to include electromagnetic/lowenergy/include
+- Updated the database
+
 13 Nov 2001 Fan Lei (radiative_decay-V03-02-03)
 - Minor bug fix
 

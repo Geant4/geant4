@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B03DetectorConstruction.cc,v 1.10 2002/11/22 17:47:58 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: B03DetectorConstruction.cc,v 1.11 2003/02/19 08:24:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 
 #include "g4std/strstream"
@@ -38,7 +38,6 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "PhysicalConstants.h"
 
 B03DetectorConstruction::B03DetectorConstruction()
 {;}

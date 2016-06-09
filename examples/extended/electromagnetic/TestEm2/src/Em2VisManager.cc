@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2VisManager.cc,v 1.7 2002/11/13 21:39:49 duns Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2VisManager.cc,v 1.8 2002/12/16 11:29:24 stesting Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 //
 // John Allison 24th January 1998.

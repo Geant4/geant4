@@ -95,7 +95,8 @@
 #include "G4BetaFermiFunction.hh"
 #include "Randomize.hh"
 #include "G4LogicalVolumeStore.hh"
-#include "G4DiscreteGammaDeexcitation.hh"
+#include "G4NuclearLevelManager.hh"
+#include "G4NuclearLevelStore.hh"
 
 #include "g4std/vector"
 #include "g4std/strstream"
@@ -1066,9 +1067,9 @@ void G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition &theParent
 	theDaughterNucleus = theNuclearDecayChannel->GetDaughterNucleus () ;
 	AD = ((const G4Ions*)(theDaughterNucleus))->GetAtomicMass();
 	ZD = ((const G4Ions*)(theDaughterNucleus))->GetAtomicNumber();  
-	G4NuclearLevelManager levelManager = G4NuclearLevelManager (ZD, AD);
-	if ( levelManager.NumberOfLevels() ) {
-	  const G4NuclearLevel* level = levelManager.NearestLevel (daughterExcitation);
+	G4NuclearLevelManager * levelManager = G4NuclearLevelStore::GetInstance()->GetManager (ZD, AD);
+	if ( levelManager->NumberOfLevels() ) {
+	  const G4NuclearLevel* level = levelManager->NearestLevel (daughterExcitation);
 
 	  if (abs(daughterExcitation - level->Energy()) < levelTolerance) {
 	    

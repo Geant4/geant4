@@ -1,5 +1,5 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
+ Geant4 version $Name: geant4-05-00-patch-01 $
                                 (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
@@ -218,7 +218,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.01s Real=0.89s Sys=0.02s
+  User=0.02s Real=0.1s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsList.hh,v 1.7 2002/10/31 13:58:32 maire Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: Em2PhysicsList.hh,v 1.8 2002/12/16 11:29:22 stesting Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //

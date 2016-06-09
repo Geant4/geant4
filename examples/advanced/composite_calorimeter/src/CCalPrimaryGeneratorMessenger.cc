@@ -36,8 +36,6 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
 
-#include "PhysicalConstants.h"
-
 CCalPrimaryGeneratorMessenger::CCalPrimaryGeneratorMessenger(CCalPrimaryGeneratorAction* myGun) : myAction(myGun) {
 
   verboseCmd = new G4UIcmdWithAnInteger("/CCal/generator/verbose",this);

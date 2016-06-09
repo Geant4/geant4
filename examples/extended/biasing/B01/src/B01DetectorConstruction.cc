@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.7 2002/11/22 17:47:57 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: B01DetectorConstruction.cc,v 1.8 2003/02/19 08:02:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 
 #include "g4std/strstream"
@@ -38,7 +38,6 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "PhysicalConstants.h"
 
 // for importance biasing
 #include "G4IStore.hh"

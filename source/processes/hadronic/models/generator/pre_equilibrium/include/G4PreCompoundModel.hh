@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.hh,v 1.17 2002/12/12 19:17:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
 //
 // by V. Lara
 
@@ -63,7 +61,7 @@ public:
 private:
     G4PreCompoundModel() {};
 
-    G4PreCompoundModel(const G4PreCompoundModel &right) {};
+    G4PreCompoundModel(const G4PreCompoundModel &right) : G4VPreCompoundModel() {};
 
     const G4PreCompoundModel& operator=(const G4PreCompoundModel &right);
     G4bool operator==(const G4PreCompoundModel &right) const;

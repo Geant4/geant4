@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInterpolator.hh,v 1.9 2002/12/12 19:18:13 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4NeutronHPInterpolator.hh,v 1.11 2003/02/12 12:37:51 jwellisc Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 #ifndef G4NeutronHPInterpolator_h
 #define G4NeutronHPInterpolator_h 1
@@ -46,6 +46,7 @@ class G4NeutronHPInterpolator
   inline G4double Lin(G4double x,G4double x1,G4double x2,G4double y1,G4double y2)
   {
     G4double slope=0, off=0;
+    if(x2-x1==0) return (y2+y1)/2.;
     slope = (y2-y1)/(x2-x1);
     off = y2-x2*slope;
     G4double y = x*slope+off;
@@ -122,6 +123,7 @@ inline G4double G4NeutronHPInterpolator::
 LinearLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
   G4double slope=0, off=0;
+  if(x2-x1==0) return (y2+y1)/2.;
   slope = (y2-y1)/(x2-x1);
   off = y2-x2*slope;
   G4double y = x*slope+off;

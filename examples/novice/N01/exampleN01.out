@@ -1,5 +1,5 @@
 **********************************************
- Geant4 version $Name: geant4-05-00 $
+ Geant4 version $Name: geant4-05-00-patch-01 $
                                 (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
@@ -193,5 +193,5 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.02s Real=0.05s Sys=0.03s
+  User=0.03s Real=0.05s Sys=0.02s
 G4 kernel has come to Quit state.

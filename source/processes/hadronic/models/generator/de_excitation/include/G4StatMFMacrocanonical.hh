@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.hh,v 1.11 2002/12/12 19:17:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -61,7 +59,7 @@ private:
 
 
     // copy constructor
-    G4StatMFMacroCanonical(const G4StatMFMacroCanonical &right) {};
+    G4StatMFMacroCanonical(const G4StatMFMacroCanonical &right) : G4VStatMFEnsemble() {};
 
 
     // operators

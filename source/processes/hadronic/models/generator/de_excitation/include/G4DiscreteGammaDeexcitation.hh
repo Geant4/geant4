@@ -14,7 +14,7 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
@@ -56,40 +56,42 @@
 
 #include "G4DiscreteGammaTransition.hh"
 #include "G4Fragment.hh"
-#include "G4NuclearLevelManager.hh"
+
+
+class G4NuclearLevelManager;
 
 class G4DiscreteGammaDeexcitation : public G4VGammaDeexcitation {
 public:
 
-    // Constructor
-    G4DiscreteGammaDeexcitation();
+  // Constructor
+  G4DiscreteGammaDeexcitation();
 
-    // Destructor
-    ~G4DiscreteGammaDeexcitation();
+  // Destructor
+  ~G4DiscreteGammaDeexcitation();
 
-    // Functions
+  // Functions
 
 public:
 
-    virtual G4VGammaTransition * CreateTransition();
+  virtual G4VGammaTransition * CreateTransition();
 
-    virtual G4bool CanDoTransition() const;
+  virtual G4bool CanDoTransition() const;
 
-    void SetICM(G4bool hl) { _icm = hl; };
+  void SetICM(G4bool hl) { _icm = hl; };
 
-    void SetRDM(G4bool hl) { _rdm = hl; };
+  void SetRDM(G4bool hl) { _rdm = hl; };
   
-    void SetHL(G4double hl) { _max_hl = hl; };
+  void SetHL(G4double hl) { _max_hl = hl; };
 
 private:
 
-    G4int _nucleusZ;
-    G4int _nucleusA;
-    G4double _tolerance;
-    G4double _max_hl;
-    G4bool _icm;
-    G4bool _rdm;
-    G4NuclearLevelManager _levelManager;
+  G4int _nucleusZ;
+  G4int _nucleusA;
+  G4double _tolerance;
+  G4double _max_hl;
+  G4bool _icm;
+  G4bool _rdm;
+  G4NuclearLevelManager * _levelManager;
 };
 
 

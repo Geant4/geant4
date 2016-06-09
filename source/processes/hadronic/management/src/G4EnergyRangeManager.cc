@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyRangeManager.cc,v 1.7 2002/12/12 19:16:53 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4EnergyRangeManager.cc,v 1.8 2003/01/27 09:57:13 jwellisc Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
  // Hadronic Process: Energy Range Manager
  // original by H.P. Wellisch
@@ -33,6 +33,7 @@
  
 #include "G4EnergyRangeManager.hh"
 #include "Randomize.hh"
+#include "G4NoModelFound.hh"
  
  G4EnergyRangeManager::G4EnergyRangeManager(
   const G4EnergyRangeManager &right )
@@ -104,7 +105,7 @@
     switch ( cou )
     {
      case 0:
-       G4Exception("GetHadronicInteraction: No model found for this energy range");
+       throw(new G4NoModelFound);
        return 0;
      case 1:
        m = memory;

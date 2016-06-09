@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: B02ImportanceDetectorConstruction.cc,v 1.2 2002/11/22 17:47:58 dressel Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: B02ImportanceDetectorConstruction.cc,v 1.3 2003/02/19 08:24:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 
 #include "globals.hh"
@@ -35,7 +35,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "PhysicalConstants.h"
 
 
 B02ImportanceDetectorConstruction::B02ImportanceDetectorConstruction()

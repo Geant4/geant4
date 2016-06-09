@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.7 2002/12/12 19:16:53 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4InelasticInteraction.hh,v 1.8 2003/02/12 09:55:00 jwellisc Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
  // Hadronic Process: Inelastic Interaction 
  // This class is an abstract base class, since the pure virtual
@@ -53,7 +53,7 @@
  public:
     
     G4InelasticInteraction() : G4HadronicInteraction()
-    { }
+    { cache = 0.0;}
     
     virtual ~G4InelasticInteraction()
     { }

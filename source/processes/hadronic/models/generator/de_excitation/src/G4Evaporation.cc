@@ -14,15 +14,15 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc,v 1.10.4.1 2002/12/12 19:17:20 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4Evaporation.cc,v 1.10 2002/11/12 02:10:57 larazb Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)

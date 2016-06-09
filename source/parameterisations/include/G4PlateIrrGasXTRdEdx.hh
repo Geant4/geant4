@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlateIrrGasXTRdEdx.hh,v 1.2 2001/07/11 10:01:29 gunter Exp $
-// GEANT4 tag $Name: geant4-05-00 $
+// $Id: G4PlateIrrGasXTRdEdx.hh,v 1.3 2003/01/23 11:30:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-05-00-patch-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -43,8 +43,8 @@
 #ifndef G4PlateIrrGasXTRdEdx_h
 #define G4PlateIrrGasXTRdEdx_h 1
 
-#include "G4VFastSimulationModel.hh"
 #include "G4VXTRdEdx.hh"
+#include "G4VFastSimulationModel.hh"
 
 class G4PlateIrrGasXTRdEdx : public G4VXTRdEdx
 {
