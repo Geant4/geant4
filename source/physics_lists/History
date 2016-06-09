@@ -1,4 +1,4 @@
-q$Id: History,v 1.171 2010/11/25 07:44:55 sincerti Exp $
+$Id: History,v 1.174 2011-01-05 15:41:39 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-2-2011, G.Folger             (phys-lists-V09-04-02 and phys-lists-V09-03-45)
+- Shielding PL corrected .icc file to include correct G4HadronElasticPhysicsHP
+
+5-1-2011, G.Folger              (phys-lists-V09-04-01 and phys-lists-V09-03-44)
+- QGSP_BERT_NOLEP and QGSP_QEL were missing the include 
+   for G4HadronQElasticPhysics.hh, but included G4HadronElasticPhysics 
+
+19-12-2010, V.Ivanchenko                (phys-lists-V09-04-00)
+- G4EmStandardPhysics_option1 - fixed missing line defing polar
+  angle limit (in the release single scattering of muons providing
+  significant CPU penalty) 
 
 25-11-2010, S.Incerti                   (phys-lists-V09-03-43)
 - changed default elastic model in G4EmDNAPhysics.cc

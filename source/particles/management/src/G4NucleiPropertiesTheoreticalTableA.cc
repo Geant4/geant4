@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTheoreticalTableA.cc,v 1.8 2006/06/29 19:25:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NucleiPropertiesTheoreticalTableA.cc,v 1.9 2010-12-22 07:07:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -42,24 +42,24 @@ G4int G4NucleiPropertiesTheoreticalTable::GetIndex(G4int Z, G4int A)
 
   if(A>339) {
     G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-		"Illegal arguemnt",
-		EventMustBeAborted,"Nucleon number larger than 339!");
+		"PART202",
+		EventMustBeAborted,"Nucleon number larger than 339");
   } else if(A<16) {
     G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-		"Illegal arguemnt",
-		EventMustBeAborted," Nucleon number smaller than 16!"); 
+		"PART202",
+		EventMustBeAborted," Nucleon number smaller than 16"); 
   } else if(Z>136) {
     G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-		"Illegal arguemnt",
-		EventMustBeAborted, "Proton number larger than 136!");
+		"PART202",
+		EventMustBeAborted, "Proton number larger than 136");
   } else if(Z<8) {
     G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-		"Illegal arguemnt",
-		EventMustBeAborted, "Proton number smaller than 8!");
+		"PART202",
+		EventMustBeAborted, "Proton number smaller than 8");
   } else if(Z>A) {
     G4Exception("G4NucleiPropertiesTheoreticalTable::GetIndex",
-		"Illegal arguemnt",
-		EventMustBeAborted, "Nucleon number smaller than Z!"); 
+		"PART202",
+		EventMustBeAborted, "Nucleon number smaller than Z"); 
   }
   
   G4int i = shortTable[Z-8];

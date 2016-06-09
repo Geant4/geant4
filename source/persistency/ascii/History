@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2010/12/15 11:32:48 arce Exp $
+$Id: History,v 1.19 2010-12-15 11:32:48 arce Exp $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -15,6 +15,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 January, 10 G.Cosmo (ascii-V09-03-06)
+- Removed function WordIsFunction() in G4tgrUtils with missing implementation
+  introduced in previous tag.
+
+10 January, 10 P.Arce
+- Added missing dumping of pressure and state for materials.
+  Added enumeration of units.
 
 15 December, 10 P.Arce (ascii-V09-03-05)
 - Introduced fixes for Coverity reports...

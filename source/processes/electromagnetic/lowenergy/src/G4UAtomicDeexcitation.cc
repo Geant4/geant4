@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4UAtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-09-04 $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +53,13 @@
 #include "G4FluoTransition.hh"
 #include "G4Proton.hh"
 
+#include "G4teoCrossSection.hh"
+#include "G4empCrossSection.hh"
+#include "G4EmCorrections.hh"
+#include "G4LossTableManager.hh"
+#include "G4Material.hh"
+#include "G4AtomicShells.hh"
+
 using namespace std;
 
 G4UAtomicDeexcitation::G4UAtomicDeexcitation():
@@ -61,38 +68,58 @@ G4UAtomicDeexcitation::G4UAtomicDeexcitation():
   minElectronEnergy(DBL_MAX)
 {
   PIXEshellCS = 0;
+  anaPIXEshellCS = new G4teoCrossSection("Analytical");
+  emcorr = G4LossTableManager::Instance()->EmCorrections();
 }
 
 G4UAtomicDeexcitation::~G4UAtomicDeexcitation()
 {
   delete PIXEshellCS;
+  delete anaPIXEshellCS;
 }
 
 void G4UAtomicDeexcitation::InitialiseForNewRun()
 {
   transitionManager = G4AtomicTransitionManager::Instance();
 
-  // initializing PIXE  
-  if ("" == PIXECrossSectionModel()) {
-    SetPIXECrossSectionModel("Empirical");
-  }
-  
-  if (PIXECrossSectionModel() == "ECPSSR_Analytical") {
-    delete PIXEshellCS;
-    PIXEshellCS = new G4teoCrossSection("analytical");
-  }
-  
-  else if (PIXECrossSectionModel() == "Empirical") {
-    delete PIXEshellCS;
-    PIXEshellCS = new G4empCrossSection;
-  }
-  else {
-    G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
-	   << G4endl;
-    G4cout << "    PIXE cross section name " << PIXECrossSectionModel()
-	   << " is unknown, PIXE is disabled" << G4endl; 
-    SetPIXEActive(false);
-  }
+  // initializing PIXE x-section name
+  // 
+  if (PIXECrossSectionModel() == "" ||
+      PIXECrossSectionModel() == "Empirical" ||
+      PIXECrossSectionModel() == "empirical") 
+    {
+      SetPIXECrossSectionModel("Empirical");
+    }
+  else if (PIXECrossSectionModel() == "ECPSSR_Analytical" ||
+	   PIXECrossSectionModel() == "Analytical" || 
+	   PIXECrossSectionModel() == "analytical") 
+    {
+      SetPIXECrossSectionModel("Analytical");
+    }
+  else 
+    {
+      G4cout << "### G4UAtomicDeexcitation::InitialiseForNewRun WARNING "
+	     << G4endl;
+      G4cout << "    PIXE cross section name " << PIXECrossSectionModel()
+	     << " is unknown, PIXE is disabled" << G4endl; 
+      SetPIXEActive(false);
+    }
+    
+  // Check if old model should be deleted 
+  if(PIXEshellCS) 
+    {
+      if(PIXECrossSectionModel() != PIXEshellCS->GetName()) 
+	{
+	  delete PIXEshellCS;
+          PIXEshellCS = 0;
+	}
+    }
+
+  // Instantiate empirical model
+  if(!PIXEshellCS && PIXECrossSectionModel() == "Empirical")
+    {
+      PIXEshellCS = new G4empCrossSection("Empirical");
+    }
 }
 
 void G4UAtomicDeexcitation::InitialiseForExtraAtom(G4int /*Z*/)
@@ -101,7 +128,7 @@ void G4UAtomicDeexcitation::InitialiseForExtraAtom(G4int /*Z*/)
 const G4AtomicShell* 
 G4UAtomicDeexcitation::GetAtomicShell(G4int Z, G4AtomicShellEnumerator shell)
 {
-  return transitionManager->Shell(Z, G4int(shell));
+  return transitionManager->Shell(Z, size_t(shell));
 }
 
 void G4UAtomicDeexcitation::GenerateParticles(
@@ -178,23 +205,32 @@ void G4UAtomicDeexcitation::GenerateParticles(
 G4double 
 G4UAtomicDeexcitation::GetShellIonisationCrossSectionPerAtom(
 			       const G4ParticleDefinition* pdef, 
-			       G4int Z /*Z*/, 
-			       G4AtomicShellEnumerator shellEnum/*shell*/,
-			       G4double kineticEnergy/*kinE*/)
+			       G4int Z, 
+			       G4AtomicShellEnumerator shellEnum,
+			       G4double kineticEnergy,
+			       const G4Material* mat)
 {
+  // check atomic number
+  G4double xsec = 0.0;
+  if(Z > 100) { return xsec; }
+  G4int idx = G4int(shellEnum);
+  if(idx >= G4AtomicShells::GetNumberOfShells(Z)) { return xsec; }
+
   // scaling to protons
   G4double mass = proton_mass_c2;
   G4double escaled = kineticEnergy*mass/(pdef->GetPDGMass());
-  G4double q = pdef->GetPDGCharge()/eplus;
+  G4double q2 = 0.0;
+  if(mat) {
+    q2 = emcorr->EffectiveChargeSquareRatio(pdef,mat,kineticEnergy);
+  } else {
+    G4double q = pdef->GetPDGCharge()/eplus;
+    q2 = q*q;
+  }
 
-
-  std::vector<G4double> atomXSs =  PIXEshellCS->GetCrossSection(Z,escaled,mass,0);
-  G4double res = 0.0;
-  G4int idx = G4int(shellEnum);
-  G4int length = atomXSs.size();
-  if(idx < length) { res = q*q*atomXSs[idx]; }
-
-  return res;
+  if(PIXEshellCS) { xsec = PIXEshellCS->CrossSection(Z,idx,escaled,mass); }
+  if(0.0 == xsec) { xsec = anaPIXEshellCS->CrossSection(Z,idx,escaled,mass); }
+  xsec *= q2;
+  return xsec;
 }
 
 void G4UAtomicDeexcitation::SetCutForSecondaryPhotons(G4double cut)
@@ -212,15 +248,17 @@ G4UAtomicDeexcitation::ComputeShellIonisationCrossSectionPerAtom(
                                const G4ParticleDefinition* p, 
 			       G4int Z, 
 			       G4AtomicShellEnumerator shell,
-			       G4double kinE)
+			       G4double kinE,
+			       const G4Material* mat)
 {
-  return GetShellIonisationCrossSectionPerAtom(p,Z,shell,kinE);
+  return GetShellIonisationCrossSectionPerAtom(p,Z,shell,kinE,mat);
 }
 
 G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 {
   if (shellId <=0 ) {
-    {G4Exception("G4UAtomicDeexcitation: zero or negative shellId");}
+    G4Exception("G4UAtomicDeexcitation: zero or negative shellId");
+    return 0;
   }
   G4bool fluoTransitionFoundFlag = false;
   
@@ -275,15 +313,12 @@ G4int G4UAtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
       // here provShellId is the right one or is -1.
       // if -1, the control is passed to the Auger generation part of the package 
     }
-
-
-
   else 
     {
- 
-     provShellId = -1;
-
+      provShellId = -1;
     }
+  //G4cout << "FlagTransition= " << provShellId << " ecut(MeV)= " << minElectronEnergy
+  //	 << "  gcut(MeV)= " << minGammaEnergy << G4endl;
   return provShellId;
 }
 

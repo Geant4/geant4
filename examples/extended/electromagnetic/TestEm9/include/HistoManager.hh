@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.12 2010/04/29 15:21:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HistoManager.hh,v 1.13 2011-01-06 15:56:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
@@ -77,7 +77,7 @@ public: // Without description
   void bookHisto();
 
   void BeginOfRun();
-  void EndOfRun();
+  void EndOfRun(G4int runID);
 
   void BeginOfEvent();
   void EndOfEvent();

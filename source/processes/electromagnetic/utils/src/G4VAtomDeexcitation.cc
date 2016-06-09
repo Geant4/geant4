@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc,v 1.7 2010/11/22 18:18:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VAtomDeexcitation.cc,v 1.8 2011-01-03 19:34:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -124,7 +124,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
           if(deRegions[j]) {
 	    for(G4int k=0; k<nelm; ++k) {
 	      G4int Z = (G4int)((*theElementVector)[k])->GetZ();
-	      if(Z > 5) { activeZ[Z] = true; }
+	      if(Z > 5 && Z < 93) { activeZ[Z] = true; }
 	    }
 	  }
 	}
@@ -149,6 +149,8 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
 						 G4bool valPIXE)
 {
   G4String s = rname;
+  //G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << s 
+  //	 << G4endl;
   if(s == "world" || s == "World" || s == "WORLD") {
     s = "DefaultRegionForTheWorld";
   }
@@ -178,8 +180,8 @@ G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
 					   G4double& eLoss,
                                            G4int coupleIndex)
 {
-  if(!CheckDeexcitationActiveRegion(coupleIndex) || !flagPIXE
-     || !activePIXEMedia[coupleIndex] || eLoss == 0.0) { return; }
+  if(!flagPIXE || !isActive || !activeDeexcitationMedia[coupleIndex] ||
+     !activePIXEMedia[coupleIndex] || eLoss == 0.0) { return; }
 
   // step parameters
   const G4StepPoint* preStep = step.GetPreStepPoint();
@@ -196,19 +198,19 @@ G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
   if(ekin <= lowestKinEnergy) { return; }
 
   // media parameters
-  G4double gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[coupleIndex];
+  G4double gCut = (*theCoupleTable->GetEnergyCutsVector(0))[coupleIndex];
   G4double eCut = DBL_MAX;
-  if(flagAuger && CheckAugerActiveRegion(coupleIndex)) { 
-    eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[coupleIndex];
+  if(flagAuger && activeAugerMedia[coupleIndex]) { 
+    eCut = (*theCoupleTable->GetEnergyCutsVector(1))[coupleIndex];
   }
+
+  //G4cout<<"!Sample PIXE gCut(MeV)= "<<gCut<<"  eCut(MeV)= "<<eCut
+  //	<<" Ekin(MeV)= " << ekin/MeV << G4endl;
 
   const G4Material* material = preStep->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
   G4int nelm = material->GetNumberOfElements();
-
-  //G4cout<<"!Sample PIXE gCut(MeV)= "<<gCut<<"  eCut(MeV)= "<<eCut
-  //	<<" Ekin(MeV)= " << ekin/MeV <<G4endl;
 
   // loop over deexcitations
   secVect.clear();
@@ -216,19 +218,20 @@ G4VAtomDeexcitation::AlongStepDeexcitation(G4VParticleChange* pParticleChange,
     G4int Z = G4int((*theElementVector)[i]->GetZ());
     if(Z >= 93)     { continue; } 
     if(!activeZ[Z]) { continue; }
-    G4double rho = theAtomNumDensityVector[i];
+    G4int nshells = std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());
+    G4double rho = truelength*theAtomNumDensityVector[i];
     //G4cout << "   Z " << Z <<" is active  x(mm)= " << truelength/mm << G4endl;
-    if(truelength*rho > 0.0) {
-      for(G4int ii=0; ii<9; ++ii) {
+    if(rho > 0.0) {
+      for(G4int ii=0; ii<nshells; ++ii) {
 	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(ii);
 	const G4AtomicShell* shell = GetAtomicShell(Z, as);
 	if(gCut < shell->BindingEnergy()) {
 	  G4double sig = rho*
-	    GetShellIonisationCrossSectionPerAtom(part, Z, as, ekin); 
+	    GetShellIonisationCrossSectionPerAtom(part, Z, as, ekin, material); 
 
 	  // mfp is mean free path in units of step size
 	  if(sig > 0.0) {
-	    G4double mfp = 1.0/(sig*truelength);
+	    G4double mfp = 1.0/sig;
 	    G4double stot = 0.0;
 	    //G4cout << " Shell " << ii << " mfp(mm)= " << mfp/mm << G4endl;
 	    // sample ionisation points

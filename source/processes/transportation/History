@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2010/09/13 16:09:47 japost Exp $
+$Id: History,v 1.155 2011-01-05 00:59:03 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 26th, 2011, G.Cosmo  transport-V09-03-02
+---------------------------
+- Simplified implementation of G4CoupledTransportation::EndTracking(), to
+  avoid unnecessary static pointer definition.
+
+January 21th, 2011, V.Ivanchenko
+--------------------------------
+- G4UserSpecialCuts - fixed compilation problem
+
+January 21th, 2011, V.Ivanchenko
+--------------------------------
+- G4UserSpecialCuts: fixed bug in energy tracking cut; changed order 
+  of checks: 1st energy tracking cut, 2nd track length, 3d time cut, 
+  4th range for charged particles with non-zero mass; removed unnecessary
+  string comparisons.
+
+January 4th, 2011, M.Asai
+-------------------------
+- G4CoupledTransportation: added EndTracking() method to reset the
+  activated navigator list.
+
+September 13th, 2010, J.Apostolakis  transport-V09-03-01
+-----------------------------------
+- Improvement to G4Transportation: copy current safety to SafetyHelper each
+  time it is computed (it used to be copied only when it was recalculated at
+  end of step).
+
 September 13th, 2010, J.Apostolakis  transport-V09-03-00
 ----------------------------------
 - Retagged - to propose for testing.

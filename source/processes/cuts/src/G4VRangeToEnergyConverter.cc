@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.15 2009/09/14 07:27:46 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.16 2010-12-23 06:00:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // --------------------------------------------------------------
@@ -210,9 +210,14 @@ void G4VRangeToEnergyConverter::SetEnergyRange(G4double lowedge,
 {
   // check LowestEnergy/ HighestEnergy 
   if ( (lowedge<0.0)||(highedge<=lowedge) ){
+#ifdef G4VERBOSE
     G4cerr << "Error in G4VRangeToEnergyConverter::SetEnergyRange";
     G4cerr << " :  illegal energy range" << "(" << lowedge/GeV;
     G4cerr << "," << highedge/GeV << ") [GeV]" << G4endl;
+#endif
+    G4Exception( "G4VRangeToEnergyConverter::SetEnergyRange()",
+		 "ProcCuts101",
+		 JustWarning, "Illegal energy range ");
   } else {
     LowestEnergy = lowedge;
     HighestEnergy = highedge;

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-04-patch-01    (18-February-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -71,7 +71,6 @@ G4NistElementBuilder: Build Element <N>  Z= 7  A= 14.0068  with natural isotope 
 G4NistElementBuilder: Build Element <O>  Z= 8  A= 15.9994  with natural isotope composition
 G4NistElementBuilder: Build Element <Ar>  Z= 18  A= 39.9477  with natural isotope composition
 New material PMMA is prepeared;  nMaterials= 315 nComponents= 843 nCurrent= 3
-### NIST DataBase for Elements is used
 G4NistMaterialBuilder: BuildMaterial PMMA
 G4NistMaterialBuilder: BuildMaterial #314
 New material nComponents= 3
@@ -96,10 +95,10 @@ G4NistMaterialBuilder: BuildMaterial #12
 New material nComponents= 1
 G4NistElementBuilder: Build Element <Al>  Z= 13  A= 26.9815  with natural isotope composition
 New material TiO2 is prepeared;  nMaterials= 320 nComponents= 854 nCurrent= 2
-G4NistElementBuilder: Build Element <Ti>  Z= 22  A= 47.8667  with natural isotope composition
 G4NistMaterialBuilder: BuildMaterial TiO2
 G4NistMaterialBuilder: BuildMaterial #319
 New material nComponents= 2
+G4NistElementBuilder: Build Element <Ti>  Z= 22  A= 47.8667  with natural isotope composition
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 WLSExtraPhysics:: Add Extra Physics Processes
 WLSOpticalPhysics:: Add Optical Physics Processes
@@ -262,7 +261,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :   Emin=        0 eV       Emax=         10 TeV
 
@@ -289,7 +288,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      0 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 
@@ -316,7 +315,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      0 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
 

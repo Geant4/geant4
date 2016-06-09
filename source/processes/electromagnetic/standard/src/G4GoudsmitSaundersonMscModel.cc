@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.25 2010/06/25 09:41:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4GoudsmitSaundersonMscModel.cc,v 1.27 2010-12-23 18:31:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -95,6 +95,11 @@ G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106] ;
 G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   : G4VMscModel(nam),lowKEnergy(0.1*keV),highKEnergy(100.*TeV),isInitialized(false)
 { 
+  currentKinEnergy=currentRange=skindepth=par1=par2=par3=zPathLength=truePathLength
+    =tausmall=taulim=tlimit=charge=lambdalimit=tPathLength=lambda0=lambda1
+    =lambda11=Qn1=Qn12=mass=0.0;
+  currentMaterialIndex = -1;
+
   fr=0.02,rangeinit=0.,masslimite=0.6*MeV,
   particle=0;tausmall=1.e-16;taulim=1.e-6;tlimit=1.e10*mm;
   tlimitmin=10.e-6*mm;geombig=1.e50*mm;geommin=1.e-3*mm,tgeom=geombig;
@@ -656,7 +661,7 @@ G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
   if (tPathLength < currentRange*dtrl) {
     if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
     else             zmean = lambda1*(1.-exp(-tau));
-  } else if(currentKinEnergy < mass) {
+  } else if(currentKinEnergy < mass /*|| tPathLength == currentRange*/) {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda1) ;
     par3 = 1.+par2 ;
@@ -755,6 +760,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
     {
       G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set properly";
       G4Exception(excep);
+      return;
     }
 
   G4String pathString(path);
@@ -765,6 +771,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
     {
       G4String excep = "G4GoudsmitSaunderson - data files: " + dirFile + " not found";
       G4Exception(excep);
+      return;
     }
 
   // Read parameters from tables and take logarithms

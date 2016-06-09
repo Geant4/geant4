@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.cc,v 1.4 2010/11/21 16:08:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4KleinNishinaModel.cc,v 1.5 2011-01-02 19:58:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -141,6 +141,7 @@ void G4KleinNishinaModel::SampleSecondaries(
 			     G4double,
 			     G4double)
 {
+  // primary gamma
   G4double energy = aDynamicGamma->GetKineticEnergy();
   G4ThreeVector direction = aDynamicGamma->GetMomentumDirection();
 
@@ -164,39 +165,35 @@ void G4KleinNishinaModel::SampleSecondaries(
   if(totprob == 0.0) { return; }
 
   G4LorentzVector lv1, lv2, lv3;
-  G4LorentzVector lv0(energy*direction.x(),energy*direction.y(),
-		      energy*direction.z(),energy);
   G4double eKinEnergy = 0.0;
   G4double gamEnergy1 = 0.0;
 
   // Loop on sampling
-  G4double bindingEnergy;
   do {
     G4double xprob = totprob*G4UniformRand();
 
+    // select shell
     for(i=0; i<nShells; ++i) { if(xprob <= fProbabilities[i]) {break;} }
     if( i == nShells ) { return; }
    
-    bindingEnergy  = elm->GetAtomicShell(i);
-    G4double tkin =  bindingEnergy*0.5;
-    G4double eEnergy = tkin + electron_mass_c2;
-    G4double eTotMomentum = sqrt(tkin*(tkin + electron_mass_c2*2));
+    // rest frame of the electron
+    G4double bindingEnergy = elm->GetAtomicShell(i);
+    G4double eEnergy = bindingEnergy + electron_mass_c2;
+    G4double eTotMomentum = sqrt(bindingEnergy*(bindingEnergy + 2*electron_mass_c2));
     G4ThreeVector eDir = G4RandomDirection();
-    lv1 = lv0;
+    lv1.set(0.0,0.0,energy,energy);
     lv2.set(eTotMomentum*eDir.x(),eTotMomentum*eDir.y(),
 	    eTotMomentum*eDir.z(),eEnergy);
     G4ThreeVector bst = lv2.boostVector();
     lv1.boost(-bst);
 
-    // In the rest frame of an electron
+    // In the rest frame of the electron
     // The scattered gamma energy is sampled according to Klein - Nishina formula.
     // The random number techniques of Butcher & Messel are used 
     // (Nuc Phys 20(1960),15).
  
     G4double gamEnergy0 = lv1.e();
     G4double E0_m = gamEnergy0 / electron_mass_c2 ;
-
-    G4ThreeVector gamDirection0 = (lv1.vect()).unit();
 
     //
     // sample the energy rate of the scattered gamma 
@@ -224,6 +221,7 @@ void G4KleinNishinaModel::SampleSecondaries(
       greject = 1. - epsilon*sint2/(1.+ epsilonsq);
 
     } while (greject < G4UniformRand());
+    gamEnergy1 = epsilon*gamEnergy0;
  
     //
     // scattered gamma angles. ( Z - axis along the parent gamma)
@@ -231,49 +229,48 @@ void G4KleinNishinaModel::SampleSecondaries(
 
     G4double cosTeta = 1. - onecost; 
     G4double sinTeta = sqrt (sint2);
-    G4double Phi     = twopi * G4UniformRand();
-    G4double dirx = sinTeta*cos(Phi), diry = sinTeta*sin(Phi), dirz = cosTeta;
-
-    //
-    // update G4VParticleChange for the scattered gamma
-    //
-   
-    G4ThreeVector gamDirection1 ( dirx,diry,dirz );
-    gamDirection1.rotateUz(gamDirection0);
-    gamEnergy1 = epsilon*gamEnergy0;
+    G4double Phi  = twopi * G4UniformRand();
+    G4double dirx = sinTeta*cos(Phi);
+    G4double diry = sinTeta*sin(Phi); 
 
     // before scattering
     lv2.set(0.0,0.0,0.0,electron_mass_c2);
     lv2 += lv1;
  
     // after scattering
-    lv1.set(gamEnergy1*gamDirection1.x(),gamEnergy1*gamDirection1.y(),
-	    gamEnergy1*gamDirection1.z(),gamEnergy1);
+    lv1.set(gamEnergy1*dirx,gamEnergy1*diry,gamEnergy1*cosTeta,gamEnergy1);
     lv2 -= lv1;
     lv2.boost(bst);
     lv1.boost(bst);
-    eKinEnergy = lv2.e() - electron_mass_c2 - bindingEnergy;
+    eKinEnergy = lv2.e() - electron_mass_c2 - 2*bindingEnergy;
   } while ( eKinEnergy < 0.0 );
 
   // gamma kinematics
   gamEnergy1 = lv1.e();
-  G4double edep = bindingEnergy;
+
+  //
+  // update G4VParticleChange for the scattered gamma
+  //
+   
   if(gamEnergy1 > lowestGammaEnergy) {
-    fParticleChange->SetProposedKineticEnergy(gamEnergy1);
-    fParticleChange->ProposeMomentumDirection((lv1.vect()).unit());
+    G4ThreeVector gamDirection1 = lv1.vect().unit();
+    gamDirection1.rotateUz(direction);
+    fParticleChange->ProposeMomentumDirection(gamDirection1);
   } else { 
     fParticleChange->ProposeTrackStatus(fStopAndKill);
-    fParticleChange->SetProposedKineticEnergy(0.0);
-    edep += gamEnergy1;
+    gamEnergy1 = 0.0;
   }
+  fParticleChange->SetProposedKineticEnergy(gamEnergy1);
   //
   // kinematic of the scattered electron
   //
-  if(eKinEnergy > DBL_MIN) {
-    G4ThreeVector eDirection = (lv2.vect()).unit();
-    G4DynamicParticle* dp = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
-    fvect->push_back(dp);
-  }
+  G4ThreeVector eDirection = (lv2.vect()).unit();
+  eDirection.rotateUz(direction);
+  G4DynamicParticle* dp = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
+  fvect->push_back(dp);
+
+  G4double edep = energy - gamEnergy1 - eKinEnergy;
+  
   // sample deexcitation
   //
   if(fAtomDeexcitation) {
@@ -285,13 +282,14 @@ void G4KleinNishinaModel::SampleSecondaries(
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
       size_t nafter = fvect->size();
       if(nafter > nbefore) {
-	for (size_t i=nbefore; i<nafter; ++i) {
-	  edep -= ((*fvect)[i])->GetKineticEnergy();
+	for (size_t j=nbefore; j<nafter; ++j) {
+	  edep -= ((*fvect)[j])->GetKineticEnergy();
 	} 
       }
     }
   }
   // energy balance
+  if(edep < 0.0) { edep = 0.0; }
   fParticleChange->ProposeLocalEnergyDeposit(edep);
 }
 

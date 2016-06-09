@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc,v 1.8 2010/06/25 09:41:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4GoudsmitSaundersonTable.cc,v 1.9 2010-12-23 16:57:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -266,6 +266,7 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
       {
         G4String excep = "G4GoudsmitSaundersonTable: G4LEDATA environment variable not set";
         G4Exception(excep);
+        return;
       }
 
     G4String pathString(path);
@@ -275,6 +276,7 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
       {
 	G4String excep = "G4GoudsmitSaunderson - data files: " + dirFile + " not found";
 	G4Exception(excep);
+        return;
       }
 
     // Read parameters into tables. 

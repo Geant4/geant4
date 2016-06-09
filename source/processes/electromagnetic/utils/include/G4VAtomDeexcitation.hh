@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh,v 1.8 2010/11/22 18:18:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VAtomDeexcitation.hh,v 1.9 2011-01-03 19:34:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -154,14 +154,16 @@ public:
   GetShellIonisationCrossSectionPerAtom(const G4ParticleDefinition*, 
 					G4int Z, 
 					G4AtomicShellEnumerator shell,
-					G4double kinE) = 0;
+					G4double kinE,
+                                        const G4Material* mat = 0) = 0;
 
   // access or compute PIXE cross section 
   virtual G4double 
   ComputeShellIonisationCrossSectionPerAtom(const G4ParticleDefinition*, 
 					    G4int Z, 
 					    G4AtomicShellEnumerator shell,
-					    G4double kinE) = 0;
+					    G4double kinE,
+					    const G4Material* mat = 0) = 0;
 
   // Sampling of PIXE for ionisation processes
   void AlongStepDeexcitation(G4VParticleChange* pParticleChange,  
@@ -271,15 +273,13 @@ G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,
 				       G4int Z,
 				       G4int idx)
 {
-  if(CheckDeexcitationActiveRegion(idx)) {
-    G4double gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
-    if(gCut < as->BindingEnergy()) {
-      G4double eCut = DBL_MAX;
-      if(flagAuger && CheckAugerActiveRegion(idx)) { 
-	eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
-      }
-      GenerateParticles(v, as, Z, gCut, eCut);
+  G4double gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
+  if(gCut < as->BindingEnergy()) {
+    G4double eCut = DBL_MAX;
+    if(CheckAugerActiveRegion(idx)) { 
+      eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
     }
+    GenerateParticles(v, as, Z, gCut, eCut);
   }
 }
 

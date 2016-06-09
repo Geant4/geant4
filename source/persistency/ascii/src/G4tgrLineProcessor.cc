@@ -161,6 +161,45 @@ G4bool G4tgrLineProcessor::ProcessLine( const std::vector<G4String>& wl )
     }
     mate->SetIonisationMeanExcitationEnergy( G4tgrUtils::GetDouble( wl[2] ) );
 
+    //------------------------------- material
+  }
+  else if( wl0 == ":MATE_STATE" )
+  {
+    G4tgrMaterial* mate = G4tgrMaterialFactory::GetInstance()
+                        ->FindMaterial( G4tgrUtils::GetString( wl[1] ) );
+    if( mate == 0 )
+    {
+      G4Exception("G4tgrLineProcessor::ProcessLine()", "Material not found",
+                  FatalException, wl[1] );
+    }
+    mate->SetState( wl[2] );
+
+    //------------------------------- material
+  }
+  else if( wl0 == ":MATE_TEMPERATURE" )
+  {
+    G4tgrMaterial* mate = G4tgrMaterialFactory::GetInstance()
+                        ->FindMaterial( G4tgrUtils::GetString( wl[1] ) );
+    if( mate == 0 )
+    {
+      G4Exception("G4tgrLineProcessor::ProcessLine()", "Material not found",
+                  FatalException, wl[1] );
+    }
+    mate->SetTemperature( G4tgrUtils::GetDouble( wl[2], kelvin ) );
+
+    //------------------------------- material
+  }
+  else if( wl0 == ":MATE_PRESSURE" )
+  {
+    G4tgrMaterial* mate = G4tgrMaterialFactory::GetInstance()
+                        ->FindMaterial( G4tgrUtils::GetString( wl[1] ) );
+    if( mate == 0 )
+    {
+      G4Exception("G4tgrLineProcessor::ProcessLine()", "Material not found",
+                  FatalException, wl[1] );
+    }
+    mate->SetPressure( G4tgrUtils::GetDouble( wl[2], atmosphere ) );
+
     //------------------------------- solid
   }
   else if( wl0 == ":SOLID" )

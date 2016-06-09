@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.cc,v 1.7 2009/06/10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermoreComptonModel.cc,v 1.8 2010-12-27 17:45:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // Author: Sebastien Inserti
@@ -38,6 +38,7 @@
 //                  - remove GetMeanFreePath method and table
 //                  - added protection against numerical problem in energy sampling 
 //                  - use G4ElementSelector
+// 26 Dec 2010   V Ivanchenko Load data tables only once to avoid memory leak
 
 #include "G4LivermoreComptonModel.hh"
 
@@ -78,8 +79,8 @@ G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
 
 G4LivermoreComptonModel::~G4LivermoreComptonModel()
 {  
-  if (crossSectionHandler) delete crossSectionHandler;
-  if (scatterFunctionData) delete scatterFunctionData;
+  delete crossSectionHandler;
+  delete scatterFunctionData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -87,19 +88,21 @@ G4LivermoreComptonModel::~G4LivermoreComptonModel()
 void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
 					 const G4DataVector& cuts)
 {
-  if (verboseLevel > 3)
+  if (verboseLevel > 3) {
     G4cout << "Calling G4LivermoreComptonModel::Initialise()" << G4endl;
+  }
 
   if (crossSectionHandler)
   {
     crossSectionHandler->Clear();
     delete crossSectionHandler;
   }
-  
+  delete scatterFunctionData;
+
   // Reading of data files - all materials are read
   
   crossSectionHandler = new G4CrossSectionHandler;
-  crossSectionHandler->Clear();
+  //  crossSectionHandler->Clear();
   G4String crossSectionFile = "comp/ce-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
 
@@ -109,13 +112,16 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
   scatterFunctionData->LoadData(scatterFile);
 
   // For Doppler broadening
-  shellData.SetOccupancyData();
-  G4String file = "/doppler/shell-doppler";
-  shellData.LoadData(file);
+  if(!isInitialised) {
+    shellData.SetOccupancyData();
+    G4String file = "/doppler/shell-doppler";
+    shellData.LoadData(file);
+  }
 
-  if (verboseLevel > 2) 
+  if (verboseLevel > 2) {
     G4cout << "Loaded cross section files for Livermore Compton model" << G4endl;
-
+  }
+ 
   InitialiseElementSelectors(particle,cuts);
 
   if(  verboseLevel>0 ) { 
@@ -126,7 +132,7 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
 	   << G4endl;
   }
   //  
-  if(isInitialised) return;
+  if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
@@ -139,10 +145,10 @@ G4double G4LivermoreComptonModel::ComputeCrossSectionPerAtom(
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
-  if (verboseLevel > 3)
+  if (verboseLevel > 3) {
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreComptonModel" << G4endl;
-
-  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) return 0.0;
+  }
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) { return 0.0; }
     
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);  
   return cs;

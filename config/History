@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.399 2010/12/08 13:46:18 gunter Exp $
+cvs log $Id: History,v 1.399 2010-12-08 13:46:18 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th February 2011  Ben Morgan   (config-V09-03-20)
+- Fixed restoring of default settings for XercesC in Configure script and
+  internal scripts. Corrected duplication of text in setup dump.
+  Addessing problem reports #1159 and #1160.
+
+22th December 2010  Laurent Garnier
+- Darwin-g++.gmk: fix to avoid mixing of OpenGL X11 and framework.
 
 8th December 2010  Gunter Folger   (config-V09-03-19)
 - Updated linux-icc to suppress warning when linking to shared libs

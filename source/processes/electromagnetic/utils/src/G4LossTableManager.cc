@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.105 2010/11/04 12:55:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LossTableManager.cc,v 1.105 2010-11-04 12:55:09 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -464,16 +464,19 @@ void G4LossTableManager::BuildPhysicsTable(
 
       if(el) {
 	const G4ProcessManager* pm = el->GetProcessManager();
-        isActive[i] = pm->GetProcessActivation(el);
+        isActive[i] = false;
+        if(pm) { isActive[i] = pm->GetProcessActivation(el); }
       	if(0 == run) { base_part_vector[i] = el->BaseParticle(); }
         tables_are_built[i] = false;
 	all_tables_are_built= false;
         if(!isActive[i]) { el->SetIonisation(false); }
   
 	if(1 < verbose) { 
-	  G4cout << i <<".   "<< el->GetProcessName() 
-		 << "  for "  << pm->GetParticleType()->GetParticleName()
-		 << "  active= " << pm->GetProcessActivation(el)
+	  G4cout << i <<".   "<< el->GetProcessName();
+          if(el->Particle()) {
+	    G4cout << "  for "  << el->Particle()->GetParticleName();
+	  }
+	  G4cout << "  active= " << isActive[i]
                  << "  table= " << tables_are_built[i]
 		 << "  isIonisation= " << el->IsIonisationProcess();
 	  if(base_part_vector[i]) { 

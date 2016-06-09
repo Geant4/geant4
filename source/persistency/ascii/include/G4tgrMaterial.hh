@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterial.hh,v 1.6 2010/10/13 07:56:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgrMaterial.hh,v 1.6 2010-10-13 07:56:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // class G4tgrMaterial
@@ -41,6 +41,7 @@
 #define G4tgrMaterial_h
 
 #include "globals.hh"
+#include "G4Material.hh"
 
 class G4tgrMaterial
 {
@@ -70,6 +71,15 @@ class G4tgrMaterial
     void SetIonisationMeanExcitationEnergy( G4double mee )
       { theIonisationMeanExcitationEnergy = mee; }
 
+    G4State GetState() const { return theState; }
+    void SetState( G4String val );
+
+    G4double GetTemperature() const { return theTemperature; }
+    void SetTemperature( G4double val ) { theTemperature = val; }
+
+    G4double GetPressure() const { return thePressure; }
+    void SetPressure( G4double val ) { thePressure = val; }
+
   protected:
 
     G4String  theName;
@@ -77,6 +87,9 @@ class G4tgrMaterial
     G4int theNoComponents;
     G4String  theMateType;
     G4double theIonisationMeanExcitationEnergy;
+    G4State theState;
+    G4double theTemperature;
+    G4double thePressure;
 };
 
 #endif

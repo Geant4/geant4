@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.15 2010/11/02 11:13:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgbGeometryDumper.cc,v 1.15 2010-11-02 11:13:05 gcosmo Exp $
+// GEANT4 tag $Name: $
 //
 //
 // class G4tgbGeometryDumper
@@ -542,6 +542,32 @@ G4String G4tgbGeometryDumper::DumpMaterial( G4Material* mat )
              << mat->GetIonisation()->GetMeanExcitationEnergy()/eV
              << "*eV" << G4endl;
 
+  (*theFile) << ":MATE_TEMPERATURE " << AddQuotes(mateName) << " "
+               << mat->GetTemperature()/kelvin << "*kelvin" << G4endl;
+
+  (*theFile) << ":MATE_PRESSURE " << AddQuotes(mateName) << " "
+               << mat->GetPressure()/atmosphere << "*atmosphere" << G4endl;
+
+  G4State state = mat->GetState();
+  G4String stateStr; 
+  switch (state) {
+  case kStateUndefined:
+    stateStr = "Undefined";
+    break;
+  case kStateSolid:
+    stateStr = "Solid";
+    break;
+  case kStateLiquid:
+    stateStr = "Liquid";
+    break;
+  case kStateGas:
+    stateStr = "Gas";
+    break;
+  }
+ 
+  (*theFile) << ":MATE_STATE " << AddQuotes(mateName) << " "
+	     << stateStr << G4endl;
+
   theMaterials[mateName] = mat;
 
   return mateName;
@@ -963,11 +989,11 @@ std::vector<G4double> G4tgbGeometryDumper::GetSolidParams( const G4VSolid * so)
 //------------------------------------------------------------------------
 G4String G4tgbGeometryDumper::DumpRotationMatrix( G4RotationMatrix* rotm )
 {
-  if (!rotm)  { rotm = new G4RotationMatrix(); } 
-
   G4double de = MatDeterminant(rotm);
   G4String rotName = LookForExistingRotation( rotm );
   if( rotName != "" )  { return rotName; }
+
+  if (!rotm)  { rotm = new G4RotationMatrix(); } 
 
   G4ThreeVector v(1.,1.,1.);
   if (de < -0.9 )  // a reflection ....

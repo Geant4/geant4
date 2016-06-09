@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2010/12/06 12:24:10 maire Exp $
+$Id: History,v 1.37 2011-01-05 19:07:50 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-01-11 V.Ivant (testem12-V09-03-06)
+- Minor cleanup of SS physics constructor
      
 05-12-10 mma (testem12-V09-03-05)
 - subdirectory berger : results of EGSnrc simulation

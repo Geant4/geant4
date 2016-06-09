@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08GammaConversionModel.cc,v 1.4 2010/07/28 07:09:16 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Penelope08GammaConversionModel.cc,v 1.5 2010-12-15 10:26:41 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // Author: Luciano Pandola
 //
@@ -401,6 +401,7 @@ void G4Penelope08GammaConversionModel::ReadDataFile(const G4int Z)
       G4String excep = 
 	"G4Penelope08GammaConversionModel - G4LEDATA environment variable not set!";
       G4Exception(excep);
+      return;
     }
  
   /*
@@ -464,6 +465,7 @@ void G4Penelope08GammaConversionModel::ReadDataFile(const G4int Z)
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Problem with allocation of logAtomicCrossSection data table " << G4endl;
       G4Exception();
+      return;
     }
   logAtomicCrossSection->insert(std::make_pair(Z,theVec));
 

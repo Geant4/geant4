@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.73 2010/10/19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Cons.cc,v 1.74 2011-01-07 10:01:09 tnikitin Exp $
+// GEANT4 tag $Name: $
 //
 //
 // class G4Cons
@@ -858,7 +858,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
     b = nt2/nt1;
     c = nt3/nt1;
     d = b*b-c  ;
-    if ( (nt3 > rout*kRadTolerance*secRMax) || (rout < 0) )
+    if ( (nt3 > rout*rout*kRadTolerance*kRadTolerance*secRMax*secRMax)
+      || (rout < 0) )
     {
       // If outside real cone (should be rho-rout>kRadTolerance*0.5
       // NOT rho^2 etc) saves a std::sqrt() at expense of accuracy
@@ -871,13 +872,14 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
           // Inside `shadow cone' with -ve radius
           // -> 2nd root could be on real cone
 
-          s = -b + std::sqrt(d) ;
+          if (b>0) { s = c/(-b-std::sqrt(d)); }
+          else     { s = -b + std::sqrt(d);   }
         }
         else
         {
           if ((b <= 0) && (c >= 0)) // both >=0, try smaller root
           {
-            s = -b - std::sqrt(d) ;
+            s=c/(-b+std::sqrt(d));
           }
           else
           {
@@ -1010,7 +1012,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
         d = b*b-c ;
         if (d >= 0)   // > 0
         {
-          s = -b + std::sqrt(d) ;
+           if(b>0){s = c/( -b-std::sqrt(d));}
+           else   {s = -b + std::sqrt(d) ;}
 
           if ( s >= 0 )   // > 0
           {
@@ -1074,7 +1077,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
         if ( d >= 0 )  // > 0
         {
-          s  = -b + std::sqrt(d) ;
+          if (b>0) { s = c/(-b-std::sqrt(d)); }
+          else     { s = -b + std::sqrt(d);   }
           zi = p.z() + s*v.z() ;
           ri = rMinAv + zi*tanRMin ;
 
@@ -1124,7 +1128,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
           }
           else
           {
-            s  = -b - std::sqrt(d) ;
+	    if (b>0) { s = -b - std::sqrt(d);   }
+            else     { s = c/(-b+std::sqrt(d)); }
             zi = p.z() + s*v.z() ;
             ri = rMinAv + zi*tanRMin ;
 
@@ -1204,13 +1209,16 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
             if ( d >= 0 )   // > 0
             {
-              s  = -b - std::sqrt(d) ;
+              if (b>0) { s = -b - std::sqrt(d);   }
+              else     { s = c/(-b+std::sqrt(d)); }
               zi = p.z() + s*v.z() ;
               ri = rMinAv + zi*tanRMin ;
               
               if ( ri > 0 )   // 2nd root
               {
-                s  = -b + std::sqrt(d) ;
+                if (b>0) { s = c/(-b-std::sqrt(d)); }
+                else     { s = -b + std::sqrt(d);   }
+                
                 zi = p.z() + s*v.z() ;
 
                 if ( (s >= 0) && (std::fabs(zi) <= tolODz) )  // s>0
@@ -1244,7 +1252,8 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
           if ( d > 0 )
           {  
-            s  = -b + std::sqrt(d) ;
+            if (b>0) { s = c/(-b-std::sqrt(d)); }
+            else     { s = -b + std::sqrt(d) ;  }
             zi = p.z() + s*v.z() ;
 
             if ( (s >= 0) && (std::fabs(zi) <= tolODz) )  // s>0
@@ -1579,7 +1588,9 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
       else
       {
         sider = kRMax  ;
-        sr    = -b - std::sqrt(d) ; // was +srqrt(d), vmg 28.04.99
+        if (b>0) { sr = -b - std::sqrt(d);    }
+        else     { sr = c/(-b+std::sqrt(d)) ; }
+
         zi    = p.z() + sr*v.z() ;
         ri    = tanRMax*zi + rMaxAv ;
           
@@ -1596,7 +1607,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
           // Safety: if both roots -ve ensure that sr cannot `win'
           //         distance to out
 
-          sr2 = -b + std::sqrt(d) ;
+          if (b>0) { sr2 = c/(-b-std::sqrt(d)); }
+          else     { sr2 = -b + std::sqrt(d);   }
           zi  = p.z() + sr2*v.z() ;
           ri  = tanRMax*zi + rMaxAv ;
 
@@ -1723,7 +1735,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         }
         else
         {
-          sr2 = -b - std::sqrt(d) ;
+          if (b>0) { sr2 = -b - std::sqrt(d);   }
+          else     { sr2 = c/(-b+std::sqrt(d)); }
           zi  = p.z() + sr2*v.z() ;
           ri  = tanRMin*zi + rMinAv ;
 
@@ -1737,7 +1750,8 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
           }
           if( (ri<0) || (sr2 < halfRadTolerance) )
           {
-            sr3 = -b + std::sqrt(d) ;
+            if (b>0) { sr3 = c/(-b-std::sqrt(d)); }
+            else     { sr3 = -b + std::sqrt(d) ;  }
 
             // Safety: if both roots -ve ensure that sr cannot `win'
             //         distancetoout

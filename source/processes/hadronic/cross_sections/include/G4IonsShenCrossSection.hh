@@ -49,55 +49,53 @@
 
 class G4IonsShenCrossSection : public G4VCrossSectionDataSet
 {
-   public:
-      G4IonsShenCrossSection ():
-         upperLimit ( 1 * TeV ),
-         lowerLimit ( 10 * MeV ),
-         r0 ( 1.1 )
-      {
-      }
+  public:
+    G4IonsShenCrossSection()
+     : G4VCrossSectionDataSet("G4IonsShenCrossSection"),
+       upperLimit( 1*TeV ), lowerLimit( 10*MeV ), r0 ( 1.1 )
+    {}
    
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
-   {
-     return IsIsoApplicable(aDP, 0, 0);
-   }
+    virtual
+    G4bool IsApplicable(const G4DynamicParticle* aDP, const G4Element*)
+    {
+      return IsIsoApplicable(aDP, 0, 0);
+    }
 
-   virtual
-   G4bool IsIsoApplicable(const G4DynamicParticle* aDP,
-                          G4int /*ZZ*/, G4int /*AA*/)
-   {
-     G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
-     G4double kineticEnergy = aDP->GetKineticEnergy(); 
-     if ( kineticEnergy / baryonNumber <= upperLimit ) 
-        return true;
-     return false;
-   }
+    virtual
+    G4bool IsIsoApplicable(const G4DynamicParticle* aDP,
+                           G4int /*ZZ*/, G4int /*AA*/)
+    {
+      G4int baryonNumber = aDP->GetDefinition()->GetBaryonNumber();
+      G4double kineticEnergy = aDP->GetKineticEnergy(); 
+      if ( kineticEnergy / baryonNumber <= upperLimit ) 
+         return true;
+      return false;
+    }
 
 
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
+    virtual
+    G4double GetCrossSection(const G4DynamicParticle*, 
+                             const G4Element*, G4double aTemperature);
 
-   virtual
-   G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ, 
-                                 G4int AA, G4double aTemperature);
+    virtual
+    G4double GetZandACrossSection(const G4DynamicParticle*, G4int ZZ, 
+                                  G4int AA, G4double aTemperature);
 
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {}
+    virtual
+    void BuildPhysicsTable(const G4ParticleDefinition&)
+    {}
 
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "G4IonsShenCrossSection: uses Shen formula"<<G4endl;}
+    virtual
+    void DumpPhysicsTable(const G4ParticleDefinition&) 
+    {G4cout << "G4IonsShenCrossSection: uses Shen formula"<<G4endl;}
 
-   private:
-      const G4double upperLimit;
-      const G4double lowerLimit; 
-      const G4double r0;
+  private:
+    const G4double upperLimit;
+    const G4double lowerLimit; 
+    const G4double r0;
 
-      G4double calEcmValue(const G4double, const G4double, const G4double); 
-      G4double calCeValue(const G4double); 
+    G4double calEcmValue(const G4double, const G4double, const G4double); 
+    G4double calCeValue(const G4double); 
 };
 
 #endif

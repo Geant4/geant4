@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronBetaDecayChannel.cc,v 1.7 2006/06/29 19:25:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -60,11 +60,18 @@ G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(
     SetDaughter(0, "e-");
     SetDaughter(1, "anti_nu_e");
     SetDaughter(2, "proton");
+  } else if (theParentName == "anti_neutron") {
+    SetBR(theBR);
+    SetParent("anti_neutron");
+    SetNumberOfDaughters(3);
+    SetDaughter(0, "e+");
+    SetDaughter(1, "nu_e");
+    SetDaughter(2, "anti_proton");
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4NeutronBetaDecayChannel:: constructor :";
-      G4cout << " parent particle is not muon but ";
+      G4cout << " parent particle is not neutron but ";
       G4cout << theParentName << G4endl;
     }
 #endif

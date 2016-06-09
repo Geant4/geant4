@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Pow.cc,v 1.4 2010/08/24 08:12:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Pow.cc,v 1.6 2011-01-08 15:39:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -36,6 +36,9 @@
 // Author:        Vladimir Ivanchenko
 //
 // Creation date: 23.05.2009
+//
+// Modifications:
+// 08.01.2011 V.Ivanchenko extended maxZ from 256 to 512
 //
 // -------------------------------------------------------------------
 
@@ -59,7 +62,7 @@ G4Pow* G4Pow::GetInstance()
 
 G4Pow::G4Pow()
 {
-  const G4int maxZ = 256; 
+  const G4int maxZ = 512; 
 
   pz13.resize(maxZ,0.0);
   lz.resize(maxZ,0.0);

@@ -37,6 +37,8 @@
 #include "WLSDetectorConstruction.hh"
 #include "WLSSteppingAction.hh"
 
+#include <ctime>
+
 WLSRunAction::WLSRunAction()
   : saveRndm(0), autoSeed(false)
 {

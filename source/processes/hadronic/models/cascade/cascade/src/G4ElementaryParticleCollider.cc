@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementaryParticleCollider.cc,v 1.75 2010/10/19 19:48:35 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4ElementaryParticleCollider.cc,v 1.75 2010-10-19 19:48:35 mkelsey Exp $
+// Geant4 tag: $Name: geant4-09-04-patch-01 $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100316  D. Wright (restored by M. Kelsey) -- Replace original (incorrect)
@@ -109,6 +109,7 @@
 #include "G4LorentzConvertor.hh"
 #include "Randomize.hh"
 #include <algorithm>
+#include <cfloat>
 #include <vector>
 
 using namespace G4InuclParticleNames;
@@ -904,32 +905,25 @@ G4ElementaryParticleCollider::sampleCMcosFor2to2(G4double pscm, G4double pFrac,
                                                  G4double pA, G4double pC,
                                                  G4double pCos) const 
 {
-  G4double term1;
-  G4double term2;
-  G4double randScale;
-  G4double randVal;
-  G4double costheta = 1.0;
-
   if (verboseLevel>3) {
     G4cout << " sampleCMcosFor2to2: pscm " << pscm << " pFrac " << pFrac
 	   << " pA " << pA << " pC " << pC << " pCos " << pCos << G4endl;
   }
 
-  if (G4UniformRand() < pFrac) {
-    // Sample small angles ( 0 < theta < theta0 )
-    term1 = 2.0*pscm*pscm*pA;
-    term2 = std::exp(-2.0*term1);
-    randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
-    randVal = (1.0 - randScale)*G4UniformRand() + randScale;
-  } else {
-    // Sample large angles ( theta0 < theta < 180 )
-    term1 = 2.0*pscm*pscm*pC;
-    term2 = std::exp(-2.0*term1);
-    randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
-    randVal = randScale*G4UniformRand();
-  }
+  G4bool smallAngle = (G4UniformRand() < pFrac);	// 0 < theta < theta0
 
-  costheta = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
+  G4double term1 = 2.0 * pscm*pscm * (smallAngle ? pA : pC);
+
+  if (std::abs(term1) < FLT_MIN) return 1.0;	// No actual scattering here!
+
+  G4double term2 = std::exp(-2.0*term1);
+  G4double randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
+
+  G4double randVal;
+  if (smallAngle) randVal = (1.0 - randScale)*G4UniformRand() + randScale;
+  else randVal = randScale*G4UniformRand();
+
+  G4double costheta = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
 
   if (verboseLevel>3) {
     G4cout << " term1 " << term1 << " term2 " << term2 << " randVal "

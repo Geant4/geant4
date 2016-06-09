@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4UAtomicDeexcitation.cc,v 1.11 
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
+//
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -58,7 +61,7 @@ class G4VhShellCrossSection
 
 public:
 
-  G4VhShellCrossSection();
+  G4VhShellCrossSection(const G4String& xname = "");
 
   virtual ~G4VhShellCrossSection();
 
@@ -67,11 +70,16 @@ public:
 			  G4double mass, 
 			  G4double deltaEnergy) const;
 
- virtual std::vector<G4double> GetCrossSection(G4int Z,
+  virtual std::vector<G4double> GetCrossSection(G4int Z,
 						G4double incidentEnergy,
 						G4double mass,
 						G4double deltaEnergy,
-					        G4bool testFlag = false) const =0;
+						G4bool testFlag = false) const =0;
+
+  virtual G4double CrossSection(G4int Z,
+                                G4int shell,
+				G4double incidentEnergy,
+				G4double mass) const =0;
 
   //protected:
 
@@ -83,6 +91,7 @@ public:
 
   virtual void SetTotalCS(G4double);
 
+  inline const G4String& GetName() const; 
 
 private:
 
@@ -90,7 +99,14 @@ private:
   G4VhShellCrossSection(const  G4VhShellCrossSection&);
   G4VhShellCrossSection & operator=(const  G4VhShellCrossSection &right);
 
+  G4String name;
+
 };
+
+inline const G4String& G4VhShellCrossSection::GetName() const
+{
+  return name;
+} 
 
 #endif
 

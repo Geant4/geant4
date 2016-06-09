@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2010/07/16 07:37:48 maire Exp $
+$Id: History,v 1.6 2010-07-16 07:37:48 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -12,6 +12,10 @@ summarize all major modifications introduced in the code and keep
 track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+28-01-11 mma (particleGunExample-V09-03-04)
+- HistoManager : fix aida fileOption
      
 15-07-10 mma (particleGunExample-V09-03-03)      
 - remove static data members and functions.

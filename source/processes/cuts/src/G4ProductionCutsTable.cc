@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.27 2010/01/22 11:10:26 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4ProductionCutsTable.cc,v 1.28 2010-12-23 06:00:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // --------------------------------------------------------------
@@ -506,6 +506,9 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
       G4cerr << " Can not open file " << fileName << G4endl;
     }
 #endif
+    G4Exception( "G4ProductionCutsTable::StoreMaterialInfo()",
+		 "ProcCuts102",
+		 JustWarning, "Can not open file ");
     return false;
   }
   
@@ -589,6 +592,9 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
       G4cerr << " Can not open file " << fileName << G4endl;
     }
 #endif
+    G4Exception( "G4ProductionCutsTable::CheckMaterialInfo()",
+		 "ProcCuts102",
+		 JustWarning, "Can not open file ");
     return false;
   }
   
@@ -605,11 +611,14 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
   if (key!=keyword) {
 #ifdef G4VERBOSE
     if (verboseLevel >0) {
-      G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
-      G4cout << " Key word in " << fileName << "= " << keyword ;
-      G4cout <<"( should be   "<< key << ")" <<G4endl;
+      G4cerr << "G4ProductionCutsTable::CheckMaterialInfo  ";
+      G4cerr << " Key word in " << fileName << "= " << keyword ;
+      G4cerr <<"( should be   "<< key << ")" <<G4endl;
     }
 #endif
+    G4Exception( "G4ProductionCutsTable::CheckMaterialInfo()",
+		 "ProcCuts103",
+		 JustWarning, "Bad Data Format");
     return false;
   }
 
@@ -650,11 +659,14 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     if (fIn.fail()) {
 #ifdef G4VERBOSE
       if (verboseLevel >0) {
-        G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
-        G4cout << " Bad data format ";
-        G4cout << " at " << idx+1 << "th  material "<< G4endl;        
+        G4cerr << "G4ProductionCutsTable::CheckMaterialInfo  ";
+        G4cerr << " Bad data format ";
+        G4cerr << " at " << idx+1 << "th  material "<< G4endl;        
       }
 #endif
+      G4Exception( "G4ProductionCutsTable::CheckMaterialInfo()",
+		   "ProcCuts103",
+		   JustWarning, "Bad Data Format");
       fIn.close();
       return false;
     }
@@ -666,15 +678,18 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     if ((0.999>ratio) || (ratio>1.001) ){
 #ifdef G4VERBOSE
       if (verboseLevel >0) {
-	G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
-	G4cout << " Inconsistent material density" << G4endl;;
-	G4cout << " at " << idx+1 << "th  material "<< G4endl;	
-	G4cout << "Name:   " << name << G4endl;
-	G4cout << "Density:" << std::setiosflags(std::ios::scientific) << density / (g/cm3) ;
-	G4cout << "(should be " << aMaterial->GetDensity()/(g/cm3)<< ")" << " [g/cm3]"<< G4endl;      
-	G4cout << std::resetiosflags(std::ios::scientific);
+	G4cerr << "G4ProductionCutsTable::CheckMaterialInfo  ";
+	G4cerr << " Inconsistent material density" << G4endl;;
+	G4cerr << " at " << idx+1 << "th  material "<< G4endl;	
+	G4cerr << "Name:   " << name << G4endl;
+	G4cerr << "Density:" << std::setiosflags(std::ios::scientific) << density / (g/cm3) ;
+	G4cerr << "(should be " << aMaterial->GetDensity()/(g/cm3)<< ")" << " [g/cm3]"<< G4endl;      
+	G4cerr << std::resetiosflags(std::ios::scientific);
       }
 #endif
+      G4Exception( "G4ProductionCutsTable::CheckMaterialInfo()",
+		   "ProcCuts104",
+		   JustWarning, "Inconsitent matrial density");
       fIn.close();
       return false;
     }
@@ -714,7 +729,10 @@ G4bool
       G4cerr << " Can not open file " << fileName << G4endl;
     }
 #endif
-    return false;
+    G4Exception( "G4ProductionCutsTable::StoreMaterialCutsCoupleInfo()",
+		 "ProcCuts102",
+		 JustWarning, "Can not open file ");
+     return false;
   }
   G4int numberOfCouples = coupleTable.size();
   if (ascii) {
@@ -840,6 +858,9 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
       G4cerr << " Can not open file " << fileName << G4endl;
     }
 #endif
+    G4Exception( "G4ProductionCutsTable::CheckMaterialCutsCoupleInfo()",
+		 "ProcCuts102",
+		 JustWarning, "Can not open file ");
     return false;
   }
   
@@ -856,11 +877,14 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
   if (key!=keyword) {
 #ifdef G4VERBOSE
     if (verboseLevel >0) {
-      G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
-      G4cout << " Key word in " << fileName << "= " << keyword ;
-      G4cout <<"( should be   "<< key << ")" <<G4endl;
+      G4cerr << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
+      G4cerr << " Key word in " << fileName << "= " << keyword ;
+      G4cerr <<"( should be   "<< key << ")" <<G4endl;
     }
 #endif
+    G4Exception( "G4ProductionCutsTable::CheckMaterialCutsCoupleInfo()",
+		 "ProcCuts103",
+		 JustWarning, "Bad Data Format");
     fIn.close();
     return false;
   }
@@ -1012,6 +1036,9 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
       G4cerr << "G4ProductionCutsTable::StoreCutsInfo  ";
       G4cerr << " Can not open file " << fileName << G4endl;
     }
+    G4Exception( "G4ProductionCutsTable::StoreCutsInfo()",
+		 "ProcCuts102",
+		 JustWarning, "Can not open file");
     return false;
   }
 
@@ -1085,6 +1112,9 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
       G4cerr << "G4ProductionCutTable::RetrieveCutsInfo  ";
       G4cerr << " Can not open file " << fileName << G4endl;
     }
+    G4Exception( "G4ProductionCutsTable::RetrieveCutsInfo()",
+		 "ProcCuts102",
+		 JustWarning, "Can not open file");
     return false;
   }
   
@@ -1100,10 +1130,13 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   }
   if (key!=keyword) {
     if (verboseLevel >0) {
-      G4cout << "G4ProductionCutTable::RetrieveCutsInfo ";
-      G4cout << " Key word in " << fileName << "= " << keyword ;
-      G4cout <<"( should be   "<< key << ")" <<G4endl;
+      G4cerr << "G4ProductionCutTable::RetrieveCutsInfo ";
+      G4cerr << " Key word in " << fileName << "= " << keyword ;
+      G4cerr <<"( should be   "<< key << ")" <<G4endl;
     }
+    G4Exception( "G4ProductionCutsTable::RetrieveCutsInfo()",
+		 "ProcCuts103",
+		 JustWarning, "Bad Data Format");
     return false;
   }
 

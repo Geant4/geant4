@@ -14,6 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 January 2011  G.Folger  (exampleP03-V09-03-05)
+--------------------------
+- re-tag, as tag was not included in geant4-09-04
+
+9 November 2010  G.Folger  (exampleP03-V09-03-04)
+--------------------------
+- add batch.mac as copy of run.mac, replacing use of OGL vis driver by ASCII
+
 8 November 2010  J.Allison (exampleP03-V09-03-03)
 --------------------------
 - Introduced G4UIExecutive.

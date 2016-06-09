@@ -456,9 +456,6 @@ if ( "X$g4ui_build_qt_session" == "Xy" || "X$g4ui_use_qt" == "Xy" )  then
     setenv QTFLAGS "$g4_qt_cxxflags"
     setenv QTLIBS "$g4_qt_libs"
     setenv QTMOC "$g4_qt_moc"
-    echo "On this machine the QTFLAGS=\$QTFLAGS"
-    echo "On this machine the QTLIBS=\$QTLIBS"
-    echo "On this machine the QTMOC=\$QTMOC"
 endif
 
 if ( "X$g4vis_build_openglqt_driver" == "Xy" || "X$g4vis_build_openglqt_driver" == "Xy" )  then
@@ -473,11 +470,23 @@ if ( "X$g4vis_build_openglqt_driver" == "Xy" || "X$g4vis_build_openglqt_driver" 
     endif
 
     setenv GLQTLIBS "$g4_qt_libs $g4_qt_gl_libs"
-    echo "On this machine the QTFLAGS=\$QTFLAGS"
-    echo "On this machine the GLQTLIBS=\$GLQTLIBS"
-    echo "On this machine the QTMOC=\$QTMOC"
 endif
 
+
+#
+# Because the setting of flags is messy, we separate out the reporting
+#
+if ( \$?QTMOC ) then
+    echo "On this machine the QTMOC=\$QTMOC"
+    echo "On this machine the QTFLAGS=\$QTFLAGS"
+    # {GL}QTLIBS dependent on what modules were chosen...
+    if ( \$?QTLIBS )  then
+        echo "On this machine the QTLIBS=\$QTLIBS"
+    endif
+    if ( \$?GLQTLIBS )  then
+        echo "On this machine the GLQTLIBS=\$GLQTLIBS"
+    endif
+endif
 
 
 

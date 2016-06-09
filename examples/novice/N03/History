@@ -1,4 +1,4 @@
-$Id: History,v 1.132 2010/12/01 05:56:40 allison Exp $
+$Id: History,v 1.132 2010-12-01 05:56:40 allison Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+01-02-11 mma (exampleN03-V09-03-06)
+- /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 1
      
 01-12-10 John Allison (exampleN03-V09-03-05)
 - First attempt at rationalising visTutor:

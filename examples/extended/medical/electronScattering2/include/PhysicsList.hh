@@ -23,6 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PhysicsList.hh,v 1.2 2011-01-05 18:48:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
 
@@ -32,6 +38,7 @@
 class G4VPhysicsConstructor;
 class PhysicsListMessenger;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsList: public G4VModularPhysicsList
 {
@@ -45,6 +52,7 @@ public:
     
   void ConstructProcess();    
   void AddDecay();
+  void AddStepMax();       
     
   void SetCuts();
   void SetCutForGamma(G4double);
@@ -62,6 +70,8 @@ private:
   G4double cutForElectron;
   G4double cutForPositron;    
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

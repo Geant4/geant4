@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.23 2010/11/18 17:43:36 allison Exp $
+$Id: History,v 1.23 2010-11-18 17:43:36 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.23 2010/11/18 17:43:36 allison Exp $
 
                       Category History file
                       ---------------------
+
+19.01.2011 - L.Pandola (DMX-V09-03-03)
+	   - Removed #includes of G4hLowEnergyIonisation (though commented)
 
 18.11.2010 - J.Allison (DMX-V09-03-02)
            - DMX.cc: Introduce G4UIExecutive.

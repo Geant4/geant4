@@ -43,6 +43,7 @@
 #include "G4NistManager.hh"
 
 G4UPiNuclearCrossSection::G4UPiNuclearCrossSection()
+ : G4VCrossSectionDataSet("G4UPiNuclearCrossSection")
 {
   Initialise();
 }

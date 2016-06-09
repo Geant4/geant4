@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 #include "ExGflashMaterialManager.hh"
-
+using namespace std;
 ExGflashMaterialManager* ExGflashMaterialManager::mpointer=0;
 
 void ExGflashMaterialManager::storeElement(G4String name,G4String symbol, double z, double a)
 {
 	if (elist.find(symbol)!=elist.end())
 	{
-		cout<<"attempt of redefining an existing element "<<symbol<<endl;
-                cout<<elist[symbol]<<endl;			
+		G4cout<<"attempt of redefining an existing element "<<symbol<<G4endl;
+                G4cout<<elist[symbol]<<G4endl;			
 	}
 	else
 	{
@@ -45,7 +45,7 @@ G4Element* ExGflashMaterialManager::getElement(G4String symbol)
 {
 	if (elist.find(symbol)==elist.end())
 	{
-		cout<<" element "<<symbol<<" not found!"<<endl;
+		G4cout<<" element "<<symbol<<" not found!"<<G4endl;
 		return NULL;
 	}
 	else
@@ -56,8 +56,8 @@ void ExGflashMaterialManager::storeMaterial(G4String name, double z, double a, d
 {
 	if (mlist.find(name)!=mlist.end())
 	{
-		cout<<"attempt of redefining an existing material "<<endl;
-                cout<<mlist[name]<<endl;			
+		G4cout<<"attempt of redefining an existing material "<<G4endl;
+                G4cout<<mlist[name]<<G4endl;			
 	}
 	else
 	{
@@ -70,8 +70,8 @@ void ExGflashMaterialManager::storeMaterial(G4String name, double d, int ncompon
 {
 	if (mlist.find(name)!=mlist.end())
 	{
-		cout<<"attempt of redefining an existing material "<<endl;
-                cout<<mlist[name]<<endl;			
+		G4cout<<"attempt of redefining an existing material "<<G4endl;
+                G4cout<<mlist[name]<<G4endl;			
 	}
 	else
 	{
@@ -84,12 +84,12 @@ G4Material* ExGflashMaterialManager::getMaterial(G4String name)
 {
 	if (mlist.find(name)==mlist.end())
 	{
-		cout<<" material "<<name<<" not found!"<<endl;
+		G4cout<<" material "<<name<<" not found!"<<G4endl;
 		return NULL;
 	}
 	else
 	{
-		// cout<<"returning material "<<name<<endl;
+		// G4cout<<"returning material "<<name<<G4endl;
 		return mlist[name];
 	}
 }
@@ -115,13 +115,13 @@ void ExGflashMaterialManager::addElement(G4String n1,G4String n2,int natoms)
 void ExGflashMaterialManager::printMaterialTable()
 {
 	MaterialList::iterator it;
-	for (it=mlist.begin();it!=mlist.end();it++) cout<<(*it).second<<endl;	
+	for (it=mlist.begin();it!=mlist.end();it++) G4cout<<(*it).second<<G4endl;	
 }
 
 void ExGflashMaterialManager::printElementTable()
 {
 	ElementList::iterator it;
-	for (it=elist.begin();it!=elist.end();it++) cout<<(*it).second<<endl;
+	for (it=elist.begin();it!=elist.end();it++) G4cout<<(*it).second<<G4endl;
 }
 
 void ExGflashMaterialManager::initialize()

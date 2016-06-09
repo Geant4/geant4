@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // G4 Physics class: G4QPhotonNuclearCrossSection for gamma+A cross sections
@@ -389,7 +389,7 @@ G4double G4QPhotonNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F,
 #ifdef debug
     G4cout<<"G4QPhNCS::CalcCS:bGDR A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dE="<<dE<<G4endl;
 #endif
-    if(A<=1. || dE <= THmin) sigma=0.;
+    if(A<=1. || dE <= THmin) sigma=0.;      // No GDR for A=1
     else      sigma=EquLinearFit(Energy,nL,THmin,dE,lastGDR);
 #ifdef debugn
     if(sigma<0.)

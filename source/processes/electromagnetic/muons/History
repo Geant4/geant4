@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2010/11/04 12:40:29 vnivanch Exp $
+$Id: History,v 1.138 2010-11-04 12:40:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 January 2010: V.Ivant (emmuons-V09-03-04)
+- G4ErrorEnergyLoss - fixed initialisation in constructor 
+                      (problem identified at Windows)
 
 4 November 2010: V.Ivant (emmuons-V09-03-03)
 G4EnergyLossForExtrapolator - fixed remaining Coverity warning -

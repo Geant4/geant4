@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-04 $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // G4 Physics class: G4PhotoNuclearCrossSection for gamma+A cross sections
@@ -68,8 +68,8 @@ std::vector<G4double*> G4PhotoNuclearCrossSection::HEN;
 
 
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection()
+ : G4VCrossSectionDataSet("Photo-nuclear")
 {}
-
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 {

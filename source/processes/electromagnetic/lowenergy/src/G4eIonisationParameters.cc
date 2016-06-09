@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.25 2009/06/10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4eIonisationParameters.cc,v 1.26 2010-12-03 16:03:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -41,6 +41,7 @@
 //                          chenged to "ion-..."
 // 17.02.04 V.Ivanchenko    Increase buffer size
 // 23.03.09 L.Pandola       Updated warning message
+// 03.12.10 V.Ivanchenko    Fixed memory leak in LoadData
 //
 // -------------------------------------------------------------------
 
@@ -224,24 +225,28 @@ void G4eIonisationParameters::LoadData()
 
     G4int shell = 0;
     std::vector<G4DataVector*> a;
-    for (size_t j=0; j<length; j++) 
-      {
-	G4DataVector* aa = new G4DataVector();
-	a.push_back(aa);
-      } 
+    a.resize(length);
     G4DataVector e;
-    e.clear();
+    G4bool isReady = false;
     do {
       file >> energy >> sum;
       if (energy == -2) break;
 
       if (energy >  -1) {
+	// new energy
+	if(!isReady) {
+	  isReady = true;
+	  e.clear();
+	  for (size_t j=0; j<length; ++j) { 
+	    a[j] = new G4DataVector(); 
+	  }  
+	}
         e.push_back(energy);
         a[0]->push_back(sum);
-        for (size_t j=0; j<length-1; j++) {
+        for (size_t j=1; j<length; ++j) {
 	  G4double qRead;
 	  file >> qRead;
-	  a[j + 1]->push_back(qRead);
+	  a[j]->push_back(qRead);
 	}    
 
       } else {
@@ -250,25 +255,22 @@ void G4eIonisationParameters::LoadData()
 	for (size_t k=0; k<length; k++) {
 
           G4VDataSetAlgorithm* interp;
-          if(0 == k) interp  = new G4LinLogLogInterpolation();
-          else       interp  = new G4LogLogInterpolation();
+          if(0 == k) { interp  = new G4LinLogLogInterpolation(); }
+          else       { interp  = new G4LogLogInterpolation(); }
 
 	  G4DataVector* eVector = new G4DataVector;
 	  size_t eSize = e.size();
 	  for (size_t s=0; s<eSize; s++) {
-	       eVector->push_back(e[s]);
+	    eVector->push_back(e[s]);
 	  }
 	  G4VEMDataSet* set = new G4EMDataSet(shell,eVector,a[k],interp,1.,1.);
 
 	  p[k]->AddComponent(set);
 	} 
 	  
-	// clear vectors
-        for (size_t j2=0; j2<length; j2++) {
-	  a[j2] = new G4DataVector();
-	} 
-        shell++;
-        e.clear();
+	// next shell
+        ++shell;
+        isReady = false;
       }
     } while (energy > -2);
     

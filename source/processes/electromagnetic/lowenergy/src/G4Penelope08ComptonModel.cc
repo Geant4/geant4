@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08ComptonModel.cc,v 1.7 2010/07/28 07:09:16 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Penelope08ComptonModel.cc,v 1.8 2010-12-15 10:26:41 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // Author: Luciano Pandola
 //
@@ -237,7 +237,8 @@ void G4Penelope08ComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material); 
 
   const G4int nmax = 64;
-  G4double rn[nmax],pac[nmax];
+  G4double rn[nmax]={0.0};
+  G4double pac[nmax]={0.0};
   
   G4double S=0.0;
   G4double epsilon = 0.0;

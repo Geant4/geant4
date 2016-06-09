@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08RayleighModel.cc,v 1.3 2010/07/28 07:09:16 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Penelope08RayleighModel.cc,v 1.4 2010-12-15 10:26:41 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // Author: Luciano Pandola
 //
@@ -216,6 +216,7 @@ G4double G4Penelope08RayleighModel::ComputeCrossSectionPerAtom(const G4ParticleD
        G4cout << "Problem in G4Penelope08RayleighModel::ComputeCrossSectionPerAtom" 
 	 << G4endl;
        G4Exception();
+       return 0;
      }
    G4double logene = std::log(energy);
    G4double logXS = atom->Value(logene);
@@ -340,6 +341,7 @@ void G4Penelope08RayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*
       G4cout << " G4Penelope08RayleighModel::SampleSecondaries" << G4endl;
       G4cout << "Looks like the model is _not_ properly initialized" << G4endl;
       G4Exception();
+      return;
     }
   
   //2) retrieve or build the sampling table
@@ -431,6 +433,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
     {
       G4String excep = "G4Penelope08RayleighModel - G4LEDATA environment variable not set!";
       G4Exception(excep);
+      return;
     }
 
   /*
@@ -456,6 +459,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Corrupted data file for Z=" << Z << G4endl;
       G4Exception();
+      return;
     }  
   G4PhysicsFreeVector* theVec = new G4PhysicsFreeVector((size_t)nPoints);
   G4double ene=0,f1=0,f2=0,xs=0;
@@ -479,6 +483,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Problem with allocation of logAtomicCrossSection data table " << G4endl;
       G4Exception();
+      return;
     }
   logAtomicCrossSection->insert(std::make_pair(Z,theVec));
   file.close();
@@ -504,6 +509,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Corrupted data file for Z=" << Z << G4endl;
       G4Exception();
+      return;
     }  
   G4PhysicsFreeVector* theFFVec = new G4PhysicsFreeVector((size_t)nPoints);
   G4double q=0,ff=0,incoh=0;
@@ -533,6 +539,7 @@ void G4Penelope08RayleighModel::ReadDataFile(const G4int Z)
       G4cout << "G4Penelope08RayleighModel::ReadDataFile()" << G4endl;
       G4cout << "Problem with allocation of atomicFormFactor data table " << G4endl;
       G4Exception();
+      return;
     }
   atomicFormFactor->insert(std::make_pair(Z,theFFVec));
   file.close();
@@ -559,6 +566,7 @@ G4double G4Penelope08RayleighModel::GetFSquared(const G4Material* mat, const G4d
       G4cout << " G4Penelope08RayleighModel::GetFSquared()" << G4endl;
       G4cout << "Unable to retrieve F squared table for " << mat->GetName();
       G4Exception();
+      return 0;
     }
   if (logQSquared < -20) // Q < 1e-9
     {
@@ -742,9 +750,9 @@ void G4Penelope08RayleighModel::InitializeSamplingAlgorithm(const G4Material* ma
 	    }
 	}while(reLoop);
 
-      if (pdfi) delete pdfi;
-      if (pdfih) delete pdfih;
-      if (sumi) delete sumi;
+      delete pdfi;
+      delete pdfih;
+      delete sumi;
     } //end of first loop over i
 
   //Now assign last point
@@ -981,7 +989,8 @@ void G4Penelope08RayleighModel::InitializeSamplingAlgorithm(const G4Material* ma
 
   if (verboseLevel > 2)
     {
-      G4cout << "*************************************************************************" << G4endl;
+      G4cout << "*************************************************************************" << 
+	G4endl;
       G4cout << "Sampling table for Penelope Rayleigh scattering in " << mat->GetName() << G4endl;
       theTable->DumpTable();
     } 
@@ -989,15 +998,15 @@ void G4Penelope08RayleighModel::InitializeSamplingAlgorithm(const G4Material* ma
 
  
   //Clean up temporary vectors
-  if (x) delete x;
-  if (a) delete a;
-  if (b) delete b;
-  if (c) delete c;
-  if (err) delete err;
-  if (area) delete area;
-  if (PAC) delete PAC;
-  if (ITTL) delete ITTL;
-  if (ITTU) delete ITTU;
+  delete x;
+  delete a;
+  delete b;
+  delete c;
+  delete err;
+  delete area;
+  delete PAC;
+  delete ITTL;
+  delete ITTU;
 
   //DONE!
   return;
@@ -1025,6 +1034,7 @@ void G4Penelope08RayleighModel::GetPMaxTable(const G4Material* mat)
       G4cout << "G4Penelope08RayleighModel::BuildPMaxTable" << G4endl;
       G4cout << "WARNING: samplingTable is not properly instantiated" << G4endl;
       G4Exception();
+      return;
     }
 
   if (!samplingTable->count(mat))
@@ -1107,8 +1117,8 @@ void G4Penelope08RayleighModel::GetPMaxTable(const G4Material* mat)
 					     (*fun)[nip-3])*CONS;
 	      sum->push_back(last);	 
 	      thePMax = thePAC + (*sum)[sum->size()-1]; //last point
-	      if (fun) delete fun;
-	      if (sum) delete sum;
+	      delete fun;
+	      delete sum;
 	    }
 	  else
 	    {

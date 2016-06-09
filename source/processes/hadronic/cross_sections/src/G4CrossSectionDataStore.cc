@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.cc,v 1.20 2010/11/19 08:14:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CrossSectionDataStore.cc,v 1.21 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -314,16 +314,79 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 }
 
 
-void
-G4CrossSectionDataStore::
+void G4CrossSectionDataStore::
 DumpPhysicsTable(const G4ParticleDefinition& aParticleType)
 {
+  // Print out all cross section data sets used and the energies at
+  // which they apply
+
   if (NDataSetList == 0) {
     G4cout << "WARNING - G4CrossSectionDataStore::DumpPhysicsTable: "
-	   << " no data sets registered"<<G4endl;
+	   << " no data sets registered" << G4endl;
     return;
   }
+
+  // Get low and high energy limits of data sets
+
+  std::vector<G4double> limitE;
   for (G4int i = NDataSetList-1; i >= 0; i--) {
-    DataSetList[i]->DumpPhysicsTable(aParticleType);
+    limitE.push_back(DataSetList[i]->GetMinKinEnergy() );
+    limitE.push_back(DataSetList[i]->GetMaxKinEnergy() );
   }
+
+  // Sort the energies and find average values for each interval
+
+  std::sort(limitE.begin(), limitE.end());
+  std::vector<G4double> avE;
+  for (unsigned int i = 0; i < limitE.size()-1; i++)
+              avE.push_back((limitE[i] + limitE[i+1])/2.);
+
+  // Check each average energy to see which set it belongs to
+
+  G4double testE;
+  G4int prevSet = -1;
+  std::vector<G4int> csIndex;
+  std::vector<G4double> csLoE;
+  std::vector<G4double> csHiE;
+
+  for (unsigned int i = 0; i < avE.size(); i++) {
+    testE = avE[i];
+    for (G4int j = NDataSetList-1; j >= 0; j--) {
+      if (testE > DataSetList[j]->GetMinKinEnergy() && 
+          testE < DataSetList[j]->GetMaxKinEnergy() ) {
+        if (j != prevSet) {
+          prevSet = j;
+          csIndex.push_back(j);
+          csLoE.push_back(limitE[i]);
+          csHiE.push_back(limitE[i+1]);
+        } else {
+          csHiE.pop_back();
+          csHiE.push_back(limitE[i+1]);
+        }
+        break;
+      }
+    }
+  }
+
+  // Print out
+
+  G4int csSet;
+  G4bool first = true;
+  for (unsigned int i = 0; i < csIndex.size(); i++) {
+    csSet = csIndex[i];
+    if (!first) G4cout << "                                 ";
+    G4cout << std::setw(25)
+           << DataSetList[csSet]->GetName() << ": Emin(GeV)= "
+           << std::setw(4) << csLoE[i]/GeV << "  Emax(GeV)= " 
+           << csHiE[i]/GeV << G4endl;
+    first = false;
+  }
+
+  for (G4int i = NDataSetList-1; i >= 0; i--) {
+    if (DataSetList[i]->GetName() == "G4CrossSectionPairGG")
+      DataSetList[i]->DumpPhysicsTable(aParticleType);
+  }
+
+  G4cout << G4endl;
+
 }

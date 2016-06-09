@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc,v 1.16 2007/01/05 14:12:13 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisAttributes.cc,v 1.17 2010-12-07 09:36:59 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // John Allison  23rd October 1996
@@ -41,6 +41,7 @@ fColour              (G4Colour ()),
 fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
+fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-DBL_MAX),
@@ -56,6 +57,7 @@ fColour              (G4Colour ()),
 fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
+fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-DBL_MAX),
@@ -71,6 +73,7 @@ fColour              (colour),
 fLineStyle           (unbroken),
 fLineWidth           (1.),
 fForceDrawingStyle   (false),
+fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-DBL_MAX),
@@ -81,17 +84,19 @@ fAttDefs             (0)
 
 G4VisAttributes::G4VisAttributes (G4bool visibility,
 				  const G4Colour& colour):
-fVisible            (visibility),
-fDaughtersInvisible (false),
-fColour             (colour),
-fLineStyle          (unbroken),
-fLineWidth          (1.),
-fForceDrawingStyle  (false),
+fVisible             (visibility),
+fDaughtersInvisible  (false),
+fColour              (colour),
+fLineStyle           (unbroken),
+fLineWidth           (1.),
+fForceDrawingStyle   (false),
+fForcedStyle         (wireframe),
+fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-DBL_MAX),
 fEndTime             (DBL_MAX),
-fAttValues          (0),
-fAttDefs            (0)
+fAttValues           (0),
+fAttDefs             (0)
 {}
 
 const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);

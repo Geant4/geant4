@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreRayleighModel.cc,v 1.8 2009/09/23 16:54:06 flongo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4LivermoreRayleighModel.cc,v 1.9 2010-12-27 17:45:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // Author: Sebastien Inserti
 //         30 October 2008
@@ -37,6 +37,7 @@
 //                  - remove GetMeanFreePath method and table
 //                  - remove initialisation of element selector 
 //                  - use G4ElementSelector
+// 26 Dec 2010   V Ivanchenko Load data tables only once to avoid memory leak
 
 #include "G4LivermoreRayleighModel.hh"
 
@@ -78,8 +79,8 @@ G4LivermoreRayleighModel::G4LivermoreRayleighModel(const G4ParticleDefinition*,
 
 G4LivermoreRayleighModel::~G4LivermoreRayleighModel()
 {  
-  if (crossSectionHandler) delete crossSectionHandler;
-  if (formFactorData) delete formFactorData;
+  delete crossSectionHandler;
+  delete formFactorData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -87,19 +88,21 @@ G4LivermoreRayleighModel::~G4LivermoreRayleighModel()
 void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
 					  const G4DataVector& cuts)
 {
-  if (verboseLevel > 3)
+  if (verboseLevel > 3) {
     G4cout << "Calling G4LivermoreRayleighModel::Initialise()" << G4endl;
+  }
 
   if (crossSectionHandler)
   {
     crossSectionHandler->Clear();
     delete crossSectionHandler;
   }
-  
+  delete formFactorData;
+
   // Data are read for all materials
   
   crossSectionHandler = new G4CrossSectionHandler;
-  crossSectionHandler->Clear();
+  //  crossSectionHandler->Clear();
   G4String crossSectionFile = "rayl/re-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
 
@@ -107,13 +110,13 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
   G4String formFactorFile = "rayl/re-ff-";
   formFactorData = new G4CompositeEMDataSet(ffInterpolation,1.,1.);
   formFactorData->LoadData(formFactorFile);
-
+  
   InitialiseElementSelectors(particle,cuts);
 
   //  
-  if (verboseLevel > 2) 
+  if (verboseLevel > 2) {
     G4cout << "Loaded cross section files for Livermore Rayleigh model" << G4endl;
-
+  }
   if (verboseLevel > 0) { 
     G4cout << "Livermore Rayleigh model is initialized " << G4endl
 	   << "Energy range: "
@@ -122,7 +125,7 @@ void G4LivermoreRayleighModel::Initialise(const G4ParticleDefinition* particle,
 	   << G4endl;
   }
 
-  if(isInitialised) return;
+  if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 
@@ -136,12 +139,12 @@ G4double G4LivermoreRayleighModel::ComputeCrossSectionPerAtom(
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
-  if (verboseLevel > 3)
+  if (verboseLevel > 3) {
     G4cout << "Calling CrossSectionPerAtom() of G4LivermoreRayleighModel" << G4endl;
-
-  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit)
+  }
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) {
     return 0.0;
-
+  }
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;
 }

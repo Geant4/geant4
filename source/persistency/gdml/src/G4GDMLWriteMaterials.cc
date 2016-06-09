@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc,v 1.26 2010/10/14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLWriteMaterials.cc,v 1.26 2010-10-14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // class G4GDMLWriteMaterials Implementation
 //
@@ -162,7 +162,9 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
   
    const size_t NumberOfElements = materialPtr->GetNumberOfElements();
 
-   if (NumberOfElements>1)
+   if ( (NumberOfElements>1)
+      || ( materialPtr->GetElement(0)
+        && materialPtr->GetElement(0)->GetNumberOfIsotopes()>1 ) )
    {
       const G4double* MassFractionVector = materialPtr->GetFractionVector();
 

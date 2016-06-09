@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.4 2010/11/15 08:24:43 gcosmo Exp $
+# $Id: sources.cmake,v 1.4 2010-11-15 08:24:43 gcosmo Exp $
 #
 #------------------------------------------------------------------------------
 
@@ -432,6 +432,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4VecpssrKModel.cc
         G4VecpssrLiModel.cc
         G4VeLowEnergyLoss.cc
+        G4VEMDataSet.cc
         G4VhElectronicStoppingPower.cc
         G4VhNuclearStoppingPower.cc
         G4VhShellCrossSection.cc

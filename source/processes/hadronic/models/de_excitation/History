@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 January 2010 Vladimir Ivanchenko (hadr-deex-V09-03-28)
+----------------------------------------------------------
+- G4ParaFissionModel - fixed initialisation of G4Fragment (A,Z order),
+                       use G4NucleiProperties to access mass 
+
 23 October 2010 Vladimir Ivanchenko (hadr-deex-V09-03-27)
 ----------------------------------------------------------
 - G4Evaporation, G4EvaporationChannel, G4EvaporationProbability -

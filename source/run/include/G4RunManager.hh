@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.55 2010/11/15 09:49:32 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4RunManager.hh,v 1.55 2010-11-15 09:49:32 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 
@@ -351,11 +351,17 @@ class G4RunManager
       G4String shellCmd = "mkdir -p ";
 #else
       std::replace(dirStr.begin(), dirStr.end(),'/','\\');
-      G4String shellCmd = "mkdir ";
+      G4String shellCmd = "if not exist " + dirStr + " mkdir ";
 #endif
       shellCmd += dirStr;
       randomNumberStatusDir = dirStr;
-      system(shellCmd);
+      G4int sysret = system(shellCmd);
+      if(sysret!=0)
+      { 
+        G4String errmsg = "\"" + shellCmd + "\" returns non-zero value. Directory creation failed.";
+        G4Exception("G4RunManager::SetRandomNumberStoreDir()","RUN",JustWarning,errmsg);
+        G4cerr << " return value = " << sysret << G4endl;
+      }
     }
     inline const G4String& GetRandomNumberStoreDir() const
     { return randomNumberStatusDir; }

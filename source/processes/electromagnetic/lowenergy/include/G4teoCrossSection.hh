@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4teoCrossSection.hh,v 1.6 2010/11/12 18:09:44 mantero Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4teoCrossSection.hh,v 1.7 2011-01-03 19:35:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //         
 //
@@ -55,16 +55,19 @@ class G4teoCrossSection : public G4VhShellCrossSection
 {
 public:
 
-  G4teoCrossSection(G4String);
+  G4teoCrossSection(const G4String& name);
 
-  ~G4teoCrossSection();
+  virtual ~G4teoCrossSection();
 			     
-
   std::vector<G4double> GetCrossSection(G4int Z,
 					G4double incidentEnergy,
 					G4double mass,
 					G4double deltaEnergy = 0,
 					G4bool testFlag = false) const;
+
+  G4double CrossSection(G4int Z, G4int shell,
+			G4double incidentEnergy,
+			G4double mass) const;
 
   std::vector<G4double> Probabilities(G4int Z,
 				      G4double incidentEnergy,
@@ -73,9 +76,7 @@ public:
   
   
   void SetTotalCS(G4double);
-  
-  
-  
+    
 private:
   
   G4double totalCS;

@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // G4 Physics class: G4QHyperonPlusNuclearCrossSection for gamma+A cross sections
@@ -247,7 +247,7 @@ G4double G4QHyperonPlusNuclearCrossSection::CalculateCrossSection(G4bool, G4int 
 #endif
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
-  G4double A=targN+targZ;              // A of the target
+  //G4double A=targN+targZ;              // A of the target
 #ifdef debug
   G4cout<<"G4QHyPNucCS::CalCS: A="<<A<<", F="<<F<<",I="<<I<<",nL="<<nL<<",nH="<<nH<<G4endl;
 #endif
@@ -301,13 +301,12 @@ G4double G4QHyperonPlusNuclearCrossSection::CalculateCrossSection(G4bool, G4int 
   else if (Momentum<Pmin)              // High Energy region
   {
 #ifdef debug
-    G4cout<<"G4QHyPNCS::CalcCS:bLEN A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dP="<<dP<<G4endl;
+    G4cout<<"G4QHyPNCS::CalcCS:bLEN nL="<<nL<<",TH="<<THmin<<",dP="<<dP<<G4endl;
 #endif
-    if(A<=1.) sigma=0.;
-    else      sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLEN);
+    sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLEN);
 #ifdef debugn
     if(sigma<0.)
-      G4cout<<"G4QHyPNuCS::CalcCS:A="<<A<<",E="<<Momentum<<",T="<<THmin<<",d="<<dP<<G4endl;
+      G4cout<<"G4QHyPNuCS::CalcCS: E="<<Momentum<<",T="<<THmin<<",d="<<dP<<G4endl;
 #endif
   }
   else if (Momentum<Pmax)              // High Energy region

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.cc,v 1.9 2006/06/29 19:06:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NURBS.cc,v 1.10 2010-12-07 09:36:59 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -483,7 +483,7 @@ G4NURBS::G4NURBS( t_order in_Uorder, t_order in_Vorder,
   {
     t_KnotVectorGenFlag flag = (dummy?in_VKVGFlag:in_UKVGFlag);
     m[dir].pKnots = 0;  // (allocation under our control)
-    if (  flag && !MakeKnotVector(m[dir], flag) )
+    if ( flag != UserDefined && !MakeKnotVector(m[dir], flag) )
     {
       G4cerr << "\nFATAL ERROR: G4NURBS::G4NURBS: "
              << "Unable to make knot vector along "

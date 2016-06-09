@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingVerbose.cc,v 1.1 2010/09/16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: SteppingVerbose.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -101,7 +101,7 @@ void SteppingVerbose::StepInfo()
 	                    fN2ndariesAlongStepDoIt +
 	                    fN2ndariesPostStepDoIt;
       if(tN2ndariesTot>0){
-	G4cout << "    :----- List of 2ndaries - "
+	G4cout << "\n    :----- List of secondaries - "
 	       << "#SpawnInStep=" << std::setw(3) << tN2ndariesTot 
 	       << "(Rest="  << std::setw(2) << fN2ndariesAtRestDoIt
 	       << ",Along=" << std::setw(2) << fN2ndariesAlongStepDoIt
@@ -113,17 +113,15 @@ void SteppingVerbose::StepInfo()
 
 	for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
                         lp1<(*fSecondary).size(); lp1++){
-	  G4cout << "    : "
+	  G4cout << "   "
+		 << std::setw(13)		 
+		 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName()	  
+		 << ":  energy ="
 		 << std::setw(6)
-		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
+		 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy")	 
+		 << "  time ="
 		 << std::setw(6)
-		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().y(),"Length")
-		 << std::setw(6)
-		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().z(),"Length")
-		 << std::setw(6)
-		 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy")
-		 << std::setw(10)
-		 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName();
+		 << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time");	 			 
 	  G4cout << G4endl;
 	}
               

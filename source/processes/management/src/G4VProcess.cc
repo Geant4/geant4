@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc,v 1.17 2010/10/07 14:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VProcess.cc,v 1.18 2010-12-22 09:14:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -103,8 +103,11 @@ void G4VProcess::SubtractNumberOfInteractionLengthLeft(
       G4cerr << G4endl;
     }
 #endif
+    G4String msg = "Negative currentInteractionLength for ";
+    msg += 	theProcessName;
     G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()",
-		"Negative currentInteractionLength",EventMustBeAborted,theProcessName);
+		"ProcMan",EventMustBeAborted,
+		msg);
   }
 }
 
@@ -172,8 +175,8 @@ const G4String& G4VProcess::GetProcessTypeName(G4ProcessType aType )
 
 G4VProcess & G4VProcess::operator=(const G4VProcess &)
 {
-  G4Exception("G4VProcess::operator=","Illegal operation",
-	      JustWarning,"Assignment operator is called");
+  G4Exception("G4VProcess::operator=","ProcMan101",
+	      JustWarning,"Assignment operator is called but NO effect");
   return *this;
 }
 

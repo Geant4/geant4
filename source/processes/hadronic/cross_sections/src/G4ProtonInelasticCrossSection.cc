@@ -34,6 +34,17 @@
 #include "globals.hh"
 
 
+G4ProtonInelasticCrossSection::G4ProtonInelasticCrossSection()
+ : G4VCrossSectionDataSet("Axen-Wellisch")
+{
+  SetMinKinEnergy(0.0);
+  SetMaxKinEnergy(100*TeV);
+}
+
+G4ProtonInelasticCrossSection::~G4ProtonInelasticCrossSection()
+{}
+
+
 G4double G4ProtonInelasticCrossSection::
 GetCrossSection(const G4DynamicParticle* aPart, 
                 const G4Element* anEle, G4double /*aTemperature*/)

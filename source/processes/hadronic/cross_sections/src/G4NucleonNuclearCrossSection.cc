@@ -450,7 +450,8 @@ using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 
 G4NucleonNuclearCrossSection::G4NucleonNuclearCrossSection()
- :fTotalXsc(0.0), fElasticXsc(0.0)
+ : G4VCrossSectionDataSet("G4NucleonNuclearCrossSection"),
+   fTotalXsc(0.0), fElasticXsc(0.0)
 {
   theNeutron = G4Neutron::Neutron();
   theProton  = G4Proton::Proton();

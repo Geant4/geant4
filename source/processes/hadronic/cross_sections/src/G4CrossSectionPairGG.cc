@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionPairGG.cc,v 1.5 2010/11/18 11:01:01 gunter Exp $
-// $ GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4CrossSectionPairGG.cc,v 1.6 2011-01-09 02:37:48 dennis Exp $
+// $ GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //   Class G4CrossSectionPairGG
 //
@@ -42,13 +42,13 @@
 #include "G4NistManager.hh"
 #include "G4ThreeVector.hh"
 
-G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet * low,
-			    G4double Etransit):
-	theLowX(low),
-	ETransition(Etransit)		    
+G4CrossSectionPairGG::G4CrossSectionPairGG(G4VCrossSectionDataSet* low,
+                                           G4double Etransit)
+ : G4VCrossSectionDataSet("G4CrossSectionPairGG"),
+   theLowX(low),  ETransition(Etransit)		    
 {
-    theHighX=new G4GlauberGribovCrossSection();
-    verboseLevel=0;
+  theHighX=new G4GlauberGribovCrossSection();
+  verboseLevel=0;
 }
 
 G4CrossSectionPairGG::~G4CrossSectionPairGG()
@@ -154,6 +154,12 @@ void G4CrossSectionPairGG::BuildPhysicsTable(const G4ParticleDefinition& pDef)
        scale_factors.push_back(forPart);
     }
 }
+
+
 void G4CrossSectionPairGG::DumpPhysicsTable(const G4ParticleDefinition&)
 {
+  G4cout << std::setw(24) << " " << " G4CrossSectionPairGG: "
+         << theLowX->GetName() << " cross sections " << G4endl;
+  G4cout << std::setw(27) << " " << "below " << ETransition/GeV
+         << " GeV, Glauber-Gribov above " << G4endl;
 }

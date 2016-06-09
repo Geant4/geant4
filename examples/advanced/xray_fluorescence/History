@@ -1,6 +1,6 @@
-# $Id: History,v 1.13 2010/11/19 09:30:42 cirrone Exp $
+# $Id: History,v 1.13 2010-11-19 09:30:42 cirrone Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-09-04 $
+# GEANT4 tag $Name: geant4-09-04-patch-01 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-01-2011 L.Pandola, Tag: XrayFluo-V09-03-04
+- Ensure compatibility with CLHEP 2.1.0.0
 
 18-11-2010 G.A.P.Cirrone, Tag: XrayFluo-V09-03-03
 - Corrected bug in the MercuryPrimaryGeneratorAction file on source definition

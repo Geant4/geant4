@@ -34,10 +34,12 @@
 #include "G4IonTable.hh"
 #include "G4HadTmpUtil.hh"
 
-G4TripathiCrossSection::G4TripathiCrossSection() 
+G4TripathiCrossSection::G4TripathiCrossSection()
+ : G4VCrossSectionDataSet("G4TripathiCrossSection")
 {
   //  G4cout <<"New G4TripathiCrossSection " << this << G4endl;
 }
+
 G4TripathiCrossSection::~G4TripathiCrossSection() 
 {}
 

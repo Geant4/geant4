@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // G4 Physics class: G4QKaonPlusNuclearCrossSection for gamma+A cross sections
@@ -298,16 +298,16 @@ G4double G4QKaonPlusNuclearCrossSection::CalculateCrossSection(G4bool, G4int F, 
   G4cout<<"G4QKpNCS::CalcCS:lTH="<<lastTH<<",Pmi="<<Pmin<<",dP="<<dP<<",dlP="<<dlP<<G4endl;
 #endif
   if (Momentum<lastTH) return 0.;      // It must be already checked in the interface class
-  else if (Momentum<Pmin)              // High Energy region
+  else if (Momentum<Pmin)              // Low Energy region
   {
 #ifdef debug
-    G4cout<<"G4QKpNCS::CalcCS:bLEN A="<<A<<", nL="<<nL<<",TH="<<THmin<<",dP="<<dP<<G4endl;
+    G4cout<<"G4QKpNCS::CalcCS:bLEN A="<<A<<", nL="<<nL<<", P="<<Momentum<<G4endl;
 #endif
-    if(A<=1.) sigma=0.;
-    else      sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLEN);
+    if(A<=1. && Momentum < 600.) sigma=0.; // Approximation tot/el uncertainty
+    else sigma=EquLinearFit(Momentum,nL,THmin,dP,lastLEN);
 #ifdef debugn
     if(sigma<0.)
-      G4cout<<"G4QKpNuCS::CalcCS:A="<<A<<",E="<<Momentum<<",T="<<THmin<<",dP="<<dP<<G4endl;
+      G4cout<<"G4QKpNuCS::CalcCS: E="<<Momentum<<",T="<<THmin<<",dP="<<dP<<G4endl;
 #endif
   }
   else if (Momentum<Pmax)              // High Energy region

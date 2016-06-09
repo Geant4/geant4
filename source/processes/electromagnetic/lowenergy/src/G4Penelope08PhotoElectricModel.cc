@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Penelope08PhotoElectricModel.cc,v 1.5 2010/07/28 07:09:16 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Penelope08PhotoElectricModel.cc,v 1.6 2010-12-15 10:26:41 pandola Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // Author: Luciano Pandola
 //
@@ -153,6 +153,7 @@ G4double G4Penelope08PhotoElectricModel::ComputeCrossSectionPerAtom(
        G4cout << "Problem in G4Penelope08PhotoElectricModel::ComputeCrossSectionPerAtom"
          << G4endl;
        G4Exception();
+       return 0;
      }
    G4double logene = std::log(energy);
    G4double logXS = totalXSLog->Value(logene);
@@ -436,6 +437,7 @@ void G4Penelope08PhotoElectricModel::ReadDataFile(G4int Z)
     {
       G4String excep = "G4Penelope08PhotoElectricModel - G4LEDATA environment variable not set!";
       G4Exception(excep);
+      return;
     }
  
   /*
@@ -478,6 +480,7 @@ void G4Penelope08PhotoElectricModel::ReadDataFile(G4int Z)
       G4cout << "G4Penelope08PhotoElectricModel::ReadDataFile()" << G4endl;
       G4cout << "Corrupted data file for Z=" << Z << G4endl;
       G4Exception();
+      return;
     }
   G4PhysicsTable* thePhysicsTable = new G4PhysicsTable();
 
@@ -638,6 +641,7 @@ G4double G4Penelope08PhotoElectricModel::GetShellCrossSection(G4int Z,size_t she
        G4cout << "Problem in G4Penelope08PhotoElectricModel::GetShellCrossSection()"
          << G4endl;
        G4Exception();
+       return 0;
      }
    G4double logene = std::log(energy);
    G4double logXS = totalXSLog->Value(logene);

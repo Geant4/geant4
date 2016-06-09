@@ -47,56 +47,60 @@
 
 #include "G4VCrossSectionDataSet.hh"
 
+
 class G4ProtonInelasticCrossSection : public G4VCrossSectionDataSet
 {
-   public:
+  public:
+
+    G4ProtonInelasticCrossSection();
+    ~G4ProtonInelasticCrossSection();
+
+    virtual
+    G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* aEle)
+    {
+      G4bool result = false;
+      if ((aPart->GetDefinition() == G4Proton::Proton() ) &&
+          (aPart->GetKineticEnergy() < GetMaxKinEnergy()) ) result = true;
+      if (aEle->GetZ() < 3) result = false;
+      return result;
+    }
+
+
+    G4bool
+    IsIsoApplicable(const G4DynamicParticle* aParticle, G4int ZZ, G4int /*AA*/)
+    {
+      G4bool result = false;
+      if ((aParticle->GetDefinition() == G4Proton::Proton() ) &&
+          (aParticle->GetKineticEnergy() < GetMaxKinEnergy()) ) result = true;
+      if (ZZ < 3) result = false;
+      return result;
+    }
+
+
+    virtual
+    G4double GetCrossSection(const G4DynamicParticle*, 
+                             const G4Element*, G4double aTemperature);
+
    
-   virtual
-   G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element* aEle)
-   {
-     G4bool result = false;
-     if ( (aPart->GetDefinition()==G4Proton::Proton()) &&
-        ( aPart->GetKineticEnergy()<100*TeV) ) result = true;
-     if(aEle->GetZ()<3) result = false;
-     return result;
-   }
-
-
-   G4bool
-   IsIsoApplicable(const G4DynamicParticle* aParticle, G4int ZZ, G4int /*AA*/)
-   {
-     G4bool result = false;
-     if (( aParticle->GetDefinition() == G4Proton::Proton()) &&
-         ( aParticle->GetKineticEnergy() < 100*TeV) ) result = true;
-     if (ZZ < 3) result = false;
-     return result;
-   }
-
-
-   virtual
-   G4double GetCrossSection(const G4DynamicParticle*, 
-                            const G4Element*, G4double aTemperature);
-
-   
-   G4double
-   GetZandACrossSection(const G4DynamicParticle* aParticle, 
-                        G4int ZZ, G4int AA, G4double /*aTemperature*/)
-   {
-     return GetCrossSection(aParticle->GetKineticEnergy(), AA, ZZ);
-   }
+    G4double
+    GetZandACrossSection(const G4DynamicParticle* aParticle, 
+                         G4int ZZ, G4int AA, G4double /*aTemperature*/)
+    {
+      return GetCrossSection(aParticle->GetKineticEnergy(), AA, ZZ);
+    } 
  
 
-   G4double GetCrossSection(G4double anEnergy, G4int anA, G4int aZ);
+    G4double GetCrossSection(G4double anEnergy, G4int anA, G4int aZ);
 
 
-   virtual
-   void BuildPhysicsTable(const G4ParticleDefinition&)
-   {}
+    virtual
+    void BuildPhysicsTable(const G4ParticleDefinition&)
+    {}
 
 
-   virtual
-   void DumpPhysicsTable(const G4ParticleDefinition&) 
-   {G4cout << "G4ProtonInelasticCrossSection: uses formula"<<G4endl;}
+    virtual
+    void DumpPhysicsTable(const G4ParticleDefinition&) 
+    {G4cout << "G4ProtonInelasticCrossSection: uses formula"<<G4endl;}
 
 };
 

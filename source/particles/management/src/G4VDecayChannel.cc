@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc,v 1.20 2010/05/20 01:01:07 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VDecayChannel.cc,v 1.21 2010-12-22 07:07:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -287,8 +287,8 @@ void G4VDecayChannel::FillDaughters()
 #endif
     daughters = 0;
     G4Exception("G4VDecayChannel::FillDaughters",
-		"can not fill daughters", FatalException,
-		"numberOfDaughters is not defined yet");    
+		"PART011", FatalException,
+		"Can not fill daughters: numberOfDaughters is not defined yet");    
   } 
 
   //create and set the array of pointers to daughter particles
@@ -308,8 +308,8 @@ void G4VDecayChannel::FillDaughters()
 #endif
       daughters[index] = 0;
       G4Exception("G4VDecayChannel::FillDaughters",
-		  "can not fill daughters", FatalException,
-		  "name of a daughter is not defined yet");    
+		  "PART011", FatalException,
+		  "Can not fill daughters: name of a daughter is not defined yet");    
     } 
     //search daughter particles in the particle table 
     daughters[index] = particletable->FindParticle(*daughters_name[index]);
@@ -374,8 +374,8 @@ void G4VDecayChannel::FillParent()
 #endif
     parent = 0;
     G4Exception("G4VDecayChannel::FillParent()",
-		"can not fill parent", FatalException,
-		"parent name is not defined yet");    
+		"PART012", FatalException,
+		"Can not fill parent: parent name is not defined yet");    
   }
   // search parent particle in the particle table
   parent = particletable->FindParticle(*parent_name);
@@ -388,8 +388,8 @@ void G4VDecayChannel::FillParent()
     }
 #endif
     G4Exception("G4VDecayChannel::FillParent()",
-		"can not fill parent", FatalException,
-		"parent does not exist");    
+		"PART012", FatalException,
+		"Can not fill parent: parent does not exist");    
   }
   parent_mass = parent->GetPDGMass();
 }
@@ -447,13 +447,13 @@ G4int G4VDecayChannel::GetAngularMomentum()
     }
   } else {
     G4Exception("G4VDecayChannel::GetAngularMomentum",
-		"can not calculate", JustWarning,
+		"PART111", JustWarning,
 		"Sorry, can't handle 3 particle decays (up to now)");
     return 0;
   }
   G4Exception ("G4VDecayChannel::GetAngularMomentum",
-		"can not calculate", JustWarning,
-		"Can't find angular momentum for this decay!");
+		"PART111", JustWarning,
+		"Can't find angular momentum for this decay");
   return 0;
 }
 

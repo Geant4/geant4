@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard_SS.cc,v 1.1 2009/10/25 19:06:26 maire Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: PhysListEmStandard_SS.cc,v 1.2 2011-01-04 19:15:59 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -123,6 +123,10 @@ void PhysListEmStandard_SS::ConstructProcess()
   // Several of them have default values.
   //
   G4EmProcessOptions emOptions;
+
+  //multiple coulomb scattering
+  //
+  emOptions.SetPolarAngleLimit(0.0);
   
   //physics tables
   //

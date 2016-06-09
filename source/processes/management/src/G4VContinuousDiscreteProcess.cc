@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VContinuousDiscreteProcess.cc,v 1.7 2010/10/30 07:51:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VContinuousDiscreteProcess.cc,v 1.8 2010-12-22 09:14:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -42,7 +42,7 @@ G4VContinuousDiscreteProcess::G4VContinuousDiscreteProcess()
   :G4VProcess("No Name Discrete Process"),
    valueGPILSelection(CandidateForSelection)
 {
-  G4Exception("G4VContinuousDiscreteProcess::G4VContinuousDiscreteProcess()","Illegal operation",
+  G4Exception("G4VContinuousDiscreteProcess::G4VContinuousDiscreteProcess()","ProcMan102",
 	      JustWarning,"Default constructor is called");
 }
 

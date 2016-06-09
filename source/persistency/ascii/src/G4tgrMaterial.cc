@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrMaterial.cc,v 1.5 2010/10/13 15:20:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgrMaterial.cc,v 1.5 2010-10-13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // class G4tgrMaterial
@@ -40,7 +40,9 @@
 // -------------------------------------------------------------------------
 G4tgrMaterial::G4tgrMaterial()
    : theName("Material"), theDensity(0.), theNoComponents(0),
-     theMateType("Material"), theIonisationMeanExcitationEnergy(-1.)
+     theMateType("Material"), theIonisationMeanExcitationEnergy(-1.),
+     theState(kStateUndefined), theTemperature(STP_Temperature),
+     thePressure(STP_Pressure)
 {
 }
 
@@ -48,4 +50,23 @@ G4tgrMaterial::G4tgrMaterial()
 // -------------------------------------------------------------------------
 G4tgrMaterial::~G4tgrMaterial()
 {
+}
+
+
+// -------------------------------------------------------------------------
+void G4tgrMaterial::SetState( G4String val )
+{ 
+  if( val == "Undefined" ) {
+    theState = kStateUndefined;
+  } else if( val == "Solid" ) {
+    theState = kStateSolid;
+  } else if( val == "Liquid" ) {
+    theState = kStateLiquid;
+  } else if( val == "Gas" ) {
+    theState = kStateGas;
+  } else {
+
+    G4Exception("G4tgrMaterial::SetState", "Wrong state", FatalErrorInArgument,
+                "Only possible states are Undefined/Solid/Liquid/Gas!");
+  }
 }

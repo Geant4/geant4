@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.36 2010/11/03 18:08:12 antoni Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NistMaterialBuilder.cc,v 1.37 2010-12-23 16:12:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -235,15 +235,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   AddMaterial(name,dens*cm3/g,0,0.,nm,state,temp,pressure);
 
   for (G4int i=0; i<nm; ++i) {
-    G4Element* el = elmBuilder->FindOrBuildElement(elm[i]);
-    if(!el) {
-      G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
-	     << "  ERROR: elements " << elm[i] << " is not found"
-	     << G4endl;
-      G4Exception("G4NistMaterialBuilder::ConstructNewMaterial: Fail to construct material");
-      return 0;
-    }
-    AddElementByAtomCount(G4int(el->GetZ()), nbAtoms[i]);
+    AddElementByAtomCount(elmBuilder->GetZ(elm[i]), nbAtoms[i]);
   }
 
   return BuildMaterial(name, isotopes);
@@ -274,15 +266,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   AddMaterial(name,dens*cm3/g,0,0.,nm,state,temp,pressure);
 
   for (G4int i=0; i<nm; ++i) {
-    G4Element* el = elmBuilder->FindOrBuildElement(elm[i]);
-    if(!el) {
-      G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
-	     << "  ERROR: elements " << elm[i] << " is not found"
-	     << G4endl;
-      G4Exception("G4NistMaterialBuilder::ConstructNewMaterial: Fail to construct material");
-      return 0;
-    }
-    AddElementByWeightFraction(G4int(el->GetZ()), w[i]);
+    AddElementByWeightFraction(elmBuilder->GetZ(elm[i]), w[i]);
   }
   
   return BuildMaterial(name, isotopes);    

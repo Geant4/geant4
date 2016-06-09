@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysicsTableHelper.cc,v 1.7 2010/10/07 15:27:56 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PhysicsTableHelper.cc,v 1.8 2010-12-23 06:00:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -90,6 +90,9 @@ G4PhysicsTable* G4PhysicsTableHelper::PreparePhysicsTable(G4PhysicsTable* physTa
 	G4cerr << " is longer than number of material-cuts-couple " << G4endl;
       }
 #endif 
+      G4Exception( "G4PhysicsTableHelper::PreparePhysicsTable()",
+		   "ProcCuts001",
+		   FatalException, "Physics Table is inconsistent with  material-cuts-couple");
     } 
   } else {
     // create PhysicsTable is given poitner is null
@@ -142,6 +145,9 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
       G4cerr << "Fail to retreive from "<< fileName << G4endl;
     }
 #endif 
+    G4Exception( "G4ProductionCutsTable::RetrievePhysicsTable()",
+		 "ProcCuts105",
+		 JustWarning, "Can not retrieve physics tables from file");
     delete tempTable;
     return false;
   } 
@@ -161,6 +167,9 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
       G4cerr << G4endl;
     }
 #endif
+    G4Exception( "G4ProductionCutsTable::RetrievePhysicsTable()",
+		 "ProcCuts106",
+		 JustWarning, "Retrived file is inconsistent with current physics tables ");
     delete tempTable;
     return false;
   }
@@ -198,6 +207,9 @@ void G4PhysicsTableHelper::SetPhysicsVector(G4PhysicsTable* physTable,
       G4cerr << G4endl;
     }
 #endif
+    G4Exception( "G4ProductionCutsTable::SetPhysicsVector()",
+		 "ProcCuts107",
+		 JustWarning, "Illegal index ");
     return;
   } 
 

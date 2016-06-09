@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.38 2010/04/06 17:10:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4MollerBhabhaModel.cc,v 1.38 2010-04-06 17:10:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -251,7 +251,7 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 
     G4double d2 = d*d*0.5;
     G4double d3 = d2*d/1.5;
-    G4double d4 = d3*d*3.75;
+    G4double d4 = d3*d*0.75;
     G4double y  = 1.0/(1.0 + gam);
     dedx = log(2.0*(tau + 2.0)/eexc2) + log(tau*d)
          - beta2*(tau + 2.0*d - y*(3.0*d2 

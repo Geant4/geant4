@@ -77,7 +77,7 @@ G4bool G4tgrUtils::IsSeparator( const char ch)
 //-------------------------------------------------------------
 G4bool G4tgrUtils::IsNumber( const G4String& str)
 {
-  G4int isnum = true;
+  G4int isnum = 1;
   G4int numE = 0;
   for(size_t ii=0; ii<str.length(); ii++)
   {
@@ -89,14 +89,14 @@ G4bool G4tgrUtils::IsNumber( const G4String& str)
         if( ii == 0 )  { return 0; }
         if(numE != 0 || ii == str.length()-1)
         {
-          isnum = false;
+          isnum = 0;
           break;
         }
         numE++;
       }
       else
       {
-        isnum = false; 
+        isnum = 0; 
         break;
       }
     }
@@ -360,7 +360,7 @@ G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval )
           bWordOK = true;      
         //----- Check if it is a unit      
         }
-        else if( !G4tgrUtils::IsNumber( word ) )
+        else if( !G4tgrUtils::WordIsUnit( word ) )
         {
           //--- It must be preceded by a *
           if( (*site == -1)
@@ -413,7 +413,7 @@ G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval )
   if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
     G4cout << " G4tgrUtils::GetDouble() - RESULT= " << val << G4endl
-           << "   from string: " << str << " converted to: " << strnew
+           << "   from string: " << str << " converted to: " << strnew.c_str()
            << " with unit val: " << unitval << G4endl;
   }
 #endif
@@ -546,6 +546,45 @@ G4bool G4tgrUtils::CheckListSize( unsigned int nWreal, unsigned int nWcheck,
   }
 
   return isOK;
+}
+
+
+//-------------------------------------------------------------
+G4bool G4tgrUtils::WordIsUnit( const G4String& word ) 
+{
+  return !IsNumber(word);
+  if(    word == "mm"
+      || word == "cm"
+      || word == "m" 
+      || word == "km"
+      || word == "millimeter"
+      || word == "centimeter"
+      || word == "meter"
+      || word == "kilometer"
+      || word == "parsec"
+      || word == "micrometer"
+      || word == "nanometer"
+      || word == "angstrom"
+      || word == "fermi"
+      || word == "nm"
+      || word == "um"
+      || word == "pc"
+      || word == "radian"
+      || word == "milliradian"
+      || word == "degree"
+      || word == "rad"
+      || word == "mrad"
+      || word == "deg"
+      || word == "ns"
+      || word == "curie"
+      || word == "curie"   )
+  { 
+    return true;
+  }
+  else
+  { 
+    return false;
+  }
 }
 
 

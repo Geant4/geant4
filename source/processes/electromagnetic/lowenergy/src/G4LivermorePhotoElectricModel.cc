@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc,v 1.12 2010/10/13 07:15:42 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LivermorePhotoElectricModel.cc,v 1.13 2010-12-27 17:45:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // Author: Sebastien Inserti
@@ -45,6 +45,7 @@
 // 15 Mar 2010   L Pandola
 //                  - removed methods to set explicitely fluorescence cuts.
 //                  Main cuts from G4ProductionCutsTable are always used
+// 26 Dec 2010   V Ivanchenko Load data tables only once to avoid memory leak
 // 
 
 #include "G4LivermorePhotoElectricModel.hh"
@@ -77,6 +78,10 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
   SetDeexcitationFlag(true);
   ActivateAuger(false);
 
+  // default generator
+  ElectronAngularGenerator = 
+    new G4PhotoElectricAngularGeneratorSauterGavrila("GEANTSauterGavrilaGenerator");        
+
   if(verboseLevel>0) {
     G4cout << "Livermore PhotoElectric is constructed " << G4endl
 	   << "Energy range: "
@@ -90,9 +95,9 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(const G4ParticleDef
 
 G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
 {  
-  if (crossSectionHandler) delete crossSectionHandler;
-  if (shellCrossSectionHandler) delete shellCrossSectionHandler;
-  if (ElectronAngularGenerator) delete ElectronAngularGenerator;
+  delete crossSectionHandler;
+  delete shellCrossSectionHandler;
+  delete ElectronAngularGenerator;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,41 +106,36 @@ void
 G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
 					  const G4DataVector&)
 {
-  if (verboseLevel > 3)
+  if (verboseLevel > 3) {
     G4cout << "Calling G4LivermorePhotoElectricModel::Initialise()" << G4endl;
+  }
 
   if (crossSectionHandler)
   {
     crossSectionHandler->Clear();
     delete crossSectionHandler;
   }
-  
   if (shellCrossSectionHandler)
   {
     shellCrossSectionHandler->Clear();
     delete shellCrossSectionHandler;
   }
-  
   // Read data tables for all materials
   
   crossSectionHandler = new G4CrossSectionHandler();
-  crossSectionHandler->Clear();
+  //crossSectionHandler->Clear();
   G4String crossSectionFile = "phot/pe-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
 
   shellCrossSectionHandler = new G4CrossSectionHandler();
-  shellCrossSectionHandler->Clear();
+  //shellCrossSectionHandler->Clear();
   G4String shellCrossSectionFile = "phot/pe-ss-cs-";
   shellCrossSectionHandler->LoadShellData(shellCrossSectionFile);
   
-  // default generator
-  ElectronAngularGenerator = 
-    new G4PhotoElectricAngularGeneratorSauterGavrila("GEANTSauterGavrilaGenerator");        
-
   //  
-  if (verboseLevel > 2) 
+  if (verboseLevel > 2) {
     G4cout << "Loaded cross section files for Livermore PhotoElectric model" << G4endl;
-
+  }
   //  InitialiseElementSelectors(particle,cuts);
 
   if (verboseLevel > 0) { 
@@ -146,7 +146,7 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
 	   << G4endl;
   }
 
-  if(isInitialised) return;
+  if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
@@ -159,13 +159,13 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
                                              G4double Z, G4double,
                                              G4double, G4double)
 {
-  if (verboseLevel > 3)
+  if (verboseLevel > 3) {
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermorePhotoElectricModel" 
 	   << G4endl;
-
-  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit)
+  }
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) {
     return 0;
-
+  }
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;
 }
@@ -317,6 +317,7 @@ void G4LivermorePhotoElectricModel::ActivateAuger(G4bool augerbool)
 void 
 G4LivermorePhotoElectricModel::SetAngularGenerator(G4VPhotoElectricAngularDistribution* dist)
 {
+  delete ElectronAngularGenerator;
   ElectronAngularGenerator = dist;
   ElectronAngularGenerator->PrintGeneratorInformation();
 }

@@ -325,11 +325,24 @@ class BooleanProcessor {
  public:
   //G.Barrand : BooleanProcessor() {}
   BooleanProcessor() //G.Barrand
-  :result_faces(faces)
+  :processor_error(0)  // The next few fields are work space, initialised
+  ,operation(0)        // here to prevent Coverity warnings.
+  ,ifaces1(0)          // "
+  ,ifaces2(0)          // "
+  ,iout1(0)            // "
+  ,iout2(0)            // "
+  ,iunk1(0)            // "
+  ,iunk2(0)            // "
+  ,del(0.)             // "
+  ,result_faces(faces)
   ,suitable_faces(faces)
   ,unsuitable_faces(faces)
   ,unknown_faces(faces)
-  {
+  {  // rmin, rmax also initialised here to prevent Coverity warnings.
+    for (int i = 0; i < 3; i++) {
+      rmin[i] = 0.;
+      rmax[i] = 0.;
+    }
   }
 
   ~BooleanProcessor() {}

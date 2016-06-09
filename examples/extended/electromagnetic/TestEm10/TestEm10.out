@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-04-patch-01    (18-February-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -217,7 +217,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.06 s
+total time for build X-ray TR energy loss tables = 0.07 s
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
@@ -376,7 +376,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.68s Real=0.68s Sys=0s
+  User=0.7s Real=0.7s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=44.2485 +- 0.51841  mm  

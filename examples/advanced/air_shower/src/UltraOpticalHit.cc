@@ -48,7 +48,7 @@ UltraOpticalHit::UltraOpticalHit()
 {
 
   fPhotEne      = 0.0;
-  fPhotPos      = 0.0;
+  fPhotPos      = G4ThreeVector();
 
 }
 

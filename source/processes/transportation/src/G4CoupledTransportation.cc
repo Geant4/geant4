@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.27 2008/11/26 13:01:28 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.28 2011-01-05 00:59:03 asaim Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
 // =======================================================================
@@ -849,6 +849,12 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
   // Update the current touchable handle  (from the track's)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();  
+}
+
+void 
+G4CoupledTransportation::EndTracking()
+{
+  G4TransportationManager::GetTransportationManager()->InactivateAll();
 }
 
 void

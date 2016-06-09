@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.40 2010/11/23 19:01:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EnergyLossMessenger.cc,v 1.41 2011-01-03 19:34:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -210,13 +210,13 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   G4UIparameter* regName = new G4UIparameter("regName",'s',false);
   deexCmd->SetParameter(regName);
 
-  G4UIparameter* flagFluo = new G4UIparameter("flagFluo",'b',false);
+  G4UIparameter* flagFluo = new G4UIparameter("flagFluo",'s',false);
   deexCmd->SetParameter(flagFluo);
 
-  G4UIparameter* flagAuger = new G4UIparameter("flagAuger",'b',false);
+  G4UIparameter* flagAuger = new G4UIparameter("flagAuger",'s',false);
   deexCmd->SetParameter(flagAuger);
 
-  G4UIparameter* flagPIXE = new G4UIparameter("flagPIXE",'b',false);
+  G4UIparameter* flagPIXE = new G4UIparameter("flagPIXE",'s',false);
   deexCmd->SetParameter(flagPIXE);
 
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);

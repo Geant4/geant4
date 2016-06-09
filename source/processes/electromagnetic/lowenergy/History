@@ -1,4 +1,4 @@
-$Id: History,v 1.477 2010/12/02 18:02:33 vnivanch Exp $
+$Id: History,v 1.483 2011-01-04 11:50:19 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-02.12.2010  V.Ivanchenko, tag emlowen-V09-03-69
+10.02.2011, V.Ivanchenko, tag emlowen-V09-03-70
+            G4UAtomicDeexcitation, G4empCrossSection, G4teoCrossSection,
+            G4VhShellCrossSection - fixed inefficiency in computation 
+            of ionisation cross sections, now both models work with
+            similar speed; added extra protections limited usage of 
+            a model in applicability range
+            Fixed memory leaks at initialisation of G4LivermoreComptonModel,
+            G4LivermoreGammaConversionModel, G4LivermorePhotoElectricModel,
+            G4LivermoreRayleighModel;
+            Fixed Coverity warnings in G4EMDataSet and G4ShellData;
+            Moved constructor and destructor to source in G4VEMDataSet
+	    Fixed Coverity defects for G4Penelope08 models (L.Pandola) 
+            Fixed memory leak at initialisation of G4eIonisationParameters,
+            G4ShellVacancy, G4LivermoreIonisationModel, 
+            G4LivermoreBremsstrahlungModel, G4EMDataSet,
+            G4BremsstrahlungParameters
+
+02.12.2010, V.Ivanchenko, tag emlowen-V09-03-69
             fixed minor memory leaks in G4VCrossSectinDataSet, G4EMDataSet,
             G4LivermoreBremsstrahlungModel, G4LivermoreIonisationModel
 
@@ -28,7 +45,7 @@ committal in the CVS repository !
 26.11.2010, L.Pandola, tag emlowen-V09-03-67
             Address Coverity reports for a few Penelope/Livermore
 
-25.11.2010  tag emlowen-V09-03-66
+25.11.2010, tag emlowen-V09-03-66
             V.Ivanchenko fixed initialisation in
             G4UAtomicDeexcitation: delete objects, use consistent names
 

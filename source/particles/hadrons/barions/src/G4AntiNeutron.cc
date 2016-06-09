@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AntiNeutron.cc,v 1.24 2010/10/01 02:41:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -40,6 +40,9 @@
 
 #include "G4AntiNeutron.hh"
 #include "G4ParticleTable.hh"
+
+#include "G4NeutronBetaDecayChannel.hh"
+#include "G4DecayTable.hh"
 
 // ######################################################################
 // ###                          ANTI NEUTRON                          ###
@@ -72,12 +75,19 @@ G4AntiNeutron* G4AntiNeutron::Definition()
 		    1,              +1,             0,          
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,
-		 true,            -1.0,          NULL,
+		 true,    885.7*second,          NULL,
                 false,        "nucleon"
               );
     // Magnetic Moment
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
     anInstance->SetPDGMagneticMoment( 1.9130427 * mN);
+    //create Decay Table 
+    G4DecayTable* table = new G4DecayTable();
+    // create a decay channel
+    G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("anti_neutron",1.00);
+    table->Insert(mode);
+    anInstance->SetDecayTable(table);
+ 
   }
   theInstance = reinterpret_cast<G4AntiNeutron*>(anInstance);
   return theInstance;

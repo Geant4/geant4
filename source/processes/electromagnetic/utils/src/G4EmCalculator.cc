@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.58 2010/11/21 16:45:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EmCalculator.cc,v 1.59 2011-01-03 19:34:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -721,14 +721,15 @@ G4double G4EmCalculator::ComputeShellIonisationCrossSectionPerAtom(
 					 const G4String& particle, 
                                          G4int Z, 
 					 G4AtomicShellEnumerator shell,
-					 G4double kinEnergy)
+					 G4double kinEnergy,
+					 const G4Material* mat)
 {
   G4double res = 0.0;
   const G4ParticleDefinition* p = FindParticle(particle);
   G4VAtomDeexcitation* ad = manager->AtomDeexcitation();
   if(p && ad) { 
-    res = 
-      ad->ComputeShellIonisationCrossSectionPerAtom(p, Z, shell, kinEnergy); 
+    res = ad->ComputeShellIonisationCrossSectionPerAtom(p, Z, shell, 
+							kinEnergy, mat); 
   }
   return res;
 }

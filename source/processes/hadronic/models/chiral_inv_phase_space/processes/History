@@ -12,6 +12,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+20-Jan-2011 A. Dotti			   (hadr-chips-proc-V09-03-12)
+-----------------------------------------------------------------------
+Added correct handling of splitting of target for (A>=2,Z=0).
+Added throwing of exception to signal NULL pointer.
+
 3-Sep-2010 G.Cosmo                         (hadr-chips-proc-V09-03-11)
 -----------------------------------------------------------------------
 Added missing std:: to call to for_each algorithm in G4QInelastic.cc.

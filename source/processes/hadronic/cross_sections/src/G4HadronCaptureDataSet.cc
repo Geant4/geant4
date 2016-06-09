@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronCaptureDataSet.cc,v 1.8 2006/06/29 19:57:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronCaptureDataSet.cc,v 1.9 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // G4 Physics class: HadronCaptureDataSet for cross sections
@@ -33,3 +33,10 @@
 // 
 
 #include "G4HadronCaptureDataSet.hh"
+
+
+G4HadronCaptureDataSet::G4HadronCaptureDataSet()
+ : G4VCrossSectionDataSet("Gheisha capture")
+{
+  theHadronCrossSections = G4HadronCrossSections::Instance();
+}

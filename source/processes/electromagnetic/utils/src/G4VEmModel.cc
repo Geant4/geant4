@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.37 2010/10/14 16:27:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VEmModel.cc,v 1.37 2010-10-14 16:27:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   flucModel(0),anglModel(0), name(nam), lowLimit(0.1*keV), highLimit(100.0*TeV), 
   eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(0.0),secondaryThreshold(DBL_MAX),theLPMflag(false),
-  pParticleChange(0),/*nuclearStopping(false),*/
+  pParticleChange(0),
   currentCouple(0),currentElement(0),
   nsec(5),flagDeexcitation(false) 
 {
@@ -120,14 +120,13 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 					    const G4DataVector& cuts)
 {
   // initialise before run
-  flagDeexcitation = false;
   G4LossTableManager* man = G4LossTableManager::Instance();
   G4bool spline = man->SplineFlag();
 
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth
-  G4int nbins = (man->GetNumberOfBinsPerDecade()/3)*
-    G4int(std::log10(highLimit/lowLimit) + 0.5);
+  G4int nbins = G4int(man->GetNumberOfBinsPerDecade()
+		      * std::log10(highLimit/lowLimit) / 6.0);
   if(nbins < 5) { nbins = 5; }
 
   G4ProductionCutsTable* theCoupleTable=

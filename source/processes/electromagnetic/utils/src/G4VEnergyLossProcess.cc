@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.172 2010/11/18 21:36:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VEnergyLossProcess.cc,v 1.174 2010-12-27 17:42:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -1649,13 +1649,6 @@ G4PhysicsVector*
 G4VEnergyLossProcess::LambdaPhysicsVector(const G4MaterialCutsCouple* /*couple*/, 
 					  G4double /*cut*/)
 {
-  /*
-  G4double tmin = 
-    std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
-	     minKinEnergy);
-  if(tmin >= maxKinEnergy) { tmin = 0.5*maxKinEnergy; }
-  G4PhysicsVector* v = new G4PhysicsLogVector(tmin, maxKinEnergy, nBins);
-  */
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nBins);
   v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
   return v;
@@ -1691,8 +1684,11 @@ void G4VEnergyLossProcess::AddCollaborativeProcess(
 
 void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 {
-  if(fTotal == tType && theDEDXunRestrictedTable != p) {
-    if(theDEDXunRestrictedTable) theDEDXunRestrictedTable->clearAndDestroy();
+  if(fTotal == tType && theDEDXunRestrictedTable != p && !baseParticle) {
+    if(theDEDXunRestrictedTable) {
+      theDEDXunRestrictedTable->clearAndDestroy();
+      delete theDEDXunRestrictedTable;
+    } 
     theDEDXunRestrictedTable = p;
     if(p) {
       size_t n = p->length();
@@ -1709,15 +1705,34 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
       }
     }
 
-  } else if(fRestricted == tType) {
+  } else if(fRestricted == tType && theDEDXTable != p) {
+    //G4cout << "G4VEnergyLossProcess::SetDEDXTable " << particle->GetParticleName()
+    //	   << " old table " << theDEDXTable << " new table " << p 
+    //	   << " ion " << theIonisationTable << " bp " << baseParticle << G4endl;
+    if(theDEDXTable && !baseParticle) {
+      if(theDEDXTable == theIonisationTable) { theIonisationTable = 0; }
+      theDEDXTable->clearAndDestroy();
+      delete theDEDXTable;
+    }
     theDEDXTable = p;
-  } else if(fSubRestricted == tType) {    
+  } else if(fSubRestricted == tType && theDEDXSubTable != p) {    
+    if(theDEDXSubTable && !baseParticle) {
+      if(theDEDXSubTable == theIonisationSubTable) { theIonisationSubTable = 0; }
+      theDEDXSubTable->clearAndDestroy();
+      delete theDEDXSubTable;
+    }
     theDEDXSubTable = p;
   } else if(fIsIonisation == tType && theIonisationTable != p) {    
-    if(theIonisationTable) theIonisationTable->clearAndDestroy();
+    if(theIonisationTable && theIonisationTable != theDEDXTable && !baseParticle) {
+      theIonisationTable->clearAndDestroy();
+      delete theIonisationTable;
+    }
     theIonisationTable = p;
   } else if(fIsSubIonisation == tType && theIonisationSubTable != p) {    
-    if(theIonisationSubTable) theIonisationSubTable->clearAndDestroy();
+    if(theIonisationSubTable && theIonisationSubTable != theDEDXSubTable && !baseParticle) {
+      theIonisationSubTable->clearAndDestroy();
+      delete theIonisationSubTable;
+    }
     theIonisationSubTable = p;
   }
 }

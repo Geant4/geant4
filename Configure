@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.139 2010/12/03 11:10:39 bmorgan Exp $
+# $Id: Head.U,v 1.3 2002-06-23 20:31:44 sadilov Exp $
 #
-# Generated on Fri Dec  3 11:08:58 GMT 2010 [metaconfig 3.0 PL70]
+# Generated on Fri Feb 11 12:53:03 GMT 2011 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -5655,6 +5655,27 @@ else # TEST g4ui_build_qt_session
 fi #END TEST g4ui_build_qt_session (dependency on Qt UI module)
 fi #END TEST g4ui_none = n AND g4vis_none=n
 
+#----------------------------------------------------------------------------
+# Start of GDML configuration section
+#
+
+#
+# Now, if user hasn't supplied with_xercesc_root, then we want to set
+# it to a sensible default, and then expand the path to remove
+# tildes and variables.
+#
+# If the user has supplied with_xercesc_root, then clearly they
+# want it, so override g4lib_build_gdml to 'y'
+#
+if test "x$with_xercesc_root" = "x" ; then
+    with_xercesc_root=$g4gdml_xercesc_root
+else
+    # Path will be o.k., but force building of library to yes
+    g4lib_build_gdml='y'
+fi
+
+with_xercesc_root=`filexp $with_xercesc_root`
+
 
 # Now query the user to see if they want to build the GDML plugin
 echo " "
@@ -5683,7 +5704,6 @@ esac
 # If user does want to build GDML plugin, now try to locate Xerces install
 #
 if test "X$g4lib_build_gdml" != "Xn"; then
-
     # If g4system is WIN32-VC, we need to force the input of a search path
     # though we can use with_xercesc_root as the dflt.
     if test "X$g4system" = "XWIN32-VC" ; then
@@ -5711,37 +5731,37 @@ EOM`
     # We now have a suitable platform independent setup for probing for the
     # Xerces-C install....
     if test "X$with_xercesc_root" != "X-"; then
-    if test "X$with_xercesc_root" != "X" ; then
-        # Probe for Xerces-C in the supplied directory
-        xercesc_root=`find $with_xercesc_root/include -type d -name xercesc 2>/dev/null | xargs echo`
-    else
-        # Probe for Xerces-C in standard locations
-        xercesc_root=`find /usr/include /usr/local/include /opt/local/include /sw/include -type d -name xercesc 2>/dev/null | xargs echo`
-    fi
-
-    # What did we find??
-    if test "X$xercesc_root" = "X" ; then
-        g4gdml_xercesc_root=""
-        echo "checking for XercesC install... no"
-    else
-        # We'll have PATH/include/xercesc if we found it
-        g4gdml_xercesc_root=`dirname $xercesc_root`
-        g4gdml_xercesc_root=`dirname $g4gdml_xercesc_root`
-        
-        echo "checking for XercesC install... $g4gdml_xercesc_root"
-    fi
-
-    # If we didn't find anything, fall back to the user...
-    if test "X$g4gdml_xercesc_root" = "X" ; then
-        promptend="no"
-        if test "X$with_xercesc_root" = "X" ; then
-            xercescloc="the standard locations"
+        if test "X$with_xercesc_root" != "X" ; then
+            # Probe for Xerces-C in the supplied directory
+            xercesc_root=`find $with_xercesc_root/include -type d -name xercesc 2>/dev/null | xargs echo`
         else
-            xercescloc=$with_xercesc_root
+            # Probe for Xerces-C in standard locations
+            xercesc_root=`find /usr/include /usr/local/include /opt/local/include /sw/include -type d -name xercesc 2>/dev/null | xargs echo`
         fi
+
+        # What did we find??
+        if test "X$xercesc_root" = "X" ; then
+            g4gdml_xercesc_root=""
+            echo "checking for XercesC install... no"
+        else
+            # We'll have PATH/include/xercesc if we found it
+            g4gdml_xercesc_root=`dirname $xercesc_root`
+            g4gdml_xercesc_root=`dirname $g4gdml_xercesc_root`
+        
+            echo "checking for XercesC install... $g4gdml_xercesc_root"
+        fi
+
+        # If we didn't find anything, fall back to the user...
+        if test "X$g4gdml_xercesc_root" = "X" ; then
+            promptend="no"
+            if test "X$with_xercesc_root" = "X" ; then
+                xercescloc="the standard locations"
+            else
+                xercescloc=$with_xercesc_root
+            fi
       
-        while test "$promptend" = "no"; do
-	        g4message=`cat << EOM
+            while test "$promptend" = "no"; do
+	            g4message=`cat << EOM
 
 Autodetection failed to locate XercesC in $xercescloc on your system. 
 Please enter the path to your XercesC install (i.e. if XercesC is installed
@@ -5750,43 +5770,45 @@ GDML module.
 XercesC path:
 EOM`
 
-	        dflt=$g4gdml_xercesc_root
-	        fn='d~(-)'
-	        rp=$g4message
-	        . ./getfile
+	            dflt=$g4gdml_xercesc_root
+	            fn='d~(-)'
+    	        rp=$g4message
+	            . ./getfile
 
-	        #check for user cancellation
-	        if test "X$ans" = "X-"; then
-	            g4lib_build_gdml=n
-	            g4gdml_xercesc_root=""
-	            echo "G4LIB_BUILD_GDML cancelled..."
-		        echo " "
-	            promptend=yes
-	        else
-	            if test -r "$ans/include/xercesc"; then
-		            g4gdml_xercesc_root=$ans
-		            echo "checking for XercesC install... $g4gdml_xercesc_root"
+	            #check for user cancellation
+	            if test "X$ans" = "X-"; then
+	                g4lib_build_gdml=n
+    	            g4gdml_xercesc_root=""
+	                echo "G4LIB_BUILD_GDML cancelled..."
 		            echo " "
-		            promptend=yes
-	            else
-	                xercesloc=$ans
-	                echo "checking for Xercesc install... no"
-	            fi
-            fi #END OF USER INPUT CHECKING
-        done #END OF WHILE LOOP OVER USER INPUT
-    fi #END OF USER INPUT SECTION
+	                promptend=yes
+    	        else
+	                if test -r "$ans/include/xercesc"; then
+		                g4gdml_xercesc_root=$ans
+		                echo "checking for XercesC install... $g4gdml_xercesc_root"
+		                echo " "
+		                promptend=yes
+    	            else    
+	                    xercesloc=$ans
+	                    echo "checking for Xercesc install... no"
+	                fi
+                fi #END OF USER INPUT CHECKING
+            done #END OF WHILE LOOP OVER USER INPUT
+        fi #END OF USER INPUT SECTION
 
-    #
-    # If a filter on g4gdml_xerces_root is needed to remove common system paths
-    # then it should be put here...
-    #
-    if test "x$g4gdml_xercesc_root" = "x/usr" -o "x$g4gdml_xercesc_root" = "x/usr/local" ; then
-        g4gdml_xercesc_root=""
-	fi
+        #
+        # If a filter on g4gdml_xerces_root is needed to remove common system paths
+        # then it should be put here...
+        #
+        if test "x$g4gdml_xercesc_root" = "x/usr" -o "x$g4gdml_xercesc_root" = "x/usr/local" ; then
+            g4gdml_xercesc_root=""
+    	fi
     fi # End outer check of WIN32-VC module cancellation
 fi #END XERCES PROBE
 
+#
 #END OF GDML/XERCES PROBE
+#----------------------------------------------------------------------------
 
 case "$g4tmp" in
 '')

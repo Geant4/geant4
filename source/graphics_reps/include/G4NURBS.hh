@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBS.hh,v 1.10 2006/06/29 19:05:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NURBS.hh,v 1.11 2010-12-07 09:36:59 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 // 
 // Olivier Crumeyrolle  12 September 1996
 
@@ -462,7 +462,7 @@ inline G4int G4NURBS::GetnbrCtrlPts(G4NURBS::t_direction in_dir) const {
 } 
 
 inline char G4NURBS::Tochar(G4NURBS::t_direction in_dir) {
-  return (in_dir?'V':'U');
+  return (in_dir != U? 'V': 'U');
 }
 
 /***********************************************************************

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-00    (17-December-2010)
+ Geant4 version Name: geant4-09-04-patch-01    (18-February-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -214,7 +214,7 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 G4 kernel has come to Quit state.
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Maximum number of tracks in the urgent stack : 1

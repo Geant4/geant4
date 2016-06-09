@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2010/11/07 11:56:34 allison Exp $
+$Id: History,v 1.9 2010-12-03 14:01:40 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-January 2010, Gunter Folger   (exgflash-V09-03-05)
+-  Finish correcting namespace problems on Windows, 
+    removed using namespace, use G4cout,.. and few std::
+     
+03-December 2010, Gunter Folger  (exgflash-V09-03-04)
+-  Correct use of "using namespace std", needed for Windows VC
 
 07-November 2010, John Allison   (exgflash-V09-03-03)
 - Introduced G4UIExecutive.

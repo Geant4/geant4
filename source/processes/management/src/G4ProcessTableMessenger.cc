@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.18 2008/03/14 02:55:04 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProcessTableMessenger.cc,v 1.19 2010-12-22 09:14:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 //---------------------------------------------------------------
@@ -443,8 +443,8 @@ void G4ProcessTableMessenger::SetNumberOfProcessType()
   if ( isFoundEndMark ) {
     NumberOfProcessType = idx;
   } else {
-    G4Exception("G4ProcessTableMessenger::SetNumberOfProcessType()","No End Mark",
-		 FatalException,"");
+    G4Exception("G4ProcessTableMessenger::SetNumberOfProcessType()","ProcMan014",
+		 FatalException,"No End Mark");
   } 
 }
 

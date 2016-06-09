@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionElasticXS.cc,v 1.11 2010/11/26 14:45:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BGGPionElasticXS.cc,v 1.12 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,10 +51,14 @@
 
 
 G4BGGPionElasticXS::G4BGGPionElasticXS(const G4ParticleDefinition*) 
+ : G4VCrossSectionDataSet("Barashenkov-Glauber-Gribov") 
 {
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;
   fLowEnergy = 20.*MeV;
+  SetMinKinEnergy(0.0);
+  SetMaxKinEnergy(100*TeV);
+
   for (G4int i = 0; i < 93; i++) {
     theGlauberFac[i] = 0.0;
     theCoulombFac[i] = 0.0;
@@ -128,14 +132,17 @@ void G4BGGPionElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BGGPionElasticXS::DumpPhysicsTable(const G4ParticleDefinition&) 
 {
-  G4cout << "G4BGGPionElasticXS:"<<G4endl;
+  G4cout << std::setw(24) << " " 
+         << " G4BGGPionElasticXS: Barashenkov cross sections below 100 GeV, "
+         << G4endl;
+  G4cout << std::setw(26) << " "
+         << " Glauber-Gribov above "
+         << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BGGPionElasticXS::Initialise() 
 {

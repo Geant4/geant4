@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh,v 1.7 2008/11/21 18:27:42 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CoupledTransportation.hh,v 1.8 2011-01-05 00:59:03 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -128,6 +128,7 @@ class G4CoupledTransportation : public G4VProcess
   public:  // without description
 
      void StartTracking(G4Track* aTrack); 
+     void EndTracking();
 
      G4double AtRestGetPhysicalInteractionLength(
                              const G4Track& ,

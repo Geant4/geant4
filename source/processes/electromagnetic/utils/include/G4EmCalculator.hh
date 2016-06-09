@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.21 2010/11/21 16:45:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EmCalculator.hh,v 1.22 2011-01-03 19:34:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -190,7 +190,8 @@ public:
   G4double ComputeShellIonisationCrossSectionPerAtom(
                    const G4String& part, G4int Z, 
 		   G4AtomicShellEnumerator shell,
-                   G4double kinEnergy);
+                   G4double kinEnergy,
+                   const G4Material* mat = 0);
 
   G4double ComputeMeanFreePath(
                        G4double kinEnergy, const G4ParticleDefinition*,

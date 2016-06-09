@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IVRestDiscreteProcess.cc,v 1.11 2010/10/30 07:51:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4IVRestDiscreteProcess.cc,v 1.12 2010-12-22 09:14:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // $Id: 
 // --------------------------------------------------------------
@@ -43,8 +43,8 @@ G4IVRestDiscreteProcess::G4IVRestDiscreteProcess()
    theNlambdaTable(0),theInverseNlambdaTable(0),
    BIGSTEP(1.e10)
 {
-  G4Exception("G4IVRestDiscreteProcess::G4IVRestDiscreteProcess", "Illegal operation",
-	      JustWarning,"default constructor is called");
+  G4Exception("G4IVRestDiscreteProcess::G4IVRestDiscreteProcess", "ProcMan102",
+	      JustWarning,"Default constructor is called");
 }
 
 G4IVRestDiscreteProcess::G4IVRestDiscreteProcess(const G4String& aName , G4ProcessType aType)

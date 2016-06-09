@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.cc,v 1.7 2010/11/18 12:59:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4NeutronCaptureXS.cc,v 1.8 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,7 +52,8 @@
 using namespace std;
 
 G4NeutronCaptureXS::G4NeutronCaptureXS() 
-  : emax(20*MeV),maxZ(92)
+ : G4VCrossSectionDataSet("G4NeutronCaptureXS"),
+   emax(20*MeV),maxZ(92)
 {
   //  verboseLevel = 0;
   if(verboseLevel > 0){
@@ -92,6 +93,8 @@ G4NeutronCaptureXS::GetCrossSection(const G4DynamicParticle* aParticle,
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();
   if(ekin > emax) { return xs; }
+  const G4double elimit = 1.0e-10*eV;
+  if(ekin < elimit) { ekin = elimit; }
 
   G4int Z = G4int(elm->GetZ());
   G4PhysicsVector* pv = data[Z];

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.32 2010/12/09 08:45:32 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.33 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
@@ -75,6 +75,7 @@ std::vector<G4double*> G4ElectroNuclearCrossSection::J3;
 
 
 G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection()
+ : G4VCrossSectionDataSet("Electro-nuclear")
 {}
 
 

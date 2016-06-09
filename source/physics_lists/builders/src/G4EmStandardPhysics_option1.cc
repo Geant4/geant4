@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.cc,v 1.21 2010/11/20 21:07:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4EmStandardPhysics_option1.cc,v 1.22 2010-12-19 18:11:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -259,6 +259,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
+  opt.SetPolarAngleLimit(0.2);
   opt.SetApplyCuts(true);
 }
 

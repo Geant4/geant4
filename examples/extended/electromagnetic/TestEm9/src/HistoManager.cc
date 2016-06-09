@@ -181,10 +181,11 @@ void HistoManager::BeginOfRun()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::EndOfRun()
+void HistoManager::EndOfRun(G4int runID)
 {
 
-  G4cout << "HistoManager: End of run actions are started" << G4endl;
+  G4cout << "HistoManager: End of run actions are started   RunID# " 
+	 << runID << G4endl;
   G4String nam[6] = {"1x1", "3x3", "5x5", "E1/E9 ", "E1/E25", "E9/E25"};
 
   // average
@@ -270,6 +271,7 @@ void HistoManager::EndOfRun()
   }
 
   histo->save();
+  if(0 < runID) { return; }
 
   // Acceptance
   EmAcceptance acc;
@@ -333,7 +335,7 @@ void HistoManager::EndOfEvent()
     if( ( 6<=i &&  8>=i) || (11<=i && 13>=i) || (16<=i && 18>=i)) e9 += E[i];
   }
 
-  if(e25 < 0.8) {
+  if(1 < verbose && e25 < 0.8) {
     n_lowe++;
     G4cout << "### in the event# " << n_evt << "  E25= " << e25 << G4endl;
   }

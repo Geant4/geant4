@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc,v 1.11 2010/11/19 08:15:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VCrossSectionDataSet.cc,v 1.12 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -44,7 +44,7 @@
 #include "G4Pow.hh"
 
 G4VCrossSectionDataSet::G4VCrossSectionDataSet(const G4String& nam) :
-  verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(DBL_MAX),name(nam) 
+  verboseLevel(0),minKinEnergy(0.0),maxKinEnergy(100*TeV),name(nam) 
 {
   G4CrossSectionDataSetRegistry::Instance()->Register(this);
 }

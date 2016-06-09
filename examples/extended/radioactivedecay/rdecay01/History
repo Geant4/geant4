@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2010/10/11 14:31:39 maire Exp $
+$Id: History,v 1.3 2010-10-11 14:31:39 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+31-01-11 mma (rdecay01-V09-03-03)
+- PhysicsList : SetARM false
+- SteppingVerbose : print global time 
+    
+28-01-11 mma
+- add Co60.mac
+- HistoManager : fix aida fileOptions
      
 11-10-10 mma (rdecay01-V09-03-02)
 - TrackingAction and RunAction : modify calculation of Activity

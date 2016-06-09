@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // Created by Joanna Weng 26.11.2004
-using namespace std;
+
 
 #include "ExGflashEventAction.hh"
 #include "ExGflashHit.hh"
@@ -37,7 +37,7 @@ using namespace std;
 #include <iostream>
 #include <algorithm>
 //Gflash
-
+using namespace std;
 
 #include "G4Timer.hh"
 extern G4Timer Timer;
@@ -52,32 +52,32 @@ nevent(0),dtime(0.0),calorimeterCollectionId(-1)
 
 ExGflashEventAction::~ExGflashEventAction()
 {
-	cout << "Internal Real Elapsed Time /event is: "<< dtime /nevent<< endl;
+	G4cout << "Internal Real Elapsed Time /event is: "<< dtime /nevent<< G4endl;
 }
 
 
 void ExGflashEventAction::BeginOfEventAction(const G4Event *evt){
 	Timerintern.Start();
-	cout<<" ------ Start ExGflashEventAction ----- "<<endl;
+	G4cout<<" ------ Start ExGflashEventAction ----- "<<G4endl;
 	nevent=evt->GetEventID();
-	cout<<" Start generating event Nr "<<nevent<<endl<<endl; 	
+	G4cout<<" Start generating event Nr "<<nevent<<G4endl<<G4endl; 	
 }
 
 void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 {  
 	Timerintern.Stop();
-	cout << endl;
-	cout << "******************************************";
-	cout << endl;
-	cout << "Internal Real Elapsed Time is: "<< Timerintern.GetRealElapsed();
-	cout << endl;
-	cout << "Internal System Elapsed Time: " << Timerintern.GetSystemElapsed();
-	cout << endl;
-	cout << "Internal GetUserElapsed Time: " << Timerintern.GetUserElapsed();
-	cout << endl;
-	cout << "******************************************"<< endl;
+	G4cout << G4endl;
+	G4cout << "******************************************";
+	G4cout << G4endl;
+	G4cout << "Internal Real Elapsed Time is: "<< Timerintern.GetRealElapsed();
+	G4cout << G4endl;
+	G4cout << "Internal System Elapsed Time: " << Timerintern.GetSystemElapsed();
+	G4cout << G4endl;
+	G4cout << "Internal GetUserElapsed Time: " << Timerintern.GetUserElapsed();
+	G4cout << G4endl;
+	G4cout << "******************************************"<< G4endl;
 	dtime+=Timerintern.GetRealElapsed();
-	cout<<" ------ ExGflashEventAction::End of event nr. "<<nevent<<"  -----"<< endl;     
+	G4cout<<" ------ ExGflashEventAction::End of event nr. "<<nevent<<"  -----"<< G4endl;     
 
 	G4SDManager * SDman = G4SDManager::GetSDMpointer();
 	G4String colNam;
@@ -91,7 +91,7 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 	if (THC) {
 		/// Hits in sensitive Detector
 		int n_hit = THC->entries();
-		cout<<"  " << n_hit<< " hits are stored in ExGflashHitsCollection "<<endl;
+		G4cout<<"  " << n_hit<< " hits are stored in ExGflashHitsCollection "<<G4endl;
 		G4PrimaryVertex* pvertex=evt->GetPrimaryVertex();   
 		///Computing (x,y,z) of vertex of initial particles  
 		G4ThreeVector vtx=pvertex->GetPosition();
@@ -114,10 +114,9 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 				G4int num=(*THC)[i]->GetCrystalNum();
 				
 				energyincrystal[num]+=(*THC)[i]->GetEdep()/GeV;
-				//std::cout << num << std::endl;
-				//@@@ExGflashEventAction: was bringen die namespace statt using namespace std ?
-			//	std::cout << " Crystal Nummer " <<  (*THC)[i]->GetCrystalNum()  << std::endl;
-			//	std::cout <<  (*THC)[i]->GetCrystalNum() /10 << "  "<<(*THC)[i]->GetCrystalNum()%10 << std::endl;
+				//G4cout << num << G4endl;
+			//	G4cout << " Crystal Nummer " <<  (*THC)[i]->GetCrystalNum()  << G4endl;
+			//	G4cout <<  (*THC)[i]->GetCrystalNum() /10 << "  "<<(*THC)[i]->GetCrystalNum()%10 << G4endl;
 				
 				G4ThreeVector hitpos=(*THC)[i]->GetPos();	  				
 				G4ThreeVector l (hitpos.x(), hitpos.y(), hitpos.z());
@@ -134,14 +133,14 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 		//Find crystal with maximum energy
 		for (int i=0;i<100;i++) 
 		{
-			//std::cout << i <<"  " << energyincrystal[i] << std::endl;
+			//G4cout << i <<"  " << energyincrystal[i] << G4endl;
 			if (max <energyincrystal[i])
 			{
 				max=energyincrystal[i];
 				index = i;
 			}
 		}	
-	//std::cout << index <<" NMAX  " << index << std::endl;	
+	//G4cout << index <<" NMAX  " << index << G4endl;	
 
 	// 3x3 matrix of crystals around the crystal with the maximum energy deposit
 	G4double e3x3 = energyincrystal[index]+energyincrystal[index+1]+energyincrystal[index-1]+
@@ -153,14 +152,14 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 	energyincrystal[index-10]+energyincrystal[index-9]+energyincrystal[index-11]+energyincrystal[index-8]+energyincrystal[index-12]+
 	energyincrystal[index+10]+energyincrystal[index+11]+energyincrystal[index+9]+energyincrystal[index+12]+energyincrystal[index+8];
 	
-	std::cout << "   e1  " << energyincrystal[index]  << "   e3x3  " << e3x3<<  "   GeV  e5x5  "   <<e5x5  <<std::endl;	
+	G4cout << "   e1  " << energyincrystal[index]  << "   e3x3  " << e3x3<<  "   GeV  e5x5  "   <<e5x5  <<G4endl;	
 	}
 	
 	G4cout << " Total energy deposited in the calorimeter: " << totE << " (GeV)" << G4endl;
 	G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
 	G4int n_trajectories = 0;
 	if(trajectoryContainer){ n_trajectories = trajectoryContainer->entries(); }
-	G4cout << "    " << n_trajectories  << " trajectories stored in this event." << endl;
+	G4cout << "    " << n_trajectories  << " trajectories stored in this event." << G4endl;
 }
 
 

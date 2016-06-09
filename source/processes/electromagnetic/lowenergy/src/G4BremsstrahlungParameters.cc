@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.20 2009/06/10 13:32:36 mantero Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4BremsstrahlungParameters.cc,v 1.21 2010-12-03 16:03:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
@@ -39,6 +39,7 @@
 // 18.11.02 V.Ivanchenko    Fix problem of load
 // 21.02.03 V.Ivanchenko    Number of parameters is defined in the constructor
 // 28.02.03 V.Ivanchenko    Filename is defined in the constructor
+// 03.12.10 V.Ivanchenko    Fixed memory leak in LoadData
 //
 // -------------------------------------------------------------------
 
@@ -163,21 +164,17 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
   // The file terminates with the pattern: -1   -1
   //                                       -2   -2
 
-  G4DataVector* energies;
-  G4DataVector* data;
   G4double ener = 0.0;
   G4double sum = 0.0;
-  energies   = new G4DataVector();
-  data       = new G4DataVector();
   G4int z    = 0;
 
   std::vector<G4DataVector*> a;
-  for (size_t j=0; j<length; j++) {
-    G4DataVector* aa = new G4DataVector();
-    a.push_back(aa);
-  }
+  a.resize(length);
+ 
   G4DataVector e;
   e.clear();
+
+  G4bool isReady = false;
 
   do {
     file_a >> ener >> sum;
@@ -189,37 +186,40 @@ void G4BremsstrahlungParameters::LoadData(const G4String& name)
       // End of next element
     } else if (ener == (G4double)(-1)) {
 
-      z++;
+      ++z;
       G4double Z = (G4double)z;
 
-	// fill map if Z is used
+      // fill map if Z is used
       if (activeZ.contains(Z)) {
 
- 	for (size_t k=0; k<length; k++) {
+ 	for (size_t k=0; k<length; ++k) {
 
-	    G4int id = z*length + k;
-	    G4VDataSetAlgorithm* inter  = new G4LogLogInterpolation();
-	    G4DataVector* eVector = new G4DataVector;
-	    size_t eSize = e.size();
-	    for (size_t s=0; s<eSize; s++) {
-	       eVector->push_back(e[s]);
-	    }
-	    G4VEMDataSet* set = new G4EMDataSet(id,eVector,a[k],inter,1.,1.);
-    	    param[id] = set;
+	  G4int id = z*length + k;
+	  G4VDataSetAlgorithm* inter  = new G4LogLogInterpolation();
+	  G4DataVector* eVector = new G4DataVector;
+	  size_t eSize = e.size();
+	  for (size_t s=0; s<eSize; s++) {
+	    eVector->push_back(e[s]);
+	  }
+	  G4VEMDataSet* set = new G4EMDataSet(id,eVector,a[k],inter,1.,1.);
+	  param[id] = set;
 	}
-        a.clear();
-        for (size_t j=0; j<length; j++) {
-            G4DataVector* aa = new G4DataVector();
-            a.push_back(aa);
-        }
       } else {
         for (size_t j=0; j<length; j++) {
-          a[j]->clear();
-        }
+	  delete a[j];
+	}
       }
-      e.clear();
+      isReady = false;
 
     } else {
+
+      if(!isReady) {
+        isReady = true;
+	e.clear();
+        for (size_t j=0; j<length; ++j) {
+          a[j] = new G4DataVector();
+        }
+      }
 
       if(ener > 1000.) ener = 1000.;
       e.push_back(ener);

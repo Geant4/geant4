@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HistoManager.cc,v 1.1 2010/09/16 16:26:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: HistoManager.cc,v 1.1 2010-09-16 16:26:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -55,7 +55,7 @@ HistoManager::HistoManager()
  
   fileName[0] = "rdecay1";
   fileType    = "root";
-  fileOption  = "export=root";
+  fileOption  = "";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;

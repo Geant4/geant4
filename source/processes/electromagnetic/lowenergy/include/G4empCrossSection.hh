@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4empCrossSection.hh,v 1.1 2009/06/17 16:39:55 mantero Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4empCrossSection.hh,v 1.2 2011-01-03 19:35:11 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //         
 //
@@ -35,8 +35,6 @@
 // -------------------------------------------------------------------
 
 // Class description:
-// Low Energy Electromagnetic Physics, Cross section, p ionisation, K shell
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
 
@@ -53,16 +51,19 @@ class G4empCrossSection : public G4VhShellCrossSection
 {
 public:
 
-  G4empCrossSection();
+  G4empCrossSection(const G4String& nam = "");
 
-  ~G4empCrossSection();
+  virtual ~G4empCrossSection();
 			     
-
   std::vector<G4double> GetCrossSection(G4int Z,
 					G4double incidentEnergy,
 					G4double mass,
 					G4double deltaEnergy,
 					G4bool testFlag = false) const;
+
+  G4double CrossSection(G4int Z, G4int shell,
+			G4double incidentEnergy,
+			G4double mass) const;
 
   std::vector<G4double> Probabilities(G4int Z,
 				      G4double incidentEnergy,
@@ -80,8 +81,7 @@ private:
               
   G4PaulKCrossSection*  paulShellK;
   G4OrlicLiCrossSection* orlicShellLi;  
-			
-			
+						
   G4empCrossSection(const G4empCrossSection&);
   G4empCrossSection & operator = (const G4empCrossSection &right);
   

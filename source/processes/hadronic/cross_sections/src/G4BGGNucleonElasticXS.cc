@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonElasticXS.cc,v 1.11 2010/11/26 14:45:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4BGGNucleonElasticXS.cc,v 1.12 2011-01-09 02:37:48 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,7 +51,8 @@
 #include "G4NistManager.hh"
 
 
-G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition*) 
+G4BGGNucleonElasticXS::G4BGGNucleonElasticXS(const G4ParticleDefinition*)
+ : G4VCrossSectionDataSet("Barashenkov-Glauber-Gribov") 
 {
   verboseLevel = 0;
   fGlauberEnergy = 91.*GeV;

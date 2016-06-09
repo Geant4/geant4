@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.141 2010/05/30 11:15:52 allison Exp $
+cvs log $Id: History,v 1.144 2010-12-27 12:18:16 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27th December 2010  John Allison  (greps-V09-03-03)
+- Tagged.
+
+7th December 2010  John Allison
+- Fixed Coverity warnings.
+
+6th December 2010  John Allison
+- G4Visible.cc::operator!=: protect zero vis attributes pointers.
+- G4Visible.cc::operator=: delete allocated vis attributes (fixes
+  memory leak).
 
 30th May 2010  John Allison  (greps-V09-03-02)
 - G4VVisManager: Added Draw(const G4VDigi&) and FilterDigi(const G4VDigi&).

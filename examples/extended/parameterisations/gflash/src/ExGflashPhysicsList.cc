@@ -41,6 +41,7 @@
 
 #include "G4FastSimulationManagerProcess.hh"
 
+using namespace std;
 
 ExGflashPhysicsList::ExGflashPhysicsList():  G4VUserPhysicsList()
 {
@@ -154,7 +155,7 @@ void ExGflashPhysicsList::AddTransportation()
 void ExGflashPhysicsList::ConstructEM()
 {
 
-   cout<<"Physics List constructor"<<endl;
+   G4cout<<"Physics List constructor"<<G4endl;
    SetCuts();
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -302,7 +303,7 @@ void ExGflashPhysicsList::AddParameterisation()
   G4FastSimulationManagerProcess* 
     theFastSimulationManagerProcess = 
       new G4FastSimulationManagerProcess();
-  G4cout << "FastSimulationManagerProcess" <<endl;
+  G4cout << "FastSimulationManagerProcess" <<G4endl;
   theParticleIterator->reset();
   //std::cout<<"---"<<std::endl;
   while( (*theParticleIterator)() ){

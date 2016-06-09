@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrUtils.hh,v 1.8 2010/12/15 11:29:54 arce Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgrUtils.hh,v 1.8 2010-12-15 11:29:54 arce Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 //
 // class G4tgrUtils
@@ -66,6 +66,7 @@ class G4tgrUtils
     static G4bool IsFunction( const G4String& word ); 
       // Checks that every character in a G4String is a number
       // (also '.' or exponencial notation: 'E')
+    static G4bool WordIsUnit( const G4String& word );
 
     static void Dump3v( const G4ThreeVector& vec, const char* msg);
       // Dumps a three-vector with a message

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreIonisationModel.cc,v 1.13 2010/12/02 16:06:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4LivermoreIonisationModel.cc,v 1.14 2010-12-03 16:03:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // Author: Luciano Pandola
 //
@@ -699,7 +699,8 @@ void G4LivermoreIonisationModel::InitialiseFluorescence()
 	       energyVector->push_back(energy);
 	       ksi->push_back(coeff);
 	     }
-	   G4VEMDataSet* p = new G4EMDataSet(iZ,energyVector,ksi,interp,1.,1.);
+	   G4VDataSetAlgorithm* interp1 = new G4LogLogInterpolation();
+	   G4VEMDataSet* p = new G4EMDataSet(iZ,energyVector,ksi,interp1,1.,1.);
 	   xsis->AddComponent(p);
 	 }
        if(verboseLevel>3) xsis->PrintData();

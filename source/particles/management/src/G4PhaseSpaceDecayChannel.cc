@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.13 2007/10/06 06:49:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.14 2010-12-22 07:07:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -180,8 +180,8 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
     }
 #endif
     G4Exception("G4PhaseSpaceDecayChannel::TwoBodyDecayIt",
-                "can not create decay products", JustWarning,
-                "sum of daughter mass is larger than parent mass");
+                "PART112", JustWarning,
+                "Can not create decay products: sum of daughter mass is larger than parent mass");
     return products;
   }
 
@@ -243,8 +243,8 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
     }
 #endif
     G4Exception("G4PhaseSpaceDecayChannel::ThreeBodyDecayIt",
-                "can not create decay products", JustWarning,
-                "sum of daughter mass is larger than parent mass");
+                "PART112", JustWarning,
+                "Can not create decay products: sum of daughter mass is larger than parent mass");
     return products;
   }
 
@@ -434,8 +434,8 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 	delete [] daughtermomentum;
 
 	G4Exception("G4PhaseSpaceDecayChannel::ManyBodyDecayIt",
-                "can not create decay products", JustWarning,
-                "sum of daughter mass is larger than parent mass");
+                "PART112", JustWarning,
+                "Can not create decay products: sum of daughter mass is larger than parent mass");
 
 	return 0;   // Error detection
 
@@ -472,8 +472,8 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
       }
 #endif
       G4Exception("G4PhaseSpaceDecayChannel::ManyBodyDecayIt: ",
-                  " Cannot decay ", JustWarning,
-		  " Decay Kinematics cannot be calculated ");
+                  "PART113", JustWarning,
+		  " Cannot decay :  Decay Kinematics cannot be calculated ");
       
       delete [] sm;
       delete [] daughtermass;

@@ -1,0 +1,25 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 27 60
+#
+/rdecay01/fullChain true
+#
+/tracking/verbose 2
+/run/beamOn 1
+#
+/tracking/verbose 0
+#
+/rdecay01/histo/setFileName Co60
+/rdecay01/histo/setFileType root
+/rdecay01/histo/setHisto 1  150  0. 1500 keV	#e+ e-
+/rdecay01/histo/setHisto 2  150  0. 1500 keV	#neutrino
+/rdecay01/histo/setHisto 3  150  0. 1500 keV	#gamma
+/rdecay01/histo/setHisto 6  100 -1. 4000 keV	#E balance
+/rdecay01/histo/setHisto 7  150  0. 15e3 keV	#P balance
+/rdecay01/histo/setHisto 8  100  0. 100. year	#time of life
+#
+/rdecay01/event/printModulo 100000
+#  
+/run/beamOn 1000000

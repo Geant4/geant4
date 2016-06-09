@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2010/11/09 20:10:13 asaim Exp $
+$Id: History,v 1.39 2011-01-04 19:15:59 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-09-11-2011 M.Asai (fano-V09-03-05)
+04-01-2011 V.Ivanchenko (fano-V09-03-06)
+- Minor cleanup of SS physics constructor
+
+09-11-2010 M.Asai (fano-V09-03-05)
 - Fix AIDA file option.
 
 25-10-2010 G.Folger  (fano-V09-03-04)

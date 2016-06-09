@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.37 2010/10/30 07:55:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleTable.cc,v 1.38 2010-12-22 07:07:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // class G4ParticleTable
 //
@@ -120,8 +120,8 @@ G4ParticleTable::G4ParticleTable(const G4ParticleTable &right)
    readyToUse(false)
 {
   G4Exception("G4ParticleTable::G4ParticleTable()",
-	      "illegal constructor call", JustWarning,
-	      "you call copy constructor of G4ParticleTable");    
+	      "PART001", FatalException,
+	      "Illegal call of copy constructor for G4ParticleTable");    
   fDictionary = new G4PTblDictionary(*(right.fDictionary));
   fIterator   = new G4PTblDicIterator(*fDictionary);
 }
@@ -459,7 +459,8 @@ void G4ParticleTable::CheckReadiness()
 {
   if(!readyToUse) {
    G4String msg;
-   msg = " Access to G4ParticleTable for finding a particle or equivalent\n";
+   msg = "Illegal use of G4ParticleTable : ";
+   msg += " Access to G4ParticleTable for finding a particle or equivalent\n";
    msg += "operation occurs before G4VUserPhysicsList is instantiated and\n";
    msg += "assigned to G4RunManager. Such an access is prohibited by\n";
    msg += "Geant4 version 8.0. To fix this problem, please make sure that\n";
@@ -467,7 +468,7 @@ void G4ParticleTable::CheckReadiness()
    msg += "G4RunManager before instantiating other user classes such as\n";
    msg += "G4VUserPrimaryParticleGeneratorAction.";
    G4Exception("G4ParticleTable::CheckReadiness()",
-              "PartMan0000",FatalException,msg);
+              "PART002",FatalException,msg);
   }
 }
 

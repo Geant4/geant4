@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.2 2010/10/11 14:31:39 maire Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: TrackingAction.cc,v 1.2 2010-10-11 14:31:39 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -100,7 +100,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //example of saving random number seed of this event, under condition
   //
   ////condition = (ih == 3);
-  if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();      
+  if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.65 2010/10/16 06:04:51 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4IonTable.cc,v 1.66 2010-12-22 07:07:59 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -114,7 +114,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
              << "  because the current state is PreInit !!" <<   G4endl;
     }
 #endif
-    G4Exception( "G4IonTable::CreateIon()","Illegal operation",
+    G4Exception( "G4IonTable::CreateIon()","PART105",
 		 JustWarning, "Can not create ions in PreInit state");
     return 0;
   }
@@ -200,7 +200,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
              << " because the current state is PreInit !!" <<   G4endl;
     }
 #endif
-    G4Exception( "G4IonTable::CreateIon()","Illegal operation",
+    G4Exception( "G4IonTable::CreateIon()","PART105",
 		 JustWarning, "Can not create ions in PreInit state");
     return 0;
   }
@@ -280,8 +280,8 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int encoding)
              << " CODE:" << encoding << G4endl;
     }
 #endif
-    G4Exception( "G4IonTable::GetIon()","Illegal operation",
-		 JustWarning, "illegal encoding");
+    G4Exception( "G4IonTable::GetIon()","PART106",
+		 JustWarning, "illegal encoding for an ion");
     return 0;
   }
   // Only ground state is supported
@@ -360,7 +360,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
              << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
-    G4Exception( "G4IonTable::FindIon()","Illegal operation",
+    G4Exception( "G4IonTable::FindIon()","PART107",
 		 JustWarning, "illegal atomic number/mass");
     return 0;
   }
@@ -407,7 +407,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
 	     <<"  E = " << E/keV << G4endl;
     }    
 #endif
-    G4Exception( "G4IonTable::FindIon()","Illegal operation",
+    G4Exception( "G4IonTable::FindIon()","PART107",
 		 JustWarning, "illegal atomic number/mass");
     return 0;
   }
@@ -746,7 +746,7 @@ G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A, G4int L) const
              << " Z =" << Z << "  A = " << A  << G4endl;
     }
 #endif
-    G4Exception( "G4IonTable::GetNucleusMass()","Illegal operation",
+    G4Exception( "G4IonTable::GetNucleusMass()","PART107",
 		 EventMustBeAborted, "illegal atomic number/mass");
     return -1.0;
   }

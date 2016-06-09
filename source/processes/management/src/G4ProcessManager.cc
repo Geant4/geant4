@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.37 2010/10/30 07:51:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ProcessManager.cc,v 1.38 2010-12-22 09:14:54 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -66,7 +66,7 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
   // create the process List
   theProcessList = new G4ProcessVector();
   if ( theProcessList == 0) {
-    G4Exception( "G4ProcessManager::G4ProcessManager()","Fatal Error",
+    G4Exception( "G4ProcessManager::G4ProcessManager()","ProcMan012",
 		 FatalException, "Can not create G4ProcessList ");
   }
 
@@ -74,7 +74,7 @@ G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):
   for (G4int i=0; i<SizeOfProcVectorArray; ++i) {
     theProcVector[i] = new G4ProcessVector();
     if ( theProcVector[i] == 0) {
-      G4Exception( "G4ProcessManager::G4ProcessManager()","Fatal Error",
+      G4Exception( "G4ProcessManager::G4ProcessManager()","ProcMan012",
 		   FatalException, "Can not create G4ProcessVector ");
     }
   }
@@ -110,7 +110,7 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
    theAttrVector = new G4ProcessAttrVector();
    if ( ( theProcessList == 0) || (theAttrVector == 0) ){
      G4Exception( "G4ProcessManager::G4ProcessManager() [coopy constructor]",
-		  "Fatal Error",FatalException, "Can not create G4ProcessList ");
+		  "ProcMan011",FatalException, "Can not create G4ProcessList ");
    }
 
    for (G4int idx=0; idx < right.numberOfProcesses; idx++) {
@@ -131,7 +131,7 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
     theProcVector[i] = new G4ProcessVector();
     if ( theProcVector[i] == 0) {
       G4Exception( "G4ProcessManager::G4ProcessManager() [coopy constructor]",
-		   "Fatal Error",FatalException, "Can not create G4ProcessVector ");
+		   "ProcMan011",FatalException, "Can not create G4ProcessVector ");
     }
 
     G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
@@ -157,8 +157,8 @@ G4ProcessManager::G4ProcessManager():
   theProcessList = 0;
   theAttrVector = 0;
 
-  G4Exception("G4ProcessManager::G4ProcessManager()","Illegal operation",
-	      JustWarning,"Default constructor is called !!");
+  G4Exception("G4ProcessManager::G4ProcessManager()","ProcMan111",
+	      JustWarning,"Default constructor is called");
 }
 
 // ///////////////////////////////////////
@@ -168,7 +168,7 @@ G4ProcessManager & G4ProcessManager::operator=(G4ProcessManager &)
   theProcessList = 0;
   theAttrVector = 0;
 
-  G4Exception("G4ProcessManager::operator=","Illegal operation",
+  G4Exception("G4ProcessManager::operator=","ProcMan111",
 	      JustWarning,"Assignemnet operator is called");
 
   return *this;
@@ -263,9 +263,9 @@ G4ProcessAttribute* G4ProcessManager::GetAttribute(G4int index) const
   // check process pointer is not 0
   G4VProcess* aProcess = (*theProcessList)[index];
   if (aProcess == 0) {
-    G4String aErrorMessage("Null Pointer for");
+    G4String aErrorMessage("Bad ProcessList:  Null Pointer for");
     aErrorMessage += theParticleType->GetParticleName() ;
-    G4Exception("G4ProcessManager::GetAttribute()","Bad ProcessList",
+    G4Exception("G4ProcessManager::GetAttribute()","ProcMan012",
 		FatalException,aErrorMessage);
     return 0;
   }    
@@ -419,10 +419,10 @@ G4int G4ProcessManager::AddProcess(
   // check size of the ProcessVector[0]
   if (numberOfProcesses != idx){
     theProcessList->removeLast();
-    G4String anErrorMessage("Inconsistent process List size for ");
+    G4String anErrorMessage("Bad ProcessList: Inconsistent process List size for ");
     anErrorMessage += "process[" + aProcess->GetProcessName() + "]";
     anErrorMessage += " particle[" + theParticleType->GetParticleName() + "]";
-    G4Exception( "G4ProcessManager::AddProcess()","Fatal Error",
+    G4Exception( "G4ProcessManager::AddProcess()","ProcMan012",
 		 FatalException,anErrorMessage);
     return -1;
   }
@@ -518,10 +518,10 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
       // corresponding DoIt is not active  
     } else {
       // idx is out of range
-      G4String anErrorMessage("Index is out of range ");
+      G4String anErrorMessage("Bad ProcessList : Index is out of range ");
       anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
       anErrorMessage += "process[" + removedProcess->GetProcessName() + "]  " ;
-      G4Exception( "G4ProcessManager::RemoveProcess()","Fatal Error",
+      G4Exception( "G4ProcessManager::RemoveProcess()","ProcMan012",
 		   FatalException,anErrorMessage);	 
       return 0;
     }
@@ -862,19 +862,19 @@ G4VProcess* G4ProcessManager::InActivateProcess(G4int index)
         if ((*pVector)[idx]== pProcess) {
 	  (*pVector)[idx]= 0;
 	} else {
-	  G4String anErrorMessage("Bad index in attribute");
+	  G4String anErrorMessage("Bad ProcessList: Bad index in attribute");
 	  anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
 	  anErrorMessage += "process[" + pProcess->GetProcessName() + "]  " ;
-	  G4Exception( "G4ProcessManager::InactivateProcess():","Fatal Error",
+	  G4Exception( "G4ProcessManager::InactivateProcess():","ProcMan012",
 		       FatalException,anErrorMessage);	 
 	  return 0;
 	}    
       } else {
         // idx is out of range
-	G4String anErrorMessage("Index is out of range");
+	G4String anErrorMessage("Bad ProcessList:  Index is out of range");
 	anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
 	anErrorMessage += "process[" + pProcess->GetProcessName() + "]  " ;
-	G4Exception( "G4ProcessManager::InactivateProcess():","Fatal Error",
+	G4Exception( "G4ProcessManager::InactivateProcess():","ProcMan012",
 		     FatalException,anErrorMessage);	 
 	return 0;
       }
@@ -923,19 +923,19 @@ G4VProcess* G4ProcessManager::ActivateProcess(G4int index)
 	if ((*pVector)[idx]== 0) {
 	  (*pVector)[idx] = pProcess;
 	} else {
-	  G4String anErrorMessage("Bad index in attribute");
+	  G4String anErrorMessage("Bad ProcessList: Bad index in attribute");
 	  anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
 	  anErrorMessage += "process[" + pProcess->GetProcessName() + "]  " ;
-	  G4Exception( "G4ProcessManager::ActivateProcess():","Fatal Error",
+	  G4Exception( "G4ProcessManager::ActivateProcess():","ProcMan012",
 		       FatalException,anErrorMessage);	 
 	  return 0;
 	}    
       } else {
         // idx is out of range
-	G4String anErrorMessage("Index is out of range");
+	G4String anErrorMessage("bad ProcessList:  Index is out of range");
 	anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
 	anErrorMessage += "process[" + pProcess->GetProcessName() + "]  " ;
-	G4Exception("G4ProcessManager::ActivateProcess():","Fatal Error",
+	G4Exception("G4ProcessManager::ActivateProcess():","ProcMan012",
 		       FatalException,anErrorMessage);	 
 	return 0;
 
@@ -1164,7 +1164,7 @@ void G4ProcessManager::CheckOrderingParameters(G4VProcess* aProcess) const
     msg = "Invalid ordering parameters are set for  ";
     msg +=  aProcess->GetProcessName();
     G4Exception( "G4ProcessManager::CheckOrderingParameters ",
-                 "Invalid Ordering",FatalException, msg);
+                 "ProcMan013",FatalException, msg);
   }
   
   return;

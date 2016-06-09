@@ -422,7 +422,7 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
     
     G4String particleType="";
     G4String parentProcess="";
-    G4ThreeVector momentum=0;
+    G4ThreeVector momentum(0.,0.,0.);
     G4double particleEnergy=0;
     G4String sampleMaterial="";
     G4double particleDepth=0;

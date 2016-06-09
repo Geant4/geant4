@@ -1,4 +1,4 @@
-$Id: History,v 1.266 2010/11/24 10:58:00 gcosmo Exp $
+$Id:$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 26, 2011  G.Cosmo (global-V09-03-25)
+- Added trailing spaces to version string in G4Version.hh.
+
+Jan 26, 2011  G.Cosmo
+- Manually added corrected tag strings in G4Version.hh, temporary solution
+  for the no longer supported feature in SVN...
+
+Jan 08, 2011  V.Ivantchenko
+- Extended length of internal arrays in G4Pow from 256 to 512.
+  Allows to fix numerical problems observed in some ion/ion collision tests.
+
+Dec 24, 2010  H.Kurasige
+- Use unsigned-int for table size type in G4PhysicsTable.
+  Fixes a problem for data persistency.
 
 Nov 24, 2010  G.Cosmo (global-V09-03-24)
 - Changed date for release 9.4.

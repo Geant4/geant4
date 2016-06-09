@@ -25,7 +25,7 @@
 //
 #ifndef ExGflashPhysicsList_h
 #define ExGflashPhysicsList_h 1
-using namespace std;
+
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"

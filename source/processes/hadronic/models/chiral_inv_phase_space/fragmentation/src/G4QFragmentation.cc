@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.17 2010/06/25 14:03:44 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4QFragmentation.cc,v 1.19 2010-12-14 09:41:04 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-01 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -1836,10 +1836,10 @@ G4QHadronVector* G4QFragmentation::Fragment()
     G4QHadron* resNuc = (*theResult)[theRS-1];              // Pointer to Residual Nucleus
     G4LorentzVector resNuc4M = resNuc->Get4Momentum();      // 4-Momentum of the Nucleuz
     G4int           resNucPDG= resNuc->GetPDGCode();        // PDG Code of the Nucleus
-    if(resNucPDG==90000000)
+    if(resNucPDG==90000000 || resNuc4M.m2()<800000.)        // m_N^2 = 880000 MeV^2
     {
       resNuc4M=G4LorentzVector(0.,0.,0.,0.);
-      resNuc->Set4Momentum(resNuc4M);
+      if(resNucPDG == 90000000) resNuc->Set4Momentum(resNuc4M);
     }
 #ifdef edebug
     G4int rnChg=resNuc->GetCharge();
@@ -1926,7 +1926,13 @@ G4QHadronVector* G4QFragmentation::Fragment()
       }
     }
     G4double nucE=resNuc4M.e();                             // Total energy of the nuclEnv
-    if(nucE<1.E-12) nucE=0.;                                // Computer accuracy safety
+    if(nucE < 1.E-12) nucE=0.;                              // Computer accuracy safety
+    else if(resNucPDG==22 && nQuas==1)                      // NuclEnv for nQ=1 is a photon
+    {
+      G4Quasmon* aQuasm=theQuasmons[0];                     // the only Quasmon
+      aQuasm->Set4Momentum(aQuasm->Get4Momentum()+resNuc4M);// add the gammaEnv to the Q
+      nucE=0.;
+    }
     G4ThreeVector   nucVel(0.,0.,0.);                       // Proto of the NucleusVelocity
     G4QHadronVector* output=0;                              // NucleusFragmentation Hadrons
     G4QEnvironment* pan= new G4QEnvironment(theEnv);        // ---> DELETED --->----------+

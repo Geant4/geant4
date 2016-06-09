@@ -248,10 +248,7 @@ void DMXPhysicsList::AddTransportation() {
 
 
 // alpha and GenericIon and deuterons, triton, He3:
-//hIonisation #include "G4hLowEnergyIonisation.hh" -> moved to G4hIonisation
 #include "G4EnergyLossTables.hh"
-// hLowEnergyIonisation uses Ziegler 1988 as the default
-
 
 //muon:
 #include "G4MuIonisation.hh"
