@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004/06/01 07:02:16 gcosmo Exp $
+$Id: History,v 1.2 2004/08/25 18:06:54 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 25th, 2004 Trevor MacPhail (LXe-V06-02-00)
+- fixed compilation error in LXeSteppingVerbose.cc
+- fixed compilation warnings in LXePMTSD.cc, LXeScintHit.cc, LXeScintSD.cc
 
 May 31st, 2004 Trevor MacPhail (LXe-V06-01-00)
 ------------------------------

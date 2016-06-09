@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: SteppingAction.cc,v 1.6 2004/09/27 09:35:38 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
-// $Id: SteppingAction.cc,v 1.5 2004/03/31 16:33:36 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,7 +32,7 @@
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
  #include "AIDA/IHistogram1D.h"
 #endif
 
@@ -82,7 +79,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double GammaPlus=EGamma*xPlus/muonMass;
  G4double GammaMinus=EGamma*xMinus/muonMass;
    	   
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
  runAction->GetHisto(0)->fill(1./(1.+pow(thetaPlus*GammaPlus,2)));
  runAction->GetHisto(1)->fill(log10(thetaPlus*GammaPlus));
 

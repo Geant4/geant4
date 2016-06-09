@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.19 2004/03/23 12:44:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4PenelopeCompton.cc,v 1.22 2004/09/27 14:00:17 pia Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // Author: Luciano Pandola
 //
@@ -641,7 +641,7 @@ void G4PenelopeCompton::ReadData()
 
   //(*((*ionizationEnergy)[Z-1]))[i] contains the ionization energy of the i-th level of
   //the element Z
-};
+}
 
 G4double G4PenelopeCompton::CrossSection(G4double energy,G4int Z)
 {

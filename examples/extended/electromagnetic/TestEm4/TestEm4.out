@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-02 $   (25-June-2004)
+ Geant4 version $Name: geant4-06-02-patch-02 $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -93,7 +93,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=15.51s Real=553.82s Sys=37.47s
+  User=15.02s Real=427.05s Sys=39.93s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

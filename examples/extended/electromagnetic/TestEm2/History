@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2004/06/21 10:50:26 maire Exp $
+$Id: History,v 1.44 2004/07/01 09:30:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+30-06-04 V.Ivanchenko (testem2-V06-02-00)
+- Update acceptance numbers in the macro
+- Fix problem in initilisation of RunAction
+
 21-06-04 mma (testem2-V06-01-03)
 - move acceptance control and histogram names in RunAction
 - add RunActionMessenger

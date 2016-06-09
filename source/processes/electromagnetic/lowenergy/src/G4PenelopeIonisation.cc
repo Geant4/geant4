@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.13 2004/06/01 15:09:12 pandola Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4PenelopeIonisation.cc,v 1.14 2004/07/01 09:24:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 // 
 // --------------------------------------------------------------
 //
@@ -798,7 +798,7 @@ void G4PenelopeIonisation::ReadData()
       G4Exception(excep);
     }
   }while (test != -2); //the very last Z is closed with -2 instead of -1
-};
+}
 
 
 G4double G4PenelopeIonisation::CalculateDeltaFermi(G4double ene,G4int Z,

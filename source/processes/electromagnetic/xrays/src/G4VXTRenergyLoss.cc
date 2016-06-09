@@ -22,8 +22,8 @@
 //
 //
 
-// $Id: G4VXTRenergyLoss.cc,v 1.11 2003/06/20 15:10:20 grichine Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VXTRenergyLoss.cc,v 1.12 2004/03/01 17:00:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // History:
 // 2001-2002 R&D by V.Grichine
@@ -741,7 +741,7 @@ void G4VXTRenergyLoss::ComputeGasPhotoAbsCof()
    for(i=0;i<fGasIntervalNumber;i++)
    {
      fGasPhotoAbsCof[i] = new G4double[5] ;
-   }
+   } 
    for(i=0;i<fGasIntervalNumber;i++)
    {
       fGasPhotoAbsCof[i][0] = thisMaterialSandiaTable.

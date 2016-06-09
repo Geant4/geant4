@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.16 2004/07/21 14:23:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02-patch-01 $
+// $Id: G4RunManagerKernel.cc,v 1.16.2.1 2004/10/13 17:29:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 //
 
@@ -79,7 +79,7 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   // version banner
   versionString
-    = " Geant4 version $Name: geant4-06-02-patch-01 $   (27-July-2004)";
+    = " Geant4 version $Name: geant4-06-02-patch-02 $   (26-October-2004)";
   G4cout << G4endl
     << "*************************************************************" << G4endl
     << versionString << G4endl

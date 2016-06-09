@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.4 2004/05/17 13:30:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4VoxelNavigation.cc,v 1.5 2004/09/10 15:38:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 //
 // class G4VoxelNavigation Implementation
@@ -120,6 +120,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
              << " gave negative safety: " << motherSafety << G4endl
              << "        for the current (local) point " << localPoint
              << G4endl;
+      motherSolid->DumpInfo();
       G4Exception("G4VoxelNavigation::ComputeStep()",
                   "NegativeSafetyMotherVol", FatalException,
                   "Negative Safety In Voxel Navigation !" ); 
@@ -133,10 +134,13 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
       G4double  estDistToSolid= motherSolid->DistanceToIn(localPoint); 
       G4cout << "          Estimated isotropic distance to solid (distToIn)= " 
              << estDistToSolid << G4endl;
-      if( estDistToSolid > 100.0 * kCarTolerance ) 
+      if( estDistToSolid > 100.0 * kCarTolerance )
+      {
+        motherSolid->DumpInfo();
         G4Exception("G4VoxelNavigation::ComputeStep()",
                     "FarOutsideCurrentVolume", FatalException,
                     "Point is far outside Current Volume !"); 
+      }
       else
         G4Exception("G4VoxelNavigation::ComputeStep()", "OutsideCurrentVolume", 
                     JustWarning, "Point is a little outside Current Volume."); 
@@ -339,6 +343,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                      << localPoint << G4endl
                      << "        Local Direction: " << localDirection << G4endl
                      << "        Solid: " << motherSolid->GetName() << G4endl; 
+              motherSolid->DumpInfo();
               G4Exception("G4VoxelNavigation::ComputeStep()",
                           "PointOutsideCurrentVolume", FatalException,
                           "Current point is outside the current solid !");

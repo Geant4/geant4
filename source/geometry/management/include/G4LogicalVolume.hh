@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.16 2003/11/04 15:11:11 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LogicalVolume.hh,v 1.17 2004/09/26 01:18:17 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // 
 // class G4LogicalVolume
@@ -181,6 +181,10 @@ class G4LogicalVolume
     inline G4Material* GetMaterial() const;
     inline void SetMaterial(G4Material *pMaterial);
       // Gets and sets the current material.
+    inline void UpdateMaterial(G4Material *pMaterial);
+      // Set material and corresponding MaterialCutsCouple.
+      // This method is invoked by G4Navigator while it is navigating through 
+      // material parameterization.
 
     inline G4FieldManager* GetFieldManager() const;
       // Gets current FieldManager.

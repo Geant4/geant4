@@ -16,6 +16,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th September 2004 Peter Gumplinger (op-V06-02-02)
+                Fix bug in G4PlaneVectorRand and resample
+                theFacetNormal for LobeReflection in DielectricMetal
+
+12th August 2004 Peter Gumplinger (op-V06-02-01)
+                In G4OpBoundaryProcess.cc: use GetMaterial from 
+                G4StepPoint directly; apply/sample reflectivity and 
+                Unified model reflection parameters only once even
+                for rough dielectric/metal surfaces - i.e. not again
+                even when reflected ray still points toward the
+                surface - fixes problem report 654.
+
+05th August 2004 Peter Gumplinger (op-V06-02-00)
+                Allow for unified model reflectivity parameters 
+                to also work in case of dielectric_metal surfaces;
+                addresses in part problem report 654.
+
 26th April 2004 Peter Gumplinger (op-V06-01-01)
                 Protect against NULL pointers in G4OpRayleigh.
                 Do not overwrite Rayleigh scattering length

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.31 2004/01/26 09:03:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Cons.cc,v 1.32 2004/07/26 14:25:30 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // class G4Cons
 //
@@ -30,6 +30,7 @@
 //
 // History:
 //
+// 26.07.04 V.Grichine: bugs fixed in   Distance ToIn(p,v):dIn=dOut=0 in 3/10^8
 // 23.01.04 V.Grichine: bugs fixed in   Distance ToIn(p,v)
 // 26.06.02 V.Grichine: bugs fixed in   Distance ToIn(p,v)
 // 05.10.00 V.Grichine: bugs fixed in   Distance ToIn(p,v)
@@ -743,14 +744,14 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
   if (fabs(nt1) > kRadTolerance)  // Equation quadratic => 2 roots
   {
+      b = nt2/nt1 ;
+      c = nt3/nt1 ;
+      d = b*b-c   ;
     if ( nt3 > rout*kRadTolerance*secRMax || rout < 0 )
     {
       // If outside real cone (should be rho-rout>kRadTolerance*0.5
       // NOT rho^2 etc) saves a sqrt() at expense of accuracy
 
-      b = nt2/nt1 ;
-      c = nt3/nt1 ;
-      d = b*b-c   ;
 
       if (d >= 0)
       {
@@ -809,7 +810,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
       if ( t3  > (rin + kRadTolerance*0.5*secRMin)*
                  (rin + kRadTolerance*0.5*secRMin) && 
-           nt2 < 0                                 && 
+	   nt2 < 0                                 && 
+	   d >= 0                                  && 
+	   //  nt2 < -kCarTolerance*secRMax/2/fDz                  && 
+           // t2 < sqrt(t3)*v.z()*tanRMax                          && 
+	   // d > kCarTolerance*secRMax*(rout-b*tanRMax*v.z())/nt1 && 
            fabs(p.z()) <= tolIDz )
       {
         // Inside cones, delta r -ve, inside z extent

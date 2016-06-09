@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2004/03/31 16:33:33 maire Exp $
+$Id: History,v 1.19 2004/09/27 09:35:30 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27-09-04 mma (testem6-V06-02-00)
+- define correctly all UI subdirectories.
+- modifs in RunAction for hbook,root,XML (Jaida)
      
 31-03-04 mma (testem6-V06-01-00)
 - remove direct interface with root

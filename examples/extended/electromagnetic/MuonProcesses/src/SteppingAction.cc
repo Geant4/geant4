@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.1 2004/06/14 10:09:27 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: SteppingAction.cc,v 1.2 2004/06/30 15:48:57 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,10 +31,6 @@
 #include "HistoManager.hh"
 
 #include "G4RunManager.hh"
-
-#ifdef USE_AIDA
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,16 +65,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double lgepsE = 0.;
   if (etrans > 0.) lgepsE = log10(etrans/E1);
 
-#ifdef USE_AIDA  	       	  
-  //
   G4int id = 0;
   if (procName == "MuIoni")     id = 1; 
   if (procName == "MuPairProd") id = 2;
   if (procName == "MuBrems")    id = 3;
   if (procName == "MuNucl")     id = 4;    
-  if ((id > 0) && (histoManager->GetHisto(id)))
-                       histoManager->GetHisto(id)->fill(lgepsE);
-#endif
+  histoManager->FillHisto(id,lgepsE);		       
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

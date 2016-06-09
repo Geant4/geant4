@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: MuonProcesses.cc,v 1.1 2004/06/14 10:09:20 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: MuonProcesses.cc,v 1.2 2004/06/30 15:48:55 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -74,10 +74,7 @@ int main(int argc,char** argv) {
    visManager->Initialize();
   #endif
   
-  HistoManager* histo = 0;
-#ifdef G4ANALYSIS_USE
-  histo = new HistoManager();
-#endif
+  HistoManager* histo = new HistoManager();
       
   // set user action classes
   RunAction* run;  
@@ -106,13 +103,12 @@ int main(int argc,char** argv) {
 
   // job termination
   //
-#ifdef G4ANALYSIS_USE
-  delete histo;
-#endif      
+ 
 #ifdef G4VIS_USE
  delete visManager;
 #endif
- 
+
+  delete histo; 
   delete runManager;
 
   return 0;

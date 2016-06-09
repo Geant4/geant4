@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4VTrajectory.cc,v 1.5 2004/07/05 17:08:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02-patch-01 $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 //
 // ---------------------------------------------------------------

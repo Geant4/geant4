@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2004/07/15 15:00:57 gcosmo Exp $
+$Id: History,v 1.14 2004/08/26 07:58:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 26th, 2004       G.Cosmo  (geomdiv-V06-02-01)
+- G4PVDivision.cc: removed unnecessary debub printout in
+  CheckAndSetParamenters().
 
 June 15th, 2004         G.Cosmo  (geomdiv-V06-02-00)
 - Removed unnecessary forward declaration of HepTransform3D from

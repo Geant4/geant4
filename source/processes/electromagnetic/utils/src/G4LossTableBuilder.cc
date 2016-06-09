@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.10 2004/02/27 09:41:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4LossTableBuilder.cc,v 1.11 2004/07/21 11:44:42 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +37,7 @@
 // Modifications:
 //
 // 23.01.2003 V.Ivanchenko Cut per region
+// 21.07.2004 V.Ivanchenko Fix problem of range for dedx=0
 //
 // Class Description: 
 //
@@ -109,11 +110,24 @@ G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
 
     G4PhysicsVector* pv = (*dedxTable)[i];
     size_t nbins = pv->GetVectorLength();
+    size_t bin0  = 0;
     G4double elow = pv->GetLowEdgeEnergy(0);
     G4double ehigh = pv->GetLowEdgeEnergy(nbins);
+    G4double dedx1  = pv->GetValue(elow, b);
+    
+
+    if(dedx1 == 0.0) {
+      for (size_t k=1; k<nbins; k++) {
+        bin0++;
+        elow  = pv->GetLowEdgeEnergy(k);
+        dedx1 = pv->GetValue(elow, b);
+        if(dedx1 > 0.0) break;
+      }
+      nbins -= bin0;
+    }
+
     G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
 
-    G4double dedx1  = pv->GetValue(elow, b);
     G4double range  = 2.*elow/dedx1;
     //G4double range  = elow/dedx1;
     v->PutValue(0,range);
@@ -121,7 +135,7 @@ G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
 
     for (size_t j=1; j<nbins; j++) {
 
-      G4double energy2 = pv->GetLowEdgeEnergy(j);
+      G4double energy2 = pv->GetLowEdgeEnergy(j+bin0);
       G4double dedx2   = pv->GetValue(energy2, b);
       G4double de = (energy2 - energy1) * del;
       G4double energy = energy1 - de*0.5;

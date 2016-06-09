@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-02 $   (25-June-2004)
+ Geant4 version $Name: geant4-06-02-patch-02 $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -221,6 +221,27 @@ Run terminated.
 Run Summary
   Number of events processed : 100
   User=0.27s Real=0.27s Sys=0s
+Set field value to (0,0,1000) Gauss 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 2 start.
+Start Run processing.
+
+---> Begin of Event: 0
+Run terminated.
+Run Summary
+  Number of events processed : 10
+  User=0.02s Real=0.02s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

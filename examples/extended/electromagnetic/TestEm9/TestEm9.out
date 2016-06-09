@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-02 $   (25-June-2004)
+ Geant4 version $Name: geant4-06-02-patch-02 $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -245,28 +245,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=31.48s Real=35.19s Sys=3.65s
+  User=31.79s Real=35.66s Sys=3.85s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
-Average number of e-         1306
-Average number of gamma      684.6
-Average number of e+         48.98
-Average number of steps      3831
-Edep 1x1 =                   0.8336 +- 0.002815
-Edep 3x3 =                   0.9586 +- 0.001349
-Edep 5x5 =                   0.979 +- 0.001047
+Average number of e-         1304
+Average number of gamma      687.5
+Average number of e+         47.89
+Average number of steps      3830
+Edep 1x1 =                   0.8276 +- 0.003276
+Edep 3x3 =                   0.9551 +- 0.00155
+Edep 5x5 =                   0.9778 +- 0.001147
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8336  delEdep1x1= -0.004382 nrms= -1.374
-Erms1x1: 0.02815  delErms1x1= -0.003748 nrms= -1.175
-Edep3x3: 0.9586  delEdep3x3= -0.001905 nrms= -1.305
-Erms3x3: 0.01349  delErms3x3= -0.001111 nrms= -0.7611
-Edep5x5: 0.979  delEdep5x5= -0.001528 nrms= -1.295
-Erms5x5: 0.01047  delErms5x5= -0.00133 nrms= -1.127
+Edep1x1: 0.8276  delEdep1x1= -0.01036 nrms= -3.248
+Erms1x1: 0.03276  delErms1x1= 0.0008563 nrms= 0.2684
+Edep3x3: 0.9551  delEdep3x3= -0.005417 nrms= -3.71
+Erms3x3: 0.0155  delErms3x3= 0.000898 nrms= 0.6151
+Edep5x5: 0.9778  delEdep5x5= -0.002727 nrms= -2.311
+Erms5x5: 0.01147  delErms5x5= -0.0003312 nrms= -0.2807
 <<<<<END>>>>>   IS ACCEPTED
 
 #

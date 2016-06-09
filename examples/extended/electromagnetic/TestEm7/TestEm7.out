@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-02 $   (25-June-2004)
+ Geant4 version $Name: geant4-06-02-patch-02 $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -235,20 +235,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=154.28s Real=375.56s Sys=54.77s
+  User=155.24s Real=296.2s Sys=55.27s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.400219 GeV	0.65001367 % 	0.00020828743 Gy
-tally 1: 	 	7.9906299 GeV	0.49941437 % 	0.00016003008 Gy
-tally 2: 	 	3.6423712 GeV	0.2276482 % 	7.2946557e-05 Gy
-tally 3: 	 	1.8338852 GeV	0.11461782 % 	3.6727615e-05 Gy
+tally 0: 	 	10.37707 GeV	0.64856687 % 	0.00020782383 Gy
+tally 1: 	 	8.000398 GeV	0.50002488 % 	0.0001602257 Gy
+tally 2: 	 	3.673622 GeV	0.22960137 % 	7.3572423e-05 Gy
+tally 3: 	 	1.8590994 GeV	0.11619371 % 	3.7232586e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1800509887, 111688235
+ Current couple of seeds = 1530366474, 1972665398
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

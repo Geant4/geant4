@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2004/06/21 10:55:10 maire Exp $
+$Id: History,v 1.33 2004/09/24 14:41:19 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,10 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-21-06-04 mma (testem4-V0-01-01)
+24-09-04 mma (testem4-V06-02-00)
+- RunAction: modif in histo management for Jaida
+     
+21-06-04 mma (testem4-V06-01-01)
 - remove direct ROOT interface
      
-30-03-04 mma (testem4-V0-01-00)
+30-03-04 mma (testem4-V06-01-00)
 - README: more information about ROOT installation
       
 15-03-04 mma (testem4-V06-00-01)

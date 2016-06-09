@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4Orb.cc,v 1.14 2004/07/02 15:45:38 grichine Exp $
-// GEANT4 tag $Name: geant4-06-02-patch-01 $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // class G4Orb
 //

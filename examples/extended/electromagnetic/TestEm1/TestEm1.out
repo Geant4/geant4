@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-02 $   (25-June-2004)
+ Geant4 version $Name: geant4-06-02-patch-02 $   (26-October-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -203,20 +203,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=28s Real=43s Sys=10s
+  User=30s Real=47s Sys=10s
 
- nb tracks/event   neutral:    27.0700   charged:   701.4100
- nb  steps/event   neutral:   145.7600   charged:  3504.0700
+ nb tracks/event   neutral:    27.3500   charged:   702.6300
+ nb  steps/event   neutral:   146.8600   charged:  3512.1600
 
  total energy deposit: 100.0000 MeV
 
  nb of process calls per event: 
           eIoni       brCMS        phot       compt        conv     annihil
-      3477.4900     25.1900     25.6800    118.6900      1.3900      1.3900
+      3485.1100     25.6600     25.9600    119.5100      1.3900      1.3900
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1009674686, 985243040
+ Current couple of seeds = 1646939367, 598796183
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

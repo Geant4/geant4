@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4CellScorerStore.cc,v 1.3 2004/07/01 10:05:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02-patch-01 $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

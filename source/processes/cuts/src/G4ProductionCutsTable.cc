@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.6 2004/03/31 08:47:05 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4ProductionCutsTable.cc,v 1.8 2004/09/28 14:36:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 //
 // --------------------------------------------------------------
@@ -104,36 +104,45 @@ void G4ProductionCutsTable::UpdateCoupleTable()
   }
 
   // Reset "used" flags of all couples
-  for(CoupleTableIterator CoupleItr=coupleTable.begin();CoupleItr!=coupleTable.end();CoupleItr++)
+  for(CoupleTableIterator CoupleItr=coupleTable.begin();
+      CoupleItr!=coupleTable.end();CoupleItr++)
   { (*CoupleItr)->SetUseFlag(false); }
 
   // Update Material-Cut-Couple
   typedef std::vector<G4Region*>::iterator regionIterator;
-  for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++){
+  for(regionIterator rItr=fG4RegionStore->begin();
+      rItr!=fG4RegionStore->end();rItr++){
     G4ProductionCuts* fProductionCut = (*rItr)->GetProductionCuts();
-    std::vector<G4Material*>::const_iterator mItr = (*rItr)->GetMaterialIterator();
+    std::vector<G4Material*>::const_iterator mItr =
+      (*rItr)->GetMaterialIterator();
     size_t nMaterial = (*rItr)->GetNumberOfMaterials();
+    (*rItr)->ClearMap();
 
     for(size_t iMate=0;iMate<nMaterial;iMate++){
       //check if this material cut couple has already been made
       G4bool coupleAlreadyDefined = false;
       G4MaterialCutsCouple* aCouple;
-      for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++){
-        if((*cItr)->GetMaterial()==(*mItr) && (*cItr)->GetProductionCuts()==fProductionCut){ 
+      for(CoupleTableIterator cItr=coupleTable.begin();
+          cItr!=coupleTable.end();cItr++){
+        if((*cItr)->GetMaterial()==(*mItr)
+        && (*cItr)->GetProductionCuts()==fProductionCut){ 
           coupleAlreadyDefined = true;
           aCouple = *cItr;
           break;
         }
       }
       
-      //if this combination is new, cleate and register a couple
+      // If this combination is new, cleate and register a couple
       if(!coupleAlreadyDefined){
         aCouple = new G4MaterialCutsCouple((*mItr),fProductionCut);
         coupleTable.push_back(aCouple);
         aCouple->SetIndex(coupleTable.size()-1);
       }
 
-      //Set the couple to the proper logical volumes in that region
+      // Register this couple to the region
+      (*rItr)->RegisterMaterialCouplePair((*mItr),aCouple);
+
+      // Set the couple to the proper logical volumes in that region
       aCouple->SetUseFlag();
 
       std::vector<G4LogicalVolume*>::iterator rootLVItr
@@ -146,11 +155,11 @@ void G4ProductionCutsTable::UpdateCoupleTable()
 
         ScanAndSetCouple(aLV,aCouple,aR);
 
-        //proceed to the next root logical volume in this region
+        // Proceed to the next root logical volume in this region
         rootLVItr++;
       }
 
-      //proceed to next material in this region
+      // Proceed to next material in this region
       mItr++;
     }
   }
@@ -173,7 +182,8 @@ void G4ProductionCutsTable::UpdateCoupleTable()
 
   // Update RangeEnergy cuts tables
   size_t idx = 0;
-  for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++){
+  for(CoupleTableIterator cItr=coupleTable.begin();
+      cItr!=coupleTable.end();cItr++){
     G4ProductionCuts* aCut = (*cItr)->GetProductionCuts();
     const G4Material* aMat = (*cItr)->GetMaterial();
     if((*cItr)->IsRecalcNeeded()) {
@@ -181,10 +191,11 @@ void G4ProductionCutsTable::UpdateCoupleTable()
         G4double rCut = aCut->GetProductionCut(ptcl);
         (*(rangeCutTable[ptcl]))[idx] = rCut;
         // if(converters[ptcl] && (*cItr)->IsUsed())
-        if(converters[ptcl]) { (*(energyCutTable[ptcl]))[idx] = converters[ptcl]->Convert(rCut,aMat); 
-	} else {
-	  (*(energyCutTable[ptcl]))[idx] = -1.; 
-	}
+        if(converters[ptcl]) {
+          (*(energyCutTable[ptcl]))[idx] = converters[ptcl]->Convert(rCut,aMat);
+        } else {
+          (*(energyCutTable[ptcl]))[idx] = -1.; 
+        }
       }
     }
     idx++;  
@@ -227,7 +238,9 @@ G4double G4ProductionCutsTable::GetHighEdgeEnergy() const
 }
  
 
-void G4ProductionCutsTable::ScanAndSetCouple(G4LogicalVolume* aLV,G4MaterialCutsCouple* aCouple,G4Region* aRegion)
+void G4ProductionCutsTable::ScanAndSetCouple(G4LogicalVolume* aLV,
+                                             G4MaterialCutsCouple* aCouple,
+                                             G4Region* aRegion)
 {
   //Check whether or not this logical volume belongs to the same region
   if((aRegion!=0) && aLV->GetRegion()!=aRegion) return;
@@ -250,8 +263,10 @@ void G4ProductionCutsTable::ScanAndSetCouple(G4LogicalVolume* aLV,G4MaterialCuts
 void G4ProductionCutsTable::DumpCouples() const
 {
   G4cout << G4endl;
-  G4cout << "========= Table of registered couples ==============================" << G4endl;
-  for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++) {
+  G4cout << "========= Table of registered couples =============================="
+         << G4endl;
+  for(CoupleTableIterator cItr=coupleTable.begin();
+      cItr!=coupleTable.end();cItr++) {
     G4MaterialCutsCouple* aCouple = (*cItr);
     G4ProductionCuts* aCut = aCouple->GetProductionCuts();
     G4cout << G4endl;
@@ -274,18 +289,19 @@ void G4ProductionCutsTable::DumpCouples() const
       G4cout << " is not ready to print";
     } else {
       G4cout << " gamma " << G4BestUnit((*(energyCutTable[0]))[aCouple->GetIndex()],"Energy")
-	     << "    e- " << G4BestUnit((*(energyCutTable[1]))[aCouple->GetIndex()],"Energy")
-	     << "    e+ " << G4BestUnit((*(energyCutTable[2]))[aCouple->GetIndex()],"Energy");
+             << "    e- " << G4BestUnit((*(energyCutTable[1]))[aCouple->GetIndex()],"Energy")
+             << "    e+ " << G4BestUnit((*(energyCutTable[2]))[aCouple->GetIndex()],"Energy");
     }
     G4cout << G4endl;
 
     if(aCouple->IsUsed()) {
       G4cout << " Region(s) which use this couple : " << G4endl;
       typedef std::vector<G4Region*>::iterator regionIterator;
-      for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++) {
-	if (IsCoupleUsedInTheRegion(aCouple, *rItr) ){
-	  G4cout << "    " << (*rItr)->GetName() << G4endl;
-	}
+      for(regionIterator rItr=fG4RegionStore->begin();
+          rItr!=fG4RegionStore->end();rItr++) {
+        if (IsCoupleUsedInTheRegion(aCouple, *rItr) ){
+          G4cout << "    " << (*rItr)->GetName() << G4endl;
+        }
       }
     }
   }
@@ -297,7 +313,7 @@ void G4ProductionCutsTable::DumpCouples() const
 
 // Store cuts and material information in files under the specified directory.
 G4bool  G4ProductionCutsTable::StoreCutsTable(const G4String& dir, 
-					      G4bool          ascii)
+                                              G4bool          ascii)
 {
   if (!StoreMaterialInfo(dir, ascii)) return false;
   if (!StoreMaterialCutsCoupleInfo(dir, ascii)) return false;
@@ -319,10 +335,11 @@ G4bool  G4ProductionCutsTable::StoreCutsTable(const G4String& dir,
 }
   
 G4bool  G4ProductionCutsTable::RetrieveCutsTable(const G4String& dir,
-						 G4bool          ascii)
+                                                 G4bool          ascii)
 {
   if (!CheckForRetrieveCutsTable(dir, ascii)) return false;
-  if (isNeedForRestoreCoupleInfo) return RetrieveMaterialCutsCoupleInfo(dir, ascii);
+  if (isNeedForRestoreCoupleInfo)
+    return RetrieveMaterialCutsCoupleInfo(dir, ascii);
   if (!RetrieveCutsInfo(dir, ascii)) return false;
 #ifdef G4VERBOSE  
   if (verboseLevel >1) {
@@ -339,9 +356,12 @@ G4bool  G4ProductionCutsTable::RetrieveCutsTable(const G4String& dir,
   return true;
 }
 
-// check stored material and cut values are consistent with the current detector setup. 
-G4bool G4ProductionCutsTable::CheckForRetrieveCutsTable(const G4String& directory, 
-							G4bool          ascii)
+// check stored material and cut values are consistent
+// with the current detector setup. 
+//
+G4bool
+G4ProductionCutsTable::CheckForRetrieveCutsTable(const G4String& directory, 
+                                                 G4bool          ascii)
 {
   isNeedForRestoreCoupleInfo = false;
   if (!CheckMaterialInfo(directory, ascii)) return false;
@@ -350,8 +370,9 @@ G4bool G4ProductionCutsTable::CheckForRetrieveCutsTable(const G4String& director
 }
   
 // Store material information in files under the specified directory.
+//
 G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory, 
-						 G4bool          ascii)
+                                                 G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "material.dat";
   const G4String key = "MATERIAL-V2.0";
@@ -391,8 +412,10 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
   
     // material name and density
     for (size_t idx=0; G4int(idx)<numberOfMaterial; ++idx){
-      fOut << std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetName();
-      fOut << std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
+      fOut << std::setw(FixedStringLengthForStore)
+           << ((*matTable)[idx])->GetName();
+      fOut << std::setw(FixedStringLengthForStore)
+           << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
     }
     
     fOut.unsetf(std::ios::scientific);
@@ -404,7 +427,8 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
 
     // key word
     for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
-    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=key[i];
+    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i)
+      temp[i]=key[i];
     fOut.write(temp, FixedStringLengthForStore);
 
     // number of materials in the table
@@ -415,7 +439,8 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
       G4String name =  ((*matTable)[imat])->GetName();
       G4double density = ((*matTable)[imat])->GetDensity();
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
-      for (i=0; i<name.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=name[i];
+      for (i=0; i<name.length() && i<FixedStringLengthForStore-1; ++i)
+        temp[i]=name[i];
       fOut.write(temp, FixedStringLengthForStore);
       fOut.write( (char*)(&density), sizeof (G4double));
     }    
@@ -427,7 +452,7 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
 
 // check stored material is consistent with the current detector setup. 
 G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory, 
-						 G4bool          ascii)
+                                                 G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "material.dat";
   const G4String key = "MATERIAL-V2.0";
@@ -498,9 +523,9 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     if(fIn.eof()) {
 #ifdef G4VERBOSE
       if (verboseLevel >0) {
-	G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
-	G4cout << " encountered End of File " ;
-	G4cout << " at " << idx+1 << "th  material "<< G4endl;
+        G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
+        G4cout << " encountered End of File " ;
+        G4cout << " at " << idx+1 << "th  material "<< G4endl;
       }
 #endif
       fIn.close();
@@ -521,9 +546,9 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     if (fIn.fail()) {
 #ifdef G4VERBOSE
       if (verboseLevel >0) {
-	G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
-	G4cout << " Bad data format ";
-	G4cout << " at " << idx+1 << "th  material "<< G4endl;	
+        G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
+        G4cout << " Bad data format ";
+        G4cout << " at " << idx+1 << "th  material "<< G4endl;        
       }
 #endif
       fIn.close();
@@ -533,12 +558,14 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     if ( name != ((*matTable)[idx])->GetName()){
 #ifdef G4VERBOSE
       if (verboseLevel >0) {
-	G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
-	G4cout << " Inconsistent material name ";
-	G4cout << " at " << idx+1 << "th  material "<< G4endl;	
-	G4cout << "Name:   " << name << " (should be " << ((*matTable)[idx])->GetName() << ")" << G4endl;
-	G4cout << "Density:" << std::setiosflags(std::ios::scientific) << density / (g/cm3) << "[g/cm3]"<< G4endl;    
-	G4cout << std::resetiosflags(std::ios::scientific);
+        G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
+        G4cout << " Inconsistent material name ";
+        G4cout << " at " << idx+1 << "th  material "<< G4endl;        
+        G4cout << "Name:   " << name << " (should be "
+               << ((*matTable)[idx])->GetName() << ")" << G4endl;
+        G4cout << "Density:" << std::setiosflags(std::ios::scientific)
+               << density / (g/cm3) << "[g/cm3]"<< G4endl;    
+        G4cout << std::resetiosflags(std::ios::scientific);
       }
 #endif
       fIn.close();
@@ -546,13 +573,15 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
      } else if ((0.999>ratio) || (ratio>1.001) ){
 #ifdef G4VERBOSE
       if (verboseLevel >0) {
-	G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
-	G4cout << " Inconsistent material density" << G4endl;;
-	G4cout << " at " << idx+1 << "th  material "<< G4endl;	
-	G4cout << "Name:   " << name << G4endl;
-	G4cout << "Density:" << std::setiosflags(std::ios::scientific) << density / (g/cm3) ;
-	G4cout << "(should be " << ((*matTable)[idx])->GetDensity()/  (g/cm3)<< ")" << " [g/cm3]"<< G4endl;      
-	G4cout << std::resetiosflags(std::ios::scientific);
+        G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
+        G4cout << " Inconsistent material density" << G4endl;;
+        G4cout << " at " << idx+1 << "th  material "<< G4endl;        
+        G4cout << "Name:   " << name << G4endl;
+        G4cout << "Density:" << std::setiosflags(std::ios::scientific)
+               << density / (g/cm3) ;
+        G4cout << "(should be " << ((*matTable)[idx])->GetDensity()/  (g/cm3)
+               << ")" << " [g/cm3]"<< G4endl;      
+        G4cout << std::resetiosflags(std::ios::scientific);
       }
 #endif
       fIn.close();
@@ -567,8 +596,10 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
 
   
 // Store materialCutsCouple information in files under the specified directory.
-G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& directory, 
-				    G4bool          ascii)
+//
+G4bool
+G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& directory, 
+                                                   G4bool          ascii)
 {  
   const G4String fileName = directory + "/" + "couple.dat";
   const G4String key = "COUPLE-V2.0";
@@ -605,7 +636,8 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
     // key word
     size_t i;
     for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
-    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=key[i];
+    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i)
+      temp[i]=key[i];
     fOut.write(temp, FixedStringLengthForStore);
     
     // number of couples in the table   
@@ -629,11 +661,12 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
     G4String regionName = "NONE";
     if (aCouple->IsUsed()){
       typedef std::vector<G4Region*>::iterator regionIterator;
-      for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++){
-	if (IsCoupleUsedInTheRegion(aCouple, *rItr) ){
-	  regionName = (*rItr)->GetName();
-	  break;
-	}
+      for(regionIterator rItr=fG4RegionStore->begin();
+          rItr!=fG4RegionStore->end();rItr++){
+        if (IsCoupleUsedInTheRegion(aCouple, *rItr) ){
+          regionName = (*rItr)->GetName();
+          break;
+        }
       }
     }
 
@@ -651,7 +684,8 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
       fOut.setf(std::ios::scientific);
       // cut values
       for (size_t idx=0; idx< NumberOfG4CutIndex; idx++) {
-	fOut << std::setw(FixedStringLengthForStore) << cutValues[idx]/(mm) << G4endl;
+        fOut << std::setw(FixedStringLengthForStore) << cutValues[idx]/(mm)
+             << G4endl;
       }
       fOut.unsetf(std::ios::scientific);
 
@@ -664,20 +698,20 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
       size_t i;
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
       for (i=0; i<materialName.length() && i<FixedStringLengthForStore-1; ++i) {
-	temp[i]=materialName[i];
+        temp[i]=materialName[i];
       }
       fOut.write(temp, FixedStringLengthForStore);
 
       // region name
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
       for (i=0; i<regionName.length() && i<FixedStringLengthForStore-1; ++i) {
-	temp[i]=regionName[i];
+        temp[i]=regionName[i];
       }
       fOut.write(temp, FixedStringLengthForStore);
 
       // cut values
       for (size_t idx=0; idx< NumberOfG4CutIndex; idx++) {
-	 fOut.write( (char*)(&(cutValues[idx])), sizeof (G4double));
+         fOut.write( (char*)(&(cutValues[idx])), sizeof (G4double));
       }    
     }
    }    
@@ -687,9 +721,12 @@ G4bool  G4ProductionCutsTable::StoreMaterialCutsCoupleInfo(const G4String& direc
 }
 
 
-// check stored materialCutsCouple is consistent with the current detector setup. 
-G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
-							   G4bool          ascii )
+// check stored materialCutsCouple is consistent
+// with the current detector setup. 
+//
+G4bool
+G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
+                                                   G4bool          ascii )
 {
   const G4String fileName = directory + "/" + "couple.dat";
   const G4String key = "COUPLE-V2.0";
@@ -779,10 +816,10 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
     G4double cutValues[NumberOfG4CutIndex];
     for (size_t i=0; i< NumberOfG4CutIndex; i++) {
       if (ascii) {
-	fIn >>  cutValues[i];
+        fIn >>  cutValues[i];
         cutValues[i] *= (mm);
       } else {
-	fIn.read( (char*)(&(cutValues[i])), sizeof (G4double));
+        fIn.read( (char*)(&(cutValues[i])), sizeof (G4double));
       }
     }
  
@@ -794,15 +831,15 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
       aCouple = (*cItr);
       if ( mat_name !=  aCouple->GetMaterial()->GetName() ) continue;
       if ( region_name == "NONE" ) {
-	if (aCouple->IsUsed()) continue;
+        if (aCouple->IsUsed()) continue;
       } else {
-	G4Region* fRegion = fG4RegionStore->GetRegion(region_name);
-	if (!IsCoupleUsedInTheRegion(aCouple, fRegion) ) continue;
+        G4Region* fRegion = fG4RegionStore->GetRegion(region_name);
+        if (!IsCoupleUsedInTheRegion(aCouple, fRegion) ) continue;
       }
       G4ProductionCuts* aCut = aCouple->GetProductionCuts();
       for (size_t j=0; j< NumberOfG4CutIndex; j++) {
-	G4double ratio =  cutValues[j]/aCut->GetProductionCut(j);
-	if ((0.999>ratio) || (ratio>1.001) )continue;
+        G4double ratio =  cutValues[j]/aCut->GetProductionCut(j);
+        if ((0.999>ratio) || (ratio>1.001) )continue;
       }
       fOK = true;
       break;
@@ -810,37 +847,38 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
 
     if (fOK) {
       if ( index !=  aCouple->GetIndex() ) {
-	isNeedForRestoreCoupleInfo = true; 
+        isNeedForRestoreCoupleInfo = true; 
 #ifdef G4VERBOSE
-	if (verboseLevel >1) {
-	  G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
-	  G4cout << "Index of couples was modified "<< G4endl;
-	  G4cout << aCouple->GetIndex() << ":"  <<aCouple->GetMaterial()->GetName();
-	  G4cout <<" is defined as " ;
-	  G4cout << index << ":"  << mat_name << " in " << fileName << G4endl;
-	}
+        if (verboseLevel >1) {
+          G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
+          G4cout << "Index of couples was modified "<< G4endl;
+          G4cout << aCouple->GetIndex() << ":"
+                 << aCouple->GetMaterial()->GetName();
+          G4cout <<" is defined as " ;
+          G4cout << index << ":"  << mat_name << " in " << fileName << G4endl;
+        }
 #endif
       } else {
 #ifdef G4VERBOSE
-	if (verboseLevel >2) {
-	  G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
-	  G4cout << index << ":"  << mat_name << " in " << fileName ;
-	  G4cout << " is consistent with current setup" << G4endl;
-	}
+        if (verboseLevel >2) {
+          G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
+          G4cout << index << ":"  << mat_name << " in " << fileName ;
+          G4cout << " is consistent with current setup" << G4endl;
+        }
 #endif
       }
     }else{ 
 #ifdef G4VERBOSE
       if (verboseLevel >0) {
-	G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
-	G4cout << "Couples is not defined in the current detector setup  ";
-	G4cout << index << ": in " << fileName  << G4endl;
-	G4cout << " material: " << mat_name ;
-	G4cout << " region: " << region_name << G4endl;
-	for (size_t ii=0; ii< NumberOfG4CutIndex; ii++) {
-	  G4cout << "cut [" << ii << "]: " << cutValues[ii]/mm;
-	}
-	G4cout << G4endl;
+        G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
+        G4cout << "Couples is not defined in the current detector setup  ";
+        G4cout << index << ": in " << fileName  << G4endl;
+        G4cout << " material: " << mat_name ;
+        G4cout << " region: " << region_name << G4endl;
+        for (size_t ii=0; ii< NumberOfG4CutIndex; ii++) {
+          G4cout << "cut [" << ii << "]: " << cutValues[ii]/mm;
+        }
+        G4cout << G4endl;
       }
 #endif
       fIn.close();
@@ -851,9 +889,12 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
   return true;
 }
 
-// Retrieve stored materialCutsCouple is consistent with the current detector setup. 
-G4bool  G4ProductionCutsTable::RetrieveMaterialCutsCoupleInfo(const G4String& directory,
-							      G4bool          ascii )
+// Retrieve stored materialCutsCouple is consistent
+// with the current detector setup. 
+//
+G4bool
+G4ProductionCutsTable::RetrieveMaterialCutsCoupleInfo(const G4String& directory,
+                                                      G4bool          ascii )
 {
   const G4String fileName = directory + "/" + "couple.dat";
   const G4String key = "COUPLE-V2.0";
@@ -943,10 +984,10 @@ G4bool  G4ProductionCutsTable::RetrieveMaterialCutsCoupleInfo(const G4String& di
     G4double cutValues[NumberOfG4CutIndex];
     for (size_t i=0; i< NumberOfG4CutIndex; i++) {
       if (ascii) {
-	fIn >>  cutValues[i];
+        fIn >>  cutValues[i];
         cutValues[i] *= (mm);
       } else {
-	fIn.read( (char*)(&(cutValues[i])), sizeof (G4double));
+        fIn.read( (char*)(&(cutValues[i])), sizeof (G4double));
       }
     }
  
@@ -968,7 +1009,7 @@ G4bool  G4ProductionCutsTable::RetrieveMaterialCutsCoupleInfo(const G4String& di
       aCouple->SetUseFlag(false);
       aCut = new G4ProductionCuts();
       for (size_t j=0; j< NumberOfG4CutIndex; j++) {
-	aCut->SetProductionCut(cutValues[j],j);
+        aCut->SetProductionCut(cutValues[j],j);
       }
       aCouple->SetProductionCuts(aCut);
     } else {
@@ -976,11 +1017,11 @@ G4bool  G4ProductionCutsTable::RetrieveMaterialCutsCoupleInfo(const G4String& di
       G4Region* fRegion = fG4RegionStore->GetRegion(region_name);
       aCut = fRegion->GetProductionCuts();
       if (!aCut) {
-	// the case no production cuts in the region
-	aCut = new G4ProductionCuts();
-	for (size_t j=0; j< NumberOfG4CutIndex; j++) {
-	  aCut->SetProductionCut(cutValues[j],j);
-	}
+        // the case no production cuts in the region
+        aCut = new G4ProductionCuts();
+        for (size_t j=0; j< NumberOfG4CutIndex; j++) {
+          aCut->SetProductionCut(cutValues[j],j);
+        }
       }
       aCouple->SetProductionCuts(aCut);
     }
@@ -992,7 +1033,7 @@ G4bool  G4ProductionCutsTable::RetrieveMaterialCutsCoupleInfo(const G4String& di
       G4cout << "material: " << mat_name << G4endl;
       G4cout << "region: " << region_name << G4endl;
       for (size_t ii=0; ii< NumberOfG4CutIndex; ii++) {
-	G4cout << "cut [" << ii << "]: " << cutValues[ii]/mm<< G4endl;
+        G4cout << "cut [" << ii << "]: " << cutValues[ii]/mm<< G4endl;
       }
     }
 #endif
@@ -1002,8 +1043,9 @@ G4bool  G4ProductionCutsTable::RetrieveMaterialCutsCoupleInfo(const G4String& di
 }
 
 // Store cut values information in files under the specified directory.
+//
 G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory, 
-					      G4bool          ascii)
+                                              G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "cut.dat";
   const G4String key = "CUT-V2.0";
@@ -1019,7 +1061,7 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
   
   // check if the file has been opened successfully 
   if (!fOut) {
-    if(verboseLevel>0) { 	
+    if(verboseLevel>0) {         
       G4cerr << "G4ProductionCutsTable::StoreCutsInfo  ";
       G4cerr << " Can not open file " << fileName << G4endl;
     }
@@ -1039,7 +1081,8 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
     // key word
     size_t i;
     for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
-    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=key[i];
+    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i)
+      temp[i]=key[i];
     fOut.write(temp, FixedStringLengthForStore);
     
     // number of couples in the table   
@@ -1061,11 +1104,11 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
         fOut << std::setw(20) << (*fEnergy)[i]/keV << G4endl;
         fOut.unsetf(std::ios::scientific);
       } else {
-	/////////////// Binary mode  /////////////////
-	G4double cut =  (*fRange)[i];
-	fOut.write((char*)(&cut), sizeof (G4double));
-	cut =  (*fEnergy)[i];
-	fOut.write((char*)(&cut), sizeof (G4double));
+        /////////////// Binary mode  /////////////////
+        G4double cut =  (*fRange)[i];
+        fOut.write((char*)(&cut), sizeof (G4double));
+        cut =  (*fEnergy)[i];
+        fOut.write((char*)(&cut), sizeof (G4double));
       }
     }
   }
@@ -1074,8 +1117,9 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
 }
   
 // Retrieve cut values information in files under the specified directory.
+//
 G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
-						 G4bool          ascii)
+                                                 G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "cut.dat";
   const G4String key = "CUT-V2.0";
@@ -1133,12 +1177,12 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
     for (size_t i=0; G4int(i)< numberOfCouples; i++){      
       G4double rcut, ecut;
       if (ascii) {
-	fIn >> rcut >> ecut;
-	rcut *= mm;
-	ecut *= keV;
+        fIn >> rcut >> ecut;
+        rcut *= mm;
+        ecut *= keV;
       } else {
-	fIn.read((char*)(&rcut), sizeof (G4double));
-	fIn.read((char*)(&ecut), sizeof (G4double));
+        fIn.read((char*)(&rcut), sizeof (G4double));
+        fIn.read((char*)(&ecut), sizeof (G4double));
       }
       fRange->push_back(rcut);
       fEnergy->push_back(ecut);
@@ -1146,8 +1190,3 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   }
   return true;
 }
-
-
-
-
-

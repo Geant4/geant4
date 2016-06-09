@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.9 2004/02/19 20:41:34 gum Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4OpBoundaryProcess.hh,v 1.10 2004/09/27 22:31:47 gum Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -307,10 +307,11 @@ G4ThreeVector G4OpBoundaryProcess::
 
   G4ThreeVector vec2 = vec1.cross(normal);
 
-  G4double cost = 2.*G4UniformRand() - 1.0;
-  G4double sint = sqrt(1.0 - cost * cost);
+  G4double phi = twopi*G4UniformRand();
+  G4double cosphi = cos(phi);
+  G4double sinphi = sin(phi);
 
-  return cost * vec1 + sint * vec2;
+  return cosphi * vec1 + sinphi * vec2;
 }
 
 inline

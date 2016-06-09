@@ -22,7 +22,7 @@
 //
 //
 // $Id: SolidAnalyser.cc,v 1.4 2004/06/28 07:25:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02-patch-01 $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // 
 // --------------------------------------------------------------

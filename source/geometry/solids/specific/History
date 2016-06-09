@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2004/06/07 08:46:53 gcosmo Exp $
+$Id: History,v 1.42 2004/09/02 15:51:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-Sep-2004, D.C.Williams (geom-specific-V06-02-00)
+- G4VCSGfaceted: fix for rare anomalous situation in which
+  DistanceToOut(p,v,..) will report kInfinity, make an additional check
+  for the point p on the surface, in which case will report zero.
+  Addresses problem observed in G4Polyhedra and reported in #650.
 
 07-Jun-2004, G.Cosmo (geom-specific-V06-01-04)
 - Fixed compilation problem in G4TwistedSurface.cc on WIN32-VC.

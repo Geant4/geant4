@@ -37,8 +37,8 @@
 // Class Description: 
 // Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionExp.cc,v 1.2 2004/06/07 07:42:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: G4hShellCrossSectionExp.cc,v 1.1 2004/04/27 09:45:49 saliceti Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 
 #include "globals.hh"
 #include <vector>
@@ -98,7 +98,7 @@ G4double G4hShellCrossSectionExp::GetCrossSectionExp(G4int Z,
 
   if(Z<26 && Z>=6 && Z!=17)
     {
-      crossSectionsInBarn = a*(pow(b,(1./incidentEnergyInMeV)))*(pow(incidentEnergyInMeV,c));
+      crossSectionsInBarn = a*(std::pow(b,(1./incidentEnergyInMeV)))*(std::pow(incidentEnergyInMeV,c));
     }          
   else if(Z<66 && Z>=26 || Z==17)
     {
@@ -106,7 +106,7 @@ G4double G4hShellCrossSectionExp::GetCrossSectionExp(G4int Z,
     }
   else if(Z<=92 && Z>=66)
     {	 
-      crossSectionsInBarn = (pow(incidentEnergyInMeV,a))*exp(b-(c*incidentEnergyInMeV));  
+      crossSectionsInBarn = (std::pow(incidentEnergyInMeV,a))*exp(b-(c*incidentEnergyInMeV));  
     }
   else
     {

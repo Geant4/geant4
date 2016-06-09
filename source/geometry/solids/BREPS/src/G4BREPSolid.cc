@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4BREPSolid.cc,v 1.26 2004/07/02 16:02:29 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02-patch-01 $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

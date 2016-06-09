@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2004/09/27 09:35:38 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2002/05/23 13:30:43 maire Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

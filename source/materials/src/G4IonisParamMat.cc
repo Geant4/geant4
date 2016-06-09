@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.10 2002/10/29 16:17:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4IonisParamMat.cc,v 1.12 2004/09/06 15:50:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+// 06-09-04, Factor 2 to shell correction term (V.Ivanchenko) 
 // 28-10-02, add setMeanExcitationEnergy (V.Ivanchenko)
 // 08-02-01, fShellCorrectionVector correctly handled (mma)
 // 16-01-01, bug corrected in ComputeDensityEffect() E100eV (L.Urban)
@@ -76,12 +77,12 @@ void G4IonisParamMat::ComputeMeanParameters()
   {
     fShellCorrectionVector[j] = 0.;
 
-    for (size_t k=0; k<fMaterial->GetNumberOfElements(); k++)
+    for (size_t k=0; k<fMaterial->GetNumberOfElements(); k++) {
       fShellCorrectionVector[j] += (fMaterial->GetVecNbOfAtomsPerVolume())[k] 
               *((*(fMaterial->GetElementVector()))[k]->GetIonisation()
                                                      ->GetShellCorrectionVector()[j]);
-     
-    fShellCorrectionVector[j] /= fMaterial->GetTotNbOfElectPerVolume();
+    }
+    fShellCorrectionVector[j] *= 2.0/fMaterial->GetTotNbOfElectPerVolume();
   } 
 }
 
@@ -212,6 +213,8 @@ void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
   
   fMeanExcitationEnergy = value;
   fLogMeanExcEnergy = log(value);
+  ComputeDensityEffect();
+  ComputeFluctModel();
  
 }
 

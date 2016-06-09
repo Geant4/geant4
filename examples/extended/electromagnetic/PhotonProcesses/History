@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2004/06/10 15:55:35 maire Exp $
+$Id: History,v 1.4 2004/06/30 11:13:56 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+30.06.04 mma (photonprocesses-V06-02-00)
+- modifs in HistoManager and messenger to conform to testem5-V06-01-04
      
 10.06.04 mma (photonprocesses-V06-01-01)
 - modifs in HistoManager and messenger to allow a multiruns job.

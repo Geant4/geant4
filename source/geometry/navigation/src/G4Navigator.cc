@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.13 2004/06/18 12:47:05 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.15 2004/09/26 01:18:18 asaim Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -198,7 +198,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
               G4LogicalVolume *pLogical;
               pLogical = fBlockedPhysicalVolume->GetLogicalVolume();
               pLogical->SetSolid( pSolid );
-              pLogical->SetMaterial(pParam->ComputeMaterial(fBlockedReplicaNo, 
+              pLogical->UpdateMaterial(pParam->ComputeMaterial(fBlockedReplicaNo, 
                                                       fBlockedPhysicalVolume));
               break;
           }
@@ -864,38 +864,23 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       // Convention: fExitNormal is in the 'grand-mother' coordinate system
       //
       fGrandMotherExitNormal= fExitNormal;
-
-      // If no relocation were made, we would need to rotate it back to 
-      // this (the mother) coordinate system
-      // const G4RotationMatrix* motherRotation= motherPhysical->GetRotation();
-      // G4ThreeVector trueMotherExitNormal = fGrandMotherExitNormal;
-      // Un-rotate gran->mother
-      //
-      // trueMotherExitNormal *= (*motherRotation);
-
-      // However, relocation will put us either in
-      //   - the grand-mother (OK)
-      //   - in the grand-grand mother (to BE checked if this is dealt with)
     }
     else
     {  
-      // We must calculate the normal anyway
-      // (in order to have it if requested)
+      // We must calculate the normal anyway (in order to have it if requested)
       //
-      G4ThreeVector finalGlobalPoint, finalLocalPoint, localExitNormal;
-      finalLocalPoint = fLastLocatedPointLocal + localDirection*Step;
-      localExitNormal  = motherLogical->GetSolid()->
-                         SurfaceNormal(finalLocalPoint);
+      G4ThreeVector finalLocalPoint =
+        fLastLocatedPointLocal + localDirection*Step;
+
+      // Now fGrandMotherExitNormal is in the 'grand-mother' coordinate system
+      //
+      fGrandMotherExitNormal =
+        motherLogical->GetSolid()->SurfaceNormal(finalLocalPoint);
+
       const G4RotationMatrix* mRot = motherPhysical->GetRotation();
       if( mRot )
       { 
-         G4ThreeVector grandMotherExitNormal = localExitNormal;
-         grandMotherExitNormal *= (*mRot);
-
-         // Now fGrandMotherExitNormal is in the 'grand-mother'
-         // coordinate system
-         //
-         fGrandMotherExitNormal = grandMotherExitNormal;
+        fGrandMotherExitNormal *= (*mRot);
       }
     }
 #ifdef G4DEBUG_NAVIGATION
@@ -1003,7 +988,7 @@ void G4Navigator::SetupHierarchy()
         //
         G4LogicalVolume *pLogical = current->GetLogicalVolume();
         pLogical->SetSolid( pSolid );
-        pLogical->SetMaterial( pParam->ComputeMaterial(replicaNo, current));
+        pLogical->UpdateMaterial( pParam->ComputeMaterial(replicaNo, current));
         break;
     }
     mother = current;
@@ -1028,6 +1013,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
     *valid = true;
   }
   else
+  {
     if( fExitedMother )
     {
       ExitNormal = fGrandMotherExitNormal;
@@ -1040,6 +1026,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
       //
       *valid = false;
     }
+  }
   return ExitNormal;
 }
 

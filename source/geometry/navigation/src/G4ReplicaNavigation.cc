@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.6 2004/06/29 16:09:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-02-patch-01 $
+// $Id: G4ReplicaNavigation.cc,v 1.7 2004/09/10 15:38:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -674,7 +674,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   G4ThreeVector repPoint, repDirection, sampleDirection;
   G4double ourStep=currentProposedStepLength;
   G4double ourSafety=kInfinity;
-  G4double sampleStep, sampleSafety;
+  G4double sampleStep, sampleSafety, motherStep, motherSafety;
   G4int localNoDaughters, sampleNo;
   G4int depth;
 
@@ -716,9 +716,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
                                localDirection);
     if ( sampleStep<ourStep )
     {
-      ourStep = ( !sampleStep && (sampleSafety<0.5*kCarTolerance) )
-              ? sampleStep+kCarTolerance
-              : sampleStep;
+      ourStep = sampleStep;
       exiting = true;
       validExitNormal = false;
     }
@@ -743,9 +741,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
                    history.GetTransform(depth).TransformAxis(globalDirection));
       if ( sampleStep<ourStep )
       {
-        ourStep = ( !sampleStep && (sampleSafety<0.5*kCarTolerance) )
-                ? sampleStep+kCarTolerance
-                : sampleStep;
+        ourStep = sampleStep;
         exiting = true;
         validExitNormal = false;
       }
@@ -758,11 +754,20 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   repPoint = history.GetTransform(depth).TransformPoint(globalPoint);
   motherPhysical = history.GetVolume(depth);
   motherSolid = motherPhysical->GetLogicalVolume()->GetSolid();
-  sampleSafety = motherSolid->DistanceToOut(repPoint);
+  motherSafety = motherSolid->DistanceToOut(repPoint);
+  repDirection = history.GetTransform(depth).TransformAxis(globalDirection);
+  motherStep = motherSolid->DistanceToOut(repPoint,repDirection,true,
+                                          &validExitNormal,&exitNormal);
 
-  if ( sampleSafety<ourSafety )
+  if  ( ( !ourStep && (sampleSafety<0.5*kCarTolerance) )
+     && ( repLogical->GetSolid()->Inside(localPoint)==kSurface ) )
   {
-    ourSafety = sampleSafety;
+    ourStep += kCarTolerance;
+  }
+
+  if ( motherSafety<ourSafety )
+  {
+    ourSafety = motherSafety;
   }
 
 #ifdef G4VERBOSE
@@ -777,10 +782,13 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
       G4double estDistToSolid= motherSolid->DistanceToIn(localPoint); 
       G4cout << "          Estimated isotropic distance to solid (distToIn)= " 
              << estDistToSolid << G4endl;
-      if( estDistToSolid > 100.0 * kCarTolerance ) 
+      if( estDistToSolid > 100.0 * kCarTolerance )
+      {
+        motherSolid->DumpInfo();
         G4Exception("G4ReplicaNavigation::ComputeStep()",
                     "FarOutsideCurrentVolume", FatalException,
                     "Point is far outside Current Volume !" ); 
+      }
       else
         G4Exception("G4ReplicaNavigation::ComputeStep()",
                     "OutsideCurrentVolume", JustWarning,
@@ -791,14 +799,11 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
 
   // May need precision protection
   //
-  if ( sampleSafety<=ourStep )
+  if ( motherSafety<=ourStep )
   {
-    repDirection = history.GetTransform(depth).TransformAxis(globalDirection);
-    sampleStep = motherSolid->DistanceToOut(repPoint,repDirection,true,
-                                            &validExitNormal,&exitNormal);
-    if ( sampleStep<=ourStep )
+    if ( motherStep<=ourStep )
     {
-      ourStep = sampleStep;
+      ourStep = motherStep;
       exiting = true;
       if ( validExitNormal )
       {

@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2004/06/23 11:30:23 maire Exp $
+$Id: README,v 1.15 2004/09/24 14:41:19 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -58,7 +58,7 @@ $Id: README,v 1.14 2004/06/23 11:30:23 maire Exp $
  		....
  		Idle> exit
  		
- 	- visualize the histogram (aida)
+ 	- visualize the histogram (paw)
  		paw> h/file 1 testem4.paw
  		paw> option stat
  		paw> option logy
@@ -98,3 +98,6 @@ gmake
 Before running the example the command should be issued:
 
 eval `aida-config --runtime csh`
+
+It is possible to choose the format of the histogram file (hbook, root, XML):
+comment/uncomment 1 line in the constructor of RunAction. 

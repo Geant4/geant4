@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: RunAction.hh,v 1.6 2004/09/24 14:41:20 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
-// $Id: RunAction.hh,v 1.5 2004/06/21 10:55:10 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -39,12 +36,11 @@
 
 class G4Run;
 
-#ifdef USE_AIDA
 namespace AIDA {
+  class IAnalysisFactory;
   class ITree;
   class IHistogram1D;
 }  
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,20 +53,13 @@ class RunAction : public G4UserRunAction
   public:
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
-
-#ifdef USE_AIDA    
+  
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-#endif
-       
-  private:
-    void bookHisto();
     
-  private:      
-#ifdef USE_AIDA         
-    AIDA::ITree* tree;             //the tree should only be deleted at the end
-    AIDA::IHistogram1D* histo[1];  // (after writing the histos to file)
-#endif
-       
+  private:
+    AIDA::IAnalysisFactory* af;         
+    AIDA::ITree*            tree;             
+    AIDA::IHistogram1D*     histo[1];        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.cc,v 1.7 2003/08/27 17:44:08 vnivanch Exp $
-// GEANT4 tag $Name: fieldex-V05-02-00 $
+// $Id: F02PhysicsList.cc,v 1.8 2004/09/15 18:00:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 // 
 
 #include "G4Timer.hh"
@@ -186,8 +186,6 @@ void F02PhysicsList::ConstructProcess()
 
 #include "F02StepCut.hh"
 
-#include "G4IonisationByLogicalVolume.hh"
-
 void F02PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
@@ -221,7 +219,7 @@ void F02PhysicsList::ConstructEM()
       theeminusStepCut = new F02StepCut();
 
       pmanager->AddProcess(theeminusIonisation,-1,2,2);
-      pmanager->AddProcess(theeminusBremsstrahlung,-1,1,1); 
+      pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3); 
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
       theeminusStepCut->SetMaxStep(MaxChargedStep) ;
 

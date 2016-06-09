@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PhysicsListMessenger.hh,v 1.3 2004/09/27 09:35:33 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
-// $Id: PhysicsListMessenger.hh,v 1.2 2003/01/27 09:46:19 hbu Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,6 +33,7 @@
 #include "G4UImessenger.hh"
 
 class PhysicsList;
+class G4UIdirectory;
 class G4UIcmdWithADouble;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,13 +41,17 @@ class G4UIcmdWithADouble;
 class PhysicsListMessenger: public G4UImessenger
 {
   public:
+  
     PhysicsListMessenger(PhysicsList*);
    ~PhysicsListMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    PhysicsList* physList;
+  
+    PhysicsList*        physList;
+    
+    G4UIdirectory*      physDir;    
     G4UIcmdWithADouble* GammaToMuPairFac;
     G4UIcmdWithADouble* AnnihiToMuPairFac;
 };

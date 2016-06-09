@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.9 2004/06/18 15:43:41 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunAction.cc,v 1.10 2004/07/01 09:30:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,34 +178,35 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   G4int nLtot = Det->GetnLtot();
   if(nLbin != nLtot)
-    {dEdL.resize(nLbin=nLtot, 0.0);
-     sumELongit.resize(nLbin, 0.0);
-     sumE2Longit.resize(nLbin, 0.0);
-     sumELongitCumul.resize(nLbin, 0.0);
-     sumE2LongitCumul.resize(nLbin, 0.0);
-     gammaFlux.resize(nLbin, 0.0);
-     electronFlux.resize(nLbin, 0.0);
-     positronFlux.resize(nLbin, 0.0);
+    {dEdL.resize(nLbin=nLtot);
+     sumELongit.resize(nLbin);
+     sumE2Longit.resize(nLbin);
+     sumELongitCumul.resize(nLbin);
+     sumE2LongitCumul.resize(nLbin);
+     gammaFlux.resize(nLbin);
+     electronFlux.resize(nLbin);
+     positronFlux.resize(nLbin);
      rebin=true;
     }
 
   G4int nRtot = Det->GetnRtot();
   if(nRbin != nRtot)
-    {dEdR.resize(nRbin=nRtot, 0.0);
-     sumERadial.resize(nRbin, 0.0);
-     sumE2Radial.resize(nRbin, 0.0);
-     sumERadialCumul.resize(nRbin, 0.0);
-     sumE2RadialCumul.resize(nRbin, 0.0);
+    {dEdR.resize(nRbin=nRtot);
+     sumERadial.resize(nRbin);
+     sumE2Radial.resize(nRbin);
+     sumERadialCumul.resize(nRbin);
+     sumE2RadialCumul.resize(nRbin);
      rebin=true;
     }
 
   //initialize arrays of cumulative energy deposition
   //
-  for (G4int i=0; i<nLbin; i++)
+  for (G4int i=0; i<nLbin; i++) {
      sumELongit[i]=sumE2Longit[i]=sumELongitCumul[i]=sumE2LongitCumul[i]=0.;
-
+     gammaFlux[i]=electronFlux[i]=positronFlux[i]=0.;  
+  }
   for (G4int j=0; j<nRbin; j++)
-     sumELongit[j]=sumE2Longit[j]=sumELongitCumul[j]=sumE2LongitCumul[j]=0.;
+     sumERadial[j]=sumE2Radial[j]=sumERadialCumul[j]=sumE2RadialCumul[j]=0.;
 
   //initialize track length
   sumChargTrLength=sum2ChargTrLength=sumNeutrTrLength=sum2NeutrTrLength=0.;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.6 2003/11/02 14:01:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Region.icc,v 1.8 2004/09/28 14:16:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // 
 // class G4Region Inline Implementation file
@@ -109,7 +109,8 @@ inline
 std::vector<G4LogicalVolume*>::iterator
 G4Region::GetRootLogicalVolumeIterator()
 {
-  G4RootLVList::iterator iterator =  G4RootLVList::iterator(fRootVolumes.begin());
+  G4RootLVList::iterator iterator =
+    G4RootLVList::iterator(fRootVolumes.begin());
   return iterator;
 }
 
@@ -165,4 +166,42 @@ G4VUserRegionInformation* G4Region::GetUserInformation() const
   return fUserInfo;
 }
 
+// ********************************************************************
+// ClearMap
+// ********************************************************************
+//
+inline
+void G4Region::ClearMap()
+{
+  if(!(fMaterialCoupleMap.empty()))
+  {
+    G4MaterialCoupleMap::iterator b = fMaterialCoupleMap.begin();
+    G4MaterialCoupleMap::iterator e = fMaterialCoupleMap.end();
+    fMaterialCoupleMap.erase(b,e);
+  }
+}
+
+// ********************************************************************
+// RegisterMateralCouplePair
+// ********************************************************************
+//
+inline
+void G4Region::RegisterMaterialCouplePair(G4Material* mat,
+                                          G4MaterialCutsCouple* couple)
+{
+  fMaterialCoupleMap.insert(G4MaterialCouplePair(mat,couple));
+}
+
+// ********************************************************************
+// FindCouple
+// ********************************************************************
+//
+inline
+G4MaterialCutsCouple* G4Region::FindCouple(G4Material* mat)
+{
+  G4MaterialCoupleMap::iterator c = fMaterialCoupleMap.find(mat);
+  G4MaterialCutsCouple* couple = 0;
+  if(c!=fMaterialCoupleMap.end()) couple = (*c).second;
+  return couple;
+}
 

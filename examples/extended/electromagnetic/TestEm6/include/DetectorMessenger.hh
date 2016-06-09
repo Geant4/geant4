@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: DetectorMessenger.hh,v 1.3 2004/09/27 09:35:33 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
-// $Id: DetectorMessenger.hh,v 1.2 2002/12/12 12:48:16 maire Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,6 +54,7 @@ class DetectorMessenger: public G4UImessenger
     DetectorConstruction*   Detector;
     
     G4UIdirectory*             testemDir;
+    G4UIdirectory*             detDir;    
     G4UIcmdWithAString*        MaterCmd;
     G4UIcmdWithADoubleAndUnit* SizeCmd;
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;

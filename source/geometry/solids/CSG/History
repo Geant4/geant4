@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2004/07/02 16:14:29 gcosmo Exp $
+$Id: History,v 1.67 2004/09/16 07:52:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 16, 2004  V.Grichine                 geom-csg-V06-02-03
+- Bug fix in G4Sphere::SurfaceNormal(p) for theta normals.
+
+Jul 28, 2004  V.Grichine                 geom-csg-V06-02-02
+- Fix in G4Cons::DistanceToIn(p,v) on fRmax surface and move in,
+  the condition became a bit more strict && determinant >=0, i.e.
+  intersections in addition to go in.
+  Fixes a rare problem of dIn=dOut=0 observed in 3 events over a
+  statistics of 10^8..
+- Updated unit test testSurfaceInOut.cc to consider the test-case above.
+
+Jul 16, 2004  V.Grichine                 geom-csg-V06-02-01
+- Fix in G4Sphere::DistanceToOut(p,v,...) on fRmin moving outside.
+  The bug showed 3 events of dIn=dOut=0 for 10^7 statistics in
+  testSurfaceInOut.
+- Added new unit test testSurfaceInOut.cc.
 
 Jul 02, 2004  V.Grichine                 geom-csg-V06-02-00
 - Fixes curing rare conditions of loops at boundaries for G4Orb and G4Sphere:

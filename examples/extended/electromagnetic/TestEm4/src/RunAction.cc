@@ -20,11 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.cc,v 1.5 2004/06/21 10:55:10 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunAction.cc,v 1.6 2004/09/24 14:41:21 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 // 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,35 +33,20 @@
 
 #include "Randomize.hh"
 
-#ifdef USE_AIDA
- #include "AIDA/AIDA.h"
+#ifdef G4ANALYSIS_USE
+#include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction()
+:af(0), tree(0)
 {
-  bookHisto();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RunAction::~RunAction()
-{
-#ifdef USE_AIDA
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)  
-  delete tree;
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::bookHisto()
-{
-#ifdef USE_AIDA 
+  histo[0] = 0;
+  
+#ifdef G4ANALYSIS_USE 
  // Creating the analysis factory
- AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
+ af = AIDA_createAnalysisFactory();
  
  // Creating the tree factory
  AIDA::ITreeFactory* tf = af->createTreeFactory();
@@ -71,7 +54,9 @@ void RunAction::bookHisto()
  // Creating a tree mapped to an hbook file.
  G4bool readOnly  = false;
  G4bool createNew = true;
- tree = tf->create("testem4.paw", "hbook",readOnly, createNew);
+ tree = tf->create("testem4.paw", "hbook",readOnly, createNew, "uncompress");
+ //tree = tf->create("testem4.root", "root",readOnly, createNew, "uncompress");
+ //tree = tf->create("testem4.aida", "XML" ,readOnly, createNew, "uncompress");
 
  // Creating a histogram factory, whose histograms will be handled by the tree
  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
@@ -82,11 +67,24 @@ void RunAction::bookHisto()
 
  delete hf;
  delete tf;
- delete af;
+#endif  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::~RunAction()
+{
+#ifdef G4ANALYSIS_USE
+  tree->commit();       // Writing the histograms to the file
+  tree->close();        // and closing the tree (and the file)
+    
+  delete tree;
+  delete af;
 #endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {

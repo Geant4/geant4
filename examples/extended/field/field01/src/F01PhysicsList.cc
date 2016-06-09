@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.cc,v 1.8 2003/08/27 17:38:54 vnivanch Exp $
-// GEANT4 tag $Name: fieldex-V05-02-00 $
+// $Id: F01PhysicsList.cc,v 1.9 2004/09/15 18:00:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 // 
 
 #include "G4Timer.hh"
@@ -186,8 +186,6 @@ void F01PhysicsList::ConstructProcess()
 
 #include "F01StepCut.hh"
 
-#include "G4IonisationByLogicalVolume.hh"
-
 void F01PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
@@ -228,7 +226,7 @@ void F01PhysicsList::ConstructEM()
       pmanager->AddProcess(theeminusIonisation,-1,2,2);
 
 
-      pmanager->AddProcess(theeminusBremsstrahlung,-1,1,1); 
+      pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3); 
 
      
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);

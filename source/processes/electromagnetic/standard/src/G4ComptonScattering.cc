@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // $Id: G4ComptonScattering.cc,v 1.19 2004/06/29 14:36:56 maire Exp $
-// GEANT4 tag $Name: geant4-06-02-patch-01 $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // 
 //------------ G4ComptonScattering physics process -----------------------------

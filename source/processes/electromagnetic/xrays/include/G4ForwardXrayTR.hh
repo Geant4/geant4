@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.hh,v 1.11 2003/06/16 17:02:53 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ForwardXrayTR.hh,v 1.12 2004/07/26 16:06:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // G4ForwardXrayTR -- header file
 //
@@ -62,6 +62,7 @@
 #include "G4TransitionRadiation.hh"
 #include "G4PhysicsTable.hh"
 #include "G4Gamma.hh"
+#include "G4PhysicsLogVector.hh"
 
 class G4ForwardXrayTR : public G4TransitionRadiation
 {

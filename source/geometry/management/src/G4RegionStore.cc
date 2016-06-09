@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.6 2003/11/02 14:01:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4RegionStore.cc,v 1.8.2.1 2004/10/13 17:23:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // G4RegionStore
 //
@@ -66,7 +66,7 @@ G4RegionStore::~G4RegionStore()
 }
 
 // ***************************************************************************
-// Delete all elements from the store
+// Delete all regions from the store except for the world region
 // ***************************************************************************
 //
 void G4RegionStore::Clean()
@@ -90,12 +90,12 @@ void G4RegionStore::Clean()
   std::vector<G4Region*>::iterator pos;
 
 #ifdef G4GEOMETRY_VOXELDEBUG
-  G4cout << "Deleting Solids ... ";
+  G4cout << "Deleting Regions ... ";
 #endif
 
-  for(pos=store->begin(); pos!=store->end(); pos++)
+  for(pos=store->begin()+1; pos!=store->end(); pos++)
   {
-    if (*pos) delete *pos; i++;
+    if (*pos) delete *pos; i++;   // Do NOT delete world region !
   }
 
 #ifdef G4GEOMETRY_VOXELDEBUG
@@ -110,7 +110,7 @@ void G4RegionStore::Clean()
 }
 
 // ***************************************************************************
-// Add Solid to container
+// Add Region to container
 // ***************************************************************************
 //
 void G4RegionStore::Register(G4Region* pRegion)
@@ -119,7 +119,7 @@ void G4RegionStore::Register(G4Region* pRegion)
 }
 
 // ***************************************************************************
-// Remove Solid from container
+// Remove Region from container
 // ***************************************************************************
 //
 void G4RegionStore::DeRegister(G4Region* pRegion)

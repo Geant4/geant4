@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2004/06/14 10:09:27 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: RunAction.cc,v 1.2 2004/06/30 15:48:57 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,7 @@
 
 #include "Randomize.hh"
 
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
  #include "AIDA/AIDA.h"
 #endif
 
@@ -67,9 +67,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   ProcCounter = new ProcessesCount;
   
-#ifdef G4ANALYSIS_USE
-  histoManager->SetFactory();
-#endif    
+  histoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,9 +163,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   delete ProcCounter;
   
-#ifdef G4ANALYSIS_USE
-  histoManager->SaveFactory();
-#endif
+  histoManager->save();
   
   // show Rndm status
   HepRandom::showEngineStatus();
@@ -192,22 +188,22 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   G4int nbOfBins = 100;
   G4double binMin = -10., binMax = 0., binWidth = (binMax-binMin)/nbOfBins;
     
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
   //create histo for theoritical crossSections, with same bining as simulation
   //
   const G4String label[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                     "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
 		      
   AIDA::IHistogram1D* histoMC = 0; AIDA::IHistogram1D* histoTh = 0;  
-  if (histoManager->GetHisto(id)) {  
-    histoMC    = histoManager->GetHisto(id); 
-    nbOfBins = (histoMC->axis()).bins();
-    binMin   = (histoMC->axis()).lowerEdge();
-    binMax   = (histoMC->axis()).upperEdge();    
-    binWidth = (binMax-binMin)/nbOfBins;
+  if (histoManager->HistoExist(id)) {
+    histoMC  = histoManager->GetHisto(id);  
+    nbOfBins = histoManager->GetNbins(id);
+    binMin   = histoManager->GetVmin (id);
+    binMax   = histoManager->GetVmax (id);
+    binWidth = histoManager->GetBinWidth(id);
     
     G4String labelTh = label[MaxHisto + id];
-    G4String titleTh = histoMC->title() + " (Th)";
+    G4String titleTh = histoManager->GetTitle(id) + " (Th)";
     histoTh = histoManager->GetHistogramFactory()
           ->createHistogram1D(labelTh,titleTh,nbOfBins,binMin,binMax);    
   }
@@ -229,12 +225,12 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
     dsigma = sigmaE*etransf*binWidth*ln10;
     if (etransf > cut) sigmaTot += dsigma;    
     NbProcess = NbOfMu*length*dsigma;
-#ifdef USE_AIDA
+#ifdef G4ANALYSIS_USE
     if (histoTh) histoTh->fill(lgeps,NbProcess);
 #endif     
   }
   
-#ifdef USE_AIDA  
+#ifdef G4ANALYSIS_USE 
   //compare simulation and theory
   //
   if (histoMC && histoTh) histoManager->GetHistogramFactory()

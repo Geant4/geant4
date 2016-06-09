@@ -132,10 +132,8 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
 
-	Material1 = pPreStepPoint ->GetPhysicalVolume()->
-				    GetLogicalVolume()->GetMaterial();
-	Material2 = pPostStepPoint->GetPhysicalVolume()->
-				    GetLogicalVolume()->GetMaterial();
+	Material1 = pPreStepPoint  -> GetMaterial();
+	Material2 = pPostStepPoint -> GetMaterial();
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
@@ -395,6 +393,14 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 			G4cout << " *** Absorption *** " << G4endl;
 		if ( theStatus == Detection )
 			G4cout << " *** Detection *** " << G4endl;
+                if ( theStatus == NotAtBoundary )
+                        G4cout << " *** NotAtBoundary *** " << G4endl;
+                if ( theStatus == SameMaterial )
+                        G4cout << " *** SameMaterial *** " << G4endl;
+                if ( theStatus == StepTooSmall )
+                        G4cout << " *** StepTooSmall *** " << G4endl;
+                if ( theStatus == NoRINDEX )
+                        G4cout << " *** NoRINDEX *** " << G4endl;
         }
 
 	aParticleChange.SetMomentumChange(NewMomentum);
@@ -476,16 +482,47 @@ G4OpBoundaryProcess::GetFacetNormal(const G4ThreeVector& Momentum,
 
 void G4OpBoundaryProcess::DielectricMetal()
 {
-	do {
-           if( !G4BooleanRand(theReflectivity) ) {
+        G4int n = 0;
 
-	     DoAbsorption();
+	do {
+
+           n++;
+
+           if( !G4BooleanRand(theReflectivity) && n == 1 ) {
+
+             DoAbsorption();
              break;
 
            }
            else {
 
-	     DoReflection();
+             if ( theModel == glisur || theFinish == polished || 
+                                        prob_ss+prob_sl+prob_bs == 0.0 ) {
+
+                DoReflection();
+
+             } else {
+
+                if ( n == 1 ) ChooseReflection();
+                                                                                
+                if ( theStatus == LambertianReflection ) {
+                   DoReflection();
+                }
+                else if ( theStatus == BackScattering ) {
+                   NewMomentum = -OldMomentum;
+                   NewPolarization = -OldPolarization;
+                }
+                else {
+
+                   theFacetNormal = GetFacetNormal(OldMomentum,theGlobalNormal);
+
+                   G4double PdotN = OldMomentum * theFacetNormal;
+                   NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
+                   G4double EdotN = OldPolarization * theFacetNormal;
+                   NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;                                                                                
+                }
+
+             }
 
              OldMomentum = NewMomentum;
              OldPolarization = NewPolarization;

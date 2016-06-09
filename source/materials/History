@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2004/05/17 13:42:24 gcosmo Exp $
+$Id: History,v 1.51 2004/09/06 15:50:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06.09.04 V.Ivant - materials-V06-02-01 
+         recalculate ionisation parameters after set of new
+         mean ionisation potential; add factor 2 to shell correction
+         term
+     
+19.07.04 mma - materials-V06-02-00
+         Put a protection in G4AtomicShells::GetNumberOfShells(Z)
+	 
 13.05.04 P.Gumplinger - materials-V06-01-01
          Added new utility method ConstPropertyExists(const char * key)
          returning true/false according to the existance of the 'key' in

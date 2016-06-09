@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: EventActionMessenger.hh,v 1.2 2004/09/27 09:35:33 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
-// $Id: EventActionMessenger.hh,v 1.1 2002/05/23 13:30:29 maire Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,6 +33,7 @@
 #include "G4UImessenger.hh"
 
 class EventAction;
+class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
@@ -50,8 +48,9 @@ class EventActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    EventAction* eventAction;   
-    G4UIcmdWithAString* DrawCmd;
+    EventAction*          eventAction;
+    G4UIdirectory*        eventDir;          
+    G4UIcmdWithAString*   DrawCmd;
     G4UIcmdWithAnInteger* PrintCmd;    
 };
 

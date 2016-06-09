@@ -1,0 +1,30 @@
+# $Id: nucl.mac,v 1.1 2004/08/17 18:07:40 vnivanch Exp $
+#
+# Macro file for "MuonProcesses.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+#
+/testem/det/setMat Iron
+/testem/det/setSize 1 m
+#
+/testem/phys/addPhysics standard
+/testem/phys/addPhysics muNucl
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/gun/particle mu+
+/gun/energy 10 TeV
+#
+/testem/histo/setFileName allproc.paw
+/testem/histo/setHisto 1 100 -10. 0.
+/testem/histo/setHisto 2 100 -10. 0.
+/testem/histo/setHisto 3 100 -10. 0.
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000

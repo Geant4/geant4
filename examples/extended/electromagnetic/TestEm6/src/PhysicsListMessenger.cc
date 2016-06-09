@@ -20,25 +20,26 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PhysicsListMessenger.cc,v 1.6 2004/09/27 09:35:38 maire Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
-// $Id: PhysicsListMessenger.cc,v 1.5 2003/10/10 10:42:39 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
+#include "G4UIdirectory.hh"
 #include "G4UIcmdWithADouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
 :physList(physL)
-{ 
+{
+  physDir = new G4UIdirectory("/testem/phys/");
+  physDir->SetGuidance("physics list commands");
+ 
   GammaToMuPairFac=new G4UIcmdWithADouble
                                       ("/testem/phys/SetGammaToMuPairFac",this);
   GammaToMuPairFac->SetGuidance(
@@ -62,6 +63,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete GammaToMuPairFac;
   delete AnnihiToMuPairFac;
+  delete physDir;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

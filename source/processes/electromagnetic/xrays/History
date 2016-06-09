@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2003/10/03 15:35:05 gcosmo Exp $
+$Id: History,v 1.29 2004/08/05 23:48:56 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 August 04: P. Gumplinger (xrays-V06-02-01)
+- changed StronglyForced back to Forced in GetMeanLifeTime of
+  G4Scintillation.cc
+
+27 July 04: V.Ivant (xrays-V06-02-00)
+- Fix a compilation problem connected with removal of the dependence
+  of particle cathegory on G4Material
 
 4 Oct 03: G.Cosmo (xrays-V05-02-01)
 - Modified GNUmakefiles:
@@ -50,6 +58,9 @@ committal in the CVS repository !
 23 January 03: G. Cosmo (xrays-V05-00-00)
 - G4VXTRenergyLoss[.hh.cc]: removed reduntant headers inclusions and
   ordered inclusion for complex numbers to allow porting on Windows .NET VC++.
+
+25 November 02: P. Gumplinger (xrays-V04-01-04)
+- G4int binding error fixed when calcuating number of photons
 
 25 November 02: P. Gumplinger (xrays-V04-01-03)
 - G4Scintillation now allows for particle dependent excitation levels

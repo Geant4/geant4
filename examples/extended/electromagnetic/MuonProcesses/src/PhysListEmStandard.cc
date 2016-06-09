@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.1 2004/06/14 10:09:26 maire Exp $
-// GEANT4 tag $Name: geant4-06-02 $
+// $Id: PhysListEmStandard.cc,v 1.2 2004/08/17 18:07:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -37,7 +37,6 @@
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
-#include "G4MuNuclearInteraction.hh"
 #include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,7 +61,6 @@ void PhysListEmStandard::ConstructProcess()
   pmanager->AddProcess(new G4MuIonisation,        -1, 1,1);
   pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 2,2);
   pmanager->AddProcess(new G4MuPairProduction,    -1, 3,3);       
-///  pmanager->AddProcess(new G4MuNuclearInteraction,-1,-1,4);       
 
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();    
@@ -70,7 +68,6 @@ void PhysListEmStandard::ConstructProcess()
   pmanager->AddProcess(new G4MuIonisation,        -1, 1,1);
   pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 2,2);
   pmanager->AddProcess(new G4MuPairProduction,    -1, 3,3);       
-///  pmanager->AddProcess(new G4MuNuclearInteraction,-1,-1,4);
     
   //extend binning of PhysicsTables
   //

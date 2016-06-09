@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.18 2003/06/16 17:02:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Scintillation.cc,v 1.19 2004/08/05 23:47:55 gum Exp $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -33,7 +33,9 @@
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
-// Updated:     2002-11-21 by Peter Gumplinger
+// Updated:     2004-08-05 by Peter Gumplinger
+//              > changed StronglyForced back to Forced in GetMeanLifeTime
+//              2002-11-21 by Peter Gumplinger
 //              > change to use G4Poisson for small MeanNumPhotons
 //              2002-11-07 by Peter Gumplinger
 //              > now allow for fast and slow scintillation component
@@ -550,7 +552,7 @@ G4double G4Scintillation::GetMeanFreePath(const G4Track&,
 G4double G4Scintillation::GetMeanLifeTime(const G4Track&,
                                           G4ForceCondition* condition)
 {
-        *condition = StronglyForced;
+        *condition = Forced;
 
         return DBL_MAX;
 

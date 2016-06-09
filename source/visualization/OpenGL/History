@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2004/02/17 18:17:20 johna Exp $
+$Id: History,v 1.39.2.2 2004/10/14 11:49:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+13th September 2004  Gabriele Cosmo  (opengl-V06-02-05a)
+- G4OpenGLTransform3D.cc: simplified implementation for GetMatrix()
+  to allow for porting on CLHEP-1.9.X series.
 
 17th February 2004  John Allison  (opengl-V06-00-00)
 - Fixed bug #581: wrong order of statements in

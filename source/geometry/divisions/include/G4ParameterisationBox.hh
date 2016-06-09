@@ -22,7 +22,7 @@
 //
 //
 // $Id: G4ParameterisationBox.hh,v 1.5 2004/07/15 14:25:01 stesting Exp $
-// GEANT4 tag $Name: geant4-06-02-patch-01 $
+// GEANT4 tag $Name: geant4-06-02-patch-02 $
 //
 // classes G4ParameterisationBoxX,
 //         G4ParameterisationBoxY,
