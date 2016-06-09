@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name:  $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -73,6 +73,7 @@ tally 3: position = 5 0 0 cm
 ---------------------------------------------------------
 World is registered to the default region.
 physicsList->Construct() start.
+physicsList->Construct() start.
 
 phot:  Total cross sections from Sandia parametrisation. 
 Thank you for using G4BinaryCascade. 
@@ -135,7 +136,7 @@ msc:  Model variant of multiple scattering
 hIoni:  
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below.
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
 msc:  Model variant of multiple scattering 
       Lambda tables from 100 eV  to 100 TeV in 100 bins.
@@ -170,6 +171,9 @@ MuPairProd:
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+Region DefaultRegionForTheWorld
+ Materials : Galactic Water 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 ========= Table of registered couples ==============================
 
@@ -189,12 +193,6 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-### Run 0 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1692458005, 1054920321
-----------------------------------------
 Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
@@ -210,6 +208,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
      100.00          0k         1        5          8         0.00    Absorber
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1692458005, 1054920321
+----------------------------------------
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -234,30 +238,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=189.43s Real=380.44s Sys=52.11s
+  User=218.05s Real=388.75s Sys=71.28s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.556 GeV	0.659749 % 	0.000211407 Gy
-tally 1: 	 	7.76408 GeV	0.485255 % 	0.000155493 Gy
-tally 2: 	 	3.32639 GeV	0.207899 % 	6.66183e-05 Gy
-tally 3: 	 	1.63959 GeV	0.102475 % 	3.28365e-05 Gy
+tally 0: 	 	10.5839 GeV	0.661495 % 	0.000211967 Gy
+tally 1: 	 	7.35039 GeV	0.4594 % 	0.000147208 Gy
+tally 2: 	 	2.90011 GeV	0.181257 % 	5.80811e-05 Gy
+tally 3: 	 	1.32232 GeV	0.0826453 % 	2.64825e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2084081781, 1451269122
+ Current couple of seeds = 1291616465, 2050820174
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
-G4 kernel has come to Quit state.
-Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
 EventManager deleted.
 UImanager deleted.
 StateManager deleted.
+RunManagerKernel is deleted.
 RunManager is deleting.

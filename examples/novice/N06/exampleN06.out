@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name:  $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -988,6 +988,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1  -88.8 cm  -2.31 m      -5 m    2.18 eV      0 eV   5.58 m    5.58 m          Tank  Transportation
     2  -2.22 m   -5.79 m     -10 m    2.18 eV      0 eV   6.23 m    11.8 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 58
-number of event = 1 User=0.11s Real=0.22s Sys=0.11s
+number of event = 1 User=0.15s Real=0.24s Sys=0.09s
 Graphics systems deleted.
 Visualization Manager deleting...

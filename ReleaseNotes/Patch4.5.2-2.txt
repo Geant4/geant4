@@ -1,0 +1,72 @@
+
+                 Geant4 5.2 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                            3 October 2003
+
+List of fixes included in this public patch since release 5.2.p01:
+
+  o Configuration script
+    --------------------
+    + Configure:
+      o Corrected default name for data sets.
+      o Implemented automatic detection of OpenGL and CLHEP installations.
+      o Fixed behavior of script on Windows system, corrected definition of
+        paths and defaults.
+      o Cleared not allowed configuration drivers.
+
+  o Geometry:
+    --------
+    + verification:
+      o Fixed logic in G4GeomTestSegment::FindSomePoints() in case a
+        point gets stuck in a loop while along a curved surface.
+	Addresses also problem report #499.
+    + volumes:
+      o Made optional the printing of information on 'looping' particles
+        in G4PropagatorInField. It is now controlled by the verbose flag.
+        Addresses problem report #509.
+
+  o Hadronic processes:
+    ------------------
+    + management
+      o Fixed major bug in G4HadronicProcess class, affecting final state
+        generation in all materials with more than two elements.
+    + cross_sections:
+      o Fixes in the high energy equivalent photon generation in the
+        electronuclear interactions above 50 GeV. 
+
+  o Particles:
+    ---------
+    + Fixed memory leak for 'theElectronOccupancy' in G4DynamicParticle
+      assignment operator.
+    + Added DecayProperTime to deep copy of G4DecayProduct.
+
+  o Examples:
+    --------
+  - Updated reference outputs.
+  - advanced:
+      + composite_calorimeter
+        o Minor fix in inclusion of headers.
+  - extended:
+      + field
+        o Implemented complete migration to cuts-by-region.
+  - novice:
+      + N05
+        o Implemented complete migration to cuts-by-region.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 5.2-patch01.
+     It is NOT a cumulative patch !
+  o  Technical notes distributed for release 5.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 5.2 are available through
+our "Source Code" Web page:  http://cern.ch/geant4
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/G4UsersDocuments/Overview/html
+for further information about using Geant4.

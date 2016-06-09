@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name:  $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -202,7 +202,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.02s Real=2.7s Sys=0.01s
+  User=0.01s Real=0.74s Sys=0.02s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

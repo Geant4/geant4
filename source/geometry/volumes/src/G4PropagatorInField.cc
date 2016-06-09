@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.49 2003/06/25 13:12:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4PropagatorInField.cc,v 1.50 2003/09/12 11:00:01 japost Exp $
+// GEANT4 tag $Name: geomvol-V05-02-00 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -302,15 +302,19 @@ G4PropagatorInField::ComputeStep(
 
   if( do_loop_count >= fMax_loop_count  )
   {
-    G4cout << "G4PropagateInField: Warning: Particle is looping - " 
-           << " tracking in field will be stopped. " << G4endl;
-#ifdef G4VERBOSE
-    G4cout << " It has performed " << do_loop_count << " steps in Field " 
-           << " while a maximum of " << GetMaxLoopCount() << " are allowed. "
-           << G4endl;
-#endif
-    G4cerr << "G4PropagateInField: Warning: Looping particle. " << G4endl; 
     fParticleIsLooping = true;
+
+    if ( fVerboseLevel > 0 ){
+       G4cout << "G4PropagateInField: Killing looping particle " 
+              // << " of " << energy  << " energy "
+              << " after " << do_loop_count << " field substeps "
+              << " totaling " << StepTaken / mm << " mm " ;
+       if( pPhysVol )
+	  G4cout << " in the volume " << pPhysVol->GetName() ; 
+       else
+	 G4cout << " in unknown or null volume. " ; 
+       G4cout << G4endl;
+    }
   }
 
   if( !intersects )
@@ -784,7 +788,6 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
   G4FieldTrack newEndPoint( CurrentStateA );
   GetChordFinder()->GetIntegrationDriver()
                   ->AccurateAdvance(newEndPoint, curveDist, fEpsilonStep);
-  // EstimatedEndStateB = newEndpoint;
 
 #ifdef G4DEBUG_FIELD
   static G4int noInaccuracyWarnings = 0; 
@@ -804,7 +807,16 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
 	     << (newEndPoint.GetPosition()-EstimatedEndStateB.GetPosition()).mag()
 	     << G4endl;
     }
+#else
+  // Statistics on the RMS value of the corrections
+  static G4int    noCorrections=0;
+  static G4double sumCorrectionsSq = 0;
+  noCorrections++; 
+  sumCorrectionsSq += (EstimatedEndStateB.GetPosition() - 
+		       newEndPoint.GetPosition()).mag2();
+
 #endif
+
   return newEndPoint;
 }
 

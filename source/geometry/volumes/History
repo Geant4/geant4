@@ -1,4 +1,4 @@
-$Id: History,v 1.104 2003/06/25 13:17:53 gcosmo Exp $
+$Id: History,v 1.105 2003/09/12 11:02:41 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 12th, 2003  J. Apostolakis - geomvol-V05-02-00
+Made optional the printing of information on 'looping' particles.
+It is now controlled by the verbose flag.
+    -> to address CMS request in problem report 509
 
 June 25th, 2003     G. Folger - geomvol-V05-01-04
 - Added disclaimer of liability where needed.

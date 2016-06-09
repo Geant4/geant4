@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.18 2003/06/16 17:03:04 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.20 2003/09/29 15:37:20 mkossov Exp $
+// GEANT4 tag $Name: gcross-V05-02-01 $
 //
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
@@ -114,7 +114,7 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
         lastH   = alop*A*(1.-.072*log(A));// corresponds to lastSP from G4PhotonuclearCrossSection 
         lastTH  = ThresholdEnergy(targZ, targN); // The last Threshold Energy
 #ifdef pdebug
-        G4cout<<"lastH="<<lastH<<",A="<<A<<",lnA="<<lnA<<G4endl;
+        G4cout<<"G4ElNucCS::GetCrossSection: lastH="<<lastH<<",A="<<A<<G4endl;
 #endif
         colN.push_back(targN);
         colZ.push_back(targZ);
@@ -150,7 +150,9 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
       G4double YNj=dlg1*lastJ1[lastL]-lgoe*(lastJ2[lastL]+lastJ2[lastL]-lastJ3[lastL]/lastE);
       lastSig= YNi+shift*(YNj-YNi);
       if(lastSig>YNj)lastSig=YNj;
-      //G4cout<<"S="<<lastSig<<",E="<<lE<<",Xj="<<Xj<<",Yj="<<YNj<<",Y1="<<YN1<<",M="<<lEMa<<G4endl;
+#ifdef pdebug
+      G4cout<<"G4ElNucCS::GetCrossSection:S="<<lastSig<<",E="<<lE<<",Yj="<<YNj<<",M="<<lEMa<<G4endl;
+#endif
     }
     else
 	{
@@ -159,8 +161,10 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
       G4double term2=lastJ2[mL]+lastH*HighEnergyJ2(lE);
       G4double term3=lastJ3[mL]+lastH*HighEnergyJ3(lE);
       lastSig=dlg1*term1-lgoe*(term2+term2-term3/lastE);
-      //G4cout<<"S="<<lastSig<<",lE="<<lE<<",Pm="<<lastJ1[mL]<<",J1="<<lastH*HighEnergyJ1(lE)
-      //      <<",Fm="<<lastJ2[mL]<<",Fh="<<lastH*HighEnergyJ2(lE)<<",EM="<<lEMa<<G4endl;
+#ifdef pdebug
+      G4cout<<"G4ElNucCS::GetCrossSec:S="<<lastSig<<",lE="<<lE<<",J1="<<lastH*HighEnergyJ1(lE)<<",Pm="
+            <<lastJ1[mL]<<",Fm="<<lastJ2[mL]<<",Fh="<<lastH*HighEnergyJ2(lE)<<",EM="<<lEMa<<G4endl;
+#endif
 	}
   } // End of "sigma" calculation
   else return 0.;
@@ -2327,7 +2331,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
     G4cerr<<"*HP*G4ElNucCS::GetEqPhotE:S="<<lastSig<<">"<<Y[lastL]<<",l="<<lastL<<">"<<mL<<G4endl;
     return 3.0*MeV; // quick and dirty workaround @@@ HP. (now can be not necessary M.K.)
   }
-  G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it is in the func. region
+  G4double ris=lastSig*G4UniformRand(); // Sig can be > Y[lastL=mL], then it is in the funct. region
 #ifdef debug
   G4cout<<"G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy: "<<ris<<",Y="<<Y[lastL]<<G4endl;
 #endif
@@ -2344,13 +2348,13 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
     G4double Yi=Y[j1];                  // Low value
     phLE=lEMi+(j1+(ris-Yi)/(Yj-Yi))*dlnE;
 #ifdef debug
-	G4cout<<"G4ElN::lE="<<phLE<<",li="<<lEMi<<",j="<<j<<",ris="<<ris<<",Yi="<<Yi<<",Y="<<Yj<<G4endl;
+	G4cout<<"G4EleNucCS::lE="<<phLE<<",li="<<lEMi<<",j="<<j<<",ris="<<ris<<",Yi="<<Yi<<",Y="<<Yj<<G4endl;
 #endif
   }
   else                                  // Search with the function
   {
     if(lastL<mL)G4cerr<<"**G4EleNucCS::GetEfPhE:L="<<lastL<<",S="<<lastSig<<",Y="<<Y[lastL]<<G4endl;
-    G4double f=(ris-Y[lastL])/lastH;    // The scaled residual value
+    G4double f=(ris-Y[lastL])/lastH;    // The scaled residual value of the cross-section integral
 #ifdef pdebug
 	G4cout<<"G4EleNucCS::GetEfPhE:HighEnergy f="<<f<<",ris="<<ris<<",lastH="<<lastH<<G4endl;
 #endif
@@ -2375,10 +2379,11 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
   static const G4double mel=0.5109989;                 // Mass of electron in MeV
   static const G4double lmel=log(mel);                 // Log of electron mass
   static const G4double z=log(EMa);                    // Initial argument
-  static const G4double p=poc*(z-pos)+shd*exp(-reg*z); // Initial function
-  static const G4int    imax=7;    // Not more than "imax" steps to find the solution
+  static const G4double p=poc*(z-pos)+shd*exp(-reg*z); // CrossX on theHighTableEdge (small change)
+  static const G4int    imax=27;   // Not more than "imax" steps to find the solution
   static const G4double eps=0.001; // Accuracy which satisfies the search
-  G4double x=z+f/p/(lastG+lmel-z); // First guess
+  G4double rE=EMa/exp(lastG+lmel);                     // r=EMa/Eel
+  G4double x=z+f/p/(lastG*(2.-rE*(2.-rE))-1.);         // First guess (the first step from the edge)
 #ifdef pdebug
   G4cout<<"SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastG="<<lastG<<",x="<<x<<G4endl;
 #endif
@@ -2386,12 +2391,13 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
   {
     G4double fx=Fun(x);
     G4double df=DFun(x);
-    G4double d=(fx-f)/df;
+    G4double d=(f-fx)/df;
     x=x+d;
 #ifdef pdebug
-    G4cout<<"SolveTheEq: i="<<i<<",d="<<d<<",x="<<x<<",fx="<<fx<<",df="<<df<<G4endl;
+    G4cout<<"G4ElNucCS::SolveTheEq: i="<<i<<",d="<<d<<",x="<<x<<",fx="<<fx<<",df="<<df<<G4endl;
 #endif
     if(abs(d)<eps) break;
+    if(i+1>=imax)G4cerr<<"**G4ElNucCS::SolveTheEq:"<<i+2<<">max="<<imax<<".Use bigger max."<<G4endl;
   }
   return x;
 }
@@ -2421,8 +2427,17 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
     return 0.;
   }    
   G4double LyQa2=log(Fy+fr);              // L(y,Q2max) function
-  G4double R=G4UniformRand();             // Random number (0,1)
-  G4double Q2=Qi2*(ePy+1./(exp(R*LyQa2-(1.-R)*Uy)-Fy));
+  G4bool cond=true;
+  G4int maxTry=3;
+  G4int cntTry=0;
+  G4double Q2=Qi2;
+  while(cond&&cntTry<maxTry)             // The loop to avoid x>1.
+  {
+    G4double R=G4UniformRand();           // Random number (0,1)
+    Q2=Qi2*(ePy+1./(exp(R*LyQa2-(1.-R)*Uy)-Fy));
+    cntTry++;
+    cond = Q2>1878.*nu;
+  }
   if(Q2<Qi2)
   {
 #ifdef edebug

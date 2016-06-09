@@ -30,9 +30,9 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4eplusAnnihilation.hh"
-#include "G4MultipleScatteringSTD.hh"
-#include "G4eIonisationSTD.hh"
-#include "G4eBremsstrahlungSTD.hh"
+#include "G4MultipleScattering52.hh"
+#include "G4eIonisation52.hh"
+#include "G4eBremsstrahlung52.hh"
 
 class G4EMModelBuilder 
 {
@@ -48,13 +48,13 @@ class G4EMModelBuilder
     G4ComptonScattering theComptonEffect;
     G4GammaConversion thePairProduction;
   
-    G4MultipleScatteringSTD theElectronMultipleScattering;
-    G4eIonisationSTD theElectronIonisation;
-    G4eBremsstrahlungSTD theElectronBremsStrahlung;
+    G4MultipleScattering52 theElectronMultipleScattering;
+    G4eIonisation52 theElectronIonisation;
+    G4eBremsstrahlung52 theElectronBremsStrahlung;
   
-    G4MultipleScatteringSTD thePositronMultipleScattering;
-    G4eIonisationSTD thePositronIonisation; 
-    G4eBremsstrahlungSTD thePositronBremsStrahlung;  
+    G4MultipleScattering52 thePositronMultipleScattering;
+    G4eIonisation52 thePositronIonisation; 
+    G4eBremsstrahlung52 thePositronBremsStrahlung;  
     G4eplusAnnihilation theAnnihilation;
 };
 // 2002 by J.P. Wellisch

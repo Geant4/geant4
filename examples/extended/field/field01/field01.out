@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name:  $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4ClassicalRK4 (default) is called
@@ -1145,7 +1145,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.34s Real=0.45s Sys=0.1s
+  User=0.37s Real=0.61s Sys=0.08s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

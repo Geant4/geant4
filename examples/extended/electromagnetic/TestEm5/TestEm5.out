@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name:  $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -189,7 +189,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=63s Real=1.2e+03s Sys=78s
+  User=60s Real=1.4e+03s Sys=82s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
     mean charged track length   in absorber=0.0209443 +- 1.36937e-05  mm  

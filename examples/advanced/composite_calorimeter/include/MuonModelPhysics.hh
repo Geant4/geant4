@@ -27,11 +27,11 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MultipleScatteringSTD.hh"
-#include "G4MuBremsstrahlungSTD.hh"
-#include "G4MuPairProductionSTD.hh"
-#include "G4MuIonisationSTD.hh"
-#include "G4hIonisationSTD.hh"
+#include "G4MultipleScattering52.hh"
+#include "G4MuBremsstrahlung52.hh"
+#include "G4MuPairProduction52.hh"
+#include "G4MuIonisation52.hh"
+#include "G4hIonisation52.hh"
 
 #include "G4MuonMinusCaptureAtRest.hh"
 
@@ -53,24 +53,24 @@ class MuonModelPhysics : public G4VPhysicsConstructor
 
   protected:
    // Muon physics
-   G4MultipleScatteringSTD   fMuPlusMultipleScattering;
-   G4MuBremsstrahlungSTD     fMuPlusBremsstrahlung ;
-   G4MuPairProductionSTD     fMuPlusPairProduction;
-   G4MuIonisationSTD         fMuPlusIonisation;
+   G4MultipleScattering52   fMuPlusMultipleScattering;
+   G4MuBremsstrahlung52     fMuPlusBremsstrahlung ;
+   G4MuPairProduction52     fMuPlusPairProduction;
+   G4MuIonisation52         fMuPlusIonisation;
 
-   G4MultipleScatteringSTD   fMuMinusMultipleScattering;
-   G4MuBremsstrahlungSTD     fMuMinusBremsstrahlung ;
-   G4MuPairProductionSTD     fMuMinusPairProduction;
-   G4MuIonisationSTD         fMuMinusIonisation;
+   G4MultipleScattering52   fMuMinusMultipleScattering;
+   G4MuBremsstrahlung52     fMuMinusBremsstrahlung ;
+   G4MuPairProduction52     fMuMinusPairProduction;
+   G4MuIonisation52         fMuMinusIonisation;
 
    G4MuonMinusCaptureAtRest fMuMinusCaptureAtRest;
 
    // Tau physics
-   G4MultipleScatteringSTD   fTauPlusMultipleScattering;
-   G4hIonisationSTD          fTauPlusIonisation;
+   G4MultipleScattering52   fTauPlusMultipleScattering;
+   G4hIonisation52          fTauPlusIonisation;
 
-   G4MultipleScatteringSTD   fTauMinusMultipleScattering;
-   G4hIonisationSTD          fTauMinusIonisation;
+   G4MultipleScattering52   fTauMinusMultipleScattering;
+   G4hIonisation52          fTauMinusIonisation;
 
 };
 

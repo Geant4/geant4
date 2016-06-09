@@ -21,8 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.hh,v 1.9 2003/06/16 17:03:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: gcross-V05-02-01 $
 //
 //
 // GEANT4 physics class: G4PhotoNuclearCrossSection -- header file

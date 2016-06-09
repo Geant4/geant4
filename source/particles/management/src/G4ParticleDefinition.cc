@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.17.2.1 2003/06/16 17:18:49 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParticleDefinition.cc,v 1.19 2003/06/19 14:38:47 gunter Exp $
+// GEANT4 tag $Name: particles-V05-02-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -159,7 +159,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
       //  this->thePDGEncoding.
 {
   G4int flavor;
-  for (flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor++){
+  for (flavor= 0; flavor<NumberOfQuarkFlavor; flavor++){
     theQuarkContent[flavor]     = 0;
     theAntiQuarkContent[flavor] = 0;
   }
@@ -169,7 +169,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
   G4int temp = checker.CheckPDGCode(thePDGEncoding, theParticleType);
 
   if ( temp != 0) {
-    for (flavor= 0; flavor<NumberOfQuarkFlavor-1; flavor++){
+    for (flavor= 0; flavor<NumberOfQuarkFlavor; flavor++){
       theQuarkContent[flavor]     = checker.GetQuarkContent(flavor);
       theAntiQuarkContent[flavor] = checker.GetAntiQuarkContent(flavor);
     }

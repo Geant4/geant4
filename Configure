@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.33 2003/02/21 16:04:59 stesting Exp $
+# $Id: Configure,v 1.42 2003/10/02 18:04:36 stesting Exp $
 #
-# Generated on Fri Feb 21 17:04:19 CET 2003 [metaconfig 3.0 PL70]
+# Generated on Thu Oct  2 20:02:53 CEST 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -159,6 +159,7 @@ d_portable=''
 g4base=''
 g4conf=''
 g4include=''
+g4includes_flag=''
 g4install=''
 g4workdir=''
 g4bin=''
@@ -234,6 +235,8 @@ g4_make_version=''
 g4make=''
 g4w_use_g3tog4=''
 g4wlib_build_g3tog4=''
+g4w_use_step=''
+g4wlib_build_step=''
 lns=''
 c=''
 n=''
@@ -2349,6 +2352,23 @@ while test "$type"; do
 done
 cd .config/UU
 ans="$value"
+
+# Check for Windows!
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+
+checkdrive=`echo $ans|cut -d"/" -f2`
+
+if test "X$checkdrive" = "Xcygdrive"; then
+
+windrive=`echo $ans|cut -d"/" -f3`
+winpath=`echo $ans|cut -d"/" -f4-`
+
+fullwinpath="$windrive:/$winpath"
+ans=$fullwinpath
+
+fi # if cygwin syntax is used
+fi # if Win
+
 rp="$orig_rp"
 dflt="$orig_dflt"
 rm -f getfile.ok
@@ -2382,6 +2402,22 @@ case "$g4install" in
 	HOME=""
 	fi
 	g4install=$HOME/geant4
+
+# Check for Windows!
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+
+checkdrive=`echo $g4install|cut -d"/" -f2`
+
+if test $checkdrive = "cygdrive"; then
+
+windrive=`echo $g4install|cut -d"/" -f3`
+winpath=`echo $g4install|cut -d"/" -f4-`
+
+fullwinpath="$windrive:/$winpath"
+g4install=$fullwinpath
+
+fi
+fi
 	;;
 esac
 
@@ -2397,12 +2433,6 @@ case "$g4includes_flag" in
 	;;
 esac
 
-case "$g4include" in
-'')
-#	g4include=$g4install/include
-	g4include=''
-	;;
-esac
 
 g4message=`cat << EOM
 
@@ -2432,13 +2462,21 @@ g4includes_flag=$ans
 
 if [ X$g4includes_flag = Xy ] ; then
 
+case "$g4include" in
+'')
+	g4include=$g4install/include
+#	g4include=''
+	;;
+esac
+
 g4message=`cat << EOM
 
 Where will be directory to copy all Geant4 headers?
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
-dflt=$g4install/include
+###dflt=$g4install/include
+dflt=$g4include
 fn='d~+'
 rp=$g4message
 . ./getfile
@@ -2543,7 +2581,7 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW1.1
+	g4ledata=$g4install/../G4EMLOW2.2
 	;;
 esac
 
@@ -2620,12 +2658,38 @@ gans=$ans
 	esac
 done
 
-echo " "
+
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
+clhep_dirs=`find /usr/local/lib /usr/lib -name \*CLHEP\*|xargs echo`
+#echo clhep_dirs=$clhep_dirs
+
+fi
+
+if test "X$clhep_dirs" != "X" ; then
+
+g4clhep_base_dir_found=`echo $clhep_dirs|cut -d" " -f1`
+#echo g4clhep_base_dir_found=$g4clhep_base_dir_found
+
+
+#g4clhep_base_dir_n=`echo $g4clhep_base_dir_found |awk -F"/" '{print NF}'`
+#echo g4clhep_base_dir_n=$g4clhep_base_dir_n
+g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
+g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
+
+	g4clhep_base_dir=$g4clhep_base_dir_found
+
+else
 case "$g4clhep_base_dir" in
 '')
+	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+	g4clhep_base_dir="c:/usr/local"
+	else
 	g4clhep_base_dir=/usr/local
+	fi
 	;;
 esac
+fi
 
 case "$g4clhep_include_dir" in
 '')
@@ -2647,9 +2711,11 @@ esac
 
 #while test 1 = 1  ; do
 
+if test "X$clhep_dirs" != "X" ; then
+
 g4message=`cat << EOM
 
-Please, specify where CLHEP is installed:
+Please, specify where CLHEP is installed. It was found in:
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
 
@@ -2662,6 +2728,24 @@ CLHEP_LIB
 You will be asked about customizing these next.
 EOM`
 
+else
+
+g4message=`cat << EOM
+
+Please, specify where CLHEP is installed (set by default):
+
+CLHEP_BASE_DIR:			$g4clhep_base_dir
+
+According to it will be set:
+
+CLHEP_INCLUDE_DIR		
+CLHEP_LIB_DIR			
+CLHEP_LIB		
+
+You will be asked about customizing these next.
+EOM`
+
+fi
 
 #dflt="Press [Enter] for default settings"
 #fn='d~'
@@ -2762,7 +2846,17 @@ gans=$ans
 	esac
 done
 
+if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
+g4clhep_base_dir=""
+fi
 
+if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
+g4clhep_include_dir=""
+fi
+
+if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
+g4clhep_lib_dir=""
+fi
 
 echo " "
 case "$g4global" in
@@ -2995,6 +3089,8 @@ esac
 #
 echo ""
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -3116,7 +3212,7 @@ fi
 
 fi
 
-
+fi # if !Win
 echo " "
 
 case "$g4make" in
@@ -3390,6 +3486,8 @@ gans=y
 		;;
 	esac
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4UI_BUILD_XAW_SESSION
@@ -3446,6 +3544,9 @@ gans=$ans
 		;;
 	esac
 
+fi # if !WIN
+
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
 
 g4message=`cat << EOM
 
@@ -3474,6 +3575,10 @@ gans=$ans
 		;;
 	esac
 
+fi # if WIN
+
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4UI_BUILD_WO_SESSION
@@ -3501,6 +3606,8 @@ gans=$ans
 		g4ui_use_wo=y
 		;;
 	esac
+
+fi #if !WIN
 
 g4message=`cat << EOM
 
@@ -3536,11 +3643,6 @@ case "$g4vis_none" in
 	;;
 esac
 
-case "$g4vis_oglhome" in
-'')
-	g4vis_oglhome="/usr"
-	;;
-esac
 
 case "$g4vis_build_openglwin32_driver" in
 '')
@@ -3724,6 +3826,8 @@ case $g4vis_none in
 
 n)
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_OPENGLX_DRIVER
@@ -3781,6 +3885,10 @@ gans=$ans
 		;;
 	esac
 
+fi # if !WIN
+
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_OPENGLWIN32_DRIVER
@@ -3809,6 +3917,10 @@ gans=$ans
 		g4vis_use_openglwin32=y
 		;;
 	esac
+
+fi # if WIN
+
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
 
 g4message=`cat << EOM
 
@@ -3867,6 +3979,10 @@ gans=$ans
 		;;
 	esac
 
+fi # if !WIN
+
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_OIWIN32_DRIVER
@@ -3894,6 +4010,10 @@ gans=$ans
 		g4vis_use_oiwin32=y
 		;;
 	esac
+
+fi # if WIN
+
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
 
 g4message=`cat << EOM
 
@@ -4043,6 +4163,7 @@ gans=y
 		;;
 	esac
 
+fi # if !WIN
 
 g4message=`cat << EOM
 
@@ -4102,7 +4223,35 @@ gans=y
 ;;
 esac
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy ] || [ X$g4vis_build_openglwin32_driver = Xy ] ; then 
+
+#####################################################################
+ogl_dirs=`find /usr/local/lib /usr/lib -name libGLU\*|xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$ogl_dirs" != "X" ; then
+
+g4ogl_base_dir_found=`echo $ogl_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
+g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
+
+	g4vis_oglhome=$g4ogl_base_dir_found
+else
+case "$g4vis_oglhome" in
+'')
+	g4vis_oglhome=/usr
+	;;
+esac
+fi
+
+##########################################################################
+
+if test "X$ogl_dirs" != "X" ; then
 
 g4message=`cat << EOM
 
@@ -4110,8 +4259,23 @@ g4message=`cat << EOM
   OGLHOME/lib
 
 You have selected to use OpenGL driver.
-Specify the correct path (OGLHOME) where OpenGL is installed in your system:
+Specify the correct path (OGLHOME) where OpenGL is installed in your system.
+It was found in:
 EOM`
+
+else
+
+g4message=`cat << EOM
+
+  OGLHOME/include
+  OGLHOME/lib
+
+You have selected to use OpenGL driver.
+Specify the correct path (OGLHOME) where OpenGL is installed in your system
+(set by defalt):
+EOM`
+
+fi
 
 dflt=$g4vis_oglhome
 fn='d~'
@@ -4119,7 +4283,17 @@ rp=$g4message
 . ./getfile
 g4vis_oglhome=$ans
 
+if test "X$g4osname" = "XLinux"; then 
+
+if test "X$g4vis_oglhome" = "X/usr" -o "X$g4vis_oglhome" = "X/usr/local"; then
+g4vis_oglhome=""
 fi
+
+fi # if platform (Linux vs SUN)
+
+fi # if need
+fi # if platform (Unix vs Win)
+
 echo " "
 case "$g4wlib_build_g3tog4" in
 '')
@@ -4127,7 +4301,7 @@ case "$g4wlib_build_g3tog4" in
 	;;
 esac
 
-case "$g4w_use_g4tog4" in
+case "$g4w_use_g3tog4" in
 '')
 	g4w_use_g3tog4=n
 	;;
@@ -4137,7 +4311,7 @@ echo ""
 
 g4message=`cat << EOM
 
-  G4USE_G3TOG4  
+  G4LIB_BUILD_G3TOG4  
 
 If this variable is set, it will be built G3TOG4 module.
 Do you want to set this variable ?
@@ -4153,11 +4327,53 @@ gans=$ans
 	
 	n*|N*) 
 		g4wlib_build_g3tog4=n
-		g4w_use_g4tog4=n
+		g4w_use_g3tog4=n
 		;;
 	y*|Y*) 
 		g4wlib_build_g3tog4=y
 		g4w_use_g3tog4=y
+		;;
+	esac
+
+
+echo " "
+case "$g4wlib_build_step" in
+'')
+	g4wlib_build_step=n
+	;;
+esac
+
+case "$g4w_use_step" in
+'')
+	g4w_use_step=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4LIB_BUILD_STEP  
+
+If this variable is set, it will be built STEP module.
+Do you want to set this variable ?
+
+EOM`
+
+dflt=$g4wlib_build_step
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wlib_build_step=n
+		g4w_use_step=n
+		;;
+	y*|Y*) 
+		g4wlib_build_step=y
+		g4w_use_step=y
 		;;
 	esac
 
@@ -4287,6 +4503,7 @@ g4debug='$g4debug'
 g4global='$g4global'
 g4granular='$g4granular'
 g4include='$g4include'
+g4includes_flag='$g4includes_flag'
 g4install='$g4install'
 g4ledata='$g4ledata'
 g4levelgammadata='$g4levelgammadata'
@@ -4340,6 +4557,7 @@ g4vis_use_raytracer='$g4vis_use_raytracer'
 g4vis_use_vrml='$g4vis_use_vrml'
 g4vis_use_vrmlfile='$g4vis_use_vrmlfile'
 g4w_use_g3tog4='$g4w_use_g3tog4'
+g4w_use_step='$g4w_use_step'
 g4wanalysis_build='$g4wanalysis_build'
 g4wanalysis_build_jas='$g4wanalysis_build_jas'
 g4wanalysis_build_lab='$g4wanalysis_build_lab'
@@ -4349,6 +4567,7 @@ g4wanalysis_use_jas='$g4wanalysis_use_jas'
 g4wanalysis_use_lab='$g4wanalysis_use_lab'
 g4wanalysis_use_lizard='$g4wanalysis_use_lizard'
 g4wlib_build_g3tog4='$g4wlib_build_g3tog4'
+g4wlib_build_step='$g4wlib_build_step'
 g4workdir='$g4workdir'
 hint='$hint'
 lns='$lns'

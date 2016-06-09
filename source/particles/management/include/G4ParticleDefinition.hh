@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.18.2.1 2003/06/16 17:18:47 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4ParticleDefinition.hh,v 1.20 2003/06/19 14:38:45 gunter Exp $
+// GEANT4 tag $Name: particles-V05-02-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -58,6 +58,7 @@ class G4ProcessManager;
 class G4DecayTable;
 class G4ParticleTable;
 class G4Material;
+class G4ParticlePropertyTable;
 
 class G4ParticleDefinition 
 {
@@ -66,6 +67,8 @@ class G4ParticleDefinition
   //  It also has uses a process manager in order to collect
   //  all the processes this kind of particle can undertake.
   //
+
+  friend class  G4ParticlePropertyTable;
 
  public: // With Description
   //  Only one type of constructor can be used for G4ParticleDefinition.
@@ -149,7 +152,7 @@ class G4ParticleDefinition
       G4int    GetAntiQuarkContent(G4int flavor) const;
       //  return the number of quark with flavor contained in this particle. 
       //  The value of flavor is assigned as follows 
-      // 1:d, 2:u, 3:s, 4:c, 5:b, 6:t, 7:l(down type quark) 8:h(up type quark) 
+      // 1:d, 2:u, 3:s, 4:c, 5:b, 6:t
  
   public: // With Description
       // ShortLived flag
@@ -275,14 +278,12 @@ class G4ParticleDefinition
       //  The Particle Data Group integer identifier of the anti-particle
 
   protected:
-      enum {NumberOfQuarkFlavor = 8};
+      enum {NumberOfQuarkFlavor = 6};
       G4int  theQuarkContent[NumberOfQuarkFlavor];
       G4int  theAntiQuarkContent[NumberOfQuarkFlavor];
       //  the number of quark (minus Sign means anti-quark) contents
       //  The value of flavor is assigned as follows 
-      //    0:d, 1:u, 2:s, 3:c, 
-      //    4:b, 5:t, 6:l(down type quark) 7:h(up type quark) 
-
+      //    0:d, 1:u, 2:s, 3:c, 4:b, 5:t
 
   private:
     // Following members can be changed after construction

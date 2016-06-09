@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05MinEkineCuts.cc,v 1.5 2003/05/28 11:20:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: ExN05MinEkineCuts.cc,v 1.6 2003/08/27 16:15:42 vnivanch Exp $
+// GEANT4 tag $Name: exampleN05-V05-02-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -69,25 +69,25 @@ G4double ExN05MinEkineCuts::PostStepGetPhysicalInteractionLength(
    G4UserLimits* pUserLimits = aTrack.GetVolume()->GetLogicalVolume()->GetUserLimits();
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
    G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
-  
+
    if (pUserLimits) {
      //min kinetic energy
      G4double temp = DBL_MAX;
      G4double    eKine     = aParticle->GetKineticEnergy();
-     G4Material* aMaterial = aTrack.GetMaterial();
+     const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
      G4double eMin = pUserLimits->GetUserMinEkine(aTrack);
 
      G4double    rangeNow = DBL_MAX;
      if (aParticleDef->GetPDGCharge() != 0.0) {
-       rangeNow = G4EnergyLossTables::GetRange(aParticleDef,eKine,aMaterial);
+       rangeNow = G4EnergyLossTables::GetRange(aParticleDef,eKine,couple);
      }
      if (eKine < eMin ) {
        proposedStep = 0.;
      } else if (aParticleDef->GetPDGCharge() != 0.0) {
        // charged particles only
-       G4double rangeMin = G4EnergyLossTables::GetRange(aParticleDef,eMin,aMaterial);
+       G4double rangeMin = G4EnergyLossTables::GetRange(aParticleDef,eMin,couple);
        temp = rangeNow - rangeMin;
-       if (proposedStep > temp) proposedStep = temp;        
+       if (proposedStep > temp) proposedStep = temp;
      }
    }
    return proposedStep;

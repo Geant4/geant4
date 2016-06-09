@@ -72,6 +72,7 @@
     G4double random = G4UniformRand();
     for( i=0; i < numberOfElements; ++i )
     { 
+      if(i!=0) runningSum[i]+=runningSum[i-1]; // hpw bug fix
       if( random<=runningSum[i]/crossSectionTotal )
       {
         currentZ = G4double( ((*theElementVector)[i])->GetZ());

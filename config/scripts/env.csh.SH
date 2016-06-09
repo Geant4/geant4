@@ -287,6 +287,20 @@ setenv G4USE_G3TOG4 1
 echo "On this machine the G4USE_G3TOG4=\$G4USE_G3TOG4"
 endif 
 
+#
+# Use STEP module
+#
+#+
+if ( X$g4wlib_build_step == Xy )  then
+setenv G4LIB_BUILD_STEP 1
+echo "On this machine the G4LIB_BUILD_STEP=\$G4LIB_BUILD_STEP"
+endif 
+
+if ( X$g4w_use_step == Xy )  then
+setenv G4USE_STEP 1
+echo "On this machine the G4USE_STEP=\$G4USE_STEP"
+endif 
+
 #+
 #
 # g4shared
@@ -334,10 +348,37 @@ $spitshell >>env.csh <<'!NO!SUBS!'
 if ( ${?G4WORKDIR} ) then
 echo "In your environment you have the G4WORKDIR=$G4WORKDIR"
 else
-echo "G4WORKDIR will be set to HOME=$HOME."
-setenv G4WORKDIR $HOME
+# Check for Windows!
+if ( "X$G4SYSTEM" == "XWIN32-VC" || "X$G4SYSTEM" == "XWIN32-VC7" ) then
+
+setenv checkdrive `echo $HOME|cut -d"/" -f2`
+
+if ( "X$checkdrive" == "Xcygdrive" ) then
+
+setenv windrive `echo $HOME|cut -d"/" -f3`
+setenv winpath `echo $HOME|cut -d"/" -f4-`
+
+setenv fullwinpath "$windrive:/$winpath"
+setenv G4WORKDIR $fullwinpath
+
+endif # if cygwin syntax is used
+
+if ( "X$winpath" == "X" ) then
+echo "G4WORKDIR will be set to ${G4WORKDIR}geant4 (in "native" Windows syntax)."
+setenv G4WORKDIR ${G4WORKDIR}geant4
+else
+echo "G4WORKDIR will be set to $G4WORKDIR/geant4 (in "native" Windows syntax)."
+setenv G4WORKDIR $G4WORKDIR/geant4
 endif
 
+
+else # if Unix
+
+echo "G4WORKDIR will be set to HOME/geant4=$HOME/geant4"
+setenv G4WORKDIR $HOME/geant4
+
+endif
+endif
 
 !NO!SUBS!
 chmod 755 env.csh

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name:  $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -250,7 +250,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=40.25s Real=52.67s Sys=7.56s
+  User=40.15s Real=138.86s Sys=7.17s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 

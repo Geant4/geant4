@@ -27,8 +27,8 @@
 #include "G4ios.hh"
 #include <vector>
 
-#include "G4MultipleScatteringSTD.hh"
-#include "G4hIonisationSTD.hh"
+#include "G4MultipleScattering52.hh"
+#include "G4hIonisation52.hh"
 #include "G4ProcessManager.hh"
 
 class G4HadronModelQEDBuilder 
@@ -41,65 +41,65 @@ class G4HadronModelQEDBuilder
     virtual void Build();
 
   private:  
-    void RegisterOne(G4ProcessManager* aP, G4MultipleScatteringSTD * aM, G4hIonisationSTD* aI);
+    void RegisterOne(G4ProcessManager* aP, G4MultipleScattering52 * aM, G4hIonisation52* aI);
 
   private:
   
    // Pi + 
-   G4MultipleScatteringSTD thePionPlusMult;
-   G4hIonisationSTD thePionPlusIonisation;
+   G4MultipleScattering52 thePionPlusMult;
+   G4hIonisation52 thePionPlusIonisation;
 
    // Pi -
-   G4MultipleScatteringSTD thePionMinusMult;
-   G4hIonisationSTD thePionMinusIonisation;
+   G4MultipleScattering52 thePionMinusMult;
+   G4hIonisation52 thePionMinusIonisation;
 
    // K + 
-   G4MultipleScatteringSTD theKaonPlusMult;
-   G4hIonisationSTD theKaonPlusIonisation;
+   G4MultipleScattering52 theKaonPlusMult;
+   G4hIonisation52 theKaonPlusIonisation;
 
    // K -
-   G4MultipleScatteringSTD theKaonMinusMult;
-   G4hIonisationSTD theKaonMinusIonisation;
+   G4MultipleScattering52 theKaonMinusMult;
+   G4hIonisation52 theKaonMinusIonisation;
 
    // Proton
-   G4MultipleScatteringSTD theProtonMult;
-   G4hIonisationSTD theProtonIonisation;
+   G4MultipleScattering52 theProtonMult;
+   G4hIonisation52 theProtonIonisation;
  
    // anti-proton
-   G4MultipleScatteringSTD theAntiProtonMult;
-   G4hIonisationSTD theAntiProtonIonisation; 
+   G4MultipleScattering52 theAntiProtonMult;
+   G4hIonisation52 theAntiProtonIonisation; 
       
    // SigmaMinus
-   G4MultipleScatteringSTD theSigmaMinusMult;
-   G4hIonisationSTD theSigmaMinusIonisation;
+   G4MultipleScattering52 theSigmaMinusMult;
+   G4hIonisation52 theSigmaMinusIonisation;
   
    // AntiSigmaMinus
-   G4MultipleScatteringSTD theAntiSigmaMinusMult;
-   G4hIonisationSTD theAntiSigmaMinusIonisation;
+   G4MultipleScattering52 theAntiSigmaMinusMult;
+   G4hIonisation52 theAntiSigmaMinusIonisation;
    
    // SigmaPlus
-   G4MultipleScatteringSTD theSigmaPlusMult;
-   G4hIonisationSTD theSigmaPlusIonisation;
+   G4MultipleScattering52 theSigmaPlusMult;
+   G4hIonisation52 theSigmaPlusIonisation;
   
    // AntiSigmaPlus
-   G4MultipleScatteringSTD theAntiSigmaPlusMult;
-   G4hIonisationSTD theAntiSigmaPlusIonisation;
+   G4MultipleScattering52 theAntiSigmaPlusMult;
+   G4hIonisation52 theAntiSigmaPlusIonisation;
     
    // XiMinus
-   G4MultipleScatteringSTD theXiMinusMult;
-   G4hIonisationSTD theXiMinusIonisation;
+   G4MultipleScattering52 theXiMinusMult;
+   G4hIonisation52 theXiMinusIonisation;
 
    // AntiXiMinus
-   G4MultipleScatteringSTD theAntiXiMinusMult;
-   G4hIonisationSTD theAntiXiMinusIonisation;
+   G4MultipleScattering52 theAntiXiMinusMult;
+   G4hIonisation52 theAntiXiMinusIonisation;
   
    // OmegaMinus
-   G4MultipleScatteringSTD theOmegaMinusMult;
-   G4hIonisationSTD theOmegaMinusIonisation;
+   G4MultipleScattering52 theOmegaMinusMult;
+   G4hIonisation52 theOmegaMinusIonisation;
    
    // AntiOmegaMinus
-   G4MultipleScatteringSTD theAntiOmegaMinusMult;
-   G4hIonisationSTD theAntiOmegaMinusIonisation;
+   G4MultipleScattering52 theAntiOmegaMinusMult;
+   G4hIonisation52  theAntiOmegaMinusIonisation;
 
    
 };

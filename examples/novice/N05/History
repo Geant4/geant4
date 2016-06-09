@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2003/05/28 11:20:40 gcosmo Exp $
+$Id: History,v 1.16 2003/08/27 16:15:42 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 27, 2003 Vladimir Ivanchenko (exampleN05-V05-02-00)
+- Migrade to cut per region
 
 May 28, 2003 Gabriele Cosmo (exampleN05-V05-01-00)
 - Get rid of pedantic warnings ...

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc,v 1.9 2001/07/11 10:01:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4DecayProducts.cc,v 1.10 2003/09/12 19:21:07 asaim Exp $
+// GEANT4 tag $Name: particles-V05-02-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -67,11 +67,14 @@ G4DecayProducts::G4DecayProducts(const G4DecayProducts &right)
   {
     G4DynamicParticle* daughter = right.theProductVector[index];
     const G4DecayProducts* pPreAssigned = daughter->GetPreAssignedDecayProducts();
+    G4double properTime = daughter->GetPreAssignedDecayProperTime();
     G4DynamicParticle* pDaughter =  new G4DynamicParticle(*daughter);
 
     if (pPreAssigned) {
       G4DecayProducts* pPA = new G4DecayProducts(*pPreAssigned);
       pDaughter->SetPreAssignedDecayProducts(pPA);
+      if(properTime>0.0)
+      { pDaughter->SetPreAssignedDecayProperTime(properTime); }
     }
 
     PushProducts( pDaughter );

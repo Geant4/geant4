@@ -21,9 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoNuclearCrossSection.cc,v 1.11 2003/06/16 17:03:07 gunter Exp $
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-05-02 $
+// GEANT4 tag $Name: gcross-V05-02-01 $
 //
 //
 // G4 Physics class: G4PhotoNuclearCrossSection for gamma+A cross sections

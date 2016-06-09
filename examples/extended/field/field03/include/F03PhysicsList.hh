@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: F03PhysicsList.hh,v 1.3 2001/10/15 17:20:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: F03PhysicsList.hh,v 1.4 2003/08/27 17:50:29 vnivanch Exp $
+// GEANT4 tag $Name: fieldex-V05-02-00 $
 //
 
 #ifndef F03PhysicsList_h
@@ -66,11 +66,11 @@ class F03PhysicsList: public G4VUserPhysicsList
     // Construct particle and physics
     void ConstructParticle();
     void ConstructProcess();
- 
+
     void SetCuts();
 
   protected:
-    // these methods Construct particles 
+    // these methods Construct particles
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
@@ -83,14 +83,11 @@ class F03PhysicsList: public G4VUserPhysicsList
     void AddParameterisation();
     void ConstructGeneral();
     void ConstructEM();
-    
+
   public:
 
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
-    void SetProtonCut(G4double);
-    void SetCutsByEnergy(G4double);
-    void GetRange(G4double);
 
     void SetMaxStep(G4double);
 
@@ -121,7 +118,6 @@ class F03PhysicsList: public G4VUserPhysicsList
 
     G4double cutForGamma;
     G4double cutForElectron;
-    G4double cutForProton;
 
     F03DetectorConstruction* pDet;
     F03PhysicsListMessenger* physicsListMessenger;

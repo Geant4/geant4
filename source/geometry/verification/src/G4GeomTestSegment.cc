@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.2 2003/06/16 16:54:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4GeomTestSegment.cc,v 1.4 2003/09/29 10:25:09 gcosmo Exp $
+// GEANT4 tag $Name: geomver-V05-02-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -294,7 +294,7 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
   //
   // Loop
   //
-  // nzero = the number of consequtive zeros
+  // nzero = the number of consecutive zeros
   //
   G4int nzero=0;
   
@@ -304,15 +304,10 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
     //
     p = p0 + s*v;
     
-    //
-    // Record point
-    //
-    points.push_back( G4GeomTestPoint( p, s, entering==forward ) );
-    
     if (nzero > 2) {
       //
-      // Oops. Infinite loop. Probably a geometry bug.
-      // We can give the solid a little help with a push
+      // Oops. In a loop. Probably along a spherical or cylindrical surface.
+      // Let's give the tool a little help with a push
       //
       G4double push = 1E-6;
       s += sign*push;
@@ -320,11 +315,11 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
         p = p0 + s*v;
         EInside inside = solid->Inside(p);
         if (inside == kInside) {
-          entering = false;
+          entering = true;
           break;
         }
         else if (inside == kOutside) {
-          entering = true;
+          entering = false;
           break;
         }
 
@@ -336,6 +331,13 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
         }
         s += sign*push;
       }
+    }
+    else {
+
+      //
+      // Record point
+      //
+      points.push_back( G4GeomTestPoint( p, s, entering==forward ) );
     }
     
     //

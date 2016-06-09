@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticDataSet.cc,v 1.5 2002/12/12 19:16:51 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02 $
+// $Id: G4HadronElasticDataSet.cc,v 1.6 2003/07/01 15:08:46 hpw Exp $
+// GEANT4 tag $Name: gcross-V05-02-01 $
 //
 //
 // G4 Physics class: HadronElasticDataSet for cross sections
