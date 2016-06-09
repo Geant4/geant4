@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.30 2006/06/29 19:24:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ParticleDefinition.hh,v 1.31 2007/03/11 07:17:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -48,6 +48,7 @@
 // added  sub-type  H.Kurashige 15 Feb. 2000
 // added  RestoreCuts  H.Kurashige 09 Mar. 2001
 // restructuring for Cuts per Region  by Hisaya    11 MAr.2003 
+// added  MagneticMoment               Mar. 2007
 // ------------------------------------------------------------
 
 #ifndef G4ParticleDefinition_h
@@ -101,7 +102,8 @@ class G4ParticleDefinition
 			   G4DecayTable     *decaytable,
 			   G4bool           shortlived = false,
                            const G4String&  subType ="",
-                           G4int            anti_encoding =0);
+                           G4int            anti_encoding =0,
+			   G4double         magneticMoment = 0.0);
 
        virtual ~G4ParticleDefinition();
       
@@ -124,6 +126,9 @@ class G4ParticleDefinition
       G4int    GetPDGiIsospin() const { return thePDGiIsospin; }
       G4int    GetPDGiIsospin3() const { return thePDGiIsospin3; }
       G4int    GetPDGiGParity() const { return thePDGiGParity; }
+ 
+      G4double GetPDGMagneticMoment() const { return thePDGMagneticMoment; }
+  void SetPDGMagneticMoment(G4double mageticMoment);
 
       const G4String& GetParticleType() const { return theParticleType; }
       const G4String& GetParticleSubType() const { return theParticleSubType; }
@@ -141,6 +146,7 @@ class G4ParticleDefinition
       //  The value of flavor is assigned as follows 
       // 1:d, 2:u, 3:s, 4:c, 5:b, 6:t
  
+
   public: // With Description
       // ShortLived flag
       G4bool   IsShortLived() const { return fShortLivedFlag; }
@@ -254,6 +260,9 @@ class G4ParticleDefinition
       G4double thePDGIsospin;
       G4double thePDGIsospin3;
       //  The isospin quantum number in units of 1.
+ 
+      G4double thePDGMagneticMoment;
+      //  The magnetic moment.
 
       G4int theLeptonNumber;
       //  The lepton quantum number.

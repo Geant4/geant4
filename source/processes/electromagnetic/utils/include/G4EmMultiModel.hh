@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.hh,v 1.5 2006/06/29 19:54:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmMultiModel.hh,v 1.6 2007/05/22 17:31:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -84,11 +84,11 @@ public:
 			G4double cutEnergy,
 			G4double maxEnergy);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double tmax);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double tmax);
 
   void DefineForRegion(const G4Region*);
 

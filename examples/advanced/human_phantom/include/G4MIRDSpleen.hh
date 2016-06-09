@@ -35,18 +35,19 @@
 #define G4MIRDSpleen_h 1
 
 #include "G4VPhysicalVolume.hh"
-
+#include "G4VOrgan.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDSpleen
+class G4MIRDSpleen: public G4VOrgan
 {
 public:
 
   G4MIRDSpleen();
   ~G4MIRDSpleen();
-  G4VPhysicalVolume* ConstructSpleen(G4VPhysicalVolume*, G4String, G4bool);
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,  
+				    const G4String&, G4bool, G4bool);
  
 };
 #endif

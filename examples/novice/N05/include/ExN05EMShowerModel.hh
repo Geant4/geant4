@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN05EMShowerModel.hh,v 1.10 2006/06/29 17:52:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //----------------------------------------------

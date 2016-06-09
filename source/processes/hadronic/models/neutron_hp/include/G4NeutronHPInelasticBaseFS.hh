@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.11 2006/06/29 20:48:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.12 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPInelasticBaseFS_h
 #define G4NeutronHPInelasticBaseFS_h 1
@@ -49,18 +49,18 @@ class G4NeutronHPInelasticBaseFS : public G4NeutronHPFinalState
     hasXsec = true; 
     theXsection = new G4NeutronHPVector;
     
-    theEnergyDistribution = NULL;
-    theFinalStatePhotons = NULL;
-    theEnergyAngData = NULL;
-    theAngularDistribution = NULL;
+    theEnergyDistribution = 0;
+    theFinalStatePhotons = 0;
+    theEnergyAngData = 0;
+    theAngularDistribution = 0;
   }
   virtual ~G4NeutronHPInelasticBaseFS()
   {
     delete theXsection;
-    if(theEnergyDistribution!=NULL) delete theEnergyDistribution;
-    if(theFinalStatePhotons!=NULL) delete theFinalStatePhotons;
-    if(theEnergyAngData!=NULL) delete theEnergyAngData;
-    if(theAngularDistribution!=NULL) delete theAngularDistribution;
+    if(theEnergyDistribution!=0) delete theEnergyDistribution;
+    if(theFinalStatePhotons!=0) delete theFinalStatePhotons;
+    if(theEnergyAngData!=0) delete theEnergyAngData;
+    if(theAngularDistribution!=0) delete theAngularDistribution;
   }
   
   void Init (G4double A, G4double Z, G4String & dirName, G4String & bit);

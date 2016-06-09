@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4HepRepFileSceneHandler.cc,v 1.64 2006/11/16 21:06:11 perl Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // Joseph Perl  27th January 2002

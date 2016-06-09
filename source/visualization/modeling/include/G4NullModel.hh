@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NullModel.hh,v 1.7 2006/06/29 21:30:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison  4th April 1998.

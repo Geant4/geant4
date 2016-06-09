@@ -25,7 +25,7 @@
 //
 //
 // $Id: g4rwPrimaryGeneratorAction.cc,v 1.4 2006/06/29 17:21:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "g4rwPrimaryGeneratorAction.hh"

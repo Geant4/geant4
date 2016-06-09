@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.22 2007/02/08 14:01:55 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.24 2007/04/04 16:50:26 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -62,23 +62,13 @@ public:
   void BeginModeling ();
   void EndModeling ();
   void AddPrimitive (const G4Polyline&);
+  void AddPrimitive (const G4Polymarker&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
-  void AddPrimitive (const G4Polymarker& polymarker);
-  // Explicitly invoke base class methods to avoid warnings about
-  // hiding of base class methods...
-  void AddPrimitive (const G4Text& text) {
-    G4OpenGLSceneHandler::AddPrimitive (text);
-  }
-  void AddPrimitive (const G4Polyhedron& polyhedron) {
-    G4OpenGLSceneHandler::AddPrimitive (polyhedron);
-  }
-  void AddPrimitive (const G4NURBS& nurbs) {
-    G4OpenGLSceneHandler::AddPrimitive (nurbs);
-  }
-  void AddPrimitive (const G4Scale& scale) {
-    G4OpenGLSceneHandler::AddPrimitive (scale);
-  }
+  void AddPrimitive (const G4Text&);
+  void AddPrimitive (const G4Scale&);
+  void AddPrimitive (const G4Polyhedron&);
+  void AddPrimitive (const G4NURBS&);
   void ClearStore ();
   void ClearTransientStore ();
 
@@ -97,19 +87,21 @@ protected:
   GLint  fTopPODL;                  // List which calls the other PODLs.
   struct PO {
     PO(G4int id, const G4Transform3D& tr = G4Transform3D()):
-      fDisplayListId(id), fTransform(tr) {}
+      fDisplayListId(id), fTransform(tr), fPickName(0) {}
     G4int fDisplayListId;
     G4Transform3D fTransform;
+    GLuint fPickName;
   };
   std::vector<PO> fPOList; 
   
   // TO = Transparent Object.
   struct TO {
     TO(G4int id, const G4Transform3D& tr = G4Transform3D()):
-      fDisplayListId(id), fTransform(tr),
+      fDisplayListId(id), fTransform(tr), fPickName(0),
       fStartTime(-G4OPENGL_DBL_MAX), fEndTime(G4OPENGL_DBL_MAX) {}
     G4int fDisplayListId;
     G4Transform3D fTransform;
+    GLuint fPickName;
     G4double fStartTime, fEndTime;  // Time range (e.g., for trajectory steps).
     G4Colour fColour;
   };
@@ -118,6 +110,9 @@ protected:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   std::map <const G4VSolid*, G4int, std::less <const G4VSolid*> > fSolidMap;
+
+private:
+  G4bool fProcessing2D;
 };
 
 #endif

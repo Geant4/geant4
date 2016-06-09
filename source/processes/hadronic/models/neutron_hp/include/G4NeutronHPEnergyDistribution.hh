@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPEnergyDistribution.hh,v 1.10 2006/06/29 20:47:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPEnergyDistribution.hh,v 1.11 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPEnergyDistribution_h
 #define G4NeutronHPEnergyDistribution_h 1
@@ -49,13 +49,13 @@ class G4NeutronHPEnergyDistribution
   public:
   G4NeutronHPEnergyDistribution()
   {
-    theEnergyDistribution = NULL;
+    theEnergyDistribution = 0;
     theNumberOfPartials = 0;
     theRepresentationType = 0;
   }
   ~G4NeutronHPEnergyDistribution()
   {
-    if(theEnergyDistribution != NULL)
+    if(theEnergyDistribution != 0)
     {
       for(G4int i=0; i<theNumberOfPartials; i++) 
       {

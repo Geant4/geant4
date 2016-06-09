@@ -33,7 +33,7 @@
 //
 //
 // $Id: RemSimRoofDecorator.hh,v 1.6 2006/06/29 16:23:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef RemSimRoofDecorator_h

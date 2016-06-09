@@ -51,15 +51,11 @@ G4HumanPhantomMessenger::G4HumanPhantomMessenger(G4HumanPhantomConstruction* myU
   bpDir = new G4UIdirectory("/bodypart/");
   bpDir->SetGuidance("Add Body Part to Phantom");
 
-  cleanCmd = new G4UIcmdWithoutParameter("/phantom/startNewPhantom",this);
-  cleanCmd->SetGuidance("Start a New Phantom and clean previous one.");
-  cleanCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
-
   modelCmd = new G4UIcmdWithAString("/phantom/setPhantomModel",this);
-  modelCmd->SetGuidance("Set sex of Phantom: MIRD, ORNL or MIX.");
+  modelCmd->SetGuidance("Set sex of Phantom: MIRD, ORNLFemale, ORNLMale, MIX, MIRDHead, ORNLHead.");
   modelCmd->SetParameterName("phantomModel",true);
   modelCmd->SetDefaultValue("MIRD");
-  modelCmd->SetCandidates("MIRD ORNL MIX");
+  modelCmd->SetCandidates("MIRD ORNLFemale ORNLMale MIX MIRDHead ORNLHead");
   modelCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
   sexCmd = new G4UIcmdWithAString("/phantom/setPhantomSex",this);
@@ -82,7 +78,6 @@ G4HumanPhantomMessenger::G4HumanPhantomMessenger(G4HumanPhantomConstruction* myU
 
 G4HumanPhantomMessenger::~G4HumanPhantomMessenger()
 {
-  delete  cleanCmd;
   delete  modelCmd;
   delete  sexCmd;
   delete  bodypartCmd;
@@ -92,10 +87,7 @@ G4HumanPhantomMessenger::~G4HumanPhantomMessenger()
 }
 
 void G4HumanPhantomMessenger::SetNewValue(G4UIcommand* command,G4String newValue){ 
-  if( command == cleanCmd )
-    { 
-      myUserPhantom->CleanPhantom();
-    } 
+
   if( command == modelCmd )
     { 
       myUserPhantom->SetPhantomModel(newValue); 
@@ -113,10 +105,6 @@ void G4HumanPhantomMessenger::SetNewValue(G4UIcommand* command,G4String newValue
       G4cout << 
 	" ****************>>>> NEW PHANTOM CONSTRUCTION <<<<***************** " 
 	     << G4endl;
-
-      //myUserPhantom->UpdatePhantom();
-
-      //G4RunManager::GetRunManager()->Initialize();
     }
 }
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.hh,v 1.12 2006/10/20 08:59:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eeToTwoGammaModel.hh,v 1.14 2007/05/23 08:47:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,8 @@
 #define G4eeToTwoGammaModel_h 1
 
 #include "G4VEmModel.hh"
+
+class G4ParticleChangeForGamma;
 
 class G4eeToTwoGammaModel : public G4VEmModel
 {
@@ -88,11 +90,11 @@ public:
 					 G4double cutEnergy,
 					 G4double maxEnergy);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double maxEnergy);
 
 private:
 
@@ -102,6 +104,8 @@ private:
 
   G4double pi_rcl2;
   G4ParticleDefinition*  theGamma;
+  G4ParticleChangeForGamma* fParticleChange;
+  G4bool isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

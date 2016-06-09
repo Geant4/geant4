@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2007/04/20 07:53:32 asaim Exp $
+$Id: History,v 1.25 2007/06/05 16:46:55 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 4, 2007, A.Howard (digits_hits-V08-03-04)
+- Removed G4PSPopulation class to obviate circular dependency
+
+June 4, 2007, A.Howard (digits_hits-V08-03-03)
+- Put back some classes required for scoring of geometrical biasing cells:
+  G4CellScoreValues, G4CellScoreComposer
+
+May 31, 2007, A.Howard (digits_hits-V08-03-02)
+- Removed classes associated with old biasing/scoring scheme in detector:
+  G4CellScoreComposer, G4CellScoreValues, G4CellStoreScorer
+- Files remain on the HEAD for testing purposes
+
+May 17, 2007, M.Asai (digits_hits-V08-03-01)
+- Introducing new scorers for event biasing options.
+
+May 11, 2007, G.Cosmo (digits_hits-V08-03-00)
+- Make use of G4GeometryTolerance instead of kCarTolerance constant.
+- Requires tag "global-V08-03-00" and related set.
 
 Apr 20, 2007, M.Asai (digits_hits-V08-02-00)
 - Fix the way of counting outward steps in flux scorers.

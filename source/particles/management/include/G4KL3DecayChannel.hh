@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4KL3DecayChannel.hh,v 1.5 2006/06/29 19:23:33 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // ------------------------------------------------------------

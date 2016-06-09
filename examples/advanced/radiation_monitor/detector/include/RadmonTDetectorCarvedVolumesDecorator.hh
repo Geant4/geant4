@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonTDetectorCarvedVolumesDecorator.hh,v 1.5 2006/06/29 16:12:13 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 // Description:   Carves the borders of a component with the following method
 //                 - Constructor

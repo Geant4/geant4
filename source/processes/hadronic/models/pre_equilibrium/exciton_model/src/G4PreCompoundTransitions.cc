@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PreCompoundTransitions.cc,v 1.9 2007/05/04 14:50:22 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // by V. Lara
 

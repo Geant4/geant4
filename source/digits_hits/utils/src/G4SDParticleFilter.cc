@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleFilter.cc,v 1.3 2006/06/29 18:08:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SDParticleFilter.cc,v 1.4 2007/05/18 00:00:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4VSensitiveDetector
 #include "G4SDParticleFilter.hh"

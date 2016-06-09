@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFacet.cc,v 1.4 2007/02/12 09:34:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4VFacet.cc,v 1.5 2007/05/11 13:54:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -48,13 +48,15 @@
 
 #include "G4VFacet.hh"
 #include "globals.hh"
+#include "G4GeometryTolerance.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4VFacet::G4VFacet ()
 {
   dirTolerance = 1.0E-14;
-  
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   P.clear();
   E.clear();
     

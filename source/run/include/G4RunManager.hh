@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.47 2007/03/08 23:54:04 asaim Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4RunManager.hh,v 1.48 2007/05/04 16:02:58 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 
@@ -428,7 +428,8 @@ class G4RunManager
     { runIDCounter = i; }
     //  Set the run number counter. Initially, the counter is initialized to zero and
     // incremented by one for every BeamOn().
-
+    inline G4int GetNumberOfParallelWorld() const
+    { return nParallelWorlds; }
   public:
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }

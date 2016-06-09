@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AnalyticalPolSolver.hh,v 1.5 2006/06/29 18:59:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Class description:
 //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.16 2006/10/30 09:50:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Step.hh,v 1.17 2007/03/25 22:54:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 //---------------------------------------------------------------
@@ -52,8 +52,9 @@
 //                                                  12 May. 1998 H.Kurashige
 // ---------------------------------------------------------------
 //   Separate implementation of inline functions inti G4Step.icc
-//   Add updating mass/charge  
-//                                                  6 Oct. 1999 H.Kurashige
+//   Add updating mass/charge                        6 Oct. 1999 H.Kurashige
+//   add nonIonizingEnergyLoss                      26 Mar. 2007 H.Kurashige 
+//
 //   Repository test - Dennis Wright
 //
 #ifndef G4Step_h
@@ -122,6 +123,10 @@ class G4Step
    void AddTotalEnergyDeposit(G4double value);
    void ResetTotalEnergyDeposit();
 
+   // manipulation of non-ionizng energy deposit 
+   void AddNonIonizingEnergyDeposit(G4double value);
+   void ResetNonIonizingEnergyDeposit();
+
 
   // Get/Set/Clear flag for initial/last step
    G4bool IsFirstStepInVolume() const;
@@ -152,6 +157,9 @@ class G4Step
 // Member data
    G4double fTotalEnergyDeposit;
      // Accummulated total energy desposit in the current Step
+
+   G4double fNonIonizingEnergyDeposit;
+     // Accummulated non-ionizing energy desposit in the current Step
 
 //---------
    private:

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTXScanner.cc,v 1.4 2006/06/29 21:24:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RTXScanner.cc,v 1.5 2007/05/22 17:10:42 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 
@@ -47,8 +47,11 @@ extern "C" {
 }
 
 G4RTXScanner::G4RTXScanner():
-  theGSName("RayTracerX"), theGSNickname("RayTracerX"),
-  theNRow(0), theNColumn(0), theIRow(0), theIColumn(0) {}
+  theNRow(0), theNColumn(0), theIRow(0), theIColumn(0)
+{
+  theGSName = "RayTracerX";
+  theGSNickname = "RayTracerX";
+}
 
 const G4String& G4RTXScanner::GetGSName() const
 {return theGSName;}

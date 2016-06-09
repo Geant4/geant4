@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.38 2007/03/17 19:24:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4EmModelManager.cc,v 1.39 2007/04/12 11:55:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,7 @@
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 // 13-05-06 Add GetModel by index method (VI)
 // 15-03-07 Add maxCutInRange (V.Ivanchenko)
+// 12-04-07 Add verbosity at destruction (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -134,6 +135,12 @@ G4EmModelManager::~G4EmModelManager()
 {
   G4int i,j;
   Clear();
+  if(1 < verboseLevel) {
+    G4cout << "G4EmModelManager:: delete models ";
+    if(particle) G4cout << " for " << particle->GetParticleName();
+    G4cout << " nModels=" << nEmModels <<G4endl;
+  }
+
   for(i = 0; i<nEmModels; i++) {
     orderOfModels[i] = 1;
   }
@@ -159,6 +166,8 @@ G4EmModelManager::~G4EmModelManager()
       delete flucModels[i];
     }
   }
+  if(1 < verboseLevel) 
+    G4cout << "G4EmModelManager:: models are deleted!" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -166,7 +175,9 @@ G4EmModelManager::~G4EmModelManager()
 void G4EmModelManager::Clear()
 {
   if(1 < verboseLevel) {
-    G4cout << "G4EmModelManager::Clear()" << G4endl;
+    G4cout << "G4EmModelManager::Clear()";
+    if(particle) G4cout << " for " << particle->GetParticleName();
+    G4cout << G4endl;
   }
 
   theCuts.clear();

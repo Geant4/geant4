@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonVDataAnalysisFactory.hh,v 1.1.2.2 2006/06/29 16:07:19 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 // Description:   Abstract class of a factory of analysis items
 //

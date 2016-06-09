@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.17 2006/10/31 10:01:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4StepPoint.hh,v 1.18 2007/03/11 07:19:06 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 //---------------------------------------------------------------
@@ -39,12 +39,12 @@
 //
 // Contact:
 //   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//     Hisaya Kurashige  
 //
 // ---------------------------------------------------------------
 //   Added fpMaterial                       16 FEb. 2000  H.Kurahige
 //   Added fpMaterialCutsCouple              8 Oct. 2002  H.Kurahige
+//   Added fMagneticMoment                      Mar 2007  H.Kurashige
 
 #ifndef G4StepPoint_h
 #define G4StepPoint_h 1
@@ -165,6 +165,9 @@ class G4StepPoint
   inline G4double GetCharge() const;
   inline void SetCharge(G4double value);
 
+  inline G4double GetMagneticMoment() const;
+  inline void SetMagneticMoment(G4double value);
+
   inline void SetWeight(G4double aValue);
   inline G4double GetWeight() const;
 
@@ -208,6 +211,8 @@ class G4StepPoint
       // Dynamical mass of the particle
    G4double fCharge;
       // Dynamical Charge of the particle
+   G4double fMagneticMoment;
+      // Dynamical MagneticMoment of the particle
    G4double fWeight;
       // Track Weight
 };

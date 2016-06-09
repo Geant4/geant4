@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.12 2006/10/20 08:59:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eeToTwoGammaModel.cc,v 1.14 2007/05/23 08:47:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -70,10 +70,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eeToTwoGammaModel.hh"
+#include "G4TrackStatus.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
+#include "G4ParticleChangeForGamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -82,7 +84,8 @@ using namespace std;
 G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
                                          const G4String& nam)
   : G4VEmModel(nam),
-  pi_rcl2(pi*classic_electr_radius*classic_electr_radius)
+    pi_rcl2(pi*classic_electr_radius*classic_electr_radius),
+    isInitialised(false)
 {
   theGamma = G4Gamma::Gamma();
 }
@@ -96,7 +99,18 @@ G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
 
 void G4eeToTwoGammaModel::Initialise(const G4ParticleDefinition*,
                                      const G4DataVector&)
-{}
+{
+  if(isInitialised) return;
+
+  if(pParticleChange)
+    fParticleChange =
+      reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
+  else
+    fParticleChange = new G4ParticleChangeForGamma();
+
+  isInitialised = true;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(
@@ -148,13 +162,12 @@ G4double G4eeToTwoGammaModel::CrossSectionPerVolume(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* dp,
-                                   G4double,
-                                   G4double)
+void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
+					    const G4MaterialCutsCouple*,
+					    const G4DynamicParticle* dp,
+					    G4double,
+					    G4double)
 {
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   G4double PositKinEnergy = dp->GetKineticEnergy();
 
   // Case at rest
@@ -244,7 +257,8 @@ vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
       << Phot2Direction << G4endl;
     */
   }
-  return vdp;
+  fParticleChange->SetProposedKineticEnergy(0.);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

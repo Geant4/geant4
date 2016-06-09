@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.20 2006/06/29 19:17:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Neutron.cc,v 1.21 2007/03/11 07:17:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -77,6 +77,9 @@ G4Neutron* G4Neutron::Definition()
 		false,       "nucleon",             0,
                   0.0 
               );
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( -1.9130427 * mN);
     //create Decay Table 
     G4DecayTable* table = new G4DecayTable();
     // create a decay channel

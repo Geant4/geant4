@@ -27,7 +27,7 @@
 #define G4FTFCrossSection_h 1
 //
 // $Id: G4FTFCrossSection.hh,v 1.2 2007/04/24 10:37:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #include "G4Proton.hh"
 class G4FTFCrossSection

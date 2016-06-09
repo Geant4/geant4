@@ -41,6 +41,9 @@
 #include "G4HumanPhantomMaterial.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4HumanPhantomColour.hh"
+
 G4MIRDUrinaryBladder::G4MIRDUrinaryBladder()
 {
 }
@@ -49,34 +52,40 @@ G4MIRDUrinaryBladder::~G4MIRDUrinaryBladder()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDUrinaryBladder::Construct(const G4String& volumeName, G4VPhysicalVolume* mother,
+							const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
 {
  
- G4cout << "ConstructUrinaryBladded for " << sex << G4endl;
+  G4cout << "Construct " << volumeName << G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
 
- G4double ax = 4.27*cm;
- G4double by= 3.38 *cm;
- G4double cz= 3.11 *cm;
- G4double zcut1= -3.11*cm;
- G4double zcut2= 3.11*cm;
-
- G4Ellipsoid* bladder = new G4Ellipsoid("bladder",ax, by, cz, zcut1, zcut2 );
+ G4double ax = 4.958*cm; 
+ G4double by= 3.458 *cm;
+ G4double cz= 3.458 *cm;
  
- G4LogicalVolume* logicUrinaryBladder = new G4LogicalVolume(bladder, soft,
-							    "UrinaryBladderVolume",
+ G4Ellipsoid* bladder = new G4Ellipsoid("bladder_out",ax, by, cz);
+ 
+ ax = 4.706 * cm;
+ by = 3.206 * cm;
+ cz = 3.206 * cm;
+ G4Ellipsoid* inner = new G4Ellipsoid("innerBladder", ax, by, cz);
+ 
+ G4SubtractionSolid* totalBladder = new G4SubtractionSolid("bladder", bladder, inner);
+
+ G4LogicalVolume* logicUrinaryBladder = new G4LogicalVolume(totalBladder, soft,
+							    "logical" + volumeName,
 							    0, 0, 0);
   
   // Define rotation and position here!
-  G4VPhysicalVolume* physUrinaryBladder = new G4PVPlacement(0,G4ThreeVector(0 *cm, -4.41 *cm,-24.34 *cm),
+  G4VPhysicalVolume* physUrinaryBladder = new G4PVPlacement(0,G4ThreeVector(0 *cm, -4.5 *cm,-27. *cm),
       			       "physicalUrinaryBladder",
   			       logicUrinaryBladder,
 			       mother,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)
@@ -86,8 +95,12 @@ G4VPhysicalVolume* G4MIRDUrinaryBladder::ConstructUrinaryBladder(G4VPhysicalVolu
   }
 
   // Visualization Attributes
-  G4VisAttributes* UrinaryBladderVisAtt = new G4VisAttributes(G4Colour(0.85,0.65,0.125));
-  UrinaryBladderVisAtt->SetForceSolid(true);
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* UrinaryBladderVisAtt = new G4VisAttributes(colour);
+  //G4VisAttributes* UrinaryBladderVisAtt = new G4VisAttributes(G4Colour(0.85,0.65,0.125));
+
+  UrinaryBladderVisAtt->SetForceSolid(wireFrame);
   logicUrinaryBladder->SetVisAttributes(UrinaryBladderVisAtt);
 
   G4cout << "UrinaryBladder created !!!!!!" << G4endl;

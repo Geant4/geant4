@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2006/10/19 15:34:03 gcosmo Exp $
+$Id: History,v 1.96 2007/05/18 07:38:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 18, 2007  G.Cosmo                    geom-csg-V08-03-01
+- Use kAngTolerance and kRadTolerance from G4GeometryTolerance class.
+- Coworks with tag "global-V08-03-03".
+
+May 16, 2007  T.Nikitina                 geom-csg-V08-03-00          
+- G4Tubs: fixed bug for DistanceToOut(p,v) for phi section.
+  Bug was causing segmentation fault in recursive_test (problem report #784). 
+  For v crossing the center of the tub DistanceToOut was always giving
+  Radial distance and not distance in Phi.  
+- G4Cons: fixed bug for DistanceToOut(p,v) for phi section,
+  the same as for G4Tubs. 
+- Updated unit tests.
 
 Oct 19, 2006  G.Cosmo                    geom-csg-V08-01-00
 - Added explicit computation for GetSurfaceArea() for all solids

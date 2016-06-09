@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RemSimPhotonEPDL.cc,v 1.7 2006/06/29 16:24:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //

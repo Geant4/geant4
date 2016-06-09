@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh,v 1.10 2006/11/01 10:08:41 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4AttDefStore.hh,v 1.11 2007/04/03 13:58:07 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #ifndef G4ATTDEFSTORE_HH
 #define G4ATTDEFSTORE_HH
@@ -35,37 +35,23 @@
 
 class G4AttDef;
 
-class G4AttDefStore
-{
-  public:
+namespace G4AttDefStore {
 
-    static std::map<G4String,G4AttDef>*
-    GetInstance(G4String storeKey, G4bool& isNew);
-      // Returns a pointer to the definitions accessed by the given
-      // key.  "isNew" is true if definitions pointer is new and
-      // therefore the needs filling.  The store keeps the ownership
-      // of the returned pointer.  See G4Trajectory::GetAttDefs for an
-      // example of the use of this class.
+  std::map<G4String,G4AttDef>*
+  GetInstance(G4String storeKey, G4bool& isNew);
+  // Returns a pointer to the definitions accessed by the given key.
+  // "isNew" is true if definitions pointer is new and therefore the
+  // needs filling.  The store keeps the ownership of the returned
+  // pointer.  See G4Trajectory::GetAttDefs for an example of the use
+  // of this class.
 
-    static G4bool GetStoreKey
-    (const std::map<G4String,G4AttDef>* definitions, G4String& key);
-      // Returns true and assigns key if definitions are amongst those
-      // maintained in the store.
+  G4bool GetStoreKey
+  (const std::map<G4String,G4AttDef>* definitions, G4String& key);
+  // Returns true and assigns key if definitions are amongst those
+  // maintained in the store.
 
-    ~G4AttDefStore();
-      // Destructor.
+  extern std::map<G4String,std::map<G4String,G4AttDef>*> m_defsmaps;
 
-  protected:
-
-    G4AttDefStore();
-
-  private:
-
-    G4AttDefStore(const G4AttDefStore&);
-    G4AttDefStore& operator=(const G4AttDefStore&);
-
-    static std::map<G4String,std::map<G4String,G4AttDef>*> m_defsmaps;
-    static G4AttDefStore* theInstance;
-};
+}
 
 #endif //G4ATTDEFSTORE_H

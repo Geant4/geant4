@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.82 2007/03/17 19:24:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4LossTableManager.cc,v 1.84 2007/06/14 07:28:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -68,6 +68,7 @@
 // 16-01-07 Create new energy loss table for e+,e-,mu+,mu- and 
 //          left ionisation table for further usage (VI)
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
+// 18-06-07 Move definition of msc parameters to G4EmProcessOptions (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -123,6 +124,7 @@ G4LossTableManager::~G4LossTableManager()
   Clear();
   delete theMessenger;
   delete tableBuilder;
+  delete emCorrections;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -157,11 +159,7 @@ G4LossTableManager::G4LossTableManager()
   maxEnergyForMuonsActive = false;
   stepFunctionActive = false;
   flagLPM = true;
-  flagMSC = true;
-  flagMSCLateral = true;
-  facRange = 0.02;
   bremsTh = DBL_MAX;
-  mscActive = false;
   verbose = 1;
 }
 
@@ -227,7 +225,6 @@ void G4LossTableManager::DeRegister(G4VEnergyLossProcess* p)
 void G4LossTableManager::Register(G4VMultipleScattering* p)
 {
   msc_vector.push_back(p);
-  if(mscActive) p->MscStepLimitation(flagMSC, facRange);
   if(verbose > 1) 
     G4cout << "G4LossTableManager::Register G4VMultipleScattering : " 
 	   << p->GetProcessName() << G4endl;
@@ -714,7 +711,6 @@ void G4LossTableManager::SetDEDXBinning(G4int val)
   }
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::SetDEDXBinningForCSDARange(G4int val)
@@ -728,9 +724,6 @@ void G4LossTableManager::SetDEDXBinningForCSDARange(G4int val)
 
 void G4LossTableManager::SetLambdaBinning(G4int val)
 {
-  for(G4int i=0; i<n_loss; i++) {
-    if(loss_vector[i]) loss_vector[i]->SetLambdaBinning(val);
-  }
   size_t msc = msc_vector.size();
   for (size_t j=0; j<msc; j++) {
     if(msc_vector[j]) msc_vector[j]->SetBinning(val);
@@ -830,65 +823,9 @@ void G4LossTableManager::SetLPMFlag(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetMscLateralDisplacement(G4bool val)
-{
-  flagMSCLateral = val;
-  size_t msc = msc_vector.size();
-  for (size_t j=0; j<msc; j++) {
-    if(msc_vector[j]) msc_vector[j]->SetLateralDisplasmentFlag(val);
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-void G4LossTableManager::SetSkin(G4double val)
-{
-  if(val < 0.0) return;
-  size_t msc = msc_vector.size();
-  for (size_t j=0; j<msc; j++) {
-    if(msc_vector[j]) msc_vector[j]->SetSkin(val);
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
 G4bool G4LossTableManager::LPMFlag() const
 {
   return flagLPM;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4bool G4LossTableManager::MscLateralDisplacementFlag() const
-{
-  return flagMSCLateral;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LossTableManager::SetMscStepLimitation(G4bool val, G4double factor)
-{
-  mscActive = true;
-  flagMSC = val;
-  facRange = factor;
-  size_t msc = msc_vector.size();
-  for (size_t j=0; j<msc; j++) {
-    if(msc_vector[j]) msc_vector[j]->MscStepLimitation(val, factor);
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4LossTableManager::MscFlag() const
-{
-  return flagMSC;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LossTableManager::FacRange() const
-{
-  return facRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

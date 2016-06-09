@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PolarizedPairProductionCrossSection.hh,v 1.2 2006/11/17 14:14:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // GEANT4 Class file
 //

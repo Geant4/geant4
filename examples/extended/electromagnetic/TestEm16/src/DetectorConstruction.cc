@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: DetectorConstruction.cc,v 1.4 2007/01/18 09:07:20 hbu Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

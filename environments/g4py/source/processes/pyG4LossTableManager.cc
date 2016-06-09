@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4LossTableManager.cc,v 1.2 2006/08/23 02:17:06 kmura Exp $
-// $Name: geant4-08-02 $
+// $Id: pyG4LossTableManager.cc,v 1.4 2007/06/07 08:59:39 kmura Exp $
+// $Name: geant4-09-00 $
 // ====================================================================
 //   pyG4LossTableManager.cc
 //
@@ -83,13 +83,30 @@ void export_G4LossTableManager()
 #if G4VERSION_NUMBER >= 810
     .def("BuildCSDARange",       &G4LossTableManager::BuildCSDARange)
     .def("LPMFlag",              &G4LossTableManager::LPMFlag)
+    .def("BremsstrahlungTh",     &G4LossTableManager::BremsstrahlungTh)
+
+#if G4VERSION_NUMBER <= 830
     .def("SetMscStepLimitation", &G4LossTableManager::SetMscStepLimitation)
     .def("MscFlag",              &G4LossTableManager::MscFlag)
     .def("FacRange",             &G4LossTableManager::FacRange)
-    .def("BremsstrahlungTh",     &G4LossTableManager::BremsstrahlungTh)
+#endif
+
 #else
     .def("BuildPreciseRange",    &G4LossTableManager::BuildPreciseRange)
 #endif
+
+    // ---
+#if G4VERSION_NUMBER == 830
+    .def("SetMscLateralDisplacement", 
+         &G4LossTableManager::SetMscLateralDisplacement)
+    .def("SetSkin",              &G4LossTableManager::SetSkin)
+#endif
+
+#if G4VERSION_NUMBER >= 830
+    .def("SetLinearLossLimit",   &G4LossTableManager::SetLinearLossLimit)
+#endif
+
     ;
+
 }
 

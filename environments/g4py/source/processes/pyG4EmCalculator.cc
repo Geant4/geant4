@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4EmCalculator.cc,v 1.5 2006/08/25 05:58:52 kmura Exp $
-// $Name: geant4-08-02 $
+// $Id: pyG4EmCalculator.cc,v 1.6 2007/05/28 03:11:20 kmura Exp $
+// $Name: geant4-09-00 $
 // ====================================================================
 //   pyG4EmCalculator.cc
 //
@@ -146,7 +146,6 @@ G4double (G4EmCalculator::*f2_ComputeNuclearDEDX)
   = &G4EmCalculator::ComputeNuclearDEDX;
 #endif
 
-
 #if G4VERSION_NUMBER >= 810
 // ComputeElectronicDEDX
 G4double (G4EmCalculator::*f1_ComputeElectronicDEDX)
@@ -160,7 +159,6 @@ G4double (G4EmCalculator::*f2_ComputeElectronicDEDX)
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ComputeElectronicDEDX, 
                                        ComputeElectronicDEDX, 3, 4);
 
-
 // ComputeTotalDEDX
 G4double (G4EmCalculator::*f1_ComputeTotalDEDX)
   (G4double, const G4ParticleDefinition*, const G4Material*, G4double)
@@ -172,7 +170,6 @@ G4double (G4EmCalculator::*f2_ComputeTotalDEDX)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ComputeTotalDEDX, ComputeTotalDEDX, 
                                        3, 4);
-
 #endif
 
 
@@ -204,6 +201,18 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ComputeCrossSectionPerAtom,
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(g_ComputeCrossSectionPerAtom, 
 				       ComputeCrossSectionPerAtom, 4, 5);
+
+#if G4VERSION_NUMBER >= 830
+// ComputeEnergyCutFromRangeCut
+G4double (G4EmCalculator::*f1_ComputeEnergyCutFromRangeCut)
+  (G4double, const G4ParticleDefinition*, const G4Material*)
+  = &G4EmCalculator::ComputeEnergyCutFromRangeCut;
+
+G4double (G4EmCalculator::*f2_ComputeEnergyCutFromRangeCut)
+  (G4double range, const G4String&, const G4String&)
+  = &G4EmCalculator::ComputeEnergyCutFromRangeCut;
+#endif
+
 
 // ComputeMeanFreePath
 G4double (G4EmCalculator::*f1_ComputeMeanFreePath)
@@ -279,6 +288,11 @@ void export_G4EmCalculator()
          f1_ComputeCrossSectionPerAtom, f_ComputeCrossSectionPerAtom())
     .def("ComputeCrossSectionPerAtom",
          f2_ComputeCrossSectionPerAtom, g_ComputeCrossSectionPerAtom())
+#if G4VERSION_NUMBER >= 830
+    .def("ComputeEnergyCutFromRangeCut", f1_ComputeEnergyCutFromRangeCut)
+    .def("ComputeEnergyCutFromRangeCut", f2_ComputeEnergyCutFromRangeCut)
+#endif
+    // ---
     .def("ComputeMeanFreePath", 
 	 f1_ComputeMeanFreePath, f_ComputeMeanFreePath())
     .def("ComputeMeanFreePath",

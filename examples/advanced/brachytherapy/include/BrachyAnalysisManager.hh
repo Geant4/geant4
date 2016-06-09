@@ -23,30 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// Code developed by:
-// S.Guatelli
-//
-//
-// $Id: BrachyAnalysisManager.hh,v 1.11 2006/06/29 15:47:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
-//
-//    **********************************
-//    *                                *
-//    *      BrachyAnalysisManager.hh  *
-//    *                                *
-//    **********************************
-// 
-//
+// $Id: BrachyAnalysisManager.hh,v 1.13 2007/06/21 14:58:39 gunter Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+
+// Code review: MG Pia, 14/05/2207
+// Contact: Geant4-INFN Genova group, MariaGrazia.Pia@ge.infn.it
+
 // The class BrachyAnalysisManager creates and manages histograms and ntuples
 //
-#ifdef G4ANALYSIS_USE
+
 #ifndef G4BRACHYANALYSISMANAGER_HH
 #define G4BRACHYANALYSISMANAGER_HH
 
 #include "globals.hh"
 #include <vector>
 #include "G4ThreeVector.hh"
+
+#ifdef G4ANALYSIS_USE
 #include "AIDA/IHistogram1D.h"
 #include "AIDA/IHistogram2D.h"
 #include "AIDA/IAnalysisFactory.h"
@@ -58,16 +51,16 @@ namespace AIDA{
   class ITupleFactory;
   class ITuple;
   class ITreeFactory;
-};
+}
+#endif
 
 class BrachyAnalysisManager
 {
-private:
-  BrachyAnalysisManager();
 
 public:
   ~BrachyAnalysisManager();
   static BrachyAnalysisManager* getInstance();
+
   void book();
   void FillNtupleWithEnergy(G4double,G4double,G4double,G4float);
   void FillHistogramWithEnergy(G4double,G4double,G4double);
@@ -76,9 +69,10 @@ public:
   void finish();
 
 private:
+  BrachyAnalysisManager();
   static BrachyAnalysisManager* instance;
 
-private:
+#ifdef G4ANALYSIS_USE
   AIDA::IAnalysisFactory*  aFact;
   AIDA::ITree*             theTree;
   AIDA::IHistogramFactory *histFact;
@@ -88,9 +82,10 @@ private:
   AIDA::IHistogram1D *h2;
   AIDA::IHistogram1D *h3;
   AIDA::ITuple *ntuple;
+#endif
+
 };
 
-#endif
 #endif
 
 

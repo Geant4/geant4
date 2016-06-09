@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TwistTrapParallelSide.cc,v 
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -162,7 +162,7 @@ G4ThreeVector G4TwistTrapParallelSide::GetNormal(const G4ThreeVector &tmpxx,
 
    G4ThreeVector normal =  NormAng(phi,u) ;  // the normal vector at phi,u
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout  << "normal vector = " << normal << G4endl ;
    G4cout << "phi = " << phi << " , u = " << u << G4endl ;
 #endif
@@ -223,7 +223,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
   G4ThreeVector p = ComputeLocalPoint(gp);
   G4ThreeVector v = ComputeLocalDirection(gv);
   
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   G4cout << "Local point p = " << p << G4endl ;
   G4cout << "Local direction v = " << v << G4endl ; 
 #endif
@@ -302,7 +302,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
     c[0] = 24*fDz*v.x() - 12*fdeltaX*v.z() ;
 
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
     G4cout << "coef = " << c[0] << " " 
            <<  c[1] << " "  
            <<  c[2] << " "  
@@ -320,7 +320,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
     for (G4int i = 0 ; i<num ; i++ ) {  // loop over all mathematical solutions
       if ( si[i]==0.0 ) {  // only real solutions
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
         G4cout << "Solution " << i << " : " << sr[i] << G4endl ;
 #endif
         phi = std::fmod(sr[i] , pihalf)  ;
@@ -335,7 +335,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
         
         xbuf.push_back(xbuftmp) ;  // store it to xbuf
       
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
         G4cout << "solution " << i << " = " << phi << " , " << u  << G4endl ;
 #endif
 
@@ -357,7 +357,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
   for ( size_t k = 0 ; k<xbuf.size() ; k++ ) {
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
     G4cout << "Solution " << k << " : " 
            << "reconstructed phiR = " << xbuf[k].phi
            << ", uR = " << xbuf[k].u << G4endl ; 
@@ -383,14 +383,14 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
         factor = 1 ;
       }
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
       G4cout << "Step i = " << i << ", distance = " << tmpdist << ", " << deltaX << G4endl ;
       G4cout << "X = " << tmpxx << G4endl ;
 #endif
       
       GetPhiUAtX(tmpxx, phi, u) ; // the new point xx is accepted and phi/u replaced
       
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
       G4cout << "approximated phi = " << phi << ", u = " << u << G4endl ; 
 #endif
       
@@ -403,7 +403,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
     if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
 
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
     G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
     G4cout << "distance = " << tmpdist << G4endl ;
     G4cout << "local X = " << tmpxx << G4endl ;
@@ -448,7 +448,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
   std::sort(xbuf.begin() , xbuf.end(), DistanceSort ) ;  // sorting
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   G4cout << G4endl << "list xbuf after sorting : " << G4endl ;
   G4cout << G4endl << G4endl ;
 #endif
@@ -465,7 +465,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
   if ( nxxtmp<2 || IsParallel  ) {
 
     // positive end
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
     G4cout << "add guess at +z/2 .. " << G4endl ;
 #endif
 
@@ -481,7 +481,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
     xbuf.push_back(xbuftmp) ;  // store it to xbuf
 
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
     G4cout << "add guess at -z/2 .. " << G4endl ;
 #endif
 
@@ -498,7 +498,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
     for ( size_t k = nxxtmp ; k<xbuf.size() ; k++ ) {
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
       G4cout << "Solution " << k << " : " 
              << "reconstructed phiR = " << xbuf[k].phi
              << ", uR = " << xbuf[k].u << G4endl ; 
@@ -523,14 +523,14 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
           factor = 1 ;
         }
         
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
         G4cout << "Step i = " << i << ", distance = " << tmpdist << ", " << deltaX << G4endl ;
         G4cout << "X = " << tmpxx << G4endl ;
 #endif
 
         GetPhiUAtX(tmpxx, phi, u) ; // the new point xx is accepted and phi/u replaced
       
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
         G4cout << "approximated phi = " << phi << ", u = " << u << G4endl ; 
 #endif
       
@@ -543,7 +543,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
       if ( std::fabs(tmpdist)<ctol ) tmpdist = 0 ; 
 
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
       G4cout << "refined solution "  << phi << " , " << u  <<  G4endl ;
       G4cout << "distance = " << tmpdist << G4endl ;
       G4cout << "local X = " << tmpxx << G4endl ;
@@ -595,7 +595,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
   // erase identical intersection (within kCarTolerance) 
   xbuf.erase( std::unique(xbuf.begin(), xbuf.end() , EqualIntersection ) , xbuf.end() ) ;
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   G4cout << G4endl << "list xbuf after sorting : " << G4endl ;
   G4cout << G4endl << G4endl ;
 #endif
@@ -612,7 +612,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
     fCurStatWithV.SetCurrentStatus(i, gxx[i], distance[i], areacode[i],
                                      isvalid[i], nxx, validate, &gp, &gv);
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
     G4cout << "element Nr. " << i 
            << ", local Intersection = " << xbuf[i].xx 
            << ", distance = " << xbuf[i].distance 
@@ -625,7 +625,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
   }  // end for( i ) loop
 
     
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   G4cout << "G4TwistTrapParallelSide finished " << G4endl ;
   G4cout << nxx << " possible physical solutions found" << G4endl ;
   for ( G4int k= 0 ; k< nxx ; k++ ) {
@@ -693,7 +693,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
      distance[0] = DistanceToPlane(p, xxonsurface, surfacenormal, xx); // new XX
      deltaX = ( xx - xxonsurface ).mag() ; 
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
      G4cout << "i = " << i << ", distance = " << distance[0] << ", " << deltaX << G4endl ;
      G4cout << "X = " << xx << G4endl ;
 #endif
@@ -722,7 +722,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 
    // end of validity 
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "refined solution "  << phiR << " , " << uR << " , " <<  G4endl ;
    G4cout << "distance = " << distance[0] << G4endl ;
    G4cout << "X = " << xx << G4endl ;
@@ -731,7 +731,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
    G4bool isvalid = true;
    gxx[0]      = ComputeGlobalPoint(xx);
    
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "intersection Point found: " << gxx[0] << G4endl ;
    G4cout << "distance = " << distance[0] << G4endl ;
 #endif
@@ -760,7 +760,7 @@ G4int G4TwistTrapParallelSide::GetAreaCode(const G4ThreeVector &xx,
    G4double fXAxisMax = GetBoundaryMax(phi) ;
    G4double fXAxisMin = GetBoundaryMin(phi) ;
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "GetAreaCode: phi = " << phi << G4endl ;
    G4cout << "GetAreaCode: yprime = " << yprime << G4endl ;
    G4cout << "Intervall is " << fXAxisMin << " to " << fXAxisMax << G4endl ;

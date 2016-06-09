@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.5 2006/06/29 18:08:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSSphereSurfaceCurrent.cc,v 1.7 2007/05/18 00:00:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
 #include "G4UnitsTable.hh"
+#include "G4GeometryTolerance.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring only Surface Current.
@@ -90,6 +91,7 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
 
   G4TouchableHandle theTouchable = 
     aStep->GetPreStepPoint()->GetTouchableHandle();
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   
   if (aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary ){
     // Entering Geometry

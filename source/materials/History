@@ -1,4 +1,4 @@
-$Id: History,v 1.80 2007/01/10 18:54:30 vnivanch Exp $
+$Id: History,v 1.87 2007/06/20 09:21:45 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10-07-01 V.Ivanchenko (materials-V08-02-00)
+19-06-07 V.Ivanchenko (materials-V08-03-02)
+- G4SandiaTable - comment out destruction of G4OrderedTable
+
+15-06-07 V.Ivanchenko (materials-V08-03-01)
+- G4SandiaTable - fixed non-initilised pointer in constructor, int -> G4int
+
+14-06-07 V.Ivanchenko (materials-V08-03-00)
+- G4SandiaTable - added deletion of elements of the table in destructor
+- G4NistElementBuilder - protection (Z>=limitNumElements) inside BuildElement
+                         (Mokka request)
+
+02-05-07 V.Ivanchenko (materials-V08-02-02)
+- G4NistManager and G4NistElementBuilder - add GetNistFirstIsotopeN
+  and GetNumberOfNistIsotopes methods
+
+25-04-07 P.Gumplinger (materials-V08-02-01)
+- add file G4SurfaceProperty.cc, modify G4SurfaceProperty.hh to provide
+  a static G4SurfacePropertyTable akin to G4MaterialTable
+  add G4Exception to SetGROUPVEL when E_photon <= 0
+
+10-07-06 V.Ivanchenko (materials-V08-02-00)
 - G4Material - fill fAtomVector in the case, when material is built
   from Element mass fractions
 - G4NistMaterialBuilder - add liquids O2 and N2

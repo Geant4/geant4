@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUIshell.hh,v 1.6 2006/06/29 19:09:41 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VUIshell.hh,v 1.7 2007/06/14 05:44:58 kmura Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4VUIshell_h
@@ -33,7 +33,7 @@
 
 #include "globals.hh"
 
-//
+// ====================================================================
 //   Description: 
 //   This class is the abstract base class for various UI shells.
 //
@@ -49,6 +49,7 @@
 //   %s ... current application status
 //   %/ ... current working directory
 //
+// ====================================================================
 
 // terminal color index
 enum TermColorIndex{ BLACK=0, RED, GREEN, YELLOW, 
@@ -94,10 +95,13 @@ public:
 
   // get command string from a command line
   virtual G4String GetCommandLine(const char* msg=0)= 0;
+
+  virtual void ResetTerminal();
 };
 
-
-// inlines...
+// ====================================================================
+//   inline functions
+// ====================================================================
 inline void G4VUIshell::SetNColumn(G4int ncol)
 {
   nColumn= ncol;

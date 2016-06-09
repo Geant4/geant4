@@ -25,7 +25,7 @@
 //
 // 
 // $Id: DetectorConstruction.cc,v 1.12 2006/10/20 16:03:40 maire Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

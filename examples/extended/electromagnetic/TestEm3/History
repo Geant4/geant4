@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2007/04/25 10:07:27 vnivanch Exp $
+$Id: History,v 1.104 2007/05/18 19:00:43 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+18-05-07  V.Ivant (testem3-V08-03-01)
+- update macro files
+
+16-05-07  V.Ivant (testem3-V08-03-00)
+- use renamed EM builders
 
 25-04-07  V.Ivant (testem3-V08-02-04)
 - fix compilation problem at SUN

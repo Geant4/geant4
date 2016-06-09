@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4QPDGToG4Particle.cc,v 1.5 2006/06/29 20:07:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ---------------- G4QG4ToG4Particle singletone class ------------------
 //                 by Mikhail Kossov, December 2003.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCurrent.cc,v 1.4 2006/06/29 18:07:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSPassageCurrent.cc,v 1.5 2007/05/18 00:00:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4PSPassageCurrent
 #include "G4PSPassageCurrent.hh"

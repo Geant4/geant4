@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmaZero.cc,v 1.17 2006/06/29 19:16:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4AntiSigmaZero.cc,v 1.18 2007/03/11 07:17:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,23 +68,24 @@ G4AntiSigmaZero* G4AntiSigmaZero::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-   anInstance = new G4ParticleDefinition(
-                 name,    1.19255*GeV,   8.9e-3*MeV,          0.0,
+    anInstance = new G4ParticleDefinition(
+                 name,    1.192642*GeV,   8.9e-3*MeV,          0.0,
                     1,              +1,             0,
                     2,               0,             0,
              "baryon",               0,            -1,        -3212,
                 false,      7.4e-11*ns,          NULL,
                 false,       "sigma");
- //create Decay Table 
-  G4DecayTable* table = new G4DecayTable();
-  
-  // create decay channels
-  // anti_sigma0 -> anti_lambda + gamma
-  G4VDecayChannel* mode  = new G4PhaseSpaceDecayChannel("anti_sigma0",1.000,2,"anti_lambda","gamma");
-
-  table->Insert(mode); 
-
-   anInstance->SetDecayTable(table);
+ 
+    //create Decay Table 
+    G4DecayTable* table = new G4DecayTable();
+    
+    // create decay channels
+    // anti_sigma0 -> anti_lambda + gamma
+    G4VDecayChannel* mode  = new G4PhaseSpaceDecayChannel("anti_sigma0",1.000,2,"anti_lambda","gamma");
+    
+    table->Insert(mode); 
+    
+    anInstance->SetDecayTable(table);
   }
   theInstance = reinterpret_cast<G4AntiSigmaZero*>(anInstance);
   return theInstance;

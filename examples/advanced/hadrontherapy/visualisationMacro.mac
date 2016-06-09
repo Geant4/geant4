@@ -31,13 +31,15 @@
 /event/verbose 0
 
 # SETTING FOR THE PHYSICS MODELS
-/physics/addPhysics photon-epdl
-/physics/addPhysics electron-eedl
-/physics/addPhysics positron-standard
-/physics/addPhysics ion-LowE
-/physics/addPhysics muon-standard
-/physics/addPhysics decay
-/physics/addPhysics proton-precompound
+/physics/addPhysics EM-Photon-EPDL
+/physics/addPhysics EM-Electron-EEDL
+/physics/addPhysics EM-Positron-Standard
+/physics/addPhysics EM-HadronIon-LowE
+/physics/addPhysics EM-Muon-Standardmuon-standard
+/physics/addPhysics Decay
+/physics/addPhysics HadronicEl-HadronIon-QElastic
+/physics/addPhysics HadronicInel-Ion-LEP
+/physics/addPhysics HadronicInel-ProtonNeutron-Prec
 
 /run/initialize
 
@@ -58,5 +60,5 @@
 /beamLine/RangeShifter/RSMat Air
 #/tracking/verbose 1
 /vis/viewer/flush
-/run/beamOn 10
+/run/beamOn 1000
 

@@ -47,6 +47,7 @@
 // 01-05-05, update polarized differential cross section (A.Schalicke)
 // 26-07-06, cross section recalculated (P.Starovoitov)
 // 09-08-06, make it work under current geant4 release (A.Schalicke)
+// 11-06-07, add PostStepGetPhysicalInteractionLength (A.Schalicke)
 //
 // -----------------------------------------------------------------------------
 
@@ -91,11 +92,6 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*);
-
   // added for polarization treatment of polarized media:
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   virtual void PreparePhysicsTable(const G4ParticleDefinition&);
@@ -109,6 +105,12 @@ protected:
   virtual G4double GetMeanFreePath(const G4Track& aTrack,     
 				   G4double   previousStepSize,
 				   G4ForceCondition* condition);
+  virtual G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
+
   // can be removed as soon as G4PolarizationChangeForGamma is fixed!
   //  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 

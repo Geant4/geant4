@@ -66,9 +66,9 @@ G4NeutronHPThermalScattering::G4NeutronHPThermalScattering()
 
 
    G4String dirName;
-   if ( !getenv("NeutronHPCrossSections") ) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
-   dirName = getenv("NeutronHPCrossSections");
+   if ( !getenv("G4NEUTRONHPDATA") ) 
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+   dirName = getenv("G4NEUTRONHPDATA");
 
 
 // Read data
@@ -336,8 +336,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
 //
 //       For T_L aNEP_EPM_TL  and T_H aNEP_EPM_TH
 //
-         std::vector< E_P_E_isoAng* >* vNEP_EPM_TL = NULL;
-         std::vector< E_P_E_isoAng* >* vNEP_EPM_TH = NULL;
+         std::vector< E_P_E_isoAng* >* vNEP_EPM_TL = 0;
+         std::vector< E_P_E_isoAng* >* vNEP_EPM_TH = 0;
 
          if ( tempLH.first != 0.0 && tempLH.second != 0.0 ) 
          {
@@ -415,8 +415,8 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
 //
 //       For T_L anEPM_TL  and T_H anEPM_TH
 //
-         std::vector< std::pair< G4double , G4double >* >* pvE_p_TL = NULL; 
-         std::vector< std::pair< G4double , G4double >* >* pvE_p_TH = NULL; 
+         std::vector< std::pair< G4double , G4double >* >* pvE_p_TL = 0; 
+         std::vector< std::pair< G4double , G4double >* >* pvE_p_TH = 0; 
 
          if ( tempLH.first != 0.0 && tempLH.second != 0.0 ) 
          {
@@ -663,8 +663,8 @@ E_isoAng G4NeutronHPThermalScattering::create_E_isoAng_from_energy ( G4double en
    std::pair < G4double , G4double > energyLH = find_LH ( energy , &v_e );
    //std::cout << " " << energy/eV << " " << energyLH.first/eV  << " " << energyLH.second/eV << std::endl;
 
-   E_isoAng* panEPM_T_EL=NULL;
-   E_isoAng* panEPM_T_EH=NULL;
+   E_isoAng* panEPM_T_EL=0;
+   E_isoAng* panEPM_T_EH=0;
 
    if ( energyLH.first != 0.0 && energyLH.second != 0.0 ) 
    {
@@ -778,8 +778,8 @@ std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM
             
          std::pair < G4double , G4double > energyLH = find_LH ( pE , &v_energy );
 
-         E_P_E_isoAng* pE_P_E_isoAng_EL = NULL; 
-         E_P_E_isoAng* pE_P_E_isoAng_EH = NULL; 
+         E_P_E_isoAng* pE_P_E_isoAng_EL = 0; 
+         E_P_E_isoAng* pE_P_E_isoAng_EH = 0; 
 
          if ( energyLH.first != 0.0 && energyLH.second != 0.0 ) 
          {

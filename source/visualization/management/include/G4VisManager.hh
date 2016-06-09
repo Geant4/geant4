@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VisManager.hh,v 1.66 2007/01/11 16:40:05 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 

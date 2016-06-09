@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ChargeExchange.hh,v 1.3 2006/08/02 10:55:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model

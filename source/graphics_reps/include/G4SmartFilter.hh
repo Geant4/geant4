@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4SmartFilter.hh,v 1.3 2006/08/25 19:39:39 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Filter with additional funcionality such as active and inverted states, 
 // and filtering statistics

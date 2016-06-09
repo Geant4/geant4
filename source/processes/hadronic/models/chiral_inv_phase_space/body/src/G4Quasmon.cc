@@ -28,7 +28,7 @@
 //
 //
 // $Id: G4Quasmon.cc,v 1.94 2007/04/20 15:50:18 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.

@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2006/11/04 20:08:28 asaim Exp $
+$Id: README,v 1.5 2007/05/04 01:49:28 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,14 +19,16 @@ $Id: README,v 1.4 2006/11/04 20:08:28 asaim Exp $
        for each region
      4. Demonstrating the use of primitive scorer and filter classes without
        implementing sensitive detector class
-     5. Measuring the timing spent for each region, both for all particle
+     5. Demonstrating the use of parallel scoring geometry and associating
+       parallel world scoring process
+     6. Measuring the timing spent for each region, both for all particle
        types and for e+/e-
 
-     *********************************************************************
-     Note: Since this example utilize its own ExN07SteppingVerbose for the
+     **********************************************************************
+     Note: Since this example utilizes its own ExN07SteppingVerbose for the
        timing measurement, the user cannot get the ordinary verbosity with
        /tracking/verbose.
-     *********************************************************************
+     **********************************************************************
 
  1- Utilizing a concrete run class derived from G4Run base class for
     accumulating physics quantities for a run
@@ -112,8 +114,30 @@ $Id: README,v 1.4 2006/11/04 20:08:28 asaim Exp $
 
     In ExN07Run::RecordEvent() method, the way of retreiving G4THitsMap
     from each primitive scorer via G4HCofThisEvent is demonstrated.
+    In ExN07RunAction::EndOfRunAction(), Run is summarized with data kept
+    in ExN07Run class object.
 
- 5- Measuring the timing spent for each region, both for all particle
+ 5- Demonstrating the use of parallel scoring geometry and associating
+    parallel world scoring process
+
+    In ExN07PhysicsList::ConstructGeneral(), G4ParallelWorldScoringProcess is
+    assigned to all the particle types. This process invokes sensitive detectors
+    (and scorers) defined in the parallel world "ParallelScoringWorld", the
+    name of the parallel world which is defined in main() (exampleN07.cc) as
+    an argument of ExN07ParallelWorld constructor.
+    
+    As implemented in ExN07ParallelWorld::SetupGeometry(), the world volume of
+    the parallel world is obtained by GetWorld() method as a clone copy of the
+    world volume of the mass geometry. The user should not create the world volume.
+
+    ExN07ParallelWorld defines three cylindrical volumes, each of them is
+    located at the same position as three sandwitch calorimeters defined
+    in the mass geometry (ExN07DetectorConstruction). Each cylinder is replicated
+    in Rho to define 20 layers, and scores the same quantities as the mass geometry.
+    These three cylinders are relocated accordingly when the mass geometry is
+    modified by ExN07DetectorConstruction::SetSerialGeometry().
+
+ 6- Measuring the timing spent for each region, both for all particle
     types and for e+/e-
  
     ExN07SteppingVerbose class has two G4SliceTimer class objects for each
@@ -136,7 +160,7 @@ $Id: README,v 1.4 2006/11/04 20:08:28 asaim Exp $
     ExN07SteppingVerbose::Report() method is used by ExN07RunAction::
     EndOfRunAction() to get the timing measured.
 
- 6- Macro files
+ 7- Macro files
 
   exampleN07.in
     To be used for batch mode. The reference output file is made by this
@@ -150,7 +174,7 @@ $Id: README,v 1.4 2006/11/04 20:08:28 asaim Exp $
     Setting visualization parameters. This macro file will be called 
     automatically when interactive execution starts.
 
- 7- UI commands defined in this example
+ 8- UI commands defined in this example
  
 Command /N07/setAbsMat
 Guidance :

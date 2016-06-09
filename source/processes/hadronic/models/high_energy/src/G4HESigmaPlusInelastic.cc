@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HESigmaPlusInelastic.cc,v 1.14 2006/06/29 20:30:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 

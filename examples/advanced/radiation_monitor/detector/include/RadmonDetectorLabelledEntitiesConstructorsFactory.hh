@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorLabelledEntitiesConstructorsFactory.hh,v 1.4 2006/06/29 16:10:07 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 // Description:   Concrete factory that constructs 
 //                RadmonVDetectorLabelledEntityConstructor objects

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4AttFilterUtils.cc,v 1.4 2006/12/13 15:50:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Visualisation attribute filter utility functions.
 //

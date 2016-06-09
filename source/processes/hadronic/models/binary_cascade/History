@@ -12,7 +12,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-     
+
+
+18-May-2007 Gunter Folger                had-binary-V08-03-00
+-   G4BinaryLightIonReaction: Protect against divide by 0 when energy momentum
+     correction stalls (for numerical precision?)     
      
 04-May-2007 Gunter Folger		tag had-binary-V08-02-01
 ----------------------------------------------------------------

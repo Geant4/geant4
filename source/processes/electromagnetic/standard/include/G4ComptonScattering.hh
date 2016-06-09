@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.18 2006/09/14 10:27:19 maire Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ComptonScattering.hh,v 1.20 2007/05/23 08:47:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
@@ -91,11 +91,6 @@ protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
 
-  std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*);
-
 private:
      
   G4bool       isInitialised;
@@ -108,17 +103,6 @@ inline
 G4bool G4ComptonScattering::IsApplicable(const G4ParticleDefinition& p)
 {
   return (&p == G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-std::vector<G4DynamicParticle*>* G4ComptonScattering::SecondariesPostStep(
-                                   G4VEmModel* model,
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp)
-{ 
-  return model->SampleSecondaries(couple, dp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

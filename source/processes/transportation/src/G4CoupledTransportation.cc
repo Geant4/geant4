@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4CoupledTransportation.cc,v 1.12 2006/11/22 18:41:44 japost Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
 // =======================================================================

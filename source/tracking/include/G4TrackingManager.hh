@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TrackingManager.hh,v 1.21 2006/11/14 10:58:47 tsasaki Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------
 //

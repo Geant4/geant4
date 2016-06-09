@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_EMV.icc,v 1.1 2007/04/26 14:47:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: FTFP_EMV.icc,v 1.2 2007/05/16 11:35:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -40,6 +40,7 @@
 // 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
 // 15.06.2006 G.Folger: Migrate to HadronElasticPhysics using improved elastic
 // 20.11.2006 G.Folger: add Tracking Cut for neutrons
+// 16.05.2007 V.Ivanchenko: rename EM builders
 //
 //----------------------------------------------------------------------------
 //
@@ -58,7 +59,7 @@
 #include <iomanip>   
 
 #include "G4DecayPhysics.hh"
-#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
@@ -79,7 +80,7 @@ template<class T> TFTFP_EMV<T>::TFTFP_EMV(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics71("standard EM v71",ver));
+  this->RegisterPhysics( new G4EmStandardPhysics_option1(ver));
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));

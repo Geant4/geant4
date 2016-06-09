@@ -40,13 +40,14 @@
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 
 #include "G4ProtonInelasticCrossSection.hh"
 
 class G4FTFCProtonBuilder : public G4VProtonBuilder
 {
   public: 
-    G4FTFCProtonBuilder();
+    G4FTFCProtonBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFCProtonBuilder(){};
 
   public: 
@@ -58,6 +59,8 @@ class G4FTFCProtonBuilder : public G4VProtonBuilder
   private:
     G4ProtonInelasticCrossSection theXSec;
     G4TheoFSGenerator * theModel;
+    G4QuasiElasticChannel * theQuasiElastic;
+
     G4double theMin;
 
 };

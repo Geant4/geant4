@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.hh,v 1.2 2006/06/29 20:08:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4QElastic.hh,v 1.3 2007/05/23 15:14:25 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QElastic header ----------------
 //                 by Mikhail Kossov, December 2003.
@@ -103,6 +103,9 @@ private:
 
   // Copy constructor
   G4QElastic(const G4QElastic&);
+
+  // Calculate XS/t: oxs=true - only CS; xst=true - calculate XS, xst=false(oxs=f/t) - t/tm
+  G4double CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G4int N, G4int pPDG);
 
 		// BODY
   // Static Parameters --------------------------------------------------------------------

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CurveRayIntersection.hh,v 1.5 2006/06/29 18:39:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4CurveRayIntersection.hh,v 1.6 2007/05/11 13:49:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4CurveRayIntersection
@@ -100,6 +100,7 @@ protected:
 
   const G4Ray* r;
   G4double d;
+  G4double kCarTolerance;
   static const G4int dFlag;
 
 };

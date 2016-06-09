@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.21 2007/01/11 16:39:33 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4VisCommands.cc,v 1.22 2007/03/27 15:47:32 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -62,6 +62,7 @@ G4String G4VisCommandAbortReviewKeptEvents::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandAbortReviewKeptEvents::SetNewValue (G4UIcommand*,
 						     G4String newValue) {
   fpVisManager->SetAbortReviewKeptEvents(G4UIcommand::ConvertToBool(newValue));
+  G4cout << "Type \"continue\" to complete the abort." << G4endl;
 }
 
 ////////////// /vis/enable ///////////////////////////////////////

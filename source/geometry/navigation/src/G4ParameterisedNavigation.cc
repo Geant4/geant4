@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.10 2006/06/29 18:37:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ParameterisedNavigation.cc,v 1.11 2007/05/11 13:43:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // class G4ParameterisedNavigation Implementation
@@ -167,7 +167,7 @@ G4double G4ParameterisedNavigation::
       G4double  estDistToSolid= motherSolid->DistanceToIn(localPoint); 
       G4cout << "          Estimated isotropic distance to solid (distToIn)= " 
              << estDistToSolid << G4endl;
-      if( estDistToSolid > 100.0 * kCarTolerance )
+      if( estDistToSolid > 100.0 * motherSolid->GetTolerance() )
       {
         motherSolid->DumpInfo();
         G4Exception("G4ParameterisedNavigation::ComputeStep()",

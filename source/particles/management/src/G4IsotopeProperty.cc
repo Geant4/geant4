@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeProperty.cc,v 1.5 2006/06/29 19:25:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4IsotopeProperty.cc,v 1.7 2007/03/16 05:25:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -47,7 +47,8 @@
 G4IsotopeProperty::G4IsotopeProperty():
                    fAtomicNumber(0),fAtomicMass(0),
 		   fISpin(0),fEnergy(0.0),
-		   fLifeTime(-1.0),fDecayTable(0)
+		   fLifeTime(-1.0),fDecayTable(0),
+		   fMagneticMoment(0.0)
 {
 }
 
@@ -59,11 +60,12 @@ G4IsotopeProperty::~G4IsotopeProperty()
 
 G4IsotopeProperty::G4IsotopeProperty(const  G4IsotopeProperty& right)
 {
-  fAtomicNumber = right.fAtomicNumber;
-  fAtomicMass   = right.fAtomicMass;
-  fISpin        = right.fISpin;
-  fEnergy       = right.fEnergy;
-  fLifeTime     = right.fLifeTime;
+  fAtomicNumber    = right.fAtomicNumber;
+  fAtomicMass      = right.fAtomicMass;
+  fISpin           = right.fISpin;
+  fMagneticMoment  = right.fMagneticMoment;
+  fEnergy          = right.fEnergy;
+  fLifeTime        = right.fLifeTime;
   // decay table is not copied because G4DecayTable has no copy constructor
   fDecayTable   = 0;
 }
@@ -72,11 +74,12 @@ G4IsotopeProperty::G4IsotopeProperty(const  G4IsotopeProperty& right)
 G4IsotopeProperty & G4IsotopeProperty::operator=(G4IsotopeProperty& right)
 {
   if (this != &right) {
-    fAtomicNumber = right.fAtomicNumber;
-    fAtomicMass   = right.fAtomicMass;
-    fISpin        = right.fISpin;
-    fEnergy       = right.fEnergy;
-    fLifeTime     = right.fLifeTime;
+    fAtomicNumber    = right.fAtomicNumber;
+    fAtomicMass      = right.fAtomicMass;
+    fISpin           = right.fISpin;
+    fMagneticMoment  = right.fMagneticMoment;
+    fEnergy          = right.fEnergy;
+    fLifeTime        = right.fLifeTime;
     // decay table is not copied because G4DecayTable has no copy constructor
     fDecayTable   = 0;
   }
@@ -88,11 +91,12 @@ G4IsotopeProperty & G4IsotopeProperty::operator=(G4IsotopeProperty& right)
 G4int G4IsotopeProperty::operator==(const G4IsotopeProperty &right) const
 {
   G4bool value = true;
-  value = value && ( fAtomicNumber == right.fAtomicNumber);
-  value = value && ( fAtomicMass   == right.fAtomicMass);
-  value = value && ( fISpin        == right.fISpin);
-  value = value && ( fEnergy       == right.fEnergy);
-  value = value && ( fLifeTime     == right.fLifeTime);
+  value = value && ( fAtomicNumber    == right.fAtomicNumber);
+  value = value && ( fAtomicMass      == right.fAtomicMass);
+  value = value && ( fISpin           == right.fISpin);
+  value = value && ( fMagneticMoment  == right.fMagneticMoment);
+  value = value && ( fEnergy          == right.fEnergy);
+  value = value && ( fLifeTime        == right.fLifeTime);
   return value;
 }
 G4int G4IsotopeProperty::operator!=(const G4IsotopeProperty &right) const
@@ -104,7 +108,12 @@ void G4IsotopeProperty::DumpInfo() const
 {
   G4cout << "AtomicNumber: " << fAtomicNumber << G4endl;
   G4cout << "AtomicMass: " << fAtomicMass << G4endl;
-  G4cout << "Spin: " << fISpin << "/2" << G4endl;
+  if (fISpin %2){
+    G4cout << "Spin: " << fISpin << "/2" << G4endl;
+  } else {
+    G4cout << "Spin: " << fISpin /2  << G4endl;
+  }
+  G4cout << "MagneticMoment: " << fMagneticMoment/MeV*tesla << "[MeV/T]" <<G4endl;
   G4cout << "Excited Energy: " << std::setprecision(1) << fEnergy/keV << "[keV]" << G4endl;
   G4cout << "Life Time: " << fLifeTime/ns << "[ns]" << G4endl;
   if (fDecayTable != 0) {

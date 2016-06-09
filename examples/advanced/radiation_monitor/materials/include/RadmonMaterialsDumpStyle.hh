@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonMaterialsDumpStyle.hh,v 1.3 2006/06/29 16:16:43 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 // Description:   Define dump widths
 //

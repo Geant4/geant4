@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingBox3D.cc,v 1.10 2006/06/29 18:41:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4BoundingBox3D.cc,v 1.11 2007/05/11 13:49:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -36,6 +36,7 @@
 
 #include "G4BoundingBox3D.hh"
 #include "geomdefs.hh"
+#include "G4GeometryTolerance.hh"
 
 const G4BoundingBox3D G4BoundingBox3D::
           space( G4Point3D(-kInfinity, -kInfinity, -kInfinity),
@@ -82,6 +83,8 @@ void G4BoundingBox3D::Init(const G4Point3D& p1, const G4Point3D& p2)
   // L. Broglia
   // Maybe temporary
   // Create a BBox bigger than the reality
+
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   box_min.setX( std::min(p1.x(), p2.x()) - kCarTolerance );
   box_min.setY( std::min(p1.y(), p2.y()) - kCarTolerance );
@@ -357,10 +360,7 @@ G4double G4BoundingBox3D::DistanceToIn(const G4Point3D& p,
     // If smin <= kCarTolerance then only clipping `tolerant' Area
     // -> no intersection
     
-    G4double kCarTolerance = 0;
-    
-    if (smin>kCarTolerance && smin<=smax) 
-      snxt=smin;
+    if ((smin>0.) && (smin<=smax))  { snxt=smin; }
     
     return snxt;
 }

@@ -45,7 +45,9 @@
 namespace AIDA 
 {
   class ITree;
-  class IHistogramFactory;
+  class IHistogramFactory; 
+  class ITupleFactory;
+  class ITuple;
   class IAnalysisFactory;
   class ITreeFactory;
 };
@@ -53,17 +55,13 @@ namespace AIDA
 class G4HumanPhantomAnalysisManager { 
 
 public:
-  
   ~G4HumanPhantomAnalysisManager();
   static G4HumanPhantomAnalysisManager* getInstance();
 
   void book();
-  void particlePath(G4double);
-  void particleProjectionXY(G4double, G4double);
-  void particleProjectionYZ(G4double, G4double);
-  void particleProjectionZX(G4double, G4double);
-  void bodypartEnergyDep(G4double,G4double);
-  void innerBreastEnergyDep(G4int, G4int, G4double);
+  void bodyPartEnergyDeposit(G4int,G4double);
+  void voxelLeftBreastEnergyDeposit(G4int, G4int, G4double);
+  void voxelRightBreastEnergyDeposit(G4int, G4int, G4double);
   void finish();
 
 private:
@@ -73,13 +71,11 @@ private:
   AIDA::IAnalysisFactory*  aFact; 
   AIDA::ITreeFactory*      treeFact;
   AIDA::ITree*             theTree;
-  AIDA::IHistogramFactory* histogramFactory;
-  AIDA::IHistogram1D*      histogramParticlePath;
-  AIDA::IHistogram2D*      projectionXY;
-  AIDA::IHistogram2D*      projectionYZ;
-  AIDA::IHistogram2D*      projectionZX;
-  AIDA::IHistogram2D*      energy;
-  AIDA::IHistogram2D*      innerBreast;
+  AIDA::IHistogramFactory* histogramFactory; 
+  AIDA::ITupleFactory     *tupFact;
+  AIDA::ITuple *ntuple;
+  AIDA::IHistogram2D*      voxelLeftBreast;
+  AIDA::IHistogram2D*      voxelRightBreast;
 };
 #endif
 #endif

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4IdentityTrajectoryFilter.hh,v 1.3 2006/06/29 18:30:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // class GIdentityTrajectoryFilter

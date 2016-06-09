@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.hh,v 1.4 2006/06/29 17:15:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: F01PhysicsList.hh,v 1.5 2007/05/23 09:14:09 japost Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef F01PhysicsList_h
@@ -83,7 +83,7 @@ class F01PhysicsList: public G4VUserPhysicsList
 
     // these methods Construct physics processes and register them
 
-    void AddParameterisation();
+    // void AddParameterisation();
     void ConstructGeneral();
     void ConstructEM();
 

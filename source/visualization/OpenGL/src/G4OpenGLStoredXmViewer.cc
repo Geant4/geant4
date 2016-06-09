@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.21 2006/09/04 12:07:59 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.22 2007/04/04 16:50:27 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -130,7 +130,9 @@ void G4OpenGLStoredXmViewer::DrawView () {
 void G4OpenGLStoredXmViewer::FinishView () {
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propogated before progressing.
-  glXSwapBuffers (dpy, win);  
+  GLint renderMode;
+  glGetIntegerv(GL_RENDER_MODE, &renderMode);
+  if (renderMode == GL_RENDER) glXSwapBuffers (dpy, win);  
 }
 
 #endif

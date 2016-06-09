@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaPlus.cc,v 1.13 2006/06/29 19:17:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SigmaPlus.cc,v 1.14 2007/03/11 07:17:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,27 +68,32 @@ G4SigmaPlus* G4SigmaPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-   anInstance = new G4ParticleDefinition(
+    anInstance = new G4ParticleDefinition(
                  name,    1.18937*GeV, 8.209e-12*MeV,       eplus,
                     1,              +1,             0,
                     2,              +2,             0,
              "baryon",               0,            +1,        3222,
-                false,       0.0799*ns,          NULL,
+                false,       0.0802*ns,          NULL,
                 false,       "sigma");
- //create Decay Table
-  G4DecayTable* table = new G4DecayTable();
+ 
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( 2.458 * mN);
 
-  // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[2];
-  // sigma+ -> proton + pi0
-  mode[0] = new G4PhaseSpaceDecayChannel("sigma+",0.516,2,"proton","pi0");
-  // sigma+ -> neutron + pi+
-  mode[1] = new G4PhaseSpaceDecayChannel("sigma+",0.483,2,"neutron","pi+");
-
-  for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
-  delete [] mode;
-
-   anInstance->SetDecayTable(table);
+    //create Decay Table
+    G4DecayTable* table = new G4DecayTable();
+    
+    // create decay channels
+    G4VDecayChannel** mode = new G4VDecayChannel*[2];
+    // sigma+ -> proton + pi0
+    mode[0] = new G4PhaseSpaceDecayChannel("sigma+",0.516,2,"proton","pi0");
+    // sigma+ -> neutron + pi+
+    mode[1] = new G4PhaseSpaceDecayChannel("sigma+",0.483,2,"neutron","pi+");
+    
+    for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);
+    delete [] mode;
+    
+    anInstance->SetDecayTable(table);
   }
   theInstance = reinterpret_cast<G4SigmaPlus*>(anInstance);
   return theInstance;

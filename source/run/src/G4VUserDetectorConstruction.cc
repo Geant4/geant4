@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.cc,v 1.7 2006/12/13 15:49:36 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VUserDetectorConstruction.cc,v 1.8 2007/05/03 17:59:18 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "G4VUserDetectorConstruction.hh"
@@ -65,5 +65,14 @@ G4int G4VUserDetectorConstruction::ConstructParallelGeometries()
     nP++;
   }
   return nP;
+}
+
+G4int G4VUserDetectorConstruction::GetNumberOfParallelWorld() const
+{ return parallelWorld.size(); }
+
+G4VUserParallelWorld* G4VUserDetectorConstruction::GetParallelWorld(G4int i) const
+{
+  if(i<0||i>=GetNumberOfParallelWorld()) return 0;
+  return parallelWorld[i];
 }
 

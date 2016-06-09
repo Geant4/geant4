@@ -32,12 +32,16 @@
 // design and code review.
 //
 #include"G4MaleBuilder.hh"
+#include "G4MIRDBodyFactory.hh"
+#include "G4ORNLMaleBodyFactory.hh"
+
 G4MaleBuilder::G4MaleBuilder()
 {  
 }
 
 G4MaleBuilder::~G4MaleBuilder()
 {
+  delete body;
 } 
 
 void G4MaleBuilder::BuildMaleGenitalia(G4bool /*sensitivity*/)
@@ -49,3 +53,13 @@ void G4MaleBuilder::BuildTestes(G4bool /*sensitivity*/)
 { 
  G4cout << "Male testes are not available !!!" << G4endl;
 }
+/*
+void G4MaleBuilder::SetModel(G4String modelFlag)
+{
+  model = modelFlag;
+
+  if(model=="MIRD") body = new G4MIRDBodyFactory();
+  if(model=="ORNLMale") body = new G4ORNLMaleBodyFactory();
+  G4cout << "SetModel in G4PhantomBuilder: "<< body << G4endl;
+}
+*/

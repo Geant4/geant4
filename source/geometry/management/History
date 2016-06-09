@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2007/04/11 08:00:12 gcosmo Exp $
+$Id: History,v 1.119 2007/06/19 11:28:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 19, 2007  G.Cosmo                     geommng-V08-03-03
+- Apply migration to <cmath> and std:: for G4ErrorCylSurfaceTarget and
+  G4ErrorPlaneSurfaceTarget implementations. Fixes compilation problems
+  detected on Windows VC++8.
+
+May 16, 2007  G.Cosmo                      geommng-V08-03-02
+- Introduced new classes for handling error propagation: G4ErrorTarget,
+  G4ErrorSurfaceTarget, G4ErrorTanPlaneTarget, G4ErrorPlaneSurfaceTarget,
+  G4ErrorCylSurfaceTarget (by P.Arce).
+- Coworks with tag "global-V08-03-02".
+
+May 11, 2007  G.Cosmo                      geommng-V08-03-01
+- Use call to G4GeometryTolerance instead of kCarTolerance where needed.
+- Requires tag "global-V08-03-00" and related tag set.
+
+April 26, 2007  M.Asai                     geommng-V08-03-00
+- Added forward declaration and pointer (with set/get methods) to
+  G4VUserSteppingAction, to allow for stepping actions defined at region.
 
 April 11, 2007  G.Cosmo                    geommng-V08-02-02
 - Added 'get' methods to stores for retrivial of volumes/solid by name.

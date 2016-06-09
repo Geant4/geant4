@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAIonizationInWater.icc,v 1.4 2006/06/29 19:34:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifdef    G4DNAIONIZATIONINWATER_HH

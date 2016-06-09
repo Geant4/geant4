@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.46 2007/02/12 12:31:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4LossTableManager.hh,v 1.47 2007/05/18 18:39:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // -------------------------------------------------------------------
@@ -59,6 +59,7 @@
 // 10-05-06 Add methods  SetMscStepLimitation, FacRange and MscFlag (VI)
 // 22-05-06 Add methods  Set/Get bremsTh (VI)
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
+// 18-06-07 Move definition of msc parameters to G4EmProcessOptions (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -193,10 +194,6 @@ public:
 
   void SetLPMFlag(G4bool val);
 
-  void SetMscLateralDisplacement(G4bool val);
-
-  void SetSkin(G4double val);
-
   void SetLinearLossLimit(G4double val);
 
   void SetBremsstrahlungTh(G4double val);
@@ -208,14 +205,6 @@ public:
   G4bool BuildCSDARange() const;
 
   G4bool LPMFlag() const;
-
-  void SetMscStepLimitation(G4bool algorithm, G4double factor = -1.);
-
-  G4bool MscFlag() const;
-
-  G4bool MscLateralDisplacementFlag() const;
-
-  G4double FacRange() const;
 
   G4double BremsstrahlungTh() const;
 
@@ -284,9 +273,6 @@ private:
   G4bool maxEnergyForMuonsActive;
   G4bool stepFunctionActive;
   G4bool flagLPM;
-  G4bool flagMSC;
-  G4bool flagMSCLateral;
-  G4bool mscActive;
 
   G4double minSubRange;
   G4double maxRangeVariation;
@@ -294,7 +280,6 @@ private:
   G4double minKinEnergy;
   G4double maxKinEnergy;
   G4double maxKinEnergyForMuons;
-  G4double facRange;
   G4double bremsTh;
 
   G4LossTableBuilder*         tableBuilder;

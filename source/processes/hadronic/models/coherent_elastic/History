@@ -14,6 +14,46 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 June 2007 - V.Ivanchenko (hadr-cohe-V08-03-07)
+------------------------------------------------
+  G4UHadronElasticProcess - use "true" flag colling CHIPS to compute cross
+                            section
+
+14 June 2007 - V.Ivanchenko (hadr-cohe-V08-03-06)
+-----------------------------------------------
+  G4ElasticHadrNucleusHE - fixed compilation nuclear parameters for heavy 
+                           nucleus
+  G4DiffuseElastic       - new class
+
+31 May 2007 - V.Ivanchenko (hadr-cohe-V08-03-05)
+-----------------------------------------------
+  G4ElasticHadrNucleusHE - fixed compilation problem at Windows
+                           use only double values inside std::pow
+
+31 May 2007 - V.Ivanchenko (hadr-cohe-V08-03-04)
+-----------------------------------------------
+  G4ElasticHadrNucleusHE - fixed compilation problem at SUN 
+                           move static const out of switch 
+
+25 May 2007 - D.H. Wright (hadr-cohe-V08-03-03)
+-----------------------------------------------
+  add model names to constructors in G4LEnp, G4LEpp, G4ChargeExchange.cc, 
+    G4HadronElastic, and G4ElasticHadrNucleusHE
+
+24 May 2007 - V.Ivanchenko (hadr-cohe-V08-03-02)
+-----------------------------------------------
+  G4ElasticHadrNucleusHE - optimised computation of tables
+  G4HadronElastic - use HElastic only for mesons 
+
+15 May 2007 - V.Ivanchenko (hadr-cohe-V08-03-01)
+-----------------------------------------------
+  G4HadronElastic - use QElasticCrossSection for p, n incident for any energy
+                    and any target; use HElastic for the rest 
+
+15 May 2007 - V.Ivanchenko (hadr-cohe-V08-03-00)
+-----------------------------------------------
+  G4ElasticHadrNucleusHE - general cleanup and redesign of private methods
+
 5 May 2007 - V.Ivanchenko (hadr-cohe-V08-02-06)
 -----------------------------------------------
   G4HadronElastic - do not use HE model for hydrogen target to avoid NaN;

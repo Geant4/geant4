@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4MuonMinusCaptureAtRest.hh,v 1.17 2006/11/15 12:17:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file --- Copyright CERN 1998

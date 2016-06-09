@@ -39,7 +39,7 @@ class G4DataQuestionaire
     G4DataQuestionaire(G4DataType t1=no, G4DataType t2=no, G4DataType t3=no, G4DataType t4=no) 
     {
       G4cout << G4endl;
-      G4cout << "<<< Geant4 Physics List engine packaging library: PACK 5.2"<<G4endl;
+      G4cout << "<<< Geant4 Physics List engine packaging library: PACK 5.3"<<G4endl;
       //      G4cout <<G4endl<<G4endl;
       // G4cout << "##### the input "<<t1<<" "<<t2<<" "<<t3<<" "<<t4<<G4endl;
       for(G4int i=0; i<4; i++)
@@ -57,19 +57,18 @@ class G4DataQuestionaire
 	      G4cout << "Photon-evaporation data are needed."<<G4endl;
 	      G4cout << "Please set the environmental variable G4LEVELGAMMADATA"<<G4endl;
 	      G4cout << "to point to your PhotonEvaporation directory."<<G4endl;
-	      G4cout << "Data are available from the geant4 download page."<<G4endl;
+	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
               G4Exception("G4DataQuestionaire", "007", FatalException,
 	                  "Fatal error: Missing mandatory data for this simulation engine");
 	    }
 	    break;
           case neutron:
-	    if(!getenv("NeutronHPCrossSections") )
+	    if(!getenv("G4NEUTRONHPDATA") )
 	    {
 	      G4cout << "G4NDL are needed."<<G4endl;
-	      G4cout << "Please set the environmental variable NeutronHPCrossSections"<<G4endl;
+	      G4cout << "Please set the environmental variable G4NEUTRONHPDATA"<<G4endl;
 	      G4cout << "to point to your G4NDL directory."<<G4endl;
-	      G4cout << "Data are available from http://cmsdoc.cern.ch/~hpw/G4NDL3.7.tar.gz "<<G4endl;
-	      G4cout << "of the geant4 download page."<<G4endl;
+	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
               G4Exception("G4DataQuestionaire", "007", FatalException,
 	                  "Fatal error: Missing mandatory data for this simulation engine");
 	    }
@@ -80,7 +79,7 @@ class G4DataQuestionaire
 	      G4cout << "Radioactive decay data are needed."<<G4endl;
 	      G4cout << "Please set the environmental variable G4RADIOACTIVEDATA"<<G4endl;
 	      G4cout << "to point to your RadiativeDecay directory."<<G4endl;
-	      G4cout << "Data are available from the geant4 download page."<<G4endl;
+	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
               G4Exception("G4DataQuestionaire", "007", FatalException,
 	                  "Fatal error: Missing mandatory data for this simulation engine");
 	    }
@@ -91,7 +90,7 @@ class G4DataQuestionaire
 	      G4cout << "Low energy electromagnetic data are needed."<<G4endl;
 	      G4cout << "Please set the environmental variable G4LEDATA"<<G4endl;
 	      G4cout << "to point to your G4EMLOW directory."<<G4endl;
-	      G4cout << "Data are available from the geant4 download page."<<G4endl;
+	      G4cout << "Data are available from the Geant4 download page."<<G4endl;
               G4Exception("G4DataQuestionaire", "007", FatalException,
 	                  "Fatal error: Missing mandatory data for this simulation engine");
 	    }

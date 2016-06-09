@@ -25,7 +25,7 @@
 *    
 *    
 *     $Id: tog4.F,v 1.5 2006/06/29 18:15:21 gunter Exp $
-*     GEANT4 tag $Name: geant4-08-02 $
+*     GEANT4 tag $Name: geant4-09-00 $
 *    
       subroutine tog4
 ************************************************************************

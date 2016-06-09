@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 1.12 2006/11/10 13:23:07 mverderi Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.13 2007/05/11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //  
 //---------------------------------------------------------------
@@ -53,10 +53,8 @@
 
 #include "G4VGlobalFastSimulationManager.hh"
 #include "G4FastSimulationManager.hh"
-#include "G4FastSimulationManagerProcess81.hh"
-#include "G4StateManager.hh"
-#include "G4VStateDependent.hh"
-#include "G4FlavoredParallelWorld.hh"
+#include "G4FastSimulationManagerProcess.hh"
+
 
 class G4FastSimulationMessenger;
 
@@ -85,44 +83,29 @@ enum  listType {
 // geometries.
 //
 
-// -- *** to be dropped @ next major release: >>>
-#include "G4GFSManager81.hh"
-// -- <<<.
-
-class G4GlobalFastSimulationManager : public G4VStateDependent, 
-				      public G4VGlobalFastSimulationManager
+class G4GlobalFastSimulationManager
 {
-  // -- *** to be dropped @ next major release: >>>
-  friend class G4GFSManager81;
-  // -- <<<.
 
 public: // With  description 
 
   static G4GlobalFastSimulationManager* GetGlobalFastSimulationManager();
   // Provides a global access to the GlobalFastSimulationManager
+  static G4GlobalFastSimulationManager* GetInstance();
+  // Same as GetGlobalFastSimulationManager()
   
   G4VFastSimulationModel* GetFastSimulationModel(const G4String& modelName,
 						 const G4VFastSimulationModel* previousFound = 0) const;
-  // Fetch G4VFastSimulationModel by name:
-  //
+  // Iterative fetch of G4VFastSimulationModel objects by name:
   //    o returns the G4VFastSimulationModel* of model with name modelName;
   //    o returns 0 if no model found;
-  //
-  //       - usage:
-  //
-  //             myModel = gblManager->GetFastSimulationModel("MyModel");
-  //
+  //    o usage:
+  //        myModel = gblManager->GetFastSimulationModel("MyModel");
   //    o note for the case of several models having the same name:
   //        - to get the first "MyModel" model:
-  //          
   //             myModel1 = gblManager->GetFastSimulationModel("MyModel", 0);
-  //      
   //        - to get the next one:
-  //          
   //             myModel2 = gblManager->GetFastSimulationModel("MyModel", myModel1);
-  //
   //        - and so on.
-  //    
   //        - When gblManager->GetFastSimulationModel("MyModel", myModel_n)
   //          returns a null pointer, no extra model with name "MyModel" exist.
 
@@ -133,8 +116,7 @@ public: // Without description
   ~G4GlobalFastSimulationManager(); 
 
   //
-  // G4FastSimulationManager(Process)'s management, no intended for
-  // general use.
+  // G4FastSimulationManager(Process)'s management, no intended for general use.
   //
   // Methods for a G4FastSimulationManager to register itself
   //
@@ -143,8 +125,8 @@ public: // Without description
   //
   // G4FastSimulationManagerProcess bookeeping:
   //
-  void    AddFSMP(G4FastSimulationManagerProcess81*);
-  void RemoveFSMP(G4FastSimulationManagerProcess81*);
+  void    AddFSMP(G4FastSimulationManagerProcess*);
+  void RemoveFSMP(G4FastSimulationManagerProcess*);
 
 
   // Flag that the Parameterisation must be closed.
@@ -158,8 +140,6 @@ public: // With  description
 
 
 public: // Without description
-  void CloseFastSimulation();
-  // deprecated
 
   void ListEnvelopes(const G4String&                 aName = "all",
 		     listType                    aListType = NAMES_ONLY);
@@ -168,11 +148,7 @@ public: // Without description
   void   ActivateFastSimulationModel(const G4String&);
   void InActivateFastSimulationModel(const G4String&);
 
-  // G4FastSimulationProcess interface
-  G4VFlavoredParallelWorld* GetFlavoredWorldForThis(G4ParticleDefinition *);
 
-  // G4StateManager interface
-  G4bool Notify(G4ApplicationState requestedState);
 
 private:
   // Private construtor insures singleton class
@@ -182,20 +158,10 @@ private:
   void DisplayRegion(G4Region* motherRegion, G4int depth, std::vector<G4ParticleDefinition*>& particles) const;
 
   // The single instance.
-  static G4GlobalFastSimulationManager* fGlobalFastSimulationManager;
-
-  // The G4FastSimulationMessenger
-  G4FastSimulationMessenger* fTheFastSimulationMessenger;
-
-  // List of G4FastSimulationManagers
-  G4FastSimulationVector <G4FastSimulationManager> ManagedManagers;
-
-  // Instantiated fast simulation processes:
-  G4FastSimulationVector <G4FastSimulationManagerProcess81> fFSMPVector;
-
-
-  // -- *** to be dropped @ next major release: >>>
-  G4GFSManager81* _deprecated;
+  static G4GlobalFastSimulationManager*           fGlobalFastSimulationManager;
+  G4FastSimulationMessenger*                       fTheFastSimulationMessenger;
+  G4FastSimulationVector <G4FastSimulationManager>             ManagedManagers;
+  G4FastSimulationVector <G4FastSimulationManagerProcess>          fFSMPVector;
 };
 
 #endif 

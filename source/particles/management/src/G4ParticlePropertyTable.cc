@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyTable.cc,v 1.3 2006/06/29 19:26:02 gunter Exp $
+// $Id: G4ParticlePropertyTable.cc,v 1.4 2007/03/11 07:17:35 kurasige Exp $
 //
 // class G4ParticlePropertyTable
 //
@@ -31,6 +31,7 @@
 //
 // History:
 // first implementation by H Kurashige 9 June 2003
+// Add   magnetic moment    by H Kurashige   Mar 2007
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -127,6 +128,7 @@ G4ParticlePropertyData*  G4ParticlePropertyTable::GetParticleProperty(const G4Pa
   pData->thePDGiGParity    = aParticle->GetPDGiGParity();
   pData->thePDGiIsospin    = aParticle->GetPDGiIsospin();
   pData->thePDGiIsospin3   = aParticle->GetPDGiIsospin3();
+  pData->thePDGMagneticMoment   = aParticle->GetPDGMagneticMoment();
   pData->theLeptonNumber   = aParticle->GetLeptonNumber();
   pData->theBaryonNumber   = aParticle->GetBaryonNumber();
   pData->thePDGEncoding    = aParticle->GetPDGEncoding();
@@ -200,6 +202,9 @@ G4bool G4ParticlePropertyTable::SetParticleProperty(const G4ParticlePropertyData
     aParticle->thePDGiIsospin3 = pData.thePDGiIsospin3;
     aParticle->thePDGIsospin3  = 0.5*pData.thePDGiIsospin3;
   }
+  if (pData.fPDGMagneticMomentModified) {
+    aParticle->thePDGMagneticMoment = pData.thePDGMagneticMoment;
+   }
   if (pData.fLeptonNumberModified) {
     aParticle->theLeptonNumber   = pData.theLeptonNumber;
   }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AttHolder.hh,v 1.4 2006/11/01 10:11:44 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4AttHolder.hh,v 1.6 2007/06/08 14:24:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #ifndef G4ATTHOLDER_HH
 #define G4ATTHOLDER_HH
@@ -48,8 +48,8 @@
 #include <vector>
 #include <map>
 
-class G4AttValue;
-class G4AttDef;
+#include "G4AttValue.hh"
+#include "G4AttDef.hh"
 
 class G4AttHolder {
 
@@ -71,6 +71,8 @@ public:
   // life.
 
 private:
+  G4AttHolder(const G4AttHolder&);  // Copy construction not allowed.
+  G4AttHolder& operator=(const G4AttHolder&);  // Assignment not allowed.
   std::vector<const std::vector<G4AttValue>*> fValues;
   std::vector<const std::map<G4String,G4AttDef>*> fDefs;
 };

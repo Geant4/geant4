@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.14 2006/06/29 19:52:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4BraggModel.cc,v 1.15 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -206,15 +206,15 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* dp,
-                                   G4double xmin,
-                                   G4double maxEnergy)
+void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
+				     const G4MaterialCutsCouple*,
+				     const G4DynamicParticle* dp,
+				     G4double xmin,
+				     G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = min(tmax, maxEnergy);
-  if(xmin >= xmax) return 0;
+  if(xmin >= xmax) return;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;
@@ -265,9 +265,7 @@ vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,
 						   deltaKinEnergy);
 
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(delta);
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2005/12/01 18:27:45 gcosmo Exp $
+$Id: History,v 1.4 2007/05/18 15:22:01 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 18, 2007, M. Verderi (exgflash-V08-03-00)
+- ExGflashPhysicsList.cc : the fast simulation process is now a discrete process
 
 Dec 1st, 2005 G.Cosmo (exgflash-V07-01-00)
 ---------------------

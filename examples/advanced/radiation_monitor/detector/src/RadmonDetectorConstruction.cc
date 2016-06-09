@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorConstruction.cc,v 1.4.2.2 2006/06/29 16:13:28 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 
 // Include files

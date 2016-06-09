@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.13 2007/03/21 15:23:45 urban Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4UniversalFluctuation.cc,v 1.14 2007/04/03 11:08:36 urban Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,7 +54,7 @@
 // 17-10-05 correction for very small loss (L.Urban)
 // 20-03-07 'GLANDZ' part rewritten completely, no 'very small loss'
 //          regime any more (L.Urban)
-// 21-03-07 optimization in ionization part (L.Urban)
+// 03-04-07 correction to get better width of eloss distr.(L.Urban)
 //          
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,6 +82,9 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
   nmaxCont2(16.)
 {
   lastMaterial = 0;
+  facwidth     = 1.000/keV;
+  oldloss = 0.;
+  samestep = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,7 +117,11 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
   // shortcut for very very small loss (out of validity of the model)
   //
-  if (meanLoss < minLoss) return meanLoss;
+  if (meanLoss < minLoss)
+  { 
+    oldloss = meanLoss;
+    return meanLoss;
+  }
 
   if(!particle) InitialiseMe(dp->GetDefinition());
 
@@ -174,6 +181,17 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
 
+  // correction to get better width even using stepmax
+  if(abs(meanLoss- oldloss) < 1.*eV)
+    samestep += 1;
+  else
+    samestep = 1.;
+  oldloss = meanLoss;
+  G4double width = 1.+samestep*facwidth*meanLoss;
+  if(width > 4.50) width = 4.50;
+  e1 = width*e1Fluct;
+  e2 = width*e2Fluct;
+
   // cut and material dependent rate 
   G4double rate = 1.0;
   if(tmax > ipotFluct) {
@@ -183,8 +201,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
       rate = 0.03+0.23*log(log(tmax/ipotFluct));
       G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
-      a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
-      a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
+      a1 = C*f1Fluct*(w2-e1LogFluct)/e1;
+      a2 = C*f2Fluct*(w2-e2LogFluct)/e2;
     }
   }
 
@@ -200,29 +218,29 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   // excitation of type 1
   if(a1 > nmaxCont2)
   {
-    emean += a1*e1Fluct;
-    sig2e += a1*e1Fluct*e1Fluct;
+    emean += a1*e1;
+    sig2e += a1*e1*e1;
   }
   else if(a1 > 0.)
   {
     p1 = G4double(G4Poisson(a1));
-    loss += p1*e1Fluct;
+    loss += p1*e1;
     if(p1 > 0.) 
-      loss += (1.-2.*G4UniformRand())*e1Fluct;
+      loss += (1.-2.*G4UniformRand())*e1;
   }
 
   // excitation of type 2
   if(a2 > nmaxCont2)
   {
-    emean += a2*e2Fluct;
-    sig2e += a2*e2Fluct*e2Fluct;
+    emean += a2*e2;
+    sig2e += a2*e2*e2;
   }
   else if(a2 > 0.)
   {
     p2 = G4double(G4Poisson(a2));
-    loss += p2*e2Fluct;
+    loss += p2*e2;
     if(p2 > 0.) 
-      loss += (1.-2.*G4UniformRand())*e2Fluct;
+      loss += (1.-2.*G4UniformRand())*e2;
   }
 
   // ionisation 
@@ -236,24 +254,16 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
        alfa            = w1*(nmaxCont2+a3)/(w1*nmaxCont2+a3);
        G4double alfa1  = alfa*log(alfa)/(alfa-1.);
        G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
-       emean          += namean*e0*alfa1; 
+       emean          += namean*e0*alfa1;
        sig2e          += e0*e0*namean*(alfa-alfa1*alfa1);
        p3              = a3-namean;
     }
- 
+
     G4double w2 = alfa*e0;
     G4double w  = (tmax-w2)/tmax;
-    G4double scale = 1.;
-    G4int nb = 0;
-    if(p3 < nmaxCont2)
-      nb = G4Poisson(p3);
-    else
-    {
-      nb = G4Poisson(nmaxCont2);
-      scale = p3/nmaxCont2;
-    }
+    G4int nb = G4Poisson(p3);
     if(nb > 0)
-      for (G4int k=0; k<nb; k++) lossc += scale*w2/(1.-w*G4UniformRand());
+      for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
   }
 
   if(emean > 0.)

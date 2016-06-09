@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2004/06/11 14:17:15 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2007/05/18 15:53:15 ahoward Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for geometry/volumes library.  Gabriele Cosmo, 16/11/96.
 # --------------------------------------------------------------------
@@ -26,6 +26,9 @@ ifdef G4DEBUG_NAVIGATION
 endif
 ifdef G4DEBUG_FIELD
   CPPFLAGS += -DG4DEBUG_FIELD
+endif
+ifdef G4DEBUG_PATHFINDER
+  CPPFLAGS += -DG4DEBUG_PATHFINDER
 endif
 
 include $(G4INSTALL)/config/common.gmk

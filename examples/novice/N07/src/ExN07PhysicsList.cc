@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07PhysicsList.cc,v 1.6 2006/06/29 17:54:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: ExN07PhysicsList.cc,v 1.7 2007/05/04 01:49:28 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "ExN07PhysicsList.hh"
@@ -111,8 +111,8 @@ void ExN07PhysicsList::ConstructBaryons()
 void ExN07PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  ConstructEM();
   ConstructGeneral();
+  ConstructEM();
 }
 
 #include "G4ComptonScattering.hh"
@@ -133,6 +133,7 @@ void ExN07PhysicsList::ConstructProcess()
 
 void ExN07PhysicsList::ConstructEM()
 {
+  G4bool displacementFlg = true; // for multiple scattering
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -147,7 +148,8 @@ void ExN07PhysicsList::ConstructEM()
 
     } else if (particleName == "e-") {
     //electron
-      G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
+      G4MultipleScattering* theeminusMultipleScattering = new G4MultipleScattering();
+      theeminusMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
       G4VProcess* theeminusIonisation         = new G4eIonisation();
       G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
       //
@@ -168,7 +170,8 @@ void ExN07PhysicsList::ConstructEM()
 
     } else if (particleName == "e+") {
     //positron
-      G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
+      G4MultipleScattering* theeplusMultipleScattering = new G4MultipleScattering();
+      theeplusMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
       G4VProcess* theeplusIonisation         = new G4eIonisation();
       G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
       G4VProcess* theeplusAnnihilation       = new G4eplusAnnihilation();
@@ -196,7 +199,8 @@ void ExN07PhysicsList::ConstructEM()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
     //muon  
-      G4VProcess* aMultipleScattering = new G4MultipleScattering();
+      G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+      aMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
       G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
       G4VProcess* aPairProduction     = new G4MuPairProduction();
       G4VProcess* anIonisation        = new G4MuIonisation();
@@ -224,7 +228,8 @@ void ExN07PhysicsList::ConstructEM()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino     
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
+     G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+     aMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
      G4VProcess* anIonisation        = new G4hIonisation();
      //
      // add processes
@@ -243,21 +248,29 @@ void ExN07PhysicsList::ConstructEM()
 }
 
 #include "G4Decay.hh"
+#include "G4ParallelWorldScoringProcess.hh"
 
 void ExN07PhysicsList::ConstructGeneral()
 {
-  // Add Decay Process
-   G4Decay* theDecayProcess = new G4Decay();
+  // Add Decay Process and Parallel world Scoring Process
+  G4Decay* theDecayProcess = new G4Decay();
+  G4ParallelWorldScoringProcess* theParallelWorldScoringProcess
+      = new G4ParallelWorldScoringProcess("ParaWorldScoringProc");
+  theParallelWorldScoringProcess->SetParallelWorld("ParallelScoringWorld");
+
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (theDecayProcess->IsApplicable(*particle)) { 
       pmanager ->AddProcess(theDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
+    pmanager->AddProcess(theParallelWorldScoringProcess);
+    pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxAtRest);
+    pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxAlongStep, 1);
+    pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess, idxPostStep);
   }
 }
 

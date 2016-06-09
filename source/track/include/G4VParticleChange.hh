@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.15 2006/10/30 09:50:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VParticleChange.hh,v 1.16 2007/03/25 22:54:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -72,6 +72,7 @@
 //   add new methods of ProposeXXX  08  May, 04 H.Kurashige  
 //   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
 //   add flag for first/last step in volume 30 Oct. 2006 H.Kurashige
+//   add nonIonizingEnergyLoss          26 Mar 2007 H.Kurashige 
 //
 
 #ifndef G4VParticleChange_h
@@ -149,6 +150,11 @@ class G4VParticleChange
     G4double GetLocalEnergyDeposit() const;
     void ProposeLocalEnergyDeposit(G4double anEnergyPart);
     //  Get/Propose the locally deposited energy 
+ 
+    //---- the following methods are for nonIonizingEnergyDeposit  ----   
+    G4double GetNonIonizingEnergyDeposit() const;
+    void ProposeNonIonizingEnergyDeposit(G4double anEnergyPart);
+    //  Get/Propose the non-ionizing deposited energy 
 
     //---- the following methods are for TrackStatus -----   
     G4TrackStatus GetTrackStatus() const;
@@ -242,7 +248,12 @@ class G4VParticleChange
     //  coming from the continuous processes gives the
     //  total energy loss localized in the current Step.
 
-    G4double theTrueStepLength;
+    G4double theNonIonizingEnergyDeposit;
+    //   non-ionizing energu deposit is defined as 
+    //   a part of local energy deposit, which does not cause
+    //   ionization of atoms
+
+   G4double theTrueStepLength;
     //  The value of "True" Step Length
     
 

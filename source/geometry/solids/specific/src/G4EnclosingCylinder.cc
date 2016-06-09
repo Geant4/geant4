@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnclosingCylinder.cc,v 1.9 2006/06/29 18:48:33 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EnclosingCylinder.cc,v 1.10 2007/05/11 13:54:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -40,6 +40,7 @@
 
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
@@ -59,7 +60,9 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
   radius = rz->Amax();
   zHi = rz->Bmax();
   zLo = rz->Bmin();
-  
+
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
+                           ->GetSurfaceTolerance();
   //
   // Save phi info
   //

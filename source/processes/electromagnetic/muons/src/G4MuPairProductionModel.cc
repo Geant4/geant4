@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.31 2007/04/24 11:51:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4MuPairProductionModel.cc,v 1.33 2007/05/22 17:35:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -56,8 +56,9 @@
 // 03-08-05 Add SetParticle method (V.Ivantchenko)
 // 23-10-05 Add protection in sampling of e+e- pair energy needed for 
 //          low cuts (V.Ivantchenko)
-// 13-02-06 add ComputeCrossSectionPerAtom (mma)
-// 24-04-07 add protection in SelectAtom method (V.Ivantchenko)
+// 13-02-06 Add ComputeCrossSectionPerAtom (mma)
+// 24-04-07 Add protection in SelectRandomAtom method (V.Ivantchenko)
+// 12-05-06 Updated sampling (use cut) in SelectRandomAtom (A.Bogdanov) 
 
 //
 // Class Description:
@@ -470,11 +471,11 @@ void G4MuPairProductionModel::MakeSamplingTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* aDynamicParticle,
-                                   G4double tmin,
-                                   G4double tmax)
+void G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp, 
+						const G4MaterialCutsCouple* couple,
+						const G4DynamicParticle* aDynamicParticle,
+						G4double tmin,
+						G4double tmax)
 {
   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
   G4double totalEnergy   = kineticEnergy + particleMass ;
@@ -487,13 +488,13 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   G4double dt = log(kineticEnergy/tdat[it-1])/log(tdat[it]/tdat[it-1]);
 
   // select randomly one element constituing the material
-  const G4Element* anElement = SelectRandomAtom(kineticEnergy, dt, it, couple);
+  const G4Element* anElement = SelectRandomAtom(kineticEnergy, dt, it, couple, tmin);
   SetCurrentElement(anElement->GetZ());
 
   G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
   G4double maxEnergy     = std::min(tmax, maxPairEnergy);
   G4double minEnergy     = std::max(tmin, minPairEnergy);
-  if(minEnergy >= maxEnergy) return 0;
+  if(minEnergy >= maxEnergy) return;
   //G4cout << "emin= " << minEnergy << " emax= " << maxEnergy 
   //	 << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
   //       << " ymin= " << ymin << " dy= " << dy << G4endl;
@@ -594,18 +595,15 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   kineticEnergy -= (ElectronEnergy + PositronEnergy);
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
 
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(aParticle1);
   vdp->push_back(aParticle2);
-
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4Element* G4MuPairProductionModel::SelectRandomAtom(
                  G4double kinEnergy, G4double dt, G4int it,
-           const G4MaterialCutsCouple* couple)
+           const G4MaterialCutsCouple* couple, G4double tmin)
 {
   // select randomly 1 element within the material
 
@@ -628,18 +626,26 @@ const G4Element* G4MuPairProductionModel::SelectRandomAtom(
     G4double Z = ((*theElementVector)[i])->GetZ();
     SetCurrentElement(Z);
     G4double maxPairEnergy = MaxSecondaryEnergy(particle,kinEnergy);
+    G4double minEnergy     = std::max(tmin, minPairEnergy);
 
     G4int iz;
     for(iz=1; iz<nzdat; iz++) {if(Z <= zdat[iz]) break;}
     if(iz == nzdat) iz--;
     G4double dz = log(Z/zdat[iz-1])/log(zdat[iz]/zdat[iz-1]);
 
-    G4double xc = log(kinEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
-    G4int iy = (G4int)((log(xc) - ymin)/dy);
-    if(iy >= nbiny) iy = nbiny-1;
+    G4double sigcut;
+    if(minEnergy <= minPairEnergy)
+      sigcut = 0.;
+    else
+    {
+      G4double xc = log(minEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
+      G4int iy = (G4int)((log(xc) - ymin)/dy);
+      if(iy < 0) iy = 0;
+      if(iy >= nbiny) iy = nbiny-1;
+      sigcut = InterpolatedIntegralCrossSection(dt,dz,iz,it,iy,   Z);
+    }
 
     G4double sigtot = InterpolatedIntegralCrossSection(dt,dz,iz,it,nbiny,Z);
-    G4double sigcut = InterpolatedIntegralCrossSection(dt,dz,iz,it,iy,   Z);
     G4double dl = (sigtot - sigcut)*theAtomNumDensityVector[i];
 
     // protection

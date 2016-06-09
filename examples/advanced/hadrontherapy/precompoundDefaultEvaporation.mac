@@ -31,8 +31,44 @@
 /physics/addPhysics muon-standard
 /physics/addPhysics decay
 
-# SETTING FOR THE PARTICULAR HADRONIC MODEL
+# -------------- HADRON ELASTIC -------------------------------
+# SETTING FOR THE PARTICULAR ELASTIC HADRONIC MODEL
+
+# GROUP I Process: G4HadronElasticProcess
+
+/physics/addPhysics hadron-LElastic
+#/physics/addPhysics hadron-hadronElastic
+#/physics/addPhysics hadron-bertiniElastic
+
+# GROUP 2, Process: G4UHadronElasticProcess
+#/physics/addPhysics hadron-UHadronElastic
+
+# GROUP 3, Process: G4QElastic
+#/physics/addPhysics hadron-CHIPSElastic
+#--------------------------------------------------------------
+
+
+# ------------- HADRON INELASTIC ------------------------------
+#
+# -->  PRECOMPOUND + DEFAULT EVAPORATION
 /physics/addPhysics proton-precompound
+
+# -->  PRECOMPOUND + GEM EVAPORATION
+#/physics/addPhysics proton-precompoundGEM
+
+# --> PRECOMPOUND + DEFAULT EVAPORATION + FERMI BREAK-UP
+#/physics/addPhysics proton-precompoundFermi
+
+# --> PRECOMPOUND + GEM EVAPORATION + FERMI BREAK-UP
+#/physics/addPhysics  proton-precompoundGEMFermi
+
+# -->  BERTINI
+#/physics/addPhysics proton-bertini
+
+# --   BINARY
+#/physics/addPhysics proton-precompound-binary
+
+# ------------------------------------------------------------
 
 /run/initialize
 
@@ -41,8 +77,8 @@
 # SETTING FOR THE RANGE SHIFTER
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
+/run/beamOn 20000
 
-/run/beamOn 500
 
 
 

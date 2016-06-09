@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.cc,v 1.7 2007/04/26 15:15:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4GeomTestSegment.cc,v 1.10 2007/05/18 07:30:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -39,6 +39,7 @@
 
 #include "G4VSolid.hh"
 #include "G4GeomTestLogger.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
@@ -51,6 +52,7 @@ G4GeomTestSegment::G4GeomTestSegment( const G4VSolid *theSolid,
     p0(theP),
     v(theV)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   FindPoints(logger);
 }
 
@@ -117,6 +119,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
   //
   std::vector<G4GeomTestPoint>::iterator curr = points.begin();
   do {
+    
     std::vector<G4GeomTestPoint>::iterator next = curr + 1;
   
     //
@@ -130,6 +133,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
       if (next->Entering() != curr->Entering()) {
         curr = next + 1;
         next = curr + 1;
+        
         break;
       }
       
@@ -138,6 +142,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
       //
       next = points.erase(next);
       curr = next - 1;
+     
     }
     
     if (curr == points.end()) break;
@@ -145,6 +150,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
     //
     // The next point should be entering...
     //
+    
     if (!curr->Entering()) {
       //
       // Point is out of sequence:
@@ -152,9 +158,10 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
       //
       G4double s = curr->GetDistance();
       G4ThreeVector p = p0 + s*v;
+      
       G4ThreeVector p1 = p - 10*kCarTolerance*v;
       
-      if (solid->Inside(p1) == kOutside) {
+      if (solid->Inside(p1) == kOutside||(solid->Inside(p1)== kSurface)) {
         //
         // We are missing an entrance point near the current
         // point. Add one.
@@ -172,9 +179,10 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
 
         s = prev->GetDistance();
         p = p0 + s*v;
+        
         p1 = p + 10*kCarTolerance*v;
-
-        if (solid->Inside(p1) == kOutside) {
+        if ((solid->Inside(p1) == kOutside)||(solid->Inside(p1)== kSurface)) {
+	  
           //
           // We are missing an entrance point near the previous
           // point. Add one.
@@ -189,8 +197,6 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
       // Oh oh. No solution. Delete the current point and complain.
       //
       logger->SolidProblem( solid, "Spurious exiting intersection point", p );
-      // G4cout<<" dir="<<curr->GetDistance()<<" entering="<<curr->Entering()<<" SigneNorm="<<v.dot(solid->SurfaceNormal(p))<<G4endl;   
-      
       curr = points.erase(curr);
       break;
     }  
@@ -198,6 +204,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
     //
     // The following point should be leaving
     //
+     
     if (next == points.end() || next->Entering() ) {
       //
       // But is missing. Check immediately after this point.
@@ -240,6 +247,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
     }
     
     if(curr!=points.end()){curr = next + 1;}
+    
   } while( curr != points.end() );
   
   //
@@ -258,14 +266,15 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
 //
 void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
                                         G4bool forward )
-{
+{ 
   G4double sign = forward ? +1 : -1;
 
   G4ThreeVector p(p0);
   G4ThreeVector vSearch(sign*v);
   G4double s(0);
   G4bool entering;
-  
+  G4double vSurfN;
+  // G4cout<<"Entering Find Some Points vSearch="<<vSearch<<" p="<<p<<G4endl;
   //
   // Look for nearest intersection point in the specified
   // direction and return if there isn't one
@@ -273,7 +282,8 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
   G4double dist;
   switch(solid->Inside(p)) {
     case kInside:
-      dist = solid->DistanceToOut(p,vSearch);
+       dist = solid->DistanceToOut(p,vSearch);
+       // G4cout<<"Inside DistToOut="<<dist<<G4endl;
       if (dist >= kInfinity) {
         logger->SolidProblem( solid,
                 "DistanceToOut(p,v) = kInfinity for point inside", p );
@@ -285,13 +295,17 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
       break;
     case kOutside:
       dist = solid->DistanceToIn(p,vSearch);
+      //G4cout<<"Outside DistToIn="<<dist<<G4endl;
       if (dist >= kInfinity) return;
       
       s += sign*dist;
       entering = true;
       break;
     case kSurface:
-      entering = (v.dot(solid->SurfaceNormal(p)) < 0);
+      vSurfN=vSearch.dot(solid->SurfaceNormal(p));
+      if(std::abs(vSurfN)<kCarTolerance)vSurfN=0;
+      entering = (vSurfN < 0);
+      //G4cout<<"Surface SurfN="<<solid->SurfaceNormal(p)<<" v.dotN="<<vSurfN<<" entering="<<entering<<G4endl;
       break;
     default:
       logger->SolidProblem( solid,
@@ -346,6 +360,7 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
       // Record point
       //
       points.push_back( G4GeomTestPoint( p, s, entering==forward ) );
+      //G4cout<<"Add point p"<<p<<" s="<<s<<" entering="<<entering<<G4endl;
     }
     
     //
@@ -354,6 +369,7 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
     G4double dist;
     if (entering) {
       dist = solid->DistanceToOut(p,vSearch);
+      //G4cout<<"if entering distToOut="<<dist<<G4endl;
       if (dist >= kInfinity) {
         logger->SolidProblem( solid,
                 "DistanceToOut(p,v) = kInfinity for point inside", p );
@@ -373,11 +389,24 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
                   "DistanceToOut(p,v) brings trajectory well outside solid",p);
         return;
       }
+
+       if(std::abs(dist)<=kCarTolerance){
+          G4double push = 1E-6;
+          s += sign*push;
+          p = p0 + s*v;
+          EInside inside = solid->Inside(p); 
+          if (inside == kOutside) {
+          entering = false;
+          break;
+        }
+      }
+
       
       entering = false;
     }
     else {
       dist = solid->DistanceToIn(p,vSearch);
+      //G4cout<<"if exiting distToIn="<<dist<<G4endl;
       if (dist >= kInfinity) return;
       
       if ( (dist > kCarTolerance)

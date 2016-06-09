@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaCompton.cc,v 1.8 2006/06/29 19:53:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4KleinNishinaCompton.cc,v 1.9 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -132,11 +132,11 @@ G4double G4KleinNishinaCompton::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4KleinNishinaCompton::SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* aDynamicGamma,
-                                   G4double,
-                                   G4double)
+void G4KleinNishinaCompton::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+					      const G4MaterialCutsCouple*,
+					      const G4DynamicParticle* aDynamicGamma,
+					      G4double,
+					      G4double)
 {
   // The scattered gamma energy is sampled according to Klein - Nishina formula.
   // The random number techniques of Butcher & Messel are used 
@@ -200,8 +200,6 @@ std::vector<G4DynamicParticle*>* G4KleinNishinaCompton::SampleSecondaries(
     fParticleChange->ProposeLocalEnergyDeposit(gamEnergy1);
   }
 
-  std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
- 
   //
   // kinematic of the scattered electron
   //
@@ -216,7 +214,6 @@ std::vector<G4DynamicParticle*>* G4KleinNishinaCompton::SampleSecondaries(
     G4DynamicParticle* dp = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
     fvect->push_back(dp);
   }
-  return fvect;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPInelasticCompFS.hh,v 1.12 2006/06/29 20:48:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPInelasticCompFS.hh,v 1.13 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPInelasticCompFS_h
 #define G4NeutronHPInelasticCompFS_h 1
@@ -49,22 +49,22 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
     for(G4int i=0; i<51; i++)
     {
       hasXsec = true; 
-      theXsection[i] = NULL;
-      theEnergyDistribution[i] = NULL;
-      theAngularDistribution[i] = NULL;
-      theEnergyAngData[i] = NULL;
-      theFinalStatePhotons[i] = NULL;
+      theXsection[i] = 0;
+      theEnergyDistribution[i] = 0;
+      theAngularDistribution[i] = 0;
+      theEnergyAngData[i] = 0;
+      theFinalStatePhotons[i] = 0;
     }
   }
   virtual ~G4NeutronHPInelasticCompFS()
   {
     for(G4int i=0; i<51; i++)
     {
-      if(theXsection[i] != NULL) delete theXsection[i];
-      if(theEnergyDistribution[i] != NULL) delete theEnergyDistribution[i];
-      if(theAngularDistribution[i] != NULL) delete theAngularDistribution[i];
-      if(theEnergyAngData[i] != NULL) delete theEnergyAngData[i];
-      if(theFinalStatePhotons[i] != NULL) delete theFinalStatePhotons[i];
+      if(theXsection[i] != 0) delete theXsection[i];
+      if(theEnergyDistribution[i] != 0) delete theEnergyDistribution[i];
+      if(theAngularDistribution[i] != 0) delete theAngularDistribution[i];
+      if(theEnergyAngData[i] != 0) delete theEnergyAngData[i];
+      if(theFinalStatePhotons[i] != 0) delete theFinalStatePhotons[i];
     }
   }
   void Init (G4double A, G4double Z, G4String & dirName, G4String & aSFType);
@@ -82,12 +82,12 @@ class G4NeutronHPInelasticCompFS : public G4NeutronHPFinalState
                                            G4ReactionProduct & aTarget, 
                                            G4int it)
   {
-    if(theAngularDistribution[it]!=NULL) 
+    if(theAngularDistribution[it]!=0) 
     {
       theAngularDistribution[it]->SetTarget(aTarget);
       theAngularDistribution[it]->SetNeutron(aNeutron);
     }
-    if(theEnergyAngData[it]!=NULL)
+    if(theEnergyAngData[it]!=0)
     {
       theEnergyAngData[it]->SetTarget(aTarget);
       theEnergyAngData[it]->SetNeutron(aNeutron);

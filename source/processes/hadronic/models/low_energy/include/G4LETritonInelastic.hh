@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LETritonInelastic.hh,v 1.10 2007/02/26 18:34:35 dennis Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
  // Hadronic Process: Low Energy Triton Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997

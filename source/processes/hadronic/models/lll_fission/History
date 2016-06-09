@@ -1,0 +1,67 @@
+-------------------------------------------------------------------
+
+      ==========================================================
+      Geant4 - an Object-Oriented Toolkit for Phyiscs Simulation
+      ==========================================================
+
+     History file for Lawrence Livermore Laboratory Fission Model
+     ------------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+    ---------------------------------------------------------------
+    * Please list in reverse chronological order (last date on top)
+    ---------------------------------------------------------------
+
+27 June 2007 Gabriele Cosmo (hadr-lllfis-V08-03-07)
+---------------------------------------------------
+- Replace NeutronHPCrossSections with G4NEUTRONHPDATA variable.
+
+1 June 2007 Dennis Wright (hadr-lllfis-V08-03-06)
+-------------------------------------------------
+- Fix un-initialized variable in G4SmpNuDistDataPu239.cc
+
+1 June 2007 Gabriele Cosmo (hadr-lllfis-V08-03-05)
+--------------------------------------------------
+- Use <cmath> and std:: in front of mathematical functions.
+- Get rid of templated wrapper for random generator. Not necessary ?
+  Resolves compilation problems on Windows.
+
+31 May 2007 Dennis Wright (hadr-lllfis-V08-03-04)
+-------------------------------------------------
+- G4FissionLibrary.hh, .cc : moved constructor to .cc and instantiated base
+    class in it (to fix VC++ compiler error)
+- G4RNGWrapper.cc : added <class T> after "template" (VC++ compiler)
+- G4SmpIsoDir.cc : replace 2*M_PI with twopi
+- G4SmpNugDist.cc : made arguments of pow and sqrt G4double (VC++ compiler)
+- G4rngc.cc : replace function pointers with G4UniformRand  (VC++ compiler)
+
+30 May 2007 Dennis Wright (hadr-lllfis-V08-03-03)
+-------------------------------------------------
+- fixed compiler warnings: 
+  control reaches end of function:
+    G4SmpGEng.cc, G4SmpNEngCf252.cc, G4SmpNuDistDataU235.cc, 
+    G4SmpNugDist.cc
+  unused parameter: G4SmpPVel.cc
+  un-initialized array: G4SmpNuDistDataU235.cc, G4SmpNuDistDataU238.cc
+  missing braces in array initialization: G4SmpSpNuDistData.cc,
+    G4SmpWatt.cc
+
+29 May 2007 Dennis Wright (hadr-lllfis-V08-03-02)
+-------------------------------------------------
+- Changed all file names to start with G4, changed int, float
+  and double to G4int, G4float and G4double,
+  removed extern C statements
+
+29 May 2007 Gabriele Cosmo (hadr-lllfis-V08-03-01)
+--------------------------------------------------
+- Fixed compilation errors on gcc-4.1.2 for extra ';' in the code.
+  Affected files: fissionEvent.cc, G4LLNLFission.cc.
+
+21 May 2007 Dennis Wright (hadr-lllfis-V08-03-00)
+-------------------------------------------------
+- new directory created for LLNL spontaneous fission model.
+  Livermore code given Geant4 license headers and .h files were 
+  converted to .hh
+

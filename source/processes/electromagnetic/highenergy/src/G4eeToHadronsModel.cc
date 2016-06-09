@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc,v 1.7 2006/06/29 19:32:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eeToHadronsModel.cc,v 1.8 2007/05/22 17:37:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -169,13 +169,12 @@ G4double G4eeToHadronsModel::ComputeCrossSectionPerElectron(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4eeToHadronsModel::SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* dParticle,
-                                   G4double,
-                                   G4double)
+void G4eeToHadronsModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
+					   const G4MaterialCutsCouple*,
+					   const G4DynamicParticle* dParticle,
+					   G4double,
+					   G4double)
 {
-  std::vector<G4DynamicParticle*>* newp = 0;
   if(crossPerElectron) {
     G4double t = dParticle->GetKineticEnergy();
     G4double e = 2.0*electron_mass_c2*sqrt(1.0 + 0.5*t/electron_mass_c2);
@@ -189,25 +188,20 @@ std::vector<G4DynamicParticle*>* G4eeToHadronsModel::SampleSecondaries(
       G4double m = lv.m();
       G4ThreeVector boost = lv.boostVector();
       const G4ThreeVector dir = gamma->GetMomentumDirection();
-      newp = model->SampleSecondaries(m, dir);
-      if(newp) {
-        G4int np = newp->size();
-        for(G4int j=0; j<np; j++) {
-          G4DynamicParticle* dp = (*newp)[j];
-          G4LorentzVector v = dp->Get4Momentum();
-          v.boost(boost);
-          v.boost(inBoost);
-          dp->Set4Momentum(v);
-	}
-      } else {
-        newp = new std::vector<G4DynamicParticle*>;
+      model->SampleSecondaries(newp, m, dir);
+      G4int np = newp->size();
+      for(G4int j=0; j<np; j++) {
+	G4DynamicParticle* dp = (*newp)[j];
+	G4LorentzVector v = dp->Get4Momentum();
+	v.boost(boost);
+	v.boost(inBoost);
+	dp->Set4Momentum(v);
       }
       gLv.boost(inBoost);
       gamma->Set4Momentum(gLv);
       newp->push_back(gamma);
     }
   }
-  return newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

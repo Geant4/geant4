@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Curve.hh,v 1.10 2006/06/29 18:38:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Curve.hh,v 1.11 2007/05/11 13:49:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4Curve
@@ -166,6 +166,7 @@ class G4Curve
   G4double  pRange;
   G4bool    bounded;
   G4int     sameSense;
+  G4double  kCarTolerance;
 
  private:
   

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClippablePolygon.cc,v 1.11 2006/06/29 18:48:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ClippablePolygon.cc,v 1.12 2007/05/11 13:54:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -41,6 +41,7 @@
 #include "G4ClippablePolygon.hh"
 
 #include "G4VoxelLimits.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
@@ -48,7 +49,9 @@
 G4ClippablePolygon::G4ClippablePolygon()
   : normal(0.,0.,0.)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
+
 
 //
 // Destructor
@@ -56,6 +59,7 @@ G4ClippablePolygon::G4ClippablePolygon()
 G4ClippablePolygon::~G4ClippablePolygon()
 {
 }
+
 
 //
 // AddVertexInOrder
@@ -73,7 +77,6 @@ void G4ClippablePolygon::ClearAllVertices()
 {
   vertices.clear();
 }
-
 
 
 //

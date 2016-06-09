@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc,v 1.10 2007/02/20 17:06:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4BetheHeitlerModel.cc,v 1.11 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -180,11 +180,11 @@ G4double G4BetheHeitlerModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* aDynamicGamma,
-                                   G4double,
-                                   G4double)
+void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+					    const G4MaterialCutsCouple* couple,
+					    const G4DynamicParticle* aDynamicGamma,
+					    G4double,
+					    G4double)
 // The secondaries e+e- energies are sampled using the Bethe - Heitler
 // cross sections with Coulomb correction.
 // A modified version of the random number techniques of Butcher & Messel
@@ -205,7 +205,7 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
 
   G4double epsil ;
   G4double epsil0 = electron_mass_c2/GammaEnergy ;
-  if(epsil0 > 1.0) return 0;
+  if(epsil0 > 1.0) return;
 
   // do it fast if GammaEnergy < 2. MeV
   static const G4double Egsmall=2.*MeV;
@@ -272,8 +272,8 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
      
   } else {
     
-       PositTotEnergy = (1.-epsil)*GammaEnergy;
-       ElectTotEnergy = epsil*GammaEnergy;
+    PositTotEnergy = (1.-epsil)*GammaEnergy;
+    ElectTotEnergy = epsil*GammaEnergy;
   }
 
   //
@@ -322,15 +322,12 @@ std::vector<G4DynamicParticle*>* G4BetheHeitlerModel::SampleSecondaries(
                       thePositron,PositDirection,PositKineEnergy);
 
   // Fill output vector
-  std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
   fvect->push_back(aParticle1);
   fvect->push_back(aParticle2);
 
   // kill incident photon
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);   
- 
-  return fvect;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

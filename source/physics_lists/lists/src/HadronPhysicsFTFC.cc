@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFC.cc,v 1.1 2006/10/31 11:35:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HadronPhysicsFTFC.cc,v 1.2 2007/06/01 15:20:06 gunter Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -50,26 +50,29 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
 
-HadronPhysicsFTFC::HadronPhysicsFTFC(const G4String& name)
-                    :  G4VPhysicsConstructor(name) 
+HadronPhysicsFTFC::HadronPhysicsFTFC(const G4String& name, G4bool quasiElastic)
+                    :  G4VPhysicsConstructor(name) , QuasiElastic(quasiElastic)
 {}
 
 void HadronPhysicsFTFC::CreateModels()
 {
   theNeutrons=new G4NeutronBuilder;
-  theNeutrons->RegisterMe(theFTFCNeutron=new G4FTFCNeutronBuilder);
+  theFTFCNeutron=new G4FTFCNeutronBuilder(QuasiElastic);
+  theNeutrons->RegisterMe(theFTFCNeutron);
   theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
-  theLEPNeutron->SetMaxInelasticEnergy(25*GeV);
+  theLEPNeutron->SetMaxInelasticEnergy(5*GeV);
 
   thePro=new G4ProtonBuilder;
-  thePro->RegisterMe(theFTFCPro=new G4FTFCProtonBuilder);
+  theFTFCPro=new G4FTFCProtonBuilder(QuasiElastic);
+  thePro->RegisterMe(theFTFCPro);
   thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
-  theLEPPro->SetMaxEnergy(25*GeV);
+  theLEPPro->SetMaxEnergy(5*GeV);
   
   thePiK=new G4PiKBuilder;
-  thePiK->RegisterMe(theFTFCPiK=new G4FTFCPiKBuilder);
+  theFTFCPiK=new G4FTFCPiKBuilder(QuasiElastic);
+  thePiK->RegisterMe(theFTFCPiK);
   thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
-  theLEPPiK->SetMaxEnergy(25*GeV);
+  theLEPPiK->SetMaxEnergy(5*GeV);
   
   theMiscLHEP=new G4MiscLHEPBuilder;
 }

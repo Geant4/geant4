@@ -37,6 +37,7 @@
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
+#include <map>
 
 class G4HumanPhantomRunAction : public G4UserRunAction
 {
@@ -47,6 +48,12 @@ class G4HumanPhantomRunAction : public G4UserRunAction
   public:
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);
+    void Fill(G4String bodypartName, G4double energyDeposit);
+private:
+    void totalRunEnergyDeposit();
+    std::map<std::string,G4double> energyTotal;
+    G4String bodypartName;
+
 };
 #endif
 

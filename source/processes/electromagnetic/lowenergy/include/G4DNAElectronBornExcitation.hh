@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAElectronBornExcitation.hh,v 1.3 2006/06/29 19:33:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #ifndef   G4DNAElectronBornExcitation_HH
  #define  G4DNAElectronBornExcitation_HH 1

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.hh,v 1.3 2006/06/29 19:12:37 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SurfaceProperty.hh,v 1.4 2007/04/25 16:18:34 gum Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -54,8 +54,14 @@
 // Includes
 /////////////
 
+#include <vector>
+
 #include "G4Types.hh"
 #include "G4String.hh"
+
+class G4SurfaceProperty;
+
+typedef std::vector<G4SurfaceProperty*> G4SurfacePropertyTable;
 
 enum G4SurfaceType
 {
@@ -94,6 +100,7 @@ public: // With description
 			  G4SurfaceType type = x_ray)
 	  : theName(name), theType(type)
         {
+          theSurfacePropertyTable.push_back(this);
         }
         // Constructor of a X-ray optical surface object.
 
@@ -119,6 +126,12 @@ public: // With description
         void         SetType(const G4SurfaceType type){theType = type;};
         // Sets the surface type.        
 
+        static void CleanSurfacePropertyTable();
+        static const G4SurfacePropertyTable* GetSurfacePropertyTable();
+        static size_t GetNumberOfSurfaceProperties();
+        static void DumpInfo();
+        // To handle the table of surface properties.
+
 protected:
 
 // ------------------
@@ -129,6 +142,8 @@ protected:
 
 	G4SurfaceType theType;		// Surface type
 
+        static G4SurfacePropertyTable theSurfacePropertyTable;
+        // The static Table of SurfaceProperties.
 };
 
 ////////////////////

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.46 2007/05/10 10:10:31 japost Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4MagIntegratorDriver.cc,v 1.48 2007/06/04 15:30:22 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //
@@ -41,7 +41,7 @@
 // --------------------------------------------------------------------
 
 #include "globals.hh"
-#include "geomdefs.hh"         //  for kCarTolerance
+#include "G4GeometryTolerance.hh"
 #include <iomanip>
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
@@ -154,10 +154,14 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
   //  Ensure that hstep > 0 
   if( hstep <= 0.0 ) { 
-    G4cerr << " Hstep is " << hstep << G4endl;
+    if(hstep==0.0){ G4cerr << " G4MagIntegratorDriver::AccurateAdvance(): Hstep is " << hstep << G4endl;
+      return succeeded; 
+    }
+    else{ 
     G4Exception("G4MagInt_Driver::AccurateAdvance()", 
-		"Requested Integration Step is zero or negative: it must be positive",
-		FatalException, "Requested-Step-not-Positive."); 
+		"Requested Integration Step is  negative: it must be positive",
+		FatalException, "Requested-Step-is-Negative"); 
+    }
   }
 
   y_current.DumpToArray( ystart );
@@ -427,7 +431,7 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
  	   maxRelError_last_printed = maxRelError;
 
         if(    dbg 
-	    && (h > kCarTolerance) 
+	    && (h > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) 
 	    && ( (dbg>1) || prNewMax || (endPointDist >= h*(1.+eps) ) ) 
           ){ 
            static G4int noWarnings = 0;

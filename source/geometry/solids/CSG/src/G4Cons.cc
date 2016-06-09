@@ -24,8 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.48 2006/06/29 18:45:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Cons.cc,v 1.53 2007/05/18 07:38:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+//
 //
 // class G4Cons
 //
@@ -53,6 +54,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -90,6 +92,9 @@ G4Cons::G4Cons( const G4String& pName,
   : G4CSGSolid(pName)
 {
   // Check z-len
+
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   if ( pDz > 0 )
     fDz = pDz ;
@@ -176,16 +181,18 @@ G4Cons::~G4Cons()
 
 EInside G4Cons::Inside(const G4ThreeVector& p) const
 {
-  G4double r2, rl, rh, pPhi, tolRMin, tolRMax ;
+  G4double r2, rl, rh, pPhi, tolRMin, tolRMax; // rh2, rl2 ;
   EInside in;
 
   if (std::fabs(p.z()) > fDz + kCarTolerance*0.5 ) return in = kOutside;
   else if(std::fabs(p.z()) >= fDz - kCarTolerance*0.5 )   in = kSurface;
-  else                                               in = kInside;
+  else                                                    in = kInside;
 
   r2 = p.x()*p.x() + p.y()*p.y() ;
   rl = 0.5*(fRmin2*(p.z() + fDz) + fRmin1*(fDz - p.z()))/fDz ;
   rh = 0.5*(fRmax2*(p.z()+fDz)+fRmax1*(fDz-p.z()))/fDz;
+
+  // rh2 = rh*rh;
 
   tolRMin = rl - kRadTolerance*0.5 ;
   if ( tolRMin < 0 ) tolRMin = 0 ;
@@ -199,7 +206,8 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
       
   if (in == kInside) // else it's kSurface already
   {
-    if (r2 < tolRMin*tolRMin || r2 >= tolRMax*tolRMax) in = kSurface;
+     if (r2 < tolRMin*tolRMin || r2 >= tolRMax*tolRMax) in = kSurface;
+    //  if (r2 <= tolRMin*tolRMin || r2-rh2 >= -rh*kRadTolerance) in = kSurface;
   }
   if ( ( fDPhi < twopi - kAngTolerance ) &&
        ( (p.x() != 0.0 ) || (p.y() != 0.0) ) )
@@ -1264,6 +1272,15 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
     }
   }
   if (snxt < kCarTolerance*0.5) snxt = 0.;
+
+#ifdef consdebug
+  G4cout.precision(24);
+  G4cout<<"G4Cons::DistanceToIn(p,v) "<<G4endl;
+  G4cout<<"position = "<<p<<G4endl;
+  G4cout<<"direction = "<<v<<G4endl;
+  G4cout<<"distance = "<<snxt<<G4endl;
+#endif
+
   return snxt ;
 }
 
@@ -1734,7 +1751,12 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
     cPhi    = fSPhi + fDPhi*0.5 ;
     sinCPhi = std::sin(cPhi) ;
     cosCPhi = std::cos(cPhi) ;
+    // add angle calculation with correction 
+      // of the  difference in domain of atan2 and Sphi
+        vphi = std::atan2(v.y(),v.x()) ;
 
+         if ( vphi < fSPhi - kAngTolerance*0.5  )             vphi += twopi ; 
+         else if ( vphi > fSPhi + fDPhi + kAngTolerance*0.5 ) vphi -= twopi; 
     if ( p.x() || p.y() )   // Check if on z axis (rho not needed later)
     {
       // pDist -ve when inside
@@ -1749,199 +1771,104 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 
       sidephi = kNull ;
 
-      if (pDistS <= 0 && pDistE <= 0)
-      {
-        // Inside both phi *full* planes
-
-        if (compS < 0)
+      if( ( (fDPhi <= pi) && ( (pDistS <= 0.5*kCarTolerance)
+                              && (pDistE <= 0.5*kCarTolerance) ) )
+         || ( (fDPhi >  pi) && !((pDistS >  0.5*kCarTolerance)
+                              && (pDistE >  0.5*kCarTolerance) ) )  )
         {
-          sphi = pDistS/compS ;
-          xi   = p.x() + sphi*v.x() ;
-          yi   = p.y() + sphi*v.y() ;
-
-          // Check intersecting with correct half-plane
-          // (if not -> no intersect)
-
-          if ( (yi*cosCPhi - xi*sinCPhi) >= 0.0 ) sphi = kInfinity ;
-          else
+          // Inside both phi *full* planes
+          if ( compS < 0 )
           {
-            sidephi = kSPhi ;
-
-            if ( pDistS > -kCarTolerance*0.5 ) // Leave by sphi immediately
+            sphi = pDistS/compS ;
+            if (sphi >= -0.5*kCarTolerance)
             {
-              sphi = 0.0 ;
-            }      
-          }
-        }
-        else sphi = kInfinity ;
+              xi = p.x() + sphi*v.x() ;
+              yi = p.y() + sphi*v.y() ;
 
-        if ( compE < 0.0 )
-        {
-          // Only check further if < starting phi intersection
-
-          sphi2 = pDistE/compE ;
-
-          if ( sphi2 < sphi )
-          {
-            xi = p.x() + sphi2*v.x() ;
-            yi = p.y() + sphi2*v.y() ;
-
-            // Check intersecting with correct half-plane 
-
-            if ( (yi*cosCPhi - xi*sinCPhi) >= 0.0 )  // Leaving via ending phi
-            {
-              sidephi = kEPhi ;
-
-              if ( pDistE <= -kCarTolerance*0.5 )  sphi = sphi2 ;
-              else                                 sphi = 0.0   ;
-            }
-          }
-        }        
-      }
-      else if ( pDistS >= 0 && pDistE >= 0 )
-      {
-        // Outside both *full* phi planes
-
-        if ( pDistS <= pDistE )  sidephi = kSPhi ;
-        else                     sidephi = kEPhi ;
-
-        if ( fDPhi > pi )
-        {
-          if (compS < 0 && compE < 0) sphi = 0.0 ;
-          else                        sphi = kInfinity ;
-        }
-        else
-        {
-          // if towards both >=0 then once inside (after error)
-          // will remain inside
-
-          if ( compS >= 0.0 && compE >= 0.0 ) sphi = kInfinity ;
-          else                                sphi = 0.0 ;
-        }        
-      }
-      else if ( pDistS > 0.0 && pDistE < 0.0 )
-      {
-        // Outside full starting plane, inside full ending plane
-
-        if ( fDPhi > pi )
-        {
-          if ( compE < 0.0 )
-          {
-            sphi = pDistE/compE ;
-            xi   = p.x() + sphi*v.x() ;
-            yi   = p.y() + sphi*v.y() ;
-
-            // Check intersection in correct half-plane
-            // (if not -> not leaving phi extent)
-
-            if ( (yi*cosCPhi - xi*sinCPhi) <= 0.0 )
-            {
-              sphi = kInfinity ;
-            }
-            else    // Leaving via Ending phi
-            {
-              sidephi = kEPhi  ;
-
-              if ( pDistE > -kCarTolerance*0.5 ) sphi = 0.0 ;
-            }
-          }
-          else sphi = kInfinity ;
-        }
-        else  // fDPhi <= pi
-        {
-          if (compS >= 0.0 )
-          {
-            if ( compE < 0.0 )
-            {            
-              sphi = pDistE/compE ;
-              xi   = p.x() + sphi*v.x() ;
-              yi   = p.y() + sphi*v.y() ;
-
-              // Check intersection in correct half-plane
-              // (if not -> remain in extent)
-
-              if ( (yi*cosCPhi - xi*sinCPhi) <= 0.0 )
+              // Check intersecting with correct half-plane
+              // (if not -> no intersect)
+              //
+               if((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance)){
+		if(((fSPhi-0.5*kAngTolerance)<=vphi)&&((ePhi+0.5*kAngTolerance)>=vphi))
+                    { sphi = kInfinity; }
+				       
+              }
+              else
+              if ((yi*cosCPhi-xi*sinCPhi)>=0)
               {
                 sphi = kInfinity ;
               }
-              else  // otherwise leaving via Ending phi
-              {
-                sidephi = kEPhi ;
-              }
-            }
-            else sphi = kInfinity ;
-          }
-          else  // leaving immediately by starting phi
-          {
-            sidephi = kSPhi ;
-            sphi    = 0.0 ;
-          }
-        }
-      }
-      else
-      {
-        // Must be pDistS<0&&pDistE>0
-        // Inside full starting plane, outside full ending plane
-
-        if (fDPhi > pi)
-        {
-          if ( compS < 0.0 )
-          {
-            sphi = pDistS/compS ;
-            xi   = p.x() + sphi*v.x() ;
-            yi   = p.y() + sphi*v.y() ;
-
-            // Check intersection in correct half-plane
-            // (if not -> not leaving phi extent)
-
-            if ( (yi*cosCPhi - xi*sinCPhi) >= 0.0 )  sphi = kInfinity ;
-            else     // Leaving via Starting phi
-            {
-              sidephi = kSPhi  ; 
-  
-              if ( pDistS > -kCarTolerance*0.5 )  sphi = 0.0 ;
-            }
-          }
-          else sphi = kInfinity ;
-        }
-        else  // fDPhi <= pi
-        {
-          if ( compE >= 0.0 )
-          {
-            if ( compS < 0.0 )
-            {
-                
-              sphi = pDistS/compS ;
-              xi   = p.x() + sphi*v.x() ;
-              yi   = p.y() + sphi*v.y() ;
-
-              // Check intersection in correct half-plane
-              // (if not -> remain in extent)
-
-              if ( (yi*cosCPhi - xi*sinCPhi) >= 0.0 )  sphi = kInfinity ;
-              else // otherwise leaving via Starting phi
+              else
               {
                 sidephi = kSPhi ;
+                if ( pDistS > -kCarTolerance*0.5 )
+                {
+                  sphi = 0.0 ; // Leave by sphi immediately
+                }    
+              }       
+            }
+            else
+            {
+              sphi = kInfinity ;
+            }
+          }
+          else
+          {
+            sphi = kInfinity ;
+          }
+
+          if ( compE < 0 )
+          {
+            sphi2 = pDistE/compE ;
+
+            // Only check further if < starting phi intersection
+            //
+            if ( (sphi2 > -0.5*kCarTolerance) && (sphi2 < sphi) )
+            {
+              xi = p.x() + sphi2*v.x() ;
+              yi = p.y() + sphi2*v.y() ;
+
+              // Check intersecting with correct half-plane 
+               if((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance)){
+               // Leaving via ending phi
+                if(!(((fSPhi-0.5*kAngTolerance)<=vphi)&&((ePhi+0.5*kAngTolerance)>=vphi))){
+                  sidephi = kEPhi ;
+                  if ( pDistE <= -kCarTolerance*0.5 ) sphi = sphi2 ;
+                  else                                sphi = 0.0 ;
+                  }
+                }
+	     else // Check intersecting with correct half-plane
+              if ( (yi*cosCPhi-xi*sinCPhi) >= 0)
+              {
+                // Leaving via ending phi
+
+                sidephi = kEPhi ;
+                if ( pDistE <= -kCarTolerance*0.5 ) sphi = sphi2 ;
+                else                                sphi = 0.0 ;
               }
             }
-            else sphi = kInfinity ;
-          }
-          else // CompE < 0, leaving immediately by ending
-          {
-            sidephi = kEPhi ;
-            sphi    = 0.0 ;
           }
         }
-      }    
+        else
+        {
+          sphi = kInfinity ;
+        }
+
+
     }
     else
     {
       // On z axis + travel not || to z axis -> if phi of vector direction
       // within phi of shape, Step limited by rmax, else Step =0
 
-      vphi = std::atan2(v.y(),v.x()) ;
+      // vphi = std::atan2(v.y(),v.x()) ;
 
-      if ( fSPhi < vphi && vphi < fSPhi + fDPhi ) sphi = kInfinity ;
+      // if ( fSPhi < vphi && vphi < fSPhi + fDPhi ) sphi = kInfinity ;
+
+       if ( ((fSPhi-0.5*kAngTolerance) <= vphi) && (vphi <=( fSPhi + fDPhi)+0.5*kAngTolerance) )
+         {
+          sphi = kInfinity ;
+        }
       else
       {
         sidephi = kSPhi  ;   // arbitrary 
@@ -2026,6 +1953,13 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
     }
   }
   if (snxt < kCarTolerance*0.5) snxt = 0.;
+#ifdef consdebug
+  G4cout.precision(24);
+  G4cout<<"G4Cons::DistanceToOut(p,v,...) "<<G4endl;
+  G4cout<<"position = "<<p<<G4endl;
+  G4cout<<"direction = "<<v<<G4endl;
+  G4cout<<"distance = "<<snxt<<G4endl;
+#endif
   return snxt ;
 }
 

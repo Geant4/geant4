@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.hh,v 1.2 2006/06/29 19:32:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eeToTwoPiModel.hh,v 1.3 2007/05/22 17:37:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -74,7 +74,7 @@ public:
 
   G4PhysicsVector* PhysicsVector(G4double, G4double) const;
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&) const;
 
 private:

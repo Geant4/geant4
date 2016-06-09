@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2006/11/14 08:56:49 gcosmo Exp $
+$Id: History,v 1.35 2007/05/18 15:25:29 mverderi Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 18, 2007, M. Verderi
+- tag as param-V08-03-00
+
+May 11, 2007, M. Verderi
+- remove include/G4FastSimulationManagerProcess81.hh
+         include/G4FlavoredParallelWorld.hh
+         include/G4GFSManager81.hh
+         src/G4FastSimulationManagerProcess81.cc
+         src/G4GFSManager81.cc
+
 
 November 10, 2006, M. Verderi - param-V08-01-00
 - Limited number of warning messages printed by the

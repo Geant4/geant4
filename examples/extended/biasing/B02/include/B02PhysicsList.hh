@@ -30,6 +30,7 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
+#include <vector>
 
 // taken from Tst12PhysicsList
 
@@ -38,6 +39,10 @@ class B02PhysicsList: public G4VUserPhysicsList
   public:
     B02PhysicsList();
     virtual ~B02PhysicsList();
+
+  public: 
+    void AddParallelWorldName(G4String& pname)
+         {paraWorldName.push_back(pname);}
 
   protected:
     // Construct particle and physics
@@ -53,6 +58,9 @@ class B02PhysicsList: public G4VUserPhysicsList
     virtual void ConstructEM();
     virtual void ConstructHad();
     virtual void ConstructLeptHad();
+
+    void AddScoringProcess(); 
+
  //
     void  ConstructAllBosons();
     void  ConstructAllLeptons();
@@ -60,6 +68,10 @@ class B02PhysicsList: public G4VUserPhysicsList
     void  ConstructAllBaryons();
     void  ConstructAllIons();
     void  ConstructAllShortLiveds();
+
+  private:
+    std::vector<G4String>  paraWorldName; 
+
 
 };
 

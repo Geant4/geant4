@@ -46,6 +46,7 @@
 #include "G4Box.hh"
 #include "G4UnionSolid.hh"
 #include "G4VSolid.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDSkull::G4MIRDSkull()
 {
@@ -56,81 +57,50 @@ G4MIRDSkull::~G4MIRDSkull()
 
 }
 
-G4VPhysicalVolume* G4MIRDSkull::ConstructSkull(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDSkull::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
+					       const G4String& colourName,
+					       G4bool wireFrame,G4bool sensitivity)
 {
   
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "ConstructSkull for "<< sex <<G4endl;
+  G4cout << "Construct "<<volumeName <<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
  
   delete material;
 
-  G4double ax = 7.68 * cm;
-  G4double by = 9.67 * cm;
-  G4double cz = 6.83 * cm;
-  G4double zcut1 = -6.83 * cm; 
-  G4double zcut2 = 6.83 * cm;
-
-  G4Ellipsoid* craniumOut =  new G4Ellipsoid("CraniumOut", ax, by, cz, zcut1, zcut2);
-
-  ax = 7.18 * cm;
-  by = 9.17 * cm;
-  cz= 6.33 * cm;
-  zcut1 =-6.33 * cm;
-  zcut2 = 6.33 * cm;
-
-  G4Ellipsoid* craniumIn =  new G4Ellipsoid("CraniumIn", ax, by, cz, zcut1, zcut2);
-
-  G4double dx = 6.92 * cm;
-  G4double dy = 8.91 * cm;
-  G4double dz = 5.13 * cm; 
-
-  G4EllipticalTube* facialSkeletonOut = new G4EllipticalTube("FacialSkeletonOut",dx, dy, dz);
-  
-  dx= 5.82 * cm;
-  dy= 7.81 * cm;
-  dz= 6.13 * cm;
+  // Outer cranium
+  G4double ax = 6.8 * cm;//a out skull
+  G4double by = 9.8 * cm; // bout
+  G4double cz = 8.3 * cm; //cout
  
-  G4EllipticalTube* facialSkeletonIn = new G4EllipticalTube("FacialSkeletonIn",dx, dy, dz);
-  
-  G4double xx = 14.84 * cm;
-  G4double yy = 18.82 * cm;
-  G4double zz = 11.26 * cm;
+  G4Ellipsoid* craniumOut =  new G4Ellipsoid("CraniumOut", ax, by, cz);
 
-  G4VSolid* subtr = new G4Box("SubtrFacialSkeleton", xx/2., yy/2., zz/2.); 
+  ax = 6. * cm; //a in
+  by = 9. * cm; //b in 
+  cz= 6.5 * cm; // cin
  
-  G4VSolid* firstFacialSkeleton = new G4SubtractionSolid("SubtrFacialSkeleton",
-				 facialSkeletonOut,  
-				 facialSkeletonIn);
-
-
-  G4SubtractionSolid* facialSkeleton = new G4SubtractionSolid("FacialSkeleton",
-							      firstFacialSkeleton,
-							      subtr,0,
-							      G4ThreeVector(0.0, 8.91 * cm,  0.0));
+  G4Ellipsoid* craniumIn =  new G4Ellipsoid("CraniumIn", ax, by, cz);
+ 
 
   G4SubtractionSolid* cranium =  new G4SubtractionSolid("Cranium",
 						      craniumOut,
 							craniumIn,0,
-						      G4ThreeVector(0.0, 0.0,-0.6 * cm));
+						      G4ThreeVector(0.0, 0.0,1. * cm));
 
-  G4UnionSolid* skull = new G4UnionSolid("Skull", facialSkeleton, cranium,0,
-					G4ThreeVector(0.0,0.0,5.13 * cm));
-
-  G4LogicalVolume* logicSkull = new G4LogicalVolume(skull, skeleton, 
-						    "SkullVolume",
+  G4LogicalVolume* logicSkull = new G4LogicalVolume(cranium, skeleton, 
+						    "logical" + volumeName,
 						    0, 0, 0);
   
   // Define rotation and position here!
   G4VPhysicalVolume* physSkull = new G4PVPlacement(0,
-						   G4ThreeVector(0., 0.,2.875 * cm),
+						   G4ThreeVector(0., 0.,7.75 * cm),
 						   "physicalSkull",
 						   logicSkull,
 						   mother,
 						   false,
-						   0);
+						   0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)
@@ -140,8 +110,12 @@ G4VPhysicalVolume* G4MIRDSkull::ConstructSkull(G4VPhysicalVolume* mother, G4Stri
   }
 
   // Visualization Attributes
-  G4VisAttributes* SkullVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  SkullVisAtt->SetForceSolid(false);
+  //G4VisAttributes* SkullVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
+ G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* SkullVisAtt = new G4VisAttributes(colour);
+  SkullVisAtt->SetForceSolid(wireFrame); 
+  SkullVisAtt->SetLineWidth(4.* mm);
   logicSkull->SetVisAttributes(SkullVisAtt);
 
   G4cout << "Skull created !!!!!!" << G4endl;

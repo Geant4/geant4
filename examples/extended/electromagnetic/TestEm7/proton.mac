@@ -1,4 +1,4 @@
-# $Id: proton.mac,v 1.6 2007/01/12 16:35:21 maire Exp $
+# $Id: proton.mac,v 1.7 2007/06/22 12:44:42 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -16,7 +16,7 @@
 /run/initialize
 #
 /gun/particle proton
-/gun/energy 200 MeV
+/gun/energy 2000 MeV
 #
 # step limit
 /testem/stepMax 0.5 mm

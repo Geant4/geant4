@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.6 2006/06/29 18:37:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VoxelNavigation.cc,v 1.7 2007/05/11 13:43:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // class G4VoxelNavigation Implementation
@@ -35,6 +35,7 @@
 // --------------------------------------------------------------------
 
 #include "G4VoxelNavigation.hh"
+#include "G4GeometryTolerance.hh"
 
 // ********************************************************************
 // Constructor
@@ -51,6 +52,7 @@ G4VoxelNavigation::G4VoxelNavigation()
     fCheck(false),
     fVerbose(0)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 // ********************************************************************

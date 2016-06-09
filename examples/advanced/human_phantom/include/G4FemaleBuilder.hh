@@ -35,25 +35,20 @@
 #ifndef G4FemaleBuilder_h
 #define G4FemaleBuilder_h 1
 
-#include "G4VPhysicalVolume.hh"
+//#include "G4VPhysicalVolume.hh"
 
 #include "G4PhantomBuilder.hh"
 
-class G4PhantomBuilder;
-
-class G4VPhysicalVolume;
-class G4VBodyFactory;
 class G4FemaleBuilder: public G4PhantomBuilder
 {
 public:
   G4FemaleBuilder();
   ~G4FemaleBuilder();
 
-  void BuildBreast(G4bool sensitivity);
-  void BuildParameterisedBreast(G4bool sensitivity);
-  void BuildOvary(G4bool sensitivity);
-  void BuildUterus(G4bool sensitivity);
-  void BuildTestes(G4bool){;};
-  void BuildMaleGenitalia(G4bool){;};
+  void BuildLeftBreast(const G4String&, G4bool, G4bool);
+  void BuildRightBreast(const G4String&, G4bool, G4bool);
+  void BuildLeftOvary(const G4String&, G4bool, G4bool);
+  void BuildRightOvary(const G4String&, G4bool, G4bool);
+  void BuildUterus(const G4String&, G4bool, G4bool);
 };
 #endif

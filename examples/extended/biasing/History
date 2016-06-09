@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2005/12/06 11:15:28 gcosmo Exp $
+$Id: History,v 1.36 2007/06/22 13:20:55 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 22, 2007  A. Howard - exbiasing-V08-03-02
+- Cleaned up B01 and B02 code to be more example-like for release
+
+June 5, 2007  A. Howard - exbiasing-V08-03-01
+- Removed B03 from GNUmakefile
+- Included "B02-V08-03-00" - migration of B02 to new biasing/scoring scheme:
+  test version
+
+June 5, 2007  A. Howard - exbiasing-V08-03-00
+- Migrated example B01 to new biasing/scoring scheme - test version 
+  (needs clean up before public release)
+- Removed B03 (redundant/obsolete use of python)
 
 Dec 6, 2005  G. Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFinalState.hh,v 1.12 2006/06/29 20:47:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPFinalState.hh,v 1.13 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPFinalState_h
 #define G4NeutronHPFinalState_h
@@ -56,7 +56,7 @@ public:
   virtual G4HadFinalState * ApplyYourself(const G4HadProjectile & ) 
   {
     throw G4HadronicException(__FILE__, __LINE__, "G4HadFinalState * ApplyYourself(const G4HadProjectile & theTrack) needs implementation");
-    return NULL;
+    return 0;
   }
   
   // of course this would better be Done templating G4NeutronHPChannel..., 
@@ -69,7 +69,7 @@ public:
   G4bool HasAnyData() {return hasAnyData;}
   
   virtual G4double GetXsec(G4double ) { return 0; }
-  virtual G4NeutronHPVector * GetXsec() { return NULL; }
+  virtual G4NeutronHPVector * GetXsec() { return 0; }
   
   void     SetA_Z(G4double anA, G4double aZ) {theBaseA = anA; theBaseZ = aZ; }
   G4double GetZ() { return theBaseZ; }

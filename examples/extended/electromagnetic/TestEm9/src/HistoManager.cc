@@ -167,15 +167,25 @@ void HistoManager::EndOfRun()
 
   // average
 
-  G4cout<<"========================================================"<<G4endl;
+  G4cout<<"================================================================="<<G4endl;
   G4double x = (G4double)n_evt;
   if(n_evt > 0) x = 1.0/x;
   G4int j;
   for(j=0; j<nmax; j++) {
+
+    // total mean
     edep[j] *= x/beamEnergy;
     G4double y = erms[j]*x/(beamEnergy*beamEnergy) - edep[j]*edep[j];
     if(y < 0.0) y = 0.0;
     erms[j] = std::sqrt(y);
+
+    // trancated mean
+    G4double xx = G4double(stat[j]);
+    if(xx > 0.0) xx = 1.0/xx;
+    edeptr[j] *= xx/beamEnergy;
+    y = ermstr[j]*xx/(beamEnergy*beamEnergy) - edeptr[j]*edeptr[j];
+    if(y < 0.0) y = 0.0;
+    ermstr[j] = std::sqrt(y);
   }
   G4double xe = x*(G4double)n_elec;
   G4double xg = x*(G4double)n_gam;
@@ -190,30 +200,28 @@ void HistoManager::EndOfRun()
   G4cout << std::setprecision(4) << "Average number of e+         " << xp << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps      " << xs << G4endl;
   
-  for(j=0; j<3; j++) {
-    G4double e = edep[j];
-    G4double s = erms[j];
+  for(j=0; j<nmax; j++) {
+    G4double e = edeptr[j];
+    G4double s = ermstr[j];
     G4double r = s*std::sqrt(x);
-
-    // compute trancated means
-    if(limittrue[j] < DBL_MAX) {
-      G4double n = G4double(stat[j]);
-      if(n > 0) n = 1.0/n;
-      e = edeptr[j]*n;
-      s = ermstr[j]*n;
-      r = s - e*e;
-      s = 0.0;
-      if(r > 0.0) s = std::sqrt(r)/beamEnergy;
-      e /= beamEnergy;
-      r = s*std::sqrt(n);
-    }
-
     G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
-           << " +- " << s;
+           << " +- " << r;
     if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
     G4cout << G4endl;
   }
-  G4cout<<"========================================================"<<G4endl;
+  if(limittrue[0] != DBL_MAX || limittrue[1] != DBL_MAX || limittrue[2] != DBL_MAX) {
+    G4cout<<"===========  Mean values without trancating ====================="<<G4endl;
+    for(j=0; j<nmax; j++) {
+      G4double e = edep[j];
+      G4double s = erms[j];
+      G4double r = s*std::sqrt(x);
+      G4cout << std::setprecision(4) << "Edep " << nam[j] << " =                   " << e
+	     << " +- " << r;
+      if(e > 0.0) G4cout << "  res=  " << f*s/e << " %";
+      G4cout << G4endl;
+    }
+  }
+  G4cout<<"=================================================================="<<G4endl;
   G4cout<<G4endl;
 
   // normalise histograms
@@ -236,8 +244,8 @@ void HistoManager::EndOfRun()
       }
       G4double etrue = edeptrue[j];
       G4double rtrue = rmstrue[j];
-      acc.EmAcceptanceGauss("Edep"+nam[j],n_evt,edep[j],etrue,rtrue,ltrue);
-      acc.EmAcceptanceGauss("Erms"+nam[j],n_evt,erms[j],rtrue,rtrue,2.0*ltrue);
+      acc.EmAcceptanceGauss("Edep"+nam[j],n_evt,edeptr[j],etrue,rtrue,ltrue);
+      acc.EmAcceptanceGauss("Erms"+nam[j],n_evt,ermstr[j],rtrue,rtrue,2.0*ltrue);
     }
   }
   if(isStarted) acc.EndOfAcceptance();
@@ -290,17 +298,17 @@ void HistoManager::EndOfEvent()
   erms[2] += e25*e25;
 
   // trancated mean
-  if(limittrue[0]<DBL_MAX && std::abs(e0/beamEnergy-edeptrue[0])<rmstrue[0]*limittrue[0]) {
+  if(limittrue[0] == DBL_MAX || std::abs(e0/beamEnergy-edeptrue[0])<rmstrue[0]*limittrue[0]) {
     stat[0] += 1;
     edeptr[0] += e0;
     ermstr[0] += e0*e0;
   }
-  if(limittrue[1]<DBL_MAX && std::abs(e9/beamEnergy-edeptrue[1])<rmstrue[1]*limittrue[1]) {
+  if(limittrue[1] == DBL_MAX || std::abs(e9/beamEnergy-edeptrue[1])<rmstrue[1]*limittrue[1]) {
     stat[1] += 1;
     edeptr[1] += e9;
     ermstr[1] += e9*e9;
   }
-  if(limittrue[2]<DBL_MAX && std::abs(e25/beamEnergy-edeptrue[2])<rmstrue[2]*limittrue[2]) {
+  if(limittrue[2] == DBL_MAX || std::abs(e25/beamEnergy-edeptrue[2])<rmstrue[2]*limittrue[2]) {
     stat[2] += 1;
     edeptr[2] += e25;
     ermstr[2] += e25*e25;

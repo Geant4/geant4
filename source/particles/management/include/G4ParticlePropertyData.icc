@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticlePropertyData.icc,v 1.2 2006/06/29 19:24:12 gunter Exp $
+// $Id: G4ParticlePropertyData.icc,v 1.3 2007/03/11 07:17:35 kurasige Exp $
 //
 
 inline 
@@ -131,7 +131,14 @@ inline
   thePDGiIsospin3 = newIsospin3;
   fPDGiIsospin3Modified = true;
 }
-
+ 
+inline
+ void G4ParticlePropertyData::SetPDGMagneticMoment(G4double mageticMoment)
+{
+   thePDGMagneticMoment = mageticMoment;
+   fPDGMagneticMomentModified = true;
+}
+ 
 inline 
  void  G4ParticlePropertyData::SetPDGiGParity(G4int newGParity)
 {

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAProtonChargeIncrease.hh,v 1.3 2006/06/29 19:34:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #ifndef   G4DNAPROTONCHARGEINCREASE_HH
 #define  G4DNAPROTONCHARGEINCREASE_HH 1

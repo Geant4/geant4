@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PVReplica.cc,v 1.7 2006/06/29 18:58:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4PVReplica Implementation

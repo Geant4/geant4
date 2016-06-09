@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.4 2007/03/20 13:13:03 urban Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4UniversalFluctuation.hh,v 1.5 2007/04/03 11:08:36 urban Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -103,11 +103,15 @@ private:
   G4double f2Fluct;
   G4double e1Fluct;
   G4double e2Fluct;
-  G4double rateFluct;
   G4double e1LogFluct;
   G4double e2LogFluct;
   G4double ipotLogFluct;
   G4double e0;
+
+  G4double facwidth;
+  G4double oldloss;
+  G4double samestep;
+  G4double e1,e2;
 
   G4double minNumberInteractionsBohr;
   G4double theBohrBeta2;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversionModel.cc,v 1.4 2007/03/19 12:38:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4PolarizedGammaConversionModel.cc,v 1.5 2007/05/23 08:52:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -91,14 +91,13 @@ void G4PolarizedGammaConversionModel::Initialise(const G4ParticleDefinition* pd,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::vector<G4DynamicParticle*>* G4PolarizedGammaConversionModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+void G4PolarizedGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+							const G4MaterialCutsCouple* couple,
+							const G4DynamicParticle* dp,
+							G4double tmin,
+							G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = 
-    G4BetheHeitlerModel::SampleSecondaries(couple, dp, tmin, maxEnergy);
+  G4BetheHeitlerModel::SampleSecondaries(vdp, couple, dp, tmin, maxEnergy);
  
   if(vdp && vdp->size()>0) {
     G4double gamEnergy0 = dp->GetKineticEnergy();
@@ -139,7 +138,6 @@ std::vector<G4DynamicParticle*>* G4PolarizedGammaConversionModel::SampleSecondar
 
     }
   }
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

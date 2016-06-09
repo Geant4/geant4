@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QPartonPairVector.hh,v 1.1 2006/11/16 11:36:09 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, October 2006.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.cc,v 1.12 2006/10/31 10:01:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4StepPoint.cc,v 1.13 2007/03/11 07:19:06 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 //---------------------------------------------------------------
@@ -39,8 +39,7 @@
 //
 // Contact:
 //   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//     Hisaya Kurashige  
 //
 // ---------------------------------------------------------------
 
@@ -74,5 +73,6 @@ G4StepPoint::G4StepPoint(const G4StepPoint &right):
   fpProcessDefinedStep(right.fpProcessDefinedStep),
   fMass(right.fMass),
   fCharge(right.fCharge),
+  fMagneticMoment(right.fMagneticMoment),
   fWeight(right.fWeight)
 {}

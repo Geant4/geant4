@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: geomdefs.hh,v 1.6 2006/06/29 18:59:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: geomdefs.hh,v 1.8 2007/05/18 07:21:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -41,17 +41,6 @@
 
 // `Infinity' - Distance returned for no intersection etc.
 static const G4double kInfinity = 9.0E99;
-
-// Thickness of shapes for Inside function / tracking.
-// Should be greater than largest math error from the shape 
-// distance calculation routines.
-// Tolerance is centred on surface: Inside routine uses a
-//                                  tolerance dx +/- kTol/2
-// Note: values not `tuned', and because of approximations kRadtolerance and
-//       kAngTolerance may not always be used as an exact radius
-static const G4double kCarTolerance = 1E-9*mm;
-static const G4double kRadTolerance = 1E-9*mm;
-static const G4double kAngTolerance = 1E-9*rad;
 
 // Minimum cosine of angle between surface normal & track direction
 // for exiting normal optimisation

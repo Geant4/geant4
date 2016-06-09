@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MscModel71.hh,v 1.4 2006/06/29 19:50:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MscModel71.hh,v 1.5 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -94,11 +94,11 @@ public:
 				   G4double cut =0.,
 				   G4double emax=DBL_MAX);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double length,
-                                      G4double safety);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double length,
+				 G4double safety);
 
   G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
                     const G4MaterialCutsCouple* couple,

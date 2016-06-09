@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PVParameterised.hh,v 1.8 2007/04/11 07:56:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4PVParameterised

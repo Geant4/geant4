@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.14 2006/06/29 21:08:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpBoundaryProcess.hh,v 1.15 2007/05/11 14:15:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ private:
 	G4double theReflectivity;
 	G4double theEfficiency;
 	G4double prob_sl, prob_ss, prob_bs;
-
+        G4double kCarTolerance;
 };
 
 ////////////////////

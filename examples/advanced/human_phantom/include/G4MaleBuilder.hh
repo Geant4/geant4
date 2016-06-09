@@ -44,11 +44,9 @@ class G4MaleBuilder: public G4PhantomBuilder
 public:
   G4MaleBuilder();
   ~G4MaleBuilder();
-  void BuildBreast(G4bool){;};
-  void BuildParameterisedBreast(G4bool){;};
-  void BuildOvary(G4bool){;};
-  void BuildUterus(G4bool){;};
+
   void BuildMaleGenitalia(G4bool);
   void BuildTestes(G4bool);
+  // void SetModel(G4String);
 };
 #endif

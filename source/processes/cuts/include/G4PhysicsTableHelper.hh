@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PhysicsTableHelper.hh,v 1.3 2006/06/29 19:29:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------

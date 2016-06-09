@@ -65,7 +65,6 @@ private:
   G4UIcmdWithAString*            sexCmd;  
   G4UIcmdWithAString*            bodypartCmd;
   G4UIcmdWithoutParameter*       endCmd;
-  G4UIcmdWithoutParameter*       cleanCmd;
 
   G4String                       bodypart;
   G4bool                         bps;

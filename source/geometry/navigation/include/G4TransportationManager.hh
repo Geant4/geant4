@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.hh,v 1.10 2006/11/03 20:03:26 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TransportationManager.hh,v 1.12 2007/04/20 15:28:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // class G4TransportationManager
 //
@@ -46,6 +46,7 @@
 #define  G4TransportationManager_hh
 
 #include "G4Navigator.hh"
+#include "G4SafetyHelper.hh"
 
 #include <vector>
 
@@ -82,6 +83,9 @@ class G4TransportationManager
      inline size_t GetNoWorlds() const;
      inline std::vector<G4VPhysicalVolume*>::iterator GetWorldsIterator();
        // Return an iterator to the list of registered worlds
+
+     inline G4SafetyHelper* GetSafetyHelper() const;
+       // Return the pointer to the navigation safety helper instance
 
      G4VPhysicalVolume* GetParallelWorld ( const G4String& worldName );
        // Return an exact copy of the tracking world volume. If already
@@ -131,6 +135,7 @@ class G4TransportationManager
      G4PropagatorInField*    fPropagatorInField;
      G4FieldManager*         fFieldManager;
      G4GeometryMessenger*    fGeomMessenger;
+     G4SafetyHelper*         fSafetyHelper;
 
      static G4TransportationManager*  fTransportationManager;
 };

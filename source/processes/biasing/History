@@ -1,0 +1,60 @@
+$Id: History,v 1.15 2007/06/25 06:59:17 ahoward Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+June 22nd, 2007 Alex Howard (procbiasing-V08-03-08)
+- Added missing member function to G4VSampler base class
+
+June 12th, 2007 Alex Howard (procbiasing-V08-03-05)
+- Added CoupledTransportation name to G4ProcessPlacer
+
+June 1st, 2007 Alex Howard (procbiasing-V08-03-04)
+- Added missing source file G4VProcessPlacer.cc previously resident in
+  processes/transportation
+- Removed scoring inheritance in G4VSampler
+- HEAD maintains inheritance for backward comparisons/testing
+
+June 1st, 2007 Alex Howard (procbiasing-V08-03-03)
+- Renamed New classes back to normal classes, simultaneously 
+  processes/transportation old biasing classes renamed with 
+  suffix 8 to avoid clashes.
+- includes modified G4GeometrySampler (without scoring)
+- HEAD contains un-modifier G4GeometrySampler and depends on old scoring scheme
+  in geometry/biasing.
+
+May 31st, 2007 Alex Howard (procbiasing-V08-03-02)
+- removed dependency on old biasing within transportation and on old scoring
+  within geometry
+- G4GeometrySampler is modified to remove scoring dependency
+- HEAD of G4GeometrySampler is the old file
+- HEAD contains a different version of G4GeometrySampler that includes the old
+  biasing scoring for the purpose of testing
+
+May 30th, 2007 Alex Howard (procbiasing-V08-03-01)
+- added missing includes to GNUmakefile
+
+May 30th, 2007 Alex Howard (procbiasing-V08-03-00)
+- migrated classes and tests from processes/scoring
+
+May 25th, 2007 Jane Tinslay
+- Add tests for physics biasing under test/physics_biasing
+
+March 21st, 2007  G.Cosmo
+- Module and history file created.
+
+

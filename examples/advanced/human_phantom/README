@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2006/11/30 16:06:38 guatelli Exp $
+qYY$Id: README,v 1.13 2007/06/06 19:11:20 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -102,6 +102,17 @@ output file: g4humanphantom.hbk containing
 2D histogram id=50:     Energy Deposit (MeV, y axis) in Body Part (x axis)
 2D histogram id=100:    Edep(MeV) in the parameterized breast, x= slice, y= sector
 
+----> Macro files: example of different human phantoms
+
+default.mac is executed by default in the simulation
+adultMIRDFemale.mac: example to define a MIRD female human phantom
+adultMIRDMale.mac: example to define a MIRD male human phantom
+adultHead.mac: example how to define one piece of the anatomy
+adultORNLFemale.mac: example to define a ORNL female human phantom
+adultORNLMale.mac: example to define a ORNL male human phantom
+adultMIXFemale.mac : example of MIRD human female phantom with 
+	             parameterised breast
+
 -----> Setup
 
 Example enviroment with the compiler gcc-3.2.3, on the Linux platform                              
@@ -112,7 +123,8 @@ The following environment variables need to be set:
 G4LEDATA : points to low energy data base
 set G4ANALYSIS_USE equal to 1 to activate the analysis
 
-- Install the GDML package with Geant4 extensions and Xerces.
+- Install the GDML package with Geant4 extensions and Xerces
+.
   See: http://cern.ch/gdml.
 
 - Set the environment variable GDML_BASE to point to the area where
@@ -146,9 +158,3 @@ gdmlData/Female and gdmlData/Male, specifying in the top line the
 - Run particles: run.mac
 
 ---------------------------------------------------------------------------
-
-for comments, advices, doubts and questions please contact: 
-guatelli@ge.infn.it, pia@ge.infn.it
-
-last modified: S. Guatelli, 30/11/2006
-

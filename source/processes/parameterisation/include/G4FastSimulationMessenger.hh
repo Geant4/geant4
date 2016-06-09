@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationMessenger.hh,v 1.6 2006/11/03 17:26:04 mverderi Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4FastSimulationMessenger.hh,v 1.7 2007/05/11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //	GEANT 4 class header file 
@@ -64,13 +64,13 @@ private:
   G4GlobalFastSimulationManager* fGlobalFastSimulationManager;
   
   //commands
-  G4UIdirectory*           fFSDirectory;
-  G4UIcmdWithoutParameter* fShowSetupCmd;
-  G4UIcmdWithAString*      fListEnvelopesCmd;
-  G4UIcmdWithAString*      fListModelsCmd;
+  G4UIdirectory*                   fFSDirectory;
+  G4UIcmdWithoutParameter*        fShowSetupCmd;
+  G4UIcmdWithAString*         fListEnvelopesCmd;
+  G4UIcmdWithAString*            fListModelsCmd;
   G4UIcmdWithAString*      fListIsApplicableCmd;
-  G4UIcmdWithAString*      fActivateModel;
-  G4UIcmdWithAString*      fInActivateModel;
+  G4UIcmdWithAString*            fActivateModel;
+  G4UIcmdWithAString*          fInActivateModel;
 };
 
 #endif

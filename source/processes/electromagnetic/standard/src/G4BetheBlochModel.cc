@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.12 2006/08/29 20:21:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4BetheBlochModel.cc,v 1.13 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -229,17 +229,17 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* dp,
-                                   G4double minKinEnergy,
-                                   G4double maxEnergy)
+void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
+					  const G4MaterialCutsCouple*,
+					  const G4DynamicParticle* dp,
+					  G4double minKinEnergy,
+					  G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double tmax = MaxSecondaryEnergy(dp->GetDefinition(),kineticEnergy);
 
   G4double maxKinEnergy = min(maxEnergy,tmax);
-  if(minKinEnergy >= maxKinEnergy) return 0;
+  if(minKinEnergy >= maxKinEnergy) return;
 
   G4double totEnergy     = kineticEnergy + mass;
   G4double etot2         = totEnergy*totEnergy;
@@ -297,7 +297,6 @@ vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
                                                  deltaDirection,deltaKinEnergy);
 
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(delta);
 
   // Change kinematics of primary particle
@@ -307,8 +306,6 @@ vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);
-
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

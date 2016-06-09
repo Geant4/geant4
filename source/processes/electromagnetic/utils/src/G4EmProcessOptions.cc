@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.20 2007/02/12 12:31:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4EmProcessOptions.cc,v 1.21 2007/05/18 18:39:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -260,13 +260,6 @@ void G4EmProcessOptions::SetDEDXBinningForCSDARange(G4int val)
 
 void G4EmProcessOptions::SetLambdaBinning(G4int val)
 {
-  const std::vector<G4VEnergyLossProcess*>& v =
-        theManager->GetEnergyLossProcessVector();
-  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
-  for(itr = v.begin(); itr != v.end(); itr++) {
-    G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetLambdaBinning(val);
-  }
   const std::vector<G4VEmProcess*>& w =
         theManager->GetEmProcessVector();
   std::vector<G4VEmProcess*>::const_iterator itp;
@@ -368,7 +361,6 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name)
       else if (s->GetProcessName() == name) s->SetVerboseLevel(val);
     }
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -407,10 +399,67 @@ void G4EmProcessOptions::ActivateDeexcitation(G4bool val, const G4Region* r)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm, 
-					      G4double factor)
+void G4EmProcessOptions::SetMscStepLimitation(G4MscStepLimitType val)
 {
-  theManager->SetMscStepLimitation(algorithm, factor);
+  const std::vector<G4VMultipleScattering*>& u =
+        theManager->GetMultipleScatteringVector();
+  std::vector<G4VMultipleScattering*>::const_iterator itm;
+  for(itm = u.begin(); itm != u.end(); itm++) {
+    if(*itm) (*itm)->SetStepLimitType(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetMscLateralDisplacement(G4bool val)
+{
+  const std::vector<G4VMultipleScattering*>& u =
+        theManager->GetMultipleScatteringVector();
+  std::vector<G4VMultipleScattering*>::const_iterator itm;
+  for(itm = u.begin(); itm != u.end(); itm++) {
+    if(*itm) (*itm)->SetLateralDisplasmentFlag(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetSkin(G4double val)
+{
+  if(val < 0.0) return;
+  const std::vector<G4VMultipleScattering*>& u =
+        theManager->GetMultipleScatteringVector();
+  std::vector<G4VMultipleScattering*>::const_iterator itm;
+  for(itm = u.begin(); itm != u.end(); itm++) {
+    if(*itm) {
+      (*itm)->SetSkin(val);
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetMscRangeFactor(G4double val)
+{
+  if(val < 0.0) return;
+  const std::vector<G4VMultipleScattering*>& u =
+        theManager->GetMultipleScatteringVector();
+  std::vector<G4VMultipleScattering*>::const_iterator itm;
+  for(itm = u.begin(); itm != u.end(); itm++) {
+    if(*itm) (*itm)->SetRangeFactor(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetMscGeomFactor(G4double val)
+{
+  if(val < 0.0) return;
+  const std::vector<G4VMultipleScattering*>& u =
+        theManager->GetMultipleScatteringVector();
+  std::vector<G4VMultipleScattering*>::const_iterator itm;
+  for(itm = u.begin(); itm != u.end(); itm++) {
+    if(*itm) (*itm)->SetGeomFactor(val);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -422,23 +471,9 @@ void G4EmProcessOptions::SetLPMFlag(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetMscLateralDisplacement(G4bool val)
-{
-  theManager->SetMscLateralDisplacement(val);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4EmProcessOptions::SetLinearLossLimit(G4double val)
 {
   theManager->SetLinearLossLimit(val);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4EmProcessOptions::SetSkin(G4double val)
-{
-  theManager->SetSkin(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

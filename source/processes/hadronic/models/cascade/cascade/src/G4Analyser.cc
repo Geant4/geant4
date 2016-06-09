@@ -25,6 +25,7 @@
 //
 #include "G4Analyser.hh"
 #include <cmath>
+#include <iomanip>
 
 G4Analyser::G4Analyser()
   :verboseLevel(1)  {
@@ -341,13 +342,14 @@ void G4Analyser::printResultsNtuple() {
 
   // Create one line of ACII data. 
   // Several runs should create ntuple for data-analysis 
-  G4cout << int(eventNumber + 0.1) << " " <<
-    averageMultiplicity / eventNumber << " " << 
-    averageProtonNumber / eventNumber << " " <<
-    averageNeutronNumber / eventNumber << " " <<
-    averageNucleonKinEnergy / (averageProtonNumber + averageNeutronNumber) << " " <<
-    averageProtonKinEnergy / (averageProtonNumber + 1.0e-10) << " " <<
-    averageNeutronKinEnergy / (averageNeutronNumber + 1.0e-10) << " " <<
-    averagePionNumber / eventNumber << " " <<
-    averagePionKinEnergy / (averagePionNumber + 1.0e-10) << G4endl;
+  G4cout <<
+    std::setw(15) << int(eventNumber + 0.1) <<
+    std::setw(15) << averageMultiplicity / eventNumber << 
+    std::setw(15) << averageProtonNumber / eventNumber <<
+    std::setw(15) << averageNeutronNumber / eventNumber << " " <<
+    std::setw(15) << averageNucleonKinEnergy / (averageProtonNumber + averageNeutronNumber) << " " <<
+    std::setw(15) << averageProtonKinEnergy / (averageProtonNumber + 1.0e-10) << " " <<
+    std::setw(15) << averageNeutronKinEnergy / (averageNeutronNumber + 1.0e-10) << " " <<
+    std::setw(15) << averagePionNumber / eventNumber << " " <<
+    std::setw(15) << averagePionKinEnergy / (averagePionNumber + 1.0e-10) << G4endl;
 }

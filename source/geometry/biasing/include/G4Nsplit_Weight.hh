@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Nsplit_Weight.hh,v 1.11 2006/06/29 18:16:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4Nsplit_Weight

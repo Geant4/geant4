@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsFTFC.hh,v 1.1 2006/10/31 11:35:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HadronPhysicsFTFC.hh,v 1.2 2007/06/01 15:20:06 gunter Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,7 +62,7 @@
 class HadronPhysicsFTFC : public G4VPhysicsConstructor
 {
   public: 
-    HadronPhysicsFTFC(const G4String& name ="hadron");
+    HadronPhysicsFTFC(const G4String& name ="hadron",G4bool quasiElastic=true);
     virtual ~HadronPhysicsFTFC();
 
   public: 
@@ -84,6 +84,8 @@ class HadronPhysicsFTFC : public G4VPhysicsConstructor
     G4FTFCProtonBuilder * theFTFCPro;    
     
     G4MiscLHEPBuilder * theMiscLHEP;
+
+    G4bool QuasiElastic;
 };
 
 #endif

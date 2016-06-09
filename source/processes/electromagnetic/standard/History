@@ -1,4 +1,4 @@
-$Id: History,v 1.299 2007/04/24 12:03:24 vnivanch Exp $
+$Id: History,v 1.316 2007/06/11 15:01:26 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,69 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 May 07: V.Ivant (emstand-V08-03-09)
+- G4MultipleScattering, G4hMultipleScattering - substitute name 
+  "G4v71" -> "Minimal"
+
+29 May 07:  V.Ivanchenko (emstand-V08-03-08)
+- G4MultipleScattering, G4hMultipleScattering - fix initialisation
+  of lateral displacement (bug introduced in previuos tag)
+  
+23 May 07:  V.Ivanchenko (emstand-V08-03-07)
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess 
+  remove method SecondaryPostStep;
+- G4eBremsstrahlung - remove definition of gamma threshold from constructor,
+  define this parameter at initialisation of the process from 
+  G4LossTableManager
+- G4eeToTwoGammaModel use fParticleChange inside SampleSecondaries
+
+22 May 07:  V.Ivanchenko (emstand-V08-03-06)
+- G4VEmModel - changed interface of SampleSecondary method, it become 
+  void, extra parameter std::vector<G4DynamicParticle*>*, all
+  classes using or inhereting this interface are modified.
+  About 5% speadup of EM shower simulation
+
+21 May 07:  V.Ivanchenko (emstand-V08-03-05)
+- G4ionIonisation - added InitialiseMassCharge method; remove
+      GetMeanFreePath implementation
+
+20 May 07:  V.Ivanchenko (emstand-V08-03-04)
+- G4ionIonisation - added NuclearStopping flag
+
+18 May 07:  V.Ivanchenko (emstand-V08-03-03)
+- remove obsolete G4VeEnergyLoss and G4VhEnergyLoss 
+
+18 May 07:  V.Ivanchenko (emstand-V08-03-02)
+- G4MultipleScattering, G4hMultipleScattering - reorganise methods 
+                                                for setting msc
+                                                parameters
+- G4UrbanMscModel - reorganise initialisation; use G4MscStepLimitType
+                    enumerator to choose step limit algorithm
+                                                
+
+16 May 07:  V.Ivanchenko (emstand-V08-03-01)
+- Remove obsolete classes G4GammaConversion52,
+  G4PhotoElectricEffect52, G4eBremsstrahlung52, G4eIonisation52,
+  G4eplusAnnihilation52, G4hIonisation52, G4MultipleScattering52
+- G4ionIonisation - add data for stopping only for GenericIons
+
+11 May 07:  G.Cosmo (emstand-V08-03-00)
+- Use call to G4GeometryTolerance instead of kCarTolerance in PAI classes.
+- Requires tag "global-V08-03-00" and related tag set.
+
+10 May 07:  V.Ivanchenko (emstand-V08-02-16)
+- G4UrbanMscModel - Fix bug - restore performance of EMV PhysicsLists
+
+01 May 07:  V.Ivanchenko (emstand-V08-02-15)
+- G4UrbanMscModel - L.Urban: optimisation of step limitation for skin>0
+                             (about 5% CPU save)
+
+24 April 07:  V.Ivanchenko (emstand-V08-02-14)
+- G4MultipleScattering - use by default skin=0, because the current 
+	                 interface to G4SafetyHelper does not allow 
+                         it to provide a valid step in the case of 
+                         magnetic field
 
 23 April 07:  V.Ivanchenko (emstand-V08-02-13)
 - G4UrbanMscModel - L.Urban: stepping near to boundaries has been

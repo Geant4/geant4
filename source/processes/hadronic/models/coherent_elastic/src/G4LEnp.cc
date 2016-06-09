@@ -37,8 +37,7 @@
 #include "Randomize.hh"
 
 
-G4LEnp::G4LEnp() :
-  G4HadronicInteraction()
+G4LEnp::G4LEnp():G4HadronicInteraction("G4LEnp")
 {
   //    theParticleChange.SetNumberOfSecondaries(1);
   

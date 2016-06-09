@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.15 2006/11/03 17:46:08 japost Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VParticleChange.icc,v 1.16 2007/03/25 22:54:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //   remove obsolete methods of SetXXX  19  Sep, 04 H.Kurashige  
 //----------------------------------------------------------------
@@ -37,6 +37,7 @@ inline G4Step* G4VParticleChange::UpdateStepInfo(G4Step* pStep)
   // Update the G4Step specific attributes
   pStep->SetStepLength( theTrueStepLength );
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
   pStep->SetControlFlag( theSteppingControlFlag );
 
   if (theFirstStepInVolume) {pStep->SetFirstStepFlag();}
@@ -155,6 +156,18 @@ inline
 }
 
 inline 
+ G4double G4VParticleChange::GetNonIonizingEnergyDeposit() const
+{
+  return theNonIonizingEnergyDeposit;
+}
+
+inline 
+ void G4VParticleChange::ProposeNonIonizingEnergyDeposit(G4double anEnergyPart)
+{
+  theNonIonizingEnergyDeposit = anEnergyPart;
+}
+
+inline 
  G4double G4VParticleChange::GetTrueStepLength() const
 {
   return theTrueStepLength;
@@ -194,6 +207,7 @@ inline
 {  
   // clear theLocalEnergyDeposited   
   theLocalEnergyDeposit = 0.0;
+  theNonIonizingEnergyDeposit = 0.0;
 }
 
 inline

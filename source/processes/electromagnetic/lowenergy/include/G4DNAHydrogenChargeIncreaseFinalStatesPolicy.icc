@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAHydrogenChargeIncreaseFinalStatesPolicy.icc,v 2005/09/15 14:38:34 Ziad FRANCIS
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifdef   G4DNAHYDROGENCHARGEINCREASEFINALSTATESPOLICY_HH

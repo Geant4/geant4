@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.19 2006/12/07 15:09:18 japost Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4Navigator.hh,v 1.23 2007/05/11 13:43:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // class G4Navigator
@@ -98,6 +98,12 @@ class G4Navigator
     // boundary is >pCurrentProposedStepLength away, kInfinity
     // is returned together with the computed isotropic safety
     // distance. Geometry must be closed.
+
+  G4double CheckNextStep(const G4ThreeVector &pGlobalPoint,
+                         const G4ThreeVector &pDirection,
+                         const G4double pCurrentProposedStepLength,
+                               G4double &pNewSafety); 
+    // Same as above, but do not disturb the state of the Navigator.
 
   virtual
   G4VPhysicalVolume* ResetHierarchyAndLocate(const G4ThreeVector &point,
@@ -233,7 +239,7 @@ class G4Navigator
     // verifications and more strict correctness conditions.
     // Is effective only with G4VERBOSE set.
 
-  void PrintState();      
+  void PrintState() const;
     // Print the internal state of the Navigator (for debugging).
     // The level of detail is according to the verbosity.
 
@@ -252,6 +258,15 @@ class G4Navigator
     // in case Navigator is stuck and is returning zero steps.
     // Values: 1 (small problem),  5 (correcting), 
     //         9 (ready to abandon), 10 (abandoned)
+
+  // inline 
+  void SetSavedState(); 
+  // ( fValidExitNormal, fExitNormal, fExiting, fEntering, 
+  //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero); 
+  // inline 
+  void RestoreSavedState(); 
+    // Copy aspects of the state, to enable a non-state changing
+    //  call to ComputeStep
 
  public:  // with description
 
@@ -290,6 +305,9 @@ class G4Navigator
     //   volumes.
 
  protected:  // without description
+
+  G4double kCarTolerance;
+    // Geometrical tolerance for surface thickness of shapes.
 
   //
   // BEGIN State information
@@ -372,22 +390,34 @@ class G4Navigator
   // END State information
   //
 
+  // Save key state information (NOT the navigation history stack)
   //
-  // BEGIN Tracking Invariants
-  //
+  struct G4SaveNavigatorState
+  { 
+     G4ThreeVector sExitNormal;  
+     G4bool sValidExitNormal;    
+     G4bool sEntering, sExiting;
+     G4VPhysicalVolume* spBlockedPhysicalVolume;
+     G4int sBlockedReplicaNo;  
+     G4int sLastStepWasZero; 
 
+     //  Potentially relevant
+     //
+     G4bool sLocatedOutsideWorld;
+     G4ThreeVector sLastLocatedPointLocal; 
+     G4bool sEnteredDaughter, sExitedMother;
+     G4ThreeVector  sPreviousSftOrigin;
+     G4double       sPreviousSafety; 
+  } fSaveState; 
+
+  // Tracking Invariants
+  //
   G4VPhysicalVolume  *fTopPhysical;
     // A link to the topmost physical volume in the detector.
     // Must be positioned at the origin and unrotated.
 
+  // Utility information
   //
-  // END Tracking Invariants
-  //
-
-  //
-  // BEGIN Utility information
-  //
-
   G4bool fCheck;
     // Check-mode flag  [if true, more strict checks are performed].
   G4bool fPushed;
@@ -395,11 +425,6 @@ class G4Navigator
   G4int  fVerbose;
     // Verbose(ness) level  [if > 0, printout can occur].
 
-  //
-  // END Utility Invariants
-  //
-
-  // 
   // Helpers/Utility classes
   //
   G4NormalNavigation  fnormalNav;

@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.42 2007/02/28 15:35:07 gcosmo Exp $
+# $Id: common.gmk,v 1.43 2007/06/28 14:33:38 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -123,10 +123,10 @@ installed_includes:=$(patsubst include/%,$(G4INCLUDE)/%,$(installed_includes))
 
 # NOTE: the double colon rule allows to add other rules for the same target
 #
-includes::	$(installed_includes)
+includes:: $(installed_includes)
 
 # Static Pattern rules, see GNU make manual for details.
-#           target(s): target-pattern : dep-pattern	
+#           target(s): target-pattern : dep-pattern
 #
 $(installed_includes): $(G4INCLUDE)/% : include/%
 	@cp -p $< $@

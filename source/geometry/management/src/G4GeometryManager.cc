@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.cc,v 1.18 2006/06/29 18:33:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4GeometryManager.cc,v 1.19 2007/05/11 13:30:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // class G4GeometryManager
 //
@@ -50,6 +50,12 @@
 #include "G4SmartVoxelHeader.hh"
 #include "voxeldefs.hh"
 
+// Needed for setting the extent for tolerance value
+//
+#include "G4GeometryTolerance.hh"
+#include "G4SolidStore.hh"
+#include "G4VSolid.hh"
+
 // ***************************************************************************
 // Static class variable: ptr to single instance of class
 // ***************************************************************************
@@ -61,8 +67,8 @@ G4GeometryManager* G4GeometryManager::fgInstance = 0;
 // ***************************************************************************
 //
 G4GeometryManager::G4GeometryManager() 
+  : fIsClosed(false)
 {
-  fIsClosed=false;
 }
 
 // ***************************************************************************
@@ -261,7 +267,10 @@ void G4GeometryManager::BuildOptimisations(G4bool allOpts,
    // Scan recursively the associated logical volume tree
    //
   tVolume = pVolume->GetLogicalVolume();
-  if (tVolume->GetNoDaughters()) {  BuildOptimisations(allOpts, tVolume->GetDaughter(0)); }
+  if (tVolume->GetNoDaughters())
+  {
+    BuildOptimisations(allOpts, tVolume->GetDaughter(0));
+  }
 }
 
 // ***************************************************************************
@@ -301,7 +310,29 @@ void G4GeometryManager::DeleteOptimisations(G4VPhysicalVolume* pVolume)
   // Scan recursively the associated logical volume tree
   //
   tVolume = pVolume->GetLogicalVolume();
-  if (tVolume->GetNoDaughters()) { DeleteOptimisations(tVolume->GetDaughter(0)); }
+  if (tVolume->GetNoDaughters())
+  {
+    DeleteOptimisations(tVolume->GetDaughter(0));
+  }
+}
+
+// ***************************************************************************
+// Sets the maximum extent of the world volume. The operation is allowed only
+// if NO solids have been created already.
+// ***************************************************************************
+//
+void G4GeometryManager::SetWorldMaximumExtent(G4double extent)
+{
+  if (G4SolidStore::GetInstance()->size())
+  {
+     // Sanity check to assure that extent is fixed BEFORE creating
+     // any geometry object (solids in this case)
+     //
+     G4Exception("G4GeometryManager::SetMaximumExtent()",
+                 "NotApplicable", FatalException,
+                 "Extent can be set only BEFORE creating any geometry object!");
+  }
+  G4GeometryTolerance::GetInstance()->SetSurfaceTolerance(extent);
 }
 
 // ***************************************************************************

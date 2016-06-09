@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiProton.cc,v 1.12 2006/06/29 19:16:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4AntiProton.cc,v 1.13 2007/03/11 07:17:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -73,6 +73,9 @@ G4AntiProton* G4AntiProton::Definition()
 		 true,            -1.0,          NULL,
                 false,       "nucleon"
               );
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( -2.792847351 * mN);
   }
   theInstance = reinterpret_cast<G4AntiProton*>(anInstance);
   return theInstance;

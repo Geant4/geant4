@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.cc,v 1.12 2006/11/03 17:26:04 mverderi Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4FastSimulationManager.cc,v 1.13 2007/05/11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------
 //
@@ -36,6 +36,8 @@
 //
 //  History:
 //    Oct 97: Verderi && MoraDeFreitas - First Implementation.
+//    ...
+//    May 07: Move to parallel world scheme
 //
 //---------------------------------------------------------------
 
@@ -155,86 +157,10 @@ G4FastSimulationManager::GetFastSimulationModel(const G4String& modelName,
   return model;
 }
 
-// ***************************************** TO BE DROPPED ********************************************** >>>> BEGINNING
 
-//----------------------------------------
-// Methods to add/remove GhostPlacements 
-//----------------------------------------
-
-G4Transform3D*
-G4FastSimulationManager::AddGhostPlacement(G4RotationMatrix *prot,
-					   const G4ThreeVector &tlate)
-{
-  G4Transform3D* newghostplace;
-  if(prot==0) prot = new G4RotationMatrix();
-  newghostplace = new G4Transform3D(*prot,tlate);
-  AddGhostPlacement(newghostplace);
-  return newghostplace;
-}
-
-G4Transform3D*
-G4FastSimulationManager::AddGhostPlacement(G4Transform3D *trans3d)
-{
-  GhostPlacements.push_back (trans3d);
-  G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
-    FastSimulationNeedsToBeClosed();  
-  return trans3d;
-}
-
-G4bool 
-G4FastSimulationManager::RemoveGhostPlacement(const G4Transform3D *trans3d)
-{
-  G4bool found;
-  if((found=(GhostPlacements.remove(trans3d) != 0)))
-    G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
-      FastSimulationNeedsToBeClosed();
-  return found;
-}
-
-G4bool 
-G4FastSimulationManager::
-InsertGhostHereIfNecessary(G4VPhysicalVolume* theClone,
-			   const G4ParticleDefinition& theParticle)
-{
-  G4PVPlacement *GhostPhysical;
-  // Not to do if there aren't glost placements
-  if(GhostPlacements.size()==0) return false;
-  
-  // If there are, verifies if at least one model is applicable
-  // for theParticle.
-  for (size_t iModel=0; iModel<ModelList.size(); iModel++)
-    if(ModelList[iModel]->IsApplicable(theParticle)) {
-      // Ok, we find one. Place the ghost(s).
-      for (size_t ighost=0; ighost<GhostPlacements.size(); ighost++)
-	{
-	  std::vector<G4LogicalVolume*>::iterator ghostIter = fFastTrack.GetEnvelope()->GetRootLogicalVolumeIterator();
-	  G4LogicalVolume* rootGhostLV = (*ghostIter);
-	  GhostPhysical=new 
-	    G4PVPlacement(*(GhostPlacements[ighost]),
-			  rootGhostLV->GetName(),
-			  rootGhostLV,
-			  theClone,
-			  false,0);
-	  // -- I'd like to check if other root LV exist, since it can not be handled today,
-	  // -- but how stop the iterator loop ???
-	  //	  ghostIter++;
-	  //	  rootGhostLV = (*ghostIter);
-	  //	  if (rootGhostLV) G4Exception("G4FastSimulationManager does not know today how to handle ghost regions with several root logical volumes.");
-	}
-      //  And answer true
-      return true;
-    }
-  //otherwise answer false
-  return false;  
-}
-
-// ***************************************** TO BE DROPPED **************************************** <<<< END
-
-//
-//-------------------------------------
-// Interface trigger method for the 
-// G4ParameterisationManagerProcess
-//-------------------------------------
+//------------------------------------------------------------------
+// Interface trigger method for the G4ParameterisationManagerProcess
+//------------------------------------------------------------------
 //   G4bool GetFastSimulationManagerTrigger(const G4Track &);
 //
 //    This method is used to interface the G4FastSimulationManagerProcess

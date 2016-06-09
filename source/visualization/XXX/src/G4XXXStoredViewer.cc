@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4XXXStoredViewer.cc,v 1.5 2006/08/29 16:11:25 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison  7th March 2006

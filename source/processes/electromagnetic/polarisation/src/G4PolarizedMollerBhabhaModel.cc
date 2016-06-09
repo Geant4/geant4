@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.cc,v 1.3 2006/11/09 18:00:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolarizedMollerBhabhaModel.cc,v 1.4 2007/05/23 08:52:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -137,11 +137,11 @@ G4double G4PolarizedMollerBhabhaModel::ComputeCrossSectionPerElectron(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>*  G4PolarizedMollerBhabhaModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* ,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+void G4PolarizedMollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+						     const G4MaterialCutsCouple* ,
+						     const G4DynamicParticle* dp,
+						     G4double tmin,
+						     G4double maxEnergy)
 {
   // *** obtain and save target and beam polarization ***
   G4PolarizationManager * polarizationManger = G4PolarizationManager::GetInstance();
@@ -165,7 +165,7 @@ std::vector<G4DynamicParticle*>*  G4PolarizedMollerBhabhaModel::SampleSecondarie
 
 
   G4double tmax = std::min(maxEnergy, MaxSecondaryKinEnergy(dp));
-  if(tmin >= tmax) return 0;
+  if(tmin >= tmax) return;
   //  if(tmin > tmax) tmin = tmax;
 
   G4double polL = theBeamPolarization.z()*theTargetPolarization.z();
@@ -314,7 +314,6 @@ std::vector<G4DynamicParticle*>*  G4PolarizedMollerBhabhaModel::SampleSecondarie
   }
 
   // create G4DynamicParticle object for delta ray
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);
 
@@ -347,8 +346,6 @@ std::vector<G4DynamicParticle*>*  G4PolarizedMollerBhabhaModel::SampleSecondarie
     fPositronPolarization=G4ThreeVector();
     fElectronPolarization=G4ThreeVector();
   }
-
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -687,8 +687,8 @@ G4DecayTable *G4RadioactiveDecay::LoadDecayTable (G4ParticleDefinition
   // Go through each record in the data file until you identify the decay
   // data relating to the nuclide of concern.
   //
-  while (!complete && -DecaySchemeFile.getline(inputChars, 80).eof() != EOF)
-    {
+//  while (!complete && -DecaySchemeFile.getline(inputChars, 80).eof() != EOF)
+  while (!complete && !DecaySchemeFile.getline(inputChars, 80).eof())    {
       inputLine = inputChars;
       //    G4String::stripType stripend(1);
       //    inputLine = inputLine.strip(stripend);

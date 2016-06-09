@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.2 2006/06/29 16:48:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: DetectorConstruction.cc,v 1.3 2007/05/12 16:33:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,6 +81,8 @@ void DetectorConstruction::DefineMaterials()
   G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
   G4Element* O  = new G4Element("Oxygen"   ,"O" , z= 8., a=  16.00*g/mole);
   G4Element* Ca = new G4Element("Calcium"  ,"Ca", z=20., a=  40.08*g/mole);
+  G4Element* H  = new G4Element("Hydrogen"   ,"H" , z= 1., a=  1.01*g/mole);
+  G4Element* I  = new G4Element("Iodine"   ,"I" , z= 53., a=  126.90*g/mole);
   
   //
   // define materials
@@ -106,6 +108,11 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Carbon", z= 6., a= 12.01*g/mole, density= 2.265*g/cm3);   
   new G4Material("Iron"  , z=26., a= 55.85*g/mole, density= 7.870*g/cm3);
   new G4Material("Tin"   , z=50., a= 118.7*g/mole, density= 7.310*g/cm3);
+
+  G4Material* HI = 
+  new G4Material("HI", density= 2.8*g/cm3, ncomponents=2); //-35oC
+  HI->AddElement(H, natoms= 1);
+  HI->AddElement(I, natoms= 1);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }

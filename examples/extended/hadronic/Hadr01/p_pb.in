@@ -18,6 +18,7 @@
 /run/initialize
 #/process/eLoss/MscStepLimit 0.2 false
 /testhadr/HistoName        p_pb_20GeV
+/testhadr/MaxEdep          10 GeV
 #
 /gun/particle proton
 /gun/energy 20. GeV

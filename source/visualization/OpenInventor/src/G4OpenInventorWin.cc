@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenInventorWin.cc,v 1.6 2006/06/29 21:22:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // OpenInventor graphics system factory.
 

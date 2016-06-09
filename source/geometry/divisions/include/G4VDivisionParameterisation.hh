@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh,v 1.10 2006/06/29 18:18:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VDivisionParameterisation.hh,v 1.11 2007/05/11 13:26:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // class G4VDivisionParameterisation
 //
@@ -104,6 +104,8 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
   
     static G4int verbose;
     G4int theVoluFirstCopyNo;
+
+    G4double kCarTolerance;
 };
 
 #include "G4VDivisionParameterisation.icc"

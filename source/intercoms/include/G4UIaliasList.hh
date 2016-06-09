@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIaliasList.hh,v 1.6 2006/06/29 19:07:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4UIaliasList_h

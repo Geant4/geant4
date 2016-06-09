@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.118 2007/01/05 14:14:18 allison Exp $
+cvs log $Id: History,v 1.121 2007/06/08 14:24:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
  
+8th June 2007  Gabriele Cosmo  (greps-V08-03-00)
+- G4AttHolder: replaced forward declarations in header with explicit inclusions
+  to allow for porting on Intel-icc compiler.
+
+3rd April 2007  John Allison  (greps-V08-02-01)
+- G4AttDefStore: now comprises utility functions in namespace
+  G4AttDefStore.  (Used to be a class with only static functions and
+  data members.)
+- G4AttHolder: Made copy constructor and assignment private to enforce
+  proper usage.
+
 5th January 2007  John Allison  (greps-V08-02-00)
 - G4VisAttributes:
   o SetForceLineSegmentsPerCircle: Bug fix: Now correctly implements reset.

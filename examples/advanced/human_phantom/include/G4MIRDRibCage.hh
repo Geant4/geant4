@@ -35,24 +35,32 @@
 #define G4MIRDRibCage_h 1
 
 #include "G4VPhysicalVolume.hh"
-
-#include "Saxana/SAXProcessor.h"
-#include "Saxana/ProcessingConfigurator.h"
+#include "G4VOrgan.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDRibCage
+class G4MIRDRibCage: public G4VOrgan
 {
 public:
 
   G4MIRDRibCage();
   ~G4MIRDRibCage();
-  G4VPhysicalVolume* ConstructRibCage(G4VPhysicalVolume*, G4String, G4bool);
- 
-private:
-    SAXProcessor sxp;
-    ProcessingConfigurator config;
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,  
+				    const G4String&, G4bool, G4bool);
 
+private:
+G4VPhysicalVolume* physRib1;
+G4VPhysicalVolume* physRib2;
+G4VPhysicalVolume* physRib3;
+G4VPhysicalVolume* physRib4;
+G4VPhysicalVolume* physRib5;
+G4VPhysicalVolume* physRib6;
+G4VPhysicalVolume* physRib7;
+G4VPhysicalVolume* physRib8;
+G4VPhysicalVolume* physRib9;
+G4VPhysicalVolume* physRib10;
+G4VPhysicalVolume* physRib11;
+G4VPhysicalVolume* physRib12;
 };
 #endif

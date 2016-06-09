@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4HepRepSceneHandler.cc,v 1.100 2006/11/16 12:17:54 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 /**

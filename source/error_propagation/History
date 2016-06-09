@@ -1,0 +1,52 @@
+$Id: History,v 1.9 2007/06/05 13:37:36 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+5 June 2007 - G.Cosmo (error_propagation-V08-03-09)
+- Added missing definition of GLOBLIBS in GNUmakefile to allow for
+  building DLLs on Windows.
+
+4 June 2007 - G.Cosmo (error_propagation-V08-03-08)
+- Fixed compilation errors and warnings on WIN32-VC platform: replaced
+  usage of M_PI with CLHEP::pi; replaced usage of 'uint' with 'size_t';
+  fixed boolean operation in conditional statement.
+
+1 June 2007 - G.Cosmo (error_propagation-V08-03-07)
+- Some cleanup and further simplification of matrices classes.
+
+31 May 2007 - P.Arce (error_propagation-V08-03-06)
+- Using G4ErrorMatrix instead of CLHEP Matrix.
+
+31 May 2007 - G.Cosmo (error_propagation-V08-03-05)
+- Fixed compilation problems on Windows/VC++.
+- Use G4bool for bool and CLHEP::pi for M_PI.
+
+31 May 2007 - P.Arce (error_propagation-V08-03-04)
+- Fixed problem of uninitialised variables.
+
+29 May 2007 - G.Cosmo (error_propagation-V08-03-03)
+- Fixed errors for unnecessary inclusion of non-existing headers.
+- Use G4GeometryTolerance for retrivial of kCarTolerance.
+- Fixed GNUmakefile for setting of debug verbosity.
+- Added CVS headers and some cleanup ...
+
+25 May 2007 - P.Arce (error_propagation-V08-03-00, 01, 02)
+- First version.
+
+12 May 2007 - G.Cosmo
+- Directory structure created.

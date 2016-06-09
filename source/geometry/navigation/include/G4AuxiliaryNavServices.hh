@@ -24,16 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4AuxiliaryNavServices.hh,v 1.3 2006/06/29 18:35:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4AuxiliaryNavServices.hh,v 1.4 2007/05/22 07:48:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
-// class G4NormalNavigation
+// class G4AuxiliaryNavServices
 //
 // Class description:
 //
-// Utility for navigation in volumes containing only G4PVPlacement
-// daughter volumes.
+// Utility class for navigation.
 
 // History:
 // - Created: Paul Kent, Aug 96
@@ -64,6 +63,14 @@ class G4AuxiliaryNavServices
      //   - the point is on the surface and the direction points inside
      //     or along it.
      // Else returns false.
+
+   static G4bool CheckPointExiting( const G4VSolid* sampleSolid, 
+                                    const G4ThreeVector& localPoint, 
+                                    const G4ThreeVector* globalDirection, 
+                                    const G4AffineTransform& sampleTransform );
+     //
+     // Is the track (point, direction) exiting the solid 'sampleSolid' ? 
+     // Returns true if we are going to exit the volume.
 
  private:
  

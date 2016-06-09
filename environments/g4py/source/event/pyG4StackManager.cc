@@ -25,7 +25,7 @@
 //
 
 // $Id: pyG4StackManager.cc,v 1.4 2006/06/29 15:31:38 gunter Exp $
-// $Name: geant4-08-02 $
+// $Name: geant4-09-00 $
 // ====================================================================
 //   pyG4StackManager.cc
 //

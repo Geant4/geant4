@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN05EMShowerModel.cc,v 1.15 2006/11/14 09:21:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #include "ExN05EMShowerModel.hh"
 #include "ExN05EnergySpot.hh"

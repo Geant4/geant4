@@ -36,7 +36,7 @@
 //    **********************************
 //
 // $Id: BrachyPhysicsList.cc,v 1.13 2006/11/15 10:02:17 guatelli Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #include "BrachyPhysicsList.hh"
 

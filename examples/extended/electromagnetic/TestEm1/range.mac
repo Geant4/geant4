@@ -1,4 +1,4 @@
-# $Id: range.mac,v 1.10 2006/10/19 17:24:12 maire Exp $
+# $Id: range.mac,v 1.11 2007/06/20 15:26:33 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # 
@@ -20,9 +20,12 @@
 # prevent any secondary production
 /testem/phys/setCuts 1 km
 #
+# no step limitation from eLoss
+/process/eLoss/StepFunction 1 100 um
+#
 # eliminate straggling
-/process/inactivate msc
 /process/eLoss/fluct false
+/process/inactivate msc
 #
 /testem/gun/setDefault
 /gun/particle proton

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.7 2006/11/15 14:58:09 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HistoManager.hh,v 1.8 2007/05/16 11:43:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -79,6 +79,8 @@ public:
 
   void BeginOfRun();
   void EndOfRun();
+  void BeginOfEvent();
+  void EndOfEvent();
   void Fill(G4int id, G4double x, G4double w);
 
   void ScoreNewTrack(const G4Track*);
@@ -105,6 +107,8 @@ public:
   G4double CurrentKinEnergy()                   {return currentKinEnergy;};
   const G4ParticleDefinition* CurrentParticle() {return currentDef;};
 
+  void SetMaxEnergyDeposit(G4double val)        {edepMax = val;};
+
 private:
 
   static HistoManager* fManager;
@@ -115,6 +119,10 @@ private:
   const G4Material*           material;
   G4Element*                  elm;
 
+  G4double edepMax;
+  G4double edepEvt;
+  G4double edepSum;
+  G4double edepSum2;
   G4double beamEnergy;
   G4double length;
   G4double absZ0;

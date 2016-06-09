@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyData.cc,v 1.2 2006/06/29 19:25:57 gunter Exp $
+// $Id: G4ParticlePropertyData.cc,v 1.3 2007/03/11 07:17:35 kurasige Exp $
 //
 // class G4ParticlePropertyData
 //
@@ -31,6 +31,7 @@
 //
 // History:
 // first implementation by H Kurashige 9 June 2003
+// Add   magnetic moment    by H Kurashige   Mar 2007
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -54,6 +55,7 @@ G4ParticlePropertyData::G4ParticlePropertyData(const G4String& particleName):
   thePDGiGParity(0),
   thePDGiIsospin(0),
   thePDGiIsospin3(0),
+  thePDGMagneticMoment(0.0),
   theLeptonNumber(0),
   theBaryonNumber(0),
   thePDGEncoding(0),
@@ -69,6 +71,7 @@ G4ParticlePropertyData::G4ParticlePropertyData(const G4String& particleName):
   fPDGiIsospin3Modified(false),
   fPDGIsospinModified(false),
   fPDGIsospin3Modified(false),
+  fPDGMagneticMomentModified(false),
   fLeptonNumberModified(false),
   fBaryonNumberModified(false),
   fPDGEncodingModified(false),
@@ -98,6 +101,7 @@ G4ParticlePropertyData::G4ParticlePropertyData(const G4ParticlePropertyData &rig
   fPDGiIsospin3Modified(false),
   fPDGIsospinModified(false),
   fPDGIsospin3Modified(false),
+  fPDGMagneticMomentModified(false),
   fLeptonNumberModified(false),
   fBaryonNumberModified(false),
   fPDGEncodingModified(false),
@@ -117,6 +121,7 @@ G4ParticlePropertyData::G4ParticlePropertyData(const G4ParticlePropertyData &rig
   thePDGiGParity    = right.thePDGiGParity;
   thePDGiIsospin    = right.thePDGiIsospin;
   thePDGiIsospin3   = right.thePDGiIsospin3;
+  thePDGMagneticMoment =  right.thePDGMagneticMoment;
   theLeptonNumber   = right.theLeptonNumber;
   theBaryonNumber   = right.theBaryonNumber;
   thePDGEncoding    = right.thePDGEncoding;
@@ -143,6 +148,7 @@ const G4ParticlePropertyData & G4ParticlePropertyData::operator=(const G4Particl
     thePDGiGParity    = right.thePDGiGParity;
     thePDGiIsospin    = right.thePDGiIsospin;
     thePDGiIsospin3   = right.thePDGiIsospin3;
+    thePDGMagneticMoment =  right.thePDGMagneticMoment;
     theLeptonNumber   = right.theLeptonNumber;
     theBaryonNumber   = right.theBaryonNumber;
     thePDGEncoding    = right.thePDGEncoding;
@@ -152,24 +158,25 @@ const G4ParticlePropertyData & G4ParticlePropertyData::operator=(const G4Particl
       theAntiQuarkContent[flv]= right.theAntiQuarkContent[flv];
     }
     thePDGLifeTime    = right.thePDGLifeTime;
-    fPDGMassModified          = true;
-    fPDGWidthModified         = true;  
-    fPDGChargeModified        = true;
-    fPDGiSpinModified         = true;
-    fPDGiParityModified       = true;    
-    fPDGiConjugationModified  = true;  
-    fPDGiGParityModified      = true;
-    fPDGiIsospinModified      = true; 
-    fPDGiIsospin3Modified     = true;
-    fPDGIsospinModified       = true; 
-    fPDGIsospin3Modified      = true;
-    fLeptonNumberModified     = true;
-    fBaryonNumberModified     = true;
-    fPDGEncodingModified      = true;
-    fAntiPDGEncodingModified  = true;
-    fQuarkContentModified     = true;
-    fAntiQuarkContentModified = true;
-    fPDGLifeTimeModified      = true;   
+    fPDGMassModified           = true;
+    fPDGWidthModified          = true;  
+    fPDGChargeModified         = true;
+    fPDGiSpinModified          = true;
+    fPDGiParityModified        = true;    
+    fPDGiConjugationModified   = true;  
+    fPDGiGParityModified       = true;
+    fPDGiIsospinModified       = true; 
+    fPDGiIsospin3Modified      = true;
+    fPDGIsospinModified        = true; 
+    fPDGIsospin3Modified       = true;
+    fPDGMagneticMomentModified = true;
+    fLeptonNumberModified      = true;
+    fBaryonNumberModified      = true;
+    fPDGEncodingModified       = true;
+    fAntiPDGEncodingModified   = true;
+    fQuarkContentModified      = true;
+    fAntiQuarkContentModified  = true;
+    fPDGLifeTimeModified       = true;   
   }
   return *this;
 }
@@ -202,6 +209,12 @@ void G4ParticlePropertyData::Print() const
   G4cout << " Isospin : (I,Iz): (" << thePDGiIsospin <<"/2";
   G4cout << " , " << thePDGiIsospin3 << "/2 ) " << G4endl;
   G4cout << " GParity : " << thePDGiGParity << G4endl;
+  G4cout << " MagneticMoment [MeV/T]: ";
+  if (thePDGMagneticMoment != 0.0) {
+    G4cout << thePDGMagneticMoment/MeV*tesla  << G4endl;
+  }else {
+    G4cout << "not defined " << G4endl;
+  }
   G4cout << " Lepton number : " << theLeptonNumber;
   G4cout << " Baryon number : " << theBaryonNumber << G4endl;  
   G4cout << " Quark contents     (d,u,s,c,b,t) : " << theQuarkContent[0];

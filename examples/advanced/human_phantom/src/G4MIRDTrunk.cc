@@ -41,6 +41,7 @@
 #include "G4ThreeVector.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDTrunk::G4MIRDTrunk()
 {
@@ -51,37 +52,40 @@ G4MIRDTrunk::~G4MIRDTrunk()
 
 }
 
-G4VPhysicalVolume* G4MIRDTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDTrunk::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
+					      const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
 {
 
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "ConstructTrunck for "<< sex <<G4endl;
+  G4cout << "Construct " << volumeName << G4endl;
    
   G4Material* soft = material -> GetMaterial("soft_tissue");
  
   delete material;
 
-  G4double dx = 17.25 * cm;
-  G4double dy = 9.80 * cm;
-  G4double dz = 31.55 * cm;
+  // MIRD Male trunk
+
+  G4double dx = 20. * cm;
+  G4double dy = 10. * cm;
+  G4double dz = 35. * cm;
 
   G4EllipticalTube* trunk = new G4EllipticalTube("Trunk",dx, dy, dz);
 
   G4LogicalVolume* logicTrunk = new G4LogicalVolume(trunk, soft, 
-						    "TrunkVolume",
+	 					    "logical" + volumeName,
 						    0, 0, 0);
   G4RotationMatrix* rm = new G4RotationMatrix();
   rm -> rotateX(90.* degree);
 
   // Define rotation and position here!
   G4VPhysicalVolume* physTrunk = new G4PVPlacement(rm,
-				 G4ThreeVector(0.* cm,31.55*cm, 0.*cm),
+				 G4ThreeVector(0.* cm, 35.0 *cm, 0.*cm),
       			       "physicalTrunk",
   			       logicTrunk,
 			       mother,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
   if (sensitivity == true)
@@ -91,8 +95,10 @@ G4VPhysicalVolume* G4MIRDTrunk::ConstructTrunk(G4VPhysicalVolume* mother, G4Stri
   }
 
   // Visualization Attributes
-  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
-  TrunkVisAtt->SetForceSolid(false);
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* TrunkVisAtt = new G4VisAttributes(colour);
+  TrunkVisAtt->SetForceSolid(wireFrame);
   logicTrunk->SetVisAttributes(TrunkVisAtt);
 
   G4cout << "Trunk created !!!!!!" << G4endl;

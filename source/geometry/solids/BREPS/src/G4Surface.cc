@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Surface.cc,v 1.15 2006/06/29 18:42:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Surface.cc,v 1.16 2007/05/11 13:49:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -36,6 +36,7 @@
 
 #include "G4Surface.hh"
 #include "G4CompositeCurve.hh"
+#include "G4GeometryTolerance.hh"
 
 G4Surface::G4Surface()
   : FLT_MAXX(kInfinity), FLT_EPSILO(0.0001)
@@ -45,6 +46,7 @@ G4Surface::G4Surface()
   distance = 1.0e20;
   Type=0;
   bbox = (G4BoundingBox3D*)0;
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 G4Surface::~G4Surface()

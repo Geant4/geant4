@@ -7,100 +7,98 @@
                       ---------------------
 
 ------------------------------------------------------------------------
-----> Introduction.                                                     |
+----> Introduction.                                                     
                                                                        
-Brachytherapy example simulates energy deposit in a Phantom filled with |
+Brachytherapy example simulates energy deposit in a Phantom filled with 
 soft tissue for: 
-1) Iridium source (endocavitary brachytherapy).                         |
+1) Iridium source (endocavitary brachytherapy).                         
 2) Iodium  source (interstitial brachytherapy).                         
-3) Leipzig Applicator (superficial brachytherapy).                      |
+3) Leipzig Applicator (superficial brachytherapy).                      
 ------------------------------------------------------------------------
-----> 1.Experimental set-up.                                            |
+----> 1.Experimental set-up.                                            
 
-The default source is an Ir-131 source put in the center of the Phantom.|  
+The default source is an Ir-131 source put in the center of the Phantom.
 The Phantom is a box (dimension:30cm), it is gridded in 
-voxels (1.mm dimension)                                                 |
+voxels (1.mm dimension)                                                 
 -------------------------------------------------------------------------
 ----> 2.SET-UP 
-                                                                        |
- -example enviroment with the compiler 3.2.3                              
- -a standard Geant4 example GNUmakefile is provided                     |
+                                          
+ -a standard Geant4 example GNUmakefile is provided                      
 
-setup with:                                                             |
-compiler = gcc-3.2.3
-G4SYSTEM = linux-g++                                                    |
+setup with:                                                              
+G4SYSTEM = linux-g++                                                     
 
-The following environment variables need to be set:                     |
+The following environment variables need to be set:                      
 
-G4LEDATA: points to low energy data base - G4EMLOW3.0                   |
+G4LEDATA: points to low energy database             
 
-setup for analysis: AIDA 3.2.1, PI 1.3.3                                |
+setup for analysis: AIDA 3.2.1, PI 1.3.3 (PI is Obsolete)
 
 Users can download the analysis tools from:  
-                                                                        |
+                                                                        
 http://aida.freehep.org/
-http://www.cern.ch/PI                                                                                                                                   |
-
+http://cern.ch/pfeiffer
+http://www.cern.ch/PI  (OBSOLETE)
 ------------------------------------------------------------------------
-----> 3.How to run the example.                                         |
+----> 3.How to run the example.                                         
 
 - batch mode:
-  $G4WORDIR/bin/Linux-g++/Brachy IridiumSourceMacro.mac                 |
-  $G4WORDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac       
-  $G4WORDIR/bin/Linux-g++/Brachy LeipzigSourceMacro.mac  
-                                                                        |
+  $G4WORKDIR/bin/Linux-g++/Brachy IridiumSourceMacro.mac                
+  $G4WORKDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac       
+  $G4WORKDIR/bin/Linux-g++/Brachy LeipzigSourceMacro.mac  
+                                                                        
 - Interative mode:                                                      
-  3) $G4WORDIR/bin/Linux-g++/Brachy
-     The VisualisationMacro.mac is loaded automatically                 |
+  3) $G4WORKDIR/bin/Linux-g++/Brachy
+     The VisualisationMacro.mac is loaded automatically                 
 
--->possible different configurations for interactive mode:              |
+-->possible different configurations for interactive mode:              
 
-1)Ir source:                                                            |
+1)Ir source:                                                            
 idle>/run/beamOn NumberOfEvents      ...and then
-idle>exit                                                               |
+idle>exit                                                               
 
-2)Leipzig Applicator:                                                   |
+2)Leipzig Applicator:                                                   
 idle>/source/switch Leipzig                                           
-idle>/run/beamOn NumberOfEvents     ...and then                         |
+idle>/run/beamOn NumberOfEvents     ...and then                         
 idle> exit
-                                                                        |
+                                                                        
 3) Iodium  source:
-idle>/source/switch Iodium                                              |
+idle>/source/switch Iodium                                               
 idle>/primary/energy Iodium
-idle>/run/beamOn NumberOfEvents     ...and then                         |
+idle>/run/beamOn NumberOfEvents     ...and then                          
 idle>exit
-                                                                        |
+                                                                         
 *Before the run you can also change the absorber material of the 
-Phantom:                                                                |
+Phantom:                                                                 
 idle>/phantom/selectMaterial  materialName
-                                                                        |
+                                                                         
 - batch mode: executable Brachy macroFile.mac 
   macros are provided as example: IodiumSourceMacro.mac,
-  IridiumSourceMacro.mac, LeipzigSourceMacro.mac                        |
+  IridiumSourceMacro.mac, LeipzigSourceMacro.mac                         
   (ex. $G4WORKDIR/bin/Linux-g++/Brachy IodiumSourceMacro.mac)   
 ------------------------------------------------------------------------
-----> 4. Simulation output                                              |
+----> 4. Simulation output                                               
 
-if ANALYSIS_USE = 1 in the set-up, the output is brachytherapy.hbk      | 
+if G4ANALYSIS_USE = 1 in the set-up, the output is brachytherapy.hbk      
 
  It contains:
- 1)1Dhistogram with the primary particle energy                         |
+ 1)1Dhistogram with the primary particle energy                          
  2)2Dhistogram with the distribution of energy in the plane 
    (x,z,energy) containing the source (YThickness = 1. mm)   
- 3)1Dhistogram with the energy deposit along the X axis in the plane    |
+ 3)1Dhistogram with the energy deposit along the X axis in the plane     
    containing the source.
  4)Ntuple with the 3D energy deposit in the Phantom                    
-                                                                        |
+                                                                         
 Units:   the energy deposit is in MeV;
-         x, y, z in mm for histograms and ntuple                        |
+         x, y, z in mm for histograms and ntuple                         
 ------------------------------------------------------------------------
-----> 5.Visualisation                                                   | 
+----> 5.Visualisation                                                     
 
-a macro is provided ad example of visualisation:  VisualisationMacro.mac|
+a macro is provided ad example of visualisation:  VisualisationMacro.mac 
 
 ------------------------------------------------------------------------
 
-for comments, advices, doubts and questions: guatelli@ge.infn.it
-for more info http://www.ge.infn.it/geant4/examples/index.html
+Further information at http://www.ge.infn.it/geant4/examples/index.html
+Contact: geant4-advanced-examples@cern.ch
 
-last modified: Susanna Guatelli 15/5/2006
+

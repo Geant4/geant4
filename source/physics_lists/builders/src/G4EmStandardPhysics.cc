@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.7 2007/03/01 10:35:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4EmStandardPhysics.cc,v 1.9 2007/05/18 17:47:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,6 +46,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
+#include "G4EmProcessOptions.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -84,7 +85,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::G4EmStandardPhysics(const G4String& name, G4int ver)
+G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String& name)
   : G4VPhysicsConstructor(name), verbose(ver)
 {
   G4LossTableManager::Instance();
@@ -137,6 +138,9 @@ void G4EmStandardPhysics::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
+    if(verbose > 1)
+      G4cout << "### " << GetPhysicsName() << " instantiates for " 
+	     << particleName << G4endl;
 
     if (particleName == "gamma") {
 
@@ -169,9 +173,6 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "He3" ||
                particleName == "GenericIon") {
 
-      if(verbose > 1)
-        G4cout << "### G4standard instantiates ionIoni for " 
-               << particleName << G4endl;
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
 
@@ -194,16 +195,12 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "triton" ||
                particleName == "xi-" ) {
 
-      if(verbose > 1)
-        G4cout << "### G4standard instantiates hIoni for " 
-               << particleName << G4endl;
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
     }
   }
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  opt.SetSkin(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

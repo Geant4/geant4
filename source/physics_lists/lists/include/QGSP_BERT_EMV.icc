@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_EMV.icc,v 1.1 2007/04/26 14:47:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: QGSP_BERT_EMV.icc,v 1.2 2007/05/16 11:35:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,7 +52,7 @@
 #include <iomanip>   
 
 #include "G4DecayPhysics.hh"
-#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4QStoppingPhysics.hh"
@@ -73,7 +73,7 @@ template<class T> TQGSP_BERT_EMV<T>::TQGSP_BERT_EMV(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics71("standard EM v71",ver));
+  this->RegisterPhysics( new G4EmStandardPhysics_option1(ver));
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));

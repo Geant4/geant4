@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.10 2006/06/29 18:48:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolyPhiFace.cc,v 1.12 2007/05/31 13:52:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -44,6 +44,7 @@
 #include "G4ReduciblePolygon.hh"
 #include "G4AffineTransform.hh"
 #include "G4SolidExtentList.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
@@ -60,6 +61,8 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz,
                                     G4double deltaPhi,
                                     G4double phiOther )
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   numEdges = rz->NumVertices();
   
   rMin = rz->Amin();
@@ -323,7 +326,9 @@ void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
   zMin    = source.zMin;
   zMax    = source.zMax;
   allBehind  = source.allBehind;
-  
+
+  kCarTolerance = source.kCarTolerance;
+
   //
   // Corner dynamic array
   //

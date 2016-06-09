@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2007/03/15 04:06:40 kurasige Exp $
+$Id: History,v 1.21 2007/06/06 14:50:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 6th, 2007 -  L.Urban (procuts-V08-03-01)
+- Fix in G4VRangeToEnergyConverter::convert(), range-energu conversion,
+  correcting artifact observed in the visible energy plot over range-cut,
+  where a jump in the distribution was evident.
+  The correction can influence the result only for the tests, where
+  the e+/e- energy cuts are below 30 keV and even in this case the change
+  in results should be small.
+
+May 30th, 2007 -  H.Kurashige (procuts-V08-03-00)
+- Fix  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo
+
 March 15th, 2007 -  H.Kurashige (procuts-V08-02-00)
 - Add   G4ProductionCutsTable::ConvertRangeToEnergy
 

@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPartial.hh,v 1.11 2006/06/29 20:49:15 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPPartial.hh,v 1.13 2007/06/18 20:56:05 tkoi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+//
+// 070618 Comment out unused private member leaking by T. Koi
 //
 #ifndef G4NeutronHPPartial_h
 #define G4NeutronHPPartial_h 1
@@ -44,7 +46,7 @@ class G4NeutronHPPartial
     X = new G4double[n];
     data = new G4NeutronHPVector[n];
     nData = n;
-    T=NULL;
+    T=0;
   }
   
   G4NeutronHPPartial(G4int n1, G4int n2)
@@ -97,7 +99,7 @@ class G4NeutronHPPartial
   ~G4NeutronHPPartial()
   {
     delete [] X;
-    if(T!=NULL) delete [] T;
+    if(T!=0) delete [] T;
     delete [] data;
   }
   inline G4int GetNumberOfEnergies() {return nData;}
@@ -121,7 +123,8 @@ class G4NeutronHPPartial
   G4double * X;
   G4double * T;
   G4NeutronHPVector * data;
-  G4NeutronHPVector * theBuffer;
+  // TKDB
+  //G4NeutronHPVector * theBuffer;
   G4int nData;
   G4InterpolationManager theManager; // interpolate between different data[i]
   G4NeutronHPInterpolator theInt;

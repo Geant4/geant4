@@ -40,11 +40,12 @@
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 
 class G4FTFCNeutronBuilder : public G4VNeutronBuilder
 {
   public: 
-    G4FTFCNeutronBuilder();
+    G4FTFCNeutronBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFCNeutronBuilder();
 
   public: 
@@ -60,6 +61,7 @@ class G4FTFCNeutronBuilder : public G4VNeutronBuilder
     G4StringChipsParticleLevelInterface * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
 
     G4NeutronInelasticCrossSection theXSec;
     G4double theMin;

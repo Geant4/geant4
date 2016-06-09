@@ -46,6 +46,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4Ellipsoid.hh"
+#include "G4HumanPhantomColour.hh"
 G4MIRDSpleen::G4MIRDSpleen()
 {
 }
@@ -55,28 +56,29 @@ G4MIRDSpleen::~G4MIRDSpleen()
 
 }
 
-G4VPhysicalVolume* G4MIRDSpleen::ConstructSpleen(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDSpleen::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
+						const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
 {
 
- G4cout << "ConstructSpleen for " << sex << G4endl;
+  G4cout << "Construct "<< volumeName << G4endl;
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
 
- G4double ax= 2.90 *cm;
- G4double by= 1.88 *cm;
- G4double cz= 5.19 * cm; 
+ G4double ax= 3.5 *cm;
+ G4double by= 2. *cm;
+ G4double cz= 6. * cm; 
 
  G4Ellipsoid* spleen = new G4Ellipsoid("spleen", ax, by, cz);
 
 
   G4LogicalVolume* logicSpleen = new G4LogicalVolume(spleen, soft,
-						     "SpleenVolume",
-						     0, 0, 0);
+						     "logical" + volumeName,
+						      0, 0, 0);
   
   // Define rotation and position here!
   G4VPhysicalVolume* physSpleen = new G4PVPlacement(0,
-			       G4ThreeVector(9.49 *cm, 2.94 *cm, 1.8*cm),
+						    G4ThreeVector(11. *cm, 3. *cm, 2.*cm), // ztrans = half trunk lenght - z0
       			       "physicalSpleen",
   			       logicSpleen,
 			       mother,
@@ -91,8 +93,11 @@ G4VPhysicalVolume* G4MIRDSpleen::ConstructSpleen(G4VPhysicalVolume* mother, G4St
   }
 
   // Visualization Attributes
-  G4VisAttributes* SpleenVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
-  SpleenVisAtt->SetForceSolid(true);
+  // G4VisAttributes* SpleenVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* SpleenVisAtt = new G4VisAttributes(colour);
+  SpleenVisAtt->SetForceSolid(wireFrame);
   logicSpleen->SetVisAttributes(SpleenVisAtt);
 
   G4cout << "Spleen created !!!!!!" << G4endl;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.hh,v 1.7 2006/06/29 16:34:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: B01DetectorConstruction.hh,v 1.9 2007/06/22 13:15:29 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef B01DetectorConstruction_hh
@@ -35,6 +35,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include <vector>
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 class G4VIStore;
 class G4VWeightWindowStore;
 
@@ -54,8 +55,16 @@ public:
     // deleting it
 
   G4String GetCellName(G4int i);
+
+  G4VPhysicalVolume* GetWorldVolume();
+
+  void SetSensitive();
+
 private:
   std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
+  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
+
+  G4VPhysicalVolume* pWorldVolume;
 
 };
 

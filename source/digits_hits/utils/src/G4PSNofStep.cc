@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSNofStep.cc,v 1.5 2006/06/29 18:07:53 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSNofStep.cc,v 1.6 2007/05/18 00:00:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4PSNofStep
 #include "G4PSNofStep.hh"

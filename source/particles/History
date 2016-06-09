@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2006/11/15 09:57:51 kurasige Exp $
+$Id: History,v 1.143 2007/05/30 08:33:28 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- May. 30  2007    H.Kurashige (particles-V08-03-01)
+- Fix G4PDGCodeChecker::GetQuarkFlavor
+
+- May.  12 2007    H.Kurashige (particles-V08-03-00)
+- Add check against sqrt(negative) in G4DecayProducts
+- Add deletion of IsotopeTableList in the destructor in G4IonTable
+
+- Mar.  16 2007    H.Kurashige (particles-V08-02-01)
+- Update magnetic moment for leptons
+- Add magnetic moment in G4IsotopeProperty
+- Allow registration of several isotope property  table in G4IonTable 
+- Add G4IsotopeMagneticMomentTable  and datda file of G4IsotopeMagneticMoment.table 
+- Allow any Z,A combination (A>=Z) for G4IonTable::GetIon
+
+- Mar.  11 2007    H.Kurashige (particles-V08-02-00)
+- Added magnetic momnet in G4ParticleDefinition and G4DynamicParticle
+   (co-work with  track-V08-02-00) 
+
 - Nov. 15, 2006    H.Kurashige (particles-V08-01-05)
 - Optimize G4IonTable::IsLightIon
  

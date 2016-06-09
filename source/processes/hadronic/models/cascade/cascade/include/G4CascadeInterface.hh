@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// CLASS DESCRIPTION
-// G4CascadeInterface defines an interface to HETC and INUCL 
-// models of an medium energy (~ 0.5 - 10 GeV) intra-nuclear transport.
-// If you have any questions, please contact 
-// package writer aatos.heikkinen@cern.ch.
-// --------------------------------------------------------------------
+// $Id: G4CascadeInterface.hh,v 1.12 2007/05/23 12:25:54 miheikki Exp $
+// Defines an interface to Bertini (BERT) cascade
+// based on INUCL  intra-nuclear transport.models 
+// with bullet hadron energy ~< 10 GeV
+
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
 
@@ -44,7 +43,6 @@
 class G4CascadeInterface : public G4VIntraNuclearTransportModel {
 
 public:
-
   G4CascadeInterface();
 
   ~G4CascadeInterface(){
@@ -52,11 +50,9 @@ public:
 
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
 
-  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
-                                   G4Nucleus& theNucleus); 
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
 
 private:
-
   G4int operator==(G4CascadeInterface& right) {
     return (this == &right);
   }
@@ -66,6 +62,7 @@ private:
   }
 
   G4int verboseLevel;
+
 private:
   G4HadFinalState theResult;  
   

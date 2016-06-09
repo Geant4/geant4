@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VShortLivedParticle.hh,v 1.8 2006/06/29 19:26:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------

@@ -1,4 +1,4 @@
-$Id: History,v 1.177 2007/04/25 11:40:55 gcosmo Exp $
+$Id: History,v 1.186 2007/06/18 13:26:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,47 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 18, 2007  G.Cosmo (global-V08-03-07)
+- Force static initialisation to G4GeometryTolerance singleton, to overcome
+  problems in startup on MacOS for the case of redundant link list of
+  libraries.
+
+Jun 05, 2007  G.Cosmo (global-V08-03-06)
+- Fixed compilation warnings on Intel icc compiler for useless const
+  specification in return values of G4ErrorPropagatorData methods.
+
+Jun 05, 2007  G.Cosmo (global-V08-03-05)
+- Define static methods not inline in G4ErrorPropagatorData class, to allow
+  for generation of DLLs on Windows.
+
+May 30, 2007  G.Cosmo (global-V08-03-04)
+- Changed date for release 9.0.
+
+May 18, 2007  G.Cosmo (global-V08-03-03)
+- Removed kAngTolerance and kRadTolerance constants, now provided by the
+  G4GeometryTolerance class. Values are still kept as the original set in
+  geomdefs.hh and cannot be changed.
+
+May 16, 2007  G.Cosmo (global-V08-03-02)
+- Introduced new utility class G4ErrorPropagatorData to provide access to
+  mode, state, target and manager verbosity for the error propagation
+  classes (by P.Arce).
+
+May 13, 2007  V.Ivanchenko (global-V08-03-01)
+- Fixed bug in G4LPhysicsVector constructor: initialise vectors of
+  length=nbin+1 (one bin is hidden for users). Addresses bug report #942.
+
+May 11, 2007  G.Cosmo (global-V08-03-00)
+- Added G4GeometryTolerance singleton class for the definition of
+  tunable geometrical tolerances. The Cartesian tolerance can either be set
+  to a fixed value (kCarTolerance=1E-9 mm) or to a value computed on the basis
+  of the maximum extent of the world volume assigned through the
+  G4GeometryManager at the beginning of the application -before- any
+  geometrical object is created.
+- Old static constant 'kCarTolerance' has been removed.
+- Added new class G4SimplexDownhill in HEPNumerics module: a Simplex method
+  for function minimization.
 
 Apr 25, 2007  G.Cosmo (global-V08-02-02)
 - Changed date for release 8.3.

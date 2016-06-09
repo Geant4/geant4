@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.31 2006/11/23 00:06:48 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VUserPhysicsList.hh,v 1.35 2007/05/30 10:16:27 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -295,9 +295,10 @@ class G4VUserPhysicsList
   private:
    enum { FixedStringLengthForStore = 32 }; 
 
+
   private:
    G4bool useCoupledTransportation;
-
+    
   public:
    inline void UseCoupledTransportation(G4bool vl=true)
    { useCoupledTransportation = vl; }

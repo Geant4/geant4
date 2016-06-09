@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.58 2007/01/05 16:07:02 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4PhysicalVolumeModel.cc,v 1.62 2007/05/30 07:58:19 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -49,6 +49,7 @@
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
+#include "G4Vector3D.hh"
 
 #include <sstream>
 
@@ -94,6 +95,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fpCurrentPV     (0),
   fpCurrentLV     (0),
   fpCurrentMaterial (0),
+  fpCurrentTransform (0),
   fCurtailDescent (false),
   fpClippingPolyhedron (0),
   fClippingMode   (subtraction)
@@ -172,6 +174,7 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
   fpCurrentPV       = 0;
   fpCurrentLV       = 0;
   fpCurrentMaterial = 0;
+  fFullPVPath.clear();
   fDrawnPVPath.clear();
 }
 
@@ -357,6 +360,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // not be accumulated.
   G4Transform3D theNewAT (theAT);
   if (fCurrentDepth != 0) theNewAT = theAT * theLT;
+  fpCurrentTransform = &theNewAT;
 
   /********************************************************
   G4cout << "G4PhysicalVolumeModel::DescribeAndDescend: "
@@ -420,6 +424,11 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       if (density < densityCut) thisToBeDrawn = false;
     }
   }
+
+  // Update full path of physical volumes...
+  G4int copyNo = fpCurrentPV->GetCopyNo();
+  fFullPVPath.push_back
+    (G4PhysicalVolumeNodeID(fpCurrentPV,copyNo,fCurrentDepth));
 
   if (thisToBeDrawn) {
 
@@ -519,7 +528,8 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   // Reset for normal descending of next volume at this level...
   fCurtailDescent = false;
 
-  // Pop item from path of drawn physical volumes...
+  // Pop item from paths physical volumes...
+  fFullPVPath.pop_back();
   if (thisToBeDrawn) {
     fDrawnPVPath.pop_back();
   }
@@ -671,20 +681,18 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
     std::map<G4String,G4AttDef>* store
       = G4AttDefStore::GetInstance("G4PhysicalVolumeModel", isNew);
     if (isNew) {
-      (*store)["PVol"] =
-	G4AttDef("PVol","Physical Volume","Physics","","G4String");
-      (*store)["Copy"] =
-	G4AttDef("Copy","Physical Volume Copy No.","Physics","","G4int");
+      (*store)["PVPath"] =
+	G4AttDef("PVPath","Physical Volume Path","Physics","","G4String");
       (*store)["LVol"] =
 	G4AttDef("LVol","Logical Volume","Physics","","G4String");
-      (*store)["Region"] =
-	G4AttDef("Region","Cuts Region","Physics","","G4String");
-      (*store)["RootRegion"] =
-	G4AttDef("RootRegion","Root Region (0/1 = false/true)","Physics","","G4bool");
       (*store)["Solid"] =
 	G4AttDef("Solid","Solid Name","Physics","","G4String");
       (*store)["EType"] =
 	G4AttDef("EType","Entity Type","Physics","","G4String");
+      (*store)["DmpSol"] =
+	G4AttDef("DmpSol","Dump of Solid properties","Physics","","G4String");
+      (*store)["Trans"] =
+	G4AttDef("Trans","Transformation of volume","Physics","","G4String");
       (*store)["Material"] =
 	G4AttDef("Material","Material Name","Physics","","G4String");
       (*store)["Density"] =
@@ -694,33 +702,85 @@ const std::map<G4String,G4AttDef>* G4PhysicalVolumeModel::GetAttDefs() const
       (*store)["Radlen"] =
 	G4AttDef("Radlen","Material Radiation Length","Physics","G4BestUnit","G4double");
     }
+      (*store)["Region"] =
+	G4AttDef("Region","Cuts Region","Physics","","G4String");
+      (*store)["RootRegion"] =
+	G4AttDef("RootRegion","Root Region (0/1 = false/true)","Physics","","G4bool");
     return store;
+}
+
+#include <iomanip>
+
+static std::ostream& operator<< (std::ostream& o, const G4Transform3D t)
+{
+  using namespace std;
+
+  G4Scale3D s;
+  G4Rotate3D r;
+  G4Translate3D tl;
+  t.getDecomposition(s, r, tl);
+
+  const int w = 10;
+
+  // Transformation itself
+  o << setw(w) << t.xx() << setw(w) << t.xy() << setw(w) << t.xz() << setw(w) << t.dx() << endl;
+  o << setw(w) << t.yx() << setw(w) << t.yy() << setw(w) << t.yz() << setw(w) << t.dy() << endl;
+  o << setw(w) << t.zx() << setw(w) << t.zy() << setw(w) << t.zz() << setw(w) << t.dz() << endl;
+
+  // Translation
+  o << "= translation:" << endl;
+  o << setw(w) << tl.dx() << setw(w) << tl.dy() << setw(w) << tl.dz() << endl;
+
+  // Rotation
+  o << "* rotation:" << endl;
+  o << setw(w) << r.xx() << setw(w) << r.xy() << setw(w) << r.xz() << endl;
+  o << setw(w) << r.yx() << setw(w) << r.yy() << setw(w) << r.yz() << endl;
+  o << setw(w) << r.zx() << setw(w) << r.zy() << setw(w) << r.zz() << endl;
+
+  // Scale
+  o << "* scale:" << endl;
+  o << setw(w) << s.xx() << setw(w) << s.yy() << setw(w) << s.zz() << endl;
+
+  // Transformed axes
+  o << "Transformed axes:" << endl;
+  o << "x': " << r * G4Vector3D(1., 0., 0.) << endl;
+  o << "y': " << r * G4Vector3D(0., 1., 0.) << endl;
+  o << "z': " << r * G4Vector3D(0., 0., 1.) << endl;
+
+  return o;
 }
 
 std::vector<G4AttValue>* G4PhysicalVolumeModel::CreateCurrentAttValues() const
 {
-    std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
-    std::ostringstream oss;
-    values->push_back(G4AttValue("PVol", fpCurrentPV->GetName(),""));
-    oss << fpCurrentPV->GetCopyNo();
-    values->push_back(G4AttValue("Copy", oss.str(),""));
-    values->push_back(G4AttValue("LVol", fpCurrentLV->GetName(),""));
-    G4Region* region = fpCurrentLV->GetRegion();
-    G4String regionName = region? region->GetName(): G4String("No region");
-    values->push_back(G4AttValue("Region", regionName,""));
-    oss.str(""); oss << fpCurrentLV->IsRootRegion();
-    values->push_back(G4AttValue("RootRegion", oss.str(),""));
-    G4VSolid* pSol = fpCurrentLV->GetSolid();
-    values->push_back(G4AttValue("Solid", pSol->GetName(),""));
-    values->push_back(G4AttValue("EType", pSol->GetEntityType(),""));
-    G4String matName = fpCurrentMaterial? fpCurrentMaterial->GetName(): G4String("No material");
-    values->push_back(G4AttValue("Material", matName,""));
-    G4double matDensity = fpCurrentMaterial? fpCurrentMaterial->GetDensity(): 0.;
-    values->push_back(G4AttValue("Density", G4BestUnit(matDensity,"Volumic Mass"),""));
-    G4State matState = fpCurrentMaterial? fpCurrentMaterial->GetState(): kStateUndefined;
-    oss.str(""); oss << matState;
-    values->push_back(G4AttValue("State", oss.str(),""));
-    G4double matRadlen = fpCurrentMaterial? fpCurrentMaterial->GetRadlen(): 0.;
-    values->push_back(G4AttValue("Radlen", G4BestUnit(matRadlen,"Length"),""));
-    return values;
+  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+  std::ostringstream oss;
+  for (size_t i = 0; i < fFullPVPath.size(); ++i) {
+    oss << fFullPVPath[i].GetPhysicalVolume()->GetName()
+	<< ':' << fFullPVPath[i].GetCopyNo();
+    if (i != fFullPVPath.size() - 1) oss << '/';
+  }
+  values->push_back(G4AttValue("PVPath", oss.str(),""));
+  values->push_back(G4AttValue("LVol", fpCurrentLV->GetName(),""));
+  G4VSolid* pSol = fpCurrentLV->GetSolid();
+  values->push_back(G4AttValue("Solid", pSol->GetName(),""));
+  values->push_back(G4AttValue("EType", pSol->GetEntityType(),""));
+  oss.str(""); oss << '\n' << *pSol;
+  values->push_back(G4AttValue("DmpSol", oss.str(),""));
+  oss.str(""); oss << '\n' << *fpCurrentTransform;
+  values->push_back(G4AttValue("Trans", oss.str(),""));
+  G4String matName = fpCurrentMaterial? fpCurrentMaterial->GetName(): G4String("No material");
+  values->push_back(G4AttValue("Material", matName,""));
+  G4double matDensity = fpCurrentMaterial? fpCurrentMaterial->GetDensity(): 0.;
+  values->push_back(G4AttValue("Density", G4BestUnit(matDensity,"Volumic Mass"),""));
+  G4State matState = fpCurrentMaterial? fpCurrentMaterial->GetState(): kStateUndefined;
+  oss.str(""); oss << matState;
+  values->push_back(G4AttValue("State", oss.str(),""));
+  G4double matRadlen = fpCurrentMaterial? fpCurrentMaterial->GetRadlen(): 0.;
+  values->push_back(G4AttValue("Radlen", G4BestUnit(matRadlen,"Length"),""));
+  G4Region* region = fpCurrentLV->GetRegion();
+  G4String regionName = region? region->GetName(): G4String("No region");
+  values->push_back(G4AttValue("Region", regionName,""));
+  oss.str(""); oss << fpCurrentLV->IsRootRegion();
+  values->push_back(G4AttValue("RootRegion", oss.str(),""));
+  return values;
 }

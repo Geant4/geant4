@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.10 2006/10/26 17:36:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eCoulombScatteringModel.cc,v 1.11 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -176,11 +176,11 @@ G4double G4eCoulombScatteringModel::CalculateCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4eCoulombScatteringModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double,
-                                   G4double)
+void G4eCoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+						  const G4MaterialCutsCouple* couple,
+						  const G4DynamicParticle* dp,
+						  G4double,
+						  G4double)
 {
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
@@ -198,7 +198,7 @@ std::vector<G4DynamicParticle*>* G4eCoulombScatteringModel::SampleSecondaries(
   G4double a = 2.*ScreeningParameter(Z, q2, mom2, invbeta2);
 
   G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/mom2);
-  if(costm >= cosThetaMin) return 0; 
+  if(costm >= cosThetaMin) return; 
 
   G4double x   = G4UniformRand();
   G4double y   = (a + 1.0 - cosThetaMin)/(cosThetaMin - costm);
@@ -221,7 +221,7 @@ std::vector<G4DynamicParticle*>* G4eCoulombScatteringModel::SampleSecondaries(
 
   fParticleChange->ProposeMomentumDirection(newDirection);   
  
-  return 0;
+  return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

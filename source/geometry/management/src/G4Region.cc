@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.22 2007/03/20 22:29:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4Region.cc,v 1.23 2007/04/26 21:20:53 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4Region Implementation
@@ -47,7 +47,7 @@
 //
 G4Region::G4Region(const G4String& pName)
   : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
-    fFastSimulationManager(0), fWorldPhys(0)
+    fFastSimulationManager(0), fWorldPhys(0), fRegionalSteppingAction(0)
 {
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
@@ -71,7 +71,7 @@ G4Region::G4Region(const G4String& pName)
 //
 G4Region::G4Region( __void__& )
   : fName(""), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0),
-    fFastSimulationManager(0), fWorldPhys(0)
+    fFastSimulationManager(0), fWorldPhys(0), fRegionalSteppingAction(0)
 {
   // Register to store
   //

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ChargeExchangeProcess.cc,v 1.9 2007/01/30 10:23:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // Geant4 Hadron Elastic Scattering Process -- header file

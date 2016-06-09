@@ -87,7 +87,7 @@
 G4DynamicParticleVector * G4NeutronHPFissionBaseFS::ApplyYourself(G4int nPrompt)
   {  
 // if therere were no data for this isotope, break out.    
-    if(!HasFSData()) return NULL;
+    if(!HasFSData()) { return 0; }
     
     G4int i;
     G4DynamicParticleVector * aResult = new G4DynamicParticleVector;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageTrackLength.hh,v 1.3 2006/06/29 18:07:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSPassageTrackLength.hh,v 1.4 2007/05/18 00:00:37 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4PSPassageTrackLength_h

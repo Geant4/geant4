@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonAnalysisLayout.hh,v 1.3 2006/06/29 16:06:44 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 // Description:   Concrete class to keep track of the analysis options
 //

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.10 2006/08/30 10:32:14 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.11 2007/05/30 08:56:55 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -355,6 +355,8 @@ namespace G4TrajectoryDrawerUtils {
 
       myContext.SetAuxPtsSize(markerSize);
       myContext.SetStepPtsSize(markerSize);
+
+      static G4bool warnedAboutIMode = false;
 
       if (!warnedAboutIMode) {
 	G4cout<<"Trajectory drawing configuration will be based on imode value of "<<i_mode<<G4endl;

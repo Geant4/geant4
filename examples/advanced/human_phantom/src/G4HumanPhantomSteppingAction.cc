@@ -32,47 +32,14 @@
 // design and code review.
 //
 #include "G4HumanPhantomSteppingAction.hh"
-#include "G4HumanPhantomEventAction.hh"
 #include "G4SteppingManager.hh"
-#include "G4Track.hh"
-#ifdef G4ANALYSIS_USE
-#include "G4HumanPhantomAnalysisManager.hh"
-#endif
-          
+#include "G4UnitsTable.hh"        
 G4HumanPhantomSteppingAction::G4HumanPhantomSteppingAction()
 { }
 
 G4HumanPhantomSteppingAction::~G4HumanPhantomSteppingAction()
 {}
 
-void G4HumanPhantomSteppingAction::UserSteppingAction(const G4Step* aStep)
+void G4HumanPhantomSteppingAction::UserSteppingAction(const G4Step*)
 { 
-  
-  G4String name = aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName();
-
-  G4ThreeVector particlePosition = aStep -> GetTrack() -> GetPosition();
-
-#ifdef G4ANALYSIS_USE
-
-  if (particlePosition[2]/cm >= 0.) // section at the z-coord
-    { 
-      G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();  	
-      analysis -> particleProjectionXY(particlePosition[0]/cm,particlePosition[1]/cm);
-    }
-
-  if (particlePosition[0]/cm >= 0.) // section at the x-coord
-    { 
-      G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
-      analysis -> particleProjectionYZ(particlePosition[1]/cm,particlePosition[2]/cm);
-    }
-
-  if ((particlePosition[1]/cm >= 50.) && (particlePosition[1]/cm <= 51.)) 
-    // section at the y-coord
-    { 
-      G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
-      analysis -> particleProjectionZX(particlePosition[2]/cm,particlePosition[0]/cm);
-    }
-
-#endif
-  
 }

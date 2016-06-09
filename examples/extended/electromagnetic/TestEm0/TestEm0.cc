@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm0.cc,v 1.3 2006/08/17 13:50:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: TestEm0.cc,v 1.4 2007/06/21 17:30:53 maire Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -60,7 +60,14 @@ int main(int argc,char** argv) {
   //Initialize G4 kernel
   runManager->Initialize();
   
-  if (argc==1)   // Define UI terminal for interactive mode  
+  if (argc!=1)   // batch mode   
+    {
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     G4UImanager::GetUIpointer()->ApplyCommand(command+fileName); 
+    }
+    
+  else           // define UI terminal for interactive mode 
     { 
      G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
@@ -70,12 +77,6 @@ int main(int argc,char** argv) {
 #endif     
      session->SessionStart();
      delete session;
-    }
-  else           // Batch mode
-    { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     G4UImanager::GetUIpointer()->ApplyCommand(command+fileName);
     }
 
   // job termination 

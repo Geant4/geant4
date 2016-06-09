@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.13 2006/06/29 18:31:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Region.icc,v 1.15 2007/04/28 01:48:29 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4Region Inline Implementation file
@@ -273,5 +273,21 @@ void G4Region::AddMaterial(G4Material* aMaterial)
     fRegionMod = true;
   }
 }
+
+// ********************************************************************
+// SetRegionalSteppingAction
+// ********************************************************************
+//
+inline
+void G4Region::SetRegionalSteppingAction(G4UserSteppingAction* rusa)
+{ fRegionalSteppingAction = rusa; }
+
+// ********************************************************************
+// GetRegionalSteppingAction
+// ********************************************************************
+//
+inline
+G4UserSteppingAction* G4Region::GetRegionalSteppingAction() const
+{ return fRegionalSteppingAction; }
 
 

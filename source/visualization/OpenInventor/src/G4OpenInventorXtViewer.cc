@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenInventorXtViewer.cc,v 1.24 2006/06/29 21:22:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation

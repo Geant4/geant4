@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PlacedSolid.cc,v 1.5 2006/06/29 18:42:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PlacedSolid.cc,v 1.6 2007/05/11 13:49:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,6 +35,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4PlacedSolid.hh"
+#include "G4GeometryTolerance.hh"
 
 G4PlacedSolid::G4PlacedSolid()
 {
@@ -47,7 +48,6 @@ G4PlacedSolid::G4PlacedSolid()
 G4PlacedSolid::G4PlacedSolid(G4BREPSolid* s, G4Axis2Placement3D* p)
 {
   solid =s;
-
   if(p)
   {
     G4double x,y,z;
@@ -64,6 +64,8 @@ G4PlacedSolid::G4PlacedSolid(G4BREPSolid* s, G4Axis2Placement3D* p)
     z = tmpvec.z();
     G4ThreeVector x_axis(x,y,z);
 
+    G4double kCarTolerance = G4GeometryTolerance::GetInstance()
+                             ->GetSurfaceTolerance();
     if( (x<kCarTolerance)&&
 	(y<kCarTolerance)&&
 	(z<kCarTolerance)   )

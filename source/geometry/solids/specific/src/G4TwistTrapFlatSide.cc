@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTrapFlatSide.cc,v 1.5 2006/06/29 18:49:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TwistTrapFlatSide.cc,v 1.6 2007/05/23 09:31:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -228,7 +228,7 @@ G4int G4TwistTrapFlatSide::DistanceToSurface(const G4ThreeVector &gp,
    fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                   isvalid[0], 1, validate, &gp, &gv);
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cerr << "ERROR - G4TwistTrapFlatSide::DistanceToSurface(p,v)" << G4endl;
    G4cerr << "        Name        : " << GetName() << G4endl;
    G4cerr << "        xx          : " << xx << G4endl;

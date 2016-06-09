@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2007/04/14 19:08:04 asaim Exp $
+$Id: History,v 1.16 2007/05/30 17:49:56 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 30th A.Howard (procscore-V08-03-03)
+- clean tag with files in the right place (!)
+
+
+May 30th A.Howard (procscore-V08-03-02)
+- Moved biasing classes and tests into processes/biasing
+
+May 18th A.Howard (procscore-V08-03-01)
+- Added comment to exception in G4NewProcessPlacer to emphasise configuration
+after physics list
+
+
+May 16th A.Howard (procscore-V08-03-00)
+- Fixed bug in G4ScoreProcess which didn't get applied to non-parallel geometries
+- Updated NewProcessPlacer to recognise old transportation (Transportation8)
+- Updated examples (to get back to old transportation and reminder about
+arguments)
+
 
 April 14th M.Asai (procscore-V08-02-00)
 - Set step status for ghost pre-step point.

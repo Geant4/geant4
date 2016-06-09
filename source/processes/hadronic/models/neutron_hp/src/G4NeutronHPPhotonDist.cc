@@ -27,12 +27,20 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 Try to limit sum of secondary photon energy while keeping distribution shape 
+//        in the of nDiscrete = 1 an nPartial = 1. Most case are satisfied. 
+//        T. Koi
+// 070606 Add Partial case by T. Koi 
+// 070618 fix memory leaking by T. Koi
+//
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
 
 #include "G4NeutronHPPhotonDist.hh"
 #include "G4NeutronHPLegendreStore.hh"
 #include "G4Electron.hh"
 #include "G4Poisson.hh"
+
+#include <numeric>
 
 G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
 {
@@ -179,6 +187,7 @@ void G4NeutronHPPhotonDist::InitEnergies(std::ifstream & aDataFile)
 
 void G4NeutronHPPhotonDist::InitPartials(std::ifstream & aDataFile)
 {
+  //G4cout << "G4NeutronHPPhotonDist::InitPartials " << G4endl;
   aDataFile >> nDiscrete >> targetMass;
   if(nDiscrete != 1)
   {
@@ -197,11 +206,18 @@ void G4NeutronHPPhotonDist::InitPartials(std::ifstream & aDataFile)
     theShells[i]*=eV;
     thePartialXsec[i].Init(aDataFile, eV);
   }  
+
+  //G4cout << "G4NeutronHPPhotonDist::InitPartials Test " << G4endl;
+  //G4cout << "G4NeutronHPPhotonDist::InitPartials nDiscrete " << nDiscrete << G4endl;
+  //G4NeutronHPVector* aHP = new G4NeutronHPVector;
+  //aHP->Check(1);
 }
 
 G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
 {
-  // the partial cross-section case is not in this yet. @@@@
+
+  //G4cout << "G4NeutronHPPhotonDist::GetPhotons repFlag " << repFlag << G4endl;
+  // the partial cross-section case is not in this yet. @@@@  << 070601 TK add partial 
   G4int i, ii, iii;
   G4int nSecondaries = 0;
   G4ReactionProductVector * thePhotons = new G4ReactionProductVector;
@@ -223,6 +239,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       }
       nSecondaries += actualMult[i];
     }
+    //G4cout << "nSecondaries " << nSecondaries  << " anEnergy " << anEnergy/eV << G4endl;
     for(i=0;i<nSecondaries;i++)
     {
       G4ReactionProduct * theOne = new G4ReactionProduct;
@@ -230,6 +247,116 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
       thePhotons->push_back(theOne);
     }
     G4int count=0;
+
+/*
+G4double totalCascadeEnergy = 0.;
+G4double lastCascadeEnergy = 0.;
+G4double eGamm = 0;
+G4int maxEnergyIndex = 0;
+*/
+    //Gcout << "nDiscrete " << nDiscrete << " nPartials " << nPartials << G4endl;
+//3456
+      if ( nDiscrete == 1 && nPartials == 1 )  
+      {
+         if ( actualMult[ 0 ] > 0 ) 
+         {
+	    if ( disType[0] == 1 ) // continuum
+            {
+
+/*
+      for(ii=0; ii< actualMult[0]; ii++)
+      {   
+
+          G4double  sum=0, run=0;
+          for(iii=0; iii<nPartials; iii++) sum+=probs[iii].GetY(anEnergy);
+          G4double random = G4UniformRand();
+          G4int theP = 0;
+          for(iii=0; iii<nPartials; iii++)
+          {
+            run+=probs[iii].GetY(anEnergy);
+            theP = iii;
+            if(random<run/sum) break;
+          }
+          if(theP==nPartials) theP=nPartials-1; // das sortiert J aus.
+          sum=0; 
+          G4NeutronHPVector * temp;
+          temp = partials[theP]->GetY(anEnergy); //@@@ look at, seems fishy
+          // Looking for TotalCascdeEnergy or LastMaxEnergy
+          if (ii == 0)
+          {
+            maxEnergyIndex = temp->GetVectorLength()-1;
+            totalCascadeEnergy = temp->GetX(maxEnergyIndex);
+            lastCascadeEnergy = totalCascadeEnergy;
+          }
+          lastCascadeEnergy -= eGamm;
+          if (ii != actualMult[i]-1) eGamm = temp->SampleWithMax(lastCascadeEnergy);
+	  else eGamm = lastCascadeEnergy;
+          thePhotons->operator[](count)->SetKineticEnergy(eGamm);
+          delete temp;
+
+     }
+*/
+               G4NeutronHPVector * temp;
+               temp = partials[ 0 ]->GetY(anEnergy); //@@@ look at, seems fishy
+               G4double maximumE = temp->GetX( temp->GetVectorLength()-1 ); // This is an assumption.
+
+               //G4cout << "start " << actualMult[ 0 ] << " maximumE " << maximumE/eV << G4endl;
+
+               std::vector< G4double > photons_e_best( actualMult[ 0 ] , 0.0 );
+               G4double best = DBL_MAX;
+               G4int maxTry = 1000; 
+               for ( G4int j = 0 ; j < maxTry ; j++ )
+               {
+                  std::vector< G4double > photons_e( actualMult[ 0 ] , 0.0 );
+                  for ( std::vector< G4double >::iterator 
+                      it = photons_e.begin() ; it < photons_e.end() ; it++ ) 
+                 {
+                     *it = temp->Sample();   
+                 }
+                 if ( std::accumulate( photons_e.begin() , photons_e.end() , 0.0 ) > maximumE ) 
+                 {
+                    if ( std::accumulate( photons_e.begin() , photons_e.end() , 0.0 ) < best )
+                       photons_e_best = photons_e;
+                    continue;
+                 }
+                 else
+                 {
+                    for ( std::vector< G4double >::iterator 
+                        it = photons_e.begin() ; it < photons_e.end() ; it++ ) 
+                    {
+                       thePhotons->operator[](count)->SetKineticEnergy( *it );
+                    }  
+                    //G4cout << "OK " << actualMult[0] << " j " << j << " total photons E  " 
+                    //          << std::accumulate( photons_e.begin() , photons_e.end() , 0.0 )/eV << " ratio " << std::accumulate( photons_e.begin() , photons_e.end() , 0.0 ) / maximumE 
+                    //          << G4endl;
+                    
+                    break;
+                 }
+                 G4cout << "NeutronHPPhotonDist could not find fitted energy set for multiplicity of " <<  actualMult[0] << "." << G4endl; 
+                 G4cout << "NeutronHPPhotonDist will use the best set." << G4endl; 
+                 for ( std::vector< G4double >::iterator 
+                     it = photons_e_best.begin() ; it < photons_e_best.end() ; it++ ) 
+                 {
+                     thePhotons->operator[](count)->SetKineticEnergy( *it );
+                 }
+                 //G4cout << "Not Good " << actualMult[0] << " j " << j << " total photons E  " 
+                 //       << best/eV << " ratio " << best / maximumE 
+                 //       << G4endl;
+               }
+               // TKDB
+               delete temp;
+            }
+	    else    // discrete
+ 	    {
+               thePhotons->operator[](count)->SetKineticEnergy(energy[i]);
+	    }
+	    count++;
+	    if(count    > nSecondaries)  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPPhotonDist::GetPhotons inconsistancy");
+        }
+         
+      }
+      else
+      {
     for(i=0; i<nDiscrete; i++)
     { 
       for(ii=0; ii< actualMult[i]; ii++)
@@ -262,6 +389,7 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
 	if(count > nSecondaries)  throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPPhotonDist::GetPhotons inconsistancy");
       }
     }
+      }
     // now do the angular distributions...
     if( isoFlag == 1)
     {
@@ -435,10 +563,137 @@ G4ReactionProductVector * G4NeutronHPPhotonDist::GetPhotons(G4double anEnergy)
     }
     thePhotons->push_back(theOne);
   }
+  else if( repFlag==0 )
+  {
+
+// TK add 
+      if ( thePartialXsec == 0 ) 
+      {
+         //G4cout << "repFlag is 0, but no PartialXsec data" << G4endl;
+         //G4cout << "This is not support yet." << G4endl;
+         return thePhotons;
+      }
+
+// Partial Case 
+
+      G4ReactionProduct * theOne = new G4ReactionProduct;
+      theOne->SetDefinition( G4Gamma::Gamma() );
+      thePhotons->push_back( theOne );
+
+// Energy 
+
+      //G4cout << "Partial Case nDiscrete " << nDiscrete << G4endl;
+      G4double sum = 0.0; 
+      std::vector < G4double > dif( nDiscrete , 0.0 ); 
+      for ( G4int i = 0 ; i < nDiscrete ; i++ ) 
+      {
+         G4double x = thePartialXsec[ i ].GetXsec( anEnergy );  // x in barn 
+         if ( x > 0 ) 
+         {
+            sum += x;   
+         } 
+         dif [ i ] = sum; 
+         //G4cout << "i " << i << ", x " << x << ", dif " << dif [ i ] << G4endl;
+      }
+      
+      G4double rand = G4UniformRand();
+
+      G4int iphoton = 0; 
+      for ( G4int i = 0 ; i < nDiscrete ; i++ ) 
+      {
+         G4double y = rand*sum; 
+         if ( dif [ i ] > y ) 
+         {
+            iphoton = i; 
+            break;  
+         } 
+      }
+      //G4cout << "iphoton " << iphoton << G4endl;
+      //G4cout << "photon energy " << theGammas[ iphoton ] /eV  << G4endl;
+
+// Angle 
+      G4double cosTheta = 0.0; // mu
+
+      if ( isoFlag == 1 )
+      {
+
+//       Isotropic Case
+
+         cosTheta = 2.*G4UniformRand()-1;
+
+      }
+      else
+      {
+
+         if ( iphoton < nIso )
+         {
+
+//          still Isotropic 
+
+            cosTheta = 2.*G4UniformRand()-1;
+
+         }
+         else
+         {
+
+            //G4cout << "Not Isotropic and isoFlag " << isoFlag  << G4endl;
+            //G4cout << "tabulationType " << tabulationType << G4endl;
+            //G4cout << "nDiscrete2  " << nDiscrete2 << G4endl;
+            //G4cout << "nIso " << nIso << G4endl;
+            //G4cout << "size of nNeu " << nDiscrete2-nIso << G4endl;
+            //G4cout << "nNeu[iphoton-nIso] " << nNeu[iphoton-nIso] << G4endl;
+
+            if ( tabulationType == 1 )
+            {
+//             legendre polynomials
+
+               G4int iangle = 0; 
+               for ( G4int j = 0 ; j < nNeu [ iphoton - nIso ] ; j++ )
+               {
+                  iangle = j;
+                  if ( theLegendre[ iphoton - nIso ][ j ].GetEnergy() > anEnergy ) break;
+               }
+ 
+               G4NeutronHPLegendreStore aStore( 2 );
+               aStore.SetCoeff( 1 , &( theLegendre[ iphoton - nIso ][ iangle ] ) );  
+               aStore.SetCoeff( 0 , &( theLegendre[ iphoton - nIso ][ iangle - 1 ] ) ); 
+
+               cosTheta = aStore.SampleMax( anEnergy );
+
+            }
+            else if ( tabulationType == 2 )
+            {
+        
+//             tabulation of probabilities.
+
+               G4int iangle = 0; 
+               for ( G4int j = 0 ; j < nNeu [ iphoton - nIso ] ; j++ )
+               {
+                  iangle = j;
+                  if ( theAngular[ iphoton - nIso ][ j ].GetEnergy() > anEnergy ) break;
+               }
+
+               cosTheta = theAngular[iphoton-nIso][ iangle ].GetCosTh(); // no interpolation yet @@
+
+            }
+         }
+      }
+      
+// Set 
+      G4double phi = twopi*G4UniformRand();
+      G4double theta = std::acos( cosTheta );
+      G4double sinTheta = std::sin( theta );
+
+      G4double photonE = theGammas[ iphoton ];
+      G4ThreeVector direction ( sinTheta*std::cos( phi ) , sinTheta * std::sin( phi ) , cosTheta );
+      G4ThreeVector photonP = photonE * direction;
+      thePhotons->operator[]( 0 )->SetMomentum( photonP ) ;
+    
+  }
   else
   {
     delete thePhotons;
-    thePhotons = NULL; // no gamma data available; some work needed @@@@@@@
+    thePhotons = 0; // no gamma data available; some work needed @@@@@@@
   }    
   return thePhotons;
 }

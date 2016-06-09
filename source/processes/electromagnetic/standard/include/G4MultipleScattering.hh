@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.34 2007/03/22 07:59:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4MultipleScattering.hh,v 1.35 2007/05/18 18:43:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -116,10 +116,6 @@ public:    // with description
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
 
-  // set boolean flag steppingAlgorithm
-  // ( true/false : standard or 7.1 style process)
-  void MscStepLimitation(G4bool algorithm, G4double factor = -1.);
-
   // geom. step length distribution should be sampled or not
   void Setsamplez(G4bool value) { samplez = value;};
 
@@ -128,12 +124,6 @@ public:    // with description
 
   // 'soften' step limitation above lambdalimit
   void SetLambdalimit(G4double value) { lambdalimit = value;};
-
-  // Steplimit = facrange*max(range,lambda)
-  void SetFacrange(G4double val) { facrange=val;};
-
-  // connected with step size reduction due to geometry
-  void SetFacgeom(G4double val) { facgeom=val;};
 
 protected:
 
@@ -144,16 +134,9 @@ private:        // data members
 
   G4UrbanMscModel* mscUrban;
 
-  G4double lowKineticEnergy;
-  G4double highKineticEnergy;
-  G4int    totBins;
-
   G4double lambdalimit;
-  G4double facrange;
-  G4double facgeom;
   G4double dtrl;
 
-  G4bool   steppingAlgorithm;
   G4bool   samplez;
   G4bool   isInitialized;
 

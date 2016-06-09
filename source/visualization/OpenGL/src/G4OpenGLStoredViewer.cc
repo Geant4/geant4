@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.21 2007/02/08 14:01:55 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4OpenGLStoredViewer.cc,v 1.23 2007/04/04 16:50:27 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -87,11 +87,11 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())       ||
       (lastVP.IsMarkerNotHidden ()  != fVP.IsMarkerNotHidden ())  ||
-      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())
-      ) {
+      (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
+      (lastVP.IsPicking ()          != fVP.IsPicking ())
+      )
     return true;
-  }
-
+  
   if (lastVP.IsDensityCulling () &&
       (lastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
     return true;
@@ -141,7 +141,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       glEnable (GL_CLIP_PLANE2);
     }
 
-    if (fG4OpenGLStoredSceneHandler.fTopPODL)
+    if (fG4OpenGLStoredSceneHandler.fTopPODL) 
       glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
 
     for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
@@ -151,6 +151,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	glPushMatrix();
 	G4OpenGLTransform3D oglt (to.fTransform);
 	glMultMatrixd (oglt.GetGLMatrix ());
+	if (fVP.IsPicking()) glLoadName(to.fPickName);
 	G4Colour& c = to.fColour;
 	G4double bsf = 1.;  // Brightness scaling factor.
 	if (fFadeFactor > 0. && to.fEndTime < fEndTime)
@@ -182,7 +183,8 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 			      fDisplayHeadTimeGreen,
 			      fDisplayHeadTimeBlue));
     headTimeText.SetVisAttributes(&visAtts);
-    fG4OpenGLStoredSceneHandler.AddPrimitive(headTimeText);
+    static_cast<G4OpenGLSceneHandler&>(fSceneHandler).
+      G4OpenGLSceneHandler::AddPrimitive(headTimeText);
     glMatrixMode (GL_PROJECTION);
     glPopMatrix();
     glMatrixMode (GL_MODELVIEW);

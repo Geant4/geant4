@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+//
 #include "G4NeutronHPChannelList.hh"
 #include "G4Element.hh"
 #include "G4HadFinalState.hh"
@@ -46,14 +48,14 @@
   G4NeutronHPChannelList::G4NeutronHPChannelList()
   {
     nChannels = 0;
-    theChannels = NULL;
+    theChannels = 0;
     allChannelsCreated = false;
     theInitCount = 0;
   }
   
   G4NeutronHPChannelList::~G4NeutronHPChannelList()
   {
-    if(theChannels!=NULL)
+    if(theChannels!=0)
     {
       for(G4int i=0;i<nChannels; i++)
       {
@@ -97,7 +99,8 @@
     for(i=0;i<numberOfIsos; i++)
     {
       isotope = i;
-      if(random<running[i]/running[numberOfIsos-1]) break;
+      //if(random<running[i]/running[numberOfIsos-1]) break;
+      if(running[numberOfIsos-1] != 0) if(random<running[i]/running[numberOfIsos-1]) break;
     }
     delete [] running;
     
@@ -121,7 +124,7 @@
     for(i=0; i<nChannels; i++)
     {
       lChan = i;
-      if(random<running[i]/running[nChannels-1]) break;
+      if(running[nChannels-1] != 0) if(random<running[i]/running[nChannels-1]) break;
     }
     delete [] running;
     return theChannels[lChan]->ApplyYourself(aTrack, isotope);

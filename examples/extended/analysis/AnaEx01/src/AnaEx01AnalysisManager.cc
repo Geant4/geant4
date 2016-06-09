@@ -25,7 +25,7 @@
 //
 //
 // $Id: AnaEx01AnalysisManager.cc,v 1.16 2006/06/29 16:33:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Guy Barrand 14th Septembre 2000.

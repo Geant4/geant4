@@ -1,0 +1,45 @@
+#----------------------------------------------------------------------------
+# PHYSICS LIST:
+# 
+#  - LOW ENERGY ELECTROMAGNETIC PHYSICS
+#  - ELASTIC SCATTERING FOR ALL THE HADRONS AND IONS
+#  - INELASTIC SCATTERING --->
+# 	
+#	* BINARY CASCADE MODEL WITH THE DEFAULT PRECOMPOUND
+# 
+# 	* LEP MODEL UP TO 100 MEV AND BINARY ION MODEL BETWEEN 80 MEV AND 40. GEV 
+#	  FOR  DEUTERON, TRITON, HE3, ALPHA
+# 
+#	* FISSION AND HADRON CAPTURE FOR NEUTRONS BETWEEN 0. MEV AND 100. TEV
+#
+#
+#-------------------------------------------------------------------------------
+
+
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+# SETTING FOR THE PHYSICS MODELS
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+/physics/addPhysics ion-LowE
+/physics/addPhysics proton-precompound-binary
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
+/run/initialize
+
+# IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
+# THE FOLLOWIG PARAMETERS
+# SETTING FOR THE RANGE SHIFTER
+ 
+#/beamLine/RangeShifter/thickness 0 cm
+#/beamLine/RangeShifter/RSMat Water
+#/tracking/verbose 1
+/beam/energy/meanEnergy 25 MeV
+/run/beamOn 100
+
+
+
+

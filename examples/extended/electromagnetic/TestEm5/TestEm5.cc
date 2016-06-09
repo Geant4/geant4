@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.16 2006/08/10 08:44:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: TestEm5.cc,v 1.17 2007/06/22 10:48:00 maire Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,10 +35,6 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "Randomize.hh"
-
-#ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
-#endif
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
@@ -50,6 +46,10 @@
 #include "SteppingVerbose.hh"
 #include "StackingAction.hh"
 #include "HistoManager.hh"
+
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,8 +69,6 @@ int main(int argc,char** argv) {
   detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
-
-  G4VisManager* visManager = 0;
 
   HistoManager* histo = new HistoManager();
 
@@ -106,36 +104,36 @@ int main(int argc,char** argv) {
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
  
-  if (argc==1)   // Define UI terminal for interactive mode  
+  if (argc!=1)   // batch mode  
+    {
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UI->ApplyCommand(command+fileName);
+    }
+    
+  else           //define visualization and UI terminal for interactive mode
     { 
-
 #ifdef G4VIS_USE
-      // visualization manager
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
-#endif
-      G4UIsession * session = 0;
+   G4VisManager* visManager = new G4VisExecutive;
+   visManager->Initialize();
+#endif    
+     
+     G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
-#endif                      
-      session->SessionStart();
-      delete session;
-    }
-  else           // Batch mode
-    { 
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);
+#endif     
+     session->SessionStart();
+     delete session;
+     
+#ifdef G4VIS_USE
+     delete visManager;
+#endif     
     }
     
   // job termination
-
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-  
+  //  
   delete histo;
   delete runManager;
 

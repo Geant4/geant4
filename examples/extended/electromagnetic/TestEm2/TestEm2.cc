@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm2.cc,v 1.11 2006/06/29 16:49:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: TestEm2.cc,v 1.12 2007/06/12 15:29:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -72,8 +72,7 @@ int main(int argc,char** argv) {
     
 #ifdef G4VIS_USE
   // visualization manager
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
+  G4VisManager* visManager = 0;
 #endif
     
   // set user action classes
@@ -88,6 +87,8 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode.
     {
+      visManager = new G4VisExecutive;
+      visManager->Initialize();
       G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      

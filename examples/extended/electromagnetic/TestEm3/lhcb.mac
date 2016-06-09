@@ -1,4 +1,4 @@
-# $Id: lhcb.mac,v 1.2 2006/10/31 12:53:48 maire Exp $
+# $Id: lhcb.mac,v 1.3 2007/05/18 19:00:44 vnivanch Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -13,7 +13,7 @@
 /testem/det/setAbsor 2 Scintillator 4 mm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  emstandard
 #
 /gun/particle e-
 /gun/energy 10 GeV

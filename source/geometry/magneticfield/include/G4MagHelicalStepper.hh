@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.hh,v 1.11 2006/06/29 18:22:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MagHelicalStepper.hh,v 1.13 2007/05/18 15:45:22 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // class G4MagHelicalStepper
@@ -70,7 +70,7 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
                                G4double yout[] ) = 0;
       // Performs a 'dump' Step without error calculation.
   
-    G4double DistChord() const;
+    G4double DistChord()const ;
       // Estimate maximum distance of curved solution and chord ... 
 
   protected:  // with description
@@ -80,14 +80,30 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
                                   G4double  yHelix[]) const;
       // A linear Step in regions without magnetic field.
 
-    void AdvanceHelix( const G4double  yIn[],
+     void AdvanceHelix( const G4double  yIn[],
                              G4ThreeVector   Bfld,
                              G4double  h,
-                             G4double  yHelix[]) const;    // output 
+			G4double  yHelix[]);    // output 
       // A first order Step along a helix inside the field.
 
     inline void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield );
       // Evaluate the field at a certain point.
+
+  
+   inline G4double GetInverseCurve( const G4double Momentum, const G4double Bmag );
+      // Evaluate Inverse of Curvature of Track
+
+      // Store and use the parameters of track : 
+      // Radius of curve, Stepping angle, Radius of projected helix
+   inline void SetAngCurve(const G4double Ang);
+   inline G4double GetAngCurve()const;
+
+   inline void SetCurve(const G4double Curve);
+   inline G4double GetCurve()const;
+
+   inline void SetRadHelix(const G4double Rad);
+   inline G4double GetRadHelix()const;
+
 
   protected:  // without description
 
@@ -99,14 +115,20 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
     G4MagHelicalStepper(const G4MagHelicalStepper&);
     G4MagHelicalStepper& operator=(const G4MagHelicalStepper&);
       // Private copy constructor and assignment operator.
-
+ 
     static const G4double fUnitConstant;   //  As in G4Mag_EqRhs.hh/cc where it is not used.
   private:
-  
-    G4ThreeVector yInitial, yMidPoint, yFinal;
-      // Data stored in order to find the chord.
-
+   
     G4Mag_EqRhs*  fPtrMagEqOfMot;
+ 
+    // Data stored in order to find the chord.
+      G4double fAngCurve;
+      G4double frCurve;
+      G4double frHelix;
+    // Data stored in order to find the chord.
+      G4ThreeVector yInitial, yMidPoint, yFinal;
+       
+    
 };
 
 #include  "G4MagHelicalStepper.icc"

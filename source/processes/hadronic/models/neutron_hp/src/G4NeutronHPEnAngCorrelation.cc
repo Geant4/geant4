@@ -39,9 +39,9 @@ G4ReactionProduct * G4NeutronHPEnAngCorrelation::SampleOne(G4double anEnergy)
   if(nProducts!=1) throw G4HadronicException(__FILE__, __LINE__, "More than one product in SampleOne");
   
   // get the result
-  G4ReactionProductVector * temp=NULL;
+  G4ReactionProductVector * temp=0;
   G4int i=0;
-  while(temp == NULL) temp = theProducts[i++].Sample(anEnergy);
+  while(temp == 0) temp = theProducts[i++].Sample(anEnergy);
   
   // is the multiplicity correct
   if(temp->size()!=1) throw G4HadronicException(__FILE__, __LINE__, "SampleOne: Yield not correct");
@@ -100,7 +100,7 @@ G4ReactionProductVector * G4NeutronHPEnAngCorrelation::Sample(G4double anEnergy)
     {
       theTotalMeanEnergy = anEnergy/nProducts+theProducts[i].GetQValue();
     }
-    if(it!=NULL)
+    if(it!=0)
     {
       for(unsigned int ii=0; ii<it->size(); ii++)
       {

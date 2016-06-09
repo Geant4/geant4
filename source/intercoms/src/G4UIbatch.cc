@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIbatch.cc,v 1.14 2006/06/29 19:08:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "G4UIbatch.hh"

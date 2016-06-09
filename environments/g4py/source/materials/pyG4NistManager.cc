@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4NistManager.cc,v 1.4 2006/06/29 15:34:21 gunter Exp $
-// $Name: geant4-08-02 $
+// $Id: pyG4NistManager.cc,v 1.5 2007/05/28 03:11:20 kmura Exp $
+// $Name: geant4-09-00 $
 // ====================================================================
 //   pyG4NistManager.cc
 //
@@ -81,11 +81,15 @@ BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ConstructNewMaterial,
 
 using namespace pyG4NistManager;
 
+#endif
+
 // ====================================================================
 // module definition
 // ====================================================================
 void export_G4NistManager()
 {
+#if G4VERSION_NUMBER >= 710
+
   class_<G4NistManager, boost::noncopyable>
     ("G4NistManager", "manager class for NIST materials", no_init)
     // ---
@@ -130,6 +134,6 @@ void export_G4NistManager()
     .def("ListMaterials",        &G4NistManager::ListMaterials)
     .def("PrintG4Material",      &G4NistManager::PrintG4Material)
     ;
+#endif
 }
 
-#endif

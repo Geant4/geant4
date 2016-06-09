@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2007/03/19 13:08:41 maire Exp $
+$Id: README,v 1.9 2007/06/12 12:04:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -123,7 +123,11 @@ $Id: README,v 1.8 2007/03/19 13:08:41 maire Exp $
     
     The finalRange of the step function is set to 10 um, which more on less
     correspond to a tracking cut in water of about 20 keV. See emOptions.
-    Once again, the above parameters can be controled via UI commands.  
+    Once again, the above parameters can be controled via UI commands.
+    
+    - Multiple scattering : is switched in single Coulomb scattering mode near
+    boundaries. This is selected via EM options in PhysicsList, and can be
+    controled with UI commands.  
      	
  5- HISTOGRAMS
  

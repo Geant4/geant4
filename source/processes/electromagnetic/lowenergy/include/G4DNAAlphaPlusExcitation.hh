@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAAlphaPlusExcitation.hh,v 1.2 2006/06/29 19:33:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #ifndef   G4DNAALPHAPLUSEXCITATION_HH
  #define  G4DNAALPHAPLUSEXCITATION_HH 1

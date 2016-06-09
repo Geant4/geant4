@@ -205,6 +205,12 @@ void G4HumanPhantomMaterial::DefineMaterials()
   adipose_glandular = new G4Material("adipose_glandular", d, 2);
   adipose_glandular -> AddMaterial(adipose, 0.5);
   adipose_glandular -> AddMaterial(glandular, 0.5);
+
+  // Air 
+  d = 1.290*mg/cm3;
+  G4Material* matAir = new G4Material("Air",d,2);
+  matAir->AddElement(elN,0.7);
+  matAir->AddElement(elO,0.3);
 }
 
 G4Material* G4HumanPhantomMaterial::GetMaterial(G4String material)

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExactHelixStepper.cc,v 1.4 2006/06/29 18:23:50 gunter Exp $ 
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ExactHelixStepper.cc,v 1.6 2007/05/18 15:49:18 tnikitin Exp $ 
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //  Helix a-la-Explicity Euler: x_1 = x_0 + helix(h)
 //   with helix(h) being a helix piece of length h
@@ -53,6 +53,7 @@ G4ExactHelixStepper::G4ExactHelixStepper(G4Mag_EqRhs *EqRhs)
    for(i=0;i<nvar;i++)  {
      fYInSav[i]= DBL_MAX;
    }
+    fPtrMagEqOfMot=EqRhs;
 }
 
 G4ExactHelixStepper::~G4ExactHelixStepper() {} 
@@ -76,9 +77,7 @@ G4ExactHelixStepper::Stepper( const G4double yInput[],
    }
 
    MagFieldEvaluate(yInput, Bfld_value) ;        
-   fBfieldValue= Bfld_value;  // Save it for chord if needed.
-   fLastStepSize = hstep;     //   ditto
-
+     
    // DumbStepper(yIn, Bfld_value, hstep, yTemp);
    AdvanceHelix(yInput, Bfld_value, hstep, yOut);
 
@@ -87,8 +86,10 @@ G4ExactHelixStepper::Stepper( const G4double yInput[],
      yErr[i] = 0.0 ;
    }
 
-   yInitialEHS = G4ThreeVector( yInput[0],   yInput[1],   yInput[2]); 
-   yFinalEHS   = G4ThreeVector( yOut[0],  yOut[1],  yOut[2]); 
+    yInitialEHS = G4ThreeVector( yInput[0],   yInput[1],   yInput[2]); 
+    yFinalEHS   = G4ThreeVector( yOut[0],  yOut[1],  yOut[2]); 
+    fBfieldValue=Bfld_value;
+    fLastStepSize=hstep;
 }
 
 void
@@ -104,28 +105,31 @@ G4ExactHelixStepper::DumbStepper( const G4double  yIn[],
 	      "EHS:NoDumbStepper", FatalException, "Stepper must do all the work." ); 
 }  
 
-G4double
-G4ExactHelixStepper::DistChord() const 
+
+// ---------------------------------------------------------------------------
+
+G4double G4ExactHelixStepper::DistChord()   const 
 {
-  //  Method below is good only for < 2 pi   ---> TO-DO
-   const G4int nvar = 6 ;
+  // Implementation : must check whether h/R >  pi  !!
+  //   If( h/R <  pi)   DistChord=h/2*tan(Ang_curve/4)
+  //   Else             DistChord=R_helix
+  //
+  G4double distChord;
+  G4double H_helix;
+  H_helix=fLastStepSize; 
+  G4double Ang_curve=GetAngCurve();
+  if(Ang_curve<pi){
+    
+    distChord=0.5*H_helix*std::tan(0.25*Ang_curve);  
 
-  // Calculate yMidPoint
-   G4double hHalf = fLastStepSize * 0.5; 
-   G4ThreeVector Bfld_initial= fBfieldValue; 
-   G4double      yStart[7], yMid[7] ;
-
-   G4int i;
-   for(i=0;i<nvar;i++) yStart[i]= fYInSav[i];
-
-   // Do the half step
-   // DumbStepper(yStart, Bfld_initial, hHalf, yMid);
-   AdvanceHelix(yStart, Bfld_initial, hHalf, yMid);
-   G4ThreeVector yMidPointEHS = G4ThreeVector( yMid[0],  yMid[1],  yMid[2]); 
-
-  return G4LineSection::Distline( yMidPointEHS, yInitialEHS, yFinalEHS );
-  // This is a class method that gives distance of Mid 
-  //  from the Chord between the Initial and Final points.
+  }
+  else{
+    distChord=GetRadHelix();
+   
+  }
+  
+  return distChord;
+  
 }
 
 G4int

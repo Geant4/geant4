@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SigmaMinus.cc,v 1.12 2006/06/29 19:17:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SigmaMinus.cc,v 1.13 2007/03/11 07:17:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,25 +68,30 @@ G4SigmaMinus* G4SigmaMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-   anInstance = new G4ParticleDefinition(
-                 name,    1.19744*GeV,  4.45e-12*MeV,    -1*eplus,
+    anInstance = new G4ParticleDefinition(
+                 name,    1.197449*GeV,  4.45e-12*MeV,    -1*eplus,
                     1,              +1,             0,
                     2,              -2,             0,
              "baryon",               0,            +1,        3112,
                 false,       0.1479*ns,          NULL,
                 false,       "sigma");
- //create Decay Table 
-  G4DecayTable* table = new G4DecayTable();
-  
-  // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[1];
-  // sigma- -> neutron + pi-
-  mode[0] = new G4PhaseSpaceDecayChannel("sigma-",1.00,2,"neutron","pi-");
-
-  for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
-  delete [] mode;
-
-   anInstance->SetDecayTable(table);
+ 
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( -1.160 * mN);
+ 
+    //create Decay Table 
+    G4DecayTable* table = new G4DecayTable();
+    
+    // create decay channels
+    G4VDecayChannel** mode = new G4VDecayChannel*[1];
+    // sigma- -> neutron + pi-
+    mode[0] = new G4PhaseSpaceDecayChannel("sigma-",1.00,2,"neutron","pi-");
+    
+    for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
+    delete [] mode;
+    
+    anInstance->SetDecayTable(table);
   }
   theInstance = reinterpret_cast<G4SigmaMinus*>(anInstance);
   return theInstance;

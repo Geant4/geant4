@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.47 2006/11/14 14:59:55 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisCommandsViewerSet.cc,v 1.48 2007/04/03 13:33:16 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -66,7 +66,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("If true, view is automatically refreshed after a change of"
      "\nview parameters.");
   fpCommandAutoRefresh->SetParameterName("auto-refresh",omitable = true);
-  fpCommandAutoRefresh->SetDefaultValue(false);
+  fpCommandAutoRefresh->SetDefaultValue(true);
 
   fpCommandAuxEdge = new G4UIcmdWithABool
     ("/vis/viewer/set/auxiliaryEdge",this);
@@ -75,7 +75,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("Auxiliary edges, i.e., those that are part of a curved surface,"
      "\nsometimes called soft edges, become visible/invisible.");
   fpCommandAuxEdge->SetParameterName("edge",omitable = true);
-  fpCommandAuxEdge->SetDefaultValue(false);
+  fpCommandAuxEdge->SetDefaultValue(true);
 
   fpCommandBackground = new G4UIcommand
     ("/vis/viewer/set/background",this);
@@ -247,6 +247,15 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandLineSegments->SetParameterName("line-segments",omitable = true);
   fpCommandLineSegments->SetDefaultValue(24);
 
+  fpCommandPicking = new G4UIcmdWithABool
+    ("/vis/viewer/set/picking",this);
+  fpCommandPicking->SetGuidance("Sets picking, if available.");
+  fpCommandPicking->SetGuidance
+    ("If true, view is set up for picking, if available."
+     "\nFor required actions, watch for instructions for viewer.");
+  fpCommandPicking->SetParameterName("picking",omitable = true);
+  fpCommandPicking->SetDefaultValue(true);
+
   fpCommandProjection = new G4UIcommand("/vis/viewer/set/projection",this);
   fpCommandProjection->SetGuidance
     ("Orthogonal or perspective projection.");
@@ -387,6 +396,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandLightsMove;
   delete fpCommandLightsThetaPhi;
   delete fpCommandLightsVector;
+  delete fpCommandPicking;
   delete fpCommandProjection;
   delete fpCommandSectionPlane;
   delete fpCommandStyle;
@@ -750,6 +760,16 @@ void G4VisCommandsViewerSet::SetNewValue
       G4cout <<
 	"Number of line segements per circle in polygon approximation is "
 	     << nSides << G4endl;
+    }
+  }
+
+  else if (command == fpCommandPicking) {
+    vp.SetPicking(G4UIcommand::ConvertToBool(newValue));
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Picking ";
+      if (vp.IsPicking()) G4cout << "requested.";
+      else G4cout << "inhibited.";
+      G4cout << G4endl;
     }
   }
 

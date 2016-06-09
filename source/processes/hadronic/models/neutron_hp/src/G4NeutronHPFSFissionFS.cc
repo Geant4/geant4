@@ -177,7 +177,7 @@ G4DynamicParticleVector * G4NeutronHPFSFissionFS::GetPhotons()
    boosted.Lorentz(theNeutron, theTarget);
    G4double anEnergy = boosted.GetKineticEnergy();
    temp = theFinalStatePhotons.GetPhotons(anEnergy);
-   if(temp == NULL) return NULL;
+   if(temp == 0) { return 0; }
 
 // lorentz transform, and add photons to final state
    unsigned int i;

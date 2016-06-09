@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2006/10/19 15:35:55 gcosmo Exp $
+$Id: History,v 1.66 2007/05/18 07:33:48 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18/05/2007 : G. Cosmo          breps-V08-03-01
+- Use kAngTolerance and kRadTolerance from G4GeometryTolerance class.
+- Coworks with tag "global-V08-03-03".
+
+11/05/2007 : G. Cosmo          breps-V08-03-00
+- Use call to G4GeometryTolerance instead of kCarTolerance where needed.
+- Requires tag "global-V08-03-00" and related tag set.
 
 19/10/2006 : G. Cosmo          breps-V08-01-00
 - Added GetSurfaceArea() method, accessors and modifiers to base class

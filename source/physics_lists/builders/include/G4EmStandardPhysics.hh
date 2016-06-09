@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics.hh,v 1.3 2006/11/23 15:53:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmStandardPhysics.hh,v 1.4 2007/05/16 11:35:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -39,6 +39,8 @@
 //
 //----------------------------------------------------------------------------
 //
+// This class provides construction of default EM standard physics
+//
 
 #ifndef G4EmStandardPhysics_h
 #define G4EmStandardPhysics_h 1
@@ -46,21 +48,14 @@
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-// for lib list detection....
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
-
-#include "G4EmProcessOptions.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4EmStandardPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysics(const G4String& name = "G4standard", G4int ver = 0);
+  G4EmStandardPhysics(G4int ver = 0, const G4String& name = "G4EmStandard");
   virtual ~G4EmStandardPhysics();
 
-public:
   virtual void ConstructParticle();
   virtual void ConstructProcess();
 

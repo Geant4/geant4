@@ -30,7 +30,7 @@
 //    **************************************
 //
 // $Id: RemSimHadronicBinary.cc,v 1.7 2006/11/15 18:39:30 guatelli Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 

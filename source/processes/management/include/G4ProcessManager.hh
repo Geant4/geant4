@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.hh,v 1.12 2006/06/29 21:07:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ProcessManager.hh,v 1.14 2007/03/30 01:02:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -202,8 +202,10 @@ class G4ProcessManager
       //   ContinuousProcess has only AlongStepDoIt
       //   DiscreteProcess has only PostStepDoIt
       //  if ord is not specified, the process is
-      //  added at the end of List of processvectors for 
-      //  both DoIt and GetPhysicalInteractionLength 
+      //  added at the end of List of processvectors 
+      //  (except for processes assigned to LAST explicitly )
+      //  for both DoIt and GetPhysicalInteractionLength
+      //  
 
       G4int AddRestProcess(G4VProcess *aProcess, G4int ord = ordDefault);
       G4int AddDiscreteProcess(G4VProcess *aProcess, G4int ord = ordDefault);

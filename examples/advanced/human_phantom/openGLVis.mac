@@ -10,6 +10,11 @@
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
-#/vis/viewer/set/viewpointThetaPhi 90 180 deg
-#/vis/viewer/zoom 1.5
+#/vis/viewer/set/viewpointThetaPhi 90 90 deg
+#/vis/viewer/zoom 2.
+# (if too many tracks cause core dump => storeTrajectory 0)
+/tracking/storeTrajectory 1
+/vis/scene/add/trajectories
+# (if you prefer refreshing each event, comment out next line)
+/vis/scene/endOfEventAction accumulate
 #

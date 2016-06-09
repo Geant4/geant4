@@ -4,8 +4,8 @@
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
-  <position name="TrunkPos" unit="cm" x="0" y="31.55" z="0" />
-  <rotation name="TrunkRot" unit="degree" x="90" y="0" z="0" />
+  <position name="OrganPos" unit="cm" x="0" y="31.55" z="0" />
+  <rotation name="OrganRot" unit="degree" x="90" y="0" z="0" />
  </define> 
 
  <materials>
@@ -107,13 +107,13 @@
  </materials>
 
  <solids>
-  <eltube aunit="cm" lunit="cm" name="Trunk" dx="17.25" dy="9.80" dz="31.55"/>
+  <eltube aunit="cm" lunit="cm" name="Organ" dx="17.25" dy="9.80" dz="31.55"/>
  </solids>
 
  <structure>
   <volume name="TrunkVolume" >
    <materialref ref="SoftTissue" />
-   <solidref ref="Trunk" />
+   <solidref ref="Organ" />
   </volume>
  </structure>
  <setup name="Default" version="1.0" >

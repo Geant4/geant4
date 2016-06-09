@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.7 2006/06/29 19:30:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.8 2007/06/06 05:13:34 urban Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // --------------------------------------------------------------
@@ -131,7 +131,10 @@ G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut,
 
     if( ((theParticle->GetParticleName()=="e-")||(theParticle->GetParticleName()=="e+"))
            && (theKineticEnergyCuts < lowen) ) 
-    { theKineticEnergyCuts /= (1.+tune/(rangeCut*density)); }
+
+    //  corr. should be switched on smoothly   
+    { theKineticEnergyCuts /= (1.+(1.-theKineticEnergyCuts/lowen)*
+                                    tune/(rangeCut*density)); }
     if(theKineticEnergyCuts < LowestEnergy) {
       theKineticEnergyCuts = LowestEnergy ;
     }

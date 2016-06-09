@@ -52,7 +52,7 @@
 #include "G4SubtractionSolid.hh"
 
 HadrontherapyBeamLine::HadrontherapyBeamLine(G4VPhysicalVolume* motherVolume):
-  physiBeamLineSupport(0),/* physiBeamLineCover(0), physiBeamLineCover2(0)*/ 
+  physiBeamLineSupport(0),
   firstScatteringFoil(0), physiFirstScatteringFoil(0), physiKaptonWindow(0), 
   solidStopper(0), physiStopper(0), 
   secondScatteringFoil(0), physiSecondScatteringFoil(0),
@@ -69,7 +69,6 @@ HadrontherapyBeamLine::HadrontherapyBeamLine(G4VPhysicalVolume* motherVolume):
   physiThirdMonitorLayer1(0), physiThirdMonitorLayer2(0),
   physiThirdMonitorLayer3(0), physiThirdMonitorLayer4(0),
   physiNozzleSupport(0), physiHoleNozzle(0),
-    /*physiSecondHoleNozzleSupport(0),*/
   solidFinalCollimator(0),
   physiFinalCollimator(0)
 {

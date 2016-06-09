@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.13 2006/06/29 19:56:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ForwardXrayTR.cc,v 1.14 2007/05/11 14:23:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4ForwardXrayTR class -- implementation file
 
@@ -51,7 +51,7 @@
 #include "G4PhysicsLinearVector.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4ProductionCutsTable.hh"
-
+#include "G4GeometryTolerance.hh"
 
 // Table initialization
 
@@ -575,13 +575,13 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
 
   G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
   G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
+  G4double tol=0.5*G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if (pPostStepPoint->GetStepStatus() != fGeomBoundary)
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
-  if (aTrack.GetStepLength() <= kCarTolerance*0.5)
-
+  if (aTrack.GetStepLength() <= tol)
   {
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }

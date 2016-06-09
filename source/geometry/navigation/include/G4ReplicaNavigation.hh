@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.hh,v 1.4 2006/06/29 18:36:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ReplicaNavigation.hh,v 1.6 2007/05/18 07:31:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4ReplicaNavigation
@@ -145,6 +145,7 @@ class G4ReplicaNavigation
 
     G4bool fCheck; 
     G4int  fVerbose;
+    G4double kCarTolerance, kRadTolerance, kAngTolerance;
 };
 
 #include "G4ReplicaNavigation.icc"

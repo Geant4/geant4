@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.cc,v 1.11 2006/06/29 17:16:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: F01PhysicsList.cc,v 1.12 2007/05/23 09:14:09 japost Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 // 
 
 #include "G4Timer.hh"
@@ -46,7 +46,6 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-#include "G4FastSimulationManagerProcess.hh"
 
 
 /////////////////////////////////////////////////////////////
@@ -159,7 +158,7 @@ void F01PhysicsList::ConstructBarions()
 void F01PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  AddParameterisation();
+  // AddParameterisation();
 
   ConstructEM();
   ConstructGeneral();
@@ -325,26 +324,6 @@ void F01PhysicsList::ConstructGeneral()
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
-  }
-}
-
-/////////////////////////////////////////////////////////////////////////////
-
-void F01PhysicsList::AddParameterisation()
-{
-  G4FastSimulationManagerProcess* theFastSimulationManagerProcess = 
-                                  new G4FastSimulationManagerProcess() ;
-  theParticleIterator->reset();
-
-  while( (*theParticleIterator)() )
-  {
-    G4ParticleDefinition* particle = theParticleIterator->value() ;
-    G4ProcessManager* pmanager = particle->GetProcessManager() ;
-
-    // both postStep and alongStep action are required: because
-    // of the use of ghost volumes. If no ghost, the postStep is sufficient.
-
-    pmanager->AddProcess(theFastSimulationManagerProcess, -1, 1, 1);
   }
 }
 

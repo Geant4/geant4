@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2007/03/27 15:15:12 allison Exp $
+$Id: History,v 1.93 2007/05/25 15:41:38 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,13 +19,58 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+25th May 2007  John Allison  (opengl-V08-03-03)
+- G4OpenGLSceneHandler and G4OpenGLXViewerMessenger:
+  Fixed gcc-4.1.2 compiler warnings.
+
+G4OpenGLXViewer: Trapped glXMakeCurrent in Initialise function.
+
+25th May 2007  John Allison  (opengl-V08-03-02)
+- G4OpenGLXViewer: Trapped glXMakeCurrent in Initialise function.
+
+24th May 2007  John Allison  (opengl-V08-03-01)
+- Fixes for SUN.
+
+16th May 2007  John Allison  (opengl-V08-03-00)
+- Fix compiler warnings on SLC4.
+- Bug fixes:
+  o Correct path /vis/ogl/set/printMode.
+  o Add SetView to pixmap screen dump ("/vis/ogl/set/printMode pixmap"
+    and "/vis/ogl/printEPS").
+
+8th May 2007  John Allison  (opengl-V08-02-06)
+- Moved vectored PostScript printing to G4OpenGLViewer.
+- /vis/ogl/printEPS should work for all viewers, including Win32.
+- Introduced /vis/ogl/set/printMode vectored|pixmap, currently only
+  effective on X windows (and still somewhat buggy).
+
+4th April 2007  John Allison  (opengl-V08-02-05 - needs visman-V08-02-04)
+- Implemented picking for OGLSX ( as well as OGLIX).  Hopefully works
+  for OGL*Win32.  Still doesn't work for OGL*Xm.
+
+3rd April 2007  John Allison  (opengl-V08-02-04 - needs visman-V08-02-03)
+- G4OpenGLStoredSceneHandler:
+  o Re-organised display lists on a per-primitive basis, i.e., one
+    display list per primitive.  (This is so that, except for text,
+    the colour - or, rather, intensity - can be brought out of the
+    display list into the TOList (Transient Object List) and
+    controlled for the Display-by-Time feature.  Previously, if more
+    than one primitive were drawn between BeginPrimitives and
+    EndPrimitives, it would finish up all in one display list, colour
+    commands included. Rationalises and fixes a rare bug in the
+    Display-by-Time feature - see August 2006.)
+  o Added AddPrimitive(const G4Polymarker&) so that it is treated as
+    one primoitive to fit with the above re-organisation.
+- Implemented picking for OGLIX.
+
 25th March 2007  John Allison  (opengl-V08-02-03)
 - Fix compiler warnings.
 
 8th February 2007  John Allison  (opengl-V08-02-02)
 - Fixed Windows problem with DBL_MAX.  (Introduced G4OPENGL_DBL_MAX.)
 - G4OpenGLXViewer.cc: Small bug fix in print().  (Context was switched
-  but not switched back.  Not serious, because context was always set
+  .but not switched back.  Not serious, because context was always set
   before normal drawing.)
 
 9th January 2007  John Allison  (opengl-V08-02-01)

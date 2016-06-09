@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.hh,v 1.3 2006/12/13 15:44:22 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4mplIonisationModel.hh,v 1.4 2007/05/22 17:37:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -71,11 +71,11 @@ public:
 					G4double kineticEnergy,
 					G4double cutEnergy);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double maxEnergy);
 
 
   virtual G4double SampleFluctuations(const G4Material*,
@@ -115,14 +115,12 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline std::vector<G4DynamicParticle*>* G4mplIonisationModel::SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double,
-                                   G4double)
-{
-  return 0;
-}
+inline void G4mplIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+						    const G4MaterialCutsCouple*,
+						    const G4DynamicParticle*,
+						    G4double,
+						    G4double)
+{}
 
 inline G4double G4mplIonisationModel::Dispersion(
                           const G4Material* material,

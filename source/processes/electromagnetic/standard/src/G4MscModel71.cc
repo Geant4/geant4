@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MscModel71.cc,v 1.4 2006/06/29 19:53:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MscModel71.cc,v 1.5 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -502,14 +502,14 @@ G4double G4MscModel71::TrueStepLength(G4double geomStepLength)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4MscModel71::SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle* dynParticle,
-                                      G4double truestep,
-                                      G4double safety)
+void G4MscModel71::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				     const G4MaterialCutsCouple*,
+				     const G4DynamicParticle* dynParticle,
+				     G4double truestep,
+				     G4double safety)
 {
   G4double kineticEnergy = dynParticle->GetKineticEnergy();
-  if(kineticEnergy <= 0.0) return 0;
+  if(kineticEnergy <= 0.0) return;
 
   G4double cth  = SampleCosineTheta(truestep,kineticEnergy);
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
@@ -551,7 +551,6 @@ std::vector<G4DynamicParticle*>* G4MscModel71::SampleSecondaries(
 
     fParticleChange->ProposePosition(newPosition);
   }
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

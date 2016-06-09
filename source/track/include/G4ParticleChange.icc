@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.icc,v 1.13 2006/06/29 21:14:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ParticleChange.icc,v 1.14 2007/03/11 07:19:06 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 inline
@@ -175,17 +175,29 @@ inline
   theChargeChange = t;
 }
 
+
+inline
+  G4double G4ParticleChange::GetMagneticMoment() const
+{
+  return theMagneticMomentChange;
+}
+ 
+inline
+  void G4ParticleChange::ProposeMagneticMoment(G4double finalMagneticMoment)
+{
+  theMagneticMomentChange = finalMagneticMoment;
+}
+  
 inline 
   G4double  G4ParticleChange::GetWeight() const
 {
-  return  theWeightChange;
+  return  G4VParticleChange::GetParentWeight();
 }
 
 inline 
   void G4ParticleChange::ProposeWeight(G4double w)
 {
-  theWeightChange = w;
-  theParentWeight = w;
+  G4VParticleChange::ProposeParentWeight(w);
 }
 
 inline  

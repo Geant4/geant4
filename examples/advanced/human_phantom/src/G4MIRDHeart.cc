@@ -56,10 +56,12 @@ G4MIRDHeart::~G4MIRDHeart()
 
 }
 
-G4VPhysicalVolume* G4MIRDHeart::ConstructHeart(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDHeart::Construct(const G4String&,G4VPhysicalVolume*,
+				    const G4String&, G4bool, G4bool)
 {
- G4cout << "ConstructHeart for " << sex << G4endl;
- 
+  
+ G4cout << " MIRD Heart is not available yet !!!! " << G4endl;
+ /* 
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
@@ -132,4 +134,5 @@ G4VPhysicalVolume* G4MIRDHeart::ConstructHeart(G4VPhysicalVolume* mother, G4Stri
 
   
   return physHeart;
+  */
 }

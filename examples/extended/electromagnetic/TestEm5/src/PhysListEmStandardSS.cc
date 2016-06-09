@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.1 2006/08/10 08:45:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: PhysListEmStandardSS.cc,v 1.2 2007/05/16 12:02:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -97,7 +97,6 @@ void PhysListEmStandardSS::ConstructProcess()
                particleName == "mu-"    ) {
       //muon  
       pmanager->AddDiscreteProcess(new G4CoulombScattering);
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);

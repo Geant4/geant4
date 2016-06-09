@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.13 2006/10/20 13:45:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Ellipsoid.cc,v 1.14 2007/05/18 07:39:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // class G4Ellipsoid
 //
@@ -43,6 +43,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "meshdefs.hh"
 
@@ -72,6 +73,8 @@ G4Ellipsoid::G4Ellipsoid(const G4String& pName,
 {
   // note: for users that want to use the full ellipsoid it is useful
   // to include a default for the cuts 
+
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
   // Check Semi-Axis
   if ( (pxSemiAxis>0.) && (pySemiAxis>0.) && (pzSemiAxis>0.) )

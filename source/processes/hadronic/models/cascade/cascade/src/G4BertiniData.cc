@@ -31,3 +31,5 @@
 // Initialize static pointer for singleton instance
 G4BertiniData*  G4BertiniData::theInstance = 0;
 
+const G4int G4BertiniData::pair[6][2] = 
+   {{0, 1}, {1, 7}, {7,27}, {27,69}, {69,94}, {94,111}};

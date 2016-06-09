@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -73,15 +73,14 @@ UI interface is started
 /testem/verbose 0
 #
 /testem/phys/setCuts          0.1 mm
-#/testem/stepMax               1.0  mm
-/process/eLoss/StepFunction   0.2 1. mm
 #
-/testem/phys/addPhysics       standard
-### PhysicsList Add Physics <standard> emBuilderIsRegisted= 0
-PhysicsList::AddPhysicsList <standard>
-#/testem/phys/addPhysics        g4v52
+/testem/phys/addPhysics       emstandard
+### PhysicsList Add Physics <emstandard> emBuilderIsRegisted= 0
+PhysicsList::AddPhysicsList <emstandard>
+#/testem/phys/addPhysics      emstandard_opt2
 #/testem/phys/addPhysics       penelope
-#/testem/phys/addPhysics       lowenergy
+#/testem/phys/addPhysics       livermore
+#/testem/phys/addPhysics      step_limit
 #
 /testem/target1Material       G4_Be
 New target1 material G4_Be
@@ -91,6 +90,8 @@ New target2 material G4_W
 /testem/target2Z              6 mm
 #
 #/testem/histoName            be_w_st.paw
+#
+#/testem/stepMax               1.0  mm
 #
 /gun/particle e-
 /gun/energy 50.0 MeV
@@ -176,22 +177,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=296s Real=317.34s Sys=21.31s
+  User=271.56s Real=271.59s Sys=0.01s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                                  10000
-Average number of e-                         13.59
-Average number of gamma                      21.22
-Average number of e+                         0.7531
+Average number of e-                         12.08
+Average number of gamma                      21.08
+Average number of e+                         0.7662
 Average number of neutrons                   0
-Average number of steps in absorber          33.23
-Average number of e- steps in target         19.07
-Average number of g  produced in the target  20.3
-Average number of e- produced in the target  7.163
-Average number of g produced in the phantom  0.5384
-Average number of e- produced in the phantom 2.829
-Total gamma fluence in front of phantom      8.611 MeV 
+Average number of steps in absorber          31.42
+Average number of e- steps in target         18.73
+Average number of g  produced in the target  20.27
+Average number of e- produced in the target  7.184
+Average number of g produced in the phantom  0.5095
+Average number of e- produced in the phantom 2.731
+Total gamma fluence in front of phantom      8.556 MeV 
 ========================================================
 
 

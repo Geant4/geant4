@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.48 2007/05/05 18:45:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4HadronElastic.cc,v 1.54 2007/05/25 17:50:49 dennis Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // Physics model class G4HadronElastic (derived from G4LElastic)
@@ -60,6 +60,7 @@
 // 04-May-07 V.Ivanchenko do not use HE model for hydrogen target to avoid NaN;
 //                        use QElastic for p, n incident for any energy for 
 //                        p and He targets only  
+// 11-May-07 V.Ivanchenko remove unused method Defs1
 //
 
 #include "G4HadronElastic.hh"
@@ -76,10 +77,9 @@
 #include "G4Alpha.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
-#include "G4NistManager.hh"
 
-G4HadronElastic::G4HadronElastic() 
-  : G4HadronicInteraction()
+G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel) 
+  : G4HadronicInteraction("G4HadronElastic"), hElastic(HModel)
 {
   SetMinEnergy( 0.0*GeV );
   SetMaxEnergy( 100.*TeV );
@@ -91,8 +91,7 @@ G4HadronElastic::G4HadronElastic()
   plabLowLimit     = 20.0*MeV;
 
   qCManager   = G4QElasticCrossSection::GetPointer();
-  nistManager = G4NistManager::Instance();
-  hElastic    = new G4ElasticHadrNucleusHE();
+  if(!hElastic) hElastic = new G4ElasticHadrNucleusHE();
 
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
@@ -180,15 +179,16 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4ElasticGenerator gtype = fLElastic;
 
   // Q-elastic for p,n scattering on H and He
-  if ((theParticle == theProton || theParticle == theNeutron)
-       && Z <= 2 && ekin >= lowEnergyLimitQ)  
+  if (theParticle == theProton || theParticle == theNeutron)
+    //     && Z <= 2 && ekin >= lowEnergyLimitQ)  
     gtype = fQElastic;
 
   else {
     // S-wave for very low energy
     if(plab < plabLowLimit) gtype = fSWave;
-    // HE-elastic for energetic projectiles
-    else if(ekin >= lowEnergyLimitHE && A < 238 && Z>= 2) gtype = fHElastic;
+    // HE-elastic for energetic projectile mesons
+    else if(ekin >= lowEnergyLimitHE && theParticle->GetBaryonNumber() == 0) 
+      gtype = fHElastic;
   }
 
   //
@@ -211,14 +211,11 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   if(gtype == fLElastic) {
     t = GeV*GeV*SampleT(ptot,m1,m2,aTarget);
-    if(t > tmax) gtype = fSWave;
   }
 
   // use mean atomic number
   if(gtype == fHElastic) {
-    G4int A0 = static_cast<G4int>(nistManager->GetAtomicMassAmu(Z)+0.5);
-    t = hElastic->SampleT(theParticle,plab,Z,A0);
-    if(t > tmax) gtype = fSWave;
+    t = hElastic->SampleT(theParticle,plab,Z,A);
   }
 
   // NaN finder
@@ -234,7 +231,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
       G4cout << " S-wave will be sampled" 
 	     << G4endl; 
     }
-    gtype = fSWave;
+    t = 0.0;
   }
 
   if(gtype == fSWave) t = G4UniformRand()*tmax;
@@ -246,9 +243,22 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   // Sampling in CM system
   G4double phi  = G4UniformRand()*twopi;
   G4double cost = 1. - 2.0*t/tmax;
-  if(std::abs(cost) > 1.0) cost = -1.0 + 2.0*G4UniformRand();
-  G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
-  
+  G4double sint;
+
+  if( cost >= 1.0 ) 
+  {
+    cost = 1.0;
+    sint = 0.0;
+  }
+  else if( cost <= -1.0) 
+  {
+    cost = -1.0;
+    sint =  0.0;
+  }
+  else  
+  {
+    sint = std::sqrt((1.0-cost)*(1.0+cost));
+  }    
   if (verboseLevel>1) 
     G4cout << "cos(t)=" << cost << " std::sin(t)=" << sint << G4endl;
 
@@ -461,9 +471,7 @@ label17:
    goto label4;
 }
 
-
 // Test function for root-finder
-
 G4double
 G4HadronElastic::Fctcos(G4double t, 
 			G4double aa, G4double bb, G4double cc, G4double dd, 
@@ -484,35 +492,3 @@ G4HadronElastic::Fctcos(G4double t,
 }
 
 
-void
-G4HadronElastic::Defs1(G4double p, G4double px, G4double py, G4double pz, 
-		       G4double pxinc, G4double pyinc, G4double pzinc, 
-		       G4double* pxnew, G4double* pynew, G4double* pznew)
-{
-// Transform scattered particle to reflect direction of incident particle
-   G4double pt2 = pxinc*pxinc + pyinc*pyinc;
-   if (pt2 > 0.) {
-      G4double cost = pzinc/p;
-      G4double sint1 = std::sqrt(std::abs((1. - cost )*(1.+cost)));
-      G4double sint2 = std::sqrt(pt2)/p;
-      G4double sint = 0.5*(sint1 + sint2);
-      G4double ph = pi*0.5;
-      if (pyinc < 0.) ph = pi*1.5;
-      if (std::abs(pxinc) > 1.e-6) ph = std::atan2(pyinc, pxinc);
-      G4double cosp = std::cos(ph);
-      G4double sinp = std::sin(ph);
-      if (verboseLevel > 1) {
-         G4cout << "cost sint " << cost << " " << sint << G4endl;
-         G4cout << "cosp sinp " << cosp << " " << sinp << G4endl;
-      }
-      *pxnew = cost*cosp*px - sinp*py + sint*cosp*pz;
-      *pynew = cost*sinp*px + cosp*py + sint*sinp*pz;
-      *pznew =     -sint*px                 +cost*pz;
-   }
-   else {
-       G4double cost=pzinc/p;
-       *pxnew = cost*px;
-       *pynew = py;
-       *pznew = cost*pz;
-   }
-}

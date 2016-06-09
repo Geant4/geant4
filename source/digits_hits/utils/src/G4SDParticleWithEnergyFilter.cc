@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDParticleWithEnergyFilter.cc,v 1.2 2006/06/29 18:08:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SDParticleWithEnergyFilter.cc,v 1.3 2007/05/18 00:00:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4VSensitiveDetector
 #include "G4SDParticleWithEnergyFilter.hh"

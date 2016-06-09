@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.79 2007/01/11 16:38:14 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4VSceneHandler.cc,v 1.82 2007/05/16 15:47:44 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -79,6 +79,7 @@
 #include "G4Run.hh"
 #include "G4Transform3D.hh"
 #include "G4AttHolder.hh"
+#include "G4AttDef.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
   fSystem                (system),
@@ -553,37 +554,40 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     } else {
 
       G4RunManager* runManager = G4RunManager::GetRunManager();
-      const G4Run* run = runManager->GetCurrentRun();
-      const std::vector<const G4Event*>* events =
-	run? run->GetEventVector(): 0;
-      size_t nKeptEvents = 0;
-      if (events) nKeptEvents = events->size();
       if (runManager) {
-	if (fpScene->GetRefreshAtEndOfEvent()) {
+	const G4Run* run = runManager->GetCurrentRun();
+	const std::vector<const G4Event*>* events =
+	  run? run->GetEventVector(): 0;
+	size_t nKeptEvents = 0;
+	if (events) nKeptEvents = events->size();
+	if (nKeptEvents) {
 
-	  if (verbosity >= G4VisManager::confirmations) {
-	    G4cout << "Refreshing event..." << G4endl;
-	  }
-	  const G4Event* event = 0;
-	  if (events && events->size()) event = events->back();
-	  if (event) DrawEvent(event);
+	  if (fpScene->GetRefreshAtEndOfEvent()) {
 
-	} else {  // Accumulating events.
-
-	  if (verbosity >= G4VisManager::confirmations) {
-	    G4cout << "Refreshing events in run..." << G4endl;
-	  }
-	  for (size_t i = 0; i < nKeptEvents; ++i) {
-	    const G4Event* event = (*events)[i];
+	    if (verbosity >= G4VisManager::confirmations) {
+	      G4cout << "Refreshing event..." << G4endl;
+	    }
+	    const G4Event* event = 0;
+	    if (events && events->size()) event = events->back();
 	    if (event) DrawEvent(event);
-	  }
 
-	  if (!fpScene->GetRefreshAtEndOfRun()) {
-	    if (verbosity >= G4VisManager::warnings) {
-	      G4cout <<
-		"WARNING: Cannot refresh events accumulated over more"
-		"\n  than one runs.  Refreshed just the last run..."
-		     << G4endl;
+	  } else {  // Accumulating events.
+
+	    if (verbosity >= G4VisManager::confirmations) {
+	      G4cout << "Refreshing events in run..." << G4endl;
+	    }
+	    for (size_t i = 0; i < nKeptEvents; ++i) {
+	      const G4Event* event = (*events)[i];
+	      if (event) DrawEvent(event);
+	    }
+
+	    if (!fpScene->GetRefreshAtEndOfRun()) {
+	      if (verbosity >= G4VisManager::warnings) {
+		G4cout <<
+		  "WARNING: Cannot refresh events accumulated over more"
+		  "\n  than one runs.  Refreshed just the last run."
+		       << G4endl;
+	      }
 	    }
 	  }
 	}
@@ -709,10 +713,13 @@ const G4Polyhedron* G4VSceneHandler::CreateCutawayPolyhedron()
 void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
 {
   // Load G4Atts from G4VisAttributes, if any...
-  const std::map<G4String,G4AttDef>* vaDefs =
-    visible.GetVisAttributes()->GetAttDefs();
-  if (vaDefs) {
-    holder->AddAtts(visible.GetVisAttributes()->CreateAttValues(), vaDefs);
+  const G4VisAttributes* va = visible.GetVisAttributes();
+  if (va) {
+    const std::map<G4String,G4AttDef>* vaDefs =
+      va->GetAttDefs();
+    if (vaDefs) {
+      holder->AddAtts(visible.GetVisAttributes()->CreateAttValues(), vaDefs);
+    }
   }
 
   G4PhysicalVolumeModel* pPVModel =

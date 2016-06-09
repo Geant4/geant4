@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4MuMinusCaptureCascade.cc,v 1.14 2007/02/13 15:25:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998

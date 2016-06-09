@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewerMessenger.cc,v 1.5 2006/11/21 16:24:00 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLXViewerMessenger.cc,v 1.7 2007/05/25 15:41:38 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
@@ -36,8 +36,6 @@
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithABool.hh"
 #include "G4VisManager.hh"
 #include <sstream>
 
@@ -54,22 +52,18 @@ G4OpenGLXViewerMessenger::G4OpenGLXViewerMessenger()
   fpDirectory = new G4UIdirectory("/vis/oglx/");
   fpDirectory->SetGuidance("G4OpenGLXViewer commands.");
 
-  fpCommandPrintEPS =
-    new G4UIcmdWithoutParameter("/vis/oglx/printEPS", this);
-  fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
-  fpCommandPrintEPS->SetGuidance
-    ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
-     "\nnumber, starting at 0.");
+  fpDirectorySet = new G4UIdirectory ("/vis/oglx/set/");
+  fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
+
 }
 
 G4OpenGLXViewerMessenger::~G4OpenGLXViewerMessenger ()
 {
-  delete fpCommandPrintEPS;
   delete fpDirectory;
 }
 
 void G4OpenGLXViewerMessenger::SetNewValue
-(G4UIcommand* command, G4String)
+(G4UIcommand* /*command*/, G4String /*newValue*/)
 {
   G4VisManager* pVisManager = G4VisManager::GetInstance();
 
@@ -92,23 +86,6 @@ void G4OpenGLXViewerMessenger::SetNewValue
            << G4endl;
     return;
   }
-
-  if (command == fpCommandPrintEPS)
-    {
-      // Keep copy of print_string to preserve Xm behaviour...
-      char* tmp_string = new char[50];
-      strcpy (tmp_string, pViewer->print_string);
-      // Make new print string...
-      static G4int file_count = 0;
-      std::ostringstream oss;
-      oss << "G4OpenGL_" << file_count++ << ".eps";
-      strcpy (pViewer->print_string, oss.str().c_str());
-      // Print eps file...
-      pViewer->print();
-      // Restore print_string for Xm...
-      strcpy (pViewer->print_string, tmp_string);
-      delete tmp_string;
-    }
 
 }
 

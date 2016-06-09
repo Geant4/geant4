@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.23.2.1 2007/05/02 14:59:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4UrbanMscModel.hh,v 1.29 2007/06/21 15:04:24 gunter Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -74,6 +74,7 @@
 // 31-01-07 code cleaning (L.Urban)
 // 06-02-07 Move SetMscStepLimitation method into the source (VI)
 // 15-02-07 new data member : smallstep (L.Urban)
+// 10-04-07 remove navigator, smallstep, tnow (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -91,10 +92,10 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
-#include "G4SafetyHelper.hh"
+#include "G4MscStepLimitType.hh"
 
 class G4ParticleChangeForMSC;
-class G4Navigator;
+class G4SafetyHelper;
 class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,7 +107,7 @@ public:
 
   G4UrbanMscModel(G4double facrange, G4double dtrl, G4double lambdalimit, 
 		  G4double facgeom,G4double skin, 
-		  G4bool samplez, G4bool stepAlg, 
+		  G4bool samplez, G4MscStepLimitType stepAlg, 
 		  const G4String& nam = "UrbanMscUni");
 
   virtual ~G4UrbanMscModel();
@@ -121,11 +122,11 @@ public:
 				   G4double cut =0.,
 				   G4double emax=DBL_MAX);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*,
-                                   G4double length,
-                                   G4double safety);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double length,
+				 G4double safety);
 
   virtual G4double ComputeTruePathLengthLimit(
                              const G4Track& track,
@@ -139,9 +140,13 @@ public:
   G4double ComputeTheta0(G4double truePathLength,
                          G4double KineticEnergy);
 
+  void SetStepLimitType(G4MscStepLimitType);
+
   void SetLateralDisplasmentFlag(G4bool val);
 
-  void SetMscStepLimitation(G4bool, G4double);
+  void SetRangeFactor(G4double);
+
+  void SetGeomFactor(G4double);
 
   void SetSkin(G4double);
 
@@ -165,11 +170,12 @@ private:
 
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
-  G4Navigator*                navigator;
+
   G4SafetyHelper*             safetyHelper;
   G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
   G4LossTableManager*         theManager;
+
 
   G4double mass;
   G4double charge;
@@ -186,13 +192,16 @@ private:
   G4double tlimit;
   G4double tlimitmin;
   G4double tlimitminfix;
-  G4double tnow;
+
   G4double nstepmax;
   G4double geombig;
   G4double geommin;
   G4double geomlimit;
   G4double facgeom;
-  G4double skin,skindepth,smallstep; 
+  G4double skin;
+  G4double skindepth;
+  G4double smallstep;
+
   G4double presafety;
   G4double facsafety;
 
@@ -212,9 +221,10 @@ private:
 
   G4int    currentMaterialIndex;
 
+  G4MscStepLimitType steppingAlgorithm;
+
   G4bool   samplez;
   G4bool   latDisplasment;
-  G4bool   steppingAlgorithm;
   G4bool   isInitialized;
 
   G4bool   inside;
@@ -237,6 +247,32 @@ inline
 void G4UrbanMscModel::SetSkin(G4double val) 
 { 
   skin = val;
+  stepmin       = tlimitminfix;
+  skindepth     = skin*stepmin;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel::SetRangeFactor(G4double val) 
+{ 
+  facrange = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel::SetGeomFactor(G4double val) 
+{ 
+  facgeom = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel::SetStepLimitType(G4MscStepLimitType val) 
+{ 
+  steppingAlgorithm = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

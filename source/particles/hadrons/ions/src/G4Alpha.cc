@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.13 2006/10/12 10:59:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Alpha.cc,v 1.14 2007/03/11 07:17:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -74,6 +74,7 @@ G4Alpha* G4Alpha::Definition()
 		 false,       "static",          0,
                  0.0
                );
+
   }
 
   //No Anti particle registered

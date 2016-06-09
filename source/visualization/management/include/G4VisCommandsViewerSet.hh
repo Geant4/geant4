@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.21 2006/09/19 16:03:14 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VisCommandsViewerSet.hh,v 1.22 2007/04/03 13:33:16 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -68,6 +68,7 @@ private:
   G4UIcommand*          fpCommandLightsThetaPhi;
   G4UIcommand*          fpCommandLightsVector;
   G4ThreeVector         fLightsVector;
+  G4UIcmdWithABool*     fpCommandPicking;
   G4UIcommand*          fpCommandProjection;
   G4UIcommand*          fpCommandSectionPlane;
   G4UIcmdWithAString*   fpCommandStyle;

@@ -7,8 +7,8 @@
 
   <position name="AscendingTransverseUpperLargeIntestineRelativePos" unit="cm" x="7.2" y="0.0" z="5.65" />
   <rotation name="AscendingTransverseUpperLargeIntestineRelativeRot" unit="degree" x="90" y="0" z="90" />
-  <position name="UpperLargeIntestinePos" unit="cm" x="-7.33" y="-2.31" z="-14.22" />
-  <rotation name="UpperLargeIntestineRot" unit="degree" x="0" y="0" z="0" />
+  <position name="OrganPos" unit="cm" x="-7.33" y="-2.31" z="-14.22" />
+  <rotation name="OrganRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
  <materials>

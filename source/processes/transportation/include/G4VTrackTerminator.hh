@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrackTerminator.hh,v 1.6 2006/06/29 21:10:44 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VTrackTerminator.hh,v 1.7 2007/05/11 14:13:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VTrackTerminator
@@ -60,6 +60,10 @@ public:  // with description
   virtual ~G4VTrackTerminator();
   virtual void KillTrack() const = 0;
   virtual const G4String &GetName() const = 0;
+
+protected:
+
+  G4double kCarTolerance;
 };
 
 #endif

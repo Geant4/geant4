@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipse.cc,v 1.11 2006/06/29 18:42:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Ellipse.cc,v 1.12 2007/05/18 07:33:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,6 +35,8 @@
 // ----------------------------------------------------------------------
 
 #include "G4Ellipse.hh"
+
+#include "G4GeometryTolerance.hh"
 
 G4Ellipse::G4Ellipse()
 {
@@ -90,8 +92,8 @@ G4Curve* G4Ellipse::Project(const G4Transform3D& tr)
   newLocation.setZ(0);
   G4double axisZ        = ( tr*position.GetPZ() ).unit().z();
 
-  if (std::abs(axisZ)<kAngTolerance) 
-    return 0;
+  if (std::abs(axisZ)<G4GeometryTolerance::GetInstance()->GetAngularTolerance()) 
+    { return 0; }
   
   G4Vector3D newAxis(0, 0, axisZ>0? +1: -1);
 

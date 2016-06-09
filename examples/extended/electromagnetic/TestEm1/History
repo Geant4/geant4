@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2006/10/19 17:24:12 maire Exp $
+$Id: History,v 1.80 2007/06/21 17:10:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+21-06-07 mma (testem1-V08-03-02)
+- make visualization only in interactive mode
+     
+20-06-07 mma (testem1-V08-03-01)
+- PhysListEmStandard options completed
+- add erange.mac for e- 
+
+23-05-07 V.Ivant (testem1-V08-03-00)
+- use G4EmProcessOptions to define bremsstrahlung threshold energy 
      
 19-10-06 mma (testem1-V08-01-00) 
 - GNUmakefile : LOADLIBS

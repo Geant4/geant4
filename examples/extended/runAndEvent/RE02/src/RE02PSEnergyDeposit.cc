@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: RE02PSEnergyDeposit.cc,v 1.2 2006/12/13 15:43:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: RE02PSEnergyDeposit.cc,v 1.3 2007/05/18 18:16:28 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // RE02PSEnergyDeposit
 #include "RE02PSEnergyDeposit.hh"
@@ -68,5 +68,5 @@ G4int RE02PSEnergyDeposit::GetIndex(G4Step* aStep)
   G4int ix = touchable->GetReplicaNumber(1);
   G4int iy = touchable->GetReplicaNumber(2);
   G4int iz = touchable->GetReplicaNumber(0);
-  return iy*fNx*fNy+ix*fNz+iz;
+  return iy*fNx*fNz+ix*fNz+iz;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.28 2006/09/05 01:15:11 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ParticleDefinition.cc,v 1.29 2007/03/11 07:17:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -76,8 +76,9 @@ G4ParticleDefinition::G4ParticleDefinition(
 		     G4DecayTable        *decaytable,
 		     G4bool              shortlived,
                      const G4String&     subType,
-                     G4int               anti_encoding)
- 
+                     G4int               anti_encoding,
+		     G4double            magneticMoment)
+
 		 : theParticleName(aName), 
 		   thePDGMass(mass),
 		   thePDGWidth(width),
@@ -91,6 +92,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGiIsospin3(iIsospin3),
 		   thePDGIsospin(iIsospin*0.5),
 		   thePDGIsospin3(iIsospin3*0.5),
+		   thePDGMagneticMoment(magneticMoment),
 		   theLeptonNumber(lepton),
 		   theBaryonNumber(baryon),
 		   theParticleType(pType), 
@@ -228,6 +230,9 @@ void G4ParticleDefinition::DumpTable() const
   G4cout << " Isospin : (I,Iz): (" << thePDGiIsospin <<"/2";
   G4cout << " , " << thePDGiIsospin3 << "/2 ) " << G4endl;
   G4cout << " GParity : " << thePDGiGParity << G4endl;
+  if (thePDGMagneticMoment != 0.0) {
+    G4cout << " MagneticMoment [MeV/T] : " << thePDGMagneticMoment/MeV*tesla << G4endl;
+  }
   G4cout << " Quark contents     (d,u,s,c,b,t) : " << theQuarkContent[0];
   G4cout << ", " << theQuarkContent[1];
   G4cout << ", " << theQuarkContent[2];

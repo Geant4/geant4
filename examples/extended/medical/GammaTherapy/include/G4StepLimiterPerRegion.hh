@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StepLimiterPerRegion.hh,v 1.3 2006/06/29 17:26:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4StepLimiterPerRegion.hh,v 1.4 2007/05/16 16:27:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,8 +46,8 @@ class G4StepLimiterPerRegion : public G4VDiscreteProcess
 {
 public:
 
-  G4StepLimiterPerRegion(const G4String& processName = "UserMaxStep");
-  ~G4StepLimiterPerRegion();
+  G4StepLimiterPerRegion(const G4String& processName = "ElectronKiller");
+  virtual ~G4StepLimiterPerRegion();
 
   G4bool IsApplicable(const G4ParticleDefinition&);
 

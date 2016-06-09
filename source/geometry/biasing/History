@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2005/11/09 14:47:39 gcosmo Exp $
+$Id: History,v 1.43 2007/06/04 13:05:14 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 4th, 2007 A.Howard geombias-V08-03-02
+     - Put back some missing store and scoring classes:
+       G4IStore, G4VCellScorerstore, G4VCellScorer
+
+May 31st, 2007 A.Howard geombias-V08-03-01
+     - Removed classes from old biasing scheme.  These are now replaced by
+       either CoupledTransportation (parallel navigation) or in 
+       processe/biasing.  In addition the scoring is implemented with the new
+       scoring frame-work (digits_hits) and processes/scoring.
+     - The following classes are removed:
+       G4IStore, G4ParallelNavigator, G4ParallelStepper, G4ParallelWorld,
+       G4VCellScorer, G4VCellScorerStore, G4VIStore, G4VParallelStepper, 
+       G4VPGeoDriver, G4VScorer, G4ImportanceSplitExaminer, 
+       G4VImportanceSplitExaminer, G4VWeightWindowExaminer, 
+       G4WeightWindowExaminer
+     - Classes are kept in the HEAD for testing purposes.
+
+May 11th, 2007 G.Cosmo geombias-V08-03-00
+     - Use call to G4GeometryTolerance instead of kCarTolerance constant in
+       G4ParallelNavigator.
+     - Requires tag "global-V08-03-00" and related tag set.
 
 Nov, 9th 2005 G.Cosmo geombias-V07-01-00
      - Implemented migration to <sstream> for affected classes:

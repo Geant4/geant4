@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.cc,v 1.3 2006/06/29 21:14:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VModularPhysicsList.cc,v 1.4 2007/06/15 07:26:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -47,6 +47,7 @@ G4VModularPhysicsList::~G4VModularPhysicsList()
     delete (*itr);
   }
   physicsVector->clear();
+  delete physicsVector;
 }
 
 void G4VModularPhysicsList::ConstructParticle()

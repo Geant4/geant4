@@ -32,8 +32,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.21 2007/04/11 16:52:52 dennis Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4NeutronHPInelastic.cc,v 1.23 2007/06/22 09:23:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+//
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 //
 #include "G4NeutronHPInelastic.hh"
 
@@ -42,11 +44,11 @@
   {
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
-    system("echo $NeutronHPCrossSections");
+    system("echo $G4NEUTRONHPDATA");
 //    G4cout << " entering G4NeutronHPInelastic constructor"<<G4endl;
-    if(!getenv("NeutronHPCrossSections")) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
-    dirName = getenv("NeutronHPCrossSections");
+    if(!getenv("G4NEUTRONHPDATA")) 
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+    dirName = getenv("G4NEUTRONHPDATA");
     G4String tString = "/Inelastic/";
     dirName = dirName + tString;
     numEle = G4Element::GetNumberOfElements();
@@ -137,7 +139,8 @@
         running += xSec[i];
         index = theMaterial->GetElement(i)->GetIndex();
         it = i;
-        if(random<=running/sum) break;
+        //if(random<=running/sum) break;
+        if( sum == 0 || random<=running/sum) break;
       }
       delete [] xSec;
     }

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TextModel.cc,v 1.7 2006/06/29 21:33:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison  3rd April 2001

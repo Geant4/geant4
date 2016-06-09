@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc,v 1.3 2006/12/13 15:44:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4mplIonisation.cc,v 1.5 2007/05/31 11:13:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,10 +62,6 @@ G4mplIonisation::G4mplIonisation(G4double mCharge, const G4String& name)
   // By default classical magnetic charge is used
   if(magneticCharge == 0.0) magneticCharge = eplus*0.5/fine_structure_const;
 
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
   SetVerboseLevel(0);
 }
 
@@ -84,7 +80,7 @@ void G4mplIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
   SetBaseParticle(0);
   SetSecondaryParticle(G4Electron::Electron());
 
-  G4mplIonisationModel* ion  = new G4mplIonisationModel(magneticCharge);
+  G4mplIonisationModel* ion  = new G4mplIonisationModel(magneticCharge,"PAI");
   ion->SetLowEnergyLimit(0.1*keV);
   ion->SetHighEnergyLimit(100.*TeV);
   AddEmModel(0,ion,ion);

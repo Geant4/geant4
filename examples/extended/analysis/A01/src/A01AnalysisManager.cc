@@ -62,7 +62,7 @@
 A01AnalysisManager* A01AnalysisManager::instance = 0;
 
 A01AnalysisManager::A01AnalysisManager()
-:analysisFactory(0), hFactory(0), tFactory(0)
+:analysisFactory(0), hFactory(0), tFactory(0), plotter(0)
 {
   // Hooking an AIDA compliant analysis system.
   analysisFactory = AIDA_createAnalysisFactory();
@@ -72,6 +72,11 @@ A01AnalysisManager::A01AnalysisManager()
     tree = treeFactory->create("A01.aida","xml",false,true,"compress=yes");
     hFactory = analysisFactory->createHistogramFactory(*tree);
     tFactory = analysisFactory->createTupleFactory(*tree);
+    IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
+    if (pf) {
+      plotter = pf->create("Plotter");
+      delete pf;
+    }
     delete treeFactory; // Will not delete the ITree.
   }
 }
@@ -84,7 +89,8 @@ A01AnalysisManager::~A01AnalysisManager()
     delete tree;
     delete tFactory;
     delete hFactory;
-    G4cout << "Warning: Geant4 will NOT exit unless you close the JAS-AIDA window." << G4endl;
+    delete plotter;
+    G4cout << "Warning: In case of working with JAS-AIDA, Geant4 will NOT exit unless you close the JAS-AIDA window." << G4endl;
     delete analysisFactory;
   }
 }
@@ -96,14 +102,9 @@ ITupleFactory* A01AnalysisManager::getTupleFactory()
 {
   return tFactory;
 }
-IPlotter* A01AnalysisManager::createPlotter()
+IPlotter* A01AnalysisManager::getPlotter()
 {
-  if (analysisFactory)
-  {
-    IPlotterFactory* pf = analysisFactory->createPlotterFactory(0,0);
-    if (pf) return pf->create("Plotter");
-  }
-  return 0;
+  return plotter;
 }
 
 A01AnalysisManager* A01AnalysisManager::getInstance()

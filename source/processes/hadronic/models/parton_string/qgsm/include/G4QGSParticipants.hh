@@ -31,7 +31,7 @@
 #include "G4Nucleon.hh"
 #include "G4InteractionContent.hh"
 #include "G4PomeronCrossSection.hh"
-#include "G4DiffractiveExcitation.hh"
+#include "G4QGSDiffractiveExcitation.hh"
 #include "G4SingleDiffractiveExcitation.hh"
 #include "G4PartonPair.hh" 
 #include "G4QGSMSplitableHadron.hh" 
@@ -72,7 +72,7 @@ class G4QGSParticipants : public G4VParticipants
     std::vector<G4PartonPair*>   thePartonPairs;
   
     G4SingleDiffractiveExcitation theSingleDiffExcitation;
-    G4DiffractiveExcitation theDiffExcitaton;
+    G4QGSDiffractiveExcitation theDiffExcitaton;
     G4int ModelMode;
     G4bool IsSingleDiffractive();
  

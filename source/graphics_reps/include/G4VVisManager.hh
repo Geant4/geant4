@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VVisManager.hh,v 1.13 2006/09/12 18:29:31 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:

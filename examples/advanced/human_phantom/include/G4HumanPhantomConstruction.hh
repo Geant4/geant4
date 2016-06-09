@@ -41,35 +41,28 @@
 #include <map>
 
 class G4VPhysicalVolume;
-//class G4LogicalVolume;
-//class G4HumanPhantomSD;
 class G4HumanPhantomMaterial;
-//class G4PhantomBuilder;
-class G4HumanPhantomEnergyDeposit;
 class G4HumanPhantomConstruction : public G4VUserDetectorConstruction
 {
   public:
-     G4HumanPhantomConstruction(G4HumanPhantomEnergyDeposit*);
+     G4HumanPhantomConstruction();
     ~G4HumanPhantomConstruction();
      G4VPhysicalVolume* Construct();
 
   void SetBodyPartSensitivity(G4String, G4bool);
-  void CleanPhantom();
-  void UpdatePhantom();
+
   void SetPhantomSex(G4String);
   void SetPhantomModel(G4String);
 
-  G4VPhysicalVolume* GetMotherVolume(){return mother;};
+  //G4VPhysicalVolume* GetMotherVolume(){return mother;};
  
  private:
-  G4HumanPhantomEnergyDeposit* edepTot;
+  G4HumanPhantomMaterial* material;
   G4HumanPhantomMessenger* messenger;
-
-  G4VPhysicalVolume*       mother;
+  G4VPhysicalVolume* ConstructWorld();
 
   G4String                 model;
   G4String                 sex;
-  G4HumanPhantomMaterial* material;
   std::map<std::string,G4bool> sensitivities;
 };
 

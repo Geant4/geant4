@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hyperbola.cc,v 1.11 2006/06/29 18:42:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Hyperbola.cc,v 1.12 2007/05/18 07:33:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -36,6 +36,7 @@
 
 #include "G4Hyperbola.hh"
 #include "G4CurvePoint.hh"
+#include "G4GeometryTolerance.hh"
 
 G4Hyperbola::G4Hyperbola()
 {
@@ -100,7 +101,7 @@ G4Curve* G4Hyperbola::Project(const G4Transform3D& tr)
   newLocation.setZ(0);
   G4double axisZ= (tr*position.GetPZ()).unit().z();
 
-  if (std::abs(axisZ)<kAngTolerance) 
+  if (std::abs(axisZ)<G4GeometryTolerance::GetInstance()->GetAngularTolerance()) 
   {
     return 0;
   }
@@ -164,7 +165,8 @@ void G4Hyperbola::InitBounded()
   {
     G4double x_i= position.GetPX()(i);
     
-    if (std::abs(x_i) <= kAngTolerance) 
+    if (std::abs(x_i) <= 
+        G4GeometryTolerance::GetInstance()->GetAngularTolerance()) 
     {
       G4double tanhu= - (semiImagAxis*position.GetPY()(i)) / (semiAxis*x_i);
       

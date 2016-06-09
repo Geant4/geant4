@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNABrennerAngularDistributionPolicy.cc,v 1.3 2006/06/29 19:39:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "G4DNAElectronElasticBrenner.hh"

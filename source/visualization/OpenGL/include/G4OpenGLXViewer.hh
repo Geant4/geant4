@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.26 2006/11/01 11:22:27 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLXViewer.hh,v 1.27 2007/05/08 11:04:11 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -52,37 +52,25 @@ class G4OpenGLSceneHandler;
 class G4OpenGLXViewer: virtual public G4OpenGLViewer {
 
   friend class G4OpenGLXViewerMessenger;
+  friend class G4OpenGLXmViewer;
 
 public:
   G4OpenGLXViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
-  void print();
 
 protected:
   void GetXConnection ();
   void CreateGLXContext (XVisualInfo* vi);
   virtual void CreateMainWindow ();
   virtual void CreateFontLists ();
+  void print();
 
   static int snglBuf_RGBA[12];
   static int dblBuf_RGBA[13];
 
-  char                              print_string[50];
-  G4bool                            print_colour,
-                                    vectored_ps;
-
-//////////////////////////////Vectored PostScript production functions//////////////////////////////
-  void printBuffer(GLint, GLfloat*);
-  GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
-  void spewSortedFeedback (FILE*, GLint, GLfloat*);
-  void spewWireframeEPS (FILE*, GLint, GLfloat*, const char*);
-  void print3DcolorVertex(GLint, GLint*, GLfloat*);
-  G4float                           pointSize;
-
-
-//////////////////////////////Pixmap (screen dump) production functions//////////////////////////////
+//////////////////////////////Pixmap (screen dump) production functions/////
   GLubyte* grabPixels (int inColor,
 		       unsigned int width,
 		       unsigned int height);
@@ -127,16 +115,6 @@ private:
   G4OpenGLXViewer (const G4OpenGLXViewer&);
   G4OpenGLXViewer& operator = (const G4OpenGLXViewer&);
 };
-
-typedef struct G4OpenGLXViewerFeedback3Dcolor {
-  GLfloat x;
-  GLfloat y;
-  GLfloat z;
-  GLfloat red;
-  GLfloat green;
-  GLfloat blue;
-  GLfloat alpha;
-} Feedback3Dcolor;
 
 #endif
 

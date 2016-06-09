@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2007/01/05 17:01:16 allison Exp $
+$Id: History,v 1.30 2007/03/27 15:11:43 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+25th March 2007  John Allison  (vistree-V08-02-01)
+- Removed GAGTree.
 
 5th January 2007  John Allison  (vistree-V08-02-00)
 - Bug fix: Format of total mass.

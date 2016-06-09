@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN05ParallelWorldForPion.hh,v 1.1 2006/11/03 17:58:49 mverderi Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef ExN05ParallelWorldForPion_hh
 #define ExN05ParallelWorldForPion_hh

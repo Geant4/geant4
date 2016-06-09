@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.6 2007/02/08 14:01:55 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.8 2007/05/16 15:59:58 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #include "G4OpenGLViewerMessenger.hh"
 
@@ -34,8 +34,10 @@
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
+#include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithAString.hh"
 #include "G4VisManager.hh"
 #include <sstream>
 
@@ -55,6 +57,13 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
   fpDirectory = new G4UIdirectory("/vis/ogl/");
   fpDirectory->SetGuidance("G4OpenGLViewer commands.");
+
+  fpCommandPrintEPS =
+    new G4UIcmdWithoutParameter("/vis/ogl/printEPS", this);
+  fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
+  fpCommandPrintEPS->SetGuidance
+    ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
+     "\nnumber, starting at 0.");
 
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
@@ -164,6 +173,13 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandFade->SetRange("fadefactor>=0.&&fadefactor<=1.");
   fpCommandFade->SetDefaultValue(0.);
 
+  fpCommandPrintMode = new G4UIcmdWithAString
+    ("/vis/ogl/set/printMode",this);
+  fpCommandPrintMode->SetGuidance("Set print mode");
+  fpCommandPrintMode->SetParameterName("print_mode",omitable = true);
+  fpCommandPrintMode->SetCandidates("vectored pixmap");
+  fpCommandPrintMode->SetDefaultValue("vectored");
+
   fpCommandStartTime =
     new G4UIcommand("/vis/ogl/set/startTime", this);
   fpCommandStartTime->SetGuidance("Set start and range of track time.");
@@ -191,6 +207,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
 G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
 {
+  delete fpCommandPrintMode;
   delete fpCommandTransparency;
   delete fpCommandStartTime;
   delete fpCommandFade;
@@ -198,6 +215,7 @@ G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
   delete fpCommandDisplayLightFront;
   delete fpCommandDisplayHeadTime;
   delete fpDirectorySet;
+  delete fpCommandPrintEPS;
   delete fpDirectory;
 }
 
@@ -225,6 +243,24 @@ void G4OpenGLViewerMessenger::SetNewValue
            << G4endl;
     return;
   }
+
+  if (command == fpCommandPrintEPS) 
+    {
+      // Keep copy of print_string to preserve Xm behaviour...
+      char* tmp_string = new char[50];
+      strcpy (tmp_string, pOGLViewer->print_string);
+      // Make new print string...
+      static G4int file_count = 0;
+      std::ostringstream oss;
+      oss << "G4OpenGL_" << file_count++ << ".eps";
+      strcpy (pOGLViewer->print_string, oss.str().c_str());
+      // Print eps file...
+      pOGLViewer->print();
+      // Restore print_string for Xm...
+      strcpy (pOGLViewer->print_string, tmp_string);
+      delete tmp_string;
+      return;
+    }
 
   G4OpenGLStoredViewer* pViewer =
     dynamic_cast<G4OpenGLStoredViewer*>(pVViewer);
@@ -300,6 +336,19 @@ void G4OpenGLViewerMessenger::SetNewValue
       pViewer->fFadeFactor = command->ConvertToDouble(newValue);
       if (pViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    }
+
+  if (command == fpCommandPrintMode)
+    {
+      if (newValue == "vectored") pViewer->vectored_ps = true;
+      if (newValue == "pixmap") {
+	pViewer->vectored_ps = false;
+	if (pVisManager->GetVerbosity() >= G4VisManager::warnings) {
+	  G4cout <<
+	    "WARNING: Only implemented for X Windows at present."
+		 << G4endl;
+	}
+      }
     }
 
   if (command == fpCommandStartTime)

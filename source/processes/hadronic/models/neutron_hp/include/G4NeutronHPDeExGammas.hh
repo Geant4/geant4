@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPDeExGammas.hh,v 1.12 2006/06/29 20:47:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPDeExGammas.hh,v 1.13 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPDeExGammas_h
 #define G4NeutronHPDeExGammas_h 1
@@ -45,23 +45,23 @@ class G4NeutronHPDeExGammas
   
   G4NeutronHPDeExGammas() 
   {
-    levelStart = NULL;
-    levelSize = NULL;
+    levelStart = 0;
+    levelSize = 0;
     nLevels = 0;
-    theLevels = NULL;
+    theLevels = 0;
   }
   ~G4NeutronHPDeExGammas() 
   {
-    if(levelStart!=NULL) delete [] levelStart;
-    if(levelSize!=NULL) delete [] levelSize;
-    if(theLevels!=NULL) delete [] theLevels;
+    if(levelStart!=0) delete [] levelStart;
+    if(levelSize!=0) delete [] levelSize;
+    if(theLevels!=0) delete [] theLevels;
   }
   
   void Init(std::ifstream & aDataFile);
 
   inline G4ReactionProductVector * GetDecayGammas(G4int aLevel)
   {
-    if(aLevel>nLevels-1 || aLevel<0) return NULL;
+    if(aLevel>nLevels-1 || aLevel<0) return 0;
     if(nLevels==0) return new G4ReactionProductVector();
     G4ReactionProductVector * result = new G4ReactionProductVector;
     G4DynamicParticleVector * theResult;
@@ -89,7 +89,7 @@ class G4NeutronHPDeExGammas
   
   inline G4NeutronHPLevel * GetLevel(G4int i)
   {
-    if(i>nLevels-1) return NULL;
+    if(i>nLevels-1) return 0;
     return theLevels+i;
   }
   

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.29 2006/11/07 14:05:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SubtractionSolid.cc,v 1.30 2007/05/18 07:35:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -43,6 +43,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -144,8 +145,14 @@ EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
        ( positionA == kSurface && positionB == kSurface &&
          ( fPtrSolidA->SurfaceNormal(p) - 
            fPtrSolidB->SurfaceNormal(p) ).mag2() > 
-            1000*kRadTolerance )                            )  return kSurface;
-    else  return kOutside;
+            1000*G4GeometryTolerance::GetInstance()->GetRadialTolerance() ) )
+    {
+      return kSurface;
+    }
+    else
+    {
+      return kOutside;
+    }
   }
 }
 

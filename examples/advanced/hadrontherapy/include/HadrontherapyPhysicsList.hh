@@ -37,8 +37,8 @@
 // 
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
-#ifndef HadrontherapyPhysicsList_h
-#define HadrontherapyPhysicsList_h 1
+#ifndef HADRONTHERAPYPHYSICSLIST_H
+#define HADRONTHERAPYPHYSICSLIST_H 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
@@ -55,14 +55,17 @@ public:
   void AddPhysicsList(const G4String& name);  
   
 private:
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-  G4bool ionIsRegistered;
-  G4bool protonHadronicIsRegistered;
-  G4bool chargedParticleIsRegistered;
-  G4bool muonIsRegistered;
   G4bool decayIsRegistered;
+  G4bool emElectronIsRegistered;
+  G4bool emPositronIsRegistered;
+  G4bool emPhotonIsRegistered;
+  G4bool emIonIsRegistered;
+  G4bool emMuonIsRegistered;
+  G4bool hadrElasticHadronIonIsRegistered;
+  G4bool hadrInelasticPionIsRegistered;
+  G4bool hadrInelasticIonIsRegistered;
+  G4bool hadrInelasticProtonNeutronIsRegistered;
+  G4bool hadrAtRestMuonIsRegistered;
 
   HadrontherapyPhysicsListMessenger* messenger;
 };

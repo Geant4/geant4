@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.46 2007/01/18 12:17:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4eBremsstrahlung.cc,v 1.48 2007/05/23 08:47:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -88,17 +88,10 @@
 
 using namespace std;
  
-G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name, G4double thresh):
+G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name):
   G4VEnergyLossProcess(name), 
-  gammaThreshold(thresh),
   isInitialised(false)
-{
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
-
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -111,7 +104,6 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(
                                                 const G4ParticleDefinition* p,
                                                 const G4ParticleDefinition*)
 {
-  gammaThreshold = G4LossTableManager::Instance()->BremsstrahlungTh();
   if(!isInitialised) {
     particle = p;
     SetSecondaryParticle(G4Gamma::Gamma());
@@ -124,19 +116,31 @@ void G4eBremsstrahlung::InitialiseEnergyLossProcess(
     AddEmModel(1, EmModel(), FluctModel());
     isInitialised = true;
   }
+  G4LossTableManager* man = G4LossTableManager::Instance(); 
+  dynamic_cast<G4eBremsstrahlungModel*>(EmModel())
+    ->SetEnergyThreshold(man->BremsstrahlungTh());
+  dynamic_cast<G4eBremsstrahlungModel*>(EmModel())
+    ->SetLPMflag(man->LPMFlag());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eBremsstrahlung::PrintInfo()
 {
-  if(EmModel())
+  if(EmModel()) {
     G4cout << "      Total cross sections and sampling from "
 	   << EmModel()->GetName() << " model"  
 	   << " (based on the EEDL data library) " 
 	   << "\n      Good description from 1 KeV to 100 GeV, "
 	   << "log scale extrapolation above 100 GeV."
+	   << " LPM flag " 
+	   << dynamic_cast<G4eBremsstrahlungModel*>(EmModel())->LPMflag()
 	   << G4endl;
+    G4double eth = dynamic_cast<G4eBremsstrahlungModel*>(EmModel())->EnergyThreshold(); 
+    if(eth < DBL_MIN)
+      G4cout << "      HighEnergyThreshold(GeV)= " << eth/GeV 
+	     << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

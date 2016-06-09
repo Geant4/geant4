@@ -32,7 +32,7 @@
 
 G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
 {
-  if(theDist == NULL) return NULL;
+  if(theDist == 0) { return 0; }
   G4ReactionProductVector * result = new G4ReactionProductVector;
   G4double mean = theYield.GetY(anEnergy);
   G4int multi;
@@ -48,7 +48,7 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   for(i=0;i<multi;i++)
   {
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
-    if(tmp != NULL) result->push_back(tmp);
+    if(tmp != 0) { result->push_back(tmp); }
   }
   if(multi == 0) 
   {
@@ -59,7 +59,7 @@ G4ReactionProductVector * G4NeutronHPProduct::Sample(G4double anEnergy)
   {
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
     tmp->SetDefinition(G4Proton::Proton());
-    if(tmp != NULL) result->push_back(tmp);
+    if(tmp != 0) { result->push_back(tmp); }
   }
   return result;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.hh,v 1.8 2006/06/29 18:47:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolyconeSide.hh,v 1.9 2007/05/11 13:54:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -145,6 +145,9 @@ class G4PolyconeSide : public G4VCSGface
                                    G4double x2, G4double y2,
                                  G4double tx2, G4double ty2,
                                  G4double &x, G4double &y );
+  private:
+
+    G4double kCarTolerance; // Geometrical surface thickness
 };
 
 #endif

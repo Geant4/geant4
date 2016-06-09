@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4WrapperProcess.hh,v 1.6 2006/06/29 21:08:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4WrapperProcess.hh,v 1.7 2007/03/25 23:20:03 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -139,6 +139,19 @@ class G4WrapperProcess  :public G4VProcess
       // should preferably use a
       // private void BuildThePhysicsTable()
       // function. Not another BuildPhysicsTable, please.
+ 
+      virtual void PreparePhysicsTable(const G4ParticleDefinition&){};
+      // Messaged by the Particle definition (via the Process manager)
+      // whenever cross section tables have to be prepare for rebuilt 
+      // (i.e. if new materials have been defined). 
+      // It is overloaded by individual processes when they need physics
+      // tables. 
+
+      // Processes which Build physics tables independent of cuts
+      // (for example in their constructors)
+      // should preferably use private 
+      // void BuildThePhysicsTable() and void PreparePhysicsTable().
+      // Not another BuildPhysicsTable, please.
 
 
       virtual G4bool StorePhysicsTable(const G4ParticleDefinition* ,
@@ -262,6 +275,12 @@ inline
  void G4WrapperProcess::BuildPhysicsTable(const G4ParticleDefinition& particle)
 {
   return     pRegProcess->BuildPhysicsTable(particle);
+}
+
+inline
+ void G4WrapperProcess::PreparePhysicsTable(const G4ParticleDefinition& particle)
+{
+  return     pRegProcess->PreparePhysicsTable(particle);
 }
 
 inline

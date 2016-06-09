@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlungModel.cc,v 1.2 2006/09/26 09:08:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ePolarizedBremsstrahlungModel.cc,v 1.3 2007/05/23 08:52:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -82,17 +82,16 @@ void G4ePolarizedBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-std::vector<G4DynamicParticle*>* G4ePolarizedBremsstrahlungModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+void G4ePolarizedBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+							const G4MaterialCutsCouple* couple,
+							const G4DynamicParticle* dp,
+							G4double tmin,
+							G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp =
-    G4eBremsstrahlungModel::SampleSecondaries(couple,dp,tmin,maxEnergy);
+  G4eBremsstrahlungModel::SampleSecondaries(vdp,couple,dp,tmin,maxEnergy);
+  G4int num = vdp->size();
 
-
-  if(vdp) {
+  if(num > 0) {
     G4double lepEnergy0 = dp->GetKineticEnergy();
     G4double gamEnergy1 = (*vdp)[0]->GetKineticEnergy();
     G4double sintheta   = dp->GetMomentumDirection().cross((*vdp)[0]->GetMomentumDirection()).mag();
@@ -119,7 +118,6 @@ std::vector<G4DynamicParticle*>* G4ePolarizedBremsstrahlungModel::SampleSecondar
 	fParticleChange->GetProposedMomentumDirection());
     fParticleChange->ProposePolarization(newBeamPol);
 
-    G4int num = vdp->size();
     if (num!=1) G4cout<<" WARNING "<<num<<" secondaries in polarized bremsstrahlung not supported!\n"; 
     for (G4int i=0; i<num; i++) {
       G4StokesVector photonPol = crossSectionCalculator->GetPol3();
@@ -130,6 +128,6 @@ std::vector<G4DynamicParticle*>* G4ePolarizedBremsstrahlungModel::SampleSecondar
 				 photonPol.p3());
     }
   }
-  return vdp;
+  return;
 }
 // The emitted gamma energy is sampled using a parametrized formula 

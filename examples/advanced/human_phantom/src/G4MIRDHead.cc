@@ -45,6 +45,7 @@
 #include "G4RotationMatrix.hh"
 #include "G4Material.hh"
 #include "G4EllipticalTube.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDHead::G4MIRDHead()
 {
@@ -56,45 +57,46 @@ G4MIRDHead::~G4MIRDHead()
   delete material;
 }
 
-G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDHead::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,
+					      const G4String& colourName, G4bool wireFrame, G4bool sensitivity)
 {
-  //  G4cout << "ConstructHead"<< G4endl;
+  G4cout << "Construct " << volumeName <<G4endl;
   G4Material* soft = material -> GetMaterial("soft_tissue");
   
+  // MIRD male model
   // Ellipsoid
-  G4double ax = 7.77 * cm;
-  G4double by = 9.76 * cm;
-  G4double cz = 6.92 * cm;
+  G4double ax = 7.0 * cm;
+  G4double by = 10.0 * cm;
+  G4double cz = 8.50 * cm;
   G4double zcut1 = 0.0 * cm;
-  G4double zcut2 = 6.92 * cm;
+  G4double zcut2 = 8.5 * cm;
 
   G4Ellipsoid* head1 = new G4Ellipsoid("Head1", ax, by, cz, zcut1, zcut2);
 
-  G4double dx = 7.77 * cm;
-  G4double dy = 9.76 * cm;
-  G4double dz = 8.25 * cm;
+   G4double dx = 7.0 * cm;
+   G4double dy = 10.0 * cm;
+   G4double dz = 7.75 * cm;
+ 
 
   G4EllipticalTube* head2 = new G4EllipticalTube("Head2", dx, dy, dz);
-  // G4Tubs(Name, r_int, r_est, halfz lenght, spanning angles) 
 
   G4UnionSolid* head = new G4UnionSolid("Head",head2,head1,
-					0, // Rotation 
-					G4ThreeVector(0.* cm, 0.*cm, 8.15 * cm) );
+  				0, // Rotation 
+  				G4ThreeVector(0.* cm, 0.*cm, 7.7500 * cm) );
 
-  G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,"HeadVolume",
+  G4LogicalVolume* logicHead = new G4LogicalVolume(head, soft,"logical" + volumeName,
 						   0, 0,0);
   G4RotationMatrix* rm = new G4RotationMatrix();
   rm -> rotateX(90.* degree);
-
+  
   // Define rotation and position here!
   G4VPhysicalVolume* physHead = new G4PVPlacement(rm,
-						  G4ThreeVector(0.* cm,71.35*cm, 0.*cm),
+						  G4ThreeVector(0.* cm,77.75 *cm, 0.*cm),
 						  "physicalHead",
 						  logicHead,
 						  mother,
 						  false,
-						  0);
-  // delete rm;
+						  0, true);
 
   // Sensitive Body Part
  
@@ -102,14 +104,21 @@ G4VPhysicalVolume* G4MIRDHead::ConstructHead(G4VPhysicalVolume* mother, G4String
   { 
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
     logicHead->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
+    G4cout <<SDman->FindSensitiveDetector("BodyPartSD")->GetName()<< G4endl;
+    SDman->FindSensitiveDetector("BodyPartSD")->SetVerboseLevel(1);
+
   }
 
   // Visualization Attributes
-  G4VisAttributes* HeadVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
-  HeadVisAtt->SetForceSolid(false);
-  logicHead->SetVisAttributes(HeadVisAtt);
 
-  G4cout << "Head created for " << sex << "!!!!!!" << G4endl;
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* HeadVisAtt = new G4VisAttributes(colour);
+
+ HeadVisAtt->SetForceSolid(wireFrame);
+ // HeadVisAtt->SetLineWidth(0.7* mm);
+  //HeadVisAtt-> SetForceAuxEdgeVisible(true);
+  logicHead->SetVisAttributes(HeadVisAtt);
 
   // Testing Head Volume
   G4double HeadVol = logicHead->GetSolid()->GetCubicVolume();

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: B01PhysicsList.cc,v 1.6 2006/06/29 16:34:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: B01PhysicsList.cc,v 1.8 2007/06/05 18:20:09 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "globals.hh"
@@ -50,11 +50,14 @@
 
 B01PhysicsList::B01PhysicsList():  G4VUserPhysicsList()
 {
+  paraWorldName.clear();
   SetVerboseLevel(1);
+  
 }
 
 B01PhysicsList::~B01PhysicsList()
 {
+  paraWorldName.clear();
 }
 
 void B01PhysicsList::ConstructParticle()
@@ -117,6 +120,7 @@ void B01PhysicsList::ConstructAllShortLiveds()
 void B01PhysicsList::ConstructProcess()
 {
   AddTransportation();
+  AddScoringProcess();
   ConstructEM();
   ConstructLeptHad();
   ConstructHad();
@@ -633,4 +637,28 @@ void B01PhysicsList::SetCuts()
   //   "G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
   SetCutsWithDefault();   
+}
+
+#include "G4ParallelWorldScoringProcess.hh"
+void B01PhysicsList::AddScoringProcess(){
+
+  G4int npw = paraWorldName.size();
+  for ( G4int i = 0; i < npw; i++){
+    G4ParallelWorldScoringProcess* theParallelWorldScoringProcess
+      = new G4ParallelWorldScoringProcess("ParaWorldScoringProc");
+    theParallelWorldScoringProcess->SetParallelWorld(paraWorldName[i]);
+
+    theParticleIterator->reset();
+    while( (*theParticleIterator)() ){
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      if ( !particle->IsShortLived() ){
+	G4ProcessManager* pmanager = particle->GetProcessManager();
+	pmanager->AddProcess(theParallelWorldScoringProcess);
+	pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxAtRest);
+	pmanager->SetProcessOrdering(theParallelWorldScoringProcess,idxAlongStep,1);
+	pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxPostStep);
+      }
+    }
+  }
+
 }

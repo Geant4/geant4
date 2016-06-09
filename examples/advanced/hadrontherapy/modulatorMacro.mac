@@ -28,21 +28,24 @@
 /run/verbose 0
 /event/verbose 0
 
-# SET OF THE PHYSICS PRTOCESSES
-/physics/addPhysics photon-epdl
-/physics/addPhysics electron-eedl
-/physics/addPhysics positron-standard
-/physics/addPhysics ion-LowE
-/physics/addPhysics muon-standard
-/physics/addPhysics decay
-/physics/addPhysics proton-hadronic
 
-/run/initialize
+# SETTING FOR THE PHYSICS MODELS
+/physics/addPhysics EM-Photon-EPDL
+/physics/addPhysics EM-Electron-EEDL
+/physics/addPhysics EM-Positron-Standard
+/physics/addPhysics EM-HadronIon-LowE
+/physics/addPhysics EM-Muon-Standardmuon-standard
+/physics/addPhysics Decay
+/physics/addPhysics HadronicEl-HadronIon-QElastic
+/physics/addPhysics HadronicInel-Ion-LEP
+/physics/addPhysics HadronicInel-ProtonNeutron-Prec
+
+/run/initialize	
 
 # SET OF THE VISUALISATION CHARACTERISTICS
 /vis/scene/create
 /vis/open OGLIX
-/vis/viewer/zoom 5.5
+/vis/viewer/zoom 3.5
 /vis/viewer/set/viewpointThetaPhi  50 130 deg
 /vis/viewer/pan -60 40 cm
 /tracking/storeTrajectory 1

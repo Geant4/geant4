@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4QCollision.cc,v 1.19 2007/05/02 14:59:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QCollision class -----------------
 //                 by Mikhail Kossov, December 2003.

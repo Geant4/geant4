@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.12 2006/12/13 15:42:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: PhysicsList.cc,v 1.14 2007/05/16 16:27:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 16.11.06 Use components from physics_lists subdirectory (V.Ivanchenko)
+// 16.05.07 Use renamed EM components from physics_lists (V.Ivanchenko)
 //
 //----------------------------------------------------------------------------
 //
@@ -46,8 +47,8 @@
 
 #include "ParticlesBuilder.hh"
 #include "G4EmStandardPhysics.hh"
-#include "G4EmStandardPhysics71.hh"
-#include "G4EmStandardPhysics72.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 #include "G4StepLimiterBuilder.hh"
@@ -109,7 +110,8 @@ void PhysicsList::ConstructProcess()
 {
   if(verbose > 0) 
     G4cout << "### PhysicsList Construte Processes" << G4endl;
-  if(!emBuilderIsRegisted) AddPhysicsList("standard");
+  if(!emBuilderIsRegisted) AddPhysicsList("emstandard");
+  RegisterPhysics(new G4StepLimiterBuilder());
   G4VModularPhysicsList::ConstructProcess();
 
   // Define energy interval for loss processes
@@ -132,22 +134,22 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << "> emBuilderIsRegisted= " << emBuilderIsRegisted
            << G4endl;
   }
-  if ((name == "standard") && !emBuilderIsRegisted) {
+  if ((name == "emstandard") && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmStandardPhysics());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;    
 
-  } else if (name == "standard_emv" && !emBuilderIsRegisted) {
-    RegisterPhysics(new G4EmStandardPhysics71());
+  } else if (name == "emstandard_opt1" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmStandardPhysics_option1());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-  } else if (name == "standard_emx" && !emBuilderIsRegisted) {
-    RegisterPhysics(new G4EmStandardPhysics72());
+  } else if (name == "emstandard_opt2" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmStandardPhysics_option2());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-  } else if (name == "lowenergy" && !emBuilderIsRegisted) {
+  } else if (name == "livermore" && !emBuilderIsRegisted) {
     RegisterPhysics(new PhysListEmLivermore());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
@@ -162,10 +164,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
     */
-  } else if (name == "step_limit" && !stepLimiterIsRegisted && emBuilderIsRegisted) {
-    RegisterPhysics(new G4StepLimiterBuilder());
-    stepLimiterIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
   } else if (name == "decay" && !decayIsRegisted && emBuilderIsRegisted) {
     RegisterPhysics(new G4DecayPhysics());

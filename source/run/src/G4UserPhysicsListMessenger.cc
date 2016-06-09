@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.26 2006/06/29 21:13:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.28 2007/05/30 10:34:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -180,7 +180,6 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   dumpCutValuesCmd->SetParameterName("particle",true);
   dumpCutValuesCmd->SetDefaultValue("all");
   dumpCutValuesCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
@@ -271,8 +270,8 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
  
   } else if( command == dumpCutValuesCmd ) {
     thePhysicsList->DumpCutValuesTable(1);
-  }
 
+  }
 } 
 
 G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
@@ -334,11 +333,3 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
    
   return cv;
 }
-
-
-
-
-
-
-
-

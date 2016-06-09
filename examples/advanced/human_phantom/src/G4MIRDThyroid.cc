@@ -60,18 +60,18 @@ G4VPhysicalVolume* G4MIRDThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
 
-  G4double z= 4.20*cm; 
-  G4double rmin= 0. * cm;
-  G4double rmax= 1.85 *cm;
+ G4double z= 4.20*cm; //c thickness = c,  
+ G4double rmin= 0. * cm;
+ G4double rmax= 1.85 *cm; //Rmax
   G4double startphi = 0. * degree;
-  G4double deltaphi= 180. * degree;
+  G4double deltaphi= 180. * degree; // y< y0
 
   G4Tubs* LobOfThyroidOut = new G4Tubs("LobOfThyroidOut",
 				       rmin, rmax,z/2., 
 				       startphi, deltaphi);
 
-  z= 4.50*cm; 
-  rmax= 0.83 * cm; 
+  z= 4.50*cm; // c thickness + something
+  rmax= 0.83 * cm; //r
   deltaphi= 360. * degree; 
   G4Tubs* LobOfThyroidIn = new G4Tubs("LobOfThyroidIn",
 				       rmin, rmax,z/2., 
@@ -83,6 +83,7 @@ G4VPhysicalVolume* G4MIRDThyroid::ConstructThyroid(G4VPhysicalVolume* mother, G4
   G4Box* SubtrThyroid = new G4Box("SubtrThyroid",
 				  xx/2., yy/2., zz/2.);
 
+  // subtraction of the two tubs
   G4SubtractionSolid* FirstThyroid = new G4SubtractionSolid("FirstThyroid",
 							    LobOfThyroidOut,
 							    LobOfThyroidIn);
@@ -116,7 +117,7 @@ G4SubtractionSolid* thyroid = new G4SubtractionSolid("SecondThyroid",
  rm -> rotateZ(180.*degree);
  
   G4VPhysicalVolume* physThyroid = new G4PVPlacement(rm,
-				G4ThreeVector(0.0*cm,-3.91*cm, -5.925*cm),
+						     G4ThreeVector(0.0*cm,-3.91*cm, -5.925*cm),//y0
       			       "physicalThyroid",
   			       logicThyroid,
 			       mother,

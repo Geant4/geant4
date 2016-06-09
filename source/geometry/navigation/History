@@ -1,4 +1,4 @@
-$Id: History,v 1.73.2.1 2007/04/26 15:23:01 gcosmo Exp $
+$Id: History,v 1.84.2.2 2007/06/08 10:09:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,89 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-April 26th, 2007 - T.Nikitina (geomnav-V08-02-01a)
+June 8th, 2007 - T.Nikitina (geomnav-V08-03-02b)
+---------------------------
+- G4PropagatorInField:
+  o Put in the constructor creation of array of FieldTracks used in
+    LocateInterSectionPoint().
+  o Change in ReEstimateNewPoint() in order to handle cases with zero step
+    caused by diffCurve=0.
+
+May 18th, 2007 - J.Apostolakis
+------------------------------
+- G4PropagatorInField: in case of proposed step less than tolerance,
+  now return 'kInfinity' as per convention of geometry instead of 'DBL_MAX'.
+
+May 30th, 2007 - G.Cosmo (geomnav-V08-03-02a)
+------------------------
+- Added method CheckPointExiting() in G4AuxiliaryNavServices utility
+  class (by P.Arce).
+- Added G4DEBUG_PATHFINDER flag to GNUmakefile.
+
+May 18th, 2007 - G.Cosmo (geomnav-V08-03-02)
+------------------------
+- Use kAngTolerance and kRadTolerance from G4GeometryTolerance class.
+- Coworks with tag "global-V08-03-03".
+
+May 16th, 2007 - G.Cosmo (geomnav-V08-03-01)
+------------------------
+- Introduced new class G4ErrorPropagationNavigator, a specialised navigator
+  for performing double navigation in the detector geometry and on the
+  target surface for error propagation (by P.Arce).
+- Fixed bug in G4GeomTestSegment in case of TestPoint on the surface,
+  reducing cases of reported spurious overlaps.
+- Coworks with tag "global-V08-03-02".
+
+May 16th, 2007 - J.Apostolakis (geomnav-V08-03-00a)
+------------------------------
+- Moved to G4PathFinder version without extra prints
+
+April 26th, 2007 - G.Cosmo (geomnav-V08-03-00)
+--------------------------
+- Use call to G4GeometryTolerance instead of kCarTolerance where needed.
+- Revised data members in G4SafetyHelper to conform to convention.
+- Requires tag "global-V08-03-00" and related tag set.
+
+April 26th, 2007 - T.Nikitina (geomnav-V08-02-03)
 -----------------------------
 - Fixed case of out of range access in G4GeomTestSegment responsible for
   crashes observed when recursive-grid test for overlaps was run.
   Addressing problem report #784.
+
+April 20th, 2007 - G.Cosmo (geomnav-V08-02-02)
+--------------------------
+- Some cleanup and minor cosmetics ...
+
+April 12st, 2007 - V.Ivanchenko
+-------------------------------
+- G4SafetyHelper become a unique class, which can be accessed via
+  G4TransporationManager. Depending on type of navigation (single
+  world or multiple navigation) it uses mass navigator or G4PathFinder.
+  All calls from EM processes to geometry are provided by G4SafetyHelper.
+- G4TransportationManager: added G4SafetyHelper.
+- G4PathFinder: initialisation of G4SafetyHelper.
+- Tagged "geomnav-V08-02-02-beta2".
+
+March 31st, 2007 - J. Apostolakis
+---------------------------------
+- G4Navigator:
+  o New method CheckNextStep() makes a trial step, without
+    changing the state of the Navigator (to be verified). 
+    It is a variant of ComputeStep, whose signature it shares.
+- Tagged "geomnav-V08-02-02-beta1".
+
+February 13th, 2007 - J.Apostolakis
+-----------------------------------
+- G4Navigator:
+  o Improvement for creating touchable history when located outside world.
+    Retain whether last point was located outside, and if so call default
+    TouchableHistory constructor (that initialised world to null).
+    NOTE: testing found problems with SteppingManager::SetInitialStep()
+          as the Vertex physical volume was not set. Protection is potentially
+          required, or bigger issue to be resolved.
+    Currently, changes in G4Navigator.hh,cc are safe, but the fix in .icc is
+    temporarly suspended and NOT included.
+- Attempted fix created Dec 7th, 2006
 
 February 13th, 2007 - J.Apostolakis (geomnav-V08-02-01)
 -----------------------------------
@@ -43,21 +121,20 @@ January 31st, 2007 - G.Cosmo (geomnav-V08-02-00)
 November 23rd, 2006 - J.Apostolakis (geomnav-V08-01-08)
 -----------------------------------
 - G4PathFinder: 
-  o Fix when report a problem - only if move > safety (additional check) *Key change*
-  o Revised condition for extra checking against safety
+  o Fix when report a problem only if move > safety (additional check).
+  o Revised condition for extra checking against safety.
   o Many small and cosmetic changes in debug printing.
 
 November 18th, 2006 - J.Apostolakis (geomnav-V08-01-07)
 -----------------------------------
 - G4PathFinder: 
-  o Fix for problem when step is fully taken 
-    -- Note: this occurs due to optimisation in PiF that avoids calling G4(Multi)Navigator!!
+  o Fix for problem when step is fully taken. 
+    Note: this occurs due to optimisation in PiF that avoids calling
+    G4(Multi)Navigator!!
   o Function LimitedString( ELimited lim ) enables printing this enum
-
-Small/cosmetic
-- G4PathFinder:
-  o Improved printing in IntersectChord.  Deleted/simplified few prints in ComputeStep
-- G4MultiNavigator - cleanup, cosmetics
+  o Improved printing in IntersectChord. Deleted/simplified few prints in
+    ComputeStep().
+- G4MultiNavigator: cleanup, cosmetics
 
 November 13th, 2006 - G.Cosmo (geomnav-V08-01-06)
 -----------------------------
@@ -65,11 +142,12 @@ November 13th, 2006 - G.Cosmo (geomnav-V08-01-06)
 
 November 11th, 2006 - J.Apostolakis (geomnav-V08-01-05)
 -----------------------------------
-G4PathFinder improvements for parallel Navigation
-  - ComputeStep method signature extended to add volume
-  - Use G4MultiNavigator for tracking in field.
-G4MultiNavigator: several fixes, primarily for 
-    taking care of condition of geometry limited step.
+- G4PathFinder improvements for parallel Navigation
+  o ComputeStep method signature extended to add volume
+  o Use G4MultiNavigator for tracking in field.
+- G4MultiNavigator:
+  o Several fixes, primarily for taking care of condition of
+    geometry limited step.
 
 November 11th, 2006 - J.Apostolakis (geomnav-V08-01-04)
 -----------------------------------

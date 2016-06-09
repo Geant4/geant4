@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPAngular.hh,v 1.10 2006/06/29 20:46:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPAngular.hh,v 1.12 2007/06/22 09:23:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+//
+// 070613 fix memory leaking by T. Koi
 //
 #ifndef G4NeutronHPAngular_h
 #define G4NeutronHPAngular_h 1
@@ -46,8 +48,16 @@ class G4NeutronHPAngular
   {
     theAngularDistributionType = 0;
     theIsoFlag = false;
+// TKDB
+      theCoefficients = 0;
+      theProbArray = 0;
   } 
-  ~G4NeutronHPAngular(){}
+  ~G4NeutronHPAngular()
+   {
+// TKDB
+      delete theCoefficients;
+      delete theProbArray;
+   }
   
   void Init(std::ifstream & aDataFile);
   

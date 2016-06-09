@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN05.cc,v 1.15 2006/11/03 17:58:49 mverderi Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: exampleN05.cc,v 1.16 2007/05/11 14:29:16 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -109,11 +109,9 @@ int main(int argc, char** argv)
   G4UserSteppingAction* stepping_action = new ExN05SteppingAction;
   runManager->SetUserAction(stepping_action);
 
-  // Inizialize Run manager
-  //
-  runManager->Initialize();
 
-  // -- needed for command /param/showSetup:  G4RunManagerKernel::GetRunManagerKernel()->RunInitialization();
+  // Initialize Run manager
+  runManager->Initialize();
 
   //----------------
   // Visualization:

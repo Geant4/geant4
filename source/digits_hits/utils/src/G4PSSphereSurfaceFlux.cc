@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.cc,v 1.1 2007/04/20 07:55:38 asaim Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4PSSphereSurfaceFlux.cc,v 1.3 2007/05/18 00:00:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4PSSphereSurfaceFlux
 #include "G4PSSphereSurfaceFlux.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
 #include "G4UnitsTable.hh"
+#include "G4GeometryTolerance.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring only Surface Flux.
@@ -121,6 +122,7 @@ G4int G4PSSphereSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Sphere* sphereSo
 
   G4TouchableHandle theTouchable = 
     aStep->GetPreStepPoint()->GetTouchableHandle();
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   
   if (aStep->GetPreStepPoint()->GetStepStatus() == fGeomBoundary ){
     // Entering Geometry

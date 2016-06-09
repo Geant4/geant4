@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationMessenger.cc,v 1.7 2006/11/03 17:26:04 mverderi Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4FastSimulationMessenger.cc,v 1.8 2007/05/11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "G4FastSimulationMessenger.hh"
@@ -44,8 +44,13 @@ G4FastSimulationMessenger(G4GlobalFastSimulationManager* theGFSM)
 
   fShowSetupCmd =
     new G4UIcmdWithoutParameter("/param/showSetup", this);
-  fShowSetupCmd->SetGuidance("Show fast simulation setup");
-  fShowSetupCmd->AvailableForStates(G4State_GeomClosed);
+  fShowSetupCmd->SetGuidance("Show fast simulation setup:");
+  fShowSetupCmd->SetGuidance("    - for each world region:");
+  fShowSetupCmd->SetGuidance("        1) fast simulation manager process attached;");
+  fShowSetupCmd->SetGuidance("               - and to which particles the process is attached to;");
+  fShowSetupCmd->SetGuidance("        2) region hierarchy;");
+  fShowSetupCmd->SetGuidance("               - with for each the fast simulation models attached;");
+  fShowSetupCmd->AvailableForStates(G4State_Idle, G4State_GeomClosed);
 
   fListEnvelopesCmd = 
     new G4UIcmdWithAString("/param/listEnvelopes", this);

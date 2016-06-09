@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QDecayChan.cc,v 1.27 2006/11/27 10:44:54 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QDecayChan ----------------
 //             by Mikhail Kossov, Sept 1999.

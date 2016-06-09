@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.9 2005/12/08 16:42:38 ribon Exp $
+$Id: History,v 1.10 2007/05/14 07:50:42 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.9 2005/12/08 16:42:38 ribon Exp $
 
                       Category History file
                       ---------------------
+
+14.05.2007 - A.Ribon (Rich-V08-03-00)
+             The constant "kCarTolerance" is no longer available,
+	     so it must be explicitly declared.
 
 08.12.2005 - A.Ribon (Rich-V07-01-00)
              Migration to CLHEP namespace.

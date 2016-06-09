@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.17 2007/04/24 14:20:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: PhysicsList.cc,v 1.18 2007/05/16 13:21:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -46,8 +46,8 @@
 
 #include "PhysListEmStandard.hh"
 #include "G4EmStandardPhysics.hh"
-#include "G4EmStandardPhysics71.hh"
-#include "G4EmStandardPhysics72.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 #include "G4DecayPhysics.hh"
@@ -150,24 +150,24 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "G4standard") {
+  if (name == "emstandard") {
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics();
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "G4standard_fast") {
+  } else if (name == "emstandard_opt1") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics71();
+    emPhysicsList = new G4EmStandardPhysics_option1();
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "G4standard_exp") {
+  } else if (name == "emstandard_opt2") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics72();
+    emPhysicsList = new G4EmStandardPhysics_option2();
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 

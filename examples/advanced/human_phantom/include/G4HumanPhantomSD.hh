@@ -35,22 +35,22 @@
 #define G4HumanPhantomSD_h 1
 
 #include "G4VSensitiveDetector.hh"
+#include "G4HumanPhantomHit.hh"
 
 class G4Step;
-class G4HumanPhantomEnergyDeposit;
 
 class G4HumanPhantomSD : public G4VSensitiveDetector
 {
   public:
-      G4HumanPhantomSD(G4String,G4HumanPhantomEnergyDeposit*);
+      G4HumanPhantomSD(G4String);
      ~G4HumanPhantomSD();
 
       void Initialize(G4HCofThisEvent*);
       G4bool ProcessHits(G4Step*, G4TouchableHistory*);
       void EndOfEvent(G4HCofThisEvent*);
-
-  private:
-  G4HumanPhantomEnergyDeposit* energyTotal;
+ 
+ private:
+      G4HumanPhantomHitsCollection* collection;
 };
 #endif
 

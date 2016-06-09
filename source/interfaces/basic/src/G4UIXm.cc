@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIXm.cc,v 1.14 2006/06/29 19:09:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G.Barrand
 

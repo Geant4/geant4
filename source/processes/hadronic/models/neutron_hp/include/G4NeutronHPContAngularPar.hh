@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPContAngularPar.hh,v 1.11 2006/06/29 20:47:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPContAngularPar.hh,v 1.12 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPContAngularPar_h
 #define G4NeutronHPContAngularPar_h 1
@@ -44,12 +44,12 @@ class G4NeutronHPContAngularPar
   
   G4NeutronHPContAngularPar()
   {
-    theAngular = NULL;
+    theAngular = 0;
     currentMeanEnergy = -2;
   }
   ~G4NeutronHPContAngularPar()
   {
-    if(theAngular!=NULL) delete [] theAngular;
+    if(theAngular!=0) delete [] theAngular;
   }
   
   void Init(std::ifstream & aDataFile);
@@ -85,7 +85,7 @@ class G4NeutronHPContAngularPar
     nEnergies = store1.nEnergies;
     theManager = store1.theManager;
     theEnergy = anEnergy;
-    if(theAngular != NULL) delete [] theAngular;
+    if(theAngular != 0) delete [] theAngular;
     theAngular = new G4NeutronHPList[nEnergies];
     G4int i, ii;
     G4double value;

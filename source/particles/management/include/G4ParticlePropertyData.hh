@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticlePropertyData.hh,v 1.2 2006/06/29 19:24:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ParticlePropertyData.hh,v 1.3 2007/03/11 07:17:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -34,6 +34,7 @@
 //	History: 
 // ---------------- G4ParticlePropertyData ----------------
 // first implementation by H Kurashige 9 June 2003
+// Add   magnetic moment    by H Kurashige   Mar 2007
 // ------------------------------------------------------------
 
 #ifndef G4ParticlePropertyData_h
@@ -83,7 +84,9 @@ class G4ParticlePropertyData
   G4int    GetPDGiIsospin() const { return thePDGiIsospin; }
   G4int    GetPDGiIsospin3() const { return thePDGiIsospin3; }
   G4int    GetPDGiGParity() const { return thePDGiGParity; }
-  
+ 
+  G4double GetPDGMagneticMoment() const { return thePDGMagneticMoment; }
+   
   G4int    GetLeptonNumber() const { return theLeptonNumber; }
   G4int    GetBaryonNumber() const { return theBaryonNumber; }
   
@@ -109,6 +112,8 @@ class G4ParticlePropertyData
   void SetPDGiIsospin(G4int newIsospin);
   void SetPDGiIsospin3(G4int newIsospin3);
   void SetPDGiGParity(G4int newGParity);
+
+  void SetPDGMagneticMoment(G4double mageticMoment);
   
   void SetLeptonNumber(G4int newLeptonNumber);
   void SetBaryonNumber(G4int newBaryonNumber);
@@ -170,6 +175,9 @@ class G4ParticlePropertyData
   G4int thePDGiIsospin3;
   //  The isospin and its 3rd-component in units of 1/2.
   
+  G4double thePDGMagneticMoment;
+  //  The magnetic moment.
+
   G4int theLeptonNumber;
   //  The lepton quantum number.
   
@@ -202,6 +210,7 @@ class G4ParticlePropertyData
   G4bool fPDGiIsospin3Modified;
   G4bool fPDGIsospinModified;
   G4bool fPDGIsospin3Modified;
+  G4bool fPDGMagneticMomentModified;
   G4bool fLeptonNumberModified;
   G4bool fBaryonNumberModified;
   G4bool fPDGEncodingModified;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4QCollision.hh,v 1.7 2006/10/30 10:33:36 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QCollision header ----------------
 //                 by Mikhail Kossov, December 2003.

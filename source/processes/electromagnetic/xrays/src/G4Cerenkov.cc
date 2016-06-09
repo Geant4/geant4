@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Cerenkov.cc,v 1.21 2006/06/29 19:56:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation

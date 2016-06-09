@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PionShowerModel.cc,v 1.17 2006/11/13 10:19:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: ExN05PionShowerModel.cc,v 1.19 2007/05/18 14:32:35 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #include "ExN05PionShowerModel.hh"
 #include "ExN05EnergySpot.hh"
@@ -85,6 +85,8 @@ G4bool ExN05PionShowerModel::ModelTrigger(const G4FastTrack&)
 void ExN05PionShowerModel::DoIt(const G4FastTrack& fastTrack, 
 		     G4FastStep& fastStep)
 {
+  //  G4cout << "ExN05PionShowerModel::DoIt" << G4endl;
+
   // Kill the parameterised particle:
   fastStep.KillPrimaryTrack();
   fastStep.ProposePrimaryTrackPathLength(0.0);

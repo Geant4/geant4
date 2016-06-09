@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.cc,v 1.7 2006/06/29 17:54:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: ExN07DetectorConstruction.cc,v 1.8 2007/05/04 01:49:28 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 
@@ -56,6 +56,7 @@
 
 #include "ExN07DetectorMessenger.hh"
 #include "ExN07PrimaryGeneratorAction.hh"
+#include "ExN07ParallelWorld.hh"
 
 ExN07DetectorConstruction::ExN07DetectorConstruction()
 :constructed(false),worldMaterial(0),absorberMaterial(0),gapMaterial(0),
@@ -238,7 +239,7 @@ void ExN07DetectorConstruction::SetupGeometry()
   layerSolid = new G4Box("Layer",0.5*m,0.5*m,layerThickness/2.);
   for(i=0;i<3;i++)
   {
-    layerLogical[i] = new G4LogicalVolume(layerSolid,absorberMaterial,"Layer");
+    layerLogical[i] = new G4LogicalVolume(layerSolid,absorberMaterial,calName[i]+"_LayerLog");
     layerPhysical[i] = new G4PVReplica(calName[i]+"_Layer",layerLogical[i],calorLogical[i],kZAxis,
                           numberOfLayers,layerThickness);
   }
@@ -281,6 +282,7 @@ void ExN07DetectorConstruction::SetupGeometry()
 
 void ExN07DetectorConstruction::SetupDetectors()
 {
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
   G4String filterName, particleName;
 
   G4SDParticleFilter* gammaFilter = new G4SDParticleFilter(filterName="gammaFilter",particleName="gamma");
@@ -344,6 +346,7 @@ void ExN07DetectorConstruction::SetupDetectors()
     { gapLogical[i]->SetSensitiveDetector(det); }
    }
   }
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(0);
 }
 
 void ExN07DetectorConstruction::PrintCalorParameters() const
@@ -418,6 +421,7 @@ void ExN07DetectorConstruction::SetSerialGeometry(G4bool ser)
     else
     { calorPhysical[i]->SetTranslation(G4ThreeVector(0.,G4double(i-1)*m,0.)); }
   }
+  ((ExN07ParallelWorld*)GetParallelWorld(0))->SetSerialGeometry(ser);
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 

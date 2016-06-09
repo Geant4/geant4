@@ -4,4 +4,4 @@
 # Force refresh here (since auto-refresh switched off in main mac).
 /vis/viewer/refresh
 # Print eps file
-#/vis/oglx/printEPS
+#/vis/ogl/printEPS

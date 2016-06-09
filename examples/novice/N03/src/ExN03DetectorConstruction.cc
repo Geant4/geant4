@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN03DetectorConstruction.cc,v 1.23 2006/06/29 17:48:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 

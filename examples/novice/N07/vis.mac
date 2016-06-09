@@ -1,12 +1,4 @@
 #
-# Macro file for the initialization phase of "exampleN02.cc"
-# when runing in interactive mode
-#
-# Sets some default verbose
-#
-/control/verbose 2
-/run/verbose 2
-#
 # create empty scene
 #
 /vis/scene/create
@@ -18,8 +10,13 @@
 #
 # draw scene
 #
-/vis/viewer/set/viewpointThetaPhi 90 180 deg
-/vis/viewer/zoom 1.4
+/vis/drawVolume worlds
+/vis/viewer/set/viewpointThetaPhi 105 165 deg
+# Set specific colur for identification
+/vis/geometry/set/colour Calor-AP_LayerLog ! yellow
+/vis/geometry/set/colour Calor-BP_LayerLog ! yellow
+/vis/geometry/set/colour Calor-CP_LayerLog ! yellow
+/vis/viewer/zoom 3.2
 /vis/viewer/flush
 #
 # for drawing the tracks

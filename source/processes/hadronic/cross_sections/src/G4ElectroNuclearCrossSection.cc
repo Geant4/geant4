@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.26 2006/12/28 04:34:12 dennis Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.27 2007/06/15 16:36:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
@@ -43,7 +43,7 @@
 
 #include "G4ElectroNuclearCrossSection.hh"
 
-// Initialization of the
+// Initialization of statics
 G4double  G4ElectroNuclearCrossSection::lastE=0.;  // Last used in the cross section TheEnergy
 G4int     G4ElectroNuclearCrossSection::lastF=0;   // Last used in the cross section TheFirstBin
 G4double  G4ElectroNuclearCrossSection::lastG=0.;  // Last used in the cross section TheGamma
@@ -56,6 +56,28 @@ G4int     G4ElectroNuclearCrossSection::lastN=0;   // The last N of calculated n
 G4int     G4ElectroNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
 G4double  G4ElectroNuclearCrossSection::lastTH=0.; // Last energy threshold
 G4double  G4ElectroNuclearCrossSection::lastSig=0.;// Last value of the Cross Section
+
+std::vector<G4double*> G4ElectroNuclearCrossSection::J1;     // Vector of pointers to the J1 tabulated functions
+std::vector<G4double*> G4ElectroNuclearCrossSection::J2;     // Vector of pointers to the J2 tabulated functions
+std::vector<G4double*> G4ElectroNuclearCrossSection::J3;     // Vector of pointers to the J3 tabulated functions
+
+G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection()
+{
+}
+
+G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
+{
+  std::vector<G4double*>::iterator pos;
+  for(pos=J1.begin(); pos<J1.end(); pos++)
+  { delete [] *pos; }
+  J1.clear();
+  for(pos=J2.begin(); pos<J2.end(); pos++)
+  { delete [] *pos; }
+  J2.clear();
+  for(pos=J3.begin(); pos<J3.end(); pos++)
+  { delete [] *pos; }
+  J3.clear();
+}
 
 // The main member function giving the gamma-A cross section 
 // (E in GeV, CS in mb)
@@ -113,9 +135,6 @@ G4ElectroNuclearCrossSection::GetIsoZACrossSection(const G4DynamicParticle* aPar
   static std::vector <G4int> colF;       // Vector of Last StartPosition in the Ji-function tables
   static std::vector <G4double> colTH;   // Vector of the energy thresholds for the eA->eX reactions
   static std::vector <G4double> colH;    // Vector of HighEnergyCoefficients (functional calculations)
-  static std::vector <G4double*> J1;     // Vector of pointers to the J1 tabulated functions
-  static std::vector <G4double*> J2;     // Vector of pointers to the J2 tabulated functions
-  static std::vector <G4double*> J3;     // Vector of pointers to the J3 tabulated functions
   // *** End of Static Definitions (Associative Memory) ***
   const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
   const G4int targetAtomicNumber = static_cast<int>(AA+.499); //@@ Nat mixture (?!)

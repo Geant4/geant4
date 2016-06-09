@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: EventAction.cc,v 1.3 2006/06/29 17:24:08 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: EventAction.cc,v 1.4 2007/05/16 11:43:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -88,8 +88,9 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
   }
 
   // Initialize user actions
-  if(HistoManager::GetPointer()->GetVerbose() > 0 || 
-     G4int(nEvt/printModulo)*printModulo == nEvt) 
+  HistoManager* man = HistoManager::GetPointer();
+  man->BeginOfEvent(); 
+  if(man->GetVerbose() > 0 || G4int(nEvt/printModulo)*printModulo == nEvt) 
     G4cout << "EventAction: Event # "
            << nEvt << " started" << G4endl;
 
@@ -124,7 +125,9 @@ void EventAction::EndOfEventAction(const G4Event* evt)
     debugStarted = false;
   }
 
-  if(HistoManager::GetPointer()->GetVerbose() > 1) 
+  HistoManager* man = HistoManager::GetPointer();
+  man->EndOfEvent(); 
+  if(man->GetVerbose() > 1) 
     G4cout << "EventAction: Event ended" << G4endl;
 }
 

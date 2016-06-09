@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VGraphicsScene.hh,v 1.9 2006/07/10 15:19:29 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 // John Allison  19th July 1996
 //
 // Class Description:

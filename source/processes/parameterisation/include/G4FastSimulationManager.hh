@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.hh,v 1.12 2006/11/03 17:26:04 mverderi Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4FastSimulationManager.hh,v 1.13 2007/05/11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //---------------------------------------------------------------
@@ -89,13 +89,13 @@ public:  // with description
   //------------------------
   // Only one Constructor. By default the envelope can
   // be placed n-Times. 
-  // If the user is sure that it'll be placed just one time,
+  // If the user is sure that it is placed just one time,
   // the IsUnique flag should be set TRUE to avoid the
   // G4AffineTransform re-calculations each time we reach
   // the envelope.
 
   G4FastSimulationManager(G4Envelope *anEnvelope,
-			  G4bool IsUnique=FALSE);
+			  G4bool        IsUnique = FALSE);
   // This is the only constructor. In this constructor you specify 
   // the envelope by giving the G4Region (typedef-ed as G4Envelope)
   // pointer. The G4FastSimulationManager object will bind itself to
@@ -148,13 +148,6 @@ public:  // without description
   {return ModelList;}
 
 
-  // -------------------------------------------------------------
-  // Deprecated ghost methods, to be dropped @ next major release:
-  // -------------------------------------------------------------
-  G4Transform3D*          AddGhostPlacement(G4RotationMatrix*, const G4ThreeVector&);
-  G4Transform3D*          AddGhostPlacement(G4Transform3D*);
-  G4bool               RemoveGhostPlacement(const G4Transform3D*);
-  G4bool         InsertGhostHereIfNecessary(G4VPhysicalVolume*, const G4ParticleDefinition&);
   //----------------------------------------------
   // Interface methods for the 
   // G4FastSimulationManagerProcess process.

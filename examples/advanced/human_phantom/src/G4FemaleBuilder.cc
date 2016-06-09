@@ -35,47 +35,69 @@
 #include"G4FemaleBuilder.hh"
 
 #include "G4VBodyFactory.hh"
-#include "G4MIRDBodyFactory.hh"
-#include "G4ORNLBodyFactory.hh"
+//#include "G4MIRDBodyFactory.hh"
+//#include "G4ORNLFemaleBodyFactory.hh"
+
 
 G4FemaleBuilder::G4FemaleBuilder()
 {  
 }
 
 G4FemaleBuilder::~G4FemaleBuilder()
-{
+
+{ 
+  delete body;
 } 
 
-void G4FemaleBuilder::BuildBreast(G4bool sensitivity)
+void G4FemaleBuilder::BuildUterus(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
+
+{
+if (trunkVolume == 0)
+
+   G4Exception("The trunk volume is missing !!!!!");
+
+ body -> CreateOrgan("Uterus",trunkVolume, colourName, solidVis, sensitivity);  }
+
+void G4FemaleBuilder::BuildLeftOvary(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
+
+{
+if (trunkVolume == 0)
+    G4Exception("The trunk volume is missing !!!!!");
+
+  body -> CreateOrgan("LeftOvary",trunkVolume, colourName,
+ 		     solidVis, sensitivity);  
+}
+
+void G4FemaleBuilder::BuildRightOvary(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
+
+{
+ if (trunkVolume == 0)
+
+    G4Exception("The trunk volume is missing !!!!!");
+
+  body -> CreateOrgan("RightOvary",trunkVolume, colourName,
+ 		     solidVis, sensitivity);  
+}
+
+void G4FemaleBuilder::BuildLeftBreast(const G4String& colourName,
+				      G4bool solidVis, G4bool sensitivity)
+{ 
+  if (motherVolume == 0)
+    G4Exception("The world volume is missing !!!!!");
+
+  body -> CreateOrgan("LeftBreast",motherVolume, colourName,
+		      solidVis, sensitivity);  
+}
+  
+
+void G4FemaleBuilder::BuildRightBreast(const G4String& colourName, 
+				       G4bool solidVis, 
+				       G4bool sensitivity)
 {
  if (motherVolume == 0)
-   G4Exception("The world volume is missing !!!!!");
+    G4Exception("The world volume is missing !!!!!");
 
- body -> CreateBreast(motherVolume,sex,sensitivity);
-}
+  body -> CreateOrgan("RightBreast",motherVolume, colourName,
+		      solidVis, sensitivity);  
 
-void G4FemaleBuilder::BuildParameterisedBreast(G4bool sensitivity)
-{
-G4cout << "Builder: build parameterised breast!!!!" <<G4endl;
-
-   if (motherVolume == 0)
-   G4Exception("The world volume is missing !!!!!");
-   
-   body -> CreateParameterisedBreast(motherVolume,sex,sensitivity);
-}
-
-void G4FemaleBuilder::BuildOvary(G4bool sensitivity)
-{   
-if (trunkVolume == 0)
-   G4Exception("The trunk volume is missing !!!!!");
-   
-   body -> CreateOvary(trunkVolume,sex,sensitivity);  
-}
-
-void G4FemaleBuilder::BuildUterus(G4bool sensitivity )
-{
-if (trunkVolume == 0)
-   G4Exception("The trunk volume is missing !!!!!");
-
-   body -> CreateUterus(trunkVolume,sex,sensitivity); 
 }

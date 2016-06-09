@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering52.cc,v 1.3 2006/10/16 15:26:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ComptonScattering52.cc,v 1.5 2007/05/16 14:00:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //------------ G4ComptonScattering52 physics process -----------------------------

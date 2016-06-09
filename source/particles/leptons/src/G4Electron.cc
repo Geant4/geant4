@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Electron.cc,v 1.12 2006/06/29 19:21:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Electron.cc,v 1.14 2007/03/15 06:53:57 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -71,6 +71,11 @@ G4Electron* G4Electron::Definition()
 		 true,            -1.0,          NULL,
              false,           "e"
               );
+    // Bohr Magnetron
+   G4double muB =  -0.5*eplus*hbar_Planck/(0.51099906*MeV/c_squared) ;
+   
+   anInstance->SetPDGMagneticMoment( muB * 1.0011596521859 );
+
   }
   theInstance = reinterpret_cast<G4Electron*>(anInstance);
   return theInstance;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.12 2006/10/20 13:45:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EllipticalCone.cc,v 1.13 2007/05/18 07:39:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -46,6 +46,7 @@
 #include "G4SolidExtentList.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "meshdefs.hh"
 
@@ -73,6 +74,8 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
   : G4VSolid(pName), fpPolyhedron(0), fCubicVolume(0.), fSurfaceArea(0.),
     zTopCut(0.)
 {
+
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
   // Check Semi-Axis
   //

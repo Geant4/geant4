@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.cc,v 1.3 2006/11/17 14:14:22 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eplusPolarizedAnnihilation.cc,v 1.4 2007/06/11 13:37:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,7 @@
 // Modifications:
 // 26-07-06 modified cross section  (P. Starovoitov)
 // 21-08-06 interface updated   (A. Schaelicke)
+// 11-06-07, add PostStepGetPhysicalInteractionLength (A.Schalicke)
 //
 //
 // Class Description:
@@ -121,6 +122,73 @@ G4double G4eplusPolarizedAnnihilation::GetMeanFreePath(const G4Track& track,
                               G4ForceCondition* condition)
 {
   G4double mfp = G4VEmProcess::GetMeanFreePath(track, previousStepSize, condition);
+
+  if (theAsymmetryTable) {
+
+    G4Material*         aMaterial = track.GetMaterial();
+    G4VPhysicalVolume*  aPVolume  = track.GetVolume();
+    G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
+    
+    //   G4Material* bMaterial = aLVolume->GetMaterial();
+    G4PolarizationManager * polarizationManger = G4PolarizationManager::GetInstance();
+    
+    const G4bool volumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
+    G4StokesVector electronPolarization = polarizationManger->GetVolumePolarization(aLVolume);
+
+    if (!volumeIsPolarized || mfp == DBL_MAX) return mfp;
+     
+    // *** get asymmetry, if target is polarized ***
+    const G4DynamicParticle* aDynamicPositron = track.GetDynamicParticle();
+    const G4double positronEnergy = aDynamicPositron->GetKineticEnergy();
+    const G4StokesVector positronPolarization = track.GetPolarization();
+    const G4ParticleMomentum positronDirection0 = aDynamicPositron->GetMomentumDirection();
+
+    if (verboseLevel>=2) {
+      
+      G4cout << " Mom " << positronDirection0  << G4endl;
+      G4cout << " Polarization " << positronPolarization  << G4endl;
+      G4cout << " MaterialPol. " << electronPolarization  << G4endl;
+      G4cout << " Phys. Volume " << aPVolume->GetName() << G4endl;
+      G4cout << " Log. Volume  " << aLVolume->GetName() << G4endl;
+      G4cout << " Material     " << aMaterial          << G4endl;
+    }
+    
+    G4bool isOutRange;
+    G4int idx= CurrentMaterialCutsCoupleIndex();
+    G4double lAsymmetry = (*theAsymmetryTable)(idx)->
+                                  GetValue(positronEnergy, isOutRange);
+    G4double tAsymmetry = (*theTransverseAsymmetryTable)(idx)->
+                                  GetValue(positronEnergy, isOutRange);
+
+    G4double polZZ = positronPolarization.z()*
+      electronPolarization*positronDirection0;
+    G4double polXX = positronPolarization.x()*
+      electronPolarization*G4PolarizationHelper::GetParticleFrameX(positronDirection0);
+    G4double polYY = positronPolarization.y()*
+      electronPolarization*G4PolarizationHelper::GetParticleFrameY(positronDirection0);
+
+    G4double impact = 1. + polZZ*lAsymmetry + (polXX + polYY)*tAsymmetry;
+
+    mfp *= 1. / impact;
+
+    if (verboseLevel>=2) {
+      G4cout << " MeanFreePath:  " << mfp / mm << " mm " << G4endl;
+      G4cout << " Asymmetry:     " << lAsymmetry << ", " << tAsymmetry  << G4endl;
+      G4cout << " PolProduct:    " << polXX << ", " << polYY << ", " << polZZ << G4endl;
+    }
+  }
+  
+  return mfp;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eplusPolarizedAnnihilation::PostStepGetPhysicalInteractionLength(
+                              const G4Track& track,
+                              G4double previousStepSize,
+                              G4ForceCondition* condition)
+{
+  G4double mfp = G4VEmProcess::PostStepGetPhysicalInteractionLength(track, previousStepSize, condition);
 
   if (theAsymmetryTable) {
 

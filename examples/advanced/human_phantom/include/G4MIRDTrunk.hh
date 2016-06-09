@@ -35,24 +35,18 @@
 #define G4MIRDTrunk_h 1
 
 #include "G4VPhysicalVolume.hh"
-
-//#include "Saxana/SAXProcessor.h"
-//#include "Saxana/ProcessingConfigurator.h"
+#include "G4VOrgan.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDTrunk
+class G4MIRDTrunk:public G4VOrgan
 {
 public:
 
   G4MIRDTrunk();
   ~G4MIRDTrunk();
-  G4VPhysicalVolume* ConstructTrunk(G4VPhysicalVolume*, G4String, G4bool);
- 
-private:
-  //    SAXProcessor sxp;
-  //  ProcessingConfigurator config;
-
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,  
+				    const G4String&, G4bool, G4bool);
 };
 #endif

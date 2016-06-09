@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,7 +14,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -107,7 +106,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -120,7 +119,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -133,7 +132,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -142,7 +141,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -154,14 +153,14 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below.
+      Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
@@ -177,7 +176,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -224,7 +223,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -235,10 +234,14 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Mylar 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 Region <VertexDetector> -- appears in <World> world volume
+ Root logical volume(s) : Absorber 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : XeCH4C3H8 
  Production cuts :  gamma 2.3 cm     e- 2.3 cm     e+ 2.3 cm 
 
@@ -298,47 +301,47 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.46s Real=9.52s Sys=0.04s
+  User=9.37s Real=9.41s Sys=0.01s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.7406 +- 0.268308  mm  
+    mean charged track length   in absorber=23.5696 +- 0.221368  mm  
 
-            mean energy deposit in absorber=0.0153805 +- 0.000283253  MeV 
+            mean energy deposit in absorber=0.0154838 +- 0.000291246  MeV 
 
- mean number of steps in absorber (charged) =0.131 +- 0.0514766      
- mean number of steps in absorber (neutral) =0.002 +- 0.0014128      
+ mean number of steps in absorber (charged) =0.104 +- 0.0479081      
+ mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.013 +- 0.0038511
+   mean number of charged secondaries = 0.011 +- 0.00329833
 
-   mean number of neutral secondaries = 0.002 +- 0.0014128
+   mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.013  and e+s =0
+   mean number of e-s =0.011  and e+s =0
 
-(number) transmission coeff=0.502  reflection coeff=0
+(number) transmission coeff=0.507  reflection coeff=0
 
  energy deposit distribution 
 #entries=1000    #underflows=0    #overflows=11
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           6       0.006
-    2         6         110        0.11
-    3         9         271       0.271
-    4        12         258       0.258
-    5        15         146       0.146
-    6        18          77       0.077
-    7        21          47       0.047
-    8        24          14       0.014
-    9        27          22       0.022
-   10        30          11       0.011
+    1         3           4       0.004
+    2         6         100         0.1
+    3         9         274       0.274
+    4        12         262       0.262
+    5        15         151       0.151
+    6        18          87       0.087
+    7        21          34       0.034
+    8        24          21       0.021
+    9        27          16       0.016
+   10        30          13       0.013
    11        33           8       0.008
    12        36           6       0.006
    13        39           4       0.004
-   14        42           1       0.001
+   14        42           2       0.002
    15        45           1       0.001
-   16        48           2       0.002
-   17        51           1       0.001
+   16        48           1       0.001
+   17        51           2       0.002
    18        54           2       0.002
-   19        57           2       0.002
+   19        57           1       0.001
 
  Emp =           0.009   width=          0.006  MeV 
 
@@ -347,7 +350,7 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 515221014, 1640723093
+ Current couple of seeds = 718165562, 201856785
 ----------------------------------------
 #
 Graphics systems deleted.

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.68 2007/02/23 14:54:00 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4hIonisation.cc,v 1.69 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -106,10 +106,6 @@ G4hIonisation::G4hIonisation(const G4String& name)
     theBaseParticle(0),
     isInitialised(false)
 {
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
   SetStepFunction(0.2, 1*mm);
   SetIntegral(true);
   SetVerboseLevel(1);

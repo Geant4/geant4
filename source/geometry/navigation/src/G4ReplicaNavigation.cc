@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc,v 1.11 2006/06/29 18:37:09 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ReplicaNavigation.cc,v 1.13 2007/05/18 07:31:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -40,6 +40,7 @@
 #include "G4SmartVoxelProxy.hh"
 #include "G4SmartVoxelNode.hh"
 #include "G4VSolid.hh"
+#include "G4GeometryTolerance.hh"
 
 #include <assert.h>
 
@@ -50,6 +51,9 @@
 G4ReplicaNavigation::G4ReplicaNavigation()
   : fCheck(false), fVerbose(0)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 }
 
 // ********************************************************************

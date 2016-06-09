@@ -38,16 +38,16 @@
      theCaptureData = new G4NeutronHPVector;
      theElasticData = new G4NeutronHPVector;
      theInelasticData = new G4NeutronHPVector;
-    theIsotopeWiseData = NULL;
+    theIsotopeWiseData = 0;
   }
   
   G4NeutronHPElementData::~G4NeutronHPElementData()
   {
-    if(theFissionData!=NULL) delete theFissionData;
-    if(theCaptureData!=NULL) delete theCaptureData;
-    if(theElasticData!=NULL) delete theElasticData;
-    if(theInelasticData!=NULL) delete theInelasticData;
-    if(theIsotopeWiseData!=NULL) delete [] theIsotopeWiseData;
+    delete theFissionData;
+    delete theCaptureData;
+    delete theElasticData;
+    delete theInelasticData;
+    delete [] theIsotopeWiseData;
   }
   
   void G4NeutronHPElementData::Init(G4Element * theElement)  
@@ -135,7 +135,7 @@
   
   void G4NeutronHPElementData::Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew)
   {
-    if(theNew == NULL) return;
+    if(theNew == 0) { return; }
     G4int s = 0, n=0, m=0;
     G4NeutronHPVector * theMerge = new G4NeutronHPVector(theStore->GetVectorLength());
 //    G4cout << "Harmonise 1: "<<theStore->GetEnergy(s)<<" "<<theNew->GetEnergy(0)<<G4endl;

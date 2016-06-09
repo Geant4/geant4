@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UniformElectricField.cc,v 1.12 2006/06/29 18:24:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //

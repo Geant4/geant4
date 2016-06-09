@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections
@@ -82,7 +82,7 @@ G4float G4HadronCrossSections::plab[TSIZE] = {
 // Elastic scattering on free protons
 //---------------------------------------------------------------------
 
-G4float G4HadronCrossSections::csel[PSIZE][TSIZE] = {
+G4float G4HadronCrossSections::csel[NPARTS][TSIZE] = {
       {0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, //1
        0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00,
        0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00,
@@ -441,7 +441,7 @@ G4float G4HadronCrossSections::csel[PSIZE][TSIZE] = {
 // Inelastic scattering on free protons
 //---------------------------------------------------------------------
 
-G4float G4HadronCrossSections::csin[PSIZE][TSIZE] = {
+G4float G4HadronCrossSections::csin[NPARTS][TSIZE] = {
 
        {0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, //1
        0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00,
@@ -1165,7 +1165,7 @@ G4float G4HadronCrossSections::csfiss[4][NFISS] = {
         1000.0}
 };
 
-G4float G4HadronCrossSections::alpha[PSIZE] = {
+G4float G4HadronCrossSections::alpha[NPARTS] = {
                      0.7,0.7,0.7,0.7,0.7,0.7,
                      0.75,0.75,0.75,
                      0.76,0.76,0.76,0.76,
@@ -1182,13 +1182,13 @@ G4float G4HadronCrossSections::alphac[TSIZE] = {
                      0.982,0.988,0.992,1.010,1.020,1.030,1.040
 };
 
-G4float G4HadronCrossSections::partel[PSIZE] = {
+G4float G4HadronCrossSections::partel[NPARTS] = {
                   0.,0.,0.,0.,0.,0.,
                   1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,
                   1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,
                   1.,1.,1.,1.,1.,1.,1.,1.,1.
 };
-G4float G4HadronCrossSections::partin[PSIZE] = {
+G4float G4HadronCrossSections::partin[NPARTS] = {
                   0.,0.,0.,0.,0.,0.,
                   1.00,0.00,1.05,1.20,1.35,1.30,1.20,1.00,1.30,
                   1.00,1.30,1.00,1.30,1.00,1.00,1.00,1.30,1.30,1.30,
@@ -1196,13 +1196,13 @@ G4float G4HadronCrossSections::partin[PSIZE] = {
 };
 
 // Enabling flags for corrections for compounds
-G4int G4HadronCrossSections::icorr[PSIZE] = {
+G4int G4HadronCrossSections::icorr[NPARTS] = {
                   1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                   0,1,0,1,0,1,1,1,0,0,0,1,1,0,0,1,1,1,1,0,0
 };
 
 // Enabling flags for interaction to occur
-G4int G4HadronCrossSections::intrc[PSIZE] = {
+G4int G4HadronCrossSections::intrc[NPARTS] = {
                   0,0,0,0,0,0,
                   1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,2,2,0,
                   1,1,1,1,1,1,1,1,1,1,0

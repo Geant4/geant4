@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EventAction.cc,v 1.9 2006/11/10 21:04:51 duns Exp $
+// $Id: A01EventAction.cc,v 1.10 2007/05/17 09:55:14 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -90,7 +90,7 @@ A01EventAction::A01EventAction()
     dc2XY = hFactory->createCloud2D("Drift Chamber 2 X vs Y");
     evstof = hFactory->createCloud2D("EDep vs Time-of-flight");
 
-    plotter = analysisManager->createPlotter();
+    plotter = analysisManager->getPlotter();
     if (plotter)
     {
        plotter->createRegions(3,2);

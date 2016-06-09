@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.13 2007/01/10 18:58:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4NistElementBuilder.cc,v 1.14 2007/06/14 14:24:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -121,7 +121,7 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
 G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
 {
   G4Element* theElement = 0;
-  if(Z<1 || Z>limitNumElements) return theElement;
+  if(Z<1 || Z>=limitNumElements) return theElement;
   G4double Zeff = (G4double)Z;
   G4double Aeff = atomicMass[Z];
   if (verbose > 1) {

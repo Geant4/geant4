@@ -31,7 +31,7 @@
 //    ***********************************************
 //
 // $Id: BrachyPrimaryGeneratorMessenger.hh,v 1.2 2006/06/29 15:48:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 #ifndef BrachyPrimaryGeneratorMessenger_h

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,7 +27,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -91,7 +90,7 @@ GammaToMuPair:  gamma->mu+mu- Bethe Heitler process.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -104,7 +103,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest.
         threshold at 43.6931 GeV good description up to 1000 TeV for all Z.
@@ -117,7 +116,7 @@ ee2hadr:       e+ annihilation into hadrons active above 1e-07 GeV
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -137,7 +136,7 @@ hhIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -184,7 +183,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -195,6 +194,8 @@ hIoni:   tables are built for  pi-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+ Root logical volume(s) : Iron 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
  Production cuts :  gamma 1 km     e- 1 km     e+ 1 km 
 
@@ -246,8 +247,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   29.8 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    189 m   -8.45 mm  -1.78 mm   12.3 TeV  17.5 TeV   157 m     157 m          Iron      muIoni
-    2    250 m   -1.18 cm  -1.07 cm   8.24 TeV  4.06 TeV  61.5 m     218 m    OutOfWorld  Transportation
+    1    189 m     5.6 mm   6.43 mm   12.5 TeV  17.3 TeV   157 m     157 m          Iron      muIoni
+    2    250 m    7.22 mm   1.17 cm   8.53 TeV  4.01 TeV  61.5 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -255,24 +256,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   70.2 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    216 m    1.57 mm   4.69 mm   24.7 TeV  45.5 TeV   184 m     184 m          Iron      muIoni
-    2    250 m    1.01 mm   6.32 mm   19.6 TeV  5.06 TeV  34.1 m     218 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m    OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m    OutOfWorld  Transportation
+    1    216 m   -3.73 mm  -3.16 mm   23.7 TeV  46.5 TeV   184 m     184 m          Iron      muIoni
+    2    250 m   -3.02 mm   -6.1 mm   18.8 TeV  4.93 TeV  34.1 m     218 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -288,9 +273,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -212 m       0 fm      0 fm   87.9 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1  -24.1 m    4.08 mm   2.11 mm   36.6 TeV  51.3 TeV   188 m     188 m          Iron      muIoni
-    2    139 m     916 um   3.02 cm   13.5 TeV  23.1 TeV   163 m     351 m          Iron      muIoni
-    3    250 m   -5.47 mm   5.18 cm   7.55 TeV  5.98 TeV   111 m     462 m    OutOfWorld  Transportation
+    1  -24.1 m    4.09 mm    2.1 mm   35.8 TeV  52.1 TeV   188 m     188 m          Iron      muIoni
+    2    138 m     908 um   3.04 cm   13.3 TeV  22.5 TeV   162 m     351 m          Iron      muIoni
+    3    250 m   -5.63 mm   5.25 cm   7.37 TeV  5.89 TeV   112 m     462 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -298,20 +283,70 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -212 m       0 fm      0 fm   12.1 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1  -84.6 m   -5.03 mm  -1.49 cm   6.19 TeV   5.9 TeV   128 m     128 m          Iron      muIoni
-    2     22 m   -2.28 cm  -3.39 mm   2.99 TeV   3.2 TeV   107 m     234 m          Iron      muIoni
-    3    106 m   -5.78 cm   7.88 mm   1.81 TeV  1.18 TeV  83.9 m     318 m          Iron      muIoni
-    4    175 m     -13 cm   6.62 mm   1.21 TeV   599 GeV  68.9 m     387 m          Iron      muIoni
-    5    232 m   -16.1 cm  -4.16 mm    862 GeV   348 GeV  57.6 m     445 m          Iron      muIoni
-    6    250 m     -16 cm    1.3 cm    759 GeV   103 GeV  17.6 m     462 m    OutOfWorld  Transportation
+    1  -84.6 m    6.01 mm   1.21 cm   6.24 TeV  5.85 TeV   128 m     128 m          Iron      muIoni
+    2   22.3 m    3.13 cm   2.05 cm   2.57 TeV  3.67 TeV   107 m     235 m          Iron      muIoni
+    3    102 m    6.36 cm   7.74 mm   1.55 TeV  1.02 TeV  79.4 m     314 m          Iron      muIoni
+    4    166 m    7.42 cm   11.7 cm   1.05 TeV   494 GeV  64.5 m     379 m          Iron      muIoni
+    5    220 m    11.2 cm   19.9 cm    762 GeV   292 GeV  53.8 m     432 m          Iron      muIoni
+    6    250 m    15.4 cm   28.2 cm    607 GeV   155 GeV    30 m     462 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    117 m       0 fm      0 fm      0 eV      0 eV    367 m     367 m          Iron  GammaToMuPair
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    117 m       0 fm      0 fm   37.5 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m      18 um    138 um   16.8 TeV  20.6 TeV   133 m     133 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    117 m       0 fm      0 fm   62.5 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m     -11 um  -83.2 um   30.7 TeV  31.8 TeV   133 m     133 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   65.7 m       0 fm      0 fm      0 eV      0 eV    316 m     316 m          Iron  GammaToMuPair
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   65.7 m       0 fm      0 fm   56.4 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    243 m   -5.67 mm   -1.8 mm   20.2 TeV  36.2 TeV   177 m     177 m          Iron      muIoni
+    2    250 m    -5.6 mm  -3.26 mm   19.4 TeV   835 GeV  7.22 m     184 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   65.7 m       0 fm      0 fm   43.6 TeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    234 m   -6.08 mm   2.36 mm   18.4 TeV  25.2 TeV   169 m     169 m          Iron      muIoni
+    2    250 m   -6.78 mm   2.66 mm   16.7 TeV  1.65 TeV  15.5 m     184 m    OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.02s Real=0.13s Sys=0.03s
+  User=0.03s Real=0.22s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2056499495, 410592805
+ Current couple of seeds = 614347382, 874035293
 ----------------------------------------
 #
 /gun/particle e+
@@ -325,6 +360,8 @@ The cross section for AnnihiToMuPair is artificially increased by the CrossSecFa
 /run/beamOn 5
 
 Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+ Root logical volume(s) : Iron 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
  Production cuts :  gamma 1 km     e- 1 km     e+ 1 km 
 
@@ -343,7 +380,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2056499495, 410592805
+ Current couple of seeds = 614347382, 874035293
 ----------------------------------------
 Start Run processing.
 
@@ -355,165 +392,169 @@ Start Run processing.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm  1e+03 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -247 m       0 fm      0 fm      0 eV      0 eV   2.51 m    2.51 m          Iron  AnnihiToMuPair
+    1   -249 m       0 fm      0 fm      0 eV      0 eV    1.4 m     1.4 m          Iron  AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -247 m       0 fm      0 fm    160 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -232 m    4.32 cm   3.27 cm    126 GeV  34.1 GeV  15.9 m    15.9 m          Iron      muIoni
-    2   -218 m      13 cm   9.48 cm   99.4 GeV  26.7 GeV  13.1 m      29 m          Iron      muIoni
-    3   -208 m    28.8 cm   22.8 cm   73.2 GeV  26.2 GeV  10.8 m    39.8 m          Iron      muIoni
-    4   -199 m    38.7 cm   34.4 cm   59.2 GeV  13.9 GeV  8.31 m    48.1 m          Iron      muIoni
-    5   -192 m    44.5 cm   48.9 cm   47.9 GeV  11.3 GeV  6.92 m      55 m          Iron      muIoni
-    6   -187 m    43.6 cm   58.4 cm   37.2 GeV  10.7 GeV  5.75 m    60.8 m          Iron      muIoni
-    7   -182 m    43.7 cm   64.8 cm   29.8 GeV  7.46 GeV  4.59 m    65.4 m          Iron      muIoni
-    8   -178 m      45 cm   73.9 cm   24.3 GeV  5.48 GeV  3.76 m    69.1 m          Iron      muIoni
-    9   -175 m      44 cm   84.9 cm   17.8 GeV  6.45 GeV  3.13 m    72.3 m          Iron      muIoni
-   10   -173 m    46.3 cm   92.2 cm   13.9 GeV  3.93 GeV  2.37 m    74.6 m          Iron      muIoni
-   11   -171 m    49.3 cm   96.8 cm   11.5 GeV  2.42 GeV  1.89 m    76.5 m          Iron      muIoni
-   12   -169 m    51.7 cm      1 m     9.4 GeV  2.09 GeV  1.59 m    78.1 m          Iron      muIoni
-   13   -168 m      58 cm   1.04 m    7.57 GeV  1.83 GeV  1.32 m    79.4 m          Iron      muIoni
-   14   -167 m    65.1 cm   1.08 m    6.12 GeV  1.45 GeV  1.08 m    80.5 m          Iron      muIoni
-   15   -166 m    72.9 cm   1.11 m    4.93 GeV  1.18 GeV  89.2 cm   81.4 m          Iron      muIoni
-   16   -165 m      80 cm   1.12 m    3.99 GeV   940 MeV  73.2 cm   82.1 m          Iron      muIoni
-   17   -165 m    85.8 cm   1.15 m    3.06 GeV   930 MeV  60.3 cm   82.7 m          Iron      muIoni
-   18   -164 m    95.5 cm   1.14 m    2.26 GeV   804 MeV  47.2 cm   83.2 m          Iron      muIoni
-   19   -164 m    1.03 m    1.15 m    1.83 GeV   433 MeV  35.5 cm   83.6 m          Iron      muIoni
-   20   -164 m    1.07 m    1.13 m    1.47 GeV   363 MeV  29.1 cm   83.9 m          Iron      muIoni
-   21   -163 m     1.1 m    1.11 m    1.19 GeV   272 MeV  23.6 cm   84.1 m          Iron      muIoni
-   22   -163 m    1.14 m    1.09 m     940 MeV   254 MeV  19.3 cm   84.3 m          Iron      muIoni
-   23   -163 m    1.16 m    1.07 m     773 MeV   166 MeV  15.3 cm   84.4 m          Iron      muIoni
-   24   -163 m    1.18 m    1.05 m     634 MeV   140 MeV  12.6 cm   84.6 m          Iron      muIoni
-   25   -163 m     1.2 m    1.01 m     511 MeV   123 MeV  10.3 cm   84.7 m          Iron      muIoni
-   26   -163 m    1.21 m    97.7 cm    422 MeV  89.3 MeV  8.27 cm   84.8 m          Iron      muIoni
-   27   -163 m    1.22 m    95.4 cm    350 MeV  71.5 MeV  6.75 cm   84.8 m          Iron      muIoni
-   28   -163 m    1.23 m    93.9 cm    282 MeV  68.3 MeV  5.52 cm   84.9 m          Iron      muIoni
-   29   -163 m    1.24 m    92.7 cm    228 MeV  53.6 MeV  4.34 cm   84.9 m          Iron      muIoni
-   30   -163 m    1.25 m    91.9 cm    189 MeV  39.4 MeV  3.41 cm     85 m          Iron      muIoni
-   31   -163 m    1.25 m    91.3 cm    158 MeV  31.1 MeV  2.74 cm     85 m          Iron      muIoni
-   32   -163 m    1.26 m    90.9 cm    131 MeV  26.6 MeV  2.21 cm     85 m          Iron      muIoni
-   33   -163 m    1.26 m    90.5 cm    109 MeV  22.1 MeV  1.77 cm     85 m          Iron      muIoni
-   34   -163 m    1.26 m    90.4 cm     91 MeV  18.3 MeV  1.41 cm     85 m          Iron      muIoni
-   35   -163 m    1.25 m    90.1 cm   77.7 MeV  13.3 MeV  1.13 cm   85.1 m          Iron      muIoni
-   36   -163 m    1.25 m    89.8 cm   64.8 MeV  12.9 MeV  9.28 mm   85.1 m          Iron      muIoni
-   37   -163 m    1.25 m    89.5 cm   53.2 MeV  11.6 MeV  7.46 mm   85.1 m          Iron      muIoni
-   38   -163 m    1.25 m    89.4 cm   43.5 MeV  9.78 MeV  5.93 mm   85.1 m          Iron      muIoni
-   39   -163 m    1.24 m    89.2 cm   34.5 MeV  8.92 MeV  4.73 mm   85.1 m          Iron      muIoni
-   40   -163 m    1.24 m    89.1 cm   27.2 MeV  7.35 MeV  3.72 mm   85.1 m          Iron      muIoni
-   41   -163 m    1.24 m      89 cm   19.7 MeV  7.44 MeV  2.97 mm   85.1 m          Iron      muIoni
-   42   -163 m    1.24 m    88.9 cm   12.6 MeV  7.18 MeV  2.28 mm   85.1 m          Iron      muIoni
-   43   -163 m    1.24 m    88.9 cm   4.63 MeV  7.94 MeV  1.59 mm   85.1 m          Iron      muIoni
-   44   -163 m    1.24 m    88.9 cm      0 eV   4.63 MeV   345 um   85.1 m          Iron      muIoni
-   45   -163 m    1.24 m    88.9 cm      0 eV      0 eV      0 fm   85.1 m          Iron       Decay
+    0   -249 m       0 fm      0 fm    411 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -217 m    9.02 cm   1.06 cm    304 GeV   107 GeV  31.4 m    31.4 m          Iron      muIoni
+    2   -192 m      16 cm    5.5 cm    238 GeV  66.6 GeV  25.6 m      57 m          Iron      muIoni
+    3   -170 m    18.7 cm     13 cm    170 GeV  68.3 GeV  21.5 m    78.5 m          Iron      muIoni
+    4   -153 m    13.4 cm   14.9 cm    127 GeV  42.1 GeV  16.6 m    95.1 m          Iron      muIoni
+    5   -140 m    3.52 cm   9.63 cm    102 GeV  25.2 GeV  13.2 m     108 m          Iron      muIoni
+    6   -129 m    -3.7 mm  -3.84 mm   81.3 GeV    21 GeV    11 m     119 m          Iron      muIoni
+    7   -120 m     9.5 mm   -5.7 cm   65.1 GeV  16.2 GeV  9.09 m     128 m          Iron      muIoni
+    8   -113 m    5.58 cm  -8.85 cm     52 GeV  13.1 GeV  7.51 m     136 m          Iron      muIoni
+    9   -106 m    1.32 cm    -11 cm   42.4 GeV   9.6 GeV  6.17 m     142 m          Iron      muIoni
+   10   -101 m    6.23 mm  -11.2 cm   34.6 GeV  7.76 GeV  5.15 m     147 m          Iron      muIoni
+   11    -97 m   -2.47 cm  -13.5 cm   28.1 GeV  6.56 GeV   4.3 m     152 m          Iron      muIoni
+   12  -93.4 m   -5.05 cm  -17.5 cm   21.9 GeV  6.12 GeV  3.57 m     155 m          Iron      muIoni
+   13  -90.5 m   -5.09 cm  -23.1 cm   17.4 GeV  4.52 GeV  2.86 m     158 m          Iron      muIoni
+   14  -88.2 m    9.29 mm  -22.2 cm   14.1 GeV  3.31 GeV  2.32 m     160 m          Iron      muIoni
+   15  -86.3 m    8.73 cm  -21.6 cm     11 GeV  3.14 GeV  1.91 m     162 m          Iron      muIoni
+   16  -84.8 m    16.3 cm  -19.4 cm   8.91 GeV  2.05 GeV  1.52 m     164 m          Iron      muIoni
+   17  -83.5 m      22 cm  -20.2 cm   6.86 GeV  2.05 GeV  1.26 m     165 m          Iron      muIoni
+   18  -82.5 m    28.1 cm  -20.6 cm   5.47 GeV  1.39 GeV  99.1 cm    166 m          Iron      muIoni
+   19  -81.7 m    31.3 cm  -19.7 cm   4.34 GeV  1.12 GeV  80.5 cm    167 m          Iron      muIoni
+   20  -81.1 m    31.6 cm  -18.1 cm   3.53 GeV   815 MeV  65.1 cm    168 m          Iron      muIoni
+   21  -80.6 m    33.3 cm  -16.8 cm   2.63 GeV   904 MeV  53.7 cm    168 m          Iron      muIoni
+   22  -80.1 m    34.9 cm  -16.3 cm   2.12 GeV   502 MeV  40.8 cm    168 m          Iron      muIoni
+   23  -79.8 m    35.5 cm  -11.8 cm   1.72 GeV   407 MeV  33.5 cm    169 m          Iron      muIoni
+   24  -79.5 m    34.3 cm   -9.3 cm   1.37 GeV   346 MeV  27.4 cm    169 m          Iron      muIoni
+   25  -79.3 m    32.6 cm  -7.07 cm   1.09 GeV   279 MeV  22.1 cm    169 m          Iron      muIoni
+   26  -79.1 m      31 cm  -5.99 cm    844 MeV   247 MeV  17.7 cm    169 m          Iron      muIoni
+   27    -79 m    31.2 cm  -4.81 cm    693 MeV   151 MeV  13.8 cm    170 m          Iron      muIoni
+   28  -78.9 m    31.2 cm  -4.13 cm    544 MeV   149 MeV  11.3 cm    170 m          Iron      muIoni
+   29  -78.8 m    31.2 cm  -3.09 cm    435 MeV   109 MeV  8.81 cm    170 m          Iron      muIoni
+   30  -78.7 m    31.4 cm  -1.64 cm    356 MeV  79.2 MeV  6.97 cm    170 m          Iron      muIoni
+   31  -78.7 m    30.5 cm  -3.69 mm    288 MeV  67.3 MeV  5.61 cm    170 m          Iron      muIoni
+   32  -78.6 m      30 cm   4.41 mm    240 MeV    48 MeV  4.45 cm    170 m          Iron      muIoni
+   33  -78.6 m    29.9 cm    9.5 mm    200 MeV  40.4 MeV  3.62 cm    170 m          Iron      muIoni
+   34  -78.6 m    29.9 cm   1.67 cm    162 MeV  38.1 MeV  2.92 cm    170 m          Iron      muIoni
+   35  -78.6 m    29.8 cm   2.23 cm    129 MeV  32.6 MeV  2.27 cm    170 m          Iron      muIoni
+   36  -78.5 m    29.8 cm   2.83 cm    108 MeV  20.7 MeV  1.73 cm    170 m          Iron      muIoni
+   37  -78.5 m    29.9 cm    3.2 cm   89.9 MeV  18.5 MeV   1.4 cm    170 m          Iron      muIoni
+   38  -78.5 m    29.9 cm   3.48 cm   72.9 MeV  17.1 MeV  1.11 cm    170 m          Iron      muIoni
+   39  -78.5 m    29.7 cm   3.69 cm   57.3 MeV  15.5 MeV   8.6 mm    170 m          Iron      muIoni
+   40  -78.5 m    29.6 cm   3.93 cm   48.2 MeV  9.12 MeV  6.46 mm    170 m          Iron      muIoni
+   41  -78.5 m    29.5 cm   4.04 cm   39.5 MeV  8.66 MeV  5.29 mm    170 m          Iron      muIoni
+   42  -78.5 m    29.4 cm   4.12 cm   31.3 MeV  8.21 MeV  4.26 mm    170 m          Iron      muIoni
+   43  -78.5 m    29.2 cm   4.18 cm   23.8 MeV  7.53 MeV  3.38 mm    170 m          Iron      muIoni
+   44  -78.5 m    29.1 cm   4.21 cm   16.5 MeV   7.3 MeV  2.65 mm    170 m          Iron      muIoni
+   45  -78.5 m      29 cm   4.28 cm   8.89 MeV  7.62 MeV  1.99 mm    170 m          Iron      muIoni
+   46  -78.5 m      29 cm   4.32 cm    546 keV  8.35 MeV  1.08 mm    170 m          Iron      muIoni
+   47  -78.5 m      29 cm   4.32 cm      0 eV    546 keV  8.85 um    170 m          Iron      muIoni
+   48  -78.5 m      29 cm   4.32 cm      0 eV      0 eV      0 fm    170 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -163 m    1.24 m    88.9 cm   39.4 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -163 m    1.24 m    89.2 cm     22 MeV  17.4 MeV  5.69 mm   5.69 mm         Iron       eIoni
-    2   -163 m    1.24 m    89.3 cm   13.8 MeV  8.12 MeV  4.35 mm      1 cm         Iron       eIoni
-    3   -162 m    1.24 m    89.5 cm   8.67 MeV  5.17 MeV  3.52 mm   1.36 cm         Iron       eIoni
-    4   -162 m    1.24 m    89.4 cm   4.89 MeV  3.77 MeV  2.85 mm   1.64 cm         Iron       eIoni
-    5   -162 m    1.24 m    89.4 cm   2.53 MeV  2.37 MeV  2.23 mm   1.87 cm         Iron       eIoni
-    6   -162 m    1.24 m    89.3 cm    228 keV   2.3 MeV  1.66 mm   2.03 cm         Iron       eIoni
-    7   -162 m    1.24 m    89.3 cm      0 eV    228 keV   102 um   2.04 cm         Iron       eIoni
+    0  -78.5 m      29 cm   4.32 cm     51 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1  -78.5 m    28.8 cm   4.36 cm     31 MeV    20 MeV  6.37 mm   6.37 mm         Iron       eIoni
+    2  -78.5 m    28.8 cm   4.34 cm   20.8 MeV  10.1 MeV  5.11 mm   1.15 cm         Iron       eIoni
+    3  -78.5 m    28.9 cm   4.32 cm   12.8 MeV  8.04 MeV  4.25 mm   1.57 cm         Iron       eIoni
+    4  -78.5 m    29.1 cm   4.26 cm    8.5 MeV   4.3 MeV   3.4 mm   1.91 cm         Iron       eIoni
+    5  -78.5 m    29.1 cm   4.44 cm    3.6 MeV  4.91 MeV  2.83 mm    2.2 cm         Iron       eIoni
+    6  -78.5 m    29.1 cm   4.57 cm   1.03 MeV  2.56 MeV  1.96 mm   2.39 cm         Iron       eIoni
+    7  -78.5 m    29.1 cm   4.58 cm      0 eV   1.03 MeV   806 um   2.47 cm         Iron       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_e,   Track ID = 5,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -163 m    1.24 m    88.9 cm   18.1 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m    73.8 m     176 m    18.1 MeV     0 eV    209 m     209 m    OutOfWorld  Transportation
+    0  -78.5 m      29 cm   4.32 cm   17.4 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m     206 m    -118 m    17.4 MeV     0 eV    405 m     405 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_mu,   Track ID = 4,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -163 m    1.24 m    88.9 cm   47.1 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m   -10.1 m    -177 m    47.1 MeV     0 eV    198 m     198 m    OutOfWorld  Transportation
+    0  -78.5 m      29 cm   4.32 cm   36.2 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m   -23.4 m   -12.7 m    36.2 MeV     0 eV    330 m     330 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -247 m       0 fm      0 fm    840 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -200 m   -2.63 mm  -2.01 cm    191 GeV   649 GeV  47.8 m    47.8 m          Iron      muIoni
-    2   -181 m     2.2 mm  -7.48 cm    150 GeV  40.5 GeV  18.2 m      66 m          Iron      muIoni
-    3   -166 m      -2 mm  -13.1 cm    120 GeV  29.9 GeV  15.1 m    81.1 m          Iron      muIoni
-    4   -154 m    10.1 cm  -21.4 cm   88.1 GeV  32.4 GeV  12.6 m    93.7 m          Iron      muIoni
-    5   -144 m    15.4 cm  -24.6 cm   69.8 GeV  18.2 GeV  9.72 m     103 m          Iron      muIoni
-    6   -136 m    18.3 cm  -37.1 cm   55.4 GeV  14.4 GeV  7.97 m     111 m          Iron      muIoni
-    7   -130 m    23.8 cm  -48.5 cm     45 GeV  10.4 GeV  6.52 m     118 m          Iron      muIoni
-    8   -124 m    32.2 cm    -62 cm   36.6 GeV  8.41 GeV  5.43 m     123 m          Iron      muIoni
-    9   -120 m    37.7 cm  -75.4 cm   29.7 GeV  6.91 GeV  4.52 m     128 m          Iron      muIoni
-   10   -116 m    39.6 cm  -93.8 cm   23.7 GeV  5.98 GeV  3.75 m     132 m          Iron      muIoni
-   11   -113 m    42.8 cm  -1.06 m    17.5 GeV  6.24 GeV  3.06 m     135 m          Iron      muIoni
-   12   -110 m      43 cm  -1.15 m    12.2 GeV  5.31 GeV  2.32 m     137 m          Iron      muIoni
-   13   -109 m    44.2 cm   -1.2 m    8.89 GeV  3.29 GeV  1.67 m     139 m          Iron      muIoni
-   14   -108 m      45 cm  -1.25 m       7 GeV  1.88 GeV  1.25 m     140 m          Iron      muIoni
-   15   -107 m    43.3 cm  -1.32 m    5.54 GeV  1.46 GeV  1.01 m     141 m          Iron      muIoni
-   16   -106 m    41.1 cm  -1.39 m    4.56 GeV   980 MeV  81.3 cm    142 m          Iron      muIoni
-   17   -105 m    39.5 cm  -1.45 m    3.59 GeV   971 MeV    68 cm    142 m          Iron      muIoni
-   18   -105 m    35.9 cm  -1.51 m    2.95 GeV   645 MeV  54.5 cm    143 m          Iron      muIoni
-   19   -104 m    32.9 cm  -1.59 m     2.3 GeV   642 MeV  45.4 cm    143 m          Iron      muIoni
-   20   -104 m    29.9 cm  -1.65 m     1.6 GeV   703 MeV  36.1 cm    144 m          Iron      muIoni
-   21   -103 m    28.7 cm  -1.69 m    1.32 GeV   282 MeV  25.6 cm    144 m          Iron      muIoni
-   22   -103 m    26.8 cm  -1.74 m    1.08 GeV   237 MeV  21.3 cm    144 m          Iron      muIoni
-   23   -103 m      25 cm  -1.78 m     893 MeV   191 MeV  17.6 cm    144 m          Iron      muIoni
-   24   -103 m    22.9 cm  -1.81 m     679 MeV   213 MeV  14.5 cm    145 m          Iron      muIoni
-   25   -103 m    21.4 cm  -1.84 m     554 MeV   125 MeV  11.1 cm    145 m          Iron      muIoni
-   26   -103 m    19.2 cm  -1.86 m     456 MeV  97.9 MeV  8.97 cm    145 m          Iron      muIoni
-   27   -103 m    17.6 cm  -1.88 m     369 MeV  86.8 MeV  7.32 cm    145 m          Iron      muIoni
-   28   -103 m    16.8 cm   -1.9 m     305 MeV    64 MeV  5.84 cm    145 m          Iron      muIoni
-   29   -103 m    15.5 cm  -1.91 m     211 MeV  93.9 MeV  4.73 cm    145 m          Iron      muIoni
-   30   -103 m    14.9 cm  -1.91 m     180 MeV  31.8 MeV  3.11 cm    145 m          Iron      muIoni
-   31   -103 m    14.5 cm  -1.92 m     147 MeV  33.1 MeV  2.57 cm    145 m          Iron      muIoni
-   32   -103 m    14.6 cm  -1.92 m     124 MeV  22.1 MeV  2.01 cm    145 m          Iron      muIoni
-   33   -103 m    14.5 cm  -1.92 m     103 MeV  21.3 MeV  1.65 cm    145 m          Iron      muIoni
-   34   -103 m    14.3 cm  -1.92 m    86.3 MeV  16.9 MeV  1.31 cm    145 m          Iron      muIoni
-   35   -102 m    14.2 cm  -1.92 m    70.7 MeV  15.5 MeV  1.05 cm    145 m          Iron      muIoni
-   36   -102 m      14 cm  -1.92 m    58.2 MeV  12.5 MeV  8.28 mm    145 m          Iron      muIoni
-   37   -102 m    13.7 cm  -1.92 m    48.2 MeV  10.1 MeV  6.57 mm    145 m          Iron      muIoni
-   38   -102 m    13.5 cm  -1.93 m    38.5 MeV  9.74 MeV  5.29 mm    145 m          Iron      muIoni
-   39   -102 m    13.2 cm  -1.93 m    30.9 MeV  7.53 MeV  4.14 mm    145 m          Iron      muIoni
-   40   -102 m      13 cm  -1.93 m    23.9 MeV  7.06 MeV  3.34 mm    145 m          Iron      muIoni
-   41   -102 m    12.8 cm  -1.93 m    17.3 MeV  6.59 MeV  2.66 mm    145 m          Iron      muIoni
-   42   -102 m    12.7 cm  -1.93 m    10.2 MeV  7.05 MeV  2.06 mm    145 m          Iron      muIoni
-   43   -102 m    12.6 cm  -1.93 m    2.48 MeV  7.75 MeV   1.3 mm    145 m          Iron      muIoni
-   44   -102 m    12.6 cm  -1.93 m       0 eV   2.48 MeV   116 um    145 m          Iron      muIoni
-   45   -102 m    12.6 cm  -1.93 m       0 eV      0 eV      0 fm    145 m          Iron       Decay
+    0   -249 m       0 fm      0 fm    589 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -209 m   -3.12 cm   -8.4 mm    433 GeV   156 GeV  39.2 m    39.2 m          Iron      muIoni
+    2   -177 m   -1.09 cm  -16.1 cm    328 GeV   105 GeV  32.4 m    71.6 m          Iron      muIoni
+    3   -150 m    3.02 cm  -35.4 cm    239 GeV    89 GeV  26.9 m    98.5 m          Iron      muIoni
+    4   -129 m    6.77 cm  -47.3 cm    188 GeV  50.9 GeV  21.5 m     120 m          Iron      muIoni
+    5   -111 m   -3.52 cm  -1.01 m     138 GeV  49.5 GeV  17.9 m     138 m          Iron      muIoni
+    6  -96.5 m   -2.73 cm   -1.5 m     108 GeV    30 GeV  14.1 m     152 m          Iron      muIoni
+    7    -85 m   -8.36 cm  -1.91 m    82.2 GeV    26 GeV  11.5 m     164 m          Iron      muIoni
+    8  -75.8 m   -8.53 cm  -2.23 m    57.6 GeV  24.6 GeV  9.17 m     173 m          Iron      muIoni
+    9  -69.1 m   -5.37 cm  -2.49 m    46.8 GeV  10.7 GeV  6.74 m     180 m          Iron      muIoni
+   10  -63.5 m    2.56 cm  -2.72 m    34.5 GeV  12.4 GeV  5.62 m     185 m          Iron      muIoni
+   11  -59.2 m    7.61 cm  -2.88 m    27.5 GeV  6.93 GeV  4.28 m     189 m          Iron      muIoni
+   12  -55.7 m      14 cm  -3.02 m    22.4 GeV  5.09 GeV   3.5 m     193 m          Iron      muIoni
+   13  -52.8 m      23 cm  -3.12 m    18.3 GeV  4.19 GeV  2.91 m     196 m          Iron      muIoni
+   14  -50.4 m      33 cm  -3.21 m      15 GeV  3.25 GeV  2.41 m     198 m          Iron      muIoni
+   15  -48.4 m    38.8 cm  -3.26 m      12 GeV  3.02 GeV  2.02 m     200 m          Iron      muIoni
+   16  -46.7 m    45.1 cm  -3.32 m    9.68 GeV   2.3 GeV  1.65 m     202 m          Iron      muIoni
+   17  -45.4 m      50 cm  -3.36 m    3.52 GeV  6.17 GeV  1.36 m     203 m          Iron      muIoni
+   18  -44.9 m      52 cm  -3.37 m    2.87 GeV   645 MeV  53.4 cm    204 m          Iron      muIoni
+   19  -44.4 m    51.9 cm   -3.4 m    2.34 GeV   526 MeV  44.3 cm    204 m          Iron      muIoni
+   20    -44 m    51.6 cm  -3.42 m    1.88 GeV   468 MeV  36.7 cm    205 m          Iron      muIoni
+   21  -43.7 m      50 cm  -3.44 m    1.54 GeV   338 MeV  29.7 cm    205 m          Iron      muIoni
+   22  -43.5 m    50.7 cm  -3.47 m    1.25 GeV   289 MeV  24.6 cm    205 m          Iron      muIoni
+   23  -43.3 m    50.6 cm  -3.48 m     811 MeV   437 MeV  20.2 cm    205 m          Iron      muIoni
+   24  -43.2 m    51.2 cm   -3.5 m     652 MeV   159 MeV  13.2 cm    205 m          Iron      muIoni
+   25  -43.1 m    51.5 cm  -3.52 m     531 MeV   121 MeV  10.6 cm    206 m          Iron      muIoni
+   26    -43 m    51.5 cm  -3.54 m     431 MeV  99.8 MeV  8.58 cm    206 m          Iron      muIoni
+   27  -42.9 m    51.7 cm  -3.56 m     360 MeV  71.5 MeV  6.89 cm    206 m          Iron      muIoni
+   28  -42.9 m    52.2 cm  -3.57 m     298 MeV  61.4 MeV  5.66 cm    206 m          Iron      muIoni
+   29  -42.8 m    52.3 cm  -3.58 m     250 MeV  47.6 MeV  4.61 cm    206 m          Iron      muIoni
+   30  -42.8 m    52.5 cm  -3.58 m     211 MeV  39.4 MeV  3.78 cm    206 m          Iron      muIoni
+   31  -42.7 m    52.6 cm  -3.59 m     173 MeV  38.5 MeV  3.11 cm    206 m          Iron      muIoni
+   32  -42.7 m      53 cm  -3.59 m     144 MeV  28.8 MeV  2.45 cm    206 m          Iron      muIoni
+   33  -42.7 m    53.3 cm  -3.59 m     122 MeV    22 MeV  1.97 cm    206 m          Iron      muIoni
+   34  -42.7 m    53.5 cm  -3.59 m     104 MeV  17.3 MeV  1.61 cm    206 m          Iron      muIoni
+   35  -42.7 m    53.7 cm  -3.59 m      86 MeV  18.5 MeV  1.33 cm    206 m          Iron      muIoni
+   36  -42.7 m    53.9 cm   -3.6 m    70.3 MeV  15.6 MeV  1.05 cm    206 m          Iron      muIoni
+   37  -42.7 m    54.1 cm   -3.6 m    56.2 MeV  14.1 MeV  8.22 mm    206 m          Iron      muIoni
+   38  -42.7 m    54.2 cm   -3.6 m    46.6 MeV  9.55 MeV  6.31 mm    206 m          Iron      muIoni
+   39  -42.6 m    54.3 cm   -3.6 m    38.4 MeV  8.29 MeV   5.1 mm    206 m          Iron      muIoni
+   40  -42.6 m    54.4 cm   -3.6 m    30.9 MeV  7.45 MeV  4.13 mm    206 m          Iron      muIoni
+   41  -42.6 m    54.5 cm   -3.6 m    23.3 MeV  7.61 MeV  3.34 mm    206 m          Iron      muIoni
+   42  -42.6 m    54.5 cm   -3.6 m    16.8 MeV  6.45 MeV   2.6 mm    206 m          Iron      muIoni
+   43  -42.6 m    54.6 cm   -3.6 m    9.84 MeV     7 MeV  2.02 mm    206 m          Iron      muIoni
+   44  -42.6 m    54.7 cm   -3.6 m    1.63 MeV  8.22 MeV  1.24 mm    206 m          Iron      muIoni
+   45  -42.6 m    54.7 cm   -3.6 m       0 eV   1.63 MeV  55.8 um    206 m          Iron      muIoni
+   46  -42.6 m    54.7 cm   -3.6 m       0 eV      0 eV      0 fm    206 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 9,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -102 m    12.6 cm  -1.93 m    13.2 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m    98.4 m    74.7 m    13.2 MeV     0 eV    374 m     374 m    OutOfWorld  Transportation
+    0  -42.6 m    54.7 cm   -3.6 m      20 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1  -51.6 m     250 m     163 m      20 MeV     0 eV    300 m     300 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_e,   Track ID = 8,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -102 m    12.6 cm  -1.93 m    44.5 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -168 m     250 m    30.7 m    44.5 MeV     0 eV    260 m     260 m    OutOfWorld  Transportation
+    0  -42.6 m    54.7 cm   -3.6 m      40 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m     -30 m    56.5 m      40 MeV     0 eV    300 m     300 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_mu,   Track ID = 7,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -102 m    12.6 cm  -1.93 m    46.9 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -109 m    -250 m   -46.8 m    46.9 MeV     0 eV    254 m     254 m    OutOfWorld  Transportation
+    0  -42.6 m    54.7 cm   -3.6 m    44.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -250 m   -67.3 m    -107 m    44.7 MeV     0 eV    241 m     241 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -521,170 +562,169 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm  1e+03 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -248 m       0 fm      0 fm      0 eV      0 eV   1.71 m    1.71 m          Iron  AnnihiToMuPair
+    1   -247 m       0 fm      0 fm      0 eV      0 eV   2.95 m    2.95 m          Iron  AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -248 m       0 fm      0 fm    784 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -202 m   -7.33 cm   1.69 cm    563 GeV   220 GeV  46.2 m    46.2 m          Iron      muIoni
-    2   -164 m   -10.6 cm  -9.12 cm    424 GeV   140 GeV  38.2 m    84.4 m          Iron      muIoni
-    3   -132 m   -22.2 cm  -19.9 cm    314 GeV   109 GeV    32 m     116 m          Iron      muIoni
-    4   -106 m   -30.4 cm  -36.4 cm    236 GeV  78.1 GeV  26.3 m     143 m          Iron      muIoni
-    5  -84.3 m     -32 cm  -63.8 cm    181 GeV  54.9 GeV  21.4 m     164 m          Iron      muIoni
-    6  -66.8 m   -26.2 cm  -89.2 cm    143 GeV  38.8 GeV  17.5 m     181 m          Iron      muIoni
-    7  -52.3 m   -20.5 cm  -1.15 m     109 GeV  33.3 GeV  14.5 m     196 m          Iron      muIoni
-    8  -40.7 m   -15.9 cm   -1.4 m    76.4 GeV  32.9 GeV  11.7 m     208 m          Iron      muIoni
-    9    -32 m   -3.31 cm  -1.57 m    57.3 GeV  19.2 GeV  8.63 m     216 m          Iron      muIoni
-   10  -25.3 m   -4.26 mm  -1.57 m      46 GeV  11.2 GeV  6.72 m     223 m          Iron      muIoni
-   11  -19.8 m    7.13 mm  -1.58 m    37.7 GeV  8.35 GeV  5.55 m     229 m          Iron      muIoni
-   12  -15.1 m    1.77 cm  -1.61 m    30.2 GeV  7.49 GeV  4.64 m     233 m          Iron      muIoni
-   13  -11.3 m    5.22 cm  -1.64 m    24.2 GeV  5.99 GeV  3.81 m     237 m          Iron      muIoni
-   14  -8.18 m    9.82 cm  -1.63 m    19.4 GeV  4.86 GeV  3.12 m     240 m          Iron      muIoni
-   15  -5.63 m    14.4 cm  -1.58 m    13.9 GeV   5.4 GeV  2.55 m     243 m          Iron      muIoni
-   16  -3.74 m    20.9 cm  -1.52 m    11.5 GeV  2.47 GeV  1.89 m     245 m          Iron      muIoni
-   17  -2.16 m    27.4 cm  -1.47 m    9.12 GeV  2.36 GeV  1.59 m     246 m          Iron      muIoni
-   18  -87.4 cm   35.5 cm  -1.44 m    7.36 GeV  1.76 GeV  1.29 m     247 m          Iron      muIoni
-   19   17.9 cm   44.2 cm  -1.43 m    5.85 GeV  1.52 GeV  1.06 m     248 m          Iron      muIoni
-   20   1.03 m    53.3 cm  -1.39 m    4.65 GeV   1.2 GeV  85.6 cm    249 m          Iron      muIoni
-   21   1.72 m    60.9 cm  -1.34 m    3.69 GeV   961 MeV  69.3 cm    250 m          Iron      muIoni
-   22   2.27 m    65.4 cm  -1.33 m       3 GeV   687 MeV    56 cm    251 m          Iron      muIoni
-   23   2.73 m    69.4 cm  -1.34 m     2.4 GeV   597 MeV  46.3 cm    251 m          Iron      muIoni
-   24   3.11 m    73.8 cm  -1.34 m    1.92 GeV   482 MeV  37.6 cm    251 m          Iron      muIoni
-   25   3.41 m    76.6 cm  -1.36 m    1.58 GeV   339 MeV  30.5 cm    252 m          Iron      muIoni
-   26   3.66 m    80.3 cm  -1.37 m    1.27 GeV   315 MeV  25.4 cm    252 m          Iron      muIoni
-   27   3.86 m    83.1 cm   -1.4 m     976 MeV   293 MeV  20.5 cm    252 m          Iron      muIoni
-   28   4.01 m    87.9 cm  -1.39 m     796 MeV   180 MeV  15.9 cm    252 m          Iron      muIoni
-   29   4.14 m      92 cm  -1.36 m     627 MeV   169 MeV    13 cm    252 m          Iron      muIoni
-   30   4.23 m    94.8 cm  -1.35 m     511 MeV   116 MeV  10.2 cm    253 m          Iron      muIoni
-   31   4.31 m    96.8 cm  -1.34 m     411 MeV  99.6 MeV  8.26 cm    253 m          Iron      muIoni
-   32   4.37 m    98.7 cm  -1.35 m     315 MeV  96.8 MeV  6.57 cm    253 m          Iron      muIoni
-   33   4.42 m    99.8 cm  -1.35 m     262 MeV  52.2 MeV   4.9 cm    253 m          Iron      muIoni
-   34   4.46 m    1.01 m   -1.36 m     219 MeV    43 MeV     4 cm    253 m          Iron      muIoni
-   35   4.49 m    1.02 m   -1.36 m     184 MeV  34.9 MeV  3.25 cm    253 m          Iron      muIoni
-   36   4.51 m    1.03 m   -1.37 m     149 MeV  35.5 MeV  2.66 cm    253 m          Iron      muIoni
-   37   4.53 m    1.04 m   -1.37 m     126 MeV    23 MeV  2.06 cm    253 m          Iron      muIoni
-   38   4.55 m    1.04 m   -1.37 m     102 MeV  24.1 MeV  1.67 cm    253 m          Iron      muIoni
-   39   4.56 m    1.04 m   -1.37 m    86.4 MeV  15.3 MeV  1.29 cm    253 m          Iron      muIoni
-   40   4.57 m    1.05 m   -1.37 m    72.6 MeV  13.9 MeV  1.06 cm    253 m          Iron      muIoni
-   41   4.58 m    1.05 m   -1.37 m    59.3 MeV  13.3 MeV  8.55 mm    253 m          Iron      muIoni
-   42   4.59 m    1.05 m   -1.37 m    47.3 MeV    12 MeV  6.72 mm    253 m          Iron      muIoni
-   43   4.59 m    1.05 m   -1.37 m    37.9 MeV  9.45 MeV  5.19 mm    253 m          Iron      muIoni
-   44    4.6 m    1.05 m   -1.37 m    29.9 MeV  7.99 MeV  4.08 mm    253 m          Iron      muIoni
-   45    4.6 m    1.05 m   -1.37 m    22.7 MeV  7.13 MeV  3.24 mm    253 m          Iron      muIoni
-   46    4.6 m    1.05 m   -1.37 m    15.4 MeV  7.35 MeV  2.55 mm    253 m          Iron      muIoni
-   47    4.6 m    1.05 m   -1.37 m    8.37 MeV  7.01 MeV  1.88 mm    253 m          Iron      muIoni
-   48    4.6 m    1.05 m   -1.37 m       0 eV   8.37 MeV   977 um    253 m          Iron      muIoni
-   49    4.6 m    1.05 m   -1.37 m       0 eV      0 eV      0 fm    253 m          Iron       Decay
+    0   -247 m       0 fm      0 fm    507 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -211 m   -5.67 cm   4.78 cm    381 GeV   126 GeV  35.9 m    35.9 m          Iron      muIoni
+    2   -181 m   -17.1 cm  -4.13 mm    284 GeV  97.3 GeV  29.9 m    65.7 m          Iron      muIoni
+    3   -157 m   -15.1 cm  -5.57 cm    219 GeV  64.2 GeV  24.4 m    90.1 m          Iron      muIoni
+    4   -137 m   -4.97 cm  -6.73 cm    168 GeV    51 GeV  20.2 m     110 m          Iron      muIoni
+    5   -120 m    7.59 cm    894 um    131 GeV  37.4 GeV  16.5 m     127 m          Iron      muIoni
+    6   -107 m    12.2 cm   7.74 cm    103 GeV  28.5 GeV  13.5 m     140 m          Iron      muIoni
+    7  -95.6 m    6.75 cm   9.93 cm   82.3 GeV  20.3 GeV  11.1 m     151 m          Iron      muIoni
+    8  -86.4 m   -3.58 mm   12.2 cm   65.2 GeV  17.1 GeV  9.19 m     161 m          Iron      muIoni
+    9  -78.9 m   -2.33 cm   11.5 cm   50.8 GeV  14.4 GeV  7.53 m     168 m          Iron      muIoni
+   10  -72.8 m   -9.92 cm   18.1 cm   40.8 GeV    10 GeV  6.05 m     174 m          Iron      muIoni
+   11  -67.8 m   -20.7 cm   20.8 cm   32.6 GeV  8.14 GeV  4.98 m     179 m          Iron      muIoni
+   12  -63.8 m   -19.9 cm   24.5 cm   23.9 GeV  8.68 GeV  4.08 m     183 m          Iron      muIoni
+   13  -60.7 m   -23.4 cm   27.4 cm   19.6 GeV  4.36 GeV  3.09 m     186 m          Iron      muIoni
+   14  -58.1 m   -27.8 cm   26.2 cm   15.1 GeV  4.51 GeV  2.58 m     189 m          Iron      muIoni
+   15  -56.1 m   -29.1 cm   23.4 cm   11.8 GeV  3.23 GeV  2.03 m     191 m          Iron      muIoni
+   16  -54.4 m   -28.3 cm   22.7 cm   9.65 GeV   2.2 GeV  1.63 m     193 m          Iron      muIoni
+   17  -53.1 m   -28.4 cm   23.2 cm    3.4 GeV  6.25 GeV  1.35 m     194 m          Iron      muIoni
+   18  -52.5 m   -28.8 cm   20.9 cm   2.73 GeV   672 MeV  51.9 cm    195 m          Iron      muIoni
+   19  -52.1 m   -28.5 cm   18.3 cm   2.22 GeV   509 MeV  42.3 cm    195 m          Iron      muIoni
+   20  -51.8 m   -30.1 cm   17.2 cm   1.78 GeV   436 MeV  34.9 cm    195 m          Iron      muIoni
+   21  -51.5 m   -33.9 cm   14.8 cm   1.44 GeV   344 MeV  28.4 cm    196 m          Iron      muIoni
+   22  -51.3 m   -37.9 cm   13.3 cm   1.19 GeV   247 MeV  23.1 cm    196 m          Iron      muIoni
+   23  -51.1 m   -40.6 cm   12.2 cm    942 MeV   249 MeV  19.3 cm    196 m          Iron      muIoni
+   24  -50.9 m   -43.5 cm   10.6 cm    742 MeV   200 MeV  15.4 cm    196 m          Iron      muIoni
+   25  -50.8 m   -46.7 cm    9.1 cm    604 MeV   138 MeV  12.1 cm    196 m          Iron      muIoni
+   26  -50.7 m   -49.4 cm   7.67 cm    499 MeV   105 MeV  9.83 cm    196 m          Iron      muIoni
+   27  -50.6 m   -51.9 cm   6.92 cm    395 MeV   104 MeV  8.06 cm    196 m          Iron      muIoni
+   28  -50.6 m   -54.2 cm   5.85 cm    333 MeV  62.4 MeV  6.29 cm    197 m          Iron      muIoni
+   29  -50.5 m   -55.9 cm    4.8 cm    266 MeV  67.2 MeV  5.22 cm    197 m          Iron      muIoni
+   30  -50.5 m   -57.1 cm      4 cm    221 MeV  44.7 MeV  4.06 cm    197 m          Iron      muIoni
+   31  -50.5 m   -58.3 cm   3.29 cm    183 MeV  38.2 MeV  3.28 cm    197 m          Iron      muIoni
+   32  -50.4 m   -59.2 cm   2.57 cm    154 MeV    29 MeV  2.63 cm    197 m          Iron      muIoni
+   33  -50.4 m   -59.9 cm   1.89 cm    127 MeV  26.3 MeV  2.14 cm    197 m          Iron      muIoni
+   34  -50.4 m   -60.2 cm   1.46 cm    107 MeV    20 MeV   1.7 cm    197 m          Iron      muIoni
+   35  -50.4 m   -60.6 cm   1.28 cm   86.6 MeV  20.9 MeV  1.38 cm    197 m          Iron      muIoni
+   36  -50.4 m   -60.7 cm   1.16 cm   69.7 MeV  16.8 MeV  1.06 cm    197 m          Iron      muIoni
+   37  -50.4 m     -61 cm   1.21 cm   58.4 MeV  11.3 MeV  8.15 mm    197 m          Iron      muIoni
+   38  -50.4 m   -61.1 cm   1.24 cm   48.1 MeV  10.3 MeV  6.61 mm    197 m          Iron      muIoni
+   39  -50.4 m   -61.3 cm   1.21 cm   39.5 MeV  8.62 MeV  5.28 mm    197 m          Iron      muIoni
+   40  -50.4 m   -61.5 cm   1.14 cm   31.6 MeV  7.88 MeV  4.26 mm    197 m          Iron      muIoni
+   41  -50.4 m   -61.5 cm   1.05 cm   23.9 MeV  7.75 MeV  3.41 mm    197 m          Iron      muIoni
+   42  -50.4 m   -61.6 cm   1.04 cm   17.2 MeV   6.7 MeV  2.66 mm    197 m          Iron      muIoni
+   43  -50.4 m   -61.6 cm   1.04 cm   10.9 MeV  6.28 MeV  2.05 mm    197 m          Iron      muIoni
+   44  -50.4 m   -61.6 cm   1.08 cm   2.71 MeV  8.21 MeV   1.4 mm    197 m          Iron      muIoni
+   45  -50.4 m   -61.6 cm   1.09 cm      0 eV   2.71 MeV   135 um    197 m          Iron      muIoni
+   46  -50.4 m   -61.6 cm   1.09 cm      0 eV      0 eV      0 fm    197 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    4.6 m    1.05 m   -1.37 m    50.6 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    4.6 m    1.05 m   -1.37 m    33.8 MeV  16.8 MeV  6.35 mm   6.35 mm         Iron       eIoni
-    2    4.6 m    1.05 m   -1.36 m      17 MeV  16.8 MeV  5.31 mm   1.17 cm         Iron       eIoni
-    3   4.61 m    1.05 m   -1.36 m    11.3 MeV  5.75 MeV  3.87 mm   1.55 cm         Iron       eIoni
-    4   4.61 m    1.05 m   -1.36 m    7.38 MeV  3.88 MeV   3.2 mm   1.87 cm         Iron       eIoni
-    5   4.61 m    1.05 m   -1.36 m    1.96 MeV  5.42 MeV  2.66 mm   2.14 cm         Iron       eIoni
-    6   4.61 m    1.05 m   -1.36 m       0 eV   1.96 MeV  1.45 mm   2.28 cm         Iron       eIoni
+    0  -50.4 m   -61.6 cm   1.09 cm   39.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1  -50.4 m   -61.4 cm   7.28 mm   24.7 MeV    15 MeV  5.71 mm   5.71 mm         Iron       eIoni
+    2  -50.3 m   -61.3 cm   3.27 mm   15.9 MeV  8.83 MeV  4.61 mm   1.03 cm         Iron       eIoni
+    3  -50.3 m   -61.2 cm    211 um   10.9 MeV  4.99 MeV  3.75 mm   1.41 cm         Iron       eIoni
+    4  -50.3 m   -61.2 cm   -2.7 mm   7.03 MeV  3.87 MeV  3.16 mm   1.72 cm         Iron       eIoni
+    5  -50.3 m   -61.4 cm  -2.87 mm   3.74 MeV  3.29 MeV  2.61 mm   1.98 cm         Iron       eIoni
+    6  -50.4 m   -61.3 cm  -2.42 mm    421 keV  3.31 MeV  1.99 mm   2.18 cm         Iron       eIoni
+    7  -50.4 m   -61.3 cm  -2.46 mm      0 eV    421 keV   251 um   2.21 cm         Iron       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_e,   Track ID = 5,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    4.6 m    1.05 m   -1.37 m    12.3 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -124 m     181 m    -250 m    12.3 MeV     0 eV    333 m     333 m    OutOfWorld  Transportation
+    0  -50.4 m   -61.6 cm   1.09 cm   37.8 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -250 m    -144 m    40.9 m    37.8 MeV     0 eV    249 m     249 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_mu,   Track ID = 4,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    4.6 m    1.05 m   -1.37 m    41.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    169 m     250 m    -246 m    41.7 MeV     0 eV    385 m     385 m    OutOfWorld  Transportation
+    0  -50.4 m   -61.6 cm   1.09 cm   27.1 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   35.6 m      91 m     250 m    27.1 MeV     0 eV    280 m     280 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -248 m       0 fm      0 fm    216 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -228 m    -1.4 cm  -2.02 cm    169 GeV  47.7 GeV    20 m      20 m          Iron      muIoni
-    2   -212 m   -3.47 cm  -15.2 cm    128 GeV  40.2 GeV  16.5 m    36.5 m          Iron      muIoni
-    3   -199 m   -1.58 mm  -33.9 cm    103 GeV  25.8 GeV  13.3 m    49.8 m          Iron      muIoni
-    4   -187 m   -1.43 cm  -49.4 cm   81.6 GeV    21 GeV  11.1 m    60.8 m          Iron      muIoni
-    5   -178 m   -12.4 cm  -59.4 cm   62.7 GeV  18.9 GeV  9.11 m    69.9 m          Iron      muIoni
-    6   -171 m   -23.3 cm    -74 cm   49.5 GeV  13.2 GeV  7.26 m    77.2 m          Iron      muIoni
-    7   -165 m   -33.4 cm  -83.9 cm   39.8 GeV  9.68 GeV   5.9 m    83.1 m          Iron      muIoni
-    8   -160 m   -63.1 cm  -1.01 m    32.1 GeV   7.7 GeV  4.87 m      88 m          Iron      muIoni
-    9   -156 m   -85.4 cm  -1.18 m      26 GeV  6.14 GeV  4.02 m      92 m          Iron      muIoni
-   10   -153 m      -1 m   -1.32 m      21 GeV  4.95 GeV  3.32 m    95.3 m          Iron      muIoni
-   11   -150 m   -1.19 m   -1.47 m    16.9 GeV   4.1 GeV  2.74 m    98.1 m          Iron      muIoni
-   12   -148 m   -1.32 m   -1.61 m    13.8 GeV  3.13 GeV  2.25 m     100 m          Iron      muIoni
-   13   -146 m   -1.43 m   -1.73 m    9.36 GeV  4.42 GeV  1.87 m     102 m          Iron      muIoni
-   14   -145 m   -1.52 m   -1.84 m    7.53 GeV  1.82 GeV  1.31 m     103 m          Iron      muIoni
-   15   -144 m   -1.58 m   -1.95 m    6.15 GeV  1.38 GeV  1.08 m     105 m          Iron      muIoni
-   16   -143 m   -1.63 m   -2.06 m    4.89 GeV  1.26 GeV  89.5 cm    105 m          Iron      muIoni
-   17   -142 m   -1.69 m   -2.14 m    3.97 GeV   927 MeV  72.5 cm    106 m          Iron      muIoni
-   18   -142 m   -1.72 m   -2.22 m     3.2 GeV   770 MeV  59.8 cm    107 m          Iron      muIoni
-   19   -141 m   -1.75 m   -2.28 m    2.47 GeV   731 MeV  48.9 cm    107 m          Iron      muIoni
-   20   -141 m   -1.77 m   -2.36 m    1.92 GeV   549 MeV  38.4 cm    108 m          Iron      muIoni
-   21   -140 m   -1.78 m   -2.41 m    1.55 GeV   366 MeV  30.3 cm    108 m          Iron      muIoni
-   22   -140 m   -1.79 m   -2.47 m    1.27 GeV   281 MeV  24.8 cm    108 m          Iron      muIoni
-   23   -140 m   -1.78 m   -2.53 m     990 MeV   280 MeV  20.5 cm    108 m          Iron      muIoni
-   24   -140 m   -1.76 m   -2.56 m     793 MeV   196 MeV  16.1 cm    109 m          Iron      muIoni
-   25   -140 m   -1.76 m    -2.6 m     649 MeV   145 MeV  12.9 cm    109 m          Iron      muIoni
-   26   -140 m   -1.76 m   -2.62 m     535 MeV   113 MeV  10.5 cm    109 m          Iron      muIoni
-   27   -140 m   -1.75 m   -2.64 m     441 MeV  94.5 MeV  8.66 cm    109 m          Iron      muIoni
-   28   -139 m   -1.75 m   -2.66 m     358 MeV  83.1 MeV  7.06 cm    109 m          Iron      muIoni
-   29   -139 m   -1.73 m   -2.67 m     297 MeV  60.4 MeV  5.64 cm    109 m          Iron      muIoni
-   30   -139 m   -1.72 m   -2.68 m     246 MeV  51.4 MeV   4.6 cm    109 m          Iron      muIoni
-   31   -139 m   -1.71 m   -2.69 m     205 MeV    41 MeV  3.71 cm    109 m          Iron      muIoni
-   32   -139 m    -1.7 m   -2.69 m     173 MeV  31.6 MeV     3 cm    109 m          Iron      muIoni
-   33   -139 m    -1.7 m    -2.7 m     145 MeV  28.2 MeV  2.47 cm    109 m          Iron      muIoni
-   34   -139 m    -1.7 m    -2.7 m     122 MeV  23.5 MeV  1.99 cm    109 m          Iron      muIoni
-   35   -139 m    -1.7 m   -2.71 m     101 MeV  20.4 MeV  1.61 cm    109 m          Iron      muIoni
-   36   -139 m    -1.7 m   -2.71 m    85.4 MeV    16 MeV  1.28 cm    109 m          Iron      muIoni
-   37   -139 m    -1.7 m   -2.71 m      73 MeV  12.5 MeV  1.04 cm    109 m          Iron      muIoni
-   38   -139 m    -1.7 m   -2.71 m    61.3 MeV  11.6 MeV   8.6 mm    109 m          Iron      muIoni
-   39   -139 m   -1.71 m   -2.71 m    51.2 MeV  10.1 MeV  6.98 mm    109 m          Iron      muIoni
-   40   -139 m   -1.71 m   -2.72 m    42.4 MeV  8.79 MeV  5.66 mm    109 m          Iron      muIoni
-   41   -139 m   -1.71 m   -2.72 m    32.9 MeV  9.51 MeV   4.6 mm    109 m          Iron      muIoni
-   42   -139 m   -1.71 m   -2.72 m    25.4 MeV  7.52 MeV  3.55 mm    109 m          Iron      muIoni
-   43   -139 m   -1.71 m   -2.72 m    18.4 MeV  6.99 MeV   2.8 mm    109 m          Iron      muIoni
-   44   -139 m   -1.71 m   -2.72 m    11.9 MeV  6.54 MeV  2.16 mm    109 m          Iron      muIoni
-   45   -139 m   -1.71 m   -2.72 m    4.33 MeV  7.55 MeV  1.52 mm    109 m          Iron      muIoni
-   46   -139 m   -1.71 m   -2.72 m       0 eV   4.33 MeV   308 um    109 m          Iron      muIoni
-   47   -139 m   -1.71 m   -2.72 m       0 eV      0 eV      0 fm    109 m          Iron       Decay
+    0   -247 m       0 fm      0 fm    493 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -212 m    6.41 cm  -4.41 cm    351 GeV   142 GeV  35.2 m    35.2 m          Iron      muIoni
+    2   -184 m    12.4 cm  -12.7 cm    270 GeV  81.3 GeV  28.2 m    63.5 m          Iron      muIoni
+    3   -160 m    24.1 cm    -16 cm    211 GeV  58.8 GeV  23.5 m      87 m          Iron      muIoni
+    4   -140 m    27.7 cm  -16.9 cm    100 GeV   111 GeV  19.6 m     107 m          Iron      muIoni
+    5   -130 m    37.6 cm  -24.1 cm   78.7 GeV  21.7 GeV  10.9 m     117 m          Iron      muIoni
+    6   -121 m    49.4 cm    -25 cm   62.8 GeV  15.8 GeV  8.84 m     126 m          Iron      muIoni
+    7   -113 m      66 cm  -13.7 cm   48.1 GeV  14.8 GeV  7.28 m     134 m          Iron      muIoni
+    8   -108 m    82.7 cm  -3.99 cm   38.7 GeV  9.39 GeV  5.75 m     139 m          Iron      muIoni
+    9   -103 m    94.4 cm  -2.33 mm   30.8 GeV  7.92 GeV  4.75 m     144 m          Iron      muIoni
+   10  -99.1 m    1.04 m    4.14 mm   23.3 GeV  7.43 GeV  3.87 m     148 m          Iron      muIoni
+   11  -96.1 m    1.15 m    -2.9 cm   18.9 GeV  4.46 GeV  3.02 m     151 m          Iron      muIoni
+   12  -93.6 m    1.23 m    -3.5 cm   15.3 GeV  3.58 GeV  2.49 m     153 m          Iron      muIoni
+   13  -91.5 m    1.33 m    -7.7 cm   12.4 GeV  2.87 GeV  2.06 m     156 m          Iron      muIoni
+   14  -89.8 m    1.43 m   -9.07 cm   9.82 GeV   2.6 GeV   1.7 m     157 m          Iron      muIoni
+   15  -88.5 m    1.52 m   -10.6 cm    8.1 GeV  1.71 GeV  1.37 m     159 m          Iron      muIoni
+   16  -87.3 m    1.61 m   -9.24 cm   6.49 GeV  1.61 GeV  1.15 m     160 m          Iron      muIoni
+   17  -86.4 m     1.7 m    -7.3 cm   5.24 GeV  1.26 GeV  94.1 cm    161 m          Iron      muIoni
+   18  -85.6 m    1.78 m   -5.25 cm   4.23 GeV  1.01 GeV  77.2 cm    161 m          Iron      muIoni
+   19    -85 m    1.82 m   -4.63 cm   3.46 GeV   770 MeV  63.5 cm    162 m          Iron      muIoni
+   20  -84.4 m    1.85 m   -5.44 cm   2.79 GeV   670 MeV  52.7 cm    163 m          Iron      muIoni
+   21    -84 m    1.87 m   -6.22 cm   2.25 GeV   540 MeV  43.2 cm    163 m          Iron      muIoni
+   22  -83.7 m    1.88 m   -6.47 cm   1.79 GeV   464 MeV  35.3 cm    163 m          Iron      muIoni
+   23  -83.4 m    1.88 m   -7.01 cm   1.45 GeV   337 MeV  28.4 cm    164 m          Iron      muIoni
+   24  -83.1 m    1.89 m   -9.43 cm   1.17 GeV   281 MeV  23.3 cm    164 m          Iron      muIoni
+   25    -83 m    1.91 m   -11.7 cm    943 MeV   226 MeV  18.9 cm    164 m          Iron      muIoni
+   26  -82.8 m    1.92 m   -12.6 cm    743 MeV   200 MeV  15.3 cm    164 m          Iron      muIoni
+   27  -82.7 m    1.94 m   -12.5 cm    598 MeV   145 MeV  12.1 cm    164 m          Iron      muIoni
+   28  -82.6 m    1.95 m   -12.5 cm    481 MeV   117 MeV  9.71 cm    165 m          Iron      muIoni
+   29  -82.5 m    1.96 m   -12.5 cm    396 MeV  85.4 MeV  7.74 cm    165 m          Iron      muIoni
+   30  -82.5 m    1.96 m   -12.6 cm    332 MeV  63.9 MeV  6.29 cm    165 m          Iron      muIoni
+   31  -82.4 m    1.97 m   -12.4 cm    269 MeV  63.1 MeV  5.19 cm    165 m          Iron      muIoni
+   32  -82.4 m    1.98 m   -12.2 cm    221 MeV  47.5 MeV   4.1 cm    165 m          Iron      muIoni
+   33  -82.3 m    1.98 m   -12.6 cm    181 MeV  39.7 MeV  3.28 cm    165 m          Iron      muIoni
+   34  -82.3 m       2 m   -13.3 cm    152 MeV  29.9 MeV   2.6 cm    165 m          Iron      muIoni
+   35  -82.3 m    2.01 m   -13.6 cm    129 MeV  22.9 MeV   2.1 cm    165 m          Iron      muIoni
+   36  -82.3 m    2.02 m   -13.9 cm    109 MeV  19.6 MeV  1.72 cm    165 m          Iron      muIoni
+   37  -82.3 m    2.03 m   -14.2 cm   91.5 MeV  17.4 MeV   1.4 cm    165 m          Iron      muIoni
+   38  -82.3 m    2.04 m   -14.3 cm   74.2 MeV  17.4 MeV  1.13 cm    165 m          Iron      muIoni
+   39  -82.3 m    2.05 m   -14.2 cm   61.1 MeV    13 MeV  8.77 mm    165 m          Iron      muIoni
+   40  -82.2 m    2.05 m   -14.3 cm     49 MeV  12.1 MeV  6.95 mm    165 m          Iron      muIoni
+   41  -82.2 m    2.06 m   -14.3 cm   39.2 MeV  9.78 MeV  5.38 mm    165 m          Iron      muIoni
+   42  -82.2 m    2.06 m   -14.2 cm   30.5 MeV  8.71 MeV  4.23 mm    165 m          Iron      muIoni
+   43  -82.2 m    2.06 m   -14.2 cm   23.9 MeV   6.6 MeV   3.3 mm    165 m          Iron      muIoni
+   44  -82.2 m    2.06 m     -14 cm   16.4 MeV  7.54 MeV  2.66 mm    165 m          Iron      muIoni
+   45  -82.2 m    2.06 m   -13.8 cm   9.23 MeV  7.12 MeV  1.97 mm    165 m          Iron      muIoni
+   46  -82.2 m    2.06 m   -13.7 cm   1.08 MeV  8.16 MeV  1.14 mm    165 m          Iron      muIoni
+   47  -82.2 m    2.06 m   -13.7 cm      0 eV   1.08 MeV  27.7 um    165 m          Iron      muIoni
+   48  -82.2 m    2.06 m   -13.7 cm      0 eV      0 eV      0 fm    165 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 9,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -139 m   -1.71 m   -2.72 m    42.3 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m     169 m   -97.5 m    42.3 MeV     0 eV    224 m     224 m    OutOfWorld  Transportation
+    0  -82.2 m    2.06 m   -13.7 cm   44.9 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -250 m    3.08 m   -32.4 m    44.9 MeV     0 eV    171 m     171 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_e,   Track ID = 8,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -139 m   -1.71 m   -2.72 m    14.2 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m   -15.4 m    28.2 m    14.2 MeV     0 eV    116 m     116 m    OutOfWorld  Transportation
+    0  -82.2 m    2.06 m   -13.7 cm     17 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1  -16.6 m    -250 m     157 m      17 MeV     0 eV    304 m     304 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_mu,   Track ID = 7,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -139 m   -1.71 m   -2.72 m    48.1 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    142 m    -250 m     112 m    48.1 MeV     0 eV    392 m     392 m    OutOfWorld  Transportation
+    0  -82.2 m    2.06 m   -13.7 cm   42.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m     115 m   -2.65 m    42.7 MeV     0 eV    351 m     351 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -692,169 +732,169 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm  1e+03 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -248 m       0 fm      0 fm      0 eV      0 eV   2.05 m    2.05 m          Iron  AnnihiToMuPair
+    1   -247 m       0 fm      0 fm      0 eV      0 eV   3.08 m    3.08 m          Iron  AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -248 m       0 fm      0 fm    876 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -199 m    9.29 mm   -1.5 cm    619 GeV   257 GeV  48.9 m    48.9 m          Iron      muIoni
-    2   -159 m   -7.53 cm   3.12 cm    449 GeV   170 GeV  40.4 m    89.4 m          Iron      muIoni
-    3   -125 m   -18.8 cm   6.18 cm    332 GeV   117 GeV  33.2 m     123 m          Iron      muIoni
-    4  -98.2 m   -24.8 cm   4.46 cm    252 GeV  79.7 GeV  27.2 m     150 m          Iron      muIoni
-    5  -75.8 m     -33 cm   2.19 cm    197 GeV  55.1 GeV  22.4 m     172 m          Iron      muIoni
-    6  -57.1 m   -30.6 cm  -6.08 cm    152 GeV  45.1 GeV  18.7 m     191 m          Iron      muIoni
-    7  -41.8 m   -21.9 cm  -3.75 cm    122 GeV  29.6 GeV  15.2 m     206 m          Iron      muIoni
-    8    -29 m   -15.4 cm   7.41 mm   94.1 GeV  28.2 GeV  12.8 m     219 m          Iron      muIoni
-    9  -18.7 m   -6.98 cm   11.7 cm   75.2 GeV    19 GeV  10.3 m     229 m          Iron      muIoni
-   10  -10.2 m   -5.32 cm   14.9 cm   59.8 GeV  15.3 GeV  8.51 m     238 m          Iron      muIoni
-   11  -3.25 m    -2.9 cm   11.5 cm   48.1 GeV  11.7 GeV  6.98 m     245 m          Iron      muIoni
-   12   2.52 m    2.39 cm   8.84 cm   29.7 GeV  18.4 GeV  5.77 m     250 m          Iron      muIoni
-   13   6.27 m    1.65 cm   2.52 mm   23.3 GeV  6.48 GeV  3.76 m     254 m          Iron      muIoni
-   14   9.28 m    7.31 mm  -4.96 cm   18.9 GeV  4.35 GeV  3.01 m     257 m          Iron      muIoni
-   15   11.8 m   -6.78 cm  -4.58 cm   15.4 GeV  3.52 GeV   2.5 m     260 m          Iron      muIoni
-   16   13.9 m     -14 cm  -6.18 cm   12.3 GeV  3.13 GeV  2.07 m     262 m          Iron      muIoni
-   17   15.5 m   -16.8 cm  -4.98 cm   9.96 GeV   2.3 GeV  1.69 m     263 m          Iron      muIoni
-   18   16.9 m   -17.5 cm    4.6 cm   8.18 GeV  1.78 GeV  1.39 m     265 m          Iron      muIoni
-   19   18.1 m     -18 cm   16.2 cm   6.63 GeV  1.55 GeV  1.16 m     266 m          Iron      muIoni
-   20     19 m   -19.1 cm   28.4 cm   5.35 GeV  1.29 GeV  96.1 cm    267 m          Iron      muIoni
-   21   19.8 m   -20.4 cm   35.4 cm   4.13 GeV  1.21 GeV  78.8 cm    268 m          Iron      muIoni
-   22   20.4 m   -22.7 cm   42.9 cm   3.34 GeV   797 MeV  62.2 cm    268 m          Iron      muIoni
-   23   20.9 m   -24.6 cm   49.3 cm    2.7 GeV   634 MeV    51 cm    269 m          Iron      muIoni
-   24   21.4 m   -25.3 cm     54 cm   2.11 GeV   588 MeV    42 cm    269 m          Iron      muIoni
-   25   21.7 m   -25.4 cm   57.6 cm   1.65 GeV   464 MeV  33.4 cm    270 m          Iron      muIoni
-   26     22 m   -25.7 cm   60.6 cm   1.32 GeV   328 MeV  26.4 cm    270 m          Iron      muIoni
-   27   22.2 m     -27 cm   64.6 cm    999 MeV   323 MeV  21.4 cm    270 m          Iron      muIoni
-   28   22.3 m   -26.9 cm   68.2 cm    814 MeV   185 MeV  16.3 cm    270 m          Iron      muIoni
-   29   22.4 m   -28.3 cm   73.9 cm    626 MeV   188 MeV  13.3 cm    270 m          Iron      muIoni
-   30   22.5 m   -31.3 cm   78.6 cm    502 MeV   124 MeV  10.2 cm    271 m          Iron      muIoni
-   31   22.6 m   -33.1 cm   82.6 cm    396 MeV   106 MeV  8.11 cm    271 m          Iron      muIoni
-   32   22.6 m   -34.7 cm   86.2 cm    323 MeV  73.6 MeV  6.31 cm    271 m          Iron      muIoni
-   33   22.7 m   -36.4 cm     89 cm    269 MeV    54 MeV  5.04 cm    271 m          Iron      muIoni
-   34   22.7 m   -38.1 cm   91.1 cm    222 MeV    47 MeV  4.11 cm    271 m          Iron      muIoni
-   35   22.7 m   -39.5 cm     93 cm    187 MeV  34.7 MeV   3.3 cm    271 m          Iron      muIoni
-   36   22.8 m   -40.6 cm   94.4 cm    152 MeV  35.3 MeV   2.7 cm    271 m          Iron      muIoni
-   37   22.8 m   -41.4 cm   95.6 cm    127 MeV  24.4 MeV   2.1 cm    271 m          Iron      muIoni
-   38   22.8 m   -42.1 cm   96.6 cm    108 MeV  19.7 MeV   1.7 cm    271 m          Iron      muIoni
-   39   22.8 m   -42.6 cm   97.5 cm   90.4 MeV  17.2 MeV  1.38 cm    271 m          Iron      muIoni
-   40   22.8 m   -42.9 cm   98.2 cm   71.2 MeV  19.2 MeV  1.12 cm    271 m          Iron      muIoni
-   41   22.8 m   -43.1 cm   98.7 cm   60.1 MeV    11 MeV  8.35 mm    271 m          Iron      muIoni
-   42   22.8 m   -43.2 cm   99.1 cm   49.8 MeV  10.3 MeV  6.83 mm    271 m          Iron      muIoni
-   43   22.8 m   -43.3 cm   99.4 cm   39.9 MeV  9.98 MeV  5.49 mm    271 m          Iron      muIoni
-   44   22.8 m   -43.4 cm   99.6 cm   32.1 MeV  7.73 MeV   4.3 mm    271 m          Iron      muIoni
-   45   22.8 m   -43.4 cm   99.8 cm   24.8 MeV  7.34 MeV  3.46 mm    271 m          Iron      muIoni
-   46   22.8 m   -43.5 cm   99.9 cm   17.4 MeV  7.36 MeV  2.74 mm    271 m          Iron      muIoni
-   47   22.8 m   -43.6 cm      1 m    10.8 MeV  6.65 MeV  2.07 mm    271 m          Iron      muIoni
-   48   22.8 m   -43.7 cm      1 m       3 MeV  7.79 MeV  1.38 mm    271 m          Iron      muIoni
-   49   22.8 m   -43.7 cm      1 m       0 eV      3 MeV   161 um    271 m          Iron      muIoni
-   50   22.8 m   -43.7 cm      1 m       0 eV      0 eV      0 fm    271 m          Iron       Decay
+    0   -247 m       0 fm      0 fm    818 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -200 m    3.47 cm   5.74 cm    595 GeV   223 GeV  47.3 m    47.3 m          Iron      muIoni
+    2   -160 m    3.43 cm   16.3 cm    441 GeV   154 GeV  39.5 m    86.7 m          Iron      muIoni
+    3   -127 m   -7.37 cm   29.7 cm    327 GeV   114 GeV  32.8 m     120 m          Iron      muIoni
+    4   -100 m   -14.3 cm   41.5 cm    251 GeV  76.1 GeV    27 m     147 m          Iron      muIoni
+    5    -78 m   -14.2 cm   56.8 cm    193 GeV  58.6 GeV  22.4 m     169 m          Iron      muIoni
+    6  -59.7 m   -15.9 cm   82.4 cm    153 GeV  39.5 GeV  18.3 m     187 m          Iron      muIoni
+    7  -44.4 m   -22.8 cm   1.01 m     119 GeV  33.8 GeV  15.3 m     203 m          Iron      muIoni
+    8  -31.8 m     -26 cm   1.14 m    89.8 GeV  29.5 GeV  12.5 m     215 m          Iron      muIoni
+    9  -21.9 m   -30.1 cm   1.25 m    71.1 GeV  18.7 GeV  9.89 m     225 m          Iron      muIoni
+   10  -13.8 m     -34 cm   1.41 m    50.7 GeV  20.3 GeV   8.1 m     233 m          Iron      muIoni
+   11  -7.79 m   -39.6 cm   1.53 m    41.1 GeV  9.61 GeV  6.04 m     239 m          Iron      muIoni
+   12  -2.77 m   -44.6 cm   1.59 m    32.2 GeV  8.95 GeV  5.02 m     244 m          Iron      muIoni
+   13   1.26 m   -51.9 cm   1.56 m    24.7 GeV  7.41 GeV  4.03 m     248 m          Iron      muIoni
+   14   4.45 m   -53.4 cm   1.58 m    19.5 GeV  5.27 GeV  3.19 m     251 m          Iron      muIoni
+   15      7 m   -79.4 cm    1.6 m    15.2 GeV  4.23 GeV  2.57 m     254 m          Iron      muIoni
+   16   9.04 m   -98.1 cm   1.63 m    12.4 GeV  2.89 GeV  2.05 m     256 m          Iron      muIoni
+   17   10.7 m   -1.19 m    1.62 m      10 GeV  2.34 GeV   1.7 m     258 m          Iron      muIoni
+   18   12.1 m   -1.38 m    1.62 m    7.99 GeV  2.02 GeV   1.4 m     259 m          Iron      muIoni
+   19   13.2 m   -1.55 m    1.62 m    6.61 GeV  1.38 GeV  1.14 m     260 m          Iron      muIoni
+   20   14.2 m   -1.69 m    1.63 m    3.72 GeV  2.89 GeV  95.8 cm    261 m          Iron      muIoni
+   21   14.7 m   -1.77 m    1.63 m       3 GeV   720 MeV  56.4 cm    262 m          Iron      muIoni
+   22   15.2 m   -1.82 m    1.64 m    2.41 GeV   590 MeV  46.2 cm    262 m          Iron      muIoni
+   23   15.6 m   -1.86 m    1.64 m    1.95 GeV   463 MeV  37.7 cm    263 m          Iron      muIoni
+   24   15.9 m   -1.89 m    1.66 m    1.36 GeV   584 MeV  30.8 cm    263 m          Iron      muIoni
+   25   16.1 m   -1.91 m    1.67 m    1.12 GeV   243 MeV    22 cm    263 m          Iron      muIoni
+   26   16.3 m   -1.91 m    1.66 m     903 MeV   216 MeV  18.2 cm    263 m          Iron      muIoni
+   27   16.4 m   -1.91 m    1.66 m     714 MeV   188 MeV  14.7 cm    263 m          Iron      muIoni
+   28   16.5 m   -1.92 m    1.66 m     588 MeV   127 MeV  11.7 cm    264 m          Iron      muIoni
+   29   16.6 m   -1.92 m    1.66 m     473 MeV   115 MeV  9.55 cm    264 m          Iron      muIoni
+   30   16.7 m   -1.92 m    1.67 m     374 MeV  98.9 MeV  7.62 cm    264 m          Iron      muIoni
+   31   16.8 m   -1.93 m    1.67 m     302 MeV  72.6 MeV  5.93 cm    264 m          Iron      muIoni
+   32   16.8 m   -1.94 m    1.67 m     245 MeV  56.2 MeV  4.68 cm    264 m          Iron      muIoni
+   33   16.9 m   -1.95 m    1.67 m     204 MeV  41.2 MeV   3.7 cm    264 m          Iron      muIoni
+   34   16.9 m   -1.96 m    1.67 m     169 MeV  34.8 MeV  2.99 cm    264 m          Iron      muIoni
+   35   16.9 m   -1.97 m    1.68 m     143 MeV  26.5 MeV   2.4 cm    264 m          Iron      muIoni
+   36   16.9 m   -1.98 m    1.68 m     119 MeV  24.3 MeV  1.96 cm    264 m          Iron      muIoni
+   37   16.9 m   -1.98 m    1.68 m    99.4 MeV  19.2 MeV  1.56 cm    264 m          Iron      muIoni
+   38     17 m   -1.99 m    1.69 m    82.5 MeV  16.9 MeV  1.25 cm    264 m          Iron      muIoni
+   39     17 m   -1.99 m    1.69 m    68.6 MeV    14 MeV  9.99 mm    264 m          Iron      muIoni
+   40     17 m   -1.99 m    1.69 m    56.8 MeV  11.8 MeV  7.99 mm    264 m          Iron      muIoni
+   41     17 m      -2 m    1.69 m    46.3 MeV  10.4 MeV  6.39 mm    264 m          Iron      muIoni
+   42     17 m      -2 m    1.69 m    37.7 MeV  8.64 MeV  5.07 mm    264 m          Iron      muIoni
+   43     17 m      -2 m     1.7 m      30 MeV  7.68 MeV  4.07 mm    264 m          Iron      muIoni
+   44     17 m      -2 m     1.7 m    23.1 MeV   6.9 MeV  3.25 mm    264 m          Iron      muIoni
+   45     17 m      -2 m     1.7 m    15.8 MeV  7.29 MeV  2.59 mm    264 m          Iron      muIoni
+   46     17 m      -2 m     1.7 m    8.65 MeV  7.18 MeV  1.92 mm    264 m          Iron      muIoni
+   47     17 m      -2 m     1.7 m     407 keV  8.25 MeV  1.04 mm    264 m          Iron      muIoni
+   48     17 m      -2 m     1.7 m       0 eV    407 keV  5.46 um    264 m          Iron      muIoni
+   49     17 m      -2 m     1.7 m       0 eV      0 eV      0 fm    264 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   22.8 m   -43.7 cm      1 m    42.3 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   22.8 m   -43.3 cm      1 m    27.9 MeV  14.4 MeV  5.87 mm   5.87 mm         Iron       eIoni
-    2   22.8 m   -43.1 cm   1.01 m    17.2 MeV  10.7 MeV  4.86 mm   1.07 cm         Iron       eIoni
-    3   22.8 m   -43.1 cm   1.01 m    10.7 MeV  6.52 MeV  3.89 mm   1.46 cm         Iron       eIoni
-    4   22.8 m     -43 cm   1.01 m    6.83 MeV  3.89 MeV  3.14 mm   1.78 cm         Iron       eIoni
-    5   22.8 m     -43 cm      1 m    3.66 MeV  3.18 MeV  2.58 mm   2.03 cm         Iron       eIoni
-    6   22.8 m     -43 cm      1 m    1.57 MeV  2.09 MeV  1.97 mm   2.23 cm         Iron       eIoni
-    7   22.8 m     -43 cm      1 m       0 eV   1.57 MeV  1.25 mm   2.36 cm         Iron       eIoni
+    0     17 m      -2 m     1.7 m      17 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1     17 m      -2 m     1.7 m    7.19 MeV  9.78 MeV  3.86 mm   3.86 mm         Iron       eIoni
+    2     17 m      -2 m     1.7 m    3.56 MeV  3.63 MeV  2.63 mm    6.5 mm         Iron       eIoni
+    3     17 m      -2 m     1.7 m    1.51 MeV  2.05 MeV  1.95 mm   8.45 mm         Iron       eIoni
+    4     17 m      -2 m     1.7 m    44.3 keV  1.46 MeV  1.21 mm   9.65 mm         Iron       eIoni
+    5     17 m      -2 m     1.7 m       0 eV   44.3 keV  6.92 um   9.66 mm         Iron       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_e,   Track ID = 5,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   22.8 m   -43.7 cm      1 m    33.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1  -98.9 m    9.61 m    -250 m    33.7 MeV     0 eV    279 m     279 m    OutOfWorld  Transportation
+    0     17 m      -2 m     1.7 m    43.4 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    164 m    -250 m    60.5 m    43.4 MeV     0 eV    294 m     294 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_mu,   Track ID = 4,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   22.8 m   -43.7 cm      1 m    28.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -159 m    -250 m     111 m    28.7 MeV     0 eV    328 m     328 m    OutOfWorld  Transportation
+    0     17 m      -2 m     1.7 m    44.3 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -181 m     250 m    55.2 m    44.3 MeV     0 eV    325 m     325 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -248 m       0 fm      0 fm    124 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -235 m    2.11 cm   2.95 cm   92.6 GeV  31.1 GeV  12.9 m    12.9 m          Iron      muIoni
-    2   -225 m     1.5 cm      8 cm   72.5 GeV  20.1 GeV  10.1 m      23 m          Iron      muIoni
-    3   -217 m    1.94 cm   9.45 cm   56.5 GeV  15.9 GeV  8.23 m    31.3 m          Iron      muIoni
-    4   -210 m    7.23 cm   16.8 cm   45.8 GeV  10.7 GeV  6.63 m    37.9 m          Iron      muIoni
-    5   -205 m    4.14 cm   24.9 cm   35.4 GeV  10.5 GeV  5.52 m    43.4 m          Iron      muIoni
-    6   -200 m    5.08 cm   37.5 cm     29 GeV  6.38 GeV  4.38 m    47.8 m          Iron      muIoni
-    7   -196 m    4.76 cm   48.8 cm   23.8 GeV  5.21 GeV  3.66 m    51.5 m          Iron      muIoni
-    8   -193 m    4.62 cm   59.3 cm     19 GeV  4.78 GeV  3.07 m    54.5 m          Iron      muIoni
-    9   -191 m    9.01 cm   71.1 cm   12.5 GeV  6.49 GeV   2.5 m      57 m          Iron      muIoni
-   10   -189 m    10.3 cm   81.8 cm   10.2 GeV  2.31 GeV  1.71 m    58.7 m          Iron      muIoni
-   11   -188 m    8.75 cm   84.9 cm   8.09 GeV   2.1 GeV  1.42 m    60.2 m          Iron      muIoni
-   12   -187 m    10.8 cm   86.1 cm   6.44 GeV  1.65 GeV  1.15 m    61.3 m          Iron      muIoni
-   13   -186 m    12.9 cm   89.5 cm   5.14 GeV  1.31 GeV  93.4 cm   62.2 m          Iron      muIoni
-   14   -185 m    11.8 cm   92.4 cm    4.2 GeV   940 MeV  75.9 cm     63 m          Iron      muIoni
-   15   -184 m    11.2 cm   88.4 cm   3.39 GeV   812 MeV    63 cm   63.6 m          Iron      muIoni
-   16   -184 m    12.8 cm   84.9 cm   2.64 GeV   752 MeV  51.6 cm   64.1 m          Iron      muIoni
-   17   -183 m    13.5 cm   82.6 cm   2.17 GeV   464 MeV  40.9 cm   64.6 m          Iron      muIoni
-   18   -183 m    13.1 cm   81.5 cm   1.74 GeV   436 MeV  34.1 cm   64.9 m          Iron      muIoni
-   19   -183 m      12 cm   78.7 cm   1.41 GeV   326 MeV  27.6 cm   65.2 m          Iron      muIoni
-   20   -183 m    11.6 cm   76.5 cm   1.14 GeV   268 MeV  22.7 cm   65.4 m          Iron      muIoni
-   21   -182 m    10.8 cm   75.6 cm    894 MeV   247 MeV  18.5 cm   65.6 m          Iron      muIoni
-   22   -182 m    10.6 cm   73.6 cm    719 MeV   175 MeV  14.5 cm   65.7 m          Iron      muIoni
-   23   -182 m    10.6 cm   72.4 cm    591 MeV   128 MeV  11.7 cm   65.8 m          Iron      muIoni
-   24   -182 m    9.42 cm     71 cm    484 MeV   107 MeV  9.59 cm   65.9 m          Iron      muIoni
-   25   -182 m    7.96 cm   69.5 cm    405 MeV  79.3 MeV   7.8 cm     66 m          Iron      muIoni
-   26   -182 m    6.13 cm   66.9 cm    330 MeV  75.6 MeV  6.45 cm   66.1 m          Iron      muIoni
-   27   -182 m    4.66 cm   65.2 cm    272 MeV    57 MeV  5.15 cm   66.1 m          Iron      muIoni
-   28   -182 m    3.24 cm   63.6 cm    225 MeV  47.4 MeV  4.16 cm   66.2 m          Iron      muIoni
-   29   -182 m    2.08 cm   62.7 cm    183 MeV  41.7 MeV  3.35 cm   66.2 m          Iron      muIoni
-   30   -182 m    8.72 mm   62.4 cm    154 MeV    29 MeV  2.63 cm   66.2 m          Iron      muIoni
-   31   -182 m   -1.34 mm   62.2 cm    131 MeV  23.1 MeV  2.14 cm   66.3 m          Iron      muIoni
-   32   -182 m   -1.01 cm   61.9 cm    112 MeV  19.5 MeV  1.76 cm   66.3 m          Iron      muIoni
-   33   -182 m    -1.9 cm   61.8 cm   93.8 MeV  18.1 MeV  1.45 cm   66.3 m          Iron      muIoni
-   34   -182 m   -2.61 cm   61.7 cm   78.5 MeV  15.3 MeV  1.17 cm   66.3 m          Iron      muIoni
-   35   -182 m   -3.23 cm   61.5 cm   66.2 MeV  12.3 MeV  9.37 mm   66.3 m          Iron      muIoni
-   36   -182 m   -3.79 cm   61.3 cm   54.9 MeV  11.3 MeV  7.64 mm   66.3 m          Iron      muIoni
-   37   -182 m   -4.22 cm   61.3 cm   44.9 MeV  9.97 MeV  6.14 mm   66.3 m          Iron      muIoni
-   38   -182 m   -4.63 cm   61.3 cm   36.4 MeV  8.49 MeV   4.9 mm   66.3 m          Iron      muIoni
-   39   -182 m   -4.95 cm   61.3 cm   27.9 MeV  8.51 MeV  3.93 mm   66.3 m          Iron      muIoni
-   40   -182 m    -5.2 cm   61.2 cm   20.4 MeV  7.56 MeV  3.05 mm   66.3 m          Iron      muIoni
-   41   -182 m    -5.4 cm   61.2 cm   13.9 MeV  6.45 MeV  2.33 mm   66.3 m          Iron      muIoni
-   42   -182 m   -5.56 cm   61.2 cm   6.98 MeV  6.95 MeV  1.74 mm   66.3 m          Iron      muIoni
-   43   -182 m   -5.63 cm   61.2 cm      0 eV   6.98 MeV   712 um   66.3 m          Iron      muIoni
-   44   -182 m   -5.63 cm   61.2 cm      0 eV      0 eV      0 fm   66.3 m          Iron       Decay
+    0   -247 m       0 fm      0 fm    182 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -229 m   -1.82 cm   9.53 mm    145 GeV    37 GeV  17.5 m    17.5 m          Iron      muIoni
+    2   -215 m   -3.63 cm   4.31 cm    115 GeV  29.3 GeV  14.6 m    32.1 m          Iron      muIoni
+    3   -203 m   -5.18 cm   12.9 cm   90.7 GeV  24.7 GeV  12.2 m    44.3 m          Iron      muIoni
+    4   -193 m   -7.26 cm   25.6 cm   72.8 GeV  17.8 GeV  9.96 m    54.2 m          Iron      muIoni
+    5   -184 m   -19.3 cm   41.8 cm   55.3 GeV  17.5 GeV  8.26 m    62.5 m          Iron      muIoni
+    6   -178 m   -23.3 cm     58 cm   44.5 GeV  10.7 GeV   6.5 m      69 m          Iron      muIoni
+    7   -173 m     -31 cm   70.1 cm   35.5 GeV  9.05 GeV  5.38 m    74.4 m          Iron      muIoni
+    8   -168 m   -38.7 cm   76.9 cm   28.6 GeV  6.91 GeV  4.39 m    78.8 m          Iron      muIoni
+    9   -165 m   -44.1 cm   82.3 cm   22.5 GeV  6.11 GeV  3.62 m    82.4 m          Iron      muIoni
+   10   -162 m     -50 cm   90.9 cm   17.5 GeV  4.96 GeV  2.91 m    85.3 m          Iron      muIoni
+   11   -159 m     -53 cm      1 m    14.3 GeV  3.23 GeV  2.33 m    87.6 m          Iron      muIoni
+   12   -157 m     -54 cm    1.1 m    11.7 GeV  2.59 GeV  1.93 m    89.6 m          Iron      muIoni
+   13   -156 m   -55.2 cm   1.17 m    9.57 GeV  2.13 GeV  1.61 m    91.2 m          Iron      muIoni
+   14   -154 m   -57.4 cm   1.22 m    7.93 GeV  1.63 GeV  1.34 m    92.5 m          Iron      muIoni
+   15   -153 m   -58.6 cm   1.26 m    6.11 GeV  1.82 GeV  1.13 m    93.7 m          Iron      muIoni
+   16   -152 m   -59.1 cm   1.31 m    4.88 GeV  1.23 GeV  88.9 cm   94.5 m          Iron      muIoni
+   17   -152 m   -61.5 cm   1.33 m    3.89 GeV   993 MeV  72.4 cm   95.3 m          Iron      muIoni
+   18   -151 m     -63 cm   1.38 m    2.99 GeV   901 MeV  58.7 cm   95.9 m          Iron      muIoni
+   19   -151 m   -66.2 cm   1.44 m    2.41 GeV   578 MeV    46 cm   96.3 m          Iron      muIoni
+   20   -150 m   -69.1 cm   1.49 m    1.98 GeV   433 MeV  37.7 cm   96.7 m          Iron      muIoni
+   21   -150 m   -71.8 cm   1.53 m    1.63 GeV   351 MeV  31.3 cm     97 m          Iron      muIoni
+   22   -150 m   -75.5 cm   1.57 m    1.31 GeV   318 MeV    26 cm   97.3 m          Iron      muIoni
+   23   -149 m   -78.7 cm    1.6 m    1.04 GeV   265 MeV  21.1 cm   97.5 m          Iron      muIoni
+   24   -149 m   -81.8 cm   1.62 m     857 MeV   188 MeV    17 cm   97.6 m          Iron      muIoni
+   25   -149 m   -85.3 cm   1.63 m     694 MeV   163 MeV    14 cm   97.8 m          Iron      muIoni
+   26   -149 m   -87.7 cm   1.65 m     562 MeV   132 MeV  11.3 cm   97.9 m          Iron      muIoni
+   27   -149 m   -90.7 cm   1.66 m     461 MeV   101 MeV   9.1 cm     98 m          Iron      muIoni
+   28   -149 m     -93 cm   1.68 m     360 MeV   101 MeV  7.39 cm   98.1 m          Iron      muIoni
+   29   -149 m     -95 cm   1.68 m     296 MeV  63.9 MeV  5.67 cm   98.1 m          Iron      muIoni
+   30   -149 m   -96.6 cm   1.69 m     244 MeV  51.6 MeV  4.57 cm   98.2 m          Iron      muIoni
+   31   -149 m   -98.1 cm    1.7 m     204 MeV    40 MeV  3.68 cm   98.2 m          Iron      muIoni
+   32   -149 m     -97 cm   1.69 m     173 MeV    31 MeV  2.99 cm   98.2 m          Iron      muIoni
+   33   -149 m     -96 cm   1.68 m     141 MeV  32.2 MeV  2.46 cm   98.3 m          Iron      muIoni
+   34   -149 m   -94.9 cm   1.68 m     118 MeV  23.1 MeV  1.92 cm   98.3 m          Iron      muIoni
+   35   -149 m   -94.3 cm   1.67 m     100 MeV  17.6 MeV  1.55 cm   98.3 m          Iron      muIoni
+   36   -149 m   -93.8 cm   1.67 m    85.2 MeV  15.2 MeV  1.27 cm   98.3 m          Iron      muIoni
+   37   -149 m   -93.6 cm   1.67 m    71.4 MeV  13.7 MeV  1.04 cm   98.3 m          Iron      muIoni
+   38   -149 m   -93.4 cm   1.67 m    60.4 MeV    11 MeV  8.38 mm   98.3 m          Iron      muIoni
+   39   -149 m   -93.3 cm   1.68 m    49.7 MeV  10.7 MeV  6.86 mm   98.3 m          Iron      muIoni
+   40   -149 m   -93.2 cm   1.68 m    39.7 MeV    10 MeV  5.47 mm   98.3 m          Iron      muIoni
+   41   -149 m   -93.1 cm   1.67 m    31.3 MeV  8.43 MeV  4.28 mm   98.3 m          Iron      muIoni
+   42   -149 m   -93.1 cm   1.67 m    23.2 MeV  8.04 MeV  3.37 mm   98.3 m          Iron      muIoni
+   43   -149 m   -93.1 cm   1.67 m    15.9 MeV  7.32 MeV   2.6 mm   98.3 m          Iron      muIoni
+   44   -149 m   -93.1 cm   1.67 m    9.03 MeV   6.9 MeV  1.93 mm   98.3 m          Iron      muIoni
+   45   -149 m   -93.1 cm   1.67 m     599 keV  8.43 MeV  1.11 mm   98.3 m          Iron      muIoni
+   46   -149 m   -93.1 cm   1.67 m       0 eV    599 keV  10.3 um   98.3 m          Iron      muIoni
+   47   -149 m   -93.1 cm   1.67 m       0 eV      0 eV      0 fm   98.3 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 9,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -182 m   -5.63 cm   61.2 cm   32.5 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m    -181 m    -194 m    32.5 MeV     0 eV    274 m     274 m    OutOfWorld  Transportation
+    0   -149 m   -93.1 cm   1.67 m    46.1 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -250 m   -72.1 m    41.9 m    46.1 MeV     0 eV    130 m     130 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_e,   Track ID = 8,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -182 m   -5.63 cm   61.2 cm     23 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m    -5.4 m   -28.1 m      23 MeV     0 eV   74.3 m    74.3 m    OutOfWorld  Transportation
+    0   -149 m   -93.1 cm   1.67 m    7.76 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -250 m    43.9 m    22.9 m    7.76 MeV     0 eV    113 m     113 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_mu,   Track ID = 7,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -182 m   -5.63 cm   61.2 cm   49.1 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   46.5 m     180 m     250 m    49.1 MeV     0 eV    383 m     383 m    OutOfWorld  Transportation
+    0   -149 m   -93.1 cm   1.67 m    50.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m     206 m    -145 m    50.7 MeV     0 eV    473 m     473 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -862,164 +902,167 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm  1e+03 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -249 m       0 fm      0 fm      0 eV      0 eV   1.11 m    1.11 m          Iron  AnnihiToMuPair
+    1   -247 m       0 fm      0 fm      0 eV      0 eV   2.79 m    2.79 m          Iron  AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -249 m       0 fm      0 fm   61.3 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -242 m   -1.72 cm    5.5 mm   48.5 GeV  12.8 GeV  7.13 m    7.13 m          Iron      muIoni
-    2   -236 m   -6.77 cm   3.35 cm   28.1 GeV  20.4 GeV  5.81 m    12.9 m          Iron      muIoni
-    3   -232 m   -14.1 cm   6.52 cm   21.9 GeV  6.26 GeV  3.57 m    16.5 m          Iron      muIoni
-    4   -230 m   -21.5 cm   5.28 cm   17.4 GeV  4.49 GeV  2.85 m    19.4 m          Iron      muIoni
-    5   -227 m   -22.6 cm  -2.01 cm   13.8 GeV  3.55 GeV  2.31 m    21.7 m          Iron      muIoni
-    6   -225 m   -25.1 cm  -11.4 cm   11.2 GeV  2.64 GeV  1.88 m    23.6 m          Iron      muIoni
-    7   -224 m   -24.4 cm  -21.1 cm   9.09 GeV   2.1 GeV  1.55 m    25.1 m          Iron      muIoni
-    8   -223 m   -25.1 cm  -26.2 cm   7.44 GeV  1.65 GeV  1.28 m    26.4 m          Iron      muIoni
-    9   -221 m   -26.2 cm  -33.2 cm   5.82 GeV  1.62 GeV  1.07 m    27.5 m          Iron      muIoni
-   10   -221 m   -25.9 cm  -41.2 cm   4.25 GeV  1.57 GeV  85.2 cm   28.3 m          Iron      muIoni
-   11   -220 m   -23.8 cm  -46.8 cm   3.33 GeV   923 MeV  63.8 cm   28.9 m          Iron      muIoni
-   12   -219 m   -20.7 cm  -51.9 cm   2.36 GeV   967 MeV  50.9 cm   29.5 m          Iron      muIoni
-   13   -219 m   -16.6 cm  -53.9 cm   1.92 GeV   443 MeV    37 cm   29.8 m          Iron      muIoni
-   14   -219 m   -13.4 cm  -56.7 cm   1.44 GeV   482 MeV  30.4 cm   30.1 m          Iron      muIoni
-   15   -219 m   -10.9 cm    -58 cm   1.13 GeV   312 MeV  23.1 cm   30.4 m          Iron      muIoni
-   16   -218 m    -8.4 cm  -59.5 cm    917 MeV   208 MeV  18.3 cm   30.5 m          Iron      muIoni
-   17   -218 m   -6.72 cm  -61.9 cm    727 MeV   190 MeV    15 cm   30.7 m          Iron      muIoni
-   18   -218 m   -5.14 cm    -65 cm    598 MeV   129 MeV  11.9 cm   30.8 m          Iron      muIoni
-   19   -218 m   -3.65 cm  -67.1 cm    491 MeV   107 MeV  9.73 cm   30.9 m          Iron      muIoni
-   20   -218 m   -2.58 cm    -69 cm    398 MeV  93.1 MeV  7.93 cm     31 m          Iron      muIoni
-   21   -218 m   -1.52 cm  -70.5 cm    327 MeV  71.7 MeV  6.35 cm   31.1 m          Iron      muIoni
-   22   -218 m    -9.7 mm  -71.9 cm    256 MeV  70.5 MeV  5.11 cm   31.1 m          Iron      muIoni
-   23   -218 m   -7.69 mm  -72.9 cm    207 MeV  49.2 MeV  3.89 cm   31.1 m          Iron      muIoni
-   24   -218 m   -9.66 mm  -73.4 cm    172 MeV  34.6 MeV  3.04 cm   31.2 m          Iron      muIoni
-   25   -218 m   -1.04 cm  -73.6 cm    144 MeV  28.6 MeV  2.45 cm   31.2 m          Iron      muIoni
-   26   -218 m   -1.03 cm  -73.8 cm    118 MeV  25.2 MeV  1.97 cm   31.2 m          Iron      muIoni
-   27   -218 m   -1.12 cm  -73.8 cm    100 MeV  18.3 MeV  1.56 cm   31.2 m          Iron      muIoni
-   28   -218 m   -1.22 cm  -73.8 cm   83.8 MeV  16.3 MeV  1.26 cm   31.2 m          Iron      muIoni
-   29   -218 m   -1.39 cm  -73.8 cm   71.3 MeV  12.5 MeV  1.02 cm   31.3 m          Iron      muIoni
-   30   -218 m   -1.44 cm    -74 cm   58.5 MeV  12.9 MeV  8.37 mm   31.3 m          Iron      muIoni
-   31   -218 m   -1.51 cm    -74 cm     49 MeV  9.44 MeV  6.61 mm   31.3 m          Iron      muIoni
-   32   -218 m   -1.57 cm    -74 cm   39.6 MeV   9.4 MeV  5.39 mm   31.3 m          Iron      muIoni
-   33   -218 m   -1.65 cm    -74 cm   31.9 MeV  7.74 MeV  4.27 mm   31.3 m          Iron      muIoni
-   34   -218 m   -1.75 cm    -74 cm   24.5 MeV  7.34 MeV  3.43 mm   31.3 m          Iron      muIoni
-   35   -218 m   -1.85 cm  -74.1 cm     18 MeV  6.54 MeV  2.72 mm   31.3 m          Iron      muIoni
-   36   -218 m   -1.87 cm  -74.2 cm   11.2 MeV   6.8 MeV  2.12 mm   31.3 m          Iron      muIoni
-   37   -218 m   -1.88 cm  -74.2 cm   3.24 MeV  7.96 MeV  1.43 mm   31.3 m          Iron      muIoni
-   38   -218 m   -1.89 cm  -74.2 cm      0 eV   3.24 MeV   183 um   31.3 m          Iron      muIoni
-   39   -218 m   -1.89 cm  -74.2 cm      0 eV      0 eV      0 fm   31.3 m          Iron       Decay
+    0   -247 m       0 fm      0 fm    777 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -201 m    1.99 mm    2.4 cm    513 GeV   264 GeV    46 m      46 m          Iron      muIoni
+    2   -165 m    3.03 cm  -2.31 cm    323 GeV   190 GeV  36.1 m    82.1 m          Iron      muIoni
+    3   -138 m    2.69 cm   1.15 cm    238 GeV  85.2 GeV  26.7 m     109 m          Iron      muIoni
+    4   -117 m   -1.75 cm     -1 cm    184 GeV  53.7 GeV  21.5 m     130 m          Iron      muIoni
+    5  -99.2 m    8.75 cm  -6.03 cm    145 GeV  38.8 GeV  17.7 m     148 m          Iron      muIoni
+    6  -84.5 m    15.5 cm  -11.9 cm    116 GeV  29.1 GeV  14.7 m     163 m          Iron      muIoni
+    7  -72.3 m    7.61 cm  -5.09 cm   91.4 GeV  24.7 GeV  12.3 m     175 m          Iron      muIoni
+    8  -62.2 m      10 cm   6.93 cm   71.7 GeV  19.7 GeV    10 m     185 m          Iron      muIoni
+    9  -54.1 m      16 cm   20.4 cm   46.9 GeV  24.9 GeV  8.17 m     193 m          Iron      muIoni
+   10  -48.4 m    22.5 cm   31.4 cm   34.4 GeV  12.5 GeV  5.63 m     199 m          Iron      muIoni
+   11  -44.2 m    29.2 cm   40.9 cm     27 GeV  7.41 GeV  4.28 m     203 m          Iron      muIoni
+   12  -40.7 m    35.9 cm   44.4 cm   21.3 GeV  5.68 GeV  3.44 m     206 m          Iron      muIoni
+   13  -37.9 m    49.1 cm   48.4 cm     17 GeV   4.3 GeV  2.78 m     209 m          Iron      muIoni
+   14  -35.7 m    64.3 cm   52.8 cm   13.9 GeV  3.13 GeV  2.27 m     212 m          Iron      muIoni
+   15  -33.8 m    79.9 cm   75.3 cm   11.4 GeV  2.51 GeV  1.88 m     213 m          Iron      muIoni
+   16  -32.3 m    90.9 cm     95 cm   9.01 GeV  2.35 GeV  1.57 m     215 m          Iron      muIoni
+   17    -31 m       1 m     1.1 m    7.16 GeV  1.85 GeV  1.27 m     216 m          Iron      muIoni
+   18    -30 m     1.1 m    1.23 m     5.6 GeV  1.55 GeV  1.03 m     217 m          Iron      muIoni
+   19  -29.2 m    1.15 m    1.33 m    4.55 GeV  1.06 GeV  82.3 cm    218 m          Iron      muIoni
+   20  -28.5 m     1.2 m    1.39 m    3.63 GeV   912 MeV  67.9 cm    219 m          Iron      muIoni
+   21    -28 m    1.25 m    1.42 m    2.93 GeV   701 MeV  55.2 cm    219 m          Iron      muIoni
+   22  -27.5 m    1.29 m    1.45 m    2.26 GeV   678 MeV  45.3 cm    220 m          Iron      muIoni
+   23  -27.2 m    1.32 m    1.51 m    1.81 GeV   449 MeV  35.4 cm    220 m          Iron      muIoni
+   24  -26.9 m    1.34 m    1.56 m    1.45 GeV   359 MeV  28.7 cm    220 m          Iron      muIoni
+   25  -26.6 m    1.36 m    1.61 m    1.16 GeV   289 MeV  23.3 cm    221 m          Iron      muIoni
+   26  -26.5 m    1.36 m    1.64 m     924 MeV   234 MeV  18.8 cm    221 m          Iron      muIoni
+   27  -26.3 m    1.36 m    1.63 m     760 MeV   165 MeV  15.1 cm    221 m          Iron      muIoni
+   28  -26.2 m    1.37 m    1.64 m     610 MeV   150 MeV  12.4 cm    221 m          Iron      muIoni
+   29  -26.1 m    1.37 m    1.65 m     496 MeV   114 MeV  9.93 cm    221 m          Iron      muIoni
+   30    -26 m    1.37 m    1.66 m     404 MeV  91.9 MeV  8.01 cm    221 m          Iron      muIoni
+   31  -25.9 m    1.36 m    1.67 m     333 MeV  71.6 MeV  6.45 cm    221 m          Iron      muIoni
+   32  -25.9 m    1.36 m    1.68 m     281 MeV  51.4 MeV  5.21 cm    221 m          Iron      muIoni
+   33  -25.9 m    1.35 m    1.69 m     235 MeV  46.2 MeV  4.33 cm    221 m          Iron      muIoni
+   34  -25.8 m    1.34 m     1.7 m     191 MeV  44.3 MeV  3.53 cm    222 m          Iron      muIoni
+   35  -25.8 m    1.33 m    1.71 m     160 MeV  30.8 MeV  2.77 cm    222 m          Iron      muIoni
+   36  -25.8 m    1.32 m    1.72 m     133 MeV    27 MeV  2.24 cm    222 m          Iron      muIoni
+   37  -25.8 m    1.31 m    1.73 m     109 MeV  24.4 MeV  1.79 cm    222 m          Iron      muIoni
+   38  -25.8 m    1.31 m    1.73 m    87.7 MeV    21 MeV   1.4 cm    222 m          Iron      muIoni
+   39  -25.7 m    1.31 m    1.74 m    74.2 MeV  13.4 MeV  1.08 cm    222 m          Iron      muIoni
+   40  -25.7 m    1.31 m    1.74 m    59.1 MeV  15.1 MeV  8.79 mm    222 m          Iron      muIoni
+   41  -25.7 m    1.31 m    1.75 m    47.5 MeV  11.7 MeV  6.69 mm    222 m          Iron      muIoni
+   42  -25.7 m    1.31 m    1.75 m    37.8 MeV  9.68 MeV   5.2 mm    222 m          Iron      muIoni
+   43  -25.7 m    1.31 m    1.75 m    30.1 MeV  7.68 MeV  4.07 mm    222 m          Iron      muIoni
+   44  -25.7 m    1.31 m    1.75 m    22.6 MeV  7.49 MeV  3.26 mm    222 m          Iron      muIoni
+   45  -25.7 m    1.31 m    1.75 m      16 MeV  6.64 MeV  2.54 mm    222 m          Iron      muIoni
+   46  -25.7 m    1.31 m    1.75 m    8.72 MeV  7.25 MeV  1.93 mm    222 m          Iron      muIoni
+   47  -25.7 m    1.31 m    1.75 m       0 eV   8.72 MeV  1.05 mm    222 m          Iron      muIoni
+   48  -25.7 m    1.31 m    1.75 m       0 eV      0 eV      0 fm    222 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -218 m   -1.89 cm  -74.2 cm   44.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -218 m   -2.23 cm  -74.7 cm   26.4 MeV  18.3 MeV  6.01 mm   6.01 mm         Iron       eIoni
-    2   -218 m   -2.38 cm  -75.2 cm   12.2 MeV  14.2 MeV  4.74 mm   1.07 cm         Iron       eIoni
-    3   -218 m   -2.38 cm  -75.4 cm   7.32 MeV  4.88 MeV  3.32 mm   1.41 cm         Iron       eIoni
-    4   -218 m   -2.16 cm  -75.5 cm   4.17 MeV  3.15 MeV  2.65 mm   1.67 cm         Iron       eIoni
-    5   -218 m   -2.05 cm  -75.6 cm    1.8 MeV  2.37 MeV  2.09 mm   1.88 cm         Iron       eIoni
-    6   -218 m   -2.09 cm  -75.7 cm    415 keV  1.38 MeV  1.37 mm   2.02 cm         Iron       eIoni
-    7   -218 m   -2.08 cm  -75.7 cm      0 eV    415 keV   246 um   2.04 cm         Iron       eIoni
+    0  -25.7 m    1.31 m    1.75 m    45.2 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1  -25.7 m    1.31 m    1.75 m    6.81 MeV  38.4 MeV  6.04 mm   6.04 mm         Iron       eIoni
+    2  -25.7 m    1.31 m    1.75 m    4.08 MeV  2.72 MeV  2.57 mm   8.61 mm         Iron       eIoni
+    3  -25.7 m    1.32 m    1.75 m    1.84 MeV  2.24 MeV  2.07 mm   1.07 cm         Iron       eIoni
+    4  -25.7 m    1.32 m    1.75 m     262 keV  1.58 MeV  1.39 mm   1.21 cm         Iron       eIoni
+    5  -25.7 m    1.32 m    1.75 m       0 eV    262 keV   126 um   1.22 cm         Iron       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_e,   Track ID = 5,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -218 m   -1.89 cm  -74.2 cm   14.8 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m   -1.31 m    5.21 m    14.8 MeV     0 eV   32.9 m    32.9 m    OutOfWorld  Transportation
+    0  -25.7 m    1.31 m    1.75 m    49.5 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -192 m   -72.7 m     250 m    49.5 MeV     0 eV    308 m     308 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_mu,   Track ID = 4,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -218 m   -1.89 cm  -74.2 cm   45.2 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -117 m     130 m     250 m    45.2 MeV     0 eV    300 m     300 m    OutOfWorld  Transportation
+    0  -25.7 m    1.31 m    1.75 m    9.92 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m     118 m    27.4 m    9.92 MeV     0 eV    301 m     301 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -249 m       0 fm      0 fm    939 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -198 m    5.31 cm   -339 um    665 GeV   274 GeV  50.7 m    50.7 m          Iron      muIoni
-    2   -156 m    15.8 cm   3.48 cm    478 GeV   187 GeV  42.1 m    92.8 m          Iron      muIoni
-    3   -122 m    21.8 cm   12.8 cm    350 GeV   128 GeV  34.5 m     127 m          Iron      muIoni
-    4  -93.4 m    19.5 cm   20.9 cm    260 GeV  90.5 GeV  28.2 m     155 m          Iron      muIoni
-    5  -70.5 m    20.2 cm   30.4 cm    201 GeV  58.9 GeV  22.9 m     178 m          Iron      muIoni
-    6  -51.6 m    21.7 cm   37.9 cm    159 GeV  41.8 GeV  18.9 m     197 m          Iron      muIoni
-    7  -35.8 m    9.01 cm   49.2 cm    123 GeV  36.3 GeV  15.8 m     213 m          Iron      muIoni
-    8    -23 m    4.64 cm   57.1 cm   97.3 GeV  25.5 GeV  12.8 m     226 m          Iron      muIoni
-    9  -12.4 m    4.06 cm   57.3 cm   77.6 GeV  19.7 GeV  10.6 m     236 m          Iron      muIoni
-   10  -3.66 m    6.75 cm   55.7 cm   60.4 GeV  17.2 GeV  8.73 m     245 m          Iron      muIoni
-   11   3.36 m    15.1 cm   56.2 cm   47.2 GeV  13.2 GeV  7.03 m     252 m          Iron      muIoni
-   12   9.02 m    21.3 cm   54.6 cm   36.3 GeV  10.9 GeV  5.66 m     258 m          Iron      muIoni
-   13   13.5 m    25.7 cm   55.7 cm   29.2 GeV  7.11 GeV  4.48 m     262 m          Iron      muIoni
-   14   17.2 m    29.3 cm   57.5 cm     23 GeV  6.22 GeV  3.69 m     266 m          Iron      muIoni
-   15   20.2 m    32.4 cm   54.5 cm   18.1 GeV  4.82 GeV  2.97 m     269 m          Iron      muIoni
-   16   22.6 m      35 cm   54.5 cm   14.4 GeV  3.72 GeV   2.4 m     271 m          Iron      muIoni
-   17   24.5 m    40.2 cm   53.3 cm   11.2 GeV  3.19 GeV  1.95 m     273 m          Iron      muIoni
-   18   26.1 m    47.3 cm   51.6 cm   9.04 GeV  2.19 GeV  1.55 m     275 m          Iron      muIoni
-   19   27.3 m    55.6 cm   54.8 cm   7.36 GeV  1.68 GeV  1.27 m     276 m          Iron      muIoni
-   20   28.4 m      63 cm   58.8 cm   5.96 GeV   1.4 GeV  1.06 m     277 m          Iron      muIoni
-   21   29.2 m    66.7 cm   60.9 cm   4.86 GeV   1.1 GeV    87 cm    278 m          Iron      muIoni
-   22     30 m    71.8 cm   61.6 cm   2.36 GeV   2.5 GeV  72.1 cm    279 m          Iron      muIoni
-   23   30.3 m    75.2 cm   61.8 cm   1.94 GeV   428 MeV  36.9 cm    279 m          Iron      muIoni
-   24   30.6 m    77.3 cm   59.6 cm   1.56 GeV   374 MeV  30.6 cm    280 m          Iron      muIoni
-   25   30.9 m    78.8 cm     57 cm   1.24 GeV   319 MeV    25 cm    280 m          Iron      muIoni
-   26   31.1 m    81.2 cm   55.8 cm    995 MeV   247 MeV  20.1 cm    280 m          Iron      muIoni
-   27   31.2 m    83.1 cm   55.7 cm    774 MeV   222 MeV  16.2 cm    280 m          Iron      muIoni
-   28   31.4 m    85.1 cm   56.3 cm    616 MeV   158 MeV  12.6 cm    280 m          Iron      muIoni
-   29   31.5 m    86.9 cm   56.3 cm    510 MeV   106 MeV    10 cm    280 m          Iron      muIoni
-   30   31.6 m    88.2 cm     56 cm    422 MeV  88.4 MeV  8.23 cm    280 m          Iron      muIoni
-   31   31.6 m    89.3 cm   55.6 cm    346 MeV  75.7 MeV  6.73 cm    281 m          Iron      muIoni
-   32   31.7 m    90.3 cm   54.9 cm    288 MeV  58.1 MeV  5.43 cm    281 m          Iron      muIoni
-   33   31.7 m    91.3 cm   54.5 cm    239 MeV  49.5 MeV  4.43 cm    281 m          Iron      muIoni
-   34   31.7 m    92.4 cm     54 cm    196 MeV  42.5 MeV  3.58 cm    281 m          Iron      muIoni
-   35   31.8 m    93.2 cm   53.7 cm    167 MeV  29.5 MeV  2.85 cm    281 m          Iron      muIoni
-   36   31.8 m    93.8 cm   53.5 cm    141 MeV  25.7 MeV  2.35 cm    281 m          Iron      muIoni
-   37   31.8 m    94.1 cm   53.2 cm    119 MeV  22.4 MeV  1.92 cm    281 m          Iron      muIoni
-   38   31.8 m    94.5 cm   52.7 cm   99.4 MeV  19.2 MeV  1.56 cm    281 m          Iron      muIoni
-   39   31.8 m    94.7 cm   52.2 cm   83.8 MeV  15.6 MeV  1.25 cm    281 m          Iron      muIoni
-   40   31.9 m      95 cm   52.1 cm   70.7 MeV  13.1 MeV  1.02 cm    281 m          Iron      muIoni
-   41   31.9 m    95.2 cm     52 cm   59.6 MeV    11 MeV  8.27 mm    281 m          Iron      muIoni
-   42   31.9 m    95.2 cm   51.9 cm   50.2 MeV  9.38 MeV  6.75 mm    281 m          Iron      muIoni
-   43   31.9 m    95.2 cm   51.8 cm   41.3 MeV  8.96 MeV  5.53 mm    281 m          Iron      muIoni
-   44   31.9 m    95.4 cm   51.7 cm   33.8 MeV  7.45 MeV  4.46 mm    281 m          Iron      muIoni
-   45   31.9 m    95.5 cm   51.7 cm   26.1 MeV  7.73 MeV  3.65 mm    281 m          Iron      muIoni
-   46   31.9 m    95.6 cm   51.7 cm     19 MeV   7.1 MeV  2.87 mm    281 m          Iron      muIoni
-   47   31.9 m    95.7 cm   51.6 cm   12.8 MeV  6.23 MeV  2.21 mm    281 m          Iron      muIoni
-   48   31.9 m    95.7 cm   51.6 cm   5.78 MeV  6.98 MeV  1.61 mm    281 m          Iron      muIoni
-   49   31.9 m    95.7 cm   51.6 cm      0 eV   5.78 MeV   512 um    281 m          Iron      muIoni
-   50   31.9 m    95.7 cm   51.6 cm      0 eV      0 eV      0 fm    281 m          Iron       Decay
+    0   -247 m       0 fm      0 fm    223 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -227 m   -4.84 cm  -6.35 cm    172 GeV  50.1 GeV  20.4 m    20.4 m          Iron      muIoni
+    2   -210 m    -9.1 cm  -13.2 cm    130 GeV  42.4 GeV  16.8 m    37.2 m          Iron      muIoni
+    3   -197 m   -9.63 cm  -26.6 cm   91.3 GeV  38.7 GeV  13.4 m    50.6 m          Iron      muIoni
+    4   -187 m     -14 cm  -29.8 cm   73.3 GeV    18 GeV    10 m    60.7 m          Iron      muIoni
+    5   -178 m   -38.6 cm  -36.6 cm   58.8 GeV  14.6 GeV  8.31 m      69 m          Iron      muIoni
+    6   -171 m   -64.1 cm  -43.5 cm     48 GeV  10.7 GeV  6.86 m    75.8 m          Iron      muIoni
+    7   -166 m   -87.1 cm    -55 cm     39 GeV  8.99 GeV  5.75 m    81.6 m          Iron      muIoni
+    8   -161 m    -1.1 m     -63 cm   31.2 GeV  7.86 GeV  4.79 m    86.4 m          Iron      muIoni
+    9   -157 m   -1.24 m     -72 cm   23.3 GeV  7.85 GeV  3.92 m    90.3 m          Iron      muIoni
+   10   -154 m   -1.33 m   -77.1 cm   19.2 GeV  4.17 GeV  3.01 m    93.3 m          Iron      muIoni
+   11   -151 m   -1.42 m   -72.2 cm   15.6 GeV  3.54 GeV  2.52 m    95.8 m          Iron      muIoni
+   12   -149 m   -1.53 m   -64.4 cm   12.2 GeV  3.43 GeV   2.1 m    97.9 m          Iron      muIoni
+   13   -148 m   -1.62 m   -56.5 cm   9.93 GeV  2.27 GeV  1.67 m    99.6 m          Iron      muIoni
+   14   -146 m   -1.74 m     -48 cm   7.98 GeV  1.94 GeV  1.39 m     101 m          Iron      muIoni
+   15   -145 m   -1.84 m   -44.1 cm   6.57 GeV  1.42 GeV  1.14 m     102 m          Iron      muIoni
+   16   -144 m   -1.91 m   -39.9 cm   5.33 GeV  1.24 GeV    95 cm    103 m          Iron      muIoni
+   17   -143 m   -2.01 m   -36.2 cm   4.32 GeV  1.01 GeV  78.4 cm    104 m          Iron      muIoni
+   18   -143 m   -2.06 m   -32.9 cm   3.56 GeV   760 MeV  64.6 cm    104 m          Iron      muIoni
+   19   -142 m   -2.11 m   -26.6 cm   2.88 GeV   682 MeV  54.1 cm    105 m          Iron      muIoni
+   20   -142 m   -2.15 m   -21.6 cm   2.32 GeV   559 MeV  44.4 cm    105 m          Iron      muIoni
+   21   -141 m    -2.2 m   -17.4 cm   1.83 GeV   487 MeV  36.3 cm    106 m          Iron      muIoni
+   22   -141 m   -2.23 m   -14.6 cm    1.5 GeV   330 MeV  29.1 cm    106 m          Iron      muIoni
+   23   -141 m   -2.26 m   -11.9 cm   1.24 GeV   264 MeV  24.1 cm    106 m          Iron      muIoni
+   24   -141 m   -2.27 m     -10 cm    883 MeV   354 MeV    20 cm    107 m          Iron      muIoni
+   25   -141 m   -2.27 m   -7.84 cm    696 MeV   186 MeV  14.4 cm    107 m          Iron      muIoni
+   26   -140 m   -2.28 m   -5.73 cm    551 MeV   146 MeV  11.3 cm    107 m          Iron      muIoni
+   27   -140 m    -2.3 m   -4.32 cm    443 MeV   108 MeV  8.91 cm    107 m          Iron      muIoni
+   28   -140 m   -2.31 m   -3.61 cm    366 MeV  76.5 MeV  7.09 cm    107 m          Iron      muIoni
+   29   -140 m   -2.31 m   -3.44 cm    303 MeV  63.3 MeV  5.78 cm    107 m          Iron      muIoni
+   30   -140 m   -2.31 m   -3.46 cm    255 MeV  47.6 MeV  4.69 cm    107 m          Iron      muIoni
+   31   -140 m   -2.31 m   -3.79 cm    212 MeV  43.7 MeV  3.87 cm    107 m          Iron      muIoni
+   32   -140 m   -2.31 m   -4.02 cm    176 MeV  35.2 MeV  3.12 cm    107 m          Iron      muIoni
+   33   -140 m   -2.31 m    -3.8 cm    146 MeV  30.2 MeV  2.52 cm    107 m          Iron      muIoni
+   34   -140 m   -2.31 m    -3.7 cm    118 MeV    28 MeV  2.01 cm    107 m          Iron      muIoni
+   35   -140 m    -2.3 m    -3.8 cm   99.5 MeV  18.7 MeV  1.55 cm    107 m          Iron      muIoni
+   36   -140 m    -2.3 m   -3.93 cm   84.1 MeV  15.4 MeV  1.25 cm    107 m          Iron      muIoni
+   37   -140 m    -2.3 m   -3.92 cm   67.6 MeV  16.5 MeV  1.02 cm    107 m          Iron      muIoni
+   38   -140 m   -2.29 m   -3.87 cm   56.5 MeV  11.1 MeV  7.84 mm    107 m          Iron      muIoni
+   39   -140 m   -2.29 m   -3.85 cm   46.1 MeV  10.4 MeV  6.34 mm    107 m          Iron      muIoni
+   40   -140 m   -2.29 m   -3.85 cm   36.9 MeV  9.21 MeV  5.03 mm    107 m          Iron      muIoni
+   41   -140 m   -2.29 m    -3.7 cm   26.9 MeV  9.98 MeV  3.97 mm    107 m          Iron      muIoni
+   42   -140 m   -2.29 m   -3.55 cm   19.6 MeV  7.27 MeV  2.94 mm    107 m          Iron      muIoni
+   43   -140 m   -2.29 m   -3.49 cm   12.4 MeV  7.16 MeV  2.26 mm    107 m          Iron      muIoni
+   44   -140 m   -2.29 m   -3.43 cm    4.5 MeV  7.95 MeV  1.58 mm    107 m          Iron      muIoni
+   45   -140 m   -2.29 m   -3.43 cm      0 eV    4.5 MeV   330 um    107 m          Iron      muIoni
+   46   -140 m   -2.29 m   -3.43 cm      0 eV      0 eV      0 fm    107 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 9,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   31.9 m    95.7 cm   51.6 cm   38.1 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -118 m   -26.6 m    -250 m    38.1 MeV     0 eV    293 m     293 m    OutOfWorld  Transportation
+    0   -140 m   -2.29 m   -3.43 cm   23.3 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -250 m   -26.8 m   -49.2 m    23.3 MeV     0 eV    123 m     123 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_e,   Track ID = 8,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   31.9 m    95.7 cm   51.6 cm   26.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -199 m    12.4 m     250 m    26.7 MeV     0 eV    340 m     340 m    OutOfWorld  Transportation
+    0   -140 m   -2.29 m   -3.43 cm   34.1 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -151 m    -250 m   -58.2 m    34.1 MeV     0 eV    255 m     255 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_mu,   Track ID = 7,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   31.9 m    95.7 cm   51.6 cm   39.9 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m    16.5 m      76 m    39.9 MeV     0 eV    231 m     231 m    OutOfWorld  Transportation
+    0   -140 m   -2.29 m   -3.43 cm   47.2 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   9.51 m     250 m     114 m    47.2 MeV     0 eV    315 m     315 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 1,   Parent ID = 0
@@ -1027,169 +1070,171 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm  1e+03 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m       0 fm      0 fm      0 eV      0 eV   6.98 cm   6.98 cm         Iron  AnnihiToMuPair
+    1   -245 m       0 fm      0 fm      0 eV      0 eV   4.97 m    4.97 m          Iron  AnnihiToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    717 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -206 m   -2.49 cm  -1.07 cm    527 GeV   190 GeV  43.9 m    43.9 m          Iron      muIoni
-    2   -169 m   -5.68 cm  -10.5 cm    327 GeV   200 GeV  36.7 m    80.6 m          Iron      muIoni
-    3   -142 m    7.72 mm  -24.8 cm    256 GeV  71.5 GeV    27 m     108 m          Iron      muIoni
-    4   -120 m     9.7 cm  -34.5 cm   57.6 GeV   198 GeV  22.7 m     130 m          Iron      muIoni
-    5   -113 m    7.54 cm  -44.4 cm   45.1 GeV  12.6 GeV  6.76 m     137 m          Iron      muIoni
-    6   -107 m     4.6 cm  -50.9 cm   35.1 GeV  9.92 GeV  5.44 m     142 m          Iron      muIoni
-    7   -103 m    3.37 cm    -58 cm   27.4 GeV  7.76 GeV  4.36 m     147 m          Iron      muIoni
-    8  -99.6 m   -6.99 mm  -65.7 cm   21.8 GeV   5.6 GeV  3.49 m     150 m          Iron      muIoni
-    9  -96.8 m   -3.88 cm  -73.8 cm   16.6 GeV  5.21 GeV  2.84 m     153 m          Iron      muIoni
-   10  -94.6 m   -2.99 cm  -82.1 cm   12.5 GeV  4.11 GeV  2.22 m     155 m          Iron      muIoni
-   11  -92.9 m   -5.44 mm  -87.5 cm   10.3 GeV  2.19 GeV  1.71 m     157 m          Iron      muIoni
-   12  -91.5 m    6.98 mm  -91.4 cm   7.64 GeV  2.64 GeV  1.43 m     158 m          Iron      muIoni
-   13  -90.4 m    2.31 cm  -97.7 cm   6.14 GeV  1.49 GeV  1.09 m     160 m          Iron      muIoni
-   14  -89.5 m    6.13 cm  -1.04 m    4.93 GeV  1.22 GeV  89.6 cm    160 m          Iron      muIoni
-   15  -88.7 m    8.12 cm  -1.09 m    3.65 GeV  1.28 GeV  73.2 cm    161 m          Iron      muIoni
-   16  -88.2 m    10.7 cm  -1.13 m    2.94 GeV   711 MeV  55.4 cm    162 m          Iron      muIoni
-   17  -87.7 m    14.9 cm  -1.17 m    2.23 GeV   713 MeV  45.3 cm    162 m          Iron      muIoni
-   18  -87.4 m    19.6 cm  -1.18 m    1.73 GeV   494 MeV    35 cm    163 m          Iron      muIoni
-   19  -87.1 m    22.6 cm  -1.19 m    1.29 GeV   439 MeV  27.6 cm    163 m          Iron      muIoni
-   20  -86.9 m    24.8 cm   -1.2 m     938 MeV   354 MeV  20.9 cm    163 m          Iron      muIoni
-   21  -86.8 m    26.1 cm  -1.21 m     781 MeV   156 MeV  15.3 cm    163 m          Iron      muIoni
-   22  -86.6 m    27.4 cm   -1.2 m     638 MeV   144 MeV  12.8 cm    163 m          Iron      muIoni
-   23  -86.5 m      27 cm  -1.18 m     517 MeV   121 MeV  10.4 cm    163 m          Iron      muIoni
-   24  -86.4 m    26.3 cm  -1.18 m     416 MeV   101 MeV  8.36 cm    164 m          Iron      muIoni
-   25  -86.4 m    23.2 cm  -1.21 m     332 MeV  83.5 MeV  6.64 cm    164 m          Iron      muIoni
-   26  -86.4 m    20.9 cm  -1.24 m     268 MeV  64.7 MeV  5.21 cm    164 m          Iron      muIoni
-   27  -86.3 m    18.9 cm  -1.27 m     223 MeV  44.4 MeV  4.09 cm    164 m          Iron      muIoni
-   28  -86.3 m      17 cm  -1.29 m     183 MeV  40.8 MeV  3.32 cm    164 m          Iron      muIoni
-   29  -86.3 m    15.7 cm  -1.31 m     148 MeV  34.7 MeV  2.62 cm    164 m          Iron      muIoni
-   30  -86.3 m    14.7 cm  -1.32 m     121 MeV  26.7 MeV  2.04 cm    164 m          Iron      muIoni
-   31  -86.3 m      14 cm  -1.33 m     101 MeV  20.2 MeV   1.6 cm    164 m          Iron      muIoni
-   32  -86.3 m    13.6 cm  -1.34 m    85.4 MeV  15.5 MeV  1.28 cm    164 m          Iron      muIoni
-   33  -86.3 m    13.4 cm  -1.35 m    72.4 MeV    13 MeV  1.04 cm    164 m          Iron      muIoni
-   34  -86.3 m    13.2 cm  -1.35 m    57.5 MeV  14.9 MeV  8.53 mm    164 m          Iron      muIoni
-   35  -86.3 m    13.2 cm  -1.35 m    47.4 MeV    10 MeV  6.48 mm    164 m          Iron      muIoni
-   36  -86.3 m    13.1 cm  -1.36 m    38.2 MeV  9.24 MeV   5.2 mm    164 m          Iron      muIoni
-   37  -86.2 m    13.1 cm  -1.36 m    29.8 MeV  8.41 MeV  4.12 mm    164 m          Iron      muIoni
-   38  -86.2 m    13.1 cm  -1.36 m    22.3 MeV  7.46 MeV  3.23 mm    164 m          Iron      muIoni
-   39  -86.2 m    13.2 cm  -1.36 m    15.8 MeV  6.56 MeV  2.52 mm    164 m          Iron      muIoni
-   40  -86.2 m    13.2 cm  -1.36 m    8.23 MeV  7.54 MeV  1.91 mm    164 m          Iron      muIoni
-   41  -86.2 m    13.2 cm  -1.36 m       0 eV   8.23 MeV   945 um    164 m          Iron      muIoni
-   42  -86.2 m    13.2 cm  -1.36 m       0 eV      0 eV      0 fm    164 m          Iron       Decay
+    0   -245 m       0 fm      0 fm    203 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -226 m   -2.48 cm   8.47 cm    157 GeV  45.8 GeV  19.1 m    19.1 m          Iron      muIoni
+    2   -210 m   -13.8 cm   9.52 cm    127 GeV  30.1 GeV  15.7 m    34.8 m          Iron      muIoni
+    3   -197 m     -23 cm   15.5 cm   98.9 GeV  28.3 GeV  13.2 m      48 m          Iron      muIoni
+    4   -186 m   -26.6 cm   12.2 cm   40.9 GeV    58 GeV  10.7 m    58.8 m          Iron      muIoni
+    5   -181 m   -27.2 cm     12 cm   19.1 GeV  21.8 GeV  4.99 m    63.8 m          Iron      muIoni
+    6   -179 m   -30.1 cm   8.55 cm   15.2 GeV  3.85 GeV  2.52 m    66.3 m          Iron      muIoni
+    7   -177 m   -31.5 cm   3.12 cm   12.4 GeV  2.81 GeV  2.05 m    68.3 m          Iron      muIoni
+    8   -175 m   -35.7 cm  -5.96 cm   9.75 GeV  2.68 GeV  1.71 m      70 m          Iron      muIoni
+    9   -174 m   -36.7 cm  -14.3 cm   7.76 GeV  1.99 GeV  1.37 m    71.4 m          Iron      muIoni
+   10   -173 m     -38 cm  -19.9 cm   6.12 GeV  1.64 GeV  1.11 m    72.5 m          Iron      muIoni
+   11   -172 m   -40.9 cm    -26 cm   4.86 GeV  1.26 GeV  89.2 cm   73.4 m          Iron      muIoni
+   12   -171 m   -42.4 cm  -28.4 cm    3.8 GeV  1.07 GeV  72.2 cm   74.1 m          Iron      muIoni
+   13   -170 m   -43.9 cm  -31.2 cm   2.88 GeV   912 MeV  57.5 cm   74.7 m          Iron      muIoni
+   14   -170 m   -46.4 cm  -36.2 cm   2.35 GeV   532 MeV  44.6 cm   75.1 m          Iron      muIoni
+   15   -170 m   -50.1 cm  -39.5 cm   1.81 GeV   542 MeV  36.9 cm   75.5 m          Iron      muIoni
+   16   -169 m   -53.1 cm  -43.2 cm   1.41 GeV   395 MeV  28.8 cm   75.8 m          Iron      muIoni
+   17   -169 m   -56.5 cm    -46 cm   1.11 GeV   306 MeV  22.8 cm     76 m          Iron      muIoni
+   18   -169 m   -58.5 cm    -48 cm    909 MeV   200 MeV    18 cm   76.2 m          Iron      muIoni
+   19   -169 m   -59.4 cm  -49.1 cm    697 MeV   211 MeV  14.8 cm   76.4 m          Iron      muIoni
+   20   -169 m   -60.5 cm  -50.2 cm    556 MeV   142 MeV  11.4 cm   76.5 m          Iron      muIoni
+   21   -169 m   -60.6 cm  -51.2 cm    453 MeV   102 MeV  9.02 cm   76.6 m          Iron      muIoni
+   22   -168 m   -60.6 cm  -51.5 cm    371 MeV  82.3 MeV  7.29 cm   76.6 m          Iron      muIoni
+   23   -168 m   -60.9 cm  -51.6 cm    308 MeV    63 MeV  5.88 cm   76.7 m          Iron      muIoni
+   24   -168 m   -60.7 cm    -52 cm    249 MeV  59.6 MeV  4.79 cm   76.7 m          Iron      muIoni
+   25   -168 m   -60.3 cm  -52.4 cm    208 MeV  40.2 MeV  3.76 cm   76.8 m          Iron      muIoni
+   26   -168 m   -60.3 cm  -52.7 cm    175 MeV    33 MeV  3.06 cm   76.8 m          Iron      muIoni
+   27   -168 m   -60.3 cm  -53.2 cm    147 MeV  28.4 MeV   2.5 cm   76.8 m          Iron      muIoni
+   28   -168 m     -60 cm  -53.4 cm    123 MeV    24 MeV  2.02 cm   76.9 m          Iron      muIoni
+   29   -168 m   -59.8 cm  -53.7 cm    101 MeV  22.3 MeV  1.63 cm   76.9 m          Iron      muIoni
+   30   -168 m   -59.4 cm  -53.9 cm   84.6 MeV    16 MeV  1.27 cm   76.9 m          Iron      muIoni
+   31   -168 m   -59.1 cm    -54 cm   71.7 MeV  12.9 MeV  1.03 cm   76.9 m          Iron      muIoni
+   32   -168 m   -58.8 cm  -53.9 cm   59.1 MeV  12.6 MeV  8.43 mm   76.9 m          Iron      muIoni
+   33   -168 m   -58.7 cm  -53.9 cm   49.6 MeV  9.52 MeV  6.69 mm   76.9 m          Iron      muIoni
+   34   -168 m   -58.6 cm  -53.9 cm   40.4 MeV  9.17 MeV  5.45 mm   76.9 m          Iron      muIoni
+   35   -168 m   -58.5 cm  -53.8 cm   31.2 MeV  9.18 MeV  4.36 mm   76.9 m          Iron      muIoni
+   36   -168 m   -58.4 cm  -53.7 cm   24.2 MeV  6.98 MeV  3.37 mm   76.9 m          Iron      muIoni
+   37   -168 m   -58.3 cm  -53.7 cm   16.9 MeV  7.36 MeV  2.69 mm   76.9 m          Iron      muIoni
+   38   -168 m   -58.2 cm  -53.6 cm    9.8 MeV  7.07 MeV  2.02 mm   76.9 m          Iron      muIoni
+   39   -168 m   -58.1 cm  -53.6 cm   1.74 MeV  8.06 MeV  1.23 mm   76.9 m          Iron      muIoni
+   40   -168 m   -58.1 cm  -53.6 cm      0 eV   1.74 MeV  62.6 um   76.9 m          Iron      muIoni
+   41   -168 m   -58.1 cm  -53.6 cm      0 eV      0 eV      0 fm   76.9 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -86.2 m    13.2 cm  -1.36 m    35.9 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1  -86.2 m    13.6 cm  -1.36 m    19.2 MeV  16.8 MeV  5.45 mm   5.45 mm         Iron       eIoni
-    2  -86.2 m    13.9 cm  -1.37 m    11.5 MeV  7.67 MeV  4.09 mm   9.54 mm         Iron       eIoni
-    3  -86.2 m    14.1 cm  -1.37 m    7.15 MeV  4.34 MeV  3.23 mm   1.28 cm         Iron       eIoni
-    4  -86.2 m    14.3 cm  -1.36 m    3.76 MeV  3.39 MeV  2.63 mm   1.54 cm         Iron       eIoni
-    5  -86.2 m    14.4 cm  -1.37 m    1.62 MeV  2.13 MeV  1.99 mm   1.74 cm         Iron       eIoni
-    6  -86.2 m    14.4 cm  -1.37 m     436 keV  1.18 MeV  1.28 mm   1.87 cm         Iron       eIoni
-    7  -86.2 m    14.4 cm  -1.37 m       0 eV    436 keV   264 um   1.89 cm         Iron       eIoni
+    0   -168 m   -58.1 cm  -53.6 cm   42.6 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -168 m   -58.2 cm  -53.1 cm   29.1 MeV  13.5 MeV  5.89 mm   5.89 mm         Iron       eIoni
+    2   -168 m   -58.3 cm  -52.6 cm   14.8 MeV  14.3 MeV  4.96 mm   1.08 cm         Iron       eIoni
+    3   -168 m   -58.4 cm  -52.3 cm   7.38 MeV  7.39 MeV  3.62 mm   1.45 cm         Iron       eIoni
+    4   -168 m   -58.5 cm  -52.1 cm   4.51 MeV  2.87 MeV  2.66 mm   1.71 cm         Iron       eIoni
+    5   -168 m   -58.4 cm  -52.1 cm   2.39 MeV  2.12 MeV  2.16 mm   1.93 cm         Iron       eIoni
+    6   -168 m   -58.3 cm    -52 cm    836 keV  1.56 MeV  1.62 mm   2.09 cm         Iron       eIoni
+    7   -168 m   -58.3 cm    -52 cm      0 eV    836 keV   621 um   2.15 cm         Iron       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_e,   Track ID = 5,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -86.2 m    13.2 cm  -1.36 m    31.4 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m    10.6 m    -189 m    31.4 MeV     0 eV    385 m     385 m    OutOfWorld  Transportation
+    0   -168 m   -58.1 cm  -53.6 cm   40.1 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -250 m    99.9 m    -211 m    40.1 MeV     0 eV    248 m     248 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_mu,   Track ID = 4,   Parent ID = 3
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -86.2 m    13.2 cm  -1.36 m    37.3 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -124 m    -238 m     250 m    37.3 MeV     0 eV    349 m     349 m    OutOfWorld  Transportation
+    0   -168 m   -58.1 cm  -53.6 cm   21.9 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m   -15.1 m   -91.5 m    21.9 MeV     0 eV    428 m     428 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -250 m       0 fm      0 fm    283 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -226 m    6.51 cm  -8.96 mm    214 GeV  69.1 GeV  24.3 m    24.3 m          Iron      muIoni
-    2   -206 m    12.2 cm   1.42 cm    169 GeV    45 GeV  19.8 m    44.1 m          Iron      muIoni
-    3   -189 m    15.4 cm   1.73 cm    132 GeV  36.5 GeV  16.5 m    60.6 m          Iron      muIoni
-    4   -176 m    20.1 cm  -8.32 cm    101 GeV  31.5 GeV  13.6 m    74.3 m          Iron      muIoni
-    5   -165 m    28.6 cm  -24.7 cm   77.6 GeV  23.3 GeV  10.9 m    85.2 m          Iron      muIoni
-    6   -156 m    40.9 cm  -38.6 cm   62.4 GeV  15.2 GeV  8.73 m    93.9 m          Iron      muIoni
-    7   -149 m    57.2 cm  -50.2 cm   39.9 GeV  22.5 GeV  7.23 m     101 m          Iron      muIoni
-    8   -144 m    68.3 cm  -57.7 cm     32 GeV  7.82 GeV  4.88 m     106 m          Iron      muIoni
-    9   -140 m    74.8 cm  -62.4 cm   25.8 GeV  6.26 GeV  4.01 m     110 m          Iron      muIoni
-   10   -137 m    83.8 cm  -66.5 cm   19.7 GeV  6.06 GeV   3.3 m     113 m          Iron      muIoni
-   11   -134 m      97 cm  -69.3 cm   15.8 GeV  3.92 GeV  2.59 m     116 m          Iron      muIoni
-   12   -132 m    1.12 m   -68.2 cm   12.7 GeV  3.09 GeV  2.12 m     118 m          Iron      muIoni
-   13   -130 m    1.26 m   -67.3 cm   10.2 GeV  2.54 GeV  1.74 m     120 m          Iron      muIoni
-   14   -129 m    1.34 m   -63.9 cm   7.53 GeV  2.64 GeV  1.42 m     121 m          Iron      muIoni
-   15   -128 m    1.39 m   -62.9 cm   4.52 GeV  3.01 GeV  1.08 m     122 m          Iron      muIoni
-   16   -127 m    1.42 m   -62.4 cm    3.7 GeV   821 MeV  67.4 cm    123 m          Iron      muIoni
-   17   -126 m    1.44 m     -64 cm   2.85 GeV   852 MeV    56 cm    123 m          Iron      muIoni
-   18   -126 m    1.46 m   -62.9 cm   2.33 GeV   511 MeV  43.9 cm    124 m          Iron      muIoni
-   19   -126 m    1.45 m   -60.9 cm   1.73 GeV   604 MeV  36.5 cm    124 m          Iron      muIoni
-   20   -125 m    1.43 m   -59.4 cm   1.42 GeV   307 MeV  27.5 cm    125 m          Iron      muIoni
-   21   -125 m    1.43 m   -58.7 cm   1.15 GeV   277 MeV  22.9 cm    125 m          Iron      muIoni
-   22   -125 m    1.42 m   -57.3 cm    867 MeV   280 MeV  18.6 cm    125 m          Iron      muIoni
-   23   -125 m    1.43 m   -56.5 cm    657 MeV   210 MeV  14.1 cm    125 m          Iron      muIoni
-   24   -125 m    1.44 m   -55.9 cm    522 MeV   136 MeV  10.7 cm    125 m          Iron      muIoni
-   25   -125 m    1.44 m   -55.8 cm    428 MeV  93.7 MeV  8.42 cm    125 m          Iron      muIoni
-   26   -125 m    1.45 m   -55.9 cm    336 MeV  92.1 MeV  6.84 cm    125 m          Iron      muIoni
-   27   -125 m    1.47 m   -55.1 cm    267 MeV  69.1 MeV  5.26 cm    125 m          Iron      muIoni
-   28   -124 m    1.47 m   -54.2 cm    222 MeV    45 MeV  4.06 cm    125 m          Iron      muIoni
-   29   -124 m    1.48 m   -53.6 cm    187 MeV  34.2 MeV  3.29 cm    126 m          Iron      muIoni
-   30   -124 m    1.48 m   -53.2 cm    153 MeV  34.4 MeV   2.7 cm    126 m          Iron      muIoni
-   31   -124 m    1.49 m   -52.6 cm    129 MeV  23.6 MeV  2.12 cm    126 m          Iron      muIoni
-   32   -124 m    1.49 m   -52.4 cm    106 MeV  23.4 MeV  1.73 cm    126 m          Iron      muIoni
-   33   -124 m    1.49 m   -52.1 cm   87.9 MeV  18.1 MeV  1.36 cm    126 m          Iron      muIoni
-   34   -124 m    1.49 m     -52 cm   74.3 MeV  13.6 MeV  1.08 cm    126 m          Iron      muIoni
-   35   -124 m    1.49 m   -51.9 cm     63 MeV  11.4 MeV  8.79 mm    126 m          Iron      muIoni
-   36   -124 m    1.49 m   -51.8 cm     53 MeV  9.92 MeV  7.19 mm    126 m          Iron      muIoni
-   37   -124 m    1.49 m   -51.6 cm   43.8 MeV   9.2 MeV   5.9 mm    126 m          Iron      muIoni
-   38   -124 m    1.49 m   -51.6 cm   36.1 MeV  7.74 MeV  4.77 mm    126 m          Iron      muIoni
-   39   -124 m    1.49 m   -51.5 cm   27.8 MeV  8.29 MeV  3.89 mm    126 m          Iron      muIoni
-   40   -124 m    1.49 m   -51.5 cm   20.7 MeV  7.13 MeV  3.03 mm    126 m          Iron      muIoni
-   41   -124 m    1.49 m   -51.5 cm   13.2 MeV  7.49 MeV  2.36 mm    126 m          Iron      muIoni
-   42   -124 m    1.49 m   -51.5 cm   6.11 MeV  7.08 MeV  1.66 mm    126 m          Iron      muIoni
-   43   -124 m    1.49 m   -51.5 cm      0 eV   6.11 MeV   561 um    126 m          Iron      muIoni
-   44   -124 m    1.49 m   -51.5 cm      0 eV      0 eV      0 fm    126 m          Iron       Decay
+    0   -245 m       0 fm      0 fm    797 GeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -198 m    3.51 cm  -6.48 cm    584 GeV   212 GeV  46.6 m    46.6 m          Iron      muIoni
+    2   -159 m    15.4 cm  -12.3 cm    425 GeV   160 GeV    39 m    85.6 m          Iron      muIoni
+    3   -127 m    34.5 cm  -11.8 cm    287 GeV   138 GeV    32 m     118 m          Iron      muIoni
+    4   -103 m    46.4 cm  -18.5 cm    178 GeV   109 GeV  24.5 m     142 m          Iron      muIoni
+    5  -85.7 m    56.6 cm  -15.6 cm    135 GeV  43.4 GeV  17.2 m     159 m          Iron      muIoni
+    6  -71.9 m    50.8 cm  -13.4 cm    103 GeV  31.2 GeV  13.8 m     173 m          Iron      muIoni
+    7  -60.8 m    48.6 cm  -21.2 cm   65.8 GeV  37.5 GeV  11.1 m     184 m          Iron      muIoni
+    8  -53.2 m    47.5 cm  -36.4 cm     52 GeV  13.8 GeV  7.57 m     192 m          Iron      muIoni
+    9    -47 m    58.8 cm  -48.2 cm   40.6 GeV  11.4 GeV  6.17 m     198 m          Iron      muIoni
+   10  -42.1 m    67.9 cm  -55.7 cm   33.1 GeV  7.47 GeV  4.96 m     203 m          Iron      muIoni
+   11  -37.9 m      75 cm  -64.4 cm   25.8 GeV  7.39 GeV  4.13 m     207 m          Iron      muIoni
+   12  -34.6 m    82.4 cm  -68.7 cm   19.7 GeV  6.04 GeV   3.3 m     210 m          Iron      muIoni
+   13  -32.1 m    88.2 cm  -73.2 cm   16.1 GeV   3.6 GeV  2.59 m     213 m          Iron      muIoni
+   14  -29.9 m    89.9 cm  -80.2 cm   12.8 GeV  3.29 GeV  2.16 m     215 m          Iron      muIoni
+   15  -28.2 m      91 cm  -87.3 cm   10.3 GeV   2.5 GeV  1.75 m     217 m          Iron      muIoni
+   16  -26.7 m    89.6 cm  -97.5 cm   7.16 GeV  3.16 GeV  1.44 m     218 m          Iron      muIoni
+   17  -25.7 m      93 cm  -1.07 m    5.84 GeV  1.31 GeV  1.03 m     219 m          Iron      muIoni
+   18  -24.9 m    94.5 cm  -1.15 m    4.81 GeV  1.03 GeV  85.4 cm    220 m          Iron      muIoni
+   19  -24.1 m    97.3 cm  -1.22 m    3.78 GeV  1.03 GeV  71.4 cm    221 m          Iron      muIoni
+   20  -23.6 m    97.8 cm  -1.29 m    3.07 GeV   715 MeV  57.2 cm    221 m          Iron      muIoni
+   21  -23.1 m    98.6 cm  -1.32 m    2.43 GeV   635 MeV  47.1 cm    222 m          Iron      muIoni
+   22  -22.7 m    99.1 cm  -1.35 m    1.93 GeV   500 MeV    38 cm    222 m          Iron      muIoni
+   23  -22.4 m    98.4 cm  -1.37 m    1.56 GeV   371 MeV  30.6 cm    223 m          Iron      muIoni
+   24  -22.2 m    97.7 cm   -1.4 m    1.22 GeV   346 MeV    25 cm    223 m          Iron      muIoni
+   25    -22 m    97.7 cm  -1.42 m     900 MeV   316 MeV  19.6 cm    223 m          Iron      muIoni
+   26  -21.8 m    97.7 cm  -1.43 m     722 MeV   178 MeV  14.6 cm    223 m          Iron      muIoni
+   27  -21.7 m    96.7 cm  -1.44 m     578 MeV   143 MeV  11.7 cm    223 m          Iron      muIoni
+   28  -21.6 m    95.4 cm  -1.45 m     467 MeV   112 MeV  9.37 cm    223 m          Iron      muIoni
+   29  -21.5 m    94.7 cm  -1.47 m     383 MeV  83.8 MeV  7.49 cm    224 m          Iron      muIoni
+   30  -21.5 m    93.8 cm  -1.48 m     312 MeV  70.6 MeV  6.06 cm    224 m          Iron      muIoni
+   31  -21.4 m      93 cm   -1.5 m     260 MeV  52.1 MeV  4.85 cm    224 m          Iron      muIoni
+   32  -21.4 m      92 cm  -1.49 m     215 MeV  45.4 MeV  3.95 cm    224 m          Iron      muIoni
+   33  -21.4 m    91.3 cm   -1.5 m     174 MeV  40.3 MeV  3.17 cm    224 m          Iron      muIoni
+   34  -21.4 m      91 cm   -1.5 m     145 MeV    29 MeV  2.48 cm    224 m          Iron      muIoni
+   35  -21.3 m      91 cm   -1.5 m     119 MeV  26.6 MeV     2 cm    224 m          Iron      muIoni
+   36  -21.3 m    91.1 cm  -1.51 m    99.6 MeV  19.2 MeV  1.56 cm    224 m          Iron      muIoni
+   37  -21.3 m    91.2 cm  -1.51 m    81.4 MeV  18.2 MeV  1.25 cm    224 m          Iron      muIoni
+   38  -21.3 m    91.1 cm  -1.51 m    65.8 MeV  15.6 MeV   9.8 mm    224 m          Iron      muIoni
+   39  -21.3 m    90.9 cm  -1.51 m      55 MeV  10.7 MeV  7.58 mm    224 m          Iron      muIoni
+   40  -21.3 m    90.7 cm  -1.51 m    45.5 MeV  9.58 MeV  6.16 mm    224 m          Iron      muIoni
+   41  -21.3 m    90.5 cm   -1.5 m    37.2 MeV  8.23 MeV  4.96 mm    224 m          Iron      muIoni
+   42  -21.3 m    90.4 cm   -1.5 m    28.9 MeV  8.35 MeV  4.01 mm    224 m          Iron      muIoni
+   43  -21.3 m    90.4 cm   -1.5 m    21.7 MeV  7.15 MeV  3.14 mm    224 m          Iron      muIoni
+   44  -21.3 m    90.4 cm   -1.5 m    14.8 MeV   6.9 MeV  2.46 mm    224 m          Iron      muIoni
+   45  -21.3 m    90.4 cm   -1.5 m    7.51 MeV  7.31 MeV  1.83 mm    224 m          Iron      muIoni
+   46  -21.3 m    90.4 cm   -1.5 m       0 eV   7.51 MeV   808 um    224 m          Iron      muIoni
+   47  -21.3 m    90.4 cm   -1.5 m       0 eV      0 eV      0 fm    224 m          Iron       Decay
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e+,   Track ID = 9,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -124 m    1.49 m   -51.5 cm     50 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1  -39.4 m    -250 m    69.4 m      50 MeV     0 eV    274 m     274 m    OutOfWorld  Transportation
+    0  -21.3 m    90.4 cm   -1.5 m    51.5 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1   -250 m    -132 m   -54.7 m    51.5 MeV     0 eV    270 m     270 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = nu_e,   Track ID = 8,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -124 m    1.49 m   -51.5 cm   16.2 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m    85.6 m   -84.9 m    16.2 MeV     0 eV    173 m     173 m    OutOfWorld  Transportation
+    0  -21.3 m    90.4 cm   -1.5 m    25.4 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m     220 m     148 m    25.4 MeV     0 eV    379 m     379 m    OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_nu_mu,   Track ID = 7,   Parent ID = 2
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -124 m    1.49 m   -51.5 cm   38.4 MeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -149 m     250 m   -32.3 m    38.4 MeV     0 eV    252 m     252 m    OutOfWorld  Transportation
+    0  -21.3 m    90.4 cm   -1.5 m    27.7 MeV     0 eV      0 fm      0 fm         Iron    initStep
+    1    250 m     115 m   -7.67 cm   27.7 MeV     0 eV    294 m     294 m    OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.36s Real=0.56s Sys=0.14s
+  User=0.4s Real=0.54s Sys=0.09s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2077495413, 1567562053
+ Current couple of seeds = 384969411, 1465002996
 ----------------------------------------
 #
 /gun/particle anti_proton
@@ -1197,6 +1242,8 @@ Run Summary
 /run/beamOn 2
 
 Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+ Root logical volume(s) : Iron 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Iron 
  Production cuts :  gamma 1 km     e- 1 km     e+ 1 km 
 
@@ -1215,7 +1262,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2077495413, 1567562053
+ Current couple of seeds = 384969411, 1465002996
 ----------------------------------------
 Start Run processing.
 
@@ -1227,62 +1274,62 @@ Start Run processing.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm      1 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m     821 um   -117 um    925 MeV  74.9 MeV   5.8 cm    5.8 cm         Iron      hhIoni
-    2   -250 m   -75.3 um  -76.9 um    855 MeV  70.4 MeV  5.21 cm     11 cm         Iron      hhIoni
-    3   -250 m   -2.03 mm    544 um    791 MeV  64.2 MeV  4.67 cm   15.7 cm         Iron      hhIoni
-    4   -250 m   -5.01 mm    1.4 mm    734 MeV  56.4 MeV  4.17 cm   19.9 cm         Iron      hhIoni
-    5   -250 m   -7.79 mm    1.5 mm    683 MeV  51.3 MeV  3.76 cm   23.6 cm         Iron      hhIoni
-    6   -250 m   -1.04 cm   2.52 mm    639 MeV  43.6 MeV  3.39 cm     27 cm         Iron      hhIoni
-    7   -250 m   -1.34 cm   3.21 mm    594 MeV  44.8 MeV  3.07 cm   30.1 cm         Iron      hhIoni
-    8   -250 m   -1.64 cm   3.63 mm    554 MeV  40.5 MeV  2.76 cm   32.8 cm         Iron      hhIoni
-    9   -250 m   -1.89 cm   4.31 mm    517 MeV  36.6 MeV  2.49 cm   35.3 cm         Iron      hhIoni
-   10   -250 m   -2.19 cm   5.16 mm    481 MeV  35.9 MeV  2.24 cm   37.6 cm         Iron      hhIoni
-   11   -250 m   -2.42 cm   4.83 mm    448 MeV  33.4 MeV  2.01 cm   39.6 cm         Iron      hhIoni
-   12   -250 m   -2.62 cm   4.72 mm    417 MeV  30.4 MeV   1.8 cm   41.4 cm         Iron      hhIoni
-   13   -250 m   -2.82 cm   5.09 mm    390 MeV  27.5 MeV  1.61 cm     43 cm         Iron      hhIoni
-   14   -250 m   -3.07 cm   5.39 mm    363 MeV  27.2 MeV  1.45 cm   44.4 cm         Iron      hhIoni
-   15   -250 m   -3.28 cm   5.57 mm    340 MeV  23.3 MeV   1.3 cm   45.7 cm         Iron      hhIoni
-   16   -250 m   -3.45 cm   5.89 mm    321 MeV  18.9 MeV  1.17 cm   46.9 cm         Iron      hhIoni
-   17   -250 m    -3.6 cm    6.4 mm    299 MeV  21.5 MeV  1.06 cm   47.9 cm         Iron      hhIoni
-   18   -250 m   -3.77 cm   6.91 mm    279 MeV  19.8 MeV  9.53 mm   48.9 cm         Iron      hhIoni
-   19   -250 m   -3.96 cm   7.18 mm    262 MeV  17.4 MeV  8.55 mm   49.7 cm         Iron      hhIoni
-   20   -249 m   -4.13 cm   7.21 mm    245 MeV  16.8 MeV  7.69 mm   50.5 cm         Iron      hhIoni
-   21   -249 m   -4.29 cm   7.38 mm    229 MeV    16 MeV   6.9 mm   51.2 cm         Iron      hhIoni
-   22   -249 m   -4.45 cm   7.51 mm    215 MeV  14.5 MeV  6.21 mm   51.8 cm         Iron      hhIoni
-   23   -249 m   -4.59 cm   7.39 mm    201 MeV  13.8 MeV  5.58 mm   52.4 cm         Iron      hhIoni
-   24   -249 m   -4.72 cm   7.25 mm    188 MeV  13.2 MeV  4.99 mm   52.9 cm         Iron      hhIoni
-   25   -249 m   -4.82 cm   7.03 mm    176 MeV    12 MeV  4.49 mm   53.3 cm         Iron      hhIoni
-   26   -249 m   -4.91 cm   6.72 mm    165 MeV  10.8 MeV  4.04 mm   53.7 cm         Iron      hhIoni
-   27   -249 m      -5 cm   6.48 mm    154 MeV  10.7 MeV  3.63 mm   54.1 cm         Iron      hhIoni
-   28   -249 m   -5.08 cm   6.23 mm    145 MeV  9.39 MeV  3.25 mm   54.4 cm         Iron      hhIoni
-   29   -249 m   -5.15 cm   6.07 mm    136 MeV   9.3 MeV  2.95 mm   54.7 cm         Iron      hhIoni
-   30   -249 m   -5.22 cm   6.07 mm    127 MeV  8.08 MeV  2.65 mm     55 cm         Iron      hhIoni
-   31   -249 m   -5.28 cm   6.06 mm    118 MeV  9.18 MeV  2.39 mm   55.2 cm         Iron      hhIoni
-   32   -249 m   -5.34 cm   6.03 mm    110 MeV  7.79 MeV  2.13 mm   55.4 cm         Iron      hhIoni
-   33   -249 m    -5.4 cm   5.99 mm    103 MeV  7.16 MeV  1.92 mm   55.6 cm         Iron      hhIoni
-   34   -249 m   -5.46 cm   5.96 mm   96.7 MeV  6.59 MeV  1.72 mm   55.8 cm         Iron      hhIoni
-   35   -249 m    -5.5 cm   5.95 mm   90.3 MeV  6.37 MeV  1.55 mm     56 cm         Iron      hhIoni
-   36   -249 m   -5.55 cm   5.94 mm   83.9 MeV  6.45 MeV   1.4 mm   56.1 cm         Iron      hhIoni
-   37   -249 m   -5.58 cm   5.94 mm   78.2 MeV  5.73 MeV  1.25 mm   56.2 cm         Iron      hhIoni
-   38   -249 m   -5.62 cm   5.98 mm   72.6 MeV  5.61 MeV  1.12 mm   56.3 cm         Iron      hhIoni
-   39   -249 m   -5.65 cm   5.98 mm   67.7 MeV  4.88 MeV  1.01 mm   56.4 cm         Iron      hhIoni
-   40   -249 m   -5.68 cm   5.98 mm   62.8 MeV  4.85 MeV   914 um   56.5 cm         Iron      hhIoni
-   41   -249 m    -5.7 cm   5.98 mm   58.1 MeV  4.71 MeV   819 um   56.6 cm         Iron      hhIoni
-   42   -249 m   -5.72 cm   6.01 mm   53.4 MeV  4.69 MeV   741 um   56.7 cm         Iron      hhIoni
-   43   -249 m   -5.74 cm   6.06 mm   49.2 MeV   4.2 MeV   663 um   56.7 cm         Iron      hhIoni
-   44   -249 m   -5.76 cm   6.13 mm   44.6 MeV  4.65 MeV   596 um   56.8 cm         Iron      hhIoni
-   45   -249 m   -5.78 cm    6.2 mm     41 MeV   3.6 MeV   531 um   56.9 cm         Iron      hhIoni
-   46   -249 m   -5.79 cm   6.26 mm   37.4 MeV   3.6 MeV   480 um   56.9 cm         Iron      hhIoni
-   47   -249 m   -5.81 cm    6.3 mm   33.8 MeV  3.53 MeV   435 um     57 cm         Iron      hhIoni
-   48   -249 m   -5.82 cm   6.33 mm   30.3 MeV  3.58 MeV   393 um     57 cm         Iron      hhIoni
-   49   -249 m   -5.84 cm   6.34 mm   26.6 MeV  3.69 MeV   353 um     57 cm         Iron      hhIoni
-   50   -249 m   -5.85 cm   6.36 mm   22.7 MeV   3.9 MeV   316 um   57.1 cm         Iron      hhIoni
-   51   -249 m   -5.86 cm   6.39 mm   19.1 MeV  3.56 MeV   280 um   57.1 cm         Iron      hhIoni
-   52   -249 m   -5.87 cm   6.41 mm   15.2 MeV  3.96 MeV   249 um   57.1 cm         Iron      hhIoni
-   53   -249 m   -5.88 cm   6.42 mm   11.4 MeV  3.73 MeV   217 um   57.1 cm         Iron      hhIoni
-   54   -249 m   -5.88 cm   6.45 mm    7.1 MeV  4.33 MeV   186 um   57.2 cm         Iron      hhIoni
-   55   -249 m   -5.89 cm   6.48 mm   2.02 MeV  5.09 MeV   134 um   57.2 cm         Iron      hhIoni
-   56   -249 m   -5.89 cm   6.49 mm      0 eV   2.02 MeV  19.1 um   57.2 cm         Iron      hhIoni
+    1   -250 m    -521 um    646 um    927 MeV  72.6 MeV   5.8 cm    5.8 cm         Iron      hhIoni
+    2   -250 m   -3.47 mm   -334 um    860 MeV  67.1 MeV  5.23 cm     11 cm         Iron      hhIoni
+    3   -250 m   -6.76 mm   -927 um    800 MeV  60.4 MeV  4.71 cm   15.7 cm         Iron      hhIoni
+    4   -250 m   -8.87 mm   -268 um    742 MeV  57.4 MeV  4.24 cm     20 cm         Iron      hhIoni
+    5   -250 m   -1.08 cm   -269 um    691 MeV    51 MeV  3.82 cm   23.8 cm         Iron      hhIoni
+    6   -250 m   -1.22 cm   -109 um    644 MeV  47.9 MeV  3.45 cm   27.3 cm         Iron      hhIoni
+    7   -250 m   -1.26 cm    591 um    599 MeV  44.9 MeV   3.1 cm   30.4 cm         Iron      hhIoni
+    8   -250 m   -1.32 cm   1.53 mm    556 MeV  42.5 MeV  2.79 cm   33.1 cm         Iron      hhIoni
+    9   -250 m   -1.41 cm   2.87 mm    519 MeV  37.3 MeV   2.5 cm   35.6 cm         Iron      hhIoni
+   10   -250 m   -1.48 cm   3.57 mm    485 MeV  33.7 MeV  2.25 cm   37.9 cm         Iron      hhIoni
+   11   -250 m   -1.61 cm   4.48 mm    451 MeV  33.8 MeV  2.03 cm   39.9 cm         Iron      hhIoni
+   12   -250 m   -1.71 cm   5.32 mm    424 MeV  27.6 MeV  1.82 cm   41.7 cm         Iron      hhIoni
+   13   -250 m    -1.8 cm   5.88 mm    397 MeV    27 MeV  1.65 cm   43.4 cm         Iron      hhIoni
+   14   -250 m   -1.89 cm   6.79 mm    369 MeV  28.3 MeV  1.49 cm   44.9 cm         Iron      hhIoni
+   15   -250 m      -2 cm   7.49 mm    344 MeV  24.4 MeV  1.33 cm   46.2 cm         Iron      hhIoni
+   16   -250 m   -2.11 cm   8.36 mm    322 MeV  21.9 MeV  1.19 cm   47.4 cm         Iron      hhIoni
+   17   -250 m   -2.19 cm    9.2 mm    301 MeV    21 MeV  1.07 cm   48.5 cm         Iron      hhIoni
+   18   -250 m    -2.3 cm   9.81 mm    281 MeV  20.5 MeV  9.63 mm   49.4 cm         Iron      hhIoni
+   19   -249 m   -2.41 cm   1.03 cm    264 MeV  16.7 MeV  8.62 mm   50.3 cm         Iron      hhIoni
+   20   -249 m   -2.52 cm   1.09 cm    249 MeV  15.6 MeV   7.8 mm   51.1 cm         Iron      hhIoni
+   21   -249 m    -2.6 cm   1.16 cm    234 MeV  14.7 MeV  7.05 mm   51.8 cm         Iron      hhIoni
+   22   -249 m   -2.68 cm   1.24 cm    219 MeV  14.7 MeV  6.41 mm   52.4 cm         Iron      hhIoni
+   23   -249 m   -2.75 cm   1.32 cm    205 MeV    14 MeV  5.78 mm     53 cm         Iron      hhIoni
+   24   -249 m   -2.81 cm   1.39 cm    192 MeV  12.8 MeV  5.17 mm   53.5 cm         Iron      hhIoni
+   25   -249 m   -2.86 cm   1.46 cm    180 MeV  12.2 MeV  4.66 mm     54 cm         Iron      hhIoni
+   26   -249 m   -2.91 cm   1.53 cm    169 MeV  11.3 MeV   4.2 mm   54.4 cm         Iron      hhIoni
+   27   -249 m   -2.96 cm    1.6 cm    160 MeV  9.21 MeV  3.78 mm   54.8 cm         Iron      hhIoni
+   28   -249 m   -3.02 cm   1.66 cm    149 MeV  10.1 MeV  3.43 mm   55.1 cm         Iron      hhIoni
+   29   -249 m   -3.08 cm   1.71 cm    141 MeV  8.89 MeV   3.1 mm   55.4 cm         Iron      hhIoni
+   30   -249 m   -3.13 cm   1.75 cm    131 MeV  9.47 MeV  2.81 mm   55.7 cm         Iron      hhIoni
+   31   -249 m   -3.17 cm   1.79 cm    123 MeV  7.79 MeV  2.51 mm     56 cm         Iron      hhIoni
+   32   -249 m   -3.21 cm   1.82 cm    115 MeV  8.02 MeV  2.27 mm   56.2 cm         Iron      hhIoni
+   33   -249 m   -3.24 cm   1.83 cm    107 MeV  7.75 MeV  2.05 mm   56.4 cm         Iron      hhIoni
+   34   -249 m   -3.27 cm   1.85 cm    101 MeV  6.15 MeV  1.83 mm   56.6 cm         Iron      hhIoni
+   35   -249 m   -3.29 cm   1.87 cm   94.3 MeV  7.08 MeV  1.66 mm   56.8 cm         Iron      hhIoni
+   36   -249 m   -3.31 cm   1.89 cm     88 MeV  6.23 MeV  1.49 mm   56.9 cm         Iron      hhIoni
+   37   -249 m   -3.33 cm   1.91 cm   81.9 MeV  6.09 MeV  1.35 mm     57 cm         Iron      hhIoni
+   38   -249 m   -3.36 cm   1.93 cm   76.2 MeV  5.69 MeV   1.2 mm   57.2 cm         Iron      hhIoni
+   39   -249 m   -3.39 cm   1.94 cm   70.7 MeV  5.57 MeV  1.08 mm   57.3 cm         Iron      hhIoni
+   40   -249 m   -3.41 cm   1.96 cm   66.1 MeV  4.58 MeV   973 um   57.4 cm         Iron      hhIoni
+   41   -249 m   -3.43 cm   1.98 cm   60.8 MeV  5.32 MeV   883 um   57.5 cm         Iron      hhIoni
+   42   -249 m   -3.45 cm   1.98 cm   55.7 MeV  5.08 MeV   785 um   57.5 cm         Iron      hhIoni
+   43   -249 m   -3.47 cm   1.99 cm   51.3 MeV  4.39 MeV   701 um   57.6 cm         Iron      hhIoni
+   44   -249 m   -3.48 cm      2 cm     47 MeV  4.33 MeV   628 um   57.7 cm         Iron      hhIoni
+   45   -249 m   -3.49 cm   2.01 cm     43 MeV  3.94 MeV   564 um   57.7 cm         Iron      hhIoni
+   46   -249 m    -3.5 cm   2.01 cm   39.3 MeV  3.78 MeV   509 um   57.8 cm         Iron      hhIoni
+   47   -249 m   -3.51 cm   2.02 cm   35.3 MeV  3.91 MeV   457 um   57.8 cm         Iron      hhIoni
+   48   -249 m   -3.52 cm   2.02 cm   31.9 MeV  3.49 MeV   411 um   57.9 cm         Iron      hhIoni
+   49   -249 m   -3.52 cm   2.02 cm   27.8 MeV  4.01 MeV   370 um   57.9 cm         Iron      hhIoni
+   50   -249 m   -3.53 cm   2.02 cm   24.3 MeV  3.51 MeV   329 um   57.9 cm         Iron      hhIoni
+   51   -249 m   -3.54 cm   2.02 cm   20.8 MeV  3.55 MeV   294 um     58 cm         Iron      hhIoni
+   52   -249 m   -3.55 cm   2.02 cm   17.2 MeV  3.54 MeV   263 um     58 cm         Iron      hhIoni
+   53   -249 m   -3.56 cm   2.04 cm   13.4 MeV  3.86 MeV   234 um     58 cm         Iron      hhIoni
+   54   -249 m   -3.57 cm   2.05 cm    9.2 MeV  4.18 MeV   203 um     58 cm         Iron      hhIoni
+   55   -249 m   -3.57 cm   2.05 cm   4.16 MeV  5.05 MeV   164 um     58 cm         Iron      hhIoni
+   56   -249 m   -3.58 cm   2.05 cm      0 eV   4.16 MeV  60.6 um     58 cm         Iron      hhIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_proton,   Track ID = 1,   Parent ID = 0
@@ -1290,70 +1337,70 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm      1 GeV     0 eV      0 fm      0 fm         Iron    initStep
-    1   -250 m    -808 um    188 um    925 MeV  74.8 MeV   5.8 cm    5.8 cm         Iron      hhIoni
-    2   -250 m    -805 um    801 um    859 MeV    66 MeV  5.22 cm     11 cm         Iron      hhIoni
-    3   -250 m   -2.13 mm   2.71 mm    795 MeV  64.3 MeV   4.7 cm   15.7 cm         Iron      hhIoni
-    4   -250 m   -3.93 mm   3.41 mm    734 MeV  61.2 MeV   4.2 cm   19.9 cm         Iron      hhIoni
-    5   -250 m   -2.55 mm   1.44 mm    681 MeV  52.4 MeV  3.76 cm   23.7 cm         Iron      hhIoni
-    6   -250 m   -1.06 mm   1.84 mm    636 MeV  44.7 MeV  3.37 cm   27.1 cm         Iron      hhIoni
-    7   -250 m       1 mm   3.01 mm    595 MeV  41.6 MeV  3.05 cm   30.1 cm         Iron      hhIoni
-    8   -250 m    2.74 mm   4.18 mm    555 MeV    40 MeV  2.76 cm   32.9 cm         Iron      hhIoni
-    9   -250 m    4.44 mm   5.68 mm    517 MeV  38.3 MeV  2.49 cm   35.4 cm         Iron      hhIoni
-   10   -250 m    5.28 mm   7.32 mm    480 MeV  36.5 MeV  2.23 cm   37.6 cm         Iron      hhIoni
-   11   -250 m    6.39 mm   8.75 mm    446 MeV  33.6 MeV     2 cm   39.6 cm         Iron      hhIoni
-   12   -250 m    7.04 mm   9.78 mm    419 MeV  27.3 MeV  1.79 cm   41.4 cm         Iron      hhIoni
-   13   -250 m    7.25 mm   9.67 mm    392 MeV  26.9 MeV  1.62 cm     43 cm         Iron      hhIoni
-   14   -250 m     7.8 mm   9.84 mm    366 MeV  26.6 MeV  1.46 cm   44.5 cm         Iron      hhIoni
-   15   -250 m    8.68 mm   1.01 cm    344 MeV  21.4 MeV  1.31 cm   45.8 cm         Iron      hhIoni
-   16   -250 m    8.84 mm   1.16 cm    322 MeV  22.2 MeV  1.19 cm     47 cm         Iron      hhIoni
-   17   -250 m    8.68 mm   1.29 cm    302 MeV  20.3 MeV  1.07 cm     48 cm         Iron      hhIoni
-   18   -250 m    8.51 mm   1.42 cm    281 MeV  20.4 MeV  9.66 mm     49 cm         Iron      hhIoni
-   19   -250 m    8.44 mm   1.55 cm    263 MeV  18.3 MeV  8.66 mm   49.9 cm         Iron      hhIoni
-   20   -249 m    8.23 mm   1.66 cm    248 MeV  15.2 MeV  7.75 mm   50.6 cm         Iron      hhIoni
-   21   -249 m    7.87 mm   1.75 cm    231 MeV  17.1 MeV  7.02 mm   51.3 cm         Iron      hhIoni
-   22   -249 m    7.62 mm   1.84 cm    217 MeV    14 MeV  6.29 mm     52 cm         Iron      hhIoni
-   23   -249 m     7.4 mm   1.92 cm    204 MeV  13.2 MeV  5.68 mm   52.5 cm         Iron      hhIoni
-   24   -249 m    7.12 mm   1.99 cm    191 MeV  12.6 MeV  5.11 mm   53.1 cm         Iron      hhIoni
-   25   -249 m    7.02 mm   2.05 cm    180 MeV  10.9 MeV  4.61 mm   53.5 cm         Iron      hhIoni
-   26   -249 m    7.09 mm    2.1 cm    169 MeV    11 MeV  4.21 mm   53.9 cm         Iron      hhIoni
-   27   -249 m    7.19 mm   2.13 cm    159 MeV  10.4 MeV  3.79 mm   54.3 cm         Iron      hhIoni
-   28   -249 m    7.18 mm   2.17 cm    148 MeV  10.6 MeV   3.4 mm   54.7 cm         Iron      hhIoni
-   29   -249 m    7.19 mm   2.21 cm    139 MeV  9.23 MeV  3.06 mm     55 cm         Iron      hhIoni
-   30   -249 m    7.29 mm   2.24 cm    131 MeV  8.19 MeV  2.76 mm   55.2 cm         Iron      hhIoni
-   31   -249 m    7.42 mm   2.27 cm    122 MeV  8.45 MeV   2.5 mm   55.5 cm         Iron      hhIoni
-   32   -249 m    7.48 mm    2.3 cm    114 MeV  8.82 MeV  2.24 mm   55.7 cm         Iron      hhIoni
-   33   -249 m    7.53 mm   2.32 cm    107 MeV  6.77 MeV     2 mm   55.9 cm         Iron      hhIoni
-   34   -249 m    7.67 mm   2.35 cm    100 MeV  6.51 MeV  1.81 mm   56.1 cm         Iron      hhIoni
-   35   -249 m    7.86 mm   2.39 cm   93.4 MeV  6.89 MeV  1.63 mm   56.3 cm         Iron      hhIoni
-   36   -249 m    8.02 mm   2.42 cm     87 MeV  6.36 MeV  1.47 mm   56.4 cm         Iron      hhIoni
-   37   -249 m    8.15 mm   2.45 cm   81.4 MeV   5.6 MeV  1.32 mm   56.5 cm         Iron      hhIoni
-   38   -249 m    8.28 mm   2.47 cm   75.6 MeV   5.8 MeV  1.19 mm   56.7 cm         Iron      hhIoni
-   39   -249 m    8.41 mm    2.5 cm   70.2 MeV  5.47 MeV  1.07 mm   56.8 cm         Iron      hhIoni
-   40   -249 m    8.57 mm   2.51 cm   64.7 MeV  5.42 MeV   963 um   56.9 cm         Iron      hhIoni
-   41   -249 m    8.75 mm   2.53 cm   59.9 MeV  4.85 MeV   856 um   56.9 cm         Iron      hhIoni
-   42   -249 m    8.89 mm   2.54 cm   55.4 MeV   4.5 MeV   770 um     57 cm         Iron      hhIoni
-   43   -249 m    8.97 mm   2.55 cm   51.2 MeV  4.18 MeV   695 um   57.1 cm         Iron      hhIoni
-   44   -249 m    9.06 mm   2.56 cm   46.9 MeV   4.3 MeV   626 um   57.2 cm         Iron      hhIoni
-   45   -249 m    9.13 mm   2.57 cm   42.5 MeV  4.35 MeV   563 um   57.2 cm         Iron      hhIoni
-   46   -249 m    9.17 mm   2.58 cm   38.7 MeV  3.85 MeV   502 um   57.3 cm         Iron      hhIoni
-   47   -249 m    9.22 mm   2.59 cm     35 MeV  3.75 MeV   451 um   57.3 cm         Iron      hhIoni
-   48   -249 m    9.25 mm    2.6 cm   31.6 MeV  3.32 MeV   407 um   57.3 cm         Iron      hhIoni
-   49   -249 m    9.26 mm    2.6 cm   27.8 MeV  3.81 MeV   367 um   57.4 cm         Iron      hhIoni
-   50   -249 m    9.28 mm   2.61 cm   24.2 MeV  3.65 MeV   329 um   57.4 cm         Iron      hhIoni
-   51   -249 m    9.29 mm   2.62 cm   20.7 MeV  3.52 MeV   293 um   57.4 cm         Iron      hhIoni
-   52   -249 m    9.29 mm   2.62 cm     17 MeV  3.68 MeV   262 um   57.5 cm         Iron      hhIoni
-   53   -249 m    9.28 mm   2.63 cm   13.1 MeV  3.87 MeV   232 um   57.5 cm         Iron      hhIoni
-   54   -249 m    9.27 mm   2.63 cm   8.82 MeV  4.28 MeV   200 um   57.5 cm         Iron      hhIoni
-   55   -249 m    9.24 mm   2.64 cm   3.94 MeV  4.88 MeV   159 um   57.5 cm         Iron      hhIoni
-   56   -249 m    9.23 mm   2.64 cm      0 eV   3.94 MeV  55.4 um   57.5 cm         Iron      hhIoni
+    1   -250 m     410 um    722 um    925 MeV  75.4 MeV   5.8 cm    5.8 cm         Iron      hhIoni
+    2   -250 m    97.4 um   3.05 mm    862 MeV  62.8 MeV  5.21 cm     11 cm         Iron      hhIoni
+    3   -250 m    -712 um   4.72 mm    797 MeV  65.2 MeV  4.72 cm   15.7 cm         Iron      hhIoni
+    4   -250 m   -2.85 mm   5.58 mm    740 MeV    57 MeV  4.22 cm   19.9 cm         Iron      hhIoni
+    5   -250 m   -5.34 mm   5.11 mm    692 MeV  47.9 MeV   3.8 cm   23.7 cm         Iron      hhIoni
+    6   -250 m   -7.07 mm   3.98 mm    643 MeV  48.5 MeV  3.45 cm   27.2 cm         Iron      hhIoni
+    7   -250 m   -9.87 mm   2.91 mm    596 MeV  47.6 MeV   3.1 cm   30.3 cm         Iron      hhIoni
+    8   -250 m   -1.29 cm   1.34 mm    556 MeV  39.1 MeV  2.77 cm   33.1 cm         Iron      hhIoni
+    9   -250 m   -1.49 cm   8.39 um    520 MeV  36.9 MeV   2.5 cm   35.6 cm         Iron      hhIoni
+   10   -250 m   -1.67 cm   -550 um    483 MeV  36.5 MeV  2.25 cm   37.8 cm         Iron      hhIoni
+   11   -250 m   -1.85 cm  -1.16 mm    450 MeV  32.9 MeV  2.02 cm   39.8 cm         Iron      hhIoni
+   12   -250 m   -2.02 cm  -1.46 mm    422 MeV  28.1 MeV  1.81 cm   41.7 cm         Iron      hhIoni
+   13   -250 m   -2.15 cm  -1.68 mm    396 MeV  26.1 MeV  1.64 cm   43.3 cm         Iron      hhIoni
+   14   -250 m   -2.26 cm  -1.51 mm    373 MeV  22.7 MeV  1.48 cm   44.8 cm         Iron      hhIoni
+   15   -250 m   -2.34 cm  -1.61 mm    348 MeV  25.7 MeV  1.35 cm   46.1 cm         Iron      hhIoni
+   16   -250 m   -2.48 cm  -1.69 mm    323 MeV  24.2 MeV  1.21 cm   47.3 cm         Iron      hhIoni
+   17   -250 m   -2.58 cm  -1.55 mm    302 MeV  20.9 MeV  1.08 cm   48.4 cm         Iron      hhIoni
+   18   -250 m    -2.7 cm  -1.37 mm    284 MeV  18.8 MeV  9.69 mm   49.4 cm         Iron      hhIoni
+   19   -249 m    -2.8 cm  -1.32 mm    267 MeV  16.7 MeV  8.76 mm   50.3 cm         Iron      hhIoni
+   20   -249 m    -2.9 cm  -1.51 mm    249 MeV  17.7 MeV  7.94 mm   51.1 cm         Iron      hhIoni
+   21   -249 m      -3 cm  -1.64 mm    233 MeV  16.3 MeV  7.08 mm   51.8 cm         Iron      hhIoni
+   22   -249 m   -3.09 cm  -1.85 mm    218 MeV  15.4 MeV  6.37 mm   52.4 cm         Iron      hhIoni
+   23   -249 m   -3.17 cm  -2.01 mm    205 MeV  12.5 MeV  5.71 mm     53 cm         Iron      hhIoni
+   24   -249 m   -3.25 cm  -2.23 mm    192 MeV  12.7 MeV  5.17 mm   53.5 cm         Iron      hhIoni
+   25   -249 m   -3.32 cm  -2.49 mm    179 MeV    13 MeV  4.66 mm     54 cm         Iron      hhIoni
+   26   -249 m   -3.38 cm  -2.71 mm    168 MeV  11.2 MeV  4.18 mm   54.4 cm         Iron      hhIoni
+   27   -249 m   -3.42 cm  -2.89 mm    158 MeV  10.4 MeV  3.75 mm   54.8 cm         Iron      hhIoni
+   28   -249 m   -3.48 cm   -2.9 mm    147 MeV  10.9 MeV  3.37 mm   55.1 cm         Iron      hhIoni
+   29   -249 m   -3.53 cm  -2.92 mm    138 MeV  9.31 MeV  3.02 mm   55.4 cm         Iron      hhIoni
+   30   -249 m   -3.57 cm  -2.98 mm    128 MeV  9.56 MeV  2.72 mm   55.7 cm         Iron      hhIoni
+   31   -249 m   -3.61 cm  -2.96 mm    119 MeV  8.56 MeV  2.41 mm   55.9 cm         Iron      hhIoni
+   32   -249 m   -3.64 cm  -2.94 mm    112 MeV  7.24 MeV  2.16 mm   56.1 cm         Iron      hhIoni
+   33   -249 m   -3.67 cm  -2.94 mm    105 MeV   7.1 MeV  1.96 mm   56.3 cm         Iron      hhIoni
+   34   -249 m    -3.7 cm  -2.89 mm   98.2 MeV  6.91 MeV  1.77 mm   56.5 cm         Iron      hhIoni
+   35   -249 m   -3.72 cm  -2.81 mm   91.5 MeV  6.68 MeV  1.59 mm   56.6 cm         Iron      hhIoni
+   36   -249 m   -3.73 cm  -2.72 mm   85.7 MeV  5.84 MeV  1.43 mm   56.8 cm         Iron      hhIoni
+   37   -249 m   -3.75 cm  -2.64 mm   79.8 MeV  5.87 MeV  1.29 mm   56.9 cm         Iron      hhIoni
+   38   -249 m   -3.77 cm  -2.56 mm   74.2 MeV  5.68 MeV  1.15 mm     57 cm         Iron      hhIoni
+   39   -249 m   -3.79 cm  -2.49 mm   68.7 MeV  5.43 MeV  1.04 mm   57.1 cm         Iron      hhIoni
+   40   -249 m    -3.8 cm  -2.43 mm   63.6 MeV  5.14 MeV   934 um   57.2 cm         Iron      hhIoni
+   41   -249 m   -3.81 cm  -2.34 mm   58.7 MeV  4.87 MeV   833 um   57.3 cm         Iron      hhIoni
+   42   -249 m   -3.82 cm  -2.26 mm   54.4 MeV  4.32 MeV   751 um   57.4 cm         Iron      hhIoni
+   43   -249 m   -3.83 cm  -2.21 mm   50.2 MeV   4.2 MeV   679 um   57.5 cm         Iron      hhIoni
+   44   -249 m   -3.84 cm  -2.18 mm     46 MeV  4.16 MeV   609 um   57.5 cm         Iron      hhIoni
+   45   -249 m   -3.84 cm  -2.13 mm   42.3 MeV  3.73 MeV   551 um   57.6 cm         Iron      hhIoni
+   46   -249 m   -3.85 cm  -2.08 mm   38.5 MeV  3.81 MeV   499 um   57.6 cm         Iron      hhIoni
+   47   -249 m   -3.85 cm  -2.01 mm   34.4 MeV  4.11 MeV   448 um   57.7 cm         Iron      hhIoni
+   48   -249 m   -3.86 cm  -1.95 mm   30.6 MeV  3.79 MeV   400 um   57.7 cm         Iron      hhIoni
+   49   -249 m   -3.86 cm  -1.89 mm   26.9 MeV  3.66 MeV   357 um   57.7 cm         Iron      hhIoni
+   50   -249 m   -3.87 cm  -1.86 mm   23.7 MeV  3.27 MeV   320 um   57.8 cm         Iron      hhIoni
+   51   -249 m   -3.87 cm  -1.83 mm   20.2 MeV  3.41 MeV   288 um   57.8 cm         Iron      hhIoni
+   52   -249 m   -3.87 cm   -1.8 mm   16.5 MeV  3.71 MeV   258 um   57.8 cm         Iron      hhIoni
+   53   -249 m   -3.87 cm  -1.77 mm   12.7 MeV  3.84 MeV   228 um   57.9 cm         Iron      hhIoni
+   54   -249 m   -3.88 cm  -1.73 mm    8.3 MeV   4.4 MeV   197 um   57.9 cm         Iron      hhIoni
+   55   -249 m   -3.88 cm  -1.71 mm   3.08 MeV  5.22 MeV   152 um   57.9 cm         Iron      hhIoni
+   56   -249 m   -3.88 cm   -1.7 mm      0 eV   3.08 MeV  37.3 um   57.9 cm         Iron      hhIoni
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.07s Real=0.12s Sys=0.03s
+  User=0.06s Real=0.1s Sys=0.02s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1679520755, 42257434
+ Current couple of seeds = 1319701757, 224519741
 ----------------------------------------
 #
 Graphics systems deleted.

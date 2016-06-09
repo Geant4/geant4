@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4CoupledTransportation.hh,v 1.4 2006/11/14 09:12:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------

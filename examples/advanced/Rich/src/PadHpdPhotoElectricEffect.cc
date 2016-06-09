@@ -36,13 +36,13 @@
 #include "RichTbGeometryParameters.hh"
 #include "G4TransportationManager.hh"
 #include "G4TouchableHandle.hh"
+#include "G4GeometryTolerance.hh"
 #include "Randomize.hh"
 #include "RichTbAnalysisManager.hh"
 #include "RichTbRunConfig.hh"
 #include "RichTbMaterialParameters.hh"
 
 #include "RichTbAnalysisManager.hh"
-
 
 PadHpdPhotoElectricEffect::PadHpdPhotoElectricEffect(const G4String& processName ,
    RichTbRunConfig* RConfig)
@@ -148,13 +148,11 @@ G4VParticleChange* PadHpdPhotoElectricEffect::PostStepDoIt(const G4Track& aTrack
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
 }
-
+  
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   if (aTrack.GetStepLength()<=kCarTolerance/2){
-
           return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
   }
-
-
 
   const G4DynamicParticle* aDynamicPhoton = aTrack.GetDynamicParticle();
   G4double PhotonEnergy = aDynamicPhoton->GetKineticEnergy();

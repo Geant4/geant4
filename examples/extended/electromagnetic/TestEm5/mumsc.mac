@@ -1,4 +1,4 @@
-# $Id: mumsc.mac,v 1.6 2007/03/20 18:37:42 vnivanch Exp $
+# $Id: mumsc.mac,v 1.7 2007/04/13 16:36:24 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -6,7 +6,6 @@
 #
 /control/verbose 2
 /run/verbose 2
-#/tracking/verbose 1
 #
 /testem/det/setAbsMat Iron
 /testem/det/setAbsThick 1 m
@@ -14,13 +13,9 @@
 /testem/det/setWorldX   1 m
 /testem/det/setWorldYZ  1 m
 #
-#### /testem/phys/addPhysics g4v52
-#
-#/testem/phys/setCuts 0.1 mm
-/testem/phys/setCuts 1 cm
+/testem/phys/setCuts 0.1 mm
 #
 /run/initialize
-#/process/eLoss/MscStepLimit 0.02 false
 #
 /testem/gun/setDefault
 /gun/particle mu+
@@ -34,4 +29,4 @@
 /testem/stack/killSecondaries
 #
 /testem/event/printModulo 1000
-/run/beamOn 1000
+/run/beamOn 10000

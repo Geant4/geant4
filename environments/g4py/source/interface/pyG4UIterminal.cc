@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4UIterminal.cc,v 1.4 2006/06/29 15:34:04 gunter Exp $
-// $Name: geant4-08-02 $
+// $Id: pyG4UIterminal.cc,v 1.6 2007/05/28 03:11:20 kmura Exp $
+// $Name: geant4-09-00 $
 // ====================================================================
 //   pyG4UIterminal.cc
 //
@@ -49,9 +49,9 @@ void StartUISession()
 {
   if (session == 0 ) {
     G4UItcsh* tcsh= new 
-      G4UItcsh("[40;01;33meccsim[40;31m(%s)[40;36m[%/][00;01;30m:");
+      G4UItcsh("[40;01;33mg4py[40;31m(%s)[40;36m[%/][00;30m:");
 
-    session= new G4UIterminal(tcsh);
+    session= new G4UIterminal(tcsh, false);
     tcsh-> SetLsColor(BLUE,RED);
   }
 

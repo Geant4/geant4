@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DecayProducts.cc,v 1.15 2007/05/07 10:04:33 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------

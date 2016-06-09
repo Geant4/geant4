@@ -24,11 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPPhotonDist.hh,v 1.10 2006/06/29 20:49:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPPhotonDist.hh,v 1.16 2007/06/22 09:23:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
+//
+// 070606 fix for Valgrind error by T. Koi
+// 070612 fix memory leaking by T. Koi
+// 070615 fix memory leaking by T. Koi
+//
  
 #ifndef G4NeutronHPPhotonDist_h
 #define G4NeutronHPPhotonDist_h 1
@@ -52,47 +57,74 @@ class G4NeutronHPPhotonDist
 public:
 
   G4NeutronHPPhotonDist()
+      : repFlag( 0 ) 
+      , targetMass( 0.0 ) 
+      , nDiscrete( 0 ) 
+      , isoFlag( 0 )
+      , tabulationType( 0 )
+      , nDiscrete2( 0 ) 
+      , nIso( 0 ) 
+      , nPartials( 0 )
+      , theInternalConversionFlag( 0 )
+      , nGammaEnergies( 0 )
+      , theBaseEnergy( 0.0 )
   {
-     disType = NULL;
-     energy = NULL;
-     theYield = NULL;
-     thePartialXsec = NULL;
-     isPrimary = NULL;
-     theShells = NULL;
-     theGammas = NULL;
-     nNeu = NULL;
-     theLegendre = NULL;
-     theAngular = NULL;
-     distribution = NULL;
-     probs = NULL;
-     partials = NULL;
-     actualMult = NULL;
 
-     theLevelEnergies = NULL;
-     theTransitionProbabilities = NULL;
-     thePhotonTransitionFraction = NULL;
+     disType = 0;
+     energy = 0;
+     theYield = 0;
+     thePartialXsec = 0;
+     isPrimary = 0;
+     theShells = 0;
+     theGammas = 0;
+     nNeu = 0;
+     theLegendre = 0;
+     theAngular = 0;
+     distribution = 0;
+     probs = 0;
+     partials = 0;
+     actualMult = 0;
+
+     theLevelEnergies = 0;
+     theTransitionProbabilities = 0;
+     thePhotonTransitionFraction = 0;
+
   }
 
   ~G4NeutronHPPhotonDist()
   {
-     if(disType != NULL) delete [] disType;
-     if(energy != NULL) delete [] energy;
-     if(theYield != NULL) delete [] theYield;
-     if(thePartialXsec != NULL) delete [] thePartialXsec;
-     if(isPrimary != NULL) delete [] isPrimary;
-     if(theShells != NULL) delete [] theShells;
-     if(theGammas != NULL) delete [] theGammas;
-     if(nNeu != NULL) delete [] nNeu;
-     if(theLegendre != NULL) delete [] theLegendre;
-     if(theAngular != NULL) delete [] theAngular;
-     if(distribution != NULL) delete [] distribution;
-     if(probs != NULL) delete [] probs;
-     if(partials != NULL) delete [] partials;
-     if(actualMult != NULL) delete [] actualMult;
+     delete [] disType;
+     delete [] energy;
+     delete [] theYield;
+     delete [] thePartialXsec;
+     delete [] isPrimary;
+     delete [] theShells;
+     delete [] theGammas;
+     delete [] nNeu;
+     delete [] theLegendre;
+     delete [] theAngular;
+     delete [] distribution;
+     delete [] probs;
 
-     if(theLevelEnergies != NULL) delete theLevelEnergies;
-     if(theTransitionProbabilities != NULL) delete theTransitionProbabilities;
-     if(thePhotonTransitionFraction != NULL) delete thePhotonTransitionFraction;
+// TKDB
+     if ( partials != 0 ) 
+     {
+        for ( G4int i = 0 ; i < nPartials ; i++ )
+           { delete partials[ i ]; }
+
+        delete [] partials;
+     }
+     // delete [] partials;
+
+     delete [] actualMult;
+
+     // delete theLevelEnergies;
+     // delete theTransitionProbabilities;
+     // delete thePhotonTransitionFraction;
+// TKDB
+     delete [] theLevelEnergies;
+     delete [] theTransitionProbabilities;
+     delete [] thePhotonTransitionFraction;
   }
   
   G4bool InitMean(std::ifstream & aDataFile);

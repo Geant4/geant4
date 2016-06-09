@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSMinKinEAtGeneration.cc,v 1.5 2006/06/29 18:07:47 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSMinKinEAtGeneration.cc,v 1.6 2007/05/18 00:00:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4PSMinKinEAtGeneration
 #include "G4PSMinKinEAtGeneration.hh"

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingBox3D.hh,v 1.6 2006/06/29 18:38:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4BoundingBox3D.hh,v 1.7 2007/05/11 13:49:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4BoundingBox3D
@@ -99,7 +99,8 @@ private:
   G4int test_result;
 
   G4Point3D MiddlePoint;
-  G4Vector3D GeantBox;    
+  G4Vector3D GeantBox;
+  G4double kCarTolerance;
 };
 
 #include "G4BoundingBox3D.icc"

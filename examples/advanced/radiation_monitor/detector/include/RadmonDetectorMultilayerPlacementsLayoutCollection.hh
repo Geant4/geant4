@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonDetectorMultilayerPlacementsLayoutCollection.hh,v 1.4 2006/06/29 16:10:49 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 // Description:   Internal class to collect placed multilayer
 //

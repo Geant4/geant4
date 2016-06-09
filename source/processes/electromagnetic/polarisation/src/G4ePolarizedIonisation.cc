@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc,v 1.2 2006/09/26 09:08:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ePolarizedIonisation.cc,v 1.4 2007/06/11 13:37:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -43,7 +43,8 @@
 // , create asymmetry table and determine interactionlength 
 // , update polarized differential cross section 
 //
-// 20-08-05, modified interface (A.Schaelicke)
+// 20-08-06, modified interface (A.Schaelicke)
+// 11-06-07, add PostStepGetPhysicalInteractionLength (A.Schalicke)
 //
 // Class Description:
 //
@@ -187,6 +188,60 @@ G4double G4ePolarizedIonisation::GetMeanFreePath(const G4Track& track,
   return mfp;
 }
 
+G4double G4ePolarizedIonisation::PostStepGetPhysicalInteractionLength(const G4Track& track,
+                                              G4double s,
+                                              G4ForceCondition* cond)
+{
+  // *** get unploarised mean free path from lambda table ***
+  G4double mfp = G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(track, s, cond);
+
+
+  // *** get asymmetry, if target is polarized ***
+  G4VPhysicalVolume*  aPVolume  = track.GetVolume();
+  G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
+
+  G4PolarizationManager * polarizationManger = G4PolarizationManager::GetInstance();
+  const G4bool volumeIsPolarized = polarizationManger->IsPolarized(aLVolume);
+  const G4StokesVector ePolarization = track.GetPolarization();
+
+  if (mfp != DBL_MAX &&  volumeIsPolarized && !ePolarization.IsZero()) {
+    const G4DynamicParticle* aDynamicElectron = track.GetDynamicParticle();
+    const G4double eEnergy = aDynamicElectron->GetKineticEnergy();
+    const G4ParticleMomentum eDirection0 = aDynamicElectron->GetMomentumDirection();
+
+    G4StokesVector volumePolarization = polarizationManger->GetVolumePolarization(aLVolume);
+
+    G4bool isOutRange;
+    size_t idx = CurrentMaterialCutsCoupleIndex();
+    G4double lAsymmetry = (*theAsymmetryTable)(idx)->
+                                  GetValue(eEnergy, isOutRange);
+    G4double tAsymmetry = (*theTransverseAsymmetryTable)(idx)->
+                                  GetValue(eEnergy, isOutRange);
+
+    // calculate longitudinal spin component
+    G4double polZZ = ePolarization.z()*
+			volumePolarization*eDirection0;
+    // calculate transvers spin components
+    G4double polXX = ePolarization.x()*
+			volumePolarization*G4PolarizationHelper::GetParticleFrameX(eDirection0);
+    G4double polYY = ePolarization.y()*
+			volumePolarization*G4PolarizationHelper::GetParticleFrameY(eDirection0);
+
+
+    G4double impact = 1. + polZZ*lAsymmetry + (polXX + polYY)*tAsymmetry;
+    // determine polarization dependent mean free path
+    mfp /= impact;
+    if (mfp <=0.) {
+     G4cout <<"PV impact ( "<<polXX<<" , "<<polYY<<" , "<<polZZ<<" )"<<G4endl;
+     G4cout << " impact on MFP is "<< impact <<G4endl;
+     G4cout<<" lAsymmetry= "<<lAsymmetry<<" ("<<std::fabs(lAsymmetry)-1.<<")\n";
+     G4cout<<" tAsymmetry= "<<tAsymmetry<<" ("<<std::fabs(tAsymmetry)-1.<<")\n";
+    }
+  }
+
+  return mfp;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void G4ePolarizedIonisation::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
@@ -281,18 +336,4 @@ G4double G4ePolarizedIonisation::ComputeAsymmetry(G4double energy,
   return lAsymmetry;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-std::vector<G4DynamicParticle*>* G4ePolarizedIonisation::SecondariesPostStep(
-                                                  G4VEmModel* model,
-                                            const G4MaterialCutsCouple* couple,
-                                            const G4DynamicParticle* dp,
-                                                  G4double& tcut)
-{
-  // determine the delta electron
-  std::vector<G4DynamicParticle*>* particles = model->SampleSecondaries(couple, dp, tcut);
-  // Note: G4VEnergyLossProcess relies on fParticleChange and not on polParticleChange,
-  //       but the former does not allow for polarization!
-  return particles;
-}
 

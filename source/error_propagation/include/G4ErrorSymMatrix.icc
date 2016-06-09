@@ -1,0 +1,141 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4ErrorSymMatrix.icc,v 1.2 2007/06/01 12:43:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+//
+// ------------------------------------------------------------
+//      GEANT 4 class inline implementation
+// ------------------------------------------------------------
+
+
+inline G4ErrorSymMatrix::G4ErrorSymMatrix() 
+  : m(0), nrow(0), size(0)
+{
+}
+
+inline G4int G4ErrorSymMatrix::num_row() const
+{
+  return nrow;
+}
+
+inline G4int G4ErrorSymMatrix::num_col() const
+{
+  return nrow;
+}
+
+inline G4int G4ErrorSymMatrix::num_size() const
+{
+  return size;
+}
+
+inline G4double & G4ErrorSymMatrix::fast(G4int row,G4int col)
+{
+  return *(m.begin()+(row*(row-1))/2+(col-1));
+}
+
+inline const G4double & G4ErrorSymMatrix::fast(G4int row,G4int col) const
+{
+  return *(m.begin()+(row*(row-1))/2+(col-1));
+}
+
+inline G4double &
+G4ErrorSymMatrix::operator()(G4int row, G4int col)
+{
+  return (row>=col? fast(row,col) : fast(col,row));
+}
+
+inline const G4double &
+G4ErrorSymMatrix::operator()(G4int row, G4int col) const 
+{
+  return (row>=col? fast(row,col) : fast(col,row));
+}
+
+inline void G4ErrorSymMatrix::assign(const G4ErrorSymMatrix &m2) 
+{
+  (*this)=m2;
+}
+
+inline G4ErrorSymMatrix G4ErrorSymMatrix::T() const
+{
+  return G4ErrorSymMatrix(*this);
+}
+
+inline G4ErrorSymMatrix::G4ErrorSymMatrix_row
+G4ErrorSymMatrix::operator[] (G4int r)
+{
+  G4ErrorSymMatrix_row b(*this,r);
+  return b;
+}
+
+inline G4ErrorSymMatrix::G4ErrorSymMatrix_row_const
+G4ErrorSymMatrix::operator[] (G4int r) const
+{
+  const G4ErrorSymMatrix_row_const b(*this,r);
+  return b;
+}
+
+inline G4double &G4ErrorSymMatrix::G4ErrorSymMatrix_row::operator[](G4int c)
+{
+   if (_r >= c )
+   {
+      return *(_a.m.begin() + (_r+1)*_r/2 + c);
+   }
+   else
+   {
+      return *(_a.m.begin() + (c+1)*c/2 + _r);
+   }
+}
+
+inline const G4double &
+G4ErrorSymMatrix::G4ErrorSymMatrix_row_const::operator[](G4int c) const 
+{
+   if (_r >= c )
+   {
+      return *(_a.m.begin() + (_r+1)*_r/2 + c);
+   }
+   else
+   {
+      return *(_a.m.begin() + (c+1)*c/2 + _r);
+   }
+}
+
+inline G4ErrorSymMatrix::
+G4ErrorSymMatrix_row::G4ErrorSymMatrix_row(G4ErrorSymMatrix &a, G4int r) 
+   : _a(a), _r(r)
+{}
+
+inline G4ErrorSymMatrix::
+G4ErrorSymMatrix_row_const::G4ErrorSymMatrix_row_const
+(const G4ErrorSymMatrix&a,G4int r) 
+   : _a(a), _r(r)
+{}
+
+inline G4ErrorSymMatrix G4ErrorSymMatrix::inverse(G4int &ifail) const
+{
+  G4ErrorSymMatrix mTmp(*this);
+  mTmp.invert(ifail);
+  return mTmp;
+}

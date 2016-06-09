@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QElastic.cc,v 1.21 2007/03/16 10:05:05 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4QElastic.cc,v 1.23 2007/05/23 15:14:25 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QElastic class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -140,12 +140,12 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
         for(G4int j=0; j<isoSize; j++)      // Calculation of abundance vector for isotopes
         {
           G4int N=pElement->GetIsotope(j)->GetN()-Z; // N means A=N+Z !
-          if(pElement->GetIsotope(j)->GetZ()!=Z)G4cerr<<"G4QCaptureAtRest::GetMeanFreePath"
-																																	<<": Z="<<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
+          if(pElement->GetIsotope(j)->GetZ()!=Z)G4cerr<<"G4QElastic::GetMeanFreePath: Z="
+                                         <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
           G4double abund=abuVector[j];
 								  std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
 #ifdef debug
-          G4cout<<"G4QElastic::GetMeanFreePath:pair#="<<j<<", N="<<N<<",ab="<<abund<<G4endl;
+          G4cout<<"G4QElastic::GetMeanFreePath:pair#="<<j<<",N="<<N<<",ab="<<abund<<G4endl;
 #endif
           newAbund->push_back(pr);
 						  }
@@ -199,7 +199,7 @@ G4double G4QElastic::GetMeanFreePath(const G4Track& aTrack,G4double Q,G4ForceCon
   } // End of LOOP over Elements
   // Check that cross section is not zero and return the mean free path
 #ifdef debug
-  G4cout<<"G4QEl::GMFP: MeanFreePath="<<1./sigma<<G4endl;
+  G4cout<<"G4QElastic::GetMeanFreePath: MeanFreePath="<<1./sigma<<G4endl;
 #endif
   if(sigma > 0.) return 1./sigma;                 // Mean path [distance] 
   return DBL_MAX;
@@ -271,7 +271,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   G4double momentum = projHadron->GetTotalMomentum()/MeV; // 3-momentum of the Proj in MeV
   G4double Momentum = proj4M.rho();                   // @@ Just for the test purposes
   if(std::fabs(Momentum-momentum)>.000001)
-           G4cerr<<"*War*G4QElastic::PostStepDoIt:P(IU)="<<Momentum<<"="<<momentum<<G4endl;
+           G4cerr<<"*War*G4QElastic::PostStepDoIt:P(IU)="<<Momentum<<"#"<<momentum<<G4endl;
   G4double pM2=proj4M.m2();        // in MeV^2
   G4double pM=std::sqrt(pM2);      // in MeV
 #ifdef pdebug
@@ -280,7 +280,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
   if (!IsApplicable(*particle))  // Check applicability
   {
-    G4cerr<<"G4QElastic::PostStepDoIt:Only pp elastic is implemented."<<G4endl;
+    G4cerr<<"G4QElastic::PostStepDoIt: Only NA elastic is implemented."<<G4endl;
     return 0;
   }
   const G4Material* material = track.GetMaterial();      // Get the current material
@@ -362,7 +362,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
   std::vector<G4int>* IsN = ElIsoN[i];     // Vector of "#of neutrons" in the isotope El[i]
   G4int nofIsot=SPI->size();               // #of isotopes in the element i
 #ifdef debug
-		G4cout<<"G4QElastic::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
+		G4cout<<"G4QElastic::PosStDoIt: nI="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<G4endl;
 #endif
   G4int j=0;
   if(nofIsot>1)
@@ -430,13 +430,13 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
 #ifdef nandebug
   if(xSec>0. || xSec<0. || xSec==0);
-  else  G4cout<<"******G4QElast::PSDI:xSec="<<xSec/millibarn<<G4endl;
+  else  G4cout<<"*Warning*G4QElastic::PostStDoIt: xSec="<<xSec/millibarn<<G4endl;
 #endif
   // @@ check a possibility to separate p, n, or alpha (!)
   if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
   {
 #ifdef pdebug
-    G4cerr<<"*Warning*G4QElastic::PSDoIt:*Zero cross-sectionp* PDG="<<projPDG<<",tPDG="
+    G4cerr<<"*Warning*G4QElastic::PostStDoIt: *Zero cross-section* PDG="<<projPDG<<",tPDG="
           <<targPDG<<",P="<<Momentum<<G4endl;
 #endif
     //Do Nothing Action insead of the reaction
@@ -452,7 +452,7 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
 #endif
 #ifdef nandebug
   if(mint>-.0000001);
-  else  G4cout<<"******G4QElast::PSDI:-t="<<mint<<G4endl;
+  else  G4cout<<"*Warning*G4QElastic::PostStDoIt:-t="<<mint<<G4endl;
 #endif
   //G4double cost=1.-mint/twop2cm;              // cos(theta) in CMS
   G4double cost=1.-mint/CSmanager->GetHMaxT();// cos(theta) in CMS
@@ -538,4 +538,36 @@ G4VParticleChange* G4QElastic::PostStepDoIt(const G4Track& track, const G4Step& 
     G4cout<<"G4QElastic::PostStepDoIt: **** PostStepDoIt is done ****"<<G4endl;
 #endif
   return G4VDiscreteProcess::PostStepDoIt(track, step);
+}
+
+// @@ For future improvement @@
+G4double G4QElastic::CalculateXSt(G4bool oxs, G4bool xst, G4double p, G4int Z, G4int N,
+                                  G4int pPDG) 
+{
+  static G4bool init=false;
+  static G4bool first=true;
+  static G4VQCrossSection* CSmanager;
+  if(first)                              // Connection with a singletone
+  {
+    CSmanager=G4QElasticCrossSection::GetPointer();
+    first=false;
+  }
+  G4double res=0.;
+  if(oxs && xst)                         // Only the Cross-Section can be returened
+  {
+    res=CSmanager->GetCrossSection(true, p, Z, N, pPDG); // XS for isotope
+  }
+  else if(!oxs && xst)                   // Calculate Cross-Section & prepare differential
+  {
+    res=CSmanager->GetCrossSection(false, p, Z, N, pPDG);// XS for isotope + init t-distr.
+    // The XS for the nucleus must be calculated the last
+    init=true;
+  }
+  else if(init)                          // Return t-value for scattering (=G4QElastic)
+  {
+    if(oxs) res=CSmanager->GetHMaxT();   // Calculate the max_t value
+				else res=CSmanager->GetExchangeT(Z, N, pPDG); // fanctionally randomized -t in MeV^2
+  }
+  else G4cout<<"*Warning*G4QCohChrgExchange::CalculateXSt:*NotInitiatedScattering"<<G4endl;
+  return res;
 }

@@ -54,10 +54,6 @@
 #include "RunAction.hh"
 #include "Histo.hh"
 
-#include <string>
-#include <fstream>
-#include <iomanip>
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -96,25 +92,25 @@ int main(int argc,char** argv) {
     {
       visManager = new G4VisExecutive();
       visManager->Initialize();
-     G4UIsession * session = new G4UIterminal;
+      G4UIsession * session;
 #ifdef G4UI_USE_TCSH
-     session = new G4UIterminal(new G4UItcsh);
+      session = new G4UIterminal(new G4UItcsh);
 #else
-     session = new G4UIterminal();
+      session = new G4UIterminal();
 #endif
-     session->SessionStart();
-     delete session;
+      session->SessionStart();
+      delete session;
     }
   else if (argc>1) // Batch mode with 1 or more files
     {
-     if(verbose >0) G4cout << "UI interface is started" << G4endl;
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      if(verbose >0) G4cout << "UI interface is started" << G4endl;
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
 
   // job termination
-  if(visManager) delete visManager;
+  delete visManager;
   delete runManager;
 
   return 0;

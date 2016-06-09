@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.hh,v 1.7 2006/06/29 19:09:37 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4UItcsh.hh,v 1.8 2007/06/14 05:44:58 kmura Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4UItcsh_h
@@ -39,7 +39,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcommandTree.hh"
 
-//
+// ====================================================================
 //   Description:
 //   This class gives tcsh-like shell.
 //   
@@ -67,6 +67,7 @@
 //   %/ ... current working directory
 //   %h ... history# (different from G4 history#)
 //
+// ====================================================================
 
 class G4UItcsh : public G4VUIshell {
 protected:
@@ -124,8 +125,13 @@ public:
   
   void SetLsColor(TermColorIndex dirColor, TermColorIndex cmdColor);
   virtual G4String GetCommandLine(const char* msg=0);
+
+  virtual void ResetTerminal();
 };
 
+// ====================================================================
+//   inline functions
+// ====================================================================
 inline G4bool G4UItcsh::IsCursorLast() const
 {
   if(cursorPosition == G4int(commandLine.length()+1)) return TRUE;

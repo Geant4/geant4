@@ -27,6 +27,9 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 add neglecting doppler broadening on the fly. T. Koi
+// 070613 fix memory leaking by T. Koi
+//
 #include "G4NeutronHPInelasticData.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
@@ -42,11 +45,16 @@ G4bool G4NeutronHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const 
 
 G4NeutronHPInelasticData::G4NeutronHPInelasticData()
 {
+// TKDB
+   theCrossSections = 0;
   BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
 G4NeutronHPInelasticData::~G4NeutronHPInelasticData()
 {
+// TKDB
+  if ( theCrossSections != 0 )
+  {  theCrossSections->clearAndDestroy(); }
   delete theCrossSections;
 }
    
@@ -55,7 +63,10 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
   size_t numberOfElements = G4Element::GetNumberOfElements();
-  theCrossSections = new G4PhysicsTable( numberOfElements );
+//  theCrossSections = new G4PhysicsTable( numberOfElements );
+// TKDB
+   if ( theCrossSections == 0 )
+   { theCrossSections = new G4PhysicsTable( numberOfElements ); }
 
   // make a PhysicsVector for each element
 
@@ -86,6 +97,21 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 
   // prepare neutron
   G4double eKinetic = aP->GetKineticEnergy();
+
+  // T. K. 
+  if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) )
+  {
+     G4double factor = 1.0;
+     if ( eKinetic < aT * k_Boltzmann ) 
+     {
+        // below 0.1 eV neutrons 
+        // Have to do some, but now just igonre.   
+        // Will take care after performance check.  
+        // factor = factor * targetV;
+     }
+     return ( (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) )* factor; 
+  }   
+
   G4ReactionProduct theNeutron( aP->GetDefinition() );
   theNeutron.SetMomentum( aP->GetMomentum() );
   theNeutron.SetKineticEnergy( eKinetic );
@@ -141,5 +167,11 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
     size += size;
   }
   result /= counter;
+/*
+  // Checking impact of  G4NEUTRONHP_NEGLECT_DOPPLER
+  G4cout << " result " << result << " " 
+         << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) << " " 
+         << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) /result << G4endl;
+*/
   return result;
 }

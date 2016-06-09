@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StepLimiterPerRegion.cc,v 1.3 2006/06/29 17:27:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4StepLimiterPerRegion.cc,v 1.4 2007/05/16 16:27:53 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,20 +68,21 @@ void G4StepLimiterPerRegion::SetMaxStep(G4double step)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4StepLimiterPerRegion::PostStepGetPhysicalInteractionLength(
-                                              const G4Track&,
+                                              const G4Track& aTrack,
                                                     G4double,
                                                     G4ForceCondition* condition )
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
   ProposedStep = MaxChargedStep;
-
+  if(aTrack.GetVolume() == gasVolume) ProposedStep = 0.0;
   return ProposedStep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VParticleChange* G4StepLimiterPerRegion::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+G4VParticleChange* G4StepLimiterPerRegion::PostStepDoIt(const G4Track& aTrack, 
+							const G4Step&)
 {
   aParticleChange.Initialize(aTrack);
   if(aTrack.GetVolume() == gasVolume) 

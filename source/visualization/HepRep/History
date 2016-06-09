@@ -1,4 +1,4 @@
-.$Id: History,v 1.125 2006/11/16 21:08:41 perl Exp $
+.$Id: History,v 1.126 2007/05/22 17:05:26 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+22 May 2007 John Allison (vis-HepRep-V08-03-00)
+- Fixed memory leak in G4HepRepFile.
 
 16 November 2006 Joseph Perl (vis-HepRep-V08-01-04)
 - Omit Pos and Aux attributes for hits.

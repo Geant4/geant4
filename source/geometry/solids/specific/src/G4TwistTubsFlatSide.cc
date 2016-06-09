@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsFlatSide.cc,v 1.5 2006/06/29 18:49:14 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TwistTubsFlatSide.cc,v 1.7 2007/05/23 09:31:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistTubsFlatSide.hh"
+#include "G4GeometryTolerance.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
@@ -236,7 +237,7 @@ G4int G4TwistTubsFlatSide::DistanceToSurface(const G4ThreeVector &gp,
    fCurStatWithV.SetCurrentStatus(0, gxx[0], distance[0], areacode[0],
                                   isvalid[0], 1, validate, &gp, &gv);
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cerr << "ERROR - G4TwistTubsFlatSide::DistanceToSurface(p,v)" << G4endl;
    G4cerr << "        Name        : " << GetName() << G4endl;
    G4cerr << "        xx          : " << xx << G4endl;
@@ -309,7 +310,8 @@ G4int G4TwistTubsFlatSide::GetAreaCode(const G4ThreeVector &xx,
                                        G4bool withTol)
 {
 
-   static const G4double rtol = 0.5*kRadTolerance;
+   static const G4double rtol
+     = 0.5*G4GeometryTolerance::GetInstance()->GetRadialTolerance();
    
    G4int areacode = sInside;
 

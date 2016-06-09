@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2006/11/16 14:42:20 vnivanch Exp $
+$Id: History,v 1.24 2007/05/25 09:59:14 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-05-07  V.Ivant (gtherapy-V08-03-02)
+- Fixed singleton GetPointer method 
+
+24-05-07  V.Ivant (gtherapy-V08-03-01)
+- substitute autoptr by normal pointers in Histo to avoid crash
+
+16 May 07: V.Ivant (gtherapy-V08-03-00)
+- Use renamed EM Phys list components from physics_lists subdirectory;
 
 16 November 06: V.Ivant (gtherapy-V08-01-00)
 - Use Phys list components from physics_list subdirectory;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUIshell.cc,v 1.9 2006/06/29 19:09:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VUIshell.cc,v 1.10 2007/06/14 05:44:58 kmura Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "G4UImanager.hh"
@@ -58,9 +58,9 @@ G4VUIshell::~G4VUIshell()
 {
 }
 
-/////////////////////////////
+////////////////////////////////////////////
 void G4VUIshell::MakePrompt(const char* msg) 
-/////////////////////////////
+////////////////////////////////////////////
 {
   if(promptSetting.length()<=1) {
     promptString= promptSetting;
@@ -104,6 +104,13 @@ void G4VUIshell::MakePrompt(const char* msg)
     promptString.append(G4String(promptSetting[(size_t)i]));
 }
 
+
+////////////////////////////////
+void G4VUIshell::ResetTerminal()
+////////////////////////////////
+{
+
+}
 
 // --------------------------------------------------------------------
 //      G4command operations
@@ -307,3 +314,4 @@ void G4VUIshell::ListCommand(const G4String& dir,
   G4UIArrayString arrayString(stream);
   arrayString.Show(nColumn);
 }
+

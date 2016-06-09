@@ -26,7 +26,7 @@
 // --------------------------------------------------------------------
 //
 // $Id: G4LowEnergyRayleigh.cc,v 1.37 2006/06/29 19:40:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

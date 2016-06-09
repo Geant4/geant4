@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4XXXStoredSceneHandler.cc,v 1.9 2006/10/26 11:30:10 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison  7th March 2006

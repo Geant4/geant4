@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.21 2007/05/08 17:50:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4EmCorrections.cc,v 1.22 2007/05/18 18:39:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -78,6 +78,7 @@ G4EmCorrections::G4EmCorrections()
   verbose    = 1;
   massFactor = 1.0;
   nist = G4NistManager::Instance();
+  ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -675,7 +676,7 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
     G4int Z = p->GetAtomicNumber();
     G4int A = p->GetAtomicMass();
     if(verbose > 1) G4cout << "Zion= " << Z << " Aion= " << A << G4endl;
-    massFactor = proton_mass_c2/G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z,A);
+    massFactor = proton_mass_c2/ionTable->GetIonMass(Z,A);
     idx = 0;
     for(; idx<nIons; idx++) {
       if(Z == Zion[idx] && A == Aion[idx]) {

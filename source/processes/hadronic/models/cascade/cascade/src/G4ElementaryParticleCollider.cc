@@ -590,8 +590,11 @@ generateSCMfinalState(G4double ekin,
 
       for (G4int i = 1; i < 4; i++) mom1[i] = -mom[i];
 
-      particles.push_back(G4InuclElementaryParticle(mom, particle_kinds[0]));
-      particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1]));
+      //particles.push_back(G4InuclElementaryParticle(mom, particle_kinds[0]));
+      //particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1]));
+
+      particles.push_back(G4InuclElementaryParticle(mom, particle_kinds[0], 3)); // register modelId
+      particles.push_back(G4InuclElementaryParticle(mom1, particle_kinds[1],3));
       generate = false;
 
     } else { // 2 -> many

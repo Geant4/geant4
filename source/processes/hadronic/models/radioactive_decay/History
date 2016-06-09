@@ -13,6 +13,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+21 June 2007 Fan Lei (radioactive_decay-V08-03-00)
+- Minor changes to remove compilation warnings on Windows
+   src\G4RIsotopeTable.cc(204): warning C4804:
+  '-' : unsafe use of type 'bool' in operation
+   src\G4RadioactiveDecay.cc(690): warning C4804:
+  '-' : unsafe use of type 'bool' in operation
+
 10 November 2006 Fan Lei (radioactive_decay-V08-01-01)
 - G4NuclearDecayChannel.cc: added the capability of handling decay emission of proton or neutron 
 for decays of He5 (alpha+n) and Li5 (alpha+p). bug#852 

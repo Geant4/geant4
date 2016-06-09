@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DummyModel.hh,v 1.2 2006/06/29 19:54:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4DummyModel.hh,v 1.3 2007/05/22 17:31:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,11 +63,11 @@ public:
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double tmax);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double tmax);
 
 private: 
 

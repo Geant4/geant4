@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.12 2006/06/29 19:09:54 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4UItcsh.cc,v 1.14 2007/06/14 05:44:58 kmura Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef WIN32
@@ -75,10 +75,10 @@ G4UItcsh::~G4UItcsh()
 /////////////////////
 {
 }
-  
-///////////////////////////
+
+//////////////////////////////////////////
 void G4UItcsh::MakePrompt(const char* msg)
-///////////////////////////
+//////////////////////////////////////////
 {
   if(promptSetting.length()<=1) {
     promptString= promptSetting;
@@ -128,6 +128,15 @@ void G4UItcsh::MakePrompt(const char* msg)
   if(i == promptSetting.length()-1) 
     promptString.append(G4String(promptSetting[i]));
 }
+
+
+//////////////////////////////
+void G4UItcsh::ResetTerminal()
+//////////////////////////////
+{
+  RestoreTerm();
+}
+
 
 // --------------------------------------------------------------------
 //      commad line operations
@@ -464,14 +473,14 @@ void G4UItcsh::CompleteCommand()
   else jhead++;
 
   G4int jt= input.find_last_of('/');
-  if(jt<jhead) jt=G4String::npos;
+  if(jt<jhead) jt=G4int(G4String::npos);
 
   if(jt==G4int(G4String::npos)) jt= jhead;
   else jt++;
 
   G4String dspstr; 
   G4int i;
-  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); // cleanup
+  for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); 
   for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(' '); 
   for(i=jt; i<=G4int(input.length())-1; i++) dspstr+= G4String(AsciiBS); 
 

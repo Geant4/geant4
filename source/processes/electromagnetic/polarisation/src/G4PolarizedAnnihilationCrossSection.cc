@@ -25,7 +25,7 @@
 //
 // -------------------------------------------------------------------
 // $Id: G4PolarizedAnnihilationCrossSection.cc,v 1.5 2006/11/20 12:21:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file

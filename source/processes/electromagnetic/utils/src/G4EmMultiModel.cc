@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmMultiModel.cc,v 1.5 2006/06/29 19:55:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmMultiModel.cc,v 1.6 2007/05/22 17:31:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -140,15 +140,13 @@ G4double G4EmMultiModel::CrossSection(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4EmMultiModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+void G4EmMultiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+				       const G4MaterialCutsCouple* couple,
+				       const G4DynamicParticle* dp,
+				       G4double tmin,
+				       G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = 0;
-
-  if(nModels) {
+  if(nModels > 0) {
     G4int i;
     G4double cross = 0.0;
     G4double t1    = tmin;
@@ -168,13 +166,11 @@ std::vector<G4DynamicParticle*>* G4EmMultiModel::SampleSecondaries(
       t1 = std::max(t2, tsecmin[i]);
       t2 = std::min(maxEnergy, tsecmin[i+1]);
       if(cross <= cross_section[i]) {
-        vdp = (model[i])->SampleSecondaries(couple, dp, t1, t2);
+        (model[i])->SampleSecondaries(vdp, couple, dp, t1, t2);
         break;
       }
     }
   } 
-
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

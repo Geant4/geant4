@@ -25,7 +25,7 @@
 //
 //
 // $Id: PhotInGapParameterisation.hh,v 1.5 2006/11/22 09:44:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 //  A parameterisation that describes a series of boxes along Z

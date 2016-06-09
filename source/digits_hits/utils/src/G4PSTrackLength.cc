@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackLength.cc,v 1.5 2006/06/29 18:08:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSTrackLength.cc,v 1.6 2007/05/18 00:00:38 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4PSTrackLength
 #include "G4PSTrackLength.hh"
@@ -35,12 +35,13 @@
 //   This is a primitive scorer class for scoring sum of track length.
 // 
 //
-// Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// Created: 2007-02-02  Tsukasa ASO, Akinori Kimura.
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTrackLength::G4PSTrackLength(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false),multiplyKinE(false),
+     divideByVelocity(false)
 {;}
 
 G4PSTrackLength::~G4PSTrackLength()
@@ -51,6 +52,8 @@ G4bool G4PSTrackLength::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4double trklength  = aStep->GetStepLength();
   if ( trklength == 0. ) return FALSE;
   if(weighted) trklength *= aStep->GetPreStepPoint()->GetWeight();
+  if(multiplyKinE) trklength *= aStep->GetPreStepPoint()->GetKineticEnergy();
+  if(divideByVelocity) trklength /= aStep->GetPreStepPoint()->GetVelocity();
   G4int  index = GetIndex(aStep);
   EvtMap->add(index,trklength);  
   return TRUE;
@@ -80,9 +83,17 @@ void G4PSTrackLength::PrintAll()
   G4cout << " Number of entries " << EvtMap->entries() << G4endl;
   std::map<G4int,G4double*>::iterator itr = EvtMap->GetMap()->begin();
   for(; itr != EvtMap->GetMap()->end(); itr++) {
-    G4cout << "  copy no.: " << itr->first
-	   << "  track length: " << G4BestUnit(*(itr->second),"Length")
-	   << G4endl;
+      G4cout << "  copy no.: " << itr->first << "  track length: " ;
+      if ( multiplyKinE && !divideByVelocity ){
+	  G4cout << *(itr->second)/(mm*MeV) <<" mm*MeV";
+      } else if ( !multiplyKinE && divideByVelocity ){
+	  G4cout << *(itr->second)*second <<" /second";
+      } else if ( multiplyKinE && divideByVelocity) {
+          G4cout << *(itr->second)/MeV*second <<" MeV/second";
+      } else {
+	  G4cout  << G4BestUnit(*(itr->second),"Length");
+      }
+      G4cout << G4endl;
   }
 }
 

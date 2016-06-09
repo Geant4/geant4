@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.18 2006/06/29 19:12:53 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MaterialPropertiesTable.cc,v 1.19 2007/04/25 15:46:55 gum Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -81,6 +81,7 @@ void G4MaterialPropertiesTable::AddConstProperty(const char     *key,
 //      Table given a key
 
         MPTC [G4String(key)] = PropertyValue;
+
 }
 
 void G4MaterialPropertiesTable::AddProperty(const char     *key,
@@ -238,12 +239,18 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
   // rindex built-in "iterator" was advanced to first entry above
   G4double E0 = rindex->GetPhotonMomentum();
   G4double n0 = rindex->GetProperty();
+
+  if (E0 <= 0. ) G4Exception("G4MaterialPropertiesTable::SetGROUPVEL ==> "
+                       "Optical Photon Energy <= 0");
                                                                                 
   if ( ++*rindex ) {
     // good, we have at least two entries in RINDEX
     // get next energy/value pair
     G4double E1 = rindex->GetPhotonMomentum();
     G4double n1 = rindex->GetProperty();
+
+    if (E1 <= 0. ) G4Exception("G4MaterialPropertiesTable::SetGROUPVEL ==> "
+                         "Optical Photon Energy <= 0");
     G4double vg;
     // add entry at first photon energy
     vg = c_light/(n0+(n1-n0)/std::log(E1/E0));
@@ -262,6 +269,9 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
       n0 = n1;
       E1 = rindex->GetPhotonMomentum();
       n1 = rindex->GetProperty();
+
+      if (E1 <= 0. ) G4Exception("G4MaterialPropertiesTable::SetGROUPVEL ==> "
+                           "Optical Photon Energy <= 0");
     }
     // add entry at last photon energy
     vg = c_light/(n1+(n1-n0)/std::log(E1/E0));

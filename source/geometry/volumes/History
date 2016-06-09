@@ -1,4 +1,4 @@
-$Id: History,v 1.145 2007/04/11 07:56:55 gcosmo Exp $
+$Id: History,v 1.146 2007/05/11 14:00:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 11th, 2007      G.Cosmo - geomvol-V08-03-00
+- Use call to G4GeometryTolerance instead of kCarTolerance in
+  G4ReflectionFactory.
+- Requires tag "global-V08-03-00" and related tag set.
 
 Apr 11th, 2007      G.Cosmo - geomvol-V08-02-02
 - More extensions to the CheckOverlaps() algorithm:

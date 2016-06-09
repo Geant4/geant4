@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UnitsTable.cc,v 1.36 2006/11/30 10:37:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //

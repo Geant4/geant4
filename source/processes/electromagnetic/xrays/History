@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2006/05/19 10:05:27 vnivanch Exp $
+$Id: History,v 1.56 2007/05/11 14:22:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 May 07: G.Cosmo (xrays-V08-03-00)
+- Use call to G4GeometryTolerance instead of kCarTolerance in G4ForwardXrayTR.
+- Requires tag "global-V08-03-00" and related tag set.
 
 19 May 06: V.Ivant (xrays-V08-00-03)
 - Create two processes G4SynchrotronRadiation and G4SynchrotronRadiationInMat

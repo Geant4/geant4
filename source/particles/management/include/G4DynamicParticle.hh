@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.17 2006/06/29 19:23:01 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4DynamicParticle.hh,v 1.18 2007/03/11 07:17:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -43,6 +43,7 @@
 //      Add theDynamicCharge and theElectronOccupancy
 //                             17 AUg. 1999   H.Kurashige  
 //      Add thePreAssignedDecayTime   18 Jan. 2001 H.Kurashige
+//      Added  MagneticMoment               Mar. 2007
 // ------------------------------------------------------------
 
 #ifndef G4DynamicParticle_h
@@ -160,6 +161,18 @@ class G4DynamicParticle
      // set/get dynamical charge 
      // the dynamical mass is set to PDG charge in default
 
+     G4double GetSpin() const;
+     void     SetSpin(G4double spin);
+     void     SetSpin(G4int    spinInUnitOfHalfInteger);
+     // set/get dynamical spin
+     // the dynamical spin is set to PDG spin in default
+
+     G4double GetMagneticMoment() const;
+     void     SetMagneticMoment(G4double magneticMoment);
+     // set/get dynamical MagneticMoment  
+     // the dynamical mass is set to PDG MagneticMoment in default
+
+
      const G4ElectronOccupancy* GetElectronOccupancy() const;
      // Get electron occupancy 
      // ElectronOccupancy is valid only if the particle is ion
@@ -207,6 +220,10 @@ class G4DynamicParticle
      G4double theDynamicalMass;
 
      G4double theDynamicalCharge;
+
+     G4double theDynamicalSpin;
+
+     G4double theDynamicalMagneticMoment;
 
      G4ElectronOccupancy* theElectronOccupancy;          
   

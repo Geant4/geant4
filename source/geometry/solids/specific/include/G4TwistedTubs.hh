@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.13 2006/10/20 13:45:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TwistedTubs.hh,v 1.14 2007/05/23 09:32:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -183,7 +183,7 @@ class G4TwistedTubs : public G4VSolid
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   G4VTwistSurface * GetOuterHype() const { return fOuterHype; }
 #endif
   
@@ -361,7 +361,7 @@ void G4TwistedTubs::SetFields(G4double phitwist, G4double innerrad,
    fEndPhi[0]      = std::atan2(fEndZ[0] * tanHalfTwist, fZHalfLength);
    fEndPhi[1]      = std::atan2(fEndZ[1] * tanHalfTwist, fZHalfLength);
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "/********* G4TwistedTubs::SetFields() Field Parameters ***************** " << G4endl;
    G4cout << "/*   fPhiTwist                  : " << fPhiTwist << G4endl;
    G4cout << "/*   fEndZ(0, 1)                : " << fEndZ[0] << " , " << fEndZ[1] << G4endl; 

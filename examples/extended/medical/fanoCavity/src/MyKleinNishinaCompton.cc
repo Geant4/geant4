@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaCompton.cc,v 1.2 2007/01/30 16:02:10 maire Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: MyKleinNishinaCompton.cc,v 1.3 2007/05/23 08:40:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -73,7 +73,8 @@ G4double MyKleinNishinaCompton::CrossSectionPerVolume(
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* MyKleinNishinaCompton::SampleSecondaries(
+void MyKleinNishinaCompton::SampleSecondaries(
+			     std::vector<G4DynamicParticle*>* fvect,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* aDynamicGamma,
                                    G4double,
@@ -136,8 +137,6 @@ std::vector<G4DynamicParticle*>* MyKleinNishinaCompton::SampleSecondaries(
   fParticleChange->SetProposedKineticEnergy(gamEnergy0);
   fParticleChange->ProposeMomentumDirection(gamDirection0);
 
-  std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
- 
   //
   // kinematic of the scattered electron
   //
@@ -154,7 +153,6 @@ std::vector<G4DynamicParticle*>* MyKleinNishinaCompton::SampleSecondaries(
                    = new G4DynamicParticle(theElectron,eDirection,eKinEnergy);
     fvect->push_back(dp);
   }
-  return fvect;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

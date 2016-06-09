@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.5 2006/10/19 17:24:13 maire Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: EventAction.cc,v 1.6 2007/06/20 15:26:33 maire Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 
@@ -87,9 +87,9 @@ void EventAction::EndOfEventAction(const G4Event* evt)
    for(G4int i=0; i<n_trajectories; i++) 
       { G4Trajectory* trj = (G4Trajectory*)
                                        ((*(evt->GetTrajectoryContainer()))[i]);
-        if (drawFlag == "all") trj->DrawTrajectory(1000);
+        if (drawFlag == "all") trj->DrawTrajectory(100);
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(1000); 
+                               trj->DrawTrajectory(100); 
       }
   }
 }

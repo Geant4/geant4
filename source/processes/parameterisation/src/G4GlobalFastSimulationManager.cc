@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.19 2006/11/10 15:27:17 mverderi Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.20 2007/05/11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //  
 //---------------------------------------------------------------
@@ -43,6 +43,7 @@
 //             G4FlavoredParallelWorld pointer.
 //    Feb 98: Verderi && MoraDeFreitas - First Implementation.
 //    March 98: correction to instanciate dynamically the manager
+//    May 07: Move to parallel world scheme
 //
 //---------------------------------------------------------------
 
@@ -59,47 +60,49 @@
 #include "G4ProcessManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 
-// -- *** to be dropped @ next major release: >>>>
-#include "G4GFSManager81.hh"
-// -- <<<<<<<<
 
-G4GlobalFastSimulationManager* 
-G4GlobalFastSimulationManager::fGlobalFastSimulationManager = 0;
+// ------------------------------------------
+// -- static instance pointer initialisation:
+// ------------------------------------------
+G4GlobalFastSimulationManager* G4GlobalFastSimulationManager::fGlobalFastSimulationManager = 0;
 
-
-G4GlobalFastSimulationManager* 
-G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()
+// --------------------------------------------------
+// -- static methods to retrieve the manager pointer:
+// --------------------------------------------------
+G4GlobalFastSimulationManager* G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()
 {
   if(!fGlobalFastSimulationManager)
-  {
     fGlobalFastSimulationManager = new G4GlobalFastSimulationManager;
-    SetConcreteInstance(fGlobalFastSimulationManager);
-
-  }
+  
   return fGlobalFastSimulationManager;
 }
 
 
-G4GlobalFastSimulationManager::G4GlobalFastSimulationManager()
+G4GlobalFastSimulationManager* G4GlobalFastSimulationManager::GetInstance()
 {
-  // Initialises the G4FastSimulationMessenger
-  fTheFastSimulationMessenger=new G4FastSimulationMessenger(this);
-
-  // -- *** to be dropped @ next major release ***:
-  _deprecated = new G4GFSManager81();
+  return G4GlobalFastSimulationManager::GetGlobalFastSimulationManager();
 }
 
+// ---------------
+// -- constructor
+// ---------------
+G4GlobalFastSimulationManager::G4GlobalFastSimulationManager()
+{
+  fTheFastSimulationMessenger = new G4FastSimulationMessenger(this);
+}
+
+// -------------
+// -- destructor
+// -------------
 G4GlobalFastSimulationManager::~G4GlobalFastSimulationManager()
 {
   delete fTheFastSimulationMessenger;
   fTheFastSimulationMessenger = 0;
 }
 
-void G4GlobalFastSimulationManager::FastSimulationNeedsToBeClosed()
-{
-  _deprecated->FastSimulationNeedsToBeClosed();
-}
-
+// ----------------------
+// -- management methods:
+// ----------------------
 void G4GlobalFastSimulationManager::
 AddFastSimulationManager(G4FastSimulationManager* fsmanager)
 {
@@ -112,39 +115,17 @@ RemoveFastSimulationManager(G4FastSimulationManager* fsmanager)
   ManagedManagers.remove(fsmanager);
 }
 
-void G4GlobalFastSimulationManager::
-AddFSMP(G4FastSimulationManagerProcess81* fp)
+void G4GlobalFastSimulationManager::AddFSMP(G4FastSimulationManagerProcess* fp)
 {
   fFSMPVector.push_back(fp);
 }
 
-void G4GlobalFastSimulationManager::
-RemoveFSMP(G4FastSimulationManagerProcess81* fp)
+void G4GlobalFastSimulationManager::RemoveFSMP(G4FastSimulationManagerProcess* fp)
 {
   fFSMPVector.remove(fp);
 }
 
-void G4GlobalFastSimulationManager::CloseFastSimulation()
-{
-  static int count(0);
-  if (count++ < 5)
-    G4cout << "G4GlobalFastSimulationManager::CloseFastSimulation() : DEPRECATING, will be dropped @ next major release" << G4endl;
-  _deprecated->CloseFastSimulation();
-}
-
-G4VFlavoredParallelWorld* 
-G4GlobalFastSimulationManager::
-GetFlavoredWorldForThis(G4ParticleDefinition* definition)
-{
-  static int count(0);
-  if (count++ < 5)
-    G4cout << "G4GlobalFastSimulationManager::GetFlavoredWorldForThis(...): DEPRECATING, will be dropped @ next major release" << G4endl;
-  return _deprecated->GetFlavoredWorldForThis(definition);
-}
-
-void 
-G4GlobalFastSimulationManager::
-ActivateFastSimulationModel(const G4String& aName)
+void G4GlobalFastSimulationManager::ActivateFastSimulationModel(const G4String& aName)
 {
   G4bool result = false;
   for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
@@ -157,9 +138,7 @@ ActivateFastSimulationModel(const G4String& aName)
   G4cout << G4endl;
 }
 
-void 
-G4GlobalFastSimulationManager::
-InActivateFastSimulationModel(const G4String& aName)
+void G4GlobalFastSimulationManager::InActivateFastSimulationModel(const G4String& aName)
 {
   G4bool result = false;
   for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
@@ -172,8 +151,11 @@ InActivateFastSimulationModel(const G4String& aName)
   G4cout << G4endl;
 }
 
-void
-G4GlobalFastSimulationManager::ShowSetup()
+
+// ---------------------------------
+// -- display fast simulation setup:
+// ---------------------------------
+void G4GlobalFastSimulationManager::ShowSetup()
 {
   std::vector<G4VPhysicalVolume*> worldDone;
   G4VPhysicalVolume* world;
@@ -224,9 +206,7 @@ G4GlobalFastSimulationManager::ShowSetup()
 }
 
 
-void
-G4GlobalFastSimulationManager::
-DisplayRegion(G4Region* region, G4int depth, std::vector<G4ParticleDefinition*>& particlesKnown) const
+void G4GlobalFastSimulationManager::DisplayRegion(G4Region* region, G4int depth, std::vector<G4ParticleDefinition*>& particlesKnown) const
 {
   G4String indent = "        ";
   for (G4int I=0; I<depth; I++) indent += "    ";
@@ -272,10 +252,12 @@ DisplayRegion(G4Region* region, G4int depth, std::vector<G4ParticleDefinition*>&
 }
 
 
+// ----------------------------
+// -- management methods : list
+// ----------------------------
 
-void 
-G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
-                                             listType        theType)
+void G4GlobalFastSimulationManager::ListEnvelopes(const G4String&   aName,
+						  listType        theType)
 {
   if (theType == ISAPPLICABLE)
     {
@@ -311,26 +293,15 @@ G4GlobalFastSimulationManager::ListEnvelopes(const G4String& aName,
     }
 }
 
-void 
-G4GlobalFastSimulationManager::ListEnvelopes(const G4ParticleDefinition* aPD)
+void G4GlobalFastSimulationManager::ListEnvelopes(const G4ParticleDefinition* aPD)
 {
   for (size_t ifsm=0; ifsm<ManagedManagers.size(); ifsm++)
     ManagedManagers[ifsm]->ListModels(aPD);
 }
 
-G4bool 
-G4GlobalFastSimulationManager::Notify(G4ApplicationState requestedState)
-{ 
-  static int count(0);
-  if (count++ < 5)
-    G4cout << "G4GlobalFastSimulationManager::Notify() : DEPRECATING, will be dropped @ next major release"  << G4endl;
-  return _deprecated->Notify(requestedState);
-}
 
-G4VFastSimulationModel* 
-G4GlobalFastSimulationManager::
-GetFastSimulationModel(const G4String& modelName,
-                       const G4VFastSimulationModel* previousFound) const
+G4VFastSimulationModel* G4GlobalFastSimulationManager::GetFastSimulationModel(const G4String&                   modelName,
+									      const G4VFastSimulationModel* previousFound) const
 {
   G4VFastSimulationModel* model = 0;
   // -- flag used to navigate accross the various managers;

@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+//
 #include "G4NeutronHPElastic.hh"
 #include "G4NeutronHPElasticFS.hh"
 
@@ -35,9 +37,9 @@
   {
     overrideSuspension = false;
     G4NeutronHPElasticFS * theFS = new G4NeutronHPElasticFS;
-    if(!getenv("NeutronHPCrossSections")) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
-    dirName = getenv("NeutronHPCrossSections");
+    if(!getenv("G4NEUTRONHPDATA")) 
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+    dirName = getenv("G4NEUTRONHPDATA");
     G4String tString = "/Elastic/";
     dirName = dirName + tString;
 //    G4cout <<"G4NeutronHPElastic::G4NeutronHPElastic testit "<<dirName<<G4endl;
@@ -89,7 +91,8 @@
       {
         running += xSec[i];
         index = theMaterial->GetElement(i)->GetIndex();
-        if(random<=running/sum) break;
+        //if(random<=running/sum) break;
+        if( sum == 0 || random <= running/sum ) break;
       }
       delete [] xSec;
       // it is element-wise initialised.

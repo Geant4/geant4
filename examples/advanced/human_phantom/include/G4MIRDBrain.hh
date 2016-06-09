@@ -35,20 +35,21 @@
 #define G4MIRDBrain_h 1
 
 #include "G4VPhysicalVolume.hh"
-
+#include "G4VOrgan.hh"
 //#include "Saxana/SAXProcessor.h"
 ///#include "Saxana/ProcessingConfigurator.h"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDBrain
+class G4MIRDBrain: public G4VOrgan
 {
 public:
 
   G4MIRDBrain();
   ~G4MIRDBrain();
-  G4VPhysicalVolume* ConstructBrain(G4VPhysicalVolume*, G4String, G4bool);
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*, 
+				    const G4String&, G4bool, G4bool);
  
 private:
   //AXProcessor sxp;

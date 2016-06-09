@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFieldPoint.hh,v 1.8 2006/06/29 20:47:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPFieldPoint.hh,v 1.9 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPFieldPoint_h
 #define G4NeutronHPFieldPoint_h 1
@@ -40,7 +40,7 @@ class G4NeutronHPFieldPoint
   {
     X = 0;
     nP = 0;
-    Y = NULL;
+    Y = 0;
   }
   
   G4NeutronHPFieldPoint(G4int n);

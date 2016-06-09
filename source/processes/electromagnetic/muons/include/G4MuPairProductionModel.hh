@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.20 2006/06/29 19:49:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MuPairProductionModel.hh,v 1.22 2007/05/22 17:35:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -44,8 +44,8 @@
 // 13-02-03 Add name (V.Ivanchenko)
 // 10-02-04 Update parameterisation using R.Kokoulin model (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
-// 13-02-06 add ComputeCrossSectionPerAtom (mma)
-//
+// 13-02-06 Add ComputeCrossSectionPerAtom (mma)
+// 12-05-06 Add parameter to SelectRandomAtom (A.Bogdanov) 
 
 //
 // Class Description:
@@ -102,11 +102,11 @@ public:
                                 G4double kineticEnergy,
                                 G4double cutEnergy);
 
-  std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
+  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
+			 const G4MaterialCutsCouple*,
+			 const G4DynamicParticle*,
+			 G4double tmin,
+			 G4double maxEnergy);
 
 protected:
 
@@ -130,7 +130,7 @@ public:
 private:
 
   const G4Element* SelectRandomAtom(G4double kinEnergy, G4double dt, G4int it,
-                              const G4MaterialCutsCouple* couple);
+				    const G4MaterialCutsCouple* couple, G4double tmin);
 
   void MakeSamplingTables();
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.hh,v 1.2 2006/11/13 18:36:02 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ParallelWorldScoringProcess.hh,v 1.4 2007/05/30 17:47:10 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //---------------------------------------------------------------

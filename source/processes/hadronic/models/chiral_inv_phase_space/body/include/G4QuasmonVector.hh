@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QuasmonVector.hh,v 1.19 2006/06/29 20:06:43 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QuasmonVector ----------------
 //             by Mikhail Kossov, Sept 1999.

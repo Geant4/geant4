@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.cc,v 1.22 2006/06/29 19:13:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SandiaTable.cc,v 1.27 2007/06/20 09:21:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
@@ -76,6 +76,7 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
 G4SandiaTable::G4SandiaTable(G4Material* material)
   : fMaterial(material)
 {
+  fMatSandiaMatrix = 0 ; 
   fPhotoAbsorptionCof = 0 ;
   //build the CumulInterval array
   fCumulInterval[0] = 1;
@@ -103,7 +104,10 @@ G4SandiaTable::G4SandiaTable(__void__&)
 
 G4SandiaTable::~G4SandiaTable()
 { 
-  if(fMatSandiaMatrix) delete fMatSandiaMatrix;
+  if(fMatSandiaMatrix) {
+    //    fMatSandiaMatrix->clearAndDestroy();
+    delete fMatSandiaMatrix;
+  }
   
   if(fPhotoAbsorptionCof)
   {
@@ -128,7 +132,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   G4int MaxIntervals = 0;
   G4int elm;    
   for (elm=0; elm<NbElm; elm++)
-     { Z[elm] = (int)(*ElementVector)[elm]->GetZ();
+     { Z[elm] = (G4int)(*ElementVector)[elm]->GetZ();
        MaxIntervals += fNbOfIntervals[Z[elm]];
      }  
      
@@ -207,7 +211,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4double  G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)                                                 
+G4double  G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)    
 {
    assert (interval>=0 && interval<fMatNbOfIntervals && j>=0 && j<5);                      
    return ((*(*fMatSandiaMatrix)[interval])[j]); 
@@ -442,7 +446,7 @@ void G4SandiaTable::ComputeMatTable()
 
   for (elm = 0; elm<noElm; elm++)
   { 
-    Z[elm] = (int)(*ElementVector)[elm]->GetZ();
+    Z[elm] = (G4int)(*ElementVector)[elm]->GetZ();
     MaxIntervals += fNbOfIntervals[Z[elm]];
   }  
   fMaxInterval = 0 ;
@@ -614,6 +618,7 @@ void G4SandiaTable::ComputeMatTable()
       (*(*fMatSandiaMatrix)[i])[j] = fPhotoAbsorptionCof[i+1][j];
     }     
   }	         	    
+  delete [] Z;
   return ;
 }  
 

@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 // 12-April-06 Enable IC electron emissions T. Koi 
+// 26-January-07 Add G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION flag
 //
 #include "G4NeutronHPCaptureFS.hh"
 #include "G4Gamma.hh"
@@ -66,8 +67,8 @@
 
 // dice the photons
 
-    G4ReactionProductVector * thePhotons = NULL;    
-    if (HasFSData()) 
+    G4ReactionProductVector * thePhotons = 0;
+    if ( HasFSData() && !getenv ( "G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION" ) ) 
     { 
       thePhotons = theFinalStatePhotons.GetPhotons(eKinetic);
     }
@@ -86,7 +87,7 @@
       {
         G4ReactionProduct * theOne = new G4ReactionProduct;
         // T. K. add 
-        if ( (*i)->GetParticleDefinition() != NULL ) 
+        if ( (*i)->GetParticleDefinition() != 0 ) 
            theOne->SetDefinition( (*i)->GetParticleDefinition() );
         else
            theOne->SetDefinition( G4Gamma::Gamma() ); // this definiion will be over writen
@@ -108,7 +109,7 @@
 // add them to the final state
 
     G4int nPhotons = 0;
-    if(thePhotons!=NULL) nPhotons=thePhotons->size();
+    if(thePhotons!=0) nPhotons=thePhotons->size();
     G4int nParticles = nPhotons;
     if(1==nPhotons) nParticles = 2;
 

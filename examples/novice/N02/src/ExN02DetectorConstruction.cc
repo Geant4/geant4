@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.18 2006/06/29 17:48:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: ExN02DetectorConstruction.cc,v 1.19 2007/05/11 14:35:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +42,8 @@
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
 #include "G4SDManager.hh"
+#include "G4GeometryTolerance.hh"
+#include "G4GeometryManager.hh"
 
 #include "G4UserLimits.hh"
 
@@ -129,9 +131,14 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   //------------------------------ 
 
   G4double HalfWorldLength = 0.5*fWorldLength;
-  
- solidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
- logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
+ 
+  G4GeometryManager::GetInstance()->SetWorldMaximumExtent(fWorldLength);
+  G4cout << "Computed tolerance = "
+         << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
+         << " mm" << G4endl;
+
+  solidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
+  logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
   
   //  Must place the World Physical volume unrotated at (0,0,0).
   // 

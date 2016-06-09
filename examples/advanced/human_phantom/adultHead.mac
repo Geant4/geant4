@@ -1,0 +1,71 @@
+#
+# Sets some default verbose
+/control/verbose 2
+#
+#
+#
+# Initialize New Phantom
+#
+# Choose model: MIRDHead, ORNLHead
+#
+/phantom/setPhantomModel MIRDHead
+#
+# Choose Sex of Phantom: Male or Female
+#
+/phantom/setPhantomSex Male
+#
+# Insert Body Part and their Sensitivity
+#
+/bodypart/addBodyPart Head yes
+#########
+/bodypart/addBodyPart Trunk no
+/bodypart/addBodyPart Legs yes
+##############
+#
+# Skeleton System
+#
+/bodypart/addBodyPart LegBones no
+/bodypart/addBodyPart ArmBones no
+/bodypart/addBodyPart UpperSpine no
+/bodypart/addBodyPart MiddleLowerSpine no
+/bodypart/addBodyPart Skull yes
+/bodypart/addBodyPart Pelvis no
+#
+# Organs
+#
+/bodypart/addBodyPart Lungs no
+/bodypart/addBodyPart Brain yes
+/bodypart/addBodyPart Heart no
+/bodypart/addBodyPart Kidneys no
+/bodypart/addBodyPart UrinaryBladder no
+/bodypart/addBodyPart Spleen no
+/bodypart/addBodyPart Pancreas no
+/bodypart/addBodyPart Thyroid no
+#
+# Gastrointestinal System
+#
+/bodypart/addBodyPart Stomach no
+/bodypart/addBodyPart UpperLargeIntestine no
+/bodypart/addBodyPart LowerLargeIntestine no
+/bodypart/addBodyPart Liver no
+#
+# Construct your Phantom
+#
+/phantom/buildNewPhantom
+/run/initialize
+#
+#
+# Visualization Config
+#
+# Visualize Phantom with VRML
+#/control/execute vrmlVis.mac
+#
+# Visualize Phantom with OPENGL
+/control/execute openGLVis.mac
+#
+# Visualize Phantom with DAWN
+#/control/execute dawnVis.mac
+#
+# Run Particles
+#
+#/control/execute run.mac

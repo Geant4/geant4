@@ -43,10 +43,10 @@ G4NeutronHPorLFission::G4NeutronHPorLFission()
    SetMinEnergy(0.*eV);
    SetMaxEnergy(20.*MeV);
 
-   if( !getenv("NeutronHPCrossSections") ) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
+   if( !getenv("G4NEUTRONHPDATA") ) 
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
 
-   dirName = getenv("NeutronHPCrossSections");
+   dirName = getenv("G4NEUTRONHPDATA");
    G4String tString = "/Fission/";
    dirName = dirName + tString;
 //    G4cout <<"G4NeutronHPorLFission::G4NeutronHPorLFission testit "<<dirName<<G4endl;

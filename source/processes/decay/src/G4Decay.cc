@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.22 2006/06/29 19:31:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Decay.cc,v 1.24 2007/05/07 12:05:45 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -252,6 +252,20 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   
   // get parent particle information ...................................
   G4double   ParentEnergy  = aParticle->GetTotalEnergy();
+  G4double   ParentMass    = aParticle->GetMass();
+  if (ParentEnergy < ParentMass) {
+    ParentEnergy = ParentMass;
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cerr << "G4Decay::DoIt  : Total Energy is less than its mass" << G4endl;
+      G4cerr << " Particle: " << aParticle->GetDefinition()->GetParticleName();
+      G4cerr << " Energy:"    << ParentEnergy/MeV << "[MeV]";
+      G4cerr << " Mass:"    << ParentMass/MeV << "[MeV]";
+      G4cerr << G4endl;
+    }
+#endif
+  }
+
   G4ThreeVector ParentDirection(aParticle->GetMomentumDirection());
 
   //boost all decay products to laboratory frame

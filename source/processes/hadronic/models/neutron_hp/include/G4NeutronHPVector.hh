@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 070606 fix with Valgrind by T. Koi
+//
 #ifndef G4NeutronHPVector_h
 #define G4NeutronHPVector_h 1
 
@@ -65,7 +67,7 @@ class G4NeutronHPVector
     {
       theData[i].SetY(theData[i].GetY()*factor);
     }
-    if(theIntegral!=NULL)
+    if(theIntegral!=0)
     {
       theIntegral[i] *= factor;
     }
@@ -223,7 +225,7 @@ class G4NeutronHPVector
   {
     G4int total;
     aDataFile >> total;
-    if(theData!=NULL) delete [] theData;
+    if(theData!=0) delete [] theData;
     theData = new G4NeutronHPDataPoint[total]; 
     nPoints=total;
     nEntries=0;    
@@ -287,7 +289,8 @@ class G4NeutronHPVector
     }
     while (p!=passive->GetVectorLength())
     {
-      if(std::abs(GetEnergy(m)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
+      if(std::abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
+      //if(std::abs(GetEnergy(m)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.001)
       {
         SetData(m, passive->GetEnergy(p), passive->GetXsec(p));
         theManager.AppendScheme(m++, active->GetScheme(p));
@@ -302,7 +305,7 @@ class G4NeutronHPVector
   G4double SampleLin() // Samples X according to distribution Y, linear int
   {
     G4double result;
-    if(theIntegral==NULL) IntegrateAndNormalise();
+    if(theIntegral==0) IntegrateAndNormalise();
     if(GetVectorLength()==1)
     {
       result = theData[0].GetX();
@@ -351,7 +354,7 @@ class G4NeutronHPVector
   inline void IntegrateAndNormalise()
   {
     G4int i;
-    if(theIntegral!=NULL) return;
+    if(theIntegral!=0) return;
     theIntegral = new G4double[nEntries];
     if(nEntries == 1)
     {

@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2007/05/07 14:37:57 gunter Exp $
+$Id: History,v 1.33 2007/06/27 10:06:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,41 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-06-2007, G.Cosmo      phys-lists-V08-03-07
+- Updated G4DataQuestionaire to change NeutronHPCrossSections with
+  G4NEUTRONHPDATA environment variable.
+
+11-06-2007, V.Ivanchenko phys-lists-V08-03-06
+- G4EmStandardPhysics_option1 - substitute name "G4v71" by "Minimal"
+
+01-06-2007, V.Ivanchenko phys-lists-V08-03-05
+- in QBBC.icc use consistent cross sections for elastic and inelastic
+
+01-06-2007, G.Folger     phys-lists-V08-03-04
+- active Quasielastic for FTF lists. Required changes to lists/*/HadronPhysicsFTF*, 
+   and builders/*/G4FTF*Builder.* 
+- lower threshold for FTF: FTF starts at 4.0 GeV, overlaps with LEP up to 5.0 GeV   
+
+24-05-2007, G.Folger     phys-lists-V08-03-03
+- remove obsolete physics lists LHEP_HP, QGSP_HP, LHEP_BIC,
+   LHEP_BIC_HP, LHEP_PRECO.
+- remove physics lists using Mars leading particle classes (*LEAD*).
+- QGSP_BIC_HP is no longer experimental
+- Increment PACK version number
+
+23-05-2007, V.Ivanchenko phys-lists-V08-03-02
+- add G4QEmExtraPhysics for gamma, e+-, mu+- nuclear CHIPS
+
+18-05-2007, V.Ivanchenko phys-lists-V08-03-01
+- remove obsolete G4EmStandardPhysics72 and G4EmStandardPhysics71
+- use new commands for G4EmStandardPhysics_option1,2
+
+16-05-2007, V.Ivanchenko phys-lists-V08-03-00
+-  Create new builders G4EmStandardPhysics_option1 from G4EmStandardPhysics71
+   G4EmStandardPhysics_option2 from G4EmStandardPhysics72
+-  Remove definition of name of EM constructor from all PL.icc files, now
+   name of EM constructor defined inside the constructor itself. 
 
 07-05-2007, G.Folger     phys-lists-V08-02-12
 -  Add QGSP_BERT_TRV; copy of QGSP_BERT, but change to BERT occurs at

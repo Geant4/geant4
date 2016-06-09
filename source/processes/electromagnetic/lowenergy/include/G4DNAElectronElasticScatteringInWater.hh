@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAElectronElasticScatteringInWater.hh,v 1.6 2006/10/14 11:03:03 pia Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 // Nucl. Instr. Meth. 155 (1978) 145-156

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.hh,v 1.1 2007/04/20 07:55:38 asaim Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4PSSphereSurfaceFlux.hh,v 1.2 2007/05/18 00:00:37 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4PSSphereSurfaceFlux_h

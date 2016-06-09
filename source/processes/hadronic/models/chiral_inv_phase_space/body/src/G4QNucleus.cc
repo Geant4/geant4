@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.73 2007/05/09 07:27:31 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4QNucleus.cc,v 1.75 2007/05/15 13:30:47 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -53,7 +53,8 @@ G4double G4QNucleus::clustProb=4.;      // clusterization probability in dense r
 G4double G4QNucleus::mediRatio=1.;      // relative vacuum hadronization probability
 G4double G4QNucleus::nucleonDistance=.8*fermi; // Distance between nucleons (0.8 fm)
 
-G4QNucleus::G4QNucleus() : G4QHadron(),Z(0),N(0),S(0),maxClust(0),currentNucleon(-1)
+G4QNucleus::G4QNucleus() : G4QHadron(),Z(0),N(0),S(0),dZ(0),dN(0),dS(0),maxClust(0),
+                           currentNucleon(-1)
 {
   Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
@@ -63,8 +64,8 @@ G4QNucleus::G4QNucleus() : G4QHadron(),Z(0),N(0),S(0),maxClust(0),currentNucleon
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) :
-  G4QHadron(90000000+s*1000000+z*1000+n),Z(z),N(n),S(s),maxClust(0),currentNucleon(-1)
+G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s) : G4QHadron(90000000+s*1000000+z*1000+n),
+  Z(z),N(n),S(s),dZ(0),dN(0),dS(0),maxClust(0),currentNucleon(-1)
 {
   Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
@@ -117,7 +118,9 @@ G4QNucleus::G4QNucleus(G4LorentzVector p, G4int nucPDG) :
 }
 
 G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
-  G4QHadron(90000000+s*1000000+z*1000+n,p),Z(z),N(n),S(s),maxClust(0),currentNucleon(-1)
+  G4QHadron(90000000+s*1000000+z*1000+n,p),Z(z),N(n),S(s),dZ(0),dN(0),dS(0),maxClust(0),
+  currentNucleon(-1)
+  
 {
   Tb = new std::vector<G4double>;
   probVect[0]=mediRatio;
@@ -135,7 +138,9 @@ G4QNucleus::G4QNucleus(G4int z, G4int n, G4int s, G4LorentzVector p) :
 #endif
 }
 
-G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0), currentNucleon(-1)
+G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC),dZ(0),dN(0),dS(0),maxClust(0),
+                                          currentNucleon(-1)
+                                          
 {
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
   Tb = new std::vector<G4double>;
@@ -183,7 +188,7 @@ G4QNucleus::G4QNucleus(G4QContent nucQC): G4QHadron(nucQC), maxClust(0), current
 }
 
 G4QNucleus::G4QNucleus(G4QContent nucQC, G4LorentzVector p) :
-  G4QHadron(nucQC,p), maxClust(0), currentNucleon(-1)
+  G4QHadron(nucQC,p),dZ(0),dN(0),dS(0),maxClust(0),currentNucleon(-1)
 {
   Tb = new std::vector<G4double>;
 #ifdef debug
@@ -326,12 +331,15 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
 #ifdef debug
   G4cout<<"G4QNucleus::InitByPDG: >Called< PDG="<<nucPDG<<G4endl;
 #endif
+  dZ=0;
+  dN=0;
+  dS=0;
   probVect[0]=mediRatio;                        // init Vacuum/Medium probability
   if(nucPDG<80000000) nucPDG=HadrToNucPDG(nucPDG); // Convert HadrPDGCode to NucPDGCode
   G4int s=0;
   G4int z=0;
   G4int n=0;
-  if(nucPDG>80000000&&nucPDG<100000000) // Try to convert the NUCCoding to PDGCoding
+  if(nucPDG>80000000 && nucPDG<100000000) // Try to convert the NUCCoding to PDGCoding
   {
     G4QPDGCode(22).ConvertPDGToZNS(nucPDG, z, n, s);
     Z  =z;
@@ -349,7 +357,7 @@ void G4QNucleus::InitByPDG(G4int nucPDG)
     Set4Momentum(p);
     SetNFragments(0);
 #ifdef debug
-	G4cout<<"G4QNucleus::InitByPDG:->QPDG="<<nPDG<<": 4M="<<p<<G4endl;
+	   G4cout<<"G4QNucleus::InitByPDG:->QPDG="<<nPDG<<": 4M="<<p<<G4endl;
 #endif
   }
   else
@@ -374,6 +382,9 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   G4double probSInt[254];                    // integrated static probabilities
   for (G4int in=0; in<256; in++) probVect[in]=0.; // Make preinit to avoid the postinit
   probSInt[0]=0;                             // integrated static probabilities
+  dZ=0;
+  dN=0;
+  dS=0;
   G4int a = Z + N + S;                       // atomic number
 #ifdef pdebug
   G4cout<<"G4QN::UpdateCl:A="<<a<<"(Z="<<Z<<",N="<<N<<",S="<<S<<"),mR="<<mediRatio<<G4endl;
@@ -396,7 +407,7 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
   G4int dA=a-sA;                             // a#of nucleons in dense part of the nucleus
   if (din && dA<2 && a>2)
   {
-	dA=2;
+	   dA=2;
     sA=a-2;
   }
 #ifdef pdebug
@@ -437,9 +448,6 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
 #ifdef pdebug
     G4cout<<"G4QNucleus::UpdateClust:Only quasi-free nucleons pV[1]="<<probVect[1]<<G4endl;
 #endif
-    dZ=0;
-    dN=0;
-    dS=0;
   }
   else
   {
@@ -453,7 +461,7 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
     G4double prb=rd+uA;
     sum =prb;
 #ifdef pdebug
-	G4cout<<"G4QNucl::UpdateCl:sud="<<sud<<",v[1]=s="<<sum<<",dA="<<dA<<",uA="<<uA<<G4endl;
+	  G4cout<<"G4QNucl::UpdateCl:sud="<<sud<<",v[1]=s="<<sum<<",dA="<<dA<<",uA="<<uA<<G4endl;
 #endif
     //probVect[1]= prb/comb;                   // a#of quasi-free nucleons (correct)
     //probVect[254]= rd/comb;                  // a#of dense nucleons (correct)
@@ -502,7 +510,7 @@ G4int G4QNucleus::UpdateClusters(G4bool din)
         G4cout<<"G4QNucleus::UpdateCl:Cluster of "<<i<<" baryons,pV="<<probVect[i]<<G4endl;
 #endif
       }
-	}
+	   }
     dS = S;                                  // @@ Lambdas are always in the dense region
     dZ = static_cast<int>(static_cast<double>((dA-dS)*Z)/(Z+N) + 0.5);
     dN = dA - dZ;
@@ -898,54 +906,54 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   if(a==2)
   {
     if(Z<0||N<0)
-	{
+    {
       G4int  nucPDG = 2112;
       G4double nucM = mNeut;
       G4int   piPDG = -211;
       G4QPDGCode db = NNQPDG;
       G4QPDGCode pi = PIMQPDG;
       if(N<0)
-	  {
+      {
         nucPDG = 2212;
         nucM   = mProt;
         piPDG  = 211;
         db     = PPQPDG;
         pi     = PIPQPDG;
-	  }
+      }
       if(totMass>mPi+nucM+nucM)
-	  {
+      {
         G4LorentzVector n14M(0.,0.,0.,nucM);
         G4LorentzVector n24M(0.,0.,0.,nucM);
         G4LorentzVector pi4M(0.,0.,0.,mPi);
-	    if(!DecayIn3(n14M,n24M,pi4M))
-		{
+        if(!DecayIn3(n14M,n24M,pi4M))
+        {
           G4cerr<<"***G4QNucl::EvapBary: tM="<<totMass<<"-> 2N="<<nucPDG<<"(M="
 		        <<nucM<<") + pi="<<piPDG<<"(M="<<mPi<<")"<<G4endl;
-		  //throw G4QException("G4QNucl::EvapBary:ISO-dibaryon DecayIn3 did not succeed");
-		  return false;
-		}
+          //throw G4QException("G4QNucl::EvapBary:ISO-dibaryon DecayIn3 did not succeed");
+          return false;
+        }
         n14M+=n24M;
         h1->SetQPDG(db);
         h2->SetQPDG(pi);
         h1->Set4Momentum(n14M);
         h2->Set4Momentum(pi4M);
         return true;
-	  }
-	  else
-	  {
+      }
+      else
+      {
         G4cerr<<"***G4QNucleus::EvaporateBaryon: M="<<totMass
               <<", M="<<totMass<<" < M_2N+Pi, d="<<totMass-2*nucM-mPi<<G4endl;
         //throw G4QException("***G4QNucl::EvaporateBaryon: ISO-dibaryon under Mass Shell");
         return false;
-	  }      
-	}
+      }      
+    }
     else if(Z==2)
     {
       h1mom=G4LorentzVector(0.,0.,0.,mProt);
       h2mom=h1mom;
       h1->SetQPDG(pQPDG);
       h2->SetQPDG(pQPDG);
-	  if(!DecayIn2(h1mom,h2mom)) return false;
+      if(!DecayIn2(h1mom,h2mom)) return false;
     }
     else if(N==2)
     {
@@ -953,12 +961,12 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       h2mom=h1mom;
       h1->SetQPDG(nQPDG);
       h2->SetQPDG(nQPDG);
-	  if(!DecayIn2(h1mom,h2mom)) return false;
+      if(!DecayIn2(h1mom,h2mom)) return false;
     }
     else if(N==1&&Z==1)
     {
       if(totMass<=mNP)
-	  {
+      {
 #ifdef ppdebug
         G4cout<<"G4QNucl::EvaporateBaryon: Photon ### d+g ###, dM="<<totMass-mNP<<G4endl;
 #endif
@@ -966,15 +974,15 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         h2mom=G4LorentzVector(0.,0.,0.,mDeut);
         h1->SetQPDG(gQPDG);
         h2->SetQPDG(NPQPDG);
-	  }
+      }
       else
-	  {
+      {
         h1mom=G4LorentzVector(0.,0.,0.,mProt);
         h2mom=G4LorentzVector(0.,0.,0.,mNeut);
         h1->SetQPDG(pQPDG);
         h2->SetQPDG(nQPDG);
       }
-	  if(!DecayIn2(h1mom,h2mom)) return false;
+      if(!DecayIn2(h1mom,h2mom)) return false;
     }
     else if(Z==1&&S==1)
     {
@@ -982,7 +990,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       h2mom=G4LorentzVector(0.,0.,0.,mLamb);
       h1->SetQPDG(pQPDG);
       h2->SetQPDG(lQPDG);
-	  if(!DecayIn2(h1mom,h2mom)) return false;
+      if(!DecayIn2(h1mom,h2mom)) return false;
     }
     else
     {
@@ -990,11 +998,11 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       h2mom=G4LorentzVector(0.,0.,0.,mLamb);
       h1->SetQPDG(nQPDG);
       h2->SetQPDG(lQPDG);
-	  if(!DecayIn2(h1mom,h2mom)) return false;
+      if(!DecayIn2(h1mom,h2mom)) return false;
     }
     h1->Set4Momentum(h1mom);
     h2->Set4Momentum(h2mom);
-	return true;
+    return true;
   }
   else if(a>2)
   {
@@ -1316,7 +1324,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         nBnd=mNeut-GSMass+GSResNn;    // Binding energy for neutron
         G4double eMax=sqrt(mN2+np2m);
 #ifdef ppdebug
-	    G4cout<<"G4QNucl::EvapBaryon: nm="<<eMax+sqrt(np2m+GSResNn*GSResNn)<<" = M="<<totMass
+        G4cout<<"G4QNuc::EvapBaryon:nm="<<eMax+sqrt(np2m+GSResNn*GSResNn)<<" = M="<<totMass
               <<", sm="<<GSResNn+mNeut<<",np2="<<np2m<<",nB="<<nBnd<<G4endl;
 #endif
         nExcess=eMax-mNeut+nBnd;
@@ -1367,7 +1375,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         lBnd=mLamb-GSMass+GSResNl;    // Binding energy for lambda
         G4double eMax=sqrt(mL2+lp2m);
 #ifdef ppdebug
-	    G4cout<<"G4QNucl::EvapBaryon:lm="<<eMax+sqrt(lp2m+GSResNl*GSResNl)<<" = M="<<totMass
+        G4cout<<"G4QNuc::EvapBaryon:lm="<<eMax+sqrt(lp2m+GSResNl*GSResNl)<<" = M="<<totMass
               <<", sm="<<GSResNl+mLamb<<",lp2="<<lp2m<<",lB="<<lBnd<<G4endl;
 #endif
         lExcess=eMax-mLamb+lBnd;
@@ -2657,7 +2665,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
       h2->Set4Momentum(G4LorentzVector(0.,0.,0.,mLamb));
     }
     else return false;
-	return true;
+    return true;
   }
   if(a<1) G4cerr<<"***G4QNucleus::EvaporateBaryon: A="<<a<<G4endl;
   return false;
@@ -2786,7 +2794,7 @@ void G4QNucleus::PrepareCandidates(G4QCandidateVector& theQCandidates, G4bool pi
   G4int mCand=theQCandidates.size();    // Full set of candidates made in UpdateClusters
   G4double s=0.;                        // Prototype of summ for constant A (=ac>2)
   G4double comb=ae0*(ae0-1)/2;          // Product up to ac=2
-  if(comb<=0.) comb=1;
+  if(comb<=0.) comb=1.;
 #ifdef cldebug
   G4double sZ=0.;                       // Percent of protons
   G4double sN=0.;                       // Percent of neutrons

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.10 2006/11/11 01:25:29 japost Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PropagatorInField.hh,v 1.13 2007/06/08 09:49:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 // 
 // class G4PropagatorInField 
 //
@@ -238,8 +238,8 @@ class G4PropagatorInField
    G4int  fVerboseLevel;
      // For debuging purposes
 
-    // Limit for the number of sub-steps taken in one call to ComputeStep
    G4int  fMax_loop_count;
+     // Limit for the number of sub-steps taken in one call to ComputeStep
 
    //  Variables to keep track of "abnormal" case - which causes loop
    //
@@ -254,21 +254,32 @@ class G4PropagatorInField
 
    G4double  fCharge, fInitialMomentumModulus, fMass;
 
-   // Last safety origin & value: for optimisation
    G4ThreeVector  fPreviousSftOrigin;
    G4double       fPreviousSafety; 
    G4bool         fUseSafetyForOptimisation;
+     // Last safety origin & value: for optimisation
 
-   // Flag whether field manager has been set for the current step
    G4bool fSetFieldMgr; 
+     // Flag whether field manager has been set for the current step
+
+   G4double  kCarTolerance;
+     // Geometrical tolerance defining surface thickness
 
 private:
-  // The filter encapsulates the algorithm which selects which
-  // intermediate points should be stored in a trajectory. 
-  //   When it is NULL, no intermediate points will be stored.
-  //   Else PIF::ComputeStep must submit (all) intermediate
-  //   points it calculates, to this filter.  (jacek 04/11/2002)
+
+   static const G4int max_depth=4;
+   G4FieldTrack* ptrInterMedFT[max_depth+1];
+     // Used to store intermediate values of tracks in case of
+     // too slow progress
+
+private:
+
   G4VCurvedTrajectoryFilter* fpTrajectoryFilter;
+    // The filter encapsulates the algorithm which selects which
+    // intermediate points should be stored in a trajectory. 
+    // When it is NULL, no intermediate points will be stored.
+    // Else PIF::ComputeStep must submit (all) intermediate
+    // points it calculates, to this filter.  (jacek 04/11/2002)
 };
 
 // ********************************************************************
@@ -278,4 +289,3 @@ private:
 #include "G4PropagatorInField.icc"
 
 #endif 
-

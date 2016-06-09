@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4StopElementSelector.hh,v 1.9 2006/11/15 12:17:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998

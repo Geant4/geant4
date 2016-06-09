@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.86 2006/12/14 10:39:45 gcosmo Exp $
+# $Id: GNUmakefile,v 1.87 2007/05/12 15:47:21 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -20,12 +20,9 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 SUBDIR1 =  global intercoms graphics_reps materials
-SUBDIR2 =  geometry particles track digits_hits processes
-SUBDIR2 += parameterisations tracking event run readout
+SUBDIR2 =  geometry particles track digits_hits processes parameterisations
+SUBDIR2 += tracking event run error_propagation readout physics_lists
 SUBDIR3 =  persistency interfaces visualization
-ifeq ($(G4LIB_BUILD_LISTS),1)
-SUBDIR3 += physics_lists
-endif
 
 SUBDIR4 =  g3tog4
 
@@ -152,7 +149,7 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version $$Name: geant4-08-03 $ "
+	@$(ECHO) " Installation Geant4 version $$Name: geant4-09-00 $ "
 	@$(ECHO) " Copyright (C) 1994-2007 Geant4 Collaboration                            "
 	@$(ECHO) "*************************************************************"
 

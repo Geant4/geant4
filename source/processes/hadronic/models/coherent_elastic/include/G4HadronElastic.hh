@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.24 2007/04/03 10:38:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4HadronElastic.hh,v 1.26 2007/05/15 16:06:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // G4 Model: Low energy elastic scattering with 4-momentum balance 
@@ -41,6 +41,7 @@
 // 16-Nov-06 V.Ivanchenko default ekinhigh = 0.4*GeV 
 // 16-Nov-06 V.Ivanchenko cleanup and rename Set methods and variables 
 // 28-Mar-07 V.Ivanchenko add NIST manager
+// 11-May-07 V.Ivanchenko remove unused method Defs1
 //
 //
 // Class Description
@@ -67,13 +68,12 @@ enum G4ElasticGenerator
 class G4ParticleDefinition;
 class G4VQCrossSection;
 class G4ElasticHadrNucleusHE;
-class G4NistManager;
 
 class G4HadronElastic : public G4HadronicInteraction
 {
 public:
 
-  G4HadronElastic();
+  G4HadronElastic(G4ElasticHadrNucleusHE* HModel = 0);
 
   virtual ~G4HadronElastic();
  
@@ -107,12 +107,7 @@ private:
 		  G4double aa, G4double bb, G4double cc, G4double dd, 
 		  G4double rr);
 
-  void Defs1(G4double p, G4double px, G4double py, G4double pz, 
-	     G4double pxinc, G4double pyinc, G4double pzinc, 
-	     G4double* pxnew, G4double* pynew, G4double* pznew);
-
   G4VQCrossSection*           qCManager;
-  G4NistManager*              nistManager;
   G4ElasticHadrNucleusHE*     hElastic;
 
   G4ParticleDefinition* theProton;

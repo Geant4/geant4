@@ -314,8 +314,11 @@ G4double G4InuclSpecialFunctions::bindingEnergyExact(G4double A,
 
   default: 
 
-    G4cout << " DM(A, Z): wrong exact case: IN " << IN 
-	   << " IZ " << IZ << G4endl;
+  if (verboseLevel > 3) {
+    G4cout << " >>> G4InuclSpecialFunctions::bindingEnergyExact" << G4endl;
+    G4cout << "     DM(A, Z): wrong exact case: IN " << IN  << " IZ " << IZ 
+           << "     -> Using default bindingEnergyAsymptotic(A, Z)" << G4endl;
+  }
 
     DM = bindingEnergyAsymptotic(A, Z);
   }; 

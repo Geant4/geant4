@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4InitXscPAI.cc,v 1.9 2006/06/29 19:53:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // G4InitXscPAI.cc -- class implementation file

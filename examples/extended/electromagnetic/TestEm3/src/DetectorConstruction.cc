@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: DetectorConstruction.cc,v 1.20 2007/03/19 20:10:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -66,6 +66,11 @@
 
 int main(int argc ,char ** argv)
 {
+
+  // Set the Random engine
+
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+
   G4RunManager* runManager = new G4RunManager;
 
   // Initialize the geometry

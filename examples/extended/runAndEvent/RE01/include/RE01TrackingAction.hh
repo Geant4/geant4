@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RE01TrackingAction.hh,v 1.2 2006/06/29 17:43:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef RE01TrackingAction_h

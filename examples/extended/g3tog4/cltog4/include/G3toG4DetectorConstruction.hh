@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3toG4DetectorConstruction.hh,v 1.3 2006/06/29 17:20:35 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G3toG4DetectorConstruction_h
 #define G3toG4DetectorConstruction_h 1

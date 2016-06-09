@@ -89,9 +89,9 @@ fi
 
 #+
 if [ X$g4neutronhpcrosssections != X ] ; then 
-NeutronHPCrossSections="$g4neutronhpcrosssections"
-export NeutronHPCrossSections
-echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
+G4NEUTRONHPDATA="$g4neutronhpcrosssections"
+export G4NEUTRONHPDATA
+echo "On this machine the G4NEUTRONHPDATA=\$G4NEUTRONHPDATA"
 fi
 
 #+
@@ -384,7 +384,7 @@ echo ""
 echo "Installing sources and headers..."
 echo ""
 mkdir -p $g4final_install/src/geant4/
-tar cf - Configure config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
+tar cf - Configure config/ source/ environments/ examples/ include/ |(cd $g4final_install/src/geant4/; tar xf -)
 fi
 fi
 
@@ -398,7 +398,7 @@ echo "Installing sources..."
 echo ""
 
 mkdir -p $g4final_install/src/geant4/
-tar cf - Configure config/ source/ environments/ physics_lists/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
+tar cf - Configure config/ source/ environments/ examples/ |(cd $g4final_install/src/geant4/; tar xf -)
 fi
 
 echo ""

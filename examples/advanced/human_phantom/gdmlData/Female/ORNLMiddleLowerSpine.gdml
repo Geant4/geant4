@@ -6,8 +6,8 @@
   <constant name="HALFPI" value="0.5*pi"/>
 
   <position name="SpineMidLowRelativePos" unit="cm" x="0.0" y="0.0" z="-21.56" />
-  <position name="MiddleLowerSpinePos" unit="cm" x="0.0" y="5.39" z="15.905" />
-  <rotation name="MiddleLowerSpineRot" unit="degree" x="0" y="0" z="0" />
+  <position name="OrganPos" unit="cm" x="0.0" y="5.39" z="15.905" />
+  <rotation name="OrganRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
  <materials>

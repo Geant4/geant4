@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIXaw.hh,v 1.6 2006/06/29 19:09:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4UIXaw_h
 #define G4UIXaw_h 

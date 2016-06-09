@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: B02DetectorConstruction.hh,v 1.4 2006/06/29 16:34:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: B02DetectorConstruction.hh,v 1.6 2007/06/22 13:38:55 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef B02DetectorConstruction_hh
@@ -44,6 +44,18 @@ public:
   ~B02DetectorConstruction();
   
   G4VPhysicalVolume* Construct();
+
+  G4VPhysicalVolume* GetWorldVolume();
+  G4VPhysicalVolume& GetWorldVolumeAddress() const;
+
+  //  G4String GetCellName(G4int i);
+
+  void SetSensitive();
+
+private:
+
+  G4VPhysicalVolume* pWorldVolume;
+
 
 };
 

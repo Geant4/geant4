@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScatteringModel.cc,v 1.7 2006/10/19 09:44:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4CoulombScatteringModel.cc,v 1.8 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -142,13 +142,12 @@ G4double G4CoulombScatteringModel::SelectIsotope(const G4Element* elm)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double,
-                                   G4double)
+void G4CoulombScatteringModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+						 const G4MaterialCutsCouple* couple,
+						 const G4DynamicParticle* dp,
+						 G4double,
+						 G4double)
 {
-  std::vector<G4DynamicParticle*>* fvect = 0; 
   const G4Material* aMaterial = couple->GetMaterial();
   const G4ParticleDefinition* p = dp->GetDefinition();
 
@@ -180,7 +179,7 @@ std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
 
   G4double costm = std::max(cosThetaMax, 1.0 - 0.5*q2Limit/momCM2);
   if(1 == iz && p == theProton) costm = std::max(0.0, costm);
-  if(costm > cosThetaMin) return fvect; 
+  if(costm > cosThetaMin) return; 
 
   G4double x   = G4UniformRand();
   G4double y   = (a + 1.0 - cosThetaMin)/(cosThetaMin - costm);
@@ -213,15 +212,12 @@ std::vector<G4DynamicParticle*>* G4CoulombScatteringModel::SampleSecondaries(
 
   ekin = lfv2.e() - m2;
   if(ekin > Z*aMaterial->GetIonisation()->GetMeanExcitationEnergy()) {
-    fvect = new std::vector<G4DynamicParticle*>;
     G4ParticleDefinition* ion = theParticleTable->GetIon(iz, in, 0.0);
     G4DynamicParticle* newdp  = new G4DynamicParticle(ion, lfv2);
     fvect->push_back(newdp);
   } else if(ekin > 0.0) {
     fParticleChange->ProposeLocalEnergyDeposit(ekin);
   }
- 
-  return fvect;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

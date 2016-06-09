@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCellCharge.hh,v 1.2 2006/12/13 15:43:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSCellCharge.hh,v 1.3 2007/05/18 00:00:37 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4PSCellCharge_h

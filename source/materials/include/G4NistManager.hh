@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.9 2006/10/17 15:15:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NistManager.hh,v 1.12 2007/05/02 11:22:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // -------------------------------------------------------------------
@@ -42,6 +42,7 @@
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 // 17.10.06 V.Ivanchneko add methods: GetAtomicMass, GetNistElementNames,
 //                       GetNistMaterialNames
+// 02.05.07 V.Ivanchneko add GetNistFirstIsotopeN and GetNumberOfNistIsotopes 
 //
 // Class Description:
 //
@@ -103,6 +104,10 @@ public:
   G4double GetIsotopeMass(G4int Z, G4int N) const;
   G4double GetAtomicMass(G4int Z, G4int N) const;
 
+  // Number of isotopes
+  G4int    GetNistFirstIsotopeN(G4int Z) const;
+  G4int    GetNumberOfNistIsotopes(G4int Z) const;
+
   G4double GetIsotopeAbundance(G4int Z, G4int N) const;
 
   void PrintElement(const G4String&);
@@ -145,7 +150,7 @@ public:
 				      G4double temp, G4double pres, 
 				      G4bool isotopes=true);
 
-  size_t GetNumberOfMaterials() {return nMaterials;};
+  size_t GetNumberOfMaterials();
   
   void SetVerbose(G4int);
   G4int GetVerbose();
@@ -171,9 +176,18 @@ private:
   G4NistElementBuilder*    elmBuilder;
   G4NistMaterialBuilder*   matBuilder;
   G4NistMessenger*         messenger;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+size_t G4NistManager::GetNumberOfMaterials() 
+{
+  return nMaterials;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
@@ -247,6 +261,22 @@ inline
 G4double G4NistManager::GetIsotopeAbundance(G4int Z, G4int N) const
 {
   return elmBuilder->GetIsotopeAbundance(Z, N);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4int G4NistManager::GetNistFirstIsotopeN(G4int Z) const
+{
+  return elmBuilder->GetNistFirstIsotopeN(Z);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4int G4NistManager::GetNumberOfNistIsotopes(G4int Z) const
+{
+  return elmBuilder->GetNumberOfNistIsotopes(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

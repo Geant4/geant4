@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIdirectory.cc,v 1.4 2006/06/29 19:09:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 

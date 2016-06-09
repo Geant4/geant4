@@ -32,7 +32,7 @@
 
   G4NeutronHPLevel::~G4NeutronHPLevel() 
   {
-    if(theGammas != NULL)
+    if(theGammas != 0)
     {
       for(G4int i=0; i<nGammas; i++) delete theGammas[i];
     }
@@ -42,7 +42,7 @@
   void G4NeutronHPLevel::SetNumberOfGammas(G4int aGammas)
   {
     nGammas = aGammas;
-    if(theGammas != NULL)
+    if(theGammas != 0)
     {
       for(G4int i=0; i<nGammas; i++) delete theGammas[i];
     }

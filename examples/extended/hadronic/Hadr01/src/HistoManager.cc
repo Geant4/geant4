@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.11 2006/11/15 14:58:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: HistoManager.cc,v 1.14 2007/05/24 13:52:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -89,8 +89,9 @@ HistoManager::HistoManager()
   verbose=  0;
   nSlices   = 300;
   nBinsE    = 100;
-  nHisto    = 19;
+  nHisto    = 22;
   length    = 300.*mm;
+  edepMax   = 1.0*GeV;
   beamFlag  = true;
   material  = 0;
   elm       = 0;
@@ -131,6 +132,8 @@ void HistoManager::bookHisto()
   histo->add1D("19","log10 Energy (MeV) of leaking charged pions",nBinsE,-4.,6.,1.0);
   histo->add1D("20","Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
   histo->add1D("21","Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
+  histo->add1D("22","Energy deposition (GeV) in the target",
+	       nBinsE,0.0,edepMax,GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -158,6 +161,9 @@ void HistoManager::BeginOfRun()
   n_neu_forw  = 0;
   n_neu_leak  = 0;
   n_neu_back  = 0;
+
+  edepSum     = 0.0;
+  edepSum2    = 0.0;
 
   bookHisto();
   histo->book();
@@ -200,11 +206,19 @@ void HistoManager::EndOfRun()
   G4double xia = x*(G4double)n_alpha;
   G4double xio = x*(G4double)n_ions;
 
+  edepSum  *= x;
+  edepSum2 *= x;
+  edepSum2 -= edepSum*edepSum;
+  if(edepSum2 > 0.0) edepSum2 = std::sqrt(edepSum2);
+  else               edepSum2 = 0.0;
+
   G4cout                         << "Beam particle                        "
 				 << primaryDef->GetParticleName() <<G4endl;
   G4cout                         << "Beam Energy(MeV)                     " 
 				 << primaryKineticEnergy/MeV <<G4endl;
   G4cout                         << "Number of events                     " << n_evt <<G4endl;
+  G4cout << std::setprecision(4) << "Average energy deposit (MeV)         " << edepSum/MeV 
+	 << "   RMS(MeV) " << edepSum2/MeV << G4endl;
   G4cout << std::setprecision(4) << "Average number of steps              " << xs << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma              " << xg << G4endl;
   G4cout << std::setprecision(4) << "Average number of e-                 " << xe << G4endl;
@@ -234,7 +248,22 @@ void HistoManager::EndOfRun()
 
   if(verbose > 1) histo->print(0);
   histo->save();
-  histo->reset();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::BeginOfEvent()
+{
+  edepEvt = 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void HistoManager::EndOfEvent()
+{
+  edepSum  += edepEvt;
+  edepSum2 += edepEvt*edepEvt;
+  histo->fill(21,edepEvt,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -327,24 +356,30 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 void HistoManager::AddTargetStep(const G4Step* step)
 {
   n_step++;
-  const G4Track* track = step->GetTrack();
-  currentDef = track->GetDefinition(); 
-  currentKinEnergy = track->GetKineticEnergy();
+  G4double edep = step->GetTotalEnergyDeposit();
+  if(edep >= DBL_MIN) { 
+    const G4Track* track = step->GetTrack();
+    currentDef = track->GetDefinition(); 
+    currentKinEnergy = track->GetKineticEnergy();
 
-  G4ThreeVector pos = 
-    (step->GetPreStepPoint()->GetPosition() +
-    step->GetPostStepPoint()->GetPosition())*0.5;
+    G4ThreeVector pos = 
+      (step->GetPreStepPoint()->GetPosition() +
+       step->GetPostStepPoint()->GetPosition())*0.5;
 
-  G4double z = pos.z() - absZ0;
-  histo->fill(0,z,step->GetTotalEnergyDeposit());
+    G4double z = pos.z() - absZ0;
 
-  if(1 < verbose) 
-    G4cout << "HistoManager::AddEnergy: e(keV)= " << step->GetTotalEnergyDeposit()/keV
-           << "; z(mm)= " << z/mm
-           << "; step(mm)= " << step->GetStepLength()/mm
-	   << " by " << currentDef->GetParticleName()
-	   << " E(MeV)= " << currentKinEnergy/MeV
-           << G4endl;
+    // scoring
+    edepEvt += edep;
+    histo->fill(0,z,edep);
+
+    if(1 < verbose) 
+      G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV
+	     << "; z(mm)= " << z/mm
+	     << "; step(mm)= " << step->GetStepLength()/mm
+	     << " by " << currentDef->GetParticleName()
+	     << " E(MeV)= " << currentKinEnergy/MeV
+	     << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,0 +1,25 @@
+$Id: History,v 1.2 2007/06/22 13:24:36 ahoward Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+June 22nd, 2007 A.Howard - B01-V08-03-01
+- Removed B01PSScoringDetectorConstruction as part of clean-up.
+
+June 22nd, 2007 A.Howard - B01-V08-03-00
+- Cleaned up code ready for release
+- kept B01PSScoringDetectorConstruction - could be removed?

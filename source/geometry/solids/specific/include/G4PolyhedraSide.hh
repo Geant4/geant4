@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.hh,v 1.8 2006/06/29 18:47:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolyhedraSide.hh,v 1.9 2007/05/11 13:54:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -179,6 +179,10 @@ class G4PolyhedraSide : public G4VCSGface
     G4double    lenRZ,      // RZ length of each side
                 lenPhi[2];  // Phi dimensions of each side
     G4double    edgeNorm;   // Normal in RZ/Phi space to each side
+
+  private:
+
+    G4double kCarTolerance;  // Geometrical surface thickness
 };
 
 #endif

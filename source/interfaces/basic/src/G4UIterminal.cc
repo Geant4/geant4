@@ -24,10 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.21 2006/06/29 19:09:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4UIterminal.cc,v 1.25 2007/06/19 10:38:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
-
+// ====================================================================
+//   G4UIterminal.cc
+//
+// ====================================================================
 #include "G4Types.hh"
 #include "G4StateManager.hh"
 #include "G4UIcommandTree.hh"
@@ -37,10 +40,53 @@
 #include "G4UIcsh.hh"
 #include <sstream>
 
+#ifndef WIN32
+#include "G4RunManager.hh"
+#include <signal.h>
+#endif
 
-//////////////////////////////////////////////
-G4UIterminal::G4UIterminal(G4VUIshell* aShell)
-//////////////////////////////////////////////
+// ====================================================================
+// signal handler for soft-abort
+// ====================================================================
+
+static G4VUIshell* theshell= 0;
+
+#ifndef WIN32
+
+////////////////////////////////
+static void SignalHandler(G4int)
+////////////////////////////////
+{
+  G4RunManager* runManager= G4RunManager::GetRunManager();
+  G4StateManager* stateManager= G4StateManager::GetStateManager();
+  G4ApplicationState state= stateManager-> GetCurrentState();
+
+  if(state==G4State_GeomClosed || state==G4State_EventProc) {
+    G4cout << "aborting Run ...";
+    runManager-> AbortRun(true);
+    G4cout << G4endl;
+  } else {
+    G4cout << G4endl
+           << "Session terminated." << G4endl;
+    theshell-> ResetTerminal();
+    delete runManager;
+    exit(0);
+  }
+
+  // for original Unix / System V
+  signal(SIGINT, SignalHandler);
+}
+#endif
+
+// ====================================================================
+//
+// class description
+//
+// ====================================================================
+
+///////////////////////////////////////////////////////////
+G4UIterminal::G4UIterminal(G4VUIshell* aShell, G4bool qsig)
+///////////////////////////////////////////////////////////
 {
   UI= G4UImanager::GetUIpointer();
   UI-> SetSession(this);
@@ -51,6 +97,14 @@ G4UIterminal::G4UIterminal(G4VUIshell* aShell)
 
   if(aShell) shell= aShell;
   else shell= new G4UIcsh;
+  theshell= shell; // locally stored for the signal handler
+
+  // add signal handler
+  if(qsig) {
+#ifndef WIN32
+  signal(SIGINT, SignalHandler);
+#endif
+  }
 }
 
 /////////////////////////////

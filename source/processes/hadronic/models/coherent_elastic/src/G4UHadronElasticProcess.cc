@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.32 2007/03/12 10:58:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4UHadronElasticProcess.cc,v 1.34 2007/06/14 17:08:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
@@ -37,6 +37,7 @@
 // 26.09.06 V.Ivanchenko add lowestEnergy
 // 20.10.06 V.Ivanchenko initialise lowestEnergy=0 for neitrals, eV for charged
 // 23.01.07 V.Ivanchnko add cross section interfaces with Z and A
+// 02.05.07 V.Ivanchnko add He3
 //
 
 #include "G4UHadronElasticProcess.hh"
@@ -162,7 +163,7 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
     x = 0.0;
     if(ni == 0) {
       G4int N = G4int(elm->GetN()+0.5) - iz;
-      x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+      x = qCManager->GetCrossSection(true,momentum,iz,N,pPDG);
       xsecH[0] = x;
       if(verboseLevel>1) 
 	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
@@ -183,7 +184,7 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 		 << " N= "  << N << " pdg= " << pPDG 
 		 << " mom(GeV)= " << momentum/GeV 
 		 << "  " << qCManager << G4endl; 
-	G4double y = ab[j]*qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+	G4double y = ab[j]*qCManager->GetCrossSection(true,momentum,iz,N,pPDG);
 	x += y;
 	xsecH[j] = x;
       }
@@ -351,6 +352,7 @@ IsApplicable(const G4ParticleDefinition& aParticleType)
            aParticleType == *(G4AntiXiMinus::AntiXiMinus()) ||
            aParticleType == *(G4Deuteron::Deuteron()) ||
            aParticleType == *(G4Triton::Triton()) ||
+           aParticleType == *(G4He3::He3()) ||
            aParticleType == *(G4Alpha::Alpha()) ||
            aParticleType == *(G4OmegaMinus::OmegaMinus()) ||
            aParticleType == *(G4AntiOmegaMinus::AntiOmegaMinus()));

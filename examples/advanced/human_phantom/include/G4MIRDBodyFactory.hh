@@ -36,62 +36,21 @@
 #define G4MIRDBodyFactory_h 1
 
 #include "G4VBodyFactory.hh"
-
+#include "G4VOrgan.hh"
+#include <map>
 class G4VBodyFactory;
 class G4VPhysicalVolume;
+class G4VOrgan;
+
 class G4MIRDBodyFactory: public G4VBodyFactory
 {
 public:
   G4MIRDBodyFactory();
  ~G4MIRDBodyFactory();
-
-  G4VPhysicalVolume* CreateHead(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateTrunk(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateLegs(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateUpperSpine(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateMiddleLowerSpine(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateLegBone(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateArmBone(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateSkull(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateRibCage(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreatePelvis(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateBreast(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateParameterisedBreast(G4VPhysicalVolume*,
-  				       G4String,G4bool);
-
-  G4VPhysicalVolume* CreateUterus(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateOvary(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateTestes(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateBrain(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateHeart(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateLung(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateStomach(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateUpperLargeIntestine(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateLowerLargeIntestine(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateKidney(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateAdrenal(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateLiver(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreatePancreas(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateSpleen(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateUrinaryBladder(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateThyroid(G4VPhysicalVolume*,G4String,G4bool);
-
-  G4VPhysicalVolume* CreateEsophagus(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateNeck(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateScapulae(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateClavicles(G4VPhysicalVolume*,G4String,G4bool);
-  G4VPhysicalVolume* CreateMaleGenitalia(G4VPhysicalVolume*,G4String,G4bool);
-
+  G4VPhysicalVolume* CreateOrgan(const G4String&, G4VPhysicalVolume*, 
+				 const G4String&,G4bool,G4bool);
+ 
 private:
-  
+  std::map<std::string,G4VOrgan*> organ; 
 };
 #endif

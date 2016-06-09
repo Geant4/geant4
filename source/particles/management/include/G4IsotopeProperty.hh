@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeProperty.hh,v 1.4 2006/06/29 19:23:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4IsotopeProperty.hh,v 1.5 2007/03/15 06:53:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -33,6 +33,7 @@
 //
 // ------------------------------------------------------------
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
+//      Add Magnetic Moment                      14 Mar  07 H.Kurashige
 
 #ifndef G4IsotopeProperty_h
 #define G4IsotopeProperty_h 1
@@ -75,6 +76,10 @@ class G4IsotopeProperty
   G4int         GetiSpin() const;
   void          SetiSpin(G4int J);
 
+  // Set/Get Magentic Moment
+  G4double      GetMagneticMoment() const;
+  void          SetMagneticMoment(G4double M);
+
   // Set/Get Excited Energy
   G4double      GetEnergy() const;
   void          SetEnergy(G4double  E);
@@ -91,12 +96,13 @@ class G4IsotopeProperty
   void          DumpInfo() const;
 
  private:
-  G4int         fAtomicNumber; // number of proton
-  G4int         fAtomicMass;   // number of nucleon 
-  G4int         fISpin;        // total angular momentum (in unit of 1/2)
-  G4double      fEnergy;       // excited energy
-  G4double      fLifeTime;     // lifeTime 
-  G4DecayTable* fDecayTable;   // decay Table
+  G4int         fAtomicNumber;     // number of proton
+  G4int         fAtomicMass;       // number of nucleon 
+  G4int         fISpin;            // total angular momentum (in unit of 1/2)
+  G4double      fEnergy;           // excited energy
+  G4double      fLifeTime;         // lifeTime 
+  G4DecayTable* fDecayTable;       // decay Table
+  G4double      fMagneticMoment;   // magnetic moment 
 };
 
 inline 
@@ -133,6 +139,18 @@ inline
  void G4IsotopeProperty::SetiSpin(G4int J)
 {
     fISpin = J;
+}
+
+inline
+  G4double  G4IsotopeProperty::GetMagneticMoment() const
+{
+  return fMagneticMoment;
+}
+
+inline
+  void     G4IsotopeProperty::SetMagneticMoment(G4double M)
+{
+  fMagneticMoment = M;
 }
 
 inline 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiOmegaMinus.cc,v 1.13 2006/06/29 19:16:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4AntiOmegaMinus.cc,v 1.14 2007/03/11 07:17:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,29 +68,34 @@ G4AntiOmegaMinus* G4AntiOmegaMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-   anInstance = new G4ParticleDefinition(
-                 name,    1.67245*GeV,  8.02e-12*MeV,       eplus,
+    anInstance = new G4ParticleDefinition(
+                 name,     1.67245*GeV,  8.02e-12*MeV,       eplus,
                     3,              +1,             0,
                     0,               0,             0,
              "baryon",               0,            -1,       -3334,
-                false,       0.0822*ns,          NULL,
+                false,       0.0821*ns,          NULL,
                 false,       "omega");
- //create Decay Table 
-  G4DecayTable* table = new G4DecayTable();
-  
-  // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[3];
-  // anti_omega- -> anti_lambda + kaon+
-  mode[0] = new G4PhaseSpaceDecayChannel("anti_omega-",0.678,2,"anti_lambda","kaon+");
-  // anti_omega- -> anti_xi0 + pi+
-  mode[1] = new G4PhaseSpaceDecayChannel("anti_omega-",0.236,2,"anti_xi0","pi+");
-  // anti_omega- -> anti_xi- + pi0
-  mode[2] = new G4PhaseSpaceDecayChannel("anti_omega-",0.086,2,"anti_xi-","pi0");
 
-  for (G4int index=0; index <3; index++ ) table->Insert(mode[index]);
-  delete [] mode;
-
-   anInstance->SetDecayTable(table);
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( -2.02 * mN);
+ 
+    //create Decay Table 
+    G4DecayTable* table = new G4DecayTable();
+    
+    // create decay channels
+    G4VDecayChannel** mode = new G4VDecayChannel*[3];
+    // anti_omega- -> anti_lambda + kaon+
+    mode[0] = new G4PhaseSpaceDecayChannel("anti_omega-",0.678,2,"anti_lambda","kaon+");
+    // anti_omega- -> anti_xi0 + pi+
+    mode[1] = new G4PhaseSpaceDecayChannel("anti_omega-",0.236,2,"anti_xi0","pi+");
+    // anti_omega- -> anti_xi- + pi0
+    mode[2] = new G4PhaseSpaceDecayChannel("anti_omega-",0.086,2,"anti_xi-","pi0");
+    
+    for (G4int index=0; index <3; index++ ) table->Insert(mode[index]);
+    delete [] mode;
+    
+    anInstance->SetDecayTable(table);
   }
   theInstance = reinterpret_cast<G4AntiOmegaMinus*>(anInstance);
   return theInstance;

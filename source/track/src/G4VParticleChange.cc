@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.19 2006/10/30 09:50:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VParticleChange.cc,v 1.20 2007/03/25 22:54:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -51,6 +51,7 @@ G4VParticleChange::G4VParticleChange():
    theStatusChange(fAlive),
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
+   theNonIonizingEnergyDeposit(0.0),
    theFirstStepInVolume(false),
    theLastStepInVolume(false),
    verboseLevel(1),
@@ -89,6 +90,7 @@ G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
    theStatusChange(fAlive),
    theSteppingControlFlag(NormalCondition),     
    theLocalEnergyDeposit(0.0),
+   theNonIonizingEnergyDeposit(0.0),
    theFirstStepInVolume(false),
    theLastStepInVolume(false),
    verboseLevel(1),
@@ -107,6 +109,7 @@ G4VParticleChange::G4VParticleChange(const G4VParticleChange &right):
   theStatusChange = right.theStatusChange;
   theTrueStepLength = right.theTrueStepLength;
   theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+  theNonIonizingEnergyDeposit = right.theNonIonizingEnergyDeposit;
   theSteppingControlFlag = right.theSteppingControlFlag;
   fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
 
@@ -130,6 +133,7 @@ G4VParticleChange & G4VParticleChange::operator=(const G4VParticleChange &right)
       theStatusChange = right.theStatusChange;
       theTrueStepLength = right.theTrueStepLength;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
+      theNonIonizingEnergyDeposit = right.theNonIonizingEnergyDeposit;
       theSteppingControlFlag = right.theSteppingControlFlag;
       fSetParentWeightByProcess = right.fSetParentWeightByProcess;    
 
@@ -181,6 +185,10 @@ void G4VParticleChange::DumpInfo() const
 
   G4cout << "        Energy Deposit (MeV): " 
        << std::setw(20) << theLocalEnergyDeposit/MeV
+       << G4endl;
+
+  G4cout << "        Non-ionizing Energy Deposit (MeV): " 
+       << std::setw(20) << theNonIonizingEnergyDeposit/MeV
        << G4endl;
 
   G4cout << "        Track Status        : " 

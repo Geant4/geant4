@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.15 2006/10/30 09:50:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Step.icc,v 1.16 2007/03/25 22:54:52 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 //---------------------------------------------------------------
@@ -124,6 +124,18 @@ inline
  }
 
 inline 
+ void G4Step::AddNonIonizingEnergyDeposit(G4double value)
+ { 
+   fNonIonizingEnergyDeposit += value;   
+ }
+
+inline 
+ void G4Step::ResetNonIonizingEnergyDeposit()
+ { 
+   fNonIonizingEnergyDeposit = 0.; 
+ }
+
+inline 
  void G4Step::SetControlFlag(G4SteppingControl value)
  {
    fpSteppingControlFlag = value;     
@@ -170,6 +182,7 @@ inline
    // Initialize G4Step attributes
    fStepLength = 0.;
    fTotalEnergyDeposit = 0.;
+   fNonIonizingEnergyDeposit = 0.;
    fpTrack = aValue;
    fpTrack->SetStepLength(0.);
    

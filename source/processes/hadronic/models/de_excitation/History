@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+ 5 June 2007 Alex Howard (hadr-deex-V08-03-01)
+-----------------------------------------------
+- Fixed bug in fix "hadr-deex-V08-03-00" - deleted pointers and iterators were
+  attempted to be accessed.  Now a final state iterator list is created and
+  filled when necessary.
+
+
+ 18 May 2007 Alex Howard (hadr-deex-V08-03-00)
+-----------------------------------------------
+- Fixed bug in low A,Z false condition in G4DiscreteGammaDeexcitation.cc, now
+the condition is (Z<2 || A<3 || Z>98) false (so stops at Cf rather than >100)
+and includes helium (previously excluded)
+- Fixed bug in pointer to iterator moving before its beginning G4ExcitationHandler.cc
+
  14 Feb 2007 Alex Howard (hadr-deex-V08-02-02)
 -----------------------------------------------
 - evaporation

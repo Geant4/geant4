@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,69 +46,24 @@
    --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
 
 
-Visualization Manager instantiating...
-Visualization Manager initialising...
-Registering graphics systems...
-
-You have successfully registered the following graphics systems.
-Current available graphics systems are:
-  ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRep (HepRepXML)
-  G4HepRepFile (HepRepFile)
-  RayTracer (RayTracer)
-  VRML1FILE (VRML1FILE)
-  VRML2FILE (VRML2FILE)
-
-Registering model factories...
-
-You have successfully registered the following model factories.
-Registered model factories:
-  generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
-  drawByAttribute
-
-Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
-  attributeFilter
-
-/run/verbose 2
-#
+/run/verbose 1
 /testem/det/setMat PbWO4
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 50 0.1
-#
-# Acceptance printout is activated
-/testem/run/acceptance  0.9450 0.0096 3.0
-#
+/testem/run/acceptance  0.949 0.0082 3.0
 /testem/phys/addPhysics  standard
 PhysicsList::AddPhysicsList: <standard>
-#
 /testem/phys/setCuts 1.0 mm
-#
 /run/initialize
-userDetector->Construct() start.
 Absorber is 17.848 cm  of PbWO4
  Material:    PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  14.07 %  ElmAbundance  66.67 %
    --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
    --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
-Ecal is registered to the default region.
-physicsList->Construct() start.
-physicsList->Construct() start.
-physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
-#
 /gun/particle e-
 /gun/energy 5 GeV
-#
 /testem/event/printModulo 20
-#
 /run/beamOn 100
 
 phot:  Total cross sections from Sandia parametrisation. 
@@ -127,7 +82,7 @@ conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV f
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -140,7 +95,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -153,7 +108,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -162,7 +117,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -174,14 +129,14 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below.
+      Parametrisation from BraggIon for protons below. NuclearStopping 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
@@ -197,7 +152,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -244,7 +199,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -253,10 +208,6 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-
-Region <DefaultRegionForTheWorld> -- appears in <Ecal> world volume
- Materials : PbWO4 
- Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 ========= Table of registered couples ==============================
 
@@ -269,11 +220,6 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -294,37 +240,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=251.23s Real=268.16s Sys=14.49s
+  User=230.57s Real=232.74s Sys=0.1s
 
  SUMMARY 
 
- energy deposit :   94.56 % E0 +-    0.81 % E0
- charged traklen:  482.86 radl +-    4.45 radl
- neutral traklen: 4468.40 radl +-  133.74 radl
+ energy deposit :   94.09 % E0 +-    3.39 % E0
+ charged traklen:  480.77 radl +-   17.09 radl
+ neutral traklen: 4415.63 radl +-  238.27 radl
 
- 90.00 % confinement: radius = 3.13 radl  (2.79 cm )
+ 90.00 % confinement: radius = 3.23 radl  (2.88 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1259944231, 254399950
+ Current couple of seeds = 945930242, 400601456
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.94558756  delEdep= 0.00058755881 nrms= 0.61204043
-Erms: 0.0080584593  delErms= -0.0015415407 nrms= -1.6057716
-<<<<END>>>>   IS ACCEPTED
+Edep: 0.94094309  delEdep= -0.0080569076 nrms= -9.8254971
+Erms: 0.033906596  delErms= 0.025706596 nrms= 31.349508
+<<<<END>>>>   IS NOT ACCEPTED
 
-Graphics systems deleted.
-Visualization Manager deleting...
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
-EventManager deleted.
-Default detector region deleted.
-UImanager deleted.
-Units table cleared.
-StateManager deleted.
-RunManagerKernel is deleted.
-RunManager is deleting.

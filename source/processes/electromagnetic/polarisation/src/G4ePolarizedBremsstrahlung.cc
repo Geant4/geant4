@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlung.cc,v 1.2 2006/09/26 09:08:48 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ePolarizedBremsstrahlung.cc,v 1.3 2007/05/23 08:52:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -57,16 +57,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-G4ePolarizedBremsstrahlung::G4ePolarizedBremsstrahlung(const G4String& name, G4double thresh):
-  G4eBremsstrahlung(name,thresh)
-{
-}
+G4ePolarizedBremsstrahlung::G4ePolarizedBremsstrahlung(const G4String& name):
+  G4eBremsstrahlung(name)
+{}
 
 
 void G4ePolarizedBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition* p,
                                                              const G4ParticleDefinition*)
 {
-  gammaThreshold = G4LossTableManager::Instance()->BremsstrahlungTh();
   if(!isInitialised) {
     isInitialised = true;
     particle = p;
@@ -81,15 +79,4 @@ void G4ePolarizedBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDef
     em->SetHighEnergyLimit(100.0*TeV);
     AddEmModel(1, em, fm);
   }
-}
-
-
-std::vector<G4DynamicParticle*>* G4ePolarizedBremsstrahlung::SecondariesPostStep(
-                                                      G4VEmModel* model,
-                                                const G4MaterialCutsCouple* couple,
-                                                const G4DynamicParticle* dp,
-                                                      G4double& tcut)
-{
-  std::vector<G4DynamicParticle*>* newp = model->SampleSecondaries(couple, dp, tcut);
-  return newp;
 }

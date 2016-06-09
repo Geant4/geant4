@@ -228,7 +228,7 @@ void DMXPhysicsList::AddTransportation() {
 
 
 // alpha and GenericIon and deuterons, triton, He3:
-#include "G4hLowEnergyIonisation.hh"
+//hIonisation #include "G4hLowEnergyIonisation.hh" -> moved to G4hIonisation
 #include "G4EnergyLossTables.hh"
 // hLowEnergyIonisation uses Ziegler 1988 as the default
 
@@ -334,15 +334,17 @@ void DMXPhysicsList::ConstructEM() {
 	// G4Nucleus exists and therefore has particle type nucleus
 	// genericIon:
         G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
-        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
+	//hIonisation G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
+        G4hIonisation* ahadronIon = new G4hIonisation();
 	pmanager->AddProcess(aMultipleScattering,-1,1,1);
-	pmanager->AddProcess(ahadronLowEIon,-1,2,2); 
+	//hIonisation	pmanager->AddProcess(ahadronLowEIon,-1,2,2); 
+	pmanager->AddProcess(ahadronIon,-1,2,2); 
         // ahadronLowEIon->SetNuclearStoppingOff() ;
 	//        ahadronLowEIon->SetNuclearStoppingPowerModel("ICRU_R49") ;
 	//        ahadronLowEIon->SetNuclearStoppingOn() ;
   
         //fluorescence switch off for hadrons (for now) PIXE:
-        ahadronLowEIon->SetFluorescence(false);
+	//hIonisation        ahadronLowEIon->SetFluorescence(false);
       } 
     else if ((!particle->IsShortLived()) &&
 	     (charge != 0.0) && 
@@ -350,9 +352,11 @@ void DMXPhysicsList::ConstructEM() {
       {
 	//all others charged particles except geantino
         G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
-        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
+	//hIonisation        G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
+        G4hIonisation* ahadronIon = new G4hIonisation();
 	pmanager->AddProcess(aMultipleScattering,-1,1,1);
-	pmanager->AddProcess(ahadronLowEIon,       -1,2,2);      
+	//hIonisation	pmanager->AddProcess(ahadronLowEIon,       -1,2,2);      
+	pmanager->AddProcess(ahadronIon,       -1,2,2);      
 	//      pmanager->AddProcess(new G4hIonisation(),       -1,2,2);      
       }
     
@@ -360,7 +364,8 @@ void DMXPhysicsList::ConstructEM() {
 
   // turn off msc step-limitation - especially as electron cut 1nm
   G4EmProcessOptions opt;
-  opt.SetMscStepLimitation(false);
+  //  opt.SetMscStepLimitation(false);
+  opt.SetMscStepLimitation(fMinimal);
 
 }
 

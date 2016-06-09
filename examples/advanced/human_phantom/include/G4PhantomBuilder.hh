@@ -36,79 +36,76 @@
 #define G4PhantomBuilder_h 1
 
 #include "G4VPhysicalVolume.hh"
-#include "G4VPhantomBuilder.hh"
+#include "G4BasePhantomBuilder.hh"
 #include "globals.hh"
 
-class G4VPhantomBuilder;
+class G4BasePhantomBuilder;
 class G4VPhysicalVolume;
 class G4VBodyFactory;
-class G4PhantomBuilder: public G4VPhantomBuilder
+class G4PhantomBuilder: public G4BasePhantomBuilder
 {
 public:
   G4PhantomBuilder();
   ~G4PhantomBuilder();
 
-  void BuildWorld();
+  void BuildHead(const G4String&,G4bool,G4bool);
+  void BuildTrunk(const G4String&,G4bool,G4bool);
+  void BuildLeftLeg(const G4String&,G4bool,G4bool);
+  void BuildRightLeg(const G4String&,G4bool,G4bool);
 
-  void BuildHead(G4bool);
-  void BuildTrunk(G4bool);
-  void BuildLegs(G4bool);
-  void BuildNeck(G4bool);
-
-  void BuildUpperSpine(G4bool);
-  void BuildMiddleLowerSpine(G4bool);
-  void BuildLegBone(G4bool);
-  void BuildArmBone(G4bool);
-  void BuildSkull(G4bool);
-//  void BuildRibCage(G4bool);
-  void BuildPelvis(G4bool);
-//  void BuildScapulae(G4bool);
+  void BuildUpperSpine(const G4String&,G4bool,G4bool);
+  void BuildMiddleLowerSpine(const G4String&,G4bool,G4bool);
+  void BuildLeftLegBone(const G4String&,G4bool,G4bool);
+  void BuildRightLegBone(const G4String&,G4bool,G4bool);
+  void BuildLeftArmBone(const G4String&,G4bool,G4bool);
+  void BuildRightArmBone(const G4String&,G4bool,G4bool);
+  void BuildSkull(const G4String&,G4bool,G4bool);
+  void BuildRibCage(const G4String&,G4bool,G4bool);
+  void BuildPelvis(const G4String&,G4bool,G4bool);
+  void BuildLeftScapula(const G4String&,G4bool,G4bool); 
+  void BuildRightScapula(const G4String&,G4bool,G4bool);
+  void BuildLeftAdrenal(const G4String&,G4bool,G4bool);  
+  void BuildRightAdrenal(const G4String&,G4bool,G4bool); 
 //  void BuildClavicles(G4bool);
 
-virtual void BuildBreast(G4bool)= 0;
-virtual void BuildParameterisedBreast(G4bool) = 0;
+  void BuildBrain(const G4String&,G4bool,G4bool);
 
-virtual void BuildUterus(G4bool)=0;
-virtual void BuildOvary(G4bool)=0;
+  void BuildHeart(const G4String&,G4bool,G4bool);
 
-virtual void BuildTestes(G4bool) =0;
-virtual void BuildMaleGenitalia(G4bool)=0;
+  void BuildLeftLung(const G4String&,G4bool,G4bool);
+  void BuildRightLung(const G4String&,G4bool,G4bool);
 
-  void BuildBrain(G4bool);
-
-  void BuildHeart(G4bool);
-
-  void BuildLung(G4bool);
-
-  void BuildStomach(G4bool);
-  void BuildUpperLargeIntestine(G4bool);
-  void BuildLowerLargeIntestine(G4bool);
+  void BuildStomach(const G4String&,G4bool,G4bool);
+  void BuildUpperLargeIntestine(const G4String&,G4bool,G4bool);
+  void BuildLowerLargeIntestine(const G4String&,G4bool,G4bool);
  // void BuildEsophagus(G4bool);
 
-  void BuildKidney(G4bool);
+  void BuildLeftKidney(const G4String&,G4bool,G4bool);
+  void BuildRightKidney(const G4String&,G4bool,G4bool);
  // void BuildAdrenal(G4bool);
-  void BuildLiver(G4bool);
-  void BuildPancreas(G4bool);
-  void BuildSpleen(G4bool);
-  void BuildUrinaryBladder(G4bool);
+  void BuildLiver(const G4String&,G4bool,G4bool);
+  void BuildPancreas(const G4String&,G4bool,G4bool);
+  void BuildSpleen(const G4String&,G4bool,G4bool);
+  void BuildUrinaryBladder(const G4String&,G4bool,G4bool);
 
-  void BuildThyroid(G4bool);
+  void BuildThyroid(const G4String&,G4bool,G4bool);
 
-  void SetSex(G4String);
   void SetModel(G4String);
+  void SetMotherVolume(G4VPhysicalVolume*);
 
-  G4VPhysicalVolume* GetPhantom();
+ 
+G4VPhysicalVolume* GetPhantom();
 
-protected:
-  G4String sex; 
+protected: 
+  G4VBodyFactory* body;
+
   G4String model;
-  G4bool sensitivity;
+
   G4VPhysicalVolume* motherVolume;
   G4VPhysicalVolume* headVolume;
   G4VPhysicalVolume* trunkVolume;
-  G4VPhysicalVolume* legsVolume;
-  G4VPhysicalVolume* neckVolume;
+  G4VPhysicalVolume* leftLegVolume;
+  G4VPhysicalVolume* rightLegVolume;  
   G4VPhysicalVolume* maleGenitaliaVolume;
-  G4VBodyFactory* body;
 };
 #endif

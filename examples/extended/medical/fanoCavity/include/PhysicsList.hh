@@ -25,7 +25,7 @@
 //
 //
 // $Id: PhysicsList.hh,v 1.2 2007/01/30 16:02:10 maire Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 

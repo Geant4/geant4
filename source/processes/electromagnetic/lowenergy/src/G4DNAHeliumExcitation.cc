@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNAHeliumExcitation.cc,v 1.3 2006/06/29 19:39:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #include "G4DNAHeliumExcitation.hh"
 #include "G4DNAGenericIonsManager.hh"

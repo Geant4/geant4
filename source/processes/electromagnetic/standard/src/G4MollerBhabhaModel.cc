@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.29 2007/01/17 09:17:56 maire Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4MollerBhabhaModel.cc,v 1.30 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -282,14 +282,14 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+					    const G4MaterialCutsCouple*,
+					    const G4DynamicParticle* dp,
+					    G4double tmin,
+					    G4double maxEnergy)
 {
   G4double tmax = std::min(maxEnergy, MaxSecondaryKinEnergy(dp));
-  if(tmin >= tmax) return 0;
+  if(tmin >= tmax) return;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy = kineticEnergy + electron_mass_c2;
@@ -394,11 +394,9 @@ std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
   }
 
   // create G4DynamicParticle object for delta ray
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
 						 deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

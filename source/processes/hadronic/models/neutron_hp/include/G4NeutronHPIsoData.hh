@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPIsoData.hh,v 1.15 2006/06/29 20:48:15 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPIsoData.hh,v 1.16 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPIsoData_h
 #define G4NeutronHPIsoData_h 1
@@ -48,14 +48,14 @@ public:
 
   G4NeutronHPIsoData()
   {
-    theChannelData = NULL;
-    theFissionData = NULL;
-    theCaptureData = NULL;
-    theElasticData = NULL;
-    theInelasticData = NULL;
+    theChannelData = 0;
+    theFissionData = 0;
+    theCaptureData = 0;
+    theElasticData = 0;
+    theInelasticData = 0;
   }
   
-  ~G4NeutronHPIsoData(){if(theChannelData!=NULL) delete theChannelData;}
+  ~G4NeutronHPIsoData(){if(theChannelData!=0) delete theChannelData;}
   
   inline G4double GetXsec(G4double energy)
   {
@@ -80,7 +80,7 @@ public:
   
   inline void FillChannelData(G4NeutronHPVector * aBuffer)
   {
-    if(theChannelData!=NULL) throw G4HadronicException(__FILE__, __LINE__, "IsoData has channel full already!!!");
+    if(theChannelData!=0) throw G4HadronicException(__FILE__, __LINE__, "IsoData has channel full already!!!");
     theChannelData = new G4NeutronHPVector;
     for(G4int i=0; i<aBuffer->GetVectorLength(); i++)
     {

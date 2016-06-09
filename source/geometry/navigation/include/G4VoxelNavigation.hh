@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.4 2006/06/29 18:36:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VoxelNavigation.hh,v 1.5 2007/05/11 13:43:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4VoxelNavigation
@@ -146,8 +146,9 @@ class G4VoxelNavigation
     //  END Voxel Stack information
     //
 
-    G4bool fCheck; 
-    G4int  fVerbose; 
+    G4bool fCheck;
+    G4int  fVerbose;
+    G4double kCarTolerance;
 };
 
 #include "G4VoxelNavigation.icc"

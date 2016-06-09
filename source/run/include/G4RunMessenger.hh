@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RunMessenger.hh,v 1.15 2007/03/08 23:54:04 asaim Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //	GEANT 4 class header file 

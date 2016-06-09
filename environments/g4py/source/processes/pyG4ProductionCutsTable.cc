@@ -23,15 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ProductionCutsTable.cc,v 1.2 2006/07/12 06:29:02 kmura Exp $
-// $Name: geant4-08-02 $
+// $Id: pyG4ProductionCutsTable.cc,v 1.3 2007/05/28 03:11:20 kmura Exp $
+// $Name: geant4-09-00 $
 // ====================================================================
 //   pyG4ProductionCutsTable.cc
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
+#include "pyG4Version.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4Material.hh"
 
 using namespace boost::python;
 
@@ -55,6 +57,10 @@ void export_G4ProductionCutsTable()
     .def("SetEnergyRange",     &G4ProductionCutsTable::SetEnergyRange)
     .def("DumpCouples",        &G4ProductionCutsTable::DumpCouples)
     .def("IsModified",         &G4ProductionCutsTable::IsModified)
+    // ---
+#if G4VERSION_NUMBER >= 830
+    .def("ConvertRangeToEnergy", &G4ProductionCutsTable::ConvertRangeToEnergy)
+#endif
     // ---
     .def("SetVerboseLevel",    &G4ProductionCutsTable::SetVerboseLevel)
     .def("GetVerboseLevel",    &G4ProductionCutsTable::GetVerboseLevel)

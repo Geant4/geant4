@@ -36,16 +36,18 @@
 #define G4MIRDUrinaryBladder_h 1
 
 #include "G4VPhysicalVolume.hh"
+#include "G4VOrgan.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-class G4MIRDUrinaryBladder
+class G4MIRDUrinaryBladder: public G4VOrgan
 {
 public:
 
   G4MIRDUrinaryBladder();
   ~G4MIRDUrinaryBladder();
-  G4VPhysicalVolume* ConstructUrinaryBladder(G4VPhysicalVolume*, G4String, G4bool);
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*, 
+				    const G4String&, G4bool, G4bool);
 };
 #endif

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.39 2007/01/18 12:17:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4ionIonisation.cc,v 1.43 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +52,7 @@
 // 10-05-06 Add a possibility to download user data (V.Ivantchenko)
 // 13-05-06 Add data for light ion stopping in water (V.Ivantchenko)
 // 14-01-07 use SetEmModel() and SetFluctModel() from G4VEnergyLossProcess (mma)
+// 16-05-07 Add data for light ion stopping only for GenericIon (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -80,12 +81,9 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
     theParticle(0),
     theBaseParticle(0),
     isInitialised(false),
-    stopDataActive(true)
+    stopDataActive(true),
+    nuclearStopping(true)
 {
-  SetDEDXBinning(120);
-  SetLambdaBinning(120);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*TeV);
   SetLinearLossLimit(0.15);
   SetStepFunction(0.1, 0.1*mm);
   SetIntegral(true);
@@ -130,8 +128,13 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
   EmModel(2)->SetHighEnergyLimit(100*TeV);
   AddEmModel(2, EmModel(2), FluctModel());    
 
-  effCharge = corr->GetIonEffectiveCharge(EmModel(1));
-  G4WaterStopping  ws(corr);
+  // Add ion stoping tables for Generic Ion
+  if(part == G4GenericIon::GenericIon()) {
+    G4WaterStopping  ws(corr);
+    effCharge = corr->GetIonEffectiveCharge(EmModel(1));
+  } else {
+    effCharge = corr->GetIonEffectiveCharge(0);
+  }
 
   isInitialised = true;
 }
@@ -147,25 +150,13 @@ void G4ionIonisation::PrintInfo()
 	   << eth/MeV << " MeV"
 	   << "\n      Parametrisation from "
 	   << EmModel(1)->GetName() << " for protons below."
+	   << " NuclearStopping " << nuclearStopping
 	   << G4endl;	 
   if (stopDataActive)
     G4cout << "\n      Stopping Power data for " 
            << corr->GetNumberOfStoppingVectors()
 	   << " ion/material pairs are used."
            << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
-					  G4double,
-					  G4ForceCondition* cond)
-{
-  DefineMassCharge(track.GetDefinition(),
-		   track.GetMaterial(),
-		   track.GetDynamicParticle()->GetMass(),
-		   track.GetKineticEnergy());
-  return G4VEnergyLossProcess::GetMeanFreePath(track, 0.0, cond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

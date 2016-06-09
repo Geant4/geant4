@@ -53,25 +53,29 @@
 #include "G4HumanPhantomSteppingAction.hh"
 #include "G4HumanPhantomEventAction.hh"
 #include "G4HumanPhantomRunAction.hh"
-#include "G4HumanPhantomEnergyDeposit.hh"
 #ifdef G4ANALYSIS_USE 
 #include  "G4HumanPhantomAnalysisManager.hh"
 #endif
+
 int main(int argc,char** argv)
 {
-  G4cout << "Starting run " << G4endl;
-
   G4RunManager* runManager = new G4RunManager;
 
-  G4HumanPhantomEnergyDeposit* energyTotal = new G4HumanPhantomEnergyDeposit();
-
-  // Set mandatory initialization classes
-  G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction(energyTotal);
+  // G4VSteppingVerbose* verbosity = new ExN02SteppingVerbose; 
+  //  G4VSteppingVerbose::SetInstance(new ExN02SteppingVerbose);
+ 
+ // Set mandatory initialization classes
+  G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction();
   runManager->SetUserInitialization(userPhantom);
 
   runManager->SetUserInitialization(new G4HumanPhantomPhysicsList);
 
   runManager->SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
+
+#ifdef G4ANALYSIS_USE
+  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
+  analysis->book();
+#endif
 
   G4UIsession* session=0;
 
@@ -105,7 +109,7 @@ int main(int argc,char** argv)
   if (session)   // Define UI session for interactive mode.
     { 
       G4cout << " UI session starts ..." << G4endl;
-      UI -> ApplyCommand("/control/execute adultFemale.mac");    
+      UI -> ApplyCommand("/control/execute default.mac");    
       session -> SessionStart();
       delete session;
     }
@@ -116,10 +120,7 @@ int main(int argc,char** argv)
       UI -> ApplyCommand(command+fileName);
     }     
 
-  energyTotal->TotalEnergyDeposit();
-
 #ifdef G4ANALYSIS_USE
-  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
   if (analysis)analysis->finish();
 #endif
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // GEANT4 physics class: G4ElectroNuclearCrossSection -- header file
@@ -50,12 +50,8 @@ class G4ElectroNuclearCrossSection : public G4VCrossSectionDataSet
 {
 public:
 
-  G4ElectroNuclearCrossSection()               // Constructor @@??
-  {
-	 //theHadronCrossSections = G4HadronCrossSections::Instance();
-  }
-
-  ~G4ElectroNuclearCrossSection() {}
+  G4ElectroNuclearCrossSection();
+ ~G4ElectroNuclearCrossSection();
 
   G4bool IsApplicable(const G4DynamicParticle* aParticle, const G4Element* )
   {
@@ -114,6 +110,10 @@ private:
   static G4double  lastSig;  // Last value of the Cross Section
   static G4double  lastG;    // Last value of gamma=lnE-ln(me)
   static G4double  lastH;    // Last value of the High energy A-dependence
+
+  static std::vector <G4double*> J1;     // Vector of pointers to the J1 tabulated functions
+  static std::vector <G4double*> J2;     // Vector of pointers to the J2 tabulated functions
+  static std::vector <G4double*> J3;     // Vector of pointers to the J3 tabulated functions
 };
 
 // Gives the threshold energy for different nuclei (min of p- and n-threshold)

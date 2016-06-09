@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4BuildGeom.cc,v 1.17 2006/06/29 18:13:34 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // modified by I. Hrivnacova, 13.10.99 
 

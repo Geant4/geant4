@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4eLowEnergyLoss.cc,v 1.35 2006/06/29 19:42:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //  
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 

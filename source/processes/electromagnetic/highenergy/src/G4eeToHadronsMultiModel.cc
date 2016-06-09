@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc,v 1.3 2006/06/29 19:32:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eeToHadronsMultiModel.cc,v 1.4 2007/05/23 08:50:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -88,7 +88,8 @@ void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition* p, const G4
     maxKineticEnergy = HighEnergyLimit();
 
     cross = new G4eeCrossSections();
-    G4eeToHadronsModel* model = new G4eeToHadronsModel(new G4eeToTwoPiModel(cross), verbose);
+    G4eeToHadronsModel* model = 
+      new G4eeToHadronsModel(new G4eeToTwoPiModel(cross), verbose);
     models.push_back(model);
     model->SetHighEnergyLimit(maxKineticEnergy);
     model->Initialise(p, v);
@@ -99,6 +100,12 @@ void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition* p, const G4
     ekinPeak.push_back(model->PeakEnergy());
     cumSum.push_back(0.0);
     nModels = 1;
+
+    if(pParticleChange)
+      fParticleChange =
+	reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
+    else
+      fParticleChange = new G4ParticleChangeForGamma();
   }
 }
 

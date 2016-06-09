@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.21 2006/06/29 19:49:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.22 2007/05/22 17:35:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -497,17 +497,17 @@ void G4MuBremsstrahlungModel::MakeSamplingTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* dp,
-                                   G4double tmin,
-                                   G4double maxEnergy)
+void G4MuBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+						const G4MaterialCutsCouple* couple,
+						const G4DynamicParticle* dp,
+						G4double tmin,
+						G4double maxEnergy)
 {
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   // check against insufficient energy
   G4double tmax = min(kineticEnergy, maxEnergy);
-  if(tmin >= tmax) return 0;
+  if(tmin >= tmax) return;
 
   static const G4double ysmall = -100. ;
   static const G4double ytablelow = -5. ;
@@ -525,7 +525,7 @@ vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
   // This sampling should be checked!!! VI
   G4double ymin=log(log(tmin/cutFixed)/log(tmax/cutFixed));
 
-  if(ymin < ysmall) return 0;
+  if(ymin < ysmall) return;
 
   //  sampling using tables
 
@@ -614,11 +614,8 @@ vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
   fParticleChange->SetProposedMomentumDirection(partDirection);
 
   // save secondary
- G4DynamicParticle* aGamma = new G4DynamicParticle(theGamma,gDirection,gEnergy);
-  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
+  G4DynamicParticle* aGamma = new G4DynamicParticle(theGamma,gDirection,gEnergy);
   vdp->push_back(aGamma);
-
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

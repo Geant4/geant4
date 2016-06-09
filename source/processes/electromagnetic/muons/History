@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2007/04/24 11:51:52 vnivanch Exp $
+$Id: History,v 1.100 2007/05/29 04:43:31 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 May 07:  V.Ivanchenko (emmuons-V08-03-04)
+- G4EnergyLossForExtrapolator - added Set methods for first and last
+  bins in tables. Default max value is set to 10 TeV (CMS request)
+
+23 May 07:  V.Ivanchenko (emmuons-V08-03-03)
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess 
+  remove method SecondaryPostStep;
+
+22 May 07:  V.Ivanchenko (emmuons-V08-03-02)
+- G4VEmModel - changed interface of SampleSecondary method, it become 
+  void, extra parameter std::vector<G4DynamicParticle*>*, all
+  classes using or inhereting this interface are modified.
+  About 5% speadup of EM shower simulation
+
+18 May 07: V.Ivant (emmuons-V08-03-01)
+- G4ErrorEnergyLoss - new class needed for GEANTe (p. Arce)
+
+12 May 07: V.Ivant (emmuons-V08-03-00)
+- G4EnergyLossForExtrapolator - linLossLimit=0.001
+- Remove obsolete G4MuIonisation52, G4MuPairProduction52, G4MuBremsstrahlung52,
+  G4VMuEnergyLoss
+- G4MuPairProductionModel - fix usage of cut value inside SelectRandomAtom,
+                            providing correct sampling of atom of mixture
+                            for production of e+e- pair (A.Bogdanov)
 
 24 April 07: V.Ivant (emmuons-V08-02-01)
 - G4MuPairProductionModel - add protection against zero or negative partial

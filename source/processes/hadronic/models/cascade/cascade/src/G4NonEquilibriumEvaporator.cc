@@ -286,6 +286,8 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
 
 			} else { // real escape		        
 			  G4InuclElementaryParticle particle(ptype);
+
+                          particle.setModel(5);
 			  G4double mass = particle.getMass();
 			  EPART *= 0.001; // to the GeV
 			  // generate particle momentum
@@ -425,6 +427,7 @@ G4CollisionOutput G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*
     for (G4int i = 1; i < 4; i++) pnuc[i] = pin[i] - ppout[i];
     G4InuclNuclei nuclei(pnuc, A, Z);
 
+    nuclei.setModel(5);
     nuclei.setEnergy();
 
     pnuc = nuclei.getMomentum(); 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpWLS.hh,v 1.4 2006/06/29 21:08:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Definition

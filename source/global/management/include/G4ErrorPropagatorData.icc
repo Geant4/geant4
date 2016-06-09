@@ -1,0 +1,76 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4ErrorPropagatorData.icc,v 1.4 2007/06/08 10:33:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+//
+//
+// Class G4ErrorPropagatorData inline implementation
+//
+// --------------------------------------------------------------------
+
+inline
+G4ErrorMode G4ErrorPropagatorData::GetMode() const
+{
+  return theMode;
+}
+
+inline
+void G4ErrorPropagatorData::SetMode( G4ErrorMode mode )
+{
+  theMode = mode;
+}
+
+
+inline 
+void G4ErrorPropagatorData::SetState( G4ErrorState sta )
+{
+  theState = sta;
+}
+
+inline 
+G4ErrorState G4ErrorPropagatorData::GetState() const
+{
+  return theState;
+}
+
+inline 
+const G4ErrorTarget* G4ErrorPropagatorData::GetTarget( G4bool mustExist ) const
+{
+  if( theTarget == 0 && mustExist )
+  {
+    G4Exception("G4ErrorPropagatorData::GetTarget()",
+                "InvalidSetup", FatalException,
+                "G4ErrorPropagator defined but without final target!"); 
+  }
+  return theTarget;
+}
+
+inline 
+void G4ErrorPropagatorData::SetTarget( const G4ErrorTarget* target )
+{
+  theTarget = const_cast<G4ErrorTarget*>(target);
+}

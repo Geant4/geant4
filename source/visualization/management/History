@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2007/01/11 16:43:49 allison Exp $
+$Id: History,v 1.100 2007/05/25 10:50:42 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,28 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+25th May 2007  John Allison  (visman-V08-03-01)
+- Improved error trapping in viewer initialisation.
+- Bug fix in /vis/scene/notifyHandlers for case of no current viewer.
+
+16th May 2007  John Allison  (visman-V08-03-00)
+- G4VSceneHandler.cc: Added #include "G4AttDef.hh" to help buggy
+  Windows compiler(!).
+
+4th April 2007  John Allison  (visman-V08-02-04)
+- G4VSceneHandler.cc: Bug fix for zero vis atts in LoadAtts.
+
+3rd April 2007  John Allison  (visman-V08-02-03)
+- Added /vis/viewer/set/picking.  Picking is false by default, except
+  for OpenInventor.
+
+25th March 2007  John Allison  (visman-V08-02-02)
+- G4VisExecutive.icc: Removed G4GAGTree.
+- G4VisCommandsCompound.cc: Removed /vis/scene/add/eventID, once
+  again, from /vis/drawVolume.
+- G4VisCommands.cc: Improved messages for /vis/abortReviewKeptEvents.
+- G4VisManager.cc, G4VSceneHandler.cc: Cosmetic.
 
 11th January 2007  John Allison  (visman-V08-02-01)
 - Added /vis/abortReviewKeptEvents.

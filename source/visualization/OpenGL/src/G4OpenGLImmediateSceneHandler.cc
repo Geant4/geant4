@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.25 2007/02/08 14:01:55 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.27 2007/04/04 16:50:26 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -46,12 +46,16 @@
 
 #include "G4OpenGLTransform3D.hh"
 #include "G4Polyline.hh"
+#include "G4Polymarker.hh"
+#include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
+#include "G4Scale.hh"
+#include "G4Polyhedron.hh"
 
-G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system,
-						const G4String& name):
-G4OpenGLSceneHandler (system, fSceneIdCount++, name)
+G4OpenGLImmediateSceneHandler::G4OpenGLImmediateSceneHandler
+(G4VGraphicsSystem& system,const G4String& name):
+  G4OpenGLSceneHandler (system, fSceneIdCount++, name)
 {}
 
 G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
@@ -61,6 +65,11 @@ G4OpenGLImmediateSceneHandler::~G4OpenGLImmediateSceneHandler ()
 
 void G4OpenGLImmediateSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
 {
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    glLoadName(++fPickName);
+    fPickMap[fPickName] = 0;
+  }
+
   const G4Colour& c = GetColour (visible);
   glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
 }
@@ -69,6 +78,20 @@ void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polyline& polyline)
 {
   AddPrimitivePreamble(polyline);
   G4OpenGLSceneHandler::AddPrimitive(polyline);
+}
+
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+{
+  AddPrimitivePreamble(polymarker);
+  G4OpenGLSceneHandler::AddPrimitive(polymarker);
+}
+
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Text& text)
+{
+  // Note: colour is still handled in
+  // G4OpenGLSceneHandler::AddPrimitive(const G4Text&).
+  AddPrimitivePreamble(text);
+  G4OpenGLSceneHandler::AddPrimitive(text);
 }
 
 void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Circle& circle)
@@ -83,9 +106,31 @@ void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Square& square)
   G4OpenGLSceneHandler::AddPrimitive(square);
 }
 
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Scale& scale)
+{
+  AddPrimitivePreamble(scale);
+  G4OpenGLSceneHandler::AddPrimitive(scale);
+}
+
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron)
+{
+  // Note: colour is still handled in
+  // G4OpenGLSceneHandler::AddPrimitive(const G4Polyhedron&).
+  AddPrimitivePreamble(polyhedron);
+  G4OpenGLSceneHandler::AddPrimitive(polyhedron);
+}
+
+void G4OpenGLImmediateSceneHandler::AddPrimitive (const G4NURBS& nurbs)
+{
+  // Note: colour is still handled in
+  // G4OpenGLSceneHandler::AddPrimitive(const G4NURBS&).
+  AddPrimitivePreamble(nurbs);
+  G4OpenGLSceneHandler::AddPrimitive(nurbs);
+}
+
 void G4OpenGLImmediateSceneHandler::BeginPrimitives
 (const G4Transform3D& objectTransformation) {
-  G4VSceneHandler::BeginPrimitives (objectTransformation);
+  G4OpenGLSceneHandler::BeginPrimitives (objectTransformation);
   glPushMatrix();
   G4OpenGLTransform3D oglt (objectTransformation);
 
@@ -109,12 +154,12 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives ()
   // See all primitives immediately...
   glFlush ();
 
-  G4VSceneHandler::EndPrimitives ();
+  G4OpenGLSceneHandler::EndPrimitives ();
 }
 
 void G4OpenGLImmediateSceneHandler::BeginPrimitives2D()
 {
-  G4VSceneHandler::BeginPrimitives2D();
+  G4OpenGLSceneHandler::BeginPrimitives2D();
 
   // Push current 3D world matrices and load identity to define screen
   // coordinates...
@@ -138,7 +183,7 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives2D()
   // See all primitives immediately...
   glFlush ();
 
-  G4VSceneHandler::EndPrimitives2D ();
+  G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 
 void G4OpenGLImmediateSceneHandler::BeginModeling () {

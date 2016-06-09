@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.hh,v 1.3 2006/06/29 19:32:28 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eeToHadronsMultiModel.hh,v 1.5 2007/05/23 08:50:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +52,8 @@
 
 #include "G4VEmModel.hh"
 #include "G4eeToHadronsModel.hh"
+#include "G4ParticleChangeForGamma.hh"
+#include "G4TrackStatus.hh"
 #include "Randomize.hh"
 #include <vector>
 
@@ -87,11 +89,11 @@ public:
                                          G4double cutEnergy = 0.0,
                                          G4double maxEnergy = DBL_MAX);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin = 0.0,
-                                      G4double maxEnergy = DBL_MAX);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin = 0.0,
+				 G4double maxEnergy = DBL_MAX);
 
   void PrintInfo();
 
@@ -105,6 +107,7 @@ private:
   G4eeToHadronsMultiModel(const  G4eeToHadronsMultiModel&);
 
   G4eeCrossSections*               cross;
+  G4ParticleChangeForGamma*        fParticleChange;
 
   std::vector<G4eeToHadronsModel*> models;
 
@@ -165,23 +168,23 @@ inline G4double G4eeToHadronsMultiModel::ComputeCrossSectionPerElectron(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline std::vector<G4DynamicParticle*>* G4eeToHadronsMultiModel::SampleSecondaries(
-                                      const G4MaterialCutsCouple* couple,
-                                      const G4DynamicParticle* dp,
-                                      G4double, G4double)
+inline 
+void G4eeToHadronsMultiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
+						const G4MaterialCutsCouple* couple,
+						const G4DynamicParticle* dp,
+						G4double, G4double)
 {
-  std::vector<G4DynamicParticle*>* newp = 0;
   G4double kinEnergy = dp->GetKineticEnergy();
   if (kinEnergy > thKineticEnergy) {
     G4double q = cumSum[nModels-1]*G4UniformRand();
     for(G4int i=0; i<nModels; i++) {
       if(q <= cumSum[i]) {
-        newp = (models[i])->SampleSecondaries(couple,dp);
+        (models[i])->SampleSecondaries(newp, couple,dp);
+	if(newp->size() > 0) fParticleChange->ProposeTrackStatus(fStopAndKill);
 	break;
       }
     }
   }
-  return newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

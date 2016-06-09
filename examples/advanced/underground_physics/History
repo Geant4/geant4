@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.10 2006/10/13 10:09:10 ahoward Exp $
+$Id: History,v 1.12 2007/06/13 15:00:48 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,15 @@ $Id: History,v 1.10 2006/10/13 10:09:10 ahoward Exp $
 
                       Category History file
                       ---------------------
+06.06.2007 - A. Howard (DMX-V08-03-01)
+	     Changed fG4v71 to preferable fMinimal for msc step limitation
+	     Converted to hIonisation from hLowEnergyIonisation until
+             un-initialiased variables are fixed
+
+06.06.2007 - A. Howard (DMX-V08-03-00)
+	     Migrated to new interface for SetMscStepLimitation(fG4v71) in
+             DMXPhysicsList
+
 13.10.2006 - A. Howard (DMX-V08-01-00)
 	     Removed uninitialized UserLimitsForXenon (bug)
 

@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.hh,v 1.11 2006/06/29 18:23:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+//
+// $Id: G4RKG3_Stepper.hh,v 1.13 2007/05/18 12:44:02 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+//
 //
 //
 // class G4RKG3_Stepper
@@ -33,7 +35,7 @@
 // Class description:
 //
 // Integrator Runga-Kutta Stepper from Geant3.
-
+//
 // History:
 // - Created. J.Apostolakis, V.Grichine - 30.01.97
 // -------------------------------------------------------------------
@@ -98,6 +100,11 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
     G4ThreeVector fyInitial,
                   fyMidPoint,
                   fyFinal;
+   G4ThreeVector  fpInitial;
+   G4ThreeVector  BfldIn;
+   G4double       hStep;
+  
+   G4Mag_EqRhs*  fPtrMagEqOfMot;
 };
 
 #endif

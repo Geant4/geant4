@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPChannel.hh,v 1.12 2006/06/29 20:46:57 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPChannel.hh,v 1.14 2007/06/14 17:17:30 tkoi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
  // Builds and has the Cross-section data for one element and channel.
 //
 // Bug fixes and workarounds in the destructor, F.W.Jones 06-Jul-1999
+// 070612 Fix memory leaking by T. Koi
  
 #ifndef G4NeutronHPChannel_h
 #define G4NeutronHPChannel_h 1
@@ -56,10 +57,10 @@ public:
   G4NeutronHPChannel()
   {
     theChannelData = new G4NeutronHPVector; 
-    theBuffer = NULL;
-    theIsotopeWiseData = NULL;
-    theFinalStates = NULL;
-    active = NULL;
+    theBuffer = 0;
+    theIsotopeWiseData = 0;
+    theFinalStates = 0;
+    active = 0;
     registerCount = -1;
   }
   
@@ -69,11 +70,11 @@ public:
     // Following statement disabled to avoid SEGV
     // theBuffer is also deleted as "theChannelData" in
     // ~G4NeutronHPIsoData.  FWJ 06-Jul-1999
-    //if(theBuffer != NULL) delete theBuffer; 
-    if(theIsotopeWiseData != NULL) delete [] theIsotopeWiseData;
+    //if(theBuffer != 0) delete theBuffer; 
+    if(theIsotopeWiseData != 0) delete [] theIsotopeWiseData;
     // Deletion of FinalStates disabled to avoid endless looping
     // in the destructor heirarchy.  FWJ 06-Jul-1999
-    //if(theFinalStates != NULL)
+    //if(theFinalStates != 0)
     //{
     //  for(i=0; i<niso; i++)
     //  {
@@ -82,7 +83,17 @@ public:
     //  delete [] theFinalStates;
     //}
     // FWJ experiment
-    //if(active!=NULL) delete [] active;
+    //if(active!=0) delete [] active;
+// T.K. 
+   if ( theFinalStates != 0 )
+   {
+      for ( G4int i = 0 ; i < niso ; i++ )
+      {
+         delete theFinalStates[i];
+      }
+      delete [] theFinalStates;
+   }
+   if ( active != 0 ) delete [] active;
     
   }
   

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // GEANT4 physics class: G4QElasticCrossSection -- header file
@@ -48,16 +48,19 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4VQCrossSection.hh"
+#include "G4QElastic.hh"
+#include "G4QCoherentChargeExchange.hh"
+#include "G4QuasiFreeRatios.hh"
 
 class G4QElasticCrossSection : public G4VQCrossSection
 {
 protected:
 
-  G4QElasticCrossSection()  {}               // Constructor
+  G4QElasticCrossSection();               // Constructor
 
 public:
 
-  ~G4QElasticCrossSection() {}
+  ~G4QElasticCrossSection();
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
@@ -67,7 +70,10 @@ public:
 
   G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int pPDG, G4int Z, G4int N,
                                                                               G4double pP);
-
+protected:
+  friend class G4QElastic;
+  friend class G4QCoherentChargeExchange;
+  friend class G4QuasiFreeRatios;
   G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // Randomizes -t=Q2 (in IU=MeV^2)
   G4double GetHMaxT();                   // Currrent Max(-t=Q2)/2. (in IU=MeV^2)
 
@@ -120,5 +126,17 @@ private:
   static G4double* lastB3T;  // E-dep of the slope of the third difruction
   static G4double* lastS4T;  // E-dep of mantissa of the 4-th difruction	
   static G4double* lastB4T;  // E-dep of the slope of the 4-th difruction
+
+  static std::vector <G4double*> PAR;   // Vector of parameters for functional calculations
+  static std::vector <G4double*> CST;   // Vector of cross-section table
+  static std::vector <G4double*> SST;   // Vector of the first squared slope
+  static std::vector <G4double*> S1T;   // Vector of the first mantissa
+  static std::vector <G4double*> B1T;   // Vector of the first slope
+  static std::vector <G4double*> S2T;   // Vector of the secon mantissa
+  static std::vector <G4double*> B2T;   // Vector of the second slope
+  static std::vector <G4double*> S3T;   // Vector of the third mantissa
+  static std::vector <G4double*> B3T;   // Vector of the third slope
+  static std::vector <G4double*> S4T;   // Vector of the 4-th mantissa (gloria)
+  static std::vector <G4double*> B4T;   // Vector of the 4-th slope    (gloria)
  }; 					
 #endif

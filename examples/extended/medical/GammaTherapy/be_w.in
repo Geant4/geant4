@@ -1,5 +1,5 @@
 #================================================
-# Macro file for the Bremsstrahlung test
+# Macro file for the thick BeW target
 #         10.04.01 V.Ivanchneko
 #================================================
 /control/verbose 2
@@ -9,17 +9,14 @@
 /testem/verbose 0
 #
 /testem/phys/setCuts          0.1 mm
-/process/eLoss/StepFunction   0.2 1. mm
-/testem/stepMax               0.5 mm
 #
-/testem/phys/addPhysics       standard
-#/testem/phys/addPhysics        g4v52
-#/testem/phys/addPhysics       modelP
-#/testem/phys/addPhysics       lowenergy
-/testem/phys/addPhysics       elastic
-/testem/phys/addPhysics       binary
-/testem/phys/addPhysics       binary_ion
-/testem/phys/addPhysics       gamma_nuc
+/testem/phys/addPhysics       emstandard
+#/testem/phys/addPhysics      emstandard_opt2
+#/testem/phys/addPhysics       livermore
+#/testem/phys/addPhysics       elastic
+#/testem/phys/addPhysics       binary
+#/testem/phys/addPhysics       binary_ion
+#/testem/phys/addPhysics       gamma_nuc
 #
 /testem/target1Material       G4_Be
 /testem/target2Material       G4_W
@@ -27,6 +24,8 @@
 /testem/target2Z              6 mm
 #
 #/testem/histoName             be_w_st_n.paw
+#
+#/testem/stepMax               0.5 mm
 #
 /gun/particle e-
 /gun/energy 50.0 MeV

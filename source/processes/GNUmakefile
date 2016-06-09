@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.34 2006/12/05 15:54:43 gcosmo Exp $
+# $Id: GNUmakefile,v 1.38 2007/05/31 08:12:53 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -10,6 +10,7 @@ SUBDIRS += cuts
 SUBDIRS += optical 
 SUBDIRS += decay 
 SUBDIRS += scoring
+SUBDIRS += biasing
 SUBDIRS += transportation 
 SUBDIRS += parameterisation
 SUBDIRS += electromagnetic/muons 
@@ -24,7 +25,8 @@ SUBLIBS  = G4procman
 SUBLIBS += G4cuts 
 SUBLIBS += G4optical 
 SUBLIBS += G4decay
-SUBLIBS += G4scoring 
+SUBLIBS += G4scoring
+SUBLIBS += G4biasing
 SUBLIBS += G4transportation 
 SUBLIBS += G4parameterisation
 SUBLIBS += G4muons 
@@ -64,6 +66,7 @@ SUBDIRS += hadronic/models/high_energy
 SUBDIRS += hadronic/models/im_r_matrix
 SUBDIRS += hadronic/models/isotope_production
 SUBDIRS += hadronic/models/leading_particle
+SUBDIRS += hadronic/models/lll_fission
 SUBDIRS += hadronic/models/low_energy
 SUBDIRS += hadronic/models/management
 SUBDIRS += hadronic/models/neutron_hp
@@ -93,6 +96,7 @@ SUBLIBS +=  G4had_im_r_matrix
 SUBLIBS +=  G4hadronic_iso
 SUBLIBS +=  G4hadronic_leading_particle
 SUBLIBS +=  G4hadronic_LE
+SUBLIBS +=  G4had_lll_fis
 SUBLIBS +=  G4had_mod_man
 SUBLIBS +=  G4had_neu_hp
 SUBLIBS +=  G4hadronic_radioactivedecay

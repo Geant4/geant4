@@ -32,7 +32,7 @@ int G4NeutronHPGamma::instancecount = 0;
 
   G4NeutronHPGamma::G4NeutronHPGamma() 
   {
-    next = NULL;
+    next = 0;
     instancecount ++;
   }
 

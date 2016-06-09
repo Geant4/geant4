@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2007/05/08 13:07:58 gcosmo Exp $
+$Id: History,v 1.124 2007/06/26 12:53:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26th June 2007  Gabriele Cosmo (examples-V09-00-00)
+- Updated reference outputs according to reference tag geant4-09-00-ref-00.
+- Includes tags: brachy-V08-03-00, cosmicray_charging-V08-03-00,
+                 hadrontherapy-V08-03-04, human_phantom-V08-03-00,
+                 radioprotection-V08-03-00, DMX-V08-03-01,
+                 exampleN03Con-V08-03-01, exbiasing-V08-03-02,
+                 testem0-V08-03-00, testem1-V08-03-02, testem2-V08-03-00,
+                 testem3-V08-03-01, testem4-V08-03-00, testem5-V08-03-01,
+                 testem7-V08-03-02, testem9-V08-03-03,
+                 errorpropagation-V08-03-01, fieldex-V08-03-00,
+                 exhadr01-V08-03-03, fano-V08-03-01, gtherapy-V08-03-02,
+                 exgflash-V08-03-00, exampleRE02-V08-03-00,
+                 exampleN02-V08-03-00, exampleN03-V08-03-01,
+                 exampleN04-V08-03-00, exampleN05-V08-03-00,
+                 exampleN07-V08-02-00.
 
 8th May 2007  Gabriele Cosmo (examples-V08-03-00)
 - Updated reference outputs according to reference tag geant4-08-03-ref-00.

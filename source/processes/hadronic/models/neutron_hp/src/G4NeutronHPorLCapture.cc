@@ -41,9 +41,9 @@ G4NeutronHPorLCapture::G4NeutronHPorLCapture()
   :G4HadronicInteraction("NeutronHPorLCapture")
 {
    G4NeutronHPCaptureFS * theFS = new G4NeutronHPCaptureFS;
-   if(!getenv("NeutronHPCrossSections")) 
-       throw G4HadronicException(__FILE__, __LINE__, "Please setenv NeutronHPCrossSections to point to the neutron cross-section files.");
-   dirName = getenv("NeutronHPCrossSections");
+   if(!getenv("G4NEUTRONHPDATA")) 
+       throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+   dirName = getenv("G4NEUTRONHPDATA");
    G4String tString = "/Capture/";
    dirName = dirName + tString;
 //    G4cout <<"G4NeutronHPorLCapture::G4NeutronHPorLCapture testit "<<dirName<<G4endl;

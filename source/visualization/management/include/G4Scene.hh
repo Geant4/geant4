@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Scene.hh,v 1.18 2006/11/14 14:59:54 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Scene  John Allison  19th July 1996.

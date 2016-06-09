@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.7 2006/06/29 21:13:20 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RunManagerKernel.hh,v 1.9 2007/05/30 00:42:09 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 
@@ -136,6 +136,7 @@ class G4RunManagerKernel
     G4bool geometryToBeOptimized;
     G4bool physicsNeedsToBeReBuilt;
     G4int verboseLevel;
+    G4int numberOfParallelWorld;
 
     G4EventManager * eventManager;
     G4ExceptionHandler* defaultExceptionHandler;
@@ -182,6 +183,14 @@ class G4RunManagerKernel
         geometryNeedsToBeClosed = true;
       }
     }
+
+    inline G4int GetNumberOfParallelWorld() const
+    { return numberOfParallelWorld; }
+    inline void SetNumberOfParallelWorld(G4int i)
+    { numberOfParallelWorld = i; }
+
+  private:
+    G4bool ConfirmCoupledTransportation();
 };
 
 #endif

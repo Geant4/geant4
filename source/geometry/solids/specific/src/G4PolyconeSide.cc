@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.14 2007/02/01 09:20:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4PolyconeSide.cc,v 1.16 2007/05/31 13:52:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -44,6 +44,7 @@
 #include "G4AffineTransform.hh"
 #include "meshdefs.hh"
 #include "G4SolidExtentList.hh"
+#include "G4GeometryTolerance.hh"
 
 //
 // Constructor
@@ -61,6 +62,8 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                                       G4bool isAllBehind )
   : corners(0)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+
   //
   // Record values
   //
@@ -204,6 +207,8 @@ void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
   deltaPhi  = source.deltaPhi;
   phiIsOpen  = source.phiIsOpen;
   allBehind  = source.allBehind;
+
+  kCarTolerance = source.kCarTolerance;
   
   cone    = new G4IntersectingCone( *source.cone );
   

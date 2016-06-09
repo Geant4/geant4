@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.19 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Sphere.hh,v 1.20 2007/05/18 07:38:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // --------------------------------------------------------------------
@@ -183,6 +183,8 @@ class G4Sphere : public G4CSGSolid
       // specification for points not on the surface
 
   private:
+
+    G4double kAngTolerance, kRadTolerance;
 
     G4double fRmin,fRmax,
              fSPhi,fDPhi,

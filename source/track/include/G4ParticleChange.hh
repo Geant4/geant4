@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.hh,v 1.12 2006/06/29 21:14:15 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ParticleChange.hh,v 1.13 2007/03/11 07:19:06 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -57,8 +57,11 @@
 //                                                 8 June 1998 H.Kurashige
 //   Add Track weight                              12 Nov. 1998  H.Kurashige
 //   Add Get/SetMomentumDirectionChange             6 Feb. 1999 H.Kurashige 
-//   Add get/SetDynamicMass                        5 Oct. 1999 H.Kurashige
-//   Add get/SetDynamicCharge                       5 Oct. 1999 H.Kurashige
+//   Add Get/SetDynamicMass                        5 Oct. 1999 H.Kurashige
+//   Add Get/SetDynamicCharge                       5 Oct. 1999 H.Kurashige
+//   Rename SetXXX methods to ProposeXXX   DynamicCharge  Oct. 2005 H.Kurashige
+//   Add get/ProposeMagneticMoment                  Mar 2007 H.Kurashige
+//   Fix treatment of weight                        Mar 2007 H.Kurashige
 // -------------------------------------------------------------
  
 #ifndef G4ParticleChange_h
@@ -161,11 +164,15 @@ class G4ParticleChange: public G4VParticleChange
 
     G4double GetCharge() const;
     void ProposeCharge(G4double finalCharge);
-    //   Get/Propose the final dynamical Charge in G4DynamicParticl
+    //   Get/Propose the final dynamical Charge in G4DynamicParticle
+
+    G4double GetMagneticMoment() const;
+    void ProposeMagneticMoment(G4double finalMagneticMoment);
+    //   Get/Propose the final MagneticMoment in G4DynamicParticle
   
     G4double GetWeight() const;
     void ProposeWeight(G4double finalWeight);
-    //   Get/Propose the final Weight of the current particle 
+    //   Get/Propose the final Weight of the parent particle
 
     //  -- Utility functions --
     G4ThreeVector GetGlobalPosition(const G4ThreeVector& displacement) const;
@@ -230,7 +237,8 @@ class G4ParticleChange: public G4VParticleChange
     G4double theProperTimeChange;
     //  The changed (final) proper time of a given track
     
-    G4double theWeightChange;
+    // Obsolete   Mar 2007
+    // G4double theWeightChange;
     //  The Changed (final) weight of a given track
 
     G4double theMassChange;
@@ -238,6 +246,9 @@ class G4ParticleChange: public G4VParticleChange
 
     G4double theChargeChange;
     //  The Changed (final) charge of a given track
+ 
+    G4double theMagneticMomentChange;
+    //  The Changed (final) MagneticMoment of a given track
   
     const G4Track* theCurrentTrack;
     

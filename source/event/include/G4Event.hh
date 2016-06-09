@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Event.hh,v 1.17 2007/03/08 23:56:12 asaim Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4Event_h

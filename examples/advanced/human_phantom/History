@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2006/11/30 16:06:38 guatelli Exp $
+$Id: History,v 1.19 2007/06/06 19:11:20 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06.06.2007 MGP human_phantom-V08-03-00
+           Minor documentation fix
+
+May 15, 2007, S. Guatelli tag: human_phantom-V08-02-02
+- Left and Right Adrenals introduced
+- Left and Right Scapulae introduced
+
+February 19, 2007, S. Guatelli tag:human_phantom-V08-02-01
+
+March 13, 2007, S. Guatelli tag: human_phantom-V08-02-07
+- VoxelBreastSensitive detector  introduced
+- Bug deleted in MIRDOvary
+
+February 24, 2007, S. Guatelli tag: human_phantom-V08-02-06
+- PhantomHeadBuilder introduced
+
+February 23, 2007, S. Guatelli tag:human_phantom-V08-02-05
+- Voxel Right breast introduced
+
+
+February 22, 2007, S. Guatelli tag:human_phantom-V08-02-04
+- Voxel Left breast introduced
+
+February 22, 2007, S. Guatelli tag:human_phantom-V08-02-03
+- Bug in MIRDLeftBreast and MIRDRightBreast corrected
+
+February 21, 2007, S. Guatelli tag:human_phantom-V08-02-02
+- G4HumanPhantomEnergyDeposit deleted
+- HitCollection introduced
+
+January 17, 2007, S. Guatelli tag:human_phantom-V08-02-00
 
 November 30, 2006, S. Guatelli tag: human_phantom-V08-01-03
 - Corrected bug in the definition of materials for MIRD phantom model. 

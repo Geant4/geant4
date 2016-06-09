@@ -1,17 +1,17 @@
-# $Id: TestEm7.in,v 1.12 2006/01/30 10:35:33 maire Exp $
+# $Id: TestEm7.in,v 1.15 2007/06/12 14:01:13 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
 #
 #
-/control/verbose 2
-/run/verbose 2
+/control/verbose 1
+/run/verbose 1
 #
-/testem/det/setMat Water
+/testem/det/setMat G4_WATER
 /testem/det/setSizeX  20 cm
 /testem/det/setSizeYZ 20 cm
 #
-/testem/det/tallyMat Water
+/testem/det/tallyMat G4_WATER
 /testem/det/tallySize 2. 2. 2. mm
 /testem/det/tallyPosition -9.9 0. 0. cm
 /testem/det/tallyPosition -5.  0. 0. cm
@@ -33,8 +33,14 @@
 #
 /run/beamOn 10000
 #
+/testem/stepMax 100 mm
 /gun/particle ion
 /gun/ion 6 12 6
 /gun/energy 3.5 GeV
+/run/beamOn 1000
 #
+/testem/det/setMat G4_Cu
+/testem/det/update
+/gun/particle kaon+
+/gun/energy 100 MeV
 /run/beamOn 1000

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.23 2006/06/29 16:34:07 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: exampleB01.cc,v 1.27 2007/06/22 13:22:09 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -55,19 +55,18 @@
 #include "G4UImanager.hh"
 #include "G4GeometryManager.hh"
 
+// user classes
 #include "B01DetectorConstruction.hh"
 #include "B01PhysicsList.hh"
 #include "B01PrimaryGeneratorAction.hh"
+#include "B01RunAction.hh"
+#include "B01ScoreTable.hh"
 
 // Files specific for biasing and scoring
-#include "G4Scorer.hh"
-#include "G4MassGeometrySampler.hh"
+#include "G4GeometrySampler.hh"
 #include "G4IStore.hh"
 #include "G4VWeightWindowStore.hh"
 #include "G4WeightWindowAlgorithm.hh"
-
-// a score table
-#include "G4ScoreTable.hh"
 
 
 int main(int argc, char **argv)
@@ -75,8 +74,7 @@ int main(int argc, char **argv)
   G4int mode = 0;
   if (argc>1)  mode = atoi(argv[1]);
 
-  std::ostream *myout = &G4cout;
-  G4int numberOfEvent = 100;
+  G4int numberOfEvents = 100;
   G4long myseed = 345354;
   CLHEP::HepRandom::setTheSeed(myseed);
 
@@ -88,6 +86,7 @@ int main(int argc, char **argv)
   //  ---------------------------------------------------
   runManager->SetUserInitialization(new B01PhysicsList);
   runManager->SetUserAction(new B01PrimaryGeneratorAction);
+  runManager->SetUserAction(new B01RunAction);
   runManager->Initialize();
 
   // pointers for importance store, weight-window store
@@ -97,14 +96,10 @@ int main(int argc, char **argv)
   G4VWeightWindowStore *aWWstore = 0;
   G4VWeightWindowAlgorithm *wwAlg = 0;
 
-  // use a scorer
-  //
-  G4Scorer scorer; 
-
   // create sampler for biasing and scoring in the mass geometry
   //
-  G4MassGeometrySampler mgs("neutron");
-  mgs.PrepareScoring(&scorer);
+  G4GeometrySampler mgs(detector->GetWorldVolume(),"neutron");
+  mgs.SetParallel(false);
 
   if (mode == 0)
   { 
@@ -133,12 +128,11 @@ int main(int argc, char **argv)
   }
   mgs.Configure();
 
-  runManager->BeamOn(numberOfEvent);
+  runManager->BeamOn(numberOfEvents);
 
   // print a table of the scores
   //
-  G4ScoreTable sp(aIstore);
-  sp.Print(scorer.GetMapGeometryCellCellScorer(), myout);
+  B01ScoreTable sp(aIstore); //ASO
 
   // open geometry for clean biasing stores clean-up
   //

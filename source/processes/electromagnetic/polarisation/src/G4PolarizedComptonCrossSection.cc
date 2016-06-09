@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PolarizedComptonCrossSection.cc,v 1.3 2006/11/09 18:00:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // GEANT4 Class file
 //

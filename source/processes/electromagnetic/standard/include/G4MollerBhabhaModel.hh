@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.18 2007/01/17 09:17:56 maire Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4MollerBhabhaModel.hh,v 1.19 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -100,11 +100,11 @@ public:
 				G4double kineticEnergy,
 				G4double cutEnergy);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double maxEnergy);
 
 protected:
 

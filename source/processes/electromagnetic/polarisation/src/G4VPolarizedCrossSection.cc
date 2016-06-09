@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VPolarizedCrossSection.cc,v 1.2 2006/11/17 14:14:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 // File name:     G4VPolarizedCrossSection
 //
 // Author:        Andreas Schaelicke

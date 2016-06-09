@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.37 2006/12/01 01:23:35 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RunManagerKernel.cc,v 1.41 2007/05/30 00:42:09 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 
@@ -67,7 +67,8 @@ G4RunManagerKernel::G4RunManagerKernel()
 :physicsList(0),currentWorld(0),
  geometryInitialized(false),physicsInitialized(false),
  geometryNeedsToBeClosed(true),geometryToBeOptimized(true),
- physicsNeedsToBeReBuilt(true),verboseLevel(0)
+ physicsNeedsToBeReBuilt(true),verboseLevel(0),
+ numberOfParallelWorld(0)
 {
 #ifdef G4FPE_DEBUG
   InvalidOperationDetection();
@@ -188,8 +189,8 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
     std::vector<G4LogicalVolume*>::iterator lvItr
      = defaultRegion->GetRootLogicalVolumeIterator();
     defaultRegion->RemoveRootLogicalVolume(*lvItr);
-    if(verboseLevel>1) G4cout << (*lvItr)->GetName()
-     << " is removed from the default region." << G4endl;
+    if(verboseLevel>1) G4cout 
+     << "Obsolete world logical volume is removed from the default region." << G4endl;
   }
 
   // Accept the world volume
@@ -261,6 +262,7 @@ void G4RunManagerKernel::InitializePhysics()
   //physicsList->ConstructParticle();
 
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
+  if(numberOfParallelWorld>0) physicsList->UseCoupledTransportation();
   physicsList->Construct();
 
   if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
@@ -303,7 +305,12 @@ G4bool G4RunManagerKernel::RunInitialization()
     return false;
   }
 
-  CheckRegions();
+  if(numberOfParallelWorld>0)
+  { // Confirm G4CoupledTransportation is used 
+    if(!ConfirmCoupledTransportation())
+    { G4Exception("G4CoupledTransportation must be used for parallel world."); }
+  }
+    
   UpdateRegion();
   BuildPhysicsTables();
 
@@ -342,6 +349,18 @@ void G4RunManagerKernel::ResetNavigator()
 
 void G4RunManagerKernel::UpdateRegion()
 {
+  G4StateManager*    stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if( currentState != G4State_Idle )
+  { 
+    G4Exception("G4RunManagerKernel::UpdateRegion",
+                "RegionUpdateAtIncorrectState",
+                JustWarning,
+                "Geant4 kernel not in Idle state : method ignored.");
+    return;
+  }
+
+  CheckRegions();
   G4RegionStore::GetInstance()->UpdateMaterialList(currentWorld);
   G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(currentWorld);
 }
@@ -412,8 +431,28 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
   else
   {
     G4cout << G4endl;
-    G4cout << "Region <" << region->GetName() << "> -- appears in <" 
-           << region->GetWorldPhysical()->GetName() << "> world volume" << G4endl;
+    G4cout << "Region <" << region->GetName() << ">";
+    if(region->GetWorldPhysical())
+    {
+      G4cout << " -- appears in <" 
+           << region->GetWorldPhysical()->GetName() << "> world volume";
+    }
+    else
+    { G4cout << " -- is not associated to any world."; }
+    G4cout << G4endl;
+
+    G4cout << " Root logical volume(s) : ";
+    size_t nRootLV = region->GetNumberOfRootVolumes();
+    std::vector<G4LogicalVolume*>::iterator lvItr = region->GetRootLogicalVolumeIterator();
+    for(size_t j=0;j<nRootLV;j++)
+    { G4cout << (*lvItr)->GetName() << " "; }
+    G4cout << G4endl;
+
+    G4cout << " Pointers : G4VUserRegionInformation[" << region->GetUserInformation() 
+           << "], G4UserLimits[" << region->GetUserLimits() 
+           << "], G4FastSimulationManager[" << region->GetFastSimulationManager()
+           << "], G4UserSteppingAction[" << region->GetRegionalSteppingAction() << "]" << G4endl;
+    
     if(region->GetWorldPhysical()!=currentWorld)
     {
       G4cout << G4endl;
@@ -444,3 +483,25 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
            << G4endl;
   }
 }
+
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4VProcess.hh"
+G4bool G4RunManagerKernel::ConfirmCoupledTransportation()
+{
+  G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
+  G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
+  theParticleIterator->reset();
+  if((*theParticleIterator)())
+  {
+    G4ParticleDefinition* pd = theParticleIterator->value();
+    G4ProcessManager* pm = pd->GetProcessManager();
+    G4ProcessVector* pv = pm->GetAlongStepProcessVector(typeDoIt);
+    G4VProcess* p = (*pv)[0];
+    return ( (p->GetProcessName()) == "CoupledTransportation" );
+  }
+  return false;
+}
+

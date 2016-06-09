@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrackTerminator.cc,v 1.5 2006/11/14 09:11:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VTrackTerminator.cc,v 1.6 2007/05/11 14:13:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,9 +35,12 @@
 // ----------------------------------------------------------------------
 
 #include "G4VTrackTerminator.hh"
+#include "G4GeometryTolerance.hh"
 
 G4VTrackTerminator::G4VTrackTerminator()
-{}
+{
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+}
 
 G4VTrackTerminator::~G4VTrackTerminator()
 {}

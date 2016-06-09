@@ -7,7 +7,41 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
      ====================================================
 
                       Category History file
-                      ---------------------
+
+07.06.2007 MGP tag hadrontherapy-V08-03-04
+           On top of head as on 07.06.2007
+           Physics component redesigned and reimplemented by Anton Lechner
+           as a result of code review
+           Physics version to be used for Bragg peak validation paper
+           Note: previous tag hadrontherapy-V09-00-00 does not respect
+           the tag numbering scheme, to be cvs removed
+
+04.06.2007 G.A.P. Cirrone (harontherapy-V08-03-03)
+	 - Various bugs fixed and random engine changed.
+
+04.06.2007 G.A.P. Cirrone (hadrontherapy-V09-00-00)
+	 - Changed the random engine.
+ 
+10.05.2007 G.A.P. Cirrone (hadrontherapy-V08-03-02)
+	 - Improved the modulator geometry and fixed a bug on its rotation; 
+
+07.05.2007 G.A.P. Cirrone (hadrontherapy-V08-02-02)
+	 - Geometry upgrade(hadrontherapyBeamLine class) according to the experimental CATANA 
+	    proton therapy beam line; 
+
+23.04.2007 S. Guatelli (hadrontherapy-V08-02-01)
+         - Compilation error corrected - human error of Susanna Guatelli.
+         - The file src/HadrontherapyProtonBertiniElastic.cc
+           and the file include/HadrontherapyProtonBertiniElastic.hh
+           have been removed
+         - This class is part of the previous version of the hadrontherapy 
+	   application,and it not necessary anymore in the current version 
+           of the hadrontherapy application.
+
+24.1.2007 S. Guatelli (hadrontherapy-V08-02-00)
+         - Design iteration
+         - Physics lists added
+              
 16.11.2006 S. Guatelli (hadrontherapy-V08-01-05)
          - Physics lists cleaned
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.cc,v 1.5 2006/06/29 19:53:22 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PEEffectModel.cc,v 1.6 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -90,11 +90,11 @@ void G4PEEffectModel::Initialise(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4PEEffectModel::SampleSecondaries(
-                             const G4MaterialCutsCouple* couple,
-                             const G4DynamicParticle* aDynamicPhoton,
-                                   G4double,
-                                   G4double)
+void G4PEEffectModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+					const G4MaterialCutsCouple* couple,
+					const G4DynamicParticle* aDynamicPhoton,
+					G4double,
+					G4double)
 {
   const G4Material* aMaterial = couple->GetMaterial();
 
@@ -107,7 +107,6 @@ std::vector<G4DynamicParticle*>* G4PEEffectModel::SampleSecondaries(
   //
   // Photo electron
   //
-  std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
 
   // Select atomic shell
   G4int nShells = anElement->GetNbOfAtomicShells();
@@ -115,7 +114,7 @@ std::vector<G4DynamicParticle*>* G4PEEffectModel::SampleSecondaries(
   while ((i<nShells) && (energy<anElement->GetAtomicShell(i))) i++;
 
   // no shell available
-  if (i == nShells) return fvect;
+  if (i == nShells) return;
   
   G4double bindingEnergy  = anElement->GetAtomicShell(i);
   G4double ElecKineEnergy = energy - bindingEnergy;
@@ -139,7 +138,6 @@ std::vector<G4DynamicParticle*>* G4PEEffectModel::SampleSecondaries(
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
   fParticleChange->ProposeLocalEnergyDeposit(bindingEnergy);
-  return fvect;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

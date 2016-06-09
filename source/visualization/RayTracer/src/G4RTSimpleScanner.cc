@@ -24,16 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSimpleScanner.cc,v 1.3 2006/06/29 21:24:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RTSimpleScanner.cc,v 1.4 2007/05/22 17:10:42 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 
 #include "G4RTSimpleScanner.hh"
 
 G4RTSimpleScanner::G4RTSimpleScanner():
-  theGSName("RayTracer"), theGSNickname("RayTracer"),
-  theNRow(0), theNColumn(0), theIRow(0), theIColumn(0) {}
+  theNRow(0), theNColumn(0), theIRow(0), theIColumn(0)
+{
+  theGSName = "RayTracer";
+  theGSNickname = "RayTracer";
+}
 
 const G4String& G4RTSimpleScanner::GetGSName() const
 {return theGSName;}

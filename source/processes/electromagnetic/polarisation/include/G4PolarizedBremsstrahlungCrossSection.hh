@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4PolarizedBremsstrahlungCrossSection.hh,v 1.2 2006/11/17 12:12:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // GEANT4 Class file
 //

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.hh,v 1.7 2006/06/29 19:24:00 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PDGCodeChecker.hh,v 1.8 2007/05/30 08:30:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -130,11 +130,11 @@ inline
 inline
   G4int G4PDGCodeChecker::GetQuarkFlavor(G4int idx) const
 {
-  G4int value = -1;
+  G4int value;
   if (idx ==0) value = quark1;
   else if (idx ==1) value = quark2;
   else if (idx ==2) value = quark3;
-  else ;
+  else value = -1;
   return value;
 }
 

@@ -33,7 +33,7 @@
 //
 // -------------------------------------------------------------------
 // $Id: G4hShellCrossSectionDoubleExpData.cc,v 1.4 2006/06/29 19:42:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #include "G4hShellCrossSectionDoubleExpData.hh"
 

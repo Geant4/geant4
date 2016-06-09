@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonModel.cc,v 1.3 2006/11/09 18:00:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolarizedComptonModel.cc,v 1.4 2007/05/23 08:52:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -123,11 +123,11 @@ G4double G4PolarizedComptonModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4PolarizedComptonModel::SampleSecondaries(
-				    const G4MaterialCutsCouple*,
-				    const G4DynamicParticle* aDynamicGamma,
-				    G4double,
-				    G4double)
+void G4PolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+						const G4MaterialCutsCouple*,
+						const G4DynamicParticle* aDynamicGamma,
+						G4double,
+						G4double)
 {
   const G4Track * aTrack = fParticleChange->GetCurrentTrack();
   G4VPhysicalVolume*  aPVolume  = aTrack->GetVolume();
@@ -260,9 +260,6 @@ std::vector<G4DynamicParticle*>* G4PolarizedComptonModel::SampleSecondaries(
     gamEnergy1 += fParticleChange->GetLocalEnergyDeposit();
     fParticleChange->ProposeLocalEnergyDeposit(gamEnergy1);
   }
-
-
-  std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
  
   //
   // kinematic of the scattered electron
@@ -368,8 +365,6 @@ std::vector<G4DynamicParticle*>* G4PolarizedComptonModel::SampleSecondaries(
 			       finalElectronPolarization.p3());
     fvect->push_back(aElectron);
   }
-
-  return fvect;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,28 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.cc,v 1.10 2006/11/01 10:08:41 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4AttDefStore.cc,v 1.11 2007/04/03 13:58:08 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #include "G4AttDefStore.hh"
 
 #include "G4AttDef.hh"
 
-G4AttDefStore* G4AttDefStore::theInstance = 0;
-std::map<G4String,std::map<G4String,G4AttDef>*> G4AttDefStore::m_defsmaps;
+namespace G4AttDefStore {
+
+std::map<G4String,std::map<G4String,G4AttDef>*> m_defsmaps;
 
 std::map<G4String,G4AttDef>*
-G4AttDefStore::GetInstance(G4String storeKey, G4bool& isNew)
+GetInstance(G4String storeKey, G4bool& isNew)
 {
-  // Create the private static instance first to allow for
-  // the deletion of the definitions in the store
-  //
-  static G4AttDefStore theStore;
-  if (!theInstance)
-  {
-    theInstance = &theStore;
-  }
-
   // Allocate the new map if not existing already
   // and return it to the caller
   //
@@ -67,14 +59,9 @@ G4AttDefStore::GetInstance(G4String storeKey, G4bool& isNew)
   return definitions;
 }
 
-G4bool G4AttDefStore::GetStoreKey
+G4bool GetStoreKey
 (const std::map<G4String,G4AttDef>* definitions, G4String& key)
 {
-  if (!theInstance)
-    {
-      return false;
-    }
-
   std::map<G4String,std::map<G4String,G4AttDef>*>::const_iterator i;
   for (i = m_defsmaps.begin(); i != m_defsmaps.end(); ++i)
     {
@@ -88,24 +75,4 @@ G4bool G4AttDefStore::GetStoreKey
   return false;
 }
 
-G4AttDefStore::G4AttDefStore()
-{
-}
-
-G4AttDefStore::~G4AttDefStore()
-{
-  std::map<G4String,std::map<G4String,G4AttDef>*>::iterator iStore, iStore_tmp;
-  for ( iStore = m_defsmaps.begin(); iStore != m_defsmaps.end(); )
-  {
-    if (iStore->second)
-    {
-      delete iStore->second;
-      iStore_tmp = iStore++;
-      m_defsmaps.erase(iStore_tmp);
-    }
-    else
-    {
-      ++iStore;
-    }
-  }
-}
+}  // End namespace G4AttDefStore.

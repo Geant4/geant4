@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.11 2007/01/10 18:53:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4NistElementBuilder.hh,v 1.12 2007/05/02 11:22:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1
@@ -42,6 +42,7 @@
 // 27.02.06 V.Ivanchenko Return m=0 if Z&N combination is out of NIST  
 // 27.02.06 V.Ivanchneko add GetAtomicMassAmu 
 // 17.10.06 V.Ivanchneko add GetAtomicMass and GetNistElementNames methods
+// 02.05.07 V.Ivanchneko add GetNistFirstIsotopeN and GetNumberOfNistIsotopes 
 //
 //----------------------------------------------------------------------------
 //
@@ -76,9 +77,12 @@ public:
 
   G4double GetIsotopeAbundance (G4int Z, G4int N);
 
-  G4int    GetMaxNumElements() {return maxNumElements-1;};
+  G4int    GetNistFirstIsotopeN(G4int Z);
+  G4int    GetNumberOfNistIsotopes(G4int Z);
 
-  void SetVerbose   (G4int vb) {verbose = vb;};
+  G4int    GetMaxNumElements(); 
+
+  void SetVerbose   (G4int);
   void PrintElement (G4int Z);
 
   // Find or build a G4Element by atomic number
@@ -176,10 +180,38 @@ inline G4double G4NistElementBuilder::GetIsotopeAbundance(G4int Z, G4int N)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline G4int G4NistElementBuilder::GetNistFirstIsotopeN(G4int Z) 
+{
+  return nFirstIsotope[Z];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4int G4NistElementBuilder::GetNumberOfNistIsotopes(G4int Z) 
+{
+  return nIsotopes[Z];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline 
 const std::vector<G4String>& G4NistElementBuilder::GetElementNames() const
 {
   return elmNames;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4int G4NistElementBuilder::GetMaxNumElements() 
+{
+  return maxNumElements-1;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4NistElementBuilder::SetVerbose(G4int val) 
+{
+  verbose = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

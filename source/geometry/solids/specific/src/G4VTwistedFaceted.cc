@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.14 2006/10/20 13:45:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VTwistedFaceted.cc,v 1.18 2007/05/25 09:42:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -46,6 +46,7 @@
 #include "G4SolidExtentList.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4GeometryTolerance.hh"
 #include "meshdefs.hh"
 
 #include "G4VGraphicsScene.hh"
@@ -93,6 +94,9 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
   fDy2 = pDy2 ;
   fDz  = pDz  ;
 
+  G4double kAngTolerance
+    = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
   // maximum values
   //
   fDxDown = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
@@ -117,7 +121,7 @@ G4VTwistedFaceted( const G4String &pname,     // Name of instance
     }
   }
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   if ( fDx1 == fDx2 && fDx3 == fDx4 )
   { 
       G4cout << "Trapezoid is a box" << G4endl ;
@@ -494,7 +498,7 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
    G4double yMax = GetValueB(phi)/2. ;  // b(phi)/2 is limit
    G4double yMin = -yMax ;
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
 
    G4cout << "inside called: p = " << p << G4endl ; 
    G4cout << "fDx1 = " << fDx1 << G4endl ;
@@ -547,7 +551,7 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
     }
   }
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   G4cout << "inside = " << fLastInside.inside << G4endl ;
 #endif
 
@@ -689,11 +693,11 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
      //for (i=1; i < 2 ; i++)
    {
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
       G4cout << G4endl << "surface " << i << ": " << G4endl << G4endl ;
 #endif
       G4double tmpdistance = surfaces[i]->DistanceToIn(p, v, xx);
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
       G4cout << "Solid DistanceToIn : distance = " << tmpdistance << G4endl ; 
       G4cout << "intersection point = " << xx << G4endl ;
 #endif 
@@ -705,7 +709,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
       }
    }
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
    G4cout << "best distance = " << distance << G4endl ;
 #endif
 
@@ -799,7 +803,7 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
       }
    } // switch end
 
-   return kInfinity;
+   return 0;
 }
 
 
@@ -946,6 +950,17 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    {
       case (kOutside) :
       {
+#ifdef G4SPECSDEBUG
+        G4cout.precision(16) ;
+        G4cout << G4endl ;
+        DumpInfo();
+        G4cout << "Position:"  << G4endl << G4endl ;
+        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+        G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "Notification",
+                    JustWarning, "Point p is outside !?" );
+#endif
       }
       case (kSurface) :
       {
@@ -996,7 +1011,7 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
       }
    } // switch end
 
-   return 0;
+   return kInfinity;
 }
 
 
@@ -1184,7 +1199,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   G4double a5   = fLowerEndcap->GetSurfaceArea() ;
   G4double a6   = fUpperEndcap->GetSurfaceArea() ;
 
-#ifdef G4SPECSDEBUG
+#ifdef G4TWISTDEBUG
   G4cout << "Surface 0   deg = " << a1 << G4endl ;
   G4cout << "Surface 90  deg = " << a2 << G4endl ;
   G4cout << "Surface 180 deg = " << a3 << G4endl ;

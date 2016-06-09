@@ -1,31 +1,34 @@
-#
 # Sets some default verbose
-/control/verbose 2
+#/control/verbose 2
 #
 #
 #
 # Initialize New Phantom
 #
-# Choose model: ORNL, MIRD, MIX
+# Choose model: ORNLFemale, ORNLMale, MIRD, MIX, MIRDHead, ORNLHead
 #
-/phantom/setPhantomModel ORNL
+
+/phantom/setPhantomModel ORNLMale
 #
 # Choose Sex of Phantom: Male or Female
 #
 /phantom/setPhantomSex Male
 #
 # Insert Body Part and their Sensitivity
-#
+# The energy deposit is calculated in the organs declared sensitive
 /bodypart/addBodyPart Head yes
 #########
-/bodypart/addBodyPart Trunk no
-/bodypart/addBodyPart Legs yes
+/bodypart/addBodyPart Trunk yes
+/bodypart/addBodyPart LeftLeg yes
+/bodypart/addBodyPart RightLeg yes
 ##############
 #
 # Skeleton System
 #
-/bodypart/addBodyPart LegBones yes
-/bodypart/addBodyPart ArmBones yes
+/bodypart/addBodyPart LeftLegBone yes
+/bodypart/addBodyPart RightLegBone yes
+/bodypart/addBodyPart LeftArmBone yes
+/bodypart/addBodyPart RightArmBone yes
 /bodypart/addBodyPart UpperSpine yes
 /bodypart/addBodyPart MiddleLowerSpine yes
 /bodypart/addBodyPart Skull yes
@@ -33,14 +36,17 @@
 #
 # Organs
 #
-/bodypart/addBodyPart Breast yes
-/bodypart/addBodyPart Lungs yes
+/bodypart/addBodyPart LeftBreast yes
+/bodypart/addBodyPart RightBreast yes
+/bodypart/addBodyPart LeftLung yes
+/bodypart/addBodyPart RightLung yes
 /bodypart/addBodyPart Brain yes
-/bodypart/addBodyPart Heart yes
-/bodypart/addBodyPart Kidneys yes
+/bodypart/addBodyPart Heart no
+/bodypart/addBodyPart LeftKidney yes
+/bodypart/addBodyPart RightKidney yes
 /bodypart/addBodyPart UrinaryBladder yes
 /bodypart/addBodyPart Spleen yes
-/bodypart/addBodyPart Pancreas no
+/bodypart/addBodyPart Pancreas yes
 /bodypart/addBodyPart Thyroid yes
 #
 # Gastrointestinal System
@@ -48,12 +54,18 @@
 /bodypart/addBodyPart Stomach yes
 /bodypart/addBodyPart UpperLargeIntestine yes
 /bodypart/addBodyPart LowerLargeIntestine yes
-/bodypart/addBodyPart Liver yes
+/bodypart/addBodyPart Liver no
+/bodypart/addBodyPart RibCage yes
+/bodypart/addBodyPart LeftScapula yes
+/bodypart/addBodyPart RightScapula yes
+/bodypart/addBodyPart LeftAdrenal yes
+/bodypart/addBodyPart RightAdrenal yes
 #
 # Genitalia
 #
-#/bodypart/addBodyPart Ovaries yes
-#/bodypart/addBodyPart Uterus yes
+/bodypart/addBodyPart LeftOvary yes
+/bodypart/addBodyPart RightOvary yes
+/bodypart/addBodyPart Uterus yes
 #
 #
 # Construct your Phantom
@@ -76,3 +88,4 @@
 # Run Particles
 #
 /control/execute run.mac
+

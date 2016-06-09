@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ExcitedXiConstructor.cc,v 1.7 2006/06/29 19:27:12 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------

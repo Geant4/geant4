@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.7 2006/10/17 15:15:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NistManager.cc,v 1.9 2007/05/02 10:48:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //

@@ -70,7 +70,7 @@ public:
 
   IHistogramFactory* getHistogramFactory();
   ITupleFactory* getTupleFactory();
-  IPlotter* createPlotter();
+  IPlotter* getPlotter();
 
 private:
 
@@ -80,6 +80,7 @@ private:
   IAnalysisFactory* analysisFactory;
   IHistogramFactory* hFactory;
   ITupleFactory* tFactory;
+  IPlotter* plotter;
   ITree* tree;
 };
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // GEANT4 Hadron physics class -- header file
@@ -86,7 +86,7 @@
 //#include "G4LPhysicsFreeVector.hh"
 
 
-enum { TSIZE=41, PSIZE=35, NELAB=17, NCNLW=15, NFISS=21 };
+enum { TSIZE=41, NPARTS=35, NELAB=17, NCNLW=15, NFISS=21 };
 
 class G4HadronCrossSections
 {
@@ -193,8 +193,8 @@ private:
 // data hiding.
 
    static G4float plab[TSIZE];
-   static G4float csel[PSIZE][TSIZE];
-   static G4float csin[PSIZE][TSIZE];
+   static G4float csel[NPARTS][TSIZE];
+   static G4float csin[NPARTS][TSIZE];
 
 
    static G4float cspiel[3][TSIZE];
@@ -210,7 +210,7 @@ private:
 
    static G4float ekfiss[NFISS], csfiss[4][NFISS];
 
-   static G4float alpha[PSIZE], alphac[TSIZE];
+   static G4float alpha[NPARTS], alphac[TSIZE];
 
    static G4float partel[35], partin[35];
    static G4int   icorr[35], intrc[35];

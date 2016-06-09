@@ -36,7 +36,10 @@
 #include "G4HumanPhantomAnalysisManager.hh"
 #include "G4ios.hh"
 #include "G4Run.hh"
-
+#include "G4UnitsTable.hh"
+#ifdef G4ANALYSIS_USE 
+#include  "G4HumanPhantomAnalysisManager.hh"
+#endif
 G4HumanPhantomRunAction::G4HumanPhantomRunAction()
 {}
 
@@ -48,18 +51,86 @@ void G4HumanPhantomRunAction::BeginOfRunAction(const G4Run* aRun)
   G4int run_number = aRun->GetRunID();
   G4cout << "### Run " << run_number << " start." << G4endl;
 
-#ifdef G4ANALYSIS_USE
-  if (run_number == 0)
-    {
-  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
-  analysis->book();
-    }
-#endif
+ energyTotal["logicalHead"]=0.;
+ energyTotal["logicalTrunk"]=0.;
+ energyTotal["logicalLeftLeg"]=0.;
+ energyTotal["logicalRightLeg"]=0.;
+ energyTotal["logicalBrain"]=0.;
+ energyTotal["logicalLeftArmBone"]=0.;
+ energyTotal["logicalRightArmBone"]=0.;
+ energyTotal["logicalSkull"]=0.;
+ energyTotal["logicalUpperSpine"]=0.;
+ energyTotal["logicalMiddleLowerSpine"]=0.;
+ energyTotal["logicalPelvis"]=0.;
+ energyTotal["logicalStomach"]=0.;
+ energyTotal["logicalUpperLargeIntestine"]=0.;
+ energyTotal["logicalLowerLargeIntestine"]=0.;
+ energyTotal["logicalRibCage"]=0.;
+ energyTotal["logicalSpleen"]=0.;
+ energyTotal["logicalPancreas"]=0.;
+ energyTotal["logicalLeftKidney"]=0.;
+ energyTotal["logicalRightKidney"]=0.;
+ energyTotal["logicalUrinaryBladder"]=0.;
+ energyTotal["logicalUterus"]=0.;
+ energyTotal["logicalLeftLung"]=0.;
+ energyTotal["logicalRightLung"]=0.;
+ energyTotal["logicalLeftOvary"]=0.;
+ energyTotal["logicalRightOvary"]=0.;
+ energyTotal["logicalLeftLegBone"]=0.;
+ energyTotal["logicalRightLegBone"]=0.;
+ energyTotal["logicalLeftBreast"]=0.;
+ energyTotal["logicalRightBreast"]=0.; 
+ energyTotal["logicalLeftScapula"]=0.; 
+ energyTotal["logicalRightScapula"]=0.; 
+ energyTotal["logicalLeftAdrenal"]=0.; 
+ energyTotal["logicalRightAdrenal"]=0.; 
 }
 
 void G4HumanPhantomRunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4cout << "Number of events = " << aRun->GetNumberOfEvent() << G4endl;
+  totalRunEnergyDeposit();
+}
+
+
+void G4HumanPhantomRunAction::Fill(G4String bodypartName, 
+				      G4double energyDeposit)
+
+{
+ energyTotal[bodypartName] += energyDeposit;
+}
+
+void G4HumanPhantomRunAction::totalRunEnergyDeposit() 
+{
+ std::map<std::string,G4double>::iterator i = energyTotal.begin();
+  std::map<std::string,G4double>::iterator end = energyTotal.end();
+
+  G4double totalEnergyDepositInPhantom =0.;
+  G4int k=0;
+  while(i!=end)
+    {
+      G4String bodypart = i->first;
+      G4double energyDep = i->second;
+      //  if(energyDep != 0.)
+      //	{
+     
+      G4cout << "Energy Total in Run" <<bodypart << " = "  
+	     << G4BestUnit(energyDep,"Energy") 
+	     << G4endl;
+#ifdef G4ANALYSIS_USE
+  G4HumanPhantomAnalysisManager* analysis = G4HumanPhantomAnalysisManager::getInstance();
+  analysis -> bodyPartEnergyDeposit(k,energyDep/MeV);
+#endif
+  //	}
+      i++;
+      k++;
+      totalEnergyDepositInPhantom += energyDep;
+    }
+  
+ 
+ G4cout << "Total Energy deposit in the body is: " 
+	<< totalEnergyDepositInPhantom/MeV << " MeV" <<G4endl; 
+
 }
 
 

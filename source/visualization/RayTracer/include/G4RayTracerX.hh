@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RayTracerX.hh,v 1.4 2006/06/29 21:23:41 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // John Allison  11th September 2003

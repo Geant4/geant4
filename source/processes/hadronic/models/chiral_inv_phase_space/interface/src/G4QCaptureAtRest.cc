@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.11 2007/03/09 10:07:35 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4QCaptureAtRest.cc,v 1.12 2007/04/20 15:50:56 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -701,7 +701,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
         cascT->push_back(aNewTrack);
       }
       // ----- Ericson mu to pi conversion ----- ????? -----
-      if(G4UniformRand()<.025) // .025 is a parameter !
+      if(G4UniformRand()<.04) // .04 is a parameter !
       {
         projPDG=-211;
         // Phase space decay of mu->nu+q+aq M=1

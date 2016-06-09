@@ -395,7 +395,8 @@ G4InuclElementaryParticle G4BertiniNucleiModel::generateQuasiDeutron(G4int type1
     dtype = 122;
   }; 
 
-  return G4InuclElementaryParticle(dmom, dtype);
+  //  return G4InuclElementaryParticle(dmom, dtype);
+  return G4InuclElementaryParticle(dmom, dtype, 3);
 }
 
 partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) const {
@@ -451,6 +452,8 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
     path = 0.0; 
 
     G4InuclElementaryParticle particle;
+
+    particle.setModel(3);
 
     thePartners.push_back(partner(particle, path));
 
@@ -628,6 +631,8 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
 
 	  if (thePartners[i].second > thePartners[j].second) {
 	    G4InuclElementaryParticle particle = thePartners[i].first;
+
+            particle.setModel(3);
 	    G4double pathi = thePartners[i].second;
 	    thePartners[i] = partner(thePartners[j].first, thePartners[j].second);
 	    thePartners[j] = partner(particle, pathi);
@@ -637,6 +642,8 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
     };
 
     G4InuclElementaryParticle particle;
+
+    particle.setModel(3);
 
     thePartners.push_back(partner(particle, path));
   }; 

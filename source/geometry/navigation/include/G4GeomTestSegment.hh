@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestSegment.hh,v 1.3 2006/06/29 18:35:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4GeomTestSegment.hh,v 1.4 2007/05/11 13:43:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -78,6 +78,8 @@ class G4GeomTestSegment
     const G4ThreeVector p0,v;
   
     std::vector<G4GeomTestPoint> points;
+
+    G4double kCarTolerance;
 };
 
 #endif

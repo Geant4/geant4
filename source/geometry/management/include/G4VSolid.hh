@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.25 2006/10/19 15:43:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VSolid.hh,v 1.26 2007/05/11 13:30:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4VSolid
@@ -106,6 +106,9 @@ class G4VSolid
       // Returns the current shape's name.
     inline void SetName(const G4String& name);
       // Sets the current shape's name.
+
+    inline G4double GetTolerance() const;
+      // Returns the cached geometrical tolerance.
 
     virtual G4bool CalculateExtent(const EAxis pAxis,
 				   const G4VoxelLimits& pVoxelLimit,
@@ -289,6 +292,10 @@ class G4VSolid
       // Calculate surface area only based on Inside() method.
       // Accuracy is limited by the second argument or the statistics
       // expressed by the first argument.
+
+protected:
+
+    G4double kCarTolerance;      // Cached geometrical tolerance
 
 private:
 

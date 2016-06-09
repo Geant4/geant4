@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Parabola.cc,v 1.8 2006/06/29 18:42:26 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Parabola.cc,v 1.9 2007/05/18 07:33:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -36,6 +36,7 @@
 
 #include "G4Parabola.hh"
 #include "G4CurvePoint.hh"
+#include "G4GeometryTolerance.hh"
 
 G4Parabola::G4Parabola(){}
 G4Parabola::~G4Parabola(){}
@@ -80,8 +81,8 @@ G4Curve* G4Parabola::Project(const G4Transform3D& tr)
 {
   G4double axisZ= (tr*position.GetPZ()).unit().z();
 
-  if (std::abs(axisZ)<kAngTolerance) 
-    return 0;
+  if (std::abs(axisZ)<G4GeometryTolerance::GetInstance()->GetAngularTolerance()) 
+    { return 0; }
   
   
   G4Vector3D newAxis(0, 0, axisZ>0? +1: -1);
@@ -128,7 +129,8 @@ void G4Parabola::InitBounded()
   {
     G4double x_i= position.GetPX()(i);
     
-    if (std::abs(x_i) <= kAngTolerance) 
+    if (std::abs(x_i) <= 
+        G4GeometryTolerance::GetInstance()->GetAngularTolerance()) 
     {
       G4double u= - position.GetPY()(i) / x_i;
       if (IsPOn(u)) 

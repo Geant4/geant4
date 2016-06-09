@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.21 2006/06/29 21:24:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4RayTracer.cc,v 1.22 2007/06/14 15:25:20 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #include "G4RayTracer.hh"
 #include "G4RayTracerFeatures.hh"
@@ -39,11 +39,13 @@ G4RayTracer::G4RayTracer():
 		     RAYTRACER_FEATURES,
 		     G4VGraphicsSystem::threeD)
 {
-  new G4TheRayTracer;  // Establish default ray tracer.
+  theRayTracer = new G4TheRayTracer;  // Establish default ray tracer.
 }
 
 G4RayTracer::~G4RayTracer()
-{}
+{
+  delete theRayTracer;
+}
 
 G4VSceneHandler* G4RayTracer::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4RayTracerSceneHandler (*this, name);

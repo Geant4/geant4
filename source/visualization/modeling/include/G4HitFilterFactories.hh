@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 /// $Id: G4HitFilterFactories.hh,v 1.1 2006/09/12 18:53:03 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // Hit filter model factories creating filters

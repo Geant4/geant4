@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonSubPhysicsListWithLabelMessenger.hh,v 1.4 2006/06/29 16:18:21 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 // Description:   UI commands for dumping the available constructors
 //

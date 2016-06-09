@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ChordFinder.cc,v 1.47 2006/06/29 18:23:32 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // 25.02.97 John Apostolakis,  design and implimentation 

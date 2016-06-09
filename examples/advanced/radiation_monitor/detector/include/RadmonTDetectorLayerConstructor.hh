@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonTDetectorLayerConstructor.hh,v 1.4 2006/06/29 16:12:17 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 // Description:   Generates a layer using a component with the following methods
 //                 - Constructor with RadmonVDetectorLabelledEntityConstructor or its base classes as argument

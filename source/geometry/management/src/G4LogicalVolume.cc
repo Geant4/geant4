@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LogicalVolume.cc,v 1.32 2006/11/30 10:39:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4LogicalVolume Implementation

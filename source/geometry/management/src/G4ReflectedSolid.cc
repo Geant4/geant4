@@ -26,7 +26,7 @@
 //
 // $Id: G4ReflectedSolid.cc,v 1.11 2006/11/08 09:56:33 gcosmo Exp $
 //
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Implementation for G4ReflectedSolid class for boolean 
 // operations between other solids

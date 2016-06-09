@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.cc,v 1.2 2007/02/08 14:01:55 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4OpenGLBitMapStore.cc,v 1.3 2007/04/04 16:50:26 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison  6th January 2007
@@ -45,7 +45,7 @@ void SetBit(G4int i, G4int j, GLubyte* bitmap, G4int byteColumns)
 const GLubyte* GetBitMap(Shape shape, G4double& size, G4bool filled)
 {
   // Rationalise size
-  G4int bitSize = std::abs(size) + 0.49;
+  G4int bitSize = G4int(std::abs(size) + 0.49);
   if (bitSize < 1) bitSize = 1;
 
   // Modify size in calling function (passed by reference).

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // GEANT4 physics class: G4PhotoNuclearCrossSection -- header file
@@ -49,12 +49,8 @@ class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
 {
 public:
 
-  G4PhotoNuclearCrossSection()               // Constructor @@??
-  {
-	 //theHadronCrossSections = G4HadronCrossSections::Instance();
-  }
-
-  ~G4PhotoNuclearCrossSection() {}
+  G4PhotoNuclearCrossSection();
+ ~G4PhotoNuclearCrossSection();
 
 
   G4bool IsApplicable(const G4DynamicParticle* particle, const G4Element* )
@@ -99,6 +95,9 @@ private:
   static G4double  lastE;   // Last used in the cross section Energy
   static G4double  lastTH;  // Last value of the Energy Threshold (A-dependent)
   static G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
+
+  static std::vector <G4double*> GDR;   // Vector of pointers to the GDRPhotonuclearCrossSection
+  static std::vector <G4double*> HEN;   // Vector of pointers to the HighEnPhotonuclearCrossSect
 
   //G4HadronCrossSections* theHadronCrossSections;
 };

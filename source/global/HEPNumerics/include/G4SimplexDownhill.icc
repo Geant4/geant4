@@ -1,0 +1,443 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4SimplexDownhill.icc,v 1.2 2007/05/11 13:05:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+//
+// Author: Tatsumi Koi (SLAC/SCCS), 2007
+// --------------------------------------------------------------------------
+
+#include <iostream>
+#include <numeric>
+#include <cfloat>
+ 
+template<class T> void G4SimplexDownhill<T>::init()
+{
+   alpha = 2.0;  // refrection coefficient:  0 < alpha
+   beta = 0.5;   // contraction coefficient:   0 < beta < 1 
+   gamma = 2.0;  // expantion coefficient:  1 < gamma
+
+   maximum_no_trial = 10000;
+   max_se = FLT_MIN;
+   //max_ratio = FLT_EPSILON/1;
+   max_ratio = DBL_EPSILON/1;
+   minimized = false;
+}
+
+
+/*
+
+void G4SimplexDownhill<class T>::
+SetFunction( G4int n , G4double( *afunc )( std::vector < G4double > ) ) 
+{
+   numberOfVariable = n; 
+   theFunction = afunc;
+   minimized = false; 
+}
+
+*/
+
+
+template<class T> 
+G4double G4SimplexDownhill<T>::GetMinimum()
+{
+
+   initialize();
+
+// First Tryal;
+  
+   //G4cout << "Begin First Trials" << G4endl;
+   doDownhill();
+   //G4cout << "End First Trials" << G4endl;
+
+   std::vector< G4double >::iterator it_minh =
+      std::min_element( currentHeights.begin() , currentHeights.end() );
+   G4int imin = -1;
+   G4int i = 0;
+   for ( std::vector< G4double >::iterator it = currentHeights.begin();
+         it != currentHeights.end(); it++ )
+   {
+      if ( it == it_minh )
+      {
+         imin = i;
+      }
+      i++;
+   }
+   std::vector< G4double > minimumPoint = currentSimplex[ imin ];
+
+// Second Trial
+
+   //std::vector< G4double > minimumPoint = currentSimplex[ 0 ];
+   initialize();
+
+   currentSimplex[ numberOfVariable ] = minimumPoint;
+
+   //G4cout << "Begin Second Trials" << G4endl;
+   doDownhill();
+   //G4cout << "End Second Trials" << G4endl;
+   
+   G4double sum = std::accumulate( currentHeights.begin() ,
+                                   currentHeights.end() , 0.0 );
+   G4double average = sum/(numberOfVariable+1); 
+   G4double minimum = average;
+
+   minimized = true;
+
+   return minimum;
+
+}
+
+
+
+template<class T> 
+void G4SimplexDownhill<T>::initialize()
+{
+
+   currentSimplex.resize( numberOfVariable+1 );
+   currentHeights.resize( numberOfVariable+1 );
+
+   for ( G4int i = 0 ; i < numberOfVariable ; i++ ) 
+   {
+      std::vector< G4double > avec ( numberOfVariable , 0.0 ); 
+      avec[ i ] = 1.0;
+      currentSimplex[ i ] = avec;
+   }
+
+   //std::vector< G4double > avec ( numberOfVariable , 0.0 ); 
+   std::vector< G4double > avec ( numberOfVariable , 1 ); 
+   currentSimplex[ numberOfVariable ] = avec;
+
+}
+
+
+
+template<class T> 
+void G4SimplexDownhill<T>::calHeights()
+{
+
+   for ( G4int i = 0 ; i <= numberOfVariable ; i++ ) 
+   {
+      currentHeights[i] = getValue ( currentSimplex[i] );
+   }
+
+}
+
+
+
+template<class T> 
+std::vector< G4double > G4SimplexDownhill<T>::calCentroid( G4int ih )
+{
+
+    std::vector< G4double > centroid ( numberOfVariable , 0.0 );
+
+    G4int i = 0;
+    for ( std::vector< std::vector< G4double > >::iterator
+          it = currentSimplex.begin(); it != currentSimplex.end() ; it++ )
+    { 
+       if ( i != ih ) 
+       { 
+          for ( G4int j = 0 ; j < numberOfVariable ; j++ ) 
+          {
+             centroid[j] += (*it)[j]/numberOfVariable;
+          }
+       }
+       i++;
+    }
+
+    return centroid;
+}
+
+
+ 
+template<class T> 
+std::vector< G4double > G4SimplexDownhill<T>::
+getReflectionPoint( std::vector< G4double > p ,
+                    std::vector< G4double > centroid )
+{
+   //G4cout << "Reflection" << G4endl;
+
+   std::vector< G4double > reflectionP ( numberOfVariable , 0.0 );
+
+   for ( G4int i = 0 ; i < numberOfVariable ; i++ )
+   {
+      reflectionP[ i ] = ( 1 + alpha ) * centroid[ i ] - alpha * p[ i ];
+   } 
+    
+   return reflectionP;
+}
+
+
+
+template<class T> 
+std::vector< G4double > G4SimplexDownhill<T>::
+getExpansionPoint( std::vector< G4double > p ,
+                   std::vector< G4double > centroid )
+{
+   //G4cout << "Expantion" << G4endl;
+
+   std::vector< G4double > expansionP ( numberOfVariable , 0.0 );
+
+   for ( G4int i = 0 ; i < numberOfVariable ; i++ )
+   {
+      expansionP[i] = ( 1 - gamma ) * centroid[i] + gamma * p[i];
+   } 
+    
+   return expansionP;
+}
+
+template<class T> 
+std::vector< G4double > G4SimplexDownhill<T>::
+getContractionPoint( std::vector< G4double > p ,
+                     std::vector< G4double > centroid )
+{
+   //G4cout << "Contraction" << G4endl;
+
+   std::vector< G4double > contractionP ( numberOfVariable , 0.0 );
+
+   for ( G4int i = 0 ; i < numberOfVariable ; i++ )
+   {
+      contractionP[i] = ( 1 - beta ) * centroid[i] + beta * p[i];
+   } 
+    
+   return contractionP;
+}
+
+
+
+template<class T> 
+G4bool G4SimplexDownhill<T>::isItGoodEnough()
+{
+   G4bool result = false;
+
+   G4double sum = std::accumulate( currentHeights.begin() ,
+                                   currentHeights.end() , 0.0 );
+   G4double average = sum/(numberOfVariable+1); 
+   //G4cout << "average " << average << G4endl;
+
+   G4double delta = 0.0; 
+   for ( G4int i = 0 ; i <= numberOfVariable ; i++ )
+   {
+      delta += std::abs ( currentHeights[ i ] - average );  
+   }
+   //G4cout << "ratio of delta to average is "
+   //       << delta / (numberOfVariable+1) / average << G4endl;
+
+   if ( delta/(numberOfVariable+1)/average < max_ratio )
+   {
+      result = true; 
+   }
+  
+/*
+   G4double sigma = 0.0; 
+   G4cout << "average " << average << G4endl;
+   for ( G4int i = 0 ; i <= numberOfVariable ; i++ )
+   {
+      sigma += ( currentHeights[ i ] - average )
+              *( currentHeights[ i ] - average );  
+   }
+
+   G4cout << "standard error of hs "
+          << std::sqrt ( sigma ) / (numberOfVariable+1) << G4endl;
+   if ( std::sqrt ( sigma ) / (numberOfVariable+1) < max_se )
+   {
+      result = true; 
+   }
+*/
+   
+   return result; 
+}
+
+
+ 
+template<class T> 
+void G4SimplexDownhill<T>::doDownhill()
+{
+
+   G4int nth_trial = 0;
+
+   while ( nth_trial < maximum_no_trial )
+   {
+
+/*
+      G4cout << "Begining " << nth_trial << "th trial " << G4endl;
+      for ( G4int j = 0 ; j <= numberOfVariable ; j++ )
+      {
+         G4cout << "SimplexPoint " << j << ": "; 
+         for ( G4int i = 0 ; i < numberOfVariable ; i++ )
+         {
+             G4cout << currentSimplex[j][i] 
+                       << " ";
+         }
+         G4cout << G4endl; 
+      }
+*/
+
+      calHeights();
+
+      if ( isItGoodEnough() ) 
+      { 
+         break;
+      }
+
+      std::vector< G4double >::iterator it_maxh =
+        std::max_element( currentHeights.begin() , currentHeights.end() );
+      std::vector< G4double >::iterator it_minh =
+        std::min_element( currentHeights.begin() , currentHeights.end() );;
+
+      G4double h_H = *it_maxh;
+      G4double h_L = *it_minh;
+
+      G4int ih = 0;;
+      G4int il = 0;
+      G4double h_H2 =0.0;
+      G4int i = 0;
+      for ( std::vector< G4double >::iterator 
+            it = currentHeights.begin(); it != currentHeights.end(); it++ )
+      {
+         if ( it == it_maxh )
+         {
+            ih = i;
+         }
+         else
+         {
+            h_H2 = std::max( h_H2 , *it );
+         }
+
+         if ( it == it_minh )
+         {
+            il = i;
+         }
+         i++;
+      }
+
+      //G4cout << "max " << h_H << " " << ih << G4endl;
+      //G4cout << "max-dash " << h_H2 << G4endl;
+      //G4cout << "min " << h_L << " " << il << G4endl;
+
+      std::vector< G4double > centroidPoint = calCentroid ( ih );
+
+      // REFLECTION
+      std::vector< G4double > reflectionPoint =
+        getReflectionPoint( currentSimplex[ ih ] , centroidPoint );
+
+      G4double h = getValue( reflectionPoint );
+
+      if ( h <= h_L ) 
+      {
+      // EXPANSION
+         std::vector< G4double > expansionPoint =
+           getExpansionPoint( reflectionPoint , centroidPoint );
+         G4double hh = getValue( expansionPoint );
+          
+         if ( hh <= h_L )
+         {
+         // Replace 
+            currentSimplex[ ih ] = expansionPoint;
+            //G4cout << "A" << G4endl;
+         } 
+         else 
+         {
+         // Replace 
+            currentSimplex[ ih ] = reflectionPoint;
+            //G4cout << "B1" << G4endl;
+         }
+      } 
+      else 
+      {
+         if ( h <= h_H2 )
+         {
+         // Replace 
+            currentSimplex[ ih ] = reflectionPoint;
+            //G4cout << "B2" << G4endl;
+         }
+         else
+         {
+            if ( h <= h_H )
+            {
+            // Replace 
+              currentSimplex[ ih ] = reflectionPoint;
+              //G4cout << "BC" << G4endl;
+            }
+            // CONTRACTION
+            std::vector< G4double > contractionPoint =
+              getContractionPoint( currentSimplex[ ih ] , centroidPoint );
+            G4double hh = getValue( contractionPoint );
+            if ( hh <= h_H )
+            {
+            // Replace 
+               currentSimplex[ ih ] = contractionPoint;
+               //G4cout << "C" << G4endl;
+            }
+            else
+            {
+            // Replace
+               for ( G4int j = 0 ; j <= numberOfVariable ; j++ ) 
+               {
+                  std::vector< G4double > vec ( numberOfVariable , 0.0 );
+                  for ( G4int k = 0 ; k < numberOfVariable ; k++ ) 
+                  {
+                     vec[ k ] = ( currentSimplex[ j ][ k ]
+                                + currentSimplex[ il ][ k ] ) / 2.0;
+                  }
+                  currentSimplex[ j ] = vec;
+               }                
+               //G4cout << "D" << G4endl;
+            }
+         } 
+
+      }
+
+      nth_trial++;
+   }
+}
+
+
+ 
+template<class T> 
+std::vector< G4double > G4SimplexDownhill<T>::GetMinimumPoint()
+{
+   if ( minimized != true )
+   {
+      GetMinimum();
+   }
+
+   std::vector< G4double >::iterator it_minh =
+     std::min_element( currentHeights.begin() , currentHeights.end() );;
+   G4int imin = -1;
+   G4int i = 0;
+   for ( std::vector< G4double >::iterator 
+         it = currentHeights.begin(); it != currentHeights.end(); it++ )
+   {
+      if ( it == it_minh )
+      {
+         imin = i;
+      }
+      i++;
+   }
+   std::vector< G4double > minimumPoint = currentSimplex[ imin ];
+
+   return minimumPoint; 
+}

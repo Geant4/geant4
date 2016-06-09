@@ -42,6 +42,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4UnionSolid.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDMiddleLowerSpine::G4MIRDMiddleLowerSpine()
 {
@@ -51,45 +52,35 @@ G4MIRDMiddleLowerSpine::~G4MIRDMiddleLowerSpine()
 {
 }
 
-G4VPhysicalVolume* G4MIRDMiddleLowerSpine::ConstructMiddleLowerSpine(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDMiddleLowerSpine::Construct(const G4String& volumeName,
+							  G4VPhysicalVolume* mother,
+							  const G4String& colourName
+							  , G4bool wireFrame, G4bool sensitivity)
 {
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
    
-  G4cout << "ConstructMiddleLowerSpine for "<< sex <<G4endl;
+ G4cout << "Construct "<< volumeName  <<G4endl;
    
   G4Material* skeleton = material -> GetMaterial("skeleton");
  
   delete material;
  
-  G4double dx = 1.73 *cm;
-  G4double dy = 2.45 *cm;
-  G4double dz = 15.645 *cm;
+  G4double dx = 2. *cm;
+  G4double dy = 2.5 *cm;
+  G4double dz = 24. *cm;
 
-  G4VSolid* midSpine = new G4EllipticalTube("MiddleSpine",dx, dy, dz);
-
-  dx = 1.73 *cm;
-  dy = 2.45 *cm;
-  dz = 5.905 *cm;
-
-  G4VSolid* lowSpine = new G4EllipticalTube("LowSpine",dx, dy, dz);
-
-  G4UnionSolid* middleLowerSpine = new G4UnionSolid("MiddleLowerSpine",
-						    midSpine,
-						    lowSpine,
-						    0,
-						    G4ThreeVector(0.0, 0.0, -21.56 * cm)
-						    );
+  G4VSolid* middleLowerSpine = new G4EllipticalTube("MiddleLowerSpine",dx, dy, dz);
 
   G4LogicalVolume* logicMiddleLowerSpine = new G4LogicalVolume( middleLowerSpine, skeleton,
-								"MiddleLowerSpineVolume",
+								"logical" + volumeName,
 								0, 0, 0);   
   // Define rotation and position here!
-  G4VPhysicalVolume* physMiddleLowerSpine = new G4PVPlacement(0,G4ThreeVector(0.0 *cm, 5.39 * cm,15.905 * cm),
+  G4VPhysicalVolume* physMiddleLowerSpine = new G4PVPlacement(0,G4ThreeVector(0.0 *cm, 5.5 * cm,11. * cm),
 							      "physicalMiddleLowerSpine",
 							      logicMiddleLowerSpine,
 							      mother,
 							      false,
-							      0);
+							      0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)
@@ -99,8 +90,12 @@ G4VPhysicalVolume* G4MIRDMiddleLowerSpine::ConstructMiddleLowerSpine(G4VPhysical
   }
 
   // Visualization Attributes
-  G4VisAttributes* MiddleLowerSpineVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
-  MiddleLowerSpineVisAtt->SetForceSolid(true);
+  // G4VisAttributes* MiddleLowerSpineVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
+ 
+ G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* MiddleLowerSpineVisAtt = new G4VisAttributes(colour);
+  MiddleLowerSpineVisAtt->SetForceSolid(wireFrame);
   logicMiddleLowerSpine->SetVisAttributes(MiddleLowerSpineVisAtt);
 
   G4cout << "MiddleLowerSpine created !!!!!!" << G4endl;

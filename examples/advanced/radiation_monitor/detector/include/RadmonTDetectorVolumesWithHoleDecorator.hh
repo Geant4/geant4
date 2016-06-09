@@ -29,7 +29,7 @@
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
 // Id:            $Id: RadmonTDetectorVolumesWithHoleDecorator.hh,v 1.5 2006/06/29 16:12:32 gunter Exp $
-// Tag:           $Name: geant4-08-02 $
+// Tag:           $Name: geant4-09-00 $
 //
 // Description:   Decorates with a hole a component with the following method
 //                 - Constructor

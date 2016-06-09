@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VPreCompoundModel.hh,v 1.5 2007/01/11 05:29:34 dennis Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4VPreCompoundModel_h

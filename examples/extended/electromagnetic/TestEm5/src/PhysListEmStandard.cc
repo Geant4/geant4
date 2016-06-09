@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.11 2007/03/20 18:37:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: PhysListEmStandard.cc,v 1.12 2007/06/22 10:48:01 maire Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -49,6 +49,9 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+
+#include "G4EmProcessOptions.hh"
+#include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -113,6 +116,24 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,        -1,2,2);
     }
   }
+
+  // Em options
+  //
+  G4EmProcessOptions emOptions;
+    
+  //coulomb scattering
+  //
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);   
+  emOptions.SetSkin(2.);
+  
+  //energy loss
+  //
+  emOptions.SetLinearLossLimit(1.e-6);
+  emOptions.SetStepFunction(0.2, 100*um); 
+   
+  //ionization
+  //
+  emOptions.SetSubCutoff(false);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

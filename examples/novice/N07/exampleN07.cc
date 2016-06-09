@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN07.cc,v 1.9 2006/11/04 19:23:07 asaim Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: exampleN07.cc,v 1.10 2007/05/04 01:49:28 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -41,6 +41,7 @@
 #include "G4VisExecutive.hh"
 #endif
 #include "ExN07DetectorConstruction.hh"
+#include "ExN07ParallelWorld.hh"
 #include "ExN07PhysicsList.hh"
 #include "ExN07PrimaryGeneratorAction.hh"
 #include "ExN07RunAction.hh"
@@ -59,6 +60,7 @@ int main(int argc,char** argv)
  // Set mandatory initialization classes
  //
  G4VUserDetectorConstruction* detector = new ExN07DetectorConstruction;
+ detector->RegisterParallelWorld(new ExN07ParallelWorld("ParallelScoringWorld"));
  runManager->SetUserInitialization(detector);
  //
  G4VUserPhysicsList* physics = new ExN07PhysicsList;

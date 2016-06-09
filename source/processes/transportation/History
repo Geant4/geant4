@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2007/02/15 19:02:06 japost Exp $
+$Id: History,v 1.119.2.2 2007/05/31 08:03:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -12,10 +12,40 @@ to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
 It DOES NOT substitute the  CVS log-message one should put at every
 committal in the CVS repository !
-
+`
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 31st, 2007, A.Howard  transport-V08-03-12
+------------------------
+- Archived classes for old biasing scheme, now replaced in module
+  processes/biasing. Removed classes:
+  G4MImportanceConfigurator, G4MScoreConfigurator, G4MScoreProcess,
+  G4MWeightWindowConfigurator, G4MassGCellFinder, G4MassGeometrySampler,
+  G4MassImportanceProcess, G4MassWeightWindowProcess,
+  G4PImportanceConfigurator, G4PScoreConfigurator, G4PScoreProcess,
+  G4PWeightWindowConfigurator, G4ParallelGCellFinder,
+  G4ParallelGeometrySampler, G4ParallelImportanceProcess, G4ParallelTransport,
+  G4ParallelTransportConfigurator, G4ParallelWWnTransportProcess,
+  G4ParallelWeightWindowProcess, G4PlaceOfAction, G4ProcessPlacer,
+  G4SamplingPostStepAction, G4VProcessPlacer, G4VSampler,
+  G4VSamplerConfigurator, G4WeightCutOffConfigurator.
+
+May 8th, 2007, G.Cosmo  transport-V08-02-03a
+----------------------
+- Use call to G4GeometryTolerance instead of kCarTolerance in
+  G4VTrackTerminator.
+- Requires tag "global-V08-03-00" and related tag set.
+
+May 2nd, 2007, J.Apostolakis  transport-V08-02-02
+----------------------------
+- G4CoupledTransportation: 
+    Make treatment of mass and full safety coherent (to-dos remain in PathFinder)
+    Added storing of full safety in state; retrieve it after compute step 
+      from PathFinder; calculate them same way at start of step.
+    Put back in the code for treating looping particles
+
 February 15th, 2007, J.Apostolakis  transport-V08-02-01
 ----------------------------------
 - G4Transportation: protection against velocity=0 in AlongStep (invalid)

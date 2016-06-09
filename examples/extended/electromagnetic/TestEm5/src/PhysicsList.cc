@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.18 2007/03/20 18:50:53 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: PhysicsList.cc,v 1.19 2007/05/16 12:02:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,10 @@
 #include "PhysListEmStandardSS.hh"
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
+
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
 
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
@@ -215,6 +219,24 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
+
+  } else if (name == "emstandard") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics();
+
+  } else if (name == "emstandard_opt1") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option1();
+
+  } else if (name == "emstandard_opt2") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option2();
 
   } else if (name == "standardSS") {
 

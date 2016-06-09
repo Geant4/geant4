@@ -14,6 +14,41 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 June 2007 Alex Howard (hadr-util-V08-03-03)
+------------------------------------------------
+- Removed DumpCoreOnHadronicException protection around Report() in
+  G4HadronicException, temporary fix to give output for G4NEUTRONHPDATA not set
+
+12 June 2007 Dennis Wright (hadr-util-V08-03-02)
+------------------------------------------------
+- G4ReactionDynamics::TwoCluster : fix array bound violation when backward
+    nucleon count is 0
+
+12 June 2007 Dennis Wright (hadr-util-V08-03-01)
+------------------------------------------------
+- G4ReactionDynamics::TwoCluster : fix two bugs:
+  1) sharp peak at 180 degrees for low and medium energies due to a units
+     error:
+         G4double totalE = kineticE + vMass;
+     was changed to 
+         G4double totalE = kineticE*GeV + vMass;
+     Result is that particles from intra-nuclear cascade now have energies
+     ~ 100 MeV instead of almost 0. 
+
+  2) sharp peak at 180 degrees for low and medium energies and target nuclei
+     with Z > 6 due to incorrect sampling of polar angle:
+     replaced 
+         G4double costheta = 
+            1.0 + 2.0*std::log(1.0 - G4UniformRand()) / dtb;
+     with 
+         G4double costheta = 
+            1.0 + 2.0*std::log(1.0 - G4UniformRand()*factor) / dtb;
+            where factor = 1.0 - std::exp(-dtb) and dtb is momentum-dependent
+
+10 June 2007 Dennis Wright (hadr-util-V08-03-00)
+------------------------------------------------
+- remove un-used classes G4Fuzzy, G4EffectiveCharge, G4ParticleVector
+
 16 April 2007 Dennis Wright (hadr-util-V08-02-01)
 -------------------------------------------------
 - G4HadronicWhiteboard.hh, .cc : add methods to set process and model names

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_QEL.icc,v 1.2 2007/04/26 14:47:11 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: QGSP_QEL.icc,v 1.3 2007/05/16 11:35:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,6 +36,7 @@
 // Created from QGSP
 // Modified:
 // 26.04.2007 G.Folger: Enable quasielastic for QGS string model
+// 16.05.2007 V.Ivanchenko: rename EM builders
 //
 //----------------------------------------------------------------------------
 //
@@ -77,7 +78,7 @@ template<class T> TQGSP_QEL<T>::TQGSP_QEL(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics("standard EM",ver));
+  this->RegisterPhysics( new G4EmStandardPhysics(ver));
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics("extra EM"));

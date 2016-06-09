@@ -247,7 +247,7 @@
       G4cout << "unusable number for repFlag: repFlag="<<repFlag<<G4endl;
       throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPElasticFS::Init -- unusable number for repFlag");
     }
-    if(cosTh<-1.1) return NULL;
+    if(cosTh<-1.1) { return 0; }
     G4double phi = twopi*G4UniformRand();
     G4double theta = std::acos(cosTh);
     G4double sinth = std::sin(theta);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.48 2007/03/27 15:15:12 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.51 2007/05/25 15:41:38 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -51,6 +51,7 @@
 #include "G4Normal3D.hh"
 #include "G4Transform3D.hh"
 #include "G4Polyline.hh"
+#include "G4Polymarker.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
@@ -63,11 +64,14 @@
 #include "G4VSolid.hh"
 #include "G4Scene.hh"
 #include "G4VisExtent.hh"
+#include "G4AttHolder.hh"
 
 G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 			      G4int id,
 			      const G4String& name):
-  G4VSceneHandler (system, id, name)
+  G4VSceneHandler (system, id, name),
+  fPickName(0),
+  fProcessingPolymarker(false)
 {}
 
 G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
@@ -94,6 +98,41 @@ const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55
 };
 
+void G4OpenGLSceneHandler::ClearAndDestroyAtts()
+{
+  std::map<GLuint, G4AttHolder*>::iterator i;
+  for (i = fPickMap.begin(); i != fPickMap.end(); ++i) delete i->second;
+  fPickMap.clear();
+}
+
+void G4OpenGLSceneHandler::PreAddSolid
+(const G4Transform3D& objectTransformation,
+ const G4VisAttributes& visAttribs)
+{
+  G4VSceneHandler::PreAddSolid (objectTransformation, visAttribs);
+}
+
+void G4OpenGLSceneHandler::BeginPrimitives
+(const G4Transform3D& objectTransformation)
+{
+  G4VSceneHandler::BeginPrimitives (objectTransformation);
+}
+
+void G4OpenGLSceneHandler::EndPrimitives ()
+{
+  G4VSceneHandler::EndPrimitives ();
+}
+
+void G4OpenGLSceneHandler::BeginPrimitives2D ()
+{
+  G4VSceneHandler::BeginPrimitives2D ();
+}
+
+void G4OpenGLSceneHandler::EndPrimitives2D ()
+{
+  G4VSceneHandler::EndPrimitives2D ();
+}
+
 const G4Polyhedron* G4OpenGLSceneHandler::CreateSectionPolyhedron ()
 {
   // Clipping done in G4OpenGLViewer::SetView.
@@ -118,6 +157,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 {
   G4int nPoints = line.size ();
   if (nPoints <= 0) return;
+
+  // Loads G4Atts for picking...
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(line, holder);
+    fPickMap[fPickName] = holder;
+  }
 
   // Note: colour treated in sub-class.
 
@@ -145,7 +191,64 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   glEnd ();
 }
 
+void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
+{
+  G4int nPoints = polymarker.size ();
+  if (nPoints <= 0) return;
+
+  fProcessingPolymarker = true;
+
+  // Loads G4Atts for picking...
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(polymarker, holder);
+    fPickMap[fPickName] = holder;
+  }
+
+  switch (polymarker.GetMarkerType()) {
+  default:
+  case G4Polymarker::dots:
+    {
+      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+        G4Circle dot (polymarker);
+        dot.SetPosition (polymarker[iPoint]);
+        dot.SetWorldSize  (0.);
+        dot.SetScreenSize (0.1);  // Very small circle.
+        G4OpenGLSceneHandler::AddPrimitive (dot);
+      }
+    }
+    break;
+  case G4Polymarker::circles:
+    {
+      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+        G4Circle circle (polymarker);
+        circle.SetPosition (polymarker[iPoint]);
+        G4OpenGLSceneHandler::AddPrimitive (circle);
+      }
+    }
+    break;
+  case G4Polymarker::squares:
+    {
+      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+        G4Square square (polymarker);
+        square.SetPosition (polymarker[iPoint]);
+        G4OpenGLSceneHandler::AddPrimitive (square);
+      }
+    }
+    break;
+  }
+
+  fProcessingPolymarker = false;
+}
+
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
+
+  // Loads G4Atts for picking...
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(text, holder);
+    fPickMap[fPickName] = holder;
+  }
 
   const G4Colour& c = GetTextColour (text);  // Picks up default if none.
   MarkerSizeType sizeType;
@@ -199,6 +302,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& square) {
 void G4OpenGLSceneHandler::AddCircleSquare
 (const G4VMarker& marker,
  G4OpenGLBitMapStore::Shape shape) {
+
+  if (!fProcessingPolymarker) {  // Polymarker has already loaded atts.
+    // Loads G4Atts for picking...
+    if (fpViewer->GetViewParameters().IsPicking()) {
+      G4AttHolder* holder = new G4AttHolder;
+      LoadAtts(marker, holder);
+      fPickMap[fPickName] = holder;
+    }
+  }
 
   // Note: colour treated in sub-class.
 
@@ -260,7 +372,7 @@ void G4OpenGLSceneHandler::AddCircleSquare
     const GLubyte* marker =
       G4OpenGLBitMapStore::GetBitMap(shape, size, filled);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glBitmap(size, size, size/2., size/2., 0., 0., marker);
+    glBitmap(GLsizei(size), GLsizei(size), size/2., size/2., 0., 0., marker);
   }
 }
 
@@ -298,6 +410,11 @@ void G4OpenGLSceneHandler::DrawXYPolygon
   glEnd ();
 }
 
+void G4OpenGLSceneHandler::AddPrimitive (const G4Scale& scale)
+{
+  G4VSceneHandler::AddPrimitive(scale);
+}
+
 //Method for handling G4Polyhedron objects for drawing solids.
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
@@ -305,6 +422,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   // Draw each facet individually
   
   if (polyhedron.GetNoFacets() == 0) return;
+
+  // Loads G4Atts for picking...
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(polyhedron, holder);
+    fPickMap[fPickName] = holder;
+  }
 
   // Get vis attributes - pick up defaults if none.
   const G4VisAttributes* pVA =
@@ -588,6 +712,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 //Method for handling G4NURBS objects for drawing solids.
 //Knots and Ctrl Pnts MUST be arrays of GLfloats.
 void G4OpenGLSceneHandler::AddPrimitive (const G4NURBS& nurb) {
+
+  // Loads G4Atts for picking...
+  if (fpViewer->GetViewParameters().IsPicking()) {
+    G4AttHolder* holder = new G4AttHolder;
+    LoadAtts(nurb, holder);
+    fPickMap[fPickName] = holder;
+  }
 
   GLUnurbsObj *gl_nurb;
   gl_nurb = gluNewNurbsRenderer ();

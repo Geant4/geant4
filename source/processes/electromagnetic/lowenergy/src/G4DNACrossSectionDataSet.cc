@@ -24,8 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNACrossSectionDataSet.cc,v 1.1.2.1 2006/06/29 19:39:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+
+// $Id: G4DNACrossSectionDataSet.cc,v 1.4 2007/06/21 15:04:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 //
@@ -38,6 +39,7 @@
 #include "G4VDataSetAlgorithm.hh"
 #include "G4EMDataSet.hh"
 #include <vector>
+#include <fstream>
 #include <sstream>
 
 

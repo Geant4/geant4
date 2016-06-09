@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownDecay.cc,v 1.3 2006/06/29 19:31:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4UnknownDecay.cc,v 1.4 2007/05/07 10:16:08 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -66,27 +66,6 @@ G4bool G4UnknownDecay::IsApplicable(const G4ParticleDefinition& aParticleType)
 
 G4double G4UnknownDecay::GetMeanFreePath(const G4Track& /*aTrack*/,G4double, G4ForceCondition*)
 {
-//   // get particle 
-//   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-//
-//   // returns the mean free path in GEANT4 internal units
-//   G4double pathlength;
-//   G4double pTime = aParticle->GetPreAssignedDecayProperTime();
-//   if(pTime<0.) pTime = DBL_MIN;
-//   G4double aCtau = c_light * pTime;
-//   G4double aMass = aParticle->GetMass();
-//
-//   G4double rKineticEnergy = aParticle->GetKineticEnergy()/aMass; 
-//   if ( rKineticEnergy > HighestValue) {
-//     // gamma >>  1
-//     pathlength = ( rKineticEnergy + 1.0)* aCtau;
-//   } else if ( rKineticEnergy < DBL_MIN ) {
-//     // too slow particle
-//     pathlength = DBL_MIN;
-//   } else {
-//     pathlength = (aParticle->GetTotalMomentum())/aMass*aCtau ;
-//   }
-//   return  pathlength;
    return  DBL_MIN;
 }
 
@@ -128,6 +107,19 @@ G4VParticleChange* G4UnknownDecay::DecayIt(const G4Track& aTrack, const G4Step& 
   
   // get parent particle information ...................................
   G4double   ParentEnergy  = aParticle->GetTotalEnergy();
+  G4double   ParentMass    = aParticle->GetMass();
+  if (ParentEnergy < ParentMass) {
+    ParentEnergy = ParentMass;
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>1) {
+      G4cerr << "G4UnknownDecay::DoIt  : Total Energy is less than its mass" << G4endl;
+      G4cerr << " Particle: " << aParticle->GetDefinition()->GetParticleName();
+      G4cerr << " Energy:"    << ParentEnergy/MeV << "[MeV]";
+      G4cerr << " Mass:"    << ParentMass/MeV << "[MeV]";
+      G4cerr << G4endl;
+    }
+#endif
+  }
   G4ThreeVector ParentDirection(aParticle->GetMomentumDirection());
 
   G4double energyDeposit = 0.0;

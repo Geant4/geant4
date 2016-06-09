@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh,v 1.7 2006/07/21 09:39:02 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EnergyLossForExtrapolator.hh,v 1.8 2007/05/29 04:43:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------------------
 //
@@ -67,31 +67,7 @@ class G4EnergyLossForExtrapolator
 public:
   G4EnergyLossForExtrapolator(G4int verb = 1);
 
-  virtual ~G4EnergyLossForExtrapolator();
-
-  G4double EnergyAfterStep(G4double kinEnergy, G4double step, 
-			   const G4Material*, const G4ParticleDefinition*);
-
-  G4double EnergyAfterStep(G4double kinEnergy, G4double step, 
-			   const G4Material*, const G4String& particleName);
-
-  G4double EnergyBeforeStep(G4double kinEnergy, G4double step, 
-			    const G4Material*, const G4ParticleDefinition*);
-
-  G4double EnergyBeforeStep(G4double kinEnergy, G4double step, 
-			    const G4Material*, const G4String& particleName);
-
-  G4double AverageScatteringAngle(G4double kinEnergy, G4double step, 
-				  const G4Material*, const G4ParticleDefinition* part);
-
-  G4double AverageScatteringAngle(G4double kinEnergy, G4double step, 
-				  const G4Material*, const G4String& particleName);
-
-  G4double EnergyDispersion(G4double kinEnergy, G4double step, 
-			    const G4Material*, const G4ParticleDefinition*);
-
-  G4double EnergyDispersion(G4double kinEnergy, G4double step, 
-			    const G4Material*, const G4String& particleName);
+  ~G4EnergyLossForExtrapolator();
 
   G4double ComputeDEDX(G4double kinEnergy, const G4ParticleDefinition*);
 
@@ -99,7 +75,35 @@ public:
 
   G4double ComputeEnergy(G4double range, const G4ParticleDefinition*);
 
-  void SetVerbose(G4int val);
+  G4double EnergyAfterStep(G4double kinEnergy, G4double step, 
+			   const G4Material*, const G4ParticleDefinition*);
+
+  G4double EnergyBeforeStep(G4double kinEnergy, G4double step, 
+			    const G4Material*, const G4ParticleDefinition*);
+
+  inline G4double EnergyAfterStep(G4double kinEnergy, G4double step, 
+			   const G4Material*, const G4String& particleName);
+
+  inline G4double EnergyBeforeStep(G4double kinEnergy, G4double step, 
+			    const G4Material*, const G4String& particleName);
+
+  inline G4double AverageScatteringAngle(G4double kinEnergy, G4double step, 
+				  const G4Material*, const G4ParticleDefinition* part);
+
+  inline G4double AverageScatteringAngle(G4double kinEnergy, G4double step, 
+					 const G4Material*, const G4String& particleName);
+
+  inline G4double EnergyDispersion(G4double kinEnergy, G4double step, 
+			    const G4Material*, const G4ParticleDefinition*);
+
+  inline G4double EnergyDispersion(G4double kinEnergy, G4double step, 
+				   const G4Material*, const G4String& particleName);
+
+  inline void SetVerbose(G4int val);
+
+  inline void SetMinKinEnergy(G4double);
+
+  inline void SetMaxKinEnergy(G4double);
    
 private:
 
@@ -108,8 +112,6 @@ private:
   G4PhysicsTable* PrepareTable();
 
   const G4ParticleDefinition* FindParticle(const G4String& name);
-
-  G4double ComputeValue(G4double x, const G4PhysicsTable* table);
 
   void ComputeElectronDEDX(const G4ParticleDefinition* part, G4PhysicsTable* table); 
 
@@ -120,7 +122,13 @@ private:
   G4double ComputeTrueStep(const G4Material*, const G4ParticleDefinition* part, 
 			   G4double kinEnergy, G4double stepLength);
 
-  G4double ComputeScatteringAngle(G4double x);
+  inline G4double ComputeValue(G4double x, const G4PhysicsTable* table);
+
+  inline G4double ComputeScatteringAngle(G4double x);
+
+  // hide assignment operator
+  G4EnergyLossForExtrapolator & operator=(const G4EnergyLossForExtrapolator &right);
+  G4EnergyLossForExtrapolator(const G4EnergyLossForExtrapolator&);
 
   const G4ParticleDefinition* currentParticle;
   const G4ParticleDefinition* electron;
@@ -264,6 +272,20 @@ inline G4double G4EnergyLossForExtrapolator::ComputeValue(G4double x,
 inline void G4EnergyLossForExtrapolator::SetVerbose(G4int val) 
 {
   verbose = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4EnergyLossForExtrapolator::SetMinKinEnergy(G4double val)
+{
+  emin = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4EnergyLossForExtrapolator::SetMaxKinEnergy(G4double val)
+{
+  emax = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

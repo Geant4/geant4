@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4RayTracerViewer.cc,v 1.17 2007/01/05 17:05:11 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #include "G4RayTracerViewer.hh"
 

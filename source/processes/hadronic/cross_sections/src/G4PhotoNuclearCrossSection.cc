@@ -25,7 +25,7 @@
 //
 //
 // The lust update: M.V. Kossov, CERN/ITEP(Moscow) 17-June-02
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // G4 Physics class: G4PhotoNuclearCrossSection for gamma+A cross sections
@@ -40,7 +40,7 @@
 
 #include "G4PhotoNuclearCrossSection.hh"
 
-// Initialization of the
+// Initialization of the statics
 G4int G4PhotoNuclearCrossSection::lastN=0;  
                             // The last N of calculated nucleus
 G4int G4PhotoNuclearCrossSection::lastZ=0;  
@@ -57,6 +57,24 @@ G4double G4PhotoNuclearCrossSection::lastTH=0.;
                             // Last value of the Energy Threshold (A-dependent)
 G4double G4PhotoNuclearCrossSection::lastSP=0.; 
                             // Last value of the ShadowingPomeron (A-dependent)
+
+std::vector<G4double*> G4PhotoNuclearCrossSection::GDR;   // Vector of pointers to the GDRPhotonuclearCrossSection
+std::vector<G4double*> G4PhotoNuclearCrossSection::HEN;   // Vector of pointers to the HighEnPhotonuclearCrossSect
+
+G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection()
+{
+}
+
+G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
+{
+  std::vector<G4double*>::iterator pos;
+  for(pos=GDR.begin(); pos<GDR.end(); pos++)
+  { delete [] *pos; }
+  GDR.clear();
+  for(pos=HEN.begin(); pos<HEN.end(); pos++)
+  { delete [] *pos; }
+  HEN.clear();
+}
 
 // The main member function giving the gamma-A cross section 
 // (E in GeV, CS in mb)
@@ -125,8 +143,6 @@ G4PhotoNuclearCrossSection::GetIsoZACrossSection(const G4DynamicParticle* aPart,
   static std::vector <G4int> colZ;      // Z of calculated nuclei
   static std::vector <G4double> spA;    // shadowing coefficients (A-dependent)
   static std::vector <G4double> eTH;    // energy threshold (A-dependent)
-  static std::vector <G4double*> GDR;   // Vector of pointers to the GDRPhotonuclearCrossSection
-  static std::vector <G4double*> HEN;   // Vector of pointers to the HighEnPhotonuclearCrossSect
   //
   const G4double Energy = aPart->GetKineticEnergy()/MeV;
   const G4int targetAtomicNumber = static_cast<int>(AA+.499); //@@ Nat mixture (?!)

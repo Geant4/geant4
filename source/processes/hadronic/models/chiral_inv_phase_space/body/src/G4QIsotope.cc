@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QIsotope.cc,v 1.9 2006/12/07 19:25:49 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.

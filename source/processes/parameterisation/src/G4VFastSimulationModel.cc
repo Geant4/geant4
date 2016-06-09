@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFastSimulationModel.cc,v 1.6 2006/06/29 21:09:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VFastSimulationModel.cc,v 1.7 2007/05/11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------
 //
@@ -43,26 +43,24 @@
 #include "G4VFastSimulationModel.hh"
 #include "G4FastSimulationManager.hh"
 
-//
-// Simple constructor.
-//
-G4VFastSimulationModel::
-G4VFastSimulationModel(const G4String& aName)  : theModelName(aName) {}
+// ----------------------
+// -- Simple constructor:
+// ----------------------
+G4VFastSimulationModel::G4VFastSimulationModel(const G4String& aName)
+ : theModelName(aName) {}
 
-//
-// Constructor for beginners. We do all the job, no matters...
-//
-G4VFastSimulationModel::
-G4VFastSimulationModel(const G4String& aName,
-		       G4Envelope* anEnvelope,
-		       G4bool IsUnique) : theModelName(aName)
+// ----------------------------------------------------------------------------------------------
+// -- Constructor with automatic G4FastSimulationManager constructed if needed fo given envelope:
+// ----------------------------------------------------------------------------------------------
+G4VFastSimulationModel::G4VFastSimulationModel(const G4String&      aName,
+					       G4Envelope*     anEnvelope,
+					       G4bool            IsUnique) 
+ : theModelName(aName)
 {
-  // Retrieves the Fast Simulation Manager ou creates one 
-  // if needed.
+  // Retrieves the Fast Simulation Manager ou creates one if needed.
   G4FastSimulationManager* theFastSimulationManager;
-  if ((theFastSimulationManager=anEnvelope->GetFastSimulationManager()) == 0) 
-    theFastSimulationManager= 
-      new G4FastSimulationManager(anEnvelope,IsUnique);
+  if ((theFastSimulationManager = anEnvelope->GetFastSimulationManager()) == 0) 
+    theFastSimulationManager = new G4FastSimulationManager(anEnvelope,IsUnique);
   // adds this model to the Fast Simulation Manager.
   theFastSimulationManager->AddFastSimulationModel(this);
 }

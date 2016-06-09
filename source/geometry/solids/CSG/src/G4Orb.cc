@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.23 2006/06/29 18:45:12 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Orb.cc,v 1.24 2007/05/18 07:38:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // class G4Orb
 //
@@ -43,6 +43,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -77,9 +78,15 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 : G4CSGSolid(pName)
 {
 
-  // Check radius
+  G4double kRadTolerance
+    = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
-  if (pRmax >= 10*kCarTolerance ) fRmax = pRmax;  
+  // Check radius
+  //
+  if (pRmax >= 10*kCarTolerance )
+  {
+    fRmax = pRmax;
+  }
   else
   {
     G4Exception("G4Orb::G4Orb()", "InvalidSetup", FatalException,

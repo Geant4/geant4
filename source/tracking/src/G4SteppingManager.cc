@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.44 2006/12/13 15:49:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SteppingManager.cc,v 1.45 2007/04/28 01:49:19 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------
 //
@@ -220,6 +220,7 @@ G4StepStatus G4SteppingManager::Stepping()
 // Update 'TrackLength' and remeber the Step length of the current Step
    fTrack->AddTrackLength(fStep->GetStepLength());
    fPreviousStepSize = fStep->GetStepLength();
+   fStep->SetTrack(fTrack);
 #ifdef G4VERBOSE
                          // !!!!! Verbose
 
@@ -237,10 +238,13 @@ G4StepStatus G4SteppingManager::Stepping()
    }
 
 // User intervention process.
-   fStep->SetTrack(fTrack);
    if( fUserSteppingAction != NULL ) {
       fUserSteppingAction->UserSteppingAction(fStep);
    }
+   G4UserSteppingAction* regionalAction
+    = fStep->GetPreStepPoint()->GetPhysicalVolume()->GetLogicalVolume()->GetRegion()
+      ->GetRegionalSteppingAction();
+   if( regionalAction ) regionalAction->UserSteppingAction(fStep);
 
 // Stepping process finish. Return the value of the StepStatus.
    return fStepStatus;

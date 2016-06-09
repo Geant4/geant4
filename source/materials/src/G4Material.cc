@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Material.cc,v 1.35 2007/01/10 12:00:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //

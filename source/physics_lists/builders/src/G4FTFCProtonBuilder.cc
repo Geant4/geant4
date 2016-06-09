@@ -30,11 +30,19 @@
 #include "TheoModelFactory.hh"
 
 G4FTFCProtonBuilder::
-G4FTFCProtonBuilder() 
+G4FTFCProtonBuilder(G4bool quasiElastic) 
 {
-  theMin = 15*GeV;
+  theMin = 4*GeV;
   theModel = TheoModelFactory<G4StringChipsParticleLevelInterface,
                               G4FTFModel, G4LundStringFragmentation>::New();
+			      
+    if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
+
 }
 
 void G4FTFCProtonBuilder::

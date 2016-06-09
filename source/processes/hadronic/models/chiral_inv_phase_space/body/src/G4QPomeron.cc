@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QPomeron.cc,v 1.2 2006/12/12 11:02:22 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaCompton.hh,v 1.2 2007/01/30 16:02:10 maire Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: MyKleinNishinaCompton.hh,v 1.3 2007/05/23 08:40:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -55,11 +55,11 @@ public:
                                       G4double cut,
                                       G4double emax);
 
-  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
-                                const G4MaterialCutsCouple*,
-                                const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double maxEnergy);
 				      
   void SetCSFactor(G4double factor) {CrossSectionFactor = factor;};
 

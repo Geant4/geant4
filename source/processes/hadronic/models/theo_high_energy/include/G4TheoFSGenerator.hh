@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TheoFSGenerator.hh,v 1.5 2007/04/12 07:53:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 // Class Description

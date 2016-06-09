@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4AttHolder.cc,v 1.3 2006/11/01 10:11:44 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #include "G4AttHolder.hh"
 

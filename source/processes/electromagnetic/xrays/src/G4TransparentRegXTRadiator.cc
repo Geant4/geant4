@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TransparentRegXTRadiator.cc,v 1.10 2006/06/29 19:56:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include <complex>

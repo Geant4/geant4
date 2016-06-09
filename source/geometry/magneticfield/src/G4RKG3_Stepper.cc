@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RKG3_Stepper.cc,v 1.12 2007/04/26 12:23:55 tnikitin Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4RKG3_Stepper.cc,v 1.14 2007/05/18 12:44:28 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 
@@ -36,8 +36,9 @@
 G4RKG3_Stepper::G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
   : G4MagIntegratorStepper(EqRhs,6)
 {
-  // G4Exception("G4RKG3_Stepper::G4RKG3_Stepper()", "NotImplemented",
-  //            FatalException, "Stepper not yet available.");
+  
+  fPtrMagEqOfMot=EqRhs;
+
 }
 
 G4RKG3_Stepper::~G4RKG3_Stepper()
@@ -51,33 +52,27 @@ void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
                                      G4double yErr[])
 {
    G4double  B[3];
-   //   G4double  yderiv[6];
-   //   G4double  alpha2, beta2;
    G4int nvar = 6 ;
-   //   G4double beTemp2, beta2=0;
-
    G4int i;
    G4double  by15 = 1. / 15. ; // was  0.066666666 ;
+
    G4double yTemp[7], dydxTemp[6], yIn[7] ;
    //  Saving yInput because yInput and yOut can be aliases for same array
    for(i=0;i<nvar;i++) yIn[i]=yInput[i];
 
    G4double h = Step * 0.5; 
-
+   hStep=Step;
    // Do two half steps
 
-
-   // To obtain B1 ...
-   // GetEquationOfMotion()->GetFieldValue(yIn,B);
-   // G4RKG3_Stepper::StepWithEst(yIn, dydx, Step, yOut,alpha2, beta2, B1, B2 );
-
    StepNoErr(yIn, dydx,h, yTemp,B) ;
-                                     //   RightHandSide(yTemp,dydxTemp) ;
-   GetEquationOfMotion()->EvaluateRhsGivenB(yTemp,B,dydxTemp) ;  
-   StepNoErr(yTemp,dydxTemp,h,yOut,B);              // ,beTemp2) ;
-                                                     //   beta2 += beTemp2;
-                                                     //   beta2 *= 0.5;
+   //Store Bfld for DistChord Calculation
+   for(i=0;i<3;i++)BfldIn[i]=B[i];
 
+   //   RightHandSide(yTemp,dydxTemp) ;
+
+   GetEquationOfMotion()->EvaluateRhsGivenB(yTemp,B,dydxTemp) ;  
+   StepNoErr(yTemp,dydxTemp,h,yOut,B);      
+        
    // Store midpoint, chord calculation
                                  
    fyMidPoint = G4ThreeVector( yTemp[0],  yTemp[1],  yTemp[2]); 
@@ -92,16 +87,12 @@ void G4RKG3_Stepper::Stepper(  const G4double  yInput[7],
       yOut[i] += yErr[i]*by15 ;          // Provides 5th order of accuracy
    }
 
-//    for(i=0;i<ncomp;i++)
-//    {
-//       fyInitial[i]  = yIn[i]; 
-//       fyFinal[i]    = yOut[i]; 
-//    }
+   //Store values for DistChord method
 
-   fyInitial = G4ThreeVector( yIn[0],   yIn[1],   yIn[2]); 
+   fyInitial = G4ThreeVector( yIn[0],   yIn[1],   yIn[2]);
+   fpInitial = G4ThreeVector( yIn[3],   yIn[4],   yIn[5]);
    fyFinal   = G4ThreeVector( yOut[0],  yOut[1],  yOut[2]); 
-   //   beta2 += beTemp2 ;
-   //   beta2 *= 0.5 ;   
+  
    // NormaliseTangentVector( yOut );  // Deleted
 }
 
@@ -140,7 +131,7 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
                                      G4double tOut[7],
                                      G4double B[3]      )     // const
    
-{
+{ 
   
   //  Copy and edit the routine above, to delete alpha2, beta2, ...
    G4double K1[7],K2[7],K3[7],K4[7] ;
@@ -156,6 +147,7 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
   
    // GetEquationOfMotion()->EvaluateRhsReturnB(tIn,dydx,B1) ;
    // Correction for momentum not a velocity
+   // Need the protection !!! must be not zero 
      mom=std::sqrt(tIn[3]*tIn[3]+tIn[4]*tIn[4]+tIn[5]*tIn[5]); 
          
    for(i=0;i<3;i++)
@@ -201,23 +193,71 @@ void G4RKG3_Stepper::StepNoErr(const G4double tIn[7],
   
 #endif
 }
+
 // ---------------------------------------------------------------------------
 
 G4double G4RKG3_Stepper::DistChord()   const 
 {
-  // Soon: must check whether h/R > 2 pi  !!
-  //  Method below is good only for < 2 pi
+  // Implementation : must check whether h/R >  pi  !!
+  //   If( h/R <  pi) use  G4LineSection::DistLine
+  //   Else           use  DistChord=R_helix
   G4double distChord,distLine;
-  
-  if (fyInitial != fyFinal) {
-     distLine= G4LineSection::Distline(fyMidPoint,fyInitial,fyFinal );
- 
-       distChord = distLine;
-  }else{
-     distChord = (fyMidPoint-fyInitial).mag();
-  }
 
- 
+  //Calculation of R_helix and R_curv
+  G4double R_helix;
+  G4double R_curv;
+  G4double H_helix=hStep;
+  G4double Bmag=BfldIn.mag();
+    
+  G4ThreeVector initVelocity= fpInitial;
+  G4double      velocityVal = initVelocity.mag();
+  G4ThreeVector initTangent = (1.0/velocityVal) * initVelocity;  // .unit();  
+    
+  const G4double fUnitConstant = 0.299792458 * (GeV/(tesla*m));
+  G4double particleCharge = fPtrMagEqOfMot->FCof() / (eplus*c_light); 
+  G4double fCoefficient = (fUnitConstant ) * particleCharge;
+  
+  // for too small field there is no curvature
+  
+  if( Bmag>1e-12 ) {
+  
+    // Bnorm = Bfld.unit();
+    G4ThreeVector Bnorm = (1.0/Bmag)*BfldIn;
+
+    // calculate the direction of the force
+   
+    G4ThreeVector B_x_P = Bnorm.cross(initTangent);
+
+    // parallel and perp vectors
+
+    G4ThreeVector B_x_P_x_B = B_x_P.cross(Bnorm); 
+    G4double ptan=B_x_P_x_B.dot(initVelocity);
+     
+     R_helix  =std::abs((  1./fCoefficient)* ptan/Bmag);
+     R_curv=std::abs((  1./fCoefficient)* velocityVal/Bmag);
+
+     // G4cout<<"Bfld="<<BfldIn<<" Momentum="<<velocityVal<<" DirectionM="<<initTangent<<G4endl;
+     // G4cout<<"R_helix="<<R_helix/mm<<" mm R_curv="<<R_curv/mm<<" BxP="<< B_x_P<<" BxPxP="<<B_x_P_x_B<<G4endl;   
+  }
+  else{
+   
+    R_helix=0.;
+    R_curv=H_helix;
+  }
+   
+  // DistChord Calculation 
+  if(std::abs(H_helix/R_curv)<pi){
+    if (fyInitial != fyFinal) {
+      distLine= G4LineSection::Distline(fyMidPoint,fyInitial,fyFinal );
+      distChord = distLine;
+    }else{
+      distChord = (fyMidPoint-fyInitial).mag();
+    }
+  }
+  else{
+    distChord=R_helix;
+  }
+  // G4cout<<"distChord="<<distChord<<" hstep="<<H_helix<<"  Helix/R ="<<std::abs(H_helix/R_curv)<<" R_helix="<<R_helix<<G4endl; 
   return distChord;
   
 }

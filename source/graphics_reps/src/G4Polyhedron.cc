@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Polyhedron.cc,v 1.20 2006/06/29 19:07:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #include "G4Polyhedron.hh"
 

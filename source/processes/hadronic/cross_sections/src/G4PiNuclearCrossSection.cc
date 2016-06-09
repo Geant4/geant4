@@ -368,8 +368,10 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
   G4double result = 0;
   G4int Z=G4lrint(ZZ);
   debug.push_back(Z);
-  size_t it=0;
+  size_t it = 0;
+
   while(it<theZ.size() && Z>theZ[it]) it++;
+
   debug.push_back(theZ[it]);
   debug.push_back(kineticEnergy);
 
@@ -380,13 +382,16 @@ GetIsoZACrossSection(const G4DynamicParticle* particle, G4double ZZ,
   }
   G4int Z1, Z2;
   G4double x1, x2, xt1, xt2;
-  if(charge<0)
+  if( charge < 0 )
   {
-    if(theZ[it]==Z)
+    if( theZ[it] == Z )
     {
       result = thePimData[it]->ReactionXSection(kineticEnergy);
+      fTotalXsc = thePimData[it]->TotalXSection(kineticEnergy);
+
       debug.push_back("D1 ");
       debug.push_back(result);
+      debug.push_back(fTotalXsc);
     }
     else
     {

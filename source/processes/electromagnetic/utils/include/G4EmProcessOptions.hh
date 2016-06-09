@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.11 2007/02/12 12:31:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4EmProcessOptions.hh,v 1.12 2007/05/18 18:39:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 
 #include <vector>
 #include "globals.hh"
+#include "G4MscStepLimitType.hh"
 
 class G4LossTableManager;
 class G4Region;
@@ -105,15 +106,19 @@ public:
 
   void SetLinearLossLimit(G4double val);
 
-  void SetSkin(G4double val);
-
   void ActivateDeexcitation(G4bool val, const G4Region* r = 0);
 
-  void SetMscStepLimitation(G4bool algorithm, G4double factor = -1.);
-
-  void SetLPMFlag(G4bool val);
+  void SetMscStepLimitation(G4MscStepLimitType val);
 
   void SetMscLateralDisplacement(G4bool val);
+
+  void SetSkin(G4double val);
+
+  void SetMscRangeFactor(G4double val);
+
+  void SetMscGeomFactor(G4double val);
+
+  void SetLPMFlag(G4bool val);
 
   void SetBremsstrahlungTh(G4double val);
 

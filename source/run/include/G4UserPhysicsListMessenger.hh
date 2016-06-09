@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.16 2006/06/29 21:13:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.18 2007/05/30 10:34:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //---------------------------------------------------------------

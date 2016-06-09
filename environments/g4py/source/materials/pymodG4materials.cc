@@ -23,15 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4materials.cc,v 1.4 2006/06/29 15:34:24 gunter Exp $
-// $Name: geant4-08-02 $
+// $Id: pymodG4materials.cc,v 1.5 2007/05/28 03:11:20 kmura Exp $
+// $Name: geant4-09-00 $
 // ====================================================================
 //   pymodG4materials.cc [Geant4Py module]
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
 
 using namespace boost::python;
 
@@ -50,8 +49,6 @@ BOOST_PYTHON_MODULE(G4materials)
   export_G4MaterialTable();
   export_G4Element();
   export_G4ElementTable();
-#if G4VERSION_NUMBER >= 710
   export_G4NistManager();
-#endif
 }
 

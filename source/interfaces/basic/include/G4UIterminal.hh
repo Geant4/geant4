@@ -23,19 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4UIterminal.hh,v 1.10 2007/05/22 01:51:05 kmura Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
-// $Id: G4UIterminal.hh,v 1.9 2006/06/29 19:09:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
-//
-
-#ifndef G4UIterminal_h
-#define G4UIterminal_h 1
-
-#include <fstream>
-#include "G4UImanager.hh"
-#include "G4VBasicShell.hh"
-#include "G4VUIshell.hh"
-
+// ====================================================================
+//   G4UIterminal.cc
 //
 //   Description:
 //
@@ -68,7 +60,14 @@
 //     - Add more functionality, if need.
 //
 //   For more detail, see source codes.
-//
+// ====================================================================
+#ifndef G4UIterminal_h
+#define G4UIterminal_h 1
+
+#include <fstream>
+#include "G4UImanager.hh"
+#include "G4VBasicShell.hh"
+#include "G4VUIshell.hh"
 
 class G4UIterminal : public G4VBasicShell {
 private:
@@ -81,7 +80,7 @@ private:
   G4bool iCont;
 
 public:
-  G4UIterminal(G4VUIshell* aShell=0);
+  G4UIterminal(G4VUIshell* aShell=0, G4bool qsig=true);
   ~G4UIterminal();
 
   void SetPrompt(const G4String& prompt);

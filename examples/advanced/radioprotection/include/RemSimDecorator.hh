@@ -31,7 +31,7 @@
 //    ***************************
 //
 // $Id: RemSimDecorator.hh,v 1.10 2006/06/29 16:22:10 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //

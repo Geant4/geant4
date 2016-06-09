@@ -69,6 +69,7 @@ G4CollisionOutput G4IntraNucleiCascader::collide(G4InuclParticle* bullet,
   G4InuclNuclei* bnuclei = dynamic_cast<G4InuclNuclei*>(bullet);
   G4InuclElementaryParticle* bparticle = dynamic_cast<G4InuclElementaryParticle*>(bullet);
   G4NucleiModel model(tnuclei);
+
   std::vector<G4double> momentum_in = bullet->getMomentum();
 
   momentum_in[0] += tnuclei->getMass();

@@ -1,4 +1,4 @@
-# $Id: storeTables.mac,v 1.7 2007/04/22 16:25:20 vnivanch Exp $
+# $Id: storeTables.mac,v 1.8 2007/05/18 19:00:44 vnivanch Exp $
 #
 # Macro file for "testEm3.cc"
 # 
@@ -7,7 +7,7 @@
 #
 /control/verbose 2
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  emstandard
 #
 /run/initialize
 /run/beamOn 3

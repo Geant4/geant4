@@ -24,8 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionERelease.hh,v 1.10 2006/06/29 20:47:53 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPFissionERelease.hh,v 1.12 2007/06/08 22:39:50 tkoi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
+//
+// 070606 fix for Valgrind by T. Koi
 //
 #ifndef G4NeutronHPFissionERelease_h
 #define G4NeutronHPFissionERelease_h 1
@@ -37,7 +39,17 @@
 class G4NeutronHPFissionERelease
 {
   public:
-  G4NeutronHPFissionERelease(){}
+     G4NeutronHPFissionERelease()
+     : totalEnergy( 0.0 )
+     , fragmentKinetic( 0.0 )
+     , promptNeutronKinetic( 0.0 )
+     , delayedNeutronKinetic( 0.0 )
+     , promptGammaEnergy( 0.0 )
+     , delayedGammaEnergy( 0.0 )
+     , neutrinoEnergy( 0.0 )
+     , reducedTotalEnergy( 0.0 )
+     {
+     }
   ~G4NeutronHPFissionERelease(){}
   
   inline void Init(std::ifstream & aDataFile)

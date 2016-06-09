@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2007/03/19 12:38:15 vnivanch Exp $
+$Id: History,v 1.10 2007/06/11 13:37:56 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 June 07: V.Ivanchenko (empolar-V08-03-02)
+- (A.Schaelicke) G4PolarizedCompton, G4ePolarizedIonisation, 
+  G4eplusPolarizedAnnihilation added method 
+  PostStepGetPhysicalInteractionLength in order to provide 
+  simulation of polarized target; the fix is required because of design 
+  change in utils
+
+25 May 07:  V.Ivanchenko (empolar-V08-03-01)
+- G4PolarizedCompton - fix compilation warning and incorrect usage of 
+	               G4PhysicsVector
+
+23 May 07:  V.Ivanchenko (empolar-V08-03-00)
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess 
+  remove method SecondaryPostStep;
+- G4VEmModel - changed interface of SampleSecondary method, it become 
+  void, extra parameter std::vector<G4DynamicParticle*>*, all
+  classes using or inhereting this interface are modified.
 
 19 March 07: V.Ivanchenko (empolar-V08-02-00)
 - G4PolarizedGammaConversionModel : fix non-initialised variable

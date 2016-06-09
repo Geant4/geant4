@@ -8,8 +8,8 @@
    <position name="FirstSubtrFacialSkeletonRelativePos" unit="cm" x="0.0" y="0.0" z="0.0" />
   <position name="SecondSubtrFacialSkeletonRelativePos" unit="cm" x="0.0" y="8.91" z="0.0" />
   <position name="SkullRelativePos" unit="cm" x="0" y="0.0" z="5.13" />
-  <position name="SkullPos" unit="cm" x="0.0" y="0.0" z="4.795" />
-  <rotation name="SkullRot" unit="degree" x="0" y="0" z="0" />
+  <position name="OrganPos" unit="cm" x="0.0" y="0.0" z="4.795" />
+  <rotation name="OrganRot" unit="degree" x="0" y="0" z="0" />
  </define> 
 
  <materials>

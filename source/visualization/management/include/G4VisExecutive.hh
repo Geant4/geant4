@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VisExecutive.hh,v 1.6 2006/06/29 21:28:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison 2nd February 2005 (based on MyVisManager, 24th January 1998).

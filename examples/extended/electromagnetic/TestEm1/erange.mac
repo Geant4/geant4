@@ -1,0 +1,40 @@
+# $Id: erange.mac,v 1.1 2007/06/20 15:26:33 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+# 
+# compute the csda range of primary particle
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+#
+/testem/phys/addPhysics  standard
+###/testem/phys/addPhysics  penelope
+###/testem/phys/addPhysics  livermore
+#
+/run/initialize
+#
+# csda condition
+/testem/phys/setCuts 1 km
+#
+# no step limitation from eLoss
+/process/eLoss/StepFunction 1 100 um
+#
+# eliminate straggling
+/process/eLoss/fluct false
+/process/inactivate msc
+#
+/testem/gun/setDefault
+/gun/particle e-
+/gun/energy 100 keV
+#
+/tracking/verbose 1
+/run/beamOn 5
+#
+###/testem/histo/setFileName std.1km
+###/testem/histo/setFileType hbook
+###/testem/histo/setHisto 1 200 0 2000 um		# csda range
+###/testem/histo/setHisto 1 250 0 5000 um
+#
+###/run/beamOn 20000

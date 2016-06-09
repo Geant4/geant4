@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXiMinus.cc,v 1.12 2006/06/29 19:16:48 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4AntiXiMinus.cc,v 1.13 2007/03/11 07:17:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,24 +68,29 @@ G4AntiXiMinus* G4AntiXiMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
   
-   anInstance = new G4ParticleDefinition(
-                 name,    1.32132*GeV,  4.02e-12*MeV,       eplus,
+    anInstance = new G4ParticleDefinition(
+                 name,    1.32131*GeV,  4.02e-12*MeV,       eplus,
                     1,              +1,             0,
                     1,              +1,             0,
              "baryon",               0,            -1,       -3312,
                 false,       0.1639*ns,          NULL,
                 false,       "xi");
- //create Decay Table 
-  G4DecayTable* table = new G4DecayTable();
-  // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[1];
-  // anti_xi- -> anti_lambda + pi+
-  mode[0] = new G4PhaseSpaceDecayChannel("anti_xi-",1.000,2,"anti_lambda","pi+");
 
-  for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
-  delete [] mode;
-  
-   anInstance->SetDecayTable(table);
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( 0.6507 * mN);
+ 
+    //create Decay Table 
+    G4DecayTable* table = new G4DecayTable();
+    // create decay channels
+    G4VDecayChannel** mode = new G4VDecayChannel*[1];
+    // anti_xi- -> anti_lambda + pi+
+    mode[0] = new G4PhaseSpaceDecayChannel("anti_xi-",1.000,2,"anti_lambda","pi+");
+    
+    for (G4int index=0; index <1; index++ ) table->Insert(mode[index]);
+    delete [] mode;
+    
+    anInstance->SetDecayTable(table);
   }
   theInstance = reinterpret_cast<G4AntiXiMinus*>(anInstance);
   return theInstance;

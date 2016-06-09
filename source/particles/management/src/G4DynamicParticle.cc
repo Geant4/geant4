@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.24 2006/06/29 19:25:21 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4DynamicParticle.cc,v 1.25 2007/03/11 07:17:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------
@@ -108,6 +108,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
   // set dynamic charge/mass
   theDynamicalMass = aParticleDefinition->GetPDGMass();
   theDynamicalCharge = aParticleDefinition->GetPDGCharge();
+  theDynamicalMagneticMoment = aParticleDefinition->GetPDGMagneticMoment();
   AllocateElectronOccupancy();
 }
 
@@ -125,6 +126,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
   // set dynamic charge/mass
   theDynamicalMass = aParticleDefinition->GetPDGMass();
   theDynamicalCharge = aParticleDefinition->GetPDGCharge();
+  theDynamicalMagneticMoment = aParticleDefinition->GetPDGMagneticMoment();
   AllocateElectronOccupancy();
 
   // 3-dim momentum is given
@@ -156,6 +158,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
    // set dynamic charge/mass
   theDynamicalMass = aParticleDefinition->GetPDGMass();
   theDynamicalCharge = aParticleDefinition->GetPDGCharge();
+  theDynamicalMagneticMoment = aParticleDefinition->GetPDGMagneticMoment();
   AllocateElectronOccupancy();
 
   // 4-momentum vector (Lorentz vecotr) is given
@@ -197,8 +200,9 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
    // set dynamic charge/mass
   theDynamicalMass = aParticleDefinition->GetPDGMass();
   theDynamicalCharge = aParticleDefinition->GetPDGCharge();
+  theDynamicalMagneticMoment = aParticleDefinition->GetPDGMagneticMoment();
   AllocateElectronOccupancy();
-
+  
   // total energy and momentum direction are given
   G4double pModule2 = aParticleMomentum.mag2();
   if (pModule2>0.0) {
@@ -226,6 +230,8 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right)
 {
   theDynamicalMass = right.theDynamicalMass;
   theDynamicalCharge = right.theDynamicalCharge;
+  theDynamicalMagneticMoment = right.theDynamicalMagneticMoment;
+
   if (right.theElectronOccupancy != 0){
       theElectronOccupancy =
 	new G4ElectronOccupancy(*right.theElectronOccupancy);
@@ -272,6 +278,8 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
   if (this != &right) {
     theDynamicalMass = right.theDynamicalMass;
     theDynamicalCharge = right.theDynamicalCharge;
+    theDynamicalMagneticMoment = right.theDynamicalMagneticMoment;
+
     if (theElectronOccupancy != 0) delete theElectronOccupancy;
     if (right.theElectronOccupancy != 0){
       theElectronOccupancy =
@@ -313,6 +321,7 @@ void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition
   // set Dynamic mass/chrge
   theDynamicalMass = theParticleDefinition->GetPDGMass();
   theDynamicalCharge = theParticleDefinition->GetPDGCharge();
+  theDynamicalMagneticMoment = theParticleDefinition->GetPDGMagneticMoment();
 
   // Set electron orbits
   if (theElectronOccupancy != 0) delete theElectronOccupancy;
@@ -419,7 +428,9 @@ void G4DynamicParticle::DumpInfo(G4int mode) const
                                << GetMomentum().z() /GeV << "[GeV]" << G4endl
          << "   Total Energy   = " << GetTotalEnergy()/GeV << "[GeV]"  << G4endl
          << "   Kinetic Energy = " << GetKineticEnergy() /GeV << "[GeV]" << G4endl
+	 << " MagneticMoment  [MeV/T]: " << GetMagneticMoment()/MeV*tesla << G4endl
          << "   ProperTime     = " << GetProperTime() /ns <<  "[ns]" << G4endl;
+
     if (mode>0) {
       if( theElectronOccupancy != 0) {
 	theElectronOccupancy->DumpInfo();

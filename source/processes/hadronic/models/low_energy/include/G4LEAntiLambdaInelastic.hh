@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4LEAntiLambdaInelastic.hh,v 1.11 2007/02/24 06:11:24 dennis Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
  // Hadronic Process: Low Energy AntiLambda Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Feb-1997

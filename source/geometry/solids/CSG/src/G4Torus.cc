@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.60 2006/10/19 15:33:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Torus.cc,v 1.61 2007/05/18 07:38:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4Torus
@@ -52,6 +52,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4GeometryTolerance.hh"
 #include "G4JTPolynomialSolver.hh"
 
 #include "G4VPVParameterisation.hh"
@@ -99,6 +100,10 @@ G4Torus::SetAllParameters( G4double pRmin,
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
   fpPolyhedron = 0;
+
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
   if ( pRtor >= pRmax+1.e3*kCarTolerance )  // Check swept radius, as in G4Cons
   {
     fRtor = pRtor ;

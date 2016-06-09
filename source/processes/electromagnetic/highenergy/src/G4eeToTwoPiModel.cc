@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.cc,v 1.4 2006/06/29 19:32:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eeToTwoPiModel.cc,v 1.5 2007/05/22 17:37:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -95,10 +95,10 @@ G4PhysicsVector* G4eeToTwoPiModel::PhysicsVector(G4double emin,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-vector<G4DynamicParticle*>* G4eeToTwoPiModel::SampleSecondaries(
+void G4eeToTwoPiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
 	    G4double e, const G4ThreeVector& direction) const
 {
-  vector<G4DynamicParticle*>* newp = new vector<G4DynamicParticle*>;
+
   G4double tkin = 0.5*e - massPi;
   if(tkin < 0.0) tkin = 0.0;
   G4double cost;
@@ -119,7 +119,6 @@ vector<G4DynamicParticle*>* G4eeToTwoPiModel::SampleSecondaries(
      new G4DynamicParticle(G4PionMinus::PionMinus(),-dir,tkin);
   newp->push_back(pip);
   newp->push_back(pin);
-  return newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

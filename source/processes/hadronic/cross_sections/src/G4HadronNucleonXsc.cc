@@ -40,7 +40,7 @@
 
 G4HadronNucleonXsc::G4HadronNucleonXsc() 
 : fUpperLimit( 10000 * GeV ),
-  fLowerLimit( 3 * GeV )
+  fLowerLimit( 0.03 * MeV )
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();
@@ -201,7 +201,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscEL(const G4DynamicParticle* aParticle,
   xsection *= millibarn;
 
   fTotalXsc     = xsection;
-  fInelasticXsc = 0.5*xsection;
+  fInelasticXsc = 0.83*xsection;
   fElasticXsc   = fTotalXsc - fInelasticXsc;
   if (fElasticXsc < 0.)fElasticXsc = 0.;
  
@@ -351,7 +351,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscPDG(const G4DynamicParticle* aParticle,
   xsection *= millibarn; // parametrised in mb
 
   fTotalXsc     = xsection;
-  fInelasticXsc = 0.5*xsection;
+  fInelasticXsc = 0.83*xsection;
   fElasticXsc   = fTotalXsc - fInelasticXsc;
   if (fElasticXsc < 0.)fElasticXsc = 0.;
 
@@ -722,12 +722,13 @@ G4HadronNucleonXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aParticle,
     fTotalXsc = xsection;
   } 
   fTotalXsc *= millibarn; // parametrised in mb
+  // xsection  *= millibarn; // parametrised in mb
 
-  fInelasticXsc = 0.5*xsection;
+  fInelasticXsc = 0.83*fTotalXsc;
   fElasticXsc   = fTotalXsc - fInelasticXsc;
   if (fElasticXsc < 0.)fElasticXsc = 0.;
 
-  return xsection;
+  return fTotalXsc;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -772,7 +773,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscVU(const G4DynamicParticle* aParticle,
       fElasticXsc = 11.9 + 26.9*std::pow(Plab,-1.21) + 0.169*sqrLogPlab - 1.85*LogPlab;
     }
   }
-  else if( PDGcode ==  211  && pORn )    //------Projectile is PionPlus ----
+  else if( PDGcode ==  211  && pORn )  //------Projectile is PionPlus ----
   {
     if(proton)
     {
@@ -843,7 +844,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscVU(const G4DynamicParticle* aParticle,
       fElasticXsc =  5.0 +  8.1*std::pow(Plab,-1.8 ) + 0.16*sqrLogPlab - 1.3*LogPlab;
     }
   }
-  else if( PDGcode == 311  && pORn )    //------Projectile is KaonZero -----
+  else if( PDGcode == 311  && pORn )  //------Projectile is KaonZero -----
   {
     if(proton)
     {
@@ -860,7 +861,7 @@ G4HadronNucleonXsc::GetHadronNucleonXscVU(const G4DynamicParticle* aParticle,
                          5.0 +  8.1*std::pow(Plab,-1.8 ) + 0.16 *sqrLogPlab - 1.3 *LogPlab)/2; //K-
     }
   }
-  else        //------Projectile is undefined, Nucleon assumed
+  else  //------Projectile is undefined, Nucleon assumed
   {
     if(proton)
     {
@@ -869,7 +870,6 @@ G4HadronNucleonXsc::GetHadronNucleonXscVU(const G4DynamicParticle* aParticle,
     }
     if(neutron)
     {    
-
       fTotalXsc   = 47.3 +  0. *std::pow(Plab, 0.  ) + 0.513*sqrLogPlab - 4.27*LogPlab;
       fElasticXsc = 11.9 + 26.9*std::pow(Plab,-1.21) + 0.169*sqrLogPlab - 1.85*LogPlab;
     }
@@ -878,8 +878,330 @@ G4HadronNucleonXsc::GetHadronNucleonXscVU(const G4DynamicParticle* aParticle,
   fElasticXsc *= millibarn;
   fInelasticXsc   = fTotalXsc - fElasticXsc;
   if (fInelasticXsc < 0.) fInelasticXsc = 0.;
+
   return fTotalXsc;    
 }
+
+/////////////////////////////////////////////////////////////////////////////////////
+//
+// Returns hadron-nucleon cross-section based on Mikhail Kossov parametrisation of
+// data from G4QuasiFreeRatios class
+
+G4double 
+G4HadronNucleonXsc::GetHadronNucleonXscMK(const G4DynamicParticle* aParticle, 
+                                          const G4ParticleDefinition* nucleon  )
+{
+  G4int I = -1;
+  G4int PDG = aParticle->GetDefinition()->GetPDGEncoding();
+
+  // G4int absPDG = std::abs(PDG);
+
+  G4double p = aParticle->GetMomentum().mag()/GeV;
+
+  G4bool F = false;            
+  if(nucleon == theProton)       F = true;
+  else if(nucleon == theNeutron) F = false;
+  else
+  {
+    G4cout << "nucleon is not proton or neutron, return xsc for proton" << G4endl;
+    F = true;
+  }
+
+  G4bool kfl = true;                             // Flag of K0/aK0 oscillation
+  G4bool kf  = false;
+
+  if( PDG == 130 || PDG == 310 )
+  {
+    kf = true;
+    if( G4UniformRand() > .5 ) kfl = false;
+  }
+  if     ( PDG == 2212 && F || PDG == 2112 && !F ) I = 0; // pp/nn
+  else if( PDG == 2112 && F || PDG == 2212 && !F ) I = 1; // np/pn
+
+  else if( PDG == -211 && F || PDG == 211  && !F ) I = 2; // pimp/pipn
+  else if( PDG == 211  && F || PDG ==-211  && !F ) I = 3; // pipp/pimn
+
+  else if( PDG == -321 || PDG == -311 || ( kf && !kfl ) ) I = 4; // KmN/K0N
+  else if( PDG == 321  || PDG == 311  || ( kf && kfl  ) ) I = 5; // KpN/aK0N
+
+  else if( PDG > 3000 && PDG < 3335)   I = 6;        // @@ for all hyperons - take Lambda
+  else if( PDG < -2000 && PDG > -3335) I = 7;        // @@ for all anti-baryons - anti-p/anti-n
+  else
+  {
+    G4cout<<"MK PDG = "<<PDG
+          <<", while it is defined only for p,n,hyperons,anti-baryons,pi,K/antiK"<<G4endl;
+    G4Exception("G4QuasiFreeRatio::FetchElTot:","22",FatalException,"CHIPScrash");
+  }
+
+  // Each parameter set can have not more than nPoints = 128 parameters
+
+  static const G4double lmi = 3.5;       // min of (lnP-lmi)^2 parabola
+  static const G4double pbe = .0557;     // elastic (lnP-lmi)^2 parabola coefficient
+  static const G4double pbt = .3;        // total (lnP-lmi)^2 parabola coefficient
+  static const G4double pmi = .1;        // Below that fast LE calculation is made
+  static const G4double pma = 1000.;     // Above that fast HE calculation is made
+                  
+  if( p <= 0.)
+  {
+    G4cout<<" p = "<<p<<" is zero or negative"<<G4endl;
+
+    fElasticXsc   = 0.;
+    fInelasticXsc = 0.;
+    fTotalXsc     = 0.;
+
+    return fTotalXsc;
+  }
+  if (!I)                          // pp/nn
+  {
+    if( p < pmi )
+    {
+      G4double p2 = p*p;
+      fElasticXsc          = 1./(.00012 + p2*.2);
+      fTotalXsc          = fElasticXsc;
+    }
+    else if(p>pma)
+    {
+      G4double lp  = std::log(p)-lmi;
+      G4double lp2 = lp*lp;
+      fElasticXsc  = pbe*lp2 + 6.72;
+      fTotalXsc    = pbt*lp2 + 38.2;
+    }
+    else
+    {
+      G4double p2  = p*p;
+      G4double LE  = 1./( .00012 + p2*.2);
+      G4double lp  = std::log(p) - lmi;
+      G4double lp2 = lp*lp;
+      G4double rp2 = 1./p2;
+      fElasticXsc  = LE + ( pbe*lp2 + 6.72+32.6/p)/( 1. + rp2/p);
+      fTotalXsc    = LE + ( pbt*lp2 + 38.2+52.7*rp2)/( 1. + 2.72*rp2*rp2);
+    }
+  }
+  else if( I==1 )                        // np/pn
+  {
+    if( p < pmi )
+    {
+      G4double p2 = p*p;
+      fElasticXsc = 1./( .00012 + p2*( .051 + .1*p2));
+      fTotalXsc   = fElasticXsc;
+    }
+    else if( p > pma )
+    {
+      G4double lp  = std::log(p) - lmi;
+      G4double lp2 = lp*lp;
+      fElasticXsc  = pbe*lp2 + 6.72;
+      fTotalXsc    = pbt*lp2 + 38.2;
+    }
+    else
+    {
+      G4double p2  = p*p;
+      G4double LE  = 1./( .00012 + p2*( .051 + .1*p2 ) );
+      G4double lp  = std::log(p) - lmi;
+      G4double lp2 = lp*lp;
+      G4double rp2 = 1./p2;
+      fElasticXsc  = LE + (pbe*lp2 + 6.72 + 30./p)/( 1. + .49*rp2/p);
+      fTotalXsc    = LE + (pbt*lp2 + 38.2)/( 1. + .54*rp2*rp2);
+    }
+  }
+  else if( I == 2 )                        // pimp/pipn
+  {
+    G4double lp = std::log(p);
+
+    if(p<pmi)
+    {
+      G4double lr = lp + 1.27;
+      fElasticXsc          = 1.53/( lr*lr + .0676);
+      fTotalXsc          = fElasticXsc*3;
+    }
+    else if( p > pma )
+    {
+      G4double ld  = lp - lmi;
+      G4double ld2 = ld*ld;
+      G4double sp  = std::sqrt(p);
+      fElasticXsc  = pbe*ld2 + 2.4 + 7./sp;
+      fTotalXsc    = pbt*ld2 + 22.3 + 12./sp;
+    }
+    else
+    {
+      G4double lr  = lp + 1.27;
+      G4double LE  = 1.53/( lr*lr + .0676);
+      G4double ld  = lp - lmi;
+      G4double ld2 = ld*ld;
+      G4double p2  = p*p;
+      G4double p4  = p2*p2;
+      G4double sp  = std::sqrt(p);
+      G4double lm  = lp + .36;
+      G4double md  = lm*lm + .04;
+      G4double lh  = lp - .017;
+      G4double hd  = lh*lh + .0025;
+      fElasticXsc  = LE + (pbe*ld2 + 2.4 + 7./sp)/( 1. + .7/p4) + .6/md + .05/hd;
+      fTotalXsc    = LE*3 + (pbt*ld2 + 22.3 + 12./sp)/(1. + .4/p4) + 1./md + .06/hd;
+    }
+  }
+  else if( I == 3 )                        // pipp/pimn
+  {
+    G4double lp = std::log(p);
+
+    if( p < pmi )
+    {
+      G4double lr  = lp + 1.27;
+      G4double lr2 = lr*lr;
+      fElasticXsc  = 13./( lr2 + lr2*lr2 + .0676);
+      fTotalXsc    = fElasticXsc;
+    }
+    else if( p > pma )
+    {
+      G4double ld  = lp - lmi;
+      G4double ld2 = ld*ld;
+      G4double sp  = std::sqrt(p);
+      fElasticXsc  = pbe*ld2 + 2.4 + 6./sp;
+      fTotalXsc    = pbt*ld2 + 22.3 + 5./sp;
+    }
+    else
+    {
+      G4double lr  = lp + 1.27;
+      G4double lr2 = lr*lr;
+      G4double LE  = 13./(lr2 + lr2*lr2 + .0676);
+      G4double ld  = lp - lmi;
+      G4double ld2 = ld*ld;
+      G4double p2  = p*p;
+      G4double p4  = p2*p2;
+      G4double sp  = std::sqrt(p);
+      G4double lm  = lp - .32;
+      G4double md  = lm*lm + .0576;
+      fElasticXsc  = LE + (pbe*ld2 + 2.4 + 6./sp)/(1. + 3./p4) + .7/md;
+      fTotalXsc    = LE + (pbt*ld2 + 22.3 + 5./sp)/(1. + 1./p4) + .8/md;
+    }
+  }
+  else if( I == 4 )                        // Kmp/Kmn/K0p/K0n
+  {
+    if( p < pmi)
+    {
+      G4double psp = p*std::sqrt(p);
+      fElasticXsc  = 5.2/psp;
+      fTotalXsc    = 14./psp;
+    }
+    else if( p > pma )
+    {
+      G4double ld  = std::log(p) - lmi;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = pbe*ld2 + 2.23;
+      fTotalXsc           = pbt*ld2 + 19.5;
+    }
+    else
+    {
+      G4double ld  = std::log(p) - lmi;
+      G4double ld2 = ld*ld;
+      G4double sp  = std::sqrt(p);
+      G4double psp = p*sp;
+      G4double p2  = p*p;
+      G4double p4  = p2*p2;
+      G4double lm  = p - .39;
+      G4double md  = lm*lm + .000156;
+      G4double lh  = p - 1.;
+      G4double hd  = lh*lh + .0156;
+      fElasticXsc  = 5.2/psp + (pbe*ld2 + 2.23)/(1. - .7/sp + .075/p4) + .004/md + .15/hd;
+      fTotalXsc    = 14./psp + (pbt*ld2 + 19.5)/(1. - .21/sp + .52/p4) + .006/md + .30/hd;
+    }
+  }
+  else if( I == 5 )                        // Kpp/Kpn/aKp/aKn
+  {
+    if( p < pmi )
+    {
+      G4double lr = p - .38;
+      G4double lm = p - 1.;
+      G4double md = lm*lm + .372;   
+      fElasticXsc = .7/(lr*lr + .0676) + 2./md;
+      fTotalXsc   = fElasticXsc + .6/md;
+    }
+    else if( p > pma )
+    {
+      G4double ld  = std::log(p) - lmi;
+      G4double ld2 = ld*ld;
+      fElasticXsc           = pbe*ld2 + 2.23;
+      fTotalXsc           = pbt*ld2 + 19.5;
+    }
+    else
+    {
+      G4double ld  = std::log(p) - lmi;
+      G4double ld2 = ld*ld;
+      G4double lr  = p - .38;
+      G4double LE  = .7/(lr*lr + .0676);
+      G4double sp  = std::sqrt(p);
+      G4double p2  = p*p;
+      G4double p4  = p2*p2;
+      G4double lm  = p - 1.;
+      G4double md  = lm*lm + .372;
+      fElasticXsc  = LE + (pbe*ld2 + 2.23)/(1. - .7/sp + .1/p4) + 2./md;
+      fTotalXsc    = LE + (pbt*ld2 + 19.5)/(1. + .46/sp + 1.6/p4) + 2.6/md;
+    }
+  }
+  else if( I == 6 )                        // hyperon-N
+  {
+    if( p < pmi )
+    {
+      G4double p2 = p*p;
+      fElasticXsc = 1./(.002 + p2*(.12 + p2));
+      fTotalXsc   = fElasticXsc;
+    }
+    else if( p > pma )
+    {
+      G4double lp  = std::log(p) - lmi;
+      G4double lp2 = lp*lp;
+      G4double sp  = std::sqrt(p);
+      fElasticXsc  = (pbe*lp2 + 6.72)/(1. + 2./sp);
+      fTotalXsc    = (pbt*lp2 + 38.2 + 900./sp)/(1. + 27./sp);
+    }
+    else
+    {
+      G4double p2  = p*p;
+      G4double LE  = 1./(.002 + p2*(.12 + p2));
+      G4double lp  = std::log(p) - lmi;
+      G4double lp2 = lp*lp;
+      G4double p4  = p2*p2;
+      G4double sp  = std::sqrt(p);
+      fElasticXsc  = LE + (pbe*lp2 + 6.72 + 99./p2)/(1. + 2./sp + 2./p4);
+      fTotalXsc    = LE + (pbt*lp2 + 38.2 + 900./sp)/(1. + 27./sp + 3./p4);
+    }
+  }
+  else if( I == 7 )                        // antibaryon-N
+  {
+    if( p > pma )
+    {
+      G4double lp  = std::log(p) - lmi;
+      G4double lp2 = lp*lp;
+      fElasticXsc  = pbe*lp2 + 6.72;
+      fTotalXsc    = pbt*lp2 + 38.2;
+    }
+    else
+    {
+      G4double ye  = std::pow(p, 1.25);
+      G4double yt  = std::pow(p, .35);
+      G4double lp  = std::log(p) - lmi;
+      G4double lp2 = lp*lp;
+      fElasticXsc  = 80./(ye + 1.) + pbe*lp2 + 6.72;
+      fTotalXsc    = (80./yt + .3)/yt +pbt*lp2 + 38.2;
+    }
+  }
+  else
+  {
+    G4cout<<"PDG incoding = "<<I<<" is not defined (0-7)"<<G4endl;
+  
+  }
+  if( fElasticXsc > fTotalXsc ) fElasticXsc = fTotalXsc;
+
+  fTotalXsc   *= millibarn;
+  fElasticXsc *= millibarn;
+  fInelasticXsc   = fTotalXsc - fElasticXsc;
+  if (fInelasticXsc < 0.) fInelasticXsc = 0.;
+
+
+  return fTotalXsc;
+}
+
+
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////
 //

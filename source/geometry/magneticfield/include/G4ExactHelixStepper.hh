@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExactHelixStepper.hh,v 1.4 2006/06/29 18:22:09 gunter Exp $ 
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ExactHelixStepper.hh,v 1.5 2007/05/18 12:50:31 tnikitin Exp $ 
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // class G4ExactHelixStepper
@@ -79,19 +79,18 @@ class G4ExactHelixStepper : public G4MagHelicalStepper
     G4ExactHelixStepper(const G4ExactHelixStepper&);
     G4ExactHelixStepper& operator=(const G4ExactHelixStepper&);
       // Private copy constructor and assignment operator.
-
-    // static const G4double fUnitConstant;   // ???????????
-            //  As in G4Mag_EqRhs.hh/cc where it is not used.
+   
   private:
     G4ThreeVector    fBfieldValue;   //  Initial value of field at last step
     G4ThreeVector    yInitialEHS,  yFinalEHS;  
+    G4ThreeVector    pInitial;
     G4double         fLastStepSize;  // Length of last step
     G4double         fYInSav[7];     // Starting state of  x, p, ...
      // Values saved for calculating mid-point for chord
 
-    // G4Mag_EqRhs*  fPtrMagEqOfMot;
+     G4Mag_EqRhs*  fPtrMagEqOfMot;
 };
 
-// #include  "G4ExactHelixStepper.icc"
+
 
 #endif  /* G4ExactHelixStepper_hh */

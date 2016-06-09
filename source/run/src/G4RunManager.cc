@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.99 2007/03/08 23:54:04 asaim Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4RunManager.cc,v 1.103 2007/06/20 17:00:23 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 
@@ -318,7 +318,7 @@ void G4RunManager::StackPreviousEvent(G4Event* anEvent)
     evt = previousEvents->back();
     previousEvents->pop_back();
   }
-  if(!(evt->ToBeKept())) delete evt;
+  if(evt && !(evt->ToBeKept())) delete evt;
 }
 
 void G4RunManager::Initialize()
@@ -348,6 +348,7 @@ void G4RunManager::InitializeGeometry()
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
   kernel->DefineWorldVolume(userDetector->Construct(),false);
   nParallelWorlds = userDetector->ConstructParallelGeometries();
+  kernel->SetNumberOfParallelWorld(nParallelWorlds);
   geometryInitialized = true;
 }
 
@@ -356,7 +357,6 @@ void G4RunManager::InitializePhysics()
   if(physicsList)
   {
     if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
-    if(nParallelWorlds>0) physicsList->UseCoupledTransportation();
     kernel->InitializePhysics();
   }
   else
@@ -410,11 +410,11 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 
 void G4RunManager::rndmSaveThisRun()
 {
-  G4int runNumber = runIDCounter;
-  /////////////if(currentRun == 0) runNumber--;        //state Idle; decrease runNumber
-  if(!storeRandomNumberStatus || runNumber < 0) {
+  G4int runNumber = 0;
+  if(currentRun) runNumber = currentRun->GetRunID();
+  if(!storeRandomNumberStatus) {
      G4cerr << "Warning from G4RunManager::rndmSaveThisRun():"
-          << " there is no currentRun or its RandomEngineStatus is not available." 
+          << " Random number status was not stored prior to this run." 
 	  << G4endl << "Command ignored." << G4endl;
      return;
   }

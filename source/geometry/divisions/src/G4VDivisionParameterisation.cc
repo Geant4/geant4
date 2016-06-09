@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.11 2006/06/29 18:18:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VDivisionParameterisation.cc,v 1.12 2007/05/11 13:26:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // class G4VDivisionParameterisation Implementation file
 //
@@ -38,6 +38,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4RotationMatrix.hh"
 #include "G4ReflectedSolid.hh"
+#include "G4GeometryTolerance.hh"
 
 G4int G4VDivisionParameterisation::verbose = 5;
 
@@ -61,6 +62,7 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
 #endif
 
   theVoluFirstCopyNo = 1;
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 //--------------------------------------------------------------------------

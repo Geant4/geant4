@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.10 2006/06/29 16:58:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: SteppingAction.cc,v 1.11 2007/06/12 14:01:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +52,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  G4double edep = aStep->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
+
+ if(aStep->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
  
  //Bragg curve
  //	

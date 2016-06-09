@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.19 2006/11/22 17:58:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: RunAction.cc,v 1.20 2007/06/12 14:01:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,13 +57,13 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
   histo[0] = 0;
   
 #ifdef G4ANALYSIS_USE
- // Creating the analysis factory
- af = AIDA_createAnalysisFactory();
- if(!af) {
-   G4cout << "RunAction::RunAction() :" 
-          << " problem creating the AIDA analysis factory."
-          << G4endl;
- } 	   
+  // Creating the analysis factory
+  af = AIDA_createAnalysisFactory();
+  if(!af) {
+    G4cout << "RunAction::RunAction() :" 
+	   << " problem creating the AIDA analysis factory."
+	   << G4endl;
+  } 	   
 #endif  
 }
 
@@ -154,6 +154,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
      
   //initialize projected range, tallies, Ebeam, and book histograms
   //
+  nPrimarySteps = 0;
   projRange = projRange2 = 0.;
   for (G4int j=0; j<MaxTally; j++) tallyEdep[j] = 0.;
   kinematic->ResetEbeamCumul();
@@ -187,10 +188,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double rms = projRange2 - projRange*projRange;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
 
+  G4double nstep = G4double(nPrimarySteps)/G4double(NbofEvents);
+
   G4cout.precision(6);       
   G4cout << "\n projected Range= "<< G4BestUnit(projRange,"Length")
          << "   rms= "            << G4BestUnit( rms,"Length")
          << G4endl;
+  G4cout << " mean number of primary steps = "<< nstep << G4endl;
      
   //print dose in tallies
   //

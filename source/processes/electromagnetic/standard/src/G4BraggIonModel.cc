@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.15 2006/10/23 18:57:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4BraggIonModel.cc,v 1.16 2007/05/22 17:34:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -212,15 +212,15 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-std::vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle* dp,
-                                   G4double xmin,
-                                   G4double maxEnergy)
+void G4BraggIonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+					const G4MaterialCutsCouple*,
+					const G4DynamicParticle* dp,
+					G4double xmin,
+					G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryKinEnergy(dp);
   G4double xmax = min(tmax, maxEnergy);
-  if(xmin >= xmax) return 0;
+  if(xmin >= xmax) return;
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;
@@ -263,7 +263,6 @@ std::vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,
 						   deltaKinEnergy);
 
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   vdp->push_back(delta);
 
   // Change kinematics of primary particle
@@ -273,8 +272,6 @@ std::vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
 
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);
-
-  return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.hh,v 1.6 2006/06/29 21:31:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TrajectoryDrawerUtils.hh,v 1.7 2007/05/30 08:56:55 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 // 
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -44,10 +44,6 @@ class G4VisTrajContext;
 class G4VTrajectory;
 
 namespace G4TrajectoryDrawerUtils {
-
-  namespace {
-    G4bool warnedAboutIMode = false;
-  }
 
   void GetPoints(const G4VTrajectory& traj, G4Polyline& trajectoryLine,
 		 G4Polymarker& auxiliaryPoints, G4Polymarker& stepPoints);

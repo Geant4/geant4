@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UImessenger.cc,v 1.7 2006/06/29 19:09:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "G4UImessenger.hh"

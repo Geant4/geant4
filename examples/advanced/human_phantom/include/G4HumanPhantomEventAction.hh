@@ -36,17 +36,26 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+#include <map>
 
 class G4Event;
 class G4HumanPhantomEventAction : public G4UserEventAction
 {
-  public:
-    G4HumanPhantomEventAction();
-   ~G4HumanPhantomEventAction();
+public:
+  G4HumanPhantomEventAction();
+  ~G4HumanPhantomEventAction();
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
+public:
+  void BeginOfEventAction(const G4Event*);
+  void EndOfEventAction(const G4Event*);
+
+private:
+  void Fill(G4String bodypartName, G4double energyDeposit);
+  void totalEventEnergyDeposit();
+ 
+  G4int hitCollectionID; 
+  std::map<std::string,G4double> energyTotal;
+  G4String bodypartName;
 };
 #endif
 

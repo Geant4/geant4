@@ -32,39 +32,57 @@
 // design and code review.
 //
 #include "G4HumanPhantomSD.hh"
-//#include "G4HCofThisEvent.hh"
+#include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
-//#include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
-#include "G4HumanPhantomEnergyDeposit.hh"
 
-G4HumanPhantomSD::G4HumanPhantomSD(G4String name, G4HumanPhantomEnergyDeposit* edepTot)
-  :G4VSensitiveDetector(name), energyTotal(edepTot)
+G4HumanPhantomSD::G4HumanPhantomSD(G4String name)
+  :G4VSensitiveDetector(name)
 {
+ G4String HCname;
+ collectionName.insert(HCname="HumanPhantomCollection");
 }
 
 G4HumanPhantomSD::~G4HumanPhantomSD()
 { 
 }
 
-void G4HumanPhantomSD::Initialize(G4HCofThisEvent*)
+void G4HumanPhantomSD::Initialize(G4HCofThisEvent* HCE)
 {
+  collection = new G4HumanPhantomHitsCollection
+                          (SensitiveDetectorName,collectionName[0]); 
+  static G4int HCID = -1;
+  if(HCID<0)
+  { 
+  HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
+  HCE->AddHitsCollection( HCID, collection ); 
 }
 
 G4bool G4HumanPhantomSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {  
-G4double edep = aStep->GetTotalEnergyDeposit();
+  G4double edep = aStep->GetTotalEnergyDeposit();
 
   if(edep==0.) return false;
  
   G4String bodypartName = aStep->GetPreStepPoint()->GetTouchable()
    			->GetVolume()->GetLogicalVolume()->GetName();
 
-  energyTotal->Fill(bodypartName, edep);
+  // G4cout <<bodypartName <<":" << edep/MeV<< G4endl; 
+
+  G4HumanPhantomHit* newHit = new G4HumanPhantomHit();
+  newHit->SetEdep(edep);
+  newHit->SetBodyPartID(bodypartName);
+  collection->insert(newHit);
+  
  return true;
 }
 
 void G4HumanPhantomSD::EndOfEvent(G4HCofThisEvent*)
 {
+
+// G4int NbHits = collection->entries();
+//      G4cout << "\n-------->Hits Collection: in this event they are " << NbHits 
+//             << " hits in the tracker chambers: " << G4endl;
+//      for (G4int i=0;i<NbHits;i++) (*collection)[i]->Print();
 }

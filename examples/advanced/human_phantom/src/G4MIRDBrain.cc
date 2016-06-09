@@ -44,6 +44,7 @@
 #include "G4HumanPhantomMaterial.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDBrain::G4MIRDBrain()
 {
@@ -54,32 +55,33 @@ G4MIRDBrain::~G4MIRDBrain()
 
 }
 
-G4VPhysicalVolume* G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDBrain::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,  
+					       const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
 {
-
+  G4cout << "Construct " << volumeName << G4endl;
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
 
- G4double ax = 6.58 * cm;
- G4double by= 8.57 * cm;
- G4double cz = 5.73 * cm;
+ G4double ax = 6. * cm;
+ G4double by= 9. * cm;
+ G4double cz = 6.5 * cm;
 
  G4Ellipsoid* brain = new G4Ellipsoid("Brain", ax, by, cz);
  
 
   G4LogicalVolume* logicBrain =  new G4LogicalVolume(brain, soft, 
-						     "BrainVolume",
+						     "logical" + volumeName,
 						     0, 0, 0);
   
   // Define rotation and position here!
   G4VPhysicalVolume* physBrain = new G4PVPlacement(0,
-						   G4ThreeVector(0.*cm, 0.*cm, 8.25 * cm),
+						   G4ThreeVector(0.*cm, 0.*cm, 8.75 * cm),
 						   "physicalBrain",
 						   logicBrain,
 						   mother,
 						   false,
-						   0);
+						   0, true);
   // Sensitive Body Part
   if (sensitivity==true)
   { 
@@ -89,11 +91,14 @@ G4VPhysicalVolume* G4MIRDBrain::ConstructBrain(G4VPhysicalVolume* mother, G4Stri
 
 
   // Visualization Attributes
-  G4VisAttributes* BrainVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
-  BrainVisAtt->SetForceSolid(true);
+  // G4VisAttributes* BrainVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  
+  G4VisAttributes* BrainVisAtt = new G4VisAttributes(colour);
+  BrainVisAtt->SetForceSolid(wireFrame);
+  BrainVisAtt->SetLineWidth(0.7* mm);
   logicBrain->SetVisAttributes(BrainVisAtt);
-
-  G4cout << "Brain created for " << sex << "!!!! "<<G4endl;
 
   // Testing Brain Volume
   G4double BrainVol = logicBrain->GetSolid()->GetCubicVolume();

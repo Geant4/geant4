@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsHypeSide.cc,v 1.5 2006/06/29 18:49:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4TwistTubsHypeSide.cc,v 1.6 2007/05/18 07:39:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // --------------------------------------------------------------------
 
 #include "G4TwistTubsHypeSide.hh"
+#include "G4GeometryTolerance.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
@@ -184,7 +185,8 @@ G4ThreeVector G4TwistTubsHypeSide::GetNormal(const G4ThreeVector &tmpxx,
 EInside G4TwistTubsHypeSide::Inside(const G4ThreeVector &gp) 
 {
    // Inside returns 
-   static const G4double halftol = 0.5 * kRadTolerance;
+   static const G4double halftol
+     = 0.5 * G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
    if (fInside.gp == gp) {
       return fInside.inside;
@@ -507,7 +509,8 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
     // We arranged G4Hype::ApproxDistOutside and G4Hype::ApproxDistInside
     // for this function. See these discriptions.
     
-   static const G4double halftol    = 0.5 * kRadTolerance;
+   static const G4double halftol
+     = 0.5 * G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
    fCurStat.ResetfDone(kDontValidate, &gp);
 

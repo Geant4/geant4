@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.21 2007/01/09 10:11:16 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.23 2007/04/04 16:50:26 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -45,26 +45,31 @@
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLBitMapStore.hh"
+#include <map>
 
-// Base class for various OpenGLScene classes.
+class G4AttHolder;
+
+// Base class for various OpenGLSceneHandler classes.
 class G4OpenGLSceneHandler: public G4VSceneHandler {
 
+  friend class G4OpenGLViewer;
+
 public:
+  virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
+  virtual void EndPrimitives ();
+  virtual void BeginPrimitives2D ();
+  virtual void EndPrimitives2D ();
   void AddPrimitive (const G4Polyline&);
+  void AddPrimitive (const G4Polymarker&);
   void AddPrimitive (const G4Text&);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
+  void AddPrimitive (const G4Scale&);
   void AddPrimitive (const G4Polyhedron&);
   void AddPrimitive (const G4NURBS&);
-  // Explicitly invoke base class methods to avoid warnings about
-  // hiding of base class methods...
-  void AddPrimitive(const G4Polymarker& polymarker) {
-    G4VSceneHandler::AddPrimitive (polymarker);
-  }
-  void AddPrimitive (const G4Scale& scale) {
-    G4VSceneHandler::AddPrimitive (scale);
-  }
 
+  void PreAddSolid (const G4Transform3D& objectTransformation,
+		    const G4VisAttributes&);
   void AddSolid (const G4Box&);
   void AddSolid (const G4Cons&);
   void AddSolid (const G4Tubs&);
@@ -89,6 +94,10 @@ protected:
   const G4Polyhedron* CreateSectionPolyhedron ();
   const G4Polyhedron* CreateCutawayPolyhedron ();
 
+  GLuint fPickName;
+  std::map<GLuint, G4AttHolder*> fPickMap;  // For picking.
+  void ClearAndDestroyAtts();  // Destroys att holders and clears pick map.
+
 private:
 
   void AddCircleSquare (const G4VMarker&, G4OpenGLBitMapStore::Shape);
@@ -102,6 +111,8 @@ private:
   // viewpoint direction and up vector.
 
   static const GLubyte fStippleMaskHashed [128];
+
+  G4bool fProcessingPolymarker;
 };
 
 #include "G4OpenGLSceneHandler.icc"

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QNuMuNuclearCrossSection.cc,v 1.10 2006/12/01 10:57:47 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // G4 Physics class: G4QNuMuNuclearCrossSection for gamma+A cross sections

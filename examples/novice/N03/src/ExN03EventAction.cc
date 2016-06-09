@@ -25,7 +25,7 @@
 //
 //
 // $Id: ExN03EventAction.cc,v 1.28 2006/10/26 14:30:05 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 

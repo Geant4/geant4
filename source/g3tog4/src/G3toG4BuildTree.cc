@@ -25,7 +25,7 @@
 //
 //
 // $Id: G3toG4BuildTree.cc,v 1.20 2006/06/29 18:13:24 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // modified by I. Hrivnacova, 2.8.99 
 

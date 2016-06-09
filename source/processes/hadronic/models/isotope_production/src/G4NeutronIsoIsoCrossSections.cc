@@ -60,7 +60,7 @@ Init(G4int A, G4int Z, G4double frac)
   theNames.SetMaxOffSet(5);
   G4NeutronHPDataUsed dataUsed;
   G4String rest = "/CrossSection/";
-  G4String base = getenv("NeutronHPCrossSections");
+  G4String base = getenv("G4NEUTRONHPDATA");
   G4String base1 = base + "/Inelastic/";
   G4bool hasInelasticData = false;
   dataUsed = theNames.GetName(A, Z, base1, rest, hasInelasticData);

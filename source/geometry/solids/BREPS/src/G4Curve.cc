@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Curve.cc,v 1.7 2006/06/29 18:42:02 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Curve.cc,v 1.8 2007/05/11 13:49:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -35,10 +35,12 @@
 // ----------------------------------------------------------------------
 
 #include "G4Curve.hh"
+#include "G4GeometryTolerance.hh"
 
 G4Curve::G4Curve()
  : bBox(G4BoundingBox3D::space), bounded(false), sameSense(true)
 {
+  kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
 G4Curve::~G4Curve()

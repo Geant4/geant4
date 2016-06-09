@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryManager.hh,v 1.11 2006/06/29 18:30:46 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4GeometryManager.hh,v 1.12 2007/05/11 13:30:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // class G4GeometryManager
 //
@@ -70,6 +70,10 @@ class G4GeometryManager
 
     G4bool IsGeometryClosed();
       // Return true/false according to state of optimised geoemtry.
+
+    void SetWorldMaximumExtent(G4double worldExtent);
+      // Set the maximum extent of the world volume. The operation is
+      // allowed only if NO solids have been created already.
 
     static G4GeometryManager* GetInstance();
       // Return ptr to singleton instance of the class.

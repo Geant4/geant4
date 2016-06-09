@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PSCellCharge.cc,v 1.2 2006/12/13 15:43:30 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSCellCharge.cc,v 1.3 2007/05/18 00:00:37 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // G4PSCellCharge
 #include "G4PSCellCharge.hh"

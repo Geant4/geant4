@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DNABrennerAngularDistributionPolicy.hh,v 1.2 2006/06/29 19:33:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Phys. Med. Biol. 29 N.4 (1983) 443-447
 

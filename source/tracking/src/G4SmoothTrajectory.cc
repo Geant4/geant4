@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SmoothTrajectory.cc,v 1.18 2006/10/16 13:37:17 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // ---------------------------------------------------------------

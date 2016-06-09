@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSFlatSurfaceFlux.hh,v 1.4 2007/04/20 07:53:33 asaim Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4PSFlatSurfaceFlux.hh,v 1.5 2007/05/18 00:00:37 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4PSFlatSurfaceFlux_h

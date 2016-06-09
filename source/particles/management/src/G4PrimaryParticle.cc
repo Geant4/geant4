@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PrimaryParticle.cc,v 1.4 2006/10/01 02:29:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "G4PrimaryParticle.hh"

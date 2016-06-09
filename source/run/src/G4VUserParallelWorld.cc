@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VUserParallelWorld.cc,v 1.2 2006/12/13 15:49:38 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #include "G4VUserParallelWorld.hh"

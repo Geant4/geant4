@@ -1,4 +1,4 @@
-$Id: History,v 1.276 2007/05/08 17:56:12 vnivanch Exp $
+$Id: History,v 1.290 2007/06/20 12:43:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,70 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 June 07: V.Ivant (emutils-V08-03-06)
+- G4VEnergyLossProcess add initialisation of preStepKinEnergy before 
+  run in order to fix a problem of test14 reported by Valgrind 
+
+14 June 07: V.Ivant (emutils-V08-03-05)
+- G4LossTableManager - add deletion of G4EmCorrections in destructor
+
+12 June 07: V.Ivant (emutils-V08-03-04)
+- G4VEnergyLossProcess fixed estimation of step limit inside
+  AlongStepGetPhysicalInteractionLength method - do not use safety
+
+11 June 07: V.Ivant (emutils-V08-03-03)
+- G4MscStepLimitType, G4VMultipleScattering, G4EnergyLossMessenger
+  substitute name "G4v71" -> "Minimal"
+
+23 May 07: V.Ivant (emutils-V08-03-02)
+- G4VEnergyLossProcess, G4VEmProcess - remove method SecondaryPostStep
+  use instead a direct call to selected model 
+
+22 May 07: V.Ivant (emutils-V08-03-01)
+- G4VEmModel - change interface of SampleSecondary method, it become 
+  void, extra parameter std::vector<G4DynamicParticle*>*, this vector
+  is now a member of base class G4VEnergyLossProcess, G4VEmProcess,
+  no new and delete of the vector in the run time. About 5% speadup
+  of EM shower simulation
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering modified 
+  to follow this new interface
+
+21 May 07: V.Ivant (emutils-V08-03-00)
+21 May 07: V.Ivant (emutils-V08-02-12)
+- G4VEnergyLossProcess - speadup the code by added implementation
+         method PostStepGetPhysicalInteractionLength;
+         added methods InitialiseStep and InitialiseMassCharge 
+- G4VEmProcess - speadup the code by added implementation
+         method PostStepGetPhysicalInteractionLength;
+         add comments to header and inline methods
+
+20 May 07: V.Ivant (emutils-V08-02-11)
+- G4VMultipleScattering - speadup the code by added implementation
+         of method AlongStepGetPhysicalInteractionLength and 
+         do not use ContinuousStepLimit; also added implementation
+         of method PostStepGetPhysicalInteractionLength           
+- G4VEnergyLossProcess - speadup the code by added implementation
+         method AlongStepGetPhysicalInteractionLength and 
+         do not use ContinuousStepLimit
+
+18 May 07: V.Ivant (emutils-V08-02-10)
+- G4EnergyLossMessenger - make new UI sub-directory "/process/msc"
+                          and reorganise UI commands for msc
+                          processes; use G4EmProcessOptions as
+                          an interface to all EM processes
+- G4LossTableManager - remove set msc parameters
+- G4EmProcessOptions - update interface to msc processes, add
+                       extra methods to set parameters
+- G4VEnergyLossProcess - cleanup comments and reorgnize code for
+                         easier reading; move short methods to inline;
+- G4VMultipleScattering - cleanup comments and reorgnize code for
+                         easier reading; move short methods to inline;
+                         add method to set msc parameters
+- G4MscStepLimitType - is added
+
+10 May 07: V.Ivant (emutils-V08-02-09)
+- integrated fixes of emutils-V08-02-06a
 
 25 April 07: V.Ivant (emutils-V08-02-08)
 - G4VEnegryLossProcess - move initialisation of safety helper to 

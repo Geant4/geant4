@@ -39,12 +39,9 @@
 #include "Histo.hh"
 
 #ifdef G4ANALYSIS_USE
-#include <memory> // for the auto_ptr(T>
 #include <AIDA/AIDA.h>
 #include "HistoMessenger.hh"
 #endif
-
-//#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,6 +62,8 @@ Histo::Histo(G4int ver)
 
 #ifdef G4ANALYSIS_USE
   messenger = new HistoMessenger(this);
+  tree = 0;
+  af   = 0;
 #endif
 }
 
@@ -73,10 +72,8 @@ Histo::Histo(G4int ver)
 Histo::~Histo()
 {
 #ifdef G4ANALYSIS_USE
-  for(G4int i=0; i<nHisto; i++) {
-    if(histo[i]) delete histo[i];
-  }
   delete messenger;
+  delete af;
 #endif
 }
 
@@ -87,12 +84,12 @@ void Histo::book()
 #ifdef G4ANALYSIS_USE
   G4cout << "### Histo books " << nHisto << " histograms " << G4endl;
   // Creating the analysis factory
-  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  if(!af) af = AIDA_createAnalysisFactory();
   if(verbose>0)
     G4cout<<"HIsto books analysis factory ......... "<<G4endl;
 
   // Creating the tree factory
-  std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+  AIDA::ITreeFactory* tf = af->createTreeFactory();
   if(verbose>0)
     G4cout<<"Histo books tree factory ......... "<<G4endl;
 
@@ -108,9 +105,10 @@ void Histo::book()
   G4String name = histDir + histName + histExt + "." + histType;
   tree = tf->create(name, histType, false, true, option);
   G4cout << "Histo: tree store : " << tree->storeName() << G4endl;
+  delete tf;
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
+  AIDA::IHistogramFactory* hf = af->createHistogramFactory( *tree );
 
   // Creating an 1-dimensional histograms in the root directory of the tree
   for(G4int i=0; i<nHisto; i++) {
@@ -119,14 +117,19 @@ void Histo::book()
 	G4cout<<" I am in book: histogram "<< i << " id= " << ids[i] <<G4endl;
 
       histo[i] = hf->createHistogram1D(ids[i], tittles[i], bins[i], xmin[i], xmax[i]);
+    } else {
+      histo[i] = 0;
     }
   }
+  delete hf;
   // Creating a tuple factory, whose tuples will be handled by the tree
   if(tupleList != "") {
     if(verbose>0)
       G4cout<<"Histo books tuple factory for "<<tupleName <<G4endl;
-    std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+
+    AIDA::ITupleFactory* tpf = af->createTupleFactory( *tree );
     ntup = tpf->create(tupleId, tupleName, tupleList);
+    delete tpf;
   }
 #endif
 } 
@@ -141,9 +144,8 @@ void Histo::save()
   G4cout << "Closing the tree..." << G4endl;
   tree->close();
   G4cout << "Histograms and Ntuples are saved" << G4endl;
-  for(G4int i=0; i<nHisto; i++) {
-    if(histo[i]) histo[i]->reset();
-  }
+  delete tree;
+  tree = 0;
 #endif
 }
 
@@ -152,9 +154,8 @@ void Histo::save()
 void Histo::reset()
 {
 #ifdef G4ANALYSIS_USE
-  for(G4int i=0; i<nHisto; i++) {
-    if(histo[i]) histo[i]->reset();
-  }
+  delete tree;
+  tree = 0;
 #endif
 }
 
@@ -226,7 +227,7 @@ void Histo::fill(G4int i, G4double x, G4double w)
            << G4endl;   
 #ifdef G4ANALYSIS_USE  
   if(i>=0 && i<nHisto) {
-    histo[i]->fill((float)(x/unit[i]), (float)w);
+    histo[i]->fill(x/unit[i], w);
   } else {
     G4cout << "Histo::fill: WARNING! wrong histogram index " << i << G4endl;
   }

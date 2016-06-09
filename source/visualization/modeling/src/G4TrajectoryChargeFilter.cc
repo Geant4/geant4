@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4TrajectoryChargeFilter.cc,v 1.4 2006/08/25 19:44:14 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Filter trajectories according to charge. Only registered 
 // charges will pass the filter.

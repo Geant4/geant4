@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QEnvironment.hh,v 1.28 2007/02/28 14:26:25 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.

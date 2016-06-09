@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.28 2006/09/19 16:02:31 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4ViewParameters.cc,v 1.29 2007/04/03 13:33:16 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison  19th July 1996
@@ -71,7 +71,8 @@ G4ViewParameters::G4ViewParameters ():
   fWindowSizeHintX (600),
   fWindowSizeHintY (600),
   fAutoRefresh (false),
-  fBackgroundColour (G4Colour(0.,0.,0.))          // Black
+  fBackgroundColour (G4Colour(0.,0.,0.)),         // Black
+  fPicking (false)
 {
   fDefaultMarker.SetScreenSize (5.);
   // Markers are 5 pixels "overall" size, i.e., diameter.
@@ -272,7 +273,9 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
       (fXGeometryString      != v.fXGeometryString)      ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
-      (fBackgroundColour     != v.fBackgroundColour))
+      (fBackgroundColour     != v.fBackgroundColour)     || 
+      (fPicking              != v.fPicking)
+      )
     G4cout << "Difference in 1st batch." << G4endl;
 
   if (fSection) {
@@ -439,6 +442,10 @@ std::ostream& operator << (std::ostream& os, const G4ViewParameters& v) {
 
   os << "\n  Background colour: " << v.fBackgroundColour;
 
+  os << "\n  Picking requested: ";
+  if (v.fPicking) os << "true";
+  else os << "false";
+
   return os;
 }
 
@@ -479,7 +486,9 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (fWindowSizeHintY      != v.fWindowSizeHintY)      ||
       (fXGeometryString      != v.fXGeometryString)      ||
       (fAutoRefresh          != v.fAutoRefresh)          ||
-      (fBackgroundColour     != v.fBackgroundColour))
+      (fBackgroundColour     != v.fBackgroundColour)     ||
+      (fPicking              != v.fPicking)
+      )
     return true;
 
   if (fDensityCulling &&

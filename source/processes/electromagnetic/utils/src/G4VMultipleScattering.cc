@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.41 2007/02/12 17:04:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4VMultipleScattering.cc,v 1.43 2007/05/18 18:39:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +52,7 @@
 // 15-04-05 optimize internal interface (V.Ivanchenko)
 // 15-04-05 remove boundary flag (V.Ivanchenko)
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
+// 12-04-07 Add verbosity at destruction (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -88,11 +89,14 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   currentParticle(0),
   currentCouple(0),
   nBins(120),
+  stepLimit(fUseSafety),
   skin(0.0),
+  facrange(0.02),
+  facgeom(2.5),
   latDisplasment(true),
   buildLambdaTable(true)
 {
-  minKinEnergy = 100.0*eV;
+  minKinEnergy = 0.1*keV;
   maxKinEnergy = 100.0*TeV;
   SetVerboseLevel(1);
 
@@ -107,6 +111,9 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 
 G4VMultipleScattering::~G4VMultipleScattering()
 {
+  if(1 < verboseLevel) 
+    G4cout << "G4VMultipleScattering destruct " << GetProcessName() 
+	   << G4endl;
   delete modelManager;
   if (theLambdaTable) theLambdaTable->clearAndDestroy();
   (G4LossTableManager::Instance())->DeRegister(this);
@@ -306,11 +313,6 @@ G4bool G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition* p
   }
   return yes;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VMultipleScattering::MscStepLimitation(G4bool, G4double)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.12 2006/10/19 17:24:13 maire Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: PhysListEmStandard.cc,v 1.14 2007/06/20 15:26:33 maire Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -50,6 +50,9 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+
+#include "G4EmProcessOptions.hh"
+#include "G4MscStepLimitType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -84,13 +87,13 @@ void PhysListEmStandard::ConstructProcess()
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung("eBrem", 10*GeV),-1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
 	    
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung("eBrem", 10*GeV),-1, 3, 3);
+      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 4);
       
     } else if( particleName == "mu+" || 
@@ -101,7 +104,9 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4, 4);       
      
-    } else if( particleName == "alpha" || particleName == "GenericIon" ) { 
+    } else if( particleName == "alpha" || particleName == "He3" 
+	       || particleName == "GenericIon" ) { 
+
       pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,     -1, 2, 2);
 
@@ -113,6 +118,28 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hIonisation,       -1, 2, 2);
     }
   }
+  
+  // Em options
+  //
+  G4EmProcessOptions emOptions;
+    
+  //coulomb scattering
+  //
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);   
+  emOptions.SetSkin(2.);
+  
+  //energy loss
+  //
+  emOptions.SetLinearLossLimit(1.e-6);
+  emOptions.SetStepFunction(0.2, 100*um); 
+   
+  //ionization
+  //
+  emOptions.SetSubCutoff(true);
+    
+  // define high energy threshold for bremstrahlung 
+  //
+  emOptions.SetBremsstrahlungTh(10.*GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

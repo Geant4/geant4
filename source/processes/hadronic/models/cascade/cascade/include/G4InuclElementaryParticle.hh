@@ -72,6 +72,20 @@ public:
     valid_particle = true;
   };
 
+  
+  G4InuclElementaryParticle(const std::vector<G4double>& mom,
+			    G4int type, G4int model) 
+    : G4InuclParticle(mom),
+      particleType(type) {
+
+    G4InuclParticle::setModel(model);
+
+    particleMass = getParticleMass(type);
+    momentum[0] = std::sqrt(momentum[1] * momentum[1] + momentum[2] * momentum[2] +
+		       momentum[3] * momentum[3] + particleMass * particleMass);
+    valid_particle = true;
+  };
+
   G4InuclElementaryParticle(G4double ekin, 
 			    G4int type) 
     : particleType(type) {
@@ -450,7 +464,6 @@ private:
   G4double particleMass;
 
   G4bool valid_particle;
-
 };        
 
 #endif // G4INUCL_ELEMENTARY_PARTICLE_HH 

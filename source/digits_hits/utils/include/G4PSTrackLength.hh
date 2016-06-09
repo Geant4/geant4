@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSTrackLength.hh,v 1.4 2006/06/29 18:07:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PSTrackLength.hh,v 1.5 2007/05/18 00:00:37 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4PSTrackLength_h
@@ -40,6 +40,9 @@
 // 
 //
 // Created: 2005-11-14  Tsukasa ASO, Akinori Kimura.
+// Modified: 2007-02-02 Tsukasa ASO, Add MultiolyKineticEnergy() 
+//                                  and DivideByVelocity(). 
+//
 // 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -52,6 +55,13 @@ class G4PSTrackLength : public G4VPrimitiveScorer
 
       inline void Weighted(G4bool flg=true) { weighted = flg; }
       // Multiply track weight
+
+      inline void MultiplyKineticEnergy(G4bool flg=true) { multiplyKinE = flg; }
+      // Multiply Kinetic Energy
+
+      inline void DivideByVelocity(G4bool flg=true) { divideByVelocity = flg; }
+      // Divide by velocity
+
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
@@ -67,5 +77,7 @@ class G4PSTrackLength : public G4VPrimitiveScorer
       G4int HCID;
       G4THitsMap<G4double>* EvtMap;
       G4bool weighted;
+      G4bool multiplyKinE;
+      G4bool divideByVelocity;
 };
 #endif

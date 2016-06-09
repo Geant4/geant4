@@ -1,3 +1,4 @@
+# $Id: vis.mac,v 1.6 2007/06/13 10:36:39 maire Exp $
 #
 # Macro file for the initialization phase of "exampleN03.cc"
 # when running in interactive mode
@@ -17,7 +18,7 @@
 #
 # Use this open statement to get an .eps and .prim files
 # suitable for viewing in DAWN.
-/vis/open DAWNFILE
+###/vis/open DAWNFILE
 #
 # Use this open statement instead for OpenGL in immediate mode.
 /vis/open OGLIX

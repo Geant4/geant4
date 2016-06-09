@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VFissionBarrier.hh,v 1.4 2006/06/29 20:13:31 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)

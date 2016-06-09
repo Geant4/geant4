@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.8 2006/06/29 19:54:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EmCorrections.hh,v 1.9 2007/05/18 18:39:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -58,9 +58,10 @@
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
 
-class G4NistManager;
 class G4VEmModel;
 class G4PhysicsVector;
+class G4IonTable;
+class G4NistManager;
 
 class G4EmCorrections
 {
@@ -229,8 +230,9 @@ private:
   G4AtomicShells        shells;
   G4ionEffectiveCharge  effCharge;
 
-  G4NistManager*              nist;
-  G4VEmModel*                 ionModel;
+  G4NistManager*        nist;
+  const G4IonTable*     ionTable;
+  G4VEmModel*           ionModel;
 
   // Ion stopping data
   G4int                       nIons;

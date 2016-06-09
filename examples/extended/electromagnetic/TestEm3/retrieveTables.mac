@@ -1,4 +1,4 @@
-# $Id: retrieveTables.mac,v 1.3 2007/03/15 18:56:33 vnivanch Exp $
+# $Id: retrieveTables.mac,v 1.4 2007/05/18 19:00:44 vnivanch Exp $
 #
 # Macro file for "exampleN03.cc"
 # 
@@ -9,8 +9,7 @@
 #
 #  select EM PhysicsList
 #
-#/testem/phys/addPhysics  model
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  emstandard
 #
 /run/particle/retrievePhysicsTable physdata
 /run/initialize

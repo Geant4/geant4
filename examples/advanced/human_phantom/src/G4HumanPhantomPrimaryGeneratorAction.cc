@@ -93,7 +93,14 @@ void G4HumanPhantomPrimaryGeneratorAction::GenerateBeamAlongZ()
   z0 = 0.5*(worldLength)*cm;
   y0 = (worldLength)*(G4UniformRand()-0.5)*cm;
   x0 = (worldLength)*(G4UniformRand()-0.5)*cm;
-  G4ThreeVector direction(0.,0.,-1.);
+ 
+  //z0 = 0.5*(worldLength)*cm;
+  //y0 = 50. * cm + 5.*(G4UniformRand()-0.5)*cm;
+  //x0 = 10.*(G4UniformRand()-0.5)*cm;
+
+   G4ThreeVector direction(0.,0.,-1.);
+
+
   particleGun->SetParticleMomentumDirection(direction);
 }
 

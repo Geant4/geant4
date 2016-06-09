@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.cc,v 1.8 2007/03/12 10:58:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4ChargeExchange.cc,v 1.11 2007/05/25 17:46:52 dennis Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
@@ -49,7 +49,7 @@
 
 G4ChargeExchange::G4ChargeExchange(G4HadronElastic* hel, G4double elim,
                                    G4double ehigh)
-: G4HadronicInteraction(),
+: G4HadronicInteraction("G4ChargeExchange"),
   fElastic(hel),
   native(false),
   ekinlim(elim),

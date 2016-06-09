@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc,v 1.4 2006/11/17 14:14:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolarizedAnnihilationModel.cc,v 1.5 2007/05/23 08:52:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,7 @@
 #include "G4StokesVector.hh"
 #include "G4PolarizedAnnihilationCrossSection.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4TrackStatus.hh"
 #include "G4Gamma.hh"
 
 G4PolarizedAnnihilationModel::G4PolarizedAnnihilationModel(const G4ParticleDefinition* p, 
@@ -128,20 +129,21 @@ void G4PolarizedAnnihilationModel::ComputeAsymmetriesPerElectron(G4double ene,
 }
 
 
-
-
-std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries(
-  const G4MaterialCutsCouple* /*couple*/,
-  const G4DynamicParticle* dp,
-  G4double /*tmin*/,
-  G4double /*maxEnergy*/) 
+void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+						     const G4MaterialCutsCouple* /*couple*/,
+						     const G4DynamicParticle* dp,
+						     G4double /*tmin*/,
+						     G4double /*maxEnergy*/) 
 {
   G4ParticleChangeForGamma*  fParticleChange 
     = dynamic_cast<G4ParticleChangeForGamma*>(pParticleChange);
   const G4Track * aTrack = fParticleChange->GetCurrentTrack();
 
+  // kill primary 
+  fParticleChange->SetProposedKineticEnergy(0.);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
+
   // V.Ivanchenko add protection against zero kin energy
-  std::vector<G4DynamicParticle*>* fvect = new std::vector<G4DynamicParticle*>;
   G4double PositKinEnergy = dp->GetKineticEnergy();
 
   if(PositKinEnergy < DBL_MIN) {
@@ -152,7 +154,7 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
     G4ThreeVector dir(sinTeta*std::cos(phi), sinTeta*std::sin(phi), cosTeta);
     fvect->push_back( new G4DynamicParticle(G4Gamma::Gamma(), dir, electron_mass_c2));
     fvect->push_back( new G4DynamicParticle(G4Gamma::Gamma(),-dir, electron_mass_c2));
-    return fvect;
+    return;
   }
 
   // *** obtain and save target and beam polarization ***
@@ -370,6 +372,4 @@ std::vector<G4DynamicParticle*>* G4PolarizedAnnihilationModel::SampleSecondaries
 			      finalGamma2Polarization.p3());
 
   fvect->push_back(aParticle2);
-
-  return fvect;
 }

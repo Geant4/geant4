@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLegendreTable.hh,v 1.11 2006/06/29 20:48:27 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPLegendreTable.hh,v 1.12 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPLegendreTable_h
 #define G4NeutronHPLegendreTable_h 1
@@ -41,9 +41,9 @@ class G4NeutronHPLegendreTable
   G4NeutronHPLegendreTable()
   {
     nCoeff=0; 
-    theCoeff = NULL;
+    theCoeff = 0;
   }
-  ~G4NeutronHPLegendreTable(){if(theCoeff!=NULL) delete [] theCoeff;}
+  ~G4NeutronHPLegendreTable(){if(theCoeff!=0) delete [] theCoeff;}
   
   void operator= (const G4NeutronHPLegendreTable & aSet)
   {
@@ -54,7 +54,7 @@ class G4NeutronHPLegendreTable
       theTemp = aSet.theTemp;
       theManager = aSet.theManager;
       nCoeff = aSet.nCoeff;
-      if(theCoeff!=NULL) delete [] theCoeff;
+      if(theCoeff!=0) delete [] theCoeff;
       theCoeff = new G4double[nCoeff];
       for(G4int i=0; i<nCoeff; i++)
       {

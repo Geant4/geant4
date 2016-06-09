@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PrimaryParticle.hh,v 1.4 2006/09/28 14:29:43 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 

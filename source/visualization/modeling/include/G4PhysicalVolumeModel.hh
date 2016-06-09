@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.32 2006/10/26 11:05:42 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PhysicalVolumeModel.hh,v 1.34 2007/04/03 13:46:49 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // John Allison  31st December 1997.
@@ -205,6 +205,8 @@ protected:
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
   G4Material*    fpCurrentMaterial;  // Current material.
+  G4Transform3D* fpCurrentTransform; // Current transform.
+  std::vector<G4PhysicalVolumeNodeID> fFullPVPath;
   std::vector<G4PhysicalVolumeNodeID> fDrawnPVPath;
   G4bool             fCurtailDescent;// Can be set to curtail descent.
   const G4Polyhedron*fpClippingPolyhedron;

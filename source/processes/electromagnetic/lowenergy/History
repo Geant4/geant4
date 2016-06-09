@@ -1,4 +1,4 @@
-$Id: History,v 1.254 2006/10/19 11:19:50 pia Exp $
+$Id: History,v 1.258 2007/06/07 13:57:26 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+04.06.2007   MGP, tag emlowen-V08-03-03
+             Tag on top of emlowen-V08-03-00a
+             Updated license information in G4DNACrossSectionDataSet.cc
+
+04.06.2007   G.Cosmo, tag emlowen-V08-03-00a
+             Archived obsolete class G4LowEnergyBraggModel
+
+30.05.2007   MGP, tag emlowen-V08-03-02
+             Removed from CVS unused class G4LowEnergyBraggModel,
+             which introduced never agreed dependency on standard
+             G4VreEmModel
+             Attempt to fix issue identified by VALGRIND related to
+             PIXE model
+
+25.05.2007   MGP, tag emlowen-V08-03-01
+             Initialized static variables in G4hLowEnergyLoss;
+             not sure whether this is correct, since this is old
+             code moved from utils/, deprived of any documentation
+             and with an evident fortran look. A design review
+             is planned to take care of this domain in a proper way.
+             Also included an updated version of G4BraggModel
+             provided by V.I. due to an interface change: however
+             this class is not used anywhere in the package, and is
+             retained only for historical reasons; it is candidate to be
+             trashed in the next design review.
+
+16.05.2007   MGP, tag emlowen-V08-03-00
+             First set of Geant4-DNA processes compliant with design
+             documented in draft publication
 
 19.10.2006   MGP, tag emlowen-V08-01-02
              Bug fixes in G4FluoData.cc

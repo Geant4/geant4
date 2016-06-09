@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidExtentList.cc,v 1.4 2006/06/29 18:48:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SolidExtentList.cc,v 1.5 2007/05/11 13:54:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // --------------------------------------------------------------------
@@ -40,6 +40,7 @@
 
 #include "G4SolidExtentList.hh"
 #include "G4VoxelLimits.hh"
+#include "G4GeometryTolerance.hh"
 
 
 //
@@ -130,6 +131,8 @@ void G4SolidExtentList::AddSurface( const G4ClippablePolygon &surface )
 //
 G4bool G4SolidExtentList::GetExtent( G4double &min, G4double &max ) const
 {
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
+                           ->GetSurfaceTolerance();
   //
   // Did we have any surfaces within the limits?
   //

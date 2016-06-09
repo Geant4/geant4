@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenInventor.cc,v 1.20 2006/06/29 21:22:12 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
 

@@ -26,6 +26,9 @@
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
+//
+// 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
+//
 #include "G4NeutronHPVector.hh"
  
   // if the ranges do not match, constant extrapolation is used.
@@ -47,7 +50,9 @@
           result->SetData(running++, x, y);
           j++;
         }
-        else if(std::abs((right.GetX(j)-left.GetX(i))/(left.GetX(i)+right.GetX(j)))>0.001)
+        //else if(std::abs((right.GetX(j)-left.GetX(i))/(left.GetX(i)+right.GetX(j)))>0.001)
+        else if( left.GetX(i)+right.GetX(j) == 0 
+              || std::abs((right.GetX(j)-left.GetX(i))/(left.GetX(i)+right.GetX(j))) > 0.001 )
         {
           x = left.GetX(i);
           y = left.GetY(i)+right.GetY(x);
@@ -76,7 +81,7 @@
     nPoints=20;
     nEntries=0;
     Verbose=0;
-    theIntegral=NULL;
+    theIntegral=0;
     totalIntegral=-1;
     isFreed = 0;
     maxValue = -DBL_MAX;
@@ -92,7 +97,7 @@
     theData = new G4NeutronHPDataPoint[nPoints]; 
     nEntries=0;
     Verbose=0;
-    theIntegral=NULL;
+    theIntegral=0;
     totalIntegral=-1;
     isFreed = 0;
     maxValue = -DBL_MAX;
@@ -103,12 +108,9 @@
   G4NeutronHPVector::~G4NeutronHPVector()
   {
 //    if(Verbose==1)G4cout <<"G4NeutronHPVector::~G4NeutronHPVector"<<G4endl;
-    if(theData!=NULL)     
-    {
       delete [] theData;
-    }
 //    if(Verbose==1)G4cout <<"Vector: delete theData"<<G4endl;
-    if(theIntegral!=NULL) delete [] theIntegral;
+      delete [] theIntegral;
 //    if(Verbose==1)G4cout <<"Vector: delete theIntegral"<<G4endl;
     isFreed = 1;
   }
@@ -121,11 +123,11 @@
     G4int i;
     
     totalIntegral = right.totalIntegral;
-    if(right.theIntegral!=NULL) theIntegral = new G4double[right.nEntries];
+    if(right.theIntegral!=0) theIntegral = new G4double[right.nEntries];
     for(i=0; i<right.nEntries; i++)
     {
       SetPoint(i, right.GetPoint(i)); // copy theData
-      if(right.theIntegral!=NULL) theIntegral[i] = right.theIntegral[i];
+      if(right.theIntegral!=0) theIntegral[i] = right.theIntegral[i];
     }
     theManager = right.theManager; 
     label = right.label;
@@ -146,7 +148,8 @@
     G4int i;
     for(i=min ; i<nEntries; i++)
     {
-      if(theData[i].GetX()>e) break;
+      //if(theData[i].GetX()>e) break;
+      if(theData[i].GetX() >= e) break;
     }
     G4int low = i-1;
     G4int high = i;
@@ -164,7 +167,9 @@
     if(e<theData[nEntries-1].GetX()) 
     {
       // Protect against doubled-up x values
-      if( (theData[high].GetX()-theData[low].GetX())/theData[high].GetX() < 0.000001)
+      //if( (theData[high].GetX()-theData[low].GetX())/theData[high].GetX() < 0.000001)
+      if ( theData[high].GetX() !=0 
+       &&( theData[high].GetX()-theData[low].GetX())/theData[high].GetX() < 0.000001)
       {
         y = theData[low].GetY();
       }
@@ -232,7 +237,10 @@
         m++;
         a++;
         G4double xp = passive->GetEnergy(p);
-        if( std::abs(std::abs(xp-xa)/xa)<0.0000001&&a<active->GetVectorLength() ) 
+        //if( std::abs(std::abs(xp-xa)/xa)<0.0000001&&a<active->GetVectorLength() ) 
+        if ( xa != 0 
+          && std::abs(std::abs(xp-xa)/xa) < 0.0000001 
+          && a < active->GetVectorLength() )
         {
           p++;
           tmp = active; t=a;
@@ -253,7 +261,9 @@
       anX = passive->GetXsec(p)-deltaX;
       if(anX>0)
       {
-        if(std::abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.0000001)
+        //if(std::abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p)>0.0000001)
+        if ( passive->GetEnergy(p) == 0 
+          || std::abs(GetEnergy(m-1)-passive->GetEnergy(p))/passive->GetEnergy(p) > 0.0000001 )
         {
           SetData(m, passive->GetEnergy(p), anX);
           theManager.AppendScheme(m++, passive->GetScheme(p));
@@ -352,7 +362,7 @@
     }
     else
     {
-      if(theIntegral==NULL) IntegrateAndNormalise();
+      if(theIntegral==0) { IntegrateAndNormalise(); }
       do
       {
         G4double value, test, baseline;
@@ -365,7 +375,8 @@
           test = GetY(value)/maxValue;
           rand = G4UniformRand();
         }
-        while(test<rand);
+        //while(test<rand);
+        while( test < rand && test > 0 );
         result = value;
       }
       while(IsBlocked(result));
@@ -384,7 +395,7 @@
     }
     else
     {
-      if(theIntegral==NULL) IntegrateAndNormalise();
+      if(theIntegral==0) { IntegrateAndNormalise(); }
       G4int i;
       result = theData[GetVectorLength()-1].GetX();
       for(i=0;i<GetVectorLength();i++)
@@ -412,7 +423,7 @@
     }
     else
     {
-      if(theIntegral==NULL) IntegrateAndNormalise();
+      if(theIntegral==0) { IntegrateAndNormalise(); }
       G4int i;
       G4double x = 0.5;
       result = theData[GetVectorLength()-1].GetX();

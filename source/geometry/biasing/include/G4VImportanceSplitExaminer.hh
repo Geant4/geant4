@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VImportanceSplitExaminer.hh,v 1.5 2006/06/29 18:16:42 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // ----------------------------------------------------------------------
 // Class G4VImportanceSplitExaminer

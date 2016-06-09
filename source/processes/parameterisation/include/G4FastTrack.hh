@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastTrack.hh,v 1.7 2006/06/29 21:09:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4FastTrack.hh,v 1.8 2007/05/11 13:50:20 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // $Id:
 //---------------------------------------------------------------
@@ -167,22 +167,24 @@ private:
   // of the envelope.
   //------------------------------------------------
   void FRecordsAffineTransformation(const G4Navigator*);
-  G4bool fAffineTransformationDefined;
-  G4Envelope* fEnvelope;
-  G4bool fIsUnique;
-  G4LogicalVolume* fEnvelopeLogicalVolume;
-  G4VPhysicalVolume* fEnvelopePhysicalVolume;
-  G4VSolid* fEnvelopeSolid;
-  G4ThreeVector fLocalTrackPosition, fLocalTrackMomentum, 
-    fLocalTrackDirection, fLocalTrackPolarization;
-  G4AffineTransform fAffineTransformation, fInverseAffineTransformation;
+  G4bool             fAffineTransformationDefined;
+  G4Envelope*                           fEnvelope;
+  G4bool                                fIsUnique;
+  G4LogicalVolume*         fEnvelopeLogicalVolume;
+  G4VPhysicalVolume*      fEnvelopePhysicalVolume;
+  G4VSolid*                        fEnvelopeSolid;
+  G4ThreeVector               fLocalTrackPosition,
+                              fLocalTrackMomentum, 
+                             fLocalTrackDirection,
+                          fLocalTrackPolarization;
+  G4AffineTransform         fAffineTransformation,
+                     fInverseAffineTransformation;
 };
 
-//*******************************************************************
-//
-//  Inline functions
-//
-//*******************************************************************
+
+// -----------------
+// -- Inline methods
+// -----------------
 
 inline G4Envelope* G4FastTrack::GetEnvelope() const
 {

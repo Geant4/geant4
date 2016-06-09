@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedGammaConversion.hh,v 1.1 2006/09/21 21:35:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolarizedGammaConversion.hh,v 1.2 2007/05/23 08:52:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -79,11 +79,6 @@ public:  // with description
 protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
-
-  std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*);
 
 private:
   

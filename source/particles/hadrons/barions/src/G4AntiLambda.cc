@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiLambda.cc,v 1.17 2006/06/29 19:16:19 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4AntiLambda.cc,v 1.18 2007/03/11 07:17:34 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -68,27 +68,32 @@ G4AntiLambda* G4AntiLambda::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
 
-   anInstance = new G4ParticleDefinition(
-                 name,    1.115684*GeV,  2.501e-12*MeV,         0.0, 
+    anInstance = new G4ParticleDefinition(
+                 name,    1.115683*GeV,  2.501e-12*MeV,         0.0, 
 		    1,              +1,             0,          
 		    0,               0,             0,             
 	     "baryon",               0,            -1,       -3122,
-		false,       0.2632*ns,          NULL,
+		false,       0.2631*ns,          NULL,
                 false,       "lambda");
- //create Decay Table 
-  G4DecayTable* table = new G4DecayTable();
 
-  // create decay channels
-  G4VDecayChannel** mode = new G4VDecayChannel*[2];
-  // anti_lambda -> anti_proton + pi+
-  mode[0] = new G4PhaseSpaceDecayChannel("anti_lambda",0.639,2,"anti_proton","pi+");
-  // anti_lambda -> anti_neutron + pi0
-  mode[1] = new G4PhaseSpaceDecayChannel("anti_lambda",0.358,2,"anti_neutron","pi0");
- 
-  for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);  
-  delete [] mode;
+    // Magnetic Moment
+    G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);
+    anInstance->SetPDGMagneticMoment( 0.613 * mN);
 
-   anInstance->SetDecayTable(table);
+    //create Decay Table 
+    G4DecayTable* table = new G4DecayTable();
+    
+    // create decay channels
+    G4VDecayChannel** mode = new G4VDecayChannel*[2];
+    // anti_lambda -> anti_proton + pi+
+    mode[0] = new G4PhaseSpaceDecayChannel("anti_lambda",0.639,2,"anti_proton","pi+");
+    // anti_lambda -> anti_neutron + pi0
+    mode[1] = new G4PhaseSpaceDecayChannel("anti_lambda",0.358,2,"anti_neutron","pi0");
+    
+    for (G4int index=0; index <2; index++ ) table->Insert(mode[index]);  
+    delete [] mode;
+    
+    anInstance->SetDecayTable(table);
   }
   theInstance = reinterpret_cast<G4AntiLambda*>(anInstance);
   return theInstance;

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4OpenGLXmPushButton.cc,v 1.6 2006/06/29 21:19:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //Push button class. Inherits from G4OpenGLXmVWidgetComponent
 

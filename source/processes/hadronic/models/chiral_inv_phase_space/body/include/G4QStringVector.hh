@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QStringVector.hh,v 1.1 2006/10/30 10:40:35 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //      ---------------- G4QStringVector ----------------
 //             by Mikhail Kossov, October 2006.

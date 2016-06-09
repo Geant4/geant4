@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PhysicsList.cc,v 1.12 2006/11/10 13:11:00 mverderi Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: ExN05PhysicsList.cc,v 1.13 2007/05/11 14:29:16 mverderi Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 
@@ -42,7 +42,7 @@
 #include "G4ios.hh"
 #include <iomanip>   
 
-#include "G4FastSimulationManagerProcess81.hh"
+#include "G4FastSimulationManagerProcess.hh"
 
 
 ExN05PhysicsList::ExN05PhysicsList():  G4VUserPhysicsList()
@@ -122,35 +122,9 @@ void ExN05PhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-#include "G4CoupledTransportation.hh"
-
 void ExN05PhysicsList::AddTransportation()
 {
-  //  G4VUserPhysicsList::AddTransportation();
-
-  G4CoupledTransportation* theTransportationProcess= new G4CoupledTransportation();
-  // loop over all particles in G4ParticleTable
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (!particle->IsShortLived()) {
-      // Add transportation process for all particles other than  "shortlived"
-      if ( pmanager == 0) {
-	// Error !! no process manager
-	G4String particleName = particle->GetParticleName();
-	G4Exception("G4VUserPhysicsList::AddTransportation","No process manager",
-		    RunMustBeAborted, particleName );
-      } else {
-	// add transportation with ordering = ( -1, "first", "first" )
-	pmanager ->AddProcess(theTransportationProcess);
-	pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxAlongStep);
-	pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxPostStep);
-      }
-    } else {
-      // shortlived particle case
-    }
-  }
+  G4VUserPhysicsList::AddTransportation();
 }
 
 #include "G4ComptonScattering.hh"
@@ -286,16 +260,14 @@ void ExN05PhysicsList::ConstructGeneral()
 
 void ExN05PhysicsList::AddParameterisation()
 {
-  G4FastSimulationManagerProcess81* 
-    fastSimProcess_parallelGeom = new G4FastSimulationManagerProcess81("G4FSMP_parallelGeom", "pionGhostWorld");
-  G4FastSimulationManagerProcess81* 
-    fastSimProcess_massGeom     = new G4FastSimulationManagerProcess81("G4FSMP_massGeom");
+  G4FastSimulationManagerProcess* fastSimProcess_parallelGeom = new G4FastSimulationManagerProcess("G4FSMP_parallelGeom", "pionGhostWorld");
+  G4FastSimulationManagerProcess* fastSimProcess_massGeom     = new G4FastSimulationManagerProcess("G4FSMP_massGeom");
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
     {
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
-      // -- G4FSMP is a PostStep process, ordering does not matter (?)
+      // -- G4FSMP is a PostStep process, ordering does not matter
       if (particle->GetParticleName() == "pi+" || 
 	  particle->GetParticleName() == "pi-")    pmanager->AddDiscreteProcess(fastSimProcess_parallelGeom);
       if (particle->GetParticleName() == "e+"  || 

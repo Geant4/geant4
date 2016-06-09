@@ -55,6 +55,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4GeometryTolerance.hh"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -356,6 +357,8 @@ G4PAIModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
 {
   G4int i ;
   G4double dNdxCut, lambda;
+  G4double kCarTolerance = G4GeometryTolerance::GetInstance()
+                           ->GetSurfaceTolerance();
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -568,12 +571,12 @@ G4double G4PAIModel::CrossSection( const G4MaterialCutsCouple* matCC,
 //
 // It is analog of PostStepDoIt in terms of secondary electron.
 //
-
-std::vector<G4DynamicParticle*>* 
-G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
-                               const G4DynamicParticle* dp,
-                                     G4double tmin,
-                                     G4double maxEnergy)
+ 
+void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+				   const G4MaterialCutsCouple* matCC,
+				   const G4DynamicParticle* dp,
+				   G4double tmin,
+				   G4double maxEnergy)
 {
   size_t jMat;
   for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
@@ -611,7 +614,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
     // deltaTkin = 10*eV;
     G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
   }
-  if( deltaTkin <= 0.) return 0;
+  if( deltaTkin <= 0.) return;
 
   if(deltaTkin > kineticEnergy && 
      particleMass != electron_mass_c2) deltaTkin = kineticEnergy;
@@ -652,9 +655,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   deltaRay->SetKineticEnergy( deltaTkin );  //  !!! trick for last steps /2.0 ???
   deltaRay->SetMomentumDirection(deltaDirection); 
 
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   vdp->push_back(deltaRay);
-  return vdp;
 }
 
 

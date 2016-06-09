@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.hh,v 1.2 2006/06/29 19:12:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NistMessenger.hh,v 1.4 2007/05/02 10:48:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // File name:     G4NistMessenger
 //
@@ -34,6 +34,7 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
+// 29.04.07 V.Ivanchenko add recCmd
 //
 //
 // Class Description:
@@ -83,7 +84,7 @@ class G4NistMessenger: public G4UImessenger
 public:
 
   G4NistMessenger(G4NistManager* );
- ~G4NistMessenger();
+  virtual ~G4NistMessenger();
 
   void SetNewValue(G4UIcommand*, G4String);
 
@@ -102,6 +103,7 @@ private:
   G4UIdirectory*             g4Dir;
   G4UIcmdWithAString*        g4ElmCmd;   
   G4UIcmdWithAString*        g4MatCmd;     
+
 };
 
 #endif

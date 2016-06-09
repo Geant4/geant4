@@ -63,6 +63,7 @@
 
 #include "G4ios.hh"
 #include "G4OpBoundaryProcess.hh"
+#include "G4GeometryTolerance.hh"
 
 /////////////////////////
 // Class Implementation
@@ -97,7 +98,8 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         prob_sl = 0.;
         prob_ss = 0.;
         prob_bs = 0.;
-
+        kCarTolerance = G4GeometryTolerance::GetInstance()
+                        ->GetSurfaceTolerance();
 }
 
 // G4OpBoundaryProcess::G4OpBoundaryProcess(const G4OpBoundaryProcess &right)

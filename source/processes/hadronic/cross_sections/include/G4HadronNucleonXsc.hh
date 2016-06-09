@@ -43,12 +43,11 @@
 #include "G4Proton.hh"
 #include "G4Nucleus.hh"
 
-#include "G4VCrossSectionDataSet.hh"
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
 
-class G4HadronNucleonXsc : public G4VCrossSectionDataSet
+class G4HadronNucleonXsc 
 {
 public:
 
@@ -77,6 +76,8 @@ public:
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4ParticleDefinition*);
 
   G4double GetHadronNucleonXscVU(const G4DynamicParticle*, const G4ParticleDefinition*);
+
+  G4double GetHadronNucleonXscMK(const G4DynamicParticle*, const G4ParticleDefinition*);
 
   // kinematics and set/get
 

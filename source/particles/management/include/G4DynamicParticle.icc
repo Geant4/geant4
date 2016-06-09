@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc,v 1.15 2006/06/29 19:23:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4DynamicParticle.icc,v 1.16 2007/03/11 07:17:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // ------------------------------------------------------------
@@ -122,6 +122,32 @@ inline void G4DynamicParticle::SetCharge(G4int newCharge)
 inline G4double G4DynamicParticle::GetMass() const
 {
   return theDynamicalMass;
+}
+
+
+inline G4double G4DynamicParticle::GetSpin() const
+{
+  return theDynamicalSpin;
+}
+
+inline void  G4DynamicParticle::SetSpin(G4double spin)
+{
+  theDynamicalSpin = spin;
+}
+
+inline void  G4DynamicParticle::SetSpin(G4int    spinInUnitOfHalfInteger)
+{
+  theDynamicalSpin =  spinInUnitOfHalfInteger * 0.5;
+}
+
+inline G4double G4DynamicParticle::GetMagneticMoment() const
+{
+  return theDynamicalMagneticMoment;
+}
+
+inline void  G4DynamicParticle::SetMagneticMoment(G4double magneticMoment)
+{
+   theDynamicalMagneticMoment = magneticMoment;  
 }
 
 inline void G4DynamicParticle::SetMass(G4double newMass)

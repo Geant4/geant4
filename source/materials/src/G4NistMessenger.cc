@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.cc,v 1.2 2006/06/29 19:13:05 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NistMessenger.cc,v 1.4 2007/05/02 10:48:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // File name:     G4NistMessenger
@@ -57,8 +57,8 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
 :manager(man)
 {
   matDir = new G4UIdirectory("/material/");
-  matDir->SetGuidance("Commands for Materials");
-  
+  matDir->SetGuidance("Commands for materials");
+
   verCmd = new G4UIcmdWithAnInteger("/material/verbose",this);
   verCmd->SetGuidance("Set verbose level.");
   
@@ -95,7 +95,7 @@ G4NistMessenger::G4NistMessenger(G4NistManager* man)
     
   g4MatCmd = new G4UIcmdWithAString("/material/g4/printMaterial",this);
   g4MatCmd->SetGuidance("print Material in G4MaterialTable.");
-            
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -109,7 +109,7 @@ G4NistMessenger::~G4NistMessenger()
   delete nistDir;
   
   delete g4ElmCmd;   
-  delete g4MatCmd;  
+  delete g4MatCmd;
   delete g4Dir;
   delete matDir;  
 }

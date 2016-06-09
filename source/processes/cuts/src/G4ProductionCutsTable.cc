@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.16 2007/03/15 04:06:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4ProductionCutsTable.cc,v 1.17 2007/05/30 08:22:20 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // --------------------------------------------------------------
@@ -880,10 +880,11 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
     // debug information 
     if (verboseLevel >1) {
       if (fOK) {
+	G4String regionname(region_name);
 	G4Region* fRegion = 0;
-	if ( region_name != "NONE" ) fRegion = fG4RegionStore->GetRegion(region_name);
-	if ( (( region_name == "NONE" ) && (aCouple->IsUsed()) )      ||
-	     (( region_name != "NONE" ) && (fRegion==0) )             ||
+	if ( regionname != "NONE" ) fRegion = fG4RegionStore->GetRegion(region_name);
+	if ( (( regionname == "NONE" ) && (aCouple->IsUsed()) )      ||
+	     (( regionname != "NONE" ) && (fRegion==0) )             ||
 	     !IsCoupleUsedInTheRegion(aCouple, fRegion)           ) {
 	  G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
 	  G4cout << "A Couple is used differnt region in the current setup  ";

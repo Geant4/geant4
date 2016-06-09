@@ -1,5 +1,5 @@
 # $Id: GNUmakefile,v 1.7 2006/10/31 15:05:33 vnivanch Exp $
-# GEANT4 tag $Name: geant4-08-02 $
+# GEANT4 tag $Name: geant4-09-00 $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------

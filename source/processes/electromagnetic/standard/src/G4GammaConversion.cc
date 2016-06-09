@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4GammaConversion.cc,v 1.27 2006/09/14 10:27:19 maire Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //------------------ G4GammaConversion physics process -------------------------

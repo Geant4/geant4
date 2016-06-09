@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NavigationLevelRep.cc,v 1.2 2006/06/29 18:58:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        

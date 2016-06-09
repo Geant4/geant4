@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //
 // GEANT4 physics class: G4QuasiFreeRatios -- header file
@@ -54,20 +54,29 @@ class G4QuasiFreeRatios
 {
  protected:
 
-  G4QuasiFreeRatios()  {}                 // Constructor
+  G4QuasiFreeRatios();                 // Constructor
 
  public:
 
-  ~G4QuasiFreeRatios() {}                 // Destructor
+  ~G4QuasiFreeRatios();                 // Destructor
 
   static G4QuasiFreeRatios* GetPointer(); // Gives a pointer to this singletone
 
   // Pair(QuasiFree/Inelastic,QuasiElastic/QuasiFree)
   std::pair<G4double,G4double> GetRatios(G4double pIU, G4int prPDG, G4int tgZ, G4int tgN);
+  // ChargeExchange/QuasiElastic factor pair<for protons (Z), for neutrons(N)>
+  std::pair<G4double,G4double> GetChExFactor(G4double pIU, G4int pPDG, G4int Z, G4int N);
   // scatter (pPDG,p4M) on a virtual nucleon (NPDG,N4M), result: final pair(newN4M,newp4M)
   // if(newN4M.e()==0.) - below threshold, XS=0, no scattering of the progectile happened
   std::pair<G4LorentzVector,G4LorentzVector> Scatter(G4int NPDG, G4LorentzVector N4M,
                                                      G4int pPDG, G4LorentzVector p4M);
+  // ChExer (pPDG,p4M) on a virtual nucleon (NPDG,N4M), result: final pair(newN4M,newp4M)
+  // if(newN4M.e()==0.) - keep projectile, XS=0, no interaction of the progectile happened
+  // User should himself change the charge (PDG) (e.g. pn->np, pi+n->pi0p, pi-p->pi0n etc.)
+  // Recepy: change target n to p or taget p to n and conserve enrgy, changing projectile
+  // Do not use for the nucleon, as it is already included in quasielastic, and for pi0.
+  std::pair<G4LorentzVector,G4LorentzVector> ChExer(G4int NPDG, G4LorentzVector N4M,
+                                                    G4int pPDG, G4LorentzVector p4M);
   // Mean hN El and Tot XS(IU) for the isotopic (Z,N): on p -> (Z=1,N=0), on n -> (Z=0,N=1)
   std::pair<G4double,G4double> GetElTot(G4double pIU, G4int hPDG, G4int Z, G4int N); //(IU)
 
@@ -80,5 +89,9 @@ class G4QuasiFreeRatios
 
  // Body
  private:
+  static std::vector<G4double*> vE;     // Vector of ElastPointers to LogTable
+  static std::vector<G4double*> vT;     // Vector of pointers to LinTable
+  static std::vector<G4double*> vL;     // Vector of pointers to LogTable
+  static std::vector<std::pair<G4double,G4double>*> vX; // Vector of ETPointers to LogTable
 }; 					
 #endif

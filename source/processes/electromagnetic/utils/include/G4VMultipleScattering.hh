@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.42 2007/03/15 12:33:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4VMultipleScattering.hh,v 1.46 2007/06/11 14:56:51 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -79,6 +79,7 @@
 #include "G4Step.hh"
 #include "G4EmModelManager.hh"
 #include "G4VEmModel.hh"
+#include "G4MscStepLimitType.hh"
 
 class G4ParticleDefinition;
 class G4DataVector;
@@ -114,50 +115,22 @@ protected:
   //------------------------------------------------------------------------
 public:
 
+  //------------------------------------------------------------------------
+  // Generic methods common to all ContinuousDiscrete processes
+  //------------------------------------------------------------------------
+
   // Initialise for build of tables
   virtual void PreparePhysicsTable(const G4ParticleDefinition&);
   
   // Build physics table during initialisation
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
-  // set boolean flag steppingAlgorithm
-  // ( true/false : standard or 7.1 style process)
-  virtual void MscStepLimitation(G4bool algorithm, G4double factor = -1.);
-
-  //------------------------------------------------------------------------
-  // Generic methods common to all models
-  //------------------------------------------------------------------------
-
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
-
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-
-  // The function overloads the corresponding function of the base
-  // class.It limits the step near to boundaries only
-  // and invokes the method GetContinuousStepLimit at every step.
-  G4double AlongStepGetPhysicalInteractionLength(
-                                            const G4Track&,
-                                                  G4double  previousStepSize,
-                                                  G4double  currentMinimalStep,
-                                                  G4double& currentSafety,
-                                                  G4GPILSelection* selection);
-
   // Print out of generic class parameters
   void PrintInfoDefinition();
 
-  void SetBinning(G4int nbins);
-  G4int Binning() const;
-    // Print out of the class parameters
+  inline virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
-  void SetMinKinEnergy(G4double e);
-  G4double MinKinEnergy() const;
-    // Print out of the class parameters
-
-  void SetMaxKinEnergy(G4double e);
-  G4double MaxKinEnergy() const;
-
-  // Build empty Physics Vector
-  G4PhysicsVector* PhysicsVector(const G4MaterialCutsCouple*);
+  inline virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   // Store PhysicsTable in a file.
   // Return false in case of failure at I/O
@@ -174,58 +147,138 @@ public:
                               const G4String& directory,
                                     G4bool ascii);
 
-  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
+  //------------------------------------------------------------------------
+  // Specific methods for multiple scattering
+  //------------------------------------------------------------------------
+
+  // Build empty Physics Vector
+  G4PhysicsVector* PhysicsVector(const G4MaterialCutsCouple*);
+
+  // The function overloads the corresponding function of the base
+  // class.It limits the step near to boundaries only
+  // and invokes the method GetMscContinuousStepLimit at every step.
+  inline virtual G4double AlongStepGetPhysicalInteractionLength(
+                                            const G4Track&,
+                                                  G4double  previousStepSize,
+                                                  G4double  currentMinimalStep,
+                                                  G4double& currentSafety,
+                                                  G4GPILSelection* selection);
+
+  // The function overloads the corresponding function of the base
+  // class.
+  inline virtual G4double PostStepGetPhysicalInteractionLength(
+                                            const G4Track&,
+					    G4double  previousStepSize,
+					    G4ForceCondition* condition);
 
   // This method does not used for tracking, it is intended only for tests
-  virtual G4double ContinuousStepLimit(const G4Track& track,
-                                     G4double previousStepSize,
-                                     G4double currentMinimalStep,
-                                     G4double& currentSafety);
+  inline virtual G4double ContinuousStepLimit(const G4Track& track,
+					      G4double previousStepSize,
+					      G4double currentMinimalStep,
+					      G4double& currentSafety);
 
-  G4bool LateralDisplasmentFlag() const;
-  void SetLateralDisplasmentFlag(G4bool val);
-     // lateral displacement to be/not to be computed
+  //------------------------------------------------------------------------
+  // Specific methods to build and access Physics Tables
+  //------------------------------------------------------------------------
 
-  G4double Skin() const;
-  void SetSkin(G4double val);
-     // skin parameter
+  inline void SetBinning(G4int nbins);
+  inline G4int Binning() const;
 
-  void SetBuildLambdaTable(G4bool val);
+  inline void SetMinKinEnergy(G4double e);
+  inline G4double MinKinEnergy() const;
+    // Print out of the class parameters
 
-  G4PhysicsTable* LambdaTable() const;
+  inline void SetMaxKinEnergy(G4double e);
+  inline G4double MaxKinEnergy() const;
 
-  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
+  inline void SetBuildLambdaTable(G4bool val);
 
-  // Define particle definition
-  const G4ParticleDefinition* Particle() const;
-  void SetParticle(const G4ParticleDefinition*);
+  inline G4PhysicsTable* LambdaTable() const;
+
+  //------------------------------------------------------------------------
+  // Define and access particle type 
+  //------------------------------------------------------------------------
+
+  inline const G4ParticleDefinition* Particle() const;
+  inline void SetParticle(const G4ParticleDefinition*);
+
+  //------------------------------------------------------------------------
+  // Specific methods to set, access, modify models
+  //------------------------------------------------------------------------
+
+  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
+
+  inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
 
   // Access to models
-  G4VEmModel* GetModelByIndex(G4int idx = 0);
+  inline G4VEmModel* GetModelByIndex(G4int idx = 0);
+
+  //------------------------------------------------------------------------
+  // Parameters for simulation of multiple scattering
+  //------------------------------------------------------------------------
+
+  inline void SetLateralDisplasmentFlag(G4bool val);
+     // lateral displacement to be/not to be computed
+
+  inline void SetSkin(G4double val);
+     // skin parameter
+
+  inline void SetRangeFactor(G4double val);
+     // FactorRange parameter
+
+  inline void SetGeomFactor(G4double val);
+     // FactorRange parameter
+
+  inline void SetStepLimitType(G4MscStepLimitType val);
+     // FactorRange parameter
 
 protected:
 
   // This method is used for tracking, it returns mean free path value
-  G4double GetMeanFreePath(const G4Track& track,
-                                 G4double,
-                                 G4ForceCondition* condition);
+  inline virtual G4double GetMeanFreePath(const G4Track& track,
+					  G4double,
+					  G4ForceCondition* condition);
 
-  G4double GetLambda(const G4ParticleDefinition* p, G4double& kineticEnergy);
+  //------------------------------------------------------------------------
+  // Run time methods
+  //------------------------------------------------------------------------
+
+  inline G4double GetLambda(const G4ParticleDefinition* p, G4double& kineticEnergy);
 
   // This method is used for tracking, it returns step limit
-  virtual G4double GetContinuousStepLimit(const G4Track& track,
+  inline G4double GetMscContinuousStepLimit(const G4Track& track,
                                         G4double previousStepSize,
                                         G4double currentMinimalStep,
                                         G4double& currentSafety);
 
-  G4VEmModel* SelectModel(G4double kinEnergy);
+  // This method is not used for tracking, it returns step limit
+  inline virtual G4double GetContinuousStepLimit(const G4Track& track,
+                                        G4double previousStepSize,
+                                        G4double currentMinimalStep,
+                                        G4double& currentSafety);
+
+  inline G4VEmModel* SelectModel(G4double kinEnergy);
   // Select concrete model
 
-  const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
+  inline const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
   // Return current G4MaterialCutsCouple
 
-  void DefineMaterial(const G4MaterialCutsCouple* couple);
+  inline void DefineMaterial(const G4MaterialCutsCouple* couple);
   // define current material
+
+  //------------------------------------------------------------------------
+  // Parameters for simulation of multiple scattering
+  //------------------------------------------------------------------------
+
+  inline G4double Skin() const;
+
+  inline G4double RangeFactor() const;
+
+  inline G4double GeomFactor() const;
+
+  inline G4MscStepLimitType StepLimitType() const;
+
+  inline G4bool LateralDisplasmentFlag() const;
 
 private:
 
@@ -255,9 +308,13 @@ private:
 
   G4int                       nBins;
 
+  G4MscStepLimitType          stepLimit;
+
   G4double                    minKinEnergy;
   G4double                    maxKinEnergy;
   G4double                    skin;
+  G4double                    facrange;
+  G4double                    facgeom;
 
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
@@ -276,11 +333,19 @@ inline void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* co
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VMultipleScattering::GetMeanFreePath(const G4Track&,
-                                                             G4double,
-                                                             G4ForceCondition* cond)
+inline G4double G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
+              const G4Track&, G4double, G4ForceCondition* condition)
 {
-  *cond = Forced;
+  *condition = Forced;
+  return DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VMultipleScattering::GetMeanFreePath(
+              const G4Track&, G4double, G4ForceCondition* condition)
+{
+  *condition = Forced;
   return DBL_MAX;
 }
 
@@ -295,7 +360,7 @@ inline G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
 {
   // get Step limit proposed by the process
   valueGPILSelectionMSC = NotCandidateForSelection;
-  G4double steplength = GetContinuousStepLimit(track,previousStepSize,
+  G4double steplength = GetMscContinuousStepLimit(track,previousStepSize,
                                               currentMinimalStep,currentSafety);
   // G4cout << "StepLimit= " << steplength << G4endl;
   // set return value for G4GPILSelection
@@ -305,7 +370,7 @@ inline G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VMultipleScattering::GetContinuousStepLimit(
+inline G4double G4VMultipleScattering::GetMscContinuousStepLimit(
                                           const G4Track& track,
                                                 G4double,
                                                 G4double currentMinimalStep,
@@ -329,13 +394,25 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4double G4VMultipleScattering::GetContinuousStepLimit(
+                                       const G4Track& track,
+                                       G4double previousStepSize,
+                                       G4double currentMinimalStep,
+                                       G4double& currentSafety)
+{
+  return GetMscContinuousStepLimit(track,previousStepSize,currentMinimalStep,
+                                      currentSafety);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4VMultipleScattering::ContinuousStepLimit(
                                        const G4Track& track,
                                        G4double previousStepSize,
                                        G4double currentMinimalStep,
                                        G4double& currentSafety)
 {
-  return GetContinuousStepLimit(track,previousStepSize,currentMinimalStep,
+  return GetMscContinuousStepLimit(track,previousStepSize,currentMinimalStep,
                                       currentSafety);
 }
 
@@ -372,8 +449,11 @@ inline G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& tra
 							      const G4Step& step)
 {
   fParticleChange.Initialize(track);
-  currentModel->SampleSecondaries(currentCouple,track.GetDynamicParticle(),
-		    step.GetStepLength(),step.GetPostStepPoint()->GetSafety());
+  std::vector<G4DynamicParticle*>* p=0;
+  currentModel->SampleSecondaries(p, currentCouple,
+				  track.GetDynamicParticle(),
+				  step.GetStepLength(),
+				  step.GetPostStepPoint()->GetSafety());
   return &fParticleChange;
 }
 
@@ -459,14 +539,68 @@ inline  G4double G4VMultipleScattering::Skin() const
 
 inline  void G4VMultipleScattering::SetSkin(G4double val)
 {
-  skin = val;
+  if(val <= 0.99999) {
+    skin = 0.0;
+    stepLimit = fUseSafety;
+  } else {
+    skin = val;
+    stepLimit = fUseDistanceToBoundary;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  G4double G4VMultipleScattering::RangeFactor() const
+{
+  return facrange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  void G4VMultipleScattering::SetRangeFactor(G4double val)
+{
+  if(val > 0.0) facrange = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  G4double G4VMultipleScattering::GeomFactor() const
+{
+  return facgeom;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  void G4VMultipleScattering::SetGeomFactor(G4double val)
+{
+  if(val > 0.0) facgeom = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4MscStepLimitType G4VMultipleScattering::StepLimitType() const
+{
+  return stepLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val) 
+{
+  stepLimit = val;
+  if(val == fMinimal) {
+    skin = 0;
+    facrange = 0.2;
+  } else if(val == fUseSafety) {
+    skin = 0;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline  void G4VMultipleScattering::SetBuildLambdaTable(G4bool val)
 {
-  buildLambdaTable = val;
+   buildLambdaTable = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

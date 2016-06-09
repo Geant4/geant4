@@ -44,6 +44,7 @@
 #include "G4PVPlacement.hh"
 #include "G4LogicalVolume.hh"
 #include "G4HumanPhantomMaterial.hh"
+#include "G4HumanPhantomColour.hh"
 
 G4MIRDUpperLargeIntestine::G4MIRDUpperLargeIntestine()
 {
@@ -53,23 +54,26 @@ G4MIRDUpperLargeIntestine::~G4MIRDUpperLargeIntestine()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUpperLargeIntestine::ConstructUpperLargeIntestine(G4VPhysicalVolume* mother, G4String sex, G4bool sensitivity)
+G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeName,
+							     G4VPhysicalVolume* mother,
+							     const G4String& colourName
+							     , G4bool wireFrame,G4bool sensitivity)
 {
-G4cout << "ConstructUpperLargeIntestine for " << sex << G4endl;
+  G4cout << "Construct " << volumeName<< G4endl;
  
  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
  G4Material* soft = material -> GetMaterial("soft_tissue");
  delete material;
 
-  G4double dx = 2.16 * cm;
-  G4double dy = 2.45 * cm;
-  G4double dz = 4.3 * cm;
+ G4double dx = 2.5 * cm; // aU
+ G4double dy = 2.5* cm; //bU
+ G4double dz = 4.775 * cm; //dzU
 
   G4VSolid* AscendingColonUpperLargeIntestine = new G4EllipticalTube("AscendingColon",dx, dy, dz);
  
-  dx = 2.45 * cm;
-  dy = 1.35 *cm;
-  dz = 9.06* cm;
+  dx = 2.5 * cm;//bt
+  dy = 1.5 *cm;//ct
+  dz = 10.5* cm;//x1t
 
   G4VSolid* TraverseColonUpperLargeIntestine = new G4EllipticalTube("TraverseColon",dx, dy, dz);
 
@@ -81,20 +85,20 @@ G4cout << "ConstructUpperLargeIntestine for " << sex << G4endl;
 						      AscendingColonUpperLargeIntestine,
 						      TraverseColonUpperLargeIntestine,
 						      relative_rm, 
-						      G4ThreeVector(7.2 *cm, 0.0, 5.65 * cm));
-
+						       G4ThreeVector(8.50 *cm, 0.0,6.275 * cm)); //,0,dzU + ct transverse
+  
 
   G4LogicalVolume* logicUpperLargeIntestine = new G4LogicalVolume(upperLargeIntestine, soft,
-								  "UpperLargeIntestineVolume", 
+								  "logical" + volumeName, 
 								  0, 0, 0);
  
   G4VPhysicalVolume* physUpperLargeIntestine = new G4PVPlacement(0,
-								 G4ThreeVector(-7.33 * cm, -2.31 *cm,-14.22 *cm),
-      			       "physicalUpperLargeIntestine",
+								 G4ThreeVector(-8.50 * cm, -2.36 *cm,-15.775 *cm),
+								 "physicalUpperLargeIntestine",                 //xo, yo, zo ascending colon
   			       logicUpperLargeIntestine,
 			       mother,
 			       false,
-			       0);
+			       0, true);
 
   // Sensitive Body Part
   if (sensitivity==true)
@@ -104,8 +108,11 @@ G4cout << "ConstructUpperLargeIntestine for " << sex << G4endl;
   }
 
   // Visualization Attributes
-  G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
-  UpperLargeIntestineVisAtt->SetForceSolid(true);
+  //  G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();
+  G4Colour colour = colourPointer -> GetColour(colourName);
+  G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(colour);
+  UpperLargeIntestineVisAtt->SetForceSolid(wireFrame);
   logicUpperLargeIntestine->SetVisAttributes(UpperLargeIntestineVisAtt);
 
   G4cout << "UpperLargeIntestine created !!!!!!" << G4endl;

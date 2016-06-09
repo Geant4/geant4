@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.111 2007/01/11 16:41:59 allison Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4VisManager.cc,v 1.113 2007/05/25 10:50:26 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -71,6 +71,7 @@
 #include "G4TrajectoryDrawByCharge.hh"
 #include "Randomize.hh"
 #include "G4RunManager.hh"
+#include "G4EventManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
 #include <sstream>
@@ -585,56 +586,64 @@ void G4VisManager::CreateViewer (G4String name) {
 
   if (fpSceneHandler) {
     G4VViewer* p = fpGraphicsSystem -> CreateViewer (*fpSceneHandler, name);
-    if (p) {
-      fpViewer = p;                             // Make current.
-      fpViewer -> Initialise ();
-      fpSceneHandler -> AddViewerToList (fpViewer);
-      fpSceneHandler -> SetCurrentViewer (fpViewer);
-
-      if (fVerbosity >= confirmations) {
-	G4cout << "G4VisManager::CreateViewer: new viewer created:"
+    if (!p) {
+      if (fVerbosity >= errors) {
+	G4cout << "ERROR in G4VisManager::CreateViewer during "
+	       << fpGraphicsSystem -> GetName ()
+	       << " viewer creation.\n  No action taken."
 	       << G4endl;
       }
+    } else {
+      p -> Initialise ();
+      if (p -> GetViewId() < 0) {
+	if (fVerbosity >= errors) {
+	G4cout << "ERROR in G4VisManager::CreateViewer during "
+	       << fpGraphicsSystem -> GetName ()
+	       << " viewer initialisation.\n  No action taken."
+	       << G4endl;
+	}
+      } else {
+	fpViewer = p;                             // Make current.
+	fpSceneHandler -> AddViewerToList (fpViewer);
+	fpSceneHandler -> SetCurrentViewer (fpViewer);
 
-      const G4ViewParameters& vp = fpViewer->GetViewParameters();
-      if (fVerbosity >= parameters) {
-	G4cout << " view parameters are:\n  " << vp << G4endl;
-      }
-
-      if (vp.IsCulling () && vp.IsCullingInvisible ()) {
-	static G4bool warned = false;
 	if (fVerbosity >= confirmations) {
-	  if (!warned) {
-	    G4cout <<
+	  G4cout << "G4VisManager::CreateViewer: new viewer created."
+		 << G4endl;
+	}
+
+	const G4ViewParameters& vp = fpViewer->GetViewParameters();
+	if (fVerbosity >= parameters) {
+	  G4cout << " view parameters are:\n  " << vp << G4endl;
+	}
+
+	if (vp.IsCulling () && vp.IsCullingInvisible ()) {
+	  static G4bool warned = false;
+	  if (fVerbosity >= confirmations) {
+	    if (!warned) {
+	      G4cout <<
   "NOTE: objects with visibility flag set to \"false\""
   " will not be drawn!"
   "\n  \"/vis/viewer/set/culling global false\" to Draw such objects."
   "\n  Also see other \"/vis/viewer/set\" commands."
-		   << G4endl;
-	    warned = true;
+		     << G4endl;
+	      warned = true;
+	    }
 	  }
 	}
-      }
-      if (vp.IsCullingCovered ()) {
-	static G4bool warned = false;
-	if (fVerbosity >= warnings) {
-	  if (!warned) {
-	    G4cout <<
+	if (vp.IsCullingCovered ()) {
+	  static G4bool warned = false;
+	  if (fVerbosity >= warnings) {
+	    if (!warned) {
+	      G4cout <<
   "WARNING: covered objects in solid mode will not be rendered!"
   "\n  \"/vis/viewer/set/culling coveredDaughters false\" to reverse this."
   "\n  Also see other \"/vis/viewer/set\" commands."
-		 << G4endl;
-	    warned = true;
+		     << G4endl;
+	      warned = true;
+	    }
 	  }
 	}
-      }
-    }
-    else {
-      if (fVerbosity >= errors) {
-	G4cout << "ERROR in G4VisManager::CreateViewer during "
-	       << fpGraphicsSystem -> GetName ()
-	       <<	" viewer creation.\n  No action taken."
-	       << G4endl;
       }
     }
   }
@@ -1131,8 +1140,8 @@ void G4VisManager::EndOfEvent ()
   G4RunManager* runManager = G4RunManager::GetRunManager();
   const G4Run* currentRun = runManager->GetCurrentRun();
 
-  const G4Event* currentEvent =
-    G4EventManager::GetEventManager()->GetConstCurrentEvent();
+  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
 
   ClearTransientStoreIfMarked();
@@ -1158,7 +1167,7 @@ void G4VisManager::EndOfEvent ()
     } else {  // Last event...
       // Keep, but only if user has not kept any...
       if (!nKeptEvents) {
-	G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+	eventManager->KeepTheCurrentEvent();
 	fKeptLastEvent = true;
       }
     }
@@ -1180,7 +1189,7 @@ void G4VisManager::EndOfEvent ()
 	warned = true;
       }
     } else if (maxNumberOfKeptEvents != 0) {
-      G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+      eventManager->KeepTheCurrentEvent();
     }
   }
 }

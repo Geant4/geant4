@@ -23,16 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// CLASS DESCRIPTION
-// G4CascadeInterface defines an interface to HETC and INUCL 
-// models of an medium energy (~ 0.5 - 5 GeV) intra-nuclear transport.
-// If you have any questions, please contact 
-// package writer aatos.heikkinen@cern.ch.
-// --------------------------------------------------------------------
-
-// This file is based on G4CascadeInterface.hh
-// Modifications by: Pekka Kaitaniemi (kaitanie@cc.helsinki.fi)
-// Helsinki Institute of Physics
+// Pekka Kaitaniemi, HIP 
+// Aatos Heikkinen
 
 #ifndef G4ELASTICCASCADEINTERFACE_H
 #define G4ELASTICCASCADEINTERFACE_H 1
@@ -46,23 +38,15 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 
-
 class G4ElasticCascadeInterface : public G4VIntraNuclearTransportModel {
-
 public:
-
   G4ElasticCascadeInterface();
-
-  ~G4ElasticCascadeInterface(){
-  }
+  ~G4ElasticCascadeInterface(){}
 
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
-
-  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
-                                   G4Nucleus& theNucleus); 
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus); 
 
 private:
-
   G4int operator==(G4ElasticCascadeInterface& right) {
     return (this == &right);
   }
@@ -72,9 +56,7 @@ private:
   }
 
   G4int verboseLevel;
-private:
   G4HadFinalState theResult;  
-  
 };
 
-#endif  //G4ELASTICCASCADEINTERFACE_H
+#endif 

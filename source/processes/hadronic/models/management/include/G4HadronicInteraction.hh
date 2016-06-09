@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HadronicInteraction.hh,v 1.8 2007/01/11 05:30:01 dennis Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
  // Hadronic Interaction  abstract base class
  // This class is the base class for the model classes.

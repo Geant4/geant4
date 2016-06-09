@@ -1,4 +1,4 @@
-# $Id: __init__.py,v 1.12 2006/12/01 02:21:56 kmura Exp $
+# $Id: __init__.py,v 1.13 2007/05/28 03:02:05 kmura Exp $
 """
 # ==================================================================
 #  [Geant4] module package
@@ -13,8 +13,8 @@
 # ==================================================================
 # docs
 # ==================================================================
-__version__ = '1.2.0'
-__date__    = '01/Dec/2006'
+__version__ = '1.3.0'
+__date__    = '25/May/2007'
 __author__  = 'K.Murakami (Koichi.Murakami@kek.jp)'
 __url__     = 'http://www-geant4.kek.jp/projects/Geant4Py/'
 
@@ -257,4 +257,21 @@ def ListMaterial(self):
   print " +------------------------------------------------------------------"
 
 G4MaterialTable.ListMaterial = ListMaterial
+
+# ------------------------------------------------------------------
+# signal handler
+# ------------------------------------------------------------------
+import signal
+
+def RunAbort(signum, frame):
+  state= gStateManager.GetCurrentState();
+
+  if(state==G4ApplicationState.G4State_GeomClosed or
+     state==G4ApplicationState.G4State_EventProc):
+    print "aborting Run ...";
+    gRunManager.AbortRun(True);
+  else:
+    raise KeyboardInterrupt
+    
+signal.signal(signal.SIGINT, RunAbort)
 

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4DCtable.hh,v 1.9 2006/06/29 21:12:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef G4DCtable_H

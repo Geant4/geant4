@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.60 2006/06/29 18:45:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Tubs.cc,v 1.63 2007/05/18 07:38:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // class G4Tubs
@@ -33,6 +33,7 @@
 // History:
 //
 //
+// 11.05.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for phi < 2pi
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 16.03.05 V.Grichine: SurfaceNormal(p) with edges/corners for boolean
 // 20.07.01 V.Grichine: bug fixed in Inside(p)
@@ -61,6 +62,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -88,6 +90,9 @@ G4Tubs::G4Tubs( const G4String &pName,
                       G4double pSPhi, G4double pDPhi )
   : G4CSGSolid(pName)
 {
+
+  kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
+  kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   if (pDz>0) // Check z-len
   {
@@ -439,7 +444,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
         // if not inside, try outer tolerant phi boundaries
 
         pPhi = std::atan2(p.y(),p.x()) ;
-
+        if((tolRMin==0)&&(p.x()==0)&&(p.y()==0)){in=kSurface;}
+        else{
         if ( pPhi < -kAngTolerance*0.5 ) pPhi += twopi ; // 0<=pPhi<2pi
 
         if ( fSPhi >= 0 )
@@ -473,7 +479,8 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
           {
             in = kInside ;
           }
-        }                    
+        }
+	}                    
       }
     }
     else  // Try generous boundaries
@@ -1369,6 +1376,13 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
       cPhi    = fSPhi + fDPhi*0.5 ;
       sinCPhi = std::sin(cPhi) ;
       cosCPhi = std::cos(cPhi) ;
+      // add angle calculation with correction 
+      // of the  difference in domain of atan2 and Sphi
+        vphi = std::atan2(v.y(),v.x()) ;
+
+         if ( vphi < fSPhi - kAngTolerance*0.5  )             vphi += twopi ; 
+         else if ( vphi > fSPhi + fDPhi + kAngTolerance*0.5 ) vphi -= twopi; 
+
 
       if ( p.x() || p.y() )  // Check if on z axis (rho not needed later)
       {
@@ -1382,7 +1396,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         compS   = -sinSPhi*v.x() + cosSPhi*v.y() ;
         compE   =  sinEPhi*v.x() - cosEPhi*v.y() ;
         sidephi = kNull;
-
+        
         //       if ( pDistS <= 0 && pDistE <= 0 )
 
         if( ( (fDPhi <= pi) && ( (pDistS <= 0.5*kCarTolerance)
@@ -1391,21 +1405,30 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
                               && (pDistE >  0.5*kCarTolerance) ) )  )
         {
           // Inside both phi *full* planes
+	  
           if ( compS < 0 )
           {
             sphi = pDistS/compS ;
+	    
             if (sphi >= -0.5*kCarTolerance)
             {
               xi = p.x() + sphi*v.x() ;
               yi = p.y() + sphi*v.y() ;
-
+	      
               // Check intersecting with correct half-plane
               // (if not -> no intersect)
               //
-              if ((yi*cosCPhi-xi*sinCPhi)>=0)
-              {
-                sphi = kInfinity ;
+              if((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance)){
+		if(((fSPhi-0.5*kAngTolerance)<=vphi)&&((ePhi+0.5*kAngTolerance)>=vphi))
+                   { sphi = kInfinity; }
+				       
               }
+              else
+               if ((yi*cosCPhi-xi*sinCPhi)>=0)
+               {
+                sphi = kInfinity ;
+               }
+              
               else
               {
                 sidephi = kSPhi ;
@@ -1428,15 +1451,24 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
           if ( compE < 0 )
           {
             sphi2 = pDistE/compE ;
-
+            
             // Only check further if < starting phi intersection
             //
             if ( (sphi2 > -0.5*kCarTolerance) && (sphi2 < sphi) )
             {
               xi = p.x() + sphi2*v.x() ;
               yi = p.y() + sphi2*v.y() ;
-
-              // Check intersecting with correct half-plane 
+	      
+              if((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance)){
+                  // Leaving via ending phi
+                  if(!(((fSPhi-0.5*kAngTolerance)<=vphi)&&((ePhi+0.5*kAngTolerance)>=vphi))){
+                  sidephi = kEPhi ;
+                  if ( pDistE <= -kCarTolerance*0.5 ) sphi = sphi2 ;
+                  else                                sphi = 0.0 ;
+                  }
+              }
+ 
+              else    // Check intersecting with correct half-plane 
 
               if ( (yi*cosCPhi-xi*sinCPhi) >= 0)
               {
@@ -1459,8 +1491,13 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         // On z axis + travel not || to z axis -> if phi of vector direction
         // within phi of shape, Step limited by rmax, else Step =0
 
-        vphi = std::atan2(v.y(),v.x()) ;
-        if ( (fSPhi < vphi) && (vphi < fSPhi + fDPhi) )
+        // vphi = std::atan2(v.y(),v.x()) ;//defined previosly
+	//G4cout<<"In axis vphi="<<vphi<<" Sphi="<<fSPhi<<" Ephi="<<ePhi<<G4endl;
+        // old  if ( (fSPhi < vphi) && (vphi < fSPhi + fDPhi) )
+        // new : correction for if statement, must be '<='  
+               
+        if ( ((fSPhi-0.5*kAngTolerance) <= vphi) && (vphi <=( ePhi+0.5*kAngTolerance) )) 
+	
         {
           sphi = kInfinity ;
         }

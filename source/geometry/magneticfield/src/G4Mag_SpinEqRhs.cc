@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Mag_SpinEqRhs.cc,v 1.12 2006/06/29 18:24:39 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // This is the standard right-hand side for equation of motion.
 // This version of the right-hand side includes the three components

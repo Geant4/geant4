@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParameterisationPolycone.hh,v 1.7 2006/06/29 18:18:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 // 
 // classes G4ParameterisationPolyconeRho,
 //         G4ParameterisationPolyconePhi,

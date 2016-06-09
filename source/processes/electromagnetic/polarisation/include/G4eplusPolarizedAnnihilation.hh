@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.hh,v 1.1 2006/09/21 21:35:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4eplusPolarizedAnnihilation.hh,v 1.3 2007/06/11 13:37:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,7 @@
 // Modifications:
 // 26-07-06 modified cross section  (P. Starovoitov)
 // 21-08-06 interface updated   (A. Schaelicke)
+// 11-06-07, add PostStepGetPhysicalInteractionLength (A.Schalicke)
 //
 //
 // Class Description:
@@ -90,6 +91,12 @@ public:
                               G4double previousStepSize,
                               G4ForceCondition* condition);
 
+  G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+                             G4double   previousStepSize,
+                             G4ForceCondition* condition
+                            );
+
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   void BuildAsymmetryTable(const G4ParticleDefinition& part);
   virtual void PreparePhysicsTable(const G4ParticleDefinition&);
@@ -103,11 +110,6 @@ public:
 protected:
 
   virtual void InitialiseProcess(const G4ParticleDefinition*);
-
-  std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*);
 
 private:
   
@@ -136,18 +138,6 @@ inline G4double G4eplusPolarizedAnnihilation::AtRestGetPhysicalInteractionLength
 {
   *condition = NotForced;
   return 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline std::vector<G4DynamicParticle*>* G4eplusPolarizedAnnihilation::SecondariesPostStep(
-                                                  G4VEmModel* model,
-                                            const G4MaterialCutsCouple* couple,
-                                            const G4DynamicParticle* dp)
-{
-  fParticleChange.SetProposedKineticEnergy(0.);
-  fParticleChange.ProposeTrackStatus(fStopAndKill);
-  return model->SampleSecondaries(couple, dp);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

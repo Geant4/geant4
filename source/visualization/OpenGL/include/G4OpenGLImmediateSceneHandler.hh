@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.11 2006/08/16 10:34:36 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.13 2007/04/04 16:50:26 allison Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -58,25 +58,13 @@ public:
   void BeginModeling ();
   void EndModeling ();
   void AddPrimitive (const G4Polyline&);
+  void AddPrimitive (const G4Polymarker&);
+  void AddPrimitive (const G4Text& text);
   void AddPrimitive (const G4Circle&);
   void AddPrimitive (const G4Square&);
-  // Explicitly invoke base class methods to avoid warnings about
-  // hiding of base class methods...
-  void AddPrimitive (const G4Text& text) {
-    G4OpenGLSceneHandler::AddPrimitive (text);
-  }
-  void AddPrimitive (const G4Polyhedron& polyhedron) {
-    G4OpenGLSceneHandler::AddPrimitive (polyhedron);
-  }
-  void AddPrimitive (const G4NURBS& nurbs) {
-    G4OpenGLSceneHandler::AddPrimitive (nurbs);
-  }
-  void AddPrimitive(const G4Polymarker& polymarker) {
-    G4OpenGLSceneHandler::AddPrimitive (polymarker);
-  }
-  void AddPrimitive (const G4Scale& scale) {
-    G4OpenGLSceneHandler::AddPrimitive (scale);
-  }
+  void AddPrimitive (const G4Scale& scale);
+  void AddPrimitive (const G4Polyhedron&);
+  void AddPrimitive (const G4NURBS&);
   void ClearTransientStore ();
 
 protected:

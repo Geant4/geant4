@@ -23,34 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4physicslists.cc,v 1.1 2006/11/20 08:53:05 kmura Exp $
-// $Name: geant4-08-02 $
+// $Id: pymodG4physicslists.cc,v 1.2 2007/05/28 03:11:20 kmura Exp $
+// $Name: geant4-09-00 $
 // ====================================================================
 //   pymodG4physicslists.cc [Geant4Py module]
 //
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "pyG4Version.hh"
 
 using namespace boost::python;
 
 // ====================================================================
 // module definition
 // ====================================================================
-#if G4VERSION_NUMBER >= 820
-
 void export_PhysicsLists();
-
-#endif
 
 BOOST_PYTHON_MODULE(G4physicslists)
 {
-#if G4VERSION_NUMBER >= 820
-
   export_PhysicsLists();
-
-#endif
-
 }
 

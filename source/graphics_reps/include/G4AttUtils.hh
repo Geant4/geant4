@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4AttUtils.hh,v 1.1 2006/09/11 18:04:58 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 // Jane Tinslay September 2006
 //

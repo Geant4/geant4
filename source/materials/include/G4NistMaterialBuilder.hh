@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4NistMaterialBuilder.hh,v 1.9 2006/10/17 15:15:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1

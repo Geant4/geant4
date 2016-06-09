@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2005/12/06 13:58:22 gcosmo Exp $
+$Id: History,v 1.23 2007/05/23 13:39:57 tnikitin Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 23rd, 2007  John Apostolakis  -  fieldex02-V08-03-00
+--------------------------------
+- Taken out FastSimulationManagerProcess, which is not needed.
 
 Dec 6th, 2005  Gabriele Cosmo
 -----------------------------

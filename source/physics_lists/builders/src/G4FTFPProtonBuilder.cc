@@ -23,50 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4FTFPProtonBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+#include "G4FTFPProtonBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
- G4FTFPProtonBuilder::
- G4FTFPProtonBuilder() 
- {
-   theMin = 15*GeV;
-   theModel = new G4TheoFSGenerator;
+G4FTFPProtonBuilder::
+G4FTFPProtonBuilder(G4bool quasiElastic) 
+{
+  theMin = 4*GeV;
+  theModel = new G4TheoFSGenerator;
 
-   theStringModel = new G4FTFModel;
-   theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
-   theStringModel->SetFragmentationModel(theStringDecay);
+  theStringModel = new G4FTFModel;
+  theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
+  theStringModel->SetFragmentationModel(theStringDecay);
 
-   theCascade = new G4GeneratorPrecompoundInterface;
-   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-   theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4GeneratorPrecompoundInterface;
+  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
+  theCascade->SetDeExcitation(thePreEquilib);  
 
-   theModel->SetHighEnergyGenerator(theStringModel);
-   theModel->SetTransport(theCascade);
- }
+  theModel->SetHighEnergyGenerator(theStringModel);
+  if (quasiElastic)
+  {
+     theQuasiElastic=new G4QuasiElasticChannel;
+     theModel->SetQuasiElasticChannel(theQuasiElastic);
+  } else 
+  {  theQuasiElastic=0;}  
 
- void G4FTFPProtonBuilder::
- Build(G4ProtonInelasticProcess * aP)
- {
-   theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->RegisterMe(theModel);
-   aP->AddDataSet(&theXSec);  
- }
+  theModel->SetTransport(theCascade);
+}
 
- G4FTFPProtonBuilder::
- ~G4FTFPProtonBuilder() 
- {
-   delete theStringDecay;
-   delete theStringModel;
-   delete theModel;
-   delete theCascade;
- }
+void G4FTFPProtonBuilder::
+Build(G4ProtonInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(100*TeV);
+  aP->RegisterMe(theModel);
+  aP->AddDataSet(&theXSec);  
+}
 
- void G4FTFPProtonBuilder::
- Build(G4HadronElasticProcess * )
- {
- }
+G4FTFPProtonBuilder::
+~G4FTFPProtonBuilder() 
+{
+  delete theStringDecay;
+  delete theStringModel;
+  delete theModel;
+  delete theCascade;
+  if ( theQuasiElastic ) delete theQuasiElastic;
+}
+
+void G4FTFPProtonBuilder::
+Build(G4HadronElasticProcess * )
+{
+}
 
  // 2002 by J.P. Wellisch

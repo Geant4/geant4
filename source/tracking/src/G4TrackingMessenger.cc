@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4TrackingMessenger.cc,v 1.15 2006/11/03 11:13:38 allison Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 //---------------------------------------------------------------
 //

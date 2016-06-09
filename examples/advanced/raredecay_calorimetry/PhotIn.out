@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,7 +15,6 @@ You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
@@ -489,18 +488,26 @@ PhotInPhysicsList::SetCuts: default cut length : 1 mm
 /run/dumpRegion
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Vac 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 Region <Region0> -- appears in <World> world volume
+ Root logical volume(s) : Sect-0 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium Scintillator 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
 
 Region <Region1> -- appears in <World> world volume
+ Root logical volume(s) : Sect-1 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium Scintillator 
  Production cuts :  gamma 1 cm     e- 1 cm     e+ 1 cm 
 
 Region <Region2> -- appears in <World> world volume
+ Root logical volume(s) : Sect-2 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium Scintillator 
  Production cuts :  gamma 10 cm     e- 10 cm     e+ 10 cm 
 /PhotIn/projParticle pi+
@@ -527,7 +534,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -540,7 +547,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -553,7 +560,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -566,7 +573,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -578,7 +585,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -591,7 +598,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -638,7 +645,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -704,129 +711,3 @@ Index : 6     used in the geometry : Yes     recalculation needed : No
 Start Run processing.
 PhotInPrimaryGeneratorAction::GeneratePrimaries: pi+,E=100
 PhotInPrimaryGeneratorAction::GeneratePrimaries: part&E're redefined
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=74.19s Real=77.22s Sys=2.86s
-##############################################################
- Run Summary - Number of events : 1
-##############################################################
-Region Region0
-====================
- Production thresholds :
- -----------------------
- gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy deposition in Absorber 1.1014107 GeV, in Gap 0 eV 
- Number of secondaries in the event :
- ------------------------------------
- gamma in Absorber 19, in Gap      137
- e-    in Absorber 412, in Gap 912
- e+    in Absorber 1, in Gap 12
- Minimum kinetic energy of generated secondaries :
- -------------------------------------------------
- gamma in Absorber = 3.3336565 keV, in Gap = 7.0059449 keV
- e-    in Absorber = 0.36374712 eV , in Gap = 30.878493 eV 
- e+    in Absorber = 8.0783104 MeV    in Gap = 1.044149 MeV
- Mean total track length of neutrons in the event : in Absorber = 3.3745678 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =87, in Gap = 0
-##############################################################
-Region Region1
-====================
- Production thresholds :
- -----------------------
- gamma 1 cm     e- 1 cm     e+ 1 cm 
- Energy deposition in Absorber 65.908667 GeV, in Gap 0 eV 
- Number of secondaries in the event :
- ------------------------------------
- gamma in Absorber 2095, in Gap      9035
- e-    in Absorber 22065, in Gap 47423
- e+    in Absorber 136, in Gap 742
- Minimum kinetic energy of generated secondaries :
- -------------------------------------------------
- gamma in Absorber = 5.7170692 keV, in Gap = 20.503949 keV
- e-    in Absorber = 0.26932028 eV , in Gap = 0.045852756 eV 
- e+    in Absorber = 214.55633 keV    in Gap = 156.10678 keV
- Mean total track length of neutrons in the event : in Absorber = 81.069248 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =1872, in Gap = 0
-##############################################################
-Region Region2
-====================
- Production thresholds :
- -----------------------
- gamma 10 cm     e- 10 cm     e+ 10 cm 
- Energy deposition in Absorber 671.94787 MeV, in Gap 0 eV 
- Number of secondaries in the event :
- ------------------------------------
- gamma in Absorber 22, in Gap      45
- e-    in Absorber 451, in Gap 661
- e+    in Absorber 3, in Gap 9
- Minimum kinetic energy of generated secondaries :
- -------------------------------------------------
- gamma in Absorber = 45.665742 keV, in Gap = 83.908611 keV
- e-    in Absorber = 32.180541 eV , in Gap = 6.014585 eV 
- e+    in Absorber = 1.3764601 MeV    in Gap = 1.1425304 MeV
- Mean total track length of neutrons in the event : in Absorber = 5.6787259 m  , in Gap = 0 fm 
- Mean number of steps of charged particles in the event : in Absorber =127, in Gap = 0
-##############################################################
-/run/dumpCouples
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Vac
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.8873065 keV    e- 596.68045 keV    e+ 568.01052 keV
- Region(s) which use this couple : 
-    Region0
-
-Index : 2     used in the geometry : Yes     recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 2.3689452 keV    e- 355.79082 keV    e+ 347.13789 keV
- Region(s) which use this couple : 
-    Region0
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
- Energy thresholds :  gamma 20.494884 keV    e- 4.5487391 MeV    e+ 4.2771968 MeV
- Region(s) which use this couple : 
-    Region1
-
-Index : 4     used in the geometry : Yes     recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 1 cm     e- 1 cm     e+ 1 cm 
- Energy thresholds :  gamma 5.6988252 keV    e- 2.200168 MeV    e+ 2.0688264 MeV
- Region(s) which use this couple : 
-    Region1
-
-Index : 5     used in the geometry : Yes     recalculation needed : No 
- Material : Aluminium
- Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
- Energy thresholds :  gamma 79.141018 keV    e- 56.740688 MeV    e+ 54.014351 MeV
- Region(s) which use this couple : 
-    Region2
-
-Index : 6     used in the geometry : Yes     recalculation needed : No 
- Material : Scintillator
- Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
- Energy thresholds :  gamma 18.864481 keV    e- 23.386044 MeV    e+ 22.262366 MeV
- Region(s) which use this couple : 
-    Region2
-
-====================================================================
-
-##
-##
-##
-/run/setCutForRegqion Region0 0.2 mm
-Graphics systems deleted.
-Visualization Manager deleting...
-G4 kernel has come to Quit state.

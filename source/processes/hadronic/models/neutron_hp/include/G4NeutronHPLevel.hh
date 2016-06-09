@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLevel.hh,v 1.10 2006/06/29 20:48:29 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4NeutronHPLevel.hh,v 1.11 2007/06/06 12:45:13 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 #ifndef G4NeutronHPLevel_h
 #define G4NeutronHPLevel_h 1
@@ -45,7 +45,7 @@ class G4NeutronHPLevel
   G4NeutronHPLevel() 
   {
     nGammas = 0;
-    theGammas = NULL;
+    theGammas = 0;
   }
 
   ~G4NeutronHPLevel();

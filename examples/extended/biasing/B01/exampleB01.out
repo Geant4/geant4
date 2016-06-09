@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-03-cand-00    (5-May-2007)
+ Geant4 version Name: geant4-09-00-cand-03    (29-June-2007)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -25,8 +25,20 @@ Going to assign importance: 16384, to volume: cell_15
 Going to assign importance: 32768, to volume: cell_16
 Going to assign importance: 65536, to volume: cell_17
 Going to assign importance: 131072, to volume: cell_18
+ preparing importance sampling 
+ creating istore 
+ creating importance configurator 
+ entering configure 
+ importance configurator push_back 
+ pushed 
+ vsampler configurator loop 
+ looping 1
+ sampler configurator 
+ entering importance configure, paraflag 0
+ creating importance process, paraflag is: 0
+ importance process paraflag is: 0
 === G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
-  ProcessName: MScoreProcess
+  ProcessName: ImportanceProcess
 The initial Vectors: 
 GPIL Vector: 
    Decay
@@ -49,56 +61,18 @@ GPIL Vector:
    HadronFission
    inelastic
    HadronElastic
-   MScoreProcess
+   ImportanceProcess
    Transportation
 DoIt Vector: 
    Transportation
-   MScoreProcess
+   ImportanceProcess
    HadronElastic
    inelastic
    HadronFission
    HadronCapture
    Decay
 ================================================
-=== G4ProcessPlacer::AddProcessAsSecondDoIt: for: neutron
-  ProcessName: MassImportanceProcess
-The initial Vectors: 
-GPIL Vector: 
-   Decay
-   HadronCapture
-   HadronFission
-   inelastic
-   HadronElastic
-   MScoreProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   MScoreProcess
-   HadronElastic
-   inelastic
-   HadronFission
-   HadronCapture
-   Decay
-The final Vectors: 
-GPIL Vector: 
-   Decay
-   HadronCapture
-   HadronFission
-   inelastic
-   HadronElastic
-   MScoreProcess
-   MassImportanceProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   MassImportanceProcess
-   MScoreProcess
-   HadronElastic
-   inelastic
-   HadronFission
-   HadronCapture
-   Decay
-================================================
+ configure preconf 
 
 conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
       sampling secondary e+e- according Bethe-Heitler model
@@ -116,7 +90,7 @@ phot:  Total cross sections from Sandia parametrisation.
 msc:  Model variant of multiple scattering for e-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -129,7 +103,7 @@ eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,7 +116,7 @@ eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
 
 annihil:       Sampling according eplus2gg model
       tables are built for  e+
@@ -151,7 +125,7 @@ annihil:       Sampling according eplus2gg model
 msc:  Model variant of multiple scattering for proton
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -163,7 +137,7 @@ hIoni:   tables are built for  proton
 
 msc:  Model variant of multiple scattering for GenericIon
       LateralDisplacementFlag=  0   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 1
 
 hIoni:   tables are built for  anti_proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -176,7 +150,7 @@ hIoni:   tables are built for  anti_proton
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 muIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -223,7 +197,7 @@ hIoni:   tables are built for  pi+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       LateralDisplacementFlag=  1   Skin= 0
-      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
 
 hIoni:   tables are built for  pi-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -232,29 +206,44 @@ hIoni:   tables are built for  pi-
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
       Parametrisation from Bragg for protons below.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         118 |         150 |         149 |         149 |   7.2096509 |   8.5785508 |           1 |
-cell_02_rep:0............ |           2 |          87 |         192 |         189 |        94.5 |   8.2328232 |    8.660209 |           1 |
-cell_03_rep:0............ |           4 |          99 |         212 |         240 |          60 |   6.6805827 |   7.9415373 |           1 |
-cell_04_rep:0............ |           8 |         119 |         258 |         287 |      35.875 |    6.957465 |   7.8605556 |           1 |
-cell_05_rep:0............ |          16 |         150 |         321 |         396 |       24.75 |   5.1009587 |    7.099783 |           1 |
-cell_06_rep:0............ |          32 |         162 |         353 |         426 |     13.3125 |   4.6037023 |   7.0570615 |           1 |
-cell_07_rep:0............ |          64 |         205 |         416 |         568 |       8.875 |   4.8261852 |   6.6681408 |           1 |
-cell_08_rep:0............ |         128 |         223 |         486 |         656 |       5.125 |  0.53648464 |   6.6539856 |           1 |
-cell_09_rep:0............ |         256 |         251 |         519 |         751 |   2.9335938 |    4.943392 |     6.39047 |           1 |
-cell_10_rep:0............ |         512 |         288 |         597 |         875 |   1.7089844 |   4.3487469 |    6.110481 |           1 |
-cell_11_rep:0............ |        1024 |         337 |         698 |        1058 |   1.0332031 |   4.4329506 |   6.0885935 |           1 |
-cell_12_rep:0............ |        2048 |         393 |         782 |        1238 |  0.60449219 |   4.4763037 |   6.0639968 |           1 |
-cell_13_rep:0............ |        4096 |         451 |         930 |        1440 |   0.3515625 |   4.2499709 |   5.7580044 |           1 |
-cell_14_rep:0............ |        8192 |         472 |         985 |        1522 |  0.18579102 | 0.072154763 |   5.4255988 |           1 |
-cell_15_rep:0............ |       16384 |         503 |        1014 |        1715 |  0.10467529 |  0.87569507 |   5.1929267 |           1 |
-cell_16_rep:0............ |       32768 |         576 |        1204 |        2080 | 0.063476562 |  0.13469363 |     4.97975 |           1 |
-cell_17_rep:0............ |       65536 |         635 |        1281 |        2314 | 0.035308838 |   3.3098112 |   4.7409862 |           1 |
-cell_18_rep:0............ |      131072 |         565 |        1356 |        2505 | 0.019111633 |   3.1110957 |    4.603961 |           1 |
-rest_rep:0............... |      131072 |         601 |         601 |           0 |           0 |           0 |           0 |           0 |
-shieldWorld_rep:0........ |           1 |          14 |         114 |           0 |           0 |          10 |          10 |           1 |
+++ ConcreteSD/Collisions id 0
+++ ConcreteSD/CollWeight id 1
+++ ConcreteSD/Population id 2
+++ ConcreteSD/TrackEnter id 3
+++ ConcreteSD/SL id 4
+++ ConcreteSD/SLW id 5
+++ ConcreteSD/SLWE id 6
+++ ConcreteSD/SLW_V id 7
+++ ConcreteSD/SLWE_V id 8
+### Run 0 start.
+ ###### EndOfRunAction  
+=============================================================
+ Number of event processed : 100
+=============================================================
+        Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
+       cell_00 |             7 |           106 |             0 |             0 |     4.8570632 |      6.394919 |             1 |     1113.0539 |     1113.0539 |     39.997852 |     7117.8892 |     194.27209 |
+       cell_01 |           107 |           126 |           160 |           160 |      7.245862 |     8.6524027 |             1 |     12127.588 |     12127.588 |     350.85037 |     104932.77 |     2542.2133 |
+       cell_02 |            72 |           171 |           216 |           108 |     6.1900176 |     8.0820959 |           0.5 |     16630.552 |     8315.2759 |     269.99556 |     67204.857 |     1671.2773 |
+       cell_03 |            84 |           188 |           199 |         49.75 |     7.3393396 |     8.7216156 |          0.25 |      19277.93 |     4819.4826 |     139.36705 |     42033.675 |     1022.8621 |
+       cell_04 |           107 |           249 |           314 |         39.25 |     6.2237328 |     8.0359115 |         0.125 |     25982.232 |      3247.779 |     105.22726 |     26098.865 |     654.90636 |
+       cell_05 |           119 |           274 |           350 |        21.875 |     5.8304001 |     7.7473901 |        0.0625 |      29050.14 |     1815.6337 |     61.166969 |     14066.423 |      356.6279 |
+       cell_06 |           138 |           314 |           483 |      15.09375 |      5.061069 |     7.4461955 |       0.03125 |     33710.715 |     1053.4598 |     39.851437 |     7844.2679 |     201.69087 |
+       cell_07 |           138 |           312 |           458 |       7.15625 |     5.2852313 |     7.2039361 |      0.015625 |      35495.11 |      554.6111 |     19.756546 |     3995.3829 |     104.41791 |
+       cell_08 |           170 |           390 |           654 |      5.109375 |     4.9015271 |      6.698322 |     0.0078125 |     45936.052 |      358.8754 |     13.198783 |      2403.863 |     64.694191 |
+       cell_09 |           186 |           431 |           655 |     2.5585938 |     4.5999796 |     6.2994019 |    0.00390625 |     45880.729 |      179.2216 |      6.788147 |     1128.9889 |     31.225338 |
+       cell_10 |           205 |           461 |           802 |     1.5664062 |     4.0725245 |     5.9959975 |   0.001953125 |     52001.934 |     101.56628 |     4.2218939 |     608.99115 |     17.193766 |
+       cell_11 |           232 |           512 |           857 |    0.83691406 |    0.75577079 |     5.6832231 |  0.0009765625 |     58106.748 |     56.744871 |     12.259625 |     322.49376 |     9.2654668 |
+       cell_12 |           271 |           584 |          1056 |      0.515625 |     3.0370662 |     5.2506271 | 0.00048828125 |     67467.473 |     32.943102 |     1.6912862 |     172.97195 |      5.136548 |
+       cell_13 |           311 |           675 |          1216 |      0.296875 |     3.2604017 |     4.9243062 | 0.00024414062 |     75024.488 |     18.316525 |    0.84787155 |     90.196179 |     2.7644018 |
+       cell_14 |           329 |           758 |          1419 |    0.17321777 |     3.4451656 |      4.769336 | 0.00012207031 |     84584.636 |     10.325273 |     0.4478539 |     49.244695 |     1.5429309 |
+       cell_15 |           364 |           783 |          1540 |   0.093994141 |    0.40940195 |     4.4470643 | 6.1035156e-05 |     91736.425 |      5.599147 |     1.9622683 |     24.899767 |    0.80335646 |
+       cell_16 |           398 |           858 |          1703 |   0.051971436 |    0.25175739 |     4.2259526 | 3.0517578e-05 |     98797.986 |     3.0150753 |     1.6715126 |     12.741565 |    0.42081564 |
+       cell_17 |           413 |           932 |          1881 |   0.028701782 |     2.8791199 |     4.1895463 | 1.5258789e-05 |     107543.85 |     1.6409889 |   0.079050326 |      6.874999 |    0.22759537 |
+       cell_18 |           383 |           889 |          1706 |   0.013015747 |     2.8292119 |     4.1307913 | 7.6293945e-06 |     100556.11 |    0.76718227 |   0.037287182 |     3.1690698 |    0.10549334 |
+       cell_19 |           440 |           440 |             0 |             0 |     2.8202313 |     4.1847543 | 7.6293945e-06 |     63345.904 |    0.48329089 |   0.023651264 |     2.0224537 |   0.066702034 |
+=============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
-  ProcessName: MassImportanceProcess, will be removed!
+  ProcessName: ImportanceProcess, will be removed!
   The initial Vectors: 
 GPIL Vector: 
    Decay
@@ -262,50 +251,11 @@ GPIL Vector:
    HadronFission
    inelastic
    HadronElastic
-   MScoreProcess
-   MassImportanceProcess
+   ImportanceProcess
    Transportation
 DoIt Vector: 
    Transportation
-   MassImportanceProcess
-   MScoreProcess
-   HadronElastic
-   inelastic
-   HadronFission
-   HadronCapture
-   Decay
-  The final Vectors: 
-GPIL Vector: 
-   Decay
-   HadronCapture
-   HadronFission
-   inelastic
-   HadronElastic
-   MScoreProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   MScoreProcess
-   HadronElastic
-   inelastic
-   HadronFission
-   HadronCapture
-   Decay
-================================================
-=== G4ProcessPlacer::RemoveProcess: for: neutron
-  ProcessName: MScoreProcess, will be removed!
-  The initial Vectors: 
-GPIL Vector: 
-   Decay
-   HadronCapture
-   HadronFission
-   inelastic
-   HadronElastic
-   MScoreProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   MScoreProcess
+   ImportanceProcess
    HadronElastic
    inelastic
    HadronFission

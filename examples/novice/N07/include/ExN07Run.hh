@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07Run.hh,v 1.5 2006/06/29 17:54:50 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: ExN07Run.hh,v 1.6 2007/05/04 01:49:28 asaim Exp $
+// GEANT4 tag $Name: geant4-09-00 $
 //
 
 #ifndef ExN07Run_h
@@ -73,6 +73,17 @@ class ExN07Run : public G4Run
     G4THitsMap<G4double> mapMin[6][3];
     G4int colIDMin[6][3];
 
+    // Maps for accumulation in parallel world
+    // mapPara[i][j]
+    //  i = 0 : Calor-AP_para    j = 0 : total eDep
+    //  i = 1 : Calor-BP_para    j = 1 : number of gamma
+    //  i = 2 : Calor-CP_para    j = 2 : number of electron
+    //                          j = 3 : number of positron
+    //                          j = 4 : total step length for e+/e-
+    //                          j = 5 : total number of steps for e+/e-
+    G4THitsMap<G4double> mapPara[3][6];
+    G4int colIDPara[3][6];
+
   public:
     inline G4double GetTotalE(G4int i) const
     { return GetTotal(mapSum[i][0]); }
@@ -86,12 +97,20 @@ class ExN07Run : public G4Run
     { return GetTotal(mapSum[i][4]); }
     inline G4double GetNStep(G4int i) const
     { return GetTotal(mapSum[i][5]); }
+
     inline G4double GetEMinGamma(G4int i) const
     { return FindMinimum(mapMin[i][0]); }
     inline G4double GetEMinElectron(G4int i) const
     { return FindMinimum(mapMin[i][1]); }
     inline G4double GetEMinPositron(G4int i) const
     { return FindMinimum(mapMin[i][2]); }
+
+    inline G4double GetParaValue(G4int i,G4int j,G4int k) const
+    { 
+      G4double* p = mapPara[i][j][k];
+      if(p) return *p;
+      return 0.;
+    }
 };
 
 #endif
