@@ -34,6 +34,9 @@
 // 16 Jan 2002 Alex Howard     Created
 // 17 June 2002 Alex Howard    Successfully Modified to AIDA 2.2
 // 17 November 2002 Alex Howard Migrated to AIDA 3.0 and added fitting
+// 22 October 2009 Luciano Pandola Changed variables names for ntuple2
+//                                 (avoid problem with columns) and some 
+//                                 clean-up (e.g. remove ntuple4)
 //
 // -------------------------------------------------------------------
 #ifdef  G4ANALYSIS_USE
@@ -45,26 +48,18 @@ DMXAnalysisManager* DMXAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXAnalysisManager::DMXAnalysisManager() :
-  af(0), tree(0), hf(0), tpf(0),
-   ntuple1(0), ntuple2(0), ntuple3(0), ntuple4(0),
+  af(0), tf(0),tree(0), hf(0), tpf(0),
+   ntuple1(0), ntuple2(0), ntuple3(0), 
   hEsourcep(0), hEdepp(0), hEdepRecoil(0), hNumPhLow(0), hNumPhHigh(0),
   hAvPhArrival(0), hPhArrival(0), hPMTHits(0), h1stPMTHit(0),hGammaEdep(0), 
   hNeutronEdep(0), hElectronEdep(0), hPositronEdep(0), hOtherEdep(0) 
   //,funFact(0),fitFact(0),exponFun(0),gaussFun(0),e_fitter(0),fitResult(0)
-{
-  // tree is created and booked inside book()
-  ;
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXAnalysisManager::~DMXAnalysisManager() 
-{ 
-  delete tpf;
-  delete hf;
-  delete tree;
-  delete af;
- }
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,7 +86,7 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool)
   G4bool fileExists = true;
   G4bool readOnly   = false;
 
-  AIDA::ITreeFactory     * tf = af->createTreeFactory();
+  tf = af->createTreeFactory();
 
   tree = tf->create(histogramfile, "hbook", readOnly, fileExists);
 
@@ -108,28 +103,15 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool)
   ntuple1 = tpf->create( "1", "Particle Source Energy", 
 			     "double energy" );
 
-  //  assert(ntuple1);
-
   // ---- secondary ntuple ------   
 
   ntuple2 = tpf->create( "2", "Scintillation Hits Info", 
-				 "float Event,e_prim,tot_e,s_hits,xe_time,num_ph,avphtime,1stpart,1stparte,gamma,neutron,posi,elec,other,seed1,seed2" );
-
-  //assert(ntuple2);
+			 "float Event,e_prim,tot_e,s_hits,xe_time,num_ph,avphtime,firstpart,firstparte,gamma,neutron,posi,elec,other,seed1,seed2" );
 
   // ---- tertiary ntuple ------   
 
   ntuple3 = tpf->create( "3", "PMT Hits Info", 
 				"float event, hits, xpos, ypos, zpos" );
-
-  //assert(ntuple3);
-
-  // ---- extra ntuple ------   
-  ntuple4 = tpf->create( "4", "Particles energy type", 
-			     "float energy, NameIdx" );
-
-  //assert(ntuple4);
-
 
   // Creating an 1-dimensional histogram in the root directory of the tree
 
@@ -164,8 +146,6 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool)
   hPositronEdep = hf->createHistogram1D("94","Positron Ener Deposit/keV",1000,0.,1000.);
 
   hOtherEdep    = hf->createHistogram1D("95","Other Ener Deposit/keV", 1000,0.,1000.);
-  
-  delete tf;
 
  //  // Creating the plotter factory
 //   pf = af->createPlotterFactory();
@@ -203,14 +183,14 @@ void DMXAnalysisManager::book(G4String histogramfile, G4bool)
 //   //  assert(e_fitter); 
 
 //   G4cout << " Created e_fitter " << G4endl;
+  return;
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DMXAnalysisManager::Init()
-{
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -226,6 +206,13 @@ void DMXAnalysisManager::Finish()
 
   // close (will again commit)
   tree->close();
+
+  
+  delete tpf;
+  delete hf;
+  delete tree;
+  delete tf;
+  delete af;
 
   // extra delete as objects are created in book() method rather than during
   // initialisation of class
@@ -338,18 +325,16 @@ void DMXAnalysisManager::analyseScintHits(G4int event_id, G4double energy_pri, G
   
   hAvPhArrival->fill(aveTimePmtHits/ns);
 
-  // AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("2") );
-
  // Fill the ntuple
   ntuple2->fill( ntuple2->findColumn( "Event"   ), (G4float) event_id          );
-  ntuple2->fill( ntuple2->findColumn( "e_prim"  ), (G4float) energy_pri/keV    );
+  ntuple2->fill( ntuple2->findColumn( "e_prim"  ), (G4float) (energy_pri/keV)    );
   ntuple2->fill( ntuple2->findColumn( "tot_e"   ), (G4float) totEnergy         );
   ntuple2->fill( ntuple2->findColumn( "s_hits"  ), (G4float) S_hits            );
   ntuple2->fill( ntuple2->findColumn( "xe_time" ), (G4float) firstLXeHitTime   );
   ntuple2->fill( ntuple2->findColumn( "num_ph"  ), (G4float) P_hits            );
   ntuple2->fill( ntuple2->findColumn( "avphtime"), (G4float) aveTimePmtHits    );
-  ntuple2->fill( ntuple2->findColumn( "1stpart" ), (G4float) firstparticleIndex);
-  ntuple2->fill( ntuple2->findColumn( "1stparte"), (G4float) firstParticleE    );
+  ntuple2->fill( ntuple2->findColumn( "firstpart" ), (G4float) firstparticleIndex);
+  ntuple2->fill( ntuple2->findColumn( "firstparte"), (G4float) firstParticleE    );
   ntuple2->fill( ntuple2->findColumn( "gamma"   ), (G4float) gamma_ev          );
   ntuple2->fill( ntuple2->findColumn( "neutron" ), (G4float) neutron_ev        );
   ntuple2->fill( ntuple2->findColumn( "posi"    ), (G4float) positron_ev       );
@@ -360,7 +345,6 @@ void DMXAnalysisManager::analyseScintHits(G4int event_id, G4double energy_pri, G
 
   //Values of attributes are prepared; store them to the nTuple:
   ntuple2->addRow();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -374,8 +358,7 @@ void DMXAnalysisManager::analysePMTHits(G4int event, G4int i, G4double x, G4doub
     h1stPMTHit->fill(x,y);
   }
 
-  //AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("3") );
-  // Fill the secondaries ntuple
+  // Fill the ntuple
   ntuple3->fill( ntuple3->findColumn( "event" ), (G4float) event );
   ntuple3->fill( ntuple3->findColumn( "hits"  ), (G4float) i     );
   ntuple3->fill( ntuple3->findColumn( "xpos"  ), (G4float) x     );
@@ -383,19 +366,18 @@ void DMXAnalysisManager::analysePMTHits(G4int event, G4int i, G4double x, G4doub
   ntuple3->fill( ntuple3->findColumn( "zpos"  ), (G4float) z     );
 
   // NEW: Values of attributes are prepared; store them to the nTuple:
-  ntuple3->addRow(); // check for returning true ...
+  ntuple3->addRow(); 
 
 }
 
 void DMXAnalysisManager::analysePrimaryGenerator(G4double energy)
 {
 
-  // AIDA::ITuple * ntuple1 = dynamic_cast<AIDA::ITuple *> ( tree->find("1") );
   // Fill energy ntple:
   ntuple1->fill( ntuple1->findColumn( "energy" ), energy );
 
   // NEW: Values of attributes are prepared; store them to the nTuple:
-  ntuple1->addRow(); // check for returning true ...
+  ntuple1->addRow(); 
 
 }
 

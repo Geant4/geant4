@@ -16,6 +16,18 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+4-Feb-2009 M.Kosov                           (hadr-chips-body-V09-02-17) 
+-----------------------------------------------------------------------
+Fixed memory corruption in mass calculation
+
+4-Feb-2009 M.Kosov
+------------------
+Mass correction in G4Quasmon, and closed loop-call in G4QEnvironment
+
+26-Jan-2010 M.Kosov
+-------------------
+Mutual tag: cleaning up compilation warning in G4QEnvironment
+
 14-Dec-2009 M.Kosov                           (hadr-chips-body-V09-02-16) 
 -----------------------------------------------------------------------
 Mutual tag: Bug fix in G4QNucleus (crash in QGSC for 400 GeV p)

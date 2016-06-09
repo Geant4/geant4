@@ -26,9 +26,7 @@
 #ifndef G4INTERACTION_CASE_HH
 #define G4INTERACTION_CASE_HH
 
-//#ifndef G4INUCL_PARTICLE_HH
 #include "G4InuclParticle.hh"
-//#endif
 
 #include <algorithm>
 
@@ -37,7 +35,8 @@ class G4InteractionCase {
 public:
 
   G4InteractionCase() { 
-    bultag = std::pair<G4InuclParticle*, G4InuclParticle*>(0, 0);
+    bultag = std::pair<G4InuclParticle*, G4InuclParticle*>((G4InuclParticle*)0,
+                                                           (G4InuclParticle*)0);
     inter_case = 0;
   };
 

@@ -1,10 +1,10 @@
 #######################################################################
 #  MACRO FILE NAME: exN03Vis9.mac                                     #
 #                                                                     #
-#  AUTHOR(S): Guy Barrand
+#  AUTHOR(S): Guy Barrand                                             #
 #                                                                     #
 #  DATE:                                                              #
-#        Appril   08, 2004                                            #
+#        April   08, 2004                                             #
 #                                                                     #
 #  CONTENTS: A simplest macro to demonstrate visualization of         #
 #            detector geometry and events                             #

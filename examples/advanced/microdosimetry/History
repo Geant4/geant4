@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.12 2009/08/14 16:49:36 sincerti Exp $
+$Id: History,v 1.12.2.1 2010/04/06 09:41:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.12 2009/08/14 16:49:36 sincerti Exp $
 
                        Package History file
                        --------------------
+
+25 March 2010 - G.Folger    - microdosimetry-V09-02-05
+- do not use G4UItcsh on windows
 
 15 August 2009 - S. Incerti - microdosimetry-V09-02-04
 - fixed type in GenericIonDefinition in PhysicsList.cc

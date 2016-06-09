@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2009/04/24 15:54:39 gcosmo Exp $
+$Id: History,v 1.4.2.1 2010/04/06 09:58:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 25th, 2010  Gunter Folger  - G03-V09-02-02
+- Do not use G4UItcsh on windows.
 
 April 24th, 2009  Gabriele Cosmo - G03-V09-02-01
 - Added missing inclusion of headers after cleanup.

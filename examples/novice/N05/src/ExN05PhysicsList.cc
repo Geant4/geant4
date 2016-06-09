@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN05PhysicsList.cc,v 1.14 2007/11/30 18:08:42 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN05PhysicsList.cc,v 1.14.6.1 2010/03/19 14:12:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 
 
@@ -131,7 +131,9 @@ void ExN05PhysicsList::AddTransportation()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -160,7 +162,7 @@ void ExN05PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
       // Construct processes for electron
-      G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
+      G4VProcess* theeminusMultipleScattering = new G4eMultipleScattering();
       G4VProcess* theeminusIonisation = new G4eIonisation();
       G4VProcess* theeminusBremsstrahlung = new G4eBremsstrahlung();
       // add processes
@@ -178,7 +180,7 @@ void ExN05PhysicsList::ConstructEM()
     } else if (particleName == "e+") {
     //positron
       // Construct processes for positron
-      G4VProcess* theeplusMultipleScattering = new G4MultipleScattering();
+      G4VProcess* theeplusMultipleScattering = new G4eMultipleScattering();
       G4VProcess* theeplusIonisation = new G4eIonisation();
       G4VProcess* theeplusBremsstrahlung = new G4eBremsstrahlung();
       G4VProcess* theeplusAnnihilation = new G4eplusAnnihilation();
@@ -202,7 +204,7 @@ void ExN05PhysicsList::ConstructEM()
                particleName == "mu-"    ) {
     //muon  
      // Construct processes for muon+
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
+     G4VProcess* aMultipleScattering = new G4MuMultipleScattering();
      G4VProcess* aBremsstrahlung = new G4MuBremsstrahlung();
      G4VProcess* aPairProduction = new G4MuPairProduction();
      G4VProcess* anIonisation = new G4MuIonisation();
@@ -224,7 +226,7 @@ void ExN05PhysicsList::ConstructEM()
 	      (particle->GetPDGCharge() != 0.0) && 
 	      (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino
-     G4VProcess* aMultipleScattering = new G4MultipleScattering();
+     G4VProcess* aMultipleScattering = new G4hMultipleScattering();
      G4VProcess* anIonisation = new G4hIonisation();
      // add processes
      pmanager->AddProcess(anIonisation);

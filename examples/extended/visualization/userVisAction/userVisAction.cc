@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: userVisAction.cc,v 1.2 2006/06/29 17:46:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: userVisAction.cc,v 1.2.6.1 2010/04/01 09:12:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,12 +41,14 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #include "UVA_VisAction.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,29 +87,24 @@ int main(int argc,char** argv) {
   runManager->Initialize();
       
   //get the pointer to the User Interface manager 
-  G4UImanager * UI = G4UImanager::GetUIpointer();  
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
   if(argc==1)
+#ifdef G4UI_USE
   // Define (G)UI terminal for interactive mode  
   { 
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif    
-
-    UI->ApplyCommand("/control/execute vis.mac");    
-    session->SessionStart();
-    delete session;
+    G4UIExecutive * ui = new G4UIExecutive(argc, argv);
+    UImanager->ApplyCommand("/control/execute vis.mac");    
+    ui->SessionStart();
+    delete ui;
+#endif
   }
   else
   // Batch mode
   { 
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
+    UImanager->ApplyCommand(command+fileName);
   }
 
 #ifdef G4VIS_USE

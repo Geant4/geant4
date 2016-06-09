@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc,v 1.10 2009/11/03 15:04:25 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAChampionElasticModel.cc,v 1.10.4.1 2010/04/01 09:07:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 
 #include "G4DNAChampionElasticModel.hh"
@@ -196,45 +196,11 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
 
   // InitialiseElementSelectors(particle,cuts);
 
-  // Test if water material
-
-  flagMaterialIsWater= false;
-  densityWater = 0;
-
-  const G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-
-  if(theCoupleTable) 
-  {
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-    if(numOfCouples>0) 
-    {
-	  for (G4int i=0; i<numOfCouples; i++) 
-	  {
-	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-	    const G4Material* material = couple->GetMaterial();
-
-            if (material->GetName() == "G4_WATER") 
-            {
-              G4double density = material->GetAtomicNumDensityVector()[1];
-	      flagMaterialIsWater = true; 
-	      densityWater = density; 
-	      
-	      if (verboseLevel > 3) 
-              G4cout << "****** Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
-            }
-  
-          }
-
-    } // if(numOfCouples>0)
-
-  } // if (theCoupleTable)
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material*,
+G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* p,
 					   G4double ekin,
 					   G4double,
@@ -247,7 +213,7 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material*,
 
  G4double sigma=0;
  
- if (flagMaterialIsWater)
+ if (material->GetName() == "G4_WATER")
  {
   const G4String& particleName = p->GetParticleName();
 
@@ -278,12 +244,12 @@ G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material*,
   {
     G4cout << "---> Kinetic energy(eV)=" << ekin/eV << G4endl;
     G4cout << " - Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
-    G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*densityWater/(1./cm) << G4endl;
+    G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
   } 
 
- } // if (flagMaterialIsWater)
+ } 
          
- return sigma*densityWater;		   
+ return sigma*material->GetAtomicNumDensityVector()[1];		   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.hh,v 1.1 2009/01/12 14:26:02 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAChampionElasticModel.hh,v 1.1.4.1 2010/04/01 09:07:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 
 #ifndef G4DNAChampionElasticModel_h
@@ -113,11 +113,6 @@ private:
   VecMap eVecm;
    
   G4double RandomizeCosTheta(G4double k);
-   
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
    
   //
    

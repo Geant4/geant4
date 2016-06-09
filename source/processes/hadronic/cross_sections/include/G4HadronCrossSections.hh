@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 // GEANT4 Hadron physics class -- header file
@@ -92,7 +92,8 @@ class G4HadronCrossSections
 {
 public:
 
-   G4HadronCrossSections() : prevParticleDefinition(0), verboseLevel(0)
+   G4HadronCrossSections()
+     : prevParticleDefinition(0), lastEkx(0.), lastEkxPower(0.), verboseLevel(0)
    {
    }
 
@@ -183,6 +184,7 @@ private:
    G4ParticleDefinition* prevParticleDefinition;
    G4Element* prevElement;
    G4double prevKineticEnergy;
+   G4double lastEkx, lastEkxPower;
 
    static G4bool correctInelasticNearZero;
 

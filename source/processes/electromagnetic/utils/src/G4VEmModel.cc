@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc,v 1.30 2009/09/23 14:42:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VEmModel.cc,v 1.30.2.1 2010/04/06 09:05:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -190,6 +190,30 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
     xsec[i] = cross;
   }
   return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
+					      const G4ParticleDefinition* pd,
+					      G4double kinEnergy,
+					      G4double tcut,
+					      G4double tmax)
+{
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  G4int n = material->GetNumberOfElements() - 1;
+  currentElement = (*theElementVector)[n];
+  if (n > 0) {
+    G4double x = G4UniformRand()*
+                 G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
+    for(G4int i=0; i<n; ++i) {
+      if (x <= xsec[i]) {
+	currentElement = (*theElementVector)[i];
+	break;
+      }
+    }
+  }
+  return currentElement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

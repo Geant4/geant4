@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.16 2009/09/02 10:21:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: HistoManager.cc,v 1.16.2.1 2010/03/18 10:33:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -421,15 +421,17 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
 
   // Forward 
   if(z > -absZ0 && dir.z() > 0.0) {
+    isLeaking = true;
     if(pd == neutron) {
-      n_neu_forw++;
+      ++n_neu_forw;
       histo->fill(15,e,1.0);
     } else isLeaking = true;
 
     // Backward
   } else if (z < absZ0 && dir.z() < 0.0) {
+    isLeaking = true;
     if(pd == neutron) {
-      n_neu_leak++;
+      ++n_neu_back;
       histo->fill(16,e,1.0);
     } else isLeaking = true;
 
@@ -437,7 +439,7 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
   } else if (std::abs(z) <= -absZ0 && x*dir.x() + y*dir.y() > 0.0) {
     isLeaking = true;
     if(pd == neutron) {
-      n_neu_back++;
+      ++n_neu_leak;
       histo->fill(14,e,1.0);
     } else isLeaking = true;
   }
@@ -446,10 +448,10 @@ void HistoManager::AddLeakingParticle(const G4Track* track)
   if(isLeaking) {
     if(pd == G4Proton::Proton()) {
       histo->fill(17,e,1.0);
-      n_prot_leak++;
+      ++n_prot_leak;
     } else if (pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) {
       histo->fill(18,e,1.0);
-      n_pion_leak++;
+      ++n_pion_leak;
     }
   }
 }

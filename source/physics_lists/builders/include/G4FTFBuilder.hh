@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBuilder.hh,v 1.1 2009/10/04 16:29:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4FTFBuilder.hh,v 1.1.2.1 2010/04/01 08:54:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,12 +44,14 @@
 
 class G4FTFModel;
 class G4ExcitedStringDecay;
+class G4PreCompoundModel;
 
 class G4FTFBuilder : public G4VHadronModelBuilder
 {
 public: 
 
-  G4FTFBuilder(const G4String& name ="");
+  G4FTFBuilder(const G4String& name ="",
+	       G4PreCompoundModel* p = 0); 
 
   virtual ~G4FTFBuilder();
 
@@ -65,7 +67,7 @@ private:
 
   G4FTFModel*            theStringModel;
   G4ExcitedStringDecay*  theStringDecay;
-
+  G4PreCompoundModel*    thePreCompound;
 };
 
 #endif

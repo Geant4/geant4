@@ -105,7 +105,8 @@ G4double G4UPiNuclearCrossSection::Interpolate(
   for(idx=0; idx<NZ; idx++) {if(theZ[idx] >= iz) break;}
   if(idx >= NZ) idx = NZ - 1;
   G4int iz2 = theZ[idx];
-
+  //  G4cout << "U: iz= " << iz << " iz2= " << iz2 << "  " 
+  //  << APower[iz] << "  " << APower[iz2]<<G4endl;
   G4double x2 = (((*table)[idx])->Value(ekin))*APower[iz]/APower[iz2];
 
   // use only one Z
@@ -183,7 +184,7 @@ void G4UPiNuclearCrossSection::Initialise()
     theZ.push_back(iz[i]);
     theA.push_back(nist->GetAtomicMassAmu(iz[i]));
   }
-  for(i=1; i<92; i++) {
+  for(i=1; i<93; i++) {
     APower[i] = std::pow(nist->GetAtomicMassAmu(i),aPower);
   }
 

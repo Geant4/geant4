@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: Microdosimetry.cc,v 1.1 2008/06/04 12:58:23 sincerti Exp $
+// $Id: Microdosimetry.cc,v 1.1.4.1 2010/04/06 09:41:56 gcosmo Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -85,7 +85,11 @@ int main(int argc,char** argv)
 
   if (argc==1)   // Define UI session for interactive mode.
   { 
+#ifdef _WIN32
+    G4UIsession * session = new G4UIterminal();
+#else
     G4UIsession * session = new G4UIterminal(new G4UItcsh);
+#endif
     UI->ApplyCommand("/control/execute microdosimetry.mac");    
     session->SessionStart();
     delete session;

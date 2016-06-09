@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc,v 1.24 2009/04/27 07:22:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLWriteMaterials.cc,v 1.24.2.1 2010/03/18 11:08:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // class G4GDMLWriteMaterials Implementation
 //
@@ -194,8 +194,9 @@ void G4GDMLWriteMaterials::MaterialWrite(const G4Material* const materialPtr)
 void G4GDMLWriteMaterials::PropertyVectorWrite(const G4String& key,
                            const G4MaterialPropertyVector* const pvec)
 {
+   const G4String matrixref = GenerateName(key, pvec);
    xercesc::DOMElement* matrixElement = NewElement("matrix");
-   matrixElement->setAttributeNode(NewAttribute("name", key));
+   matrixElement->setAttributeNode(NewAttribute("name", matrixref));
    matrixElement->setAttributeNode(NewAttribute("coldim", "2"));
    std::ostringstream pvalues;
    for (G4int i=0; i<pvec->Entries(); i++)
@@ -226,7 +227,8 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
    {
       propElement = NewElement("property");
       propElement->setAttributeNode(NewAttribute("name", mpos->first));
-      propElement->setAttributeNode(NewAttribute("ref", mpos->first));
+      propElement->setAttributeNode(NewAttribute("ref",
+                                    GenerateName(mpos->first, mpos->second)));
       PropertyVectorWrite(mpos->first, mpos->second);
       matElement->appendChild(propElement);
    }

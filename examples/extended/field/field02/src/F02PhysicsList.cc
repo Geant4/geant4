@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02PhysicsList.cc,v 1.11 2007/05/23 13:40:28 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F02PhysicsList.cc,v 1.11.6.1 2010/04/06 09:48:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 // 
 
 #include "G4Timer.hh"
@@ -173,7 +173,9 @@ void F02PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -247,7 +249,7 @@ void F02PhysicsList::ConstructEM()
       F02StepCut* muonStepCut = new F02StepCut();
 
       G4MuIonisation* themuIonisation = new G4MuIonisation() ;
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1);
       pmanager->AddProcess(themuIonisation,-1,2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
@@ -268,8 +270,8 @@ void F02PhysicsList::ConstructEM()
       F02StepCut* thehadronStepCut = new F02StepCut();
 
       G4hIonisation* thehIonisation = new G4hIonisation() ; 
-      G4MultipleScattering* thehMultipleScattering =
-                     new G4MultipleScattering() ;
+      G4hMultipleScattering* thehMultipleScattering =
+                     new G4hMultipleScattering() ;
 
 
       pmanager->AddProcess(thehMultipleScattering,-1,1,1);

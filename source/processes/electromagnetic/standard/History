@@ -1,4 +1,4 @@
-$Id: History,v 1.480 2009/12/03 17:28:28 vnivanch Exp $
+$Id: History,v 1.480.2.2 2010/04/14 09:10:31 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31 March 09:  V.Ivant (emstand-V09-02-38)
+- Use data for Oxigen (G4_O) from ICRU'49 instead NIST for alpha stopping
+  power. Fixes problem of data corruption when such material is used.
+
+31 March 09:  V.Ivant (emstand-V09-02-37)
+- G4PolarizedComptonScattering - add message that this process is obsolete
+
+17 February 09:  V.Ivant
+- G4CoulombScatteringModel - Added comments to relativistic formula
+- G4eCoulombScatteringModel - Added method SetLowEnergyLimit().
+- G4CoulombScattering - Removed inlined method SetBuildTableFlag() hiding
+                        implementation in the base class 
 
 03 December 09:  V.Ivant (emstand-V09-02-36)
 - G4BetheBlochModel - (A.Lechner) return back commented out CorrectionAlongStep

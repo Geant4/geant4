@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.25 2009/11/11 03:20:22 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ProductionCutsTable.cc,v 1.25.2.1 2010/03/18 10:24:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 // --------------------------------------------------------------
@@ -251,9 +251,9 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
   }
   if (verboseLevel>2) {
     timer.Stop();
-    std::cout << "G4ProductionCutsTable::UpdateCoupleTable "
+    G4cout << "G4ProductionCutsTable::UpdateCoupleTable "
 	      << "  elapsed time for calculation of  energy cuts " << G4endl;
-    std::cout << timer <<G4endl;
+    G4cout << timer <<G4endl;
   }
 
   // resize Range/Energy cuts double vectors if new couple is made
@@ -290,7 +290,8 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
   if (material ==0) return -1.0;
 
   // check range
-  if (range <=0.0) return -1.0;
+  if (range ==0.0) return 0.0;
+  if (range <0.0) return -1.0;
 
   // check particle
   G4int index = G4ProductionCuts::GetIndex(particle);
@@ -921,9 +922,12 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
       G4ProductionCuts* aCut = aCouple->GetProductionCuts();
       G4bool fRatio = true;
       for (size_t j=0; j< NumberOfG4CutIndex; j++) {
-        G4double ratio =  cutValues[j]/aCut->GetProductionCut(j);
-        fRatio = fRatio && (0.999<ratio) && (ratio<1.001) ;
-      }
+        // check ratio only if values are not the same
+        if (cutValues[j] != aCut->GetProductionCut(j)) {  
+          G4double ratio =  cutValues[j]/aCut->GetProductionCut(j);
+          fRatio = fRatio && (0.999<ratio) && (ratio<1.001) ;
+        }
+      } 
       if (!fRatio) continue; 
       // MCC matched 
       fOK = true;

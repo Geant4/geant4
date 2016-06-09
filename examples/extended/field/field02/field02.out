@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -99,48 +99,6 @@ Registered filter factories:
  The ABSORBER is made of 40mm of Kr20CO2, the transverse size (R) is 100 mm. 
  Z position of the (middle of the) absorber 360  mm.
 
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 F02PhysicsList::SetCuts:CutLength : 1 mm 
 
 total time(SetCuts)=0 s 
@@ -193,9 +151,9 @@ eBrem:   for  e+    SubType= 3
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -224,11 +182,11 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -283,9 +241,9 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -2711,9 +2669,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0   -351 nm  -11.4 cm   1.94 cm   1.03 keV     0 eV      0 fm      0 fm      World   initStep
     1   3.03 um  -11.4 cm   1.94 cm    655 keV  1.03 keV  59.7 um   59.7 um      World     eIoni
-    2   17.1 um  -16.1 cm   1.94 cm    473 MeV  9.75 keV  4.73 cm   4.73 cm      World     eIoni
-    3   18.1 um  -18.5 cm   1.94 cm    709 MeV  5.25 keV  2.36 cm   7.09 cm      World     eIoni
-    4   18.1 um    -20 cm   1.94 cm    863 MeV  2.06 keV  1.54 cm   8.63 cm OutOfWorldTransportation
+    2   17.1 um  -16.1 cm   1.94 cm    473 MeV  9.75 keV  4.73 cm   4.73 cm      WorldTransportation
+    3   17.1 um  -16.1 cm   1.94 cm    473 MeV1.77e-12 eV 0.00848 fm   4.73 cm      World     eIoni
+    4   18.1 um  -18.5 cm   1.94 cm    709 MeV  5.25 keV  2.36 cm   7.09 cm      World     eIoni
+    5   18.1 um    -20 cm   1.94 cm    863 MeV  2.06 keV  1.54 cm   8.63 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 4
@@ -3611,10 +3570,11 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0  -20.8 um  -8.42 cm   1.76 cm   1.19 keV     0 eV      0 fm      0 fm      World   initStep
     1  -15.8 um  -8.43 cm   1.76 cm    805 keV  1.19 keV  73.3 um   73.3 um      World     eIoni
-    2  -7.14 um  -8.62 cm   1.76 cm   19.6 MeV   193 eV   1.88 mm   1.95 mm      World     eIoni
-    3   4.25 um  -14.5 cm   1.76 cm    604 MeV  7.96 keV  5.84 cm   6.04 cm      World     eIoni
-    4   4.47 um  -14.7 cm   1.76 cm    625 MeV  1.58 keV  2.16 mm   6.25 cm      World     eIoni
-    5   11.6 um    -20 cm   1.76 cm   1.16 GeV  12.4 keV  5.32 cm   11.6 cm OutOfWorldTransportation
+    2  -7.14 um  -8.62 cm   1.76 cm   19.6 MeV   193 eV   1.88 mm   1.95 mm      WorldTransportation
+    3  -7.14 um  -8.62 cm   1.76 cm   19.6 MeV5.07e-14 eV 0.000281 fm   1.95 mm      World     eIoni
+    4   4.25 um  -14.5 cm   1.76 cm    604 MeV  7.96 keV  5.84 cm   6.04 cm      World     eIoni
+    5   4.47 um  -14.7 cm   1.76 cm    625 MeV  1.58 keV  2.16 mm   6.25 cm      World     eIoni
+    6   11.6 um    -20 cm   1.76 cm   1.16 GeV  12.4 keV  5.32 cm   11.6 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 6
@@ -3804,9 +3764,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm  -3.48 cm   1.39 cm    3.3 keV     0 eV      0 fm      0 fm      World   initStep
     1  -8.46 um  -3.52 cm   1.39 cm   3.77 MeV   3.3 keV   350 um    350 um      World     eIoni
-    2  -15.7 um  -4.08 cm   1.39 cm   59.6 MeV  1.34 keV  5.58 mm   5.93 mm      WorldTransportation
-    3  -15.7 um  -4.08 cm   1.39 cm   59.6 MeV1.78e-13 eV 0.00091 fm   5.93 mm      World     eIoni
-    4    -25 um    -20 cm    1.4 cm   1.65 GeV  33.6 keV  15.9 cm   16.5 cm OutOfWorldTransportation
+    2  -15.7 um  -4.08 cm   1.39 cm   59.6 MeV  1.34 keV  5.58 mm   5.93 mm      World     eIoni
+    3    -25 um    -20 cm    1.4 cm   1.65 GeV  33.6 keV  15.9 cm   16.5 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -4568,8 +4527,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
     0   5.44 um  -10.8 cm   1.92 cm    2.5 keV     0 eV      0 fm      0 fm      World   initStep
     1  -2.11 um  -10.8 cm   1.92 cm   2.39 MeV   2.5 keV   220 um    220 um      World     eIoni
     2  -5.07 um  -10.9 cm   1.92 cm   7.34 MeV  92.1 eV    495 um    715 um      World     eIoni
-    3  -16.5 um  -13.9 cm   1.92 cm    317 MeV  5.43 keV  3.09 cm   3.16 cm      World     eIoni
-    4  -26.7 um    -20 cm   1.91 cm    922 MeV  11.8 keV  6.05 cm   9.22 cm OutOfWorldTransportation
+    3  -16.5 um  -13.9 cm   1.92 cm    317 MeV  5.43 keV  3.09 cm   3.16 cm      WorldTransportation
+    4  -16.5 um  -13.9 cm   1.92 cm    317 MeV1.15e-12 eV 0.00551 fm   3.16 cm      World     eIoni
+    5  -26.7 um    -20 cm   1.91 cm    922 MeV  11.8 keV  6.05 cm   9.22 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 3
@@ -7423,8 +7383,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm  -6.31 cm   1.66 cm   1.23 keV     0 eV      0 fm      0 fm      World   initStep
     1  -5.76 um  -6.32 cm   1.66 cm    842 keV  1.23 keV  76.5 um   76.5 um      World     eIoni
-    2    -17 um  -6.64 cm   1.66 cm   32.9 MeV   396 eV   3.21 mm   3.28 mm      World     eIoni
-    3  -40.1 um    -20 cm   1.67 cm   1.37 GeV  25.8 keV  13.4 cm   13.7 cm OutOfWorldTransportation
+    2    -17 um  -6.64 cm   1.66 cm   32.9 MeV   396 eV   3.21 mm   3.28 mm      WorldTransportation
+    3    -17 um  -6.64 cm   1.66 cm   32.9 MeV1.07e-13 eV 0.000569 fm   3.28 mm      World     eIoni
+    4  -40.1 um    -20 cm   1.67 cm   1.37 GeV  25.8 keV  13.4 cm   13.7 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 2
@@ -8050,7 +8011,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.09s Real=0.1s Sys=0s
+  User=0.11s Real=0.2s Sys=0.01s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.19 2009/10/29 16:01:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4Allocator.hh,v 1.19.2.1 2010/04/06 09:31:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 
 // ------------------------------------------------------------
@@ -135,8 +135,6 @@ class G4Allocator
     template <class U>
     struct rebind { typedef G4Allocator<U> other; };
       // Rebind allocator to type U
-
-  private:
 
     G4AllocatorPool mem;
       // Pool of elements of sizeof(Type)

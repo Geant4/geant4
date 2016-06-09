@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2006/03/14 10:13:55 vnivanch Exp $
+$Id: History,v 1.6.6.1 2010/03/19 14:15:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 18th, 2010 G.Cosmo (g3tog4Tests-V09-02-00)
+------------------------
+- Updated physics-lists to make use of particle-based multiple
+  scattering processes.
+
 March 13rd, 2006 V.Ivantchenko (g3tog4Tests-V08-00-00)
-----------------------------
+------------------------------
 - Minor cleanup of the PhysicsList and README
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+May 3rd, 2005  John Allison  (examples-V07-00-03)
+---------------------------
 - Replaced vis manager with G4VisExecutive.
 
 Dec 3rd, 2004 Gabriele Cosmo (g3tog4Tests-V06-02-00)

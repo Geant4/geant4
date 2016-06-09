@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.72 2009/09/23 14:42:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VEmModel.hh,v 1.72.2.1 2010/04/06 09:05:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -227,6 +227,9 @@ public:
 					     G4double cutEnergy = 0.0,
 					     G4double maxEnergy = DBL_MAX);
 
+  // select isotope in order to have precise mass of the nucleus
+  inline G4int SelectIsotopeNumber(const G4Element*);
+
   // atom can be selected effitiantly if element selectors are initialised 
   inline const G4Element* SelectRandomAtom(const G4MaterialCutsCouple*,
 					   const G4ParticleDefinition*,
@@ -235,14 +238,11 @@ public:
 					   G4double maxEnergy = DBL_MAX);
 
   // to select atom cross section per volume is recomputed for each element 
-  inline const G4Element* SelectRandomAtom(const G4Material*,
-					   const G4ParticleDefinition*,
-					   G4double kineticEnergy,
-					   G4double cutEnergy = 0.0,
-					   G4double maxEnergy = DBL_MAX);
-
-  // select isotope in order to have precise mass of the nucleus
-  inline G4int SelectIsotopeNumber(const G4Element*);
+  const G4Element* SelectRandomAtom(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double kineticEnergy,
+				    G4double cutEnergy = 0.0,
+				    G4double maxEnergy = DBL_MAX);
 
   //------------------------------------------------------------------------
   // Get/Set methods
@@ -340,7 +340,43 @@ private:
 
 };
 
+// ======== Run time inline methods ================
+
+inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* p)
+{
+  currentCouple = p;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
+{
+  return currentCouple;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
+{
+  currentElement = elm;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline const G4Element* G4VEmModel::GetCurrentElement() const
+{
+  return currentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4double G4VEmModel::MaxSecondaryKinEnergy(const G4DynamicParticle* dynPart)
+{
+  return MaxSecondaryEnergy(dynPart->GetDefinition(),
+                            dynPart->GetKineticEnergy());
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* c,
@@ -374,7 +410,7 @@ inline G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* p,
 {
   G4double mfp = DBL_MAX;
   G4double cross = CrossSectionPerVolume(material,p,ekin,emin,emax);
-  if (cross > DBL_MIN) mfp = 1./cross;
+  if (cross > DBL_MIN) { mfp = 1./cross; }
   return mfp;
 }
 
@@ -414,31 +450,6 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
-					      const G4ParticleDefinition* pd,
-					      G4double kinEnergy,
-					      G4double tcut,
-					      G4double tmax)
-{
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  G4int n = material->GetNumberOfElements() - 1;
-  currentElement = (*theElementVector)[n];
-  if (n > 0) {
-    G4double x = G4UniformRand()*
-                 G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
-    for(G4int i=0; i<n; i++) {
-      if (x <= xsec[i]) {
-	currentElement = (*theElementVector)[i];
-	break;
-      }
-    }
-  }
-  return currentElement;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
 {
   currentElement = elm;
@@ -449,18 +460,18 @@ inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
     if(ni > 1) {
       G4double* ab = elm->GetRelativeAbundanceVector();
       G4double x = G4UniformRand();
-      for(; idx<ni; idx++) {
+      for(; idx<ni; ++idx) {
 	x -= ab[idx];
-	if (x <= 0.0) break;
+	if (x <= 0.0) { break; }
       }
-      if(idx >= ni) idx = ni - 1;
+      if(idx >= ni) { idx = ni - 1; }
     }
     N = elm->GetIsotope(idx)->GetN();
   }
   return N;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ======== Get/Set inline methods used at initialisation ================
 
 inline G4VEmFluctuationModel* G4VEmModel::GetModelOfFluctuations()
 {
@@ -581,15 +592,6 @@ inline void G4VEmModel::ActivateNuclearStopping(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-G4double G4VEmModel::MaxSecondaryKinEnergy(const G4DynamicParticle* dynPart)
-{
-  return MaxSecondaryEnergy(dynPart->GetDefinition(),
-                            dynPart->GetKineticEnergy());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 inline const G4String& G4VEmModel::GetName() const 
 {
   return name;
@@ -600,36 +602,8 @@ inline const G4String& G4VEmModel::GetName() const
 inline void G4VEmModel::SetParticleChange(G4VParticleChange* p,  
                                           G4VEmFluctuationModel* f = 0)
 {
-  if(p && pParticleChange != p) pParticleChange = p;
+  if(p && pParticleChange != p) { pParticleChange = p; }
   fluc = f;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* p)
-{
-  currentCouple = p;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
-{
-  return currentCouple;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
-{
-  currentElement = elm;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline const G4Element* G4VEmModel::GetCurrentElement() const
-{
-  return currentElement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th Jan 2010 Peter Gumplinger (op-V09-02-07)
+              assign PropertyPointers to NULL at the start of the
+              PostStepDoIt, addresses bug report #1094
+
 19th Nov 2009 Peter Gumplinger (op-V09-02-06)
               change the code such that the LUT are now read in and kept
               by G4OpticalSurface and not G4OpBoundaryProcess, reordering

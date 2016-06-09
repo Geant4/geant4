@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABornExcitationModel.cc,v 1.7 2009/08/31 14:03:29 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNABornExcitationModel.cc,v 1.7.4.1 2010/04/01 09:07:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 
 #include "G4DNABornExcitationModel.hh"
@@ -130,46 +130,12 @@ void G4DNABornExcitationModel::Initialise(const G4ParticleDefinition* /*particle
   }    
 
   // InitialiseElementSelectors(particle,cuts);
-  
-  // Test if water material
-
-  flagMaterialIsWater= false;
-  densityWater = 0;
-
-  const G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-
-  if(theCoupleTable) 
-  {
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-    if(numOfCouples>0) 
-    {
-	  for (G4int i=0; i<numOfCouples; i++) 
-	  {
-	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-	    const G4Material* material = couple->GetMaterial();
-
-            if (material->GetName() == "G4_WATER") 
-            {
-              G4double density = material->GetAtomicNumDensityVector()[1];
-	      flagMaterialIsWater = true; 
-	      densityWater = density; 
-	      
-	      if (verboseLevel > 3) 
-              G4cout << "****** Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
-            }
-  
-          }
-
-    } // if(numOfCouples>0)
-
-  } // if (theCoupleTable)
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNABornExcitationModel::CrossSectionPerVolume(const G4Material*,
+G4double G4DNABornExcitationModel::CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* particleDefinition,
 					   G4double k,
 					   G4double,
@@ -182,7 +148,7 @@ G4double G4DNABornExcitationModel::CrossSectionPerVolume(const G4Material*,
 
   G4double crossSection=0;
   
-  if (flagMaterialIsWater)
+  if (material->GetName() == "G4_WATER")
   {
     if (particleDefinition == G4Proton::ProtonDefinition())
     {
@@ -195,12 +161,12 @@ G4double G4DNABornExcitationModel::CrossSectionPerVolume(const G4Material*,
       {
         G4cout << "---> Kinetic energy(keV)=" << k/keV << G4endl;
         G4cout << " - Cross section per water molecule (cm^2)=" << crossSection/cm/cm << G4endl;
-        G4cout << " - Cross section per water molecule (cm^-1)=" << crossSection*densityWater/(1./cm) << G4endl;
+        G4cout << " - Cross section per water molecule (cm^-1)=" << crossSection*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
       } 
     }
-  } // if (flagMaterialIsWater)
+  } 
 
- return crossSection*densityWater;		   
+ return crossSection*material->GetAtomicNumDensityVector()[1];		   
 
 }
 

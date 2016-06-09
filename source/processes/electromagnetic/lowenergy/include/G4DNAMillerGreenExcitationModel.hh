@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.hh,v 1.1 2009/01/12 14:26:03 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAMillerGreenExcitationModel.hh,v 1.1.4.1 2010/04/01 09:07:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 
 #ifndef G4DNAMillerGreenExcitationModel_h
@@ -114,13 +114,6 @@ private:
   G4double slaterEffectiveCharge[3][4];
   G4double sCoefficient[3][4];
 
-  // Final state
-  
-  // Test water material 
-   
-  G4bool flagMaterialIsWater;
-  G4double densityWater;
-   
   //
    
   G4DNAMillerGreenExcitationModel & operator=(const  G4DNAMillerGreenExcitationModel &right);

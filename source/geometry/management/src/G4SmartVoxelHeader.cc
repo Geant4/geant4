@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.34 2009/10/30 14:05:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4SmartVoxelHeader.cc,v 1.34.2.1 2010/03/18 11:01:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 
 // class G4SmartVoxelHeader
@@ -760,7 +760,8 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
                                         const G4VolumeNosVector* pCandidates,
                                               EAxis pAxis)
 {
-  G4double motherMinExtent, motherMaxExtent, targetMinExtent, targetMaxExtent;
+  G4double motherMinExtent= kInfinity, motherMaxExtent= -kInfinity,
+           targetMinExtent= kInfinity, targetMaxExtent= -kInfinity;
   G4VPhysicalVolume *pDaughter=0;
   G4VPVParameterisation *pParam=0;
   G4VSolid *targetSolid;

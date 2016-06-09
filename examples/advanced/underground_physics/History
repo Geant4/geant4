@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.17 2008/06/15 22:39:27 cirrone Exp $
+$Id: History,v 1.17.4.1 2010/03/18 11:16:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,26 @@ $Id: History,v 1.17 2008/06/15 22:39:27 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+16.02.2010 - L. Pandola (DMX-V09-02-03)
+	     Copy of the previous tag, DMX-V09-02-02, which was not submitted for 
+	     testing.
+
+26.10.2009 - L. Pandola (DMX-V09-02-02)
+	     Physics list migrated from LowEnergy processes to the new Livermore 
+	     models. Physics results unchanged for gamma/e-. Possible differences 
+             with ions/protons, since we don't use anymore G4hLowEnergyIonisation
+
+22.10.2009 - L. Pandola (DMX-V09-02-01)
+	     Correct Analysis manager to solve a problem with the HBOOK output files
+	     (ntuples not filled, histograms not saved). Still at the stage of 
+	     pre-migration.
+
+22.10.2009 - L. Pandola (DMX-V09-02-00)
+             Get rid of a warning message and allocation problems with ntuple2
+             Meant to be the reference to verify the migration to new 
+	     Livermore models. 
+
 16.06.2008 - G.A.P.Cirrone (DMX-V09-01-01)
              Removed AIDA command from GNUmakefile
 

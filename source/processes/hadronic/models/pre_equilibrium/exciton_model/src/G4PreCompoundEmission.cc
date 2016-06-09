@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.22 2009/11/13 17:40:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PreCompoundEmission.cc,v 1.22.2.1 2010/04/01 09:48:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +37,9 @@
 // Author:         V.Lara
 //
 // Modified:  
+// 15.01.2010 J.M.Quesada  added protection against unphysical values of parameter an 
+// 19.01.2010 V.Ivanchenko simplified computation of parameter an, sample cosTheta 
+//                         instead of theta; protect all calls to sqrt 
 //
 
 #include "G4PreCompoundEmission.hh"
@@ -45,9 +48,11 @@
 #include "G4PreCompoundEmissionFactory.hh"
 #include "G4HETCEmissionFactory.hh"
 
-const G4PreCompoundEmission & G4PreCompoundEmission::operator=(const G4PreCompoundEmission &)
+const G4PreCompoundEmission & 
+G4PreCompoundEmission::operator=(const G4PreCompoundEmission &)
 {
-  throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundEmission::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__,
+			    "G4PreCompoundEmission::operator= meant to not be accessable");
   return *this;
 }
 
@@ -165,10 +170,11 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
     
   // check that Excitation energy is >= 0
   G4double anU = RestMomentum.m()-theFragment->GetRestNuclearMass();
-  if (anU < 0.0) throw G4HadronicException(__FILE__, __LINE__, "G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
-    
-    
-    
+  if (anU < 0.0) {
+    throw G4HadronicException(__FILE__, __LINE__, 
+			      "G4PreCompoundModel::DeExcite: Excitation energy less than 0!");
+  }
+     
   // Update nucleus parameters:
   // --------------------------
 
@@ -203,30 +209,29 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   return MyRP;
 }
 
-
-G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
-							 const G4Fragment& aFragment,
-							 const G4double KineticEnergyOfEmittedFragment) const
+G4ThreeVector 
+G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment * theFragment,
+					   const G4Fragment& aFragment,
+					   const G4double kinEnergyOfEmittedFrag) const
 {
   G4double p = aFragment.GetNumberOfParticles();
   G4double h = aFragment.GetNumberOfHoles();
   G4double U = aFragment.GetExcitationEnergy();
-	
-  // Kinetic Energy of emitted fragment
-  // G4double KineticEnergyOfEmittedFragment = theFragment->GetKineticEnergy(aFragment);
+
+  G4double ekin = std::max(0.0, kinEnergyOfEmittedFrag);
 	
   // Emission particle separation energy
   G4double Bemission = theFragment->GetBindingEnergy();
-	
+
   // Fermi energy
   G4double Ef = G4PreCompoundParameters::GetAddress()->GetFermiEnergy();
 	
   //
   //  G4EvaporationLevelDensityParameter theLDP;
   //  G4double g = (6.0/pi2)*aFragment.GetA()*
-  //    theLDP.LevelDensityParameter(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()),U);
-  G4double g = (6.0/pi2)*aFragment.GetA()*
-    G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+
+  G4double g = (6.0/pi2)*aFragment.GetA()
+    *G4PreCompoundParameters::GetAddress()->GetLevelDensity();
 	
   // Average exciton energy relative to bottom of nuclear well
   G4double Eav = 2.0*p*(p+1.0)/((p+h)*g);
@@ -234,8 +239,6 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
   // Excitation energy relative to the Fermi Level
   G4double Uf = std::max(U - (p - h)*Ef , 0.0);
   //  G4double Uf = U - KineticEnergyOfEmittedFragment - Bemission;
-
-
 
   G4double w_num = rho(p+1,h,g,Uf,Ef);
   G4double w_den = rho(p,h,g,Uf,Ef);
@@ -250,56 +253,43 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
     }
   
 
-  G4double zeta = std::max(1.0,9.3/std::sqrt(KineticEnergyOfEmittedFragment/MeV));
-	
-  G4double an = 3.0*std::sqrt((ProjEnergy+Ef)*(KineticEnergyOfEmittedFragment+Bemission+Ef));
-  if (aFragment.GetNumberOfExcitons() == 1)
-    {
-      an /= (zeta*2.0*aFragment.GetNumberOfExcitons()*Eav);
-    }
-  else
-    {
-      an /= (zeta*(aFragment.GetNumberOfExcitons()-1.0)*Eav);
-    }
-			
-			
-//    G4double expan=std::exp(an);
-//    thetaold = std::acos(std::log(expan-random*(expan-1.0/expan))/an);
-//      exp(an) becomes large for large an
-//      1/exp(an) becomes large for large negative an
-//       take the large value out of the log depending on the sign of an to avoid FP exceptions 
- 
-  G4double random=G4UniformRand();
-  G4double exp2an=0;
-  G4double theta;
-  if (an > 0.) {
-    if (an < 25.) { exp2an = std::exp(-2*an); } // we subtract from 1, exp(-50)~1e-21, so will not
-                                           //  change numerical result
-    theta = std::acos(1+ std::log(1-random*(1-exp2an))/an);
-  } else if ( an < 0.) {
-    if ( an > -25.) { exp2an = std::exp(2*an); } // similar to above, except we compare to rndm*1
-    theta = std::acos(std::log(exp2an-random*(exp2an-1))/an - 1.);
-  } else {   // an==0 now.	
-    theta=std::acos(1.-2*random);
-  }
+  // VI + JMQ 19/01/2010 update computation of the parameter an
+  //
+  G4double an = 0.0;
+  G4double Eeff = ekin + Bemission + Ef;
+  if(ekin > DBL_MIN && Eeff > DBL_MIN) {
+
+    G4double zeta = std::max(1.0,9.3/std::sqrt(ekin/MeV));
   
-  if (std::abs(an) < 50 )
-  {
-     
+    an = 3.0*std::sqrt((ProjEnergy+Ef)*Eeff)/(zeta*Eav);
+
+    G4int ne = aFragment.GetNumberOfExcitons() - 1;
+    if ( ne > 1 ) { an /= (G4double)ne; }
+			
+    // protection of exponent
+    if ( an > 10. ) { an = 10.; }
   }
+
+  // sample cosine of theta and not theta as in old versions  
+  G4double random = G4UniformRand();
+  G4double cost;
+ 
+  if(an < 0.1) { cost = 1. - 2*random; }
+  else {
+    G4double exp2an = std::exp(-2*an);
+    cost = 1. + std::log(1-random*(1-exp2an))/an;
+    if(cost > 1.) { cost = 1.; }
+    else if(cost < -1.) {cost = -1.; }
+  }  
 
   G4double phi = twopi*G4UniformRand();
   
   // Calculate the momentum magnitude of emitted fragment 	
-  G4double EmittedMass = theFragment->GetNuclearMass();
-  G4double pmag = std::sqrt(KineticEnergyOfEmittedFragment*(KineticEnergyOfEmittedFragment+2.0*EmittedMass));
+  G4double pmag = std::sqrt(ekin*(ekin + 2.0*theFragment->GetNuclearMass()));
   
-  
-  G4double sinTheta = std::sin(theta);
-  //  G4double cosTheta = std::sqrt(1.0-sinTheta*sinTheta);
-  G4double cosTheta = std::cos(theta);
+  G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
-  G4ThreeVector momentum(pmag*std::cos(phi)*sinTheta,pmag*std::sin(phi)*sinTheta,pmag*cosTheta);
+  G4ThreeVector momentum(pmag*std::cos(phi)*sint,pmag*std::sin(phi)*sint,pmag*cost);
   // theta is the angle wrt the incident direction
   momentum.rotateUz(theIncidentDirection);
 
@@ -308,38 +298,40 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
 
 G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4double g, 
 				    const G4double E, const G4double Ef) const
-{
-	
-  G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
-  G4double alpha = (p*p+h*h)/(2.0*g);
+{	
+  // 25.02.2010 V.Ivanchenko added more protections
+  G4double Aph   = (p*p + h*h + p - 3.0*h)/(4.0*g);
+  //  G4double alpha = (p*p + h*h)/(2.0*g);
   
-  if ( (E-alpha) < 0 ) return 0;
+  if ( E - Aph < 0.0) { return 0.0; }
   
   G4double logConst =  (p+h)*std::log(g) - logfactorial(p+h-1) - logfactorial(p) - logfactorial(h);
 
-// initialise values using j=0
+  // initialise values using j=0
 
   G4double t1=1;
   G4double t2=1;
-  G4double logt3=(p+h-1) * std::log(E-Aph);
-  G4double tot = std::exp( logt3 + logConst );
+  G4double logt3=(p+h-1) * std::log(E-Aph) + logConst;
+  const G4double logmax = 200.;
+  if(logt3 > logmax) { logt3 = logmax; }
+  G4double tot = std::exp( logt3 );
 
-// and now sum rest of terms 
-  G4int j(1);  
-  while ( (j <= h) && ((E - alpha - j*Ef) > 0.0) ) 
+  // and now sum rest of terms
+  // 25.02.2010 V.Ivanchenko change while to for loop and cleanup 
+  G4double Eeff = E - Aph; 
+  for(G4int j=1; j<=h; ++j) 
     {
-	  t1 *= -1.;
-	  t2 *= (h+1-j)/j;
-	  logt3 = (p+h-1) * std::log( E - j*Ef - Aph) + logConst;
-	  G4double t3 = std::exp(logt3);
-	  tot += t1*t2*t3;
-	  j++;
+      Eeff -= Ef;
+      if(Eeff < 0.0) { break; }
+      t1 *= -1.;
+      t2 *= (G4double)(h+1-j)/(G4double)j;
+      logt3 = (p+h-1) * std::log( Eeff) + logConst;
+      if(logt3 > logmax) { logt3 = logmax; }
+      tot += t1*t2*std::exp(logt3);
     }
         
   return tot;
 }
-
-
 
 G4double G4PreCompoundEmission::factorial(G4double a) const
 {

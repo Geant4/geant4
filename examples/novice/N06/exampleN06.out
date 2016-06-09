@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -1056,7 +1056,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1     -5 m   -69.5 cm  -69.7 cm   3.13 eV      0 eV    5.1 m     5.1 m          Tank  Transportation
     2    -10 m   -1.65 m   -1.66 m    3.13 eV      0 eV   5.18 m    10.3 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 35
-number of event = 1 User=0.01s Real=0s Sys=0s
+number of event = 1 User=0.01s Real=0.03s Sys=0s
 #
 /process/inactivate Scintillation
 /run/physicsModified
@@ -1347,7 +1347,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1      5 m    3.01 m   -3.52 m     511 keV     0 eV   6.81 m    6.81 m          Tank  Transportation
     2     10 m    6.02 m   -7.04 m     511 keV     0 eV   6.81 m    13.6 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 11
-number of event = 1 User=0s Real=0s Sys=0s
+number of event = 1 User=0s Real=0.01s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 

@@ -1,4 +1,4 @@
-q$Id: History,v 1.119 2009/12/04 13:09:12 gcosmo Exp $
+q$Id: History,v 1.119.2.1 2010/04/01 08:54:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-12-2009, V.Ivanchenko                (phys-lists-V09-02-47)
+- QBBC - fixed hadron inelastic configuration; instantiated 
+         G4PreCompoundModel and its pointer propagated to 
+         all high energy models; use CHIPS for anti-protons
+         to avoid crash in FTF
 
 04-12-2009, K.Murakami                  (phys-lists-V09-02-46)
 - Fixed typo in FTFP_EMV.icc for wrong call to G4WarnPLStatus.

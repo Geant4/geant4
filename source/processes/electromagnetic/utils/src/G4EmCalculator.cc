@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.49 2009/11/22 17:58:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmCalculator.cc,v 1.49.2.1 2010/04/06 09:05:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -494,6 +494,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	     << "  " <<  p->GetParticleName()
 	     << " in " <<  currentMaterialName
 	     << " Zi^2= " << chargeSquare
+	     << " isIon=" << isIon
 	     << G4endl;
     }
   }
@@ -515,10 +516,11 @@ G4double G4EmCalculator::ComputeElectronicDEDX(G4double kinEnergy,
     const std::vector<G4VEnergyLossProcess*> vel =
       lManager->GetEnergyLossProcessVector();
     G4int n = vel.size();
-    for(G4int i=0; i<n; i++) {
+    for(G4int i=0; i<n; ++i) {
       const G4ParticleDefinition* p = (vel[i])->Particle();
-      if((!isIon && p == part) || (isIon && p == theGenericIon))
+      if((!isIon && p == part) || (isIon && p == theGenericIon)) {
 	dedx += ComputeDEDX(kinEnergy,part,(vel[i])->GetProcessName(),mat,cut);
+      }
     }
   }
   return dedx;
@@ -685,7 +687,7 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(G4double kinEnergy,
 {
   return ComputeCrossSectionPerAtom(kinEnergy,FindParticle(particle),
 				    processName,
-                                    elm->GetZ(),elm->GetA(),cut);
+                                    elm->GetZ(),elm->GetN(),cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1022,7 +1024,9 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   if(elproc) {
     currentModel = elproc->SelectModelForMaterial(scaledEnergy, idx);
     G4double eth = currentModel->LowEnergyLimit();
-    loweModel = elproc->SelectModelForMaterial(eth - CLHEP::eV, idx);
+    if(eth > 0.0) {
+      loweModel = elproc->SelectModelForMaterial(eth - CLHEP::eV, idx);
+    }
   }
 
   // Search for discrete process
@@ -1035,7 +1039,9 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
       {
         currentModel = (vem[i])->SelectModelForMaterial(kinEnergy, idx);
 	G4double eth = currentModel->LowEnergyLimit();
-	loweModel = (vem[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);
+	if(eth > 0.0) {
+	  loweModel = (vem[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);
+	}
         break;
       }
     }
@@ -1052,7 +1058,9 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
       {
         currentModel = (vmsc[i])->SelectModelForMaterial(kinEnergy, idx);
 	G4double eth = currentModel->LowEnergyLimit();
-	loweModel = (vmsc[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);  
+	if(eth > 0.0) {
+	  loweModel = (vmsc[i])->SelectModelForMaterial(eth - CLHEP::eV, idx);
+	}
         break;
       }
     }
@@ -1081,9 +1089,13 @@ G4VEnergyLossProcess* G4EmCalculator::FindEnergyLossProcess(
   G4String partname =  p->GetParticleName();
   const G4ParticleDefinition* part = p;
   
-  if(p->GetParticleType() == "nucleus" && 
-     partname != "deuteron" && 
-     partname != "triton") { part = theGenericIon; } 
+  if(p->GetParticleType() == "nucleus" 
+     && currentParticleName != "deuteron"  
+     && currentParticleName != "triton"
+     && currentParticleName != "alpha+"
+     && currentParticleName != "helium"
+     && currentParticleName != "hydrogen"
+     ) { part = theGenericIon; } 
   
   G4LossTableManager* lManager = G4LossTableManager::Instance();
   const std::vector<G4VEnergyLossProcess*> vel = 

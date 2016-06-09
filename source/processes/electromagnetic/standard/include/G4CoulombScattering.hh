@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.hh,v 1.13 2009/05/07 18:41:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4CoulombScattering.hh,v 1.13.2.1 2010/04/06 09:14:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -73,9 +73,6 @@ public:
   // Set energy above which high energy model will be used
   inline void SetHEModelLimit(G4double);
 
-  // obsolete method to be removed
-  inline void SetBuildTableFlag(G4bool);
-
   // Print out of the class parameters
   virtual void PrintInfo();
 
@@ -121,11 +118,6 @@ inline void G4CoulombScattering::SetQ2Max(G4double val)
 {
   q2Max = val;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4CoulombScattering::SetBuildTableFlag(G4bool)
-{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

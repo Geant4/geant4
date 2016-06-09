@@ -1,4 +1,4 @@
-$Id: History,v 1.163 2009/11/06 11:35:03 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 9th, 2010       G.Cosmo - geomvol-V09-02-05
+- Adopt assign() within G4NavigationHistory copy-constructor.
+  Should provide slight performance improvement and keep locality.
 
 Nov 6th, 2009       G.Cosmo - geomvol-V09-02-04
 - Moved inline constructors to source for G4TouchableHistory, to avoid problems

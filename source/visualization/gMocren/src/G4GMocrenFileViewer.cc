@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileViewer.cc,v 1.2 2009/10/12 10:04:35 akimura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GMocrenFileViewer.cc,v 1.2.2.1 2010/03/18 10:29:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -106,13 +106,13 @@ G4GMocrenFileViewer::ClearView( void )
   if(GFDEBUG)
     G4cerr << "***** G4GMocrenFileViewer::ClearView (): No effects " << G4endl;
 
-  if(kSceneHandler.kGddDest) {
-    kSceneHandler.kGddDest.close();
+  //if(kSceneHandler.kGddDest) {
+    //kSceneHandler.kGddDest.close();
     // Re-open with same filename...
-    kSceneHandler.kGddDest.open(kSceneHandler.kGddFileName);
+    //kSceneHandler.kGddDest.open(kSceneHandler.kGddFileName);
     kSceneHandler.kFlagInModeling = false;
     kSceneHandler.GFBeginModeling();
-  }
+    //}
 }
 
 

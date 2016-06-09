@@ -1,0 +1,238 @@
+
+                 Geant4 9.3 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                              9 April 2010
+
+List of fixes included in this public patch since the public release 9.3:
+
+  o Configuration:
+    -------------
+    + Configure script: 
+      o Corrected settings of LD_LYBRARY_PATH for CLHEP for the case of static
+        libraries build selection (path was set only for the dynamic libraries
+        case...).
+      o Corrected detection of Qt modules on MacOSX.
+        Addressing problem report #1095.
+    + binmake.gmk: removed extra space characters in definition of TARGOBJEXT,
+      fixing issue with target for main() not being rebuilt according to
+      dependencies change. Addressing problem report #1098.
+
+  o Event:
+    -----
+    + Minor changes to G4GeneralParticleSourceMessenger to now use full range
+      of predefined units for length, energy and angle.
+    + Fixed gcc-4.4.0 compilation warning message for non-initialised variable
+      in G4SPSEneDistribution.
+
+  o Geometry:
+    --------
+    + management:
+      o Fixed initialisation of min/max extent for mother and target volumes
+        in method BuildNodes() of G4SmartVoxelHeader.
+    + navigation:
+      o Avoid unnecessary creation of debug string in G4PropagatorInField. 
+        Also printout reformatting.
+    + solids/specific:
+      o Adopt caching of Phi in G4PolyconeSide and G4PolyhedraSide to avoid
+        unnecessary consecutive computations on the same point.
+      o Use kInfinity for initialising minimum and maximum allowed extent for
+        G4SolidExtentList of faceted solids.
+    + volumes:
+      o Adopt assign() within copy-constructor of G4NavigationHistory.
+        Should provide slight performance improvement.
+
+  o Global:
+    ------
+    + G4PhysicsLogVector, G4PhysicsLnVector, G4PhysicsLinearVector: preserve
+      values of 'edgeMin' and 'edgeMax' in constructors avoiding recomputation,
+      to avoid precision problem; fixes problem detected on Windows/VC++.
+    + Moved 'mem' pool in G4Allocator to public section, to allow for use of
+      allocator in vectors on Windows/C++.
+    + Changed date for patch-01 to release 9.3.
+
+  o Materials:
+    ---------
+    + G4OpticalSurface: removed left-over debug test function OverWrite()
+      from header.
+
+  o Persistency (GDML):
+    ------------------
+    + Added missing reference attribute in G4GDMLWriteMaterials for dumping
+      of materials property vectors. Increased string buffer in G4GDMLWrite.
+      Addressing problem report #1104.
+    + Corrected import of surface properties in G4GDMLReadSolids for the case
+      of recursive read of files.
+    + Added IsValid() method to parser to verify if variable/constant/quantity
+      is defined and is valid. Added const qualifier to reader accessors in
+      parser.
+
+  o Low-energy Electromagnetic Processes:
+    ------------------------------------
+    + Modified hydrogen correction in G4DNARuddIonisation.
+    + Re-added vapor water shell constants to G4DNARuddIonisationModel
+      and modified electron correction.
+    + Extended low energy cover of G4DNA charge change processes
+    + Improved way of testing material in Geant4-DNA models.
+    + Fixed initialisation of 'atomTotalCrossSection' in
+      G4hShellCrossSectionDoubleExp.
+
+  o Standard Electromagnetic Processes:
+    ----------------------------------
+    + High Energy:
+      o G4mplIonisation: fixed IsApplicable() method, now returning always
+        "true". Addresses a problem report by CMS about crashes in the case
+        when several types of monopoles are instantiated.
+    + Standard:
+      o G4CoulombScatteringModel: added comments to relativistic formula.
+      o G4eCoulombScatteringModel: added method SetLowEnergyLimit().
+      o G4CoulombScattering: removed inlined method SetBuildTableFlag()
+        hiding implementation in the base class.
+      o G4PolarizedComptonScattering: added message for obsolete process.
+      o Use data for Oxygen (G4_O) from ICRU'49 instead NIST for alpha stopping
+        power. Fixes problem of data corruption when such material is used.
+    + Utils:
+      o G4EmCorrections: added protection against large Barkas and Bloch
+        corrections in the case of large negatively charged particle
+        (Q^2 > 50); addresses problem of simulation of highly charged
+        exotic particles reported by ATLAS.
+      o Code cleanup in G4EmCalculator.
+      o G4VEmProcess: added protection against negative cross section.
+        Moved SetBuildTableFlag() method from protected to public.
+        Fixed problem for ion processes by adding pointer to 'currentParticle'
+        which may be different from generic ion.
+      o G4VEnergyLossProcess: added protection against negative cross
+        section, and improved logic in RetrieveTable() method.
+      o Reordered inline methods and improved comments in classes G4VEmModel,
+        G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering and
+        G4LossTableManager.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o G4CrossSectionDataSetRegistry: do not pop_back vector of pointers
+        when deregistering cross-section data set; addresses problem detected
+        on Windows/VC++.
+      o G4UPiNuclearCrossSection: fixed bug for high Z (>83) atoms.
+      o Cache computation of std::pow() in GetCaptureCrossSection() method of
+        G4HadronCrossSections, avoiding repeated calls with same argument.
+    + models/cascade:
+      o G4InteractionCase: minor change in initialisation in constructor to
+        allow for porting on C++0x Standard.
+    + models/CHIPS:
+      o Correction of mass in G4Quasmon, and fix of memory corruption in mass
+        calculation; 
+      o Tuning of parameters and fixed bug in CHIPS fragmentation.
+    + models/de_excitation:
+      o G4ExcitationHandler: activated Fermi-BreakUp by setting limits to the
+        default values (Z=9 and A=17) for this model.
+    + models/high_energy:
+      o Fixed segmentation fault in G4HEKaonZeroLongInelastic and
+        G4HEKaonZeroShortInelastic due to local instantiation and subsequent
+        deletion of the K0 and anti-K0 models. As added feature, the production
+        of K0 and anti-K0 outside the nucleus is now prohibited.
+    + models/management:
+      o G4HadronicInteractionRegistry: do not pop_back vector of pointers
+        when deregistering cross-section data set; addresses problem detected
+        on Windows/VC++.
+    + models/neutron_hp:
+      o Add 'Ignore' and 'Enable' methods for on-flight Doppler broadening
+        in G4NeutronHPElasticData, G4NeutronHPInelasticData and
+        G4NeutronHPCaptureData, which can now be set from the physics-lists.
+    + models/pre_equilibrium:
+      o Added protections for numerical computations to G4PreCompoundEmission.
+
+  o Generic Processes:
+    -----------------
+    + Cuts:
+      o Fix in G4ProductionCutTable to solve problems with zero range for
+        protons.
+    + Optical:
+      o Fixed problem of initialization of 'PropertyPointers', now set to
+        NULL at the start of PostStepDoIt(). Addresses problem report #1094.
+
+  o Physics Lists:
+    -------------
+    + QBBC: fixed hadron inelastic configuration; instantiated
+      G4PreCompoundModel and its pointer propagated to all high energy models.
+      Use CHIPS for anti-protons to fix crash in FTF.
+
+  o Track:
+    -----
+    + Replace string data member to a pointer in G4VUserTrackInformation
+      for property to indicate type of UserTrackInformation; helps in reducing
+      unnecessary memory churn reported by CMS.
+    + Modified G4VUserTrackInformation::Print() method from pure-virtual to
+      simple virtual.
+
+  o Tracking:
+    --------
+    + G4RichTrajectory: Fixed bug in MergeTrajectory(), to not invoke
+      G4Trajectory::MergeTrajectory().
+    + G4RichTrajectory and G4RichTrajectoryPoint: eliminated spaces in
+      G4AttValue values; G4AttValue() values are "None" for attributes
+      derived from zero pointers.
+
+  o Visualization:
+    -------------
+    + gMocren: fixed file-I/O bug in G4GMocrenFileViewer and G4GMocrenIO;
+      fix in G4GMocrenFileSceneHandler to allow for porting on C++0x Standard,
+      also use G4 types in consistent way. Removed debug code with printout.
+
+  o Examples:
+    --------
+    + Migrated physics-lists to use particle-based multiple-scattering
+      wherever necessary, and updated reference outputs.
+    + advanced/microbeam:
+      o Added density initialisation in MicrobeamPhantomConfiguration and
+        changed material/density selection.
+    + advanced/microdosimetry:
+      o Disable use of G4UItcsh on Windows.
+    + advanced/underground_physics:
+      o Physics list migrated from LowEnergy processes to the new Livermore
+        models. Physics results unchanged for gamma/e-. Possible differences
+        with ions/protons.
+      o Corrected analysis-manager to solve a problem with the HBOOK output
+        files (ntuples not filled, histograms not saved).
+        Get rid of a warning message and allocation problems with ntuple2.
+    + extended/field/field04:
+      o Fixed compilation error on Windows in F04RunAction.
+    + extended/hadronic/Hadr01:
+      o Fixed problem of counting of particles leaked from the target.
+      o When PhysList defined via PHYSLIST environment variable still
+        make local PhysList messenger available to avoid crash in old macro.
+    + extended/optical/wls:
+      o Added missing initialization macro init.in.
+      o Replaced use of 2*M_PI with CLHEP::twopi.
+    + extended/persistency/gdml/G01:
+      o Added printout of associated auxiliary information value.
+      o Corrected typo in replicated.gdml file.
+    + extended/persistency/gdml/G03:
+      o Disable use of G4UItcsh on Windows.
+    + extended/visualization/userVisAction:
+      o Introduced G4UIExecutive.
+    + novice/N02:
+      o Correction in DetectorConstruction::SetMagField() to invoke
+        fpMagField->SetMagFieldValue().
+    + novice/N03:
+      o visTutor: corrected exN03Vis14.mac and exN03Vis15.mac to enable
+        visualization of tracks and removed redundancy; updated gui.mac
+        adding missing macros and correcting order; corrected comments
+        wherever necessary.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of relese 9.3.
+  o  Technical notes distributed for release 9.3 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.3 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

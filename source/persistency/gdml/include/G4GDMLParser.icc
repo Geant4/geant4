@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.8 2009/01/22 11:02:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLParser.icc,v 1.8.2.1 2010/03/18 11:08:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 // class G4GDMLParser inline methods
@@ -83,56 +83,61 @@ G4LogicalVolume* G4GDMLParser::ParseST(const G4String& filename,
 // Methods for Reader
 //
 
+inline G4bool G4GDMLParser::IsValid(const G4String& name) const
+{
+  return reader->IsValidID(name);
+}
+
 inline 
-G4double G4GDMLParser::GetConstant(const G4String& name)
+G4double G4GDMLParser::GetConstant(const G4String& name) const
 {
   return reader->GetConstant(name);
 }
 
 inline 
-G4double G4GDMLParser::GetVariable(const G4String& name)
+G4double G4GDMLParser::GetVariable(const G4String& name) const
 {
   return reader->GetVariable(name);
 }
 
 inline 
-G4double G4GDMLParser::GetQuantity(const G4String& name)
+G4double G4GDMLParser::GetQuantity(const G4String& name) const
 {
   return reader->GetQuantity(name);
 }
 
 inline 
-G4ThreeVector G4GDMLParser::GetPosition(const G4String& name)
+G4ThreeVector G4GDMLParser::GetPosition(const G4String& name) const
 {
   return reader->GetPosition(name);
 }
 
 inline 
-G4ThreeVector G4GDMLParser::GetRotation(const G4String& name)
+G4ThreeVector G4GDMLParser::GetRotation(const G4String& name) const
 {
   return reader->GetRotation(name);
 }
 
 inline 
-G4ThreeVector G4GDMLParser::GetScale(const G4String& name)
+G4ThreeVector G4GDMLParser::GetScale(const G4String& name) const
 {
   return reader->GetScale(name);
 }
 
 inline 
-G4GDMLMatrix G4GDMLParser::GetMatrix(const G4String& name)
+G4GDMLMatrix G4GDMLParser::GetMatrix(const G4String& name) const
 {
   return reader->GetMatrix(name);
 }
 
 inline 
-G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name)
+G4LogicalVolume* G4GDMLParser::GetVolume(const G4String& name) const
 {
   return reader->GetVolume(name);
 }
 
-inline 
-G4VPhysicalVolume* G4GDMLParser::GetWorldVolume(const G4String& setupName)
+inline G4VPhysicalVolume*
+G4GDMLParser::GetWorldVolume(const G4String& setupName) const
 {
   return reader->GetWorldVolume(setupName);
 }

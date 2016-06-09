@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.hh,v 1.41 2009/04/24 15:34:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLWrite.hh,v 1.41.2.1 2010/03/18 11:08:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 // class G4GDMLWrite
@@ -123,7 +123,7 @@ class G4GDMLWrite
     static G4bool addPointerToName;
     xercesc::DOMDocument* doc;
     xercesc::DOMElement* extElement;
-    XMLCh tempStr[100];
+    XMLCh tempStr[10000];
 
 };
 

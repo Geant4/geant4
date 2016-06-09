@@ -14,6 +14,17 @@ code and to keep track of all tags.
   * Please list in reverse chronological order (last date on top)
   ---------------------------------------------------------------
 
+23 Jan 2010 - Dennis Wright (hadr-hep-V09-02-00)
+------------------------------------------------
+ A bug report from Alexander Shepetov (Tien-Shan Mountain Station)
+   found a segmentation fault in G4HEKaonZeroLongInelastic and 
+   G4HEKaonZeroShortInelastic due to local instantiation and subsequent
+   deletion of the K0 and anti-K0 models.
+   This was fixed by implementing code specifically for 
+   G4HEKaonZeroLongInelastic and G4HEKaonZeroShortInelastic, without
+   using the K0, anti-K0 code.  As an added feature, the production of
+   K0 and anti-K0 outside the nucleus is now prohibited.
+ 
 23 July 2008 - Dennis Wright for Vladimir Uzhinskiy (hadr-hep-V09-01-04)
 ------------------------------------------------------------------------
  G4HEInelastic::HighEnergyCascading: fix bug in momentum sampling which 

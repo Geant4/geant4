@@ -1,4 +1,4 @@
-$Id: History,v 1.160 2009/11/11 12:25:46 gcosmo Exp $
+$Id: History,v 1.160.2.1 2010/03/18 11:04:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-Feb-2010  G.Cosmo (geom-specific-V09-02-09)
+- Adopt caching of Phi in G4PolyconeSide and G4PolyhedraSide to avoid
+  unnecessary consecutive computations on the same point.
+
+10-Feb-2010  G.Cosmo
+- Use kInfinity for initialising minimum and maximum allowed extent for
+  G4SolidExtentList of faceted solids.
 
 11-Nov-2009  G.Cosmo (geom-specific-V09-02-08)
 - Avoid fake (and redundant) assignment of value to 3-vector in

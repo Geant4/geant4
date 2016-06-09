@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLnVector.cc,v 1.18 2009/06/25 10:05:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PhysicsLnVector.cc,v 1.18.2.1 2010/04/06 09:31:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -74,11 +74,16 @@ G4PhysicsLnVector::G4PhysicsLnVector(G4double theEmin,
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);      
 
-  for (size_t i=0; i<numberOfNodes; i++)
+  binVector.push_back(theEmin);
+  dataVector.push_back(0.0);
+
+  for (size_t i=1; i<numberOfNodes-1; i++)
   {
     binVector.push_back(std::exp((baseBin+i)*dBin));
     dataVector.push_back(0.0);
   }
+  binVector.push_back(theEmax);
+  dataVector.push_back(0.0);
 
   edgeMin = binVector[0];
   edgeMax = binVector[numberOfNodes-1];

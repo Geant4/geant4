@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07PhysicsList.cc,v 1.7 2007/05/04 01:49:28 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN07PhysicsList.cc,v 1.7.6.1 2010/03/19 14:13:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 
 #include "ExN07PhysicsList.hh"
@@ -119,7 +119,9 @@ void ExN07PhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -148,7 +150,7 @@ void ExN07PhysicsList::ConstructEM()
 
     } else if (particleName == "e-") {
     //electron
-      G4MultipleScattering* theeminusMultipleScattering = new G4MultipleScattering();
+      G4eMultipleScattering* theeminusMultipleScattering = new G4eMultipleScattering();
       theeminusMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
       G4VProcess* theeminusIonisation         = new G4eIonisation();
       G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
@@ -170,7 +172,7 @@ void ExN07PhysicsList::ConstructEM()
 
     } else if (particleName == "e+") {
     //positron
-      G4MultipleScattering* theeplusMultipleScattering = new G4MultipleScattering();
+      G4eMultipleScattering* theeplusMultipleScattering = new G4eMultipleScattering();
       theeplusMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
       G4VProcess* theeplusIonisation         = new G4eIonisation();
       G4VProcess* theeplusBremsstrahlung     = new G4eBremsstrahlung();
@@ -199,7 +201,7 @@ void ExN07PhysicsList::ConstructEM()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
     //muon  
-      G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+      G4MuMultipleScattering* aMultipleScattering = new G4MuMultipleScattering();
       aMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
       G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
       G4VProcess* aPairProduction     = new G4MuPairProduction();
@@ -228,7 +230,7 @@ void ExN07PhysicsList::ConstructEM()
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino     
-     G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+     G4hMultipleScattering* aMultipleScattering = new G4hMultipleScattering();
      aMultipleScattering->SetLateralDisplasmentFlag(displacementFlg);
      G4VProcess* anIonisation        = new G4hIonisation();
      //

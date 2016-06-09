@@ -1,5 +1,5 @@
-$Id: History,v 1.137 2009/11/24 10:04:14 perl Exp $
-$Name: geant4-09-03 $ 
+$Id: History,v 1.137.2.1 2010/03/18 11:11:06 gcosmo Exp $
+$Name: geant4-09-03-patch-01 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 Feb 2010 John Allison (tracking-V09-02-08)
+- G4RichTrajectory: Fixed bug in MergeTrajectory (should not invoke
+  G4Trajectory::MergeTrajectory).
+- G4RichTrajectory and G4RichTrajectoryPoint:
+  o Eliminated spaces in G4AttValue values.
+  o G4AttValue values are "None" for attributes derived from zero pointers.
 
 24 Nov 2009 Joseph Perl (tracking-V09-02-07)
 - G4RichTrajectory: add additional attributes

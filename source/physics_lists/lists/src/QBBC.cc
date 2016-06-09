@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.cc,v 1.4 2009/11/28 17:35:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: QBBC.cc,v 1.4.2.1 2010/04/01 08:54:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -68,6 +68,7 @@ QBBC::QBBC( G4int ver, const G4String& type )
   SetVerboseLevel(ver);
 
   // EM Physics
+  //RegisterPhysics( new G4EmStandardPhysics(ver));
   RegisterPhysics( new G4EmStandardPhysics_option2(ver));
 
   // Synchroton Radiation & GN Physics
@@ -78,6 +79,7 @@ QBBC::QBBC( G4int ver, const G4String& type )
 
    // Hadron Physics
   RegisterPhysics( new G4HadronHElasticPhysics(ver,false,type));
+  //RegisterPhysics( new G4HadronElasticPhysics("elastic",ver,false));
   RegisterPhysics( new G4QStoppingPhysics("stopping",ver));
   RegisterPhysics( new G4IonBinaryCascadePhysics("ionBIC"));
   RegisterPhysics( new G4HadronInelasticQBBC(type, ver));

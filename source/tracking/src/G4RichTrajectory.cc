@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.cc,v 1.8 2009/11/24 10:04:14 perl Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RichTrajectory.cc,v 1.8.2.1 2010/03/18 11:11:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // ---------------------------------------------------------------
 //
@@ -144,8 +144,6 @@ void G4RichTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 {
   if(!secondTrajectory) return;
 
-  G4Trajectory::MergeTrajectory(secondTrajectory);
-
   G4RichTrajectory* seco = (G4RichTrajectory*)secondTrajectory;
   G4int ent = seco->GetPointEntries();
   for(G4int i=1;i<ent;i++) {
@@ -244,8 +242,8 @@ std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
     G4ProcessType type = fpCreatorProcess->GetProcessType();
     values->push_back(G4AttValue("CPTN",G4VProcess::GetProcessTypeName(type),""));
   } else {
-    values->push_back(G4AttValue("CPN","User Defined",""));
-    values->push_back(G4AttValue("CPTN","User",""));
+    values->push_back(G4AttValue("CPN","None",""));
+    values->push_back(G4AttValue("CPTN","None",""));
   }
 
   if (fpFinalVolume && fpFinalVolume->GetVolume()) {
@@ -265,8 +263,8 @@ std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
     G4ProcessType type = fpEndingProcess->GetProcessType();
     values->push_back(G4AttValue("EPTN",G4VProcess::GetProcessTypeName(type),""));
   } else {
-    values->push_back(G4AttValue("EPN","User Defined",""));
-    values->push_back(G4AttValue("EPTN","User",""));
+    values->push_back(G4AttValue("EPN","None",""));
+    values->push_back(G4AttValue("EPTN","None",""));
   }
 
   values->push_back

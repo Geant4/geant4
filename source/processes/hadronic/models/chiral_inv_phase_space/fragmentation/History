@@ -16,9 +16,30 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+25-Mar-2010 M.Kosov                            (hadr-chips-frag-V09-02-00)
+--------------------------------------------------------------------------
+Bug fix for the cleaning up sequence
+
+25-Mar-2010 M.Kosov
+-------------------
+Bug fix for Windows run time warning
+
+26-Jan-2010 M.Kosov
+-------------------
+Bug fix in the previous bug fix in CHIPS fragmentation (G4QFragmentation)
+
+24-Jan-2010 M.Kosov
+-------------------
+Mutual tag: bug fix in CHIPS fragmentation (G4QFragmentation)
+
+15-Jan-2010 M.Kosov
+-------------------
+Second approximation of CHIPS parameters
+
 1-Dec-2009 M.Kosov                             (hadr-chips-V09-02-29)
 -----------------------------------------------------------------------
 Mutual tag: Compilation warning fix in G4QFragmentation and G4QIonIonCollision
+
 
 17-Nov-2009 M.Kosov                            (hadr-chips-V09-02-24)
 -----------------------------------------------------------------------

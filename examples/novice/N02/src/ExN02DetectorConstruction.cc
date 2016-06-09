@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.21 2008/09/22 16:41:20 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02DetectorConstruction.cc,v 1.21.4.1 2010/04/01 09:14:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -299,7 +299,7 @@ void ExN02DetectorConstruction::setChamberMaterial(G4String materialName)
  
 void ExN02DetectorConstruction::SetMagField(G4double fieldValue)
 {
-  fpMagField->SetFieldValue(fieldValue);
+  fpMagField->SetMagFieldValue(fieldValue);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

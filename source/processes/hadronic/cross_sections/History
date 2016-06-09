@@ -14,6 +14,20 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25 Mar 2010 Vladimir Ivanchenko (hadr-cross-V09-02-19)
+------------------------------------------------------------
+- G4CrossSectionDataSetRegistry - do not pop_back vector of pointers
+  when deregistering cross section data set - bug fixed for Windows
+
+17 Mar 2010 Gabriele Cosmo
+------------------------------------------------------------
+- Cache computation of std::pow() in GetCaptureCrossSection() method of
+  G4HadronCrossSections, to avoid repeated calls with same argument.
+
+26 Feb 2010 Vladimir Ivanchenko
+------------------------------------------------------------
+- G4UPiNuclearCrossSection - fixed bug for high Z (>83) atoms
+
 9 Dec 2009 Gunter Folger       (hadr-cross-V09-02-18)
 ------------------------------------------------------------
 - G4TripathiLightCrossSection.cc modified by Macrus Mendenhall:

@@ -14,6 +14,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25-February  2010 V.Ivanchenko  hadr-pre-V09-02-08
+---------------------------------------------------
+G4PreCompoundEmission - more protections for numerical computations are added 
+
+17-February  2010 V.Ivanchenko
+------------------------------
+G4PreCompoundEmission - (JMQ) return back value of Ef as it was in 9.3 
+
+19-January  2010 V.Ivanchenko
+-----------------------------
+G4PreCompoundEmission - (JMQ) added protection against unphysical value of 
+                              parameter "an" when exitation energy is huge
+                              to avoid numerical problem
+                      -       simplified algorithm of sampling
+
 21-November 2009 V.Ivanchenko   hadr-pre-V09-02-07
 ---------------------------------------------------
 G4PreCompoundTransitions - return back transition probability
@@ -28,7 +43,7 @@ G4PreCompoundTransitions - (JMQ) CEM transition probabilities have been
 
 12-November 2009 G.Cosmo        hadr-pre-V09-02-05
 ---------------------------------------------------
-G4PrecompoundEmission - fixed compilation error on Windows.
+G4PreCompoundEmission - fixed compilation error on Windows.
 
 12-November 2009 G.Folger       hadr-pre-V09-02-04
 ---------------------------------------------------

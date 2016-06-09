@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2009/11/25 23:36:12 gum Exp $
+# $Id: GNUmakefile,v 1.1.2.1 2010/04/06 09:55:50 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for WLS example.
 # --------------------------------------------------------------
@@ -13,15 +13,6 @@ endif
 
 .PHONY: all
 all: lib bin
-
-ifdef MAKEHBOOK
- CPPFLAGS+=-I$(G4INSTALL)/tests/tools/include -DMAKEHBOOK -DMAKEBOOK
- EXTRALIBS+=-L$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM) -lG4TestTool
- EXTRALIBS+=-L/cern/pro/lib -lpacklib -lnsl
- ifeq ($(G4SYSTEM),Linux-g++)
-   EXTRALIBS+=-lg2c -lm -lgcc -lc -lgcc
- endif
-endif
 
 include $(G4INSTALL)/config/architecture.gmk
 

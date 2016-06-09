@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: gdml_ext.cc,v 1.1 2009/04/15 13:26:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: gdml_ext.cc,v 1.1.2.1 2010/04/06 09:58:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 // --------------------------------------------------------------
@@ -82,7 +82,11 @@ int main(int argc, char** argv)
   {
     // Open a tcsh session: will stay there until the user types "exit"
 
+#ifdef _WIN32
+    G4UIsession* session = new G4UIterminal();
+#else
     G4UIsession* session = new G4UIterminal(new G4UItcsh);
+#endif
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
     UI->ApplyCommand("/control/execute vis.mac");
 

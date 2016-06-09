@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.6 2009/08/13 11:32:47 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAMillerGreenExcitationModel.cc,v 1.6.4.1 2010/04/01 09:07:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 
 #include "G4DNAMillerGreenExcitationModel.hh"
@@ -209,40 +209,6 @@ void G4DNAMillerGreenExcitationModel::Initialise(const G4ParticleDefinition* par
 
   // InitialiseElementSelectors(particle,cuts);
   
-  // Test if water material
-
-  flagMaterialIsWater= false;
-  densityWater = 0;
-
-  const G4ProductionCutsTable* theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-
-  if(theCoupleTable) 
-  {
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-    if(numOfCouples>0) 
-    {
-	  for (G4int i=0; i<numOfCouples; i++) 
-	  {
-	    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
-	    const G4Material* material = couple->GetMaterial();
-
-            if (material->GetName() == "G4_WATER") 
-            {
-              G4double density = material->GetAtomicNumDensityVector()[1];
-	      flagMaterialIsWater = true; 
-	      densityWater = density; 
-	      
-	      if (verboseLevel > 3) 
-              G4cout << "****** Water material is found with density(cm^-3)=" << density/(cm*cm*cm) << G4endl;
-            }
-  
-          }
-
-    } // if(numOfCouples>0)
-
-  } // if (theCoupleTable)
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -277,7 +243,7 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
   G4double highLim = 0;
   G4double crossSection = 0.;
 
-  if (flagMaterialIsWater)
+  if (material->GetName() == "G4_WATER")
   {
     const G4String& particleName = particleDefinition->GetParticleName();
 
@@ -317,7 +283,8 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
 	  G4double tmp =0.;
 	  
 	  if (k*0.511/3728 > 7.4*eV && k*0.511/3728 < 10*keV) sigmaExcitation = 
-	    excitationXS->CrossSectionPerVolume(material,particleDefinition,k*0.511/3728,tmp,tmp)/densityWater;
+	    excitationXS->CrossSectionPerVolume(material,particleDefinition,k*0.511/3728,tmp,tmp)
+	    /material->GetAtomicNumDensityVector()[1];
        
 	  if ( particleDefinition == instance->GetIon("alpha+") ) 
 	    crossSection = crossSection +  sigmaExcitation ;
@@ -334,12 +301,12 @@ G4double G4DNAMillerGreenExcitationModel::CrossSectionPerVolume(const G4Material
     {
       G4cout << "---> Kinetic energy(eV)=" << k/eV << G4endl;
       G4cout << " - Cross section per water molecule (cm^2)=" << crossSection/cm/cm << G4endl;
-      G4cout << " - Cross section per water molecule (cm^-1)=" << crossSection*densityWater/(1./cm) << G4endl;
+      G4cout << " - Cross section per water molecule (cm^-1)=" << crossSection*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
     } 
 
-  } // if (flagMaterialIsWater)
+  } 
 
- return crossSection*densityWater;		   
+ return crossSection*material->GetAtomicNumDensityVector()[1];		   
 
 }
 

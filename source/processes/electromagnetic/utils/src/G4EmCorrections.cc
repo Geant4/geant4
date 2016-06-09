@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.54 2009/10/29 17:56:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4EmCorrections.cc,v 1.54.2.1 2010/04/06 09:05:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -122,11 +122,11 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
 
   G4double sum = (2.0*(Barkas + Bloch) + Mott);
 
-  if(verbose > 1)
+  if(verbose > 1) {
     G4cout << "EmCorrections: E(MeV)= " << e/MeV << " Barkas= " << Barkas
 	   << " Bloch= " << Bloch << " Mott= " << Mott 
-	   << " Sum= " << sum << G4endl; 
-
+	   << " Sum= " << sum << " q2= " << q2 << G4endl; 
+  }
   sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
   return sum;
 }
@@ -164,7 +164,7 @@ G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
 //   valid for kineticEnergy < 0.5 MeV
 //   Other corrections from S.P.Ahlen Rev. Mod. Phys., Vol 52, No1, 1980
   SetupKinematics(p, mat, e);
-  if(tau <= 0.0) return 0.0;
+  if(tau <= 0.0) { return 0.0; }
 
   G4double Barkas = BarkasCorrection (p, mat, e);
   G4double Bloch  = BlochCorrection (p, mat, e);
@@ -179,7 +179,7 @@ G4double G4EmCorrections::ComputeIonCorrections(const G4ParticleDefinition* p,
   }
   sum *= material->GetElectronDensity() * q2 *  twopi_mc2_rcl2 /beta2;
 
-  if(verbose > 1) G4cout << " Sum= " << sum << G4endl; 
+  if(verbose > 1) { G4cout << " Sum= " << sum << G4endl; } 
   return sum;
 }
 
@@ -218,7 +218,7 @@ G4double G4EmCorrections::IonHighOrderCorrections(const G4ParticleDefinition* p,
 
     sum = ComputeIonCorrections(p,couple->GetMaterial(),e) - rest/e;
 
-    if(verbose > 1) G4cout << " Sum= " << sum << " dSum= " << rest/e << G4endl; 
+    if(verbose > 1) { G4cout << " Sum= " << sum << " dSum= " << rest/e << G4endl; } 
   }
   return sum;
 }
@@ -551,6 +551,10 @@ G4double G4EmCorrections::BarkasCorrection(const G4ParticleDefinition* p,
   }
 
   BarkasTerm *= 1.29*charge/material->GetTotNbOfAtomsPerVolume();
+
+  // temporary protection
+  if(charge < -7.0 ) { BarkasTerm *= (-7.0/charge); }
+
   return BarkasTerm;
 }
 
@@ -573,7 +577,11 @@ G4double G4EmCorrections::BlochCorrection(const G4ParticleDefinition* p,
     term += del;
   } while (del > 0.01*term);
 
-  return -y2*term;
+  G4double res = -y2*term;
+  // temporary protection
+  if(q2 > 49. && res < -0.2) { res = -0.2; }
+
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -807,7 +815,7 @@ void G4EmCorrections::BuildCorrectionVector()
   delete v;
   ionList[idx]  = ion;
   stopData[idx] = vv;
-  if(verbose>1) G4cout << "End data set " << G4endl;
+  if(verbose>1) { G4cout << "End data set " << G4endl; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

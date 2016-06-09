@@ -71,6 +71,7 @@ class G4GDMLReadDefine : public G4GDMLRead
 
  public:
 
+   G4bool IsValidID(const G4String&) const;
    G4double GetConstant(const G4String&);
    G4double GetVariable(const G4String&);
    G4double GetQuantity(const G4String&);

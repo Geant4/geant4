@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.79 2009/11/10 20:30:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VEmProcess.cc,v 1.79.2.1 2010/04/06 09:05:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +52,7 @@
 // 12-04-07 remove double call to Clear model manager (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
+// 17-02-10 Added pointer currentParticle (VI)
 //
 // Class Description:
 //
@@ -97,6 +98,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   idxDERegions(0),
   currentModel(0),
   particle(0),
+  currentParticle(0),
   currentCouple(0)
 {
   SetVerboseLevel(1);
@@ -204,7 +206,7 @@ G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver)
 
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  if(!particle) particle = &part;
+  if(!particle) { SetParticle(&part); }
   if(1 < verboseLevel) {
     G4cout << "G4VEmProcess::PreparePhysicsTable() for "
            << GetProcessName()
@@ -229,7 +231,8 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       }
     }
 
-    theCuts = modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
+    theCuts = modelManager->Initialise(particle,secondaryParticle,
+				       2.,verboseLevel);
     const G4ProductionCutsTable* theCoupleTable=
           G4ProductionCutsTable::GetProductionCutsTable();
     theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
@@ -353,9 +356,6 @@ void G4VEmProcess::BuildLambdaTable()
     G4cout << "Lambda table is built for "
            << particle->GetParticleName()
            << G4endl;
-    if(2 < verboseLevel) {
-      G4cout << *theLambdaTable << G4endl;
-    }
   }
 }
 
@@ -384,7 +384,7 @@ void G4VEmProcess::PrintInfoDefinition()
 
   if(verboseLevel > 2 && buildLambdaTable) {
     G4cout << "      LambdaTable address= " << theLambdaTable << G4endl;
-    if(theLambdaTable) G4cout << (*theLambdaTable) << G4endl;
+    if(theLambdaTable) { G4cout << (*theLambdaTable) << G4endl; }
   }
 }
 
@@ -398,9 +398,9 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   // condition is set to "Not Forced"
   *condition = NotForced;
   G4double x = DBL_MAX;
-  if(previousStepSize <= DBL_MIN) theNumberOfInteractionLengthLeft = -1.0;
+  if(previousStepSize <= DBL_MIN) { theNumberOfInteractionLengthLeft = -1.0; }
   InitialiseStep(track);
-  if(!currentModel->IsActive(preStepKinEnergy)) return x;
+  if(!currentModel->IsActive(preStepKinEnergy)) { return x; }
 
   if(preStepKinEnergy < mfpKinEnergy) {
     if (integral) ComputeIntegralLambda(preStepKinEnergy);
@@ -427,7 +427,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
     if (verboseLevel>2){
       G4cout << "G4VEmProcess::PostStepGetPhysicalInteractionLength ";
       G4cout << "[ " << GetProcessName() << "]" << G4endl; 
-      G4cout << " for " << particle->GetParticleName() 
+      G4cout << " for " << currentParticle->GetParticleName() 
 	     << " in Material  " <<  currentMaterial->GetName()
 	     << " Ekin(MeV)= " << preStepKinEnergy/MeV 
 	     <<G4endl;
@@ -460,7 +460,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   // Do not make anything if particle is stopped, the annihilation then
   // should be performed by the AtRestDoIt!
-  if (track.GetTrackStatus() == fStopButAlive) return &fParticleChange;
+  if (track.GetTrackStatus() == fStopButAlive) { return &fParticleChange; }
 
   G4double finalT = track.GetKineticEnergy();
 
@@ -468,7 +468,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   if (integral) {
     G4double lx = GetLambda(finalT, currentCouple);
     if(preStepLambda<lx && 1 < verboseLevel) {
-      G4cout << "WARING: for " << particle->GetParticleName() 
+      G4cout << "WARING: for " << currentParticle->GetParticleName() 
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
              << " preLambda= " << preStepLambda << " < " << lx << " (postLambda) "
@@ -482,7 +482,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   }
 
   SelectModel(finalT, currentCoupleIndex);
-  if(!currentModel->IsActive(finalT)) return &fParticleChange;
+  if(!currentModel->IsActive(finalT)) { return &fParticleChange; }
   if(useDeexcitation) {
     currentModel->SetDeexcitationFlag(idxDERegions[currentCoupleIndex]);
   }
@@ -661,9 +661,10 @@ G4double G4VEmProcess::CrossSectionPerVolume(G4double kineticEnergy,
   } else {
     SelectModel(kineticEnergy, currentCoupleIndex);
     cross = currentModel->CrossSectionPerVolume(currentMaterial,
-						particle,kineticEnergy);
+						currentParticle,kineticEnergy);
   }
 
+  if(cross < 0.0) { cross = 0.0; }
   return cross;
 }
 
@@ -675,6 +676,32 @@ G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
 {
   *condition = NotForced;
   return G4VEmProcess::MeanFreePath(track);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEmProcess::MeanFreePath(const G4Track& track)
+{
+  DefineMaterial(track.GetMaterialCutsCouple());
+  preStepLambda = GetCurrentLambda(track.GetKineticEnergy());
+  G4double x = DBL_MAX;
+  if(DBL_MIN < preStepLambda) x = 1.0/preStepLambda;
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4VEmProcess::ComputeCrossSectionPerAtom(G4double kineticEnergy, 
+					 G4double Z, G4double A, G4double cut)
+{
+  SelectModel(kineticEnergy, currentCoupleIndex);
+  G4double x = 0.0;
+  if(currentModel) {
+   x = currentModel->ComputeCrossSectionPerAtom(currentParticle,kineticEnergy,
+						 Z,A,cut);
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -713,7 +740,7 @@ void G4VEmProcess::FindLambdaMax()
     }
     theEnergyOfCrossSectionMax[i] = emax;
     theCrossSectionMax[i] = smax;
-    if(2 < verboseLevel) {
+    if(1 < verboseLevel) {
       G4cout << "For " << particle->GetParticleName() 
 	     << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
 	     << " lambda= " << smax << G4endl;

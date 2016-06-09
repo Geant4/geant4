@@ -14,6 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17 February 2010 Vladimir Ivanchenko (hadr-deex-V09-02-24)
+----------------------------------------------------------
+- G4ExcitationHandler - deactivate Multi-Fragmentation models
+
+05 February 2010 Vladimir Ivanchenko
+------------------------------------
+- G4ExcitationHandler - activate FermiBreakUp and Multi-Fragmentation models
+
+18 January 2010  Vladimir Ivanchenko
+------------------------------------
+- Move 9.3 version to the head of cvs for following files: G4FissionBarrier.hh,
+  G4FissionBarrier.cc, G4VGammaDeexcitation.cc, G4VGammaDeexcitation.hh,
+
 09 December 2009 Gunter Folger  (hadr-deex-V09-02-23)
 -----------------------------------------------------
 - Include fixes in ablation by Pete Truscott:

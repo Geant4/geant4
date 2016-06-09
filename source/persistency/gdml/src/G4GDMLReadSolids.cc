@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.27 2009/12/04 13:58:51 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLReadSolids.cc,v 1.27.2.1 2010/03/18 11:08:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -1554,46 +1554,79 @@ OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
    G4OpticalSurfaceFinish finish;
    G4SurfaceType type;   
    
-   if (smodel="unified") { model = unified; } else
-   if (smodel="glisur") { model = glisur; }
+   if ((smodel=="glisur") || (smodel=="0")) { model = glisur; } else
+   if ((smodel=="unified") || (smodel=="1")) { model = unified; }
    else { model = LUT; }
 
-   if (sfinish=="polishedfrontpainted") { finish = polishedfrontpainted; } else
-   if (sfinish=="polishedbackpainted") { finish = polishedbackpainted; } else
-   if (sfinish=="groundfrontpainted") { finish = groundfrontpainted; } else
-   if (sfinish=="groundbackpainted") { finish = groundbackpainted; } else
-   if (sfinish=="ground") { finish = ground; } else
-   if (sfinish=="polished") { finish = polished; } else
-   if (sfinish=="polishedlumirrorair") { finish = polishedlumirrorair; } else
-   if (sfinish=="polishedlumirrorglue") { finish = polishedlumirrorglue; } else
-   if (sfinish=="polishedair") { finish = polishedair; } else
-   if (sfinish=="polishedteflonair") { finish = polishedteflonair; } else
-   if (sfinish=="polishedtioair") { finish = polishedtioair; } else
-   if (sfinish=="polishedtyvekair") { finish = polishedtyvekair; } else
-   if (sfinish=="polishedvm2000air") { finish = polishedvm2000air; } else
-   if (sfinish=="polishedvm2000glue") { finish = polishedvm2000glue; } else
-   if (sfinish=="etchedlumirrorair") { finish = etchedlumirrorair; } else
-   if (sfinish=="etchedlumirrorglue") { finish = etchedlumirrorglue; } else
-   if (sfinish=="etchedair") { finish = etchedair; } else
-   if (sfinish=="etchedteflonair") { finish = etchedteflonair; } else
-   if (sfinish=="etchedtioair") { finish = etchedtioair; } else
-   if (sfinish=="etchedtyvekair") { finish = etchedtyvekair; } else
-   if (sfinish=="etchedvm2000air") { finish = etchedvm2000air; } else
-   if (sfinish=="etchedvm2000glue") { finish = etchedvm2000glue; } else
-   if (sfinish=="groundlumirrorair") { finish = groundlumirrorair; } else
-   if (sfinish=="groundlumirrorglue") { finish = groundlumirrorglue; } else
-   if (sfinish=="groundair") { finish = groundair; } else
-   if (sfinish=="groundteflonair") { finish = groundteflonair; } else
-   if (sfinish=="groundtioair") { finish = groundtioair; } else
-   if (sfinish=="groundtyvekair") { finish = groundtyvekair; } else
-   if (sfinish=="groundvm2000air") { finish = groundvm2000air; }
+   if ((sfinish=="polished") || (sfinish=="0"))
+      { finish = polished; } else
+   if ((sfinish=="polishedfrontpainted") || (sfinish=="1"))
+      { finish = polishedfrontpainted; } else
+   if ((sfinish=="polishedbackpainted") || (sfinish=="2"))
+      { finish = polishedbackpainted; } else
+   if ((sfinish=="ground") || (sfinish=="3"))
+      { finish = ground; } else
+   if ((sfinish=="groundfrontpainted") || (sfinish=="4"))
+      { finish = groundfrontpainted; } else
+   if ((sfinish=="groundbackpainted") || (sfinish=="5"))
+      { finish = groundbackpainted; } else
+   if ((sfinish=="polishedlumirrorair") || (sfinish=="6"))
+      { finish = polishedlumirrorair; } else
+   if ((sfinish=="polishedlumirrorglue") || (sfinish=="7"))
+      { finish = polishedlumirrorglue; } else
+   if ((sfinish=="polishedair") || (sfinish=="8"))
+      { finish = polishedair; } else
+   if ((sfinish=="polishedteflonair") || (sfinish=="9"))
+      { finish = polishedteflonair; } else
+   if ((sfinish=="polishedtioair") || (sfinish=="10"))
+      { finish = polishedtioair; } else
+   if ((sfinish=="polishedtyvekair") || (sfinish=="11"))
+      { finish = polishedtyvekair; } else
+   if ((sfinish=="polishedvm2000air") || (sfinish=="12"))
+      { finish = polishedvm2000air; } else
+   if ((sfinish=="polishedvm2000glue") || (sfinish=="13"))
+      { finish = polishedvm2000glue; } else
+   if ((sfinish=="etchedlumirrorair") || (sfinish=="14"))
+      { finish = etchedlumirrorair; } else
+   if ((sfinish=="etchedlumirrorglue") || (sfinish=="15"))
+      { finish = etchedlumirrorglue; } else
+   if ((sfinish=="etchedair") || (sfinish=="16"))
+      { finish = etchedair; } else
+   if ((sfinish=="etchedteflonair") || (sfinish=="17"))
+      { finish = etchedteflonair; } else
+   if ((sfinish=="etchedtioair") || (sfinish=="18"))
+      { finish = etchedtioair; } else
+   if ((sfinish=="etchedtyvekair") || (sfinish=="19"))
+      { finish = etchedtyvekair; } else
+   if ((sfinish=="etchedvm2000air") || (sfinish=="20"))
+      { finish = etchedvm2000air; } else
+   if ((sfinish=="etchedvm2000glue") || (sfinish=="21"))
+      { finish = etchedvm2000glue; } else
+   if ((sfinish=="groundlumirrorair") || (sfinish=="22"))
+      { finish = groundlumirrorair; } else
+   if ((sfinish=="groundlumirrorglue") || (sfinish=="23"))
+      { finish = groundlumirrorglue; } else
+   if ((sfinish=="groundair") || (sfinish=="24"))
+      { finish = groundair; } else
+   if ((sfinish=="groundteflonair") || (sfinish=="25"))
+      { finish = groundteflonair; } else
+   if ((sfinish=="groundtioair") || (sfinish=="26"))
+      { finish = groundtioair; } else
+   if ((sfinish=="groundtyvekair") || (sfinish=="27"))
+      { finish = groundtyvekair; } else
+   if ((sfinish=="groundvm2000air") || (sfinish=="28"))
+      { finish = groundvm2000air; }
    else { finish = groundvm2000glue; }
 
-   if (stype=="dielectric_metal") { type = dielectric_metal; } else
-   if (stype=="dielectric_dielectric") { type = dielectric_dielectric; } else
-   if (stype=="dielectric_LUT") { type = dielectric_LUT; } else
-   if (stype=="x_ray") { type = x_ray; }
-   else { type = firsov; }
+   if ((stype=="dielectric_metal") || (stype=="0"))
+      { type = dielectric_metal; } else
+   if ((stype=="dielectric_dielectric") || (stype=="1"))
+      { type = dielectric_dielectric; } else
+   if ((stype=="dielectric_LUT") || (stype=="2"))
+      { type = dielectric_LUT; } else
+   if ((stype=="firsov") || (stype=="3"))
+      { type = firsov; }
+   else { type = x_ray; }
 
    new G4OpticalSurface(name,model,finish,type,value);
 }

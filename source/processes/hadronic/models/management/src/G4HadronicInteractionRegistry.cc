@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteractionRegistry.cc,v 1.9 2009/12/02 15:57:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4HadronicInteractionRegistry.cc,v 1.9.2.1 2010/04/01 09:54:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 23-Jan-2009 V.Ivanchenko make the class to be a singleton
 
@@ -95,7 +95,6 @@ RemoveMe(G4HadronicInteraction * aModel)
       //G4cout << "DeRegister model <" << aModel->GetModelName() 
       //<< ">  " << i << G4endl;
       allModels[i] = 0;
-      if(i == nModels-1) allModels.pop_back();
       return;
     }
   }

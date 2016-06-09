@@ -4,245 +4,11 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
 
 B01PhysicsList::SetCuts:CutLength : 1 (mm)
 Going to assign importance: 1, to volume: cell_01
@@ -381,9 +147,9 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -395,9 +161,9 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :     Emin=          2 MeV        Emax=   10 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -426,11 +192,11 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   10 TeV
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -485,9 +251,9 @@ hIoni:   for  pi+    SubType= 2
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc92 :     Emin=          0 eV         Emax=   10 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -562,26 +328,26 @@ hIoni:   for  pi-    SubType= 2
  Number of event processed : 100
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            13 |           113 |             0 |             0 |       5.61232 |     7.4371885 |             1 |     2916.5495 |     2916.5495 |     99.426314 |     21690.928 |     558.01229 |
-       cell_01 |           108 |           132 |           136 |           136 |     7.0757781 |     8.6292831 |             1 |      11502.96 |      11502.96 |     339.48587 |     99262.301 |     2402.1267 |
-       cell_02 |            71 |           166 |           190 |            95 |     7.6018819 |     8.5492627 |           0.5 |     15695.343 |     7847.6713 |      215.9572 |     67091.804 |     1641.6811 |
-       cell_03 |            81 |           175 |           224 |            56 |     6.5054625 |     7.7824432 |          0.25 |     17460.464 |     4365.1159 |     132.02292 |     33971.267 |     858.87014 |
-       cell_04 |            89 |           205 |           215 |        26.875 |     6.6073208 |     7.8888608 |         0.125 |     20939.742 |     2617.4677 |       78.9244 |     20648.839 |     521.47883 |
-       cell_05 |           109 |           241 |           313 |       19.5625 |     5.7494783 |     7.6812676 |        0.0625 |      25441.48 |     1590.0925 |     53.857143 |     12213.926 |     309.65047 |
-       cell_06 |           140 |           301 |           407 |      12.71875 |     5.4403433 |     7.4495959 |       0.03125 |     31598.471 |     987.45221 |      34.66688 |     7356.1199 |     188.59973 |
-       cell_07 |           151 |           347 |           498 |       7.78125 |   0.088116031 |     7.1492903 |      0.015625 |     36382.686 |     568.47947 |     1208.7925 |     4064.2247 |     106.51399 |
-       cell_08 |           155 |           361 |           531 |     4.1484375 |     1.4680023 |     6.7995311 |     0.0078125 |     38716.694 |     302.47417 |     37.475934 |     2056.6825 |     55.014755 |
-       cell_09 |           179 |           424 |           677 |     2.6445312 |     4.5133063 |     6.2518413 |    0.00390625 |     45265.981 |     176.82024 |     6.7640535 |     1105.4521 |     30.528245 |
-       cell_10 |           202 |           455 |           753 |     1.4707031 |     3.8733446 |     5.8949275 |   0.001953125 |      48997.89 |     95.699004 |     4.0969015 |     564.13869 |     15.868711 |
-       cell_11 |           231 |           535 |           856 |     0.8359375 |     3.6383551 |     5.7422032 |  0.0009765625 |      54743.91 |     53.460849 |     2.4056525 |     306.98306 |      8.752618 |
-       cell_12 |           280 |           581 |          1124 |    0.54882812 |     3.4327816 |     5.3593515 | 0.00048828125 |     69300.808 |     33.838285 |     1.5475193 |     181.35126 |      5.312296 |
-       cell_13 |           322 |           679 |          1269 |    0.30981445 |     3.2951856 |     5.1867546 | 0.00024414062 |     76063.426 |     18.570172 |    0.86847764 |     96.318927 |      2.861795 |
-       cell_14 |           341 |           721 |          1388 |    0.16943359 |    0.11698079 |     5.0065733 | 0.00012207031 |     84149.054 |     10.272101 |     13.259503 |     51.428028 |      1.551107 |
-       cell_15 |           381 |           818 |          1645 |    0.10040283 |     2.8460701 |     4.7402406 | 6.1035156e-05 |     94156.643 |     5.7468654 |    0.29552248 |     27.241525 |    0.84107769 |
-       cell_16 |           432 |           949 |          1887 |    0.05758667 |     2.6077252 |     4.6240132 | 3.0517578e-05 |     110208.38 |     3.3632929 |    0.18522521 |     15.551911 |    0.48301645 |
-       cell_17 |           450 |           994 |          2040 |    0.03112793 |   0.081788968 |     4.4480586 | 1.5258789e-05 |     113451.07 |      1.731126 |     2.9660188 |     7.7001498 |    0.24258762 |
-       cell_18 |           452 |          1048 |          2101 |   0.016029358 |     2.1453345 |     4.3717818 | 7.6293945e-06 |     114883.29 |    0.87648992 |   0.056295804 |     3.8318227 |    0.12077333 |
-       cell_19 |           523 |           523 |             0 |             0 |     1.9486462 |     4.2943207 | 7.6293945e-06 |     73499.256 |    0.56075482 |   0.038803644 |      2.408061 |   0.075614574 |
+       cell_00 |            11 |           111 |             0 |             0 |     6.2521107 |     7.2036217 |             1 |     1656.5443 |     1656.5443 |     50.465846 |     11933.118 |     315.51806 |
+       cell_01 |           106 |           126 |           118 |           118 |     9.1086992 |     9.4173919 |             1 |     10480.042 |     10480.042 |     255.84872 |     98694.661 |      2330.449 |
+       cell_02 |            72 |           166 |           156 |            78 |     7.9307935 |     8.9172892 |           0.5 |     14911.223 |     7455.6114 |     201.68641 |     66483.843 |     1599.5333 |
+       cell_03 |           101 |           228 |           261 |         65.25 |     7.6572789 |     8.4945866 |          0.25 |     23237.153 |     5809.2882 |     158.32897 |     49347.501 |     1212.3691 |
+       cell_04 |           118 |           267 |           373 |        46.625 |     6.5303753 |     7.6032498 |         0.125 |     29481.858 |     3685.2323 |     110.21293 |     28019.742 |     719.73179 |
+       cell_05 |           129 |           314 |           403 |       25.1875 |     6.0116323 |     7.6013192 |        0.0625 |     32125.666 |     2007.8541 |     65.059097 |      15262.34 |     391.11137 |
+       cell_06 |           148 |           341 |           477 |      14.90625 |     6.2669126 |     7.5227297 |       0.03125 |      37330.16 |     1166.5675 |     36.213051 |     8775.7719 |     226.94403 |
+       cell_07 |           166 |           387 |           515 |      8.046875 |     4.8827937 |     6.9286396 |      0.015625 |     39366.003 |      615.0938 |     23.169978 |     4261.7633 |     113.13422 |
+       cell_08 |           198 |           425 |           624 |         4.875 |     3.3499387 |     6.3692991 |     0.0078125 |     48760.889 |     380.94444 |     19.908528 |     2426.3491 |     66.692347 |
+       cell_09 |           233 |           547 |           859 |     3.3554688 |    0.26091593 |     6.1642597 |    0.00390625 |     58772.724 |     229.58095 |     151.13784 |     1415.1966 |     39.434271 |
+       cell_10 |           250 |           554 |           823 |     1.6074219 |    0.10997076 |     6.3309074 |   0.001953125 |     59781.989 |      116.7617 |     185.90867 |     739.20749 |     20.444517 |
+       cell_11 |           271 |           632 |           990 |    0.96679688 |    0.59768804 |      6.100975 |  0.0009765625 |     68132.069 |     66.535223 |     18.984767 |     405.92973 |     11.346968 |
+       cell_12 |           311 |           684 |          1197 |    0.58447266 |     2.7536145 |     5.7909355 | 0.00048828125 |     80944.385 |     39.523625 |     2.3673873 |     228.87877 |     6.5188719 |
+       cell_13 |           359 |           784 |          1386 |    0.33837891 |    0.58431491 |     5.3178931 | 0.00024414062 |     87379.065 |     21.332779 |     5.7294769 |     113.44544 |     3.3478188 |
+       cell_14 |           391 |           860 |          1629 |    0.19885254 |    0.34415394 |     5.0207196 | 0.00012207031 |      98617.77 |     12.038302 |     5.3226013 |     60.440939 |     1.8317942 |
+       cell_15 |           401 |           902 |          1863 |     0.1137085 |     2.0505983 |     4.6583929 | 6.1035156e-05 |     102197.72 |     6.2376541 |    0.44389179 |     29.057443 |    0.91024374 |
+       cell_16 |           446 |           969 |          1830 |   0.055847168 |    0.33327761 |     4.6024303 | 3.0517578e-05 |     107323.54 |     3.2752545 |     1.4248096 |      15.07413 |    0.47485714 |
+       cell_17 |           455 |          1021 |          1952 |   0.029785156 |    0.96497195 |      4.510521 | 1.5258789e-05 |     117430.81 |      1.791852 |    0.26878627 |      8.082186 |    0.25937121 |
+       cell_18 |           449 |          1071 |          1919 |   0.014640808 |     3.0203248 |     4.5160968 | 7.6293945e-06 |     117066.62 |    0.89314745 |   0.042870644 |     4.0335403 |    0.12948327 |
+       cell_19 |           452 |           452 |             0 |             0 |     3.0602483 |     4.4846814 | 7.6293945e-06 |     68333.795 |    0.52134549 |   0.024459142 |     2.3380684 |   0.074851049 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ImportanceProcess, will be removed!

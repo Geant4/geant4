@@ -12,7 +12,7 @@
 #          % setenv DAWN_BATCH               1                        #
 #          % make visclean                                            #
 #          % $G4BINDIR/exampleN03                                     #
-#          Idle> /control/execute visTutor/exN03Vis8.mac              #
+#          Idle> /control/execute visTutor/exN03Vis7.mac              #
 #          Idle> exit                                                 #
 #          % gv g4_00.eps &                                           #
 #          % gv g4_01.eps &                                           #
@@ -30,8 +30,6 @@
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
 #    * Unnecessary                                                    #
-#                                                                     # 
-#  ADDITIONAL NOTES:                                                  #
 #                                                                     # 
 #######################################################################
 

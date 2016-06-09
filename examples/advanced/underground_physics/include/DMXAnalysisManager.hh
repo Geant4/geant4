@@ -32,6 +32,7 @@
 // History:
 // -----------
 //  16 Jan 2002  Alex Howard   Created
+//  22 Oct 2009  Luciano Pandola Added TreeFactory, removed ntuple4
 //
 // -------------------------------------------------------------------
 
@@ -77,6 +78,7 @@
 namespace AIDA {
   class IAnalysisFactory;
   class ITree;
+  class ITreeFactory;
   class IHistogramFactory;
   class ITupleFactory;
   class ITuple;
@@ -173,13 +175,14 @@ private:
   G4bool interactive;
 
   AIDA::IAnalysisFactory  *af;
+  AIDA::ITreeFactory *tf;
   AIDA::ITree             *tree;
   AIDA::IHistogramFactory *hf;
   AIDA::ITupleFactory     *tpf;
   AIDA::ITuple            *ntuple1;
   AIDA::ITuple            *ntuple2;
   AIDA::ITuple            *ntuple3;
-  AIDA::ITuple            *ntuple4;
+
 
   AIDA::IHistogram1D* hEsourcep;
   AIDA::IHistogram1D* hEdepp;

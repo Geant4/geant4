@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2009/03/02 16:49:14 gunter Exp $
+$Id: History,v 1.6.2.1 2010/03/19 14:17:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.6 2009/03/02 16:49:14 gunter Exp $
 
                        Package History file
                        --------------------
+
+18 March 2010 - tag nanobeam-V09-02-02 - S. Incerti
+- updated multiple scattering class for e+- and mu
 
 2-March 2009 - tag nanobeam-V09-02-01 - G.Folger
 - correct for gcc4.3/slc5 warning 

@@ -54,6 +54,7 @@
 #include "G4VisExecutive.hh"
 #endif
 
+#include "DMXAnalysisManager.hh"
 #include "DMXDetectorConstruction.hh"
 #include "DMXPhysicsList.hh"
 #include "DMXPrimaryGeneratorAction.hh"
@@ -166,6 +167,11 @@ int main(int argc,char** argv) {
     }
 
   // job termination
+#ifdef G4ANALYSIS_USE  
+  DMXAnalysisManager::getInstance()->Finish(); 
+  G4cout << "Analysis files closed" << G4endl;
+#endif
+
 #ifdef G4VIS_USE
   if(visManager) delete visManager;
 #endif

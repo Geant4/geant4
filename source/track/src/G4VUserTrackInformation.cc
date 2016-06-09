@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserTrackInformation.cc,v 1.3 2009/10/19 09:37:00 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VUserTrackInformation.cc,v 1.3.2.1 2010/03/18 10:09:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -33,12 +33,23 @@
 #include "G4VUserTrackInformation.hh"
 
 G4VUserTrackInformation::G4VUserTrackInformation()
-  : fType("NONE")
+  : pType(0)
 {;}
 
 G4VUserTrackInformation::G4VUserTrackInformation(const G4String& infoType)
-  : fType(infoType)
-{;}
+{ 
+  pType = new G4String(infoType) ;
+}
 
 G4VUserTrackInformation::~G4VUserTrackInformation()
-{;}
+{
+  if (pType!=0) delete pType;
+}
+
+const G4String& G4VUserTrackInformation::GetType() const
+{
+  static const G4String NOTYPE="NONE";
+  if(pType!=0) return *pType;
+  else return NOTYPE;
+}
+

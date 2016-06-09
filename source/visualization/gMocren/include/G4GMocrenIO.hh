@@ -67,6 +67,7 @@ public:
   GMocrenDataPrimitive<T> & operator += (const GMocrenDataPrimitive<T> & _right);
 
   void clear();
+  void clearImage();
   void setSize(int _size[3]);
   void getSize(int _size[3]);
   void setScale(double & _scale);
@@ -316,6 +317,7 @@ public:
   // set the modality image in CT 
   void setModalityImage(short * _image);
   short * getModalityImage(int _z);
+  void clearModalityImage();
   // set/get the modality image density map
   void setModalityImageDensityMap(std::vector<float> & _map);
   std::vector<float> & getModalityImageDensityMap();

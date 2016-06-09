@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.126 2009/11/26 10:40:56 bmorgan Exp $
+# $Id: Configure,v 1.126.2.1 2010/03/18 09:59:14 gcosmo Exp $
 #
-# Generated on Thu Nov 26 10:39:51 GMT 2009 [metaconfig 3.0 PL70]
+# Generated on Thu Mar 11 15:55:53 GMT 2010 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2259,17 +2259,20 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
     #
     # User may supply a value for 'QTDIR' and in that case we ASSUME a
-    # Trolltech style installation or a Mac Framework
+    # Trolltech style installation or a Mac Framework. The latter has a
+    # higher priority in the list of search paths because otherwise we may
+    # miss the presence of a Framework (see Bug #1095)
     #
     if test "x\$with_qt_dir" != "x" ; then
         g4_qt_dir="\$with_qt_dir"
-        g4_qt_possible_qt_include_dirs="\$with_qt_dir/include/QtCore
+        g4_qt_possible_qt_include_dirs="\$with_qt_dir/QtCore.framework/Headers
+                                        \$with_qt_dir/lib*/QtCore.framework/Headers
+                                        \$with_qt_dir/include/QtCore
                                         \$with_qt_dir/include/Qt 
                                         \`ls -dr \$with_qt_dir/include/qt*/QtCore 2>/dev/null\` 
                                         \`ls -dr \$with_qt_dir/include/qt*/Qt 2>/dev/null\` 
                                         \`ls -dr \$with_qt_dir/include/qt* 2>/dev/null\` 
-                                        \$with_qt_dir/include
-                                        \$with_qt_dir/QtCore.framework/Headers"
+                                        \$with_qt_dir/include"
 
         # Check for qglobal.h
         g4_qglobal_loc=\`./loc qglobal.h no \$g4_qt_possible_qt_include_dirs\`
@@ -2285,17 +2288,29 @@ if test "x\$g4_qt_is_configured" = "x" ; then
         fi
 
     else
-        # We use standard search paths...
+        # We use standard search paths, again preferencing Frameworks so that
+        # these are not missed
         qt_direct_test_header="qglobal.h"
 
         g4_qt_include_path_list="
             \`ls -dr /Library/Frameworks/QtCore.framework/Headers 2>/dev/null\` 
             \`ls -dr /System/Library/Frameworks/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/local/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/local/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/local/lib*/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/local/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/local/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/local/lib/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/local/lib*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/Qt*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /opt/Qt*/lib*/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/lib/QtCore.framework/Headers 2>/dev/null\`
+            \`ls -dr /usr/lib/Qt*/QtCore.framework/Headers 2>/dev/null\`
             /usr/include/QtCore
             \`ls -dr /usr/include/qt*/QtCore 2>/dev/null\`
-	    \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
+	        \`ls -dr /usr/local/include/QtCore 2>/dev/null\`
             \`ls -dr /usr/local/include/qt*/QtCore 2>/dev/null\`
-	    \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
+	        \`ls -dr /usr/local/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /opt/qt*/include/QtCore 2>/dev/null\` 
             \`ls -dr /usr/qt*/include/QtCore 2>/dev/null\`
             \`ls -dr /usr/qt/*/include/QtCore 2>/dev/null\` 
@@ -2306,7 +2321,7 @@ if test "x\$g4_qt_is_configured" = "x" ; then
             /usr/include
             \`ls -dr /usr/include/qt* 2>/dev/null\`
             \`ls -dr /usr/local/include 2>/dev/null\`
-	    \`ls -dr /usr/local/include/qt* 2>/dev/null\`
+	        \`ls -dr /usr/local/include/qt* 2>/dev/null\`
             \`ls -dr /usr/local/qt*/include 2>/dev/null\`
             \`ls -dr /opt/qt*/include 2>/dev/null\` 
             \`ls -dr /usr/qt*/include 2>/dev/null\`
@@ -2349,9 +2364,10 @@ if test "x\$g4_qt_is_configured" = "x" ; then
         if test "x\$g4_qt_include_dir" = "x" ; then
             g4_qt_include_dir=no
             g4_havegoodqt=no
+            echo "checking for qglobal.h... no"
+        else
+            echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
         fi
-
-        echo "checking for qglobal.h... \$g4_qt_include_dir/qglobal.h"
     fi # END TEST with_qt_dir is set
 
     #
@@ -2362,24 +2378,54 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
     # Immediate and obvious Darwin check...
     if test "x\`basename \$g4_qt_include_dir\`" = "xHeaders" ; then
-        #check for moc
-        if test -x "/usr/bin/moc" ; then
-            g4_qt_moc="/usr/bin/moc"
-            echo "checking for moc... \$g4_qt_moc"
+        #check for moc - we have a framework so we first need to check for
+        #a bin directory below g4_qt_include_dir. Depending on how the
+        #Framework was installed, this may be below the level that
+        #QtCore.framework is at.
 
-            g4_qt_dir=\`dirname \$g4_qt_include_dir\`
-            g4_qt_dir=\`dirname \$g4_qt_dir\`
+        # Find base framework directory
+        g4_qt_fmwk_base_dir=\`dirname \$g4_qt_include_dir\`
+        g4_qt_fmwk_base_dir=\`dirname \$g4_qt_fmwk_base_dir\`
 
-	    g4_qt_version="4"
-            g4_qt_cxxflags="-I\$g4_qt_dir/QtCore.framework/Headers -I\$g4_qt_dir/QtGui.framework/Headers"
-            g4_qt_gl_cxxflags="-I\$g4_qt_dir/QtOpenGl.framework/Headers"
-            g4_qt_libs="-F\$g4_qt_dir -framework QtCore -framework QtGui"
-            g4_qt_gl_libs="-framework QtOpenGL"
-        else
-            echo "checking for moc... no"
-            g4_havegoodqt=no
+        if test "x\`basename \$g4_qt_fmwk_base_dir\`" = "xlib" ; then
+            #This is probably an independent install
+            echo "checking Mac Framework location... trolltech/custom"
+            g4_qt_dir=\`dirname \$g4_qt_fmwk_base_dir\`
+
+            #Check for moc
+            if test -x "\$g4_qt_dir/bin/moc" ; then
+                g4_qt_moc="\$g4_qt_dir/bin/moc"
+                echo "checking for moc... \$g4_qt_moc"
+
+                g4_qt_version="4"
+                g4_qt_cxxflags="-I\$g4_qt_dir/lib/QtCore.framework/Headers -I\$g4_qt_dir/lib/QtGui.framework/Headers"
+                g4_qt_gl_cxxflags="-I\$g4_qt_dir/lib/QtOpenGl.framework/Headers"
+                g4_qt_libs="-F\$g4_qt_dir/lib -framework QtCore -framework QtGui"
+                g4_qt_gl_libs="-framework QtOpenGL"
+            else
+                echo "checking for moc... no"
+                g4_havegoodqt=no
+            fi
+        elif test "x\`basename \$g4_qt_fmwk_base_dir\`" = "xFrameworks" ; then
+            #This looks like a system install
+            echo "Checking Mac Framework location... Frameworks"
+            if test -x "/usr/bin/moc" ; then
+                g4_qt_moc="/usr/bin/moc"
+                echo "checking for moc... \$g4_qt_moc"
+
+                g4_qt_dir=\$g4_qt_fmwk_base_dir
+
+ 	            g4_qt_version="4"
+                g4_qt_cxxflags="-I\$g4_qt_dir/QtCore.framework/Headers -I\$g4_qt_dir/QtGui.framework/Headers"
+                g4_qt_gl_cxxflags="-I\$g4_qt_dir/QtOpenGl.framework/Headers"
+                g4_qt_libs="-F\$g4_qt_dir -framework QtCore -framework QtGui"
+                g4_qt_gl_libs="-framework QtOpenGL"
+            else
+                echo "checking for moc... no"
+                g4_havegoodqt=no
+            fi
         fi
-    else
+    elif test "x\$g4_qt_include_dir" != "x" ; then
         # Probably have Unix-style installation, in which case estimated
         # 'QTDIR' equivalent is $with_qt_dir if supplied, or directory
         # one level below the 'include' directory in \$g4_qt_include_dir
@@ -2670,6 +2716,9 @@ EOM\`
         else
             g4_qt_is_configured=''
         fi
+    else
+        #We couldn't find qglobal...
+	    g4_havegoodqt="no"
     fi #END TEST for Darwin Framework
 
 else

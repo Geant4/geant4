@@ -1,4 +1,4 @@
-$Id: History,v 1.234 2009/12/07 09:24:27 vnivanch Exp $
+$Id: History,v 1.234.2.1 2010/04/06 09:31:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Dec 7, 2009  V.Ivanchenko (global-V09-02-12)
-- G4PhysicsVector: (L.Pandola) fixed initialisation of lastEnergy to -DBL_MAX
-                   allowing to have negative scale of energy  
+Apr 06, 2010  G.Cosmo (global-V09-02-13)
+- Changed date for release 9.3.p01.
+
+Mar 30, 2010  G.Cosmo
+- Moved 'mem' pool in G4Allocator to public section, to allow for use of
+  allocator in vectors on Windows/C++.
+
+Mar 23, 2010  V.Ivanchenko
+- G4PhysicsLogVector, G4PhysicsLnVector, G4PhysicsLinearVector: preserve
+  values of 'edgeMin' and 'edgeMax' in constructors avoiding recomputation,
+  to avoid precision problem; fixes problem detected on Windows/VC++.
+
+Dec 07, 2009  L.Pandola, V.Ivanchenko (global-V09-02-12)
+- G4PhysicsVector: fixed initialisation of 'lastEnergy' to -DBL_MAX
+  allowing to have negative scale of energy.
 
 Nov 24, 2009  G.Cosmo (global-V09-02-11)
 - Changed date for release 9.3.

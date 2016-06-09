@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: hadr01.cc,v 1.10 2009/11/25 19:56:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: hadr01.cc,v 1.10.2.1 2010/03/18 10:33:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -------------------------------------------------------------
 //      GEANT4 hadr01
@@ -36,6 +36,7 @@
 //  Authors: A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov
 //
 //  Modified: 
+//  29.12.2009 V.Ivanchenko introduced access to reference PhysLists
 //
 // -------------------------------------------------------------
 //
@@ -54,6 +55,7 @@
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "PhysicsListMessenger.hh"
 
 #include "RunAction.hh"
 #include "EventAction.hh"
@@ -76,6 +78,7 @@ int main(int argc,char** argv) {
 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
+  PhysicsListMessenger* mess = 0;
   G4String physName = "";
 
   // Physics List name defined via 2nd argument
@@ -88,6 +91,7 @@ int main(int argc,char** argv) {
   // reference PhysicsList via its name
   if(factory.IsReferencePhysList(physName)) {
     phys = factory.GetReferencePhysList(physName);
+    mess = new PhysicsListMessenger();
   } 
 
   // local Physics List
@@ -124,14 +128,15 @@ int main(int argc,char** argv) {
     }
   else           // Batch mode
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
 
   //job termination
-  if(visManager) delete visManager;
+  delete visManager;
   delete runManager;
+  delete mess;
 
   return 0;
 }

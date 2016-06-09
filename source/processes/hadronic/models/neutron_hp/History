@@ -14,7 +14,29 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-14 May 2009  Tatsumi Koi  (hadr-hpn-V09-02-00)
+24 March 2010  Dennis Wright (hadr-hpn-V09-02-02)
+-------------------------------------------------
+- move all code in hadr-hpn-V09-02-01 to HEAD.
+
+18 November 2009 Tatsumi Koi (hadr-hpn-V09-02-01)
+-------------------------------------------------
+- Add Ignore and Enable On Flight Doppler Broadening methods  
+	G4NeutronHPElasticData.cc
+	G4NeutronHPInelasticData.cc
+	G4NeutronHPCaptureData.cc
+
+22 September 2009  Tatsumi Koi  (hadr-hpn-V09-02-00)
+- Add safty for Floating Point Exception caused by 0 kinetic energy neutron
+        G4NeutronHPCaptureData.cc
+        G4NeutronHPElasticData.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPFissionData.cc
+        G4NeutronHPorLCaptureData.cc
+        G4NeutronHPorLEInelasticData.cc
+        G4NeutronHPorLElasticData.cc
+        G4NeutronHPorLFissionData.cc
+
+14 May 2009  Tatsumi Koi  (hadr-hpn-V09-01-29)
 - Fix bug in IC electron emissions: Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
 	G4NeutronHPPhotonDist.cc
 	G4NeutronHPInelasticCompFS.cc

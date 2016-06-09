@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc,v 1.24 2009/10/14 13:10:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GDMLReadDefine.cc,v 1.24.2.1 2010/03/18 11:08:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // class G4GDMLReadDefine Implementation
 //
@@ -493,6 +493,11 @@ G4String G4GDMLReadDefine::RefRead(const xercesc::DOMElement* const element)
    }
 
    return ref;
+}
+
+G4bool G4GDMLReadDefine::IsValidID(const G4String& ref) const
+{
+   return eval.IsVariable(ref);
 }
 
 G4double G4GDMLReadDefine::GetConstant(const G4String& ref)

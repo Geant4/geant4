@@ -2,7 +2,7 @@
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
 
   <define>
-  <define/>
+  </define>
 
   <materials>
     <material Z="13" name="ALU" state="solid">

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: geant4-09-03 $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 // G4 Hadron Physics class G4HadronCrossSections
@@ -1584,15 +1584,21 @@ G4HadronCrossSections::GetCaptureCrossSection(
                           const G4DynamicParticle* aParticle,
                           G4double ZZ, G4double /*AA*/)
 {
-   if (GetParticleCode(aParticle) != 16) return 0.;
+   if (GetParticleCode(aParticle) != 16)  { return 0.; }
    G4double ek = aParticle->GetKineticEnergy()/GeV;
-   if (ek > 0.0327) return 0.;
+   if (ek > 0.0327)  { return 0.; }
 
    G4double ekx = std::max(ek, 1.e-9);
+   if( ekx != lastEkx )
+   {
+     lastEkx = ekx;
+     lastEkxPower = std::pow(ekx*1.e6, 0.577);
+   }
+
    G4int izno = static_cast<G4int> (ZZ + 0.01);
    if (izno > 100) izno = 100;      // Not in GHESIG
    izno = izno - 1;      // For array indexing
-   G4double sigcap = 11.12*cscap[izno]/std::pow(ekx*1.e6, 0.577);
+   G4double sigcap = 11.12*cscap[izno]/lastEkxPower;
    // Convert cross section from mb to default units
    sigcap = sigcap*millibarn;
    return sigcap;

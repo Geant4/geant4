@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.18 2008/10/15 17:53:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolarizedComptonScattering.cc,v 1.18.4.1 2010/04/06 09:14:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 //---------- G4PolarizedComptonScattering physics process ----------------------
@@ -51,7 +51,13 @@ using namespace std;
 
 G4PolarizedComptonScattering::G4PolarizedComptonScattering(const G4String& pname)
   : G4ComptonScattering52 (pname)
-{ }
+{ 
+  G4cout << G4endl;
+  G4cout << "!!! G4PolarizedComptonScattering class is obsolete and will be removed for the next major Geant4 release !!!" << G4endl;
+  G4cout << "!!! Please use models for polarisation from polarisation library if yuou work with polarized beams !!!" << G4endl;
+  G4cout << "!!! Please use lowenergy package if you work with single linear polarized photons !!!" << G4endl;
+  G4cout << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

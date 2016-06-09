@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -23,18 +23,6 @@
 
 
 ### NIST DataBase for Materials is used
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
-
-!!! G4MultipleScattering class is obsolete and will be removed for the next major Geant4 release !!!
-!!! Please use G4eMultipleScattering for e+ and e- !!!
-!!! Please use G4MuMultipleScattering for mu+ and mu- !!!
-!!! Please use G4hMultipleScattering for hadrons and ions !!!
-
 PhysicsList::SetCuts:CutLength : 1 um 
  ********************** 
  **** CONFIGURATION *** 

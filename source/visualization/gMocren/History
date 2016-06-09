@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2009/11/05 11:37:12 gcosmo Exp $
+$Id: History,v 1.7.2.1 2010/03/18 10:29:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+22 January 2010  Gabriele Cosmo (gMocren-V09-02-04)
+Fix in G4GMocrenFileSceneHandler.cc to allow for porting on C++0x Standard:
+made explicit with static_cast conversions from double to float. Also use
+G4 types in consistent way.
+
+3 December 2009  Akinori Kimura
+Line 363 of G4GMocrenFileSceneHandler.cc was deleted.
+It was a debug code with G4cout.
+Another file I/O bug was fixed. The following files were committed.
+G4GMocrenFileViewer.cc
+G4GMocrenFileSceneHandler.cc
+G4GMocrenIO.{cc,hh}
 
 5 November 2009  Gabriele Cosmo (gMocren-V09-02-03)
 Fix in G4GMocrenFileSceneHandler.cc for resolving compilation error on

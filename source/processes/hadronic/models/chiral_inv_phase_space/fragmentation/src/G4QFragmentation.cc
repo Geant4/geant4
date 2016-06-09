@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QFragmentation.cc,v 1.6 2009/12/16 17:51:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QFragmentation.cc,v 1.6.2.1 2010/04/01 09:36:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -53,8 +53,9 @@
 
 // Definition of static parameters
 G4int    G4QFragmentation::nCutMax=7;
-G4double G4QFragmentation::stringTension=1.5*GeV/fermi;
-G4double G4QFragmentation::tubeDensity  =1.5/fermi;
+G4double G4QFragmentation::stringTension=GeV/fermi;
+//G4double G4QFragmentation::tubeDensity  =1./fermi;
+G4double G4QFragmentation::tubeDensity  =0./fermi;
 // Parameters of diffractional fragmentation (was .72*)
 G4double G4QFragmentation::widthOfPtSquare=-GeV*GeV;// pt -width2 forStringExcitation
 
@@ -472,8 +473,8 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
     {
 	aTarget=theInteractions[0]->GetTarget();
 	aProjectile=theInteractions[0]->GetProjectile();
-      theInteractions.clear();
       delete theInteractions[0];
+      theInteractions.clear();
     }
     else                                             // Create a new target nucleon
     {
@@ -554,8 +555,11 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
 #ifdef debug
   G4cout<<"G4QFragmentation::Construct: Creation ofSoftCollisionPartonPair STARTS"<<G4endl;
 #endif
-  for(it = theInteractions.begin(); it != theInteractions.end(); ++it)   
+  G4bool rep=true;
+  while(rep && theInteractions.size())
   {
+   for(it = theInteractions.begin(); it != theInteractions.end(); ++it)
+   {
     G4QInteraction* anIniteraction = *it;
     G4QPartonPair*  aPair=0;
     G4int nSoftCollisions = anIniteraction->GetNumberOfSoftCollisions();
@@ -582,8 +586,31 @@ G4QFragmentation::G4QFragmentation(const G4QNucleus &aNucleus, const G4QHadron &
       }  
       delete *it;
       it=theInteractions.erase(it);      // Soft interactions are converted & erased
-      it--;
+      if( it != theInteractions.begin() )// To avoid going below begin() (for Windows)
+      {
+        it--;
+        rep=false;
+#ifdef debug
+        G4cout<<"G4QFragmentation::Construct: *** Decremented ***"<<G4endl;
+#endif
+      }
+      else
+      {
+        rep=true;
+#ifdef debug
+        G4cout<<"G4QFragmentation::Construct: *** Begin ***"<<G4endl;
+#endif
+        break;
+      }
     }
+    else rep=false;
+#ifdef debug
+    G4cout<<"G4QFragmentation::Construct: #0fSC="<<nSoftCollisions<<", r="<<rep<<G4endl;
+#endif
+   }
+#ifdef debug
+   G4cout<<"G4QFragmentation::Construct: *** While *** , r="<<rep<<G4endl;
+#endif
   }
 #ifdef debug
   G4cout<<"G4QFragmentation::Construct: -> Parton pairs for SOFT strings are made"<<G4endl;
@@ -1825,6 +1852,9 @@ G4QHadronVector* G4QFragmentation::Fragment()
       }
       G4int miPDG=qsumQC.GetSPDGCode();                     // PDG of minM of hadron/fragm.
       G4double gsM=0.;                                      // Proto minM of had/frag forQC
+#ifdef debug
+      G4cout<<"G4QFragmentation::Fragment: QC="<<qsumQC<<",PDG="<<miPDG<<G4endl;
+#endif
       if(miPDG == 10)
       {
         G4QChipolino QCh(qsumQC);                           // define TotNuc as a Chipolino
@@ -1832,14 +1862,15 @@ G4QHadronVector* G4QFragmentation::Fragment()
         //gsM=theWorld->GetQParticle(QCh.GetQPDG1())->MinMassOfFragm() +
         //    theWorld->GetQParticle(QCh.GetQPDG2())->MinMassOfFragm();
       }
-      else if(miPDG>80000000)                               // Compound Nucleus
-      {
-        G4QNucleus rtN(qsumQC);                  // Create PseudoNucl for totCompound
-        gsM=rtN.GetGSMass(); // MinMass of residQ+(Env-ParC) syst.      }
-      }
-      else if(std::abs(miPDG)%10 > 2)
+      // @@ it is not clear, why it does not work ?!
+      //else if(miPDG>80000000)                             // Compound Nucleus
+      //{
+      //  G4QNucleus rtN(qsumQC);                           // CreatePseudoNucl for totComp
+      //  gsM=rtN.GetGSMass();                              // MinMass of residQ+(Env-ParC)
+      //}
+      else if(miPDG < 80000000 && std::abs(miPDG)%10 > 2)
                            gsM=theWorld->GetQParticle(G4QPDGCode(miPDG))->MinMassOfFragm();
-      else gsM=G4QPDGCode(miPDG).GetMass();      // minM of hadron/fragm. for QC
+      else gsM=G4QPDGCode(miPDG).GetMass();                 // minM of hadron/fragm. for QC
       G4double reM=qsum4M.m();                              // real mass of the compound
 #ifdef debug
       G4cout<<"G4QFragmentation::Fragment: PDG="<<miPDG<<",rM="<<reM<<",GSM="<<gsM<<G4endl;
@@ -1860,7 +1891,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
       }
       else
       {
-        G4cerr<<"***G4QFragmentation::Fragm:PDG="<<miPDG<<",M="<<reM<<",GSM="<<gsM<<G4endl;
+        G4cerr<<"*G4QFr::Fr:PDG="<<miPDG<<",M="<<reM<<",GSM="<<gsM<<",QC="<<qsumQC<<G4endl;
         G4Exception("G4QFragmentation::Fragment:","27",FatalException,"Can't recover GSM");
       }
     }

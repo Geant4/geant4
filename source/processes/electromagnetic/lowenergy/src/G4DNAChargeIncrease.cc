@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChargeIncrease.cc,v 1.3 2009/03/04 13:28:49 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4DNAChargeIncrease.cc,v 1.3.4.1 2010/04/01 09:07:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 
 #include "G4DNAChargeIncrease.hh"
 
@@ -71,7 +71,16 @@ void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
 
     G4String name = p->GetParticleName();
 
-    if( name == "hydrogen" || name =="alpha+" || name =="helium" )
+    if( name == "hydrogen" )
+    {
+      if(!Model()) SetModel(new G4DNADingfelderChargeIncreaseModel);
+      Model()->SetLowEnergyLimit(100*eV);
+      Model()->SetHighEnergyLimit(10*MeV);
+
+      AddEmModel(1, Model());   
+    }
+    
+    if( name =="alpha+" || name =="helium" )
     {
       if(!Model()) SetModel(new G4DNADingfelderChargeIncreaseModel);
       Model()->SetLowEnergyLimit(1*keV);
@@ -79,6 +88,7 @@ void G4DNAChargeIncrease::InitialiseProcess(const G4ParticleDefinition* p)
 
       AddEmModel(1, Model());   
     }
+
     
   } 
 }

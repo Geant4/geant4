@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.21 2009/04/30 10:23:57 sincerti Exp $
+$Id: History,v 1.21.2.1 2010/03/18 11:14:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,14 @@ $Id: History,v 1.21 2009/04/30 10:23:57 sincerti Exp $
 
                        Package History file
                        --------------------
+
+23 February 2010 - S. Incerti - tag microbeam-V09-02-02
+- changed material/density selection in MicrobeamPhantomConfiguration.cc
+(thanks to gunter)
+
+23 February 2010 - S. Incerti
+- Added density initialisation in MicrobeamPhantomConfiguration.cc
+(thanks to gunter)
 
 30 April 2009 - S. Incerti - tag microbeam-V09-02-01
 - Updated Physics list to migrated Livermore processes

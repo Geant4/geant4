@@ -1,4 +1,4 @@
-$Id: History,v 1.126 2009/11/15 14:48:40 maire Exp $
+$Id: History,v 1.126.2.1 2010/04/01 09:18:54 gcosmo Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,7 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+21-03-10 Vladimir Ivantchenko (exampleN03-V09-02-03)
+- Cleanup particle construction in Physics List
+
+21-01-10 Gabriele Cosmo
+- visTutor: corrected exN03Vis14.mac and exN03Vis15.mac to enable
+  visualization of tracks and removed redundancy; updated gui.mac
+  adding missing macros and correcting order; corrected comments wherever
+  necessary.
+
 15-11-09 mma (exampleN03-V09-02-02)
 - Use G4MuMultipleScattering for muons
 - Separate alpha from GenericIon

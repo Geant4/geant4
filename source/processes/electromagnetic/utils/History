@@ -1,4 +1,4 @@
-$Id: History,v 1.400 2009/11/22 19:48:30 vnivanch Exp $
+$Id: History,v 1.400.2.1 2010/04/06 09:05:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 March 10: V.Ivant (emutils-V09-02-25)
+- G4EmCorrections: added protection against large Barkas and Bloch
+  corrections in the case of large negatively charged particle
+  (Q^2 > 50); addresses problem of simulation of highly charged 
+  exotic particles reported by ATLAS.
+- Code cleanup in G4EmCalculator.
+
+10 March 10: V.Ivant
+- Reordered inline methods and improved comments in classes G4VEmModel,
+  G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering and
+  G4LossTableManager.
+
+24 February 10: V.Ivant
+G4VEmProcess - move SetBuildTableFlag method from protected to public
+
+17 February 10: V.Ivant
+- G4VEmProcess: fixed problem for ion processes by adding pointer
+  to 'currentParticle' which may be different from generic ion.
+
+22 January 10: V.Ivant
+- G4VEmProcess: added protection against negative cross section.
+- G4VEnergyLossProcess: added protection against negative cross
+  section, and improved logic in RetrieveTable() method.
 
 23 November 09: V.Ivant (emutils-V09-02-24)
 G4EmConfigurator - fixed bug in selection of models

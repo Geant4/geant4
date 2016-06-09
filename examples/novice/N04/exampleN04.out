@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+ Geant4 version Name: geant4-09-03-patch-01-ref    (9-April-2010)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -416,8 +416,8 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
      53 hits are stored in ExN04TrackerHitsCollection.
-     27 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.48863941184205 (GeV)
+     32 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.65362817018845 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -429,13 +429,13 @@ Stage 0->1 : 0 hits found in the muon chamber.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 2
-     62 hits are stored in ExN04TrackerHitsCollection.
-     27 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.49187478069713 (GeV)
+     43 hits are stored in ExN04TrackerHitsCollection.
+     34 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.57765149192582 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.48s Real=1.48s Sys=0.01s
+  User=2.32s Real=2.34s Sys=0s
 G4 kernel has come to Quit state.
 

@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElasticData.hh,v 1.11 2008/04/28 19:07:53 tkoi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPElasticData.hh,v 1.11.4.1 2010/04/01 09:52:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 // 080428 Add bool onFlightDB by T. Koi
+// 091118 Add Ignore and Enable On Flight Doppler Broadening methods by T. Koi
 //
 #ifndef G4NeutronHPElasticData_h
 #define G4NeutronHPElasticData_h 1
@@ -66,6 +67,9 @@ class G4NeutronHPElasticData : public G4VCrossSectionDataSet
    void BuildPhysicsTable(const G4ParticleDefinition&);
 
    void DumpPhysicsTable(const G4ParticleDefinition&);
+
+      void IgnoreOnFlightDopplerBroadening(){ onFlightDB = false; };
+      void EnableOnFlightDopplerBroadening(){ onFlightDB = true; };
    
    private:
    

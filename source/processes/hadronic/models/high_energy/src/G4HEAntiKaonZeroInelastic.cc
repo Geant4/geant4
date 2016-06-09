@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiKaonZeroInelastic.cc,v 1.15 2008/03/17 20:49:17 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HEAntiKaonZeroInelastic.cc,v 1.15.4.1 2010/04/01 09:44:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 
@@ -178,10 +178,10 @@ ApplyYourself( const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
                                atomicWeight, atomicNumber);
       }
 
-    if (!successful)
-      { 
-        G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles" << G4endl;
-      }
+    if (!successful) 
+      G4cout << "GHEInelasticInteraction::ApplyYourself fails to produce final state particles"
+             << G4endl;
+
       FillParticleChange(pv,  vecLength);
       delete [] pv;
       theParticleChange.SetStatusChange(stopAndKill);

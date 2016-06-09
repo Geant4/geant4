@@ -18,7 +18,7 @@
 #          % setenv DAWN_BATCH               a                        #
 #          % gmake visclean                                           #
 #          % $G4BINDIR/exampleN03                                     #
-#          Idle> /control/execute visTutor/exN03Vis9.mac              #
+#          Idle> /control/execute visTutor/exN03Vis8.mac              #
 #          Idle> exit                                                 #
 #          % gv g4_00.eps                                             #
 #                                                                     #

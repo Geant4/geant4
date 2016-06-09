@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.11 2009/08/03 16:27:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4NavigationHistory.cc,v 1.11.2.3 2010/04/16 07:58:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 
 // G4NavigationHistory Implementation
@@ -44,8 +44,9 @@ G4NavigationHistory::G4NavigationHistory()
 }
 
 G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
-  : fNavHistory(h.fNavHistory), fStackDepth(h.fStackDepth)
+  : fStackDepth(h.fStackDepth)
 {
+  fNavHistory.assign(h.fNavHistory.begin(),h.fNavHistory.end());
 }
 
 G4NavigationHistory::~G4NavigationHistory()

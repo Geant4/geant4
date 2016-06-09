@@ -1,4 +1,4 @@
-$Id: History,v 1.168 2009/12/03 11:09:47 vnivanch Exp $
+$Id: History,v 1.168.2.1 2010/03/18 10:20:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-01-10 G.Cosmo (materials-V09-02-25)
+- G4OpticalSurface - removed left-over debug test function OverWrite() from
+  header.
 
 03-12-09 V.Ivanchenko (materials-V09-02-24)
 - G4NIstMessenger - fixed minor memory leak at destruction

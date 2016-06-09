@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc,v 1.15 2008/05/15 11:41:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolyhedraSide.cc,v 1.15.4.1 2010/03/18 11:04:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -63,9 +63,11 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
                                         G4bool thePhiIsOpen,
                                         G4bool isAllBehind )
 {
-
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea=0.;
+  fPhi.first = G4ThreeVector(0,0,0);
+  fPhi.second= 0.0;
+
   //
   // Record values
   //
@@ -560,7 +562,7 @@ G4double G4PolyhedraSide::Distance( const G4ThreeVector &p, G4bool outgoing )
   //
   // Try the closest phi segment first
   //
-  G4int iPhi = ClosestPhiSegment( p.phi() );
+  G4int iPhi = ClosestPhiSegment( GetPhi(p) );
   
   G4ThreeVector pdotc = p - vecs[iPhi].center;
   G4double normDist = pdotc.dot(vecs[iPhi].normal);
@@ -593,7 +595,7 @@ EInside G4PolyhedraSide::Inside( const G4ThreeVector &p,
   //
   // Which phi segment is closest to this point?
   //
-  G4int iPhi = ClosestPhiSegment( p.phi() );
+  G4int iPhi = ClosestPhiSegment( GetPhi(p) );
   
   G4double norm;
   
@@ -623,7 +625,7 @@ G4ThreeVector G4PolyhedraSide::Normal( const G4ThreeVector &p,
   //
   // Which phi segment is closest to this point?
   //
-  G4int iPhi = ClosestPhiSegment( p.phi() );
+  G4int iPhi = ClosestPhiSegment( GetPhi(p) );
 
   //
   // Get distance to this segment
@@ -655,7 +657,7 @@ G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
   //
   // Which phi segment, if any, does the axis belong to
   //
-  iPhi = PhiSegment( axis.phi() );
+  iPhi = PhiSegment( GetPhi(axis) );
   
   if (iPhi < 0)
   {
@@ -966,6 +968,31 @@ G4int G4PolyhedraSide::PhiSegment( G4double phi0 )
   }
   
   return answer;
+}
+
+
+//
+// GetPhi
+//
+// Calculate Phi for a given 3-vector (point), if not already cached for the
+// same point, in the attempt to avoid consecutive computation of the same
+// quantity
+//
+G4double G4PolyhedraSide::GetPhi( const G4ThreeVector& p )
+{
+  G4double val=0.;
+
+  if (fPhi.first != p)
+  {
+    val = p.phi();
+    fPhi.first = p;
+    fPhi.second = val;
+  }
+  else
+  {
+    val = fPhi.second;
+  }
+  return val;
 }
 
 

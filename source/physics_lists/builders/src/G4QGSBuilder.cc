@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSBuilder.cc,v 1.1 2009/10/04 16:29:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4QGSBuilder.cc,v 1.1.2.1 2010/04/01 08:54:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,10 +47,14 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4BinaryCascade.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4ExcitationHandler.hh"
 
 
-G4QGSBuilder::G4QGSBuilder(const G4String& aName, G4bool quasiel, G4bool diff) 
-  : G4VHadronModelBuilder(aName), quasielFlag(quasiel), diffFlag(diff)
+G4QGSBuilder::G4QGSBuilder(const G4String& aName, G4PreCompoundModel* p,
+			   G4bool quasiel, G4bool diff) 
+  : G4VHadronModelBuilder(aName), thePreCompound(p), 
+    quasielFlag(quasiel), diffFlag(diff)
 {
   theProjectileDiffraction = 0;
   theQuasiElastic = 0;
@@ -81,14 +85,22 @@ G4HadronicInteraction* G4QGSBuilder::BuildModel()
     theQGSModel->SetProjectileDiffraction(theProjectileDiffraction);
   } 
 
-  if(GetName() == "QGSP") {
-    theQGSModel->SetTransport(new G4GeneratorPrecompoundInterface());
-  } else if(GetName() == "QGSC") {
+  if(!thePreCompound) {
+    thePreCompound = new G4PreCompoundModel(new G4ExcitationHandler());
+  }
+
+  if(GetName() == "QGSC") {
     theQGSModel->SetTransport(new G4QStringChipsParticleLevelInterface());
+
   } else if(GetName() == "QGSB") {
-    theQGSModel->SetTransport(new G4BinaryCascade());
+    G4BinaryCascade* bic = new G4BinaryCascade();
+    bic->SetDeExcitation(thePreCompound);
+    theQGSModel->SetTransport(bic);
+
   } else {
-    theQGSModel->SetTransport(new G4GeneratorPrecompoundInterface());
+    G4GeneratorPrecompoundInterface* pint = new G4GeneratorPrecompoundInterface();
+    pint->SetDeExcitation(thePreCompound);
+    theQGSModel->SetTransport(pint);
   }
 
   return theQGSModel;

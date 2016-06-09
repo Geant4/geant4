@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh,v 1.1 2009/07/09 11:42:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4VAtomDeexcitation.hh,v 1.1.2.1 2010/04/06 09:05:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -62,44 +62,10 @@ class G4VAtomDeexcitation {
 
   virtual ~G4VAtomDeexcitation();
 
-  //initialization
+  //========== initialization ==========
+
   virtual void PreparePhysicsTable(const G4ParticleDefinition&);
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
-
-  // Get atomic shell by shell index, used by discrete processes 
-  // (for example, photoelectric), when shell vacancy sampled by the model
-  virtual const G4AtomicChell* GetAtomicShell(G4int Z, G4int ShellIndex);
-
-  // selection of random shell for ionisation process
-  virtual const G4AtomicShell* SelectRandomShell(const G4DynamicParticle*, 
-						 G4int Z);
-
-  // generation of deexcitation for given atom and shell vacancy
-  virtual void GenerateParticles(std::vector<G4DynamicParticle*>*, 
-				 const G4AtomicChell*, G4int Z);
-
-  // access or compute PIXE cross section 
-  virtual G4double GetPIXECrossSection (const G4ParticleDefinition*, 
-					G4int Z, G4double kinE);
-
-  // calculate PIXE cross section from the models
-  virtual G4double CalculatePIXECrossSection(const G4ParticleDefinition*,
-					     G4int Z, G4double kinE);
-
-  // Sampling of PIXE for ionisation processes
-  virtual void 
-  AlongStepDeexcitation(std::vector<G4DynamicParticle*>* secVect, 
-			const G4DynamicParticle* icidentParticle, 
-			const G4MaterialCutsCouple*, 
-			G4double trueStepLenght, 
-			G4double eLoss);
-
-  // Check if deexcitation is active for a given geometry volume
-  G4bool CheckActiveRegion(G4int coupleIndex);
-
-  // Access flags defined in the CheckActiveVolume method
-  inline G4bool IsFluorescenceActive() const; 
-  inline G4bool IsPIXECrossSectionActive() const; 
 
   // PIXE model name
   inline void SetPIXECrossSectionModel(const G4String&);
@@ -114,6 +80,44 @@ class G4VAtomDeexcitation {
   void SetAugerActiveRegion(const G4String& rname = "");
   void SetPIXECrossSectionActiveRegion(const G4String& rname = ""); 
 
+  //========== Run time methods ==========
+
+  // Check if deexcitation is active for a given geometry volume
+  G4bool CheckFluorescenceActiveRegion(G4int coupleIndex);
+
+  // Check if deexcitation is active for a given geometry volume
+  G4bool CheckPIXEActiveRegion(G4int coupleIndex);
+
+  // Get atomic shell by shell index, used by discrete processes 
+  // (for example, photoelectric), when shell vacancy sampled by the model
+  const G4AtomicShell* GetAtomicShell(G4int Z, G4int ShellIndex);
+
+  // selection of random shell for ionisation process
+  virtual const G4AtomicShell* SelectRandomShell(const G4DynamicParticle*, 
+						 G4int Z);
+
+  // generation of deexcitation for given atom and shell vacancy
+  virtual void GenerateParticles(std::vector<G4DynamicParticle*>*, 
+				 const G4AtomicShell*, G4int Z) = 0;
+
+  // access or compute PIXE cross section 
+  virtual G4double GetPIXECrossSection (const G4ParticleDefinition*, 
+					G4int Z, G4double kinE) = 0;
+
+  // calculate PIXE cross section from the models
+  virtual G4double CalculatePIXECrossSection(const G4ParticleDefinition*,
+					     G4int Z, G4double kinE) = 0;
+
+  // Sampling of PIXE for ionisation processes
+  virtual void 
+  AlongStepDeexcitation(std::vector<G4DynamicParticle*>* secVect, 
+			const G4DynamicParticle* icidentParticle, 
+			const G4MaterialCutsCouple*, 
+			G4double trueStepLenght, 
+			G4double eLoss) = 0;
+
+
+
 private:
 
   // copy constructor and hide assignment operator
@@ -121,20 +125,8 @@ private:
   G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right);
 
   G4String namePIXE;
-  G4bool isFluoActive;
-  G4bool isPIXEActive;
 
 };
-
-inline G4bool IsFluorescenceActive() const
-{
-  return isFluoActive;
-}
-
-inline G4bool IsPIXECrossSectionActive() const 
-{
-  return isPIXEActive;
-}
 
 inline 
 void G4VAtomDeexcitation::SetPIXECrossSectionModel(const G4String& n)

@@ -1,5 +1,5 @@
 #######################################################################
-#  MACRO FILE NAME: exN03Vis12.mac                                     #
+#  MACRO FILE NAME: exN03Vis15.mac                                    #
 #                                                                     #
 #  AUTHOR(S): Laurent Garnier                                         #
 #                                                                     #
@@ -7,46 +7,57 @@
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating Inventor driver          #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis12.mac            #
+#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis15.mac            #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, Motif, X-window, OpenGL ,Qt  #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv G4VIS_BUILD_OGLQT
+#    % setenv G4VIS_BUILD_OGLQT 1                                     #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
 #                                                                     #
-#    % setenv G4VIS_USE_OGLQT               1                          #
+#    % setenv G4VIS_USE_OGLQT 1                                       #
 #                                                                     # 
 #  ADDITIONAL NOTES:                                                  #
 #                                                                     # 
 #######################################################################
 
 # Create "scene-0" 
+#
 /vis/scene/create
 
 # Invoke the Qt driver 
+#
 /vis/sceneHandler/create OGLSQt
 /vis/viewer/create
 
 # Add the world volume to the current scene
+#
 /vis/scene/add/volume
+
 #/vis/scene/add/volume Layer
 # Name of the absorbers = name of their material (Lead) !
 #/vis/scene/add/volume Lead
 # Name of the gaps = name of their material (liquidArgon) !
 #/vis/scene/add/volume liquidArgon
-#/vis/scene/add/trajectories
+
 /tracking/storeTrajectory 1
 
 # Bird-eye view of events
+#
 /vis/viewer/reset
 /vis/viewer/set/viewpointThetaPhi 45 45 
 
 /vis/scene/notifyHandlers
+
+/vis/scene/add/trajectories smooth
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+/vis/scene/endOfEventAction accumulate
 
 /control/verbose 2
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenIO.cc,v 1.4 2009/11/05 03:14:12 akimura Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4GMocrenIO.cc,v 1.4.2.1 2010/03/18 10:29:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03-patch-01 $
 //
 //
 // File I/O manager class for writing or reading calcuated dose
@@ -169,14 +169,14 @@ void GMocrenDataPrimitive<T>::clear() {
   kMinmax[0] = (T)32109;
   kMinmax[1] = (T)-32109;
 
-  /*
-    if(!image.empty()) {
-    typename std::vector<T *>::iterator itr;
-    for(itr = image.begin(); itr != image.end(); itr++) {
+  clearImage();
+}
+template <typename T> 
+void GMocrenDataPrimitive<T>::clearImage() {
+  typename std::vector<T *>::iterator itr;
+  for(itr = kImage.begin(); itr != kImage.end(); itr++) {
     delete [] *itr;
-    }
-    }
-  */
+  }
   kImage.clear();
 }
 template <typename T> 
@@ -3366,6 +3366,10 @@ void G4GMocrenIO::setModalityImage(short * _image) {
 short * G4GMocrenIO::getModalityImage(int _z) {
   
   return kModality.getImage(_z);
+}
+void G4GMocrenIO::clearModalityImage() {
+  
+  kModality.clearImage();
 }
 // set/get the modality image density map
 void G4GMocrenIO::setModalityImageDensityMap(std::vector<float> & _map) {
