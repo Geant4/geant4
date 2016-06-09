@@ -131,6 +131,7 @@
       G4LorentzVector it;
 
       G4FermiMomentum theFermi;
+      G4int tryCount(0);
       while(!result)
       {
 	projectile = new G4Fancy3DNucleus;
@@ -197,6 +198,28 @@
           delete result; result=0;
           delete fancyNucleus;
           delete projectile;
+	  if (++tryCount > 100)
+	  {
+	      // abort!!
+	      
+	      G4cerr << "G4BinaryLightIonReaction no final state for: " << G4endl;
+	      G4cerr << " Primary " << aTrack.GetDefinition()
+	  	       << ", (A,Z)=(" << aTrack.GetDefinition()->GetBaryonNumber()
+		       << "," << aTrack.GetDefinition()->GetPDGCharge() << ") "
+	               << ", kinetic energy " << aTrack.GetKineticEnergy() 
+		       << G4endl;
+	      G4cerr << " Target nucleus (A,Z)=(" <<  targetNucleus.GetN()
+	               << "," << targetNucleus.GetZ() << G4endl;
+	      G4cerr << " if frequent, please submit above information as bug report"
+  		      << G4endl << G4endl;
+		
+	      theResult.Clear();
+	      theResult.SetStatusChange(isAlive);
+	      theResult.SetEnergyChange(aTrack.GetKineticEnergy());
+	      theResult.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    	      return &theResult;
+
+	  }
 	} 
 	else
 	{
@@ -366,11 +389,27 @@
 	proFrag = theHandler.BreakItUp(aProRes);
       if ( momentum.vect().mag() > momentum.e() )
       {
-           G4cout << "mom check: " <<  momentum 
+           G4cerr << "mom check: " <<  momentum 
 	          << " 3.mag "<< momentum.vect().mag() << G4endl
 		  << " .. iState/fState/spectators " << iState <<" " 
 		  << fState << " " << pspectators << G4endl
 		  << " .. A,Z " << resA <<" "<< resZ << G4endl;          	                
+	   G4cerr << "G4BinaryLightIonReaction no final state for: " << G4endl;
+	   G4cerr << " Primary " << aTrack.GetDefinition()
+	  	    << ", (A,Z)=(" << aTrack.GetDefinition()->GetBaryonNumber()
+		    << "," << aTrack.GetDefinition()->GetPDGCharge() << ") "
+	            << ", kinetic energy " << aTrack.GetKineticEnergy() 
+		    << G4endl;
+	   G4cerr << " Target nucleus (A,Z)=(" <<  targetNucleus.GetN()
+	            << "," << targetNucleus.GetZ() << G4endl;
+	   G4cerr << " if frequent, please submit above information as bug report"
+  	     	   << G4endl << G4endl;
+
+	   theResult.Clear();
+	   theResult.SetStatusChange(isAlive);
+	   theResult.SetEnergyChange(aTrack.GetKineticEnergy());
+	   theResult.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    	   return &theResult;
       }
       
         G4LorentzRotation boost_fragments_here(momentum.boostVector());
@@ -477,6 +516,7 @@
 	if(swapped)
 	{
           tmp*=toBreit.inverse();
+	  tmp.setVect(-tmp.vect());
 	}    
 	tmp *= toLab;
 	aNew->Set4Momentum(tmp);

@@ -1,4 +1,4 @@
-$Id: History,v 1.118 2004/03/04 08:07:12 gcosmo Exp $
+$Id: History,v 1.122 2004/06/09 07:26:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 9th, 2004       G. Cosmo - geomvol-V06-01-03
+- Adopt G4DLLIMPORT/G4DLLEXPORT technique to handle extern simbols for
+  allowing support of DLLs on Windows.
+- Coworks with "global-V06-01-02b".
+
+Jun 7th, 2004       G. Cosmo - geomvol-V06-01-02
+- Export extern symbols for allowing support of DLLs on Windows.
+  Modified files: G4NavigationLevel.icc, G4NavigationLevelRep.icc.
+- Coworks with "global-V06-01-02a".
+
+May 19th, 2004      G. Cosmo - geomvol-V06-01-01
+- Added CleanSurfaceTable() static methods in G4LogicalBorderSurface and
+  G4LogicalSkinSurface classes for the clearing of the surface tables in
+  case of dynamic geometries (by T.MacPhail).
+
+May 13th, 2004      G. Cosmo - geomvol-V06-01-00
+- Imported G4ReflectionFactory and unit test 'testG4ReflectedSolid' from
+  module "solids/Boolean".
+- Enhanced G4ReflectionFactory to support reflection of divided volumes
+  (courtesy of I.Hrivnacova). Added Divide(...) set of methods.
+- Coworks with tags: geommng-V06-01-00, geomdiv-V06-01-00 and
+                     geom-bool-V06-01-00.
 
 March 4th, 2004     G. Cosmo - geomvol-V06-00-01
 - G4NavigationHistory.icc: fixed bug in NewLevel() causing segmentation

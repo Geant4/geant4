@@ -23,28 +23,23 @@ voxels (1.mm dimension)                                                 |
 -------------------------------------------------------------------------
 ----> 2.SET-UP 
                                                                         |
- -example enviroment with the compiler 3.2                              
+ -example enviroment with the compiler 3.2.3                              
  -a standard Geant4 example GNUmakefile is provided                     |
 
 setup with:                                                             |
-compiler = gcc-3.2
+compiler = gcc-3.2.3
 G4SYSTEM = linux-g++                                                    |
 
 The following environment variables need to be set:                     |
 
-G4LEDATA: points to low energy data base - G4EMLOW2.2                   |
+G4LEDATA: points to low energy data base - G4EMLOW2.3                   |
 
-setup for analysis with AIDA 3.0/Anaphe 5.0.5 for user with account     |
-on lxplus:
-                                                                        |
-setenv G4ANALYSIS_USE  1
-                                                                        |
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
-setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/    |
+setup for analysis: AIDA 3.2.1, PI 1.2.1                                |
 
- Please take a look to the Anaphe/Lizard web page                       |
-        http://anaphe.web.cern.ch/anaphe 
- for more info                                                          |
+Users can download the analysis tools from:  
+                                                                        |
+http://aida.freehep.org/
+http://www.cern.ch/PI                                                                                                                                   |
 
 ------------------------------------------------------------------------
 ----> 3.How to run the example.                                         |
@@ -108,4 +103,4 @@ a macro is provided ad example of visualisation:  VisualisationMacro.mac|
 for comments, advices, doubts and questions: guatelli@ge.infn.it
 for more info http://www.ge.infn.it/geant4/examples/index.html
 
-last modified: Susanna Guatelli 11/3/2004
+last modified: Susanna Guatelli 14/5/2004

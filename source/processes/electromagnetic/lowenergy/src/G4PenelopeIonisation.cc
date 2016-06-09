@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeIonisation.cc,v 1.12 2004/03/18 13:44:44 pandola Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4PenelopeIonisation.cc,v 1.13 2004/06/01 15:09:12 pandola Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // 
 // --------------------------------------------------------------
 //
@@ -46,6 +46,7 @@
 // 10.03.04 L.Pandola           Bug fixed with reference system of delta rays
 // 17.03.04 L.Pandola           Removed unnecessary calls to pow(a,b)
 // 18.03.04 L.Pandola           Bug fixed in the destructor
+// 01.06.04 L.Pandola           StopButAlive for positrons on PostStepDoIt
 // --------------------------------------------------------------
 
 #include "G4PenelopeIonisation.hh"
@@ -65,6 +66,7 @@
 #include "G4Gamma.hh"
 #include "G4Positron.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ProcessManager.hh"
 
 G4PenelopeIonisation::G4PenelopeIonisation(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
@@ -329,7 +331,15 @@ G4VParticleChange* G4PenelopeIonisation::PostStepDoIt(const G4Track& track,
   else
     {    
       aParticleChange.SetEnergyChange(0.) ;
-      aParticleChange.SetStatusChange(fStopAndKill);
+      if (aParticleType->GetProcessManager()->GetAtRestProcessVector()->size()) 
+	//In this case there is at least one AtRest process
+	{
+	  aParticleChange.SetStatusChange(fStopButAlive);
+	}
+      else
+	{
+	  aParticleChange.SetStatusChange(fStopAndKill);
+	}
     }
 
   //Generate the delta day

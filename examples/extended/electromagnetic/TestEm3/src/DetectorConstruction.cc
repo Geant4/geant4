@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.7 2004/01/21 17:29:27 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorConstruction.cc,v 1.11 2004/06/09 14:18:47 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,12 +54,6 @@ DetectorConstruction::DetectorConstruction()
  solidLayer(0),logicLayer(0),physiLayer(0),
  magField(0)
 {
-  for (G4int i=0; i<MaxAbsor; i++)
-     {
-      AbsorMaterial[i]=0; AbsorThickness[i]=0.;
-      solidAbsor[i]=0;logicAbsor[i]=0;physiAbsor[i]=0;
-     }
-  //    
   // default parameter values of the calorimeter
   NbOfAbsor = 2;
   AbsorThickness[0] = 2.3*mm;
@@ -67,13 +61,13 @@ DetectorConstruction::DetectorConstruction()
   NbOfLayers        = 50;
   CalorSizeYZ       = 40.*cm;
   ComputeCalorParameters();
-  
+
   // materials
   DefineMaterials();
   SetWorldMaterial("Galactic");
   SetAbsorMaterial(0,"Lead");
-  SetAbsorMaterial(1,"liquidArgon");  
-  
+  SetAbsorMaterial(1,"liquidArgon");
+
   // create UserLimits
   userLimits = new G4UserLimits();
 
@@ -106,7 +100,7 @@ void DetectorConstruction::DefineMaterials()
   // define Elements
   //
   G4double z,a;
-  
+
   G4Element* H  = new G4Element("Hydrogen",  "H" , z= 1.,  a= 1.008*g/mole);
   G4Element* C  = new G4Element("Carbon",    "C" , z= 6.,  a= 12.01*g/mole);
   G4Element* N  = new G4Element("Nitrogen",  "N" , z= 7.,  a= 14.01*g/mole);
@@ -136,7 +130,7 @@ void DetectorConstruction::DefineMaterials()
   // define simple materials
   //
   G4double density;
-  
+
   new G4Material("liquidH2",    z=1.,  a= 1.008*g/mole,  density= 70.8*mg/cm3);
   new G4Material("Aluminium",   z=13., a= 26.98*g/mole,  density= 2.700*g/cm3);
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole,  density= 1.390*g/cm3);
@@ -152,7 +146,7 @@ void DetectorConstruction::DefineMaterials()
   // define a material from elements.   case 1: chemical molecule
   //
   G4int natoms;
-  
+
   G4Material* H2O = 
   new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
   H2O->AddElement(H, natoms=2);
@@ -521,6 +515,7 @@ void DetectorConstruction::SetMaxStepSize(G4double val)
     }
   userLimits->SetMaxAllowedStep(val);
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th April 2004 Peter Gumplinger (op-V06-01-01)
+                Protect against NULL pointers in G4OpRayleigh.
+                Do not overwrite Rayleigh scattering length
+                for the material named 'Water' if it has been
+                specified by the user through a call to
+                AddProperty("RAYLEIGH"
+
+21st April 2004 Peter Gumplinger (op-V06-01-00)
+                Assign class members to defaults in DoIt.
+
 17th March 2004 Peter Gumplinger (op-V06-00-03)
                 Assign all class members in constructor.
 

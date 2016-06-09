@@ -1,0 +1,643 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// ********************************************************************
+// *                                                                  *
+// * cosmicray_charging advanced example for Geant4                   *
+// * (adapted simulation of test-mass charging in the LISA mission)   *
+// *                                                                  *
+// * Henrique Araujo (h.araujo@imperial.ac.uk) & Peter Wass           *
+// * Imperial College London                                          *
+// *                                                                  *
+// * LISADetectorConstruction class                                   *
+// *                                                                  *
+// ********************************************************************
+//
+// HISTORY
+// 22/02/2004: migrated from LISA-V04
+//
+// ********************************************************************
+
+
+//***************************************************************************
+// Interferometer Assembly
+//***************************************************************************
+//   Payload Shield (Y Tube)
+//   Telescope Light Shields
+//   Telescope Electronics Mounting
+//   Telescope Mirrors Mounting
+//   Telescope Actuator Mechanism
+//   Optical Bench Mounting
+//   Optical Bench
+//***************************************************************************
+
+
+
+  //***************************************************************************
+  // Payload Shield
+  //***************************************************************************
+
+  // Y-tube
+  G4double YTube_dia  =  400.*mm;
+  G4double YTube_thi  =    5.*mm;
+  G4double arm1_len   =  900.*mm;
+  G4double arm2_len   =  900.*mm;
+  G4double arm3_len   =  900.*mm;
+  // G4double YTube_xoff = -800.*mm;
+  G4double tune_x     =  800.*mm;
+  G4double tune_y     =  250.*mm;
+
+  // outer volumes
+  G4Tubs* arm1_o_sol = 
+    new G4Tubs("arm1_o_sol", 0., 0.5*YTube_dia, 0.5*arm1_len, 0., 360.*deg);
+  G4Tubs* arm2_o_sol = 
+    new G4Tubs("arm2_o_sol", 0., 0.5*YTube_dia, 0.5*arm2_len, 0., 360.*deg);
+  G4Tubs* arm3_o_sol = 
+    new G4Tubs("arm3_o_sol", 0., 0.5*YTube_dia, 0.5*arm3_len, 0., 360.*deg);
+  G4RotationMatrix ytube_rot1; ytube_rot1.rotateY(30.*deg);
+  G4UnionSolid* uni1_o_sol = new G4UnionSolid("uni1_o_sol", arm1_o_sol,
+    arm2_o_sol, G4Transform3D(ytube_rot1, G4ThreeVector(+tune_y,0,tune_x)));
+  G4RotationMatrix ytube_rot2; ytube_rot2.rotateY(-30.*deg);
+  G4UnionSolid* uni2_o_sol = new G4UnionSolid("uni2_o_sol", uni1_o_sol,
+    arm3_o_sol, G4Transform3D(ytube_rot2, G4ThreeVector(-tune_y,0,tune_x)));
+  G4LogicalVolume* arms_o_log = 
+    new G4LogicalVolume(uni2_o_sol, CFRP, "arms_o_log");
+  G4RotationMatrix ytube_rot3; 
+  ytube_rot3.rotateX(90.*deg); ytube_rot3.rotateZ(90.*deg);
+  G4VPhysicalVolume* arms_o_phys = new G4PVPlacement 
+    (G4Transform3D(ytube_rot3, spacecraft_pos + G4ThreeVector(YTube_xoff,0,0)),
+    "arms_o_phys", arms_o_log, wld_phys, false, 0);
+  arms_o_log->SetVisAttributes(yellow_vat);
+  // inner volumes
+  G4Tubs* arm1_i_sol = new G4Tubs("arm1_i_sol", 0., 0.5*YTube_dia-YTube_thi,
+    0.5*arm1_len, 0.*deg, 360.*deg);
+  G4Tubs* arm2_i_sol = new G4Tubs("arm2_i_sol", 0., 0.5*YTube_dia-YTube_thi, 
+    0.5*arm2_len, 0.*deg, 360.*deg);
+  G4Tubs* arm3_i_sol = new G4Tubs("arm3_i_sol", 0., 0.5*YTube_dia-YTube_thi,
+    0.5*arm3_len, 0.*deg, 360.*deg);
+  G4UnionSolid* uni1_i_sol = new G4UnionSolid("uni1_i_sol", arm1_i_sol,
+    arm2_i_sol, G4Transform3D(ytube_rot1, G4ThreeVector(+tune_y,0,tune_x)));
+  G4UnionSolid* uni2_i_sol = new G4UnionSolid("uni2_i_sol", uni1_i_sol,
+    arm3_i_sol, G4Transform3D(ytube_rot2, G4ThreeVector(-tune_y,0,tune_x)));
+  G4LogicalVolume* arms_i_log = 
+    new G4LogicalVolume(uni2_i_sol, vacuum, "arms_i_log");
+  G4VPhysicalVolume* arms_i_phys = new G4PVPlacement(0, G4ThreeVector(0,0,0),
+    "arms_i_phys", arms_i_log, arms_o_phys, false, 0);
+  arms_i_log->SetVisAttributes(yellow_vat);
+
+
+
+  // Telescope Light Shields: ~5.5 kg
+  G4double TelShield_len  = 730.*mm;
+  G4double TelShield_dia  = 370.*mm;
+  G4double TelShield_thi  =   5.*mm;
+  G4double TelShield_yoff = 663.*mm;
+  G4double TelShield_xoff = 1511.*mm;
+  G4double TelShieldCutout_len = 2000.*mm;
+  G4double TelShieldCutout_off = 1000.*mm;
+
+  G4Tubs* TelShield_tub = new G4Tubs("TelShield_sol", 0.5*TelShield_dia - 
+     TelShield_thi, 0.5*TelShield_dia, 0.5*TelShield_len, 0., 360.*deg);
+  G4Box* TelShieldCutout_box = new G4Box("TelShieldCutout_box",
+    0.5*TelShieldCutout_len, 0.5*TelShieldCutout_len, 0.5*TelShieldCutout_len);
+  G4RotationMatrix ytube_rot4; ytube_rot4.rotateX(-30.*deg);
+  G4SubtractionSolid* TelShield_sol = new G4SubtractionSolid("TelShield_sol",
+    TelShield_tub, TelShieldCutout_box, G4Transform3D(ytube_rot4, 
+    G4ThreeVector(0,0,-0.5*TelShield_len-TelShieldCutout_off)));
+  G4LogicalVolume* TelShield_log = 
+    new G4LogicalVolume(TelShield_sol, CFRP, "TelShield_log");
+  G4VPhysicalVolume* TelShield_phys;
+  G4RotationMatrix telsh_rot1; telsh_rot1.rotateY(-90.*deg);
+  telsh_rot1.rotateX(90.*deg); telsh_rot1.rotateZ(-30.*deg);
+  TelShield_phys = new G4PVPlacement(G4Transform3D(telsh_rot1, 
+    spacecraft_pos+G4ThreeVector(YTube_xoff+TelShield_xoff,-TelShield_yoff,0)),
+    "TelShield_phys", TelShield_log, wld_phys, false, 0);
+  G4RotationMatrix telsh_rot2; telsh_rot2.rotateY(-90.*deg);
+  telsh_rot2.rotateX(90.*deg); telsh_rot2.rotateZ(+30.*deg);
+  TelShield_phys = new G4PVPlacement(G4Transform3D(telsh_rot2, 
+    spacecraft_pos+G4ThreeVector(YTube_xoff+TelShield_xoff,+TelShield_yoff,0)),
+    "TelShield_phys", TelShield_log, wld_phys, false, 1);
+  TelShield_log->SetVisAttributes(green_vat);
+
+
+
+  // Telescope actuator: 1.8 kg
+  // includes mass of Al arms
+  G4double TelActuatorCyl_dia   =  76.*mm;
+  G4double TelActuatorCyl_len   = 147.*mm;
+  // Actuator mount: 0.45 kg
+  G4double TelActuatorMount_hei = 147.*mm;
+  G4double TelActuatorMount_wid = 120.*mm;
+  G4double TelActuatorMount_thi =  7.5*mm;
+  G4ThreeVector TelActuator_pos1(-100.*mm,0.,550.*mm);
+  G4ThreeVector TelActuator_pos2( 100.*mm,0.,550.*mm);
+
+  // Telescope actuator 1: cylinder
+  G4Tubs* TelActuatorCyl_sol = new G4Tubs("TelActuatorCyl_sol", 
+    0, 0.5*TelActuatorCyl_dia, 0.5*TelActuatorCyl_len, 0., 360.*deg);
+  G4LogicalVolume* TelActuatorCyl_log = 
+    new G4LogicalVolume(TelActuatorCyl_sol, Al6061, "TelActuatorCyl_log");
+  G4RotationMatrix act_rot1; act_rot1.rotateY(60.*deg);
+  G4VPhysicalVolume* TelActuatorCyl_phys;
+  TelActuatorCyl_phys = new G4PVPlacement(G4Transform3D(act_rot1, 
+    TelActuator_pos1), "TelActuatorCyl_phys", TelActuatorCyl_log,
+    arms_i_phys, false, 0);
+  TelActuatorCyl_log->SetVisAttributes(sol_red_vat);
+  // Telescope actuator 1: mount
+  G4Box* TelActuatorMount_box = new G4Box("TelActuatorMount_box", 
+    .5*TelActuatorMount_wid, .5*TelActuatorMount_hei, .5*TelActuatorMount_thi);
+  G4SubtractionSolid* TelActuatorMount_sol = new G4SubtractionSolid
+    ("TelActuatorMount_sol", TelActuatorMount_box, TelActuatorCyl_sol,
+    0, G4ThreeVector(0,0.5*TelActuatorMount_hei,0));
+  G4LogicalVolume* TelActuatorMount_log = 
+    new G4LogicalVolume(TelActuatorMount_sol, TiAlloy, "TelActuatorMount_log");
+  G4VPhysicalVolume* TelActuatorMount_phys;
+  TelActuatorMount_phys = new G4PVPlacement(G4Transform3D(act_rot1, 
+    TelActuator_pos1 + G4ThreeVector(0,-0.5*TelActuatorMount_hei-2.*mm,0.)),
+    "TelActuatorMount_phys", TelActuatorMount_log, arms_i_phys, false, 0);
+  TelActuatorMount_log->SetVisAttributes(sol_yellow_vat);
+  // Telescope actuator 2
+  G4RotationMatrix act_rot2; act_rot2.rotateY(-60.*deg);
+  TelActuatorCyl_phys = new G4PVPlacement(G4Transform3D
+    (act_rot2, TelActuator_pos2), "TelActuatorCyl_phys",
+    TelActuatorCyl_log, arms_i_phys, false, 1);
+  TelActuatorMount_phys = new G4PVPlacement(G4Transform3D(act_rot2, 
+    TelActuator_pos2 + G4ThreeVector(0,-0.5*TelActuatorMount_hei-2.*mm,0.)),
+    "TelActuatorMount_phys", TelActuatorMount_log, arms_i_phys, false, 1);
+
+
+
+
+  //***************************************************************************
+  // Telescope / GRS Assembly (in dummy wrapper volume)
+  //***************************************************************************
+
+
+  // Dummy (assembly) box for telescope
+  G4double TelBox_len = 620.*mm;
+  G4double TelBox_dia = 370.*mm;
+  // Dummy (assembly) box for telescope
+  G4Tubs* TelBox_sol = 
+    new G4Tubs("TelBox_sol", 0., 0.5*TelBox_dia, 0.5*TelBox_len, 0., 360.*deg);
+  G4LogicalVolume* TelBox_log = 
+    new G4LogicalVolume(TelBox_sol, vacuum, "TelBox_log");
+  G4VPhysicalVolume* TelBox_phys;
+  TelBox_phys = 
+    new G4PVPlacement(G4Transform3D(tel_rot1, tel_pos1), 
+    "TelBox1_phys", TelBox_log, arms_i_phys, false, 0);
+  TelBox_phys = 
+    new G4PVPlacement(G4Transform3D(tel_rot2, tel_pos2), 
+    "TelBox2_phys", TelBox_log, arms_i_phys, false, 1);
+  // TelBox_log->SetVisAttributes(white_vat);
+  TelBox_log->SetVisAttributes(G4VisAttributes::Invisible);
+
+
+  // all z-offsets referred to TM centre
+  // change OpticalBench_off to move telescope components along z-axis
+
+  // Optical Bench: 4.41 kg
+  G4double OpticalBench_len        = 350.0*mm;
+  G4double OpticalBench_wid        = 200.0*mm;
+  G4double OpticalBench_thi        =  40.0*mm;
+  // Sensor Housing as in Solid Model
+  //  G4double OpticalBenchCutout_len  = 170.0*mm + 1.*mm;
+  //  G4double OpticalBenchCutout_wid  = 120.0*mm + 1.*mm;
+  // Sensor Housing to fit LTP Sensor
+  G4double OpticalBenchCutout_dia  = 126.0*mm;
+  G4double OpticalBenchCutout_thi  = 100.0*mm;
+  //  G4double OpticalBench_off    = 0.0*mm;
+
+  // Optical Bench
+  G4Box* OpticalBench_box = new G4Box("OpticalBench_box", 
+    0.5*OpticalBench_wid, 0.5*OpticalBench_thi, 0.5*OpticalBench_len);
+  // old design cutout
+  //  G4Box* OpticalBenchCutout_box = new G4Box("OpticalBenchCutout_box", 
+  //    0.5*OpticalBenchCutout_wid, 0.5*OpticalBenchCutout_thi,
+  //    0.5*OpticalBenchCutout_len);
+  // LTP design cutout
+  G4Tubs* OpticalBenchCutout_box = new G4Tubs("OpticalBenchCutout_box", 
+    0., 0.5*OpticalBenchCutout_dia, 0.5*OpticalBenchCutout_thi, 0., 360.*deg);
+  G4RotationMatrix cutout_rot; cutout_rot.rotateX(90.*deg);
+  G4SubtractionSolid* OpticalBench_sol = new G4SubtractionSolid
+    ("OpticalBench_sol", OpticalBench_box, OpticalBenchCutout_box,
+    G4Transform3D(cutout_rot, G4ThreeVector()));
+  G4LogicalVolume* OpticalBench_log = 
+    new G4LogicalVolume(OpticalBench_sol, ULEglass, "OpticalBench_log");
+  G4VPhysicalVolume* OpticalBench_phys= 
+    new G4PVPlacement(0, G4ThreeVector(0,0, OpticalBench_off),
+    "OpticalBench_phys", OpticalBench_log, TelBox_phys, false, 0);
+  OpticalBench_log->SetVisAttributes(sol_white_vat);
+
+
+  // Support ring: 0.99 kg
+  G4double SupportRing_od    = 359.*mm;
+  G4double SupportRing_dia_o =  23.*mm;
+  G4double SupportRing_dia_i =  10.*mm;
+  // Support yokes: 0.12 kg
+  // also accounts for pivot mass
+  G4double SupportYoke_thi   =   5.*mm;
+  G4double SupportYoke_dia   =  15.*mm;
+  G4double SupportYoke_len   = 170.*mm;
+  G4double SupportYoke_xoff  = 122.*mm;
+  G4double SupportYoke_yoff  =  50.*mm;
+  G4double SupportYoke_zoff  =  90.*mm;
+
+  // Support ring
+  G4Torus* SupportRing_sol = new G4Torus("SupportRing_sol", 
+    0.5*SupportRing_dia_i,0.5*SupportRing_dia_o,
+    0.5*(SupportRing_od-SupportRing_dia_o), 0.,360.*deg);
+  G4LogicalVolume* SupportRing_log = 
+    new G4LogicalVolume(SupportRing_sol, ULEglass, "SupportRing_log");
+  G4VPhysicalVolume* SupportRing_phys= 
+    new G4PVPlacement(0, G4ThreeVector(0.,0.,OpticalBench_off),
+    "SupportRing_phys", SupportRing_log, TelBox_phys, false, 0);
+  SupportRing_log->SetVisAttributes(sol_red_vat);
+  // Support yokes
+  G4Tubs* SupportYoke_sol = new G4Tubs("SupportYoke_sol", 0.5*SupportYoke_dia
+    - SupportYoke_thi, 0.5*SupportYoke_dia, 0.5*SupportYoke_len, 0., 360.*deg);
+  G4LogicalVolume* SupportYoke_log = 
+    new G4LogicalVolume(SupportYoke_sol, TiAlloy, "SupportYoke_log");
+  SupportYoke_log->SetVisAttributes(sol_red_vat);
+  G4VPhysicalVolume* SupportYoke_phys;
+  // upper
+  G4RotationMatrix tel_rot3; 
+  tel_rot3.rotateX(+30.*deg); tel_rot3.rotateY(-10.*deg);
+  SupportYoke_phys = new G4PVPlacement(G4Transform3D(tel_rot3, 
+    G4ThreeVector(+SupportYoke_xoff, +SupportYoke_yoff ,
+    OpticalBench_off + SupportYoke_zoff)), "SupportYoke_phys",
+    SupportYoke_log, TelBox_phys, false, 0);
+  G4RotationMatrix tel_rot4; 
+  tel_rot4.rotateX(+30.*deg); tel_rot4.rotateY(+10.*deg);
+  SupportYoke_phys = new G4PVPlacement(G4Transform3D(tel_rot4, 
+    G4ThreeVector(-SupportYoke_xoff, +SupportYoke_yoff ,
+    OpticalBench_off + SupportYoke_zoff)), "SupportYoke_phys",
+    SupportYoke_log, TelBox_phys, false, 1);
+  G4RotationMatrix tel_rot5; 
+  tel_rot5.rotateX(-30.*deg); tel_rot5.rotateY(+10.*deg);
+  SupportYoke_phys = new G4PVPlacement(G4Transform3D(tel_rot5, 
+    G4ThreeVector(+SupportYoke_xoff, +SupportYoke_yoff ,
+    OpticalBench_off - SupportYoke_zoff)), "SupportYoke_phys",
+    SupportYoke_log, TelBox_phys, false, 2);
+  G4RotationMatrix tel_rot6; 
+  tel_rot6.rotateX(-30.*deg); tel_rot6.rotateY(-10.*deg);
+  SupportYoke_phys = new G4PVPlacement(G4Transform3D(tel_rot6, 
+    G4ThreeVector(-SupportYoke_xoff, +SupportYoke_yoff ,
+    OpticalBench_off - SupportYoke_zoff)), "SupportYoke_phys",
+    SupportYoke_log, TelBox_phys, false, 3);
+  // lower
+  G4RotationMatrix tel_rot7; 
+  tel_rot7.rotateX(-30.*deg); tel_rot7.rotateY(-10.*deg);
+  SupportYoke_phys = new G4PVPlacement(G4Transform3D(tel_rot7, 
+    G4ThreeVector(+SupportYoke_xoff, -SupportYoke_yoff ,
+    OpticalBench_off + SupportYoke_zoff)), "SupportYoke_phys",
+    SupportYoke_log, TelBox_phys, false, 4);
+  G4RotationMatrix tel_rot8; 
+  tel_rot8.rotateX(-30.*deg); tel_rot8.rotateY(+10.*deg);
+  SupportYoke_phys = new G4PVPlacement(G4Transform3D(tel_rot8, 
+    G4ThreeVector(-SupportYoke_xoff, -SupportYoke_yoff ,
+    OpticalBench_off + SupportYoke_zoff)), "SupportYoke_phys",
+    SupportYoke_log, TelBox_phys, false, 5);
+  G4RotationMatrix tel_rot9; 
+  tel_rot9.rotateX(+30.*deg); tel_rot9.rotateY(+10.*deg);
+  SupportYoke_phys = new G4PVPlacement(G4Transform3D(tel_rot9, 
+    G4ThreeVector(+SupportYoke_xoff, -SupportYoke_yoff ,
+    OpticalBench_off - SupportYoke_zoff)), "SupportYoke_phys",
+    SupportYoke_log, TelBox_phys, false, 6);
+  G4RotationMatrix tel_rot10; 
+  tel_rot10.rotateX(+30.*deg); tel_rot10.rotateY(-10.*deg);
+  SupportYoke_phys = new G4PVPlacement(G4Transform3D(tel_rot10, 
+    G4ThreeVector(-SupportYoke_xoff, -SupportYoke_yoff ,
+    OpticalBench_off - SupportYoke_zoff)), "SupportYoke_phys",
+    SupportYoke_log, TelBox_phys, false, 7);
+
+
+
+  // Shield tube: 3.66 kg
+  G4double ShieldTube_len = 500.*mm;
+  G4double ShieldTube_thi =   4.*mm;
+  G4double ShieldTube_dia = 360.*mm + 2*ShieldTube_thi;
+  G4double ShieldTube_off =  60.*mm;
+
+  // Shield tube
+  G4Tubs* ShieldTube_sol = new G4Tubs("ShieldTube_sol", 
+   0.5*ShieldTube_dia-ShieldTube_thi, 0.5*ShieldTube_dia, 
+   0.5*ShieldTube_len, 0., 360.*deg);
+  G4LogicalVolume* ShieldTube_log = 
+    new G4LogicalVolume(ShieldTube_sol, CFRP, "ShieldTube_log");
+  G4VPhysicalVolume* ShieldTube_phys = new G4PVPlacement(0, 
+    G4ThreeVector(0,0,OpticalBench_off-ShieldTube_off),
+    "ShieldTube_phys", ShieldTube_log, TelBox_phys, false, 0);
+  ShieldTube_log->SetVisAttributes(G4VisAttributes::Invisible);
+
+
+
+  // Mounting rings: 0.78 kg
+  G4double TelRing_dia  = 360.0*mm;
+  G4double TelRing_thi  = 15.0*mm;
+  G4double TelRing_len  = 30.0*mm;
+  G4double TelRing_off1 = 0.5*OpticalBench_len - 0.5*TelRing_len + 0.5*mm;
+  G4double TelRing_off2 = 0.5*OpticalBench_len;
+
+  // Mounting rings
+  G4Tubs* TelRing_sol = 
+    new G4Tubs("TelRing_sol", 0.5*TelRing_dia-TelRing_thi, 0.5*TelRing_dia,
+    0.5*TelRing_len, 0., 360.*deg);
+  G4LogicalVolume* TelRing_log = 
+    new G4LogicalVolume(TelRing_sol, CFRP, "TelRing_log");
+  TelRing_log->SetVisAttributes(sol_white_vat);
+  G4VPhysicalVolume* TelRing_phys;
+  TelRing_phys = new G4PVPlacement(0, G4ThreeVector
+    (0,0,OpticalBench_off - TelRing_off1),
+    "TelRing_phys", TelRing_log, TelBox_phys, false, 0);
+  // Electronics mounting ring
+  TelRing_phys = new G4PVPlacement(0, G4ThreeVector
+    (0,0,OpticalBench_off + TelRing_off2), 
+    "TelRing_phys", TelRing_log, TelBox_phys, false, 1);
+
+
+
+  // Shield/Mounting Plate: 1.54 kg
+  G4double ShieldPlate_dia = 350.*mm;
+  G4double ShieldPlate_thi =  10.*mm;
+  G4double ShieldPlate_off = TelRing_off2 + 
+                             0.5*(TelRing_len+ShieldPlate_thi) + 20.0*mm;
+  // Shield/Mounting Plate
+  G4Tubs* ShieldPlate_sol = new G4Tubs("ShieldPlate_sol", 
+   0., 0.5*ShieldPlate_dia, 0.5*ShieldPlate_thi, 0., 360.*deg);
+  G4LogicalVolume* ShieldPlate_log = 
+    new G4LogicalVolume(ShieldPlate_sol, CFRP, "ShieldPlate_log");
+  G4VPhysicalVolume* ShieldPlate_phys = new G4PVPlacement(0, 
+    G4ThreeVector(0,0,OpticalBench_off + ShieldPlate_off),
+    "ShieldPlate_phys", ShieldPlate_log, TelBox_phys, false, 0);
+  ShieldPlate_log->SetVisAttributes(sol_white_vat);
+
+
+
+  // Telescope electronics boxes: 0.36 kg
+  G4double TelElecBox_wid   = 100.0*mm;
+  G4double TelElecBox_len   =  90.0*mm;
+  G4double TelElecBox_hei   = 180.0*mm;
+  G4double TelElecBoxes_sep = 150.0*mm;
+  G4double TelElecBoxes_off = ShieldPlate_off +
+                              0.5*(ShieldPlate_thi + TelElecBox_len);
+
+  // Telescope electronics boxes
+  G4Box* TelElecBox_sol = new G4Box("TelElecBox_sol", 0.5*TelElecBox_wid,
+    0.5*TelElecBox_hei, 0.5*TelElecBox_len);
+  G4LogicalVolume* TelElecBox_log = 
+    new G4LogicalVolume(TelElecBox_sol, Al6061, "TelElecBox_log");
+  G4VPhysicalVolume* TelElecBox_phys;
+  // Interferometer electronics
+  TelElecBox_phys = new G4PVPlacement(0, 
+    G4ThreeVector(-0.5*TelElecBoxes_sep, 0,OpticalBench_off+TelElecBoxes_off), 
+    "TelElecBox_phys", TelElecBox_log, TelBox_phys, false, 0);
+  TelElecBox_log->SetVisAttributes(sol_red_vat);
+  // Accelerator electronics
+  TelElecBox_phys = new G4PVPlacement(0, 
+    G4ThreeVector(0.5*TelElecBoxes_sep, 0, OpticalBench_off+TelElecBoxes_off), 
+    "TelElecBox_phys", TelElecBox_log, TelBox_phys, false, 1);
+  // Each box is made from solid Al6061 from which a volume 
+  // s times smaller is removed to match assigned mass;
+  G4double s = pow(1.-0.36/(2.70*TelElecBox_wid*TelElecBox_hei*TelElecBox_len)
+      *1E6,1./3.);
+  G4Box* TelElecBoxIn_sol = new G4Box("TelElecBoxIn_sol", s*0.5*TelElecBox_wid,
+    s*0.5*TelElecBox_hei, s*0.5*TelElecBox_len);
+  G4LogicalVolume* TelElecBoxIn_log = 
+    new G4LogicalVolume(TelElecBoxIn_sol, vacuum, "TelElecBoxIn_log");
+  G4VPhysicalVolume* TelElecBoxIn_phys = new G4PVPlacement
+    (0, 0, "TelElecBoxIn_i", TelElecBoxIn_log, TelElecBox_phys, false, 0);
+
+
+
+  // Front thermal shield: 0.15 kg
+  G4double FrontThermalShield_dia  = 350.*mm;
+  G4double FrontThermalShield_thi  =   1.*mm;
+  G4double FrontThermalShield_hol  =  25.*mm;
+  G4double FrontThermalShield_roff =  30.*mm;
+  G4double FrontThermalShield_off  = TelRing_off1 + 0.5*TelRing_len 
+                                     + 0.5*FrontThermalShield_thi + 20.0*mm;
+
+  // Front thermal shield
+  G4Tubs* FrontThermalShield_tub = new G4Tubs("FrontThermalShield_tub", 
+    0., 0.5*FrontThermalShield_dia, 0.5*FrontThermalShield_thi, 0., 360.*deg);
+  G4Tubs* FrontThermalShieldCutout_tub = 
+    new G4Tubs("FrontThermalShieldCutout_tub", 
+    0., 0.5*FrontThermalShield_hol, 2*FrontThermalShield_thi, 0., 360.*deg);
+  G4SubtractionSolid* FrontThermalShield_sol = 
+    new G4SubtractionSolid("FrontThermalShield_sol", FrontThermalShield_tub,
+    FrontThermalShieldCutout_tub, G4Transform3D(G4RotationMatrix(), 
+    G4ThreeVector(0,FrontThermalShield_roff,0)));
+  G4LogicalVolume* FrontThermalShield_log = 
+    new G4LogicalVolume(FrontThermalShield_sol, CFRP, 
+    "FrontThermalShield_log");
+  G4VPhysicalVolume* FrontThermalShield_phys = new G4PVPlacement
+    (0, G4ThreeVector(0, 0, OpticalBench_off-FrontThermalShield_off),
+    "FrontThermalShield_phys", FrontThermalShield_log, TelBox_phys, false, 0);
+  FrontThermalShield_log->SetVisAttributes(sol_white_vat);
+
+
+
+  //***************************************************************************
+  // Telescope assembly
+  //***************************************************************************
+
+
+  // Primary mirror mount: ~1.9 kg
+  G4double TelPriMirMount_rad  = 420.*mm;
+  G4double TelPriMirMount_yoff = 220.*mm;
+  G4double TelPriMirMount_thi  =  13.*mm;
+  G4double TelPriMirMount_off  = FrontThermalShield_off + 
+                                 0.5*TelPriMirMount_thi + 20.*mm;
+  G4double TelPriMirMountCutout0_dia  = 350.*mm;
+  G4double TelPriMirMountCutout0_yoff = 220.*mm;
+  G4double TelPriMirMountCutout1_dia  =  60.*mm;
+  G4double TelPriMirMountCutout1_yoff = 190.*mm;
+  G4double TelPriMirMountCutout2_dia  =  46.*mm;
+  G4double TelPriMirMountCutout2_yoff = 367.*mm;
+
+  // Primary mirror mount
+  // full thickness assumed; material density is decreased to conserve mass
+  G4Tubs* TelPriMirMount_tub = new G4Tubs("TelPriMirMount_tub", 
+    0, TelPriMirMount_rad, 0.5*TelPriMirMount_thi, -115.*deg, 50.*deg);
+  G4Tubs* TelPriMirMountCutout0_tub = new G4Tubs
+    ("TelPriMirMountCutout0_tub", 0.5*TelPriMirMountCutout0_dia, 
+    0.8*TelPriMirMountCutout0_dia, TelPriMirMount_thi, 0., 360.*deg);
+  G4SubtractionSolid* TelPriMirMount_sol0 = new G4SubtractionSolid
+    ("TelPriMirMount_sol1", TelPriMirMount_tub, TelPriMirMountCutout0_tub,
+    G4Transform3D(G4RotationMatrix(), 
+    G4ThreeVector(0,-TelPriMirMountCutout0_yoff,0)));
+  G4Tubs* TelPriMirMountCutout1_tub = new G4Tubs("TelPriMirMountCutout1_tub", 
+    0, 0.5*TelPriMirMountCutout1_dia, TelPriMirMount_thi, 0.*deg, 360.*deg);
+  G4SubtractionSolid* TelPriMirMount_sol1 = new G4SubtractionSolid
+    ("TelPriMirMount_sol1", TelPriMirMount_sol0, TelPriMirMountCutout1_tub,
+     G4Transform3D(G4RotationMatrix(), 
+     G4ThreeVector(0, -TelPriMirMountCutout1_yoff,0)));
+  G4Tubs* TelPriMirMountCutout2_tub = new G4Tubs("TelPriMirMountCutout2_tub", 
+    0, 0.5*TelPriMirMountCutout2_dia, TelPriMirMount_thi, 0.*deg, 360.*deg);
+  G4SubtractionSolid* TelPriMirMount_sol2 = new G4SubtractionSolid
+    ("TelPriMirMount_sol2", TelPriMirMount_sol1, TelPriMirMountCutout2_tub,
+     G4Transform3D(G4RotationMatrix(), 
+     G4ThreeVector(0, -TelPriMirMountCutout2_yoff,0)));
+  G4LogicalVolume* TelPriMirMount_log = 
+    new G4LogicalVolume(TelPriMirMount_sol2, Al6061, "TelPriMirMount_log");
+  G4VPhysicalVolume* TelPriMirMount_phys = new G4PVPlacement(0, 
+    G4ThreeVector(0, TelPriMirMount_yoff, OpticalBench_off-TelPriMirMount_off),
+    "TelPriMirMount_phys", TelPriMirMount_log, TelBox_phys, false, 0);
+  TelPriMirMount_log->SetVisAttributes(sol_blue_vat);
+
+
+  // primary mirror: 2.03 kg
+  G4double TelPriMir_thi    =   9.0*mm;
+  G4double TelPriMir_rad    = 500.0*mm;
+  G4double TelPriMir_dia    = 304.0*mm;
+  G4double TelPriMir_yoff   =  30.0*mm;
+  G4double TelPriMirHol_dia =  35.0*mm;
+  G4double TelPriMirHol_thi =   5.0*mm;
+  G4double TelPriMirHol_len =  45.0*mm;
+  G4double TelPriMir_off    =  TelPriMirMount_off + 
+                               0.5*TelPriMirMount_thi +2.*mm;
+  // primary mirror: cylinder
+  G4Tubs* TelPriMirCyl_sol = new G4Tubs("TelPriMirCyl_sol", 
+    0.5*TelPriMirHol_dia, 0.5*TelPriMirHol_dia+TelPriMirHol_thi,
+    0.5*TelPriMirHol_len, 0., 360.*deg);
+  G4LogicalVolume* TelPriMirCyl_log = 
+    new G4LogicalVolume(TelPriMirCyl_sol, SiC, "TelPriMirCyl_log");
+  G4VPhysicalVolume* TelPriMirCyl_phys= new G4PVPlacement(0, G4ThreeVector
+    (0,TelPriMir_yoff,OpticalBench_off-TelPriMir_off+0.5*TelPriMirMount_thi),
+    "TelPriMirCyl_phys", TelPriMirCyl_log, TelBox_phys, false, 0);
+  TelPriMirCyl_log->SetVisAttributes(sol_green_vat);
+  // primary mirror: dish
+  G4Sphere* TelPriMir_sol = 
+    new G4Sphere("TelPriMir_sol", TelPriMir_rad - TelPriMir_thi, 
+    TelPriMir_rad, 0, 360.*deg, 
+    atan(0.5*TelPriMirHol_dia/TelPriMir_rad), 
+    atan(0.5*TelPriMir_dia/TelPriMir_rad) -
+    atan(0.5*TelPriMirHol_dia/TelPriMir_rad));
+  G4LogicalVolume* TelPriMir_log = 
+    new G4LogicalVolume(TelPriMir_sol, SiC, "TelPriMir_log");
+  G4VPhysicalVolume* TelPriMir_phys= new G4PVPlacement(0, G4ThreeVector
+    (0,TelPriMir_yoff, OpticalBench_off-TelPriMir_off-TelPriMir_rad-17.*mm),
+    "TelPriMir_phys", TelPriMir_log, TelBox_phys, false, 0);
+  TelPriMir_log->SetVisAttributes(sol_green_vat);
+
+
+
+  // *** NOTE ***
+  // Following items are NOT in TelBox_phys but in TelShield_phys
+
+  G4ThreeVector offset(0,0,0.5*TelShield_len);
+
+  // Telescope mast: 0.41 kg
+  G4double TelMast_thi = 2.0*mm;
+  G4double TelMast_dia = 44.0*mm;
+  G4double TelMast_len = 500.*mm;
+  G4double TelMast_off = 0.5*TelMast_len;
+  // Telescope mast
+  G4Tubs* TelMast_sol = 
+    new G4Tubs("TelMast_sol", 0.5*TelMast_dia-TelMast_thi, 0.5*TelMast_dia,
+    0.5*TelMast_len, 0., 360.*deg);
+  G4LogicalVolume* TelMast_log = 
+    new G4LogicalVolume(TelMast_sol, SiC, "TelMast_log");
+  G4VPhysicalVolume* TelMast_phys= new G4PVPlacement(0, offset+G4ThreeVector
+    (0,-0.5*TelPriMir_dia - 0.5*TelMast_dia + TelPriMir_yoff, -TelMast_off),
+    "TelMastTel_phys", TelMast_log, TelShield_phys, false, 0);
+  TelMast_log->SetVisAttributes(sol_grey_vat);
+
+
+  // secondary mirror: 0.27 kg
+  G4double TelSecMir_dia = 40.0*mm;
+  G4double TelSecMir_len = 70.0*mm;
+  G4double TelSecMir_off = TelMast_off + 0.5*TelMast_len
+                           - 0.5*TelSecMir_len + 10.*mm;
+  // secondary mirror
+  G4Tubs* TelSecMir_sol = 
+    new G4Tubs("TelSecMir_sol", 0., 0.5*TelSecMir_dia, 
+     0.5*TelSecMir_len, 0., 360.*deg);
+  G4LogicalVolume* TelSecMir_log = 
+    new G4LogicalVolume(TelSecMir_sol, SiC, "TelSecMir_log");
+  G4VPhysicalVolume* TelSecMir_phys= new G4PVPlacement
+    (0, offset+G4ThreeVector(0,TelPriMir_yoff, -TelSecMir_off),
+    "TelSecMir_phys", TelSecMir_log, TelShield_phys, false, 0);
+  TelSecMir_log->SetVisAttributes(sol_green_vat);
+
+
+
+  // secondary mirror holder: 0.35 kg
+  G4double TelSecHol_top     = 20.0*mm;
+  G4double TelSecHol_bot     = 60.0*mm;
+  G4double TelSecHol_thi     =  5.0*mm;
+  G4double TelSecHolCap1_thi =  5.0*mm;
+  G4double TelSecHolCap1_len = TelSecHol_bot;
+  G4double TelSecHolCap2_thi =  5.0*mm;
+  G4double TelSecHolCap2_len = TelSecHol_top;
+  G4double TelSecHol_len     = 0.5*(TelPriMir_dia-TelSecMir_dia)
+                               - TelSecHolCap1_thi - TelSecHolCap2_thi;
+  // secondary mirror holder
+  G4Trap* TelSecHol_sol = new G4Trap("TelSecHol_sol",
+    TelSecHol_thi, TelSecHol_len,
+    TelSecHol_bot, TelSecHol_top);
+  G4RotationMatrix tel_rot11; tel_rot11.rotateZ(-90.*deg);
+  tel_rot11.rotateY(-90.*deg); tel_rot11.rotateX(-90.*deg);
+  G4LogicalVolume* TelSecHol_log = 
+    new G4LogicalVolume(TelSecHol_sol, SiC, "TelSecHol_log");
+  G4VPhysicalVolume* TelSecHol_phys= new G4PVPlacement(G4Transform3D
+    (tel_rot11, offset + G4ThreeVector(0, 
+    TelPriMir_yoff-0.5*TelSecHol_len-0.5*TelSecMir_dia-TelSecHolCap2_thi,
+    -TelMast_off-0.5*TelMast_len+TelSecHol_top)),
+    "TelSecHol_phys", TelSecHol_log, TelShield_phys, false, 0);
+  TelSecHol_log->SetVisAttributes(sol_grey_vat);
+  // cap1
+  G4Tubs* TelSecHolCap1_sol = 
+    new G4Tubs("TelSecHolCap1_sol", 0.5*TelMast_dia, 
+    0.5*TelMast_dia+TelSecHolCap1_thi, 0.5*TelSecHolCap1_len, 0., 360.*deg);
+  G4LogicalVolume* TelSecHolCap1_log = 
+    new G4LogicalVolume(TelSecHolCap1_sol, SiC, "TelSecHolCap1_log");
+  G4VPhysicalVolume* TelSecHolCap1_phys= new G4PVPlacement(0, 
+    offset + G4ThreeVector(0,-0.5*TelPriMir_dia-0.5*TelMast_dia+TelPriMir_yoff,
+    -TelMast_off-0.5*TelMast_len+0.5*TelSecHol_bot),
+    "TelSecHolCap1_phys", TelSecHolCap1_log, TelShield_phys, false, 0);
+  TelSecHolCap1_log->SetVisAttributes(sol_grey_vat);
+  // cap2
+  G4Tubs* TelSecHolCap2_sol = 
+    new G4Tubs("TelSecHolCap2_sol", 0.5*TelSecMir_dia, 
+    0.5*TelSecMir_dia+TelSecHolCap2_thi, 0.5*TelSecHolCap2_len, 0., 360.*deg);
+  G4LogicalVolume* TelSecHolCap2_log = 
+    new G4LogicalVolume(TelSecHolCap2_sol, SiC, "TelSecHolCap2_log");
+  G4VPhysicalVolume* TelSecHolCap2_phys= new G4PVPlacement(0, 
+    offset + G4ThreeVector(0,TelPriMir_yoff,
+    -TelMast_off-0.5*TelMast_len+0.5*TelSecHol_top),
+    "TelSecHolCap2_phys", TelSecHolCap2_log, TelShield_phys, false, 0);
+  TelSecHolCap2_log->SetVisAttributes(sol_grey_vat);
+
+
+  // make structure invisible
+  //  arms_o_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  arms_i_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  TelShield_log->SetVisAttributes(G4VisAttributes::Invisible);
+
+  // make structure solid
+  //  arms_o_log->SetVisAttributes(sol_yellow_vat);
+  //  arms_i_log->SetVisAttributes(yellow_vat);
+  //  TelShield_log->SetVisAttributes(sol_green_vat);
+
+
+// ****************************************************************************

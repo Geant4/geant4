@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.20 2003/01/22 18:02:04 gcosmo Exp $
+# $Id: globlib.gmk,v 1.24 2004/06/08 10:04:46 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -40,7 +40,7 @@ ifneq ($(G4LIB_BUILD_STATIC),)
 $(G4LIBDIR)/lib$(name).a: \
   $(foreach dir,$(SUBLIBS),$(G4TMP)/$(G4SYSTEM)/$(dir)/obj.last)
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ; fi
-	@echo Merging object files in $(G4LIBDIR)/lib$(name).a
+	@echo Merging object files in $(G4LIBDIR)/lib$(name).a ...
 	@$(RM) $(G4LIBDIR)/lib$(name).a
 #
 #
@@ -79,7 +79,7 @@ endif
 ifneq ($(G4LIB_BUILD_SHARED),)
 $(SHARED_LIB):	$(foreach dir,$(SUBLIBS),$(G4TMP)/$(G4SYSTEM)/$(dir)/obj.last)
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ; fi
-	@echo Creating global shared library $@
+	@echo Creating global shared library $@ ...
 	@$(RM) $@
 #	use system specific commands to build the library
 	$(build-global-shared-lib)
@@ -105,16 +105,25 @@ clean:
 	@echo Cleaning up ...
 	@for lib in $(SUBLIBS); do ( \
 				 rm -rf $(G4TMP)/$(G4SYSTEM)/$$lib;\
-				 rm -f $(G4LIBDIR)/lib$$lib.a;\
-				 rm -f $(G4LIBDIR)/lib$$lib.$(SHEXT) );\
+				 rm -f $(G4LIBDIR)/*$$lib.a;\
+				 rm -f $(G4LIBDIR)/*$$lib.lib;\
+				 rm -f $(G4LIBDIR)/*$$lib.exp;\
+				 rm -f $(G4LIBDIR)/*$$lib.$(SHEXT) );\
 				done
-	@rm -f $(G4LIBDIR)/lib$(name).a
+	@rm -f $(G4LIBDIR)/*$(name).a
+	@rm -f $(G4LIBDIR)/*$(name).lib
+	@rm -f $(G4LIBDIR)/*$(name).exp
+	@rm -f $(G4LIBDIR)/*$(name).$(SHEXT)
 
 clean_libs:
 	@echo Removing lib$(name).a/.$(SHEXT) and sub-libraries ...
 	@for lib in $(SUBLIBS); do ( \
-				  rm -f $(G4LIBDIR)/lib$$lib.a;\
-				  rm -f $(G4LIBDIR)/lib$$lib.$(SHEXT) );\
+				  rm -f $(G4LIBDIR)/*$$lib.a;\
+				  rm -f $(G4LIBDIR)/*$$lib.lib;\
+				  rm -f $(G4LIBDIR)/*$$lib.exp;\
+				  rm -f $(G4LIBDIR)/*$$lib.$(SHEXT) );\
 				done
-	@rm -f $(G4LIBDIR)/lib$(name).a
-	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)
+	@rm -f $(G4LIBDIR)/*$(name).a
+	@rm -f $(G4LIBDIR)/*$(name).lib
+	@rm -f $(G4LIBDIR)/*$(name).exp
+	@rm -f $(G4LIBDIR)/*$(name).$(SHEXT)

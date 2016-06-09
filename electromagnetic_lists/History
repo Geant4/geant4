@@ -1,0 +1,21 @@
+$Id: History,v 1.1 2004/05/28 15:19:42 vnivanch Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+              electromagnetic_lists History file
+              ----------------------------------
+
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+28-05-04 V.Ivanchenko (emphys-V06-01-00)
+- first tag
+

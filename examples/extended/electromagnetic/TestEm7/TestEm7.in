@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.6 2004/02/06 17:12:45 vnivanch Exp $
+# $Id: TestEm7.in,v 1.7 2004/03/10 12:32:19 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -20,7 +20,7 @@
 #
 /testem/phys/addPhysics  standard	# em physics     
 ###/testem/phys/addPhysics  g4v52	# em physics
-#/testem/phys/addPhysics  binary		# hadronic physics
+###/testem/phys/addPhysics  binary	# hadronic physics
 #
 /run/initialize
 #

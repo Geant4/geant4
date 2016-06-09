@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TDigiCollection.hh,v 1.1 2003/10/03 10:14:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4TDigiCollection.hh,v 1.4 2004/06/11 14:10:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #ifndef G4TDigiCollection_h
@@ -55,7 +55,11 @@ class G4DigiCollection : public G4VDigiCollection
       void* theCollection;
 };
 
-extern G4Allocator<G4DigiCollection> aDCAllocator;
+#if defined G4DIGI_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4DigiCollection> aDCAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4DigiCollection> aDCAllocator;
+#endif
 
 template <class T> class G4TDigiCollection : public G4DigiCollection 
 {

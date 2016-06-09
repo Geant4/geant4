@@ -20,13 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsList.hh,v 1.1 2003/08/11 10:14:07 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+// $Id: PhysicsList.hh,v 1.4 2004/06/21 10:57:11 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,7 +33,6 @@
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
-class DetectorConstruction;
 class StepMax;
 class PhysicsListMessenger;
 
@@ -47,38 +41,36 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VModularPhysicsList
 {
   public:
-    PhysicsList(DetectorConstruction*);
+    PhysicsList();
    ~PhysicsList();
 
     void ConstructParticle();
+        
+    void AddPhysicsList(const G4String& name);
+    
+    void ConstructProcess();    
+    void AddDecay();
+    void AddStepMax();       
+    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
     
     void SetCuts();
-    void SetCutForGamma   (G4double);
+    void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
     void SetCutForPositron(G4double);
     
-    void AddPhysicsList(const G4String& name);    
-    void ConstructProcess();
-    
-    void AddStepMax();
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;}
-    
-    G4double GetRange(G4double);
-    
-
   private:
+  
+    PhysicsListMessenger* pMessenger; 
+
+    G4String emName;
+    G4VPhysicsConstructor*  emPhysicsList;
+    std::vector<G4VPhysicsConstructor*>  hadronPhys;
+    
+    StepMax* stepMaxProcess;
+    
     G4double cutForGamma;
     G4double cutForElectron;
-    G4double cutForPositron;
-    
-    DetectorConstruction* pDet;        
-    PhysicsListMessenger* pMessenger;
-        
-    G4VPhysicsConstructor* particleList;
-    G4VPhysicsConstructor* generalPhysicsList;    
-    G4VPhysicsConstructor* emPhysicsList;
-    G4String               emName;
-    StepMax*            stepMaxProcess;
+    G4double cutForPositron;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

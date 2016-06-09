@@ -21,73 +21,98 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.icc,v 1.4 2001/07/11 10:08:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ParticleChangeForMSC.icc,v 1.5 2004/05/08 15:28:12 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
-inline 
- const G4ThreeVector* G4ParticleChangeForMSC::GetMomentumChange() const
+
+inline
+ void G4ParticleChangeForMSC::ProposeMomentumDirection(const G4ThreeVector& P)
 {
-  return &theMomentumDirectionChange;
+  theMomentumDirection = P;
 }
 
-inline 
- void G4ParticleChangeForMSC::SetMomentumChange(
-						G4double Px, 
-						G4double Py, 
-						G4double Pz	)
+inline
+ void G4ParticleChangeForMSC::SetProposedMomentumDirection(const G4ThreeVector& P)
 {
-  theMomentumDirectionChange.setX(Px);
-  theMomentumDirectionChange.setY(Py);
-  theMomentumDirectionChange.setZ(Pz);
+  theMomentumDirection = P;
 }
 
-inline 
+inline
+ void G4ParticleChangeForMSC::ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz)
+{
+  theMomentumDirection.setX(Px);
+  theMomentumDirection.setY(Py);
+  theMomentumDirection.setZ(Pz);
+}
+
+inline
+ const G4ThreeVector* G4ParticleChangeForMSC::GetMomentumDirection() const
+{
+  return &theMomentumDirection;
+}
+
+inline
+ const G4ThreeVector* G4ParticleChangeForMSC::GetProposedMomentumDirection() const
+{
+  return &theMomentumDirection;
+}
+
+inline
+ void G4ParticleChangeForMSC::SetProposedPosition(const G4ThreeVector& P)
+{
+  thePosition = P;
+}
+
+inline
+ const G4ThreeVector* G4ParticleChangeForMSC::GetPosition() const
+{
+  return &thePosition;
+}
+
+inline
+ const G4ThreeVector* G4ParticleChangeForMSC::GetProposedPosition() const
+{
+  return &thePosition;
+}
+
+inline
+ void G4ParticleChangeForMSC::ProposePosition(const G4ThreeVector& P)
+{
+  thePosition = P;
+}
+
+
+inline void G4ParticleChangeForMSC::Initialize(const G4Track& track)
+{
+  theStatusChange = track.GetTrackStatus();
+  theMomentumDirection = track.GetMomentumDirection();
+  thePosition = track.GetPosition();
+}
+
+// Following methods will be removed in release 7.0
+inline
  void G4ParticleChangeForMSC::SetMomentumChange(const G4ThreeVector& P)
 {
-  theMomentumDirectionChange = P;
-}
-inline 
- const G4ThreeVector* G4ParticleChangeForMSC::GetMomentumDirectionChange() const
-{
-  return &theMomentumDirectionChange;
+  ProposeMomentumDirection(P);
 }
 
-inline 
- void G4ParticleChangeForMSC::SetMomentumDirectionChange(
-						G4double Px, 
-						G4double Py, 
-						G4double Pz	)
+inline
+ void G4ParticleChangeForMSC::SetMomentumChange(G4double Px, G4double Py, G4double Pz)
 {
-  theMomentumDirectionChange.setX(Px);
-  theMomentumDirectionChange.setY(Py);
-  theMomentumDirectionChange.setZ(Pz);
+  ProposeMomentumDirection(Px, Py, Pz);
 }
 
-inline 
- void G4ParticleChangeForMSC::SetMomentumDirectionChange(const G4ThreeVector& P)
+inline
+ void G4ParticleChangeForMSC::SetPositionChange(const G4ThreeVector& P)
 {
-  theMomentumDirectionChange = P;
+  ProposePosition(P);
 }
 
-inline 
+inline
  const G4ThreeVector* G4ParticleChangeForMSC::GetPositionChange() const
 {
-  return &thePositionChange;
-}
-
-inline 
- void G4ParticleChangeForMSC::SetPositionChange(const G4ThreeVector& finalPosition)
-{
-  thePositionChange= finalPosition;
-}
-
-inline 
- void G4ParticleChangeForMSC::SetPositionChange(G4double x,G4double y, G4double z)
-{
-  thePositionChange.setX(x);
-  thePositionChange.setY(y);
-  thePositionChange.setZ(z);
+  return GetPosition();
 }
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003/11/08 06:10:48 kurasige Exp $
+$Id: History,v 1.8 2004/06/07 13:47:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 7th, 2004 - G.Cosmo (procuts-V06-01-01)
+- Moved usage of statics in inline functions to non-inline to allow
+  porting for DLLs on Windows. Modified G4ProductionCuts[.hh.cc].
+
+March 31st, 2004 - H.Kurashige (procuts-V06-01-00)
+- Modify  G4ProductionCutsTable::RetrieveCutsTable to allow  
+   ordering of materials and couples can be different from 
+   one in file 
+
 November 8th, 2003 - H.Kurashige (procuts-V05-02-03)
 - Fixed bugs in G4VRangeToEnergyConverter (and related class)
-
 - Revised error messages in retreiving ProductionCutsTable
+
 November 7th, 2003 - H.Kurashige (procuts-V05-02-02)
 - Revised error messages in retreiving ProductionCutsTable
 
@@ -29,7 +38,6 @@ November 3th, 2003 - H.Kurashige (procuts-V05-02-01)
 - Add verboseLevel in G4ProductionCutsTable
 
 September 19th, 2003 - G.Cosmo  (procuts-V05-02-00)
---------------------
 - Created new sub-category 'cuts'.
   Moved classes from particles/management.
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDStructure.hh,v 1.1 2003/10/03 10:08:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4SDStructure.hh,v 1.2 2004/05/03 08:14:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #ifndef G4SDStructure_h
@@ -54,7 +54,7 @@ class G4SDStructure
       void Activate(G4String aName, G4bool sensitiveFlag);
       void Initialize(G4HCofThisEvent*HCE);
       void Terminate(G4HCofThisEvent*HCE);
-      G4VSensitiveDetector* FindSensitiveDetector(G4String aName);
+      G4VSensitiveDetector* FindSensitiveDetector(G4String aName, G4bool warning = true);
       G4VSensitiveDetector* GetSD(G4String aName);
       void ListTree();
 

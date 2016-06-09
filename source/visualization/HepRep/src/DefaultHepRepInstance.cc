@@ -10,14 +10,14 @@ DefaultHepRepInstance::DefaultHepRepInstance(HepRepInstance* instance, HepRepTyp
     : DefaultHepRepAttribute(), parent(instance), type(heprepType) {
 
     if (type == NULL) cerr << "HepRepInstance cannot be created without a HepRepType." << endl;
-    ((HepRepInstance*)parent)->addInstance(this);
+    parent->addInstance(this);
 }
 
 DefaultHepRepInstance::DefaultHepRepInstance(HepRepInstanceTree* instanceTree, HepRepType* heprepType)
-    : DefaultHepRepAttribute(), parent(instanceTree), type(heprepType) {
+    : DefaultHepRepAttribute(), parent(NULL), type(heprepType) {
 
     if (type == NULL) cerr << "HepRepInstance cannot be created without a HepRepType." << endl;
-    ((HepRepInstanceTree*)parent)->addInstance(this);
+    instanceTree->addInstance(this);
 }
 
 DefaultHepRepInstance::~DefaultHepRepInstance() {
@@ -35,13 +35,13 @@ void DefaultHepRepInstance::overlay(HepRepInstance *) {
     cerr << "DefaultHepRepInstance::overlay(HepRepInstance * instance) not implemented." << endl;
 }
 
-HepRepInstance* DefaultHepRepInstance::copy(HepRep*, HepRepInstance*, HepRepSelectFilter*) {
-    cerr << "DefaultHepRepInstance::copy(HepRep*, HepRepInstance*, HepRepSelectFilter*) not implemented." << endl;
+HepRepInstance* DefaultHepRepInstance::copy(HepRepTypeTree*, HepRepInstance*, HepRepSelectFilter*) {
+    cerr << "DefaultHepRepInstance::copy(HepRepTypeTree*, HepRepInstance*, HepRepSelectFilter*) not implemented." << endl;
     return NULL;
 }
 
-HepRepInstance* DefaultHepRepInstance::copy(HepRep*, HepRepInstanceTree*, HepRepSelectFilter*) {
-    cerr << "DefaultHepRepInstance::copy(HepRep*, HepRepInstanceTree*, HepRepSelectFilter*) not implemented." << endl;
+HepRepInstance* DefaultHepRepInstance::copy(HepRepTypeTree*, HepRepInstanceTree*, HepRepSelectFilter*) {
+    cerr << "DefaultHepRepInstance::copy(HepRepTypeTree*, HepRepInstanceTree*, HepRepSelectFilter*) not implemented." << endl;
     return NULL;
 }
 
@@ -49,26 +49,28 @@ HepRepType* DefaultHepRepInstance::getType() {
     return type;
 }
 
-bool DefaultHepRepInstance::addPoint(HepRepPoint* point) {
+void DefaultHepRepInstance::addPoint(HepRepPoint* point) {
     points.push_back(point);
-    return true;
 }
 
-vector<HepRepPoint*>* DefaultHepRepInstance::getPoints() {
-    return &points;
+vector<HepRepPoint*> DefaultHepRepInstance::getPoints() {
+    return points;
 }
 
-bool DefaultHepRepInstance::addInstance(HepRepInstance* instance) {
+HepRepInstance* DefaultHepRepInstance::getSuperInstance() {
+    return parent;
+}
+
+void DefaultHepRepInstance::addInstance(HepRepInstance* instance) {
     instances.push_back(instance);
-    return true;
 }
 
 void DefaultHepRepInstance::removeInstance(HepRepInstance*) {
     cerr << "DefaultHepRepInstance::removeInstance(HepRepInstance*) not implemented." << endl;
 }
 
-vector<HepRepInstance*>* DefaultHepRepInstance::getInstances() {
-    return &instances;
+vector<HepRepInstance*> DefaultHepRepInstance::getInstances() {
+    return instances;
 }
 
 HepRepAttValue* DefaultHepRepInstance::getAttValue(string name) {

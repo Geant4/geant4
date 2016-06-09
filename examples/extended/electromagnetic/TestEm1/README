@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2003/10/06 10:02:19 maire Exp $
+$Id: README,v 1.12 2004/06/23 11:31:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -94,7 +94,7 @@ $Id: README,v 1.8 2003/10/06 10:02:19 maire Exp $
  	
  7- HISTOGRAMS
  
-     Testem1 produces several histo which are saved as testem1.paw
+   Testem1 produces several histo which are saved as testem1.paw
      
      Content of these histo:
   
@@ -105,18 +105,35 @@ $Id: README,v 1.8 2003/10/06 10:02:19 maire Exp $
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile.
  
- 8- Using the Anaphe implementation of the AIDA 3.0 histograms:
- --------------------------------------------------------------
 
- In order to use the Anaphe implementation of the AIDA 3.0 interfaces, 
- the 'aida-config' command (which is used in the GNUmakefile) is 
- available at:
- /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/aida-config 
+ 8- Using histograms
+ ------------------- 
 
- In order to run the executable, you need to source the following
- script (once):
- $HOME/bin/setupAnaphe.csh  (or $HOME/bin/setupAnaphe)
+By default the histograms are not activated. To activate histograms
+the environment variable G4ANALYSIS_USE should be defined. For instance
+uncomment the flag G4ANALYSIS_USE in GNUmakefile.
 
- At cern 'setupAnaphe' is available at: 
- /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
- (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)
+To use histograms any of implementations of AIDA interfaces should
+be available (see http://aida.freehep.org).
+
+A package including AIDA and extended interfaces also using Python
+is PI, available from: http://cern.ch/pi .
+
+Once installed PI or PI-Lite in a specified local area $MYPY, it is
+required to add the installation path to $PATH, i.e. for example,
+for release 1.2.1 of PI:
+
+setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
+
+CERN users can use the PATH to the LCG area on AFS.
+
+Before compilation of the example it is optimal to clean up old 
+files:
+
+gmake histclean
+gmake
+
+Before running the example the command should be issued:
+
+eval `aida-config --runtime csh`
+

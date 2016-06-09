@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh,v 1.13 2003/06/16 16:55:32 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIcommand.hh,v 1.14 2004/05/16 18:42:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -35,6 +35,7 @@ class G4UImessenger;
 #include "G4ApplicationState.hh"
 #include <vector>
 #include "G4UItokenNum.hh"
+#include "G4ThreeVector.hh"
 
 // class description:
 //  
@@ -78,10 +79,30 @@ class G4UIcommand
       G4bool IsAvailable();
       virtual void List();
 
-  public:
+  public: // with description
+      static G4String ConvertToString(G4bool boolVal);
+      static G4String ConvertToString(G4int intValue);
+      static G4String ConvertToString(G4double doubleValue);
+      static G4String ConvertToString(G4double doubleValue,const char* unitName);
+      static G4String ConvertToString(G4ThreeVector vec);
+      static G4String ConvertToString(G4ThreeVector vec,const char* unitName);
+      // Static methods for conversion from value(s) to a string. These methods are to be
+      // used by GetCurrentValues() methods of concrete messengers.
+
+      static G4bool ConvertToBool(const char* st);
+      static G4int ConvertToInt(const char* st);
+      static G4double ConvertToDouble(const char* st);
+      static G4double ConvertToDimensionedDouble(const char* st);
+      static G4ThreeVector ConvertTo3Vector(const char* st);
+      static G4ThreeVector ConvertToDimensioned3Vector(const char* st);
+      // Static methods for conversion from a string to a value of the returning type.
+      // These methods are to be used directly by SetNewValues() methods of concrete
+      // messengers, or GetNewXXXValue() of classes derived from this G4UIcommand class.
+
       static G4double ValueOf(const char* unitName);
       static G4String CategoryOf(const char* unitName);
       static G4String UnitsList(const char* unitCategory);
+      // Static methods for unit and its category.
 
   private:  
       void G4UIcommandCommonConstructorCode (const char * theCommandPath);

@@ -99,24 +99,16 @@
  Note that histograms are disabled via the flag G4ANALYSIS_USE in GNUmakefile.
 
 
- 7. Using the Anaphe implementation of the AIDA 3.0 histograms:
- ---------------------------------------------------------------
+ 7. Using the PI implementation of the AIDA histograms:
+ ------------------------------------------------------
 
- In order to use the new Anaphe implementation of the AIDA interfaces, 
- prepare some environment variables by source-ing one of the following 
- startup scripts.
+ In order to setup the proper environmental variables, needed for 
+ running AIDA / PI , run the script:
 
- # This example has been developed and tested in the platform 
- # Linux Red-Hat 7.3 with compilers gcc-2.95.2 and gcc-3.2
- # (the setup below refers to gcc-2.95.2)
+  --- For c-shell  :     source setupAidaPi.csh
+
+  --- For bash-shell :   . setupAidaPi.sh
+
+ Notice that you need g++ 3.2 or 3.23.
  
- o Set up the environment variable: G4ANALYSIS_USE    1
- o setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat73/gcc-2.95.2/5.0.6/bin
-
- o source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/install/sharedstart.csh or .ch
- o ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts/* ~/bin/. 
-   (This has to be made only once)
-     
- After this, you will have access to the last 'aida-config' command which
- is used in the GNUmakefile.
-
+ 

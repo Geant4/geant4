@@ -1,0 +1,101 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// ********************************************************************
+// *                                                                  *
+// * cosmicray_charging advanced example for Geant4                   *
+// * (adapted simulation of test-mass charging in the LISA mission)   *
+// *                                                                  *
+// * Henrique Araujo (h.araujo@imperial.ac.uk) & Peter Wass           *
+// * Imperial College London                                          *
+// *                                                                  *
+// * LISADetectorConstruction class                                   *
+// *                                                                  *
+// ********************************************************************
+//
+// HISTORY
+// 22/02/2004: migrated from LISA-V04
+//
+// ********************************************************************
+
+
+//*************************************************************************
+// Sensor Vacuum Housing (TiAlloy)
+// Modified to contain LTP Inertial Sensor and Caging Mechanism
+//*************************************************************************
+
+
+  // Sensor housing
+  G4double SensorHousing_thi  =   5.0*mm;
+  G4double SensorHousing_yoff = +30.0*mm;
+  // original dimentions
+  // G4double SensorHousing_len  = 170.0*mm;
+  // G4double SensorHousing_wid  = 120.0*mm;
+  // G4double SensorHousing_hei  = 120.0*mm;
+  G4double SensorHousing_dia  = 125.0*mm;
+  G4double SensorHousing_hei  = 224.0*mm;
+
+
+  // Sensor vacuum housing ****************************************************
+
+  // // Outer dimensions as shown in Solid Model Document
+  // G4Box* SensorHousing_o_sol = new G4Box("SensorHousing_o_sol", 
+  //   0.5*SensorHousing_len, 0.5*SensorHousing_hei, 0.5*SensorHousing_wid);
+  // G4LogicalVolume* SensorHousing_o_log = 
+  //   new G4LogicalVolume(SensorHousing_o_sol, TiAlloy,"SensorHousing_o_log");
+  // G4VPhysicalVolume* SensorHousing_o_phys = new G4PVPlacement(G4Transform3D
+  //   (IS_rot, G4ThreeVector(0,SensorHousing_yoff,OpticalBench_off)),
+  //   "SensorHousing_o_phys", SensorHousing_o_log, wld_phys, false, 0);
+  // G4Box* SensorHousing_i_sol = new G4Box("SensorHousing_i_sol",
+  //   0.5*SensorHousing_len-SensorHousing_thi,
+  //   0.5*SensorHousing_hei-SensorHousing_thi,
+  //   0.5*SensorHousing_wid-SensorHousing_thi);
+  // G4LogicalVolume* SensorHousing_i_log = 
+  //   new G4LogicalVolume(SensorHousing_i_sol, vacuum, "SensorHousing_i_log");
+  // G4VPhysicalVolume* SensorHousing_i_phys = new G4PVPlacement
+  //   (0, G4ThreeVector(0,0,0), "SensorHousing_i_phys", 
+  //   SensorHousing_i_log, SensorHousing_o_phys, false, 0);
+  // SensorHousing_o_log->SetVisAttributes(blue_vat);
+  // SensorHousing_i_log->SetVisAttributes(blue_vat);
+
+
+  // Modified to contain LTP Inertial Sensor and Caging Mechanism
+  G4Tubs* SensorHousing_o_sol = new G4Tubs("SensorHousing_o_sol", 
+    0., 0.5*SensorHousing_dia, 0.5*SensorHousing_hei, 0., 360.*deg);
+  G4LogicalVolume* SensorHousing_o_log = 
+    new G4LogicalVolume(SensorHousing_o_sol, TiAlloy, "SensorHousing_o_log");
+  G4VPhysicalVolume* SensorHousing_o_phys = new G4PVPlacement(G4Transform3D
+    (IS_rot, G4ThreeVector(0,SensorHousing_yoff,OpticalBench_off)),
+    "SensorHousing_o_phys", SensorHousing_o_log, TelBox_phys, false, 0);
+  G4Tubs* SensorHousing_i_sol = new G4Tubs("SensorHousing_i_sol",
+    0., 0.5*SensorHousing_dia - SensorHousing_thi, 0.5*SensorHousing_hei
+    - SensorHousing_thi, 0., 360.*deg);
+  G4LogicalVolume* SensorHousing_i_log = 
+    new G4LogicalVolume(SensorHousing_i_sol, vacuum, "SensorHousing_i_log");
+  G4VPhysicalVolume* SensorHousing_i_phys = new G4PVPlacement
+    (0, G4ThreeVector(0,0,0), "SensorHousing_i_phys", 
+     SensorHousing_i_log, SensorHousing_o_phys, false, 0);
+  SensorHousing_o_log->SetVisAttributes(blue_vat);
+  SensorHousing_i_log->SetVisAttributes(blue_vat);
+
+
+//*****************************************************************************

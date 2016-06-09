@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32.cc,v 1.10 2003/06/10 17:41:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLStoredWin32.cc,v 1.11 2004/04/07 15:18:22 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // OpenGLStoredWin32 graphics system factory.
@@ -36,11 +36,6 @@
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLStoredWin32.hh"
 #include "G4OpenGLStoredWin32Viewer.hh"
-
-#ifdef WIN32
-  #include <windows.h>
-#endif
-#include <GL/gl.h>
 
 G4OpenGLStoredWin32::G4OpenGLStoredWin32 ():
   G4VGraphicsSystem ("OpenGLStoredWin32",

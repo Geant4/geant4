@@ -20,13 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: VisManager.cc,v 1.3 2004/06/21 10:57:15 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: VisManager.cc,v 1.2 2003/11/13 15:10:28 johna Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-//
-// John Allison 24th January 1998.
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

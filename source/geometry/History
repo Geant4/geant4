@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2003/11/04 09:47:57 gcosmo Exp $
+$Id: History,v 1.32 2004/06/11 15:01:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 11, 2004   Gabriele Cosmo               geometry-V06-01-01
+-----------------------------
+- Includes tag "geomnav-V06-01-01".
+- Use global flag G4GEOMETRY_ALLOC_EXPORT to export extern symbols for DLLs.
+  Modified granular GNUmakefiles and rearranged usage of extern symbols
+  in classes in volumes module.
+
+Jun 07, 2004   Gabriele Cosmo               geometry-V06-01-00
+-----------------------------
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+- Includes tags in "geant4-06-02-cand-00" plus "geomvol-V06-01-02".
 
 Nov 04, 2003   Gabriele Cosmo               geometry-V05-02-01
 -----------------------------

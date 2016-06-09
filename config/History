@@ -1,5 +1,5 @@
-$Id: History,v 1.238 2004/02/24 09:49:45 gcosmo Exp $
-$Name: geant4-06-01 $
+$Id: History,v 1.254 2004/06/23 10:56:23 gcosmo Exp $
+$Name: geant4-06-02 $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,73 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23rd June 2004 Gabriele Cosmo (config-V06-01-10)
+- Updated win32def.c program to fix retrivial of public static data for
+  building DLLs on Windows (G.Barrand).
+- Updated Configure scripts.
+
+17th June 2004 Gabriele Cosmo (config-V06-01-09)
+- Darwin-g++.gmk: use twolevel_namespace and GLOBLIBS for shared-libs
+  build on MacOS. Shared-libs build are possible only global libraries
+  and requires shared-lib version of CLHEP build with compatible options
+  (G.Barrand).
+
+14th June 2004 Gabriele Cosmo (config-V06-01-08)
+- architecture.gmk: added specification for G4LIB_USE_DLL.
+
+11th June 2004 Gabriele Cosmo (config-V06-01-07)
+- binmake.gmk: activated shared-libs mechanism for Windows platforms;
+  forced creation of static library for examples/applications for the
+  usage with DLLs.
+
+8th June 2004 Gabriele Cosmo (config-V06-01-06)
+- binmake.gmk: restored global lib for interfaces which was missing
+  from linking list.
+- common.gmk, globlib.gmk: fixed clean/clean_libs target.
+- architecture.gmk: added definition of G4LIB_BUILD_DLL flag.
+- WIN32-VC.gmk: added targets for DLLs build.
+- Linux-g++.gmk: made -O2 the default optimisation mode.
+  Archived temporary setup Linux-gO2 introduced in "config-V06-01-01".
+
+7th June 2004 Gabriele Cosmo (config-V06-01-05)
+- Corrected setup for WIN32-VC7 for building of DLLs.
+- Cosmetics in build printout...
+
+1st June 2004 Gabriele Cosmo (config-V06-01-04)
+- binmake.gmk, added include paths to new hadronic models for
+  abrasion, em_dissociation, de_excitation/ablation and
+  de_excitation/fission.
+- architecture.gmk: updated comments to header.
+
+26th May 2004 Mark Donszelmann (config-V06-01-03)
+- Fixed small problem in previous fix.
+
+26th May 2004  Gunter Folger (config-V06-01-02)
+- binmake.gmk: fixed problem for WIN32 such that also LDLIBS (including
+  EXTRALIBS) will be mangled to replace -L by its WIN32 correspondance
+  libpath.
+
+11th May 2004  Gabriele Cosmo (config-V06-01-01)
+- Added new experimental setup for Linux-g++ using -O2 optimisation
+  as default. To trigger this setup G4SYSTEM must be set to "Linux-gO2".
+  It also includes (deactivated by default) Pentium4 chip specific options
+  for using chips-specific floating-point arithmetics based on the SSE unit.
+
+8th April 2004  Guy Barrand
+- architecture.gmk: revisited Inventor default. Removed HEPVis dependencies
+  (Inventor visualization driver does not need these libraries any longer).
+
+7th April 2004  Guy Barrand
+- Darwin-g++.gmk:
+  o Corrected options to build shared libraries (.dyn); use
+    "-dynamic -single_module" to have faster startup when Geant4 is
+    embedded in an external framework.
+  o Corrected options to retrieve Motif. 
+
+5th April 2004  Gabriele Cosmo (config-V06-01-00)
+- architecture.gmk: added check for definition of LDFLAGS.
+  Fixes bug report #603.
 
 24th February 2004  Gabriele Cosmo (config-V06-00-03)
 - Fixed link rpath definition in Linux-icc.gmk.

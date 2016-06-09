@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.hh,v 1.1 2003/10/03 10:08:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4SDManager.hh,v 1.2 2004/05/03 08:14:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #ifndef G4SDManager_h
@@ -71,7 +71,7 @@ class G4SDManager
       //  These two methods return the ID number of the sensitive detector.
 
   public:
-      G4VSensitiveDetector* FindSensitiveDetector(G4String dName);
+      G4VSensitiveDetector* FindSensitiveDetector(G4String dName, G4bool warning = true);
       G4HCofThisEvent* PrepareNewEvent();
       void TerminateCurrentEvent(G4HCofThisEvent* HCE);
 

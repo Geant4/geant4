@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.19 2004/03/16 00:04:30 asaim Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4EventManager.cc,v 1.20 2004/05/26 17:08:33 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 //
@@ -46,7 +46,7 @@ G4EventManager* G4EventManager::GetEventManager()
 
 G4EventManager::G4EventManager()
 :currentEvent(0),trajectoryContainer(0),
- verboseLevel(0),tracking(false)
+ verboseLevel(0),tracking(false),abortRequested(false)
 {
  if(fpEventManager)
  {
@@ -145,7 +145,8 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   }
 #endif
 
-  StackTracks( transformer->GimmePrimaries( currentEvent, trackIDCounter ),true );
+  if(!abortRequested)
+  { StackTracks( transformer->GimmePrimaries( currentEvent, trackIDCounter ),true ); }
 
 #ifdef G4VERBOSE
   if ( verboseLevel > 0 )
@@ -252,6 +253,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   currentEvent = 0;
 
   stateManager->SetNewState(G4State_GeomClosed);
+  abortRequested = false;
 }
 
 void G4EventManager::StackTracks(G4TrackVector *trackVector,G4bool IDhasAlreadySet)

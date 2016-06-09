@@ -1,8 +1,8 @@
 #!/usr/bin/env python2.2
 #
-# $Id: runSim.py,v 1.7 2003/06/20 12:41:06 dressel Exp $
+# $Id: runSim.py,v 1.8 2004/06/09 15:04:35 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02-patch-01 $
+# GEANT4 tag $Name: geant4-06-02 $
 # -------------------------------------------------------------------
 
 # importing python libraries
@@ -96,7 +96,6 @@ comment = ""
 ##########################################################################
 
 # this should be fine for most settings
-
 experiment = tiaraSpecifications.Experiment(beamEnergy,      
                                            particleCut["neutron"],
                                            particleCut,
@@ -159,10 +158,8 @@ impScorer = G4Kernel.G4Scorer()
 ##########################################################################
 
 # this and the remaining part should be fine for most settings
-
 tApp = tiaraApplication.TiaraApplet(tiaraSpecs,
                                     Tiara.TiaraSim_GetTiaraSim())
-
 if totalTime == 0:
     tApp.visMode()
 else:
@@ -173,18 +170,14 @@ tApp.specifyPhysicsList(physList, particleCut)
 
 # detectors
 tApp.setScoreDetectorCreator(scoreDetectorCreator)
-
 tApp.buildGeometry()
-
 tiara_dir = os.environ["TIARA_BASE"]
-
 primGenBuilder = tiaraGenerators.\
                  TiaraDPSEnergyGenerator(tiaraSpecs,
                                          tiara_dir +
                                          "/data/expDataConverted/dpsSource.xml")
 #primGenBuilder = tiaraGenerators.TiaraPrimaryGenerator(tiaraSpecs)
 #primGenBuilder = tiaraGenerators.FixedEnergyPrimaryGenerator(tiaraSpecs)
-
 tApp.setPrimaryGenerator(primGenBuilder.primGen)
 
 

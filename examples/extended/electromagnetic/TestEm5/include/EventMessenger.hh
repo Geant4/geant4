@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: EventMessenger.hh,v 1.3 2004/06/21 10:57:10 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: EventMessenger.hh,v 1.2 2003/10/07 11:58:28 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

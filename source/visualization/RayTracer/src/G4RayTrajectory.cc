@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.cc,v 1.12 2003/06/16 17:13:45 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4RayTrajectory.cc,v 1.14 2004/06/11 14:30:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 //
@@ -30,7 +30,6 @@
 ///////////////////
 //G4RayTrajectory.cc
 ///////////////////
-
 
 #include "G4RayTrajectory.hh"
 #include "G4RayTrajectoryPoint.hh"

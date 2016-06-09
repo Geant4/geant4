@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.22 2004/03/01 12:17:07 urban Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4VMultipleScattering.cc,v 1.23 2004/04/23 05:52:07 urban Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 // 03-11-03 Fix initialisation problem in RetrievePhysicsTable (V.Ivanchenko)
 // 04-11-03 Update PrintInfoDefinition (V.Ivanchenko)
 // 01-03-04 SampleCosineTheta signature changed
+// 22-04-04 SampleCosineTheta signature changed back to original
 //
 // Class Description:
 //
@@ -180,12 +181,8 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
   G4double kineticEnergy = track.GetKineticEnergy();
   G4double truestep = step.GetStepLength();
 
-  G4double lambda = GetLambda(track.GetDynamicParticle()->GetDefinition(),
-                               kineticEnergy) ;
-
-
   if (kineticEnergy > 0.0) {
-    G4double cth  = currentModel->SampleCosineTheta(truestep,kineticEnergy,lambda);
+    G4double cth  = currentModel->SampleCosineTheta(truestep,kineticEnergy);
     G4double sth  = sqrt(1.-cth*cth);
     G4double phi  = twopi*G4UniformRand();
     G4double dirx = sth*cos(phi);
@@ -206,16 +203,12 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
   }
   */
 
-    //    G4cout << "PostStep: sth= " << sth << " trueLength= " << truestep << " tLast= " << truePathLength << G4endl;
-
     if (latDisplasment) {
 
       G4double safety = step.GetPostStepPoint()->GetSafety();
       if ( safety > 0.0) {
         G4double r = currentModel->SampleDisplacement();
         if (r > safety) r = safety;
-
-	//    G4cout << "r= " << r << " safety= " << safety << G4endl;
 
         // sample direction of lateral displacement
         G4double phi  = twopi*G4UniformRand();

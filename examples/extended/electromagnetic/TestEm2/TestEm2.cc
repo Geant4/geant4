@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm2.cc,v 1.7 2003/10/08 17:28:29 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: TestEm2.cc,v 1.8 2004/05/04 07:36:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -49,20 +49,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
- 
+
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-  
+
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-     
+
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  DetectorConstruction* detector = new DetectorConstruction;
+  DetectorConstruction* detector = new DetectorConstruction();
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PhysicsList);
+  runManager->SetUserInitialization(new PhysicsList());
   
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);

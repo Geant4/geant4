@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2003/07/14 17:10:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2004/05/27 13:43:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -46,6 +46,7 @@
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,7 +75,9 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   G4double zVertex = - (detector->GetWorldSizeZ());
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));  
+  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
+  if(anEvent->GetEventID() == 1)
+    (HistoManager::GetPointer())->SetBeamEnergy(particleGun->GetParticleEnergy());
   particleGun->GeneratePrimaryVertex(anEvent);
 }
 

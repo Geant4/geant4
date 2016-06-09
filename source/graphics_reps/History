@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.47 2003/09/18 11:03:10 johna Exp $
+cvs log $Id: History,v 1.51 2004/06/07 08:55:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18th September 2003  John Alison  (greps-V05-02-00)
+7th June 2004  G.Cosmo  (greps-V06-01-01)
+- Fixed compilation problem on WIN32-VC for G4AttDefStore.
+- Added definition of GLOBLIBS in GNUmakefile for DLLs build on Windows.
+
+30th March 2004  G.Cosmo  (greps-V06-01-00)
+- Implemented constructor and destructor for G4AttDefStore, to properly
+  delete objects in the static map, allocated through explicit calls to
+  GetInstance(). Made G4AttDefStore a singleton.
+
+18th September 2003  J.Allison  (greps-V05-02-00)
 - Introduced G4Colour<->G4ThreeVector conversion operators.
 
 3rd April 2003  G.Cosmo  (greps-V05-00-00)
@@ -26,20 +35,20 @@ committal in the CVS repository !
 27th November 2002  J.Allison  (greps-V04-01-05)
 - Small revison of G4Scale and improvements in G4VMarker class description.
 
-Nov 20, 2002, G.Cosmo  (greps-V04-01-04)
+20th November 2002  G.Cosmo  (greps-V04-01-04)
 - Patched access to public static data in G4Scale and G4VisAttributes.
   Added static accessors to be used in the kernel to allow porting on
   Windows DLLs.
 - HepPolyhedron[.hh.cc]: changed inline static methods to not inlined.
 
-Nov 11, 2002, E.Chernaev  (greps-V04-01-03)
+11th November 2002  E.Chernaev  (greps-V04-01-03)
 - Minor bug fix in HepPolyhedron::GetFacet().
 - HepDouble, HepBoolean --> double, bool in HepPolyhedron
 
-Nov 7, 2002, E.Chernaev  (greps-V04-01-02)
+7th November 2002  E.Chernaev  (greps-V04-01-02)
 - Added createTwistedTrap() and createPolyhedron() to HepPolyhedron.
 
-Oct 28, 2002, J.Allison  (greps-V04-01-01)
+28th October 2002  J.Allison  (greps-V04-01-01)
 - Changed AttDefStore to return a map.
 
 24th October 2002  John Allison  (greps-V04-01-00)

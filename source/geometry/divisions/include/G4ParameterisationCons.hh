@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.hh,v 1.4 2003/11/19 11:51:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationCons.hh,v 1.5 2004/05/13 14:57:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // classes G4ParameterisationConsRho,
 //         G4ParameterisationConsPhi,
@@ -34,9 +34,10 @@
 // dividing a G4Cons along one of each axis Rho, Phi, Z.
 
 // History:
-// 09.05.01 - P.Arce Initial version
-// ********************************************************************
-
+// -------
+// 09.05.01 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 #ifndef G4ParameterisationCons_H
 #define G4ParameterisationCons_H 1
 
@@ -58,7 +59,18 @@ class G4Tubs;
 class G4Polycone;
 class G4Polyhedra;
 
-class G4ParameterisationConsRho : public G4VDivisionParameterisation
+class G4VParameterisationCons : public G4VDivisionParameterisation
+{ 
+  public:  // with description
+  
+    G4VParameterisationCons( EAxis axis, G4int nCopies,
+                            G4double offset, G4double step,
+                            G4VSolid* msolid, DivisionType divType );
+  
+    virtual ~G4VParameterisationCons();
+};
+
+class G4ParameterisationConsRho : public G4VParameterisationCons
 { 
   public:  // with description
 
@@ -100,7 +112,7 @@ class G4ParameterisationConsRho : public G4VDivisionParameterisation
                             const G4VPhysicalVolume*) const {}
 };
 
-class G4ParameterisationConsPhi : public G4VDivisionParameterisation
+class G4ParameterisationConsPhi : public G4VParameterisationCons
 { 
   public:  // with description
 
@@ -142,7 +154,7 @@ class G4ParameterisationConsPhi : public G4VDivisionParameterisation
                             const G4VPhysicalVolume*) const {}
 };
 
-class G4ParameterisationConsZ : public G4VDivisionParameterisation
+class G4ParameterisationConsZ : public G4VParameterisationCons
 { 
   public:  // with description
 

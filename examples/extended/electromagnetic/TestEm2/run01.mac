@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.14 2003/11/13 14:12:50 vnivanch Exp $
+# $Id: run01.mac,v 1.16 2004/06/18 15:43:36 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -8,14 +8,19 @@
 /control/verbose 2
 /run/verbose 1
 #
+/testem/det/setMat PbWO4
+/testem/det/setLbin 20  1.
+/testem/det/setRbin 20 0.25
+#
 /testem/phys/addPhysics  standard
-###/testem/phys/addPhysics  g4v52
+####/testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 1 mm
 #
-/run/initialize
+# Acceptance printout is activated
+/testem/run/acceptance 0.9488 0.0112 3.0
 #
-/run/particle/applyCuts
+/run/initialize
 #
 /gun/particle e-
 /gun/energy 5 GeV

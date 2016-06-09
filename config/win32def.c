@@ -1,4 +1,4 @@
-/* $Id: win32def.c,v 1.2 2004/02/09 16:44:45 gcosmo Exp $ */
+/* $Id: win32def.c,v 1.3 2004/06/18 16:10:06 gcosmo Exp $ */
 /* +---------------------- Copyright notice -------------------------------+ */
 /* | Copyright (C) 1995, Guy Barrand, LAL Orsay, (barrand@lal.in2p3.fr)    | */
 /* |   Permission to use, copy, modify, and distribute this software       | */
@@ -60,8 +60,11 @@ EXPORTS\n",aArgs[1]);
       length--;
     }
     if(strstr(buffer,"SECT")==NULL) continue;
-    if(strstr(buffer,"??_")!=NULL) continue;
     if(strstr(buffer,"External")==NULL) continue;
+    if(strstr(buffer,"??_")!=NULL) {
+      if(strstr(buffer,"operator/=")==NULL) continue;
+      /* Keep operator /= */
+    }
 
     {    
       char** words;
@@ -69,24 +72,25 @@ EXPORTS\n",aArgs[1]);
       words  = GetWords (buffer," ",&wordn);
       if(wordn>=8) {
 	int iword = 7;
+        int offset = 0;
 	if(strcmp(words[4],"()")==0) {
 	  iword = 7;
 	} else if(strcmp(words[4],"External")==0) {
 	  iword = 6;
 	}
-	if(words[iword][0]=='_') {
-	  if(iword==6) {
-	    printf(" %s\tDATA\n",words[iword]+1);
-	  } else {
-	    printf(" %s\n",words[iword]+1);
-	  }
+	if(words[iword][0]=='_') offset = 1;
+
+        if( (iword==6) && (strstr(buffer,"static class")!=NULL) ){
+          /* static class objects are not DATA */
+	  printf(" %s\n",words[iword]+offset);
+	} else if(iword==6) {
+          /* DATA */
+	  printf(" %s\tDATA\n",words[iword]+offset);
 	} else {
-	  if(iword==6) {
-	    printf(" %s\tDATA\n",words[iword]);
-	  } else {
-	    printf(" %s\n",words[iword]);
-	  }
+          /* code */
+	  printf(" %s\n",words[iword]+offset);
 	}
+
       }
       {int count;
       for(count=0;count<wordn;count++) if(words[count]) free(words[count]);

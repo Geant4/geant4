@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRunManager.cc,v 1.5 2003/06/16 16:49:34 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: ParRunManager.cc,v 1.6 2004/06/19 20:50:42 cooperma Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // --------------------------------------------------------------------
 //                   Parallel Library for Geant4
@@ -168,7 +168,8 @@ TOPC_BUF ParRunManager::DoEvent( void *input_buf )
   ParMarshaledRandomState buf = ParMarshaledRandomState( input_buf );
   buf.unmarshalEventIDandSetState( i_event );
 
-    stateManager->SetNewState(G4State_EventProc);
+    // removed for Geant4.6
+    //  stateManager->SetNewState(G4State_EventProc);
 
     currentEvent = GenerateEvent(i_event);
 
@@ -184,7 +185,11 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
   MarshaledObj buf = MarshaledObj(input_buf);
   buf.Unmarshal(i_event);
 
-  stateManager->SetNewState(G4State_EventProc);
+  // removed for Geant4.6
+  //stateManager->SetNewState(G4State_EventProc);
+  // Geant4.6 requires the state to be G4State_GeomClosed
+  // before calling EventManager::ProcessOneEvent(..)
+
   if(!userPrimaryGeneratorAction)
   {
     G4Exception
@@ -201,6 +206,7 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
   // When Geant4 4.0 sees empty event, it still calls userStackingAction.
   // On master, only trivial events exist, so we delete userStackingAction
   SetUserAction( (G4UserStackingAction*)NULL );
+
   eventManager->ProcessOneEvent(currentEvent); // Processing the trivial event
 
   // Called with output_buf and no size, creates object for unmarshaling

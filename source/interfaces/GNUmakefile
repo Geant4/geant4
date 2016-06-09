@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2003/11/04 08:24:05 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2004/06/03 13:55:20 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for interfaces.  John Allison, 5/7/98.
 # -----------------------------------------------------------------------
@@ -11,12 +11,11 @@ ifndef G4INSTALL
   G4INSTALL = ../..
 endif
 
+GLOBLIBS = libG4intercoms.lib libG4global.lib
+
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4UI_BUILD.gmk
 include $(G4INSTALL)/config/interactivity.gmk
-
-G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
-G4TMPDIR := $(G4TMP)/$(G4SYSTEM)/$(name)
 
 # Libraries which can be used without external packages or libraries...
 ifdef G4UI_BUILD

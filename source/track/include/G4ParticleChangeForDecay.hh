@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForDecay.hh,v 1.5 2001/07/11 10:08:35 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ParticleChangeForDecay.hh,v 1.6 2004/05/08 15:28:11 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -83,9 +83,19 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     virtual void Initialize(const G4Track&);
     // Initialize all propoerties by using G4Track information
 
+    G4double GetGlobalTime() const;
+    void     ProposeGlobalTime(G4double t);
+    //  Get/Propose the final GlobalTime
+
+    G4double GetGlobalTime(G4double timeDelay) const;
+    //  Convert the time delay to the global time.
+
+  public:
+   // Following methods will be removed in release 7.0
+   // Using ProposeXXXX methods is recommended to setting
+   // properties in G4ParticleChangeForDecay   
     G4double GetTimeChange() const;
     void     SetTimeChange(G4double t);
-    //  Get/Set theTimeChange vector.
 
   public:
     virtual void DumpInfo() const;
@@ -99,6 +109,26 @@ class G4ParticleChangeForDecay: public G4VParticleChange
     virtual G4bool CheckIt(const G4Track&);
 };
 
+inline 
+  G4double G4ParticleChangeForDecay::GetGlobalTime() const
+{
+  return  theTimeChange;
+}
+
+inline 
+  void G4ParticleChangeForDecay::ProposeGlobalTime(G4double t)
+{
+  theTimeChange = t;
+}
+   
+inline
+ G4double  G4ParticleChangeForDecay::GetGlobalTime(G4double timeDelay) const
+{
+  //  Convert the time delay to the global time.
+  return theTimeChange + timeDelay;
+}
+
+// Following methods will be removed in release 7.0
 inline 
   G4double G4ParticleChangeForDecay::GetTimeChange() const
 {

@@ -93,6 +93,18 @@ To write 10 events (and geometries), use:
 Be aware that this may increase the size of the output dramatically.
 
 
+(Optional) You may use the commands:
+/vis/viewer/zoom                            to set an initial zoom factor
+/vis/viewer/set/viewpointThetaPhi           to set an initial view point
+/vis/heprep/setCoordinateSystem uvw         to change the coordinate system, where uvw can be "xyz", "zxy", ...
+
+
+(Optional) You may decide to write .zip files with events and geometry separated (but linked).
+This results in a smaller zip file, as the geometry is only written once. Use the command:
+
+/vis/heprep/appendGeometry false
+
+
 (Optional) To close the file, remove the SceneHandler, use:
 
 /vis/sceneHandler/remove scene-handler-0
@@ -109,5 +121,5 @@ Only one SceneHandler can exist at any time, connected to a single Viewer.
 Since the HepRep format is a model rather than a view this is not a real
 limitation. In WIRED you can create as many views (SceneHandlers) as you like.
 
-4 November 2003
+27 May 2004
 Mark.Donszelmann@slac.stanford.edu

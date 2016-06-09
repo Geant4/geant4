@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.hh,v 1.1 2003/10/27 15:24:08 grichine Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PhysListEmStandard.hh,v 1.2 2004/05/27 18:04:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,7 +42,7 @@ class PhysListEmStandard : public G4VPhysicsConstructor
     virtual ~PhysListEmStandard();
 
   public: 
-    // This method is dummy for physics
+    // This method is dummy for physics. 
     virtual void ConstructParticle() {};
  
     // This method will be invoked in the Construct() method.

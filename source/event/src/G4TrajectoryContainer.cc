@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.cc,v 1.2 2002/10/06 11:46:48 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4TrajectoryContainer.cc,v 1.4 2004/06/11 14:11:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #include "G4TrajectoryContainer.hh"

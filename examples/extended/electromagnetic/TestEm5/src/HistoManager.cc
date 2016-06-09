@@ -20,93 +20,125 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HistoManager.cc,v 1.9 2004/06/21 10:57:14 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: HistoManager.cc,v 1.6 2004/02/19 18:18:53 maire Exp $
-// GEANT4 tag $Name: geant4-06-01 $
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#ifdef G4ANALYSIS_USE
 
 #include "HistoManager.hh"
 #include "HistoMessenger.hh"
-
-#include "AIDA/AIDA.h"
 #include "G4UnitsTable.hh"
+
+#ifdef G4ANALYSIS_USE
+#include "AIDA/AIDA.h"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
 :tree(0),hf(0),factoryOn(false)
 {
+  fileName = "testem5.paw";
+  fileType = "hbook";
+  // histograms
+  for (G4int k=0; k<MaxHisto; k++) {
+    histo[k] = 0;
+    exist[k] = false;
+    Unit[k]  = 1.0;
+    Width[k] = 1.0;
+  }
+
   histoMessenger = new HistoMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::~HistoManager()
-{ 
-  if (factoryOn) { 
+{
+  delete histoMessenger;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::book()
+{
+#ifdef G4ANALYSIS_USE
+  // Creating the analysis factory
+  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
+
+  // Creating the tree factory
+  AIDA::ITreeFactory* tf = af->createTreeFactory();
+
+  // Creating a tree mapped to an hbook file.
+  G4bool readOnly  = false;
+  G4bool createNew = true;
+  tree = tf->create(fileName, fileType, readOnly, createNew);
+
+  // Creating a histogram factory, whose histograms will be handled by the tree
+  hf = af->createHistogramFactory(*tree);
+
+  // create selected histograms
+  for (G4int k=0; k<MaxHisto; k++) {
+    if (exist[k]) {
+      histo[k] = hf->createHistogram1D( Label[k], Title[k],
+                                                  Nbins[k], Vmin[k], Vmax[k]);
+      factoryOn = true;
+    }
+  }
+  if(factoryOn) 
+      G4cout << "\n----> Histogram Tree is opened " << G4endl;
+
+  delete tf;
+  delete af;
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void HistoManager::save()
+{
+#ifdef G4ANALYSIS_USE
+  if (factoryOn) {
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
- 
-    delete hf; 
+    G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
+
+    delete hf;
     delete tree;
     factoryOn = false;
   }
-
-  delete histoMessenger;  
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::SetFactory(G4String fileName)
-{ 
-  if (factoryOn) {
-    G4cout << "\n--->HistoManager::SetFactory(): factory already exists"
-           << G4endl;
+void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
+{
+  if (ih > MaxHisto) {
+    G4cout << "---> warning from HistoManager::FillHisto() : histo " << ih
+           << "does not exist; e= " << e << " w= " << weight << G4endl;
     return;
   }
-    	   
- // Creating the analysis factory
- AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
- 
- // Creating the tree factory
-  AIDA::ITreeFactory* tf = af->createTreeFactory();
- 
- // Creating a tree mapped to an hbook file.
- G4bool readOnly  = false;
- G4bool createNew = true;
- tree = tf->create(fileName, "hbook", readOnly, createNew);
-
- // Creating a histogram factory, whose histograms will be handled by the tree
- hf = af->createHistogramFactory(*tree);
- 
- // histograms
- for (G4int k=0; k<MaxHisto; k++) { histo[k] = 0; histoUnit[k] = 1.;}
-  
- delete tf;
- delete af;
- factoryOn = true;  
+#ifdef G4ANALYSIS_USE
+  if(exist[ih]) histo[ih]->fill(e/Unit[ih], weight);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::SetHisto(G4int ih, 
-                 G4int nbBins, G4double valmin, G4double valmax, G4String unit)
-{ 
-  if (!factoryOn) SetFactory("testem5.paw");
-   
+void HistoManager::SetHisto(G4int ih,
+                 G4int nbins, G4double valmin, G4double valmax, const G4String& unit)
+{
   if (ih > MaxHisto) {
     G4cout << "---> warning from HistoManager::SetHisto() : histo " << ih
            << "does not exist" << G4endl;
     return;
-  }	 
+  }
 
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                          "10","11","12","13","14","15","16"};
-  const G4String title[] = 
+  const G4String title[] =
                 { "dummy",						//0
                   "energy deposit in absorber",				//1
                   "energy of charged secondaries at creation",		//2
@@ -125,27 +157,45 @@ void HistoManager::SetHisto(G4int ih,
 		  "(reflect , neutral) : space angle at exit",		//15
 		  "(reflect , neutral) : projected angle at exit",	//16
                  };
-		 
+
   G4String titl = title[ih];
   G4double vmin = valmin, vmax = valmax;
-  
+  Unit[ih] = 1.;
+
   if (ih == 3) { vmin = log10(valmin/MeV); vmax = log10(valmax/MeV);}
   else if (unit != "none") {
     titl = title[ih] + " (" + unit + ")";
-    histoUnit[ih] = G4UnitDefinition::GetValueOf(unit);
-    vmin = valmin/histoUnit[ih]; vmax = valmax/histoUnit[ih];
+    Unit[ih] = G4UnitDefinition::GetValueOf(unit);
+    vmin = valmin/Unit[ih]; vmax = valmax/Unit[ih];
   }
-  
-  histo[ih] = hf->createHistogram1D(id[ih],titl,nbBins,vmin,vmax);
-  
-  binWidth[ih] = (valmax-valmin)/nbBins;
-  
+
+  exist[ih] = true;
+  Label[ih] = id[ih];
+  Title[ih] = titl;
+  Nbins[ih] = nbins;
+  Vmin[ih]  = vmin;
+  Vmax[ih]  = vmax;
+  Width[ih] = (valmax-valmin)/nbins;
+
   G4cout << "----> SetHisto " << ih << ": " << titl << ";  "
-         << nbBins << " bins from " 
+         << nbins << " bins from "
          << vmin << " " << unit << " to " << vmax << " " << unit << G4endl;
-   		 
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void HistoManager::RemoveHisto(G4int ih)
+{
+ if (ih > MaxHisto) {
+    G4cout << "---> warning from HistoManager::RemoveHisto() : histo " << ih
+           << "does not exist" << G4endl;
+    return;
+  }
+
+  histo[ih] = 0;
+  exist[ih] = false;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

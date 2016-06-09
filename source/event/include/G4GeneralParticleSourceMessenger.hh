@@ -24,23 +24,32 @@
 //
 // MODULE:       G4GeneralParticleSourceMessenger.hh
 //
-// Version:      1.1
-// Date:         19/10/00
-// Author:       C Ferguson, F Lei and P Truscott
-// Organisation: University of Southampton / DERA
+// Version:      2.0
+// Date:         5/02/04
+// Author:       Fan Lei 
+// Organisation: QinetiQ ltd.
 // Customer:     ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSourceMessenger.hh,v 1.8 2002/02/26 16:34:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+//
+// CHANGE HISTORY
+// --------------
+//
+// Version 2.0, 05/02/2004, Fan Lei, Created.
+//    After changes to version 1.1 as in Geant4 v6.0
+//     - Mutilple particle source definition
+//     - Re-structured commands
+//     - old commonds have been retained for backward compatibility, will be
+//       removed in the future. 
+//
 ///////////////////////////////////////////////////////////////////////////////
+//
 //
 // Class Description:
 //
 // The function of the G4GeneralParticleSourceMessenger is to allow the user to
 // enter commands either in interactive command line mode or through macros to
-// control the G4GeneralParticleSource. The G4GeneralParticleSourceMessenger
-// class is based on G4ParticleGunMessenger.
+// control the G4GeneralParticleSource. 
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -53,23 +62,14 @@
 // ~G4GeneralParticleSourceMessenger()
 //     Destructor:  Deletes commands.
 //
+// void SetParticleGun(G4SingleParticleSource *fpg) { fParticleGun = fpg; } ;
+//     To selecte the particle gun to be defined/modified. 
 // void SetNewValue(G4UIcommand *command, G4String newValues)
 //     Uses the appropriate methods in the G4GeneralParticleSource to carry out
 //     the user commands.
-//
 // G4String GetCurrentValue(G4UIcommand *command)
 //     Allows the user to retrieve the current values of parameters.
 //     Not implemented yet.
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//
-// Version 1.0, 28 February 2000, C Ferguson, Created.
-//
-// Version 1.1, 19 October 2000, Modified to inherit from G4VPrimaryGenerator.
-// New name at the request of M. Asai.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -78,7 +78,6 @@
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
-//#include "UIcmdWithNucleusAndUnit.hh"
 
 class G4ParticleTable;
 class G4UIcommand;
@@ -93,14 +92,17 @@ class G4UIcmdWithADouble;
 class G4UIcmdWithABool;
 class G4UIcmdWithoutParameter;
 
+class G4SingleParticleSource;
 class G4GeneralParticleSource;
 
 class G4GeneralParticleSourceMessenger: public G4UImessenger
 {
 public:
-  G4GeneralParticleSourceMessenger(G4GeneralParticleSource *fPtclGun);
+  G4GeneralParticleSourceMessenger(G4GeneralParticleSource*);
   ~G4GeneralParticleSourceMessenger();
-    
+
+  void SetParticleGun(G4SingleParticleSource *fpg) { fParticleGun = fpg; } ;
+  //    To selecte the particle gun to be defined/modified.   
   void SetNewValue(G4UIcommand *command, G4String newValues);
   //    Identifies the command which has been invoked by the user, extracts the
   //    parameters associated with that command (held in newValues), and uses
@@ -111,13 +113,42 @@ private:
   void IonCommand(G4String newValues);
 
 private:
-  G4GeneralParticleSource *fParticleGun;
+  G4GeneralParticleSource *fGPS;
+  G4SingleParticleSource *fParticleGun;
   G4ParticleTable *particleTable;
   G4String histtype;
     
 private: //commands
   G4UIdirectory              *gpsDirectory;
-
+  // multiple source control commands
+  G4UIdirectory              *sourceDirectory;
+  G4UIcmdWithADouble         *addsourceCmd;
+  G4UIcmdWithoutParameter    *listsourceCmd;
+  G4UIcmdWithoutParameter    *clearsourceCmd;
+  G4UIcmdWithoutParameter    *getsourceCmd;
+  G4UIcmdWithAnInteger       *setsourceCmd;  
+  G4UIcmdWithADouble         *setintensityCmd;
+  G4UIcmdWithAnInteger       *deletesourceCmd;
+  // positional commands
+  G4UIdirectory              *positionDirectory;
+  G4UIcmdWithAString         *typeCmd1;
+  G4UIcmdWithAString         *shapeCmd1;
+  G4UIcmdWith3VectorAndUnit  *centreCmd1;
+  G4UIcmdWith3Vector         *posrot1Cmd1;
+  G4UIcmdWith3Vector         *posrot2Cmd1;
+  G4UIcmdWithADoubleAndUnit  *halfxCmd1;
+  G4UIcmdWithADoubleAndUnit  *halfyCmd1;
+  G4UIcmdWithADoubleAndUnit  *halfzCmd1;
+  G4UIcmdWithADoubleAndUnit  *radiusCmd1;
+  G4UIcmdWithADoubleAndUnit  *radius0Cmd1;
+  G4UIcmdWithADoubleAndUnit  *possigmarCmd1;
+  G4UIcmdWithADoubleAndUnit  *possigmaxCmd1;
+  G4UIcmdWithADoubleAndUnit  *possigmayCmd1;
+  G4UIcmdWithADoubleAndUnit  *paralpCmd1;
+  G4UIcmdWithADoubleAndUnit  *partheCmd1;
+  G4UIcmdWithADoubleAndUnit  *parphiCmd1;  
+  G4UIcmdWithAString         *confineCmd1;         
+  //old ones, will be reomved soon
   G4UIcmdWithAString         *typeCmd;
   G4UIcmdWithAString         *shapeCmd;
   G4UIcmdWith3VectorAndUnit  *centreCmd;
@@ -135,7 +166,21 @@ private: //commands
   G4UIcmdWithADoubleAndUnit  *partheCmd;
   G4UIcmdWithADoubleAndUnit  *parphiCmd;  
   G4UIcmdWithAString         *confineCmd;         
-
+  // angular commands
+  G4UIdirectory              *angularDirectory;
+  G4UIcmdWithAString         *angtypeCmd1;
+  G4UIcmdWith3Vector         *angrot1Cmd1;
+  G4UIcmdWith3Vector         *angrot2Cmd1;
+  G4UIcmdWithADoubleAndUnit  *minthetaCmd1;
+  G4UIcmdWithADoubleAndUnit  *maxthetaCmd1;
+  G4UIcmdWithADoubleAndUnit  *minphiCmd1;
+  G4UIcmdWithADoubleAndUnit  *maxphiCmd1;
+  G4UIcmdWithADoubleAndUnit  *angsigmarCmd1;
+  G4UIcmdWithADoubleAndUnit  *angsigmaxCmd1;
+  G4UIcmdWithADoubleAndUnit  *angsigmayCmd1;
+  G4UIcmdWithABool           *useuserangaxisCmd1;
+  G4UIcmdWithABool           *surfnormCmd1;
+  // old ones, will be removed soon
   G4UIcmdWithAString         *angtypeCmd;
   G4UIcmdWith3Vector         *angrot1Cmd;
   G4UIcmdWith3Vector         *angrot2Cmd;
@@ -148,7 +193,22 @@ private: //commands
   G4UIcmdWithADoubleAndUnit  *angsigmayCmd;
   G4UIcmdWithABool           *useuserangaxisCmd;
   G4UIcmdWithABool           *surfnormCmd;
-
+  // energy commands
+  G4UIdirectory              *energyDirectory;
+  G4UIcmdWithAString         *energytypeCmd1;
+  G4UIcmdWithADoubleAndUnit  *eminCmd1;
+  G4UIcmdWithADoubleAndUnit  *emaxCmd1;
+  G4UIcmdWithADoubleAndUnit  *monoenergyCmd1;
+  G4UIcmdWithADoubleAndUnit  *engsigmaCmd1;
+  G4UIcmdWithADouble         *alphaCmd1;
+  G4UIcmdWithADouble         *tempCmd1;
+  G4UIcmdWithADouble         *ezeroCmd1;
+  G4UIcmdWithADouble         *gradientCmd1;
+  G4UIcmdWithADouble         *interceptCmd1;
+  G4UIcmdWithoutParameter    *calculateCmd1;
+  G4UIcmdWithABool           *energyspecCmd1;
+  G4UIcmdWithABool           *diffspecCmd1;
+  // old ones, will be removed soon
   G4UIcmdWithAString         *energytypeCmd;
   G4UIcmdWithADoubleAndUnit  *eminCmd;
   G4UIcmdWithADoubleAndUnit  *emaxCmd;
@@ -162,24 +222,28 @@ private: //commands
   G4UIcmdWithoutParameter    *calculateCmd;
   G4UIcmdWithABool           *energyspecCmd;
   G4UIcmdWithABool           *diffspecCmd;
-
+  // histogram commands
+  G4UIdirectory              *histDirectory;
   G4UIcmdWith3Vector         *histpointCmd;
   G4UIcmdWithAString         *histnameCmd;
   G4UIcmdWithAString         *arbintCmd;
-
   G4UIcmdWithAString         *resethistCmd;
+  // old ones, will be removed soon
+  G4UIcmdWith3Vector         *histpointCmd1;
+  G4UIcmdWithAString         *histnameCmd1;
+  G4UIcmdWithAString         *arbintCmd1;
+  G4UIcmdWithAString         *resethistCmd1;
 
+  //
   G4UIcmdWithAnInteger       *verbosityCmd;
 
   // below are commands from G4ParticleGun
 
   G4UIcommand                *ionCmd;
-
   G4UIcmdWithAString         *particleCmd;
   G4UIcmdWithADoubleAndUnit  *timeCmd;
   G4UIcmdWith3Vector         *polCmd;
   G4UIcmdWithAnInteger       *numberCmd;
-
   G4UIcmdWith3VectorAndUnit  *positionCmd;
   G4UIcmdWith3Vector         *directionCmd;
   G4UIcmdWithADoubleAndUnit  *energyCmd;

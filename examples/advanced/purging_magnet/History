@@ -1,0 +1,29 @@
+-------------------------------------------------------------------
+$Id: History,v 1.4 2004/06/10 10:25:16 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+                      Geant4 - Purging Magnet example
+     =========================================================
+
+                      Category History file
+                      ---------------------
+
+10.06.2004 - G. Cosmo        purtag-V06-01-02
+  Leave out the field-map file, now provided through web in compressed format:
+    http://cern.ch/geant4/source/source/PurgMag3D.TABLE.gz
+  Updated README and tagged.
+
+27.05.2004 . S. Larsson      purtag-V06-01-01
+  Migration to PI - Setup in README updated
+  Tagged				
+
+25.05.2004 - J. Apostolakis   purtag-V06-01-00
+  Tagged 
+
+24.05.2004 - J. Apostolakis
+  Modified README file
+
+09.12.2003 - S. Larsson
+  Example commited
+

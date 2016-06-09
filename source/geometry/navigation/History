@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2004/03/11 13:17:42 gcosmo Exp $
+$Id: History,v 1.28 2004/06/18 12:45:10 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      --------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 18th, 2004 - G.Cosmo  (geomnav-V06-01-03)
+------------------------
+- Enhanced check for null step in G4Navigator::ComputeStep().
+  Now attempting a corrective action after 10 consecutive zero steps.
+  Event gets aborted after 25 zero steps.
+
+Jun 15th, 2004 - G.Cosmo  (geomnav-V06-01-02)
+------------------------
+- Relax exception in G4Navigator::ComputeStep() for stuck tracks.
+  Event gets aborted after 25 zero steps.
+
+Jun 11th, 2004 - G.Cosmo  (geomnav-V06-01-01)
+------------------------
+- Added check to G4Navigator to count the number of steps with zero length
+  and issue an exception for tracks that get stuck in a loop (J.Apostolakis).
+- Modified GNUmakefile to define G4GEOMETRY_ALLOC_EXPORT flag for DLLs
+  build on Windows.
+
+May 17th, 2004 - G.Cosmo  (geomnav-V06-01-00)
+------------------------
+- Added more verbosity on solids response for navigators (optimised/not
+  optimised) if "check_mode" state is combined with verbose level-1.
 
 Mar 11th, 2004 - G.Cosmo  (geomnav-V06-00-02)
 ------------------------

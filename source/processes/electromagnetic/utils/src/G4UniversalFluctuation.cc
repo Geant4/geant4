@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.15 2004/02/06 11:59:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4UniversalFluctuation.cc,v 1.20 2004/05/11 15:35:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -42,6 +42,7 @@
 // 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 // 07-11-03 Fix problem of rounding of double in G4UniversalFluctuations
 // 06-02-04 Add control on big sigma > 2*meanLoss (V.Ivanchenko)
+// 26-04-04 Comment out the case of very small step (V.Ivanchenko)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -61,14 +62,13 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
   particle(0),
   minNumberInteractionsBohr(10.0),
   theBohrBeta2(50.0*keV/proton_mass_c2),
-  minLoss(0.000001*eV),
-  problim(0.01),
+  minLoss(0.001*eV),
+  sumalim(0.01),
   alim(10.),
   nmaxCont1(4.),
   nmaxCont2(16.)
 {
   lastMaterial = 0;
-  sumalim = -log(problim);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -97,46 +97,48 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is essentially the same
 // as in Glandz in Geant3.
-  
-  // shortcut for very very small loss 
+// G4cout << "### Mean  loss= " << meanLoss << G4endl;
+
+  // shortcut for very very small loss
   if(meanLoss < minLoss) return meanLoss;
 
-  if(dp->GetDefinition() != particle) {
-    particleMass   = dp->GetMass();
-    G4double q     = dp->GetCharge(); 
-    chargeSquare   = q*q;
-  }
+  if(!particle) InitialiseMe(dp->GetDefinition());
 
   ipotFluct = material->GetIonisation()->GetMeanExcitationEnergy();
 
-  G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0;
-  G4double gam2  = gam*gam; 
-  G4double beta2 = 1.0 - 1.0/gam2;
- 
+  G4double tau   = dp->GetKineticEnergy()/particleMass;
+  G4double gam   = tau + 1.0;
+  G4double gam2  = gam*gam;
+  G4double beta2 = tau*(tau + 2.0)/gam2;
+
   // Validity range for delta electron cross section
   G4double loss, siga;
-  // G4cout << "### tmax= " << tmax << " kappa= " << minNumberInteractionsBohr << " l= " << length << G4endl;
-  // Gaussian fluctuation 
+  // G4cout << "tmax= " << tmax << " kappa= " << minNumberInteractionsBohr << " l= " << length << G4endl;
+  // Gaussian fluctuation
   if(meanLoss >= minNumberInteractionsBohr*tmax || tmax <= ipotFluct*minNumberInteractionsBohr)
   {
     electronDensity = material->GetElectronDensity();
-    siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length 
+    siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
                               * electronDensity * chargeSquare ;
     siga = sqrt(siga);
     G4double twomeanLoss = meanLoss + meanLoss;
     if(twomeanLoss < siga) {
-      loss = twomeanLoss*G4UniformRand(); 
+      G4double x;
+      do {
+        loss = twomeanLoss*G4UniformRand();
+	x = (loss - meanLoss)/siga;
+      } while (1.0 - 0.5*x*x < G4UniformRand());
     } else {
       do {
        loss = G4RandGauss::shoot(meanLoss,siga);
       } while (loss < 0. || loss > twomeanLoss);
     }
-    //    G4cout << "de= " << meanLoss << "  fluc= " << loss-meanLoss << " sig= " << siga << G4endl; 
+    //G4cout << "### meanLoss= " << meanLoss << "  fluc= " << loss-meanLoss << " sig= " << siga << G4endl;
 
     return loss;
   }
 
-  // Non Gaussian fluctuation 
+  // Non Gaussian fluctuation
 
   if(material != lastMaterial) {
     f1Fluct      = material->GetIonisation()->GetF1fluct();
@@ -153,7 +155,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   G4double p1,p2,p3;
 
   G4double w1 = tmax/ipotFluct;
-  G4double w2 = log(2.*electron_mass_c2*(gam2 - 1.0));
+  G4double w2 = log(2.*electron_mass_c2*beta2*gam2);
 
   G4double C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
 
@@ -165,11 +167,11 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   if(a3 < 0.) a3 = 0.;
 
   G4double suma = a1+a2+a3;
-
   loss = 0. ;
-
+  
   if(suma < sumalim)             // very small Step
     {
+      //G4cout << "A very small step" << G4endl; 
       G4double e0 = material->GetIonisation()->GetEnergy0fluct();
 
       if(tmax == ipotFluct)
@@ -209,11 +211,12 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
           for(G4int i=0; i<ip3; i++) {
             loss += 1./(1.-w*G4UniformRand()) ;
 	  }
-          loss *= e0*corrfac ;  
-        }        
+          loss *= e0*corrfac ;
+        }
       }
     // Not so small Step
-    } else {        
+    } else {
+      //G4cout << "Excitation alim= " << alim << " a1= " << a1 << " a2= " << a2 << G4endl; 
       // excitation type 1
       if(a1>alim) {
         siga=sqrt(a1) ;
@@ -232,12 +235,12 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
  
       // smearing to avoid unphysical peaks
       if(p2 > 0.)
-        loss += (1.-2.*G4UniformRand())*e2Fluct;   
+        loss += (1.-2.*G4UniformRand())*e2Fluct;
       else if (loss>0.)
         loss += (1.-2.*G4UniformRand())*e1Fluct;   
       if(loss < 0.) loss = 0.0;
-      
-      // ionisation .......................................
+
+      // ionisation
       if(a3 > 0.) {
         if(a3>alim) {
           siga=sqrt(a3) ;
@@ -265,7 +268,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
           if (p3 > na) {
             w2 = alfa*ipotFluct;
-            G4double w  = (tmax-w2)/tmax;      
+            G4double w  = (tmax-w2)/tmax;
             G4int    nb = G4int(p3-na);
             for (G4int k=0; k<nb; k++) {
               lossc += w2/(1.-w*G4UniformRand());
@@ -274,25 +277,27 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
         }        
         loss += lossc;  
       }
-    } 
-
+    }
+  //G4cout << "### Final loss= " << loss << G4endl;
   return loss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-G4double G4UniversalFluctuation::Dispersion(    
-                          const G4Material* material, 
+G4double G4UniversalFluctuation::Dispersion(
+                          const G4Material* material,
                           const G4DynamicParticle* dp,
- 				G4double& tmax, 
+ 				G4double& tmax,
 			        G4double& length)
 {
+  if(!particle) InitialiseMe(dp->GetDefinition());
+
   electronDensity = material->GetElectronDensity();
 
-  G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0; 
+  G4double gam   = (dp->GetKineticEnergy())/particleMass + 1.0;
   G4double beta2 = 1.0 - 1.0/(gam*gam);
- 
+
   G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
                  * electronDensity * chargeSquare;
 

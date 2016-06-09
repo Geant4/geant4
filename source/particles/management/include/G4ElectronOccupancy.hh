@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.hh,v 1.5 2001/07/11 10:01:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ElectronOccupancy.hh,v 1.8 2004/06/11 14:25:27 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -98,7 +98,11 @@ class G4ElectronOccupancy
 
 };
 
-extern G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
+#if defined G4PARTICLES_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
+#endif
 
 // ------------------------
 // Inlined operators

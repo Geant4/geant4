@@ -227,7 +227,7 @@ void XrayTelPhysicsList::SetCuts()
   SetCutValue(cutForProton, "proton"); 
   SetCutValue(cutForProton, "anti_proton");
 
-  SetCutValueForOthers(defaultCutValue); 
+  // SetCutValueForOthers(defaultCutValue); 
  
   if (verboseLevel >1) { 
     DumpCutValuesTable(); 

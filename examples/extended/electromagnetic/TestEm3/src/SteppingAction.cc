@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.9 2004/01/21 17:29:27 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: SteppingAction.cc,v 1.10 2004/03/16 18:06:17 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,8 +67,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // sum up per event
   eventAct->SumEnergy(absorNo,edep,stepl);
   
-  // energy leaving each volume
-  if (track->GetNextVolume() != volume) {
+  // energy from secondaries leaving each volume
+  if ((track->GetTrackID() != 1)&&(track->GetNextVolume() != volume)) {
     G4double EnLeaving = track->GetKineticEnergy();
     if (track->GetDefinition() == G4Positron::Positron())
        EnLeaving += 2*electron_mass_c2;

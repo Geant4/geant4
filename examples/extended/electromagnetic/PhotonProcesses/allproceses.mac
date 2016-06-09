@@ -1,0 +1,20 @@
+# $Id: allproceses.mac,v 1.1 2004/04/28 11:09:06 maire Exp $
+#
+# Macro file for "PhotonProcesses.cc"
+# (can be run in batch, without graphic)
+#
+# photon 100 keV; all processes
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSize 100 m
+#
+/run/initialize
+#
+/gun/energy 100 keV
+#
+/testem/event/printModulo 10000
+#
+/run/beamOn 100000

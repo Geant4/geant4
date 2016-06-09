@@ -20,14 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: RunAction.hh,v 1.5 2004/06/18 15:43:40 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: RunAction.hh,v 1.1 2003/10/08 17:28:37 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: Adapted MyVector for STL   
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -37,6 +32,7 @@
 #include "G4UserRunAction.hh"
 
 #include "G4ParticleDefinition.hh"
+#include "G4ThreeVector.hh"
 #include "globals.hh"
 
 #include <vector>
@@ -47,72 +43,96 @@ typedef  std::vector<G4double> MyVector;
 
 class DetectorConstruction;
 class PrimaryGeneratorAction;
+class RunActionMessenger;
 
 class G4Run;
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
 namespace AIDA {
- class ITree;
- class IHistogram1D;
-} 
+  class ITree;
+  class IHistogram1D;
+}
 #endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
   public:
-  
+
     RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~RunAction();
 
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
-    
+
     inline void initializePerEvent();
            void fillPerEvent();
     inline void fillPerTrack(G4double,G4double);
     inline void fillPerStep (G4double,G4int,G4int);
     inline void particleFlux(G4ParticleDefinition*,G4int);
- 
+    
+     // Acceptance parameters
+     void     SetEdepAndRMS(G4ThreeVector);
+     
+     G4double GetAverageEdep() const    {return edeptrue;};
+     G4double GetRMSEdep() const        {return rmstrue;};
+     G4double GetLimitEdep() const      {return limittrue;};
+
+     // Histogram name and type
+     void SetHistoName(G4String& val)   {histoName = val;};
+     void SetHistoType(G4String& val)   {histoType = val;};
+     
+     const G4String& HistoName() const  {return histoName;};
+     const G4String& HistoType() const  {return histoType;};
+     
   private:
-  
+
     void bookHisto();
     void cleanHisto();
-    
+
   private:
-    
+
     DetectorConstruction*   Det;
     PrimaryGeneratorAction* Kin;
+    RunActionMessenger*     runMessenger;
     
-    G4int nLbin;    
+    G4int nLbin;
     MyVector dEdL;
     MyVector sumELongit;
     MyVector sumE2Longit;
     MyVector sumELongitCumul;
     MyVector sumE2LongitCumul;
-    
-    G4int nRbin;    
+
+    G4int nRbin;
     MyVector dEdR;
     MyVector sumERadial;
     MyVector sumE2Radial;
     MyVector sumERadialCumul;
     MyVector sumE2RadialCumul;
-        
+
     MyVector gammaFlux;
     MyVector electronFlux;
     MyVector positronFlux;
-    
+
     G4double ChargTrLength;
     G4double sumChargTrLength;
     G4double sum2ChargTrLength;
-    
+
     G4double NeutrTrLength;
     G4double sumNeutrTrLength;
     G4double sum2NeutrTrLength;
-                  
-#ifdef G4ANALYSIS_USE
+
+    G4double           edeptrue;
+    G4double           rmstrue;
+    G4double           limittrue;
+    
+    G4String           histoName;
+    G4String           histoType;
+#ifdef USE_AIDA
     AIDA::ITree* tree;             // the tree should only be deleted at the end
     AIDA::IHistogram1D* histo[12];   // (after writing the histos to file)
-#endif    
+#endif            
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -120,7 +140,7 @@ class RunAction : public G4UserRunAction
 inline
 void RunAction::initializePerEvent()
 {
-  //initialize arrays of energy deposit per bin     
+  //initialize arrays of energy deposit per bin
   for (G4int i=0; i<nLbin; i++)
      { dEdL[i] = 0.; }
      

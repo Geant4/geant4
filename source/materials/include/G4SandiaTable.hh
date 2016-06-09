@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTable.hh,v 1.10 2001/10/17 07:59:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4SandiaTable.hh,v 1.11 2004/03/08 16:35:16 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 
 // class description
 //
@@ -33,6 +33,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// History:
+//
+// 05.03.04 V.Grichine, new methods for old sorting algorithm for PAI model
 // 03.04.01 fnulcof[4] added; returned if energy < emin
 // 30.01.01 major bug in the computation of AoverAvo and in the units (/g!)
 //          in GetSandiaCofPerAtom(). mma
@@ -51,6 +54,7 @@
 
 class G4Material;
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 class G4SandiaTable
@@ -59,6 +63,8 @@ public:  // with description
 
     G4SandiaTable(G4int);	         
     G4SandiaTable(G4Material*);	         
+
+	         
    ~G4SandiaTable();
 
     //per atom of an Element:   
@@ -101,25 +107,32 @@ private:
 
 public:  // without description
 
-         inline void SandiaSwap( G4double** da,
+
+    inline void SandiaSwap( G4double** da,
                                  G4int i,
                                  G4int j );
 
-         void SandiaSort( G4double** da,
+    void SandiaSort( G4double** da,
                           G4int sz );
 
-	 G4int SandiaIntervals( G4int Z[],
+    G4int SandiaIntervals( G4int Z[],
                                 G4int el );
 
-         G4int SandiaMixing(       G4int Z[],
+    G4int SandiaMixing(       G4int Z[],
                              const G4double fractionW[],
                                    G4int el,
                                    G4int mi );
 
-         inline G4double GetPhotoAbsorpCof(G4int i , G4int j)const ;
+    inline G4double GetPhotoAbsorpCof(G4int i , G4int j) const;
 
-         inline G4int GetMaxInterval() const ;
+    inline G4int GetMaxInterval() const { return fMaxInterval;};
 
+    G4OrderedTable* GetSandiaMatTable() const {return fMatSandiaMatrix;};
+    inline G4double  GetSandiaMatTable(G4int,G4int) const;
+
+private:
+
+    void ComputeMatTable();
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -168,26 +181,24 @@ G4SandiaTable::SandiaSwap( G4double** da ,
 inline
 G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const
 {
-   G4double unitCof ;
-   if(j == 0)
-   {
-      unitCof = keV ;
-   }
-   else
-   {
-      unitCof = (cm2/g)*pow(keV,(G4double)j) ;
-   }
+   G4double     unitCof ;
+   if(j == 0)   unitCof = keV ;
+   else         unitCof = (cm2/g)*pow(keV,(G4double)j) ;
+   
    return  fPhotoAbsorptionCof[i][j]*unitCof ;
 }
 
-/////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 //
 //
 
-inline
-G4int G4SandiaTable::GetMaxInterval() const
+inline G4double  G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j) const
 {
-   return fMaxInterval ;
+   assert (interval >= 0 && interval < fMaxInterval && j >= 0 && j < 5 );
+   G4double     unitCof ;
+   if(j == 0)   unitCof = keV ;
+   else         unitCof = (cm2/g)*pow(keV,(G4double)j);                      
+   return ( (*(*fMatSandiaMatrix)[interval])[j] )*unitCof; 
 }
 
 //

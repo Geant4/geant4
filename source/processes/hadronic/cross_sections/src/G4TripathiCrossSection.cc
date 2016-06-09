@@ -72,9 +72,32 @@ GetCrossSection(const G4DynamicParticle* aPart,
   G4double Energy = kineticEnergy/projectileAtomicNumber;
 
   // done
-  G4double D = 2.77-(8.0E-3*targetAtomicNumber)+(1.8E-5*targetAtomicNumber*targetAtomicNumber)
+  //
+  // Note that this correction to G4TripathiCrossSection is just to accurately
+  // reflect Tripathi's algorithm.  However, if you're using alpha particles/protons
+  // consider using the more accurate G4TripathiLightCrossSection, which
+  // Tripathi developed specifically for light systems.
+  //
+  G4double D;
+  if (nProjProtons==1 && projectileAtomicNumber==1)
+  {
+    D = 2.05;
+  }
+  else if (nProjProtons==2 && projectileAtomicNumber==4)
+  {
+    D = 2.77-(8.0E-3*targetAtomicNumber)+(1.8E-5*targetAtomicNumber*targetAtomicNumber)
                    - 0.8/(1+exp((250.-Energy)/75.));
-  D = 1.75;
+  }
+  else
+  {
+  //
+  // This is the original value used in the G4TripathiCrossSection implementation,
+  // and was used for all projectile/target conditions.  I'm not touching this, 
+  // althoughJudging from Tripathi's paper, this is valid for cases where the
+  // nucleon density changes little with A.
+  // 
+    D = 1.75;
+  }
   // done
   G4double C_E = D * (1-exp(-Energy/40.)) - 0.292*exp(-Energy/792.)*cos(0.229*pow(Energy, 0.453));
   
@@ -94,5 +117,5 @@ GetCrossSection(const G4DynamicParticle* aPart,
   
   if(result < 0) result = 0;
   return result*m2;
-  
+
 }

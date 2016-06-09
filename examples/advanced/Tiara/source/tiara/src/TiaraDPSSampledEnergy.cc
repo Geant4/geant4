@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraDPSSampledEnergy.cc,v 1.7 2003/12/08 17:53:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: TiaraDPSSampledEnergy.cc,v 1.8 2004/06/09 15:04:37 daquinog Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #include "TiaraDPSSampledEnergy.hh"
@@ -40,16 +40,34 @@ TiaraDPSSampledEnergy::TiaraDPSSampledEnergy(const G4String &eng,
 					     const G4String &sourceTree,
 					     const G4String &nameExt)
   :
-  fTree( (checkFileIsReadable(sourceTree, "TiaraDPSSampledEnergy::TiaraDPSSampledEnergy"),
-	 AIDA_createAnalysisFactory()
-	->createTreeFactory()
-	->create(sourceTree, "xml",true,false))  ),
-  fSampleDPS(dynamic_cast<AIDA::IDataPointSet *>(fTree->find(G4String("dps" + eng + nameExt)))),
+ //  fTree( (checkFileIsReadable(sourceTree, "TiaraDPSSampledEnergy::TiaraDPSSampledEnergy"),
+// 	 AIDA_createAnalysisFactory()
+// 	->createTreeFactory()
+// 	->create(sourceTree, "xml",true,false))  ),
+  //fSampleDPS(dynamic_cast<AIDA::IDataPointSet *>(fTree->find(G4String("dps" + eng + nameExt)))),
   fMinEnergyCut(minEnergyCut),
-  fMaxProb(0),
-  fMinE(fSampleDPS->point(0)->coordinate(0)->value()),
-  fMaxE(fSampleDPS->point(fSampleDPS->size()-1)->coordinate(0)->value())
+  fMaxProb(0)
+  // fMinE(fSampleDPS->point(0)->coordinate(0)->value()),
+  //fMaxE(fSampleDPS->point(fSampleDPS->size()-1)->coordinate(0)->value())
 {
+  /////////////////////////////////////////
+ 
+  AIDA::IAnalysisFactory* aFact = AIDA_createAnalysisFactory();
+
+  AIDA::ITreeFactory *treeFact = aFact->createTreeFactory(); 
+ 
+  fTree = treeFact -> create(sourceTree, "xml",true,false); 
+
+  AIDA::IManagedObject* object = fTree->find("dps" + eng + nameExt);
+  if(object) {
+    AIDA::IDataPointSet* sample = object->cast("AIDA::IDataPointSet");
+    fSampleDPS = sample;
+  } 
+  fMinE = fSampleDPS->point(0)->coordinate(0)->value();
+  fMaxE = fSampleDPS->point(fSampleDPS->size()-1)->coordinate(0)->value();
+
+  /////////////////////////////////////////
+
   for (G4int i=0; i < fSampleDPS->size(); i++) {
     AIDA::IDataPoint *p = fSampleDPS->point(i);
     G4double prob(p->coordinate(1)->value());

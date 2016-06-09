@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2003/12/08 17:53:26 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2004/06/09 15:04:35 daquinog Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -43,4 +43,4 @@ LDLIBS +=   -lpython$(PYTHONVERSION) \
 tiaraClean:
 	@echo Cleaning up $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)
 	@rm -rf $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)
-
+	@rm -f *.pyc

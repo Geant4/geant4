@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.1 2004/02/27 17:59:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4EmProcessOptions.hh,v 1.2 2004/05/17 09:46:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 #include "globals.hh"
 
 class G4LossTableManager;
+class G4Region;
 
 class G4EmProcessOptions
 {
@@ -89,6 +90,12 @@ public:
   void SetBuildPreciseRange(G4bool val);
 
   void SetVerbose(G4int val, const G4String& name = "all");
+
+  void SetLambdaFactor(G4double val);
+
+  void ActivateFluorescence(G4bool val, const G4Region* r = 0);
+
+  void ActivateAugerElectronProduction(G4bool val, const G4Region* r = 0);
 
 private:
 

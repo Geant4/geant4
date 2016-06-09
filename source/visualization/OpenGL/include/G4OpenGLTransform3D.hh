@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLTransform3D.hh,v 1.5 2003/06/10 17:41:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLTransform3D.hh,v 1.6 2004/04/07 15:17:12 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // Andrew Walkden  24th October 1996
@@ -36,10 +36,7 @@
 
 #include "G4Transform3D.hh"
 
-#ifdef WIN32
-  #include <windows.h>
-#endif
-#include <GL/gl.h>
+#include "G4OpenGL.hh"
 
 class G4OpenGLTransform3D : public G4Transform3D {
 public:

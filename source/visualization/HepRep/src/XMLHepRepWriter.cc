@@ -37,9 +37,22 @@ XMLHepRepWriter::~XMLHepRepWriter() {
     delete xml;
 }
 
+bool XMLHepRepWriter::addProperty(std::string key, std::string value) {
+    properties[key] = value;
+    return true;
+}
+
 bool XMLHepRepWriter::close() {
     xml->closeDoc(true);
     if (zip != NULL) {
+        zip->putNextEntry(ZipCDirEntry("heprep.properties"));
+        
+        map<string, string>::iterator i = properties.begin();
+        while (i != properties.end()) {
+            *zip << (*i).first << "=" << (*i).second << endl;
+            i++;
+        }
+        zip->closeEntry();
         zip->finish();
         zip->close();
     }
@@ -58,15 +71,15 @@ bool XMLHepRepWriter::write(HepRep* heprep, string name) {
     xml->openDoc();
     xml->setAttribute("xmlns", "http://java.freehep.org/schemas/heprep/2.0");
     xml->setAttribute("xmlns", "xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    xml->setAttribute("xsi", "schemaLocation", "HepRep.xsd");
+    xml->setAttribute("xsi", "schemaLocation", "http://java.freehep.org/schemas/heprep/2.0 http://java.freehep.org/schemas/heprep/2.0/HepRep.xsd");
     xml->openTag(nameSpace, "heprep");
     write(heprep->getLayerOrder());
-    vector<HepRepTypeTree*>* typeTreeList = heprep->getTypeTrees();
-    for (vector<HepRepTypeTree*>::iterator i1=typeTreeList->begin(); i1 != typeTreeList->end(); i1++) {
+    set<HepRepTypeTree*> typeTreeSet = heprep->getTypeTrees();
+    for (set<HepRepTypeTree*>::iterator i1=typeTreeSet.begin(); i1 != typeTreeSet.end(); i1++) {
         write(*i1);
     }
-    vector<HepRepInstanceTree*>* instanceTreeList = heprep->getInstanceTrees();
-    for (vector<HepRepInstanceTree*>::iterator i2=instanceTreeList->begin(); i2 != instanceTreeList->end(); i2++) {
+    set<HepRepInstanceTree*> instanceTreeSet = heprep->getInstanceTrees();
+    for (set<HepRepInstanceTree*>::iterator i2=instanceTreeSet.begin(); i2 != instanceTreeSet.end(); i2++) {
         write(*i2);
     }
     xml->closeTag();
@@ -78,10 +91,10 @@ bool XMLHepRepWriter::write(HepRep* heprep, string name) {
     return true;
 }
 
-bool XMLHepRepWriter::write(vector<string> *layers) {
+bool XMLHepRepWriter::write(vector<string> layers) {
     string layerOrder = "";
     bool comma = false;
-    for (vector<string>::iterator i=layers->begin(); i != layers->end(); i++) {
+    for (vector<string>::iterator i=layers.begin(); i != layers.end(); i++) {
         if (comma) {
             layerOrder.append(", ");
         }
@@ -98,8 +111,8 @@ bool XMLHepRepWriter::write(HepRepTypeTree* typeTree) {
     xml->setAttribute("version", typeTree->getVersion());
     xml->openTag(nameSpace, "typetree");
 
-    vector<HepRepType*>* list = typeTree->getTypes();
-    for (vector<HepRepType*>::iterator i=list->begin(); i != list->end(); i++) {
+    set<HepRepType*> types = typeTree->getTypes();
+    for (set<HepRepType*>::iterator i=types.begin(); i != types.end(); i++) {
         write(*i);
     }
     xml->closeTag();
@@ -112,8 +125,8 @@ bool XMLHepRepWriter::write(HepRepType* type) {
     write((HepRepDefinition*)type);
     write((HepRepAttribute*)type);
     
-    vector<HepRepType*>* list = type->getTypes();
-    for (vector<HepRepType*>::iterator i=list->begin(); i != list->end(); i++) {
+    set<HepRepType*> types = type->getTypes();
+    for (set<HepRepType*>::iterator i=types.begin(); i != types.end(); i++) {
         write(*i);
     }
     xml->closeTag();
@@ -142,14 +155,14 @@ bool XMLHepRepWriter::write(HepRepInstanceTree* instanceTree) {
     xml->setAttribute("typetreeversion", instanceTree->getTypeTree()->getVersion());
     xml->openTag(nameSpace, "instancetree");
     // refs
-    vector<HepRepTreeID*>* instanceTreeList = instanceTree->getInstanceTrees();
-    for (vector<HepRepTreeID*>::iterator i1=instanceTreeList->begin(); i1 != instanceTreeList->end(); i1++) {
+    set<HepRepTreeID*> instanceTreeSet = instanceTree->getInstanceTrees();
+    for (set<HepRepTreeID*>::iterator i1=instanceTreeSet.begin(); i1 != instanceTreeSet.end(); i1++) {
         write(*i1);
     }
 
     // instances
-    vector<HepRepInstance*>* instanceList = instanceTree->getInstances();
-    for (vector<HepRepInstance*>::iterator i2=instanceList->begin(); i2 != instanceList->end(); i2++) {
+    vector<HepRepInstance*> instanceList = instanceTree->getInstances();
+    for (vector<HepRepInstance*>::iterator i2=instanceList.begin(); i2 != instanceList.end(); i2++) {
         write(*i2);
     }
     xml->closeTag();
@@ -162,13 +175,13 @@ bool XMLHepRepWriter::write(HepRepInstance* instance) {
     xml->openTag(nameSpace, "instance");
     write((HepRepAttribute*)instance);
 
-    vector<HepRepPoint*>* pointList = instance->getPoints();
-    for (vector<HepRepPoint*>::iterator i1=pointList->begin(); i1 != pointList->end(); i1++) {
+    vector<HepRepPoint*> pointList = instance->getPoints();
+    for (vector<HepRepPoint*>::iterator i1=pointList.begin(); i1 != pointList.end(); i1++) {
         write(*i1);
     }
 
-    vector<HepRepInstance*>* instanceList = instance->getInstances();
-    for (vector<HepRepInstance*>::iterator i2=instanceList->begin(); i2 != instanceList->end(); i2++) {
+    vector<HepRepInstance*> instanceList = instance->getInstances();
+    for (vector<HepRepInstance*>::iterator i2=instanceList.begin(); i2 != instanceList.end(); i2++) {
         write(*i2);
     }
     xml->closeTag();
@@ -179,7 +192,7 @@ bool XMLHepRepWriter::write(HepRepPoint* point) {
     xml->setAttribute("x", point->getX());
     xml->setAttribute("y", point->getY());
     xml->setAttribute("z", point->getZ());
-    if (point->getAttValuesFromNode()->size() != 0) {
+    if (point->getAttValuesFromNode().size() != 0) {
         xml->openTag(nameSpace, "point");
         write((HepRepAttribute*)point);
         xml->closeTag();
@@ -195,16 +208,16 @@ bool XMLHepRepWriter::write(HepRepAttribute* attribute) {
     HepRepAttValue* layerAtt = attribute->getAttValueFromNode("layer");
     if (layerAtt != NULL) write(layerAtt);
 
-    vector<HepRepAttValue*>* list = attribute->getAttValuesFromNode();
-    for (vector<HepRepAttValue*>::iterator i=list->begin(); i != list->end(); i++) {
+    set<HepRepAttValue*> attSet = attribute->getAttValuesFromNode();
+    for (set<HepRepAttValue*>::iterator i=attSet.begin(); i != attSet.end(); i++) {
         write(*i);
     }
     return true;
 }
 
 bool XMLHepRepWriter::write(HepRepDefinition* definition) {
-    vector<HepRepAttDef*>* list = definition->getAttDefsFromNode();
-    for (vector<HepRepAttDef*>::iterator i=list->begin(); i != list->end(); i++) {
+    set<HepRepAttDef*> list = definition->getAttDefsFromNode();
+    for (set<HepRepAttDef*>::iterator i=list.begin(); i != list.end(); i++) {
         write(*i);
     }
     return true;

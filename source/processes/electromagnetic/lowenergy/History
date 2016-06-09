@@ -1,4 +1,4 @@
-$Id: History,v 1.200 2004/03/23 12:45:14 gcosmo Exp $
+$Id: History,v 1.203 2004/06/07 07:42:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07.06.2004   G.Cosmo, tag emlowen-V06-01-02
+             Fix in G4hShellCrossSectionExp for compilation error on WIN32-VC.
+
+01.06.2004   MGP, tag emlowen-V06-01-01
+             Bug fix for Barkas effect   
+
+01.06.2004   MGP, tag emlowen-V06-01-00
+             Bug fix in energy loss concerning positrons handled by Penelope   
+  
+19.05.2004   MGP, tag emlowen-V06-00-11
+             New model for PIXE (by Simona Saliceti)
+
+19.05.2004   MGP, tag emlowen-V06-00-10
+             First iteration towards new models for photoelectric 
+             angular distribution: design iteration and re-implementation
+             of re-implementation of non-polarized Sauter-Gavrila 
+             distribution (K-shell approximation)" by Pedro Rodrigues 
+             and Andreia Trindade
+
 23.03.2004   G.Cosmo, tag emlowen-V06-00-09
-             Fix in G4PenelopeCompton for compilation on WIN32-VC.
+             Fix in G4PenelopeCompton for compilation error on WIN32-VC.
 
 15.03.2004   MGP, tag emlowen-V06-00-08
              Fix in G4PenelopeRayleigh related to PR 605

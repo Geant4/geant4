@@ -21,36 +21,46 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.11 2003/11/24 16:34:09 grichine Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: Em8DetectorConstruction.cc,v 1.13 2004/05/27 08:39:05 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
 #include "Em8DetectorConstruction.hh"
 #include "Em8DetectorMessenger.hh"
-
 #include "Em8CalorimeterSD.hh"
-#include "G4VXrayTRmodel.hh"
-#include "G4IrregularXrayTRmodel.hh"
-#include "G4FoamXrayTRmodel.hh"
-#include "G4RegularXrayTRmodel.hh"
-#include "G4GamDistrXrayTRmodel.hh"
-#include "G4PlateIrrGasXrayTRmodel.hh"
+
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
+
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
+#include "G4GeometryManager.hh"
 #include "G4RunManager.hh"
 
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 #include "G4ProductionCuts.hh"
+
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
+
+#include "G4UnitsTable.hh"
 #include "G4ios.hh"
+
+
+
+const G4double Em8DetectorConstruction::fDelta = 0.0001*mm;
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -58,47 +68,30 @@
 
 Em8DetectorConstruction::Em8DetectorConstruction()
 :
-worldchanged(false),
-WorldMaterial(NULL),solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
-AbsorberMaterial(NULL),solidAbsorber(NULL),logicAbsorber(NULL),
-physiAbsorber(NULL),
-fRadiatorMat(NULL),
- magField(NULL),calorimeterSD(NULL)
+fWorldChanged(false),
+fWorldMaterial(NULL),fSolidWorld(NULL),fLogicWorld(NULL),fPhysicsWorld(NULL),
+fAbsorberMaterial(NULL),fSolidAbsorber(NULL),fLogicAbsorber(NULL),
+fPhysicsAbsorber(NULL),fDetectorMessenger(NULL),
+fCalorimeterSD(NULL),fRegGasDet(NULL)
 {
   // default parameter values of the calorimeter
 
   //  G4double inch = 2.54*cm ;
   // G4double  mil = inch/1000.0 ;
 
-  WorldSizeZ = 80.*cm;
-  WorldSizeR = 20.*cm;
+  // G4double delta = 0.0001*mm;
 
-    AbsorberThickness = 40.0*mm;
-  //  AbsorberThickness = 0.04*mm;
+  fAbsorberThickness = 23.0*mm;
+  fAbsorberRadius    = 10.*cm;
+  fAbsorberZ         = 0.*cm ;
 
-  AbsorberRadius   = 10.*cm;
-  zAbsorber = 36.*cm ;
+  fWindowThick       = 51.0*micrometer ;
 
-  fWindowThick = 51.0*micrometer ;
-  fElectrodeThick = 10.0*micrometer ;
-  fGapThick = 1.0*mm ;
+  fGammaCut    = 23*mm; 
+  fElectronCut = 23*mm; 
+  fPositronCut = 23*mm; 
 
-  fRadThickness = 25*micrometer ;   // 0.5*mil ;   
-  fGasGap       = 1500*micrometer  ;    // 30*mil ;    
-  fFoilNumber   = 188 ;
-
-  fDetThickness = 40.0*mm ;
-  fDetLength    = 200.0*cm  ;
-  fDetGap       = 1.0*mm ;
-
-  fStartR       = 40*cm  ;
-  fStartZ       = 10.0*mm  ;
-
-  fModuleNumber = 1      ;  
-
-  // create commands for interactive definition of the calorimeter  
-
-  detectorMessenger = new Em8DetectorMessenger(this);
+  fDetectorMessenger = new Em8DetectorMessenger(this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -107,7 +100,7 @@ fRadiatorMat(NULL),
 
 Em8DetectorConstruction::~Em8DetectorConstruction()
 { 
-  delete detectorMessenger;
+  delete fDetectorMessenger;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -144,8 +137,8 @@ G4double fractionmass;
 // define Elements
 //
 
-//  a = 1.01*g/mole;
-//  G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
+  a = 1.01*g/mole;
+  G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
 
   a = 12.01*g/mole;
   G4Element* elC = new G4Element(name="Carbon", symbol="C", z=6., a);
@@ -280,13 +273,6 @@ H2O->AddElement(elO, natoms=1);
   a = 26.98*g/mole;
   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
 
-  // Mylar
-
-  density = 1.39*g/cm3;
-  G4Material* Mylar = new G4Material(name="Mylar", density, nel=3);
-  Mylar->AddElement(elO,2);
-  Mylar->AddElement(elC,5);
-  Mylar->AddElement(elH,4);
 
   // Polypropelene
 
@@ -295,6 +281,13 @@ H2O->AddElement(elO, natoms=1);
   CH2->AddElement(elC,1);
 
 ************************ */
+  // Mylar
+
+  density = 1.39*g/cm3;
+  G4Material* Mylar = new G4Material(name="Mylar", density, nel=3);
+  Mylar->AddElement(elO,2);
+  Mylar->AddElement(elC,5);
+  Mylar->AddElement(elH,4);
 
 
   // Krypton as detector gas, STP
@@ -381,9 +374,34 @@ H2O->AddElement(elO, natoms=1);
 
   // Xenon as detector gas, STP
 
-  //  density = 5.858*mg/cm3 ;
-  //  a = 131.29*g/mole ;
-  //  G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
+  density = 5.858*mg/cm3 ;
+  a = 131.29*g/mole ;
+  G4Material* Xe  = new G4Material(name="Xenon",z=54., a, density );
+
+  // Metane, STP
+
+  density = 0.7174*mg/cm3 ;
+  G4Material* metane = new G4Material(name="CH4",density,nel=2) ;
+  metane->AddElement(elC,1) ;
+  metane->AddElement(elH,4) ;
+
+  // Propane, STP
+
+  density = 2.005*mg/cm3 ;
+  G4Material* propane = new G4Material(name="C3H8",density,nel=2) ;
+  propane->AddElement(elC,3) ;
+  propane->AddElement(elH,8) ;
+
+  // 87.5% Xe + 7.5% CH4 + 5% C3H8, 20 C, 1 atm 
+
+  density = 4.9196*mg/cm3 ;
+
+  G4Material* XeCH4C3H8 = new G4Material(name="XeCH4C3H8"  , 
+                                  density,  ncomponents=3);
+  XeCH4C3H8->AddMaterial( Xe,       fractionmass = 0.971 ) ;
+  XeCH4C3H8->AddMaterial( metane,   fractionmass = 0.010 ) ;
+  XeCH4C3H8->AddMaterial( propane,  fractionmass = 0.019 ) ;
+
 
   // Carbon dioxide, STP
 
@@ -419,17 +437,17 @@ H2O->AddElement(elO, natoms=1);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
-  //default materials of the calorimeter and TR radiator
+  //default materials of the absorber and window 
 
-  //  fRadiatorMat =  Mylar ; // CH2 ;   // Mylar ; 
+  
   
   // fWindowMat = Mylar ;
-  // fElectrodeMat = Al ;
+ 
 
-  AbsorberMaterial = Kr20CO2 ; // lH2 ; // Al; // Be; // XeCO2CF4  ; 
-  fGapMat          = Kr20CO2 ;
+  fAbsorberMaterial = XeCH4C3H8; // Kr20CO2 ; // lH2 ; // Al; // Be; // XeCO2CF4  ; 
 
-  WorldMaterial    = Air ;
+
+  fWorldMaterial    = Mylar; // Air ;
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -438,77 +456,97 @@ H2O->AddElement(elO, natoms=1);
   
 G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 {
-  //  G4int i, j ; 
-  //  G4double zModule, zRadiator, rModule, rRadiator ; 
+  // Cleanup old geometry
 
-  // complete the Calor parameters definition and Print 
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
+  //  G4RegionStore::GetInstance()->Clean();
+
+  // complete the Calor parameters definition and print 
 
   ComputeCalorParameters();
   PrintCalorParameters();
       
   // World
   
-  if(solidWorld) delete solidWorld ;
-  if(logicWorld) delete logicWorld ;
-  if(physiWorld) delete physiWorld ;
+  // if(fSolidWorld)   delete fSolidWorld ;
+  // if(fLogicWorld)   delete fLogicWorld ;
+  // if(fPhysicsWorld) delete fPhysicsWorld ;
 
-  solidWorld = new G4Tubs("World",				//its name
-                   0.,WorldSizeR,WorldSizeZ/2.,0.,twopi)       ;//its size
+  fSolidWorld = new G4Tubs("World",				//its name
+                   0.,fWorldSizeR,fWorldSizeZ/2.,0.,twopi)       ;//its size
                          
-  logicWorld = new G4LogicalVolume(solidWorld,		//its solid
-                                   WorldMaterial,	//its material
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,		//its solid
+                                   fWorldMaterial,	//its material
                                    "World");		//its name
                                    
-  physiWorld = new G4PVPlacement(0,			//no rotation
+  fPhysicsWorld = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
                                  "World",		//its name
-                                 logicWorld,		//its logical volume
+                                 fLogicWorld,		//its logical volume
                                  NULL,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
 
   // Absorber
 
-  if (AbsorberThickness > 0.) 
+  if (fAbsorberThickness > 0.) 
   { 
-      if(solidAbsorber) delete solidAbsorber ;
-      if(logicAbsorber) delete logicAbsorber ;
-      if(physiAbsorber) delete physiAbsorber ;
+    // if(fSolidAbsorber)   delete fSolidAbsorber ;
+    // if(fLogicAbsorber)   delete fLogicAbsorber ;
+    // if(fPhysicsAbsorber) delete fPhysicsAbsorber ;
 
-      solidAbsorber = new G4Tubs("Absorber",		
-                          0.,AbsorberRadius,AbsorberThickness/2.,0.,twopi); 
+      fSolidAbsorber = new G4Tubs("Absorber",		
+                          0.,fAbsorberRadius,fAbsorberThickness/2.,0.,twopi); 
                           
-      logicAbsorber = new G4LogicalVolume(solidAbsorber,    
-      			                  AbsorberMaterial, 
+      fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    
+      			                  fAbsorberMaterial, 
       			                  "Absorber");     
       			                  
-      physiAbsorber = new G4PVPlacement(0,		   
-      		    G4ThreeVector(0.,0.,zAbsorber),        
+      fPhysicsAbsorber = new G4PVPlacement(0,		   
+      		    G4ThreeVector(0.,0.,fAbsorberZ),        
                                         "Absorber",        
-                                        logicAbsorber,     
-                                        physiWorld,       
+                                        fLogicAbsorber,     
+                                        fPhysicsWorld,       
                                         false,             
                                         0);                
                                         
   }
-  G4Region* regGasDet = new G4Region("VertexDetector");
-  regGasDet->AddRootLogicalVolume(logicAbsorber);                                 
-  G4ProductionCuts* cuts = new G4ProductionCuts();
-  cuts->SetProductionCut(30.*mm,"gamma");
-  cuts->SetProductionCut(30.*mm,"e-");
-  cuts->SetProductionCut(30.*mm,"e+");
-  regGasDet->SetProductionCuts(cuts);
+  if( fRegGasDet != 0 )  // remove obsolete root logical volume
+  {
+    fRegGasDet->RemoveRootLogicalVolume(fLogicAbsorber);
+  }
+  G4ProductionCuts* cuts = 0;
+
+  if( fRegGasDet == 0 ) // First time - instantiate a region and a cut objects
+  {    
+    fRegGasDet = new G4Region("VertexDetector");
+    cuts = new G4ProductionCuts();
+    fRegGasDet->SetProductionCuts(cuts);
+  }
+  else  // Second time - get a cut object from region
+  {   
+    cuts = fRegGasDet->GetProductionCuts();
+  }
+  fRegGasDet->AddRootLogicalVolume(fLogicAbsorber);                               
+
+  cuts->SetProductionCut(fGammaCut,"gamma");
+  cuts->SetProductionCut(fElectronCut,"e-");
+  cuts->SetProductionCut(fPositronCut,"e+");
 
   // Sensitive Detectors: Absorber 
   
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
-  if(!calorimeterSD)
+  if(!fCalorimeterSD)
   {
-    calorimeterSD = new Em8CalorimeterSD("CalorSD",this);
-    SDman->AddNewDetector( calorimeterSD );
+    fCalorimeterSD = new Em8CalorimeterSD("CalorSD",this);
+    SDman->AddNewDetector( fCalorimeterSD );
   }
-  if (logicAbsorber)  logicAbsorber->SetSensitiveDetector(calorimeterSD);
+  if (fLogicAbsorber)  fLogicAbsorber->SetSensitiveDetector(fCalorimeterSD);
 
   // Parameterisation
 
@@ -538,7 +576,7 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
   
   // always return physics world
 
-  return physiWorld;
+  return fPhysicsWorld;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -548,12 +586,12 @@ G4VPhysicalVolume* Em8DetectorConstruction::ConstructCalorimeter()
 void Em8DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n The  WORLD   is made of " 
-       << WorldSizeZ/mm << "mm of " << WorldMaterial->GetName() ;
-  G4cout << ", the transverse size (R) of the world is " << WorldSizeR/mm << " mm. " << G4endl;
+       << fWorldSizeZ/mm << "mm of " << fWorldMaterial->GetName() ;
+  G4cout << ", the transverse size (R) of the world is " << fWorldSizeR/mm << " mm. " << G4endl;
   G4cout << " The ABSORBER is made of " 
-       << AbsorberThickness/mm << "mm of " << AbsorberMaterial->GetName() ;
-  G4cout << ", the transverse size (R) is " << AbsorberRadius/mm << " mm. " << G4endl;
-  G4cout << " Z position of the (middle of the) absorber " << zAbsorber/mm << "  mm." << G4endl;
+       << fAbsorberThickness/mm << "mm of " << fAbsorberMaterial->GetName() ;
+  G4cout << ", the transverse size (R) is " << fAbsorberRadius/mm << " mm. " << G4endl;
+  G4cout << " Z position of the (middle of the) absorber " << fAbsorberZ/mm << "  mm." << G4endl;
   G4cout << G4endl;
 }
 
@@ -568,14 +606,19 @@ void Em8DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 
   // search the material by its name   
   G4Material* pttoMaterial;
-  for (size_t J=0 ; J<theMaterialTable->size() ; J++)
-   { pttoMaterial = (*theMaterialTable)[J];     
-     if(pttoMaterial->GetName() == materialChoice)
-        {AbsorberMaterial = pttoMaterial;
-         logicAbsorber->SetMaterial(pttoMaterial); 
+
+  for (size_t J = 0 ; J < theMaterialTable->size() ; J++)
+  { 
+    pttoMaterial = (*theMaterialTable)[J];
+     
+    if(pttoMaterial->GetName() == materialChoice)
+    {
+      fAbsorberMaterial = pttoMaterial;
+      fLogicAbsorber->SetMaterial(pttoMaterial); 
+
         // PrintCalorParameters();
-        }             
-   }
+    }             
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -590,13 +633,17 @@ void Em8DetectorConstruction::SetWorldMaterial(G4String materialChoice)
   // search the material by its name   
   G4Material* pttoMaterial;
   for (size_t J=0 ; J<theMaterialTable->size() ; J++)
-   { pttoMaterial = (*theMaterialTable)[J];     
-     if(pttoMaterial->GetName() == materialChoice)
-        {WorldMaterial = pttoMaterial;
-         logicWorld->SetMaterial(pttoMaterial); 
+  { 
+    pttoMaterial = (*theMaterialTable)[J]; 
+    
+    if(pttoMaterial->GetName() == materialChoice)
+    {
+      fWorldMaterial = pttoMaterial;
+      fLogicWorld->SetMaterial(pttoMaterial);
+ 
        //  PrintCalorParameters();
-        }             
-   }
+    }             
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -606,7 +653,7 @@ void Em8DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 void Em8DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   // change Absorber thickness and recompute the calorimeter parameters
-  AbsorberThickness = val;
+  fAbsorberThickness = val;
   ComputeCalorParameters();
 }  
 
@@ -617,7 +664,7 @@ void Em8DetectorConstruction::SetAbsorberThickness(G4double val)
 void Em8DetectorConstruction::SetAbsorberRadius(G4double val)
 {
   // change the transverse size and recompute the calorimeter parameters
-  AbsorberRadius = val;
+  fAbsorberRadius = val;
   ComputeCalorParameters();
 }  
 
@@ -627,8 +674,8 @@ void Em8DetectorConstruction::SetAbsorberRadius(G4double val)
 
 void Em8DetectorConstruction::SetWorldSizeZ(G4double val)
 {
-  worldchanged=true;
-  WorldSizeZ = val;
+  fWorldChanged=true;
+  fWorldSizeZ = val;
   ComputeCalorParameters();
 }  
 
@@ -638,8 +685,8 @@ void Em8DetectorConstruction::SetWorldSizeZ(G4double val)
 
 void Em8DetectorConstruction::SetWorldSizeR(G4double val)
 {
-  worldchanged=true;
-  WorldSizeR = val;
+  fWorldChanged=true;
+  fWorldSizeR = val;
   ComputeCalorParameters();
 }  
 
@@ -649,41 +696,10 @@ void Em8DetectorConstruction::SetWorldSizeR(G4double val)
 
 void Em8DetectorConstruction::SetAbsorberZpos(G4double val)
 {
-  zAbsorber  = val;
+  fAbsorberZ  = val;
   ComputeCalorParameters();
 }  
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-
-//void Em8DetectorConstruction::SetMagField(G4double fieldValue)
-//{
-
-  //apply a global uniform magnetic field along X axis
-
-  /* *********************************************************
-
-  G4FieldManager* fieldMgr 
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
-  if(magField) delete magField;		//delete the existing magn field
-  
-  if(fieldValue!=0.)			// create a new one if non nul
-  { 
-    magField = new G4UniformMagField(G4ThreeVector(fieldValue,0.,0.));        
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
-  } 
-  else 
-  {
-    magField = NULL;
-    fieldMgr->SetDetectorField(magField);
-  }
-
-  *************************************************************** */
-
-// }
 
 ///////////////////////////////////////////////////////////////////////////////
 //

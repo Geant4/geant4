@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: HistoMessenger.hh,v 1.1 2003/10/31 12:09:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: HistoMessenger.hh,v 1.2 2004/05/27 13:43:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -61,8 +61,8 @@ class HistoMessenger: public G4UImessenger
    G4UIdirectory*          histoDir;   
    G4UIcmdWithAString*     factoryCmd;
    G4UIcmdWithAString*     fileCmd;
-   G4UIcommand*            histoCmd;    
- 
+   G4UIcommand*            histoCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

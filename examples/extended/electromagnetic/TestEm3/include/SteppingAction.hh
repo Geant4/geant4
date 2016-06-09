@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.hh,v 1.2 2003/11/27 18:20:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: SteppingAction.hh,v 1.3 2004/03/16 18:25:29 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,9 +43,9 @@ class SteppingAction : public G4UserSteppingAction
 {
   public:
     SteppingAction(DetectorConstruction*, EventAction*);
-    virtual ~SteppingAction();
+   ~SteppingAction();
 
-    virtual void UserSteppingAction(const G4Step*);
+    void UserSteppingAction(const G4Step*);
     
     G4double BirkAttenuation(const G4Step*);
     

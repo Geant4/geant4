@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.17 2003/10/24 12:27:53 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: ExN02PhysicsList.cc,v 1.18 2004/03/19 14:08:03 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -30,14 +30,8 @@
 #include "globals.hh"
 #include "ExN02PhysicsList.hh"
 
-#include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProcessVector.hh"
 #include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4ios.hh"
-#include <iomanip>                
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -65,7 +59,6 @@ void ExN02PhysicsList::ConstructParticle()
   ConstructLeptons();
   ConstructMesons();
   ConstructBaryons();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -202,7 +195,7 @@ void ExN02PhysicsList::ConstructEM()
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
-      ///pmanager->AddProcess(new G4hUserSpecialCuts,  -1,-1,3);      
+      ///pmanager->AddProcess(new G4UserSpecialCuts,  -1,-1,3);      
     }
   }
 }

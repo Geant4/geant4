@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm3.cc,v 1.10 2003/11/28 12:30:00 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: TestEm3.cc,v 1.12 2004/06/15 11:39:55 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -33,10 +33,6 @@
 #include "G4UItcsh.hh"
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
-#include "VisManager.hh"
-#endif
-
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -44,6 +40,11 @@
 #include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "HistoManager.hh"
+
+#ifdef G4VIS_USE
+#include "VisManager.hh"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,17 +64,23 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
   //
-  runManager->SetUserAction(new PrimaryGeneratorAction(detector));
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+  runManager->SetUserAction(primary);
     
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new VisManager;
   visManager->Initialize();
 #endif
+
+  HistoManager* histo = 0;
+#ifdef G4ANALYSIS_USE
+  histo = new HistoManager();
+#endif
     
   // set user action classes
-  RunAction*      runAct = new RunAction(detector);
-  EventAction*    evtAct = new EventAction(detector,runAct);
+  RunAction*      runAct = new RunAction(detector,primary,histo);
+  EventAction*    evtAct = new EventAction(detector,runAct,histo);
   SteppingAction* stpAct = new SteppingAction(detector,evtAct);
   
   runManager->SetUserAction(runAct);
@@ -103,9 +110,13 @@ int main(int argc,char** argv) {
     }
 
   // job termination
+#ifdef G4ANALYSIS_USE
+  delete histo;
+#endif      
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+
   delete runManager;
 
   return 0;

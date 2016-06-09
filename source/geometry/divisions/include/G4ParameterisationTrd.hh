@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.hh,v 1.5 2003/11/19 11:51:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationTrd.hh,v 1.6 2004/05/13 14:57:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // classes G4ParameterisationTrdX
 //         G4ParameterisationTrdY
@@ -34,9 +34,10 @@
 // dividing a trapezoid along one of each axis X, Y, Z.
 
 // History:
-// 09.05.01 P.Arce First version
-// ********************************************************************
-
+// -------
+// 09.05.01 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 #ifndef G4ParameterisationTrd_H
 #define G4ParameterisationTrd_H 1
 
@@ -57,7 +58,18 @@ class G4Tubs;
 class G4Polycone;
 class G4Polyhedra;
 
-class G4ParameterisationTrdX : public G4VDivisionParameterisation
+class G4VParameterisationTrd : public G4VDivisionParameterisation
+{ 
+  public:  // with description
+  
+    G4VParameterisationTrd( EAxis axis, G4int nCopies,
+                            G4double offset, G4double step,
+                            G4VSolid* msolid, DivisionType divType );
+  
+    virtual ~G4VParameterisationTrd();
+};
+
+class G4ParameterisationTrdX : public G4VParameterisationTrd
 { 
   public:  // with description
 
@@ -103,7 +115,7 @@ class G4ParameterisationTrdX : public G4VDivisionParameterisation
 };
 
 
-class G4ParameterisationTrdY : public G4VDivisionParameterisation
+class G4ParameterisationTrdY : public G4VParameterisationTrd
 { 
   public:  // with description
 
@@ -149,7 +161,7 @@ class G4ParameterisationTrdY : public G4VDivisionParameterisation
 };
 
 
-class G4ParameterisationTrdZ : public G4VDivisionParameterisation
+class G4ParameterisationTrdZ : public G4VParameterisationTrd
 { 
   public:  // with description
 

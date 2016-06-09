@@ -30,8 +30,8 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: BrachyPhantomROGeometry.cc,v 1.8 2004/03/11 15:38:43 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: BrachyPhantomROGeometry.cc,v 1.9 2004/05/13 14:47:46 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 #include "BrachyPhantomROGeometry.hh"
 #include "BrachyDummySD.hh"
@@ -177,7 +177,7 @@ G4VPhysicalVolume* BrachyPhantomROGeometry::Build()
 							      numberOfVoxelsAlongZ,
 							      voxelXThickness);
   BrachyDummySD *dummySD = new BrachyDummySD;
-  ROPhantomYDivisionLog->SetSensitiveDetector(dummySD);
+  ROPhantomYDivisionLog -> SetSensitiveDetector(dummySD);
 
   return ROWorldPhys;
 }

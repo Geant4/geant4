@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999/01/07 16:08:53 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2004/06/11 14:18:57 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for global HEPNumerics.  Gabriele Cosmo, 26/9/96.
 # --------------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4IOS_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include
 
 include $(G4INSTALL)/config/common.gmk

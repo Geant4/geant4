@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.hh,v 1.9 2001/11/21 14:05:57 kurasige Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ParticleChange.hh,v 1.10 2004/05/08 15:28:11 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -121,51 +121,48 @@ class G4ParticleChange: public G4VParticleChange
     
     // ----------------------------------------------------
     //--- methods to keep information of the final state--
-    //  IMPORTANT NOTE: Although the name of the class and methods are
-    //   "Change", what it stores (and returns in get) are the "FINAL" 
-    //   values of the Position, Momentum, etc.
+    //  IMPORTANT NOTE: 
+    //  These ProposeXXX methods stores (and returns in GetXXX methods) 
+    //   the "FINAL" values of the Position, Momentum, etc.
 
-    const G4ThreeVector* GetMomentumDirectionChange() const;
-    void SetMomentumDirectionChange(G4double Px, G4double Py, G4double Pz);
-    void SetMomentumDirectionChange(const G4ThreeVector& Pfinal);
-    const G4ThreeVector* GetMomentumChange() const;
-    void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
-    void SetMomentumChange(const G4ThreeVector& Pfinal);
-    // Get/Set theMomentumDirectionChange vector: it is the final momentum direction.
+    const G4ThreeVector* GetMomentumDirection() const;
+    void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
+    void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
+    // Get/Propose the MomentumDirection vector: it is the final momentum direction.
 
-    const G4ThreeVector* GetPolarizationChange() const;
-    void SetPolarizationChange(G4double Px, G4double Py, G4double Pz);
-    void SetPolarizationChange(const G4ThreeVector& finalPoralization);
-    // Get/Set thePolarizationChange vector.
+    const G4ThreeVector* GetPolarization() const;
+    void  ProposePolarization(G4double Px, G4double Py, G4double Pz);
+    void  ProposePolarization(const G4ThreeVector& finalPoralization);
+    // Get/Propose the final Polarization vector.
 
-    G4double GetEnergyChange() const;
-    void SetEnergyChange(G4double theEnergyChange);
-    // Get/Set the final kinetic energy of the current particle.
+    G4double GetEnergy() const;
+    void ProposeEnergy(G4double finalEnergy);
+    // Get/Propose the final kinetic energy of the current particle.
 
-    G4double GetProperTimeChange() const;
-    void SetProperTimeChange(G4double t);
-    //  Get/Set theProperTimeChange vector
+    G4double GetProperTime() const;
+    void ProposeProperTime(G4double finalProperTime);
+    //  Get/Propose th final eProperTime 
 
-    const G4ThreeVector* GetPositionChange() const;
-    void SetPositionChange(G4double x, G4double y, G4double z);
-    void SetPositionChange(const G4ThreeVector& finalPosition);
-    //  Get/Set the final position of the current particle.
+    const G4ThreeVector* GetPosition() const;
+    void ProposePosition(G4double x, G4double y, G4double z);
+    void ProposePosition(const G4ThreeVector& finalPosition);
+    //  Get/Propose the final position of the current particle.
 
-    G4double GetTimeChange() const;
-    void SetTimeChange(G4double t);
-    //  Get/Set theTimeChange vector.
+    G4double GetGlobalTime() const;
+    void ProposeGlobalTime(G4double finalGlobalTime);
+    //  Get/Propose the final GlobalTime
  
-    G4double GetMassChange() const;
-    void SetMassChange(G4double mass);
-    //   Get/Set theMassChange 
+    G4double GetMass() const;
+    void ProposeMass(G4double finalMass);
+    //   Get/Propose the final dynamical Mass in G4DynamicParticle
 
-    G4double GetChargeChange() const;
-    void SetChargeChange(G4double mass);
-    //   Get/Set theChargeChange 
+    G4double GetCharge() const;
+    void ProposeCharge(G4double finalCharge);
+    //   Get/Propose the final dynamical Charge in G4DynamicParticl
   
-    G4double GetWeightChange() const;
-    void SetWeightChange(G4double w);
-    //   Get/Set theWeightChange 
+    G4double GetWeight() const;
+    void ProposeWeight(G4double finalWeight);
+    //   Get/Propose the final Weight of the current particle 
 
     //  -- Utility functions --
     G4ThreeVector GetGlobalPosition(const G4ThreeVector& displacement) const;
@@ -205,6 +202,36 @@ class G4ParticleChange: public G4VParticleChange
     // ----------------------------------------------------
 
   public:
+   // Following methods will be removed in release 7.0
+   // Using ProposeXXXX methods is recommended to setting
+   // properties in G4ParticleChange   
+    const G4ThreeVector* GetMomentumDirectionChange() const;
+    void SetMomentumDirectionChange(G4double Px, G4double Py, G4double Pz);
+    void SetMomentumDirectionChange(const G4ThreeVector& Pfinal);
+    const G4ThreeVector* GetMomentum() const;
+    void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
+    void SetMomentumChange(const G4ThreeVector& Pfinal);
+    const G4ThreeVector* GetMomentumChange() const;
+    const G4ThreeVector* GetPolarizationChange() const;
+    void SetPolarizationChange(G4double Px, G4double Py, G4double Pz);
+    void SetPolarizationChange(const G4ThreeVector& finalPoralization);
+    G4double GetEnergyChange() const;
+    void SetEnergyChange(G4double theEnergyChange);
+    G4double GetProperTimeChange() const;
+    void SetProperTimeChange(G4double t);
+    const G4ThreeVector* GetPositionChange() const;
+    void SetPositionChange(G4double x, G4double y, G4double z);
+    void SetPositionChange(const G4ThreeVector& finalPosition);
+    G4double GetTimeChange() const;
+    void SetTimeChange(G4double t);
+    G4double GetMassChange() const;
+    void SetMassChange(G4double mass);
+    G4double GetChargeChange() const;
+    void SetChargeChange(G4double mass);
+    G4double GetWeightChange() const;
+    void SetWeightChange(G4double w);
+
+  public:
     virtual void DumpInfo() const;
 
   protected:
@@ -241,14 +268,6 @@ class G4ParticleChange: public G4VParticleChange
   
     const G4Track* theCurrentTrack;
     
-  public:
-  // these methods is used for switch on/off EB in all ParticleChange objects
-  // static void SwOnAllEB();
-  //  static void SwOffAllEB();
-
-  private:
-  //  static G4bool fUseEBForAll;
-
   public:
     // for Debug 
     virtual G4bool CheckIt(const G4Track&);

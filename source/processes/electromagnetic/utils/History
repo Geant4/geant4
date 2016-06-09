@@ -1,4 +1,4 @@
-$Id: History,v 1.141 2004/03/15 12:15:03 maire Exp $
+$Id: History,v 1.151 2004/05/26 15:21:16 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,52 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 May 04: V.Ivanchenko (utils-V06-01-07)
+- Critical fix in msc to avoid crash in case of use of G4hLowEnergyIonisation
+  for ions together with msc
+
+17 May 04: V.Ivanchenko (utils-V06-01-06)
+- Update integral method taking into account 1 peak in cross section
+- Add options to G4EmProcessOptions
+- Fix minor problem at initialisation
+
+10 May 04: V.Ivanchenko (utils-V06-01-05)
+- Add method GetCurrentRange
+- Add additional initialisation to fluctuations
+- Fix in printout format
+
+04 May 04: V.Ivanchenko (utils-V06-01-04)
+- Use dynamic change for simulation of multiple scattering angle
+- Use trancate range table for estimation of energy loss inside
+  msc model.
+
+26 April 04: V.Ivanchenko (utils-V06-01-03)
+- Reduce aria of applicability of the model for simulation
+  of fluctuations at very small steps to provide less step dependent
+  results. 
+
+23 April 04: L.Urban (utils-V06-01-02)
+- changes in G4MscModel: t->z and z->t transformations (true length 
+  to geometrical length and back)  have been completely rewritten, 
+  change in the angular distribution for e+/e-
+  ( correction to the Highland formula) + some technical changes
+  ==> results are closer to data, step dependence decreased. Effect
+  the resolution of sampling calorimeters
+
+05 April 04: V.Ivant  (utils-V06-01-01)
+- G4VEnergyLossProcess: Update calulation of energy loss from tables
+  (important for proton energies about 1 MeV);
+- Fluctuations: smooth out sampling of Gaussian fluctuations,
+  when sigma is much bigger than energy loss.
+
+31 March 04: V.Ivant  (utils-V06-01-00)
+- G4VEnergyLossProcess: Fix a problem of retrieve tables if PreciseRange
+  is absent
      
+15 March 04: V.Ivant  (utils-V06-00-09)
+- G4VEnergyLossProcess: Fix a problem of energy below lowestKinEnergy
+ 
 15 March 04: mma  (utils-V06-00-08)
  
 12 March 04: V.Ivant

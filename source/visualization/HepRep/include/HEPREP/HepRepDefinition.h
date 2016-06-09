@@ -9,8 +9,8 @@
 
 // Copyright 2000-2002, FreeHEP.
 
+#include <set>
 #include <string>
-#include <vector>
 
 #include "HEPREP/HepRepAttribute.h"
 
@@ -37,17 +37,15 @@ public:
      * @param desc description of the definition.
      * @param category category of the definition.
      * @param extra extra info of the definition.
-     * @return false only if this definition is written immediately to a stream.
      */
-    virtual bool addAttDef(std::string name, std::string desc, std::string category, std::string extra) = 0;
+    virtual void addAttDef(std::string name, std::string desc, std::string category, std::string extra) = 0;
 
     /**
      * Adds an attdef.
      *
      * @param attDef to be added.
-     * @return false only if this definition is written immediately to a stream.
      */
-    virtual bool addAttDef(HepRepAttDef * attDef) = 0;
+    virtual void addAttDef(HepRepAttDef * attDef) = 0;
 
     /**
      * Return a named attribute definition searched on this node and any parent nodes.
@@ -62,7 +60,7 @@ public:
      *
      * @return collection of attributes definitions.
      */
-    virtual std::vector<HepRepAttDef *>  * getAttDefsFromNode() = 0;
+    virtual std::set<HepRepAttDef *>  getAttDefsFromNode() = 0;
 
     /**
      * Returns a named attribute definition defined on this node.

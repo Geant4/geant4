@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.8 2003/11/19 11:51:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationTrd.cc,v 1.10 2004/05/17 07:20:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // class G4ParameterisationTrd Implementation file
 //
-// 26.05.03 - P.Arce Initial version
-// ********************************************************************
+// 26.05.03 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 
 #include "G4ParameterisationTrd.hh"
 
@@ -36,29 +37,62 @@
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4ReflectedSolid.hh"
 #include "G4Trd.hh"
 #include "G4Trap.hh"
+
+//--------------------------------------------------------------------------
+G4VParameterisationTrd::
+G4VParameterisationTrd( EAxis axis, G4int nDiv, G4double width,
+                        G4double offset, G4VSolid* msolid,
+                        DivisionType divType )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+{
+  G4Trd* msol = (G4Trd*)(msolid);
+  if (msolid->GetEntityType() == "G4ReflectedSolid")
+  {
+    // Get constituent solid  
+    G4VSolid* mConstituentSolid 
+       = ((G4ReflectedSolid*)msolid)->GetConstituentMovedSolid();
+    msol = (G4Trd*)(mConstituentSolid);
+  
+    // Create a new solid with inversed parameters
+    G4Trd* newSolid
+      = new G4Trd(msol->GetName(),
+                  msol->GetXHalfLength2(), msol->GetXHalfLength1(),
+                  msol->GetYHalfLength2(), msol->GetYHalfLength1(),
+                  msol->GetZHalfLength());
+    msol = newSolid;
+    fmotherSolid = newSolid;
+    fReflectedSolid = true;
+    fDeleteSolid = true;
+  }    
+}
+
+//------------------------------------------------------------------------
+G4VParameterisationTrd::~G4VParameterisationTrd()
+{
+}
 
 //------------------------------------------------------------------------
 G4ParameterisationTrdX::
 G4ParameterisationTrdX( EAxis axis, G4int nDiv,
                         G4double width, G4double offset,
                         G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationTrd( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionTrdX" );
 
+  G4Trd* msol = (G4Trd*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Trd* mtrd = (G4Trd*)(msolid);
-    fnDiv = CalculateNDiv( 2*mtrd->GetXHalfLength1(),
+    fnDiv = CalculateNDiv( 2*msol->GetXHalfLength1(),
                            width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Trd* mtrd = (G4Trd*)(msolid);
-    fwidth = CalculateWidth( 2*mtrd->GetXHalfLength1(), nDiv, offset );
+    fwidth = CalculateWidth( 2*msol->GetXHalfLength1(), nDiv, offset );
   }
 
 #ifdef G4DIVDEBUG
@@ -175,21 +209,20 @@ G4ParameterisationTrdY::
 G4ParameterisationTrdY( EAxis axis, G4int nDiv,
                         G4double width, G4double offset,
                         G4VSolid* msolid, DivisionType divType)
-  : G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  : G4VParameterisationTrd( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionTrdY" );
 
+  G4Trd* msol = (G4Trd*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Trd* mtrd = (G4Trd*)(msolid);
-    fnDiv = CalculateNDiv( 2*mtrd->GetYHalfLength1(),
+    fnDiv = CalculateNDiv( 2*msol->GetYHalfLength1(),
                            width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Trd* mtrd = (G4Trd*)(msolid);
-    fwidth = CalculateWidth( 2*mtrd->GetYHalfLength1(),
+    fwidth = CalculateWidth( 2*msol->GetYHalfLength1(),
                              nDiv, offset );
   }
 
@@ -304,21 +337,20 @@ G4ParameterisationTrdZ::
 G4ParameterisationTrdZ( EAxis axis, G4int nDiv,
                         G4double width, G4double offset,
                         G4VSolid* msolid, DivisionType divType )
-  : G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  : G4VParameterisationTrd( axis, nDiv, width, offset, msolid, divType )
 { 
   CheckParametersValidity();
   SetType( "DivTrdZ" );
 
+  G4Trd* msol = (G4Trd*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Trd* mtrd = (G4Trd*)(msolid);
-    fnDiv = CalculateNDiv( 2*mtrd->GetZHalfLength(),
+    fnDiv = CalculateNDiv( 2*msol->GetZHalfLength(),
                            width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Trd* mtrd = (G4Trd*)(msolid);
-    fwidth = CalculateWidth( 2*mtrd->GetZHalfLength(),
+    fwidth = CalculateWidth( 2*msol->GetZHalfLength(),
                              nDiv, offset );
   }
 
@@ -355,7 +387,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 
   //----- translation 
   G4ThreeVector origin(0.,0.,0.); 
-  G4double posi = -mdz + foffset + (copyNo+0.5)*fwidth;
+  G4double posi = -mdz + OffsetZ() + (copyNo+0.5)*fwidth;
   if( faxis == kZAxis )
   {
     origin.setZ( posi ); 
@@ -397,10 +429,10 @@ ComputeDimensions(G4Trd& trd, const G4int copyNo,
   G4double pDz = fwidth/2.;
   G4double zLength = 2*msol->GetZHalfLength();
  
-  trd.SetAllParameters ( pDx1+DDx*(foffset+copyNo*fwidth)/zLength,
-                         pDx1+DDx*(foffset+(copyNo+1)*fwidth)/zLength, 
-                         pDy1+DDy*(foffset+copyNo*fwidth)/zLength,
-                         pDy1+DDy*(foffset+(copyNo+1)*fwidth)/zLength, pDz );
+  trd.SetAllParameters( pDx1+DDx*(OffsetZ()+copyNo*fwidth)/zLength,
+                        pDx1+DDx*(OffsetZ()+(copyNo+1)*fwidth)/zLength, 
+                        pDy1+DDy*(OffsetZ()+copyNo*fwidth)/zLength,
+                        pDy1+DDy*(OffsetZ()+(copyNo+1)*fwidth)/zLength, pDz );
 
 #ifdef G4DIVDEBUG
   if( verbose >= 1 )

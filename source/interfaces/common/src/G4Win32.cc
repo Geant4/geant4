@@ -21,29 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4Win32.cc,v 1.6 2001/07/11 10:01:23 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Win32.cc,v 1.8 2004/04/08 15:35:05 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // G.Barrand
 
 #if defined(G4INTY_BUILD_WIN32) || defined(G4INTY_USE_WIN32)
 
-#include <stdlib.h>
-#include "G4ios.hh"
-
-#include "G4UImanager.hh"
-
+// this :
 #include "G4Win32.hh"
+
+#include "G4ios.hh"
 
 static char className[] = "G4Win32";
 
 G4Win32* G4Win32::instance  = NULL;
 
 static G4bool    Win32Inited   = FALSE;
-static HINSTANCE hInstance     = NULL;
-static HINSTANCE hPrevInstance = NULL;
-static LPTSTR    lpszCmdLine   = NULL;
-static int       nCmdShow      = 0;
 static HWND      topWindow     = NULL;
 /***************************************************************************/
 G4Win32* G4Win32::getInstance (
@@ -51,66 +45,38 @@ G4Win32* G4Win32::getInstance (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  return G4Win32::getInstance(NULL,NULL,NULL,0);
-}
-/***************************************************************************/
-G4Win32* G4Win32::getInstance (
- HINSTANCE a_hInstance
-,HINSTANCE a_hPrevInstance
-,LPSTR  a_lpszCmdLine
-,int    a_nCmdShow
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
   if (instance==NULL) {
-    instance = new G4Win32(a_hInstance,
-			   a_hPrevInstance,
-			   a_lpszCmdLine,
-			   a_nCmdShow);
+    instance = new G4Win32();
   }
   return instance;
 }
 /***************************************************************************/
 G4Win32::G4Win32 (
- HINSTANCE a_hInstance
-,HINSTANCE a_hPrevInstance
-,LPSTR  a_lpszCmdLine
-,int    a_nCmdShow
-)
+) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(Win32Inited==FALSE) { // Should be Done once.
 
-    hInstance        = a_hInstance;
-    hPrevInstance    = a_hPrevInstance;
-    lpszCmdLine      = a_lpszCmdLine;
-    nCmdShow         = a_nCmdShow;
-  
-    if(hInstance==NULL) {
-      G4cout << "G4Win32::G4Win32 : NULL hInstance given." <<G4endl;
-    }
-
-    if(hPrevInstance==NULL) {
-      WNDCLASS         wc;
-      wc.style         = CS_HREDRAW | CS_VREDRAW;
-      wc.lpfnWndProc   = (WNDPROC)DefWindowProc;
-      wc.cbClsExtra    = 0;
-      wc.cbWndExtra    = 0;
-      wc.hInstance     = hInstance;
-      wc.hIcon         = LoadIcon  (NULL,IDI_APPLICATION);
-      wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
-      wc.hbrBackground = GetStockBrush(BLACK_BRUSH);
-      wc.lpszMenuName  = className;
-      wc.lpszClassName = className;
-      ::RegisterClass  (&wc);
-    }
+    WNDCLASS         wc;
+    wc.style         = CS_HREDRAW | CS_VREDRAW;
+    wc.lpfnWndProc   = (WNDPROC)DefWindowProc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = ::GetModuleHandle(NULL);
+    wc.hIcon         = LoadIcon  (NULL,IDI_APPLICATION);
+    wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
+    wc.hbrBackground = GetStockBrush(BLACK_BRUSH);
+    wc.lpszMenuName  = className;
+    wc.lpszClassName = className;
+    ::RegisterClass  (&wc);
     
     topWindow   = ::CreateWindow(className,className, 
 				 WS_OVERLAPPEDWINDOW,
 				 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, 
-				 NULL, NULL, hInstance, NULL);
+				 NULL, NULL, 
+				 ::GetModuleHandle(NULL),
+				 NULL);
     
     if(topWindow==NULL) {
       G4cout << "G4Win32 : Unable to create Win32 window." << G4endl;
@@ -157,21 +123,11 @@ void G4Win32::FlushAndWaitExecution (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-}
-/***************************************************************************/
-void G4Win32::getWinMainArguments (
- HINSTANCE* a_hInstance
-,HINSTANCE* a_hPrevInstance
-,LPSTR*  a_lpszCmdLine
-,int*    a_nCmdShow
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
- if(a_hInstance!=NULL)     *a_hInstance     = hInstance;
- if(a_hPrevInstance!=NULL) *a_hPrevInstance = hPrevInstance;
- if(a_lpszCmdLine!=NULL)   *a_lpszCmdLine   = lpszCmdLine;
- if(a_nCmdShow!=NULL)      *a_nCmdShow      = nCmdShow;
+  MSG event;
+  while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
+    ::TranslateMessage(&event);
+    ::DispatchMessage (&event);
+  }
 }
 /***************************************************************************/
 G4bool G4Win32::dispatchWin32Event  (

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.hh,v 1.6 2004/01/20 15:29:41 vnivanch Exp $
+// $Id: G4ParticleChangeForMSC.hh,v 1.7 2004/05/08 15:28:11 kurasige Exp $
 // GEANT4 tag $ $
 //
 // 
@@ -83,18 +83,28 @@ class G4ParticleChangeForMSC: public G4VParticleChange
     //   "Change", what it stores (and returns in get) are the "FINAL"
     //   values of the Position, Momentum, etc.
 
-    void SetMomentumChange(const G4ThreeVector& Pfinal);
-    void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
+    void ProposeMomentumDirection(const G4ThreeVector& Pfinal);
+    void ProposeMomentumDirection(G4double Px, G4double Py, G4double Pz);
+    const G4ThreeVector* GetMomentumDirection() const;
     const G4ThreeVector* GetProposedMomentumDirection() const;
     void SetProposedMomentumDirection(const G4ThreeVector& Pfinal);
     // Get/Set theMomentumDirectionChange vector: it is the final momentum direction.
 
-    const G4ThreeVector* GetPositionChange() const;
-    void SetPositionChange(const G4ThreeVector& finalPosition);
+    const G4ThreeVector* GetPosition() const;
+    void  ProposePosition(const G4ThreeVector& finalPosition);
     const G4ThreeVector* GetProposedPosition() const;
-    void SetProposedPosition(const G4ThreeVector& finalPosition);
+    void  SetProposedPosition(const G4ThreeVector& finalPosition);
     //  Get/Set the final position of the current particle.
 
+  public:
+   // Following methods will be removed in release 7.0
+   // Using ProposeXXXX methods is recommended to setting
+   // properties in G4ParticleChangeForMSC 
+    void SetMomentumChange(const G4ThreeVector& Pfinal);
+    void SetMomentumChange(G4double Px, G4double Py, G4double Pz);
+    const G4ThreeVector* GetPositionChange() const;
+    void SetPositionChange(const G4ThreeVector& finalPosition);
+ 
   public:
     virtual void DumpInfo() const;
     // for Debug
@@ -113,61 +123,6 @@ class G4ParticleChangeForMSC: public G4VParticleChange
 
 };
 
-inline
- void G4ParticleChangeForMSC::SetMomentumChange(const G4ThreeVector& P)
-{
-  theMomentumDirection = P;
-}
-
-inline
- void G4ParticleChangeForMSC::SetProposedMomentumDirection(const G4ThreeVector& P)
-{
-  theMomentumDirection = P;
-}
-
-inline
- void G4ParticleChangeForMSC::SetMomentumChange(G4double Px, G4double Py, G4double Pz)
-{
-  theMomentumDirection.setX(Px);
-  theMomentumDirection.setY(Py);
-  theMomentumDirection.setZ(Pz);
-}
-
-inline
- const G4ThreeVector* G4ParticleChangeForMSC::GetProposedMomentumDirection() const
-{
-  return &theMomentumDirection;
-}
-
-inline
- void G4ParticleChangeForMSC::SetProposedPosition(const G4ThreeVector& P)
-{
-  thePosition = P;
-}
-
-inline
- const G4ThreeVector* G4ParticleChangeForMSC::GetProposedPosition() const
-{
-  return &thePosition;
-}
-
-inline
- void G4ParticleChangeForMSC::SetPositionChange(const G4ThreeVector& P)
-{
-  thePosition = P;
-}
-
-inline
- const G4ThreeVector* G4ParticleChangeForMSC::GetPositionChange() const
-{
-  return &thePosition;
-}
-
-inline void G4ParticleChangeForMSC::Initialize(const G4Track& track)
-{
-  theStatusChange = track.GetTrackStatus();
-  theMomentumDirection = track.GetMomentumDirection();
-  thePosition = track.GetPosition();
-}
-
+#include "G4ParticleChangeForMSC.icc"
 #endif
+

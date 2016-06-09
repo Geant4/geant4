@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: SteppingAction.cc,v 1.2 2004/06/21 10:57:15 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: SteppingAction.cc,v 1.1 2003/08/11 10:22:10 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -37,10 +34,6 @@
 #include "HistoManager.hh"
 
 #include "G4Track.hh"
-
-#ifdef G4ANALYSIS_USE
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

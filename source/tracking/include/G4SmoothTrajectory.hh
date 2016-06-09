@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.hh,v 1.5 2003/06/16 17:13:07 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4SmoothTrajectory.hh,v 1.8 2004/06/11 14:30:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 //---------------------------------------------------------------
@@ -124,7 +124,11 @@ public: // with description
 
 };
 
-extern G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
+#if defined G4TRACKING_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
+#endif
 
 inline void* G4SmoothTrajectory::operator new(size_t)
 {

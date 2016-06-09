@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PrimaryGeneratorMessenger.hh,v 1.2 2004/06/21 10:57:11 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: PrimaryGeneratorMessenger.hh,v 1.1 2003/08/11 10:14:49 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2003/11/19 18:02:10 gcosmo Exp $
+$Id: History,v 1.12 2004/05/17 07:20:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 17th, 2004          G.Cosmo  (geomdiv-V06-01-01)
+- Corrected handling of offset in Z for reflection.
+
+May 13th, 2004          G.Cosmo  (geomdiv-V06-01-00)
+- Added support for reflection of divided volumes (courtesy of I.Hrivnacova):
+  o Added concrete istance of division-factory G4PVDivisionFactory
+    for the creation of volume divisions on demand.
+  o Enhanced unit-test suite "ExDivisions" to support reflections with
+    additional input argument for positioning type (normal/reflected).
+  o Coworks with tags: geommng-V06-01-00, geomvol-V06-01-00 and
+                       geom-bool-V06-01-00.
 
 Nov 19th, 2003          G.Cosmo  (geomdiv-V05-02-07)
 - Moved verbose output between G4DIVDEBUG compilation flag.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.cc,v 1.9 2003/06/16 17:13:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4VRML2FileSceneHandler.cc,v 1.10 2004/04/19 09:08:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // G4VRML2FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -180,8 +180,8 @@ void G4VRML2FileSceneHandler::connectPort()
 	// open a VRML 2.0 file with determined file name
 	G4cerr << "==========================================="  << G4endl; 
 	G4cerr << "Output VRML 2.0 file: " <<    fVRMLFileName << G4endl; 
-	G4cerr << "Muximal number of file in the destination directory: " << fMaxFileNum << G4endl; 
-	G4cerr << "  (Customizable as: setenv G4VRMLFILE_MAX_FILE_NUM number) " << G4endl;
+	G4cerr << "Maximum number of files in the destination directory: " << fMaxFileNum << G4endl; 
+	G4cerr << "  (Customizable with the environment variable: G4VRMLFILE_MAX_FILE_NUM) " << G4endl;
 	G4cerr << "===========================================" << G4endl; 
 
 	fDest.open(fVRMLFileName) ;  fFlagDestOpen =  true ;

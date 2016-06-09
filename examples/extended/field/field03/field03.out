@@ -1,8 +1,8 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-01 $   (25-March-2004)
+ Geant4 version $Name: geant4-06-02 $   (25-June-2004)
                       Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303.
+                      Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
@@ -128,8 +128,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -138,7 +138,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -156,7 +156,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -186,15 +186,15 @@ Start Run processing.
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
-    1          0 fm  4.0138452 cm   21.79201 m         500 MeV         0 eV  20.288442 cm  20.288442 cm      World  Transportation           0 fm    390.36094 mum   -920.6619 mum
-    2          0 fm  6.5801508 cm      21.74 m         500 MeV         0 eV  5.8028638 cm  26.091306 cm   RadSlice  Transportation           0 fm    493.16452 mum  -869.93607 mum
-    3          0 fm  19.942498 cm   21.58699 m         500 MeV         0 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 mum  -605.81452 mum
+    1          0 fm  4.0138452 cm   21.79201 m         500 MeV0.00049459459 eV  20.288442 cm  20.288442 cm      World  Transportation           0 fm    390.36094 mum   -920.6619 mum
+    2          0 fm  6.5801508 cm      21.74 m         500 MeV0.00014148327 eV  5.8028638 cm  26.091306 cm   RadSlice  Transportation           0 fm    493.16452 mum  -869.93607 mum
+    3          0 fm  19.942498 cm   21.58699 m         500 MeV0.00049863047 eV  20.453361 cm  46.544667 cm   Radiator  Transportation           0 fm    795.60591 mum  -605.81452 mum
     4          0 fm  81.240793 cm   21.58699 m         500 MeV         0 eV  65.848987 cm  1.1239365 m       World  Transportation           0 fm    795.60595 mum   605.81447 mum
-    5          0 fm  94.603131 cm      21.74 m         500 MeV         0 eV  20.453354 cm  1.3284701 m    Radiator  Transportation           0 fm     493.1647 mum   869.93596 mum
-    6          0 fm  98.923943 cm      21.84 m         500 MeV         0 eV  10.914704 cm  1.4376171 m    RadSlice  Transportation           0 fm    295.50359 mum   955.34163 mum
-    7          0 fm  1.0118328 m     21.9895 m         500 MeV         0 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1926162 Ang        1000 mum
-    8          0 fm  1.0118318 m     21.9905 m         500 MeV         0 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763919 mum   999.99805 mum
-    9          0 fm  1.0117238 m          22 m         500 MeV         0 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm     -20.7542 mum   999.78461 mum
+    5          0 fm  94.603131 cm      21.74 m         500 MeV0.00049863047 eV  20.453354 cm  1.3284701 m    Radiator  Transportation           0 fm     493.1647 mum   869.93596 mum
+    6          0 fm  98.923943 cm      21.84 m         500 MeV0.00026608404 eV  10.914704 cm  1.4376171 m    RadSlice  Transportation           0 fm    295.50359 mum   955.34163 mum
+    7          0 fm  1.0118328 m     21.9895 m         500 MeV0.00036999381 eV  15.176601 cm  1.5893831 m       World  Transportation           0 fm    2.1925965 Ang        1000 mum
+    8          0 fm  1.0118318 m     21.9905 m         500 MeV2.444267e-06 eV  1.0000007 mm  1.5903831 m    Absorber  Transportation           0 fm   -1.9763919 mum   999.99805 mum
+    9          0 fm  1.0117238 m          22 m         500 MeV2.3135271e-05 eV  9.5007541 mm  1.5998839 m  OutOfWorld  Transportation           0 fm     -20.7542 mum   999.78461 mum
 Run terminated.
 Run Summary
   Number of events processed : 1

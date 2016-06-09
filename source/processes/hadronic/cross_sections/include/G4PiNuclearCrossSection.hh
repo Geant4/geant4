@@ -29,6 +29,7 @@
 #include "G4PionMinus.hh"
 #include "G4PionPlus.hh"
 #include "G4PiData.hh"
+#include "G4HadTmpUtil.hh"
 
 class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
 {
@@ -41,7 +42,7 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
     G4bool result = false;
     if(aParticle->GetDefinition() == G4PionMinus::PionMinus()) result=true;
     if(aParticle->GetDefinition() == G4PionPlus::PionPlus())   result=true;
-    if(anElement->GetZ() == 1) result = false;
+    if(G4lrint(anElement->GetZ()) == 1) result = false;
     if(aParticle->GetKineticEnergy() > 999.9*GeV) result=false;
     return result;
   }

@@ -20,10 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: TrackingAction.hh,v 1.1 2003/08/11 10:16:04 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
+// $Id: TrackingAction.hh,v 1.2 2004/06/21 10:57:12 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

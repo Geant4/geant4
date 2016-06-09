@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2003/11/06 15:04:40 johna Exp $
+$Id: History,v 1.11 2004/04/27 09:01:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/VRML sub-category
 ------------------------------------------------
+
+19th April 2004  Gabriele Cosmo (VRML-V06-01-00)
+- Fixed typo in printout in G4VRML1FileSceneHandler.cc and
+  G4VRML2FileSceneHandler.cc.
 
 6th November 2003  John Allison  (vis-V05-02-03)
 - G4VRML2SceneHandlerFunc: changed const char* pv_name to G4String pv_name.

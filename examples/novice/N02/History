@@ -1,4 +1,4 @@
-$Id: History,v 1.34 2004/03/08 15:14:46 maire Exp $
+$Id: History,v 1.36 2004/04/05 16:21:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+05-04-04 mma (exampleN02-V06-01-00)
+- ExN02DetectorConstruction: correct definition of XenonGas
+     
+19-03-04 mma (exampleN02-V06-00-01)
+- ExN02PhysicsList: cleanup of include
      
 08-03-04 mma (exampleN02-V06-00-00)
 - ExN02RunAction: removed ApplyCommand("/vis/...") statements.

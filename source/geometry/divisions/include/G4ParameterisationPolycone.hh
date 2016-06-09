@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.hh,v 1.5 2003/11/18 12:15:30 arce Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationPolycone.hh,v 1.6 2004/05/13 14:57:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // 
 // classes G4ParameterisationPolyconeRho,
 //         G4ParameterisationPolyconePhi,
@@ -34,7 +34,9 @@
 // dividing a G4Polycone along one of each axis Rho, Phi, Z.
 
 // History:
-// 09.05.01 - P.Arce First version
+// -------
+// 09.05.01 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
 //---------------------------------------------------------------------
 #ifndef G4ParameterisationPolycone_H
 #define G4ParameterisationPolycone_H 1
@@ -56,11 +58,22 @@ class G4Hype;
 class G4Tubs;
 class G4Polyhedra;
 
+class G4VParameterisationPolycone : public G4VDivisionParameterisation
+{ 
+  public:  // with description
+  
+    G4VParameterisationPolycone( EAxis axis, G4int nCopies,
+                            G4double offset, G4double step,
+                            G4VSolid* msolid, DivisionType divType );
+  
+    virtual ~G4VParameterisationPolycone();
+};
+
 //---------------------------------------------------------------------
 // Class G4ParameterisationPolyconeRho
 //---------------------------------------------------------------------
 
-class G4ParameterisationPolyconeRho : public G4VDivisionParameterisation
+class G4ParameterisationPolyconeRho : public G4VParameterisationPolycone
 { 
   public:  // with description
 
@@ -109,7 +122,7 @@ class G4ParameterisationPolyconeRho : public G4VDivisionParameterisation
 // Class G4ParameterisationPolyconePhi
 //---------------------------------------------------------------------
 
-class G4ParameterisationPolyconePhi : public G4VDivisionParameterisation
+class G4ParameterisationPolyconePhi : public G4VParameterisationPolycone
 { 
   public:  // with description
 
@@ -156,7 +169,7 @@ class G4ParameterisationPolyconePhi : public G4VDivisionParameterisation
 // Class G4ParameterisationPolyconeZ
 //---------------------------------------------------------------------
 
-class G4ParameterisationPolyconeZ : public G4VDivisionParameterisation
+class G4ParameterisationPolyconeZ : public G4VParameterisationPolycone
 { 
   public:  // with description
 

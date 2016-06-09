@@ -21,13 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorMessenger.cc,v 1.5 2003/11/24 16:34:10 grichine Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: Em8DetectorMessenger.cc,v 1.6 2004/05/27 08:39:06 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Em8DetectorMessenger.hh"
 
@@ -38,7 +35,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+///////////////////////////////////////////////////////////////////////////////////
 
 Em8DetectorMessenger::Em8DetectorMessenger(Em8DetectorConstruction * Em8Det)
 :Em8Detector(Em8Det)
@@ -91,6 +88,31 @@ Em8DetectorMessenger::Em8DetectorMessenger(Em8DetectorConstruction * Em8Det)
   WorldRCmd->SetDefaultUnit("mm");
   WorldRCmd->SetRange("WSizeR>0.");
   WorldRCmd->AvailableForStates(G4State_Idle);
+
+
+  ElectronCutCmd = new G4UIcmdWithADoubleAndUnit("/calor/setElectronCut",this);
+  ElectronCutCmd->SetGuidance("Set electron cut in mm for vertex region");
+  ElectronCutCmd->SetParameterName("ElectronCut",false,false);
+  ElectronCutCmd->SetDefaultUnit("mm");
+  ElectronCutCmd->SetRange("ElectronCut>0.");
+  ElectronCutCmd->AvailableForStates(G4State_Idle);
+
+
+  PositronCutCmd = new G4UIcmdWithADoubleAndUnit("/calor/setPositronCut",this);
+  PositronCutCmd->SetGuidance("Set positron cut in mm for vertex region");
+  PositronCutCmd->SetParameterName("PositronCut",false,false);
+  PositronCutCmd->SetDefaultUnit("mm");
+  PositronCutCmd->SetRange("PositronCut>0.");
+  PositronCutCmd->AvailableForStates(G4State_Idle);
+
+
+  GammaCutCmd = new G4UIcmdWithADoubleAndUnit("/calor/setGammaCut",this);
+  GammaCutCmd->SetGuidance("Set gamma cut in mm for vertex region");
+  GammaCutCmd->SetParameterName("GammaCut",false,false);
+  GammaCutCmd->SetDefaultUnit("mm");
+  GammaCutCmd->SetRange("GammaCut>0.");
+  GammaCutCmd->AvailableForStates(G4State_Idle);
+
   
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
@@ -98,16 +120,10 @@ Em8DetectorMessenger::Em8DetectorMessenger(Em8DetectorConstruction * Em8Det)
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
       
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false,false);
-  MagFieldCmd->SetDefaultUnit("tesla");
-  MagFieldCmd->AvailableForStates(G4State_Idle);  
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////
 
 Em8DetectorMessenger::~Em8DetectorMessenger()
 {
@@ -119,43 +135,60 @@ Em8DetectorMessenger::~Em8DetectorMessenger()
   delete WorldZCmd;
   delete WorldRCmd;
   delete UpdateCmd;
-  delete MagFieldCmd;
+ 
   delete Em8detDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////////
 
 void Em8DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == AbsMaterCmd )
-   { Em8Detector->SetAbsorberMaterial(newValue);}
-   
-  if( command == WorldMaterCmd )
-   { Em8Detector->SetWorldMaterial(newValue);}
-   
-  if( command == AbsThickCmd )
-   { Em8Detector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == AbsRadCmd )
-   { Em8Detector->SetAbsorberRadius(AbsRadCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == AbsZposCmd )
-   { Em8Detector->SetAbsorberZpos(AbsZposCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == WorldZCmd )
-   { Em8Detector->SetWorldSizeZ(WorldZCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == WorldRCmd )
-   { Em8Detector->SetWorldSizeR(WorldRCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == UpdateCmd )
-   { Em8Detector->UpdateGeometry(); }
-
-  if( command == MagFieldCmd )
   { 
-    // Em8Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));
+    Em8Detector->SetAbsorberMaterial(newValue);
+  } 
+  if( command == WorldMaterCmd )
+  { 
+    Em8Detector->SetWorldMaterial(newValue);
+  } 
+  if( command == AbsThickCmd )
+  { 
+    Em8Detector->SetAbsorberThickness(AbsThickCmd->GetNewDoubleValue(newValue));
+  } 
+  if( command == AbsRadCmd )
+  { 
+    Em8Detector->SetAbsorberRadius(AbsRadCmd->GetNewDoubleValue(newValue));
+  } 
+  if( command == AbsZposCmd )
+  { 
+    Em8Detector->SetAbsorberZpos(AbsZposCmd->GetNewDoubleValue(newValue));
   }
+  if( command == WorldZCmd )
+  { 
+    Em8Detector->SetWorldSizeZ(WorldZCmd->GetNewDoubleValue(newValue));
+  } 
+  if( command == WorldRCmd )
+  { 
+    Em8Detector->SetWorldSizeR(WorldRCmd->GetNewDoubleValue(newValue));
+  }
+  if( command == ElectronCutCmd )
+  { 
+    Em8Detector->SetElectronCut(WorldRCmd->GetNewDoubleValue(newValue));
+  }
+  if( command == PositronCutCmd )
+  { 
+    Em8Detector->SetPositronCut(WorldRCmd->GetNewDoubleValue(newValue));
+  }
+  if( command == GammaCutCmd )
+  { 
+    Em8Detector->SetGammaCut(WorldRCmd->GetNewDoubleValue(newValue));
+  }
+  if( command == UpdateCmd )
+  { 
+    Em8Detector->UpdateGeometry(); 
+  }
+
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////

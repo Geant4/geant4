@@ -1,0 +1,35 @@
+$Id: History,v 1.4 2004/05/21 10:51:48 mpiergen Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+21.05.2004   Michela Piergentili, tag medical_linac-V06-01-03
+	     modified documentation
+
+21.05.2004   Michela Piergentili, tag medical_linac-V06-01-02
+	     added README
+
+14.05.2004   Michela Piergentili, tag medical_linac-V06-01-01
+	     decorator design iteration implemented, bug fixed in 
+	     MedLinacPhantomSD, cut per region introduced for the
+	     first collimator
+
+02.04.2004   Michela Piergentili, tag medical_linac-V06-01-00
+	     geometry completed, bug fixed in DetectorConstruction
+
+18.03.2004   Michela Piergentili, tag medical_linac-V06-00-00
+             First created
+

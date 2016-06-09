@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.23 2003/11/03 03:27:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ProcessManager.cc,v 1.24 2004/05/11 15:17:18 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -323,18 +323,18 @@ G4int G4ProcessManager::InsertAt(G4int ip, G4VProcess* process, G4int ivec)
 }
 
 // ///////////////////////////////////////
-G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess* process, G4int ivec)
+G4int G4ProcessManager::RemoveAt(G4int ip, G4VProcess* , G4int ivec)
 {
   G4ProcessVector* pVector = theProcVector[ivec];
   // check position
   if ( (ip<0) || (ip >= pVector->entries()) ) return -1;
 
   //check pointer and remove
-  if ((*pVector)[ip]== process) {
-    pVector->removeAt(ip);
-  } else {
-    return -1;
-  }    
+  //if ((*pVector)[ip]== process) {
+  pVector->removeAt(ip);
+  //} else {
+  //  return -1;
+  //}    
 
   // correct index
   for(G4int iproc=0; iproc<numberOfProcesses; iproc++) {
@@ -489,37 +489,34 @@ G4VProcess* G4ProcessManager::RemoveProcess(G4int index)
   // remove process
   G4VProcess* removedProcess = (*theProcessList)[index];
 
-   if (pAttr->isActive) {
-    // remove process from vectors if the process is active
-    for (G4int ivec=0; ivec<SizeOfProcVectorArray; ivec++) {
-      G4ProcessVector* pVector = theProcVector[ivec];
-      G4int idx = pAttr->idxProcVector[ivec];
-      if ((idx >= 0)  && (idx < pVector->entries())) {
-        //remove
-	if (RemoveAt(idx, removedProcess, ivec) <0) {
-	  G4String anErrorMessage("Bad index in attribute");
-	  anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
-	  anErrorMessage += "process[" + removedProcess->GetProcessName() + "]  " ;
-	  G4Exception( "G4ProcessManager::RemoveProcess()","Fatal Error",
-		 FatalException,anErrorMessage);	 
-	  return 0;
-	}    
-      } else if (idx<0) {
-        // corresponding DoIt is not active  
-      } else {
-        // idx is out of range
-	G4String anErrorMessage("Index is out of range ");
+  if (!(pAttr->isActive)) { ActivateProcess(index);}
+  // remove process from vectors if the process is active
+  for (G4int ivec=0; ivec<SizeOfProcVectorArray; ivec++) {
+    G4ProcessVector* pVector = theProcVector[ivec];
+    G4int idx = pAttr->idxProcVector[ivec];
+    if ((idx >= 0)  && (idx < pVector->entries())) {
+      //remove
+      if (RemoveAt(idx, removedProcess, ivec) <0) {
+	G4String anErrorMessage("Bad index in attribute");
 	anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
 	anErrorMessage += "process[" + removedProcess->GetProcessName() + "]  " ;
 	G4Exception( "G4ProcessManager::RemoveProcess()","Fatal Error",
 		     FatalException,anErrorMessage);	 
 	return 0;
-      }
+      }    
+    } else if (idx<0) {
+      // corresponding DoIt is not active  
+    } else {
+      // idx is out of range
+      G4String anErrorMessage("Index is out of range ");
+      anErrorMessage += "for particle[" + theParticleType->GetParticleName() + "] ";
+      anErrorMessage += "process[" + removedProcess->GetProcessName() + "]  " ;
+      G4Exception( "G4ProcessManager::RemoveProcess()","Fatal Error",
+		   FatalException,anErrorMessage);	 
+      return 0;
     }
-    pAttr->isActive = false;
-  } else { 
-    // the process is inactive
   }
+  pAttr->isActive = false;
   // remove from the process List and delete the attribute
   theProcessList->removeAt(index);
   G4ProcessAttrVector::iterator itr;
@@ -911,9 +908,9 @@ void G4ProcessManager::CreateGPILvectors()
 //-- create GetPhysicalInteractionLength process vectors just as the inverse
 //-- order of DoIt process vector
   for(G4int k=0; k<theProcessList->entries(); k++) {
-    GetAttribute((*theProcessList)(k))->idxProcVector[0]=-1;
-    GetAttribute((*theProcessList)(k))->idxProcVector[2]=-1;
-    GetAttribute((*theProcessList)(k))->idxProcVector[4]=-1;
+    GetAttribute((*theProcessList)[k])->idxProcVector[0]=-1;
+    GetAttribute((*theProcessList)[k])->idxProcVector[2]=-1;
+    GetAttribute((*theProcessList)[k])->idxProcVector[4]=-1;
   }
 
   for(G4int i=0; i<SizeOfProcVectorArray; i += 2) {

@@ -1,0 +1,94 @@
+
+     =========================================================
+ 		      Geant4 - ExDiane example
+     =========================================================
+
+                             README
+                      ---------------------
+
+------------------------------------------------------------------------
+----> Introduction                                                    
+
+This example shows how to run a Geant4 application in a parallel mode
+using DIANE (DIstributed ANalysis Environment).
+
+With DIANE the simulation may be run in sequential or parallel mode
+without changing the code of the Geant4 application. Using a dedicated
+cluster or geographically distributed resources (e.g. GRID) is
+completely transparent for the user.
+
+For more details about DIANE, have a look at http://cern.ch/diane
+
+The ExDiane example derives from the Geant4 advanced example
+brachytherapy. The original application code is the same.  An
+interface class (BrachySimulation) has been added to replace the
+main() function.
+
+Please look at the documentation of the brachytherapy advanced example
+to know details about the functionality of the application:
+   - geant4/examples/advanced/brachytherapy 
+   - http://www.ge.infn.it/geant4/examples/index.html
+
+-------------------------------------------------------------------------
+----> 2.SET-UP 
+                                                                       
+ - example enviroment with the compiler 3.2.3                              
+    compiler = gcc-3.2.3
+    G4SYSTEM = linux-g++                                               
+
+ - other environment variables which need to be set:                   
+    G4LEDATA: points to low energy data base - G4EMLOW2.3              
+
+ - download DIANE
+    You need to have python 2.2 or greater.
+    
+  * AUTOMATIC INSTALLATION OF DIANE
+    Execute this command:
+    > python2 diane.installation.manager --packages=brachy DIANE-1.0.0 download
+    Get the diane.installation.manager script from 
+    http://cern.ch/diane/download.html
+
+  * MANUAL INSTALLATION OF DIANE
+    Make sure that you have AIDA 3.2.1, PI 1.2.1. Download them from
+      http://aida.freehep.org/
+      http://www.cern.ch/PI
+    Download DIANE executing this command:
+    > python2 diane.installation.manager DIANE-1.0.0 download
+
+------------------------------------------------------------------------
+----> 3.How to compile the example.
+                                       
+setenv G4ANALYSIS_USE 1 -> to activate the analysis
+setenv G4DIANE_USE 1    -> to activate the use of DIANE
+> gmake
+------------------------------------------------------------------------
+----> 4.How to run the example.                                       
+
+Two macros are provided as example: iridium.job and iodium.job
+They correspond to the Geant4 macros: IridiumSourceMacro.mac and
+IodiumSourceMacro.mac
+
+- batch mode running through DIANE:
+  diane.startjob --job=iodium.job -w 3@localhost --wms=xterm                                                ^        ^    
+                  input macro        number of workers
+------------------------------------------------------------------------
+----> 4. Simulation output                                            
+
+if ANALYSIS_USE = 1 in the set-up, the output is brachytherapy.xml    
+
+ It contains:
+ 1)1Dhistogram with the primary particle energy                       
+ 2)2Dhistogram with the distribution of energy in the plane 
+   (x,z,energy) containing the source
+ 3)1Dhistogram with the energy deposit along the X axis in the plane  
+   containing the source.
+                                                                      
+Units:   the energy deposit is in MeV;
+         x, y, z in mm for histograms                                 
+-------------------------------------------------------------------------
+Authors: Susanna Guatelli, Kuba Moscicki
+
+for comments, advices, doubts and questions: 
+guatelli@ge.infn.it, Jakub.Moscicki@cern.ch
+
+- last modified: Susanna Guatelli and Kuba Moscicki 25/5/2004

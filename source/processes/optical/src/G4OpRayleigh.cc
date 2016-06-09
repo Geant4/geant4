@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.9 2003/12/01 15:20:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4OpRayleigh.cc,v 1.10 2004/04/27 00:27:30 gum Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -75,6 +75,8 @@ G4OpRayleigh::G4OpRayleigh(const G4String& processName)
 {
 
         thePhysicsTable = 0;
+
+        DefaultWater = false;
 
         if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;
@@ -201,21 +203,34 @@ void G4OpRayleigh::BuildThePhysicsTable()
 
         for (G4int i=0 ; i < numOfMaterials; i++)
         {
-                G4PhysicsOrderedFreeVector* ScatteringLengths =
+            G4PhysicsOrderedFreeVector* ScatteringLengths =
                                 new G4PhysicsOrderedFreeVector();
+
+            G4MaterialPropertiesTable *aMaterialPropertiesTable =
+                         (*theMaterialTable)[i]->GetMaterialPropertiesTable();
+                                                                                
+            if(aMaterialPropertiesTable){
+
+              G4MaterialPropertyVector* AttenuationLengthVector =
+                            aMaterialPropertiesTable->GetProperty("RAYLEIGH");
+
+              if(!AttenuationLengthVector){
 
                 if ((*theMaterialTable)[i]->GetName() == "Water")
                 {
-			G4MaterialPropertiesTable *MaterialPT =
-			(*theMaterialTable)[i]->GetMaterialPropertiesTable();
-			// Call utility routine to Generate
-			// Rayleigh Scattering Lengths
-			ScatteringLengths =
-				RayleighAttenuationLengthGenerator(MaterialPT);
-		}
+		   // Call utility routine to Generate
+		   // Rayleigh Scattering Lengths
 
-		thePhysicsTable->insertAt(i,ScatteringLengths);
-	} 
+                   DefaultWater = true;
+
+		   ScatteringLengths =
+		   RayleighAttenuationLengthGenerator(aMaterialPropertiesTable);
+                }
+              }
+	    }
+
+	    thePhysicsTable->insertAt(i,ScatteringLengths);
+        } 
 }
 
 // GetMeanFreePath()
@@ -232,7 +247,7 @@ G4double G4OpRayleigh::GetMeanFreePath(const G4Track& aTrack,
 
         G4double AttenuationLength = DBL_MAX;
 
-        if (aMaterial->GetName() == "Water") {
+        if (aMaterial->GetName() == "Water" && DefaultWater){
 
            G4bool isOutRange;
 
@@ -298,9 +313,12 @@ G4OpRayleigh::RayleighAttenuationLengthGenerator(G4MaterialPropertiesTable *aMPT
 
         G4PhysicsOrderedFreeVector *RayleighScatteringLengths = 
 				new G4PhysicsOrderedFreeVector();
-        Rindex->ResetIterator();
 
-        while (++(*Rindex)) {
+        if (Rindex ) {
+
+           Rindex->ResetIterator();
+
+           while (++(*Rindex)) {
 
                 e = (Rindex->GetPhotonMomentum());
 
@@ -325,6 +343,8 @@ G4OpRayleigh::RayleighAttenuationLengthGenerator(G4MaterialPropertiesTable *aMPT
 		}
                 RayleighScatteringLengths->
 			InsertValues(Rindex->GetPhotonMomentum(), Dist);
+           }
+
         }
 
 	return RayleighScatteringLengths;

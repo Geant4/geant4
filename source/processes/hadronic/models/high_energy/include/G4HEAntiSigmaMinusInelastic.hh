@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiSigmaMinusInelastic.hh,v 1.10 2003/07/01 15:42:21 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HEAntiSigmaMinusInelastic.hh,v 1.11 2004/04/22 18:59:57 dwright Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -34,11 +34,23 @@
 #ifndef G4HEAntiSigmaMinusInelastic_h
 #define G4HEAntiSigmaMinusInelastic_h 1
 
+// Class description:
+// High energy parameterized model for anti-Sigma- inelastic scattering.  This
+// class is responsible for producing the final state of the interaction and
+// is typically valid for incident anti-Sigma- energies above 20 GeV.  This
+// physics may be invoked by registering an instance of the class with
+// G4AntiSigmaMinusInelasticProcess in the user's physics list.
+//
+// This class is derived from G4HEInelastic which in turn is derived from
+// G4HadronicInteraction.
+
+// Class Description - End
+
 #include "G4HEInelastic.hh"
 
 class G4HEAntiSigmaMinusInelastic : public G4HEInelastic  
 {
- public: 
+ public:  // with description
         G4HEAntiSigmaMinusInelastic() : G4HEInelastic()
            {
               theMinEnergy =  20*GeV;

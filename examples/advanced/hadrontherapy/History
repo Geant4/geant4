@@ -1,0 +1,24 @@
+-----------------------------------------------------------
+$Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
+-----------------------------------------------------------
+
+     ====================================================
+            Geant4 - Hadrontherapy
+     ====================================================
+
+                      Category History file
+                      ---------------------
+28.05.2005 - S. Guatelli
+                Update of the README, code review for public release.
+
+27.02.2004 - G.A.P. Cirrone
+             	Created, first version.
+
+13.03.2004 - G.A.P. Cirrone
+		Redefinition of the design.
+
+14.03.2004 - G.A.P. Cirrone
+		Attempt to insert AIDA class for .xml file creation.
+
+29.03.2004 - G. Russo
+		Redefinition of the physics list with hadronic model.

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2003/10/06 10:02:25 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PhysicsList.hh,v 1.2 2004/06/09 15:29:43 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -66,8 +66,6 @@ class PhysicsList: public G4VModularPhysicsList
     G4double currentDefaultCut;
     
     G4VPhysicsConstructor*  emPhysicsList;
-    G4VPhysicsConstructor*  generalPhysicsList;
-    G4VPhysicsConstructor*  particleList;
     G4String emName;
     
     DetectorConstruction* pDet;

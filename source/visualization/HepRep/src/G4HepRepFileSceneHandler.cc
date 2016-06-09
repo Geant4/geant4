@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.18 2004/03/15 08:00:22 perl Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.19 2004/05/28 04:59:54 perl Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -674,6 +674,8 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     // Additional attributes.
     hepRepXMLWriter->addAttValue("Layer",hepRepXMLWriter->typeDepth);
     hepRepXMLWriter->addAttValue("LVol", fpCurrentLV->GetName());
+    hepRepXMLWriter->addAttValue("Region", fpCurrentLV->GetRegion()->GetName());
+    hepRepXMLWriter->addAttValue("RootRegion", fpCurrentLV->IsRootRegion());
     hepRepXMLWriter->addAttValue("Solid", fpCurrentLV->GetSolid()->GetName());
     hepRepXMLWriter->addAttValue("EType", fpCurrentLV->GetSolid()->GetEntityType());
     hepRepXMLWriter->addAttValue("Material", fpCurrentLV->GetMaterial()->GetName());
@@ -731,6 +733,8 @@ void G4HepRepFileSceneHandler::CheckFileOpen() {
     fileCounter++;
 
     hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
+    hepRepXMLWriter->addAttDef("Region", "Cuts Region", "Physics","");
+    hepRepXMLWriter->addAttDef("RootRegion", "Root Region", "Physics","");
     hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
     hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
     hepRepXMLWriter->addAttDef("Material", "Material Name", "Physics","");

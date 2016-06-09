@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: IonC12.hh,v 1.3 2003/08/11 10:26:24 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: IonC12.hh,v 1.4 2004/06/21 10:57:10 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // Each class inheriting from G4VIon
 // corresponds to a particle type; one and only one

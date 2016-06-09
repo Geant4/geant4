@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.12 2003/03/25 14:56:17 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Allocator.hh,v 1.14 2004/05/14 17:40:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -60,6 +60,14 @@ class G4Allocator
     inline void FreeSingle(Type* anElement);
       // Malloc and Free methods to be used when overloading
       // new and delete operators in the client <Type> object
+
+    inline void ResetStorage();
+      // Returns allocated storage to the free store, resets
+      // allocator and page sizes.
+      // Note: contents in memory are lost using this call !
+
+    inline int GetAllocatedSize();
+      // Returns the size of the total memory allocated
 
   private:
 
@@ -149,8 +157,8 @@ void G4Allocator<Type>::FreeSingle(Type* anElement)
 
   // The gcc-3.1 compiler will complain and not correctly handle offsets
   // computed from non-POD types. Pointers to member data should be used
-  // instead. This advanced C++ feature seems not to work on earlier
-  // versions of the same compiler.
+  // instead.  This C++ feature seems not to work on earlier versions of
+  // the same compiler.
   //
   #if (__GNUC__==3) && (__GNUC_MINOR__>0)
     Type G4AllocatorUnit<Type>::*pOffset = &G4AllocatorUnit<Type>::fElement;
@@ -192,6 +200,54 @@ void G4Allocator<Type>::AddNewPage()
   }
   aPage->fUnits[unit_no].fNext = fFreeList;
   fFreeList = &aPage->fUnits[0];
+}
+
+// ************************************************************
+// ResetStorage
+// ************************************************************
+//
+template <class Type>
+void G4Allocator<Type>::ResetStorage()
+{
+  // Clear all allocated storage and return it to the free store
+  //
+  G4AllocatorPage<Type> * aPage;
+  G4AllocatorPage<Type> * aNextPage;
+
+  aPage = fPages;
+  while (aPage != 0)
+  {
+    aNextPage = aPage->fNext;
+    free(aPage->fUnits);
+    delete aPage;
+    aPage = aNextPage;
+  }
+
+  // Reset unit&page size and allocate a single page
+  //
+  fPages = 0;
+  fFreeList = 0;
+  fUnitSize = sizeof(G4AllocatorUnit<Type>);
+  fPageSize = ( (fUnitSize < 512) ? 1024 : (fUnitSize*10) );
+  AddNewPage();
+}
+
+// ************************************************************
+// GetAllocatedSize
+// ************************************************************
+//
+template <class Type>
+int G4Allocator<Type>::GetAllocatedSize()
+{
+  G4AllocatorPage<Type> * aPage = fPages;
+  int count = 0;
+
+  while (aPage != 0)
+  {
+    aPage = aPage->fNext;
+    count++;
+  }
+  return count*fPageSize;
 }
 
 // ************************************************************

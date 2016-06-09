@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.3 2003/11/07 15:38:29 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: SteppingAction.cc,v 1.5 2004/03/31 11:34:59 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -36,7 +36,7 @@
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
 #endif
 
@@ -63,11 +63,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   if (process) runAction->CountProcesses(process->GetProcessName());
 
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   G4double charge  = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
   G4double steplen = aStep->GetStepLength();
   if (charge != 0.) runAction->GetHisto(2)->fill(steplen);
-#endif                    
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

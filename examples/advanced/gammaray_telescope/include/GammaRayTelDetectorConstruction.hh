@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.hh,v 1.6 2001/07/11 09:56:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: GammaRayTelDetectorConstruction.hh,v 1.7 2004/06/02 15:21:29 flongo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -44,6 +44,7 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
+class G4Region;
 class GammaRayTelDetectorMessenger;
 class GammaRayTelTrackerSD;
 class GammaRayTelAnticoincidenceSD;
@@ -264,6 +265,8 @@ private:
   GammaRayTelCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
   GammaRayTelAnticoincidenceSD* anticoincidenceSD;  //pointer to the sensitive detector
 
+  G4Region* aTKRRegion; // TKR cut region
+  G4Region* aCALRegion; // CAL cut region
 
 private:
     

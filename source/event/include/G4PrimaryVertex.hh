@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh,v 1.8 2003/09/12 21:51:32 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PrimaryVertex.hh,v 1.11 2004/06/11 14:11:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -139,7 +139,11 @@ class G4PrimaryVertex
       { return userInfo; }
 };
 
-extern G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
+#if defined G4EVENT_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4PrimaryVertex> aPrimaryVertexAllocator;
+#endif
 
 inline void * G4PrimaryVertex::operator new(size_t)
 {

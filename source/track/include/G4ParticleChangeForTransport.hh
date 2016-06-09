@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.12 2003/09/19 19:08:14 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParticleChangeForTransport.hh,v 1.13 2004/05/08 15:28:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -90,16 +90,25 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     //  Get/Set the touchable of the current particle.
     //  Note: Touchable in PostStepPoint will be updated only after PostStepDoIt
 
-    G4Material* GetMaterialChange() const;
-    void SetMaterialChange(G4Material* fMaterial);
-    //  Get/Set the material in the touchable of the current particle.
+    G4Material* GetMaterialInTouchable() const;
+    void SetMaterialInTouchable(G4Material* fMaterial);
+    //  Get/Propose the material in the touchable of the current particle.
 
-    const G4MaterialCutsCouple* GetMaterialCutsCoupleChange() const;
-    void SetMaterialCutsCoupleChange(const G4MaterialCutsCouple* fMaterialCutsCouple);
+    const G4MaterialCutsCouple* GetMaterialCutsCoupleInTouchable() const;
+    void SetMaterialCutsCoupleInTouchable(const G4MaterialCutsCouple* fMaterialCutsCouple);
     //  Get/Set the materialCutsCouple in the touchable of the current particle.
 
     G4bool GetMomentumChanged() const;
     void SetMomentumChanged(G4bool b);
+
+  public:
+   // Following methods will be removed in release 7.0
+   // Using ProposeXXXX methods is recommended to setting
+   // properties in G4ParticleChangeForDecay   
+  G4Material* GetMaterialChange() const;
+  void SetMaterialChange(G4Material* fMaterial);
+  const G4MaterialCutsCouple* GetMaterialCutsCoupleChange() const;
+  void SetMaterialCutsCoupleChange(const G4MaterialCutsCouple* fMaterialCutsCouple);
 
   public:
     virtual void DumpInfo() const;
@@ -131,3 +140,9 @@ class G4ParticleChangeForTransport: public G4ParticleChange
 #include "G4ParticleChangeForTransport.icc"
 
 #endif
+
+
+
+
+
+

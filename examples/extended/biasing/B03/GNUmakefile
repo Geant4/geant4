@@ -1,22 +1,20 @@
-# $Id: GNUmakefile,v 1.11 2003/06/30 16:40:27 dressel Exp $
+# $Id: GNUmakefile,v 1.12 2004/06/20 17:26:13 daquinog Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 #
-# The variable PYTHON_DIR has to be setup. See ../README.
+# The variable PI_BASE_DIR has to be setup. See ../README.
 #
 
 name := exampleB03
 G4TARGET := $(name)
 G4EXLIB := true
 
-
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
-
 
 SWIGINC = include/B03App.i
 SWIGCC = src/B03App_wrap.cc
@@ -26,26 +24,28 @@ SWIGSO = $(G4WORKDIR)/tmp/$(G4SYSTEM)/exampleB03/_B03App.so
 
 moduleName = B03App
 
-
 MYLIBS = $(subst -l$(name),,$(LDLIBS)) 	
 
-SWIG = $(ANAPHETOP)/specific/$(PLATF)/PublicDomainPackages/2.0.0/bin/swig-1.3.15
+SWIG = ${SWIG_BASE_DIR}/bin/swig-${SWIGVERSION}
 
-
-.PHONY: all
+.PHONY: clean_all all
 all: $(SWIGD) $(SWIGCC) lib $(SWIGSO) bin
 
 
-CPPFLAGS += -I$(ANAPHETOP)/specific/$(PLATF)/PublicDomainPackages/2.0.0/include/python$(PYTHON_VERSION)
+CPPFLAGS += -I${PI_BASE_DIR}/${PI_VER}/external/Python/2.2.2/${PLATF}/include/python${PYTHONVERSION}
 CXXFLAGS += -w
 
-
 LDFLAGS += \
-	   -L$(ANAPHETOP)/specific/$(PLATF)/PublicDomainPackages/2.0.0/lib/python$(PYTHON_VERSION)/config \
+	   -L${PI_BASE_DIR}/${PI_VER}/external/Python/2.2.2/${PLATF}/lib/python${PYTHONVERSION}/config \
 	   -L/lib \
-	   -lnsl -ldl -lreadline /lib/libtermcap.so.2  -lieee -lpthread -lutil -lexampleB03 -lpython$(PYTHON_VERSION)
+	   -lnsl -ldl -lreadline /lib/libtermcap.so.2  -lieee -lpthread -lutil -lexampleB03 -lpython$(PYTHONVERSION)
 
 include $(G4INSTALL)/config/binmake.gmk
+
+ifdef G4ANALYSIS_USE
+ CPPFLAGS += `aida-config --include`
+ LDFLAGS  += `aida-config --lib`
+endif
 
 $(SWIGSO): $(objectfilesWrapper) 
 	@echo Creating shared library:  $@  
@@ -58,6 +58,12 @@ src/%_wrap.cc: include/%.i
 
 ${G4WORKDIR}/tmp/${G4SYSTEM}/$(name): 
 	@mkdir ${G4WORKDIR}/tmp/${G4SYSTEM}/$(name)
+
+
+clean_all: clean
+	@rm -f B03App.pyc
+	@rm B03App.py
+	@rm src/B03App_wrap.cc
 
 
 #libdir = $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.18 2003/06/16 17:13:11 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Trajectory.hh,v 1.21 2004/06/11 14:30:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 //---------------------------------------------------------------
@@ -129,7 +129,11 @@ public: // with description
 
 };
 
-extern G4Allocator<G4Trajectory> aTrajectoryAllocator;
+#if defined G4TRACKING_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4Trajectory> aTrajectoryAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4Trajectory> aTrajectoryAllocator;
+#endif
 
 inline void* G4Trajectory::operator new(size_t)
 {

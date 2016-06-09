@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2004/03/15 12:18:42 maire Exp $
+$Id: History,v 1.117 2004/06/07 13:51:57 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 Jun 04: G.Cosmo (stand-V06-01-03)
+- G4PAIxSection.cc: fix in constructor for compilation error in VC++ 6.0
+- Moved usage of statics in inline functions to non-inline to allow
+  porting for DLLs on Windows. Modified files:
+  G4PAIonisation[.icc.cc], G4SynchrotronRadiation[.hh.cc].
+
+27 May 04: V.Ivant (stand-V06-01-02)
+- Set integral regime to be default for G4ionIonisation and G4hIonisation
+- Exclude G4PAIwithPhotons and G4InitXscPAI classes previously included
+  by mistake but still under development ...
+
+27 May 04: V.Ivant (stand-V06-01-01)
+- (V.Grichine) Updated and optimise PAI model
+- (L.Urban) Minor fix in G4eBremsstrahlung - units properly used
+
+04 May 04: V.Ivant (stand-V06-01-00)
+- (V.Grichine) Updated PAI model - use precise integrator, 
+  add photon emission, add G4PAIwithPhotons and G4PAIxSection classes
      
 15 Mar 04: mma (stand-V06-00-04)
      

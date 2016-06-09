@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2003/12/01 21:09:20 perl Exp $
+$Id: History,v 1.75 2004/06/14 08:30:32 gcosmo Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,7 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+08-04-04 Guy Barrand (exampleN03-V06-01-00)
+- exampleN03.cc : Windows : Have G4UI_USE_WIN32 in order to have 
+  a default Windows GUI coworking with the OpenGL Windows driver.
+- exN03Vis9.mac : demo of the OpenGL Windows driver.
+- gui.mac : change menu items in order to reflect the used vis driver.
+  
+19-03-04 M.Maire (exampleN03-V06-00-00)
+- ExN03PhysicsList: cleanup of include.
+  
 01-12-03 J.Perl (exampleN03-V05-02-08)
 - Removed extraneous flushes from visTutor/heprep.mac to match new
   endOfRunAction behavior.

@@ -1,6 +1,6 @@
-# $Id: History,v 1.18 2003/12/09 08:48:33 daquinog Exp $
+# $Id: History,v 1.19 2004/06/09 15:04:34 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-00-patch-01 $
+# GEANT4 tag $Name: geant4-06-02 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jun 9th, 2004 G.Daquino - Tiara-V06-01-00
+- Passing from Anaphe to PI, Tiara has been partly fixed. Still problems 
+  are present on the compatibility between the PI and Anaphe pointers for hf.
+  However, runSimNoAnalysis.py works correctly, being independent of the
+  analysis tool.
 
 Dec  9th, 2003 G.Daquino - Tiara-V05-02-06
 - Fixed implementation of TiaraPrimaryGeneratorAction, where copy

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.8 2004/03/11 13:09:29 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.13 2004/06/18 12:47:05 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -42,9 +42,12 @@
 //
 G4Navigator::G4Navigator()
   : fWasLimitedByGeometry(false), fTopPhysical(0),
-    fCheck(false), fVerbose(0)
+    fCheck(false), fPushed(false), fVerbose(0)
 {
   ResetStackAndState();
+
+  fActionThreshold_NoZeroSteps  = 10; 
+  fAbandonThreshold_NoZeroSteps = 25; 
 }
 
 // ********************************************************************
@@ -230,6 +233,20 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       targetSolid = fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid();
       localPoint = fHistory.GetTopTransform().TransformPoint(globalPoint);
       insideCode = targetSolid->Inside(localPoint);
+#ifdef G4VERBOSE
+      if(( fVerbose == 1 ) && ( fCheck ))
+      {
+         G4String solidResponse = "-kInside-";
+         if (insideCode == kOutside)
+           solidResponse = "-kOutside-";
+         else if (insideCode == kSurface)
+           solidResponse = "-kSurface-";
+         G4cout << "*** G4Navigator::LocateGlobalPointAndSetup(): ***" << G4endl
+                << "    Invoked Inside() for solid: " << targetSolid->GetName()
+                << ". Solid replied: " << solidResponse << G4endl
+                << "    For local point p: " << localPoint << G4endl;
+      }
+#endif
     }
     else
     {
@@ -464,8 +481,9 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
          break;
 
        case kReplica:
-         G4Exception("G4Navigator::LocateGlobalPointWithinVolume()", "NotApplicable",
-                     FatalException, "Not applicable for replicated volumes.");
+         G4Exception("G4Navigator::LocateGlobalPointWithinVolume()",
+                     "NotApplicable", FatalException,
+                     "Not applicable for replicated volumes.");
          break;
      }
    }
@@ -549,6 +567,9 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   G4double Step = DBL_MAX;
   G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
+
+  static G4int sNavCScalls=0;
+  sNavCScalls++;
 
 #ifdef G4VERBOSE
   G4int oldcoutPrec= G4cout.precision(8);
@@ -759,11 +780,73 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fPreviousSftOrigin = pGlobalpoint;
   fPreviousSafety = pNewSafety; 
 
-  // Edge if two consecutive steps are zero, because
-  // at least two candidate volumes must have been checked
+  // Count zero steps - one can occur due to changing momentum at a boundary
+  //                  - one, two (or a few) can occur at common edges between
+  //                    volumes
+  //                  - more than two is likely a problem in the geometry
+  //                    description or the Navigation 
+
+  // Rule of thumb: likely at an Edge if two consecutive steps are zero,
+  //                because at least two candidate volumes must have been
+  //                checked
   //
-  fLocatedOnEdge = fLastStepWasZero && (Step==0);
-  fLastStepWasZero = (Step==0);
+  fLocatedOnEdge   = fLastStepWasZero && (Step==0.0);
+  fLastStepWasZero = (Step==0.0);
+  if (fPushed)  fPushed = fLastStepWasZero;
+
+  // Handle large number of consecutive zero steps
+  //
+  if ( fLastStepWasZero )
+  {
+    fNumberZeroSteps++;
+#ifdef G4DEBUG_NAVIGATION
+    if( fNumberZeroSteps > 1 )
+    {
+       G4cout << "G4Nav - CompStep: another zero step, # " << fNumberZeroSteps
+              << " at " << pGlobalpoint
+              << " in volume " << motherPhysical->GetName()
+              << " nav-comp-step calls # " << sNavCScalls
+              << G4endl;
+    }
+#endif
+    if( (fNumberZeroSteps > fActionThreshold_NoZeroSteps-1) && (!fPushed) )
+    {
+       // Act to recover this stuck track. Pushing it once along direction
+       //
+       Step += 0.9*kCarTolerance;
+       fPushed = true;
+#ifdef G4VERBOSE
+       G4cerr << "WARNING - G4Navigator::ComputeStep()" << G4endl
+              << "          Track stuck, not moving for " 
+              << fNumberZeroSteps << " steps" << G4endl
+              << "          in volume -" << motherPhysical->GetName()
+              << "- at point " << pGlobalpoint << G4endl
+              << "          direction: " << pDirection << "." << G4endl
+              << "          Potential geometry or navigation problem !"
+              << G4endl
+              << "          Trying pushing it of " << Step << " mm ..."
+              << G4endl;
+#endif
+     }
+     if( fNumberZeroSteps > fAbandonThreshold_NoZeroSteps-1 )
+     {
+        // Must kill this stuck track
+        //
+        G4cerr << "ERROR - G4Navigator::ComputeStep()" << G4endl
+               << "        Track stuck, not moving for " 
+               << fNumberZeroSteps << " steps" << G4endl
+               << "        in volume -" << motherPhysical->GetName()
+               << "- at point " << pGlobalpoint << G4endl
+               << "        direction: " << pDirection << "." << G4endl;
+        G4Exception("G4Navigator::ComputeStep()",
+                    "StuckTrack", EventMustBeAborted, 
+                    "Stuck Track: potential geometry or navigation problem.");
+    }
+  }
+  else
+  {
+    if (!fPushed)  fNumberZeroSteps = 0;
+  }
 
   fEnteredDaughter = fEntering;   // I expect to enter a volume in this Step
   fExitedMother = fExiting;
@@ -857,22 +940,25 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 //
 void G4Navigator::ResetState()
 {
-  fWasLimitedByGeometry=false;
-  fEntering=false;
-  fExiting=false;
-  fLocatedOnEdge = false;
-  fLastStepWasZero= false;
-  fEnteredDaughter = false;
-  fExitedMother = false;
-  
-  fValidExitNormal = false;
-  fExitNormal = G4ThreeVector(0,0,0);
+  fWasLimitedByGeometry  = false;
+  fEntering              = false;
+  fExiting               = false;
+  fLocatedOnEdge         = false;
+  fLastStepWasZero       = false;
+  fEnteredDaughter       = false;
+  fExitedMother          = false;
+  fPushed                = false;
 
-  fPreviousSftOrigin = G4ThreeVector(0,0,0);
-  fPreviousSafety = 0.0; 
+  fValidExitNormal       = false;
+  fExitNormal            = G4ThreeVector(0,0,0);
+
+  fPreviousSftOrigin     = G4ThreeVector(0,0,0);
+  fPreviousSafety        = 0.0; 
+
+  fNumberZeroSteps       = 0;
     
-  fBlockedPhysicalVolume=0;
-  fBlockedReplicaNo=-1;
+  fBlockedPhysicalVolume = 0;
+  fBlockedReplicaNo      = -1;
 }
 
 // ********************************************************************

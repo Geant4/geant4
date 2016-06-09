@@ -87,7 +87,7 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
   // For now, just use the constant approximation (not reliable near magic
   // nuclei).
 
-  G4ConstantLevelDensityParameter a;
+  static G4ConstantLevelDensityParameter a;
 
   G4double aLevelDensityParam = a.LevelDensityParameter(static_cast<G4int>(Afrag),
 							static_cast<G4int>(Zfrag),
@@ -106,7 +106,7 @@ G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag,
   G4double Egdp = (40.3 / pow(Afrag,0.2) )*MeV;
   G4double GammaR = 0.30 * Egdp;
  
-  G4double normC = 1.0 / ((pi * hbarc)*(pi * hbarc));
+  static G4double normC = 1.0 / ((pi * hbarc)*(pi * hbarc));
 
   // CD
   //cout<<"  PROB TESTS "<<G4endl;

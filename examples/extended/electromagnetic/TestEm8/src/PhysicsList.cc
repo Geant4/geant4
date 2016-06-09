@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.2 2003/11/24 17:52:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PhysicsList.cc,v 1.3 2004/05/27 18:04:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,7 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListEmModelP.hh"
+#include "PhysListEmPAI.hh"
 #include "PhysListEmG4v52.hh"
 
 #include "G4Gamma.hh"
@@ -122,11 +122,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmG4v52(name);
 
-  } else if (name == "modelPAI") {
+  } else if (name == "PAI") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModelP(name);
+    emPhysicsList = new PhysListEmPAI(name);
 
   } else {
 

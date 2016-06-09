@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.hh,v 1.11 2003/06/16 16:50:31 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4TrajectoryContainer.hh,v 1.14 2004/06/11 14:11:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // G4TrajectoryContainer
@@ -73,8 +73,11 @@ class G4TrajectoryContainer
     TrajectoryVector* vect;
 };
 
-
-extern G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;
+#if defined G4EVENT_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;
+#endif
 
 inline void* G4TrajectoryContainer::operator new(size_t)
 {

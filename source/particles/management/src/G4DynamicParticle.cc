@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.18 2003/12/01 15:15:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4DynamicParticle.cc,v 1.20 2004/06/11 14:25:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -57,6 +57,7 @@
 //         take into account the case of virtual photons
 //
 //--------------------------------------------------------------
+
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"

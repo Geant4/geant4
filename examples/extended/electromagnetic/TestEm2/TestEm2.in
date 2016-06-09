@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.9 2003/10/08 17:28:29 maire Exp $
+# $Id: TestEm2.in,v 1.14 2004/06/18 15:43:35 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -14,6 +14,9 @@
 /testem/det/setMat Water
 /testem/det/setLbin 9 1.11
 /testem/det/setRbin 6 0.111
+#
+# Acceptance printout is activated
+/testem/run/acceptance  0.9425 0.0355 3.0
 #
 /testem/phys/addPhysics  standard
 ### /testem/phys/addPhysics  g4v52

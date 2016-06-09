@@ -1,8 +1,8 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-01 $   (25-March-2004)
+ Geant4 version $Name: geant4-06-02 $   (25-June-2004)
                       Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303.
+                      Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
@@ -23,14 +23,15 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 /run/verbose 2
 #
-/testem/det/setAbsMat Silicon   
-/testem/det/setAbsThick 20.5 mum  
+/testem/det/setAbsMat Silicon
+/testem/det/setAbsThick 20.5 mum
 /testem/det/setAbsYZ     1 mm
 #
 /testem/phys/addPhysics  standard
+PhysicsList::AddPhysicsList: <standard>
 ###/testem/phys/addPhysics  g4v52
 #
-/testem/phys/setGCut 2.13 mm    
+/testem/phys/setGCut 2.13 mm
 /testem/phys/setECut 7.0  mum
 /testem/phys/setPCut 7.0  mum
 #
@@ -53,6 +54,7 @@ physicsList->Construct() start.
 phot:  Total cross sections from Sandia parametrisation. 
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
+###/testem/histo/setHisto 6 100 -0.25 0.25 mrad
 #
 /testem/gun/setDefault
 /gun/particle pi+ 
@@ -107,8 +109,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -117,7 +119,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -135,7 +137,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -200,21 +202,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=46.49s Real=1044.02s Sys=104.53s
+  User=45.97s Real=1123.29s Sys=85.2s
 
  ======================== run summary ======================
 
  Number of Events = 100000
 
- Total energy deposit in absorber per event = 6.698 keV +- 21.79 eV 
+ Total energy deposit in absorber per event = 6.7 keV +- 21.82 eV 
 
- Total track length (charged) in absorber per event = 20.97 mum +- 15.28 nm 
- Total track length (neutral) in absorber per event = 3.612 nm  +- 3.107 nm 
+ Total track length (charged) in absorber per event = 20.97 mum +- 15.24 nm 
+ Total track length (neutral) in absorber per event = 1.319 nm  +- 9.342 Ang
 
- Number of steps (charged) in absorber per event = 1.079 +- 1.236e-05
- Number of steps (neutral) in absorber per event = 3e-05 +- 1.236e-05
+ Number of steps (charged) in absorber per event = 1.08 +- 1.234e-05
+ Number of steps (neutral) in absorber per event = 3e-05 +- 1.234e-05
 
- Number of secondaries per event : Gammas = 3e-05;   electrons = 0.03757;   positrons = 0
+ Number of secondaries per event : Gammas = 3e-05;   electrons = 0.03719;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -222,11 +224,9 @@ Run Summary
  Number of events with the primary particle reflected = 0 %
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
- MultipleScattering: theta0 Highland = 0.02663 mrad
-
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1147184665, 872245730
+ Current couple of seeds = 1636731634, 910890274
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

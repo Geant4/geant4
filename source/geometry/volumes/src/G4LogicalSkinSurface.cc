@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.11 2003/12/01 14:53:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LogicalSkinSurface.cc,v 1.12 2004/05/19 08:14:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // --------------------------------------------------------------------
 // G4LogicalSkinSurface Implementation
@@ -136,4 +136,14 @@ void G4LogicalSkinSurface::DumpInfo()
              << G4endl;
     }
     G4cout << G4endl;
+}
+
+void G4LogicalSkinSurface::CleanSurfaceTable()
+{  
+  std::vector<G4LogicalSkinSurface*>::iterator pos;
+  for(pos=theSurfaceTable.begin(); pos!=theSurfaceTable.end(); pos++)
+  {
+    if (*pos) delete *pos;
+  }
+  theSurfaceTable.clear();
 }

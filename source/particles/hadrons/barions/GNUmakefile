@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999/10/07 14:10:23 stesting Exp $
+# $Id: GNUmakefile,v 1.3 2004/06/11 14:25:22 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for barions library.  Gabriele Cosmo, 18/9/96.
 # --------------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4PARTICLES_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \

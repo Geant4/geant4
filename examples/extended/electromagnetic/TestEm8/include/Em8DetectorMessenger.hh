@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorMessenger.hh,v 1.3 2001/07/11 09:57:53 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: Em8DetectorMessenger.hh,v 1.4 2004/05/27 08:39:05 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -53,6 +53,7 @@ class Em8DetectorMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
+
     Em8DetectorConstruction*   Em8Detector;
     
     G4UIdirectory*             Em8detDir;
@@ -67,7 +68,10 @@ class Em8DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* WorldZCmd;
     G4UIcmdWithADoubleAndUnit* WorldRCmd;
 
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* ElectronCutCmd;
+    G4UIcmdWithADoubleAndUnit* PositronCutCmd;
+    G4UIcmdWithADoubleAndUnit* GammaCutCmd;
+
     G4UIcmdWithoutParameter*   UpdateCmd;
 
 };

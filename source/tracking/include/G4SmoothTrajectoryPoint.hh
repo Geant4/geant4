@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.hh,v 1.7 2003/06/16 17:13:08 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4SmoothTrajectoryPoint.hh,v 1.10 2004/06/11 14:30:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 //---------------------------------------------------------------
@@ -83,12 +83,13 @@ public: // without description
 // Member data
    G4ThreeVector fPosition;
    std::vector<G4ThreeVector>* fAuxiliaryPointVector;
-
-
 };
 
-
-extern G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
+#if defined G4TRACKING_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
+#endif
 
 inline void* G4SmoothTrajectoryPoint::operator new(size_t)
 {

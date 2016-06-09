@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.24 2003/11/24 10:27:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParticleChange.cc,v 1.26 2004/05/08 15:28:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -223,7 +223,6 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
 
   G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
-  G4Track*     aTrack  = pStep->GetTrack();
   G4double     mass = theMassChange;
 
   // Set Mass/Charge
@@ -273,6 +272,7 @@ G4Step* G4ParticleChange::UpdateStepForAlongStep(G4Step* pStep)
   pPostStepPoint->SetWeight( newWeight );
 
 #ifdef G4VERBOSE
+  G4Track*     aTrack  = pStep->GetTrack();
   if (debugFlag) CheckIt(*aTrack);
 #endif
 
@@ -421,7 +421,7 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
   G4double  accuracy;
 
   // No check in case of "fStopAndKill" 
-  if (GetStatusChange() ==   fStopAndKill )  {
+  if (GetTrackStatus() ==   fStopAndKill )  {
     return G4VParticleChange::CheckIt(aTrack);
   }
 

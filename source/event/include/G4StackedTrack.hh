@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.hh,v 1.6 2001/07/13 15:01:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4StackedTrack.hh,v 1.9 2004/06/11 14:11:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai
@@ -83,7 +83,11 @@ class G4StackedTrack
       { nextStackedTrack = value; }
 };
 
-extern G4Allocator<G4StackedTrack> aStackedTrackAllocator;
+#if defined G4EVENT_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4StackedTrack> aStackedTrackAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4StackedTrack> aStackedTrackAllocator;
+#endif
 
 inline void * G4StackedTrack::operator new(size_t)
 {

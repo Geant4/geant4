@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlineTracer.cc,v 1.1 2003/11/25 09:29:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4BlineTracer.cc,v 1.2 2004/06/03 15:28:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -47,6 +47,7 @@
 #include "G4PropagatorInField.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4LogicalVolumeStore.hh"
+#include "G4ChordFinder.hh"
 
 //////////////////////////////////////////////////////////////////
 

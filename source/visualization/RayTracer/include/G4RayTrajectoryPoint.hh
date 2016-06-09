@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectoryPoint.hh,v 1.5 2002/10/16 11:42:48 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4RayTrajectoryPoint.hh,v 1.8 2004/06/11 14:30:50 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -77,7 +77,11 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
     // Dummy function (not used) to satisfy base class pure virtual function.
 };
 
-extern G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
+#if defined G4VIS_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
+#endif
 
 inline void* G4RayTrajectoryPoint::operator new(size_t)
 {

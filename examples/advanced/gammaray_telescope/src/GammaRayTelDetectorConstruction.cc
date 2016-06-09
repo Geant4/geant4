@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.10 2003/05/28 13:56:33 flongo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.11 2004/06/02 15:20:46 flongo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -77,7 +77,8 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
    solidCALDetectorX(0),logicCALDetectorX(0),physiCALDetectorX(0),
    solidCALDetectorY(0),logicCALDetectorY(0),physiCALDetectorY(0),
    solidPlane(0),logicPlane(0),physiPlane(0),
-   solidConverter(0),logicConverter(0),physiConverter(0)
+   solidConverter(0),logicConverter(0),physiConverter(0),
+   aTKRRegion(0), aCALRegion(0)
 {
   // default parameter values of the payload
   
@@ -281,7 +282,7 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   solidCALDetectorX=0;logicCALDetectorX=0;physiCALDetectorX=0;
   solidCALDetectorY=0;logicCALDetectorY=0;physiCALDetectorY=0;
   solidPlane=0;logicPlane=0;physiPlane=0;
-  
+  aCALRegion=0; aTKRRegion=0;
   //
   // Payload
   //
@@ -680,17 +681,19 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 
 
   G4String regName[] = {"Calorimeter","Tracker"};
-
-  G4Region* aCALRegion = new G4Region(regName[0]);
-  G4Region* aTKRRegion = new G4Region(regName[1]);
-
-
-  logicCAL->SetRegion(aCALRegion);
-  logicTKR->SetRegion(aTKRRegion);
-  aCALRegion->AddRootLogicalVolume(logicCAL);
-  aTKRRegion->AddRootLogicalVolume(logicTKR);
-
-  // Sensitive Detector Manager
+  if (!aCALRegion)
+    { 
+      aCALRegion = new G4Region(regName[0]);
+      logicCAL->SetRegion(aCALRegion);
+      aCALRegion->AddRootLogicalVolume(logicCAL);
+    }
+  if (!aTKRRegion)
+    {
+      aTKRRegion = new G4Region(regName[1]);
+      logicTKR->SetRegion(aTKRRegion);
+      aTKRRegion->AddRootLogicalVolume(logicTKR);
+    }
+  //Sensitive Detector Manager
   
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   

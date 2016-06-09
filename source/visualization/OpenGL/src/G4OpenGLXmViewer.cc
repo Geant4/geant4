@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.11 2002/02/24 01:48:29 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLXmViewer.cc,v 1.12 2004/04/07 15:18:23 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -34,10 +34,6 @@
 #include "globals.hh"
 
 #include "G4OpenGLXmViewer.hh"
-
-#include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
 
 #include "G4ios.hh"
 

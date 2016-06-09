@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiKaonZeroInelastic.hh,v 1.10 2003/07/01 15:42:21 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HEAntiKaonZeroInelastic.hh,v 1.11 2004/04/22 19:22:55 dwright Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // G4 Gheisha High Energy model class -- header file
@@ -34,11 +34,23 @@
 #ifndef G4HEAntiKaonZeroInelastic_h
 #define G4HEAntiKaonZeroInelastic_h 1
 
+// Class description:
+// High energy parameterized model for anti-K0 inelastic scattering.  This
+// class is responsible for producing the final state of the interaction and
+// is typically valid for incident anti-K0 energies above 20 GeV.  There is
+// currently no corresponding inelastic process to which this model can 
+// be assigned.
+//
+// This class is derived from G4HEInelastic which in turn is derived from
+// G4HadronicInteraction.
+
+// Class Description - End
+
 #include "G4HEInelastic.hh"
 
 class G4HEAntiKaonZeroInelastic : public G4HEInelastic  
 {
- public: 
+ public:  // with description
         G4HEAntiKaonZeroInelastic() : G4HEInelastic()
            {
               theMinEnergy =  20*GeV;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.hh,v 1.7 2003/06/16 16:46:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: XrayTelAnalysis.hh,v 1.8 2004/05/28 15:56:58 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
 //         (copy of his UserAnalyser class)
@@ -108,9 +108,9 @@ private:
 
   XrayTelAnalysis();
 
-#ifdef G4ANALYSIS_USE_PLOTTER
-  void plotAll();
-#endif
+// #ifdef G4ANALYSIS_USE_PLOTTER
+//   void plotAll();
+// #endif
   static XrayTelAnalysis* instance;
 
 #ifdef G4ANALYSIS_USE
@@ -118,10 +118,10 @@ private:
   AIDA::ITree             *tree;
   AIDA::IHistogramFactory *histoFactory;
   AIDA::ITupleFactory     *tupleFactory;
-#ifdef G4ANALYSIS_USE_PLOTTER
-  AIDA::IPlotterFactory   *plotterFactory;
-  AIDA::IPlotter          *plotter;
-#endif
+// #ifdef G4ANALYSIS_USE_PLOTTER
+//   AIDA::IPlotterFactory   *plotterFactory;
+//   AIDA::IPlotter          *plotter;
+// #endif
 #endif
   // Quantities for the ntuple
   G4double eKin;
@@ -135,7 +135,11 @@ private:
   G4String asciiFileName;
   G4String histFileName;
   G4String histFileType;
-
+  AIDA::IHistogram1D *h1;
+  AIDA::IHistogram2D *h2;
+  AIDA::IHistogram1D *h3;
+  AIDA::IHistogram2D *h4;
+  AIDA::ITuple * ntuple;
   //  std::ofstream asciiFile;
 
 };

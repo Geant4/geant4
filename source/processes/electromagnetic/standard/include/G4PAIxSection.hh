@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.hh,v 1.10 2003/10/19 15:21:22 grichine Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PAIxSection.hh,v 1.11 2004/04/02 10:51:12 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // G4PAIxSection.hh -- header file
@@ -59,20 +59,25 @@
 
 #include"G4SandiaTable.hh"
 
+class G4MaterialCutsCouple;
+class G4Sandiatable;
+
+
 class G4PAIxSection
 {
 public:
 	  // Constructors
+  G4PAIxSection( G4MaterialCutsCouple* matCC);
 	  
-	  G4PAIxSection( G4int materialIndex,
+  G4PAIxSection( G4int materialIndex,
 	                 G4double maxEnergyTransfer   ) ;
 	  
-          G4PAIxSection( G4int materialIndex,           // for proton loss table
+  G4PAIxSection( G4int materialIndex,           // for proton loss table
 		         G4double maxEnergyTransfer,
 		         G4double betaGammaSq ,
                          G4double** photoAbsCof, G4int intNumber         ) ;
 
-          G4PAIxSection( G4int materialIndex,           // test constructor
+  G4PAIxSection( G4int materialIndex,           // test constructor
 		         G4double maxEnergyTransfer,
 		         G4double betaGammaSq          ) ;
 	  
@@ -188,6 +193,7 @@ const G4int fRefGammaNumber  ; // The number of gamma for creation of spline (15
 
 G4int    fIntervalNumber  ;    //  The number of energy intervals
 G4double fNormalizationCof ;   // Normalization cof for PhotoAbsorptionXsection
+
 // G4double fBetaGammaSq ;        // (beta*gamma)^2
 
 G4double fDensity ;            // Current density
@@ -195,6 +201,9 @@ G4double fElectronDensity ;    // Current electron (number) density
 G4int    fSplineNumber ;       // Current size of spline
 
 // Arrays of Sandia coefficients
+
+  G4OrderedTable* fMatSandiaMatrix;
+  G4SandiaTable*  fSandia;
 
 G4double* fEnergyInterval ;
 G4double* fA1 ; 
@@ -204,6 +213,7 @@ G4double* fA4 ;
 
 static
 const G4int   fMaxSplineSize  ;          // Max size of output splain arrays = 500
+
 /* ******************
 G4double*          fSplineEnergy ;   // energy points of splain
 G4double* fRePartDielectricConst ;   // Real part of dielectric const
@@ -212,6 +222,8 @@ G4double*          fIntegralTerm ;   // Integral term in PAI cross section
 G4double*        fDifPAIxSection ;   // Differential PAI cross section
 G4double*   fIntegralPAIxSection ;   // Integral PAI cross section  ?
 */ ///////////////
+
+
 G4double          fSplineEnergy[500] ;   // energy points of splain
 G4double fRePartDielectricConst[500] ;   // Real part of dielectric const
 G4double fImPartDielectricConst[500] ;   // Imaginary part of dielectric const

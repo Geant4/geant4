@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: IonC12.cc,v 1.4 2003/08/11 10:27:14 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: IonC12.cc,v 1.5 2004/06/21 10:57:14 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

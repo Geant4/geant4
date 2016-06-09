@@ -271,45 +271,67 @@ void G4Fancy3DNucleus::ChooseNucleons()
 void G4Fancy3DNucleus::ChoosePositions()
 {
 	G4int i=0;
-	G4ThreeVector	aPos,center;
+	G4ThreeVector	aPos, delta;
+        std::vector<G4ThreeVector> places;
+	places.reserve(myA);
 	G4bool		freeplace;
+	static G4double nd2 = sqr(nucleondistance);
 	G4double maxR=GetNuclearRadius(0.01);   //  there are no nucleons at a
 	                                        //  relative Density of 0.01
-
+	G4int jr=0;
+	G4int jx,jy;
+	G4double arand[600];
+	G4double *prand=arand;
+//	G4int Attempt=0;
 	while ( i < myA )
 	{
 	   do
-	   {   aPos=G4ThreeVector( (2*G4UniformRand()-1.),
-	   				   (2*G4UniformRand()-1.),
-					   (2*G4UniformRand()-1.));
+	   {   	
+//	        ++Attempt;
+		if ( jr < 3 ) 
+		{
+		    jr=std::min(600,9*(myA - i));
+		    HepRandom::getTheEngine()->flatArray(jr, prand );
+		}
+		jx=--jr;
+		jy=--jr;
+		aPos=G4ThreeVector( (2*arand[jx]-1.),
+	   				   (2*arand[jy]-1.),
+					   (2*arand[--jr]-1.));
 	   } while (aPos.mag2() > 1. );
 	   aPos *=maxR;
 	   G4double density=theDensity->GetRelativeDensity(aPos);
 	   if (G4UniformRand() < density)
 	   {
 	      freeplace= true;
-	      G4double pFermi=theFermi.GetFermiMomentum(theDensity->GetDensity(aPos));
-		// protons must at least have binding energy of CoulombBarrier, so
-		//  assuming the Fermi energy corresponds to a potential, we must place these such
-		//  that the Fermi Energy > CoulombBarrier
-	      if (theNucleons[i].GetDefinition() == G4Proton::Proton())
-	      {
-	         G4double eFermi= sqrt( sqr(pFermi) + sqr(theNucleons[i].GetDefinition()->GetPDGMass()) )
-		                  - theNucleons[i].GetDefinition()->GetPDGMass();
-	         if (eFermi <= CoulombBarrier() ) freeplace=false;
-	      }
 	      for( int j=0; j<i && freeplace; j++)
 	      {
-	        freeplace= freeplace &&
-	              (theNucleons[j].GetPosition()-aPos).mag() > nucleondistance;
+	        delta = places[j] - aPos;
+		freeplace= delta.mag2() > nd2;
+	      }
+	      
+	      if ( freeplace )
+	      {
+		  G4double pFermi=theFermi.GetFermiMomentum(theDensity->GetDensity(aPos));
+		    // protons must at least have binding energy of CoulombBarrier, so
+		    //  assuming the Fermi energy corresponds to a potential, we must place these such
+		    //  that the Fermi Energy > CoulombBarrier
+		  if (theNucleons[i].GetDefinition() == G4Proton::Proton())
+		  {
+	             G4double eFermi= sqrt( sqr(pFermi) + sqr(theNucleons[i].GetDefinition()->GetPDGMass()) )
+		                      - theNucleons[i].GetDefinition()->GetPDGMass();
+	             if (eFermi <= CoulombBarrier() ) freeplace=false;
+		  }
 	      }
 	      if ( freeplace )
 	      {
 		  theNucleons[i].SetPosition(aPos);
+		  places[i]=aPos;
 		  ++i;
 	      }
 	   }
 	}
+//	G4cout << "Att " << myA << " " << Attempt << G4endl;
 
 }
 

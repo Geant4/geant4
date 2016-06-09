@@ -29,8 +29,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.13 2004/03/11 15:38:42 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: BrachyAnalysisManager.cc,v 1.14 2004/05/13 14:47:46 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 #ifdef  G4ANALYSIS_USE
 #include <stdlib.h>

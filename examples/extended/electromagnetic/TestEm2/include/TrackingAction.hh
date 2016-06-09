@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.hh,v 1.1 2003/10/08 17:28:39 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: TrackingAction.hh,v 1.2 2004/05/24 07:03:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -37,14 +37,19 @@ class RunAction;
 
 class TrackingAction : public G4UserTrackingAction {
 
-  public:  
-    TrackingAction(RunAction*);
-   ~TrackingAction() {};
-   
-    void PostUserTrackingAction(const G4Track*);
-    
-  private:
-    RunAction* Run;  
+public:
+  TrackingAction(RunAction*);
+  ~TrackingAction() {};
+
+  void PostUserTrackingAction(const G4Track*);
+
+private:
+
+  // hide assignment operator
+  TrackingAction & operator=(const TrackingAction &right);
+  TrackingAction(const TrackingAction&);
+
+  RunAction* Run;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

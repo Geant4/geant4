@@ -64,12 +64,20 @@ public:
 			  G4double mass, 
 			  G4double deltaEnergy) const;
 
-protected:
-
-  virtual std::vector<G4double> Probabilities(G4int Z,
+ virtual std::vector<G4double> GetCrossSection(G4int Z,
 						G4double incidentEnergy,
 						G4double mass,
-						G4double deltaEnergy) const = 0;
+						G4double deltaEnergy,
+					        G4bool testFlag = false) const =0;
+
+  //protected:
+
+  virtual std::vector<G4double> Probabilities(G4int Z,
+					      G4double incidentEnergy,
+					      G4double mass,
+					      G4double deltaEnergy) const = 0;
+
+
 private:
 
   // Hide copy constructor and assignment operator 

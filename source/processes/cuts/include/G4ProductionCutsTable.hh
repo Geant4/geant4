@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.2 2003/11/03 02:18:44 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ProductionCutsTable.hh,v 1.3 2004/02/03 08:29:35 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -31,6 +31,10 @@
 //
 // ------------------------------------------------------------
 //   First Implementation          05 Oct. 2002  M.Asai    
+//
+//   Modified                      03 Feb 2004 H.Kurashige
+//    Modify RetrieveCutsTable to allow ordering of materials and 
+//    couples can be different from one in file (i.e. at storing)
 // ------------------------------------------------------------
 
 #ifndef G4ProductionCutsTable_h 
@@ -173,6 +177,11 @@ class G4ProductionCutsTable
   // Store materialCutsCouple information in files under the specified directory.
   virtual G4bool  StoreMaterialCutsCoupleInfo(const G4String& directory, 
 				    G4bool          ascii = false);
+
+  // Retreive materialCutsCouple information in files under the specified directory.
+  virtual G4bool  RetrieveMaterialCutsCoupleInfo(const G4String& directory, 
+				   G4bool          ascii = false);
+
   // check stored materialCutsCouple is consistent with the current detector setup. 
   virtual G4bool  CheckMaterialCutsCoupleInfo(const G4String& directory, 
 				    G4bool          ascii = false);
@@ -187,6 +196,7 @@ class G4ProductionCutsTable
 
   private:
    G4bool firstUse;
+   G4bool isNeedForRestoreCoupleInfo;
    enum { FixedStringLengthForStore = 32 }; 
 
   public: // with description  

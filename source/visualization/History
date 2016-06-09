@@ -1,4 +1,4 @@
-$Id: History,v 1.241 2004/03/16 08:46:58 gcosmo Exp $
+$Id: History,v 1.247 2004/06/09 07:40:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,9 +24,36 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+9th June 2004  Gabriele Cosmo  (vis-V06-01-03)
+- Adopt G4DLLIMPORT/G4DLLEXPORT technique to handle extern simbols for
+  allowing support of DLLs on Windows.
+- Minor correction in modeling/GNUmakefile for GLOBLIBS definition.
+- Coworks with "global-V06-01-02b".
+
+7th June 2004  Gabriele Cosmo  (vis-V06-01-02)
+- Includes "vis-HepRep-V06-01-04".
+- Export extern symbols for allowing support of DLLs on Windows.
+  Modified files: G4RayTrajectory.hh, G4RayTrajectoryPoint.hh.
+- GNUmakefiles: added definition of GLOBLIBS for DLLs support on Windows.
+- Coworks with "global-V06-01-02a".
+
+9th April 2004  John Allison  (vis-V06-01-01 + interfaces-V06-01-00)
+- Tagged OpenGL as below.  Joint with interfaces-V06-01-00.
+
+7th April 2004  Guy Barrand
+- visualization/OpenGL/* : use the G4OpenGL.hh file.
+- Added : visualization/OpenGL/include/G4OpenGL.hh to encapsulate
+  the include of gl/gl.h and gl/glu.h that may be platform dependant.
+  It permits to rm some #ifdef WIN32 spread in the code. It opens also
+  the way to the usage of the Apple OpenGL on a Mac.
+
 14 March 2004 Joseph Perl (vis-V06-00-01)
 - HepRepFile handle duplicate ShowView.
 - HepRepFile improve layering and hierarchy for hits.
+
+17th February 2004  John Allison  (opengl-V06-00-00)
+- Fixed bug #581: wrong order of statements in
+  G4OpenGLXViewer::~G4OpenGLXViewer (see bug report).
 
 1st December 2003  John Allison
 - Added checks and minor improvment of behaviour at end of event and run:

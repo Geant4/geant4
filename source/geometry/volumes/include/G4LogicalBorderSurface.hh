@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.hh,v 1.12 2003/12/01 14:53:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LogicalBorderSurface.hh,v 1.13 2004/05/19 08:14:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // class G4LogicalBorderSurface
 //
@@ -72,6 +72,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
     inline void SetVolume2( G4VPhysicalVolume* vol2 );
       // To use with care!
 
+    static void CleanSurfaceTable();
     static const std::vector<G4LogicalBorderSurface*> * GetSurfaceTable();
     static size_t GetNumberOfBorderSurfaces();
     static void DumpInfo(); 
@@ -104,3 +105,4 @@ typedef std::vector<G4LogicalBorderSurface*> G4LogicalBorderSurfaceTable;
 #include "G4LogicalBorderSurface.icc"
 
 #endif /* G4LogicalBorderSurface_h */
+

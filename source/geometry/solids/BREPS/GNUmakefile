@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2000/01/21 13:47:35 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2004/06/11 14:17:16 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for BREPS library.  Gabriele Cosmo, 15/11/96.
 # ------------------------------------------------------------
@@ -11,7 +11,8 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS  += \
+CPPFLAGS += -DG4GEOM_ALLOC_EXPORT
+CPPFLAGS += \
              -I$(G4BASE)/geometry/management/include \
              -I$(G4BASE)/geometry/solids/Boolean/include \
              -I$(G4BASE)/geometry/solids/CSG/include \

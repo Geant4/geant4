@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin32.hh,v 1.5 2001/07/11 10:09:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenInventorWin32.hh,v 1.6 2004/04/08 09:39:38 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // OpenInventor graphics system factory.
 
@@ -31,12 +31,14 @@
 #ifndef G4OPENINVENTORWIN32_HH
 #define G4OPENINVENTORWIN32_HH
 
-#include "G4OpenInventor.hh"
+// For backward compatibilty.
 
-class G4OpenInventorWin32: public G4OpenInventor {
+#include "G4OpenInventorWin.hh"
+
+class G4OpenInventorWin32: public G4OpenInventorWin {
 public:
-  G4OpenInventorWin32 ();
-  virtual ~G4OpenInventorWin32 ();
+  G4OpenInventorWin32 () {}
+  virtual ~G4OpenInventorWin32 () {}
 };
 
 #endif

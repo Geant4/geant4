@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: RunAction.hh,v 1.13 2004/06/15 11:39:57 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: RunAction.hh,v 1.8 2004/01/21 17:29:26 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,64 +32,53 @@
 #include "DetectorConstruction.hh"
 
 #include "G4UserRunAction.hh"
+#include "G4ThreeVector.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
+class PrimaryGeneratorAction;
 class RunActionMessenger;
+class HistoManager;
 
-#ifdef G4ANALYSIS_USE
-namespace AIDA {
- class ITree;
- class IHistogramFactory;
- class IHistogram1D;
-}
-#endif
+class G4Run;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
   public:
 
-    RunAction(DetectorConstruction*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
    ~RunAction();
 
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
     void fillPerEvent(G4int,G4double,G4double,G4double);
-
-#ifdef G4ANALYSIS_USE
-    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-    G4double GetHistoUnit(G4int id) {return histoUnit[id];}
-#endif
-
-    void SetFileName(const G4String& s) {fileName = s;};
-    void SetHisto (G4int, G4int, G4double, G4double, G4String);
-
+    
     void PrintDedxTables();
     
+     // Acceptance parameters
+     void     SetEdepAndRMS(G4int, G4ThreeVector);
+     G4double GetAverageEdep(G4int i) const    {return edeptrue[i];};
+     G4double GetRMSEdep(G4int i) const        {return rmstrue[i];};
+     G4double GetLimitEdep(G4int i) const      {return limittrue[i];};
+         
   private:
 
     G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
     G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
     G4double sumEleav[MaxAbsor], sum2Eleav[MaxAbsor];           
 
-    DetectorConstruction* Detector;    
-    RunActionMessenger*   runMessenger;
-            
-    G4String fileName;
-    G4String hid  [MaxAbsor],  htitle[MaxAbsor];
-    G4int    hbins[MaxAbsor];
-    G4double hmin [MaxAbsor],  hmax  [MaxAbsor];
-    G4double histoUnit[MaxAbsor];
-    
-#ifdef G4ANALYSIS_USE    
-    AIDA::ITree* tree;
-    AIDA::IHistogramFactory* hf;
-    AIDA::IHistogram1D* histo[MaxAbsor];
-#endif      
-             
+    DetectorConstruction*   Detector;
+    PrimaryGeneratorAction* Primary;    
+    RunActionMessenger*     runMessenger;
+    HistoManager*           histoManager;
+
+    G4double edeptrue [MaxAbsor];
+    G4double rmstrue  [MaxAbsor];
+    G4double limittrue[MaxAbsor];                
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.cc,v 1.1 2003/10/03 10:18:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HCofThisEvent.cc,v 1.3 2004/06/11 14:10:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #include "G4HCofThisEvent.hh"

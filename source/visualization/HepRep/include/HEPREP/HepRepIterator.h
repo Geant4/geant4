@@ -7,15 +7,15 @@
 #ifndef HEPREP_HEPREPITERATOR_H
 #define HEPREP_HEPREPITERATOR_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2004, FreeHEP.
 
 #include <string>
 
 namespace HEPREP {
 
-class HepRepAttValue;
+class HepRepAttributeListener;
+class HepRepFrameListener;
 class HepRepInstance;
-class HepRepIteratorListener;
 
 /**
  * HepRepIterator interface.
@@ -47,22 +47,41 @@ public:
      *
      * @param listener to be added.
      */
-    virtual bool addHepRepIteratorListener(HepRepIteratorListener * listener) = 0;
+    virtual void addHepRepAttributeListener(std::string name, HepRepAttributeListener * listener) = 0;
 
     /**
      * Removes a listener.
      *
      * @param listener to be removed.
      */
-    virtual void removeHepRepIteratorListener(HepRepIteratorListener * listener) = 0;
+    virtual void removeHepRepAttributeListener(std::string name, HepRepAttributeListener * listener) = 0;
+
+    /**
+     * Adds a listener to be informed about attribute changes while iterating.
+     *
+     * @param listener to be added.
+     */
+    virtual void addHepRepFrameListener(HepRepFrameListener * listener) = 0;
+
+    /**
+     * Removes a listener.
+     *
+     * @param listener to be removed.
+     */
+    virtual void removeHepRepFrameListener(HepRepFrameListener * listener) = 0;
+
+    /**
+     * Returns true if the current instance, just delivered by nextInstance(), is to be drawn as a frame.
+     */
+    virtual bool drawAsFrame() = 0;
 
     /**
      * Returns the attValue for key at the current point of iteration.
      *
-     * @param key name of tye attribute to be looked up.
+     * @param key name of the attribute to be looked up.
      * @return value associated to name at this point in the iteration.
      */
-    virtual HepRepAttValue * getAttValue(std::string key) = 0;
+//    HepRepAttValue* getAttValue(String key);
 }; // class
 } // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPITERATOR_H */

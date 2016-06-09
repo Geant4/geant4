@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundTransitions.cc,v 1.4 2003/11/04 11:36:26 lara Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PreCompoundTransitions.cc,v 1.5 2004/05/09 16:58:01 lara Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // by V. Lara
 
@@ -168,6 +168,7 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
   G4Fragment result(aFragment);
   G4double ChosenTransition = G4UniformRand()*(TransitionProb1 + TransitionProb2 + TransitionProb3);
   G4int deltaN = 0;
+  G4int Nexcitons = result.GetNumberOfExcitons();
   if (ChosenTransition <= TransitionProb1) 
     {
       // Number of excitons is increased on \Delta n = +2
@@ -183,15 +184,17 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
 
   // With weight Z/A, number of charged particles is decreased on +1
   if ((deltaN > 0 || result.GetNumberOfCharged() > 0) &&
-      (G4UniformRand() <= static_cast<G4double>(result.GetZ())/static_cast<G4double>(result.GetA())))
+      (G4UniformRand() <= static_cast<G4double>(result.GetZ()-result.GetNumberOfCharged())/
+		  static_cast<G4double>(result.GetA()-Nexcitons)))
     {
       result.SetNumberOfCharged(result.GetNumberOfCharged()+deltaN/2);
     }
   
   // Number of charged can not be greater that number of particles
-  if ( result.GetNumberOfParticles() < result.GetNumberOfCharged() ) {
-    result.SetNumberOfCharged(result.GetNumberOfParticles());
-  }
+  if ( result.GetNumberOfParticles() < result.GetNumberOfCharged() ) 
+    {
+      result.SetNumberOfCharged(result.GetNumberOfParticles());
+    }
   
   return result;
 }

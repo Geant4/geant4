@@ -1,0 +1,28 @@
+# $Id: phot.mac,v 1.1 2004/04/28 11:09:07 maire Exp $
+#
+# Macro file for "PhotonProcesses.cc"
+# (can be run in batch, without graphic)
+#
+# photon 100 keV; photoelectric
+#
+/control/verbose 2
+/run/verbose 2
+#
+#/testem/det/setMat Iron
+/testem/det/setMat BGO
+#
+/run/initialize
+#
+/process/inactivate compt
+/process/inactivate conv
+/process/inactivate GammaToMuPair
+#
+/gun/energy 100 keV
+#
+/testem/histo/setFileName phot.paw
+/testem/histo/setHisto 3  100 0. 100. keV	#energy  of ch. secondaries  
+/testem/histo/setHisto 4  200 -1. +1. none	#costeta of ch. secondaries
+#
+/testem/event/printModulo 10000
+#
+/run/beamOn 100000

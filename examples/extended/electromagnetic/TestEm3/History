@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2004/01/21 17:29:22 maire Exp $
+$Id: History,v 1.57 2004/06/21 10:52:54 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,7 +13,39 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+     ---------------------------------------------------------
+     
+21-06-04  mma (testem3-V06-01-04)
+- remove direct interface to ROOT
+     
+15-06-04  mma (testem3-V06-01-03)
+- introduction of the class HistoManager (like TestEm5)
+- EndOfRun: missprint in rms of totalTrackLength
+     
+09-06-04  mma (testem3-V06-01-02)
+- move acceptance check in RunAction
+- printout : remove leakage information
+     
+25-05-04 V.Ivanchenko
+- Update printout
+- Fix problem of dE/dx printout
+- Add acceptance check activated by UI command
+
+28-04-04 mma (testem3-V06-01-01)
+- print resolution at EndOfRun
+- suppress PhysListParticles and General
+     
+31-03-04 mma (testem3-V06-01-00)
+- README : more informations about ROOT installation
+     
+17-03-04 mma (testem3-V06-00-02)
+- energy leakage only from secondaries.
+- idem in geant3
+- suppression of DataVector in EventAction
+- new macro dedx.max to quickly check dE/dx calculation
+     
+15-03-04 mma (testem3-V06-00-01)
+- example of histograms with ROOT: USE_ROOT
 
 21-01-04 mma
 - possibility to have one histograms file per run.

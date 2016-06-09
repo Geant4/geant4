@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999/01/07 16:09:08 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2004/06/01 15:36:32 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for graphics_reps library.  John Allison, 19/7/96.
 # --------------------------------------------------------------
@@ -8,6 +8,8 @@ name := G4graphics_reps
 ifndef G4INSTALL
   G4INSTALL = ../..
 endif
+
+GLOBLIBS = libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 

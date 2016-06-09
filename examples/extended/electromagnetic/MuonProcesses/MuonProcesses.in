@@ -1,0 +1,22 @@
+# $Id: MuonProcesses.in,v 1.1 2004/06/14 10:09:20 maire Exp $
+#
+# Macro file for "MuonProcesses.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Iron
+/testem/det/setSize 1 m
+#
+/testem/phys/addPhysics standard
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/gun/particle mu+
+/gun/energy 10 TeV
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000

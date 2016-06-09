@@ -1,0 +1,33 @@
+
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+
+
+/vis/scene/create
+/vis/open VRML2FILE
+/vis/drawVolume
+/vis/viewer/update
+/vis/viewer/set/viewpointThetaPhi 60 30 deg
+/vis/viewer/zoom 1
+
+/vis/viewer/flush
+#
+# draw scene/
+#
+#
+# for drawing the tracks
+/run/initialize
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+
+/Jaws/X1/DistanceFromAxis -15. cm
+/Jaws/X2/DistanceFromAxis 15. cm
+/Jaws/Y1/DistanceFromAxis -15. cm
+/Jaws/Y2/DistanceFromAxis 15. cm
+/Jaws/update
+
+/energy 6.0 MeV
+/sourceType 0.127 MeV
+/vis/viewer/update
+/run/beamOn 1000

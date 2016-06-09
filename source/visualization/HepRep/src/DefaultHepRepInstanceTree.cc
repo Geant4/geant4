@@ -19,38 +19,32 @@ void DefaultHepRepInstanceTree::overlay(HepRepInstanceTree *) {
     cerr << "DefaultHepRepInstanceTree::overlay(HepRepInstanceTree * instanceTree) not implemented." << endl;
 }
 
-HepRepTreeID* DefaultHepRepInstanceTree::copy() {
-    return DefaultHepRepTreeID::copy();
-}
-
-HepRepInstanceTree* DefaultHepRepInstanceTree::copy(HepRep*, HepRepSelectFilter*) {
-    cerr << "DefaultHepRepInstanceTree::copy(HepRep*, HepRepSelectFilter*) not implemented." << endl;
+HepRepInstanceTree* DefaultHepRepInstanceTree::copy(HepRepTypeTree*, HepRepSelectFilter*) {
+    cerr << "DefaultHepRepInstanceTree::copy(HepRepTypeTree*, HepRepSelectFilter*) not implemented." << endl;
     return NULL;
 }
 
-bool DefaultHepRepInstanceTree::addInstance(HepRepInstance* instance) {
+void DefaultHepRepInstanceTree::addInstance(HepRepInstance* instance) {
     instances.push_back(instance);
-    return true;
 }
 
 void DefaultHepRepInstanceTree::removeInstance(HepRepInstance*) {
     cerr << "DefaultHepRepInstanceTree::removeInstance(HepRepInstance*) not implemented." << endl;
 }
 
-vector<HepRepInstance*>* DefaultHepRepInstanceTree::getInstances() {
-    return &instances;
+vector<HepRepInstance*> DefaultHepRepInstanceTree::getInstances() {
+    return instances;
 }
 
-bool DefaultHepRepInstanceTree::addInstanceTree(HepRepTreeID* treeID) {
-    instanceTrees.push_back(treeID);
-    return true;
+void DefaultHepRepInstanceTree::addInstanceTree(HepRepTreeID* treeID) {
+    instanceTrees.insert(treeID);
 }
 
 HepRepTreeID* DefaultHepRepInstanceTree::getTypeTree() {
     return typeTree;
 }
 
-vector<HepRepTreeID*>* DefaultHepRepInstanceTree::getInstanceTrees() {
-    return &instanceTrees;
+set<HepRepTreeID*> DefaultHepRepInstanceTree::getInstanceTrees() {
+    return instanceTrees;
 }
 

@@ -52,7 +52,7 @@ class G4IonProtonCrossSection : public G4VCrossSectionDataSet
 
    virtual
    G4double GetCrossSection(const G4DynamicParticle* aPart, 
-                            const G4Element*anEle, G4double aTemperature)
+                            const G4Element*, G4double )
    {
      G4ProtonInelasticCrossSection theForward;
      G4double result = theForward.GetCrossSection(aPart->GetKineticEnergy(),
@@ -67,7 +67,7 @@ class G4IonProtonCrossSection : public G4VCrossSectionDataSet
 
    virtual
    void DumpPhysicsTable(const G4ParticleDefinition&)
-   {G4cout << "G4IonProtonCrossSection: uses formula"<<endl;}
+   {G4cout << "G4IonProtonCrossSection: uses formula"<<G4endl;}
 
 };
 

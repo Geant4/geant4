@@ -1,22 +1,23 @@
-# $Id: TestEm5.in,v 1.11 2003/10/27 11:32:38 maire Exp $
+# $Id: TestEm5.in,v 1.13 2004/06/21 10:57:09 maire Exp $
 #
 # macro file for TestEm5.cc
 #
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setAbsMat Silicon   
-/testem/det/setAbsThick 20.5 mum  
+/testem/det/setAbsMat Silicon
+/testem/det/setAbsThick 20.5 mum
 /testem/det/setAbsYZ     1 mm
 #
 /testem/phys/addPhysics  standard
 ###/testem/phys/addPhysics  g4v52
 #
-/testem/phys/setGCut 2.13 mm    
+/testem/phys/setGCut 2.13 mm
 /testem/phys/setECut 7.0  mum
 /testem/phys/setPCut 7.0  mum
 #
 /run/initialize
+###/testem/histo/setHisto 6 100 -0.25 0.25 mrad
 #
 /testem/gun/setDefault
 /gun/particle pi+ 

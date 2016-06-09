@@ -1,9 +1,12 @@
-/control/verbose 1
+
+/lowenergy/lowlimGE 250 eV
+
+/lowenergy/cutEnergy 250 eV
+
 /gun/randomVert on
 
 /gun/particle gamma
 
 /gun/energy 6 keV
 
-/run/beamOn 30
-
+/run/beamOn 10

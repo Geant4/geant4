@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2003/08/25 12:33:52 dressel Exp $
+$Id: History,v 1.28 2004/06/21 09:28:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 21st, 2004  G. Daquino - exbiasing-V06-01-00
+- Ported B02 and B03 to AIDA 3.2.1 and PI 1.2.1.
 
 Jul 31th, 2003  M. Dressel - exbiasing-V05-02-02
 - added weight window example to B01

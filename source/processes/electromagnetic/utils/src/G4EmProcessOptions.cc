@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.1 2004/02/27 17:59:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4EmProcessOptions.cc,v 1.2 2004/05/17 09:46:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +48,7 @@
 #include "G4VEmProcess.hh"
 #include "G4VEnergyLossProcess.hh"
 #include "G4VMultipleScattering.hh"
+#include "G4Region.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -337,6 +338,66 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name)
     }
   }
 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetLambdaFactor(G4double val)
+{
+  const std::vector<G4VEnergyLossProcess*>& v =
+        theManager->GetEnergyLossProcessVector();
+  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
+  for(itr = v.begin(); itr != v.end(); itr++) {
+    G4VEnergyLossProcess* p = *itr;
+    if(p) p->SetLambdaFactor(val);
+  }
+  const std::vector<G4VEmProcess*>& w =
+        theManager->GetEmProcessVector();
+  std::vector<G4VEmProcess*>::const_iterator itp;
+  for(itp = w.begin(); itp != w.end(); itp++) {
+    G4VEmProcess* q = *itp;
+    if(q) q->SetLambdaFactor(val);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::ActivateFluorescence(G4bool val, const G4Region* r)
+{
+  const std::vector<G4VEnergyLossProcess*>& v =
+        theManager->GetEnergyLossProcessVector();
+  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
+  for(itr = v.begin(); itr != v.end(); itr++) {
+    G4VEnergyLossProcess* p = *itr;
+    if(p) p->ActivateFluorescence(val,r);
+  }
+  const std::vector<G4VEmProcess*>& w =
+        theManager->GetEmProcessVector();
+  std::vector<G4VEmProcess*>::const_iterator itp;
+  for(itp = w.begin(); itp != w.end(); itp++) {
+    G4VEmProcess* q = *itp;
+    if(q) q->ActivateFluorescence(val,r);
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::ActivateAugerElectronProduction(G4bool val, const G4Region* r)
+{
+  const std::vector<G4VEnergyLossProcess*>& v =
+        theManager->GetEnergyLossProcessVector();
+  std::vector<G4VEnergyLossProcess*>::const_iterator itr;
+  for(itr = v.begin(); itr != v.end(); itr++) {
+    G4VEnergyLossProcess* p = *itr;
+    if(p) p->ActivateAugerElectronProduction(val,r);
+  }
+  const std::vector<G4VEmProcess*>& w =
+        theManager->GetEmProcessVector();
+  std::vector<G4VEmProcess*>::const_iterator itp;
+  for(itp = w.begin(); itp != w.end(); itp++) {
+    G4VEmProcess* q = *itp;
+    if(q) q->ActivateAugerElectronProduction(val,r);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.17 2003/10/19 15:21:22 grichine Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PAIxSection.cc,v 1.19 2004/06/07 07:33:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // G4PAIxSection.cc -- class implementation file
@@ -35,6 +35,7 @@
 // R&D: Vladimir.Grichine@cern.ch
 //
 // History:
+//
 // 13.05.03 V. Grichine, bug fixed for maxEnergyTransfer > max interval energy
 // 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 17.05.01 V. Grichine, low energy extension down to 10*keV of proton
@@ -50,6 +51,9 @@
 #include "G4ios.hh"
 #include "G4Poisson.hh"
 #include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4SandiaTable.hh"
+
 
 /* ******************************************************************
 
@@ -81,6 +85,33 @@ const G4int G4PAIxSection::fMaxSplineSize = 500 ;  // Max size of output spline
 //
 // Constructor
 //
+
+G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
+{
+  fDensity       = matCC->GetMaterial()->GetDensity();
+  G4int matIndex = matCC->GetMaterial()->GetIndex();
+  fSandia        = new G4SandiaTable(matIndex);
+
+  G4int i, j; 
+  fMatSandiaMatrix = new G4OrderedTable();
+ 
+  for (i = 0; i < fSandia->GetMaxInterval()-1; i++)
+  {
+     fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
+  }	         	
+  for (i = 0; i < fSandia->GetMaxInterval()-1; i++)
+  {
+    (*(*fMatSandiaMatrix)[i])[0] = fSandia->GetSandiaMatTable(i,0);
+
+    for(j = 1; j < 5 ; j++)
+    {
+      (*(*fMatSandiaMatrix)[i])[j] = fSandia->GetSandiaMatTable(i,j)*fDensity;
+    }     
+  }	         	
+
+
+
+}
 
 G4PAIxSection::G4PAIxSection(G4int materialIndex,
 			     G4double maxEnergyTransfer)

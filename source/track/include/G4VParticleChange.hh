@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.hh,v 1.10 2003/12/12 13:12:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VParticleChange.hh,v 1.11 2004/05/08 15:28:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -66,6 +66,7 @@
 //   add CheckIt                    13  Apr.,99 H.Kurashige
 //   add accuracy leveles            5  May, 99 H.Kurashige
 //   add check secondaries          11  June, 03 H.Kurashige
+//   add new methods of ProposeXXX  08  May, 04 H.Kurashige  
 #ifndef G4VParticleChange_h
 #define G4VParticleChange_h 1
 
@@ -132,24 +133,24 @@ class G4VParticleChange
   public: // with description
     //---- the following methods are for TruePathLength ----
     G4double GetTrueStepLength() const;
-    void  SetTrueStepLength(G4double truePathLength);
-    //  Get/Set theTrueStepLength
+    void  ProposeTrueStepLength(G4double truePathLength);
+    //  Get/Propose theTrueStepLength
 
     //---- the following methods are for LocalEnergyDeposit ----   
     G4double GetLocalEnergyDeposit() const;
-    void SetLocalEnergyDeposit(G4double anEnergyPart);
-    //  Get/Set the locally deposited energy 
+    void ProposeLocalEnergyDeposit(G4double anEnergyPart);
+    //  Get/Propose the locally deposited energy 
 
     //---- the following methods are for TrackStatus -----   
-    G4TrackStatus GetStatusChange() const;
-    void SetStatusChange(G4TrackStatus status); 
-    //  Get/Set the final TrackStatus of the current particle.
+    G4TrackStatus GetTrackStatus() const;
+    void ProposeTrackStatus(G4TrackStatus status); 
+    //  Get/Propose the final TrackStatus of the current particle.
     // ------------------------------------------------------   
 
     //---- the following methods are for managements of SteppingControl --
     G4SteppingControl GetSteppingControl() const;
-    void SetSteppingControl(G4SteppingControl StepControlFlag);
-    //  Set/Get a flag to control stepping manager behavier 
+    void ProposeSteppingControl(G4SteppingControl StepControlFlag);
+    //  Set/Propose a flag to control stepping manager behavier 
     // ------------------------------------------------------   
 
     //---- the following methods are for managements of secondaries --
@@ -178,8 +179,9 @@ class G4VParticleChange
 
     G4double GetParentWeight() const ;
     //  Get weight of the parent (i.e. current) track
+    void     ProposeParentWeight(G4double);
+    //  Propse new weight of the parent (i.e. current) track
 
-    void     SetParentWeight(G4double);
     void     SetParentWeightByProcess(G4bool);
     G4bool   IsParentWeightSetByProcess() const;  
     // If fParentWeightByProcess flag is false (true in default),
@@ -198,6 +200,18 @@ class G4VParticleChange
 
     void SetVerboseLevel(G4int vLevel);
     G4int GetVerboseLevel() const;
+
+  public:
+   // Following methods will be removed in release 7.0
+   // Using ProposeXXXX methods is recommended to setting
+   // properties in G4VParticleChange   
+
+    void  SetTrueStepLength(G4double truePathLength);
+    void  SetLocalEnergyDeposit(G4double anEnergyPart);
+    G4TrackStatus GetStatusChange() const;
+    void  SetStatusChange(G4TrackStatus status);
+    void  SetSteppingControl(G4SteppingControl StepControlFlag);
+    void  SetParentWeight(G4double);
 
   protected:
 

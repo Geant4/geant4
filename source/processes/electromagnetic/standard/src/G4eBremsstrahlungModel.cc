@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.cc,v 1.15 2003/11/20 18:22:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4eBremsstrahlungModel.cc,v 1.16 2004/05/20 19:46:14 urban Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +43,7 @@
 // 27-01-03  Make models region aware (V.Ivanchenko)
 // 13-02-03  Add name (V.Ivanchenko)
 // 09-05-03  Fix problem of supression function + optimise sampling (V.Ivanchenko)
+// 20-05-04  Correction to ensure unit independence (L.Urban)
 //
 // Class Description:
 //
@@ -340,7 +341,7 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
       }
     }
 
-  G4double xx = log10(T);
+  G4double xx = log10(T/MeV);
   G4double fl = 1.;
 
   if (xx <= xlim)
@@ -542,7 +543,7 @@ G4double G4eBremsstrahlungModel::CrossSectionPerAtom(G4double kineticEnergy,
     }
   }
 
-  G4double xx = log10(kineticEnergy) ;
+  G4double xx = log10(kineticEnergy/MeV) ;
   G4double fs = 1. ;
 
   if (xx <= xlim) {

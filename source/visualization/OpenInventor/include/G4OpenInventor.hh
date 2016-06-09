@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.hh,v 1.6 2001/07/11 10:08:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenInventor.hh,v 1.7 2004/04/08 09:39:37 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // Guy Barrand 26 Mar 1998.
 // OpenInventor graphics system factory.
@@ -40,11 +40,10 @@ class G4OpenInventor: public G4VGraphicsSystem {
 public:
   G4OpenInventor(const G4String,const G4String,G4VGraphicsSystem::Functionality);
   virtual ~G4OpenInventor();
-  G4VViewer* CreateViewer(G4VSceneHandler&,const G4String& name = "");
   void SetInteractorManager(G4VInteractorManager*);
   G4VInteractorManager* GetInteractorManager();
   G4VSceneHandler* CreateSceneHandler (const G4String& name);
-  void InitHEPVis();
+  void InitNodes();
 private:
   G4VInteractorManager* interactorManager;
 };

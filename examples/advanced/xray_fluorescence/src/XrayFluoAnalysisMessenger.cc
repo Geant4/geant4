@@ -22,41 +22,51 @@
 //
 //
 // $Id: XrayFluoAnalysisMessenger.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
-// 29 Nov 2002 minor upgrade (Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 
 #ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisMessenger.hh"
 
-#include "XrayFluoAnalysisManager.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoAnalysisMessenger::XrayFluoAnalysisMessenger(XrayFluoAnalysisManager* analysisManager)
   :xrayFluoAnalysis(analysisManager)
-
+  
 { 
   XrayFluoAnalysisDir = new G4UIdirectory("/analysis/");
   XrayFluoAnalysisDir->SetGuidance("analysis control.");
-
-  ouputFileCommand = new G4UIcmdWithAString("/analysis/outputFile",this);
-  ouputFileCommand->SetGuidance("specify the name of the output file (lowercase for Hbook)");
-  ouputFileCommand->SetGuidance("default: xrayfluo.hbk");
-  ouputFileCommand->SetParameterName("choice",true);
-  ouputFileCommand->SetDefaultValue("xrayfluo.hbk");
-  //DrawCmd->SetCandidates("none charged neutral all");
-  ouputFileCommand->AvailableForStates(G4State_Idle);
   
+  outputFileCommand = new G4UIcmdWithAString("/analysis/outputFile",this);
+  outputFileCommand->SetGuidance("specify the name of the output file (lowercase if paw will be used)");
+  outputFileCommand->SetGuidance("command /analysis/update MUST be used after this command");
+  outputFileCommand->SetParameterName("choice",true);
+  outputFileCommand->SetDefaultValue("xrayfluo.hbk");
+  outputFileCommand->AvailableForStates(G4State_Idle);
+    
+  outputFileType = new G4UIcmdWithAString("/analysis/fileType",this);
+  outputFileType->SetGuidance("specify the type of the output file");
+  outputFileType->SetGuidance("command /analysis/update MUST be used after this command");
+  outputFileType->SetParameterName("choice",true);
+  outputFileType->SetDefaultValue("hbook");
+  outputFileType->SetCandidates("hbook xml");
+  outputFileType->AvailableForStates(G4State_Idle);
+  
+  persistencyUpdateCommand = new G4UIcmdWithoutParameter("/analysis/update",this);
+  outputFileCommand->SetGuidance("Update persistency file");
+  outputFileCommand->SetGuidance("This command MUST be used after outputFile or outputFileType commands");
+  outputFileCommand->AvailableForStates(G4State_Idle);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -72,10 +82,21 @@ XrayFluoAnalysisMessenger::~XrayFluoAnalysisMessenger()
 void XrayFluoAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
 
-if(command == ouputFileCommand)
-    {xrayFluoAnalysis->SetOutputFileName(newValue);}
+  if(command == outputFileCommand)
+    {
+      if ((xrayFluoAnalysis->GetDeletePersistencyFileFlag())) remove("xrayfluo.hbk");      
+      xrayFluoAnalysis->SetOutputFileName(newValue);
+    }
+  
+  else if (command == persistencyUpdateCommand)
+    {xrayFluoAnalysis->CreatePersistency();}
 
-   
+  else if(command == outputFileType)
+    {
+      if (xrayFluoAnalysis->GetDeletePersistencyFileFlag()) remove("xrayfluo.hbk");      
+      xrayFluoAnalysis->SetOutputFileType(newValue);
+    }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

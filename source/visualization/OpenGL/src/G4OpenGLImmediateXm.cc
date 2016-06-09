@@ -21,16 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXm.cc,v 1.8 2002/02/24 01:48:05 johna Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLImmediateXm.cc,v 1.9 2004/04/07 15:18:22 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // Andrew Walkden  10th February 1997
 // OpenGL graphics system factory.
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-
-#include <GL/gl.h>
 
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"

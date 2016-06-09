@@ -30,8 +30,8 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.7 2004/03/11 16:05:03 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: BrachyPhantomSD.cc,v 1.8 2004/05/13 14:47:46 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 #include "BrachyPhantomSD.hh"
 #include "BrachyPhantomHit.hh"
@@ -72,34 +72,32 @@ G4bool BrachyPhantomSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
   G4double energyDeposit = aStep->GetTotalEnergyDeposit();
   if(energyDeposit == 0.)
     return false;
-
-  // Read Voxel indexes: i is the x index, k is the z index
-  G4int k = ROhist->GetReplicaNumber(1);
-  G4int i = ROhist->GetReplicaNumber(2);
-  G4int j = ROhist->GetReplicaNumber();
-  
-  G4int numberOfVoxelZ = 300;
-  G4double voxelWidthZ = 1. *mm;
           
-  G4double x = (-numberOfVoxelZ+1+2*i)*voxelWidthZ/2; 
-  G4double y = (- numberOfVoxelZ+1+2*j)*voxelWidthZ/2;
-  G4double z = (- numberOfVoxelZ+1+2*k)*voxelWidthZ/2;
-
- 
- if(energyDeposit != 0)                       
+  if(energyDeposit != 0)                       
 	    { 
             
 #ifdef G4ANALYSIS_USE	
-                 BrachyAnalysisManager* analysis = 
-                                      BrachyAnalysisManager::getInstance();   
-	         analysis -> FillNtupleWithEnergy(x,y,z,energyDeposit);
-                 if (y<0.8*mm && y> -0.8*mm)
-	         { 
-                 analysis -> FillHistogramWithEnergy(x,z,energyDeposit/MeV);
+	      // Read Voxel indexes: i is the x index, k is the z index
+	      G4int k = ROhist->GetReplicaNumber(1);
+	      G4int i = ROhist->GetReplicaNumber(2);
+	      G4int j = ROhist->GetReplicaNumber();
+  
+	      G4int numberOfVoxelZ = 300;
+	      G4double voxelWidthZ = 1. *mm;
+	      G4double x = (-numberOfVoxelZ+1+2*i)*voxelWidthZ/2; 
+	      G4double y = (- numberOfVoxelZ+1+2*j)*voxelWidthZ/2;
+	      G4double z = (- numberOfVoxelZ+1+2*k)*voxelWidthZ/2;
+
+	      BrachyAnalysisManager* analysis = 
+		BrachyAnalysisManager::getInstance();   
+	      analysis -> FillNtupleWithEnergy(x,y,z,energyDeposit);
+	      if (y<0.8*mm && y> -0.8*mm)
+		{ 
+		  analysis -> FillHistogramWithEnergy(x,z,energyDeposit/MeV);
    
-                   if (z<0.8*mm && z> -0.8*mm)                
-                   analysis -> DoseDistribution(x,energyDeposit/MeV);
-		 }
+		  if (z<0.8*mm && z> -0.8*mm)                
+		    analysis -> DoseDistribution(x,energyDeposit/MeV);
+		}
 #endif  
 	    }
   return true;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.hh,v 1.6 2001/08/31 16:44:46 gum Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpRayleigh.hh,v 1.7 2004/04/27 00:26:34 gum Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -139,6 +139,10 @@ protected:
         //  A Physics Table can be either a cross-sections table or
         //  an energy table (or can be used for other specific
         //  purposes).
+
+private:
+
+        G4bool DefaultWater;
 
 };
 

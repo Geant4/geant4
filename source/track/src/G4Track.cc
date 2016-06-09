@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.19 2003/05/20 22:24:41 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Track.cc,v 1.21 2004/06/11 14:28:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 //---------------------------------------------------------------
@@ -33,6 +33,7 @@
 //   Add copy constructor            Hisaya Feb. 07 01
 //   Fix GetVelocity                 Hisaya Feb. 17 01
 //   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek//
+
 #include "G4Track.hh"
 
 G4Allocator<G4Track> aTrackAllocator;

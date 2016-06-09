@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.2 2003/10/10 16:21:27 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: RunAction.hh,v 1.4 2004/03/31 17:09:45 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,7 @@ class PhysicsList;
 class PrimaryGeneratorAction;
 class G4Run;
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
 namespace AIDA {
  class ITree;
  class IHistogram1D;
@@ -58,12 +58,12 @@ class RunAction : public G4UserRunAction
     
     G4double* GetTallyEdep() {return tallyEdep;};
     
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
-    
+#endif
+       
     G4double GetBinLength() {return binLength;};
     G4double GetOffsetX()   {return offsetX;} 
-#endif
            
   private:  
     void bookHisto();
@@ -75,14 +75,14 @@ class RunAction : public G4UserRunAction
     PrimaryGeneratorAction* kinematic;
     G4double*               tallyEdep;   
 
-#ifdef G4ANALYSIS_USE
-  private:        
+  private:
+#ifdef USE_AIDA          
     AIDA::ITree* tree;
     AIDA::IHistogram1D* histo[1];
-    
+#endif
+            
     G4double binLength;
-    G4double offsetX;
-#endif                     
+    G4double offsetX;                   
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

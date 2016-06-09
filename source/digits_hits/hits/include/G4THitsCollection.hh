@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4THitsCollection.hh,v 1.1 2003/10/03 10:17:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4THitsCollection.hh,v 1.4 2004/06/11 14:10:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #ifndef G4THitsCollection_h
@@ -56,7 +56,11 @@ class G4HitsCollection : public G4VHitsCollection
       void* theCollection;
 };
 
-extern G4Allocator<G4HitsCollection> anHCAllocator;
+#if defined G4DIGI_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4HitsCollection> anHCAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4HitsCollection> anHCAllocator;
+#endif
 
 template <class T> class G4THitsCollection : public G4HitsCollection 
 {

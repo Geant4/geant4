@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.15 2003/10/29 10:01:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.16 2004/04/08 09:39:38 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // J Kallenbach  27th Aug 1996
@@ -44,7 +44,8 @@ class SoSeparator;
 // Base class for various OpenInventorScene classes.
 class G4OpenInventorSceneHandler: public G4VSceneHandler {
 
-friend class G4OpenInventorViewer;
+friend class G4OpenInventorXtViewer;
+friend class G4OpenInventorWinViewer;
 
 public:
 

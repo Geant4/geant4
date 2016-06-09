@@ -1,0 +1,8 @@
+#This sets the gun up to shoot an optical photon
+
+/gun/particle opticalphoton
+/gun/energy 7.07 eV
+/gun/position 5 5 -5
+/gun/direction 0 0 1
+/gun/polarization 0 1 0
+/tracking/verbose 1

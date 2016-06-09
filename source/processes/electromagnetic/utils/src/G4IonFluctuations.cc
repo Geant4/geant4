@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.8 2003/11/12 10:24:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4IonFluctuations.cc,v 1.9 2004/05/11 15:35:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -66,7 +66,7 @@ G4IonFluctuations::G4IonFluctuations(const G4String& nam)
   theBohrBeta2(50.0*keV/proton_mass_c2),
   minFraction(0.2),
   xmin(0.2),
-  minLoss(0.000001*eV)
+  minLoss(0.001*eV)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -99,13 +99,11 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
     particle       = dp->GetDefinition();
     charge = particle->GetPDGCharge()/eplus;
   }
-  particleMass     = dp->GetMass();
-  G4double q       = dp->GetCharge()/eplus;
-  chargeSquare     = q*q;
-  chargeSqRatio    = chargeSquare/(charge*charge);
 
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
+  
+
   G4double navr = minNumberInteractionsBohr;
 
   // Gaussian fluctuation
@@ -141,6 +139,7 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
     G4double n    = (G4double)(G4Poisson(navr));
     loss = meanLoss*n/navr;
   }
+
   //  G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
   return loss;
 }
@@ -153,6 +152,11 @@ G4double G4IonFluctuations::Dispersion(
  				G4double& tmax,
 			        G4double& length)
 {
+  particleMass     = dp->GetMass();
+  G4double q       = dp->GetCharge()/eplus;
+  chargeSquare     = q*q;
+  chargeSqRatio    = chargeSquare/(charge*charge);
+
   G4double electronDensity = material->GetElectronDensity();
   kineticEnergy  = dp->GetKineticEnergy();
   //  G4cout << "e= " <<  kineticEnergy << " m= " << particleMass

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.12 2003/06/16 16:56:19 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4MaterialPropertiesTable.hh,v 1.15 2004/05/17 13:42:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -114,6 +114,9 @@ public: // With description
 
         G4double GetConstProperty(const char *key);
         // Get the constant property from the table corresponding to the key-name
+
+        G4bool ConstPropertyExists(const char *key);
+        // Return true if a const property 'key' exists.
 
 	G4MaterialPropertyVector* GetProperty(const char *key);
         // Get the property from the table corresponding to the key-name.

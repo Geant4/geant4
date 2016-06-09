@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2003/01/23 15:31:39 maire Exp $
+$Id: README,v 1.5 2004/05/31 18:13:04 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,7 +10,9 @@ $Id: README,v 1.4 2003/01/23 15:31:39 maire Exp $
 
 This example presently illustrates the following basic concepts, and in
 particular (indicated with ***), how to use G4 for optical photon
-generation and transport: 
+generation and transport. An extended example of what is possible
+in Geant4 with optical photons can be found at
+examples/extended/optical/LXe. 
 
 main()
 ------

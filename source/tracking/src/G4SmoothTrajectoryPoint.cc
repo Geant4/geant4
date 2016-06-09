@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.10 2003/06/16 17:13:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.12 2004/06/11 14:30:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // ---------------------------------------------------------------

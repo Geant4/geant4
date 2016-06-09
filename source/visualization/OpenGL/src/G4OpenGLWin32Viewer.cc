@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.9 2003/06/25 09:01:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.13 2004/04/08 15:36:32 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
@@ -71,6 +71,12 @@ void G4OpenGLWin32Viewer::FinishView (
 {
   if(!fHDC) return;
   ::SwapBuffers(fHDC);
+  // Empty the Windows message queue :
+  MSG event;
+  while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
+    ::TranslateMessage(&event);
+    ::DispatchMessage (&event);
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -197,10 +203,10 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+/*
   switch (aMessage) { 
   case WM_PAINT:{
-    G4OpenGLWin32Viewer* This = 
-      (G4OpenGLWin32Viewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+    printf("debug : PAINT\n");
     HDC	hDC;
     PAINTSTRUCT	ps;
     hDC = BeginPaint(aWindow,&ps);
@@ -208,11 +214,26 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
       // FIXME : To have an automatic refresh someone have to redraw here.
     }
     EndPaint(aWindow, &ps);
+
+    //FIXME : have to handle WM_RESIZE
+    //pView->WinSize_x = (G4int) width;
+    //pView->WinSize_y = (G4int) height;
+    G4OpenGLWin32Viewer* This = 
+      (G4OpenGLWin32Viewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+    if(This) {
+      This->SetView();
+      glViewport(0,0,This->WinSize_x,This->WinSize_y);
+      This->ClearView();
+      This->DrawView();
+      // WARNING : the below empty the Windows message queue...
+      This->FinishView();
     }
-    return 0;
+  } return 0;
   default:
     return DefWindowProc(aWindow,aMessage,aWParam,aLParam);
   }
+*/
+  return DefWindowProc(aWindow,aMessage,aWParam,aLParam);
 }
 
 //////////////////////////////////////////////////////////////////////////////

@@ -12,26 +12,25 @@ DefaultHepRepTypeTree::DefaultHepRepTypeTree(HepRepTreeID* typeTree)
 }
 
 DefaultHepRepTypeTree::~DefaultHepRepTypeTree() {
-    for (vector<HepRepType*>::iterator i1 = types.begin(); i1 != types.end(); i1++) {
+    for (set<HepRepType*>::iterator i1 = types.begin(); i1 != types.end(); i1++) {
         delete (*i1);
     }
 }
 
-HepRepTreeID* DefaultHepRepTypeTree::copy() {
-    return DefaultHepRepTreeID::copy();
-}
-
-HepRepTypeTree* DefaultHepRepTypeTree::copy(HepRep*) {
-    cerr << "DefaultHepRepTypeTree::copy(HepRep*) not implemented." << endl;
+HepRepTypeTree* DefaultHepRepTypeTree::copy() {
+    cerr << "DefaultHepRepTypeTree::copy() not implemented." << endl;
     return NULL;
 }
 
-bool DefaultHepRepTypeTree::addType(HepRepType* type) {
-    types.push_back(type);
-    return true;
+void DefaultHepRepTypeTree::addType(HepRepType* type) {
+    types.insert(type);
 }
 
-vector<HepRepType*>* DefaultHepRepTypeTree::getTypes() {
-    return &types;
+set<HepRepType*> DefaultHepRepTypeTree::getTypes() {
+    return types;
 }
 
+HepRepType* DefaultHepRepTypeTree::getType(string /*typeName*/) {
+    cerr << "DefaultHepRepTypeTree::getType(string) not implemented." << endl;
+    return NULL;
+}

@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.94 2003/11/18 11:28:10 hpw Exp $
+# $Id: binmake.gmk,v 1.102 2004/06/11 14:07:47 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -20,6 +20,9 @@ include $(G4INSTALL)/config/G4VIS_USE.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 include $(G4INSTALL)/config/analysis.gmk
 
+# Verify the existance of the global static libraries first.
+# if not verify the existance of global shared libraries (Unix only).
+#
 ifndef G4LIB_USE_GRANULAR
     GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
   ifndef GLOBALLIBS
@@ -28,10 +31,15 @@ ifndef G4LIB_USE_GRANULAR
   endif
 endif
 
+# Verify the existance of granular shared libraries (Unix) or global DLLs (Windows)
+#
 ifndef SHAREDLIBS
   SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4globman.$(SHEXT) && echo yes)
 endif
-  
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/G4global.$(SHEXT) && echo yes)
+endif  
+
 ifndef INCFLAGS
  ifeq ($(G4INCLUDE_EXEC),1)
   INCFLAGS := -I$(G4INCLUDE)
@@ -64,44 +72,47 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
 	      -I$(G4BASE)/processes/hadronic/management/include \
+	      -I$(G4BASE)/processes/hadronic/models/abrasion/include \
+              -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
 	      -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
 	      -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
 	      -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
               -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
-              -I$(G4BASE)/processes/hadronic/models/high_energy/include \
-              -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
-              -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
-              -I$(G4BASE)/processes/hadronic/models/low_energy/include \
-              -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
-              -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
+	      -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
-              -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
+	      -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/gem_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
-              -I$(G4BASE)/processes/hadronic/models/inucl/include \
-              -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
-              -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
-              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include \
-              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
-              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/include \
-              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/uplusplus/include \
+              -I$(G4BASE)/processes/hadronic/models/em_dissociation/include \
+              -I$(G4BASE)/processes/hadronic/models/general_finalstate/include \
+              -I$(G4BASE)/processes/hadronic/models/high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
+              -I$(G4BASE)/processes/hadronic/models/inucl/include \
+              -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
+              -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
+              -I$(G4BASE)/processes/hadronic/models/low_energy/include \
               -I$(G4BASE)/processes/hadronic/models/management/include \
+              -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
               -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
+              -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
+              -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
+              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include \
+              -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
+              -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
+              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/include \
+              -I$(G4BASE)/processes/hadronic/models/relativistic_qmd/uplusplus/include \
               -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
               -I$(G4BASE)/processes/hadronic/models/util/include \
-              -I$(G4BASE)/processes/hadronic/models/general_finalstate/include \
-              -I$(G4BASE)/processes/hadronic/models/radioactive_decay/include \
               -I$(G4BASE)/processes/hadronic/processes/include \
               -I$(G4BASE)/processes/hadronic/stopping/include \
               -I$(G4BASE)/processes/hadronic/util/include \
@@ -160,23 +171,32 @@ endif
 #
 ifndef USER_DEFINED_LDLIBS
 
-# LDLIBS1 contains the very high level libraries...
+# TARGETLIB is the library generated for the final user application...
 #
 ifdef G4EXLIB
-  LDLIBS1 := -l$(G4TARGET)
+  ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  # Unix
+    TARGETLIB := -l$(G4TARGET)
+  else
+  # Windows
+    TARGETLIB := lib$(G4TARGET).a   
+  endif
 endif
-LDLIBS1 += $(EXTRALIBS)
 
-# VISLIBS and UILIBS are now handled by the granular library script...
+# LDLIBS1 contains the very high level libraries...
+#
+LDLIBS1 := $(EXTRALIBS)
+
+# VISLIBS (and UILIBS?) is handled by the granular library script...
 #
 ifdef GLOBALLIBS
-  LDLIBS1 += $(VISLIBS) $(UILIBS) -lG4persistency
+  LDLIBS2 := $(VISLIBS) -lG4interfaces -lG4persistency
 
   ifdef G4USE_G3TOG4
-    LDLIBS1 += -lG3toG4
+    LDLIBS2 += -lG3toG4
   endif
 
-  LDLIBS2 := -lG4readout \
+  LDLIBS2 += -lG4readout \
              -lG4run \
              -lG4event \
              -lG4tracking \
@@ -241,13 +261,18 @@ LDLIBS_PREFINAL += $(LDLIBS4)
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   WIN32TMP := $(patsubst -L%,$(LIB_PATH)%,$(LDFLAGS))
   LDFLAGS  = $(patsubst /,$(PATH_DEL),$(WIN32TMP))
-  LDLIBS = $(patsubst -l%,lib%.a,$(LDLIBS_PREFINAL))
+  WIN32TMP2 := $(patsubst -L%,$(LIB_PATH)%,$(LDLIBS_PREFINAL))
+  ifdef SHAREDLIBS
+	LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.lib,$(WIN32TMP2))
+  else
+  	LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
+  endif
 else
-  LDLIBS = $(LDLIBS_PREFINAL)
+  LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
 endif
 
 ifdef transform-RPath
-#invoke system specific transformation of 
+# Invoke system specific transformation of 
 include $(G4INSTALL)/config/sys/$(G4SYSTEM)-runpath.gmk
 endif
 	
@@ -279,7 +304,7 @@ ifndef USER_DEFINED_LDLIBS
 	  echo "         gmake libmap"; \
 	  exit 1; fi
   else
-	@echo "Using global libraries."
+	@echo "Using global libraries ..."
   endif
 endif
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
@@ -339,7 +364,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	@if [ ! -d $(G4TMPDIR)/exe ] ; then mkdir $(G4TMPDIR)/exe ;fi
-	@echo Making dependency for file $<...
+	@echo Making dependency for file $< ...
 	@set -e;\
 	g++ $(GPPFLAGS) $(CPPFLAGS) -w $< |\
 	sed 's!$(G4TARGET)\.o!$(G4TMPDIR)/exe/& $@!' >$@;\

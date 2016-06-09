@@ -1,8 +1,8 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-01 $   (25-March-2004)
+ Geant4 version $Name: geant4-06-02 $   (25-June-2004)
                       Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303.
+                      Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
@@ -74,8 +74,12 @@ PhysicsList::AddPhysicsList: <standard>
 /testem/phys/MuonCuts  10.0 mm
 /testem/stepMax         100 mm
 #
-/process/eLoss/preciseRange  true
-/process/eLoss/integral      true
+/testem/det/acceptance1  0.8380 0.0319 3.0
+/testem/det/acceptance9  0.9605 0.0146 3.0
+/testem/det/acceptance25 0.9805 0.0118 3.0
+#
+#/process/eLoss/preciseRange  true
+#/process/eLoss/integral      true
 /run/initialize
 Ecal is 36 cm  of CsI
 Absorber is 2 mm  of Al
@@ -86,7 +90,8 @@ world cuts are set
 Vertex cuts are set
 Muon cuts are set
 #
-#/testem/histo/fileName  e_pr.paw
+#/testem/histo/fileName  e_pr.root
+#/testem/histo/fileType  root
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
@@ -107,7 +112,6 @@ eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
-      Precise range table up to 1 GeV in 70 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e-
@@ -120,7 +124,6 @@ eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
-      Precise range table up to 1 GeV in 70 bins.
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e+
@@ -140,8 +143,7 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
-      Precise range table up to 1 GeV in 70 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -151,8 +153,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
-      Precise range table up to 1 GeV in 70 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -170,8 +171,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
-      Precise range table up to 1 GeV in 70 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -245,16 +245,29 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=30.84s Real=34.11s Sys=3.27s
+  User=31.48s Real=35.19s Sys=3.65s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
-Number of events                     100
-Average number of e-                 1295
-Average number of gamma              681.2
-Average number of e+                 48.45
-Average number of steps              3796
+Number of events             100
+Average number of e-         1306
+Average number of gamma      684.6
+Average number of e+         48.98
+Average number of steps      3831
+Edep 1x1 =                   0.8336 +- 0.002815
+Edep 3x3 =                   0.9586 +- 0.001349
+Edep 5x5 =                   0.979 +- 0.001047
 ========================================================
+
+
+<<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
+Edep1x1: 0.8336  delEdep1x1= -0.004382 nrms= -1.374
+Erms1x1: 0.02815  delErms1x1= -0.003748 nrms= -1.175
+Edep3x3: 0.9586  delEdep3x3= -0.001905 nrms= -1.305
+Erms3x3: 0.01349  delErms3x3= -0.001111 nrms= -0.7611
+Edep5x5: 0.979  delEdep5x5= -0.001528 nrms= -1.295
+Erms5x5: 0.01047  delErms5x5= -0.00133 nrms= -1.127
+<<<<<END>>>>>   IS ACCEPTED
 
 #
 Graphics systems deleted.

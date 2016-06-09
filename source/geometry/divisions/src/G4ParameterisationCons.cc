@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.cc,v 1.6 2003/11/19 11:51:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationCons.cc,v 1.8 2004/05/17 07:20:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // class G4ParameterisationCons Implementation file
 //
-// 26.05.03 - P.Arce Initial version
-// ********************************************************************
+// 26.05.03 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 
 #include "G4ParameterisationCons.hh"
 
@@ -36,19 +37,54 @@
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4ReflectedSolid.hh"
 #include "G4Cons.hh"
+
+//--------------------------------------------------------------------------
+G4VParameterisationCons::
+G4VParameterisationCons( EAxis axis, G4int nDiv, G4double width,
+                        G4double offset, G4VSolid* msolid,
+                        DivisionType divType )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+{
+  G4Cons* msol = (G4Cons*)(msolid);
+  if (msolid->GetEntityType() == "G4ReflectedSolid")
+  {
+    // Get constituent solid  
+    G4VSolid* mConstituentSolid 
+       = ((G4ReflectedSolid*)msolid)->GetConstituentMovedSolid();
+    msol = (G4Cons*)(mConstituentSolid);
+  
+    // Create a new solid with inversed parameters
+    G4Cons* newSolid
+      = new G4Cons(msol->GetName(),
+                   msol->GetInnerRadiusPlusZ(), msol->GetOuterRadiusPlusZ(),
+                   msol->GetInnerRadiusMinusZ(), msol->GetOuterRadiusMinusZ(),
+                   msol->GetZHalfLength(),
+                   msol->GetStartPhiAngle(), msol->GetDeltaPhiAngle());
+    msol = newSolid;
+    fmotherSolid = newSolid;
+    fReflectedSolid = true;
+    fDeleteSolid = true;
+  }    
+}
+
+//------------------------------------------------------------------------
+G4VParameterisationCons::~G4VParameterisationCons()
+{
+}
 
 //--------------------------------------------------------------------------
 G4ParameterisationConsRho::
 G4ParameterisationConsRho( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationCons( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionConsRho" );
 
-  G4Cons* msol = (G4Cons*)(msolid);
+  G4Cons* msol = (G4Cons*)(fmotherSolid);
   if( msol->GetInnerRadiusPlusZ() == 0. )
   {
     G4cerr << "WARNING - G4ParameterisationConsRho, OuterRadiusMinusZ = 0. "
@@ -175,19 +211,18 @@ G4ParameterisationConsPhi::
 G4ParameterisationConsPhi( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationCons( axis, nDiv, width, offset, msolid, divType )
 { 
   CheckParametersValidity();
   SetType( "DivisionConsPhi" );
 
+  G4Cons* msol = (G4Cons*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Cons* msol = (G4Cons*)(msolid);
     fnDiv = CalculateNDiv( msol->GetDeltaPhiAngle(), width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Cons* msol = (G4Cons*)(msolid);
     fwidth = CalculateWidth( msol->GetDeltaPhiAngle(), nDiv, offset );
   }
 
@@ -282,19 +317,18 @@ G4ParameterisationConsZ::
 G4ParameterisationConsZ( EAxis axis, G4int nDiv,
                          G4double width, G4double offset,
                          G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationCons( axis, nDiv, width, offset, msolid, divType )
 { 
   CheckParametersValidity();
   SetType( "DivisionConsZ" );
 
+  G4Cons* msol = (G4Cons*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Cons* msol = (G4Cons*)(msolid);
     fnDiv = CalculateNDiv( 2*msol->GetZHalfLength(), width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Cons* msol = (G4Cons*)(msolid);
     fwidth = CalculateWidth( 2*msol->GetZHalfLength(), nDiv, offset );
   }
 
@@ -329,7 +363,7 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 {
   //----- set translation: along Z axis
   G4Cons* motherCons = (G4Cons*)(GetMotherSolid());
-  G4double posi = - motherCons->GetZHalfLength() + foffset
+  G4double posi = - motherCons->GetZHalfLength() + OffsetZ()
                   + fwidth/2 + copyNo*fwidth;
   G4ThreeVector origin(0.,0.,posi); 
   physVol->SetTranslation( origin );
@@ -367,8 +401,8 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
                    - msol->GetOuterRadiusMinusZ()) / (2*mHalfLength);
   G4double bROuter = (msol->GetOuterRadiusPlusZ()
                    + msol->GetOuterRadiusMinusZ()) / 2;
-  G4double xMinusZ = -mHalfLength + foffset + fwidth*copyNo;
-  G4double xPlusZ  = -mHalfLength + foffset + fwidth*(copyNo+1);
+  G4double xMinusZ = -mHalfLength + OffsetZ() + fwidth*copyNo;
+  G4double xPlusZ  = -mHalfLength + OffsetZ() + fwidth*(copyNo+1);
   cons.SetInnerRadiusMinusZ( aRInner * xMinusZ + bRInner );
   cons.SetOuterRadiusMinusZ( aROuter * xMinusZ + bROuter );
   cons.SetInnerRadiusPlusZ( aRInner * xPlusZ + bRInner );
@@ -390,4 +424,5 @@ ComputeDimensions( G4Cons& cons, const G4int copyNo,
     if( verbose >= 4 ) cons.DumpInfo();
   }
 #endif
+
 }

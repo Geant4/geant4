@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.6 2003/11/19 11:51:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.8 2004/05/17 07:20:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // class G4ParameterisationPolyhedra Implementation file
 //
-// 14.10.03 - P.Arce Initial version
-//---------------------------------------------------------------------
+// 14.10.03 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 
 #include "G4ParameterisationPolyhedra.hh"
 
@@ -36,19 +37,92 @@
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4ReflectedSolid.hh"
 #include "G4Polyhedra.hh"
+
+//--------------------------------------------------------------------------
+G4VParameterisationPolyhedra::
+G4VParameterisationPolyhedra( EAxis axis, G4int nDiv, G4double width,
+                              G4double offset, G4VSolid* msolid,
+                              DivisionType divType )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+{
+  G4Polyhedra* msol = (G4Polyhedra*)(msolid);
+  if (msolid->GetEntityType() == "G4ReflectedSolid")
+  {
+    // Get constituent solid  
+    G4VSolid* mConstituentSolid 
+       = ((G4ReflectedSolid*)msolid)->GetConstituentMovedSolid();
+    msol = (G4Polyhedra*)(mConstituentSolid);
+  
+    // Get parameters
+    G4int   nofSides = msol->GetOriginalParameters()->numSide;
+    G4int   nofZplanes = msol->GetOriginalParameters()->Num_z_planes;
+    G4double* zValues  = msol->GetOriginalParameters()->Z_values;
+    G4double* rminValues  = msol->GetOriginalParameters()->Rmin;
+    G4double* rmaxValues  = msol->GetOriginalParameters()->Rmax;
+
+    // Invert z values, 
+    // convert radius parameters
+    G4double* rminValues2 = new G4double[nofZplanes];
+    G4double* rmaxValues2 = new G4double[nofZplanes];
+    G4double* zValuesRefl = new G4double[nofZplanes];
+    for (G4int i=0; i<nofZplanes; i++)
+    {
+      rminValues2[i] = rminValues[i] * ConvertRadiusFactor(*msol);
+      rmaxValues2[i] = rmaxValues[i] * ConvertRadiusFactor(*msol);
+      zValuesRefl[i] = - zValues[i];
+    }  
+    
+    G4Polyhedra* newSolid
+      = new G4Polyhedra(msol->GetName(),
+                        msol->GetStartPhi(), 
+                        msol->GetEndPhi() - msol->GetStartPhi(),
+                        nofSides,
+                        nofZplanes, zValuesRefl, rminValues2, rmaxValues2);
+
+    delete [] rminValues2;       
+    delete [] rmaxValues2;       
+    delete [] zValuesRefl;       
+
+    msol = newSolid;
+    fmotherSolid = newSolid;
+    fReflectedSolid = true;
+    fDeleteSolid = true;
+  }    
+}
+
+//------------------------------------------------------------------------
+G4VParameterisationPolyhedra::~G4VParameterisationPolyhedra()
+{
+}
+
+//--------------------------------------------------------------------------
+G4double 
+G4VParameterisationPolyhedra::
+ConvertRadiusFactor(const G4Polyhedra& phedra) const
+{
+  G4double phiTotal = phedra.GetEndPhi() - phedra.GetStartPhi();
+  G4int nofSides = phedra.GetOriginalParameters()->numSide;
+  
+  if ( (phiTotal <=0) || (phiTotal > 2*M_PI+kAngTolerance) )
+    phiTotal = 2*M_PI;
+  
+  return cos(0.5*phiTotal/nofSides);
+}  
 
 //--------------------------------------------------------------------------
 G4ParameterisationPolyhedraRho::
 G4ParameterisationPolyhedraRho( EAxis axis, G4int nDiv,
                                G4double width, G4double offset,
                                G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationPolyhedra( axis, nDiv, width, offset, msolid, divType )
 {
+
   CheckParametersValidity();
   SetType( "DivisionPolyhedraRho" );
 
-  G4Polyhedra* msol = (G4Polyhedra*)(msolid);
+  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
   G4PolyhedraHistorical* original_pars = msol->GetOriginalParameters();
 
   if( divType == DivWIDTH )
@@ -190,12 +264,12 @@ G4ParameterisationPolyhedraPhi::
 G4ParameterisationPolyhedraPhi( EAxis axis, G4int nDiv,
                                G4double width, G4double offset,
                                G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationPolyhedra( axis, nDiv, width, offset, msolid, divType )
 { 
   CheckParametersValidity();
   SetType( "DivisionPolyhedraPhi" );
 
-  G4Polyhedra* msol = (G4Polyhedra*)(msolid);
+  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
   G4double deltaPhi = msol->GetEndPhi() - msol->GetStartPhi();
 
   if( divType == DivWIDTH )
@@ -345,12 +419,12 @@ G4ParameterisationPolyhedraZ::
 G4ParameterisationPolyhedraZ( EAxis axis, G4int nDiv,
                              G4double width, G4double offset,
                              G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationPolyhedra( axis, nDiv, width, offset, msolid, divType )
 { 
   CheckParametersValidity();
   SetType( "DivisionPolyhedraZ" );
 
-  G4Polyhedra* msol = (G4Polyhedra*)(msolid);
+  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
   
   if( divType == DivWIDTH )
@@ -387,8 +461,8 @@ G4double G4ParameterisationPolyhedraZ::GetMaxParameter() const
 {
   G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
   G4PolyhedraHistorical* origparamMother = msol->GetOriginalParameters();
-  return (origparamMother->Z_values[origparamMother->Num_z_planes-1]
-         -origparamMother->Z_values[0]);
+  return abs (origparamMother->Z_values[origparamMother->Num_z_planes-1]
+             -origparamMother->Z_values[0]);
 }
 
 //---------------------------------------------------------------------

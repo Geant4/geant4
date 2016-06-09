@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh,v 1.12 2003/09/09 20:09:17 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4EventManager.hh,v 1.14 2004/05/26 17:08:33 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -126,6 +126,7 @@ class G4EventManager
       G4SDManager* sdManager;
       G4PrimaryTransformer* transformer;
       G4bool tracking;
+      G4bool abortRequested;
 
       G4EvManMessenger* theMessenger;
 
@@ -146,6 +147,7 @@ class G4EventManager
   public: // with description
       inline void AbortCurrentEvent()
       { 
+        abortRequested = true;
         trackContainer->clear();
         if(tracking) trackManager->EventAborted();
       }
@@ -172,6 +174,11 @@ class G4EventManager
       // corresponding managers.
       void SetNumberOfAdditionalWaitingStacks(G4int iAdd)
       { trackContainer->SetNumberOfAdditionalWaitingStacks(iAdd); }
+
+      inline G4StackManager* GetStackManager() const
+      { return trackContainer; }
+      inline G4TrackingManager* GetTrackingManager() const
+      { return trackManager; }
 
   public: // with description
       inline G4int GetVerboseLevel()

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.42 2004/03/10 11:34:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4LossTableManager.cc,v 1.44 2004/05/12 12:25:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -364,7 +364,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
               G4VEnergyLossProcess* em = loss_vector[j];
               em->Initialise();
               em->SetDEDXTable(hIonisation->DEDXTable());
-              em->SetRangeTable(hIonisation->RangeTable());
+              em->SetPreciseRangeTable(hIonisation->PreciseRangeTable());
               em->SetRangeTableForLoss(hIonisation->RangeTableForLoss());
               em->SetInverseRangeTable(hIonisation->InverseRangeTable());
 	      em->SetLambdaTable(hIonisation->LambdaTable());
@@ -390,7 +390,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
               tables_are_built[i] = true;
               em->Initialise();
               em->SetDEDXTable(hIonisation->DEDXTable());
-              em->SetRangeTable(hIonisation->RangeTable());
+              em->SetPreciseRangeTable(hIonisation->PreciseRangeTable());
               em->SetRangeTableForLoss(hIonisation->RangeTableForLoss());
               em->SetInverseRangeTable(hIonisation->InverseRangeTable());
               em->SetLambdaTable(hIonisation->LambdaTable());
@@ -479,7 +479,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
         tables_are_built[j] = true;
 	em->Initialise();
         em->SetDEDXTable(theLoss->DEDXTable());
-        em->SetRangeTable(theLoss->RangeTable());
+        em->SetPreciseRangeTable(theLoss->PreciseRangeTable());
         em->SetRangeTableForLoss(theLoss->RangeTableForLoss());
         em->SetInverseRangeTable(theLoss->InverseRangeTable());
         em->SetLambdaTable(theLoss->LambdaTable());
@@ -606,7 +606,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
     }
     newlist.clear();
     range = tableBuilder->BuildRangeTable(dedxForRange);
-    em->SetRangeTable(range);
+    em->SetPreciseRangeTable(range);
     delete dedxForRange;
   }
 

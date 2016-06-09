@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.6 2004/01/28 17:58:58 ribon Exp $
+$Id: History,v 1.8 2004/05/28 11:05:41 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History,v 1.6 2004/01/28 17:58:58 ribon Exp $
 
                       Category History file
                       ---------------------
+
+28.05.04 - A.Ribon (lAr_calorimeter-V06-01-01)
+           Now PI light is used.
+
+18.05.04 - A.Ribon (lAr_calorimeter-V06-01-00)
+           Ported to PI. Only the setup is changed, no changes in the code.
 
 28.01.2004 - A.Ribon (lAr_calorimeter-V06-00-01)
              Clean up. Fixes for g++ 3.2 . New Physics Lists.

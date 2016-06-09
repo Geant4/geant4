@@ -15,7 +15,10 @@
 # Edit the next line(s) to choose another graphic system
 #
 /vis/open HepRepXML
+/vis/heprep/appendGeometry false
+/vis/heprep/setCoordinateSystem zxy
 /vis/viewer/set/culling global false
+/vis/viewer/zoom 0.0001
 #
 # Add volume to scene
 #

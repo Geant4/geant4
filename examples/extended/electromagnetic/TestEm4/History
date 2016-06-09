@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2003/11/25 18:36:18 vnivanch Exp $
+$Id: History,v 1.32 2004/06/21 10:55:10 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+21-06-04 mma (testem4-V0-01-01)
+- remove direct ROOT interface
+     
+30-03-04 mma (testem4-V0-01-00)
+- README: more information about ROOT installation
+      
+15-03-04 mma (testem4-V06-00-01)
+- put back G4ANALYSIS_USE in GNUmakefile 
+     
+27-02-04 mma (testem4-V06-00-00)
+- example of histogram with ROOT: USE_ROOT
 
 25-11-03 V.Ivanchenko (testem4-V05-02-03)
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003/10/03 14:42:29 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2004/06/01 15:39:56 gcosmo Exp $
 # -----------------------------------------------------------
 # GNUmakefile for digits+hits library.  Makoto Asai, 1/11/96.
 # -----------------------------------------------------------
@@ -8,6 +8,12 @@ name := G4readout
 ifndef G4INSTALL
   G4INSTALL = ../..
 endif
+
+GLOBLIBS  = libG4run.lib libG4event.lib
+GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
+GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 

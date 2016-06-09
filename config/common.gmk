@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.35 2003/01/22 18:02:03 gcosmo Exp $
+# $Id: common.gmk,v 1.38 2004/06/08 10:04:47 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -37,7 +37,7 @@ ifneq ($(G4LIB_BUILD_SHARED),)
 # Make shared library.
 $(G4LIBDIR)/lib$(name).$(SHEXT): $(G4TMPDIR)/obj.last
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
-	@echo Creating shared library $@
+	@echo Creating shared library $@ ...
 	@$(RM) $@
 #      use architecture specific macro defined in sys/$(G4SYSTEM).gmk
 	$(build-granular-shared-lib)
@@ -47,7 +47,7 @@ ifneq ($(G4LIB_BUILD_STATIC),)
 # Make static (archive) library.
 $(G4LIBDIR)/lib$(name).a: $(G4TMPDIR)/obj.last
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
-	@echo Creating/replacing object files in $(G4LIBDIR)/lib$(name).a
+	@echo Creating/replacing object files in $(G4LIBDIR)/lib$(name).a ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
 	@$(AR) $(OUT_LIB)$(G4LIBDIR)/lib$(name).a $(G4TMPDIR)/*.o
 	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then ranlib $(G4LIBDIR)/lib$(name).a ;fi
@@ -130,14 +130,16 @@ ifndef G4EXLIB
 clean:
 	@echo Cleaning up ...
 	@rm -f $(G4LIBDIR)/lib$(name).a
+	@rm -f $(G4LIBDIR)/*$(name).lib
+	@rm -f $(G4LIBDIR)/*$(name).exp
 	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)
 	@rm -rf $(G4TMPDIR)
 endif
 
 clean_libs:
-	@if [ -f $(G4LIBDIR)/lib$(name).a ] ; then \
-	$(ECHO) Removing library lib$(name).a ... ; \
-	$(RM) -f $(G4LIBDIR)/lib$(name).a ; fi
-	@if [ -f $(G4LIBDIR)/lib$(name).$(SHEXT) ] ; then \
-	$(ECHO) Removing library lib$(name).$(SHEXT) ... ; \
-	$(RM) -f $(G4LIBDIR)/lib$(name).$(SHEXT) ; fi
+	@echo Removing library lib$(name).a ...
+	@rm -f $(G4LIBDIR)/*$(name).a
+	@echo Removing library lib$(name).$(SHEXT) ...
+	@rm -f $(G4LIBDIR)/*$(name).lib
+	@rm -f $(G4LIBDIR)/*$(name).exp
+	@rm -f $(G4LIBDIR)/*$(name).$(SHEXT)

@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: DetectorConstruction.hh,v 1.5 2004/06/21 10:57:10 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: DetectorConstruction.hh,v 1.4 2004/02/19 18:18:51 maire Exp $
-// GEANT4 tag $Name: geant4-06-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADouble.cc,v 1.5 2003/06/16 16:55:39 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIcmdWithADouble.cc,v 1.6 2004/05/16 18:42:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -39,19 +39,7 @@ G4UIcmdWithADouble::G4UIcmdWithADouble
 
 G4double G4UIcmdWithADouble::GetNewDoubleValue(const char* paramString)
 {
-  G4double vl;
-  std::istrstream is((char*)paramString);
-  is >> vl;
-  return vl;
-}
-
-G4String G4UIcmdWithADouble::ConvertToString(G4double dblValue)
-{
-  char st[20];
-  std::ostrstream os(st,20);
-  os << dblValue << '\0';
-  G4String vl = st;
-  return vl;
+  return ConvertToDouble(paramString);
 }
 
 void G4UIcmdWithADouble::SetParameterName

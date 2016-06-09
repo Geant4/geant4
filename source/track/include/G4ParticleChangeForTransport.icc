@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.icc,v 1.9 2003/06/16 17:12:57 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ParticleChangeForTransport.icc,v 1.10 2004/05/08 15:28:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 inline 
@@ -40,25 +40,25 @@ inline
 
 
 inline 
- void G4ParticleChangeForTransport::SetMaterialChange(G4Material* fMaterial)
+ void G4ParticleChangeForTransport::SetMaterialInTouchable(G4Material* fMaterial)
 {
   theMaterialChange =   fMaterial;
 }
 
 inline 
- G4Material* G4ParticleChangeForTransport::GetMaterialChange() const
+ G4Material* G4ParticleChangeForTransport::GetMaterialInTouchable() const
 {
   return theMaterialChange;
 }
 
 inline 
- void G4ParticleChangeForTransport::SetMaterialCutsCoupleChange(const G4MaterialCutsCouple* fMaterialCutsCouple)
+ void G4ParticleChangeForTransport::SetMaterialCutsCoupleInTouchable(const G4MaterialCutsCouple* fMaterialCutsCouple)
 {
   theMaterialCutsCoupleChange =   fMaterialCutsCouple;
 }
 
 inline 
- const G4MaterialCutsCouple* G4ParticleChangeForTransport::GetMaterialCutsCoupleChange() const
+ const G4MaterialCutsCouple* G4ParticleChangeForTransport::GetMaterialCutsCoupleInTouchable() const
 {
   return theMaterialCutsCoupleChange;
 }
@@ -126,3 +126,38 @@ G4ParticleChangeForTransport::GetPointerToVectorOfAuxiliaryPoints() const
 {
   return fpVectorOfAuxiliaryPointsPointer;
 }
+
+
+// Following methods will be removed in release 7.0
+inline 
+ void G4ParticleChangeForTransport::SetMaterialChange(G4Material* fMaterial)
+{
+  theMaterialChange =   fMaterial;
+}
+
+inline 
+ G4Material* G4ParticleChangeForTransport::GetMaterialChange() const
+{
+  return theMaterialChange;
+}
+
+inline 
+ void G4ParticleChangeForTransport::SetMaterialCutsCoupleChange(const G4MaterialCutsCouple* fMaterialCutsCouple)
+{
+  theMaterialCutsCoupleChange =   fMaterialCutsCouple;
+}
+
+inline 
+ const G4MaterialCutsCouple* G4ParticleChangeForTransport::GetMaterialCutsCoupleChange() const
+{
+  return theMaterialCutsCoupleChange;
+}
+
+
+
+
+
+
+
+
+

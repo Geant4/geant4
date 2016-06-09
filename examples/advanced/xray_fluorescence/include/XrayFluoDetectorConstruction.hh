@@ -22,29 +22,42 @@
 //
 //
 // $Id: XrayFluoDetectorConstruction.hh
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 //  28 Nov 2001  Elena Guardincerri   Created
+//     Nov 2002  Alfonso Mantero materials added, Material selection implementation
+//  16 Jul 2003  Alfonso Mantero Detector type selection added + minor fixes
+//  21 Aug 2003  Alfonso Mantero Material Management moved to XrayFluoMaterials 
 //
 // -------------------------------------------------------------------
 
-#ifndef XrayFluoDetectorConstruction_h
-#define XrayFluoDetectorConstruction_h 1
+#ifndef XrayFluoDetectorConstruction_hh
+#define XrayFluoDetectorConstruction_hh 1
 
+#include "XrayFluoSiLiDetectorType.hh"
+#include "XrayFluoHPGeDetectorType.hh"
+#include "XrayFluoSD.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
+
+#include "XrayFluoGeometry.hh"
+
 class G4Box;
 class G4Tubs;
+class G4Sphere;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class XrayFluoDetectorMessenger;
-class XrayFluoHPGeSD;
+class XrayFluoMaterials;
+
+//class XrayFluoSD;
+//class XrayFluoVDetectorType;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -52,7 +65,7 @@ class XrayFluoDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
   
-  XrayFluoDetectorConstruction();
+
   ~XrayFluoDetectorConstruction();
   
 public:
@@ -61,12 +74,28 @@ public:
   
   void UpdateGeometry();
 
+
   void SetSampleMaterial(G4String newMaterial);
+
+  void SetDetectorType(G4String type);
+
+  static XrayFluoDetectorConstruction* GetInstance();
+
+  inline void SetSampleGranularity(G4bool granularity) 
+  {sampleGranularity = granularity;};
+
+  inline void SetGrainDia(G4double size)
+  {grainDia = size;};
+
+  void DeleteGrainObjects();
   
 public:
   
   void PrintApparateParameters(); 
-  
+
+  XrayFluoVDetectorType* GetDetectorType();
+
+
   G4double GetWorldSizeZ()           {return WorldSizeZ;}; 
   G4double GetWorldSizeXY()          {return WorldSizeXY;};
   
@@ -96,9 +125,16 @@ public:
   const G4VPhysicalVolume* GetOhmicPos()    {return physiOhmicPos;};
   const G4VPhysicalVolume* GetOhmicNeg()    {return physiOhmicNeg;};
   
-  
 private:
   
+  XrayFluoDetectorConstruction();
+
+  static XrayFluoDetectorConstruction* instance;
+
+  XrayFluoVDetectorType* detectorType;
+
+  G4bool sampleGranularity;
+
   G4double           DeviceSizeX;
   G4double           DeviceSizeY;
   G4double           DeviceThickness;
@@ -135,7 +171,13 @@ private:
   G4LogicalVolume*   logicPixel;  
   G4VPhysicalVolume* physiPixel;    
  
-  //pointers to the materials used 
+  G4Sphere*          solidGrain;
+  G4LogicalVolume*   logicGrain;
+  G4VPhysicalVolume* physiGrain;
+
+  //materials management
+  XrayFluoMaterials* materials;
+
   G4Material*        OhmicPosMaterial;
   G4Material*        OhmicNegMaterial; 
   G4Material*        pixelMaterial;
@@ -143,29 +185,15 @@ private:
   G4Material*        Dia1Material;
   G4Material*        Dia3Material;
   G4Material*        defaultMaterial;
-  
-  G4Material*        dolorite;
-  G4Material*        FeMaterial;
-  G4Material*        Al;
-  G4Material*        Si;
-  G4Material*        Cu;
-  G4Material*        matOx;
-  G4Material*        HPGe;
-  G4Material*        materialMg;
-  G4Material*        materialNd;
-  G4Material*        Sn;
-  G4Material*        Ti;
-  G4Material*        U;
 
-
-
-
+  //apparate parameters
 
   G4double           OhmicPosThickness;
   
   G4double           OhmicNegThickness;
   
   G4int              PixelCopyNb;
+  G4int              grainCopyNb;
   G4int              NbOfPixels;
   G4int              NbOfPixelRows;
   G4int              NbOfPixelColumns;
@@ -185,6 +213,7 @@ private:
 
   G4double           SampleThickness;
   G4double           SampleSizeXY;
+  G4double           grainDia;
   G4double           SiSizeXY; 
   G4double           Dia1Thickness;
   G4double           Dia1SizeXY;
@@ -192,7 +221,7 @@ private:
   G4double           Dia3SizeXY;
   G4double           DiaInnerSize;
   G4double           Dia3InnerSize;
-  G4double           DistSi;
+  //  G4double           DistSi;
 public: 
   
   
@@ -232,11 +261,14 @@ private:
   
   XrayFluoDetectorMessenger* detectorMessenger; //pointer to the Messenger
 
-  XrayFluoHPGeSD* HPGeSD;  //pointer to the sensitive detector
+  XrayFluoSD* HPGeSD;  //pointer to the sensitive detector
+
+  G4Region* sampleRegion;
+
   
 private:
   
-  void DefineMaterials();
+  void DefineDefaultMaterials();
   G4VPhysicalVolume* ConstructApparate();
 
   //calculates some quantities used to construct geometry
@@ -251,9 +283,15 @@ inline void XrayFluoDetectorConstruction::ComputeApparateParameters()
   // Compute derived parameters of the apparate
   
   DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
-  DeviceSizeY =NbOfPixelRows*std::max(ContactSizeXY,PixelSizeXY);
-  DeviceSizeX =NbOfPixelColumns*std::max(ContactSizeXY,PixelSizeXY);
-  
+
+  G4cout << "DeviceThickness(cm): "<< DeviceThickness/cm << G4endl;
+
+  DeviceSizeY =(NbOfPixelRows * std::max(ContactSizeXY,PixelSizeXY));
+  DeviceSizeX =(NbOfPixelColumns * std::max(ContactSizeXY,PixelSizeXY));
+
+  G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/cm <<G4endl;
+  G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/cm << G4endl;
+
   WorldSizeZ = (2 * (DistDe  +1.4142 *(std::max(std::max(DeviceThickness,DeviceSizeY), DeviceSizeX))))+5*m; 
   WorldSizeXY = 2 * (DistDe +1.4142 *Dia1SizeXY)+5*m;
   

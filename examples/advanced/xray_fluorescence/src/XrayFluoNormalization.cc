@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoAnalysisMessenger.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -49,14 +49,22 @@ const XrayFluoDataSet* XrayFluoNormalization::Normalize(G4double minIntExtreme, 
 {
  
  G4VDataSetAlgorithm* interpolation = new G4LogLogInterpolation();
- XrayFluoDataSet* dataSet = 
-   new XrayFluoDataSet(1,fileName,interpolation,keV,1);
 
+  char* path = getenv("XRAYDATA");
+  G4String dirFile;
+  if (path) {
+    G4String pathString(path);
+    dirFile = pathString + "/" + fileName;
+  }
+  else{ dirFile = fileName;}
+  XrayFluoDataSet* dataSet = 
+    new XrayFluoDataSet(1,dirFile,interpolation,keV,1);
+  
  G4double integral = Integrate(minIntExtreme, maxIntExtreme, nBins, dataSet);
 
  G4VDataSetAlgorithm* interpolation2 = new G4LogLogInterpolation();
 
- XrayFluoDataSet* finalDataSet = new XrayFluoDataSet(1,fileName,interpolation2,keV,1/(integral/keV));
+ XrayFluoDataSet* finalDataSet = new XrayFluoDataSet(1,dirFile,interpolation2,keV,1/(integral/keV));
  return finalDataSet;
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.hh,v 1.6 2003/11/18 12:15:30 arce Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationPolyhedra.hh,v 1.7 2004/05/13 14:57:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // 
 // classes G4ParameterisationPolyhedraRho,
 //         G4ParameterisationPolyhedraPhi,
@@ -34,7 +34,9 @@
 // dividing a G4Polyhedra along one of each axis Rho, Phi, Z.
 
 // History:
-// 09.05.01 - P.Arce First version
+// -------
+// 09.05.01 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
 //---------------------------------------------------------------------
 #ifndef G4ParameterisationPolyhedra_H
 #define G4ParameterisationPolyhedra_H 1
@@ -56,11 +58,28 @@ class G4Hype;
 class G4Tubs;
 class G4Polycone;
 
+class G4VParameterisationPolyhedra : public G4VDivisionParameterisation
+{ 
+  public:  // with description
+  
+    G4VParameterisationPolyhedra( EAxis axis, G4int nCopies,
+                            G4double offset, G4double step,
+                            G4VSolid* msolid, DivisionType divType );
+  
+    virtual ~G4VParameterisationPolyhedra();
+
+  private:
+
+    G4double ConvertRadiusFactor(const G4Polyhedra& phedra) const;
+      // Converts radius of the sides to radius of the corners:
+      // r_corners = r_sides/factor
+};
+
 //---------------------------------------------------------------------
 // Class G4ParameterisationPolyhedraRho
 //---------------------------------------------------------------------
 
-class G4ParameterisationPolyhedraRho : public G4VDivisionParameterisation
+class G4ParameterisationPolyhedraRho : public G4VParameterisationPolyhedra
 { 
   public:  // with description
 
@@ -109,7 +128,7 @@ class G4ParameterisationPolyhedraRho : public G4VDivisionParameterisation
 // Class G4ParameterisationPolyhedraPhi
 //---------------------------------------------------------------------
 
-class G4ParameterisationPolyhedraPhi : public G4VDivisionParameterisation
+class G4ParameterisationPolyhedraPhi : public G4VParameterisationPolyhedra
 { 
   public:  // with description
 
@@ -158,7 +177,7 @@ class G4ParameterisationPolyhedraPhi : public G4VDivisionParameterisation
 // Class G4ParameterisationPolyhedraZ
 //---------------------------------------------------------------------
 
-class G4ParameterisationPolyhedraZ : public G4VDivisionParameterisation
+class G4ParameterisationPolyhedraZ : public G4VParameterisationPolyhedra
 { 
   public:  // with description
 

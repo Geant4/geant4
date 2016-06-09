@@ -48,6 +48,8 @@
  "Einsteinium"};
 
 
+  G4String G4NeutronHPNames::GetName(G4int i) { return theString[i]; }
+
   G4NeutronHPDataUsed G4NeutronHPNames::GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & aFlag)
   {
     G4NeutronHPDataUsed result;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: HistoMessenger.cc,v 1.1 2003/10/31 12:09:37 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: HistoMessenger.cc,v 1.2 2004/05/27 13:43:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@ HistoMessenger::HistoMessenger(Histo* manager)
 
   fileCmd = new G4UIcmdWithAString("/testem/histo/fileType",this);
   fileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
-   
+
   histoCmd = new G4UIcommand("/testem/histo/setHisto",this);
   histoCmd->SetGuidance("Set bining of the histo number ih :");
   histoCmd->SetGuidance("  nbBins; valMin; valMax; unit (of vmin and vmax)");
@@ -61,20 +61,21 @@ HistoMessenger::HistoMessenger(Histo* manager)
   G4UIparameter* nbBins = new G4UIparameter("nbBins",'i',false);
   nbBins->SetGuidance("number of bins");
   nbBins->SetParameterRange("nbBins>0");
-  histoCmd->SetParameter(nbBins);  
-  //    
+  histoCmd->SetParameter(nbBins);
+  //
   G4UIparameter* valMin = new G4UIparameter("valMin",'d',false);
   valMin->SetGuidance("valMin, expressed in unit");
-  histoCmd->SetParameter(valMin);  
-  //    
+  histoCmd->SetParameter(valMin);
+  //
   G4UIparameter* valMax = new G4UIparameter("valMax",'d',false);
   valMax->SetGuidance("valMax, expressed in unit");
   histoCmd->SetParameter(valMax);
-  //    
+  //
   G4UIparameter* unit = new G4UIparameter("unit",'s',true);
   unit->SetGuidance("if omitted, vmin and vmax are assumed dimensionless");
   unit->SetDefaultValue("none");
-  histoCmd->SetParameter(unit);  
+  histoCmd->SetParameter(unit);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,7 +85,7 @@ HistoMessenger::~HistoMessenger()
   delete fileCmd;
   delete histoCmd;
   delete factoryCmd;
-  delete histoDir;  
+  delete histoDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -106,7 +107,7 @@ void HistoMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
      G4double vUnit = 1. ;
      if (unit != "none") vUnit = G4UIcommand::ValueOf(unit);
      histo->setHisto1D(ih,nbBins,vmin,vmax,vUnit);
-   }      
+   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

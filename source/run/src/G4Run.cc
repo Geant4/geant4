@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.cc,v 1.5 2003/04/23 17:54:31 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Run.cc,v 1.7 2004/06/11 14:27:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #include "G4Run.hh"

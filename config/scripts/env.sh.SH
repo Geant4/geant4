@@ -97,6 +97,15 @@ echo "On this machine the NeutronHPCrossSections=\$NeutronHPCrossSections"
 fi
 fi
 
+#+
+if [ X$g4elasticdata != X ] ; then 
+G4ELASTICDATA="$g4elasticdata"
+export G4ELASTICDATA
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
+fi
+fi
+
 #
 # g4clhep.U
 #
@@ -430,26 +439,9 @@ if [ X$g4non_display = X ] ; then
 # Check for Windows!
 if test "X$G4SYSTEM" = "XWIN32-VC" -o "X$G4SYSTEM" = "XWIN32-VC7"; then
 
-checkdrive=`echo $HOME|cut -d"/" -f2`
-
-if test "X$checkdrive" = "Xcygdrive"; then
-
-windrive=`echo $HOME|cut -d"/" -f3`
-winpath=`echo $HOME|cut -d"/" -f4-`
-
-fullwinpath="$windrive:/$winpath"
-G4WORKDIR=$fullwinpath
-
-fi # if cygwin syntax is used
-
-if test "X$winpath" = "X"; then
-echo "G4WORKDIR will be set to ${G4WORKDIR}geant4 (in "native" Windows syntax)"
-export G4WORKDIR=${G4WORKDIR}geant4
-else
-echo "G4WORKDIR will be set to $G4WORKDIR/geant4 (in "native" Windows syntax)"
-export G4WORKDIR=${G4WORKDIR}/geant4
-fi
-
+echo "G4WORKDIR will be set to c:/geant4 (in "native" Windows syntax)"
+G4WORKDIR="c:/geant4"
+export G4WORKDIR
 
 else # if Unix
 

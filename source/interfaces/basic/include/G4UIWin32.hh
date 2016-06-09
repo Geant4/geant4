@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.hh,v 1.11 2003/06/16 16:55:54 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIWin32.hh,v 1.13 2004/04/08 08:29:47 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 #ifndef G4UIWin32_h
 #define G4UIWin32_h 
@@ -61,7 +61,7 @@ class G4VInteractorManager;
 
 class G4UIWin32 : public G4VBasicShell, public G4VInteractiveSession {
 public: // With description
-  G4UIWin32 (HINSTANCE,HINSTANCE,LPSTR,int);
+  G4UIWin32();
   // The WinMain arguments have to be given.
   G4UIsession* SessionStart      ();
   // To enter interactive Win32 loop ; waiting/executing command,...

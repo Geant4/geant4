@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.5 2003/10/10 10:42:39 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: RunAction.cc,v 1.7 2004/03/31 16:33:36 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -33,12 +33,10 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/AIDA.h"
 #endif
 
@@ -58,7 +56,7 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -84,17 +82,17 @@ void RunAction::bookHisto()
  delete hf;
  delete tf;
  delete af;     
-#endif   
+#endif
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::cleanHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-  
+  tree->close();        // and closing the tree (and the file)  
   delete tree;
 #endif   
 }
@@ -112,19 +110,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //histograms
   //
   if (aRun->GetRunID() == 0) bookHisto();
-    
-  if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-   //draw the events
-  if (G4VVisManager::GetConcreteInstance()) 
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-
   // show Rndm status
   HepRandom::showEngineStatus();
 }

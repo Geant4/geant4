@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2003/11/25 09:29:45 gcosmo Exp $
+$Id: History,v 1.2 2004/06/03 15:28:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 6th, 2004 - L.Desorgher (BlineTracer-V06-01-00)
+---------------------------
+- Added inclusion of G4ChordFinder.hh in G4BlineTracer.cc.
 
 Nov 25th, 2003 - G.Cosmo  (BlineTracer-V05-02-00)
 ------------------------

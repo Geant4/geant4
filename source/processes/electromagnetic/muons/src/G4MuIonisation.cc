@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.40 2004/02/15 17:46:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4MuIonisation.cc,v 1.42 2004/05/27 17:29:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -60,6 +60,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
+// 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
 //
 // -------------------------------------------------------------------
 //
@@ -90,7 +91,6 @@ G4MuIonisation::G4MuIonisation(const G4String& name)
   SetLambdaBinning(120);
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
-  SetIntegral(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -106,12 +106,7 @@ void G4MuIonisation::InitialiseProcess()
   mass = theParticle->GetPDGMass();
   SetSecondaryParticle(G4Electron::Electron());
 
-  if(IsIntegral()) {
-    flucModel = new G4BohrFluctuations();
-
-  } else {
-    flucModel = new G4UniversalFluctuation();
-  }
+  flucModel = new G4UniversalFluctuation();
 
   G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
@@ -125,6 +120,8 @@ void G4MuIonisation::InitialiseProcess()
   em2->SetLowEnergyLimit(1.0*GeV);
   em2->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(3, em2, flucModel);
+
+  SetStepLimits(0.2, 1.0*mm);
 
   ratio = electron_mass_c2/mass;
   isInitialised = true;

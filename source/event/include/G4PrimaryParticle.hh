@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh,v 1.11 2003/09/12 21:51:32 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PrimaryParticle.hh,v 1.14 2004/06/11 14:11:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -188,7 +188,11 @@ class G4PrimaryParticle
       }
 };
 
-extern G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
+#if defined G4EVENT_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
+#endif
 
 inline void * G4PrimaryParticle::operator new(size_t)
 {

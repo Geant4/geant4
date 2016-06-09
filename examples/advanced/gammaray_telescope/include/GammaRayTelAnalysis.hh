@@ -22,8 +22,8 @@
 //
 #ifdef G4ANALYSIS_USE
 //
-// $Id: GammaRayTelAnalysis.hh,v 1.16 2003/06/25 10:18:27 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: GammaRayTelAnalysis.hh,v 1.17 2004/06/01 06:59:38 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //      CERN Geneva Switzerland
@@ -61,12 +61,9 @@ class AIDA::IAnalysisFactory;
 class AIDA::ITree;
 class AIDA::IHistogramFactory;
 class AIDA::ITupleFactory;
-class AIDA::IPlotter;
+//class AIDA::IPlotter;
 class AIDA::IHistogram1D;
 class AIDA::IHistogram2D;
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class GammaRayTelAnalysis {
 public:
@@ -116,7 +113,7 @@ private:
 
   IAnalysisFactory* analysisFactory;
   ITree* tree;
-  IPlotter* plotter;
+  //IPlotter* plotter;
   ITuple* tuple;
 
   IHistogram1D* energy;

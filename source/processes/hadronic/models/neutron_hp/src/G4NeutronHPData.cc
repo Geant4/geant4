@@ -27,8 +27,6 @@
 #include "G4NeutronHPData.hh"
 #include "G4LPhysicsFreeVector.hh"
 
-  G4NeutronHPData * G4NeutronHPData::theCrossSectionData = NULL;
-
   G4NeutronHPData::G4NeutronHPData()
   {
      numEle = G4Element::GetNumberOfElements();
@@ -45,6 +43,12 @@
   delete [] theData;
   }
   
+  G4NeutronHPData * G4NeutronHPData::Instance()
+  {
+    static G4NeutronHPData theCrossSectionData;
+    return &theCrossSectionData;
+  }
+
   G4PhysicsVector * G4NeutronHPData::DoPhysicsVector(G4NeutronHPVector * theVector)
   {
 //    G4cout << "Entered G4NeutronHPData::DoPhysicsVector."<<G4endl;

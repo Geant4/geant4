@@ -21,23 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventor.cc,v 1.9 2003/10/29 10:02:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4OpenInventor.cc,v 1.11 2004/06/14 09:27:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 #ifdef G4VIS_BUILD_OI_DRIVER
 
-//#include <HEPVis/SoDB.h>
-#include <HEPVis/nodes/SoG4Box.h>
-#include <HEPVis/nodes/SoG4Tubs.h>
-#include <HEPVis/nodes/SoG4Cons.h>
-#include <HEPVis/nodes/SoG4Trd.h>
-#include <HEPVis/nodes/SoG4Trap.h>
-#include <HEPVis/nodekits/SoDetectorTreeKit.h>
-
+// this :
 #include "G4OpenInventor.hh"
-#include "G4OpenInventorSceneHandler.hh"
-#include "G4OpenInventorViewer.hh"
 
+#include "HEPVis/nodes/SoBox.h"
+#include "HEPVis/nodes/SoTubs.h"
+#include "HEPVis/nodes/SoCons.h"
+#include "HEPVis/nodes/SoTrd.h"
+#include "HEPVis/nodes/SoTrap.h"
+#include "HEPVis/nodekits/SoDetectorTreeKit.h"
+
+#include "G4OpenInventorSceneHandler.hh"
 
 G4OpenInventor::G4OpenInventor (
  const G4String name
@@ -64,23 +63,13 @@ G4VSceneHandler* G4OpenInventor::CreateSceneHandler (const G4String& name) {
   return    p;
 }
 
-G4VViewer* G4OpenInventor::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
+void G4OpenInventor::InitNodes()
 {
-  G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
-  G4OpenInventorViewer*  pView  = new G4OpenInventorViewer (*pScene, name);
-  return   pView;
-}
-
-void G4OpenInventor::InitHEPVis()
-{
-  // The below is too much for most loaders :
-  //  HEPVis_SoDB::init();  
-
-  SoG4Box::initClass();
-  SoG4Tubs::initClass();
-  SoG4Cons::initClass();
-  SoG4Trd::initClass();
-  SoG4Trap::initClass();
+  SoBox::initClass();
+  SoTubs::initClass();
+  SoCons::initClass();
+  SoTrd::initClass();
+  SoTrap::initClass();
   SoDetectorTreeKit::initClass();
 }
 

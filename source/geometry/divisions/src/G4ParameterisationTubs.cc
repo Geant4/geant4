@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTubs.cc,v 1.5 2003/11/19 11:51:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationTubs.cc,v 1.7 2004/05/17 07:20:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // class G4ParameterisationTubs Implementation file
 //
-// 26.05.03 - P.Arce Initial version
-// ********************************************************************
+// 26.05.03 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 
 #include "G4ParameterisationTubs.hh"
 
@@ -36,27 +37,51 @@
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4ReflectedSolid.hh"
 #include "G4Tubs.hh"
+
+//--------------------------------------------------------------------------
+G4VParameterisationTubs::
+G4VParameterisationTubs( EAxis axis, G4int nDiv, G4double width,
+                        G4double offset, G4VSolid* msolid,
+                        DivisionType divType )
+  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+{
+  G4Tubs* msol = (G4Tubs*)(msolid);
+  if (msolid->GetEntityType() == "G4ReflectedSolid")
+  {
+    //----- get constituent solid  
+    G4VSolid* mConstituentSolid 
+       = ((G4ReflectedSolid*)msolid)->GetConstituentMovedSolid();
+    msol = (G4Tubs*)(mConstituentSolid);
+    fmotherSolid = msol;
+    fReflectedSolid = true;
+  }    
+}
+
+//------------------------------------------------------------------------
+G4VParameterisationTubs::~G4VParameterisationTubs()
+{
+}
 
 //--------------------------------------------------------------------------
 G4ParameterisationTubsRho::
 G4ParameterisationTubsRho( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationTubs( axis, nDiv, width, offset, msolid, divType )
 {
   CheckParametersValidity();
   SetType( "DivisionTubsRho" );
 
+  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Tubs* msol = (G4Tubs*)(msolid);
     fnDiv = CalculateNDiv( msol->GetOuterRadius() - msol->GetInnerRadius(),
                            width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Tubs* msol = (G4Tubs*)(msolid);
     fwidth = CalculateWidth( msol->GetOuterRadius() - msol->GetInnerRadius(),
                              nDiv, offset );
   }
@@ -155,19 +180,18 @@ G4ParameterisationTubsPhi::
 G4ParameterisationTubsPhi( EAxis axis, G4int nDiv,
                            G4double width, G4double offset,
                            G4VSolid* msolid, DivisionType divType )
-  :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  :  G4VParameterisationTubs( axis, nDiv, width, offset, msolid, divType )
 { 
   CheckParametersValidity();
   SetType( "DivisionTubsPhi" );
 
+  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Tubs* msol = (G4Tubs*)(msolid);
     fnDiv = CalculateNDiv( msol->GetDeltaPhiAngle(), width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Tubs* msol = (G4Tubs*)(msolid);
     fwidth = CalculateWidth( msol->GetDeltaPhiAngle(), nDiv, offset );
   }
 
@@ -265,18 +289,18 @@ G4ParameterisationTubsZ::
 G4ParameterisationTubsZ( EAxis axis, G4int nDiv,
                          G4double width, G4double offset,
                          G4VSolid* msolid, DivisionType divType )
-  : G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
+  : G4VParameterisationTubs( axis, nDiv, width, offset, msolid, divType )
 { 
   CheckParametersValidity();
   SetType( "DivisionTubsZ" );
+
+  G4Tubs* msol = (G4Tubs*)(fmotherSolid);
   if( divType == DivWIDTH )
   {
-    G4Tubs* msol = (G4Tubs*)(msolid);
     fnDiv = CalculateNDiv( 2*msol->GetZHalfLength(), width, offset );
   }
   else if( divType == DivNDIV )
   {
-    G4Tubs* msol = (G4Tubs*)(msolid);
     fwidth = CalculateWidth( 2*msol->GetZHalfLength(), nDiv, offset );
   }
 
@@ -310,7 +334,7 @@ ComputeTransformation(const G4int copyNo, G4VPhysicalVolume *physVol) const
 {
   //----- set translation: along Z axis
   G4Tubs* motherTubs = (G4Tubs*)(fmotherSolid);
-  G4double posi = - motherTubs->GetZHalfLength() + foffset
+  G4double posi = - motherTubs->GetZHalfLength() + OffsetZ() 
                   + fwidth/2 + copyNo*fwidth;
   G4ThreeVector origin(0.,0.,posi); 
   physVol->SetTranslation( origin );

@@ -1,0 +1,27 @@
+# $Id: conv.mac,v 1.2 2004/06/10 15:55:36 maire Exp $
+#
+# Macro file for "PhotonProcesses.cc"
+# (can be run in batch, without graphic)
+#
+# photon 100 MeV; gamma conversion to e+e-
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Lead
+#
+/run/initialize
+#
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate GammaToMuPair
+#
+/gun/energy 100 MeV
+#
+/testem/histo/setFileName conv.paw
+/testem/histo/setHisto 3  200 0. 100. MeV	#energy  of ch. secondaries  
+/testem/histo/setHisto 4  200 0. +1.  none 	#costeta of ch. secondaries
+#
+/testem/event/printModulo 10000
+#  
+/run/beamOn 100000

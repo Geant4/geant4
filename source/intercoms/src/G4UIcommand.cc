@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.22 2003/06/16 16:55:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIcommand.cc,v 1.23 2004/05/16 18:42:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -341,6 +341,127 @@ void G4UIcommand::List()
   }
   G4cout << G4endl;
 }
+
+G4String G4UIcommand::ConvertToString(G4bool boolVal)
+{
+  G4String vl = "0";
+  if(boolVal) vl = "1";
+  return vl;
+}
+
+G4String G4UIcommand::ConvertToString(G4int intValue)
+{
+  char st[20];
+  std::ostrstream os(st,20);
+  os << intValue << '\0';
+  G4String vl = st;
+  return vl;
+}
+
+G4String G4UIcommand::ConvertToString(G4double doubleValue)
+{
+  char st[40];
+  std::ostrstream os(st,40);
+  os << doubleValue << '\0';
+  G4String vl = st;
+  return vl;
+}
+
+G4String G4UIcommand::ConvertToString(G4double doubleValue,const char* unitName)
+{
+  G4String unt = unitName;
+  G4double uv = ValueOf(unitName);
+
+  char st[60];
+  std::ostrstream os(st,60);
+  os << doubleValue/uv << " " << unitName << '\0';
+  G4String vl = st;
+  return vl;
+}
+
+G4String G4UIcommand::ConvertToString(G4ThreeVector vec)
+{
+  char st[100];
+  std::ostrstream os(st,100);
+  os << vec.x() << " " << vec.y() << " " << vec.z() << '\0';
+  G4String vl = st;
+  return vl;
+}
+
+G4String G4UIcommand::ConvertToString(G4ThreeVector vec,const char* unitName)
+{
+  G4String unt = unitName;
+  G4double uv = ValueOf(unitName);
+
+  char st[120];
+  std::ostrstream os(st,120);
+  os << vec.x()/uv << " " << vec.y()/uv << " " << vec.z()/uv
+     << " " << unitName << '\0';
+  G4String vl = st;
+  return vl;
+}
+
+G4bool G4UIcommand::ConvertToBool(const char* st)
+{
+  G4String v = st;
+  v.toUpper();
+  G4bool vl = false;
+  if( v=="Y" || v=="YES" || v=="1" || v=="T" || v=="TRUE" )
+  { vl = true; }
+  return vl;
+}
+
+G4int G4UIcommand::ConvertToInt(const char* st)
+{
+  G4int vl;
+  std::istrstream is((char*)st);
+  is >> vl;
+  return vl;
+}
+
+G4double G4UIcommand::ConvertToDouble(const char* st)
+{
+  G4double vl;
+  std::istrstream is((char*)st);
+  is >> vl;
+  return vl;
+}
+
+G4double G4UIcommand::ConvertToDimensionedDouble(const char* st)
+{
+  G4double vl;
+  char unts[30];
+
+  std::istrstream is((char*)st);
+  is >> vl >> unts;
+  G4String unt = unts;
+
+  return (vl*ValueOf(unt));
+}
+
+G4ThreeVector G4UIcommand::ConvertTo3Vector(const char* st)
+{
+  G4double vx;
+  G4double vy;
+  G4double vz;
+  std::istrstream is((char*)st);
+  is >> vx >> vy >> vz;
+  return G4ThreeVector(vx,vy,vz);
+}
+
+G4ThreeVector G4UIcommand::ConvertToDimensioned3Vector(const char* st)
+{
+  G4double vx;
+  G4double vy;
+  G4double vz;
+  char unts[30];
+  std::istrstream is((char*)st);
+  is >> vx >> vy >> vz >> unts;
+  G4String unt = unts;
+  G4double uv = ValueOf(unt);
+  return G4ThreeVector(vx*uv,vy*uv,vz*uv);
+}
+
 
 // ----- the following is used by CheckNewValue()  ------------
 

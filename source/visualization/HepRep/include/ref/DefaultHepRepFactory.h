@@ -41,6 +41,7 @@ class DefaultHepRepFactory : public virtual HEPREP::HepRepFactory {
         HEPREP::HepRepInstanceTree* createHepRepInstanceTree (std::string name, std::string version,
                                                         HEPREP::HepRepTreeID* typeTreeID);
         HEPREP::HepRepType* createHepRepType (HEPREP::HepRepType* parent, std::string name);
+        HEPREP::HepRepType* createHepRepType (HEPREP::HepRepTypeTree* parent, std::string name);
         HEPREP::HepRepTypeTree* createHepRepTypeTree (HEPREP::HepRepTreeID* treeID);
         HEPREP::HepRep* createHepRep ();
 };

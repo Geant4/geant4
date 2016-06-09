@@ -22,8 +22,8 @@
 //
 #ifdef G4ANALYSIS_USE
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.19 2003/06/25 10:18:28 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: GammaRayTelAnalysis.cc,v 1.20 2004/06/01 06:59:39 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -62,7 +62,8 @@ GammaRayTelAnalysis* GammaRayTelAnalysis::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelAnalysis::GammaRayTelAnalysis()
-:GammaRayTelDetector(0),analysisFactory(0), tree(0), plotter(0), tuple(0)
+  :GammaRayTelDetector(0),analysisFactory(0), tree(0)//, plotter(0), 
+  ,tuple(0)
   ,energy(0), hits(0), posXZ(0), posYZ(0)
   ,histo1DDraw("enable"),histo1DSave("enable"),histo2DDraw("enable")
   ,histo2DSave("enable"),histo2DMode("strip")
@@ -74,13 +75,11 @@ GammaRayTelAnalysis::GammaRayTelAnalysis()
 #ifdef  G4ANALYSIS_USE
   // Define the messenger and the analysis system
 
-  analysisMessenger = new GammaRayTelAnalysisMessenger(this);
+  analysisMessenger = new GammaRayTelAnalysisMessenger(this);  
+
   analysisFactory = AIDA_createAnalysisFactory(); // create the Analysis Factory
-  
   if(analysisFactory) {
-
-    ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-
+     AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
   // create Tree Factory
 
     if(treeFactory) {
@@ -89,12 +88,9 @@ GammaRayTelAnalysis::GammaRayTelAnalysis()
 
       //      tree = treeFactory->create("gammaraytel.hbook", "hbook", false, false);
       // (hbook implementation)
-      
-      tree = treeFactory->create("gammaraytel.aida","xml",false,true,"compress=yes");
-
+      tree = treeFactory->create("gammaraytel.aida","xml",false,true,"uncompress");
       if(tree) {
 	// Get a tuple factory :
-	
 	ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
 	if(tupleFactory) {
 	  // Create a tuple :
@@ -124,18 +120,19 @@ GammaRayTelAnalysis::GammaRayTelAnalysis()
 	  // 1D histogram that store the hits distribution along the TKR X-planes
 
 	  hits = histoFactory->createHistogram1D("20","Hits dist in TKR X planes",Nplane, 0, Nplane-1);
-	  
 	  // 2D histogram that store the position (mm) of the hits (XZ projection)
 
-	  if (histo2DMode == "strip")
+	  if (histo2DMode == "strip"){
 	    posXZ = histoFactory->createHistogram2D("30","Tracker Hits XZ (strip,plane)", 
 					   N, 0, N-1, 
-					   2*Nplane, 0, Nplane-1);
+					   2*Nplane, 0, Nplane-1); 
+            }
 	  else
+	    {
 	    posXZ = histoFactory->createHistogram2D("30","Tracker Hits XZ (x,z) in mm", 
 					   int(sizexy/5), -sizexy/2, sizexy/2, 
 						    int(sizez/5), -sizez/2, sizez/2);
-	  
+	  }
 	  // 2D histogram that store the position (mm) of the hits (YZ projection)
 
 	  if(histo2DMode=="strip")
@@ -151,33 +148,30 @@ GammaRayTelAnalysis::GammaRayTelAnalysis()
 	}
     
       }
-      delete treeFactory; // Will not delete the ITree.
+     }
+      delete treeFactory; // Will not delete the ITree. 
+     
     }
     
-    IPlotterFactory* plotterFactory = analysisFactory->createPlotterFactory(0,0);
-    if(plotterFactory) {
-      plotter  = plotterFactory->create();
-     if(plotter) {
-	plotter->show();
-	plotter->setParameter("pageTitle","Gamma Ray Tel");
-     }
-     delete plotterFactory;
-    }
-
-  }
-
-
+ //  IPlotterFactory* plotterFactory = analysisFactory->createPlotterFactory(0,0);    
+//   if(plotterFactory) {
+//     plotter  = plotterFactory->create();
+//     if(plotter) {
+//       plotter->show();
+//       plotter->setParameter("pageTitle","Gamma Ray Tel");
+        
+//     }
+//     delete plotterFactory;
+//   }
 
 #endif
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelAnalysis::~GammaRayTelAnalysis() {
   Finish();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void GammaRayTelAnalysis::Init()
 {
@@ -187,7 +181,7 @@ void GammaRayTelAnalysis::Finish()
 {
 #ifdef  G4ANALYSIS_USE
   delete tree;
-  delete plotter;
+  //delete plotter;
   //  delete analysisFactory; // Will delete tree and histos.
   delete analysisMessenger;
   
@@ -201,9 +195,6 @@ GammaRayTelAnalysis* GammaRayTelAnalysis::getInstance()
   return instance;
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 // This function fill the 2d histogram of the XZ positions
 void GammaRayTelAnalysis::InsertPositionXZ(double x, double z)
 {
@@ -211,8 +202,6 @@ void GammaRayTelAnalysis::InsertPositionXZ(double x, double z)
   if(posXZ) posXZ->fill(x, z);
 #endif
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // This function fill the 2d histogram of the YZ positions
 void GammaRayTelAnalysis::InsertPositionYZ(double y, double z)
@@ -222,8 +211,6 @@ void GammaRayTelAnalysis::InsertPositionYZ(double y, double z)
 #endif
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 // This function fill the 1d histogram of the energy released in the last Si plane
 void GammaRayTelAnalysis::InsertEnergy(double en)
 {
@@ -231,8 +218,6 @@ void GammaRayTelAnalysis::InsertEnergy(double en)
   if(energy) energy->fill(en);
 #endif
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // This function fill the 1d histogram of the hits distribution along the TKR planes
 void GammaRayTelAnalysis::InsertHits(int nplane)
@@ -279,7 +264,7 @@ void GammaRayTelAnalysis::BeginOfRun()
 /* 
    This member is called at the end of each run 
 */
-void GammaRayTelAnalysis::EndOfRun(G4int n) 
+void GammaRayTelAnalysis::EndOfRun(G4int) 
 {
 #ifdef  G4ANALYSIS_USE
   if(tree) {
@@ -287,53 +272,46 @@ void GammaRayTelAnalysis::EndOfRun(G4int n)
     tree->close();
   }
 
-  if(plotter) {
+//   if(plotter) {
 
-    // We set one single region for the plotter
-    // We now print the histograms, each one in a separate file
+//     // We set one single region for the plotter
+//     // We now print the histograms, each one in a separate file
 
-    if(histo2DSave == "enable") {
-      char name[15];
-      plotter->createRegions(1,1);
-      sprintf(name,"posxz_%d.ps", n);
-      plotter->currentRegion().plot(*posXZ);
-      plotter->refresh();
-      //      plotter->write(name,"ps"); // temporary unavailable
+//     if(histo2DSave == "enable") {
+//       char name[15];
+//       plotter->createRegions(1,1);
+//       sprintf(name,"posxz_%d.ps", n);
+//       plotter->currentRegion().plot(*posXZ);
+//       plotter->refresh();
+//       //      plotter->write(name,"ps"); // temporary unavailable
       
-      plotter->createRegions(1,1);
-      sprintf(name,"posyz_%d.ps", n);
-      plotter->currentRegion().plot(*posYZ);
-      plotter->next().plot(*posYZ);
-      plotter->refresh();
-      // plotter->write(name,"ps"); // temporary unavailable
-    }
+//       plotter->createRegions(1,1);
+//       sprintf(name,"posyz_%d.ps", n);
+//       plotter->currentRegion().plot(*posYZ);
+//       plotter->next().plot(*posYZ);
+//       plotter->refresh();
+//       // plotter->write(name,"ps"); // temporary unavailable
+//     }
 
-    if(histo1DSave == "enable") {
-      plotter->createRegions(1,1);
-      char name[15];
-      sprintf(name,"energy_%d.ps", n);
-      plotter->currentRegion().plot(*energy);
-      plotter->refresh();
-      //      plotter->write(name,"ps"); // temporary unavailable
-      plotter->createRegions(1,1);   
-      sprintf(name,"hits_%d.ps", n);
-      plotter->currentRegion().plot(*hits);
-      plotter->refresh();
-      //      plotter->write(name,"ps"); // temporary unavailable
-      plotter->createRegions(1,2);
-      plotter->currentRegion().plot(*energy);
-      plotter->next().plot(*hits);
-      plotter->refresh();
-    }
-
-
-
-
-  }
-
+//     if(histo1DSave == "enable") {
+//       plotter->createRegions(1,1);
+//       char name[15];
+//       sprintf(name,"energy_%d.ps", n);
+//       plotter->currentRegion().plot(*energy);
+//       plotter->refresh();
+//       //      plotter->write(name,"ps"); // temporary unavailable
+//       plotter->createRegions(1,1);   
+//       sprintf(name,"hits_%d.ps", n);
+//       plotter->currentRegion().plot(*hits);
+//       plotter->refresh();
+//       //      plotter->write(name,"ps"); // temporary unavailable
+//       plotter->createRegions(1,2);
+//       plotter->currentRegion().plot(*energy);
+//       plotter->next().plot(*hits);
+//       plotter->refresh();
+  //  }
 #endif
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 /* This member is called at the end of every event */
 void GammaRayTelAnalysis::EndOfEvent(G4int flag) 
@@ -346,30 +324,30 @@ void GammaRayTelAnalysis::EndOfEvent(G4int flag)
   // to plot for each region.
   //  It is done here, since then EndOfRun set regions
   // for paper output.
-  if(plotter) {
-    if((histo2DDraw == "enable") && (histo1DDraw == "enable")) {
-      plotter->createRegions(1,2);
-      //plotter->currentRegion().plot(*posXZ); //temporary unavailable
-      plotter->currentRegion().plot(*hits);
-      //      plotter->next().plot(*posYZ); //temporary unavailable
-      plotter->next().plot(*energy);
-      //plotter->next().plot(*energy);
-      //      plotter->currentRegion().plot(*hits);
-      //plotter->next().plot(*hits);
-    } else if((histo1DDraw == "enable") && (histo2DDraw != "enable")) {
-      plotter->createRegions(1,2);
-      plotter->currentRegion().plot(*energy);
-      plotter->next().plot(*hits);
-    } else if((histo1DDraw != "enable") && (histo2DDraw == "enable")) {
-      /*      plotter->createRegions(1,2);
-      plotter->currentRegion().plot(*posXZ);
-      plotter->next().plot(*posYZ);*/
-      G4cout << "Temporary Unavailable " << G4endl;
-    } else { // Nothing to plot.
-      plotter->createRegions(1,1);
-    }
-    plotter->refresh();
-  }
+  // if(plotter) {
+//     if((histo2DDraw == "enable") && (histo1DDraw == "enable")) {
+//       plotter->createRegions(1,2);
+//       //plotter->currentRegion().plot(*posXZ); //temporary unavailable
+//       plotter->currentRegion().plot(*hits);
+//       //      plotter->next().plot(*posYZ); //temporary unavailable
+//       plotter->next().plot(*energy);
+//       //plotter->next().plot(*energy);
+//       //      plotter->currentRegion().plot(*hits);
+//       //plotter->next().plot(*hits);
+//     } else if((histo1DDraw == "enable") && (histo2DDraw != "enable")) {
+//       plotter->createRegions(1,2);
+//       plotter->currentRegion().plot(*energy);
+//       plotter->next().plot(*hits);
+//     } else if((histo1DDraw != "enable") && (histo2DDraw == "enable")) {
+//       /*      plotter->createRegions(1,2);
+//       plotter->currentRegion().plot(*posXZ);
+//       plotter->next().plot(*posYZ);*/
+//       G4cout << "Temporary Unavailable " << G4endl;
+//     } else { // Nothing to plot.
+//       plotter->createRegions(1,1);
+//     }
+//     plotter->refresh();
+//   }
 
 #endif
 }

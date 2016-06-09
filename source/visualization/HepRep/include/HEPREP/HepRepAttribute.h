@@ -9,6 +9,7 @@
 
 // Copyright 2000-2002, FreeHEP.
 
+#include <set>
 #include <string>
 #include <vector>
 
@@ -33,9 +34,8 @@ public:
      * Adds an attValue.
      *
      * @param attValue to be added.
-     * @return false only if the value is immediately written to a stream.
      */
-    virtual bool addAttValue(HepRepAttValue * attValue) = 0;
+    virtual void addAttValue(HepRepAttValue * attValue) = 0;
 
 
     /**
@@ -47,18 +47,16 @@ public:
      * @param key name of attValue
      * @param value value of attValue
      * @param showLabel show this as label
-     * @return false if an IOException was created.
      */
-    virtual bool addAttValue(std::string key, char* value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
+    virtual void addAttValue(std::string key, char* value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
     /**
      * Adds an attValue.
      *
      * @param key name of attValue
      * @param value value of attValue
      * @param showLabel show this as label
-     * @return false only if the value is immediately written to a stream.
      */
-    virtual bool addAttValue(std::string key, std::string value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
+    virtual void addAttValue(std::string key, std::string value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
 
     /**
      * Adds an attValue.
@@ -66,9 +64,8 @@ public:
      * @param key name of attValue
      * @param value value of attValue
      * @param showLabel show this as label
-     * @return false only if the value is immediately written to a stream.
      */
-    virtual bool addAttValue(std::string key, int value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
+    virtual void addAttValue(std::string key, int value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
 
     /**
      * Adds an attValue.
@@ -76,9 +73,8 @@ public:
      * @param key name of attValue
      * @param value value of attValue
      * @param showLabel show this as label
-     * @return false only if the value is immediately written to a stream.
      */
-    virtual bool addAttValue(std::string key, double value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
+    virtual void addAttValue(std::string key, double value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
 
     /**
      * Adds an attValue.
@@ -86,9 +82,8 @@ public:
      * @param key name of attValue
      * @param value value of attValue
      * @param showLabel show this as label
-     * @return false only if the value is immediately written to a stream.
      */
-    virtual bool addAttValue(std::string key, bool value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
+    virtual void addAttValue(std::string key, bool value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
 
     /**
      * Adds a Color attValue.
@@ -96,9 +91,8 @@ public:
      * @param key name of attValue
      * @param value value of attValue
      * @param showLabel show this as label
-     * @return false only if the value is immediately written to a stream.
      */
-    virtual bool addAttValue(std::string key, std::vector<double> value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
+    virtual void addAttValue(std::string key, std::vector<double> value, int showLabel = HepRepConstants::SHOW_NONE) = 0;
 
     /**
      * Adds a Color attValue.
@@ -109,9 +103,8 @@ public:
      * @param blue color
      * @param alpha value
      * @param showLabel show this as label
-     * @return false only if the value is immediately written to a stream.
      */
-    virtual bool addAttValue(std::string key, double red, double green, double blue, double alpha = 1.0, int showLabel = HepRepConstants::SHOW_NONE) = 0;
+    virtual void addAttValue(std::string key, double red, double green, double blue, double alpha = 1.0, int showLabel = HepRepConstants::SHOW_NONE) = 0;
 
     /**
      * Remove the attvalue named by key.
@@ -135,7 +128,7 @@ public:
      *
      * @return collection of HepRepAttValues.
      */
-    virtual std::vector<HepRepAttValue *>  * getAttValuesFromNode() = 0;
+    virtual std::set<HepRepAttValue *>  getAttValuesFromNode() = 0;
 
     /**
      * Returns a named attribute value from this node.

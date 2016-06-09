@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.cc,v 1.1 2003/10/03 10:11:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4SDManager.cc,v 1.2 2004/05/03 08:14:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #include "G4SDManager.hh"
@@ -101,11 +101,11 @@ void G4SDManager::Activate(G4String dName, G4bool activeFlag)
   treeTop->Activate(pathName,activeFlag);
 }
 
-G4VSensitiveDetector* G4SDManager::FindSensitiveDetector(G4String dName)
+G4VSensitiveDetector* G4SDManager::FindSensitiveDetector(G4String dName, G4bool warning)
 {
   G4String pathName = dName;
   if( pathName(0) != '/' ) pathName.prepend("/");
-  return treeTop->FindSensitiveDetector(pathName);
+  return treeTop->FindSensitiveDetector(pathName, warning);
 }
 
 G4int G4SDManager::GetCollectionID(G4String colName)

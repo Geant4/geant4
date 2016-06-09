@@ -1,0 +1,29 @@
+# $Id: compton.mac,v 1.1 2004/04/28 11:09:06 maire Exp $
+#
+# Macro file for "PhotonProcesses.cc"
+# (can be run in batch, without graphic)
+#
+# photon 300 keV; compton
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+#
+/run/initialize
+#
+/process/inactivate phot
+/process/inactivate conv
+/process/inactivate GammaToMuPair
+#
+/gun/energy 300 keV
+#
+/testem/histo/setFileName compton.paw
+/testem/histo/setHisto 1  100 0. 300. keV	#energy  of primary  
+/testem/histo/setHisto 2  200 -1. +1. none	#costeta of primary
+/testem/histo/setHisto 3  100 0. 300. keV	#energy  of ch. secondary  
+/testem/histo/setHisto 4  200 -1. +1. none	#costeta of ch. secondary
+#
+/testem/event/printModulo 10000
+#  
+/run/beamOn 100000

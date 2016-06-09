@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003/11/19 11:51:44 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2004/06/11 14:17:13 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for geometry/divisions library.  Gabriele Cosmo, 16/06/03.
 # ----------------------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4GEOM_ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPGeometry/include \

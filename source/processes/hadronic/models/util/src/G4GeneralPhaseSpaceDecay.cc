@@ -43,7 +43,8 @@
 
 
 G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(G4int Verbose) : 
-                          G4VDecayChannel("Phase Space", Verbose)
+                          G4VDecayChannel("Phase Space", Verbose),
+			  theDaughterMasses(0)
 {
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay:: constructor " << G4endl;
 }
@@ -59,7 +60,8 @@ G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(const G4String& theParentName
 					           theNumberOfDaughters,
 					           theDaughterName1,
 					           theDaughterName2,
-					           theDaughterName3)
+					           theDaughterName3),
+				   theDaughterMasses(0)
 {
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay:: constructor " << G4endl;
   
@@ -83,7 +85,28 @@ G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(const G4String& theParentName
 					           theDaughterName1,
 					           theDaughterName2,
 					           theDaughterName3),
-			           parentmass(theParentMass)
+			           parentmass(theParentMass),
+				   theDaughterMasses(0)
+{
+  if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay:: constructor " << G4endl;
+}
+
+G4GeneralPhaseSpaceDecay::G4GeneralPhaseSpaceDecay(const G4String& theParentName,
+                                                   G4double        theParentMass,
+			                           G4double        theBR,
+			                           G4int           theNumberOfDaughters,
+			                           const G4String& theDaughterName1,
+			                           const G4String& theDaughterName2,
+			                           const G4String& theDaughterName3,
+						   const G4double *masses) :
+                                   G4VDecayChannel("Phase Space",
+					           theParentName,theBR,
+					           theNumberOfDaughters,
+					           theDaughterName1,
+					           theDaughterName2,
+					           theDaughterName3),
+			           parentmass(theParentMass),
+				   theDaughterMasses(masses)
 {
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay:: constructor " << G4endl;
 }
@@ -162,15 +185,22 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::TwoBodyDecayIt()
   //daughters'mass
   G4double daughtermass[2]; 
   G4double daughtermomentum;
-  daughtermass[0] = daughters[0]->GetPDGMass();
-  daughtermass[1] = daughters[1]->GetPDGMass();
+  if ( theDaughterMasses )
+  { 
+     daughtermass[0]= *(theDaughterMasses);
+     daughtermass[1] = *(theDaughterMasses+1);
+  } else {   
+     daughtermass[0] = daughters[0]->GetPDGMass();
+     daughtermass[1] = daughters[1]->GetPDGMass();
+  }
+  
 //  G4double sumofdaughtermass =  daughtermass[0] + daughtermass[1];
 
   //create parent G4DynamicParticle at rest
   G4ParticleMomentum dummy;
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
 
-  //create G4Decayproducts
+  //create G4Decayproducts  @@GF why dummy parentparticle?
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
@@ -181,10 +211,12 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::TwoBodyDecayIt()
   G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
   G4ParticleMomentum direction(sintheta*cos(phi),sintheta*sin(phi),costheta);
 
-  //create daughter G4DynamicParticle 
-  G4DynamicParticle * daughterparticle = new G4DynamicParticle( daughters[0], direction*daughtermomentum);
+  //create daughter G4DynamicParticle
+  G4double Etotal= sqrt(daughtermass[0]*daughtermass[0] + daughtermomentum*daughtermomentum); 
+  G4DynamicParticle * daughterparticle = new G4DynamicParticle( daughters[0],Etotal, direction*daughtermomentum);
   products->PushProducts(daughterparticle);
-  daughterparticle = new G4DynamicParticle( daughters[1], direction*(-1.0*daughtermomentum));
+  Etotal= sqrt(daughtermass[1]*daughtermass[1] + daughtermomentum*daughtermomentum);
+  daughterparticle = new G4DynamicParticle( daughters[1],Etotal, direction*(-1.0*daughtermomentum));
   products->PushProducts(daughterparticle);
 
   if (GetVerboseLevel()>1) 
@@ -206,7 +238,12 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
   G4double sumofdaughtermass = 0.0;
   for (G4int index=0; index<3; index++)
     {
-     daughtermass[index] = daughters[index]->GetPDGMass();
+     if ( theDaughterMasses )
+     { 
+         daughtermass[index]= *(theDaughterMasses+index);
+     } else {   
+         daughtermass[index] = daughters[index]->GetPDGMass();
+     }   
      sumofdaughtermass += daughtermass[index];
     }
   
@@ -274,8 +311,9 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
   sinphi = sin(phi);
   cosphi = cos(phi);
   G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
+  G4double Etotal=sqrt( daughtermass[0]*daughtermass[0] + daughtermomentum[0]*daughtermomentum[0]);
   G4DynamicParticle * daughterparticle 
-         = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
+         = new G4DynamicParticle( daughters[0], Etotal, direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
 
   costhetan = (daughtermomentum[1]*daughtermomentum[1]-daughtermomentum[2]*daughtermomentum[2]-daughtermomentum[0]*daughtermomentum[0])/(2.0*daughtermomentum[2]*daughtermomentum[0]);
@@ -287,14 +325,13 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::ThreeBodyDecayIt()
   direction2.setX( sinthetan*cosphin*costheta*cosphi - sinthetan*sinphin*sinphi + costhetan*sintheta*cosphi); 
   direction2.setY( sinthetan*cosphin*costheta*sinphi + sinthetan*sinphin*cosphi + costhetan*sintheta*sinphi); 
   direction2.setZ( -sinthetan*cosphin*sintheta + costhetan*costheta);
-  daughterparticle = new G4DynamicParticle( daughters[2], direction2*(daughtermomentum[2]/direction2.mag()));
+  Etotal=sqrt( daughtermass[2]*daughtermass[2] + daughtermomentum[2]*daughtermomentum[2]/direction2.mag2());
+  daughterparticle = new G4DynamicParticle( daughters[2],Etotal, direction2*(daughtermomentum[2]/direction2.mag()));
   products->PushProducts(daughterparticle);
-
+  G4ThreeVector mom=(direction0*daughtermomentum[0] + direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0);
+  Etotal= sqrt( daughtermass[1]*daughtermass[1] + mom.mag2() );
   daughterparticle = 
-       new G4DynamicParticle( 
-	        daughters[1],
-	       (direction0*daughtermomentum[0] + direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0)   
-		);
+       new G4DynamicParticle(daughters[1], Etotal, mom);
   products->PushProducts(daughterparticle);
 
   if (GetVerboseLevel()>1) {

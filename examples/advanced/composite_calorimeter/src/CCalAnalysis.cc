@@ -34,6 +34,8 @@
 
 #include <AIDA/AIDA.h>
 
+#include <typeinfo>
+
 //#define debug
 
 CCalAnalysis* CCalAnalysis::instance = 0;
@@ -80,8 +82,8 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 	  tag2 = tag  + " ELAB, XPOS, YPOS, ZPOS";
 	  tag  = tag2 + ", EDEP, EDEC, EDHC";
 
-	  //tuple = tupleFactory->create("1","Event info", tag); // Column wise (default)
-	  tuple = tupleFactory->create("1","Event info", tag, "--preferRWN"); // Row wise
+	  tuple = tupleFactory->create("1","Event info", tag); // Column wise (default)
+	  //tuple = tupleFactory->create("1","Event info", tag, "--preferRWN"); // Row wise
 	  
 	  assert(tuple);
 	  
@@ -292,25 +294,24 @@ void CCalAnalysis::setNtuple(float* hcalE, float* ecalE, float elab,
 			     float x, float y, float z, float edep, 
 			     float edec, float edhc) {
 
-  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("1") );
-  if (ntuple) {
+  if (tuple) {
     char tag[10];
     for (int i=0; i<28; i++) {
       sprintf (tag, "hcal%d", i);
-      ntuple->fill(tuple->findColumn(tag),hcalE[i]);
+      tuple->fill(tuple->findColumn(tag),hcalE[i]);
     }
     for (int i=0; i<49; i++) {
       sprintf (tag, "ecal%d", i);
-      ntuple->fill(tuple->findColumn(tag),ecalE[i]);
+      tuple->fill(tuple->findColumn(tag),ecalE[i]);
     }
-    ntuple->fill(tuple->findColumn("ELAB"),elab);
-    ntuple->fill(tuple->findColumn("XPOS"),x);
-    ntuple->fill(tuple->findColumn("YPOS"),y);
-    ntuple->fill(tuple->findColumn("ZPOS"),z);
-    ntuple->fill(tuple->findColumn("EDEP"),edep);
-    ntuple->fill(tuple->findColumn("EDEC"),edec);
-    ntuple->fill(tuple->findColumn("EDHC"),edhc);
-    ntuple->addRow();
+    tuple->fill(tuple->findColumn("ELAB"),elab);
+    tuple->fill(tuple->findColumn("XPOS"),x);
+    tuple->fill(tuple->findColumn("YPOS"),y);
+    tuple->fill(tuple->findColumn("ZPOS"),z);
+    tuple->fill(tuple->findColumn("EDEP"),edep);
+    tuple->fill(tuple->findColumn("EDEC"),edec);
+    tuple->fill(tuple->findColumn("EDHC"),edhc);
+    tuple->addRow();
 #ifdef debug
     G4cout << "CCalAnalysis:: Fill Ntuple " << G4endl;
 #endif

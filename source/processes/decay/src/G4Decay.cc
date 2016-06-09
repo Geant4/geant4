@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.16 2003/04/26 18:54:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Decay.cc,v 1.18 2004/05/08 15:30:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -213,8 +213,8 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 #endif
     fParticleChangeForDecay.SetNumberOfSecondaries(0);
     // Kill the parent particle
-    fParticleChangeForDecay.SetStatusChange( fStopAndKill ) ;
-    fParticleChangeForDecay.SetLocalEnergyDeposit(0.0); 
+    fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
+    fParticleChangeForDecay.ProposeLocalEnergyDeposit(0.0); 
     
     ClearNumberOfInteractionLengthLeft();
     return &fParticleChangeForDecay ;
@@ -234,9 +234,9 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
       // decay channel not found
       G4Exception("G4Decay::DoIt  : can not determine decay channel ");
     } else {
-      G4int temp = decaychannel->GetVerboseLevel();
       // execute DecayIt() 
 #ifdef G4VERBOSE
+      G4int temp = decaychannel->GetVerboseLevel();
       if (GetVerboseLevel()>1) {
 	G4cerr << "G4Decay::DoIt  : selected decay channel  addr:" << decaychannel <<G4endl;
 	decaychannel->SetVerboseLevel(GetVerboseLevel());
@@ -307,9 +307,9 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   delete products;
 
   // Kill the parent particle
-  fParticleChangeForDecay.SetStatusChange( fStopAndKill ) ;
-  fParticleChangeForDecay.SetLocalEnergyDeposit(energyDeposit); 
-  fParticleChangeForDecay.SetTimeChange( finalGlobalTime );
+  fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
+  fParticleChangeForDecay.ProposeLocalEnergyDeposit(energyDeposit); 
+  fParticleChangeForDecay.ProposeGlobalTime( finalGlobalTime );
   // reset NumberOfInteractionLengthLeft
   ClearNumberOfInteractionLengthLeft();
 

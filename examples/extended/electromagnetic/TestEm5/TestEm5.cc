@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm5.cc,v 1.9 2004/02/19 18:18:42 maire Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: TestEm5.cc,v 1.11 2004/06/18 09:47:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,36 +54,33 @@ int main(int argc,char** argv) {
 
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-  
+
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
+
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
-  
+
   // set mandatory initialization classes
   DetectorConstruction* detector;
   detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PhysicsList(detector));
-  
+  runManager->SetUserInitialization(new PhysicsList());
+
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new VisManager;
   visManager->Initialize();
-#endif 
+#endif
 
-  HistoManager* histo = 0;
-#ifdef G4ANALYSIS_USE
-  histo = new HistoManager();
-#endif  
- 
+  HistoManager* histo = new HistoManager();
+
   // set user action classes
   //
   //primaryGenerator
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
-  
+
   //runAction
   RunAction* runaction = new RunAction(detector,primary,histo);
   runManager->SetUserAction(runaction);
@@ -91,7 +88,7 @@ int main(int argc,char** argv) {
   //eventAction
   EventAction* eventaction = new EventAction(runaction,histo);
   runManager->SetUserAction(eventaction);
-  
+
   //trackAction
   TrackingAction* trackingaction = new TrackingAction(detector, runaction,
                                                       eventaction, histo);

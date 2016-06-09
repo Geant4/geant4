@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.cc,v 1.5 2003/05/21 20:52:53 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4HEPEvtParticle.cc,v 1.7 2004/06/11 14:11:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 

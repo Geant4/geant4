@@ -1,8 +1,8 @@
 #!/usr/bin/env python2.2
 #
-# $Id: runSimNoAnalysis.py,v 1.3 2003/06/20 12:41:06 dressel Exp $
+# $Id: runSimNoAnalysis.py,v 1.4 2004/06/09 15:04:35 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02-patch-01 $
+# GEANT4 tag $Name: geant4-06-02 $
 # -------------------------------------------------------------------
 
 
@@ -124,7 +124,7 @@ impScorer = G4Kernel.G4Scorer()
 ##########################################################################
 tApp = tiaraApplication.TiaraApplet(tiaraSpecs = tiaraSpecs,
                                     tSim = Tiara.TiaraSim_GetTiaraSim(),
-                                    useLizard = False)
+                                    usePI = False)
 
 
 #tApp.visMode()
@@ -190,7 +190,7 @@ rc.impScorer = impScorer
 rc.totalTime = totalTime
 rc.comment = comment
 
-rs = runSequence.RunSequence(runConfig=rc, useLizard = False)
+rs = runSequence.RunSequence(runConfig=rc, usePI = False)
 rs.runNevents(100)
 rs.runLoop()
 

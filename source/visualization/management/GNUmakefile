@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2003/11/06 15:08:18 johna Exp $
+# $Id: GNUmakefile,v 1.8 2004/06/17 13:54:27 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 
@@ -7,6 +7,13 @@ name := G4vis_management
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
+
+GLOBLIBS  = libG4modeling.lib
+GLOBLIBS += libG4run.lib libG4event.lib
+GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
+GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk

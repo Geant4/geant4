@@ -1,7 +1,21 @@
-$Id: History,v 1.53 2003/10/03 14:31:40 gcosmo Exp $
+$Id: History,v 1.56 2004/06/17 14:27:32 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V06-01-02 17-Jun-2004 G.Cosmo
+- GNUmakefile: added definition of GLOBLIBS.
+
+g3tog4-V06-01-01 03-May-2004 G.Cosmo
+- G4gsrotm.cc: commented warning about left-handled coordinates for
+  rotation axes (I.Hrivnacova).
+
+g3tog4-V06-01-00 26-Mar-2004 G.Cosmo
+- Removed hardwired gSeparator constant (a character which is used
+  during generation of volume names) to '_'. Now gSeparator is made non
+  constant and so can be changed in case a user wants to use '_' in his
+  code (I.Hrivnacova).
+  Modified files: G3toG4.hh, clparse.cc.
 
 g3tog4-V05-02-00 03-Oct-2003 G.Cosmo
 - GNUmakefile:

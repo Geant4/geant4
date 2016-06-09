@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999/01/07 16:10:20 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2004/06/11 14:25:24 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for leptons library.  Gabriele Cosmo, 18/9/96.
 # --------------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4PARTICLES_ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \

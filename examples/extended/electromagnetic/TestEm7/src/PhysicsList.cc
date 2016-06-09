@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.9 2003/11/19 10:16:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PhysicsList.cc,v 1.10 2004/06/09 16:20:31 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,8 +31,6 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "PhysListParticles.hh"
-#include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
 #include "PhysListEmG4v52.hh"
 #include "PhysListHadronElastic.hh"
@@ -58,15 +56,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   SetVerboseLevel(1);
 
-   // Particles
-  particleList = new PhysListParticles("particles");
-
-  // General Physics
-  generalPhysicsList = new PhysListGeneral("general");
-
   // EM physics
-  emName = G4String("standard");
-  emPhysicsList = new PhysListEmStandard(emName);
+  emPhysicsList = new PhysListEmStandard(emName = "standard");
 
 }
 
@@ -75,26 +66,151 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete pMessenger;
-  delete generalPhysicsList;
   delete emPhysicsList;
   for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// Bosons
+#include "G4ChargedGeantino.hh"
+#include "G4Geantino.hh"
+#include "G4Gamma.hh"
+#include "G4OpticalPhoton.hh"
+
+// leptons
+#include "G4MuonPlus.hh"
+#include "G4MuonMinus.hh"
+#include "G4NeutrinoMu.hh"
+#include "G4AntiNeutrinoMu.hh"
+
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4NeutrinoE.hh"
+#include "G4AntiNeutrinoE.hh"
+
+// Mesons
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4PionZero.hh"
+#include "G4Eta.hh"
+#include "G4EtaPrime.hh"
+
+#include "G4KaonPlus.hh"
+#include "G4KaonMinus.hh"
+#include "G4KaonZero.hh"
+#include "G4AntiKaonZero.hh"
+#include "G4KaonZeroLong.hh"
+#include "G4KaonZeroShort.hh"
+
+// Baryons
+#include "G4Proton.hh"
+#include "G4AntiProton.hh"
+#include "G4Neutron.hh"
+#include "G4AntiNeutron.hh"
+
+// Nuclei
+#include "G4Alpha.hh"
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4He3.hh"
+#include "G4GenericIon.hh"
+
+#include "IonC12.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void PhysicsList::ConstructParticle()
 {
-  particleList->ConstructParticle();
+// pseudo-particles
+  G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();
+  
+// gamma
+  G4Gamma::GammaDefinition();
+  
+// optical photon
+  G4OpticalPhoton::OpticalPhotonDefinition();
+
+// leptons
+  G4Electron::ElectronDefinition();
+  G4Positron::PositronDefinition();
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
+
+  G4NeutrinoE::NeutrinoEDefinition();
+  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+  G4NeutrinoMu::NeutrinoMuDefinition();
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
+
+// mesons
+  G4PionPlus::PionPlusDefinition();
+  G4PionMinus::PionMinusDefinition();
+  G4PionZero::PionZeroDefinition();
+  G4Eta::EtaDefinition();
+  G4EtaPrime::EtaPrimeDefinition();
+  G4KaonPlus::KaonPlusDefinition();
+  G4KaonMinus::KaonMinusDefinition();
+  G4KaonZero::KaonZeroDefinition();
+  G4AntiKaonZero::AntiKaonZeroDefinition();
+  G4KaonZeroLong::KaonZeroLongDefinition();
+  G4KaonZeroShort::KaonZeroShortDefinition();
+
+// barions
+  G4Proton::ProtonDefinition();
+  G4AntiProton::AntiProtonDefinition();
+  G4Neutron::NeutronDefinition();
+  G4AntiNeutron::AntiNeutronDefinition();
+
+// ions
+  G4Deuteron::DeuteronDefinition();
+  G4Triton::TritonDefinition();
+  G4He3::He3Definition();
+  G4Alpha::AlphaDefinition();
+  G4GenericIon::GenericIonDefinition();
+  IonC12::IonDefinition();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4ProcessManager.hh"
+#include "G4Decay.hh"
+
 void PhysicsList::ConstructProcess()
 {
+  // transportation
+  //
   AddTransportation();
-  generalPhysicsList->ConstructProcess();
+  
+  // electromagnetic physics list
+  //
   emPhysicsList->ConstructProcess();
+  
+  // hadronic physics lists
   for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
+  
+  // decay process
+  //
+  G4Decay* fDecayProcess = new G4Decay();
+
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (fDecayProcess->IsApplicable(*particle)) { 
+
+      pmanager ->AddProcess(fDecayProcess);
+
+      // set ordering for PostStepDoIt and AtRestDoIt
+      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
+
+    }
+  }
+  
+  // step limitation (as a full process)
+  //  
   AddStepMax();
 }
 
@@ -143,12 +259,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StepMax.hh"
-
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddStepMax()
 {

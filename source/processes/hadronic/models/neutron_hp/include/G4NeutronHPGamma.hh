@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPGamma.hh,v 1.10 2003/06/16 17:10:44 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4NeutronHPGamma.hh,v 1.11 2004/05/24 10:32:59 hpw Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 #ifndef G4NeutronHPGamma_h
 #define G4NeutronHPGamma_h 1
@@ -39,12 +39,8 @@ class G4NeutronHPGamma
 {
   public:
   
-  G4NeutronHPGamma() 
-  {
-    next = NULL;
-    instancecount ++;
-  }
-  ~G4NeutronHPGamma() {instancecount--;}
+  G4NeutronHPGamma();
+  ~G4NeutronHPGamma();
   
   G4bool Init(std::ifstream & aDataFile);
   

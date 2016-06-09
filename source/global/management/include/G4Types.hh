@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Types.hh,v 1.7 2003/06/17 08:14:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Types.hh,v 1.9 2004/06/09 07:30:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // GEANT4 native types
@@ -32,11 +32,26 @@
 #ifndef G4TYPES_HH
 #define G4TYPES_HH
 
-// Disable warning C4786 on WIN32 architectures: identifier was truncated
-// to '255' characters in the debug information
-//
 #ifdef WIN32
+  // Disable warning C4786 on WIN32 architectures:
+  // identifier was truncated to '255' characters
+  // in the debug information
+  //
   #pragma warning ( disable : 4786 )
+  //
+  // Define DLL export macro for WIN32 systems for
+  // importing/exporting external symbols to DLLs
+  //
+  #if defined G4LIB_BUILD_DLL
+    #define G4DLLEXPORT __declspec( dllexport )
+    #define G4DLLIMPORT __declspec( dllimport )
+  #else
+    #define G4DLLEXPORT
+    #define G4DLLIMPORT
+  #endif
+#else
+  #define G4DLLEXPORT
+  #define G4DLLIMPORT
 #endif
 
 // Disable deprecated warnings for usage of strstream on Linux
@@ -45,7 +60,7 @@
 #if (__GNUC__==3) && (__GNUC_MINOR__>0)
   #undef __DEPRECATED
 #endif
-
+  
 #include <CLHEP/config/CLHEP.h>
 #include <complex>
 

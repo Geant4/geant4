@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.2 2003/10/06 14:51:17 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: RunAction.cc,v 1.5 2004/06/21 10:55:10 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,12 +32,10 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/AIDA.h"
 #endif
 
@@ -52,20 +50,18 @@ RunAction::RunAction()
 
 RunAction::~RunAction()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
-  
+  tree->close();        // and closing the tree (and the file)  
   delete tree;
-#endif  
-  
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::bookHisto()
 {
-#ifdef G4ANALYSIS_USE 
+#ifdef USE_AIDA 
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -81,7 +77,8 @@ void RunAction::bookHisto()
  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
 
  // Creating the histogram
- histo[0]=hf->createHistogram1D("1","total energy deposit in C6F6(MeV)",100,0.,10.);
+ histo[0]=hf->createHistogram1D
+                         ("1","total energy deposit in C6F6(MeV)",100,0.,10.);
 
  delete hf;
  delete tf;
@@ -98,18 +95,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   HepRandom::showEngineStatus();
-
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  if (G4VVisManager::GetConcreteInstance())
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-
   // show Rndm status
   HepRandom::showEngineStatus();         
 }

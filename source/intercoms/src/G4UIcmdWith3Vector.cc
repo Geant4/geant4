@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3Vector.cc,v 1.5 2003/06/16 16:55:36 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIcmdWith3Vector.cc,v 1.6 2004/05/16 18:42:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -43,21 +43,7 @@ G4UIcmdWith3Vector::G4UIcmdWith3Vector
 
 G4ThreeVector G4UIcmdWith3Vector::GetNew3VectorValue(const char* paramString)
 {
-  G4double vx;
-  G4double vy;
-  G4double vz;
-  std::istrstream is((char*)paramString);
-  is >> vx >> vy >> vz;
-  return G4ThreeVector(vx,vy,vz);
-}
-
-G4String G4UIcmdWith3Vector::ConvertToString(G4ThreeVector vec)
-{
-  char st[100];
-  std::ostrstream os(st,100);
-  os << vec.x() << " " << vec.y() << " " << vec.z() << '\0';
-  G4String vl = st;
-  return vl;
+  return ConvertTo3Vector(paramString);
 }
 
 void G4UIcmdWith3Vector::SetParameterName

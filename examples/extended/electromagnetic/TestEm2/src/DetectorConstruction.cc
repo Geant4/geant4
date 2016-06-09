@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 // 
-// $Id: DetectorConstruction.cc,v 1.2 2003/11/25 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorConstruction.cc,v 1.7 2004/06/18 15:43:41 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +56,7 @@ DetectorConstruction::DetectorConstruction()
 {
   DefineMaterials();
   SetMaterial("PbWO4");
-  detectorMessenger = new DetectorMessenger(this);  
+  detectorMessenger = new DetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,7 +109,12 @@ void DetectorConstruction::DefineMaterials()
 
   new G4Material("Aluminium",   z=13., a= 26.98*g/mole, density= 2.7*g/cm3);
 
+  G4Material* Fe = 
   new G4Material("Iron",        z=26., a= 55.85*g/mole, density= 7.87*g/cm3);
+  G4Material* Ni = 
+  new G4Material("Nickel",      z=28., a= 58.69*g/mole, density= 8.96*g/cm3);
+  G4Material* Cu = 
+  new G4Material("Copper",      z=29., a= 63.54*g/mole, density= 8.96*g/cm3);
 
   G4Material* BGO = 
   new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
@@ -127,11 +132,20 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Tungsten", density= 19.30*g/cm3, ncomponents=1);
   w->AddElement(W, fractionmass=1.0);
 
+  G4Material* ma1 = new G4Material("FCal2Slugs",density = 18.6*g/cm3, 3);
+  ma1->AddMaterial(w, fractionmass=0.97);
+  ma1->AddMaterial(Fe,fractionmass=0.01);
+  ma1->AddMaterial(Ni,fractionmass=0.02);
+
+  G4Material* ma2 = new G4Material("FCal2Abs",density = 10.*g/cm3, 2);
+  ma2->AddMaterial(Cu, fractionmass=0.2);
+  ma2->AddMaterial(ma1,fractionmass=0.8);
+
   G4Material* pb = 
   new G4Material("Lead", density= 11.35*g/cm3, ncomponents=1);
   pb->AddElement(Pb, fractionmass=1.0);
 
-////  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

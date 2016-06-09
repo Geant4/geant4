@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.hh,v 1.11 2003/06/16 17:13:12 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4TrajectoryPoint.hh,v 1.14 2004/06/11 14:30:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 //---------------------------------------------------------------
@@ -92,8 +92,11 @@ public: // without description
 
 };
 
-
-extern G4Allocator<G4TrajectoryPoint> aTrajectoryPointAllocator;
+#if defined G4TRACKING_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4TrajectoryPoint> aTrajectoryPointAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4TrajectoryPoint> aTrajectoryPointAllocator;
+#endif
 
 inline void* G4TrajectoryPoint::operator new(size_t)
 {

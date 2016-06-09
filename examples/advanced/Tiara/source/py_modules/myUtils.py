@@ -1,6 +1,6 @@
-# $Id: myUtils.py,v 1.4 2003/06/20 12:41:06 dressel Exp $
+# $Id: myUtils.py,v 1.5 2004/06/09 15:04:36 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02-patch-01 $
+# GEANT4 tag $Name: geant4-06-02 $
 # -------------------------------------------------------------------
 #
 import CLHEP
@@ -13,7 +13,7 @@ import shelve
 
 G4analysisUse = os.environ.has_key("G4ANALYSIS_USE")
 if G4analysisUse:
-    import myLiz
+    import myPI
 
 
 def createParallelSampler(impGeo, impScorer):
@@ -48,7 +48,7 @@ def saveResults(tApp, path, shelveName, impScorer, impGeo):
     table.Print(tApp.cellScorerStore.GetMapGeometryCellCellScorer())
     if G4analysisUse:
         storePath = path + "/" + myShelve["xmlStoreName"]
-        persistantStore = myLiz.tf.create(storePath,"xml",0,1)
+        persistantStore = myPI.tf.create(storePath,"xml",0,1)
         coppyTrees(tApp.tree, persistantStore)
         persistantStore.commit()
         persistantStore.close()
@@ -187,7 +187,7 @@ if G4analysisUse:
     def addToXML(mergedXMLStore, xmlStore):
         objNames = xmlStore.listObjectNames()
         objTypes = xmlStore.listObjectTypes()
-        hf = myLiz.af.createHistogramFactory(mergedXMLStore)
+        hf = myPI.af.createHistogramFactory(mergedXMLStore)
         for i in range(len(objNames)):
             oName = objNames[i]
             oType = objTypes[i]
@@ -230,11 +230,11 @@ def addToShelve(mergedShelve, she, shelveNameToBeAdded):
 if G4analysisUse:
     def mergeData(mergedName, shelveList):
         mergedShelveName = mergedName + ".shelve"
-        print "createing merged shelve: ", mergedShelveName
+        print "creating merged shelve: ", mergedShelveName
         mergedShelve = shelve.open(mergedShelveName)
         mergedXMLname = mergedName + ".xml"
-        print "createing merged XML store: ", mergedXMLname
-        mergedXMLStore = myLiz.tf.create(mergedXMLname, "xml", 0, 1)
+        print "creating merged XML store: ", mergedXMLname
+        mergedXMLStore = myPI.tf.create(mergedXMLname, "xml", 0, 1)
 
     
         for i in range(len(shelveList)):
@@ -243,7 +243,7 @@ if G4analysisUse:
             she = shelve.open(shelveName,"r")
             xmlStoreName = she["xmlStoreName"]
             print "opening: ", xmlStoreName
-            xmlStore = myLiz.tf.create(xmlStoreName,"xml",1,0)
+            xmlStore = myPI.tf.create(xmlStoreName,"xml",1,0)
             if i == 0:
                 if mergedXMLStore.listObjectNames() == ():
                     setUpMergedShelve(she, mergedShelve, mergedXMLname, shelveName)

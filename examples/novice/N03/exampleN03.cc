@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.19 2003/09/15 15:38:08 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: exampleN03.cc,v 1.20 2004/04/08 09:03:32 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,10 @@
 
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
+#endif
+
+#ifdef G4UI_USE_WIN32
+#include "G4UIWin32.hh"
 #endif
 
 #include "Randomize.hh"
@@ -74,14 +78,14 @@ int main(int argc,char** argv) {
   if (argc==1)   // Define UI session for interactive mode.
     {
       // G4UIterminal is a (dumb) terminal.
-#ifdef G4UI_USE_XM
+#if defined(G4UI_USE_XM)
       session = new G4UIXm(argc,argv);
-#else           
-#ifdef G4UI_USE_TCSH
+#elif defined(G4UI_USE_WIN32)
+      session = new G4UIWin32();
+#elif defined(G4UI_USE_TCSH)
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
-#endif
 #endif
     }
   
@@ -108,8 +112,8 @@ int main(int argc,char** argv) {
     {
       // G4UIterminal is a (dumb) terminal.
       UI->ApplyCommand("/control/execute vis.mac");    
-#ifdef G4UI_USE_XM
-      // Customize the G4UIXm menubar with a macro file :
+#if defined(G4UI_USE_XM) || defined(G4UI_USE_WIN32)
+      // Customize the G4UIXm,Win32 menubar with a macro file :
       UI->ApplyCommand("/control/execute visTutor/gui.mac");
 #endif
       session->SessionStart();

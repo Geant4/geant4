@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmG4v52.cc,v 1.1 2003/10/06 10:09:24 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PhysListEmG4v52.cc,v 1.2 2004/03/24 18:25:31 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -108,7 +108,7 @@ void PhysListEmG4v52::ConstructProcess()
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MultipleScattering52,-1,1,1);
-      pmanager->AddProcess(new G4hIonisation52,     -1,2,2);
+      pmanager->AddProcess(new G4hIonisation52,       -1,2,2);
     }
   }
 }

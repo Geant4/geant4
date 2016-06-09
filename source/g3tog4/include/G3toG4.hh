@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4.hh,v 1.7 2001/07/11 09:58:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G3toG4.hh,v 1.8 2004/03/26 14:59:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // modified by I.Hrivnacova, 27 Sep 99
 
@@ -31,7 +31,7 @@
 
 #include "globals.hh"
 
-const char gSeparator('_'); 
+extern char gSeparator; 
 
 extern G4int Ipar[1000];
 extern G4double Rpar[1000];

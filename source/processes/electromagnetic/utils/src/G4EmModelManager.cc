@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.22 2004/01/27 11:21:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4EmModelManager.cc,v 1.23 2004/05/10 18:45:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -321,7 +321,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
     if(0 < verboseLevel) {
       G4cout << "New G4RegionModels set with " << n << " models for region <"
-	     << region->GetName() << ">  Elow(MeV)= "; 
+	     << region->GetName() << ">  Elow(MeV)= ";
       for(G4int ii=0; ii<n; ii++) {G4cout << eLow[ii]/MeV << " ";}
       G4cout << G4endl;
     }
@@ -344,8 +344,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       G4cout << "G4EmModelManager::Initialise() for "
              << material->GetName()
              << " indexOfCouple= " << i
-             << " indexOfRegion= " << reg  
-             << " indexOfRegion= " << reg  
+             << " indexOfRegion= " << reg
              << G4endl;
     }
 

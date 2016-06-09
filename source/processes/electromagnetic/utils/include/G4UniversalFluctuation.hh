@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.10 2003/11/06 17:18:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4UniversalFluctuation.hh,v 1.12 2004/05/11 15:35:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -108,12 +108,10 @@ private:
   G4double minNumberInteractionsBohr;
   G4double theBohrBeta2;
   G4double minLoss;
-  G4double problim;
   G4double sumalim;
   G4double alim;
   G4double nmaxCont1;
   G4double nmaxCont2;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

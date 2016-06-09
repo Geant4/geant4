@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2004/03/19 19:14:21 asaim Exp $
+$Id: History,v 1.75 2004/06/11 15:21:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun.11, 2004 G.Cosmo (tracking-V06-01-02)
+- Use global flag G4TRACKING_ALLOC_EXPORT to export extern symbols for DLLs.
+  Modified GNUmakefile and rearranged usage of extern symbols in classes.
+
+Jun.09, 2004 G.Cosmo (tracking-V06-01-01)
+- Adopt G4DLLIMPORT/G4DLLEXPORT technique to handle extern simbols for
+  allowing support of DLLs on Windows.
+- Coworks with "global-V06-01-02b".
+
+Jun.07, 2004 G.Cosmo (tracking-V06-01-00)
+- Export extern symbols for allowing support of DLLs on Windows.
+  Modified files:  G4Trajectory.hh, G4TrajectoryPoint.hh,
+                   G4SmoothTrajectory.hh, G4SmoothTrajectoryPoint.hh.
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
+- Coworks with "global-V06-01-02a".
 
 Mar.19, 2004 M.Asai (tracking-V06-00-01)
 - G4SteppingManager2.cc has been restored back to the version in

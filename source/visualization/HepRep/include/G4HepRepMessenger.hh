@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.hh,v 1.3 2003/12/11 21:55:54 duns Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HepRepMessenger.hh,v 1.5 2004/05/27 05:55:19 duns Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 #ifndef G4HepRepMessenger_HH
@@ -45,6 +45,7 @@ class G4HepRepMessenger : public G4UImessenger {
         virtual G4String getEventNumberSuffix();
         virtual G4bool appendGeometry();
         virtual G4bool addPointAttributes();
+        virtual G4String getCoordinateSystem();
 
 
     private:            
@@ -54,10 +55,13 @@ class G4HepRepMessenger : public G4UImessenger {
         G4UIcmdWithAString* setEventNumberSuffixCommand;
         
         G4bool geometry;
-//        G4UIcmdWithABool* appendGeometryCommand;
+        G4UIcmdWithABool* appendGeometryCommand;
 
         G4bool pointAttributes;
         G4UIcmdWithABool* addPointAttributesCommand;
+
+        G4String coordinateSystem;
+        G4UIcmdWithAString* setCoordinateSystemCommand;
 };
 
 #endif

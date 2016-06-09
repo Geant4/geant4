@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc,v 1.7 2003/09/12 21:51:34 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PrimaryVertex.cc,v 1.9 2004/06/11 14:11:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #include "G4PrimaryVertex.hh"

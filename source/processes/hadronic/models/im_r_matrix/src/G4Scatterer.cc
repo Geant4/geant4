@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.13.2.1 2004/03/24 13:18:45 hpw Exp $ //
+// $Id: G4Scatterer.cc,v 1.13.2.2 2004/05/07 15:09:21 gunter Exp $ //
 //
 
 #include "globals.hh"
@@ -58,36 +58,49 @@ G4Scatterer::~G4Scatterer()
   collisions.clear();
 }
 
-
 G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1, 
 					   const G4KineticTrack& trk2)
 {
   G4double time = DBL_MAX;
+    G4double distance_fast;
+  G4LorentzVector mom1 = trk1.GetTrackingMomentum();
+//  G4cout << "zcomp=" << abs(mom1.vect().unit().z() -1 ) << G4endl;
+  G4double collisionTime;
   
-  G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
-
-  // Check whether there is enough energy for elastic scattering 
-  // (to put the particles on to mass shell
+  if ( abs(mom1.vect().unit().z() -1 ) < 1e-6 ) 
+  {
+     G4ThreeVector position = trk2.GetPosition() - trk1.GetPosition();
+     G4double deltaz=position.z();
+     G4double velocity = mom1.z()/mom1.e() * c_light;
+     
+     collisionTime=deltaz/velocity;
+     distance_fast=position.x()*position.x() + position.y()*position.y();
+  } else {
   
-//  if (trk1.GetDefinition()->GetPDGMass() + trk2.GetDefinition()->GetPDGMass() < sqrtS)
-    if (trk1.GetActualMass() + trk2.GetActualMass() < sqrtS)
-    {
-      G4LorentzVector mom1 = trk1.GetTrackingMomentum();
-      //  The nucleons of the nucleus are FROZEN, ie. do not move..
-      
-      G4ThreeVector position = trk1.GetPosition() - trk2.GetPosition();    
+    //  The nucleons of the nucleus are FROZEN, ie. do not move..
 
-      // G4ThreeVector velocity = (mom1.boostVector() - mom2.boostVector()) * c_light;
-      if ( mom1.mag2() < -1.*eV )
-      {
-        G4cout << "G4Scatterer::GetTimeToInteraction(): negative m2:" << mom1.mag2() << G4endl;
-      } 
-      G4ThreeVector velocity = mom1.vect()/mom1.e() * c_light; 
-      G4double collisionTime = - (position * velocity) / (velocity * velocity);    // can't divide by /c_light;
-      
+    G4ThreeVector position = trk2.GetPosition() - trk1.GetPosition();    
+
+    G4ThreeVector velocity = mom1.vect()/mom1.e() * c_light;  // mom1.boostVector() will exit on slightly negative mass
+    collisionTime = (position * velocity) / velocity.mag2();    // can't divide by /c_light;
+    position -= velocity * collisionTime;
+    distance_fast=position.mag2();
+    
+//    if ( collisionTime>0 ) G4cout << " dis1/2 square" << dis1 <<" "<< dis2 << G4endl;
+//     collisionTime = GetTimeToClosestApproach(trk1,trk2);
+  }
      if (collisionTime > 0)
 	{ 
+	   static const G4double maxCrossSection = 500*millibarn;
+	   if(0.7*pi*distance_fast>maxCrossSection) return time;
+
+       
            G4LorentzVector mom2(0,0,0,trk2.Get4Momentum().mag());
+
+// 	   G4ThreeVector momLab = mom1.vect();// frozen Nucleus - mom2.vect();
+// 	   G4ThreeVector posLab = trk1.GetPosition() - trk2.GetPosition();
+// 	   G4double disLab=posLab * posLab - (posLab*momLab) * (posLab*momLab) /(momLab.mag2());
+
 	   G4LorentzRotation toCMSFrame((-1)*(mom1 + mom2).boostVector());
 	   mom1 = toCMSFrame * mom1;
 	   mom2 = toCMSFrame * mom2;
@@ -101,9 +114,16 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 
 	  // Calculate the impact parameter
 
-	   G4double distance = pos * pos - (pos*mom) * (pos*mom) / (mom*mom);
+	   G4double distance = pos * pos - (pos*mom) * (pos*mom) / (mom.mag2());
+
+//     G4cout << " disDiff " << distance-disLab << " " << disLab 
+//            << " " << abs(distance-disLab)/distance << G4endl
+//	    << " mom/Lab " << mom << " " << momLab << G4endl
+//	    << " pos/Lab " << pos << " " << posLab 
+//	    << G4endl;
+
 	   // global optimization
-	   static const G4double maxCrossSection = 500*millibarn;
+//	   static const G4double maxCrossSection = 500*millibarn;
 	   if(pi*distance>maxCrossSection) return time;
 	   
 	   // charged particles special
@@ -112,6 +132,7 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 	      abs(trk2.GetDefinition()->GetPDGCharge())>0.1 &&
 	      pi*distance>maxChargedCrossSection) return time;
 	      
+           G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
 	   // neutrons special   
 	   if(( trk1.GetDefinition() == G4Neutron::Neutron() ||
 	        trk1.GetDefinition() == G4Neutron::Neutron() ) &&
@@ -149,6 +170,9 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
  * 	  if(1)
  * 	    return time;
  */
+	   
+	   if ((trk1.GetActualMass()+trk2.GetActualMass()) > sqrtS) return time;
+
 	    
 	  
 	  G4VCollision* collision = FindCollision(trk1,trk2);
@@ -229,20 +253,6 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 	  // End of debugging
 	      */
 	}
-    }
-  else
-    {
-	      /*
-      // For debugging
-      G4cout << "G4Scatterer - Infinite time to interaction"
-	     << ": sqrtS " << sqrtS
-	     << ", mass1 = " << trk1.GetDefinition()->GetPDGMass()
-	     << ", mass2 = " << trk2.GetDefinition()->GetPDGMass()
-	     << G4endl;
-	throw G4HadronicException(__FILE__, __LINE__, "G4Scatterer TimeToInteraction is INF");
-      // End of debugging
-	      */
-    }
 
   return time;
 }

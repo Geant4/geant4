@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2003/12/08 17:53:26 gcosmo Exp $
+# $Id: GNUmakefile,v 1.6 2004/06/09 15:04:37 daquinog Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -27,8 +27,10 @@ all: lib bin
 include $(G4INSTALL)/config/binmake.gmk
 
 ifdef G4ANALYSIS_USE
-  CPPFLAGS += `$(ANAPHE_SCRIPTS)/aida-config -i`
+ CPPFLAGS += `aida-config --include`
+# LDFLAGS  += `aida-config --lib`
 endif
+
 
 CPPFLAGS += -I$(PYTHON_INCLUDE_DIR) \
 	    -I$(TIARA_BASE)/source/tiaraPhysicsPackaging/include \
@@ -37,7 +39,7 @@ CPPFLAGS += -I$(PYTHON_INCLUDE_DIR) \
 LDFLAGS += -L$(PYTHON_LIB_DIR)
 
 ifdef G4ANALYSIS_USE
-  LDLIBS +=   `$(ANAPHE_SCRIPTS)/aida-config -l`
+ LDLIBS += `aida-config --lib`
 endif
 
 LDLIBS +=   -lpython$(PYTHONVERSION) \

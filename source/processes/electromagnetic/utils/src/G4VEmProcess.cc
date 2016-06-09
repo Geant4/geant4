@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.4 2004/03/01 13:06:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4VEmProcess.cc,v 1.5 2004/05/17 09:46:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -71,10 +71,14 @@
 G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
                       G4VRestDiscreteProcess(name, type),
   theLambdaTable(0),
+  theEnergyOfCrossSectionMax(0),
+  theCrossSectionMax(0),
   particle(0),
   secondaryParticle(0),
   currentCouple(0),
   nLambdaBins(90),
+  lambdaFactor(0.1),
+  mfpKinEnergy(0.0),
   integral(true),
   meanFreePath(true)
 {
@@ -91,7 +95,8 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 G4VEmProcess::~G4VEmProcess()
 {
   if(theLambdaTable) theLambdaTable->clearAndDestroy();
-  theLambdaTable = 0;
+  if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
+  if(theCrossSectionMax) delete [] theCrossSectionMax;
   modelManager->Clear();
   delete modelManager;
   (G4LossTableManager::Instance())->DeRegister(this);
@@ -102,6 +107,8 @@ G4VEmProcess::~G4VEmProcess()
 void G4VEmProcess::Initialise()
 {
   if(theLambdaTable) theLambdaTable->clearAndDestroy();
+  if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
+  if(theCrossSectionMax) delete [] theCrossSectionMax;
   theLambdaTable = 0;
   modelManager->Clear();
   theCuts = modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
@@ -163,6 +170,8 @@ G4PhysicsTable* G4VEmProcess::BuildLambdaTable()
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
   G4PhysicsTable* theTable = new G4PhysicsTable(numOfCouples);
+  theEnergyOfCrossSectionMax = new G4double [numOfCouples];
+  theCrossSectionMax = new G4double [numOfCouples];
 
   for(size_t i=0; i<numOfCouples; i++) {
 
@@ -170,6 +179,20 @@ G4PhysicsTable* G4VEmProcess::BuildLambdaTable()
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
     G4PhysicsVector* aVector = LambdaPhysicsVector(couple);
     modelManager->FillLambdaVector(aVector, couple);
+
+    G4double e, s, emax = 0.0;
+    G4bool b;
+    G4double smax = 0.0;
+    for (G4int j=0; j<nLambdaBins; j++) {
+      e = aVector->GetLowEdgeEnergy(j);
+      s = aVector->GetValue(e,b);
+      if(s > smax) {
+        smax = s;
+        emax = e;
+      }
+    }
+    theEnergyOfCrossSectionMax[i] = emax;
+    theCrossSectionMax[i] = smax;
 
     // Insert vector for this material into the table
     theTable->insert(aVector) ;
@@ -228,12 +251,8 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
   // Integral approach
   if (integral) {
-    G4bool b;
-    G4double postStepLambda =
-             (((*theLambdaTable)[currentMaterialIndex])->GetValue(finalT,b));
-
-    if(preStepLambda*G4UniformRand() > postStepLambda)
-      return G4VRestDiscreteProcess::PostStepDoIt(track,step);
+    if(preStepLambda*G4UniformRand() > GetLambda(finalT))
+    return G4VRestDiscreteProcess::PostStepDoIt(track,step);
   }
 
   G4VEmModel* currentModel = SelectModel(finalT);
@@ -397,6 +416,60 @@ G4bool G4VEmProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
   }
 
   return yes;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetLambdaBinning(G4int nbins)
+{
+  nLambdaBins = nbins;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetMinKinEnergy(G4double e)
+{
+  minKinEnergy = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEmProcess::MinKinEnergy() const
+{
+  return minKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetMaxKinEnergy(G4double e)
+{
+  maxKinEnergy = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEmProcess::MaxKinEnergy() const
+{
+  return maxKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::ActivateFluorescence(G4bool, const G4Region*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::ActivateAugerElectronProduction(G4bool, const G4Region*)
+
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetLambdaFactor(G4double val)
+{
+  if(val > 0.0 && val <= 1.0) lambdaFactor = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

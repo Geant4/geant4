@@ -34,8 +34,8 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.24 2004/03/11 16:05:02 guatelli Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: BrachyDetectorConstruction.cc,v 1.25 2004/05/13 14:47:46 guatelli Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 #include "BrachyPhantomROGeometry.hh"
 #include "BrachyPhantomSD.hh"
@@ -101,7 +101,7 @@ BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
 
   factory = new BrachyFactoryIr();
 
-  pMaterial= new BrachyMaterial();
+  pMaterial = new BrachyMaterial();
 }
 
 
@@ -115,9 +115,9 @@ BrachyDetectorConstruction::~BrachyDetectorConstruction()
 
 G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 {
-  pMaterial-> DefineMaterials();
+  pMaterial -> DefineMaterials();
   ConstructPhantom();
-  factory->CreateSource(PhantomPhys);
+  factory -> CreateSource(PhantomPhys); //Build the source inside the phantom
   ConstructSensitiveDetector();
 
   return WorldPhys;
@@ -125,7 +125,8 @@ G4VPhysicalVolume* BrachyDetectorConstruction::Construct()
 
 void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
 {
-  factory->CleanSource();
+  factory -> CleanSource();
+
   delete factory;
   switch(detectorChoice)
   { 
@@ -142,11 +143,10 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
       factory = new BrachyFactoryIr();
       break;
   }
-  factory->CreateSource(PhantomPhys);
+  factory -> CreateSource(PhantomPhys);
 
   // Notify run manager that the new geometry has been built
-
-  G4RunManager::GetRunManager()->DefineWorldVolume( WorldPhys );
+  G4RunManager::GetRunManager() -> DefineWorldVolume( WorldPhys );
 }
 
 void BrachyDetectorConstruction::SelectBrachytherapicSeed(G4String val)
@@ -176,28 +176,32 @@ void BrachyDetectorConstruction::ConstructPhantom()
 {
   G4Colour  lblue   (0.0, 0.0, .75);
 
-  G4Material* air=pMaterial->GetMat("Air") ;
-  G4Material* water=pMaterial->GetMat("Water");
+  G4Material* air = pMaterial -> GetMat("Air") ;
+  G4Material* water = pMaterial -> GetMat("Water");
 
   ComputeDimVoxel();
 
   // World volume
   World = new G4Box("World",Worldx,Worldy,Worldz);
   WorldLog = new G4LogicalVolume(World,air,"WorldLog",0,0,0);
-  WorldPhys = new G4PVPlacement(0,G4ThreeVector(),"WorldPhys",WorldLog,0,false,0);
+  WorldPhys = new G4PVPlacement(0,G4ThreeVector(),
+                                "WorldPhys",WorldLog,0,false,0);
 
   // Water Box
-  Phantom = new G4Box("Phantom",phantomDimensionX,phantomDimensionY,phantomDimensionZ);
+  Phantom = new G4Box("Phantom",phantomDimensionX,phantomDimensionY,
+                       phantomDimensionZ);
   PhantomLog = new G4LogicalVolume(Phantom,water,"PhantomLog",0,0,0);
-  PhantomPhys = new G4PVPlacement(0,G4ThreeVector(),"PhantomPhys",PhantomLog,WorldPhys,false,0); 
+  PhantomPhys = new G4PVPlacement(0,G4ThreeVector(),
+                                  "PhantomPhys",PhantomLog,
+                                  WorldPhys,false,0); 
 
-  WorldLog->SetVisAttributes (G4VisAttributes::Invisible);
+  WorldLog -> SetVisAttributes (G4VisAttributes::Invisible);
 
-  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(lblue);
-  simpleBoxVisAtt->SetVisibility(true);
-  simpleBoxVisAtt->SetForceWireframe(true);
+  G4VisAttributes* simpleBoxVisAtt = new G4VisAttributes(lblue);
+  simpleBoxVisAtt -> SetVisibility(true);
+  simpleBoxVisAtt -> SetForceWireframe(true);
 
-  PhantomLog->SetVisAttributes(simpleBoxVisAtt);
+  PhantomLog -> SetVisAttributes(simpleBoxVisAtt);
 }
 
 void  BrachyDetectorConstruction::ConstructSensitiveDetector()
@@ -209,11 +213,13 @@ void  BrachyDetectorConstruction::ConstructSensitiveDetector()
   {
     phantomSD = new BrachyPhantomSD(sensitiveDetectorName);
     G4String ROGeometryName = "PhantomROGeometry";
-    phantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,phantomDimensionX,phantomDimensionZ,numberOfVoxelsAlongX,numberOfVoxelsAlongZ);
-    phantomROGeometry->BuildROGeometry();
-    phantomSD->SetROgeometry(phantomROGeometry);
-    pSDManager->AddNewDetector(phantomSD);
-    PhantomLog->SetSensitiveDetector(phantomSD);
+    phantomROGeometry = new BrachyPhantomROGeometry(ROGeometryName,
+                                phantomDimensionX,phantomDimensionZ,
+                                numberOfVoxelsAlongX,numberOfVoxelsAlongZ);
+    phantomROGeometry -> BuildROGeometry();
+    phantomSD -> SetROgeometry(phantomROGeometry);
+    pSDManager -> AddNewDetector(phantomSD);
+    PhantomLog -> SetSensitiveDetector(phantomSD);
   }
 }
 
@@ -248,7 +254,7 @@ void BrachyDetectorConstruction::SetPhantomMaterial(G4String materialChoice)
   if (pttoMaterial)
   {
     phantomAbsorberMaterial = pttoMaterial;
-    PhantomLog->SetMaterial(pttoMaterial); 
+    PhantomLog -> SetMaterial(pttoMaterial); 
     PrintDetectorParameters();
   } 
   else

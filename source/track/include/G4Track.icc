@@ -21,16 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.10 2002/12/16 11:59:12 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Track.icc,v 1.13 2004/06/11 14:28:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions
 //-----------------------------------------------------------------
 //   change GetMaterial        16 Feb. 2000  H.Kurashige
-  
+
+#if defined G4TRACK_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4Track> aTrackAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4Track> aTrackAllocator;
+#endif
+
 // Operators
-   extern G4Allocator<G4Track> aTrackAllocator;
+
    inline void* G4Track::operator new(size_t)
    { void *aTrack;
      aTrack = (void *) aTrackAllocator.MallocSingle();

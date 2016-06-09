@@ -1,4 +1,4 @@
-$Id: History,v 1.80 2004/03/25 18:10:57 gcosmo Exp $
+$Id: History,v 1.84 2004/06/23 16:15:45 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th June 2004  Gabriele Cosmo (examples-V06-01-02)
+- Updated reference outputs according to reference tag geant4-06-02-ref-00.
+- Includes tags: cosmicray_charging-V06-01-02, GammaRayTel-V06-01-01,
+                 hadrontherapy-V06-01-01, lAr_calorimeter-V06-01-01,
+                 purtag-V06-01-02, radioprotection-V06-01-06, Rich-V06-01-00,
+                 Tiara-V06-01-03, DMX-V06-01-00, XrayFluo-V06-01-06,
+                 xraytel-V06-01-01, exampleA01-V06-01-01, exbiasing-V06-01-00,
+                 muonprocesses-V06-01-01, photonprocesses-V06-01-01,
+                 testem1-V06-01-03, testem2-V06-01-03, testem3-V06-01-04,
+                 testem3-V06-01-01, testem5-V06-01-04, testem7-V06-01-01
+                 testem8-V06-01-00, testem9-V06-01-00, BlineTracer-V06-01-00,
+                 opticalex-V06-01-00, exparallel-V06-01-00,
+                 exampleN03-V06-01-00, exampleN06-V06-01-01.
+
+28th May 2004  Gabriele Cosmo (examples-V06-01-01)
+- Updated reference outputs according to reference tag geant4-06-01-ref-02.
+- Includes tags: brachy-V06-01-01, ccal-V06-01-01, lAr_calorimeter-V06-01-00,
+                 medical_linac-V06-01-03, photonprocesses-V06-01-00,
+                 testem2-V06-01-02, testem3-V06-01-01, testem5-V06-01-00,
+                 DICOM-V06-01-00.
+
+30th April 2004  Gabriele Cosmo (examples-V06-01-00)
+- Updated reference outputs according to reference tag geant4-06-01-ref-01.
+- Includes tags: testem1-V06-01-02, testem2-V06-01-00, testem3-V06-01-00,
+                 testem4-V06-01-00, testem5-V06-01-00, testem6-V06-01-00,
+                 testem7-V06-01-00, exampleN02-V06-01-00, exampleN03-V06-00-00,
+                 exampleN06-V06-01-00.
 
 25th March 2004  Gabriele Cosmo (examples-V06-00-02)
 - Updated reference outputs according to reference tag geant4-06-01-ref-00.

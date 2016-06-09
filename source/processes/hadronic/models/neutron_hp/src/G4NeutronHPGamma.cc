@@ -26,6 +26,15 @@
 //
 #include "G4NeutronHPGamma.hh"
 int G4NeutronHPGamma::instancecount = 0;
+
+  G4NeutronHPGamma::G4NeutronHPGamma() 
+  {
+    next = NULL;
+    instancecount ++;
+  }
+
+  G4NeutronHPGamma::~G4NeutronHPGamma() {instancecount--;}
+
 G4bool G4NeutronHPGamma::Init(std::ifstream & aDataFile)
 {
   G4bool theResult = true;

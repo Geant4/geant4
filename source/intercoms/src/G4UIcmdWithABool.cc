@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithABool.cc,v 1.5 2003/06/16 16:55:38 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIcmdWithABool.cc,v 1.6 2004/05/16 18:42:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -39,19 +39,7 @@ G4UIcmdWithABool::G4UIcmdWithABool
 
 G4bool G4UIcmdWithABool::GetNewBoolValue(const char* paramString)
 {
-  G4String v = paramString;
-  v.toUpper();
-  G4bool vl = false;
-  if( v=="Y" || v=="YES" || v=="1" || v=="T" || v=="TRUE" )
-  { vl = true; }
-  return vl;
-}
-
-G4String G4UIcmdWithABool::ConvertToString(G4bool blValue)
-{
-  G4String vl = "0";
-  if(blValue) vl = "1";
-  return vl;
+  return ConvertToBool(paramString);
 }
 
 void G4UIcmdWithABool::SetParameterName

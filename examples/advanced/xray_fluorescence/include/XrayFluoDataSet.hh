@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoDataSet.hh
-// GEANT4 tag $Name: xray_fluo-V04-01-03 
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -62,19 +62,19 @@ public:
  
   //find the value corresponding to the energy e in the set
   //identified by id
-  G4double FindValue(G4double e, G4int id = 0) const;
+  G4double FindValue(G4double e, G4int) const;
 
-  virtual const G4VEMDataSet* GetComponent(G4int i) const { i = i ; return 0;} 
+  virtual const G4VEMDataSet* GetComponent(G4int) const { return 0;} 
 
-  virtual void AddComponent(G4VEMDataSet* dataSet) { G4VEMDataSet* dummy; dummy = dataSet;}
+  virtual void AddComponent(G4VEMDataSet*) { }
 
   virtual size_t NumberOfComponents() const { return 0; }
 
 
   void PrintData() const;
 
-  const G4DataVector& GetEnergies(G4int i) const { i = i; return *energies; }
-  const G4DataVector& GetData(G4int i) const { i = i; return *data; }
+  const G4DataVector& GetEnergies(G4int) const { return *energies; }
+  const G4DataVector& GetData(G4int) const { return *data; }
 
 private:
 

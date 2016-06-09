@@ -1,0 +1,143 @@
+$Id: README,v 1.3 2004/06/23 11:28:26 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            PhotonProcesses
+                            ---------------
+
+	This test is devoted to the photon processes: gamma conversion, coherent
+	and incoherent scattering, photoelectric effect. It allows to compute
+	absorption coefficients and to plot final state. 
+	
+ 1- GEOMETRY DEFINITION
+ 
+ 	It is a single box representing a 'semi infinite' homogeneous medium.
+ 	Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+ 	
+ 	The default geometry (100 m of water) is constructed in 
+	DetectorConstruction, but the above parameters can be changed 
+	interactively via the commands defined in DetectorMessenger.
+ 	
+ 2- PHYSICS LIST
+ 
+ 	The particle list contains only gamma, e+, e-, mu+, mu-.
+ 	The physics list contains the 'standard' electromagnetic processes. 
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+ 	The primary kinematic consists of a single particle starting at the edge
+	of the box. The type of the particle and its energy are set in 
+	PrimaryGeneratorAction (1 MeV gamma), and can be changed via the G4 
+ 	build-in commands of ParticleGun class (see the macros provided with 
+ 	this example).
+ 	
+ 4- PHYSICS
+ 
+	The incident particle is a photon. The event is killed at the first
+	interaction of the photon.
+	The absorption length is computed as the mean value of the track length
+	of the photon.
+	The energy spectrum and the angular distribution of the scattered photon
+	(if any) and of the secondaries are plotted (see SteppingAction).
+ 	
+ 	A set of macros defining various run conditions are provided.
+ 	The processes are actived/inactived in order to survey the processes 
+	individually.
+
+ 5- HISTOGRAMS
+         
+	The test contains 6 built-in 1D histograms, which are managed by the
+	HistoManager class and its Messenger. The histos can be individually 
+	activated with the command :
+	/testem/histo/setHisto id nbBins  valMin valMax unit 
+	where unit is the desired unit for the histo (MeV or keV, etc..)
+	(see the macros xxxx.mac).
+ 
+	1	"scattered primary particle: energy spectrum"
+	2	"scattered primary particle: costheta distribution"
+	3	"charged secondaries: energy spectrum"
+	4	"charged secondaries: costheta distribution"
+	5	"neutral secondaries: energy spectrum"
+	6	"neutral secondaries: costheta distribution"			
+
+	The histograms can be viewed using PAW. See below the note on 
+	ANAPHE+AIDA.
+	
+ 	One can control the name of the histograms file with the command:
+ 	/testem/histo/setFileName  name  (default photonprocesses.paw)
+   	
+	Note that, by default, histograms are disabled. To activate them, 
+	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	
+ 	 				
+ 6- VISUALIZATION
+ 
+ 	The Visualization Manager is set in the main().
+ 	The initialisation of the drawing is done via the commands
+ 	/vis/... in the macro vis.mac. To get visualisation:
+ 	> /control/execute vis.mac
+ 	
+ 	The detector has a default view which is a longitudinal view of the 
+ 	box.
+ 	
+ 	The tracks are drawn at the end of event, and erased at the end of run.
+	
+ 7- HOW TO START ?
+ 
+	compile and link to generate an executable
+ 		% cd geant4/examples/extended/electromagnetic/PhotonProcesses
+ 		% gmake
+ 		
+	execute PhotonProcesses in 'batch' mode from macro files :
+ 		% PhotonProcesses   compt.mac
+ 		
+	execute PhotonProcesses in 'interactive mode' with visualization :
+ 		% PhotonProcesses
+		Idle> control/execute vis.mac
+ 		....
+ 		Idle> type your commands
+ 		....
+ 		Idle> exit
+ 
+
+ 8- Using histograms
+ ------------------- 
+
+By default the histograms are not activated. To activate histograms
+the environment variable G4ANALYSIS_USE should be defined. For instance
+uncomment the flag G4ANALYSIS_USE in GNUmakefile.
+
+To use histograms any of implementations of AIDA interfaces should
+be available (see http://aida.freehep.org).
+
+A package including AIDA and extended interfaces also using Python
+is PI, available from: http://cern.ch/pi .
+
+Once installed PI or PI-Lite in a specified local area $MYPY, it is
+required to add the installation path to $PATH, i.e. for example,
+for release 1.2.1 of PI:
+
+setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
+
+CERN users can use the PATH to the LCG area on AFS.
+
+Before compilation of the example it is optimal to clean up old 
+files:
+
+gmake histclean
+gmake
+
+Before running the example the command should be issued:
+
+eval `aida-config --runtime csh`
+
+It is possible to choose the format of the output file with 
+histograms using UI command:
+
+/testem/histo/setFileType type
+
+The following types are available: hbook, root, xml.

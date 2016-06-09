@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithAnInteger.cc,v 1.5 2003/06/16 16:55:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIcmdWithAnInteger.cc,v 1.6 2004/05/16 18:42:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -39,19 +39,7 @@ G4UIcmdWithAnInteger::G4UIcmdWithAnInteger
 
 G4int G4UIcmdWithAnInteger::GetNewIntValue(const char* paramString)
 {
-  G4int vl;
-  std::istrstream is((char*)paramString);
-  is >> vl;
-  return vl;
-}
-
-G4String G4UIcmdWithAnInteger::ConvertToString(G4int intValue)
-{
-  char st[20];
-  std::ostrstream os(st,20);
-  os << intValue << '\0';
-  G4String vl = st;
-  return vl;
+  return ConvertToInt(paramString);
 }
 
 void G4UIcmdWithAnInteger::SetParameterName

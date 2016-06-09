@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPara.hh,v 1.5 2003/11/19 11:51:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationPara.hh,v 1.6 2004/05/13 14:57:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // 
 // classes G4ParameterisationParaX,
 //         G4ParameterisationParaY,
@@ -34,9 +34,10 @@
 // dividing a G4Para along one of each axis X, Y, Z.
 
 // History:
-// 09.05.01 - P.Arce First version
-// ********************************************************************
-
+// -------
+// 09.05.01 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 #ifndef G4ParameterisationPara_H
 #define G4ParameterisationPara_H 1
 
@@ -56,8 +57,18 @@ class G4Tubs;
 class G4Polycone;
 class G4Polyhedra;
 
+class G4VParameterisationPara : public G4VDivisionParameterisation
+{ 
+  public:  // with description
+  
+    G4VParameterisationPara( EAxis axis, G4int nCopies,
+                            G4double offset, G4double step,
+                            G4VSolid* msolid, DivisionType divType );
+  
+    virtual ~G4VParameterisationPara();
+};
 
-class G4ParameterisationParaX : public G4VDivisionParameterisation
+class G4ParameterisationParaX : public G4VParameterisationPara
 { 
   public:  // with description
 
@@ -101,7 +112,7 @@ class G4ParameterisationParaX : public G4VDivisionParameterisation
 };
 
 
-class G4ParameterisationParaY : public G4VDivisionParameterisation
+class G4ParameterisationParaY : public G4VParameterisationPara
 { 
   public:  // with description
 
@@ -145,7 +156,7 @@ class G4ParameterisationParaY : public G4VDivisionParameterisation
 };
 
 
-class G4ParameterisationParaZ : public G4VDivisionParameterisation
+class G4ParameterisationParaZ : public G4VParameterisationPara
 { 
   public:  // with description
 

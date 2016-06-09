@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2003/09/22 14:06:20 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PrimaryGeneratorAction.cc,v 1.3 2004/04/28 16:58:49 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 

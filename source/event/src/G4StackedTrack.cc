@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackedTrack.cc,v 1.6 2003/05/21 20:52:54 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4StackedTrack.cc,v 1.8 2004/06/11 14:11:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 //  Last Modification : 02/Feb/96 M.Asai

@@ -21,14 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.icc,v 1.9 2003/12/04 15:58:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4NavigationLevelRep.icc,v 1.12 2004/06/11 14:17:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
 // ----------------------------------------------------------------------
 
-extern G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
+#if defined G4GEOM_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
+#endif
 
 // Constructors
 //--------------

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.hh,v 1.8 2001/07/11 10:01:55 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4DecayProducts.hh,v 1.11 2004/06/11 14:25:25 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // ------------------------------------------------------------
@@ -101,10 +101,15 @@ class G4DecayProducts
 
 };
 
+#if defined G4PARTICLES_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4DecayProducts> aDecayProductsAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4DecayProducts> aDecayProductsAllocator;
+#endif
+
 // ------------------------
 // Inlined operators
 // ------------------------
-extern G4Allocator<G4DecayProducts> aDecayProductsAllocator;
 
 inline void * G4DecayProducts::operator new(size_t)
 {

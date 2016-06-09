@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorTransform3D.cc,v 1.4 2001/07/11 10:09:01 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenInventorTransform3D.cc,v 1.5 2004/04/08 09:41:11 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // jck 17 Dec 1996
@@ -31,9 +31,10 @@
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
-#include <Inventor/fields/SoSFMatrix.h>
-
+// this :
 #include "G4OpenInventorTransform3D.hh"
+
+#include <Inventor/fields/SoSFMatrix.h>
 
 G4OpenInventorTransform3D::G4OpenInventorTransform3D (const G4Transform3D &t) 
 : G4Transform3D (t) {

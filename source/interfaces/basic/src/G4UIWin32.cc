@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.cc,v 1.9 2003/06/16 16:55:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIWin32.cc,v 1.12 2004/06/07 13:33:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // G.Barrand
 
@@ -30,7 +30,14 @@
 
 #ifdef G4UI_BUILD_WIN32_SESSION
 
+// this :
+#include "G4UIWin32.hh"
+
 #include <string.h>
+
+#include <windows.h>
+#include <windowsx.h>
+#include <wingdi.h>
 
 #include <strstream>
 
@@ -40,91 +47,26 @@
 #include "G4UIcommandStatus.hh"
 #include "G4Win32.hh"
 
-#include "G4UIWin32.hh"
-
-#include <wingdi.h>
-
 #define TEXT_MAX_LINES 300
 
-class TextBuffer {
+class TextBuffer
+{
 public:
-  TextBuffer():linei(0),linen(TEXT_MAX_LINES),endOfPage(0),heightOfPage(12) {
-    lines = new G4String[linen];
-    for(int count=0;count<256;count++) spaces[count] = ' ';
-  }
-  ~TextBuffer() {
-    delete [] lines;
-  }
-  int GetNumberOfLines () {
-    return linei;
-  }
-  void SetHeightOfPage (int a_height) {
-    heightOfPage = a_height;
-  }
-  void SetEndOfPage (int a_value) {
-    if( (a_value<0) || (a_value>=linei)) {
-      endOfPage = linei-1;
-    } else {
-      endOfPage = a_value;
-    }
-  }
-  int GetEndOfPage () {
-    return endOfPage;
-  }
-  void IncrementEndOfPage () {
-    endOfPage++;
-    if(endOfPage>=linei) endOfPage = linei-1;
-  }
-  void DecrementEndOfPage () {
-    endOfPage--;
-    if(endOfPage<0) endOfPage = 0;
-  }
-  void JumpDownEndOfPage () {
-    endOfPage += heightOfPage;
-    if(endOfPage>=linei) endOfPage = linei-1;
-  }
-  void JumpUpEndOfPage () {
-    endOfPage -= heightOfPage;
-    if(endOfPage<0) endOfPage = 0;
-  }
-  G4bool AppendString (char* a_string) {
-    G4bool value = false;
-    if( (a_string==NULL) || (a_string[0]=='\0') ) return value;
-    int length = strlen(a_string);
-    if(a_string[length-1]=='\n') {
-      lines[linei] += a_string; 
-      lines[linei] = lines[linei].strip(G4String::trailing,'\n');
-      linei++;
-      value = true;
-    } else {
-      lines[linei] += a_string; 
-    }
-    if(linei>=linen) {
-      for(int count=0;count<linen;count++) {
-	lines[count] = "";
-      }
-      linei = 0;
-    }
-    if(value==true) endOfPage = linei-1;
-    return value;
-  }
-  void Draw (HDC a_hdc,RECT* a_rect) {
-    TEXTMETRIC tm;
-    GetTextMetrics (a_hdc,&tm);
-    short charWidth = tm.tmAveCharWidth;
-    short charHeight = tm.tmHeight + tm.tmExternalLeading;
-    for(int row=0;row<heightOfPage;row++) {
-      int rowi = endOfPage - row;
-      short y = a_rect->bottom - charHeight * (row + 1);
-      if((rowi>=0)&&(rowi<linei)) {
-	TextOut (a_hdc,0,y,(char*)spaces,256); //Clear text background first.
-	const char* string = lines[rowi].data();
-	if(string!=NULL) {
-	  TextOut (a_hdc,0,y,(char*)string,strlen((char*)string));
-	}
-      }
-    }
-  }
+   TextBuffer();
+  ~TextBuffer();
+
+  int GetNumberOfLines () { return linei;}
+  void SetHeightOfPage (int a_height) { heightOfPage = a_height; }
+  void SetEndOfPage (int a_value);
+  int GetEndOfPage () { return endOfPage; }
+
+  void IncrementEndOfPage ();
+  void DecrementEndOfPage ();
+  void JumpDownEndOfPage ();
+  void JumpUpEndOfPage ();
+  G4bool AppendString (char* a_string);
+  void Draw (HDC a_hdc,RECT* a_rect);
+
 private:
   G4String* lines;
   int linen;
@@ -133,6 +75,94 @@ private:
   char spaces[256];
 };
 
+TextBuffer::TextBuffer()
+ : linei(0),linen(TEXT_MAX_LINES),endOfPage(0),heightOfPage(12)
+{
+  lines = new G4String[linen];
+  for(int count=0;count<256;count++) spaces[count] = ' ';
+}
+
+TextBuffer::~TextBuffer()
+{
+  delete [] lines;
+}
+
+void TextBuffer::SetEndOfPage (int a_value)
+{
+  if( (a_value<0) || (a_value>=linei)) {
+    endOfPage = linei-1;
+  } else {
+    endOfPage = a_value;
+  }
+}
+
+void TextBuffer::IncrementEndOfPage ()
+{
+  endOfPage++;
+  if(endOfPage>=linei) endOfPage = linei-1;
+}
+
+void TextBuffer::DecrementEndOfPage ()
+{
+  endOfPage--;
+  if(endOfPage<0) endOfPage = 0;
+}
+
+void TextBuffer::JumpDownEndOfPage ()
+{
+  endOfPage += heightOfPage;
+  if(endOfPage>=linei) endOfPage = linei-1;
+}
+
+void TextBuffer::JumpUpEndOfPage ()
+{
+  endOfPage -= heightOfPage;
+  if(endOfPage<0) endOfPage = 0;
+}
+
+G4bool TextBuffer::AppendString (char* a_string)
+{
+  G4bool value = false;
+  if( (a_string==NULL) || (a_string[0]=='\0') ) return value;
+  int length = strlen(a_string);
+  if(a_string[length-1]=='\n') {
+    lines[linei] += a_string; 
+    lines[linei] = lines[linei].strip(G4String::trailing,'\n');
+    linei++;
+    value = true;
+  } else {
+    lines[linei] += a_string; 
+  }
+  if(linei>=linen) {
+    for(int count=0;count<linen;count++) {
+      lines[count] = "";
+    }
+    linei = 0;
+  }
+  if(value==true) endOfPage = linei-1;
+  return value;
+}
+
+void TextBuffer::Draw (HDC a_hdc,RECT* a_rect)
+{
+  TEXTMETRIC tm;
+  GetTextMetrics (a_hdc,&tm);
+  short charWidth = (short)tm.tmAveCharWidth;
+  short charHeight = (short)(tm.tmHeight + tm.tmExternalLeading);
+  for(int row=0;row<heightOfPage;row++) {
+    int rowi = endOfPage - row;
+    short y = (short)(a_rect->bottom - charHeight * (row + 1));
+    if((rowi>=0)&&(rowi<linei)) {
+      TextOut (a_hdc,0,y,(char*)spaces,256); //Clear text background first.
+      const char* string = lines[rowi].data();
+      if(string!=NULL) {
+        TextOut (a_hdc,0,y,(char*)string,strlen((char*)string));
+      }
+    }
+  }
+}
+
+/***************************************************************************/
 static char mainClassName[] = "G4UIWin32";
 static char textClassName[] = "G4UIWin32/Text";
 static G4bool exitSession = true;
@@ -147,10 +177,6 @@ static int actionIdentifier = 0;
 
 /***************************************************************************/
 G4UIWin32::G4UIWin32 (
- HINSTANCE a_hInstance
-,HINSTANCE a_hPrevInstance
-,LPSTR  a_lpszCmdLine
-,int    a_nCmdShow
 )
 :mainWindow(NULL)
 ,textWindow(NULL)
@@ -168,41 +194,36 @@ G4UIWin32::G4UIWin32 (
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI!=NULL) UI->SetSession(this);
 
-  interactorManager = G4Win32::getInstance (a_hInstance,a_hPrevInstance,
-					    a_lpszCmdLine,a_nCmdShow);
+  interactorManager = G4Win32::getInstance ();
   static G4bool Done = FALSE;
   if(Done==FALSE) {
-    if(a_hPrevInstance==NULL) {
-      WNDCLASS         wc;
-      wc.style         = CS_HREDRAW | CS_VREDRAW;
-      wc.lpfnWndProc   = (WNDPROC)G4UIWin32::MainWindowProc;
-      wc.cbClsExtra    = 0;
-      wc.cbWndExtra    = 0;
-      wc.hInstance     = a_hInstance;
-      wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
-      wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
-      wc.hbrBackground = GetStockBrush(BLACK_BRUSH);
-      wc.lpszMenuName  = mainClassName;
-      wc.lpszClassName = mainClassName;
-      ::RegisterClass  (&wc);
-
-      wc.style         = CS_HREDRAW | CS_VREDRAW;
-      wc.lpfnWndProc   = (WNDPROC)G4UIWin32::TextWindowProc;
-      wc.cbClsExtra    = 0;
-      wc.cbWndExtra    = 0;
-      wc.hInstance     = a_hInstance;
-      wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
-      wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
-      wc.hbrBackground = GetStockBrush(WHITE_BRUSH);
-      wc.lpszMenuName  = textClassName;
-      wc.lpszClassName = textClassName;
-      ::RegisterClass  (&wc);
-    }
+    WNDCLASS         wc;
+    wc.style         = CS_HREDRAW | CS_VREDRAW;
+    wc.lpfnWndProc   = (WNDPROC)G4UIWin32::MainWindowProc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = ::GetModuleHandle(NULL);
+    wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
+    wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
+    wc.hbrBackground = GetStockBrush(WHITE_BRUSH);
+    wc.lpszMenuName  = mainClassName;
+    wc.lpszClassName = mainClassName;
+    ::RegisterClass  (&wc);
+    
+    wc.style         = CS_HREDRAW | CS_VREDRAW;
+    wc.lpfnWndProc   = (WNDPROC)G4UIWin32::TextWindowProc;
+    wc.cbClsExtra    = 0;
+    wc.cbWndExtra    = 0;
+    wc.hInstance     = ::GetModuleHandle(NULL);
+    wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
+    wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
+    wc.hbrBackground = GetStockBrush(WHITE_BRUSH);
+    wc.lpszMenuName  = textClassName;
+    wc.lpszClassName = textClassName;
+    ::RegisterClass  (&wc);
     Done = TRUE;
   }
 
-  /*
-  */
   menuBar = CreateMenu();
   defaultMenu = CreatePopupMenu();
   AppendMenu(menuBar,MF_POPUP,(UINT)defaultMenu,"Geant4");
@@ -211,10 +232,12 @@ G4UIWin32::G4UIWin32 (
 
   tmpSession = this;
   mainWindow = ::CreateWindow(mainClassName,mainClassName, 
-			   WS_OVERLAPPEDWINDOW,
-			   CW_USEDEFAULT,CW_USEDEFAULT, 
-			   0,0,
-			   NULL,menuBar,a_hInstance,NULL);
+			      WS_OVERLAPPEDWINDOW,
+			      CW_USEDEFAULT,CW_USEDEFAULT, 
+			      0,0,
+			      NULL,menuBar,
+			      ::GetModuleHandle(NULL),
+			      NULL);
   tmpSession = NULL;
   ::SetWindowLong(mainWindow,GWL_USERDATA,LONG(this));
 
@@ -426,8 +449,8 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
 
     hdc = GetDC (a_window);
     GetTextMetrics (hdc,&tm);
-    charWidth = tm.tmAveCharWidth;
-    charHeight = tm.tmHeight + tm.tmExternalLeading;
+    charWidth = (short)tm.tmAveCharWidth;
+    charHeight = (short)(tm.tmHeight + tm.tmExternalLeading);
     ReleaseDC (a_window,hdc);
 
     G4UIWin32* This = (G4UIWin32*)tmpSession;
@@ -616,7 +639,7 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
       if(This!=NULL) {
 	int pos = This->fHistoryPos== -1 ? 
 	  This->fHistory.size()-1 : This->fHistoryPos-1;
-	if((pos>=0)&&(pos<This->fHistory.size())) {
+	if((pos>=0)&&(pos<(int)This->fHistory.size())) {
 	  G4String command = This->fHistory[pos];
 	  const char* d = command.data();
 	  int l = strlen(d);
@@ -632,7 +655,7 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
 			 GetParent(a_window),GWL_USERDATA);
       if(This!=NULL) {
 	int pos = This->fHistoryPos + 1;
-	if((pos>=0)&&(pos<This->fHistory.size())) {
+	if((pos>=0)&&(pos<(int)This->fHistory.size())) {
 	  G4String command = This->fHistory[pos];
 	  const char* d = command.data();
 	  int l = strlen(d);
@@ -640,7 +663,7 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
 	  Edit_SetSel(a_window,l,l);
 	  //
 	  This->fHistoryPos = pos;
-	} else if(pos>=This->fHistory.size()) {
+	} else if(pos>=(int)This->fHistory.size()) {
 	  Edit_SetText(a_window,"");
 	  Edit_SetSel(a_window,0,0);
 	  //
@@ -668,7 +691,6 @@ void G4UIWin32::TextAppendString (
     RECT rect;
     GetClientRect(textWindow,&rect);
     InvalidateRect(textWindow,NULL,TRUE); //To erase background.
-    PAINTSTRUCT ps;
     HDC hdc = GetDC(textWindow);
     ((TextBuffer*)textBuffer)->Draw(hdc,&rect);
     ReleaseDC (textWindow,hdc);

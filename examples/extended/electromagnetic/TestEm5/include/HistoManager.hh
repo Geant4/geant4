@@ -20,19 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HistoManager.hh,v 1.6 2004/06/21 10:57:10 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: HistoManager.hh,v 1.3 2003/11/03 12:58:52 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
-
-#ifdef G4ANALYSIS_USE
 
 #include "globals.hh"
 
@@ -42,40 +37,53 @@ namespace AIDA {
  class ITree;
  class IHistogramFactory;
  class IHistogram1D;
-} 
+}
 
 class HistoMessenger;
 
-  const G4int MaxHisto = 17;
+const G4int MaxHisto = 17;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class HistoManager
 {
   public:
+
     HistoManager();
    ~HistoManager();
-   
-    void SetFactory(G4String);
-    void SetHisto  (G4int, G4int, G4double, G4double, G4String unit="none");
-    
-    AIDA::ITree*             GetTree()              {return tree;}
-    AIDA::IHistogramFactory* GetHistogramFactory()  {return hf;}        
-    AIDA::IHistogram1D*      GetHisto(G4int id)     {return histo[id];}
-    G4double                 GetHistoUnit(G4int id) {return histoUnit[id];}
-    G4double                 GetBinWidth (G4int id) {return binWidth[id];}
+
+    void SetFileName (const G4String& name) { fileName = name;};
+    void SetFileType (const G4String& name) { fileType = name;};
+    void book();
+    void save();
+    void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
+    void FillHisto(G4int id, G4double e, G4double weight = 1.0);
+    void RemoveHisto (G4int);
+
+    G4bool    HistoExist  (G4int id) {return exist[id];}
+    G4double  GetHistoUnit(G4int id) {return Unit[id];}
+    G4double  GetBinWidth (G4int id) {return Width[id];}
+
   private:
+
+    G4String                 fileName;
+    G4String                 fileType;
     AIDA::ITree*             tree;
-    AIDA::IHistogramFactory* hf;    
+    AIDA::IHistogramFactory* hf;
     AIDA::IHistogram1D*      histo[MaxHisto];
-    G4double                 histoUnit[MaxHisto];
-    G4double                 binWidth[MaxHisto];
-    G4bool                   factoryOn;        
+    G4bool                   exist[MaxHisto];
+    G4String                 Label[MaxHisto];
+    G4String                 Title[MaxHisto];
+    G4int                    Nbins[MaxHisto];
+    G4double                 Vmin [MaxHisto];
+    G4double                 Vmax [MaxHisto];
+    G4double                 Unit [MaxHisto];
+    G4double                 Width[MaxHisto];
+    G4bool                   factoryOn;
     HistoMessenger*          histoMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
 #endif
 

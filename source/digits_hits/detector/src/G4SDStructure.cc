@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDStructure.cc,v 1.1 2003/10/03 10:11:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4SDStructure.cc,v 1.2 2004/05/03 08:14:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 // G4SDStructure
@@ -160,7 +160,7 @@ void G4SDStructure::Activate(G4String aName, G4bool sensitiveFlag)
   }
 }
 
-G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName)
+G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName, G4bool warning)
 {
   G4String aPath = aName;
   aPath.remove(0,pathName.length());
@@ -170,7 +170,8 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName)
     G4SDStructure* tgtSDS = FindSubDirectory(subD);
     if( tgtSDS == 0 )
     {  // The subdirectory is not found
-      G4cout << subD << " is not found in " << pathName << G4endl;
+      if (warning)
+        G4cout << subD << " is not found in " << pathName << G4endl;
       return 0;
     }
     else
@@ -183,7 +184,8 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName)
     G4VSensitiveDetector* tgtSD = GetSD(aPath);
     if( tgtSD == 0 )
     {  // The detector is not found.
-      G4cout << aPath << " is not found in " << pathName << G4endl;
+      if (warning)
+        G4cout << aPath << " is not found in " << pathName << G4endl;
     }
     return tgtSD;
   }

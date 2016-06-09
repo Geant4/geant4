@@ -402,9 +402,11 @@
       if( p > DBL_MIN )
         theParticleChange.SetMomentumChange( m.x()/p, m.y()/p, m.z()/p );
       else
-        theParticleChange.SetMomentumChange( 0.0, 0.0, 0.0 );
+        theParticleChange.SetMomentumChange( 1.0, 0.0, 0.0 );
 
-      theParticleChange.SetEnergyChange( currentParticle.GetKineticEnergy() );
+      G4double aE = currentParticle.GetKineticEnergy();
+      if (fabs(aE)<.1*eV) aE=.1*eV;
+      theParticleChange.SetEnergyChange( aE );
     }
     if( targetParticle.GetMass() > 0.0 )  // targetParticle can be eliminated in TwoBody
     {

@@ -1,10 +1,9 @@
-# $Id: tiaraApplication.py,v 1.3 2003/06/16 17:06:44 dressel Exp $
+# $Id: tiaraApplication.py,v 1.4 2004/06/09 15:04:36 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02-patch-01 $
+# GEANT4 tag $Name: geant4-06-02 $
 # -------------------------------------------------------------------
 #
 import string
-
 import CLHEP
 import G4Kernel
 import Tiara
@@ -16,11 +15,27 @@ import tallyData
 
 class TiaraApplet(object):
     tiaraSim = None
-    def __init__(self, tiaraSpecs, tSim = None, useLizard = True):
-        if useLizard:
-            import myLiz
-            self.tree = myLiz.tf.create()
-            self.hf = myLiz.af.createHistogramFactory (self.tree)
+    def __init__(self, tiaraSpecs, tSim = None, usePI = True):
+        if usePI:
+            import myPI
+            self.tree = myPI.tf.create()
+            self.hf = myPI.af.createHistogramFactory (self.tree)
+            print self.hf
+            print "hf"
+            hf_ptr = str(self.hf._theObject)
+            print hf_ptr
+            print "hf_ptr before split"
+            hf_ptr = string.split(str(self.hf._theObject))[-1]
+            print hf_ptr
+            print "hf_ptr after split" 
+	    hf_ptr2 = hf_ptr.split('x')[1]
+            for i in range(len(hf_ptr2),8) :
+                hf_ptr2 = '0'+hf_ptr2
+                
+       	    self.hf.this='_' + hf_ptr2 + '_p_AIDA__IHistogramFactory'
+            self.hf.thisown = 1
+            print self.hf.this
+            print "hf.this after split"
         else:
             self.tree = None
             self.hf = None
@@ -160,6 +175,7 @@ class TiaraApplet(object):
                                          self.tiaraSpecs.
                                          experiment.binEdgesBonner,
                                          tally)
+
         else:
             self.scSrc = Tiara.\
                          TiaraCellScorer("source_detector",
@@ -218,6 +234,5 @@ class TiaraApplet(object):
         
         self.sampler.PrepareScoring(self.scorer)
         self.sampler.Configure()
-
 
 

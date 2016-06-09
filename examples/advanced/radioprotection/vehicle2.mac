@@ -1,0 +1,49 @@
+#############################
+############# Activate physics
+#### Add e.m. physics 
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+#/physics/addPhysics ion-standard
+/physics/addPhysics ion-ICRU
+#### Add Hadronic Physics, muon physics and decay
+#/physics/addPhysics hadronic
+#/physics/addPhysics muon-standard
+#/physics/addPhysics decay
+##############################
+#### Sets some default verbose
+/control/verbose 1
+/run/verbose 1
+/event/verbose 0
+/run/initialize
+################
+## Visualisation
+#/vis/scene/create
+# --- Choose one the following visualisation tools
+#/vis/open OGLIX
+#/vis/open DAWNFILE
+#/vis/open VRML2FILE
+# --------
+#/vis/drawVolume
+#/vis/viewer/set/viewpointThetaPhi 90 180 deg
+#/vis/viewer/zoom 2
+#/tracking/storeTrajectory 1
+################
+/run/initialize
+# Generation of primary particles
+/gun/generator Interplanetary
+/gun/particle IonC12
+/run/data gcrZ=6.txt
+# Geometry configuration
+/configuration/choose vehicle
+/configuration/AddShielding On
+#/configuration/AddShielding Off
+/configuration/AddSPE On
+#/configuration/AddSPE Off
+/run/beamOn 1000
+
+
+
+
+
+

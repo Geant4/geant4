@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.91 2004/02/09 15:22:49 gunter Exp $
+# $Id: architecture.gmk,v 1.99 2004/06/14 10:42:12 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -13,11 +13,11 @@
 # List of the supported architectures/compilers and related flavors for
 # the environment variable G4SYSTEM:
 #
-#          Linux-g++   Linux (Red Hat 7.3), gcc-2.95.2 or gcc-3.2 (default)
+#          Linux-g++   Linux (Red Hat 7.3), gcc-3.2.3 (default)
 #
 #          SUN-CC      SunOS 5.8, CC 5.4
 #
-#          WIN32-VC    Windows/2000/XP and Microsoft Visual C++ 6.0 - SP5
+#          WIN32-VC7   Windows/2000/XP and Microsoft Visual C++ 7.1 .NET
 #                      Adding CYGWIN32 tools
 # -------------------------------------------------------------------------
 
@@ -84,6 +84,18 @@ ifeq ($(G4LIB_BUILD_SHARED),)
   endif  
 endif
 
+# Specify if to build the DLL libraries on Windows. Default is NO.
+#
+ifneq ($(G4LIB_USE_DLL),)
+  G4LIB_BUILD_DLL = 1
+  CPPFLAGS += -DG4LIB_BUILD_DLL
+endif
+ifneq ($(G4LIB_BUILD_DLL),)
+  G4LIB_BUILD_DLL = 1
+  CPPFLAGS += -DG4LIB_BUILD_DLL
+  G4LIB_USE_DLL = 1
+endif
+
 # Specify if to build the G3TOG4 module or not. Default is NO.
 #
 ifneq ($(G4LIB_BUILD_G3TOG4),)
@@ -115,7 +127,7 @@ endif
 # CLHEP path, etc.
 #
 ifndef CLHEP_BASE_DIR
-  CLHEP_BASE_DIR    := /afs/cern.ch/sw/geant4/dev/CLHEP/$(G4SYSTEM)/pro
+  CLHEP_BASE_DIR    := $(shell ls CLHEP_BASE_DIR--UNDEFINED)
 endif
 ifndef CLHEP_INCLUDE_DIR
   CLHEP_INCLUDE_DIR := $(CLHEP_BASE_DIR)/include
@@ -151,7 +163,7 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   OUT_LIB := '-out:'
   OUT_EXE := '-Fe'
   LIB_PATH := '-libpath:'
-  CERNLIB_PATH := "z:\p32\cern\new\df\lib"
+  CERNLIB_PATH := "c:\cern\pro\lib"
   PATH_DEL := \\
   #
   # pattern for next substitution
@@ -180,11 +192,14 @@ CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 
 # Positional qualifiers in action...
 #
+ifndef LDFLAGS
+  LDFLAGS :=
+endif
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-  LDFLAGS   := -link $(LIB_PATH)$(CLHEP_LIB_DIR)
+  LDFLAGS   += -link $(LIB_PATH)$(CLHEP_LIB_DIR)
   LOADLIBS  := $(CLHEP_LIB)
 else
-  LDFLAGS   := -L$(CLHEP_LIB_DIR)
+  LDFLAGS   += -L$(CLHEP_LIB_DIR)
   LOADLIBS  := -l$(CLHEP_LIB)
   LOADLIBS  += -lm
 endif
@@ -220,21 +235,19 @@ XAWLIBS    := -lXaw
 # are set below.  Most system-dependent code assumes OGLHOME is set.
 #
 # ------------- OpenInventor -----------------
-# The path to the installation of HEPVis and OpenInventor must be specified
-# in HEPVISDIR -only- if the packages are installed in a location different
+# The path to the installation of OpenInventor must be specified
+# if the package is installed in a location different
 # than default system directories (like... /usr or /usr/local).
 #
-ifndef HEPVISINC
-  HEPVISINC := $(HEPVISDIR)/include
-endif
-ifndef HEPVISLIB
-  HEPVISLIB := $(HEPVISDIR)/lib
+
+ifndef OIVHOME
+  OIVHOME  := /usr/local/Inventor
 endif
 ifndef OIVFLAGS
-  OIVFLAGS  := -I${HEPVISINC}
+  OIVFLAGS  := -I$(OIVHOME)/include 
 endif
 ifndef OIVLIBS
-  OIVLIBS   := -L${HEPVISLIB} -lHEPVis -lHEPVisXt -lInventor -lInventorXt
+  OIVLIBS   := -L$(OIVHOME)/lib -lInventorXt -lInventor
 endif
 
 # For cfront compilers the repository location is set to

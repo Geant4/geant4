@@ -1,6 +1,6 @@
-# $Id: README,v 1.15 2003/12/08 17:53:25 gcosmo Exp $
+# $Id: README,v 1.18 2004/06/13 13:35:12 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-06-00-patch-01 $
+# GEANT4 tag $Name: geant4-06-02 $
 # -------------------------------------------------------------------
 
 Simulation of the TIARA experiment using importance sampling
@@ -16,7 +16,7 @@ created by 43 MeV and 68 MeV protons bombarding a 7Li target are measured
 behind several shields. The simulation starts from the neutron spectra.
 In this example the interactions of the neutrons with the (concrete) 
 shields are simulated and energy dependent neutron fluxes are measured 
-behind the shields. Users may chose to run the simulation for different 
+behind the shields. Users may choose to run the simulation for different 
 shielding configuration with or without importance sampling.
 The simulated neutron fluxes are compared to the published 
 experimental data. The efficiency of applying importance sampling
@@ -28,9 +28,9 @@ For Application Developers", Chapter "Toolkit Fundamentals"
 Section  "Event Biasing Techniques" and references there.
 
 The example has been tested on CERN RH 7.3 with the
-gcc-3.2 and gcc-2.95.2 compilers.
+gcc-3.2.3 and gcc-2.95.2 compilers.
 
-Note for system testing without analysis: see points 1, 1.3 and 3.2.
+Note for system testing without analysis: see points 1.1, 1.3 and 3.2.
 
 
 
@@ -41,51 +41,43 @@ Note for system testing without analysis: see points 1, 1.3 and 3.2.
 You must compile Geant4 with:
    "G4LIB_BUILD_SHARED" set to 1.
 You need to set:
-   "NeutronHPCrossSections" (e.g. to ${G4INSTALL}/data/G4NDL3.7)
+   "NeutronHPCrossSections" (e.g. pointing to a directory containing G4NDL3.7)
 
 
 Three examples are given of how to set environment variables
 in the three cases:
 
-1.1) Anaphe via AFS (most simple):
+1.1) PI via AFS (most simple):
 --------------------
-   You have access to afs and you want to use Anaphe for the
+   You have access to afs and you want to use PI for the
    analysis: 
    Set the following environment variables:
    "G4ANALYSIS_USE"
+   "PI_BASE_DIR" (where PI has been installed)
+   "SWIG_BASE_DIR"  (where SWIG has been installed)
 
-   "ANAPHETOP" (e.g. /afs/cern.ch/sw/lhcxx)
-   "AIDA_DIR"  (e.g. /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp)
-   "ANAPHE_SCRIPTS" (e.g. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.6/scripts)
-
-   Finally source the script envCommon.csh from the directory
-   you have Tiara installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
+   Finally source the script envCommon.csh from the directory where you have Tiara 
+   installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
 
 
-1.2) No afs but a local Anaphe and AIDA installation:
+1.2) No afs but a local PI and SWIG installation:
 -----------------------------------------------------
-   You don't use afs but you have a local installation of Anaphe and AIDA
-   (e.g. from http://anaphe.web.cern.ch/anaphe/.
+   You don't use afs but you have a local installation of SWIG and PI
    Set the following environment variables:
    "G4ANALYSIS_USE"
- 
-   "ANAPHETOP" (e.g. <directory>/Anaphe/release)
-   "AIDA_DIR"  (e.g. <directory>/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
-   "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.6/scripts)
+    "PI_BASE_DIR"
+   "SWIG_BASE_DIR"
 
-      here <directory> is a place holder for your directory with the
-      respective installations of Anaphe and AIDA
-
-   Finally source the script envCommon.csh from the directory
+   Finally source the script envCommon.csh from the directory where
    you have Tiara installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
 
 
-1.3) No afs, no Anaphe and no AIDA (e.g. for system testing):
+1.3) No afs, no PI and no SWIG (e.g. for system testing):
 -------------------------------------------------------------
-   You don't want to use Anaphe and AIDA and you don't have afs access.
-   Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE).
-
-   Note: python must be built against a "libc". 
+   You don't want to use PI and SWIG and you don't have afs access.
+   Make sure "G4ANALYSIS_USE" is unset (e.g. unsetenv G4ANALYSIS_USE)
+   
+   Note 1: python must be built against a "libc". 
          You may do this by creating a shared library by a command
          similar to this 
          "ld -shared -o libpython2.2.so --whole-archive libpython2.2.a /usr/lib/libc.so"
@@ -97,16 +89,21 @@ in the three cases:
    "SWIG_BASE_DIR" (e.g. /usr)
    "CLHEP_BASE_DIR" (e.g. to  /opt/local)
 
-   Finally source the script envCommon.csh from the directory
+   Finally source the script envCommon.csh from the directory where
    you have Tiara installed, e.g. ${G4INSTALL}/examples/advanced/Tiara
-
+   
+   Note 2: Passing from a simulation WITH to another WITHOUT analysis implies 
+   that the G4ANALYSIS_use should be unset and that the SWIG-wrapper scripts 
+   in the directory TiaraWrapper should be deleted. Normally, the whole code 
+   should be compiled again using gmake tiaraClean and, afterwards, gmake.
+   The same procedure should be followed also passing from a simulation WITHOUT
+   to another WITH analysis.
 
 2) Building the example
 =======================
 
 Geant4 has to be compiled using G4LIB_BUILD_SHARED 1 and the one of the 
 above environment settings have to be set.
-
 Type "gmake".
 
 
@@ -116,10 +113,7 @@ Type "gmake".
 Geant4 must be compiled into granular shared libraries.
 Therefore before compiling Geant4 set "G4LIB_BUILD_SHARED" to "1".
 
-External packages used in this example are Anaphe, SWIG and Python.
-The Anaphe package comes with SWIG and Python versions used to build
-Anaphe itself. These SWIG and Python versions should also be used with 
-this example if Anaphe is used. 
+External packages used in this example are PI, SWIG and Python.
 
 
 2.2) Cleaning up
@@ -134,10 +128,10 @@ $G4WORKDIR/tmp/$G4SYSTEM/ use "gmake tiaraClean".
 =======================
 
 
-3.1) Using Anaphe
+3.1) Using PI
 -----------------
 Change to the sub directory "run" and execute "runSim.py".
-"runSim.py" runs an example configuration which nay be
+"runSim.py" runs an example configuration which may be
 changed by the user. The results of the simulation are stored in 
 the directory "simData". 
 The script "runSim.py" periodically prints scoring information to the 
@@ -146,8 +140,8 @@ It also prints out the relative path of a ".shelve" file.
 This file can be used to access results of the simulation.
 
 In case the example was build using analysis
-results may be viewed e.g. using lizard and scripts:
-1) Start python2.2 or lizard
+results may be viewed e.g. using python or ROOT:
+1) Start python2.2
 2) type: import dataAcess
 3) type: p = dataAcess.ExpMcPlot (shelveFileName,detectorposition)
          where "shelveFileName" is the name (enclosed in quotes) of the
@@ -184,7 +178,7 @@ set the print out period to 30 minutes by setting:
 
 
 
-3.2) Not using Anaphe (mainly for system testing)
+3.2) Not using PI (mainly for system testing)
 -------------------------------------------------
 Change to the sub directory "run" and execute 
 runSimNoAnalysis.py.
@@ -197,7 +191,7 @@ runSimNoAnalysis.py.
 ============================
 
 
-simCommon.csh - a script to setup environment variables
+envCommon.csh - a script to setup environment variables
     in case the above one of the above environment settings have been
     done beforehand.
 

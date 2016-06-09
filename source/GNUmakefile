@@ -1,10 +1,11 @@
-# $Id: GNUmakefile,v 1.41 2003/12/05 07:44:10 gcosmo Exp $
+# $Id: GNUmakefile,v 1.61 2004/06/11 14:08:57 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
 #                Composite libraries are built.
 # "gmake includes" places header files .h/.hh in $G4INCLUDE
 # "gmake libmap" forces rebuilding of map-file for granular libraries.
+# "gmake dll" forces building of DLLs global libraries and generates DLLs on WIN32
 # "gmake clean_libs" removes just archive (.a) and shared (.so) libraries
 #                    of current platform installation.
 # "gmake clean" removes installation of current platform.
@@ -12,10 +13,10 @@
 #
 # (The .o files(s) are made by implicit rules.)
 
-SUBDIR1 =  global particles processes geometry digits_hits
-SUBDIR2 =  event tracking track materials run graphics_reps intercoms
-SUBDIR2 += parameterisations persistency readout
-SUBDIR3 =  interfaces visualization
+SUBDIR1 =  global intercoms graphics_reps materials
+SUBDIR2 =  geometry particles track digits_hits processes
+SUBDIR2 += parameterisations tracking event run readout
+SUBDIR3 =  persistency interfaces visualization
 SUBDIR4 =  g3tog4
 
 ifndef G4INSTALL
@@ -28,25 +29,28 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
-.PHONY: all glob global libmap includes clean_libs clean clean_lists clean_all
+.PHONY: all glob global kernel_global kernel libmap dll win32def includes clean_libs clean clean_lists clean_all
 
-all:
-	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
-	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
-	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
+all: kernel
 ifdef G4USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 	$(MAKE) libmap
 
-glob global:
-	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) global); done;:
-	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
-	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
+glob global: kernel_global
 ifdef G4USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 
+kernel_global:
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) global); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) global); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) global); done;:
+
+kernel:
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
 
 libmap: $(G4LIBDIR)/liblist
 	@echo "WARNING: Making a library map of granular libraries."
@@ -55,12 +59,12 @@ libmap: $(G4LIBDIR)/liblist
 	@echo "         To do this it needs a complete set of dependency"
 	@echo "         files, e.g., after gmake in the source/ directory."
 	@echo "Searching $(G4INSTALL)/source"
-	@echo '  for GNUmakefiles containing "name" and sorting...'
+	@echo '  for GNUmakefiles containing "name" and sorting ...'
 	@find $(G4INSTALL)/source \
 	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
 	  | sort \
 	  > /tmp/G4_all_lib_makefiles.$(unique);
-	@echo "Weeding out /test[s]/, global level GNUmakefiles, etc..."
+	@echo "Weeding out /test[s]/, global level GNUmakefiles, etc ..."
 	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
 	do \
 	  echo $$i | $(GREP) -q '/tests\?/' || \
@@ -68,7 +72,7 @@ libmap: $(G4LIBDIR)/liblist
 	  $(GREP) -q G4hepgeometry $$i || \
 	  echo $$i >> /tmp/G4_granlib_makefiles.$(unique); \
 	done
-	@echo "Making libname.map starter file..."
+	@echo "Making libname.map starter file ..."
 	@touch /tmp/G4libname.map.starter.$(unique);
 	@for i in `cat /tmp/G4_granlib_makefiles.$(unique)`; \
 	do \
@@ -76,7 +80,7 @@ libmap: $(G4LIBDIR)/liblist
 	  >> /tmp/G4libname.map.starter.$(unique); \
 	  echo $$i >> /tmp/G4libname.map.starter.$(unique); \
 	done
-	@echo "Making libname.map..."
+	@echo "Making libname.map ..."
 	@rm -f $(G4LIBDIR)/libname.map;
 	@G4TMP=$(G4TMP); export G4TMP; \
 	  $(G4LIBDIR)/liblist -l -d $(G4TMPDIR) \
@@ -87,9 +91,37 @@ libmap: $(G4LIBDIR)/liblist
 	@rm -f /tmp/G4libname.map.starter.$(unique);
 
 $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
-	@echo "Compiling liblist.c..."
+	@echo "Building library management utility liblist ..."
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
-	$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
+	@$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
+
+dll: win32def
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+	@echo "Verifying existence of global libraries for DLLs ..."
+	@$(MAKE) kernel_global G4LIB_BUILD_DLL=1
+	@echo "Building Windows DLL libraries ..."
+	@$(MAKE) kernel_global G4LIB_BUILD_DLL=1 G4LIB_BUILD_SHARED=1
+	@echo "Clearing temporary DLL objects and temporaries ..."
+	@rm -rf $(G4LIBDIR)/*.def $(G4LIBDIR)/*.exp
+	@rm -rf $(G4TMPDIR)/*
+ifdef G4USE_G3TOG4
+	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
+	@mv $(G4LIBDIR)/libG3toG4.a $(G4LIBDIR)/libG3toG4.lib
+endif
+	@echo "Done !"
+else
+	@echo "Sorry !"
+endif
+
+win32def: $(G4INSTALL)/config/win32def.c
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+	@echo "Building DLL management utility win32def ..."
+	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
+	@$(CC) $(CCFLAGS) -o $(G4LIBDIR)/win32def $(G4INSTALL)/config/win32def.c
+else
+	@echo "Build of DLLs is only supported on Windows platforms !"
+	@echo "The system you have currently selected is $(G4SYSTEM)."
+endif
 
 includes:
 	@echo Installing includes files in $(G4INCLUDE) ...

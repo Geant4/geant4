@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.50 2003/11/12 16:23:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4hIonisation.cc,v 1.51 2004/05/27 17:23:02 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -66,6 +66,7 @@
 // 04-08-03 Set integral=false to be default (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
+// 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
 //
 // -------------------------------------------------------------------
 //
@@ -96,7 +97,6 @@ G4hIonisation::G4hIonisation(const G4String& name)
   SetMinKinEnergy(0.1*keV);
   SetMaxKinEnergy(100.0*TeV);
   SetVerboseLevel(0);
-  SetIntegral(false);
   mass = 0.0;
   ratio = 0.0;
 }
@@ -120,17 +120,15 @@ void G4hIonisation::InitialiseProcess()
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(2.0*MeV*massFactor);
 
-  if(IsIntegral()) {
-    flucModel = new G4BohrFluctuations();
-  } else {
-    flucModel = new G4UniversalFluctuation();
-  }
+  flucModel = new G4UniversalFluctuation();
 
   AddEmModel(1, em, flucModel);
   G4VEmModel* em1 = new G4BetheBlochModel();
   em1->SetLowEnergyLimit(2.0*MeV*massFactor);
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(2, em1, flucModel);
+
+  SetStepLimits(0.2, 1.0*mm);
 
   isInitialised = true;
 }

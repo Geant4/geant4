@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: TrackingAction.cc,v 1.5 2003/10/28 10:27:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: TrackingAction.cc,v 1.7 2004/03/31 11:35:00 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +33,7 @@
 
 #include "G4Track.hh"
  
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
 #endif
 
@@ -70,11 +70,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
      runAction->CountTraks1(1); 
      runAction->CountSteps1(nbSteps);
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
      G4double Trleng = aTrack->GetTrackLength();
      runAction->GetHisto(0)->fill(Trleng);
      runAction->GetHisto(1)->fill((float)nbSteps);
-#endif	
+#endif
   }    
 }
 

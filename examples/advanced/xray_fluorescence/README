@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2003/12/04 11:01:58 guatelli Exp $
+$Id: README,v 1.11 2004/05/29 10:02:08 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ with different shapes of the primary generator.
 Apart from the sample and the detector there are two diaphragm reproducing 
 those used to collimate the incident beam during the test beam.
 
+Other two geometries are present for the user: an infinte-plane geometry and
+a planetary one, with the status of "beta release". The user must select, 
+at the moment of the execution, which geometry wants to use.
+If the program is executed in batch mode, it is possible to specify 
+geometry from command line. Example: 
+/path/XrayFluo macro.mac 1 (for test beam Geometry)
+/path/XrayFluo macro.mac 2 (for infinite plane Geometry)
+
 The aim of this advanced example is to illustrate the use of particle 
 generation and analysis schemes available in Geant4:
 
@@ -30,7 +38,7 @@ generation and analysis schemes available in Geant4:
   shows how to use it in order to obtain a beam of circular section or
   a particle source isotropic in space
 
-_ the example includes the possibility to shoot particles according to a 
+- the example includes the possibility to shoot particles according to a 
   given energy spectrum: the files B_flare.dat, C_Flare.dat and M_flare.dat
   store the spectra of photons during solar flares, the files 
   mercury2_flx_solmax.dat and mercury_flx_solmin.dat contain the spectra of
@@ -47,31 +55,44 @@ _ the example includes the possibility to shoot particles according to a
 In order to be able to use any of these packages, prior installation is 
 necessary and a number of environment variables will have to be set.
 
--------------------------------------------------------------------------
-----> 2.SET-UP 
-                                                                        |
- -example enviroment with the compiler 3.2                              
- -a standard Geant4 example GNUmakefile is provided                     |
 
-setup with:                                                             |
-compiler = gcc-3.2
-G4SYSTEM = linux-g++                                                    |
+#set up VRMLview
+setenv G4VRMLFILE_MAX_FILE_NUM     100
+setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
+setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
 
-The following environment variables need to be set:                     |
+#set up OpenGL or Mesa 
+setenv G4VIS_BUILD_OPENGLX_DRIVER   1
+setenv G4VIS_USE_OPENGLX            1
+setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
 
-G4LEDATA: points to low energy data base - G4EMLOW2.2                   |
+#set up DAWN
+setenv G4VIS_BUILD_DAWN_DRIVER      1
+setenv G4VIS_USE_DAWN               1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
-setup for analysis with AIDA 3.0/Anaphe 5.0.5 for user with account     |
-on lxplus:
-                                                                        |
-setenv G4ANALYSIS_USE  1
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
-setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/    |
+# flag that we want to use analysis:
+setenv G4ANALYSIS_USE               1
 
- Please take a look to the Anaphe/Lizard web page                       |
-        http://anaphe.web.cern.ch/anaphe 
- for more info    
--------------------------------------------------------------------------
+#select AIDA implementation: PI 1.2.1  (for cern AFS)
+
+setenv G4ANALYSIS_BUILD  1
+setenv PI_VERSION 1_2_1
+
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/PI/Linux-g++/bin"
+
+eval `aida-config -r csh`
+
+
+#path to the lowEnergy data base
+
+setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW2.3
+
+#path to Xray_Fluorescence data files, if not set, PWD is assumed:
+
+setenv XRAYDATA /afs/cern.ch/user/u/username
+
+1. Run
 To execute a sample simulation with visualisation of tracks
 reaching the detector run:
 
@@ -112,15 +133,32 @@ XrayFluoParticleGeneratorAction.cc
 
 6. Analysis
 
-At present the analisys is provided by any AIDA-3.0 compliant analysis system. 
-In the example the Anaphe toolkit (version 5.0.5) is used.
+At present the analisys is provided by any AIDA-3.2.1 compliant analysis system. 
+In the example the Anaphe toolkit is used.
 
-By setting visPlotter variable in XrayFluoAnalysisManager to true, 
+AIDA / Anaphe configuration for compilation and link are in GNUmakefile, once 
+is set the environmente as above:
+
+ifdef G4ANALYSIS_USE
+ CPPFLAGS += `aida-config --include`
+ LDFLAGS  += `aida-config --lib`
+endif
+
+To build and execute the example on platforms where there is no
+implementation of the analysis system, the environment variables 
+must not be set.
+
+It is possible to visualize the outpu of the simulation. In order to do this 
+is necessary to uncomment all lines in XrayFluoAnalysisManager.cc / .hh regarding plotting; 
+and the same must be done for plotting refernces in XrayFluoRunManager.cc and XrayFluoEventAction.cc.
+And link against other AIDA compliant analysis sistems, such as Anaphe or JAS.
+ 
+Finally, by setting visPlotter variable in XrayFluoAnalysisManager to true, 
 it is possible to display the simulated output of the detector while 
-simulation is in progress. Graph window is updated every 1000 events. 
+simulation is in progress. Graph window is updated every 100000 events. 
 
 The example provides also a simple Python file used to display
-histograms with Lizard 3.0.0.x 
+histograms with Lizard 3.0.0.x (from Anaphe)
 
 Various commads, with help,  are available for Geant4 UI. 
 /analysis/outputFile and /analysis/fileType respectively for 
@@ -132,5 +170,3 @@ command, /anaysis/update, must be executed.
 NOTE: if a file named xrayfluo.hbk (default name) is present, it 
 will be deleted, even if /analysis/outputFile command is issued 
 before any run.
-
----- Last modified Susanna Guatelli 3/12/2003=======

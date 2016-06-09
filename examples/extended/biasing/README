@@ -58,7 +58,7 @@ importance of the current volumes.
 Further information:
 --------------------
 Short description of importance sampling and scoring:
-http://dressel.home.cern.ch/dressel/biasscore/Sampling.html
+http://cern.ch/geant4/working_groups/geometry/biasing/Sampling.html
 
 Example B01
 ===========
@@ -89,90 +89,62 @@ the scoring. In this example one scorer creates a histogram.
 
 Compiling and running
 ---------------------
-To compile this example you need AIDA 3.0 installed. To link 
+Can be compiled and executed on a RedHat-7.3 system with gcc-3.2.3
+compiler and the tcsh shell.
+To compile this example you need AIDA 3.2.1 installed. To link 
 and run it you need a AIDA compliant analysis package. The
-GNUmakefile of this example shows how to use Anaphe as analysis
-package.
-The following list shows what to do if you are at CERN using rehat73
-and gcc-3.2 and the tcsh:
-1) set the following variables (for example):
-setenv ANAPHETOP /afs/cern.ch/sw/lhcxx
-  (or if installed in opt: /opt/Anaphe/5.0.5)
-setenv AIDA_DIR /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp
-  (or if installed in opt: /opt/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
-
-2) Source the script:
-source $ANAPHETOP/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
-
-This should set the LD_LIBRARY_PATH and the PATH environment to find the
-lizrd executable and Anaphe libraries and header files. 
-It also sets the environment variable PLATF.
-
-3) and add to lirary path the following directories:
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB02
+GNUmakefile of this example shows how to use AIDA through PI as
+analysis interface.
+Histograms are saved in HBOOK format. It can be displayed with PAW or
+compatible packages.
+You need to set the following variables in your environment:
+   "G4ANALYSIS_USE"
+   "PI_BASE_DIR" (where PI has been installed)
+Finally, source the script setupPI.csh.
 
 Now you should be able to run gmake and to run exampleB02.
 
 The example stores the plot in the file b02.hbook.
-To look at the histogram using lizard you also may use Anaphe 5.0.5
-http://anaphe.web.cern.ch/anaphe/index2.html.
-
-Files in B02:
-B02plot.py: a simple script that may be executed from a lizzard session
-   to show the plot created by running the exampleB02.
+To look at the histogram using lizard you also may use PI 1.2.1
+http://cern.ch/PI.
 
 
 Example B03
 ===========
 
 This example uses Geant4 and in particular importance sampling and
-scoring through python. It creates a simple histogram. It's ment
+scoring through python. It creates a simple histogram. It's meant
 to demonstrate how to use a customized scorer and importance sampling 
 in combination with a scripting language, python.
 Geant4 code is executed from a python session. Therefore, swig is used 
 to create python shadow classes and to generate the code necessary to 
 use the Geant4 libraries from a python session.
-For simplicity it is recommended to use Anaphe. Anaphe comes with 
-python and swig installations. 
-  See http://anaphe.web.cern.ch/
-
-
-
+It can be built and run using PI:  http://cern.ch/PI.
+At the end a histogram called "trackentering.hbook" is created and can be 
+displayed using standard packages (such as PAW).
 
 Building, compiling and running
 -------------------------------
 
-  Follow similar steps as for example B02. If you already have
-the environment set up for example B02 jump to point 3 below:
+You need to set the following variables in your environment:
+   "G4ANALYSIS_USE"
+   "PI_BASE_DIR"    (where PI has been installed)
+   "SWIG_BASE_DIR"  (where SWIG 1.3.15 has been installed)
+Finally source the script setupPI.csh.
 
-1) set the following variables (for example):
-setenv ANAPHETOP /afs/cern.ch/sw/lhcxx
-  (or if installed in opt: /opt/Anaphe/5.0.5)
-setenv AIDA_DIR /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp
-  (or if installed in opt: /opt/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
-
-2) Source the script:
-source $ANAPHETOP/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
-
-3) and add to lirary path the following directories:
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB03
-                               ====
- setenv PYTHONPATH $LD_LIBRARY_PATH
-
-4) setenv PYTHON_VERSION 2.2
-
- You may run gmake now.
- You should be able to execute the file B03RunApplication.py from your 
+You may run gmake now.
+You should be able to execute the file B03RunApplication.py from your 
 shell or from a lizard session now.
- The histogram is displayed only if the script is beeing ran
-from lizard.
   
+At the moment the plotting is not available using a python script, but
+it is planned in future releases. A histogram is created and later displayed
+using standard analysis packages.
 
 Files in B03;
 B03Application.py: Is a example class utilizing importance sampling
    and scoring using python.
 B03RunApplication.py: Is a python script running the example. 
-   It may be executed from the shell or in a python or lizard
-   session. In case it is executed from lizard it creates a plot
-   with a histogram.
+   It may be executed from the shell or in a python session.
 B03App.py: Is created by swig using swig.
+TracksEntering.hbook: 
+   It is the histogram file created by running B03RunApplication.py

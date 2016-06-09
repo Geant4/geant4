@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.10 2003/12/04 16:49:55 ribon Exp $
+$Id: README,v 1.11 2004/05/18 14:57:48 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -50,24 +50,15 @@ $Id: README,v 1.10 2003/12/04 16:49:55 ribon Exp $
  The user should first setup, as "usual", the Geant4 environmental
  variables (in particular, the variable G4ANALYSIS_USE must be set
  if you want to have the histograms and the ntuple).
- Then the specific setup for this example should be run:
+ Then the specific setup for this example, including the AIDA/PI part
+ used in the analysis, should be run:
  
      >  source envExample.csh      in the case of C-shell
  or
      >  . envExample.sh            in the case of bash-shell
  
- The analysis part is based on:
-        ***  AIDA version 3.0  &  Anaphe version 5.0.6  ***
- 
- NB) Be careful that if you want to have this analysis part,
-     you have not only to set the variable G4ANALYSIS_USE but 
-     also to edit the above script file (envExample.csh or envExample.sh)
-     and remove the comments "#" on the setup of AIDA/Anaphe,
-     because, by default, the analysis is not done (the reason being
-     that, in some platform, such AIDA/Anaphe setup does not work).
-  
- Please take a look to the Anaphe/Lizard web page
- 	http://anaphe.web.cern.ch/anaphe
+ The analysis part is based on AIDA/PI.
+ Please take a look to the web page:  http://www.cern.ch/PI .
 
 
 2. Sample run
@@ -368,10 +359,8 @@ No Noise and Digitization
 ----------------------------
 
  The analysis part of CompositeCalorimeter is kept in class CCalAnalysis,
- and is based on the AIDA interfaces and their implementation in Anaphe:   
-        ***  AIDA version 3.0  &  Anaphe version 5.0.6  *** 
- please look at their documentation for more details:
- 	http://anaphe.web.cern.ch/anaphe
+ and is based on the AIDA interfaces and their implementation in PI.
+ Please take a look to the web page:  http://www.cern.ch/PI .    
  Both the histograms and the ntuple are saved at the end of the run in the 
  HBOOK file "ccal.his". You can than analyze offline the contents of such 
  a file, using Lizard (or any other AIDA-compliant package) or with 

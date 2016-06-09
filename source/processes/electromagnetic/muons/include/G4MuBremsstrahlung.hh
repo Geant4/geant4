@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.19 2004/02/10 18:07:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4MuBremsstrahlung.hh,v 1.21 2004/05/07 16:47:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //

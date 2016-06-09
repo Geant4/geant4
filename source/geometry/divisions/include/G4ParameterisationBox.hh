@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationBox.hh,v 1.3 2003/11/19 11:51:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationBox.hh,v 1.4 2004/05/13 14:57:12 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // classes G4ParameterisationBoxX,
 //         G4ParameterisationBoxY,
@@ -34,9 +34,10 @@
 // dividing a G4Box along one of each axis X, Y, Z.
 
 // History:
-// 09.05.01 - P.Arce Initial version
-// ********************************************************************
-
+// -------
+// 09.05.01 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 #ifndef G4ParameterisationBox_H
 #define G4ParameterisationBox_H 1
 
@@ -58,7 +59,18 @@ class G4Tubs;
 class G4Polycone;
 class G4Polyhedra;
 
-class G4ParameterisationBoxX : public G4VDivisionParameterisation
+class G4VParameterisationBox : public G4VDivisionParameterisation
+{ 
+  public:  // with description
+  
+    G4VParameterisationBox( EAxis axis, G4int nCopies,
+                            G4double offset, G4double step,
+                            G4VSolid* msolid, DivisionType divType );
+  
+    virtual ~G4VParameterisationBox();
+};
+
+class G4ParameterisationBoxX : public G4VParameterisationBox
 { 
   public:  // with description
   
@@ -75,8 +87,7 @@ class G4ParameterisationBoxX : public G4VDivisionParameterisation
     void ComputeDimensions(G4Box& box, const G4int copyNo,
                            const G4VPhysicalVolume* physVol) const;
 
-
-  private:  // Dummy declarations to get rid of warnings ...
+   private:  // Dummy declarations to get rid of warnings ...
 
     void ComputeDimensions (G4Cons&,const G4int,
                             const G4VPhysicalVolume*) const {}
@@ -102,7 +113,7 @@ class G4ParameterisationBoxX : public G4VDivisionParameterisation
                             const G4VPhysicalVolume*) const {}
 };
 
-class G4ParameterisationBoxY : public G4VDivisionParameterisation
+class G4ParameterisationBoxY : public G4VParameterisationBox
 { 
   public:  // with description
 
@@ -145,7 +156,7 @@ class G4ParameterisationBoxY : public G4VDivisionParameterisation
                             const G4VPhysicalVolume*) const {}
 };
 
-class G4ParameterisationBoxZ : public G4VDivisionParameterisation
+class G4ParameterisationBoxZ : public G4VParameterisationBox
 { 
   public:  // with description
 

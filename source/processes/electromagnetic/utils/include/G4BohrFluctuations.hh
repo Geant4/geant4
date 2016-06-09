@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.hh,v 1.5 2003/10/16 13:06:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4BohrFluctuations.hh,v 1.6 2004/05/11 15:35:06 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -106,6 +106,8 @@ inline G4double G4BohrFluctuations::Dispersion(
  				G4double& tmax,
 			        G4double& length)
 {
+  if(!particle) InitialiseMe(dp->GetDefinition());
+
   G4double electronDensity = material->GetElectronDensity();
   kineticEnergy  = dp->GetKineticEnergy();
   G4double gam   = kineticEnergy/particleMass + 1.0;

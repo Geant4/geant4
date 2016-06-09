@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2004/02/03 13:45:29 vnivanch Exp $
+$Id: History,v 1.49 2004/05/17 13:42:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13.05.04 P.Gumplinger - materials-V06-01-01
+         Added new utility method ConstPropertyExists(const char * key)
+         returning true/false according to the existance of the 'key' in
+         the table G4MaterialPropertiesTable.
+     
+05.03.04 V.Grichine - materials-V06-01-00 
+         new methods for old sorting algorithm for PAI model
+	 
 03.02.04 V.Ivant - materials-V06-00-01
          Fix problem of destructor of G4SandiaTable
      

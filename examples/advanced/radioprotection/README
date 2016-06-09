@@ -1,0 +1,249 @@
+
+     =========================================================
+ 		      Geant4 - Radioprotection example
+     =========================================================
+
+                             README
+                      ---------------------
+
+0. INTRODUCTION
+
+The Radioprotection example derives from a Geant4 application
+ ( look www.ge.infn.it/geant4/space/remsim for more details ) whose scope 
+is to evaluate the dose in astronauts, in vehicle concepts and 
+Moon surface habitat configurations, in a defined interplanetary space
+radiation environment. 
+
+1. GEOMETRY
+
+The user can calculate the dose in the astronaut (phantom) in the
+following set-ups:
+
+- Vehicle configuration
+
+      | ||sh|   |    |     |       | 
+      |S||ie|   |SPE |     |       |
+----> |I||ld|   |she |     |phantom|
+beam  |H||in|   |lter|     |       |
+      | ||g |   |    |     |       |
+                            
+--------------------------------------->
+                                      Z axis
+
+- The SIH is the Simplified Inflatable Habitat. 
+
+- The shielding is  a layer of water, its scope it to protect the astronaut 
+  from Galactic Cosmic Rays (GCR). The user can add, delete this element
+  in the geometrical configuration, change its thickness through UI comands.
+
+- The SPE shelter is a water layer (thickness = 75.cm along Z axis), its scope 
+  it to protect the astronaut from Solar Particle Events (SPE).
+  The user can add, delete this element in the geometrical configuration
+  through UI comands.
+
+- The phantom is the astronaut model; the energy deposit is collected in this
+  geometrical component. The phantom is a box of water,
+  it is 30. cm wide along Z axis, it is voxelised in 30 slices along Z axis. 
+  The energy deposit of primary and secondary particles is collected in 
+  each voxel.
+
+- Moon Habitat configuration
+         _______________________________
+         |                              |
+       / |Moon Surface                  |
+     /   |                              |
+     | x | _________                    |
+     |<->||  _____  |                   |
+---->|   || |Phan | |  <---shelter      |
+beam |   || |thom | |                   |
+     |   || |_____| |                   |
+     \   ||_________|                   |
+       \ |                              |
+     pyramid                            |
+      log|                              |
+         |______________________________|
+ 
+------------------------------------------->
+                                         Z axis
+                     
+- The astronaut/phantom is set in the astronaut habitat (shelter).
+
+- The pyramid log is made of moon soil and protects the astronaut from 
+  GCR and SPE. The user can add, delete this element in the geometrical 
+  configuration, change its thickness (x) through UI comands. 
+
+- The phantom is the astronaut model; the energy deposit is collected in this
+  geometrical component. The phantom is a box of water,
+  it is 30. cm wide along Z axis, it is voxelised in 30 slices along Z axis. 
+  The energy deposit of primary and secondary particles is collected in 
+  each voxel.
+
+1.1 UI
+
+- The user can change the geometry set-up with the following UI commands:
+/configuration/choose vehicle -> choose the Vehicle configuration
+/configuration/choose moon    -> choose the Moon Habitat configuration
+The user can not switch between these two configurations interactively.
+
+- The user can select in the vehicle configuration:
+/configuration/AddShielding On   -> set the shielding water layer
+/configuration/AddShielding Off  -> destroy the shielding water layer
+/shielding/thickness 30.cm       -> set the thickness of the shielding layer
+/configuration/AddSPE On         -> set the SPE shelter
+/configuration/AddSPE Off        -> destroy the SPE shelter
+
+- The user can select in the Moon surface habitat configuration:
+/configuration/AddRoof On   -> set the pyramid log
+/configuration/AddRoof Off  -> destroy the pyramid log
+/roof/thickness 1. m        -> set the height (x) of the pyramid log
+
+2. PHYSICS LIST
+
+The user can select the physics processes to activate interactively as 
+shown in the macro vis.mac.
+The example is provided of:
+- Low Energy electromagnetic processes for photons, e- 
+- Standard electromagnetic processes for e+
+- Low Energy or Standard electromagnetic processes with ICRU parameterisation 
+  for p, alpha and ions
+- Muon electromagnetic processes
+- Decay
+- Hadronic processes for p and alpha particles as primary particles.
+
+3. PRIMARY PARTICLES
+
+The user can select different set-ups to generate primary particles:
+
+- "Basic": monochromatic particle beam (default configuration)
+
+- "Interplanetary": particle beam with energy derived from a given 
+  energy spectrum. 
+
+- "Moon": particles generated with energy derived from a given 
+  energy spectrum; The primary vertex is generated on a given hemisphere.
+
+The default configuration is Basic.
+
+The energy spectrum is written is ASCII file:
+first column: energy in MeV
+second column: flux
+The final two rows must look as follows:
+-1 -1
+-2 -2
+
+The flux is used as probability of generating a particle with a particular 
+energy. The sum of the fluxes is normalised to 1 in the RunAction. 
+
+Examples of ASCII files --
+
+- Galactic Cosmic Rays fluxes (envelope of CREME96 1977 and CREME86 1975 solar
+minimum spectra):
+
+p: gcrZ=1.txt
+alpha: gcrZ=2.txt
+carbon ion: gcrZ=6.txt
+oxygen ion: gcrZ=8.txt
+silicon ion: gcrZ=14.txt
+iron ion: gcrZ=26.txt
+
+- Solar Particle Events (envelope of CREME96 October 1989 and 
+August 1972 spectra)
+
+p: speZ=1.txt
+alpha: speZ=2.txt
+
+3.1 UI
+The user can define primary particles with the following command:
+/gun/particle proton
+/gun/particle alpha
+/gun/particle IonC12
+/gun/particle IonO16
+/gun/particle IonSi28
+/gun/particle IonFe52
+
+The user can select interactively the configuration with the following
+UI commands:
+/gun/generator Basic
+/gun/generator Interplanetary
+/gun/generator Moon
+
+In the Basic configuration, the user can change interactively the 
+energy of primary particles:
+example: /gun/energy 1.MeV
+
+4. STEPPING
+
+Available UI command:
+
+/step/hadronicVerbose On  -> print the hadronic processes undertaken by 
+                             particles during the run
+
+/step/hadronicVerbose Off -> switch off the verbose level
+
+5. ANALYSIS
+
+if ANALYSIS_USE = 1 in the variable environment, the output of
+the simulation is remsim.hbk           
+                                 
+The file contains histograms:                                              
+    - 10 (1)   Energy Deposit (MeV)in the phantom (astronaut) versus 
+               the depth along Z axis 
+    
+    - 20 (1)   Initial energy (MeV) of primary particles               
+    
+    - 30 (1)   Energy Deposit (MeV) in the phantom given by secondaries  
+               versus the depth along Z axis 
+    
+    - 40 (1)   Initial energy (MeV) of primaries reaching the phantom  
+    
+    - 50 (1)   Initial energy (MeV) of primaries ougoing the phantom 
+     
+    - 60 (1)   Energy (MeV) of primaries reaching the phantom          
+     
+    - 70 (1)   Energy (MeV) of primaries outgoing the phantom
+
+6.SET-UP 
+                                                                        
+- a standard Geant4 example GNUmakefile is provided                     
+
+setup with:                                                             
+compiler = gcc-3.2.3
+G4SYSTEM = linux-g++                                                    
+
+The following environment variables need to be set for the physics packages:                     
+G4LEDATA points to low energy data base - G4EMLOW2.3                   
+G4LEVELGAMMADATA points to  PhotoEvaporation data
+G4RADIOACTIVEDATA points to Radioactive Decay data
+NeutronHPCrossSections points to  neutron data - G4NDL3.7
+
+Setup for analysis: AIDA 3.2.1, PI 1.2.1                                
+
+Users can download the analysis tools from:  
+                                                                        
+http://aida.freehep.org/
+http://www.cern.ch/PI                                                                                                                                   
+7. HOW TO RUN THE EXAMPLE
+
+example macros are provided:
+
+- vehicle1.mac, vehicle2.mac are examples of simulation in the 
+  vehicle configuration 
+- moon.mac is an example of simulation in the Moon habitat configuration
+                                                                        
+- batch mode:
+  $G4WORDIR/bin/Linux-g++/remsim vehicle1.mac
+  $G4WORDIR/bin/Linux-g++/remsim vehicle2.mac                          
+  $G4WORDIR/bin/Linux-g++/Brachy moon.mac       
+                                                                        
+- Interative mode:                                                      
+  $G4WORDIR/bin/Linux-g++/remsim
+  -> the vis.mac is loaded automatically                                |
+
+------------------------------------------------------------------------
+Author : Susanna Guatelli
+
+for comments, advices, doubts and questions: guatelli@ge.infn.it
+
+last modified: Susanna Guatelli 27/5/2004
+
+

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.hh,v 1.3 2003/11/27 18:20:18 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: EventAction.hh,v 1.7 2004/06/15 11:39:57 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -35,17 +35,17 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 #include "DetectorConstruction.hh"
-#include "G4DataVector.hh"
 
 class RunAction;
 class EventActionMessenger;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:  
-    EventAction(DetectorConstruction*, RunAction*);
+    EventAction(DetectorConstruction*, RunAction*, HistoManager*);
    ~EventAction();
 
     void BeginOfEventAction(const G4Event*);
@@ -63,12 +63,14 @@ class EventAction : public G4UserEventAction
     DetectorConstruction* detector;
     RunAction*            runAct;
     
-    G4DataVector          energyDeposit;
-    G4DataVector          energyLeaving;
-    G4DataVector          trackLengthCh;    
-    G4String              drawFlag;           // draw the event
+    G4double              energyDeposit[MaxAbsor];
+    G4double              energyLeaving[MaxAbsor];
+    G4double              trackLengthCh[MaxAbsor];
+        
+    G4String              drawFlag; 
     G4int                 printModulo;         
     EventActionMessenger* eventMessenger;
+    HistoManager*         histoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

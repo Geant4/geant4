@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4Win32.hh,v 1.6 2001/07/11 10:01:22 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Win32.hh,v 1.7 2004/04/08 08:16:34 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //  To unify Windows message treatment between 
 // G4/interfaces Windows sessions and G4/visualizations Windows drivers.
 // G.Barrand
+
 
 #ifndef G4WIN32_HH
 #define G4WIN32_HH
@@ -49,18 +50,16 @@
 class G4Win32 : public G4VInteractorManager {
 public:
   static G4Win32*  getInstance           ();
-  static G4Win32*  getInstance           (HINSTANCE,HINSTANCE,LPSTR,int);
   G4bool           Inited                ();
   void*            GetEvent              ();
   void             FlushAndWaitExecution ();
   static G4bool    dispatchWin32Event    (void*);
-  void             getWinMainArguments   (HINSTANCE*,HINSTANCE*,LPSTR*,int*);
   virtual         ~G4Win32               ();                     
 private:
-  G4Win32 (HINSTANCE,HINSTANCE,LPSTR,int);                     
+  G4Win32();
   static G4Win32* instance; // Pointer to single instance.
 };
 
-#endif //HAS_WIN32
+#endif
 
 #endif

@@ -1,0 +1,9 @@
+/run/beamOn 100
+
+/apparate/detector hpge
+/analysis/fileType hbk
+/analysis/outputFile testhbk
+/analysis/update
+
+/run/beamOn 100
+

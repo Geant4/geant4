@@ -22,23 +22,26 @@
 //
 //
 // $Id: XrayFluoDetectorConstruction.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V06-02-00
 //
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
-// 29 Nov 2002 New materials added (Alfonso.mantero@ge.infn.it)
-//
+//    Nov 2002 Alfonso Mantero materials added, 
+//             Material selection implementation
+// 16 Jul 2003 Alfonso Mantero Detector type selection added + minor fixes
+// 28 May 2004 Alfonso Mantero sample material selection + bug fixes
 // -------------------------------------------------------------------
 
 #include "XrayFluoDetectorConstruction.hh"
 #include "XrayFluoDetectorMessenger.hh"
-#include "XrayFluoHPGeSD.hh"
+#include "XrayFluoSD.hh"
 #include "G4Material.hh"
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
+#include "G4Sphere.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
@@ -49,11 +52,19 @@
 #include "G4Colour.hh"
 #include "G4ios.hh"
 #include "G4PVReplica.hh"
+#include "G4UserLimits.hh"
+#include "XrayFluoMaterials.hh"
+
+
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
 XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
-  : DeviceSizeX(0),DeviceSizeY(0),DeviceThickness(0),
+  : detectorType(0),sampleGranularity(false), DeviceSizeX(0),
+    DeviceSizeY(0),DeviceThickness(0),
     solidWorld(0),logicWorld(0),physiWorld(0),
     solidHPGe(0),logicHPGe(0),physiHPGe(0),
     solidSample (0),logicSample(0),physiSample (0),
@@ -65,16 +76,24 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
     OhmicPosMaterial(0), OhmicNegMaterial(0),
     pixelMaterial(0),sampleMaterial(0),
     Dia1Material(0),Dia3Material(0),
-    defaultMaterial(0),matOx(0),U(0),HPGeSD(0)
+    defaultMaterial(0),HPGeSD(0)
   
 { 
-  NbOfPixelRows     =  1;
-  NbOfPixelColumns  =  1;
+  materials = XrayFluoMaterials::GetInstance();
+ 
+  DefineDefaultMaterials();
+
+  NbOfPixelRows     =  1; // should be 1
+  NbOfPixelColumns  =  1; // should be 1
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-    PixelSizeXY       = 5 * cm;
-  PixelThickness =  3.5 * mm;
-  ContactSizeXY     = 0.005*mm;
-  SampleThickness = 2.5 * mm;
+  PixelSizeXY       =  sqrt(40) * mm; // should be sqrt(40) * mm
+  PixelThickness = 3.5 * mm; //should be 3.5 mm
+
+  G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
+  G4cout << "PixelSizeXY(cm): "<< PixelSizeXY/cm << G4endl;
+
+  ContactSizeXY     = sqrt(40) * mm; //should be the same as PixelSizeXY
+  SampleThickness = 4 * mm;
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
   Dia3Thickness = 1. *mm;
@@ -82,39 +101,91 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   Dia3SizeXY = 3. *cm;
 
 
-  DiaInnerSize = 2.99 * cm;
+  DiaInnerSize = 1 * mm; //(Hole in the detector's diaphragm)
 
 
-  OhmicNegThickness = 0.005*mm;
-  OhmicPosThickness = 0.005*mm;
+  OhmicNegThickness = 0.005*mm;// 0.005
+  OhmicPosThickness = 0.005*mm;// 0.005
   ThetaHPGe = 135. * deg;
+  PhiHPGe = 225. * deg;
+
+  ThetaDia1 = 135. * deg;
+  PhiDia1 = 90. * deg;
+  AlphaDia1 = 225. * deg;
+
+  AlphaDia3 = 180. * deg;
   Dia3Dist =  66.5 * mm;
   Dia3InnerSize = 1. * mm;
-  PhiHPGe = 225. * deg;
-  ThetaDia1 = 135. * deg;
   ThetaDia3 = 180. * deg;
   PhiDia3 = 90. * deg;
+
   DistDia = 66.5 * mm;
   DistDe =DistDia+ (Dia1Thickness
 		    +PixelThickness)/2+OhmicPosThickness ;
-  PhiDia1 = 90. * deg;
-  AlphaDia1 = 225. * deg;
-  AlphaDia3 = 180. * deg;
+
+  grainDia = 1 * mm;
+
+
   PixelCopyNb=0;
+  grainCopyNb=0;
+  G4String defaultDetectorType = "sili";
   ComputeApparateParameters();
+  SetDetectorType(defaultDetectorType);
   
   // create commands for interactive definition of the apparate
   
   detectorMessenger = new XrayFluoDetectorMessenger(this);
+
+  G4String regName = "SampleRegion";
+  sampleRegion = new G4Region(regName);
+
   G4cout << "XrayFluoDetectorConstruction created" << G4endl;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
+XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::instance = 0;
+
+XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::GetInstance()
+{
+  if (instance == 0)
+    {
+      instance = new XrayFluoDetectorConstruction;
+     
+    }
+  return instance;
+}
+
+void XrayFluoDetectorConstruction::SetDetectorType(G4String type)
+{
+
+  if (type=="sili")
+    {
+      detectorType = XrayFluoSiLiDetectorType::GetInstance();
+    }
+   else if (type=="hpge")
+     {
+       detectorType = XrayFluoHPGeDetectorType::GetInstance();
+    }
+  else 
+    {
+      G4String excep = type + "detector type unknown";
+      G4Exception(excep);
+    }
+}
+
+XrayFluoVDetectorType* XrayFluoDetectorConstruction::GetDetectorType()
+{
+  return detectorType;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 XrayFluoDetectorConstruction::~XrayFluoDetectorConstruction()
+
 { 
-  delete U;
-  delete matOx;
   delete detectorMessenger;
+  delete detectorType;
   G4cout << "XrayFluoDetectorConstruction deleted" << G4endl;
 }
 
@@ -122,409 +193,24 @@ XrayFluoDetectorConstruction::~XrayFluoDetectorConstruction()
 
 G4VPhysicalVolume* XrayFluoDetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructApparate();
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XrayFluoDetectorConstruction::DefineMaterials()
+void XrayFluoDetectorConstruction::DefineDefaultMaterials()
 {
-  //define elements
-  G4String name, symbol;             //a=mass of a mole;
-  G4double a, z, density;            //z=mean number of protons;  
-  G4int  natoms,ncomponents;
-  G4double temperature, pressure;  
-  G4double fractionmass;
 
-  // Elements Definitions
 
-  //define Niobium
-  
-  a = 92.906*g/mole;
-  G4Element* Nb  = new G4Element(name="Niobium"  ,symbol="Nb" , z= 41., a);
+  //define materials of the apparate
 
-  //define Zirconium
-  
-  a = 91.22*g/mole;
-  G4Element* Zr  = new G4Element(name="Zirconium"  ,symbol="Zr" , z= 40., a);
+  sampleMaterial = materials->GetMaterial("Anorthosite");
+  Dia1Material = materials->GetMaterial("Lead");
+  Dia3Material = materials->GetMaterial("Lead");
+  pixelMaterial = materials->GetMaterial("Silicon");
+  OhmicPosMaterial = materials->GetMaterial("Galactic");
+  OhmicNegMaterial = materials->GetMaterial("Lead");
+  defaultMaterial = materials->GetMaterial("Galactic");
 
-  //define Yttrium
-  
-  a = 88.905*g/mole;
-  G4Element* Y  = new G4Element(name="Yttrium"  ,symbol="Y" , z= 39., a);
-
-  //define Stronzium
-  
-  a = 87.62*g/mole;
-  G4Element* Sr  = new G4Element(name="Stronzium"  ,symbol="Sr" , z= 38., a);
-
-  //define Rubidium
-  
-  a = 85.47*g/mole;
-  G4Element* Rb  = new G4Element(name="Rubidium"  ,symbol="Rb" , z= 37., a);
-
-  //define Zinc
-  
-  a = 65.37*g/mole;
-  G4Element* Zn  = new G4Element(name="Zinc"  ,symbol="Zn" , z= 30., a);
-
-  //define Nichel
-  
-  a = 58.71*g/mole;
-  G4Element* Ni  = new G4Element(name="Nichel"  ,symbol="Ni" , z= 28., a);
-
-  //define Scandio
-  
-  a = 44.956*g/mole;
-  G4Element* Sc  = new G4Element(name="Scandium"  ,symbol="Sc" , z= 21., a);
-
-  //define Vanadium
-  
-  a = 50.942*g/mole;
-  G4Element* V  = new G4Element(name="Vanadium"  ,symbol="V" , z= 39., a);
-
-  //define Cromium
- 
-  a = 51.996*g/mole;
-  G4Element* Cr  = new G4Element(name="Cromium"  ,symbol="Cr" , z= 24., a);
-
-  //define Cobalt
-  
-  a = 58.933*g/mole;
-  G4Element* Co  = new G4Element(name="Cobalt"  ,symbol="Co" , z= 27., a);
-
-  //define Copper
-  
-  a = 63.54*g/mole;
-  G4Element* elCu  = new G4Element(name="Copper"  ,symbol="Cu" , z= 29., a);
-
-  //define Barium
-  
-  a = 137.34*g/mole;
-  G4Element* Ba  = new G4Element(name="Barium"  ,symbol="Ba" , z= 56., a);
-
-  //define Cerium
-  
-  a = 140.12*g/mole;
-  G4Element* Ce  = new G4Element(name="Cerium"  ,symbol="Ce" , z= 58., a);
-
-  //define Neodimuim
-  
-  a = 144.24*g/mole;
-  G4Element* Nd  = new G4Element(name="Neodimuim"  ,symbol="Nd" , z= 60., a);
-
-
-  //Define Zolfo
-
-  a = 32.064*g/mole;
-  G4Element* elS  = new G4Element(name="Zolfo"  ,symbol="S" , z= 16., a);
-
-
-
-  //define carbon
-  
-  a = 12.0107*g/mole;
-  G4Element* C  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
-
-  //define Nitrogen
-
-  a = 14.01*g/mole;
-  G4Element* N  = new G4Element(name="Nitrogen",symbol="N" , z= 7., a);
-
-  // define Oxigen
-  a = 15.9994*g/mole;
-  G4Element* O  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
-
-  //define Arsenic
-  a = 74.9216 * g/mole;
-  G4Element * As = new G4Element( name="arsenic",symbol="As",z= 33.,a);
-
-  //Define Gallium  
-  a = 69.72* g/mole;
-  G4Element * Ga = new G4Element(name="gallium",symbol="Ga",z= 31.,a);
-
-  //define Iron  
-  a = 55.847*g/mole;
-  G4Element* Fe = new G4Element(name="Iron"  ,symbol="Fe", z=26., a);
-  //define hydrogen
-  
-  a = 1.01*g/mole;
-  G4Element* H  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
-  
-  //define germanium
-  a = 72.61*g/mole;
-  G4Element* Ge = new G4Element(name="Germanium",symbol="Ge", z= 32.,a);
-  //define phosporus
-
-  a = 30.97*g/mole;
-  G4Element* P =  new G4Element(name="Phosporus",symbol="P", z= 15., a);
-
-  // define Titanium
-  a = 47.88*g/mole;
-  G4Element* elTi = new G4Element(name="Titanium",symbol="Ti" , z= 22., a);
-
-  // define Calcium
-  a = 40.078*g/mole;
-  G4Element* Ca = new G4Element(name="Calcium",symbol="Ca" , z= 20., a);
-
-  // define silicon
-  a = 28.0855*g/mole;
-  G4Element* elSi = new G4Element(name="Silicon",symbol="Si" , z= 14., a);
-
-  // define Aluminium
-  a = 26.98154*g/mole;
-  G4Element* elAl = new G4Element(name="Aluminium",symbol="Al" , z= 13., a);
-
-  // Define Magnesium
-  a = 24.305*g/mole;
-  G4Element* Mg = new G4Element(name="Magnesium",symbol="Mg" , z= 12., a);
-
-  // Define Manganese
-  a = 54.938*g/mole;
-  G4Element* Mn = new G4Element(name="Manganese",symbol="Mn" , z= 25., a);
-
-  // Define Sodium
-  a = 22.989*g/mole;
-  G4Element* Na = new G4Element(name="Sodium",symbol="Na" , z= 11., a);
-
-  // Define Potassium
-  a = 39.10*g/mole;
-  G4Element* K = new G4Element(name="Potassium",symbol="K" , z= 19., a); 
-  // Define lead
-
-  a=207.19*g/mole;
-  G4Element* elPb = new G4Element(name="Lead",symbol="pb", z=82.,a);
-
-  //define Uranium 
-
-  a =  238.02891*g/mole;
-  G4Element* elU  = new G4Element(name="Uranium",symbol="U", z=92.,a);
-
-
-  G4cout << "Elementi creati" << G4endl;
-
-
-
-  // Materials Definitions
-
-  // Define dolorite main components
-
-  density = 3*g/cm3;
-  G4Material* diorite = new G4Material(name="Diorite", density, ncomponents=11);
-  diorite->AddElement(Fe,   fractionmass=0.1750);
-  diorite->AddElement(elTi, fractionmass=0.0082);
-  diorite->AddElement(Ca,   fractionmass=0.0753);
-  diorite->AddElement(elSi, fractionmass=0.2188);
-  diorite->AddElement(elAl, fractionmass=0.0676);
-  diorite->AddElement(Mg,   fractionmass=0.0008);
-  diorite->AddElement(O ,   fractionmass=0.4377);
-  diorite->AddElement(Mn ,  fractionmass=0.0015);
-  diorite->AddElement(Na ,  fractionmass=0.0134);
-  diorite->AddElement(K ,   fractionmass=0.0011);
-  diorite->AddElement(P ,   fractionmass=0.0006);
-
-  // define traces in dolorite
-
-  density = 3*g/cm3;
-  G4Material* tracesOfDolorite = new G4Material(name="TracesOfDolorite", density, ncomponents=16);
-  tracesOfDolorite->AddElement(Nb,   natoms=5);
-  tracesOfDolorite->AddElement(Zr,   natoms=91);
-  tracesOfDolorite->AddElement(Y,    natoms=29);
-  tracesOfDolorite->AddElement(Sr,   natoms=140);
-  tracesOfDolorite->AddElement(Rb,   natoms=3);
-  tracesOfDolorite->AddElement(Ga,   natoms=20);
-  tracesOfDolorite->AddElement(Zn,   natoms=99);
-  tracesOfDolorite->AddElement(Ni,   natoms=77);
-  tracesOfDolorite->AddElement(Sc,   natoms=32);
-  tracesOfDolorite->AddElement(V,    natoms=314);
-  tracesOfDolorite->AddElement(Cr,   natoms=130);
-  tracesOfDolorite->AddElement(Co,   natoms=56);
-  tracesOfDolorite->AddElement(elCu,   natoms=119);
-  tracesOfDolorite->AddElement(Ba,   natoms=38);
-  tracesOfDolorite->AddElement(Ce,   natoms=15);
-  tracesOfDolorite->AddElement(Nd,   natoms=9);
-
-  // define dolorite (full)
-
-  density = 3*g/cm3;
-  dolorite = new G4Material(name="Dolorite", density, ncomponents=2);
-  dolorite->AddMaterial(tracesOfDolorite, fractionmass=0.0027842352);
-  dolorite->AddMaterial(diorite, fractionmass=0.9972157648);
-
-  // define mars1
-
-  density = 3*g/cm3;
-  G4Material* mars1Main = new G4Material(name="Mars1 Main components", density, ncomponents=11);
-  mars1Main->AddElement(Fe,   fractionmass=0.100916);
-  mars1Main->AddElement(elTi, fractionmass=0.0186804);
-  mars1Main->AddElement(Ca,   fractionmass=0.0404091);
-  mars1Main->AddElement(elSi, fractionmass=0.196378);
-  mars1Main->AddElement(elAl, fractionmass=0.103282);
-  mars1Main->AddElement(Mg,   fractionmass=0.0241622);
-  mars1Main->AddElement(Mn ,  fractionmass=0.00184331);
-  mars1Main->AddElement(Na ,  fractionmass=0.0177908);
-  mars1Main->AddElement(K ,   fractionmass=0.00574498);
-  mars1Main->AddElement(P ,   fractionmass=0.00280169);
-  mars1Main->AddElement(O ,   fractionmass=0.48799152);
-
-  density = 3*g/cm3;
-  G4Material* tracesOfMars1 = new G4Material(name="TracesOfMars1", density, ncomponents=17);
-  tracesOfMars1->AddElement(Nb,   natoms=55);
-  tracesOfMars1->AddElement(Zr,   natoms=433);
-  tracesOfMars1->AddElement(Y,    natoms=58);
-  tracesOfMars1->AddElement(Sr,   natoms=968);
-  tracesOfMars1->AddElement(Rb,   natoms=16);
-  tracesOfMars1->AddElement(Ga,   natoms=24);
-  tracesOfMars1->AddElement(Zn,   natoms=109);
-  tracesOfMars1->AddElement(Ni,   natoms=70);
-  tracesOfMars1->AddElement(Sc,   natoms=21);
-  tracesOfMars1->AddElement(V,    natoms=134);
-  tracesOfMars1->AddElement(Cr,   natoms=141);
-  tracesOfMars1->AddElement(Co,   natoms=30);
-  tracesOfMars1->AddElement(elCu, natoms=19);
-  tracesOfMars1->AddElement(Ba,   natoms=580);
-  tracesOfMars1->AddElement(elPb,   natoms=4);
-  tracesOfMars1->AddElement(elS,  natoms=444);
-  tracesOfMars1->AddElement(elU,    natoms=2);
-
-
-  density = 3*g/cm3;
-  G4Material* mars1 = new G4Material(name="Mars1", density, ncomponents=2);
-  mars1->AddMaterial(tracesOfMars1, fractionmass=0.0044963163);
-  mars1->AddMaterial(mars1Main, fractionmass=0.9955036837);
-
-  //define Neodimuim
-  
-  density =  6800*kg/m3;
-              materialNd  = new G4Material(name="Neodimuim"  ,density , ncomponents=1);
-  materialNd ->AddElement(Nd,natoms=1);
-
-  // Define Magnesium
-  density = 1738*kg/m3;
-              materialMg = new G4Material(name="Magnesium",density , ncomponents=1);
-  materialMg->AddElement(Mg,natoms=1);
-
-  //define iron 
-
-  density = 7.86 * g/cm3;
-              FeMaterial = new G4Material(name="Iron",density,ncomponents=1);
-  FeMaterial->AddElement(Fe,natoms=1);
-
-
-
-  //define gallium arsenide
-  
-  density = 5.32 * g/cm3;
-  G4Material * GaAs = new G4Material(name ="gallium arsenide",density,ncomponents=2);
-  GaAs->AddElement(Ga,natoms=1);
-  GaAs->AddElement(As,natoms=1);
-
-
-  // define germanium
-  
-  density = 5.32 * g/cm3;
-              HPGe = new G4Material(name="HPGe",density,ncomponents=1);
-  HPGe ->AddElement(Ge,natoms=1);
-  
-  //define silicon
-  
-  density = 2.333*g/cm3;
-  a = 28.0855*g/mole;
-	      Si = new G4Material(name="Silicon",z=14., a,density);
-  
-  //define copper
-  
-  density = 8.960*g/cm3;
-  a = 63.55*g/mole;
-              Cu = new G4Material(name="Copper"   , z=29., a, density);
-
-
-  
-  //define Oxigen
-  density = 1*g/cm3;
-  a=16*g/mole;
-              matOx = new G4Material(name="Oxigen", z=8., a, density);
-  
-  //define aluminium
-  
-  density = 2.700*g/cm3;
-  a = 26.98*g/mole;
-	      Al = new G4Material(name="Aluminium", z=13., a, density);
-
-  //define titanium 
-  density = 4.54 *g/cm3;
-  a = 47.867*g/mole;
-              Ti  = new G4Material(name="Titanium",z=22.,a,density);
-
-
-  //define Uranium 
-  density = 19050*kg/m3;
-  a =  238.02891*g/mole;
-              U  = new G4Material(name="Uranium",z=92.,a,density);
-
-  //define Tin
-  density = 7310*kg/m3;
-  a =  118.710*g/mole;
-              Sn  = new G4Material(name="Tin",z=50.,a,density);
-
-  //define lead
-  
-  density = 11.35*g/cm3;
-  a=207.19*g/mole;
-  G4Material* Pb = new G4Material(name="Lead",z=82.,a,density);
-
-  //define scintillator
-  
-  density = 1.032*g/cm3;
-  G4Material* Sci = new G4Material(name="Scintillator", density, ncomponents=2);
-  Sci->AddElement(C, natoms=9);
-  Sci->AddElement(H, natoms=10);  
-
-  
-  //define air
-
-
-  density = 1.290*mg/cm3;
-  G4Material* Air = new G4Material(name="Air"  , density, ncomponents=2);
-  Air->AddElement(N, fractionmass=0.7);
-  Air->AddElement(O, fractionmass=0.3);
-  
-  //define vacuum
-  
-  density     = universe_mean_density;    //from PhysicalConstants.h
-  pressure    = 3.e-18*pascal;
-  temperature = 2.73*kelvin;
-  G4Material * Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole, density,
-				       kStateGas,temperature,pressure);
-
-
-
-
-  
-  //define basalt
-  density = 3.*g/cm3; 
-  G4Material* basalt = new G4Material(name="Basalt", density, ncomponents=7);
-  basalt->AddElement(Fe, fractionmass=0.1200);
-  basalt->AddElement(elTi, fractionmass=0.0160);
-  basalt->AddElement(Ca, fractionmass=0.0750);
-  basalt->AddElement(elSi, fractionmass=0.2160);
-  basalt->AddElement(elAl, fractionmass=0.0710);
-  basalt->AddElement(Mg, fractionmass=0.0590);
-  basalt->AddElement(O , fractionmass=0.4430);
-
-  // end basalt
-  
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-  
-  //default materials of the apparate
-  
-  sampleMaterial = mars1;
-  Dia1Material = Pb;
-  Dia3Material = Pb;
-  pixelMaterial = HPGe;
-  OhmicPosMaterial = Cu;
-  OhmicNegMaterial = Pb;
-  defaultMaterial = Vacuum;
   
 }
 
@@ -534,7 +220,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 {
   // complete the apparate parameters definition 
   
-  ComputeApparateParameters();
+  //ComputeApparateParameters();
   
   //world
   
@@ -564,7 +250,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       
       
       logicHPGe = new G4LogicalVolume(solidHPGe,	//its solid
-				      defaultMaterial,	//its material
+				      defaultMaterial,	//its material 
 				      "HPGeDetector");	//its name
       
       zRotPhiHPGe.rotateX(PhiHPGe);
@@ -572,14 +258,18 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       z = DistDe * cos(ThetaHPGe);
       y =DistDe * sin(ThetaHPGe);
       x = 0.*cm;
-      physiHPGe = new G4PVPlacement(G4Transform3D(zRotPhiHPGe,G4ThreeVector(x,y,z)),                                           "HPGeDetector",	//its name
+      physiHPGe = new G4PVPlacement(G4Transform3D(zRotPhiHPGe,G4ThreeVector(x,y,z)), 
+				    "HPGeDetector",	//its name
 				    logicHPGe,	//its logical volume
 				    physiWorld,	//its mother  volume
 				    false,		//no boolean operation
 				    0);		//copy number
     }
-  // Pixel   
+  // Pixel
   
+
+
+
   for ( G4int j=0; j < NbOfPixelColumns ; j++ )
     { for ( G4int i=0; i < NbOfPixelRows ; i++ )
       { 
@@ -590,22 +280,28 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	
 	logicPixel = new G4LogicalVolume(solidPixel,	
 					 pixelMaterial,	//its material
-					 "Pixel");	        //its name 
+					 "Pixel");	        //its name
+
+	/*
 	zRotPhiHPGe.rotateX(PhiHPGe);
 	G4double x,y,z;
 	z = DistDe * cos(ThetaHPGe);
 	y =DistDe * sin(ThetaHPGe);
-	x = 0.*cm; 
-	
+	x = 0.*cm;*/ 
 	physiPixel = new G4PVPlacement(0,	       
 				       G4ThreeVector(0,
-						     i*PixelSizeXY,
+						     i*PixelSizeXY, 
 						     j*PixelSizeXY ),
 				       "Pixel",  
 				       logicPixel,	 //its logical volume
 				       physiHPGe, //its mother  volume
 				       false,	 //no boolean operation
 				       PixelCopyNb);//copy number
+
+
+
+	
+
 	
 	// OhmicNeg
 	
@@ -636,7 +332,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	
 	if (OhmicPosThickness > 0.) 
 	  { solidOhmicPos = new G4Box("OhmicPos",		//its name
-				      ContactSizeXY/2,ContactSizeXY/2,OhmicPosThickness/2); 
+				      PixelSizeXY/2,PixelSizeXY/2,OhmicPosThickness/2); 
 	  
 	  logicOhmicPos = new G4LogicalVolume(solidOhmicPos,    //its solid
 					      OhmicPosMaterial, //its material
@@ -653,34 +349,161 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 					    PixelCopyNb); 
 	  
 	  }
-	PixelCopyNb += PixelCopyNb;
+	
+	PixelCopyNb += PixelCopyNb; 
+	G4cout << "PixelCopyNb: " << PixelCopyNb << G4endl;
       }
-    } 
+
+    }
   
+
+
     //Sample
-    
+
+  if (sampleGranularity) {
+
     solidSample=0;  logicSample=0;  physiSample=0;
-    
     if (SampleThickness > 0.)  
       {
 	solidSample = new G4Box("Sample",		//its name
 				SampleSizeXY/2,SampleSizeXY/2,SampleThickness/2);//size
 	
 	logicSample= new G4LogicalVolume(solidSample,	//its solid
-					 sampleMaterial,	//its material
-      				       "Sample");	//its name
+					 defaultMaterial,	//its material
+					 "Sample");	//its name
 	
 	physiSample = new G4PVPlacement(0,			//no rotation
 					G4ThreeVector(),	//at (0,0,0)
 					"Sample",	//its name
 					logicSample,	//its logical volume
-				      physiWorld,	//its mother  volume
+					physiWorld,	//its mother  volume
 					false,		//no boolean operation
 					0);		//copy number
 	
       }
+
+
+
+
+    G4int nbOfGrainsX = ((G4int)(SampleSizeXY/grainDia)) -1 ;
     
-    //Diaphragm1
+    // y dim of a max density plane is 2rn-(n-1)ar, wehere a = (1-(sqrt(3)/2)), n is 
+    // number of rows and r the radius of the grain. so the Y-dim of the sample must 
+    // be greater or equal to this. It results that nmust be <= (SampleY-a)/(1-a).
+    // Max Y shift of the planes superimposing along Z axis is minor (2/sqrt(3)r)
+
+    G4double a = (1.-(sqrt(3.)/2.));
+    G4int nbOfGrainsY =  (G4int) ( ((SampleSizeXY/(grainDia/2.)) -a)/(2.-a) ) -1;
+
+    // same for the z axis, but a = 2 * (sqrt(3) - sqrt(2))/sqrt(3)
+
+    G4double b = 2. * (sqrt(3.) - sqrt(2.))/sqrt(3.);
+    G4int nbOfGrainsZ =  (G4int) ( ((SampleThickness/(grainDia/2.)) -b)/(2.-b) )-1;
+
+    if (SampleThickness > 0.){
+      
+      solidGrain=0; logicGrain=0; physiGrain=0;
+      solidGrain = new G4Sphere("Grain",0.,			
+				grainDia/2,0., twopi, 0., pi);
+      
+      logicGrain = new G4LogicalVolume(solidGrain,	
+				       sampleMaterial,	//its material
+				       "Grain");	        //its name
+      G4ThreeVector grainPosition; 
+      G4double grainInitPositionX;
+      G4double grainInitPositionY;
+      G4double grainInitPositionZ = (-1.*SampleThickness/2.+grainDia/2.);
+      G4double grainStepX = grainDia;
+      G4double grainStepY = grainDia*(1.-(0.5-(sqrt(3.)/4.)));
+      G4double grainStepZ = grainDia*sqrt(2./3.);
+      
+      for ( G4int k=0; k < nbOfGrainsZ ; k++ ) {
+	for ( G4int j=0; j < nbOfGrainsY ; j++ ) {
+	  for ( G4int i=0; i < nbOfGrainsX ; i++ ) {
+	    
+	    // Now we identify the layer and the row where the grain is , to place it in the right position
+	    
+	    
+	    
+	    if (k%3 == 0) { // first or (4-multiple)th layer: structure is ABCABC
+	      grainInitPositionY = (-1.*SampleSizeXY/2.+grainDia/2.);    
+	      if (j%2 ==0) { //first or (3-multiple)th row
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia/2.);
+	      }
+	      
+	      else if ( ((j+1) % 2)  == 0 ) {
+		grainInitPositionX = (-1.*SampleSizeXY/2.+ grainDia);		
+	      }
+	      
+	    }	      
+	    else if ( ((k+2) % 3) == 0 ) { // B-layer
+	      
+	      grainInitPositionY = ( (-1.*SampleSizeXY/2.) + (grainDia/2.)*(1. + (1./sqrt(3.)) ) );
+	      
+	      if (j%2 ==0) { //first or (3-multiple)th row
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia);
+	      }
+	      
+	      else if ( (j+1)%2  == 0 ) {
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia/2);		
+	      }
+	      
+	    }
+	    
+	    else if ( (k+1)%3 == 0 ) { // B-layer
+	      
+	      grainInitPositionY = (-1.*SampleSizeXY/2.+(grainDia/2.)*(1.+2./sqrt(3.)) );
+	      
+	      if (j%2 ==0) { //first or (3-multiple)th row
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia/2.);
+	      }
+	      
+	      else if ( (j+1)%2  == 0 ) {
+		grainInitPositionX = (-1.*SampleSizeXY/2.+grainDia);		
+	      }
+	      
+	    }
+	    
+	    physiGrain = new G4PVPlacement(0,	       
+					   G4ThreeVector( grainInitPositionX + i*grainStepX, 
+							  grainInitPositionY + j*grainStepY,
+							  grainInitPositionZ + k*grainStepZ),
+					   "Grain",  
+					   logicGrain,	 //its logical volume
+					   physiSample, //its mother  volume
+					   false,	 //no boolean operation
+					   grainCopyNb);//copy number    
+	    
+	    grainCopyNb = grainCopyNb +1; 
+	  }
+	}
+      }
+    }    
+  }
+  else {     
+      
+    solidSample=0;  logicSample=0;  physiSample=0;
+    if (SampleThickness > 0.)  
+      {
+	solidSample = new G4Box("Sample",		//its name
+				SampleSizeXY/2,SampleSizeXY/2,SampleThickness/2);//size
+	  
+	logicSample= new G4LogicalVolume(solidSample,	//its solid
+					 sampleMaterial,	//its material
+					 "Sample");	//its name
+	  
+	physiSample = new G4PVPlacement(0,			//no rotation
+					G4ThreeVector(),	//at (0,0,0)
+					"Sample",	//its name
+					logicSample,	//its logical volume
+					physiWorld,	//its mother  volume
+					false,		//no boolean operation
+					0);		//copy number
+	  
+      }  
+  }
+    
+  //Diaphragm1
     
   solidDia1 = 0;  physiDia1 = 0;  logicDia1=0;
   
@@ -703,11 +526,12 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       z = DistDia * cos(ThetaDia1);
       y =DistDia * sin(ThetaDia1);
       x = 0.*cm;
-      physiDia1 = new G4PVPlacement(G4Transform3D(zRotPhiDia1,G4ThreeVector(x,y,z)),                                           "Diaphragm1",	//its name
+      physiDia1 = new G4PVPlacement(G4Transform3D(zRotPhiDia1,G4ThreeVector(x,y,z)),
+				    "Diaphragm1",	//its name
 				    logicDia1,	//its logical volume
 				    physiWorld,	//its mother  volume
 				    false,		//no boolean operation
-                                   0);		//copy number
+				    0);		//copy number
     }  
  
   //Diaphragm3
@@ -742,9 +566,10 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
     
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   
+
   if(!HPGeSD)
     {
-      HPGeSD = new XrayFluoHPGeSD ("HPGeSD",this);
+      HPGeSD = new XrayFluoSD ("HPGeSD",this);
       SDman->AddNewDetector(HPGeSD);
     }
   
@@ -753,29 +578,56 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
     {
       logicPixel->SetSensitiveDetector(HPGeSD);
     }
+
+  // cut per region
+
+
+  logicSample->SetRegion(sampleRegion);
+  sampleRegion->AddRootLogicalVolume(logicSample);
+
+
   
   // Visualization attributes
   
   logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
    G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
    G4VisAttributes * yellow= new G4VisAttributes( G4Colour(255/255. ,255/255. ,51/255. ));
+   G4VisAttributes * red= new G4VisAttributes( G4Colour(255/255. , 0/255. , 0/255. ));
+   G4VisAttributes * blue= new G4VisAttributes( G4Colour(0/255. , 0/255. ,  255/255. ));
+   G4VisAttributes * gray= new G4VisAttributes( G4Colour(128/255. , 128/255. ,  128/255. ));
+   G4VisAttributes * lightGray= new G4VisAttributes( G4Colour(178/255. , 178/255. ,  178/255. ));
   yellow->SetVisibility(true);
   yellow->SetForceSolid(true);
+  red->SetVisibility(true);
+  red->SetForceSolid(true);
+  blue->SetVisibility(true);
+  gray->SetVisibility(true);
+  gray->SetForceSolid(true);
+  lightGray->SetVisibility(true);
+  lightGray->SetForceSolid(true);
   simpleBoxVisAtt->SetVisibility(true);
  
-  logicPixel->SetVisAttributes(simpleBoxVisAtt);
-  logicHPGe->SetVisAttributes(G4VisAttributes::Invisible );
+  logicPixel->SetVisAttributes(red); //modified!!!
+  logicHPGe->SetVisAttributes(blue);
+
   logicSample->SetVisAttributes(simpleBoxVisAtt);
+
+  if (sampleGranularity) logicSample->SetVisAttributes(simpleBoxVisAtt); // mandatory
   
-  logicDia1->SetVisAttributes(simpleBoxVisAtt);
-  logicDia3->SetVisAttributes(simpleBoxVisAtt);
+  logicDia1->SetVisAttributes(lightGray);
+  logicDia3->SetVisAttributes(lightGray);
   
   logicOhmicNeg->SetVisAttributes(yellow);
   logicOhmicPos->SetVisAttributes(yellow);
+
+
+
+  if (sampleGranularity)  logicGrain->SetVisAttributes(gray);
+
   //always return the physical World
-  
-  
+    
   PrintApparateParameters();
+
   return physiWorld;
 }
 
@@ -794,9 +646,9 @@ void XrayFluoDetectorConstruction::PrintApparateParameters()
 	 << SampleSizeXY/cm
 	 << " cm"
 	 << G4endl
-	 <<" Material: " << sampleMaterial->GetName() 
+	 <<" Material: " << logicSample->GetMaterial()->GetName() 
 	 <<G4endl
-	  <<"The HPGeDetector is a slice  " << DeviceThickness/(1.e-6*m) <<  " micron thick"
+	  <<"The Detector is a slice  " << DeviceThickness/(1.e-6*m) <<  " micron thick of " << pixelMaterial->GetName()
 	 <<G4endl
 	 
 
@@ -807,48 +659,51 @@ void XrayFluoDetectorConstruction::PrintApparateParameters()
 
 void XrayFluoDetectorConstruction::UpdateGeometry()
 {
+
+  delete solidWorld;
+  delete logicWorld;
+  delete physiWorld;
+  delete solidHPGe;
+  delete logicHPGe;
+  delete physiHPGe;
+  delete solidPixel;
+  delete logicPixel;
+  delete physiPixel;
+  delete solidOhmicNeg;
+  delete logicOhmicNeg;
+  delete physiOhmicNeg;
+  delete solidOhmicPos;
+  delete logicOhmicPos;
+  delete physiOhmicPos;
+  delete solidSample;
+  delete logicSample;
+  delete physiSample;
+
+  zRotPhiHPGe.rotateX(-1.*PhiHPGe);
+  zRotPhiDia1.rotateX(-1.*AlphaDia1);
+  zRotPhiDia3.rotateX(-1.*AlphaDia3);
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructApparate());
 }
 
+
+void XrayFluoDetectorConstruction::DeleteGrainObjects()
+{
+  if (sampleGranularity) { 
+    delete solidGrain; 
+    delete logicGrain;
+    delete physiGrain;
+  }
+
+}
 void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
 {
 
-  if( newMaterial == "dolorite") {
-    sampleMaterial = dolorite;
-  }
 
-  else if ( newMaterial == "iron") {
-    sampleMaterial = FeMaterial;
-}
-
-  else if ( newMaterial == "silicon") {
-    sampleMaterial = Si;
-}
-
-  else if ( newMaterial == "aluminium") {
-    sampleMaterial = Al;
-}
-
-  else if ( newMaterial == "copper") {
-    sampleMaterial = Cu;
-}
-  else if ( newMaterial == "germanium") {
-    sampleMaterial = HPGe;
-}
-  else if ( newMaterial == "magnesium") {
-    sampleMaterial = materialMg;
-}
-
-  else if ( newMaterial == "neodimium") {
-    sampleMaterial = materialNd;
-}
-  else if ( newMaterial == "tin") {
-    sampleMaterial = Sn;
-}
-  else if ( newMaterial == "titanium") {
-    sampleMaterial = Ti;
-}
-
+    G4cout << "Material Change in Progress" << newMaterial << G4endl;
+    sampleMaterial = materials->GetMaterial(newMaterial);
+    logicSample->SetMaterial(sampleMaterial);
+    PrintApparateParameters();
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

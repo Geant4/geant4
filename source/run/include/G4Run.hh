@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.7 2003/04/23 17:54:17 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Run.hh,v 1.10 2004/06/11 14:27:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #ifndef G4Run_h
@@ -90,7 +90,11 @@ class G4Run
     { DCtable = DCtbl; }
 };
 
-extern G4Allocator<G4Run> aRunAllocator;
+#if defined G4RUN_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4Run> aRunAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4Run> aRunAllocator;
+#endif
 
 inline void* G4Run::operator new(size_t)
 {

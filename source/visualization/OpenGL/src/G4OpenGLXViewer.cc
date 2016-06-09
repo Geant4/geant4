@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.20 2004/02/17 18:17:34 johna Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4OpenGLXViewer.cc,v 1.21 2004/04/07 15:18:23 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -32,10 +32,6 @@
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #include "G4OpenGLXViewer.hh"
-
-#include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
 
 #include "G4ios.hh"
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepViewer.hh,v 1.16 2003/12/11 21:55:55 duns Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HepRepViewer.hh,v 1.17 2004/05/27 05:55:20 duns Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 /**
@@ -37,9 +37,11 @@
 // Geant4
 #include "G4VViewer.hh"
 
+#include "G4HepRepMessenger.hh"
+
 class G4HepRepViewer: public G4VViewer {
     public:
-        G4HepRepViewer (G4VSceneHandler& scene, const G4String& name = "");
+        G4HepRepViewer (G4VSceneHandler& scene, G4HepRepMessenger& messenger, const G4String& name = "");
         virtual ~G4HepRepViewer ();
         void SetView ();
         void ClearView ();
@@ -47,8 +49,11 @@ class G4HepRepViewer: public G4VViewer {
         void ShowView ();
         void FinishView ();
 
+        void reset();
+        
     private:
         bool geometryIncluded;
+        G4HepRepMessenger& messenger;
 };
 
 #endif

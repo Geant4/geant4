@@ -22,8 +22,8 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.2 2003/11/25 15:19:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorConstruction.cc,v 1.3 2004/03/15 11:09:36 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 

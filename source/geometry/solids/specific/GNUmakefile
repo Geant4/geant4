@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003/11/14 14:46:15 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2004/06/11 14:17:18 gcosmo Exp $
 # ----------------------------------------------------------------------------
 # GNUmakefile for geometry/solids/specific library.  Gabriele Cosmo, 05/04/00.
 # ----------------------------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4GEOM_ALLOC_EXPORT
 CPPFLAGS += -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/global/management/include \

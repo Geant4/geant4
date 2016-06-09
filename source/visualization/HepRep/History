@@ -1,4 +1,4 @@
-.$Id: History,v 1.67 2004/03/15 08:05:37 perl Exp $
+.$Id: History,v 1.75 2004/06/17 06:50:35 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,29 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+17 June 2004 Mark Donszelmann (vis-HepRep-V06-01-05 against geant4-06-02-cand-02)
+- Fixed GEANT-50:
+  - Renamed zlib prefix from z_ to heprep_z_
+  - Added symbol z_errmsg to list for renaming to avoid conflicts with other
+    programs who contain a copy of zlib (such as Root).
+  
+4 June 2004 Mark Donszelmann (vis-HepRep-V06-01-04 against geant4-06-01-ref-02)
+- Fixed compilation problem with G4RunManagerKernel
+
+27 May 2004 Joseph Perl (vis-HepRep-V06-01-02)
+- Added attributes for Region and Root Region to both HepRep drivers.
+
+27 May 2004 Mark Donszelmann (vis-HepRep-V06-01-01)
+- Fixed GEANT17: geometry files can be written separately.
+- Updated README with instructions
+  see http://bugs.freehep.org/secure/BrowseProject.jspa?id=10041
+
+26 May 2004 Mark Donszelmann (vis-HepRep-V06-01-00)
+- Fixed GEANT-47: Added initial viewpoint settings and a command to set the 
+  coordinate system.
+- Fixed GEANT-41: copied new interfaces for HepRep, which uses fewer pointers,
+  see http://bugs.freehep.org/secure/BrowseProject.jspa?id=10041
+
 14 March 2004 Joseph Perl (vis-HepRep-V06-00-06)
 - HepRepFile handle duplicate ShowView.
 - HepRepFile improve layering and hierarchy for hits.

@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include "HEPREP/HepRepDefinition.h"
 #include "HEPREP/HepRepWriter.h"
@@ -19,15 +20,14 @@ class DefaultHepRepDefinition : public DefaultHepRepAttribute, public virtual HE
 
     private:
         std::map<std::string, HEPREP::HepRepAttDef*> attDefs;
-        std::vector<HEPREP::HepRepAttDef*> attList;
 
     public:
         DefaultHepRepDefinition();
         ~DefaultHepRepDefinition();
 
-        bool addAttDef(HEPREP::HepRepAttDef* hepRepAttDef);
-        bool addAttDef(std::string name, std::string desc, std::string type, std::string extra);
-        std::vector<HEPREP::HepRepAttDef *>* getAttDefsFromNode();
+        void addAttDef(HEPREP::HepRepAttDef* hepRepAttDef);
+        void addAttDef(std::string name, std::string desc, std::string type, std::string extra);
+        std::set<HEPREP::HepRepAttDef *> getAttDefsFromNode();
         HEPREP::HepRepAttDef* getAttDefFromNode(std::string lowerCaseName);
 
         HEPREP::HepRepAttDef* getAttDef(std::string name) = 0;

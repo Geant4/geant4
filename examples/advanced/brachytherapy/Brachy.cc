@@ -22,7 +22,7 @@
 //
 //
 // $Id: Brachy.cc
-// GEANT4 tag $Name: geant4-06-01 $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -100,7 +100,7 @@ int main(int argc ,char ** argv)
 #ifdef G4ANALYSIS_USE
   G4cout << G4endl << G4endl << G4endl 
 	 << " User Environment " << G4endl
-	 << " Using AIDA 3.0 analysis " << G4endl;
+	 << " Using AIDA 3.2.1 analysis " << G4endl;
 # else
   G4cout << G4endl << G4endl << G4endl 
 	 << " User Environment " << G4endl

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2003/12/08 17:53:26 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2004/06/09 15:04:35 daquinog Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -46,9 +46,9 @@ all: $(copyDeps) $(SWIGSO)
 include $(G4INSTALL)/config/binmake.gmk
 
 ifdef G4ANALYSIS_USE
-CPPFLAGS += `$(ANAPHE_SCRIPTS)/aida-config -i`
+ CPPFLAGS += `aida-config --include`
+# LDFLAGS  += `aida-config --lib`
 endif
-
 
 CPPFLAGS += -I$(TIARA_BASE)/source/tiara/include\
 	    -I$(PYTHON_INCLUDE_DIR) \
@@ -65,7 +65,7 @@ LDLIBS1 += -ltiaraPhysicsLists \
 	   -ltiaraPhysicsPackaging-handMade
 
 ifdef G4ANALYSIS_USE
-LDLIBS +=   `$(ANAPHE_SCRIPTS)/aida-config -l`
+ LDLIBS += `aida-config --lib`
 endif
 
 LDLIBS +=   -lpython$(PYTHONVERSION) \
@@ -89,4 +89,4 @@ tiaraClean:
 	@echo Cleaning up $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)
 	@echo $(tiaraDeps)
 	@rm -rf $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)
-
+	@rm -f *.pyc

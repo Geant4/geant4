@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.21 2004/02/27 17:54:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4LossTableManager.hh,v 1.24 2004/05/12 12:25:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // -------------------------------------------------------------------
@@ -98,6 +98,11 @@ public:
     const G4MaterialCutsCouple *couple);
 
   G4double GetRange(
+    const G4ParticleDefinition *aParticle,
+    G4double kineticEnergy,
+    const G4MaterialCutsCouple *couple);
+
+  G4double GetTrancatedRange(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
     const G4MaterialCutsCouple *couple);
@@ -259,7 +264,32 @@ inline G4double G4LossTableManager::GetDEDX(
   if(currentLoss) x = currentLoss->GetDEDX(kineticEnergy, couple);
   else            x = G4EnergyLossTables::GetDEDX(currentParticle,kineticEnergy,couple,false);
   return x;
-//  return currentLoss->GetDEDX(kineticEnergy, couple);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+inline G4double G4LossTableManager::GetTrancatedRange(
+          const G4ParticleDefinition *aParticle,
+                G4double kineticEnergy,
+          const G4MaterialCutsCouple *couple)
+{
+  if(aParticle != currentParticle) {
+    currentParticle = aParticle;
+    std::map<PD, G4VEnergyLossProcess*, std::less<PD> >::const_iterator pos;
+    if ((pos = loss_map.find(currentParticle)) != loss_map.end()) {
+      currentLoss = (*pos).second;
+    } else {
+      currentLoss = 0;
+//      ParticleHaveNoLoss(aParticle);
+    }
+  }
+  G4double x;
+  if(currentLoss) {
+    x = currentLoss->GetRangeForLoss(kineticEnergy, couple);
+  } else {           
+    x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,couple,false);
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -280,10 +310,12 @@ inline G4double G4LossTableManager::GetRange(
     }
   }
   G4double x;
-  if(currentLoss) x = currentLoss->GetRange(kineticEnergy, couple);
-  else            x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,couple,false);
+  if(currentLoss) {
+    x = currentLoss->GetRange(kineticEnergy, couple);
+  } else {           
+    x = G4EnergyLossTables::GetRange(currentParticle,kineticEnergy,couple,false);
+  }
   return x;
-//  return currentLoss->GetRange(kineticEnergy, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -305,9 +337,9 @@ inline G4double G4LossTableManager::GetEnergy(
   }
   G4double x;
   if(currentLoss) x = currentLoss->GetKineticEnergy(range, couple);
-  else            x = G4EnergyLossTables::GetPreciseEnergyFromRange(currentParticle,range,couple,false);
+  else            x = G4EnergyLossTables::GetPreciseEnergyFromRange(currentParticle,
+                                          range,couple,false);
   return x;
-//  return currentLoss->GetKineticEnergy(range, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

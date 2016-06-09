@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoVisManager.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -43,7 +43,6 @@
 #include "G4DAWNFILE.hh"
 #include "G4GAGTree.hh"
 #include "G4HepRepFile.hh"
-#include "G4HepRep.hh"
 #include "G4RayTracer.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
@@ -100,10 +99,9 @@ void XrayFluoVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4DAWNFILE);
   RegisterGraphicsSystem (new G4GAGTree);
   RegisterGraphicsSystem (new G4HepRepFile);
-  RegisterGraphicsSystem (new G4HepRep);
   RegisterGraphicsSystem (new G4RayTracer);
-  // RegisterGraphicsSystem (new G4VRML1File);
-  //RegisterGraphicsSystem (new G4VRML2File);
+  RegisterGraphicsSystem (new G4VRML1File);
+  RegisterGraphicsSystem (new G4VRML2File);
 
   // Graphics systems needing external packages or libraries...
 
@@ -138,13 +136,13 @@ void XrayFluoVisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_OIWIN32
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
-
  
+  /*
 #ifdef G4VIS_USE_VRML
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);
 #endif
- 
+  */
   if (fVerbose > 0) {
     G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."

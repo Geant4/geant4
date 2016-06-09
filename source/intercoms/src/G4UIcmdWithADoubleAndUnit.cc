@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.5 2003/06/16 16:55:40 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIcmdWithADoubleAndUnit.cc,v 1.7 2004/05/16 20:42:37 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4Tokenizer.hh"
+#include "G4UnitsTable.hh"
 #include <strstream>
 
 G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
@@ -42,14 +44,7 @@ G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
 
 G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(const char* paramString)
 {
-  G4double vl;
-  char unts[30];
-  
-  std::istrstream is((char*)paramString);
-  is >> vl >> unts;
-  G4String unt = unts;
-  
-  return (vl*ValueOf(unt));
+  return ConvertToDimensionedDouble(paramString);
 }
 
 G4double G4UIcmdWithADoubleAndUnit::GetNewDoubleRawValue(const char* paramString)
@@ -75,17 +70,29 @@ G4double G4UIcmdWithADoubleAndUnit::GetNewUnitValue(const char* paramString)
   return ValueOf(unt);
 }
 
-G4String G4UIcmdWithADoubleAndUnit::ConvertToString
-(G4double dblValue,const char * unitName)
+G4String G4UIcmdWithADoubleAndUnit::ConvertToStringWithBestUnit(G4double val)
 {
-  G4String unt = unitName;
-  G4double uv = ValueOf(unitName);
-  
-  char st[50];
-  std::ostrstream os(st,50);
-  os << dblValue/uv << " " << unitName << '\0';
-  G4String vl = st;
-  return vl;
+  G4UIparameter* unitParam = GetParameter(1);
+  G4String canList = unitParam->GetParameterCandidates();
+  G4Tokenizer candidateTokenizer(canList);
+  G4String aToken = candidateTokenizer();
+  char strg[60];
+  std::ostrstream os(strg,60);
+  os << G4BestUnit(val,CategoryOf(aToken)) << '\0';
+
+  G4String st = strg;
+  return st;
+}
+
+G4String G4UIcmdWithADoubleAndUnit::ConvertToStringWithDefaultUnit(G4double val)
+{
+  G4UIparameter* unitParam = GetParameter(1);
+  G4String st;
+  if(unitParam->IsOmittable())
+  { st = ConvertToString(val,unitParam->GetDefaultValue()); }
+  else
+  { st = ConvertToStringWithBestUnit(val); }
+  return st;
 }
 
 void G4UIcmdWithADoubleAndUnit::SetParameterName

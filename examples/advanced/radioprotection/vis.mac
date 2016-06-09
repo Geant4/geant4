@@ -1,0 +1,52 @@
+#############################
+############# Activate physics
+#### Add e.m. physics 
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+/physics/addPhysics positron-standard
+#
+#Standard process for p, alpha and ions
+#/physics/addPhysics ion-standard
+#
+##LowEnergy process for p, alpha and ions
+/physics/addPhysics ion-ICRU
+#### Add Hadronic Physics, muon physics and decay
+/physics/addPhysics hadronic
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
+##############################
+#### Sets some default verbose
+/control/verbose 1
+/run/verbose 1
+/event/verbose 0
+################
+## Visualisation
+#/vis/scene/create
+# --- Choose one the following visualisation tools
+/vis/open OGLIX
+#/vis/open DAWNFILE
+#/vis/open VRML2FILE
+# --------
+/vis/drawVolume
+#/vis/viewer/zoom 2
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+######################
+/run/initialize
+/vis/viewer/set/viewpointThetaPhi 90 180 deg
+/gun/particle p
+/gun/generator Basic
+/gun/energy 100. MeV 
+/configuration/choose vehicle
+/configuration/AddShielding On
+/configuration/AddSPE On
+
+
+
+
+
+
+
+
+

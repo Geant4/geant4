@@ -1,9 +1,16 @@
-# $Id: GNUmakefile,v 1.3 2003/09/21 19:38:49 kurasige Exp $
+# $Id: GNUmakefile,v 1.4 2004/06/01 15:37:42 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for particles library.  Gabriele Cosmo, 4/4/97.
 # --------------------------------------------------------------
 
 name := G4particles
+
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
+
+GLOBLIBS  = libG4geometry.lib libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 SUBDIRS = management bosons leptons shortlived
 SUBDIRS += hadrons/mesons hadrons/barions hadrons/ions
@@ -11,8 +18,5 @@ SUBDIRS += utils
 SUBLIBS = G4partman G4bosons G4leptons G4shortlived
 SUBLIBS += G4mesons G4baryons G4ions
 SUBLIBS += G4partutils
-ifndef G4INSTALL
-  G4INSTALL = ../..
-endif
 
 include $(G4INSTALL)/config/globlib.gmk

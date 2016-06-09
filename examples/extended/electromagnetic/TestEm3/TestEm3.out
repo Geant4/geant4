@@ -1,8 +1,8 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-01 $   (25-March-2004)
+ Geant4 version $Name: geant4-06-02 $   (25-June-2004)
                       Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303.
+                      Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
@@ -23,9 +23,8 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 /run/verbose 2
-/tracking/verbose 0
 #
-##/testem/phys/addPhysics  g4v52
+#### /testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
 #
 /run/initialize
@@ -58,8 +57,9 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /gun/particle e-
 /gun/energy 1 GeV
 #
-/testem/run/setHisto 0 100 700. 1000. MeV
-/testem/run/setHisto 1 100   0.  300. MeV
+###/testem/histo/setFileName testem3.paw
+###/testem/histo/setHisto 0 100 700. 1000. MeV
+###/testem/histo/setHisto 1 100   0.  300. MeV
 #
 /testem/event/printModulo 50
 #
@@ -112,8 +112,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -122,7 +122,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -140,7 +140,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -208,19 +208,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=37.72s Real=48.71s Sys=6.2s
+  User=42.97s Real=52.04s Sys=6.01s
 
--------------------------------------------------------------
-                                   total energy dep                total tracklen       mean energy leaving per layer 
+------------------------------------------------------------
+material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
- Absorber0 (        Lead) : 815.52 MeV +- 17.55 MeV       56.69 cm  +-  1.37 cm                 267.36 MeV +- 45.80 MeV
- Absorber1 ( liquidArgon) : 174.13 MeV +- 15.78 MeV       86.03 cm  +-  8.19 cm                 263.78 MeV +- 45.88 MeV
+      Lead: 810.29 MeV +- 15.56 MeV      1.92 +- 0.192 %      56.1 cm  +- 1.22 cm 
+liquidArgon: 179.93 MeV +- 14.46 MeV     8.035 +- 0.8035 %      88.8 cm  +- 7.75 cm 
 
--------------------------------------------------------------
+------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1809837985, 1683402677
+ Current couple of seeds = 405591755, 816799671
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

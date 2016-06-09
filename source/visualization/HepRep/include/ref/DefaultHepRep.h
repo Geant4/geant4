@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include "HEPREP/HepRep.h"
 #include "HEPREP/HepRepSelectFilter.h"
@@ -21,22 +22,21 @@ class DefaultHepRep : public virtual HEPREP::HepRep {
 
     private:
         std::vector<std::string> layers;
-        std::vector<HEPREP::HepRepTypeTree*> typeTrees;
-        std::vector<HEPREP::HepRepInstanceTree*> instanceTrees;
+        std::set<HEPREP::HepRepTypeTree*> typeTrees;
+        std::set<HEPREP::HepRepInstanceTree*> instanceTrees;
 
     public:
         DefaultHepRep();
         ~DefaultHepRep();
 
         HEPREP::HepRep* copy(HEPREP::HepRepSelectFilter* filter);
-        std::vector<std::string>* getLayerOrder();
-        bool addLayer(std::string layer);
-        bool addTypeTree(HEPREP::HepRepTypeTree* typeTree);
+        std::vector<std::string> getLayerOrder();
+        void addLayer(std::string layer);
+        void addTypeTree(HEPREP::HepRepTypeTree* typeTree);
         void removeTypeTree(HEPREP::HepRepTypeTree* typeTree);
         HEPREP::HepRepTypeTree* getTypeTree(std::string name, std::string version);
-        std::vector<HEPREP::HepRepTypeTree*>* getTypeTrees();
-        HEPREP::HepRepType* getType(std::string name);
-        bool addInstanceTree(HEPREP::HepRepInstanceTree* instanceTree);
+        std::set<HEPREP::HepRepTypeTree*> getTypeTrees();
+        void addInstanceTree(HEPREP::HepRepInstanceTree* instanceTree);
         void overlayInstanceTree(HEPREP::HepRepInstanceTree * instanceTree);
         void removeInstanceTree(HEPREP::HepRepInstanceTree* instanceTree);
         HEPREP::HepRepInstanceTree* getInstanceTreeTop(std::string name, std::string version);
@@ -52,7 +52,7 @@ class DefaultHepRep : public virtual HEPREP::HepRep {
                                             bool getNonDrawAtts,
                                             std::vector<std::string> invertAtts);
         std::string checkForException();
-        std::vector<HEPREP::HepRepInstanceTree*>* getInstanceTrees();
+        std::set<HEPREP::HepRepInstanceTree*> getInstanceTrees();
 };
 
 #endif

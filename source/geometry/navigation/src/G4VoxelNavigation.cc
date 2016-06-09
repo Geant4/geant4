@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.3 2004/03/10 18:21:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4VoxelNavigation.cc,v 1.4 2004/05/17 13:30:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // class G4VoxelNavigation Implementation
@@ -104,6 +104,15 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
 #ifdef G4VERBOSE
   if ( fCheck )
   {
+    if(fVerbose == 1 )
+    {
+      G4cout << "*** G4VoxelNavigation::ComputeStep(): ***" << G4endl
+             << "    Invoked DistanceToOut(p) for mother solid: "
+             << motherSolid->GetName()
+             << ". Solid replied: " << motherSafety << G4endl
+             << "    For local point p: " << localPoint
+             << ", to be considered as 'mother safety'." << G4endl;
+    }
     if( motherSafety < 0.0 )
     {
       G4cout << "ERROR - G4VoxelNavigation::ComputeStep()" << G4endl
@@ -184,6 +193,17 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                      samplePhysical->GetLogicalVolume()->GetSolid();
           const G4double sampleSafety     =
                      sampleSolid->DistanceToIn(samplePoint);
+#ifdef G4VERBOSE
+          if(( fCheck ) && ( fVerbose == 1 ))
+          {
+            G4cout << "*** G4VoxelNavigation::ComputeStep(): ***" << G4endl
+                   << "    Invoked DistanceToIn(p) for daughter solid: "
+                   << sampleSolid->GetName()
+                   << ". Solid replied: " << sampleSafety << G4endl
+                   << "    For local point p: " << samplePoint
+                   << ", to be considered as 'daughter safety'." << G4endl;
+          }
+#endif
           if ( sampleSafety<ourSafety )
           {
             ourSafety = sampleSafety;
@@ -193,6 +213,18 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
             sampleDirection = sampleTf.TransformAxis(localDirection);
             G4double sampleStep =
                      sampleSolid->DistanceToIn(samplePoint, sampleDirection);
+#ifdef G4VERBOSE
+            if(( fCheck ) && ( fVerbose == 1 ))
+            {
+              G4cout << "*** G4VoxelNavigation::ComputeStep(): ***" << G4endl
+                     << "    Invoked DistanceToIn(p,v) for daughter solid: "
+                     << sampleSolid->GetName()
+                     << ". Solid replied: " << sampleStep << G4endl
+                     << "    For local point p: " << samplePoint << G4endl
+                     << "    Direction v: " << sampleDirection
+                     << ", to be considered as 'daughter step'." << G4endl;
+            }
+#endif
             if ( sampleStep<=ourStep )
             {
               ourStep = sampleStep;
@@ -210,6 +242,20 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                 G4ThreeVector intersectionPoint;
                 intersectionPoint= samplePoint + sampleStep * sampleDirection;
                 EInside insideIntPt= sampleSolid->Inside(intersectionPoint); 
+                G4String solidResponse = "-kInside-";
+                if (insideIntPt == kOutside)
+                  solidResponse = "-kOutside-";
+                else if (insideIntPt == kSurface)
+                  solidResponse = "-kSurface-";
+                if( fVerbose == 1 )
+                {
+                  G4cout << "*** G4VoxelNavigation::ComputeStep(): ***"<<G4endl
+                         << "    Invoked Inside() for solid: "
+                         << sampleSolid->GetName()
+                         << ". Solid replied: " << solidResponse << G4endl
+                         << "    For point p: " << intersectionPoint
+                         << ", considered as 'intersection' point." << G4endl;
+                }
                 if( insideIntPt != kSurface )
                 {
                   G4int oldcoutPrec = G4cout.precision(16); 
@@ -218,14 +264,8 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                          << "          Inaccurate solid DistanceToIn"
                          << " for solid " << sampleSolid->GetName() << G4endl;
                   G4cout << "          Solid gave DistanceToIn = "
-                         << sampleStep << " yet returns " ;
-                  if( insideIntPt == kInside )
-                    G4cout << "-kInside-"; 
-                  else if( insideIntPt == kOutside )
-                    G4cout << "-kOutside-";
-                  else
-                    G4cout << "-kSurface-"; 
-                  G4cout << " for this point !" << G4endl; 
+                         << sampleStep << " yet returns " << solidResponse
+                         << " for this point !" << G4endl; 
                   G4cout << "          Point = " << intersectionPoint << G4endl;
                   if ( insideIntPt != kInside )
                     G4cout << "        DistanceToIn(p) = " 
@@ -277,7 +317,18 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                                          localDirection,
                                          true, &validExitNormal, &exitNormal);
 #ifdef G4VERBOSE
-          if ( fCheck ) 
+          if ( fCheck )
+          {
+            if(fVerbose == 1)
+            {
+              G4cout << "*** G4VoxelNavigation::ComputeStep(): ***" << G4endl
+                     << "    Invoked DistanceToOut(p,v,...) for mother solid: "
+                     << motherSolid->GetName()
+                     << ". Solid replied: " << motherStep << G4endl
+                     << "    For local point p: " << localPoint << G4endl
+                     << "    Direction v: " << localDirection
+                     << ", to be considered as 'mother step'." << G4endl;
+            }
             if( ( motherStep < 0.0 ) || ( motherStep >= kInfinity) )
             {
               G4int oldPrOut= G4cout.precision(16); 
@@ -294,6 +345,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
               G4cout.precision(oldPrOut);
               G4cerr.precision(oldPrErr);
             }
+          }
 #endif
           if ( motherStep<=ourStep )
           {
@@ -620,6 +672,17 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
   motherSafety = motherSolid->DistanceToOut(localPoint);
   ourSafety = motherSafety;                 // Working isotropic safety
 
+#ifdef G4VERBOSE
+  if(( fCheck ) && ( fVerbose == 1 ))
+  {
+    G4cout << "*** G4VoxelNavigation::ComputeSafety(): ***" << G4endl
+           << "    Invoked DistanceToOut(p) for mother solid: "
+           << motherSolid->GetName()
+           << ". Solid replied: " << motherSafety << G4endl
+           << "    For local point p: " << localPoint
+           << ", to be considered as 'mother safety'." << G4endl;
+  }
+#endif
   //
   // Compute daughter safeties 
   //
@@ -648,6 +711,17 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
     {
       ourSafety = sampleSafety;
     }
+#ifdef G4VERBOSE
+    if(( fCheck ) && ( fVerbose == 1 ))
+    {
+      G4cout << "*** G4VoxelNavigation::ComputeSafety(): ***" << G4endl
+             << "    Invoked DistanceToIn(p) for daughter solid: "
+             << sampleSolid->GetName()
+             << ". Solid replied: " << sampleSafety << G4endl
+             << "    For local point p: " << samplePoint
+             << ", to be considered as 'daughter safety'." << G4endl;
+    }
+#endif
   }
   voxelSafety = ComputeVoxelSafety(localPoint);
   if ( voxelSafety<ourSafety )

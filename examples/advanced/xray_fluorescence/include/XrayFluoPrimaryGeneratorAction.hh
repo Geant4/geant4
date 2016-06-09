@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoPrimaryGeneratorAction.hh
-// GEANT4 tag $Name:  xray_fluo-V04-01-03
+// GEANT4 tag $Name:  xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -74,16 +74,16 @@ private:
 //pointer a to G4 service class
   G4ParticleGun*                particleGun;	  
 
- //pointer to the geometry
+  //pointer to the geometry
   XrayFluoDetectorConstruction*    XrayFluoDetector;  
-
+  
   //messenger of this class
   XrayFluoPrimaryGeneratorMessenger* gunMessenger; 
   XrayFluoRunAction*  runManager;
-
- //flag for a random impact point 
+  
+  //flag for a random impact point 
   G4String                      rndmFlag;   
-
+  
   //flag for a circular non-point source
   G4String                      beam;
 

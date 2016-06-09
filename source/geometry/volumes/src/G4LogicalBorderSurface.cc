@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.12 2003/12/01 14:53:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LogicalBorderSurface.cc,v 1.13 2004/05/19 08:14:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // --------------------------------------------------------------------
 // G4LogicalBorderSurface Implementation
@@ -145,4 +145,15 @@ void G4LogicalBorderSurface::DumpInfo()
            << G4endl;
   }
   G4cout << G4endl;
+}
+
+void G4LogicalBorderSurface::CleanSurfaceTable()
+{
+  std::vector<G4LogicalBorderSurface*>::iterator pos;
+  for(pos=theBorderSurfaceTable.begin();
+      pos!=theBorderSurfaceTable.end(); pos++)
+  {
+    if (*pos) delete *pos;
+  }
+  theBorderSurfaceTable.clear();
 }

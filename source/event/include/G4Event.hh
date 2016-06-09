@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.7 2003/09/09 20:09:17 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4Event.hh,v 1.10 2004/06/11 14:11:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #ifndef G4Event_h
@@ -155,7 +155,11 @@ class G4Event
       //  Set and Get method of G4VUserEventInformation
 };
 
-extern G4Allocator<G4Event> anEventAllocator;
+#if defined G4EVENT_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4Event> anEventAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4Event> anEventAllocator;
+#endif
 
 inline void* G4Event::operator new(size_t)
 {

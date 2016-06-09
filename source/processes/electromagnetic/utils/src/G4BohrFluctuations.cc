@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc,v 1.7 2003/10/24 14:00:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4BohrFluctuations.cc,v 1.9 2004/05/11 15:35:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -60,7 +60,7 @@ G4BohrFluctuations::G4BohrFluctuations(const G4String& nam)
   minNumberInteractionsBohr(10.0),
   minFraction(0.2),
   xmin(0.2),
-  minLoss(0.000001*eV)
+  minLoss(0.001*eV)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -89,6 +89,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
   if(meanLoss <= minLoss) return meanLoss;
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
+
   G4double navr = minNumberInteractionsBohr;
 
   // Gaussian fluctuation
@@ -97,10 +98,11 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
     navr = meanLoss*meanLoss/siga;
     if (navr < minNumberInteractionsBohr) gauss = false;
   }
+//  G4cout << "### meanLoss= " << meanLoss << "  navr= " << navr << " sig= " << sqrt(siga) << G4endl;
 
   if(gauss) {
     // Increase fluctuations for big fractional energy loss
-  
+
     if ( meanLoss > minFraction*kineticEnergy ) {
       G4double gam = (kineticEnergy - meanLoss)/particleMass + 1.0;
       G4double b2  = 1.0 - 1.0/(gam*gam);
@@ -111,17 +113,26 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
     }
     siga = sqrt(siga);
 
-    G4double lossmax = meanLoss+meanLoss;
+    G4double twomeanLoss = meanLoss + meanLoss;
 
-    do {
-      loss = G4RandGauss::shoot(meanLoss,siga);
-    } while (0.0 > loss || loss > lossmax);
+    if(twomeanLoss < siga) {
+      G4double x;
+      do {
+        loss = twomeanLoss*G4UniformRand();
+	x = (loss - meanLoss)/siga;
+      } while (1.0 - 0.5*x*x < G4UniformRand());
+    } else {
+      do {
+        loss = G4RandGauss::shoot(meanLoss,siga);
+      } while (0.0 > loss || loss > twomeanLoss);
+    }
 
   // Poisson fluctuations
   } else {
     G4double n    = (G4double)(G4Poisson(navr));
     loss = meanLoss*n/navr;
   }
+
   return loss;
 }
 

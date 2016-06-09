@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.9 2004/03/10 16:48:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4SynchrotronRadiation.cc,v 1.10 2004/06/07 13:49:52 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -74,6 +74,95 @@ G4SynchrotronRadiation::~G4SynchrotronRadiation()
 // Production of synchrotron X-ray photon
 // GEANT4 internal units.
 // 
+
+G4double G4SynchrotronRadiation::GetLambdaConst()
+{
+  return fLambdaConst;
+}
+
+
+G4double G4SynchrotronRadiation::GetEnergyConst()
+{
+  return fEnergyConst;
+}
+
+
+G4double 
+G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
+                                               G4double,
+                                               G4ForceCondition* condition)
+{
+   // gives the MeanFreePath in GEANT4 internal units
+
+   const G4DynamicParticle* aDynamicParticle;
+   G4Material* aMaterial;
+   G4double MeanFreePath;
+   //G4bool isOutRange ;
+ 
+   *condition = NotForced ;
+
+   aDynamicParticle = trackData.GetDynamicParticle();
+   aMaterial = trackData.GetMaterial();
+
+   G4double gamma = aDynamicParticle->GetTotalEnergy()/
+                   (aDynamicParticle->GetMass()              ) ;
+ 
+   G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
+
+   if (KineticEnergy <  LowestKineticEnergy || gamma<1.0e3)
+   {
+     MeanFreePath = DBL_MAX ;
+   }
+   else
+   {
+     G4TransportationManager* transportMgr;
+     G4FieldManager* globalFieldMgr;
+
+     transportMgr = G4TransportationManager::GetTransportationManager() ;
+  
+     globalFieldMgr = transportMgr->GetFieldManager() ;
+
+     G4bool FieldExists = globalFieldMgr->DoesFieldExist() ;
+     G4ThreeVector  FieldValue;
+     const G4Field*   pField = 0 ;
+     if (FieldExists)
+     {  
+       pField = globalFieldMgr->GetDetectorField() ;
+       G4ThreeVector  globPosition = trackData.GetPosition() ;
+       G4double  globPosVec[3], FieldValueVec[3] ;
+       globPosVec[0] = globPosition.x() ;
+       globPosVec[1] = globPosition.y() ;
+       globPosVec[2] = globPosition.z() ;
+
+       pField->GetFieldValue( globPosVec, FieldValueVec ) ;
+       FieldValue = G4ThreeVector( FieldValueVec[0], 
+                                   FieldValueVec[1], 
+                                   FieldValueVec[2]   ) ;
+
+       
+       
+       G4ThreeVector unitMomentum = aDynamicParticle->GetMomentumDirection(); 
+       G4ThreeVector unitMcrossB = FieldValue.cross(unitMomentum) ;
+       G4double perpB = unitMcrossB.mag() ;
+       G4double beta = aDynamicParticle->GetTotalMomentum()/
+                      (aDynamicParticle->GetTotalEnergy()    ) ;
+       if(perpB > 0.0)
+       {
+         MeanFreePath = fLambdaConst*beta/perpB ;
+       }       
+       else
+       {
+         MeanFreePath = DBL_MAX ;
+       }
+     }
+     else
+     {
+       MeanFreePath = DBL_MAX ;
+     }
+   }
+   return MeanFreePath; 
+} 
+
 
 G4VParticleChange* 
 G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,

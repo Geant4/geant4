@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataInterpolation.cc,v 1.4 2001/07/11 10:00:41 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4DataInterpolation.cc,v 1.5 2004/04/23 06:52:57 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 #include "G4DataInterpolation.hh"
 
-
+//////////////////////////////////////////////////////////////////////////////
+//
 // Constructor for initializing of fArgument, fFunction and fNumber data members
 
 G4DataInterpolation::G4DataInterpolation( G4double pX[], 
@@ -45,6 +46,8 @@ G4DataInterpolation::G4DataInterpolation( G4double pX[],
    }
 } 
 
+////////////////////////////////////////////////////////////////////////////
+//
 // Constructor for cubic spline interpolation. It creates the array 
 // fSecondDerivative[0,...fNumber-1] which is used in this interpolation by
 // the function 
@@ -120,7 +123,7 @@ G4DataInterpolation::G4DataInterpolation( G4double pX[],
    delete[] u ;
 } 
 
-// ----------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////
 //
 // Destructor deletes dynamically created arrays for data members: fArgument,
 // fFunction and fSecondDerivative, all have dimension of fNumber
@@ -132,7 +135,7 @@ G4DataInterpolation::~G4DataInterpolation()
    if(fSecondDerivative) delete[] fSecondDerivative ;
 }
 
-// ------------------------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////////
 //
 // This function returns the value P(pX), where P(x) is polynom of fNumber-1 degree
 // such that P(fArgument[i]) = fFunction[i], for i = 0, ..., fNumber-1  . This is
@@ -147,7 +150,7 @@ G4DataInterpolation::PolynomInterpolation(G4double pX,
    G4double* c = new G4double[fNumber] ;
    G4double* d = new G4double[fNumber] ;
    diff = fabs(pX-fArgument[0]) ;
-   for(i=1;i<fNumber;i++)
+   for(i=0;i<fNumber;i++)
    {
       difi = fabs(pX-fArgument[i]) ;
       if(difi <diff)
@@ -184,7 +187,7 @@ G4DataInterpolation::PolynomInterpolation(G4double pX,
    return y ;
 }
 
-// -----------------------------------------------------------
+////////////////////////////////////////////////////////////////////////////////
 //
 // Given arrays fArgument[0,..,fNumber-1] and fFunction[0,..,fNumber-1] , this
 // function calculates an array of coefficients. The coefficients don't provide
@@ -233,8 +236,8 @@ G4DataInterpolation::PolIntCoefficient( G4double cof[]) const
 
 
 
-// ----------------------------------------------------------------
-
+///////////////////////////////////////////////////////////////////////////////
+//
 // The function returns diagonal rational function (Bulirsch and Stoer algorithm
 // of Neville type) Pn(x)/Qm(x) where P and Q are polynoms.
 // Tests showed the method is not stable and hasn't advantage if compared with
@@ -295,8 +298,8 @@ G4DataInterpolation::RationalPolInterpolation(G4double pX,
    return y ;
 }
 
-// --------------------------------------------------------------------------
-
+//////////////////////////////////////////////////////////////////////////////////
+//
 // Cubic spline interpolation in point pX for function given by the table:
 // fArgument, fFunction. The constructor, which creates fSecondDerivative, must be
 // called before. The function works optimal, if sequential calls are in random
@@ -341,7 +344,7 @@ G4DataInterpolation::CubicSplineInterpolation(G4double pX) const
            (b*b*b - b)*fSecondDerivative[kHigh])*deltaHL*deltaHL/6.0  ;
 }
 
-// ---------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////
 //
 // Return cubic spline interpolation in the point pX which is located between
 // fArgument[index] and fArgument[index+1]. It is usually called in sequence of
@@ -368,7 +371,7 @@ G4DataInterpolation::FastCubicSpline(G4double pX,
            (b*b*b - b)*fSecondDerivative[index+1])*delta*delta/6.0  ;
 }
 
-// ---------------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////////
 //
 // Given argument pX, returns index k, so that pX bracketed by fArgument[k] and
 // fArgument[k+1]
@@ -404,7 +407,7 @@ G4DataInterpolation::LocateArgument(G4double pX) const
    else  return kLow ;
 }
 
-// ------------------------------------------------------------------------
+/////////////////////////////////////////////////////////////////////////////////////
 //
 // Given a value pX, returns a value 'index' such that pX is between fArgument[index]
 // and fArgument[index+1]. fArgument MUST BE MONOTONIC, either increasing or
@@ -496,3 +499,7 @@ G4DataInterpolation::CorrelatedSearch( G4double pX,
    }
    return ;
 }
+
+//
+//
+//////////////////////////////////////////////////////////////////////////////////

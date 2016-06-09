@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.1 2003/07/14 17:10:16 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorMessenger.cc,v 1.2 2004/05/27 13:43:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -47,6 +47,7 @@
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -109,6 +110,28 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   UpdateCmd->SetGuidance("if you changed geometrical value(s)");
   UpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+
+  accCmd1 = new G4UIcmdWith3Vector("/testem/det/acceptance1",this);
+  accCmd1->SetGuidance("set Edep and RMS");
+  accCmd1->SetGuidance("acceptance values for central cell");
+  accCmd1->SetParameterName("edep","rms","limit",true);
+  accCmd1->SetRange("edep>0 && edep<1 && rms>0");
+  accCmd1->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  accCmd2 = new G4UIcmdWith3Vector("/testem/det/acceptance9",this);
+  accCmd2->SetGuidance("set Edep and RMS");
+  accCmd2->SetGuidance("acceptance values for 3x3 matrix");
+  accCmd2->SetParameterName("edep","rms","limit",true);
+  accCmd2->SetRange("edep>0 && edep<1 && rms>0");
+  accCmd2->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  accCmd3 = new G4UIcmdWith3Vector("/testem/det/acceptance25",this);
+  accCmd3->SetGuidance("set Edep and RMS");
+  accCmd3->SetGuidance("acceptance values for 5x5 matrix");
+  accCmd3->SetParameterName("edep","rms","limit",true);
+  accCmd3->SetRange("edep>0 && edep<1 && rms>0");
+  accCmd3->AvailableForStates(G4State_PreInit,G4State_Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,6 +148,9 @@ DetectorMessenger::~DetectorMessenger()
   delete l6Cmd;
   delete UpdateCmd;
   delete testemDir;
+  delete accCmd1;
+  delete accCmd2;
+  delete accCmd3;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -157,6 +183,18 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == UpdateCmd )
    { Detector->UpdateGeometry();}
+
+  HistoManager* histo = HistoManager::GetPointer();
+  if( command == accCmd1 )
+   { histo->SetEdepAndRMS(0,accCmd1->GetNew3VectorValue(newValue));}
+
+  if( command == accCmd2 )
+   { histo->SetEdepAndRMS(1,accCmd2->GetNew3VectorValue(newValue));}
+
+  if( command == accCmd3 )
+   { histo->SetEdepAndRMS(2,accCmd3->GetNew3VectorValue(newValue));}
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

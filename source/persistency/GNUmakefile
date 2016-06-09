@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.23 2003/10/03 14:39:01 gcosmo Exp $
+# $Id: GNUmakefile,v 1.25 2004/06/03 09:38:45 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for persistency library.  Gabriele Cosmo, 16/11/96.
 # -----------------------------------------------------------------------
@@ -8,6 +8,11 @@ name := G4persistency
 ifndef G4INSTALL
   G4INSTALL = ../..
 endif
+
+GLOBLIBS  = libG4run.lib libG4event.lib
+GLOBLIBS += libG4tracking.lib libG4digits_hits.lib libG4track.lib
+GLOBLIBS += libG4particles.lib libG4geometry.lib libG4materials.lib
+GLOBLIBS += libG4graphics_reps.lib libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 

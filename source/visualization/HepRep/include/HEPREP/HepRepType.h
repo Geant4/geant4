@@ -7,16 +7,14 @@
 #ifndef HEPREP_HEPREPTYPE_H
 #define HEPREP_HEPREPTYPE_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2003, FreeHEP.
 
+#include <set>
 #include <string>
-#include <vector>
 
 #include "HEPREP/HepRepDefinition.h"
 
 namespace HEPREP {
-
-class HepRep;
 
 /**
  * HepRepType interface.
@@ -33,9 +31,8 @@ public:
      * Adds a sub-type to this type.
      *
      * @param type sub-type to be added.
-     * @return false only if written directly to a stream.
      */
-    virtual bool addType(HepRepType * type) = 0;
+    virtual void addType(HepRepType * type) = 0;
 
     /**
      * Returns the name of this type.
@@ -66,11 +63,25 @@ public:
     virtual std::string getDescription() = 0;
 
     /**
+     * Sets the description of this type.
+     *
+     * @param infoURL
+     */
+    virtual void setDescription(std::string description) = 0;
+
+    /**
      * Returns the information URL of this type.
      *
      * @return info URL of type.
      */
     virtual std::string getInfoURL() = 0;
+
+    /**
+     * Sets the information URL of this type.
+     *
+     * @param infoURL
+     */
+    virtual void setInfoURL(std::string infoURL) = 0;
 
     /**
      * Returns the parent of this type.
@@ -84,16 +95,15 @@ public:
      *
      * @return collection of HepRepTypes.
      */
-    virtual std::vector<HepRepType *>  * getTypes() = 0;
+    virtual std::set<HepRepType *>  getTypes() = 0;
 
     /**
      * Returns a deep copy of this type.
      *
-     * @param heprep top-level heprep. (Not sure if this is necessary).
      * @param parent to which this copy is added.
      * @return copy of this type.
      */
-    virtual HepRepType * copy(HepRep * heprep, HepRepType * parent) = 0;
+    virtual HepRepType * copy(HepRepType * parent) = 0;
 }; // class
 } // namespace HEPREP
 #endif /* ifndef HEPREP_HEPREPTYPE_H */

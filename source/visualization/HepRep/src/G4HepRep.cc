@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRep.cc,v 1.20 2003/12/11 21:55:55 duns Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HepRep.cc,v 1.21 2004/05/27 05:55:20 duns Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 /**
@@ -71,7 +71,7 @@ G4VViewer* G4HepRep::CreateViewer (G4VSceneHandler& scene, const G4String& name)
         cout << "G4HepRep::CreateViewer: Cannot create more than one G4HepRepViewer" << endl;
         return NULL;
     }
-    viewer  = new G4HepRepViewer ((G4HepRepSceneHandler&)scene, name);
+    viewer  = new G4HepRepViewer ((G4HepRepSceneHandler&)scene, *messenger, name);
     return viewer;
 }
 

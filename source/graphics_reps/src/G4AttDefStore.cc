@@ -21,28 +21,67 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.cc,v 1.3 2003/06/16 16:55:18 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4AttDefStore.cc,v 1.5 2004/03/31 06:50:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 
 #include "G4AttDefStore.hh"
 
 #include "G4AttDef.hh"
 
+G4AttDefStore* G4AttDefStore::theInstance = 0;
 std::map<G4String,std::map<G4String,G4AttDef>*> G4AttDefStore::m_stores;
 
 std::map<G4String,G4AttDef>*
-G4AttDefStore::GetInstance(G4String storeName,bool& isNew) {
+G4AttDefStore::GetInstance(G4String storeName, G4bool& isNew)
+{
+  // Create the private static instance first to allow for
+  // the deletion of the allocated attributes in the map store
+  //
+  static G4AttDefStore theStore;
+  if (!theInstance)
+  {
+    theInstance = &theStore;
+  }
+
+  // Allocate the new map if not existing already
+  // and return it to the caller
+  //
   std::map<G4String,G4AttDef>* store;
   std::map<G4String,std::map<G4String,G4AttDef>*>::iterator iStore =
     m_stores.find(storeName);
-  if (iStore == m_stores.end()) {
+
+  if (iStore == m_stores.end())
+  {
     isNew = true;
     store = new std::map<G4String,G4AttDef>;
     m_stores[storeName] = store;
   }
-  else {
+  else
+  {
     isNew = false;
     store = iStore->second;
   }
   return store;
+}
+
+G4AttDefStore::G4AttDefStore()
+{
+}
+
+G4AttDefStore::~G4AttDefStore()
+{
+  std::map<G4String,std::map<G4String,G4AttDef>*>::iterator iStore, iStore_tmp;
+  for ( iStore = m_stores.begin(); iStore != m_stores.end(); )
+  {
+    if (iStore->second)
+    {
+      delete iStore->second;
+      iStore_tmp = iStore++;
+      m_stores.erase(iStore_tmp);
+    }
+    else
+    {
+      ++iStore;
+    }
+  }
 }

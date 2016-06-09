@@ -21,16 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorTransform3D.hh,v 1.4 2001/07/11 10:09:00 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4OpenInventorTransform3D.hh,v 1.5 2004/04/08 09:39:38 gbarrand Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // jck  17 Dec 1996
 // G4OpenGLInventorTransform3D provides SoSFMatrix transformation matrix
 // from G4Transform3D.
 
-#ifndef G4OpenInventorTRANSFORM3D_HH
-#define G4OpenInventorTRANSFORM3D_HH
+#ifndef G4OPENINVENTORTRANSFORM3D_HH
+#define G4OPENINVENTORTRANSFORM3D_HH
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 

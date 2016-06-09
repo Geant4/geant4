@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.hh,v 1.2 2003/10/31 12:08:50 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorMessenger.hh,v 1.3 2004/05/27 13:43:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -75,6 +75,9 @@ private:
   G4UIcmdWithADoubleAndUnit* l5Cmd;
   G4UIcmdWithADoubleAndUnit* l6Cmd;
   G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIcmdWith3Vector*        accCmd1;
+  G4UIcmdWith3Vector*        accCmd2;
+  G4UIcmdWith3Vector*        accCmd3;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

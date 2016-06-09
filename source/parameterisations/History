@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2003/10/03 14:35:32 gcosmo Exp $
+$Id: History,v 1.10 2004/06/07 13:36:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 7th, 2004 G.Cosmo (parmodels-V06-01-00)
+- GNUmakefile: added definition of GLOBLIBS for DLLs support on Windows.
 
 Oct 4th, 2003 G.Cosmo (parmodels-V05-02-01)
 ---------------------

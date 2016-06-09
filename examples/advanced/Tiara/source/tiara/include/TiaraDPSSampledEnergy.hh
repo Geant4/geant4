@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TiaraDPSSampledEnergy.hh,v 1.5 2003/06/25 09:12:37 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: TiaraDPSSampledEnergy.hh,v 1.6 2004/06/09 15:04:37 daquinog Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // ----------------------------------------------------------------------
 //
@@ -61,8 +61,13 @@ private:
 
   void getBounds(G4int &cL, G4int &cH, G4double v);
 
-  std::auto_ptr<AIDA::ITree> fTree;
-  std::auto_ptr<AIDA::IDataPointSet> fSampleDPS;
+  //std::auto_ptr<AIDA::ITree> fTree;
+  // std::auto_ptr<AIDA::IDataPointSet> fSampleDPS;
+ // /////
+ AIDA::ITree* fTree;
+ AIDA::IDataPointSet* fSampleDPS;
+  //////
+
   G4double fMinEnergyCut;
   std::map<int, double> fEnergy_Flux;
   G4double fMaxProb;

@@ -1,0 +1,247 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// ********************************************************************
+// *                                                                  *
+// * cosmicray_charging advanced example for Geant4                   *
+// * (adapted simulation of test-mass charging in the LISA mission)   *
+// *                                                                  *
+// * Henrique Araujo (h.araujo@imperial.ac.uk) & Peter Wass           *
+// * Imperial College London                                          *
+// *                                                                  *
+// * LISADetectorConstruction class                                   *
+// *                                                                  *
+// ********************************************************************
+//
+// HISTORY
+// 22/02/2004: migrated from LISA-V04
+//
+// ********************************************************************
+
+
+// **************************************************************************
+// Inertial Sensors:  YZ-Injection, 46 mm Test Mass
+// LISA Inertial Sensor Design Report LTP-RT-CGS-001, issue 2
+//***************************************************************************
+
+
+  // Molybdenum cage (electrode housing)
+  G4double cage_o       = 75.0*mm;
+  G4double cage_i_x     = 53.8*mm;
+  G4double cage_i_y     = 51.6*mm;
+  G4double cage_i_z     = 52.8*mm;
+
+  // Molybdenum disks (top and bottom)
+  G4double disk_thi     =  3.0*mm;
+  G4double disk_id      = 12.0*mm;
+  G4double disk_od      = 60.0*mm;
+  G4double disk_off     = 0.5*cage_o+0.5*disk_thi;
+
+  // SHAPAL electrode supports
+  G4double elecsupp_x_thi  = 6.5*mm;
+  G4double elecsupp_y_thi  = 7.6*mm;
+  G4double elecsupp_yi_thi = 6.5*mm;
+  G4double elecsupp_z_thi  = 7.0*mm;
+  G4double elecsupp_zi_thi = 6.5*mm;
+
+
+  // gold plating thickness
+  G4double elec_thi     = 0.300*micrometer;
+
+  // electrodes (x faces)
+  G4double elec_x_xoff  = 0.5*cage_i_x + 0.5*elecsupp_x_thi + elec_thi;
+  G4double elec_x_y     = 14.5*mm, elec_x_z = 36.0*mm;
+  G4double elec_x_yoff  = 10.*mm;
+  // electrodes (y faces)
+  G4double elec_y_yoff  = 0.5*cage_i_y + 0.5*elecsupp_y_thi + elec_thi;
+  G4double elec_y_x     = 38.2*mm, elec_y_z = 7.1*mm;
+  G4double elec_y_zoff  = 15.*mm;
+  // electrodes (y injection)
+  G4double elec_yi_yoff  = 0.5*cage_i_y + 0.5*elecsupp_yi_thi + elec_thi;
+  G4double elec_yi_x    = 38.2*mm, elec_yi_z = 16.0*mm;
+  // electrodes (z faces)
+  G4double elec_z_zoff  = 0.5*cage_i_z + 0.5*elecsupp_z_thi + elec_thi;
+  G4double elec_z_x     = 6.5*mm, elec_z_y = 37.0*mm;
+  // electrodes (z injection)
+  G4double elec_zi_x    = 16.0*mm; 
+  G4double elec_zi_y    = 12.0*mm;
+  G4double elec_zi_zoff = 0.5*cage_i_z + 0.5*elecsupp_zi_thi + elec_thi;
+  G4double elec_zi_yoff = 12.*mm;
+
+  // Test Mass
+  G4double tmass_len    = 46.0*mm;
+
+
+
+
+  // Molybdenum cage **********************************************************
+  G4Box* cage_o_sol = new G4Box("cage_o_sol", .5*cage_o, .5*cage_o, .5*cage_o);
+  G4LogicalVolume* cage_o_log = 
+    new G4LogicalVolume(cage_o_sol, molybdenum, "cage_o_log");
+  G4VPhysicalVolume* cage_o_phys = new G4PVPlacement(0, G4ThreeVector(),
+    "cage_o_phys", cage_o_log, SensorHousing_i_phys, false, 0);
+   cage_o_log->SetVisAttributes(lgreen_vat);
+//  cage_o_log->SetVisAttributes(G4VisAttributes::Invisible);
+
+  // 0.3 um gold plating
+  G4Box* goldplating_sol = new G4Box("goldplating_sol", 
+     0.5*cage_i_x+elec_thi, 0.5*cage_i_y+elec_thi, 0.5*cage_i_z+elec_thi);
+  G4LogicalVolume* goldplating_log = 
+    new G4LogicalVolume(goldplating_sol, gold, "goldplating_log");
+  G4VPhysicalVolume* goldplating_phys = new G4PVPlacement(0, G4ThreeVector(),
+    "goldplating_phys", goldplating_log, cage_o_phys, false, 0);
+  goldplating_log->SetVisAttributes(yellow_vat);
+
+  // Inside cage
+  G4Box* cage_i_sol = 
+    new G4Box("cage_i_sol", .5*cage_i_x, .5*cage_i_y, .5*cage_i_z);
+  G4LogicalVolume* cage_i_log = 
+    new G4LogicalVolume(cage_i_sol, vacuum, "cage_i_log");
+  G4VPhysicalVolume* cage_i_phys = new G4PVPlacement(0, G4ThreeVector(),
+    "cage_i_phys", cage_i_log, goldplating_phys, false, 0);
+  cage_i_log->SetVisAttributes(white_vat);
+
+
+  // Molybdenum disks *********************************************************
+  G4Tubs* disk_sol = new G4Tubs("disk_sol", 0.5*disk_id, 0.5*disk_od,
+    0.5*disk_thi, 0., 360.*deg);
+  G4LogicalVolume* disk_log = 
+    new G4LogicalVolume(disk_sol, molybdenum, "disk_log");
+  G4VPhysicalVolume* disk_phys;
+  disk_phys = new G4PVPlacement(0, G4ThreeVector(0,0,+disk_off),
+    "disk_phys", disk_log, SensorHousing_i_phys, false, 0);
+  disk_phys = new G4PVPlacement(0, G4ThreeVector(0,0,-disk_off),
+    "disk_phys", disk_log, SensorHousing_i_phys, false, 1);
+  disk_log->SetVisAttributes(lgreen_vat);
+//  disk_log->SetVisAttributes(G4VisAttributes::Invisible);
+
+
+
+  // electrodes (x faces) *****************************************************
+  G4Box* elecsupp_x_sol = 
+    new G4Box("elecsupp_x_sol", 0.5*elecsupp_x_thi,0.5*elec_x_y,0.5*elec_x_z);
+  G4LogicalVolume* elecsupp_x_log = 
+    new G4LogicalVolume(elecsupp_x_sol, SHAPAL, "elecsupp_x_log");
+  G4VPhysicalVolume* elecsupp_x_phys;
+  elecsupp_x_phys = new G4PVPlacement(0,
+    G4ThreeVector(+elec_x_xoff,-elec_x_yoff,0),
+    "elecsupp_x_phys", elecsupp_x_log, cage_o_phys, false, 0);
+  elecsupp_x_phys = new G4PVPlacement(0,
+    G4ThreeVector(+elec_x_xoff,+elec_x_yoff,0),
+    "elecsupp_x_phys", elecsupp_x_log, cage_o_phys, false, 1);
+  elecsupp_x_phys = new G4PVPlacement(0,
+    G4ThreeVector(-elec_x_xoff,-elec_x_yoff,0),
+    "elecsupp_x_phys", elecsupp_x_log, cage_o_phys, false, 2);
+  elecsupp_x_phys = new G4PVPlacement(0,
+     G4ThreeVector(-elec_x_xoff,+elec_x_yoff,0),
+    "elecsupp_x_phys", elecsupp_x_log, cage_o_phys, false, 3);
+
+
+  // electrodes (y faces) *****************************************************
+  G4Box* elecsupp_y_sol = 
+    new G4Box("elecsupp_y_sol", 0.5*elec_y_x,0.5*elecsupp_y_thi,0.5*elec_y_z);
+  G4LogicalVolume* elecsupp_y_log = 
+    new G4LogicalVolume(elecsupp_y_sol, SHAPAL, "elecsupp_y_log");
+  G4VPhysicalVolume* elecsupp_y_phys;
+  elecsupp_y_phys = new G4PVPlacement(0,
+    G4ThreeVector(0,+elec_y_yoff,-elec_y_zoff),
+    "elecsupp_y_phys", elecsupp_y_log, cage_o_phys, false, 0);
+  elecsupp_y_phys = new G4PVPlacement(0,
+    G4ThreeVector(0,+elec_y_yoff,+elec_y_zoff),
+    "elecsupp_y_phys", elecsupp_y_log, cage_o_phys, false, 1);
+  elecsupp_y_phys = new G4PVPlacement(0,
+    G4ThreeVector(0,-elec_y_yoff,-elec_y_zoff),
+    "elecsupp_y_phys", elecsupp_y_log, cage_o_phys, false, 2);
+  elecsupp_y_phys = new G4PVPlacement(0,
+    G4ThreeVector(0,-elec_y_yoff,+elec_y_zoff),
+    "elecsupp_y_phys", elecsupp_y_log, cage_o_phys, false, 3);
+
+  // y injection
+  G4Box* elecsupp_yi_sol = 
+    new G4Box("elecsupp_yi_sol",.5*elec_yi_x,.5*elecsupp_yi_thi,.5*elec_yi_z);
+  G4LogicalVolume* elecsupp_yi_log = 
+    new G4LogicalVolume(elecsupp_yi_sol, SHAPAL, "elecsupp_yi_log");
+  G4VPhysicalVolume* elecsupp_yi_phys;
+  elecsupp_yi_phys = new G4PVPlacement(0, G4ThreeVector(0,+elec_yi_yoff,0),
+    "elecsupp_yi_phys", elecsupp_yi_log, cage_o_phys, false, 0);
+  elecsupp_yi_phys = new G4PVPlacement(0, G4ThreeVector(0,-elec_yi_yoff,0),
+    "elecsupp_yi_phys", elecsupp_yi_log, cage_o_phys, false, 1);
+
+
+  // electrodes (z faces) *****************************************************
+  G4Box* elecsupp_z_sol = 
+    new G4Box("elecsupp_z_sol",.5*elec_z_x,.5*elec_z_y,.5*elecsupp_z_thi);
+  G4LogicalVolume* elecsupp_z_log = 
+    new G4LogicalVolume(elecsupp_z_sol, SHAPAL, "elecsupp_z_log");
+  G4VPhysicalVolume* elecsupp_z_phys;
+  elecsupp_z_phys = new G4PVPlacement(0,
+    G4ThreeVector(-elec_y_zoff,0,+elec_z_zoff),
+    "elecsupp_y_phys", elecsupp_z_log, cage_o_phys, false, 0);
+  elecsupp_z_phys = new G4PVPlacement(0,
+    G4ThreeVector(+elec_y_zoff,0,+elec_z_zoff),
+    "elecsupp_y_phys", elecsupp_z_log, cage_o_phys, false, 1);
+  elecsupp_z_phys = new G4PVPlacement(0,
+    G4ThreeVector(-elec_y_zoff,0,-elec_z_zoff),
+    "elecsupp_y_phys", elecsupp_z_log, cage_o_phys, false, 2);
+  elecsupp_z_phys = new G4PVPlacement(0,
+    G4ThreeVector(+elec_y_zoff,0,-elec_z_zoff),
+    "elecsupp_y_phys", elecsupp_z_log, cage_o_phys, false, 3);
+
+  // z injection
+  G4Box* elecsupp_zi_sol = 
+    new G4Box("elecsupp_zi_sol",.5*elec_zi_x,.5*elec_zi_y,.5*elecsupp_zi_thi);
+  G4LogicalVolume* elecsupp_zi_log = 
+    new G4LogicalVolume(elecsupp_zi_sol, SHAPAL, "elecsupp_zi_log");
+  G4VPhysicalVolume* elecsupp_zi_phys;
+  elecsupp_zi_phys=new G4PVPlacement(0,
+    G4ThreeVector(0,-elec_zi_yoff,+elec_zi_zoff),
+    "elecsupp_zi_phys", elecsupp_zi_log, cage_o_phys, false, 0);
+  elecsupp_zi_phys=new G4PVPlacement(0,
+    G4ThreeVector(0,+elec_zi_yoff,+elec_zi_zoff),
+    "elecsupp_zi_phys", elecsupp_zi_log, cage_o_phys, false, 1);
+  elecsupp_zi_phys=new G4PVPlacement(0,
+    G4ThreeVector(0,-elec_zi_yoff,-elec_zi_zoff),
+    "elecsupp_zi_phys", elecsupp_zi_log, cage_o_phys, false, 2);
+  elecsupp_zi_phys=new G4PVPlacement(0,
+    G4ThreeVector(0,+elec_zi_yoff,-elec_zi_zoff),
+    "elecsupp_zi_phys", elecsupp_zi_log, cage_o_phys, false, 3);
+
+  // electrode vis attributes
+  elecsupp_x_log ->SetVisAttributes(sol_white_vat);
+  elecsupp_y_log ->SetVisAttributes(sol_white_vat);
+  elecsupp_z_log ->SetVisAttributes(sol_white_vat);
+  elecsupp_yi_log->SetVisAttributes(sol_orange_vat);
+  elecsupp_zi_log->SetVisAttributes(sol_orange_vat);
+
+
+  // Test Masses **************************************************************
+  G4Box* tmass_sol = 
+    new G4Box("tmass_sol", 0.5*tmass_len, 0.5*tmass_len, 0.5*tmass_len);
+  G4LogicalVolume* tmass_log = 
+    new G4LogicalVolume(tmass_sol, AuPt, "tmass_log");
+  G4VPhysicalVolume* tmass_phys = new G4PVPlacement
+    (0,	G4ThreeVector(), "tmass_phys", tmass_log, cage_i_phys, false, 0);
+  tmass_log->SetVisAttributes(sol_gold_vat);
+
+
+
+//*****************************************************************************

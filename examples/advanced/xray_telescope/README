@@ -1,4 +1,4 @@
-$Id: README,v 1.11 2003/12/02 17:30:37 gcosmo Exp $
+$Id: README,v 1.12 2004/05/28 15:56:58 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -6,7 +6,7 @@ $Id: README,v 1.11 2003/12/02 17:30:37 gcosmo Exp $
      =========================================================
 
 
-NEW: Nov 2002: Migration to AIDA 3 - see below
+NEW: May 2004: Migration to AIDA 3.2.1 - see below
 
 
 Introduction
@@ -71,7 +71,7 @@ NOTE: The geometry is refreshed on the viewer at the beginning of each run,
 
 Analysis
 --------
-Set up for the AIDA 3.0 interface:
+Set up for the AIDA 3.2.1, PI 1.2.1 interface:
 In case the variable G4ANALYSIS_USE is set:
 setenv G4ANALYSIS_USE               1
 relevant information from the simulation is processed in the XrayTelAnalysis
@@ -83,22 +83,9 @@ Specifically in the GNUmakefile you find the 2 lines:
   CPPFLAGS += `aida-config --include`
   LDFLAGS += `aida-config --lib`
 
-
-
-On-line plotting
-----------------
-Set-up for the AIDA 3.0 interface:
-In case the variable G4ANALYSIS_USE_PLOTTER is set:
-setenv G4ANALYSIS_USE_PLOTTER 1
-a new window is opened for on-line plotting. 
-NOTE: The histograms are plotted or refreshed only in case an interesting event occurs. 
-      This is the case only for about 1 every 10**4 events.
-
-You may need to add the AIDA tool path to your run-time library path 
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:`aida-config -r`
-
-
-
+For more information about AIDA and PI please look at:
+> http://aida.freehep.org/
+> http://www.cern.ch/PI                                                            
 Sources
 -------
 

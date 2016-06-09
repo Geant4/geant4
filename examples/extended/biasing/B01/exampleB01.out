@@ -1,8 +1,8 @@
 
 *************************************************************
- Geant4 version $Name: geant4-06-01 $   (25-March-2004)
+ Geant4 version $Name: geant4-06-02 $   (25-June-2004)
                       Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303.
+                      Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
@@ -149,8 +149,8 @@ msc:  Model variant of multiple scattering for proton
 hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -159,7 +159,7 @@ msc:  Model variant of multiple scattering for mu+
 MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -177,7 +177,7 @@ MuPairProd:   tables are built for  mu+
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
       Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
       radiative corrections for E > 1 GeV
 
@@ -185,26 +185,26 @@ msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         106 |         131 |         120 |         120 | 0.032472038 |   9.2527983 |           1 |
-cell_02_rep:0............ |           2 |          72 |         157 |         148 |          74 |   8.9205605 |   9.2174133 |           1 |
-cell_03_rep:0............ |           4 |          93 |         212 |         211 |       52.75 |   7.4823819 |   8.5261163 |           1 |
-cell_04_rep:0............ |           8 |         112 |         219 |         254 |       31.75 |   3.5008375 |   7.7749792 |           1 |
-cell_05_rep:0............ |          16 |         128 |         262 |         321 |     20.0625 |   4.1377944 |   7.7074206 |           1 |
-cell_06_rep:0............ |          32 |         134 |         297 |         329 |    10.28125 |   6.6014772 |   7.7333631 |           1 |
-cell_07_rep:0............ |          64 |         156 |         316 |         391 |    6.109375 |  0.18088036 |   7.4546045 |           1 |
-cell_08_rep:0............ |         128 |         184 |         376 |         497 |   3.8828125 |    5.134922 |   6.7888989 |           1 |
-cell_09_rep:0............ |         256 |         211 |         445 |         591 |   2.3085938 | 0.061641191 |   6.5983902 |           1 |
-cell_10_rep:0............ |         512 |         239 |         494 |         707 |   1.3808594 |   5.1539762 |   6.6420088 |           1 |
-cell_11_rep:0............ |        1024 |         260 |         530 |         781 |  0.76269531 |  0.17684092 |   6.5343371 |           1 |
-cell_12_rep:0............ |        2048 |         289 |         596 |         928 |    0.453125 |   2.0888873 |   6.0537706 |           1 |
-cell_13_rep:0............ |        4096 |         301 |         643 |        1004 |  0.24511719 |   3.6000169 |   5.9038428 |           1 |
-cell_14_rep:0............ |        8192 |         327 |         682 |        1112 |  0.13574219 |   3.6317715 |   5.5996676 |           1 |
-cell_15_rep:0............ |       16384 |         332 |         673 |         974 | 0.059448242 |   3.4512276 |   5.5878681 |           1 |
-cell_16_rep:0............ |       32768 |         360 |         743 |        1194 | 0.036437988 |   3.1622704 |   5.4812661 |           1 |
-cell_17_rep:0............ |       65536 |         394 |         812 |        1230 | 0.018768311 |   3.5856689 |   5.5173971 |           1 |
-cell_18_rep:0............ |      131072 |         355 |         828 |        1436 | 0.010955811 |  0.23625257 |   5.1653559 |           1 |
-rest_rep:0............... |      131072 |         385 |         385 |           0 |           0 |           0 |           0 |           0 |
-shieldWorld_rep:0........ |           1 |          10 |         110 |           0 |           0 |          10 |          10 |           1 |
+cell_01_rep:0............ |           1 |         110 |         131 |         118 |         118 |   8.5562926 |    9.237997 |           1 |
+cell_02_rep:0............ |           2 |          73 |         167 |         174 |          87 |   7.1601913 |   8.7864585 |           1 |
+cell_03_rep:0............ |           4 |          88 |         191 |         196 |          49 |   7.5359216 |   8.6869605 |           1 |
+cell_04_rep:0............ |           8 |         104 |         214 |         305 |      38.125 |   3.1115996 |   7.4269722 |           1 |
+cell_05_rep:0............ |          16 |         105 |         228 |         302 |      18.875 |   3.5556678 |    7.357289 |           1 |
+cell_06_rep:0............ |          32 |         110 |         230 |         286 |      8.9375 |   6.3052811 |   7.3525379 |           1 |
+cell_07_rep:0............ |          64 |         119 |         256 |         350 |     5.46875 |   5.6560453 |   6.8402582 |           1 |
+cell_08_rep:0............ |         128 |         137 |         281 |         407 |   3.1796875 |   4.9128142 |     6.36468 |           1 |
+cell_09_rep:0............ |         256 |         158 |         320 |         491 |   1.9179688 |   4.5960987 |   6.3811044 |           1 |
+cell_10_rep:0............ |         512 |         183 |         386 |         561 |   1.0957031 |   4.6296183 |   6.3449131 |           1 |
+cell_11_rep:0............ |        1024 |         190 |         403 |         606 |  0.59179688 |   4.3429934 |   6.1812327 |           1 |
+cell_12_rep:0............ |        2048 |         188 |         381 |         698 |  0.34082031 | 0.036896157 |   5.4227668 |           1 |
+cell_13_rep:0............ |        4096 |         211 |         440 |         822 |  0.20068359 |   3.0971965 |   4.9838145 |           1 |
+cell_14_rep:0............ |        8192 |         216 |         452 |         781 | 0.095336914 |   3.0991602 |   4.9325683 |           1 |
+cell_15_rep:0............ |       16384 |         251 |         510 |         901 | 0.054992676 |   1.9544162 |    4.851316 |           1 |
+cell_16_rep:0............ |       32768 |         256 |         516 |         958 |  0.02923584 |   2.5277374 |   4.4940816 |           1 |
+cell_17_rep:0............ |       65536 |         290 |         564 |        1105 | 0.016860962 |   2.5106552 |   4.1521405 |           1 |
+cell_18_rep:0............ |      131072 |         265 |         624 |        1379 | 0.010520935 |  0.22549469 |    4.019048 |           1 |
+rest_rep:0............... |      131072 |         267 |         267 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:0........ |           1 |          10 |         109 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: MassImportanceProcess, will be removed!
   The initial Vectors: 

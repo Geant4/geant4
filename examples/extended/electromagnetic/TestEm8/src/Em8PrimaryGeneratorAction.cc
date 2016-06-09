@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8PrimaryGeneratorAction.cc,v 1.4 2001/07/11 09:57:56 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: Em8PrimaryGeneratorAction.cc,v 1.5 2004/05/24 16:56:31 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -93,6 +93,7 @@ void Em8PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   thePrimaryParticleName = particleGun->GetParticleDefinition()->
                                                 GetParticleName() ;
   G4double x0,y0,z0 ;
+  G4double delta = 0.0001*mm;
   if(vertexdefined)
   {
     x0 = xvertex ;
@@ -103,7 +104,7 @@ void Em8PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   {
     x0 = 0. ;
     y0 = 0. ;
-    z0 = 0. ; // -0.5*(Em8Detector->GetWorldSizeZ()) ;
+    z0 = -0.5*( Em8Detector->GetWorldSizeZ() ) + delta ;
   }
   G4double r0,phi0 ;
   /* ****************************************************

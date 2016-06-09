@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRunManager.cc,v 1.5 2003/06/16 16:49:43 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: ParRunManager.cc,v 1.6 2004/06/19 20:51:09 cooperma Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // --------------------------------------------------------------------
 //                   Parallel Library for Geant4
@@ -70,7 +70,7 @@ G4StateManager* ParRunManager::stateManager;
 G4int ParRunManager::n_event;
 G4int ParRunManager::n_select;
 G4String ParRunManager::msg;
-ParRunManager* ParRunManager::myRunManager = 0;
+ParRunManager* ParRunManager::myRunManager = NULL;
 
 // TOP-C callbacks (static functions)
 //   If this->*(&ParRunManager::GenerateEventInput), created a thunk,
@@ -101,7 +101,7 @@ void ParRunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_sele
   { timer->Start(); }
 
   G4String msg;
-  if(macroFile!=0)
+  if(macroFile!=NULL)
   { 
     if(n_select<0) n_select = n_event;
     msg = "/control/execute ";
@@ -122,7 +122,7 @@ void ParRunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_sele
   if ( eventManager->GetUserEventAction() )
   {
     origUserEventAction = eventManager->GetUserEventAction();
-    SetUserAction( (G4UserEventAction *)0 );
+    SetUserAction( (G4UserEventAction *)NULL );
   }
 
   // Make these variables accessible to TOP-C callback functions
@@ -130,7 +130,7 @@ void ParRunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_sele
 
   // This is where all the parallelism occurs
   i_event = -1;  //  ParRunManager::GenerateEventInput() will increment this.
-  TOPC_master_slave(MyGenerateEventInput, MyDoEvent, MyCheckEventResult, 0);
+  TOPC_master_slave(MyGenerateEventInput, MyDoEvent, MyCheckEventResult, NULL);
 
   if(verboseLevel>0)
   {
@@ -168,7 +168,8 @@ TOPC_BUF ParRunManager::DoEvent( void *input_buf )
   ParMarshaledRandomState buf = ParMarshaledRandomState( input_buf );
   buf.unmarshalEventIDandSetState( i_event );
 
-    stateManager->SetNewState(G4State_EventProc);
+    // removed for Geant4.6
+    //  stateManager->SetNewState(G4State_EventProc);
 
     currentEvent = GenerateEvent(i_event);
 
@@ -184,7 +185,11 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
   MarshaledObj buf = MarshaledObj(input_buf);
   buf.Unmarshal(i_event);
 
-  stateManager->SetNewState(G4State_EventProc);
+  // removed for Geant4.6
+  //stateManager->SetNewState(G4State_EventProc);
+  // Geant4.6 requires the state to be G4State_GeomClosed
+  // before calling EventManager::ProcessOneEvent(..)
+
   if(!userPrimaryGeneratorAction)
   {
     G4Exception
@@ -200,7 +205,8 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
 
   // When Geant4 4.0 sees empty event, it still calls userStackingAction.
   // On master, only trivial events exist, so we delete userStackingAction
-  SetUserAction( (G4UserStackingAction*)0 );
+  SetUserAction( (G4UserStackingAction*)NULL );
+
   eventManager->ProcessOneEvent(currentEvent); // Processing the trivial event
 
   // Called with output_buf and no size, creates object for unmarshaling
@@ -217,7 +223,7 @@ TOPC_ACTION ParRunManager::CheckEventResult( void * input_buf, void *output_buf 
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
     stateManager->SetNewState(G4State_GeomClosed);
     StackPreviousEvent(currentEvent);
-    currentEvent = 0;
+    currentEvent = NULL;
     // Move this to GenerateEventInput:
     // if(runAborted) break;
     return NO_ACTION;

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.hh,v 1.1 2003/10/03 10:16:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HCofThisEvent.hh,v 1.4 2004/06/11 14:10:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 #ifndef G4HCofThisEvent_h
@@ -84,7 +84,11 @@ class G4HCofThisEvent
       }
 };
 
-extern G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+#if defined G4DIGI_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+#endif
 
 inline void* G4HCofThisEvent::operator new(size_t)
 {

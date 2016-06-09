@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.30 2003/12/11 21:55:55 duns Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HepRepSceneHandler.hh,v 1.32 2004/05/27 05:55:20 duns Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 
 /**
@@ -127,12 +127,16 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void open(G4String name);
         void close();
 
+        void writeLayers(HEPREP::HepRep* heprep);
+
         void addAttDefs(HEPREP::HepRepDefinition* definition, const std::map<G4String,G4AttDef>* attDefs);
         void addAttVals(HEPREP::HepRepAttribute* attribute, const std::map<G4String,G4AttDef>* attDefs, std::vector<G4AttValue>* attValues);
 
+        void addTopLevelAttributes(HEPREP::HepRepType* type);
 
         // Returns the particular instance/type or if not created, creates them and adds them to the HepRep
         HEPREP::HepRep*             getHepRep();
+        HEPREP::HepRep*             getHepRepGeometry();
         HEPREP::HepRepInstanceTree* getGeometryInstanceTree();
         HEPREP::HepRepInstance*     getGeometryInstance(G4LogicalVolume* volume, int depth);
         HEPREP::HepRepInstance*     getGeometryInstance(G4String volumeName, int depth);
@@ -172,6 +176,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         
         // DO NOT USE member vars directly, use get methods.
         HEPREP::HepRep*                         _heprep;
+        HEPREP::HepRep*                         _heprepGeometry;
         HEPREP::HepRepInstanceTree*             _geometryInstanceTree;
         std::vector<HEPREP::HepRepInstance*>    _geometryInstance;
         HEPREP::HepRepInstance*                 _geometryRootInstance;

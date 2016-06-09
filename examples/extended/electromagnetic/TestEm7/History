@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2004/02/06 17:12:45 vnivanch Exp $
+$Id: History,v 1.18 2004/06/09 16:20:28 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+09-06-04 mma (testem7-V06-01-01)
+- remove  PhysicsList Particles and General
+     
+31-03-04 mma (testem7-V06-01-00)
+- remove direct root interface
+     
+15-03-04 mma (testem7-V06-00-02)
+- put back G4ANALYSIS_USE in GNUmakefile
+     
+10-03-04 mma (testem7-V06-00-01)
+- example of histogram with ROOT: USE_ROOT
 
 06-02-04 V.Ivanchenko (testem7-V06-00-00)
 - Remove "add binary" from TestEm7.in macro

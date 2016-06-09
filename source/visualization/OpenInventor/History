@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2003/10/29 10:02:24 gcosmo Exp $
+$Id: History,v 1.7 2004/06/14 09:27:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+08th April 2004  Guy Barrand (openinventor-V06-01-00)
+- Bring in the repository the necessary HEPVis code. In fact few of HEPVis
+  is used in this G4 driver. Then HEPVis is no more needed.
+  Note that, to avoid clashes of G4/vis within experiments, the HEPVis
+  node are protected by some : #define Geant4_<node> <node>.  Then, for
+  example, within the G4OpenInventor lib there are Geant4_SoBox, etc...
+  (and not SoBox,... that may clash with other HEPVis code in  experiments).
+- Have code to run on Windows.
+- Split Viewer to have G4OpenInventorXtViewer and G4OpenInventorWinViewer.
+- Split G4OpenInventor to have G4OpenInventorXt and G4OpenInventorWin.
+  Xt and Win (and not X and Win32 like in vis/OpenGL) to follow 
+  the conventions found in the OpenInventor world.
 
 29th October 2003  Cosmo Gabriele (openinventor-V05-02-00)
 - Patch in G4OpenInventorSceneHandler in PreAddThis() to cope with changes

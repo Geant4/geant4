@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.16 2003/11/24 12:54:22 gcosmo Exp $
+# $Id: GNUmakefile,v 1.19 2004/06/01 05:37:34 hpw Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -12,6 +12,7 @@ SUBDIRS += cross_sections
 SUBDIRS += stopping
 
 
+SUBDIRS += models/abrasion
 SUBDIRS += models/binary_cascade
 SUBDIRS += models/cascade/evaporation
 SUBDIRS += models/cascade/utils
@@ -28,6 +29,8 @@ SUBDIRS += models/de_excitation/management
 SUBDIRS += models/de_excitation/multifragmentation
 SUBDIRS += models/de_excitation/photon_evaporation
 SUBDIRS += models/de_excitation/util
+SUBDIRS += models/de_excitation/ablation
+SUBDIRS += models/em_dissociation
 SUBDIRS += models/high_energy
 SUBDIRS += models/im_r_matrix
 SUBDIRS += models/isotope_production
@@ -45,7 +48,8 @@ SUBDIRS += models/radioactive_decay
 SUBDIRS += models/theo_high_energy
 SUBDIRS += models/util
 
-SUBLIBS =  G4hadronic_xsect 
+SUBLIBS  =  G4hadronic_abrasion
+SUBLIBS +=  G4hadronic_xsect 
 SUBLIBS +=  G4hadronic_mgt
 SUBLIBS +=  G4hadronic_proc
 SUBLIBS +=  G4hadronic_stop
@@ -76,6 +80,8 @@ SUBLIBS +=  G4hadronic_deex_management
 SUBLIBS +=  G4hadronic_deex_multifragmentation
 SUBLIBS +=  G4hadronic_deex_photon_evaporation
 SUBLIBS +=  G4hadronic_deex_util
+SUBLIBS +=  G4hadronic_ablation
+SUBLIBS +=  G4hadronic_em_dissociation
 SUBLIBS +=  G4had_preequ_exciton
 SUBLIBS +=  G4had_muon_nuclear
 SUBLIBS +=  G4had_string_diff

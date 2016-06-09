@@ -49,6 +49,7 @@
 #include "G4Delete.hh"
 #include "G4CrossSectionDataStore.hh"
 #include "G4HadronicException.hh"
+#include "G4Fuzzy.hh"
 
 class G4Track;
 class G4Step;
@@ -95,6 +96,15 @@ class G4ParticleChange;
       if(theIsoResult) theOldIsoResult = theIsoResult;
       theIsoResult = 0;
       return anIsoResult;
+    }
+
+    // use this with bool only
+    static G4bool AlwaysKillLeadingHadron(G4Fuzzy aB=G4Fuzzy())
+    {
+       static G4Fuzzy state = G4Fuzzy();
+       if(getenv("AlwaysKillLeadingHadron")) return true;
+       if (!aB.first) state = aB;
+       return state.second;
     }
 
     void BiasCrossSectionByFactor(G4double aScale) 

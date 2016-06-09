@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.hh,v 1.3 2003/11/04 01:58:28 asaim Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4RunManagerKernel.hh,v 1.4 2004/05/04 16:43:25 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -52,13 +52,15 @@
 #define G4RunManagerKernel_h 1
 
 class G4VUserPhysicsList;
-class G4EventManager;
 
 class G4VPhysicalVolume;
 class G4Region;
 class G4ExceptionHandler;
+class G4StackManager;
+class G4TrackingManager;
 
 #include "globals.hh"
+#include "G4EventManager.hh"
 
 class G4RunManagerKernel
 {
@@ -150,6 +152,10 @@ class G4RunManagerKernel
   public:
     inline G4EventManager* GetEventManager() const
     { return eventManager; }
+    inline G4StackManager* GetStackManager() const
+    { return eventManager->GetStackManager(); }
+    inline G4TrackingManager* GetTrackingManager() const
+    { return eventManager->GetTrackingManager(); }
 
     inline G4String GetVersionString() const
     { return versionString; }

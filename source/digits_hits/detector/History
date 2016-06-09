@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2003/10/03 10:29:19 gcosmo Exp $
+$Id: History,v 1.3 2004/05/03 08:14:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May,  3rd 2004 G.Cosmo
+- G4SDManager, G4SDStructure: added optional argument 'warning' to
+  FindSensitiveDetector(pathName, warning), defaulted to TRUE, to
+  eventually exclude warning issued by G4SDManager when sensitive
+  detector is not found.
+  The fix has been requested by ALICE to deactivate the warning when
+  a new sensitive-detector is created automatically in their framework.
 
 Oct,  4th 2003 G.Cosmo
 - Imported from digits+hits directory.

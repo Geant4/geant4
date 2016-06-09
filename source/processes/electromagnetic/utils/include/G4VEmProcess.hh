@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.3 2004/03/06 13:47:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4VEmProcess.hh,v 1.4 2004/05/17 09:46:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -101,12 +101,10 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   // Build physics table during initialisation
 
   virtual void PrintInfoDefinition();
-
   // Print out of the class parameters
 
   G4PhysicsTable* BuildLambdaTable();
@@ -144,7 +142,7 @@ public:
   void UpdateEmModel(const G4String&, G4double, G4double);
   // Define new energy range for the model identified by the name
 
-  G4double GetLambda(G4double kineticEnergy, const G4MaterialCutsCouple* couple);
+  G4double GetLambda(G4double& kinEnergy, const G4MaterialCutsCouple* couple);
   // It returns the Lambda of the process
 
   G4double MicroscopicCrossSection(G4double kineticEnergy,
@@ -161,18 +159,21 @@ public:
   const G4ParticleDefinition* Particle() const;
   const G4ParticleDefinition* SecondaryParticle() const;
 
+  void ActivateFluorescence(G4bool, const G4Region* r = 0);
+  void ActivateAugerElectronProduction(G4bool, const G4Region* r = 0);
+
+  void SetLambdaFactor(G4double val);
+
 protected:
 
   void SetParticle(const G4ParticleDefinition* p);
   void SetSecondaryParticle(const G4ParticleDefinition* p);
 
-  virtual
-  G4double GetMeanFreePath(const G4Track& track,
-                                 G4double previousStepSize,
-                                 G4ForceCondition* condition);
+  virtual G4double GetMeanFreePath(const G4Track& track,
+                                         G4double previousStepSize,
+                                         G4ForceCondition* condition);
 
-  virtual
-  G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
+  virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
                                     const G4Material*, G4double cut) = 0;
@@ -190,6 +191,10 @@ private:
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
 
+  G4double GetLambda(G4double kinEnergy);
+
+  void ComputeLambda(G4double kinEnergy);
+
   // hide  assignment operator
 
   G4VEmProcess(G4VEmProcess &);
@@ -203,6 +208,8 @@ private:
 
   // tables and vectors
   G4PhysicsTable*             theLambdaTable;
+  G4double*                   theEnergyOfCrossSectionMax;
+  G4double*                   theCrossSectionMax;
 
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* baseParticle;
@@ -218,9 +225,12 @@ private:
 
   G4double                    minKinEnergy;
   G4double                    maxKinEnergy;
+  G4double                    lambdaFactor;
 
   G4double                    preStepLambda;
+  G4double                    preStepMFP;
   G4double                    preStepKinEnergy;
+  G4double                    mfpKinEnergy;
 
   G4bool                      integral;
   G4bool                      meanFreePath;
@@ -235,7 +245,44 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
-    if(integral && !meanFreePath) ResetNumberOfInteractionLengthLeft();
+    if(integral && (!meanFreePath || preStepKinEnergy < mfpKinEnergy))
+      ResetNumberOfInteractionLengthLeft();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::GetLambda(G4double& kineticEnergy,
+                                  const G4MaterialCutsCouple* couple)
+{
+  DefineMaterial(couple);
+  G4double x = 0.0;
+  if(theLambdaTable) x = GetLambda(kineticEnergy);
+  return x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VEmProcess::GetLambda(G4double e)
+{
+  G4bool b;
+  return (((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmProcess::ComputeLambda(G4double e)
+{
+  meanFreePath  = false;
+  mfpKinEnergy  = 0.0;
+  G4double emax = theEnergyOfCrossSectionMax[currentMaterialIndex];
+  if (e <= emax) preStepLambda = GetLambda(e);
+  else {
+    e *= lambdaFactor;
+    if(e > emax) {
+      mfpKinEnergy = e;
+      preStepLambda = GetLambda(e);
+    } else preStepLambda = theCrossSectionMax[currentMaterialIndex];
   }
 }
 
@@ -244,18 +291,16 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
 inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track, G4double,
                                                     G4ForceCondition*)
 {
-  DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy = track.GetKineticEnergy();
+  DefineMaterial(track.GetMaterialCutsCouple());
   if (meanFreePath) {
-    G4bool b;
-    preStepLambda = (((*theLambdaTable)[currentMaterialIndex])->
-                      GetValue(preStepKinEnergy, b));
-    if (integral) meanFreePath = false;
+    if (integral) ComputeLambda(preStepKinEnergy);
+    else          preStepLambda = GetLambda(preStepKinEnergy);
+    if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
+    else                    preStepMFP = DBL_MAX;
   }
-  G4double x = DBL_MAX;
-  if(0.0 < preStepLambda) x = 1.0/preStepLambda;
-//  G4cout << GetProcessName() << ": e= " << preStepKinEnergy << " mfp= " << x << G4endl;
-  return x;
+  // G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<<" mfp= "<<preStepMFP<<G4endl;
+  return preStepMFP;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -289,56 +334,6 @@ inline const G4ParticleDefinition* G4VEmProcess::SecondaryParticle() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmProcess::SetLambdaBinning(G4int nbins)
-{
-  nLambdaBins = nbins;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetMinKinEnergy(G4double e)
-{
-  minKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::MinKinEnergy() const
-{
-  return minKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetMaxKinEnergy(G4double e)
-{
-  maxKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::MaxKinEnergy() const
-{
-  return maxKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEmProcess::GetLambda(G4double kineticEnergy,
-                                  const G4MaterialCutsCouple* couple)
-{
-  DefineMaterial(couple);
-  G4double x = DBL_MAX;
-  G4bool b;
-  if(theLambdaTable) {
-    G4double y = (((*theLambdaTable)[currentMaterialIndex])->GetValue(kineticEnergy, b));
-    if(y > 0.0) x = 1.0/y;
-  }
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4VEmProcess::GetMeanLifeTime(const G4Track&,
                                                     G4ForceCondition*)
 {
@@ -347,7 +342,7 @@ inline G4double G4VEmProcess::GetMeanLifeTime(const G4Track&,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VParticleChange* G4VEmProcess::AtRestDoIt(const G4Track&, 
+inline G4VParticleChange* G4VEmProcess::AtRestDoIt(const G4Track&,
                                                    const G4Step&)
 {
   return 0;

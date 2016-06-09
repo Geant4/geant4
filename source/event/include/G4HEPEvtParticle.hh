@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.hh,v 1.5 2001/07/13 15:01:45 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4HEPEvtParticle.hh,v 1.8 2004/06/11 14:11:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -75,7 +75,11 @@ class G4HEPEvtParticle
       { return JDAHEP2; }
 };
 
-extern G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
+#if defined G4EVENT_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
+#endif
 
 inline void * G4HEPEvtParticle::operator new(size_t)
 {

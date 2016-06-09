@@ -21,13 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.15 2003/10/29 10:01:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.17 2004/06/14 09:27:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
 // OpenInventor stored scene - creates OpenInventor display lists.
 #ifdef G4VIS_BUILD_OI_DRIVER
+
+// this :
+#include "G4OpenInventorSceneHandler.hh"
 
 #include <Inventor/SoPath.h>
 #include <Inventor/SoNodeKitPath.h>
@@ -54,18 +57,16 @@
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoResetTransform.h>
 
-#include <HEPVis/nodes/SoG4Box.h>
-#include <HEPVis/nodes/SoG4Tubs.h>
-#include <HEPVis/nodes/SoG4Cons.h>
-#include <HEPVis/nodes/SoG4Trd.h>
-#include <HEPVis/nodes/SoG4Trap.h>
-#include <HEPVis/nodekits/SoDetectorTreeKit.h>
+#include "HEPVis/nodes/SoBox.h"
+#include "HEPVis/nodes/SoTubs.h"
+#include "HEPVis/nodes/SoCons.h"
+#include "HEPVis/nodes/SoTrd.h"
+#include "HEPVis/nodes/SoTrap.h"
+#include "HEPVis/nodekits/SoDetectorTreeKit.h"
 
 #include "G4Scene.hh"
 #include "G4NURBS.hh"
 #include "G4OpenInventor.hh"
-#include "G4OpenInventorSceneHandler.hh"
-#include "G4OpenInventorViewer.hh"
 #include "G4OpenInventorTransform3D.hh"
 #include "G4ThreeVector.hh"
 #include "G4Point3D.hh"
@@ -88,7 +89,7 @@
 #include "G4Material.hh"
 #include "G4VisAttributes.hh"
 
-typedef SoDetectorTreeKit SoG4DetectorTreeKit;
+typedef SoDetectorTreeKit SoDetectorTreeKit;
 G4Point3D translation;
 
 G4OpenInventorSceneHandler::G4OpenInventorSceneHandler (G4OpenInventor& system,
@@ -548,7 +549,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Box & Box) {
 }
 void G4OpenInventorSceneHandler::AddThis (const G4Tubs & Tubs) {
   if(currentSeparator==0) return;
-  SoG4Tubs *g4Tubs = new SoG4Tubs();
+  SoTubs *g4Tubs = new SoTubs();
   g4Tubs->pRMin = Tubs.GetRMin();
   g4Tubs->pRMax = Tubs.GetRMax();
   g4Tubs->pDz = Tubs.GetDz();
@@ -558,7 +559,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Tubs & Tubs) {
 }
 void G4OpenInventorSceneHandler::AddThis (const G4Cons &cons) {
   if(currentSeparator==0) return;
-  SoG4Cons *g4Cons = new SoG4Cons();
+  SoCons *g4Cons = new SoCons();
   g4Cons->fRmin1 = cons.GetRmin1();
   g4Cons->fRmin2 = cons.GetRmin2();
   g4Cons->fRmax1 = cons.GetRmax1();
@@ -572,7 +573,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Cons &cons) {
 void G4OpenInventorSceneHandler::AddThis (const G4Trap &trap) {
   if(currentSeparator==0) return;
   G4ThreeVector SymAxis=trap.GetSymAxis();
-    SoG4Trap *g4Trap = new SoG4Trap();
+    SoTrap *g4Trap = new SoTrap();
   g4Trap->pDz  = trap.GetZHalfLength();
   g4Trap->pPhi = atan2(SymAxis(kYAxis),SymAxis(kXAxis));
   g4Trap->pTheta = acos(SymAxis(kZAxis));
@@ -587,7 +588,7 @@ void G4OpenInventorSceneHandler::AddThis (const G4Trap &trap) {
 
 void G4OpenInventorSceneHandler::AddThis (const G4Trd &trd) {
   if(currentSeparator==0) return;
-  SoG4Trd *g4Trd = new SoG4Trd();
+  SoTrd *g4Trd = new SoTrd();
   g4Trd->fDx1 = trd.GetXHalfLength1();
   g4Trd->fDx2 = trd.GetXHalfLength2();
   g4Trd->fDy1 = trd.GetYHalfLength1();
@@ -650,7 +651,7 @@ void G4OpenInventorSceneHandler::PreAddThis
     //
     // Make the detector tree kit:
     //
-    SoG4DetectorTreeKit* g4DetectorTreeKit = new SoG4DetectorTreeKit();  
+    SoDetectorTreeKit* g4DetectorTreeKit = new SoDetectorTreeKit();  
 
     SoSeparator* previewSeparator   =  
       (SoSeparator*) g4DetectorTreeKit->getPart("previewSeparator",TRUE);

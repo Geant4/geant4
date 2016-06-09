@@ -1,5 +1,5 @@
 
-$Id: History,v 1.45 2004/02/27 14:22:07 gcosmo Exp $
+$Id: History,v 1.46 2004/05/13 14:52:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 07, 2004   G.Cosmo                   geom-bool-V06-01-00
+  - Moved G4ReflectedSolid class to "management" module.
+  - Moved G4ReflectionFactory class to "volumes" module.
+  - Moved unit test for reflection to "volumes" module.
+  - Coworks with tags: geommng-V06-01-00, geomvol-V06-01-00 and
+                       geomdiv-V06-01-00.
 
  Feb 27, 2004   V.Grichine                geom-bool-V06-00-00
   - G4UnionSolid.cc, G4SubtractionSolid.cc: fix in debug printout for

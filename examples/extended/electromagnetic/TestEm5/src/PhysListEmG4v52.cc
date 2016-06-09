@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysListEmG4v52.cc,v 1.1 2003/10/07 11:58:31 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PhysListEmG4v52.cc,v 1.4 2004/06/21 10:57:14 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,14 +106,14 @@ void PhysListEmG4v52::ConstructProcess()
     } else if( particleName == "GenericIon" ) {
  
       pmanager->AddProcess(new G4MultipleScattering52,-1,1,1);
-      pmanager->AddProcess(new G4hIonisation52,      -1,2,2);
+      pmanager->AddProcess(new G4hIonisation52,       -1,2,2);
 
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
       pmanager->AddProcess(new G4MultipleScattering52,-1,1,1);
-      pmanager->AddProcess(new G4hIonisation52,     -1,2,2);
+      pmanager->AddProcess(new G4hIonisation52,       -1,2,2);
     }
   }
 }

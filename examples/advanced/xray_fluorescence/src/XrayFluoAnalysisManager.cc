@@ -22,35 +22,25 @@
 //
 //
 // $Id: XrayFluoAnalysisManager.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
+// 11 Jul 2003 A.Mantero, code cleaning / Plotter-XML addiction
+//    Sep 2002 A.Mantero, AIDA3.0 Migration
 // 06 Dec 2001 A.Pfeiffer updated for singleton
 // 30 Nov 2001 Guy Barrand : migrate to AIDA-2.2.
 // 28 Nov 2001 Elena Guardincerri     Created
-// 29 Nov 2002 Muigration to AIDA 3.0 (Alfonso.mantero@ge.infn.it)
-
+//
 // -------------------------------------------------------------------
 #include <stdlib.h>
 #include "G4VProcess.hh"
 #include <fstream>
+#include <strstream>
 #include "G4ios.hh"
-#include "AIDA/IManagedObject.h"
-#include "AIDA/IAnalysisFactory.h"
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/ITree.h"
-#include "AIDA/IHistogramFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-#include "AIDA/ITupleFactory.h"
-#include "AIDA/ITuple.h"
-
 #include "XrayFluoAnalysisManager.hh"
-
-
 #include "G4Step.hh"
 
 XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
@@ -58,48 +48,30 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoAnalysisManager::XrayFluoAnalysisManager()
-  :outputFileName("xrayfluo.hbk"),analysisFactory(0), tree(0),histogramFactory(0)
+  :outputFileName("xrayfluo"), /*visPlotter(false),*/ persistencyType("xml"), 
+  deletePersistencyFile(true), analysisFactory(0), tree(0),histogramFactory(0)//, plotter(0)
 {
-  //  pEvent=new XrayFluoEventAction();
-
+  //creating the messenger
   analisysMessenger = new XrayFluoAnalysisMessenger(this);
 
   // Hooking an AIDA compliant analysis system.
+  // creating Analysis factroy, necessary to create/manage analysis
   analysisFactory = AIDA_createAnalysisFactory();
-  if(analysisFactory) {
 
-    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-    if(treeFactory) {
-      // tree = treeFactory->create(); // Tree in memory.
-      //porebbe essere qua il memory leak//
+    // creating  persistency
 
-      tree = treeFactory->create(outputFileName,"hbook",false,true);
+  CreatePersistency(outputFileName,persistencyType);
 
-      delete treeFactory; // Will not delete the ITree.
-      histogramFactory = analysisFactory->createHistogramFactory(*tree);  
-      // tupleFactory = analysisFactory->createTupleFactory(*tree);
-    }
+//   if(analysisFactory) {
 
-    /*
-    // Create and a the plotter :
-    IPlotterFactory* plotterFactory = 
-      analysisFactory->createPlotterFactory(argc,argv);
-    if(plotterFactory) {
-      plotter = plotterFactory->create();
-      if(plotter) {
-        // Map the plotter on screen :
-	plotter->show();
-        // Set the page title :
-	plotter->setParameter("pageTitle","XrayFluo");
-	// Have two plotting regions (one column, two rows).
-      }
-      delete plotterFactory;
-    }
-    */
-    }
+
+    
+//     // Creating the plotter factory
+//     plotterFactory = analysisFactory->createPlotterFactory();
+//   }
+
 
   G4cout << "XrayFluoAnalysisManager created" << G4endl;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -112,8 +84,10 @@ XrayFluoAnalysisManager::~XrayFluoAnalysisManager()
   delete analysisFactory;
   analysisFactory = 0;
 
-  // delete tupleFactory;
-  // tupleFactory=0;
+  //  delete plotterFactory;
+  //  plotterFactory=0;
+
+  delete tree;
 
   delete instance;
 
@@ -132,11 +106,39 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::getInstance()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void XrayFluoAnalysisManager::CreatePersistency(G4String fileName,G4String persistencyType,
+						G4bool readOnly, G4bool createNew)
+{
+
+  if (tree) delete tree;
+  if (histogramFactory) delete histogramFactory;
+
+    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+    if(treeFactory) {
+      if (persistencyType == "hbook") {
+	fileName = fileName + ".hbk";
+      }
+      else if (persistencyType == "xml"){
+	fileName = fileName + ".xml";
+      }
+      tree = treeFactory->create(fileName,persistencyType,readOnly,createNew); // output file
+      
+      delete treeFactory; // Will not delete the ITree.
+    }
+  if(analysisFactory) {
+
+
+    histogramFactory = analysisFactory->createHistogramFactory(*tree);  
+
+  }
+}
+
+
 void XrayFluoAnalysisManager::book()
 {
     // Book histograms
 
-  histo_1 = histogramFactory->createHistogram1D("1","Energy Deposit", 100000,0.,10.); //1eV def.
+  histo_1 = histogramFactory->createHistogram1D("1","Energy Deposit", 500,0.,10.); //20eV def.
   histo_2 = histogramFactory->createHistogram1D("2","Gamma born in the sample", 100,0.,10.);
   histo_3 = histogramFactory->createHistogram1D("3","Electrons  born in the sample", 100,0.,10.);
   histo_4 = histogramFactory->createHistogram1D("4","Gammas leaving the sample", 300,0.,10.);
@@ -145,15 +147,16 @@ void XrayFluoAnalysisManager::book()
   histo_7 = histogramFactory->createHistogram1D("7","Spectrum of the incident particles", 100,0.,10.);
   histo_8 = histogramFactory->createHistogram1D("8","Protons reaching the detector", 100,0.,10.);
   histo_9 = histogramFactory->createHistogram1D("9","Protons leaving the sample", 100,0.,10.);
-  histo_10 = histogramFactory->createHistogram1D("10","Photon Origin", 4,0.,3.);  
-  histo_11 = histogramFactory->createHistogram1D("11","Spectrum from LowEnPhotoELectric", 300,0.,10.);
-  histo_12 = histogramFactory->createHistogram1D("12","Spectrum From the other processes (unknown)", 300,0.,10.);
+
+  // Debugging-purpose Histos
+
+  //histo_10 = histogramFactory->createHistogram1D("10","Photon Origin", 4,0.,3.);  
+  //histo_11 = histogramFactory->createHistogram1D("11","Spectrum from LowEnPhotoELectric", 300,0.,10.);
+  //histo_12 = histogramFactory->createHistogram1D("12","Spectrum From the other processes (unknown)", 300,0.,10.);
 
   //  IHistogram2D* histo_20 = histogramFactory->
   //create2D("20","Phi, Theta",80 ,-3.14,3.14,80,0.,3.14);  
   
-  // Create a tuple :
-  // tuple = tupleFactory->create("XrayFluo","XrayFluo","energy counts");
 } 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -161,31 +164,65 @@ void XrayFluoAnalysisManager::book()
 void XrayFluoAnalysisManager::finish()
 {
 
+//   if(plotter)  {
+//     // Wait for the keyboard return to avoid destroying the plotter window too quickly.
+//     G4cout << "Press <ENTER> to exit" << G4endl;
+//     G4cin.get();
+//     plotter->hide(); //hide plotter windows, but doesn't delete plotter
+//   }
+
   if(tree) {
-    tree->commit(); // Write histos and tuple in file. 
+    tree->commit(); // Write histos in file. 
     tree->close();
   }
 
+  deletePersistencyFile = false;
+
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// void XrayFluoAnalysisManager::InitializePlotter()
+// {
+
+//   // If speciefied (visPlotter=true),
+//   // a window for the visulizaton of partial results is created
+//   if(plotterFactory && visPlotter && deletePersistencyFile) 
+//     {
+//       plotter = plotterFactory->create();
+//       // Set the page title :
+//       plotter->setParameter("pageTitle","XrayFluo");
+//     }
+
+//   if(plotter && visPlotter) {
+//     plotter->show(); // shows plotter window
+//   }
+  
+// }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// void XrayFluoAnalysisManager::PlotCurrentResults()
+// {
+//   if(plotter) {
+//       // Plotting the Detector Energy Deposit - histo_1
+//       AIDA::IHistogram1D& histo1p = *histo_1;
+//       plotter->currentRegion().plot( histo1p, "Detector Energy Deposition" );
+//       plotter->refresh();
+//     }
+// }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4bool XrayFluoAnalysisManager::GetDeletePersistencyFileFlag()
+{
+  return deletePersistencyFile;
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 {
 
- 
- /*
-  IHistogram1D*   histo_2 =dynamic_cast<IHistogram1D *> ( tree->find("2") );
-  IHistogram1D*   histo_3 =dynamic_cast<IHistogram1D *> ( tree->find("3") );
-  IHistogram1D*   histo_4 =dynamic_cast<IHistogram1D *> ( tree->find("4") );
-  IHistogram1D*   histo_5 =dynamic_cast<IHistogram1D *> ( tree->find("5") );
-  IHistogram1D*   histo_6 =dynamic_cast<IHistogram1D *> ( tree->find("6") );
-  IHistogram1D*   histo_8 =dynamic_cast<IHistogram1D *> ( tree->find("8") );
-  IHistogram1D*   histo_10 =dynamic_cast<IHistogram1D *> ( tree->find("10") );  
-  IHistogram1D*   histo_11 =dynamic_cast<IHistogram1D *> ( tree->find("11") );
-  IHistogram1D*   histo_12 =dynamic_cast<IHistogram1D *> ( tree->find("12") );
-  //IHistogram2D*   histo_20=dynamic_cast<IHistogram2D *> ( tree->find("20") );
-  */
   
   G4double gammaAtTheDetPre=0;
   G4double protonsAtTheDetPre=0;
@@ -197,69 +234,81 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
   G4double protonsLeavSam=0;
   G4double gammaBornInSample=0;
   G4double eleBornInSample=0;
+
+  // Filling the histograms with data, passing thru stepping.
+
+
+  // Select volume from wich the step starts
   if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
-    
-    if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) 
-      { 
-	if ((aStep->GetTrack()->GetDynamicParticle()
-	     ->GetDefinition()-> GetParticleName()) == "gamma" )
-	  
-	  {
+    // Select volume from wich the step ends
+    if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) { 
+      // Select the particle type
+      if ((aStep->GetTrack()->GetDynamicParticle()
+	   ->GetDefinition()-> GetParticleName()) == "gamma" )
+	
+	{
 	    
 	    
-	    if(aStep->GetTrack()->GetCreatorProcess()){
-	      G4String process = aStep->GetTrack()->GetCreatorProcess()->GetProcessName();
-	      // G4cout << "Il processo di origine e' " << process << G4endl;
-	      if(histo_10) {
-		histo_10->fill(1.);
-		gammaLeavingSample = 
-		  (aStep->GetPreStepPoint()->GetKineticEnergy());
-		if(histo_11) {
-		  histo_11->fill(gammaLeavingSample/keV);
+	  // Control histos, used for debugging purpose.
+
+	  //  	    if(aStep->GetTrack()->GetCreatorProcess()){
+	  //  	      G4String process = aStep->GetTrack()->GetCreatorProcess()->GetProcessName();
+	  //  	      G4cout << "Il processo di origine e' " << process << G4endl;
+	  //  	      if(histo_10) {
+	  //  		histo_10->fill(1.);
+	  //  		gammaLeavingSample = 
+	  //  		  (aStep->GetPreStepPoint()->GetKineticEnergy());
+	  //  		if(histo_11) {
+	  //  		  histo_11->fill(gammaLeavingSample/keV);
 		  
-		}
-	      }    
-	    }
-	    else {
-	      //G4cout << "Sembra che non ci sia un processo d'origine" << G4endl;
-	      if(histo_10) {
-		histo_10->fill(2.);
+	  //  		}
+	  //  	      }    
+	  //  	    }
+	  //  	    else {
+	  //  	      //G4cout << "Sembra che non ci sia un processo d'origine" << G4endl;
+	  //  	      if(histo_10) {
+	  //  		histo_10->fill(2.);
 
-		gammaLeavingSample = 
-		  (aStep->GetPreStepPoint()->GetKineticEnergy());
-		if(histo_12) {
-		  histo_12->fill(gammaLeavingSample/keV);
+	  //  		gammaLeavingSample = 
+	  //  		  (aStep->GetPreStepPoint()->GetKineticEnergy());
+	  //  		if(histo_12) {
+	  //  		  histo_12->fill(gammaLeavingSample/keV);
 
-		}
+	  //  		}
 		
-	      }
-	    }
+	  //  	      }
+	  //  	    }
 	    
 
+	  //                  //
+	  //  Filling Histos  //
+	  //                  // 
 
-	    gammaLeavingSample = 
-	      (aStep->GetPreStepPoint()->GetKineticEnergy());
-	    if(histo_4) {
-	      histo_4->fill(gammaLeavingSample/keV);
 
-	    }
-
-	    /*    gammaLeavingSamplePhi = 
-		  (aStep->GetPreStepPoint()->GetMomentumDirection().phi());
-		  G4cout << "questo e' Phi: " << gammaLeavingSamplePhi << G4endl;
-		  gammaLeavingSampleTheta = 
-		  (aStep->GetPreStepPoint()->GetMomentumDirection().theta());
-		  G4cout << "questo e' Theta: " << gammaLeavingSampleTheta << G4endl;
-		  if(histo_20) {
-		  // G4cout << "histo_20 esiste" << G4endl;
-		  histo_20->fill(gammaLeavingSamplePhi,gammaLeavingSampleTheta,1.);
-		  }  */
-  
+	  gammaLeavingSample = 
+	    (aStep->GetPreStepPoint()->GetKineticEnergy());
+	  if(histo_4) {
+	    histo_4->fill(gammaLeavingSample/keV);
 
 	  }
-      }
-  }
 
+	  // Other debugging purpose histos
+	  /*    gammaLeavingSamplePhi = 
+		(aStep->GetPreStepPoint()->GetMomentumDirection().phi());
+		G4cout << "questo e' Phi: " << gammaLeavingSamplePhi << G4endl;
+		gammaLeavingSampleTheta = 
+		(aStep->GetPreStepPoint()->GetMomentumDirection().theta());
+		G4cout << "questo e' Theta: " << gammaLeavingSampleTheta << G4endl;
+		if(histo_20) {
+		// G4cout << "histo_20 esiste" << G4endl;
+		histo_20->fill(gammaLeavingSamplePhi,gammaLeavingSampleTheta,1.);
+		}  */
+  
+
+	}
+    }
+  }
+  
 
   
   if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
@@ -278,15 +327,62 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 		  ->GetDefinition()-> GetParticleName()) == "proton" )
 	  {
 	    protonsLeavSam = (aStep->GetPreStepPoint()->GetKineticEnergy());
-	    if(histo_3) {
-	      histo_3->fill(protonsLeavSam/keV);
+	    if(histo_9) {
+	      histo_9->fill(protonsLeavSam/keV);
 	    }
 	  }
 	
       }
   }
+
+  // electrons  from the detector -- Debugging
   
-  
+//   if((aStep->GetTrack()->GetDynamicParticle()
+//       ->GetDefinition()-> GetParticleName()) == "e-" ){
+    
+//     if(1== (aStep->GetTrack()->GetCurrentStepNumber())){ 
+      
+//       if(0 != aStep->GetTrack()->GetParentID()){
+// 	if(aStep->GetTrack()->GetVolume()->GetName() == "HPGeDetector")
+	  
+// 	  if(aStep->GetTrack()->GetNextVolume()->GetName() == "World" ){
+	    
+// 	    if(aStep->GetTrack()->GetCreatorProcess()){
+//  	      G4String process = aStep->GetTrack()->GetCreatorProcess()->GetProcessName();
+//  	      G4cout << "Origin Porcess Name:  " << process << G4endl;
+//  	      if(histo_10) {
+//  		histo_10->fill(1.);
+//  		gammaLeavingSample = 
+//  		  (aStep->GetPreStepPoint()->GetKineticEnergy());
+//  		if(histo_11) {
+//  		  histo_11->fill(gammaLeavingSample/keV);
+		  
+//  		}
+//  	      }    
+//  	    }
+//  	    else {
+//  	      G4cout << "No Origin Process Name" << G4endl;
+//  	      if(histo_10) {
+//  		histo_10->fill(2.);
+		
+//  		gammaLeavingSample = 
+//  		  (aStep->GetPreStepPoint()->GetKineticEnergy());
+//  		if(histo_12) {
+//  		  histo_12->fill(gammaLeavingSample/keV);
+		  
+//  		}
+		
+//  	      }
+//  	    }
+// 	  }
+//       }
+      
+//     }
+//   }
+
+
+
+ 
   if((aStep->GetTrack()->GetDynamicParticle()
       ->GetDefinition()-> GetParticleName()) == "gamma" )
     
@@ -324,50 +420,45 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
   
   if(aStep->GetTrack()->GetNextVolume()){
     
-    if(aStep->GetTrack()->GetVolume()->GetName() == "World"){
+    //if(aStep->GetTrack()->GetVolume()->GetName() == "World"){
       
-      if(aStep->GetTrack()->GetNextVolume()->GetName() == "HPGeDetector")
+    if(aStep->GetTrack()->GetNextVolume()->GetName() == "HPGeDetector")
 	
-	{ 
-	  if ((aStep->GetTrack()->GetDynamicParticle()
-	       ->GetDefinition()-> GetParticleName()) == "gamma" ) 
-	    {
-	      gammaAtTheDetPre = 
-		(aStep->GetPreStepPoint()->GetKineticEnergy());
-	      if(histo_6) {
-		histo_6->fill( gammaAtTheDetPre/keV);
-	      }
-	    }
-	  else if ((aStep->GetTrack()->GetDynamicParticle()
-		    ->GetDefinition()-> GetParticleName()) == "proton" ) 
-	    {
-	      protonsAtTheDetPre = 
-		(aStep->GetPreStepPoint()->GetKineticEnergy());
-	      if(histo_8) {
-		histo_8->fill( protonsAtTheDetPre/keV);
-	      }
-	    }
-	}
-    }
-    }
+      { 
+	if ((aStep->GetTrack()->GetDynamicParticle()
+	     ->GetDefinition()-> GetParticleName()) == "gamma" ) 
+	  {
 
+	    gammaAtTheDetPre = 
+	      (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    if(histo_6) {
+	      histo_6->fill( gammaAtTheDetPre/keV);
+	    }
+	  }
+	else if ((aStep->GetTrack()->GetDynamicParticle()
+		  ->GetDefinition()-> GetParticleName()) == "proton" ) 
+	  {
+	    protonsAtTheDetPre = 
+	      (aStep->GetPreStepPoint()->GetKineticEnergy());
+	    if(histo_8) {
+	      histo_8->fill( protonsAtTheDetPre/keV);
+	    }
+	  }
+      }
+    //}  close of if(aStep->GetTrack()->GetVolume()->GetName() == "World"){ 
   }
+
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoAnalysisManager::analyseEnergyDep(G4double energyDep)
 {
-  //histo_1 =dynamic_cast<IHistogram1D *> ( tree->find("1") );
+
+  // Filling of Energy Deposition, called by XrayFluoEventAction
   
   histo_1->fill(energyDep/keV);
   
-  /*
-    if(tuple) {
-    tuple->fill(0,energyDep);
-    tuple->fill(1,1);
-    tuple->addRow();
-    }
-  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -375,19 +466,25 @@ void XrayFluoAnalysisManager::analyseEnergyDep(G4double energyDep)
 void XrayFluoAnalysisManager::analysePrimaryGenerator(G4double energy)
 {
 
-  // qua si fa uso spropositato di memoria -- attenzione!!//
-  //histo_7 =dynamic_cast<IHistogram1D *> ( tree->find("7") );
+  // Filling of energy spectrum histogram of the primary generator
+
     histo_7->fill(energy/keV);
 }
+
+
+// not used -- Created for future development
 
 void XrayFluoAnalysisManager::SetOutputFileName(G4String newName)
 {
 
   outputFileName = newName;
-
 }
 
+void XrayFluoAnalysisManager::SetOutputFileType(G4String newType)
+{
 
+  persistencyType = newType;
+}
 
 
 

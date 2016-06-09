@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.22 2003/06/16 17:13:24 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4Trajectory.cc,v 1.24 2004/06/11 14:30:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // ---------------------------------------------------------------
@@ -36,7 +36,6 @@
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
 //
 // ---------------------------------------------------------------
-
 
 #include "G4Trajectory.hh"
 #include "G4TrajectoryPoint.hh"

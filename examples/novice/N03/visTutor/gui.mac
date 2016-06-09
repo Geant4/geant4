@@ -15,15 +15,18 @@
 #
 # Vis menu :
 /gui/addMenu vis Vis
-/gui/addButton vis Vis0 "/control/execute visTutor/exN03Vis0.mac"
-/gui/addButton vis Vis1 "/control/execute visTutor/exN03Vis1.mac"
-/gui/addButton vis Vis2 "/control/execute visTutor/exN03Vis2.mac"
-/gui/addButton vis Vis3 "/control/execute visTutor/exN03Vis3.mac"
-/gui/addButton vis Vis4 "/control/execute visTutor/exN03Vis4.mac"
-/gui/addButton vis Vis5 "/control/execute visTutor/exN03Vis5.mac"
-/gui/addButton vis Vis6 "/control/execute visTutor/exN03Vis6.mac"
-/gui/addButton vis Vis7 "/control/execute visTutor/exN03Vis7.mac"
-/gui/addButton vis Vis8 "/control/execute visTutor/exN03Vis8.mac"
+/gui/addButton vis Vis0(OGLIX) "/control/execute visTutor/exN03Vis0.mac"
+/gui/addButton vis Vis1(OGLSX) "/control/execute visTutor/exN03Vis1.mac"
+/gui/addButton vis Vis2(OGLSX) "/control/execute visTutor/exN03Vis2.mac"
+/gui/addButton vis Vis3(OGLSX) "/control/execute visTutor/exN03Vis3.mac"
+/gui/addButton vis Vis4(OGLIX) "/control/execute visTutor/exN03Vis4.mac"
+/gui/addButton vis Vis5(OIX)   "/control/execute visTutor/exN03Vis5.mac"
+/gui/addButton vis Vis6(VRML2FILE) "/control/execute visTutor/exN03Vis6.mac"
+/gui/addButton vis Vis7(DAWNFILE) "/control/execute visTutor/exN03Vis7.mac"
+/gui/addButton vis Vis8(DAWNFILE) "/control/execute visTutor/exN03Vis8.mac"
+/gui/addButton vis Vis9(OGLIWIN) "/control/execute visTutor/exN03Vis9.mac"
+/gui/addButton vis Vis10(OIWin32) "/control/execute visTutor/exN03Vis10.mac"
+/gui/addButton vis Vis11(OGLSXm) "/control/execute visTutor/exN03Vis11.mac"
 #
 # To limit the output flow in the "dump" widget :
 /event/printModulo 100

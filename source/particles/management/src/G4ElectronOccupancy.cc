@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.cc,v 1.6 2001/07/11 10:01:59 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ElectronOccupancy.cc,v 1.8 2004/06/11 14:25:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -34,7 +34,6 @@
 //     This class has information of occupation of electrons 
 //     in atomic orbits
 // ---------------------------------------------------------------
-
 
 #include "G4ElectronOccupancy.hh"
 

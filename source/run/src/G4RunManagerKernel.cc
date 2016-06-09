@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.13 2004/03/18 08:47:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4RunManagerKernel.cc,v 1.15 2004/06/07 13:56:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -31,7 +31,7 @@
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
 #include "G4ExceptionHandler.hh"
-#include "G4EventManager.hh"
+//#include "G4EventManager.hh"
 #include "G4GeometryManager.hh"
 #include "G4TransportationManager.hh"
 //#include "G4Navigator.hh"
@@ -79,12 +79,12 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   // version banner
   versionString
-    = " Geant4 version $Name: geant4-06-01 $   (25-March-2004)";
+    = " Geant4 version $Name: geant4-06-02 $   (25-June-2004)";
   G4cout << G4endl
     << "*************************************************************" << G4endl
     << versionString << G4endl
     << "                      Copyright : Geant4 Collaboration" << G4endl
-    << "                      Reference : NIM A 506 (2003), 250-303." << G4endl
+    << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
     << "                            WWW : http://cern.ch/geant4" << G4endl
     << "*************************************************************" << G4endl
     << G4endl;

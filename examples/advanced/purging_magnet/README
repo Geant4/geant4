@@ -1,0 +1,134 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                        purgin_magnet
+                        -------------
+                     s. Larsson, May 2004
+
+-----------------------------------------------------------------
+Acknowledgments to GEANT4 people, in particular to J. Apostolakis,
+J Generowicz, G. Folger, Vladimir Ivanchenko,  M.G.Pia and 
+S. Guatelli. 
+-----------------------------------------------------------------
+
+0. Introduction
+----------------
+
+This example simulates electrons traveling through a 3D magnetic field. 
+
+The Purging Magnet example is an application of Geant4 in a medical
+environment. It simulates a strong purging magnet in a treatment head. 
+The geometry is very simplified. The major idea of this example is to 
+implement an external magnetic field grid and test if the deviation of 
+electrons are as expected in this particular field. The data (position, 
+energy and momentum) are collected in a measurement volume.The data is 
+stored in a HBOOK file if the user has set up the AIDA 3.0 environment 
+and Anaphe is available.
+ 
+  
+1. Setting up the environment variables
+---------------------------------------
+-example enviroment with the compiler 3.2.3
+ -a standard Geant4 example GNUmakefile is provided                     
+
+setup with:                                                             
+compiler = gcc-3.2.3
+G4SYSTEM = linux-g++                                                    
+
+The following environment variables need to be set:                     
+
+G4LEDATA: points to low energy data base - G4EMLOW2.3                   
+
+setup for analysis: AIDA 3.2.1, PI 1.2.1                                
+
+Users can download the analysis tools from:
+                                                                        
+http://aida.freehep.org/
+http://www.cern.ch/PI
+
+The required data-file for the field map can be downloaded from:
+   http://cern.ch/geant4/source/source/PurgMag3D.TABLE.gz
+
+
+2. How to run the example
+-------------------------
+
+- Run the "PurgMag" executable.
+- File PurgMag.TABLE needs to be available in the current directory in order to run correctly.
+- For visualisation use vis.mac. 
+  Default visualization is with OpenGL
+- Interactive or batch modes possible.
+  Default: Interactive mode.
+
+To run a certain number of events in interactive mode, 
+type the following at the "idle>" prompt:
+
+idle> run/beamOn  NumberOfEvents
+idle> exit
+
+- Simulation histogram output is stored in purgmag.hbk
+
+1)Ntuple with position, energy and momentum for electrons
+2)Ntuple with position, energy and momentum for photons 
+  (not needed in this example, will be used in further development)
+3)Ntuple with position, energy and momentum for positrons
+  (not needed in this example, will be used in further development)
+
+A default vizualisation macro (vis.mac) is pre-loaded before interactive runs.
+Executing it
+    osmachine.3% $G4WORKDIR/bin/Linux-g++/PurgMag 
+runs vis.mac before giving you an interactive prompt.
+
+	
+3. Detector description
+-----------------------
+
+Simply a measurement volume. All particles entering the volume are scored.
+
+
+4. Physics processes
+--------------------
+
+This example uses the standard Electromagnetic processes.
+
+
+5. Particle Generator
+----------------------
+
+The PurgMagPrimaryGeneratorAction sets the initial state of tracks to
+
+-electrons 50MeV
+-Start position (0, 0, 15cm)
+-Momentum direction (0, 0, -1)
+
+ 
+6. Geometry and materials
+--------------------------
+
+The world consists of Vacuum to minimize interactions of the electrons
+with the medium. The purging magnet is implemented as a 3D field grid 
+of field values and geometerically as a pole gap made of iron. The 
+measurement volume also contains vacuum. 
+
+The field is interpolated using a simple linear interpolation in two 
+dimensions (z and rho).
+
+7. Comparison
+--------------
+
+The design of the magnetic field was made with the OPERA 3D package 
+which is an electromagnetic finite element and finite difference 
+analysis software. The deviation in the y-direction (ey in Ntuple 1)
+has also been calculated in the OPERA 3D module TOSCA for comparison. 
+
+TOSCA:  deviation y-direction: 35.112 cm
+GEANT4: deviation y-direction: 35.170 cm (updated after PurgMag.pdf)
+
+****************************************************************
+*                                                              *
+* More information about the setup and geometry in PurgMag.pdf *
+*                                                              *
+****************************************************************

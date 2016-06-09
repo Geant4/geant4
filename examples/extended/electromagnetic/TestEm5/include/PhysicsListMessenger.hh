@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: PhysicsListMessenger.hh,v 1.5 2004/06/21 10:57:11 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// $Id: PhysicsListMessenger.hh,v 1.2 2003/10/07 11:58:29 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,8 +33,8 @@
 #include "globals.hh"
 
 class PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,13 +51,11 @@ class PhysicsListMessenger: public G4UImessenger
   
     PhysicsList* pPhysicsList;
     
+    G4UIcmdWithAString*        pListCmd;    
     G4UIcmdWithADoubleAndUnit* gammaCutCmd;
     G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* positCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;
-    G4UIcmdWithADoubleAndUnit* rangeCmd;       
-    G4UIcmdWithAString*        pListCmd;
-    
+    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+    G4UIcmdWithADoubleAndUnit* allCutCmd;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

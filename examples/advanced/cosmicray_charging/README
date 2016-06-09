@@ -1,0 +1,45 @@
+========================================================================
+
+                  cosmicray_charging advanced example
+
+                     Henrique Araujo & Peter Wass
+                       Imperial College London
+
+                              April 2004
+
+========================================================================
+
+This Geant4 example was derived from an application aimed at
+simulating the electrostatic charging of isolated test masses in the
+LISA mission by galactic cosmic ray protons and helium nuclei. This
+work was supported by the European Space Agency through the SEPTIMESS
+project under Contract No. 16339/02/NL/FM.
+
+LISA, the Laser Interferometer Space Antenna for the detection of
+gravitational waves, is a joint ESA/NASA mission composed of three
+identical spacecraft orbiting the Sun in a triangular formation, each
+containing two cubic test masses in pure geodesic (drag free) motion. 
+The interferometric measurements between different spacecraft
+are affected by the accrual of charge in the test masses caused by the
+interaction of energetic cosmic rays.
+
+With this example we intend to demonstrate an application of Geant4 to
+space environment simulations, using an extensive set of physics
+models spanning from TeV energies down to a few hundred eV. This code
+retains most (but not all) of the complex spacecraft and sensor
+geometry implemented for the original purpose. In particular, some
+complex elements of the inertial sensor surrounding the test masses
+have not been included. Differential energy spectra for protons, He-4
+and He-3 nuclei at solar minimum conditions are the only input macros
+provided. The remaining application classes have been kept unchanged.
+
+A Software Users' Manual suitable for Geant4 users of all levels is
+distributed with this application (/docs). The technical description
+of the original software package, including further software
+documentation, physics analysis and a similar effort for the precursor
+ESA mission LISA Pathfinder are available from the SEPTIMESS project
+website at http://reat.space.qinetiq.com/septimess/ or from
+http://astro.ic.ac.uk/~haraujo/SEPTIMESS/ .
+
+Any queries regarding this example or the original work can be
+directed to h.araujo@imperial.ac.uk.

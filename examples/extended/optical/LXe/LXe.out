@@ -1,0 +1,125 @@
+**********************************************
+ Geant4 version $Name: geant4-06-02 $
+                                (12-December-2003)
+             Copyright : Geant4 Collaboration
+**********************************************
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
+
+phot:  Total cross sections from Sandia parametrisation. 
+MuonMinusCaptureAtRest is created 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
+
+MuIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+MuBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+MuPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+### All dEdx and Range tables are built #####
+
+MuIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
+      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+	Energy weighted position of hits in LXe : (5.18102,30.2388,-98.8831)
+	Total energy deposition in scintillator : 511 (keV)
+	Reconstructed position of hits in LXe : (3.87256,8.56373,-27.017)
+	Number of photons that hit PMTs in this event : 2160
+	Number of PMTs above threshold(1) : 32
+	Number of photons produced by scintillation in this event : 6040
+	Number of photons produced by cerenkov in this event : 1
+	Number of photons absorbed (OpAbsorption) in this event : 3881
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
+Unacounted for photons in this event : 0
+	Energy weighted position of hits in LXe : (-28.7618,-1.33268,-9.54847)
+	Total energy deposition in scintillator : 511 (keV)
+	Reconstructed position of hits in LXe : (-5.96696,-2.2751,-2.77019)
+	Number of photons that hit PMTs in this event : 2176
+	Number of PMTs above threshold(1) : 32
+	Number of photons produced by scintillation in this event : 6167
+	Number of photons produced by cerenkov in this event : 1
+	Number of photons absorbed (OpAbsorption) in this event : 3992
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
+Unacounted for photons in this event : 0
+	Energy weighted position of hits in LXe : (1.6474,-12.2959,-71.5899)
+	Total energy deposition in scintillator : 511 (keV)
+	Reconstructed position of hits in LXe : (1.21798,-3.59905,-26.1855)
+	Number of photons that hit PMTs in this event : 2230
+	Number of PMTs above threshold(1) : 32
+	Number of photons produced by scintillation in this event : 6217
+	Number of photons produced by cerenkov in this event : 1
+	Number of photons absorbed (OpAbsorption) in this event : 3988
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
+Unacounted for photons in this event : 0
+Graphics systems deleted.
+Visualization Manager deleting...

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2003/09/21 19:38:49 kurasige Exp $
+# $Id: GNUmakefile,v 1.2 2004/06/11 14:25:31 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for particle management library.  G.Cosmo, 4/4/97.
 # ----------------------------------------------------------------
@@ -11,6 +11,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4PARTICLES_ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \

@@ -1,0 +1,903 @@
+<HTML>
+<HEAD>
+<TITLE>Geant4 6.2 Release Notes</TITLE>
+</HEAD>
+<BODY BGCOLOR='F0F0F0'>
+
+<P> </P>
+<BR>
+<P> </P>
+
+<P ALIGN="Center">
+<FONT SIZE="+4" COLOR="#238E23">
+<B>Geant4 6.2 Release Notes</B>
+</FONT>
+
+<TABLE WIDTH="100%">
+<TR><TD ALIGN="Right">
+<FONT SIZE="-1" COLOR="#5C3317">
+<B><I>June 25<SUP>th</SUP>, 2004</I></B>
+</FONT>
+</TD></TR>
+</TABLE>
+
+<BR><BR>
+<HR ALIGN="Center" SIZE="7%">
+<P>
+The code and binary libraries for the supported systems are available
+through our <A TARGET="ext" HREF="http://cern.ch/geant4">Source Code Web page</A>.
+</P>
+<P>
+Please refer to the
+<A TARGET="ext" HREF="http://cern.ch/geant4/G4UsersDocuments/Overview/html">Geant4
+User Documentation</A> for further information about using Geant4.
+</P>
+
+<H2><I>Contents</I></H2>
+<OL>
+<LI><A HREF="#1.">Supported and Tested Platforms</A></LI>
+<LI><A HREF="#2.">AIDA and CLHEP</A></LI>
+<LI><A HREF="#3.">Compiler Specific Problems</A></LI>
+<LI><A HREF="#4.">Known Run-Time Problems</A></LI>
+<LI><A HREF="#5.">Compilation Warnings</A></LI>
+<LI><A HREF="#6.">Known Run-Time Warnings</A></LI>
+<LI><A HREF="#7.">Major items for migration of user code</A></LI>
+<LI><A HREF="#8.">Detailed list of changes and fixes</A></LI>
+</OL>
+
+<P> </P>
+<A NAME="1."></a>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>1. Supported and Tested Platforms</H2>
+
+Official platforms:
+<UL>
+<LI>SUN Solaris 5.8, C++ CC-5.4 Patch 111715-02.</LI>
+<LI>Linux, gcc 3.2.3.<BR>
+    This configuration was tested with the RedHat 7.3 distribution,
+    versions of Geant4 have also been compiled successfully on other
+    Linux distributions, like Debian, Suse or more recent RedHat systems.
+    The default RedHat compiler gcc-2.96 distributed in RedHat 7.X is NOT
+    supported. It has been verified that it produces incorrect binaries,
+    therefore is not reliable. See also <A HREF="#note-1">note below</A>.</LI>
+<LI>Windows/XP and CygWin Tools with: Visual C++ 7.1 .NET</LI>
+</UL>
+
+More verified configurations:
+<UL>
+<LI>SUN Solaris 5.8, C++ CC-5.5.</LI>
+<LI>Linux, gcc 3.3.3.</LI>
+<LI>Linux, Intel-icc 8.0.</LI>
+<LI>MacOS 10.3, gcc-3.3</LI>
+</UL>
+
+More verified configurations, which we plan to stop supporting
+in releases or patches after November 2004:
+<UL>
+<LI>Linux, gcc 2.95.2.</LI>
+<LI>Windows/2000 and CygWin Tools, Visual C++ 6.0 Service Pack 5</LI>
+</UL>
+
+Platforms configured but not tested and not supported:
+<UL>
+<LI>AIX 4.3.2, xlC 6.0</LI>
+<LI>DEC V4.0, cxx C++ V6.1-027</LI>
+<LI>HP 10.20, aCC C++ B3910B A.01.23</LI>
+<LI>SGI V6.5.5, CC 7.2.1</LI>
+</UL>
+
+<P> </P>
+<A NAME="2."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>2. AIDA and CLHEP</H2>
+
+Geant4 6.2 requires the <A TARGET="ext"
+HREF="http://cern.ch/clhep/INSTALLATION/clhep.html">installation
+of CLHEP</A>.<BR>
+Tests have been performed with <B>CLHEP-1.8.1.0</B><BR>
+<P> </P>
+Geant4 6.2 examples with histogramming cowork with AIDA 3.2.1
+implementations. These include:
+<UL>
+<LI><A TARGET="ext" HREF="http://cern.ch/PI">PI</A> and included components</LI>
+<LI><A TARGET="ext" HREF="http://jas.freehep.org">JAS (Java Analysis Studio)</A></LI>
+<LI><A TARGET="ext" HREF="http://www.lal.in2p3.fr/OpenScientist">Open Scientist</A></LI>
+</UL>
+
+AIDA headers can be downloaded from:
+<A TARGET="ext" HREF="http://aida.freehep.org">http://aida.freehep.org</A>
+
+
+<P> </P>
+<A NAME="3."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>3. Compiler Specific Problems</H2>
+
+<UL>
+<LI><A NAME="note-1"><B>Linux Red Hat 7.X, gcc-2.96</B></A>.
+<UL>
+<LI>The default compiler distributed by Red Hat since release 7.0 is
+    NOT supported and not considered reliable for running a Geant4-based
+    application. In more than one test case, binaries produced by gcc-2.96
+    have shown incorrect behavior, either due to wrong order of
+    initialisation of static data in memory or to bugs in the system
+    <TT>iostream</TT> classes, problems which apparently have all been
+    solved in more recent versions of the compiler (3.X series).<BR>
+    For information, gcc-2.96 is a compiler that has never been
+    officially released, nor supported by the GNU team itself and is not
+    considered reliable by the authors (for more information, see also
+    <A TARGET="ext" HREF="http://gcc.gnu.org/gcc-2.96.html">http://gcc.gnu.org/gcc-2.96.html</A>).</LI>
+</UL></LI>
+</UL>
+
+<P> </P>
+<A NAME="4."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>4. Known Run-Time Problems and Limitations</H2>
+
+For a complete list of outstanding run-time problems and to submit any
+problem you may find running this version of Geant4, please refer to the
+<A TARGET="ext" HREF="http://cern.ch/geant4/problemreport">Geant4 Problem Reporting
+System</A>.
+
+
+<P> </P>
+<A NAME="5."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>5. Compilation Warnings</H2>
+
+There may be compilation warnings on some platforms.  We do not believe
+that any will lead to incorrect run-time behaviour.
+
+
+<P> </P>
+<A NAME="6."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>6. Known Run-Time Warnings</H2>
+
+The following message can be written to error output while tracking.
+We believe it does not give rise to incorrect behaviour.
+<PRE>
+    G4PropagateInField: Warning: Particle is looping 
+    -  tracking in field will be stopped. 
+       It has performed 1000 steps in Field while a maximum of 1000
+       are allowed. 
+</PRE>
+
+
+<P> </P>
+<A NAME="7."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>7. Major items for migration of user code</H2>
+
+There're not known migrations necessary if upgrading from release 6.1,
+other than recompilation and/or reinstallation of libraries and user
+applications.
+<P> </P>
+<B>Future migration for <TT>G4VParticleChange</TT> class</B>
+<P> </P>
+For the future releases, an interface change to the class
+<TT>G4VParticleChange</TT> is foreseen. The required changes are already
+implemented in this release while still keeping valid the old interface.<BR>
+The following methods will be removed in the future:
+<PRE>
+      void  SetTrueStepLength(G4double truePathLength);
+      void  SetLocalEnergyDeposit(G4double anEnergyPart);
+      G4TrackStatus GetStatusChange() const;
+      void  SetStatusChange(G4TrackStatus status);
+      void  SetSteppingControl(G4SteppingControl StepControlFlag);
+      void  SetParentWeight(G4double);
+</PRE>
+They will have to be replaced by the following methods, respectively:
+<PRE>
+      void ProposeTrueStepLength(G4double truePathLength);
+      void ProposeLocalEnergyDeposit(G4double anEnergyPart);
+      G4TrackStatus GetTrackStatus() const;
+      void ProposeTrackStatus(G4TrackStatus status);
+      void ProposeSteppingControl(G4SteppingControl StepControlFlag);
+      void ProposeParentWeight(G4double);
+</PRE>
+<P> </P>
+<B>Future migration for <TT>G4GeneralParticleSource</TT> class</B>
+<P> </P>
+A 'tree-structured' command format is implemented in this release for
+<TT>G4GeneralParticleSource</TT>. The old UI commands have been kept
+for backward compatibility but will be removed in the future.<BR>
+For more information, please consult:
+<A HREF="http://reat.space.qinetiq.com/gps">http://reat.space.qinetiq.com/gps</A>.
+
+<P> </P>
+<A NAME="8."></A>
+<HR>
+
+<!-- ============================================== -->
+
+<H2>8. Detailed list of changes and fixes</H2>
+
+These are the main new features/fixes included in this release since the
+last patched public release (for the detailed list of fixes/additions,
+please refer to the related History files provided in most packages):
+
+<P> </P>
+
+<A NAME="conf-notes">
+<H3><I>Configuration</I></H3></A>
+<UL>
+<LI><TT>Configure</TT> script:
+    <UL>
+    <LI>Added support for global DLL libraries on Windows systems.</LI>
+    <LI>Added new data-set for elastic-scattering data.</LI>
+    </UL></LI>
+<LI><TT>source/GNUmakefile</TT>:
+    <UL>
+    <LI>Revised order of module installation according to dependencies.</LI>
+    <LI>New <TT>dll</TT> target for building of DLLs global libraries
+        on Windows systems.</LI>
+    </UL></LI>
+<LI><TT>Linux-g++.gmk</TT>:
+    <UL>
+    <LI>Made -O2 optimisation the default.</LI>
+    <LI>Included (deactivated by default) Pentium4 chip specific options
+        for using chips-specific floating-point arithmetics based on the
+        SSE unit.</LI>
+    </UL></LI>
+<LI><TT>WIN32-VC7.gmk</TT>:
+    <UL>
+    <LI>Added setup for WIN32-VC7 for building of DLLs.</LI>
+    </UL></LI>
+<LI><TT>Darwin-g++.gmk</TT>:
+    <UL>
+    <LI>Corrected options to build shared libraries (.dyn);  use
+        twolevel_namespace and GLOBLIBS for shared-libs build on MacOS.
+        Shared-libs build are possible only global libraries.</LI>
+    <LI>Corrected options to retrieve Motif.</LI>
+    </UL></LI>
+<LI><TT>architecture.gmk</TT>:
+    <UL>
+    <LI>Added check for definition of LDFLAGS. Fixes bug report #603.</LI>
+    <LI>Revisited Inventor default. Removed HEPVis dependencies
+        (Inventor visualization driver no longer needs these).</LI>
+    </UL></LI>
+<LI><TT>binmake.gmk</TT>:
+    <UL>
+    <LI>Activated shared-libs mechanism for Windows platforms; forced creation
+        of static library for examples/applications for the usage with DLLs.</LI>
+    <LI>Fixed problem for WIN32 such that also LDLIBS (including EXTRALIBS)
+        will be mangled to replace -L by its WIN32 corresponding libpath.</LI>
+    <LI>Added include paths to new hadronic models.</LI>
+    <LI>Restored global library for 'interfaces' module which was missing from
+        the linking list.</LI>
+    </UL></LI>
+<LI><TT>common.gmk</TT>, <TT>globlib.gmk</TT>:
+    <UL>
+    <LI>Fixed clean/clean_libs target.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="dgt-notes">
+<H3><I>Digitization & Hits</I></H3></A>
+<UL>
+<LI><TT>G4SDManager</TT>, <TT>G4SDStructure</TT>: added optional argument
+  <I>warning</I> to <TT>FindSensitiveDetector(pathName, warning)</TT>,
+  defaulted to <TT>true</TT>, to eventually exclude warning issued by
+  <TT>G4SDManager</TT> when sensitive detector is not found.</LI>
+</UL>
+
+<A NAME="evt-notes">
+<H3><I>Event</I></H3></A>
+<UL>
+<LI>Design iteration of the <TT>G4GeneralParticleSource</TT> class:
+    <UL>
+    <LI>New classes have been added.<BR>
+        See <A HREF="http://reat.space.qinetiq.com/gps">http://reat.space.qinetiq.com/gps</A>
+        for more details of the changes.</LI>
+    <LI>New formula for converting integral spectrum to differential one.</LI>
+    </UL></LI>
+<LI><TT>G4EventManager</TT>:
+    <UL>
+    <LI>Added access methods to <TT>G4TrackingManager</TT> and
+        <TT>G4StackManager</TT>.</LI>
+    <LI>Fixed incorrect behaviour of event abortion requested by
+        <TT>BeginOfEventAction()</TT>.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="emlow-notes">
+<H3><I>Electromagnetic Processes (Low-energy)</I></H3></A>
+<UL>
+<LI>First iteration towards new models for photoelectric angular distribution:
+    design iteration and re-implementation of non-polarized Sauter-Gavrila
+    distribution (K-shell approximation).</LI>
+<LI>New model for PIXE.</LI>
+<LI>Bug fix for Barkas effect.</LI>
+<LI>Bug fix in energy loss concerning positrons handled by Penelope.</LI>
+</UL>
+
+<A NAME="emstd-notes">
+<H3><I>Electromagnetic Processes (Standard)</I></H3></A>
+<UL>
+<LI><TT>G4VEnergyLoss</TT> and related classes:
+    <UL>
+    <LI>Corrected error in retrieving <TT>dE/dx</TT> from tables
+        (it affected proton around <TT>1 MeV</TT>).</LI>
+    <LI>Fixed a problem in retrieving physics tables from files. </LI>
+    <LI>Fixed a problem of energy below <TT>lowestKinEnergy</TT> (simulation of
+        energy loss of low energy particles in low density gases).</LI>
+
+    <LI>Improved sampling in integral method for cross sections with peaks.</LI>
+    <LI>Added new methods to define simulation options to
+        <TT>G4EmProcessOptions</TT>.</LI>
+    <LI>Revised printout format in <TT>G4VEnergyLossProcess</TT>.</LI>
+    </UL></LI>
+<LI>Energy-loss fluctuations:
+    <UL>
+    <LI>Reduced area of applicability of the model for simulation of
+        fluctuations at very small steps to provide less step dependent
+        results in solid absorbers.</LI>
+    <LI>Smoothed out sampling of Gaussian fluctuations, when sigma is much
+        bigger than energy loss.</LI>
+    </UL>
+    The purpose of both changes is to provide results that are less dependent
+    on step size. For example, for steps down to 0.1 microns (in solid materials)
+    the energy deposition distribution in a thin absorber is not dependent on the
+    step limit.</LI>
+<LI>Ionization for muons, hadrons, ions:
+    <UL>
+    <LI>Set the integral method to be the default (it already was for electrons).
+        The step remains limited to 20% of the current range, as in Geant4 5.2.</LI>
+    </UL></LI>
+<LI>Multiple Scattering:
+    <UL>
+    <LI>Changes in <TT>G4MscModel</TT>: <TT>t->z</TT> and <TT>z->t</TT>
+        transformations (true length to geometrical length and back) have
+        been rewritten. The purpose is to reduce the step-size dependence of
+        results, which was mainly connected with simulation of multiple
+        scattering of low energy particles. It will affect the resolution
+        of sampling calorimeters.</LI>
+    <LI>Change in the angular distribution for <TT>e+/e-</TT>: correction
+        to the Highland formula for the central part of the distribution.</LI>
+    </UL></LI>
+<LI>Multiple Scattering for ions:
+    <UL>
+    <LI>Use dynamic charge for simulation of multiple scattering angle.</LI>
+    <LI>Fix to avoid crash in case of use of <TT>G4hLowEnergyIonisation</TT>
+        for ions together with multiple-scattering.</LI>
+    </UL></LI>
+<LI>Muon Pair Production:
+    <UL>
+    <LI>Minor fix in differential cross section: use total energy instead
+        of kinetic energy.</LI>
+    <LI>Fixed minor energy non-conservation (electron mass).</LI>
+    <LI>Fixed problem of calculation of maximum energy transfer to an
+        atom of compound materials.</LI>
+    </UL></LI>
+<LI>PAI ionisation:
+    <UL>
+    <LI>Introduced new model <TT>G4PAIPhotonModel</TT>, PAI model that splits
+        the cross-section into electron and photon parts.</LI>
+    <LI>Removed limitations on cut values in both PAI models.</LI>
+    <LI>Use precise integrator for initialisation of PAI models.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="gen-notes">
+<H3><I>General Processes, Parameterisation, Cuts, Decay, Optical</I></H3></A>
+<UL>
+<LI><B>Cuts</B>:
+    <UL>
+    <LI>Enabled the user to retrieve from a file tables with materials and
+        couples which are in a different order to that in memory.<BR>
+        Modified <TT>G4ProductionCutsTable::RetrieveCutsTable()</TT> to enable this.</LI>
+    <LI><TT>G4ProductionCuts</TT>: moved usage of statics in inline functions
+        to non-inline for porting to DLLs on Windows.</LI>
+    </UL></LI>
+<LI><B>Decay</B>:
+    <UL>
+    <LI>Use new interface methods of <TT>G4VParticleChange</TT>.</LI>
+    </UL></LI>
+<LI><B>Management</B>:
+    <UL>
+    <LI>Fixed bug in <TT>G4ProcessManager::RemoveProcess()</TT> for the case
+        when the process to be removed is inactive.</LI>
+    </UL></LI>
+<LI><B>Optical</B>:
+    <UL>
+    <LI>Fixes in <TT>G4OpBoundaryProcess</TT> for default class member
+        assignments in <TT>DoIt()</TT> method.</LI>
+    <LI>Added protection against NULL pointers in <TT>G4OpRayleigh</TT> process.
+        Do not overwrite Rayleigh scattering length for 'Water' material if it
+        has been specified by the user through a call to
+        <TT>AddProperty("RAYLEIGH"...)</TT>.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="geo-notes">
+<H3><I>Geometry</I></H3></A>
+<UL>
+<LI><B>Divisions</B>
+    <UL>
+    <LI>Added support for reflection of divided volumes:
+        added concrete istance of division-factory <TT>G4PVDivisionFactory</TT>
+        for the creation of volume divisions on demand.</LI>
+    </UL></LI>
+<LI><B>Management</B>
+    <UL>
+    <LI>Imported <TT>G4ReflectedSolid</TT> class from <TT>solids/Boolean</TT>.</LI>
+    <LI>Added abstract factory <TT>G4VPVDivisionFactory</TT> defining interfaces
+        for the creation of volumes divisions.</LI>
+    </UL></LI>
+<LI><B>Navigation</B>
+    <UL>
+    <LI>Added more verbosity on solids response for navigators (optimised/not
+        optimised) if "check_mode" state is combined with verbose level-1.</LI>
+    <LI>Added check to <TT>G4Navigator</TT> to count the number of steps with
+        zero length and issue an exception aborting the event for tracks that
+        get stuck in a loop. A corrective action is attempted after 10
+        consecutive zero steps; the exception is thrown after 25 consecutive
+        zero steps.</LI>
+    </UL></LI>
+<LI><B>Solids</B>
+    <UL>
+    <LI><I>Boolean solids</I>:
+        <UL>
+        <LI>Moved <TT>G4ReflectedSolid</TT> class to <TT>management</TT> module.</LI>
+        <LI>Moved <TT>G4ReflectionFactory</TT> class to <TT>volumes</TT> module.</LI>
+        <LI>Moved unit test for reflection to <TT>volumes</TT> module.</LI>
+        </UL></LI>
+    <LI><I>Specific solids</I>:
+        <UL>
+        <LI>First implementation of a framework for twisted surfaces:<BR>
+            includes a new specific twisted shape: <TT>G4TwistedTubs</TT>.<BR>
+            New classes: <TT>G4VSurface</TT>, <TT>G4TwistedSurface</TT>,
+            <TT>G4HyperbolicSurface</TT>, <TT>G4FlatSurface</TT>,
+            <TT>G4TwistedTubs</TT>.</LI>
+        </UL></LI>
+    </UL></LI>
+<LI><B>Volumes</B>
+    <UL>
+    <LI><TT>G4LogicalBorderSurface</TT>, <TT>G4LogicalSkinSurface</TT>: added
+        <TT>CleanSurfaceTable()</TT> static methods for the clearing of the
+        surface tables in case of dynamic geometries.</LI>
+    <LI>Imported <TT>G4ReflectionFactory</TT> from module <TT>solids/Boolean</TT>.</LI>
+    <LI>Enhanced <TT>G4ReflectionFactory</TT> to support reflection of divided
+        volumes: added <TT>Divide(...)</TT> set of methods.</LI>
+    <LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for
+        allowing support of DLLs on Windows.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="glob-notes">
+<H3><I>Global</I></H3></A>
+<UL>
+<LI><TT>G4Allocator</TT>: added utility methods for explicitely deallocate
+    storage and print total allocated pages size:
+    <TT>ResetStorage()</TT>, <TT>GetAllocatedSize()</TT>.</LI>
+<LI>HEPNumerics: fixed bug in <TT>G4DataInterpolation::PolynomInterpolation()</TT>
+    for indexing in a for-loop.</LI>
+<LI>Added support for building DLLs on Windows: added macros for importing
+    symbols and migrated <TT>G4ios</TT> and <TT>G4strstreambuf</TT>.</LI>
+</UL>
+
+<A NAME="greps-notes">
+<H3><I>Graphical Representations</I></H3></A>
+<UL>
+<LI>Implemented constructor and destructor for <TT>G4AttDefStore</TT>, to
+    properly delete objects in the static map, allocated through explicit
+    calls to <TT>GetInstance()</TT>. Made <TT>G4AttDefStore</TT> a singleton.</LI>
+</UL>
+
+<A NAME="mat-notes">
+<H3><I>Materials</I></H3></A>
+<UL>
+<LI><TT>G4SandiaTable</TT>: added new methods for sorting algorithm
+    in PAI model.</LI>
+<LI>Added new utility method <TT>ConstPropertyExists(const char * key)</TT>
+    returning <TT>true</TT>/<TT>false</TT> according to the existance of the
+    'key' in the table <TT>G4MaterialPropertiesTable</TT>.</LI>
+</UL>
+
+<A NAME="had-notes">
+<H3><I>Hadronic Processes</I></H3></A>
+<UL>
+<LI>New packages and models:
+    <UL>
+    <LI><I>Ablation</I>: model for evaporation (used in conjunction with
+        the abrasion code).</LI>
+    <LI><I>Abrasion</I>: package for ion reactions.</LI>
+    <LI><I>EM dissociation</I>.</LI>
+    <LI><I>Coherent_elastic</I>: new model for high energy elastic scattering,
+        requiring a new provided data set for elasting scattering data.</LI>
+    </UL></LI>
+<LI>cross_sections:
+    <UL>
+    <LI>Removed discontinuities in pion scattering data.</LI>
+    <LI>Fix in high energy p-H cross-sections (G3 legacy bug).</LI>
+    </UL></LI>
+<LI>management:
+    <UL>
+    <LI>Optionally killing of primaries, steerable from use code.</LI>
+    <LI>Bug fix for cross-section biasing.</LI>
+    <LI>Added protection to hadronic processes against illegal track
+        status.</LI>
+    </UL></LI>
+<LI>util:
+    <UL>
+    <LI>Added a fuzzy initializer class.</LI>
+    <LI>Added a Besselfunction class.</LI>
+    <LI>Fixed two rare bugs seen by LHCb in <TT>G4HadFinalState</TT> that
+        lead to an exception.</LI>
+    </UL></LI>
+<LI>models/binary_cascade:
+    <UL>
+    <LI>Some performance optimizations.</LI>
+    <LI>Corrected rotation in inverse kinematics for light ion
+        reaction code.</LI>
+    <LI>Added some protections fixing problems reported in bug-reports
+        #574 and #593.
+    <LI>Bug fix related to bug report #607.</LI>
+    </UL></LI>
+<LI>models/cascade:
+    <UL>
+    <LI>Fixed memory leak.
+    </UL></LI>
+<LI>models/chiral_invariant_phase_space:
+    <UL>
+    <LI>Fixed <TT>ppK+</TT> "antistrange below mass shell" problem in
+        <TT>G4QEnvironment</TT>.</LI>
+    <LI>Minor bug fixes in <TT>G4QEnvironment</TT> in (Sigma-)2n final state.</LI>
+    <LI>Fixed rare problem of decay in <TT>Del+Del+</TT> with <TT>pi0</TT> when
+        <TT>pi-</TT> was found.</LI>
+    <LI>Minor bug fix in final multibaryon spit (<TT>3n->n+n+n</TT>).</LI>
+    </UL>
+<LI>models/de_excitation/fermi-break-up:
+    <UL>
+    <LI>Bug fix in the splitting probabilities.</LI>
+    <LI>Adding destruction of configurations.</LI>
+    </UL></LI>
+<LI>models/de_excitation/photon-evaporation:
+    <UL>
+    <LI>Slight optimisation of E1 probabilities.</LI>
+    </UL></LI>
+<LI>models/high_energy:
+    <UL>
+    <LI>Re-added class-descriptions.</LI>
+    </UL></LI>
+<LI>models/im_r_matrix:
+    <UL>
+    <LI>Some optimizations in <TT>G4Scatterer</TT>.</LI>
+    </UL></LI>
+<LI>models/management:
+    <UL>
+    <LI>Protections for rounding issues.</LI>
+    <LI>Enabling user overload of some methods.</LI>
+    </UL></LI>
+<LI>models/neutron_hp:
+    <UL>
+    <LI>Some code clean-up.</LI>
+    <LI>Now suitable for DLL usage.</LI>
+    </UL></LI>
+<LI>models/pre_equilibrium:
+    <UL>
+    <LI>Dixed updating of charged/neutral excited particles.</LI>
+    </UL></LI>
+<LI>models/util:
+    <UL> 
+    <LI>Optimized initialization for <TT>G4Fancy3DNucleus</TT>.</LI>
+    <LI>Fix in decay routines for decays involving broad resonances
+        in the final state.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="part-notes">
+<H3><I>Particles</I></H3></A>
+<UL>
+<LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for DLLs.
+    Modified granular <TT>GNUmakefile</TT>s and rearranged usage of extern
+    symbols in classes in <TT>management</TT> module.</LI>
+</UL>
+
+<A NAME="run-notes">
+<H3><I>Run, Intercoms and Interfaces</I></H3></A>
+<UL>
+<LI><B>Intercoms</B>:
+    <UL>
+    <LI>Introduced static methods in <TT>G4UIcommand</TT> class for conversion
+        between a string and a value. Some implementation of derived classes
+        are modified accordingly. Introduced utility methods
+        <TT>ConvertToStringWithBestUnit()</TT> and
+        <TT>ConvertToStringWithDefaultUnit()</TT> for command classes taking a
+        unit parameter.</LI>
+    </UL></LI>
+<LI><B>Interfaces</B>:
+    <UL>
+    <LI><TT>G4[UI]Win32</TT>: implemented changes to allow usage of
+        standard C main (and avoid WinMain). Moved usage of inline methods
+        to non-inline for DLLs support on Windows.</LI>
+    </UL></LI>
+<LI><B>Run</B>:
+    <UL>
+    <LI><TT>G4RunManagerKernel</TT>: added access methods to
+        <TT>G4TrackingManager</TT> and <TT>G4StackManager</TT>.</LI>
+    <LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for DLLs.
+        Modified <TT>GNUmakefile</TT> and rearranged usage of extern symbols in
+        <TT>G4Run</TT>.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="track-notes">
+<H3><I>Track and Tracking</I></H3></A>
+<UL>
+<LI><B>Track</B>
+    <UL>
+    <LI>G4VParticleChange: added new methods <TT>ProposeXXX()</TT> (and
+        corresponding <TT>GetXXX()</TT> methods) as replacement for old
+        <TT>SetXXXChange()</TT> and <TT>GetXXXChange()</TT>, now obsolete.</LI>
+    <LI><TT>G4ParticleChangeForLoss</TT>: fixed minor energy non-conservation
+        problem in case of more than 1 processes changing the energy.
+        Fixed initialization of <TT>ParentWeight</TT>.</LI>
+    <LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for DLLs.
+        Modified <TT>GNUmakefile</TT> and rearranged usage of extern symbols in
+        <TT>G4Track</TT>.</LI>
+    </UL></LI>
+<LI><B>Tracking</B>
+    <UL>
+    <LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for
+        DLLs. Modified <TT>GNUmakefile</TT> and rearranged usage of extern
+        symbols in classes.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="vis-notes">
+<H3><I>Visualization</I></H3></A>
+<UL>
+<LI><B>HepRep</B>
+    <UL>
+    <LI>Renamed zlib prefix from <TT>z_</TT> to <TT>heprep_z_</TT>.
+        Added symbol <TT>z_errmsg</TT> to list for renaming to avoid conflicts
+        with other programs who contain a copy of zlib.</LI>
+    <LI>Added attributes for Region and root-Region to both HepRep drivers.</LI>
+    <LI>Added ability to separately write geometry files.</LI>
+    <LI>Bug fix: copied new interfaces for HepRep, which uses fewer pointers.</LI>
+    <LI>Added initial viewpoint settings and a command to set the coordinate
+        system.</LI>
+    </UL></LI>
+<LI><B>OpenGL</B>
+    <UL>
+    <LI>Added <TT>G4OpenGL.hh</TT> wrapper file and adapted code to encapsulate
+        inclusion of <TT>GL/gl.h</TT> and <TT>GL/glu.h</TT> that may be platform
+        dependent. Cleared WIN32 ifdefs no longer necessary.</LI>
+    </UL></LI>
+<LI><B>OpenInventor</B>
+    <UL>
+    <LI>Added copy of the few necessary HEPVis code. HEPVis module dependency
+        is now no more needed.</LI>
+    <LI>Ported code to run on Windows systems.</LI>
+    <LI>Split Viewer to have <TT>G4OpenInventorXtViewer</TT> and
+        <TT>G4OpenInventorWinViewer</TT>.</LI>
+    <LI>Split <TT>G4OpenInventor</TT> to have <TT>G4OpenInventorXt</TT> and
+        <TT>G4OpenInventorWin</TT>: Xt and Win to follow the conventions found
+        in the OpenInventor environment.</LI>
+    </UL></LI>
+<LI><B>RayTracer</B>
+    <UL>
+    <LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for
+        allowing support of DLLs on Windows.</LI>
+    </UL></LI>
+<LI><B>VRML</B>
+    <UL>
+    <LI>Fixed typo in printout in <TT>G4VRML[1/2]FileSceneHandler</TT>.</LI>
+    </UL></LI>
+</UL>
+
+<A NAME="data-notes">
+<H3><I>Data sets</I></H3></A>
+<UL>
+<LI>New data set for elastic-scattering data at high-energies
+    (above 1-GeV) for the <I>coherent_elastic</I> hadronic model.</LI>
+</UL>
+
+<A NAME="emlst-notes">
+<H3><I>Electromagnetic physics-lists</I></H3></A>
+<UL>
+<LI>New module with samples of physics list for standard electromagnetic
+    physics.</LI>
+</UL>
+
+<A NAME="env-notes">
+<H3><I>Environments</I></H3></A>
+<UL>
+<LI>MOMO: new version of MOMO.jar archive including a bug-fix to GPE.</LI>
+</UL>
+
+<A NAME="g3tog4-notes">
+<H3><I>G3toG4 Tool</I></H3></A>
+<UL>
+<LI>Removed hardwired <TT>gSeparator</TT> constant (a character which is
+    used during generation of volume names) to '_'. Now <TT>gSeparator</TT>
+    is made non constant and so can be changed in case a user wants to use
+    '_' in his code.</LI>
+<LI><TT>G4gsrotm</TT>: commented warning about left-handled coordinates for
+    rotation axes.</LI>
+</UL>
+
+<A NAME="ex-notes">
+<H3><I>Examples</I></H3></A>
+<UL>
+<LI>Updated reference outputs.</LI>
+<LI><B>advanced</B>
+    <UL>
+    <LI>Implemented migration to AIDA 3.2.1</LI>
+    <LI><I>composite_calorimeter</I>
+        <UL>
+        <LI>Changed use of the ntuple. Mechanism simplified and the ntuple
+            is always correctly filled.</LI>
+       </UL></LI>
+    <LI><I>cosmicray_charging</I>
+       <UL>
+         <LI>New example illustrating an application aimed at simulating the
+             electrostatic charging of isolated test masses in the LISA mission
+             by galactic cosmic ray protons and helium nuclei.</LI>
+       </UL></LI>
+    <LI><I>hadrontherapy</I>
+       <UL>
+         <LI>New example illustrating an application simulating an hadron
+             therapy beam line for medical physics.</LI>
+       </UL></LI>
+    <LI><I>medical_linac</I>
+       <UL>
+         <LI>New example simulating energy deposit in a Phantom filled with
+             water for a typical linac used for intensity modulated radiation
+             therapy. The experimental set-up is very similar to one used in
+             clinical practice.</LI>
+       </UL></LI>
+    <LI><I>purging_magnet</I>
+       <UL>
+         <LI>New example illustrating an application that simulates electrons
+             traveling through a 3D magnetic field; used in a medical
+             environment for simulating a strong purging magnet in a treatment
+             head.</LI>
+       </UL></LI>
+    <LI><I>radioprotection</I>
+       <UL>
+         <LI>New example illustrating an application to evaluate the dose in
+             astronauts, in vehicle concepts and Moon surface habitat
+             configurations, in a defined interplanetary space radiation
+             environment.</LI>
+       </UL></LI>
+    </UL></LI>
+<LI><B>extended</B>
+    <UL>
+    <LI>Implemented migration to AIDA 3.2.1</LI>
+    <LI><I>analysis</I>
+        <UL>
+        <LI><I>A01</I>
+            <UL>
+            <LI>Updated mac files for HepRep2 driver to set zoom factor
+                and coordinate system and write separate geometry.</LI>
+            </UL></LI>
+        </UL></LI>
+    <LI><I>electromagnetic</I>
+        <UL>
+        <LI><I>TestEm1</I>:
+            <UL>
+            <LI>PhysicsLists: removed Particles and General.</LI>
+            <LI>EmPhysicsList: set G4eBremsstrahlungCMS as default.</LI>
+            </UL></LI>
+        <LI><I>TestEm2</I>
+            <UL>
+            <LI>Updated PhysicsList: use concept of builders per package.</LI>
+            <LI>Added acceptance control.</LI>
+            <LI>Added histogram name and type UI commands (AIDA, ROOT, JAS,
+                and other output types are available).</LI>
+            </UL></LI>
+        <LI><I>TestEm3</I>
+            <UL>
+            <LI>Introduction of the class HistoManager.</LI>
+            <LI>Possibility to have multi-runs histogram files.</LI>
+            <LI>PhysicsLists: removed Particles and General.</LI>
+            <LI>New macro <TT>dedx.max</TT> to quickly check <TT>dE/dx</TT>
+                calculation.</LI>
+            <LI>Added acceptance check activated by UI command.</LI>
+            </UL></LI>
+        <LI><I>TestEm5</I>
+            <UL>
+            <LI>Modified HistoManager and its messenger in order to allow
+                for multi-run jobs.</LI>
+            <LI>PhysicsLists: added HadronElastic, BinaryCascade,
+                IonBinaryCascade. Removed Particles, General.</LI>
+            <LI>New macro <TT>dedx.mac</TT>.</LI>
+            <LI>Modified histo 7: projected position at exit.</LI>
+            </UL></LI>
+        <LI><I>TestEm7</I>
+            <UL>
+            <LI>PhysicsLists: removed Particles and General.</LI>
+            </UL></LI>
+        <LI><I>TestEm8</I>
+            <UL>
+            <LI>Updated test of PAI model.</LI>
+            </UL></LI>
+        <LI><I>TestEm9</I>
+            <UL>
+            <LI>Removed Clean of <TT>G4RegionStore</TT>, instead delete
+                regions one by one.</LI>
+            <LI>Added acceptance printout.</LI>
+            <LI>Added <TT>histclean</TT> target to <TT>GNUmakefile</TT>.</LI>
+            </UL></LI>
+        <LI><I>MuonProcesses</I>
+            <UL>
+            <LI>New example intended to check implementation of the processes 
+                of muon interactions: ionization, direct (e+,e-) production,
+                bremsstrahlung, mu-nuclear interaction.
+                It allows to compute differential cross sections (as function
+                of the energy transfered to secondaries), total cross sections
+                and to compare with analytic calculations.</LI>
+            </UL></LI>
+        <LI><I>PhotonProcesses</I>
+            <UL>
+            <LI>New test devoted to the photon processes: gamma conversion,
+                coherent and incoherent scattering, photoelectric effect.
+                It allows to compute absorption coefficients and to plot
+            </UL></LI>
+        </UL></LI>
+    <LI><I>optical</I>
+        <UL>
+        <LI>New example <I>LXe</I> demonstrating the use of optical processes
+            in a multi-purpose detector setup.</LI>
+        </UL></LI>
+    <LI><I>parallel</I>
+        <UL>
+        <LI>New example <I>ExDiane</I> showing parallelisation of the
+            'brachytherapy' example using the DIANE framework
+            (see <A HREF="http://cern.ch/diane">http://cern.ch/diane</A>).</LI>
+        <LI>Bug fix in ParRunManager for ParN02 and ParN04 TOP-C examples.</LI>
+        </UL></LI>
+    </UL></LI>
+<LI><B>novice</B>
+    <UL>
+    <LI><I>N02</I>
+        <UL>
+        <LI>Removed UI vis commands from run-action.</LI>
+        <LI>Code cleanup in physics-list.</LI>
+        <LI>Corrected definition of XenonGas in detector-contruction.</LI>
+        </UL></LI>
+    <LI><I>N03</I>
+        <UL>
+        <LI>Use G4UI_USE_WIN32 to have a default Windows GUI coworking
+            with the OpenGL Windows driver on Windows.</LI>
+        <LI>New macro <TT>exN03Vis9.mac</TT>, demo of the OpenGL Windows
+            driver. Update to the <TT>gui.mac</TT> menu items.</LI>
+        <LI>Code cleanup in physics-list.</LI>
+        </UL></LI>
+    <LI><I>N06</I>
+        <UL>
+        <LI>Change e+ energy in primary-generator to 500 keV.</LI>
+        <LI>Removed UI vis commands from run-action.</LI>
+        </UL></LI>
+    </UL></LI>
+</UL>
+
+<HR>
+
+</BODY>
+</HTML>

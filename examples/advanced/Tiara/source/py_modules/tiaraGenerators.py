@@ -1,6 +1,6 @@
-# $Id: tiaraGenerators.py,v 1.2 2003/06/16 17:06:44 dressel Exp $
+# $Id: tiaraGenerators.py,v 1.3 2004/06/09 15:04:36 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02-patch-01 $
+# GEANT4 tag $Name: geant4-06-02 $
 # -------------------------------------------------------------------
 #
 import string
@@ -36,7 +36,6 @@ class TiaraPrimaryGenerator(object):
 class TiaraDPSEnergyGenerator(object):
     def __init__(self, tiaraSpecs, xmlName):
         self.Name = "dpsSource"
-
         self.eSamp = Tiara.\
                      TiaraDPSSampledEnergy(tiaraSpecs.
                                            experiment.energy,
@@ -45,7 +44,6 @@ class TiaraDPSEnergyGenerator(object):
                                            xmlName,
                                            "")
         
-
         self.tally = Tiara.TiaraTally()
 
         if string.find(xmlName,"other") > -1:

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.11 2004/02/10 18:07:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4MuPairProductionModel.hh,v 1.12 2004/04/28 14:39:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -120,7 +120,7 @@ protected:
 //private:
 public:
 
-  G4double ComputMuPairLoss(G4double Z, G4double tkin, G4double cut);
+  G4double ComputMuPairLoss(G4double Z, G4double tkin, G4double cut, G4double tmax);
 
   G4double ComputeMicroscopicCrossSection(G4double tkin,
                                           G4double Z,
@@ -131,7 +131,7 @@ public:
                                            G4double pairEnergy);
 private:
 
-  const G4Element* SelectRandomAtom(G4double dt, G4int it, G4int iy,
+  const G4Element* SelectRandomAtom(G4double kinEnergy, G4double dt, G4int it,
                               const G4MaterialCutsCouple* couple);
 
   void MakeSamplingTables();
@@ -215,12 +215,14 @@ void G4MuPairProductionModel::SetCurrentElement(G4double Z)
 
 inline
 G4double G4MuPairProductionModel::InterpolatedIntegralCrossSection(G4double dt, G4double dz,
-                                                                  G4int iz, G4int it, G4int iy, G4double z)
+         G4int iz, G4int it, G4int iy, G4double z)
 {
   G4double fac =  1./(zdat[iz]  *(zdat[iz]  +1.));
   G4double fac1 = 1./(zdat[iz-1]*(zdat[iz-1]+1.));
-  G4double f0 = fac1*proba[iz-1][it-1][iy] + (fac*proba[iz][it-1][iy]-fac1*proba[iz-1][it-1][iy])*dz;
-  G4double f1 = fac1*proba[iz-1][it  ][iy] + (fac*proba[iz][it  ][iy]-fac1*proba[iz-1][it  ][iy])*dz;
+  G4double f0 = fac1*proba[iz-1][it-1][iy] + 
+                (fac*proba[iz][it-1][iy]-fac1*proba[iz-1][it-1][iy])*dz;
+  G4double f1 = fac1*proba[iz-1][it  ][iy] + 
+                (fac*proba[iz][it  ][iy]-fac1*proba[iz-1][it  ][iy])*dz;
   return (f0 + (f1-f0)*dt)*z*(z+1.);
 }
 

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPData.hh,v 1.6 2002/12/12 19:18:10 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4NeutronHPData.hh,v 1.7 2004/05/24 10:32:59 hpw Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -67,19 +67,13 @@ public:
 
   G4PhysicsVector * DoPhysicsVector(G4NeutronHPVector * theVector);
   
-  static G4NeutronHPData * Instance()
-  {
-    if(theCrossSectionData==NULL) theCrossSectionData = new G4NeutronHPData;
-    return theCrossSectionData;
-  }
+  static G4NeutronHPData * Instance();
   
 private:
 
   G4NeutronHPElementData * theData;
   G4int numEle;
   
-  static G4NeutronHPData * theCrossSectionData;
-
 };
 
 #endif

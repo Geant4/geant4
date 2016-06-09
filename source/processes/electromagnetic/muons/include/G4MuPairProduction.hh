@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh,v 1.18 2004/02/10 18:07:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-01 $
+// $Id: G4MuPairProduction.hh,v 1.21 2004/05/07 16:47:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
+// 28-04-04 Fix minor bug in energy balance (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -181,6 +182,7 @@ inline void G4MuPairProduction::SecondariesPostStep(
   elpos = (*newp)[1];
   fParticleChange.AddSecondary(elpos);
   kinEnergy -= elpos->GetKineticEnergy();
+  kinEnergy -= 2.0*electron_mass_c2;
   delete newp;
 }
 

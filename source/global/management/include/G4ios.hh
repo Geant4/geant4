@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.hh,v 1.7 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4ios.hh,v 1.9 2004/06/09 07:30:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ---------------------------------------------------------------
@@ -36,20 +36,15 @@
 
 #include "G4Types.hh"
 
-#if defined(OO_DDL_TRANSLATION)
-/*
- * stdlib needs to be included before iostream.h
- * during oddlx runs to work around a parser
- * problem of AIX ooddlx v4.0.2 with some versions of
- * AIX system header files.
- */
-#include <stdlib.h>
-#endif
-
 #include <iostream>
 
-extern std::ostream G4cout;
-extern std::ostream G4cerr;
+#if defined G4IOS_EXPORT
+  extern G4DLLEXPORT std::ostream G4cout;
+  extern G4DLLEXPORT std::ostream G4cerr;
+#else
+  extern G4DLLIMPORT std::ostream G4cout;
+  extern G4DLLIMPORT std::ostream G4cerr;
+#endif
 
 #define G4cin std::cin
 #define G4endl std::endl

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.2 2003/10/28 10:27:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: RunAction.hh,v 1.4 2004/03/31 11:34:58 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -40,12 +40,14 @@
 
 class G4Run;
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
 namespace AIDA {
  class ITree;
  class IHistogram1D;
 } 
 #endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
@@ -64,10 +66,10 @@ class RunAction : public G4UserRunAction
     void CountSteps1(G4int ns) { NbOfSteps1 += ns;}
     void CountProcesses(G4String);
 
-#ifdef G4ANALYSIS_USE   
+#ifdef USE_AIDA   
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
-           
+            
   private:  
     void bookHisto();
     void cleanHisto();
@@ -78,10 +80,10 @@ class RunAction : public G4UserRunAction
     G4double edep;
     ProcessesCount*   ProcCounter;   
 
-#ifdef G4ANALYSIS_USE       
+#ifdef USE_AIDA       
     AIDA::ITree*        tree;
     AIDA::IHistogram1D* histo[3];
-#endif                     
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

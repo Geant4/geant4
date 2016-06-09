@@ -1,0 +1,26 @@
+$Id: History,v 1.1 2004/06/20 17:26:14 daquinog Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Jun 20th, 2004  G.Daquino - B03-V06-01-00
+- porting B03 from Anaphe (Lizard) to PI. Actually, PI 1.2.1 still DOES NOT
+  allow the plotting in the same way, previously set in Anaphe. Therefore the
+  HBOOk file produced at the end of the example still needs other packages to 
+  be displayed. However, future PI releases could contain python modules with
+  this property.
+  README file has been updated accordingly.

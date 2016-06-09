@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.12 2003/12/01 14:53:26 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4LogicalSkinSurface.hh,v 1.13 2004/05/19 08:14:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // class G4LogicalSkinSurface
 //
@@ -62,6 +62,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     inline void  SetLogicalVolume(G4LogicalVolume* vol);
        // Accessors.
 
+    static void CleanSurfaceTable();
     static size_t GetNumberOfSkinSurfaces();
     static void DumpInfo(); // const 
       // To handle with the table of surfaces.
@@ -95,3 +96,4 @@ typedef std::vector<G4LogicalSkinSurface*> G4LogicalSkinSurfaceTable;
 #include "G4LogicalSkinSurface.icc"
 
 #endif /* G4LogicalSkinSurface_h */
+

@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.4 2003/10/10 10:42:36 maire Exp $
+# $Id: run02.mac,v 1.5 2004/03/15 11:23:16 maire Exp $
 #
 # Macro file for "TestEm6.cc"
 # (can be run in batch, without graphic)
@@ -16,4 +16,4 @@
 /gun/energy 100 TeV
 /testem/gun/rndm  0.8
 #
-#/run/beamOn 50000
+/run/beamOn 50000

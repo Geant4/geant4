@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.hh,v 1.11 2003/06/16 17:13:42 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4RayTrajectory.hh,v 1.14 2004/06/11 14:30:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -87,8 +87,11 @@ class G4RayTrajectory : public G4VTrajectory
    std::vector<G4RayTrajectoryPoint*>* positionRecord;
 };
 
-
-extern G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
+#if defined G4VIS_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
+#endif
 
 inline void* G4RayTrajectory::operator new(size_t)
 {

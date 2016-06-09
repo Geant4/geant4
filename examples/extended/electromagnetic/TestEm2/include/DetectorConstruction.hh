@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2003/10/08 17:28:34 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorConstruction.hh,v 1.5 2004/06/18 15:43:39 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -63,12 +63,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      void UpdateGeometry();
 
-  public:
-
      const
      G4VPhysicalVolume* GetEcal() {return physiEcal;};
      G4Material*    GetMaterial() {return myMaterial;};
 
+     // Subdivision of absorber
      G4int    GetnLtot()          {return nLtot;};
      G4int    GetnRtot()          {return nRtot;};
      G4double GetdLradl()         {return dLradl;};

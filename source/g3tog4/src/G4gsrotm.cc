@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsrotm.cc,v 1.9 2001/07/11 09:59:02 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4gsrotm.cc,v 1.10 2004/05/03 07:49:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 #include "G3toG4.hh"
 #include "G3RotTable.hh"
@@ -85,10 +85,10 @@ void G4gsrotm(G4int irot, G4double theta1, G4double phi1,
         G4cerr << G4endl;
         G4Exception("G4gsrotm error");
     }
-    else if (1+check<=tol) {
-        G4cerr << "G4gsrotm warning: coordinate axes forming rotation "
-               << "matrix " << irot << " are left-handed" << G4endl;
-    }
+    //else if (1+check<=tol) {
+    //    G4cerr << "G4gsrotm warning: coordinate axes forming rotation "
+    //           << "matrix " << irot << " are left-handed" << G4endl;
+    //}
     
     G3toG4RotationMatrix* rotp = new G3toG4RotationMatrix;
 

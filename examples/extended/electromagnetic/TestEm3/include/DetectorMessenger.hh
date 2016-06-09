@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.hh,v 1.1 2003/09/22 14:06:39 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorMessenger.hh,v 1.5 2004/06/09 14:18:45 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 
@@ -49,18 +49,18 @@ class DetectorMessenger: public G4UImessenger
   public:
     DetectorMessenger(DetectorConstruction* );
    ~DetectorMessenger();
-    
+
     void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
     DetectorConstruction* Detector;
-    
+
     G4UIdirectory*             testemDir;
 
     G4UIcmdWithADoubleAndUnit* SizeYZCmd;
     G4UIcmdWithAnInteger*      NbLayersCmd;
     G4UIcmdWithAnInteger*      NbAbsorCmd;
-    G4UIcommand*               AbsorCmd;        
+    G4UIcommand*               AbsorCmd;
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;
     G4UIcmdWithADoubleAndUnit* MaxStepCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;

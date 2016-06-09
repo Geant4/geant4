@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.3 2003/11/03 17:54:18 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4HadronicInteraction.hh,v 1.5 2004/05/26 09:56:52 hpw Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
  // Hadronic Interaction  abstract base class
  // This class is the base class for the model classes.
@@ -98,32 +98,28 @@
     inline G4double GetMinEnergy() const
     { return theMinEnergy; }
     
-    G4double GetMinEnergy( const G4Material *aMaterial,
-                           const G4Element *anElement ) const;
+    virtual G4double GetMinEnergy( const G4Material *aMaterial,
+                                  const G4Element *anElement ) const;
     
     inline void SetMinEnergy( const G4double anEnergy )
     { theMinEnergy = anEnergy; }
     
-    void SetMinEnergy( G4double anEnergy,
-                       G4Element *anElement );
+    virtual void SetMinEnergy( G4double anEnergy, G4Element *anElement );
     
-    void SetMinEnergy( G4double anEnergy,
-                       G4Material *aMaterial );
+    virtual void SetMinEnergy( G4double anEnergy, G4Material *aMaterial );
     
     inline G4double GetMaxEnergy() const
     { return theMaxEnergy; }
     
-    G4double GetMaxEnergy( const G4Material *aMaterial,
-                           const G4Element *anElement ) const;
+    virtual G4double GetMaxEnergy( const G4Material *aMaterial,
+                                  const G4Element *anElement ) const;
     
     inline void SetMaxEnergy( const G4double anEnergy )
     { theMaxEnergy = anEnergy; }
     
-    void SetMaxEnergy( G4double anEnergy,
-                       G4Element *anElement );
+    virtual void SetMaxEnergy( G4double anEnergy, G4Element *anElement );
     
-    void SetMaxEnergy( G4double anEnergy,
-                       G4Material *aMaterial );
+    virtual void SetMaxEnergy( G4double anEnergy, G4Material *aMaterial );
   
     inline const G4HadronicInteraction *GetMyPointer() const
     { return this; }
@@ -139,29 +135,32 @@ public: // With description
     
     virtual G4HadFinalState *ApplyYourself(
             const G4HadProjectile &aTrack, G4Nucleus & targetNucleus ) = 0;
+    
 public: // Without description
 
-    void DeActivateFor( G4Material *aMaterial );
+    virtual void DeActivateFor( G4Material *aMaterial );
     
-    void ActivateFor( G4Material *aMaterial ) 
+    virtual void ActivateFor( G4Material *aMaterial ) 
     { 
       Block(); 
       SetMaxEnergy(GetMaxEnergy(), aMaterial);
       SetMinEnergy(GetMinEnergy(), aMaterial);
     }
 
-    void DeActivateFor( G4Element *anElement ); 
-    void ActivateFor( G4Element *anElement )
+    virtual void DeActivateFor( G4Element *anElement ); 
+    virtual void ActivateFor( G4Element *anElement )
     { 
       Block(); 
       SetMaxEnergy(GetMaxEnergy(), anElement);
       SetMinEnergy(GetMinEnergy(), anElement);
     }
 
-    G4bool IsBlocked( const G4Material *aMaterial ) const;
+    virtual G4bool IsBlocked( const G4Material *aMaterial ) const;
 
-    G4bool IsBlocked( const G4Element *anElement) const;
+    virtual G4bool IsBlocked( const G4Element *anElement) const;
     
+    virtual G4bool IsApplicable(const G4HadProjectile &/*aTrack*/, 
+                               G4Nucleus & /*targetNucleus*/){  return true;}
  protected:
     
     G4HadFinalState theParticleChange;

@@ -1,0 +1,90 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+// ********************************************************************
+// *                                                                  *
+// * cosmicray_charging advanced example for Geant4                   *
+// * (adapted simulation of test-mass charging in the LISA mission)   *
+// *                                                                  *
+// * Henrique Araujo (h.araujo@imperial.ac.uk) & Peter Wass           *
+// * Imperial College London                                          *
+// *                                                                  *
+// * LISADetectorConstruction class                                   *
+// *                                                                  *
+// ********************************************************************
+//
+// HISTORY
+// 22/02/2004: migrated from LISA-V04
+//
+// ********************************************************************
+
+
+// **************************************************************************
+// Colours and VisAttributes
+//***************************************************************************
+
+
+  // edge colour attributes
+  G4VisAttributes*   white_vat = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
+  G4VisAttributes*    grey_vat = new G4VisAttributes(G4Colour(0.5, 0.5, 0.5));
+  G4VisAttributes*   black_vat = new G4VisAttributes(G4Colour(0.0, 0.0, 0.0));
+  G4VisAttributes*     red_vat = new G4VisAttributes(G4Colour(1.0, 0.0, 0.0));
+  G4VisAttributes*  orange_vat = new G4VisAttributes(G4Colour(1.0, 0.5, 0.0));
+  G4VisAttributes*  yellow_vat = new G4VisAttributes(G4Colour(1.0, 1.0, 0.0));
+  G4VisAttributes*    gold_vat = new G4VisAttributes(G4Colour(.75, .75, 0.0));
+  G4VisAttributes*   green_vat = new G4VisAttributes(G4Colour(0.0, 1.0, 0.0));
+  G4VisAttributes*  lgreen_vat = new G4VisAttributes(G4Colour(0.0, .75, 0.0));
+  G4VisAttributes*    cyan_vat = new G4VisAttributes(G4Colour(0.0, 1.0, 1.0));
+  G4VisAttributes*   lblue_vat = new G4VisAttributes(G4Colour(0.0, 0.0, .75));
+  G4VisAttributes*    blue_vat = new G4VisAttributes(G4Colour(0.0, 0.0, 1.0));
+  G4VisAttributes* magenta_vat = new G4VisAttributes(G4Colour(1.0, 0.0, 1.0));
+
+  // solid colour attributes
+  G4VisAttributes* sol_white_vat  = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  sol_white_vat->SetForceSolid(true);
+  G4VisAttributes* sol_grey_vat   = new G4VisAttributes(G4Colour(0.5,0.5,0.5));
+  sol_grey_vat->SetForceSolid(true);
+  G4VisAttributes* sol_dgrey_vat  = new G4VisAttributes(G4Colour(.25,.25,.25));
+  sol_dgrey_vat->SetForceSolid(true);
+  G4VisAttributes* sol_black_vat  = new G4VisAttributes(G4Colour(0.0,0.0,0.0));
+  sol_black_vat->SetForceSolid(true);
+  G4VisAttributes* sol_red_vat    = new G4VisAttributes(G4Colour(1.0,0.0,0.0));
+  sol_red_vat->SetForceSolid(true);
+  G4VisAttributes* sol_green_vat  = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
+  sol_green_vat->SetForceSolid(true);
+  G4VisAttributes* sol_lgreen_vat = new G4VisAttributes(G4Colour(0.0,.75,0.0));
+  sol_lgreen_vat->SetForceSolid(true);
+  G4VisAttributes* sol_lblue_vat  = new G4VisAttributes(G4Colour(0.0,0.0,.75));
+  sol_lblue_vat->SetForceSolid(true);
+  G4VisAttributes* sol_cyan_vat   = new G4VisAttributes(G4Colour(0.0,1.0,1.0));
+  sol_cyan_vat->SetForceSolid(true);
+  G4VisAttributes* sol_blue_vat   = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
+  sol_blue_vat->SetForceSolid(true);
+  G4VisAttributes*   sol_gold_vat = new G4VisAttributes(G4Colour(.75,.75,0.0));
+  sol_gold_vat->SetForceSolid(true);
+  G4VisAttributes* sol_yellow_vat = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
+  sol_yellow_vat->SetForceSolid(true);
+  G4VisAttributes* sol_orange_vat = new G4VisAttributes(G4Colour(1.0,0.5,0.0));
+  sol_orange_vat->SetForceSolid(true);
+
+
+//*****************************************************************************

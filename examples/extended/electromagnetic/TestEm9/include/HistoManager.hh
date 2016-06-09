@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.4 2003/11/03 19:19:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: HistoManager.hh,v 1.6 2004/05/27 13:43:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
@@ -50,9 +50,11 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4DataVector.hh"
 #include "G4Track.hh"
-#include "Histo.hh"
+//#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class Histo;
 
 class HistoManager
 {
@@ -106,6 +108,9 @@ public: // Without description
   void SetThresholdZ(G4double val) {thPosZ = val;};
   void AddStep() {n_step++;};
 
+  // Acceptance parameters
+  void SetEdepAndRMS(G4int, G4ThreeVector);
+  void SetBeamEnergy(G4double val) {beamEnergy = val;};
 
 private:
 
@@ -137,11 +142,21 @@ private:
   G4bool nTuple;
 
   G4double Eabs1, Eabs2, Eabs3, Eabs4;
-  G4double E[25];
+  G4double     E[25];
   G4DataVector Evertex;
   G4DataVector Nvertex;
 
-  Histo  histo;
+  G4DataVector edeptrue;
+  G4DataVector rmstrue;
+  G4DataVector limittrue;
+  G4DataVector edep;
+  G4DataVector erms;
+  G4int   nmax;
+
+  Histo*  histo;
+  
+
+
 };
 
 #endif

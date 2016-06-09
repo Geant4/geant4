@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWithABool.hh,v 1.5 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIcmdWithABool.hh,v 1.6 2004/05/16 18:42:30 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -47,11 +47,8 @@ class G4UIcmdWithABool : public G4UIcommand
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
     // and the pointer to the messenger must be given.
-    G4bool GetNewBoolValue(const char* paramString);
+    static G4bool GetNewBoolValue(const char* paramString);
     //  Convert string which represents a boolean value to G4bool.
-    G4String ConvertToString(G4bool intValue);
-    //  Convert a boolean value to a string. This method must be used by 
-    // the messenger for its GetCurrentValues() method.
     void SetParameterName(const char * theName,G4bool omittable,
                           G4bool currentAsDefault=false);
     //  Set the parameter name for a boolean parameter.

@@ -20,9 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: StackingAction.cc,v 1.1 2003/08/11 10:21:33 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: StackingAction.cc,v 1.3 2004/06/21 10:57:15 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,17 +35,13 @@
 
 #include "G4Track.hh"
 
-#ifdef G4ANALYSIS_USE
- #include "AIDA/IHistogram1D.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction(RunAction* RA, EventAction* EA, HistoManager* HM)
 :runaction(RA), eventaction(EA), histoManager(HM)
 {
- killSecondary = false;
- stackMessenger = new StackingMessenger(this);
+  killSecondary = false;
+  stackMessenger = new StackingMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,36 +53,26 @@ StackingAction::~StackingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ClassificationOfNewTrack 
+G4ClassificationOfNewTrack
 StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {
-  //keep primary particle 
+  //keep primary particle
   if (aTrack->GetParentID() == 0) return fUrgent;
-  
+
   //count secondary particles
   runaction->CountParticles(aTrack->GetDefinition());
-  
-#ifdef G4ANALYSIS_USE
-  //  
+
+  //
   //energy spectrum of secondaries
   //
   G4double energy = aTrack->GetKineticEnergy();
   G4double charge = aTrack->GetDefinition()->GetPDGCharge();
-  
-  if (charge != 0.) {
-    if (histoManager->GetHisto(2)) {
-      G4double unit = histoManager->GetHistoUnit(2);
-      histoManager->GetHisto(2)->fill(energy/unit);
-    }
-  }
-      
-  if (aTrack->GetDefinition() == G4Gamma::Gamma()) {
-    if (histoManager->GetHisto(3)) {
-      histoManager->GetHisto(3)->fill(log10(energy/MeV));
-    }
-  }  
-#endif
-      
+
+  if (charge != 0.) histoManager->FillHisto(2,energy);
+
+  if (aTrack->GetDefinition() == G4Gamma::Gamma())
+      histoManager->FillHisto(3, log10(energy/MeV));
+
   //stack or delete secondaries
   G4ClassificationOfNewTrack status = fUrgent;
   if (killSecondary)         status = fKill;

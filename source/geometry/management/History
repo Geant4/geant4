@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2003/12/01 14:54:14 gcosmo Exp $
+$Id: History,v 1.67 2004/05/13 14:54:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 07, 2004  G.Cosmo                      geommng-V06-01-00
+- Imported G4ReflectedSolid class from solids/Boolean.
+- Added abstract factory G4VPVDivisionFactory defining interfaces
+  for the creation of volumes divisions (courtesy of I.Hrivnacova).
+- Coworks with tags: geomvol-V06-01-00, geomdiv-V06-01-00 and
+                     geom-bool-V06-01-00.
 
 Dec 01, 2003  P.Gumplinger                 geommng-V05-02-05
 - G4LogicalSurface[.hh.icc]: modified to use G4SurfaceProperty instead

@@ -6,6 +6,7 @@
 #include "geant321/gcflag.inc"
 #include "geant321/gckine.inc"
 #include "geant321/gcking.inc"
+#include "geant321/gconst.inc"
 #include "geant321/gctrak.inc"
 #include "geant321/gctmed.inc"
 #include "calor.inc"
@@ -25,5 +26,12 @@
         if (DESTEP.NE.0.)      EdepAbs(NUMED) = EdepAbs(NUMED) + DESTEP
         if (CHARGE*STEP.NE.0.) TrckAbs(NUMED) = TrckAbs(NUMED) + STEP
       ENDIF
+*
+* *** Energy leakage from secondaries
+      IF ((NUMED.LE.NbAbsor).and.(INWVOL.EQ.2).and.(ISTAK.GT.0)) THEN
+        Eleav = gekin
+	if (ipart.eq.2) Eleav = gekin + 2*emass
+	EleaAbs(NUMED) = EleaAbs(NUMED) + Eleav 
+      ENDIF	     
 *
       END

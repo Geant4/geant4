@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEInelastic.hh,v 1.10 2002/12/12 19:17:58 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4HEInelastic.hh,v 1.11 2004/04/22 21:52:45 dwright Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 // G4 Gheisha High Energy (GHE) model class -- header file
@@ -46,12 +46,23 @@
 #ifndef G4HEInelastic_h
 #define G4HEInelastic_h 1
 
+// Class description:
+// Each of the high energy parameterized models (e.g. G4HEProtonInelastic)
+// derives from the G4HEInelastic class. This class contains the various
+// algorithms needed to implement the interaction. These include 
+// lambda-fragmentation, meson and nucleon cluster formation and decay, 
+// nuclear cascade, and nuclear de-excitation.  
+//
+// This class is derived from G4HadronicInteraction.
+
+// Class Description - End
+
 #include "G4HEVector.hh"
 #include "G4HadronicInteraction.hh"
 
 class G4HEInelastic : public G4HadronicInteraction
 {
- public: 
+ public:  // with description 
          G4HEInelastic()
             { 
               SetParticles();

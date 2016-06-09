@@ -8,10 +8,10 @@ DefaultHepRep::DefaultHepRep() {
 }
 
 DefaultHepRep::~DefaultHepRep() {
-    for (vector<HepRepTypeTree*>::iterator i1 = typeTrees.begin(); i1 != typeTrees.end(); i1++) {
+    for (set<HepRepTypeTree*>::iterator i1 = typeTrees.begin(); i1 != typeTrees.end(); i1++) {
         delete (*i1);
     }
-    for (vector<HepRepInstanceTree*>::iterator i2 = instanceTrees.begin(); i2 != instanceTrees.end(); i2++) {
+    for (set<HepRepInstanceTree*>::iterator i2 = instanceTrees.begin(); i2 != instanceTrees.end(); i2++) {
         delete (*i2);
     }
 }
@@ -21,18 +21,16 @@ HepRep* DefaultHepRep::copy(HepRepSelectFilter*) {
     return NULL;
 }
 
-vector<string>* DefaultHepRep::getLayerOrder() {
-    return &layers;
+vector<string> DefaultHepRep::getLayerOrder() {
+    return layers;
 }
 
-bool DefaultHepRep::addLayer(string layer) {
+void DefaultHepRep::addLayer(string layer) {
     layers.push_back(layer);
-    return true;
 }
 
-bool DefaultHepRep::addTypeTree(HepRepTypeTree* typeTree) {
-    typeTrees.push_back(typeTree);
-    return true;
+void DefaultHepRep::addTypeTree(HepRepTypeTree* typeTree) {
+    typeTrees.insert(typeTree);
 }
 
 void DefaultHepRep::removeTypeTree(HepRepTypeTree*) {
@@ -44,18 +42,12 @@ HepRepTypeTree* DefaultHepRep::getTypeTree(string, string) {
     return NULL;
 }
 
-vector<HepRepTypeTree*>* DefaultHepRep::getTypeTrees() {
-    return &typeTrees;
+set<HepRepTypeTree*> DefaultHepRep::getTypeTrees() {
+    return typeTrees;
 }
 
-HepRepType* DefaultHepRep::getType(string) {
-    cerr << "DefaultHepRep::getType(string) not implemented." << endl;
-    return NULL;
-}
-
-bool DefaultHepRep::addInstanceTree(HepRepInstanceTree* instanceTree) {
-    instanceTrees.push_back(instanceTree);
-    return true;
+void DefaultHepRep::addInstanceTree(HepRepInstanceTree* instanceTree) {
+    instanceTrees.insert(instanceTree);
 }
 
 void DefaultHepRep::overlayInstanceTree(HepRepInstanceTree *) {
@@ -94,7 +86,7 @@ string DefaultHepRep::checkForException() {
     return NULL;
 }
 
-vector<HepRepInstanceTree*>* DefaultHepRep::getInstanceTrees() {
-    return &instanceTrees;
+set<HepRepInstanceTree*> DefaultHepRep::getInstanceTrees() {
+    return instanceTrees;
 }
 

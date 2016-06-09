@@ -1,5 +1,5 @@
-# $Id: GNUmakefile,v 1.6 2003/11/13 12:00:27 vnivanch Exp $
-# GEANT4 tag $Name: geant4-06-00-patch-01 $
+# $Id: GNUmakefile,v 1.7 2004/05/27 13:43:17 vnivanch Exp $
+# GEANT4 tag $Name: geant4-06-02 $
 # --------------------------------------------------------------
 # GNUmakefile for examples module with AIDA interface
 # --------------------------------------------------------------
@@ -29,7 +29,7 @@ endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
-analclean:
+histclean:
 	rm -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(G4TARGET)/Histo.o
 
 visclean:

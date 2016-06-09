@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTubs.hh,v 1.4 2003/11/19 11:51:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4ParameterisationTubs.hh,v 1.5 2004/05/13 14:57:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // classes G4ParameterisationTubsRho
 //         G4ParameterisationTubsPhi
@@ -34,9 +34,10 @@
 // dividing a G4Tubs along one of each axis Rho, Phi, Z.
 
 // History:
-// 09.05.01 P.Arce First version
-// ********************************************************************
-
+// -------
+// 09.05.01 - P.Arce, Initial version
+// 08.04.04 - I.Hrivnacova, Implemented reflection
+// --------------------------------------------------------------------
 #ifndef G4ParameterisationTubsRho_H
 #define G4ParameterisationTubsRho_H 1
 
@@ -56,8 +57,18 @@ class G4Hype;
 class G4Polycone;
 class G4Polyhedra;
 
+class G4VParameterisationTubs : public G4VDivisionParameterisation
+{ 
+  public:  // with description
+  
+    G4VParameterisationTubs( EAxis axis, G4int nCopies,
+                            G4double offset, G4double step,
+                            G4VSolid* msolid, DivisionType divType );
+  
+    virtual ~G4VParameterisationTubs();
+};
 
-class G4ParameterisationTubsRho : public G4VDivisionParameterisation
+class G4ParameterisationTubsRho : public G4VParameterisationTubs
 { 
   public:  // with description
 
@@ -100,7 +111,7 @@ class G4ParameterisationTubsRho : public G4VDivisionParameterisation
 };
 
 
-class G4ParameterisationTubsPhi : public G4VDivisionParameterisation
+class G4ParameterisationTubsPhi : public G4VParameterisationTubs
 { 
   public:  // with description
 
@@ -143,7 +154,7 @@ class G4ParameterisationTubsPhi : public G4VDivisionParameterisation
 };
 
 
-class G4ParameterisationTubsZ : public G4VDivisionParameterisation
+class G4ParameterisationTubsZ : public G4VParameterisationTubs
 { 
   public:  // with description
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.2 2003/10/10 16:21:32 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: SteppingAction.cc,v 1.4 2004/03/31 17:09:46 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +33,7 @@
 #include "G4VProcess.hh"
 #include "G4ParticleTypes.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
 #endif
 
@@ -55,12 +55,12 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  G4double edep = aStep->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
  	   
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  G4double x = aStep->GetTrack()->GetPosition().x() + runAction->GetOffsetX();
  G4double binLength = runAction->GetBinLength();
  runAction->GetHisto(0)->fill(x, (edep/binLength)/(MeV/mm));
 #endif
- 
+
  //fill tallies
  //
  G4VPhysicalVolume* pVolume = aStep->GetTrack()->GetVolume();

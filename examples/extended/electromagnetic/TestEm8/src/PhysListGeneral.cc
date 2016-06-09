@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListGeneral.cc,v 1.1 2003/10/27 15:24:10 grichine Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: PhysListGeneral.cc,v 1.2 2004/05/24 16:56:32 grichine Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -51,12 +51,13 @@ void PhysListGeneral::ConstructProcess()
   G4Decay* fDecayProcess = new G4Decay();
 
   theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
+  while( (*theParticleIterator)() )
+  {
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
-
+    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) 
+    { 
       pmanager ->AddProcess(fDecayProcess);
 
       // set ordering for PostStepDoIt and AtRestDoIt

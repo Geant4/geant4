@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDefStore.hh,v 1.4 2003/06/16 16:55:05 gunter Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4AttDefStore.hh,v 1.6 2004/06/07 08:54:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 
 #ifndef G4ATTDEFSTORE_HH
 #define G4ATTDEFSTORE_HH
@@ -32,18 +32,31 @@
 
 class G4AttDef;
 
-class G4AttDefStore{
-public:
-  static std::map<G4String,G4AttDef>*
-  GetInstance(G4String storeName,bool& isNew);
-  // Returns a pointer to the named store and isNew is true if store is new.
-protected:
-  G4AttDefStore();
-  ~G4AttDefStore();
-private:
-  G4AttDefStore(const G4AttDefStore&);
-  G4AttDefStore& operator=(const G4AttDefStore&);
-  static std::map<G4String,std::map<G4String,G4AttDef>*> m_stores;
+class G4AttDefStore
+{
+  public:
+
+    static std::map<G4String,G4AttDef>*
+    GetInstance(G4String storeName, G4bool& isNew);
+      // Returns a pointer to the named store
+      // and isNew is true if store is new.
+      // The store keeps the ownership of the returned
+      // pointer to the map.
+
+    ~G4AttDefStore();
+      // Destructor.
+
+  protected:
+
+    G4AttDefStore();
+
+  private:
+
+    G4AttDefStore(const G4AttDefStore&);
+    G4AttDefStore& operator=(const G4AttDefStore&);
+
+    static std::map<G4String,std::map<G4String,G4AttDef>*> m_stores;
+    static G4AttDefStore* theInstance;
 };
 
 #endif //G4ATTDEFSTORE_H

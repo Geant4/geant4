@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcmdWith3Vector.hh,v 1.5 2002/04/26 22:03:35 asaim Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4UIcmdWith3Vector.hh,v 1.6 2004/05/16 18:42:29 asaim Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 
@@ -44,13 +44,9 @@ class G4UIcmdWith3Vector : public G4UIcommand
     (const char * theCommandPath,G4UImessenger * theMessenger);
     //  Constructor. The command string with full path directory
     // and the pointer to the messenger must be given.
-    G4ThreeVector GetNew3VectorValue(const char* paramString);
+    static G4ThreeVector GetNew3VectorValue(const char* paramString);
     //  Convert string which represents three double values to
     // G4ThreeVector.
-    G4String ConvertToString(G4ThreeVector vec);
-    //  Convert G4ThreeVector to a string which represents three
-    // double values. This method must be used by the messenger
-    // for its GetCurrentValues() method.
     void SetParameterName(const char * theNameX,const char * theNameY,
       const char * theNameZ,G4bool omittable,G4bool currentAsDefault=false);
     //  Set the parameter names for three parameters. Names are used by

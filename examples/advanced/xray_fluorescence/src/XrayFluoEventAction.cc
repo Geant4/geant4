@@ -22,20 +22,23 @@
 //
 //
 // $Id: XrayFluoEventAction.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
+// GEANT4 tag $Name: xray_fluo-V03-02-00
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 // 28 Nov 2001 Elena Guardincerri     Created
+// 15 Jul 2003 Alfonso Mantero        "DetectorType" use integration
+// 23 Sep 2003 Alfonso Mantero        differnt geometries integration
 //
 // -------------------------------------------------------------------
 
 #include "XrayFluoEventAction.hh"
 #include "XrayFluoSensorHit.hh"
 #include "XrayFluoEventActionMessenger.hh"
-#include "XrayFluoRunAction.hh"
+
+//#include "XrayFluoRunAction.hh"
 #include "XrayFluoDataSet.hh"
 
 #include "XrayFluoAnalysisManager.hh"
@@ -52,45 +55,97 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
-
+#include <fstream>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoEventAction::XrayFluoEventAction()
+XrayFluoEventAction::XrayFluoEventAction(XrayFluoDetectorConstruction* det)
   :drawFlag("all"),
    HPGeCollID(-1),
    eventMessenger(0),
-   printModulo(1)
- 
+   printModulo(1),
+   detectorType(0)
 {
   eventMessenger = new XrayFluoEventActionMessenger(this);
-  runManager = new XrayFluoRunAction();
- 
+  detectorType = det->GetDetectorType();
+
+  //runManager = new XrayFluoRunAction();
+  G4cout << "XrayFluoEventAction created" << G4endl;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+XrayFluoEventAction::XrayFluoEventAction(XrayFluoPlaneDetectorConstruction* det)
+  :drawFlag("all"),
+   HPGeCollID(-1),
+   eventMessenger(0),
+   printModulo(1),
+   detectorType(0)
+{
+  eventMessenger = new XrayFluoEventActionMessenger(this);
+  detectorType = det->GetDetectorType();
+
+  //runManager = new XrayFluoRunAction();
+  G4cout << "XrayFluoEventAction created" << G4endl;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+XrayFluoEventAction::XrayFluoEventAction(XrayFluoMercuryDetectorConstruction* det)
+  :drawFlag("all"),
+   HPGeCollID(-1),
+   eventMessenger(0),
+   printModulo(1),
+   detectorType(0)
+{
+  eventMessenger = new XrayFluoEventActionMessenger(this);
+  detectorType = det->GetDetectorType();
+
+  //runManager = new XrayFluoRunAction();
+  G4cout << "XrayFluoEventAction created" << G4endl;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoEventAction::~XrayFluoEventAction()
 {
    delete eventMessenger;
    eventMessenger = 0;
-   delete  runManager;
-   runManager = 0;
+   //delete  runManager;
+   //runManager = 0;
+   G4cout << "XrayFluoEventAction deleted" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
 {
- 
-  if (HPGeCollID==-1 && evt)
+
+  G4int eventNumber = (evt->GetEventID())+1;
+  if ( eventNumber == 1){
+
+  G4cout << "# = 100000 events" << G4endl;
+  G4cout << "1--------+---------+---------+---------+---------5e6"<<G4endl;
+  }
+
+  if ( ((eventNumber) % 100000) == 0 )  {
+
+    if ( eventNumber % (G4int)5e6 != 0 ) G4cout << "#" << std::flush;
+    else G4cout << "#"<< G4endl;
+    //    if ( eventNumber % 5e6 == 0 ) G4cout << "#"<< G4endl;
+
+    //    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+    //    analysis->PlotCurrentResults();
+  }
+
+  if (HPGeCollID==-1)
+    
     {
       G4SDManager * SDman = G4SDManager::GetSDMpointer();
       HPGeCollID = SDman->GetCollectionID("HPGeCollection");
       //the pointer points to the ID number of the sensitive detector
     }
 }
-
+  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
@@ -98,26 +153,39 @@ void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
   // extracted from hits, compute the total energy deposit (and total charged
   // track length) 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+
+
   
   XrayFluoSensorHitsCollection* HPGeHC = 0;
   G4int n_hit = 0;
-  G4double totEnergyDetect=0., totEnergy=0, energyD=0.;
+  G4double totEnergyDetect=0., totEnergy=0., energyD=0.;
   
   if (HCE) HPGeHC = (XrayFluoSensorHitsCollection*)(HCE->GetHC(HPGeCollID));
   if(HPGeHC)
+
+
     {
       n_hit = HPGeHC->entries();
+      
+      // if (n_hit) {G4cout << "Ecco quante hit ho nel detector "<< n_hit << G4endl;}
+      
       for (G4int i=0;i<n_hit;i++)
 	{
+	  
 	  totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
 	  
-	  energyD = ResponseFunction(totEnergy);
-	    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-	    analysis->analyseEnergyDep(energyD);
-
-	    totEnergyDetect += energyD;
-	    
-	    
+	  
+	  
+	  energyD = detectorType->ResponseFunction(totEnergy);
+	  // energyD = totEnergy;
+	  // G4cout << "energy deposit: "<< totEnergy  << G4endl;
+	  
+	  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+	  analysis->analyseEnergyDep(energyD);
+	  
+	  totEnergyDetect += energyD;
+	  
+	  
 	}
     }
   
@@ -172,77 +240,5 @@ G4double XrayFluoEventAction::RandomCut(G4double energy)
     return   EdepDetect;
     
 };
-G4double XrayFluoEventAction::ResponseFunction(G4double energy)
-{
-  G4double eMin = 1* keV;
-  G4double eMax = 10*keV; 
-  G4double value = 0.;
-  G4double efficiency = 1.;
-  
-  const XrayFluoDataSet* dataSet = runManager->GetEfficiencySet();
-  G4int id = 0;
-  
-  G4double random = G4UniformRand();
- 
-  if (energy>=eMin && energy <=eMax)
-    {
-      G4double infEnergy = (G4int)(energy/keV)* keV;
-      
-      G4double supEnergy = ((G4int)(energy/keV) + 1)*keV;
-      
-      
-      
-      G4double infData = runManager->GetInfData(energy, random);
-      
-      G4double supData = runManager->GetSupData(energy,random);
-      
-      value = (log10(infData)*log10(supEnergy/energy) +
-	       log10(supData)*log10(energy/infEnergy)) / 
-	log10(supEnergy/infEnergy);
-      value = pow(10,value);
-    }
-  else if (energy<eMin)
-    { 
-      G4double infEnergy = eMin;
-      G4double supEnergy = eMin/keV +1*keV;
- 
-      G4double infData = runManager->GetInfData(eMin, random);
-      G4double supData = runManager->GetSupData(eMin,random);
-      value = (log10(infData)*log10(supEnergy/eMin) +
-	       log10(supData)*log10(eMin/infEnergy)) / 
-	log10(supEnergy/infEnergy);
-      value = pow(10,value);
-      value = value-eMin+ energy;
-
-
-    }
- else if (energy>eMax)
-    { 
-      G4double infEnergy = eMax/keV - 1. *keV;
-      G4double supEnergy = eMax;
- 
-      G4double infData = runManager->GetInfData(eMax, random);
-      G4double supData = runManager->GetSupData(eMax,random);
-      value = (log10(infData)*log10(supEnergy/eMax) +
-	       log10(supData)*log10(eMax/infEnergy)) / 
-	log10(supEnergy/infEnergy);
-      value = pow(10,value);
-      value = value+energy- eMax;
-    }
-  G4double  RandomNum = G4UniformRand(); 
-  
-  efficiency = dataSet->FindValue(value,id);
-  if ( RandomNum>efficiency )
-    {
-      value = 0.;
-    }
- 
-  return value;
-
-}
-
-
-
-
 
 

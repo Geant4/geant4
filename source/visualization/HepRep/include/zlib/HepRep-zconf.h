@@ -3,7 +3,7 @@
  * For conditions of distribution and use, see copyright notice in HepRep-zlib.h 
  */
 
-/* @(#) $Id: HepRep-zconf.h,v 1.1 2004/02/03 19:34:43 duns Exp $ */
+/* @(#) $Id: HepRep-zconf.h,v 1.2 2004/06/16 21:05:27 duns Exp $ */
 
 #ifndef _HEPREP_ZCONF_H
 #define _HEPREP_ZCONF_H
@@ -16,39 +16,43 @@
  * compile with -DZ_PREFIX. The "standard" zlib should be compiled without it.
  */
 #ifdef Z_PREFIX
-#  define deflateInit_	z_deflateInit_
-#  define deflate	z_deflate
-#  define deflateEnd	z_deflateEnd
-#  define inflateInit_ 	z_inflateInit_
-#  define inflate	z_inflate
-#  define inflateEnd	z_inflateEnd
-#  define deflateInit2_	z_deflateInit2_
-#  define deflateSetDictionary z_deflateSetDictionary
-#  define deflateCopy	z_deflateCopy
-#  define deflateReset	z_deflateReset
-#  define deflateParams	z_deflateParams
-#  define inflateInit2_	z_inflateInit2_
-#  define inflateSetDictionary z_inflateSetDictionary
-#  define inflateSync	z_inflateSync
-#  define inflateSyncPoint z_inflateSyncPoint
-#  define inflateReset	z_inflateReset
-#  define compress	z_compress
-#  define compress2	z_compress2
-#  define uncompress	z_uncompress
-#  define adler32	z_adler32
-#  define crc32		z_crc32
-#  define get_crc_table z_get_crc_table
+/* MD: changes z_ into heprep_z_ */
+#  define deflateInit_	        heprep_z_deflateInit_
+#  define deflate	            heprep_z_deflate
+#  define deflateEnd	        heprep_z_deflateEnd
+#  define inflateInit_ 	        heprep_z_inflateInit_
+#  define inflate	            heprep_z_inflate
+#  define inflateEnd	        heprep_z_inflateEnd
+#  define deflateInit2_	        heprep_z_deflateInit2_
+#  define deflateSetDictionary  heprep_z_deflateSetDictionary
+#  define deflateCopy	        heprep_z_deflateCopy
+#  define deflateReset	        heprep_z_deflateReset
+#  define deflateParams	        heprep_z_deflateParams
+#  define inflateInit2_	        heprep_z_inflateInit2_
+#  define inflateSetDictionary  heprep_z_inflateSetDictionary
+#  define inflateSync	        heprep_z_inflateSync
+#  define inflateSyncPoint      heprep_z_inflateSyncPoint
+#  define inflateReset	        heprep_z_inflateReset
+#  define compress	            heprep_z_compress
+#  define compress2	            heprep_z_compress2
+#  define uncompress	        heprep_z_uncompress
+#  define adler32	            heprep_z_adler32
+#  define crc32		            heprep_z_crc32
+#  define get_crc_table         heprep_z_get_crc_table
 
-#  define Byte		z_Byte
-#  define uInt		z_uInt
-#  define uLong		z_uLong
-#  define Bytef	        z_Bytef
-#  define charf		z_charf
-#  define intf		z_intf
-#  define uIntf		z_uIntf
-#  define uLongf	z_uLongf
-#  define voidpf	z_voidpf
-#  define voidp		z_voidp
+#  define Byte		            heprep_z_Byte
+#  define uInt		            heprep_z_uInt
+#  define uLong		            heprep_z_uLong
+#  define Bytef	                heprep_z_Bytef
+#  define charf		            heprep_z_charf
+#  define intf		            heprep_z_intf
+#  define uIntf		            heprep_z_uIntf
+#  define uLongf	            heprep_z_uLongf
+#  define voidpf	            heprep_z_voidpf
+#  define voidp		            heprep_z_voidp
+
+/* MD: added define for lonely symbol not renamed... */
+#  define z_errmsg              heprep_z_errmsg
 #endif
 
 #if (defined(_WIN32) || defined(__WIN32__)) && !defined(WIN32)

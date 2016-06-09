@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.4 2003/11/25 15:19:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorConstruction.cc,v 1.5 2004/05/27 13:43:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -79,6 +79,8 @@ DetectorConstruction::DetectorConstruction()
   padLength    = 0.1*mm;
   padWidth     = 0.02*mm;
   absLength    = 2.*mm;
+  vertexRegion = 0;
+  muonRegion   = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -221,7 +223,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
-  //  G4RegionStore::GetInstance()->Clean();
+
+  if(vertexRegion) delete vertexRegion;
+  if(muonRegion) delete muonRegion;
+  vertexRegion = new G4Region("VertexDetector");
+  muonRegion   = new G4Region("MuonDetector");
 
   if(vertexLength < padLength*5.0) vertexLength = padLength*5.0;
   G4double gap    = 0.01*mm;
@@ -359,15 +365,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   // Define region for the vertex detector
 
-  G4Region* regionV = new G4Region("VertexDetector");
-  regionV->AddRootLogicalVolume(logicVV);
-  regionV->AddRootLogicalVolume(logicA3);
-
+  vertexRegion->AddRootLogicalVolume(logicVV);
+  vertexRegion->AddRootLogicalVolume(logicA3);
 
   // Define region for the muon detector
 
-  G4Region* regionM = new G4Region("MuonDetector");
-  regionM->AddRootLogicalVolume(logicYV);
+  muonRegion->AddRootLogicalVolume(logicYV);
 
   // color regions
 

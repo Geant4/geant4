@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.13 2003/10/06 08:59:40 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: ExN02DetectorConstruction.cc,v 1.14 2004/04/05 16:21:23 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,7 +95,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   //Xenon gas
   G4Material* Xenon = 
   new G4Material("XenonGas", z=54., a=131.29*g/mole, density= 5.458*mg/cm3,
-                 kStateGas, temperature= 1*atmosphere, pressure= 293.15*kelvin);
+                 kStateGas, temperature= 293.15*kelvin, pressure= 1*atmosphere);
 
   // Print all the materials defined.
   //

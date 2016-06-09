@@ -1,6 +1,6 @@
-# $Id: runSequence.py,v 1.3 2003/06/16 17:06:44 dressel Exp $
+# $Id: runSequence.py,v 1.4 2004/06/09 15:04:36 daquinog Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-05-02-patch-01 $
+# GEANT4 tag $Name: geant4-06-02 $
 # -------------------------------------------------------------------
 #
 import Tiara
@@ -31,9 +31,9 @@ class RunConfig(object):
       
 class RunSequence(object):
     # methods to be used public
-    def  __init__(self, runConfig, useLizard = True):
+    def  __init__(self, runConfig, usePI = True):
         self.rc = runConfig
-        self.useLizard = useLizard
+        self.usePI = usePI
         self.runNum = -1
         self.confInfo = self.rc.getConfInfo()
         self.storeName = myUtils.getStoreName()
@@ -74,7 +74,7 @@ class RunSequence(object):
     def report(self):
         print "\n\nRunSequence.report:"
         print self.confInfo
-        if self.useLizard:
+        if self.usePI:
             print "the xml store will be named: "
             print " ", self.pathXMLName
         print "the shelve name: "
@@ -97,7 +97,7 @@ class RunSequence(object):
         rns = string.rjust(rns, 5)
         rns = string.replace(rns,' ','0')
         rId = "_run" + rns 
-        if self.useLizard:
+        if self.usePI:
             self.xmlStore = self.storeName + rId + ".xml"
             self.pathXMLName = self.path + "/" + self.xmlStore
 
@@ -108,7 +108,7 @@ class RunSequence(object):
 
     def mkShelve(self):
         myShelve = shelve.open(self.pathShelveName)
-        if self.useLizard:
+        if self.usePI:
             myShelve["xmlStoreName"] = self.xmlStore
         for info in self.confInfo:
             myShelve[info] = self.confInfo[info]

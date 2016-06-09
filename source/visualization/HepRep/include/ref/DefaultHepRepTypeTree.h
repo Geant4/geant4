@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include "HEPREP/HepRep.h"
 #include "HEPREP/HepRepTypeTree.h"
@@ -21,16 +22,16 @@
 class DefaultHepRepTypeTree : public DefaultHepRepTreeID, public virtual HEPREP::HepRepTypeTree {
 
     private:
-        std::vector<HEPREP::HepRepType*> types;
+        std::set<HEPREP::HepRepType*> types;
 
     public:
         DefaultHepRepTypeTree(HEPREP::HepRepTreeID* typeTree);
         ~DefaultHepRepTypeTree();
 
-        HEPREP::HepRepTypeTree* copy(HEPREP::HepRep* heprep);
-        HEPREP::HepRepTreeID* copy();
-        bool addType(HEPREP::HepRepType* type);
-        std::vector<HEPREP::HepRepType* >* getTypes();
+        HEPREP::HepRepTypeTree* copy();
+        void addType(HEPREP::HepRepType* type);
+        std::set<HEPREP::HepRepType* > getTypes();
+        HEPREP::HepRepType* getType(std::string name);
 };
 
 #endif

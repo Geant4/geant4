@@ -35,12 +35,6 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     FCFLAGS   += -pg
     CCFLAGS   += -pg
   endif
-  ifdef G4LIB_BUILD_SHARED
-    CXXFLAGS  += -fPIC
-    FCFLAGS   += -fPIC
-    CCFLAGS   += -fPIC
-  endif
-#  G4RUNPATHOPTION := -Wl,-rpath 
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
@@ -48,8 +42,8 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   SHEXT   := dylib
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
-  XMFLAGS   := -I/usr/X11R6/include
-  XMLIBS    := -lXm -lXpm
+  XMFLAGS   := -I/sw/include
+  XMLIBS    := -L/sw/lib -lXm -lXpm
   DLDLIBS   := -ldl
   ifndef OGLHOME
     OGLHOME  := /usr/X11R6
@@ -60,16 +54,22 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
-  OIVFLAGS  += -I$(OIHOME)/include 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     g++ -dynamiclib -flat_namespace -undefined suppress -o $$libdir/$(@F) $(INTYLIBS) *.o
+     g++ -dynamiclib -twolevel_namespace -undefined error -dynamic \
+         -single_module -o $$libdir/$(@F) *.o -L$(G4LIB)/$(G4SYSTEM) \
+         $(patsubst lib%,-l%,$(patsubst %.lib,%,$(GLOBLIBS))) \
+         -L$(CLHEP_LIB_DIR) -l$(CLHEP_LIB) $(INTYLIBS)
   endef
   define build-global-shared-lib
-    libdir=`(cd $(@D);/bin/pwd)`; \
+    @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     g++ -dynamiclib -flat_namespace -undefined suppress -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+     g++ -dynamiclib -twolevel_namespace -undefined error -dynamic \
+         -single_module -o $$libdir/$(@F) \
+         $(foreach dir,$(SUBLIBS),$(dir)/*.o) -L$(G4LIB)/$(G4SYSTEM) \
+         $(patsubst lib%,-l%,$(patsubst %.lib,%,$(GLOBLIBS))) \
+         -L$(CLHEP_LIB_DIR) -l$(CLHEP_LIB) $(INTYLIBS);
   endef
 
 endif

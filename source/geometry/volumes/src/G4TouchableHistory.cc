@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.8 2003/12/05 17:10:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4TouchableHistory.cc,v 1.10 2004/06/11 14:17:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // class G4TouchableHistory Implementation

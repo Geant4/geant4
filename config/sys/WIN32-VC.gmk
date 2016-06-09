@@ -15,6 +15,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   CPPFLAGS += -DWIN32
   LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll
       
+  SHEXT := dll
   AR := LIB
   ECHO := echo -e
   FC := g77
@@ -30,10 +31,49 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   endif
 
   define build-granular-shared-lib
-    @echo "Shared Libraries not supported on $(G4SYSTEM)
+    @libdir=`(cd $(@D);/bin/pwd)`;\
+    cd $(G4TMP)/$(G4SYSTEM);\
+    echo "Building $(name).dumpbin file ...";\
+    $(RM) $(name).dumpbin;\
+    dumpbin /symbols $(G4LIBDIR)/lib$(name).a > $(name).dumpbin;\
+    echo "Building $(name).def file ...";\
+    $(RM) $(name).def;\
+    $(G4LIB)/$(G4SYSTEM)/win32def.exe $(name) < $(name).dumpbin > $(name).def;\
+    $(RM) $(name).dumpbin;\
+    echo "Building lib$(name).exp and lib$(name).lib file ...";\
+    $(RM) $(G4LIBDIR)/lib$(name).exp;\
+    $(RM) $(G4LIBDIR)/lib$(name).lib;\
+    lib.exe /nologo /machine:ix86 /def:$(name).def \
+            /out:$(G4LIBDIR)/lib$(name).lib;\
+    $(RM) $(G4LIBDIR)/$(name).dll;\
+    echo "Building $(name).dll file ...";\
+    link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
+             $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
+             /libpath:$(G4LIBDIR) $(GLOBLIBS) \
+             $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
+             $(INTYLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
   define build-global-shared-lib
-    @echo "Shared Libraries not supported on $(G4SYSTEM)
+    @libdir=`(cd $(@D);/bin/pwd)`;\
+    cd $(G4TMP)/$(G4SYSTEM);\
+    echo "Building $(name).dumpbin file ...";\
+    $(RM) $(name).dumpbin;\
+    dumpbin /symbols $(G4LIBDIR)/lib$(name).a > $(name).dumpbin;\
+    echo "Building $(name).def file ...";\
+    $(RM) $(name).def;\
+    $(G4LIB)/$(G4SYSTEM)/win32def.exe $(name) < $(name).dumpbin > $(name).def;\
+    $(RM) $(name).dumpbin;\
+    echo "Building lib$(name).exp and lib$(name).lib ...";\
+    $(RM) $(G4LIBDIR)/lib$(name).exp;\
+    $(RM) $(G4LIBDIR)/lib$(name).lib;\
+    lib.exe /nologo /machine:ix86 /def:$(name).def \
+            /out:$(G4LIBDIR)/lib$(name).lib;\
+    $(RM) $(G4LIBDIR)/$(name).dll;\
+    echo "Building $(name).dll ...";\
+    link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
+             $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
+             /libpath:$(G4LIBDIR) $(GLOBLIBS) \
+             $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
+             $(INTYLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
-
 endif

@@ -21,17 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.10 2003/11/19 11:51:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PVDivision.cc,v 1.11 2004/05/13 14:57:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // class G4PVDivision Implementation file
 //
 // 26.05.03 - P.Arce Initial version
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4PVDivision.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
+#include "G4ReflectedSolid.hh"
 #include "G4ParameterisationBox.hh"
 #include "G4ParameterisationTubs.hh"
 #include "G4ParameterisationCons.hh"
@@ -256,6 +257,15 @@ void G4PVDivision::SetParameterisation( G4LogicalVolume* motherLogical,
 
   G4VSolid* mSolid = motherLogical->GetSolid();
   G4String mSolidType = mSolid->GetEntityType();
+
+  // If the solid is a reflected one, update type to its
+  // real constituent solid.
+  // 
+  if (mSolidType == "G4ReflectedSolid")
+  {
+      mSolidType = ((G4ReflectedSolid*)mSolid)->GetConstituentMovedSolid()
+                 ->GetEntityType(); 
+  }    
 
   // Parameterisation type depend of mother solid type and axis of division
   //

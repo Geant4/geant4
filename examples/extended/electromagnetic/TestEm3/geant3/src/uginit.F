@@ -70,8 +70,10 @@
       do k=1,MaxAbs
         sumEdep(k) = 0.
         sumTrck(k) = 0.
+	sumElea(k) = 0.
         su2Edep(k) = 0.
         su2Trck(k) = 0.
+	su2Elea(k) = 0.
       enddo                                                         
 *                                                                               
       END                                                                       

@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.icc,v 1.10 2003/06/11 07:16:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4VParticleChange.icc,v 1.11 2004/05/08 15:28:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 //----------------------------------------------------------------
 // Virtual methods for updating G4Step 
@@ -81,13 +81,13 @@ inline
 }
 
 inline 
- void G4VParticleChange::SetStatusChange(G4TrackStatus aStatus)
+ void G4VParticleChange::ProposeTrackStatus(G4TrackStatus aStatus)
 {
   theStatusChange = aStatus;
 }
 
 inline 
- G4TrackStatus G4VParticleChange::GetStatusChange() const
+ G4TrackStatus G4VParticleChange::GetTrackStatus() const
 {
   return theStatusChange;
 }
@@ -99,7 +99,7 @@ G4SteppingControl G4VParticleChange::GetSteppingControl() const
 }
 
 inline
-void G4VParticleChange::SetSteppingControl(G4SteppingControl StepControlFlag)
+void G4VParticleChange::ProposeSteppingControl(G4SteppingControl StepControlFlag)
 {
   theSteppingControlFlag = StepControlFlag;
 }
@@ -115,7 +115,7 @@ inline
 }
 
 inline 
- void G4VParticleChange::SetLocalEnergyDeposit(G4double anEnergyPart)
+ void G4VParticleChange::ProposeLocalEnergyDeposit(G4double anEnergyPart)
 {
   theLocalEnergyDeposit = anEnergyPart;
 }
@@ -127,7 +127,7 @@ inline
 }
 
 inline 
- void G4VParticleChange::SetTrueStepLength(G4double aLength)
+ void G4VParticleChange::ProposeTrueStepLength(G4double aLength)
 {
   theTrueStepLength = aLength;
 }
@@ -288,7 +288,7 @@ inline
 }
 
 inline
- void     G4VParticleChange::SetParentWeight(G4double w)
+ void     G4VParticleChange::ProposeParentWeight(G4double w)
 {
   theParentWeight = w;
 }
@@ -305,4 +305,41 @@ inline
   return fSetParentWeightByProcess;
 }
 
+// Following methods will be removed in release 7.0
+inline 
+ void G4VParticleChange::SetStatusChange(G4TrackStatus aStatus)
+{
+  ProposeTrackStatus(aStatus);
+}
+
+inline 
+ G4TrackStatus G4VParticleChange::GetStatusChange() const
+{
+  return GetTrackStatus();
+}
+
+inline
+void G4VParticleChange::SetSteppingControl(G4SteppingControl StepControlFlag)
+{
+  ProposeSteppingControl(StepControlFlag);
+}
+
+inline 
+ void G4VParticleChange::SetLocalEnergyDeposit(G4double anEnergyPart)
+{
+  ProposeLocalEnergyDeposit(anEnergyPart);
+}
+
+
+inline 
+ void G4VParticleChange::SetTrueStepLength(G4double aLength)
+{
+  ProposeTrueStepLength(aLength);
+}
+
+inline
+ void     G4VParticleChange::SetParentWeight(G4double w)
+{
+  ProposeParentWeight(w);
+}
 

@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungCMS.cc,v 1.4 2003/10/28 10:27:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4eBremsstrahlungCMS.cc,v 1.5 2004/04/05 19:04:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +37,7 @@
 // Modifications:
 //
 // 17-10-03 model variant (V.Ivanchenko)
+// 05-04-03 Migrate to ParticleChangeForLoss (V.Ivanchenko) 
 //
 // -------------------------------------------------------------------
 //
@@ -65,20 +66,20 @@ void G4eBremsstrahlungCMS::SecondariesPostStep( G4VEmModel* model,
                                                 G4double& tcut,
                                                 G4double& kinEnergy)
 {
- G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
+  G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
   G4double gammaEnergy = gamma->GetKineticEnergy(); 
   kinEnergy -= gammaEnergy;
   G4int nSecond = 1;
   if(gammaEnergy > gammaThreshold) nSecond = 2;
-  aParticleChange.SetNumberOfSecondaries(nSecond);
-  aParticleChange.AddSecondary(gamma);
-  aParticleChange.SetLocalEnergyDeposit(0.0);
+  fParticleChange.SetNumberOfSecondaries(nSecond);
+  fParticleChange.AddSecondary(gamma);
+  fParticleChange.SetLocalEnergyDeposit(0.0);
   if(nSecond == 2) {
-    aParticleChange.SetStatusChange(fStopAndKill);
+    fParticleChange.SetStatusChange(fStopAndKill);
     G4DynamicParticle* el = new G4DynamicParticle(dp->GetDefinition(),
                                                   dp->GetMomentumDirection(),
                                                   kinEnergy);
-    aParticleChange.AddSecondary(el);
+    fParticleChange.AddSecondary(el);
   }
 }
 

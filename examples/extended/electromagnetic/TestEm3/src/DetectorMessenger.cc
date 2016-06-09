@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.1 2003/09/22 14:06:16 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorMessenger.cc,v 1.5 2004/06/09 14:18:47 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -122,7 +120,7 @@ DetectorMessenger::~DetectorMessenger()
   delete SizeYZCmd;
   delete NbLayersCmd;
   delete NbAbsorCmd;
-  delete AbsorCmd;  
+  delete AbsorCmd;
   delete MagFieldCmd;
   delete UpdateCmd;
   delete MaxStepCmd;
@@ -132,13 +130,13 @@ DetectorMessenger::~DetectorMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{    
+{
   if( command == SizeYZCmd )
    { Detector->SetCalorSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
-   
+
   if( command == NbLayersCmd )
    { Detector->SetNbOfLayers(NbLayersCmd->GetNewIntValue(newValue));}
-   
+
   if( command == NbAbsorCmd )
    { Detector->SetNbOfAbsor(NbAbsorCmd->GetNewIntValue(newValue));}
    
@@ -154,7 +152,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      Detector->SetAbsorMaterial (num,material);
      Detector->SetAbsorThickness(num,tick);
    }
-   
+
   if( command == MagFieldCmd )
    { Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
            

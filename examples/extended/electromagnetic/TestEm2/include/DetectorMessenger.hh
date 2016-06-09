@@ -20,12 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: DetectorMessenger.hh,v 1.1 2003/10/08 17:28:34 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: DetectorMessenger.hh,v 1.4 2004/06/18 15:43:39 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -46,21 +44,21 @@ class G4UIcmdWithoutParameter;
 
 class DetectorMessenger: public G4UImessenger
 {
-  public:
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    DetectorConstruction* Detector;
-    
-    G4UIdirectory*             testemDir;
-    G4UIcmdWithAString*        MaterCmd;
-    G4UIcmdWith3Vector*        LBinCmd;
-    G4UIcmdWith3Vector*        RBinCmd;
-    G4UIcmdWithADoubleAndUnit* FieldCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+public:
+  DetectorMessenger(DetectorConstruction* );
+ ~DetectorMessenger();
+
+  void SetNewValue(G4UIcommand*, G4String);
+
+private:
+  DetectorConstruction* Detector;
+
+  G4UIdirectory*             testemDir;
+  G4UIcmdWithAString*        MaterCmd;
+  G4UIcmdWith3Vector*        LBinCmd;
+  G4UIcmdWith3Vector*        RBinCmd;
+  G4UIcmdWithADoubleAndUnit* FieldCmd;
+  G4UIcmdWithoutParameter*   UpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

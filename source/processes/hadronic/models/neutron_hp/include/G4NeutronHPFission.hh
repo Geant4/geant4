@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFission.hh,v 1.7 2003/07/01 15:58:36 hpw Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4NeutronHPFission.hh,v 1.8 2004/05/24 10:32:59 hpw Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -68,7 +68,7 @@ class G4NeutronHPFission : public G4HadronicInteraction
   G4NeutronHPChannel * theFission;
   G4String dirName;
   G4int numEle;
-  static G4String theNames[3];
+  // static G4String theNames[3];
 };
 
 #endif

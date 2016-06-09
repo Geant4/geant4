@@ -1,14 +1,23 @@
 #
-# ------ GNU/LINUX ------ gcc 2.95.2 / gcc 3.2
+# ------ GNU/LINUX ------ gcc 3.2 and higher
 #
 ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++
   CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
+#
+# Uncomment the following options to activate Pentium4 chip specific
+# floating-point operations on the SSE unit. It will allow for more stable
+# results (no output differences between debug/optimised runs) and little
+# performance improvement (in the order of 2%).
+# NOTE: binaries built using these options will NOT be portable cross
+#       platforms. Will only run on Pentium4-based architectures !
+#
+# CXXFLAGS  += -march=pentium4 -mfpmath=sse
   ifdef G4OPTIMISE
-    CXXFLAGS  += -O
-    FCFLAGS   := -O
-    CCFLAGS   := -O
+    CXXFLAGS  += -O2
+    FCFLAGS   := -O2
+    CCFLAGS   := -O2
   else
     ifdef G4DEBUG
       CXXFLAGS  += -g

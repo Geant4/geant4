@@ -20,8 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.14 2003/11/18 17:29:43 pia Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.15 2004/06/01 15:07:10 pandola Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // 
 // --------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 // 23.05.2003 MGP          - Removed memory leak (fix in destructor)
 // 07.11.2003 L.Pandola    - Bug fixed in LoadAngularData()
 // 11.11.2003 L.Pandola    - Code review: use std::map for angular data
+// 01.06.2004 L.Pandola    - StopButAlive for positrons on PostStepDoIt
 //
 //----------------------------------------------------------------
 
@@ -55,7 +56,7 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4DataVector.hh"
 #include "G4ProductionCutsTable.hh"
-
+#include "G4ProcessManager.hh"
 
 G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
   : G4eLowEnergyLoss(nam), 
@@ -66,7 +67,6 @@ G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
   angularData = new std::map<G4int,G4PenelopeBremsstrahlungAngular*>;
   cutForPhotons = 0.;
   verboseLevel = 0;
-  
 }
 
 
@@ -321,11 +321,12 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
     G4String excep = "Not found the angular data for material " + material->GetName();
     G4Exception(excep);
   }
-  G4PenelopeBremsstrahlungAngular* elementAngularData = angularData->find(Z)->second;
+   
   //Check if the loaded angular data are right
-  //G4cout << "Material Z: " << elementAngularData->GetAtomicNumber() << " !!" << G4endl;
+  //G4cout << "Material Z: " << angularData->find(Z)->second->GetAtomicNumber() << " !!" << G4endl;
+
   // Sample gamma angle (Z - axis along the parent particle).
-  G4double dirZ = elementAngularData->ExtractCosTheta(kineticEnergy,tGamma);
+  G4double dirZ = angularData->find(Z)->second->ExtractCosTheta(kineticEnergy,tGamma); 
   G4double totalEnergy = kineticEnergy + electron_mass_c2;
   G4double phi   = twopi * G4UniformRand();
   G4double sinTheta  = sqrt(1. - dirZ*dirZ);
@@ -336,7 +337,7 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
   G4ThreeVector electronDirection = track.GetMomentumDirection();
     
   gammaDirection.rotateUz(electronDirection);   
-  
+
   //
   // Update the incident particle 
   //
@@ -358,7 +359,27 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
   aParticleChange.SetNumberOfSecondaries(1);
   G4double norm = 1./sqrt(finalX*finalX + finalY*finalY + finalZ*finalZ); 
   aParticleChange.SetMomentumChange(finalX*norm, finalY*norm, finalZ*norm);
-  aParticleChange.SetEnergyChange( finalEnergy );
+
+  const G4ParticleDefinition* particle = track.GetDefinition();
+
+  if (finalEnergy > 0.)
+    {
+      aParticleChange.SetEnergyChange(finalEnergy) ;
+    }
+  else
+    {    
+      aParticleChange.SetEnergyChange(0.) ;
+      if (particle->GetProcessManager()->GetAtRestProcessVector()->size()) 
+	//In this case there is at least one AtRest process
+	{
+	  aParticleChange.SetStatusChange(fStopButAlive);
+	}
+      else
+	{
+	  aParticleChange.SetStatusChange(fStopAndKill);
+	}
+    }
+ 
 
   // create G4DynamicParticle object for the gamma 
   G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(),
@@ -421,8 +442,7 @@ void G4PenelopeBremsstrahlung::LoadAngularData()
       G4int Z = (G4int)((*theElementVector)[iel]->GetZ());
       //if the material is not present yet --> insert it in the map
       if (!(angularData->count(Z))) {
-	G4PenelopeBremsstrahlungAngular* elementAngular = new G4PenelopeBremsstrahlungAngular(Z);
-	angularData->insert(std::make_pair(Z,elementAngular));
+	angularData->insert(std::make_pair(Z,new G4PenelopeBremsstrahlungAngular(Z)));
 	//G4cout << "Loaded......... Z= " << Z << G4endl;
       }
     }

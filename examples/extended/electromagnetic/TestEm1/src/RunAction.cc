@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.3 2003/11/07 15:38:28 maire Exp $
-// GEANT4 tag $Name: geant4-06-00-patch-01 $
+// $Id: RunAction.cc,v 1.5 2004/03/31 11:34:59 maire Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,14 +35,12 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  #include "AIDA/AIDA.h"
 #endif
 
@@ -63,7 +61,7 @@ RunAction::~RunAction()
 
 void RunAction::bookHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -78,11 +76,10 @@ void RunAction::bookHisto()
  // Creating a histogram factory, whose histograms will be handled by the tree
  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
 
-
  // booking histograms
  histo[0] = hf->createHistogram1D("1","track length (mm) of a charged particle",
                          100,0.,50*cm);
- histo[1] = hf->createHistogram1D("2","Nb of steps per track (charged particle)",
+ histo[1] = hf->createHistogram1D("2","Nb steps per track (charged particle)",
                          100,0.,100.);
  histo[2] = hf->createHistogram1D("3","step length (mm) charged particle",
                          100,0.,10*mm);
@@ -90,19 +87,18 @@ void RunAction::bookHisto()
  delete hf;
  delete tf;
  delete af;		       
-#endif   
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::cleanHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file)
- 
+  tree->close();        // and closing the tree (and the file) 
   delete tree;
-#endif   
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,9 +118,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //histograms
   //
   if (aRun->GetRunID() == 0) bookHisto();
-    
-  if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -187,10 +180,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     delete aProcCount;
   }
   delete ProcCounter;
-                             
-  //draw the events
-  if (G4VVisManager::GetConcreteInstance()) 
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
 
   // show Rndm status
   HepRandom::showEngineStatus();

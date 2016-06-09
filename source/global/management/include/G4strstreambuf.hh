@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh,v 1.10 2003/06/06 16:17:14 gcosmo Exp $
-// GEANT4 tag $Name: geant4-05-02-patch-01 $
+// $Id: G4strstreambuf.hh,v 1.12 2004/06/09 07:30:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-06-02 $
 //
 // 
 // ---------------------------------------------------------------
@@ -40,8 +40,14 @@
 #include "G4coutDestination.hh"
 
 class G4strstreambuf;
-extern G4strstreambuf G4coutbuf;
-extern G4strstreambuf G4cerrbuf;
+
+#if defined G4IOS_EXPORT
+  extern G4DLLEXPORT G4strstreambuf G4coutbuf;
+  extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
+#else
+  extern G4DLLIMPORT G4strstreambuf G4coutbuf;
+  extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
+#endif
 
 class G4strstreambuf : public std::streambuf
 {

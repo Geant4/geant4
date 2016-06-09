@@ -89,6 +89,7 @@
 // 12 Apr   2003 V.Ivanchenko Cut per region for fluo AlongStep
 // 18 Apr   2003 V.Ivanchenko finalRange redefinition
 // 26 Apr   2003 V.Ivanchenko fix for stepLimit
+// 28 May   2004 V.Ivanchenko fix for ionisation of antiprotons in complex materials
 
 // -----------------------------------------------------------------------
 
@@ -932,7 +933,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   }
 
   //  stop particle if the kinetic energy <= MinKineticEnergy
-  if (finalT <= MinKineticEnergy ) {
+  if (finalT*massRatio <= MinKineticEnergy ) {
 
      finalT = 0.0;
       if(!particle->GetDefinition()->GetProcessManager()->
@@ -1060,14 +1061,15 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
   // The proton model is used + Barkas correction
   } else {
     if(kineticEnergy < protonLowEnergy) {
-      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,protonLowEnergy);
+      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,protonLowEnergy)
+          * sqrt(kineticEnergy/protonLowEnergy) ;
 
     // Parametrisation
     } else {
       eloss = theProtonModel->TheValue(G4Proton::Proton(),material,
                                        kineticEnergy);
     }
-    if(theBarkas) eloss -= 2.0*BarkasTerm(material, kineticEnergy);
+    //if(theBarkas) eloss -= 2.0*BarkasTerm(material, kineticEnergy);
   }
 
   // Delta rays energy

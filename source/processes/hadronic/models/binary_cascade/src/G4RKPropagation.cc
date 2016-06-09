@@ -240,7 +240,7 @@ void G4RKPropagation::Init(G4V3DNucleus * nucleus)
 }
 
 
-
+//#define debug_1_RKPropagation 1
 //----------------------------------------------------------------------------
 void G4RKPropagation::Transport(G4KineticTrackVector & active,
 //----------------------------------------------------------------------------
@@ -328,7 +328,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	if(newE <= kt->GetActualMass())  // the particle cannot enter the nucleus
 	{
 // FixMe: should be "pushed back?"
-//      for the moment take it past teh nucleus, so we'll not worry next time..
+//      for the moment take it past the nucleus, so we'll not worry next time..
 	  FreeTransport(kt, 1.1*t_leave);   // take past nucleus
           kt->SetState(G4KineticTrack::miss_nucleus);
 	  continue;
@@ -623,15 +623,15 @@ G4bool G4RKPropagation::GetSphereIntersectionTimes(const G4KineticTrack * kt,
   G4double radius = theOuterRadius + 3*fermi; // "safety" of 3 fermi
   G4ThreeVector speed = kt->GetTrackingMomentum().vect()/kt->GetTrackingMomentum().e(); // bost vector
   G4double scalarProd = kt->GetPosition().dot(speed);
-  G4double speedMag = speed.mag();
+  G4double speedMag2 = speed.mag2();
   G4double sqrtArg = scalarProd*scalarProd -
-    speedMag*speedMag*(kt->GetPosition().mag2()-radius*radius);
+    speedMag2*(kt->GetPosition().mag2()-radius*radius);
   if(sqrtArg <= 0.) // particle will not intersect the sphere
   {
      return false;
   }
-  t1 = (-scalarProd - sqrt(sqrtArg))/speedMag/speedMag/c_light;
-  t2 = (-scalarProd + sqrt(sqrtArg))/speedMag/speedMag/c_light;
+  t1 = (-scalarProd - sqrt(sqrtArg))/speedMag2/c_light;
+  t2 = (-scalarProd + sqrt(sqrtArg))/speedMag2/c_light;
   return true;
 }
 
