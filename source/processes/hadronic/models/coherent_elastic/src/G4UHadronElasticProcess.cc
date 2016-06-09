@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4UHadronElasticProcess.cc,v 1.35.2.1 2008/04/23 14:14:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 

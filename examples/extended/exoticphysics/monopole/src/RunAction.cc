@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.1 2007/08/16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.cc,v 1.1.2.1 2008/09/03 08:43:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,11 +83,12 @@ void RunAction::bookHisto()
   G4double length  = detector->GetAbsorSizeX();
   if(!binLength) binLength = 5 * mm;
 	if(binLength > detector->GetMaxStepSize()) binLength = detector->GetMaxStepSize();
-  G4int nbBins = (int)(0.5 + length / binLength);
   offsetX   = 0.5 * length;
  
 #ifdef G4ANALYSIS_USE
   if(GetVerbose() > 0) G4cout << "\n----> Histogram Tree opened" << G4endl;
+
+  G4int nbBins = (int)(0.5 + length / binLength);
 
   // Create the tree factory
   AIDA::ITreeFactory* tf  = af->createTreeFactory();
@@ -142,6 +143,10 @@ void RunAction::SetBinSize(G4double size)
 
 void RunAction::FillHisto(G4int ih, G4double x, G4double weight)
 {
+  if(GetVerbose() > 1) {
+    G4cout << "FillHisto " << ih << "  x=" << x << " weight= " << weight 
+	   << G4endl;
+  }
 #ifdef G4ANALYSIS_USE
   if(histo[ih]) histo[ih]->fill(x, weight);
 #endif

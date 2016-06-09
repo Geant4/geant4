@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QNucleus.cc,v 1.92.2.1 2008/04/23 14:47:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //      ---------------- G4QNucleus ----------------
 //             by Mikhail Kossov, Sept 1999.

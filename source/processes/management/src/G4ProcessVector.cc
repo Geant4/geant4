@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessVector.cc,v 1.4 2006/06/29 21:08:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ProcessVector.cc,v 1.4.4.1 2008/09/02 13:39:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -37,11 +37,11 @@
 #include "G4VProcess.hh"
 #include "G4ProcessVector.hh"
 
-
 /////// Constructors
-G4ProcessVector::G4ProcessVector(size_t):pProcVector(0)
+//
+G4ProcessVector::G4ProcessVector(size_t)
 {
-   pProcVector = new G4ProcVector();
+  pProcVector = new G4ProcVector();
 }
 
 G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)
@@ -50,21 +50,28 @@ G4ProcessVector::G4ProcessVector(const G4ProcessVector& right)
 }
 
 /////// destructor
+//
 G4ProcessVector::~G4ProcessVector()
 {
   // delete pProcVector
-  if (pProcVector != 0 ) {
+  //
+  if (pProcVector != 0 )
+  {
     pProcVector->clear();
     delete pProcVector;
   }
 }
 
 ////// assignment oeprator
+//
 G4ProcessVector & G4ProcessVector::operator=(G4ProcessVector &right)
 {
-  if (this != &right) {
+  if (this != &right)
+  {
     // delete pProcVector
-    if (pProcVector != 0 ) {
+    //
+    if (pProcVector != 0 )
+    {
       pProcVector->clear();
       delete pProcVector;
     }
@@ -72,17 +79,12 @@ G4ProcessVector & G4ProcessVector::operator=(G4ProcessVector &right)
     pProcVector = new G4ProcVector();
     
     // copy all contents in  pProcVector
-    if (pProcVector != 0) {
-      pProcVector->clear();
-      delete pProcVector;
-    }
-    pProcVector = new G4ProcVector();
+    //
     G4ProcVector::iterator i;
-    for (i = pProcVector->begin(); i!= pProcVector->end(); ++i) {
+    for (i = pProcVector->begin(); i!= pProcVector->end(); ++i)
+    {
       pProcVector->push_back(*i);
     }
   }
   return *this;
 }
-
-

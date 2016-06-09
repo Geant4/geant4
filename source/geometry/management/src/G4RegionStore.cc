@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.13 2007/04/10 10:13:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4RegionStore.cc,v 1.13.4.1 2008/09/02 12:30:04 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // G4RegionStore
 //
@@ -98,8 +98,6 @@ void G4RegionStore::Clean()
   G4cout << "Deleting Regions ... ";
 #endif
 
-  // Do NOT delete world region !
-  //
   for(iterator pos=store->begin(); pos!=store->end(); ++pos)
   {
     if (fgNotifier) { fgNotifier->NotifyDeRegistration(); }

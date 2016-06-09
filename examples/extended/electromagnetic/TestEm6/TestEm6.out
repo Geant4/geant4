@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-03    (9-May-2008)
+ Geant4 version Name: global-V09-00-04    (12-September-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -391,7 +391,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0.03s Sys=0s
+  User=0.01s Real=0.03s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1439,7 +1439,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1454,7 +1454,6 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
-Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.

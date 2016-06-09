@@ -25,7 +25,7 @@
 //
 //
 // $Id: F02FieldMessenger.cc,v 1.6.2.1 2008/05/05 09:23:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 
 

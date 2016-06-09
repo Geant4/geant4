@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-03    (9-May-2008)
+ Geant4 version Name: global-V09-00-04    (12-September-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -250,7 +250,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=18.6s Real=260.66s Sys=23.45s
+  User=18.39s Real=270s Sys=26s
 
  ======================== run summary ======================
 
@@ -296,7 +296,6 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
-Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.

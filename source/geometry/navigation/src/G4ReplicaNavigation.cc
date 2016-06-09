@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ReplicaNavigation.cc,v 1.17.2.2 2008/04/28 16:05:41 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //
 // class G4ReplicaNavigation Implementation

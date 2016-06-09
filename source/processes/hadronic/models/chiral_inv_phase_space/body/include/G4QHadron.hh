@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QHadron.hh,v 1.36 2008/01/09 09:37:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //      ---------------- G4QHadron ----------------
 //             by Mikhail Kossov, Sept 1999.

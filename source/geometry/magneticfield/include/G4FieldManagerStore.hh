@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FieldManagerStore.hh,v 1.3 2008/01/17 09:39:08 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // class G4FieldManagerStore
 //

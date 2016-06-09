@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4MuMinusCaptureCascade.cc,v 1.15.2.1 2008/05/05 09:14:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //   G4MuonMinusCaptureAtRest physics process
 //                   

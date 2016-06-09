@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.27 2007/10/29 18:49:45 asaim Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UIterminal.cc,v 1.27.2.1 2008/09/02 13:27:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // ====================================================================
 //   G4UIterminal.cc
@@ -69,7 +69,8 @@ static void SignalHandler(G4int)
     G4cout << G4endl
            << "Session terminated." << G4endl;
     theshell-> ResetTerminal();
-    exit(0);
+    G4Exception("G4UIterminal/SignalHandler", "KeyboardInterrupt",
+                FatalException, "Interrupt with Ctrl-C");
   }
 
   // for original Unix / System V

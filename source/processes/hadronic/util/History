@@ -14,6 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 Jul 2008 D.H. Wright for Vladimir Uzhinskiy (hadr-util-V09-00-01)
+--------------------------------------------------------------------
+- G4ReactionDynamics::GenerateXandPt: fixed bug in momentum bin which
+  caused oscillatory behavior in spectrum:  changed 
+    x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2 ) )
+  to 
+    x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) )
+- Tag for release 9.1.p03.
+
+09 Jul 2008 D.H. Wright
+-----------------------
+- G4ReactionDynamics::GenerateXandPt: replace exit with G4Exception.
+
 11 Oct 2007 F.W. Jones (hadr-util-V09-00-00)
 --------------------------------------------
 - G4LightMedia: fixed coding errors in inequalities for

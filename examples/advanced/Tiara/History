@@ -1,6 +1,6 @@
-# $Id: History,v 1.31 2006/11/20 12:44:40 ahoward Exp $
+# $Id: History,v 1.31.2.1 2008/09/03 08:40:16 gcosmo Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-09-01 $
+# GEANT4 tag $Name: geant4-09-01-patch-03 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -19,13 +19,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 14th, 2006, G.A.P.Cirrone (Tiara-V09-00-00)
+- Fixed compilation errors.
+- Tag for release 9.1.p03.
+
 November 20th, 2006, A. Howard
-- removed hadronic_list.gmk from GNUmakefile to accommodate new reference 
+- Removed hadronic_list.gmk from GNUmakefile to accommodate new reference 
   physicslist location
 
 June 26th, 2006 A. Howard
 - fixed configuration script, GNUmakefiles and python scripts to work for
-runSimNoAnalysis.py and also corrected Vis scripts for non-static particles
+  runSimNoAnalysis.py and also corrected Vis scripts for non-static particles
 
 December 15th, 2005 A.Howard
 - Migration to CLHEP namespace - requires cloning of class in python

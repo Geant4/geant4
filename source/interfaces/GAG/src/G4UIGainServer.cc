@@ -25,8 +25,8 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.11 2007/11/16 14:59:35 kmura Exp $
-// $Name: geant4-09-01 $
+// $Id: G4UIGainServer.cc,v 1.11.2.1 2008/09/02 13:27:13 gcosmo Exp $
+// $Name: geant4-09-01-patch-03 $
 //
 #ifndef WIN32
 
@@ -413,7 +413,11 @@ void G4UIGainServer::WaitingConnection(){
         if((socketD[i] = accept(socketD[0], (struct sockaddr *)&caddr,(socklen_t *)&len))<0){
 #endif
             G4cerr<<"accept:"<<i<<G4endl;
-            exit(1);
+            //exit(1);
+            G4Exception("G4UIGainServer::WaitingConnection", "Invalid Socket",
+                        FatalException, "Cannot establish connection");
+
+
         }
     }
     close(socketD[0]);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02PhysicsList.cc,v 1.22 2006/06/29 17:48:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: ExN02PhysicsList.cc,v 1.22.2.2 2008/05/09 12:09:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +47,8 @@ ExN02PhysicsList::ExN02PhysicsList():  G4VUserPhysicsList()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExN02PhysicsList::~ExN02PhysicsList()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

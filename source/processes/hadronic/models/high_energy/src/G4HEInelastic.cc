@@ -247,13 +247,16 @@ G4HEInelastic::pmltpc(G4int np, G4int nm, G4int nz, G4int n,
    return std::exp(r);
  }
 
+
 G4int G4HEInelastic::Factorial(G4int n)
- { 
-   G4int result = 1;
-   if(n<0) exit(EXIT_FAILURE);
-   while(n>1) result *= n--;
-   return result;
- } 
+{ 
+  G4int result = 1;
+  if (n < 0) G4Exception("G4HEInelastic::Factorial()", "601",
+                         FatalException, "Negative factorial argument");
+  while (n > 1) result *= n--;
+  return result;
+} 
+
 
 G4double G4HEInelastic::normal()
  {
@@ -1160,7 +1163,7 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
                       ran = G4UniformRand()*dndl[19];
                       while( ( ran >= dndl[l] ) && ( l < 20 ) )l++;
                       l = Imin( 19, l );
-                      xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
+                      xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
                       if( pv[i].getSide() < 0 ) xval *= -1.;
                       pv[i].setMomentumAndUpdate( xval*et );  // Set the z-momentum
                       pvEnergy = pv[i].getEnergy();
@@ -1781,42 +1784,41 @@ G4HEInelastic::HighEnergyCascading(G4bool &successful,
  }
 
 void
-G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
-                                            G4int &vecLen,
-                                            G4HEVector incidentParticle,
-                                            G4HEVector targetParticle,
-                                            G4double atomicWeight,
-                                            G4double atomicNumber)
- {
-   G4int i,j;
-   G4double incidentKineticEnergy   = incidentParticle.getKineticEnergy();
-   G4double incidentTotalMomentum   = incidentParticle.getTotalMomentum();
-   G4double incidentCharge          = incidentParticle.getCharge(); 
-   G4double incidentMass            = incidentParticle.getMass();
-   G4double targetMass              = targetParticle.getMass();
-   G4int    pionPlusCode            = PionPlus.getCode();
-   G4int    pionMinusCode           = PionMinus.getCode();
-   G4int    pionZeroCode            = PionZero.getCode();  
-   G4int    protonCode              = Proton.getCode();
-   G4int    neutronCode             = Neutron.getCode();
-   G4HEVector *pvmx   = new G4HEVector [10];
-   G4double   *reddec = new G4double [7];
+G4HEInelastic::TuningOfHighEnergyCascading(G4HEVector pv[],
+                                           G4int &vecLen,
+                                           G4HEVector incidentParticle,
+                                           G4HEVector targetParticle,
+                                           G4double atomicWeight,
+                                           G4double atomicNumber)
+{
+  G4int i,j;
+  G4double incidentKineticEnergy   = incidentParticle.getKineticEnergy();
+  G4double incidentTotalMomentum   = incidentParticle.getTotalMomentum();
+  G4double incidentCharge          = incidentParticle.getCharge(); 
+  G4double incidentMass            = incidentParticle.getMass();
+  G4double targetMass              = targetParticle.getMass();
+  G4int    pionPlusCode            = PionPlus.getCode();
+  G4int    pionMinusCode           = PionMinus.getCode();
+  G4int    pionZeroCode            = PionZero.getCode();  
+  G4int    protonCode              = Proton.getCode();
+  G4int    neutronCode             = Neutron.getCode();
+  G4HEVector *pvmx   = new G4HEVector [10];
+  G4double   *reddec = new G4double [7];
 
-   if ( incidentKineticEnergy > (25.+G4UniformRand()*75.) )
-     {
-       G4double reden = -0.7 + 0.29*std::log10(incidentKineticEnergy);
+  if (incidentKineticEnergy > (25.+G4UniformRand()*75.) ) {
+    G4double reden = -0.7 + 0.29*std::log10(incidentKineticEnergy);
 //       G4double redat =  1.0 - 0.40*std::log10(atomicWeight);
 //       G4double redat = 0.5 - 0.18*std::log10(atomicWeight);
-       G4double redat = 0.722 - 0.278*std::log10(atomicWeight);
-       G4double pmax   = -200.;
-       G4double pmapim = -200.;
-       G4double pmapi0 = -200.;
-       G4double pmapip = -200.;
-       G4int ipmax  = 0;
-       G4int maxpim = 0;
-       G4int maxpi0 = 0;
-       G4int maxpip = 0;
-       G4int iphmf; 
+    G4double redat = 0.722 - 0.278*std::log10(atomicWeight);
+    G4double pmax   = -200.;
+    G4double pmapim = -200.;
+    G4double pmapi0 = -200.;
+    G4double pmapip = -200.;
+    G4int ipmax  = 0;
+    G4int maxpim = 0;
+    G4int maxpi0 = 0;
+    G4int maxpip = 0;
+    G4int iphmf; 
        if (   (G4UniformRand() > (atomicWeight/100.-0.28)) 
            && (std::fabs(incidentCharge) > 0.) )
          { 
@@ -1933,130 +1935,145 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
              }
          }
        vecLen = j;     
-     }
+  }
 
-   pvmx[0] = incidentParticle;
-   pvmx[1] = targetParticle;
-   pvmx[8].setZero();
-   pvmx[2].Add(pvmx[0], pvmx[1]);
-   pvmx[3].Lor(pvmx[0], pvmx[2]);
-   pvmx[4].Lor(pvmx[1], pvmx[2]);
+  pvmx[0] = incidentParticle;
+  pvmx[1] = targetParticle;
+  pvmx[8].setZero();
+  pvmx[2].Add(pvmx[0], pvmx[1]);
+  pvmx[3].Lor(pvmx[0], pvmx[2]);
+  pvmx[4].Lor(pvmx[1], pvmx[2]);
    
-   if(verboseLevel > 1)
-     {
-       pvmx[0].Print(0);
-       incidentParticle.Print(0);
-       pvmx[1].Print(1);
-       targetParticle.Print(1);
-       pvmx[2].Print(2);
-       pvmx[3].Print(3);
-       pvmx[4].Print(4);
-     }
+  if (verboseLevel > 1) {
+    pvmx[0].Print(0);
+    incidentParticle.Print(0);
+    pvmx[1].Print(1);
+    targetParticle.Print(1);
+    pvmx[2].Print(2);
+    pvmx[3].Print(3);
+    pvmx[4].Print(4);
+  }
+
+  // Calculate leading particle effect in which a single final state 
+  // particle carries away nearly the maximum allowed momentum, while
+  // all other secondaries have reduced momentum.  A secondary is 
+  // proportionately less likely to be a leading particle as the 
+  // difference of its quantum numbers with the primary increases.
  
-   G4int ledpar = -1;
-   G4double redpar = 0.;
-   G4double gespar = 0.;
-   G4int incidentS = incidentParticle.getStrangenessNumber();
-   if(incidentParticle.getName() == "KaonZeroShort" || incidentParticle.getName() == "KaonZeroLong")
-     {
-       if(G4UniformRand() < 0.5) { incidentS = 1;}
-       else                      { incidentS = -1;}
-     }
-   G4int incidentB =   incidentParticle.getBaryonNumber();   
+  G4int ledpar = -1;
+  G4double redpar = 0.;
+  G4int incidentS = incidentParticle.getStrangenessNumber();
+  if (incidentParticle.getName() == "KaonZeroShort" || 
+      incidentParticle.getName() == "KaonZeroLong") {
+    if(G4UniformRand() < 0.5) { 
+      incidentS = 1;
+    } else { 
+      incidentS = -1;
+    }
+  }
 
-   if(verboseLevel > 1)
-     {
-       G4cout << " incidentS, incidentB " << incidentS << " " << incidentB << G4endl;
-     }
+  G4int incidentB =   incidentParticle.getBaryonNumber();   
 
-   for (i=0; i<vecLen; i++)
-     { G4int iphmf = pv[i].getCode();
-       G4double ppp   = pv[i].Length();
-       if (ppp > 1.e-3)
-         { 
-           pvmx[5].Lor( pv[i], pvmx[2] );
-           G4double cost = pvmx[3].CosAng( pvmx[5] );
-           G4int particleS =   pv[i].getStrangenessNumber();
-           if(pv[i].getName() == "KaonZeroShort" || pv[i].getName() == "KaonZeroLong")
-             {
-               if(G4UniformRand() < 0.5) { particleS = 1;}
-               else                      { particleS = -1;}
-             } 
-           G4int particleB =   pv[i].getBaryonNumber();
-           G4double hfmass;
-           if (cost > 0.)
-             { 
-               reddec[0] = std::fabs( incidentMass - pv[i].getMass() );
-               reddec[1] = std::fabs( incidentCharge - pv[i].getCharge());
-               reddec[2] = std::fabs( G4double(incidentS - particleS) ); // cast for aCC
-               reddec[3] = std::fabs( G4double(incidentB - particleB) ); // cast for aCC
-               hfmass = incidentMass;  
-             }
-           else
-             { 
-               reddec[0] = std::fabs( targetMass - pv[i].getMass() );
-               reddec[1] = std::fabs( atomicNumber/atomicWeight - pv[i].getCharge());
-               reddec[2] = std::fabs( G4double(particleS) ); // cast for aCC
-               reddec[3] = std::fabs( 1. - particleB );
-               hfmass = targetMass;  
-             } 
-           reddec[5] = reddec[0]+reddec[1]+reddec[2]+reddec[3];
-           G4double sbqwgt = reddec[5];
-           if ( hfmass < 0.2)
-             { 
-               sbqwgt = (sbqwgt-2.5)*0.10;
-               if(pv[i].getCode() == pionZeroCode) sbqwgt = 0.15; 
-             } 
-           else if (hfmass < 0.6)
-               sbqwgt = (sbqwgt-3.0)*0.10;
-           else 
-             { 
-               sbqwgt = (sbqwgt-2.0)*0.10;
-               if(pv[i].getCode() == pionZeroCode) sbqwgt = 0.15;  
-             }
-           ppp = pvmx[5].Length();
-           if ( (sbqwgt>0.) && (ppp>1.e-6) )
-             { 
-               G4double pthmf = ppp*std::sqrt(1.-cost*cost);
-               G4double plhmf = ppp*cost*(1.-sbqwgt);
-               pvmx[7].Cross( pvmx[3], pvmx[5] );
-               pvmx[7].Cross( pvmx[7], pvmx[3] );
-               if(pvmx[3].Length() > 0.)
-                 pvmx[6].SmulAndUpdate( pvmx[3], plhmf/pvmx[3].Length() );
-               else if(verboseLevel > 1)
-                 G4cout << "NaNQ in Tuning of High Energy Hadronic Interactions" << G4endl;
-               if(pvmx[7].Length() > 0.)    
-                 pvmx[7].SmulAndUpdate( pvmx[7], pthmf/pvmx[7].Length() );
-               else if(verboseLevel > 1)
-                 G4cout << "NaNQ in Tuning of High Energy Hadronic Interactions" << G4endl;
-               pvmx[5].Add3(pvmx[6], pvmx[7] );
-               pvmx[5].setEnergy( std::sqrt(sqr(pvmx[5].Length()) + sqr(pv[i].getMass())));
-               pv[i].Lor( pvmx[5], pvmx[4] );
-               if(verboseLevel > 1) 
-                 {
-                   G4cout << " Particle Momentum changed to: " << G4endl;
-                   pv[i].Print(i); 
-		 }
-             }    
+  for (i=0; i<vecLen; i++) { 
+    G4int iphmf = pv[i].getCode();
+    G4double ppp = pv[i].Length();
 
-	   // Neither pi0s, backward nucleons from intra-nuclear cascade,
-	   // nor evaporation fragments can be leading particles
+    if (ppp > 1.e-3) { 
+      pvmx[5].Lor( pv[i], pvmx[2] );  // secondary in CM frame
+      G4double cost = pvmx[3].CosAng( pvmx[5] );
 
-           if (iphmf != pionZeroCode && pv[i].getSide() > -3)
-             { 
-               pvmx[7].Sub3( incidentParticle, pv[i] );
-               reddec[4] = pvmx[7].Length()/incidentTotalMomentum;
-               reddec[6] = reddec[4]*2./3. + reddec[5]/12.;
-               reddec[6] = Amax(0., 1. - reddec[6]);
-               gespar   += reddec[6];
-               if ( (reddec[5] <= 3.75) && (reddec[6] > redpar) )
-                 { ledpar = i;
-                   redpar = reddec[6]; 
-                 }   
-             } 
-         }
-       pvmx[8].Add3(pvmx[8], pv[i] );
-     } 
+      // For each secondary, find the sum of the differences of its 
+      // quantum numbers with that of the incident particle 
+      // (dM + dQ + dS + dB)
+
+      G4int particleS = pv[i].getStrangenessNumber();
+
+      if (pv[i].getName() == "KaonZeroShort" || 
+          pv[i].getName() == "KaonZeroLong") {
+        if (G4UniformRand() < 0.5) { 
+          particleS = 1;
+        } else { 
+          particleS = -1;
+        }
+      } 
+      G4int particleB = pv[i].getBaryonNumber();
+      G4double hfmass;
+      if (cost > 0.) { 
+        reddec[0] = std::fabs( incidentMass - pv[i].getMass() );
+        reddec[1] = std::fabs( incidentCharge - pv[i].getCharge());
+        reddec[2] = std::fabs( G4double(incidentS - particleS) ); // cast for aCC
+        reddec[3] = std::fabs( G4double(incidentB - particleB) ); // cast for aCC
+        hfmass = incidentMass;
+
+      } else { 
+        reddec[0] = std::fabs( targetMass - pv[i].getMass() );
+        reddec[1] = std::fabs( atomicNumber/atomicWeight - pv[i].getCharge());
+        reddec[2] = std::fabs( G4double(particleS) ); // cast for aCC
+        reddec[3] = std::fabs( 1. - particleB );
+        hfmass = targetMass;  
+      }
+
+      reddec[5] = reddec[0]+reddec[1]+reddec[2]+reddec[3];
+      G4double sbqwgt = reddec[5];
+      if (hfmass < 0.2) { 
+        sbqwgt = (sbqwgt-2.5)*0.10;
+        if(pv[i].getCode() == pionZeroCode) sbqwgt = 0.15; 
+      } else if (hfmass < 0.6) {
+        sbqwgt = (sbqwgt-3.0)*0.10;
+      } else { 
+        sbqwgt = (sbqwgt-2.0)*0.10;
+        if(pv[i].getCode() == pionZeroCode) sbqwgt = 0.15;
+      }
+           
+      ppp = pvmx[5].Length();
+
+      // Reduce the longitudinal momentum of the secondary by a factor 
+      // which is a function of the sum of the differences
+
+      if (sbqwgt > 0. && ppp > 1.e-6) { 
+        G4double pthmf = ppp*std::sqrt(1.-cost*cost);
+        G4double plhmf = ppp*cost*(1.-sbqwgt);
+        pvmx[7].Cross( pvmx[3], pvmx[5] );
+        pvmx[7].Cross( pvmx[7], pvmx[3] );
+
+        if (pvmx[3].Length() > 0.)
+          pvmx[6].SmulAndUpdate( pvmx[3], plhmf/pvmx[3].Length() );
+        else if(verboseLevel > 1)
+          G4cout << "NaNQ in Tuning of High Energy Hadronic Interactions" << G4endl;
+
+        if (pvmx[7].Length() > 0.)    
+          pvmx[7].SmulAndUpdate( pvmx[7], pthmf/pvmx[7].Length() );
+        else if(verboseLevel > 1)
+          G4cout << "NaNQ in Tuning of High Energy Hadronic Interactions" << G4endl;
+
+        pvmx[5].Add3(pvmx[6], pvmx[7] );
+        pvmx[5].setEnergy( std::sqrt(sqr(pvmx[5].Length()) + sqr(pv[i].getMass())));
+        pv[i].Lor( pvmx[5], pvmx[4] );
+        if (verboseLevel > 1) {
+          G4cout << " Particle Momentum changed to: " << G4endl;
+          pv[i].Print(i); 
+	}
+      }
+
+      // Choose leading particle
+      // Neither pi0s, backward nucleons from intra-nuclear cascade,
+      // nor evaporation fragments can be leading particles
+
+      G4int ss = -3;
+      if (incidentS != 0) ss = 0;
+      if (iphmf != pionZeroCode && pv[i].getSide() > ss) { 
+        pvmx[7].Sub3( incidentParticle, pv[i] );
+        reddec[4] = pvmx[7].Length()/incidentTotalMomentum;
+        reddec[6] = reddec[4]*2./3. + reddec[5]/12.;
+        reddec[6] = Amax(0., 1. - reddec[6]);
+        if ( (reddec[5] <= 3.75) && (reddec[6] > redpar) ) { 
+          ledpar = i;
+          redpar = reddec[6]; 
+        }   
+      } 
+    }
+    pvmx[8].Add3(pvmx[8], pv[i] );
+  }
 
   if(false) if (ledpar >= 0)
      { 
@@ -2078,30 +2095,33 @@ G4HEInelastic::TuningOfHighEnergyCascading( G4HEVector pv[],
            pv[ledpar].Print(ledpar);
        }  
      }
-  if(conserveEnergy)
-  {
+
+  if (conserveEnergy) {
     G4double ekinhf = 0.;
-    for(i=0; i<vecLen; i++)
-    {
+    for (i=0; i<vecLen; i++) {
       ekinhf += pv[i].getKineticEnergy();
       if(pv[i].getMass() < 0.7) ekinhf += pv[i].getMass();
     }
     if(incidentParticle.getMass() < 0.7) ekinhf -= incidentParticle.getMass();
-    if(ledpar < 0)
-    {
+
+    if(ledpar < 0) {   // no leading particle chosen
       ekinhf = incidentParticle.getKineticEnergy()/ekinhf;
-      for(i=0; i<vecLen; i++) pv[i].setKineticEnergyAndUpdate(ekinhf*pv[i].getKineticEnergy());
-    }
-    else
-    {
+      for (i=0; i<vecLen; i++) 
+        pv[i].setKineticEnergyAndUpdate(ekinhf*pv[i].getKineticEnergy());
+
+    } else {   
+      // take the energy removed from non-leading particles and
+      // give it to the leading particle
       ekinhf = incidentParticle.getKineticEnergy() - ekinhf;
       ekinhf += pv[ledpar].getKineticEnergy();
       if(ekinhf < 0.) ekinhf = 0.;
       pv[ledpar].setKineticEnergyAndUpdate(ekinhf);
     }
-  }  
+  }
+
   delete [] reddec;
   delete [] pvmx;
+
   return;
  }     
 
@@ -3450,7 +3470,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
                       ran = G4UniformRand()*dndl[19];
                       while( ( ran >= dndl[l] ) && ( l < 20 ) )l++;
                       l = Imin( 19, l );
-                      xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
+                      xval = Amin( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
                       if( pv[i].getSide() < 0 ) xval *= -1.;
                       pv[i].setMomentumAndUpdate( xval*et );   // set the z-momentum
                       pvEnergy = pv[i].getEnergy();
@@ -5495,10 +5515,13 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
       totalMass += mass[i];
       sm[i] = totalMass;
     }
+
     if( totalMass >= totalEnergy ) {
-      G4cerr << "*** Error in G4HEInelastic::GenerateNBodyEvent" << G4endl;
-      G4cerr << "    total mass (" << totalMass << ") >= total energy ("
-           << totalEnergy << ")" << G4endl;
+      if (verboseLevel > 1) {
+        G4cout << "*** Error in G4HEInelastic::GenerateNBodyEvent" << G4endl;
+        G4cout << "    total mass (" << totalMass << ") >= total energy ("
+               << totalEnergy << ")" << G4endl;
+      }
       delete [] mass;
       delete [] energy;
       for( i=0; i<3; ++i )delete [] pcm[i];
@@ -5506,6 +5529,7 @@ G4HEInelastic::fctcos(G4double t, G4double aa, G4double bb, G4double cc,
       delete [] sm;
       return -1.0;
     }
+
     G4double kineticEnergy = totalEnergy - totalMass;
     G4double* emm = new G4double [vecLen];
     emm[0] = mass[0];

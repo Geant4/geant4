@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4IonTable.hh,v 1.25.2.1 2008/04/25 12:21:52 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 
 // ------------------------------------------------------------

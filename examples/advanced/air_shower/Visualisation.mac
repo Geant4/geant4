@@ -11,10 +11,10 @@
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
-/vis/open OGLIX
+#/vis/open OGLIX
 #/vis/open RayTracer
 #/vis/open OGLSX
-#/vis/open DAWNFILE
+/vis/open DAWNFILE
 #/vis/open HepRepFile
 #/vis/open VRML2FILE
 #
@@ -32,8 +32,8 @@
 /vis/scene/add/trajectories 
 /vis/scene/endOfEventAction accumulate
 #/vis/drawVolume
-
-
+/gps/particle opticalphoton
+/gps/energy 2.0 eV	
 /mysetrun/SetRunID 9999
-/run/beamOn 50
+/run/beamOn 100
 

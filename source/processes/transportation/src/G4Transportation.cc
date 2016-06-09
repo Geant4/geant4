@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Transportation.cc,v 1.72.2.1 2007/12/07 17:18:11 japost Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4KnotVector.cc,v 1.10.2.1 2008/04/23 08:59:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file

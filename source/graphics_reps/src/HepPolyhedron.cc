@@ -25,7 +25,7 @@
 //
 //
 // $Id: HepPolyhedron.cc,v 1.26.2.1.2.1 2008/04/23 07:58:25 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 
 //

@@ -24,16 +24,21 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelMuonPhysics.cc,v 1.4 2006/06/29 15:56:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-//
+// $Id: GammaRayTelMuonPhysics.cc,v 1.4.2.1 2008/09/02 14:24:41 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 // 
 
 #include "GammaRayTelMuonPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4MuonPlus.hh"
+#include "G4TauPlus.hh"
+#include "G4TauMinus.hh"
 #include <iomanip>   
+
+
+#include "G4ParticleTypes.hh"
 
 
 GammaRayTelMuonPhysics::GammaRayTelMuonPhysics(const G4String& name)

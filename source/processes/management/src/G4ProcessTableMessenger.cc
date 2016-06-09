@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.17 2006/06/29 21:08:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ProcessTableMessenger.cc,v 1.17.4.1 2008/09/02 13:39:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //
 //---------------------------------------------------------------
@@ -437,7 +437,8 @@ void G4ProcessTableMessenger::SetNumberOfProcessType()
   G4int idx;
   for (idx = 0; idx < 1000 ; idx ++ ) {
     G4String typeName = G4VProcess::GetProcessTypeName(G4ProcessType(idx));
-    if ( isFoundEndMark = typeName.contains("---")) break;
+    isFoundEndMark = typeName.contains("---");
+    if ( isFoundEndMark ) break;
   }
   if ( isFoundEndMark ) {
     NumberOfProcessType = idx;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.26 2007/10/18 11:14:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Element.cc,v 1.26.2.1 2008/09/04 11:53:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,22 +68,35 @@ G4Element::G4Element(const G4String& name, const G4String& symbol,
                      G4double zeff, G4double aeff)
   : fName(name), fSymbol(symbol)		     
 {
-  if (zeff<1.) G4Exception (" ERROR from G4Element::G4Element !"
-			    " It is not allowed to create an Element with Z < 1" );
+  if (zeff<1.) {
+    G4cout << "G4Element ERROR:  " << name << " Z= " << zeff
+           << " A= " << fNeff << G4endl;
+    G4Exception (" ERROR from G4Element::G4Element !"
+		 " It is not allowed to create an Element with Z < 1" );
+  }
 
-  if (aeff/(g/mole)<zeff) G4Exception (" ERROR from G4Element::G4Element !"
-				       " Attempt to create an Element with N < Z !!!" );
-
-  if ((zeff-G4int(zeff)) > perMillion)
+  if ((zeff-G4int(zeff)) > perMillion) {
+    G4cout << "G4Element ERROR:  " << name << " Z= " << zeff
+           << " A= " << fNeff << G4endl;
     G4cerr << name << " : WARNING from G4Element::G4Element !"  
       " Trying to define an element as a mixture directly via effective Z."
 	   << G4endl;
+  }
 
   InitializePointers();
 
   fZeff   = zeff;
   fNeff   = aeff/(g/mole);
   fAeff   = aeff;
+
+  if(fNeff < 1.0) fNeff = 1.0;
+
+  if (fNeff < zeff) {
+    G4cout << "G4Element ERROR:  " << name << " Z= " << zeff
+           << " A= " << fNeff << G4endl;
+    G4Exception (" ERROR from G4Element::G4Element !"
+                 " Attempt to create an Element with N < Z !!!" );
+  }
    
   fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
   fAtomicShells     = new G4double[fNbOfAtomicShells];
@@ -116,10 +129,11 @@ G4Element::G4Element(const G4String& name,
 
 void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
 {
-  if (theIsotopeVector == 0)
+  if (theIsotopeVector == 0) {
+    G4cout << "G4Element ERROR:  " << fName << G4endl;
     G4Exception ("ERROR from G4Element::AddIsotope!"
 		 " Trying to add an Isotope before contructing the element.");
-
+  }
   // filling ...
   if ( fNumberOfIsotopes < theIsotopeVector->size() ) {
     // check same Z
@@ -133,9 +147,11 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     ++fNumberOfIsotopes;
     isotope->increaseCountUse();
   } 
-  else G4Exception ("ERROR from G4Element::AddIsotope!"  
-		    " Attempt to add more than the declared number of isotopes.");
-
+  else {
+    G4cout << "G4Element ERROR:  " << fName << G4endl;
+    G4Exception ("ERROR from G4Element::AddIsotope!"  
+		 " Attempt to add more than the declared number of isotopes.");
+  }
   // filled.
   if ( fNumberOfIsotopes == theIsotopeVector->size() ) {
     // Compute Neff, Aeff
@@ -397,7 +413,7 @@ std::ostream& operator<<(std::ostream& flux, G4Element* element)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- std::ostream& operator<<(std::ostream& flux, G4Element& element)
+std::ostream& operator<<(std::ostream& flux, G4Element& element)
 {
   flux << &element;        
   return flux;

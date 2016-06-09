@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.66 2007/11/23 09:07:43 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Tubs.cc,v 1.66.4.1 2008/09/02 12:36:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 
 // class G4Tubs
@@ -982,14 +982,69 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
           inum   = p.x()*cosCPhi + p.y()*sinCPhi ;
           iden   = std::sqrt(t3) ;
           cosPsi = inum/iden ;
-          if (cosPsi >= cosHDPhiIT)  { return 0.0; }
+          if (cosPsi >= cosHDPhiIT)
+          {
+            // In the old version, the small negative tangent for the point
+            // on surface was not taken in account, and returning 0.0 ...
+            // New version: check the tangent for the point on surface and 
+            // if no intersection, return kInfinity, if intersection instead
+            // return s.
+            //
+            c = t3-fRMax*fRMax; 
+            if ( c<=0.0 )
+            {
+              return 0.0;
+            }
+            else
+            {
+              c = c/t1 ;
+              d = b*b-c;
+              if ( d>=0.0 )
+              {
+                snxt = c/(-b+std::sqrt(d)); // using safe solution
+                                            // for quadratic equation 
+                if ( snxt<kCarTolerance*0.5 ) { snxt=0; }
+                return snxt ;
+              }      
+              else
+              {
+                return kInfinity;
+              }
+            }
+          } 
         }
         else
-        {
-          return 0.0 ;
-        }
-      }
-    }      
+        {   
+          // In the old version, the small negative tangent for the point
+          // on surface was not taken in account, and returning 0.0 ...
+          // New version: check the tangent for the point on surface and 
+          // if no intersection, return kInfinity, if intersection instead
+          // return s.
+          //
+          c = t3 - fRMax*fRMax; 
+          if ( c<=0.0 )
+          {
+            return 0.0;
+          }
+          else
+          {
+            c = c/t1 ;
+            d = b*b-c;
+            if ( d>=0.0 )
+            {
+              snxt= c/(-b+std::sqrt(d)); // using safe solution
+                                         // for quadratic equation 
+              if ( snxt<kCarTolerance*0.5 ) { snxt=0; }
+              return snxt ;
+            }      
+            else
+            {
+              return kInfinity;
+            }
+          }
+        } // end if   (seg)
+      }   // end if   (t3>tolIRMin2)
+    }     // end if   (Inside Outer Radius) 
     if ( fRMin )    // Try inner cylinder intersection
     {
       c = (t3 - fRMin*fRMin)/t1 ;
@@ -1458,7 +1513,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
               // (if not -> no intersect)
               //
               if((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance))
-		{ sidephi = kSPhi;
+                { sidephi = kSPhi;
                 if (((fSPhi-0.5*kAngTolerance)<=vphi)
                    &&((ePhi+0.5*kAngTolerance)>=vphi))
                 {

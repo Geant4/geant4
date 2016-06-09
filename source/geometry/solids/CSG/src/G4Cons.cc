@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Cons.cc,v 1.54.4.1 2008/04/23 09:05:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //
 // class G4Cons

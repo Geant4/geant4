@@ -1,4 +1,4 @@
-$Id: History,v 1.173.2.2 2008/04/17 09:12:23 kurasige Exp $
+$Id: History,v 1.173.2.4 2008/09/02 13:46:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,9 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-April 17th, 2008, Hisaya Kurashige (run-V09-00-08)
-- Add G4Transportation to shortlived particles in G4VUserPhysicsList
-  in order to fix a bug for shortlived particle decay
+
+July  10th, 2008, Gabriele Cosmo (run-V09-00-10)
+- G4RunManagerKernel: avoid deletion of default root-region which is now
+  taken care by the geometry stores. It resolves the ambiguity of explicitely
+  avoiding the de-registration and deletion of the default root-region by
+  the stores and eliminates the limitation of forcing the world logical-volume
+  being the first registered in the logical-volumes store.
+- Tag for release 9.1.p03.
+
+May   09th, 2008, Hisaya Kurashige (run-V09-00-09)
+- Invoke G4Particle::DeleteAllParticles() in the destructor of G4VUserPhysicsList
+
+April 30th, 2008, Makoto Asai (run-V09-00-08)
+- Added G4Transportation process to short-lived particles in G4VUserPhysicsList
+  in order to fix the problem found for infinitesimal but non-zero decay length.
 
 November 16th, 2007, Makoto Asai (run-V09-00-06)
 - Re-order the commands in G4RunMessenger so that obsolete commands appear last.

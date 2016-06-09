@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AssemblyVolume.cc,v 1.11 2008/02/03 09:12:50 ivana Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 
 // Class G4AssemblyVolume - implementation

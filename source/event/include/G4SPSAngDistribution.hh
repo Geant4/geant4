@@ -177,13 +177,19 @@ public:
   void SetUseUserAngAxis(G4bool);
   void SetUserWRTSurface(G4bool);
   //
-  void SetPosDistribution(G4SPSPosDistribution* a) {posDist = a; };
-  void SetBiasRndm(G4SPSRandomGenerator* a) {angRndm = a;};
+  void SetPosDistribution(G4SPSPosDistribution* a) {posDist = a; }
+  void SetBiasRndm(G4SPSRandomGenerator* a) {angRndm = a;}
   // method to re-set the histograms
   void ReSetHist(G4String);
   //
   // Set the verbosity level.
-  void SetVerbosity(G4int a) {verbosityLevel = a; } ;
+  void SetVerbosity(G4int a) {verbosityLevel = a; }
+  // some get methods
+  G4String GetDistType() { return AngDistType;}
+  G4double GetMinTheta() { return MinTheta; }
+  G4double GetMaxTheta() { return MaxTheta; }
+  G4double GetMinPhi() { return MinPhi; }
+  G4double GetMaxPhi() { return MaxPhi; }
   //
   G4ParticleMomentum GenerateOne();
   
@@ -229,7 +235,3 @@ private:
 };
 
 #endif
-
-
-
-

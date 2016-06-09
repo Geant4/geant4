@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2007/09/30 23:05:58 gum Exp $
+$Id: History,v 1.14.2.1 2008/09/02 14:13:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +7,24 @@ $Id: History,v 1.14 2007/09/30 23:05:58 gum Exp $
 
                            History file
                            ------------
+
+03.07.2008 -- B. Tome - air_shower-V09-00-01
+              Access to private data members of UltraDetectorConstruction
+              through Get functions.
+              Tag for release 9.1.p03.
+
+03.07.2008 -- B. Tome
+              Adjusted range of optical properties tables in UltraDetectorConstruction;
+              Added check of optical photon energy in UltraPrimaryGeneratorAction;
+              Cerenkov process attached to all applicable particles;
+              Modified Visualisation.mac and UltraMacro.mac files
+              
+26.06.2008 -- G.A.P.Cirrone
+              Corrected a parameter in the UltraDetectorConstruction to remove a segmentation
+	      due to a non correct definition of the refraction index of the Quartz.
+
+11.06.2008 -- G.A.P.Cirrone
+              Solved a compilation error in the Analysis Manager 
 
 30.09.2007 -- P.Gumplinger - air_shower-V09-00-00
            -- adjust to the G4Cerenkov process now being a G4VDiscreteProcess
@@ -37,7 +55,7 @@ $Id: History,v 1.14 2007/09/30 23:05:58 gum Exp $
 06.06.2005 -- G.Cosmo - air_shower-V07-00-00
            -- Corrected usage of <strstream> in RunActionMessenger.
            -- Corrected call to Visualisation.mac from Ultra.cc.
-              - Changed viewer to OGLSX in Visualisation.mac.
+           -- Changed viewer to OGLSX in Visualisation.mac.
 
 03.05.2005 -- J.Allison
            -- Replaced vis manager with G4VisExecutive.

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.11 2007/09/30 23:00:40 gum Exp $
+$Id: History,v 1.11.2.1 2008/09/03 08:38:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.11 2007/09/30 23:00:40 gum Exp $
 
                       Category History file
                       ---------------------
+
+14.06.2008 - G.A.P.Cirrone (Rich-V09-00-01)
+             Fixed compilation errors and removed warnings.
+             Tag for release 9.1.p03.
 
 30.09.2007 - P.Gumplinger (Rich-V09-00-00)
              adjust to the G4Cerenkov process now being a G4VDiscreteProcess

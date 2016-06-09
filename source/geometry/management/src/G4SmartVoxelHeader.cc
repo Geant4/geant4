@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4SmartVoxelHeader.cc,v 1.28.4.1 2008/04/23 09:15:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 
 // class G4SmartVoxelHeader

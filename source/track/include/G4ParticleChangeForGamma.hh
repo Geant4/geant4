@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParticleChangeForGamma.hh,v 1.9 2008/01/11 19:57:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //
 // ------------------------------------------------------------

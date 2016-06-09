@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QuasiElasticChannel.hh,v 1.1.2.1 2008/04/24 10:54:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 
 // Author : Gunter Folger March 2007

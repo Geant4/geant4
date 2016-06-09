@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.hh,v 1.12 2006/06/29 18:18:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PVDivision.hh,v 1.12.2.1 2008/09/02 12:18:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 // 
 // class G4PVDivision
 //
@@ -144,10 +144,7 @@ class G4PVDivision : public G4VPhysicalVolume
   private:
 
     void CheckAndSetParameters( const EAxis pAxis,
-                                const G4int nDivs,
-                                const G4double width,
                                 const G4double offset, 
-                                      DivisionType divType,
                                 const G4LogicalVolume* pMotherLogical );
 
     G4PVDivision(const G4PVDivision&);

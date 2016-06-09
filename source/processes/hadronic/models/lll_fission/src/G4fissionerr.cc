@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id: G4fissionerr.cc,v 1.2 2007/06/01 13:46:53 gcosmo Exp $
+// $Id: G4fissionerr.cc,v 1.2.2.1 2008/09/02 14:49:30 gcosmo Exp $
 //
 
 #include <iostream>
@@ -94,11 +94,12 @@ void G4fissionEvent::G4fissionerr(G4int iSever, std::string chSubNam, std::strin
    ExitMsg = "Error in Function "+chSubNam+", Severity=" + itoa(iSever) + " : "+chMsg;
 
    std::cerr << "Fission " << ExitMsg << std::endl;
-   if (doExit == 1) exit(iSever);
+   if (doExit == 1) G4Exception("G4fissionEvent::G4fissionerr()", "601",
+                                FatalException, "Fatal Error");
 
    return;
-
 }
+
 
 std::string itoa(const G4int& x)
 {

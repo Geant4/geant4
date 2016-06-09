@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.114 2007/12/11 13:20:29 gcosmo Exp $
+# $Id: architecture.gmk,v 1.114.2.1 2008/09/02 09:44:39 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -269,9 +269,9 @@ ifneq ($(G4LIB_BUILD_GDML),)
   endif
   ifndef GDMLLIBS
     ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-      GDMLLIBS := $(LIB_PATH)$(XERCESCROOT)/lib xerces-depdom_2.lib xerces-c_2.lib
+      GDMLLIBS := $(LIB_PATH)$(XERCESCROOT)/lib xerces-c_2.lib
     else
-      GDMLLIBS := -L$(XERCESCROOT)/lib -lxerces-depdom -lxerces-c
+      GDMLLIBS := -L$(XERCESCROOT)/lib -lxerces-c
     endif
   endif
   CPPFLAGS  += $(GDMLFLAGS)

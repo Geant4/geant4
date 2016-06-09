@@ -1,4 +1,4 @@
-$Id: History,v 1.116.2.3 2008/04/29 15:37:16 gcosmo Exp $
+$Id: History,v 1.116.2.4 2008/09/15 07:38:22 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,33 +17,40 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 12th, 2008 - T.Nikitina (geomnav-V09-00-16)
+---------------------------------
+- G4PropagatorInField: correction to LocateIntersectionPoint() algorithm
+  to ensure that endpoints are not further apart in space than on the curve
+  due to different errors in the integration.
+- Tag for release 9.1.p03.
+
 April 23rd, 2008 - G.Cosmo (geomnav-V09-00-15)
 --------------------------
 - Tag for release 9.1.p02.
 
-April 29th, 2008 - M.Asai (geomnav-V09-01-04)
+April 29th, 2008 - M.Asai
 -------------------------
 - G4PathFinder: commented out warning and exception in ComputeStep()
   for step smaller than minimum threshold.
 
-April 28th, 2008 - G.Cosmo (geomnav-V09-01-03)
+April 28th, 2008 - G.Cosmo
 --------------------------
 - Corrected condition for wrong evaluation order introduced in the
   previous tag.
 
-March 13th, 2008 - G.Cosmo (geomnav-V09-01-02)
+March 13th, 2008 - G.Cosmo
 --------------------------
 - Cleared compilation warnings in G4ReplicaNavigation on gcc-4.3.0 for
   ambiguous use of parentheses in condition statements.
 
-January 24th, 2008 - T.Nikitina (geomnav-V09-01-01)
+January 24th, 2008 - T.Nikitina
 -------------------------------
 - G4PropagatorInField: changed condition for 'ReEstimationEndPoint'
   in order to better handle very strict parameters of propagation.
   Also added more verbosity in case of error for negative step.
   Fixes rare problem observed in production by ATLAS.
 
-January 22nd, 2008 - P.Arce (geomnav-V09-01-00)
+January 22nd, 2008 - P.Arce
 ---------------------------
 - G4PhantomParameterisation:
   o Bug fix in GetReplicaNo() to catch overflows in X and Y.

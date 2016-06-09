@@ -75,6 +75,11 @@ UltraDetectorConstruction::UltraDetectorConstruction()
 
  // Sensitive Detector Manager
  SDmanager = G4SDManager::GetSDMpointer();
+
+// Define wavelength limits for materials definition
+ lambda_min = 200*nm ; 
+ lambda_max = 700*nm ; 
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -224,27 +229,14 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 // Construct Material Properties Tables
 /////////////////////////////////////////////
 
-  const G4int NUMENTRIES = 32;
+  const G4int NUMENTRIES = 2;
 
   // Energy bins
-  G4double X_RINDEX[NUMENTRIES] =
-            { 2.034E-9*GeV, 2.068E-9*GeV, 2.103E-9*GeV, 2.139E-9*GeV,
-              2.177E-9*GeV, 2.216E-9*GeV, 2.256E-9*GeV, 2.298E-9*GeV,
-              2.341E-9*GeV, 2.386E-9*GeV, 2.433E-9*GeV, 2.481E-9*GeV,
-              2.532E-9*GeV, 2.585E-9*GeV, 2.640E-9*GeV, 2.697E-9*GeV,
-              2.757E-9*GeV, 2.820E-9*GeV, 2.885E-9*GeV, 2.954E-9*GeV,
-              3.026E-9*GeV, 3.102E-9*GeV, 3.181E-9*GeV, 3.265E-9*GeV,
-              3.353E-9*GeV, 3.446E-9*GeV, 3.545E-9*GeV, 3.649E-9*GeV,
-              3.760E-9*GeV, 3.877E-9*GeV, 4.002E-9*GeV, 4.136E-9*GeV } ;
+  G4double X_RINDEX[NUMENTRIES] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
 
 
   // Air
-  G4double RINDEX_AIR[NUMENTRIES] =
-            { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
-              1.00, 1.00, 1.00, 1.00 } ;
+  G4double RINDEX_AIR[NUMENTRIES] = {1.00, 1.00} ; 
 
 // Air refractive index at 20 oC and 1 atm (from PDG) 
   for(G4int j=0 ; j<NUMENTRIES ; j++){
@@ -264,7 +256,7 @@ void UltraDetectorConstruction::ConstructTableMaterials()
   // Refractive index 
 
   const G4int N_RINDEX_QUARTZ = 2 ;
-  G4double X_RINDEX_QUARTZ[N_RINDEX_QUARTZ] = {0.0*eV, 10.0*eV};
+  G4double X_RINDEX_QUARTZ[N_RINDEX_QUARTZ] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
   G4double RINDEX_QUARTZ[N_RINDEX_QUARTZ] = {1.54, 1.54};
 
   G4MaterialPropertiesTable *MPT_PMT = new G4MaterialPropertiesTable();
@@ -279,20 +271,79 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 
 // Refractive index 
 
-  const G4int    N_RINDEX_ACRYLIC = 3 ;
-  G4double X_RINDEX_ACRYLIC[N_RINDEX_ACRYLIC] = {320.0, 400.0, 500.0};  // Wavelength in nanometers
-  G4double RINDEX_ACRYLIC[N_RINDEX_ACRYLIC] = {1.526, 1.507, 1.497};
+  const G4int NENTRIES = 11 ;
+  G4double LAMBDA_ACRYLIC[NENTRIES] ;
 
-    // Convert from nm to GeV
 
-     for(G4int i=0;i<N_RINDEX_ACRYLIC; i++){
-      X_RINDEX_ACRYLIC[i] = ((1239.84/X_RINDEX_ACRYLIC[i])*1E-9)*GeV;
-      }
+  G4double RINDEX_ACRYLIC[NENTRIES] ;
+  G4double ENERGY_ACRYLIC[NENTRIES] ;
+
+// Parameterization for refractive index of High Grade PMMA 
+
+  G4double bParam[4] = {1760.7010,-1.3687,2.4388e-3,-1.5178e-6} ; 
+  
+  for(G4int i=0;i<NENTRIES; i++){
+ 
+    LAMBDA_ACRYLIC[i] = lambda_min + i*(lambda_max-lambda_min)/float(NENTRIES-1) ;
+    RINDEX_ACRYLIC[i] = 0.0 ;
+
+    for (G4int jj=0 ; jj<4 ; jj++)
+    {
+      RINDEX_ACRYLIC[i] +=  (bParam[jj]/1000.0)*pow(LAMBDA_ACRYLIC[i]/nm,jj) ; 
+    }
+
+    ENERGY_ACRYLIC[i] =   h_Planck*c_light/LAMBDA_ACRYLIC[i] ;  // Convert from wavelength to energy ;
+//  G4cout << ENERGY_ACRYLIC[i]/eV << " " << LAMBDA_ACRYLIC[i]/nm << " " << RINDEX_ACRYLIC[i] << G4endl ;
+
+  }
 
   G4MaterialPropertiesTable *MPT_Acrylic = new G4MaterialPropertiesTable();
-  MPT_Acrylic->AddProperty("RINDEX", X_RINDEX_ACRYLIC, RINDEX_ACRYLIC, N_RINDEX_ACRYLIC);
-  Acrylic->SetMaterialPropertiesTable(MPT_Acrylic);
+  MPT_Acrylic->AddProperty("RINDEX", ENERGY_ACRYLIC, RINDEX_ACRYLIC, NENTRIES);
 
+
+// Absorption
+  const G4int NENT = 25 ;
+  G4double LAMBDAABS[NENT] = 
+  {
+    100.0,
+    246.528671, 260.605103, 263.853516, 266.019104, 268.726105,    
+    271.433136, 273.598724, 276.305725, 279.554138, 300.127380,    
+    320.159241, 340.191101, 360.764343, 381.337585, 399.745239,    
+    421.401276, 440.891724, 460.382172, 480.414001, 500.987274,    
+    520.477722, 540.509583, 559.458618,
+    700.0    
+  } ;
+
+  G4double ABS[NENT] =   // Transmission (in %) of  3mm thick PMMA 
+  { 
+    0.0000000,
+    0.0000000,  5.295952,  9.657321, 19.937695, 29.283491, 
+    39.252335, 48.598133, 58.255451, 65.109039, 79.439247,
+    85.669785, 89.719627, 91.277260, 91.588783, 91.900307,
+    91.588783, 91.277260, 91.277260, 91.588783, 91.588783,
+    91.900307, 91.900307, 91.588783,
+    91.5
+  } ;
+
+
+  MPT_Acrylic->AddProperty("ABSLENGTH", new G4MaterialPropertyVector()) ;
+  for(G4int i=0;i<NENT; i++){
+    G4double energy    = h_Planck*c_light/(LAMBDAABS[i]*nm) ;
+    G4double abslength ;
+
+    if (ABS[i] <= 0.0) {
+      abslength = 1.0/kInfinity ;
+    }
+    else {
+      abslength = -3.0*mm/(std::log(ABS[i]/100.0)) ;
+    }
+
+    MPT_Acrylic->AddEntry("ABSLENGTH", energy, abslength);
+
+  }
+
+  Acrylic->SetMaterialPropertiesTable(MPT_Acrylic);
+  
 
 //////////////////////////////////////////////////////////////////
 
@@ -343,7 +394,7 @@ OpticalAirMirror->SetType(dielectric_dielectric);
 OpticalAirMirror->SetFinish(polishedfrontpainted);
 
 const G4int NUM = 2;
-G4double XX[NUM] = { 0.1E-9*GeV, 10.0E-9*GeV };
+G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
 G4double ICEREFLECTIVITY[NUM]      = { 0.95, 0.95 };
 
 G4MaterialPropertiesTable *AirMirrorMPT = new G4MaterialPropertiesTable();
@@ -402,7 +453,7 @@ OpticalAirGround->SetType(dielectric_dielectric);
 OpticalAirGround->SetFinish(groundfrontpainted);
 
  const G4int NUM = 2;
-G4double XX[NUM] = { 0.1E-9*GeV, 10.0E-9*GeV };
+G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
 G4double ICEREFLECTIVITY[NUM]      = { 0.95, 0.95 };
 
 G4MaterialPropertiesTable *AirGroundMPT = new G4MaterialPropertiesTable();
@@ -565,7 +616,7 @@ OpticalAirPaint->SetType(dielectric_dielectric);
 OpticalAirPaint->SetFinish(groundfrontpainted);
 
 const G4int NUM = 2;
-G4double XX[NUM] = { 2.030E-9*GeV, 4.144E-9*GeV };
+G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
 G4double BLACKPAINTREFLECTIVITY[NUM]      = { 0.05, 0.05 };
 //G4double WHITEPAINTREFLECTIVITY[NUM]      = { 0.99, 0.99 };
 

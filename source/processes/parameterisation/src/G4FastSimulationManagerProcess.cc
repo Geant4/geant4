@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FastSimulationManagerProcess.cc,v 1.17.2.1 2008/04/23 08:50:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //
 //---------------------------------------------------------------

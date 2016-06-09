@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh,v 1.10.8.1 2008/04/23 09:22:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// $Id: templates.hh,v 1.10.8.2 2008/09/03 07:30:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 
 // -*- C++ -*-
@@ -111,8 +111,8 @@ typedef float Float;
 //---------------------------------
 
 template <class T>
-inline void G4SwapPtr(T* a, T* b) {
-  T* tmp=a;
+inline void G4SwapPtr(T*& a, T*& b) {
+  T* tmp= a;
   a = b;
   b = tmp;
 }

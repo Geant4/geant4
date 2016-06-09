@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4QCollision.cc,v 1.24.2.2 2008/05/07 13:47:31 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //      ---------------- G4QCollision class -----------------
 //                 by Mikhail Kossov, December 2003.

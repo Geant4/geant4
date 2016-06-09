@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-03    (9-May-2008)
+ Geant4 version Name: global-V09-00-04    (12-September-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -272,7 +272,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=9.44s Real=9.8s Sys=0.03s
+  User=9.53s Real=10.22s Sys=0.05s
 
 ------------------------------------------------------------
       material       Total Edep         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
@@ -301,7 +301,6 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
 EventManager deleted.
-Default detector region deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.

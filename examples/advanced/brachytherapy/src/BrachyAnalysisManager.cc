@@ -32,8 +32,8 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.19 2007/05/14 09:57:55 pia Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: BrachyAnalysisManager.cc,v 1.19.2.1 2008/09/02 14:17:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 #include <stdlib.h>
 #include <fstream>
@@ -55,18 +55,13 @@
 
 BrachyAnalysisManager* BrachyAnalysisManager::instance = 0;
 
-BrachyAnalysisManager::BrachyAnalysisManager()
+BrachyAnalysisManager::BrachyAnalysisManager():
+aFact(0), theTree(0), histFact(0), tupFact(0), h1(0),
+  h2(0), ntuple(0)
 {
 
 #ifdef G4ANALYSIS_USE
-  aFact = 0;
-  theTree(0); 
-  histFact = 0;
-  tupFact = 0; 
-  h1 = 0; 
-  h2 = 0; 
-  ntuple = 0;
-
+  
   // Instantiate the factories
   // The factories manage the analysis objects
   aFact = AIDA_createAnalysisFactory();
@@ -74,8 +69,8 @@ BrachyAnalysisManager::BrachyAnalysisManager()
   AIDA::ITreeFactory *treeFact = aFact -> createTreeFactory(); 
   
   // Definition of the output file
-  G4String fileName = "brachytherapy.hbk";
-  theTree = treeFact -> create(fileName,"hbook",false, true);
+  G4String fileName = "brachytherapy.root";
+  theTree = treeFact -> create(fileName,"ROOT",false, true);
 
   delete treeFact;
 #endif
@@ -128,7 +123,7 @@ void BrachyAnalysisManager::book()
 				     300,-150.,150.); //bins' number, xmin, xmax
 
   //defining the ntuple columns' name 
-  std::string columnNames = "float energy; float x; float y; float z";
+  std::string columnNames = "double energy; double x; double y; double z";
   std::string options = "";
   
   //creating a ntuple
@@ -141,7 +136,7 @@ void BrachyAnalysisManager::book()
 void BrachyAnalysisManager::FillNtupleWithEnergy(G4double xx,
                                                  G4double yy, 
                                                  G4double zz,
-                                                 G4float en)
+                                                 G4double en)
 {
 #ifdef G4ANALYSIS_USE
   if (ntuple == 0) 

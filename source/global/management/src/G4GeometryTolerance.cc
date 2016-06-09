@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GeometryTolerance.cc,v 1.2.4.1 2008/04/23 09:22:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // class G4GeometryTolerance
 //

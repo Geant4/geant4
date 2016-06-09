@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4EqMagElectricField.cc,v 1.13.4.1 2008/04/24 12:43:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //
 //  This is the standard right-hand side for equation of motion.

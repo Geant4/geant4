@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: BrachyAnalysisManager.hh,v 1.13 2007/06/21 14:58:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: BrachyAnalysisManager.hh,v 1.13.2.1 2008/09/02 14:17:59 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 
 // Code review: MG Pia, 14/05/2207
 // Contact: Geant4-INFN Genova group, MariaGrazia.Pia@ge.infn.it
@@ -62,7 +62,7 @@ public:
   static BrachyAnalysisManager* getInstance();
 
   void book();
-  void FillNtupleWithEnergy(G4double,G4double,G4double,G4float);
+  void FillNtupleWithEnergy(G4double,G4double,G4double,G4double);
   void FillHistogramWithEnergy(G4double,G4double,G4double);
   void PrimaryParticleEnergySpectrum(G4double);
   void DoseDistribution(G4double,G4double);

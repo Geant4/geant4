@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4DiffuseElastic.cc,v 1.20 2008/01/14 10:39:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //
 // Physics model class G4DiffuseElastic 

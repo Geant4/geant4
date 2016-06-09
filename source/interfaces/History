@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2008/01/15 08:14:15 kmura Exp $
+$Id: History,v 1.92.2.1 2008/09/02 13:27:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15 January 2007, Koichi Murakami (interfaces-V09-01-00)
- - G4UItcsh.cc: fixed the problem with Ctl-D termination for bash users.
+22 July, 2008 K.Murakami (interfaces-V09-00-04)
+ - Direct exit calls are replaced with G4Exception/another way of exit
+   G4UIGainServer.cc, G4UIterminal.cc : call G4Exception
+   G4UItcsh.cc : nomal exit instead of direct calling exit().
+ - Tag for release 9.1.p03.
 
 30 November 2007, Laurent Garnier
  - G4UIQt : Some improvements for Qt3, corrections of some bugs

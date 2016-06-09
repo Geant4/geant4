@@ -551,7 +551,7 @@
           l = 1;
           while( ( ran >= dndl[l] ) && ( l < 20 ) )l++;
           l = std::min( 19, l );
-          x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
+          x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
           if( vec[i]->GetSide() < 0 )x *= -1.;
           vec[i]->SetMomentum( x*et*GeV );              // set the z-momentum
           totalEnergy = std::sqrt( x*et*x*et + pt*pt + vecMass*vecMass );
@@ -735,7 +735,7 @@
     l = 1;
     while( (ran>dndl[l]) && (l<20) )l++;
     l = std::min( 19, l );
-    x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );   
+    x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
     currentParticle.SetMomentum( x*et*GeV );                 // set the z-momentum
     if( forwardEnergy < forwardKinetic )
       totalEnergy = vecMass + 0.04*std::fabs(normal());
@@ -803,7 +803,7 @@
           ran = G4UniformRand()*dndl[19];
           while( ( ran >= dndl[l] ) && ( l < 20 ) )l++;
           l = std::min( 19, l );
-          x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1])/2.) );
+          x = std::min( 1.0, pt*(binl[l-1] + G4UniformRand()*(binl[l]-binl[l-1]) ) );
           if( targetParticle.GetSide() < 0 )x *= -1.;
           targetParticle.SetMomentum( x*et*GeV );                // set the z-momentum
           totalEnergy = std::sqrt( x*et*x*et + pt*pt + vecMass*vecMass );
@@ -916,13 +916,8 @@
           } // for l
         } // if (resetEnergies)
       } // closes outer loop
-
-//      if( eliminateThisParticle )  // not enough energy, eliminate target
-//      {
-//        G4cerr << "Warning: eliminating target particle" << G4endl;
-//        exit( EXIT_FAILURE );
-//      }
     }
+
     //
     // Target particle finished.
     //
@@ -1015,7 +1010,8 @@
         G4cerr << "currentParticle side = " << currentParticle.GetSide() << G4endl;
         for( i=0; i<vecLen; ++i )
           G4cerr << "particle #" << i << " side = " << vec[i]->GetSide() << G4endl;
-        exit( EXIT_FAILURE );
+        G4Exception("G4ReactionDynamics::GenerateXandPt", "601", 
+                    FatalException, "Mismatch in nucleon count");
       }
       constantCrossSection = true;
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ScreenedNuclearRecoil.cc,v 1.5 2008/01/14 12:11:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //
 // Class Description

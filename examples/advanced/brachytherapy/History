@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.21 2006/11/15 10:03:37 guatelli Exp $
+$Id: History,v 1.21.2.1 2008/09/02 14:17:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,13 @@ $Id: History,v 1.21 2006/11/15 10:03:37 guatelli Exp $
 
                       Category History file
                       ---------------------
+
+05th June 2008 G.A.P.Cirrone (brachy-V09-00-00)
+- Compilation error corrected in the BrachyAnalysiManager
+- Bad type assignment in BrachyAnalysismanager
+- Activated the generation .root files for output
+- Tag for release 9.1.p03. 
+
 15th November 2006 Susanna Guatelli (brachy-V08-01-01)
 - Physics list cleaned. The cut is fixed to a value lower than the 
   1 keV limit. 

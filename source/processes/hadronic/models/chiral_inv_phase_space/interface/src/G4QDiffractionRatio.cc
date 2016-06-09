@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QDiffractionRatio.cc,v 1.7.2.1 2008/04/23 14:57:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //
 // G4 Physics class: G4QDiffractionRatio for N+A elastic cross sections

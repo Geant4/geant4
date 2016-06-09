@@ -59,12 +59,16 @@ class UltraFresnelLens;
 
 class UltraDetectorConstruction : public G4VUserDetectorConstruction
 {
+ 
   public:
     UltraDetectorConstruction();
     ~UltraDetectorConstruction();
 
   public:
     G4VPhysicalVolume* Construct();
+
+    inline G4double GetLambdaMin() const {return lambda_min;}
+    inline G4double GetLambdaMax() const {return lambda_max;}
 
   private:
     
@@ -81,7 +85,9 @@ class UltraDetectorConstruction : public G4VUserDetectorConstruction
   private:
     UltraPMTSD*   PMTSD  ;          //pointer to the photomultiplier sensitive detector
     G4SDManager*  SDmanager ;       // Sensitive Detector Manager
-
+    
+    G4double lambda_min ;
+    G4double lambda_max ;
 };
 
 #endif 

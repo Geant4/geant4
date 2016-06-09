@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.15 2006/11/14 14:49:19 ribon Exp $
+$Id: History,v 1.15.2.1 2008/09/02 14:28:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.15 2006/11/14 14:49:19 ribon Exp $
 
                       Category History file
                       ---------------------
+
+12.06.2008 - G.A.P.Cirrone (lAr_calorimeter-V09-00-00)
+             Fixed a compilation error in the Analysis manager.
+             Tag for release 9.1.p03.
 
 14.11.2006 - A.Ribon (lAr_calorimeter-V08-01-01)
              Removed hadronic_lists.gmk after the inclusion of
@@ -21,8 +25,8 @@ $Id: History,v 1.15 2006/11/14 14:49:19 ribon Exp $
              Migration to CLHEP namespace. 
 	     Removed also old header files.
 
-3rd May 2005  John Allison  (examples-V07-00-03)
-- Replaced vis manager with G4VisExecutive.
+03.05.05 - John Allison  (examples-V07-00-03)
+           Replaced vis manager with G4VisExecutive.
 
 13.12.04 - G.Cosmo (lAr_calorimeter-V06-02-02)
            Use new phys-lists structure.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4EllipticalCone.cc,v 1.15.2.1 2008/04/25 09:11:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // Implementation of G4EllipticalCone class
 //

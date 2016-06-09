@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc,v 1.7 2007/04/24 10:32:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4FTFModel.cc,v 1.7.2.1 2008/06/02 08:01:12 gunter Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 
 // ------------------------------------------------------------
@@ -50,7 +50,7 @@ G4FTFModel::G4FTFModel():theExcitation(new G4DiffractiveExcitation()) // Uzhi
 	G4VPartonStringModel::SetThisPointer(this);
 }
 
-G4FTFModel::G4FTFModel(G4double a, G4double b, G4double c):theExcitation(new G4DiffractiveExcitation())
+G4FTFModel::G4FTFModel(G4double , G4double , G4double ):theExcitation(new G4DiffractiveExcitation())
 {
 	G4VPartonStringModel::SetThisPointer(this);
 }

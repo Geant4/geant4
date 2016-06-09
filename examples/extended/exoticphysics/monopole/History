@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2007/08/16 12:57:59 vnivanch Exp $
+$Id: History,v 1.2.2.1 2008/09/03 08:43:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 June 08: V.Ivant (monopole-V09-00-01)
+- Fixed compilation warnings.
+- Tag for release 9.1.p03.
 
 16 August 07: V.Ivant (monopole-V09-00-00)
 - First release

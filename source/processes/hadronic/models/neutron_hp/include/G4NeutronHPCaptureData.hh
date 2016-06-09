@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NeutronHPCaptureData.hh,v 1.9.2.1 2008/04/29 07:05:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 //

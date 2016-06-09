@@ -1,5 +1,5 @@
-$Id: History,v 1.121 2007/10/09 03:51:06 tsasaki Exp $
-$Name: geant4-09-01 $ 
+$Id: History,v 1.121.2.1 2008/09/02 13:49:56 gcosmo Exp $
+$Name: geant4-09-01-patch-03 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 May 2008 T.Sasaki (tracking-V09-00-02)
+- G4SteppingManager.cc: fTouchableHandle was not properly updated.
+- Tag for release 9.1.p03.
 
 08 Oct 2007 T.Sasaki (tracking-V09-00-01)
 - G4SteppingManager.hh: use kCarTolerance in CalculateSafety() instead of zero

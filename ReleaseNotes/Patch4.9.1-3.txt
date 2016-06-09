@@ -1,0 +1,203 @@
+
+                 Geant4 9.1 - patch-03 Release Notes
+                 -----------------------------------
+
+                                                            12 September 2008
+
+List of fixes included in this public patch since the public release 9.1.p02:
+
+  o Configuration:
+    -------------
+    + architecture.gmk: removed obsoled DOM library from GDMLIBS; resolving
+      run-time problems on Windows systems.
+    + liblist.c: removed C++ style comments; resolving compilation problems
+      on legacy SUN-CC compiler.
+
+  o Digits_Hits:
+    -----------
+    + Fixed a bug in G4ScoringBox for the use of G4PVDivision
+      and G4VScoreWriter for indexing scheme in GetIndex() method.
+
+  o Event:
+    -----
+    + Provided accessors to G4SPSAngDistribution.
+      Addressing problem report #1013.
+    + Cleared gcc-4.3.0 compilation warnings in G4SPSEneDistribution.
+
+  o G3toG4:
+    ------
+    + GNUmakefile: workaround for renewing Fortran objects in 'lib' target
+      before re-build of libraries.
+
+  o Geometry:
+    --------
+    + divisions:
+      o Corrected initialisation for 'fnReplicas' and 'fwidth' data members
+        in CheckAndSetParameters(), to make use of precomputed values retrieved
+        from concrete parameterisations; simplified method signature.
+      o Corrected error print-out in CheckNDivAndWidth() method in
+        G4VDivisionParameterisation class.
+    + management:
+      o G4LogicalVolume, G4LogicalVolumeStore: corrected logic for the deletion
+        of the root-region volumes, adding locking mechanism and automatically
+        de-registering the world default root-region.
+        Simplified Clean() method in the store, by removing unused and
+        unnecessary default flag for logical-volumes notification.
+      o Reinstated update of materials in G4Region::RemoveRootLogicalVolume()
+        to correct handling individual removal of root-region volumes and
+        restore proper setup state.
+      o G4Region: changed condition inside ScanVolumeTree() to check for the
+        existence of a valid material-scanner pointer to apply the material
+        scan instead of using the flag for nested structures.
+      o G4GeometryManager: do not apply optimisation on the current volume if
+        it has been defined as a regular structure.
+        Addresses problem report #990.
+      o G4VSolid: promote copy-constructor and assignment operator to public
+        to cope with specific use-case in ATLAS (see problem report #1023).
+    + navigation:
+      o G4PropagatorInField: correction to LocateIntersectionPoint() algorithm
+        to ensure that endpoints are not further apart in space than on the
+        curve due to different errors in the integration.
+        Resolves rare error conditions in ATLAS production.
+    + solids/CSG:
+      o G4Sphere: fixed bug in DistanceToOut(p, v, ...) for normal 'fSTheta'
+        greater than 90*deg, and use of tangent giving negative value.
+        Fixed calculation of roots in DistanceToOut(p,v,...) for theta-conical
+        surface interserctions and for sTheta<=90 degree intersection.
+        Addresses issue reported when running PET application with optical
+        photons about mis-computation of distance on half-sphere constructs,
+        and later also reported in problem report #1022.
+      o G4Tubs: fix in DistanceToIn(p,v, ...) in case of point on surface with
+        very small tangent direction; now returning kInfinity and no longer
+        zero. It fixes rare observed cases of zero value returned by both
+        DistanceToIn() and DistanceToOut(), causing stuck tracks with zero
+        step length. 
+    + solids/specific:
+      o G4ExtrudedSolid: fix in polygon decomposition; systematically use
+        half kCarTolerance instead of kCarTolerance; added solid name in the
+        error messages coming from fatal exceptions.
+        Added missing 'std' namespace to standard mathematical function calls.
+      o G4Paraboloid: revised DistanceToOut(p,v,...) in answer to problem
+        report #1015. Fixed precision problem when solving quadratic equation;
+        apply comparison with kCarTolerance and not with zero; fixed logic
+        problem in algorithm for points on surface and direction inside,
+        relative to directions along Z, (0,0,Vz).
+      o G4VFacet: corrected increment of indeces in operator==().
+        Addressing problem report #1024.
+
+  o Global:
+    ------
+    + Corrected signature of G4SwapPtr() to use reference of pointers as
+      arguments.
+    + Changed date for patch-03 to release 9.1.
+
+  o Interfaces:
+    ----------
+    + Replaced calls to exit() with G4Exception wherever applicable.
+
+  o Materials:
+    ---------
+    + G4Element: extended printout of errors and warnings; added more safe
+      check of consistency between Z and A in construction.
+    + G4Material: improved errors printout.
+
+  o Hadronic Processes:
+    ------------------
+    + models/coherent_elastic:
+      o G4HadronElastic: added protection inside LElastic algorithm against
+        cases of t>tmax (outside kinematically allowed 4-momentum transfer).
+    + models/lll_fission:
+      o Replaced usage of exit() with G4Exception in G4fissionerr.
+    + models/high_energy:
+      o In G4HEInelastic: fixed bug in HighEnergyCascading() and
+        MediumEnergyCascading() for momentum sampling, responsible for
+        oscillatory behavior in spectrum.
+        In TuningOfHighEnergyCascade(), removed abnormally high pt secondaries
+        due to incident strange particles by prohibiting the assignment of
+        leading particle to anything that goes backward in the CM frame. 
+        Replaced usage of exit() with G4Exception in Factorial() method.
+        In NBodyPhaseSpace(), removed error message "total mass > total energy"
+        and replaced with message only when verbosity is > 1.
+    + models/parton_string/diffraction:
+      o Fixed compilation warnings for unused variables in G4FTFModel.
+    + models/pre_equilibrium:
+      o Fixed cases of floating point overflow when using pre-compound in
+        combination with binary-cascade; reviewed algorithm in method
+        G4PreCompoundEmission::rho().
+    + util:
+      o G4ReactionDynamics::GenerateXandPt(): fixed bug in momentum bin
+        responsible for causing oscillatory behavior in spectrum.
+        Replaced usage of exit() with G4Exception. 
+
+  o Generic Processes:
+    -----------------
+    + Management:
+      o Fixed un-necessary double deletion/creation of vector in operator=()
+        in G4ProcessVector.
+      o Fixed compilation warning on messenger. 
+
+  o Run:
+    ---
+    + G4RunManagerKernel: avoid deletion of default root-region which is now
+      taken care by the geometry stores. It resolves the ambiguity of explicitly
+      avoiding the de-registration and deletion of the default root-region by
+      the stores and eliminates the limitation of forcing the world logical
+      volume being the first registered in the logical-volumes store.
+    + Invoke G4Particle::DeleteAllParticles() in the destructor of
+      G4VUserPhysicsList to clear memory leak at application closure.
+
+  o Tracking:
+    --------
+    + Fix in G4SteppingManager to properly update 'fTouchableHandle' data
+      member. Addresses problem report #1009.
+
+  o Examples:
+    --------
+    + advanced/air_shower:
+      o Adjusted range of optical properties tables in DetectorConstruction;
+        Added check of optical photon energy in PrimaryGeneratorAction;
+        Cerenkov process attached to all applicable particles;
+        Modified Visualisation.mac and UltraMacro.mac macros.
+      o Corrected a parameter in the DetectorConstruction to fix a
+        segmentation due to a non correct definition of the refraction index
+        of the Quartz.
+      o Implemented access to private data members of DetectorConstruction
+        through accessors.
+      o Fixed a compilation warning in AnalysisManager. 
+    + advanced/brachytherapy:
+      o Fixed compilation warning in AnalysisManager. Fixed bad type assignment.
+      o Activated generation of histogram files for output.
+    + advanced/gammaray_telescope:
+      o Fixed problems in compilation.
+    + advanced/lAr_calorimeter:
+      o Fixed compilation warning in AnalysisManager.
+    + advanced/Rich:
+      o Fixed compilation errors and removed warnings.
+    + advanced/Tiara:
+      o Fixed compilation errors.
+    + extended/exoticphysics/monopole:
+      o Fixed compilation warnings.
+    + extended/medical/DICOM:
+      o Bug fix in DicomNestedPhantomParameterisation in calculating the cell
+        copy-number; now fixing the material assignments.
+      o Set default cut to 1 mm to reduce physics content and enhance tracking
+        performance.
+      o Corrected direction and position of primary particles to better
+        traverse the DICOM voxels.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.1
+  o  Technical notes distributed for release 9.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.1 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

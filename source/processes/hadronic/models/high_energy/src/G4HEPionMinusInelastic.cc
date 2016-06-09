@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4HEPionMinusInelastic.cc,v 1.14.2.1 2008/04/23 16:31:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 
 // 11-OCT-2007 F.W. Jones: fixed incorrect Imax (should be Imin) in
 //             sampling of charge exchange.

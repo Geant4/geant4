@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.42 2008/01/24 08:54:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// $Id: G4PropagatorInField.cc,v 1.42.2.2 2008/09/15 07:59:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 // 
 // 
 //  This class implements an algorithm to track a particle in a
@@ -463,8 +463,6 @@ G4PropagatorInField::LocateIntersectionPoint(
   G4FieldTrack ApproxIntersecPointV(CurveEndPointVelocity); // FT-Def-Construct
   G4double    NewSafety= -0.0;
 
-  G4bool final_section= true;  // Shows whether current section is last
-                               // (i.e. B=full end)
   G4bool first_section=true;
   recalculatedEndPoint= false; 
 
@@ -531,6 +529,13 @@ G4PropagatorInField::LocateIntersectionPoint(
     *ptrInterMedFT[idepth]=CurveStartPointVelocity;
   }
 
+  // Final_section boolean store for depth algoritm
+  //
+  G4bool fin_section_depth[max_depth];
+  for (G4int idepth=0; idepth<max_depth; idepth++ )
+  {
+    fin_section_depth[idepth]=true;
+  }
   // 'SubStartPoint' is needed to calculate the length of the divided step
   //
   G4FieldTrack SubStart_PointVelocity = CurveStartPointVelocity;
@@ -540,6 +545,7 @@ G4PropagatorInField::LocateIntersectionPoint(
     G4int substep_no_p = 0;
     G4bool sub_final_section = false; // the same as final_section,
                                       // but for 'sub_section'
+    SubStart_PointVelocity = CurrentA_PointVelocity; 
     do // REPEAT param
     {
       G4ThreeVector Point_A = CurrentA_PointVelocity.GetPosition();  
@@ -620,7 +626,7 @@ G4PropagatorInField::LocateIntersectionPoint(
           // By moving point B, must take care if current
           // AF has no intersection to try current FB!!
           //
-          final_section= false; 
+          fin_section_depth[depth]=false; 
 
 #ifdef G4VERBOSE
           if( fVerboseLevel > 3 )
@@ -670,7 +676,7 @@ G4PropagatorInField::LocateIntersectionPoint(
           {
             // There is NO intersection of FB with a volume boundary
 
-            if( final_section  )
+            if(fin_section_depth[depth])
             {
               // If B is the original endpoint, this means that whatever
               // volume(s) intersected the original chord, none touch the
@@ -701,11 +707,25 @@ G4PropagatorInField::LocateIntersectionPoint(
             }
             else
             {
-              // We must restore the original endpoint
+              if(depth==0)
+              {
+                // We must restore the original endpoint
 
-              CurrentA_PointVelocity = CurrentB_PointVelocity;  // Got to B
-              CurrentB_PointVelocity = CurveEndPointVelocity;
-              restoredFullEndpoint = true;
+                CurrentA_PointVelocity = CurrentB_PointVelocity;  // Got to B
+                CurrentB_PointVelocity = CurveEndPointVelocity;
+                SubStart_PointVelocity = CurrentA_PointVelocity;
+                restoredFullEndpoint = true;
+
+              }
+              else
+              {
+                // We must restore the depth endpoint
+
+                CurrentA_PointVelocity = CurrentB_PointVelocity;  // Got to B
+                CurrentB_PointVelocity =  *ptrInterMedFT[depth];
+                SubStart_PointVelocity = CurrentA_PointVelocity;
+                restoredFullEndpoint = true;
+              }
             }
           } // Endif (Intersects_FB)
         } // Endif (Intersects_AF)
@@ -733,7 +753,8 @@ G4PropagatorInField::LocateIntersectionPoint(
           G4FieldTrack oldPointVelB = CurrentB_PointVelocity; 
           CurrentB_PointVelocity = newEndPointFT;
 
-          if( (final_section)&&(Second_half)&&(depth==0) ) // real final section
+          if( (fin_section_depth[depth])            // real final section
+            &&(((Second_half)&&(depth==0))||(first_section)) )
           {
             recalculatedEndPoint = true;
             IntersectedOrRecalculatedFT = newEndPointFT;
@@ -789,7 +810,7 @@ G4PropagatorInField::LocateIntersectionPoint(
 
         if(restoredFullEndpoint)
         {
-          final_section = restoredFullEndpoint;
+          fin_section_depth[depth] = restoredFullEndpoint;
           restoredFullEndpoint = false;
         }
       } // EndIf ( E is close enough to the curve, ie point F. )
@@ -867,6 +888,7 @@ G4PropagatorInField::LocateIntersectionPoint(
         if(Intersects_AB)
         {
           CurrentE_Point = PointGe;
+          fin_section_depth[depth]=true;
         }
         else
         {
@@ -889,6 +911,34 @@ G4PropagatorInField::LocateIntersectionPoint(
         SubStart_PointVelocity = *ptrInterMedFT[depth];
         CurrentA_PointVelocity = *ptrInterMedFT[depth];
         CurrentB_PointVelocity = *ptrInterMedFT[depth-1];
+
+        // Ensure that the new endpoints are not further apart in space
+        // than on the curve due to different errors in the integration
+        //
+        G4double linDistSq, curveDist; 
+        linDistSq = ( CurrentB_PointVelocity.GetPosition() 
+                    - CurrentA_PointVelocity.GetPosition() ).mag2(); 
+        curveDist = CurrentB_PointVelocity.GetCurveLength()
+                    - CurrentA_PointVelocity.GetCurveLength();
+        if( curveDist*curveDist*(1+2*fEpsilonStep ) < linDistSq )
+        {
+          // Re-integrate to obtain a new B
+          //
+          G4FieldTrack newEndPointFT=
+                  ReEstimateEndpoint( CurrentA_PointVelocity,
+                                      CurrentB_PointVelocity,
+                                      linDistSq,    // to avoid recalculation
+                                      curveDist );
+          G4FieldTrack oldPointVelB = CurrentB_PointVelocity; 
+          CurrentB_PointVelocity = newEndPointFT;
+          if (depth==1)
+          {
+            recalculatedEndPoint = true;
+            IntersectedOrRecalculatedFT = newEndPointFT;
+            // So that we can return it, if it is the endpoint!
+          }
+        }
+
         G4ThreeVector Point_A    = CurrentA_PointVelocity.GetPosition();
         G4ThreeVector SubE_point = CurrentB_PointVelocity.GetPosition();   
         fNavigator->LocateGlobalPointWithinVolume(Point_A);
@@ -898,11 +948,9 @@ G4PropagatorInField::LocateIntersectionPoint(
         {
           CurrentE_Point = PointGe;
         }
-        else
-        {
-          final_section = true;
-        }
+        
         depth--;
+        fin_section_depth[depth]=true; 
       }
     }  // if(!found_aproximate_intersection)
 

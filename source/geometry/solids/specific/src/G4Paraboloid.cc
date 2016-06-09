@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc,v 1.5.2.1 2008/04/23 08:10:24 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// $Id: G4Paraboloid.cc,v 1.5.2.2 2008/09/02 13:02:29 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // class G4Paraboloid
 //
 // Implementation for G4Paraboloid class
-//
-// History:
 //
 // Author : Lukas Lindroos (CERN), July 2007
 // Revised: Tatiana Nikitina (CERN)
@@ -81,10 +79,10 @@ G4Paraboloid::G4Paraboloid(const G4String& pName,
                 "Invalid dimensions. Negative Input Values or R1>=R2.");
   }
 
-// r1^2 = k1 * (-dz) + k2
-// r2^2 = k1 * ( dz) + k2
-// => r1^2 + r2^2 = k2 + k2 => k2 = (r2^2 + r1^2) / 2
-// and r2^2 - r1^2 = k1 * dz - k1 * (-dz) => k1 = (r2^2 - r1^2) / 2 / dz
+  // r1^2 = k1 * (-dz) + k2
+  // r2^2 = k1 * ( dz) + k2
+  // => r1^2 + r2^2 = k2 + k2 => k2 = (r2^2 + r1^2) / 2
+  // and r2^2 - r1^2 = k1 * dz - k1 * (-dz) => k1 = (r2^2 - r1^2) / 2 / dz
 
   k1 = (r2 * r2 - r1 * r1) / 2 / dz;
   k2 = (r2 * r2 + r1 * r1) / 2;
@@ -282,12 +280,12 @@ EInside G4Paraboloid::Inside(const G4ThreeVector& p) const
   G4double rho2 = p.perp2(),
            rhoSurfTimesTol2  = (k1 * p.z() + k2) * sqr(kCarTolerance),
            A = rho2 - ((k1 *p.z() + k2) + 0.25 * kCarTolerance * kCarTolerance);
-
+ 
   if(A < 0 && sqr(A) > rhoSurfTimesTol2)
   {
     // Actually checking rho < radius of paraboloid at z = p.z().
     // We're either inside or in lower/upper cutoff area.
-
+   
     if(std::fabs(p.z()) > dz - 0.5 * kCarTolerance)
     {
       // We're in the upper/lower cutoff area, sides have a paraboloid shape
@@ -431,8 +429,10 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
           { return intersection; }
       }
     }
-    else // Direction away, no posibility of intersection
-      { return kInfinity; }
+    else  // Direction away, no possibility of intersection
+    {
+      return kInfinity;
+    }
   }
   else if(r1 && p.z() < tolh - dz)
   {
@@ -454,8 +454,10 @@ G4double G4Paraboloid::DistanceToIn( const G4ThreeVector& p,
         }
       }
     }
-    else// Direction away, no posibility of intersection
-      { return kInfinity; }
+    else  // Direction away, no possibility of intersection
+    {
+      return kInfinity;
+    }
   }
 
   G4double A = k1 / 2 * v.z() - p.x() * v.x() - p.y() * v.y(),
@@ -576,7 +578,7 @@ G4double G4Paraboloid::DistanceToIn(const G4ThreeVector& p) const
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Calculate distance to surface of shape from `inside'
+// Calculate distance to surface of shape from 'inside'
 
 G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
                                     const G4ThreeVector& v,
@@ -597,9 +599,12 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
   // The equation for all points on the surface (surface expanded for
   // to include all z) x^2 + y^2 = k1 * z + k2 => .. =>
   // => s = (A +- std::sqrt(A^2 + B)) / vRho2
-  // where 
+  // where:
+  //
   G4double A = k1 / 2 * v.z() - p.x() * v.x() - p.y() * v.y();
-  // and
+  //
+  // and:
+  //
   G4double B = (-rho2 + paraRho2) * vRho2;
 
   if ( rho2 < paraRho2 && sqr(rho2 - paraRho2 - 0.25 * tol2) > tol2 * paraRho2
@@ -675,7 +680,13 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
     }
     else if( ((A <= 0) && (B >= sqr(A) * (sqr(vRho2) - 1))) || (A >= 0))
     {
-      intersection = (A + std::sqrt(B + sqr(A))) / vRho2;
+      // intersection = (A + std::sqrt(B + sqr(A))) / vRho2;
+      // The above calculation has a precision problem:
+      // known problem of solving quadratic equation with small A  
+
+      A = A/vRho2;
+      B = (k1 * p.z() + k2 - rho2)/vRho2;
+      intersection = B/(-A + std::sqrt(B + sqr(A)));
       if(calcNorm)
       {
         G4ThreeVector intersectionP = p + v * intersection;
@@ -699,15 +710,15 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
          && std::fabs(p.z()) < dz + tolh) 
   {
     // If this is true we're somewhere in the border.
-
+    
     G4ThreeVector normal = G4ThreeVector (p.x(), p.y(), -k1/2);
 
     if(std::fabs(p.z()) > dz - tolh)
     {
       // We're in the lower or upper edge
+      //
       if( ((v.z() > 0) && (p.z() > 0)) || ((v.z() < 0) && (p.z() < 0)) )
-      // If we're headig out of the object that is treated here
-      {
+      {             // If we're heading out of the object that is treated here
         if(calcNorm)
         {
           *validNorm = true;
@@ -741,15 +752,26 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
         return intersection;
       }
     }
-    else if(normal.dot(v) >= 0)
-    {
-      if(calcNorm)
-      {
-        *validNorm = true;
-        *n = normal.unit();
-      }
-      return 0;
-    }
+    //
+    // Problem in the Logic :: Following condition for point on upper surface 
+    //                         and Vz<0  will return 0 (Problem #1015), but
+    //                         it has to return intersection with parabolic
+    //                         surface or with lower plane surface (z = -dz)
+    // The logic has to be  :: If not found intersection until now,
+    // do not exit but continue to search for possible intersection.
+    // Only for point situated on both borders (Z and parabolic)
+    // this condition has to be taken into account and done later
+    //
+    //
+    // else if(normal.dot(v) >= 0)
+    // {
+    //   if(calcNorm)
+    //   {
+    //     *validNorm = true;
+    //     *n = normal.unit();
+    //   }
+    //   return 0;
+    // }
 
     if(v.z() > 0)
     {
@@ -779,7 +801,7 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
         return intersection;
       }
     }
-    if(r1 && v.z() < 0)
+    if( v.z() < 0)
     {
       // Check for collision with lower edge.
 
@@ -808,10 +830,35 @@ G4double G4Paraboloid::DistanceToOut(const G4ThreeVector& p,
       }
     }
 
-    if(vRho2 != 0)
-      { intersection = (A + std::sqrt(B + sqr(A))) / vRho2; }
+    // Note: comparison with zero below would not be correct !
+    //
+    if(std::fabs(vRho2) > tol2) // precision error in the calculation of
+    {                           // intersection = (A+std::sqrt(B+sqr(A)))/vRho2
+      A = A/vRho2;
+      B = (k1 * p.z() + k2 - rho2);
+      if(std::fabs(B)>kCarTolerance)
+      {
+        B = (B)/vRho2;
+        intersection = B/(-A + std::sqrt(B + sqr(A)));
+      }
+      else                      // Point is On both borders: Z and parabolic
+      {                         // solution depends on normal.dot(v) sign
+        if(normal.dot(v) >= 0)
+        {
+          if(calcNorm)
+          {
+            *validNorm = true;
+            *n = normal.unit();
+          }
+          return 0;
+        }
+        intersection = 2.*A;
+      }
+    }
     else
-      { intersection = ((rho2 - k2) / k1 - p.z()) / v.z(); }
+    {
+      intersection = ((rho2 - k2) / k1 - p.z()) / v.z();
+    }
 
     if(calcNorm)
     {

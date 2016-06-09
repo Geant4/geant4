@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QContent.cc,v 1.43.4.1 2008/04/23 14:47:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.

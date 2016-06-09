@@ -162,6 +162,7 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
     
   // Update nucleus parameters:
   // --------------------------
+
   // Number of excitons
   aFragment.SetNumberOfParticles(aFragment.GetNumberOfParticles()-
 				 static_cast<G4int>(theFragment->GetA()));
@@ -174,7 +175,7 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
     
   // Charge
   aFragment.SetZ(theFragment->GetRestZ());
-    
+
     
   // Perform Lorentz boosts
   RestMomentum.boost(aFragment.GetMomentum().boostVector());
@@ -274,9 +275,48 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
   return momentum;
 }
 
-
 G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4double g, 
 				    const G4double E, const G4double Ef) const
+{
+	
+  G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
+  G4double alpha = (p*p+h*h)/(2.0*g);
+  
+  if ( (E-alpha) < 0 ) return 0;
+
+  G4double factp=factorial(p);
+
+  G4double facth=factorial(h);
+
+  G4double factph=factorial(p+h-1);
+  
+  G4double logConst =  (p+h)*std::log(g) - log (factph) - log(factp) - log(facth);
+
+// initialise values using j=0
+
+  G4double t1=1;
+  G4double t2=1;
+  G4double logt3=(p+h-1) * std::log(E-Aph);
+  G4double tot = exp( logt3 + logConst );
+
+// and now sum rest of terms 
+  G4int j(1);  
+  while ( (j <= h) && ((E - alpha - j*Ef) > 0.0) ) 
+    {
+	  t1 *= -1.;
+	  t2 *= (h+1-j)/j;
+	  logt3 = (p+h-1) * std::log( E - j*Ef - Aph) + logConst;
+	  G4double t3 = std::exp(logt3);
+	  tot += t1*t2*t3;
+	  j++;
+    }
+        
+  return tot;
+}
+
+
+
+G4double G4PreCompoundEmission::factorial(G4double a) const
 {
   // Values of factorial function from 0 to 60
   const G4int factablesize = 61;
@@ -348,79 +388,23 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
   //    for (G4int n = 1; n < 21; n++) {
   //      fact[n] = fact[n-1]*static_cast<G4double>(n); 
   //    }
-	
-  G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
-  G4double alpha = (p*p+h*h)/(2.0*g);
-
-  G4double tot = 0.0;
-  for (G4int j = 0; j <= h; j++) 
+  G4double result(0.0);
+  G4int ia = static_cast<G4int>(a);
+  if (ia < factablesize) 
     {
-      if (E-alpha-static_cast<G4double>(j)*Ef > 0.0)
-	{
-	  G4double t1 = std::pow(-1.0, static_cast<G4double>(j));
-	  G4double t2 = fact[static_cast<G4int>(h)]/ (fact[static_cast<G4int>(h)-j]*fact[j]);
-	  G4double t3 = E - static_cast<G4double>(j)*Ef - Aph;
-	  t3 = std::pow(t3,p+h-1);
-	  tot += t1*t2*t3;
-	}
-      else 
+      result = fact[ia];
+    }
+  else
+    {
+      result = fact[factablesize-1];
+      for (G4int n = factablesize; n < ia+1; ++n)
         {
-          break;
+          result *= static_cast<G4double>(n);
         }
     }
     
-
-  G4double factp(0.0);
-  G4int ph = static_cast<G4int>(p);
-  if (ph < factablesize) 
-    {
-      factp = fact[ph];
-    }
-  else
-    {
-      factp = fact[factablesize-1];
-      for (G4int n = factablesize; n < ph+1; ++n)
-        {
-          factp *= static_cast<G4double>(n);
-        }
-    }
-
-  G4double facth(0.0);
-  ph = static_cast<G4int>(h);
-  if (ph < factablesize) 
-    {
-      facth = fact[ph];
-    }
-  else
-    {
-      facth = fact[factablesize-1];
-      for (G4int n = factablesize; n < ph+1; ++n)
-        {
-          facth *= static_cast<G4double>(n);
-        }
-    }
-  G4double factph(0.0);
-  ph = static_cast<G4int>(p+h)-1;
-  if (ph < factablesize)
-    {
-      factph = fact[ph];
-    }
-  else
-    {
-      factph = fact[factablesize-1];
-      for (G4int n = factablesize; n < ph+1; ++n)
-        {
-          factph *= static_cast<G4double>(n);
-        }
-    }
-  
-  tot *= std::pow(g,p+h)/factph;
-  tot /= factp;
-  tot /= facth;
-    
-  return tot;
+    return result;
 }
-
 
 
 #ifdef debug

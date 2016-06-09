@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.cc,v 1.38.2.1 2008/04/28 07:24:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// $Id: G4Material.cc,v 1.38.2.2 2008/09/04 11:53:19 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -195,10 +195,12 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
      fNumberOfComponents = ++fNumberOfElements;
      element->increaseCountUse();
   }
-  else
+  else {
+     G4cerr << "G4Material::AddElement ERROR for " << fName << " nElement= "
+	    <<  fNumberOfElements << G4endl;     
      G4Exception
     ("ERROR!!! - Attempt to add more than the declared number of elements.");
-
+  }
   // filled.
   if ( G4int(fNumberOfElements) == maxNbComponents ) {     
      // compute proportion by mass
@@ -242,10 +244,12 @@ void G4Material::AddElement(G4Element* element, G4double fraction)
       }
       fNumberOfComponents++;  
   }
-  else
+  else {
+     G4cerr << "G4Material::AddElement ERROR for " << fName << " nElement= "
+	    <<  fNumberOfElements << G4endl;     
      G4Exception
     ("ERROR!!! - Attempt to add more than the declared number of components.");
-    
+  }    
   // filled.
   if (G4int(fNumberOfComponents) == maxNbComponents) {
 
@@ -303,10 +307,12 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
        } 
       fNumberOfComponents++;  
   }
-  else
+  else {
+     G4cerr << "G4Material::AddElement ERROR for " << fName << " nElement= "
+	    <<  fNumberOfElements << G4endl;     
      G4Exception
     ("ERROR!!! - Attempt to add more than the declared number of components.");
-    
+  }
   // filled.
   if (G4int(fNumberOfComponents) == maxNbComponents) {
      size_t i=0;

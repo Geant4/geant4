@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UIQt.cc,v 1.13 2007/11/30 14:28:50 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // L. Garnier
 

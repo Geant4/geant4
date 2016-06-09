@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4QLowEnergy.cc,v 1.4.2.1 2008/04/23 14:57:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 //      ---------------- G4QLowEnergy class -----------------
 //                 by Mikhail Kossov, Aug 2007.

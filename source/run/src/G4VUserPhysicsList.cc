@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.62.2.1 2008/04/17 09:10:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01-patch-02 $
+// $Id: G4VUserPhysicsList.cc,v 1.62.2.3 2008/05/09 13:05:27 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -101,6 +101,9 @@ G4VUserPhysicsList::~G4VUserPhysicsList()
     theMessenger = 0;
   }
   RemoveProcessManager();
+
+  // Remove All particles in the particle table
+  theParticleTable->DeleteAllParticles();
 }
 
 ////////////////////////////////////////////////////////

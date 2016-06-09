@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-03    (9-May-2008)
+ Geant4 version Name: global-V09-00-04    (12-September-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -347,7 +347,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.84s Real=3.11s Sys=0.25s
+  User=2.87s Real=3.11s Sys=0.25s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -476,20 +476,20 @@ layer  eDep/evt   nGamma/evt   nElec/evt   nPosi/evt   stepLen/evt   nStep/evt
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0  Real=0.03  Sys=0
+ All particles : User=0  Real=0  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=1.23  Real=1.13  Sys=0.08
- e+ / e-       : User=0.85  Real=0.82  Sys=0.04
+ All particles : User=1.07  Real=1.18  Sys=0.07
+ e+ / e-       : User=0.79  Real=0.85  Sys=0.05
 
 Region <Calor-B>
- All particles : User=0.82  Real=0.87  Sys=0.03
- e+ / e-       : User=0.59  Real=0.67  Sys=0.04
+ All particles : User=0.75  Real=0.88  Sys=0.05
+ e+ / e-       : User=0.45  Real=0.65  Sys=0.04
 
 Region <Calor-C>
- All particles : User=0.24  Real=0.26  Sys=0.03
- e+ / e-       : User=0.17  Real=0.18  Sys=0
+ All particles : User=0.24  Real=0.23  Sys=0
+ e+ / e-       : User=0.2  Real=0.18  Sys=0.01
 
 /run/dumpCouples
 
@@ -765,7 +765,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=10.82s Real=11.8s Sys=0.97s
+  User=10.96s Real=11.98s Sys=1s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -898,16 +898,16 @@ Region <DefaultRegionForTheWorld>
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=1.24  Real=1.38  Sys=0.09
- e+ / e-       : User=0.83  Real=0.86  Sys=0.07
+ All particles : User=1.38  Real=1.35  Sys=0.06
+ e+ / e-       : User=0.99  Real=0.99  Sys=0.06
 
 Region <Calor-B>
- All particles : User=3.14  Real=3.41  Sys=0.23
- e+ / e-       : User=2.26  Real=2.4  Sys=0.14
+ All particles : User=3.11  Real=3.45  Sys=0.16
+ e+ / e-       : User=2.23  Real=2.5  Sys=0.21
 
 Region <Calor-C>
- All particles : User=3.71  Real=3.91  Sys=0.21
- e+ / e-       : User=2.68  Real=2.79  Sys=0.16
+ All particles : User=3.64  Real=3.81  Sys=0.17
+ e+ / e-       : User=2.48  Real=2.8  Sys=0.2
 
 /run/dumpCouples
 
@@ -1212,7 +1212,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.87s Real=3.14s Sys=0.27s
+  User=2.91s Real=3.16s Sys=0.25s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1341,20 +1341,20 @@ layer  eDep/evt   nGamma/evt   nElec/evt   nPosi/evt   stepLen/evt   nStep/evt
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0  Real=0  Sys=0
+ All particles : User=0.01  Real=0.01  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.25  Real=0.24  Sys=0.02
- e+ / e-       : User=0.18  Real=0.15  Sys=0.02
+ All particles : User=0.21  Real=0.26  Sys=0.01
+ e+ / e-       : User=0.09  Real=0.18  Sys=0.02
 
 Region <Calor-B>
- All particles : User=0.2  Real=0.13  Sys=0
- e+ / e-       : User=0.14  Real=0.09  Sys=0.01
+ All particles : User=0.17  Real=0.19  Sys=0
+ e+ / e-       : User=0.08  Real=0.12  Sys=0
 
 Region <Calor-C>
- All particles : User=1.89  Real=1.83  Sys=0.1
- e+ / e-       : User=0.83  Real=0.82  Sys=0.07
+ All particles : User=1.79  Real=1.97  Sys=0.12
+ e+ / e-       : User=1  Real=0.94  Sys=0.13
 
 /run/dumpCouples
 
@@ -1690,7 +1690,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.9s Real=2.06s Sys=0.16s
+  User=1.88s Real=2.06s Sys=0.18s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1823,16 +1823,16 @@ Region <DefaultRegionForTheWorld>
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=0.88  Real=0.92  Sys=0.06
- e+ / e-       : User=0.54  Real=0.52  Sys=0.02
+ All particles : User=0.78  Real=0.85  Sys=0.04
+ e+ / e-       : User=0.5  Real=0.54  Sys=0.05
 
 Region <Calor-B>
- All particles : User=0.41  Real=0.45  Sys=0.01
- e+ / e-       : User=0.22  Real=0.3  Sys=0
+ All particles : User=0.42  Real=0.46  Sys=0.03
+ e+ / e-       : User=0.24  Real=0.25  Sys=0.03
 
 Region <Calor-C>
- All particles : User=0.22  Real=0.21  Sys=0.04
- e+ / e-       : User=0.12  Real=0.14  Sys=0.03
+ All particles : User=0.14  Real=0.21  Sys=0
+ e+ / e-       : User=0.07  Real=0.12  Sys=0
 
 /run/dumpCouples
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc,v 1.4 2007/11/11 01:00:44 akimura Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VScoreWriter.cc,v 1.4.2.1 2008/09/18 07:12:08 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-03 $
 //
 
 #include "G4VScoreWriter.hh"
@@ -206,6 +206,7 @@ void G4VScoreWriter::DumpAllQuantitiesToFile(G4String & fileName, G4String & opt
 }
 
 G4int G4VScoreWriter::GetIndex(G4int x, G4int y, G4int z) const {
-  return x + y*fNMeshSegments[0] + z*fNMeshSegments[0]*fNMeshSegments[1];
+    //return x + y*fNMeshSegments[0] + z*fNMeshSegments[0]*fNMeshSegments[1];
+    return x*fNMeshSegments[1]*fNMeshSegments[2] +y*fNMeshSegments[2]+z;
 }
 
