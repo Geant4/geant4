@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.hh,v 1.18 2007/08/07 15:14:01 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Step.hh,v 1.19 2008/01/12 12:00:25 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 //---------------------------------------------------------------
@@ -103,8 +103,12 @@ class G4Step
    // step length
    G4double GetStepLength() const;
    void SetStepLength(G4double value);
+    // Before the end of the AlongStepDoIt loop,StepLength keeps
+    // the initial value which is determined by the shortest geometrical Step
+    // proposed by a physics process. After finishing the AlongStepDoIt,
+    // it will be set equal to 'StepLength' in G4Step. 
 
-  // total energy deposit 
+   // total energy deposit 
    G4double GetTotalEnergyDeposit() const;
    void SetTotalEnergyDeposit(G4double value);
 

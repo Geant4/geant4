@@ -1,4 +1,4 @@
-$Id: History,v 1.310 2007/12/11 13:20:28 gcosmo Exp $
+$Id: History,v 1.311 2008/01/15 10:08:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15th January 2008  Gabriele Cosmo (config-V09-01-00)
+- Added commented lines for OpenGL setup in Darwin-g++.gmk for MacOS
+  10.5 Leopard, pending fix from Apple.
 
 11th December 2007  Gabriele Cosmo (config-V09-00-12)
 - Corrected setup for GDML on WIN32-VC to allow for building DLLs.

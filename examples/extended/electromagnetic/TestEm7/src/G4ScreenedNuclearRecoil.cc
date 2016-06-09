@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScreenedNuclearRecoil.cc,v 1.4 2007/12/10 16:28:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ScreenedNuclearRecoil.cc,v 1.5 2008/01/14 12:11:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 // Class Description
@@ -490,8 +490,10 @@ G4VParticleChange* G4ScreenedNuclearRecoil::PostStepDoIt(const G4Track& aTrack, 
 	for(; stage != collisionStages.end(); stage++) 
 		(*stage)->DoCollisionStep(this,aTrack, aStep);
 	
-	if(registerDepositedEnergy) aParticleChange.ProposeLocalEnergyDeposit(NIEL);
-	
+	if(registerDepositedEnergy) {
+	  aParticleChange.ProposeLocalEnergyDeposit(NIEL);
+	  aParticleChange.ProposeNonIonizingEnergyDeposit(NIEL);
+	}
 	return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
 }
 

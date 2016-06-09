@@ -24,13 +24,8 @@
 // ********************************************************************
 //
 //
-//<<<<<<< HepPolyhedron.cc
-// $Id: HepPolyhedron.cc,v 1.26 2007/08/21 14:10:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-//=======
-// $Id: HepPolyhedron.cc,v 1.26 2007/08/21 14:10:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
-//>>>>>>> 1.24
+// $Id: HepPolyhedron.cc,v 1.26.2.1 2008/01/30 10:45:58 allison Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // 
 //
@@ -63,6 +58,8 @@
 // 20.06.05 G.Cosmo
 // - added HepPolyhedronEllipsoid;
 //
+// 18.07.07 T.Nikitin
+// - added HepParaboloid;
   
 #include "HepPolyhedron.h"
 #include <CLHEP/Units/PhysicalConstants.h>
@@ -1503,7 +1500,9 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(double r1,
  *                                                                     *
  * Name: HepPolyhedronParaboloid                     Date:    28.06.07 *
  *       ::HepPolyhedronParaboloid                                     *
- * Author:                                           Revised:          *
+ * Author: Lukas Lindroos (CERN), July 2007          Revised:          *
+ * Author: Tatiana Nikitin                           Revised:          *
+ * Author: John Allison (bug fix and improvement)    Revised: 29.01.08 *
  *                                                                     *
  * Function: Constructor for paraboloid                                *
  *                                                                     *
@@ -1559,37 +1558,19 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(double r1,
   //   P R E P A R E   T W O   P O L Y L I N E S
 
   int n = GetNumberOfRotationSteps();
-  double a1 = 2 * dz * r2*r2 / (r2*r2 - r1*r1), 
-         a2 = 2 * dz * r1*r1 / (r2*r2 - r1*r1), 
-         b = 2 * r2, A, l1, l2 = 0, l, scale, dl, k1, k2;
-  A = std::sqrt(b*b + 16 * a1*a1);
-  l1 = A / 2 + b*b / 8 / a1 * std::log((4 * a1 + A) / b);
-  if(a2 != 0)
-  {
-    A = std::sqrt(b*b + 16 * a2*a2);
-    l2 = A / 2 + b*b / 8 / a2 * std::log((4 * a2 + A) / b);
-  }
-  l = (l1 - l2) / 2;
-  dl  = l / n;
-  scale = dl;
-  k1 = (r2*r2 - r1*r1) / 2 / dz;
-  k2 = (r2*r2 + r1*r1) / 2;
+  double dl = (r2 - r1) / n;
+  double k1 = (r2*r2 - r1*r1) / 2 / dz;
+  double k2 = (r2*r2 + r1*r1) / 2;
 
-  double *zz = new double[n + 1], *rr = new double[n + 1];
+  double *zz = new double[n + 2], *rr = new double[n + 2];
 
   zz[0] = dz;
   rr[0] = r2;
-
 
   for(int i = 1; i < n - 1; i++)
   {
     rr[i] = rr[i-1] - dl;
     zz[i] = (rr[i]*rr[i] - k2) / k1;
-    while(rr[i] > 0 && (scale = std::sqrt((rr[i] - rr[i-1])*(rr[i] - rr[i-1]) + (zz[i]-zz[i-1])*(zz[i]-zz[i-1]))) < 0.9999 * dl || scale > 1.0001 * dl) // This should maybe be changed to a constant
-    {
-      rr[i] += (scale - dl) / scale * (rr[i-1] - rr[i]);
-      zz[i] = (rr[i]*rr[i] - k2) / k1;
-    }
     if(rr[i] < 0)
     {
       rr[i] = 0;
@@ -1597,16 +1578,18 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(double r1,
     }
   }
 
-
   zz[n-1] = -dz;
   rr[n-1] = r1;
 
-  zz[n] =  dz;
-  rr[n] =  0;
+  zz[n] = dz;
+  rr[n] = 0;
+
+  zz[n+1] = -dz;
+  rr[n+1] = 0;
 
   //   R O T A T E    P O L Y L I N E S
 
-  RotateAroundZ(0, phi1, dphi, n, 1, zz, rr, -1, -1); 
+  RotateAroundZ(0, phi1, dphi, n, 2, zz, rr, -1, -1); 
   SetReferences();
 
   delete zz;

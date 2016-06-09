@@ -24,12 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc,v 1.2 2007/12/10 16:29:59 gunter Exp $
+// $Id: G4PhantomParameterisation.cc,v 1.4 2008/01/22 15:02:36 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation
 //
-// Author: Pedro Arce, May 2007
+// May 2007 Pedro Arce,   first version
 //
 // --------------------------------------------------------------------
 
@@ -251,19 +251,19 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   // Add +kCarTolerance so that they are first placed on voxel N, and then
   // if the direction is negative substract 1
 
-  G4double fx = (localPoint.x()+fContainerWallX+kCarTolerance)/fVoxelHalfX/2.;
+  G4double fx = (localPoint.x()+fContainerWallX+kCarTolerance)/(fVoxelHalfX*2.);
   G4int nx = G4int(fx);
 
-  G4double fy = (localPoint.y()+fContainerWallY+kCarTolerance)/fVoxelHalfY/2.;
+  G4double fy = (localPoint.y()+fContainerWallY+kCarTolerance)/(fVoxelHalfY*2.);
   G4int ny = G4int(fy);
 
-  G4double fz = (localPoint.z()+fContainerWallZ+kCarTolerance)/fVoxelHalfZ/2.;
+  G4double fz = (localPoint.z()+fContainerWallZ+kCarTolerance)/(fVoxelHalfZ*2.);
   G4int nz = G4int(fz);
 
   // If it is on the surface side, check the direction: if direction is
   // negative place it on the previous voxel (if direction is positive it is
   // already in the next voxel...). 
-  // NOTE: Sometimes this algorithm gives nx = -1, it is always traced to be
+  // Correct also cases where n = -1 or n = fNoVoxel. It is always traced to be
   // due to multiple scattering: track is entering a voxel but multiple
   // scattering changes the angle towards outside
   //
@@ -275,8 +275,12 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
       {
         nx -= 1;
       }
-      else
+    }
+    else
+    {
+      if( nx == G4int(fNoVoxelX) )  
       {
+        nx -= 1;       
       }
     }
   }
@@ -288,8 +292,12 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
       {
         ny -= 1;
       }
-      else
+    }
+    else
+    {
+      if( ny == G4int(fNoVoxelY) )  
       {
+        ny -= 1;       
       }
     }
   }
@@ -301,63 +309,69 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
       {
         nz -= 1;
       }
-      else
+    }
+    else
+    {
+      if( nz == G4int(fNoVoxelZ) )  
       {
+        nz -= 1;       
       }
     }
   }
   
   G4int copyNo = nx + fNoVoxelX*ny + fNoVoxelXY*nz;
 
-  // Correct precision problems
+  // Check if there are still errors 
   //
-  if( copyNo < 0 || copyNo >= G4int(fNoVoxel) )
+  G4bool isOK = true;
+  if( nx < 0 )
   {
-    G4bool isOK = true;
-    if( nx < 0 )
-    {
-      nx = 0;
-      isOK = false;
-    }
-    else if( nx >= G4int(fNoVoxelX) )
-    {
-      nx = fNoVoxelX-1;
-      isOK = false;
-    }
-    if( ny < 0 )
-    {
-      ny = 0;
-      isOK = false;
-    }
-    else if( ny >= G4int(fNoVoxelY) )
-    {
-      ny = fNoVoxelY-1;
-      isOK = false;
-    }
-    if( nz < 0 )
-    {
-      nz = 0;
-      isOK = false;
-    }
-    else if( nz >= G4int(fNoVoxelZ) )
-    {
-      nz = fNoVoxelZ-1;
-      isOK = false;
-    }
-    if( !isOK )
-    {
-      G4cerr << "WARNING - G4PhantomParameterisation::GetReplicaNo()" << G4endl
-             << "          LocalPoint: " << localPoint << G4endl
-             << "          Voxel container size: " << fContainerWallX
-             << " " << fContainerWallY << " " << fContainerWallZ << G4endl;
-      G4Exception("G4PhantomParameterisation::GetReplicaNo()",
-                  "Wrong-copy-number", JustWarning,
-                  "Corrected the copy numbe! It was negative or too big");
-      copyNo = nx + fNoVoxelX*ny + fNoVoxelXY*nz;
-    }
+    nx = 0;
+    isOK = false;
+  }
+  else if( nx >= G4int(fNoVoxelX) )
+  {
+    nx = fNoVoxelX-1;
+    isOK = false;
+  }
+  if( ny < 0 )
+  {
+    ny = 0;
+    isOK = false;
+  }
+  else if( ny >= G4int(fNoVoxelY) )
+  {
+    ny = fNoVoxelY-1;
+    isOK = false;
+  }
+  if( nz < 0 )
+  {
+    nz = 0;
+    isOK = false;
+  }
+  else if( nz >= G4int(fNoVoxelZ) )
+  {
+    nz = fNoVoxelZ-1;
+    isOK = false;
+  }
+  if( !isOK )
+  {
+    G4cerr << "WARNING - G4PhantomParameterisation::GetReplicaNo()" << G4endl
+           << "          LocalPoint: " << localPoint << G4endl
+           << "          LocalDir: " << localDir << G4endl
+           << "          Voxel container size: " << fContainerWallX
+           << " " << fContainerWallY << " " << fContainerWallZ << G4endl
+           << "          LocalPoint - wall: "
+           << localPoint.x()-fContainerWallX << " "
+           << localPoint.y()-fContainerWallY << " "
+           << localPoint.z()-fContainerWallZ << G4endl;
+    G4Exception("G4PhantomParameterisation::GetReplicaNo()",
+                "Wrong-copy-number", JustWarning,
+                "Corrected the copy number! It was negative or too big");
+    copyNo = nx + fNoVoxelX*ny + fNoVoxelXY*nz;
   }
 
-  CheckCopyNo( copyNo ); // not needed, just for debugging code
+  // CheckCopyNo( copyNo ); // not needed, just for debugging code
 
   return copyNo;
 }

@@ -14,7 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 Jan 2008 -  V.Ivanchenko (hadr-cohe-V09-01-00)
+------------------------------------------------
+  G4DiffuseElastic       - remove dependence on other elastic models
+  G4ElasticHadrNucleusHE - fixed non-reproducibility, removed commented
+                           part of old code; add more formatting 
+  G4HadronElastic - return back threshold to G4ElasticHadrNucleusHE 
+                    model 1 GeV
+
 10 Dec 2007 -  V.Ivanchenko (hadr-cohe-V09-00-07)
+------------------------------------------------
   G4HadronElastic - set threshold to G4ElasticHadrNucleusHE model
                     DBL_MAX
 

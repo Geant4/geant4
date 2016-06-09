@@ -1,4 +1,4 @@
-$Id: History,v 1.128 2007/12/12 16:51:31 gcosmo Exp $
+$Id: History,v 1.131 2008/02/05 08:20:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5-Feb-2008, I.Hrivnacova (geom-specific-V09-01-02)
+- G4ExtrudedSolid: bug fix in MakeFacets() to fill 'fTriangles' also in case
+  of polygon with 3 or 4 vertices, as they are needed for Inside(p).
+
+2-Feb-2008, I.Hrivnacova (geom-specific-V09-01-01)
+- Corrected triangularization of polygon, now correctly handling case
+  of concave shapes.
+- Corrected order of arguments in G4Paraboloid constructor.  
+
+16-Jan-2008, I.Hrivnacova (geom-specific-V09-01-00)
+- In G4ExtrudedSolid::MakeFacets(), now adding triangular facets before quadrangular
+  ones, following logic behind G4TessellatedSolid.
 
 12-Dec-2007, G.Cosmo (geom-specific-V09-00-08a)
 - Remove use of global static constant from singleton initialisation in

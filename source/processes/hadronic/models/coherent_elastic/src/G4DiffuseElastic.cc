@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DiffuseElastic.cc,v 1.18 2007/11/14 18:42:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4DiffuseElastic.cc,v 1.20 2008/01/14 10:39:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 // Physics model class G4DiffuseElastic 
@@ -39,9 +39,6 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4IonTable.hh"
-#include "G4QElasticCrossSection.hh"
-#include "G4VQCrossSection.hh"
-#include "G4ElasticHadrNucleusHE.hh"
 
 #include "Randomize.hh"
 #include "G4Integrator.hh"

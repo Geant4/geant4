@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.cc,v 1.23 2007/11/27 18:25:41 japost Exp $
+// $Id: G4CoupledTransportation.cc,v 1.24 2007/12/07 16:29:07 japost Exp $
 // --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
-// GEANT4 tag $Name: geant4-09-01 $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
 // =======================================================================
@@ -49,6 +49,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
+#include "G4FieldManagerStore.hh"
 class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
@@ -829,8 +830,10 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
 
      G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
      if( chordF ) chordF->ResetStepEstimate();
-     //  Should also do this for the chord finders of local field managers - TODO
   }
+  // Clear the chord finders of all fields (ie managers) derived objects
+  static G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+  fieldMgrStore->ClearAllChordFindersState(); 
 
 #ifdef G4DEBUG_TRANSPORT
   if( fVerboseLevel > 1 ){

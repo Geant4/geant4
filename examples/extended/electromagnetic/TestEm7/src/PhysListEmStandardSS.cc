@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardSS.cc,v 1.4 2007/11/07 19:41:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysListEmStandardSS.cc,v 1.5 2008/01/14 12:11:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -50,6 +50,7 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4ionGasIonisation.hh"
+#include "G4IonFluctuations.hh"
 #include "G4CoulombScattering.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,21 +104,29 @@ void PhysListEmStandardSS::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4CoulombScattering);      
              
     } else if (particleName == "alpha" || particleName == "He3") {
-      pmanager->AddProcess(new G4ionIonisation,      -1, 1,1);
+      G4ionIonisation* ion = new G4ionIonisation();
+      ion->SetStepFunction(0.1, um);
+      ion->ActivateNuclearStopping(false);
+      pmanager->AddProcess(ion,  -1, 1,1);
       pmanager->AddDiscreteProcess(new G4CoulombScattering);      
 
     } else if (particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4ionGasIonisation,   -1, 1,1);
+      G4ionGasIonisation* ion = new G4ionGasIonisation();
+      ion->ActivateNuclearStopping(false);
+      ion->SetStepFunction(0.1, um);
+      pmanager->AddProcess(ion,  -1, 1,1);
       G4CoulombScattering* cs = new G4CoulombScattering();
       cs->SetBuildTableFlag(false);
       pmanager->AddDiscreteProcess(cs);
       
-     
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4hIonisation,        -1,1,1);
+      G4hIonisation* hion = new G4hIonisation();
+      hion->SetStepFunction(0.1, 10.*um);
+      hion->ActivateNuclearStopping(false);
+      pmanager->AddProcess(hion,  -1,1,1);
       pmanager->AddDiscreteProcess(new G4CoulombScattering);      
     }
   }

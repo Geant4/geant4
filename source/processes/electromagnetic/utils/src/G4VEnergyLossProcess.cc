@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.122 2007/11/07 18:38:49 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4VEnergyLossProcess.cc,v 1.123 2008/01/11 19:55:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -1659,12 +1659,23 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(
 void G4VEnergyLossProcess::AddCollaborativeProcess(
             G4VEnergyLossProcess* p)
 {
-  scProcesses.push_back(p);
-  nProcesses++;
-  if (0 < verboseLevel) 
-    G4cout << "### The process " << p->GetProcessName() 
-	   << " is added to the list of collaborative processes of "
-	   << GetProcessName() << G4endl; 
+  G4bool add = true;
+  if(nProcesses > 0) {
+    for(G4int i=0; i<nProcesses; i++) {
+      if(p == scProcesses[i]) {
+        add = false;
+        break;
+      }
+    }
+  }
+  if(add) {
+    scProcesses.push_back(p);
+    nProcesses++;
+    if (0 < verboseLevel) 
+      G4cout << "### The process " << p->GetProcessName() 
+	     << " is added to the list of collaborative processes of "
+	     << GetProcessName() << G4endl; 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

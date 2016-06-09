@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLBase.cc,v 1.3 2007/11/30 11:58:46 ztorzsok Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4GDMLBase.cc,v 1.3.2.1 2008/01/16 09:43:30 ztorzsok Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 // class G4GDMLBase
@@ -57,6 +57,7 @@ G4GDMLBase::G4GDMLBase() {
    parser->setDoNamespaces(true);
    parser->setDoSchema(true);
    parser->setValidationSchemaFullChecking(true);
+   parser->setCreateEntityReferenceNodes(false);   // Entities will be automatically resolved by Xerces
 }
 
 G4GDMLBase::~G4GDMLBase() {

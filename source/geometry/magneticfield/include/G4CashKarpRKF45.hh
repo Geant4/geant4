@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.hh,v 1.10 2006/06/29 18:20:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4CashKarpRKF45.hh,v 1.11 2008/01/11 15:23:54 japost Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 // class G4CashKarpRKF45
@@ -87,7 +87,7 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   private:
 
-   G4int fNumberOfVariables ;
+   // G4int fNumberOfVariables ;  // Already kept in G4MagIntegratorStepper
    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *yTemp, *yIn;  // scratch space
 
   // for DistChord calculations

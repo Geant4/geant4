@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -212,7 +212,7 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for proton
@@ -225,7 +225,7 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muIoni:   tables are built for  mu+
@@ -272,7 +272,7 @@ hIoni:   tables are built for  pi+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 hIoni:   tables are built for  pi-
@@ -280,7 +280,7 @@ hIoni:   tables are built for  pi-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -345,7 +345,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=78.55s Real=80.12s Sys=1.51s
+  User=76.69s Real=77.86s Sys=1.17s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -474,20 +474,20 @@ layer  eDep/evt   nGamma/evt   nElec/evt   nPosi/evt   stepLen/evt   nStep/evt
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.01  Real=0.03  Sys=0
+ All particles : User=0.02  Real=0.02  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=37.81  Real=38.28  Sys=0.49
- e+ / e-       : User=26.39  Real=26.75  Sys=0.35
+ All particles : User=37.54  Real=38.02  Sys=0.48
+ e+ / e-       : User=26.19  Real=26.5  Sys=0.31
 
 Region <Calor-B>
- All particles : User=13.58  Real=13.72  Sys=0.16
- e+ / e-       : User=9.11  Real=9.23  Sys=0.13
+ All particles : User=13.51  Real=13.64  Sys=0.13
+ e+ / e-       : User=8.83  Real=8.92  Sys=0.09
 
 Region <Calor-C>
- All particles : User=0.86  Real=0.87  Sys=0.01
- e+ / e-       : User=0.38  Real=0.39  Sys=0.01
+ All particles : User=1  Real=1.02  Sys=0.02
+ e+ / e-       : User=0.45  Real=0.47  Sys=0.02
 
 /run/dumpCouples
 
@@ -630,7 +630,7 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for proton
@@ -643,7 +643,7 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muIoni:   tables are built for  mu+
@@ -690,7 +690,7 @@ hIoni:   tables are built for  pi+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 hIoni:   tables are built for  pi-
@@ -698,7 +698,7 @@ hIoni:   tables are built for  pi-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -763,7 +763,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=107.2s Real=108.59s Sys=1.36s
+  User=102.94s Real=105.13s Sys=2.19s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -892,20 +892,20 @@ layer  eDep/evt   nGamma/evt   nElec/evt   nPosi/evt   stepLen/evt   nStep/evt
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.01  Real=0.01  Sys=0
+ All particles : User=0.02  Real=0.02  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=37.61  Real=37.99  Sys=0.35
- e+ / e-       : User=26.44  Real=26.69  Sys=0.27
+ All particles : User=35.29  Real=35.98  Sys=0.69
+ e+ / e-       : User=25.08  Real=25.62  Sys=0.53
 
 Region <Calor-B>
- All particles : User=18.63  Real=18.86  Sys=0.23
- e+ / e-       : User=12.74  Real=13  Sys=0.28
+ All particles : User=17.2  Real=17.43  Sys=0.23
+ e+ / e-       : User=11.66  Real=11.81  Sys=0.15
 
 Region <Calor-C>
- All particles : User=14.8  Real=14.91  Sys=0.13
- e+ / e-       : User=9.64  Real=9.75  Sys=0.11
+ All particles : User=14.96  Real=15.17  Sys=0.21
+ e+ / e-       : User=9.91  Real=10.03  Sys=0.14
 
 /run/dumpCouples
 
@@ -1047,7 +1047,7 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for proton
@@ -1060,7 +1060,7 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muIoni:   tables are built for  mu+
@@ -1107,7 +1107,7 @@ hIoni:   tables are built for  pi+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 hIoni:   tables are built for  pi-
@@ -1115,7 +1115,7 @@ hIoni:   tables are built for  pi-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -1210,7 +1210,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=28.66s Real=29.04s Sys=0.38s
+  User=27.79s Real=28.04s Sys=0.25s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1339,20 +1339,20 @@ layer  eDep/evt   nGamma/evt   nElec/evt   nPosi/evt   stepLen/evt   nStep/evt
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.03  Real=0.03  Sys=0
+ All particles : User=0.06  Real=0.06  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=6.45  Real=6.49  Sys=0.05
- e+ / e-       : User=3.6  Real=3.63  Sys=0.02
+ All particles : User=6.15  Real=6.18  Sys=0.04
+ e+ / e-       : User=3.5  Real=3.53  Sys=0.03
 
 Region <Calor-B>
- All particles : User=4.98  Real=5.07  Sys=0.09
- e+ / e-       : User=2.35  Real=2.38  Sys=0.03
+ All particles : User=4.88  Real=4.92  Sys=0.05
+ e+ / e-       : User=2.39  Real=2.41  Sys=0.03
 
 Region <Calor-C>
- All particles : User=9.16  Real=9.25  Sys=0.09
- e+ / e-       : User=3.88  Real=3.92  Sys=0.04
+ All particles : User=9.09  Real=9.13  Sys=0.05
+ e+ / e-       : User=3.98  Real=3.99  Sys=0.02
 
 /run/dumpCouples
 
@@ -1525,7 +1525,7 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for proton
@@ -1538,7 +1538,7 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 muIoni:   tables are built for  mu+
@@ -1585,7 +1585,7 @@ hIoni:   tables are built for  pi+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 hIoni:   tables are built for  pi-
@@ -1593,7 +1593,7 @@ hIoni:   tables are built for  pi-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.29750425 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -1688,7 +1688,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=46.28s Real=47.31s Sys=1.03s
+  User=45.04s Real=46.05s Sys=1.01s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1817,20 +1817,20 @@ layer  eDep/evt   nGamma/evt   nElec/evt   nPosi/evt   stepLen/evt   nStep/evt
 ############################################################
 
 Region <DefaultRegionForTheWorld>
- All particles : User=0.01  Real=0.01  Sys=0
+ All particles : User=0.04  Real=0.04  Sys=0
  e+ / e-       : User=0  Real=0  Sys=0
 
 Region <Calor-A>
- All particles : User=16.74  Real=17.03  Sys=0.29
- e+ / e-       : User=10.27  Real=10.44  Sys=0.17
+ All particles : User=15.92  Real=16.19  Sys=0.28
+ e+ / e-       : User=9.61  Real=9.88  Sys=0.27
 
 Region <Calor-B>
- All particles : User=8.59  Real=8.74  Sys=0.15
- e+ / e-       : User=4.95  Real=5.14  Sys=0.19
+ All particles : User=8.54  Real=8.68  Sys=0.13
+ e+ / e-       : User=4.98  Real=5.09  Sys=0.11
 
 Region <Calor-C>
- All particles : User=5.91  Real=5.94  Sys=0.03
- e+ / e-       : User=2.95  Real=2.96  Sys=0.01
+ All particles : User=5.53  Real=5.63  Sys=0.1
+ e+ / e-       : User=2.79  Real=2.85  Sys=0.06
 
 /run/dumpCouples
 

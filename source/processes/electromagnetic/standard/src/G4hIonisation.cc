@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.69 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4hIonisation.cc,v 1.70 2008/01/14 11:59:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -112,6 +112,7 @@ G4hIonisation::G4hIonisation(const G4String& name)
   mass = 0.0;
   ratio = 0.0;
   corr = G4LossTableManager::Instance()->EmCorrections();  
+  nuclearStopping = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -156,6 +157,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
   if (!EmModel(1)) SetEmModel(new G4BraggModel(),1);
   EmModel(1)->SetLowEnergyLimit(100*eV);
   eth = 2.0*MeV*mass/proton_mass_c2;
+  ethnuc = eth*50.0;
   EmModel(1)->SetHighEnergyLimit(eth);
   if (!FluctModel()) SetFluctModel(new G4UniversalFluctuation());
   AddEmModel(1, EmModel(1), FluctModel());
@@ -179,7 +181,26 @@ void G4hIonisation::PrintInfo()
 	   << eth/MeV << " MeV"
 	   << "\n      Parametrisation from "
 	   << EmModel(1)->GetName() << " for protons below."
+	   << " NuclearStopping= " << nuclearStopping
 	   << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
+					 const G4DynamicParticle* dp,
+					 G4double& eloss,
+					 G4double& s)
+{
+  G4double ekin = dp->GetKineticEnergy();
+  if(nuclearStopping && ekin < ethnuc) {
+    G4double nloss = s*corr->NuclearDEDX(theParticle,couple->GetMaterial(),
+					 ekin - eloss*0.5);
+    eloss += nloss;
+    //  G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
+    //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
+    fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

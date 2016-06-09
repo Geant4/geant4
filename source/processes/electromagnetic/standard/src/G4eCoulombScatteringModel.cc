@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc,v 1.39 2007/11/28 12:36:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4eCoulombScatteringModel.cc,v 1.40 2008/01/07 08:32:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -215,12 +215,16 @@ G4double G4eCoulombScatteringModel::ComputeElectronXSectionPerAtom(
       (1.0 + 2.0*ratio*(tau + 1.0) + ratio*ratio); 
   }
 
+  cosTetMaxElec = cosTetMaxNuc;
   G4double t = std::min(cutEnergy, tmax);
-  G4double mom21 = t*(t + 2.0*electron_mass_c2); 
-  t = tkin - t;
-  G4double mom22 = t*(t + 2.0*mass); 
-  cosTetMaxElec = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
-  if(cosTetMaxElec < cosTetMaxNuc) cosTetMaxElec = cosTetMaxNuc;
+  G4double mom21 = t*(t + 2.0*electron_mass_c2);
+  G4double t1 = tkin - t;
+  if(t1 > 0.0) {
+    G4double mom22 = t1*(t1 + 2.0*mass);
+    G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
+    if(ctm > cosTetMaxElec && ctm <= 1.0) cosTetMaxElec = ctm;
+  }
+
   if(cosTetMaxElec < cosThetaMin) {
     G4double x1 = 1.0 - cosThetaMin  + screenZ;
     G4double x2 = 1.0 - cosTetMaxElec + screenZ;

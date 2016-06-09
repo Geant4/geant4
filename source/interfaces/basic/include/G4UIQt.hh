@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.7 2007/11/15 18:53:59 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UIQt.hh,v 1.9 2007/11/30 13:32:47 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -149,7 +149,7 @@ private slots :
   void ButtonCallback(const QString&);
   void HelpTreeClicCallback();
 #if QT_VERSION < 0x040000
-  void HelpTreeDoubleClicCallback( QListViewItem*, int);
+  void HelpTreeDoubleClicCallback( QListViewItem*);
 #else
   void HelpTreeDoubleClicCallback( QTreeWidgetItem*, int);
 #endif

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -123,7 +123,7 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 hhIoni:   tables are built for  anti_proton
@@ -177,7 +177,7 @@ hIoni:   tables are built for  pi+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -190,7 +190,7 @@ hIoni:   tables are built for  pi-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
@@ -308,7 +308,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.02s Real=0.12s Sys=0.01s
+  User=0.03s Real=0.14s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1188,7 +1188,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.39s Real=0.73s Sys=0.11s
+  User=0.35s Real=0.65s Sys=0.17s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1354,7 +1354,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.08s Real=0.17s Sys=0.02s
+  User=0.07s Real=0.17s Sys=0.03s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

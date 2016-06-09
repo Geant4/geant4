@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.cc,v 1.13 2006/06/29 18:23:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4FieldTrack.cc,v 1.14 2007/10/03 15:34:42 japost Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // -------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(LaboratoryTimeOfFlight), 
    // fProperTimeOfFlight(0.0),
-   fMomentumDir(pMomentumDirection),
+   // fMomentumDir(pMomentumDirection),
    fChargeState(  charge, magnetic_dipole_moment ) 
 {
   G4double momentum  = std::sqrt(kineticEnergy*kineticEnergy
@@ -65,6 +65,11 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
 
   G4ThreeVector pMomentum= momentum * pMomentumDirection; 
   SetCurvePnt( pPosition, pMomentum, curve_length );
+  // Sets momentum direction as well.
+
+  // Set the momentum direction again - keeping value from argument exactly
+  fMomentumDir=pMomentumDirection; 
+
   InitialiseSpin( Spin ); 
 
   // fpChargeState = new G4ChargeState( charge, magnetic_dipole_moment ); 
@@ -83,7 +88,7 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(pLaboratoryTimeOfFlight), 
    fProperTimeOfFlight(pProperTimeOfFlight),
-   fMomentumDir(pMomentumDirection), 
+   // fMomentumDir(pMomentumDirection), 
    fChargeState( DBL_MAX ) //  charge not set 
 {
   G4double momentum  = std::sqrt(kineticEnergy*kineticEnergy
@@ -91,6 +96,11 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
   G4ThreeVector pMomentum= momentum * pMomentumDirection; 
 
   SetCurvePnt( pPosition, pMomentum, curve_length );
+  // Sets momentum direction as well.
+
+  // Set the momentum direction again
+  //   -- to avoid numerical issues from multiplying by momentum and dividing again
+  fMomentumDir=pMomentumDirection; 
 
   G4ThreeVector Spin(0.0, 0.0, 0.0); 
   if( !pSpin ) Spin= G4ThreeVector(0.,0.,0.); 

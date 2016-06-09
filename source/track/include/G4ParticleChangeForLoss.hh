@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.19 2006/08/28 16:10:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParticleChangeForLoss.hh,v 1.20 2008/01/11 19:57:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 // ------------------------------------------------------------
@@ -228,6 +228,7 @@ inline void G4ParticleChangeForLoss::InitializeForAlongStep(const G4Track& track
 {
   theStatusChange = track.GetTrackStatus();
   theLocalEnergyDeposit = 0.0;
+  theNonIonizingEnergyDeposit = 0.0;
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
   proposedKinEnergy = track.GetKineticEnergy();
@@ -238,6 +239,7 @@ inline void G4ParticleChangeForLoss::InitializeForPostStep(const G4Track& track)
 {
   theStatusChange = track.GetTrackStatus();
   theLocalEnergyDeposit = 0.0;
+  theNonIonizingEnergyDeposit = 0.0;
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
   proposedKinEnergy = track.GetKineticEnergy();
@@ -275,6 +277,7 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
   //  /(pPreStepPoint->GetWeight());
   // pPostStepPoint->SetWeight( newWeight );
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
   return pStep;
 }
 
@@ -290,6 +293,7 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
     pPostStepPoint->SetWeight( theParentWeight );
 
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
   return pStep;
 }
 

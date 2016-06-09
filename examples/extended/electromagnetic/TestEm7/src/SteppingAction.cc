@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.11 2007/06/12 14:01:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: SteppingAction.cc,v 1.12 2008/01/14 12:11:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,6 +52,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  G4double edep = aStep->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
+
+ // G4cout << "edep= " << edep << "NIEL= " << aStep->GetNonIonizingEnergyDeposit()<<G4endl;
+
+ runAction->FillEdep(edep,aStep->GetNonIonizingEnergyDeposit());
 
  if(aStep->GetTrack()->GetTrackID() == 1) runAction->AddPrimaryStep();  
  

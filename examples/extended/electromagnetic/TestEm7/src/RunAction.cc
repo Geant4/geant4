@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.20 2007/06/12 14:01:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.cc,v 1.21 2008/01/14 12:11:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -156,6 +156,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //
   nPrimarySteps = 0;
   projRange = projRange2 = 0.;
+  edeptot = eniel = 0.;
   for (G4int j=0; j<MaxTally; j++) tallyEdep[j] = 0.;
   kinematic->ResetEbeamCumul();
   bookHisto();      
@@ -191,10 +192,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double nstep = G4double(nPrimarySteps)/G4double(NbofEvents);
 
   G4cout.precision(6);       
-  G4cout << "\n projected Range= "<< G4BestUnit(projRange,"Length")
+  G4cout << "\n Projected Range= "<< G4BestUnit(projRange,"Length")
          << "   rms= "            << G4BestUnit( rms,"Length")
          << G4endl;
-  G4cout << " mean number of primary steps = "<< nstep << G4endl;
+  G4cout << " Mean number of primary steps = "<< nstep << G4endl;
+
+  //compute energy deposition and NIEL
+  //
+  edeptot /= NbofEvents; 
+  G4cout << " Total energy deposit= "<< G4BestUnit(edeptot,"Energy")
+         << G4endl;
+  eniel /= NbofEvents; 
+  G4cout << " NIEL energy deposit = "<< G4BestUnit(eniel,"Energy")
+         << G4endl;
      
   //print dose in tallies
   //

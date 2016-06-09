@@ -1,0 +1,121 @@
+
+                 Geant4 9.0 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                           25 January 2008
+
+List of fixes included in this public patch since the public release 9.0.p01:
+
+  o Error Propagation:
+    -----------------
+    + G4ErrorFreeTrajState: corrected bug in one of the transformation
+      matrix terms. Addresses problem report #971.
+    + G4ErrorFreeTrajParam: corrected normalization of Y and Z coordinates.
+    + G4ErrorPropagator: removed call to exit() and some cleanup.
+
+  o Event:  (*)
+    -----
+    + G4ParticleGun:
+      o Added class member 'particle_momentum' and method
+        SetParticleMomentum().
+      o Added private copy constructor and =, ==, += operators to
+        Addressing problem report #984.
+    + Modified G4SPSEneDistribution to adress problem report #988.
+
+  o Geometry:
+    --------
+    + management: (*)
+      o Fixed typo in forcing minimum number of points in method
+        G4VSolid::EstimateSurfaceArea(). Addresses problem report #981.
+    + navigation: (*)
+      o G4PropagatorInField:
+        - Fixes for compilation of code under G4DEBUG_FIELD
+          (problem report #982).
+        - Changed condition for 'ReEstimationEndPoint' in order to better
+          handle very strict parameters of propagation. Also added more
+          verbosity in case of error for negative step.
+          Fixes rare problem observed in production by ATLAS.
+        - Added extra check of method LocateIntersectionPoint() arguments.
+    + solids/Boolean: (*)
+      o Boosted performance for response of Inside() for G4SubtractionSolid
+        and G4UnionSolid according to suggestion in problem report #979.
+    + solids/BREPS: (*)
+      o Fixed bug in G4BREPSolidPolyhedra::DistanceToOut() for cases of
+        particle passing the border of two touching surfaces.
+      o G4BREPSolidBox: fixed problem in the constructor in definition of
+        the side for the normal to surface.
+    + solids/CSG: (*)
+      o G4Torus:
+        - Fixed bug in CalculateExtent() for case of non-rotated full-Phi
+          torus definition: added protection against negative value for sqrt()
+          and corrected formula for 'delta'.
+          Fixes problem of NaN detected in initialisation by CMS.
+        - Fixed bug in SolveNumericJT(): corrected handling of complex roots.
+          Addresses problem report #969.
+      o Fixed problem of undefined side for valid surface normal in case of
+        'Phi' section and direction through the center of either a G4Tubs or
+        G4Cons shape.
+    + solids/specific: (*)
+      o Removed debug printout in G4Polycone::GetPointOnCone().
+
+  o Global:
+    ------
+    + Changed date for patch-02 to release 9.0.
+
+  o Management Processes:
+    --------------------
+    + G4WrapperProcess: fixed double definition of method PreparePhysicsTable()
+      in the header and moved inline implementations of virtual methods to
+      source file.
+
+  o Hadronic Processes:
+    ------------------
+    + management: (*)
+      o G4HadronicProcess::FillTotalResult(): fix addressing problem report
+        #967, replaced call to 'aT.GetGlobalTime()' with an internal variable.
+    + models/cascade:
+      o Fixed angular distribution for nucleon-nucleon elastic scattering
+        above 2.8 GeV.
+    + models/chiral_inv_phase_space:  (*)
+      o Fixed problem of non-reproducibility induced by G4QElasticCrossSection
+        and G4StringChipsInterface.
+      o Reduced memory allocation induced by use std::deque collection in
+        G4QHadron class; temporary workaround by replacing it with std::list.
+    + models/high_energy: (*)
+      o G4HEInelastic::TuningOfHighEnergyCascading(): fixed incorrect
+        assignment of leading particle to low energy backward nucleons and
+        fragments. This bug caused high energy backward particles to be
+        emitted from high energy collisions.
+      o G4HEPionMinusInelastic: fixed incorrect 'Imax' in sampling of charge
+        exchange.
+    + stopping: (*)
+      o G4StopElementSelector: fixed typo in Primakoff formula for
+        capture velocity.
+      o G4MuonMinusCaptureAtRest: fixed old memory leak.
+      o Removed old-style copyright from all headers and fixed Software
+        Reference Manual tags.
+
+  o Examples:
+    --------
+    + advanced/underground_physics:
+      o Corrected micrometer unit in macros from mum to um (old bug since 8.2).
+
+
+ (*) Fixes also included in the patched release 8.3.p02.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.0
+  o  Technical notes distributed for release 9.0 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.0 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

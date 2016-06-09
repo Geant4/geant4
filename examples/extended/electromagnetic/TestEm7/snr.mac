@@ -1,0 +1,46 @@
+# $Id: snr.mac,v 1.1 2007/12/19 19:21:41 vnivanch Exp $
+#
+# Macro file for "TestEm7.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 1
+/run/verbose 1
+#
+/testem/det/setMat G4_WATER
+/testem/det/setSizeX  20 cm
+/testem/det/setSizeYZ 20 cm
+#
+/testem/det/tallyMat G4_WATER
+/testem/det/tallySize 2. 2. 2. mm
+/testem/det/tallyPosition -9.9 0. 0. cm
+/testem/det/tallyPosition -5.  0. 0. cm
+/testem/det/tallyPosition  0.  0. 0. cm
+/testem/det/tallyPosition  5.  0. 0. cm
+#
+/testem/phys/addPhysics  standardNR	# use screened nuclear recoil  
+###/testem/phys/addPhysics  binary	# hadronic physics
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 160 MeV
+# beam size
+/testem/gun/rndm 3 mm
+#
+/testem/event/printModulo 1000
+/testem/stepMax 1 mm
+#
+/run/beamOn 10000
+#
+/testem/stepMax 100 mm
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 3.5 GeV
+/run/beamOn 1000
+#
+/testem/det/setMat G4_Cu
+/testem/det/update
+/gun/particle kaon+
+/gun/energy 100 MeV
+/run/beamOn 1000

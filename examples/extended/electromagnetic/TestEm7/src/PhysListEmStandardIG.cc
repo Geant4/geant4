@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandardIG.cc,v 1.3 2007/11/07 19:41:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: PhysListEmStandardIG.cc,v 1.7 2008/01/14 12:11:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -32,6 +32,7 @@
 #include "PhysListEmStandardIG.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
+#include "G4EmProcessOptions.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -39,7 +40,7 @@
 
 #include "G4MultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
-#include "G4ScreenedNuclearRecoil.hh"
+#include "G4MuMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -51,6 +52,7 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
+#include "G4IonFluctuations.hh"
 #include "G4CoulombScattering.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,9 +70,7 @@ PhysListEmStandardIG::~PhysListEmStandardIG()
 
 void PhysListEmStandardIG::ConstructProcess()
 {
-  // Add standard EM Processes
-
-  G4ScreenedNuclearRecoil* nucr = new G4ScreenedNuclearRecoil();
+  G4double thetamin = 0.1;
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -100,33 +100,46 @@ void PhysListEmStandardIG::ConstructProcess()
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4MuMultipleScattering(thetamin), -1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 4,4);
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      cs->SetThetaMin(thetamin);
+      pmanager->AddDiscreteProcess(cs);
              
-    } else if (particleName == "alpha" || particleName == "He3") {
-      pmanager->AddProcess(new G4ionIonisation,      -1, 1,1);
-      pmanager->AddDiscreteProcess(nucr);      
+    } else if (particleName == "alpha" || particleName == "He3"
+	       || particleName == "GenericIon") {
 
-    } else if (particleName == "GenericIon" ) { 
-      pmanager->AddProcess(new G4ionIonisation,      -1, 1,1);
-      pmanager->AddDiscreteProcess(nucr);      
-
-    } else if (particleName == "proton" ||
-	       particleName == "deuteron" ||
-               particleName == "triton") { 
-      pmanager->AddProcess(new G4hIonisation,      -1, 1,1);
-      pmanager->AddDiscreteProcess(nucr);      
+      G4ionIonisation* ion = new G4ionIonisation();
+      ion->ActivateNuclearStopping(false);
+      ion->SetStepFunction(0.1, um);
+      pmanager->AddProcess(new G4MuMultipleScattering(thetamin), -1, 1,1);
+      pmanager->AddProcess(ion, -1, 2,2);
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      cs->SetThetaMin(thetamin);
+      pmanager->AddDiscreteProcess(cs);
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4hIonisation,        -1, 2,2);      
+      G4hIonisation* hion = new G4hIonisation();
+      hion->SetFluctModel(new G4IonFluctuations());
+      hion->SetStepFunction(0.1, 10.*um);
+      hion->ActivateNuclearStopping(false);
+      pmanager->AddProcess(new G4MuMultipleScattering(thetamin), -1, 1,1);
+      pmanager->AddProcess(hion, -1, 2,2);
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      cs->SetThetaMin(thetamin);
     }
   }
+  G4EmProcessOptions opt;
+  opt.SetMinEnergy(0.1*keV);
+  opt.SetMaxEnergy(100.*GeV);
+  opt.SetDEDXBinning(360);
+  opt.SetLambdaBinning(360);
+  opt.SetLinearLossLimit(1.e-6);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

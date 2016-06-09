@@ -27,8 +27,8 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.104 2007/11/29 18:59:57 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Quasmon.cc,v 1.105 2008/01/14 10:34:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -4081,8 +4081,8 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
   }
   if (vRndm<=0. || vRndm>1.)
   {
-    G4cout<<"-Warning-G4Quasmon::GetQPM: R="<<vRndm<<",kMi="<<kMin<<",kMa="<<kMax<<",kLi="
-          <<kLim<<G4endl;
+    //G4cout<<"-Warning-G4Quasmon::GetQPM: R="<<vRndm<<",kMi="<<kMin<<",kMa="<<kMax<<",kLi="
+    //      <<kLim<<G4endl;
     if(vRndm<=0.) vRndm=1.e-9;
     else if(vRndm>1.) vRndm=1.;
   }

@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -119,7 +119,7 @@ hIoni:   tables are built for  proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for GenericIon
@@ -131,7 +131,7 @@ ionIoni:   tables are built for  GenericIon
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from BraggIon for protons below. NuclearStopping 1
+      Parametrisation from BraggIon for protons below. NuclearStopping= 1
 
       Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1
@@ -141,7 +141,7 @@ hIoni:   tables are built for  anti_proton
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for mu+
@@ -188,7 +188,7 @@ hIoni:   tables are built for  pi+
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 msc:  Model variant of multiple scattering for pi-
@@ -201,7 +201,7 @@ hIoni:   tables are built for  pi-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used from proton dE/dx and range.
       Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below.
+      Parametrisation from Bragg for protons below. NuclearStopping= 1
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1
 
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
@@ -269,21 +269,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.65s Real=7.71s Sys=0s
+  User=7.64s Real=7.65s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.2235 +- 0.0925384  mm  
+    mean charged track length   in absorber=23.3644 +- 0.136787  mm  
 
-            mean energy deposit in absorber=0.0156861 +- 0.000283479  MeV 
+            mean energy deposit in absorber=0.0156928 +- 0.000289693  MeV 
 
- mean number of steps in absorber (charged) =0.094 +- 0.0535646      
+ mean number of steps in absorber (charged) =0.086 +- 0.0512699      
  mean number of steps in absorber (neutral) =0 +- 0      
 
-   mean number of charged secondaries = 0.008 +- 0.00281709
+   mean number of charged secondaries = 0.01 +- 0.00314643
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.008  and e+s =0
+   mean number of e-s =0.01  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
@@ -291,24 +291,24 @@ Run Summary
 #entries=1000    #underflows=0    #overflows=5
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           8       0.008
-    2         6          98       0.098
-    3         9         267       0.267
-    4        12         245       0.245
-    5        15         155       0.155
-    6        18          81       0.081
-    7        21          42       0.042
-    8        24          29       0.029
-    9        27          18       0.018
+    1         3           9       0.009
+    2         6          99       0.099
+    3         9         260        0.26
+    4        12         251       0.251
+    5        15         154       0.154
+    6        18          86       0.086
+    7        21          39       0.039
+    8        24          25       0.025
+    9        27          20        0.02
    10        30          14       0.014
    11        33           9       0.009
    12        36           8       0.008
    13        39           5       0.005
    14        42           5       0.005
-   15        45           1       0.001
+   15        45           2       0.002
    16        48           2       0.002
    17        51           1       0.001
-   18        54           5       0.005
+   18        54           4       0.004
    19        57           2       0.002
 
  Emp =           0.009   width=          0.006  MeV 
@@ -316,7 +316,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 520439100, 504834070
+ Current couple of seeds = 1098442791, 1818165836
 ----------------------------------------
 #
 UserDetectorConstruction deleted.

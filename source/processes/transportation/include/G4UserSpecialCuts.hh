@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UserSpecialCuts.hh,v 1.10 2006/06/29 21:10:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UserSpecialCuts.hh,v 1.11 2007/06/01 07:53:26 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // class description
 //

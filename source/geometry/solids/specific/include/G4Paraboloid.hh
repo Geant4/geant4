@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Paraboloid.hh,v 1.3 2007/08/21 12:58:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Paraboloid.hh,v 1.4 2008/01/22 17:42:09 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 // --------------------------------------------------------------------
@@ -65,9 +65,9 @@ class G4Paraboloid : public G4VSolid
   public:  // with description
 
     G4Paraboloid(const G4String& pName,
+		      G4double  pDz,
                       G4double  pR1,
-                      G4double  pR2,
-                      G4double  pDz);
+                      G4double  pR2);
 
     virtual ~G4Paraboloid();
 

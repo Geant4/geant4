@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.15 2007/11/06 09:36:23 kmura Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UItcsh.cc,v 1.16 2008/01/15 08:13:34 kmura Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 
 #ifndef WIN32
@@ -559,6 +559,7 @@ G4String G4UItcsh::ReadLine()
       if(commandLine.length()!=0 && IsCursorLast()) ListMatchedCommand();
       else if (commandLine.empty()) {
 	G4cout << G4endl;
+        RestoreTerm();
 	exit(0);
       } else DeleteCharacter();
       break;

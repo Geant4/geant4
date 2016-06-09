@@ -1,4 +1,4 @@
-# $Id: TestEm7.in,v 1.15 2007/06/12 14:01:13 vnivanch Exp $
+# $Id: TestEm7.in,v 1.16 2008/01/14 12:11:38 vnivanch Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -18,7 +18,8 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-/testem/phys/addPhysics  standard	# em physics  
+/testem/phys/addPhysics   emstandard	# default em physics  
+#/testem/phys/addPhysics  standard	# em physics  
 ###/testem/phys/addPhysics  binary	# hadronic physics
 #
 /run/initialize

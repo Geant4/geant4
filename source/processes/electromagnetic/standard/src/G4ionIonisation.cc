@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.44 2007/11/09 11:45:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ionIonisation.cc,v 1.45 2008/01/14 11:59:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -85,7 +85,7 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
     stopDataActive(true),
     nuclearStopping(true)
 {
-  SetLinearLossLimit(0.15);
+  //  SetLinearLossLimit(0.0.05);
   SetStepFunction(0.1, 0.1*mm);
   SetIntegral(true);
   SetVerboseLevel(1);
@@ -151,7 +151,7 @@ void G4ionIonisation::PrintInfo()
 	   << eth/MeV << " MeV"
 	   << "\n      Parametrisation from "
 	   << EmModel(1)->GetName() << " for protons below."
-	   << " NuclearStopping " << nuclearStopping
+	   << " NuclearStopping= " << nuclearStopping
 	   << G4endl;	 
   if (stopDataActive)
     G4cout << "\n      Stopping Power data for " 
@@ -176,23 +176,27 @@ void G4ionIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					   G4double& eloss,
 					   G4double& s)
 {
+  const G4ParticleDefinition* part = dp->GetDefinition();
+  const G4Material* mat = couple->GetMaterial();
   if(eloss < preKinEnergy) {
-    const G4ParticleDefinition* part = dp->GetDefinition();
-    const G4Material* mat = couple->GetMaterial();
+    //    G4cout << "e= " << preKinEnergy << " ratio= " << massRatio << " eth= " << eth<<  G4endl;
     if(preKinEnergy*massRatio > eth)
       eloss += s*corr->HighOrderCorrections(part,mat,preKinEnergy);
     else {
+
       if(stopDataActive)
 	eloss *= corr->EffectiveChargeCorrection(part,mat,preKinEnergy);
 
-      if(nuclearStopping) {
-	G4double nloss = s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
-        eloss += nloss;
-	fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
-      }
     }
     fParticleChange.SetProposedCharge(effCharge->EffectiveCharge(part,
                                       mat,preKinEnergy-eloss));
+  }
+  if(nuclearStopping && preKinEnergy*massRatio < 50.*eth*charge2) {
+    G4double nloss = s*corr->NuclearDEDX(part,mat,preKinEnergy - eloss*0.5);
+    eloss += nloss;
+    //  G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
+    //	   << " de= " << eloss << " NIEL= " << nloss << G4endl;
+    fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }
 }
 

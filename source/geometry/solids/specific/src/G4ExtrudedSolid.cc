@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.7 2007/05/02 14:59:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ExtrudedSolid.cc,v 1.11 2008/02/05 11:25:24 ivana Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 // --------------------------------------------------------------------
@@ -304,6 +304,24 @@ G4bool G4ExtrudedSolid::IsPointInside(G4TwoVector a, G4TwoVector b,
 
 //_____________________________________________________________________________
 
+G4double 
+G4ExtrudedSolid::GetAngle(G4TwoVector po, G4TwoVector pa, G4TwoVector pb) const
+{
+  // Return the angle of the vertex in po
+
+  G4TwoVector t1 = pa - po;
+  G4TwoVector t2 = pb - po;
+  
+  G4double result
+    = (atan2(t1.y(), t1.x()) - atan2(t2.y(), t2.x()));
+
+  if ( result < 0 ) result += 2*pi;
+
+  return result;
+}
+
+//_____________________________________________________________________________
+
 G4VFacet*
 G4ExtrudedSolid::MakeDownFacet(G4int ind1, G4int ind2, G4int ind3) const
 {
@@ -397,6 +415,21 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
     //        << c1->second << "  " << c2->second
     //        << "  " << c3->second << G4endl;  
 
+    // skip concave vertices
+    //
+    G4double angle = GetAngle(c2->first, c3->first, c1->first);
+    //G4cout << angle << G4endl; 
+    if ( angle > pi ) {
+      // G4cout << "Skipping concave vertex " << c2->second << G4endl;
+
+      // try next three consecutive vertices
+      //
+      c1 = c2;
+      c2 = c3;
+      ++c3; 
+      if ( c3 == verticesToBeDone.end() ) { c3 = verticesToBeDone.begin(); }
+    }
+
     G4bool good = true;
     std::vector< Vertex >::iterator it;
     for ( it=verticesToBeDone.begin(); it != verticesToBeDone.end(); ++it )
@@ -404,6 +437,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
       // skip vertices of tested triangle
       //
       if ( it == c1 || it == c2 || it == c3 ) { continue; }
+
       if ( IsPointInside(c1->first, c2->first, c3->first, it->first) )
       {
         // G4cout << "Point " << it->second << " is inside" << G4endl;
@@ -460,6 +494,55 @@ G4bool G4ExtrudedSolid::MakeFacets()
 
   G4bool good;
   
+  // Decomposition of polygonal sides in the facets
+  //
+  if ( fNv == 3 )
+  {
+    good = AddFacet( new G4TriangularFacet( GetVertex(0, 0), GetVertex(0, 1),
+                                            GetVertex(0, 2), ABSOLUTE) );
+    if ( ! good ) { return false; }
+
+    good = AddFacet( new G4TriangularFacet( GetVertex(fNz-1, 2), GetVertex(fNz-1, 1),
+                                            GetVertex(fNz-1, 0), ABSOLUTE) );
+    if ( ! good ) { return false; }
+    
+    std::vector<G4int> triangle(3);
+    triangle[0] = 0;
+    triangle[1] = 1;
+    triangle[2] = 2;
+    fTriangles.push_back(triangle);
+  }
+  
+  else if ( fNv == 4 )
+  {
+    good = AddFacet( new G4QuadrangularFacet( GetVertex(0, 0),GetVertex(0, 1),
+                                              GetVertex(0, 2),GetVertex(0, 3),
+                                              ABSOLUTE) );
+    if ( ! good ) { return false; }
+
+    good = AddFacet( new G4QuadrangularFacet( GetVertex(fNz-1, 3), GetVertex(fNz-1, 2), 
+                                              GetVertex(fNz-1, 1), GetVertex(1, 0),
+                                              ABSOLUTE) );
+    if ( ! good ) { return false; }
+
+    std::vector<G4int> triangle1(3);
+    triangle1[0] = 0;
+    triangle1[1] = 1;
+    triangle1[2] = 2;
+    fTriangles.push_back(triangle1);
+
+    std::vector<G4int> triangle2(3);
+    triangle2[0] = 0;
+    triangle2[1] = 2;
+    triangle2[2] = 3;
+    fTriangles.push_back(triangle2);
+  }  
+  else
+  {
+    good = AddGeneralPolygonFacets();
+    if ( ! good ) { return false; }
+  }
+    
   // The quadrangular sides
   //
   for ( G4int iz = 0; iz < fNz-1; ++iz ) 
@@ -474,37 +557,6 @@ G4bool G4ExtrudedSolid::MakeFacets()
     }
   }  
 
-  // Decomposition of polygonal sides in the facets
-  //
-  if ( fNv == 3 )
-  {
-    good = AddFacet( new G4TriangularFacet( GetVertex(0, 0), GetVertex(0, 1),
-                                            GetVertex(0, 2), ABSOLUTE) );
-    if ( ! good ) { return false; }
-
-    good = AddFacet( new G4TriangularFacet( GetVertex(fNz-1, 2), GetVertex(fNz-1, 1),
-                                            GetVertex(fNz-1, 0), ABSOLUTE) );
-    if ( ! good ) { return false; }
-  }
-  
-  else if ( fNv == 4 )
-  {
-    good = AddFacet( new G4QuadrangularFacet( GetVertex(0, 0),GetVertex(0, 1),
-                                              GetVertex(0, 2),GetVertex(0, 3),
-                                              ABSOLUTE) );
-    if ( ! good ) { return false; }
-
-    good = AddFacet( new G4QuadrangularFacet( GetVertex(fNz-1, 3), GetVertex(fNz-1, 2), 
-                                              GetVertex(fNz-1, 1), GetVertex(1, 0),
-                                              ABSOLUTE) );
-    if ( ! good ) { return false; }
-  }  
-  else
-  {
-    good = AddGeneralPolygonFacets();
-    if ( ! good ) { return false; }
-  }
-    
   SetSolidClosed(true);
 
   return good;

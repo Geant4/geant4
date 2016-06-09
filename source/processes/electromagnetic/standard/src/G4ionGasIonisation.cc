@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.3 2007/11/09 11:45:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ionGasIonisation.cc,v 1.4 2008/01/14 11:59:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -123,21 +123,14 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
 					      G4double& eloss,
 					      G4double& s)
 {
+  const G4ParticleDefinition* part = dp->GetDefinition();
+  const G4Material* mat = couple->GetMaterial();
   // add corrections
   if(eloss < preStepKinEnergy) {
-    const G4ParticleDefinition* part = dp->GetDefinition();
-    const G4Material* mat = couple->GetMaterial();
 
     // use Bethe-Bloch with corrections
     if(preStepKinEnergy*currMassRatio > BetheBlochEnergyThreshold())
       eloss += s*corr->HighOrderCorrections(part,mat,preStepKinEnergy);
-
-    // use nuclear stopping 
-    else if(NuclearStoppingFlag()) {
-      G4double nloss = s*corr->NuclearDEDX(part,mat,preStepKinEnergy - eloss*0.5);
-      eloss += nloss;
-      fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
-    }
 
     // effective number of collisions
     G4double x = mat->GetElectronDensity()*s*atomXS;
@@ -146,6 +139,13 @@ void G4ionGasIonisation::CorrectionsAlongStep(const G4MaterialCutsCouple* couple
   
     // sample charge change during the step
     fParticleChange.SetProposedCharge(SampleChargeAfterStep(q, x));
+  }
+
+  // use nuclear stopping 
+  if(NuclearStoppingFlag()) {
+    G4double nloss = s*corr->NuclearDEDX(part,mat,preStepKinEnergy - eloss*0.5);
+    eloss += nloss;
+    fParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
   }
 }
 

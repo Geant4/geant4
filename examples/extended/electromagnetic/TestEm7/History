@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2007/12/07 17:51:10 vnivanch Exp $
+$Id: History,v 1.64 2008/01/14 12:14:52 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-01-08 V.Ivant (testem7-V09-01-01)
+- Added PhysListStandardNR PhysList in which G4ScreenedNuclearRecoil
+  process is used ("standardNR");
+- Use PhysListStandardIG for new G4MUMultipleScattering and 
+  G4IonFluctuations model for protons ("standardIG");
+- Added computation of mean NIEL energy loss
+
+19-12-07 V.Ivant (testem7-V09-01-00)
+- Deactivate nuclear stopping in G4ionIonisation for 
+  PhysListStandardIG Physics List ("standardNR"), because it is
+  already simulated by G4ScreenNuclearRecoil process;
+- linLossLimit=10^-6; nbuns=360 both for standard and
+  standardNR Physics Lists
 
 07-12-07 V.Ivant (testem7-V09-00-10)
 - Fixed disclaimer

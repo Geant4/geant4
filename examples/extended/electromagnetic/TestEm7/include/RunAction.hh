@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.11 2007/06/12 14:01:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: RunAction.hh,v 1.12 2008/01/14 12:11:39 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,6 +58,7 @@ public:
   void   EndOfRunAction(const G4Run*);
     
   void FillTallyEdep(G4int n, G4double e) {tallyEdep[n] += e;};
+  void FillEdep(G4double de, G4double eni) {edeptot += de; eniel += eni;};
        
   G4double GetBinLength() {return binLength;};
   G4double GetLength()    {return length;};
@@ -80,6 +81,7 @@ private:
   G4double                offsetX;
   G4double                length;
   G4double                projRange, projRange2;
+  G4double                edeptot, eniel;
   G4int                   nPrimarySteps;
            
   AIDA::IAnalysisFactory* af;  

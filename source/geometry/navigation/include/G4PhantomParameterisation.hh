@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.hh,v 1.2 2007/10/18 14:29:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4PhantomParameterisation.hh,v 1.4 2008/01/22 15:02:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 // class G4PhantomParameterisation
@@ -152,15 +152,15 @@ class G4PhantomParameterisation : public G4VPVParameterisation
     G4Material* GetMaterial( size_t nx, size_t ny, size_t nz) const;
     G4Material* GetMaterial( size_t copyNo ) const;
 
+    void CheckVoxelsFillContainer( G4double contX, G4double contY,
+                                   G4double contZ ) const;
+      // Check that the voxels fill it completely.
+
   private:
 
     void ComputeVoxelIndices(const G4int copyNo, size_t& nx,
                                    size_t& ny, size_t& nz ) const;
       // Convert the copyNo to voxel numbers in x, y and z.
-
-    void CheckVoxelsFillContainer( G4double contX, G4double contY,
-                                   G4double contZ ) const;
-      // Check that the voxels fill it completely.
 
     void CheckCopyNo( const G4int copyNo ) const;
       // Check that the copy number is within limits.

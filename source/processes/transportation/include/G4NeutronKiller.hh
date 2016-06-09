@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronKiller.hh,v 1.1 2006/11/17 15:53:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4NeutronKiller.hh,v 1.2 2007/06/01 07:53:26 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //---------------------------------------------------------------------------
 //

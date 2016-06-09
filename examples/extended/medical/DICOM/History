@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2007/12/05 22:36:01 arce Exp $
+$Id: History,v 1.13 2008/01/22 15:09:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,6 +7,10 @@ $Id: History,v 1.12 2007/12/05 22:36:01 arce Exp $
 
                       Category History file
                       ---------------------
+
+22.01.2008 - Pedro Arce (DICOM-V09-01-00)
+             Do not use 'rindex' in DicomHandler class to avoid problems
+             on Windows.
 
 06.12.2007 - Pedro Arce
              Added voxel colouring by material. Added possibility to use nested parameterisation

@@ -1,0 +1,158 @@
+
+                 Geant4 9.1 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                           25 January 2008
+
+List of fixes included in this public patch since the public release 9.1:
+
+  o Configuration:
+    -------------
+    + Added commented lines for OpenGL setup in Darwin-g++.gmk for MacOS
+      10.5 Leopard, pending fix from Apple.
+
+  o Geometry:
+    --------
+    + magneticfield:
+      o G4CashKarpRKF45: deleted un-needed duplicate (and unused) instance
+        variable already defined in G4MagIntegratorStepper.
+      o Some code cleanup.
+    + navigation:
+      o G4PropagatorInField: changed condition for 'ReEstimationEndPoint'
+        in order to better handle very strict parameters of propagation.
+        Also added more verbosity in case of error for negative step.
+        Fixes rare problem observed in production by ATLAS.  (*)
+      o G4PhantomParameterisation: bug fix in GetReplicaNo() to catch
+        overflows in X and Y.
+        Made CheckVoxelsFillContainer() visible in public interface.
+    + solids/BREPS: (*)
+      o Fixed bug in G4BREPSolidPolyhedra::DistanceToOut() for cases of
+        particle passing the border of two touching surfaces.
+      o G4BREPSolidBox: fixed problem in the constructor in definition of
+        the side for the normal to surface.
+    + solids/specific:
+      o In G4ExtrudedSolid::MakeFacets(), now adding triangular facets before
+        quadrangular ones, following logic behind G4TessellatedSolid.
+        Fixes occasional crashes when defining solids with mixed facets.
+        Corrected triangularization of polygon, now correctly handling case
+        of concave shapes.
+      o Corrected order of arguments in G4Paraboloid constructor.
+    + volumes:
+      o Fixed problem of double-deletion of rotation matrix in destructor
+        of G4AssemblyVolume.
+
+  o Global:
+    ------
+    + Changed date for patch-01 to release 9.1.
+
+  o Graphics Representations:
+    ------------------------
+    + HepPolyhedron: fixed bug and improvement in the visualization of
+      G4Paraboloid.
+
+  o Interfaces:
+    ----------
+    + G4UItcsh: fixed problem with <Ctl-D> termination for bash users.
+    + G4UIQt: some improvements for Qt3, corrections of some bugs.
+    + G4UIQt_moc: added versions for QT_MOC_REVISION 28,58 and 59.
+ 
+  o Electromagnetic Processes:
+    -------------------------
+    + Standard:
+      o G4PAIModel, G4PAIPhotonModel: added extra protection to guarantee
+        correct usage of the last bin for the table of energy transfers.
+        Fixes problem report #995.
+      o G4hIonisation, G4ionIonisation, G4ionGasIonisation: fixed
+        computation of non-ionizing energy loss: at the last ionization step
+        and at energies above 2 MeV for protons.
+      o G4eCoulombScatteringModel: using safer numerical espression.
+    + Utils:
+      o G4EmCorrections: improved CPU by usage of expansions and precalculated
+        values of Z^0.23.
+      o G4VEnergyLossProcess: fixed list of "collaborative" processes needed
+        for sub-cutoff option.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o G4PhotoNuclearCrossSection and G4ElectroNuclearCrossSection: fixed
+        wrong return value (was zero instead of pseudo-inf) and commented out 
+        extra debug warning. Moved unnecessary inline methods to implementation.
+    + models/chiral_inv_phase_space:
+      o Fixed problem of non-reproducibility induced by
+        G4QElasticCrossSection.  (*)
+      o Reduce memory allocation induced by use std::deque collection in    (*)
+        G4QHadron class; temporary workaround by replacing it with std::list.
+      o G4ChiralInvariantPhaseSpace: moved some unnecessary inline methods to 
+        implementation and fixed non-reproducibility due to difference in 
+        initialisation.
+      o G4StringChipsInterface: fixed non-reproducibility due to difference in
+        initialisation.  (*)
+      o Commented out debug printout in G4Quasmon.
+      o Fixed compilation warning on SUN/CC compiler in G4QNucleus.
+    + models/coherent_elastic:
+      o G4DiffuseElastic: removed dependency on other elastic models.
+      o G4ElasticHadrNucleusHE: fixed non-reproducibility problem.
+        Removed commented part of old code and added more formatting.
+      o G4HadronElastic: restored threshold to G4ElasticHadrNucleusHE 
+        model at 1 GeV.
+
+  o Persistency:
+    -----------
+    + gdml:
+      o Fixed vertex referencing for tessellated-solid in G4GDMLSolids.
+      o Fixed entity resolution in G4GDMLBase.
+      o Fixed naming of convention for external files in G4GDMLStructure.
+
+  o Physics Lists:
+    + G4EmExtraPhysics: fixed swapping of synchrotron radiation and mu-nuclear
+      activation. Addressing problem report #993.
+
+  o Track:
+    -----
+    + Added non-ionizing energy loss to EM physics (classes
+      G4ParticleChangeForGamma and G4ParticleChangeForLoss).
+
+  o Transportation:
+    --------------
+    + G4Transportation & G4CoupledTransportation: allow for clearing the
+      state of all chord-finders using G4FieldManagerStore. Assures for
+      event reproducibility in case multiple local fields are used.
+    + Syncronised files with CVS HEAD.
+
+  o Examples:
+    --------
+    + extended/electromagnetic/TestEm7:
+      o Added PhysListStandardNR PhysList in which G4ScreenedNuclearRecoil
+        process is used ("standardNR");
+      o Added computation of mean NIEL energy loss.
+      o Fixed experimental physics lists if single scattering models are used 
+        instead of multiple scattering. Set nuclear stopping flag for ionisation 
+        to "false".
+    + extended/gdml:
+      o Added entity.gdml and materials.xml to demonstrate the ability of
+        the parser of resolving entities.
+      o Fixed axes.gdml and diamond.gdml according to tessellated-solid
+        specifications.
+    + extended/medical/DICOM:
+      o Fix to not use 'rindex' in DicomHandler class to avoid problems
+        on Windows.
+
+ (*) Fixes also included in the patched releases 9.0.p02 and 8.3.p02.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.1
+  o  Technical notes distributed for release 9.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.1 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

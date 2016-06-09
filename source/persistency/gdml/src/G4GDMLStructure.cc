@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLStructure.cc,v 1.25 2007/11/30 14:51:20 ztorzsok Exp $
+// $Id: G4GDMLStructure.cc,v 1.25.2.1 2008/01/16 09:44:28 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLStructure Implementation
@@ -159,6 +159,8 @@ G4LogicalVolume* G4GDMLStructure::fileRead(const xercesc::DOMElement* const elem
    G4GDMLStructure structure; // We create a new structure with a new evaluator
    
    structure.Parse(name);
+
+   if (volname.empty()) return structure.getVolume(structure.getSetup("Default"));
 
    return structure.getVolume(structure.GenerateName(volname));
 }

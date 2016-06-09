@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLSolids.cc,v 1.23 2007/11/30 14:51:20 ztorzsok Exp $
+// $Id: G4GDMLSolids.cc,v 1.23.2.1 2008/01/16 09:43:09 ztorzsok Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLSolids Implementation
@@ -605,10 +605,10 @@ G4QuadrangularFacet* G4GDMLSolids::quadrangularRead(const xercesc::DOMElement* c
       const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="v1") v1 = attribute_value; else
-      if (attribute_name=="v2") v2 = attribute_value; else
-      if (attribute_name=="v3") v3 = attribute_value; else
-      if (attribute_name=="v4") v4 = attribute_value; else
+      if (attribute_name=="vertex1") v1 = attribute_value; else
+      if (attribute_name=="vertex2") v2 = attribute_value; else
+      if (attribute_name=="vertex3") v3 = attribute_value; else
+      if (attribute_name=="vertex4") v4 = attribute_value; else
       if (attribute_name=="type") type = attribute_value;
    }
 
@@ -1071,9 +1071,9 @@ G4TriangularFacet* G4GDMLSolids::triangularRead(const xercesc::DOMElement* const
       const G4String attribute_name = xercesc::XMLString::transcode(attribute->getName());
       const G4String attribute_value = xercesc::XMLString::transcode(attribute->getValue());
 
-      if (attribute_name=="v1") v1 = attribute_value; else
-      if (attribute_name=="v2") v2 = attribute_value; else
-      if (attribute_name=="v3") v3 = attribute_value; else
+      if (attribute_name=="vertex1") v1 = attribute_value; else
+      if (attribute_name=="vertex2") v2 = attribute_value; else
+      if (attribute_name=="vertex3") v3 = attribute_value; else
       if (attribute_name=="type") type = attribute_value;
    }
 

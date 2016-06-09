@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForGamma.hh,v 1.8 2006/08/28 16:10:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ParticleChangeForGamma.hh,v 1.9 2008/01/11 19:57:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 //
 // ------------------------------------------------------------
@@ -181,6 +181,7 @@ inline void G4ParticleChangeForGamma::InitializeForPostStep(const G4Track& track
 {
   theStatusChange = track.GetTrackStatus();
   theLocalEnergyDeposit = 0.0;
+  theNonIonizingEnergyDeposit = 0.0;
   InitializeSecondaries(track);
   theParentWeight = track.GetWeight();
   proposedKinEnergy = track.GetKineticEnergy();
@@ -216,6 +217,7 @@ inline G4Step* G4ParticleChangeForGamma::UpdateStepForPostStep(G4Step* pStep)
     pPostStepPoint->SetWeight( theParentWeight );
   
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
+  pStep->AddNonIonizingEnergyDeposit( theNonIonizingEnergyDeposit );
   return pStep;
 }
 

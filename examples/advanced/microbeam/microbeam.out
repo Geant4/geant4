@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: global-V09-00-02    (14-December-2007)
+ Geant4 version Name: geant4-09-01-patch-01-ref    (25-January-2008)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -332,29 +332,27 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
 
 -> Event # 6 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32341093
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.036113653
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32692432
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.041487444
 
 -> Event # 7 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.26556093
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.050062224
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.308267
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.056959178
 
 -> Event # 8 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32553893
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.061953552
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.56384885
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.052732617
 
 -> Event # 9 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 10 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.6130144
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.027280906
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
--> Total number of particles detected by the gas detector : 5
+-> Total number of particles detected by the gas detector : 4
 
 Graphics systems deleted.
 Visualization Manager deleting...

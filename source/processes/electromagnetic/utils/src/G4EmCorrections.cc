@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.22 2007/05/18 18:39:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4EmCorrections.cc,v 1.23 2008/01/11 19:55:29 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -474,8 +474,8 @@ G4double G4EmCorrections::BlochCorrection(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EmCorrections::MottCorrection(const G4ParticleDefinition* p,
-                                               const G4Material* mat, 
-					       G4double e)
+					 const G4Material* mat, 
+					 G4double e)
 {
   SetupKinematics(p, mat, e);
   G4double mterm = pi*fine_structure_const*beta*charge;
@@ -531,6 +531,7 @@ G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
 {
   SetupKinematics(p, mat, e);
   G4double term = 0.0;
+  G4double numlim = 0.2;
 
   //Leptons
   if(p->GetLeptonNumber() != 0) {
@@ -541,14 +542,16 @@ G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
   } else if(p->GetPDGSpin() == 0.0 && q2 < 1.5) {
     G4double xpi = 0.736*GeV;
     G4double x   = 2.0*electron_mass_c2*tmax0/(xpi*xpi);
-    term = -std::log(1.0 + x);
+    if(x <= numlim) term = -x*(1.0 - 0.5*x);
+    else            term = -std::log(1.0 + x);
 
     // Protons and baryons
   } else if(q2 < 1.5) {
     G4double xp = 0.8426*GeV;
     G4double x  = 2.0*electron_mass_c2*tmax0/(xp*xp);
     G4double ksi2 = 2.79285*2.79285;
-    term = -x*(1.0 + 5.0*x/6.0)/((1.0 + x)*(1 + x)) - std::log(1.0 + x);
+    if(x <= numlim) term = -x*((1.0 + 5.0*x/6.0)/((1.0 + x)*(1 + x)) + 0.5*x);
+    else term = -x*(1.0 + 5.0*x/6.0)/((1.0 + x)*(1 + x)) - std::log(1.0 + x);
     G4double b  = xp*0.5/mass;
     G4double c  = xp*mass/(electron_mass_c2*(mass + e));
     G4double lb = b*b;
@@ -570,7 +573,8 @@ G4double G4EmCorrections::FiniteSizeCorrection(const G4ParticleDefinition* p,
   } else {
     G4double xp = 0.8426*GeV/std::pow(mass/proton_mass_c2,-0.33333333);
     G4double x  = 2.0*electron_mass_c2*tmax0/(xp*xp);
-    term = -std::log(1.0 + x);
+    if(x <= numlim) term = -x*(1.0 - 0.5*x);
+    else            term = -std::log(1.0 + x);
     //G4cout << "Ion F= " << term << G4endl;
   }
 
@@ -616,23 +620,28 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
   G4double nloss = 0.0;
   
   G4double rm;
-  if(z1 > 1.5) rm = (m1 + m2) * ( std::pow(z1, .23) + std::pow(z2, .23) ) ;
-  else         rm = (m1 + m2) * std::pow(z2, 0.333333);
+  if(z1 > 1.5) rm = (m1 + m2) * ( Z23[G4int(z1)] + Z23[G4int(z2)] ) ;
+  else         rm = (m1 + m2) * nist->GetZ13(G4int(z2));
 
   G4double er = 32.536 * m2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
-    
-  for (G4int i=1; i<104; i++)
+
+  if (er >= ed[0])       nloss = a[0];
+  else {
+    for (G4int i=102; i>=0; i--)
     {
-      if (er > ed[i]) {
-	nloss = (a[i] - a[i-1])*(er-ed[i-1])/(ed[i] - ed[i-1]) + a[i-1];
+      if (er <= ed[i]) {
+	nloss = (a[i] - a[i+1])*(er - ed[i+1])/(ed[i] - ed[i+1]) + a[i+1];
 	break;
       }
     }
+  }
 
   // Stragling
   if(lossFlucFlag) {
+    //    G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
+    //              (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
     G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
-                  (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
+				    (4.0 + 0.197/(er*er) + 6.584/er));
 
     nloss *= G4RandGauss::shoot(1.0,sig) ;
   }
@@ -1411,6 +1420,10 @@ void G4EmCorrections::Initialise()
   for(i=0; i<14; i++) {
     COSEB[i] = coseb[i];
     COSXI[i] = cosxi[i];
+  }
+
+  for(i=1; i<100; i++) {
+    Z23[i] = std::pow(G4double(i),0.23);
   }
 }
 

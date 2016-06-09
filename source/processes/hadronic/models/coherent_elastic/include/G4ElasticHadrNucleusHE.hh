@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.hh,v 1.43 2007/11/13 17:22:51 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4ElasticHadrNucleusHE.hh,v 1.45 2007/12/19 18:27:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // G4ElasticHadrNucleusHe.hh
 
@@ -156,14 +156,9 @@ public:
 
   void     GetKinematics(const G4ParticleDefinition * aHadron,
 		          G4double MomentumH);
-public:
-  //    G4double R1, R2, Pnucl, Aeff, HadrTot1, HadrSlope1, HadrReIm1, Tott1;
-
 private:
 
-
   void     Binom();
-
 
   //  fields
 
@@ -272,5 +267,12 @@ G4double G4ElasticHadrNucleusHE::GetBinomCof( G4int n, G4int m )
   else                     return 0.;
 }
 
+////////////////////////////////////////////////////////////////
+
+inline
+G4double G4ElasticHadrNucleusHE::GetDistrFun(G4double Q2)
+{
+  return GetFt(Q2)/FmaxT;
+}
 
 #endif

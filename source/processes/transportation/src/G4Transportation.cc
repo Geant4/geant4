@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.72 2007/11/08 17:55:57 japost Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4Transportation.cc,v 1.72.2.1 2007/12/07 17:18:11 japost Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -57,6 +57,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
+#include "G4FieldManagerStore.hh"
 class G4VSensitiveDetector;
 
 //////////////////////////////////////////////////////////////////////////
@@ -95,14 +96,6 @@ G4Transportation::G4Transportation( G4int verboseLevel )
   //  is constructed.
   // Instead later the method DoesGlobalFieldExist() is called
 
-  // Small memory leak from this new
-  //    fCurrentTouchableHandle = new G4TouchableHistory();
-  // Fixes: 
-  // 1) static G4TouchableHistory sfNullTouchableHistory = new G4TouchableHistory();
-  //    fCurrentTouchableHandle = new G4TouchableHandle( sfNullTouchableHistory );
-  // 2) set it to (G4TouchableHistory*) 0 
-  //    fCurrentTouchableHandle = new G4TouchableHandle( (G4TouchableHistory*) 0 ); 
-  // 3) Below:
   static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
   fCurrentTouchableHandle = nullTouchableHandle; 
 
@@ -723,12 +716,17 @@ G4Transportation::StartTracking(G4Track* aTrack)
   //
   if( DoesGlobalFieldExist() ) {
      fFieldPropagator->ClearPropagatorState();   
-       // Resets safety values, in case of overlaps.  
+       // Resets all state of field propagator class (ONLY)
+       //  including safety values (in case of overlaps and to wipe for first track).
 
-     G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
-     if( chordF ) chordF->ResetStepEstimate();
+     // G4ChordFinder* chordF= fFieldPropagator->GetChordFinder();
+     // if( chordF ) chordF->ResetStepEstimate();
   }
-  
+
+  // Make sure to clear the chord finders of all fields (ie managers)
+  static G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+  fieldMgrStore->ClearAllChordFindersState(); 
+
   // Update the current touchable handle  (from the track's)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();

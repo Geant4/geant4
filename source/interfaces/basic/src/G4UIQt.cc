@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.12 2007/11/15 18:24:27 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4UIQt.cc,v 1.13 2007/11/30 14:28:50 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // L. Garnier
 
@@ -127,14 +127,47 @@ G4UIQt::G4UIQt (
   fMainWindow->move(QPoint(50,100));
 #endif
 
-  QSplitter *splitter = new QSplitter(Qt::Vertical);
-  fTextArea = new QTextEdit(fMainWindow);
-  QPushButton *clearButton = new QPushButton("clear",fMainWindow);
+  QSplitter *splitter = new QSplitter(Qt::Vertical,fMainWindow);
+
+  // Set layouts
+
+#if QT_VERSION < 0x040000
+
+  QWidget* topWidget = new QWidget(splitter);
+  QWidget* bottomWidget = new QWidget(splitter);
+
+  QVBoxLayout *layoutTop = new QVBoxLayout(topWidget);
+  QVBoxLayout *layoutBottom = new QVBoxLayout(bottomWidget);
+#else
+  QWidget* topWidget = new QWidget();
+  QWidget* bottomWidget = new QWidget();
+
+  QVBoxLayout *layoutTop = new QVBoxLayout;
+  QVBoxLayout *layoutBottom = new QVBoxLayout;
+#endif
+
+  // fill them
+
+  fTextArea = new QTextEdit(topWidget);
+#ifdef GEANT4_QT_DEBUG
+  printf("G4UIQt:: end\n");
+#endif
+#ifdef GEANT4_QT_DEBUG
+  printf("G4UIQt::PushButton 1\n");
+#endif
+  QPushButton *clearButton = new QPushButton("clear",topWidget);
+#ifdef GEANT4_QT_DEBUG
+  printf("G4UIQt::end1\n");
+#endif
   connect(clearButton, SIGNAL(clicked()), SLOT(ClearButtonCallback()));
 
 #if QT_VERSION < 0x040000
-  fCommandHistoryArea = new QListView();
+  fCommandHistoryArea = new QListView(bottomWidget);
+
+  fCommandHistoryArea->setSorting (-1, FALSE);
   fCommandHistoryArea->setSelectionMode(QListView::Single);
+  fCommandHistoryArea->addColumn("");
+  fCommandHistoryArea->header()->hide();
   connect(fCommandHistoryArea, SIGNAL(selectionChanged()), SLOT(CommandHistoryCallback()));
 #else
   fCommandHistoryArea = new QListWidget();
@@ -142,9 +175,9 @@ G4UIQt::G4UIQt (
   connect(fCommandHistoryArea, SIGNAL(itemSelectionChanged()), SLOT(CommandHistoryCallback()));
 #endif
   fCommandHistoryArea->installEventFilter(this);
-  fCommandLabel = new QLabel("",fMainWindow);
+  fCommandLabel = new QLabel("",bottomWidget);
 
-  fCommandArea = new QLineEdit(fMainWindow);
+  fCommandArea = new QLineEdit(bottomWidget);
   fCommandArea->installEventFilter(this);
 #if QT_VERSION < 0x040000
   fCommandArea->setActiveWindow();
@@ -162,20 +195,8 @@ G4UIQt::G4UIQt (
   fTextArea->setReadOnly(true);
 
 
-  // Set layouts
-
-#if QT_VERSION < 0x040000
-  QWidget* topWidget = new QWidget(splitter);
-  QWidget* bottomWidget = new QWidget(splitter);
-
-  QVBoxLayout *layoutTop = new QVBoxLayout(topWidget);
-  QVBoxLayout *layoutBottom = new QVBoxLayout(bottomWidget);
-#else
-  QWidget* topWidget = new QWidget();
-  QWidget* bottomWidget = new QWidget();
-
-  QVBoxLayout *layoutTop = new QVBoxLayout;
-  QVBoxLayout *layoutBottom = new QVBoxLayout;
+#ifdef GEANT4_QT_DEBUG
+  printf("G4UIQt::   2\n");
 #endif
 
 
@@ -281,7 +302,9 @@ G4UIsession* G4UIQt::SessionStart (
   printf("disable secondary loop\n");
 #endif
   interactorManager->DisableSecondaryLoop (); // TO KEEP
-  ((QApplication*)interactorManager->GetMainInteractor())->exec(); 
+  if ((QApplication*)interactorManager->GetMainInteractor())
+    ((QApplication*)interactorManager->GetMainInteractor())->exec();
+
   // on ne passe pas le dessous ? FIXME ????
   // je ne pense pas 13/06
 
@@ -486,14 +509,22 @@ void G4UIQt::AddButton (
   if(parent==NULL) return;
   
   QSignalMapper *signalMapper = new QSignalMapper(this);
-#if QT_VERSION < 0x040000
+#if QT_VERSION < 0x030200
+  QAction *action = new QAction(QString(aLabel),QString(aLabel),QKeySequence::QKeySequence (),signalMapper, SLOT(map()));
+  action->addTo(parent);
+ connect(action,SIGNAL(activated()),signalMapper,SLOT(map()));
+
+#elif QT_VERSION < 0x040000
   QAction *action = new QAction(QString(aLabel),QKeySequence::QKeySequence (),signalMapper, SLOT(map()));
   action->addTo(parent);
+ connect(action,SIGNAL(activated()),signalMapper,SLOT(map()));
+
 #else
   QAction *action = parent->addAction(aLabel, signalMapper, SLOT(map()));
+
 #endif
-  signalMapper->setMapping(action, QString(aCommand));
   connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ButtonCallback(const QString&)));
+  signalMapper->setMapping(action, QString(aCommand));
 }
 
 
@@ -513,12 +544,15 @@ void G4UIQt::TerminalHelp(
   // Create the help dialog
   if (!fHelpDialog) {
 #if QT_VERSION < 0x040000
-    fHelpDialog = new QDialog(fMainWindow,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
+    fHelpDialog = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
+    QVBoxLayout *vLayout = new QVBoxLayout(fHelpDialog);
+    QSplitter *splitter = new QSplitter(Qt::Horizontal,fHelpDialog);
 #else
-    fHelpDialog = new QDialog(fMainWindow,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
-#endif
+    QVBoxLayout *vLayout = new QVBoxLayout();
+    fHelpDialog = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
     QSplitter *splitter = new QSplitter(Qt::Horizontal);
-    QPushButton *exitButton = new QPushButton("Exit",fMainWindow);
+#endif
+    QPushButton *exitButton = new QPushButton("Exit",fHelpDialog);
     connect(exitButton, SIGNAL(clicked()), fHelpDialog,SLOT(close()));
 
     // the help tree
@@ -530,9 +564,10 @@ void G4UIQt::TerminalHelp(
 #if QT_VERSION < 0x040000
     fHelpTreeWidget = new QListView(splitter);
     fHelpTreeWidget->setSelectionMode(QListView::Single);
+    fHelpTreeWidget->setRootIsDecorated(true);
     fHelpTreeWidget->addColumn("Command");
-    fHelpTreeWidget->addColumn("Description");
-    fHelpTreeWidget->hideColumn(1);
+    fHelpTreeWidget->addColumn("Description",0);
+    //    fHelpTreeWidget->setColumnWidth (1,0);
     fHelpTreeWidget->header()->setResizeEnabled(FALSE,1);
     //    QList<QListViewItem *> items;
 #else
@@ -584,22 +619,40 @@ void G4UIQt::TerminalHelp(
       //      items.append(newItem);
     }
 
+#if QT_VERSION < 0x040000
+    connect(fHelpTreeWidget, SIGNAL(selectionChanged ()),this, SLOT(HelpTreeClicCallback()));  
+    connect(fHelpTreeWidget, SIGNAL(doubleClicked (QListViewItem*)),this, SLOT(HelpTreeDoubleClicCallback(QListViewItem*)));
+#else
     connect(fHelpTreeWidget, SIGNAL(itemSelectionChanged ()),this, SLOT(HelpTreeClicCallback()));  
-    connect(fHelpTreeWidget, SIGNAL(itemDoubleClicked (QTreeWidgetItem*,int)),this, SLOT(HelpTreeDoubleClicCallback(QTreeWidgetItem*,int)));  
+    connect(fHelpTreeWidget, SIGNAL(itemDoubleClicked (QTreeWidgetItem*,int)),this, SLOT(HelpTreeDoubleClicCallback(QTreeWidgetItem*)));  
+#endif
 
     // Set layouts
 
-#if QT_VERSION < 0x040000
-    QVBoxLayout *vLayout = new QVBoxLayout(fHelpDialog);
-#else
-    QVBoxLayout *vLayout = new QVBoxLayout;
+#if QT_VERSION >= 0x040000
     splitter->addWidget(fHelpTreeWidget);
     splitter->addWidget(fHelpArea);
 #endif
 
 
+#if QT_VERSION >= 0x040000
     vLayout->addWidget(splitter);
     vLayout->addWidget(exitButton);
+#else
+    vLayout->add(splitter);
+    vLayout->addWidget(exitButton);
+#endif
+
+    // set the splitter size
+#if QT_VERSION >= 0x040000
+    QList<int> list;
+#else
+    QValueList<int> list;
+#endif
+    list.append( 400 );
+    list.append( 400 );
+    splitter->setSizes(list);
+
 #if QT_VERSION >= 0x040000
     fHelpDialog->setLayout(vLayout);
 #endif
@@ -1080,6 +1133,14 @@ void G4UIQt::CommandEnteredCallback (
 
     QListViewItem *newItem = new QListViewItem(fCommandHistoryArea);
     newItem->setText(0,fCommandArea->text());
+    fCommandHistoryArea->insertItem(newItem);
+    // now we have to arrange 
+    QListViewItem *temp= fCommandHistoryArea->lastItem();
+    for (int i=0; i<fCommandHistoryArea->childCount()-1;i++) {
+      fCommandHistoryArea->takeItem(temp);
+      fCommandHistoryArea->insertItem(temp);
+      temp= fCommandHistoryArea->lastItem();
+    }
 #else
   G4String command (fCommandArea->text().toStdString().c_str());
   if (fCommandArea->text().trimmed() != "") {
@@ -1098,9 +1159,6 @@ void G4UIQt::CommandEnteredCallback (
     } else {
       TerminalHelp(command);
     }
-#ifdef GEANT4_QT_DEBUG
-    printf("after \n");
-#endif
     if(exitSession==true) 
       SessionTerminate();
   }
@@ -1132,7 +1190,6 @@ void G4UIQt::ButtonCallback (
 void G4UIQt::HelpTreeClicCallback (
 )
 {
-  //  printf("G4UIQt::HelpTreeClicCallback");
 #if QT_VERSION < 0x040000
   QListViewItem* item =  NULL;
 #else
@@ -1197,13 +1254,10 @@ void G4UIQt::HelpTreeDoubleClicCallback (
 QListViewItem* item
 #else
 QTreeWidgetItem* item
+,int
 #endif
- ,int nb
 )
 {
-#ifdef GEANT4_QT_DEBUG
-  printf("G4UIQt::HelpTreeDoubleClicCallback");
-#endif
   HelpTreeClicCallback();
   fCommandArea->setText(item->text (1));
 }
@@ -1225,7 +1279,7 @@ void G4UIQt::CommandHistoryCallback(
 
   
 #if QT_VERSION < 0x040000
-  item =fHelpTreeWidget->selectedItem();
+  item =fCommandHistoryArea->selectedItem();
 #else
   QList<QListWidgetItem *> list =fCommandHistoryArea->selectedItems();
   if (list.isEmpty())

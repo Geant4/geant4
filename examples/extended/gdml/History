@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2007/12/11 13:09:39 gcosmo Exp $
+$Id: History,v 1.13 2008/01/16 16:12:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 16th, 2008  Z.Torszok - exgdml-V09-01-00
+- Added entity.gdml and materials.xml to demonstrate the ability of the parser
+  of resolving entities.
+- Fixed axes.gdml and diamond.gdml according to tessellated-solid specifications.
 
 December 11th, 2007  G.Cosmo - exgdml-V09-00-02
 - Protected usage of G4UItcsh in main().

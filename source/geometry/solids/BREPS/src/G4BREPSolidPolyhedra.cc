@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.34 2006/06/29 18:41:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-01 $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.35 2008/01/22 16:04:58 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-01-patch-01 $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -1182,12 +1182,21 @@ G4BREPSolidPolyhedra::DistanceToOut(register const G4ThreeVector& Pt,
     }
   }
 
-  G4double distance = 0.;
-
+   G4double distance = 0.;
+   
   // Be careful !
   // SurfaceVec->Distance is in fact the squared distance
   //
-  if((ShortestDistance != kInfinity) && (parity&1))
+   // This condition was changed in order to give not zero answer
+   // when particle is passing the border of two Touching Surfaces
+   // and the distance to this surfaces is not zero.
+   // parity is for the points on the boundary,
+   // parity is counting only surfDistance<kCarTolerance/2. 
+   //
+   //  if((ShortestDistance != kInfinity) && (parity&1))
+   //  
+   //
+   if((ShortestDistance != kInfinity) || (parity&1))
   {
     distance = std::sqrt(ShortestDistance);
   }

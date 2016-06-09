@@ -1,4 +1,4 @@
-$Id: History,v 1.307 2007/11/09 11:35:53 vnivanch Exp $
+$Id: History,v 1.308 2008/01/11 19:55:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 January 08: V.Ivant (emutils-V09-01-00)
+- G4EmCorrections - improve CPU by usage expansions and precalculated
+                    values of Z^0.23
+- G4VEnergyLossProcess - fixed list of "collaborative" processes
+                         needed for sub-cutoff option
 
 09 November 07: V.Ivant (emutils-V09-00-13)
 - G4VMultipleScattering - set at initialisation that scattering may be 
