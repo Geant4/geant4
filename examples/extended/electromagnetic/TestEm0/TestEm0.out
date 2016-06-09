@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-patch-01    (18-February-2011)
+ Geant4 version Name: geant4-09-04-patch-02    (24-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -110,11 +110,11 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
   processes :                	        eIoni		        eBrem		        total
  
   compCrossSectionPerVolume : 	     0.994761 cm^-1	     0.342573 cm^-1	      1.33733 cm^-1
-  cross section per volume : 	     0.994761 cm^-1	     0.342573 cm^-1	      1.33733 cm^-1
-  cross section per mass   : 	     0.994761 cm2/g	     0.342573 cm2/g	      1.33733 cm2/g
+  cross section per volume : 	     0.994763 cm^-1	     0.345147 cm^-1	      1.33991 cm^-1
+  cross section per mass   : 	     0.994763 cm2/g	     0.345147 cm2/g	      1.33991 cm2/g
  
-  mean free path           : 	      1.00527 cm 	      2.91908 cm 	      7.47756 mm 
-        (g/cm2)            : 	      1.00527 g/cm2 	      2.91908 g/cm2 	      747.756 mg/cm2
+  mean free path           : 	      1.00526 cm 	      2.89732 cm 	      7.46319 mm 
+        (g/cm2)            : 	      1.00526 g/cm2 	      2.89732 g/cm2 	      746.319 mg/cm2
 
  
   restricted dE/dx         : 	      1.61536 MeV/cm	      12.5324 eV/cm 	      1.61538 MeV/cm

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialCutsCouple.cc,v 1.3 2006/06/29 19:30:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MaterialCutsCouple.cc,v 1.3 2006-06-29 19:30:10 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // --------------------------------------------------------------
@@ -60,6 +60,7 @@ G4MaterialCutsCouple::G4MaterialCutsCouple(const G4Material* material,
 
 
 G4MaterialCutsCouple::G4MaterialCutsCouple(const G4MaterialCutsCouple& right) 
+  :fMaterial(0), fCuts(0)
 {
   *this = right;
 }

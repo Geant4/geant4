@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNeutron.cc,v 1.7 2010/11/17 11:06:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PreCompoundNeutron.cc,v 1.7 2010-11-17 11:06:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -147,29 +147,14 @@ G4double G4PreCompoundNeutron::GetOpt12(G4double K)
 G4double G4PreCompoundNeutron::GetOpt34(G4double K)
 {
   G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2;
-  G4double p, p0, p1, p2;
-  G4double flow,spill,ec,ecsq,xnulam,etest(0.),ra(0.),a,signor(1.),sig; 
+  G4double p, p0;
+  G4double flow,ec,ecsq,xnulam,etest(0.),ra(0.),a,signor(1.),sig; 
   G4double b,ecut,cut,ecut2,geom,elab;
 
-  //safety initialization
-  landa0=0;
-  landa1=0;
-  mu0=0.;
-  mu1=0.;
-  nu0=0.;
-  nu1=0.;
-  nu2=0.;
-  p0=0.;
-  p1=0.;
-  p2=0.;
-
   flow = 1.e-18;
-  spill= 1.0e+18; 
 
   // PRECO xs for neutrons is choosen
   p0 = -312.;
-  p1= 0.;
-  p2 = 0.;
   landa0 = 12.10;
   landa1=  -11.27;
   mu0 = 234.1;

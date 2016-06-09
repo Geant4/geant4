@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.399 2010-12-08 13:46:18 gunter Exp $
+cvs log $Id: History,v 1.400 2010-12-22 16:28:40 lgarnier Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10th February 2011  Ben Morgan   (config-V09-03-20)
+9th May 2011 Gabriele Cosmo (config-V09-03-21)
+- Workaround in binmake.gmk to avoid clashes with flag LDFLAGS set in the
+  user's environment beforehand.
+
+8th May 2011 Ben Morgan
+- Updated configure scripts to correct settings of G4LIB_USE_DLL for the
+  case of DLLs build on Windows. Partially addressing problem report #1189.
+
+18th March 2011  Gunter Folger
+- Address old bug report 1033 in liblist.c
+
+10th February 2011  Ben Morgan (config-V09-03-20)
 - Fixed restoring of default settings for XercesC in Configure script and
   internal scripts. Corrected duplication of text in setup dump.
   Addessing problem reports #1159 and #1160.
@@ -24,7 +35,7 @@ committal in the CVS repository !
 22th December 2010  Laurent Garnier
 - Darwin-g++.gmk: fix to avoid mixing of OpenGL X11 and framework.
 
-8th December 2010  Gunter Folger   (config-V09-03-19)
+8th December 2010  Gunter Folger (config-V09-03-19)
 - Updated linux-icc to suppress warning when linking to shared libs
 
 25th November 2010  Gabriele Cosmo (config-V09-03-18)

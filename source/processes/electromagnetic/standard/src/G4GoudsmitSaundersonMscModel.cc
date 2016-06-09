@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4GoudsmitSaundersonMscModel.cc,v 1.27 2010-12-23 18:31:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -158,19 +158,22 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
      (tPathLength/tausmall < lambda1)) return ;
 
   ///////////////////////////////////////////
-  // Effective energy
-  G4double  eloss = theManager->GetEnergy(particle,tPathLength,currentCouple);
-  if(eloss>0.5*kineticEnergy)
-   {if((dynParticle->GetCharge())==-eplus)eloss=kineticEnergy-eloss;//exchange between target and projectile if they are electrons
-    else eloss=0.5*kineticEnergy;
-   }
-  G4double ee       = kineticEnergy - 0.5*eloss;
-  G4double ttau     = ee/electron_mass_c2;
-  G4double ttau2    = ttau*ttau;
-  G4double epsilonpp= eloss/ee;
-  G4double cst1=epsilonpp*epsilonpp*(6+10*ttau+5*ttau2)/(24*ttau2+48*ttau+72);
-
-  kineticEnergy *= (1 - cst1);
+  // Effective energy 
+  G4double eloss    = kineticEnergy;
+  G4double rrr      = currentRange-tPathLength;
+  if(rrr > 0.0) {
+    G4double T1 = theManager->GetEnergy(particle,currentRange-tPathLength,currentCouple);
+    if(T1 < kineticEnergy) { eloss = kineticEnergy - T1; }
+    else { eloss = 0.0; }
+  }
+  if(eloss > 0.0) {
+    G4double ee       = kineticEnergy - 0.5*eloss;
+    G4double ttau     = ee/electron_mass_c2;
+    G4double ttau2    = ttau*ttau;
+    G4double epsilonpp= eloss/ee;
+    G4double cst1=epsilonpp*epsilonpp*(6+10*ttau+5*ttau2)/(24*ttau2+48*ttau+72);
+    kineticEnergy *= (1 - cst1);
+  }
   ///////////////////////////////////////////
   // additivity rule for mixture and compound xsection's
   const G4Material* mat = currentCouple->GetMaterial();
@@ -258,7 +261,6 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
        ws=1.+Qn12*log(G4UniformRand());
        }while((fabs(ws)>1.)&&(i<20));//i<20 to avoid time consuming during the run
        if(i>=19)ws=cos(sqrtA);
-
        wss=std::sqrt((1.-ws)*(1.0+ws));      
        us=wss*cos(phi1);
        vs=wss*sin(phi1);
@@ -275,10 +277,10 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4DynamicParticle* dynParti
       if(Qn1<0.02)// corresponding to error less than 1% in the exact formula of <z>
       z_coord = 1.0 - Qn1*(0.5 - Qn1/6.);
       else z_coord = (1.-std::exp(-Qn1))/Qn1;
-
       G4double rr=std::sqrt((1.- z_coord*z_coord)/(1.-ws*ws));
       x_coord = rr*us;
       y_coord = rr*vs;
+
       // displacement is computed relatively to the end point
       z_coord -= 1.0;
       rr = std::sqrt(x_coord*x_coord+y_coord*y_coord+z_coord*z_coord);
@@ -308,7 +310,7 @@ G4GoudsmitSaundersonMscModel::SampleCosineTheta(G4double lambdan, G4double scrA,
 						G4double &cost, G4double &sint)
 {
   G4double xi=0.;
-  
+  Qn12 = 2.* lambdan *scrA*((1.+scrA)*log(1.+1./scrA)-1.);  
   if (Qn12<0.001)  
   {G4double r1,tet;
       do{
@@ -453,6 +455,7 @@ G4GoudsmitSaundersonMscModel::ComputeTruePathLengthLimit(const G4Track& track,
   currentKinEnergy = dp->GetKineticEnergy();
   currentRange = 
     theManager->GetRangeFromRestricteDEDX(particle,currentKinEnergy,currentCouple);
+
 
   lambda1 = GetLambda(currentKinEnergy);
 
@@ -661,7 +664,7 @@ G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
   if (tPathLength < currentRange*dtrl) {
     if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
     else             zmean = lambda1*(1.-exp(-tau));
-  } else if(currentKinEnergy < mass /*|| tPathLength == currentRange*/) {
+  } else if(currentKinEnergy < mass || tPathLength == currentRange) {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda1) ;
     par3 = 1.+par2 ;

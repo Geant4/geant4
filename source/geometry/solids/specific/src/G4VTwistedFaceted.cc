@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.22 2010/09/23 10:27:38 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VTwistedFaceted.cc,v 1.22 2010-09-23 10:27:38 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -745,11 +745,8 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    G4ThreeVector xx;
    G4ThreeVector bestxx;
    G4int i;
-   G4int besti = -1;
    for (i=0; i < 6 ; i++)
-     //for (i=1; i < 2 ; i++)
    {
-
 #ifdef G4TWISTDEBUG
       G4cout << G4endl << "surface " << i << ": " << G4endl << G4endl ;
 #endif
@@ -762,7 +759,6 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
       {
          distance = tmpdistance;
          bestxx = xx;
-         besti = i;
       }
    }
 
@@ -836,7 +832,6 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
          surfaces[5] = fUpperEndcap;
 
          G4int i;
-         G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
          for (i=0; i< 6; i++)
@@ -846,7 +841,6 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
             {
                distance = tmpdistance;
                bestxx = xx;
-               besti = i;
             }
          }
          *tmpdist = distance;
@@ -1047,7 +1041,6 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
         surfaces[5] = fUpperEndcap;
 
         G4int i;
-        G4int besti = -1;
         G4ThreeVector xx;
         G4ThreeVector bestxx;
         for (i=0; i< 6; i++)
@@ -1057,7 +1050,6 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
           {
             distance = tmpdistance;
             bestxx = xx;
-            besti = i;
           }
         }
         *tmpdist = distance;
@@ -1246,7 +1238,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointInSolid(G4double z) const
 G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 {
 
-  G4double  phi = CLHEP::RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
+  G4double  phi = G4RandFlat::shoot(-fPhiTwist/2.,fPhiTwist/2.);
   G4double u , umin, umax ;  //  variable for twisted surfaces
   G4double y  ;              //  variable for flat surface (top and bottom)
 
@@ -1271,14 +1263,14 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   G4cout << "Surface Upper   = " << a6 << G4endl ;
 #endif 
 
-  G4double chose = CLHEP::RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
+  G4double chose = G4RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
 
   if(chose < a1)
   {
 
     umin = fSide0->GetBoundaryMin(phi) ;
     umax = fSide0->GetBoundaryMax(phi) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return  fSide0->SurfacePoint(phi, u, true) ;   // point on 0deg surface
   }
@@ -1289,7 +1281,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
     umin = fSide90->GetBoundaryMin(phi) ;
     umax = fSide90->GetBoundaryMax(phi) ;
     
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return fSide90->SurfacePoint(phi, u, true);   // point on 90deg surface
   }
@@ -1299,7 +1291,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
     umin = fSide180->GetBoundaryMin(phi) ;
     umax = fSide180->GetBoundaryMax(phi) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
      return fSide180->SurfacePoint(phi, u, true); // point on 180 deg surface
   }
@@ -1309,7 +1301,7 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
     umin = fSide270->GetBoundaryMin(phi) ;
     umax = fSide270->GetBoundaryMax(phi) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return fSide270->SurfacePoint(phi, u, true); // point on 270 deg surface
   }
@@ -1317,19 +1309,19 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
   else if( (chose >= a1 + a2 + a3 + a4  ) && (chose < a1 + a2 + a3 + a4 + a5 ) )
   {
 
-    y = CLHEP::RandFlat::shoot(-fDy1,fDy1) ;
+    y = G4RandFlat::shoot(-fDy1,fDy1) ;
     umin = fLowerEndcap->GetBoundaryMin(y) ;
     umax = fLowerEndcap->GetBoundaryMax(y) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return fLowerEndcap->SurfacePoint(u,y,true); // point on lower endcap
   }
   else {
 
-    y = CLHEP::RandFlat::shoot(-fDy2,fDy2) ;
+    y = G4RandFlat::shoot(-fDy2,fDy2) ;
     umin = fUpperEndcap->GetBoundaryMin(y) ;
     umax = fUpperEndcap->GetBoundaryMax(y) ;
-    u = CLHEP::RandFlat::shoot(umin,umax) ;
+    u = G4RandFlat::shoot(umin,umax) ;
 
     return fUpperEndcap->SurfacePoint(u,y,true) ; // point on upper endcap
 

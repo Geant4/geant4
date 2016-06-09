@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 April 2011: V.Ivant (emstand-V09-03-34)
+- G4IonFluctuation - replaced Gauss sampling by Gamma function sampling
+
+21 March 2011: V.Ivant
+- G4GoudsmitSaundersonMscModel - restore to version of original 9.4
+
 17 February 2011: V.Ivant (emstand-V09-03-33)
 - G4PEEffectFluoModel - comment out parasitic cout
 

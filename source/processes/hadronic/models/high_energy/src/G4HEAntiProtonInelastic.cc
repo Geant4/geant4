@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HEAntiProtonInelastic.cc,v 1.16 2010/11/29 05:44:44 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HEAntiProtonInelastic.cc,v 1.16 2010-11-29 05:44:44 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 
 #include "globals.hh"
@@ -54,7 +54,10 @@ G4HEAntiProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
   G4int incidentCode = incidentParticle.getCode();
   G4double incidentMass = incidentParticle.getMass();
   G4double incidentTotalEnergy = incidentParticle.getEnergy();
-  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+
+  // G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  // DHW 19 may 2011: variable set but not used
+
   G4double incidentKineticEnergy = incidentTotalEnergy - incidentMass;
 
   if (incidentKineticEnergy < 1.)
@@ -91,8 +94,9 @@ G4HEAntiProtonInelastic::ApplyYourself(const G4HadProjectile& aTrack,
 
   incidentKineticEnergy -= excitation;
   incidentTotalEnergy = incidentKineticEnergy + incidentMass;
-  incidentTotalMomentum = std::sqrt( (incidentTotalEnergy-incidentMass)
-                                    *(incidentTotalEnergy+incidentMass));
+  // incidentTotalMomentum = std::sqrt( (incidentTotalEnergy-incidentMass)
+  //                                   *(incidentTotalEnergy+incidentMass));
+  // DHW 19 may 2011: variable set but not used
 
   G4HEVector targetParticle;
   if (G4UniformRand() < atomicNumber/atomicWeight) { 

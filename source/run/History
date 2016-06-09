@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 31st, 2011, J.Apostolakis (run-V09-03-11)
+- Ensure that a ScoreSplittingProcess is added only once in SetScoreSplitter()
+  of G4RunManagerKernel. Addresses problem report #1218.
+
 February 11th, 2011, M.Asai (run-V09-03-10)
 - G4RunManager.hh : Additional protection against the failure in
   creating a new directory -- Problem #1157

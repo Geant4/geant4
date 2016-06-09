@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4Penelope08GammaConversionModel.cc,v 1.5 2010-12-15 10:26:41 pandola Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // Author: Luciano Pandola
 //

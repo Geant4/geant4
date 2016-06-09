@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.35 2010/10/20 07:31:39 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SubtractionSolid.cc,v 1.35 2010-10-20 07:31:39 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -280,6 +280,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
       
       if( fPtrSolidA->Inside(p+dist*v) != kInside )
       {
+        G4int count1=0;
         do
         {
           disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
@@ -294,7 +295,16 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
           {
             disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ; 
             dist += disTmp ;
-          }         
+            count1++;
+            if( count1 > 1000 )  // Infinite loop detected
+            {
+	      G4String err_message = "Illegal condition caused by solids: ";
+              err_message += fPtrSolidA->GetName() + " and "
+                           + fPtrSolidB->GetName();
+              G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
+                          "InfiniteLoop", EventMustBeAborted, err_message);
+            }
+          }    
         }
         while( Inside(p+dist*v) == kOutside ) ;
       }
@@ -309,6 +319,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
       }
       else
       {
+        G4int count2=0;
         while( Inside(p+dist*v) == kOutside )  // pushing loop
         {
           disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ;
@@ -323,6 +334,15 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
               return kInfinity ;
             }                 
             dist += disTmp ;
+            count2++;
+            if( count2 > 1000 )  // Infinite loop detected
+            {
+	      G4String err_message = "Illegal condition caused by solids: ";
+              err_message += fPtrSolidA->GetName() + " and "
+                           + fPtrSolidB->GetName();
+              G4Exception("G4SubtractionSolid::DistanceToIn(p,v)",
+                          "InfiniteLoop", EventMustBeAborted, err_message);
+            }
           }
         }
       }

@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 May 2011 - Dennis Wright (hadr-lep-V09-03-00)
+------------------------------------------------
+  G4LCapture.cc: fix gcc-4.6 compiler warning (variable e0 set but not used)
+
 26 February 2007 - Dennis Wright (hadr-lep-V08-02-01)
 -----------------------------------------------------
   G4LEAntiProtonInelastic.cc : for low energy (< 0.1 MeV) anti-protons,

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrEvaluator.hh,v 1.1 2008/10/23 14:43:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrEvaluator.hh,v 1.1 2008-10-23 14:43:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // class G4tgrEvaluator
@@ -42,9 +42,9 @@
 #define G4tgrEvaluator_HH
 
 #include "G4ThreeVector.hh"
-#include <CLHEP/Evaluator/Evaluator.h>
+#include "G4Evaluator.hh"
 
-class G4tgrEvaluator : public HepTool::Evaluator
+class G4tgrEvaluator : public G4Evaluator
 {
   public:  // with description
 

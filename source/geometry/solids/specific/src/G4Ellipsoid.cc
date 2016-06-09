@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.30 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Ellipsoid.cc,v 1.30 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // class G4Ellipsoid
 //
@@ -979,7 +979,7 @@ std::ostream& G4Ellipsoid::StreamInfo( std::ostream& os ) const
 
 G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
 {
-  G4double aTop, aBottom, aCurved, chose, xRand, yRand, zRand, phi, theta;
+  G4double aTop, aBottom, aCurved, chose, xRand, yRand, zRand, phi;
   G4double cosphi, sinphi, costheta, sintheta, alpha, beta, max1, max2, max3;
 
   max1  = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
@@ -989,7 +989,6 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
   else                        { max2 = xSemiAxis; max3 = ySemiAxis; }
 
   phi   = RandFlat::shoot(0.,twopi);
-  theta = RandFlat::shoot(0.,pi);
   
   cosphi = std::cos(phi);   sinphi = std::sin(phi);
   costheta = RandFlat::shoot(zBottomCut,zTopCut)/zSemiAxis;

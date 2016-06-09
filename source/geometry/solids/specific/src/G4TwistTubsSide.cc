@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsSide.cc,v 1.7 2010/07/12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TwistTubsSide.cc,v 1.7 2010-07-12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -490,10 +490,8 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    //
    
    G4ThreeVector  lastgxx[2];
-   G4double       distfromlast[2];
    for (i=0; i<2; i++) {
       lastgxx[i] = fCurStatWithV.GetXX(i);
-      distfromlast[i] = (gp - lastgxx[i]).mag();
    } 
 
    if  ((gp - lastgxx[0]).mag() < halftol
@@ -538,11 +536,11 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
    G4ThreeVector C;  // foot of normal from p to boundary of sAxis0 & sAxisMax
    G4ThreeVector B;       // point on boundary sAxis0 & sAxisMax at z = A.z()
    G4ThreeVector D;       // point on boundary sAxis0 & sAxisMin at z = C.z()
-   G4double      distToA; // distance from p to A
-   G4double      distToC; // distance from p to C 
 
-   distToA = DistanceToBoundary(sAxis0 & sAxisMin, A, p);
-   distToC = DistanceToBoundary(sAxis0 & sAxisMax, C, p);
+   // G4double      distToA; // distance from p to A
+   DistanceToBoundary(sAxis0 & sAxisMin, A, p);
+   // G4double      distToC; // distance from p to C 
+   DistanceToBoundary(sAxis0 & sAxisMax, C, p);
    
    // is p.z between a.z and c.z?
    // p.z must be bracketed a.z and c.z.

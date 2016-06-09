@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc,v 1.22 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ExtrudedSolid.cc,v 1.22 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -763,7 +763,7 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   for ( G4int i=0; i<fNv; ++i )
   {
     G4int j = (i+1) % fNv;
-    if ( IsSameLine(pscaled, fPolygon[i], fPolygon[j]) )
+    if ( IsSameLineSegment(pscaled, fPolygon[i], fPolygon[j]) )
     {
       // G4cout << "G4ExtrudedSolid::Inside return Surface (on polygon) "
       //        << G4endl;

@@ -14,6 +14,25 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 April 2011  Tatsumi Koi (hadr-hpn-V09-03-13)
+-Add "Fermium" 
+	include/G4NeutronHPNames.hh
+
+11 April 2011  Tatsumi Koi
+-Add "Fermium" and fix bug in "Actinium"
+	src/G4NeutronHPNames.cc
+
+30 March 2011  Tatsumi Koi
+-Add message when the environment variable of "G4NEUTRONHP_NEGLECT_DOPPLER" is found
+        G4NeutronHPElasticData.cc
+        G4NeutronHPInelasticData.cc
+        G4NeutronHPCaptureData.cc
+
+24 March 2011  Tatsumi Koi
+-Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT) 
+	G4NeutronHPDiscreteTwoBody.cc
+	G4NeutronHPDiscreteTwoBody.hh
+
 3 December 2010  Tatsumi Koi (hadr-hpn-V09-03-12)
 -Bug fix Bugzilla/Geant4 Problem 1155
         G4NeutronHPCaptureFS.cc

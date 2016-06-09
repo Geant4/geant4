@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RotationMatrix.hh,v 1.5 2006/06/29 19:02:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RotationMatrix.hh,v 1.5 2006-06-29 19:02:54 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -42,5 +42,6 @@
 #include <CLHEP/Vector/Rotation.h>
 
 typedef CLHEP::HepRotation G4RotationMatrix;
+typedef CLHEP::HepRep3x3 G4Rep3x3;
 
 #endif

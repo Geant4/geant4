@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 10th, 2011, J.Apostolakis  transport-V09-03-03
+------------------------------
+- Fix G4Transportation::AlongStepDoIt
+  Use only initial velocity to update time. An estimate of velocity
+  at endpoint is not yet available. (finalVelocity still= initial)
+    ==> It will be updated later in the tracking sequence, when
+        energy loss is applied, and it will be available to 
+	Transportation only in the PostStepDoIt()
+
 January 26th, 2011, G.Cosmo  transport-V09-03-02
 ---------------------------
 - Simplified implementation of G4CoupledTransportation::EndTracking(), to

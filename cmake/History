@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.3 2010/12/03 17:58:51 gcosmo Exp $
+cvs log $Id: History,v 1.3 2010-12-03 17:58:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,10 +16,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 3rd 2010 - B. Morgan (cmake-V09-03-01)
+May 24th 2010 - B.Morgan (cmake-V09-03-02)
+- Templates/geant4-env.sh.in : Added variable setting for RayTracerX
+- Templates/geant4-env.csh.in : Added variable setting for RayTracerX
+- Templates/geant4-config.in : Added needed reporting and flags setting for
+  RayTracerX support.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Added setting of 
+  variable needed to export the existence of RayTracerX in the geant4-env
+  scripts.
+- Modules/Geant4ConfigureConfigScript.cmake : Added setting of variables
+  needed to export RayTracerX existence and X11 flags to geant4-config script.
+
+December 3rd 2010 - B.Morgan (cmake-V09-03-01)
 - Added generation of geant4-config script.
 
-October 29th 2010 - B. Morgan
+October 29th 2010 - B.Morgan
 - Install.g4cmake: Added as installation guide for using CMake.
 
 October 1st, 2010 - B.Morgan (cmake-V09-03-00)

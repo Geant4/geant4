@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.72.2.4 2009/11/17 16:51:06 japost Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Transportation.cc,v 1.72.2.4 2009-11-17 16:51:06 japost Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation
@@ -450,9 +450,6 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
   static G4int noCalls=0;
-  static const G4ParticleDefinition* fOpticalPhoton =
-           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
-
   noCalls++;
 
   fParticleChange.Initialize(track) ;
@@ -478,27 +475,11 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   {
      // The time was not integrated .. make the best estimate possible
      //
-     G4double finalVelocity   = track.GetVelocity() ;
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
 
      deltaTime= 0.0;  // in case initialVelocity = 0 
-     const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
-     if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
-     {
-        //  A photon is in the medium of the final point
-        //  during the step, so it has the final velocity.
-        deltaTime = stepLength/finalVelocity ;
-     }
-     else if (finalVelocity > 0.0)
-     {
-        G4double meanInverseVelocity ;
-        // deltaTime = stepLength/finalVelocity ;
-        meanInverseVelocity = 0.5
-                            * ( 1.0 / initialVelocity + 1.0 / finalVelocity ) ;
-        deltaTime = stepLength * meanInverseVelocity ;
-     }
-     else if( initialVelocity > 0.0 )
+     if( initialVelocity > 0.0 )
      {
         deltaTime = stepLength/initialVelocity ;
      }
@@ -511,7 +492,7 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
 
   fParticleChange.ProposeGlobalTime( fCandidateEndGlobalTime ) ;
 
-  // Now Correct by Lorentz factor to get "proper" deltaTime
+  // Now Correct by Lorentz factor to get "proper" Time
   
   G4double  restMass       = track.GetDynamicParticle()->GetMass() ;
   G4double deltaProperTime = deltaTime*( restMass/track.GetTotalEnergy() ) ;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gstmed.cc,v 1.7 2006/06/29 18:15:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gstmed.cc,v 1.7 2006-06-29 18:15:02 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // The last G4int argument of G4gstmed(..) is used for sending
 // info whether the Geant3 tracking medium parameters should
@@ -41,7 +41,7 @@
 #include "G4MagneticField.hh"
 #include "G4Material.hh"
 
-void PG4gstmed(G4String tokens[])
+void PG4gstmed(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgstmed);

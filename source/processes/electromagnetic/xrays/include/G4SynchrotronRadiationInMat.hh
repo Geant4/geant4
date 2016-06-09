@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.hh,v 1.2 2006/06/29 19:55:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SynchrotronRadiationInMat.hh,v 1.2 2006-06-29 19:55:45 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -79,7 +79,6 @@ public:
 private:
 
   G4SynchrotronRadiationInMat & operator=(const G4SynchrotronRadiationInMat &right);
-
   G4SynchrotronRadiationInMat(const G4SynchrotronRadiationInMat&);
 
 public:  /////////////////    Post Step functions  //////////////////////////
@@ -106,8 +105,6 @@ public:  /////////////////    Post Step functions  //////////////////////////
   G4double GetAngleK( G4double );
   G4double GetAngleNumberAtGammaKsi( G4double );
 
-
-
   G4bool IsApplicable(const G4ParticleDefinition&);
 
   static G4double GetLambdaConst(){ return fLambdaConst; };
@@ -120,16 +117,13 @@ public:  /////////////////    Post Step functions  //////////////////////////
   void SetPsiGamma(G4double psg){ fPsiGamma = psg; };
   void SetOrderAngleK(G4double ord){ fOrderAngleK = ord; }; // should be 1/3 or 2/3
 
-  protected:
-
-  private:
+private:
 
   static const G4double fLambdaConst;
 
   static const G4double fEnergyConst;
 
   static const G4double fIntegralProbabilityOfSR[200];
-
 
   const G4double
   LowestKineticEnergy;   // low  energy limit of the cross-section formula
@@ -168,18 +162,6 @@ public:  /////////////////    Post Step functions  //////////////////////////
   G4PropagatorInField* fFieldPropagator;
 
 };
-
-//////////////////////////  INLINE METHODS  /////////////////////////////
-
-inline G4bool
-G4SynchrotronRadiationInMat::IsApplicable( const G4ParticleDefinition& particle )
-{
-
-  return ( ( &particle == (const G4ParticleDefinition *)theElectron ) ||
-            ( &particle == (const G4ParticleDefinition *)thePositron )    );
-
-  // return ( particle.GetPDGCharge() != 0.0 );
-}
 
 #endif  // end of G4SynchrotronRadiationInMat.hh
 

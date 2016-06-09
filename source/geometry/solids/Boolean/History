@@ -1,5 +1,5 @@
 
-$Id: History,v 1.67 2010/10/20 07:31:58 gcosmo Exp $
+$Id: History,v 1.67 2010-10-20 07:31:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 27, 2011  T.Nikitina                 geom-bool-V09-03-04
+  - Added protection for potential cases of infinite loop in DistanceToIn(p,v)
+    and related error message with event abortion.
 
  October 19, 2010  G.Cosmo                geom-bool-V09-03-03
   - Implemented Clone() virtual method for all solids, returning a pointer

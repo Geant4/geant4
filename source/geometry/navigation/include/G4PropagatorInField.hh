@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: G4PropagatorInField.hh,v 1.19 2009/11/13 17:34:26 japost Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4PropagatorInField.hh,v 1.19 2009-11-13 17:34:26 japost Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // Class G4PropagatorInField 
@@ -123,13 +123,14 @@ class G4PropagatorInField
    inline void      SetMinimumEpsilonStep( G4double newEpsMin ); //  of any step
    inline G4double  GetMaximumEpsilonStep() const;
    inline void      SetMaximumEpsilonStep( G4double newEpsMax );
-   inline void      SetLargestAcceptableStep( G4double newBigDist );
-   inline G4double  GetLargestAcceptableStep();
-     // The 6 above methods are now obsolescent but *for now* will work 
+     // The 4 above methods are now obsolescent but *for now* will work 
      // They are being replaced by same-name methods in G4FieldManager,
      // allowing the specialisation in different volumes. 
      // Their new behaviour is to change the values for the global field
      // manager
+
+   inline void      SetLargestAcceptableStep( G4double newBigDist );
+   inline G4double  GetLargestAcceptableStep();
 
    void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
      // Set the filter that examines & stores 'intermediate' 
@@ -193,67 +194,42 @@ class G4PropagatorInField
                                    G4double      stepTrial,
                              const G4FieldTrack& aFieldTrack);
  private:
-
    // ----------------------------------------------------------------------
    //  DATA Members
    // ----------------------------------------------------------------------
 
-   G4FieldManager *fDetectorFieldMgr; 
-     // The  Field Manager of the whole Detector.  (default)
+   //  ==================================================================
+   //  INVARIANTS - Must not change during tracking
 
-   G4FieldManager *fCurrentFieldMgr;
-     // The  Field Manager of the current volume (may be the one above.)
+   //  ** PARAMETERS -----------
+   G4int    fMax_loop_count;
+       // Limit for the number of sub-steps taken in one call to ComputeStep
+   G4bool   fUseSafetyForOptimisation;
 
-   G4Navigator   *fNavigator;
-  
-   //  STATE information
-   //  -----------------
+    //  Thresholds for identifying "abnormal" cases - which cause looping
+   G4int    fActionThreshold_NoZeroSteps;       //  Threshold # - above it act
+   G4int    fSevereActionThreshold_NoZeroSteps; //  Threshold # to act harshly
+   G4int    fAbandonThreshold_NoZeroSteps;      //  Threshold # to abandon
+   G4double fZeroStepThreshold; 
+       // Threshold *length* for counting of tiny or 'zero' steps 
+ 
+   G4double fLargestAcceptableStep;
+       // Maximum size of a step - for optimization (and to avoid problems)
+   //  ** End of PARAMETERS -----
 
-   G4double    fEpsilonStep;
-     // Relative accuracy for current Step (Calc.)
+   G4double kCarTolerance;
+       // Geometrical tolerance defining surface thickness
 
-   G4FieldTrack    End_PointAndTangent;
-     // End point storage
+   G4bool   fAllocatedLocator;                    //  Book-keeping
 
-   G4bool      fParticleIsLooping;
+   //  --------------------------------------------------------
+   //  ** Dependent Objects - to which work is delegated 
 
-   G4int  fVerboseLevel;
-     // For debuging purposes
-
-   G4int  fMax_loop_count;
-     // Limit for the number of sub-steps taken in one call to ComputeStep
-
-   //  Variables to keep track of "abnormal" case - which causes loop
-   //
-   G4int     fNoZeroStep;                        //  Counter of zeroStep
-   G4int     fActionThreshold_NoZeroSteps;       //  Threshold: above this - act
-   G4int     fSevereActionThreshold_NoZeroSteps; //  Threshold to act harshly
-   G4int     fAbandonThreshold_NoZeroSteps;      //  Threshold to abandon
-
-   G4double  fFull_CurveLen_of_LastAttempt; 
-   G4double  fLast_ProposedStepLength; 
-   G4double  fLargestAcceptableStep;
-
-   G4double  fCharge, fInitialMomentumModulus, fMass;
-
-   G4ThreeVector  fPreviousSftOrigin;
-   G4double       fPreviousSafety; 
-   G4bool         fUseSafetyForOptimisation;
-     // Last safety origin & value: for optimisation
-
-   G4bool fSetFieldMgr; 
-     // Flag whether field manager has been set for the current step
-
-   G4double  kCarTolerance;
-     // Geometrical tolerance defining surface thickness
-   G4double  fZeroStepThreshold; 
-     // Threshold for counting of tiny or 'zero' steps
+   G4FieldManager         *fDetectorFieldMgr; 
+       // The  Field Manager of the whole Detector.  (default)
 
    G4VIntersectionLocator *fIntersectionLocator;
-   G4bool fAllocatedLocator;
-     // Used to Intersection Locator
-
- private:
+     // Refines candidate intersection
 
    G4VCurvedTrajectoryFilter* fpTrajectoryFilter;
      // The filter encapsulates the algorithm which selects which
@@ -261,11 +237,44 @@ class G4PropagatorInField
      // When it is NULL, no intermediate points will be stored.
      // Else PIF::ComputeStep must submit (all) intermediate
      // points it calculates, to this filter.  (jacek 04/11/2002)
+
+   G4Navigator            *fNavigator;
+     // Set externally - only by tracking / run manager
+   //
+   //  ** End of Dependent Objects ----------------------------
+
+   //  End of INVARIANTS 
+   //  ==================================================================
+
+   //  STATE information
+   //  -----------------
+   G4FieldManager *fCurrentFieldMgr;
+      // The  Field Manager of the current volume (may be the global)
+   G4bool         fSetFieldMgr;  // Has it been set for the current step
+
+   // Parameters of current step
+   G4double       fCharge, fInitialMomentumModulus, fMass;
+   G4double       fEpsilonStep;        // Relative accuracy of current Step
+   G4FieldTrack   End_PointAndTangent; // End point storage
+   G4bool         fParticleIsLooping;
+   G4int          fNoZeroStep;         //  Count of zero Steps
+
+   // State used for Optimisation
+   G4double       fFull_CurveLen_of_LastAttempt; 
+   G4double       fLast_ProposedStepLength; 
+       // Previous step information -- for use in adjust step size
+   G4ThreeVector  fPreviousSftOrigin;
+   G4double       fPreviousSafety; 
+       // Last safety origin & value: for optimisation
+
+   G4int          fVerboseLevel;
+       // For debuging purposes
+
+ private:
 };
 
-// ********************************************************************
 // Inline methods.
-// ********************************************************************
+// *******************************
 
 #include "G4PropagatorInField.icc"
 

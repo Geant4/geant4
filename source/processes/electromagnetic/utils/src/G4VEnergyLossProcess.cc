@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VEnergyLossProcess.cc,v 1.174 2010-12-27 17:42:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -229,11 +229,11 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   secParticles.reserve(5);
 
   // Data for stragling of ranges from ICRU'37 report
-  const G4int nrbins = 7;
-  vstrag = new G4PhysicsLogVector(keV, GeV, nrbins-1);
-  vstrag->SetSpline(true);
-  G4double s[nrbins] = {-0.2, -0.85, -1.3, -1.578, -1.76, -1.85, -1.9};
-  for(G4int i=0; i<nrbins; ++i) {vstrag->PutValue(i, s[i]);}
+  //  const G4int nrbins = 7;
+  //vstrag = new G4PhysicsLogVector(keV, GeV, nrbins-1);
+  //vstrag->SetSpline(true);
+  //G4double s[nrbins] = {-0.2, -0.85, -1.3, -1.578, -1.76, -1.85, -1.9};
+  //for(G4int i=0; i<nrbins; ++i) {vstrag->PutValue(i, s[i]);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -243,7 +243,7 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
   if(1 < verboseLevel) 
     G4cout << "G4VEnergyLossProcess destruct " << GetProcessName() 
 	   << G4endl;
-  delete vstrag;
+  //delete vstrag;
   Clean();
 
   if ( !baseParticle ) {
@@ -711,7 +711,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
 
   G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
   G4PhysicsLogVector* aVector = 0;
-  G4PhysicsLogVector* bVector = 0;
+  G4double scale = std::log(maxKinEnergy/minKinEnergy);
 
   for(size_t i=0; i<numOfCouples; ++i) {
 
@@ -720,12 +720,12 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
-      if(!bVector) {
-	aVector = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nBins);
-        bVector = aVector;
-      } else {
-        aVector = new G4PhysicsLogVector(*bVector);
-      }
+      G4double emin = MinPrimaryEnergy(particle,couple->GetMaterial(),(*theCuts)[i]);
+      if(0.0 >= emin) { emin = eV; }
+      else if(maxKinEnergy <= emin) { emin = 0.5*maxKinEnergy; }
+      G4int bin = G4int(nBins*std::log(maxKinEnergy/emin)/scale + 0.5);
+      if(bin < 3) { bin = 3; }
+      aVector = new G4PhysicsLogVector(emin, maxKinEnergy, bin);
       aVector->SetSpline(splineFlag);
 
       modelManager->FillLambdaVector(aVector, couple, true, tType);
@@ -879,10 +879,7 @@ void G4VEnergyLossProcess::ActivateDeexcitation(G4bool val, const G4Region* r)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
-                             const G4Track&,
-                             G4double,
-                             G4double  currentMinStep,
-                             G4double&,
+                             const G4Track&,G4double,G4double,G4double&,
                              G4GPILSelection* selection)
 {
   G4double x = DBL_MAX;
@@ -892,13 +889,18 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
 
     x = fRange;
     G4double y = x*dRoverRange;
-
-    if(x > finalRange && y < currentMinStep) { 
-      x = y + finalRange*(1.0 - dRoverRange)*(2.0 - finalRange/fRange);
-    } else if (rndmStepFlag) { x = SampleRange(); }
+    G4double finR = finalRange;
+    if(rndmStepFlag) { 
+      finR = std::min(finR,currentCouple->GetProductionCuts()->GetProductionCut(1)); 
+    }
+    if(x > finR) { x = y + finR*(1.0 - dRoverRange)*(2.0 - finR/fRange); }
+    //if(x > finalRange && y < currentMinStep) { 
+    //  x = y + finalRange*(1.0 - dRoverRange)*(2.0 - finalRange/fRange);
+    //} else if (rndmStepFlag) { x = SampleRange(); }
     //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
-    //  <<" range= "<<fRange <<" cMinSt="<<currentMinStep
-    //  << " limit= " << x <<G4endl;
+    //   <<" range= "<<fRange <<" cMinSt="<<currentMinStep
+    //	  << " y= " << y << " finR= " << prec
+    //    << " limit= " << x <<G4endl;
   }
   //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
   //  <<" stepLimit= "<<x<<G4endl;

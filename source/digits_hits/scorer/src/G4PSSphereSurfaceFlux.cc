@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceFlux.cc,v 1.7 2010/07/23 04:35:38 taso Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PSSphereSurfaceFlux.cc,v 1.7 2010-07-23 04:35:38 taso Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // G4PSSphereSurfaceFlux
 #include "G4PSSphereSurfaceFlux.hh"
@@ -51,7 +51,7 @@
 // 29-Mar-2007  T.Aso,  Bug fix for momentum direction at outgoing flux.
 // 2010-07-22   Introduce Unit specification.
 // 2010-07-22   Add weighted and divideByAre options
-// 
+// 2011-02-21   Get correct momentum direction in Flux_Out. 
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, 
@@ -79,6 +79,7 @@ G4PSSphereSurfaceFlux::~G4PSSphereSurfaceFlux()
 G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
+
   G4VPhysicalVolume* physVol = preStep->GetPhysicalVolume();
   G4VPVParameterisation* physParam = physVol->GetParameterisation();
   G4VSolid * solid = 0;
@@ -104,7 +105,7 @@ G4bool G4PSSphereSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
       if ( dirFlag == fFlux_In ){
 	thisStep = preStep;
       }else if ( dirFlag == fFlux_Out ){
-	thisStep = aStep->GetPreStepPoint();
+	thisStep = aStep->GetPostStepPoint();
       }else{
 	return FALSE;
       }

@@ -15,6 +15,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29 April 2011 Michael Kelsey (hadr-casc-V09-03-90)
+--------------------------------------------------
+- G4InuclNuclei.cc: Remove prefatory message about PDGencoding; requires
+  particles-V09-04-01 to be included in branch.
+
+14 April 2011 Michael Kelsey (hadr-casc-V09-03-89)
+--------------------------------------------------
+- G4ElementaryParticleCollider.cc: In sampleCMcosFor2to2(), change
+  divide-by-zero by testing for abs(term1)<1e-7.
+
 19 January 2011 Michael Kelsey (hadr-casc-V09-03-88)
 ----------------------------------------------------
 - G4ElementaryParticleCollider.cc: In sampleCMcosFor2to2(), protect against

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.32 2010/10/14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLReadSolids.cc,v 1.32 2010-10-14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -178,7 +178,6 @@ void G4GDMLReadSolids::BoxRead(const xercesc::DOMElement* const boxElement)
 {
    G4String name;
    G4double lunit = 1.0;
-   G4double aunit = 1.0;
    G4double x = 0.0;
    G4double y = 0.0;
    G4double z = 0.0;
@@ -208,7 +207,6 @@ void G4GDMLReadSolids::BoxRead(const xercesc::DOMElement* const boxElement)
 
       if (attName=="name") { name = GenerateName(attValue); } else
       if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
-      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
       if (attName=="x") { x = eval.Evaluate(attValue); } else
       if (attName=="y") { y = eval.Evaluate(attValue); } else
       if (attName=="z") { z = eval.Evaluate(attValue); }
@@ -639,7 +637,6 @@ ParaboloidRead(const xercesc::DOMElement* const paraElement)
 {
    G4String name;
    G4double lunit = 1.0;
-   G4double aunit = 1.0;
    G4double rlo = 0.0;
    G4double rhi = 0.0;
    G4double dz = 0.0;
@@ -669,7 +666,6 @@ ParaboloidRead(const xercesc::DOMElement* const paraElement)
 
       if (attName=="name")  { name = GenerateName(attValue); } else
       if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
-      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
       if (attName=="rlo")   { rlo =  eval.Evaluate(attValue); } else
       if (attName=="rhi")   { rhi = eval.Evaluate(attValue); } else
       if (attName=="dz")    { dz = eval.Evaluate(attValue); } 
@@ -1346,7 +1342,6 @@ void G4GDMLReadSolids::TrdRead(const xercesc::DOMElement* const trdElement)
 {
    G4String name;
    G4double lunit = 1.0;
-   G4double aunit = 1.0;
    G4double x1 = 0.0;
    G4double x2 = 0.0;
    G4double y1 = 0.0;
@@ -1377,7 +1372,6 @@ void G4GDMLReadSolids::TrdRead(const xercesc::DOMElement* const trdElement)
 
       if (attName=="name") { name = GenerateName(attValue); } else
       if (attName=="lunit") { lunit = eval.Evaluate(attValue); } else
-      if (attName=="aunit") { aunit = eval.Evaluate(attValue); } else
       if (attName=="x1") { x1 = eval.Evaluate(attValue); } else
       if (attName=="x2") { x2 = eval.Evaluate(attValue); } else
       if (attName=="y1") { y1 = eval.Evaluate(attValue); } else

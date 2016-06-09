@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Apr. 29, 2011   H.Kurashige (procman-V09-03-04)
+- Fix errors reported by Coverity 
+
+- Mar. 29, 2011   G.Cosmo
+- Cleared compilation warnings from G4VProcess.hh for parameter set
+  but not used. Removed extra semi-colons...
+
 - Dec. 22, 2010   H.Kurashige (procman-V09-03-02)
 - Clean up  code (define error code for G4Exception)
 

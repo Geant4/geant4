@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-patch-01    (18-February-2011)
+ Geant4 version Name: geant4-09-04-patch-02    (24-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -207,7 +207,7 @@ Start Run processing.
 
 ---> Begin of Event: 0
 G4SynchrotronRadiation::GetMeanFreePath :
-  MeanFreePath = 16.18 cm 
+  MeanFreePath = 16.1828 cm 
 G4SynchrotronRadiation::GetRandomEnergySR :
   Ecr   = 66.5 keV
   Emean = 20.48 keV
@@ -215,7 +215,7 @@ G4SynchrotronRadiation::GetRandomEnergySR :
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.37s Real=0.38s Sys=0s
+  User=0.28s Real=0.28s Sys=0s
 Summary for synchrotron radiation :
   Number of photons = 64554
   Emean             = 20.24 +/- 0.1449 keV

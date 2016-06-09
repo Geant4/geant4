@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02RunAction.cc,v 1.3 2006/07/05 12:46:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02RunAction.cc,v 1.9 2006-06-29 17:48:16 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,6 @@
 #include "ExN02RunAction.hh"
 
 #include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,6 +50,11 @@ void ExN02RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN02RunAction::EndOfRunAction(const G4Run*)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

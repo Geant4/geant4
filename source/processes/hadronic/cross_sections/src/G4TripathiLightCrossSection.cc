@@ -70,7 +70,7 @@
 
 
 G4TripathiLightCrossSection::G4TripathiLightCrossSection ()
- : G4VCrossSectionDataSet("G4TripathiLightCrossSection")
+ : G4VCrossSectionDataSet("TripathiLightIons")
 {
   // Constructor only needs to instantiate the object which provides functions
   // to calculate the nuclear radius, and some other constants used to
@@ -133,24 +133,21 @@ G4double
 G4TripathiLightCrossSection::GetZandACrossSection(const G4DynamicParticle* theProjectile,
                                                   G4int ZZ, G4int AA, G4double /*theTemperature*/)
 {
-//
-// Initialise the result.
+  // Initialise the result.
   G4double result = 0.0;
-//
-//
-// Get details of the projectile and target (nucleon number, atomic number,
-// kinetic enery and energy/nucleon.
-//
+
+  // Get details of the projectile and target (nucleon number, atomic number,
+  // kinetic enery and energy/nucleon.
+
   const G4double AT = AA;
   const G4double ZT = ZZ;
   const G4double EA = theProjectile->GetKineticEnergy()/MeV;
   const G4double AP = theProjectile->GetDefinition()->GetBaryonNumber();
   const G4double ZP = theProjectile->GetDefinition()->GetPDGCharge();
-        G4double E  = EA / AP;
-//
-//
-// Determine target mass and energy within the centre-of-mass frame.
-//
+  G4double E  = EA / AP;
+
+  // Determine target mass and energy within the centre-of-mass frame.
+
   G4double mT = G4ParticleTable::GetParticleTable()
                 ->GetIonTable()
                 ->GetIonMass(static_cast<G4int>(ZT), static_cast<G4int>(AT));
@@ -158,11 +155,11 @@ G4TripathiLightCrossSection::GetZandACrossSection(const G4DynamicParticle* thePr
   G4LorentzVector pP(theProjectile->Get4Momentum());
   pT = pT + pP;
   G4double E_cm = (pT.mag()-mT-pP.m())/MeV;
-//
-//
-// Determine nuclear radii.  Note that the r_p and r_T are defined differently
-// from Wilson et al.
-//
+  if (E_cm < DBL_MIN) return 0.;
+
+  // Determine nuclear radii.  Note that the r_p and r_T are defined differently
+  // from Wilson et al.
+
   G4WilsonRadius theWilsonNuclearRadius;
   G4double r_rms_p = theWilsonRadius->GetWilsonRMSRadius(AP);
   G4double r_rms_t = theWilsonRadius->GetWilsonRMSRadius(AT);
@@ -174,37 +171,31 @@ G4TripathiLightCrossSection::GetZandACrossSection(const G4DynamicParticle* thePr
     std::pow(E_cm, third);
 
   G4double B = 1.44 * ZP * ZT / Radius;
-//
-//
-// Now determine other parameters associated with the parametric
-// formula, depending upon the projectile and target.
-//
+
+  // Now determine other parameters associated with the parametric
+  // formula, depending upon the projectile and target.
+
   G4double T1 = 0.0;
   G4double D  = 0.0;
   G4double G  = 0.0;
 
-  if ((AT==1 && ZT==1) || (AP==1 && ZP==1))
-  {
+  if ((AT==1 && ZT==1) || (AP==1 && ZP==1)) {
     T1 = 23.0;
     D  = 1.85 + 0.16/(1+std::exp((500.0-E)/200.0));
-  }
-  else if ((AT==1 && ZT==0) || (AP==1 && ZP==0))
-  {
+
+  } else if ((AT==1 && ZT==0) || (AP==1 && ZP==0)) {
     T1 = 18.0;
     D  = 1.85 + 0.16/(1+std::exp((500.0-E)/200.0));
-  }
-  else if ((AT==2 && ZT==1) || (AP==2 && ZP==1))
-  {
+
+  } else if ((AT==2 && ZT==1) || (AP==2 && ZP==1)) {
     T1 = 23.0;
     D  = 1.65 + 0.1/(1+std::exp((500.0-E)/200.0));
-  }
-  else if ((AT==3 && ZT==2) || (AP==3 && ZP==2))
-  {
+
+  } else if ((AT==3 && ZT==2) || (AP==3 && ZP==2)) {
     T1 = 40.0;
     D  = 1.55;
-  }
-  else if (AP==4 && ZP==2)
-  {
+
+  } else if (AP==4 && ZP==2) {
     if      (AT==4 && ZT==2) {T1 = 40.0; G = 300.0;}
     else if (ZT==4)          {T1 = 25.0; G = 300.0;}
     else if (ZT==7)          {T1 = 40.0; G = 500.0;}
@@ -223,11 +214,10 @@ G4TripathiLightCrossSection::GetZandACrossSection(const G4DynamicParticle* thePr
     else                     {T1 = 40.0; G = 75.0;}
     D = 2.77 - 8.0E-3*AP + 1.8E-5*AP*AP-0.8/(1.0+std::exp((250.0-E)/G));
   }
-//
-//
-// C_E, S, deltaE, X1, S_L and X_m correspond directly with the original
-// formulae of Tripathi et al in his report.
-//
+
+  // C_E, S, deltaE, X1, S_L and X_m correspond directly with the original
+  // formulae of Tripathi et al in his report.
+
   G4double C_E = D*(1.0-std::exp(-E/T1)) -
                  0.292*std::exp(-E/792.0)*std::cos(0.229*std::pow(E,0.453));
 
@@ -246,14 +236,13 @@ G4TripathiLightCrossSection::GetZandACrossSection(const G4DynamicParticle* thePr
     X1     = 2.83 - 3.1E-2*AP + 1.7E-4*AP*AP;
   }
   G4double S_L = 1.2 + 1.6*(1.0-std::exp(-E/15.0));
-//JMQ 241110 bug fixed 
-//  G4double X_m = 1.0 - X1*std::exp(-E/X1*S_L);
+  //JMQ 241110 bug fixed 
+  //  G4double X_m = 1.0 - X1*std::exp(-E/X1*S_L);
   G4double X_m = 1.0 - X1*std::exp(-E/(X1*S_L));
-//
-//
-// R_c is also highly dependent upon the A and Z of the projectile and
-// target.
-//
+
+  // R_c is also highly dependent upon the A and Z of the projectile and
+  // target.
+
   G4double R_c = 1.0;
   if (AP==1 && ZP==1)
   {
@@ -283,14 +272,13 @@ G4TripathiLightCrossSection::GetZandACrossSection(const G4DynamicParticle* thePr
   }
   else if ((AP==4 && ZP==2 && (ZT==73 || ZT==79)) ||
            (AT==4 && ZT==2 && (ZP==73 || ZP==79))) R_c = 0.6;
-//
-//
-// Find the total cross-section.  Check that it's value is positive, and if
-// the energy is less that 10 MeV/nuc, find out if the cross-section is
-// increasing with decreasing energy.  If so this is a sign that the function
-// is behaving badly at low energies, and the cross-section should be
-// set to zero.
-//
+
+  // Find the total cross-section.  Check that it's value is positive, and if
+  // the energy is less that 10 MeV/nuc, find out if the cross-section is
+  // increasing with decreasing energy.  If so this is a sign that the function
+  // is behaving badly at low energies, and the cross-section should be
+  // set to zero.
+
   result = pi * r_0*r_0 *
            std::pow((std::pow(AT,third) + std::pow(AP,third) + deltaE),2.0) *
            (1.0 - R_c*B/E_cm) * X_m;

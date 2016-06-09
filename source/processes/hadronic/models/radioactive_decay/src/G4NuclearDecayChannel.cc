@@ -137,28 +137,25 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   applyICM = true;
   applyARM = true;
 }
-///////////////////////////////////////////////////////////////////////////////
+
 //
-//
-// Constructor for a daughter nucleus and two other particles.
+// Constructor for a daughter nucleus and two other particles
 //
 G4NuclearDecayChannel::G4NuclearDecayChannel
                       (const G4RadioactiveDecayMode &theMode,
                        G4int Verbose,
                        const G4ParticleDefinition *theParentNucleus,
                        G4double theBR,
-                       G4double theFFN,
-		       G4bool betaS, 
+                       G4double /* theFFN */,
+		       G4bool /* betaS */, 
 		       CLHEP::RandGeneral* randBeta,
                        G4double theQtransition,
                        G4int A,
                        G4int Z,
                        G4double theDaughterExcitation,
                        const G4String theDaughterName1,
-                       const G4String theDaughterName2) :
-			G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode)
-  //,BetaSimple(betaS),
-  //			RandomEnergy(randBeta),  Qtransition(theQtransition),FermiFN(theFFN)
+                       const G4String theDaughterName2)
+ : G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1)
@@ -172,19 +169,14 @@ G4NuclearDecayChannel::G4NuclearDecayChannel
   SetDaughter(0, theDaughterName1);
   SetDaughter(2, theDaughterName2);
   FillDaughterNucleus(1, A, Z, theDaughterExcitation);
-  BetaSimple = betaS;
   RandomEnergy = randBeta;
   Qtransition = theQtransition;
-  FermiFN = theFFN;
   halflifethreshold = 1e-6*second;
   applyICM = true;
   applyARM = true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
 //
 #include "G4HadTmpUtil.hh"
 
@@ -431,6 +423,14 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
     if (aZ > 5 && aZ < 100) {  // only applies to 5< Z <100 
       // Retrieve the corresponding identifier and binding energy of the selected shell
       const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+
+      //check that eShell is smaller than the max number of shells
+      //this to avoid a warning from transitionManager(otherwise the output is the same)
+      //Correction to Bug 1662. L Desorgher (04/02/2011)
+      if (eShell >= transitionManager->NumberOfShells(aZ)){
+    	  eShell=transitionManager->NumberOfShells(aZ)-1;
+      }
+
       const G4AtomicShell* shell = transitionManager->Shell(aZ, eShell);
       G4double bindingEnergy = shell->BindingEnergy();
       G4int shellId = shell->ShellId();
@@ -473,11 +473,9 @@ G4DecayProducts *G4NuclearDecayChannel::DecayIt (G4double theParentMass)
 
   return products;
 }
-////////////////////////////////////////////////////////////////////////////////
-//
 
-G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 
+G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
 {
   if (GetVerboseLevel()>1) G4cout << "G4Decay::BetaDecayIt()"<<G4endl;
 
@@ -501,202 +499,76 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
 
   G4double Q = pmass - sumofdaughtermass;  
 
-  // 09/11/2004 flei
-  // All Beta decays are now treated with the improved 3 body decay algorithm. No more slow/fast modes
-  /*
-  if (BetaSimple == true) {
+  // faster method as suggested by Dirk Kruecker of FZ-Julich
+  G4double daughtermomentum[3];
+  G4double daughterenergy[3];
+  // Use the histogram distribution to generate the beta energy
+  daughterenergy[0] = RandomEnergy->shoot() * Q;
+  daughtermomentum[0] = std::sqrt(daughterenergy[0]*daughterenergy[0] +
+                        2.0*daughterenergy[0] * daughtermass[0]);
 
-    // Use the histogramed distribution to generate the beta energy
-    G4double daughtermomentum[2];
-    G4double daughterenergy[2];
-    daughterenergy[0] = RandomEnergy->shoot() * Q;
-    daughtermomentum[0] = std::sqrt(daughterenergy[0]*daughterenergy[0] +
-			       2.0*daughterenergy[0] * daughtermass[0]);
-    // the recoil neuleus is asummed to have a maximum energy of Q/daughterA/1000.
-    daughterenergy[1] = G4UniformRand() * Q/(1000.*daughterA);
-    G4double recoilmomentumsquared = daughterenergy[1]*daughterenergy[1] +
-                               2.0*daughterenergy[1] * daughtermass[1];
-    if (recoilmomentumsquared < 0.0) recoilmomentumsquared = 0.0;
-    daughtermomentum[1] = std::sqrt(recoilmomentumsquared);
-    //
-    //create daughter G4DynamicParticle
-    G4double costheta, sintheta, phi, sinphi, cosphi;
-    //    G4double costhetan, sinthetan, phin, sinphin, cosphin;
-    costheta = 2.*G4UniformRand()-1.0;
-    sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-    phi  = twopi*G4UniformRand()*rad;
-    sinphi = std::sin(phi);
-    cosphi = std::cos(phi);
-    G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
-    G4DynamicParticle * daughterparticle
-      = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
-    products->PushProducts(daughterparticle);
-    // The two products are independent in directions
-    costheta = 2.*G4UniformRand()-1.0;
-    sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-    phi  = twopi*G4UniformRand()*rad;
-    sinphi = std::sin(phi);
-    cosphi = std::cos(phi);
-    G4ParticleMomentum direction1(sintheta*cosphi,sintheta*sinphi,costheta);
-    daughterparticle
-      = new G4DynamicParticle( daughters[1], direction1*daughtermomentum[1]);
-    products->PushProducts(daughterparticle);
-
-    // the neutrino is igored in this case
-
-  } else {
-  */
-    /* original slow method  
-    //calculate daughter momentum
-    //  Generate two
-    G4double rd1, rd2;
-    G4double daughtermomentum[3];
-    G4double daughterenergy[3];
-    G4double momentummax=0.0, momentumsum = 0.0;
-    G4double fermif;
-    G4BetaFermiFunction* aBetaFermiFunction;
-    if (decayMode == 1) {
-      // beta-decay 
-      aBetaFermiFunction = new G4BetaFermiFunction (daughterA, daughterZ);
-    } else {
-      // beta+decay
-      aBetaFermiFunction = new G4BetaFermiFunction (daughterA, -daughterZ);
-    }
-    if (GetVerboseLevel()>1) {
-      G4cout<< " Q =  " <<Q<<G4endl;
-      G4cout<< " daughterA =  " <<daughterA<<G4endl;
-      G4cout<< " daughterZ =  " <<daughterZ<<G4endl;
-      G4cout<< " decayMode = " <<static_cast<G4int>(decayMode) << G4endl;
-      G4cout<< " FermiFN =  " <<FermiFN<<G4endl;
-    }
-    do
-      {
-	rd1 = G4UniformRand();
-	rd2 = G4UniformRand();
-	
-	momentummax = 0.0;
-	momentumsum = 0.0;
-	
-	// daughter 0
-	
-	//     energy = rd2*(pmass - sumofdaughtermass);
-	daughtermomentum[0] = std::sqrt(rd2) * std::sqrt((Q + 2.0*daughtermass[0])*Q);
-	daughterenergy[0] = std::sqrt(daughtermomentum[0]*daughtermomentum[0] +
-				 daughtermass[0] * daughtermass[0]) - daughtermass[0];
-	if ( daughtermomentum[0] >momentummax )momentummax =  daughtermomentum[0];
-	momentumsum  +=  daughtermomentum[0];
-	
-	// daughter 2
-	//     energy = (1.-rd1)*(pmass - sumofdaughtermass);
-	daughtermomentum[2] = std::sqrt(rd1)*std::sqrt((Q + 2.0*daughtermass[2])*Q);
-	daughterenergy[2] = std::sqrt(daughtermomentum[2]*daughtermomentum[2] +
-				 daughtermass[2] * daughtermass[2]) - daughtermass[2];
-	if ( daughtermomentum[2] >momentummax )momentummax =  daughtermomentum[2];
-	momentumsum  +=  daughtermomentum[2];
-	
-	// daughter 1
-	
-	daughterenergy[1] = Q - daughterenergy[0] - daughterenergy[2];
-	if (daughterenergy[1] > 0.0) {
-	  daughtermomentum[1] = std::sqrt(daughterenergy[1]*daughterenergy[1] +
-				     2.0*daughterenergy[1] * daughtermass[1]);
-	  if ( daughtermomentum[1] >momentummax ) momentummax =
-						    daughtermomentum[1];
-	  momentumsum +=  daughtermomentum[1];
-	} else {
-	  momentummax = momentumsum = Q;
-	}
-	// beta particles is sampled with no coulomb effects applied above. Now
-	// apply the Fermi function using rejection method.
-	daughterenergy[0] = daughterenergy[0]*MeV/0.511;
-	fermif = aBetaFermiFunction->GetFF(daughterenergy[0])/FermiFN;
-	// fermif: normalised Fermi factor
-	if (G4UniformRand() > fermif) momentummax = momentumsum =  Q;
-	// rejection method
-      } while (momentummax >  momentumsum - momentummax );
-    delete aBetaFermiFunction;
-    
-    // output message
-    if (GetVerboseLevel()>1) {
-      G4cout <<"     daughter 0:" <<daughtermomentum[0]/GeV <<"[GeV/c]" <<G4endl;
-      G4cout <<"     daughter 1:" <<daughtermomentum[1]/GeV <<"[GeV/c]" <<G4endl;
-      G4cout <<"     daughter 2:" <<daughtermomentum[2]/GeV <<"[GeV/c]" <<G4endl;
-      G4cout <<"   momentum sum:" <<momentumsum/GeV <<"[GeV/c]" <<G4endl;
-    }
-    */
-    // faster method as suggested by Dirk Kruecker of FZ-Julich
-    G4double daughtermomentum[3];
-    G4double daughterenergy[3];
-    // Use the histogramed distribution to generate the beta energy
-    daughterenergy[0] = RandomEnergy->shoot() * Q;
-    daughtermomentum[0] = std::sqrt(daughterenergy[0]*daughterenergy[0] +
-			       2.0*daughterenergy[0] * daughtermass[0]);
-	 
-    //neutrino energy distribution is flat within the kinematical limits
-    G4double rd = 2*G4UniformRand()-1;
-    // limits
-    G4double Mme=pmass-daughtermass[0];
-    G4double K=0.5-daughtermass[1]*daughtermass[1]/(2*Mme*Mme-4*pmass*daughterenergy[0]);
+  // neutrino energy distribution is flat within the kinematical limits
+  G4double rd = 2*G4UniformRand()-1;
+  // limits
+  G4double Mme=pmass-daughtermass[0];
+  G4double K=0.5-daughtermass[1]*daughtermass[1]/(2*Mme*Mme-4*pmass*daughterenergy[0]);
 	  
-    daughterenergy[2]=K*(Mme-daughterenergy[0]+rd*daughtermomentum[0]);
-    daughtermomentum[2] = daughterenergy[2] ; 
+  daughterenergy[2]=K*(Mme-daughterenergy[0]+rd*daughtermomentum[0]);
+  daughtermomentum[2] = daughterenergy[2] ; 
 	  
-    // the recoil neuleus
-    daughterenergy[1] = Q-daughterenergy[0]-daughterenergy[2];
-    G4double recoilmomentumsquared = daughterenergy[1]*daughterenergy[1] +
-                               2.0*daughterenergy[1] * daughtermass[1];
-    if (recoilmomentumsquared < 0.0) recoilmomentumsquared = 0.0;
-    daughtermomentum[1] = std::sqrt(recoilmomentumsquared);
+  // the recoil nucleus
+  daughterenergy[1] = Q-daughterenergy[0]-daughterenergy[2];
+  G4double recoilmomentumsquared = daughterenergy[1]*daughterenergy[1] +
+                             2.0*daughterenergy[1] * daughtermass[1];
+  if (recoilmomentumsquared < 0.0) recoilmomentumsquared = 0.0;
+  daughtermomentum[1] = std::sqrt(recoilmomentumsquared);
   
-    // output message
-    if (GetVerboseLevel()>1) {
-      G4cout <<"     daughter 0:" <<daughtermomentum[0]/GeV <<"[GeV/c]" <<G4endl;
-      G4cout <<"     daughter 1:" <<daughtermomentum[1]/GeV <<"[GeV/c]" <<G4endl;
-      G4cout <<"     daughter 2:" <<daughtermomentum[2]/GeV <<"[GeV/c]" <<G4endl;
-    }
-    //create daughter G4DynamicParticle
-    G4double costheta, sintheta, phi, sinphi, cosphi;
-    G4double costhetan, sinthetan, phin, sinphin, cosphin;
-    costheta = 2.*G4UniformRand()-1.0;
-    sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
-    phi  = twopi*G4UniformRand()*rad;
-    sinphi = std::sin(phi);
-    cosphi = std::cos(phi);
-    G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
-    G4DynamicParticle * daughterparticle
+  // output message
+  if (GetVerboseLevel()>1) {
+    G4cout <<"     daughter 0:" <<daughtermomentum[0]/GeV <<"[GeV/c]" <<G4endl;
+    G4cout <<"     daughter 1:" <<daughtermomentum[1]/GeV <<"[GeV/c]" <<G4endl;
+    G4cout <<"     daughter 2:" <<daughtermomentum[2]/GeV <<"[GeV/c]" <<G4endl;
+  }
+  //create daughter G4DynamicParticle
+  G4double costheta, sintheta, phi, sinphi, cosphi;
+  G4double costhetan, sinthetan, phin, sinphin, cosphin;
+  costheta = 2.*G4UniformRand()-1.0;
+  sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
+  phi  = twopi*G4UniformRand()*rad;
+  sinphi = std::sin(phi);
+  cosphi = std::cos(phi);
+  G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
+  G4DynamicParticle * daughterparticle
       = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
-    products->PushProducts(daughterparticle);
+  products->PushProducts(daughterparticle);
     
-    costhetan = (daughtermomentum[1]*daughtermomentum[1]-
-		 daughtermomentum[2]*daughtermomentum[2]-
-		 daughtermomentum[0]*daughtermomentum[0])/
-      (2.0*daughtermomentum[2]*daughtermomentum[0]);
-    // added the following test to avoid rounding erros. A problem
-    // reported bye Ben Morgan of Uni.Warwick
-    if (costhetan > 1.) costhetan = 1.;
-    if (costhetan < -1.) costhetan = -1.;
-    sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
-    phin  = twopi*G4UniformRand()*rad;
-    sinphin = std::sin(phin);
-    cosphin = std::cos(phin);
-    G4ParticleMomentum direction2;
-    direction2.setX( sinthetan*cosphin*costheta*cosphi - 
-		     sinthetan*sinphin*sinphi + costhetan*sintheta*cosphi);
-    direction2.setY( sinthetan*cosphin*costheta*sinphi +
-		     sinthetan*sinphin*cosphi + costhetan*sintheta*sinphi);
-    direction2.setZ( -sinthetan*cosphin*sintheta +
-		     costhetan*costheta);
-    daughterparticle = new G4DynamicParticle
-      ( daughters[2], direction2*(daughtermomentum[2]/direction2.mag()));
-    products->PushProducts(daughterparticle);
+  costhetan = (daughtermomentum[1]*daughtermomentum[1]-
+               daughtermomentum[2]*daughtermomentum[2]-
+               daughtermomentum[0]*daughtermomentum[0])/
+        (2.0*daughtermomentum[2]*daughtermomentum[0]);
+  // added the following test to avoid rounding erros. A problem
+  // reported bye Ben Morgan of Uni.Warwick
+  if (costhetan > 1.) costhetan = 1.;
+  if (costhetan < -1.) costhetan = -1.;
+  sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
+  phin  = twopi*G4UniformRand()*rad;
+  sinphin = std::sin(phin);
+  cosphin = std::cos(phin);
+  G4ParticleMomentum direction2;
+  direction2.setX(sinthetan*cosphin*costheta*cosphi - 
+                  sinthetan*sinphin*sinphi + costhetan*sintheta*cosphi);
+  direction2.setY(sinthetan*cosphin*costheta*sinphi +
+                  sinthetan*sinphin*cosphi + costhetan*sintheta*sinphi);
+  direction2.setZ(-sinthetan*cosphin*sintheta + costhetan*costheta);
+  daughterparticle = new G4DynamicParticle(daughters[2],
+                          direction2*(daughtermomentum[2]/direction2.mag()));
+  products->PushProducts(daughterparticle);
     
-    daughterparticle =
-      new G4DynamicParticle (daughters[1],
-			     (direction0*daughtermomentum[0] +
-			      direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0));
-    products->PushProducts(daughterparticle);
-    // }
-  //   delete daughterparticle;
+  daughterparticle =
+    new G4DynamicParticle(daughters[1],
+                         (direction0*daughtermomentum[0] +
+			  direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0));
+  products->PushProducts(daughterparticle);
   
   if (GetVerboseLevel()>1) {
     G4cout << "G4NuclearDecayChannel::BetaDecayIt ";

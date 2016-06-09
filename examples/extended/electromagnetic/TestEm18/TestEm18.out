@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-patch-01    (18-February-2011)
+ Geant4 version Name: geant4-09-04-patch-02    (24-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -280,7 +280,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.43s Real=1.43s Sys=0s
+  User=1s Real=1s Sys=0s
 
  ======================== run summary ======================
 
@@ -288,19 +288,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0004 cm 	 nb of steps= 1.5488  stepSize= 6.4595 mm 
+ trackLength= 1.0005 cm 	 nb of steps= 1.5496  stepSize= 6.456 mm 
 
- d-rays  : eLoss/primary= 244.25 keV	  nb of d-rays= 0.2303  <Tkin>= 1.0606 MeV  Tmin= 351.9 keV  Tmax= 4.9663 MeV
+ d-rays  : eLoss/primary= 246.48 keV	  nb of d-rays= 0.2316  <Tkin>= 1.0642 MeV  Tmin= 351.9 keV  Tmax= 4.9663 MeV
 
- brems   : eLoss/primary= 171.12 keV	  nb of gammas= 0.30491  <Tkin>= 561.23 keV  Tmin= 2.9418 keV  Tmax= 9.6461 MeV
+ brems   : eLoss/primary= 168.98 keV	  nb of gammas= 0.30461  <Tkin>= 554.73 keV  Tmin= 2.9427 keV  Tmax= 9.6461 MeV
 
- deposit : eLoss/primary= 1.7346 MeV	 <dEcut > table= 1.7359 MeV   ---> simul/reference= 0.99926
+ deposit : eLoss/primary= 1.7348 MeV	 <dEcut > table= 1.7359 MeV   ---> simul/reference= 0.99938
 
- total   : eLoss/primary= 2.1499 MeV	 <dEfull> table= 2.1499 MeV   ---> simul/reference= 1
+ total   : eLoss/primary= 2.1503 MeV	 <dEfull> table= 2.1503 MeV   ---> simul/reference= 1
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 68507315, 32930455
+ Current couple of seeds = 936522572, 2020387051
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

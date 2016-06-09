@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InuclNuclei.cc,v 1.23 2010/12/15 07:41:11 gunter Exp $
-// Geant4 tag: $Name: geant4-09-04 $
+// $Id: G4InuclNuclei.cc,v 1.23 2010-12-15 07:41:11 gunter Exp $
+// Geant4 tag: $Name: geant4-09-04-patch-02 $
 //
 // 20100301  M. Kelsey -- Add function to create unphysical nuclei for use
 //	     as temporary final-state fragments.
@@ -42,6 +42,7 @@
 //		migrate to integer A and Z
 // 20100924  M. Kelsey -- Add constructor to copy G4Fragment input, and output
 //		functions to create G4Fragment
+// 20110427  M. Kelsey -- Remove PDG-code warning
 
 #include "G4InuclNuclei.hh"
 #include "G4Fragment.hh"
@@ -193,9 +194,6 @@ G4InuclNuclei::makeNuclearFragment(G4int a, G4int z) {
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding Excitation-energy
-  
-  G4cout << " >>> G4InuclNuclei creating temporary fragment for evaporation "
-	 << "with non-standard PDGencoding." << G4endl;
   
   G4Ions* fragPD = new G4Ions(name,       mass, 0., z*eplus,
   			      0,          +1,   0,

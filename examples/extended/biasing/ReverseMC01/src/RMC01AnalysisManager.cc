@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: RMC01AnalysisManager.cc,v 1.7 2010-11-11 14:39:42 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:	RMC01AnalysisManager

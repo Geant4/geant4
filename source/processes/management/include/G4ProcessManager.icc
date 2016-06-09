@@ -24,12 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.icc,v 1.6 2007/03/30 01:02:28 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProcessManager.icc,v 1.6 2007-03-30 01:02:28 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
-
-#include "G4ProcessAttribute.hh"
 
 // -----------------------------------------
 //  inlined function members implementation

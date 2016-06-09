@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.hh,v 1.2 2006/06/29 17:34:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02DetectorConstruction.hh,v 1.10 2008-09-22 16:41:20 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,8 @@ class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class G4VPVParameterisation;
+class G4UserLimits;
 class ExN02DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,6 +67,7 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
      void setTargetMaterial (G4String);
      void setChamberMaterial(G4String);
      void SetMagField(G4double);
+     void SetMaxStep (G4double);     
      
   private:
 
@@ -85,7 +88,11 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* physiChamber;  // pointer to the physical Chamber
      
      G4Material*         TargetMater;  // pointer to the target  material
-     G4Material*         ChamberMater; // pointer to the chamber material     
+     G4Material*         ChamberMater; // pointer to the chamber material
+
+     G4VPVParameterisation* chamberParam; // pointer to chamber parameterisation
+     G4UserLimits* stepLimit;             // pointer to user step limits
+
      ExN02MagneticField* fpMagField;   // pointer to the magnetic field 
      
      ExN02DetectorMessenger* detectorMessenger;  // pointer to the Messenger

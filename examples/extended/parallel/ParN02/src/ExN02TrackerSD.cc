@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerSD.cc,v 1.3 2006/06/29 17:35:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02TrackerSD.cc,v 1.9 2006-06-29 17:48:27 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,8 +72,8 @@ G4bool ExN02TrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 
   ExN02TrackerHit* newHit = new ExN02TrackerHit();
   newHit->SetTrackID  (aStep->GetTrack()->GetTrackID());
-  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchable()
-                                               ->GetReplicaNumber());
+  newHit->SetChamberNb(aStep->GetPreStepPoint()->GetTouchableHandle()
+                                               ->GetCopyNumber());
   newHit->SetEdep     (edep);
   newHit->SetPos      (aStep->GetPostStepPoint()->GetPosition());
   trackerCollection->insert( newHit );

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4CrossSectionPairGG.cc,v 1.6 2011-01-09 02:37:48 dennis Exp $
-// $ GEANT4 tag $Name: geant4-09-04-patch-01 $
+// $ GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //   Class G4CrossSectionPairGG
 //

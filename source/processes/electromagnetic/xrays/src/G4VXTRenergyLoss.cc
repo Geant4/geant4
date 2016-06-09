@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.45 2010/06/16 15:34:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4VXTRenergyLoss.cc,v 1.45 2010-06-16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // History:
 // 2001-2002 R&D by V.Grichine
@@ -59,10 +59,10 @@
 // Constructor, destructor
 
 G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
-				 G4Material* foilMat,G4Material* gasMat,
-				 G4double a, G4double b,
-				 G4int n,const G4String& processName,
-				 G4ProcessType type) :
+				   G4Material* foilMat,G4Material* gasMat,
+				   G4double a, G4double b,
+				   G4int n,const G4String& processName,
+				   G4ProcessType type) :
   G4VDiscreteProcess(processName, type),
   fGammaCutInKineticEnergy(0),
   fGammaTkinCut(0),
@@ -73,6 +73,10 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fAngleForEnergyTable(0)
 {
   verboseLevel = 1;
+
+  fPtrGamma = 0;
+  fMinEnergyTR = fMaxEnergyTR = fMaxThetaTR = fGamma = fEnergy = fVarAngle 
+    = fLambda = fTotalDist = fPlateThick = fGasThick = fAlphaPlate = fAlphaGas = 0.0;
 
   // Initialization of local constants
   fTheMinEnergyTR = 1.0*keV;
@@ -149,11 +153,10 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 
   // Compute cofs for preparation of linear photo absorption
 
-  ComputePlatePhotoAbsCof() ;
-  ComputeGasPhotoAbsCof() ;
+  ComputePlatePhotoAbsCof();
+  ComputeGasPhotoAbsCof();
 
   pParticleChange = &fParticleChange;
-
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -161,6 +164,11 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 G4VXTRenergyLoss::~G4VXTRenergyLoss()
 {
   if(fEnvelope) delete fEnvelope;
+  delete fProtonEnergyVector;
+  delete fXTREnergyVector;
+  delete fEnergyDistrTable;
+  delete fAngleDistrTable;
+  delete fAngleForEnergyTable;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -278,6 +286,7 @@ void G4VXTRenergyLoss::BuildTable()
   G4double radiatorCof = 1.0;           // for tuning of XTR yield
 
   fEnergyDistrTable = new G4PhysicsTable(fTotBin);
+  fAngleDistrTable = new G4PhysicsTable(fTotBin);
 
   fGammaTkinCut = 0.0;
   
@@ -355,7 +364,7 @@ void G4VXTRenergyLoss::BuildTable()
       }
     iPlace = iTkin;
     fEnergyDistrTable->insertAt(iPlace,energyVector);
-     //  fAngleDistrTable->insertAt(iPlace,angleVector);
+    fAngleDistrTable->insertAt(iPlace,angleVector);
   }     
   timer.Stop();
   G4cout.precision(6);
@@ -457,7 +466,7 @@ void G4VXTRenergyLoss::BuildAngleTable()
 G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
 {
   G4double theta=0., result, tmp=0., cof1, cof2, cofMin, cofPHC, angleSum  = 0.;
-  G4int iTheta, k, kMax, kMin;
+  G4int iTheta, k, /*kMax,*/ kMin;
 
   G4PhysicsFreeVector* angleVector = new G4PhysicsFreeVector(n);
   
@@ -473,7 +482,7 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
   kMin = G4int(cofMin);
   if (cofMin > kMin) kMin++;
 
-  kMax = kMin + fBinTR -1;
+  //kMax = kMin + fBinTR -1;
   if(verboseLevel > 2)
   {
     G4cout<<"n-1 = "<<n-1<<"; theta = "
@@ -627,7 +636,7 @@ void G4VXTRenergyLoss::BuildGlobalAngleTable()
 G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack, 
 		                                  const G4Step&  aStep   )
 {
-  G4int iTkin, iPlace;
+  G4int iTkin /*, iPlace*/;
   G4double energyTR, theta,theta2, phi, dirX, dirY, dirZ;
  
 
@@ -672,7 +681,7 @@ G4VParticleChange* G4VXTRenergyLoss::PostStepDoIt( const G4Track& aTrack,
     {
       if(TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break;    
     }
-    iPlace = iTkin - 1;
+    //iPlace = iTkin - 1;
 
     if(iTkin == 0) // Tkin is too small, neglect of TR photon generation
     {

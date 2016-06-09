@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPhotoElectricModel.cc,v 1.6 2010/11/11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4AdjointPhotoElectricModel.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 #include "G4AdjointPhotoElectricModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -73,8 +73,7 @@ void G4AdjointPhotoElectricModel::SampleSecondaries(const G4Track& aTrack,
   G4double electronEnergy = aDynPart->GetKineticEnergy();
   G4ThreeVector electronDirection= aDynPart->GetMomentumDirection() ;
   pre_step_AdjointCS = totAdjointCS; //The last computed CS was  at pre step point
-  G4double adjCS;
-  adjCS = AdjointCrossSection(aCouple, electronEnergy,IsScatProjToProjCase);
+  post_step_AdjointCS = AdjointCrossSection(aCouple, electronEnergy,IsScatProjToProjCase);
   post_step_AdjointCS = totAdjointCS; 
 				
 

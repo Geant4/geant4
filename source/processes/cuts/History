@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 13th, 2011  -  H.Kurashige (procuts-V09-03-03)
+- Fix compiler warnings in G4RToEConvForGamma.cc
+
+May 3rd, 2011  -  H.Kurashige
+- Fix erros reported by Coverity
+
 Jan. 26th, 2011  -  H.Kurashige (procuts-V09-03-02)
 - Add protection in G4ProductionCuts::SetProductionCuts
   to check consistencies of size of given vector

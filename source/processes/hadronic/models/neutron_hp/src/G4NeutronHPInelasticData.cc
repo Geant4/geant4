@@ -69,7 +69,12 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
 
 //080428
-   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) onFlightDB = false;
+   if ( getenv( "G4NEUTRONHP_NEGLECT_DOPPLER" ) ) 
+   {
+      G4cout << "Find environment variable of \"G4NEUTRONHP_NEGLECT_DOPPLER\"." << G4endl;
+      G4cout << "On the fly Doppler broadening will be neglect in the cross section calculation of inelastic scattering of neutrons (<20MeV)." << G4endl;
+      onFlightDB = false;
+   }    
 
   size_t numberOfElements = G4Element::GetNumberOfElements();
 //  theCrossSections = new G4PhysicsTable( numberOfElements );

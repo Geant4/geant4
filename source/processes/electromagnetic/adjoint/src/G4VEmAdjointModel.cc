@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAdjointModel.cc,v 1.6 2010/11/11 11:51:56 ldesorgh Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VEmAdjointModel.cc,v 1.6 2010-11-11 11:51:56 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointCSManager.hh"
@@ -135,9 +135,10 @@ G4double G4VEmAdjointModel::DiffCrossSectionPerAtomPrimToSecond(
  
  
  if (kinEnergyProj>Emin_proj && kinEnergyProj<=Emax_proj){ //the produced particle should have a kinetic energy smaller than the projectile 
-	G4double Tmax=kinEnergyProj;
-	if (second_part_of_same_type) Tmax = kinEnergyProj/2.;
 	
+	/*G4double Tmax=kinEnergyProj;
+	if (second_part_of_same_type) Tmax = kinEnergyProj/2.;*/
+
 	G4double E1=kinEnergyProd;
  	G4double E2=kinEnergyProd*1.000001;
  	G4double dE=(E2-E1);
@@ -181,8 +182,8 @@ G4double G4VEmAdjointModel::DiffCrossSectionPerVolumePrimToSecond(
  
  
  if (kinEnergyProj>Emin_proj && kinEnergyProj<=Emax_proj){ 
-	G4double Tmax=kinEnergyProj;
-	if (second_part_of_same_type) Tmax = kinEnergyProj/2.;
+	/*G4double Tmax=kinEnergyProj;
+	if (second_part_of_same_type) Tmax = kinEnergyProj/2.;*/
 	G4double E1=kinEnergyProd;
 	G4double E2=kinEnergyProd*1.0001;
  	G4double dE=(E2-E1);

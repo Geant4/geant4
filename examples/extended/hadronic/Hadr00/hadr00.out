@@ -1,23 +1,29 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-06    (4-July-2008)
+ Geant4 version Name: geant4-09-04-patch-02    (24-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
+    Default Physics Lists QGSP_BERT is instantiated
 
-<<< Geant4 Physics List engine packaging library: PACK 5.4
-<<< Geant4 Physics List simulation engine: QGSP_BERT 3.3
+<<< Geant4 Physics List engine packaging library: PACK 5.5
+<<< Geant4 Physics List simulation engine: QGSP_BERT 3.4
 
 /run/verbose 1
 /tracking/verbose 0
 /testhadr/TargetMat G4_Al
-/testhadr/TargetRadius 1 cm
-/testhadr/TargetLength 10 cm
+/testhadr/TargetRadius 2 cm
+/testhadr/TargetLength 50 cm
 /testhadr/PrintModulo 10
 /run/initialize
-### Target consist of G4_Al disks with R(mm)= 10  Length(mm)= 100  ###
+### Target consist of G4_Al disks with R(mm)= 20  Length(mm)= 500  ###
 
 ***** Table : Nb of materials = 2 *****
 
@@ -25,971 +31,1181 @@
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
    --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- Material: G4_Galactic     density:  0.000 kg/m3   RadL: 204311276.564 pc   Nucl.Int.Length: 114319864.124 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: G4_Galactic     density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114327973.206 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
    --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
    --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
 
-### Adding Neutron tracking cut for neutron
-###  cut value is 10 microseconds
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+/run/setCut 1 km
 /gun/particle proton
-/gun/energy 100. MeV
+/gun/energy 20. GeV
 /testhadr/verbose 1
-/run/beamOn 1
+/run/beamOn 10
 
-phot:  Total cross sections from Sandia parametrisation. 
-      Sampling according PhotoElectric model
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :   Emin=        0 eV       Emax=         10 TeV
 
-compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
-      Sampling according Klein-Nishina model
-      tables are built for  gamma
-      Lambda tables from 100 eV  to 100 GeV in 90 bins, spline: 0
+compt:   for  gamma    SubType= 13
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :   Emin=        0 eV       Emax=         10 TeV
 
-conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
-      sampling secondary e+e- according Bethe-Heitler model
-      tables are built for  gamma
-      Lambda tables from 1.022 MeV to 100 GeV in 100 bins, spline: 0
+conv:   for  gamma    SubType= 14
+      Lambda tables from 1.022 MeV to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        BetheHeitler :   Emin=        0 eV       Emax=         10 TeV
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.02  Step limit type 1
+msc:   for e-    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc93 :   Emin=        0 eV       Emax=         10 TeV
 
-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
 
-eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Delta cross sections and sampling from MollerBhabha model
-      Good description from 1 KeV to 100 GeV.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :   Emin=        0 eV       Emax=         10 TeV
 
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Total cross sections and sampling from StandBrem model (based on the EEDL data library) 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV. LPM flag 1
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               eBrem :   Emin=        0 eV       Emax=          1 GeV  AngularGenUrban
+            eBremLPM :   Emin=        1 GeV      Emax=         10 TeV  AngularGenUrban
 
-annihil:       Sampling according eplus2gg model
-      tables are built for  e+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :   Emin=        0 eV       Emax=         10 TeV
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+msc:   for proton    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
 
-hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :   Emin=        0 eV       Emax=          2 MeV
+          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
 
-msc:  Model variant of multiple scattering for GenericIon
-      LateralDisplacementFlag=  0   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :   Emin=        0 eV       Emax=         10 TeV
 
-ionIoni:   tables are built for  GenericIon
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :   Emin=        0 eV       Emax=         10 TeV
 
-      Stopping Power data for 8 ion/material pairs are used.
-      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.15
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
 
-hIoni:   tables are built for  anti_proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 2 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      Stopping Power data for 17 ion/material pairs 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :   Emin=        0 eV       Emax=          2 MeV
+          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
 
-hIoni:   tables are built for  kaon+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :   Emin=        0 eV       Emax=          2 MeV
+          BetheBloch :   Emin=        2 MeV      Emax=         10 TeV
 
-hIoni:   tables are built for  kaon-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 1.05231 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+msc:   for kaon+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
 
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :   Emin=        0 eV       Emax=    1.05231 MeV
+          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
 
-muIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :   Emin=        0 eV       Emax=         10 TeV
 
-muBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Theoretical model 
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :   Emin=        0 eV       Emax=         10 TeV
 
-muPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Theoretical model 
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :   Emin=        0 eV       Emax=    1.05231 MeV
+          BetheBloch :   Emin=  1.05231 MeV      Emax=         10 TeV
 
-muIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :   Emin=        0 eV       Emax=         10 TeV
 
-muBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Theoretical model 
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :   Emin=        0 eV       Emax=         10 TeV
 
-muPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Theoretical model 
+muMsc:   for mu+    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :   Emin=        0 eV       Emax=         10 TeV
 
-hIoni:   tables are built for  pi+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :   Emin=        0 eV       Emax=        200 keV
+          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
+        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
 
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins, spline: 0
-      LateralDisplacementFlag=  1   Skin= 3
-      Boundary/stepping algorithm is active with RangeFactor= 0.2  Step limit type 0
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :   Emin=        0 eV       Emax=         10 TeV
 
-hIoni:   tables are built for  pi-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins
-      Lambda tables from threshold to 100 TeV in 120 bins, spline: 0
-      Scaling relation is used from proton dE/dx and range.
-      Delta cross sections and sampling from BetheBloch model for scaled energy > 0.297504 MeV
-      Parametrisation from Bragg for protons below. NuclearStopping= 1
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.05
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+
+CoulombScat:   for  mu+    SubType= 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :   Emin=        0 eV       Emax=        200 keV
+          BetheBloch :   Emin=      200 keV      Emax=          1 GeV
+        MuBetheBloch :   Emin=        1 GeV      Emax=         10 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :   Emin=        0 eV       Emax=         10 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :   Emin=        0 eV       Emax=         10 TeV
+
+CoulombScat:   for  mu-    SubType= 1
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      11.4592 < Theta(degree) < 180, Eth(MeV)= 10; pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :   Emin=        0 eV       Emax=         10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :   Emin=        0 eV       Emax=    297.505 keV
+          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :   Emin=        0 eV       Emax=         10 TeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :   Emin=        0 eV       Emax=         10 TeV
+
+msc:   for pi-    SubType= 10
+      Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          UrbanMsc90 :   Emin=        0 eV       Emax=         10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :   Emin=        0 eV       Emax=    297.505 keV
+          BetheBloch :   Emin=  297.505 keV      Emax=         10 TeV
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :   Emin=        0 eV       Emax=         10 TeV
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :   Emin=        0 eV       Emax=         10 TeV
 ============================================================================================
              HADRONIC PROCESSES SUMMARY (verbose level 1)
 
                      Hadronic Processes for <anti_neutron>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
 AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
                      Hadronic Processes for <anti_proton>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
  AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                 G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
+                     Hadronic Processes for <e->
+      ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
+
+                     Hadronic Processes for <gamma>
+     PhotonInelastic  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 3.5
+                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
+
                      Hadronic Processes for <kaon+>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-   KaonPlusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
+   KaonPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                   G4LEKaonPlusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <kaon->
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-  KaonMinusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
+  KaonMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                  G4LEKaonMinusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <lambda>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 100000
      LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
                                     G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
+                     Hadronic Processes for <mu->
+          muMinusCaptureAtRest
+
                      Hadronic Processes for <neutron>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-    NeutronInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
+    NeutronInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                    G4LENeutronInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
-       HadronCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 20000
-       HadronFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 20000
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
+            nCapture  Models:                G4LCapture: Emin(GeV)=     0  Emax(GeV)= 20000
+            nFission  Models:                G4LFission: Emin(GeV)=     0  Emax(GeV)= 20000
 
                      Hadronic Processes for <pi+>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-   PionPlusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
+                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
+   PionPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                   G4LEPionPlusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <pi->
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-  PionMinusInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+          hadElastic  Models:              hElasticLHEP: Emin(GeV)=     0  Emax(GeV)= 1
+                                        hElasticGlauber: Emin(GeV)=     1  Emax(GeV)= 100000
+  PionMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                  G4LEPionMinusInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 
                      Hadronic Processes for <proton>
-            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
-     ProtonInelastic  Models:           TheoFSGenerator: Emin(GeV)=    12  Emax(GeV)= 100000
+          hadElastic  Models:             hElasticCHIPS: Emin(GeV)=     0  Emax(GeV)= 100000
+     ProtonInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
                                     G4LEProtonInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
-                                           CascadeModel: Emin(GeV)=     0  Emax(GeV)= 9.9
+                                        Bertini Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
 ============================================================================================
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
- Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
- Range cuts        :  gamma 700 um     e- 700 um     e+ 700 um 
- Energy thresholds :  gamma 5.84521 keV    e- 460.753 keV    e+ 444.047 keV
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 1 km 
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
 ### Run 0 start
-e1= -1 e2= 6 p1= -3 p2= 5
-New histogram will be booked: #h1  <Elastic cross section (barn) as a functions of log10(p/GeV)  800  -3  5  1
-New histogram will be booked: #h2  <Elastic cross section (barn) as a functions of log10(E/MeV)  700  -1  6  1
-New histogram will be booked: #h3  <Inelastic cross section (barn) as a functions of log10(p/GeV)  800  -3  5  1
-New histogram will be booked: #h4  <Inelastic cross section (barn) as a functions of log10(E/MeV)  700  -1  6  1
-New histogram will be booked: #h5  <Capture cross section (barn) as a functions of log10(E/MeV)  700  -1  6  1
-New histogram will be booked: #h6  <Fission cross section (barn) as a functions of log10(E/MeV)  700  -1  6  1
+New histogram will be booked: #h1  <Elastic cross section (barn) as a functions of log10(p/GeV)  700  -3  4  1
+New histogram will be booked: #h2  <Elastic cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
+New histogram will be booked: #h3  <Inelastic cross section (barn) as a functions of log10(p/GeV)  700  -3  4  1
+New histogram will be booked: #h4  <Inelastic cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
+New histogram will be booked: #h5  <Capture cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
+New histogram will be booked: #h6  <Fission cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
+New histogram will be booked: #h7  <Charge exchange cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
+New histogram will be booked: #h8  <Total cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
 Start Run processing.
 EventAction: Event # 0 started
 Run terminated.
 Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  Number of events processed : 10
+  User=0.06s Real=0.07s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ### Fill Cross Sections for proton off Al
----------------------------------------------------------
-    N     E(MeV)    Elastic(barn)   Inelastic(barn)
----------------------------------------------------------
-    0   0.1011579      2.058666      4.914505e-07
-    1   0.1035142      2.058187      5.296618e-07
-    2   0.1059254      2.057703       5.70844e-07
-    3   0.1083927      2.057213      6.152283e-07
-    4   0.1109175      2.056717      6.630635e-07
-    5   0.1135011      2.056216       7.14618e-07
-    6   0.1161449      2.055709       7.70181e-07
-    7   0.1188502      2.055196      8.300641e-07
-    8   0.1216186      2.054677      8.946032e-07
-    9   0.1244515      2.054153      9.641604e-07
-   10   0.1273503      2.053622      1.039126e-06
-   11   0.1303167      2.053085       1.11992e-06
-   12   0.1333521      2.052541      1.206996e-06
-   13   0.1364583      2.051992      1.300842e-06
-   14   0.1396368      2.051436      1.401985e-06
-   15   0.1428894      2.050873      1.510992e-06
-   16   0.1462177      2.050304      1.628475e-06
-   17   0.1496236      2.049729      1.755092e-06
-   18   0.1531087      2.049147      1.891554e-06
-   19   0.1566751      2.048558      2.038626e-06
-   20   0.1603245      2.047962      2.197134e-06
-   21    0.164059       2.04736      2.367965e-06
-   22   0.1678804       2.04675      2.552079e-06
-   23   0.1717908      2.046133      2.750508e-06
-   24   0.1757924      2.045509      2.964366e-06
-   25   0.1798871      2.044878      3.194851e-06
-   26   0.1840772       2.04424      3.443256e-06
-   27   0.1883649      2.043594      3.710976e-06
-   28   0.1927525      2.042941      3.999512e-06
-   29   0.1972423       2.04228      4.310481e-06
-   30   0.2018366      2.041612      4.645629e-06
-   31    0.206538      2.040936      5.006835e-06
-   32   0.2113489      2.040252      5.396126e-06
-   33   0.2162719       2.03956      5.815684e-06
-   34   0.2213095       2.03886      6.267864e-06
-   35   0.2264644      2.038152      6.755201e-06
-   36   0.2317395      2.037436      7.280429e-06
-   37   0.2371374      2.036711      7.846494e-06
-   38    0.242661      2.035978      8.456572e-06
-   39   0.2483133      2.035237      9.114083e-06
-   40   0.2540973      2.034487      9.822717e-06
-   41    0.260016      2.033728      1.058645e-05
-   42   0.2660725       2.03296      1.140956e-05
-   43   0.2722701      2.032184      1.229667e-05
-   44   0.2786121      2.031399      1.325275e-05
-   45   0.2851018      2.030604      1.428316e-05
-   46   0.2917427        2.0298      1.539369e-05
-   47   0.2985383      2.028987      1.659057e-05
-   48   0.3054921      2.028165       1.78805e-05
-   49   0.3126079      2.027333      1.927072e-05
-   50   0.3198895      2.026491      2.076903e-05
-   51   0.3273407       2.02564      2.238383e-05
-   52   0.3349654      2.024779      2.412418e-05
-   53   0.3427678      2.023908      2.599983e-05
-   54   0.3507519      2.023027      2.802132e-05
-   55   0.3589219      2.022135      3.019997e-05
-   56   0.3672823      2.021233        3.2548e-05
-   57   0.3758374      2.020321      3.507859e-05
-   58   0.3845918      2.019398      3.780591e-05
-   59   0.3935501      2.018465      4.074528e-05
-   60    0.402717       2.01752      4.391316e-05
-   61   0.4120975      2.016565      4.732733e-05
-   62   0.4216965      2.015599      5.100693e-05
-   63   0.4315191      2.014621       5.49726e-05
-   64   0.4415704      2.013632      5.924656e-05
-   65   0.4518559      2.012632      6.385279e-05
-   66    0.462381       2.01162       6.88171e-05
-   67   0.4731513      2.010596      7.416734e-05
-   68   0.4841724      2.009561       7.99335e-05
-   69   0.4954502      2.008513      8.614791e-05
-   70   0.5069907      2.007454       9.28454e-05
-   71      0.5188      2.006382      0.0001000635
-   72   0.5308844      2.005297      0.0001078427
-   73   0.5432503        2.0042      0.0001162266
-   74   0.5559043      2.003091      0.0001252622
-   75   0.5688529      2.001968      0.0001350001
-   76   0.5821032      2.000833       0.000145495
-   77   0.5956621      1.999684      0.0001568055
-   78   0.6095369      1.998522      0.0001689951
-   79   0.6237348      1.997347      0.0001821321
-   80   0.6382635      1.996158      0.0001962901
-   81   0.6531306      1.994955      0.0002115484
-   82   0.6683439      1.993738      0.0002279924
-   83   0.6839116      1.992507      0.0002457143
-   84    0.699842      1.991262      0.0002648133
-   85   0.7161434      1.990002      0.0002853964
-   86   0.7328245      1.988728      0.0003075787
-   87   0.7498942      1.987439      0.0003314845
-   88   0.7673615      1.986135      0.0003572475
-   89   0.7852356      1.984816      0.0003850119
-   90   0.8035261      1.983482      0.0004149331
-   91   0.8222426      1.982132      0.0004471784
-   92   0.8413951      1.980767      0.0004819281
-   93   0.8609938      1.979385      0.0005193766
-   94   0.8810489      1.977988      0.0005597332
-   95   0.9015711      1.976574      0.0006032234
-   96   0.9225714      1.975145      0.0006500901
-   97   0.9440609      1.973698      0.0007005951
-   98   0.9660509      1.972235      0.0007550205
-   99   0.9885531      1.970755      0.0008136698
-  100    1.011579      1.969257      0.0008768705
-  101    1.035142      1.967742      0.0009449748
-  102    1.059254       1.96621       0.001018362
-  103    1.083927       1.96466       0.001097442
-  104    1.109175      1.963092       0.001182655
-  105    1.135011      1.961506       0.001274474
-  106    1.161449      1.959901        0.00137341
-  107    1.188502      1.958278       0.001480015
-  108    1.216186      1.956636       0.001594878
-  109    1.244515      1.954974       0.001718639
-  110    1.273503      1.953294       0.001851983
-  111    1.303167      1.951594       0.001995649
-  112    1.333521      1.949874       0.002150433
-  113    1.364583      1.948135       0.002317191
-  114    1.396368      1.946375       0.002496843
-  115    1.428894      1.944595       0.002690382
-  116    1.462177      1.942794       0.002898872
-  117    1.496236      1.940972       0.003123463
-  118    1.531087      1.939129       0.003365387
-  119    1.566751      1.937265       0.003625973
-  120    1.603245      1.935379       0.003906647
-  121     1.64059      1.933471       0.004208944
-  122    1.678804      1.931541       0.004534512
-  123    1.717908      1.929588       0.004885125
-  124    1.757924      1.927613       0.005262687
-  125    1.798871      1.925615       0.005669243
-  126    1.840772      1.923594       0.006106991
-  127    1.883649      1.921549       0.006578288
-  128    1.927525      1.919481       0.007085667
-  129    1.972423      1.917388       0.007631843
-  130    2.018366      1.915271       0.008219729
-  131     2.06538       1.91313       0.008852449
-  132    2.113489      1.910964        0.00953335
-  133    2.162719      1.908772        0.01026602
-  134    2.213095      1.906555        0.01105429
-  135    2.264644      1.904313        0.01190228
-  136    2.317395      1.902044        0.01281439
-  137    2.371374      1.899749         0.0137953
-  138     2.42661      1.897427        0.01485004
-  139    2.483133      1.895078        0.01598396
-  140    2.540973      1.892702        0.01720279
-  141     2.60016      1.890299        0.01851262
-  142    2.660725      1.887867        0.01991993
-  143    2.722701      1.885407        0.02143162
-  144    2.786121      1.882919        0.02305504
-  145    2.851018      1.880401        0.02479796
-  146    2.917427      1.877854        0.02666865
-  147    2.985383      1.875278        0.02867586
-  148    3.054921      1.872672        0.03082882
-  149    3.126079      1.870035         0.0331373
-  150    3.198895      1.867367        0.03561159
-  151    3.273407      1.864669        0.03826252
-  152    3.349654      1.861939        0.04110144
-  153    3.427678      1.859178        0.04414027
-  154    3.507519      1.856384        0.04739144
-  155    3.589219      1.853558        0.05086792
-  156    3.672823      1.850698        0.05458319
-  157    3.758374      1.847806        0.05855122
-  158    3.845918       1.84488        0.06278641
-  159    3.935501      1.841919        0.06730359
-  160     4.02717      1.838924        0.07211793
-  161    4.120975      1.835895        0.07724489
-  162    4.216965       1.83283        0.08270013
-  163    4.315191      1.829729        0.08849945
-  164    4.415704      1.826592         0.0946586
-  165    4.518559      1.823419         0.1011932
-  166     4.62381      1.820208         0.1081188
-  167    4.731513       1.81696         0.1154501
-  168    4.841724      1.813674         0.1232016
-  169    4.954502       1.81035         0.1313867
-  170    5.069907      1.806987          0.140018
-  171       5.188      1.803585         0.1491066
-  172    5.308844      1.800143         0.1586624
-  173    5.432503      1.793322         0.1686934
-  174    5.559043      1.786276         0.1792054
-  175    5.688529      1.779148         0.1902022
-  176    5.821032      1.771937         0.2016849
-  177    5.956621      1.764642         0.2136519
-  178    6.095369      1.757261         0.2260984
-  179    6.237348      1.749794         0.2390166
-  180    6.382635      1.742239          0.252395
-  181    6.531306      1.734596         0.2662185
-  182    6.683439      1.726864         0.2804684
-  183    6.839116      1.719042         0.2951221
-  184     6.99842      1.711127         0.3101533
-  185    7.161434       1.70312         0.3255317
-  186    7.328245       1.69502         0.3412235
-  187    7.498942      1.686824         0.3571915
-  188    7.673615      1.678532         0.3733952
-  189    7.852356      1.670144         0.3897912
-  190    8.035261      1.661657         0.4063335
-  191    8.222426       1.65307          0.422974
-  192    8.413951      1.644382         0.4396632
-  193    8.609938      1.635593         0.4563503
-  194    8.810489        1.6267         0.4729838
-  195    9.015711      1.617703         0.4895123
-  196    9.225714      1.608601          0.505885
-  197    9.440609      1.599391         0.5220522
-  198    9.660509      1.590073         0.5379654
-  199    9.885531      1.580646         0.5535785
-  200    10.11579      1.571108         0.5688479
-  201    10.35142      1.561457         0.5837325
-  202    10.59254      1.551693         0.5981947
-  203    10.83927      1.541814         0.6122001
-  204    11.09175      1.531819         0.6257179
-  205    11.35011      1.521706          0.638721
-  206    11.61449      1.511473         0.6511861
-  207    11.88502       1.50112         0.6630936
-  208    12.16186      1.485968         0.6744274
-  209    12.44515      1.470069         0.6851751
-  210    12.73503      1.453983         0.6953276
-  211    13.03167      1.437708          0.704879
-  212    13.33521      1.421239         0.7138263
-  213    13.64583      1.404576         0.7221694
-  214    13.96368      1.387716         0.7299104
-  215    14.28894      1.370656         0.7370538
-  216    14.62177      1.353395         0.7436061
-  217    14.96236      1.335928         0.7495753
-  218    15.31087      1.318255         0.7549711
-  219    15.66751      1.300372         0.7598044
-  220    16.03245      1.282277         0.7640868
-  221     16.4059      1.263968         0.7678313
-  222    16.78804       1.24544          0.771051
-  223    17.17908      1.226693         0.7737598
-  224    17.57924      1.207722         0.7759719
-  225    17.98871      1.188526         0.7777017
-  226    18.40772      1.169101         0.7789638
-  227    18.83649      1.149445         0.7797726
-  228    19.27525      1.129554         0.7801427
-  229    19.72423      1.109426         0.7800887
-  230    20.18366      1.089058         0.7796247
-  231     20.6538      1.068447         0.7787651
-  232    21.13489      1.049196         0.7775238
-  233    21.62719       1.04216         0.7759146
-  234    22.13095       1.03504         0.7739513
-  235    22.64644      1.027835         0.7716473
-  236    23.17395      1.020543          0.769016
-  237    23.71374      1.013164         0.7660706
-  238     24.2661      1.005696         0.7628242
-  239    24.83133     0.9981387         0.7592897
-  240    25.40973     0.9904902         0.7554802
-  241     26.0016     0.9827497         0.7514084
-  242    26.60725     0.9749159         0.7470873
-  243    27.22701     0.9669876         0.7425296
-  244    27.86121     0.9589636         0.7377482
-  245    28.51018     0.9508427          0.732756
-  246    29.17427     0.9426235         0.7275658
-  247    29.85383     0.9343049         0.7221907
-  248    30.54921     0.9258855         0.7166435
-  249    31.26079      0.917364         0.7109372
-  250    31.98895     0.9087391          0.705085
-  251    32.73407     0.9000093         0.6990998
-  252    33.49654     0.9029422         0.6929947
-  253    34.27678     0.9059234         0.6867829
-  254    35.07519     0.9089409         0.6804772
-  255    35.89219     0.9119953         0.6740907
-  256    36.72823      0.915087         0.6676363
-  257    37.58374     0.9182165         0.6611266
-  258    38.45918     0.9213843         0.6545743
-  259    39.35501      0.924591         0.6479917
-  260     40.2717     0.9278371          0.641391
-  261    41.20975      0.931123          0.634784
-  262    42.16965     0.9344494         0.6281825
-  263    43.15191     0.9378168         0.6215976
-  264    44.15704     0.9412258         0.6150401
-  265    45.18559     0.9446769         0.6085206
-  266     46.2381     0.9481707         0.6020491
-  267    47.31513     0.9448764          0.595635
-  268    48.41724     0.9341334         0.5892876
-  269    49.54502     0.9232568         0.5830152
-  270    50.69907     0.9122448          0.576826
-  271       51.88     0.9010955         0.5707274
-  272    53.08844      0.889807         0.5647263
-  273    54.32503     0.8783773         0.5588291
-  274    55.59043     0.8668044         0.5530415
-  275    56.88529     0.8550863         0.5473687
-  276    58.21032     0.8432209         0.5418154
-  277    59.56621     0.8312062         0.5363857
-  278    60.95369     0.8190399         0.5310831
-  279    62.37348     0.8067199         0.5259107
-  280    63.82635     0.7942439         0.5208709
-  281    65.31306     0.7816098         0.5159658
-  282    66.83439     0.7688152         0.5111968
-  283    68.39116     0.7558576         0.5065651
-  284     69.9842     0.7427349         0.5020713
-  285    71.61434     0.7294445         0.4977156
-  286    73.28245     0.7159839         0.4934978
-  287    74.98942     0.7023505         0.4894176
-  288    76.73615      0.688542          0.485474
-  289    78.52356     0.6745555         0.4816659
-  290    80.35261     0.6603884         0.4779919
-  291    82.22426     0.6478869         0.4744503
-  292    84.13951     0.6401341         0.4710394
-  293    86.09938     0.6322806         0.4677568
-  294    88.10489     0.6243247         0.4646005
-  295    90.15711     0.6162649          0.461568
-  296    92.25714     0.6080996         0.4586566
-  297    94.40609     0.5998273         0.4558638
-  298    96.60509     0.5914461         0.4531868
-  299    98.85531     0.5829544         0.4506228
-  300    101.1579     0.5743504         0.4481687
-  301    103.5142      0.560173         0.4458217
-  302    105.9254      0.540297         0.4435789
-  303    108.3927     0.5201562         0.4414371
-  304    110.9175     0.4997464         0.4393934
-  305    113.5011     0.4790632         0.4374448
-  306    116.1449     0.4581022         0.4355884
-  307    118.8502     0.4368589         0.4338211
-  308    121.6186     0.4153287           0.43214
-  309    124.4515     0.3935069         0.4305424
-  310    127.3503     0.3806943         0.4290252
-  311    130.3167     0.3694845         0.4275858
-  312    133.3521     0.3581214         0.4262214
-  313    136.4583     0.3466027         0.4249294
-  314    139.6368     0.3349255         0.4237071
-  315    142.8894     0.3230873         0.4225521
-  316    146.2177     0.3110853         0.4214617
-  317    149.6236     0.2992778         0.4204338
-  318    153.1087     0.2910524         0.4194658
-  319    156.6751     0.2827121         0.4185556
-  320    160.3245     0.2742549          0.417701
-  321     164.059     0.2656787         0.4168999
-  322    167.8804     0.2569815         0.4161501
-  323    171.7908     0.2481611         0.4154499
-  324    175.7924     0.2398692         0.4147973
-  325    179.8871      0.238357         0.4141903
-  326    184.0772     0.2368232         0.4136274
-  327    188.3649     0.2352673         0.4131068
-  328    192.7525     0.2336889         0.4126269
-  329    197.2423     0.2320878         0.4121861
-  330    201.8366     0.2304634         0.4117829
-  331     206.538          0.23         0.4114159
-  332    211.3489          0.23         0.4110838
-  333    216.2719          0.23         0.4107851
-  334    221.3095          0.23         0.4105188
-  335    226.4644          0.23         0.4102834
-  336    231.7395          0.23          0.410078
-  337    237.1374     0.2284044         0.4099013
-  338     242.661     0.2265778         0.4097524
-  339    248.3133     0.2247237         0.4096303
-  340    254.0973     0.2228416         0.4095339
-  341     260.016     0.2209309         0.4094623
-  342    266.0725          0.22         0.4094148
-  343    272.2701          0.22         0.4093904
-  344    278.6121          0.22         0.4093883
-  345    285.1018          0.22         0.4094078
-  346    291.7427          0.22         0.4094482
-  347    298.5383      0.220582         0.4095087
-  348    305.4921     0.2216453         0.4095888
-  349    312.6079     0.2227252         0.4096877
-  350    319.8895     0.2238222         0.4098048
-  351    327.3407     0.2249365         0.4099397
-  352    334.9654         0.225         0.4100917
-  353    342.7678         0.225         0.4102603
-  354    350.7519         0.225         0.4104449
-  355    358.9219         0.225         0.4106452
-  356    367.2823     0.2273428         0.4108607
-  357    375.8374     0.2310211         0.4110908
-  358    384.5918     0.2347593         0.4113352
-  359    393.5501     0.2385588         0.4115935
-  360     402.717          0.24         0.4118652
-  361    412.0975          0.24         0.4121501
-  362    421.6965          0.24         0.4124476
-  363    431.5191          0.24         0.4127575
-  364    441.5704     0.2458683         0.4130794
-  365    451.8559       0.25286          0.413413
-  366     462.381     0.2599698          0.413758
-  367    473.1513     0.2672005          0.414114
-  368    484.1724     0.2745544         0.4144807
-  369    495.4502     0.2820344         0.4148579
-  370    506.9907      0.289643         0.4152452
-  371       518.8     0.2959066         0.4156423
-  372    530.8844     0.3022064          0.416049
-  373    543.2503      0.308616         0.4164649
-  374    555.9043      0.315138         0.4168898
-  375    568.8529     0.3217747         0.4173235
-  376    582.1032     0.3285288         0.4177656
-  377    595.6621     0.3306754         0.4182158
-  378    609.5369     0.3315499          0.418674
-  379    623.7348     0.3324402         0.4191397
-  380    638.2635     0.3333465         0.4196128
-  381    653.1306     0.3342691          0.420093
-  382    668.3439     0.3356256         0.4205799
-  383    683.9116     0.3384952         0.4210733
-  384     699.842     0.3414173          0.421573
-  385    716.1434     0.3443932         0.4220786
-  386    732.8245      0.347424         0.4225899
-  387    749.8942     0.3501703         0.4231065
-  388    767.3615     0.3512185         0.4236282
-  389    785.2356     0.3522863         0.4241546
-  390    803.5261     0.3533742         0.4246856
-  391    822.2426     0.3544825         0.4252206
-  392    841.3951     0.3568356         0.4257596
-  393    860.9938      0.360288          0.426302
-  394    881.0489     0.3638064         0.4268477
-  395    901.5711     0.3673922         0.4273962
-  396    922.5714      0.369302         0.4279473
-  397    944.0609     0.3668184         0.4285005
-  398    966.0509     0.3642867         0.4290557
-  399    988.5531     0.3617056         0.4296124
-  400    1011.579     0.3590741         0.4301702
-  401    1035.142      0.356391         0.4307289
-  402    1059.254      0.353655          0.431288
-  403    1083.927      0.350865         0.4318472
-  404    1109.175     0.3480197         0.4324061
-  405    1135.011     0.3451177         0.4329643
-  406    1161.449     0.3421577         0.4335216
-  407    1188.502     0.3391384         0.4340774
-  408    1216.186     0.3360584         0.4346314
-  409    1244.515     0.3329162         0.4351833
-  410    1273.503     0.3297103         0.4357326
-  411    1303.167     0.3264394          0.436279
-  412    1333.521     0.3231017          0.436822
-  413    1364.583     0.3196958         0.4373613
-  414    1396.368     0.3162199         0.4378966
-  415    1428.894     0.3126726         0.4384273
-  416    1462.177      0.309052         0.4389533
-  417    1496.236     0.3053564         0.4394739
-  418    1531.087     0.3015841          0.439989
-  419    1566.751     0.2977332         0.4404982
-  420    1603.245     0.2938019          0.441001
-  421     1640.59     0.2897881         0.4414971
-  422    1678.804     0.2856901         0.4419861
-  423    1717.908     0.2815057         0.4424679
-  424    1757.924      0.277233         0.4429419
-  425    1798.871     0.2728697         0.4434079
-  426    1840.772     0.2696035         0.4438656
-  427    1883.649     0.2684658         0.4443147
-  428    1927.525     0.2673038         0.4447548
-  429    1972.423      0.266117         0.4451858
-  430    2018.366     0.2649047         0.4456074
-  431     2065.38     0.2636664         0.4460194
-  432    2113.489     0.2624014         0.4464214
-  433    2162.719     0.2611091         0.4468134
-  434    2213.095     0.2597466         0.4471951
-  435    2264.644     0.2581279         0.4475663
-  436    2317.395      0.256474          0.447927
-  437    2371.374     0.2547841          0.448277
-  438     2426.61     0.2530574         0.4486161
-  439    2483.133     0.2512929         0.4489444
-  440    2540.973     0.2494897         0.4492616
-  441     2600.16      0.247647         0.4495678
-  442    2660.725     0.2457638          0.449863
-  443    2722.701     0.2438391         0.4501472
-  444    2786.121     0.2418719         0.4504203
-  445    2851.018     0.2398613         0.4506824
-  446    2917.427     0.2378062         0.4509336
-  447    2985.383     0.2357055          0.451174
-  448    3054.921     0.2335581         0.4514037
-  449    3126.079      0.231363         0.4516227
-  450    3198.895     0.2294127         0.4518313
-  451    3273.407     0.2278833         0.4520295
-  452    3349.654     0.2263198         0.4522177
-  453    3427.678     0.2247212          0.452396
-  454    3507.519     0.2230869         0.4525645
-  455    3589.219      0.221416         0.4527236
-  456    3672.823     0.2197075         0.4528735
-  457    3758.374     0.2179606         0.4530144
-  458    3845.918     0.2161744         0.4531466
-  459    3935.501     0.2143479         0.4532705
-  460     4027.17     0.2124802         0.4533862
-  461    4120.975     0.2105704         0.4534941
-  462    4216.965          0.21         0.4535945
-  463    4315.191          0.21         0.4536878
-  464    4415.704          0.21         0.4537741
-  465    4518.559          0.21         0.4538539
-  466     4623.81          0.21         0.4539275
-  467    4731.513          0.21         0.4539952
-  468    4841.724          0.21         0.4540572
-  469    4954.502          0.21          0.454114
-  470    5069.907          0.21         0.4541659
-  471        5188       0.20973          0.454213
-  472    5308.844     0.2091187         0.4542559
-  473    5432.503     0.2084935         0.4542946
-  474    5559.043     0.2078539         0.4543296
-  475    5688.529     0.2071998          0.454361
-  476    5821.032     0.2065307         0.4543893
-  477    5956.621     0.2058462         0.4544145
-  478    6095.369     0.2051461          0.454437
-  479    6237.348     0.2044299         0.4544569
-  480    6382.635     0.2036973         0.4544746
-  481    6531.306     0.2029479         0.4544902
-  482    6683.439     0.2021813         0.4545039
-  483    6839.116     0.2013971         0.4545159
-  484     6998.42     0.2005948         0.4545264
-  485    7161.434           0.2         0.4545355
-  486    7328.245           0.2         0.4545434
-  487    7498.942           0.2         0.4545502
-  488    7673.615           0.2          0.454556
-  489    7852.356           0.2          0.454561
-  490    8035.261           0.2         0.4545652
-  491    8222.426           0.2         0.4545688
-  492    8413.951           0.2         0.4545718
-  493    8609.938           0.2         0.4545743
-  494    8810.489           0.2         0.4545764
-  495    9015.711           0.2         0.4545781
-  496    9225.714     0.1998794         0.4545795
-  497    9440.609     0.1996636         0.4545807
-  498    9660.509     0.1994428         0.4545816
-  499    9885.531     0.1992169         0.4545824
-  500    10115.79     0.1989858          0.454583
-  501    10351.42     0.1987494         0.4545834
-  502    10592.54     0.1985074         0.4545838
-  503    10839.27     0.1982599         0.4545841
-  504    11091.75     0.1980066         0.4545843
-  505    11350.11     0.1977475         0.4545844
-  506    11614.49     0.1974824         0.4545845
-  507    11885.02     0.1972111         0.4545846
-  508    12161.86     0.1969335         0.4545846
-  509    12445.15     0.1966495         0.4545846
-  510    12735.03     0.1963589         0.4545846
-  511    13031.67     0.1960616         0.4545846
-  512    13335.21     0.1957574         0.4545846
-  513    13645.83     0.1954461         0.4545845
-  514    13963.68     0.1951276         0.4545845
-  515    14288.94     0.1948017         0.4545844
-  516    14621.77     0.1944683         0.4545844
-  517    14962.36     0.1941271         0.4545844
-  518    15310.87      0.193778         0.4545843
-  519    15667.51     0.1934207         0.4545843
-  520    16032.45     0.1930552         0.4545842
-  521     16405.9     0.1926812         0.4545842
-  522    16788.04     0.1922985         0.4545842
-  523    17179.08      0.191907         0.4545841
-  524    17579.24     0.1915063         0.4545841
-  525    17988.71     0.1910963         0.4545841
-  526    18407.72     0.1906768          0.454584
-  527    18836.49     0.1902475          0.454584
-  528    19275.25      0.189976          0.454584
-  529    19724.23     0.1899199         0.4545839
-  530    20183.66     0.1898624         0.4545839
-  531     20653.8     0.1898035         0.4545839
-  532    21134.89     0.1897433         0.4545839
-  533    21627.19     0.1896818         0.4545839
-  534    22130.95     0.1896187         0.4545839
-  535    22646.44     0.1895542         0.4545839
-  536    23173.95     0.1894883         0.4545839
-  537    23713.74     0.1894207         0.4545839
-  538     24266.1     0.1893516         0.4545839
-  539    24831.33     0.1892809         0.4545839
-  540    25409.73     0.1892086         0.4545839
-  541     26001.6     0.1891346         0.4545839
-  542    26607.25     0.1890588         0.4545839
-  543    27227.01     0.1889813         0.4545839
-  544    27861.21      0.188902         0.4545839
-  545    28510.18     0.1888208         0.4545839
-  546    29174.27     0.1887378         0.4545839
-  547    29853.83     0.1886528         0.4545839
-  548    30549.21     0.1885658         0.4545839
-  549    31260.79     0.1884768         0.4545839
-  550    31988.95     0.1883858         0.4545839
-  551    32734.07     0.1882926         0.4545839
-  552    33496.54     0.1881972         0.4545839
-  553    34276.78     0.1880997         0.4545839
-  554    35075.19     0.1879998         0.4545839
-  555    35892.19     0.1878977         0.4545839
-  556    36728.23     0.1877931         0.4545839
-  557    37583.74     0.1876862         0.4545839
-  558    38459.18     0.1875767         0.4545839
-  559    39355.01     0.1874647         0.4545839
-  560     40271.7     0.1873501         0.4545839
-  561    41209.75     0.1872328         0.4545839
-  562    42169.65     0.1871128         0.4545839
-  563    43151.91       0.18699         0.4545839
-  564    44157.04     0.1868643         0.4545839
-  565    45185.59     0.1867357         0.4545839
-  566     46238.1     0.1866041         0.4545839
-  567    47315.13     0.1864695         0.4545839
-  568    48417.24     0.1863317         0.4545839
-  569    49545.02     0.1861907         0.4545839
-  570    50699.07     0.1860464         0.4545839
-  571       51880     0.1858988         0.4545839
-  572    53088.44     0.1857477         0.4545839
-  573    54325.03     0.1855931         0.4545839
-  574    55590.43     0.1854349         0.4545839
-  575    56885.29      0.185273         0.4545839
-  576    58210.32     0.1851074         0.4545839
-  577    59566.21     0.1849378         0.4545839
-  578    60953.69     0.1847644         0.4545839
-  579    62373.48     0.1845869         0.4545839
-  580    63826.35     0.1844053         0.4545839
-  581    65313.06     0.1842194         0.4545839
-  582    66834.39     0.1840292         0.4545839
-  583    68391.16     0.1838346         0.4545839
-  584     69984.2     0.1836355         0.4545839
-  585    71614.34     0.1834317         0.4545839
-  586    73282.45     0.1832232         0.4545839
-  587    74989.42     0.1830098         0.4545839
-  588    76736.15     0.1827914         0.4545839
-  589    78523.56      0.182568         0.4545839
-  590    80352.61     0.1823393         0.4545839
-  591    82224.26     0.1821053         0.4545839
-  592    84139.51     0.1818659         0.4545839
-  593    86099.38     0.1816209         0.4545839
-  594    88104.89     0.1813702         0.4545839
-  595    90157.11     0.1811137         0.4545839
-  596    92257.14     0.1808512         0.4545839
-  597    94406.09     0.1805825         0.4545839
-  598    96605.09     0.1803076         0.4545839
-  599    98855.31     0.1800264         0.4545839
-  600    101157.9     0.1804046         0.4545839
-  601    103514.2     0.1808506         0.4545839
-  602    105925.4     0.1812966         0.4545839
-  603    108392.7     0.1817427         0.4545839
-  604    110917.5     0.1821889         0.4545839
-  605    113501.1     0.1826352         0.4545839
-  606    116144.9     0.1830816         0.4545839
-  607    118850.2     0.1835281         0.4545839
-  608    121618.6     0.1839746         0.4545839
-  609    124451.5     0.1844212         0.4545839
-  610    127350.3     0.1848679         0.4545839
-  611    130316.7     0.1853147         0.4545839
-  612    133352.1     0.1857615         0.4545839
-  613    136458.3     0.1862085         0.4545839
-  614    139636.8     0.1866554         0.4545839
-  615    142889.4     0.1871025         0.4545839
-  616    146217.7     0.1875496         0.4545839
-  617    149623.6     0.1879968         0.4545839
-  618    153108.7      0.188444         0.4545839
-  619    156675.1     0.1888913         0.4545839
-  620    160324.5     0.1893387         0.4545839
-  621      164059     0.1897861         0.4545839
-  622    167880.4     0.1902336         0.4545839
-  623    171790.8     0.1906812         0.4545839
-  624    175792.4     0.1911288         0.4545839
-  625    179887.1     0.1915764         0.4545839
-  626    184077.2     0.1920241         0.4545839
-  627    188364.9     0.1924719         0.4545839
-  628    192752.5     0.1929197         0.4545839
-  629    197242.3     0.1933675         0.4545839
-  630    201836.6     0.1938154         0.4545839
-  631      206538     0.1942634         0.4545839
-  632    211348.9     0.1947114         0.4545839
-  633    216271.9     0.1951594         0.4545839
-  634    221309.5     0.1956075         0.4545839
-  635    226464.4     0.1960556         0.4545839
-  636    231739.5     0.1965038         0.4545839
-  637    237137.4      0.196952         0.4545839
-  638      242661     0.1974003         0.4545839
-  639    248313.3     0.1978486         0.4545839
-  640    254097.3     0.1982969         0.4545839
-  641      260016     0.1987453         0.4545839
-  642    266072.5     0.1991937         0.4545839
-  643    272270.1     0.1996421         0.4545839
-  644    278612.1     0.2000906         0.4545839
-  645    285101.8     0.2005391         0.4545839
-  646    291742.7     0.2009876         0.4545839
-  647    298538.3     0.2014362         0.4545839
-  648    305492.1     0.2018848         0.4545839
-  649    312607.9     0.2023335         0.4545839
-  650    319889.5     0.2027822         0.4545839
-  651    327340.7     0.2032309         0.4545839
-  652    334965.4     0.2036796         0.4545839
-  653    342767.8     0.2041283         0.4545839
-  654    350751.9     0.2045771         0.4545839
-  655    358921.9      0.205026         0.4545839
-  656    367282.3     0.2054748         0.4545839
-  657    375837.4     0.2059237         0.4545839
-  658    384591.8     0.2063726         0.4545839
-  659    393550.1     0.2068215         0.4545839
-  660      402717     0.2072704         0.4545839
-  661    412097.5     0.2077194         0.4545839
-  662    421696.5     0.2081684         0.4545839
-  663    431519.1     0.2086174         0.4545839
-  664    441570.4     0.2090664         0.4545839
-  665    451855.9     0.2095155         0.4545839
-  666      462381     0.2099646         0.4545839
-  667    473151.3     0.2104137         0.4545839
-  668    484172.4     0.2108628         0.4545839
-  669    495450.2     0.2113119         0.4545839
-  670    506990.7     0.2117611         0.4545839
-  671      518800     0.2122103         0.4545839
-  672    530884.4     0.2126595         0.4545839
-  673    543250.3     0.2131087         0.4545839
-  674    555904.3     0.2135579         0.4545839
-  675    568852.9     0.2140072         0.4545839
-  676    582103.2     0.2144564         0.4545839
-  677    595662.1     0.2149057         0.4545839
-  678    609536.9      0.215355         0.4545839
-  679    623734.8     0.2158043         0.4545839
-  680    638263.5     0.2162537         0.4545839
-  681    653130.6      0.216703         0.4545839
-  682    668343.9     0.2171524         0.4545839
-  683    683911.6     0.2176018         0.4545839
-  684      699842     0.2180512         0.4545839
-  685    716143.4     0.2185006         0.4545839
-  686    732824.5       0.21895         0.4545839
-  687    749894.2     0.2193994         0.4545839
-  688    767361.5     0.2198489         0.4545839
-  689    785235.6     0.2202983         0.4545839
-  690    803526.1     0.2207478         0.4545839
-  691    822242.6     0.2211973         0.4545839
-  692    841395.1     0.2216468         0.4545839
-  693    860993.8     0.2220963         0.4545839
-  694    881048.9     0.2225458         0.4545839
-  695    901571.1     0.2229953         0.4545839
-  696    922571.4     0.2234448         0.4545839
-  697    944060.9     0.2238944         0.4545839
-  698    966050.9      0.224344         0.4545839
-  699    988553.1     0.2247935         0.4545839
----------------------------------------------------------
+------------------------------------------------------------------------
+    N     E(MeV)   Elastic(b)   Inelastic(b)   Total(b)
+------------------------------------------------------------------------
+    0      0.1012       2.059    4.915e-07        2.059
+    1      0.1035       2.058    5.297e-07        2.058
+    2      0.1059       2.058    5.708e-07        2.058
+    3      0.1084       2.057    6.152e-07        2.057
+    4      0.1109       2.057    6.631e-07        2.057
+    5      0.1135       2.056    7.146e-07        2.056
+    6      0.1161       2.056    7.702e-07        2.056
+    7      0.1189       2.055    8.301e-07        2.055
+    8      0.1216       2.055    8.946e-07        2.055
+    9      0.1245       2.054    9.642e-07        2.054
+   10      0.1274       2.054    1.039e-06        2.054
+   11      0.1303       2.053     1.12e-06        2.053
+   12      0.1334       2.053    1.207e-06        2.053
+   13      0.1365       2.052    1.301e-06        2.052
+   14      0.1396       2.051    1.402e-06        2.051
+   15      0.1429       2.051    1.511e-06        2.051
+   16      0.1462        2.05    1.628e-06         2.05
+   17      0.1496        2.05    1.755e-06         2.05
+   18      0.1531       2.049    1.892e-06        2.049
+   19      0.1567       2.049    2.039e-06        2.049
+   20      0.1603       2.048    2.197e-06        2.048
+   21      0.1641       2.047    2.368e-06        2.047
+   22      0.1679       2.047    2.552e-06        2.047
+   23      0.1718       2.046    2.751e-06        2.046
+   24      0.1758       2.046    2.964e-06        2.046
+   25      0.1799       2.045    3.195e-06        2.045
+   26      0.1841       2.044    3.443e-06        2.044
+   27      0.1884       2.044    3.711e-06        2.044
+   28      0.1928       2.043        4e-06        2.043
+   29      0.1972       2.042     4.31e-06        2.042
+   30      0.2018       2.042    4.646e-06        2.042
+   31      0.2065       2.041    5.007e-06        2.041
+   32      0.2113        2.04    5.396e-06         2.04
+   33      0.2163        2.04    5.816e-06         2.04
+   34      0.2213       2.039    6.268e-06        2.039
+   35      0.2265       2.038    6.755e-06        2.038
+   36      0.2317       2.037     7.28e-06        2.037
+   37      0.2371       2.037    7.846e-06        2.037
+   38      0.2427       2.036    8.457e-06        2.036
+   39      0.2483       2.035    9.114e-06        2.035
+   40      0.2541       2.034    9.823e-06        2.034
+   41        0.26       2.034    1.059e-05        2.034
+   42      0.2661       2.033    1.141e-05        2.033
+   43      0.2723       2.032     1.23e-05        2.032
+   44      0.2786       2.031    1.325e-05        2.031
+   45      0.2851       2.031    1.428e-05        2.031
+   46      0.2917        2.03    1.539e-05         2.03
+   47      0.2985       2.029    1.659e-05        2.029
+   48      0.3055       2.028    1.788e-05        2.028
+   49      0.3126       2.027    1.927e-05        2.027
+   50      0.3199       2.026    2.077e-05        2.027
+   51      0.3273       2.026    2.238e-05        2.026
+   52       0.335       2.025    2.412e-05        2.025
+   53      0.3428       2.024      2.6e-05        2.024
+   54      0.3508       2.023    2.802e-05        2.023
+   55      0.3589       2.022     3.02e-05        2.022
+   56      0.3673       2.021    3.255e-05        2.021
+   57      0.3758        2.02    3.508e-05         2.02
+   58      0.3846       2.019    3.781e-05        2.019
+   59      0.3936       2.018    4.075e-05        2.019
+   60      0.4027       2.018    4.391e-05        2.018
+   61      0.4121       2.017    4.733e-05        2.017
+   62      0.4217       2.016    5.101e-05        2.016
+   63      0.4315       2.015    5.497e-05        2.015
+   64      0.4416       2.014    5.925e-05        2.014
+   65      0.4519       2.013    6.385e-05        2.013
+   66      0.4624       2.012    6.882e-05        2.012
+   67      0.4732       2.011    7.417e-05        2.011
+   68      0.4842        2.01    7.993e-05         2.01
+   69      0.4955       2.009    8.615e-05        2.009
+   70       0.507       2.007    9.285e-05        2.008
+   71      0.5188       2.006    0.0001001        2.006
+   72      0.5309       2.005    0.0001078        2.005
+   73      0.5433       2.004    0.0001162        2.004
+   74      0.5559       2.003    0.0001253        2.003
+   75      0.5689       2.002     0.000135        2.002
+   76      0.5821       2.001    0.0001455        2.001
+   77      0.5957           2    0.0001568            2
+   78      0.6095       1.999     0.000169        1.999
+   79      0.6237       1.997    0.0001821        1.998
+   80      0.6383       1.996    0.0001963        1.996
+   81      0.6531       1.995    0.0002115        1.995
+   82      0.6683       1.994     0.000228        1.994
+   83      0.6839       1.993    0.0002457        1.993
+   84      0.6998       1.991    0.0002648        1.992
+   85      0.7161        1.99    0.0002854         1.99
+   86      0.7328       1.989    0.0003076        1.989
+   87      0.7499       1.987    0.0003315        1.988
+   88      0.7674       1.986    0.0003572        1.986
+   89      0.7852       1.985     0.000385        1.985
+   90      0.8035       1.983    0.0004149        1.984
+   91      0.8222       1.982    0.0004472        1.983
+   92      0.8414       1.981    0.0004819        1.981
+   93       0.861       1.979    0.0005194         1.98
+   94       0.881       1.978    0.0005597        1.979
+   95      0.9016       1.977    0.0006032        1.977
+   96      0.9226       1.975    0.0006501        1.976
+   97      0.9441       1.974    0.0007006        1.974
+   98      0.9661       1.972     0.000755        1.973
+   99      0.9886       1.971    0.0008137        1.972
+  100       1.012       1.969    0.0008769         1.97
+  101       1.035       1.968     0.000945        1.969
+  102       1.059       1.966     0.001018        1.967
+  103       1.084       1.965     0.001097        1.966
+  104       1.109       1.963     0.001183        1.964
+  105       1.135       1.962     0.001274        1.963
+  106       1.161        1.96     0.001373        1.961
+  107       1.189       1.958      0.00148         1.96
+  108       1.216       1.957     0.001595        1.958
+  109       1.245       1.955     0.001719        1.957
+  110       1.274       1.953     0.001852        1.955
+  111       1.303       1.952     0.001996        1.954
+  112       1.334        1.95      0.00215        1.952
+  113       1.365       1.948     0.002317         1.95
+  114       1.396       1.946     0.002497        1.949
+  115       1.429       1.945      0.00269        1.947
+  116       1.462       1.943     0.002899        1.946
+  117       1.496       1.941     0.003123        1.944
+  118       1.531       1.939     0.003365        1.942
+  119       1.567       1.937     0.003626        1.941
+  120       1.603       1.935     0.003907        1.939
+  121       1.641       1.933     0.004209        1.938
+  122       1.679       1.932     0.004535        1.936
+  123       1.718        1.93     0.004885        1.934
+  124       1.758       1.928     0.005263        1.933
+  125       1.799       1.926     0.005669        1.931
+  126       1.841       1.924     0.006107         1.93
+  127       1.884       1.922     0.006578        1.928
+  128       1.928       1.919     0.007086        1.927
+  129       1.972       1.917     0.007632        1.925
+  130       2.018       1.915      0.00822        1.923
+  131       2.065       1.913     0.008852        1.922
+  132       2.113       1.911     0.009533         1.92
+  133       2.163       1.909      0.01027        1.919
+  134       2.213       1.907      0.01105        1.918
+  135       2.265       1.904       0.0119        1.916
+  136       2.317       1.902      0.01281        1.915
+  137       2.371         1.9       0.0138        1.914
+  138       2.427       1.897      0.01485        1.912
+  139       2.483       1.895      0.01598        1.911
+  140       2.541       1.893       0.0172         1.91
+  141         2.6        1.89      0.01851        1.909
+  142       2.661       1.888      0.01992        1.908
+  143       2.723       1.885      0.02143        1.907
+  144       2.786       1.883      0.02306        1.906
+  145       2.851        1.88       0.0248        1.905
+  146       2.917       1.878      0.02667        1.905
+  147       2.985       1.875      0.02868        1.904
+  148       3.055       1.873      0.03083        1.904
+  149       3.126        1.87      0.03314        1.903
+  150       3.199       1.867      0.03561        1.903
+  151       3.273       1.865      0.03826        1.903
+  152        3.35       1.862       0.0411        1.903
+  153       3.428       1.859      0.04414        1.903
+  154       3.508       1.856      0.04739        1.904
+  155       3.589       1.854      0.05087        1.904
+  156       3.673       1.851      0.05458        1.905
+  157       3.758       1.848      0.05855        1.906
+  158       3.846       1.845      0.06279        1.908
+  159       3.936       1.842       0.0673        1.909
+  160       4.027       1.839      0.07212        1.911
+  161       4.121       1.836      0.07724        1.913
+  162       4.217       1.833       0.0827        1.916
+  163       4.315        1.83       0.0885        1.918
+  164       4.416       1.827      0.09466        1.921
+  165       4.519       1.823       0.1012        1.925
+  166       4.624        1.82       0.1081        1.928
+  167       4.732       1.817       0.1155        1.932
+  168       4.842       1.814       0.1232        1.937
+  169       4.955        1.81       0.1314        1.942
+  170        5.07       1.807         0.14        1.947
+  171       5.188       1.804       0.1491        1.953
+  172       5.309         1.8       0.1587        1.959
+  173       5.433       1.793       0.1687        1.962
+  174       5.559       1.786       0.1792        1.965
+  175       5.689       1.779       0.1902        1.969
+  176       5.821       1.772       0.2017        1.974
+  177       5.957       1.765       0.2137        1.978
+  178       6.095       1.757       0.2261        1.983
+  179       6.237        1.75        0.239        1.989
+  180       6.383       1.742       0.2524        1.995
+  181       6.531       1.735       0.2662        2.001
+  182       6.683       1.727       0.2805        2.007
+  183       6.839       1.719       0.2951        2.014
+  184       6.998       1.711       0.3102        2.021
+  185       7.161       1.703       0.3255        2.029
+  186       7.328       1.695       0.3412        2.036
+  187       7.499       1.687       0.3572        2.044
+  188       7.674       1.679       0.3734        2.052
+  189       7.852        1.67       0.3898         2.06
+  190       8.035       1.662       0.4063        2.068
+  191       8.222       1.653        0.423        2.076
+  192       8.414       1.644       0.4397        2.084
+  193        8.61       1.636       0.4564        2.092
+  194        8.81       1.627        0.473          2.1
+  195       9.016       1.618       0.4895        2.107
+  196       9.226       1.609       0.5059        2.114
+  197       9.441       1.599       0.5221        2.121
+  198       9.661        1.59        0.538        2.128
+  199       9.886       1.581       0.5536        2.134
+  200       10.12       1.571       0.5688         2.14
+  201       10.35       1.561       0.5837        2.145
+  202       10.59       1.552       0.5982         2.15
+  203       10.84       1.542       0.6122        2.154
+  204       11.09       1.532       0.6257        2.158
+  205       11.35       1.522       0.6387         2.16
+  206       11.61       1.511       0.6512        2.163
+  207       11.89       1.501       0.6631        2.164
+  208       12.16       1.486       0.6744         2.16
+  209       12.45        1.47       0.6852        2.155
+  210       12.74       1.454       0.6953        2.149
+  211       13.03       1.438       0.7049        2.143
+  212       13.34       1.421       0.7138        2.135
+  213       13.65       1.405       0.7222        2.127
+  214       13.96       1.388       0.7299        2.118
+  215       14.29       1.371       0.7371        2.108
+  216       14.62       1.353       0.7436        2.097
+  217       14.96       1.336       0.7496        2.086
+  218       15.31       1.318        0.755        2.073
+  219       15.67         1.3       0.7598         2.06
+  220       16.03       1.282       0.7641        2.046
+  221       16.41       1.264       0.7678        2.032
+  222       16.79       1.245       0.7711        2.016
+  223       17.18       1.227       0.7738            2
+  224       17.58       1.208        0.776        1.984
+  225       17.99       1.189       0.7777        1.966
+  226       18.41       1.169        0.779        1.948
+  227       18.84       1.149       0.7798        1.929
+  228       19.28        1.13       0.7801         1.91
+  229       19.72       1.109       0.7801         1.89
+  230       20.18       1.089       0.7796        1.869
+  231       20.65       1.068       0.7788        1.847
+  232       21.13       1.049       0.7775        1.827
+  233       21.63       1.042       0.7759        1.818
+  234       22.13       1.035        0.774        1.809
+  235       22.65       1.028       0.7716        1.799
+  236       23.17       1.021        0.769         1.79
+  237       23.71       1.013       0.7661        1.779
+  238       24.27       1.006       0.7628        1.769
+  239       24.83      0.9981       0.7593        1.757
+  240       25.41      0.9905       0.7555        1.746
+  241          26      0.9827       0.7514        1.734
+  242       26.61      0.9749       0.7471        1.722
+  243       27.23       0.967       0.7425         1.71
+  244       27.86       0.959       0.7377        1.697
+  245       28.51      0.9508       0.7328        1.684
+  246       29.17      0.9426       0.7276         1.67
+  247       29.85      0.9343       0.7222        1.656
+  248       30.55      0.9259       0.7166        1.643
+  249       31.26      0.9174       0.7109        1.628
+  250       31.99      0.9087       0.7051        1.614
+  251       32.73         0.9       0.6991        1.599
+  252        33.5      0.9029        0.693        1.596
+  253       34.28      0.9059       0.6868        1.593
+  254       35.08      0.9089       0.6805        1.589
+  255       35.89       0.912       0.6741        1.586
+  256       36.73      0.9151       0.6676        1.583
+  257       37.58      0.9182       0.6611        1.579
+  258       38.46      0.9214       0.6546        1.576
+  259       39.36      0.9246        0.648        1.573
+  260       40.27      0.9278       0.6414        1.569
+  261       41.21      0.9311       0.6348        1.566
+  262       42.17      0.9344       0.6282        1.563
+  263       43.15      0.9378       0.6216        1.559
+  264       44.16      0.9412        0.615        1.556
+  265       45.19      0.9447       0.6085        1.553
+  266       46.24      0.9482        0.602         1.55
+  267       47.32      0.9449       0.5956        1.541
+  268       48.42      0.9341       0.5893        1.523
+  269       49.55      0.9233        0.583        1.506
+  270        50.7      0.9122       0.5768        1.489
+  271       51.88      0.9011       0.5707        1.472
+  272       53.09      0.8898       0.5647        1.455
+  273       54.33      0.8784       0.5588        1.437
+  274       55.59      0.8668        0.553         1.42
+  275       56.89      0.8551       0.5474        1.402
+  276       58.21      0.8432       0.5418        1.385
+  277       59.57      0.8312       0.5364        1.368
+  278       60.95       0.819       0.5311         1.35
+  279       62.37      0.8067       0.5259        1.333
+  280       63.83      0.7942       0.5209        1.315
+  281       65.31      0.7816        0.516        1.298
+  282       66.83      0.7688       0.5112         1.28
+  283       68.39      0.7559       0.5066        1.262
+  284       69.98      0.7427       0.5021        1.245
+  285       71.61      0.7294       0.4977        1.227
+  286       73.28       0.716       0.4935        1.209
+  287       74.99      0.7024       0.4894        1.192
+  288       76.74      0.6885       0.4855        1.174
+  289       78.52      0.6746       0.4817        1.156
+  290       80.35      0.6604        0.478        1.138
+  291       82.22      0.6479       0.4745        1.122
+  292       84.14      0.6401        0.471        1.111
+  293        86.1      0.6323       0.4678          1.1
+  294        88.1      0.6243       0.4646        1.089
+  295       90.16      0.6163       0.4616        1.078
+  296       92.26      0.6081       0.4587        1.067
+  297       94.41      0.5998       0.4559        1.056
+  298       96.61      0.5914       0.4532        1.045
+  299       98.86       0.583       0.4506        1.034
+  300       101.2      0.5744       0.4482        1.023
+  301       103.5      0.5602       0.4458        1.006
+  302       105.9      0.5403       0.4436       0.9839
+  303       108.4      0.5202       0.4414       0.9616
+  304       110.9      0.4997       0.4394       0.9391
+  305       113.5      0.4791       0.4374       0.9165
+  306       116.1      0.4581       0.4356       0.8937
+  307       118.9      0.4369       0.4338       0.8707
+  308       121.6      0.4153       0.4321       0.8475
+  309       124.5      0.3935       0.4305        0.824
+  310       127.4      0.3807        0.429       0.8097
+  311       130.3      0.3695       0.4276       0.7971
+  312       133.4      0.3581       0.4262       0.7843
+  313       136.5      0.3466       0.4249       0.7715
+  314       139.6      0.3349       0.4237       0.7586
+  315       142.9      0.3231       0.4226       0.7456
+  316       146.2      0.3111       0.4215       0.7325
+  317       149.6      0.2993       0.4204       0.7197
+  318       153.1      0.2911       0.4195       0.7105
+  319       156.7      0.2827       0.4186       0.7013
+  320       160.3      0.2743       0.4177        0.692
+  321       164.1      0.2657       0.4169       0.6826
+  322       167.9       0.257       0.4162       0.6731
+  323       171.8      0.2482       0.4154       0.6636
+  324       175.8      0.2399       0.4148       0.6547
+  325       179.9      0.2384       0.4142       0.6525
+  326       184.1      0.2368       0.4136       0.6505
+  327       188.4      0.2353       0.4131       0.6484
+  328       192.8      0.2337       0.4126       0.6463
+  329       197.2      0.2321       0.4122       0.6443
+  330       201.8      0.2305       0.4118       0.6422
+  331       206.5        0.23       0.4114       0.6414
+  332       211.3        0.23       0.4111       0.6411
+  333       216.3        0.23       0.4108       0.6408
+  334       221.3        0.23       0.4105       0.6405
+  335       226.5        0.23       0.4103       0.6403
+  336       231.7        0.23       0.4101       0.6401
+  337       237.1      0.2284       0.4099       0.6383
+  338       242.7      0.2266       0.4098       0.6363
+  339       248.3      0.2247       0.4096       0.6344
+  340       254.1      0.2228       0.4095       0.6324
+  341         260      0.2209       0.4095       0.6304
+  342       266.1        0.22       0.4094       0.6294
+  343       272.3        0.22       0.4094       0.6294
+  344       278.6        0.22       0.4094       0.6294
+  345       285.1        0.22       0.4094       0.6294
+  346       291.7        0.22       0.4094       0.6294
+  347       298.5      0.2206       0.4095       0.6301
+  348       305.5      0.2216       0.4096       0.6312
+  349       312.6      0.2227       0.4097       0.6324
+  350       319.9      0.2238       0.4098       0.6336
+  351       327.3      0.2249       0.4099       0.6349
+  352         335       0.225       0.4101       0.6351
+  353       342.8       0.225       0.4103       0.6353
+  354       350.8       0.225       0.4104       0.6354
+  355       358.9       0.225       0.4106       0.6356
+  356       367.3      0.2273       0.4109       0.6382
+  357       375.8       0.231       0.4111       0.6421
+  358       384.6      0.2348       0.4113       0.6461
+  359       393.6      0.2386       0.4116       0.6502
+  360       402.7        0.24       0.4119       0.6519
+  361       412.1        0.24       0.4122       0.6522
+  362       421.7        0.24       0.4124       0.6524
+  363       431.5        0.24       0.4128       0.6528
+  364       441.6      0.2459       0.4131       0.6589
+  365       451.9      0.2529       0.4134       0.6663
+  366       462.4        0.26       0.4138       0.6737
+  367       473.2      0.2672       0.4141       0.6813
+  368       484.2      0.2746       0.4145        0.689
+  369       495.5       0.282       0.4149       0.6969
+  370         507      0.2896       0.4152       0.7049
+  371       518.8      0.2959       0.4156       0.7115
+  372       530.9      0.3022        0.416       0.7183
+  373       543.3      0.3086       0.4165       0.7251
+  374       555.9      0.3151       0.4169        0.732
+  375       568.9      0.3218       0.4173       0.7391
+  376       582.1      0.3285       0.4178       0.7463
+  377       595.7      0.3307       0.4182       0.7489
+  378       609.5      0.3315       0.4187       0.7502
+  379       623.7      0.3324       0.4191       0.7516
+  380       638.3      0.3333       0.4196        0.753
+  381       653.1      0.3343       0.4201       0.7544
+  382       668.3      0.3356       0.4206       0.7562
+  383       683.9      0.3385       0.4211       0.7596
+  384       699.8      0.3414       0.4216        0.763
+  385       716.1      0.3444       0.4221       0.7665
+  386       732.8      0.3474       0.4226         0.77
+  387       749.9      0.3502       0.4231       0.7733
+  388       767.4      0.3512       0.4236       0.7748
+  389       785.2      0.3523       0.4242       0.7764
+  390       803.5      0.3534       0.4247       0.7781
+  391       822.2      0.3545       0.4252       0.7797
+  392       841.4      0.3568       0.4258       0.7826
+  393         861      0.3603       0.4263       0.7866
+  394         881      0.3638       0.4268       0.7907
+  395       901.6      0.3674       0.4274       0.7948
+  396       922.6      0.3693       0.4279       0.7972
+  397       944.1      0.3668       0.4285       0.7953
+  398       966.1      0.3643       0.4291       0.7933
+  399       988.6      0.3617       0.4296       0.7913
+  400        1012      0.3591       0.4302       0.7892
+  401        1035      0.3564       0.4307       0.7871
+  402        1059      0.3537       0.4313       0.7849
+  403        1084      0.3509       0.4318       0.7827
+  404        1109       0.348       0.4324       0.7804
+  405        1135      0.3451        0.433       0.7781
+  406        1161      0.3422       0.4335       0.7757
+  407        1189      0.3391       0.4341       0.7732
+  408        1216      0.3361       0.4346       0.7707
+  409        1245      0.3329       0.4352       0.7681
+  410        1274      0.3297       0.4357       0.7654
+  411        1303      0.3264       0.4363       0.7627
+  412        1334      0.3231       0.4368       0.7599
+  413        1365      0.3197       0.4374       0.7571
+  414        1396      0.3162       0.4379       0.7541
+  415        1429      0.3127       0.4384       0.7511
+  416        1462      0.3091        0.439        0.748
+  417        1496      0.3054       0.4395       0.7448
+  418        1531      0.3016         0.44       0.7416
+  419        1567      0.2977       0.4405       0.7382
+  420        1603      0.2938        0.441       0.7348
+  421        1641      0.2898       0.4415       0.7313
+  422        1679      0.2857        0.442       0.7277
+  423        1718      0.2815       0.4425        0.724
+  424        1758      0.2772       0.4429       0.7202
+  425        1799      0.2729       0.4434       0.7163
+  426        1841      0.2696       0.4439       0.7135
+  427        1884      0.2685       0.4443       0.7128
+  428        1928      0.2673       0.4448       0.7121
+  429        1972      0.2661       0.4452       0.7113
+  430        2018      0.2649       0.4456       0.7105
+  431        2065      0.2637        0.446       0.7097
+  432        2113      0.2624       0.4464       0.7088
+  433        2163      0.2611       0.4468       0.7079
+  434        2213      0.2597       0.4472       0.7069
+  435        2265      0.2581       0.4476       0.7057
+  436        2317      0.2565       0.4479       0.7044
+  437        2371      0.2548       0.4483       0.7031
+  438        2427      0.2531       0.4486       0.7017
+  439        2483      0.2513       0.4489       0.7002
+  440        2541      0.2495       0.4493       0.6988
+  441        2600      0.2476       0.4496       0.6972
+  442        2661      0.2458       0.4499       0.6956
+  443        2723      0.2438       0.4501        0.694
+  444        2786      0.2419       0.4504       0.6923
+  445        2851      0.2399       0.4507       0.6905
+  446        2917      0.2378       0.4509       0.6887
+  447        2985      0.2357       0.4512       0.6869
+  448        3055      0.2336       0.4514        0.685
+  449        3126      0.2314       0.4516        0.683
+  450        3199      0.2294       0.4518       0.6812
+  451        3273      0.2279        0.452       0.6799
+  452        3350      0.2263       0.4522       0.6785
+  453        3428      0.2247       0.4524       0.6771
+  454        3508      0.2231       0.4526       0.6757
+  455        3589      0.2214       0.4527       0.6741
+  456        3673      0.2197       0.4529       0.6726
+  457        3758       0.218        0.453        0.671
+  458        3846      0.2162       0.4531       0.6693
+  459        3936      0.2143       0.4533       0.6676
+  460        4027      0.2125       0.4534       0.6659
+  461        4121      0.2106       0.4535       0.6641
+  462        4217        0.21       0.4536       0.6636
+  463        4315        0.21       0.4537       0.6637
+  464        4416        0.21       0.4538       0.6638
+  465        4519        0.21       0.4539       0.6639
+  466        4624        0.21       0.4539       0.6639
+  467        4732        0.21        0.454        0.664
+  468        4842        0.21       0.4541       0.6641
+  469        4955        0.21       0.4541       0.6641
+  470        5070        0.21       0.4542       0.6642
+  471        5188      0.2097       0.4542       0.6639
+  472        5309      0.2091       0.4543       0.6634
+  473        5433      0.2085       0.4543       0.6628
+  474        5559      0.2079       0.4543       0.6622
+  475        5689      0.2072       0.4544       0.6616
+  476        5821      0.2065       0.4544       0.6609
+  477        5957      0.2058       0.4544       0.6603
+  478        6095      0.2051       0.4544       0.6596
+  479        6237      0.2044       0.4545       0.6589
+  480        6383      0.2037       0.4545       0.6582
+  481        6531      0.2029       0.4545       0.6574
+  482        6683      0.2022       0.4545       0.6567
+  483        6839      0.2014       0.4545       0.6559
+  484        6998      0.2006       0.4545       0.6551
+  485        7161         0.2       0.4545       0.6545
+  486        7328         0.2       0.4545       0.6545
+  487        7499         0.2       0.4546       0.6546
+  488        7674         0.2       0.4546       0.6546
+  489        7852         0.2       0.4546       0.6546
+  490        8035         0.2       0.4546       0.6546
+  491        8222         0.2       0.4546       0.6546
+  492        8414         0.2       0.4546       0.6546
+  493        8610         0.2       0.4546       0.6546
+  494        8810         0.2       0.4546       0.6546
+  495        9016         0.2       0.4546       0.6546
+  496        9226      0.1999       0.4546       0.6545
+  497        9441      0.1997       0.4546       0.6542
+  498        9661      0.1994       0.4546        0.654
+  499        9886      0.1992       0.4546       0.6538
+  500   1.012e+04       0.199       0.4546       0.6536
+  501   1.035e+04      0.1987       0.4546       0.6533
+  502   1.059e+04      0.1985       0.4546       0.6531
+  503   1.084e+04      0.1983       0.4546       0.6528
+  504   1.109e+04       0.198       0.4546       0.6526
+  505   1.135e+04      0.1977       0.4546       0.6523
+  506   1.161e+04      0.1975       0.4546       0.6521
+  507   1.189e+04      0.1972       0.4546       0.6518
+  508   1.216e+04      0.1969       0.4546       0.6515
+  509   1.245e+04      0.1966       0.4546       0.6512
+  510   1.274e+04      0.1964       0.4546       0.6509
+  511   1.303e+04      0.1961       0.4546       0.6506
+  512   1.334e+04      0.1958       0.4546       0.6503
+  513   1.365e+04      0.1954       0.4546         0.65
+  514   1.396e+04      0.1951       0.4546       0.6497
+  515   1.429e+04      0.1948       0.4546       0.6494
+  516   1.462e+04      0.1945       0.4546       0.6491
+  517   1.496e+04      0.1941       0.4546       0.6487
+  518   1.531e+04      0.1938       0.4546       0.6484
+  519   1.567e+04      0.1934       0.4546        0.648
+  520   1.603e+04      0.1931       0.4546       0.6476
+  521   1.641e+04      0.1927       0.4546       0.6473
+  522   1.679e+04      0.1923       0.4546       0.6469
+  523   1.718e+04      0.1919       0.4546       0.6465
+  524   1.758e+04      0.1915       0.4546       0.6461
+  525   1.799e+04      0.1911       0.4546       0.6457
+  526   1.841e+04      0.1907       0.4546       0.6453
+  527   1.884e+04      0.1902       0.4546       0.6448
+  528   1.928e+04        0.19       0.4546       0.6446
+  529   1.972e+04      0.1899       0.4546       0.6445
+  530   2.018e+04      0.1899       0.4546       0.6444
+  531   2.065e+04      0.1898       0.4546       0.6444
+  532   2.113e+04      0.1897       0.4546       0.6443
+  533   2.163e+04      0.1897       0.4546       0.6443
+  534   2.213e+04      0.1896       0.4546       0.6442
+  535   2.265e+04      0.1896       0.4546       0.6441
+  536   2.317e+04      0.1895       0.4546       0.6441
+  537   2.371e+04      0.1894       0.4546        0.644
+  538   2.427e+04      0.1894       0.4546       0.6439
+  539   2.483e+04      0.1893       0.4546       0.6439
+  540   2.541e+04      0.1892       0.4546       0.6438
+  541     2.6e+04      0.1891       0.4546       0.6437
+  542   2.661e+04      0.1891       0.4546       0.6436
+  543   2.723e+04       0.189       0.4546       0.6436
+  544   2.786e+04      0.1889       0.4546       0.6435
+  545   2.851e+04      0.1888       0.4546       0.6434
+  546   2.917e+04      0.1887       0.4546       0.6433
+  547   2.985e+04      0.1887       0.4546       0.6432
+  548   3.055e+04      0.1886       0.4546       0.6431
+  549   3.126e+04      0.1885       0.4546       0.6431
+  550   3.199e+04      0.1884       0.4546        0.643
+  551   3.273e+04      0.1883       0.4546       0.6429
+  552    3.35e+04      0.1882       0.4546       0.6428
+  553   3.428e+04      0.1881       0.4546       0.6427
+  554   3.508e+04       0.188       0.4546       0.6426
+  555   3.589e+04      0.1879       0.4546       0.6425
+  556   3.673e+04      0.1878       0.4546       0.6424
+  557   3.758e+04      0.1877       0.4546       0.6423
+  558   3.846e+04      0.1876       0.4546       0.6422
+  559   3.936e+04      0.1875       0.4546        0.642
+  560   4.027e+04      0.1874       0.4546       0.6419
+  561   4.121e+04      0.1872       0.4546       0.6418
+  562   4.217e+04      0.1871       0.4546       0.6417
+  563   4.315e+04       0.187       0.4546       0.6416
+  564   4.416e+04      0.1869       0.4546       0.6414
+  565   4.519e+04      0.1867       0.4546       0.6413
+  566   4.624e+04      0.1866       0.4546       0.6412
+  567   4.732e+04      0.1865       0.4546       0.6411
+  568   4.842e+04      0.1863       0.4546       0.6409
+  569   4.955e+04      0.1862       0.4546       0.6408
+  570    5.07e+04       0.186       0.4546       0.6406
+  571   5.188e+04      0.1859       0.4546       0.6405
+  572   5.309e+04      0.1857       0.4546       0.6403
+  573   5.433e+04      0.1856       0.4546       0.6402
+  574   5.559e+04      0.1854       0.4546         0.64
+  575   5.689e+04      0.1853       0.4546       0.6399
+  576   5.821e+04      0.1851       0.4546       0.6397
+  577   5.957e+04      0.1849       0.4546       0.6395
+  578   6.095e+04      0.1848       0.4546       0.6393
+  579   6.237e+04      0.1846       0.4546       0.6392
+  580   6.383e+04      0.1844       0.4546        0.639
+  581   6.531e+04      0.1842       0.4546       0.6388
+  582   6.683e+04       0.184       0.4546       0.6386
+  583   6.839e+04      0.1838       0.4546       0.6384
+  584   6.998e+04      0.1836       0.4546       0.6382
+  585   7.161e+04      0.1834       0.4546        0.638
+  586   7.328e+04      0.1832       0.4546       0.6378
+  587   7.499e+04       0.183       0.4546       0.6376
+  588   7.674e+04      0.1828       0.4546       0.6374
+  589   7.852e+04      0.1826       0.4546       0.6372
+  590   8.035e+04      0.1823       0.4546       0.6369
+  591   8.222e+04      0.1821       0.4546       0.6367
+  592   8.414e+04      0.1819       0.4546       0.6364
+  593    8.61e+04      0.1816       0.4546       0.6362
+  594    8.81e+04      0.1814       0.4546        0.636
+  595   9.016e+04      0.1811       0.4546       0.6357
+  596   9.226e+04      0.1809       0.4546       0.6355
+  597   9.441e+04      0.1806       0.4547       0.6352
+  598   9.661e+04      0.1803       0.4547        0.635
+  599   9.886e+04        0.18       0.4548       0.6348
+  600   1.012e+05      0.1804       0.4548       0.6352
+  601   1.035e+05      0.1809       0.4549       0.6357
+  602   1.059e+05      0.1813       0.4549       0.6362
+  603   1.084e+05      0.1817        0.455       0.6368
+  604   1.109e+05      0.1822       0.4551       0.6373
+  605   1.135e+05      0.1826       0.4552       0.6378
+  606   1.161e+05      0.1831       0.4552       0.6383
+  607   1.189e+05      0.1835       0.4553       0.6388
+  608   1.216e+05       0.184       0.4554       0.6394
+  609   1.245e+05      0.1844       0.4555       0.6399
+  610   1.274e+05      0.1849       0.4556       0.6404
+  611   1.303e+05      0.1853       0.4557        0.641
+  612   1.334e+05      0.1858       0.4558       0.6415
+  613   1.365e+05      0.1862       0.4559       0.6421
+  614   1.396e+05      0.1867        0.456       0.6426
+  615   1.429e+05      0.1871       0.4561       0.6432
+  616   1.462e+05      0.1875       0.4562       0.6437
+  617   1.496e+05       0.188       0.4563       0.6443
+  618   1.531e+05      0.1884       0.4564       0.6449
+  619   1.567e+05      0.1889       0.4565       0.6454
+  620   1.603e+05      0.1893       0.4566        0.646
+  621   1.641e+05      0.1898       0.4568       0.6466
+  622   1.679e+05      0.1902       0.4569       0.6471
+  623   1.718e+05      0.1907        0.457       0.6477
+  624   1.758e+05      0.1911       0.4572       0.6483
+  625   1.799e+05      0.1916       0.4573       0.6489
+  626   1.841e+05       0.192       0.4574       0.6495
+  627   1.884e+05      0.1925       0.4576       0.6501
+  628   1.928e+05      0.1929       0.4577       0.6507
+  629   1.972e+05      0.1934       0.4579       0.6513
+  630   2.018e+05      0.1938        0.458       0.6519
+  631   2.065e+05      0.1943       0.4582       0.6525
+  632   2.113e+05      0.1947       0.4584       0.6531
+  633   2.163e+05      0.1952       0.4585       0.6537
+  634   2.213e+05      0.1956       0.4587       0.6543
+  635   2.265e+05      0.1961       0.4589       0.6549
+  636   2.317e+05      0.1965        0.459       0.6555
+  637   2.371e+05       0.197       0.4592       0.6562
+  638   2.427e+05      0.1974       0.4594       0.6568
+  639   2.483e+05      0.1978       0.4596       0.6574
+  640   2.541e+05      0.1983       0.4597        0.658
+  641     2.6e+05      0.1987       0.4599       0.6587
+  642   2.661e+05      0.1992       0.4601       0.6593
+  643   2.723e+05      0.1996       0.4603       0.6599
+  644   2.786e+05      0.2001       0.4605       0.6606
+  645   2.851e+05      0.2005       0.4607       0.6612
+  646   2.917e+05       0.201       0.4609       0.6619
+  647   2.985e+05      0.2014       0.4611       0.6625
+  648   3.055e+05      0.2019       0.4613       0.6632
+  649   3.126e+05      0.2023       0.4615       0.6638
+  650   3.199e+05      0.2028       0.4617       0.6645
+  651   3.273e+05      0.2032       0.4619       0.6652
+  652    3.35e+05      0.2037       0.4622       0.6658
+  653   3.428e+05      0.2041       0.4624       0.6665
+  654   3.508e+05      0.2046       0.4626       0.6672
+  655   3.589e+05       0.205       0.4628       0.6678
+  656   3.673e+05      0.2055       0.4631       0.6685
+  657   3.758e+05      0.2059       0.4633       0.6692
+  658   3.846e+05      0.2064       0.4635       0.6699
+  659   3.936e+05      0.2068       0.4637       0.6706
+  660   4.027e+05      0.2073        0.464       0.6713
+  661   4.121e+05      0.2077       0.4642       0.6719
+  662   4.217e+05      0.2082       0.4645       0.6726
+  663   4.315e+05      0.2086       0.4647       0.6733
+  664   4.416e+05      0.2091        0.465        0.674
+  665   4.519e+05      0.2095       0.4652       0.6747
+  666   4.624e+05        0.21       0.4655       0.6754
+  667   4.732e+05      0.2104       0.4657       0.6761
+  668   4.842e+05      0.2109        0.466       0.6768
+  669   4.955e+05      0.2113       0.4662       0.6776
+  670    5.07e+05      0.2118       0.4665       0.6783
+  671   5.188e+05      0.2122       0.4668        0.679
+  672   5.309e+05      0.2127        0.467       0.6797
+  673   5.433e+05      0.2131       0.4673       0.6804
+  674   5.559e+05      0.2136       0.4676       0.6811
+  675   5.689e+05       0.214       0.4679       0.6819
+  676   5.821e+05      0.2145       0.4681       0.6826
+  677   5.957e+05      0.2149       0.4684       0.6833
+  678   6.095e+05      0.2154       0.4687        0.684
+  679   6.237e+05      0.2158        0.469       0.6848
+  680   6.383e+05      0.2163       0.4693       0.6855
+  681   6.531e+05      0.2167       0.4696       0.6863
+  682   6.683e+05      0.2172       0.4698        0.687
+  683   6.839e+05      0.2176       0.4701       0.6877
+  684   6.998e+05      0.2181       0.4704       0.6885
+  685   7.161e+05      0.2185       0.4707       0.6892
+  686   7.328e+05      0.2189        0.471         0.69
+  687   7.499e+05      0.2194       0.4713       0.6907
+  688   7.674e+05      0.2198       0.4716       0.6915
+  689   7.852e+05      0.2203       0.4719       0.6922
+  690   8.035e+05      0.2207       0.4723        0.693
+  691   8.222e+05      0.2212       0.4726       0.6938
+  692   8.414e+05      0.2216       0.4729       0.6945
+  693    8.61e+05      0.2221       0.4732       0.6953
+  694    8.81e+05      0.2225       0.4735        0.696
+  695   9.016e+05       0.223       0.4738       0.6968
+  696   9.226e+05      0.2234       0.4741       0.6976
+  697   9.441e+05      0.2239       0.4745       0.6984
+  698   9.661e+05      0.2243       0.4748       0.6991
+  699   9.886e+05      0.2248       0.4751       0.6999
+  700   1.012e+06      0.2252       0.4754       0.7007
+  701   1.035e+06      0.2257       0.4758       0.7015
+  702   1.059e+06      0.2261       0.4761       0.7023
+  703   1.084e+06      0.2266       0.4764        0.703
+  704   1.109e+06       0.227       0.4768       0.7038
+  705   1.135e+06      0.2275       0.4771       0.7046
+  706   1.161e+06      0.2279       0.4775       0.7054
+  707   1.189e+06      0.2284       0.4778       0.7062
+  708   1.216e+06      0.2288       0.4781        0.707
+  709   1.245e+06      0.2293       0.4785       0.7078
+  710   1.274e+06      0.2297       0.4788       0.7086
+  711   1.303e+06      0.2302       0.4792       0.7094
+  712   1.334e+06      0.2306       0.4795       0.7102
+  713   1.365e+06      0.2311       0.4799        0.711
+  714   1.396e+06      0.2315       0.4802       0.7118
+  715   1.429e+06       0.232       0.4806       0.7126
+  716   1.462e+06      0.2324        0.481       0.7134
+  717   1.496e+06      0.2329       0.4813       0.7142
+  718   1.531e+06      0.2333       0.4817        0.715
+  719   1.567e+06      0.2338        0.482       0.7158
+  720   1.603e+06      0.2342       0.4824       0.7166
+  721   1.641e+06      0.2347       0.4828       0.7175
+  722   1.679e+06      0.2351       0.4831       0.7183
+  723   1.718e+06      0.2356       0.4835       0.7191
+  724   1.758e+06       0.236       0.4839       0.7199
+  725   1.799e+06      0.2365       0.4842       0.7207
+  726   1.841e+06      0.2369       0.4846       0.7216
+  727   1.884e+06      0.2374        0.485       0.7224
+  728   1.928e+06      0.2378       0.4854       0.7232
+  729   1.972e+06      0.2383       0.4857        0.724
+  730   2.018e+06      0.2387       0.4861       0.7249
+  731   2.065e+06      0.2392       0.4865       0.7257
+  732   2.113e+06      0.2396       0.4869       0.7265
+  733   2.163e+06      0.2401       0.4873       0.7274
+  734   2.213e+06      0.2405       0.4877       0.7282
+  735   2.265e+06       0.241       0.4881        0.729
+  736   2.317e+06      0.2414       0.4884       0.7299
+  737   2.371e+06      0.2419       0.4888       0.7307
+  738   2.427e+06      0.2423       0.4892       0.7316
+  739   2.483e+06      0.2428       0.4896       0.7324
+  740   2.541e+06      0.2432         0.49       0.7332
+  741     2.6e+06      0.2437       0.4904       0.7341
+  742   2.661e+06      0.2441       0.4908       0.7349
+  743   2.723e+06      0.2446       0.4912       0.7358
+  744   2.786e+06       0.245       0.4916       0.7366
+  745   2.851e+06      0.2455        0.492       0.7375
+  746   2.917e+06      0.2459       0.4924       0.7383
+  747   2.985e+06      0.2464       0.4928       0.7392
+  748   3.055e+06      0.2468       0.4932         0.74
+  749   3.126e+06      0.2473       0.4936       0.7409
+  750   3.199e+06      0.2477        0.494       0.7417
+  751   3.273e+06      0.2482       0.4944       0.7426
+  752    3.35e+06      0.2486       0.4948       0.7435
+  753   3.428e+06      0.2491       0.4952       0.7443
+  754   3.508e+06      0.2495       0.4957       0.7452
+  755   3.589e+06        0.25       0.4961       0.7461
+  756   3.673e+06      0.2504       0.4965       0.7469
+  757   3.758e+06      0.2509       0.4969       0.7478
+  758   3.846e+06      0.2513       0.4973       0.7486
+  759   3.936e+06      0.2518       0.4977       0.7495
+  760   4.027e+06      0.2522       0.4982       0.7504
+  761   4.121e+06      0.2527       0.4986       0.7512
+  762   4.217e+06      0.2531        0.499       0.7521
+  763   4.315e+06      0.2536       0.4994        0.753
+  764   4.416e+06       0.254       0.4998       0.7539
+  765   4.519e+06      0.2545       0.5003       0.7547
+  766   4.624e+06      0.2549       0.5007       0.7556
+  767   4.732e+06      0.2554       0.5011       0.7565
+  768   4.842e+06      0.2558       0.5015       0.7574
+  769   4.955e+06      0.2563        0.502       0.7582
+  770    5.07e+06      0.2567       0.5024       0.7591
+  771   5.188e+06      0.2572       0.5028         0.76
+  772   5.309e+06      0.2576       0.5033       0.7609
+  773   5.433e+06      0.2581       0.5037       0.7618
+  774   5.559e+06      0.2585       0.5041       0.7626
+  775   5.689e+06       0.259       0.5045       0.7635
+  776   5.821e+06      0.2594        0.505       0.7644
+  777   5.957e+06      0.2599       0.5054       0.7653
+  778   6.095e+06      0.2603       0.5059       0.7662
+  779   6.237e+06      0.2608       0.5063       0.7671
+  780   6.383e+06      0.2612       0.5067        0.768
+  781   6.531e+06      0.2617       0.5072       0.7688
+  782   6.683e+06      0.2621       0.5076       0.7697
+  783   6.839e+06      0.2626        0.508       0.7706
+  784   6.998e+06       0.263       0.5085       0.7715
+  785   7.161e+06      0.2635       0.5089       0.7724
+  786   7.328e+06      0.2639       0.5094       0.7733
+  787   7.499e+06      0.2644       0.5098       0.7742
+  788   7.674e+06      0.2648       0.5103       0.7751
+  789   7.852e+06      0.2653       0.5107        0.776
+  790   8.035e+06      0.2657       0.5112       0.7769
+  791   8.222e+06      0.2662       0.5116       0.7778
+  792   8.414e+06      0.2666        0.512       0.7787
+  793    8.61e+06      0.2671       0.5125       0.7796
+  794    8.81e+06      0.2675       0.5129       0.7805
+  795   9.016e+06       0.268       0.5134       0.7814
+  796   9.226e+06      0.2684       0.5138       0.7823
+  797   9.441e+06      0.2689       0.5143       0.7832
+  798   9.661e+06      0.2693       0.5147       0.7841
+  799   9.886e+06      0.2698       0.5152        0.785
+-----------------------------------------------------------------
 G4 kernel has come to Quit state.
+

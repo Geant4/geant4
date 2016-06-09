@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsvolu.cc,v 1.10 2006/06/29 18:15:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsvolu.cc,v 1.10 2006-06-29 18:15:06 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // by I.Hrivnacova, 13.10.99
 
@@ -35,7 +35,7 @@
 #include "G3toG4.hh"
 #include "G3toG4MakeSolid.hh"
 
-void PG4gsvolu(G4String tokens[]) {
+void PG4gsvolu(G4String *tokens) {
     // fill the parameter containers
     G3fillParams(tokens,PTgsvolu);
 

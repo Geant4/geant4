@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbRotationMatrix.cc,v 1.10 2010/10/13 15:20:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4tgbRotationMatrix.cc,v 1.10 2010-10-13 15:20:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // class G4tgbRotationMatrix
@@ -118,20 +118,20 @@ G4tgbRotationMatrix::BuildG4RotMatrixFrom6( std::vector<G4double>& values )
   G4double phiZ = values[5];
 
   // build the 3 axis from the values
-  CLHEP::Hep3Vector colx(std::sin(thetaX)*std::cos(phiX),
-                         std::sin(thetaX)*std::sin(phiX),std::cos(thetaX));
-  CLHEP::Hep3Vector coly(std::sin(thetaY)*std::cos(phiY),
-                         std::sin(thetaY)*std::sin(phiY),std::cos(thetaY));
-  CLHEP::Hep3Vector colz(std::sin(thetaZ)*std::cos(phiZ),
-                         std::sin(thetaZ)*std::sin(phiZ),std::cos(thetaZ));
+  G4ThreeVector colx(std::sin(thetaX)*std::cos(phiX),
+                     std::sin(thetaX)*std::sin(phiX),std::cos(thetaX));
+  G4ThreeVector coly(std::sin(thetaY)*std::cos(phiY),
+                     std::sin(thetaY)*std::sin(phiY),std::cos(thetaY));
+  G4ThreeVector colz(std::sin(thetaZ)*std::cos(phiZ),
+                     std::sin(thetaZ)*std::sin(phiZ),std::cos(thetaZ));
 
   // Now create a G4RotationMatrix (HepRotation), which can be left handed. 
   // This is not foreseen in CLHEP, but can be achieved using the
   // constructor which does not check its input arguments!   
 
-  CLHEP::HepRep3x3 rottemp(colx.x(),coly.x(),colz.x(), // matrix representation
-                           colx.y(),coly.y(),colz.y(), // (inverted)
-                           colx.z(),coly.z(),colz.z());
+  G4Rep3x3 rottemp(colx.x(),coly.x(),colz.x(), // matrix representation
+                   colx.y(),coly.y(),colz.y(), // (inverted)
+                   colx.z(),coly.z(),colz.z());
   
   G4RotationMatrix* rotMat = new G4RotationMatrix(rottemp);
 
@@ -151,17 +151,17 @@ G4RotationMatrix*
 G4tgbRotationMatrix::BuildG4RotMatrixFrom9( std::vector<G4double>& values )
 {
   // build the 3 axis from the values
-  CLHEP::Hep3Vector colx(values[0],values[1],values[2]);
-  CLHEP::Hep3Vector coly(values[3],values[4],values[5]);
-  CLHEP::Hep3Vector colz(values[6],values[7],values[8]);
+  G4ThreeVector colx(values[0],values[1],values[2]);
+  G4ThreeVector coly(values[3],values[4],values[5]);
+  G4ThreeVector colz(values[6],values[7],values[8]);
 
   // Now create a G4RotationMatrix (HepRotation), which can be left handed. 
   // This is not foreseen in CLHEP, but can be achieved using the
   // constructor which does not check its input arguments!
 
-  CLHEP::HepRep3x3 rottemp(colx.x(),coly.x(),colz.x(),  // matrix representation
-                           colx.y(),coly.y(),colz.y(),  // (inverted)
-                           colx.z(),coly.z(),colz.z());
+  G4Rep3x3 rottemp(colx.x(),coly.x(),colz.x(),  // matrix representation
+                   colx.y(),coly.y(),colz.y(),  // (inverted)
+                   colx.z(),coly.z(),colz.z());
   
   G4RotationMatrix* rotMat = new G4RotationMatrix(rottemp);
 

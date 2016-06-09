@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4ElementaryParticleCollider.cc,v 1.75 2010-10-19 19:48:35 mkelsey Exp $
-// Geant4 tag: $Name: geant4-09-04-patch-01 $
+// Geant4 tag: $Name: geant4-09-04-patch-02 $
 //
 // 20100114  M. Kelsey -- Remove G4CascadeMomentum, use G4LorentzVector directly
 // 20100316  D. Wright (restored by M. Kelsey) -- Replace original (incorrect)
@@ -68,6 +68,7 @@
 // 20100804  M. Kelsey -- Add printing of final-state tables, protected by
 //		G4CASCADE_DEBUG_SAMPLER preprocessor flag
 // 20101019  M. Kelsey -- CoVerity report: check dynamic_cast<> for null
+// 20110414  M. Kelsey -- Protect two-body scattering angle from divide-by-zero
 
 #include "G4ElementaryParticleCollider.hh"
 
@@ -914,7 +915,7 @@ G4ElementaryParticleCollider::sampleCMcosFor2to2(G4double pscm, G4double pFrac,
 
   G4double term1 = 2.0 * pscm*pscm * (smallAngle ? pA : pC);
 
-  if (std::abs(term1) < FLT_MIN) return 1.0;	// No actual scattering here!
+  if (std::abs(term1) < 1e-7) return 1.0;	// No actual scattering here!
 
   G4double term2 = std::exp(-2.0*term1);
   G4double randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);

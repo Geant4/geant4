@@ -47,6 +47,8 @@ unsetenv  G4LIB
 unsetenv  G4LIB_BUILD_G3TOG4
 unsetenv  G4LIB_BUILD_SHARED
 unsetenv  G4LIB_BUILD_STATIC
+unsetenv  G4LIB_USE_DLL
+
 unsetenv  G4LIB_BUILD_ZLIB
 unsetenv  G4LIB_BUILD_GDML
 unsetenv  G4LIB_USE_G3TOG4
@@ -549,6 +551,12 @@ endif
 if ( X$g4lib_build_static == Xy ) then
     setenv G4LIB_BUILD_STATIC 1
     echo "On this machine the G4LIB_BUILD_STATIC=\$G4LIB_BUILD_STATIC"
+endif
+
+
+if ( X$g4lib_use_dll == Xy ) then
+    setenv G4LIB_USE_DLL 1
+    echo "On this machine the G4LIB_USE_DLL=\$G4LIB_USE_DLL"
 endif
 
 #+

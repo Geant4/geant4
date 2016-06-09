@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 14 May 2011  Hisaya Kurashige  (particles-V09-03-17)
+- Fix energy of proton and neutrino in G4NeutronBetaDecayChannel
+
+- 13 May 2011  Hisaya Kurashige
+-  Fix compiler warning in G4TauLeptonicDecayChannel.cc 
+
+- 22 Mar. 2011  Hisaya Kurashige
+- Fix  G4ParticleDefinition::SetApplyCutsFlag() to remove warning messages for proton 
+
+- 16 Mar. 2011  Hisaya Kurashige
+- Modify PDGCodeChecker to allow PDG codei for neutron balls
+- Fix problems reported by Coverity
+  
 - 26 jan. 2011  Hisaya Kurashige  (particles-V09-03-16)
 - Register BetaDecay for anti_neutron 
   though anti_neutron keeps as "stable" with finite life time

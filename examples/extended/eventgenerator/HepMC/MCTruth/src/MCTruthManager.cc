@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: MCTruthManager.cc,v 1.4 2010/12/15 07:38:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: MCTruthManager.cc,v 1.4 2010-12-15 07:38:50 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // --------------------------------------------------------------
@@ -275,8 +275,8 @@ void MCTruthManager::printTree(HepMC::GenParticle* particle, G4String offset)
   {
     G4String deltaoffset = "";
 
-    G4int curr = std::fmod((*it)->barcode(),10000000);
-    G4int part = std::fmod(particle->barcode(),10000000);
+    G4int curr = std::fmod(double((*it)->barcode()),10000000.);
+    G4int part = std::fmod(double(particle->barcode()),10000000.);
     if( curr != part )
       {
         deltaoffset = " | ";

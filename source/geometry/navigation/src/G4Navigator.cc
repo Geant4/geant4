@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.46 2010/11/15 14:03:27 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.46 2010-11-15 14:03:27 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -1034,7 +1034,7 @@ void G4Navigator::SetupHierarchy()
 {
   G4int i;
   const G4int cdepth = fHistory.GetDepth();
-  G4VPhysicalVolume *mother, *current;
+  G4VPhysicalVolume *current;
   G4VSolid *pSolid;
   G4VPVParameterisation *pParam;
 
@@ -1070,7 +1070,6 @@ void G4Navigator::SetupHierarchy()
           ComputeMaterial(replicaNo, current, &touchable) );
         break;
     }
-    mother = current;
   }
 }
 

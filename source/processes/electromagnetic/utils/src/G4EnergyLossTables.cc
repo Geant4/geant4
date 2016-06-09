@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4EnergyLossTables.cc,v 1.36 2010-12-23 17:04:54 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 // first version created by P.Urban , 06/04/1998

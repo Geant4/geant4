@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsHypeSide.cc,v 1.8 2010/07/12 15:33:49 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TwistTubsHypeSide.cc,v 1.8 2010-07-12 15:33:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -540,10 +540,8 @@ G4int G4TwistTubsHypeSide::DistanceToSurface(const G4ThreeVector &gp,
    // If p is on surface, return distance = 0 immediatery .
    //
    G4ThreeVector  lastgxx[2];
-   G4double       distfromlast[2];
    for (G4int i=0; i<2; i++) {
       lastgxx[i] = fCurStatWithV.GetXX(i);
-      distfromlast[i] = (gp - lastgxx[i]).mag();
    }
 
    if ((gp - lastgxx[0]).mag() < halftol || (gp - lastgxx[1]).mag() < halftol) {

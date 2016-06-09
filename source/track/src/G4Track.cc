@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.35 2010/09/21 00:33:05 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Track.cc,v 1.35 2010-09-21 00:33:05 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 //---------------------------------------------------------------
@@ -42,12 +42,16 @@
 #include "G4Track.hh"
 #include "G4ParticleTable.hh"
 
+#include <iostream>
+#include <iomanip>
+
 G4Allocator<G4Track> aTrackAllocator;
 
 G4PhysicsLogVector* G4Track::velTable = 0;
 
-const G4double G4Track::maxT = 100.0;
-const G4double G4Track::minT = 0.0001;
+G4double G4Track::maxT = 1000.0;
+G4double G4Track::minT = 0.0001;
+G4int    G4Track::NbinT = 500;
 
 ///////////////////////////////////////////////////////////
 G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
@@ -266,11 +270,41 @@ G4double G4Track::GetVelocity() const
 void G4Track::PrepareVelocityTable()
 ///////////////////
 {
-  const G4int NBIN=300;
-  velTable = new G4PhysicsLogVector(minT, maxT, NBIN);
-  for (G4int i=0; i<=NBIN; i++){
+  velTable = new G4PhysicsLogVector(minT, maxT, NbinT);
+  for (G4int i=0; i<=NbinT; i++){
     G4double T = velTable->Energy(i);
-    velTable->PutValue(i, c_light*std::sqrt(T*(T+2.))/(T+1.0) );
+    velTable->PutValue(i, c_light*std::sqrt(T*(T+2.))/(T+1.0) );    
   }
+
   return;
+} 
+
+
+///////////////////
+void G4Track::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin)
+///////////////////
+{
+  if (nbin > 100 )                NbinT = nbin;
+  if ((t_min < t_max)&&(t_min>0.))  {
+    minT = t_min; 
+    maxT = t_max;
+  } 
+  if (velTable !=0)               delete velTable;
+  velTable = 0;
 }
+
+///////////////////
+G4double G4Track::GetMaxTOfVelocityTable()
+///////////////////
+{ return maxT; }
+
+///////////////////
+G4double G4Track::GetMinTOfVelocityTable() 
+///////////////////
+{ return minT; }
+
+///////////////////
+G4double G4Track::GetNbinOfVelocityTable() 
+///////////////////
+{ return NbinT; }
+

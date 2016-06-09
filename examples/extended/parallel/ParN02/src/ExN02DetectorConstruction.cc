@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorConstruction.cc,v 1.3 2006/06/29 17:34:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02DetectorConstruction.cc,v 1.22 2010-01-22 11:57:03 maire Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,6 +42,8 @@
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
 #include "G4SDManager.hh"
+#include "G4GeometryTolerance.hh"
+#include "G4GeometryManager.hh"
 
 #include "G4UserLimits.hh"
 
@@ -57,7 +59,8 @@ ExN02DetectorConstruction::ExN02DetectorConstruction()
  solidTarget(0), logicTarget(0), physiTarget(0), 
  solidTracker(0),logicTracker(0),physiTracker(0), 
  solidChamber(0),logicChamber(0),physiChamber(0), 
- TargetMater(0), ChamberMater(0),fpMagField(0),
+ TargetMater(0), ChamberMater(0),chamberParam(0),
+ stepLimit(0), fpMagField(0),
  fWorldLength(0.),  fTargetLength(0.), fTrackerLength(0.),
  NbOfChambers(0) ,  ChamberWidth(0.),  ChamberSpacing(0.)
 {
@@ -70,6 +73,8 @@ ExN02DetectorConstruction::ExN02DetectorConstruction()
 ExN02DetectorConstruction::~ExN02DetectorConstruction()
 {
   delete fpMagField;
+  delete stepLimit;
+  delete chamberParam;
   delete detectorMessenger;             
 }
 
@@ -98,7 +103,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   //Xenon gas
   G4Material* Xenon = 
   new G4Material("XenonGas", z=54., a=131.29*g/mole, density= 5.458*mg/cm3,
-                 kStateGas, temperature= 1*atmosphere, pressure= 293.15*kelvin);
+                 kStateGas, temperature= 293.15*kelvin, pressure= 1*atmosphere);
 
   // Print all the materials defined.
   //
@@ -129,9 +134,14 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   //------------------------------ 
 
   G4double HalfWorldLength = 0.5*fWorldLength;
-  
- solidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
- logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
+ 
+  G4GeometryManager::GetInstance()->SetWorldMaximumExtent(fWorldLength);
+  G4cout << "Computed tolerance = "
+         << G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()/mm
+         << " mm" << G4endl;
+
+  solidWorld= new G4Box("world",HalfWorldLength,HalfWorldLength,HalfWorldLength);
+  logicWorld= new G4LogicalVolume( solidWorld, Air, "World", 0, 0, 0);
   
   //  Must place the World Physical volume unrotated at (0,0,0).
   // 
@@ -141,7 +151,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 				 "World",         // its name
                                  0,               // its mother  volume
                                  false,           // no boolean operations
-                                 0);              // no field specific to volume
+                                 0);              // copy number
 				 
   //------------------------------ 
   // Target
@@ -157,7 +167,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 				  "Target",        // its name
 				  logicWorld,      // its mother  volume
 				  false,           // no boolean operations
-				  0);              // no particular field 
+				  0);              // copy number 
 
   G4cout << "Target is " << fTargetLength/cm << " cm of " 
          << TargetMater->GetName() << G4endl;
@@ -176,7 +186,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 				  "Tracker",       // its name
 				  logicWorld,      // its mother  volume
 				  false,           // no boolean operations
-				  0);              // no particular field 
+				  0);              // copy number 
 
   //------------------------------ 
   // Tracker segments
@@ -192,7 +202,7 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   G4double firstLength = fTrackerLength/10;
   G4double lastLength  = fTrackerLength;
    
-  G4VPVParameterisation* chamberParam = new ExN02ChamberParameterisation(  
+  chamberParam = new ExN02ChamberParameterisation(  
 			   NbOfChambers,          // NoChambers 
 			   firstPosition,         // Z of center of first 
 			   ChamberSpacing,        // Z spacing of centers
@@ -239,11 +249,18 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
 //--------- example of User Limits -------------------------------
 
   // below is an example of how to set tracking constraints in a given
-  // logical volume(see also in N02PhysicsList how to setup the process
-  // G4UserSpecialCuts).  
-  // Sets a max Step length in the tracker region
-  // G4double maxStep = 0.5*ChamberWidth, maxLength = 2*fTrackerLength;
-  // G4double maxTime = 0.1*ns, minEkin = 10*MeV;
+  // logical volume(see also in N02PhysicsList how to setup the processes
+  // G4StepLimiter or G4UserSpecialCuts).
+    
+  // Sets a max Step length in the tracker region, with G4StepLimiter
+  //
+  G4double maxStep = 0.5*ChamberWidth;
+  stepLimit = new G4UserLimits(maxStep);
+  logicTracker->SetUserLimits(stepLimit);
+  
+  // Set additional contraints on the track, with G4UserSpecialCuts
+  //
+  // G4double maxLength = 2*fTrackerLength, maxTime = 0.1*ns, minEkin = 10*MeV;
   // logicTracker->SetUserLimits(new G4UserLimits(maxStep,maxLength,maxTime,
   //                                               minEkin));
   
@@ -282,7 +299,14 @@ void ExN02DetectorConstruction::setChamberMaterial(G4String materialName)
  
 void ExN02DetectorConstruction::SetMagField(G4double fieldValue)
 {
-  fpMagField->SetFieldValue(fieldValue);
+  fpMagField->SetMagFieldValue(fieldValue);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExN02DetectorConstruction::SetMaxStep(G4double maxStep)
+{
+  if ((stepLimit)&&(maxStep>0.)) stepLimit->SetMaxAllowedStep(maxStep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

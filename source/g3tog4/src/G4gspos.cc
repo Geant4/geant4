@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gspos.cc,v 1.13 2006/06/29 18:14:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gspos.cc,v 1.13 2006-06-29 18:14:42 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // by I.Hrivnacova, 13.10.99
 
@@ -39,7 +39,7 @@ void G4CreateCloneVTE(G3VolTableEntry* vte, G3VolTableEntry* mvte,
               G4double pars[], G4int npar, G4int num,
               G4double x, G4double y, G4double z, G4int irot, G4String vonly);
 
-void PG4gspos(G4String tokens[])
+void PG4gspos(G4String *tokens)
 {
         // fill the parameter containers
     G3fillParams(tokens,PTgspos);

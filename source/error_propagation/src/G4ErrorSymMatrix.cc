@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorSymMatrix.cc,v 1.3 2007/06/21 15:04:10 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorSymMatrix.cc,v 1.3 2007-06-21 15:04:10 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -292,29 +292,30 @@ G4ErrorMatrix operator*(const G4ErrorMatrix &m1, const G4ErrorSymMatrix &m2)
   G4ErrorMatrixConstIter mit1, mit2, sp,snp; //mit2=0
   G4double temp;
   G4ErrorMatrixIter mir=mret.m.begin();
-  G4int step,stept;
   for(mit1=m1.m.begin();
-      mit1<m1.m.begin()+m1.num_row()*m1.num_col(); mit1 = mit2)
-  {
-    for(step=1,snp=m2.m.begin();step<=m2.num_row();)
+      mit1<m1.m.begin()+m1.num_row()*m1.num_col();
+      mit1 = mit2)
     {
-      mit2=mit1;
-      sp=snp;
-      snp+=step;
-      temp=0;
-      while(sp<snp)
-      {
-        temp+=*(sp++)*(*(mit2++));
-      }
-      sp+=step-1;
-      for(stept=++step;stept<=m2.num_row();stept++)
-      {
-        temp+=*sp*(*(mit2++));
-        sp+=stept;
-      }
-      *(mir++)=temp;
-    }
-  }
+      snp=m2.m.begin();
+      for(int step=1;step<=m2.num_row();++step)
+        {
+            mit2=mit1;
+            sp=snp;
+            snp+=step;
+            temp=0;
+            while(sp<snp)
+            temp+=*(sp++)*(*(mit2++));
+            if( step<m2.num_row() ) {	// only if we aren't on the last row
+                sp+=step-1;
+                for(int stept=step+1;stept<=m2.num_row();stept++)
+                {
+                   temp+=*sp*(*(mit2++));
+                   if(stept<m2.num_row()) sp+=stept;
+                }
+            }	// if(step
+            *(mir++)=temp;
+        }	// for(step
+    }	// for(mit1
   return mret;
 }
 

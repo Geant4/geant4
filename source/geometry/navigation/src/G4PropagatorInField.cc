@@ -35,7 +35,7 @@
 // 14.10.96 John Apostolakis,   design and implementation
 // 17.03.97 John Apostolakis,   renaming new set functions being added
 //
-// $Id: G4PropagatorInField.cc,v 1.52 2010/07/13 15:59:42 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.52 2010-07-13 15:59:42 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
@@ -58,20 +58,21 @@
 G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator, 
                                           G4FieldManager *detectorFieldMgr,
                                           G4VIntersectionLocator *vLocator  )
-  : fDetectorFieldMgr(detectorFieldMgr), 
-    fCurrentFieldMgr(detectorFieldMgr), 
+  : 
+    fMax_loop_count(1000),
+    fUseSafetyForOptimisation(true),   // (false) is less sensitive to incorrect safety
+    fZeroStepThreshold( 0.0 ),         // length of what is recognised as 'zero' step
+    fDetectorFieldMgr(detectorFieldMgr), 
+    fpTrajectoryFilter( 0 ),
     fNavigator(theNavigator),
+    fCurrentFieldMgr(detectorFieldMgr),
+    fSetFieldMgr(false),
+    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
                         G4ThreeVector(0.,0.,0.),0.0,0.0,0.0,0.0,0.0),
     fParticleIsLooping(false),
-    fVerboseLevel(0),
-    fMax_loop_count(1000),
     fNoZeroStep(0), 
-    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0),
-    fUseSafetyForOptimisation(true),   // (false) is less sensitive to incorrect safety
-    fSetFieldMgr(false),
-    fZeroStepThreshold( 0.0 ), 
-    fpTrajectoryFilter( 0 )
+    fVerboseLevel(0)
 {
   if(fDetectorFieldMgr) { fEpsilonStep = fDetectorFieldMgr->GetMaximumEpsilonStep();}
   else                  { fEpsilonStep= 1.0e-5; } 

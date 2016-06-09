@@ -228,9 +228,9 @@ G4tgbGeometryDumper::DumpPVPlacement( G4VPhysicalVolume* pv,
     // apply a Z reflection (reflection matrix is decomposed in new
     // reflection-free rotation + z-reflection)
     colz *= -1.;
-    CLHEP::HepRep3x3 rottemp(colx.x(),coly.x(),colz.x(),
-                             colx.y(),coly.y(),colz.y(),
-                             colx.z(),coly.z(),colz.z());
+    G4Rep3x3 rottemp(colx.x(),coly.x(),colz.x(),
+                     colx.y(),coly.y(),colz.y(),
+                     colx.z(),coly.z(),colz.z());
     // matrix representation (inverted)
     *rotMat = G4RotationMatrix(rottemp);
     *rotMat = (*rotMat).inverse();
@@ -1075,7 +1075,7 @@ G4String G4tgbGeometryDumper::GetTGSolidType( const G4String& solidType )
 //------------------------------------------------------------------------
 G4double G4tgbGeometryDumper::MatDeterminant(G4RotationMatrix * ro) 
 {
-   CLHEP::HepRep3x3 r = ro->rep3x3();
+   G4Rep3x3 r = ro->rep3x3();
    return       r.xx_*(r.yy_*r.zz_ - r.zy_*r.yz_)
               - r.yx_*(r.xy_*r.zz_ - r.zy_*r.xz_)
               + r.zx_*(r.xy_*r.yz_ - r.yy_*r.xz_);

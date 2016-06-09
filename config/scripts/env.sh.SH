@@ -47,6 +47,8 @@ unset  G4LIB
 unset  G4LIB_BUILD_G3TOG4
 unset  G4LIB_BUILD_SHARED
 unset  G4LIB_BUILD_STATIC
+unset  G4LIB_USE_DLL
+
 unset  G4LIB_BUILD_ZLIB
 unset  G4LIB_BUILD_GDML
 unset  G4LIB_USE_G3TOG4
@@ -749,6 +751,15 @@ if [ X$g4lib_build_static = Xy ] ; then
         echo "On this machine the G4LIB_BUILD_STATIC=\$G4LIB_BUILD_STATIC"
     fi
 fi 
+
+
+if [ X$g4lib_use_dll = Xy ] ; then
+    G4LIB_USE_DLL=1
+    export G4LIB_USE_DLL
+    if [ X\$g4non_display = X ] ; then
+        echo "On this machine the G4LIB_USE_DLL=\$G4LIB_USE_DLL"
+    fi
+fi
 
 #+
 #

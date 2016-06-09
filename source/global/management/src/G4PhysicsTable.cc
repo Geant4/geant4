@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PhysicsTable.cc,v 1.18 2010-12-24 07:33:13 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // ------------------------------------------------------------

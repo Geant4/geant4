@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VEMDataSet.hh,v 1.14 2010-12-27 17:44:01 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

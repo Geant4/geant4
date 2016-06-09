@@ -119,7 +119,7 @@ void Histo::book()
       G4String idd;
       if(histType == "root") { idd = "h" +  ids[i]; }
       else                   { idd = ids[i]; }
-      histo[i] = hf->createHistogram1D(idd, tittles[i], bins[i], xmin[i], xmax[i]);
+      histo[i] = hf->createHistogram1D(idd, titles[i], bins[i], xmin[i], xmax[i]);
     } else {
       histo[i] = 0;
     }
@@ -141,7 +141,7 @@ void Histo::book()
 
 void Histo::save()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef G4ANALYSIS_USE 
   // Write histogram file
   tree->commit();
   G4cout << "Closing the tree..." << G4endl;
@@ -195,7 +195,7 @@ void Histo::add1D(const G4String& id, const G4String& name, G4int nb,
   xmax.push_back(x2);
   unit.push_back(u);
   ids.push_back(id);
-  tittles.push_back(name);
+  titles.push_back(name);
   histo.push_back(0);
 }
 

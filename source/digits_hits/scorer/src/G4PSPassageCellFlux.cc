@@ -74,22 +74,12 @@ G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
 
   if ( IsPassed(aStep) ) {
-    G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
-    G4VPVParameterisation* physParam = physVol->GetParameterisation();
-    G4VSolid* solid = 0;
-    if(physParam)
-    { // for parameterized volume
-      G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
-                  ->GetReplicaNumber(indexDepth);
-      solid = physParam->ComputeSolid(idx, physVol);
-      solid->ComputeDimensions(physParam,idx,physVol);
-    }
-    else
-    { // for ordinary volume
-      solid = physVol->GetLogicalVolume()->GetSolid();
-    }
+    G4int idx = ((G4TouchableHistory*)
+		 (aStep->GetPreStepPoint()->GetTouchable()))
+                 ->GetReplicaNumber(indexDepth);
+    G4double cubicVolume = ComputeVolume(aStep, idx);
 
-    fCellFlux /= solid->GetCubicVolume();
+    fCellFlux /= cubicVolume;
     G4int index = GetIndex(aStep);
     EvtMap->add(index,fCellFlux);
   }
@@ -175,3 +165,26 @@ void G4PSPassageCellFlux::DefineUnitAndCategory(){
 }
 
 
+G4double G4PSPassageCellFlux::ComputeVolume(G4Step* aStep, G4int idx){
+
+  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid* solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    if(idx<0)
+    {
+      G4Exception("G4PSPassageCellFlux","G4PSPassageCellFlux::ProcessHits",JustWarning,
+                  "Incorrect replica number");
+      G4cerr << " --- GetReplicaNumber : " << idx << G4endl;
+    }
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
+  }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+  
+  return solid->GetCubicVolume();
+}

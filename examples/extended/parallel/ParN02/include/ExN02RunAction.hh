@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02RunAction.hh,v 1.3 2006/07/05 12:46:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02RunAction.hh,v 1.8 2006-06-29 17:47:45 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,6 +48,7 @@ class ExN02RunAction : public G4UserRunAction
 
   public:
     void BeginOfRunAction(const G4Run*);
+    void EndOfRunAction(const G4Run*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

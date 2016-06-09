@@ -34,7 +34,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
-
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
@@ -57,6 +56,7 @@ G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
+    //verboseLevel = 10;
 }
 
 G4PSCellFlux::G4PSCellFlux(G4String name, const G4String& unit, G4int depth)
@@ -74,22 +74,12 @@ G4bool G4PSCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4double stepLength = aStep->GetStepLength();
   if ( stepLength == 0. ) return FALSE;
 
-  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  G4VPVParameterisation* physParam = physVol->GetParameterisation();
-  G4VSolid* solid = 0;
-  if(physParam)
-  { // for parameterized volume
-    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
-                ->GetReplicaNumber(indexDepth);
-    solid = physParam->ComputeSolid(idx, physVol);
-    solid->ComputeDimensions(physParam,idx,physVol);
-  }
-  else
-  { // for ordinary volume
-    solid = physVol->GetLogicalVolume()->GetSolid();
-  }
+  G4int idx = ((G4TouchableHistory*)
+	       (aStep->GetPreStepPoint()->GetTouchable()))
+               ->GetReplicaNumber(indexDepth);
+  G4double cubicVolume = ComputeVolume(aStep, idx);
 
-  G4double CellFlux = stepLength / (solid->GetCubicVolume());
+  G4double CellFlux = stepLength / cubicVolume;
   if (weighted) CellFlux *= aStep->GetPreStepPoint()->GetWeight(); 
   G4int index = GetIndex(aStep);
   EvtMap->add(index,CellFlux);
@@ -139,4 +129,28 @@ void G4PSCellFlux::DefineUnitAndCategory(){
    new G4UnitDefinition("percentimeter2","percm2","Per Unit Surface",(1./cm2));
    new G4UnitDefinition("permillimeter2","permm2","Per Unit Surface",(1./mm2));
    new G4UnitDefinition("permeter2","perm2","Per Unit Surface",(1./m2));
+}
+
+G4double G4PSCellFlux::ComputeVolume(G4Step* aStep, G4int idx){
+
+  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid* solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    if(idx<0)
+    {
+      G4Exception("G4PSCellFlux","G4PSCellFlux::ProcessHits",JustWarning,
+                  "Incorrect replica number");
+      G4cerr << " --- GetReplicaNumber : " << idx << G4endl;
+    }
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
+  }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+  
+  return solid->GetCubicVolume();
 }

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ParticleDefinition.cc,v 1.39 2010-12-22 07:07:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -321,7 +321,8 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
 {
   if(theParticleName=="gamma"
   || theParticleName=="e-"
-  || theParticleName=="e+")
+  || theParticleName=="e+"
+  || theParticleName=="proton")
   { fApplyCutsFlag = flg; }
   else
   {
@@ -330,6 +331,6 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
      << G4endl;
     G4cerr
      << "becomes obsolete. Production threshold is applied only for "
-     << "gamma, e- and e+." << G4endl;
+     << "gamma, e- ,e+ and proton." << G4endl;
   }
 }

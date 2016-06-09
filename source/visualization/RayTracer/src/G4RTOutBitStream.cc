@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTOutBitStream.cc,v 1.6 2008/04/04 13:52:48 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RTOutBitStream.cc,v 1.6 2008-04-04 13:52:48 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 //
@@ -51,6 +51,11 @@ G4OutBitStream::G4OutBitStream(int size)
 
   mBitPos = 7;
   mWriteFlag = 1;
+}
+
+G4OutBitStream::~G4OutBitStream()
+{
+  delete mBuf;
 }
 
 void

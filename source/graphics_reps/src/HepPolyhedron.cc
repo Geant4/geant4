@@ -25,7 +25,7 @@
 //
 //
 // $Id: HepPolyhedron.cc,v 1.35 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 //

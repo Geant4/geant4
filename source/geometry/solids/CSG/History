@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 1, 2011  G.Cosmo                    geom-csg-V09-03-16
+- Made radial tolerance a local constant instead of a static data member
+  in G4Orb and G4Sphere.
+
+May 27, 2011  T.Nikitina
+- G4Tubs: use safe formula for quadratic equation solution, in order to avoid
+  numerical errors.
+- G4Torus: use relative radial tolerances to avoid loss of precision issues
+  for shapes of big dimensions. Addresses problem report #1175.
+
+May 12, 2011  G.Cosmo
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+Apr 27, 2011  T.Nikitina
+- Added protection for potential negative argument to sqrt() in
+  CalculateExtent() for G4Orb, G4Cons and G4Sphere.
+
 Jan 7, 2011  T.Nikitina                  geom-csg-V09-03-15
 - G4Cons: fix in DistanceToIn(p,v,..) to squared tolerance in comparision.
   Replaced calculation of the solution for the quadratic equation, to use safe

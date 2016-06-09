@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessAttribute.hh,v 1.6 2010/10/07 13:59:21 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ProcessAttribute.hh,v 1.6 2010-10-07 13:59:21 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -47,8 +47,9 @@
 #include "globals.hh"
 #include "G4ios.hh"
 
-#include "G4VProcess.hh"
 #include "G4ProcessManager.hh"
+
+class G4VProcess;
 
 class G4ProcessAttribute
 {

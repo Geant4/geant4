@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.69 2010/06/05 06:25:03 perl Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.69 2010-06-05 06:25:03 perl Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -41,6 +41,7 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
+#include "G4RotationMatrix.hh"
 #include "G4Material.hh"
 #include "G4Polymarker.hh"
 #include "G4Polyline.hh"
@@ -211,7 +212,7 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 	
 	// HepRApp does not correctly represent the end faces of cones at
 	// non-standard angles, let the base class convert these solids to polygons.	
-	CLHEP::HepRotation r = fpObjectTransformation->getRotation();	
+	G4RotationMatrix r = fpObjectTransformation->getRotation();	
 	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
 								std::fabs(r.phiY())<=.001 || 
 								std::fabs(r.phiZ())<=.001 ||
@@ -278,7 +279,7 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 	
 	// HepRApp does not correctly represent the end faces of cylinders at
 	// non-standard angles, let the base class convert these solids to polygons.	
-	CLHEP::HepRotation r = fpObjectTransformation->getRotation();	
+	G4RotationMatrix r = fpObjectTransformation->getRotation();	
 	G4bool linedUpWithAnAxis = (std::fabs(r.phiX())<=.001 ||  
 								std::fabs(r.phiY())<=.001 || 
 								std::fabs(r.phiZ())<=.001 ||

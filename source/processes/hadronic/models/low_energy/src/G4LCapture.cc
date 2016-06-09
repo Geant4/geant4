@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.cc,v 1.14 2007/02/24 05:17:29 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LCapture.cc,v 1.14 2007-02-24 05:17:29 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // G4 Model: Low-energy Neutron Capture
@@ -130,7 +130,7 @@ G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucle
    G4double py = p*sint*std::cos(phi);
    G4double pz = p*cost;
    G4double e = p;
-   G4double e0 = 0.;
+   // G4double e0 = 0.;  DHW 19 May 2011: variable set but not used
 
    G4double a = px*Px + py*Py + pz*Pz;
    a = (a/(E + E0) - e)/E0;
@@ -159,7 +159,7 @@ G4LCapture::ApplyYourself(const G4HadProjectile & aTrack, G4Nucleus& targetNucle
        py = xp*sint*std::cos(phi);
        pz = xp*cost;
        e = xp;
-       e0 = 0.;
+       //  e0 = 0.;   DHW 19 May 2011: variable set but not used
 
        a = px*Px + py*Py + pz*Pz;
        a = (a/(E + E0) - e)/E0;

@@ -7,8 +7,8 @@
 # The script is generated froma template file and then installed to the
 # known bindir as an executable.
 #
-# $Id: Geant4ConfigureConfigScript.cmake,v 1.4 2010/12/13 17:31:59 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04 $
+# $Id: Geant4ConfigureConfigScript.cmake,v 1.4 2010-12-13 17:31:59 bmorgan Exp $
+# GEANT4 Tag $Name: geant4-09-04-patch-02 $
 #
 
 #-----------------------------------------------------------------------------
@@ -28,6 +28,21 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
         set(G4_BUILTWITH_QT "yes")
     else()
         set(G4_BUILTWITH_QT "no")
+    endif()
+
+    # - RayTracerX
+    if(GEANT4_USE_RAYTRACERX)
+        set(G4_BUILTWITH_RAYTRACERX11 "yes")
+        # We have to play with the X11 paths to get a clean set suitable for
+        # inclusion
+        set(_raw_x11_includes ${X11_INCLUDE_DIR})
+        list(REMOVE_DUPLICATES _raw_x11_includes)
+        set(G4_X11_INCLUDE_STATEMENT )
+        foreach(_p ${_raw_x11_includes})
+            set(G4_X11_INCLUDE_STATEMENT "-I${_p} ${G4_X11_INCLUDE_STATEMENT}")
+        endforeach()
+    else()
+        set(G4_BUILTWITH_RAYTRACERX11 "no")
     endif()
 
     # Configure the script

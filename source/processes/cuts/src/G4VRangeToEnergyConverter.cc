@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VRangeToEnergyConverter.cc,v 1.16 2010-12-23 06:00:42 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // --------------------------------------------------------------
@@ -57,6 +57,7 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter():
 
 G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& right) : TotBin(right.TotBin)
 {
+  fMaxEnergyCut = 0.;
   *this = right;
 }
 
@@ -100,6 +101,7 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
     G4RangeVector* rangeVector = 0; 
     if (vector !=0 ) {
       rangeVector = new G4RangeVector(LowestEnergy, MaxEnergyCut, TotBin);
+      fMaxEnergyCut = MaxEnergyCut;   
       for (size_t i=0; i<size_t(TotBin); i++) {
 	G4double Value = (*vector)[i];
 	rangeVector->PutValue(i,Value);

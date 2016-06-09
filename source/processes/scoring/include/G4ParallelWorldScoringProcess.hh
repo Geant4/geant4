@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.hh,v 1.4 2007/05/30 17:47:10 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParallelWorldScoringProcess.hh,v 1.4 2007-05-30 17:47:10 ahoward Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -52,6 +52,7 @@ class G4PathFinder;
 class G4VTouchable;
 class G4VPhysicalVolume;
 class G4ParticleChange;
+class G4ParticleDefinition;
 #include "G4VProcess.hh"
 #include "G4FieldTrack.hh"
 #include "G4TouchableHandle.hh"
@@ -83,6 +84,7 @@ public: // with description
 
   void SetParallelWorld(G4String parallelWorldName);
   void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
+  G4bool IsAtRestRequired(G4ParticleDefinition* partDef);
 
   //--------------------------------------------------------------
   //     Process interface

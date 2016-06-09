@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsatt.cc,v 1.13 2006/06/29 18:13:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsatt.cc,v 1.13 2006-06-29 18:13:39 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 
 #include "globals.hh"
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 
-void PG4gsatt(G4String tokens[])
+void PG4gsatt(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsatt);

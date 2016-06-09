@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2010/11/19 20:13:26 vnivanch Exp $
+$Id: History,v 1.43 2010-11-19 20:13:26 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-03-11  V.Ivant (exhadr01-V09-03-11)
+- Fixed typo in printout
 
 19-11-10  V.Ivant (exhadr01-V09-03-10)
 - PhysicsList - update according to Physics List library

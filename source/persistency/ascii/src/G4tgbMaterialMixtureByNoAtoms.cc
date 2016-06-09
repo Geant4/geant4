@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4tgbMaterialMixtureByNoAtoms.cc,v 1.7 2010-10-13 07:56:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // class G4tgbMaterialMixtureByNoAtoms

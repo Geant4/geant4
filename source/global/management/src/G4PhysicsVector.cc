@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.cc,v 1.49 2010/11/01 13:55:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PhysicsVector.cc,v 1.49 2010-11-01 13:55:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -86,11 +86,7 @@ G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
 {
   if (&right==this)  { return *this; }
-  if (type != right.type)  { return *this; }
-
-  //DeleteData();
   CopyData(right);
-
   return *this;
 }
 
@@ -274,8 +270,9 @@ G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
       dataVector[i] *= factorV;
     } 
   }
-  n = secDerivative.size();
-  if(n > 0) { for(i=0; i<n; ++i) { secDerivative[i] *= factorV; } }
+  //  n = secDerivative.size();
+  // if(n > 0) { for(i=0; i<n; ++i) { secDerivative[i] *= factorV; } }
+  secDerivative.clear();
 
   edgeMin *= factorE;
   edgeMax *= factorE;
@@ -364,7 +361,8 @@ void G4PhysicsVector::FillSecondDerivatives()
  
   G4int n = numberOfNodes-1;
 
-  //G4cout << "G4PhysicsVector::FillSecondDerivatives() n= " << n << G4endl;
+  //G4cout << "G4PhysicsVector::FillSecondDerivatives() n= " << n 
+  //	 << "   " << this << G4endl;
   // G4cout << *this << G4endl;
 
   G4double* u = new G4double [n];
@@ -452,8 +450,8 @@ G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
 {
-  if(!useSpline)  { return useSpline; }
   secDerivative.clear();
+  if(!useSpline)  { return useSpline; }
   secDerivative.reserve(numberOfNodes);
   for(size_t j=0; j<numberOfNodes; ++j)
   {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4LivermoreComptonModel.cc,v 1.8 2010-12-27 17:45:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // Author: Sebastien Inserti

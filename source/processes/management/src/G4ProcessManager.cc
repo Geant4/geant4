@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProcessManager.cc,v 1.38 2010-12-22 09:14:54 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -44,6 +44,7 @@
 
 #include "G4ProcessManagerMessenger.hh"
 #include "G4ProcessManager.hh"
+#include "G4ProcessAttribute.hh"
 #include "G4StateManager.hh"
 #include <iomanip>
 #include "G4ProcessTable.hh"
@@ -151,7 +152,9 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
 // ///////////////////////////////////////
 G4ProcessManager::G4ProcessManager():
                 theParticleType(0),
-                numberOfProcesses(0)
+                numberOfProcesses(0),
+                duringTracking(false),
+		verboseLevel(1)
 {
   // clear the process List and ProcessAttr Vector
   theProcessList = 0;

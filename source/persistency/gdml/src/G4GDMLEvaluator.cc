@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.cc,v 1.26 2010/11/04 11:33:49 gcosmo Exp $
+// $Id: G4GDMLEvaluator.cc,v 1.26 2010-11-04 11:33:49 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLEvaluator Implementation
@@ -34,8 +34,6 @@
 // --------------------------------------------------------------------
 
 #include <sstream>
-
-#include "globals.hh"
 
 #include "G4GDMLEvaluator.hh"
 
@@ -218,7 +216,7 @@ G4double G4GDMLEvaluator::Evaluate(const G4String& in)
    {
       value = eval.evaluate(expression.c_str());
 
-      if (eval.status() != HepTool::Evaluator::OK)
+      if (eval.status() != G4Evaluator::OK)
       {
          eval.print_error();
          G4String error_msg = "Error in expression: " + expression;

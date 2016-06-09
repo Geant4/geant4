@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: FCALSteppingAction.cc,v 1.7 2006-06-29 16:03:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 

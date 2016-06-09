@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceBoundary.hh,v 1.8 2006/06/29 18:40:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SurfaceBoundary.hh,v 1.8 2006-06-29 18:40:45 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4SurfaceBoundary
@@ -72,8 +72,7 @@ public:  // with description
   inline const G4BoundingBox3D& BBox() const;
     // Returns the bounding-box.
 
-  G4SurfaceBoundary* Project(const G4Transform3D& tr =
-                             HepGeom::Transform3D::Identity);
+  G4SurfaceBoundary* Project(const G4Transform3D& tr = G4Transform3D::Identity);
     // Projection onto the xy plane after transformation tr.
     // The returned object is allocated dynamically; it is the caller's
     // responsibility to delete it.

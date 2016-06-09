@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.47 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Polycone.cc,v 1.47 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -578,12 +578,12 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
 { 
   // declare working variables
   //
-  G4double Aone, Atwo, Afive, phi, zRand, fDPhi, fSPhi, cosu, sinu;
+  G4double Aone, Atwo, Afive, phi, zRand, fDPhi, cosu, sinu;
   G4double rRand1, chose, rone, rtwo, qone, qtwo,
            fDz = std::fabs((zTwo-zOne)/2.);
   G4ThreeVector point, offset;
   offset = G4ThreeVector(0.,0.,0.5*(zTwo+zOne));
-  fSPhi = startPhi; fDPhi = endPhi - startPhi;
+  fDPhi = endPhi - startPhi;
   rone = (fRmax1-fRmax2)/(2.*fDz); 
   rtwo = (fRmin1-fRmin2)/(2.*fDz);
   if(fRmax1==fRmax2){qone=0.;}

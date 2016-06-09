@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.12 2006/06/29 20:48:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPMadlandNixSpectrum.hh,v 1.12 2006-06-29 20:48:33 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 #ifndef G4NeutronHPMadlandNixSpectrum_h
 #define G4NeutronHPMadlandNixSpectrum_h 1
@@ -118,13 +118,13 @@ class G4NeutronHPMadlandNixSpectrum : public G4VNeutronHPEDis
     G4double precision = 0.000001;
     G4double result =-gamma - std::log(aValue);
     G4double term = -aValue;
-    G4double last;
+//    G4double last;
     G4int count = 1;
     result -= term;
     for(;;)
     {
       count++;
-      last = result;
+//      last = result;
       term = -term*aValue*(count-1)/(count*count);
       result -=term;
       if(std::fabs(term)/std::fabs(result)<precision) break;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02MagneticField.cc,v 1.2 2006/06/29 17:34:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02MagneticField.cc,v 1.9 2007-08-22 13:11:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //  
 //   User Field class implementation.
 //
@@ -34,6 +34,7 @@
 
 #include "ExN02MagneticField.hh"
 #include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,44 +56,41 @@ ExN02MagneticField::ExN02MagneticField(G4ThreeVector fieldVector)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+ExN02MagneticField::~ExN02MagneticField()
+{
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // Set the value of the Global Field to fieldValue along X
 //
-void ExN02MagneticField::SetFieldValue(G4double fieldValue)
+void ExN02MagneticField::SetMagFieldValue(G4double fieldValue)
 {
-   G4UniformMagField::SetFieldValue(G4ThreeVector(fieldValue,0,0));
+   SetMagFieldValue(G4ThreeVector(fieldValue,0,0));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Set the value of the Global Field
 //
-void ExN02MagneticField::SetFieldValue(G4ThreeVector fieldVector)
+void ExN02MagneticField::SetMagFieldValue(G4ThreeVector fieldVector)
 {
   // Find the Field Manager for the global field
   G4FieldManager* fieldMgr= GetGlobalFieldManager();
     
   if(fieldVector!=G4ThreeVector(0.,0.,0.))
   { 
-    G4UniformMagField::SetFieldValue(fieldVector);
+    SetFieldValue(fieldVector);
     fieldMgr->SetDetectorField(this);
   } else {
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
-    G4MagneticField* magField = NULL;
+    G4MagneticField* magField = 0;
     fieldMgr->SetDetectorField(magField);
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ExN02MagneticField::~ExN02MagneticField()
-{
-  // GetGlobalFieldManager()->SetDetectorField(0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4TransportationManager.hh"
 
 G4FieldManager*  ExN02MagneticField::GetGlobalFieldManager()
 {

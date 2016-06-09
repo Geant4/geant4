@@ -24,16 +24,9 @@
 // ********************************************************************
 //
 //
-// --------------------------------------------------------------
-//   GEANT 4 - Underground Dark Matter Detector Advanced Example
-//
-//      For information related to this code contact: Alex Howard
-//      e-mail: a.s.howard@ic.ac.uk
-// --------------------------------------------------------------
-// Comments
-//
-//
-// TrackerHit header
+// $Id: ExN02TrackerHit.hh,v 1.8 2006-06-29 17:47:53 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
+// 
 // --------------------------------------------------------------
 
 #ifndef ExN02TrackerHit_h
@@ -60,7 +53,7 @@ class ExN02TrackerHit : public G4VHit
 
       ExN02TrackerHit(const ExN02TrackerHit&);
       const ExN02TrackerHit& operator=(const ExN02TrackerHit&);
-      int operator==(const ExN02TrackerHit&) const;
+      G4int operator==(const ExN02TrackerHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);
@@ -89,15 +82,15 @@ class ExN02TrackerHit : public G4VHit
 
   public:
      
-  inline void SetTrackID  (G4int track)       {trackID = track; };
-  inline void SetChamberNb(G4int chamb)       {chamberNb = chamb; };  
-  inline void SetEdep(G4double de)            {edep=de;};
-  inline void SetPos(G4ThreeVector xyz)       {pos=xyz;};
+    inline void SetTrackID  (G4int track)       {trackID = track; }
+    inline void SetChamberNb(G4int chamb)       {chamberNb = chamb; } 
+    inline void SetEdep(G4double de)            {edep=de;}
+    inline void SetPos(G4ThreeVector xyz)       {pos=xyz;}
 
-  inline G4int GetTrackID()                   const {return trackID; };
-  inline G4int GetChamberNb()                 const {return chamberNb; };
-  inline G4double GetEdep()                   const {return edep;};
-  inline G4ThreeVector GetPos()               const {return pos;};
+    inline G4int GetTrackID()                   const {return trackID; }
+    inline G4int GetChamberNb()                 const {return chamberNb; }
+    inline G4double GetEdep()                   const {return edep;}
+    inline G4ThreeVector GetPos()               const {return pos;}
 
 };
 //MSH_END
@@ -105,24 +98,18 @@ class ExN02TrackerHit : public G4VHit
 // vector collection of one type of hits
 typedef G4THitsCollection<ExN02TrackerHit> ExN02TrackerHitsCollection;
 
-
 extern G4Allocator<ExN02TrackerHit> ExN02TrackerHitAllocator;
 
-
-inline void* ExN02TrackerHit::operator new(size_t) {
+inline void* ExN02TrackerHit::operator new(size_t)
+{
   void* aHit;
   aHit = (void*) ExN02TrackerHitAllocator.MallocSingle();
   return aHit;
 }
 
-
-inline void ExN02TrackerHit::operator delete(void* aHit) {
+inline void ExN02TrackerHit::operator delete(void* aHit)
+{
   ExN02TrackerHitAllocator.FreeSingle((ExN02TrackerHit*) aHit);
 }
 
 #endif
-
-
-
-
-

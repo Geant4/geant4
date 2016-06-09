@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.17 2010/01/13 15:53:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: HistoManager.cc,v 1.17 2010-01-13 15:53:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -248,7 +248,7 @@ void HistoManager::EndOfRun()
   G4cout<<G4endl;
 
   // normalise histograms
-  for(G4int i=0; i<nHisto; i++) {
+  for(G4int i=0; i<nHisto; i++) { 
     histo->scale(i,x);
   }
 

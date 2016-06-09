@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.16 2006/06/29 18:22:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FieldManager.hh,v 1.16 2006-06-29 18:22:15 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //  
 // class G4FieldManager
@@ -148,29 +148,35 @@ class G4FieldManager
        // Private copy constructor and assignment operator.
 
   private:
-
+     // Dependent objects -- with state that depends on tracking
      G4Field*        fDetectorField;
      G4ChordFinder*  fChordFinder;
 
      G4bool          fAllocatedChordFinder; // Did we used "new" to
 					    // create fChordFinder ?
+     // INVARIANTS of tracking  ---------------------------------------
+     // 
+     //  1. CONSTANTS 
+     const G4double  fEpsilonMinDefault;   // Can be 1.0e-5 to 1.0e-10 ...
+     const G4double  fEpsilonMaxDefault;   // Can be 1.0e-3 to 1.0e-8 ...
+
+     //  2. CHARACTERISTIC of field
      G4bool          fFieldChangesEnergy;
 
-     //  Values for the required accuracies
-     //
+     //  3. PARAMETERS 
+     // 
+     //     Values for the required accuracies
      G4double  fDelta_One_Step_Value;      //  for one tracking/physics step
      G4double  fDelta_Intersection_Val;    //  for boundary intersection
 
      G4double  fDefault_Delta_One_Step_Value;   // = 0.25 * mm;
      G4double  fDefault_Delta_Intersection_Val; // = 0.1 * mm;
 
-     //  Values for the small possible relative accuracy of a step
-     //  (corresponding to the greatest possible integration accuracy)
-
-     G4double  fEpsilonMinDefault;   // Can be 1.0e-5 to 1.0e-10 ...
-     G4double  fEpsilonMaxDefault;   // Can be 1.0e-3 to 1.0e-8 ...
+     //     Values for the small possible relative accuracy of a step
+     //     (corresponding to the greatest possible integration accuracy)
      G4double  fEpsilonMin; 
      G4double  fEpsilonMax;
+
 };
 
 // Our current design and implementation expect that a particular

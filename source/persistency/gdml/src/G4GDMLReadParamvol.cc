@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc,v 1.14 2010/10/14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4GDMLReadParamvol.cc,v 1.14 2010-10-14 16:19:40 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // class G4GDMLReadParamvol Implementation
 //
@@ -636,7 +636,6 @@ ParameterisedRead(const xercesc::DOMElement* const element)
  
      if (tag=="parameters")
      {
-        G4double number = 1;
         const xercesc::DOMNamedNodeMap* const attributes
               = element->getAttributes();
         XMLSize_t attributeCount = attributes->getLength();
@@ -659,7 +658,7 @@ ParameterisedRead(const xercesc::DOMElement* const element)
           const G4String attName = Transcode(attribute->getName());
           const G4String attValue = Transcode(attribute->getValue());
 
-          if (attName=="number")  { number = eval.Evaluate(attValue); }
+          if (attName=="number")  { eval.Evaluate(attValue); }
         }
         ParametersRead(child);
       }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.30 2010/10/19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Torus.hh,v 1.30 2010-10-19 15:42:09 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -198,8 +198,8 @@ class G4Torus : public G4CSGSolid
 
     // used by normal
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
-
-    G4double kRadTolerance, kAngTolerance;
+    
+    G4double fRminTolerance, fRmaxTolerance, kRadTolerance, kAngTolerance;
       // Radial and angular tolerances
 };
 

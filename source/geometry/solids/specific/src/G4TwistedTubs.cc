@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.30 2010/11/10 10:00:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TwistedTubs.cc,v 1.30 2010-11-10 10:00:16 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -740,7 +740,6 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
    G4ThreeVector xx;
    G4ThreeVector bestxx;
    G4int i;
-   G4int besti = -1;
    for (i=0; i< 6; i++)
    {
       G4double tmpdistance = surfaces[i]->DistanceToIn(p, v, xx);
@@ -748,7 +747,6 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p,
       {
          distance = tmpdistance;
          bestxx = xx;
-         besti = i;
       }
    }
    *tmpdist = distance;
@@ -812,7 +810,6 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
          surfaces[5] = fOuterHype;
 
          G4int i;
-         G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
          for (i=0; i< 6; i++)
@@ -822,7 +819,6 @@ G4double G4TwistedTubs::DistanceToIn (const G4ThreeVector& p) const
             {
                distance = tmpdistance;
                bestxx = xx;
-               besti = i;
             }
          }
          *tmpdist = distance;
@@ -1007,7 +1003,6 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
          surfaces[5] = fUpperEndcap;
 
          G4int i;
-         G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
          for (i=0; i< 6; i++)
@@ -1017,7 +1012,6 @@ G4double G4TwistedTubs::DistanceToOut( const G4ThreeVector& p ) const
             {
                distance = tmpdistance;
                bestxx = xx;
-               besti = i;
             }
          }
          *tmpdist = distance;
@@ -1252,7 +1246,7 @@ G4double G4TwistedTubs::GetSurfaceArea()
 G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
 {
 
-  G4double  z = CLHEP::RandFlat::shoot(fEndZ[0],fEndZ[1]);
+  G4double  z = G4RandFlat::shoot(fEndZ[0],fEndZ[1]);
   G4double phi , phimin, phimax ;
   G4double x   , xmin,   xmax ;
   G4double r   , rmin,   rmax ;
@@ -1264,14 +1258,14 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
   G4double a5 = fLowerEndcap->GetSurfaceArea()  ;
   G4double a6 = fUpperEndcap->GetSurfaceArea() ;
 
-  G4double chose = CLHEP::RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
+  G4double chose = G4RandFlat::shoot(0.,a1 + a2 + a3 + a4 + a5 + a6) ;
 
   if(chose < a1)
   {
 
     phimin = fOuterHype->GetBoundaryMin(z) ;
     phimax = fOuterHype->GetBoundaryMax(z) ;
-    phi = CLHEP::RandFlat::shoot(phimin,phimax) ;
+    phi = G4RandFlat::shoot(phimin,phimax) ;
 
     return fOuterHype->SurfacePoint(phi,z,true) ;
 
@@ -1281,7 +1275,7 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
 
     phimin = fInnerHype->GetBoundaryMin(z) ;
     phimax = fInnerHype->GetBoundaryMax(z) ;
-    phi = CLHEP::RandFlat::shoot(phimin,phimax) ;
+    phi = G4RandFlat::shoot(phimin,phimax) ;
 
     return fInnerHype->SurfacePoint(phi,z,true) ;
 
@@ -1291,7 +1285,7 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
 
     xmin = fLatterTwisted->GetBoundaryMin(z) ; 
     xmax = fLatterTwisted->GetBoundaryMax(z) ;
-    x = CLHEP::RandFlat::shoot(xmin,xmax) ;
+    x = G4RandFlat::shoot(xmin,xmax) ;
     
     return fLatterTwisted->SurfacePoint(x,z,true) ;
 
@@ -1301,7 +1295,7 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
 
     xmin = fFormerTwisted->GetBoundaryMin(z) ; 
     xmax = fFormerTwisted->GetBoundaryMax(z) ;
-    x = CLHEP::RandFlat::shoot(xmin,xmax) ;
+    x = G4RandFlat::shoot(xmin,xmax) ;
 
     return fFormerTwisted->SurfacePoint(x,z,true) ;
   
@@ -1311,11 +1305,11 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
 
     rmin = GetEndInnerRadius(0) ;
     rmax = GetEndOuterRadius(0) ;
-    r = CLHEP::RandFlat::shoot(rmin,rmax) ;
+    r = G4RandFlat::shoot(rmin,rmax) ;
 
     phimin = fLowerEndcap->GetBoundaryMin(r) ; 
     phimax = fLowerEndcap->GetBoundaryMax(r) ;
-    phi    = CLHEP::RandFlat::shoot(phimin,phimax) ;
+    phi    = G4RandFlat::shoot(phimin,phimax) ;
 
     return fLowerEndcap->SurfacePoint(phi,r,true) ;
 
@@ -1324,11 +1318,11 @@ G4ThreeVector G4TwistedTubs::GetPointOnSurface() const
   {
     rmin = GetEndInnerRadius(1) ;
     rmax = GetEndOuterRadius(1) ;
-    r = CLHEP::RandFlat::shoot(rmin,rmax) ;
+    r = G4RandFlat::shoot(rmin,rmax) ;
 
     phimin = fUpperEndcap->GetBoundaryMin(r) ; 
     phimax = fUpperEndcap->GetBoundaryMax(r) ;
-    phi    = CLHEP::RandFlat::shoot(phimin,phimax) ;
+    phi    = G4RandFlat::shoot(phimin,phimax) ;
 
     return fUpperEndcap->SurfacePoint(phi,r,true) ;
   }

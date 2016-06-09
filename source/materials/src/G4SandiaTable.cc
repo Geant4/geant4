@@ -25,7 +25,7 @@
 //
 
 // $Id: G4SandiaTable.cc,v 1.43 2010-12-23 16:12:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

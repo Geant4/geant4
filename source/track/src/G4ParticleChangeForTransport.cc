@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.20 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleChangeForTransport.cc,v 1.20 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -48,7 +48,8 @@
 
 G4ParticleChangeForTransport::G4ParticleChangeForTransport()
   : G4ParticleChange(), isMomentumChanged(false), theMaterialChange(0),
-    theMaterialCutsCoupleChange(0), theSensitiveDetectorChange(0)
+    theMaterialCutsCoupleChange(0), theSensitiveDetectorChange(0),
+    fpVectorOfAuxiliaryPointsPointer(0)
 {
   if (verboseLevel>2) {
     G4cout << "G4ParticleChangeForTransport::G4ParticleChangeForTransport() "
@@ -66,7 +67,8 @@ G4ParticleChangeForTransport::~G4ParticleChangeForTransport()
 
 G4ParticleChangeForTransport::
 G4ParticleChangeForTransport(const G4ParticleChangeForTransport &r)
-  : G4ParticleChange(r)
+  : G4ParticleChange(r),
+    fpVectorOfAuxiliaryPointsPointer(0)
 {
   if (verboseLevel>0) {
     G4cout << "G4ParticleChangeForTransport::  copy constructor is called "

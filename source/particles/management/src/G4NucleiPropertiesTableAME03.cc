@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NucleiPropertiesTableAME03.cc,v 1.5 2010-12-22 07:07:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 //

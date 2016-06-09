@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc,v 1.8 2010/06/16 11:20:54 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4ePolarizedIonisation.cc,v 1.8 2010-06-16 11:20:54 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -269,9 +269,7 @@ void G4ePolarizedIonisation::BuildPhysicsTable(const G4ParticleDefinition& part)
     // get cut value
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(j);
 
-    G4double tcutmin = emModel->MinEnergyCut(&part, couple);
     G4double cut = (*theCoupleTable->GetEnergyCutsVector(1))[j];
-    cut = std::max(cut, tcutmin);
 
     //create physics vectors then fill it (same parameters as lambda vector)
     G4PhysicsVector * ptrVectorA = LambdaPhysicsVector(couple,cut);

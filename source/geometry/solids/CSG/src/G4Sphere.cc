@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.90 2010/11/23 14:45:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Sphere.cc,v 1.90 2010-11-23 14:45:56 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // class G4Sphere
 //
@@ -82,8 +82,6 @@ enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
 
 enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
-const G4double G4Sphere::fEpsilon = 2.e-11;  // relative tolerance of radii
-
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
@@ -95,6 +93,8 @@ G4Sphere::G4Sphere( const G4String& pName,
                           G4double pSTheta, G4double pDTheta )
   : G4CSGSolid(pName), fFullPhiSphere(true), fFullThetaSphere(true)
 {
+  const G4double fEpsilon = 2.e-11;  // Relative radial tolerance constant
+
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
   // Check radii and set radial tolerances
@@ -233,7 +233,7 @@ G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
     G4double yoffset,yMin,yMax;
     G4double zoffset,zMin,zMax;
 
-    G4double diff1,diff2,maxDiff,newMin,newMax;
+    G4double diff1,diff2,delta,maxDiff,newMin,newMax;
     G4double xoff1,xoff2,yoff1,yoff2;
 
     xoffset=pTransform.NetTranslation().x();
@@ -324,8 +324,10 @@ G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
           //
-          diff1=std::sqrt(fRmax*fRmax-yoff1*yoff1);
-          diff2=std::sqrt(fRmax*fRmax-yoff2*yoff2);
+          delta=fRmax*fRmax-yoff1*yoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=fRmax*fRmax-yoff2*yoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=xoffset-maxDiff;
           newMax=xoffset+maxDiff;
@@ -348,8 +350,10 @@ G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
           //
-          diff1=std::sqrt(fRmax*fRmax-xoff1*xoff1);
-          diff2=std::sqrt(fRmax*fRmax-xoff2*xoff2);
+          delta=fRmax*fRmax-xoff1*xoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=fRmax*fRmax-xoff2*xoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=yoffset-maxDiff;
           newMax=yoffset+maxDiff;
@@ -1911,9 +1915,8 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
 
   G4double pDistS,compS,pDistE,compE,sphi2,vphi;
     
-  G4double rho2,rad2,pDotV2d,pDotV3d,pTheta;
+  G4double rho2,rad2,pDotV2d,pDotV3d;
 
-  G4double tolSTheta=0.,tolETheta=0.;
   G4double xi,yi,zi;      // Intersection point
 
   // Theta precals
@@ -1927,19 +1930,9 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
   rho2 = p.x()*p.x()+p.y()*p.y();
   rad2 = rho2+p.z()*p.z();
 
-  pTheta = std::atan2(std::sqrt(rho2),p.z());
-
   pDotV2d = p.x()*v.x()+p.y()*v.y();
   pDotV3d = pDotV2d+p.z()*v.z();
 
-  // Theta precalcs
-    
-  if ( !fFullThetaSphere )
-  {
-    tolSTheta = fSTheta - halfAngTolerance;
-    tolETheta = eTheta + halfAngTolerance;
-  }
-    
   // Radial Intersections from G4Sphere::DistanceToIn
   //
   // Outer spherical shell intersection

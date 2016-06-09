@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 May 2010 Gabriele Cosmo (gdml-V09-03-12)
+- G4GDMLWriteMaterials: avoid dereferencing of null pointer in PropertyWrite()
+  for materials without property assigned; issue a warning message.
+  Addressing problem report #1214.
+
+13 May 2011 Gabriele Cosmo
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+5 May 2010 Gabriele Cosmo
+- Make use of G4Evaluator typedef for evaluator instance.
+
 10 Jan 2010 Ivana Hrivnakova (gdml-V09-03-11)
 - Correction in G4GDMLWriteMaterials::MaterialWrite() to properly treat
   export of materials with single element defined as isotope composition.

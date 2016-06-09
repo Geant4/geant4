@@ -20,7 +20,7 @@
 
 # $Id: Head.U,v 1.3 2002-06-23 20:31:44 sadilov Exp $
 #
-# Generated on Fri Feb 11 12:53:03 GMT 2011 [metaconfig 3.0 PL70]
+# Generated on Fri Jun 24 15:51:14 BST 2011 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -186,6 +186,7 @@ g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
 g4clhep_lib_dir=''
+g4lib_build_dll=''
 g4lib_build_shared=''
 g4lib_build_static=''
 g4lib_use_dll=''
@@ -292,6 +293,7 @@ g4lib_use_shared='y'
 g4lib_build_static='n'
 g4lib_use_static='n'
 g4lib_build_dll='n'
+g4lib_use_dll='n'
 g4lib_build_dyn='n'
 #INITIALIZE GLOBAL/GRANULAR LIBRARY OPTIONS
 g4global='y'
@@ -2237,9 +2239,9 @@ $startsh
 with_qt_dir="\$qt_search_dir"
 
 #
-# Only run if we haven't succesfully found Qt already
+# Only run if we haven't succesfully found Qt4 already
 #
-if test "x\$g4_qt_is_configured" = "x" ; then
+if test "x\$g4_qt_is_configured" = "x" || test "x\$g4_is_qt4" = "xno" ; then
     #
     # Flag specifying if we've configured Qt o.k.
     #
@@ -2726,9 +2728,13 @@ EOM\`
 	    g4_havegoodqt="no"
     fi #END TEST for Darwin Framework
 
+    # Hack in a final, well, hack to flag qt4
+    if test "x\$g4_qt_version" = "x4" || "x\$g4_qt_major_version" = "x4" ; then
+        g4_is_qt4="yes"
+    fi
 else
     #Probably also want flags here to reset variables if requested
-    echo "configure: Qt already configured, no recheck neccessary"
+    echo "configure: Qt already configured, no recheck necessary"
 fi #END TEST "x\$g4_qt_is_configured" = "x" 
 
 EOSC
@@ -3135,12 +3141,14 @@ if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
 		case $gans in
 		n*|N*) 
 			g4lib_build_dll=n
+            g4lib_use_dll=n
 			g4lib_build_shared=n
 			g4lib_build_static=y
 			break
 			;;
 		y*|Y*) 
 			g4lib_build_dll=y
+            g4lib_use_dll=y
 			g4lib_build_shared=n
 			g4lib_build_static=n
 			break
@@ -4509,15 +4517,15 @@ if test "x$g4ui_none" = "xn" ; then
 
 	# If we didn't find Qt automatically, then ask user if they know
 	# where it's installed...
-	if test "x$g4_havegoodqt" = "xno" ; then
+	if test "x$g4_havegoodqt" = "xno" || test "x$g4_is_qt4" = "xno" ; then
 	    promptend="no"
 	    user_qthome="the standard locations"
 
             while test "x$promptend" = "xno" ; do
 	        g4message=`cat << EOM
 
-Autodetection failed to locate Qt3 or Qt4 in $qthomeloc on your system.
-Please enter the path to your Qt3 OR Qt4 install (i.e. if Qt4 is installed
+Autodetection failed to locate Qt4 in $qthomeloc on your system.
+Please enter the path to your Qt4 install (i.e. if Qt4 is installed
 in PATH/include/QT, PATH/include or PATH/include/qt4, enter PATH),
 or type '-' to CANCEL the build of the Qt UI module.
 Qt path:
@@ -4540,7 +4548,7 @@ EOM`
 		    qt_search_dir=$user_qthome
 		    . ./qt
 
-		    if test "x$g4_havegoodqt" = "xyes" ; then
+		    if test "x$g4_havegoodqt" = "xyes" && test "x$g4_is_qt4" = "xyes" ; then
 			promptend=yes
 		    fi
 		fi #END TEST user_qthome = -
@@ -5609,15 +5617,15 @@ if test "x$g4ui_build_qt_session" = "xy" ; then
 
 	# If we didn't find Qt automatically, then ask user if they know
 	# where it's installed...
-	if test "x$g4_havegoodqt" = "xno" ; then
+	if test "x$g4_havegoodqt" = "xno" || test "x$g4_is_qt4" = "xno" ; then
 	    promptend="no"
 	    user_qthome="the standard locations"
 
             while test "x$promptend" = "xno" ; do
 	        g4message=`cat << EOM
 
-Autodetection failed to locate Qt3 or Qt4 in $qthomeloc on your system.
-Please enter the path to your Qt3 OR Qt4 install (i.e. if Qt4 is installed
+Autodetection failed to locate Qt4 in $qthomeloc on your system.
+Please enter the path to your Qt4 install (i.e. if Qt4 is installed
 in PATH/include/QT, PATH/include or PATH/include/qt4, enter PATH),
 or type '-' to CANCEL the build of the Qt UI module.
 Qt path:
@@ -5640,7 +5648,7 @@ EOM`
 		    qt_search_dir=$user_qthome
 		    . ./qt
 
-		    if test "x$g4_havegoodqt" = "xyes" ; then
+		    if test "x$g4_havegoodqt" = "xyes" && test "x$g4_is_qt4" = "xyes" ; then
 			promptend=yes
 		    fi
 		fi #END TEST user_qthome = -
@@ -5973,6 +5981,7 @@ g4install='$g4install'
 g4ledata='$g4ledata'
 g4levelgammadata='$g4levelgammadata'
 g4lib='$g4lib'
+g4lib_build_dll='$g4lib_build_dll'
 g4lib_build_gdml='$g4lib_build_gdml'
 g4lib_build_shared='$g4lib_build_shared'
 g4lib_build_static='$g4lib_build_static'

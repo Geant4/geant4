@@ -23,18 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajState.cc,v 1.8 2009/05/14 13:53:06 arce Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ErrorFreeTrajState.cc,v 1.8 2009-05-14 13:53:06 arce Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
 // ------------------------------------------------------------
 //
-#include "G4ErrorFreeTrajState.hh"
-#include "G4ErrorFreeTrajParam.hh"
-#include "G4ErrorSurfaceTrajState.hh"
 
-#include "G4ErrorMatrix.hh"
 #include <iomanip>
 
 #include "G4Field.hh"
@@ -43,6 +39,10 @@
 #include "G4GeometryTolerance.hh"
 #include "G4Material.hh"
 #include "G4ErrorPropagatorData.hh"
+#include "G4ErrorFreeTrajState.hh"
+#include "G4ErrorFreeTrajParam.hh"
+#include "G4ErrorSurfaceTrajState.hh"
+#include "G4ErrorMatrix.hh"
 
 //------------------------------------------------------------------------
 G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4String& partType, const G4Point3D& pos, const G4Vector3D& mom, const G4ErrorTrajErr& errmat) : G4ErrorTrajState( partType, pos, mom, errmat )
@@ -649,10 +649,12 @@ void G4ErrorFreeTrajState::CalculateEffectiveZandA( const G4Material* mate, G4do
 G4int G4ErrorFreeTrajState::PropagateErrorIoni( const G4Track* aTrack )
 { 
   G4double stepLengthCm = aTrack->GetStep()->GetStepLength()/cm;
+#ifdef G4EVERBOSE
   G4double DEDX2;
   if( stepLengthCm < 1.E-7 ) {
     DEDX2=0.;
   }
+#endif
   //  *     Calculate xi factor (KeV).
   G4Material* mate = aTrack->GetVolume()->GetLogicalVolume()->GetMaterial();
   G4double effZ, effA;
@@ -688,8 +690,6 @@ G4int G4ErrorFreeTrajState::PropagateErrorIoni( const G4Track* aTrack )
   if( iverbose >= 2 ) G4cout << "G4EP:IONI: DEDX2 " << dedxSq << " emass " << eMass << " Emax " << Emax << G4endl;
 #endif
 
-  //  if( iverbose >= 2 ) G4cout << "G4EP:IONI: Etot " << Etot << " DEDX2 " << dedxSq << " emass " << eMass << G4endl;
-  
   G4double pPre6 = (aTrack->GetStep()->GetPreStepPoint()->GetMomentum()/GeV).mag();
   pPre6 = std::pow(pPre6, 6 );
   //Apply it to error 

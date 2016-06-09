@@ -40,7 +40,7 @@
 #include "G4HadronicException.hh"
 #include <fstream>
 
-  const G4String G4NeutronHPNames::theString[99] = {"Hydrogen", "Helium",
+  const G4String G4NeutronHPNames::theString[100] = {"Hydrogen", "Helium",
  "Lithium", "Berylium", "Boron", "Carbon", "Nitrogen", "Oxygen", "Fluorine",
  "Neon", "Sodium", "Magnesium", "Aluminum", "Silicon", "Phosphorous", 
  "Sulfur", "Chlorine", "Argon", "Potassium", "Calcium", "Scandium",
@@ -54,9 +54,9 @@
  "Holmium", "Erbium", "Thulium", "Ytterbium", "Lutetium", "Hafnium",
  "Tantalum", "Tungsten", "Rhenium", "Osmium", "Iridium", "Platinium", "Gold",
  "Mercury", "Thallium", "Lead", "Bismuth", "Polonium", "Astatine", "Radon", 
- "Francium", "Radium", "Actinium ", "Thorium", "Protactinium", "Uranium", 
+ "Francium", "Radium", "Actinium", "Thorium", "Protactinium", "Uranium", 
  "Neptunium", "Plutonium", "Americium", "Curium", "Berkelium", "Californium",
- "Einsteinium"};
+ "Einsteinium","Fermium"};
 
 
   G4String G4NeutronHPNames::GetName(G4int i) { return theString[i]; }

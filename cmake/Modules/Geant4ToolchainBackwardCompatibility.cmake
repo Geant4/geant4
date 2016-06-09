@@ -38,8 +38,8 @@
 # library directory and creating a symbolic link inside this directory
 # pointing up one directory level.
 #
-# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.10 2010/12/13 19:03:34 bmorgan Exp $
-# GEANT4 Tag $Name: geant4-09-04 $
+# $Id: Geant4ToolchainBackwardCompatibility.cmake,v 1.10 2010-12-13 19:03:34 bmorgan Exp $
+# GEANT4 Tag $Name: geant4-09-04-patch-02 $
 #
 
 
@@ -107,6 +107,12 @@ else()
     set(G4_HAVE_TCSH "no")
 endif()
 
+if(GEANT4_USE_RAYTRACERX)
+    set(G4_HAVE_RAYTRACERX "yes")
+else()
+    set(G4_HAVE_RAYTRACERX "no")
+endif()
+
 
 #------------------------------------------------------------------------------
 # Add configure files for generating backward compatible shell scripts
@@ -128,6 +134,7 @@ if(UNIX)
         DESTINATION ${GEANT4_DATAROOTDIR}/geant4-${geant4_VERSION}
         FILES_MATCHING PATTERN "*.gmk"
         PATTERN "CVS" EXCLUDE
+        PATTERN ".svn" EXCLUDE
         PATTERN "scripts/" EXCLUDE)
 
     # setup scripts

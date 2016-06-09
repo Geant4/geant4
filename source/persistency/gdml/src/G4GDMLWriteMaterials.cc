@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4GDMLWriteMaterials.cc,v 1.26 2010-10-14 16:19:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // class G4GDMLWriteMaterials Implementation
 //
@@ -230,8 +230,19 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
       propElement->setAttributeNode(NewAttribute("name", mpos->first));
       propElement->setAttributeNode(NewAttribute("ref",
                                     GenerateName(mpos->first, mpos->second)));
-      PropertyVectorWrite(mpos->first, mpos->second);
-      matElement->appendChild(propElement);
+      if (mpos->second)
+      {
+         PropertyVectorWrite(mpos->first, mpos->second);
+         matElement->appendChild(propElement);
+      }
+      else
+      {
+         G4String warn_message = "Null pointer for material property -"
+                  + mpos->first + "- of material -" + mat->GetName() + "- !";
+         G4Exception("G4GDMLWriteMaterials::PropertyWrite()", "NullPointer",
+                     JustWarning, warn_message);
+         continue;
+      }
    }
    for (cpos=cmap->begin(); cpos!=cmap->end(); cpos++)
    {

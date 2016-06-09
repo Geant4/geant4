@@ -17,6 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 13, 2011  G.Cosmo (global-V09-03-26)
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used
+  in G4AnalyticalPolSolver.
+
+May 10, 2011  G.Cosmo
+- Cleared unused CLHEP headers included in Randomize.hh.
+
+May 5, 2011  G.Cosmo
+- Added G4Evaluator typedef in G4Evaluator.hh header.
+
+March 31, 2011  V.Ivantchenko
+- Fixed internal copy constructor in G4PhysicsVector.
+
+Mar 25, 2011  G.Cosmo
+- Added more G4 types for random classes in Randomize.hh.
+- Use G4UniformRand() in G4Poisson.
+
+Mar 25, 2011  G.Cosmo
+- Added G4Rep3x3 typedef to CLHEP::HepRep3x3 in G4RotationMatrix.hh.
+
 Jan 26, 2011  G.Cosmo (global-V09-03-25)
 - Added trailing spaces to version string in G4Version.hh.
 

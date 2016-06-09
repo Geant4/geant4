@@ -24,24 +24,33 @@
 // ********************************************************************
 //
 //
-// $Id: Randomize.hh,v 1.7 2006/06/29 19:00:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: Randomize.hh,v 1.7 2006-06-29 19:00:50 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 #ifndef randomize_h
 #define randomize_h 1
 
 #include <CLHEP/Random/Randomize.h>
 
-// Additional distributions ...
+// Distributions used ...
 //
-#include <CLHEP/Random/RandGaussQ.h>
-#include <CLHEP/Random/RandGaussT.h>
-#include <CLHEP/Random/RandPoissonQ.h>
-#include <CLHEP/Random/RandPoissonT.h>
-#include <CLHEP/Random/RandLandau.h>
+#include <CLHEP/Random/RandFlat.h>
 #include <CLHEP/Random/RandBit.h>
+#include <CLHEP/Random/RandGamma.h>
+#include <CLHEP/Random/RandGaussQ.h>
+#include <CLHEP/Random/RandPoissonQ.h>
+#include <CLHEP/Random/RandExponential.h>
+#include <CLHEP/Random/RandGeneral.h>
 
+#define G4RandStat CLHEP::HepStat
+#define G4RandFlat CLHEP::RandFlat
+#define G4RandBit CLHEP::RandBit
+#define G4RandGamma CLHEP::RandGamma
 #define G4RandGauss CLHEP::RandGaussQ
+#define G4RandExponential CLHEP::RandExponential
+#define G4RandGeneral CLHEP::RandGeneral
+#define G4Random CLHEP::HepRandom
+
 #define G4UniformRand() CLHEP::HepRandom::getTheEngine()->flat()
 
 #endif // randomize_h 

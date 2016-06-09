@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4TransitionRadiation.cc,v 1.10 2010/10/14 18:38:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TransitionRadiation.cc,v 1.10 2010-10-14 18:38:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // G4TransitionRadiation class -- implementation file
 
@@ -63,8 +62,9 @@ G4TransitionRadiation( const G4String& processName, G4ProcessType type )
   : G4VDiscreteProcess(processName, type)
 {
   SetProcessSubType(fTransitionRadiation);
-  //  fMatIndex1 = pMat1->GetIndex() ;
-  //  fMatIndex2 = pMat2->GetIndex() ;
+  fMatIndex1 = fMatIndex2;
+
+  fGamma = fEnergy = fVarAngle = fMinEnergy = fMaxEnergy = fMaxTheta = fSigma1 = fSigma2;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -75,6 +75,26 @@ G4TransitionRadiation( const G4String& processName, G4ProcessType type )
 G4TransitionRadiation::~G4TransitionRadiation()
 {}
 
+G4bool 
+G4TransitionRadiation::IsApplicable(const G4ParticleDefinition& aParticleType)
+{
+  return ( aParticleType.GetPDGCharge() != 0.0 );
+}
+
+G4double G4TransitionRadiation::GetMeanFreePath(const G4Track&,
+						G4double,
+						G4ForceCondition* condition)
+{
+  *condition = Forced;
+  return DBL_MAX;      // so TR doesn't limit mean free path
+}
+
+G4VParticleChange* G4TransitionRadiation::PostStepDoIt(const G4Track&,
+						       const G4Step&)
+{
+  ClearNumberOfInteractionLengthLeft();
+  return &aParticleChange;
+}
 
 ///////////////////////////////////////////////////////////////////
 //

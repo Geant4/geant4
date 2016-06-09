@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20-May 2011 V.Ivanchenko   hadr-pre-V09-03-18
+---------------------------------------------------
+G4PreCompoundProton, G4PreCompoundNeutron - fixed compilation
+  warnings for gcc-4.6.0
+
 23-November 2010 V.Ivanchenko   hadr-pre-V09-03-17
 ---------------------------------------------------
 G4PreCompoundFragment, G4PreCompoundEmission, G4PreCompoundModel -

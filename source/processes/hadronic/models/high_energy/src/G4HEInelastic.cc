@@ -4523,13 +4523,18 @@ G4HEInelastic::MediumEnergyClusterProduction(G4bool& successful,
      for(i=0; i<vecLen; i++) pv[i].Print(i);
    }
 
-  G4bool dum(0);
+  // G4bool dum(0);
+  // DHW 19 May 2011: variable set but not used
+
   G4double ekin, teta;
 
   if (lead) {
     for (i = 0; i < vecLen; i++) {
       if (pv[i].getCode() == lead) {
-        dum = false;
+
+        // dum = false;
+        // DHW 19 May 2011: variable set but not used
+
         break;
       }
     }

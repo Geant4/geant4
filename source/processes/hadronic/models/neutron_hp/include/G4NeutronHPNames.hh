@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPNames.hh,v 1.15 2006/06/29 20:49:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronHPNames.hh,v 1.15 2006-06-29 20:49:03 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 #ifndef G4NeutronHPNames_h
 #define G4NeutronHPNames_h 1
@@ -51,7 +51,7 @@ class G4NeutronHPNames
   
   public:
   
-  static const G4String theString[99];
+  static const G4String theString[100];
   G4int theMaxOffSet;
   G4String itoa(int current)
   {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnalyticalPolSolver.cc,v 1.7 2007/11/13 17:35:06 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AnalyticalPolSolver.cc,v 1.7 2007-11-13 17:35:06 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 
 #include  "globals.hh"
@@ -173,7 +173,7 @@ G4int G4AnalyticalPolSolver::CubicRoots( G4double p[5], G4double r[3][5] )
 G4int G4AnalyticalPolSolver::BiquadRoots( G4double p[5], G4double r[3][5] )
 {
   G4double a, b, c, d, e;
-  G4int i, k, j, noRoots;
+  G4int i, k, j;
 
   if(p[0] != 1.0)
   {
@@ -195,7 +195,7 @@ G4int G4AnalyticalPolSolver::BiquadRoots( G4double p[5], G4double r[3][5] )
 
   if( p[3] < 0. )
   {
-    noRoots = CubicRoots(p,r);
+    CubicRoots(p,r);
 
     for( k = 1; k < 4; k++ )
     {
@@ -211,7 +211,7 @@ G4int G4AnalyticalPolSolver::BiquadRoots( G4double p[5], G4double r[3][5] )
         b = 0.5*( a + b/p[1] );
 
         p[2]    = c/b; 
-        noRoots = QuadRoots(p,r);
+        QuadRoots(p,r);
 
         for( i = 1; i < 3; i++ )
         {
@@ -219,7 +219,7 @@ G4int G4AnalyticalPolSolver::BiquadRoots( G4double p[5], G4double r[3][5] )
         }
         p[1]    = -p[1]; 
         p[2]    =  b; 
-        noRoots = QuadRoots(p,r);
+        QuadRoots(p,r);
 
         for( i = 1; i < 5; i++ ) { r[1][i] = r[1][i] - e; }
 
@@ -253,7 +253,7 @@ G4int G4AnalyticalPolSolver::BiquadRoots( G4double p[5], G4double r[3][5] )
   }
 
   p[2]    = c/b; 
-  noRoots = QuadRoots(p,r);
+  QuadRoots(p,r);
 
   for( k = 1; k < 3; k++ )
   {
@@ -261,7 +261,7 @@ G4int G4AnalyticalPolSolver::BiquadRoots( G4double p[5], G4double r[3][5] )
   }
   p[1]    = -p[1]; 
   p[2]    =  b; 
-  noRoots = QuadRoots(p,r);
+  QuadRoots(p,r);
 
   for( k = 1; k < 5; k++ ) { r[1][k] = r[1][k] - e; }
 
@@ -277,7 +277,7 @@ G4int G4AnalyticalPolSolver::QuarticRoots( G4double p[5], G4double r[3][5])
   G4double a, b, c, d, ds;
 
   G4double reRoot[4];
-  G4int k, noRoots, noReRoots = 0;
+  G4int k, noReRoots = 0;
   
   for( k = 0; k < 4; k++ ) { reRoot[k] = DBL_MAX; }
 
@@ -297,7 +297,7 @@ G4int G4AnalyticalPolSolver::QuarticRoots( G4double p[5], G4double r[3][5])
   p[2] = a1*a3 - 4*a0;
   p[3] = 4*a2*a0 - a1*a1 - a3*a3*a0;
 
-  noRoots = CubicRoots(p,r);
+  CubicRoots(p,r);
 
   for( k = 1; k < 4; k++ )
   {

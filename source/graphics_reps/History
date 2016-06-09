@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st March 2011  John Allison  (greps-V09-03-04)
+- Fixed Coverity warnings.
+
 27th December 2010  John Allison  (greps-V09-03-03)
 - Tagged.
 

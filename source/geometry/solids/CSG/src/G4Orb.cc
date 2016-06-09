@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.35 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Orb.cc,v 1.35 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // class G4Orb
 //
@@ -67,8 +67,6 @@ enum ESide {kNull,kRMax};
 enum ENorm {kNRMax};
 
 
-const G4double G4Orb::fEpsilon = 2.e-11;  // relative tolerance of fRmax
-
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor - check positive radius
@@ -77,6 +75,8 @@ const G4double G4Orb::fEpsilon = 2.e-11;  // relative tolerance of fRmax
 G4Orb::G4Orb( const G4String& pName, G4double pRmax )
 : G4CSGSolid(pName), fRmax(pRmax)
 {
+
+  const G4double fEpsilon = 2.e-11;  // relative tolerance of fRmax
 
   G4double kRadTolerance
     = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
@@ -170,7 +170,7 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
     G4double yoffset,yMin,yMax;
     G4double zoffset,zMin,zMax;
 
-    G4double diff1,diff2,maxDiff,newMin,newMax;
+    G4double diff1,diff2,delta,maxDiff,newMin,newMax;
     G4double xoff1,xoff2,yoff1,yoff2;
 
     xoffset=pTransform.NetTranslation().x();
@@ -263,8 +263,10 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
           //
-          diff1=std::sqrt(fRmax*fRmax-yoff1*yoff1);
-          diff2=std::sqrt(fRmax*fRmax-yoff2*yoff2);
+          delta=fRmax*fRmax-yoff1*yoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=fRmax*fRmax-yoff2*yoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=xoffset-maxDiff;
           newMax=xoffset+maxDiff;
@@ -287,8 +289,10 @@ G4bool G4Orb::CalculateExtent( const EAxis pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
           //
-          diff1=std::sqrt(fRmax*fRmax-xoff1*xoff1);
-          diff2=std::sqrt(fRmax*fRmax-xoff2*xoff2);
+          delta=fRmax*fRmax-xoff1*xoff1;
+          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
+          delta=fRmax*fRmax-xoff2*xoff2;
+          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff=(diff1>diff2) ? diff1:diff2;
           newMin=yoffset-maxDiff;
           newMax=yoffset+maxDiff;

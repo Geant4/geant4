@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.6 2007/05/24 13:52:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: Histo.hh,v 1.6 2007-05-24 13:52:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 
 #ifndef Histo_h
 #define Histo_h 1
@@ -132,7 +132,7 @@ private:
   std::vector<G4double>  xmax;
   std::vector<G4double>  unit;
   std::vector<G4String>  ids;
-  std::vector<G4String>  tittles;
+  std::vector<G4String>  titles;
 };
 
 #endif

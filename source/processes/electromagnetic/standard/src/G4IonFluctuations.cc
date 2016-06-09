@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.27 2010/10/25 19:13:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4IonFluctuations.cc,v 1.27 2010-10-25 19:13:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -123,33 +123,43 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
   
-  G4double navr = minNumberInteractionsBohr;
-  navr = meanLoss*meanLoss/siga;
   //G4cout << "### siga= " << sqrt(siga) << "  navr= " << navr << G4endl;
 
   // Gaussian fluctuation
-  if (navr >= minNumberInteractionsBohr) {
 
-    // Increase fluctuations for big fractional energy loss
-    //G4cout << "siga= " << siga << G4endl;
-    if ( meanLoss > minFraction*kineticEnergy ) {
-      G4double gam = (kineticEnergy - meanLoss)/particleMass + 1.0;
-      G4double b2  = 1.0 - 1.0/(gam*gam);
-      if(b2 < xmin*beta2) b2 = xmin*beta2;
-      G4double x   = b2/beta2;
-      G4double x3  = 1.0/(x*x*x);
-      siga *= 0.25*(1.0 + x)*(x3 + (1.0/b2 - 0.5)/(1.0/beta2 - 0.5) );
-    }
-    //       G4cout << "siga= " << siga << G4endl;
-    siga = sqrt(siga);
-    G4double lossmax = meanLoss+meanLoss;
+  // Increase fluctuations for big fractional energy loss
+  //G4cout << "siga= " << siga << G4endl;
+  if ( meanLoss > minFraction*kineticEnergy ) {
+    G4double gam = (kineticEnergy - meanLoss)/particleMass + 1.0;
+    G4double b2  = 1.0 - 1.0/(gam*gam);
+    if(b2 < xmin*beta2) b2 = xmin*beta2;
+    G4double x   = b2/beta2;
+    G4double x3  = 1.0/(x*x*x);
+    siga *= 0.25*(1.0 + x)*(x3 + (1.0/b2 - 0.5)/(1.0/beta2 - 0.5) );
+  }
+  //       G4cout << "siga= " << siga << G4endl;
+
+  G4double sigb = siga/(meanLoss*meanLoss);
+  G4double lambda = 1.0/sigb;
+  
+  if (lambda >= 5.0) {
+
+    sigb = sqrt(sigb);
+    do {
+      loss = G4RandGauss::shoot(1.0,sigb);
+    } while (0.0 > loss || loss > 2.0);
+  } else {
+
+    loss = CLHEP::RandGamma::shoot(lambda,lambda);
+  }
+  loss *= meanLoss;  
+
+  /*
+  G4double lossmax = meanLoss+meanLoss;
 
     if(siga > 5.0*meanLoss) {
       loss = lossmax*G4UniformRand();
     } else {
-      do {
-	loss = G4RandGauss::shoot(meanLoss,siga);
-      } while (0.0 > loss || loss > lossmax);
     }
   // Poisson fluctuations
   } else {
@@ -157,6 +167,7 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
     G4double n    = (G4double)(G4Poisson(navr));
     loss = meanLoss*n/navr;
   }
+  */
 
   //G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
   return loss;

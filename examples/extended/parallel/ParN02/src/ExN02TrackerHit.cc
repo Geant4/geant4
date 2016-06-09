@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02TrackerHit.cc,v 1.3 2006/06/29 17:35:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN02TrackerHit.cc,v 1.10 2006-06-29 17:48:24 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,7 +84,7 @@ void ExN02TrackerHit::Draw()
   if(pVVisManager)
   {
     G4Circle circle(pos);
-    circle.SetScreenSize(0.04);
+    circle.SetScreenSize(2.);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,0.,0.);
     G4VisAttributes attribs(colour);

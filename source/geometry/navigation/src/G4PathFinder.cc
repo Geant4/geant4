@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.64 2010/07/13 15:59:42 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.64 2010-07-13 15:59:42 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -548,6 +548,8 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
   std::vector<G4Navigator*>::iterator pNavIter=
     fpTransportManager->GetActiveNavigatorsIterator(); 
 
+#ifdef G4DEBUG_PATHFINDER
+
   // Check that this relocation does not violate safety
   //   - at endpoint (computed from start point) AND
   //   - at last safety location  (likely just called)
@@ -586,8 +588,6 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
      // Recompute ComputeSafety for end position
      //
      revisedSafety= ComputeSafety(lastEndPosition); 
-
-#ifdef G4DEBUG_PATHFINDER
 
      const G4double kRadTolerance =
        G4GeometryTolerance::GetInstance()->GetRadialTolerance();
@@ -693,11 +693,8 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
                    "ReLocation is further than end-safety value."); 
         G4cout.precision(oldPrec); 
     }
-
-#endif
   }
 
-#ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
   {
     G4cout << G4endl; 
@@ -714,7 +711,7 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
               << "  relocated = " << fRelocatedPoint << G4endl;
     }
   }
-#endif
+#endif // G4DEBUG_PATHFINDER
 
   for ( register G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
@@ -838,8 +835,6 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   G4double      MagSqShift  = OriginShift.mag2() ;
   G4double      MagShift;  // Only given value if it larger than minimum safety
 
-  G4double fullSafety;  // For all geometries, for prestep point
-
   // Potential optimisation using Maximum Value of safety!
   // if( MagSqShift >= sqr(fPreSafetyMaxValue ) ){ 
   //   MagShift= kInfinity;   // Not a useful value -- all will not use/ignore
@@ -847,6 +842,11 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   //  MagShift= std::sqrt(MagSqShift) ;
 
   MagShift= std::sqrt(MagSqShift) ;
+
+#ifdef G4PATHFINDER_OPTIMISATION
+
+  G4double fullSafety;  // For all geometries, for prestep point
+
   if( MagSqShift >= sqr(fPreSafetyMinValue ) )
   {
      fullSafety = 0.0 ;     
@@ -855,9 +855,6 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   {
      fullSafety = fPreSafetyMinValue - MagShift;
   }
-
-#ifdef G4PATHFINDER_OPTIMISATION
-
   if( proposedStepLength < fullSafety ) 
   {
      // Move is smaller than all safeties

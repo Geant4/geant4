@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundProton.cc,v 1.8 2010/11/17 11:06:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4PreCompoundProton.cc,v 1.8 2010-11-17 11:06:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -226,12 +226,14 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
   nu2 = -1.872;
   
   // parameters for  proton cross section refinement 
+  /*
   G4double afit,bfit,a2,b2;
   afit=-0.0785656;
   bfit=5.10789;
   a2= -0.00089076;
   b2= 0.0231597;  
-  
+  */
+
   G4double ec,ecsq,xnulam,etest(0.),ra(0.),a,w,c,signor(1.),signor2,sig; 
   G4double b,ecut,cut,ecut2,geom,elab;
     

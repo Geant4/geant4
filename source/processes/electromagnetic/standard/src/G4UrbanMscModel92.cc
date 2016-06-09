@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4UrbanMscModel92.cc,v 1.6 2010-12-23 18:31:17 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 //

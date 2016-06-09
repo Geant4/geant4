@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-patch-01    (18-February-2011)
+ Geant4 version Name: geant4-09-04-patch-02    (24-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -378,23 +378,23 @@ AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     34 hits are stored in ExN04TrackerHitsCollection.
-     5 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.25769886029801 (GeV)
+     20 hits are stored in ExN04TrackerHitsCollection.
+     6 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.30889394961949 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     60 hits are stored in ExN04TrackerHitsCollection.
-     29 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.0539596276452 (GeV)
+     35 hits are stored in ExN04TrackerHitsCollection.
+     24 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.3793890125311 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     5 hits are stored in ExN04TrackerHitsCollection.
-     24 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 10.17495240169 (GeV)
+     23 hits are stored in ExN04TrackerHitsCollection.
+     16 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.7718544960655 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2010/11/10 08:42:47 kurasige Exp $
+$Id: History,v 1.120 2010-11-10 08:42:47 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr. 2, 2011, H.Kurashige (track-V09-03-12)
+- Set maxT for Velocity Table to 1000.
+- Add SetVelocityTableProperties.
+
+Mar. 16, 2011, H.Kurashige
+- Fix problems reported by Coverity.
+ 
 Nov. 10, 2010, H.Kurashige (track-V09-03-11)
 - Remove  GetSecondaryInCurrentStep method in G4Step.
-  (revert chages in track-V09-03-07)
+  (revert changes in track-V09-03-07)
 
 Nov. 08, 2010, M.Asai (track-V09-03-10)
 - Adding touchable history of the origin to G4Track.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.49 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Trap.cc,v 1.49 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // class G4Trap
 //
@@ -1124,7 +1124,7 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  G4int i, imin = 0, noSurfaces = 0;
+  G4int i, noSurfaces = 0;
   G4double dist, distz, distx, disty, distmx, distmy, safe = kInfinity;
   G4double delta    = 0.5*kCarTolerance;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
@@ -1136,7 +1136,6 @@ G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
     if ( dist < safe )
     {
       safe = dist;
-      imin = i;
     }
   }
   distz  = std::fabs( std::fabs( p.z() ) - fDz );

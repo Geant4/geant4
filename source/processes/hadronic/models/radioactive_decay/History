@@ -13,14 +13,46 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31 May 2011  L.Desorgher (radioactive_decay-V09-03-06)
+-----------------------------------------------------
+- Fixing to bug 1662 (remove of a warning).
+  Adding of a check for maximum shell number, in line 438-440 
+  of G4NuclearDecayChannel. 
+
+19 May 2011  Dennis Wright (SLAC)
+---------------------------------
+- G4RadioactiveDecay.cc: fix gcc 4.6 warning: variable j set but not
+  used
+ 
+ 3 December 2010  Dennis Wright (SLAC) (radioactive_decay-V09-03-05)
+--------------------------------------------------------------------
+- G4NuclearDecayChannel: remove unused variables BetaSimple, FermiFN
+- G4RadioactiveDecay::LoadDecayTable(): initialize ModeTotalBR[] to 0.0
+- G4RadioactiveDecay::AddDecayRateTable(): delete theDecayTable to fix
+    memory leak
+- G4RadioactiveDecay::SetSourceTimeProfile(): fix array overrun, change
+    SBin[99], SProfile[99] to SBIN[100], SProfile[100]
+- G4RadioactiveDecay::SetDecayBias(): fix array overrun, change
+    DBin[99], DProfile[99] to DBIN[100], DProfile[100]
+- G4RadioactiveDecay::DecayIt(): to avoid possible dereferencing of 
+    zero ptr when in branching ratio bias mode, fill tempprods as if no 
+    biasing active
+
+- G4RadioactiveDecayRate ctor: initialize Z, A, E, generation and
+    verboseLevel to 0
+
 18 November 2010  F.Lei (radioactive_decay-V09-03-04)
-- src/G4RadioactiveDecay.cc:1593 get rid of the compalition warning with gcc4.5.1
+-----------------------------------------------------
+- src/G4RadioactiveDecay.cc:1593 get rid of the compalition warning with 
+  gcc4.5.1
 
 17 November 2010  F.Lei (radioactive_decay-V09-03-03)
 - Completed the implementation of generating the activity table in VR mode
 - Set the default h-l threshold to 1 micros in VR mode.
 - General improvement in VR mode implementation.  
-- G4RadioactiveDecaymessenger.cc: icmCMD,armCMD & hlThreshold are available at all states. 
+- G4RadioactiveDecaymessenger.cc: icmCMD,armCMD & hlThreshold are available
+  at all states. 
 
 11 November 2010  F.Lei
 - further updates to G4RadioactivityTable.hh .cc and G4RadioactiveDecay.hh .cc

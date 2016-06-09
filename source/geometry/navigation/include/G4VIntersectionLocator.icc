@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIntersectionLocator.icc,v 1.3 2008/11/14 18:26:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VIntersectionLocator.icc,v 1.3 2008-11-14 18:26:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // Class G4VIntersectionLocator inline methods
@@ -118,7 +118,6 @@ G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA,
   G4ThreeVector OriginShift = StartPointA -  fPreviousSftOrigin ;
   G4double      MagSqShift  = OriginShift.mag2() ;
   G4double      currentSafety;
-  G4bool        doCallNav= false;
 
   if( MagSqShift >= sqr(fPreviousSafety) )
   {
@@ -139,8 +138,7 @@ G4VIntersectionLocator::IntersectChord( G4ThreeVector  StartPointA,
   }
   else
   {
-    doCallNav= true; 
-      // Check whether any volumes are encountered by the chord AB
+    // Check whether any volumes are encountered by the chord AB
 
     LinearStepLength = GetNavigatorFor()->ComputeStep( StartPointA,
                                  ChordAB_Dir, ChordAB_Length, NewSafety );

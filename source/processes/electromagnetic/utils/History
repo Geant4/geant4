@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 June 11: V.Ivant (emutils-V09-03-32)
+- G4EmModelManager, G4EmCalculator - changed smoothing function
+  between two models, effect is seen for protons in non-NIST water
+
+19 April 11: V.Ivant
+- G4VEnergyLossProcess - start cross section table from energy threshold
+  and not from minimal kinetic energy, number of bins is reduced, cross
+  section starts from zero value
+
+31 March 11: V.Ivant
+- G4VEmModel - use linear interpolation for G4EmElementSelectors
+   to avoid numerical imprecision for small number of bins
+   (increase number of bins will require extra memory)
+
 02 February 11: V.Ivant (emutils-V09-03-31)
 - G4VEmModel - reduced in 2 times memory for element selectors data
                 (ATLAS concern)

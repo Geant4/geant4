@@ -14,7 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-11-Nov-2010 Dennis Wright        (hadr-stopping-V09-03-01)
+15-May-2011 Dennis Wright  (hadr-stopping-V09-03-02)
+----------------------------------------------------
+- G4AntiNeutronAnnihilationAtRest.cc, G4AntiProtonAnnihilationAtRest.cc,
+  G4KaonMinusAbsorptionAtRest.cc, G4KaonMinusAbsorption.cc,
+  G4NeutronCaptureAtRest.cc, G4PionMinusAbsorptionAtRest.cc :
+  remove variables which were set but not used, based on warnings from
+  gcc-4.6.0 compiler.
+
+11-Nov-2010 Dennis Wright  (hadr-stopping-V09-03-01)
 ----------------------------------------------------------
 - G4MuonMinusCaptureAtRest::DoMuCapture : fix unused branch  
     pd = G4Deuteron::Deuteron() in mass calculation
@@ -27,7 +35,7 @@ code and to keep track of all tags.
     particles to default of switch/case to avoid possible NULL
     pointers
  
-20-Sep-2010 Gunter Folger        (hadr-stopping-V09-03-00)
+20-Sep-2010 Gunter Folger  (hadr-stopping-V09-03-00)
 ----------------------------------------------------------
 - G4MuonMinusCaptureAtRest use integer A&Z for G4Fancy3DNucleus
 

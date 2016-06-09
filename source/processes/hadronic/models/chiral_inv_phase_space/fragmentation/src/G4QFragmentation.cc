@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QFragmentation.cc,v 1.19 2010-12-14 09:41:04 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class header file
@@ -41,6 +41,8 @@
 // Short description: CHIPS QG string fragmentation class
 // Rhe key member function is Scatter, making the interaction (see G4QCollision)
 // -----------------------------------------------------------------------------
+// 12 May 2011 : A. Dotti, paste of snippet of code from Mikhail to correct for
+//               bugzilla #1179 (see: http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1179)
 //#define debug
 //#define edebug
 //#define pdebug
@@ -3714,27 +3716,36 @@ void G4QFragmentation::Breeder()
           delete theLast;        //*!!When kill, delete theLastQHadr as an Instance!*
           break;
         }
-        if( !(hCh+mCh+curStrChg) && !(hBN+mBN+curStrBaN) && std::fabs(dEn+hEn+mEn)<eps &&
-            std::fabs(dPx+hPx+mPx)<eps && std::fabs(dPy+hPy+mPy)<eps &&
-            std::fabs(dPz+hPz+mPz)<eps )
-        { 
-          G4cout<<"G4QFragmentation::Breeder:***Cured*** Redundent 2Hadrons i="<<i<<G4endl;
-          G4QHadron* theLast = (*theResult)[nHadr-1];
-          curHadr->Set4Momentum(theLast->Get4Momentum()); //4-Mom of CurHadr
-          G4QPDGCode lQP=theLast->GetQPDG();
-          if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP);
-          else curHadr->SetQC(theLast->GetQC());
-          theResult->pop_back(); // theLastQHadron is excluded from OUTPUT
-          delete theLast;        //*!!When kill, delete theLastQHadr as an Instance!*
-          theLast = (*theResult)[nHadr-2];
-          curHadr->Set4Momentum(theLast->Get4Momentum()); //4-Mom of CurHadr
-          lQP=theLast->GetQPDG();
-          if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP);
-          else curHadr->SetQC(theLast->GetQC());
-          theResult->pop_back(); // theLastQHadron is excluded from OUTPUT
-          delete theLast;        //*!!When kill, delete theLastQHadr as an Instance!*
-          break;
-        }
+	//Andrea: Try to fix bug #1179, snippet of code from Mikhail
+	if( !(hCh+mCh+curStrChg) && !(hBN+mBN+curStrBaN) && std::fabs(dEn+hEn+mEn)<eps &&
+	    std::fabs(dPx+hPx+mPx)<eps && std::fabs(dPy+hPy+mPy)<eps &&
+	    std::fabs(dPz+hPz+mPz)<eps && i>0)
+	  {
+	    G4cout<<"G4QFragmentation::Breeder:***Cured*** Redundent 2Hadrons i="<<i<<G4endl;
+	    G4QHadron* preHadr = (*theResult)[i-1];
+	    G4QHadron* theLast = (*theResult)[nHadr-1];
+	    if(i < nHadr-1)        // Only cur can overlap with the two last hadrons
+	      {                      // Put the last to the previous
+		preHadr->Set4Momentum(theLast->Get4Momentum()); // must be 4-Mom of preHadr
+		G4QPDGCode lQP=theLast->GetQPDG();
+		if(lQP.GetPDGCode()!=10) preHadr->SetQPDG(lQP);
+		else preHadr->SetQC(theLast->GetQC());
+	      }
+	    theResult->pop_back(); // theLastQHadron's excluded from OUTPUT(even if Cur=Last)
+	    delete theLast;        //*!!When kill, delete theLastQHadr as an Instance!*
+	    theLast = (*theResult)[nHadr-2]; // nHadr is not changed -> so it's LastButOne
+	    if(i < nHadr-2)        // The two current and the two Last are not overlaped
+	      {                      // Put the last but one to the current
+		curHadr->Set4Momentum(theLast->Get4Momentum()); // must be 4-Mom of curHadr
+		G4QPDGCode lQP=theLast->GetQPDG();
+		if(lQP.GetPDGCode()!=10) curHadr->SetQPDG(lQP);
+		else curHadr->SetQC(theLast->GetQC());
+	      }
+	    theResult->pop_back(); // theLastQHadron's excluded from OUTPUT(even for overlap)
+	    delete theLast;        //*!!When kill, delete theLastQHadr as an Instance!*
+	    nHadr=theResult->size(); // Just a precaution... should be nHadr-2
+	    break;
+	  }
         // If the redundent particle decay in 3 FS hadrons -> the corresponding Improvement
         G4cout<<"*Warning*G4QFragmentation::Breeder: Nonconservation isn't cured!"<<G4endl;
       }

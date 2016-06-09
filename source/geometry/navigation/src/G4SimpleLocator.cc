@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleLocator.cc,v 1.6 2010/07/13 15:59:42 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4SimpleLocator.cc,v 1.6 2010-07-13 15:59:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // Class G4SimpleLocator implementation
 //
@@ -115,7 +115,6 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
   // Statistics for substeps
   //
   static G4int max_no_seen= -1; 
-  static G4int trigger_substepno_print= warn_substeps - 20;
  
 #ifdef G4DEBUG_FIELD
   static G4double tolerance= 1.0e-8; 
@@ -390,6 +389,8 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
        // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
 
 #ifdef G4DEBUG_LOCATE_INTERSECTION  
+     static G4int trigger_substepno_print= warn_substeps - 20;
+
      if( substep_no >= trigger_substepno_print )
      {
        G4cout << "Difficulty in converging in "
@@ -418,10 +419,12 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
   if( substep_no > max_no_seen )
   {
     max_no_seen = substep_no; 
+#ifdef G4DEBUG_LOCATE_INTERSECTION  
     if( max_no_seen > warn_substeps )
     {
       trigger_substepno_print = max_no_seen-20; // Want to see last 20 steps 
     } 
+#endif
   }
 
   if(  ( substep_no >= max_substeps)

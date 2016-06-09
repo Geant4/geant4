@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4EmCalculator.cc,v 1.59 2011-01-03 19:34:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -464,7 +464,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 
       // emulate smoothing procedure
       G4double eth = currentModel->LowEnergyLimit();
-      //      G4cout << "massRatio= " << massRatio << " eth= " << eth << G4endl;
+      // G4cout << "massRatio= " << massRatio << " eth= " << eth << G4endl;
       if(loweModel) {
         G4double res0 = 0.0;
         G4double res1 = 0.0;
@@ -482,12 +482,14 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 		 << " DEDX(MeV/mm)= " << res1*mm/MeV
 		 << G4endl;
 	}
-	/*
-        G4cout << "eth= " << eth << " escaled= " << escaled
-	       << " res0= " << res0 << " res1= "
-               << res1 <<  "  q2= " << chargeSquare << G4endl;
-	*/
-        res += (res0 - res1)*eth/escaled;
+	
+        //G4cout << "eth= " << eth << " escaled= " << escaled
+	//       << " res0= " << res0 << " res1= "
+        //       << res1 <<  "  q2= " << chargeSquare << G4endl;
+	
+        if(res1 > 0.0 && escaled > 0.0) {
+	  res *= (1.0 + (res0/res1 - 1.0)*eth/escaled);
+	}
       } 
 
       // low energy correction for ions
@@ -511,7 +513,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
     }
       
     if(verbose > 0) {
-      G4cout << "E(MeV)= " << kinEnergy/MeV
+      G4cout << "Sum: E(MeV)= " << kinEnergy/MeV
 	     << " DEDX(MeV/mm)= " << res*mm/MeV
 	     << " DEDX(MeV*cm^2/g)= " << res*gram/(MeV*cm2*mat->GetDensity())
 	     << " cut(MeV)= " << cut/MeV

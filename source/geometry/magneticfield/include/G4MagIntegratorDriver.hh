@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.21 2010/07/14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4MagIntegratorDriver.hh,v 1.21 2010-07-14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // class G4MagInt_Driver
@@ -210,18 +210,19 @@ class G4MagInt_Driver
 
    private:
 
+     // ---------------------------------------------------------------
+     //  INVARIANTS 
+
      G4double  fMinimumStep;
         // Minimum Step allowed in a Step (in absolute units)
      G4double  fSmallestFraction;      //   Expected range 1e-12 to 5e-15;  
         // Smallest fraction of (existing) curve length - in relative units
         //  below this fraction the current step will be the last 
-   
 
      const G4int  fNoIntegrationVariables;  // Number of Variables in integration
      const G4int  fMinNoVars;               // Minimum number for FieldTrack
      const G4int  fNoVars;                  // Full number of variable
 
-     G4MagIntegratorStepper *pIntStepper;
      G4int   fMaxNoSteps;
      static const G4int  fMaxStepBase;  
 
@@ -235,8 +236,14 @@ class G4MagInt_Driver
      static const G4double max_stepping_decrease;
         // Maximum stepsize increase/decrease factors.
 
-     G4int  fVerboseLevel;
-        // Verbosity level for printing (debug, ..)
+     G4int    fStatisticsVerboseLevel;
+
+     // ---------------------------------------------------------------
+     // DEPENDENT Objects
+     G4MagIntegratorStepper *pIntStepper;
+
+     // ---------------------------------------------------------------
+     //  STATE
 
      G4int  fNoTotalSteps, fNoBadSteps, fNoSmallSteps, fNoInitialSmallSteps; 
      G4double fDyerr_max, fDyerr_mx2;
@@ -244,7 +251,9 @@ class G4MagInt_Driver
      G4double fSumH_sm, fSumH_lg; 
         // Step Statistics 
 
-     G4int    fStatisticsVerboseLevel;
+     G4int  fVerboseLevel;   // Verbosity level for printing (debug, ..)
+        // Could be varied during tracking - to help identify issues
+
 };
 
 #include "G4MagIntegratorDriver.icc"

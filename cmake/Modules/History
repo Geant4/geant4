@@ -14,6 +14,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24th May 2011 Ben Morgan
+- *** All History MUST be reported in the main CMake Category History file ***
+
+24th May 2011 Ben Morgan
+- Geant4InterfaceOptions.cmake: Added option to enable RayTracer X11 driver,
+  also adding in find_package for X11.
+
+6th April 2011 Ben Morgan
+- Geant4ToolChainBackwardCompatibility.cmake - Added ".svn" to list of patterns
+to ignore when installing directories.
+
 3rd December 2010 Ben Morgan
 - Geant4ConfigureConfigScript.cmake - Removed requirement on having a shared
 library build to generate script.

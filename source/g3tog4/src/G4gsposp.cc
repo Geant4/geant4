@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsposp.cc,v 1.16 2006/06/29 18:14:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsposp.cc,v 1.16 2006-06-29 18:14:44 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // by I.Hrivnacova, 13.10.99
 
@@ -39,7 +39,7 @@
 G4bool G3NegVolPars(G4double pars[], G4int *nparpt, 
           G3VolTableEntry* vte, G3VolTableEntry* mvte, const char routine[]);		       
 
-void PG4gsposp(G4String tokens[]){
+void PG4gsposp(G4String *tokens){
   // fill the parameter containers
   G3fillParams(tokens,PTgsposp);
   

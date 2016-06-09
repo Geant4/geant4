@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc,v 1.10 2010/07/12 15:25:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VTwistSurface.cc,v 1.10 2010-07-12 15:25:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -309,7 +309,9 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
    }
 
    G4double      bestdistance   = kInfinity;
+#ifdef G4TWISTDEBUG
    G4int         besti          = -1;  
+#endif
    G4ThreeVector bestgxx(kInfinity, kInfinity, kInfinity);
 
    G4int         nxx = DistanceToSurface(gp, gv, gxx, distance, areacode, 
@@ -345,9 +347,8 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
          if (distance[i] < bestdistance) {
             bestdistance = distance[i];
             bestgxx = gxx[i];
-            besti   = i;
-
 #ifdef G4TWISTDEBUG
+            besti   = i;
             G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                    << " areacode sInside name, distance = "
                    << fName <<  " "<< bestdistance << G4endl;
@@ -435,10 +436,10 @@ G4double G4VTwistSurface::DistanceToIn(const G4ThreeVector &gp,
 
          if (isaccepted[0] == true && isaccepted[1] == true) {
             if (distance[i] < bestdistance) {
-                bestdistance = distance[i];
-                gxxbest = gxx[i];
-                besti   = i;
+               bestdistance = distance[i];
+               gxxbest = gxx[i];
 #ifdef G4TWISTDEBUG
+               besti   = i;
                G4cout << "   G4VTwistSurface::DistanceToIn(p,v): "
                       << " areacode sBoundary & sBoundary distance = "
                       << fName  << " " << distance[i] << G4endl;
@@ -500,7 +501,6 @@ G4double G4VTwistSurface::DistanceToOut(const G4ThreeVector &gp,
 
    G4int         nxx;
    G4double      bestdistance   = kInfinity;
-   G4int         besti          = -1;
 
    nxx = DistanceToSurface(gp, gv, gxx, distance, areacode,
                            isvalid, kValidateWithTol);
@@ -523,7 +523,6 @@ G4double G4VTwistSurface::DistanceToOut(const G4ThreeVector &gp,
          if (distance[i] < bestdistance) {
             bestdistance = distance[i];
             gxxbest = gxx[i];
-            besti   = i;
          }
       } 
    }
@@ -570,9 +569,8 @@ G4double G4VTwistSurface::DistanceTo(const G4ThreeVector &gp,
      areacode[i] = sOutside ;
    }
 
-   G4int nxx;
 
-   nxx = DistanceToSurface(gp, gxx, distance, areacode);
+   DistanceToSurface(gp, gxx, distance, areacode);
    gxxbest = gxx[0];
 
 #ifdef G4TWISTDEBUG

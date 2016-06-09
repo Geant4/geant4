@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NURBS.cc,v 1.10 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // Olivier Crumeyrolle  12 September 1996
@@ -700,11 +700,14 @@ void G4NURBS::CalcPoint(G4double u, G4double v, G4Point3D &p,
       rj = orderU - 1 - j;
 
       tmp = bu[rj] * bv[ri];
+
       cpoint = GetdoubleCtrlPt(j+ufirst, i+vfirst);
       cp.x = *cpoint[G4NURBS::X];
       cp.y = *cpoint[G4NURBS::Y];
       cp.z = *cpoint[G4NURBS::Z];
       cp.w = *cpoint[G4NURBS::W];
+      delete [] cpoint;
+
       r.x += cp.x * tmp;
       r.y += cp.y * tmp;
       r.z += cp.z * tmp;

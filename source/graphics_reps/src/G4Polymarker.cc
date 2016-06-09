@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Polymarker.cc,v 1.12 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // John Allison  November 1996

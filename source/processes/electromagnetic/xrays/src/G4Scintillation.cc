@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.38 2010/12/15 07:39:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Scintillation.cc,v 1.38 2010-12-15 07:39:26 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -262,6 +262,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
              G4Exception("G4Scintillation::PostStepDoIt",
                          "No correct entry in MaterialPropertiesTable",
                          FatalException,"Missing MaterialPropertiesTable entry.");
+             return G4VRestDiscreteProcess::PostStepDoIt(aTrack, aStep);
            }
 
            if (verboseLevel>1) {
@@ -293,9 +294,9 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         // Birks law saturation:
 
-        G4double constBirks = 0.0;
+        //G4double constBirks = 0.0;
 
-        constBirks = aMaterial->GetIonisation()->GetBirksConstant();
+        //constBirks = aMaterial->GetIonisation()->GetBirksConstant();
 
         G4double MeanNumberOfPhotons;
 

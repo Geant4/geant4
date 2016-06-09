@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ellipse.hh,v 1.10 2006/06/29 18:39:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Ellipse.hh,v 1.10 2006-06-29 18:39:16 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // ----------------------------------------------------------------------
 // Class G4Ellipse
@@ -55,8 +55,7 @@ public:  // with description
   G4Ellipse& operator=(const G4Ellipse& right);
     // Copy constructor and assignment operator.
 
-  G4Curve* Project(const G4Transform3D& tr=
-                   HepGeom::Transform3D::Identity);
+  G4Curve* Project(const G4Transform3D& tr= G4Transform3D::Identity);
     // Transforms and projects the curve.
 
   G4bool Tangent(G4CurvePoint& cp, G4Vector3D& v);

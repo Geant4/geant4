@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsmixt.cc,v 1.13 2006/06/29 18:14:37 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsmixt.cc,v 1.13 2006-06-29 18:14:37 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // by I.Hrivnacova, 27 Sep 99
 
@@ -39,7 +39,7 @@
 #include "G4Material.hh"
 #include "G4Isotope.hh"
 
-void PG4gsmixt(G4String tokens[])
+void PG4gsmixt(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsmixt);

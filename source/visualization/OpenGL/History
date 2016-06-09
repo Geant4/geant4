@@ -1,4 +1,4 @@
-$Id: History,v 1.193 2010/11/13 10:28:40 allison Exp $
+$Id: History,v 1.193 2010-11-13 10:28:40 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th June 2011  John Allison  (opengl-V09-03-11)
+- G4OpenGLViewer.cc: Re-instated cutaways in intersection mode.  (Seems
+  they got accidentally commented out.)
 
 13th November 2010  John Allison  (opengl-V09-03-10)
 - Tagged.

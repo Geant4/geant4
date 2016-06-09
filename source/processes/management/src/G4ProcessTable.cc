@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTable.cc,v 1.15 2010/10/30 07:51:23 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ProcessTable.cc,v 1.15 2010-10-30 07:51:23 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -57,7 +57,12 @@ G4ProcessTable::G4ProcessTable():verboseLevel(1)
 
 // copy constructor //////////////////////////
 G4ProcessTable::G4ProcessTable(const G4ProcessTable &)
+  :verboseLevel(1)
 {
+  fProcTblVector  = 0;
+  fProcNameVector = 0;
+  tmpTblVector    = 0;
+  fProcTblMessenger = 0;
 #ifdef G4VERBOSE
   if (verboseLevel>0){
     G4cout << "--  G4ProcessTable copy constructor  --" << G4endl;

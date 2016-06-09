@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.45 2010/10/20 08:54:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Polyhedra.cc,v 1.45 2010-10-20 08:54:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -311,8 +311,7 @@ void G4Polyhedra::Create( G4double phiStart,
     if (nextNext >= corners+numCorner) nextNext = corners;
     
     if (corner->r < 1/kInfinity && next->r < 1/kInfinity) continue;
-
-    //
+/*
     // We must decide here if we can dare declare one of our faces
     // as having a "valid" normal (i.e. allBehind = true). This
     // is never possible if the face faces "inward" in r *unless*
@@ -333,7 +332,7 @@ void G4Polyhedra::Create( G4double phiStart,
       allBehind = !rz->BisectedBy( corner->r, corner->z,
                                    next->r, next->z, kCarTolerance );
     }
-    
+*/
     *face++ = new G4PolyhedraSide( prev, corner, next, nextNext,
                  numSide, startPhi, endPhi-startPhi, phiIsOpen );
   } while( prev=corner, corner=next, corner > corners );

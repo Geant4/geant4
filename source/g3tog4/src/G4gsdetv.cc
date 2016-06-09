@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdetv.cc,v 1.10 2006/06/29 18:13:53 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsdetv.cc,v 1.10 2006-06-29 18:13:53 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 
 #include "G4ios.hh"
 #include "G3toG4.hh"
@@ -34,7 +34,7 @@
 
 class G4VSensitiveDetector;
 
-void PG4gsdetv(G4String tokens[])
+void PG4gsdetv(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdetv);

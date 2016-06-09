@@ -65,6 +65,7 @@ class G4PSPassageCellFlux : public G4VPrimitiveScorer
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
       virtual G4bool IsPassed(G4Step*);
+      virtual G4double ComputeVolume(G4Step*, G4int idx);
 
   public: 
       virtual void Initialize(G4HCofThisEvent*);

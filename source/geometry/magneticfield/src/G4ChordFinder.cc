@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.53 2009/05/18 14:22:43 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4ChordFinder.cc,v 1.53 2009-05-18 14:22:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // 25.02.97 - John Apostolakis - Design and implementation 
@@ -42,20 +42,20 @@
 // ..........................................................................
 
 G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
-  : fDefaultDeltaChord( 0.25 * mm ), 
-    fDeltaChord( fDefaultDeltaChord ),
-    fAllocatedStepper(false),
-    fEquation(0), 
-    fDriversStepper(0), 
+  : fDefaultDeltaChord( 0.25 * mm ),      // Parameters
+    fDeltaChord( fDefaultDeltaChord ),    //   Internal parameters
     fFirstFraction(0.999), fFractionLast(1.00),  fFractionNextEstimate(0.98), 
     fMultipleRadius(15.0), 
-    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0),
-    fStatsVerbose(0)
+    fStatsVerbose(0),
+    fDriversStepper(0),                    // Dependent objects 
+    fAllocatedStepper(false),
+    fEquation(0),      
+    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0)
 {
-  // Simple constructor which does not create equation, ..
-
+  // Simple constructor -- it does not create equation
   fIntgrDriver= pIntegrationDriver;
   fAllocatedStepper= false;
+
   fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
 
   SetFractions_Last_Next( fFractionLast, fFractionNextEstimate);  
@@ -68,15 +68,15 @@ G4ChordFinder::G4ChordFinder(G4MagInt_Driver* pIntegrationDriver)
 G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
                               G4double                stepMinimum, 
                               G4MagIntegratorStepper* pItsStepper )
-  : fDefaultDeltaChord( 0.25 * mm ), 
-    fDeltaChord( fDefaultDeltaChord ),
-    fAllocatedStepper(false),
-    fEquation(0), 
-    fDriversStepper(0), 
+  : fDefaultDeltaChord( 0.25 * mm ),     // Constants 
+    fDeltaChord( fDefaultDeltaChord ),   // Parameters
     fFirstFraction(0.999), fFractionLast(1.00),  fFractionNextEstimate(0.98), 
     fMultipleRadius(15.0), 
-    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0),
-    fStatsVerbose(0)
+    fStatsVerbose(0),
+    fDriversStepper(0),                  //  Dependent objects
+    fAllocatedStepper(false),
+    fEquation(0), 
+    fTotalNoTrials_FNC(0), fNoCalls_FNC(0), fmaxTrials_FNC(0)  // State - stats
 {
   //  Construct the Chord Finder
   //  by creating in inverse order the  Driver, the Stepper and EqRhs ...
@@ -331,7 +331,6 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
   // which is likely to assist in more performant 'stepping'.
 
   G4double stepTrial;
-  static G4double lastStepTrial = 1.,  lastDchordStep= 1.;
 
 #if 1
 
@@ -374,9 +373,6 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
   {
      stepTrial= 0.000001;
   }
-
-  lastStepTrial = stepTrialOld; 
-  lastDchordStep= dChordStep;
 
 #else
 
@@ -500,8 +496,7 @@ G4ChordFinder::ApproxCurvePointS( const G4FieldTrack&  CurveA_PointVelocity,
       test_step=0.5*curve;
     }
 
-    G4bool goodAdvance;
-    goodAdvance = fIntgrDriver->AccurateAdvance(EndPoint,test_step, eps_step);
+    fIntgrDriver->AccurateAdvance(EndPoint,test_step, eps_step);
       
 #ifdef G4DEBUG_FIELD
     // Printing Brent and Linear Approximation
@@ -613,11 +608,10 @@ ApproxCurvePointV( const G4FieldTrack& CurveA_PointVelocity,
 
   new_st_length= AE_fraction * curve_length; 
 
-  G4bool good_advance;
   if ( AE_fraction > 0.0 )
   { 
-     good_advance = fIntgrDriver->AccurateAdvance(Current_PointVelocity, 
-                                                  new_st_length, eps_step );
+     fIntgrDriver->AccurateAdvance(Current_PointVelocity, 
+                                   new_st_length, eps_step );
      //
      // In this case it does not matter if it cannot advance the full distance
   }

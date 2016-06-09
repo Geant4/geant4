@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEAntiLambdaInelastic.cc,v 1.17 2010/11/27 02:00:07 dennis Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4HEAntiLambdaInelastic.cc,v 1.17 2010-11-27 02:00:07 dennis Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 
 #include "globals.hh"
@@ -56,7 +56,10 @@ G4HEAntiLambdaInelastic::ApplyYourself(const G4HadProjectile &aTrack,
   G4int incidentCode = incidentParticle.getCode();
   G4double incidentMass = incidentParticle.getMass();
   G4double incidentTotalEnergy = incidentParticle.getEnergy();
-  G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+
+  // G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
+  // DHW 19 May 2011: variable set but not used
+
   G4double incidentKineticEnergy = incidentTotalEnergy - incidentMass;
 
   if (incidentKineticEnergy < 1.)
@@ -92,8 +95,9 @@ G4HEAntiLambdaInelastic::ApplyYourself(const G4HadProjectile &aTrack,
 
   incidentKineticEnergy -= excitation;
   incidentTotalEnergy = incidentKineticEnergy + incidentMass;
-  incidentTotalMomentum = std::sqrt( (incidentTotalEnergy-incidentMass)
-                         *(incidentTotalEnergy+incidentMass));
+  // incidentTotalMomentum = std::sqrt( (incidentTotalEnergy-incidentMass)
+  //                        *(incidentTotalEnergy+incidentMass));
+  // DHW 19 May 2011: variable set but not used
 
   G4HEVector targetParticle;
   if (G4UniformRand() < atomicNumber/atomicWeight) { 

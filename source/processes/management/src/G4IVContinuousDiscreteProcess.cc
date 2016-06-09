@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4IVContinuousDiscreteProcess.cc,v 1.12 2010-12-22 09:14:54 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // $Id: 
 // --------------------------------------------------------------

@@ -656,7 +656,7 @@ G4RotationMatrix G4tgrUtils::GetRotationFromDirection( G4ThreeVector dir )
   // choose between  angy and PI-angy
   if( dir.z() * std::cos(angx)*std::cos(angy) < 0 )
   {
-    angy = CLHEP::pi - angy;
+    angy = pi - angy;
   }
   rotation.rotateX( angx );
   rotation.rotateY( angy );

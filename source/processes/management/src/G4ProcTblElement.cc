@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcTblElement.cc,v 1.7 2006/06/29 21:08:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProcTblElement.cc,v 1.7 2006-06-29 21:08:06 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -54,6 +54,7 @@ G4ProcTblElement::G4ProcTblElement(G4VProcess* aProcess):
 
 // copy constructor //////////////////////////
 G4ProcTblElement::G4ProcTblElement(const G4ProcTblElement &right)
+  :pProcess(0),pProcMgrVector(0)
 {
   *this = right;
 }

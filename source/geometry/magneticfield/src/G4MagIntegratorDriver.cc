@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.57 2010/07/14 10:00:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4MagIntegratorDriver.cc,v 1.57 2010-07-14 10:00:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 //
@@ -66,24 +66,25 @@ const G4int  G4MagInt_Driver::fMaxStepBase = 250;  // Was 5000
 //  Constructor
 //
 G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum, 
-                                  G4MagIntegratorStepper *pItsStepper,
+                                  G4MagIntegratorStepper *pStepper,
                                   G4int                   numComponents,
                                   G4int                   statisticsVerbose)
   : fSmallestFraction( 1.0e-12 ), 
     fNoIntegrationVariables(numComponents), 
     fMinNoVars(12), 
     fNoVars( std::max( fNoIntegrationVariables, fMinNoVars )),
-    fVerboseLevel(0),
+    fStatisticsVerboseLevel(statisticsVerbose),
     fNoTotalSteps(0),  fNoBadSteps(0), fNoSmallSteps(0),
-    fNoInitialSmallSteps(0), fDyerr_max(0.0), fDyerr_mx2(0.0), 
+    fNoInitialSmallSteps(0), 
+    fDyerr_max(0.0), fDyerr_mx2(0.0), 
     fDyerrPos_smTot(0.0), fDyerrPos_lgTot(0.0), fDyerrVel_lgTot(0.0), 
     fSumH_sm(0.0), fSumH_lg(0.0),
-    fStatisticsVerboseLevel(statisticsVerbose)
+    fVerboseLevel(0)
 {  
   // In order to accomodate "Laboratory Time", which is [7], fMinNoVars=8
   // is required. For proper time of flight and spin,  fMinNoVars must be 12
 
-  RenewStepperAndAdjust( pItsStepper );
+  RenewStepperAndAdjust( pStepper );
   fMinimumStep= hminimum;
   fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
 #ifdef G4DEBUG_FIELD
@@ -476,13 +477,12 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
                                      G4double  eps,
                                      G4int     dbg)
 {
-  static G4double maxRelError=0.0, maxRelError_last_printed=0.0;
+  static G4double maxRelError=0.0;
   G4bool isNewMax, prNewMax;
 
   isNewMax = endPointDist > (1.0 + maxRelError) * h;
   prNewMax = endPointDist > (1.0 + 1.05 * maxRelError) * h;
   if( isNewMax ) { maxRelError= endPointDist / h - 1.0; }
-  if( prNewMax ) { maxRelError_last_printed = maxRelError; }
 
   if( dbg && (h > G4GeometryTolerance::GetInstance()->GetSurfaceTolerance()) 
           && ( (dbg>1) || prNewMax || (endPointDist >= h*(1.+eps) ) ) )

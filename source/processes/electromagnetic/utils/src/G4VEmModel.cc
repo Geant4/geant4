@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4VEmModel.cc,v 1.37 2010-10-14 16:27:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -121,7 +121,8 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 {
   // initialise before run
   G4LossTableManager* man = G4LossTableManager::Instance();
-  G4bool spline = man->SplineFlag();
+  // G4bool spline = man->SplineFlag();
+  G4bool spline = false;
 
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth

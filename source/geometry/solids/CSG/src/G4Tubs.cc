@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.84 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Tubs.cc,v 1.84 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // class G4Tubs
@@ -912,7 +912,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
       if (d >= 0)  // If real root
       {
-        s = -b - std::sqrt(d) ;
+        s = c/(-b+std::sqrt(d));
         if (s >= 0)  // If 'forwards'
         {
           if ( s>dRmax ) // Avoid rounding errors due to precision issues on
@@ -1028,7 +1028,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
         // Always want 2nd root - we are outside and know rmax Hit was bad
         // - If on surface of rmin also need farthest root
 
-        s = -b + std::sqrt(d) ;
+        s =( b > 0. )? c/(-b - std::sqrt(d)) : (-b + std::sqrt(d));
         if (s >= -halfCarTolerance)  // check forwards
         {
           // Check z intersection
@@ -1329,7 +1329,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         b     = t2/t1 ;
         c     = deltaR/t1 ;
         d2    = b*b-c;
-        if( d2 >= 0 ) { sr = -b + std::sqrt(d2); }
+        if( d2 >= 0 ) { sr = c/( -b - std::sqrt(d2)); }
         else          { sr = 0.; }
         sider = kRMax ;
       }
@@ -1364,7 +1364,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 
           if (deltaR > kRadTolerance*fRMin)
           {
-            sr    = -b-std::sqrt(d2) ;
+            sr = c/(-b+std::sqrt(d2)); 
             sider = kRMin ;
           }
           else

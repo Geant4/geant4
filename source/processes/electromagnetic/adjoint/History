@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2010/11/11 11:51:56 ldesorgh Exp $
+$Id: History,v 1.8 2010-11-11 11:51:56 ldesorgh Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 May 2011: L. Desorgher (emadjoint-V09-03-03, emadjoint-V09-03-04)
+-Remove few unused variables to avoid compilation warning with gcc-4.6.0.
 
 11 Nov 2010: L. Desorgher (emadjoint-V09-03-02)
 -G4AdjointBremsstrahlungModel: add a G4EmModelManager to initialise properly,

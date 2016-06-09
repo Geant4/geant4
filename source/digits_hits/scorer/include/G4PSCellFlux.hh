@@ -34,6 +34,8 @@
 #include "G4VPrimitiveScorer.hh"
 #include "G4THitsMap.hh"
 
+class G4VSolid;
+
 ///////////////////////////////////////////////////////////////////////////////
 // (Description)
 //   This is a primitive scorer class for scoring cell flux.
@@ -65,6 +67,8 @@ class G4PSCellFlux : public G4VPrimitiveScorer
 
   protected: // with description
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+
+      virtual G4double ComputeVolume(G4Step*, G4int idx);
 
   public: 
       virtual void Initialize(G4HCofThisEvent*);

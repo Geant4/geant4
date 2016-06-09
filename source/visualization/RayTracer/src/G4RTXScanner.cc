@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTXScanner.cc,v 1.8 2010/06/14 14:33:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4RTXScanner.cc,v 1.8 2010-06-14 14:33:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 
@@ -47,7 +47,9 @@ extern "C" {
 }
 
 G4RTXScanner::G4RTXScanner():
-  G4VRTScanner(), theNRow(0), theNColumn(0), theIRow(0), theIColumn(0)
+  G4VRTScanner(), theNRow(0), theNColumn(0), theStep(0)
+  ,theIRow(0), theIColumn(0)
+  ,display(0), win(0), scmap(0)
 {
   theGSName = "RayTracerX";
   theGSNickname = "RayTracerX";

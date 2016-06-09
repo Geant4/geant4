@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProcessTableMessenger.cc,v 1.19 2010-12-22 09:14:54 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 //---------------------------------------------------------------
@@ -178,7 +178,6 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
                          = theProcessTable->GetNameList(); 
   G4int idx;
 
-  G4ProcessVector* tmpVector=0;
   G4int type = -1;
 
   if( command == listCmd ){
@@ -199,7 +198,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     G4ProcessTable::G4ProcNameVector::iterator itr; 
     for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
       idx +=1;
-      tmpVector = theProcessTable->FindProcesses(*itr);
+      G4ProcessVector* tmpVector = theProcessTable->FindProcesses(*itr);
       if ( (type <0) || ( ((*tmpVector)(0)->GetProcessType()) == type) ) {
         if ( counter%4 != 0) G4cout << ",";
 	G4cout << std::setw(19) <<*itr;
@@ -207,9 +206,9 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
           G4cout << G4endl;
         }
       }
+      delete tmpVector;
     }
     G4cout << G4endl;
-    delete tmpVector;
     //Commnad  /process/list
 
   } else if( command==procVerboseCmd ) {
@@ -245,15 +244,15 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     G4ProcessTable::G4ProcNameVector::iterator itr; 
     for (itr=procNameVector->begin(); itr!=procNameVector->end(); ++itr) {
       idx +=1;
-      tmpVector = theProcessTable->FindProcesses(*itr);
+      G4ProcessVector* tmpVector = theProcessTable->FindProcesses(*itr);
       G4VProcess* p = (*tmpVector)(0);
       if ( isAll || 
 	   (!isProcName && ( p->GetProcessType() == type) ) ||
 	   ( isProcName && ( p->GetProcessName()== currentProcessName) ) ){
 	p->SetVerboseLevel(level);
       }
+      delete tmpVector;
     }
-    delete tmpVector;
     //Commnad  /process/setVerbose
 
   } else if( command==verboseCmd ) {
@@ -312,6 +311,7 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
         
     if( command==dumpCmd ) {
       // process/dump
+      G4ProcessVector* tmpVector;
       if (isProcName) {
 	tmpVector = theProcessTable->FindProcesses(currentProcessName);
       } else {

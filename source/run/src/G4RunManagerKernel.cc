@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.54 2010/12/05 12:12:43 allison Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4RunManagerKernel.cc,v 1.54 2010-12-05 12:12:43 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 
@@ -557,18 +557,25 @@ void G4RunManagerKernel::SetScoreSplitter()
   G4ScoreSplittingProcess* pSplitter = new G4ScoreSplittingProcess();
   G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
   G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )  
-  {
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if(pmanager)
-    { pmanager->AddDiscreteProcess(pSplitter); }
-  }
 
-  if(verboseLevel>0) 
-  {
-    G4cout << "G4RunManagerKernel -- G4ScoreSplittingProcess is appended to all particles." << G4endl;
+  // Ensure that Process is added only once to the particles' process managers
+  static bool InitSplitter=false; 
+  if( ! InitSplitter ) {
+    InitSplitter = true;
+
+    theParticleIterator->reset();
+    while( (*theParticleIterator)() )  
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      if(pmanager)
+	{ pmanager->AddDiscreteProcess(pSplitter); }
+    }
+
+    if(verboseLevel>0) 
+    {
+      G4cout << "G4RunManagerKernel -- G4ScoreSplittingProcess is appended to all particles." << G4endl;
+    }
   }
 }
 

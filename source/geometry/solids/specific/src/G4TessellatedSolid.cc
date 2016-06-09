@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.27 2010/11/02 11:29:07 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4TessellatedSolid.cc,v 1.27 2010-11-02 11:29:07 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -1135,7 +1135,7 @@ G4ThreeVector G4TessellatedSolid::GetPointOnSurface() const
 {
   // Select randomly a facet and return a random point on it
 
-  G4int i = CLHEP::RandFlat::shootInt(facets.size());
+  G4int i = G4RandFlat::shootInt(facets.size());
   return facets[i]->GetPointOnFace();
 }
 ///////////////////////////////////////////////////////////////////////////////

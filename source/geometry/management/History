@@ -1,4 +1,4 @@
-$Id: History,v 1.145 2010/10/19 15:20:33 gcosmo Exp $
+$Id: History,v 1.145 2010-10-19 15:20:33 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 12, 2011  G.Cosmo                      geommng-V09-03-06
+- Fixed trivial compilation warnings detected with gcc-4.6.0.
+
+March 31, 2011  G.Cosmo
+- Fix in G4LogicalVolume::AddDaughter() for proper propagation settings
+  of local field manager. Avoid forcing propagation to all daughters when
+  a local field manager is set already for the new daughter.
+  Addressing problem report #1183.
+
+March 21, 2011  G.Cosmo
+- Use internal G4 header for physical constants in meshdefs.h.
 
 October 19, 2010  G.Cosmo                  geommng-V09-03-05
 - Added Clone() virtual method to G4VSolid, to return a pointer to a

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIExecutive.icc,v 1.7 2010/05/28 08:12:27 kmura Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4UIExecutive.icc,v 1.7 2010-05-28 08:12:27 kmura Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // ====================================================================
 //   G4UIExecutive.icc
@@ -37,6 +37,9 @@
 #if defined(G4UI_USE_QT)
 #include "G4UIQt.hh"
 #include "G4Qt.hh"
+
+#elif defined(G4UI_USE_WT)
+#include "G4UIWt.hh"
 
 #elif defined(G4UI_USE_XM)
 #include "G4UIXm.hh"
@@ -56,6 +59,8 @@
 
 #define DISCARD_PARAMETER(p) (void)p
 
+
+
 /////////////////////////////////////////////////////
 G4UIExecutive::G4UIExecutive(G4int argc, char** argv)
   : session(0), shell(0),isGUI(false)
@@ -63,6 +68,10 @@ G4UIExecutive::G4UIExecutive(G4int argc, char** argv)
 {
 #if defined(G4UI_USE_QT)
   session = new G4UIQt(argc, argv);
+  isGUI = true;
+
+#elif defined(G4UI_USE_WT)
+  session = new G4UIWt(argc, argv);
   isGUI = true;
 
 #elif defined(G4UI_USE_XM)
@@ -132,6 +141,10 @@ inline void G4UIExecutive::SessionStart()
 /////////////////////////////////////////
 {
   session-> SessionStart();
+
+#if defined(G4UI_USE_WT)
+#else
   delete session;
+#endif
 }
 

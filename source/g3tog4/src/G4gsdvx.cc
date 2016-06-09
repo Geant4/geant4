@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdvx.cc,v 1.5 2006/06/29 18:14:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsdvx.cc,v 1.5 2006-06-29 18:14:08 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // by I.Hrivnacova, V.Berejnoi, 27 Sep 99
 
@@ -38,7 +38,7 @@ void G4gsdvn2(G4String name, G4String moth, G4int ndiv, G4int iaxis,
 void G4gsdvt2(G4String name, G4String moth, G4double Step, G4int iaxis,
               G4double c0, G4int numed, G4int ndvmx);
 
-void PG4gsdvx(G4String tokens[])
+void PG4gsdvx(G4String *tokens)
 {
     // fill the parameter containers
     G3fillParams(tokens,PTgsdvx);

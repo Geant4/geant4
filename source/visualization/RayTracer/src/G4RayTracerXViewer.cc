@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.cc,v 1.8 2009/09/16 16:56:52 allison Exp $
-// GEANT4 tag $Name: geant4-09-03 $
+// $Id: G4RayTracerXViewer.cc,v 1.8 2009-09-16 16:56:52 allison Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 
 #ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
 
@@ -51,14 +51,19 @@ G4RayTracerXViewer::~G4RayTracerXViewer() {}
 
 void G4RayTracerXViewer::Initialise() {
 
-  if (theTracer) {
-    theTracer->SetNColumn(fVP.GetWindowSizeHintX());
-    theTracer->SetNRow(fVP.GetWindowSizeHintY());
+  if (!theTracer) {
+    G4cerr << "G4RayTracerXViewer::Initialise: No tracer" << G4endl;
+    fViewId = -1;  // This flags an error.
+    return;
   }
+
+  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
+  theTracer->SetNRow(fVP.GetWindowSizeHintY());
 
   // Set up X Window...
   G4RTXScanner* theXScanner = (G4RTXScanner*)theTracer->GetScanner();
   if (!theXScanner->GetXWindow(fName,fVP)) {
+    G4cerr << "G4RayTracerXViewer::Initialise: No scanner" << G4endl;
     fViewId = -1;  // This flags an error.
     return;
   }

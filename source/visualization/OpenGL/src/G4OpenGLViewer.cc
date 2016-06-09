@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.63 2010/10/05 15:45:19 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4OpenGLViewer.cc,v 1.63 2010-10-05 15:45:19 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -293,8 +293,7 @@ void G4OpenGLViewer::SetView () {
 
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   size_t nPlanes = cutaways.size();
-  //if (fVP.IsCutaway() &&
-  if (false &&
+  if (fVP.IsCutaway() &&
       fVP.GetCutawayMode() == G4ViewParameters::cutawayIntersection &&
       nPlanes > 0) {
     double a[4];

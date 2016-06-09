@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc,v 1.12 2010/06/16 15:34:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04-beta-01 $
+// $Id: G4TransparentRegXTRadiator.cc,v 1.12 2010-06-16 15:34:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 
 #include <complex>
@@ -70,12 +70,12 @@ G4TransparentRegXTRadiator::~G4TransparentRegXTRadiator()
 
 G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
 {
-  G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC,aMa, bMb, sigma;
+  G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC,aMa, bMb /*,sigma*/;
   G4int k, kMax, kMin;
 
   aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
   bMb = fGasThick*GetGasLinearPhotoAbs(energy);
-  sigma = aMa + bMb;
+  //sigma = aMa + bMb;
    
   cofPHC  = 4*pi*hbarc;
   tmp     = (fSigma1 - fSigma2)/cofPHC/energy;  

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectoryPoint.cc,v 1.6 2006/06/29 21:24:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RayTrajectoryPoint.cc,v 1.6 2006-06-29 21:24:23 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 //
@@ -39,6 +39,9 @@
 G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
 
 G4RayTrajectoryPoint :: G4RayTrajectoryPoint()
+  :preStepAtt(0)
+  ,postStepAtt(0)
+  ,stepLength(0.)
 {;}
 
 G4RayTrajectoryPoint :: ~G4RayTrajectoryPoint()

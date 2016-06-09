@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyTable.cc,v 1.4 2007/03/11 07:17:35 kurasige Exp $
+// $Id: G4ParticlePropertyTable.cc,v 1.4 2007-03-11 07:17:35 kurasige Exp $
 //
 // class G4ParticlePropertyTable
 //
@@ -71,6 +71,7 @@ G4ParticlePropertyTable::G4ParticlePropertyTable():
 ////////////////////////
 G4ParticlePropertyTable::G4ParticlePropertyTable(const G4ParticlePropertyTable &right)
 {
+  fParticleTable = G4ParticleTable::GetParticleTable();   
   *this = right;
 }
       

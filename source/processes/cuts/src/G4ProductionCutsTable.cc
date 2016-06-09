@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ProductionCutsTable.cc,v 1.28 2010-12-23 06:00:42 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 // --------------------------------------------------------------
@@ -91,7 +91,11 @@ G4ProductionCutsTable::G4ProductionCutsTable()
 
 /////////////////////////////////////////////////////////////
 G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& )
-{;}
+{ 
+  fMessenger=0;
+  defaultProductionCuts=0; 
+  fG4RegionStore =0;
+}
 
 /////////////////////////////////////////////////////////////
 G4ProductionCutsTable::~G4ProductionCutsTable()
@@ -628,6 +632,12 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     fIn >> nmat;
   } else {
     fIn.read( (char*)(&nmat), sizeof (G4int));
+  }
+  if ((nmat<=0) || (nmat >100000)){
+    G4Exception( "G4ProductionCutsTable::CheckMaterialInfo()",
+		 "ProcCuts108",JustWarning, 
+		 "Number of materials is less than zero or too big");
+    return false;
   }
 
   // list of material

@@ -7,9 +7,16 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt,v 1.1 2010/09/29 19:12:38 bmorgan Exp $
+# $Id: CMakeLists.txt,v 1.1 2010-09-29 19:12:38 bmorgan Exp $
 #
 #------------------------------------------------------------------------------
+
+# Add allocation export symbol for the RayTracer module
+# NB: we don't add this at the category level because RayTracer is
+# the only vis driver that uses exports at the moment. We can move the
+# add_definitions higher later if needed.
+add_definitions(-DG4VIS_ALLOC_EXPORT)
+
 
 include(Geant4MacroLibraryTargets)
 if(GEANT4_BUILD_GRANULAR_LIBS)

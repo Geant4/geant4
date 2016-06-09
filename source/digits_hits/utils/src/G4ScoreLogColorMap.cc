@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreLogColorMap.cc,v 1.10 2010/11/03 19:31:36 asaim Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ScoreLogColorMap.cc,v 1.11 2010-11-14 14:18:36 akimura Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 
 #include "G4ScoreLogColorMap.hh"
@@ -138,7 +138,7 @@ void G4ScoreLogColorMap::GetMapColor(G4double val, G4double color[4])
 
 void G4ScoreLogColorMap::DrawColorChartBar(G4int _nPoint) {
 
-  G4cout << "++++++ " << fMinVal << " - " << fMaxVal << G4endl;
+  //G4cout << "++++++ " << fMinVal << " - " << fMaxVal << G4endl;
   G4bool lmin = true, lmax = true;
   if(fMinVal <= 0.) lmin = false;
   if(fMaxVal <= 0.) lmax = false;

@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2010/11/10 16:38:39 gcosmo Exp $
+$Id: History,v 1.50 2010-11-10 16:38:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 31, 2011, G.Cosmo (digits_hits-V09-03-08)
+- Replace use of M_PI with pi/twopi, fixing compilation errors on Windows...
+
+Mar 31, 2011, G.Cosmo
+- Added missing source files in scorer/sources.cmake.
+- Fixed compilation warning for unused parameter in function
+  G4PSStepChecker::Initialize().
+
+Mar 30, 2011, M.Asai
+- Fixed scoring meshes for visualizing scores of very few entry.
+  - Changed G4ScoringBox, G4ScoringCylinder
+
+Mar 22, 2011, M.Asai
+- Fixed scorers used for cylindrical mesh that require cubic volume or surface area.
+  - Changed  G4PSCellFlux3D, G4PSDoseDeposit3D, G4PSPassageCellFlux3D
+  - Added G4PSCellFluxForCylinder3D, G4PSDoseDepositForCylinder3D, G4PSPassageCellFluxForCylinder3D
+
+Feb 21, 2011, M.Asai
+- Fixed G4PSCylinderSurfaceFlux.cc and G4PSSPhareSurfaceFlux.cc for
+  the way how "flux_out" is scored.
 
 Nov 10, 2010, G.Cosmo (digits_hits-V09-03-07)
 - Fixed signature in G4VPrimitiveScorer for Set/GetUnit() methods.

@@ -1,5 +1,5 @@
-$Id: History,v 1.147 2010/11/18 17:24:22 allison Exp $
-$Name: geant4-09-04 $ 
+$Id: History,v 1.147 2010-11-18 17:24:22 allison Exp $
+$Name: geant4-09-04-patch-02 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5 May 2011 Makoto Asai (tracking-V09-03-10)
+- Fixed setting of 'fWorldBoundary' step status in G4SteppingManager
+  InvokePostStepDoItProcs() and DefinePhysicalStepLength().
 
 18 November 2010 John Allison (tracking-V09-03-09)
 - G4Trajectory, G4SmoothTrajectory:

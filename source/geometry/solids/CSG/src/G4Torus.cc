@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.71 2010/10/19 15:42:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4Torus.cc,v 1.71 2010-10-19 15:42:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // class G4Torus
@@ -103,13 +103,15 @@ G4Torus::SetAllParameters( G4double pRmin,
                            G4double pSPhi,
                            G4double pDPhi )
 {
+  const G4double fEpsilon = 4.e-11;  // relative tolerance of radii
+
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
   fpPolyhedron = 0;
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
-
+  
   if ( pRtor >= pRmax+1.e3*kCarTolerance )  // Check swept radius, as in G4Cons
   {
     fRtor = pRtor ;
@@ -139,6 +141,12 @@ G4Torus::SetAllParameters( G4double pRmin,
     G4Exception("G4Torus::SetAllParameters()",
                 "InvalidSetup", FatalException, "Invalid radii.");
   }
+
+  // Relative tolerances
+  //
+  fRminTolerance = (fRmin)
+                 ? 0.5*std::max( kRadTolerance, fEpsilon*(fRtor-fRmin )) : 0;
+  fRmaxTolerance = 0.5*std::max( kRadTolerance, fEpsilon*(fRtor+fRmax) );
 
   // Check angles
   //
@@ -173,7 +181,8 @@ G4Torus::SetAllParameters( G4double pRmin,
 //
 G4Torus::G4Torus( __void__& a )
   : G4CSGSolid(a), fRmin(0.), fRmax(0.), fRtor(0.), fSPhi(0.),
-    fDPhi(0.), kRadTolerance(0.), kAngTolerance(0.)
+    fDPhi(0.), fRminTolerance(0.), fRmaxTolerance(0. ),
+    kRadTolerance(0.), kAngTolerance(0.)
 {
 }
 
@@ -191,6 +200,7 @@ G4Torus::~G4Torus()
 G4Torus::G4Torus(const G4Torus& rhs)
   : G4CSGSolid(rhs), fRmin(rhs.fRmin),fRmax(rhs.fRmax),
     fRtor(rhs.fRtor),fSPhi(rhs.fSPhi),fDPhi(rhs.fDPhi),
+    fRminTolerance(rhs.fRminTolerance), fRmaxTolerance(rhs.fRmaxTolerance),
     kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance)
 {
 }
@@ -213,6 +223,7 @@ G4Torus& G4Torus::operator = (const G4Torus& rhs)
    //
    fRmin = rhs.fRmin; fRmax = rhs.fRmax;
    fRtor = rhs.fRtor; fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
+   fRminTolerance = rhs.fRminTolerance; fRmaxTolerance = rhs.fRmaxTolerance;
    kRadTolerance = rhs.kRadTolerance; kAngTolerance = rhs.kAngTolerance;
 
    return *this;
@@ -623,17 +634,16 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
   G4double r2, pt2, pPhi, tolRMin, tolRMax ;
 
   EInside in = kOutside ;
-  static const G4double halfRadTolerance = 0.5*kRadTolerance;
   static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
-                                              // General precals
+                                               // General precals
   r2  = p.x()*p.x() + p.y()*p.y() ;
   pt2 = r2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*std::sqrt(r2) ;
 
-  if (fRmin) tolRMin = fRmin + halfRadTolerance ;
+  if (fRmin) tolRMin = fRmin + fRminTolerance ;
   else       tolRMin = 0 ;
 
-  tolRMax = fRmax - halfRadTolerance;
+  tolRMax = fRmax - fRmaxTolerance;
       
   if (pt2 >= tolRMin*tolRMin && pt2 <= tolRMax*tolRMax )
   {
@@ -680,8 +690,8 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
   }
   else   // Try generous boundaries
   {
-    tolRMin = fRmin - halfRadTolerance ;
-    tolRMax = fRmax + halfRadTolerance ;
+    tolRMin = fRmin - fRminTolerance ;
+    tolRMax = fRmax + fRmaxTolerance ;
 
     if (tolRMin < 0 )  { tolRMin = 0 ; }
 
@@ -931,17 +941,14 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   //                                            check validity
 
   G4bool seg;        // true if segmented
-  G4double hDPhi,hDPhiOT,hDPhiIT,cosHDPhiOT=0.,cosHDPhiIT=0.;
-                     // half dphi + outer tolerance
+  G4double hDPhi;    // half dphi
   G4double cPhi,sinCPhi=0.,cosCPhi=0.;  // central phi
 
-  G4double tolORMin2,tolIRMin2;  // `generous' radii squared
-  G4double tolORMax2,tolIRMax2 ;
+  G4double tolORMin2;  // `generous' radii squared
+  G4double tolORMax2;
 
   static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfRadTolerance = 0.5*kRadTolerance;
-  static const G4double halfAngTolerance = 0.5*kAngTolerance;
-
+ 
   G4double Dist,xi,yi,zi,rhoi2,it2; // Intersection point variables
 
   G4double Comp;
@@ -955,30 +962,23 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
     seg        = true ;
     hDPhi      = 0.5*fDPhi ;    // half delta phi
     cPhi       = fSPhi + hDPhi ;
-    hDPhiOT    = hDPhi + halfAngTolerance ;  // outers tol' half delta phi 
-    hDPhiIT    = hDPhi - halfAngTolerance ;
     sinCPhi    = std::sin(cPhi) ;
     cosCPhi    = std::cos(cPhi) ;
-    cosHDPhiOT = std::cos(hDPhiOT) ;
-    cosHDPhiIT = std::cos(hDPhiIT) ;
   }
   else
   {
     seg = false ;
   }
 
-  if (fRmin > kRadTolerance) // Calculate tolerant rmin and rmax
+  if (fRmin > fRminTolerance) // Calculate tolerant rmin and rmax
   {
-    tolORMin2 = (fRmin - halfRadTolerance)*(fRmin - halfRadTolerance) ;
-    tolIRMin2 = (fRmin + halfRadTolerance)*(fRmin + halfRadTolerance) ;
+    tolORMin2 = (fRmin - fRminTolerance)*(fRmin - fRminTolerance) ;
   }
   else
   {
     tolORMin2 = 0 ;
-    tolIRMin2 = 0 ;
   }
-  tolORMax2 = (fRmax + halfRadTolerance)*(fRmax + halfRadTolerance) ;
-  tolIRMax2 = (fRmax - halfRadTolerance)*(fRmax - halfRadTolerance) ;
+  tolORMax2 = (fRmax + fRmaxTolerance)*(fRmax + fRmaxTolerance) ;
 
   // Intersection with Rmax (possible return) and Rmin (must also check phi)
 
@@ -1137,7 +1137,6 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   G4double snxt = kInfinity, sphi, s[4] ;
 
   static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfRadTolerance = 0.5*kRadTolerance;
   static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
   // Vars for phi intersection
@@ -1166,7 +1165,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
 
-  G4double tolRMax = fRmax - halfRadTolerance ;
+  G4double tolRMax = fRmax - fRmaxTolerance ;
    
   G4double vDotNmax   = pDotV - fRtor*(v.x()*p.x() + v.y()*p.y())/rho ;
   G4double pDotxyNmax = (1 - fRtor/rho) ;
@@ -1177,7 +1176,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
     // radial surface -> leaving immediately with *n for really convex part
     // only
       
-    if ( calcNorm && (pDotxyNmax >= -kRadTolerance) ) 
+    if ( calcNorm && (pDotxyNmax >= -2.*fRmaxTolerance) ) 
     {
       *n = G4ThreeVector( p.x()*(1 - fRtor/rho)/pt,
                           p.y()*(1 - fRtor/rho)/pt,
@@ -1194,7 +1193,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 
   if ( fRmin )
   {
-    G4double tolRMin = fRmin + halfRadTolerance ;
+    G4double tolRMin = fRmin + fRminTolerance ;
 
     if ( (pt2 < tolRMin*tolRMin) && (vDotNmax < 0) )
     {
@@ -1401,7 +1400,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         it2   = std::fabs(rhoi2 + zi*zi + fRtor*fRtor - 2*fRtor*rhoi) ;
         it    = std::sqrt(it2) ;
         iDotxyNmax = (1-fRtor/rhoi) ;
-        if(iDotxyNmax >= -kRadTolerance) // really convex part of Rmax
+        if(iDotxyNmax >= -2.*fRmaxTolerance) // really convex part of Rmax
         {                       
           *n = G4ThreeVector( xi*(1-fRtor/rhoi)/it,
                               yi*(1-fRtor/rhoi)/it,

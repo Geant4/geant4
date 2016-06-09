@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.40 2010/10/19 15:19:37 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4VSolid.cc,v 1.40 2010-10-19 15:19:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // class G4VSolid
 //
@@ -203,7 +203,6 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 {
   G4int iInside=0;
   G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,volume;
-  G4bool yesno;
   G4ThreeVector p;
   EInside in;
 
@@ -214,9 +213,9 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 
   // min max extents of pSolid along X,Y,Z
 
-  yesno = this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
-  yesno = this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
-  yesno = this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+  this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
 
   // limits
 
@@ -262,7 +261,6 @@ G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
 {
   G4int inside=0;
   G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,surf;
-  G4bool yesno;
   G4ThreeVector p;
   EInside in;
 
@@ -273,9 +271,9 @@ G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
 
   // min max extents of pSolid along X,Y,Z
 
-  yesno = this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
-  yesno = this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
-  yesno = this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
+  this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
+  this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
+  this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
 
   // limits
 

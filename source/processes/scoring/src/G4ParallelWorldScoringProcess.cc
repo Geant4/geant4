@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldScoringProcess.cc,v 1.11 2008/09/06 06:18:12 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParallelWorldScoringProcess.cc,v 1.11 2008-09-06 06:18:12 asaim Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 //
 
@@ -41,6 +41,7 @@
 #include "G4ParticleChange.hh"
 #include "G4StepPoint.hh"
 #include "G4FieldTrackUpdator.hh"
+#include "G4ParticleDefinition.hh"
 
 #include "G4SDManager.hh"
 #include "G4VSensitiveDetector.hh"
@@ -103,6 +104,33 @@ SetParallelWorld(G4VPhysicalVolume* parallelWorld)
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
+
+G4bool G4ParallelWorldScoringProcess::
+IsAtRestRequired(G4ParticleDefinition* partDef)
+{
+  G4int pdgCode = partDef->GetPDGEncoding();
+  if(pdgCode==0)
+  {
+    G4String partName = partDef->GetParticleName();
+    if(partName=="opticalphoton") return false;
+    if(partName=="geantino") return false;
+    if(partName=="chargedgeantino") return false;
+  }
+  else
+  {
+    if(pdgCode==22) return false; // gamma
+    if(pdgCode==11) return false; // electron
+    if(pdgCode==2212) return false; // proton
+    if(pdgCode==-12) return false; // anti_nu_e
+    if(pdgCode==12) return false; // nu_e
+    if(pdgCode==-14) return false; // anti_nu_mu
+    if(pdgCode==14) return false; // nu_mu
+    if(pdgCode==-16) return false; // anti_nu_tau
+    if(pdgCode==16) return false; // nu_tau
+  }
+  return true;
+}
+
 
 //------------------------------------------------------
 //

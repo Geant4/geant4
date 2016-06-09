@@ -1,4 +1,4 @@
-$Id: History,v 1.29 2010/11/30 11:16:01 gcosmo Exp $
+$Id: History,v 1.31 2010-12-23 11:34:22 chauvie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -6,7 +6,21 @@ $Id: History,v 1.29 2010/11/30 11:16:01 gcosmo Exp $
      =========================================================
 
                       Category History file
+
                       ---------------------
+
+05.06.2011 - Pedro Arce (DICOM-V09-03-10, DICOM-V09-03-11)
+             Corrected name for sensitive detector to be consistently
+             named as "phantomSD" in DicomRunAction. Addressing problem
+             report #1210.
+             Corrected axis slicing hint in nested-parameterisation.
+
+23.12.2010 - Stephane Chauvie 
+             Corrected 2 bugs in DicomHandler
+
+30.11.2010 - John Allison
+             dicom.cc: Removed redundant headers:
+             "G4UIterminal.hh" and "G4UItcsh.hh".             
 
 30.11.2010 - Ivana Hrivnacova (DICOM-V09-03-09)
              Moved inclusion of vis headers as last in main().

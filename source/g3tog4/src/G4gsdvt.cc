@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdvt.cc,v 1.7 2006/06/29 18:14:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4gsdvt.cc,v 1.7 2006-06-29 18:14:03 gunter Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // by I.Hrivnacova, V.Berejnoi, 29 Oct 99
 
@@ -39,7 +39,7 @@ void G4CreateCloneVTEWithDivision(G4String vname, G3VolTableEntry* mvte,
                G3DivType divType, G4int nofDivisions, G4int iaxis, G4int nmed, 
      	       G4double c0, G4double step);
 
-void PG4gsdvt(G4String tokens[])
+void PG4gsdvt(G4String *tokens)
 {
   // fill the parameter containers
   G3fillParams(tokens,PTgsdvt);

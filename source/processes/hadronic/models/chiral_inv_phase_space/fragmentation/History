@@ -13,6 +13,11 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+06-Jun-2011 A. Dotti			    (hadr-chips-frag-V09-03-10)
+-----------------------------------------------------------------------
+Introducing fix provided by M. Kosov for file src/G4QFragmentation.cc
+solving bugzilla issue #1179.
+
 14-Jun-2010 M.Kosov                         (hadr-chips-frag-V09-03-09)
 -----------------------------------------------------------------------
 Photon nuclear environment is fixed for 1 Quasmon. Thanks to Andrea.

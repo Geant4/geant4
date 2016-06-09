@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4NURBS.hh,v 1.11 2010-12-07 09:36:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 // 
 // Olivier Crumeyrolle  12 September 1996
 
@@ -494,7 +494,7 @@ G4NURBS::TofloatCtrlPt(const t_CtrlPt & in_krcp)
 inline G4NURBS::t_doubleCtrlPt* 
 G4NURBS::TodoubleCtrlPt(const t_CtrlPt & in_krcp)
 {
-  G4NURBS::t_doubleCtrlPt *  pcopy = new G4NURBS::t_doubleCtrlPt [1];
+  G4NURBS::t_doubleCtrlPt *  pcopy = new G4NURBS::t_doubleCtrlPt [4];
   for (G4int indCoord = X; indCoord < NofC; indCoord++)
     (*pcopy)[indCoord] = (G4double)in_krcp[indCoord];
   return pcopy;

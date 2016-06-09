@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-04-patch-01    (18-February-2011)
+ Geant4 version Name: geant4-09-04-patch-02    (24-June-2011)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -286,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=6.38s Real=6.41s Sys=0s
+  User=4.28s Real=4.28s Sys=0s
 
  The run consists of 1000000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
@@ -355,22 +355,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=7.14s Real=7.15s Sys=0s
+  User=4.91s Real=4.91s Sys=0s
 
  The run consists of 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 540804	eBrem = 277603	eIoni = 181593
+ Process calls frequency --->	Transportation = 540823	eBrem = 277571	eIoni = 181606
 
- Nb of incident particles unaltered after 1 cm  of Water : 540804 over 1000000 incident particles.  Ratio = 54.08 %
- ---> CrossSection per volume:	0.6147 cm^-1 	CrossSection per mass: 0.6147 cm2/g
+ Nb of incident particles unaltered after 1 cm  of Water : 540823 over 1000000 incident particles.  Ratio = 54.082 %
+ ---> CrossSection per volume:	0.61466 cm^-1 	CrossSection per mass: 0.61466 cm2/g
 
  Verification from G4EmCalculator: 
-	eBrem= 0.37212 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61549 cm2/g
-	Expected ratio of transmitted particles= 54.037 %
+	eBrem= 0.37206 cm2/g	eIoni= 0.24337 cm2/g	total= 0.61543 cm2/g
+	Expected ratio of transmitted particles= 54.041 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 490323513, 1321056075
+ Current couple of seeds = 691275951, 554599066
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

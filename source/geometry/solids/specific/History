@@ -1,4 +1,4 @@
-$Id: History,v 1.186 2010/11/26 13:36:35 gcosmo Exp $
+$Id: History,v 1.186 2010-11-26 13:36:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-May-2011  I.Hrivnacova (geom-specific-V09-03-21)
+- G4ExtrudedSolid: fix in Inside(p) for false overlap reporting.
+  Addressing problem report #1211.
+
+12-May-2011  G.Cosmo
+- Fixed compilation warnings from gcc-4.6.0 for variables set but not used.
+
+06-May-2011  G.Cosmo
+- Use G4 typedef for CLHEP types.
 
 26-Nov-2010  T.Nikitina (geom-specific-V09-03-20)
 - Fixes in G4GenericTrap reported by SBT unit test in SurfaceNormal(),

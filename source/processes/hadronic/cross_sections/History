@@ -14,17 +14,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
- 2 February 2011 Vladimir Ivanchenko (hadr-cross-V09-03-23)
+5 May 2011 Dennis Wright (hadr-cross-V09-03-24)
+-----------------------------------------------
+- G4TripathiLightCrossSection::GetZandACrossSection: return 0 cross section
+  when E_cm <= DBL_MIN, in response to bug report #1174
+
+2 February 2011 Vladimir Ivanchenko (hadr-cross-V09-03-23)
 ----------------------------------------------------------
 - G4NeutronCaptureXS - added protection for the case Ekin = 0
 
- 8 January 2011 Dennis Wright
+8 January 2011 Dennis Wright
 ----------------------------------------------------
 - add cross section name to constructors:  G4VCrossSectionDataSet("CSname")
   so that they can be retrieved for physics list print out
 
- 9 December 2010 Dennis Wright (hadr-cross-V09-03-21)
------------------------------------------------------
+9 December 2010 Dennis Wright (hadr-cross-V09-03-21)
+----------------------------------------------------
 - G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy() : remove
   initialization of array Y[]. This forced expensive re-calculation 
   at each call.

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChange.cc,v 1.32 2010/07/21 09:30:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-04 $
+// $Id: G4ParticleChange.cc,v 1.32 2010-07-21 09:30:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -98,6 +98,7 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
       theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
+      theCurrentTrack = right.theCurrentTrack;
 
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;

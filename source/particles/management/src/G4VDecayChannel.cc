@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VDecayChannel.cc,v 1.21 2010-12-22 07:07:59 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-04-patch-01 $
+// GEANT4 tag $Name: geant4-09-04-patch-02 $
 //
 // 
 // ------------------------------------------------------------
@@ -109,6 +109,7 @@ G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
   //create array
   numberOfDaughters = right.numberOfDaughters;
 
+  daughters_name =0;
   if ( numberOfDaughters >0 ) {
     daughters_name = new G4String*[numberOfDaughters];
     //copy daughters name
@@ -142,6 +143,7 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
     // recreate array
     numberOfDaughters = right.numberOfDaughters;
     if ( numberOfDaughters >0 ) {
+      if (daughters_name !=0) ClearDaughtersName();
       daughters_name = new G4String*[numberOfDaughters];
       //copy daughters name
       for (G4int index=0; index < numberOfDaughters; index++) {
@@ -269,7 +271,10 @@ void G4VDecayChannel::FillDaughters()
 #ifdef G4VERBOSE
   if (verboseLevel>1) G4cout << "G4VDecayChannel::FillDaughters()" <<G4endl;
 #endif
-  if (daughters != 0) delete [] daughters;
+  if (daughters != 0) {
+    delete [] daughters;
+    daughters = 0;
+  }
 
   // parent mass
   if (parent == 0) FillParent();  
