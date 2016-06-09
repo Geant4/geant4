@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.19 2008/04/28 08:51:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NistMaterialBuilder.cc,v 1.23 2009/11/24 17:19:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,11 @@
 // 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 // 27.06.06 V.Ivanchneko fix graphite description
 // 27.07.07 V.Ivanchneko remove dependence on NistManager
+// 30.10.09 V.Ivanchneko update density of G4_GRAFITE from PDG'2008
+//                       added G4_GRAPHITE_POROUS
+// 03.11.09 A.Lechner changed following material names:
+//                    From G4_NYLON-6/6 to G4_NYLON-6-6
+//                    From G4_NYLON-6/10 to G4_NYLON-6-10
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +82,7 @@ G4NistMaterialBuilder::~G4NistMaterialBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
+G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
                                                        G4bool isotopes,
 						       G4bool warning)
 {
@@ -88,9 +93,13 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
     first = false;
   }
 
-  if (verbose > 1)
-    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " << name << G4endl;
+  G4String name = matname;
+  if("G4_NYLON-6/6" == matname)  name = "G4_NYLON-6-6";
+  if("G4_NYLON-6/10" == matname) name = "G4_NYLON-6-10";
 
+  if (verbose > 1) {
+    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " << name << G4endl;
+  }
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   G4int nmat = theMaterialTable->size();
 
@@ -1336,13 +1345,13 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 7, 0.099536);
   AddElementByWeightFraction( 8, 0.148539);
 
-  AddMaterial("G4_NYLON-6/6", 1.14, 0, 63.9, 4);
+  AddMaterial("G4_NYLON-6-6", 1.14, 0, 63.9, 4);
   AddElementByWeightFraction( 1, 0.097976);
   AddElementByWeightFraction( 6, 0.636856);
   AddElementByWeightFraction( 7, 0.123779);
   AddElementByWeightFraction( 8, 0.141389);
 
-  AddMaterial("G4_NYLON-6/10", 1.14, 0, 63.2, 4);
+  AddMaterial("G4_NYLON-6-10", 1.14, 0, 63.2, 4);
   AddElementByWeightFraction( 1, 0.107062);
   AddElementByWeightFraction( 6, 0.680449);
   AddElementByWeightFraction( 7, 0.099189);
@@ -1688,7 +1697,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 6, 0.280555);
   AddElementByWeightFraction( 9, 0.710028);
 
-  AddMaterial("G4_WATER", 1.0,0, 75., 2);
+  AddMaterial("G4_WATER", 1.0,0, 78., 2);
   AddElementByWeightFraction( 1, 0.111894);
   AddElementByWeightFraction( 8, 0.888106);
   AddChemicalFormula("G4_WATER","H_2O");
@@ -1702,7 +1711,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 1, 0.094935);
   AddElementByWeightFraction( 6, 0.905065);
 
-  AddMaterial("G4_GRAPHITE", 1.7, 6, 78.);
+  AddMaterial("G4_GRAPHITE", 2.21, 6, 78.);
   nNIST = nMaterials;
   AddChemicalFormula("G4_GRAPHITE","Graphite");
 }
@@ -1726,6 +1735,10 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
   G4double density = universe_mean_density*cm3/g;
   AddMaterial("G4_Galactic", density, 1, 21.8, 1, kStateGas);
   AddGas("G4_Galactic",2.73*kelvin, 3.e-18*pascal);
+
+  AddMaterial("G4_GRAPHITE_POROUS", 1.7, 6, 78.);
+  AddChemicalFormula("G4_GRAPHITE","Graphite");
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

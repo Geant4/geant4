@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc,v 1.7 2008/03/31 15:34:01 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DiffractiveSplitableHadron.cc,v 1.8 2009/07/31 11:03:00 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 // ------------------------------------------------------------
@@ -86,13 +86,13 @@ void G4DiffractiveSplitableHadron::SplitUp()
 // flavours of quark ends
 	
 	G4int PDGcode=GetDefinition()->GetPDGEncoding();
+
 	G4int stringStart, stringEnd;
 	ChooseStringEnds(PDGcode, &stringStart,&stringEnd);
-	
+
 	Parton[0] = new G4Parton(stringStart);
 	Parton[1] = new G4Parton(stringEnd);
 	PartonIndex=-1;
-	
 }
 
 G4Parton * G4DiffractiveSplitableHadron::GetNextParton()

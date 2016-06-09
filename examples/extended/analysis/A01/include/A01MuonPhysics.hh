@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01MuonPhysics.hh,v 1.6 2006/06/29 16:31:31 gunter Exp $
+// $Id: A01MuonPhysics.hh,v 1.8 2009/12/02 22:45:09 perl Exp $
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 mu+- tau+- processes are changed by T. Koi
@@ -36,7 +36,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 #include "G4MuIonisation.hh"

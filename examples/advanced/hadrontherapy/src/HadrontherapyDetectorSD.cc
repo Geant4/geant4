@@ -24,23 +24,7 @@
 // ********************************************************************
 //
 // $Id: HadrontherapyDetectorSD.cc; 
-// Last modified: G.A.P.Cirrone March 2008;
-// 
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
-//
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyAnalysisManager.hh"
@@ -64,14 +48,14 @@ HadrontherapyDetectorSD::~HadrontherapyDetectorSD()
 }
 
 void HadrontherapyDetectorSD::Initialize(G4HCofThisEvent*)
-{ 
+{
   HitsCollection = new HadrontherapyDetectorHitsCollection(sensitiveDetectorName,
 							  collectionName[0]);
 }
 
-
 G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 {
+  //The code doesn't seem to get here if we use the IAEA geometry. FIXME
   if(!ROhist)
     return false;
  
@@ -91,23 +75,17 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
   G4String particleName = aStep -> GetTrack() -> GetDynamicParticle() -> 
                            GetDefinition() -> GetParticleName();
 
-  if(energyDeposit != 0)                       
-    {  
-      // Create a hit with the information of position is in the detector     
-      HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();       
-      detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
-      HitsCollection -> insert(detectorHit);
-    }
+  // Create a hit with the information of position is in the detector     
+  HadrontherapyDetectorHit* detectorHit = new HadrontherapyDetectorHit();       
+  detectorHit -> SetEdepAndPosition(i, j, k, energyDeposit); 
+  HitsCollection -> insert(detectorHit);
 
   // Energy deposit of secondary particles along X (integrated on Y and Z)
-#ifdef G4ANALYSIS_USE 	
 
+#ifdef ANALYSIS_USE
  HadrontherapyAnalysisManager* analysis = 
 			HadrontherapyAnalysisManager::getInstance();
 
- if(energyDeposit != 0)                       
-    {  
-   
  if(aStep -> GetTrack() -> GetTrackID()!= 1)
    {
      if (particleName == "proton")
@@ -134,7 +112,6 @@ G4bool HadrontherapyDetectorSD::ProcessHits(G4Step* aStep, G4TouchableHistory* R
     if (particleName == "pi+" || particleName == "pi-" ||  particleName == "pi0")
        analysis -> SecondaryPionEnergyDeposit(i, energyDeposit/MeV);   	
    }
-    }
 #endif
 
   return true;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh,v 1.25 2008/10/13 14:56:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmModelManager.hh,v 1.34 2009/08/11 10:29:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,6 +52,9 @@
 // 20-01-06 Introduce G4EmTableType and reducing number of methods (VI)
 // 13-05-06 Add GetModel by index method (VI)
 // 15-03-07 Add maxCutInRange (V.Ivanchenko)
+// 08-04-08 Simplify Select method for only one G4RegionModel (VI)
+// 03-08-09 Removed unused members and simplify model search if only one
+//          model is used (VI)
 //
 // Class Description:
 //
@@ -90,28 +93,28 @@ private:
 
   ~G4RegionModels();
 
-  G4int SelectIndex(G4double e) const {
+  inline G4int SelectIndex(G4double e) const {
     G4int idx = 0;
     if (nModelsForRegion>1) {
       idx = nModelsForRegion;
-      do {idx--;} while (idx && e <= lowKineticEnergy[idx]);
+      do {--idx;} while (idx > 0 && e <= lowKineticEnergy[idx]);
     }
     return theListOfModelIndexes[idx];
   };
 
-  G4int ModelIndex(G4int n) const {
+  inline G4int ModelIndex(G4int n) const {
     return theListOfModelIndexes[n];
   };
 
-  G4int NumberOfModels() const {
+  inline G4int NumberOfModels() const {
     return nModelsForRegion;
   };
 
-  G4double LowEdgeEnergy(G4int n) const {
+  inline G4double LowEdgeEnergy(G4int n) const {
     return lowKineticEnergy[n];
   };
 
-  const G4Region* Region() const {
+  inline const G4Region* Region() const {
     return theRegion;
   };
 
@@ -128,7 +131,6 @@ private:
 
 class G4Region;
 class G4ParticleDefinition;
-class G4DataVector;
 class G4PhysicsVector;
 class G4MaterialCutsCouple;
 
@@ -149,21 +151,13 @@ public:
 				       G4double,
                                        G4int);
 
-  const G4DataVector* Cuts() const;
-
-  const G4DataVector* SubCutoff() const;
-
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
 		      G4EmTableType t = fRestricted);
 
   void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
                         G4bool startFromNull = true, G4EmTableType t = fRestricted);
 
-  G4VEmModel* SelectModel(G4double& energy, size_t& index);
-
   G4VEmModel* GetModel(G4int, G4bool ver = false);
-
-  G4int NumberOfModels() const;
 
   void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
   
@@ -171,7 +165,21 @@ public:
 
   void DumpModelList(G4int verb);
 
+  inline G4VEmModel* SelectModel(G4double& energy, size_t& index);
+
+  inline const G4DataVector* Cuts() const;
+
+  inline const G4DataVector* SubCutoff() const;
+
+  inline G4int NumberOfModels() const;
+
 private:
+
+  inline G4double ComputeDEDX(G4VEmModel* model,
+			      const G4MaterialCutsCouple*,
+			      G4double kinEnergy,
+			      G4double cutEnergy,
+			      G4double minEnergy);
 
   // hide  assignment operator
 
@@ -189,28 +197,24 @@ private:
   std::vector<G4VEmFluctuationModel*>     flucModels;
   std::vector<const G4Region*>            regions;
   std::vector<G4int>                      orderOfModels;
+  std::vector<G4int>                      isUsed;
 
   G4int                       nEmModels;
   G4int                       nRegions;
-  G4int                       nCouples;
 
-  G4int*                      idxOfRegionModels;
-  G4RegionModels**            setOfRegionModels;
+  std::vector<G4int>            idxOfRegionModels;
+  std::vector<G4RegionModels*>  setOfRegionModels;
 
-  G4double                    minSubRange;
-  G4double                    maxCutInRange;
   G4double                    maxSubCutInRange;
 
   const G4ParticleDefinition* particle;
-  const G4ParticleDefinition* secondaryParticle;
-  const G4ParticleDefinition* theGamma;
-  const G4ParticleDefinition* thePositron;
 
   G4int                       verboseLevel;
+  G4bool                      severalModels;
 
-  // cash
-  G4int                       currentIdx;
-
+  // may be changed in run time
+  G4RegionModels*             currRegionModel;
+  G4VEmModel*                 currModel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -219,9 +223,13 @@ private:
 inline G4VEmModel* G4EmModelManager::SelectModel(G4double& kinEnergy, 
 						 size_t& index)
 {
-  currentIdx = 
-    (setOfRegionModels[idxOfRegionModels[index]])->SelectIndex(kinEnergy);
-  return models[currentIdx];
+  if(severalModels) {
+    if(nRegions > 1) {
+      currRegionModel = setOfRegionModels[idxOfRegionModels[index]];
+    }
+    currModel = models[currRegionModel->SelectIndex(kinEnergy)];
+  }
+  return currModel;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -243,6 +251,23 @@ inline const G4DataVector* G4EmModelManager::SubCutoff() const
 inline G4int G4EmModelManager::NumberOfModels() const
 {
   return nEmModels;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double 
+G4EmModelManager::ComputeDEDX(G4VEmModel* model,
+			      const G4MaterialCutsCouple* couple,
+			      G4double e,
+			      G4double cut,
+			      G4double emin)
+{
+  G4double dedx = 0.0;
+  if(model && cut > emin) {
+    dedx = model->ComputeDEDX(couple,particle,e,cut); 
+    if(emin > 0.0) {dedx -= model->ComputeDEDX(couple,particle,e,emin);} 
+  }
+  return dedx;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

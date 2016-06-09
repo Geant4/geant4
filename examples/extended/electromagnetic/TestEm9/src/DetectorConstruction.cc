@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.11 2008/04/07 18:09:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.14 2009/11/21 17:28:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -250,9 +250,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   //Vertex
   G4double vertWidth = ecalWidth/5.;
   G4int npads = (G4int)(vertWidth/padWidth);
+  //G4cout << " vertWidth= " << vertWidth << " padWidth= " << padWidth 
+  //	 << " npads= " << npads << G4endl;
+  // insure beam to hit a middle of central pad
   npads = (npads/2)*2 + 1;
-  x0 = -0.5*padWidth*((G4double)(npads-1));
-  G4double x1 = std::fabs(x0) + 0.5*padWidth + gap; 
+  x0 = -0.5*(padWidth + vertWidth);
+  G4double x1 = 0.5*vertWidth + gap; 
   G4double z  = -(vertexLength+absLength);
 
   G4Box* solidVD = new G4Box("VertDet",x1,ecalWidth*0.5+gap,padLength*0.5);

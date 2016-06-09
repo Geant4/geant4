@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2008/11/14 20:47:11 gum Exp $
+$Id: History,v 1.70 2009/07/29 23:43:27 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 July 09: P. Gumplinger (xrays-V09-02-00)
+- Change IsApplicable for G4Cerenkov and G4Scintillation to 
+  exclude short-lived particles.
 
 14 November 08: P. Gumplinger (xrays-V09-01-06)
 - Do not calculate a step limit coming from G4Cerenkov when the

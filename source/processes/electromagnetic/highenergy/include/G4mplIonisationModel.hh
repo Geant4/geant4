@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.hh,v 1.6 2007/11/13 18:36:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4mplIonisationModel.hh,v 1.7 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -117,33 +117,5 @@ private:
 };
 
 #endif
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4mplIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
-						    const G4MaterialCutsCouple*,
-						    const G4DynamicParticle*,
-						    G4double,
-						    G4double)
-{}
-
-inline G4double G4mplIonisationModel::Dispersion(
-                          const G4Material* material,
-                          const G4DynamicParticle* dp,
-                                G4double& tmax,
-                                G4double& length)
-{
-  G4double siga = 0.0;
-  G4double tau   = dp->GetKineticEnergy()/mass;
-  if(tau > 0.0) { 
-    G4double electronDensity = material->GetElectronDensity();
-    G4double gam   = tau + 1.0;
-    G4double invbeta2 = (gam*gam)/(tau * (tau+2.0));
-    siga  = (invbeta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
-      * electronDensity * chargeSquare;
-  }
-  return siga;
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

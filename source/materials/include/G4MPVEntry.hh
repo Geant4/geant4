@@ -24,23 +24,26 @@
 // ********************************************************************
 //
 //
-// $Id: G4MPVEntry.hh,v 1.7 2008/06/05 23:36:56 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MPVEntry.hh,v 1.8 2009/04/21 15:35:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
-// G4MPVEntry Class Definition 
-////////////////////////////////////////////////////////////////////////
 //
-// File:	G4MPVEntry.hh	
-// Description: A G4MPVEntry is an MaterialPropertyVector Entry.  
-//		One Material Property Vector contains many MPVEntries  
-// Version:	1.0
-// Created:	1996-02-08	
-// Author:	Juliet Armstrong
+// Class G4MPVEntry
+//
+// Class description:
+//
+// A G4MPVEntry is a MaterialPropertyVector Entry.  
+// One Material Property Vector contains many MPVEntries.
+
+// File:        G4MPVEntry.hh
+// Version:     1.0
+// Created:     1996-02-08  
+// Author:      Juliet Armstrong
 // Updated:     1999-10-29 add method and class descriptors
 //              1997-03-25 by Peter Gumplinger
-//		> cosmetics (only)
+//              > cosmetics (only)
 // mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
@@ -55,62 +58,54 @@
 #include "G4ios.hh"
 #include "globals.hh"
 
-// Class Description:
-// A G4MPVEntry is an MaterialPropertyVector Entry.
-// One Material Property Vector contains many MPVEntries.
-// Class Description - End:
-
 /////////////////////
 // Class Definition
 /////////////////////
 
-class G4MPVEntry {
+class G4MPVEntry
+{
+  public: // Without description
 
-public: // Without description
+    //////////////
+    // Operators
+    //////////////
 
-	//////////////
-	// Operators
-	//////////////G4MPVEntry.hh
-		
-	// Well defined semantics for these operators
-	// required by G4RWTPtrSortedVector
+    // Well defined semantics for these operators
+    // required by G4RWTPtrSortedVector
+    //
+    G4bool operator <(const G4MPVEntry &right) const;  
+    G4bool operator ==(const G4MPVEntry &right) const;
+    G4MPVEntry& operator =(const G4MPVEntry &right);
 
-	G4bool operator <(const G4MPVEntry &right) const;	
-	G4bool operator ==(const G4MPVEntry &right) const;
-	G4MPVEntry& operator =(const G4MPVEntry &right);
+    ///////////////////////////////
+    // Constructors and Destructor
+    ///////////////////////////////
 
-	///////////////////////////////
-	// Constructor and Destructor
-	///////////////////////////////
+    G4MPVEntry(G4double aPhotonEnergy, G4double aPropertyValue); 
+    G4MPVEntry(const G4MPVEntry &right);
+   ~G4MPVEntry();
 
-	G4MPVEntry(G4double aPhotonEnergy, G4double aPropertyValue); 
+    ////////////
+    // Methods
+    ////////////
 
-	G4MPVEntry(const G4MPVEntry &right);
+    G4double GetPhotonEnergy();
+    G4double GetProperty();
+  
+    //////////
+    // Tests
+    //////////
 
-	~G4MPVEntry();
+    void DumpEntry();
 
-	////////////
-	// Methods
-	////////////
+  private:
 
-	G4double GetPhotonEnergy();
+    /////////////////////////
+    // Private Data members 
+    /////////////////////////
 
-	G4double GetProperty();
-	
-	//////////
-	// Tests
-	//////////
-
-	void DumpEntry();
-
-private:
-
-	/////////////////////////
-	// Private Data members 
-	/////////////////////////
-
-	G4double thePhotonEnergy;
-	G4double theProperty;
+    G4double thePhotonEnergy;
+    G4double theProperty;
 };
 
 ////////////////////
@@ -124,7 +119,7 @@ private:
 inline 
 G4double G4MPVEntry::GetPhotonEnergy()
 {
-	return thePhotonEnergy;
+  return thePhotonEnergy;
 }
 
 // GetProperty
@@ -134,7 +129,7 @@ G4double G4MPVEntry::GetPhotonEnergy()
 inline 
 G4double G4MPVEntry::GetProperty()
 {
-	return theProperty;
+  return theProperty;
 }
 
 #endif /* G4MPVEntry_h */

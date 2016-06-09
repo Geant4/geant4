@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2008/08/27 11:04:02 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2009/05/11 13:03:17 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.
 # --------------------------------------------------------------
@@ -19,6 +19,9 @@ endif
 
 include $(G4INSTALL)/config/binmake.gmk
 
-visclean:
-	rm -f g4*.prim g4*.eps g4*.wrl
-	rm -f .DAWN_*
+visclean: clean
+	@rm -f g4*.prim g4*.eps g4*.wrl
+	@rm -f .DAWN_*
+
+clean_all: visclean
+	@rm -f g01.gdml

@@ -24,18 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.hh,v 1.5 2006/06/29 20:06:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QIsotope.hh,v 1.6 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //      ---------------- G4QIsotope header ----------------
 //                 by Mikhail Kossov, December 2003.
 //  Header of the G4QIsotope class of the CHIPS Simulation Branch in GEANT4
 // ----------------------------------------------------------------------------
-//  It contains information about natural abundances of stable and long living 
-//  isotopes and a NEW "Element" can be initialised for any isotope set.
-//  Randomization of isotopes of the Natural Elements is hardwired and fast
-//  Randomization of isotopes of the user defined Elements is a bit slower
+//  Short descriptionIt contains information about natural abundances of stable
+//  and long living isotopes and a NEW "Element" can be initialised for any
+//  isotope set. Randomization of isotopes of the Natural Elements is hardwired and
+//  fast randomization of isotopes of the user defined Elements is a bit slower
 //  CrossSectionWeighted randomisation of isotopes is slow (same for Nat and New)
 // -------------------------------------------------------------------------------
 // ****************************************************************************************

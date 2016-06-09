@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc,v 1.6 2008/07/11 17:49:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eeToHadronsMultiModel.cc,v 1.8 2009/04/12 17:48:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -128,12 +128,7 @@ void G4eeToHadronsMultiModel::Initialise(const G4ParticleDefinition*,
 
     nModels = models.size();
 
-    if(pParticleChange) {
-      fParticleChange =
-	reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-    } else {
-      fParticleChange = new G4ParticleChangeForGamma();
-    }
+    fParticleChange = GetParticleChangeForGamma();
   }
 }
 

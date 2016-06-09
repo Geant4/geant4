@@ -24,13 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4QStringVector.hh,v 1.1 2006/10/30 10:40:35 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QStringVector.hh,v 1.2 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QStringVector ----------------
 //             by Mikhail Kossov, October 2006.
 // Type definition for a Vector of QStrings - output of CHIPS model
 // ----------------------------------------------------------------
+// Short description: If partons from the G4QPartonPair are close in
+// rapidity, they create Quasmons, but if they are far in the rapidity
+// space, they can not interact directly. Say the bottom parton (quark)
+// has rapidity 0, and the top parton (antiquark) has rapidity 8, then
+// the top quark splits in two by radiating gluon, and each part has
+// rapidity 4, then the gluon splits in quark-antiquark pair (rapidity
+// 2 each), and then the quark gadiates anothe gluon and reachs rapidity
+// 1. Now it can interact with the bottom antiquark, creating a Quasmon
+// or a hadron. The intermediate partons is the string ladder.
+// ---------------------------------------------------------------------
 
 #ifndef G4QStringVector_h
 #define G4QStringVector_h 1

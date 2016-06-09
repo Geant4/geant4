@@ -24,32 +24,39 @@
 // ********************************************************************
 //
 //
-// $Id: G4B8GEMCoulombBarrier.hh,v 1.3 2006/06/29 20:14:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4B8GEMCoulombBarrier.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
-
+//
+//J.M. Quesada (July 2009) Coulomb barrier now derives from new class G4GEMCoulombBarrier
+// strictly according to Furihata's report
+//
 #ifndef G4B8GEMCoulombBarrier_h
 #define G4B8GEMCoulombBarrier_h 1
 
-#include "G4GEMCoulombBarrierHE.hh"
+//#include "G4GEMCoulombBarrierHE.hh"
+#include "G4GEMCoulombBarrier.hh"
 #include "globals.hh"
-
-class G4B8GEMCoulombBarrier : public G4GEMCoulombBarrierHE
+//JMQ 200709 now derives from new class G4GEMCoulombBarrier
+//class G4B8GEMCoulombBarrier : public G4GEMCoulombBarrierHE
+class G4B8GEMCoulombBarrier : public G4GEMCoulombBarrier
 {
 public:
-  G4B8GEMCoulombBarrier() : G4GEMCoulombBarrierHE(8,5) {};
+  //JMQ 200709
+  //  G4B8GEMCoulombBarrier() : G4GEMCoulombBarrierHE(8,5) {};
+  G4B8GEMCoulombBarrier() : G4GEMCoulombBarrier(8,5) {};
   ~G4B8GEMCoulombBarrier() {};
-
+  
 private:
   G4B8GEMCoulombBarrier(const G4B8GEMCoulombBarrier & right);
-
+  
   const G4B8GEMCoulombBarrier & operator=(const G4B8GEMCoulombBarrier & right);
   G4bool operator==(const G4B8GEMCoulombBarrier & right) const;
   G4bool operator!=(const G4B8GEMCoulombBarrier & right) const;
   
-
+  
 };
 
 #endif

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2008/06/21 19:28:03 sincerti Exp $
+$Id: History,v 1.6 2009/03/02 16:49:14 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,12 @@ $Id: History,v 1.4 2008/06/21 19:28:03 sincerti Exp $
                        Package History file
                        --------------------
 
+2-March 2009 - tag nanobeam-V09-02-01 - G.Folger
+- correct for gcc4.3/slc5 warning 
+
+26 February 2009 - tag nanobeam-V09-02-00 - G.Folger
+- Correct TabulatedField3D.cc to use logical AND (&&) in few if()
+ 
 21 June 2008 - tag nanobeam-V09-01-11 - S. Incerti
 - several tags to try to resolve conflict with system testing
 

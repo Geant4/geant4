@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AdjointAlongStepWeightCorrection.cc,v 1.5 2009/11/23 09:02:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 #include "G4AdjointAlongStepWeightCorrection.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4VParticleChange.hh"
 #include "G4AdjointCSManager.hh"
-
 
 ///////////////////////////////////////////////////////
 //
@@ -44,28 +46,19 @@ G4AdjointAlongStepWeightCorrection::G4AdjointAlongStepWeightCorrection(const G4S
 G4AdjointAlongStepWeightCorrection::~G4AdjointAlongStepWeightCorrection()
 {; 
 }
-
-
 ///////////////////////////////////////////////////////
 //
-
 void G4AdjointAlongStepWeightCorrection::PreparePhysicsTable(
      const G4ParticleDefinition& )
 {
 ; 
-
 }
-
 ///////////////////////////////////////////////////////
 //
 
 void G4AdjointAlongStepWeightCorrection::BuildPhysicsTable(const G4ParticleDefinition& )
 {;
 }
-
-
-
-
 ///////////////////////////////////////////////////////
 //
 G4VParticleChange* G4AdjointAlongStepWeightCorrection::AlongStepDoIt(const G4Track& track,
@@ -84,9 +77,28 @@ G4VParticleChange* G4AdjointAlongStepWeightCorrection::AlongStepDoIt(const G4Tra
   G4double weight_correction=G4AdjointCSManager::GetAdjointCSManager()->GetContinuousWeightCorrection(thePartDef,
   									preStepKinEnergy,Tkin, currentCouple,length);
 	
- 
   
+ 
   G4double new_weight=weight_correction*track.GetWeight();
+  
+  //if (weight_correction >2.) new_weight=1.e-300;
+  
+  
+  //The following test check for zero weight.
+  //This happens after weight correction of gamma for photo electric effect.
+  //When the new weight is 0 it will be later on consider as nan by G4.
+  //Therefore we do put a lower limit of 1.e-300. for new_weight 
+  //Correction by L.Desorgher on 15 July 2009 
+#ifdef WIN32
+  if (!!_isnan(new_weight) || new_weight==0){
+#else
+  if (std::isnan(new_weight) || new_weight==0){
+#endif
+		//G4cout<<new_weight<<'\t'<<weight_correction<<'\t'<<track.GetWeight()<<G4endl;
+		new_weight=1.e-300;
+  }
+  
+  //G4cout<<new_weight<<'\t'<<weight_correction<<'\t'<<track.GetWeight()<<G4endl;
   fParticleChange->SetParentWeightByProcess(false);
   fParticleChange->SetSecondaryWeightByProcess(false);
   fParticleChange->ProposeParentWeight(new_weight);
@@ -94,4 +106,14 @@ G4VParticleChange* G4AdjointAlongStepWeightCorrection::AlongStepDoIt(const G4Tra
 
   return fParticleChange;
 
+}
+///////////////////////////////////////////////////////
+//
+G4double G4AdjointAlongStepWeightCorrection::GetContinuousStepLimit(const G4Track& track,
+                G4double , G4double , G4double& )
+{ 
+  G4double x = DBL_MAX;
+  DefineMaterial(track.GetMaterialCutsCouple());
+  preStepKinEnergy = track.GetKineticEnergy();
+  return x;
 }

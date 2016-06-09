@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFC.icc,v 1.6 2008/06/19 08:08:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: FTFC.icc,v 1.7 2009/05/18 08:54:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
+// 18.05.2009 G.Folger: obsoleted
 // 28.11.2005 G.Folger: migration to non static particles
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
 // 02.12.2005 V.Ivanchenko: rename components
@@ -68,6 +69,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsFTFC.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TFTFC<T>::TFTFC(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -77,6 +80,9 @@ template<class T> TFTFC<T>::TFTFC(G4int ver):  T()
   G4cout << G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("FTFC");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));

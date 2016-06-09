@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.23 2006/11/26 15:51:12 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Scene.cc,v 1.24 2009/11/04 12:49:16 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -144,6 +144,29 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
   return true;
 }
 
+G4bool G4Scene::AddEndOfRunModel (G4VModel* pModel, G4bool warn) {
+  G4int i, nModels = fEndOfRunModelList.size ();
+  for (i = 0; i < nModels; i++) {
+    if (pModel -> GetGlobalDescription () ==
+	fEndOfRunModelList [i] -> GetGlobalDescription ()) break;
+  }
+  if (i < nModels) {
+    delete fEndOfRunModelList[i];
+    fEndOfRunModelList[i] = pModel;
+    if (warn) {
+      G4cout << "G4Scene::AddEndOfRunModel: a model \""
+	     << pModel -> GetGlobalDescription ()
+	     << "\"\n  is already in the end-of-run list of scene \""
+	     << fName <<
+	"\".\n  The old model has been deleted; this new model replaces it."
+	     << G4endl;
+    }
+    return true;  // Model replaced sucessfully.
+  }
+  fEndOfRunModelList.push_back (pModel);
+  return true;
+}
+
 std::ostream& operator << (std::ostream& os, const G4Scene& s) {
 
   size_t i;
@@ -158,6 +181,11 @@ std::ostream& operator << (std::ostream& os, const G4Scene& s) {
   os << "\n  End-of-event model list:";
   for (i = 0; i < s.fEndOfEventModelList.size (); i++) {
     os << "\n  " << *(s.fEndOfEventModelList[i]);
+  }
+
+  os << "\n  End-of-run model list:";
+  for (i = 0; i < s.fEndOfRunModelList.size (); i++) {
+    os << "\n  " << *(s.fEndOfRunModelList[i]);
   }
 
   os << "\n  Extent or bounding box: " << s.fExtent;

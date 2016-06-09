@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.24 2008/04/14 08:50:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HepPolyhedron.h,v 1.25 2009/10/28 13:38:54 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // Class Description:
@@ -106,8 +106,6 @@
 //   SetNumberOfRotationSteps (n) - set number of steps for whole circle;
 //   ResetNumberOfRotationSteps() - reset number of steps for whole circle
 //                            to default value;
-//   IsErrorBooleanProcess()- true if there has been an error during the
-//                            processing of a Boolean operation.
 // History:
 //
 // 20.06.96 Evgeni Chernyaev <Evgueni.Tcherniaev@cern.ch> - initial version
@@ -163,6 +161,9 @@
 //
 // 20.06.05 G.Cosmo
 // - added HepPolyhedronEllipsoid
+//
+// 21.10.09 J.Allison
+// - removed IsErrorBooleanProcess (now error is returned through argument)
 //
 
 #ifndef HEP_POLYHEDRON_HH
@@ -312,8 +313,6 @@ class HepPolyhedron {
   HepPolyhedron add(const HepPolyhedron &p) const;
   HepPolyhedron subtract(const HepPolyhedron &p) const;
   HepPolyhedron intersect(const HepPolyhedron &p) const;
-  // If there has been an error during the above processing..
-  bool IsErrorBooleanProcess() const;
 
   // Get area of the surface of the polyhedron
   double GetSurfaceArea() const;

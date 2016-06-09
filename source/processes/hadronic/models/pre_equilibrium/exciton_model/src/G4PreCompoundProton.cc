@@ -23,37 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J.M.Quesada (August 08). New source file
-// 
-// Modif (21 August 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
-// 
-// JMQ (06 September 2008) Also external choice has been added for:
-//                      - superimposed Coulomb barrier (if useSICB=true) 
+//
+// $Id: G4PreCompoundProton.cc,v 1.4 2009/02/11 18:06:00 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundProton
+//
+// Author:         V.Lara
+//
+// Modified:  
+// 21.08.2008 J. M. Quesada added external choice of inverse cross section option
+// 21.08.2008 J. M. Quesada added external choice for superimposed Coulomb barrier 
+//                          (if useSICB=true) 
+//
 
 #include "G4PreCompoundProton.hh"
 
-  G4ReactionProduct * G4PreCompoundProton::GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct = 
-      new G4ReactionProduct(G4Proton::ProtonDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
+G4ReactionProduct * G4PreCompoundProton::GetReactionProduct() const
+{
+  G4ReactionProduct * theReactionProduct = 
+    new G4ReactionProduct(G4Proton::ProtonDefinition());
+  theReactionProduct->SetMomentum(GetMomentum().vect());
+  theReactionProduct->SetTotalEnergy(GetMomentum().e());
 #ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
+  theReactionProduct->SetCreatorModel("G4PrecompoundModel");
 #endif
-    return theReactionProduct;
-  }
+  return theReactionProduct;
+}
 
-
-   G4double G4PreCompoundProton::GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 0.0;
-    if(NumberParticles > 0) rj = static_cast<G4double>(NumberCharged)/static_cast<G4double>(NumberParticles);
-    return rj;
-  }
-
-
+G4double G4PreCompoundProton::GetRj(const G4int NumberParticles, const G4int NumberCharged)
+{
+  G4double rj = 0.0;
+  if(NumberParticles > 0) rj = static_cast<G4double>(NumberCharged)/static_cast<G4double>(NumberParticles);
+  return rj;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
@@ -62,7 +70,7 @@
 //OPT=2 Wellisch's parametarization
 //OPT=3 Kalbach's parameterization 
 // 
- G4double G4PreCompoundProton::CrossSection(const  G4double K)
+G4double G4PreCompoundProton::CrossSection(const  G4double K)
 {
   //G4cout<<" In G4PreCompoundProton OPTxs="<<OPTxs<<G4endl;
   //G4cout<<" In G4PreCompoundProton useSICB="<<useSICB<<G4endl;
@@ -74,8 +82,6 @@
   ResidualAthrd=std::pow(ResidualA,0.33333);
   FragmentA=GetA()+GetRestA();
   FragmentAthrd=std::pow(FragmentA,0.33333);
-
-
 
   if (OPTxs==0) return GetOpt0(K);
   else if( OPTxs==1) return GetOpt1(K);
@@ -93,82 +99,78 @@
 
 G4double G4PreCompoundProton::GetOpt0(const  G4double K)
 {
-const G4double r0 = G4PreCompoundParameters::GetAddress()->Getr0();
+  const G4double r0 = G4PreCompoundParameters::GetAddress()->Getr0();
   // cross section is now given in mb (r0 is in mm) for the sake of consistency
   //with the rest of the options
- return 1.e+25*pi*(r0*ResidualAthrd)*(r0*ResidualAthrd)*GetAlpha()*(1.+GetBeta()/K);
+  return 1.e+25*pi*(r0*ResidualAthrd)*(r0*ResidualAthrd)*GetAlpha()*(1.+GetBeta()/K);
 }
 //
 //------------
 //
-  G4double G4PreCompoundProton::GetAlpha()
-  {
- G4double aZ = static_cast<G4double>(GetRestZ());
-    G4double C = 0.0;
-    if (aZ >= 70) 
-      {
-	C = 0.10;
-      } 
-    else 
-      {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
-      }
-    return 1.0 + C;
-  }
+G4double G4PreCompoundProton::GetAlpha()
+{
+  G4double aZ = static_cast<G4double>(GetRestZ());
+  G4double C = 0.0;
+  if (aZ >= 70) 
+    {
+      C = 0.10;
+    } 
+  else 
+    {
+      C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
+    }
+  return 1.0 + C;
+}
 //
 //-------------------
 //  
-  G4double G4PreCompoundProton::GetBeta() 
-  {
+G4double G4PreCompoundProton::GetBeta() 
+{
   return -GetCoulombBarrier();
-  }
+}
 //
   
-
-
 //********************* OPT=1 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)
 
 G4double G4PreCompoundProton::GetOpt1(const  G4double K)
 {
- G4double Kc=K; 
+  G4double Kc=K; 
 
-// JMQ  xsec is set constat above limit of validity
- if (K>50)  Kc=50;
+  // JMQ  xsec is set constat above limit of validity
+  if (K>50)  Kc=50;
 
- G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
- G4double p, p0, p1, p2,Ec,delta,q,r,ji;
+  G4double landa, landa0, landa1, mu, mu0, mu1,nu, nu0, nu1, nu2,xs;
+  G4double p, p0, p1, p2,Ec,delta,q,r,ji;
   
- p0 = 15.72;
- p1 = 9.65;
- p2 = -449.0;
- landa0 = 0.00437;
- landa1 = -16.58;
- mu0 = 244.7;
- mu1 = 0.503;
- nu0 = 273.1;
- nu1 = -182.4;
- nu2 = -1.872;  
- delta=0.;  
+  p0 = 15.72;
+  p1 = 9.65;
+  p2 = -449.0;
+  landa0 = 0.00437;
+  landa1 = -16.58;
+  mu0 = 244.7;
+  mu1 = 0.503;
+  nu0 = 273.1;
+  nu1 = -182.4;
+  nu2 = -1.872;  
+  delta=0.;  
 
- Ec = 1.44*theZ*ResidualZ/(1.5*ResidualAthrd+delta);
- p = p0 + p1/Ec + p2/(Ec*Ec);
- landa = landa0*ResidualA + landa1;
- mu = mu0*std::pow(ResidualA,mu1);
- nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*(Ec*Ec));
- q = landa - nu/(Ec*Ec) - 2*p*Ec;
- r = mu + 2*nu/Ec + p*(Ec*Ec);
+  Ec = 1.44*theZ*ResidualZ/(1.5*ResidualAthrd+delta);
+  p = p0 + p1/Ec + p2/(Ec*Ec);
+  landa = landa0*ResidualA + landa1;
+  mu = mu0*std::pow(ResidualA,mu1);
+  nu = std::pow(ResidualA,mu1)*(nu0 + nu1*Ec + nu2*(Ec*Ec));
+  q = landa - nu/(Ec*Ec) - 2*p*Ec;
+  r = mu + 2*nu/Ec + p*(Ec*Ec);
 
- ji=std::max(Kc,Ec);
- if(Kc < Ec) { xs = p*Kc*Kc + q*Kc + r;}
- else {xs = p*(Kc - ji)*(Kc - ji) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
- if (xs <0.0) {xs=0.0;}
+  ji=std::max(Kc,Ec);
+  if(Kc < Ec) { xs = p*Kc*Kc + q*Kc + r;}
+  else {xs = p*(Kc - ji)*(Kc - ji) + landa*Kc + mu + nu*(2 - Kc/ji)/ji ;}
+  if (xs <0.0) {xs=0.0;}
 
- return xs; 
+  return xs; 
 
 }
-
-
 
 //************* OPT=2 : Welisch's proton reaction cross section ************************ 
 
@@ -177,8 +179,8 @@ G4double G4PreCompoundProton::GetOpt2(const  G4double K)
 
   G4double rnpro,rnneu,eekin,ekin,ff1,ff2,ff3,r0,fac,fac1,fac2,b0,xine_th(0);
  
-//This is redundant when the Coulomb  barrier is overimposed to all cross sections 
-//It should be kept when Coulomb barrier only imposed at OPTxs=2
+  //This is redundant when the Coulomb  barrier is overimposed to all cross sections 
+  //It should be kept when Coulomb barrier only imposed at OPTxs=2
 
   if(!useSICB && K<=theCoulombBarrier) return xine_th=0.0;
 
@@ -315,9 +317,8 @@ G4double G4PreCompoundProton::GetOpt3(const  G4double K)
     
   }   //end for E>Ec
 
-  return sig;}
-
-
+  return sig;
+}
 
 //   ************************** end of cross sections ******************************* 
 

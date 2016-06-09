@@ -1,0 +1,64 @@
+$Id: History,v 1.4 2009/11/22 19:06:15 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    electronScattering History file
+                    -------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     
+22-11-09 mma (electronScattering-V09-02-03)
+- PhysListEmStandard and PhysListStandardGS as in TestEm5
+     
+24-09-09 V.Ivant (electronScattering-V09-02-02)
+- PhysicsList.cc : fix bug in 'standardGS' setting
+     
+23-09-09 mma (electronScattering-V09-02-01)
+- reactive EmOptions in local physics
+      
+19-09-09 mma (electronScattering-V09-02-00)
+- rename example NRCC_E_Benchmark_V1 to electronScattering
+- local "standard" physics list renamed "local" (default) 
+
+09-09-09 V.Ivant (eBenchmarkV1-V09-02-02)
+- add Goudsmit-Saunderson msc model, set default Phys List Opt0
+     
+06-07-09 mma (eBenchmarkV1-V09-02-01)
+- add a protection in RunAction::ComputeFluenceError()
+     
+17-05-09 mma
+- first commit and tag eBenchmarkV1-V09-02-00
+
+01-03-09 mma
+- TestBruce renamed NRCC_E_Benchmark_V1
+     
+18-01-09 mma (Laszlo)
+- RunAction::ComputeFluenceError() : sqrt(err1^2 + err0^2)  
+      
+26-12-08 mma
+- RunAction. Normalisation : average over few bins (4 mm) 
+     
+13-12-08 mma
+- RunAction : compute error on fluence distribution
+    
+11-12-08 mma
+- HistoManager : redefine histogram numbering
+- PhysicsLists : remove livermore and penelope 
+     
+07-12-08 mma
+- fluence histo : plot 1/uz instead of uz (TrackingAction)
+
+04-12-08 mma
+- fluence histo : divide by surface of ring
+                  normalize to bin 0 
+    
+10-11-08 Michel Maire
+- Created.
+- TestBruce looks like TestEm5

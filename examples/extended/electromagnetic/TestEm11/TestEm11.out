@@ -1,13 +1,17 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 13 *****
+***** Table : Nb of materials = 14 *****
 
  Material:    G4_Al     density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.894 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -17,6 +21,9 @@
 
  Material:    G4_Fe     density:  7.874 g/cm3   RadL:   1.757 cm   Nucl.Int.Length:  16.990 cm   Imean: 286.000 eV 
    --->  Element: Fe (Fe)   Z = 26.0   N =  55.8   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:    G4_Cu     density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.588 cm   Imean: 322.000 eV 
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Ge     density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm   Imean: 350.000 eV 
    --->  Element: Ge (Ge)   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
@@ -69,6 +76,7 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
 
@@ -94,9 +102,8 @@ Registered filter factories:
 /testem/det/setSizeX 1 mm
 /testem/det/setSizeYZ 1 mm
 #
-/testem/phys/addPhysics standard
-PhysicsList::AddPhysicsList: <standard>
-###/testem/phys/addPhysics  penelope   # em physics
+/testem/phys/addPhysics local
+PhysicsList::AddPhysicsList: <local>
 #
 /run/initialize
 userDetector->Construct() start.
@@ -108,6 +115,7 @@ userDetector->Construct() start.
 Absorber is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -149,7 +157,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc93 :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -190,9 +198,9 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -217,19 +225,26 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :     Emin=          0 eV         Emax=   2 MeV
-          BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
+         ParamICRU73 :     Emin=          0 eV         Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
+
+nuclearStopping:   for  GenericIon    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   100 TeV
+
+nuclearStopping:   for  alpha    SubType= 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   ICRU49NucStopping :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -261,11 +276,11 @@ hIoni:   for  kaon-    SubType= 2
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -335,9 +350,9 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -365,14 +380,14 @@ Region <DefaultRegionForTheWorld> -- appears in <Absorber> world volume
  Root logical volume(s) : Absorber 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : G4_Si 
- Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 540.718 keV    e+ 521.113 keV
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  6.95018 keV    e-  548.291 keV    e+  526.624 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -399,7 +414,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=25.3s Real=79.79s Sys=5.45s
+  User=12.68s Real=13.16s Sys=0.48s
 
  ======================== run summary ======================
 
@@ -407,20 +422,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 444.607 keV +- 108.535 keV
+ Total Energy deposited        = 442.943 keV +- 109.797 keV
 
- Track length of primary track = 868.715 um  +- 194.872 um 
- Range from EmCalculator       = 938.446 um  (from full dE/dx)
+ Track length of primary track = 869.663 um  +- 197.088 um 
+ Range from EmCalculator       = 943.428 um  (from full dE/dx)
 
- Projected range               = 311.192 um  +- 203.930 um 
+ Projected range               = 318.392 um  +- 208.091 um 
 
- Nb of steps of primary track  = 87.39 +- 19.47	 Step size= 9.932 um  +- 91.138 nm 
+ Nb of steps of primary track  = 87.49 +- 19.70	 Step size= 9.930 um  +- 94.345 nm 
 
- absorbed = 76.92 %   transmit = 4.97 %   reflected = 18.11 %
+ absorbed = 76.46 %   transmit = 5.28 %   reflected = 18.27 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 515728334, 203590976
+ Current couple of seeds = 1959715666, 101414751
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -435,3 +450,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+

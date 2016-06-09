@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.21 2008/11/21 09:50:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Sphere.hh,v 1.24 2009/03/31 07:51:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------------
@@ -35,7 +35,7 @@
 //
 // Class description:
 //
-//   A G4Sphere is, in the general case, section of a spherical shell,
+//   A G4Sphere is, in the general case, a section of a spherical shell,
 //   between specified phi and theta angles
 //
 //   The phi and theta segments are described by a starting angle,
@@ -82,9 +82,14 @@ class G4Sphere : public G4CSGSolid
                    G4double pRmin, G4double pRmax,
                    G4double pSPhi, G4double pDPhi,
                    G4double pSTheta, G4double pDTheta);
+      //
+      // Constructs a sphere or sphere shell section
+      // with the given name and dimensions
        
-    virtual ~G4Sphere() ;
-    
+   ~G4Sphere();
+      //
+      // Destructor
+
     // Accessors
        
     inline G4double GetInnerRadius    () const;
@@ -98,7 +103,7 @@ class G4Sphere : public G4CSGSolid
 
     inline void SetInnerRadius    (G4double newRMin);
     inline void SetOuterRadius    (G4double newRmax);
-    inline void SetStartPhiAngle  (G4double newSphi);
+    inline void SetStartPhiAngle  (G4double newSphi, G4bool trig=true);
     inline void SetDeltaPhiAngle  (G4double newDphi);
     inline void SetStartThetaAngle(G4double newSTheta);
     inline void SetDeltaThetaAngle(G4double newDTheta);
@@ -106,7 +111,7 @@ class G4Sphere : public G4CSGSolid
     // Methods for solid
 
     inline G4double GetCubicVolume();
-    inline G4double GetSurfaceArea();
+    G4double GetSurfaceArea();
 
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
@@ -141,6 +146,7 @@ class G4Sphere : public G4CSGSolid
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
+
     G4VisExtent   GetExtent          () const;    
     void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
     G4Polyhedron* CreatePolyhedron() const;
@@ -149,6 +155,7 @@ class G4Sphere : public G4CSGSolid
   public:  // without description
    
     G4Sphere(__void__&);
+      //
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
@@ -164,34 +171,67 @@ class G4Sphere : public G4CSGSolid
     inline G4double  GetInsideRadius() const;
     inline void SetInsideRadius(G4double newRmin);
 
-  protected:
+  private:
  
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform,
                                 G4int& noPolygonVertices) const;
-  
-    // Used by distanceToOut
-  
-    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
-  
-    // used by normal
-  
-    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
+      //
+      // Creates the List of transformed vertices in the format required
+      // for G4VSolid:: ClipCrossSection and ClipBetweenSections
 
-  private:
+    inline void Initialize();
+      //
+      // Reset relevant values to zero
+
+    inline void CheckThetaAngles(G4double sTheta, G4double dTheta);
+    inline void CheckSPhiAngle(G4double sPhi);
+    inline void CheckDPhiAngle(G4double dPhi);
+    inline void CheckPhiAngles(G4double sPhi, G4double dPhi);
+      //
+      // Reset relevant flags and angle values
+
+    inline void InitializePhiTrigonometry();
+    inline void InitializeThetaTrigonometry();
+      //
+      // Recompute relevant trigonometric values and cache them
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
+      //
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
 
   private:
 
-    G4double kAngTolerance, kRadTolerance;
+    // Used by distanceToOut
+    //
+    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
+  
+    // used by normal
+    //
+    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
-    G4double fRmin,fRmax,
-             fSPhi,fDPhi,
-             fSTheta,fDTheta;
-    G4double fEpsilon;
+    G4double fEpsilon, fRminTolerance, fRmaxTolerance, kAngTolerance;
+      //
+      // Radial and angular tolerances
+
+    G4double fRmin, fRmax, fSPhi, fDPhi, fSTheta, fDTheta;
+      //
+      // Radial and angular dimensions
+
+    G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
+             sinSPhi, cosSPhi, sinEPhi, cosEPhi, hDPhi, cPhi, ePhi;
+      //
+      // Cached trigonometric values for Phi angle
+
+    G4double sinSTheta, cosSTheta, sinETheta, cosETheta,
+             tanSTheta, tanSTheta2, tanETheta, tanETheta2, eTheta;
+      //
+      // Cached trigonometric values for Theta angle
+
+    G4bool fFullPhiSphere, fFullThetaSphere, fFullSphere;
+      //
+      // Flags for identification of section, shell or full sphere
 };
 
 #include "G4Sphere.icc"

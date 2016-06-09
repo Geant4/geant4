@@ -24,20 +24,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentCluster.cc,v 1.25 2006/11/27 10:44:55 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QParentCluster.cc,v 1.26 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QParentCluster ----------------
 //             by Mikhail Kossov, Sept 1999.
 //      class fora Parent nuclear cluster in the CHIPS Model
-// ----------------------------------------------------------
-
+// -------------------------------------------------------------------
+// Short description: The parent cluster is the cluster, which can be
+// used for the nuclear fragment production. Different clusters csn be
+// used as the parent cluser for the particular G4QCandidate (nuclear
+// fragment), e.g. t and He3 for the t-fragment production. So the
+// G4QParentClusterVector is needed.
+// -------------------------------------------------------------------
 //#define debug
 //#define pdebug
 
 #include "G4QParentClusterVector.hh"
 
-G4QParentCluster::G4QParentCluster(G4int PDGCode): thePDGCode(PDGCode), theProbability(0.){}
+G4QParentCluster::G4QParentCluster(G4int PDGCode): thePDGCode(PDGCode),theProbability(0.){}
 
 G4QParentCluster::G4QParentCluster(G4int PDGCode, G4double prob): 
   thePDGCode(PDGCode), theProbability(prob){}

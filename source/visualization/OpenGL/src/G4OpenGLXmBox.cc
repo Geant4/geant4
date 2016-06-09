@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmBox.cc,v 1.6 2006/06/29 21:19:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmBox.cc,v 1.8 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //Box container class
 
@@ -35,6 +35,8 @@
 #include "G4OpenGLXmBox.hh"
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetShell.hh"
+#include <Xm/RowColumn.h>
+#include <Xm/Xm.h>
 
 G4OpenGLXmBox::G4OpenGLXmBox (const char* n, 
 			      G4bool r)

@@ -1,4 +1,4 @@
-# $Id: gamma.mac,v 1.4 2007/06/24 22:26:54 maire Exp $
+# $Id: gamma.mac,v 1.5 2009/09/25 11:27:13 maire Exp $
 #
 # Macro file for "TestEm13.cc"
 # (can be run in batch, without graphic)
@@ -10,8 +10,6 @@
 #
 /testem/det/setMat Water
 /testem/det/setSize 1 cm
-#
-/testem/phys/addPhysics standard
 #
 /run/initialize
 #

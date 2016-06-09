@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2008/12/05 07:56:16 kmura Exp $
+$Id: History,v 1.40 2009/11/27 07:59:32 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V09-02-02 27 Nov. 2009 Koichi Murakami
+ [g4py]
+ - linker option is updated.
+
+envs-V09-02-01 20 Nov. 2009 Koichi Murakami
+ [g4py]
+ - configuration script is updated for 9.3
+ - physics list is updated.
+ [momo]
+ - documentation is updated.
+
+envs-V09-02-00 15 May 2009 Koichi Murakami
+ [g4py]
+ - configuration script is updated.
+   * some fixes
+   * modify search paths for inc/lib
 
 envs-V09-01-03  5 Dec. 2008 Koichi Murakami
  [g4py]

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc,v 1.11 2007/05/30 08:56:55 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrajectoryDrawerUtils.cc,v 1.12 2009/02/24 12:00:56 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -253,7 +253,7 @@ namespace G4TrajectoryDrawerUtils {
   
     if (myContext.GetDrawAuxPts() && (auxiliaryPoints.size() > 0)) {
       auxiliaryPoints.SetMarkerType(myContext.GetAuxPtsType());
-      auxiliaryPoints.SetScreenSize(myContext.GetAuxPtsSize());
+      auxiliaryPoints.SetSize(myContext.GetAuxPtsSizeType(), myContext.GetAuxPtsSize());
       auxiliaryPoints.SetFillStyle(myContext.GetAuxPtsFillStyle());
 
       G4VisAttributes auxiliaryPointsAttribs(myContext.GetAuxPtsColour());  
@@ -265,7 +265,7 @@ namespace G4TrajectoryDrawerUtils {
   
     if (myContext.GetDrawStepPts() && (stepPoints.size() > 0)) {
       stepPoints.SetMarkerType(myContext.GetStepPtsType());
-      stepPoints.SetScreenSize(myContext.GetStepPtsSize());
+      stepPoints.SetSize(myContext.GetStepPtsSizeType(), myContext.GetStepPtsSize());
       stepPoints.SetFillStyle(myContext.GetStepPtsFillStyle());
 
       G4VisAttributes stepPointsAttribs(myContext.GetStepPtsColour()); 
@@ -312,7 +312,7 @@ namespace G4TrajectoryDrawerUtils {
 	G4Polymarker point;
 	point.push_back(auxiliaryPoints[i]);
 	point.SetMarkerType(myContext.GetAuxPtsType());
-	point.SetScreenSize(myContext.GetAuxPtsSize());
+	point.SetSize(myContext.GetAuxPtsSizeType(), myContext.GetAuxPtsSize());
 	point.SetFillStyle(myContext.GetAuxPtsFillStyle());
 	auxiliaryPointsAttribs.SetStartTime(auxiliaryPointTimes[i]);
 	auxiliaryPointsAttribs.SetEndTime(auxiliaryPointTimes[i]);
@@ -329,7 +329,7 @@ namespace G4TrajectoryDrawerUtils {
 	G4Polymarker point;
 	point.push_back(stepPoints[i]);
 	point.SetMarkerType(myContext.GetStepPtsType());
-	point.SetScreenSize(myContext.GetStepPtsSize());
+	point.SetSize(myContext.GetStepPtsSizeType(), myContext.GetStepPtsSize());
 	point.SetFillStyle(myContext.GetStepPtsFillStyle());
 	stepPointsAttribs.SetStartTime(stepPointTimes[i]);
 	stepPointsAttribs.SetEndTime(stepPointTimes[i]);

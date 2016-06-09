@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2008/11/27 21:55:27 arce Exp $
+$Id: History,v 1.18 2009/11/19 14:34:05 chauvie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,12 +7,24 @@ $Id: History,v 1.15 2008/11/27 21:55:27 arce Exp $
 
                       Category History file
                       ---------------------
+19.11.2009- Stéphane Chauvie (DICOM-V09-02-03 )
+	    Changed DICOM Handler to read CT files coming from CONQUEST DICOM server
+
+05.02.2009 - Pedro Arce (DICOM-V09-02-01)
+             Added report on dose per voxel.
+             Added warning for erroneous inclusion of development code in
+             release 9.2 (to be removed when fix will be included in patch).
+
+27.01.2009 - Gabriele Cosmo (DICOM-V09-02-00)
+             Use new class G4RegularNavigationHistory for counting of step
+             lengths in voxels of the regular structure.
 
 27.11.2008 - Pedro Arce (DICOM-V09-01-02)
              Included G4PSDoseDeposit_RegNav to distribute dose along voxels, 
 	     including msc and energy loss corrections, for the case of 
 	     skipping voxel with equal materials when using regular
 	     navigation
+
 21.07.2008 - Pedro Arce (DICOM-V09-01-01)
              Bug fix in DicomNestedPhantomParameterisation in calculating the
              'copyNo', so that material assignment was wrong

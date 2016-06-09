@@ -14,6 +14,51 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21-November 2009 V.Ivanchenko   hadr-pre-V09-02-07
+---------------------------------------------------
+G4PreCompoundTransitions - return back transition probability
+
+19-November 2009 V.Ivanchenko   hadr-pre-V09-02-06
+---------------------------------------------------
+G4PreCompoundModel       - (JMQ) CEM transition probabilities are set 
+                                 as a default 
+G4PreCompoundTransitions - (JMQ) CEM transition probabilities have been
+                                 renormalized (transitions with Delta N=+2
+                                 are increased by factor 5)
+
+12-November 2009 G.Cosmo        hadr-pre-V09-02-05
+---------------------------------------------------
+G4PrecompoundEmission - fixed compilation error on Windows.
+
+12-November 2009 G.Folger       hadr-pre-V09-02-04
+---------------------------------------------------
+G4PrecompoundEmission - modifiy AngularDistribution() to avoid floating point
+                        exceptions.
+		      - remove calls to log in rho() replaced by use of new
+		        logfactorial()
+				
+13-February 2009 V.Ivanchenko   hadr-pre-V09-02-03
+---------------------------------------------------
+G4PreCompoundXXX - changed the shape of probabilities (return back to 9.2)  
+                   for d, t, He3, alpha (JMQ)
+
+12-February 2009 V.Ivanchenko   hadr-pre-V09-02-02
+---------------------------------------------------
+G4PreCompoundXXX - changed the shape of probabilities 
+                   for d, t, He3, alpha near the Coulomb barrier (JMQ)
+
+11-February 2009 V.Ivanchenko   hadr-pre-V09-02-01
+---------------------------------------------------
+G4PreCompoundXXX - set default Opt3 back, add decrease Coulomb barrier
+                   for d, t, a, he3 (JMQ)
+
+10-February 2009 V.Ivanchenko   hadr-pre-V09-02-00
+---------------------------------------------------
+Some clean up of comments
+G4PreCompoundIon - fixed probability of light ion emmision (JMQ)
+G4PreCompoundXXX - by default Opt1 is used for d, t, a, he3, 
+                   Opt3 for n, p (JMQ)
+
 09-December 2008 A.Howard   hadr-pre-V09-01-15
 ---------------------------------------------------
 Added protection for close to zero excitation energy in 

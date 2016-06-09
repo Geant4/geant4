@@ -39,8 +39,8 @@
 //
 // MODULE:              G4WilsonAbrasionModel.hh
 //
-// Version:		B.1
-// Date:		15/04/04
+// Version:		1.0
+// Date:		08/12/2009
 // Author:		P R Truscott
 // Organisation:	QinetiQ Ltd, UK
 // Customer:		ESA/ESTEC, NOORDWIJK
@@ -56,6 +56,10 @@
 //
 // 15 March 2004, P R Truscott, QinetiQ Ltd, UK
 // Beta release
+//
+// 08 December 2009, P R Truscott, QinetiQ Ltd, Ltd
+// ver 1.0
+// Variable fradius defined. See .cc file for more details.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -118,6 +122,7 @@ class G4WilsonAbrasionModel : public G4HadronicInteraction
     G4bool                 conserveMomentum;
     G4double               B;
     G4double               third;
+    G4double               fradius;
 };
 ////////////////////////////////////////////////////////////////////////////////
 //

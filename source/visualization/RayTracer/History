@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2008/04/04 13:52:48 allison Exp $
+$Id: History,v 1.60 2009/11/15 12:33:54 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,8 +24,28 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+15th November 2009  John Allison  (raytracer-V09-02-02)
+- Formal tag to record fixing of bugzilla Problem 1072.
+  o There is no change of source code.
+  o This was actullay fixed in raytracer-V09-02-00, which is already accepted.
+
+21st October 2009  John Allison  (raytracer-V09-02-01 coworks greps-V09-02-02)
+- Added AddCompound (const G4THitsMap<G4double>&) methods.
+  o Prevents warnings about hiding - calls G4VSceneHandler base class.
+
+16 September 2009  John Allison  (raytracer-V09-02-00)
+- Cosmetic adjustments and tagging.
+
+19 August 2009 Laurent Garnier
+- G4RayTracerViewer.cc, G4RayTracerXViewer.cc : Fix an bad use of fVP
+  parameters [bugzilla Problem 1072]
+
+18 August 2009 Laurent Garnier
+- G4RayTracerXViewer, G4RTXScanner : Fix a crash introduce by the 
+  new way of handling window size hints (January 2009)
+
 4th April 2008  John Allison  (raytracer-V09-01-00)
- - Fixed gcc-4.3.0 compiler warnings.
+- Fixed gcc-4.3.0 compiler warnings.
 
 14th June 2007  John Allison  (raytracer-V08-03-01)
 - Fixed memory leak in G4RayTracer (wrapper class).

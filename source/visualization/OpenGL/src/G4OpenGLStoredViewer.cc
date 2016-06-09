@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.24 2008/04/04 13:32:22 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLStoredViewer.cc,v 1.26 2009/04/08 16:55:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -124,12 +124,21 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
 }
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
+#ifdef G4DEBUG_VIS_OGL
+      printf("G4OpenGLStoredViewer::DrawDisplayLists \n");
+#endif
 
   const G4Planes& cutaways = fVP.GetCutawayPlanes();
   G4bool cutawayUnion = fVP.IsCutaway() &&
     fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion;
   size_t nPasses = cutawayUnion? cutaways.size(): 1;
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLStoredViewer::DrawDisplayLists");
+#endif
   for (size_t i = 0; i < nPasses; ++i) {
+#ifdef G4DEBUG_VIS_OGL
+    printf("+");
+#endif
 
     if (cutawayUnion) {
       double a[4];
@@ -145,6 +154,9 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
       glCallList (fG4OpenGLStoredSceneHandler.fTopPODL);
 
     for (size_t i = 0; i < fG4OpenGLStoredSceneHandler.fTOList.size(); ++i) {
+#ifdef G4DEBUG_VIS_OGL
+      printf("-");
+#endif
       G4OpenGLStoredSceneHandler::TO& to =
 	fG4OpenGLStoredSceneHandler.fTOList[i];
       if (to.fEndTime >= fStartTime && to.fStartTime <= fEndTime) {
@@ -165,6 +177,9 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 
     if (cutawayUnion) glDisable (GL_CLIP_PLANE2);
   }
+#ifdef G4DEBUG_VIS_OGL
+      printf("\n");
+#endif
 
   // Display time at "head" of time range, which is fEndTime...
   if (fDisplayHeadTime && fEndTime < DBL_MAX) {

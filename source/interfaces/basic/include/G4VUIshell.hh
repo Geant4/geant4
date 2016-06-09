@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUIshell.hh,v 1.7 2007/06/14 05:44:58 kmura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VUIshell.hh,v 1.8 2009/05/13 09:01:36 kmura Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4VUIshell_h
@@ -86,6 +86,7 @@ public:
   void SetNColumn(G4int ncol);
   void SetPrompt(const G4String& prompt);
   void SetCurrentDirectory(const G4String& ccd);
+  virtual void SetLsColor(TermColorIndex, TermColorIndex);
 
   // shell commands
   virtual void ShowCurrentDirectory() const;
@@ -115,6 +116,10 @@ inline void G4VUIshell::SetPrompt(const G4String& prompt)
 inline void G4VUIshell::SetCurrentDirectory(const G4String& dir)
 {
   currentCommandDir= dir;
+}
+
+inline void G4VUIshell::SetLsColor(TermColorIndex, TermColorIndex)
+{
 }
 
 inline void G4VUIshell::ShowCurrentDirectory() const

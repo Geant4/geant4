@@ -52,10 +52,10 @@
 #include "G4StopDummyDeexcitation.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DynamicParticleVector.hh"
-#include "G4NucleiPropertiesTable.hh"
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
+#include "G4HadronicProcessStore.hh"
 
 // Constructor
 
@@ -69,14 +69,26 @@ G4PiMinusAbsorptionAtRest::G4PiMinusAbsorptionAtRest(const G4String& processName
 
   if (verboseLevel>0) 
     { G4cout << GetProcessName() << " is created "<< G4endl; }
+  G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
 
 
 // Destructor
 
 G4PiMinusAbsorptionAtRest::~G4PiMinusAbsorptionAtRest()
-{}
+{
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+}
 
+void G4PiMinusAbsorptionAtRest::PreparePhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+}
+
+void G4PiMinusAbsorptionAtRest::BuildPhysicsTable(const G4ParticleDefinition& p) 
+{
+  G4HadronicProcessStore::Instance()->PrintInfo(&p);
+}
 
 G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, const G4Step& )
 {
@@ -141,8 +153,7 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double newZ = Z - stopAbsorption.NProtons();
   G4double newN = A - Z - stopAbsorption.NNeutrons();
   G4double newA = newZ + newN;
-  G4double pNucleus = (stopAbsorption.RecoilMomentum()).mag();
-  G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,pNucleus);
+  G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,stopAbsorption.RecoilMomentum());
 
   unsigned int nAbsorptionProducts = 0;
   if (absorptionProducts != 0)     

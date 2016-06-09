@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 July 2009 V.Ivanchenko (radioactive_decay-V09-02-00)
+- GNUmakefile - added dependence on electromagnetic/utils
+
 09 July 2008 Dennis Wright (radioactive_decay-V09-01-02)
 - replace exit() with G4Exception in G4RadioactiveDecay and G4NuclearDecayChannel
 

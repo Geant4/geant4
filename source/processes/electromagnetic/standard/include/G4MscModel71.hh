@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MscModel71.hh,v 1.5 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MscModel71.hh,v 1.6 2009/11/01 13:04:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -80,7 +80,7 @@ class G4MscModel71 : public G4VEmModel
 public:
 
   G4MscModel71(G4double&, G4double&, G4double&, G4double&, G4bool&,
-	     const G4String& nam = "MscUni");
+	       const G4String& nam = "UrbanMsc71");
 
   virtual ~G4MscModel71();
 

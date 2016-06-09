@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.38 2008/10/24 14:00:03 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.39 2009/05/08 06:47:32 tnikitin Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -1017,7 +1017,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       const G4RotationMatrix* mRot = motherPhysical->GetRotation();
       if( mRot )
       { 
-        fGrandMotherExitNormal *= (*mRot);
+        fGrandMotherExitNormal *= (*mRot).inverse();
       }
     }
   }

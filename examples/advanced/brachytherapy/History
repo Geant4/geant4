@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.26 2008/11/24 14:53:28 cirrone Exp $
+$Id: History,v 1.29 2009/11/12 10:34:31 pandola Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,16 @@ $Id: History,v 1.26 2008/11/24 14:53:28 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+12 Nov 2009 - L. Pandola; tag brachy-V09-02-02
+ Fixed AIDA 
+
+12 Nov. 2009 - S. Guatelli; brachy-V09-02-01
+- Update of Physics List
+
+22.Feb 2009 - G.Folger;  tag brachy-V09-02-00
+-  Correct compilation  errors and warnings when G4ANALYSIS is NOT set
+
 24.11.2008 -- G.A.P.Cirrone; tag: brachy-V09-01-03
               Updated macro files
 21.11.2008 -- G.A.P.Cirrone; Tag: brachy-V09-01-02

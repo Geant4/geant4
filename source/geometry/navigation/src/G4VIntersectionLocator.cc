@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc,v 1.4 2008/11/14 18:26:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VIntersectionLocator.cc,v 1.7 2009/11/27 15:21:59 japost Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Class G4VIntersectionLocator implementation
 //
@@ -42,12 +42,16 @@
 //
 // Constructor
 //
-G4VIntersectionLocator:: G4VIntersectionLocator(G4Navigator *theNavigator)
+G4VIntersectionLocator:: G4VIntersectionLocator(G4Navigator *theNavigator): 
+  fUseNormalCorrection(false), 
+  fiNavigator( theNavigator ),
+  fiChordFinder( 0 ),            // Not set - overridden at each step
+  fiEpsilonStep( -1.0 ),         // Out of range - overridden at each step
+  fiDeltaIntersection( -1.0 ),   // Out of range - overridden at each step
+  fiUseSafety(false)             // Default - overridden at each step
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fiNavigator = theNavigator;
   fVerboseLevel = 0;
-  fUseNormalCorrection = false;
   fHelpingNavigator = new G4Navigator();
 }      
 
@@ -190,12 +194,13 @@ ReEstimateEndpoint( const G4FieldTrack &CurrentStateA,
      G4double advanceLength= endCurveLen - currentCurveLen ; 
      if (std::abs(advanceLength)<kCarTolerance)
      {
-       advanceLength=(EstimatedEndStateB.GetPosition()
-                     -newEndPoint.GetPosition()).mag();
+       goodAdvance=true;
      }
+     else{
      goodAdvance= 
        integrDriver->AccurateAdvance(newEndPoint, advanceLength,
                                      GetEpsilonStepFor());
+     }
   }
   while( !goodAdvance && (++itrial < no_trials) );
 
@@ -341,7 +346,7 @@ AdjustmentOfFoundIntersection( const G4ThreeVector &CurrentA_Point,
   // Intersection between Line and Plane
   //
   G4double n_d_m = Normal.dot(MomentumDir);
-  if ( std::abs(n_d_m)<kCarTolerance )
+  if ( std::abs(n_d_m)>kCarTolerance )
   {
     if ( fVerboseLevel>1 )
     {

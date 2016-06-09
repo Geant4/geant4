@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2007/11/30 18:08:41 mverderi Exp $
+$Id: History,v 1.48 2009/10/30 15:10:56 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30th October 2009 John Allison (exampleN05-V09-02-00)
+- Introduced G4UIExecutive.
 
 30th November 2007
 - modify ExN05PhysicsList.cc to account for Along method of G4FSMP

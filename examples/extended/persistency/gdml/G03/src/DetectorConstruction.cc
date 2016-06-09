@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.2 2008/12/18 12:57:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.3 2009/04/15 13:26:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Class DetectorConstruction implementation
 //
@@ -43,9 +43,13 @@
 //
 #include "DetectorMessenger.hh"
 
-// Color extension include
+// Color extension include for reading
 //
 #include "ColorReader.hh"
+
+// Color extension include for writing
+//
+#include "ColorWriter.hh"
 
 // ----------------------------------------------------------------------------
 //
@@ -54,12 +58,15 @@
 DetectorConstruction::DetectorConstruction()
   : Air(0), Aluminum(0), Pb(0), Xenon(0)
 {  
-  fReadFile ="color_extension.gdml";
+  fReadFile = "color_extension.gdml";
+  fWriteFile = "color_extension_test.gdml";
+  writingChoice = 1;
 
   detectorMessenger = new DetectorMessenger( this );
 
   reader = new ColorReader;
-  parser = new G4GDMLParser(reader);
+  writer = new ColorWriter;
+  parser = new G4GDMLParser(reader, writer);
 }
 
 // ----------------------------------------------------------------------------
@@ -70,6 +77,7 @@ DetectorConstruction::~DetectorConstruction()
 {
   delete detectorMessenger;
   delete reader;
+  delete writer;
   delete parser;
 }
 
@@ -91,11 +99,17 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Prints the material information
   //
   G4cout << *(G4Material::GetMaterialTable() ) << G4endl;
-         
+
   // Giving World Physical Volume from GDML Parser
   //
   fWorldPhysVol = parser->GetWorldVolume();     
 
+  if(writingChoice!=0)
+  {
+    parser->Write(fWriteFile, fWorldPhysVol, true,
+                  "./SimpleExtensionSchema/SimpleExtension.xsd");
+  }
+      
   return fWorldPhysVol;
 }
 
@@ -160,7 +174,18 @@ void DetectorConstruction::ListOfMaterials()
 //
 // SetReadFile
 //
-void DetectorConstruction::SetReadFile( const G4String& File )
+void DetectorConstruction::SetReadFile( const G4String& fname )
 {
-  fReadFile=File;
+  fReadFile=fname;
+  writingChoice=0;
+}
+
+// ----------------------------------------------------------------------------
+//
+// SetWriteFile
+//
+void DetectorConstruction::SetWriteFile( const G4String& fname )
+{
+  fWriteFile=fname;
+  writingChoice=1;
 }

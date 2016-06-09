@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGLFontBaseStore.hh,v 1.3 2006/06/29 21:17:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLFontBaseStore.hh,v 1.4 2009/02/04 16:48:40 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // J.Allison  Apr 2005.
 

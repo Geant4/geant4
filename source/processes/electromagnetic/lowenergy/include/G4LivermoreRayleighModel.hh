@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreRayleighModel.hh,v 1.1 2008/10/30 14:16:35 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LivermoreRayleighModel.hh,v 1.3 2009/04/17 10:29:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4LivermoreRayleighModel_h
@@ -36,6 +36,7 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4CompositeEMDataSet.hh"
 #include "G4ForceCondition.hh"
+#include "G4Gamma.hh"
 
 class G4LivermoreRayleighModel : public G4VEmModel
 {
@@ -67,9 +68,6 @@ protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
-  G4double GetMeanFreePath(const G4Track& aTrack, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
 private:
 
   G4double lowEnergyLimit;  

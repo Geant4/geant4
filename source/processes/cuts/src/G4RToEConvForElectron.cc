@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForElectron.cc,v 1.5 2006/06/29 19:30:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RToEConvForElectron.cc,v 1.7 2009/09/11 15:21:39 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------
@@ -70,10 +70,11 @@ G4double G4RToEConvForElectron::ComputeLoss(G4double AtomicNumber,
   const  G4double cbr1=0.02, cbr2=-5.7e-5, cbr3=1., cbr4=0.072;
   const  G4double Tlow=10.*keV, Thigh=1.*GeV;
   static G4double bremfactor= 0.1 ;
- 
-  G4double Mass = theParticle->GetPDGMass();       
+
+  static G4double Mass= theParticle->GetPDGMass();
+
   //  calculate dE/dx for electrons
-  if( std::abs(AtomicNumber-Z)>0.1 ) {
+  if( std::fabs(AtomicNumber-Z)>0.1 ) {
     Z = AtomicNumber;
     taul = Tlow/Mass;
     ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z))/Mass;
@@ -118,54 +119,3 @@ G4double G4RToEConvForElectron::ComputeLoss(G4double AtomicNumber,
 
   return dEdx;
 }
-
-
-void G4RToEConvForElectron::BuildRangeVector(const G4Material* aMaterial,
-					     G4double       maxEnergy,
-					     G4double       aMass,
-					     G4PhysicsLogVector* rangeVector)
-{
-  //  create range vector for a material
-  const G4double tlim = 10.*keV;
-  const G4int maxnbint = 100;
-
-  const G4ElementVector* elementVector = aMaterial->GetElementVector();
-  const G4double* atomicNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-  G4int NumEl = aMaterial->GetNumberOfElements();
-
-  // calculate parameters of the low energy part first
-  size_t i;
-  G4double loss=0.;
-  for (i=0; i<size_t(NumEl); i++) {
-    G4bool isOut;
-    G4int IndEl = (*elementVector)[i]->GetIndex();
-    loss += atomicNumDensityVector[i]*
-           (*theLossTable)[IndEl]->GetValue(tlim,isOut);
-  }
-  G4double taulim = tlim/aMass;
-  G4double clim = std::sqrt(taulim)*loss;
-  G4double taumax = maxEnergy/aMass;
-
-  // now the range vector can be filled
-  for ( i=0; i<size_t(TotBin); i++) {
-    G4double LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i);
-    G4double tau = LowEdgeEnergy/aMass;
-
-    if ( tau <= taulim ) {
-      G4double Value = 2.*aMass*tau*std::sqrt(tau)/(3.*clim);
-      rangeVector->PutValue(i,Value);
-    } else {
-      G4double rangelim = 2.*aMass*taulim*std::sqrt(taulim)/(3.*clim);
-      G4double ltaulow = std::log(taulim);
-      G4double ltauhigh = std::log(tau);
-      G4double ltaumax = std::log(taumax);
-      G4int    nbin = G4int(maxnbint*(ltauhigh-ltaulow)/(ltaumax-ltaulow));
-      if( nbin < 1 ) nbin = 1;
-      G4double Value = RangeLogSimpson( NumEl, elementVector,
-					atomicNumDensityVector, aMass,
-					ltaulow, ltauhigh, nbin) 
-	             + rangelim;
-      rangeVector->PutValue(i,Value);
-    }
-  }
-} 

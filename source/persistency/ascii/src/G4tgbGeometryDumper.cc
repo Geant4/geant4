@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgbGeometryDumper.cc,v 1.11 2008/12/18 12:59:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgbGeometryDumper.cc,v 1.12 2009/11/19 13:29:04 arce Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4tgbGeometryDumper
@@ -641,10 +641,10 @@ G4String G4tgbGeometryDumper::DumpSolid( G4VSolid* solid,
     DumpBooleanVolume( "UNION", solid );
 
   } else if (solidType == "SUBTRACTIONSOLID")  {
-    DumpBooleanVolume( "SUBS", solid );
+    DumpBooleanVolume( "SUBTRACTION", solid );
 
   } else if (solidType == "INTERSECTIONSOLID") {
-    DumpBooleanVolume( "INTERS", solid );
+    DumpBooleanVolume( "INTERSECTION", solid );
 
   } else if (solidType == "REFLECTEDSOLID") {
     G4ReflectedSolid* solidrefl = dynamic_cast<G4ReflectedSolid*>(solid);

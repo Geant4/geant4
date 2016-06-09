@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc,v 1.59 2008/11/21 09:32:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteSolids.cc,v 1.65 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -35,10 +35,53 @@
 
 #include "G4GDMLWriteSolids.hh"
 
+#include "G4BooleanSolid.hh"
+#include "G4Box.hh"
+#include "G4Cons.hh"
+#include "G4Ellipsoid.hh"
+#include "G4EllipticalCone.hh"
+#include "G4EllipticalTube.hh"
+#include "G4ExtrudedSolid.hh"
+#include "G4Hype.hh"
+#include "G4Orb.hh"
+#include "G4Para.hh"
+#include "G4Paraboloid.hh"
+#include "G4IntersectionSolid.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
+#include "G4ReflectedSolid.hh"
+#include "G4Sphere.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4TessellatedSolid.hh"
+#include "G4Tet.hh"
+#include "G4Torus.hh"
+#include "G4Trap.hh"
+#include "G4Trd.hh"
+#include "G4Tubs.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrap.hh"
+#include "G4TwistedTrd.hh"
+#include "G4TwistedTubs.hh"
+#include "G4UnionSolid.hh"
+#include "G4OpticalSurface.hh"
+#include "G4SurfaceProperty.hh"
+
+G4GDMLWriteSolids::
+G4GDMLWriteSolids() : G4GDMLWriteMaterials()
+{
+}
+
+G4GDMLWriteSolids::
+~G4GDMLWriteSolids()
+{
+}
+
 void G4GDMLWriteSolids::
 BooleanWrite(xercesc::DOMElement* solidsElement,
              const G4BooleanSolid* const boolean)
 {
+   G4int displaced=0;
+
    G4String tag("undefined");
    if (dynamic_cast<const G4IntersectionSolid*>(boolean))
      { tag = "intersection"; } else
@@ -52,20 +95,54 @@ BooleanWrite(xercesc::DOMElement* solidsElement,
    
    G4ThreeVector firstpos,firstrot,pos,rot;
 
-   if (const G4DisplacedSolid* disp
-       = dynamic_cast<const G4DisplacedSolid*>(firstPtr))
-   {   
-      firstpos = disp->GetObjectTranslation();
-      firstrot = GetAngles(disp->GetObjectRotation());
-      firstPtr = disp->GetConstituentMovedSolid();
-   }
-
-   if (const G4DisplacedSolid* disp
-       = dynamic_cast<const G4DisplacedSolid*>(secondPtr))
+   // Solve possible displacement of referenced solids!
+   //
+   while (true)
    {
-      pos = disp->GetObjectTranslation();
-      rot = GetAngles(disp->GetObjectRotation());
-      secondPtr = disp->GetConstituentMovedSolid();
+      if ( displaced>8 )
+      {
+        G4String ErrorMessage = "The referenced solid '"
+                              + firstPtr->GetName() +
+                              + "in the Boolean shape '" +
+                              + boolean->GetName() +
+                              + "' was displaced too many times!";
+        G4Exception("G4GDMLWriteSolids::BooleanWrite()",
+                    "InvalidSetup", FatalException, ErrorMessage);
+      }
+
+      if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(firstPtr))
+      {
+         firstpos += disp->GetObjectTranslation();
+         firstrot += firstrot + GetAngles(disp->GetObjectRotation());
+         firstPtr = disp->GetConstituentMovedSolid();
+         displaced++;
+         continue;
+      }
+      break;
+   }
+   displaced = 0;
+   while (true)
+   {
+      if ( displaced>maxTransforms )
+      {
+        G4String ErrorMessage = "The referenced solid '"
+                              + secondPtr->GetName() +
+                              + "in the Boolean shape '" +
+                              + boolean->GetName() +
+                              + "' was displaced too many times!";
+        G4Exception("G4GDMLWriteSolids::BooleanWrite()",
+                    "InvalidSetup", FatalException, ErrorMessage);
+      }
+
+      if (G4DisplacedSolid* disp = dynamic_cast<G4DisplacedSolid*>(secondPtr))
+      {
+         pos += disp->GetObjectTranslation();
+         rot += GetAngles(disp->GetObjectRotation());
+         secondPtr = disp->GetConstituentMovedSolid();
+         displaced++;
+         continue;
+      }
+      break;
    }
 
    AddSolid(firstPtr);   // At first add the constituent solids!
@@ -728,6 +805,23 @@ ZplaneWrite(xercesc::DOMElement* element, const G4double& z,
    element->appendChild(zplaneElement);
 }
 
+void G4GDMLWriteSolids::
+OpticalSurfaceWrite(xercesc::DOMElement* solidsElement,
+                    const G4OpticalSurface* const surf)
+{
+   xercesc::DOMElement* optElement = NewElement("opticalsurface");
+   G4OpticalSurfaceModel smodel = surf->GetModel();
+   G4double sval = (smodel==glisur) ? surf->GetPolish() : surf->GetSigmaAlpha();
+
+   optElement->setAttributeNode(NewAttribute("name", surf->GetName()));
+   optElement->setAttributeNode(NewAttribute("model", smodel));
+   optElement->setAttributeNode(NewAttribute("finish", surf->GetFinish()));
+   optElement->setAttributeNode(NewAttribute("type", surf->GetType()));
+   optElement->setAttributeNode(NewAttribute("value", sval));
+
+   solidsElement->appendChild(optElement);
+}
+
 void G4GDMLWriteSolids::SolidsWrite(xercesc::DOMElement* gdmlElement)
 {
    G4cout << "G4GDML: Writing solids..." << G4endl;
@@ -821,8 +915,9 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
      { TwistedtubsWrite(solidsElement,twistedtubsPtr); }
    else
    {
-     G4String error_msg = "Unknown solid: " + solidPtr->GetName();
-     G4Exception("G4GDMLWriteSolids::AddSolid()", "ReadError",
+     G4String error_msg = "Unknown solid: " + solidPtr->GetName()
+                        + "; Type: " + solidPtr->GetEntityType();
+     G4Exception("G4GDMLWriteSolids::AddSolid()", "WriteError",
                  FatalException, error_msg);
    }
 }

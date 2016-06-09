@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.icc,v 1.14 2006/11/14 14:59:54 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Scene.icc,v 1.15 2009/11/04 12:49:16 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -50,6 +50,11 @@ G4Scene::GetRunDurationModelList () const {
 inline const std::vector<G4VModel*>&
 G4Scene::GetEndOfEventModelList () const {
   return fEndOfEventModelList;
+}
+
+inline const std::vector<G4VModel*>&
+G4Scene::GetEndOfRunModelList () const {
+  return fEndOfRunModelList;
 }
 
 inline const G4VisExtent& G4Scene::GetExtent () const {
@@ -79,7 +84,12 @@ inline std::vector<G4VModel*>& G4Scene::SetRunDurationModelList ()
 
 inline std::vector<G4VModel*>& G4Scene::SetEndOfEventModelList ()
 {
-  return fRunDurationModelList;
+  return fEndOfEventModelList;
+}
+
+inline std::vector<G4VModel*>& G4Scene::SetEndOfRunModelList ()
+{
+  return fEndOfRunModelList;
 }
 
 inline void G4Scene::SetRefreshAtEndOfEvent(G4bool refresh) {

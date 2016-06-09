@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh,v 1.15 2008/11/06 10:06:33 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIQt.hh,v 1.16 2009/02/16 11:40:26 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -102,6 +102,7 @@ public:
   G4int ReceiveG4cout(G4String);
   G4int ReceiveG4cerr(G4String);
   //   G4String GetCommand(Widget);
+  QMainWindow * getMainWindow();
 
 private:
   void SecondaryLoop(G4String); // a VIRER

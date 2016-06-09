@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DummyModel.cc,v 1.3 2007/05/22 17:31:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DummyModel.cc,v 1.4 2009/04/07 18:39:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -51,7 +51,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DummyModel::G4DummyModel(const G4String& nam)
-  : G4VEmModel(nam)
+  : G4VMscModel(nam)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

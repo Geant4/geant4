@@ -17,7 +17,7 @@
 #
 /run/initialize
 #
-/process/eLoss/verbose 0
+/process/eLoss/verbose 1
 /testex/event/printModulo 10
 #
 /gun/particle monopole

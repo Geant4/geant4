@@ -23,64 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// The code was written by :
-//	*Louis Archambault louis.archambault@phy.ulaval.ca,
-//      *Luc Beaulieu beaulieu@phy.ulaval.ca
-//      +Vincent Hubert-Tremblay at tigre.2@sympatico.ca
-//
-//
-// *Centre Hospitalier Universitaire de Quebec (CHUQ),
-// Hotel-Dieu de Quebec, departement de Radio-oncologie
-// 11 cote du palais. Quebec, QC, Canada, G1R 2J6
-// tel (418) 525-4444 #6720
-// fax (418) 691 5268
-//
-// + Université Laval, Québec (QC) Canada
-//
-// History: 30.11.07  P.Arce default cut changed to 1 mm
-//*******************************************************
+// -------------------------------------------------------------------
+// $Id: DicomPhysicsList.cc,v 1.11 2009/10/26 11:20:49 chauvie Exp $
+// -------------------------------------------------------------------
+
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4ParticleTypes.hh"
+#include "G4StepLimiter.hh"
+#include "G4BaryonConstructor.hh"	              
+#include "G4IonConstructor.hh"	 
+#include "G4MesonConstructor.hh"	 
 
 #include "DicomPhysicsList.hh"
 
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleWithCuts.hh"
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-#include "G4Material.hh"
-#include "G4UnitsTable.hh"
-#include "G4ios.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DicomPhysicsList::DicomPhysicsList():  G4VUserPhysicsList()
 {
-  defaultCutValue = 1.*mm;
-  cutForGamma     = 1.*mm;
+  defaultCutValue = 0.01*micrometer;
+  cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
-
-  SetVerboseLevel(0);
+  SetVerboseLevel(1);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DicomPhysicsList::~DicomPhysicsList()
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void DicomPhysicsList::ConstructParticle()
 {
-  // In this method, static member functions should be called
-  // for all particles which you want to use.
-  // This ensures that objects of these particle types will be
-  // created in the program.
-
   ConstructBosons();
   ConstructLeptons();
+  ConstructBaryons();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void DicomPhysicsList::ConstructBosons()
-{
+{ 
   // gamma
   G4Gamma::GammaDefinition();
 
+  // optical photon
+  G4OpticalPhoton::OpticalPhotonDefinition();
 }
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DicomPhysicsList::ConstructLeptons()
 {
@@ -89,122 +81,277 @@ void DicomPhysicsList::ConstructLeptons()
   G4Positron::PositronDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void DicomPhysicsList::ConstructBaryons()
+{
+  //  baryons
+  G4BaryonConstructor bConstructor;
+  bConstructor.ConstructParticle();
+
+  G4IonConstructor iConstructor;
+  iConstructor.ConstructParticle();
+
+  G4MesonConstructor mConstructor;
+  mConstructor.ConstructParticle();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void DicomPhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
+  ConstructHad();
+  ConstructGeneral();
 }
 
-#include "G4MultipleScattering.hh"
+// *** Processes and models
+
 // gamma
-#include "G4LowEnergyRayleigh.hh"
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
+
+#include "G4PhotoElectricEffect.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+
+#include "G4ComptonScattering.hh"
+#include "G4LivermoreComptonModel.hh"
+
+#include "G4GammaConversion.hh"
+#include "G4LivermoreGammaConversionModel.hh"
+
+#include "G4RayleighScattering.hh" 
+#include "G4LivermoreRayleighModel.hh"
+
 // e-
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
-// e+
+
+#include "G4eMultipleScattering.hh"
+#include "G4UniversalFluctuation.hh"
+
 #include "G4eIonisation.hh"
+#include "G4LivermoreIonisationModel.hh"
+
 #include "G4eBremsstrahlung.hh"
+#include "G4LivermoreBremsstrahlungModel.hh"
+
+// e+
+
 #include "G4eplusAnnihilation.hh"
+
+// mu
+
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
+
+// hadrons
+
+#include "G4hMultipleScattering.hh"
+#include "G4MscStepLimitType.hh"
+
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
+
+#include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
+#include "G4IonParametrisedLossModel.hh"
+
+//
+
+#include "G4LossTableManager.hh"
+#include "G4EmProcessOptions.hh"
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DicomPhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
-  while( (*theParticleIterator)() )
-    {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
 
-      //processes
-      lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
-      loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
-      loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
+  while( (*theParticleIterator)() ){
 
-      if (particleName == "gamma")
-        {
-	  //gamma
-	  pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-	  pmanager->AddDiscreteProcess(lowePhot);
-	  pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-	  pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+    G4String particleName = particle->GetParticleName();
 
-        }
-      else if (particleName == "e-")
-        {
-	  //electron
-	  pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-	  pmanager->AddProcess(loweIon,     -1, 2,2);
-	  pmanager->AddProcess(loweBrem,    -1,-1,3);
+    if (particleName == "gamma") {
 
-        }
-      else if (particleName == "e+")
-        {
-	  //positron
-	  pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-	  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	  pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
 
-        }
+      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
+      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+
+      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      G4LivermoreComptonModel* theLivermoreComptonModel = new G4LivermoreComptonModel();
+      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+      pmanager->AddDiscreteProcess(theComptonScattering);
+
+      G4GammaConversion* theGammaConversion = new G4GammaConversion();
+      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermoreGammaConversionModel();
+      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      pmanager->AddDiscreteProcess(theGammaConversion);
+
+      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+      theRayleigh->AddEmModel(0, theRayleighModel);
+      pmanager->AddDiscreteProcess(theRayleigh);
+      
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
+      
+    } else if (particleName == "e-") {
+     
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
+      
+      // Ionisation
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->AddEmModel(0, new G4LivermoreIonisationModel(), new G4UniversalFluctuation() );
+      eIoni->SetStepFunction(0.2, 100*um); //     
+      pmanager->AddProcess(eIoni,                 -1, 2, 2);
+      
+      // Bremsstrahlung
+      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      eBrem->AddEmModel(0, new G4LivermoreBremsstrahlungModel());
+      pmanager->AddProcess(eBrem, 		  -1,-3, 3);
+
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 4);
+      
+    } else if (particleName == "e+") {
+
+      // Identical to G4EmStandardPhysics_option3
+    
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
+
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetStepFunction(0.2, 100*um);      
+      pmanager->AddProcess(eIoni,                 -1, 2, 2);
+      
+      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
+      
+      pmanager->AddProcess(new G4eplusAnnihilation,0,-1, 4);
+      
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
+
+    } else if (particleName == "GenericIon") {
+
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+      ionIoni->SetStepFunction(0.1, 20*um);
+      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
+
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 3);
+
+    } else if (particleName == "alpha" ||
+               particleName == "He3" ) {
+
+      // Identical to G4EmStandardPhysics_option3
+      
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetStepFunction(0.1, 20*um);
+      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
+
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 3);
     }
+
+   //
+
+  }
 }
-#include "G4Decay.hh"
-void DicomPhysicsList::ConstructGeneral()
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4HadronElasticProcess.hh"
+#include "G4LElastic.hh"
+
+#include "G4AlphaInelasticProcess.hh"
+#include "G4BinaryLightIonReaction.hh"
+#include "G4TripathiCrossSection.hh"
+#include "G4IonsShenCrossSection.hh"
+#include "G4LEAlphaInelastic.hh"
+
+void DicomPhysicsList::ConstructHad()
 {
-  // Add Decay Process
-  G4Decay* theDecayProcess = new G4Decay();
+
+  G4HadronElasticProcess * theElasticProcess = new G4HadronElasticProcess;
+  theElasticProcess->RegisterMe( new G4LElastic() );
+
   theParticleIterator->reset();
   while( (*theParticleIterator)() )
-    {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      if (theDecayProcess->IsApplicable(*particle))
-        {
-	  pmanager ->AddProcess(theDecayProcess);
-	  // set ordering for PostStepDoIt and AtRestDoIt
-	  pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-	  pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
-        }
-    }
+  {
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pManager = particle->GetProcessManager();
+
+    if (particle->GetParticleName() == "alpha") 
+       { 
+
+ 	  // INELASTIC SCATTERING
+	  // Binary Cascade
+  	  G4BinaryLightIonReaction* theBC = new G4BinaryLightIonReaction();
+  	  theBC -> SetMinEnergy(80.*MeV);
+  	  theBC -> SetMaxEnergy(40.*GeV);
+  
+  	  // TRIPATHI CROSS SECTION
+  	  // Implementation of formulas in analogy to NASA technical paper 3621 by 
+  	  // Tripathi, et al. Cross-sections for ion ion scattering
+  	  G4TripathiCrossSection* TripathiCrossSection = new G4TripathiCrossSection;
+  
+  	  // IONS SHEN CROSS SECTION
+  	  // Implementation of formulas 
+  	  // Shen et al. Nuc. Phys. A 491 130 (1989) 
+  	  // Total Reaction Cross Section for Heavy-Ion Collisions
+  	  G4IonsShenCrossSection* aShen = new G4IonsShenCrossSection;
+  
+  	  // Final state production model for Alpha inelastic scattering below 20 GeV
+  	  G4LEAlphaInelastic* theAIModel = new G4LEAlphaInelastic;
+  	  theAIModel -> SetMaxEnergy(100.*MeV);
+
+	  G4AlphaInelasticProcess * theIPalpha = new G4AlphaInelasticProcess;		  
+	  theIPalpha->AddDataSet(TripathiCrossSection);
+	  theIPalpha->AddDataSet(aShen);
+
+	  // Register the Alpha Inelastic and Binary Cascade Model
+	  theIPalpha->RegisterMe(theAIModel);
+	  theIPalpha->RegisterMe(theBC);
+	  
+	  // Activate the alpha inelastic scattering using the alpha inelastic and binary cascade model
+	  pManager -> AddDiscreteProcess(theIPalpha);
+	  
+	  // Activate the Hadron Elastic Process
+	  pManager -> AddDiscreteProcess(theElasticProcess); 
+            
+       }
+  }
+
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DicomPhysicsList::ConstructGeneral()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DicomPhysicsList::SetCuts()
 {
-  if (verboseLevel >0)
-    {
-      G4cout << "DicomPhysicsList::SetCuts:";
-      G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-    }
-
+  if (verboseLevel >0){
+    G4cout << "DicomPhysicsList::SetCuts:";
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+  }  
+  
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
+  // because some processes for e+/e- need cut values for gamma 
   SetCutValue(cutForGamma, "gamma");
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");
+  
+  if (verboseLevel>0) DumpCutValuesTable();
 
-
-  if (verboseLevel>0)
-    DumpCutValuesTable();
-}
-
-void DicomPhysicsList::SetGammaCut(G4double val)
-{
-  ResetCuts();
-  cutForGamma = val;
-}
-
-void DicomPhysicsList::SetElectronCut(G4double val)
-{
-  //  ResetCuts();
-  cutForElectron = val;
-}
-
-void DicomPhysicsList::SetPositronCut(G4double val)
-{
-  //  ResetCuts();
-  cutForPositron = val;
 }
 

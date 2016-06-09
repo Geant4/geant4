@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AdjointInterpolator.hh,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 /////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4AdjointInterpolator.hh
+//      Module:		G4AdjointInterpolator
 //	Author:       	L. Desorgher
-//	Date:		1st April 2007
 // 	Organisation: 	SpaceIT GmbH
+//	Contract:	ESA contract 21435/08/NL/AT
 // 	Customer:     	ESA/ESTEC
 /////////////////////////////////////////////////////////////////////////////////
 //
@@ -76,17 +79,17 @@ class G4AdjointInterpolator
 	G4double Interpolation(G4double& x,G4double& x1,G4double& x2,G4double& y1,G4double &y2,G4String InterPolMethod="Log");
 	
 	
-	size_t FindPosition(G4double& x,std::vector<double>& x_vec,size_t ind_min=0, size_t ind_max=0);
+	size_t FindPosition(G4double& x,std::vector<G4double>& x_vec,size_t ind_min=0, size_t ind_max=0);
 	
-	size_t FindPositionForLogVector(G4double& x,std::vector<double>& x_vec);
+	size_t FindPositionForLogVector(G4double& x,std::vector<G4double>& x_vec);
 	
-	G4double Interpolate(G4double& x,std::vector<double>& x_vec,std::vector<double>& y_vec,G4String InterPolMethod="Log"); //xvec should monotically increase			
+	G4double Interpolate(G4double& x,std::vector<G4double>& x_vec,std::vector<G4double>& y_vec,G4String InterPolMethod="Log"); //xvec should monotically increase			
 	
-	G4double InterpolateWithIndexVector(G4double& x,std::vector<double>& x_vec,std::vector<double>& y_vec,
+	G4double InterpolateWithIndexVector(G4double& x,std::vector<G4double>& x_vec,std::vector<G4double>& y_vec,
 					    std::vector<size_t>& index_vec, G4double x0,G4double dx); //xvec should monotically increase			
 	
 	
-	G4double InterpolateForLogVector(G4double& x,std::vector<double>& x_vec,std::vector<double>& y_vec);
+	G4double InterpolateForLogVector(G4double& x,std::vector<G4double>& x_vec,std::vector<G4double>& y_vec);
    
    private:
   	static 	G4AdjointInterpolator* theInstance;

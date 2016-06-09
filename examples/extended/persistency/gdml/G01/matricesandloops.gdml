@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd" >
+ <define>
+  <position name="v0" unit="mm" x="0" y="0" z="0" />
+  <position name="v1" unit="mm" x="13" y="15" z="10" />
+  <position name="v2" unit="mm" x="-12" y="-10" z="20" />
+  <position name="v3" unit="mm" x="22" y="14" z="25" />
+  <position name="P" unit="mm" x="10" y="20" z="30" />
+  <rotation name="R" unit="degree" x="10" y="20" z="30" />
+
+  <matrix name="m" coldim="3" values="100000 200000 30000 
+                                      100000 500000 6000 
+                                      70000 8000 90000"/>
+
+  <matrix name="la" coldim="1" values="100000 200000 30000 100000 500000 6000 70000 8000 90000"/>
+
+  <matrix name="k" coldim="1" values="3 2 2.2 1.4 5 6.3 72 2.8 19"/>
+
+  <variable name="x" value="10"/>
+  <variable name="ss" value="0"/>
+  <variable name="ll" value="10"/>
+  <variable name="ii" value="1"/>
+  <variable name="j" value="2"/>
+  <variable name="i" value="1"/>
+ </define>
+ <materials>
+  <material Z="7" formula=" " name="Nitrogen" >
+   <D value="0.00125" />
+   <atom value="14.01" />
+  </material>
+  <material Z="8" formula=" " name="Oxygen" >
+   <D value="0.00143" />
+   <atom value="16.0" />
+  </material>
+  <material formula=" " name="Air" >
+   <D value="0.0012" />
+   <fraction n="0.7" ref="Nitrogen" />
+   <fraction n="0.3" ref="Oxygen" />
+  </material>
+ </materials>
+ <solids>
+  <tet aunit="degree" lunit="mm" name="Tet" vertex1="v0" vertex2="v1" vertex3="v2" vertex4="v3" />
+  <box aunit="radian" lunit="mm" name="WorldBox" x="(m[ii,j]+m[j,ii]+la[9-ii+ii])" y="(m[j-1,ii*3-1]+m[j*1,ii+2])" z="(la[ii]+la[j*2+1])+2" />
+  <box aunit="radian" lunit="mm" name="LoopBox" x="k[9]/2" y="la[9]" z="27" />
+ </solids>
+
+ <structure>
+  <volume name="LoopVol" >
+   <materialref ref="Air" />
+   <solidref ref="LoopBox" />
+  </volume>
+  <volume name="Tetvol" >
+   <materialref ref="Air" />
+   <solidref ref="Tet" />
+  </volume>
+  <volume name="World" >
+   <materialref ref="Air" />
+   <solidref ref="WorldBox" />
+   <physvol>
+    <volumeref ref="Tetvol" />
+    <positionref ref="P" />
+    <rotation name="lrp" unit="degree" x="10"  y="20" z="30" />
+   </physvol>
+   <loop for="ss" to="8" step="1">
+    <physvol>
+     <volumeref ref="LoopVol" />
+     <position name="lp" unit="mm"     x="13*ss"  y="15*ss" z="10*ss" />
+     <rotation name="lr" unit="degree" x="10*ss"  y="20*ss" z="30*ss" />
+    </physvol>
+   </loop>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="World" />
+ </setup>
+</gdml>

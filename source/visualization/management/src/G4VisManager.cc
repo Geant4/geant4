@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.115 2008/01/04 22:03:46 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisManager.cc,v 1.122 2009/11/04 12:58:00 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -158,6 +158,17 @@ G4VisManager::G4VisManager ():
     // #endif
     //   // (Don't forget to delete visManager;)
     //   ...
+
+    // Make top level command directory...
+    G4UIcommand* directory;
+    directory = new G4UIdirectory ("/vis/");
+    directory -> SetGuidance ("Visualization commands.");
+    fDirectoryList.push_back (directory);
+
+    // Instantiate top level basic commands
+    G4VVisCommand::SetVisManager (this);  // Sets shared pointer
+    RegisterMessenger(new G4VisCommandVerbose);
+    RegisterMessenger(new G4VisCommandInitialize);
   }
 }
 
@@ -199,6 +210,12 @@ G4VisManager* G4VisManager::GetInstance () {
 
 void G4VisManager::Initialise () {
 
+  if (fInitialised && fVerbosity >= warnings) {
+    G4cout << "WARNING: G4VisManager::Initialise: already initialised."
+	   << G4endl;
+    return;
+  }
+
   if (fVerbosity >= startup) {
     G4cout << "Visualization Manager initialising..." << G4endl;
   }
@@ -237,14 +254,9 @@ void G4VisManager::Initialise () {
     G4cout << G4endl;
   }
 
-  // Make top level directory...
-  G4UIcommand* directory;
-  directory = new G4UIdirectory ("/vis/");
-  directory -> SetGuidance ("Visualization commands.");
-  fDirectoryList.push_back (directory);
-
-  // ... and make command directory for commands instantiated in the
+  // Make command directories for commands instantiated in the
   // modeling subcategory...
+  G4UIcommand* directory;
   directory = new G4UIdirectory ("/vis/modeling/");
   directory -> SetGuidance ("Modeling commands.");
   fDirectoryList.push_back (directory);
@@ -639,7 +651,7 @@ void G4VisManager::CreateSceneHandler (G4String name) {
       if(fVerbosity >= errors) {
 	G4cout << "ERROR in G4VisManager::CreateSceneHandler during "
 	       << fpGraphicsSystem -> GetName ()
-	       << " scene creation.\n  No action taken."
+	       << " scene handler creation.\n  No action taken."
 	       << G4endl;
       }
     }
@@ -647,74 +659,85 @@ void G4VisManager::CreateSceneHandler (G4String name) {
   else PrintInvalidPointers ();
 }
 
-void G4VisManager::CreateViewer (G4String name) {
+void G4VisManager::CreateViewer (G4String name,G4String XGeometry) {
 
   if (!fInitialised) Initialise ();
 
-  if (fpSceneHandler) {
-    G4VViewer* p = fpGraphicsSystem -> CreateViewer (*fpSceneHandler, name);
-    if (!p) {
-      if (fVerbosity >= errors) {
-	G4cout << "ERROR in G4VisManager::CreateViewer during "
-	       << fpGraphicsSystem -> GetName ()
-	       << " viewer creation.\n  No action taken."
-	       << G4endl;
-      }
-    } else {
-      p -> Initialise ();
-      if (p -> GetViewId() < 0) {
-	if (fVerbosity >= errors) {
-	G4cout << "ERROR in G4VisManager::CreateViewer during "
-	       << fpGraphicsSystem -> GetName ()
-	       << " viewer initialisation.\n  No action taken."
-	       << G4endl;
-	}
-      } else {
-	fpViewer = p;                             // Make current.
-	fpSceneHandler -> AddViewerToList (fpViewer);
-	fpSceneHandler -> SetCurrentViewer (fpViewer);
+  if (!fpSceneHandler) {
+    PrintInvalidPointers ();
+    return;
+  }
 
-	if (fVerbosity >= confirmations) {
-	  G4cout << "G4VisManager::CreateViewer: new viewer created."
-		 << G4endl;
-	}
+  G4VViewer* p = fpGraphicsSystem -> CreateViewer (*fpSceneHandler, name);
 
-	const G4ViewParameters& vp = fpViewer->GetViewParameters();
-	if (fVerbosity >= parameters) {
-	  G4cout << " view parameters are:\n  " << vp << G4endl;
-	}
+  if (!p) {
+    if (fVerbosity >= errors) {
+      G4cout << "ERROR in G4VisManager::CreateViewer during "
+	     << fpGraphicsSystem -> GetName ()
+	     << " viewer creation.\n  No action taken."
+	     << G4endl;
+    }
+    return;
+  }
 
-	if (vp.IsCulling () && vp.IsCullingInvisible ()) {
-	  static G4bool warned = false;
-	  if (fVerbosity >= confirmations) {
-	    if (!warned) {
-	      G4cout <<
+  if (p -> GetViewId() < 0) {
+    if (fVerbosity >= errors) {
+      G4cout << "ERROR in G4VisManager::CreateViewer during "
+	     << fpGraphicsSystem -> GetName ()
+	     << " viewer initialisation.\n  No action taken."
+	     << G4endl;
+    }
+    return;
+  }
+
+  // Viewer is created, now we can set geometry parameters
+  // Before 12/2008, it was done in G4VViewer.cc but it did not have to be there!
+    
+  G4ViewParameters initialvp = p -> GetViewParameters();
+  initialvp.SetXGeometryString(XGeometry); //parse string and store parameters
+  p -> SetViewParameters(initialvp);
+  p -> Initialise ();  // (Viewer itself may change view parameters further.)
+
+  fpViewer = p;                             // Make current.
+  fpSceneHandler -> AddViewerToList (fpViewer);
+  fpSceneHandler -> SetCurrentViewer (fpViewer);
+  if (fVerbosity >= confirmations) {
+    G4cout << "G4VisManager::CreateViewer: new viewer created."
+	   << G4endl;
+  }
+
+  const G4ViewParameters& vp = fpViewer->GetViewParameters();
+  if (fVerbosity >= parameters) {
+    G4cout << " view parameters are:\n  " << vp << G4endl;
+  }
+
+  if (vp.IsCulling () && vp.IsCullingInvisible ()) {
+    static G4bool warned = false;
+    if (fVerbosity >= confirmations) {
+      if (!warned) {
+	G4cout <<
   "NOTE: objects with visibility flag set to \"false\""
   " will not be drawn!"
   "\n  \"/vis/viewer/set/culling global false\" to Draw such objects."
   "\n  Also see other \"/vis/viewer/set\" commands."
-		     << G4endl;
-	      warned = true;
-	    }
-	  }
-	}
-	if (vp.IsCullingCovered ()) {
-	  static G4bool warned = false;
-	  if (fVerbosity >= warnings) {
-	    if (!warned) {
-	      G4cout <<
-  "WARNING: covered objects in solid mode will not be rendered!"
-  "\n  \"/vis/viewer/set/culling coveredDaughters false\" to reverse this."
-  "\n  Also see other \"/vis/viewer/set\" commands."
-		     << G4endl;
-	      warned = true;
-	    }
-	  }
-	}
+	       << G4endl;
+	warned = true;
       }
     }
   }
-  else PrintInvalidPointers ();
+  if (vp.IsCullingCovered ()) {
+    static G4bool warned = false;
+    if (fVerbosity >= warnings) {
+      if (!warned) {
+	G4cout <<
+  "WARNING: covered objects in solid mode will not be rendered!"
+  "\n  \"/vis/viewer/set/culling coveredDaughters false\" to reverse this."
+  "\n  Also see other \"/vis/viewer/set\" commands."
+	       << G4endl;
+	warned = true;
+      }
+    }
+  }
 }
 
 void G4VisManager::GeometryHasChanged () {
@@ -777,6 +800,37 @@ void G4VisManager::GeometryHasChanged () {
 	G4UImanager::GetUIpointer () ->
 	  ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
       }
+    }
+  }
+
+  // Check the manager's current scene...
+  if (fpScene && fpScene -> GetRunDurationModelList ().size () == 0) {
+    if (fVerbosity >= warnings) {
+      G4cout << "WARNING: The current scene \""
+	     << fpScene -> GetName ()
+	     << "\" has no models."
+	     << G4endl;
+    }
+  }
+
+}
+void G4VisManager::NotifyHandlers () {
+
+  if (fVerbosity >= confirmations) {
+    G4cout << "G4VisManager::NotifyHandler() called." << G4endl;
+  }
+
+  // Check scenes.
+  G4SceneList& sceneList = fSceneList;
+  G4int iScene, nScenes = sceneList.size ();
+  for (iScene = 0; iScene < nScenes; iScene++) {
+    G4Scene* pScene = sceneList [iScene];
+    std::vector<G4VModel*>& modelList = pScene -> SetRunDurationModelList ();
+    
+    if (modelList.size ()) {
+      pScene->CalculateExtent();
+      G4UImanager::GetUIpointer () ->
+        ApplyCommand (G4String("/vis/scene/notifyHandlers " + pScene->GetName()));
     }
   }
 
@@ -962,17 +1016,12 @@ void G4VisManager::RegisterMessengers () {
   // Instantiate individual messengers/commands (often - but not
   // always - one command per messenger).
 
-  G4VVisCommand::SetVisManager (this);  // Sets shared pointer to vis manager.
-
   G4UIcommand* directory;
 
-  // Top level basic commands...
+  // Top level commands...
   RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
   RegisterMessenger(new G4VisCommandEnable);
   RegisterMessenger(new G4VisCommandList);
-  RegisterMessenger(new G4VisCommandVerbose);
-
-  // Other top level commands...
   RegisterMessenger(new G4VisCommandReviewKeptEvents);
 
   // Compound commands...
@@ -1020,6 +1069,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
   RegisterMessenger(new G4VisCommandSceneAddLogo);
+  RegisterMessenger(new G4VisCommandSceneAddPSHits);
   RegisterMessenger(new G4VisCommandSceneAddScale);
   RegisterMessenger(new G4VisCommandSceneAddText);
   RegisterMessenger(new G4VisCommandSceneAddTrajectories);
@@ -1248,9 +1298,10 @@ void G4VisManager::EndOfEvent ()
       if (!warned) {
 	if (fVerbosity >= warnings) {
 	  G4cout <<
-	    "WARNING: G4VisManager::EndOfEvent: Event keeping suspended."
-	    "\n  The number of events exceeds the maximum that may be kept, "
-		 << maxNumberOfKeptEvents << '.'
+ "WARNING: G4VisManager::EndOfEvent: Automatic event keeping suspended."
+ "\n  The number of events exceeds the maximum, "
+		 << maxNumberOfKeptEvents <<
+ ", that can be kept by the vis manager."
 		 << G4endl;
 	}
 	warned = true;
@@ -1272,6 +1323,7 @@ void G4VisManager::EndOfRun ()
   if (valid) {
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
+	fpSceneHandler->DrawEndOfRunModels();
 	fpViewer->ShowView();
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
@@ -1279,12 +1331,13 @@ void G4VisManager::EndOfRun ()
 
     if (fEventKeepingSuspended && fVerbosity >= warnings) {
       G4cout <<
-	"WARNING: G4VisManager::EndOfRun: Event keeping was suspended."
-	"\n  The number of events in the run exceeded the maximum to be kept, "
-	     << fpScene->GetMaxNumberOfKeptEvents() << '.' <<
-	"\n  The number of events to be kept can be changed with"
-	"\n  \"/vis/scene/endOfEventAction accumulate <N>\", where N is the"
-	"\n  maximum number you wish to allow.  N < 0 means \"unlimited\"."
+ "WARNING: G4VisManager::EndOfRun: Automatic event keeping has been suspended."
+ "\n  The number of events in the run exceeded the maximum, "
+	     << fpScene->GetMaxNumberOfKeptEvents() <<
+ ", that can be kept by the vis manager." <<
+ "\n  The number of events kept by the vis manager can be changed with"
+ "\n  \"/vis/scene/endOfEventAction accumulate <N>\", where N is the"
+ "\n  maximum number you wish to allow.  N < 0 means \"unlimited\"."
 	     << G4endl;
     }
   }

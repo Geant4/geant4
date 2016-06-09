@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.hh,v 1.10 2006/06/29 18:30:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LogicalSurface.hh,v 1.11 2009/04/21 15:18:15 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Class G4LogicalSurface
@@ -85,27 +85,25 @@ class G4LogicalSurface
    G4SurfaceProperty*  GetSurfaceProperty() const;
    void     SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty);
 
-   G4String GetName() const;
+   const G4String& GetName() const;
    void     SetName(const G4String& name);
 
    G4TransitionRadiationSurface*  GetTransitionRadiationSurface() const;
-   void SetTransitionRadiationSurface(G4TransitionRadiationSurface* transRadSurf);
+   void SetTransitionRadiationSurface(G4TransitionRadiationSurface* tRadSurf);
+
+ public:  // without description
+
+   virtual ~G4LogicalSurface();
+
+   G4int operator==(const G4LogicalSurface &right) const;
+   G4int operator!=(const G4LogicalSurface &right) const;
 
  protected:
 
-        // There should be no instances of this class
+   // There should be no instances of this class
 
-   G4LogicalSurface(const G4String&         name,
-                    G4SurfaceProperty* surfaceProperty); 
-        // Is the name more meaningful for the properties or the logical
-        // surface ?  
-
- public:
-   virtual ~G4LogicalSurface();
-
- public:
-   G4int operator==(const G4LogicalSurface &right) const;
-   G4int operator!=(const G4LogicalSurface &right) const;
+   G4LogicalSurface(const G4String& name, G4SurfaceProperty* surfaceProperty); 
+     // Is the name more meaningful for the properties or the logical surface ?
 
  private:
 
@@ -116,7 +114,7 @@ class G4LogicalSurface
 
    G4String theName;              // Surface name
 
-   G4SurfaceProperty*              theSurfaceProperty;
+   G4SurfaceProperty*             theSurfaceProperty;
    G4TransitionRadiationSurface*  theTransRadSurface;
 };
 

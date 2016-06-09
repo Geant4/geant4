@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.hh,v 1.5 2007/05/23 08:50:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4mplIonisation.hh,v 1.6 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -71,7 +71,7 @@ public:
 
   virtual ~G4mplIonisation();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
   // Print out of the class parameters
   virtual void PrintInfo();
@@ -91,14 +91,6 @@ private:
   G4bool      isInitialised;
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4mplIonisation::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (p.GetParticleName() == "monopole");
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

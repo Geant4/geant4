@@ -60,9 +60,6 @@ public:
   virtual
   G4bool IsZAApplicable(const G4DynamicParticle* aDP, G4double Z, G4double A);
 
-
-
-
   virtual
   void DumpPhysicsTable(const G4ParticleDefinition&) 
   {G4cout << "G4HadronNucleonXsc: uses parametrisation"<<G4endl;}
@@ -76,8 +73,6 @@ public:
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4ParticleDefinition*);
 
   G4double GetHadronNucleonXscVU(const G4DynamicParticle*, const G4ParticleDefinition*);
-
-  G4double GetHadronNucleonXscMK(const G4DynamicParticle*, const G4ParticleDefinition*);
 
   // kinematics and set/get
 

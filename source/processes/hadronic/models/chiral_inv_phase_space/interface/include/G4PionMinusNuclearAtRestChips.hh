@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// 17.02.2009 M.Kossov, now it is recommended to use the G4QCaptureAtRest process
+//
 #ifndef G4PionMinusNuclearAtRestChips_h
 #define G4PionMinusNuclearAtRestChips_h
 
@@ -42,7 +44,7 @@ class G4PionMinusNuclearAtRestChips : public G4VRestProcess
    
   public:
  
-     G4PionMinusNuclearAtRestChips(const G4String& processName ="PionMinusAnnihilationAtRest")
+     G4PionMinusNuclearAtRestChips(const G4String& processName ="PionMinusCaptureAtRest")
       : G4VRestProcess (processName, fHadronic) 
      {
        SetProcessSubType(fHadronAtRest);
@@ -55,15 +57,15 @@ class G4PionMinusNuclearAtRestChips : public G4VRestProcess
        return ( &aParticle == G4PionMinus::PionMinusDefinition() );
      }
 
-  // null physics table
+     // null physics table
      void BuildPhysicsTable(const G4ParticleDefinition&){}
 
      G4double AtRestGetPhysicalInteractionLength(const G4Track&track,
-						 G4ForceCondition*condition);
+       G4ForceCondition*condition);
 
-  // zero mean lifetime
+     // zero mean lifetime
      G4double GetMeanLifeTime(const G4Track& aTrack,
-			      G4ForceCondition* condition) {return 0.0;}
+         G4ForceCondition* condition) {return 0.0;}
 
      G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&); 
 
@@ -78,7 +80,8 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
 {
   if(aTrack.GetDynamicParticle()->GetDefinition() != G4PionMinus::PionMinus())
   {
-    throw G4HadronicException(__FILE__, __LINE__, "Calling G4PionMinusNuclearAtRestChips with particle other than pi-!!!");
+    throw G4HadronicException(__FILE__, __LINE__,
+                  "Calling G4PionMinusNuclearAtRestChips with particle other than pi-!!!");
   }
   
   // Create target
@@ -90,8 +93,7 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
 }
 
 G4double G4PionMinusNuclearAtRestChips::
-AtRestGetPhysicalInteractionLength(const G4Track&track,
-				   G4ForceCondition*condition)
+AtRestGetPhysicalInteractionLength(const G4Track&track, G4ForceCondition*condition)
 {
   ResetNumberOfInteractionLengthLeft();
   *condition = NotForced;

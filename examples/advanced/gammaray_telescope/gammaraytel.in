@@ -7,26 +7,10 @@
 /control/saveHistory
 /run/verbose 1
 /gun/sourceGen true
-/run/initialize
-
 /control/execute emstd.mac
 
-/gun/particle proton
-/gun/energy 1 GeV
-/gun/sourceType 2
-/run/beamOn 100
+/run/initialize
 
-/gun/particle gamma
-/gun/energy 1 GeV
-/gun/sourceType 2
-/run/beamOn 100
-
-/gun/particle e-
-/gun/energy 1 GeV
-/gun/sourceType 2
-/run/beamOn 100
-
-/control/execute emlowe.mac
 
 /gun/particle proton
 /gun/energy 1 GeV

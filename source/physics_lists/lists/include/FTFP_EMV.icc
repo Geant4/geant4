@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: FTFP_EMV.icc,v 1.3 2008/06/19 08:08:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: FTFP_EMV.icc,v 1.6 2009/12/04 13:08:42 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //    Created as copy from FTFP
 //
 // Modified:
+// 18.05.2009 G.Folger: obsoleted
 // 28.11.2005 G.Folger: migration to non static particles
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
 // 02.12.2005 V.Ivanchenko: rename components
@@ -70,6 +71,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsFTFP.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TFTFP_EMV<T>::TFTFP_EMV(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -79,6 +82,10 @@ template<class T> TFTFP_EMV<T>::TFTFP_EMV(G4int ver):  T()
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Replaced("FTFP_EMV","FTFP_BERT_EMV");
+  G4Exception(" Crash for usage of replaced physics list");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics_option1(ver));

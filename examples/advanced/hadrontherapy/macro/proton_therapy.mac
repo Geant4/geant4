@@ -1,0 +1,59 @@
+# G.A.P.Cirrone
+# cirrone@lns.infn.it
+#
+# Macro file recommended for the use with proton beams and built-in physic list.
+# This macro uses the physics list already contained in the Geant4 distribution
+# 
+
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+##########################
+# Set of the physic models
+#
+/physic/addPhysics standard_opt3    	# Electromagnetic model
+/physic/addPhysics elastic          	# Hadronic elastic model
+/physic/addPhysics binary           	# Hadronic inelastic model
+/physic/addPhysics radioactive_decay    # Radioactive decay
+
+##########################
+# Initialisation procedure
+#
+/run/initialize
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle proton
+
+/beam/energy/meanEnergy 63 MeV
+/beam/energy/sigmaEnergy 400 keV
+/beam/position/Xposition -2600 mm
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+#
+/physic/setCuts 0.01 mm
+/Step/waterPhantomStepMax 0.01 mm 
+
+#########################
+# Display the event number
+# during the run
+# 
+/event/printEventNumber 100
+
+/run/beamOn 5000
+
+#########################
+# Move the generated .root
+# file into the
+# "SimulationOutputs" folder
+
+/control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root		

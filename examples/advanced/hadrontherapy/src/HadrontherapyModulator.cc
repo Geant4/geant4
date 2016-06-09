@@ -23,20 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyModulator.cc; May 2005
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// $Id: HadrontherapyModulator.cc; 
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"
@@ -50,13 +38,12 @@
 #include "G4RotationMatrix.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "HadrontherapyMaterial.hh"
 #include "HadrontherapyModulator.hh"
-#include "HadrontherapyMaterial.hh"
 #include "G4Transform3D.hh"
 #include "G4ios.hh"
 #include <fstream>
 #include "G4RunManager.hh"
+#include "G4NistManager.hh"
 
 HadrontherapyModulator::HadrontherapyModulator():physiMotherMod(0),
 						 solidMod0(0),         logicMod0(0),          physiMod0(0),
@@ -140,36 +127,30 @@ HadrontherapyModulator::HadrontherapyModulator():physiMotherMod(0),
   G4double phi = 270. *deg;     
   rm -> rotateY(phi); 
 }
-
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyModulator::~HadrontherapyModulator() 
 {
   delete rm;
 }
-
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
 {
+  G4bool isotopes = false;
+  G4Material* airNist =  G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR", isotopes);
 
-
-  //Materials used for the modulator wheel
-  HadrontherapyMaterial* material = new HadrontherapyMaterial();
-
-  G4Material* Mod0Mater = material -> GetMat("Air");
-  G4Material* ModMater = material -> GetMat("Air");
-  delete material;
-
+  G4Material* Mod0Mater = airNist;
+  G4Material* ModMater = airNist;
+ 
   G4double innerRadiusOfTheTube = 2.5 *cm;
   G4double outerRadiusOfTheTube = 9.5 *cm;
   G4double hightOfTheTube = 0.03*cm;
 
   // Mother of the modulator wheel  
-
   G4ThreeVector positionMotherMod = G4ThreeVector(-1960.50 *mm, 30 *mm, 50 *mm);
  
   G4Box* solidMotherMod = new G4Box("MotherMod", 12 *cm, 12 *cm, 12 *cm);
  
   G4LogicalVolume * logicMotherMod = new G4LogicalVolume(solidMotherMod, Mod0Mater,"MotherMod",0,0,0);
-
- 
 
   physiMotherMod = new G4PVPlacement(rm,positionMotherMod,  "MotherMod", 
 				     logicMotherMod,    				  
@@ -199,7 +180,6 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   
   logicMod0 = new G4LogicalVolume(solidMod0, Mod0Mater, "Mod0",0,0,0);
   
-  
   physiMod0 = new G4PVPlacement(G4Transform3D(rm2, positionMod0), 
 				logicMod0,    
 				"Mod0",       
@@ -211,7 +191,6 @@ void HadrontherapyModulator::BuildModulator(G4VPhysicalVolume* motherVolume)
   //----------------------------------------------------------
   // First modulator sclice
   //----------------------------------------------------------
- 
  
   G4double startAngleOfTheTube1 = 54.267*deg;
   G4double spanningAngleOfTheTube1 = 71.466*deg;

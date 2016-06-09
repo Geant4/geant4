@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2006/04/18 16:53:05 vnivanch Exp $
+# $Id: GNUmakefile,v 1.7 2009/11/16 19:20:18 mkossov Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -19,10 +19,11 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/hadronic/management/include/ \
             -I$(G4BASE)/processes/hadronic/models/management/include/ \
-            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include/ \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include/ \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include/ \
             -I$(G4BASE)/processes/hadronic/models/neutron_hp/include/ \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include/ \

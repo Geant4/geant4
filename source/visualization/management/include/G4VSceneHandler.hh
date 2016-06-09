@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.40 2008/01/04 22:03:45 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VSceneHandler.hh,v 1.42 2009/11/04 12:55:33 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // John Allison  19th July 1996.
@@ -41,11 +41,10 @@
 
 #include "globals.hh"
 
-#include <stack>
-
 #include "G4VGraphicsScene.hh"
 #include "G4ViewerList.hh"
 #include "G4ViewParameters.hh"
+#include "G4THitsMap.hh"
 
 class G4Scene;
 class G4VViewer;
@@ -129,6 +128,7 @@ public: // With description
 
   virtual void AddCompound (const G4VTrajectory&);
   virtual void AddCompound (const G4VHit&);
+  virtual void AddCompound (const G4THitsMap<G4double>&);
 
   //////////////////////////////////////////////////////////////
   // Functions for adding primitives.
@@ -268,6 +268,9 @@ public: // With description
   void DrawEvent(const G4Event*);
   // Checks scene's end-of-event model list and draws trajectories,
   // hits, etc.
+
+  void DrawEndOfRunModels();
+  // Draws end-of-run models.
 
   //////////////////////////////////////////////////////////////
   // Administration functions.

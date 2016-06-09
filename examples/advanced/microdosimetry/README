@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.5 2008/06/11 11:56:16 sincerti Exp $
+$Id: README,v 1.6 2009/04/29 14:17:03 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,12 +16,10 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
-Last modified by S. Incerti, 27/02/2007
-
 ---->0. INTRODUCTION.                                                    
                                                                        
 The microdosimetry example simulates the track of a 10 keV Helium+ (positive
-charge is +e) particle in liquid water using only G4DNA processes.
+charge is +e) particle in liquid water using only Geant4-DNA processes.
 
 ---->1. GEOMETRY SET-UP.
  
@@ -84,19 +82,10 @@ To get visualization, make sure to uncomment the /vis/... lines in the macro.
 
 ---->4. PHYSICS
 
-This example shows how to use the Geant4 DNA processes AND how to affect them a
+This example shows how to use the Geant4-DNA processes AND how to affect them a
 name.
 
 Look at the PhyscisList.cc file.
-
-Note that the G4CrossSectionElasticScreenedRutherford.cc is put in the src
-directory with an increased (10 eV instead of 7 eV) lower limit of the model energy range to
-avoid an energy region where electrons do not lose any energy and may undergo
-elastic scattering without limit.
-
-Same remark for the G4CrossSectionExcitationEmfietzoglou.cc file whre the lower
-limit has been set to 10 eV instead of 7.4 eV.
-
 
 ---->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
 
@@ -112,6 +101,7 @@ file plot.C; to do so :
 * be sure to be in the microdosimetry directory
 * launch ROOT by typing root
 * under your ROOT session, type in : .X plot.C to execute the macro file
+* alternatively you can type directly under your session : root plot.C
 
 The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
 
@@ -124,15 +114,25 @@ alpha+   : 5
 helium   : 6
 
 -processes:
-ElasticBrennerZaider 		: 11
-ElasticScreenedRutherford 	: 12
-ExcitationBorn 			: 13
-ExcitationEmfietzoglou 		: 14
-ExcitationMillerGreen 		: 15
-IonisationBorn 			: 16
-IonisationRudd 			: 17
-ChargeDecrease 			: 18
-ChargeIncrease 			: 19
+e-_G4DNAElastic			: 11
+e-_G4DNAExcitation		: 12
+e-_G4DNAIonisation		: 13
+proton_G4DNAExcitation		: 14
+proton_G4DNAIonisation		: 15
+proton_G4DNAChargeDecrease	: 16
+hydrogen_G4DNAIonisation	: 17
+hydrogen_G4DNAChargeIncrease	: 18
+alpha_G4DNAExcitation		: 19
+alpha_G4DNAIonisation 		: 20
+alpha_G4DNAChargeDecrease	: 21
+alpha+_G4DNAExcitation		: 22
+alpha+_G4DNAIonisation		: 23
+alpha+_G4DNAChargeDecrease	: 24
+alpha+_G4DNAChargeIncrease	: 25
+helium_G4DNAExcitation		: 26
+helium_G4DNAIonisation		: 27
+helium_G4DNAChargeIncrease  	: 28
+
 
 ---------------------------------------------------------------------------
 

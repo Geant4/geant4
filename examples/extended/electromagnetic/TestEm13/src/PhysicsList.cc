@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.5 2006/06/29 16:44:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.7 2009/11/19 17:30:25 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -198,11 +198,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (name == emName) return;
 
   if (name == "standard") {
-
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
-      
+   
   } else if (name == "livermore") {
     emName = name;
     delete emPhysicsList;
@@ -212,7 +211,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPenelope(name);
-            
+                         
   } else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AdjointCSManager.cc,v 1.5 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 #include "G4AdjointCSManager.hh"
 #include "G4AdjointCSMatrix.hh"
 #include "G4AdjointInterpolator.hh"
@@ -39,10 +42,14 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
+#include "G4Proton.hh"
 #include "G4AdjointElectron.hh"
 #include "G4AdjointGamma.hh"
+#include "G4AdjointProton.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ProductionCutsTable.hh"
+#include <fstream>
+#include <iomanip>
 
 
 G4AdjointCSManager* G4AdjointCSManager::theInstance = 0;
@@ -64,18 +71,32 @@ G4AdjointCSManager::G4AdjointCSManager()
   theTotalAdjointSigmaTableVector.clear();
   listOfForwardEmProcess.clear();
   listOfForwardEnergyLossProcess.clear();
-  theListOfAdjointParticlesInAction.clear();
+  theListOfAdjointParticlesInAction.clear(); 
+  EminForFwdSigmaTables.clear();
+  EminForAdjSigmaTables.clear();
+  EkinofFwdSigmaMax.clear();
+  EkinofAdjSigmaMax.clear();
   Tmin=0.1*keV;
   Tmax=100.*TeV;
-  nbins=240;
+  nbins=360; //probably this should be decrease, that was choosen to avoid error in the CS value closed to CS jump.(For example at Tcut)
   
   RegisterAdjointParticle(G4AdjointElectron::AdjointElectron());
   RegisterAdjointParticle(G4AdjointGamma::AdjointGamma());
+  RegisterAdjointParticle(G4AdjointProton::AdjointProton());
   
   verbose  = 1;
+ 
+  lastPartDefForCS =0;
+  LastEkinForCS =0;
+  LastCSCorrectionFactor =1.;
   
-  consider_continuous_weight_correction =true;
-  consider_poststep_weight_correction =false;
+  forward_CS_mode = true;
+  
+  currentParticleDef = 0;
+  
+  theAdjIon = 0;
+  theFwdIon = 0;  
+ 
  
 }
 ///////////////////////////////////////////////////////
@@ -95,7 +116,7 @@ void G4AdjointCSManager::RegisterEmProcess(G4VEmProcess* aProcess, G4ParticleDef
   G4ParticleDefinition* anAdjPartDef = GetAdjointParticleEquivalent(aFwdPartDef);
   if (anAdjPartDef && aProcess){
   	RegisterAdjointParticle(anAdjPartDef);
-	int index=-1;
+	G4int index=-1;
 	
   	for (size_t i=0;i<theListOfAdjointParticlesInAction.size();i++){
   		if (anAdjPartDef->GetParticleName() == theListOfAdjointParticlesInAction[i]->GetParticleName()) index=i;
@@ -110,7 +131,7 @@ void G4AdjointCSManager::RegisterEnergyLossProcess(G4VEnergyLossProcess* aProces
   G4ParticleDefinition* anAdjPartDef = GetAdjointParticleEquivalent(aFwdPartDef);
   if (anAdjPartDef && aProcess){
         RegisterAdjointParticle(anAdjPartDef);
-  	int index=-1;
+  	G4int index=-1;
   	for (size_t i=0;i<theListOfAdjointParticlesInAction.size();i++){
   		if (anAdjPartDef->GetParticleName() == theListOfAdjointParticlesInAction[i]->GetParticleName()) index=i;
   	}
@@ -120,7 +141,7 @@ void G4AdjointCSManager::RegisterEnergyLossProcess(G4VEnergyLossProcess* aProces
 ///////////////////////////////////////////////////////
 //
 void G4AdjointCSManager::RegisterAdjointParticle(G4ParticleDefinition* aPartDef)
-{  int index=-1;
+{  G4int index=-1;
    for (size_t i=0;i<theListOfAdjointParticlesInAction.size();i++){
   	if (aPartDef->GetParticleName() == theListOfAdjointParticlesInAction[i]->GetParticleName()) index=i;
    }
@@ -131,6 +152,11 @@ void G4AdjointCSManager::RegisterAdjointParticle(G4ParticleDefinition* aPartDef)
 	theTotalAdjointSigmaTableVector.push_back(new G4PhysicsTable);
 	listOfForwardEmProcess.push_back(new std::vector<G4VEmProcess*>());
 	theListOfAdjointParticlesInAction.push_back(aPartDef);
+	EminForFwdSigmaTables.push_back(std::vector<G4double> ());
+	EminForAdjSigmaTables.push_back(std::vector<G4double> ());
+	EkinofFwdSigmaMax.push_back(std::vector<G4double> ());
+	EkinofAdjSigmaMax.push_back(std::vector<G4double> ());
+	
    }
 }
 ///////////////////////////////////////////////////////
@@ -161,9 +187,11 @@ void G4AdjointCSManager::BuildCrossSectionMatrices()
 	theAdjointCSMatricesForProdToProj.clear();
 	const G4ElementTable* theElementTable = G4Element::GetElementTable();
 	const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+	
+	G4cout<<"========== Computation of cross section matrices for adjoint models =========="<<G4endl;
 	for (size_t i=0; i<listOfAdjointEMModel.size();i++){
 		G4VEmAdjointModel* aModel =listOfAdjointEMModel[i];
-		G4cout<<"Build adjoint cross section matrices for "<<aModel->GetName()<<std::endl;
+		G4cout<<"Build adjoint cross section matrices for "<<aModel->GetName()<<G4endl;
 		if (aModel->GetUseMatrix()){
 			std::vector<G4AdjointCSMatrix*>* aListOfMat1 = new std::vector<G4AdjointCSMatrix*>();
 			std::vector<G4AdjointCSMatrix*>* aListOfMat2 = new std::vector<G4AdjointCSMatrix*>();
@@ -172,17 +200,17 @@ void G4AdjointCSManager::BuildCrossSectionMatrices()
 			if (aModel->GetUseMatrixPerElement()){
 				if (aModel->GetUseOnlyOneMatrixForAllElements()){
 						std::vector<G4AdjointCSMatrix*>
-						two_matrices=BuildCrossSectionsMatricesForAGivenModelAndElement(aModel,1, 1, 10);
+						two_matrices=BuildCrossSectionsMatricesForAGivenModelAndElement(aModel,1, 1, 80);
 						aListOfMat1->push_back(two_matrices[0]);
 						aListOfMat2->push_back(two_matrices[1]);
 				}
 				else {		
 					for (size_t j=0; j<theElementTable->size();j++){
 						G4Element* anElement=(*theElementTable)[j];
-						G4int Z = G4int(anElement->GetZ());
-						G4int A = G4int(anElement->GetA());
+						G4int Z = int(anElement->GetZ());
+						G4int A = int(anElement->GetA());
 						std::vector<G4AdjointCSMatrix*>
-							two_matrices=BuildCrossSectionsMatricesForAGivenModelAndElement(aModel,Z, A, 10);
+							two_matrices=BuildCrossSectionsMatricesForAGivenModelAndElement(aModel,Z, A, 40);
 						aListOfMat1->push_back(two_matrices[0]);
 						aListOfMat2->push_back(two_matrices[1]);
 					}
@@ -192,7 +220,7 @@ void G4AdjointCSManager::BuildCrossSectionMatrices()
 				for (size_t j=0; j<theMaterialTable->size();j++){
 					G4Material* aMaterial=(*theMaterialTable)[j];
 					std::vector<G4AdjointCSMatrix*>
-						two_matrices=BuildCrossSectionsMatricesForAGivenModelAndMaterial(aModel,aMaterial, 10);
+						two_matrices=BuildCrossSectionsMatricesForAGivenModelAndMaterial(aModel,aMaterial, 40);
 					aListOfMat1->push_back(two_matrices[0]);
 					aListOfMat2->push_back(two_matrices[1]);
 				}
@@ -202,14 +230,19 @@ void G4AdjointCSManager::BuildCrossSectionMatrices()
 			theAdjointCSMatricesForScatProjToProj.push_back(*aListOfMat2);	
 			aModel->SetCSMatrices(aListOfMat1, aListOfMat2); 	
 		}
-		else {  std::vector<G4AdjointCSMatrix*> two_empty_matrices;
+		else {  G4cout<<"The model "<<aModel->GetName()<<" does not use cross section matrices"<<G4endl;
+			std::vector<G4AdjointCSMatrix*> two_empty_matrices;
 			theAdjointCSMatricesForProdToProj.push_back(two_empty_matrices);
 			theAdjointCSMatricesForScatProjToProj.push_back(two_empty_matrices);
 			
 		}		
 	}
-	G4cout<<"All adjoint cross section matrices are built "<<std::endl;
+	G4cout<<"              All adjoint cross section matrices are computed!"<<G4endl;
+	G4cout<<"======================================================================"<<G4endl;
+	
 	CrossSectionMatrixesAreBuilt = true;
+
+
 }
 
 
@@ -220,36 +253,106 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
   const G4ProductionCutsTable* theCoupleTable= G4ProductionCutsTable::GetProductionCutsTable();
   for (size_t i=0;i<theListOfAdjointParticlesInAction.size();i++){
   	G4ParticleDefinition* thePartDef = theListOfAdjointParticlesInAction[i];
+	DefineCurrentParticle(thePartDef);
   	theTotalForwardSigmaTableVector[i]->clearAndDestroy();
 	theTotalAdjointSigmaTableVector[i]->clearAndDestroy();
+	EminForFwdSigmaTables[i].clear();
+	EminForAdjSigmaTables[i].clear();
+	EkinofFwdSigmaMax[i].clear();
+	EkinofAdjSigmaMax[i].clear();
+	//G4cout<<thePartDef->GetParticleName();
+	
   	for (size_t j=0;j<theCoupleTable->GetTableSize();j++){
 		const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(j);
 		
+		/*
+		G4String file_name1=couple->GetMaterial()->GetName()+"_"+thePartDef->GetParticleName()+"_adj_totCS.txt";
+		G4String file_name2=couple->GetMaterial()->GetName()+"_"+thePartDef->GetParticleName()+"_fwd_totCS.txt";
+		
+		std::fstream FileOutputAdjCS(file_name1, std::ios::out);
+		std::fstream FileOutputFwdCS(file_name2, std::ios::out);
+		
+		
+		
+		FileOutputAdjCS<<std::setiosflags(std::ios::scientific);
+ 		FileOutputAdjCS<<std::setprecision(6);
+		FileOutputFwdCS<<std::setiosflags(std::ios::scientific);
+ 		FileOutputFwdCS<<std::setprecision(6);	
+		*/
+			  
+
 		//make first the total fwd CS table for FwdProcess
 		G4PhysicsVector* aVector =  new G4PhysicsLogVector(Tmin, Tmax, nbins);
+		G4bool Emin_found=false;
+		size_t ind=0;
+		G4double sigma_max =0.;
+		G4double e_sigma_max =0.;
 		for(size_t l=0; l<aVector->GetVectorLength(); l++) { 
-			G4double totCS=0;
+			G4double totCS=0.;
 			G4double e=aVector->GetLowEdgeEnergy(l);
 			for (size_t k=0; k<listOfForwardEmProcess[i]->size(); k++){
 				totCS+=(*listOfForwardEmProcess[i])[k]->GetLambda(e, couple);
 			}
 			for (size_t k=0; k<listOfForwardEnergyLossProcess[i]->size(); k++){
-				totCS+=(*listOfForwardEnergyLossProcess[i])[k]->GetLambda(e, couple);
+				if (thePartDef == theAdjIon) { // e is considered already as the scaled energy
+				        size_t mat_index = couple->GetIndex();
+					G4VEmModel* currentModel = (*listOfForwardEnergyLossProcess[i])[k]->SelectModelForMaterial(e,mat_index);
+  					G4double chargeSqRatio =  currentModel->GetChargeSquareRatio(theFwdIon,couple->GetMaterial(),e/massRatio);
+					(*listOfForwardEnergyLossProcess[i])[k]->SetDynamicMassCharge(massRatio,chargeSqRatio);
+				}
+				G4double e1=e/massRatio;
+				totCS+=(*listOfForwardEnergyLossProcess[i])[k]->GetLambda(e1, couple);
 			}
-			//G4cout<<totCS<<std::endl;
 			aVector->PutValue(l,totCS);
+			if (totCS>sigma_max){
+				sigma_max=totCS;
+				e_sigma_max = e;
+				
+			}
+			//FileOutputFwdCS<<e<<'\t'<<totCS<<G4endl;
+			
+			if (totCS>0 && !Emin_found) {
+				EminForFwdSigmaTables[i].push_back(e);
+				Emin_found=true;
+			}
+			
 		
 		}
+		//FileOutputFwdCS.close();
+		
+		EkinofFwdSigmaMax[i].push_back(e_sigma_max);
+		
+		
+		if(!Emin_found)	EminForFwdSigmaTables[i].push_back(Tmax);
+		
 		theTotalForwardSigmaTableVector[i]->push_back(aVector);
 		
+		
+		Emin_found=false;
+		sigma_max=0;
+		e_sigma_max =0.;
+		ind=0;
 		G4PhysicsVector* aVector1 =  new G4PhysicsLogVector(Tmin, Tmax, nbins);
 		for(size_t l=0; l<aVector->GetVectorLength(); l++) { 
 			G4double e=aVector->GetLowEdgeEnergy(l);
-			G4double totCS =ComputeTotalAdjointCS(couple,thePartDef,e);
-			//G4cout<<totCS<<std::endl;
+			G4double totCS =ComputeTotalAdjointCS(couple,thePartDef,e*0.9999999/massRatio); //massRatio needed for ions
 			aVector1->PutValue(l,totCS);
+			if (totCS>sigma_max){
+				sigma_max=totCS;
+				e_sigma_max = e;
+				
+			}
+			//FileOutputAdjCS<<e<<'\t'<<totCS<<G4endl;
+			if (totCS>0 && !Emin_found) {
+				EminForAdjSigmaTables[i].push_back(e);
+				Emin_found=true;
+			}
 		
-		}	
+		}
+		//FileOutputAdjCS.close();
+		EkinofAdjSigmaMax[i].push_back(e_sigma_max);
+		if(!Emin_found)	EminForAdjSigmaTables[i].push_back(Tmax);
+			
 		theTotalAdjointSigmaTableVector[i]->push_back(aVector1);
 		
 	}
@@ -261,14 +364,9 @@ void G4AdjointCSManager::BuildTotalSigmaTables()
 G4double G4AdjointCSManager::GetTotalAdjointCS(G4ParticleDefinition* aPartDef, G4double Ekin,
 	 		   	     const G4MaterialCutsCouple* aCouple)
 { DefineCurrentMaterial(aCouple);
-  int index=-1;
-  for (size_t i=0;i<theListOfAdjointParticlesInAction.size();i++){
-  	if (aPartDef == theListOfAdjointParticlesInAction[i]) index=i;
-  }	
-  if (index == -1) return 0.;
-  
+  DefineCurrentParticle(aPartDef);	
   G4bool b;
-  return (((*theTotalAdjointSigmaTableVector[index])[currentMatIndex])->GetValue(Ekin, b));
+  return (((*theTotalAdjointSigmaTableVector[currentParticleIndex])[currentMatIndex])->GetValue(Ekin*massRatio, b));
   
   
   
@@ -278,70 +376,142 @@ G4double G4AdjointCSManager::GetTotalAdjointCS(G4ParticleDefinition* aPartDef, G
 G4double G4AdjointCSManager::GetTotalForwardCS(G4ParticleDefinition* aPartDef, G4double Ekin,
 	 		   	     const G4MaterialCutsCouple* aCouple)
 { DefineCurrentMaterial(aCouple);
-  int index=-1;
-  for (size_t i=0;i<theListOfAdjointParticlesInAction.size();i++){
-  	if (aPartDef == theListOfAdjointParticlesInAction[i]) index=i;
-  }	
-  if (index == -1) return 0.;
+  DefineCurrentParticle(aPartDef);
   G4bool b;
-  return (((*theTotalForwardSigmaTableVector[index])[currentMatIndex])->GetValue(Ekin, b));
+  return (((*theTotalForwardSigmaTableVector[currentParticleIndex])[currentMatIndex])->GetValue(Ekin*massRatio, b));
   
   
+}
+				     
+///////////////////////////////////////////////////////
+//				     
+void G4AdjointCSManager::GetEminForTotalCS(G4ParticleDefinition* aPartDef,
+	 		   	     const G4MaterialCutsCouple* aCouple, G4double& emin_adj, G4double& emin_fwd)
+{ DefineCurrentMaterial(aCouple);
+  DefineCurrentParticle(aPartDef);
+  emin_adj = EminForAdjSigmaTables[currentParticleIndex][currentMatIndex]/massRatio;
+  emin_fwd = EminForFwdSigmaTables[currentParticleIndex][currentMatIndex]/massRatio;
+  
+  
+  
+}
+///////////////////////////////////////////////////////
+//				     
+void G4AdjointCSManager::GetMaxFwdTotalCS(G4ParticleDefinition* aPartDef,
+	 		   	     const G4MaterialCutsCouple* aCouple, G4double& e_sigma_max, G4double& sigma_max)
+{ DefineCurrentMaterial(aCouple);
+  DefineCurrentParticle(aPartDef);
+  e_sigma_max = EkinofFwdSigmaMax[currentParticleIndex][currentMatIndex];
+  G4bool b;
+  sigma_max =((*theTotalForwardSigmaTableVector[currentParticleIndex])[currentMatIndex])->GetValue(e_sigma_max, b);
+  e_sigma_max/=massRatio;
+  
+  
+}
+///////////////////////////////////////////////////////
+//				     
+void G4AdjointCSManager::GetMaxAdjTotalCS(G4ParticleDefinition* aPartDef,
+	 		   	     const G4MaterialCutsCouple* aCouple, G4double& e_sigma_max, G4double& sigma_max)
+{ DefineCurrentMaterial(aCouple);
+  DefineCurrentParticle(aPartDef);
+  e_sigma_max = EkinofAdjSigmaMax[currentParticleIndex][currentMatIndex];
+  G4bool b;
+  sigma_max =((*theTotalAdjointSigmaTableVector[currentParticleIndex])[currentMatIndex])->GetValue(e_sigma_max, b);
+  e_sigma_max/=massRatio;
+  
+  
+}				     
+///////////////////////////////////////////////////////
+//				     
+G4double G4AdjointCSManager::GetCrossSectionCorrection(G4ParticleDefinition* aPartDef,G4double PreStepEkin,const G4MaterialCutsCouple* aCouple, G4bool& fwd_is_used,
+										G4double& fwd_TotCS)
+{ G4double corr_fac = 1.;
+  if (forward_CS_mode) {
+  	fwd_TotCS=PrefwdCS;
+  	if (LastEkinForCS != PreStepEkin || aPartDef != lastPartDefForCS || aCouple!=currentCouple) {
+		DefineCurrentMaterial(aCouple);
+		PreadjCS = GetTotalAdjointCS(aPartDef, PreStepEkin,aCouple);
+		PrefwdCS = GetTotalForwardCS(aPartDef, PreStepEkin,aCouple);
+		LastEkinForCS = PreStepEkin;
+		lastPartDefForCS = aPartDef;
+		if (PrefwdCS >0. &&  PreadjCS >0.) {
+			forward_CS_is_used = true;
+			LastCSCorrectionFactor = PrefwdCS/PreadjCS;
+		}
+		else {
+			forward_CS_is_used = false;
+			LastCSCorrectionFactor = 1.;
+			
+		}
+		
+	}
+	corr_fac =LastCSCorrectionFactor;
+	
+	
+	
+  }  
+  else {
+  	forward_CS_is_used = false;
+  	LastCSCorrectionFactor = 1.;
+  }
+  fwd_TotCS=PrefwdCS;	
+  fwd_is_used = forward_CS_is_used;
+  return  corr_fac;
 }				     
 ///////////////////////////////////////////////////////
 //				     			     
 G4double G4AdjointCSManager::GetContinuousWeightCorrection(G4ParticleDefinition* aPartDef, G4double PreStepEkin,G4double AfterStepEkin,
 	 		   	     const G4MaterialCutsCouple* aCouple, G4double step_length)
-{ //G4double fwdCS = GetTotalForwardCS(aPartDef, AfterStepEkin,aCouple);
-  
-  G4double corr_fac = 1.;
-  if (consider_continuous_weight_correction) {
-  	
-	G4double adjCS = GetTotalAdjointCS(aPartDef, PreStepEkin,aCouple);
-	G4double PrefwdCS;
-	PrefwdCS = GetTotalForwardCS(aPartDef, PreStepEkin,aCouple);
-  	G4double fwdCS = GetTotalForwardCS(aPartDef, (AfterStepEkin+PreStepEkin)/2.,aCouple);
-	G4cout<<adjCS<<'\t'<<fwdCS<<std::endl;
-	//if (aPartDef ==G4AdjointGamma::AdjointGamma()) G4cout<<adjCS<<'\t'<<fwdCS<<std::endl;
-  	/*if (adjCS >0 ) corr_fac = std::exp((PrefwdCS-fwdCS)*step_length);
-	else corr_fac = std::exp(-fwdCS*step_length);*/
-	corr_fac *=std::exp((adjCS-fwdCS)*step_length);
-	corr_fac=std::max(corr_fac,1.e-6);
-	corr_fac *=PreStepEkin/AfterStepEkin;
-   	
+{  G4double corr_fac = 1.;
+  //return corr_fac;
+  //G4double after_adjCS = GetTotalAdjointCS(aPartDef, AfterStepEkin,aCouple);
+  G4double after_fwdCS = GetTotalForwardCS(aPartDef, AfterStepEkin,aCouple);
+  G4double pre_adjCS = GetTotalAdjointCS(aPartDef, PreStepEkin,aCouple);
+  if (!forward_CS_is_used || pre_adjCS ==0. ||  after_fwdCS==0.) {
+	forward_CS_is_used=false;
+	G4double pre_fwdCS = GetTotalForwardCS(aPartDef, PreStepEkin,aCouple);
+	corr_fac *=std::exp((pre_adjCS-pre_fwdCS)*step_length);
+	LastCSCorrectionFactor = 1.;
   }
-  G4cout<<"Cont "<<corr_fac<<std::endl;
-  G4cout<<"Ekin0 "<<PreStepEkin<<std::endl;
-  G4cout<<"Ekin1 "<<AfterStepEkin<<std::endl;
-  G4cout<<"step_length "<<step_length<<std::endl;
+  else {
+	LastCSCorrectionFactor = after_fwdCS/pre_adjCS;
+  }	
+	
+
+ 
   return corr_fac; 
 }				     
 ///////////////////////////////////////////////////////
 //				     			     
-G4double G4AdjointCSManager::GetPostStepWeightCorrection(G4ParticleDefinition* , G4ParticleDefinition* ,
-					    		  G4double ,G4double ,
-	 		   	     			  const G4MaterialCutsCouple* )
-{ G4double corr_fac = 1.;
-  if (consider_poststep_weight_correction) {
-	/*G4double fwdCS = GetTotalForwardCS(aSecondPartDef, EkinPrim,aCouple);
-  	G4double adjCS = GetTotalAdjointCS(aPrimPartDef, EkinPrim,aCouple);*/
-  	//G4double fwd1CS = GetTotalForwardCS(aPrimPartDef, EkinPrim,aCouple);
-  	//if (adjCS>0 && fwd1CS>0) adjCS = fwd1CS;
-  	//corr_fac =fwdCS*EkinSecond/adjCS/EkinPrim;
-  	//corr_fac = adjCS/fwdCS;
-  }
-  return corr_fac;
+G4double G4AdjointCSManager::GetPostStepWeightCorrection( )
+{//return 1.; 
+ return  1./LastCSCorrectionFactor;
+	
 }							  
 ///////////////////////////////////////////////////////
 //
-double  G4AdjointCSManager::ComputeAdjointCS(G4Material* aMaterial,
+G4double  G4AdjointCSManager::ComputeAdjointCS(G4Material* aMaterial,
 					    		 G4VEmAdjointModel* aModel, 
 					    		 G4double PrimEnergy,
 					    		 G4double Tcut,
 					    		 G4bool IsScatProjToProjCase,
-							 std::vector<double>& CS_Vs_Element)
+							 std::vector<G4double>& CS_Vs_Element)
 { 
   
+  G4double EminSec=0;
+  G4double EmaxSec=0;
+  
+  if (IsScatProjToProjCase){
+	EminSec= aModel->GetSecondAdjEnergyMinForScatProjToProjCase(PrimEnergy,Tcut);
+	EmaxSec= aModel->GetSecondAdjEnergyMaxForScatProjToProjCase(PrimEnergy);
+  }
+  else if (PrimEnergy > Tcut || !aModel->GetApplyCutInRange()) {
+	EminSec= aModel->GetSecondAdjEnergyMinForProdToProjCase(PrimEnergy);
+	EmaxSec= aModel->GetSecondAdjEnergyMaxForProdToProjCase(PrimEnergy);
+  }
+  if (EminSec >= EmaxSec) return 0.;
+
+
   G4bool need_to_compute=false;
   if ( aMaterial!= lastMaterial || PrimEnergy != lastPrimaryEnergy || Tcut != lastTcut){
   	lastMaterial =aMaterial;
@@ -380,7 +550,7 @@ double  G4AdjointCSManager::ComputeAdjointCS(G4Material* aMaterial,
 	listOfIsScatProjToProjCase.push_back(IsScatProjToProjCase);
 	CS_Vs_Element.clear();
 	if (!aModel->GetUseMatrix()){
-		return aModel->AdjointCrossSection(currentCouple,PrimEnergy,IsScatProjToProjCase);
+		CS_Vs_Element.push_back(aModel->AdjointCrossSection(currentCouple,PrimEnergy,IsScatProjToProjCase));
 				         
 	
 	}
@@ -396,18 +566,9 @@ double  G4AdjointCSManager::ComputeAdjointCS(G4Material* aMaterial,
 			if (PrimEnergy > Tlow)
 					CS = ComputeAdjointCS(PrimEnergy,theCSMatrix,Tlow);
 			G4double factor=0.;
-			for (size_t i=0;i<n_el;i++){
-				size_t ind_el = aMaterial->GetElement(i)->GetIndex();
+			for (size_t i=0;i<n_el;i++){ //this could be computed only once
+				//size_t ind_el = aMaterial->GetElement(i)->GetIndex();
 				factor+=aMaterial->GetElement(i)->GetZ()*aMaterial->GetVecNbOfAtomsPerVolume()[i];
-				G4AdjointCSMatrix* theCSMatrix;
-				if (IsScatProjToProjCase){
-					theCSMatrix=theAdjointCSMatricesForScatProjToProj[ind_model][ind_el];
-				}
-				else  	theCSMatrix=theAdjointCSMatricesForProdToProj[ind_model][ind_el];
-				//G4double CS =0.;
-				
-				//G4cout<<CS<<std::endl;			
-				
 			}
 			CS *=factor;
 			CS_Vs_Element.push_back(CS);
@@ -416,7 +577,7 @@ double  G4AdjointCSManager::ComputeAdjointCS(G4Material* aMaterial,
 		else {
 			for (size_t i=0;i<n_el;i++){
 				size_t ind_el = aMaterial->GetElement(i)->GetIndex();
-				//G4cout<<aMaterial->GetName()<<std::endl;
+				//G4cout<<aMaterial->GetName()<<G4endl;
 				G4AdjointCSMatrix* theCSMatrix;
 				if (IsScatProjToProjCase){
 					theCSMatrix=theAdjointCSMatricesForScatProjToProj[ind_model][ind_el];
@@ -425,7 +586,7 @@ double  G4AdjointCSManager::ComputeAdjointCS(G4Material* aMaterial,
 				G4double CS =0.;
 				if (PrimEnergy > Tlow)
 					CS = ComputeAdjointCS(PrimEnergy,theCSMatrix,Tlow);
-				//G4cout<<CS<<std::endl;			
+				//G4cout<<CS<<G4endl;			
 				CS_Vs_Element.push_back(CS*(aMaterial->GetVecNbOfAtomsPerVolume()[i]));	
 			}
 		}		
@@ -452,18 +613,10 @@ double  G4AdjointCSManager::ComputeAdjointCS(G4Material* aMaterial,
   
   G4double CS=0;
   for (size_t i=0;i<CS_Vs_Element.size();i++){
-  	CS+=CS_Vs_Element[i];
-  }
-
-  return CS;
+  	CS+=CS_Vs_Element[i]; //We could put the progressive sum of the CS instead of the CS of an element itself
   	
-  
-  
-  
-  
-  
-  
-  
+  }
+  return CS;
 }							
 ///////////////////////////////////////////////////////
 //	
@@ -472,7 +625,7 @@ G4Element* G4AdjointCSManager::SampleElementFromCSMatrices(G4Material* aMaterial
 					 	       		   G4double PrimEnergy,
 						        	   G4double Tcut,
 						       		   G4bool IsScatProjToProjCase)
-{ std::vector<double> CS_Vs_Element;
+{ std::vector<G4double> CS_Vs_Element;
   G4double CS = ComputeAdjointCS(aMaterial,aModel,PrimEnergy,Tcut,IsScatProjToProjCase,CS_Vs_Element);
   G4double rand_var= G4UniformRand();
   G4double SumCS=0.;
@@ -497,59 +650,40 @@ G4double G4AdjointCSManager::ComputeTotalAdjointCS(const G4MaterialCutsCouple* a
 							     G4double Ekin)
 {
  G4double TotalCS=0.;
-// G4ParticleDefinition* theDirPartDef = GetForwardParticleEquivalent(aPartDef);
+
  DefineCurrentMaterial(aCouple);
-/* size_t idx=-1;
- if (theDirPartDef->GetParticleName() == "gamma") idx = 0;
- else if (theDirPartDef->GetParticleName() == "e-") idx = 1;
- else if (theDirPartDef->GetParticleName() == "e+") idx = 2;
- 
- //THe tCut computation is wrong this should be on Tcut per model the secondary determioming the Tcut
- const std::vector<G4double>* aVec = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(idx);
- //G4cout<<aVec<<std::endl;
- G4double Tcut =(*aVec)[aCouple->GetIndex()];*/
- //G4cout<<"Tcut "<<Tcut<<std::endl;
- //G4cout<<(*aVec)[0]<<std::endl;
-// G4double Tcut =converters[idx]->Convert(Rcut,aCouple->GetMaterial());
- 
+
   
- std::vector<double> CS_Vs_Element;
+ std::vector<G4double> CS_Vs_Element;
  for (size_t i=0; i<listOfAdjointEMModel.size();i++){
- 	/*G4ParticleDefinition* theDirSecondPartDef = 
-			GetForwardParticleEquivalent(listOfAdjointEMModel[i]->GetAdjointEquivalentOfDirectSecondaryParticleDefinition());
  	
-	*/
-	
-	
 	G4double Tlow=0;
 	if (!listOfAdjointEMModel[i]->GetApplyCutInRange()) Tlow =listOfAdjointEMModel[i]->GetLowEnergyLimit();
 	else {
 		G4ParticleDefinition* theDirSecondPartDef = 
 			GetForwardParticleEquivalent(listOfAdjointEMModel[i]->GetAdjointEquivalentOfDirectSecondaryParticleDefinition());
-		G4int idx=-1;
+		size_t idx=56;
  		if (theDirSecondPartDef->GetParticleName() == "gamma") idx = 0;
 		else if (theDirSecondPartDef->GetParticleName() == "e-") idx = 1;
  		else if (theDirSecondPartDef->GetParticleName() == "e+") idx = 2;
-		const std::vector<G4double>* aVec = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(idx);
- 		Tlow =(*aVec)[aCouple->GetIndex()];
+		if (idx <56) {
+			const std::vector<G4double>* aVec = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(idx);
+ 			Tlow =(*aVec)[aCouple->GetIndex()];
+		}	
 		
 	
 	}
  	
  	if ( Ekin<=listOfAdjointEMModel[i]->GetHighEnergyLimit() && Ekin>=listOfAdjointEMModel[i]->GetLowEnergyLimit()){
 		if (aPartDef == listOfAdjointEMModel[i]->GetAdjointEquivalentOfDirectPrimaryParticleDefinition()){
-			//G4cout<<"Yes1 before "<<std::endl;
 			TotalCS += ComputeAdjointCS(currentMaterial,
 					    	       listOfAdjointEMModel[i], 
-					    	       Ekin, Tlow,true,CS_Vs_Element);
-			//G4cout<<"Yes1 "<<Ekin<<'\t'<<TotalCS<<std::endl;			       
+					    	       Ekin, Tlow,true,CS_Vs_Element);			       
 		}
 		if (aPartDef == listOfAdjointEMModel[i]->GetAdjointEquivalentOfDirectSecondaryParticleDefinition()){
 			TotalCS += ComputeAdjointCS(currentMaterial,
 					    	       listOfAdjointEMModel[i], 
 					    	       Ekin, Tlow,false, CS_Vs_Element);
-						       
-			//G4cout<<"Yes2 "<<TotalCS<<std::endl;
 		}
 		
 	}
@@ -562,7 +696,7 @@ G4double G4AdjointCSManager::ComputeTotalAdjointCS(const G4MaterialCutsCouple* a
 //
 std::vector<G4AdjointCSMatrix*>
 G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndElement(G4VEmAdjointModel* aModel,G4int Z,G4int A,
-								        int nbin_pro_decade)
+								        G4int nbin_pro_decade)
 { 
   G4AdjointCSMatrix* theCSMatForProdToProjBackwardScattering = new G4AdjointCSMatrix(false);
   G4AdjointCSMatrix* theCSMatForScatProjToProjBackwardScattering = new G4AdjointCSMatrix(true);
@@ -576,36 +710,25 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndElement(G4VEmAdjo
    if (aModel->GetSecondPartOfSameType() )EkinMaxForProd =EkinMaxForProd/2.;
    
     
-   
-   
-   
-   
-   
    //Product to projectile backward scattering
    //-----------------------------------------
    G4double fE=std::pow(10.,1./nbin_pro_decade);
-   G4double E2=std::pow(10.,G4double( G4int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
+   G4double E2=std::pow(10.,double( int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
    G4double E1=EkinMin;
    while (E1 <EkinMaxForProd){
    	E1=std::max(EkinMin,E2);
 	E1=std::min(EkinMaxForProd,E1);
-	std::vector< std::vector< G4double >* >  aMat= aModel->ComputeAdjointCrossSectionVectorPerAtomForSecond(E1,Z,A,nbin_pro_decade);
+	std::vector< std::vector< double>* >  aMat= aModel->ComputeAdjointCrossSectionVectorPerAtomForSecond(E1,Z,A,nbin_pro_decade);
 	if (aMat.size()>=2) {
-		std::vector< G4double >* log_ESecVec=aMat[0];
-		std::vector< G4double >* log_CSVec=aMat[1];
+		std::vector< double>* log_ESecVec=aMat[0];
+		std::vector< double>* log_CSVec=aMat[1];
 		G4double log_adjointCS=log_CSVec->back();
 		//normalise CSVec such that it becomes a probability vector
- 		/*for (size_t j=0;j<log_CSVec->size();j++) (*log_CSVec)[j]=(*log_CSVec)[j]-log_adjointCS;
-		(*log_CSVec)[0]=-90.;*/
-	
-	
-		for (size_t j=0;j<log_CSVec->size();j++) {
-	        	//G4cout<<"CSMan1 "<<(*log_CSVec)[j]<<std::endl;
-			if (j==0) (*log_CSVec)[j] = 0.; 
-			else (*log_CSVec)[j]=std::log(1.-std::exp((*log_CSVec)[j]-log_adjointCS));
-			//G4cout<<"CSMan2 "<<(*log_CSVec)[j]<<std::endl;
+ 		for (size_t j=0;j<log_CSVec->size();j++) {
+	        	if (j==0) (*log_CSVec)[j] = 0.; 
+			else (*log_CSVec)[j]=std::log(1.-std::exp((*log_CSVec)[j]-log_adjointCS) +1e-50);
 		}	
-		(*log_CSVec)[log_CSVec->size()-1]=(*log_CSVec)[log_CSVec->size()-2]-1.;
+		(*log_CSVec)[log_CSVec->size()-1]=(*log_CSVec)[log_CSVec->size()-2]-std::log(1000.);
 		theCSMatForProdToProjBackwardScattering->AddData(std::log(E1),log_adjointCS,log_ESecVec,log_CSVec,0);
 	}	
    	E1=E2;
@@ -615,24 +738,22 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndElement(G4VEmAdjo
    //Scattered projectile to projectile backward scattering
    //-----------------------------------------
    
-   E2=std::pow(10.,G4double( G4int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
+   E2=std::pow(10.,double( int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
    E1=EkinMin;
    while (E1 <EkinMaxForScat){
    	E1=std::max(EkinMin,E2);
 	E1=std::min(EkinMaxForScat,E1);
-	std::vector< std::vector< G4double >* >  aMat= aModel->ComputeAdjointCrossSectionVectorPerAtomForScatProj(E1,Z,A,nbin_pro_decade);
+	std::vector< std::vector< double>* >  aMat= aModel->ComputeAdjointCrossSectionVectorPerAtomForScatProj(E1,Z,A,nbin_pro_decade);
 	if (aMat.size()>=2) {
-		std::vector< G4double >* log_ESecVec=aMat[0];
-		std::vector< G4double >* log_CSVec=aMat[1];
+		std::vector< double>* log_ESecVec=aMat[0];
+		std::vector< double>* log_CSVec=aMat[1];
 		G4double log_adjointCS=log_CSVec->back();
 		//normalise CSVec such that it becomes a probability vector
  		for (size_t j=0;j<log_CSVec->size();j++) {
-	        	//G4cout<<"CSMan1 "<<(*log_CSVec)[j]<<std::endl;
-			if (j==0) (*log_CSVec)[j] = 0.; 
-			else (*log_CSVec)[j]=std::log(1.-std::exp((*log_CSVec)[j]-log_adjointCS));
-		//G4cout<<"CSMan2 "<<(*log_CSVec)[j]<<std::endl;
+	        	if (j==0) (*log_CSVec)[j] = 0.; 
+			else (*log_CSVec)[j]=std::log(1.-std::exp((*log_CSVec)[j]-log_adjointCS)+1e-50);
 		}	
-		(*log_CSVec)[log_CSVec->size()-1]=(*log_CSVec)[log_CSVec->size()-2]-1.;
+		(*log_CSVec)[log_CSVec->size()-1]=(*log_CSVec)[log_CSVec->size()-2]-std::log(1000.);
 		theCSMatForScatProjToProjBackwardScattering->AddData(std::log(E1),log_adjointCS,log_ESecVec,log_CSVec,0);
    	}
 	E1=E2;
@@ -640,19 +761,13 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndElement(G4VEmAdjo
    }
    
    
-   
-   
-   
-   
-   
   std::vector<G4AdjointCSMatrix*> res;
   res.clear();
-  
   res.push_back(theCSMatForProdToProjBackwardScattering);
   res.push_back(theCSMatForScatProjToProjBackwardScattering);
   
 
-#ifdef TEST_MODE
+/*
   G4String file_name;
   std::stringstream astream;
   G4String str_Z;
@@ -661,14 +776,8 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndElement(G4VEmAdjo
   theCSMatForProdToProjBackwardScattering->Write(aModel->GetName()+G4String("_CSMat_Z")+str_Z+"_ProdToProj.txt"); 
   theCSMatForScatProjToProjBackwardScattering->Write(aModel->GetName()+G4String("_CSMat_Z")+str_Z+"_ScatProjToProj.txt");
  
-  /*G4AdjointCSMatrix* aMat1 = new G4AdjointCSMatrix(false);
-  G4AdjointCSMatrix* aMat2 = new G4AdjointCSMatrix(true);
-  
-  aMat1->Read(G4String("test_Z")+str_Z+"_1.txt");
-  aMat2->Read(G4String("test_Z")+str_Z+"_2.txt");
-  aMat1->Write(G4String("test_Z")+str_Z+"_11.txt");
-  aMat2->Write(G4String("test_Z")+str_Z+"_22.txt"); */
-#endif 
+*/
+
   
   return res;
   
@@ -701,25 +810,25 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndMaterial(G4VEmAdj
    //Product to projectile backward scattering
    //-----------------------------------------
    G4double fE=std::pow(10.,1./nbin_pro_decade);
-   G4double E2=std::pow(10.,G4double( G4int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
+   G4double E2=std::pow(10.,double( int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
    G4double E1=EkinMin;
    while (E1 <EkinMaxForProd){
    	E1=std::max(EkinMin,E2);
 	E1=std::min(EkinMaxForProd,E1);
-	std::vector< std::vector< G4double >* >  aMat= aModel->ComputeAdjointCrossSectionVectorPerVolumeForSecond(aMaterial,E1,nbin_pro_decade);
+	std::vector< std::vector< double>* >  aMat= aModel->ComputeAdjointCrossSectionVectorPerVolumeForSecond(aMaterial,E1,nbin_pro_decade);
 	if (aMat.size()>=2) {
-		std::vector< G4double >* log_ESecVec=aMat[0];
-		std::vector< G4double >* log_CSVec=aMat[1];
+		std::vector< double>* log_ESecVec=aMat[0];
+		std::vector< double>* log_CSVec=aMat[1];
 		G4double log_adjointCS=log_CSVec->back();
 	
 		//normalise CSVec such that it becomes a probability vector
 		for (size_t j=0;j<log_CSVec->size();j++) {
-	        	//G4cout<<"CSMan1 "<<(*log_CSVec)[j]<<std::endl;
+	        	//G4cout<<"CSMan1 "<<(*log_CSVec)[j]<<G4endl;
 			if (j==0) (*log_CSVec)[j] = 0.; 
 			else (*log_CSVec)[j]=std::log(1.-std::exp((*log_CSVec)[j]-log_adjointCS));
-			//G4cout<<"CSMan2 "<<(*log_CSVec)[j]<<std::endl;
+			//G4cout<<"CSMan2 "<<(*log_CSVec)[j]<<G4endl;
 		}	
-		(*log_CSVec)[log_CSVec->size()-1]=(*log_CSVec)[log_CSVec->size()-2]-1.;
+		(*log_CSVec)[log_CSVec->size()-1]=(*log_CSVec)[log_CSVec->size()-2]-std::log(1000.);
 		theCSMatForProdToProjBackwardScattering->AddData(std::log(E1),log_adjointCS,log_ESecVec,log_CSVec,0);
 	}	
 	
@@ -732,24 +841,25 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndMaterial(G4VEmAdj
    //Scattered projectile to projectile backward scattering
    //-----------------------------------------
    
-   E2=std::pow(10.,G4double( G4int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
+   E2=std::pow(10.,double( int(std::log10(EkinMin)*nbin_pro_decade)+1)/nbin_pro_decade)/fE;
    E1=EkinMin;
    while (E1 <EkinMaxForScat){
    	E1=std::max(EkinMin,E2);
 	E1=std::min(EkinMaxForScat,E1);
-	std::vector< std::vector< G4double >* >  aMat= aModel->ComputeAdjointCrossSectionVectorPerVolumeForScatProj(aMaterial,E1,nbin_pro_decade);
+	std::vector< std::vector< double>* >  aMat= aModel->ComputeAdjointCrossSectionVectorPerVolumeForScatProj(aMaterial,E1,nbin_pro_decade);
 	if (aMat.size()>=2) {
-		std::vector< G4double >* log_ESecVec=aMat[0];
-		std::vector< G4double >* log_CSVec=aMat[1];
+		std::vector< double>* log_ESecVec=aMat[0];
+		std::vector< double>* log_CSVec=aMat[1];
 		G4double log_adjointCS=log_CSVec->back();
 	
 		for (size_t j=0;j<log_CSVec->size();j++) {
-	        	//G4cout<<"CSMan1 "<<(*log_CSVec)[j]<<std::endl;
+	        	//G4cout<<"CSMan1 "<<(*log_CSVec)[j]<<G4endl;
 			if (j==0) (*log_CSVec)[j] = 0.; 
 			else (*log_CSVec)[j]=std::log(1.-std::exp((*log_CSVec)[j]-log_adjointCS));
-		//G4cout<<"CSMan2 "<<(*log_CSVec)[j]<<std::endl;
+		//G4cout<<"CSMan2 "<<(*log_CSVec)[j]<<G4endl;if (theAdjPartDef->GetParticleName() == "adj_gamma") return G4Gamma::Gamma();
+ 
 		}	
-		(*log_CSVec)[log_CSVec->size()-1]=(*log_CSVec)[log_CSVec->size()-2]-1.;
+		(*log_CSVec)[log_CSVec->size()-1]=(*log_CSVec)[log_CSVec->size()-2]-std::log(1000.);
 	
 		theCSMatForScatProjToProjBackwardScattering->AddData(std::log(E1),log_adjointCS,log_ESecVec,log_CSVec,0);
    	}
@@ -769,10 +879,10 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndMaterial(G4VEmAdj
   res.push_back(theCSMatForProdToProjBackwardScattering);
   res.push_back(theCSMatForScatProjToProjBackwardScattering); 
   
-#ifdef TEST_MODE
+ /*
   theCSMatForProdToProjBackwardScattering->Write(aModel->GetName()+"_CSMat_"+aMaterial->GetName()+"_ProdToProj.txt");
   theCSMatForScatProjToProjBackwardScattering->Write(aModel->GetName()+"_CSMat_"+aMaterial->GetName()+"_ScatProjToProj.txt");
-#endif
+*/
 
 
   return res;
@@ -785,7 +895,10 @@ G4AdjointCSManager::BuildCrossSectionsMatricesForAGivenModelAndMaterial(G4VEmAdj
 G4ParticleDefinition* G4AdjointCSManager::GetAdjointParticleEquivalent(G4ParticleDefinition* theFwdPartDef)
 {
  if (theFwdPartDef->GetParticleName() == "e-") return G4AdjointElectron::AdjointElectron();
- if (theFwdPartDef->GetParticleName() == "gamma") return G4AdjointGamma::AdjointGamma();
+ else if (theFwdPartDef->GetParticleName() == "gamma") return G4AdjointGamma::AdjointGamma();
+ else if (theFwdPartDef->GetParticleName() == "proton") return G4AdjointProton::AdjointProton();
+ else if (theFwdPartDef ==theFwdIon) return theAdjIon;
+ 
  return 0; 	
 }
 ///////////////////////////////////////////////////////
@@ -793,7 +906,9 @@ G4ParticleDefinition* G4AdjointCSManager::GetAdjointParticleEquivalent(G4Particl
 G4ParticleDefinition* G4AdjointCSManager::GetForwardParticleEquivalent(G4ParticleDefinition* theAdjPartDef)
 {
  if (theAdjPartDef->GetParticleName() == "adj_e-") return G4Electron::Electron();
- if (theAdjPartDef->GetParticleName() == "adj_gamma") return G4Gamma::Gamma();
+ else if (theAdjPartDef->GetParticleName() == "adj_gamma") return G4Gamma::Gamma();
+ else if (theAdjPartDef->GetParticleName() == "adj_proton") return G4Proton::Proton();
+ else if (theAdjPartDef == theAdjIon) return theFwdIon;
  return 0; 	
 }
 ///////////////////////////////////////////////////////
@@ -804,25 +919,43 @@ void G4AdjointCSManager::DefineCurrentMaterial(const G4MaterialCutsCouple* coupl
     currentCouple   = const_cast<G4MaterialCutsCouple*> (couple);
     currentMaterial = const_cast<G4Material*> (couple->GetMaterial());
     currentMatIndex = couple->GetIndex();
-    //G4cout<<"Index material "<<currentMatIndex<<std::endl;
+    lastPartDefForCS =0;
+    LastEkinForCS =0;
+    LastCSCorrectionFactor =1.;
+  }  
+}
+
+///////////////////////////////////////////////////////
+//
+void G4AdjointCSManager::DefineCurrentParticle(const G4ParticleDefinition* aPartDef)
+{
+  if(aPartDef != currentParticleDef) {
+  
+  	currentParticleDef= const_cast< G4ParticleDefinition* > (aPartDef);
+	massRatio=1;
+	if (aPartDef == theAdjIon) massRatio = proton_mass_c2/aPartDef->GetPDGMass();
+  	currentParticleIndex=1000000;
+ 	for (size_t i=0;i<theListOfAdjointParticlesInAction.size();i++){
+  		if (aPartDef == theListOfAdjointParticlesInAction[i]) currentParticleIndex=i;
+  	}	
+	 
   }  
 }
 
 
 
-///////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////
 //
-double G4AdjointCSManager::ComputeAdjointCS(G4double aPrimEnergy,G4AdjointCSMatrix*
+G4double G4AdjointCSManager::ComputeAdjointCS(G4double aPrimEnergy,G4AdjointCSMatrix*
 				anAdjointCSMatrix,G4double Tcut)
 { 
-  std::vector< G4double > *theLogPrimEnergyVector = anAdjointCSMatrix->GetLogPrimEnergyVector();
+  std::vector< double> *theLogPrimEnergyVector = anAdjointCSMatrix->GetLogPrimEnergyVector();
   if (theLogPrimEnergyVector->size() ==0){
- 	G4cout<<"No data are contained in the given AdjointCSMatrix!"<<std::endl;
-	G4cout<<"The sampling procedure will be stopped."<<std::endl;
+ 	G4cout<<"No data are contained in the given AdjointCSMatrix!"<<G4endl;
+	G4cout<<"The s"<<G4endl;
 	return 0.;
 	
   }
-  //G4cout<<"A prim/Tcut "<<aPrimEnergy<<'\t'<<Tcut<<std::endl; 
   G4double log_Tcut = std::log(Tcut);
   G4double log_E =std::log(aPrimEnergy);
   
@@ -833,35 +966,23 @@ double G4AdjointCSManager::ComputeAdjointCS(G4double aPrimEnergy,G4AdjointCSMatr
   G4AdjointInterpolator* theInterpolator=G4AdjointInterpolator::GetInstance();
  
   size_t ind =theInterpolator->FindPositionForLogVector(log_E,*theLogPrimEnergyVector);
-  //G4cout<<"Prim energy "<<(*thePrimEnergyVector)[0]<<std::endl;
-  //G4cout<<"Prim energy[ind]"<<(*thePrimEnergyVector)[ind]<<std::endl;
-  //G4cout<<"Prim energy ind"<<ind<<std::endl;
-  
   G4double aLogPrimEnergy1,aLogPrimEnergy2;
   G4double aLogCS1,aLogCS2;
   G4double log01,log02;
-  std::vector< G4double>* aLogSecondEnergyVector1 =0;
-  std::vector< G4double>* aLogSecondEnergyVector2  =0;
-  std::vector< G4double>* aLogProbVector1=0;
-  std::vector< G4double>* aLogProbVector2=0;
+  std::vector< double>* aLogSecondEnergyVector1 =0;
+  std::vector< double>* aLogSecondEnergyVector2  =0;
+  std::vector< double>* aLogProbVector1=0;
+  std::vector< double>* aLogProbVector2=0;
   std::vector< size_t>* aLogProbVectorIndex1=0;
   std::vector< size_t>* aLogProbVectorIndex2=0;
   
 	 							     
   anAdjointCSMatrix->GetData(ind, aLogPrimEnergy1,aLogCS1,log01, aLogSecondEnergyVector1,aLogProbVector1,aLogProbVectorIndex1);
   anAdjointCSMatrix->GetData(ind+1, aLogPrimEnergy2,aLogCS2,log02, aLogSecondEnergyVector2,aLogProbVector2,aLogProbVectorIndex2);
-  //G4cout<<"aSecondEnergyVector1.size() "<<aSecondEnergyVector1->size()<<std::endl;
-  //G4cout<<aSecondEnergyVector1<<std::endl;
-  //G4cout<<"aSecondEnergyVector2.size() "<<aSecondEnergyVector2->size()<<std::endl;
   if (anAdjointCSMatrix->IsScatProjToProjCase()){ //case where the Tcut plays a role
 	G4double log_minimum_prob1, log_minimum_prob2;
-	
-	//G4cout<<aSecondEnergyVector1->size()<<std::endl;
 	log_minimum_prob1=theInterpolator->InterpolateForLogVector(log_Tcut,*aLogSecondEnergyVector1,*aLogProbVector1);
 	log_minimum_prob2=theInterpolator->InterpolateForLogVector(log_Tcut,*aLogSecondEnergyVector2,*aLogProbVector2);
-	//G4cout<<"minimum_prob1 "<< std::exp(log_minimum_prob1)<<std::endl;
-	//G4cout<<"minimum_prob2 "<< std::exp(log_minimum_prob2)<<std::endl;
-	//G4cout<<"Tcut "<<std::endl;
 	aLogCS1+= log_minimum_prob1;
 	aLogCS2+= log_minimum_prob2;
   }

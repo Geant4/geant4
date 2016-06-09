@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffuseElastic.hh,v 1.13 2007/11/06 17:01:20 grichine Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DiffuseElastic.hh,v 1.17 2009/09/22 16:21:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // G4 Model: optical elastic scattering with 4-momentum balance 
@@ -163,7 +163,8 @@ public:
   G4double ThetaLabToThetaCMS(const G4DynamicParticle* aParticle, 
                                 G4double tmass, G4double thetaLab);
 
-
+  void TestAngleTable(const G4ParticleDefinition* theParticle, G4double partMom,
+		      G4double Z, G4double A);
 
 
 
@@ -174,6 +175,7 @@ public:
 
   G4double GetDiffElasticProb(G4double theta);
   G4double GetDiffElasticSumProb(G4double theta);
+  G4double GetDiffElasticSumProbA(G4double alpha);
   G4double GetIntegrandFunction(G4double theta);
 
 
@@ -442,18 +444,18 @@ inline  G4double G4DiffuseElastic::CalculateNuclearRad( G4double A)
 {
   G4double r0;
 
-  if(A < 50.)
+  if( A < 50. )
   {
-    if(A > 10.) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
-    else        r0  = 1.1*fermi;
+    if( A > 10. ) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*fermi;   // 1.08*fermi;
+    else          r0  = 1.1*fermi;
 
     fNuclearRadius = r0*std::pow(A, 1./3.);
   }
   else
   {
-    r0 = 1.7*fermi;
+    r0 = 1.7*fermi;   // 1.7*fermi;
 
-    fNuclearRadius = r0*std::pow(A, 0.27);
+    fNuclearRadius = r0*std::pow(A, 0.27); // 0.27);
   }
   return fNuclearRadius;
 }

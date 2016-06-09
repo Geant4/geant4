@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizationHelper.cc,v 1.4 2007/11/01 17:30:25 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolarizationHelper.cc,v 1.5 2009/11/12 12:57:15 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // GEANT4 Class file
 //
@@ -96,9 +96,9 @@ G4ThreeVector G4PolarizationHelper::GetSpinInPRF(const G4ThreeVector &uZ, const 
   }
 
   G4double perp    = std::sqrt(sqr(uZ.x())+sqr(uZ.y()));
-  G4double invPerp = uZ.z()/perp;
+  G4double invPerp = 1./perp;
 
-  G4ThreeVector uX(uZ.x()*invPerp,uZ.y()*invPerp,-perp);
+  G4ThreeVector uX(uZ.x()*uZ.z()*invPerp,uZ.y()*uZ.z()*invPerp,-perp);
   G4ThreeVector uY(-uZ.y()*invPerp,uZ.x()*invPerp,0); 
   
   return G4ThreeVector(spin*uX,spin*uY,spin*uZ);
@@ -134,6 +134,8 @@ void G4PolarizationHelper::TestPolarizationTransformations()
     G4cout<<yAxis<<" "<<yAxis.mag()<<"\n";
     G4ThreeVector xAxis = yAxis.cross(zAxis);
     G4cout<<xAxis<<" "<<xAxis.mag()<<"\n\n";
+
+    G4cout<<"spat : "<<xAxis*yAxis.cross(zAxis)<<"\n\n";
   }
   G4cout<<"========================================\n\n";
 }

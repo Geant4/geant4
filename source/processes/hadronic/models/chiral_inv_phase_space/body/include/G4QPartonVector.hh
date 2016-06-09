@@ -24,19 +24,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPartonVector.hh,v 1.1 2006/10/30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QPartonVector.hh,v 1.2 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Oct 2006.
 // Type defenition for a Vector of Partons - output of CHIPS model
 // ---------------------------------------------------------------
+// Short description: The Quark-Gluon String consists of the partons, which
+// are quarks and some times gluons.
+// ------------------------------------------------------------------------
 
 #ifndef G4QPartonVector_h
 #define G4QPartonVector_h 1
 //
-// $Id: G4QPartonVector.hh,v 1.1 2006/10/30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QPartonVector.hh,v 1.2 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

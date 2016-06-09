@@ -23,19 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimIonICRU.cc,v 1.10 2006/06/29 16:23:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimIonICRU.cc,v 1.11 2009/11/12 05:12:18 cirrone Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #include "RemSimIonICRU.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
-#include "G4hLowEnergyIonisation.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
-#include "G4hLowEnergyLoss.hh"
+#include "G4ionIonisation.hh"
 #include "G4StepLimiter.hh"
+#include "G4IonParametrisedLossModel.hh"
 
 RemSimIonICRU::RemSimIonICRU(const G4String& name): G4VPhysicsConstructor(name)
 { }
@@ -54,30 +54,65 @@ void RemSimIonICRU::ConstructProcess()
       G4String particleName = particle -> GetParticleName();
       G4double charge = particle -> GetPDGCharge();
 
-      if (particleName  == "proton" || particleName == "GenericIon"
-          || particleName == "alpha" )
+      if (particleName  == "proton" 
+	  || particleName == "pi+"
+          || particleName == "pi-")
 	{
-	  G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
-	  G4VProcess*  multipleScattering = new G4MultipleScattering(); 
-	  manager -> AddProcess(multipleScattering, -1,1,1);   
-	  manager -> AddProcess(ionisation, -1,2,2);
+	  manager -> AddProcess(new G4hMultipleScattering, -1,1,1);   
+
+	  G4hIonisation* ionisation = new G4hIonisation();
+	  ionisation -> SetStepFunction(0.2, 50*um);
+	  manager -> AddProcess(ionisation, -1,2,2); 
+	  manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
+	}
+
+      else if(particleName == "alpha"      ||
+	      particleName == "deuteron"   ||
+	      particleName == "triton"     ||
+	      particleName == "He3")
+	{
+	  //multiple scattering
+	  manager->AddProcess(new G4hMultipleScattering,-1,1,1);
+	
+	  //ionisation
+	  G4ionIonisation* ionIoni = new G4ionIonisation();
+	  ionIoni->SetStepFunction(0.1, 20*um);
+	  manager->AddProcess(ionIoni,-1, 2, 2);
+	  manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
+	}
+
+      else if (particleName == "GenericIon")
+	{
+	  // OBJECT may be dynamically created as either a GenericIon or nucleus
+	  // G4Nucleus exists and therefore has particle type nucleus
+	  // genericIon:
+	
+	  //multiple scattering
+	  manager->AddProcess(new G4hMultipleScattering,-1,1,1);
+
+	  //ionisation
+	  G4ionIonisation* ionIoni = new G4ionIonisation();
+	  ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+	  ionIoni->SetStepFunction(0.1, 20*um);
+	  manager->AddProcess(ionIoni,-1, 2, 2);
 	  manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
 	}
       else{     
 	if (( charge != 0. ) && particleName != "e+" && particleName != "mu+" &&
-            particleName != "e-" && particleName != "mu-") 
+            particleName != "e-" && particleName != "mu-")
 	  {
 	    if((!particle -> IsShortLived()) &&
 	       (particle -> GetParticleName() != "chargedgeantino"))
 	      {
-		G4hLowEnergyIonisation* ionisation = new G4hLowEnergyIonisation();
-		G4VProcess*  multipleScattering = new G4MultipleScattering(); 
+		G4hIonisation* ionisation = new G4hIonisation();
+		G4VProcess*  multipleScattering = new G4hMultipleScattering(); 
 		manager -> AddProcess(multipleScattering, -1,1,1);   
 		manager -> AddProcess(ionisation, -1,2,2);
 		manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
 	      }
 	  }
-      }}
+      }
+    }
 }
 
    

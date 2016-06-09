@@ -1,4 +1,4 @@
-$Id: History,v 1.96 2008/04/30 10:05:31 allison Exp $
+$Id: History,v 1.104 2009/11/17 17:47:49 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,31 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+17th November 2009  John Allison  (openinventor-V09-02-03)
+- Tagged for vis tag.
+
+17th November 2009  Gabriele Cosmo
+- Fixed GNUmakefile.  Fixes build problem with gl2ps on Windows.
+
+29 September 2009  John Allison  (openinventor-V09-02-02)
+- Tagged.
+
+18 August 2009 Laurent Garnier
+ - G4OpenInventorXt/WinViewer : Fix a wrong initialization introduce by the 
+   new way of handling window size hints (January 2009)
+
+24 July 2009, Laurent Garnier
+ - Remove Geant4_gl2ps.h gl2ps.cc gl2ps.h which were copied in external/gl2ps
+   in february but forgot to remove them from OpenInventor
+
+18 February 2009, Laurent Garnier (openinventor-V09-02-01)
+ - Bug fix in gl2ps drawing
+
+16 February 2009, Laurent Garnier
+ - Modifications in GNUMakefile for gl2ps.
+ - SoGL2PSAction Modified.
+ - G4OpenInventorViewer.cc add a protection on file writing in gl2ps
 
 30th April 2008  John Allison  (openinventor-V09-01-01)
 - Fixes more gcc-4.3.0 compiler warnings.

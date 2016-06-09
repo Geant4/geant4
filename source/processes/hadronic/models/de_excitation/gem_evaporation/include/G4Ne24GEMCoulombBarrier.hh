@@ -24,22 +24,30 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ne24GEMCoulombBarrier.hh,v 1.3 2006/06/29 20:19:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Ne24GEMCoulombBarrier.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
-
+//
+//J.M. Quesada (July 2009) Coulomb barrier now derives from new class G4GEMCoulombBarrier
+// strictly according to Furihata's report
+//
 #ifndef G4Ne24GEMCoulombBarrier_h
 #define G4Ne24GEMCoulombBarrier_h 1
 
-#include "G4GEMCoulombBarrierHE.hh"
+//#include "G4GEMCoulombBarrierHE.hh"
+#include "G4GEMCoulombBarrier.hh"
 #include "globals.hh"
 
-class G4Ne24GEMCoulombBarrier : public G4GEMCoulombBarrierHE
+//JMQ 200709 now derives from new class G4GEMCoulombBarrier
+//class G4Ne24GEMCoulombBarrier : public G4GEMCoulombBarrierHE
+class G4Ne24GEMCoulombBarrier : public G4GEMCoulombBarrier
 {
 public:
-  G4Ne24GEMCoulombBarrier() : G4GEMCoulombBarrierHE(24,10) {};
+//JMQ 200709
+//  G4Ne24GEMCoulombBarrier() : G4GEMCoulombBarrierHE(24,10) {};
+  G4Ne24GEMCoulombBarrier() : G4GEMCoulombBarrier(24,10) {};
   ~G4Ne24GEMCoulombBarrier() {};
 
 private:

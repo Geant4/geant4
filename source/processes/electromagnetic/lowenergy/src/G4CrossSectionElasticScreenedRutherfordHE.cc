@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionElasticScreenedRutherfordHE.cc,v 1.2 2008/07/14 20:47:34 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CrossSectionElasticScreenedRutherfordHE.cc,v 1.5 2009/06/11 15:47:08 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #include "G4CrossSectionElasticScreenedRutherfordHE.hh"
 
@@ -34,6 +34,16 @@ G4CrossSectionElasticScreenedRutherfordHE::G4CrossSectionElasticScreenedRutherfo
 {
   lowEnergyLimit = 200. * eV; 
   highEnergyLimit = 10. * MeV;
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4CrossSectionElasticScreenedRutherfordHE is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

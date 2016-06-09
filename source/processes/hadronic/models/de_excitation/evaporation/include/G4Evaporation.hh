@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.hh,v 1.5 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Evaporation.hh,v 1.7 2009/07/27 10:32:05 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 //
 //
 // Alex Howard - added protection for negative probabilities in the sum, 14/2/07
+// V.Ivanchenko - added Combined decay channels (default + GEM) 27/07/09
 
 #ifndef G4Evaporation_h
 #define G4Evaporation_h 1
@@ -54,7 +55,7 @@ public:
     theChannels(aChannelsVector), theChannelFactory(0)
   {};
 	 
-  ~G4Evaporation();
+  virtual ~G4Evaporation();
 
 private:
   G4Evaporation(const G4Evaporation &right);
@@ -68,6 +69,7 @@ public:
 
   void SetDefaultChannel();
   void SetGEMChannel();
+  void SetCombinedChannel();
 
 #ifdef debug
   void CheckConservation(const G4Fragment & theInitialState,

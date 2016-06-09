@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundFragmentVector.hh,v 1.4 2008/09/22 10:18:36 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PreCompoundFragmentVector.hh,v 1.6 2009/02/10 16:01:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara
@@ -38,10 +38,7 @@
 #ifndef G4PreCompoundFragmentVector_h
 #define G4PreCompoundFragmentVector_h 1
 
-
 #include "G4VPreCompoundFragment.hh"
-
-
 
 class G4PreCompoundFragmentVector 
 {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.hh,v 1.4 2007/05/02 10:48:52 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NistMessenger.hh,v 1.5 2009/10/30 18:01:22 bagoulia Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // File name:     G4NistMessenger
 //
@@ -102,8 +102,8 @@ private:
     
   G4UIdirectory*             g4Dir;
   G4UIcmdWithAString*        g4ElmCmd;   
-  G4UIcmdWithAString*        g4MatCmd;     
-
+  G4UIcmdWithAString*        g4MatCmd;
+  G4UIcmdWithAString*        g4DensCmd;    
 };
 
 #endif

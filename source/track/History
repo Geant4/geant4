@@ -1,4 +1,4 @@
-$Id: History,v 1.102 2008/10/24 08:22:20 kurasige Exp $
+$Id: History,v 1.107 2009/10/19 09:37:00 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct. 19, 2009 Hisaya Kurashige (track-V09-02-04)
+added a string prooperty to indicate type of UserTrackInformation
+
+
+June 18, 2009 Hisaya Kurashige (track-V09-02-03)
+added SetLowEnergyLimit method (Vladimir)
+
+
+May.  27, 2009 Hisaya Kurashige (track-V09-02-02)
+- Add lowEnergyLimit = 1 eV in lowEnergyLimit = 1 eV (Vladimir)
+
+Apr.  2, 2009 Hisaya Kurashige (track-V09-02-01)
+- Add protection for the case mass==0 and T==0 in GetVelocity
+
+Apr.  2, 2009 Hisaya Kurashige (track-V09-02-00)
+- Modify GetVelocity to improve performance 
+
 Oct. 24, 2008 Hisaya Kurashige (track-V09-01-02)
 - change fpCreatorProcess and fpLCAtVertex in G4Track to  'const' pointer   
 - change fpProcessDefinedStep in G4StepPoint to  'const' pointer   

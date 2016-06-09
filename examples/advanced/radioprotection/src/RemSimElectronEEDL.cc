@@ -23,17 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimElectronEEDL.cc,v 1.6 2006/06/29 16:23:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimElectronEEDL.cc,v 1.7 2009/11/12 05:12:18 cirrone Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Susanna Guatelli, guatelloi@ge.infn.it
 
 #include "RemSimElectronEEDL.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
+// e-
+#include "G4eMultipleScattering.hh"
+#include "G4eIonisation.hh"
+#include "G4LivermoreIonisationModel.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4LivermoreBremsstrahlungModel.hh"
 #include "G4StepLimiter.hh"
 
 RemSimElectronEEDL::RemSimElectronEEDL(const G4String& name): G4VPhysicsConstructor(name)
@@ -51,15 +54,28 @@ void RemSimElectronEEDL::ConstructProcess()
   while( (*theParticleIterator)() )
     {
       G4ParticleDefinition* particle = theParticleIterator -> value();
-      G4ProcessManager* manager = particle -> GetProcessManager();
+      G4ProcessManager* pmanager = particle -> GetProcessManager();
       G4String particleName = particle -> GetParticleName();
      
       if (particleName == "e-") 
 	{
-	  manager -> AddProcess(new G4MultipleScattering,     -1, 1,1);
-	  manager -> AddProcess(new G4LowEnergyIonisation,    -1, 2,2);
-	  manager -> AddProcess(new G4LowEnergyBremsstrahlung,-1,-1,3);
-          manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
+	  G4eMultipleScattering* msc = new G4eMultipleScattering();
+	  msc->SetStepLimitType(fUseDistanceToBoundary);
+	  pmanager->AddProcess(msc,-1, 1, 1);
+
+	  // Ionisation
+	  G4eIonisation* eIonisation = new G4eIonisation();
+	  eIonisation->SetEmModel(new G4LivermoreIonisationModel());
+	  eIonisation->SetStepFunction(0.2, 100*um); //improved precision in tracking  
+	  pmanager->AddProcess(eIonisation,-1, 2, 2);
+	
+	  // Bremsstrahlung
+	  G4eBremsstrahlung* eBremsstrahlung = new G4eBremsstrahlung();
+	  eBremsstrahlung->SetEmModel(new G4LivermoreBremsstrahlungModel());
+	  pmanager->AddProcess(eBremsstrahlung, -1,-3, 3);
+
+	  // Step Limiter
+	  pmanager -> AddProcess(new G4StepLimiter(),  -1,-1,3);
 	}   
     }
 }

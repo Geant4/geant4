@@ -1,8 +1,0 @@
-/radmon/detector/SetRelativePlacementPosition detector01 packaging -1.8 1.8 {Det-Height-Rel-Pkg}
-/radmon/detector/SetRelativePlacementRotation detector01 packaging 0. 0. 0. deg
-/radmon/detector/SetRelativePlacementPosition detector02 packaging 1.8 -1.8 {Det-Height-Rel-Pkg}
-/radmon/detector/SetRelativePlacementRotation detector02 packaging 0. 0. 0. deg
-/radmon/detector/SetRelativePlacementPosition detector03 packaging 1.2 1.2 {Det2-Height-Rel-Pkg}
-/radmon/detector/SetRelativePlacementRotation detector03 packaging 0. 0. 45. deg
-/radmon/detector/SetRelativePlacementPosition detector04 packaging -1.2 -1.2 {Det2-Height-Rel-Pkg}
-/radmon/detector/SetRelativePlacementRotation detector04 packaging 0. 0. 45. deg

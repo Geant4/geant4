@@ -239,7 +239,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   centreCmd1->SetGuidance("   same effect as the /gps/position command");
   centreCmd1->SetParameterName("X","Y","Z",true,true);
   centreCmd1->SetDefaultUnit("cm");
-  centreCmd1->SetUnitCandidates("micron mm cm m km");
+  //  centreCmd1->SetUnitCandidates("micron mm cm m km");
 
   posrot1Cmd1 = new G4UIcmdWith3Vector("/gps/pos/rot1",this);
   posrot1Cmd1->SetGuidance("Set the 1st vector defining the rotation matrix'.");
@@ -257,70 +257,70 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   halfxCmd1->SetGuidance("Set x half length of source.");
   halfxCmd1->SetParameterName("Halfx",true,true);
   halfxCmd1->SetDefaultUnit("cm");
-  halfxCmd1->SetUnitCandidates("micron mm cm m km");
+  //  halfxCmd1->SetUnitCandidates("micron mm cm m km");
 
   halfyCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/halfy",this);
   halfyCmd1->SetGuidance("Set y half length of source.");
   halfyCmd1->SetParameterName("Halfy",true,true);
   halfyCmd1->SetDefaultUnit("cm");
-  halfyCmd1->SetUnitCandidates("micron mm cm m km");
+  //  halfyCmd1->SetUnitCandidates("micron mm cm m km");
 
   halfzCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/halfz",this);
   halfzCmd1->SetGuidance("Set z half length of source.");
   halfzCmd1->SetParameterName("Halfz",true,true);
   halfzCmd1->SetDefaultUnit("cm");
-  halfzCmd1->SetUnitCandidates("micron mm cm m km");
+  //  halfzCmd1->SetUnitCandidates("micron mm cm m km");
 
   radiusCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/radius",this);
   radiusCmd1->SetGuidance("Set radius of source.");
   radiusCmd1->SetParameterName("Radius",true,true);
   radiusCmd1->SetDefaultUnit("cm");
-  radiusCmd1->SetUnitCandidates("micron mm cm m km");
+  //  radiusCmd1->SetUnitCandidates("micron mm cm m km");
 
   radius0Cmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/inner_radius",this);
   radius0Cmd1->SetGuidance("Set inner radius of source when required.");
   radius0Cmd1->SetParameterName("Radius0",true,true);
   radius0Cmd1->SetDefaultUnit("cm");
-  radius0Cmd1->SetUnitCandidates("micron mm cm m km");
+  //  radius0Cmd1->SetUnitCandidates("micron mm cm m km");
 
   possigmarCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/sigma_r",this);
   possigmarCmd1->SetGuidance("Set standard deviation in radial of the beam positional profile");
   possigmarCmd1->SetGuidance(" applicable to Beam type source only");
   possigmarCmd1->SetParameterName("Sigmar",true,true);
   possigmarCmd1->SetDefaultUnit("cm");
-  possigmarCmd1->SetUnitCandidates("micron mm cm m km");
+  //  possigmarCmd1->SetUnitCandidates("micron mm cm m km");
 
   possigmaxCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/sigma_x",this);
   possigmaxCmd1->SetGuidance("Set standard deviation of beam positional profile in x-dir");
   possigmaxCmd1->SetGuidance(" applicable to Beam type source only");
   possigmaxCmd1->SetParameterName("Sigmax",true,true);
   possigmaxCmd1->SetDefaultUnit("cm");
-  possigmaxCmd1->SetUnitCandidates("micron mm cm m km");
+  //  possigmaxCmd1->SetUnitCandidates("micron mm cm m km");
 
   possigmayCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/sigma_y",this);
   possigmayCmd1->SetGuidance("Set standard deviation of beam positional profile in y-dir");
   possigmayCmd1->SetGuidance(" applicable to Beam type source only");
   possigmayCmd1->SetParameterName("Sigmay",true,true);
   possigmayCmd1->SetDefaultUnit("cm");
-  possigmayCmd1->SetUnitCandidates("micron mm cm m km");
+  //  possigmayCmd1->SetUnitCandidates("micron mm cm m km");
 
   paralpCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/paralp",this);
   paralpCmd1->SetGuidance("Angle from y-axis of y' in Para");
   paralpCmd1->SetParameterName("paralp",true,true);
   paralpCmd1->SetDefaultUnit("rad");
-  paralpCmd1->SetUnitCandidates("rad deg");
+  //  paralpCmd1->SetUnitCandidates("rad deg");
 
   partheCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/parthe",this);
   partheCmd1->SetGuidance("Polar angle through centres of z faces");
   partheCmd1->SetParameterName("parthe",true,true);
   partheCmd1->SetDefaultUnit("rad");
-  partheCmd1->SetUnitCandidates("rad deg");
+  //  partheCmd1->SetUnitCandidates("rad deg");
 
   parphiCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/pos/parphi",this);
   parphiCmd1->SetGuidance("Azimuth angle through centres of z faces");
   parphiCmd1->SetParameterName("parphi",true,true);
   parphiCmd1->SetDefaultUnit("rad");
-  parphiCmd1->SetUnitCandidates("rad deg");
+  //  parphiCmd1->SetUnitCandidates("rad deg");
 
   confineCmd1 = new G4UIcmdWithAString("/gps/pos/confine",this);
   confineCmd1->SetGuidance("Confine source to volume (NULL to unset).");
@@ -346,7 +346,7 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   centreCmd->SetGuidance("Set centre coordinates of source.(obsolete!)");
   centreCmd->SetParameterName("X","Y","Z",true,true);
   centreCmd->SetDefaultUnit("cm");
-  centreCmd->SetUnitCandidates("micron mm cm m km");
+  //  centreCmd->SetUnitCandidates("micron mm cm m km");
 
   posrot1Cmd = new G4UIcmdWith3Vector("/gps/posrot1",this);
   posrot1Cmd->SetGuidance("Set rotation matrix of x'.(obsolete!)");
@@ -364,67 +364,67 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   halfxCmd->SetGuidance("Set x half length of source.(obsolete!)");
   halfxCmd->SetParameterName("Halfx",true,true);
   halfxCmd->SetDefaultUnit("cm");
-  halfxCmd->SetUnitCandidates("micron mm cm m km");
+  //  halfxCmd->SetUnitCandidates("micron mm cm m km");
 
   halfyCmd = new G4UIcmdWithADoubleAndUnit("/gps/halfy",this);
   halfyCmd->SetGuidance("Set y half length of source.(obsolete!)");
   halfyCmd->SetParameterName("Halfy",true,true);
   halfyCmd->SetDefaultUnit("cm");
-  halfyCmd->SetUnitCandidates("micron mm cm m km");
+  //  halfyCmd->SetUnitCandidates("micron mm cm m km");
 
   halfzCmd = new G4UIcmdWithADoubleAndUnit("/gps/halfz",this);
   halfzCmd->SetGuidance("Set z half length of source.(obsolete!)");
   halfzCmd->SetParameterName("Halfz",true,true);
   halfzCmd->SetDefaultUnit("cm");
-  halfzCmd->SetUnitCandidates("micron mm cm m km");
+  //  halfzCmd->SetUnitCandidates("micron mm cm m km");
 
   radiusCmd = new G4UIcmdWithADoubleAndUnit("/gps/radius",this);
   radiusCmd->SetGuidance("Set radius of source.(obsolete!)");
   radiusCmd->SetParameterName("Radius",true,true);
   radiusCmd->SetDefaultUnit("cm");
-  radiusCmd->SetUnitCandidates("micron mm cm m km");
+  //  radiusCmd->SetUnitCandidates("micron mm cm m km");
 
   radius0Cmd = new G4UIcmdWithADoubleAndUnit("/gps/radius0",this);
   radius0Cmd->SetGuidance("Set inner radius of source.(obsolete!)");
   radius0Cmd->SetParameterName("Radius0",true,true);
   radius0Cmd->SetDefaultUnit("cm");
-  radius0Cmd->SetUnitCandidates("micron mm cm m km");
+  //  radius0Cmd->SetUnitCandidates("micron mm cm m km");
 
   possigmarCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaposr",this);
   possigmarCmd->SetGuidance("Set standard deviation of beam position in radial(obsolete!)");
   possigmarCmd->SetParameterName("Sigmar",true,true);
   possigmarCmd->SetDefaultUnit("cm");
-  possigmarCmd->SetUnitCandidates("micron mm cm m km");
+  // possigmarCmd->SetUnitCandidates("micron mm cm m km");
 
   possigmaxCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaposx",this);
   possigmaxCmd->SetGuidance("Set standard deviation of beam position in x-dir(obsolete!)");
   possigmaxCmd->SetParameterName("Sigmax",true,true);
   possigmaxCmd->SetDefaultUnit("cm");
-  possigmaxCmd->SetUnitCandidates("micron mm cm m km");
+  //  possigmaxCmd->SetUnitCandidates("micron mm cm m km");
 
   possigmayCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaposy",this);
   possigmayCmd->SetGuidance("Set standard deviation of beam position in y-dir(obsolete!)");
   possigmayCmd->SetParameterName("Sigmay",true,true);
   possigmayCmd->SetDefaultUnit("cm");
-  possigmayCmd->SetUnitCandidates("micron mm cm m km");
+  //  possigmayCmd->SetUnitCandidates("micron mm cm m km");
 
   paralpCmd = new G4UIcmdWithADoubleAndUnit("/gps/paralp",this);
   paralpCmd->SetGuidance("Angle from y-axis of y' in Para(obsolete!)");
   paralpCmd->SetParameterName("paralp",true,true);
   paralpCmd->SetDefaultUnit("rad");
-  paralpCmd->SetUnitCandidates("rad deg");
+  //  paralpCmd->SetUnitCandidates("rad deg");
 
   partheCmd = new G4UIcmdWithADoubleAndUnit("/gps/parthe",this);
   partheCmd->SetGuidance("Polar angle through centres of z faces(obsolete!)");
   partheCmd->SetParameterName("parthe",true,true);
   partheCmd->SetDefaultUnit("rad");
-  partheCmd->SetUnitCandidates("rad deg");
+  //  partheCmd->SetUnitCandidates("rad deg");
 
   parphiCmd = new G4UIcmdWithADoubleAndUnit("/gps/parphi",this);
   parphiCmd->SetGuidance("Azimuth angle through centres of z faces(obsolete!)");
   parphiCmd->SetParameterName("parphi",true,true);
   parphiCmd->SetDefaultUnit("rad");
-  parphiCmd->SetUnitCandidates("rad deg");
+  //  parphiCmd->SetUnitCandidates("rad deg");
 
   confineCmd = new G4UIcmdWithAString("/gps/confine",this);
   confineCmd->SetGuidance("Confine source to volume (NULL to unset)(obsolete!) .");
@@ -460,51 +460,51 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   minthetaCmd1->SetParameterName("MinTheta",true,true);
   minthetaCmd1->SetDefaultValue(0.);
   minthetaCmd1->SetDefaultUnit("rad");
-  minthetaCmd1->SetUnitCandidates("rad deg");
+  //  minthetaCmd1->SetUnitCandidates("rad deg");
 
   maxthetaCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/maxtheta",this);
   maxthetaCmd1->SetGuidance("Set maximum theta");
   maxthetaCmd1->SetParameterName("MaxTheta",true,true);
   maxthetaCmd1->SetDefaultValue(pi);
   maxthetaCmd1->SetDefaultUnit("rad");
-  maxthetaCmd1->SetUnitCandidates("rad deg");
+  //  maxthetaCmd1->SetUnitCandidates("rad deg");
 
   minphiCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/minphi",this);
   minphiCmd1->SetGuidance("Set minimum phi");
   minphiCmd1->SetParameterName("MinPhi",true,true);
   minphiCmd1->SetDefaultUnit("rad");
-  minphiCmd1->SetUnitCandidates("rad deg");
+  //  minphiCmd1->SetUnitCandidates("rad deg");
 
   maxphiCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/maxphi",this);
   maxphiCmd1->SetGuidance("Set maximum phi");
   maxphiCmd1->SetParameterName("MaxPhi",true,true);
   maxphiCmd1->SetDefaultValue(pi);
   maxphiCmd1->SetDefaultUnit("rad");
-  maxphiCmd1->SetUnitCandidates("rad deg");
+  //  maxphiCmd1->SetUnitCandidates("rad deg");
 
   angsigmarCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/sigma_r",this);
   angsigmarCmd1->SetGuidance("Set standard deviation in direction for 1D beam.");
   angsigmarCmd1->SetParameterName("Sigmara",true,true);
   angsigmarCmd1->SetDefaultUnit("rad");
-  angsigmarCmd1->SetUnitCandidates("rad deg");
+  //  angsigmarCmd1->SetUnitCandidates("rad deg");
   
   angsigmaxCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/sigma_x",this);
   angsigmaxCmd1->SetGuidance("Set standard deviation in direction in x-direc. for 2D beam");
   angsigmaxCmd1->SetParameterName("Sigmaxa",true,true);
   angsigmaxCmd1->SetDefaultUnit("rad");
-  angsigmaxCmd1->SetUnitCandidates("rad deg");
+  //  angsigmaxCmd1->SetUnitCandidates("rad deg");
 
   angsigmayCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ang/sigma_y",this);
   angsigmayCmd1->SetGuidance("Set standard deviation in direction in y-direc. for 2D beam");
   angsigmayCmd1->SetParameterName("Sigmaya",true,true);
   angsigmayCmd1->SetDefaultUnit("rad");
-  angsigmayCmd1->SetUnitCandidates("rad deg");
+  //  angsigmayCmd1->SetUnitCandidates("rad deg");
 
   angfocusCmd = new G4UIcmdWith3VectorAndUnit("/gps/ang/focuspoint",this);
   angfocusCmd->SetGuidance("Set the focusing point for the beam");
   angfocusCmd->SetParameterName("x","y","z",true,true);
   angfocusCmd->SetDefaultUnit("cm");
-  angfocusCmd->SetUnitCandidates("micron mm cm m km");
+  //  angfocusCmd->SetUnitCandidates("micron mm cm m km");
 
   useuserangaxisCmd1 = new G4UIcmdWithABool("/gps/ang/user_coor",this);
   useuserangaxisCmd1->SetGuidance("true for using user defined angular co-ordinates");
@@ -542,44 +542,44 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   minthetaCmd->SetGuidance("Set minimum theta (obsolete!)");
   minthetaCmd->SetParameterName("MinTheta",true,true);
   minthetaCmd->SetDefaultUnit("rad");
-  minthetaCmd->SetUnitCandidates("rad deg");
+  //  minthetaCmd->SetUnitCandidates("rad deg");
 
   maxthetaCmd = new G4UIcmdWithADoubleAndUnit("/gps/maxtheta",this);
   maxthetaCmd->SetGuidance("Set maximum theta (obsolete!)");
   maxthetaCmd->SetParameterName("MaxTheta",true,true);
   maxthetaCmd->SetDefaultValue(3.1416);
   maxthetaCmd->SetDefaultUnit("rad");
-  maxthetaCmd->SetUnitCandidates("rad deg");
+  //  maxthetaCmd->SetUnitCandidates("rad deg");
 
   minphiCmd = new G4UIcmdWithADoubleAndUnit("/gps/minphi",this);
   minphiCmd->SetGuidance("Set minimum phi (obsolete!)");
   minphiCmd->SetParameterName("MinPhi",true,true);
   minphiCmd->SetDefaultUnit("rad");
-  minphiCmd->SetUnitCandidates("rad deg");
+  //  minphiCmd->SetUnitCandidates("rad deg");
 
   maxphiCmd = new G4UIcmdWithADoubleAndUnit("/gps/maxphi",this);
   maxphiCmd->SetGuidance("Set maximum phi(obsolete!)");
   maxphiCmd->SetParameterName("MaxPhi",true,true);
   maxphiCmd->SetDefaultUnit("rad");
-  maxphiCmd->SetUnitCandidates("rad deg");
+  //  maxphiCmd->SetUnitCandidates("rad deg");
 
   angsigmarCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaangr",this);
   angsigmarCmd->SetGuidance("Set standard deviation of beam direction in radial(obsolete!).");
   angsigmarCmd->SetParameterName("Sigmara",true,true);
   angsigmarCmd->SetDefaultUnit("rad");
-  angsigmarCmd->SetUnitCandidates("rad deg");
+  //  angsigmarCmd->SetUnitCandidates("rad deg");
 
   angsigmaxCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaangx",this);
   angsigmaxCmd->SetGuidance("Set standard deviation of beam direction in x-direc(obsolete!).");
   angsigmaxCmd->SetParameterName("Sigmaxa",true,true);
   angsigmaxCmd->SetDefaultUnit("rad");
-  angsigmaxCmd->SetUnitCandidates("rad deg");
+  //  angsigmaxCmd->SetUnitCandidates("rad deg");
 
   angsigmayCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmaangy",this);
   angsigmayCmd->SetGuidance("Set standard deviation of beam direction in y-direc.(obsolete!)");
   angsigmayCmd->SetParameterName("Sigmaya",true,true);
   angsigmayCmd->SetDefaultUnit("rad");
-  angsigmayCmd->SetUnitCandidates("rad deg");
+  //  angsigmayCmd->SetUnitCandidates("rad deg");
 
   useuserangaxisCmd = new G4UIcmdWithABool("/gps/useuserangaxis",this);
   useuserangaxisCmd->SetGuidance("true for using user defined angular co-ordinates(obsolete!)");
@@ -608,25 +608,25 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   eminCmd1->SetGuidance("Sets minimum energy");
   eminCmd1->SetParameterName("emin",true,true);
   eminCmd1->SetDefaultUnit("keV");
-  eminCmd1->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  //  eminCmd1->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
   emaxCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ene/max",this);
   emaxCmd1->SetGuidance("Sets maximum energy");
   emaxCmd1->SetParameterName("emax",true,true);
   emaxCmd1->SetDefaultUnit("keV");
-  emaxCmd1->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  //  emaxCmd1->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
   monoenergyCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ene/mono",this);
   monoenergyCmd1->SetGuidance("Sets a monocromatic energy (same as  gps/energy)");
   monoenergyCmd1->SetParameterName("monoenergy",true,true);
   monoenergyCmd1->SetDefaultUnit("keV");
-  monoenergyCmd1->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  //  monoenergyCmd1->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
   engsigmaCmd1 = new G4UIcmdWithADoubleAndUnit("/gps/ene/sigma",this);
   engsigmaCmd1->SetGuidance("Sets the standard deviation for Gaussian energy dist.");
   engsigmaCmd1->SetParameterName("Sigmae",true,true);
   engsigmaCmd1->SetDefaultUnit("keV");
-  engsigmaCmd1->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  //  engsigmaCmd1->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
   alphaCmd1 = new G4UIcmdWithADouble("/gps/ene/alpha",this);
   alphaCmd1->SetGuidance("Sets Alpha (index) for power-law energy dist.");
@@ -672,25 +672,25 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   eminCmd->SetGuidance("Sets Emin (obsolete!)");
   eminCmd->SetParameterName("emin",true,true);
   eminCmd->SetDefaultUnit("keV");
-  eminCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  //  eminCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
   emaxCmd = new G4UIcmdWithADoubleAndUnit("/gps/emax",this);
   emaxCmd->SetGuidance("Sets Emax (obsolete!)");
   emaxCmd->SetParameterName("emax",true,true);
   emaxCmd->SetDefaultUnit("keV");
-  emaxCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  //  emaxCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
   monoenergyCmd = new G4UIcmdWithADoubleAndUnit("/gps/monoenergy",this);
   monoenergyCmd->SetGuidance("Sets Monoenergy (obsolete, use gps/energy instead!)");
   monoenergyCmd->SetParameterName("monoenergy",true,true);
   monoenergyCmd->SetDefaultUnit("keV");
-  monoenergyCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  //  monoenergyCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
   engsigmaCmd = new G4UIcmdWithADoubleAndUnit("/gps/sigmae",this);
   engsigmaCmd->SetGuidance("Sets the standard deviation for Gaussian energy dist.(obsolete!)");
   engsigmaCmd->SetParameterName("Sigmae",true,true);
   engsigmaCmd->SetDefaultUnit("keV");
-  engsigmaCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
+  //  engsigmaCmd->SetUnitCandidates("eV keV MeV GeV TeV PeV");
 
   alphaCmd = new G4UIcmdWithADouble("/gps/alpha",this);
   alphaCmd->SetGuidance("Sets Alpha (index) for power-law energy dist(obsolete!).");

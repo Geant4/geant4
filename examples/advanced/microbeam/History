@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.19 2008/10/23 11:12:12 sincerti Exp $
+$Id: History,v 1.21 2009/04/30 10:23:57 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,14 @@ $Id: History,v 1.19 2008/10/23 11:12:12 sincerti Exp $
                        Package History file
                        --------------------
 
+30 April 2009 - S. Incerti - tag microbeam-V09-02-01
+- Updated Physics list to migrated Livermore processes
+- Corrected plot.C
+- Corrected switching field value 
+
+26 February 2009 - G.Folger  - tag microbeam-V09-02-00
+- Correct  MicrobeamEMField.cc to use logical &&, not bit & in if().
+ 
 23 October 2008 - tag microbeam-V09-01-03
 - Corrected typos in zero field region in MicrobeamEMField.cc
 

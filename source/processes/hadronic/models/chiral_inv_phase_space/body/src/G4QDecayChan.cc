@@ -24,12 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChan.cc,v 1.27 2006/11/27 10:44:54 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QDecayChan.cc,v 1.28 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QDecayChan ----------------
 //             by Mikhail Kossov, Sept 1999.
 //      class for Decay Channels of Hadrons in CHIPS Model
+// -------------------------------------------------------------------
+// Short description: In the CHIPS World the particles (G4QParticle)
+// are defined. For unstable particles there is a G4QDecayChannelVector
+// which describes different channels of decay for the particular
+// particle. So the G4QDecayChannel class is the class for the description
+// of such a decay channel in two or three particles (the secondaries can
+// be unstable too and have firther decay).
 // -------------------------------------------------------------------
  
 //#define debug
@@ -57,8 +64,8 @@ G4QDecayChan::G4QDecayChan(G4double pLev, G4int PDG1, G4int PDG2, G4int PDG3):
     aVecOfSecHadrons.push_back(thirdPDG);
   }
 #ifdef debug
-  cout<<"G4QDecayChan is defined with pL="<<pLev<<",1="<<PDG1<<",2="<<PDG2<<",3="<<PDG3
-      <<",m1="<<firstPDG->GetMass()<<",m2="<<secondPDG->GetMass()<<",minM="<<theMinMass<<endl;
+  G4cout<<"G4QDecayChan is defined with pL="<<pLev<<",1="<<PDG1<<",2="<<PDG2<<",3="<<PDG3
+      <<",m1="<<firstPDG->GetMass()<<",m2="<<secondPDG->GetMass()<<",minM="<<theMinMass<<G4endl;
 #endif
 }
 

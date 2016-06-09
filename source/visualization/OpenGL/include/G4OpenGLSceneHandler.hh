@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.24 2008/01/04 22:07:01 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLSceneHandler.hh,v 1.27 2009/10/21 15:18:14 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -38,13 +38,12 @@
 #define G4OPENGLSCENEHANDLER_HH
 
 #include "globals.hh"
-#include "G4RotationMatrix.hh"
-
-#include "G4OpenGL.hh"
 
 #include "G4VSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
 #include "G4OpenGLBitMapStore.hh"
+#include <GL/gl.h>
+#include <GL/glu.h>
+
 #include <map>
 
 class G4AttHolder;
@@ -83,6 +82,7 @@ public:
   void AddSolid (const G4VSolid&);
   void AddCompound (const G4VTrajectory&);
   void AddCompound (const G4VHit&);
+  void AddCompound (const G4THitsMap<G4double>&);
 
 protected:
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.9 2006/06/29 16:56:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.hh,v 1.10 2009/11/27 14:54:58 hbu Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
+#include "ProcessesCount.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,13 +57,15 @@ class RunAction : public G4UserRunAction
   public:
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
-    
+    void     CountProcesses(G4String);
+
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
     
   private:
     AIDA::IAnalysisFactory* af;          
     AIDA::ITree* tree;
     AIDA::IHistogram1D* histo[6];
+    ProcessesCount*     ProcCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

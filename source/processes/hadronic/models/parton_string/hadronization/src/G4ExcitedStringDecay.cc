@@ -133,7 +133,7 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
 	break;
       }
     }
-    
+#ifdef debug_G4ExcitedStringDecay     
     if(!success)
     {
       G4cout << "G4ExcitedStringDecay::EnergyAndMomentumCorrector - Warning"<<G4endl;
@@ -143,9 +143,16 @@ EnergyAndMomentumCorrector(G4KineticTrackVector* Output, G4LorentzVector& TotalC
       G4cout << "   Increase number of attempts or increase ERRLIMIT"<<G4endl;
 //       throw G4HadronicException(__FILE__, __LINE__, "G4ExcitedStringDecay failed to correct...");
     }
-
+#endif     
     // Compute c.m.s. interaction velocity and KTV back boost   
     Beta = TotalCollisionMom.boostVector();
     Output->Boost(Beta);
+/* // Uzhi
+G4cout<<"Number of produced hadrons // correct E and P "<<Output->size()<<G4endl; // Uzhi
+    for(cHadron = 0; cHadron < Output->size(); cHadron++)
+    {
+G4cout<<cHadron<<" "<<Output->operator[](cHadron)->Get4Momentum()<<" "<<Output->operator[](cHadron)->Get4Momentum().mag()<<Output->operator[](cHadron)->GetDefinition()->GetParticleName()<<G4endl;  
+    }
+*/ // Uzhi
     return success;
   }

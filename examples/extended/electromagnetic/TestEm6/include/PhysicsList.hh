@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.7 2006/06/29 16:56:45 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.hh,v 1.8 2009/11/27 14:54:58 hbu Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,9 +67,6 @@ class PhysicsList: public G4VUserPhysicsList
 
   private:
      PhysicsListMessenger*  pMes;
-     G4GammaConversionToMuons* theGammaToMuPairProcess;
-     G4AnnihiToMuPair*         theAnnihiToMuPairProcess;
-     G4eeToHadrons*            eehadProcess;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

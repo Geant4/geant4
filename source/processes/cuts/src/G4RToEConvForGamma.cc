@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForGamma.cc,v 1.4 2006/06/29 19:30:24 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RToEConvForGamma.cc,v 1.6 2009/09/12 12:09:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------
@@ -52,7 +52,6 @@ G4RToEConvForGamma::G4RToEConvForGamma() : G4VRangeToEnergyConverter()
     }
 #endif
   } 
-  TotBin = 100;
 }
 
 G4RToEConvForGamma::~G4RToEConvForGamma()
@@ -65,8 +64,6 @@ G4RToEConvForGamma::~G4RToEConvForGamma()
 // ***********************************************************************
 void G4RToEConvForGamma::BuildAbsorptionLengthVector(
                             const G4Material* aMaterial,
-                            G4double       ,     
-                            G4double       ,
                             G4RangeVector* absorptionLengthVector )
 {
   // fill the absorption length vector for this material
@@ -81,20 +78,26 @@ void G4RToEConvForGamma::BuildAbsorptionLengthVector(
   //  fill absorption length vector
   G4int NumEl = aMaterial->GetNumberOfElements();
   G4double absorptionLengthMax = 0.0;
+  G4double previous = 0.;
   for (size_t ibin=0; ibin<size_t(TotBin); ibin++) {
-    G4double lowEdgeEnergy = absorptionLengthVector->GetLowEdgeEnergy(ibin);
-    
     G4double SIGMA = 0. ;
-    
     for (size_t iel=0; iel<size_t(NumEl); iel++) {
-      G4bool isOut;
       G4int IndEl = (*elementVector)[iel]->GetIndex();
       SIGMA +=  atomicNumDensityVector[iel]*
-	           (*aCrossSectionTable)[IndEl]->GetValue(lowEdgeEnergy,isOut);
+	           (*((*aCrossSectionTable)[IndEl]))[ibin];
     }
     //  absorption length=5./SIGMA
     absorptionLengthVector->PutValue(ibin, 5./SIGMA);
     if (absorptionLengthMax < 5./SIGMA ) absorptionLengthMax = 5./SIGMA;
+ 
+    //if (previous > 5./SIGMA) {
+    //  G4cout << "G4RToEConvForGamma::BuildAbsorptionLengthVector"
+    //     << ": WARNING absorptionVector "
+    //     << ibin << ":" <<  5./SIGMA  << " <-- " 
+    //     << ibin -1 <<  ":" << previous <<G4endl;
+    //}
+
+    previous = 5./SIGMA;
   }
 }
 

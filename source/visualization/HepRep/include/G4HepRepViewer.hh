@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepViewer.hh,v 1.18 2006/06/29 21:17:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HepRepViewer.hh,v 1.19 2009/11/23 05:42:28 perl Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 /**
@@ -40,11 +40,9 @@
 // Geant4
 #include "G4VViewer.hh"
 
-#include "G4HepRepMessenger.hh"
-
 class G4HepRepViewer: public G4VViewer {
     public:
-        G4HepRepViewer (G4VSceneHandler& scene, G4HepRepMessenger& messenger, const G4String& name = "");
+        G4HepRepViewer (G4VSceneHandler& scene, const G4String& name = "");
         virtual ~G4HepRepViewer ();
         void SetView ();
         void ClearView ();
@@ -56,7 +54,6 @@ class G4HepRepViewer: public G4VViewer {
         
     private:
         bool geometryIncluded;
-        G4HepRepMessenger& messenger;
 };
 
 #endif

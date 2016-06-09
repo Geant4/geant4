@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.3 2008/11/02 12:22:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SimpleMaterialStoppingICRU73.hh,v 1.8 2009/11/09 16:51:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #ifndef G4SimpleMaterialStoppingICRU73_h
 #define G4SimpleMaterialStoppingICRU73_h 1
@@ -35,9 +35,14 @@
 //
 // Description: Data on stopping powers for light ions in compounds
 //
-// Author:      A.Ivantchenko 10.07.2008
+// Author:      Ivantchenko 10.07.2008
+//
+// in the framework of the ESA Technology Research Programme
+// (ESA contract 21435/08/NL/AT)
 //
 // Modifications:
+// 03.11.2009 A. Lechner:  Added new methods BuildPhysicsVector according
+//            to interface changes in base class G4VIonDEDXTable.
 //
 //----------------------------------------------------------------------------
 //
@@ -50,10 +55,14 @@
 
 
 #include "globals.hh"
+#include "G4VIonDEDXTable.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include <vector>
+#include <utility>
+#include <map>
 
-class G4SimpleMaterialStoppingICRU73
+
+class G4SimpleMaterialStoppingICRU73 : public G4VIonDEDXTable
 {
 public:
 
@@ -61,152 +70,64 @@ public:
 
   ~G4SimpleMaterialStoppingICRU73();
 
-  G4double GetDEDX(G4int ionZ, G4int idxMaterial, G4double kinEnergy);
+  G4bool BuildPhysicsVector(G4int ionZ, 
+                            const G4String& matName);
 
-  inline G4double GetDEDX(G4int ionZ, const G4String& NameMaterial, 
-			  G4double kinEnergy);
+  G4bool BuildPhysicsVector(G4int ionZ, 
+                            G4int matZ);
 
-  inline G4int GetMaterialIndex(const G4String& NameMaterial);
+  G4bool IsApplicable(G4int ionZ,  
+                      G4int matZ);
 
-  // Function returns an unique index (>=0) for each ion-material couple (the 
-  // return value is -1 if the couple is not found):
-  inline G4int GetIonMaterialCoupleIndex(
-                        G4int atomicNumber,            // Atomic number of ion 
-                        const G4String& materialName); // Material name
+  G4bool IsApplicable(G4int ionZ, 
+                      const G4String& matName);
 
-  inline G4double GetDensity(G4int idxMaterial);
+  G4PhysicsVector* GetPhysicsVector(G4int ionZ, 
+                                    G4int matZ);
 
-  inline G4String GetMaterialName(G4int idxMaterial);
+  G4PhysicsVector* GetPhysicsVector(G4int ionZ, 
+                               	    const G4String& matName);
 
-  inline G4PhysicsVector* GetPhysicsVector(G4int ionZ, G4int idxMaterial);
+  G4double GetDEDX(G4double kinEnergyPerNucleon,
+                   G4int ionZ,
+                   const G4String& matName);
 
-  inline G4PhysicsVector* GetPhysicsVector(G4int ionZ, 
-					   const G4String& NameMaterial);
-
-  inline G4double GetLowerEnergyBoundary();
-
-  inline G4double GetUpperEnergyBoundary();
+  G4double GetDEDX(G4double kinEnergyPerNucleon,
+                   G4int ionZ,
+                   G4int matZ);
 
 private:
+  // Function for creating a physics vector
+  G4PhysicsVector* CreatePhysicsVector(G4double* energy, 
+                                       G4double* stoppower, 
+                                       G4double factor);
 
-  void Initialise();
-
-  void AddData(G4double* energy, G4double* stoppower, G4double factor);
-
-  // hide assignment operator
-  G4SimpleMaterialStoppingICRU73 & operator=(const G4SimpleMaterialStoppingICRU73 &right);
+  // Assignment operator and copy constructor
+  G4SimpleMaterialStoppingICRU73 & 
+                       operator=(const G4SimpleMaterialStoppingICRU73 &right);
   G4SimpleMaterialStoppingICRU73(const G4SimpleMaterialStoppingICRU73&);
 
-  G4bool   spline;
-  G4int    Z[16];
-  G4double A[16];
-  G4String MatName[31];
-  G4double Density[31];
+  // Flag indicating the use of spline interpolation for dE/dx vectors
+  G4bool spline;
 
-  // Lower and upper energy boundaries for dE/dx vectors:
-  G4double lowerEnergyBoundary;
-  G4double upperEnergyBoundary;
+  // Minimum and maximum atomic number
+  G4int minIonAtomicNmb;
+  G4int maxIonAtomicNmb;
 
-  std::vector<G4LPhysicsFreeVector*>  dedx;
+  // Vectors containing the atomic numbers and names of the materials
+  std::vector<G4int> atomicNumbersMat;
+  std::vector<G4String> namesMat;
+
+  // Keys (ion atomic number and material names) corresponding to created 
+  // dE/dx vectors
+  typedef std::pair<G4int, G4String> DEDXKey;
+  std::vector<DEDXKey> dedxKeys;
+
+  // Vector of dE/dx vectors
+  std::vector<G4PhysicsVector*>  dedx;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4SimpleMaterialStoppingICRU73::GetDEDX(G4int ionZ, const G4String& NameMaterial, 
-					G4double kinEnergy)
-{
-  return GetDEDX(ionZ, GetMaterialIndex(NameMaterial), kinEnergy);
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4int
-G4SimpleMaterialStoppingICRU73::GetMaterialIndex(const G4String& NameMaterial)
-{
-  G4int idx = -1;
-  for (G4int i=0; i<25; i++){
-    if(MatName[i] == NameMaterial) {
-      idx = i;
-      break;
-    }
-  }
-  return idx;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4int
-G4SimpleMaterialStoppingICRU73::GetIonMaterialCoupleIndex(
-                       G4int atomicNumber,             
-                       const G4String& materialName) 
-{ 
-  G4int idx = -1;
-  if(atomicNumber >= 3 && atomicNumber <= 18) {
-
-    G4int materialIndex = GetMaterialIndex(materialName);
-    if(materialIndex >= 0) idx = materialIndex * 16 + atomicNumber - 3;
-  }
-
-  return idx;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double 
-G4SimpleMaterialStoppingICRU73::GetDensity(G4int idxMaterial)
-{
-  G4double d = 0.0;
-  if( idxMaterial >= 0 && idxMaterial <= 24) d = Density[idxMaterial];
-  return d;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline 
-G4String G4SimpleMaterialStoppingICRU73::GetMaterialName(G4int idxMaterial)
-{
-  G4String s = "";
-  if( idxMaterial >= 0 && idxMaterial <= 24) s = MatName[idxMaterial];
-  return s;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4PhysicsVector* 
-G4SimpleMaterialStoppingICRU73::GetPhysicsVector(G4int ionZ, G4int idxMaterial)
-{
-  G4PhysicsVector* v = 0;
-  if(ionZ >= 3 && ionZ <= 18 && idxMaterial >= 0 && idxMaterial <= 24) {  
-    v = dedx[idxMaterial*16 + ionZ - 3];
-  }
-  return v;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4PhysicsVector* 
-G4SimpleMaterialStoppingICRU73::GetPhysicsVector(G4int ionZ, 
-						 const G4String& NameMaterial)
-{
-  return GetPhysicsVector(ionZ, GetMaterialIndex(NameMaterial));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double
-G4SimpleMaterialStoppingICRU73::GetLowerEnergyBoundary() {
-
-  return lowerEnergyBoundary;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double
-G4SimpleMaterialStoppingICRU73::GetUpperEnergyBoundary() {
-
-  return upperEnergyBoundary;
-}
-
 
 #endif

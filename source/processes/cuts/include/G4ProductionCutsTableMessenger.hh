@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTableMessenger.hh,v 1.1 2008/03/02 10:52:55 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProductionCutsTableMessenger.hh,v 1.2 2009/11/11 03:20:22 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 //---------------------------------------------------------------
@@ -85,6 +85,7 @@ public: // with description
     G4UIcmdWithAnInteger *      verboseCmd;
     G4UIcmdWithADoubleAndUnit * setLowEdgeCmd; 
     G4UIcmdWithADoubleAndUnit * setHighEdgeCmd; 
+    G4UIcmdWithADoubleAndUnit * setMaxEnergyCutCmd; 
     G4UIcmdWithoutParameter *   dumpCmd;
  
 }; 

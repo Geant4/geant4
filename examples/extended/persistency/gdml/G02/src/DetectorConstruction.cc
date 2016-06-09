@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.4 2008/12/18 12:57:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.8 2009/04/24 15:47:13 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Class DetectorConstruction implementation
 //
@@ -47,6 +47,7 @@
 //
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4PVParameterised.hh"
 #include "G4PVPlacement.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -116,6 +117,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   {
     // **** LOOK HERE*** FOR READING GDML FILES
     //
+    
+    // ACTIVATING OVERLAP CHECK when read volumes are placed.
+    // Can take long time in case of complex geometries
+    //
+    // parser.SetOverlapCheck(true);
+
     parser.Read(fReadFile);
 
     // READING GDML FILES OPTION: 2nd Boolean argument "Validate".
@@ -211,6 +218,12 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
      new G4PVPlacement(0, G4ThreeVector(10.0,0.0,0.0), LogicalVolST,
                        "StepPhys", experimentalHallLV, false, 0);
   }
+
+  // Set Visualization attributes to world
+  //
+  G4VisAttributes* BoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  fWorldPhysVol->GetLogicalVolume()->SetVisAttributes(BoxVisAtt);  
+
   return fWorldPhysVol;
 }
 
@@ -473,7 +486,8 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
     new G4ReflectedSolid("Refll_Big", BigTube, transform);
   G4LogicalVolume * ReflBigLV =
     new G4LogicalVolume(ReflBig, Xenon, "ReflBigAl");
-
+   new G4PVPlacement(0, G4ThreeVector(0.,0.0,0.0), ReflBigLV,
+                      "AlPhysBigTube", SmallBoxLV, false, 0); 
   //
   // LOOK HERE FOR ASSEMBLY 
   //
@@ -481,7 +495,6 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
   // create Assembly of Boxes and Tubs
   //
   G4AssemblyVolume* assembly = new G4AssemblyVolume();
-  G4AssemblyVolume* assemblyDaug = new G4AssemblyVolume();
   G4RotationMatrix* rot = new G4RotationMatrix();
   G4ThreeVector posBig(-bigPlace, 0, 0);
   G4ThreeVector posBig0(bigPlace/4, 0, 0);
@@ -496,15 +509,7 @@ G4LogicalVolume* DetectorConstruction::ConstructAssembly()
   // Add to Assembly the Small Box
   //
   assembly->AddPlacedVolume(SmallBoxLV, posMed, rot);
-
-  // Add to AssemblyDaug BigTub
-  //
-  assemblyDaug->AddPlacedVolume(ReflBigLV, position, rot);
-
-  // Add AssemblyDaug to the Assembly
-  //
-  assembly->AddPlacedAssembly(assemblyDaug, posMed, rot);
-
+  
   // Place the Assembly
   //
   assembly->MakeImprint(BigBoxLV, posBig0, rot, 0);

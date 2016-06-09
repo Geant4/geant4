@@ -23,38 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyMatrix.hh; May 2005
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyMatrix.hh;
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #ifndef HadrontherapyMatrix_H
 #define HadrontherapyMatrix_H 1
 
 #include "globals.hh"
+#include <vector>
 
 // The information: energy deposit and position in the phantom
 // is stored in a matrix
 
 class HadrontherapyMatrix 
 {
+private:
+  HadrontherapyMatrix(G4int voxelX, G4int voxelY, G4int voxelZ); //<--- this is supposed to be a singleton
+
 public:
-  HadrontherapyMatrix();
+
   ~HadrontherapyMatrix();
+// Get object instance only
+  static HadrontherapyMatrix* getInstance();
+// Make & Get instance
+  static HadrontherapyMatrix* getInstance(G4int nX, G4int nY, G4int nZ);
+ 
+  void flush();
  
   void Initialize(); 
   // All the elements of the matrix are initialised to zero
- 
+   
   void Fill(G4int i, G4int j, G4int k, G4double energyDeposit);
   // The matrix is filled with the energy deposit 
   // in the element corresponding to the voxel of the phantom where
@@ -63,8 +61,13 @@ public:
   void TotalEnergyDeposit();
   // Store the information of the matrix in a ntuple and in 
   // a 1D Histogram
+  
+  inline G4int Index(G4int i, G4int j, G4int k){ return (i * numberVoxelY + j) * numberVoxelZ + k; } 
+  // Get a unique index from a three dimensional voxel information
 
 private:
+
+  static HadrontherapyMatrix* instance;
   G4int numberVoxelX;
   G4int numberVoxelY;
   G4int numberVoxelZ;

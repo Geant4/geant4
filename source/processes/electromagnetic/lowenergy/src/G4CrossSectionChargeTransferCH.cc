@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionChargeTransferCH.cc,v 1.3 2008/03/25 16:00:20 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CrossSectionChargeTransferCH.cc,v 1.4 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

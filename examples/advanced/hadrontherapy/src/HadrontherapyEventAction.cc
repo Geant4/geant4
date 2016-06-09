@@ -23,24 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyEventAction.cc;
-// Last modified: G.A.P.Cirrone March 2008;
-// 
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
-//
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// --------------------------------------------------------------
+// $Id: HadrontherapyEventAction.cc; 
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -55,48 +40,52 @@
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyMatrix.hh"
+#include "HadrontherapyEventActionMessenger.hh"
 
-HadrontherapyEventAction::HadrontherapyEventAction(HadrontherapyMatrix* matrixPointer) :
-  drawFlag("all" ),printModulo(10000)
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyEventAction::HadrontherapyEventAction() :
+  drawFlag("all" ),printModulo(1000), pointerEventMessenger(0)
 { 
   hitsCollectionID = -1;
-  matrix = matrixPointer; 
+  pointerEventMessenger = new HadrontherapyEventActionMessenger(this);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyEventAction::~HadrontherapyEventAction()
 {
+ delete pointerEventMessenger;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
-{
-  
+{ 
   G4int evtNb = evt->GetEventID();
   
   //printing survey
   if (evtNb%printModulo == 0)
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-  
+   
   G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
   if(hitsCollectionID == -1)
     hitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyDetectorHitsCollection");
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
 {  
   if(hitsCollectionID < 0)
-    return;
-
+  return;
   G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
-  HadrontherapyDetectorHitsCollection* CHC = NULL; 
  
   if(HCE)
-    CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
-  
-  if(CHC)
-    {
-      if(matrix)
-	{
-	  // Fill the matrix with the information: voxel and associated energy deposit 
+  {
+    HadrontherapyDetectorHitsCollection* CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
+    if(CHC)
+     {
+	   matrix = HadrontherapyMatrix::getInstance();	 
+       if(matrix)
+	  { 
+	      // Fill the matrix with the information: voxel and associated energy deposit 
           // in the detector at the end of the event
 
 	  G4int HitCount = CHC -> entries();
@@ -108,9 +97,9 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
               G4double energyDeposit = ((*CHC)[h]) -> GetEdep();
               matrix -> Fill(i, j, k, energyDeposit/MeV);              
 	    }
-	}
+	  }
     }
-
+  }
   // Extract the trajectories and draw them in the visualisation
 
   if (G4VVisManager::GetConcreteInstance())

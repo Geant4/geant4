@@ -69,6 +69,10 @@ public:
 
   ~G4BremsstrahlungCrossSectionHandler();
  
+  G4double GetCrossSectionAboveThresholdForElement(G4double energy,
+                                                   G4double cutEnergy,
+                                                   G4int Z);
+
 protected:
 
   std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 

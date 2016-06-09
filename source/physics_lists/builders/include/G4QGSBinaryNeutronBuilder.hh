@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QGSBinaryNeutronBuilder.hh,v 1.2 2009/03/31 11:04:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSBinaryNeutronBuilder
+//
+// Author: 2006 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4QGSBinaryNeutronBuilder_h
 #define G4QGSBinaryNeutronBuilder_h 1
 
@@ -34,7 +48,6 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
 
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
@@ -67,7 +80,6 @@ class G4QGSBinaryNeutronBuilder : public G4VNeutronBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
 
-    G4NeutronInelasticCrossSection theXSec;
     G4double theMin;
 
 };

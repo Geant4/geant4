@@ -47,10 +47,14 @@ G4QMDGroundStateNucleus::G4QMDGroundStateNucleus( G4int z , G4int a )
 
    //std::cout << " G4QMDGroundStateNucleus( G4int z , G4int a ) Begin " << z << " " << a << std::endl;
 
-// Hydrogen  Case
-   if ( z ==  1 && a == 1 )
+   if ( z == 1 && a == 1 ) // Hydrogen  Case or proton primary
    {
       SetParticipant( new G4QMDParticipant( G4Proton::Proton() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
+      return;
+   }
+   else if ( z == 0 && a == 1 ) // Neutron primary
+   {
+      SetParticipant( new G4QMDParticipant( G4Neutron::Neutron() , G4ThreeVector( 0.0 ) , G4ThreeVector( 0.0 ) ) );
       return;
    }
 

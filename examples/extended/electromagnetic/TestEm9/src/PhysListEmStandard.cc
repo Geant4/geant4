@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.13 2008/11/16 21:01:10 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysListEmStandard.cc,v 1.15 2009/11/20 20:27:21 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

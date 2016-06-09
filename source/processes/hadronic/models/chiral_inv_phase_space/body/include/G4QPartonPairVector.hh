@@ -24,13 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPartonPairVector.hh,v 1.1 2006/11/16 11:36:09 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QPartonPairVector.hh,v 1.2 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, October 2006.
 // Type defenition for a Vector of PartonPairs of CHIPS model
 // ---------------------------------------------------------------
+// Short description: Each Quasmon String has a pair of partons
+// (quark/diquark-partons) on its ends. During the hadronization
+// procedure the rapidity gap between partons shrinks, but the
+// parton pair still exists, while it is converted to the final
+// meson (quaek-antiquark) or baryon (quark-diquark).
+// --------------------------------------------------------------
 
 #ifndef G4QPartonPairVector_h
 #define G4QPartonPairVector_h 1

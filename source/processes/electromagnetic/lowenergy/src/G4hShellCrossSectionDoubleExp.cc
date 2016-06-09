@@ -40,8 +40,8 @@
 // Class Description: 
 // Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.9 2008/06/26 18:19:10 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.10 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #include "globals.hh"
 #include <vector>

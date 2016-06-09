@@ -29,6 +29,8 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
+class GammaRayTelPhysicsListMessenger;
+
 class GammaRayTelPhysicsList: public G4VModularPhysicsList
 {
 public:
@@ -38,7 +40,16 @@ public:
 public:
   // SetCuts() 
   virtual void SetCuts();
+  void SetRegionCut(G4double);
+  void AddPhysicsList(const G4String& name);
+  // void ConstructProcess();
 
+  
+private:
+
+  G4String                             emName;
+  G4VPhysicsConstructor*               emPhysicsList;
+  GammaRayTelPhysicsListMessenger* pMessenger;
 
 };
 

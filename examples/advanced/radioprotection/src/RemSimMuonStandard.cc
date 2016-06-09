@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimMuonStandard.cc,v 1.6 2006/06/29 16:23:57 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimMuonStandard.cc,v 1.7 2009/11/12 05:12:18 cirrone Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -33,7 +33,7 @@
 
 //muon:
 #include "G4hIonisation.hh"
-#include "G4MultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
@@ -60,7 +60,7 @@ void RemSimMuonStandard::ConstructProcess()
      
       if(( particleName == "mu+")|| (particleName == "mu-" ))
 	{//muon
-	  G4VProcess* aMultipleScattering = new G4MultipleScattering();
+	  G4VProcess* aMultipleScattering = new G4MuMultipleScattering();
 	  G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
 	  G4VProcess* aPairProduction     = new G4MuPairProduction();
 	  G4VProcess* anIonisation        = new G4MuIonisation();

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.14 2007/11/10 14:50:01 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.15 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
@@ -38,8 +38,7 @@
 
 #include "globals.hh"
 
-#include "G4VViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLViewer.hh"
 
 class G4OpenGLSceneHandler;
 

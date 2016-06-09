@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.7 2008/11/16 22:14:35 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.8 2009/11/17 22:48:26 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,8 @@
 #include "PhysicsListMessenger.hh"
  
 #include "PhysListEmStandard.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -215,6 +217,16 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
+
+  } else if (name == "penelope"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
+
+  } else if (name == "livermore"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePhysics();
         
   } else {
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh,v 1.21 2008/07/22 16:11:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuBremsstrahlungModel.hh,v 1.22 2009/02/20 14:48:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -77,12 +77,10 @@ public:
 
   virtual ~G4MuBremsstrahlungModel();
 
-  void SetParticle(const G4ParticleDefinition*);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+				const G4MaterialCutsCouple*);
 			      
   virtual G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
@@ -96,11 +94,11 @@ public:
                                 G4double kineticEnergy,
                                 G4double cutEnergy);
 			      
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double tmin,
-			 G4double maxEnergy);
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double maxEnergy);
 
   inline void SetLowestKineticEnergy(G4double e);
 
@@ -116,8 +114,7 @@ protected:
 						   G4double Z,
 						   G4double gammaEnergy);
 
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-			      G4double kineticEnergy);
+  inline void SetParticle(const G4ParticleDefinition*);
 
 private:
 
@@ -159,27 +156,9 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline 
-G4double G4MuBremsstrahlungModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
-						     G4double kineticEnergy)
-{
-  return kineticEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 inline void G4MuBremsstrahlungModel::SetLowestKineticEnergy(G4double e) 
 {
   lowestKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
-                                               const G4MaterialCutsCouple*)
-{
-  return minThreshold;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

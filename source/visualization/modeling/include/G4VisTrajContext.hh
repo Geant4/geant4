@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisTrajContext.hh,v 1.3 2006/08/14 11:47:53 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisTrajContext.hh,v 1.4 2009/02/24 12:00:56 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Jane Tinslay May 2006
 //
@@ -71,6 +71,9 @@ public:
   void SetAuxPtsSize(const G4double& size);
   G4double GetAuxPtsSize() const;
 
+  void SetAuxPtsSizeType(const G4VMarker::SizeType& sizeType);
+  G4VMarker::SizeType GetAuxPtsSizeType() const;
+
   void SetAuxPtsFillStyle(const G4VMarker::FillStyle& style);
   G4VMarker::FillStyle GetAuxPtsFillStyle() const;
 
@@ -89,6 +92,9 @@ public:
 
   void SetStepPtsSize(const G4double& size);
   G4double GetStepPtsSize() const;
+
+  void SetStepPtsSizeType(const G4VMarker::SizeType& sizeType);
+  G4VMarker::SizeType GetStepPtsSizeType() const;
 
   void SetStepPtsFillStyle(const G4VMarker::FillStyle& style);
   G4VMarker::FillStyle GetStepPtsFillStyle() const;
@@ -116,6 +122,7 @@ private:
   G4bool fDrawAuxPts;
   G4Polymarker::MarkerType fAuxPtsType;
   G4double fAuxPtsSize;
+  G4VMarker::SizeType fAuxPtsSizeType;
   G4VMarker::FillStyle fAuxPtsFillStyle;
   G4Colour fAuxPtsColour;
   G4bool fAuxPtsVisible;
@@ -124,6 +131,7 @@ private:
   G4bool fDrawStepPts;
   G4Polymarker::MarkerType fStepPtsType;
   G4double fStepPtsSize;
+  G4VMarker::SizeType fStepPtsSizeType;
   G4VMarker::FillStyle fStepPtsFillStyle;
   G4Colour fStepPtsColour;
   G4bool fStepPtsVisible;

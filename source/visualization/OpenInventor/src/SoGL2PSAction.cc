@@ -57,40 +57,32 @@ SoGL2PSAction::SoGL2PSAction(
  const SbViewportRegion& aViewPortRegion
 )
 :SoGLRenderAction(aViewPortRegion)
-,fFileName("out.ps")
-,fFile(0)
+,G4OpenGL2PSAction()
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+  setFileName("out.ps");
   SO_ACTION_CONSTRUCTOR(SoGL2PSAction);
 }
-//////////////////////////////////////////////////////////////////////////////
-void SoGL2PSAction::setFileName(
- const char* aFileName
+
+bool SoGL2PSAction::enableFileWriting(
 )
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  fFileName = aFileName;
-}
-//////////////////////////////////////////////////////////////////////////////
-void SoGL2PSAction::enableFileWriting(
-)
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-  fFile = ::fopen(fFileName.getString(),"w");
+  fFile = ::fopen(fFileName,"w");
   if(!fFile) {
     SoDebugError::post("SoGL2PSAction::enableFileWriting",
-                       "Cannot open file %s",fFileName.getString());
-    return;
+                       "Cannot open file %s",fFileName);
+    return false;
   }
 #ifdef __COIN__
 #else //SGI
   const SbViewportRegion& vpr = getViewportRegion();
   SoViewportRegionElement::set(getState(),vpr);
-  gl2psBegin();
+  G4gl2psBegin();
 #endif
+  return true;
 }
 //////////////////////////////////////////////////////////////////////////////
 void SoGL2PSAction::disableFileWriting(
@@ -105,16 +97,9 @@ void SoGL2PSAction::disableFileWriting(
   ::fclose(fFile);
   fFile = 0;
 }
+
 //////////////////////////////////////////////////////////////////////////////
-SbBool SoGL2PSAction::fileWritingEnabled(
-) const
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-  return (fFile?TRUE:FALSE);
-}
-//////////////////////////////////////////////////////////////////////////////
-SbBool SoGL2PSAction::addBitmap(
+bool SoGL2PSAction::addBitmap(
  int aWidth
 ,int aHeight
 ,float aXorig
@@ -125,10 +110,10 @@ SbBool SoGL2PSAction::addBitmap(
 /////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-  if(!fFile) return FALSE;
+  if(!fFile) return false;
   GLboolean valid;
   glGetBooleanv(GL_CURRENT_RASTER_POSITION_VALID,&valid);
-  if(valid==GL_FALSE) return FALSE;
+  if(!valid) return false;
   float pos[4];
   glGetFloatv(GL_CURRENT_RASTER_POSITION,pos);
   int xoff = -(int)(aXmove + aXorig);
@@ -143,33 +128,13 @@ SbBool SoGL2PSAction::addBitmap(
   if(x+w>(vp[0]+vp[2])) w = vp[0]+vp[2]-x;
   if(y+h>(vp[1]+vp[3])) h = vp[1]+vp[3]-y;
   int s = 3 * w * h;
-  if(s<=0) return FALSE;
+  if(s<=0) return false;
   float* image = (float*)::malloc(s * sizeof(float));
-  if(!image) return FALSE;
+  if(!image) return false;
   glReadPixels(x,y,w,h,GL_RGB,GL_FLOAT,image);
   GLint status = gl2psDrawPixels(w,h,xoff,yoff,GL_RGB,GL_FLOAT,image);
   ::free(image);
-  return (status!=GL2PS_SUCCESS ? FALSE : TRUE);
-}
-//////////////////////////////////////////////////////////////////////////////
-void SoGL2PSAction::beginViewport(
-)
-/////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-  if(!fFile) return;
-  GLint vp[4];
-  glGetIntegerv(GL_VIEWPORT,vp);
-  gl2psBeginViewport(vp);
-}
-//////////////////////////////////////////////////////////////////////////////
-void SoGL2PSAction::endViewport(
-)
-/////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-  if(!fFile) return;
-  gl2psEndViewport();
+  return (status!=GL2PS_SUCCESS ? false : true);
 }
 //////////////////////////////////////////////////////////////////////////////
 void SoGL2PSAction::beginTraversal(
@@ -182,47 +147,17 @@ void SoGL2PSAction::beginTraversal(
 #ifdef __COIN__
     const SbViewportRegion& vpr = getViewportRegion();
     SoViewportRegionElement::set(getState(),vpr);
-    gl2psBegin();
+    G4gl2psBegin();
     traverse(aNode);
-    gl2psEndPage();        
+    gl2psEndPage();       
 #else //SGI
+    // Should have already do G4gl2psBegin() before
     SoGLRenderAction::beginTraversal(aNode);
+    // Should do gl2psEndPage() after
 #endif
   } else {
     SoGLRenderAction::beginTraversal(aNode);
   }
-}
-//////////////////////////////////////////////////////////////////////////////
-void SoGL2PSAction::gl2psBegin(
-)
-//////////////////////////////////////////////////////////////////////////////
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
-{
-  if(!fFile) return;
-  int options = GL2PS_OCCLUSION_CULL | 
-     GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
-  int sort = GL2PS_BSP_SORT;
-  //int sort = GL2PS_SIMPLE_SORT;
-    
-  const SbViewportRegion& vpr = getViewportRegion();
-  SoViewportRegionElement::set(getState(),vpr);
- 
-  const SbVec2s& win = vpr.getWindowSize();
-  GLint vp[4];
-  vp[0] = 0;
-  vp[1] = 0;
-  vp[2] = win[0];
-  vp[3] = win[1];
-
-  int bufsize = 0;
-  gl2psBeginPage("title","HEPVis::SoGL2PSAction", 
-                 vp,
-                 GL2PS_EPS, 
-                 sort, 
-                 options, 
-                 GL_RGBA,0, NULL,0,0,0,
-                 bufsize, 
-                 fFile,fFileName.getString());    
 }
 
 #endif

@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2007/06/06 19:11:20 pia Exp $
+$Id: History,v 1.25 2009/04/06 06:24:37 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-06.06.2007 MGP human_phantom-V08-03-00
-           Minor documentation fix
+April 6, 2009, G.A.P.Cirrone, tag: human_phantom-V09-02-02
+- GNUmakefile updated
+
+February 20, 2009, G. Cosmo tag: human_phantom-V09-02-01
+- Corrected URL for standard location of schema in all GDML files.
+- Use "OrganPos" and "OrganRot" as names for organ's transformations in
+  ORNL files, as implied by code.
+- Fixed 'solids' tag in ORNLLeftLegBone.gdml files for male and female.
+
+February 19, 2009, G. Cosmo tag: human_phantom-V09-02-00
+- Migrated GDML read setup to use embedded GDML reader as in Geant4 9.2.
+- Fixed compilation warnings.
+- Updated README.
+
+June 6, 2007, M.G. Pia tag: human_phantom-V08-03-00
+- Minor documentation fix
 
 May 15, 2007, S. Guatelli tag: human_phantom-V08-02-02
 - Left and Right Adrenals introduced

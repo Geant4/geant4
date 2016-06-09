@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ColorReader.hh,v 1.1 2008/11/20 15:41:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ColorReader.hh,v 1.3 2009/04/24 15:54:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class ColorReader
@@ -39,10 +39,15 @@
 #include <map>
 #include "G4GDMLReadStructure.hh"
 
+class G4VisAttributes;
+
 class ColorReader : public G4GDMLReadStructure
 {
 
  public:
+
+   ColorReader();
+  ~ColorReader();
 
    void ExtensionRead(const xercesc::DOMElement* const element);
    void ColorRead(const xercesc::DOMElement* const element);

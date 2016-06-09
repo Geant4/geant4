@@ -55,8 +55,8 @@ bool G4Absorber::WillBeAbsorbed(const G4KineticTrack & kt)
 // Cut on kinetic Energy...
   if (kt.Get4Momentum().e() - kt.GetActualMass() < theCutOnP) 
   {
-      if(kt.GetDefinition() == G4PionPlus::PionPlus() ||
-	 kt.GetDefinition() == G4PionZero::PionZero() ||
+      if(kt.GetDefinition() == G4PionPlus::PionPlus()  ||
+	 kt.GetDefinition() == G4PionZero::PionZero()  ||
 	 kt.GetDefinition() == G4PionMinus::PionMinus())
       {
 	 return true;

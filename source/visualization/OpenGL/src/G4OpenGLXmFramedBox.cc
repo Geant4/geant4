@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmFramedBox.cc,v 1.6 2006/06/29 21:19:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmFramedBox.cc,v 1.8 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //Framed box container class
 
@@ -35,6 +35,8 @@
 #include "G4OpenGLXmFramedBox.hh"
 #include "G4OpenGLXmVWidgetComponent.hh"
 #include "G4OpenGLXmVWidgetShell.hh"
+#include <Xm/RowColumn.h>
+#include <Xm/Frame.h>
 
 G4OpenGLXmFramedBox::G4OpenGLXmFramedBox (const char* n, 
 					  G4bool r) :

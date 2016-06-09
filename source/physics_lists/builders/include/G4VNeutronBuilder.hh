@@ -23,6 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VNeutronBuilder.hh,v 1.2 2009/03/31 11:04:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4VNeutronBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 30.03.2009 V.Ivanchenko move constructor and destructor to source
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4VNeutronBuilder_h
 #define G4VNeutronBuilder_h
 
@@ -33,13 +48,13 @@ class G4NeutronInelasticProcess;
 
 class G4VNeutronBuilder
 {
-  public:
-    G4VNeutronBuilder() {}
-    virtual ~G4VNeutronBuilder() {}
-    virtual void Build(G4HadronElasticProcess * aP) = 0;
-    virtual void Build(G4HadronFissionProcess * aP) = 0;
-    virtual void Build(G4HadronCaptureProcess * aP) = 0;
-    virtual void Build(G4NeutronInelasticProcess * aP) = 0;
+public:
+  G4VNeutronBuilder();
+  virtual ~G4VNeutronBuilder();
+  virtual void Build(G4HadronElasticProcess * aP) = 0;
+  virtual void Build(G4HadronFissionProcess * aP) = 0;
+  virtual void Build(G4HadronCaptureProcess * aP) = 0;
+  virtual void Build(G4NeutronInelasticProcess * aP) = 0;
 };
 // 2002 by J.P. Wellisch
 

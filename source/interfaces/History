@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2008/11/27 00:49:06 kmura Exp $
+$Id: History,v 1.122 2009/11/20 22:15:20 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,31 +17,86 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 November, 2009 K. Murakami (interfaces-V09-02-07)
+- G4UIExecutive.hh:  no default arguments of the constructor
+- G4UIExecutive.icc: more cleaver way for suppressing compiler warnings
+
+20 November, 2009 J. Allison (interfaces-V09-02-06)
+- G4UIExecutive.icc: Fixed complier warnings for some cases when more
+  than one flag is set.
+
+19 November, 2009 J. Allison (interfaces-V09-02-05)
+- Tagged for the release.
+
+18 November, 2009 L. Garnier
+ - G4UIQt: Add CTRL+A and CTRL+E to move to begin/end of command line
+
+17 November, 2009 L. Garnier
+ - G4VBasicShell: Fix commands strings that match some shorter 
+   commands are trimmed and executed as those shorter commands.
+
+5 November, 2009 L. Garnier
+ - G4UIQt Fix a problem introduce the 6th October 2009 and cause
+   some widget display strange things on qt3
+
+19 October, 2009 L. Garnier
+ - basic/GNUMakefile Add optionnal debug flag
+
+6 October, 2009 L. Garnier
+ - G4UIQt Fix a problem on macOSX 10.6 with Qt 4.6(preview)
+ - Change GEANT4_QT_DEBUG flag for G4DEBUG_INTERFACES_BASIC and 
+   G4DEBUG_INTERFACES_COMMON
+
+28 May, 2009 K. Murakami (interfaces-V09-02-03)
+ - G4UIExecutive: add  IsGUI() method / add GetSession() method
+
+18 May, 2009 K. Murakami (interfaces-V09-02-02)
+ - G4UIExecutive : fixed wrong #ifdef condition
+ - include changes by Laurent (7/May)
+
+15 May, 2009 K. Murakami (interfaces-V09-02-01)
+ - G4UIExecutive : Remove batch mode handling
+
+13 May, 2009 K. Murakami (interfaces-V09-02-00)
+ - G4UIExecutive : Add new class for automatic instantiation of user session
+ - G4VUIshell : Add SetLsColor()
+
+7, May, 2009 L. Garnier
+ - G4UIQt.cc : Fix Compilation warning 
+ - G4VBasicShell.cc : Better command completion in command Line 
+
+31, March, 2009 L.Garnier
+ - Fix a compilation warning in G4Qt.cc
+
+16 February 2009, Laurent Garnier
+ - G4UIQt : Add an Interactor to be able to add button on file and help menu
+ - G4UIQt : Add a public method to get the MainWindow
+
 27, November, 2008 K. Murakami (interfaces-V09-01-04)
  - G4UIQt.cc: warning fix
 
 21, November, 2008 K. Murakami (interfaces-V09-01-03)
  -tagged for release 9.2
 
-14 November, Laurent Garnier
+14 November, 2008 Laurent Garnier
  - G4UIXm,G4Win32 : Renaming according to Geant4 code policy
 
-6 November, Laurent Garnier
+6 November, 2008 Laurent Garnier
  - G4Qt : Re-fix problem on some linux with QApplication, should be better
  - G4Qt : Add availabity to launch a G4Qt without a G4UIQt
 
-24 October, Laurent Garnier
+24 October, 2008 Laurent Garnier
  - Change GEANT4_QT_DEBUG flag by QTDEBUG
  - Suppress unuseful DEBUG messages
 
-15 October, Laurent Garnier
+15 October, 2008 Laurent Garnier
  - Fix a problem on some linux with QApplication. But this is NOT the good way to do it...
  - Fix a qt3 backward compatibility on G4UIQt.cc
 
-7 October, Laurent Garnier
+7 October, 2008 Laurent Garnier
  - Fix a G4cout possible problem cause by recursive G4cout call.
 
-2 October, Laurent Garnier
+2 October, 2008 Laurent Garnier
  - Add availability to have a external Qapp
 
 22 July, 2008 K.Murakami (interfaces-V09-01-02)

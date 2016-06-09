@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.18 2006/06/29 19:40:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.21 2009/06/11 15:47:08 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // 
 // --------------------------------------------------------------
 //
@@ -70,6 +70,17 @@ G4PenelopeBremsstrahlung::G4PenelopeBremsstrahlung(const G4String& nam)
   angularData = new std::map<G4int,G4PenelopeBremsstrahlungAngular*>;
   cutForPhotons = 0.;
   verboseLevel = 0;
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4PenelopeBremsstrahlung is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
+
 }
 
 

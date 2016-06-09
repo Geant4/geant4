@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh,v 1.10 2008/10/22 01:17:36 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Cerenkov.hh,v 1.11 2009/07/29 23:45:02 gum Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -107,7 +107,8 @@ public: // Without description
 public: // With description
 
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
-        // Returns true -> 'is applicable', for all charged particles.
+        // Returns true -> 'is applicable', for all charged particles
+        // except short-lived particles.
 
         G4double GetMeanFreePath(const G4Track& aTrack,
                                  G4double ,
@@ -211,11 +212,10 @@ private:
 inline 
 G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-   if (aParticleType.GetParticleName() != "chargedgeantino" ) {
-      return (aParticleType.GetPDGCharge() != 0);
-   } else {
-      return false;
-   }
+   if (aParticleType.GetParticleName() == "chargedgeantino") return false;
+   if (aParticleType.IsShortLived()) return false;
+
+   return (aParticleType.GetPDGCharge() != 0);
 }
 
 inline 

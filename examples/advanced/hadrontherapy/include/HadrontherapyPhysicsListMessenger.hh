@@ -23,59 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhisicsListMessenger.hh; Nov 2008
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a), M.P. Russo
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyPhysicsListsMessenger.hh
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
-#ifndef HADRONTHERAPYPHYSICSLISTMESSENGER_HH
-#define HADRONTHERAPYPHYSICSLISTMESSENGER_HH 1
+#ifndef HadrontherapyPhysicsListMessenger_h
+#define HadrontherapyPhysicsListMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
 class HadrontherapyPhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithABool;
 class G4UIcmdWithAString;
 
-class HadrontherapyPhysicsListMessenger: public G4UImessenger {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-public:
+class HadrontherapyPhysicsListMessenger: public G4UImessenger
+{
+  public:
   
-  HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* physList);
+    HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* );
+   ~HadrontherapyPhysicsListMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
   
-  ~HadrontherapyPhysicsListMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-  
-private:
-  
-  HadrontherapyPhysicsList* physicsList;   
-  G4UIdirectory* listDir;
-  G4UIcmdWithAString* physicsListCmd;
-  G4UIcmdWithAString* packageListCmd;
+  HadrontherapyPhysicsList* pPhysicsList;
+    
+  G4UIdirectory*             physDir;        
+  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* electCutCmd;
+  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+  G4UIcmdWithADoubleAndUnit* allCutCmd;    
+  G4UIcmdWithAString*        pListCmd;
+  G4UIcmdWithAString* packageListCmd;    
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
-
-
-
-
-
 

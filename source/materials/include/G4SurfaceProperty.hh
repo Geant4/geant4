@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SurfaceProperty.hh,v 1.8 2008/12/11 10:23:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SurfaceProperty.hh,v 1.10 2009/11/12 00:53:43 gum Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -67,6 +67,7 @@ enum G4SurfaceType
 {
    dielectric_metal,            // dielectric-metal interface
    dielectric_dielectric,       // dielectric-dielectric interface
+   dielectric_LUT,              // dielectric-Look-Up-Table interface
    firsov,                      // for Firsov Process
    x_ray                        // for x-ray mirror process
 };
@@ -77,73 +78,66 @@ enum G4SurfaceType
 
 class G4SurfaceProperty
 {
+  public: // Without description
 
-public: // Without description
+     //////////////
+     // Operators
+     //////////////
 
-        //////////////
-        // Operators
-        //////////////
+    // G4SurfaceProperty(const G4SurfaceProperty &right);
+    // const G4SurfaceProperty & operator=(const G4SurfaceProperty &right);
 
-  //    G4SurfaceProperty(const G4SurfaceProperty &right);
-  //	const G4SurfaceProperty & operator=(const G4SurfaceProperty &right);
+    // G4int operator==(const G4SurfaceProperty &right) const;
+    // G4int operator!=(const G4SurfaceProperty &right) const;
 
-  //	G4int operator==(const G4SurfaceProperty &right) const;
-  //	G4int operator!=(const G4SurfaceProperty &right) const;
+  public: // With description
 
-public: // With description
+    ////////////////////////////////
+    // Constructors and Destructor
+    ////////////////////////////////
 
-        ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
+    G4SurfaceProperty(const G4String& name, G4SurfaceType type = x_ray);
+    // Constructor of a X-ray optical surface object.
 
-        G4SurfaceProperty(const G4String& name, G4SurfaceType type = x_ray);
-        // Constructor of a X-ray optical surface object.
+  public: // Without description
 
-public: // Without description
+    G4SurfaceProperty();
+    virtual ~G4SurfaceProperty();
 
-        G4SurfaceProperty();
-	virtual ~G4SurfaceProperty();
+    ////////////
+    // Methods
+    ////////////
 
-	////////////
-	// Methods
-        ////////////
+  public: // With description
 
-	// public methods
+    const G4String& GetName() const { return theName; }
+    // Returns the surface name.
+    void     SetName(const G4String& name) { theName = name; }
+    // Sets the surface name.
 
-public: // With description
+    const G4SurfaceType& GetType() const { return theType; }
+    // Returns the surface type.
+    void     SetType(const G4SurfaceType& type) { theType = type; }
+    // Sets the surface type.        
 
-	G4String GetName() const { return theName; };
-        // Returns the surface name.
-	void     SetName(const G4String& name){theName = name;};
-        // Sets the surface name.
+    static void CleanSurfacePropertyTable();
+    static const G4SurfacePropertyTable* GetSurfacePropertyTable();
+    static size_t GetNumberOfSurfaceProperties();
+    static void DumpTableInfo();
+    // To handle the table of surface properties.
 
-        G4SurfaceType GetType() const {return theType;};
-        // Returns the surface type.
-        void         SetType(const G4SurfaceType type){theType = type;};
-        // Sets the surface type.        
+  protected:
 
-        static void CleanSurfacePropertyTable();
-        static const G4SurfacePropertyTable* GetSurfacePropertyTable();
-        static size_t GetNumberOfSurfaceProperties();
-        static void DumpTableInfo();
-        // To handle the table of surface properties.
+    // ------------------
+    // Basic data members ( To define surface property)
+    // ------------------
 
-protected:
+    G4String theName;                // Surface name
 
-// ------------------
-// Basic data members ( To define surface property)
-// ------------------
+    G4SurfaceType theType;           // Surface type
 
-	G4String theName;		// Surface name
-
-	G4SurfaceType theType;		// Surface type
-
-        static G4SurfacePropertyTable theSurfacePropertyTable;
-        // The static Table of SurfaceProperties.
+    static G4SurfacePropertyTable theSurfacePropertyTable;
+    // The static Table of SurfaceProperties.
 };
-
-////////////////////
-// Inline methods
-////////////////////
 
 #endif /* G4SurfaceProperty_h */

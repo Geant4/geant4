@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.26 2008/11/16 18:51:42 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.40 2009/11/15 22:10:03 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,22 +34,18 @@
 
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
+#include "PhysListEmStandardGS.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 
-#include "G4HadronElasticPhysics.hh"
-#include "G4HadronDElasticPhysics.hh"
-#include "G4HadronHElasticPhysics.hh"
-#include "G4HadronQElasticPhysics.hh"
-#include "G4HadronInelasticQBBC.hh"
-#include "G4IonBinaryCascadePhysics.hh"
+#include "G4Decay.hh"
+#include "StepMax.hh"
 
-#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -81,18 +77,14 @@
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
-  G4LossTableManager::Instance();
   pMessenger = new PhysicsListMessenger(this); 
    
   // EM physics
-  emName = G4String("standard");
+  emName = G4String("local");
   emPhysicsList = new PhysListEmStandard(emName);
-
-  helIsRegisted  = false;
-  bicIsRegisted  = false;
-  biciIsRegisted = false;
-    
+      
   defaultCutValue = 1.*mm;
+
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForPositron  = defaultCutValue;
@@ -105,7 +97,6 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete emPhysicsList;
-  for(size_t i=0; i<hadronPhys.size(); i++) delete hadronPhys[i];
   delete pMessenger;  
 }
 
@@ -113,17 +104,14 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-// pseudo-particles
+  // pseudo-particles
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition();
   
-// gamma
+  // gamma
   G4Gamma::GammaDefinition();
   
-// optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
-
-// leptons
+  // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
   G4MuonPlus::MuonPlusDefinition();
@@ -134,15 +122,15 @@ void PhysicsList::ConstructParticle()
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
 
-// mesons
+  // mesons
   G4MesonConstructor mConstructor;
   mConstructor.ConstructParticle();
 
-// barions
+  // barions
   G4BaryonConstructor bConstructor;
   bConstructor.ConstructParticle();
 
-// ions
+  // ions
   G4IonConstructor iConstructor;
   iConstructor.ConstructParticle();
 }
@@ -153,14 +141,11 @@ void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   emPhysicsList->ConstructProcess();
-  for(size_t i=0; i<hadronPhys.size(); i++) hadronPhys[i]->ConstructProcess();
   AddDecay();  
   AddStepMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Decay.hh"
 
 void PhysicsList::AddDecay()
 {
@@ -186,8 +171,6 @@ void PhysicsList::AddDecay()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
 {
@@ -216,13 +199,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "local") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "emstandard") {
+  } else if (name == "emstandard_opt0") {
 
     emName = name;
     delete emPhysicsList;
@@ -251,43 +234,23 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
-                
-  } else if (name == "livermore") {
+
+  } else if (name == "standardGS") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmLivermore(name);
-    
-  } else if (name == "penelope") {
+    emPhysicsList = new PhysListEmStandardGS(name);
 
+  } else if (name == "empenelope"){
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope(name);
+    emPhysicsList = new G4EmPenelopePhysics();
 
-  } else if (name == "elastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronElasticPhysics());
-    helIsRegisted = true;
-
-  } else if (name == "DElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronDElasticPhysics());
-    helIsRegisted = true;
-
-  } else if (name == "HElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronHElasticPhysics());
-    helIsRegisted = true;
-
-  } else if (name == "QElastic" && !helIsRegisted) {
-    hadronPhys.push_back( new G4HadronQElasticPhysics());
-    helIsRegisted = true;
-
-  } else if (name == "binary" && !bicIsRegisted) {
-    hadronPhys.push_back(new G4HadronInelasticQBBC());
-    bicIsRegisted = true;
-
-  } else if (name == "binary_ion" && !biciIsRegisted) {
-    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
-    biciIsRegisted = true;
-        
+  } else if (name == "emlivermore"){
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePhysics();
+                        
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
@@ -300,7 +263,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::SetCuts()
 {
-
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
@@ -340,4 +302,3 @@ void PhysicsList::SetCutForPositron(G4double cut)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

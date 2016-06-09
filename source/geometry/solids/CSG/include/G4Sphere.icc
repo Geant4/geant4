@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc,v 1.8 2008/11/21 09:50:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Sphere.icc,v 1.11 2009/05/13 11:23:00 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -76,67 +76,193 @@ G4double G4Sphere::GetDeltaThetaAngle() const
   return fDTheta;
 }
 
+inline 
+void G4Sphere::Initialize()
+{
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
+  fpPolyhedron = 0;
+}
+
+inline
+void G4Sphere::InitializePhiTrigonometry()
+{
+  hDPhi = 0.5*fDPhi;                       // half delta phi
+  cPhi  = fSPhi + hDPhi; 
+  ePhi  = fSPhi + fDPhi;
+
+  sinCPhi    = std::sin(cPhi);
+  cosCPhi    = std::cos(cPhi);
+  cosHDPhiIT = std::cos(hDPhi - 0.5*kAngTolerance); // inner/outer tol half dphi
+  cosHDPhiOT = std::cos(hDPhi + 0.5*kAngTolerance);
+  sinSPhi = std::sin(fSPhi);
+  cosSPhi = std::cos(fSPhi);
+  sinEPhi = std::sin(ePhi);
+  cosEPhi = std::cos(ePhi);
+}
+
+inline
+void G4Sphere::InitializeThetaTrigonometry()
+{
+  eTheta  = fSTheta + fDTheta;
+
+  sinSTheta = std::sin(fSTheta);
+  cosSTheta = std::cos(fSTheta);
+  sinETheta = std::sin(eTheta);
+  cosETheta = std::cos(eTheta);
+
+  tanSTheta  = std::tan(fSTheta);
+  tanSTheta2 = tanSTheta*tanSTheta;
+  tanETheta  = std::tan(eTheta);
+  tanETheta2 = tanETheta*tanETheta;
+}
+
+inline
+void G4Sphere::CheckThetaAngles(G4double sTheta, G4double dTheta)
+{
+  if ( (sTheta<0) || (sTheta>pi) )
+  {
+    G4cerr << "ERROR - G4Sphere()::CheckThetaAngles()" << G4endl
+           << "        Invalid starting Theta angle for solid: " << GetName()
+           << G4endl;
+    G4Exception("G4Sphere::CheckThetaAngles()", "InvalidSetup",
+                FatalException, "sTheta outside 0-PI range.");
+  }
+  else
+  {
+    fSTheta=sTheta;
+  }
+  if ( dTheta+sTheta >= pi )
+  {
+    fDTheta=pi-sTheta;
+  }
+  else if ( dTheta > 0 )
+  {
+    fDTheta=dTheta;
+  }
+  else
+  {
+    G4cerr << "ERROR - G4Sphere()::CheckThetaAngles(): " << G4endl
+           << "        Negative delta-Theta (" << dTheta << "), for solid: "
+           << GetName() << G4endl;
+    G4Exception("G4Sphere::CheckThetaAngles()", "InvalidSetup",
+                FatalException, "Invalid dTheta.");
+  }
+  if ( fDTheta-fSTheta < pi ) { fFullThetaSphere = false; }
+  else                        { fFullThetaSphere = true ; }
+  fFullSphere = fFullPhiSphere && fFullThetaSphere;
+
+  InitializeThetaTrigonometry();
+}
+
+inline
+void G4Sphere::CheckSPhiAngle(G4double sPhi)
+{
+  // Ensure fSphi in 0-2PI or -2PI-0 range if shape crosses 0
+
+  if ( sPhi < 0 )
+  {
+    fSPhi = twopi - std::fmod(std::fabs(sPhi),twopi);
+  }
+  else
+  {
+    fSPhi = std::fmod(sPhi,twopi) ;
+  }
+  if ( fSPhi+fDPhi > twopi )
+  {
+    fSPhi -= twopi ;
+  }
+}
+
+inline
+void G4Sphere::CheckDPhiAngle(G4double dPhi)
+{
+  fFullPhiSphere = true;
+  if ( dPhi >= twopi-kAngTolerance*0.5 )
+  {
+    fDPhi=twopi;
+    fSPhi=0;
+  }
+  else
+  {
+    fFullPhiSphere = false;
+    if ( dPhi > 0 )
+    {
+      fDPhi = dPhi;
+    }
+    else
+    {
+      G4cerr << "ERROR - G4Sphere()::CheckDPhiAngle(): " << GetName() << G4endl
+             << "        Negative delta-Phi ! - "
+             << dPhi << G4endl;
+      G4Exception("G4Sphere::CheckDPhiAngle()", "InvalidSetup",
+                  FatalException, "Invalid dphi.");
+    }
+  }
+}
+
+inline
+void G4Sphere::CheckPhiAngles(G4double sPhi, G4double dPhi)
+{
+  CheckDPhiAngle(dPhi);
+  if (!fFullPhiSphere && sPhi) { CheckSPhiAngle(sPhi); }
+  fFullSphere = fFullPhiSphere && fFullThetaSphere;
+
+  InitializePhiTrigonometry();
+}
+
 inline
 void G4Sphere::SetInsideRadius(G4double newRmin)
 {
   fRmin= newRmin;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
 void G4Sphere::SetInnerRadius(G4double newRmin)
 {
   fRmin= newRmin;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
 void G4Sphere::SetOuterRadius(G4double newRmax)
 {
   fRmax= newRmax;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  Initialize();
 }
 
 inline
-void G4Sphere::SetStartPhiAngle(G4double newSphi)
+void G4Sphere::SetStartPhiAngle(G4double newSPhi, G4bool compute)
 {
-  fSPhi= newSphi;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  // Flag 'compute' can be used to explicitely avoid recomputation of
+  // trigonometry in case SetDeltaPhiAngle() is invoked afterwards
+
+  CheckSPhiAngle(newSPhi);
+  fFullPhiSphere = false;
+  if (compute)  { InitializePhiTrigonometry(); }
+  Initialize();
 }
 
 inline
-void G4Sphere::SetDeltaPhiAngle(G4double newDphi)
+void G4Sphere::SetDeltaPhiAngle(G4double newDPhi)
 {
-  fDPhi= newDphi;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  CheckPhiAngles(fSPhi, newDPhi);
+  Initialize();
 }
 
 inline
 void G4Sphere::SetStartThetaAngle(G4double newSTheta)
 {
-  fSTheta=newSTheta;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  CheckThetaAngles(newSTheta, fDTheta);
+  Initialize();
 }
 
 inline
 void G4Sphere::SetDeltaThetaAngle(G4double newDTheta)
 {
-  fDTheta=newDTheta;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  CheckThetaAngles(fSTheta, newDTheta);
+  Initialize();
 }
 
 // Old access functions
@@ -181,55 +307,7 @@ inline
 G4double G4Sphere::GetCubicVolume()
 {
   if(fCubicVolume != 0.) {;}
-  else   fCubicVolume = fDPhi*(std::cos(fSTheta)-std::cos(fSTheta+fDTheta))*
-                              (fRmax*fRmax*fRmax-fRmin*fRmin*fRmin)/3.; 
+  else { fCubicVolume = fDPhi*(std::cos(fSTheta)-std::cos(fSTheta+fDTheta))*
+                              (fRmax*fRmax*fRmax-fRmin*fRmin*fRmin)/3.; }
   return fCubicVolume;
-}
-
-
-inline
-G4double G4Sphere::GetSurfaceArea()
-{
-  if(fSurfaceArea != 0.) {;}
-  else
-  {   
-    G4double Rsq=fRmax*fRmax;
-    G4double rsq=fRmin*fRmin;
-         
-    fSurfaceArea = fDPhi*(rsq+Rsq)*(std::cos(fSTheta)
-                 - std::cos(fSTheta+fDTheta));
-    if(fDPhi < twopi)
-    {
-      fSurfaceArea = fSurfaceArea + fDTheta*(Rsq-rsq);
-    }
-    if(fSTheta >0)
-    {
-      G4double acos1=std::acos( std::pow(std::sin(fSTheta),2)
-                               *std::cos(fDPhi)
-                               +std::pow(std::cos(fSTheta),2));
-      if(fDPhi>pi)
-      { 
-        fSurfaceArea = fSurfaceArea + 0.5*(Rsq-rsq)*(twopi-acos1);
-      }
-      else
-      {
-        fSurfaceArea = fSurfaceArea + 0.5*(Rsq-rsq)*acos1;
-      }
-    }
-    if(fDTheta+fSTheta < pi)
-    {
-      G4double acos2=std::acos( std::pow(std::sin(fSTheta+fDTheta),2)
-                               *std::cos(fDPhi)
-                               +std::pow(std::cos(fSTheta+fDTheta),2));
-      if(fDPhi>pi)
-      { 
-        fSurfaceArea = fSurfaceArea + 0.5*(Rsq-rsq)*(twopi-acos2);
-      }
-      else
-      {
-        fSurfaceArea = fSurfaceArea + 0.5*(Rsq-rsq)*acos2;
-      }
-    }
-  }
-  return fSurfaceArea;
 }

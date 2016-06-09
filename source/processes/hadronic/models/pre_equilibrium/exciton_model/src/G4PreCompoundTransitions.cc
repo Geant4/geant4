@@ -23,12 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PreCompoundTransitions.cc,v 1.22 2009/11/21 18:03:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
-//J. M. Quesada (Feb. 08). Base on previous work by V. Lara.
-// New transition probabilities. Several bugs fixed.
-// JMQ (06 September 2008) Also external choices have been added for:
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundIon
+//
+// Author:         V.Lara
+//
+// Modified:  
+// 16.02.2008 J. M. Quesada fixed bugs 
+// 06.09.2008 J. M. Quesada added external choices for:
 //                      - "never go back"  hipothesis (useNGB=true) 
 //                      -  CEM transition probabilities (useCEMtr=true)
+
+// 30.10.09 J.M.Quesada: CEM transition probabilities have been renormalized 
+//                       (IAEA benchmark)
+//
 #include "G4PreCompoundTransitions.hh"
 #include "G4HadronicException.hh"
 
@@ -141,6 +156,11 @@ CalculateProbability(const G4Fragment & aFragment)
     // Transition probability for \Delta n = +2
     
     TransitionProb1 = AveragedXSection*PauliFactor*std::sqrt(2.0*RelativeEnergy/proton_mass_c2)/Vint;
+
+//JMQ 281009  phenomenological factor in order to increase equilibrium contribution
+//   G4double factor=5.0;
+//   TransitionProb1 *= factor;
+//
     if (TransitionProb1 < 0.0) TransitionProb1 = 0.0; 
     
     G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
@@ -183,7 +203,8 @@ CalculateProbability(const G4Fragment & aFragment)
     //  G4cout<<"U = "<<U<<G4endl;
     //  G4cout<<"N="<<N<<"  P="<<P<<"  H="<<H<<G4endl;
     //  G4cout<<"l+ ="<<TransitionProb1<<"  l- ="<< TransitionProb2<<"  l0 ="<< TransitionProb3<<G4endl; 
-    return TransitionProb1 + TransitionProb2 + TransitionProb3;}
+    return TransitionProb1 + TransitionProb2 + TransitionProb3;
+  }
   
   else  {
     //JMQ: Transition probabilities from Gupta's work
@@ -191,10 +212,9 @@ CalculateProbability(const G4Fragment & aFragment)
     G4double a = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
     // GE = g*E where E is Excitation Energy
     G4double GE = (6.0/pi2)*a*A*U;
-    
+ 
     G4double Kmfp=2.;
-     
-    
+        
     TransitionProb1=1./Kmfp*3./8.*1./c_light*1.0e-9*(1.4e+21*U-2./(N+1)*6.0e+18*U*U);
     if (TransitionProb1 < 0.0) TransitionProb1 = 0.0;
     
@@ -214,8 +234,6 @@ CalculateProbability(const G4Fragment & aFragment)
     //  G4cout<<"l+ ="<<TransitionProb1<<"  l- ="<< TransitionProb2<<"  l0 ="<< TransitionProb3<<G4endl; 
     return TransitionProb1 + TransitionProb2 + TransitionProb3;
   }
-
-
 }
 
 
@@ -236,19 +254,23 @@ G4Fragment G4PreCompoundTransitions::PerformTransition(const G4Fragment & aFragm
       deltaN = -2;
     }
 
-  // AH/JMQ: Randomly decrease the number of charges if deltaN is -2 and in proportion to the number charges w.r.t. number of particles,  PROVIDED that there are charged particles
-  if(deltaN < 0 && G4UniformRand() <= static_cast<G4double>(result.GetNumberOfCharged())/static_cast<G4double>(result.GetNumberOfParticles()) && (result.GetNumberOfCharged() >= 1))
+  // AH/JMQ: Randomly decrease the number of charges if deltaN is -2 and in proportion 
+  // to the number charges w.r.t. number of particles,  PROVIDED that there are charged particles
+  if(deltaN < 0 && G4UniformRand() <= 
+     static_cast<G4double>(result.GetNumberOfCharged())/static_cast<G4double>(result.GetNumberOfParticles()) 
+     && (result.GetNumberOfCharged() >= 1)) {
     result.SetNumberOfCharged(result.GetNumberOfCharged()+deltaN/2); // deltaN is negative!
+  }
 
-
- //JMQ the following lines have to be before SetNumberOfCharged, otherwise the check on number of charged vs. number of particles fails
+  // JMQ the following lines have to be before SetNumberOfCharged, otherwise the check on 
+  // number of charged vs. number of particles fails
   result.SetNumberOfParticles(result.GetNumberOfParticles()+deltaN/2);
   result.SetNumberOfHoles(result.GetNumberOfHoles()+deltaN/2); 
 
- // With weight Z/A, number of charged particles is increased with +1
+  // With weight Z/A, number of charged particles is increased with +1
   if ( ( deltaN > 0 ) &&
       (G4UniformRand() <= static_cast<G4double>(result.GetZ()-result.GetNumberOfCharged())/
-		  std::max(static_cast<G4double>(result.GetA()-Nexcitons),1.)))
+       std::max(static_cast<G4double>(result.GetA()-Nexcitons),1.)))
     {
       result.SetNumberOfCharged(result.GetNumberOfCharged()+deltaN/2);
     }

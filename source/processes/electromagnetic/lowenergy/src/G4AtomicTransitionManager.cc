@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicTransitionManager.cc,v 1.2 ????
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -365,6 +365,10 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
 	  totalRadTransProb = totalRadTransProb + transProb[j];
 	}
       
+      if (totalRadTransProb > 1) {
+      G4Exception( "Wrong Total Probability");
+      return 0;
+}
       G4double totalNonRadTransProb= (1 - totalRadTransProb);
       
       return totalNonRadTransProb;    }

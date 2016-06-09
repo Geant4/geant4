@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.22 2007/04/04 16:50:27 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.25 2009/04/08 16:55:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -60,6 +60,9 @@ G4OpenGLStoredXViewer::~G4OpenGLStoredXViewer () {}
 
 void G4OpenGLStoredXViewer::Initialise () {
 
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLStoredXViewer::Initialise\n");
+#endif
   CreateGLXContext (vi_stored);
   CreateMainWindow ();
   CreateFontLists ();
@@ -76,9 +79,11 @@ void G4OpenGLStoredXViewer::Initialise () {
 
 void G4OpenGLStoredXViewer::DrawView () {
 
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLStoredXViewer::DrawView\n");
+#endif
   //Make sure current viewer is attached and clean...
   glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, WinSize_x, WinSize_y);
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
@@ -95,6 +100,9 @@ void G4OpenGLStoredXViewer::DrawView () {
 
     HaloingFirstPass ();
     DrawDisplayLists ();
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLStoredXViewer::DrawView flush \n");
+#endif
     glFlush ();
 
     HaloingSecondPass ();
@@ -107,9 +115,15 @@ void G4OpenGLStoredXViewer::DrawView () {
     // If kernel visit was needed, drawing and FinishView will already
     // have been done, so...
     if (!kernelVisitWasNeeded) {
+#ifdef G4DEBUG_VIS_OGL
+      printf("G4OpenGLStoredXViewer::DrawView NO need kernel visit\n");
+#endif
       DrawDisplayLists ();
       FinishView ();
     } else {
+#ifdef G4DEBUG_VIS_OGL
+      printf("G4OpenGLStoredXViewer::DrawView NEED kernel visit\n");
+#endif
     // However, union cutaways are implemented in DrawDisplayLists, so make
     // an extra pass...
       if (fVP.IsCutaway() &&
@@ -117,14 +131,26 @@ void G4OpenGLStoredXViewer::DrawView () {
 	ClearView();
 	DrawDisplayLists ();
 	FinishView ();
+      } else { // ADD TO AVOID KernelVisit=1 and nothing to display
+        DrawDisplayLists ();
+        FinishView ();
       }
     }
   }
 }
 
 void G4OpenGLStoredXViewer::FinishView () {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLStoredXViewer::FinishView\n");
+#endif
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propogated before progressing.
+
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLStoredXViewer::FinishView flush \n");
+#endif
+  glFlush (); //FIXME
+
   GLint renderMode;
   glGetIntegerv(GL_RENDER_MODE, &renderMode);
   if (renderMode == GL_RENDER) glXSwapBuffers (dpy, win);  

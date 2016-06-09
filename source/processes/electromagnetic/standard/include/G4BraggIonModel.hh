@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh,v 1.11 2008/10/22 16:00:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BraggIonModel.hh,v 1.12 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -76,8 +76,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-			const G4MaterialCutsCouple*);
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+				const G4MaterialCutsCouple*);
 			
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
@@ -127,8 +127,8 @@ public:
 
 protected:
 
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-			      G4double kinEnergy);
+  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+				      G4double kinEnergy);
 
 private:
 
@@ -176,19 +176,6 @@ private:
   G4bool   isIon;
   G4bool   isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4BraggIonModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition* pd,
-                G4double kinEnergy)
-{
-  if(pd != particle) SetParticle(pd);
-  G4double tau  = kinEnergy/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
-                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return tmax;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

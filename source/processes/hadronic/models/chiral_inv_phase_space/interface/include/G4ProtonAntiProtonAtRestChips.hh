@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// (Why only antiproton-proton, when the antiproton-nucleus is made? - M.K.)
+// 17.02.2009 M.Kossov, now it is recommended to use the G4QCaptureAtRest process
 #ifndef G4ProtonAntiProtonAtRestChips_h
 #define G4ProtonAntiProtonAtRestChips_h
 
@@ -49,13 +51,14 @@ class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
    
   public:
  
-     G4ProtonAntiProtonAtRestChips(const G4String& processName ="AntiProtonAnnihilationAtRest")
+     G4ProtonAntiProtonAtRestChips(const G4String& processName=
+                                                            "AntiProtonAnnihilationAtRest")
       : G4VRestProcess (processName, fHadronic) 
      {
        SetProcessSubType(fHadronAtRest);
      }
  
-    ~G4ProtonAntiProtonAtRestChips() {}
+     ~G4ProtonAntiProtonAtRestChips() {}
 
      G4bool IsApplicable(const G4ParticleDefinition& aParticle)
      {
@@ -66,11 +69,11 @@ class G4ProtonAntiProtonAtRestChips : public G4VRestProcess
      void BuildPhysicsTable(const G4ParticleDefinition&){}
 
      G4double AtRestGetPhysicalInteractionLength(const G4Track&track,
-						 G4ForceCondition*condition);
+       G4ForceCondition*condition);
 
   // zero mean lifetime
      G4double GetMeanLifeTime(const G4Track& aTrack,
-			      G4ForceCondition* condition) {return 0.0;}
+         G4ForceCondition* condition) {return 0.0;}
 
      G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&); 
 
@@ -91,11 +94,13 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
   // in the long haul. @@@@@@
   if(aTrack.GetDynamicParticle()->GetDefinition() != G4AntiProton::AntiProton())
   {
-    throw G4HadronicException(__FILE__, __LINE__, "Calling G4ProtonAntiProtonAtRestChips with particle other than p-bar!!!");
+    throw G4HadronicException(__FILE__, __LINE__,
+                "Calling G4ProtonAntiProtonAtRestChips with particle other than p-bar!!!");
   }
   if(aTargetNucleus.GetZ() != 1)
   {
-    throw G4HadronicException(__FILE__, __LINE__, "Calling G4ProtonAntiProtonAtRestChips for target other than Hydrogen!!!");
+    throw G4HadronicException(__FILE__, __LINE__,
+                "Calling G4ProtonAntiProtonAtRestChips for target other than Hydrogen!!!");
   }
   
   // Call chips
@@ -104,7 +109,7 @@ AtRestDoIt(const G4Track& aTrack, const G4Step&aStep)
 
 G4double G4ProtonAntiProtonAtRestChips::
 AtRestGetPhysicalInteractionLength(const G4Track&track,
-				   G4ForceCondition*condition)
+       G4ForceCondition*condition)
 {
   ResetNumberOfInteractionLengthLeft();
   *condition = NotForced;

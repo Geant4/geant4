@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.hh,v 1.6 2006/06/29 19:37:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eIonisationCrossSectionHandler.hh,v 1.7 2009/01/29 08:13:27 pandola Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,7 +39,8 @@
 //
 // Modified: 
 // 10 Oct 2001  M.G. Pia        Revision to improve code quality and consistency with design
-//
+// 28 Jan 2009  L.Pandola    Added public method to make a easier migration of
+//                           G4LowEnergyIonisation to G4LivermoreIonisationModel
 // -------------------------------------------------------------------
 
 // Class description: 
@@ -71,6 +72,10 @@ public:
                                          G4int nbin);
 
   ~G4eIonisationCrossSectionHandler();
+
+  G4double GetCrossSectionAboveThresholdForElement(G4double energy,
+						   G4double cutEnergy,
+						   G4int Z);
  
 protected:
 

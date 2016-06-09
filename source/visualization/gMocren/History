@@ -1,0 +1,66 @@
+$Id: History,v 1.7 2009/11/05 11:37:12 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/gMocren sub-category
+---------------------------------------------------
+
+5 November 2009  Gabriele Cosmo (gMocren-V09-02-03)
+Fix in G4GMocrenFileSceneHandler.cc for resolving compilation error on
+Windows
+
+5 November 2009  Akinori Kimura
+GMocrenFileSceneHandler::AddCompound(G4THisMap<>) was modified
+to deal with /vis/scene/add/psHits <scorer_name>.
+GMocrenIO.cc was modified to remove an unnecessary output by std::cout.
+
+2 November 2009  Akinori Kimura (gMocren-V09-02-02)
+I mistook to make a tag, gMocren-V09-02-01.
+So I made a tag again.
+
+
+2 November 2009  Akinori Kimura (gMocren-V09-02-01)
+Deleted the following two AddEndOfEventModel(*) in
+G4GMocrenFileSceneHandler::GFBeginModeling().
+These models are entrusted to user commands /vis/scene/add/psHits or hits
+
+   scene->AddEndOfEventModel(new G4PSHitsModel()); 
+   scene->AddEndOfEventModel(new G4HitsModel());
+
+
+1 November 2009  Akinori Kimura
+A few warning as following were fixed.
+src/G4GMocrenFileSceneHandler.cc:1812: warning: dereferencing pointer '<anonymous>' does break strict-aliasing rules
+
+
+22 October 2009  Akinori Kimura (gMocren-V09-02-00)
+G4PSHitsModel.{hh,cc} were moved to the modeling directory.
+Made a tag of the gMocren file driver.
+
+18 October 2009  Akinori Kimura
+Fixed bugs which are to create an extra file and to be not able to
+deal with multiple runs.
+
+12 October 2009  Akinori Kimura
+Large modification to support G4PhantomParameterisation,
+G4VNestedParameterisation, primitive scorer and interactive primitive
+scorer
+
+1 April 2009  Akinori Kimura
+The prototype gMocren-file driver is added.
+Tagged vis-V09-02-06.

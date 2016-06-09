@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 //
-// Created:
+// Created: H.-P. Wellicsh: GHAD model wrapper for the CHIPS model (1997)
 // 16.01.08 V.Ivanchenko use initialization similar to other CHIPS models
 //
 
@@ -95,16 +94,17 @@ G4HadFinalState * G4ChiralInvariantPhaseSpace::ApplyYourself(
                            halfTheStrangenessOfSee,
 			   etaToEtaPrime);
   //  G4QEnvironment::SetParameters(solidAngle);
-//  G4cout << "Input info "<< projectilePDGCode << " " 
-//         << targetPDGCode <<" "
-//	 << 1./MeV*proj4Mom<<" "
-//	 << 1./MeV*targ4Mom << " "
-//	 << nop << G4endl;
+  //  G4cout << "Input info "<< projectilePDGCode << " " 
+  //         << targetPDGCode <<" "
+  //	 << 1./MeV*proj4Mom<<" "
+  //	 << 1./MeV*targ4Mom << " "
+  //	 << nop << G4endl;
   G4QHadronVector projHV;
   G4QHadron* iH = new G4QHadron(projectilePDGCode, 1./MeV*proj4Mom);
   projHV.push_back(iH);
   G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
-  //G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
+  //G4Quasmon* pan= new G4Quasmon(projectilePDGCode, targetPDGCode,
+  //                              1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
   G4QHadronVector* output=0;
   try
   {

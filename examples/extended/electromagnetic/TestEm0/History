@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2008/11/16 22:14:35 maire Exp $
+$Id: History,v 1.16 2009/11/17 22:48:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+17-11-09 mma (testem0-V09-02-01)
+- new PhysicsLists : livermore, penelope
+  remove runManger->Initialize() from TestEm0.cc 
+     
+14-11-09 mma (testem0-V09-02-00)
+- PhysListEmStandard : replace obsolete G4MultipleScattering
      
 17-11-08 mma (testem0-V09-01-01)
 - Em options : 20 bins/decade

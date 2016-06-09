@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.hh,v 1.7 2008/12/18 12:59:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrVolume.hh,v 1.10 2009/11/23 11:38:54 arce Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4tgrVolume
@@ -64,6 +64,7 @@ class G4tgrVolume
 
     G4tgrVolume();
     G4tgrVolume( const std::vector<G4String>& wl );
+    G4tgrVolume( const G4tgrVolume& vol );
     virtual ~G4tgrVolume();
 
     virtual G4tgrPlace* AddPlace( const std::vector<G4String>& wl );
@@ -93,7 +94,9 @@ class G4tgrVolume
 
     const std::vector<G4tgrPlace*> GetPlacements() const {return thePlacements;}
     G4bool GetVisibility() const {return theVisibility;}
-    const G4double* GetColour() const {return theRGBColour;}
+    G4double* GetColour() const {return theRGBColour;}
+    G4double* GetRGBColour() const {return theRGBColour;}
+
     G4bool GetCheckOverlaps() const {return theCheckOverlaps;}
 
     virtual G4tgrVolume* GetVolume( G4int ii ) const;

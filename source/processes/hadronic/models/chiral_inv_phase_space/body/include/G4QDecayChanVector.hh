@@ -24,13 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4QDecayChanVector.hh,v 1.19 2006/06/29 20:06:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QDecayChanVector.hh,v 1.20 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
 // Type defenition for Decay Channel Vector in CHIPS model
 // --------------------------------------------------------------
+// Short description: In the CHIPS World the particles (G4QParticle)
+// are defined. For unstable particles there is a G4QDecayChannelVector
+// which describes different channels of decay for the particular
+// particle. So the G4QDecayChannel class is the class for the description
+// of such a decay channel in two or three particles (the secondaries can
+// be unstable too and have firther decay).
+// -------------------------------------------------------------------
 
 #ifndef G4QDecayChanVector_h
 #define G4QDecayChanVector_h 1

@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.139 2008/12/03 13:35:36 gcosmo Exp $
+# $Id: binmake.gmk,v 1.144 2009/11/20 11:09:18 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -86,7 +86,10 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
+              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \
+              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/fragmentation/include \
               -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
+              -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/processes/include \
               -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
@@ -195,11 +198,9 @@ ifdef G4EXLIB
   ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   # Unix
     TARGETLIB  := -l$(G4TARGET)
-    TARGOBJEXT := o
   else
   # Windows
     TARGETLIB  := lib$(G4TARGET).a   
-    TARGOBJEXT := OBJ   
   endif
 endif
 
@@ -232,6 +233,11 @@ ifdef GLOBALLIBS
              -lG4graphics_reps \
              -lG4intercoms \
              -lG4global
+
+  ifdef G4LIB_USE_ZLIB
+    LDLIBS2 += -lG4zlib
+  endif
+
 else
 # The next lines specifically should read LDLIBS2 = , not LDLIBS2 :=, so
 # that it is not expanded until the directory G4TMPDIR is created.
@@ -256,10 +262,6 @@ else
 # Extra libraries to resolve remaining circular dependencies...
 #  LDLIBS2EXTRA = 
   endif
-endif
-
-ifdef G4LIB_USE_ZLIB
-  LDLIBS2 += -lG4zlib
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
@@ -308,10 +310,12 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
     LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
   endif
   OUT   := /Fe
+  TARGOBJEXT := OBJ   
 else
   # Unix
   LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
   OUT   := -o 
+  TARGOBJEXT := o   
 endif
 
 ifdef transform-RPath
@@ -356,7 +360,7 @@ ifdef CPPVERBOSE
 	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
 else
-	@echo Linking $(G4TARGET) ...
+	@echo Linking $(G4TARGET)
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
 	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)

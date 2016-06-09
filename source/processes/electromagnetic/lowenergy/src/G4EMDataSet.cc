@@ -24,14 +24,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.18 2008/03/17 13:40:53 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EMDataSet.cc,v 1.20 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
 // 31 Jul 2001   MGP        Created
+//
+// 15 Jul 2009   Nicolas A. Karakatsanis
+//
+//                           - New Constructor was added when logarithmic data are loaded as well
+//                             to enhance CPU performance
+//
+//                           - Destructor was modified accordingly
+//
+//                           - LoadNonLogData method was created to load only the non-logarithmic data from G4EMLOW
+//                             dataset. It is essentially performing the data loading operations as in the past.
+//
+//                           - LoadData method was revised in order to calculate the logarithmic values of the data
+//                             It retrieves the data values from the G4EMLOW data files but, then, calculates the
+//                             respective log values and loads them to seperate data structures. 
+//
+//                           - SetLogEnergiesData method was cretaed to set logarithmic values to G4 data vectors.
+//                             The EM data sets, initialized this way, contain both non-log and log values.
+//                             These initialized data sets can enhance the computing performance of data interpolation
+//                             operations
+//
 //
 // -------------------------------------------------------------------
 
@@ -52,6 +72,8 @@ G4EMDataSet::G4EMDataSet(G4int Z,
   z(Z),
   energies(0),
   data(0),
+  log_energies(0),
+  log_data(0),
   algorithm(algo),
   unitEnergies(xUnit),
   unitData(yUnit),
@@ -72,6 +94,8 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   z(argZ),
   energies(dataX),
   data(dataY),
+  log_energies(0),
+  log_data(0),
   algorithm(algo),
   unitEnergies(xUnit),
   unitData(yUnit),
@@ -91,13 +115,58 @@ G4EMDataSet::G4EMDataSet(G4int argZ,
   if (randomSet) BuildPdf();
 }
 
+G4EMDataSet::G4EMDataSet(G4int argZ, 
+			 G4DataVector* dataX, 
+			 G4DataVector* dataY,
+                         G4DataVector* dataLogX,
+                         G4DataVector* dataLogY, 
+			 G4VDataSetAlgorithm* algo, 
+			 G4double xUnit, 
+			 G4double yUnit,
+			 G4bool random):
+  z(argZ),
+  energies(dataX),
+  data(dataY),
+  log_energies(dataLogX),
+  log_data(dataLogY),
+  algorithm(algo),
+  unitEnergies(xUnit),
+  unitData(yUnit),
+  pdf(0),
+  randomSet(random)
+{
+  if (algorithm == 0) G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
+
+  if ((energies == 0) ^ (data == 0))
+    G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data (zero case)");
+
+  if (energies == 0) return;
+  
+  if (energies->size() != data->size()) 
+    G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data");
+
+  if ((log_energies == 0) ^ (log_data == 0))
+    G4Exception("G4EMDataSet::G4EMDataSet - different size for log energies and log data (zero case)");
+
+  if (log_energies == 0) return;
+
+  if (log_energies->size() != log_data->size())
+    G4Exception("G4EMDataSet::G4EMDataSet - different size for log energies and log data");
+
+  if (randomSet) BuildPdf();
+}
+
+
 G4EMDataSet::~G4EMDataSet()
 { 
   delete algorithm;
   if (energies) delete energies;
   if (data) delete data;
   if (pdf) delete pdf;
+  if (log_energies) delete log_energies;
+  if (log_data) delete log_data;
 }
+
 
 G4double G4EMDataSet::FindValue(G4double energy, G4int /* componentId */) const
 {
@@ -107,6 +176,13 @@ G4double G4EMDataSet::FindValue(G4double energy, G4int /* componentId */) const
 
   size_t i = energies->size()-1;
   if (energy >= (*energies)[i]) return (*data)[i];
+
+//Nicolas A. Karakatsanis: Check if the logarithmic data have been loaded to decide
+//                         which Interpolation-Calculation method will be applied
+  if (log_energies != 0) 
+   {
+     return algorithm->Calculate(energy, FindLowerBound(energy), *energies, *data, *log_energies, *log_data);
+   }
 
   return algorithm->Calculate(energy, FindLowerBound(energy), *energies, *data);
 }
@@ -146,19 +222,62 @@ void G4EMDataSet::SetEnergiesData(G4DataVector* dataX,
     G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data (zero case)");
 
   if (energies == 0) return;
-  
+
+  //G4cout << "Size of energies: " << energies->size() << G4endl << "Size of data: " << data->size() << G4endl;
   if (energies->size() != data->size()) 
     G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data");
 }
 
+void G4EMDataSet::SetLogEnergiesData(G4DataVector* dataX,
+                                     G4DataVector* dataY,
+                                     G4DataVector* data_logX, 
+				     G4DataVector* data_logY,
+                                     G4int /* componentId */)
+{
+//Load of the actual energy and data values  
+  if (energies) delete energies;
+  energies = dataX;
+  if (data) delete data;
+  data = dataY;
+
+//Check if data loaded properly from data files
+  if ((energies == 0) ^ (data==0)) 
+    G4Exception("G4EMDataSet::SetLogEnergiesData - different size for energies and data (zero case)");
+
+  if (energies == 0) return;
+
+  //G4cout << "Size of energies: " << energies->size() << G4endl << "Size of data: " << data->size() << G4endl << G4endl;
+  if (energies->size() != data->size()) 
+    G4Exception("G4EMDataSet::SetLogEnergiesData - different size for energies and data");
+
+//Load of the logarithmic energy and data values
+  if (log_energies) delete log_energies;
+  log_energies = data_logX;
+  if (log_data) delete log_data;
+  log_data = data_logY;
+
+//Check if logarithmic data loaded properly from data files 
+  if ((log_energies == 0) ^ (log_data==0)) 
+    G4Exception("G4EMDataSet::SetLogEnergiesData - different size for log energies and log data (zero case)");
+
+  if (log_energies == 0) G4cout << "G4EMDataSet::SetLogEnergiesData - log_energies == 0" << G4endl;
+  if (log_energies == 0) return;
+
+  //G4cout << "Size of log energies: " << log_energies->size() << G4endl << "Size of log data: " << log_data->size() << G4endl << G4endl;  
+  if (log_energies->size() != log_data->size()) 
+    G4Exception("G4EMDataSet::SetLogEnergiesData - different size for log energies and log data");
+}
+
+
+
 G4bool G4EMDataSet::LoadData(const G4String& fileName)
 {
-  // The file is organized into two columns:
-  // 1st column is the energy
-  // 2nd column is the corresponding value
-  // The file terminates with the pattern: -1   -1
-  //                                       -2   -2
- 
+ // The file is organized into four columns:
+ // 1st column contains the values of energy
+ // 2nd column contains the corresponding data value
+ // The file terminates with the pattern: -1   -1
+ //                                       -2   -2
+
   G4String fullFileName(FullFileName(fileName));
   std::ifstream in(fullFileName);
 
@@ -172,30 +291,97 @@ G4bool G4EMDataSet::LoadData(const G4String& fileName)
 
   G4DataVector* argEnergies=new G4DataVector;
   G4DataVector* argData=new G4DataVector;
+  G4DataVector* argLogEnergies=new G4DataVector;
+  G4DataVector* argLogData=new G4DataVector;
 
   G4double a;
-  bool energyColumn(true);
+  G4int k = 0;
+  G4int nColumns = 2;
+
+  do
+    {
+      in >> a;
+
+      if (a==0.) a=1e-300;
+  
+      if (a != -1 && a != -2)
+	{
+	  if (k%nColumns == 0)
+            {
+	     argEnergies->push_back(a*unitEnergies);
+             argLogEnergies->push_back(std::log10(a)+std::log10(unitEnergies));
+            }
+	  else if (k%nColumns == 1)
+            {
+	     argData->push_back(a*unitData);
+             argLogData->push_back(std::log10(a)+std::log10(unitData));
+            }
+          k++;
+	}
+    }
+  while (a != -2);
+
+
+  SetLogEnergiesData(argEnergies, argData, argLogEnergies, argLogData, 0);
+
+  if (randomSet) BuildPdf();
+ 
+  return true;
+}
+
+
+G4bool G4EMDataSet::LoadNonLogData(const G4String& fileName)
+{
+ // The file is organized into four columns:
+ // 1st column contains the values of energy
+ // 2nd column contains the corresponding data value
+ // The file terminates with the pattern: -1   -1
+ //                                       -2   -2
+
+  G4String fullFileName(FullFileName(fileName));
+  std::ifstream in(fullFileName);
+  if (!in.is_open())
+    {
+      G4String message("G4EMDataSet::LoadData - data file \"");
+      message += fullFileName;
+      message += "\" not found";
+      G4Exception(message);
+    }
+
+  G4DataVector* argEnergies=new G4DataVector;
+  G4DataVector* argData=new G4DataVector;
+
+  G4double a;
+  G4int k = 0;
+  G4int nColumns = 2;
 
   do
     {
       in >> a;
   
-      if (a!=-1 && a!=-2)
+      if (a != -1 && a != -2)
 	{
-	  if (energyColumn)
-	    argEnergies->push_back(a*unitEnergies);
-	  else
-	    argData->push_back(a*unitData);
-	  energyColumn=(!energyColumn);
+	  if (k%nColumns == 0)
+            {
+	     argEnergies->push_back(a*unitEnergies);
+            }
+	  else if (k%nColumns == 1)
+            {
+	     argData->push_back(a*unitData);
+            }
+          k++;
 	}
     }
   while (a != -2);
  
   SetEnergiesData(argEnergies, argData, 0);
+
   if (randomSet) BuildPdf();
  
   return true;
 }
+
+
 
 G4bool G4EMDataSet::SaveData(const G4String& name) const
 {
@@ -266,6 +452,8 @@ G4bool G4EMDataSet::SaveData(const G4String& name) const
   return true;
 }
 
+
+
 size_t G4EMDataSet::FindLowerBound(G4double x) const
 {
   size_t lowerBound = 0;
@@ -311,6 +499,7 @@ G4String G4EMDataSet::FullFileName(const G4String& name) const
                       
   return G4String(fullFileName.str().c_str());
 }
+
 
 
 void G4EMDataSet::BuildPdf() 

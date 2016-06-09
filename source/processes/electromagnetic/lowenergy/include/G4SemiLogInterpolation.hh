@@ -24,14 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4SemiLogInterpolation.hh,v 1.4 2006/06/29 19:36:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SemiLogInterpolation.hh,v 1.5 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 31 Jul 2001   MGP        Created
+// 31 Jul 2001   MGP                 Created
+//
+// 15 Jul 2009   N.A.Karakatsanis    New methods added for loading logarithmic data
+//                                   to enhance computing performance of interpolation
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -59,6 +62,12 @@ public:
   G4double Calculate(G4double point, G4int bin, 
 		     const G4DataVector& energies, 
 		     const G4DataVector& data) const;
+
+  G4double Calculate(G4double point, G4int bin,
+                     const G4DataVector& energies,
+                     const G4DataVector& data, 
+		     const G4DataVector& log_energies, 
+		     const G4DataVector& log_data) const;
 
   virtual G4VDataSetAlgorithm* Clone() const;
 

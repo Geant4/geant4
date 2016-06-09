@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionSource.cc,v 1.5 2006/08/19 21:50:47 dennis Exp $ //
+// $Id: G4VCrossSectionSource.cc,v 1.5.2.1 2009/11/20 16:25:08 gunter Exp $ //
 //
 
 #include "globals.hh"
@@ -45,10 +45,10 @@ G4VCrossSectionSource::~G4VCrossSectionSource()
 { }
 
 
-G4String G4VCrossSectionSource::
+G4ParticleDefinition * G4VCrossSectionSource::
 FindKeyParticle(const G4KineticTrack& trk1,const G4KineticTrack& trk2) const
 {
-  G4String result;
+  G4ParticleDefinition * result;
   
   G4ParticleDefinition * p1 = trk1.GetDefinition();
   G4ParticleDefinition * p2 = trk2.GetDefinition();
@@ -56,12 +56,12 @@ FindKeyParticle(const G4KineticTrack& trk1,const G4KineticTrack& trk2) const
   if( (p1==G4Proton::Proton() && p2==G4Proton::Proton() ) ||
       (p1==G4Neutron::Neutron() && p2==G4Neutron::Neutron()) )
   {
-    result = G4Proton::Proton()->GetParticleName();
+    result = G4Proton::Proton();
   }
   else if( (p1==G4Neutron::Neutron() && p2==G4Proton::Proton()) ||
            (p2==G4Neutron::Neutron() && p1==G4Proton::Proton()) )
   {
-    result = G4Neutron::Neutron()->GetParticleName();
+    result = G4Neutron::Neutron();
   }
   else
   {

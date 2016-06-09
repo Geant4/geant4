@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.16 2006/07/03 16:38:13 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.19 2009/05/20 10:19:51 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from G4OpenGLWin32Viewer and
@@ -34,6 +34,7 @@
 #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
 
 #include "G4OpenGLImmediateWin32Viewer.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4ios.hh"
 
@@ -79,7 +80,7 @@ void G4OpenGLImmediateWin32Viewer::DrawView () {
   //Make sure current viewer is attached and clean...
   //Win32 version needed
   //glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, WinSize_x, WinSize_y);
+  glViewport (0, 0, getWinWidth(), getWinHeight());
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {

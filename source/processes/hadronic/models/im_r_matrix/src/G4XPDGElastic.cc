@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XPDGElastic.cc,v 1.3 2006/06/29 20:42:42 gunter Exp $ //
+// $Id: G4XPDGElastic.cc,v 1.3.2.1 2009/11/20 16:25:08 gunter Exp $ //
 // -------------------------------------------------------------------
 //      
 // PDG  Elastic cross section 
@@ -73,23 +73,23 @@ const G4double G4XPDGElastic::npbarPDGFit[7] =    { 1.1,      5.55, 36.5,  0.,  
 
 G4XPDGElastic::G4XPDGElastic() 
 {
-  G4String proton = G4Proton::ProtonDefinition()->GetParticleName();
-  G4String neutron = G4Neutron::NeutronDefinition()->GetParticleName();
-  G4String piPlus = G4PionPlus::PionPlusDefinition()->GetParticleName();
-  G4String piMinus = G4PionMinus::PionMinusDefinition()->GetParticleName();
-  G4String KPlus = G4KaonPlus::KaonPlusDefinition()->GetParticleName();
-  G4String KMinus = G4KaonMinus::KaonMinusDefinition()->GetParticleName();
-  G4String antiproton = G4AntiProton::AntiProtonDefinition()->GetParticleName();
+  G4ParticleDefinition * proton = G4Proton::ProtonDefinition();
+  G4ParticleDefinition * neutron = G4Neutron::NeutronDefinition();
+  G4ParticleDefinition * piPlus = G4PionPlus::PionPlusDefinition();
+  G4ParticleDefinition * piMinus = G4PionMinus::PionMinusDefinition();
+  G4ParticleDefinition * KPlus = G4KaonPlus::KaonPlusDefinition();
+  G4ParticleDefinition * KMinus = G4KaonMinus::KaonMinusDefinition();
+  G4ParticleDefinition * antiproton = G4AntiProton::AntiProtonDefinition();
   
-  std::pair<G4String,G4String> pp(proton,proton);
-  std::pair<G4String,G4String> pn(proton,neutron);
-  std::pair<G4String,G4String> piPlusp(piPlus,proton);
-  std::pair<G4String,G4String> piMinusp(piMinus,proton);
-  std::pair<G4String,G4String> KPlusp(KPlus,proton);
-  std::pair<G4String,G4String> KMinusp(KMinus,proton);
-  std::pair<G4String,G4String> nn(neutron,neutron);
-  std::pair<G4String,G4String> ppbar(proton,antiproton);
-  std::pair<G4String,G4String> npbar(antiproton,neutron);
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> pp(proton,proton);
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> pn(proton,neutron);
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> piPlusp(piPlus,proton);
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> piMinusp(piMinus,proton);
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KPlusp(KPlus,proton);
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> KMinusp(KMinus,proton);
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> nn(neutron,neutron);
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> ppbar(proton,antiproton);
+  std::pair<G4ParticleDefinition *,G4ParticleDefinition *> npbar(antiproton,neutron);
 
   std::vector<G4double> ppData;
   std::vector<G4double> pPiPlusData;
@@ -158,8 +158,6 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
 
   G4ParticleDefinition* def1 = trk1.GetDefinition();
   G4ParticleDefinition* def2 = trk2.GetDefinition();
-  G4String name1 = def1->GetParticleName();
-  G4String name2 = def2->GetParticleName();     
   
   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
   G4double m1 = def1->GetPDGMass();
@@ -181,9 +179,9 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
       if ( (enc1 < 0 && enc2 >0) || (enc2 < 0 && enc1 >0) ) coeff = 1.;
       
       // Order the pair: first is the lower mass particle, second is the higher mass one
-      std::pair<G4String,G4String> trkPair(def1->GetParticleName(),def2->GetParticleName());
+      std::pair<G4ParticleDefinition *,G4ParticleDefinition *> trkPair(def1,def2);
       if (def1->GetPDGMass() > def2->GetPDGMass())
-	trkPair = std::pair<G4String,G4String>(def2->GetParticleName(),def1->GetParticleName());
+	trkPair = std::pair<G4ParticleDefinition *,G4ParticleDefinition *>(def2,def1);
       
       std::vector<G4double> data; 
       G4double pMinFit = 0.;
@@ -203,7 +201,7 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
 	  PairDoubleMap::const_iterator iter;
 	  for (iter = xMap.begin(); iter != xMap.end(); ++iter)
 	    {
-	      std::pair<G4String,G4String> thePair = (*iter).first;
+	      std::pair<G4ParticleDefinition *,G4ParticleDefinition *> thePair = (*iter).first;
 	      if (thePair == trkPair)
 		{
 		  data = (*iter).second;
@@ -244,7 +242,7 @@ G4double G4XPDGElastic::CrossSection(const G4KineticTrack& trk1, const G4Kinetic
   if (sigma < 0.)
     {
       G4cout << "WARNING! G4XPDGElastic::PDGElastic "      
-	     << name1 << "-" << name2
+	     << def1->GetParticleName() << "-" << def2->GetParticleName()
 	     << " elastic cross section: momentum " 
 	     << pLab << " GeV, negative cross section " 
 	     << sigma / millibarn << " mb set to 0" << G4endl;

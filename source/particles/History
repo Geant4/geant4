@@ -1,4 +1,4 @@
-$Id: History,v 1.162 2008/11/13 08:23:12 kurasige Exp $
+$Id: History,v 1.184 2009/11/20 14:01:31 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,82 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Nov 20 2009     Laurent Desorgher (particles-V09-02-17)
+- Add Geant4 disclaimer to  G4AdjointProton and Adjoint-light ions
+
+- Nov 06 2009     Hisaya Kurashige (particles-V09-02-16)
+- Add G4AdjointProton and Adjoint-light ions (Laurent)
+
+- Oct 21 2009     Hisaya Kurashige (particles-V09-02-15)
+- Change G4ElectronOccupancies::MaxSizeOfOrbit to 10
+
+- Oct 9 2009     Hisaya Kurashige (particles-V09-02-14)
+- Fix small difference of mass of  taus, mesons, and baryons between PDG2009
+
+- Oct 8 2009     Hisaya Kurashige (particles-V09-02-13)
+- Fix mass of anti baryons (Sigmac, Lambdac) and anti-diquarks A
+
+- Sep 23 2009     Hisaya Kurashige (particles-V09-02-12)
+- Fix a bug in G4IonTable::FIndIon 
+   (use multimap instead of map)
+- Fix a bug in G4IonTable::CreateIon 
+   (remove deleteion of G4IsotopeProperty* pointer)
+
+- Sep 16 2009     Hisaya Kurashige (particles-V09-02-11)
+- Add check on application state in the constructor of G4ParticleDefinition
+- Use sstream instead of strstrem in test/checkParticles
+
+- Sep 14 2009     Hisaya Kurashige (particles-V09-02-10)
+- Clean up codes for DecayChannels and so on
+
+- Aug 05 2009     Hisaya Kurashige (particles-V09-02-09)
+- Fix a bug that A nad Z of neutron are not defined
+- Fix handling of PDG encoding for proton in G4IonTable 
+
+- Aug 03 2009     Hisaya Kurashige (particles-V09-02-08)
+- Remove G4NucleiPropertiesTable
+- Modify G4IonTable::IsIon
+ 
+- July 31 2009     Hisaya Kurashige (particles-V09-02-07)
+- Use STL map for G4IonTable
+- Add G4IonTable::CreateAllIon() method
+- Add /particle/createAllIon command
+
+- May  5 2009      P.Gumplinger (particles-V09-02-06)
+- ascertain that the absolute of the argument to boost is <1.0
+  in G4MuonRadiativeDecayChannelWithSpin.cc
+
+- May. 2 2009      H.Kurashige  (particles-V09-02-05)
+- Add G4NuclearProperty::GetNuclearMass(const G4int A, const G4int Z)
+- Fix bugs in  electron mass calculation and move it to G4NucleiPropertiesTableAME03
+- Add  printMassTable in test 
+
+- Apr. 29 2009      H.Kurashige  (particles-V09-02-04)
+- Clean up comments in G4NucleiPropertiesTableAME03 
+
+- Apr. 7 2009      H.Kurashige  (particles-V09-02-03)
+- Migrate to use G4NucleiPropertiesTableAME03 instead of G4NucleiPropertiesTable
+- Introduce  G4NucleiPropertiesTableAME03 to use AME 03 mass table (T.Koi) 
+
+- Apr. 2 2009      H.Kurashige  (particles-V09-02-02)
+- Use std::fabs() instead of abs()
+
+- Feb. 27 2009      H.Kurashige  (particles-V09-02-01)
+- Update masses of light ions
+
+- Jan. 29 2009      H.Kurashige  (particles-V09-02-00)
+- include fixes in "partman-V09-02-00" and CalculateAnomaly method
+
+- Jan. 28 2009      G.Cosmo
+- Optimised G4IonTable::IsIon() implementation for usage of strings
+  (on kind suggestion of P.Elmer, CMS).
+  Fix included in tag "partman-V09-02-00", which excludes the last change
+  introduced to G4ParticleDefinition, just below.
+
+- Nov. 14 2008      H.Kurashige 
+- Add G4ParticleDefinition::CalculateAnomaly method
+
 - Nov. 13 2008      H.Kurashige (particles-V09-01-13)
 - Fix magnetic moment for leptons
 

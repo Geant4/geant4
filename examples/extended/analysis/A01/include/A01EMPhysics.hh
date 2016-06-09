@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01EMPhysics.hh,v 1.6 2006/06/29 16:30:58 gunter Exp $
+// $Id: A01EMPhysics.hh,v 1.7 2009/11/21 01:00:19 perl Exp $
 // --------------------------------------------------------------
 //
 // 09-Oct-2003 Chhange gamma, electron, positorn process T. Koi
@@ -40,7 +40,7 @@
 #include "G4PhotoElectricEffect.hh"
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"

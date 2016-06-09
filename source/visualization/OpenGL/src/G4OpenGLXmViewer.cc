@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.24 2007/08/21 14:05:51 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmViewer.cc,v 1.31 2009/05/13 10:28:00 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -37,6 +37,7 @@
 #include "globals.hh"
 
 #include "G4OpenGLXmViewer.hh"
+#include "G4OpenGLSceneHandler.hh"
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -48,6 +49,9 @@
 
 #include "G4Xt.hh"
 #include <X11/Shell.h>
+#include <Xm/MainW.h>
+#include <Xm/Frame.h>
+#include <Xm/DrawingA.h>
 
 #include <sstream>
 
@@ -125,14 +129,60 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   bgnd = XWhitePixelOfScreen (XtScreen(shell));
   borcol = XBlackPixelOfScreen (XtScreen(shell));
   
-  XtVaSetValues (shell, 
-		 XtNvisual, vi -> visual, 
-       		 XtNdepth, vi -> depth, 
-       		 XtNcolormap, cmap, 
-		 XtNborderColor, &borcol,
-		 XtNbackground, &bgnd,
-		 XmNtitle, fName.data(),
-		 NULL);
+  ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+
+  G4int x_origin = fVP.GetWindowAbsoluteLocationHintX(DisplayWidth(dpy, vi -> screen));
+
+  // FIXME,  screen size != window size on MAC, but I don't know have to get the menuBar
+  // size on MAC. L.Garnier 01/2009
+  G4int y_origin = fVP.GetWindowAbsoluteLocationHintY(DisplayHeight(dpy, vi -> screen));
+
+  if (fVP.IsWindowSizeHintX () && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    XtVaSetValues (shell, 
+                   XtNvisual, vi -> visual, 
+                   XtNdepth, vi -> depth,
+                   XtNcolormap, cmap, 
+                   XtNwidth, getWinWidth(),
+                   XtNheight, getWinHeight(),
+                   XtNx, x_origin,
+                   XtNy, y_origin,
+                   XtNborderColor, &borcol,
+                   XtNbackground, &bgnd,
+                   XmNtitle, fName.data(),
+                   NULL);
+  } else if (fVP.IsWindowSizeHintX () && !(fVP.IsWindowLocationHintX () || fVP.IsWindowLocationHintY ())) {
+    XtVaSetValues (shell, 
+                   XtNvisual, vi -> visual, 
+                   XtNdepth, vi -> depth,
+                   XtNcolormap, cmap, 
+                   XtNwidth, getWinWidth(),
+                   XtNheight, getWinHeight(),
+                   XtNborderColor, &borcol,
+                   XtNbackground, &bgnd,
+                   XmNtitle, fName.data(),
+                   NULL);
+  } else if ((!fVP.IsWindowSizeHintX ()) && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    XtVaSetValues (shell, 
+                   XtNvisual, vi -> visual, 
+                   XtNdepth, vi -> depth,
+                   XtNcolormap, cmap, 
+                   XtNx, x_origin,
+                   XtNy, y_origin,
+                   XtNborderColor, &borcol,
+                   XtNbackground, &bgnd,
+                   XmNtitle, fName.data(),
+                   NULL);
+  } else {
+    XtVaSetValues (shell, 
+                   XtNvisual, vi -> visual, 
+                   XtNdepth, vi -> depth,
+                   XtNcolormap, cmap, 
+                   XtNborderColor, &borcol,
+                   XtNbackground, &bgnd,
+                   XmNtitle, fName.data(),
+                   NULL);
+  }
+
 
   main_win = XtVaCreateManagedWidget ("main_win", 
 				      xmMainWindowWidgetClass,
@@ -570,15 +620,6 @@ void G4OpenGLXmViewer::CreateMainWindow () {
 				     XtNbackground, bgnd,
 				     NULL);
   
-  XtAddCallback (glxarea, 
-		 XmNexposeCallback, 
-		 expose_callback, 
-		 this);
-
-  XtAddCallback (glxarea, 
-		 XmNresizeCallback, 
-		 resize_callback, 
-		 this);
 
   XmMainWindowSetAreas (main_win,  // main widget, children are specified 
 			menubar,   // widget to use as menu bar
@@ -593,14 +634,20 @@ void G4OpenGLXmViewer::CreateMainWindow () {
   // Once widget is realized (ie, associated with a created X window), we
   // can bind the OpenGL rendering context to the window.
 
-  Dimension width, height;
-  XtVaGetValues (glxarea,XmNwidth,&width,XmNheight,&height,NULL);
-  WinSize_x = (G4int) width;
-  WinSize_y = (G4int) height;
-
   win = XtWindow (glxarea);
 
   glXMakeCurrent (dpy, win, cx);
+
+  // This should be add AFTER glXMakeCurrent done because it will fire a resizeCallback
+  XtAddCallback (glxarea, 
+ 		 XmNresizeCallback, 
+ 		 resize_callback, 
+ 		 this);
+
+  XtAddCallback (glxarea, 
+		 XmNexposeCallback, 
+		 expose_callback, 
+		 this);
 
 }
 
@@ -629,9 +676,6 @@ fpsetting_top (0),
 fpmiscellany_top (0),
 fpprint_top (0)
 {
-  WinSize_x = 100;
-  WinSize_y = 100;
-  
   GetXmConnection ();
   if (fViewId < 0) return;
 }

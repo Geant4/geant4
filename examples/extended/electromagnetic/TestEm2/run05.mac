@@ -1,4 +1,4 @@
-# $Id: run05.mac,v 1.5 2006/10/20 16:03:40 maire Exp $
+# $Id: run05.mac,v 1.7 2009/09/16 18:07:30 maire Exp $
 #
 #
 # Macro file for "TestEm2.cc"
@@ -9,7 +9,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  local
 #
 /testem/phys/setCuts 1 mm
 #
@@ -19,7 +19,7 @@
 /gun/energy 100 MeV
 /run/beamOn 10
 #
-/run/particle/applyCuts
+/process/em/applyCuts true 
 /run/beamOn 10
 /run/dumpCouples
 #

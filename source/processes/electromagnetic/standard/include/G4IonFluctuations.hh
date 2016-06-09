@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh,v 1.8 2008/10/22 16:04:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonFluctuations.hh,v 1.9 2009/02/19 19:17:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -83,7 +83,7 @@ public:
   void InitialiseMe(const G4ParticleDefinition*);
 
   // Initialisation prestep
-  inline void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
+  void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
 
 private:
 
@@ -113,22 +113,6 @@ private:
   G4double kineticEnergy;
   G4double beta2;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline
-void G4IonFluctuations::SetParticleAndCharge(const G4ParticleDefinition* part,
-					     G4double q2)
-{
-  if(part != particle) {
-    particle       = part;
-    particleMass   = part->GetPDGMass();
-    charge         = part->GetPDGCharge()/eplus;
-    chargeSquare   = charge*charge;
-  }
-  effChargeSquare  = q2;
-  uniFluct.SetParticleAndCharge(part, q2);
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

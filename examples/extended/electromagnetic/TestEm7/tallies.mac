@@ -1,4 +1,4 @@
-# $Id: tallies.mac,v 1.1 2006/01/30 10:35:33 maire Exp $
+# $Id: tallies.mac,v 1.2 2009/11/21 22:02:51 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -19,7 +19,7 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-/testem/phys/addPhysics  standard	# em physics  
+/testem/phys/addPhysics  local	# em physics  
 #
 /run/initialize
 #

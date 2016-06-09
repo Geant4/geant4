@@ -24,13 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParentClusterVector.hh,v 1.18 2006/06/29 20:06:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QParentClusterVector.hh,v 1.19 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
 // Type defenition of Parent nuclear cluster Vector in CHIPS model
 // ---------------------------------------------------------------
+// Short description: The parent cluster is the cluster, which can be
+// used for the nuclear fragment production. Different clusters csn be
+// used as the parent cluser for the particular G4QCandidate (nuclear
+// fragment), e.g. t and He3 for the t-fragment production. So the
+// G4QParentClusterVector is needed.
+// -------------------------------------------------------------------
 
 #ifndef G4QParentClusterVector_h
 #define G4QParentClusterVector_h 1
@@ -42,5 +48,3 @@ typedef std::vector<G4QParentCluster *> G4QParentClusterVector;
 struct DeleteQParentCluster{ void operator()(G4QParentCluster *aN){delete aN;} };
 
 #endif
-
-

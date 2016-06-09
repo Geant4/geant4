@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh,v 1.1 2007/08/16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PrimaryGeneratorAction.hh,v 1.2 2009/07/15 10:19:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,25 +44,26 @@ class PrimaryGeneratorMessenger;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    PrimaryGeneratorAction(DetectorConstruction*);    
-   ~PrimaryGeneratorAction();
+public:
 
-  public:  
-    void SetRndmBeam(G4double val)  {rndmBeam = val;}   
-    void GeneratePrimaries(G4Event*);
+  PrimaryGeneratorAction(DetectorConstruction*);    
+  ~PrimaryGeneratorAction();
+
+  void SetRndmBeam(G4double val)  {rndmBeam = val;}   
+  void GeneratePrimaries(G4Event*);
     
-    void   ResetEbeamCumul() {EbeamCumul = 0.;}
-    G4double GetEbeamCumul() {return EbeamCumul;}
+  void   ResetEbeamCumul() {EbeamCumul = 0.;}
+  G4double GetEbeamCumul() {return EbeamCumul;}
      
-    G4ParticleGun* GetParticleGun() {return particleGun;}
+  G4ParticleGun* GetParticleGun() {return particleGun;}
     
-  private:
-    G4ParticleGun*             particleGun;
-    DetectorConstruction*      detector;
-    G4double                   rndmBeam;
-    G4double                   EbeamCumul;       
-    PrimaryGeneratorMessenger* gunMessenger;     
+private:
+
+  G4ParticleGun*             particleGun;
+  DetectorConstruction*      detector;
+  G4double                   rndmBeam;
+  G4double                   EbeamCumul;       
+  PrimaryGeneratorMessenger* gunMessenger;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

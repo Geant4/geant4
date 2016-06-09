@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh,v 1.10 2008/11/14 09:25:19 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eBremsstrahlungRelModel.hh,v 1.11 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -70,8 +70,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double MinEnergyCut(const G4ParticleDefinition*, 
-			const G4MaterialCutsCouple*);
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*, 
+				const G4MaterialCutsCouple*);
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
@@ -95,11 +95,6 @@ public:
 
   inline void SetLPMconstant(G4double val);
   inline G4double LPMconstant() const;
-
-protected:
-
-  inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				     G4double kineticEnergy);
 
 private:
 
@@ -202,15 +197,6 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
     fCoulomb=GetCurrentElement()->GetfCoulomb();
     fMax   =  Fel-fCoulomb + Finel/currentZ  +  (1.+1./currentZ)/12.;
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double 
-G4eBremsstrahlungRelModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
-					      G4double kineticEnergy)
-{
-  return kineticEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

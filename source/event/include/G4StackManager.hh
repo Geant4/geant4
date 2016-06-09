@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh,v 1.12 2006/06/29 18:09:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StackManager.hh,v 1.13 2009/08/15 15:45:50 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 
@@ -36,10 +36,12 @@
 #include "G4UserStackingAction.hh"
 #include "G4StackedTrack.hh"
 #include "G4TrackStack.hh"
+#include "G4SmartTrackStack.hh"
 #include "G4ClassificationOfNewTrack.hh"
 #include "G4Track.hh"
 #include "G4TrackStatus.hh"
 #include "globals.hh"
+#include "evmandefs.hh"
 class G4StackingMessenger;
 class G4VTrajectory;
 
@@ -108,7 +110,11 @@ class G4StackManager
   private:
       G4UserStackingAction * userStackingAction;
       G4int verboseLevel;
+#ifdef G4_USESMARTSTACK
+      G4SmartTrackStack * urgentStack;
+#else
       G4TrackStack * urgentStack;
+#endif
       G4TrackStack * waitingStack;
       G4TrackStack * postponeStack;
       G4StackingMessenger* theMessenger;

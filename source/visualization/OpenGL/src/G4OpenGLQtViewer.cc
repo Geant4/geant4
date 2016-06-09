@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc,v 1.30 2008/11/06 13:43:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLQtViewer.cc,v 1.45 2009/10/21 08:14:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -36,6 +36,9 @@
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
 #include "G4OpenGLQtViewer.hh"
+#include "G4VViewer.hh"
+#include "G4VSceneHandler.hh"
+#include "G4OpenGLSceneHandler.hh"
 
 #include "G4ios.hh"
 #include "G4VisExtent.hh"
@@ -54,6 +57,7 @@
 #include <qdialog.h>
 #include <qprocess.h>
 #include <qapplication.h>
+#include <qdesktopwidget.h>
 
 #if QT_VERSION >= 0x040000
 #include <qmenu.h>
@@ -88,23 +92,6 @@ void G4OpenGLQtViewer::SetView (
   G4OpenGLViewer::SetView ();
 }
 
-/**
- * Set the viewport of the scene
- */
-void G4OpenGLQtViewer::setupViewport(int aWidth, int aHeight)
-{
-  int side = aWidth;
-  if (aHeight < aWidth) side = aHeight;
-  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
-  
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-0.5, +0.5, +0.5, -0.5, 4.0, 15.0);
-  glMatrixMode(GL_MODELVIEW);
-}
-
-
-
 
 
 
@@ -118,98 +105,45 @@ void G4OpenGLQtViewer::CreateMainWindow (
 {
 
   if(fWindow) return; //Done.
-#ifdef G4DEBUG
-  printf("G4OpenGLQtViewer::CreateMainWindow glWidget\n");
-#endif
-
-  // launch Qt if not
-  G4Qt* interactorManager = G4Qt::getInstance ();
-  //  G4UImanager* UI = G4UImanager::GetUIpointer();
 
   fWindow = glWidget ;
   //  fWindow->makeCurrent();
 
-  // create window
-  if (((QApplication*)interactorManager->GetMainInteractor())) {
-    // look for the main window
-    bool found = false;
+  QWidget *myParent = getParentWidget();
+  if (myParent != NULL) {
 #if QT_VERSION < 0x040000
-    // theses lines does nothing exept this one "GLWindow = new QDialog(0..."
-    // but if I comment them, it doesn't work...
-    QWidgetList  *list = QApplication::allWidgets();
-    QWidgetListIt it( *list );         // iterate over the widgets
-    QWidget * widget;
-    while ( (widget=it.current()) != 0 ) {  // for each widget...
-      ++it;
-      if ((found== false) && (widget->inherits("QMainWindow"))) {
-        GLWindow = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
-        found = true;
-      }
-    }
-    delete list;                      // delete the list, not the widgets
+    glWidget->reparent(myParent,0,QPoint(0,0));  
 #else
-    foreach (QWidget *widget, QApplication::allWidgets()) {
-      if ((found== false) && (widget->inherits("QMainWindow"))) {
-        GLWindow = new QDialog(0,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
-        found = true;
-      }
-    }
+    glWidget->setParent(myParent);  
 #endif
-
-#if QT_VERSION < 0x040000
-    glWidget->reparent(GLWindow,0,QPoint(0,0));  
-#else
-    glWidget->setParent(GLWindow);  
-#endif
-
-    if (found==false) {
-#ifdef G4DEBUG
-      printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
-#endif
-      GLWindow = new QDialog();
-    }
-  } else {
-#ifdef G4DEBUG
-    printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
-#endif
-    GLWindow = new QDialog();
   }
 
-  QHBoxLayout *mainLayout = new QHBoxLayout(GLWindow);
-
+  QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
+  mainLayout->setMargin(0);
+  mainLayout->setSpacing(0);   
   mainLayout->addWidget(fWindow);
 
 #if QT_VERSION < 0x040000
-  GLWindow->setCaption(name );
+  fGLWindow->setCaption(name );
 #else
-  GLWindow->setLayout(mainLayout);
-  GLWindow->setWindowTitle( name);
+  fGLWindow->setLayout(mainLayout);
+  fGLWindow->setWindowTitle( name);
 #endif
-  GLWindow->resize(fVP.GetWindowSizeHintX(), fVP.GetWindowSizeHintY());
-  GLWindow->move(900,300);
-  GLWindow->show();
+  ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+
+  //useful for MACOSX, we have to compt the menuBar height
+  int offset = QApplication::desktop()->height() 
+                      - QApplication::desktop()->availableGeometry().height();
+
+  G4int YPos= fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height());
+  if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
+    YPos = offset;
+  }
+  fGLWindow->resize(getWinWidth(), getWinHeight());
+  fGLWindow->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
+  fGLWindow->show();
   
-  // delete the pointer if close this
-  //  GLWindow->setAttribute(Qt::WA_DeleteOnClose);
-
-#if QT_VERSION >= 0x040000
-//   QObject ::connect(GLWindow, 
-//                     SIGNAL(rejected()),
-//                     this, 
-//                     SLOT(dialogClosed()));
-#endif
-
-  WinSize_x = 400;
-  WinSize_y = 400;
-  if (WinSize_x < fVP.GetWindowSizeHintX ())
-    WinSize_x = fVP.GetWindowSizeHintX ();
-  if (WinSize_y < fVP.GetWindowSizeHintY ())
-    WinSize_y = fVP.GetWindowSizeHintY ();
-
   if(!fWindow) return;
-#ifdef G4DEBUG
-  printf("G4OpenGLQtViewer::CreateMainWindow glWidget END\n");
-#endif
 
   if (!fContextMenu) 
     createPopupMenu();
@@ -220,7 +154,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
 /**  Close the dialog and set the pointer to NULL
  */
 // void G4OpenGLQtViewer::dialogClosed() {
-//   //  GLWindow = NULL;
+//   //  fGLWindow = NULL;
 // }
 #endif
 
@@ -269,7 +203,7 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
 
   fLastEventTime = new QTime();
 
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
 #endif
 }
@@ -294,7 +228,7 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
 void G4OpenGLQtViewer::createPopupMenu()    {
 
 #if QT_VERSION < 0x040000
-  fContextMenu = new QPopupMenu( GLWindow,"All" );
+  fContextMenu = new QPopupMenu( fGLWindow,"All" );
 #else
   fContextMenu = new QMenu("All");
 #endif
@@ -792,23 +726,9 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 }
 
 
-void G4OpenGLQtViewer::G4resizeGL(
- int aWidth
-,int aHeight)
-{  
-  setupViewport(aWidth,aHeight);
-  
-  if (((WinSize_x != (G4int)aWidth)) || (WinSize_y != (G4int) aHeight)) {
-    hasToRepaint =true;
-  }
-  WinSize_x = (G4int) aWidth;
-  WinSize_y = (G4int) aHeight;
-}
-
-
 void G4OpenGLQtViewer::G4manageContextMenuEvent(QContextMenuEvent *e)
 {
-  if (!GLWindow) {
+  if (!fGLWindow) {
     G4cerr << "Visualization window not defined, please choose one before" << G4endl;
   } else {
   
@@ -1031,7 +951,7 @@ void G4OpenGLQtViewer::showShortcuts() {
  */
 void G4OpenGLQtViewer::toggleDrawingAction(int aAction) {
 
-  G4ViewParameters::DrawingStyle d_style;
+  G4ViewParameters::DrawingStyle d_style = G4ViewParameters::wireframe;
   
 
   // initialize
@@ -1267,9 +1187,9 @@ void G4OpenGLQtViewer::toggleAux(bool check) {
    SLOT Activate by a click on the full screen menu
 */
 void G4OpenGLQtViewer::toggleFullScreen(bool check) {
-  if (check != GLWindow->isFullScreen()) { //toggle
+  if (check != fGLWindow->isFullScreen()) { //toggle
 #if QT_VERSION >= 0x030200
-    GLWindow->setWindowState(GLWindow->windowState() ^ Qt::WindowFullScreen);
+    fGLWindow->setWindowState(fGLWindow->windowState() ^ Qt::WindowFullScreen);
 #else
     G4cerr << "This version of Qt could not do fullScreen. Resizing the widget is the only solution available." << G4endl;
 #endif
@@ -1324,39 +1244,42 @@ void G4OpenGLQtViewer::actionSaveImage() {
   filters += "ps;;";
   filters += "pdf";
   QString* selectedFormat = new QString();
+  std::string name;
 #if QT_VERSION < 0x040000
-  QString nomFich =  QFileDialog::getSaveFileName ( ".",
+  name =  QFileDialog::getSaveFileName ( ".",
                                                     filters,
-                                                    GLWindow,
+                                                    fGLWindow,
                                                     "Save file dialog",
                                                     tr("Save as ..."),
-                                                    selectedFormat ); 
+                                                    selectedFormat ).ascii(); 
 #else
-  QString nomFich =  QFileDialog::getSaveFileName ( GLWindow,
+  name =  QFileDialog::getSaveFileName ( fGLWindow,
                                                     tr("Save as ..."),
                                                     ".",
                                                     filters,
-                                                    selectedFormat ); 
+                                                    selectedFormat ).toStdString().c_str(); 
 #endif
   // bmp jpg jpeg png ppm xbm xpm
-  if (nomFich == "") {
+  if (name.empty()) {
     return;
   }
 #if QT_VERSION < 0x040000
-  nomFich += "."+QString(selectedFormat->ascii());
+  name += "." + std::string(selectedFormat->ascii());
   QString format = selectedFormat->lower();
 #else
-  nomFich += "."+QString(selectedFormat->toStdString().c_str());
+  name += "." + selectedFormat->toStdString();
   QString format = selectedFormat->toLower();
 #endif
-  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(GLWindow,format,fWindow->height(),fWindow->width());
+  setPrintFilename(name.c_str(),0);
+  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(fGLWindow,format,fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
 
     QImage image;
     bool res = false;
     if ((exportDialog->getWidth() !=fWindow->width()) ||
         (exportDialog->getHeight() !=fWindow->height())) {
-      if (format != QString("eps")) {
+      setPrintSize(exportDialog->getWidth(),exportDialog->getHeight());
+      if ((format != QString("eps")) && (format != QString("ps"))) {
       G4cerr << "Export->Change Size : This function is not implemented, to export in another size, please resize your frame to what you need" << G4endl;
       
       //    rescaleImage(exportDialog->getWidth(),exportDialog->getHeight());// re-scale image
@@ -1379,13 +1302,15 @@ void G4OpenGLQtViewer::actionSaveImage() {
       image = fWindow->grabFrameBuffer();
     }    
     if (format == QString("eps")) {
-      if (exportDialog->getVectorEPS()) {
-        res = generateVectorEPS(nomFich,exportDialog->getWidth(),exportDialog->getHeight(),image);
-      } else {
-        res = generateEPS(nomFich,exportDialog->getNbColor(),image);
-      }
-    } else if ((format == "ps") || (format == "pdf")) {
-      res = generatePS_PDF(nomFich,exportDialog->getNbColor(),image);
+      fVectoredPs = exportDialog->getVectorEPS();
+      printEPS();
+    } else if (format == "ps") {
+      fVectoredPs = true;
+      printEPS();
+    } else if (format == "pdf") {
+
+      res = printPDF(name,exportDialog->getNbColor(),image);
+
     } else if ((format == "tif") ||
                (format == "tiff") ||
                (format == "jpg") ||
@@ -1398,25 +1323,19 @@ void G4OpenGLQtViewer::actionSaveImage() {
                (format == "xbm") ||
                (format == "xpm")) {
 #if QT_VERSION < 0x040000
-      res = image.save(nomFich,selectedFormat->ascii(),exportDialog->getSliderValue());
+      res = image.save(QString(name.c_str()),selectedFormat->ascii(),exportDialog->getSliderValue());
 #else
-      res = image.save(nomFich,0,exportDialog->getSliderValue());
+      res = image.save(QString(name.c_str()),0,exportDialog->getSliderValue());
 #endif
     } else {
       G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
     }
-    if (res == false) {
-#if QT_VERSION < 0x040000
-      G4cerr << "Error while saving file... "<<nomFich.ascii()<<"" << G4endl;
-#else
-      G4cerr << "Error while saving file... "<<nomFich.toStdString().c_str()<< G4endl;
-#endif
-    } else {
-#if QT_VERSION < 0x040000
-      G4cout << "File "<<nomFich.ascii()<<" has been saved " << G4endl;
-#else
-      G4cout << "File "<<nomFich.toStdString().c_str()<<" has been saved " << G4endl;
-#endif
+    if ((format == QString("eps")) && (format == QString("ps"))) {
+      if (res == false) {
+        G4cerr << "Error while saving file... "<<name.c_str()<< G4endl;
+      } else {
+        G4cout << "File "<<name.c_str()<<" has been saved " << G4endl;
+      }
     }
     
   } else { // cancel selected
@@ -1433,7 +1352,7 @@ void G4OpenGLQtViewer::actionMovieParameters() {
 
 void G4OpenGLQtViewer::showMovieParametersDialog() {
   if (!fMovieParametersDialog) {
-    fMovieParametersDialog= new G4OpenGLQtMovieDialog(this,GLWindow);
+    fMovieParametersDialog= new G4OpenGLQtMovieDialog(this,fGLWindow);
     displayRecordingStatus();
     fMovieParametersDialog->checkEncoderSwParameters();
     fMovieParametersDialog->checkSaveFileNameParameters();
@@ -1466,8 +1385,10 @@ void Graph::exportToSVG(const QString& fname)
 
 void G4OpenGLQtViewer::FinishView()
 {
-   glFlush ();
-   fWindow->swapBuffers ();
+  glFlush ();
+
+  // L. Garnier 10/2009 : Not necessary and cause problems on mac OS X 10.6
+  //  fWindow->swapBuffers ();
 }
 
 /**
@@ -1597,9 +1518,9 @@ void G4OpenGLQtViewer::moveScene(float dx,float dy, float dz,bool mouseMove)
   G4double coefTrans = 0;
   GLdouble coefDepth = 0;
   if(mouseMove) {
-    coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_x);
-    if (WinSize_y <WinSize_x) {
-      coefTrans = ((G4double)getSceneNearWidth())/((G4double)WinSize_y);
+    coefTrans = ((G4double)getSceneNearWidth())/((G4double)getWinWidth());
+    if (getWinHeight() <getWinWidth()) {
+      coefTrans = ((G4double)getSceneNearWidth())/((G4double)getWinHeight());
     }
   } else {
     coefTrans = getSceneNearWidth()*fDeltaSceneTranslation;
@@ -1669,8 +1590,8 @@ void G4OpenGLQtViewer::rotateQtCamera(float dx, float dy)
     @param aHeight : new height
 */
 void G4OpenGLQtViewer::rescaleImage(
- int aWidth
-,int aHeight
+ int /* aWidth */
+,int /* aHeight */
 ){
   //  GLfloat* feedback_buffer;
   //  GLint returned;
@@ -1680,214 +1601,28 @@ void G4OpenGLQtViewer::rescaleImage(
 //   glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
 //   glRenderMode (GL_FEEDBACK);
   
-//   glViewport (0, 0, aWidth, aHeight);
 //   DrawView();
 //   returned = glRenderMode (GL_RENDER);
 
 }
 
-/**
-   Generate Vectorial Encapsulated Postscript form image
-   @param aFilename : name of file
-   @param aInColor : numbers of colors : 1->BW 2->RGB 3->RGB+Alpha
-   @param aImage : Image to print
-*/
-bool G4OpenGLQtViewer::generateVectorEPS (
- QString aFilename
-,int aWidth
-,int aHeight
-,QImage aImage
-)
-{
-  // Print vectored PostScript
-  
-  G4int size = 5000000;
 
-  GLfloat* feedback_buffer;
-  GLint returned;
-  FILE* file;
-  
-  feedback_buffer = new GLfloat[size];
-  glFeedbackBuffer (size, GL_3D_COLOR, feedback_buffer);
-  glRenderMode (GL_FEEDBACK);
-  
-  int side = aWidth;
-  if (aHeight < aWidth) side = aHeight;
-  glViewport((aWidth - side) / 2, (aHeight - side) / 2, side, side);
-  DrawView();
 
-  returned = glRenderMode (GL_RENDER);
-  
-  
-#if QT_VERSION < 0x040000
-  file = fopen (aFilename.ascii(), "w");
-#else
-  file = fopen (aFilename.toStdString().c_str(), "w");
-#endif
-  if (file) {
-    spewWireframeEPS (file, returned, feedback_buffer, "rendereps");
-  } else {
-#if QT_VERSION < 0x040000
-    G4cerr << "Could not open "<< aFilename.ascii() << G4endl;
-#else
-    G4cerr << "Could not open "<< aFilename.toStdString().c_str() << G4endl;
-#endif
-  }
-  
-  delete[] feedback_buffer;
-
-  return true;
-}
-
-/**
-   Generate Encapsulated Postscript form image
-   @param aFilename : name of file
-   @param aInColor : numbers of colors : 1->BW 2->RGB 3->RGB+Alpha
-   @param aImage : Image to print
-*/
-bool G4OpenGLQtViewer::generateEPS (
- QString aFilename
-,int aInColor
-,QImage aImage
-)
-{
-  // FIXME
-
-  FILE* fp;
-
-  if (aImage.bits () == NULL)
-    return false;
-  
-#if QT_VERSION < 0x040000
-  fp = fopen (aFilename.ascii(), "w");
-#else
-  fp = fopen (aFilename.toStdString().c_str(), "w");
-#endif
-  if (fp == NULL) {
-    return false;
-  }
-  
-  fprintf (fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
-#if QT_VERSION < 0x040000
-  fprintf (fp, "%%%%Title: %s\n", aFilename.ascii());
-#else
-  fprintf (fp, "%%%%Title: %s\n", aFilename.toStdString().c_str());
-#endif
-  fprintf (fp, "%%%%Creator: OpenGL pixmap render output\n");
-  fprintf (fp, "%%%%BoundingBox: 0 0 %d %d\n", aImage.width(), aImage.height());
-  fprintf (fp, "%%%%EndComments\n");
-  fprintf (fp, "gsave\n");
-  fprintf (fp, "/bwproc {\n");
-  fprintf (fp, "    rgbproc\n");
-  fprintf (fp, "    dup length 3 idiv string 0 3 0 \n");
-  fprintf (fp, "    5 -1 roll {\n");
-  fprintf (fp, "    add 2 1 roll 1 sub dup 0 eq\n");
-  fprintf (fp, "    { pop 3 idiv 3 -1 roll dup 4 -1 roll dup\n");
-  fprintf (fp, "       3 1 roll 5 -1 roll } put 1 add 3 0 \n");
-  fprintf (fp, "    { 2 1 roll } ifelse\n");
-  fprintf (fp, "    }forall\n");
-  fprintf (fp, "    pop pop pop\n");
-  fprintf (fp, "} def\n");
-  fprintf (fp, "systemdict /colorimage known not {\n");
-  fprintf (fp, "   /colorimage {\n");
-  fprintf (fp, "       pop\n");
-  fprintf (fp, "       pop\n");
-  fprintf (fp, "       /rgbproc exch def\n");
-  fprintf (fp, "       { bwproc } image\n");
-  fprintf (fp, "   }  def\n");
-  fprintf (fp, "} if\n");
-  fprintf (fp, "/picstr %d string def\n", aImage.width() * aInColor);
-  fprintf (fp, "%d %d scale\n", aImage.width(), aImage.height());
-  fprintf (fp, "%d %d %d\n", aImage.width(), aImage.height(), 8);
-  fprintf (fp, "[%d 0 0 %d 0 0]\n", aImage.width(), aImage.height());
-  fprintf (fp, "{currentfile picstr readhexstring pop}\n");
-  fprintf (fp, "false %d\n", aInColor);
-  fprintf (fp, "colorimage\n");
-  
-
-  int width = aImage.width();
-  int height = aImage.height();
-  int depth = aImage.depth();
-  int size = width*height;
-  
-  if (depth == 1)
-    size = (width+7)/8*height;
-  else if (aInColor == 1)
-    size = size*3;
-  
-  int i = 0;
-  //  if ( aInColor ==1 ) {
-  // FIXME : L. Garnier. For the moment 10 dec 2007, I could not find a way
-  // to save correctly grayscale Image. I mean that color or grayscale image
-  // have the same file save size !
-  
-  /* } else*/ if (depth == 8) {
-    for(int y=height-1; y >=0 ; y--) {
-      const uchar * s = aImage.scanLine(y);
-      for(int x=0; x <width; x++) {
-        QRgb rgb = aImage.color(s[x]);
-        if (aInColor == 1) {
-          fprintf (fp, " %02hx ",(unsigned char)qGray(rgb));
-          i++;
-        } else {
-          fprintf (fp, " %02hx %02hx %02hx",
-                   (unsigned char) qRed(rgb),
-                   (unsigned char) qGreen(rgb),
-                   (unsigned char) qBlue(rgb));
-          i += 3;
-        }
-      }
-      fprintf (fp, "\n");
-    }
-  } else {
-#if QT_VERSION < 0x040000
-    bool alpha = aImage.hasAlphaBuffer();
-#else
-    bool alpha = aImage.hasAlphaChannel();
-#endif
-    for(int y=height-1; y >=0 ; y--) {
-      QRgb * s = (QRgb*)(aImage.scanLine(y));
-      for(int x=0; x <width; x++) {
-        QRgb rgb = (*s++);
-        if (alpha && qAlpha(rgb) < 0x40) // 25% alpha, convert to white -
-          rgb = qRgb(0xff, 0xff, 0xff);
-        if (aInColor == 1) {
-          fprintf (fp, " %02hx ",(unsigned char)qGray(rgb));
-          i++;
-        } else {
-          fprintf (fp, " %02hx %02hx %02hx",
-                   (unsigned char) qRed(rgb),
-                   (unsigned char) qGreen(rgb),
-                   (unsigned char) qBlue(rgb));
-          i += 3;
-        }
-      }
-      fprintf (fp, "\n");
-    } 
-
-  }
-
-  fprintf (fp, "grestore\n");
-  fprintf (fp, "showpage\n");
-  fclose (fp);
-
-  return true;
-}
 /**
    Generate Postscript or PDF form image
    @param aFilename : name of file
    @param aInColor : numbers of colors : 1->BW 2->RGB
    @param aImage : Image to print
 */
-bool G4OpenGLQtViewer::generatePS_PDF (
- QString aFilename
+bool G4OpenGLQtViewer::printPDF (
+ const std::string aFilename
 ,int aInColor
 ,QImage aImage
 )
 {
 
 #if QT_VERSION < 0x040000
-#ifdef Q_WS_MAC || Q_WS_X11
+#if defined(Q_WS_MAC) || defined(Q_WS_X11)
   QPrinter printer;
   //  printer.setPageSize(pageSize);
   if (aInColor == 1) {
@@ -1910,6 +1645,13 @@ bool G4OpenGLQtViewer::generatePS_PDF (
   paint.end();
 #else
   G4cerr << "This fonction is only supported on Mac OsX or X11 with Qt3. Full platform supported with Qt4" << G4endl;
+  // FIXME 
+  // L.Garnier 6 May 2009 : Only to fix compilation warnings
+  if (aFilename.empty()) {
+    aInColor = 0;
+    aImage = 0;
+  }
+  // END_OF FIXME
 #endif
 #else
   QPrinter printer;
@@ -1927,7 +1669,7 @@ bool G4OpenGLQtViewer::generatePS_PDF (
   }
 
 
-  if (aFilename.endsWith(".ps")) {
+  if (aFilename.substr(aFilename.size()-3) == ".ps") {
 #if QT_VERSION > 0x040200
     printer.setOutputFormat(QPrinter::PostScriptFormat);
 #endif
@@ -1937,7 +1679,7 @@ bool G4OpenGLQtViewer::generatePS_PDF (
 #endif
   }
 #if QT_VERSION > 0x040100
-  printer.setOutputFileName(aFilename);
+  printer.setOutputFileName(QString(aFilename.c_str()));
 #endif
   //  printer.setFullPage ( true);
   QPainter paint(&printer);
@@ -2855,6 +2597,62 @@ QString G4OpenGLQtViewer::getProcessErrorMsg()
   }
 #endif
    return txt;
+}
+
+
+
+
+QWidget *G4OpenGLQtViewer::getParentWidget() 
+{
+  // launch Qt if not
+  G4Qt* interactorManager = G4Qt::getInstance ();
+  //  G4UImanager* UI = G4UImanager::GetUIpointer();
+  
+  bool found = false;
+  
+  // create window
+  if (((QApplication*)interactorManager->GetMainInteractor())) {
+    // look for the main window
+#if QT_VERSION < 0x040000
+    // theses lines does nothing exept this one "GLWindow = new QDialog(0..."
+    // but if I comment them, it doesn't work...
+    QWidgetList  *list = QApplication::allWidgets();
+    QWidgetListIt it( *list );         // iterate over the widgets
+    QWidget * widget;
+    while ( (widget=it.current()) != 0 ) {  // for each widget...
+      ++it;
+      if ((found== false) && (widget->inherits("QMainWindow"))) {
+        fGLWindow = new QDialog(0,0,FALSE,Qt::WStyle_Title | Qt::WStyle_SysMenu | Qt::WStyle_MinMax );
+        found = true;
+      }
+    }
+    delete list;                      // delete the list, not the widgets
+#else
+    foreach (QWidget *widget, QApplication::allWidgets()) {
+      if ((found== false) && (widget->inherits("QMainWindow"))) {
+        fGLWindow = new QDialog(widget,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
+        found = true;
+      }
+    }
+#endif
+    
+    if (found==false) {
+#ifdef G4DEBUG_VIS_OGL
+      printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
+#endif
+      fGLWindow = new QDialog();
+    }
+  } else {
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
+#endif
+    fGLWindow = new QDialog();
+  }
+  if (found) {
+    return fGLWindow;
+  } else {
+    return NULL;
+  }
 }
 
 /*

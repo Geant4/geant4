@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopePhotoElectric.cc,v 1.12 2006/06/29 19:40:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopePhotoElectric.cc,v 1.16 2009/06/11 15:47:08 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: L. Pandola
 //
@@ -36,6 +36,11 @@
 // 10 Mar 2003 V.Ivanchenko   Remome CutPerMaterial warning
 // 31 May 2005  L. Pandola  Added Sauter formula for the sampling of 
 //                          the electron direction
+// 08 Jan 2009  L. Pandola  Check shell index to avoid mismatch between 
+//                          the Penelope cross section database and the 
+//                          G4AtomicTransitionManager database. It suppresses 
+//                          a warning from G4AtomicTransitionManager only. 
+//                          Results are unchanged.
 // --------------------------------------------------------------
 
 #include "G4PenelopePhotoElectric.hh"
@@ -88,6 +93,17 @@ G4PenelopePhotoElectric::G4PenelopePhotoElectric(const G4String& processName)
 	     << highEnergyLimit / GeV << " GeV" 
 	     << G4endl;
     }
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4PenelopePhotoElectric is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
+
 }
 
 G4PenelopePhotoElectric::~G4PenelopePhotoElectric()
@@ -145,6 +161,17 @@ G4VParticleChange* G4PenelopePhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   // Retrieve the corresponding identifier and binding energy of the selected shell
   const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+
+  //The number of shell cross section possibly reported in the Penelope database 
+  //might be different from the number of shells in the G4AtomicTransitionManager
+  //(namely, Penelope may contain more shell, especially for very light elements).
+  //In order to avoid a warning message from the G4AtomicTransitionManager, I 
+  //add this protection. Results are anyway changed, because when G4AtomicTransitionManager
+  //has a shellID>maxID, it sets the shellID to the last valid shell. 
+  size_t numberOfShells = (size_t) transitionManager->NumberOfShells(Z);
+  if (shellIndex >= numberOfShells)
+    shellIndex = numberOfShells-1;
+
   const G4AtomicShell* shell = transitionManager->Shell(Z,shellIndex);
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();

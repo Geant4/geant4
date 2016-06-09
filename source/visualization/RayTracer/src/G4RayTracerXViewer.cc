@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.cc,v 1.5 2006/06/29 21:24:19 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RayTracerXViewer.cc,v 1.8 2009/09/16 16:56:52 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #ifdef G4VIS_BUILD_RAYTRACERX_DRIVER
 
@@ -45,7 +45,17 @@ G4RayTracerXViewer::G4RayTracerXViewer
   G4RayTracerViewer(sceneHandler,
 		    name,
 		    new G4TheRayTracer(new G4RTJpegMaker, new G4RTXScanner))
-{
+{}
+
+G4RayTracerXViewer::~G4RayTracerXViewer() {}
+
+void G4RayTracerXViewer::Initialise() {
+
+  if (theTracer) {
+    theTracer->SetNColumn(fVP.GetWindowSizeHintX());
+    theTracer->SetNRow(fVP.GetWindowSizeHintY());
+  }
+
   // Set up X Window...
   G4RTXScanner* theXScanner = (G4RTXScanner*)theTracer->GetScanner();
   if (!theXScanner->GetXWindow(fName,fVP)) {
@@ -53,7 +63,5 @@ G4RayTracerXViewer::G4RayTracerXViewer
     return;
   }
 }
-
-G4RayTracerXViewer::~G4RayTracerXViewer() {}
 
 #endif

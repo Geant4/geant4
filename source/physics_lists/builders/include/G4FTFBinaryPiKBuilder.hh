@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4FTFBinaryPiKBuilder.hh,v 1.2 2009/03/31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4FTFBinaryPiKBuilder
+//
+// Author: 2008 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4FTFBinaryPiKBuilder_h
 #define G4FTFBinaryPiKBuilder_h 1
 
@@ -70,7 +84,7 @@ class G4FTFBinaryPiKBuilder : public G4VPiKBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
 
-    G4PiNuclearCrossSection thePiData;
+    G4PiNuclearCrossSection* thePiData;
     G4double theMin;
 
 };

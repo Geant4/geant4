@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.24 2008/10/16 11:48:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.25 2009/11/20 20:22:44 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,8 +49,8 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -187,19 +187,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     if (verboseLevel > 0) 
       G4cout << "PhysicsList::Set " << name << " EM physics" << G4endl;
 
-  } else if (name == "livermore") {
+  } else if (name == "emlivermore") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmLivermore();
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Set Livermore EM physics" << G4endl;
+    emPhysicsList = new G4EmLivermorePhysics();
 
-  } else if (name == "penelope") {
+  } else if (name == "empenelope") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope();
-    if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Set Penelope EM physics" << G4endl;
+    emPhysicsList = new G4EmPenelopePhysics();
 
   } else if (name == "elastic" && !helIsRegisted) {
     hadronPhys.push_back( new G4HadronElasticPhysics(name));

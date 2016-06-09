@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh,v 1.30 2008/02/29 17:50:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuPairProduction.hh,v 1.31 2009/02/20 14:48:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -83,18 +83,18 @@ public:
 
   virtual ~G4MuPairProduction();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-			    const G4Material*, G4double cut);
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+				    const G4Material*, G4double cut);
 
   // Print out of the class parameters
-  void PrintInfo();
+  virtual void PrintInfo();
 
 protected:
 
-  void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-				   const G4ParticleDefinition*);
+  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+					   const G4ParticleDefinition*);
 
 private:
 
@@ -110,25 +110,6 @@ private:
   G4bool                      isInitialised;
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4bool G4MuPairProduction::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4MuPairProduction::MinPrimaryEnergy(const G4ParticleDefinition*,
-					      const G4Material*,
-					      G4double)
-{
-  return lowestKinEnergy;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

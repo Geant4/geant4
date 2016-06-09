@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -11,22 +15,22 @@
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : ArgonGas
- Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
- Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Range cuts        :  gamma  0 fm     e-  0 fm     e+  0 fm  proton 0 fm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminum
- Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
- Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Range cuts        :  gamma  0 fm     e-  0 fm     e+  0 fm  proton 0 fm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 0 fm     e- 0 fm     e+ 0 fm 
- Energy thresholds :  gamma -1 MeV    e- -1 MeV    e+ -1 MeV
+ Range cuts        :  gamma  0 fm     e-  0 fm     e+  0 fm  proton 0 fm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -38,7 +42,6 @@ Start Run processing.
 =====================================
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
-### pop requested out of 1 stacked tracks.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -90,9 +93,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    42    2e+03        0        0     1e+03        0       90     4e+03     expHall Transportation
    43    3e+03        0        0     1e+03        0    1e+03     5e+03  OutOfWorld Transportation
 Track (trackID 1, parentID 0) is processed with stopping code 2
-### pop requested out of 0 stacked tracks.
-### 0 waiting tracks are re-classified to
-     0 urgent tracks and 0 waiting tracks.
 NULL returned from G4StackManager.
 Terminate current event processing.
 =====================================
@@ -100,7 +100,6 @@ Terminate current event processing.
 =====================================
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
-### pop requested out of 1 stacked tracks.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -152,9 +151,6 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    42    2e+03      400        0     1e+03        0     90.4  4.02e+03     expHall Transportation
    43    3e+03      500        0     1e+03        0    1e+03  5.02e+03  OutOfWorld Transportation
 Track (trackID 1, parentID 0) is processed with stopping code 2
-### pop requested out of 0 stacked tracks.
-### 0 waiting tracks are re-classified to
-     0 urgent tracks and 0 waiting tracks.
 NULL returned from G4StackManager.
 Terminate current event processing.
 =====================================
@@ -162,7 +158,6 @@ Terminate current event processing.
 =====================================
 1 primaries are passed from G4EventTransformer.
 !!!!!!! Now start processing an event !!!!!!!
-### pop requested out of 1 stacked tracks.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -214,13 +209,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    42    2e+03        0      400     1e+03        0     90.4  4.02e+03     expHall Transportation
    43    3e+03        0      500     1e+03        0    1e+03  5.02e+03  OutOfWorld Transportation
 Track (trackID 1, parentID 0) is processed with stopping code 2
-### pop requested out of 0 stacked tracks.
-### 0 waiting tracks are re-classified to
-     0 urgent tracks and 0 waiting tracks.
 NULL returned from G4StackManager.
 Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 G4 kernel has come to Quit state.
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Maximum number of tracks in the urgent stack : 1
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+

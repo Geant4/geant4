@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: evmandefs.hh,v 1.4 2006/06/29 18:09:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: evmandefs.hh,v 1.7 2009/09/16 23:10:46 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 ///#define G4EVENTMANAGER_DEBUG 1
@@ -35,4 +35,9 @@
 #endif
 
 #include "trajectoryControl.hh"
+
+//================ G4SmartStack ===================
+//
+//#define G4_USESMARTSTACK 1
+//
 

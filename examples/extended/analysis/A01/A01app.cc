@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01app.cc,v 1.8 2006/11/06 19:46:06 allison Exp $
+// $Id: A01app.cc,v 1.9 2009/11/14 14:41:13 allison Exp $
 // --------------------------------------------------------------
 //
 // --------------------------------------------------------------
@@ -36,10 +36,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#ifdef G4UI_USE_TCSH
-#include "G4UItcsh.hh"
-#endif
 
 #include "A01DetectorConstruction.hh"
 #include "A01PhysicsList.hh"
@@ -49,6 +45,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 int main(int argc,char** argv)
@@ -86,13 +86,11 @@ int main(int argc,char** argv)
   else
   // start interactive session
   {
-#ifdef G4UI_USE_TCSH
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);
-#else
-    G4UIsession* session = new G4UIterminal();
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+    ui->SessionStart();
+    delete ui;
 #endif
-    session->SessionStart();
-    delete session;
   }
 
 #ifdef G4VIS_USE

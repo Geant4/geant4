@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.15 2006/11/01 10:56:04 allison Exp $
+# $Id: GNUmakefile,v 1.16 2009/11/04 12:58:43 allison Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 
@@ -40,6 +40,7 @@ CPPFLAGS += -I$(G4BASE)/run/include
 CPPFLAGS += -I$(G4BASE)/event/include
 CPPFLAGS += -I$(G4BASE)/track/include
 CPPFLAGS += -I$(G4BASE)/processes/management/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/utils/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/digits/include
 
 include $(G4INSTALL)/config/common.gmk

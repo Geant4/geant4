@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayProducts.cc,v 1.16 2007/10/06 06:49:29 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DecayProducts.cc,v 1.17 2009/04/02 02:24:53 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -239,7 +239,7 @@ G4bool G4DecayProducts::IsChecked() const
   G4ThreeVector direction = theParentParticle->GetMomentumDirection();
   G4ThreeVector parent_momentum = direction*(theParentParticle->GetTotalMomentum());
   // check momentum dirction is a unit vector
-  if ( (parent_momentum.mag() >0.0) && (std::abs(direction.mag()-1.0) >1.0e-6 ) ) {
+  if ( (parent_momentum.mag() >0.0) && (std::fabs(direction.mag()-1.0) >1.0e-6 ) ) {
 #ifdef G4VERBOSE
     G4cout << " Momentum Direction Vector of Parent is not normalized ";
     G4cout << "  (=" << direction.mag() << ")" << G4endl;
@@ -260,7 +260,7 @@ G4bool G4DecayProducts::IsChecked() const
     direction = theProductVector[index]->GetMomentumDirection();
     momentum = direction*(theProductVector[index]->GetTotalMomentum());
     // check momentum dirction is a unit vector
-    if ( (momentum.mag()>0.0) && (std::abs(direction.mag()-1.0) > 1.0e-6)) {
+    if ( (momentum.mag()>0.0) && (std::fabs(direction.mag()-1.0) > 1.0e-6)) {
 #ifdef G4VERBOSE
       G4cout << " Momentum Direction Vector of Daughter [" << index;
       G4cout << "]  is not normalized (=" << direction.mag() << ")" << G4endl;
@@ -279,7 +279,7 @@ G4bool G4DecayProducts::IsChecked() const
     total_momentum -= momentum;
   }
   // check energy/momentum conservation
-  if ( (std::abs(total_energy) >1.0e-6) || (total_momentum.mag() >1.0e-6 ) ){ 
+  if ( (std::fabs(total_energy) >1.0e-9*MeV) || (total_momentum.mag() >1.0e-9*MeV ) ){ 
 #ifdef G4VERBOSE
     G4cout << " Energy/Momentum is not conserved   "<< G4endl;
     G4cout << " difference between parent energy and sum of dughters' energy : " 

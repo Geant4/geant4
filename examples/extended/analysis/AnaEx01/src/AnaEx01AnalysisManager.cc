@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.16 2006/06/29 16:33:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: AnaEx01AnalysisManager.cc,v 1.18 2009/05/13 08:33:17 gbarrand Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Guy Barrand 14th Septembre 2000.
@@ -69,18 +69,59 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(AIDA::IAnalysisFactory* aAIDA)
   if(!treeFactory) return;
 
   // Create a tree-like container to handle histograms.
-  // This tree is associated to a AnaEx01.aida file.  
-  //std::string opts = "compress=yes";
-  std::string opts = "compress=no";
-  fTree = treeFactory->create("AnaEx01.aida","xml",false,true,opts);
-  //std::string opts = "export=root";
-  //fTree = treeFactory->create("AnaEx01.root","ROOT",false,true,opts);
+  // This tree is associated to a AnaEx01.<format> file.  
+
+  std::string h_name_EAbs("EAbs");
+  std::string h_name_LAbs("LAbs");
+  std::string h_name_EGap("EGap");
+  std::string h_name_LGap("LGap");
+  std::string t_name("AnaEx01");
+
+  // File format :
+  std::string format("xml");
+  //std::string format("hbook");
+  //std::string format("root");
+
+  std::string file("AnaEx01");
+  std::string ext;
+  ext = "."+format;
+
+  std::string opts;
+  if(format=="hbook") {
+    opts = "compress=no";
+
+    h_name_EAbs = "1";
+    h_name_LAbs = "2";
+    h_name_EGap = "3";
+    h_name_LGap = "4";
+    t_name = "101";
+
+  } else if(format=="root") {
+    opts = "compress=yes";
+
+  } else if(format=="xml") {
+    ext = ".aida";
+    opts = "compress=no";
+
+  } else {
+    G4cout << "storage format \"" << format << "\""
+           << " not handled in this example."
+           << G4endl;
+    return;
+  }
+
+  file += ext;
+  fTree = treeFactory->create(file,format,false,true,opts);
 
   // Factories are not "managed" by an AIDA analysis system.
   // They must be deleted by the AIDA user code.
   delete treeFactory; 
 
-  if(!fTree) return;
+  if(!fTree) {
+    G4cout << "can't create tree associated to file \"" << file << "\"."
+           << G4endl;
+    return;
+  }
 
   fTree->mkdir("histograms");
   fTree->cd("histograms");
@@ -89,10 +130,14 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(AIDA::IAnalysisFactory* aAIDA)
   AIDA::IHistogramFactory* histoFactory = 
     fAIDA->createHistogramFactory(*fTree);
   if(histoFactory) {
-    fEAbs = histoFactory->createHistogram1D("EAbs",100,0,100);
-    fLAbs = histoFactory->createHistogram1D("LAbs",100,0,100);
-    fEGap = histoFactory->createHistogram1D("EGap",100,0,10);
-    fLGap = histoFactory->createHistogram1D("LGap",100,0,100);
+    fEAbs = histoFactory->createHistogram1D(h_name_EAbs,"EAbs",100,0,100);
+    if(!fEAbs) G4cout << "can't create histo EAbs." << G4endl;
+    fLAbs = histoFactory->createHistogram1D(h_name_LAbs,"LAbs",100,0,100);
+    if(!fLAbs) G4cout << "can't create histo LAbs." << G4endl;
+    fEGap = histoFactory->createHistogram1D(h_name_EGap,"EGap",100,0,10);
+    if(!fEGap) G4cout << "can't create histo EGap." << G4endl;
+    fLGap = histoFactory->createHistogram1D(h_name_LGap,"LGap",100,0,100);
+    if(!fLGap) G4cout << "can't create histo LGap." << G4endl;
     delete histoFactory;
   }
     
@@ -105,12 +150,14 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(AIDA::IAnalysisFactory* aAIDA)
   if(tupleFactory) {
     
     // Create a tuple :
-    fTuple = tupleFactory->create("AnaEx01","AnaEx01",
+    fTuple = tupleFactory->create(t_name,"AnaEx01",
       "double EAbs,double LAbs,double EGap,double LGap");
+    if(!fTuple) G4cout << "can't create tuple." << G4endl;
     
     delete tupleFactory;
   }
 
+  fTree->cd("..");
 }
 AnaEx01AnalysisManager::~AnaEx01AnalysisManager() {
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmPushButton.cc,v 1.6 2006/06/29 21:19:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmPushButton.cc,v 1.8 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //Push button class. Inherits from G4OpenGLXmVWidgetComponent
 
@@ -35,6 +35,8 @@
 #include "G4OpenGLXmVWidgetContainer.hh"
 #include "G4OpenGLXmPushButton.hh"
 #include <X11/Intrinsic.h>
+#include <Xm/PushB.h>
+
 #include "globals.hh"
 
 G4OpenGLXmPushButton::G4OpenGLXmPushButton (const char* n,

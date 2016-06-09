@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.hh,v 1.6 2008/05/09 08:23:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4hMultipleScattering.hh,v 1.8 2009/11/01 13:04:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -38,6 +38,7 @@
 // 
 // Modifications:
 // 20.03.07 Remove local parameter skin (V.Ivanchenko) 
+// 04.07.09 Remove other local parameters (V.Ivanchenko) 
 //
 //
 //------------------------------------------------------------------------------
@@ -59,8 +60,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4VMscModel;
-
 class G4hMultipleScattering : public G4VMultipleScattering
 
 {
@@ -76,25 +75,6 @@ public:    // with description
   // Print few lines of informations about the process: validity range,
   void PrintInfo();
 
-  // geom. step length distribution should be sampled or not
-  void Setsamplez(G4bool value) { samplez = value;};
-
-  // to reduce the energy/step dependence
-  void Setdtrl(G4double value) { dtrl = value;};
-
-  // 'soften' step limitation above lambdalimit
-  void SetLambdalimit(G4double value) { lambdalimit = value;};
-
-  // The function overloads the corresponding function of the base
-  // class.It limits the step near to boundaries only
-  // and invokes the method GetMscContinuousStepLimit at every step.
-  G4double AlongStepGetPhysicalInteractionLength(
-                                            const G4Track&,
-					    G4double  previousStepSize,
-					    G4double  currentMinimalStep,
-					    G4double& currentSafety,
-					    G4GPILSelection* selection);
-
 protected:
 
   // This function initialise models
@@ -102,14 +82,7 @@ protected:
 
 private:        // data members
 
-  G4VMscModel* mscUrban;
-
-  G4double lambdalimit;
-  G4double dtrl;
-
-  G4bool   samplez;
   G4bool   isInitialized;
-  G4bool   isIon;
 
 };
 

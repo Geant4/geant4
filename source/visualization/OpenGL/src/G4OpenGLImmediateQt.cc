@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQt.cc,v 1.4 2008/10/24 13:49:19 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateQt.cc,v 1.6 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // OpenGLImmediateQt graphics system factory.
@@ -39,6 +39,7 @@
 #include "G4OpenGLImmediateQt.hh"
 #include "G4OpenGLImmediateQtViewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 G4OpenGLImmediateQt::G4OpenGLImmediateQt ():
   G4VGraphicsSystem ("OpenGLImmediateQt",
@@ -57,7 +58,7 @@ G4VSceneHandler* G4OpenGLImmediateQt::CreateSceneHandler
 
 G4VViewer* G4OpenGLImmediateQt::CreateViewer
 (G4VSceneHandler& scene, const G4String& name) {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQt::CreateViewer \n");
 #endif
   G4VViewer* pView =
@@ -77,7 +78,7 @@ G4VViewer* G4OpenGLImmediateQt::CreateViewer
     G4cerr << "G4OpenGLImmediateQt::CreateViewer: null pointer on"
       " new G4OpenGLImmediateQtViewer." << G4endl;
   }
-#ifdef G4DEBUG
+#ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQt::CreateViewer END \n");
 #endif
    return pView;

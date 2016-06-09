@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.25 2006/06/29 21:22:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenInventorWinViewer.cc,v 1.26 2009/09/18 12:48:43 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 /*
  * jck : 05 Feb 1997 : Initial Implementation
@@ -64,7 +64,6 @@ public:
   }
 };
 
-#define SIZE 600
 // File : 
 #define ID_FILE_POSTSCRIPT 1
 #define ID_FILE_PIXMAP_POSTSCRIPT 2
@@ -97,7 +96,15 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
 {
   G4cout << "Window name: " << fName << G4endl;
 
+}
+
+
+void G4OpenInventorWinViewer::Initialise() {
+
   G4String wName = fName;
+
+  int width = 600;
+  int height = 600;
 
   HWND parent = (HWND)fInteractorManager->GetParentInteractor ();
   if(!parent) {
@@ -121,7 +128,10 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
       ::RegisterClass(&wc);
       done = TRUE;
     }
-
+    
+    width = fVP.GetWindowSizeHintX();
+    height = fVP.GetWindowSizeHintX();
+    
     HMENU menuBar = CreateMenu();
 
    {HMENU casc = CreatePopupMenu();
@@ -156,7 +166,7 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
                             WS_OVERLAPPEDWINDOW |
                             WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
                             CW_USEDEFAULT, CW_USEDEFAULT, 
-                            SIZE,SIZE,
+                            width,height,
                             0,menuBar,::GetModuleHandle(0),0);
     // Retreive window and client sizez :
     RECT wrect,crect;
@@ -166,8 +176,8 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
     int wh = wrect.bottom-wrect.top;
     int cw = crect.right-crect.left;
     int ch = crect.bottom-crect.top;
-    // Compell client rect to be SIZE SIZE :
-    MoveWindow((HWND)fShell,wrect.left,wrect.top,SIZE+ww-cw,SIZE+wh-ch,TRUE);
+    // Compell client rect to be width height :
+    MoveWindow((HWND)fShell,wrect.left,wrect.top,width+ww-cw,height+wh-ch,TRUE);
     ::SetWindowLong((HWND)fShell,GWL_USERDATA,LONG(this));
     ::SetWindowText((HWND)fShell,shellName.c_str());
     parent = fShell;
@@ -183,7 +193,7 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
   fGL2PSAction = new SoGL2PSAction(vpRegion);
   fViewer->setGLRenderAction(fGL2PSAction);
 
-  fViewer->setSize(SbVec2s(SIZE,SIZE));
+  fViewer->setSize(SbVec2s(width,height));
   fViewer->setSceneGraph(fSoSelection);
   fViewer->viewAll();
   fViewer->saveHomePosition();

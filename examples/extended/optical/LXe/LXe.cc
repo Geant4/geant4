@@ -26,8 +26,6 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4String.hh"
-#include "G4UItcsh.hh"
-#include "G4UIterminal.hh"
 
 #include "LXeDetectorConstruction.hh"
 #include "LXePhysicsList.hh"
@@ -43,6 +41,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -70,30 +72,25 @@ int main(int argc, char** argv)
   runManager->SetUserAction(new LXeTrackingAction(recorder));
   runManager->SetUserAction(new LXeSteppingAction(recorder));
 
-  runManager->Initialize();
+  // runManager->Initialize();
  
   // get the pointer to the UI manager and set verbosities
-  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
   if(argc==1){
-    G4UIsession* session=0;
-#ifdef G4UI_USE_TCSH
-    session = new G4UIterminal(new G4UItcsh);
-#else
-    session = new G4UIterminal();
+#ifdef G4UI_USE
+    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+    UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
-
-    //execute vis.mac
-    UI->ApplyCommand("/control/execute vis.mac");
-
-    session->SessionStart();
-    delete session;
-
+    ui->SessionStart();
+    delete ui;
+#endif
   }
   else{
     G4String command = "/control/execute ";
     G4String filename = argv[1];
-    UI->ApplyCommand(command+filename);
+    UImanager->ApplyCommand(command+filename);
   }
 
   if(recorder)delete recorder;

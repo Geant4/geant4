@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP.icc,v 1.7 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: QGSP.icc,v 1.8 2009/11/27 17:28:19 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -40,6 +40,7 @@
 // 20.11.2006 G.Folger: add Tracking Cut for neutrons
 // 30.03.2007 G.Folger: Enable quasielastic for QGS string model
 // 16.05.2007 V.Ivanchenko: rename EM builders
+// 27.11.2009 G.Folger: Mark as obsolete
 //
 //----------------------------------------------------------------------------
 //
@@ -68,18 +69,23 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSP<T>::TQGSP(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP 3.3"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP 3.4"<<G4endl;
   G4cout <<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSP", "QGSP_BERT");
+  
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));
 

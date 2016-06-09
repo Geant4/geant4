@@ -1,0 +1,63 @@
+#/control/verbose 1
+
+
+#
+#Define some geometrical parameters
+###############################################
+/RMC01/geometry/SetSensitiveVolumeHeight 1. mm
+/RMC01/geometry/SetSensitiveVolumeRadius 1. mm
+
+/RMC01/geometry/SetShieldingThickness 2. mm
+
+
+#
+#Select physics list
+###############################################
+
+/adjoint_physics/UseProtonIonisation true
+/adjoint_physics/UseGammaConversion false
+/adjoint_physics/SetEminForAdjointModels 1. keV
+/adjoint_physics/SetEmaxForAdjointModels 200. MeV
+#
+#Initialize geometry and physics
+###############################################
+/run/initialize
+
+#
+#Set cut
+###############################################
+
+/run/setCut 1.000e-02 mm
+/control/verbose 1
+
+
+#
+#Definition of parameters for the Adjoint simulation
+##################################
+
+
+#Definition of the external source
+
+/adjoint/DefineExtSourceOnExtSurfaceOfAVolume  Shielding
+/adjoint/SetExtSourceEmax 200. MeV
+
+#Definition of the adjoint source
+/adjoint/DefineAdjSourceOnExtSurfaceOfAVolume SensitiveVolume
+/adjoint/SetAdjSourceEmin 1. keV
+/adjoint/SetAdjSourceEmax 200. MeV
+
+
+#Definition of the primary spectrum to which 
+#the results of the adjoint/reverse simulation will be normalised
+
+/RMC01/analysis/SetPowerLawPrimSpectrumForAdjointSim proton 1. cm-2 1. 1e-3 200. MeV 
+
+#Definition of the precision in % that the computed energy deposited should reach 
+#before aborting the run. 
+/RMC01/analysis/SetExpectedPrecisionOfResults 1.
+
+
+
+/run/verbose 1
+/tracking/verbose 0
+/adjoint/start_run  100000

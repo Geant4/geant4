@@ -27,33 +27,34 @@
 #define G4ParametrizedHadronicVertex_h 1
 
 #include "globals.hh"
-#include "G4ParticleChange.hh"
+#include "G4VParticleChange.hh"
+#include "G4HEInelastic.hh"
 #include "G4Nucleus.hh"
-#include "G4ReactionProduct.hh"
-#include "G4LEPionPlusInelastic.hh"
-#include "G4LEPionMinusInelastic.hh"
-#include "G4HEPionPlusInelastic.hh"
-#include "G4HEPionMinusInelastic.hh"
 #include "G4Track.hh"
+
+class G4LEPionPlusInelastic;
+class G4LEPionMinusInelastic;
+class G4HEPionPlusInelastic;
+class G4HEPionMinusInelastic;
 
 class G4ParametrizedHadronicVertex
 {
-  public:
-   G4ParametrizedHadronicVertex()
-   {
-     theLowEPionPlus = new G4LEPionPlusInelastic;
-     theLowEPionMinus = new G4LEPionMinusInelastic;
-     theHighEPionPlus = new G4HEPionPlusInelastic;
-     theHighEPionMinus = new G4HEPionMinusInelastic;
-   }
-   G4VParticleChange * ApplyYourself(G4Nucleus & theTarget, 
-                                     const G4Track &thePhoton);
+public:
 
-  private:
-   G4LEPionPlusInelastic  *theLowEPionPlus;
-   G4LEPionMinusInelastic *theLowEPionMinus;
-   G4HEPionPlusInelastic  *theHighEPionPlus;
-   G4HEPionMinusInelastic *theHighEPionMinus;
+  G4ParametrizedHadronicVertex();
+
+  ~G4ParametrizedHadronicVertex();
+
+  G4VParticleChange * ApplyYourself(G4Nucleus & theTarget, 
+				    const G4Track &thePhoton);
+
+private:
+
+  G4LEPionPlusInelastic  *theLowEPionPlus;
+  G4LEPionMinusInelastic *theLowEPionMinus;
+  G4HEPionPlusInelastic  *theHighEPionPlus;
+  G4HEPionMinusInelastic *theHighEPionMinus;
   
+  G4VParticleChange theTotalResult;
 };
 #endif

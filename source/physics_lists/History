@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2008/12/05 15:14:36 gcosmo Exp $
+q$Id: History,v 1.119 2009/12/04 13:09:12 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,14 +15,214 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-12-2009, K.Murakami                  (phys-lists-V09-02-46)
+- Fixed typo in FTFP_EMV.icc for wrong call to G4WarnPLStatus.
+
+03-12-2009, P.Kaitaniemi                (phys-lists-V09-02-45)
+- QGSP_INCL_ABLA, Fix: Use Bertini cascade for kaons in the energy range 0 - 10 GeV.
+
+30-11-2009, M.Kosov                     (phys-lists-V09-02-44)
+- G4QNeutrinoPhysics - process is not created if neutrino is not simulated
+
+28-11-2009, V.Ivanchenko                (phys-lists-V09-02-43)
+- QBBC - fixed cross sections for hadron elastic
+
+27-11-2009, G.Folger                    (phys-lists-V09-02-42)
+- QGSP_BERT_TRV, change transition energies in HadronPhysicsQGSP_BERT_TRV to 
+   use BERT ]0,9.9], LEP [9.5, 15], QGSP [10, inf[
+- QGSP_BERT_NOLEP, use G4HadronQElasticPhysics  
+- explicitely mark experimental: QGSP_BERT_EMX, QGSP_BERT_TRV, QGSP_FTFP_BERT, 
+     QGSP_INCL_ABLA
+- mark as obsolete: FTFP, QGSP, QGSC, QGSC_CHIPS, QGSC_EMV, QGSC_QGSC 
+- mark supported ( remove experimental) :FTFP_BERT,  FTFP_BERT_EMV
+- Add initial version of G4IonQMDPhysics    
+   
+25-11-2009, V.Ivanchenko                  (phys-lists-V09-02-41)
+- G4PhysListFactory - update list of supported referenced PhysicsLists
+- QBBC - updated for the release
+
+24-11-2009, V.Ivanchenko                  (phys-lists-V09-02-40)
+- G4EmStandardPhysics_option3, G4EmLivermorePhysics, G4EmPenelopePhysics,
+  G4EmLivermorePolarizedPhysics - set finalRange=10um for ions
+- G4EmStandardPhysics_option2 - use default StepFunction for ions
+
+20-11-2009, M.Kosov                       (phys-lists-V09-02-39)
+- Something was wrong in CHIPS lis, but now it is working
+
+20-11-2009, M.Kosov                       (phys-lists-V09-02-38)
+- G4QAtomicPhysics and xs_dependent is excluded from the GNUmakefile's
+
+18-11-2009, M.Kosov                       (phys-lists-V09-02-37)
+- bug fix in CHIPS.icc (call for G4QCaptureAtRestPhysics)
+
+17-11-2009, M.Kosov                       (phys-lists-V09-02-36)
+- improved dependencies on CHIPS
+
+16-11-2009, M.Kosov                       (phys-lists-V09-02-35)
+- dependencies on split CHIPS-body and new class G4QCaptureAtRestPhysics
+
+13-11-2009, M.Kosov                       (phys-lists-V09-02-34)
+- two builders G4QNeutrinoPhysics & G4QPhotoNuclearPhysics with
+  the G4QMessenger are added to the CHIPS physics list
+
+10-11-2009, V.Ivanchenko                  (phys-lists-V09-02-33)
+- G4EmStandardPhysics_option3, G4EmLivermorePhysics, G4EmPenelopePhysics,
+  G4EmLivermorePolarizedPhysics - added G4NuclearStopping process for 
+                                  GenericIon, He3, alpha particles
+
+4-11-2009, P.Gumplinger                   (phys-lists-V09-02-32)
+- add G4OpticalPhysics and G4OpticalPhysicsMessenger class
+
+3-11-2009, M.Kosov                        (phys-lists-V09-02-31)
+- close the warning about not used quasiElastic
+
+31-10-2009, V.Ivanchenko                   (phys-lists-V09-02-30)
+- G4EmDNAPhysics (S.Inserti) updated combined Physics List standard/DNA
+
+30-10-2009, V.Ivanchenko                   (phys-lists-V09-02-29)
+- Review of all EM builders: 
+   - in all builders separate definition of processes for He3 and 
+     He4 ions; G4eMultipleScattering for e+, e-,
+     G4MuMultipleScattering for muons; 
+   - G4UrbanMscModel93 for e+- for all builders except Opt0 and Opt1
+   - G4WentzelVIModel for muons for all builders except Opt0 and Opt1
+   - G4ParameterizedIonModel for Opt3 and all combined builders
+   - StepFunction (0.1, 0.02*mm) for ions inside Opt2  
+
+30-10-2009, M.Kosov                        (phys-lists-V09-02-28)
+- first implementation of the one model CHIPS physics list
+
+08-10-2009, V.Ivanchenko                   (phys-lists-V09-02-27)
+- fixed compillation problem in G4HadronPhysicsQBBC
+
+04-10-2009, V.Ivanchenko                   (phys-lists-V09-02-26)
+- modified QBBC - remove template and move QBBC.icc to QBBC.cc;
+                  use a new G4VHadronPhysics interface
+- G4HadroHElasticPhysics uses G4WHadronElasticProcess (the result of 
+   redesign of elastic) instead of G4UHadronElasticProcess    
+- QGSP_BERT_EMV uses G4HadroHElasticPhysics instead of G4HadroElasticPhysics  
+
+02-10-2009, V.Ivanchenko                   (phys-lists-V09-02-25)
+- modified EM standard Physics Lists
+G4EmStandardPhysics         - return 9.2 configuration
+G4EmStandardPhysics_option1 - use ApplyCuts=true
+G4EmStandardPhysics_option2 - use G4eMultipleScattering for e+-
+
+09-09-2009, S.Incerti                      (phys-lists-V09-02-24)
+- added high energy limit to e- models for better clarity in
+G4EmLivermorePhysics.cc
+G4EmLivermorePolarizedPhysics.cc
+
+19-07-2009, P.Kaitaniemi                   (phys-lists-V09-02-23)
+- Added INCL/ABLA physics builders for protons, neutrons, pions and light ions
+- Added QGSP_INCL_ABLA physics list
+- Added QGSP_INCL_ABLA to the G4PhysListFactory
+
+08-07-2009, S.Incerti                      (phys-lists-V09-02-22)
+- adapted G4EmLivermorePolarizedPhysics builder similarly to
+the non polarized case
+
+03-06-2009, G.Folger                       (phys-lists-V09-02-21)
+- no code change
+- use versions of phys-lists-V09-02-18 for 
+   builders/include/G4QGSC_CHIPSNeutronBuilder.hh
+   builders/*/G4QNeutronBuilder.{hh,cc}
+   
+
+02-06-2009, G.Folger                       (phys-lists-V09-02-20)
+- Rename HadronPhysicsFB68.{hh,cc} to HadronPhysicsFTFP_BERT_TRV.{hh,cc};
+   required changes in FTFP_BERT_TRV.icc as well.
+- correct typo in experimental/Unsupported names in FTF_BIC.icc and QGSP_EMX.icc
+   
+25-05-2009, M.Kosov                        (phys-lists-V09-02-19)
+- Two new low energy (<290 MeV) nA CHIPS reactions are implemented in the QGSC_CHIPS
+  physics list (works together with the hadr-chips-inter-V09-02-07 CHIPS tag
+
+18-05-2009, G.Folger                       (phys-lists-V09-02-18)
+- Declare several list obsolete, partially disabling use.
+  Obsolete + disabled  (= remove)
+     FTF_EMV,   replacment FTFP_BERT_EMV
+     QGSC_EFLOW, replacment QGSC_CHIPS
+     QGSP_EMX, replacment QGSP_BERT_EMX
+  Obsolete:
+     FTFC
+     LHEP_BERT, LHEP_BERT_HP, LHEP_PRECO_HP
+     QGSP_BERT_DIF, QGSP_BERT_NQE, QGSP_DIF, QGSP_EMV, QGSP_EMV_NQE,
+     QGSP_NQE, QGSP_QEL  
+
+11-05-2009, V.Ivanchenko phys-lists-V09-02-17
+- Added new PhysLists with special EM options: FTFP_BERT_EMV,
+  FTFP_BERT_EMX, QGSP_BERT_EMX, QGSP_BIC_EMY (opt3 EM physics)
+- Renamed FB68 to FTFP_BERT_TRV
+- G4PhysicsListFactory - updated list of supported PhysLists
+
+10-05-2009, V.Ivanchenko phys-lists-V09-02-16
+G4EmStandardPhysics, G4EmStandardPhysics_option1 - use 9.2 msc
+                                                   model for e+-
+G4EmStandardPhysics_option2 - use G4WentzelVIModel for e+-
+G4EmStandardPhysics_option3 - use updated G4UrbanMscModel2 and 
+                              use G4RayleighScattering
+G4EmLivermorePhysics - upper limit of Livermore models 1 GeV
+
+23-04-2009, J.Apostolakis phys-lists-V09-02-15
+- Added MaxEnergy method in FTF builders.
+- Added QGSP_FTFP_BERT based on QGSP_BERT replacing the bridging LEP with FTFP, 
+  and transitioning from BERT to FTFP between 7 and 9 GeV;
+- Added FB68 as variant of FTFP_BERT with transition between 6 and 8 GeV. 
+
+20-04-2009, M.Kosov phys-lists-V09-02-14
+- Two new physics lists QGSC_QGSC and QGSC_CHIPS are added.
+- QGSC_QGSC physics list uses the QGS model with the MultySoft
+  interface to CHIPS at all energies, starting from E=0. For neutrons
+  it still uses LHEP models for the radiativ capture and fission.
+- QGSC_CHIPS physics list uses the QGS model with the EnergyFlow
+  interface to CHIPS at all energies. For the pA interactions the
+  native CHIPS process G4QCollision is used below 290 MeV. The QGSC and
+  G4QCollision processes are joined in one process by the CHIPS
+  G4QDiscProcessMixer interface.
+- The corresponding physics builders are added.
+
+17-04-2009, V.Ivanchenko phys-lists-V09-02-12
+- Restore History after modification of CHIPS builders
+- Fixed G4EmLivermorePhysics, G4EmPenelopePhysics
+- Added new CHIPS PhysLists to the G4PhysListFactory
+- Fixed G4HadronInelasticQBBC - cross sections are created by new, 
+  not by value, fission only instantiated for HP
+
+31-03-2009, V.Ivanchenko phys-lists-V09-02-05
+- To fix bug #1056 all cross section data sets are included not as a
+  member of classes but created by new
+- inline constructor and destructors are moved to source for classes:
+  G4VNeutronBuilder, G4VPiKBuilder, G4VProtonBuilder, G4WarnPLStatus
+
+26-03-2009, S.Incerti phys-lists-V09-02-04
+- Added builders for Livermore and Penelope physics processes:
+  G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics, G4EmPenelopePhysics.
+
+25-03-2009, S.Incerti phys-lists-V09-02-03
+- Added builder for DNA physics processes: G4EmDNAPhysics.
+
+12-03-2009, V.Ivanchenko phys-lists-V09-02-02
+- HadronPhysicsQGSC: fixed crash at destruction.
+
+16-02-2009, V.Ivanchenko phys-lists-V09-02-01
+- G4IonBinaryCascadePhysics: use Shen cross section only if Tripathi is
+  not applicable (fixed order of x-sections).
+- G4HadronInelasticQBBC: use G4StringChipsParticleLevelInterface instead of
+  obsolete G4StringChipsInterface.
+
+05-02-2009, V.Ivanchenko phys-lists-V09-02-00
+- G4MiscLHEPBuilder: create processes by "new" in order to have proper
+  deletion at the end of job.
+
 05-12-2008, G.Cosmo phys-lists-V09-01-20
 - Added missing dependency to "run" category in GLOBLIBS for DLL parsing
   induced by G4PhysicsListFactory which now brings in dependency on
   G4VModularPhysicsList.
 
 01-12-2008, V.Ivanchenko phys-lists-V09-01-19
-G4HadronElasticPhysics - fixed adding optional Barashenkov Xsection
-QBBC - added QBBBG option
+- G4HadronElasticPhysics: fixed adding optional Barashenkov Xsection
+  QBBC - added QBBBG option
 
 21-11-2008, V.Ivanchenko phys-lists-V09-01-18
 - Added sigma_c+, sigma_c++ in the list of stable hadrons

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorPropagatorData.hh,v 1.3 2007/06/08 10:33:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorPropagatorData.hh,v 1.5 2009/05/19 13:31:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------------
@@ -37,7 +37,6 @@
 //   Utility class to provide access to mode, state, target 
 //   and manager verbosity for the error propagation classes.
 
-// History:
 // - Created. P.Arce, 2004.
 // --------------------------------------------------------------------
 
@@ -55,6 +54,10 @@ enum G4ErrorState { G4ErrorState_PreInit = 1,
                     G4ErrorState_Propagating,
                     G4ErrorState_TargetCloserThanBoundary,
                     G4ErrorState_StoppedAtTarget };
+
+enum G4ErrorStage  { G4ErrorStage_Inflation = 1,
+                     G4ErrorStage_Deflation };
+
 class G4ErrorTarget;
 
 class G4ErrorPropagatorData 
@@ -71,6 +74,9 @@ public:  // with description
 
   G4ErrorState GetState() const;
   void SetState( G4ErrorState sta );
+
+  G4ErrorStage GetStage() const;
+  void SetStage( G4ErrorStage sta );
 
   const G4ErrorTarget* GetTarget( G4bool mustExist = 0) const;
   void SetTarget( const G4ErrorTarget* target );
@@ -92,6 +98,8 @@ private:
   G4ErrorMode theMode;
 
   G4ErrorState theState;
+
+  G4ErrorStage theStage;
 
   G4ErrorTarget* theTarget;
 

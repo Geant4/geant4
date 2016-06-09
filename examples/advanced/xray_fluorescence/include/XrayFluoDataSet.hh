@@ -32,7 +32,7 @@
 // History:
 // -----------
 //  28 Nov 2001  Elena Guardincerri   Created
-//
+//  2001 - 2009  Alfonso Mantero      Mantained
 // -------------------------------------------------------------------
 
 //for the documentation of this class see also G4EMDataSet class
@@ -73,15 +73,38 @@ public:
 
   virtual size_t NumberOfComponents() const { return 0; }
 
+  virtual void SetEnergiesData(G4DataVector*, G4DataVector*, int
+    = 0) {}
+
+  virtual G4bool SaveData(const G4String&) const {return true;}
+
+  virtual G4double RandomSelect(int = 0) const {return 0;}
 
   void PrintData() const;
 
   const G4DataVector& GetEnergies(G4int) const { return *energies; }
   const G4DataVector& GetData(G4int) const { return *data; }
+  
+  virtual const G4DataVector& GetLogEnergies(G4int ) const { return *energies; }
+  virtual const G4DataVector& GetLogData(G4int ) const { return *data; }
+  //  void SetEnergiesData(G4DataVector* x, G4DataVector* data, G4int component=0) {;}
+  
+  virtual void SetLogEnergiesData(G4DataVector* ,
+                                  G4DataVector* ,
+                                  G4DataVector* ,
+                                  G4DataVector* ,
+                                  G4int ) {;}
+
+  virtual G4bool LoadNonLogData(const G4String& ) {return false;}
+
+//  G4bool SaveData(const G4String& fileName) const {return 0;}
+
+
 
 private:
 
-  void LoadData(const G4String& dataFile);
+  G4bool LoadData(const G4String& dataFile);
+
   G4int z;
   G4int FindBinLocation(G4double energy) const;
 
@@ -96,5 +119,7 @@ private:
   size_t numberOfBins;
 
 };
+
+
  
 #endif

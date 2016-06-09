@@ -1,0 +1,21 @@
+#================================================
+#     Macro file for hadr00
+#     26.06.2009 V.Ivanchneko
+#================================================
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_Pb 
+/testhadr/TargetRadius     10 cm
+/testhadr/TargetLength     50 cm
+/testhadr/PrintModulo      10
+#
+/run/initialize
+#
+/run/setCut           1 km
+/gun/particle neutron
+/gun/energy 40. MeV
+/testhadr/verbose 0
+/run/beamOn 10
+#

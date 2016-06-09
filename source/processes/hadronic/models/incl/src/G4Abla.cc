@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Abla.cc,v 1.19 2008/09/15 08:16:45 kaitanie Exp $ 
+// $Id: G4Abla.cc,v 1.20 2009/11/18 10:43:14 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -650,6 +650,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       G4double bil_py_pf1 = pf1_rem[2]; 
       G4double bil_pz_pf1 = pf1_rem[3];
       for(G4int ipf1 = lmi_pf1; ipf1 <= lma_pf1; ipf1++) { //do ipf1=lmi_pf1,lma_pf1
+	if(varntp->enerj[ipf1] <= 0.0) continue; // Safeguard against a division by zero
 	bil_e_pf1 = bil_e_pf1 - (std::pow(varntp->plab[ipf1],2) + std::pow(varntp->enerj[ipf1],2))/(2.0*(varntp->enerj[ipf1]));
 	cst = std::cos(varntp->tetlab[ipf1]/57.2957795);
 	sst = std::sin(varntp->tetlab[ipf1]/57.2957795);
@@ -667,6 +668,7 @@ void G4Abla::breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMas
       G4double bil_py_pf2 = pf2_rem[2]; 
       G4double bil_pz_pf2 = pf2_rem[3];
       for(G4int ipf2 = lmi_pf2; ipf2 <= lma_pf2; ipf2++) { //do ipf2=lmi_pf2,lma_pf2
+	if(varntp->enerj[ipf2] <= 0.0) continue; // Safeguard against a division by zero
 	bil_e_pf2 = bil_e_pf2 - (std::pow(varntp->plab[ipf2],2) + std::pow(varntp->enerj[ipf2],2))/(2.0*(varntp->enerj[ipf2]));
 	G4double cst = std::cos(varntp->tetlab[ipf2]/57.2957795);
 	G4double sst = std::sin(varntp->tetlab[ipf2]/57.2957795);

@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2007/05/23 13:38:37 tnikitin Exp $
+$Id: History,v 1.22 2009/11/05 01:16:04 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 4th,  2009  Peter Gumplinger - fieldex03-V09-02-00
+--------------------------------
+- fix the density of STP Carbon Dioxide in DetectorConstruction
 
 May 23rd, 2007  John Apostolakis  -  fieldex03-V08-03-00
 --------------------------------

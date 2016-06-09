@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN05.cc,v 1.16 2007/05/11 14:29:16 mverderi Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: exampleN05.cc,v 1.17 2009/10/30 15:10:56 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -62,17 +62,17 @@
 //-----------------------------------
 #include "ExN05PhysicsList.hh"
 
-#include "G4UIterminal.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh"
 #include "G4RunManagerKernel.hh"
-
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 
-#include "G4ios.hh"
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 int main(int argc, char** argv)
 {
@@ -109,7 +109,6 @@ int main(int argc, char** argv)
   G4UserSteppingAction* stepping_action = new ExN05SteppingAction;
   runManager->SetUserAction(stepping_action);
 
-
   // Initialize Run manager
   runManager->Initialize();
 
@@ -124,32 +123,28 @@ int main(int argc, char** argv)
 
   // Setup commands
   //
-  G4UImanager * UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/Step/Verbose 0");
-  UI->ApplyCommand("/tracking/Verbose 1");
-  UI->ApplyCommand("/gun/particle e-");
-  UI->ApplyCommand("/gun/energy 100 MeV");
-  UI->ApplyCommand("/gun/direction 0 0 1");
-  UI->ApplyCommand("/gun/position 0 0 0");
-  UI->ApplyCommand("/gun/direction 0 .3 1.");
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();
+  UImanager->ApplyCommand("/Step/Verbose 0");
+  UImanager->ApplyCommand("/tracking/Verbose 1");
+  UImanager->ApplyCommand("/gun/particle e-");
+  UImanager->ApplyCommand("/gun/energy 100 MeV");
+  UImanager->ApplyCommand("/gun/direction 0 0 1");
+  UImanager->ApplyCommand("/gun/position 0 0 0");
+  UImanager->ApplyCommand("/gun/direction 0 .3 1.");
 
   if(argc==1)
   {
     //--------------------------
     // Define (G)UI
     //--------------------------
-    // G4UIterminal is a (dumb) terminal
-    //
-    G4UIsession* session = new G4UIterminal;
-    session->SessionStart();
-    delete session;
+#ifdef G4UI_USE
+    G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+    ui->SessionStart();
+    delete ui;
+#endif
   }
   else
   {
-#ifdef G4VIS_USE
-    visManager->SetVerboseLevel("quiet");
-#endif
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
     UImanager->ApplyCommand(command+fileName);

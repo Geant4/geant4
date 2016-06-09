@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2006/05/22 08:49:27 allison Exp $
+# $Id: GNUmakefile,v 1.12 2009/11/04 12:44:39 allison Exp $
 # --------------------------------------------------------------
 # GNUmakefile for modeling library.  John Allison, 31/12/1997.
 # --------------------------------------------------------------
@@ -31,6 +31,7 @@ CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
 CPPFLAGS += -I$(G4BASE)/processes/management/include
 CPPFLAGS += -I$(G4BASE)/particles/management/include
 CPPFLAGS += -I$(G4BASE)/event/include
+CPPFLAGS += -I$(G4BASE)/digits_hits/utils/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/digits/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/detector/include

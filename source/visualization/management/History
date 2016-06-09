@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2008/11/21 21:51:14 perl Exp $
+$Id: History,v 1.137 2009/11/22 14:08:09 allison Exp $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,101 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+22nd November 2009  John Allison  (visman-V09-02-08)
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/trajectories rich:
+  o Added G4RichTrajectoryPoint().GetAttDefs() to informational.
+
+17th November 2009  John Allison  (visman-V09-02-07)
+- Tagged.
+
+17th November 2009  Laurent Garnier
+- Allow arbitrary viewer deletion (fixes crash).
+  o G4VViewer::~G4VViewer: Removes itself from viewer list.
+  o G4VSceneHandler::~G4VSceneHandler: better algorithm for removing viewers
+  to handle viewer self removal.
+
+16th November 2009  Laurent Garnier
+-G4VSceneHandler.cc: Bug fix: Deleting G4VSceneHandler null pointer exception fix.
+
+14th November 2009  John Allison
+- G4VSceneHandler.cc: Bug fix: Should be const_cast, not static_cast, for hits.
+  (Introduced in visman-V09-02-05 and geant4-09-02-ref-10.)
+
+6th November 2009  John Allison
+- G4VSceneHandler::AddCompound (const G4THitsMap<G4double>&):
+  o For scoring maps, call DrawMesh with G4DefaultLinearColorMap as default.
+  o Write message about other options:
+    - /vis/open/gMocrenFile
+    - /score/draw.. commands.
+  o For hits that are not scoring maps, call DrawAllHits.
+
+5th November 2009  John Allison
+- G4VSceneHandler.cc:
+  o ProcessScene: Added DrawEndOfRunModels().
+  o AddCompound (const G4THitsMap<G4double>&): Call DrawMesh.
+
+4th November 2009  John Allison
+- G4Scene: Added EndOfRunModelList.
+- G4VSceneHandler:
+  o Added DrawEndOfRunModels.
+  o AddCompound(const G4THitsMap<G4double>&): Prototype implementation
+    using G4ScoringManager.  Still does nothing for scoring maps but
+    otherwise calls DrawAllHits.
+- G4VisManager.cc: Call fpSceneHandler->DrawEndOfRunModels at end of run.
+- G4VisCommandsSceneAdd: Added optional parameter:
+  o /vis/scene/add/psHits [scoring map name]
+
+30th October 2009  John Allison  (visman-V09-02-06 coworks greps-V09-02-03)
+- Added /vis/scene/add/psHits.
+- G4VisManager.cc: As above and also:
+  o Tidied view creation.
+  o Improved message ("scene" should be "scene handler").
+
+23rd October 2009  John Allison  (visman-V09-02-05 coworks greps-V09-02-02)
+- Implemented default behaviour in
+  G4VSceneHandler::AddCompound (const G4THitsMap<G4double>&).
+
+21st October 2009  John Allison  (visman-V09-02-04 coworks greps-V09-02-02)
+- G4VSceneHandler:
+  o Added default AddCompound (const G4THitsMap<G4double>&) methods.
+    (For time being just issues warning.)
+
+29th September 2009  John Allison  (visman-V09-02-03)
+- G4VSceneHandler.cc: Allow refresh in GeomClosed as well as Idle state.
+- G4VisCommandsSceneAdd.cc: Fixed uninitialised pointers.
+- G4VisManager.cc: Considerable tidy up.
+
+24th July 2009  Laurent Garnier
+- G4VisCommandsSceneAdd::EventID::operator() : Add a protection if
+  CurrentSceneHandler has no model
+
+13th May 2009  John Allison  (visman-V09-02-02)
+- G4VisCommandsViewerSet.hh/cc: Added /vis/viewer/set/targetPoint.
+- G4VisManager.cc: End of run event keeping information improved.
+
+14th March 2009  John Allison  (visman-V09-02-01)
+- G4VisCommands.hh/.cc: Introduced /vis/initialize.
+- G4VisManager.cc: /vis/verbose and /vis/initialize instantiated in
+    constructor.
+- G4VisExecutive.icc: made methods inline.
+
+25th February 2009  Laurent Garnier  (visman-V09-02-00)
+- Notify handler send by G4VVisManager is implemented in G4VisManager
+
+22th January 2009  Laurent Garnier
+- Fix bug in ratio and geometry on X/Xm/Qt/Win32 viewers. Now Could pass XString like 400x600-0+0 to viewers and set position and location.
+
+12th January 2009  John Allison
+- /vis/viewer/create: Pass both X and Y window size hints to viewer.
+  (To get a non-rectangular viewer give a X-windows-style geometry
+  argument, such as "800x400" or "800x400-0+0".)
+
+2nd December, Laurent Garnier
+ - G4ViewParameters.hh G4ViewParameters.icc G4VisManager.hh G4VisManager.icc 
+   G4ViewParameters.cc G4VisManager.cc G4VViewer.cc G4VisCommandsViewer.cc,
+   do a lot of change to be able to pass XString like 400x600-0+0 to viewers 
+   and set position and location. It will work for Qt, X, Win32 for the moment.
 
 27th July 2008  John Allison (visman-V09-01-05)
 - G4VisCommands.cc: Trap recursive use of /vis/reviewKeptEvents.

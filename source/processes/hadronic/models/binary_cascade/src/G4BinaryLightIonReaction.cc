@@ -37,13 +37,17 @@
 #include "G4HadTmpUtil.hh"
 #include <cmath>
  
-  G4BinaryLightIonReaction::G4BinaryLightIonReaction()
-    : G4HadronicInteraction("Binary Cascade"), theModel(), theHandler(), 
-      theProjectileFragmentation(&theHandler) {}
+G4BinaryLightIonReaction::G4BinaryLightIonReaction()
+    : G4HadronicInteraction("Binary Cascade"), theModel() , 
+      theHandler(0) , theProjectileFragmentation(0)
+{
+    theHandler= new G4ExcitationHandler; 
+    SetPrecompound(new G4PreCompoundModel(theHandler));
+}
   
-  G4HadFinalState *G4BinaryLightIonReaction::
+G4HadFinalState *G4BinaryLightIonReaction::
   ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
-  { 
+{ 
   static G4int eventcounter=0;
   eventcounter++;
   if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number starts ######### "<<eventcounter<<G4endl;
@@ -117,7 +121,7 @@
 
 //      G4cout << "Fragment INFO "<< a1+a2 <<" "<<z1+z2<<" "
 //             << aL <<" "<<preFragDef->GetParticleName()<<G4endl;
-      cascaders = theProjectileFragmentation.DeExcite(aPreFrag);
+      cascaders = theProjectileFragmentation->DeExcite(aPreFrag);
       G4double tSum = 0;
       for(size_t count = 0; count<cascaders->size(); count++)
       {
@@ -401,7 +405,7 @@
 	G4ParticleDefinition * resDef;
 	resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);  
 	aProRes.SetParticleDefinition(resDef);
-	proFrag = theHandler.BreakItUp(aProRes);
+	proFrag = theHandler->BreakItUp(aProRes);
       if ( momentum.vect().mag() > momentum.e() )
       {
            G4cerr << "mom check: " <<  momentum 

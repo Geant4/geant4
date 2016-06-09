@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit_RegNav.hh,v 1.1 2008/11/27 21:55:27 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSDoseDeposit_RegNav.hh,v 1.2 2009/11/10 18:52:35 arce Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4PSDoseDeposit_RegNav_h
@@ -61,6 +61,10 @@ class G4PSDoseDeposit_RegNav : public G4VPrimitiveScorer
       virtual void DrawAll();
       virtual void PrintAll();
 
+  void SetNIterations( G4int niter ){
+    theNIterations = niter;
+  }
+
   private:
       G4int HCID;
       G4THitsMap<G4double>* EvtMap;
@@ -69,6 +73,8 @@ class G4PSDoseDeposit_RegNav : public G4VPrimitiveScorer
   G4bool IsPhantomVolume( G4VPhysicalVolume* pv );
 
   G4PhantomParameterisation* thePhantomParam;
- G4EnergyLossForExtrapolator* theElossExt;
+  G4EnergyLossForExtrapolator* theElossExt;
+  
+  G4int theNIterations;
 };
 #endif

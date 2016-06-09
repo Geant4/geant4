@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2008/11/20 15:41:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.hh,v 1.2 2009/04/15 13:26:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Class DetectorConstruction
 //
@@ -36,15 +36,11 @@
 #ifndef DetectorConstruction_H
 #define DetectorConstruction_H 1
 
-
-#include "G4VUserDetectorConstruction.hh"
-
-#include "G4Material.hh"
-
 #include "globals.hh"
-
+#include "G4VUserDetectorConstruction.hh"
 #include "G4GDMLParser.hh"
 
+class G4Material;
 class DetectorMessenger;
 
 // ----------------------------------------------------------------------------
@@ -66,9 +62,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     //
     void ListOfMaterials();
 
-    // Reading GDML
+    // Reading/writing GDML
     //
-    void SetReadFile( const G4String& File );
+    void SetReadFile( const G4String& fname );
+    void SetWriteFile( const G4String& fname );
 
   private:
 
@@ -81,14 +78,19 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     //
     G4GDMLReadStructure* reader;
 
+    // Extended writer
+    //
+    G4GDMLWriteStructure* writer;
+
     // GDMLparser
     //
     G4GDMLParser* parser;
         
-    // Reading Settings
+    // Read/write Settings
     //
-    G4String fReadFile;
-
+    G4String fReadFile, fWriteFile;
+    G4bool writingChoice;
+ 
     // Detector Messenger
     //
     DetectorMessenger* detectorMessenger;

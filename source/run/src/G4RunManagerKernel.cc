@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.43 2008/07/10 09:27:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RunManagerKernel.cc,v 1.47 2009/11/13 23:13:40 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 
@@ -82,6 +82,21 @@ G4RunManagerKernel::G4RunManagerKernel()
   }
   fRunManagerKernel = this;
 
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  if(particleTable->entries()>0)
+  {
+    // No particle should be registered beforehand
+    G4cerr<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+    G4cerr<<" G4RunManagerKernel fatal exception"<<G4endl;
+    G4cerr<<"  -- Following particles have already been registered"<<G4endl;
+    G4cerr<<"     before G4RunManagerKernel is instantiated."<<G4endl;
+    for(int i=0;i<particleTable->entries();i++)
+    { G4cerr<<"     "<<particleTable->GetParticle(i)->GetParticleName()<<G4endl; }
+    G4cerr<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<G4endl;
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","StaticParticleDefinition",
+       FatalException,"Particles have already been instantiated before G4RunManagerKernel.");
+  }
+  
   // construction of Geant4 kernel classes
   eventManager = new G4EventManager();
   defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
@@ -263,6 +278,8 @@ void G4RunManagerKernel::InitializePhysics()
   if(numberOfParallelWorld>0) physicsList->UseCoupledTransportation();
   physicsList->Construct();
 
+  if(verboseLevel>1) G4cout << "physicsList->CheckParticleList() start." << G4endl;
+  physicsList->CheckParticleList();
   if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
   physicsList->SetCuts();
   CheckRegions();
@@ -443,7 +460,7 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
     size_t nRootLV = region->GetNumberOfRootVolumes();
     std::vector<G4LogicalVolume*>::iterator lvItr = region->GetRootLogicalVolumeIterator();
     for(size_t j=0;j<nRootLV;j++)
-    { G4cout << (*lvItr)->GetName() << " "; }
+    { G4cout << (*lvItr)->GetName() << " "; lvItr++; }
     G4cout << G4endl;
 
     G4cout << " Pointers : G4VUserRegionInformation[" << region->GetUserInformation() 
@@ -475,9 +492,10 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
           G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
     }
     G4cout << " Production cuts : "
-           << " gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
-           << "    e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
-           << "    e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
+           << "  gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
+           << "     e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
+           << "     e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
+           << " proton " << G4BestUnit(cuts->GetProductionCut("proton"),"Length")
            << G4endl;
   }
 }

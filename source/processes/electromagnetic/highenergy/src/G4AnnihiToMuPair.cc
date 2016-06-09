@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc,v 1.5 2008/10/16 14:29:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AnnihiToMuPair.cc,v 1.6 2009/11/09 18:24:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -64,6 +64,7 @@ G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
  //modele ok up to 1000 TeV due to neglected Z-interference
  HighestEnergyLimit = 1000*TeV;
  
+ CurrentSigma = 0.0;
  CrossSecFactor = 1.;
  SetProcessSubType(6);
 
@@ -87,7 +88,8 @@ void G4AnnihiToMuPair::BuildPhysicsTable(const G4ParticleDefinition&)
 // Build cross section and mean free path tables
 //here no tables, just calling PrintInfoDefinition
 {
-   PrintInfoDefinition();
+  CurrentSigma = 0.0;
+  PrintInfoDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,8 +118,26 @@ G4double G4AnnihiToMuPair::ComputeCrossSectionPerAtom(G4double Epos, G4double Z)
   G4double xi = LowestEnergyLimit/Epos;
   G4double SigmaEl = Sig0*xi*(1.+xi/2.)*sqrt(1.-xi); // per electron
   CrossSection = SigmaEl*Z;         // number of electrons per atom
-  CrossSection *= CrossSecFactor;   //increase the CrossSection by  (default 1)
   return CrossSection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4AnnihiToMuPair::CrossSectionPerVolume(G4double PositronEnergy, 
+						 const G4Material* aMaterial)
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
+
+  G4double SIGMA = 0.0;
+
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; ++i )
+  {
+    G4double AtomicZ = (*theElementVector)[i]->GetZ();
+    SIGMA += NbOfAtomsPerVolume[i] *
+      ComputeCrossSectionPerAtom(PositronEnergy,AtomicZ);
+  }
+  return SIGMA;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -132,18 +152,13 @@ G4double G4AnnihiToMuPair::GetMeanFreePath(const G4Track& aTrack,
   G4double PositronEnergy = aDynamicPositron->GetKineticEnergy()
                                               +electron_mass_c2;
   G4Material* aMaterial = aTrack.GetMaterial();
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
-  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
+  CurrentSigma = CrossSectionPerVolume(PositronEnergy, aMaterial);
 
-  G4double SIGMA = 0 ;
+  // increase the CrossSection by CrossSecFactor (default 1)
+  G4double mfp = DBL_MAX;
+  if(CurrentSigma > DBL_MIN) mfp = 1.0/(CurrentSigma*CrossSecFactor);
 
-  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
-  {
-    G4double AtomicZ = (*theElementVector)[i]->GetZ();
-    SIGMA += NbOfAtomsPerVolume[i] *
-      ComputeCrossSectionPerAtom(PositronEnergy,AtomicZ);
-  }
-  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+  return mfp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -161,18 +176,18 @@ G4VParticleChange* G4AnnihiToMuPair::PostStepDoIt(const G4Track& aTrack,
 
   // current Positron energy and direction, return if energy too low
   const G4DynamicParticle *aDynamicPositron = aTrack.GetDynamicParticle();
-  G4double Epos = aDynamicPositron->GetKineticEnergy()+Mele;
+  G4double Epos = aDynamicPositron->GetKineticEnergy() + Mele; 
 
- if (Epos < LowestEnergyLimit)
-  { G4cout 
-        << "error in G4AnnihiToMuPair::PostStepDoIt called with energy below"
-	   " threshold Epos= "
-	<< Epos << G4endl;       // shoud never happen
-	G4Exception(10);
-  }
+  // test of cross section
+  if(CurrentSigma*G4UniformRand() > 
+     CrossSectionPerVolume(Epos, aTrack.GetMaterial())) 
+    {
+      return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+    }
 
-  if (Epos < LowestEnergyLimit)
+  if (Epos < LowestEnergyLimit) {
      return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
+  }
 
   G4ParticleMomentum PositronDirection = 
                                        aDynamicPositron->GetMomentumDirection();

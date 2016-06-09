@@ -1,4 +1,4 @@
-# $Id: TestEm13.in,v 1.5 2006/05/10 12:09:13 maire Exp $
+# $Id: TestEm13.in,v 1.7 2009/11/19 17:30:25 maire Exp $
 #
 # Macro file for "TestEm13.cc"
 # (can be run in batch, without graphic)
@@ -11,8 +11,7 @@
 /testem/det/setMat Water
 /testem/det/setSize 1 cm
 #
-#### /testem/phys/addPhysics livermore
-#### /testem/phys/addPhysics penelope
+/testem/phys/addPhysics standard
 #
 /run/initialize
 #

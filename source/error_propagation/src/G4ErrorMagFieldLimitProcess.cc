@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorMagFieldLimitProcess.cc,v 1.2 2007/05/29 14:41:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorMagFieldLimitProcess.cc,v 1.3 2009/11/11 17:10:33 arce Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -77,7 +77,7 @@ PostStepGetPhysicalInteractionLength( const G4Track& aTrack, G4double ,
 
     G4ThreeVector BVec(h1[0],h1[1],h1[2]);
     G4double pmag = aTrack.GetMomentum().mag();
-    G4double BPerpMom = BVec.cross( pmag ).mag() / pmag;
+    G4double BPerpMom = BVec.cross( G4ThreeVector(pmag,0.,0.) ).mag() / pmag;
 
     theStepLength = theStepLimit * pmag / BPerpMom; 
 #ifdef G4VERBOSE

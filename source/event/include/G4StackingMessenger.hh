@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackingMessenger.hh,v 1.5 2006/06/29 18:09:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StackingMessenger.hh,v 1.6 2009/09/16 23:10:46 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4StackingMessenger_h
@@ -44,6 +44,7 @@ class G4UIcmdWithAnInteger;
 //   /event/stack/
 //   /event/stack/status
 //   /event/stack/clear
+//   /event/stack/verbose
 
 class G4StackingMessenger: public G4UImessenger
 {
@@ -56,6 +57,7 @@ class G4StackingMessenger: public G4UImessenger
     G4UIdirectory* stackDir;
     G4UIcmdWithoutParameter* statusCmd;
     G4UIcmdWithAnInteger* clearCmd;
+    G4UIcmdWithAnInteger* verboseCmd;
 };
 
 #endif

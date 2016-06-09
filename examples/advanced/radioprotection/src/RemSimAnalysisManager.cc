@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimAnalysisManager.cc,v 1.12 2006/06/29 16:23:31 gunter Exp $
+// $Id: RemSimAnalysisManager.cc,v 1.13 2009/11/15 23:23:24 cirrone Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -60,7 +60,7 @@ RemSimAnalysisManager::RemSimAnalysisManager()
      histo_muon_slice(0), histo_other_slice(0), histo_vehicle(0)
 { 
   aFact = AIDA_createAnalysisFactory();
-  fileFormat = "hbook";
+  fileFormat = "xml";
 }
 
 RemSimAnalysisManager::~RemSimAnalysisManager() 
@@ -124,8 +124,9 @@ void RemSimAnalysisManager::book()
   treeFact = aFact -> createTreeFactory();
    
 
-  theTree = treeFact -> create("remsim.hbk", "hbook", false, true);
-  G4cout << "The format of the output file is hbook" << G4endl;
+  theTree = treeFact -> create("remsim.xml", "xml",false, true,"uncompressed");
+
+  G4cout << "The format of the output file is xml" << G4endl;
 
   histogramFactory = aFact -> createHistogramFactory(*theTree);
   energyDeposit = histogramFactory -> createHistogram1D("10",

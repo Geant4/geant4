@@ -1,0 +1,37 @@
+# $Id: scatter.mac,v 1.1 2009/09/19 16:09:43 maire Exp $
+#
+# macro file for eBenchmarkV1.cc
+#
+/control/verbose 2
+/run/verbose 2
+#
+# define here the Scattering foil
+#
+/testem/det/setMaterial Beryllium
+/testem/det/setThickness 5.005 mm	#Be
+##/testem/det/setMaterial Aluminium
+##/testem/det/setThickness 518.5 um	#Al2
+##/testem/det/setMaterial Titanium
+##/testem/det/setThickness 123.5 um	#Ti4
+##/testem/det/setMaterial Gold
+##/testem/det/setThickness 16.2 um	#Au1
+##/testem/det/setThickness 48.5 um	#Au3
+#
+/testem/phys/addPhysics  emstandard_opt0
+##/testem/phys/addPhysics  standardSS
+#
+/testem/phys/setCut 10 um
+#
+/run/initialize
+#
+/gun/particle e- 
+/gun/energy 13 MeV
+#
+/testem/histo/setFileName results/13mev/Be.opt0
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 3 120 0. 240. mm		#d(N/cost)/dS = f(r)
+/testem/histo/setHisto 4 120 0. 240. mm		#normalized d(N/cost)/dS = f(r)
+#
+/testem/event/printModulo 100000
+#
+/run/beamOn 4000000

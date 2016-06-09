@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.20 2008/10/22 16:01:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BraggModel.cc,v 1.23 2009/11/10 19:25:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -111,6 +111,9 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p != particle) SetParticle(p);
 
+  // always false before the run
+  SetDeexcitationFlag(false);
+
   if(!isInitialised) {
     isInitialised = true;
 
@@ -120,12 +123,7 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
 
     corr = G4LossTableManager::Instance()->EmCorrections();
 
-    if(pParticleChange) {
-      fParticleChange = 
-	reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-    } else {
-      fParticleChange = new G4ParticleChangeForLoss();
-    }
+    fParticleChange = GetParticleChangeForLoss();
   }
 }
 
@@ -241,7 +239,7 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/*
 void G4BraggModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					const G4DynamicParticle* dp,
 					G4double& eloss,
@@ -264,14 +262,15 @@ void G4BraggModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     } else {
       eloss += nloss;
     }
-    /*
+    
     G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
     	   << " de= " << eloss << " NIEL= " << nloss 
 	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
-    */
+    
     fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
   }
 }
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -336,6 +335,18 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 						   deltaKinEnergy);
 
   vdp->push_back(delta);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BraggModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
+					  G4double kinEnergy)
+{
+  if(pd != particle) SetParticle(pd);
+  G4double tau  = kinEnergy/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
+  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

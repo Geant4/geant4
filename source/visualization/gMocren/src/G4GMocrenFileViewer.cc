@@ -1,0 +1,168 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4GMocrenFileViewer.cc,v 1.2 2009/10/12 10:04:35 akimura Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//
+// Created:  Mar. 31, 2009  Akinori Kimura  
+//
+
+
+#define __G_ANSI_C__
+#define G4GMocrenFile_STRUCTURE_PRIORITY  1.
+
+#include "G4ios.hh"
+#include <cstdio>
+#include <cstring>
+#include <cassert>
+
+#include "G4Scene.hh"
+#include "G4Vector3D.hh"
+#include "G4VisExtent.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VSolid.hh"
+
+#include "G4GMocrenFile.hh"
+#include "G4GMocrenFileSceneHandler.hh"
+#include "G4GMocrenFileViewer.hh"
+#include "G4GMocrenMessenger.hh"
+
+
+//----- constants
+
+//-- for a debugging
+const bool GFDEBUG = false;
+
+//----- G4GMocrenFileViewer, constructor
+G4GMocrenFileViewer::G4GMocrenFileViewer (G4GMocrenFileSceneHandler& sceneHandler,
+					  G4GMocrenMessenger & messenger,
+					  const G4String& name)
+  : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name),
+    kSceneHandler (sceneHandler),
+    kMessenger(messenger)
+{
+  // Set a g4.gdd-file viewer 
+  std::strcpy( kG4GddViewer, "gMocren" ); 
+  if( getenv( "G4GMocrenFile_VIEWER" ) != NULL ) {
+    std::strcpy( kG4GddViewer, getenv( "G4GMocrenFile_VIEWER" ) ) ;			
+  } 
+
+  // string for viewer invocation
+  if ( !std::strcmp( kG4GddViewer, "NONE" ) ) {
+		
+    std::strcpy( kG4GddViewerInvocation, "" );
+  } else {
+
+    std::strcpy( kG4GddViewerInvocation, kG4GddViewer );
+    std::strcat( kG4GddViewerInvocation, " ");
+    std::strcat( kG4GddViewerInvocation, kSceneHandler.GetGddFileName() );
+  }
+
+}
+
+//----- G4GMocrenFileViewer, destructor
+G4GMocrenFileViewer::~G4GMocrenFileViewer () 
+{}
+
+//----- G4GMocrenFileViewer::SetView () 
+void G4GMocrenFileViewer::SetView () 
+{
+  if(GFDEBUG)
+    G4cerr << "***** G4GMocrenFileViewer::SetView(): No effects" << G4endl;
+
+  // Do nothing, since DAWN is running as a different process.
+  // SendViewParameters () will do this job instead.
+}
+
+
+//----- G4GMocrenFileViewer::ClearView()
+void
+G4GMocrenFileViewer::ClearView( void )
+{
+  if(GFDEBUG)
+    G4cerr << "***** G4GMocrenFileViewer::ClearView (): No effects " << G4endl;
+
+  if(kSceneHandler.kGddDest) {
+    kSceneHandler.kGddDest.close();
+    // Re-open with same filename...
+    kSceneHandler.kGddDest.open(kSceneHandler.kGddFileName);
+    kSceneHandler.kFlagInModeling = false;
+    kSceneHandler.GFBeginModeling();
+  }
+}
+
+
+//----- G4GMocrenFileViewer::DrawView () 
+void G4GMocrenFileViewer::DrawView () 
+{
+  if(GFDEBUG)
+    G4cerr << "***** G4GMocrenFileViewer::DrawView () " << G4endl;
+
+  //----- 
+  kSceneHandler.GFBeginModeling() ;
+
+  //----- Always visit G4 kernel 
+  NeedKernelVisit ();
+	                           
+  //----- Draw
+  G4VViewer::ProcessView () ;
+
+} // G4GMocrenFileViewer::DrawView () 
+
+
+
+//----- G4GMocrenFileViewer::ShowView()
+void G4GMocrenFileViewer::ShowView( void )
+{
+  if(GFDEBUG)
+    G4cerr << "***** G4GMocrenFileViewer::ShowView () " << G4endl;
+
+  if( kSceneHandler.GFIsInModeling() ) 
+    {
+      //----- End of modeling
+      // !EndModeling, !DrawAll, !CloseDevice,
+      // close g4.gdd
+      kSceneHandler.GFEndModeling();
+
+      //----- Output DAWN GUI file 
+      //SendViewParameters(); 
+
+      //----- string for viewer invocation
+      if ( !strcmp( kG4GddViewer, "NONE" ) ) {
+		
+	std::strcpy( kG4GddViewerInvocation, "" );
+      } else {
+
+	std::strcpy( kG4GddViewerInvocation, kG4GddViewer );
+	std::strcat( kG4GddViewerInvocation, " ");
+	std::strcat( kG4GddViewerInvocation, kSceneHandler.GetGddFileName() );
+      }
+
+    }
+
+} // G4GMocrenFileViewer::ShowView()
+

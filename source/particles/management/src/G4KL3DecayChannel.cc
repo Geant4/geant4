@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.cc,v 1.8 2006/06/29 19:25:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4KL3DecayChannel.cc,v 1.9 2009/08/17 14:52:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -54,41 +54,43 @@ G4KL3DecayChannel::G4KL3DecayChannel(
 				   theBR,  3,
 				   thePionName,theLeptonName,theNutrinoName)
 {
-  //#ifdef G4VERBOSE
-  //if (GetVerboseLevel()>1) {
-  //  G4cout << "G4KL3DecayChannel:: constructor ";
-  //  G4cout << "addr[" << this << "]" << G4endl;
-  //}
-  //#endif
+  static const G4String K_plus("kaon+");
+  static const G4String K_minus("kaon-");
+  static const G4String K_L("kaon0L");
+  static const G4String Mu_plus("mu+");
+  static const G4String Mu_minus("mu-");
+  static const G4String E_plus("e+");
+  static const G4String E_minus("e-");
+ 
   // check modes
-  if ( ((theParentName == "kaon+")&&(theLeptonName == "e+")) ||
-       ((theParentName == "kaon-")&&(theLeptonName == "e-"))   ) {
+  if ( ((theParentName == K_plus)&&(theLeptonName == E_plus)) ||
+       ((theParentName == K_minus)&&(theLeptonName == E_minus))   ) {
     // K+- (Ke3)
     pLambda = 0.0286;
     pXi0    = -0.35;
-   } else if ( ((theParentName == "kaon+")&&(theLeptonName == "mu+")) ||
-       ((theParentName == "kaon-")&&(theLeptonName == "mu-"))   ) {
+   } else if ( ((theParentName == K_plus)&&(theLeptonName == Mu_plus)) ||
+       ((theParentName == K_minus)&&(theLeptonName == Mu_minus))   ) {
     // K+- (Kmu3)
     pLambda = 0.033;
     pXi0    = -0.35;
-  } else if ( (theParentName == "kaon0L") && 
-              ((theLeptonName == "e+") ||(theLeptonName == "e-"))  ){
+  } else if ( (theParentName == K_L) && 
+              ((theLeptonName == E_plus) ||(theLeptonName == E_minus))  ){
     // K0L (Ke3)
     pLambda = 0.0300;
     pXi0    = -0.11;
-  } else if ( (theParentName == "kaon0L") && 
-              ((theLeptonName == "mu+") ||(theLeptonName == "mu-"))  ){
+  } else if ( (theParentName == K_L) && 
+              ((theLeptonName == Mu_plus) ||(theLeptonName == Mu_minus))  ){
     // K0L (Kmu3)
     pLambda = 0.034;
     pXi0    = -0.11;
   } else {
-    //#ifdef G4VERBOSE
-    //if (GetVerboseLevel()>0) {
-    //   G4cout << "G4KL3DecayChannel:: constructor :";
-    //   G4cout << "illegal arguments " << G4endl;;
-    //   DumpInfo();
-    // }
-    //#endif
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>2) {
+      G4cout << "G4KL3DecayChannel:: constructor :";
+      G4cout << "illegal arguments " << G4endl;;
+      DumpInfo();
+    }
+#endif
     // set values for K0L (Ke3) temporarily
     pLambda = 0.0300;
     pXi0    = -0.11;
@@ -107,6 +109,7 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) G4cout << "G4KL3DecayChannel::DecayIt " << G4endl;
 #endif
+
   // fill parent particle and its mass
   if (parent == 0) {
     FillParent();

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc,v 1.17 2007/01/05 17:05:11 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RayTracerViewer.cc,v 1.18 2009/08/19 08:39:19 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #include "G4RayTracerViewer.hh"
 
@@ -46,8 +46,6 @@ G4RayTracerViewer::G4RayTracerViewer
 {
   theTracer = aTracer;
   if (!aTracer) theTracer = new G4TheRayTracer;
-  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
-  theTracer->SetNRow(fVP.GetWindowSizeHintY());
 }
 
 G4RayTracerViewer::~G4RayTracerViewer() {}

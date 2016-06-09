@@ -26,60 +26,17 @@
 #ifndef  G4WarnPLStatus_hh
 #define  G4WarnPLStatus_hh
 
-#include "G4String.hh"
+#include "globals.hh"
 
 class  G4WarnPLStatus
 {
 public:
   G4WarnPLStatus();
+  ~G4WarnPLStatus();
+
+  void Replaced(const G4String aPL, const G4String Replacement) const ;
   void Unsupported(const G4String aPL, const G4String Replacement ="") const ;
   void Experimental(const G4String aPL) const ;
 };
-
-inline 
-G4WarnPLStatus::G4WarnPLStatus()
-{}
-
-inline
-void G4WarnPLStatus::Unsupported(const G4String aPL, const G4String Replacement) const
-{
-    G4cout << 
-"*=====================================================================" <<G4endl <<
-"*                                                                     " <<G4endl <<
-"*   The Physics list "<<aPL<<" is NO LONGER SUPPORTED !   " <<G4endl <<
-"*   and is likely to be deleted in a future release of Geant4             " <<G4endl <<
-"*                                                                     " <<G4endl;
-   if (Replacement.size() > 0)
-   {
-   G4cout << 
-"*    We recommend you try the physics lists "<<Replacement<< ","         <<G4endl <<
-"*      this offers similar functionality for most use cases            " <<G4endl <<
-"*                                                                      " <<G4endl;
-   
-   }
-   G4cout << 
-"*                                                                      " <<G4endl <<
-"*   We invite you to report your use case for, and your experience with" <<G4endl <<
-"*    this physics list on the Geant4 User Forum dedicated to physics   " <<G4endl <<
-"*    lists:                                                            " <<G4endl <<
-"*  http://geant4-hn.slac.stanford.edu:5090/HyperNews/public/get/phys-list.html"<<G4endl <<
-"*                                                                      " <<G4endl <<
-"*=====================================================================*" <<G4endl<<
-G4endl;   
-}
-void G4WarnPLStatus::Experimental(const G4String aPL) const
-{
-    G4cout << 
-"*=====================================================================" <<G4endl <<
-"*                                                                     " <<G4endl <<
-"*   The Physics list "<<aPL<<" is an experimental physics list !   " <<G4endl <<
-"*                                                                      " <<G4endl <<
-"*   Please  report your use case for, and your experience with this    " <<G4endl <<
-"*    physics list on the Geant4 User Forum dedicated to physics lists: " <<G4endl <<
-"*  http://geant4-hn.slac.stanford.edu:5090/HyperNews/public/get/phys-list.html"<<G4endl <<
-"*                                                                      " <<G4endl <<
-"*=====================================================================*" <<G4endl<<
-G4endl;   
-}
 
 #endif

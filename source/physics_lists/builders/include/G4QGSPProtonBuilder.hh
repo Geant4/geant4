@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QGSPProtonBuilder.hh,v 1.5 2009/03/31 11:04:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSPProtonBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4QGSPProtonBuilder_h
 #define G4QGSPProtonBuilder_h 
 
@@ -62,7 +76,7 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4ProtonInelasticCrossSection theXSec;
+
     G4TheoFSGenerator * theModel;
     G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;

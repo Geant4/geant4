@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSetup.hh,v 1.7 2008/07/16 15:46:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteSetup.hh,v 1.9 2009/04/15 13:29:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4GDMLWriteSetup
@@ -45,9 +45,15 @@
 
 class G4GDMLWriteSetup : public G4GDMLWriteSolids
 {
- private:
+  public:
 
-   void SetupWrite(xercesc::DOMElement*, const G4LogicalVolume* const);
+    virtual void SetupWrite(xercesc::DOMElement*, const G4LogicalVolume* const);
+
+ protected:
+
+   G4GDMLWriteSetup();
+   virtual ~G4GDMLWriteSetup();
+
 };
 
 #endif

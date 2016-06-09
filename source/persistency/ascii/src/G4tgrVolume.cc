@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4tgrVolume.cc,v 1.7 2008/12/18 13:00:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4tgrVolume.cc,v 1.10 2009/11/23 11:36:29 arce Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4tgrVolume
@@ -104,6 +104,20 @@ G4tgrVolume::G4tgrVolume( const std::vector<G4String>& wl)
 #endif
     }
 
+}
+
+
+//-------------------------------------------------------------------------
+G4tgrVolume::G4tgrVolume( const G4tgrVolume& vol )
+{
+  theName = vol.GetName();   
+  theType = vol.GetType();
+  theMaterialName = vol.GetMaterialName();   
+  theSolid = const_cast<G4tgrSolid*>(vol.GetSolid());
+  thePlacements  = vol.GetPlacements();
+  theVisibility   = vol.GetVisibility();
+  theRGBColour   = vol.GetRGBColour();
+  theCheckOverlaps = vol.GetCheckOverlaps();
 }
 
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4eInverseCompton.cc,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 ///////////////////////////////////////////////////////
 // File name:     G4eInverseCompton
 //
@@ -38,9 +41,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4eInverseCompton::G4eInverseCompton(G4bool whichScatCase,G4String process_name,G4AdjointComptonModel* aComptonAdjointModel):
-				G4VAdjointInverseScattering(process_name,whichScatCase)
+				G4VAdjointReverseReaction(process_name,whichScatCase)
 {theAdjointEMModel = aComptonAdjointModel;
- theAdjointEMModel->SetSecondPartOfSameType(false); 
+ theAdjointEMModel->SetSecondPartOfSameType(false);
+ SetIntegralMode(false);
+ /*if (IsScatProjToProjCase) SetIntegralMode(false);
+ else   SetIntegralMode(true); */
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //

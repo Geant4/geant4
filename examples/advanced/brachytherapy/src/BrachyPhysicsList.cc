@@ -35,8 +35,8 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.13 2006/11/15 10:02:17 guatelli Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: BrachyPhysicsList.cc,v 1.14 2009/11/12 02:50:51 cirrone Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 #include "BrachyPhysicsList.hh"
 
@@ -46,16 +46,27 @@
 #include "G4ParticleTypes.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"              
-
 #include "G4MultipleScattering.hh"
 // gamma
-#include "G4LowEnergyRayleigh.hh" 
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"  
-#include "G4LowEnergyGammaConversion.hh" 
+#include "G4PhotoElectricEffect.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+
+#include "G4ComptonScattering.hh"
+#include "G4LivermoreComptonModel.hh"
+
+#include "G4GammaConversion.hh"
+#include "G4LivermoreGammaConversionModel.hh"
+
+#include "G4RayleighScattering.hh" 
+#include "G4LivermoreRayleighModel.hh"
+
 // e-
-#include "G4LowEnergyIonisation.hh" 
-#include "G4LowEnergyBremsstrahlung.hh" 
+#include "G4eMultipleScattering.hh"
+#include "G4eIonisation.hh"
+#include "G4LivermoreIonisationModel.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4LivermoreBremsstrahlungModel.hh"
+
 // e+
 #include "G4eIonisation.hh" 
 #include "G4eBremsstrahlung.hh" 
@@ -79,6 +90,7 @@ void BrachyPhysicsList::ConstructParticle()
 
   ConstructBosons();
   ConstructLeptons();
+
 }
 
 void BrachyPhysicsList::ConstructBosons()
@@ -113,30 +125,58 @@ void BrachyPhysicsList::ConstructEM()
     // Processes
     
     if (particleName == "gamma") {
+      
       // Photon     
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
+      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+      theRayleigh->SetModel(new G4LivermoreRayleighModel());  //not strictly necessary
+      pmanager->AddDiscreteProcess(theRayleigh);
+
+      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+      thePhotoElectricEffect->SetModel(new G4LivermorePhotoElectricModel());
+      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+	
+      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      theComptonScattering->SetModel(new G4LivermoreComptonModel());
+      pmanager->AddDiscreteProcess(theComptonScattering);
+	
+      G4GammaConversion* theGammaConversion = new G4GammaConversion();
+      theGammaConversion->SetModel(new G4LivermoreGammaConversionModel());
+      pmanager->AddDiscreteProcess(theGammaConversion);
       
     } else if (particleName == "e-") {
       // Electron
-      G4LowEnergyIonisation*	 loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
+      
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,-1, 1, 1);
 
-      G4LowEnergyBremsstrahlung* loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
-      // Select the Bremsstrahlung angular distribution model (Tsai/2BN/2BS)
-      loweBrem->SetAngularGenerator("tsai");
-    
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(loweIon,     -1, 2,2);
-      pmanager->AddProcess(loweBrem,    -1,-1,3);      
+      // Ionisation
+      G4eIonisation* eIonisation = new G4eIonisation();
+      eIonisation->SetEmModel(new G4LivermoreIonisationModel());
+      eIonisation->SetStepFunction(0.2, 100*um); //improved precision in tracking  
+      pmanager->AddProcess(eIonisation,-1, 2, 2);
+	
+      // Bremsstrahlung
+      G4eBremsstrahlung* eBremsstrahlung = new G4eBremsstrahlung();
+      eBremsstrahlung->SetEmModel(new G4LivermoreBremsstrahlungModel());
+      pmanager->AddProcess(eBremsstrahlung, -1,-3, 3);
       
     } else if (particleName == "e+") {
       // Positron      
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);      
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,-1, 1, 1);
+	
+      // Ionisation
+      G4eIonisation* eIonisation = new G4eIonisation();
+      eIonisation->SetStepFunction(0.2, 100*um); //     
+      pmanager->AddProcess(eIonisation,                 -1, 2, 2);
+
+      //Bremsstrahlung (use default, no low-energy available)
+      pmanager->AddProcess(new G4eBremsstrahlung(), -1,-1, 3);
+
+      //Annihilation
+      pmanager->AddProcess(new G4eplusAnnihilation(),0,-1, 4);     
       
     }
   }  

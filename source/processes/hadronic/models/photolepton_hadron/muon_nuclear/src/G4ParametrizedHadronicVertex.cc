@@ -24,62 +24,60 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParametrizedHadronicVertex.cc,v 1.6 2006/06/29 20:57:40 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParametrizedHadronicVertex.cc,v 1.7 2009/03/04 19:09:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // --------------------------------------------------------------
+
 #include "G4ParametrizedHadronicVertex.hh"
 #include "G4HadFinalState.hh"
-#include "G4ParticleChange.hh"
+#include "G4HadProjectile.hh"
+#include "G4LEPionPlusInelastic.hh"
+#include "G4LEPionMinusInelastic.hh"
+#include "G4HEPionPlusInelastic.hh"
+#include "G4HEPionMinusInelastic.hh"
 
-G4VParticleChange * G4ParametrizedHadronicVertex::
-ApplyYourself(G4Nucleus & theTarget, const G4Track &thePhoton)
+G4ParametrizedHadronicVertex::G4ParametrizedHadronicVertex()
+{
+  theLowEPionPlus = new G4LEPionPlusInelastic;
+  theLowEPionMinus = new G4LEPionMinusInelastic;
+  theHighEPionPlus = new G4HEPionPlusInelastic;
+  theHighEPionMinus = new G4HEPionMinusInelastic;
+}
+
+G4ParametrizedHadronicVertex::~G4ParametrizedHadronicVertex()
+{}
+
+G4VParticleChange* 
+G4ParametrizedHadronicVertex::ApplyYourself(G4Nucleus & theTarget, 
+					    const G4Track &thePhoton)
 {   
-    static G4ParticleChange theTotalResult; 
+  theTotalResult.Clear();
+  theTotalResult.Initialize(thePhoton);
 
-    theTotalResult.Clear();
-    theTotalResult.ProposeLocalEnergyDeposit(0.);
-    theTotalResult.Initialize(thePhoton);
-    theTotalResult.ProposeTrackStatus(fAlive);
-    G4double theKineticEnergy = thePhoton.GetKineticEnergy();
-    G4HadFinalState * aR = 0;
-    G4HadProjectile thePro(thePhoton);
-    if(CLHEP::RandBit::shootBit())
+  G4double theKineticEnergy = thePhoton.GetKineticEnergy();
+  G4HadFinalState * aR = 0;
+  G4HadProjectile thePro(thePhoton);
+  if(G4UniformRand() > 0.5)
     {
       if(theKineticEnergy<20*GeV) aR = theLowEPionMinus->ApplyYourself(thePro, theTarget);
       else aR = theHighEPionMinus->ApplyYourself(thePro, theTarget);
     }
-    else
+  else
     {
       if(theKineticEnergy<20*GeV) aR = theLowEPionPlus->ApplyYourself(thePro, theTarget);
       else aR = theHighEPionPlus->ApplyYourself(thePro, theTarget);
     }
-    aR->SetTrafoToLab(thePro.GetTrafoToLab());
-    if(aR->GetStatusChange()==stopAndKill)
-    {
-      theTotalResult.ProposeTrackStatus(fStopAndKill);
-      theTotalResult.ProposeEnergy( 0.0 );
-    }
-    if(aR->GetStatusChange()==suspend)
-    {
-      theTotalResult.ProposeTrackStatus(fSuspend);
-    }
-    if(aR->GetStatusChange()!=stopAndKill )
-    {
-      G4double newWeight = aR->GetWeightChange()*thePhoton.GetWeight();
-      theTotalResult.ProposeParentWeight(newWeight); 
-      if(aR->GetEnergyChange()>-.5) theTotalResult.ProposeEnergy(aR->GetEnergyChange());
-      G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
-      newDirection*=aR->GetTrafoToLab();
-      theTotalResult.ProposeMomentumDirection(newDirection.vect());
-    }
+  if(!aR) return &theTotalResult;
 
-    theTotalResult.ProposeLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
-    theTotalResult.SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
+  aR->SetTrafoToLab(thePro.GetTrafoToLab());
 
-    G4ThreeVector it(0., 0., 1.);
-    G4double what = 2.*pi*G4UniformRand();
-    for(G4int i=0; i<aR->GetNumberOfSecondaries(); i++)
+  G4int nsec = aR->GetNumberOfSecondaries();
+  theTotalResult.SetNumberOfSecondaries(nsec);
+
+  G4ThreeVector it(0., 0., 1.);
+  G4double what = twopi*G4UniformRand();
+  for(G4int i=0; i<nsec; i++)
     {
       G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
       theM.rotate(what, it);

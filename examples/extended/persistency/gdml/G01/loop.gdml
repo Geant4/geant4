@@ -22,26 +22,14 @@
 
    <solids>
       <box name="WorldBox" x="2000" y="2000" z="2000"/>
-      <loop for="i" from="0" to="num" step="1">
-      <loop for="j" from="0" to="num" step="1">
-      <loop for="k" from="0" to="num" step="1">
-         <box name="Boxijk" x="64-i*10" y="64-j*10" z="64-k*10"/>
-      </loop>
-      </loop>
-      </loop>
+      <box name="Box" x="64" y="64" z="64"/>
    </solids>
 
    <structure>
-      <loop for="i" from="0" to="num" step="1">
-      <loop for="j" from="0" to="num" step="1">
-      <loop for="k" from="0" to="num" step="1">
-         <volume name="vBoxijk">
-            <materialref ref="ALU"/>
-            <solidref ref="Boxijk"/>
-         </volume>
-      </loop>
-      </loop>
-      </loop>
+      <volume name="logBox">
+         <materialref ref="ALU"/>
+         <solidref ref="Box"/>
+      </volume>
     
       <volume name="TOP">
          <materialref ref="AIR"/>
@@ -50,7 +38,7 @@
          <loop for="j" from="0" to="num" step="1">
          <loop for="k" from="0" to="num" step="1">
             <physvol>
-	       <volumeref ref="vBoxijk"/>
+	       <volumeref ref="logBox"/>
                <position name="posijk" x="scale*(i-num/2)" y="scale*(j-num/2)" z="scale*(k-num/2)"/>
             </physvol>
          </loop>

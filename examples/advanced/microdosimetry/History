@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.8 2008/06/27 20:33:05 sincerti Exp $
+$Id: History,v 1.12 2009/08/14 16:49:36 sincerti Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,22 @@ $Id: History,v 1.8 2008/06/27 20:33:05 sincerti Exp $
 
                        Package History file
                        --------------------
+
+15 August 2009 - S. Incerti - microdosimetry-V09-02-04
+- fixed type in GenericIonDefinition in PhysicsList.cc
+  (to be used with emlowen-V09-02-50 and above)
+
+13 August 2009 - S. Incerti - microdosimetry-V09-02-03
+- replaced H2O material by NIST G4_WATER 
+  (to be used with emlowen-V09-02-50 and above) 
+
+10 August 2009 - S. Incerti - microdosimetry-V09-02-02
+- added GenericIon definition to PhysicsList (required by rules of G4VUserPhysicsList)
+
+29 April 2009 - S. Incerti - microdosimetry-V09-02-01
+- modified PhysicsList for migrated Geant4-DNA processes
+- modified SteppingAction accordingly
+- updated README
 
 27 June 2008 - S. Incerti - microdosimetry-V09-01-04
 - modified PhysicsList.cc and SteppingAction.cc to take into account

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.20 2008/07/10 09:46:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Region.hh,v 1.21 2009/11/27 16:34:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4Region
 //
@@ -47,6 +47,7 @@ class G4Material;
 class G4VUserRegionInformation;
 class G4MaterialCutsCouple;
 class G4UserLimits;
+class G4FieldManager;
 class G4FastSimulationManager;
 class G4VPhysicalVolume;
 class G4UserSteppingAction;
@@ -143,6 +144,13 @@ class G4Region
       // Set G4FastSimulationManager pointer to the one for the parent region
       // if it exists. Otherwise set to null.
 
+    inline void SetFieldManager(G4FieldManager* fm);
+    inline G4FieldManager* GetFieldManager() const;
+      // Set and Get methods for G4FieldManager.
+      // The region with assigned field-manager sets the field to the
+      // geometrical area associated with it; priority is anyhow given
+      // to local fields eventually set to logical volumes.
+
     inline G4VPhysicalVolume* GetWorldPhysical() const;
       // Get method for the world physical volume which this region
       // belongs to. A valid pointer will be assigned by G4RunManagerKernel
@@ -198,6 +206,7 @@ class G4Region
 
     G4VUserRegionInformation* fUserInfo;
     G4UserLimits* fUserLimits;
+    G4FieldManager* fFieldManager;
 
     G4FastSimulationManager* fFastSimulationManager;
 

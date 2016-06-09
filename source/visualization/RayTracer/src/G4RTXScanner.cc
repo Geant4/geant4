@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTXScanner.cc,v 1.5 2007/05/22 17:10:42 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RTXScanner.cc,v 1.7 2009/09/16 16:56:52 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 
@@ -119,8 +119,8 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
 
   // Window size and position...
   int xOffset = 0, yOffset = 0;
-  unsigned int width, height;
   XSizeHints* size_hints = XAllocSizeHints();
+  unsigned int width, height;
   const G4String& XGeometryString = vp.GetXGeometryString();
   if (!XGeometryString.empty()) {
     G4int geometryResultMask = XParseGeometry
@@ -149,6 +149,13 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
       width = 600;
       height = 600;
     }
+  } else {
+    G4cout << "ERROR: Geometry string \""
+	   << XGeometryString
+	   << "\" is empty.  Using \"600x600\"."
+	   << G4endl;
+    width = 600;
+    height = 600;
   }
   size_hints->width = width;
   size_hints->height = height;

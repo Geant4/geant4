@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmElementSelector.hh,v 1.2 2008/07/22 15:55:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmElementSelector.hh,v 1.6 2009/09/29 11:31:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -88,6 +88,7 @@ private:
 
   G4VEmModel*       model;
   const G4Material* material;
+  const G4Element*  element;
   const G4ElementVector* theElementVector;
 
   G4int    nElmMinusOne;
@@ -106,18 +107,17 @@ private:
 
 inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e)
 {
-  const G4Element* elm = (*theElementVector)[nElmMinusOne];
   if (nElmMinusOne > 0) {
-    G4bool b;
     G4double x = G4UniformRand();
-    for(G4int i=0; i<nElmMinusOne; i++) {
-      if (x <= (xSections[i])->GetValue(e,b)) {
-	elm = (*theElementVector)[i];
+    element = (*theElementVector)[nElmMinusOne];
+    for(G4int i=0; i<nElmMinusOne; ++i) {
+      if (x <= (xSections[i])->Value(e)) {
+	element = (*theElementVector)[i];
 	break;
       }
     }
   }
-  return elm;
+  return element;
 }
 
 inline const G4Material* G4EmElementSelector::GetMaterial() const

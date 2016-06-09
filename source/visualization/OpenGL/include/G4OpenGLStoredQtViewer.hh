@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.hh,v 1.7 2008/11/06 13:43:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLStoredQtViewer.hh,v 1.9 2009/10/14 13:27:30 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Class G4OpenGLStoredQtViewer : a class derived from
@@ -33,10 +33,9 @@
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
-#ifndef G4OpenGLSTOREDQTVIEWER_HH
-#define G4OpenGLSTOREDQTVIEWER_HH
+#ifndef G4OPENGLSTOREDQTVIEWER_HH
+#define G4OPENGLSTOREDQTVIEWER_HH
 
-#include "G4VViewer.hh"
 #include "G4OpenGLStoredViewer.hh"
 #include "G4OpenGLQtViewer.hh"
 

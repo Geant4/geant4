@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN03.cc,v 1.36 2008/11/24 13:54:38 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: exampleN03.cc,v 1.37 2009/10/30 15:06:01 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,20 +48,9 @@
 #include "G4VisExecutive.hh"
 #endif
 
-#if defined(G4UI_USE_TCSH)
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-#elif defined(G4UI_USE_XM)
-#include "G4UIXm.hh"
-#elif defined(G4UI_USE_WIN32)
-#include "G4UIWin32.hh"
-#elif defined(G4UI_USE_QT)
-#include "G4UIQt.hh"
-#include "G4Qt.hh"
-#else
-#include "G4UIterminal.hh"
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -116,38 +105,28 @@ int main(int argc,char** argv)
   
   // Get the pointer to the User Interface manager
   //
-  G4UImanager* UI = G4UImanager::GetUIpointer();      
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
   if (argc!=1)   // batch mode
     {
       G4String command = "/control/execute ";
       G4String fileName = argv[1];
-      UI->ApplyCommand(command+fileName);    
+      UImanager->ApplyCommand(command+fileName);    
     }
-  else           // interactive mode : define visualization UI terminal
-    {
-      G4UIsession* session = 0;
-#if defined(G4UI_USE_TCSH)
-      session = new G4UIterminal(new G4UItcsh);      
-#elif defined(G4UI_USE_XM)
-      session = new G4UIXm(argc,argv);
-      UI->ApplyCommand("/control/execute visTutor/gui.mac");      
-#elif defined(G4UI_USE_WIN32)
-      session = new G4UIWin32();
-      UI->ApplyCommand("/control/execute visTutor/gui.mac");      
-#elif defined(G4UI_USE_QT)
-      session = new G4UIQt(argc,argv);
-      UI->ApplyCommand("/control/execute visTutor/gui.mac");      
-#else
-      session = new G4UIterminal();
-#endif
+  else
+    {  // interactive mode : define UI session
+#ifdef G4UI_USE
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-      UI->ApplyCommand("/control/execute vis.mac");     
+      UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
-      session->SessionStart();
-      delete session;
+      if (ui->IsGUI())
+	UImanager->ApplyCommand("/control/execute visTutor/gui.mac");     
+      ui->SessionStart();
+      delete ui;
+#endif
     }
-
+  
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not

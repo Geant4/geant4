@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: lArCal.cc,v 1.11 2006/06/29 16:01:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: lArCal.cc,v 1.12 2009/11/12 12:43:14 ribon Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -57,10 +57,10 @@
 #include "LHEP.hh"
 #include "QGSP.hh"
 #include "QGSC.hh"
+#include "QGSP_BIC_EMY.hh"
 
 
 #ifdef G4ANALYSIS_USE
-
 
 #include "FCALRunAction.hh"
 #include "FCALTBEventAction.hh"
@@ -86,8 +86,9 @@ int main(int argc,char** argv) {
 
   //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
   // runManager->SetUserInitialization(new LHEP);     // LHEP     
-  runManager->SetUserInitialization(new QGSP);     // QGSP   
+  // runManager->SetUserInitialization(new QGSP);     // QGSP   
   // runManager->SetUserInitialization(new QGSC);     // QGSC
+  runManager->SetUserInitialization(new QGSP_BIC_EMY);     // QGSP_BIC_EMY    
   //***endLOOKHERE***
   
  G4UIsession* session=0;

@@ -23,33 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//J. M. Quesada (August 2008). New source file
 //
-// Modif (21 August 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
+// $Id: G4PreCompoundNeutron.cc,v 1.4 2009/02/11 18:06:00 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundNeutron
+//
+// Author:         V.Lara
+//
+// Modified:  
+// 21.08.2008 J. M. Quesada add choice of options  
+// 10.02.2009 J. M. Quesada set default opt3
 // 
+
 #include "G4PreCompoundNeutron.hh"
 
-
-  G4ReactionProduct * G4PreCompoundNeutron::GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct = 
-      new G4ReactionProduct(G4Neutron::NeutronDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
+G4ReactionProduct * G4PreCompoundNeutron::GetReactionProduct() const
+{
+  G4ReactionProduct * theReactionProduct = 
+    new G4ReactionProduct(G4Neutron::NeutronDefinition());
+  theReactionProduct->SetMomentum(GetMomentum().vect());
+  theReactionProduct->SetTotalEnergy(GetMomentum().e());
 #ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
+  theReactionProduct->SetCreatorModel("G4PrecompoundModel");
 #endif
-    return theReactionProduct;
-  }
+  return theReactionProduct;
+}
 
-
-   G4double G4PreCompoundNeutron::GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 0.0;
-    if(NumberParticles > 0) rj = static_cast<G4double>(NumberParticles - NumberCharged)/static_cast<G4double>(NumberParticles);
-    return rj;
-  }
+G4double G4PreCompoundNeutron::GetRj(const G4int NumberParticles, const G4int NumberCharged)
+{
+  G4double rj = 0.0;
+  if(NumberParticles > 0) rj = static_cast<G4double>(NumberParticles - NumberCharged)/
+			    static_cast<G4double>(NumberParticles);
+  return rj;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
@@ -57,7 +69,7 @@
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
- G4double G4PreCompoundNeutron::CrossSection(const  G4double K)
+G4double G4PreCompoundNeutron::CrossSection(const  G4double K)
 {
   ResidualA=GetRestA();
   ResidualZ=GetRestZ(); 
@@ -91,23 +103,20 @@ G4double G4PreCompoundNeutron::GetOpt0(const  G4double K)
 //
 //-------
 //
-  G4double G4PreCompoundNeutron::GetAlpha()
-  {
- //   return 0.76+2.2/std::pow(GetRestA(),1.0/3.0);
+G4double G4PreCompoundNeutron::GetAlpha()
+{
+  //   return 0.76+2.2/std::pow(GetRestA(),1.0/3.0);
   return 0.76+2.2/ResidualAthrd;
-  }
+}
 //
 //------------
 //
-  G4double G4PreCompoundNeutron::GetBeta() 
-  {
- //   return (2.12/std::pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
- return (2.12/(ResidualAthrd*ResidualAthrd)-0.05)*MeV/GetAlpha();
-  }
+G4double G4PreCompoundNeutron::GetBeta() 
+{
+  //   return (2.12/std::pow(GetRestA(),2.0/3.0)-0.05)*MeV/GetAlpha();
+  return (2.12/(ResidualAthrd*ResidualAthrd)-0.05)*MeV/GetAlpha();
+}
 //
-
-  
-
 
 //********************* OPT=1,2 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)
@@ -155,7 +164,7 @@ G4double G4PreCompoundNeutron::GetOpt34(const  G4double K)
   G4double flow,spill,ec,ecsq,xnulam,etest(0.),ra(0.),a,signor(1.),sig; 
   G4double b,ecut,cut,ecut2,geom,elab;
 
-//safety initialization
+  //safety initialization
   landa0=0;
   landa1=0;
   mu0=0.;
@@ -171,9 +180,7 @@ G4double G4PreCompoundNeutron::GetOpt34(const  G4double K)
   flow = 1.e-18;
   spill= 1.0e+18; 
 
-
-
-// PRECO xs for neutrons is choosen
+  // PRECO xs for neutrons is choosen
 
   p0 = -312.;
   p1= 0.;
@@ -200,11 +207,9 @@ G4double G4PreCompoundNeutron::GetOpt34(const  G4double K)
   p = p0;
   xnulam = 1.;
   etest = 32.;
-//          ** etest is the energy above which the rxn cross section is
-//          ** compared with the geometrical limit and the max taken.
-//          ** xnulam here is a dummy value to be used later.
-
-
+  //          ** etest is the energy above which the rxn cross section is
+  //          ** compared with the geometrical limit and the max taken.
+  //          ** xnulam here is a dummy value to be used later.
 
   a = -2.*p*ec + landa - nu/ecsq;
   b = p*ecsq + mu + 2.*nu/ec;

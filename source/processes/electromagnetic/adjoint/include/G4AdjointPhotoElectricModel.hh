@@ -23,18 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AdjointPhotoElectricModel.hh,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 /////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4AdjointPhotoElectricModel.hh
+//      Module:		G4AdjointPhotoElectricModel
 //	Author:       	L. Desorgher
-//	Date:		10 October 2007
 // 	Organisation: 	SpaceIT GmbH
+//	Contract:	ESA contract 21435/08/NL/AT
 // 	Customer:     	ESA/ESTEC
 /////////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
 // --------------
 //      ChangeHistory: 
-//	 	1 September 2007 creation by L. Desorgher  		
+//		-1 September 2007 creation by L. Desorgher  
+//		
+//		-January 2009. L. Desorgher	
+//		 Put a higher limit on the CS to avoid a high rate of  Inverse Photo e- effect at low energy. The very high adjoint CS of the reverse 
+//		 photo electric reaction produce a high rate of reverse photo electric reaction in the inner side of a shielding for eaxmple, the correction of this occurence
+//		 by weight correction in the StepDoIt method is not statistically sufficient at small energy. The problem is partially solved by setting an higher CS limit 
+//		 and compensating it by an extra weight correction factor. However when  coupling it with other reverse  processes the reverse photo-electric is still 
+//		 the source of very occasional high weight that decrease the efficiency of the computation. A way to solve this problemn is still needed but is difficult
+//		 to find as it happens in rarea case but does give a weighrt that is outside the noemal distribution. (Very Tricky!)  
+//		
+//	 	-October 2009	Correction of Element sampling. L. Desorgher		
 //
 //-------------------------------------------------------------
 //	Documentation:
@@ -60,7 +73,6 @@ public:
   virtual void SampleSecondaries(const G4Track& aTrack,
                                 G4bool IsScatProjToProjCase,
 				G4ParticleChange* fParticleChange);
-  
   virtual G4double AdjointCrossSection(const G4MaterialCutsCouple* aCouple,
 				G4double primEnergy,
 				G4bool IsScatProjToProjCase);
@@ -72,11 +84,22 @@ public:
   inline void SetTheDirectPEEffectModel(G4PEEffectModel* aModel){theDirectPEEffectModel = aModel; 
   						       DefineDirectEMModel(aModel);} 				      
   
+  virtual void CorrectPostStepWeight(G4ParticleChange* fParticleChange, 
+  				     G4double old_weight, 
+				     G4double adjointPrimKinEnergy, 
+				     G4double projectileKinEnergy,
+				     G4bool IsScatProjToProjCase);
   
   
 private:
   G4double  xsec[40];
   G4double  totAdjointCS;
+  G4double  totBiasedAdjointCS;
+  G4double  factorCSBiasing;
+  G4double  pre_step_AdjointCS;
+  G4double  post_step_AdjointCS;
+  
+  
   G4double  shell_prob[40][40];
  
   

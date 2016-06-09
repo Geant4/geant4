@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.17 2008/12/09 14:09:59 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PreCompoundModel.cc,v 1.18 2009/11/19 10:19:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // by V. Lara
 //
@@ -53,6 +53,21 @@
 G4Fragment G4PreCompoundModel::theInitialFragmentForTest;
 std::vector<G4String*> G4PreCompoundModel::theCreatorModels;
 #endif
+
+G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler * const value) 
+  : G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false), 
+    OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(true) 
+{}
+
+G4PreCompoundModel::~G4PreCompoundModel() 
+{}
+
+G4PreCompoundModel::G4PreCompoundModel() 
+{}
+
+G4PreCompoundModel::G4PreCompoundModel(const G4PreCompoundModel &) 
+: G4VPreCompoundModel() 
+{}
 
 const G4PreCompoundModel & G4PreCompoundModel::operator=(const G4PreCompoundModel &)
 {

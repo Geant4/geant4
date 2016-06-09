@@ -23,22 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AdjointAlongStepWeightCorrection.hh,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 /////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4AdjointAlongStepWeightCorrection.hh
+//      Class:		G4AdjointAlongStepWeightCorrection
 //	Author:       	L. Desorgher
-//	Date:		10 May 2007
 // 	Organisation: 	SpaceIT GmbH
+//	Contract:	ESA contract 21435/08/NL/AT
 // 	Customer:     	ESA/ESTEC
 /////////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
 // --------------
 //      ChangeHistory: 
-//	 	10 May 2007 creation by L. Desorgher  		
+//	 	10 May 2007 creation by L. Desorgher  
+//		October 2009 implementation of the mode where the total adjoint and forward cross sections are equivalent. L. Desorgher		
 //
 //-------------------------------------------------------------
 //	Documentation:
 //		Continuous processes acting on adjoint particles to correct continuously their weight during the adjoint reverse tracking.
+//		Thi process is needed whene the adjoint cross section are not scaled such that the total adjoint cross section match the total forward cross section. 
+//		By default the mode where the total adjoint cross section is equal to the total forward cross section is used an therefore this along step weight 
+//		correction factor is 1.
+//		However in some cases (some energy ranges) the total forward cross section or the total adjoint cross section can be null, in this case the along step 
+//		weight correction is neede and is given by exp(-(Sigma_tot_adj-Sigma_tot_fwd).dx)
+//		
+// 
 //
 
 
@@ -119,20 +130,10 @@ inline void G4AdjointAlongStepWeightCorrection::DefineMaterial(
     currentCouple   = couple;
     currentMaterial = couple->GetMaterial();
     currentMaterialIndex = couple->GetIndex();
-    //G4cout<<"Define Material"<<std::endl;
-    //if(!meanFreePath) ResetNumberOfInteractionLengthLeft();
+  
   }
 }
 
 
-///////////////////////////////////////////////////////
-//
-inline G4double G4AdjointAlongStepWeightCorrection::GetContinuousStepLimit(const G4Track& track,
-                G4double , G4double , G4double& )
-{ 
-  G4double x = DBL_MAX;
-  DefineMaterial(track.GetMaterialCutsCouple());
-  preStepKinEnergy = track.GetKineticEnergy();
-  return x;
-}
+
 #endif

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.14 2007/05/24 13:52:31 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HistoManager.cc,v 1.16 2009/09/02 10:21:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -89,7 +89,7 @@ HistoManager::HistoManager()
   verbose=  0;
   nSlices   = 300;
   nBinsE    = 100;
-  nHisto    = 22;
+  nHisto    = 25;
   length    = 300.*mm;
   edepMax   = 1.0*GeV;
   beamFlag  = true;
@@ -132,8 +132,14 @@ void HistoManager::bookHisto()
   histo->add1D("19","log10 Energy (MeV) of leaking charged pions",nBinsE,-4.,6.,1.0);
   histo->add1D("20","Log10 Energy (MeV) of pi+",nBinsE,-4.,6.,1.0);
   histo->add1D("21","Log10 Energy (MeV) of pi-",nBinsE,-4.,6.,1.0);
-  histo->add1D("22","Energy deposition (GeV) in the target",
-	       nBinsE,0.0,edepMax,GeV);
+  histo->add1D("22","Energy deposition in the target normalized to beam energy",
+	       110,0.0,1.1,1.0);
+  histo->add1D("23","EM energy deposition in the target normalized to beam energy",
+	       110,0.0,1.1,1.0);
+  histo->add1D("24","Pion energy deposition in the target normalized to beam energy",
+	       110,0.0,1.1,1.0);
+  histo->add1D("25","Proton energy deposition in the target normalized to beam energy",
+	       110,0.0,1.1,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -255,6 +261,9 @@ void HistoManager::EndOfRun()
 void HistoManager::BeginOfEvent()
 {
   edepEvt = 0.0;
+  edepEM  = 0.0;
+  edepPI  = 0.0;
+  edepP   = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -263,7 +272,10 @@ void HistoManager::EndOfEvent()
 {
   edepSum  += edepEvt;
   edepSum2 += edepEvt*edepEvt;
-  histo->fill(21,edepEvt,1.0);
+  histo->fill(21,edepEvt/primaryKineticEnergy,1.0);
+  histo->fill(22,edepEM/primaryKineticEnergy,1.0);
+  histo->fill(23,edepPI/primaryKineticEnergy,1.0);
+  histo->fill(24,edepP/primaryKineticEnergy,1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -371,6 +383,16 @@ void HistoManager::AddTargetStep(const G4Step* step)
     // scoring
     edepEvt += edep;
     histo->fill(0,z,edep);
+    const G4ParticleDefinition* pd = currentDef;
+
+    if(pd == G4Gamma::Gamma() || pd == G4Electron::Electron() 
+       || pd == G4Positron::Positron()) {
+      edepEM += edep;
+    } else if ( pd == G4PionPlus::PionPlus() || pd == G4PionMinus::PionMinus()) {
+      edepPI += edep;
+    } else if ( pd == G4Proton::Proton() || pd == G4AntiProton::AntiProton()) {
+      edepP  += edep;
+    }
 
     if(1 < verbose) 
       G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV

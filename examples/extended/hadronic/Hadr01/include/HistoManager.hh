@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.8 2007/05/16 11:43:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HistoManager.hh,v 1.9 2009/08/28 09:21:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -121,6 +121,9 @@ private:
 
   G4double edepMax;
   G4double edepEvt;
+  G4double edepEM;
+  G4double edepPI;
+  G4double edepP;
   G4double edepSum;
   G4double edepSum2;
   G4double beamEnergy;

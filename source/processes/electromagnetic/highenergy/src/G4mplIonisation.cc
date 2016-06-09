@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisation.cc,v 1.7 2008/10/16 14:29:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4mplIonisation.cc,v 1.8 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -71,6 +71,13 @@ G4mplIonisation::G4mplIonisation(G4double mCharge, const G4String& name)
 
 G4mplIonisation::~G4mplIonisation()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4mplIonisation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (p.GetParticleName() == "monopole");
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

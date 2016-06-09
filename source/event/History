@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2008/09/02 09:56:49 gcosmo Exp $
+$Id: History,v 1.127 2009/11/18 17:57:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,38 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Movember 18th, 2009, G.Cosmo (event-V09-02-05)
+- Fixes to "Adjoint" classes to allow build of DLLs on Windows: renamed all
+  methods and data holding "External" as keyword to "Ext".
+  Cleanup of the code: use "const G4String&" instead of "G4String" wherever
+  possible; use G4 types in consistent way; avoid usage of "isNan"; code
+  formatting cleanup; added Geant4 disclaimer.
+
+November 6, 2009, L.Desorgher (event-V09-02-04)
+- First commit of G4Adjoint calsses for event category
+  New classes are G4AdjointPosOnPhysVolGenerator,G4AdjointPrimaryGenerator, G4AdjointStackingAction
+
+September 16, 2009, M.Asai (event-V09-02-03)
+- Improved the logic in G4SmartTrackStack. 
+- Added /event/stack/verbose to have a short report of peak number of tracks in
+  the urgent stack.
+
+August 17, 2009, M.Asai (event-V09-02-02)
+- Introducing G4SmartTrackStack class. By using this new stack as the urgent stack of
+  G4StackManager, the next track poped up from the stack is not necessarily the last
+  track stored in the stack, but the track of same particle type as the previous one, 
+  as long as such a track exists in the urgent stack. This mechanism is expected to 
+  improve the performance for ultra-large scale simulation such as LHC, by increasing
+  the cashe hit rate of the physics tables.
+- The use of G4SmartTrackStack is optional. To use it, uncomment the "#define" line
+  in include/evmandefs.hh.
+
+June 29, 2009, M.Asai (event-V09-02-01)
+- Fix warning message in G4SPSEneDistribution.cc.
+
+February 17, 2009, F. Lei (event-V09-02-00)
+- Minor chnages to G4GeneralParticleSourceMessenger.cc. It now uses the full ranges of units pre-defined in G4 for length, energy and angle.
 
 September 02, 2008, G.Cosmo (event-V09-01-01)
 - Removed some redundant semicolons in G4SPSAngDistribution header...

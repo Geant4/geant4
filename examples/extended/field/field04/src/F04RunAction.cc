@@ -37,7 +37,7 @@
 #include "F04GlobalField.hh"
 
 F04RunAction::F04RunAction()
-  : saveRndm(0)
+  : saveRndm(0), autoSeed(false)
 {
   runMessenger = new F04RunActionMessenger(this);
 }
@@ -53,12 +53,23 @@ void F04RunAction::BeginOfRunAction(const G4Run* aRun)
 
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
-  
-  if (saveRndm > 0)
-  { 
-      CLHEP::HepRandom::showEngineStatus();
-      CLHEP::HepRandom::saveEngineStatus("BeginOfRun.rndm");
+
+  if (autoSeed) {
+     // automatic (time-based) random seeds for each run
+     G4cout << "*******************" << G4endl;
+     G4cout << "*** AUTOSEED ON ***" << G4endl;
+     G4cout << "*******************" << G4endl;
+     long seeds[2];
+     time_t systime = time(NULL);
+     seeds[0] = (long) systime;
+     seeds[1] = (long) (systime*G4UniformRand());
+     CLHEP::HepRandom::setTheSeeds(seeds);
+     CLHEP::HepRandom::showEngineStatus();
+  } else {
+     CLHEP::HepRandom::showEngineStatus();
   }
+  
+  if (saveRndm > 0) CLHEP::HepRandom::saveEngineStatus("BeginOfRun.rndm");
 
   FieldList* fields = F04GlobalField::getObject()->getFields();
 
@@ -72,8 +83,7 @@ void F04RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void F04RunAction::EndOfRunAction(const G4Run*)
 {
-  if (saveRndm == 1)
-  { 
+  if (saveRndm == 1) {
      CLHEP::HepRandom::showEngineStatus();
      CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
   }     

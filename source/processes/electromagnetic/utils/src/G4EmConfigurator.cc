@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc,v 1.3 2008/11/21 12:30:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmConfigurator.cc,v 1.6 2009/11/22 19:48:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -66,7 +66,7 @@ enum PType {unknown=0, eloss, discrete, msc};
 
 G4EmConfigurator::G4EmConfigurator()
 {
-  index = 1;
+  index = -10;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,7 +116,9 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
   AddExtraEmModel(particleName, mod, fm);
   G4String fname = "";
   if(fm) fname = fm->GetName();
-  AddModelForRegion(particleName, processName, mod->GetName(), regionName,
+  G4String mname = "";
+  if(mod) mname = mod->GetName();
+  AddModelForRegion(particleName, processName, mname, regionName,
 		    emin, emax, fname);
 }
 
@@ -153,7 +155,7 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
   //G4cout << " G4EmConfigurator::SetModelForRegion" << G4endl;
 
   // new set
-  index--;
+  --index;
 
   G4ParticleTable::G4PTblDicIterator* theParticleIterator = 
     G4ParticleTable::GetParticleTable()->GetIterator(); 
@@ -202,7 +204,11 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 	//G4cout << "Search model " << modelName << " in " << nm << G4endl;
 
 	for(G4int i=0; i<nm; i++) {
-	  if(modelName == modelList[i]->GetName() &&
+          G4String mname = "";
+          if(modelList[i]) mname = modelList[i]->GetName();
+          G4String fname = "";
+          if(flucModelList[i]) fname = flucModelList[i]->GetName();
+	  if(modelName == mname && flucModelName == fname &&
              (particleList[i] == "" || particleList[i] == particleName) ) {
 	    mod  = modelList[i];
 	    fluc = flucModelList[i];
@@ -213,13 +219,22 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 	if("dummy" == modelName) mod = new G4DummyModel();
 
 	if(!mod) {
-	  G4cout << "### G4EmConfigurator WARNING: fails to find a model <"
-		 << modelName << "> for process <" 
-		 << processName << "> and " << particleName 
-		 << G4endl;
-	  if(flucModelName != "")  
-	    G4cout << "                            fluctuation model <" 
-		   << flucModelName << G4endl;
+
+	  // set fluctuation model for ionisation processes
+          if(fluc && ptype == eloss) {
+	    G4VEnergyLossProcess* p = static_cast<G4VEnergyLossProcess*>(proc);
+	    p->SetFluctModel(fluc);
+	 
+	  } else {
+	    G4cout << "### G4EmConfigurator WARNING: fails to find a model <"
+		   << modelName << "> for process <" 
+		   << processName << "> and " << particleName 
+		   << G4endl;
+	    if(flucModelName != "") {
+	      G4cout << "                            fluctuation model <" 
+		     << flucModelName << G4endl;
+	    }
+	  }
 	} else {
 
 	  // search for region
@@ -242,19 +257,21 @@ void G4EmConfigurator::SetModelForRegion(const G4String& particleName,
 	  mod->SetLowEnergyLimit(e1);
 	  mod->SetHighEnergyLimit(e2);
 
-	  //G4cout << "e1= " << e1 << " e2= " << e2 << G4endl;
+	  //G4cout << "index= " << index << " e1= " << e1 << " e2= " << e2 << G4endl;
 
 	  // added model
 	  if(ptype == eloss) {
-	    G4VEnergyLossProcess* p = reinterpret_cast<G4VEnergyLossProcess*>(proc);
+	    G4VEnergyLossProcess* p = static_cast<G4VEnergyLossProcess*>(proc);
 	    p->AddEmModel(index,mod,fluc,reg);
 	    //G4cout << "### Added eloss model order= " << index << " for " 
 	    //	   << particleName << " and " << processName << "  " << mod << G4endl;
 	  } else if(ptype == discrete) {
-	    G4VEmProcess* p = reinterpret_cast<G4VEmProcess*>(proc);
+	    G4VEmProcess* p = static_cast<G4VEmProcess*>(proc);
 	    p->AddEmModel(index,mod,reg);
 	  } else if(ptype == msc) {
-	    G4VMultipleScattering* p = reinterpret_cast<G4VMultipleScattering*>(proc);
+	    //G4cout << "### Added msc model order= " << index << " for " 
+	    //	   << particleName << " and " << processName << "  " << mod << G4endl;
+	    G4VMultipleScattering* p = static_cast<G4VMultipleScattering*>(proc);
 	    p->AddEmModel(index,mod,reg);
 	  }
 	}

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc,v 1.5 2007/11/13 18:36:29 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4mplIonisationModel.cc,v 1.7 2009/04/12 17:35:41 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -78,6 +78,7 @@ G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam
   pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;
   chargeSquare = magCharge * magCharge;
   dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
+  fParticleChange = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -92,11 +93,7 @@ void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
 {
   monopole = p;
   mass     = monopole->GetPDGMass();
-
-  if(pParticleChange) 
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-  else 
-    fParticleChange = new G4ParticleChangeForLoss();
+  if(!fParticleChange) fParticleChange = GetParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -138,7 +135,8 @@ G4double G4mplIonisationModel::ComputeDEDXPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material, G4double bg2)
+G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material, 
+						G4double bg2)
 {
   G4double eDensity = material->GetElectronDensity();
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
@@ -178,6 +176,15 @@ G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material, G4do
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4mplIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+					     const G4MaterialCutsCouple*,
+					     const G4DynamicParticle*,
+					     G4double,
+					     G4double)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4mplIonisationModel::SampleFluctuations(
 				       const G4Material* material,
 				       const G4DynamicParticle* dp,
@@ -203,3 +210,24 @@ G4double G4mplIonisationModel::SampleFluctuations(
   }
   return loss;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4mplIonisationModel::Dispersion(const G4Material* material,
+					  const G4DynamicParticle* dp,
+					  G4double& tmax,
+					  G4double& length)
+{
+  G4double siga = 0.0;
+  G4double tau   = dp->GetKineticEnergy()/mass;
+  if(tau > 0.0) { 
+    G4double electronDensity = material->GetElectronDensity();
+    G4double gam   = tau + 1.0;
+    G4double invbeta2 = (gam*gam)/(tau * (tau+2.0));
+    siga  = (invbeta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
+      * electronDensity * chargeSquare;
+  }
+  return siga;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

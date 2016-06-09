@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.56 2008/12/04 08:31:47 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLParser.hh,v 1.58 2009/04/15 13:29:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4GDMLParser
@@ -53,6 +53,7 @@ class G4GDMLParser
 
    G4GDMLParser();
    G4GDMLParser(G4GDMLReadStructure*);
+   G4GDMLParser(G4GDMLReadStructure*, G4GDMLWriteStructure*);
   ~G4GDMLParser();
      //
      // Parser constructors & destructor
@@ -100,6 +101,7 @@ class G4GDMLParser
    inline G4VPhysicalVolume* GetWorldVolume(const G4String& setupName="Default");
    inline G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const logvol);
    inline void StripNamePointers() const;
+   inline void SetOverlapCheck(G4bool);
 
    // Methods for Writer
    //
@@ -111,7 +113,7 @@ class G4GDMLParser
 
    G4GDMLReadStructure* reader;
    G4GDMLWriteStructure* writer;
-   G4bool ucode;
+   G4bool urcode, uwcode;
 
 };
 

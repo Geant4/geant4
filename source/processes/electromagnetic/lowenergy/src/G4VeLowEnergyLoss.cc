@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.25 2006/06/29 19:41:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VeLowEnergyLoss.cc,v 1.27 2009/07/23 09:15:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------
@@ -171,7 +171,7 @@ void G4VeLowEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
   G4int n = 100;
   G4double del = 1.0/(G4double)n ;
 
-  for (G4int j=1; j<TotBin; j++) {
+  for (G4int j=1; j<=TotBin; j++) {
 
     G4double energy2 = rangeVector->GetLowEdgeEnergy(j);
     G4double de = (energy2 - energy1) * del ;
@@ -200,7 +200,7 @@ G4double G4VeLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
   dtau = (tauhigh-taulow)/nbin;
   Value = 0.;
 
-  for (G4int i=0; i<=nbin; i++)
+  for (G4int i=0; i<nbin; i++)
   {
     taui = taulow + dtau*i ;
     ti = ParticleMass*taui;
@@ -209,7 +209,7 @@ G4double G4VeLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
       ci=0.5;
     else
     {
-      if(i<nbin)
+      if(i<nbin-1)
         ci=1.;
       else
         ci=0.5;
@@ -232,7 +232,7 @@ G4double G4VeLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
   dltau = ltt/nbin;
   Value = 0.;
 
-  for (G4int i=0; i<=nbin; i++)
+  for (G4int i=0; i<nbin; i++)
   {
     ui = ltaulow+dltau*i;
     taui = std::exp(ui);
@@ -242,7 +242,7 @@ G4double G4VeLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
       ci=0.5;
     else
     {
-      if(i<nbin)
+      if(i<nbin-1)
         ci=1.;
       else
         ci=0.5;
@@ -368,7 +368,7 @@ void G4VeLowEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
     tauold = tau ;
   } while (tau<=taulim) ;
   i += 1 ;
-  for (G4int j=i; j<TotBin; j++)
+  for (G4int j=i; j<=TotBin; j++)
   {
     LowEdgeEnergy = timeVector->GetLowEdgeEnergy(j);
     tau = LowEdgeEnergy/ParticleMass ;
@@ -429,7 +429,7 @@ void G4VeLowEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
     tauold = tau ;
   } while (tau<=taulim) ;
   i += 1 ;
-  for (G4int j=i; j<TotBin; j++)
+  for (G4int j=i; j<=TotBin; j++)
   {
     LowEdgeEnergy = timeVector->GetLowEdgeEnergy(j);
     tau = LowEdgeEnergy/ParticleMass ;
@@ -454,7 +454,7 @@ G4double G4VeLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
   dltau = ltt/nbin;
   Value = 0.;
 
-  for (G4int i=0; i<=nbin; i++)
+  for (G4int i=0; i<nbin; i++)
   {
     ui = ltaulow+dltau*i;
     taui = std::exp(ui);
@@ -464,7 +464,7 @@ G4double G4VeLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
       ci=0.5;
     else
     {
-      if(i<nbin)
+      if(i<nbin-1)
         ci=1.;
       else
         ci=0.5;
@@ -487,7 +487,7 @@ G4double G4VeLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
   dltau = ltt/nbin;
   Value = 0.;
 
-  for (G4int i=0; i<=nbin; i++)
+  for (G4int i=0; i<nbin; i++)
   {
     ui = ltaulow+dltau*i;
     taui = std::exp(ui);
@@ -497,7 +497,7 @@ G4double G4VeLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
       ci=0.5;
     else
     {
-      if(i<nbin)
+      if(i<nbin-1)
         ci=1.;
       else
         ci=0.5;
@@ -540,9 +540,9 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildInverseRangeTable(G4PhysicsTable* theRan
     G4double rlow  = pv->GetValue(elow, b);
     G4double rhigh = pv->GetValue(ehigh, b);
 
-    rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
+    //rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
 
-    G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins);
+    G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins-1);
 
     v->PutValue(0,elow);
     G4double energy1 = elow;
@@ -596,7 +596,7 @@ void G4VeLowEnergyLoss::InvertRangeVector(G4PhysicsTable* theRangeTable,
   G4bool isOut ;
 
   //loop for range values
-  for( G4int i=0; i<TotBin; i++)
+  for( G4int i=0; i<=TotBin; i++)
   {
     LowEdgeRange = aVector->GetLowEdgeEnergy(i) ;  //i.e. GetLowEdgeValue(i)
     if( rangebin < LowEdgeRange )
@@ -612,7 +612,7 @@ void G4VeLowEnergyLoss::InvertRangeVector(G4PhysicsTable* theRangeTable,
 
     if(binnumber == 0)
       KineticEnergy = lowestKineticEnergy ;
-    else if(binnumber == TotBin-1)
+    else if(binnumber == TotBin)
       KineticEnergy = highestKineticEnergy ;
     else
     {
@@ -667,7 +667,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
     Ti = lowestKineticEnergy ;
     G4PhysicsVector* rangeVector= (*theRangeTable)[J];
 
-    for ( G4int i=0; i<TotBin; i++)
+    for ( G4int i=0; i<=TotBin; i++)
     {
       Ri = rangeVector->GetValue(Ti,isOut) ;
       if ( i==0 )
@@ -677,7 +677,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffATable(G4PhysicsTable* theRang
         Tim = Ti/RTable ;
         Rim = rangeVector->GetValue(Tim,isOut);
       }
-      if ( i==(TotBin-1))
+      if ( i==TotBin)
         Rip = Ri ;
       else
       {
@@ -729,7 +729,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
     Ti = lowestKineticEnergy ;
     G4PhysicsVector* rangeVector= (*theRangeTable)[J];
   
-    for ( G4int i=0; i<TotBin; i++)
+    for ( G4int i=0; i<=TotBin; i++)
     {
       Ri = rangeVector->GetValue(Ti,isOut) ;
       if ( i==0 )
@@ -739,7 +739,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRang
         Tim = Ti/RTable ;
         Rim = rangeVector->GetValue(Tim,isOut);
       }
-      if ( i==(TotBin-1))
+      if ( i==TotBin)
         Rip = Ri ;
       else
       {
@@ -790,7 +790,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
     Ti = lowestKineticEnergy ;
     G4PhysicsVector* rangeVector= (*theRangeTable)[J];
   
-    for ( G4int i=0; i<TotBin; i++)
+    for ( G4int i=0; i<=TotBin; i++)
     {
       Ri = rangeVector->GetValue(Ti,isOut) ;
       if ( i==0 )
@@ -800,7 +800,7 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRang
         Tim = Ti/RTable ;
         Rim = rangeVector->GetValue(Tim,isOut);
       }
-      if ( i==(TotBin-1))
+      if ( i==TotBin)
         Rip = Ri ;
       else
       {

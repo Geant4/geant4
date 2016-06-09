@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.53 2008/12/03 13:35:36 gcosmo Exp $
+# $Id: common.gmk,v 1.54 2009/02/26 16:29:08 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -150,6 +150,7 @@ clean::
 	@rm -f $(G4LIBDIR)/*$(name).exp
 	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)
 	@rm -rf $(G4TMPDIR)
+	@rm -rf moc
 endif
 
 clean_libs::

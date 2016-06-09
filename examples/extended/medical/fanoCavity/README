@@ -1,4 +1,4 @@
-$Id: README,v 1.15 2008/09/28 16:04:01 maire Exp $
+$Id: README,v 1.16 2009/10/25 19:06:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -95,7 +95,7 @@ $Id: README,v 1.15 2008/09/28 16:04:01 maire Exp $
     	 			 	
  4- PHYSICS
  
-    The physics list contains the standard electromagnetic processes, with few 
+    The physics lists contains the standard electromagnetic processes, with few 
     modifications listed here.
     
     - Compton scattering : as explained above, the final state is modified in
@@ -107,8 +107,8 @@ $Id: README,v 1.15 2008/09/28 16:04:01 maire Exp $
     
     - Bremsstrahlung : Fano conditions imply no energy transfer via
     bremsstrahlung radiation. Therefore this process is not registered in the
-    physics list. However, it is always possible to include it via an UI
-    command. See PhysicsListMessenger class.
+    physics list. However, it is always possible to include it.
+    See PhysListEmStandard class.
     
     - Ionisation : In order to have same stopping power in wall and cavity, one
     must cancel the density correction term in the dedx formula. This is done in

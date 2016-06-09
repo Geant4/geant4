@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.hh,v 1.4 2008/03/10 10:39:28 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VMscModel.hh,v 1.9 2009/04/07 18:39:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,7 +38,7 @@
 // Creation date: 07.03.2008
 //
 // Modifications:
-//
+// 07.04.2009 V.Ivanchenko moved msc methods from G4VEmModel to G4VMscModel 
 //
 // Class Description:
 //
@@ -53,6 +53,11 @@
 #include "G4VEmModel.hh"
 #include "G4MscStepLimitType.hh"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
+#include "G4Track.hh"
+#include "G4SafetyHelper.hh"
+
+class G4ParticleChangeForMSC;
 
 class G4VMscModel : public G4VEmModel
 {
@@ -63,6 +68,28 @@ public:
 
   virtual ~G4VMscModel();
 
+  virtual G4double ComputeTruePathLengthLimit(const G4Track& track, 
+					      G4PhysicsTable* theLambdaTable, 
+					      G4double currentMinimalStep);
+
+  virtual G4double ComputeGeomPathLength(G4double truePathLength);
+
+  virtual G4double ComputeTrueStepLength(G4double geomPathLength);
+
+  virtual void SampleScattering(const G4DynamicParticle*,
+				G4double safety);
+
+  // empty 
+  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+				 const G4MaterialCutsCouple*,
+				 const G4DynamicParticle*,
+				 G4double tmin,
+				 G4double tmax);
+
+  //================================================================
+  //  Set parameters of multiple scattering models
+  //================================================================
+ 
   inline void SetStepLimitType(G4MscStepLimitType);
 
   inline void SetLateralDisplasmentFlag(G4bool val);
@@ -73,11 +100,36 @@ public:
 
   inline void SetSkin(G4double);
 
+  inline void SetSampleZ(G4bool);
+
+protected:
+
+  // initialisation of the ParticleChange for the model
+  G4ParticleChangeForMSC* GetParticleChangeForMSC();
+
+  // initialisation of interface with geometry
+  void InitialiseSafetyHelper();
+
+  // shift point of the track PostStep 
+  void ComputeDisplacement(G4ParticleChangeForMSC*,  
+			   const G4ThreeVector& displDir,
+                           G4double displacement,
+			   G4double postsafety);
+
+  // compute safety
+  inline G4double ComputeSafety(const G4ThreeVector& position, G4double limit);
+
+  // compute linear distance to a geometry boundary
+  inline G4double ComputeGeomLimit(const G4Track& position, G4double& presafety, 
+				   G4double limit);
+
 private:
 
   //  hide assignment operator
   G4VMscModel & operator=(const  G4VMscModel &right);
   G4VMscModel(const  G4VMscModel&);
+
+  G4SafetyHelper* safetyHelper;
 
 protected:
 
@@ -87,6 +139,7 @@ protected:
   G4double skin;
   G4double dtrl;
   G4double lambdalimit;
+  G4double geommax;
 
   G4MscStepLimitType steppingAlgorithm;
 
@@ -129,6 +182,37 @@ inline void G4VMscModel::SetGeomFactor(G4double val)
 inline void G4VMscModel::SetStepLimitType(G4MscStepLimitType val)
 {
   steppingAlgorithm = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VMscModel::SetSampleZ(G4bool val)
+{
+  samplez = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VMscModel::ComputeSafety(const G4ThreeVector& position, 
+					   G4double)
+{
+  return safetyHelper->ComputeSafety(position);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4VMscModel::ComputeGeomLimit(const G4Track& track, 
+					      G4double& presafety, 
+					      G4double limit)
+{
+  G4double res = geommax;
+  if(track.GetVolume() != safetyHelper->GetWorldVolume()) {
+    res = safetyHelper->CheckNextStep(
+          track.GetStep()->GetPreStepPoint()->GetPosition(),
+	  track.GetMomentumDirection(),
+	  limit, presafety);
+  }
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

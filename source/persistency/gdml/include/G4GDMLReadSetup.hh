@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSetup.hh,v 1.5 2008/11/20 15:33:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadSetup.hh,v 1.6 2009/03/24 15:47:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4GDMLReadSetup
@@ -54,6 +54,11 @@ class G4GDMLReadSetup : public G4GDMLReadSolids
    G4String GetSetup(const G4String&);
 
    virtual void SetupRead(const xercesc::DOMElement* const element);
+
+ protected:
+
+   G4GDMLReadSetup();
+   virtual ~G4GDMLReadSetup();
 
  protected:
 

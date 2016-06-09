@@ -14,6 +14,17 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+20 Nov 2009 - Dennis Wright (hadr-rpg-V09-02-01)
+------------------------------------------------
+G4RPGInelastic:  add temporary message stating the RPG model is
+   under development and should not be used
+
+25 May 2009 - Dennis Wright (hadr-rpg-V09-02-00)
+------------------------------------------------
+G4RPGInelastic:  fix MAC complaint about initialization order:
+   remove static array of G4ParticleDefinition pointers and
+   replace with local array 
+  
  9 June 2008 - Dennis Wright (hadr-rpg-V09-01-03)
 -------------------------------------------------
 Remove unused variable ekIncident in G4RPGFragmentation.cc and 

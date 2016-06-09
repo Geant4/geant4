@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellCorrection.cc,v 1.4 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ShellCorrection.cc,v 1.6 2009/11/30 10:33:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -43,9 +43,13 @@ G4ShellCorrection::G4ShellCorrection()
 //  theCameronTruranHilfShellCorrections = G4CameronTruranHilfShellCorrections::GetInstance();
 }
 
+G4ShellCorrection::~G4ShellCorrection()
+{
+}
 
 G4ShellCorrection* G4ShellCorrection::GetInstance()
 {
-  if (!theInstance) theInstance = new G4ShellCorrection();
+  static G4ShellCorrection theCorrections;
+  if (!theInstance)  { theInstance = &theCorrections; }
   return theInstance;
 }   

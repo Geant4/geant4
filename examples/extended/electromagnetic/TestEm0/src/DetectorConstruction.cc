@@ -25,8 +25,8 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.9 2006/12/08 16:38:38 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.10 2009/11/14 18:04:20 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 
@@ -82,9 +82,11 @@ void DetectorConstruction::DefineMaterials()
   G4double z,a;
   
   G4Element* H  = new G4Element("Hydrogen" ,"H" , z= 1., a=   1.01*g/mole);
+  G4Element* C  = new G4Element("Carbon"   ,"C" , z= 6., a=  12.01*g/mole);  
   G4Element* N  = new G4Element("Nitrogen" ,"N" , z= 7., a=  14.01*g/mole);
   G4Element* O  = new G4Element("Oxygen"   ,"O" , z= 8., a=  16.00*g/mole);
   G4Element* Ge = new G4Element("Germanium","Ge", z=32., a=  72.59*g/mole);
+  G4Element* Pb = new G4Element("Lead"     ,"Pb", z=82., a= 207.19*g/mole);  
   G4Element* Bi = new G4Element("Bismuth"  ,"Bi", z=83., a= 208.98*g/mole);
   
   //
@@ -109,7 +111,7 @@ void DetectorConstruction::DefineMaterials()
   H2O->AddElement(O, natoms=1);
   ///H2O->SetChemicalFormula("H_2O");
   H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
-  
+        
   G4Material* steam = 
   new G4Material("WaterSteam", density= 1.0*mg/cm3, ncomponents=1);
   steam->AddMaterial(H2O, fractionmass=1.);
@@ -131,8 +133,13 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
   new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
-  
-
+    
+  G4Material* ams = 
+  new G4Material("ams", density= 7.409*g/cm3, ncomponents=3);
+  ams->AddElement(Pb, fractionmass = 94.81*perCent);
+  ams->AddElement(C , fractionmass =  4.79*perCent);
+  ams->AddElement(H , fractionmass =  0.40*perCent);    
+    
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

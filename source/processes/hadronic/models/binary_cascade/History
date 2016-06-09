@@ -13,6 +13,51 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+4-Dec-2009, Gunter Folger                had-binary-V09-02-06
+- Bug fix in G4BinaryCascade::ApplyCollision; decay products outside
+   nucleus were nevertheless counted in currentZ/A as if these were within
+   nucleus.
+
+13-Nov-2009, Gunter Folger               had-binary-V09-02-05
+- Correct assignment to G4ThreeVector, avoid use of Vector=0;
+- Protect for void nucleus ( not even a single neutron ) after cascade 
+
+9-Nov-2009, Gunter Folger                had-binary-V09-02-04
+- Merge changes for BinaryCascade with changes by VU, see below.
+
+5-Oct-2009, Gunter Folger                had-binary-V09-02-03
+- Make capture threshold a setable parameter in G4GeneratorPrecompoundInterface
+- Note that changes below to Binary (30 Aug) are NOT included in tag.
+
+30 August, V. Uzhinsky   -- Proposed changes in bin.cascade to protect
+                            energy-non-conservation in FTF+BIC
+                            combination.
+  They are:
+
+  1. Shift of particle's formation times that the min. time=0.
+
+  2. Including of captured particles (Due to absend of the options there 
+     were
+     a large energy-non-conservation).
+
+  3. GetExcitationEnergy() - correction for the case when all nucleons are
+     ejected.
+
+  4. Correction for the nuclear field for baryons.
+---------------------------------------------------------
+
+4-Aug-2009, Gunter Folger                had-binary-V09-02-02
+- Remove unused header file G4NucleiPropertiesTable.hh from 
+    G4KM_NucleonEqRhs.cc, G4{Proton,Neutron}Field.cc 
+
+15-Jun-2009, Gunter Folger               had-binary-V09-02-01
+- Commit files supposedly in  had-binary-V09-02-00
+
+11-Jun-2009 Gunter Folger                had-binary-V09-02-00 <-- does not contain mods, only committed to ...-01
+- Add interface to set deexcitation handler in  G4BinaryLightIonReaction used to
+  deexcite lighter initial nucleus;
+   precompound handling low energy interactions can be set, too.
+   
 8-Dec-2008 Gunter Folger		 had-binary-V09-01-03
   G4BinaryCascade: previous tag inadvertedly added developement; 
   moved development to branch, and re-add data member initialisation.

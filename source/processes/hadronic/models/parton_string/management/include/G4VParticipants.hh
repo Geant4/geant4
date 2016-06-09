@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticipants.hh,v 1.4 2008/05/19 13:03:20 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VParticipants.hh,v 1.6 2009/11/19 14:23:09 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4VParticipants_h
@@ -64,7 +64,7 @@ class G4VParticipants
       G4V3DNucleus * GetWoundedNucleus() const;
 
 
-  protected:
+//  protected:   // Uzhi 26 July 09
 
   
       G4V3DNucleus *theNucleus;
@@ -89,7 +89,7 @@ inline void G4VParticipants::Init(G4double theA, G4double theZ)
 {
 	if ( theNucleus == NULL ) theNucleus = new G4Fancy3DNucleus();
 	theNucleus->Init(theA, theZ);
-        theNucleus->SortNucleonsInZ();    // Uzhi 16.05.08 Sorting of nucleon-Z
+        theNucleus->SortNucleonsIncZ();
 }
 
 

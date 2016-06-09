@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSetup.cc,v 1.9 2008/07/16 15:46:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadSetup.cc,v 1.10 2009/03/24 15:47:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4GDMLReadSetup Implementation
 //
@@ -33,6 +33,14 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadSetup.hh"
+
+G4GDMLReadSetup::G4GDMLReadSetup() : G4GDMLReadSolids()
+{
+}
+
+G4GDMLReadSetup::~G4GDMLReadSetup()
+{
+}
 
 G4String G4GDMLReadSetup::GetSetup(const G4String& ref)
 {

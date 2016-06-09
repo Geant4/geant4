@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2008/11/21 21:50:02 perl Exp $
+$Id: History,v 1.115 2009/11/04 12:44:39 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,37 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
-27th July 2008  John Allison (modeling-V09-01-01)
+4th November 2009  John Allison
+- G4PSHitsModel:
+  o Now intended as end-of-run model.
+  o Picks up hits from G4ScoringManager instead of event.
+
+22nd October 2009  John Allison  (modeling-V09-02-05 coworks greps-V09-02-02)
+- Added G4PSHitsModel for gMocren driver.
+- G4PhysicalVolumeModel.cc: Makes use of HepPolyhedronProcessor.
+
+21st October 2009  John Allison  (modeling-V09-02-04 coworks greps-V09-02-02)
+- G4BoundingSphereScene, G4PhysicalVolumeMassScene,
+  G4PhysicalVolumeSearchScene:
+  o Added empty AddCompound (const G4THitsMap<G4double>&) methods.
+
+10th October 2009  John Allison  (modeling-V09-02-03)
+- G4PhysicalVolumeModel: Added G4PhysicalVolumeModelTouchable.  Used in
+  ComputeMaterial.  Effective for nested parameterisations.
+
+29th September 2009  John Allison  (modeling-V09-02-02)
+- G4PhysicalVolumeModel.cc: Added warning if logical volume not defined.
+
+25th February 2009  John Allison  (modeling-V09-02-01 - needs greps-V09-02-01)
+- G4ModelApplyCommandsT: Added visManager->NotifyHandlers() after
+  application (Apply) of all commands.  Forces update of all viewers
+  after a change of model, e.g., trajectory colour, point size, etc.
+
+24th February 2009  John Allison  (modeling-V09-02-00 - needs greps-V09-02-00)
+- Added setAux/StepPtsSizeType commands (candidates: "none world screen").
+- Added unit to setAux/StepPtsSize for SizeType == world.
+
+27th July 2008  John Allison  (modeling-V09-01-01)
 - G4PhysicalVolumeSearchScene.cc: Cosmetic improvement to a message.
 
 4th January 2008  John Allison  (modeling-V09-01-00)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyData.cc,v 1.3 2007/03/11 07:17:35 kurasige Exp $
+// $Id: G4ParticlePropertyData.cc,v 1.4 2009/08/17 14:52:19 kurasige Exp $
 //
 // class G4ParticlePropertyData
 //
@@ -196,6 +196,7 @@ G4int G4ParticlePropertyData::operator!=(const G4ParticlePropertyData &right) co
 ////////////////////////
 void G4ParticlePropertyData::Print() const
 {
+#ifdef G4VERBOSE
   G4cout << " Particle Name : " << theParticleName << G4endl;
   G4cout << " PDG particle code : " << thePDGEncoding;
   G4cout << " [PDG anti-particle code: " << this->GetAntiPDGEncoding() << "]"<< G4endl;
@@ -229,6 +230,7 @@ void G4ParticlePropertyData::Print() const
   G4cout << ", " << theAntiQuarkContent[3];
   G4cout << ", " << theAntiQuarkContent[4];
   G4cout << ", " << theAntiQuarkContent[5] << G4endl;
+#endif
 }
 
 

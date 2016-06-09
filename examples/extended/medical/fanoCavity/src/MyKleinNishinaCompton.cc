@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaCompton.cc,v 1.5 2007/10/01 15:19:57 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: MyKleinNishinaCompton.cc,v 1.6 2009/10/25 19:06:26 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "MyKleinNishinaCompton.hh"
+#include "MyKleinNishinaMessenger.hh"
 #include "DetectorConstruction.hh"
 
 #include "G4Electron.hh"
@@ -47,13 +48,16 @@ MyKleinNishinaCompton::MyKleinNishinaCompton(DetectorConstruction* det,
                                              const G4String& nam)
   :G4KleinNishinaCompton(0,nam), detector(det)
 {
-  CrossSectionFactor = 1.; 
+  CrossSectionFactor = 1.;
+  pMessenger = new MyKleinNishinaMessenger(this);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 MyKleinNishinaCompton::~MyKleinNishinaCompton()
-{}
+{  
+  delete pMessenger;  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

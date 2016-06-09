@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2008/11/13 14:14:07 vnivanch Exp $
+$Id: History,v 1.134 2009/11/09 19:18:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,44 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 November 09: V.Ivant (emmuons-V09-02-08)
+- G4MuBetheBlochModel - compute density effect correction using method of 
+                        G4IonisParamMat class applying revised parameterisation
+
+30 October 09: V.Ivant (emmuons-V09-02-07)
+G4MuMultipleScattering - use G4UrbanMscModel90 by default
+
+11 August 09: V.Ivant (emmuons-V09-02-06)
+G4MuPairProductionModel - restore the head
+
+24 July 09: V.Ivant (emmuons-V09-02-05)
+G4MuMultipleScattering - removed obosolete members and methods (they
+                         are in the base class)
+
+09 July 09: V.Ivant (emmuons-V09-02-04)
+G4EnergyLossForExtrapolator - removed hidden bin to use full scale of 
+                              of PhysicsVector; linLossLimit = 0.01
+
+02 June 09: V.Ivant (emmuons-V09-02-03)
+G4MuPairProductionModel - added protection for the case when
+  maxPairEnergy<minPairEnergy (empty interval for energy transfer
+  observed for rare case happens with kaons)
+
+12 April 09: V.Ivant (emmuons-V09-02-02)
+G4MuBetheBlochModel, G4MuBremsstrahlungModel, G4MuPairProductionModel
+  - simplified initialisation
+
+26 February 09: V.Ivant (emmuons-V09-02-01)
+G4MuIonisation - fixed initialisation alowing to configure external model
+                 of fluctuations
+
+20 February 09: V.Ivant (emmuons-V09-02-00)
+- Cleanup: improved comments, move virtual methods from .hh to .cc
+
+11 August 09: V.Ivant (emmuons-V09-01-15a)
+G4MuPairProductionModel - added protection against numerical problem
+                          due to negative value of transfered energy 
 
 12 November 08: V.Ivant (emmuons-V09-01-15)
 G4EnergyLossForExtrapolator - added method TrueStepLength; fixed initialisation

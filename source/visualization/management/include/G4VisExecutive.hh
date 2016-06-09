@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.hh,v 1.6 2006/06/29 21:28:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisExecutive.hh,v 1.9 2009/11/17 15:34:06 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // John Allison 2nd February 2005 (based on MyVisManager, 24th January 1998).
@@ -40,10 +40,12 @@
 // name are set.
 //
 // Include this file and write code to instantiate G4VisExecutive just
-// once as beginning of operations.  Before you compile, set
-// appropriate environment variables.  If you change your environment
-// you must force recompilation (the make files will not detect the
-// need to do this).  Typically, your main program file will contain:
+// once at beginning of operations.  Before you compile, set
+// appropriate environment variables (usually using "./Configure").
+// If you change your environment you must force recompilation (the
+// make files will not detect the need to do this).
+//
+// Typically, your main program file will contain:
 //
 // #ifdef G4VIS_USE
 // #include "G4VisExecutive.hh"
@@ -53,10 +55,10 @@
 //   ...
 // #ifdef G4VIS_USE
 //   // Instantiate and initialise Visualization Manager.
-//   G4VisManager* visManager = new G4VisExecutive;
-//   //  visManager -> SetVerboseLevel (verbosityString);
-//   //  visManager -> RegisterGraphicsSystem (new G4XXX);
-//   visManager -> Initialize ();
+//   G4VisManager* visManager = new G4VisExecutive;    // See Nore (a).
+//   visManager -> SetVerboseLevel (verbosityString);  // See Note (b).
+//   visManager -> RegisterGraphicsSystem (new myGS);  // See Note (c).
+//   visManager -> Initialize ();                      // See Note (d).
 // #endif
 //   ...
 // #ifdef G4VIS_USE
@@ -65,22 +67,47 @@
 //   G4cout << "Vis manager deleted." << G4endl;
 // #endif
 //
-// The implementation is included as an .icc file because - for those
-//   graphics systems that need external libraries - only those
-//   systems that have been selected by the flags may be instantiated
-//   without causing unresolved references (only the user knows which
-//   libraries are available on his/her computer).  It also ensures
-//   that libraries can be linked in the right order, without circular
-//   dependencies.  (Note that some graphics systems, notable those
-//   that write files for off-line viewing, do not suffer these
-//   restrictions and are always registered.)  Additional graphics
-//   systems, XXX say, can be individually registered before
-//   invocation of Initialise() with RegisterGraphicsSystem(new XXX).
+// Notes:
+// (a) After instantiation, all references to this object should be as
+//     a G4VisManager.  The functions RegisterGraphicsSystems and
+//     RegisterModelFactories defined in G4VisExecutive.icc are
+//     virtual functions of G4VisManager.  They are invoked by
+//     G4VisManager::Initialise.  If you need to initialise in a
+//     separate file, see advice below.
+// (b) The verbosityString ("quiet", "errors", "warnings",
+//     "confirmations", etc. - "help /vis/verbose" to see options) can be
+//     set here or with /vis/verbose.
+// (c) You can register your own graphics system like this.
+// (d) Your can intialise like this with C++ code or use /vis/initialize.
 //
-// Alternatively, you can implement an empty function here and just
-//   register the systems you want in your main(), e.g.:
-//   G4VisManager* visManager = new G4VisExecutive;
-//   visManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
+// If you need to perform the instantiation and the initialisation in
+// separate files, e.g., to establish the verbosity before
+// initialisation, then the code that initialises must have access, of
+// course, to the G4VisExecutive object, but this should be as a
+// G4VisManager object, i.e., #include "G4VisManager.hh".
+// RegisterGraphicsSystems and RegisterModelFactories are (pure)
+// virtual methods of G4VisManager called from G4VisManager::Initialize.
+// First file:
+// #include "G4VisExecutive.hh"
+// ...
+//   fpVisManager = new G4VisExecutive;
+// where fpVisManager is a G4VisManager*.
+// Second file:
+// #include "G4VisManager.hh"
+// ...
+//   fpVisManager -> Initialize ();
+// where there is some mechanism for getting access to the pointer
+// fpVisManager.
+//
+// The implementation is included as an .icc file because - for those
+// graphics systems that need external libraries - only those systems
+// that have been selected by the flags may be instantiated without
+// causing unresolved references (only the user knows which libraries
+// are available on his/her computer).  It also ensures that libraries
+// can be linked in the right order, without circular dependencies.
+// (Note that some graphics systems, notable those that write files
+// for off-line viewing, do not suffer these restrictions and are
+// always registered.)
 //
 // See class description of G4VisManager for more details.
 
@@ -93,7 +120,7 @@ class G4VisExecutive: public G4VisManager {
 
 public: // With description
 
-  G4VisExecutive ();
+  G4VisExecutive () {}
 
 private:
 

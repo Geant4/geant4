@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiBMesonZero.cc,v 1.20 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AntiBMesonZero.cc,v 1.21 2009/10/09 14:34:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -65,7 +65,7 @@ G4AntiBMesonZero* G4AntiBMesonZero::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      5.2794*GeV, 4.331e-10*MeV,          0.,
+                 name,     5.27953*GeV, 4.331e-10*MeV,          0.,
                     0,              -1,             0,
                     1,              +1,             0,
               "meson",               0,             0,        -511,

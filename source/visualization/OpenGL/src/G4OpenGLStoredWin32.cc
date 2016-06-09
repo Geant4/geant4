@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32.cc,v 1.14 2006/08/14 12:07:19 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLStoredWin32.cc,v 1.15 2009/01/19 16:53:42 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // OpenGLStoredWin32 graphics system factory.

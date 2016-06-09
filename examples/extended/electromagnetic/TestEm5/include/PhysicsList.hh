@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.8 2008/11/16 19:13:33 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.hh,v 1.11 2009/03/06 18:04:23 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,20 +60,15 @@ public:
   void SetCutForPositron(G4double);
     
 private:
-  
+
   PhysicsListMessenger* pMessenger; 
 
   G4String emName;
   G4VPhysicsConstructor*  emPhysicsList;
-  std::vector<G4VPhysicsConstructor*>  hadronPhys;
     
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;    
-
-  G4bool helIsRegisted;
-  G4bool bicIsRegisted;
-  G4bool biciIsRegisted;
 
 };
 

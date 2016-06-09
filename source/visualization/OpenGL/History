@@ -1,12 +1,12 @@
-$Id: History,v 1.120 2008/11/21 21:56:28 perl Exp $
+$Id: History,v 1.161 2009/11/17 17:21:11 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                      Category History file
-                      ---------------------
+           Category History file for visualization/OpenGL
+           ----------------------------------------------
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
@@ -17,8 +17,176 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-History file for visualization/OpenGL
--------------------------------------
+17th November 2009  John Allison  (opengl-V09-02-10)
+- Tagged for vis tag.
+
+17th November 2009  Gabriele Cosmo
+- Fixed problem in the generation of dependencies on Windows for some
+  files, due to redefinition of min and max macros from windows.h in
+  G4OpenGL.hh.
+- Fixed GNUmakefile.
+
+3rd November 2009  John Allison  (opengl-V09-02-09 coworks greps-V09-02-03)
+- Tagged for system testing.
+
+3rd November 2009  Laurent Garnier
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer : Protec Qt4 method 
+  introduce 13rd october 09 by ifdef
+
+3rd November 2009  John Allison
+- G4OpenGLXmPanningCallbacks: Fixed pView compilation problem.
+
+21 October 2009 Laurent Garnier
+ -  G4OpenGLQtViewer : Prepare to attach viewer In UI
+
+21st October 2009  John Allison  (opengl-V09-02-08 coworks greps-V09-02-02)
+- Added default AddCompound (const G4THitsMap<G4double>&) methods.
+  o Prevents warnings about hiding - calls G4VSceneHandler base class.
+
+15 October 2009 Laurent Garnier
+ - G4OpenGLViewer.cc : Fix a problem with printing. On mac OSX version
+   > 10.5.7? or Ubuntu > 9.04? AND with user account configure in french
+   (or canadian I believe), the decimal point character was defined by
+   "," (see LC_NUMERIC). This cause a problem on reading eps files. 
+   Changed "," to "." 
+
+13 October 2009 Laurent Garnier
+ - G4OpenGLImmediateQtViewer/StoredQtViewer : some cleaning
+ - G4OpenGLImmediateQtViewer : Remove picking to true at initialisation 
+ - G4OpenGLQtViewer.cc : Fix a redraw problem on mac OS X 10.6
+ - G4OpenGLStoreQtViewer.cc,G4OpenGLImmediateQtViewer.cc : Fix width()
+   and height() problem on mac OS X 10.6
+
+29 September 2009  John Allison  (opengl-V09-02-07)
+- Tagged.
+
+18 August 2009 Laurent Garnier
+ - G4OpenGLXmViewer : Fix a wrong initialization introduce by the 
+   new way of handling window size hints (January 2009)
+
+29 July 2009, Laurent Garnier
+ - G4OpenGLQtViewer : Ensure the GL frame size will be correct
+   by setting a 0 size margin around 
+
+27 July 2009, Laurent Garnier
+ - G4OpenGLStoredQtViewer : Remove picking to true at initialisation 
+
+20 May 2009, Laurent Garnier (opengl-V09-02-06)
+ - Fixed compilation errors on WIN32-VC for WIN32 specific drivers.
+
+18 May 2009, Joseph Perl (opengl-V09-02-05)
+ - Correct G4OpenGLViewerMessenger.hh
+
+14 May 2009, Laurent Garnier (opengl-V09-02-04)
+ - G4OpenGLViewer : Add methods to manage print size and filename
+ - G4OpenGLViewerMessenger : Added /vis/ogl/set/printSize
+ - G4OpenGLViewerMessenger : Added /vis/ogl/set/printFilename
+ - G4OpenGLQtViewer.cc,G4OpenGLXmMainMenuBarCallback.cc, renaming
+   according to first point.
+
+13 May 2009, Laurent Garnier
+ - G4OpenGLStoredQtViewer.cc: Fix a second view redraw at ShowView() call
+ - G4OpenGLQtViewer : Remove unuseful variables, renaming others
+ - G4OpenGLViewer : Add method for resizing properly windows. Add methods
+   to get window width, height and to know if size has changed
+ - G4OpenGLQtViewer, G4OpenGLStoredQtViewer, G4OpenGLImmediateQtViewer,
+   G4OpenGLXmViewer, G4XmWindowsHandlingCallback, G4OpenGLXViewer :
+     Apply the previous changes.
+
+6 May 2009, Laurent Garnier
+ - G4OpenGLQtViewer.cc: Fix compilation warning and error with gcc4.4
+
+28th April 2009, John Allison
+ - G4OpenGLViewerMessenger.cc: Added return statement at end of every
+   "if (command == ..." statement.  (Because of test for OGLS, it is
+   not elegant to use "if...else if...else" structure.)
+
+28th April 2009, Laurent Garnier
+ - G4OpenGLXViewer,G4OpenGLViewer : End of moving printEPS and associated 
+   functions from GLXViewer to GLViewer.   
+ - G4OpenGLXViewer :
+   - Remove debug methods
+   - Add check in SetView() method
+ - G4OpenGLViewer : Add a glReadBuffer before glReadPixel in grabPixel method 
+
+8th April 2009, Laurent Garnier
+ - G4OpenGLBitmapStore.hh : BugFix correction for windows (introduce 2nd February ?)
+ - G4OpenGLViewer.hh : move methods in private
+ - G4OpenGLXViewer.hh : Add debug methods
+ - G4OpenGLImmediateXmViewer.cc, G4OpenGLStoredViewer.cc, G4OpenGLStoredXmViewer.cc,
+   G4OpenGLStoredXViewer.cc, G4OpenGLViewer.cc   : Add debug messages
+ - G4OpenGLStoredXmViewer.cc,G4OpenGLStoredXViewer.cc, G4OpenGLStoredWin32Viewer.cc :
+   - Add a DrawDisplay list in case of KernelVisit=1 and  nothing new to display. 
+   - Add a flush at the end of the view.
+ - G4OpenGLViewer.cc : 
+   - Improve the fix and resizing when X/Y size was even (lack of precision
+     in a /2)
+   - Set line/point size at a default size when printing.
+ - G4OpenGLXmWindowsHandlingCallbacks.cc : print method rename in printEPS
+ - G4OpenGLXViewer.cc : Lot of changes, try to debug it. Pb when printing in pixmap
+   mode on some windows size
+
+6th April 2009, Joseph Perl (opengl-V09-02-02, then opengl-V09-02-03)
+ - New tag to clean up all of the cases of files that changed only in the cvs id.
+
+24th March 2009, Laurent Garnier (opengl-V09-02-01)
+ - G4OpenGLViewer : Add a fix and resizing when X/Y size was even (lack of precision
+   in a /2)
+
+18th March 2009  John Allison
+- G4OpenGLViewerMessenger.cc: printMode and transparency are available
+  for all OGL windows (they were previously inadvertently hidden by
+  an OGLS requirement).
+
+16th March 2009, Laurent Garnier
+ - G4OpenGLViewer : Add a check on max viewport dimensions when setting size.
+
+4rd March 2009, Laurent Garnier
+ - G4OpenGLQtViewer:
+   - Suppress some warnings when saving file
+   - Changing size is now allowed when saving (to save with better resolution than screen size)
+ - G4OpenGLViewer: 
+  - Some renaming for print methods to be more clear about Vectored and non Vectored
+  - Now using Gl2PS method to do PS (changes also in G4OpenGLXViewer and G4OpenGLQtViewer)
+  - Suppress unuseful printX methods (heritated form XViewer)
+  - Add methods to handle printVectored and NonVector cases
+ - G4OpenGLViewerMessanger : Changes methods to get new G4OpenGLViewer methods to print
+
+1st March 2009, Laurent Garnier
+ - Remplacing glBitmap by GL_POINTS to draw marker : Speed improvment
+  and gl2ps can now draw Markers.
+
+16 February 2009, Laurent Garnier
+ - Modifications in GNUMakefile for gl2ps.
+ - G4OpenGLViewer,G4OpenGLViewerMessenger.cc,G4OpenGLXmMainMenubarCallbacks.cc
+   ,G4OpenGLXmViewer.cc modified for gl2ps and some renaming "print" in 
+   "printVectoredEPS"
+
+2nd February 2009  Laurent Garnier
+- Improve Anticipate headers declaration in all files
+- Factorize grabPixels function in G4OpenGLViewer
+- Begin of refactoring printEPS function
+
+22th January 2009  Laurent Garnier
+- Fix bug in ratio and geometry on X/Xm/Qt/Win32 viewers
+
+19th January 2009  Laurent Garnier
+- Change G4DEBUG definition by G4DEBUG_VIS_OGL
+
+12th January 2009  John Allison
+- G4OpenGLViewer.cc: Pick up X and Y window size hints to define viewport.
+
+2 December, Laurent Garnier
+ - G4OpenGLImmediateXmViewer,G4OpenGLStoredXmViewer,G4OpenGLXmViewer
+   G4OpenGLImmediateXViewer, G4OpenGLStoredXViewer, G4OpenGLXViewer,
+   G4OpenGLXmWindowHandlingCallbacks,
+   G4OpenGLImmediateQtViewer.cc, G4OpenGLStoredQtViewer, G4OpenGLQtViewer
+   G4OpenGLImmediateWin32Viewer.cc, G4OpenGLStoredWin32Viewer, G4OpenGLWin32Viewer 
+   ->  Replace WinSize by fWinSize and some improvments about size initialization
+
+ - G4OpenGLQtViewer.hh : Suppress WinSize private variable
+ - Now Could pass XString like 400x600-0+0 to viewers and set position and location. It
+   will work for Qt, X, Win32 for the moment.
 
 24 October, Laurent Garnier (opengl-V09-01-03)
  - Change GEANT4_QT_DEBUG flag by QTDEBUG

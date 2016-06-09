@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIbatch.hh,v 1.10 2007/07/16 10:15:12 kmura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIbatch.hh,v 1.11 2009/11/06 08:58:53 kmura Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ====================================================================
 //   G4UIbatch.hh
@@ -69,9 +69,19 @@ public:
 
   ~G4UIbatch();
   
+  G4UIsession* GetPreviousSession() const;
+
   virtual G4UIsession* SessionStart();
   virtual void PauseSessionStart(G4String Prompt);
 
 };
+
+// ============================================================================
+// inlines
+
+inline G4UIsession* G4UIbatch::GetPreviousSession() const
+{
+  return previousSession;
+}
 
 #endif

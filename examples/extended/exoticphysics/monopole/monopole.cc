@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: monopole.cc,v 1.1 2007/08/16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: monopole.cc,v 1.2 2009/07/15 10:19:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +34,7 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "Randomize.hh"
+#include "globals.hh"
 
 #include "DetectorConstruction.hh"
 #include "G4MonopolePhysics.hh"
@@ -59,35 +60,41 @@ int main(int argc,char** argv) {
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
-  //set mandatory initialization classes
-  DetectorConstruction* det;
-
-	//ceate physicsList
+  //create physicsList
   QGSP* phys = new QGSP();
-  G4MonopolePhysics * theMonopole = new G4MonopolePhysics;
+  G4MonopolePhysics * theMonopole = new G4MonopolePhysics();
   phys->RegisterPhysics(theMonopole);
 
-  PrimaryGeneratorAction* kin;
-  runManager->SetUserInitialization(det  = new DetectorConstruction);
-	runManager->SetUserInitialization(phys);
-  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
+  //get the pointer to the User Interface manager
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+
+  // Setup monopole
+  G4String s = ""; 
+  if(argc > 2) s = argv[2];
+  UI->ApplyCommand("/control/verbose 1");
+  UI->ApplyCommand("/monopole/setup "+s);
+
+  // mandator user classes
+  DetectorConstruction* det = new DetectorConstruction();
+
+  runManager->SetUserInitialization(det);  
+  runManager->SetUserInitialization(phys);
+
+  PrimaryGeneratorAction* kin = new PrimaryGeneratorAction(det);
+  runManager->SetUserAction(kin);
 
 #ifdef G4VIS_USE
   //visualization manager
   G4VisManager* visManager = 0;
 #endif
 
-  //set user action classes
+  //user action classes
   RunAction* run;
 
   runManager->SetUserAction(run = new RunAction(det, kin));
   runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new TrackingAction(run));
   runManager->SetUserAction(new SteppingAction(det, run));
-
-  //get the pointer to the User Interface manager
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  G4cout << "User actions are instantiated" << G4endl;
 
   if (argc == 1)   // Define UI terminal for interactive mode
     {
@@ -99,14 +106,14 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif
-     session->SessionStart();
-     delete session;
+      session->SessionStart();
+      delete session;
     }
   else           // Batch mode
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
 
   //job termination

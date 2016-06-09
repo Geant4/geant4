@@ -24,13 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.hh,v 1.28 2006/06/29 20:05:59 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QCandidate.hh,v 1.29 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidate ----------------
 //             by Mikhail Kossov, Sept 1999.
 //  class header for Quasmon initiated Candidates used by the CHIPS Model
 // ----------------------------------------------------------------------
+// Short description: A candidate for hadronization. The candidates
+// (hadrons or nuclear fragments) are competative, each quark of a
+// Quasmon select which candidate to use for hadronization
+// ------------------------------------------------------------------
 
 #ifndef G4QCandidate_h
 #define G4QCandidate_h 1
@@ -80,7 +84,7 @@ public:
   void SetEBMass(G4double newMass);         // Set mass bounded to Environment
   void SetNBMass(G4double newMass);         // Set mass bounded to Total Nucleus
 
-// Body  								   
+// Body             
 private:
   G4bool   possible;                // permission/forbiding preFlag to be a hadron/fragment
   G4bool   parPossible;             // permission/forbiding preFlag to be a parent

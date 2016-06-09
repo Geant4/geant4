@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <cstdio>
 
 #ifndef CHEPREP_NO_ZLIB
 #include <zlib.h>
@@ -12,7 +13,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: DeflateOutputStreamBuffer.h,v 1.5 2005/06/02 21:28:45 duns Exp $
+ * @version $Id: DeflateOutputStreamBuffer.h,v 1.6 2009/05/08 09:26:58 gcosmo Exp $
  */
 namespace cheprep {
 

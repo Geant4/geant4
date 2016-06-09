@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.55 2008/11/14 19:23:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eBremsstrahlung.cc,v 1.56 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -100,6 +100,13 @@ G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name):
 
 G4eBremsstrahlung::~G4eBremsstrahlung()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4eBremsstrahlung::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

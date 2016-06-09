@@ -37,7 +37,19 @@ G4DiffractiveHHScatterer::G4DiffractiveHHScatterer()
   theStringFragmentation(new G4LundStringFragmentation())
 {}
 
-// -------------------------------------------------------------------
+void G4DiffractiveHHScatterer::CreateStrings()
+/*
+                                             G4VSplitableHadron * aHadron, 
+                                             G4bool isProjectile,
+                                             G4ExcitedString * FirstString, 
+                                             G4ExcitedString * SecondString,
+                                             G4FTFParameters *theParameters) 
+*/
+const
+
+{}
+
+/* -------------------------------------------------------------------
 G4KineticTrackVector * G4DiffractiveHHScatterer::
 Scatter(const G4KineticTrack & aTrack, const G4KineticTrack & bTrack)
 {
@@ -75,3 +87,4 @@ Scatter(const G4KineticTrack & aTrack, const G4KineticTrack & bTrack)
   
   return result;
 }
+*/

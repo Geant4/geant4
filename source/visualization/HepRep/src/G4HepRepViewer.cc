@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepViewer.cc,v 1.26 2006/06/29 21:17:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HepRepViewer.cc,v 1.27 2009/11/23 05:42:28 perl Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 /**
@@ -39,6 +39,7 @@
 //#include "G4VInteractorManager.hh"
 #include "G4Scene.hh"
 #include "G4HepRep.hh"
+#include "G4HepRepMessenger.hh"
 #include "G4HepRepSceneHandler.hh"
 //This
 #include "G4HepRepViewer.hh"
@@ -46,10 +47,9 @@
 using namespace HEPREP;
 using namespace std;
 
-G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& sceneHandler, G4HepRepMessenger& heprepMessenger, const G4String& name)
+G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& sceneHandler, const G4String& name)
         : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name),
-        geometryIncluded(false),
-        messenger(heprepMessenger) {
+        geometryIncluded(false) {
 
 #ifdef SDEBUG
     cout << "G4HepRepViewer::G4HepRepViewer " << name << endl;
@@ -110,7 +110,9 @@ void G4HepRepViewer::ShowView () {
     G4HepRepSceneHandler* sceneHandler = dynamic_cast<G4HepRepSceneHandler*>(GetSceneHandler());
     if (sceneHandler->closeHepRep()) {
         sceneHandler->openHepRep();
-        if (messenger.appendGeometry()) geometryIncluded = false;
+		
+		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+        if (messenger->appendGeometry()) geometryIncluded = false;
     }
 }
 

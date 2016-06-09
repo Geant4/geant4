@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc,v 1.22 2008/11/21 09:32:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadSolids.cc,v 1.27 2009/12/04 13:58:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -33,6 +33,47 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadSolids.hh"
+
+#include "G4Box.hh"
+#include "G4Cons.hh"
+#include "G4Ellipsoid.hh"
+#include "G4EllipticalCone.hh"
+#include "G4EllipticalTube.hh"
+#include "G4Hype.hh"
+#include "G4IntersectionSolid.hh"
+#include "G4Orb.hh"
+#include "G4Para.hh"
+#include "G4Paraboloid.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
+#include "G4QuadrangularFacet.hh"
+#include "G4ReflectedSolid.hh"
+#include "G4Sphere.hh"
+#include "G4SolidStore.hh"
+#include "G4SubtractionSolid.hh"
+#include "G4TessellatedSolid.hh"
+#include "G4Tet.hh"
+#include "G4Torus.hh"
+#include "G4Transform3D.hh"
+#include "G4Trap.hh"
+#include "G4Trd.hh"
+#include "G4TriangularFacet.hh"
+#include "G4Tubs.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrap.hh"
+#include "G4TwistedTrd.hh"
+#include "G4TwistedTubs.hh"
+#include "G4UnionSolid.hh"
+#include "G4OpticalSurface.hh"
+#include "G4SurfaceProperty.hh"
+
+G4GDMLReadSolids::G4GDMLReadSolids() : G4GDMLReadMaterials()
+{
+}
+
+G4GDMLReadSolids::~G4GDMLReadSolids()
+{
+}
 
 void G4GDMLReadSolids::
 BooleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
@@ -1477,7 +1518,7 @@ ZplaneRead(const xercesc::DOMElement* const zplaneElement)
 }
 
 void G4GDMLReadSolids::
-OpticalsurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
+OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
 {
    G4String name;
    G4String smodel;
@@ -1513,17 +1554,46 @@ OpticalsurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
    G4OpticalSurfaceFinish finish;
    G4SurfaceType type;   
    
-   if (smodel="unified") { model = unified; } else { model = glisur; }
+   if (smodel="unified") { model = unified; } else
+   if (smodel="glisur") { model = glisur; }
+   else { model = LUT; }
 
    if (sfinish=="polishedfrontpainted") { finish = polishedfrontpainted; } else
    if (sfinish=="polishedbackpainted") { finish = polishedbackpainted; } else
    if (sfinish=="groundfrontpainted") { finish = groundfrontpainted; } else
    if (sfinish=="groundbackpainted") { finish = groundbackpainted; } else
-   if (sfinish=="ground") { finish = ground; } else { finish = polished; }
+   if (sfinish=="ground") { finish = ground; } else
+   if (sfinish=="polished") { finish = polished; } else
+   if (sfinish=="polishedlumirrorair") { finish = polishedlumirrorair; } else
+   if (sfinish=="polishedlumirrorglue") { finish = polishedlumirrorglue; } else
+   if (sfinish=="polishedair") { finish = polishedair; } else
+   if (sfinish=="polishedteflonair") { finish = polishedteflonair; } else
+   if (sfinish=="polishedtioair") { finish = polishedtioair; } else
+   if (sfinish=="polishedtyvekair") { finish = polishedtyvekair; } else
+   if (sfinish=="polishedvm2000air") { finish = polishedvm2000air; } else
+   if (sfinish=="polishedvm2000glue") { finish = polishedvm2000glue; } else
+   if (sfinish=="etchedlumirrorair") { finish = etchedlumirrorair; } else
+   if (sfinish=="etchedlumirrorglue") { finish = etchedlumirrorglue; } else
+   if (sfinish=="etchedair") { finish = etchedair; } else
+   if (sfinish=="etchedteflonair") { finish = etchedteflonair; } else
+   if (sfinish=="etchedtioair") { finish = etchedtioair; } else
+   if (sfinish=="etchedtyvekair") { finish = etchedtyvekair; } else
+   if (sfinish=="etchedvm2000air") { finish = etchedvm2000air; } else
+   if (sfinish=="etchedvm2000glue") { finish = etchedvm2000glue; } else
+   if (sfinish=="groundlumirrorair") { finish = groundlumirrorair; } else
+   if (sfinish=="groundlumirrorglue") { finish = groundlumirrorglue; } else
+   if (sfinish=="groundair") { finish = groundair; } else
+   if (sfinish=="groundteflonair") { finish = groundteflonair; } else
+   if (sfinish=="groundtioair") { finish = groundtioair; } else
+   if (sfinish=="groundtyvekair") { finish = groundtyvekair; } else
+   if (sfinish=="groundvm2000air") { finish = groundvm2000air; }
+   else { finish = groundvm2000glue; }
 
    if (stype=="dielectric_metal") { type = dielectric_metal; } else
-   if (stype=="x_ray") { type = x_ray; } else
-   if (stype=="firsov") { type = firsov; } else { type = dielectric_dielectric; }
+   if (stype=="dielectric_dielectric") { type = dielectric_dielectric; } else
+   if (stype=="dielectric_LUT") { type = dielectric_LUT; } else
+   if (stype=="x_ray") { type = x_ray; }
+   else { type = firsov; }
 
    new G4OpticalSurface(name,model,finish,type,value);
 }
@@ -1540,9 +1610,9 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
-
-      if (tag=="box") { BoxRead(child); } else
-      if (tag=="cone") { ConeRead(child); } else
+      if (tag=="define") { DefineRead(child);  }  else 
+      if (tag=="box")    { BoxRead(child); } else
+      if (tag=="cone")   { ConeRead(child); } else
       if (tag=="elcone") { ElconeRead(child); } else
       if (tag=="ellipsoid") { EllipsoidRead(child); }else
       if (tag=="eltube") { EltubeRead(child); } else
@@ -1568,7 +1638,7 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="twistedtrd") { TwistedtrdRead(child); } else
       if (tag=="twistedtubs") { TwistedtubsRead(child); } else
       if (tag=="union") { BooleanRead(child,UNION); } else
-      if (tag=="opticalsurface") { OpticalsurfaceRead(child); } else
+      if (tag=="opticalsurface") { OpticalSurfaceRead(child); } else
       if (tag=="loop") { LoopRead(child,&G4GDMLRead::SolidsRead); }
       else
       {

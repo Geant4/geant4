@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.8 2008/10/16 14:29:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eeToHadrons.cc,v 1.9 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -71,6 +71,13 @@ G4eeToHadrons::G4eeToHadrons(const G4String& name)
 
 G4eeToHadrons::~G4eeToHadrons()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4eeToHadrons::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Positron::Positron());
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

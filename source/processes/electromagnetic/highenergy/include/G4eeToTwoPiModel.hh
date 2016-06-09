@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoPiModel.hh,v 1.4 2008/07/10 18:06:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eeToTwoPiModel.hh,v 1.5 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -66,13 +66,13 @@ public:
 
   virtual ~G4eeToTwoPiModel();
 
-  G4double ThresholdEnergy() const;
+  virtual G4double ThresholdEnergy() const;
 
-  G4double PeakEnergy() const;
+  virtual G4double PeakEnergy() const;
 
-  G4double ComputeCrossSection(G4double) const;
+  virtual G4double ComputeCrossSection(G4double) const;
 
-  G4PhysicsVector* PhysicsVector(G4double, G4double) const;
+  virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&);
@@ -89,28 +89,6 @@ private:
   G4double massRho;
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToTwoPiModel::ThresholdEnergy() const
-{
-  return 2.0*massPi;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToTwoPiModel::PeakEnergy() const
-{
-  return massRho;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToTwoPiModel::ComputeCrossSection(G4double e) const
-{
-  G4double ee = std::min(HighEnergy(),e);
-  return cross->CrossSection2pi(ee);
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

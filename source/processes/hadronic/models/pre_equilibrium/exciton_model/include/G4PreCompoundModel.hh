@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.hh,v 1.6 2008/09/22 10:18:36 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PreCompoundModel.hh,v 1.7 2009/11/19 10:19:31 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // by V. Lara
 
@@ -42,7 +42,8 @@
 //                - superimposed Coulomb barrier (if useSICB=true, default false) 
 //                - "never go back"  hipothesis (if useNGB=true, default false) 
 //                - soft cutoff from preeq. to equlibrium (if useSCO=true, default false)
-//                - CEM transition probabilities (if useCEMtr=true, default false)  
+//                - CEM transition probabilities (if useCEMtr=true)
+// J. M. Quesada (30.10.09) : CEM transition probabilities are set as default
 
 #ifndef G4PreCompoundModel_h
 #define G4PreCompoundModel_h 1
@@ -72,23 +73,24 @@ class G4PreCompoundModel : public G4VPreCompoundModel
 {
  
 public:
-  G4PreCompoundModel(G4ExcitationHandler * const value) : 
-    G4VPreCompoundModel(value), useHETCEmission(false), useGNASHTransition(false), 
-    OPTxs(3), useSICB(false), useNGB(false), useSCO(false), useCEMtr(false) {}
 
-  ~G4PreCompoundModel() {}
+  G4PreCompoundModel(G4ExcitationHandler * const value); 
+
+  virtual ~G4PreCompoundModel();
 
 private:
-  G4PreCompoundModel() {}
 
-  G4PreCompoundModel(const G4PreCompoundModel &) : G4VPreCompoundModel() {}
+  G4PreCompoundModel();
+
+  G4PreCompoundModel(const G4PreCompoundModel &);
 
   const G4PreCompoundModel& operator=(const G4PreCompoundModel &right);
   G4bool operator==(const G4PreCompoundModel &right) const;
   G4bool operator!=(const G4PreCompoundModel &right) const;
 
 public:
-    G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus);
+
+  G4HadFinalState * ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus);
 
   G4ReactionProductVector* DeExcite(const G4Fragment& aFragment) const;
 

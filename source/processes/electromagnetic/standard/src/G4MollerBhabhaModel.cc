@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.30 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MollerBhabhaModel.cc,v 1.35 2009/11/09 19:16:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -73,10 +73,11 @@ using namespace std;
 G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
                                          const G4String& nam)
   : G4VEmModel(nam),
-  particle(0),
-  isElectron(true),
-  twoln10(2.0*log(10.0)),
-  lowLimit(0.2*keV)
+    particle(0),
+    isElectron(true),
+    twoln10(2.0*log(10.0)),
+    lowLimit(0.2*keV),
+    isInitialised(false)
 {
   theElectron = G4Electron::Electron();
   if(p) SetParticle(p);
@@ -86,14 +87,6 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
 
 G4MollerBhabhaModel::~G4MollerBhabhaModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
-{
-  particle = p;
-  if(p != theElectron) isElectron = false;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -107,15 +100,26 @@ G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4MollerBhabhaModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
+						 G4double kinEnergy) 
+{
+  G4double tmax = kinEnergy;
+  if(isElectron) tmax *= 0.5;
+  return tmax;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
   if(!particle) SetParticle(p);
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
-                                                     (pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForLoss();
+  SetDeexcitationFlag(false);
+
+  if(isInitialised) return;
+
+  isInitialised = true;
+  fParticleChange = GetParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -253,17 +257,18 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
   } 
 
   //density correction 
-  G4double cden  = material->GetIonisation()->GetCdensity();
-  G4double mden  = material->GetIonisation()->GetMdensity();
-  G4double aden  = material->GetIonisation()->GetAdensity();
-  G4double x0den = material->GetIonisation()->GetX0density();
-  G4double x1den = material->GetIonisation()->GetX1density();
+  //G4double cden  = material->GetIonisation()->GetCdensity();
+  //G4double mden  = material->GetIonisation()->GetMdensity();
+  //G4double aden  = material->GetIonisation()->GetAdensity();
+  //G4double x0den = material->GetIonisation()->GetX0density();
+  //G4double x1den = material->GetIonisation()->GetX1density();
   G4double x     = log(bg2)/twoln10;
 
-  if (x >= x0den) {
-    dedx -= twoln10*x - cden;
-    if (x < x1den) dedx -= aden*pow(x1den-x, mden);
-  } 
+  //if (x >= x0den) {
+  //  dedx -= twoln10*x - cden;
+  //  if (x < x1den) dedx -= aden*pow(x1den-x, mden);
+  //}
+  dedx -= material->GetIonisation()->DensityCorrection(x); 
 
   // now you can compute the total ionization loss
   dedx *= twopi_mc2_rcl2*electronDensity/beta2;
@@ -288,10 +293,12 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
 					    G4double tmin,
 					    G4double maxEnergy)
 {
-  G4double tmax = std::min(maxEnergy, MaxSecondaryKinEnergy(dp));
+  G4double kineticEnergy = dp->GetKineticEnergy();
+  G4double tmax = kineticEnergy;
+  if(isElectron) tmax *= 0.5;
+  if(maxEnergy < tmax) tmax = maxEnergy;
   if(tmin >= tmax) return;
 
-  G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy = kineticEnergy + electron_mass_c2;
   G4double totalMomentum = sqrt(kineticEnergy*(energy + electron_mass_c2));
   G4double xmin   = tmin/kineticEnergy;
@@ -338,25 +345,13 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
     G4double b4  = y122*y12;
     G4double b3  = b4 + y122;
 
-    y     = xmax*xmax;
-    grej  = -xmin*b1;
-    grej += y*b2;
-    grej -= xmin*xmin*xmin*b3;
-    grej += y*y*b4;
-    grej *= beta2;
-    grej += 1.0;
+    y    = xmax*xmax;
+    grej = 1.0 + (y*y*b4 - xmin*xmin*xmin*b3 + y*b2 - xmin*b1)*beta2; 
     do {
-      q  = G4UniformRand();
-      x  = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
-      z  = -x*b1;
-      y  = x*x;
-      z += y*b2;
-      y *= x;
-      z -= y*b3;
-      y *= x;
-      z += y*b4;
-      z *= beta2;
-      z += 1.0;
+      q = G4UniformRand();
+      x = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
+      y = x*x;
+      z = 1.0 + (y*y*b4 - x*y*b3 + y*b2 - x*b1)*beta2; 
       /*
       if(z > grej) {
         G4cout << "G4MollerBhabhaModel::SampleSecondary Warning! "
@@ -395,7 +390,7 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
-						 deltaDirection,deltaKinEnergy);
+						   deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);
 }
 

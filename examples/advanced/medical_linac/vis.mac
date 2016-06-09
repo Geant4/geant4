@@ -1,210 +1,61 @@
-/PhysicsList/cut 0.2 mm
-/control/verbose 2
-/control/saveHistory
-/run/verbose 2
-/run/initialize
-
 /vis/scene/create
 /vis/open OGLIX
-#/vis/drawVolume
-/vis/viewer/update
-/vis/viewer/set/viewpointThetaPhi 70 20 deg
+
+/vis/drawVolume 
+
+#/vis/scene/add/volume
+
+/vis/viewer/set/viewpointThetaPhi 45 45 deg
 /vis/viewer/zoom 1
-
 /vis/viewer/flush
-#
-# draw scene/
-#
-#
-# for drawing the tracks
+/vis/scene/add/trajectories 
+/vis/scene/endOfEventAction accumulate 100
 
-/run/initialize
+/run/beamOn 100
 
-/tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
+# acceleratorBox
+# targetA
+# targetB
+# BeWTubePV
+# ionizationChamberTubeW1PV
+# ionizationChamberTubeP1PV
+# ionizationChamberTubeW2PV
+# ionizationChamberTubeP2PV
+# ionizationChamberTubeW3PV
+# ionizationChamberTubeP3PV
+# FFL1A_1PV
+# FFL2_1PV
+# MirrorTubePV
+# UpperCollimator
+# CylMinusCone
+# leafA0
+# leafA1
+# leafA2
+# leafA3
+# leafA4
+# leafA5
+# leafA6
+# leafA7
+# leafA8
+# leafA9
+# leafB0
+# leafB1
+# leafB2
+# leafB3
+# leafB4
+# leafB5
+# leafB6
+# leafB7
+# leafB8
+# leafB9
+# Jaws1XPV
+# Jaws2XPV
+# Jaws1YPV
+# Jaws2YPV
+# killerPlaneKPV
 
-/Phantom/dimension 15. cm
-/Phantom/Nvoxels 150
-/Phantom/maxStep 0.2 mm
-
-/PhantomSD/dimension 15. cm
-/PhantomSD/Nvoxels 150
-
-#    Multi Leaf
-
-/MLC/leaf_selection  a1
-/MLC/position 0. cm
-/MLC/leaf_selection  a2
-/MLC/position 0. cm
-/MLC/leaf_selection  a3
-/MLC/position 0. cm
-/MLC/leaf_selection  a4
-/MLC/position 0. cm
-/MLC/leaf_selection  a5
-/MLC/position 0. cm
-/MLC/leaf_selection  a6
-/MLC/position 0. cm
-/MLC/leaf_selection  a7
-/MLC/position 0. cm
-/MLC/leaf_selection  a8
-/MLC/position 0. cm
-/MLC/leaf_selection  a9
-/MLC/position 0. cm
-/MLC/leaf_selection  a10
-/MLC/position 0. cm
-/MLC/leaf_selection  a11
-/MLC/position 0. cm
-/MLC/leaf_selection  a12
-/MLC/position 0. cm
-/MLC/leaf_selection  a13
-/MLC/position 0. cm
-/MLC/leaf_selection  a14
-/MLC/position 0. cm
-/MLC/leaf_selection  a15
-/MLC/position 0. cm
-/MLC/leaf_selection  a16
-/MLC/position 0. cm
-/MLC/leaf_selection  a17
-/MLC/position 2.4 cm
-/MLC/leaf_selection  a18
-/MLC/position 2.7 cm
-/MLC/leaf_selection  a19
-/MLC/position 3.5 cm
-/MLC/leaf_selection  a20
-/MLC/position 4.0 cm
-/MLC/leaf_selection  a21
-/MLC/position 4.6 cm
-/MLC/leaf_selection  a22
-/MLC/position 5.0 cm
-/MLC/leaf_selection  a23
-/MLC/position 5.8 cm
-/MLC/leaf_selection  a24
-/MLC/position 6.0 cm
-/MLC/leaf_selection  a25
-/MLC/position 5.6 cm
-/MLC/leaf_selection  a26
-/MLC/position 0. cm
-/MLC/leaf_selection  a27
-/MLC/position 0. cm
-/MLC/leaf_selection  a28
-/MLC/position 0. cm
-/MLC/leaf_selection  a29
-/MLC/position 0. cm
-/MLC/leaf_selection  a30
-/MLC/position 0. cm
-/MLC/leaf_selection  a31
-/MLC/position 0. cm
-/MLC/leaf_selection  a32
-/MLC/position 0. cm
-/MLC/leaf_selection  a33
-/MLC/position 0. cm
-/MLC/leaf_selection  a34
-/MLC/position 0. cm
-/MLC/leaf_selection  a35
-/MLC/position 0. cm
-/MLC/leaf_selection  a36
-/MLC/position 0. cm
-/MLC/leaf_selection  a37
-/MLC/position 0. cm
-/MLC/leaf_selection  a38
-/MLC/position 0. cm
-/MLC/leaf_selection  a39
-/MLC/position 0. cm
-/MLC/leaf_selection  a40
-/MLC/position 0. cm
-
-
-/MLC/leaf_selection  b1
-/MLC/position 0. cm
-/MLC/leaf_selection  b2
-/MLC/position 0. cm
-/MLC/leaf_selection  b3
-/MLC/position 0. cm
-/MLC/leaf_selection  b4
-/MLC/position 0. cm
-/MLC/leaf_selection  b5
-/MLC/position 0. cm
-/MLC/leaf_selection  b6
-/MLC/position 0. cm
-/MLC/leaf_selection  b7
-/MLC/position 0. cm
-/MLC/leaf_selection  b8
-/MLC/position 0. cm
-/MLC/leaf_selection  b9
-/MLC/position 0. cm
-/MLC/leaf_selection  b10
-/MLC/position 0. cm
-/MLC/leaf_selection  b11
-/MLC/position 0. cm
-/MLC/leaf_selection  b12
-/MLC/position 0. cm
-/MLC/leaf_selection  b13
-/MLC/position 0. cm
-/MLC/leaf_selection  b14
-/MLC/position 0. cm
-/MLC/leaf_selection  b15
-/MLC/position 0. cm
-/MLC/leaf_selection  b16
-/MLC/position 0. cm
-/MLC/leaf_selection  b17
-/MLC/position 2.3 cm
-/MLC/leaf_selection  b18
-/MLC/position 2.8 cm
-/MLC/leaf_selection  b19
-/MLC/position 3.5 cm
-/MLC/leaf_selection  b20
-/MLC/position 4.4 cm
-/MLC/leaf_selection  b21
-/MLC/position 4.7 cm
-/MLC/leaf_selection  b22
-/MLC/position 5.4 cm
-/MLC/leaf_selection  b23
-/MLC/position 5.7 cm
-/MLC/leaf_selection  b24
-/MLC/position 5.8 cm
-/MLC/leaf_selection  b25
-/MLC/position 5.4 cm
-/MLC/leaf_selection  b26
-/MLC/position 0. cm
-/MLC/leaf_selection  b27
-/MLC/position 0. cm
-/MLC/leaf_selection  b28
-/MLC/position 0. cm
-/MLC/leaf_selection  b29
-/MLC/position 0. cm
-/MLC/leaf_selection  b30
-/MLC/position 0. cm
-/MLC/leaf_selection  b31
-/MLC/position 0. cm
-/MLC/leaf_selection  b32
-/MLC/position 0. cm
-/MLC/leaf_selection  b33
-/MLC/position 0. cm
-/MLC/leaf_selection  b34
-/MLC/position 0. cm
-/MLC/leaf_selection  b35
-/MLC/position 0. cm
-/MLC/leaf_selection  b36
-/MLC/position 0. cm
-/MLC/leaf_selection  b37
-/MLC/position 0. cm
-/MLC/leaf_selection  b38
-/MLC/position 0. cm
-/MLC/leaf_selection  b39
-/MLC/position 0. cm
-/MLC/leaf_selection  b40
-/MLC/position 0. cm
-
-/Jaws/X1/DistanceFromAxis -4.2 cm
-/Jaws/X2/DistanceFromAxis 5.2 cm
-/Jaws/Y1/DistanceFromAxis -6.6 cm
-/Jaws/Y2/DistanceFromAxis 6.8 cm
-
-/Jaws/update
-
-/energy 6.0 MeV
-/sourceType 0.127 MeV
-/vis/viewer/update
-/run/beamOn 10
-
+# phmWorldPV
+# BoxInsidePV
+# boxPMMAPV
+# OutMinusInBoxPV
 

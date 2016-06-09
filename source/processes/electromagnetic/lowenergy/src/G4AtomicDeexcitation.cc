@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4AtomicDeexcitation.cc,v 1.11 
-// GEANT4 tag $Name: geant4-09-02 $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
@@ -110,7 +110,7 @@ std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z
       else {provShellId = -2;}
     }
   
-  // Look this in a particular way: only one auger emitted! //
+  // Look this in a particular way: only one auger emitted! // ????
   while (provShellId > -2); 
   
   return vectorOfParticles;
@@ -294,24 +294,13 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 	  shellNum++;
  	  if(shellNum == maxNumOfShells)
  	    {
-//  	      G4cout << "G4AtomicDeexcitation warning: No Auger transition found" <<  G4endl;
-// 	      G4cout << "Absorbed enrgy deposited locally" << G4endl;
- 	      return 0;
-// 	      //  G4Exception("G4AtomicDeexcitation: No Auger transition found");
+
+ 	      //G4Exception("G4AtomicDeexcitation: No Auger transition found");
+	      return 0;
  	    }
 	}
  	while (shellId != (transitionManager->ReachableAugerShell(Z,shellNum)->FinalShellId()) ) ;
       }
-	  /*	{
-
-	  if(shellNum == maxNumOfShells-1)
-	    {
-	      G4Exception("G4AtomicDeexcitation: No Auger tramsition found");
-	    }
-	  shellNum++;
-	  }*/
-    
-
 
 
       // Now we have that shellnum is the shellIndex of the shell named ShellId
@@ -393,8 +382,10 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
       G4double partialProb = G4UniformRand();
       // G4int augerOriginatingShellId = 0;
       
-      G4int numberOfPossibleAuger = 
-	  (anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId))->size();
+      G4int numberOfPossibleAuger = 0;
+      numberOfPossibleAuger = anAugerTransition->AugerTransitionProbabilities(transitionRandomShellId)->size();
+
+
       G4bool foundFlag = false;
 
       while (transitionRandomShellIndex < transitionSize) {

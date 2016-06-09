@@ -1,7 +1,9 @@
-# $Id: essai.mac,v 1.4 2008/04/04 13:10:09 maire Exp $
+# $Id: essai.mac,v 1.5 2009/10/31 18:05:56 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2
+#
+/testem/phys/addPhysics standard_opt3
 #
 /run/initialize
 #

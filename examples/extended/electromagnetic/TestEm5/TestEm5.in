@@ -1,4 +1,4 @@
-# $Id: TestEm5.in,v 1.21 2008/09/13 17:05:40 maire Exp $
+# $Id: TestEm5.in,v 1.23 2009/01/23 13:26:29 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -9,11 +9,9 @@
 /testem/det/setAbsThick 20 um
 /testem/det/setAbsYZ    50 um
 #
-/testem/phys/addPhysics  emstandard_opt2
+/testem/phys/addPhysics  emstandard_opt3
 #
-/testem/phys/setGCut 2.13 mm
-/testem/phys/setECut 7.0  um
-/testem/phys/setPCut 7.0  um
+/testem/phys/setCuts 7 um
 #
 /run/initialize
 #
@@ -26,3 +24,44 @@
 /testem/histo/setHisto 13 100 -0.25 0.25 mrad 
 #
 /run/beamOn 100000
+#
+/testem/det/setAbsMat Gold
+/testem/det/setAbsThick 9.658 um
+/testem/det/setAbsYZ    1 mm
+/testem/det/update
+/testem/gun/setDefault
+/gun/particle e-
+/gun/energy 15.7 MeV
+/run/beamOn 50000
+#
+/testem/phys/setCuts 10 um
+#
+/testem/det/setAbsMat G4_POLYETHYLENE
+/testem/det/setAbsThick 4.74 mm
+/testem/det/setAbsYZ    50 mm
+/testem/det/update
+/testem/gun/setDefault
+/gun/particle mu+
+/gun/energy 96.2 MeV
+/run/beamOn 50000
+#
+/testem/phys/setCuts 1 mm
+#
+/testem/stack/killSecondaries
+#
+/testem/det/setAbsMat Aluminium
+/testem/det/setAbsThick 8.004 mm
+/testem/det/update
+/testem/gun/setDefault
+/gun/particle proton
+/gun/energy 174.664 GeV
+/run/beamOn 50000
+#
+/testem/det/setAbsMat Iron
+/testem/det/setAbsThick 1 m
+/testem/det/update
+/testem/gun/setDefault
+/gun/particle mu+
+/gun/energy 100 GeV
+/run/beamOn 50000
+#

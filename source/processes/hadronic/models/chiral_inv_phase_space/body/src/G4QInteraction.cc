@@ -24,31 +24,35 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.cc,v 1.2 2006/12/12 11:02:22 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QInteraction.cc,v 1.6 2009/08/28 14:49:10 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
 //      ---------------- G4QInteraction----------------
 //            Created by Mikhail Kossov Oct, 2006
-//   class for a storing colliding particles in PartonString Models
-//   For comparison mirror member functions are taken from G4 class:
-//   G4InteractionContent
-// -------------------------------------------------------------------
+//   class for colliding particles (hadrons) in Parton String Models
+//   For comparison mirror member function is G4InteractionContent
+// ---------------------------------------------------------------------
+//  Short description: Classify the interaction in soft/hard/diffractive
+//  parts for firther treatment by the QGS algorithm.
+// ---------------------------------------------------------------------
 
 #include "G4QInteraction.hh"
 
-G4QInteraction::G4QInteraction(G4QHadron* aProjectile) : theProjectile(aProjectile),
-  theTarget(0),theNumberOfHard(0),theNumberOfSoft(0),theNumberOfDiffractive(0)
+G4QInteraction::G4QInteraction(G4QHadron* aProjectile) :
+  theProjectile(aProjectile), theTarget(0), theNumberOfDINR(0),
+  theNumberOfHard(0),theNumberOfSoft(0),theNumberOfDiffractive(0)
 {}
 
 G4QInteraction::G4QInteraction(const G4QInteraction &right) :
   theProjectile(right.GetProjectile()), theTarget(right.GetTarget()),
-  theNumberOfHard(0), theNumberOfSoft(0), theNumberOfDiffractive(0)
+  theNumberOfDINR(0), theNumberOfHard(0), theNumberOfSoft(0), theNumberOfDiffractive(0)
 {}
 
 G4QInteraction::~G4QInteraction()
-{}
-
-
+{
+  //delete theProjectile;
+  //if(theTarget) delete theTarget;
+}

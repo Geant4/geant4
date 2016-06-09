@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProtonGEMChannel.hh,v 1.3 2006/06/29 20:20:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProtonGEMChannel.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
@@ -36,7 +36,7 @@
 #define G4ProtonGEMChannel_h 1
 
 #include "G4GEMChannel.hh"
-#include "G4ProtonCoulombBarrier.hh"
+#include "G4ProtonGEMCoulombBarrier.hh"
 #include "G4ProtonGEMProbability.hh"
 
 class G4ProtonGEMChannel : public G4GEMChannel
@@ -63,8 +63,9 @@ public:
   G4bool operator!=(const G4ProtonGEMChannel & right) const;
 
 private:
-
-  G4ProtonCoulombBarrier theCoulombBarrier;
+     // JMQ 190709
+//     G4ProtonCoulombBarrier theCoulombBarrier;    
+  G4ProtonGEMCoulombBarrier theCoulombBarrier;
 	
   G4ProtonGEMProbability theEvaporationProbability;
 

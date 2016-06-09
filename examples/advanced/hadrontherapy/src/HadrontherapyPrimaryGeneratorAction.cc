@@ -23,24 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: HadrontherapyPrimarygeneratorAction.cc;
-// Last modified: G.A.P.Cirrone, May 2008;
-//
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
+// HadrontherapyPrimarygeneratorAction.cc;
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
 // ----------------------------------------------------------------------------
 // Code developed by:
 //
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
+// G.A.P. Cirrone(a)*, F.Romano(a)
 // 
 // (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
+//     of the INFN, Catania, Italy
 // 
 // * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+//
+// ------------------------------------------------------------------------------
+
 #include "HadrontherapyPrimaryGeneratorAction.hh"
 #include "HadrontherapyPrimaryGeneratorMessenger.hh"
 #include "G4Event.hh"
@@ -48,6 +46,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
+#include "HadrontherapyAnalysisManager.hh"
 
 HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction()
 {
@@ -78,13 +77,18 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   particleGun -> SetParticleDefinition(particle); 
 
   // Define the energy of primary particles:
-  // gaussian distribution with mean energy = 64.00 *MeV
-  // and sigma = 300.0 *keV
-  G4double defaultMeanKineticEnergy = 64.00 *MeV;
+  // gaussian distribution with mean energy = 62.0 *MeV
+  // and sigma = 400.0 *keV
+  G4double defaultMeanKineticEnergy = 62.0 *MeV;
   meanKineticEnergy = defaultMeanKineticEnergy;
 
-  G4double defaultsigmaEnergy = 300.0 *keV;
+  G4double defaultsigmaEnergy = 400.0 *keV;
   sigmaEnergy = defaultsigmaEnergy;
+  
+#ifdef ANALYSIS_USE
+  // Write these values into the analysis if needed. Have to be written separately on change.
+  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+#endif
 
   // Define the parameters of the initial position: 
   // the y, z coordinates have a gaussian distribution
@@ -115,6 +119,11 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
 
 void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+#ifdef ANALYSIS_USE
+  // Increment the event counter
+  HadrontherapyAnalysisManager::getInstance()->startNewEvent();
+#endif
+
   // ****************************************
   // Set the beam angular apread 
   // and spot size
@@ -166,10 +175,23 @@ void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 } 
 
 void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )  
-{ meanKineticEnergy = val;} 
+{
+	meanKineticEnergy = val;
+#ifdef ANALYSIS_USE
+  // Update the beam-data in the analysis manager
+  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+#endif
+
+} 
 
 void HadrontherapyPrimaryGeneratorAction::SetsigmaEnergy (G4double val )  
-{ sigmaEnergy = val;}
+{ 
+	sigmaEnergy = val;
+#ifdef ANALYSIS_USE
+  // Update the sigmaenergy in the metadata.
+  HadrontherapyAnalysisManager::getInstance()->setBeamMetaData(meanKineticEnergy, sigmaEnergy);
+#endif
+}
 
 void HadrontherapyPrimaryGeneratorAction::SetXposition (G4double val )  
 { X0 = val;}
@@ -191,3 +213,6 @@ void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumY (G4double val )
 
 void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumZ (G4double val )  
 { sigmaMomentumZ = val;}
+
+G4double HadrontherapyPrimaryGeneratorAction::GetmeanKineticEnergy(void)
+{ return meanKineticEnergy;}

@@ -313,7 +313,7 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
   //----- Define density differences (maximum density difference to create a new material)
   G4double densityDiff = 0.1; 
   std::map<G4int,G4double>  fDensityDiffs; // to be able to use a different densityDiff for each material
-  for( size_t ii = 0; ii < fOriginalMaterials.size(); ii++ ){
+  for( unsigned int ii = 0; ii < fOriginalMaterials.size(); ii++ ){
     fDensityDiffs[ii] = densityDiff; //currently all materials with same difference
   }
 
@@ -326,10 +326,12 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
 
   //--- If first slice, initiliaze fMateIDs
   if( fZSliceHeaders.size() == 1 ) {
+    //fMateIDs = new unsigned int[fNoFiles*nVoxels];
     fMateIDs = new size_t[fNoFiles*nVoxels];
+
   }
 
-  size_t mateID;
+  unsigned int mateID;
   G4int voxelCopyNo = (fZSliceHeaders.size()-1)*nVoxels; // number of voxels from previously read slices
   for( G4int ii = 0; ii < nVoxels; ii++, voxelCopyNo++ ){
     fin >> mateID;
@@ -352,7 +354,7 @@ void DicomDetectorConstruction::ReadPatientDataFile(const G4String& fname)
     G4String newMateName = mateOrig->GetName()+"__"+ftoa(densityBin);
     
     //-- Look if a material with this name is already created (because a previous voxel was already in this density bin)
-    size_t im;
+    unsigned int im;
     for( im = 0; im < fMaterials.size(); im++ ){
       if( fMaterials[im]->GetName() == newMateName ) {
 	break;
@@ -376,7 +378,7 @@ void DicomDetectorConstruction::MergeZSliceHeaders()
 {
   //----- Images must have the same dimension ... 
   fZSliceHeaderMerged = new DicomPatientZSliceHeader( *fZSliceHeaders[0] );
-  for( size_t ii = 1; ii < fZSliceHeaders.size(); ii++ ) {
+  for( unsigned int ii = 1; ii < fZSliceHeaders.size(); ii++ ) {
     *fZSliceHeaderMerged += *fZSliceHeaders[ii];
   };
 }

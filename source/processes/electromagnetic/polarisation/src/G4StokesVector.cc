@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.cc,v 1.3 2006/11/17 11:59:03 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StokesVector.cc,v 1.4 2009/11/12 12:57:15 schaelic Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // GEANT4 Class file
 //
@@ -96,7 +96,7 @@ void G4StokesVector::RotateAz(G4ThreeVector nInteractionFrame,
   //  G4double hel=sgn(cross(yParticleFrame*nInteractionFrame)*zInteractionFrame);
   // Why not particleDirection instead of zInteractionFrame ???!!!
   // -> is the same, since SYSIN is called with p1, and p2 as first parameter!
-  G4double hel=(cross(yParticleFrame*nInteractionFrame)*particleDirection)>0?1.:-1.;
+  G4double hel=(yParticleFrame.cross(nInteractionFrame)*particleDirection)>0?1.:-1.;
 
   G4double sinphi=hel*std::sqrt(1.-cosphi*cosphi);
   //  G4cout<<" sin2 + cos2 -1 = "<<(sinphi*sinphi+cosphi*cosphi-1)<<"\n";
@@ -124,7 +124,7 @@ void G4StokesVector::InvRotateAz(G4ThreeVector nInteractionFrame,
   else if (cosphi<-1)cosphi=-1.;
 
   // check sign once more!
-  G4double hel=(cross(yParticleFrame*nInteractionFrame)*particleDirection)>0?1.:-1.;
+  G4double hel=(yParticleFrame.cross(nInteractionFrame)*particleDirection)>0?1.:-1.;
   G4double sinphi=hel*std::sqrt(std::fabs(1.-cosphi*cosphi));
   RotateAz(cosphi,-sinphi);
 }

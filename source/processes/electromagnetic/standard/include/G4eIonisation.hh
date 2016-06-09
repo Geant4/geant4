@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.hh,v 1.35 2007/05/23 08:47:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eIonisation.hh,v 1.36 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -87,7 +87,7 @@ public:
 
   virtual ~G4eIonisation();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
   // Print out of the class parameters
   virtual void PrintInfo();
@@ -97,8 +97,8 @@ protected:
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*);
 
-  G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-			    const G4Material*, G4double cut);
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
+				    const G4Material*, G4double cut);
 
 private:
 
@@ -112,25 +112,6 @@ private:
   G4bool isElectron;
   G4bool isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
-						const G4Material*,
-						G4double cut)
-{
-  G4double x = cut;
-  if(isElectron) x += cut;
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4eIonisation::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

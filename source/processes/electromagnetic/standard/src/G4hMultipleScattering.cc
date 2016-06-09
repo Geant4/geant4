@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc,v 1.13 2008/10/15 17:53:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4hMultipleScattering.cc,v 1.16 2009/11/01 13:05:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -58,7 +58,6 @@ G4hMultipleScattering::G4hMultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
   isInitialized = false;  
-  isIon         = false;
   SetStepLimitType(fMinimal);
 }
 
@@ -76,38 +75,10 @@ G4bool G4hMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
+void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
-  // Modification of parameters between runs
-  if(isInitialized) {
-    if (p->GetParticleType() != "nucleus" && p->GetPDGMass() < GeV) {
-      mscUrban->SetStepLimitType(StepLimitType());
-      mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-      mscUrban->SetSkin(Skin());
-      mscUrban->SetRangeFactor(RangeFactor());
-      mscUrban->SetGeomFactor(GeomFactor());
-    }
-    return;
-  }
-
-  // defaults for ions, which cannot be overwritten
-  if (p->GetParticleType() == "nucleus" || p->GetPDGMass() > GeV) {
-    SetStepLimitType(fMinimal);
-    SetLateralDisplasmentFlag(false);
-    SetBuildLambdaTable(false);
-    if(p->GetParticleType() == "nucleus") isIon = true;
-  }
-
-  // initialisation of parameters
-  G4String part_name = p->GetParticleName();
-  mscUrban = new G4UrbanMscModel90();
-
-  mscUrban->SetStepLimitType(StepLimitType());
-  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-  mscUrban->SetSkin(Skin());
-  mscUrban->SetRangeFactor(RangeFactor());
-  mscUrban->SetGeomFactor(GeomFactor());
-
+  if(isInitialized) return;
+  G4VMscModel* mscUrban = new G4UrbanMscModel90();
   AddEmModel(1,mscUrban);
   isInitialized = true;
 }
@@ -117,36 +88,11 @@ void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 void G4hMultipleScattering::PrintInfo()
 {
   G4cout << "      RangeFactor= " << RangeFactor()
-	 << ", step limit type: " << StepLimitType()
-         << ", lateralDisplacement: " << LateralDisplasmentFlag()
-	 << ", skin= " << Skin()  
-    //	 << ", geomFactor= " << GeomFactor()  
+	 << ", stepLimitType: " << StepLimitType()
+         << ", latDisplacement: " << LateralDisplasmentFlag()
+	 << ", skin= " << Skin()
+   	 << ", geomFactor= " << GeomFactor()  
 	 << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4hMultipleScattering::AlongStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                             G4double,
-                             G4double currentMinimalStep,
-                             G4double& currentSafety,
-                             G4GPILSelection* selection)
-{
-  // get Step limit proposed by the process
-  valueGPILSelectionMSC = NotCandidateForSelection;
-
-  G4double escaled = track.GetKineticEnergy();
-  if(isIon) escaled *= track.GetDynamicParticle()->GetMass()/proton_mass_c2;
-
-  G4double steplength = GetMscContinuousStepLimit(track,
-						  escaled,
-						  currentMinimalStep,
-						  currentSafety);
-  // G4cout << "StepLimit= " << steplength << G4endl;
-  // set return value for G4GPILSelection
-  *selection = valueGPILSelectionMSC;
-  return  steplength;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

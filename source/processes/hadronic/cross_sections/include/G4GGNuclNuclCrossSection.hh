@@ -71,6 +71,9 @@ public:
 				G4double Z, G4double A, 
 				G4double aTemperature = 0.0);
 
+  G4double GetCoulombBarier(const G4DynamicParticle*, 
+				G4double Z, G4double A, G4double pR, G4double tR);
+
   virtual
   void BuildPhysicsTable(const G4ParticleDefinition&)
   {}
@@ -88,30 +91,15 @@ public:
   G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, const G4Element*);
   G4double GetHadronNucleonXscPDG(const G4DynamicParticle*, G4double At, G4double Zt);
 
-
-
-
   // G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4Element*);
   // G4double GetHadronNucleonXscNS(const G4DynamicParticle*,G4double At, G4double Zt);
 
-
-
-
   G4double GetHadronNucleonXscNS(G4ParticleDefinition*,G4double pTkin, G4ParticleDefinition*);
-
-
-
-
-
-
 
   // G4double GetHNinelasticXsc(const G4DynamicParticle*, const G4Element*);
   // G4double GetHNinelasticXsc(const G4DynamicParticle*, G4double At, G4double Zt);
 
   G4double GetHNinelasticXscVU(const G4DynamicParticle*, G4double At, G4double Zt);
-
-  G4double GetHadronNucleonXscMK(G4ParticleDefinition* pParticle, G4double pTkin, 
-				 G4ParticleDefinition* nucleon  ); 
 
   G4double CalculateEcmValue ( const G4double , const G4double , const G4double ); 
 

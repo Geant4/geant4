@@ -24,31 +24,18 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.icc,v 1.10 2006/12/07 14:26:28 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TouchableHistory.icc,v 1.13 2009/11/06 11:10:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // class G4TouchableHistory inline implementation
 // ----------------------------------------------------------------------
 
-inline
-G4TouchableHistory::G4TouchableHistory()
-  : frot(G4RotationMatrix()),
-    ftlate(G4ThreeVector(0.,0.,0.)),
-    fhistory()
-{
-   G4VPhysicalVolume* pPhysVol=0;
-   fhistory.SetFirstEntry(pPhysVol);
-}
-
-inline
-G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
-  : fhistory(history)
-{
-  G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
-  ftlate = tf.NetTranslation();
-  frot = tf.NetRotation();
-}
+#if defined G4GEOM_ALLOC_EXPORT
+  extern G4DLLEXPORT G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
+#else
+  extern G4DLLIMPORT G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
+#endif
 
 inline
 void  G4TouchableHistory::UpdateYourself( G4VPhysicalVolume*   pPhysVol,
@@ -102,8 +89,7 @@ G4int G4TouchableHistory::GetHistoryDepth()  const
 inline
 G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
 {
-  G4NavigationHistory* nHistory= &fhistory;
-  G4int maxLevelsMove = nHistory->GetDepth();
+  G4int maxLevelsMove = fhistory.GetDepth();
   G4int minLevelsMove = 0;              // Cannot redescend today!
                                         // Soon it will be possible
                                         // by adding a data member here
@@ -116,7 +102,7 @@ G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
   {
     num_levels = minLevelsMove;
   }
-  nHistory->BackLevel( num_levels ); 
+  fhistory.BackLevel( num_levels ); 
 
   return num_levels;
 }
@@ -126,3 +112,19 @@ const G4NavigationHistory* G4TouchableHistory::GetHistory() const
 {
   return &fhistory;
 }
+
+// There is no provision in case this class is subclassed.
+// If it is subclassed, this will fail and may not give errors!
+//
+inline
+void* G4TouchableHistory::operator new(size_t)
+{
+  return (void *) aTouchableHistoryAllocator.MallocSingle();
+}
+
+inline
+void G4TouchableHistory::operator delete(void *aTH)
+{
+  aTouchableHistoryAllocator.FreeSingle((G4TouchableHistory *) aTH);
+}
+

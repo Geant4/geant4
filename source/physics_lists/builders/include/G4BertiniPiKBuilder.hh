@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4BertiniPiKBuilder.hh,v 1.2 2009/03/31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4BertiniPiKBuilder
+//
+// Author: 2002 H.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4BertiniPiKBuilder_h
 #define G4BertiniPiKBuilder_h 1
 
@@ -56,7 +70,7 @@ class G4BertiniPiKBuilder : public G4VPiKBuilder
     void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
-    G4PiNuclearCrossSection thePiData;
+    G4PiNuclearCrossSection* thePiData;
     G4CascadeInterface * theModel;    
     G4double theMin;
     G4double theMax;

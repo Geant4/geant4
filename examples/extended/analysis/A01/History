@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2007/05/17 09:55:13 duns Exp $
+$Id: History,v 1.48 2009/12/02 22:45:09 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,27 @@ $Id: History,v 1.43 2007/05/17 09:55:13 duns Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+
+2 Dec 2009  Joseph Perl (exampleA01-V09-02-02)
+- A01MuonPhysics: change hMultipleScattering to MuMultipleScattering.
+
+20 Mov 2009  Joseph Perl (exampleA01-V09-02-01)
+- A01DetectorConstruction, A01MagneticField: improve handing of field.
+  Resolves bug 1012.
+- A01Trajectory: removed.  Example uses G4Trajectory.
+- Update to new multiple scattering classes.
+- README: General update.
+	  Remove references to obsolete SLAC Geant4 tutorial CD.
+
+14 Mov 2009  John Allison (exampleA01-V09-02-00)
+- A01app.cc: Introduced G4UIExecutive.
+
+5 March 2009 Guy Barrand
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file, since
+  it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
+
 17 May 2007 - Mark Donszelmann (exampleA01-V08-03-01)
 - Fixed memory leak for plotter
 

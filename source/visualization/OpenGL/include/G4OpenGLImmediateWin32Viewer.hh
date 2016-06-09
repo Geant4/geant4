@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.hh,v 1.9 2006/06/29 21:17:46 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateWin32Viewer.hh,v 1.10 2009/02/04 16:48:40 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Class G4OpenGLImmediateWin32Viewer : a class derived from
@@ -36,7 +36,6 @@
 #ifndef G4OpenGLIMMEDIATEWIN32VIEWER_HH
 #define G4OpenGLIMMEDIATEWIN32VIEWER_HH
 
-#include "G4VViewer.hh"
 #include "G4OpenGLImmediateViewer.hh"
 #include "G4OpenGLWin32Viewer.hh"
 

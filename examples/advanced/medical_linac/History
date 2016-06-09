@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2007/07/06 21:39:05 mpiergen Exp $
+$Id: History,v 1.27 2009/11/19 09:54:39 cirrone Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,12 +10,35 @@ $Id: History,v 1.19 2007/07/06 21:39:05 mpiergen Exp $
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+19.11.2009   C. Andenna, B. Caccia, G.A.P.Cirrone tag medical_linac-V09-02-05
+	     History corrected, changed the local environmental variables name		     
+
+18.11.2009   C. Andenna, B. Caccia, G.A.P.Cirrone tag medical_linac-V09-02-04
+	     updated of the include and src files, written the README_MedLinac2.txt.
+
+17.11.2009   C. Andenna, B. Caccia, G.A.P.Cirrone tag medical_linac-V09-02-03
+	     first realise of the new version of the medical linac
+
+18.09.2009   G.A.P.Cirrone, tag medical_linac-V09-02-02
+           - Corrected a crash in the MedLinacHead.cc file class.
+           - Update of the physics models: deleted the old and not
+             more supported Lowenergy electromagnetic models and
+             added the possibility to activate the physics lists and the
+             Reference physics lists (or packages) directly
+             via macro command;
+           - Added the possibility to set cuts and max allowed step lenghts
+             via macro commands
+
+15.09.2009   G.A.P.Cirrone, tag medical_linac-V09-02-01
+             GNUmakefile corrected
+
+06.04.2009   G.A.P.Cirrone, tag medical_linac-V09-02-00
+             GNUmakefile updated
+
 06.07.2007   Michela Piergentili, tag medical_linac-V08-03-02
              bug 880 fixed in Detector Construction
  

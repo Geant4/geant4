@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeInterface.hh,v 1.13 2008/10/18 16:04:40 vnivanch Exp $
+// $Id: G4CascadeInterface.hh,v 1.14 2009/09/24 20:48:02 dennis Exp $
 // Defines an interface to Bertini (BERT) cascade
 // based on INUCL  intra-nuclear transport.models 
 // with bullet hadron energy ~< 10 GeV
@@ -39,6 +39,14 @@
 #include "G4ParticleChange.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
+
+#include "G4ElementaryParticleCollider.hh"
+#include "G4NonEquilibriumEvaporator.hh"
+#include "G4EquilibriumEvaporator.hh"
+#include "G4Fissioner.hh"
+#include "G4BigBanger.hh"
+#include "G4IntraNucleiCascader.hh"
+
 
 class G4CascadeInterface : public G4VIntraNuclearTransportModel {
 
@@ -63,8 +71,16 @@ private:
   G4int verboseLevel;
 
 private:
+
+  G4ElementaryParticleCollider colep;
+  G4NonEquilibriumEvaporator noneq;
+  G4EquilibriumEvaporator eqil;
+  G4Fissioner fiss;
+  G4BigBanger bigb;
+  G4IntraNucleiCascader inc;
+
   G4HadFinalState theResult;  
-  
+
 };
 
 #endif // G4CASCADEINTERFACE_H

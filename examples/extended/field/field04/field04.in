@@ -31,12 +31,8 @@
 /field04/SetDgrThick 0.1 cm
 #/field04/SetDgrPos -7.4 m
 #
-#/exp/phys/addPhysics emstandard_opt1
-#/exp/phys/addPhysics QGSP_BERT
-#/exp/phys/removeHadronPhysics gamma_nuc
 /exp/phys/gammaCut 1.0 m
 /exp/phys/stepMax 2.0 mm
-/exp/phys/list
 #
 #/decay/pienu
 #/decay/pimunu
@@ -60,6 +56,9 @@
 /gun/random on
 #
 #/control/execute vis.mac
+#
+#
+#/rndm/autoSeed 1
 #
 #/rndm/save 2
 #/rndm/read random/run0evt8268.rndm

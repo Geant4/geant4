@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RemSimPhotonEPDL.cc,v 1.7 2006/06/29 16:24:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimPhotonEPDL.cc,v 1.8 2009/11/12 05:12:18 cirrone Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -33,10 +33,19 @@
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyRayleigh.hh"
+
+#include "G4PhotoElectricEffect.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+
+#include "G4ComptonScattering.hh"
+#include "G4LivermoreComptonModel.hh"
+
+#include "G4GammaConversion.hh"
+#include "G4LivermoreGammaConversionModel.hh"
+
+#include "G4RayleighScattering.hh" 
+#include "G4LivermoreRayleighModel.hh"
+
 #include "G4StepLimiter.hh"
 
 RemSimPhotonEPDL::RemSimPhotonEPDL(const G4String& name):
@@ -55,16 +64,29 @@ void RemSimPhotonEPDL::ConstructProcess()
   while( (*theParticleIterator)() )
     {
       G4ParticleDefinition* particle = theParticleIterator -> value();
-      G4ProcessManager* manager = particle -> GetProcessManager();
+      G4ProcessManager* pmanager = particle -> GetProcessManager();
       G4String particleName = particle -> GetParticleName();
      
       if (particleName == "gamma") 
 	{
-	  manager -> AddDiscreteProcess(new G4LowEnergyPhotoElectric);
-	  manager -> AddDiscreteProcess(new G4LowEnergyCompton);
-	  manager -> AddDiscreteProcess(new G4LowEnergyGammaConversion);
-	  manager -> AddDiscreteProcess(new G4LowEnergyRayleigh);
-          manager -> AddProcess(new G4StepLimiter(),-1,-1,3);
+	  // Photon     
+      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+      theRayleigh->SetModel(new G4LivermoreRayleighModel());  //not strictly necessary
+      pmanager->AddDiscreteProcess(theRayleigh);
+
+      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+      thePhotoElectricEffect->SetModel(new G4LivermorePhotoElectricModel());
+      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
+	
+      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      theComptonScattering->SetModel(new G4LivermoreComptonModel());
+      pmanager->AddDiscreteProcess(theComptonScattering);
+	
+      G4GammaConversion* theGammaConversion = new G4GammaConversion();
+      theGammaConversion->SetModel(new G4LivermoreGammaConversionModel());
+      pmanager->AddDiscreteProcess(theGammaConversion);  
+     
+      pmanager->AddProcess(new G4StepLimiter(),  -1,-1,3);
 	}   
     }
 }

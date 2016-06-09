@@ -13,9 +13,11 @@
 /control/saveHistory
 /run/verbose 2
 /gun/sourceGen true
-/run/initialize
+
 
 /control/execute emlowe.mac
+
+/run/initialize
 
 /gun/particle mu-
 /gun/energy 100 MeV

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.8 2007/11/07 17:22:16 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.9 2009/11/16 15:09:10 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,6 +90,7 @@ void DetectorConstruction::DefineMaterials()
   man->FindOrBuildMaterial("G4_Al", isotopes);
   man->FindOrBuildMaterial("G4_Si", isotopes);
   man->FindOrBuildMaterial("G4_Fe", isotopes);
+  man->FindOrBuildMaterial("G4_Cu", isotopes);  
   man->FindOrBuildMaterial("G4_Ge", isotopes);
   man->FindOrBuildMaterial("G4_Mo", isotopes);
   man->FindOrBuildMaterial("G4_Ta", isotopes);

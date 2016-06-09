@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.10 2006/10/20 16:03:39 maire Exp $
+# $Id: run02.mac,v 1.12 2009/09/16 18:07:30 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -11,11 +11,11 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Aluminium
+/testem/det/setMat G4_Al
 /testem/det/setLbin 12 1.1245
 /testem/det/setRbin 12 0.11245
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  emstandard_opt0
 #
 /testem/phys/setCuts 2.0 mm
 #

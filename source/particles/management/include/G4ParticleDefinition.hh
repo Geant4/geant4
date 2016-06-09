@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh,v 1.32 2008/03/22 06:03:40 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleDefinition.hh,v 1.33 2008/11/14 16:26:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -128,7 +128,9 @@ class G4ParticleDefinition
       G4int    GetPDGiGParity() const { return thePDGiGParity; }
  
       G4double GetPDGMagneticMoment() const { return thePDGMagneticMoment; }
-  void SetPDGMagneticMoment(G4double mageticMoment);
+      void     SetPDGMagneticMoment(G4double mageticMoment); 
+      G4double CalculateAnomaly()  const;
+      // gives the anomaly of magnetic moment for spin 1/2 particles 
 
       const G4String& GetParticleType() const { return theParticleType; }
       const G4String& GetParticleSubType() const { return theParticleSubType; }

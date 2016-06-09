@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.95 2008/11/13 18:23:39 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LossTableManager.cc,v 1.97 2009/10/29 19:25:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -92,6 +92,7 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4EmCorrections.hh"
 #include "G4EmSaturation.hh"
+#include "G4EmConfigurator.hh"
 #include "G4EmTableType.hh"
 #include "G4LossTableBuilder.hh"
 
@@ -163,6 +164,7 @@ G4LossTableManager::G4LossTableManager()
   tableBuilder = new G4LossTableBuilder();
   emCorrections= new G4EmCorrections();
   emSaturation = new G4EmSaturation();
+  emConfigurator = new G4EmConfigurator();
   integral = true;
   integralActive = false;
   buildCSDARange = false;
@@ -173,6 +175,7 @@ G4LossTableManager::G4LossTableManager()
   flagLPM = true;
   splineFlag = true;
   bremsTh = DBL_MAX;
+  factorForAngleLimit = 1.0;
   verbose = 1;
   tableBuilder->SetSplineFlag(splineFlag);
 }
@@ -917,6 +920,20 @@ G4double G4LossTableManager::BremsstrahlungTh() const
   return bremsTh;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LossTableManager::SetFactorForAngleLimit(G4double val) 
+{
+  if(val > 0.0) factorForAngleLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4LossTableManager::FactorForAngleLimit() const
+{
+  return factorForAngleLimit;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmCorrections* G4LossTableManager::EmCorrections() 
@@ -929,6 +946,13 @@ G4EmCorrections* G4LossTableManager::EmCorrections()
 G4EmSaturation* G4LossTableManager::EmSaturation()
 {
   return emSaturation;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmConfigurator* G4LossTableManager::EmConfigurator()
+{
+  return emConfigurator;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

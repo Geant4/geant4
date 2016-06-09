@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.4 2006/06/29 19:30:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.8 2009/09/14 07:27:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // ------------------------------------------------------------
@@ -85,6 +85,10 @@ class G4VRangeToEnergyConverter
   //  get energy range for all particle type
   static G4double GetLowEdgeEnergy();
   static G4double GetHighEdgeEnergy();
+
+  //  get/set max cut energy for all particle type
+  static G4double GetMaxEnergyCut();
+  static void SetMaxEnergyCut(G4double value);
   
   // return pointer to the particle type which this converter takes care
   const G4ParticleDefinition* GetParticleType() const;
@@ -96,57 +100,47 @@ class G4VRangeToEnergyConverter
    // Each loss vector has energy loss values (cross section values
    // for neutral particles) which are calculated by
    // ComputeLoss(G4double AtomicNumber,G4double KineticEnergy).
- 
+   // ComputeLoss method is pure virtual and should be provided for each 
+   // particle type
+
+  // reset Loss Table and Range Vectors
+  virtual void Reset();
+    
  protected:
     static G4double               LowestEnergy, HighestEnergy;
-
+    static G4double               MaxEnergyCut; 
+    G4double                      fMaxEnergyCut;
+   
     const G4ParticleDefinition*   theParticle;
     typedef G4PhysicsTable        G4LossTable;
     G4LossTable*                  theLossTable;
     G4int                         NumberOfElements;
-
+  
     typedef G4PhysicsLogVector    G4LossVector;
-    G4int                         TotBin;
+    const G4int                   TotBin;
 
   protected:// with description  
-   virtual void BuildLossTable();
+    virtual void BuildLossTable();
 
     virtual G4double ComputeLoss(G4double AtomicNumber,
                                  G4double KineticEnergy
-                                ) const;
+			       ) const = 0;
 
   //-------------- Range Table ------------------------------------------
   protected:
     typedef G4PhysicsLogVector G4RangeVector;
-    virtual void BuildRangeVector(const G4Material* aMaterial,
-                                  G4double       maxEnergy,
-                                  G4double       aMass,
-                                  G4RangeVector* rangeVector);
 
+    virtual void BuildRangeVector(const G4Material* aMaterial,
+                                   G4RangeVector* rangeVector);
+
+    std::vector< G4RangeVector* > fRangeVectorStore;   
+      
   protected:
     G4double ConvertCutToKineticEnergy(
                                        G4RangeVector* theRangeVector,
 				       G4double       theCutInLength, 
                                        size_t         materialIndex
                                       ) const;
-
-    G4double RangeLinSimpson(
-                            G4int  numberOfElements,
-                            const G4ElementVector* elementVector,
-                            const G4double* atomicNumDensityVector,
-			    G4double aMass,
-                            G4double taulow, G4double tauhigh,
-                            G4int nbin
-                          ); 
-
-    G4double RangeLogSimpson(
-                            G4int  numberOfElements,
-                            const G4ElementVector* elementVector,
-                            const G4double* atomicNumDensityVector,
-                            G4double aMass,
-                            G4double ltaulow, G4double ltauhigh,
-                            G4int nbin
-                          );
 
   public: // with description  
       void  SetVerboseLevel(G4int value);
@@ -174,6 +168,11 @@ inline
 }
 
 
+inline 
+ const G4ParticleDefinition* G4VRangeToEnergyConverter::GetParticleType() const
+{
+   return theParticle;
+}
 #endif
 
 

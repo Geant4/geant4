@@ -1,4 +1,4 @@
-# $Id: erange.mac,v 1.1 2007/06/20 15:26:33 maire Exp $
+# $Id: erange.mac,v 1.2 2009/09/15 12:51:49 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # 
@@ -9,9 +9,9 @@
 #
 /testem/det/setMat Water
 #
-/testem/phys/addPhysics  standard
-###/testem/phys/addPhysics  penelope
-###/testem/phys/addPhysics  livermore
+/testem/phys/addPhysics  local
+###/testem/phys/addPhysics  empenelope
+###/testem/phys/addPhysics  emlivermore
 #
 /run/initialize
 #

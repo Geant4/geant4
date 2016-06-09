@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AdjointComptonModel.cc,v 1.6 2009/12/16 17:50:03 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 #include "G4AdjointComptonModel.hh"
 #include "G4AdjointCSManager.hh"
 
@@ -33,6 +36,7 @@
 #include "G4AdjointElectron.hh"
 #include "G4AdjointGamma.hh"
 #include "G4Gamma.hh"
+#include "G4KleinNishinaCompton.hh"
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,12 +47,12 @@ G4AdjointComptonModel::G4AdjointComptonModel():
 { SetApplyCutInRange(false);
   SetUseMatrix(true);
   SetUseMatrixPerElement(true);
-  SetIsIonisation(false);
   SetUseOnlyOneMatrixForAllElements(true);
   theAdjEquivOfDirectPrimPartDef =G4AdjointGamma::AdjointGamma();
   theAdjEquivOfDirectSecondPartDef=G4AdjointElectron::AdjointElectron();
   theDirectPrimaryPartDef=G4Gamma::Gamma();
   second_part_of_same_type=false;
+  theDirectEMModel=new G4KleinNishinaCompton(G4Gamma::Gamma(),"ComptonDirectModel");
  
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +65,7 @@ void G4AdjointComptonModel::SampleSecondaries(const G4Track& aTrack,
                        G4bool IsScatProjToProjCase,
 	               G4ParticleChange* fParticleChange)
 { 
-   
+   if (!UseMatrix) return RapidSampleSecondaries(aTrack,IsScatProjToProjCase,fParticleChange); 
    
    //A recall of the compton scattering law is 
    //Egamma2=Egamma1/(1+(Egamma1/E0_electron)(1.-cos_th))
@@ -70,27 +74,16 @@ void G4AdjointComptonModel::SampleSecondaries(const G4Track& aTrack,
    
    
   const G4DynamicParticle* theAdjointPrimary =aTrack.GetDynamicParticle();
-  //DefineCurrentMaterial(aTrack->GetMaterialCutsCouple());
-  size_t ind= 0;
-  
-  
- 
- 
- //Elastic inverse scattering //not correct in all the cases 
- //---------------------------------------------------------
- G4double adjointPrimKinEnergy = theAdjointPrimary->GetKineticEnergy();
- 
- //G4cout<<adjointPrimKinEnergy<<std::endl;
- if (adjointPrimKinEnergy>HighEnergyLimit*0.999){
+  G4double adjointPrimKinEnergy = theAdjointPrimary->GetKineticEnergy();
+  if (adjointPrimKinEnergy>HighEnergyLimit*0.999){
  	return;
- }
+  }
+ 
  
  //Sample secondary energy
  //-----------------------
  G4double gammaE1;
-
- gammaE1 = SampleAdjSecEnergyFromCSMatrix(ind,
- 						  adjointPrimKinEnergy,
+ gammaE1 = SampleAdjSecEnergyFromCSMatrix(adjointPrimKinEnergy,
 						  IsScatProjToProjCase);
  
  
@@ -107,7 +100,7 @@ void G4AdjointComptonModel::SampleSecondaries(const G4Track& aTrack,
  
  //Cos th
  //-------
-// G4cout<<"Compton scattering "<<gammaE1<<'\t'<<gammaE2<<std::endl;
+// G4cout<<"Compton scattering "<<gammaE1<<'\t'<<gammaE2<<G4endl;
  G4double cos_th = 1.+ electron_mass_c2*(1./gammaE1 -1./gammaE2);
  if (!IsScatProjToProjCase) {
  	G4double p_elec=theAdjointPrimary->GetTotalMomentum();
@@ -115,7 +108,7 @@ void G4AdjointComptonModel::SampleSecondaries(const G4Track& aTrack,
  }
  G4double sin_th = 0.;
  if (std::abs(cos_th)>1){
- 	//G4cout<<"Problem in compton scattering with cos_th "<<cos_th<<std::endl;
+ 	//G4cout<<"Problem in compton scattering with cos_th "<<cos_th<<G4endl;
 	if (cos_th>0) {
 		cos_th=1.;
 	}
@@ -135,17 +128,21 @@ void G4AdjointComptonModel::SampleSecondaries(const G4Track& aTrack,
  G4double phi =G4UniformRand()*2.*3.1415926;
  G4ThreeVector gammaMomentum1 = gammaE1*G4ThreeVector(std::cos(phi)*sin_th,std::sin(phi)*sin_th,cos_th);
  gammaMomentum1.rotateUz(dir_parallel);
-// G4cout<<gamma0Energy<<'\t'<<gamma0Momentum<<std::endl;
+// G4cout<<gamma0Energy<<'\t'<<gamma0Momentum<<G4endl;
  
  
  //It is important to correct the weight of particles before adding the secondary
  //------------------------------------------------------------------------------
- CorrectPostStepWeight(fParticleChange, aTrack.GetWeight(), adjointPrimKinEnergy,gammaE1);
+ CorrectPostStepWeight(fParticleChange, 
+ 			aTrack.GetWeight(), 
+			adjointPrimKinEnergy,
+			gammaE1,
+			IsScatProjToProjCase);
  
- if (!IsScatProjToProjCase && CorrectWeightMode){ //kill the primary and add a secondary
+ if (!IsScatProjToProjCase){ //kill the primary and add a secondary
  	fParticleChange->ProposeTrackStatus(fStopAndKill);
  	fParticleChange->AddSecondary(new G4DynamicParticle(theAdjEquivOfDirectPrimPartDef,gammaMomentum1));
-	//G4cout<<"gamma0Momentum "<<gamma0Momentum<<std::endl;
+	//G4cout<<"gamma0Momentum "<<gamma0Momentum<<G4endl;
  }
  else {
  	fParticleChange->ProposeEnergy(gammaE1);
@@ -153,7 +150,127 @@ void G4AdjointComptonModel::SampleSecondaries(const G4Track& aTrack,
  }
  
  	
-} 			
+} 
+////////////////////////////////////////////////////////////////////////////////
+//
+void G4AdjointComptonModel::RapidSampleSecondaries(const G4Track& aTrack,
+                       G4bool IsScatProjToProjCase,
+	               G4ParticleChange* fParticleChange)
+{ 
+
+ const G4DynamicParticle* theAdjointPrimary =aTrack.GetDynamicParticle();
+ DefineCurrentMaterial(aTrack.GetMaterialCutsCouple());
+ 
+ 
+ G4double adjointPrimKinEnergy = theAdjointPrimary->GetKineticEnergy();
+
+ 
+ if (adjointPrimKinEnergy>HighEnergyLimit*0.999){
+ 	return;
+ }
+  
+ 
+ G4double diffCSUsed=currentMaterial->GetElectronDensity()*twopi_mc2_rcl2; 
+ G4double gammaE1=0.;
+ G4double gammaE2=0.;
+ if (!IsScatProjToProjCase){
+ 	
+	G4double Emax = GetSecondAdjEnergyMaxForProdToProjCase(adjointPrimKinEnergy);
+        G4double Emin=  GetSecondAdjEnergyMinForProdToProjCase(adjointPrimKinEnergy);;
+	if (Emin>=Emax) return;
+	G4double f1=(Emin-adjointPrimKinEnergy)/Emin;
+	G4double f2=(Emax-adjointPrimKinEnergy)/Emax/f1;
+	gammaE1=adjointPrimKinEnergy/(1.-f1*std::pow(f2,G4UniformRand()));;
+	gammaE2=gammaE1-adjointPrimKinEnergy;
+	diffCSUsed= diffCSUsed*(1.+2.*std::log(1.+electron_mass_c2/adjointPrimKinEnergy))*adjointPrimKinEnergy/gammaE1/gammaE2;
+	
+ 	
+ }
+ else {	G4double Emax = GetSecondAdjEnergyMaxForScatProjToProjCase(adjointPrimKinEnergy);
+	G4double Emin = GetSecondAdjEnergyMinForScatProjToProjCase(adjointPrimKinEnergy,currentTcutForDirectSecond);
+	if (Emin>=Emax) return;
+	gammaE2 =adjointPrimKinEnergy;
+	gammaE1=Emin*std::pow(Emax/Emin,G4UniformRand());
+	diffCSUsed= diffCSUsed/gammaE1;
+	
+ }
+  
+  
+  
+						  	
+ //Weight correction
+ //-----------------------
+ //First w_corr is set to the ratio between adjoint total CS and fwd total CS
+ G4double w_corr=G4AdjointCSManager::GetAdjointCSManager()->GetPostStepWeightCorrection();
+
+ //Then another correction is needed due to the fact that a biaised differential CS has been used rather than the 
+ //one consistent with the direct model
+ 
+ 
+ G4double diffCS = DiffCrossSectionPerAtomPrimToScatPrim(gammaE1, gammaE2,1,0.);
+ if (diffCS >0)  diffCS /=G4direct_CS;  // here we have the normalised diffCS
+ diffCS*=theDirectEMProcess->GetLambda(gammaE1,currentCouple);
+ //diffCS*=theDirectEMModel->CrossSectionPerVolume(currentMaterial,G4Gamma::Gamma(),gammaE1,0.,2.*gammaE1);
+ //G4cout<<"diffCS/diffCSUsed "<<diffCS/diffCSUsed<<'\t'<<gammaE1<<'\t'<<gammaE2<<G4endl;                                 
+ 
+ w_corr*=diffCS/diffCSUsed;
+	   
+ G4double new_weight = aTrack.GetWeight()*w_corr;
+ fParticleChange->SetParentWeightByProcess(false);
+ fParticleChange->SetSecondaryWeightByProcess(false);
+ fParticleChange->ProposeParentWeight(new_weight); 
+ 
+ 
+ 
+ //Cos th
+ //-------
+
+ G4double cos_th = 1.+ electron_mass_c2*(1./gammaE1 -1./gammaE2);
+ if (!IsScatProjToProjCase) {
+ 	G4double p_elec=theAdjointPrimary->GetTotalMomentum();
+	cos_th = (gammaE1 - gammaE2*cos_th)/p_elec;
+ }
+ G4double sin_th = 0.;
+ if (std::abs(cos_th)>1){
+ 	//G4cout<<"Problem in compton scattering with cos_th "<<cos_th<<G4endl;
+	if (cos_th>0) {
+		cos_th=1.;
+	}
+	else 	cos_th=-1.;
+	sin_th=0.;
+ }
+ else  sin_th = std::sqrt(1.-cos_th*cos_th);
+
+ 
+ 
+ 
+ //gamma0 momentum
+ //--------------------
+
+ 
+ G4ThreeVector dir_parallel=theAdjointPrimary->GetMomentumDirection();
+ G4double phi =G4UniformRand()*2.*3.1415926;
+ G4ThreeVector gammaMomentum1 = gammaE1*G4ThreeVector(std::cos(phi)*sin_th,std::sin(phi)*sin_th,cos_th);
+ gammaMomentum1.rotateUz(dir_parallel);
+ 
+ 
+
+ 
+ if (!IsScatProjToProjCase){ //kill the primary and add a secondary
+ 	fParticleChange->ProposeTrackStatus(fStopAndKill);
+ 	fParticleChange->AddSecondary(new G4DynamicParticle(theAdjEquivOfDirectPrimPartDef,gammaMomentum1));
+	//G4cout<<"gamma0Momentum "<<gamma0Momentum<<G4endl;
+ }
+ else {
+ 	fParticleChange->ProposeEnergy(gammaE1);
+	fParticleChange->ProposeMomentumDirection(gammaMomentum1.unit());
+ }
+ 
+ 
+ 
+} 
+
+			
 ////////////////////////////////////////////////////////////////////////////////
 //
 //The implementation here is correct for energy loss process, for the photoelectric and compton scattering the method should be redefine  
@@ -178,9 +295,11 @@ G4double G4AdjointComptonModel::DiffCrossSectionPerAtomPrimToScatPrim(
 				      G4double Z, 
                                       G4double )
 { //Based on Klein Nishina formula
- //* In the forward case (see G4KleinNishinaModel)  the  cross section is parametrised while the secondaries are sampled from the 
+ // In the forward case (see G4KleinNishinaModel)  the  cross section is parametrised while
+ // the secondaries are sampled from the 
  // Klein Nishida differential cross section
- // The used diffrential cross section here is therefore the cross section multiplied by the normalidsed differential Klein Nishida cross section
+ // The used diffrential cross section here is therefore the cross section multiplied by the normalised 
+ //differential Klein Nishida cross section
  
  
  //Klein Nishida Cross Section
@@ -190,10 +309,10 @@ G4double G4AdjointComptonModel::DiffCrossSectionPerAtomPrimToScatPrim(
  G4double gamEnergy1_max = gamEnergy0;
  G4double gamEnergy1_min = gamEnergy0/one_plus_two_epsi;
  if (gamEnergy1 >gamEnergy1_max ||  gamEnergy1<gamEnergy1_min) {
- 	/*G4cout<<"the differential CS is null"<<std::endl;
-	G4cout<<gamEnergy0<<std::endl;
-	G4cout<<gamEnergy1<<std::endl;
-	G4cout<<gamEnergy1_min<<std::endl;*/
+ 	/*G4cout<<"the differential CS is null"<<G4endl;
+	G4cout<<gamEnergy0<<G4endl;
+	G4cout<<gamEnergy1<<G4endl;
+	G4cout<<gamEnergy1_min<<G4endl;*/
  	return 0.;
  }
  	
@@ -221,19 +340,20 @@ G4double G4AdjointComptonModel::DiffCrossSectionPerAtomPrimToScatPrim(
  //Normalised to the CS used in G4
  //-------------------------------
  
- G4double G4direct_CS = theDirectEMModel->ComputeCrossSectionPerAtom(G4Gamma::Gamma(),
+ G4direct_CS = theDirectEMModel->ComputeCrossSectionPerAtom(G4Gamma::Gamma(),
                                              gamEnergy0,
                                              Z, 0., 0.,0.);
  
  dCS_dE1 *= G4direct_CS/CS;
-/* G4cout<<"the differential CS is not null"<<std::endl;
- G4cout<<gamEnergy0<<std::endl;
- G4cout<<gamEnergy1<<std::endl;*/
+/* G4cout<<"the differential CS is not null"<<G4endl;
+ G4cout<<gamEnergy0<<G4endl;
+ G4cout<<gamEnergy1<<G4endl;*/
  
  return dCS_dE1;
 
 
 }
+				      
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4double G4AdjointComptonModel::GetSecondAdjEnergyMaxForScatProjToProjCase(G4double PrimAdjEnergy)
@@ -249,4 +369,40 @@ G4double G4AdjointComptonModel::GetSecondAdjEnergyMinForProdToProjCase(G4double 
   G4double term=std::sqrt(half_e*(electron_mass_c2+half_e));
   G4double emin=half_e+term;
   return  emin; 
+}
+////////////////////////////////////////////////////////////////////////////////
+//
+G4double G4AdjointComptonModel::AdjointCrossSection(const G4MaterialCutsCouple* aCouple,
+				             G4double primEnergy,
+				             G4bool IsScatProjToProjCase)
+{ 
+  if (UseMatrix) return G4VEmAdjointModel::AdjointCrossSection(aCouple,primEnergy,IsScatProjToProjCase);
+  DefineCurrentMaterial(aCouple);
+  
+  
+  G4double Cross=0.;
+  G4double Emax_proj =0.;
+  G4double Emin_proj =0.;
+  if (!IsScatProjToProjCase ){
+  	Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(primEnergy);
+  	Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(primEnergy);
+	if (Emax_proj>Emin_proj ){
+		 Cross= std::log((Emax_proj-primEnergy)*Emin_proj/Emax_proj/(Emin_proj-primEnergy))
+		 						*(1.+2.*std::log(1.+electron_mass_c2/primEnergy));
+	}	 
+  }
+  else {
+        Emax_proj = GetSecondAdjEnergyMaxForScatProjToProjCase(primEnergy);
+	Emin_proj = GetSecondAdjEnergyMinForScatProjToProjCase(primEnergy,0.);
+	if (Emax_proj>Emin_proj) {
+		Cross = std::log(Emax_proj/Emin_proj);
+		//+0.5*primEnergy*primEnergy(1./(Emin_proj*Emin_proj) - 1./(Emax_proj*Emax_proj)); neglected at the moment
+	}
+  	
+  	
+  }
+  
+  Cross*=currentMaterial->GetElectronDensity()*twopi_mc2_rcl2;
+  lastCS=Cross;
+  return Cross;	
 }

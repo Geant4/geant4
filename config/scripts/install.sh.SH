@@ -30,7 +30,6 @@ unset  CLHEP_INCLUDE_DIR
 unset  CLHEP_LIB
 unset  CLHEP_LIB_DIR
 
-unset  G4ANALYSIS_USE
 unset  G4DEBUG
 unset  G4INCLUDE
 unset  G4INSTALL
@@ -53,6 +52,7 @@ unset  G4LIB_USE_ZLIB
 
 unset  G4SYSTEM
 
+unset  G4UI_NONE
 unset  G4UI_BUILD_WIN32_SESSION
 unset  G4UI_BUILD_XAW_SESSION
 unset  G4UI_BUILD_XM_SESSION
@@ -63,6 +63,7 @@ unset  G4UI_USE_XAW
 unset  G4UI_USE_XM
 unset  G4UI_USE_QT
 
+unset  G4VIS_NONE
 unset  G4VIS_BUILD_DAWN_DRIVER
 unset  G4VIS_BUILD_OIWIN32_DRIVER
 unset  G4VIS_BUILD_OIX_DRIVER
@@ -218,19 +219,19 @@ export G4DEBUG
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 fi
 
-#
-# g4analysis
-#
-#+
-if [ X$g4wanalysis_use = Xy ] ; then
-G4ANALYSIS_USE=1
-export G4ANALYSIS_USE
-echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
-fi 
 
 #
 # g4ui
 #
+#+
+if [ X$g4ui_none = Xy ] ; then
+G4UI_NONE=1
+export G4UI_NONE
+echo "On this machine G4UI_NONE is set - no UIs will be built"
+
+else
+echo "On this machine G4UI_NONE is not set - following UIs will be built:"
+
 #+
 if [ X$g4ui_build_xaw_session = Xy ] ; then
 G4UI_BUILD_XAW_SESSION=1
@@ -288,10 +289,21 @@ export G4UI_USE_QT
 echo "On this machine the G4UI_USE_QT=\$G4UI_USE_QT"
 fi 
 
+fi
+# END OF G4UI_NONE block
 
 #
 # g4vis
 #
+#+
+if [ X$g4vis_none = Xy ] ; then
+G4VIS_NONE=1
+export G4VIS_NONE
+echo "On this machine G4VIS_NONE is set - no drivers will be built"
+
+else
+echo "On this machine G4VIS_NONE is not set - following drivers will be built:"
+
 #+
 if [ X$g4vis_build_dawn_driver = Xy ] ; then
 G4VIS_BUILD_DAWN_DRIVER=1
@@ -421,7 +433,8 @@ echo "On this machine the G4VIS_USE_OPENGLQT=\$G4VIS_USE_OPENGLQT"
 fi 
 
 
-
+fi
+# End of G4VIS_NONE block
 
 
 

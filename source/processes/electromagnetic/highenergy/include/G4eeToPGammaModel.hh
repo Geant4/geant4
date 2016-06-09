@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToPGammaModel.hh,v 1.1 2008/07/10 18:07:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eeToPGammaModel.hh,v 1.2 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -67,13 +67,13 @@ public:
 
   virtual ~G4eeToPGammaModel();
 
-  G4double ThresholdEnergy() const;
+  virtual G4double ThresholdEnergy() const;
 
-  G4double PeakEnergy() const;
+  virtual G4double PeakEnergy() const;
 
-  G4double ComputeCrossSection(G4double) const;
+  virtual G4double ComputeCrossSection(G4double) const;
 
-  G4PhysicsVector* PhysicsVector(G4double, G4double) const;
+  virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&);
@@ -93,31 +93,6 @@ private:
   G4double massR;
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToPGammaModel::ThresholdEnergy() const
-{
-  return LowEnergy();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToPGammaModel::PeakEnergy() const
-{
-  return massR;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eeToPGammaModel::ComputeCrossSection(G4double e) const
-{
-  G4double ee = std::min(HighEnergy(),e);
-  G4double xs;
-  if(particle == pi0) xs = cross->CrossSectionPi0G(ee);
-  else                xs = cross->CrossSectionEtaG(ee);
-  return xs;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

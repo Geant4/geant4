@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.53 2008/07/15 16:56:38 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LossTableManager.hh,v 1.55 2009/10/29 19:25:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // -------------------------------------------------------------------
@@ -90,6 +90,7 @@ class G4VMultipleScattering;
 class G4VEmProcess;
 class G4EmCorrections;
 class G4EmSaturation;
+class G4EmConfigurator;
 class G4LossTableBuilder;
 
 class G4LossTableManager
@@ -208,6 +209,8 @@ public:
 
   void SetBremsstrahlungTh(G4double val);
 
+  void SetFactorForAngleLimit(G4double val);
+
   void SetVerbose(G4int val);
 
   G4EnergyLossMessenger* GetMessenger();
@@ -220,6 +223,8 @@ public:
 
   G4double BremsstrahlungTh() const;
 
+  G4double FactorForAngleLimit() const;
+
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
   const std::vector<G4VEmProcess*>& GetEmProcessVector();
@@ -231,6 +236,8 @@ public:
   G4EmCorrections* EmCorrections();
 
   G4EmSaturation* EmSaturation();
+
+  G4EmConfigurator* EmConfigurator();
 
 private:
 
@@ -298,11 +305,13 @@ private:
   G4double maxKinEnergy;
   G4double maxKinEnergyForMuons;
   G4double bremsTh;
+  G4double factorForAngleLimit;
 
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;
   G4EmCorrections*            emCorrections;
   G4EmSaturation*             emSaturation;
+  G4EmConfigurator*           emConfigurator;
 
   const G4ParticleDefinition* firstParticle;
   G4int verbose;

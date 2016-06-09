@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2006/08/16 15:43:44 gcosmo Exp $
+$Id: History,v 1.18 2009/05/13 08:46:37 gbarrand Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 May 2009 Guy Barrand (AnaEx01-V09-02-00)
+- Tagged all changes.
+
+13 May 2009 Guy Barrand
+- update the README.
+- remove the content of the analysis/[Falsetto,jas,Lab] directories.
+  In fact the analysis directory should not be distributed anymore.
+- have a run.mac in the main example directory.
+- AnaEx01AnalysisManager : arrange to have histo and tuple name
+  as interger in case of hbook file format. 
+
+5 March 2009 Guy Barrand
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file, since
+  it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
 
 16th August 2006  Gabriele Cosmo (AnaEx01-V08-01-00)
 - Corrected text in README for AIDA setup.

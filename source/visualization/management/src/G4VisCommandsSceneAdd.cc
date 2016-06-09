@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.73 2007/11/16 20:29:04 perl Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.78 2009/11/22 14:02:30 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -36,6 +36,7 @@
 #include "G4LogicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4HitsModel.hh"
+#include "G4PSHitsModel.hh"
 #include "G4TrajectoriesModel.hh"
 #include "G4ScaleModel.hh"
 #include "G4TextModel.hh"
@@ -64,6 +65,7 @@
 #include "G4TransportationManager.hh"
 #include "G4PropagatorInField.hh"
 #include "G4RichTrajectory.hh"
+#include "G4RichTrajectoryPoint.hh"
 #include "G4AttDef.hh"
 #include "G4ios.hh"
 #include <sstream>
@@ -228,12 +230,22 @@ void G4VisCommandSceneAddEventID::EventID::operator()
 {
   const G4Run* currentRun = 0;
   G4RunManager* runManager = G4RunManager::GetRunManager();
-  if (runManager)  currentRun = runManager->GetCurrentRun();
+  if (runManager) currentRun = runManager->GetCurrentRun();
 
   G4VModel* model = fpVisManager->GetCurrentSceneHandler()->GetModel();
-  const G4ModelingParameters* mp = model->GetModelingParameters();
-  const G4Event* currentEvent = mp->GetEvent();
-
+  const G4ModelingParameters* mp = 0;
+  const G4Event* currentEvent = 0;
+  if (model) {
+   mp = model->GetModelingParameters();
+   currentEvent = mp->GetEvent();
+  } else {
+    G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No model defined for this SceneHandler : "
+	     << fpVisManager->GetCurrentSceneHandler()->GetName()
+	     << G4endl;
+    }
+  }
   if (currentRun && currentEvent) {
     G4int runID = currentRun->GetRunID();
     G4int eventID = currentEvent->GetEventID();
@@ -883,6 +895,64 @@ void G4VisCommandSceneAddLogo::G4Logo::operator()
   sceneHandler.EndPrimitives();
 }
 
+////////////// /vis/scene/add/psHits ///////////////////////////////////////
+
+G4VisCommandSceneAddPSHits::G4VisCommandSceneAddPSHits () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/scene/add/psHits", this);
+  fpCommand -> SetGuidance
+    ("Adds Primitive Scorer Hits (PSHits) to current scene.");
+  fpCommand -> SetGuidance
+    ("PSHits are drawn at end of run when the scene in which"
+     "\nthey are added is current.");
+  fpCommand -> SetGuidance
+    ("Optional parameter specifies name of scoring map.  By default all"
+     "\nscoring maps registered with the G4ScoringManager are drawn.");
+  fpCommand -> SetParameterName ("mapname", omitable = true);
+  fpCommand -> SetDefaultValue ("all");
+}
+
+G4VisCommandSceneAddPSHits::~G4VisCommandSceneAddPSHits () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddPSHits::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddPSHits::SetNewValue
+(G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4PSHitsModel* model = new G4PSHitsModel(newValue);
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddEndOfRunModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      if (newValue == "all") {
+	G4cout << "All Primitive Scorer hits";
+      } else {
+	G4cout << "Hits of Primitive Scorer \"" << newValue << '"';
+      }
+      G4cout << " will be drawn at end of run in scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
 ////////////// /vis/scene/add/scale //////////////////////////////////
 
 G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
@@ -1345,7 +1415,8 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
 	"Attributes available for modeling and filtering with"
 	"\n\"/vis/modeling/trajectories/create/drawByAttribute\" and"
 	"\n\"/vis/filtering/trajectories/create/attributeFilter\" commands:\n"
-	     << G4RichTrajectory().GetAttDefs();
+	     << G4RichTrajectory().GetAttDefs()
+	     << G4RichTrajectoryPoint().GetAttDefs();
     }
   }
 

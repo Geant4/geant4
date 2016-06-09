@@ -29,8 +29,8 @@
 //    *                                    *
 //    **************************************
 //
-// $Id: RemSimHadronicBinary.cc,v 1.7 2006/11/15 18:39:30 guatelli Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RemSimHadronicBinary.cc,v 1.8 2009/11/12 05:12:18 cirrone Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author : Susanna Guatelli, guatelli@ge.infn.it
 
@@ -256,7 +256,7 @@ void RemSimHadronicBinary::ConstructProcess()
   G4BinaryLightIonReaction* binaryIonModel = new G4BinaryLightIonReaction();
   // Energy limit of the binary ion model
   G4double binaryIonLowLimit = 80. * MeV;
-  G4double binaryIonHighLimit = 40. * GeV; 
+  G4double binaryIonHighLimit = 400. * GeV; 
   binaryIonModel->SetMinEnergy(binaryIonLowLimit);
   binaryIonModel->SetMaxEnergy(binaryIonHighLimit);
 

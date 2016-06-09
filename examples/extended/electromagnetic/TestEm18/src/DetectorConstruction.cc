@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.2 2007/02/16 11:59:47 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.3 2009/03/06 18:24:07 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,7 +112,10 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);
   new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
   new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
-
+  
+  new G4Material("ArgonGas"   , z=18., a=39.948*g/mole, density= 1.782*mg/cm3,
+		 kStateGas, 273.15*kelvin, 1*atmosphere);
+		 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 

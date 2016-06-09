@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPartonStringModel.cc,v 1.5 2007/01/24 10:29:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPartonStringModel.cc,v 1.6 2009/10/05 12:52:48 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //// ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -98,13 +98,13 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   	{
 		throw G4HadronicException(__FILE__, __LINE__, "G4VPartonStringModel::Scatter(): fails to generate strings");
   	}
-
 	theThis->Init(theNucleus,thePrimary);
   	strings = GetStrings();
   }
   
   G4KineticTrackVector * theResult = 0;
   G4double stringEnergy(0);
+
   for ( unsigned int astring=0; astring < strings->size(); astring++)
   {
 //    rotate string to lab frame, models have it aligned to z
@@ -136,6 +136,14 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
 #endif
 	    
   theResult = stringFragmentationModel->FragmentStrings(strings);
+/*
+G4cout<<"Size "<<theResult->size()<<G4endl;
+  for ( unsigned int i=0; i < theResult->size(); i++)
+  {
+
+G4cout<<(*theResult)[i]->Get4Momentum()<<" "<<(*theResult)[i]->Get4Momentum().mag()<<G4endl;;
+  }
+*/
   std::for_each(strings->begin(), strings->end(), DeleteString() );
   delete strings;
 

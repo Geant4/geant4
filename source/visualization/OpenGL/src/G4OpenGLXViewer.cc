@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.42 2007/05/25 10:47:17 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXViewer.cc,v 1.55 2009/05/13 10:28:00 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -35,6 +35,9 @@
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #include "G4OpenGLXViewer.hh"
+#include "G4VViewer.hh"
+#include "G4OpenGLSceneHandler.hh"
+#include <GL/glu.h>
 
 #include "G4OpenGLFontBaseStore.hh"
 
@@ -45,9 +48,11 @@
 #include "G4VSolid.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
+#include "G4StateManager.hh"
 
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <X11/Xmu/StdCmap.h>
 
 #include <assert.h>
 
@@ -86,7 +91,17 @@ extern "C" {
 }
 
 void G4OpenGLXViewer::SetView () {
-  glXMakeCurrent (dpy, win, cx);
+  Bool success = glXMakeCurrent (dpy, win, cx);
+  if (!success) {
+    fViewId = -1;  // This flags an error.
+    G4cerr << "G4OpenGLViewer::G4OpenGLViewer failed to attach a GLX context."
+           << G4endl;
+    GLint error = GL_NO_ERROR;
+    while ((error = glGetError()) != GL_NO_ERROR) {
+      G4cout << "GL Error: " << gluErrorString(error) << G4endl;
+    }
+    return;
+  }
   G4OpenGLViewer::SetView ();  
 }
 
@@ -213,49 +228,27 @@ void G4OpenGLXViewer::CreateMainWindow () {
   swa.backing_store = WhenMapped;
 
   // Window size and position...
-  unsigned int width, height;
-  x_origin = 0;
-  y_origin = 0;
   size_hints = XAllocSizeHints();
-  const G4String& XGeometryString = fVP.GetXGeometryString();
-  int screen_num = DefaultScreen(dpy);
-  if (!XGeometryString.empty()) {
-    G4int geometryResultMask = XParseGeometry
-      ((char*)XGeometryString.c_str(),
-       &x_origin, &y_origin, &width, &height);
-    if (geometryResultMask & (WidthValue | HeightValue)) {
-      if (geometryResultMask & XValue) {
-	if (geometryResultMask & XNegative) {
-	  x_origin = DisplayWidth(dpy, screen_num) + x_origin - width;
-	}
-	size_hints->flags |= PPosition;
-	size_hints->x = x_origin;
-      }
-      if (geometryResultMask & YValue) {
-	if (geometryResultMask & YNegative) {
-	  y_origin = DisplayHeight(dpy, screen_num) + y_origin - height;
-	}
-	size_hints->flags |= PPosition;
-	size_hints->y = y_origin;
-      }
-    } else {
-      G4cout << "ERROR: Geometry string \""
-	     << XGeometryString
-	     << "\" invalid.  Using \"600x600\"."
-	     << G4endl;
-      width = 600;
-      height = 600;
-    }
+    
+  ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
+
+  G4int x_origin = fVP.GetWindowAbsoluteLocationHintX(DisplayWidth(dpy, vi -> screen));
+
+  // FIXME,  screen size != window size on MAC, but I don't know have to get the menuBar
+  // size on MAC. L.Garnier 01/2009
+  G4int y_origin = fVP.GetWindowAbsoluteLocationHintY(DisplayHeight(dpy, vi -> screen));
+
+  size_hints->base_width = getWinWidth();
+  size_hints->base_height = getWinHeight();
+  size_hints->x = x_origin;
+  size_hints->y = y_origin;
+  if (fVP.IsWindowSizeHintX () && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    size_hints->flags |= PSize | PPosition;
+  } else if (fVP.IsWindowSizeHintX () && !(fVP.IsWindowLocationHintX () || fVP.IsWindowLocationHintY ())) {
+    size_hints->flags |= PSize;
+  } else if ((!fVP.IsWindowSizeHintX ()) && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
+    size_hints->flags |= PPosition;
   }
-  size_hints->width = width;
-  size_hints->height = height;
-  size_hints->flags |= PSize;
-
-  //  G4int                             WinSize_x;
-  //  G4int                             WinSize_y;
-  WinSize_x = width;
-  WinSize_y = height;
-
   G4cout << "Window name: " << fName << G4endl;
   strncpy (charViewName, fName, 100);
   char *window_name = charViewName;
@@ -275,15 +268,15 @@ void G4OpenGLXViewer::CreateMainWindow () {
   class_hints -> res_name  = NewString("G4OpenGL");
   class_hints -> res_class = NewString("G4OpenGL");
 
-  win = XCreateWindow (dpy, XRootWindow (dpy, vi -> screen), x_origin, 
-                       y_origin, WinSize_x, WinSize_y, 0, vi -> depth,
-                       InputOutput, vi -> visual,  
-                       CWBorderPixel | CWColormap | 
-                       CWEventMask | CWBackingStore,
-                       &swa);
+   win = XCreateWindow (dpy, XRootWindow (dpy, vi -> screen), x_origin, 
+                        y_origin, getWinWidth(), getWinHeight(), 0, vi -> depth,
+                        InputOutput, vi -> visual,  
+                        CWBorderPixel | CWColormap | 
+                        CWEventMask | CWBackingStore,
+                        &swa);
   
-  XSetWMProperties (dpy, win, &windowName, &iconName, 0, 0, 
-                    size_hints, wm_hints, class_hints);
+   XSetWMProperties (dpy, win, &windowName, &iconName, 0, 0, 
+                     size_hints, wm_hints, class_hints);
   
 // request X to Draw window on screen.
   XMapWindow (dpy, win);
@@ -426,210 +419,6 @@ G4OpenGLXViewer::~G4OpenGLXViewer () {
     XFlush (dpy);
   }
 }
-
-void G4OpenGLXViewer::print() {
-  
-  //using namespace std;
-  //cout << "print_col_callback requested with file name: " << print_string << G4endl;
-  
-  if (vectored_ps) {
-
-    G4OpenGLViewer::print();
-
-  } else {
-
-    XVisualInfo* pvi;
-    GLXContext pcx = create_GL_print_context(pvi);
-
-    if (!pcx) {
-      G4cout << "Unable to create print context." << G4endl;
-      return;
-    }
-
-    GLXContext tmp_cx;
-    tmp_cx = cx;
-    cx=pcx;
-    
-    Pixmap pmap = XCreatePixmap (dpy,
-				 XRootWindow (dpy, pvi->screen),
-				 WinSize_x, WinSize_y,
-				 pvi->depth);
-    
-    GLXPixmap glxpmap = glXCreateGLXPixmap (dpy, 
-					    pvi,
-					    pmap);
-    
-    GLXDrawable tmp_win;
-    tmp_win=win;
-    win=glxpmap;
-    
-    glXMakeCurrent (dpy,
-		    win,
-		    cx);
-    
-    glViewport (0, 0, WinSize_x, WinSize_y);
-    
-    ClearView ();
-    SetView ();
-    DrawView ();
-    
-    generateEPS (print_string,
-		 print_colour,
-		 WinSize_x, WinSize_y);
-    
-    win=tmp_win;
-    cx=tmp_cx;
-    
-    glXMakeCurrent (dpy,
-		    win,
-		    cx);
-    
-  }
-
-}
-
-GLubyte* G4OpenGLXViewer::grabPixels (int inColor, unsigned int width, unsigned int height) {
-  
-  GLubyte* buffer;
-  GLint swapbytes, lsbfirst, rowlength;
-  GLint skiprows, skippixels, alignment;
-  GLenum format;
-  int size;
-
-  if (inColor) {
-    format = GL_RGB;
-    size = width*height*3;
-  } else {
-    format = GL_LUMINANCE;
-    size = width*height*1;
-  }
-
-  buffer = new GLubyte[size];
-  if (buffer == NULL)
-    return NULL;
-
-  glGetIntegerv (GL_UNPACK_SWAP_BYTES, &swapbytes);
-  glGetIntegerv (GL_UNPACK_LSB_FIRST, &lsbfirst);
-  glGetIntegerv (GL_UNPACK_ROW_LENGTH, &rowlength);
-
-  glGetIntegerv (GL_UNPACK_SKIP_ROWS, &skiprows);
-  glGetIntegerv (GL_UNPACK_SKIP_PIXELS, &skippixels);
-  glGetIntegerv (GL_UNPACK_ALIGNMENT, &alignment);
-
-  glPixelStorei (GL_UNPACK_SWAP_BYTES, GL_FALSE);
-  glPixelStorei (GL_UNPACK_LSB_FIRST, GL_FALSE);
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
-
-  glPixelStorei (GL_UNPACK_SKIP_ROWS, 0);
-  glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
-  glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-
-  glReadPixels (0, 0, (GLsizei)width, (GLsizei)height, format, GL_UNSIGNED_BYTE, (GLvoid*) buffer);
-
-  glPixelStorei (GL_UNPACK_SWAP_BYTES, swapbytes);
-  glPixelStorei (GL_UNPACK_LSB_FIRST, lsbfirst);
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, rowlength);
-  
-  glPixelStorei (GL_UNPACK_SKIP_ROWS, skiprows);
-  glPixelStorei (GL_UNPACK_SKIP_PIXELS, skippixels);
-  glPixelStorei (GL_UNPACK_ALIGNMENT, alignment);
-  
-  return buffer;
-}
-
-int G4OpenGLXViewer::generateEPS (char* filnam,
-				int inColour,
-				unsigned int width,
-				unsigned int height) {
-
-  FILE* fp;
-  GLubyte* pixels;
-  GLubyte* curpix;
-  int components, pos, i;
-
-  pixels = grabPixels (inColour, width, height);
-
-  if (pixels == NULL)
-    return 1;
-  if (inColour) {
-    components = 3;
-  } else {
-    components = 1;
-  }
-  
-  fp = fopen (filnam, "w");
-  if (fp == NULL) {
-    return 2;
-  }
-  
-  fprintf (fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
-  fprintf (fp, "%%%%Title: %s\n", filnam);
-  fprintf (fp, "%%%%Creator: OpenGL pixmap render output\n");
-  fprintf (fp, "%%%%BoundingBox: 0 0 %d %d\n", width, height);
-  fprintf (fp, "%%%%EndComments\n");
-  fprintf (fp, "gsave\n");
-  fprintf (fp, "/bwproc {\n");
-  fprintf (fp, "    rgbproc\n");
-  fprintf (fp, "    dup length 3 idiv string 0 3 0 \n");
-  fprintf (fp, "    5 -1 roll {\n");
-  fprintf (fp, "    add 2 1 roll 1 sub dup 0 eq\n");
-  fprintf (fp, "    { pop 3 idiv 3 -1 roll dup 4 -1 roll dup\n");
-  fprintf (fp, "       3 1 roll 5 -1 roll } put 1 add 3 0 \n");
-  fprintf (fp, "    { 2 1 roll } ifelse\n");
-  fprintf (fp, "    }forall\n");
-  fprintf (fp, "    pop pop pop\n");
-  fprintf (fp, "} def\n");
-  fprintf (fp, "systemdict /colorimage known not {\n");
-  fprintf (fp, "   /colorimage {\n");
-  fprintf (fp, "       pop\n");
-  fprintf (fp, "       pop\n");
-  fprintf (fp, "       /rgbproc exch def\n");
-  fprintf (fp, "       { bwproc } image\n");
-  fprintf (fp, "   }  def\n");
-  fprintf (fp, "} if\n");
-  fprintf (fp, "/picstr %d string def\n", width * components);
-  fprintf (fp, "%d %d scale\n", width, height);
-  fprintf (fp, "%d %d %d\n", width, height, 8);
-  fprintf (fp, "[%d 0 0 %d 0 0]\n", width, height);
-  fprintf (fp, "{currentfile picstr readhexstring pop}\n");
-  fprintf (fp, "false %d\n", components);
-  fprintf (fp, "colorimage\n");
-  
-  curpix = (GLubyte*) pixels;
-  pos = 0;
-  for (i = width*height*components; i>0; i--) {
-    fprintf (fp, "%02hx ", *(curpix++));
-    if (++pos >= 32) {
-      fprintf (fp, "\n");
-      pos = 0; 
-    }
-  }
-  if (pos)
-    fprintf (fp, "\n");
-
-  fprintf (fp, "grestore\n");
-  fprintf (fp, "showpage\n");
-  delete pixels;
-  fclose (fp);
-  return 0;
-}
-
-GLXContext G4OpenGLXViewer::create_GL_print_context(XVisualInfo*& pvi) {
-  
-  pvi = glXChooseVisual (dpy,
-			 XDefaultScreen (dpy),
-			 snglBuf_RGBA);
-
-  if (!pvi) {
-    pvi = glXChooseVisual (dpy,
-			   XDefaultScreen (dpy),
-			   dblBuf_RGBA);
-  }
-
-  return glXCreateContext (dpy,
-			   pvi,
-			   NULL,
-			   False);
-}
+	
 
 #endif

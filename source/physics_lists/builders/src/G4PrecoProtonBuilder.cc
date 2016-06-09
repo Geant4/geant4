@@ -23,10 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PrecoProtonBuilder.cc,v 1.2 2009/03/31 11:03:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4PrecoProtonBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #include "G4PrecoProtonBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4ProtonInelasticCrossSection.hh"
 
 #include "G4ExcitationHandler.hh"  
 
@@ -52,7 +67,7 @@ Build(G4ProtonInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(&theXSec);  
+  aP->AddDataSet(new G4ProtonInelasticCrossSection);  
 }
 
 // 2002 by J.P. Wellisch

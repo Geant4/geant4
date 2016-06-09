@@ -8,9 +8,9 @@
 #  Hava A Fun!
 # ==================================================================
 """
-# $Id: __init__.py,v 1.19 2008/12/03 07:01:22 kmura Exp $
-__version__ ='9.2.0'
-__date__ = '1/Dec/2008'
+# $Id: __init__.py,v 1.21 2009/11/20 03:36:51 kmura Exp $
+__version__ ='9.3.0'
+__date__ = '1/Dec/2009'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
 __url__ = 'http://www-geant4.kek.jp/projects/Geant4Py/'
 
@@ -214,8 +214,8 @@ def _list_material(self):
             (j+1, elementVec[j].GetName(), elementVec[j].GetSymbol(),
              elementVec[j].GetZ(),
              elementVec[j].GetN(),
-             fractionVec[j]/HEPUnit.perCent,
-             abundanceVec[j]/totNAtoms/HEPUnit.perCent)
+             fractionVec[j]/hepunit.perCent,
+             abundanceVec[j]/totNAtoms/hepunit.perCent)
 
   print " +------------------------------------------------------------------"
 

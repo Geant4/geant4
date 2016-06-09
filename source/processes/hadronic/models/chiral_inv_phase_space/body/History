@@ -3,38 +3,173 @@
        Geant4 - an Object-Oriented Toolkit for Physics Simulation
        ==========================================================
 
-        History file for hadronic/models/chiral_inv_phase_space/interface 
+History file for  hadronic/models/chiral_inv_phase_space/body  directory.
 	
-This file should be used to summarize modifications introduced in the 
-code and to keep track of all tags.
+Summarize all code modifications & keep track of all tags in this file.
 
-     ---------------------------------------------------------------
-     * Please list in reverse chronological order (last date on top)
-     ---------------------------------------------------------------
+****************************************************************************
+*** Geant4 developers can not make changes in this directory or make the ***
+*** History records without permision of M.Kosov: Mikhail.Kossov@cern.ch ***
+****************************************************************************
 
-31-Mar-2008 Dennis Wright               (hadr-chips-body-V09-01-04)
--------------------------------------------------------------------
-- add more parentheses around && within || to satisfy gcc-4.3 compiler
-  files affected:
-    G4QChipolino.cc
-    G4QEnvironment.cc
-    G4QNucleus.cc
-    G4Quasmon.cc
+     -----------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top) *
+     -----------------------------------------------------------------
 
-19-Mar-2008 Dennis Wright               (hadr-chips-body-V09-01-03)
--------------------------------------------------------------------
-- add parentheses around && within || to satisfy gcc-4.3 compiler
-  files affected:
-    G4QChipolino.cc
-    G4QContent.cc
-    G4QEnvironment.cc
-    G4QNucleus.cc
-    G4QPDGCode.cc
-    G4Quasmon.cc
+14-Dec-2009 M.Kosov                           (hadr-chips-body-V09-02-16) 
+-----------------------------------------------------------------------
+Mutual tag: Bug fix in G4QNucleus (crash in QGSC for 400 GeV p)
 
-- add braces and ; for empty while blocks to satisfy gcc-4.3
-  files affected:
-    G4QHadron.cc
+17-Nov-2009 M.Kosov                            (hadr-chips-V09-02-24)
+-----------------------------------------------------------------------
+Mutual tag: Migration of CHIPS-cross_section depenent files to CHIPS-xs_dep
 
-18-Mar-2008 Vladimir Ivanchenko         (hadr-chips-body-V09-01-02)
-- G4QNucleus - fixed compillation warnings at Windows for constructors
+16-Nov-2009 M.Kosov                            (hadr-chips-V09-02-23)
+-----------------------------------------------------------------------
+Mutual tag: Split up of CHIPS-body in three directories -> this
+
+13-Nov-2009 M.Kosov                            (hadr-chips-V09-02-21)
+-----------------------------------------------------------------------
+Mutual tag: G4QDiffractionRatio lost dependence on G4QElasticCrossSection
+
+12-Nov-2009 M.Kosov                            (hadr-chips-V09-02-20)
+-----------------------------------------------------------------------
+Mutual tag: bug fix in G4QDiffractionRatio (tested by Valgrind)
+
+10-Nov-2009 M.Kosov                            (hadr-chips-V09-02-18)
+-----------------------------------------------------------------------
+Mutual tag: Diffraction is added to CHIPS inelastic
+
+5-Nov-2009 M.Kosov                             (hadr-chips-V09-02-17)
+-----------------------------------------------------------------------
+Mutual tag: Bug fix in XS's & migration of G4QNeutronCaptureRatio from
+            body to interface
+
+4-Nov-2009 M.Kosov                             (hadr-chips-V09-02-16)
+-----------------------------------------------------------------------
+Mutual tag: Thanks to Andrea bug fix (skip for Z=0,A=0 residual nucleus)
+            in G4QCollision class
+
+4-Nov-2009 M.Kosov                             (hadr-chips-V09-02-15)
+-----------------------------------------------------------------------
+Mutual tag: Reduction of the CHIPS-body dependency + G4QNucleus bug fix
+
+30-Oct-2009 M.Kosov                             (hadr-chips-V09-02-13)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for new CHIPS hA cross-sections
+- 8 new CHIPS cross-sectopn classes are added + bug is fixed in the CHIPS
+  pA cross_sections + pimA XS class is not fake now, but real
+
+23-Oct-2009 M.Kosov                             (hadr-chips-V09-02-12)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the bug fix + G4QuasiFreeRatio change (needs make clean)
+
+23-Oct-2009 M.Kosov                         (hadr-chips-body-V09-02-15)
+----------------------------------------------------------------------
+In the G4QuasiFreeRatio class a poblic method GetElTotXS is made for
+the G4GGNuclNuclCrossSection, G4GlauberGribovCrossSection, and
+G4HadronNucleonXsc classes of the hadronic/cross_sections directory
+to calculate the CHIPS hN parameterization without tripled duplication.
+But there exist a similar FetchElTot method, which is automatically cashing
+the cross-sections and works faster.
+
+12-Oct-2009 M.Kosov                             (hadr-chips-V09-02-11)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the bug fixes (mostly body)
+
+25-Sep-2009 M.Kosov                         (hadr-chips-body-V09-02-14)
+----------------------------------------------------------------------
+A few more bug fixes for E/M conservation
+
+18-Sep-2009 M.Kosov                             (hadr-chips-V09-02-10)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the heavy fragments in LowEnergy (mostly body)
+
+8-Sep-2009 M.Kosov                              (hadr-chips-V09-02-09)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the hadron+proton improvement (mostly body)
+
+2-Sep-2009 M.Kosov                              (hadr-chips-V09-02-08)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the first prototype of the CHIPS Ion-Ion Inelastic
+
+28-Aug-2009 M.Kosov                              (hadr-chips-V09-02-07)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the Valgrind induced improvement
+
+21-Aug-2009 M.Kosov                              (hadr-chips-V09-02-06)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for added photon- and lepton-nuclear CHIPS inelastic
+
+10-Aug-2009 M.Kosov                         (hadr-chips-body-V09-02-13)
+----------------------------------------------------------------------
+Improved to work for all targets, including Hydrogen
+
+7-Aug-2009 M.Kosov                               (hadr-chips-V09-02-05)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for All-Energies-All-Hadrons pilot tag
+
+5-Aug-2009 M.Kosov                          (hadr-chips-body-V09-02-12)
+----------------------------------------------------------------------
+Bug fix: quasielastic is closed for photons and leptons
+
+5-Aug-2009 M.Kosov                          (hadr-chips-body-V09-02-11)
+-----------------------------------------------------------------------
+Bug fix: noninitialized variabkles in G4QContent class
+
+5-Aug-2009 M.Kosov                               (hadr-chips-V09-02-04)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for All-Energies-Nucleons and -Mesons (only pi+/- & K-)
+
+5-Aug-2009 M.Kosov                               (hadr-chips-V09-02-03)
+-----------------------------------------------------------------------
+Migration of the rest of the XS from interface to body and exclusion of the
+dependency of the G4NucleiPropertiesTable class (absolete by Hisaya)
+
+5-Aug-2009 M.Kosov                              (hadr-chips-body-V09-02-10)
+-----------------------------------------------------------------------
+Necesary line was closed by the debug flag in G4QFragmentation.
+Warning of "leave ASIS" for the Resonance decay is closed in G4Quasmon
+Charge of the electron is corrected in G4QPDGCode.
+
+4-Aug-2009 M.Kosov                              (hadr-chips-body-V09-02-09)
+-----------------------------------------------------------------------
+Fast fix of brackets around && to avoid warnings
+
+31-Jul-2009 M.Kosov                              (hadr-chips-V09-02-02)
+-----------------------------------------------------------------------
+Creation of the beta-version of CHIPS, covering all energies (mutual CHIPS tag)
+
+2-Jul-2009 M.Kosov                              (hadr-chips-body-V09-02-08)
+----------------------------------------------------------------------------
+Everywhere in the CHIPS the internal RndmDir() is replaced by the general
+G4RandomDirection().
+
+30-Jun-2009 M.Kosov                              (hadr-chips-body-V09-02-07)
+----------------------------------------------------------------------------
+Safety correction of the sqrt(neg.val.) in G4QNucleus + internal development
+of the pion production in CHIPS (preliminary, do not influence the other
+applications).
+
+26-May-2009 M.Kosov                              (hadr-chips-body-V09-02-06)
+----------------------------------------------------------------------------
+Safety check of nDelta in the hadronization probability calculations (G4Quasmon)
+to avoid /zero
+
+26-May-2009 M.Kosov                              (hadr-chips-body-V09-02-05)
+----------------------------------------------------------------------------
+In low energy nHe and pHe reactions, when only elastic scattering is possible,
+the inelastic application makes a complain, while it is making the elastic
+scattering (with very low cross-section). *** The complain is closed ***
+
+15-May-2009 M.Kosov                              (hadr-chips-body-V09-02-04)
+----------------------------------------------------------------------------
+For rare cases of the output hadron mass below the GS mass instead of Exception
+in the G4QEnvironment class a fill As Is for the hadron is used with appropriate
+warning. If this case can be reproduced, it should be debugged in future.
+
+29-Apr-2009 M.Kosov                              (hadr-chips-body-V09-02-03)
+----------------------------------------------------------------------------
+The rare situation was Found by Alberto. It is improved in G4QEnvironment.
+When the Hypernucleus can not decay in the residual nucleus and pion, then
+now it is decayed in the residual nucleus and gamma. 

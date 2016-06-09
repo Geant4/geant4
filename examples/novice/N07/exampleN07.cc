@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN07.cc,v 1.11 2008/05/07 10:13:17 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: exampleN07.cc,v 1.12 2009/10/30 15:29:55 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -34,12 +34,15 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+
 #include "ExN07DetectorConstruction.hh"
 #include "ExN07ParallelWorld.hh"
 #include "ExN07PhysicsList.hh"
@@ -87,31 +90,24 @@ int main(int argc,char** argv)
   
  // Get the pointer to the User Interface manager
  //
- G4UImanager* UI = G4UImanager::GetUIpointer();  
+ G4UImanager* UImanager = G4UImanager::GetUIpointer();  
 
  if (argc==1)   // Define UI session for interactive mode
  {
-   G4UIsession* session=0;
-  
-   // G4UIterminal is a (dumb) terminal
-   //
-#ifdef G4UI_USE_TCSH
-   session = new G4UIterminal(new G4UItcsh);      
-#else
-   session = new G4UIterminal();
-#endif    
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
 #ifdef G4VIS_USE
-   UI->ApplyCommand("/control/execute vis.mac");     
+      UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
-   session->SessionStart();
-
-   delete session;
+      ui->SessionStart();
+      delete ui;
+#endif
  }
  else           // Batch mode
  { 
    G4String command = "/control/execute ";
    G4String fileName = argv[1];
-   UI->ApplyCommand(command+fileName);
+   UImanager->ApplyCommand(command+fileName);
  }
 
   // Job termination

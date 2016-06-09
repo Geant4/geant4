@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.hh,v 1.1 2008/11/20 15:41:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorMessenger.hh,v 1.2 2009/04/15 13:26:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Class DetectorMessenger
 //
@@ -57,9 +57,9 @@ class DetectorMessenger: public G4UImessenger
 
   private:
 
-    DetectorConstruction*      theDetector;
-    G4UIdirectory*             theDetectorDir;
-    G4UIcmdWithAString*        theReadCommand;
+    DetectorConstruction      *theDetector;
+    G4UIdirectory             *theDetectorDir;
+    G4UIcmdWithAString        *theReadCommand, *theWriteCommand;
 };
 
 // ----------------------------------------------------------------------------

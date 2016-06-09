@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaLightIonInterface.cc,v 1.10 2007/12/10 16:31:57 gunter Exp $ 
+// $Id: G4InclAblaLightIonInterface.cc,v 1.11 2009/12/04 13:16:57 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -206,24 +206,32 @@ G4HadFinalState* G4InclAblaLightIonInterface::ApplyYourself(const G4HadProjectil
       
       if(bulletType == proton) {
         aParticleDefinition = G4Proton::ProtonDefinition();
-      }
-      if(bulletType == neutron) {
+      } else if(bulletType == neutron) {
         aParticleDefinition = G4Neutron::NeutronDefinition();
-      }
-      if(bulletType == pionPlus) {
+      } else if(bulletType == pionPlus) {
         aParticleDefinition = G4PionPlus::PionPlusDefinition();
-      }
-      if(bulletType == pionZero) {
+      } else if(bulletType == pionZero) {
         aParticleDefinition = G4PionZero::PionZeroDefinition();
-      }
-      if(bulletType == pionMinus) {
+      } else if(bulletType == pionMinus) {
         aParticleDefinition = G4PionMinus::PionMinusDefinition();
+      } else if(bulletType == deuteron) {
+        aParticleDefinition = G4Deuteron::DeuteronDefinition();
+      } else if(bulletType == triton) {
+        aParticleDefinition = G4Triton::TritonDefinition();
+      } else if(bulletType == he3) {
+        aParticleDefinition = G4He3::He3Definition();
+      } else if(bulletType == he4) {
+        aParticleDefinition = G4Alpha::AlphaDefinition();
+      } else { // Particle was not recognized. Probably an unsupported particle was given as input
+	aParticleDefinition = 0;
       }
 
-      cascadeParticle = new G4DynamicParticle();
-      cascadeParticle->SetDefinition(aParticleDefinition);
-      cascadeParticle->Set4Momentum(aTrack.Get4Momentum());
-      theResult.AddSecondary(cascadeParticle);
+      if(aParticleDefinition != 0) {
+	cascadeParticle = new G4DynamicParticle();
+	cascadeParticle->SetDefinition(aParticleDefinition);
+	cascadeParticle->Set4Momentum(aTrack.Get4Momentum());
+	theResult.AddSecondary(cascadeParticle);
+      }
     }
 
     // Convert INCL4 output to Geant4 compatible data structures.

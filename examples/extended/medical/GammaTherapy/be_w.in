@@ -12,7 +12,7 @@
 #
 /testem/phys/addPhysics       emstandard
 #/testem/phys/addPhysics      emstandard_opt2
-#/testem/phys/addPhysics       livermore
+#/testem/phys/addPhysics       emlivermore
 #/testem/phys/addPhysics       elastic
 #/testem/phys/addPhysics       binary
 #/testem/phys/addPhysics       binary_ion

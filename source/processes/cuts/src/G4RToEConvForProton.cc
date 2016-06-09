@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.cc,v 1.3 2006/06/29 19:30:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RToEConvForProton.cc,v 1.6 2009/09/14 07:27:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------
@@ -57,3 +57,66 @@ G4RToEConvForProton::~G4RToEConvForProton()
 { 
 }
 
+
+G4double G4RToEConvForProton::Convert(G4double rangeCut, const G4Material* )
+{
+  // Simple formula
+  //   range = Ekin/(100*keV)*(1*mm);
+  return (rangeCut/(1.0*mm)) * (100.0*keV); 
+}
+
+
+// **********************************************************************
+// ************************* ComputeLoss ********************************
+// **********************************************************************
+G4double G4RToEConvForProton::ComputeLoss(G4double AtomicNumber,
+                                                G4double KineticEnergy) const
+{
+  //  calculate dE/dx
+
+  static G4double Z;  
+  static G4double ionpot, tau0, taum, taul, ca, cba, cc;
+
+  G4double  z2Particle = theParticle->GetPDGCharge()/eplus;
+  z2Particle *=  z2Particle;
+  if (z2Particle < 0.1) return 0.0;
+
+  if( std::fabs(AtomicNumber-Z)>0.1 ){
+    // recalculate constants
+    Z = AtomicNumber;
+    G4double Z13 = std::exp(std::log(Z)/3.);
+    tau0 = 0.1*Z13*MeV/proton_mass_c2;
+    taum = 0.035*Z13*MeV/proton_mass_c2;
+    taul = 2.*MeV/proton_mass_c2;
+    ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z));
+   cc = (taul+1.)*(taul+1.)*std::log(2.*electron_mass_c2*taul*(taul+2.)/ionpot)/(taul*(taul+2.))-1.;
+    cc = 2.*twopi_mc2_rcl2*Z*cc*std::sqrt(taul);
+    ca = cc/((1.-0.5*std::sqrt(tau0/taum))*tau0);
+    cba = -0.5/std::sqrt(taum);
+  }
+
+  G4double tau = KineticEnergy/theParticle->GetPDGMass();
+  G4double dEdx;
+  if ( tau <= tau0 ) {
+    dEdx = ca*(std::sqrt(tau)+cba*tau);
+  } else {
+    if( tau <= taul ) {
+      dEdx = cc/std::sqrt(tau);
+    } else {
+      dEdx = (tau+1.)*(tau+1.)*
+             std::log(2.*electron_mass_c2*tau*(tau+2.)/ionpot)/(tau*(tau+2.))-1.;
+      dEdx = 2.*twopi_mc2_rcl2*Z*dEdx;
+    }
+  }
+  return dEdx*z2Particle ;
+}
+
+
+// **********************************************************************
+// ************************* Reset       ********************************
+// **********************************************************************
+void G4RToEConvForProton::Reset()
+{
+  // do nothing because loss tables and range vectors are not used 
+  return;
+}

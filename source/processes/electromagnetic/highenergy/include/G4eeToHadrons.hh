@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh,v 1.8 2007/05/23 08:50:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eeToHadrons.hh,v 1.9 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -69,14 +69,14 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
   // Print out of the class parameters
-  void PrintInfo();
+  virtual void PrintInfo();
 
   // Set the factor to artificially increase the crossSection (default 1)
   void SetCrossSecFactor(G4double fac);
 
 protected:
 
-  void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
 private:
 
@@ -90,14 +90,6 @@ private:
   G4double                  csFactor;
   G4bool                    isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4eeToHadrons::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Positron::Positron());
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01IonPhysics.hh,v 1.7 2006/06/29 16:31:22 gunter Exp $
+// $Id: A01IonPhysics.hh,v 1.8 2009/11/21 01:00:19 perl Exp $
 // --------------------------------------------------------------
 // 05-Jan-2004 Add G4ionIonisation T. Koi
 //
@@ -50,7 +50,7 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
-#include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 class A01IonPhysics : public G4VPhysicsConstructor
 {

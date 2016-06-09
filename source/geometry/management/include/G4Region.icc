@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.15 2007/04/28 01:48:29 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Region.icc,v 1.16 2009/11/27 16:34:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // class G4Region Inline Implementation file
@@ -246,6 +246,26 @@ inline
 G4FastSimulationManager* G4Region::GetFastSimulationManager() const
 {
   return fFastSimulationManager;
+}
+
+// ********************************************************************
+// GetFieldManager
+// ********************************************************************
+//
+inline 
+G4FieldManager* G4Region::GetFieldManager() const
+{
+  return fFieldManager;
+}
+
+// ********************************************************************
+// SetFieldManager
+// ********************************************************************
+//
+inline
+void G4Region::SetFieldManager(G4FieldManager* fm)
+{
+  fFieldManager = fm;
 }
 
 // ********************************************************************

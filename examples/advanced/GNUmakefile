@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2008/06/23 09:26:07 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2009/11/20 16:17:52 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,10 +10,10 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 SUBDIRS =  gammaray_telescope underground_physics xray_fluorescence xray_telescope
-SUBDIRS += brachytherapy cosmicray_charging hadrontherapy
-SUBDIRS += medical_linac purging_magnet radioprotection human_phantom
+SUBDIRS += brachytherapy hadrontherapy medical_linac
+SUBDIRS += purging_magnet radioprotection human_phantom
 SUBDIRS += air_shower microbeam microdosimetry nanobeam
-SUBDIRS += Tiara Rich composite_calorimeter lAr_calorimeter
+SUBDIRS += Rich composite_calorimeter lAr_calorimeter
 
 .PHONY : all clean clean_libs
 

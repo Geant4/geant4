@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.8 2006/06/29 21:19:50 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.12 2009/11/03 10:21:49 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -39,6 +39,9 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
+#include "G4VSceneHandler.hh"
+#include <Xm/ToggleB.h>
+
 #include "G4Scene.hh"
 
 void G4OpenGLXmViewer::zoom_callback (Widget w, 

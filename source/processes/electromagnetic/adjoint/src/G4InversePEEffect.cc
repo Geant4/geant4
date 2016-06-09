@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4InversePEEffect.cc,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 #include "G4InversePEEffect.hh"
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointPhotoElectricModel.hh"
@@ -30,9 +33,12 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4InversePEEffect::G4InversePEEffect(G4String process_name,G4AdjointPhotoElectricModel* aModel):
-				G4VAdjointInverseScattering(process_name,false)
+				G4VAdjointReverseReaction(process_name,false)
 {theAdjointEMModel = aModel;
- theAdjointEMModel->SetSecondPartOfSameType(false); 
+ theAdjointEMModel->SetSecondPartOfSameType(false);
+ SetIntegralMode(false);
+  
+ 
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //

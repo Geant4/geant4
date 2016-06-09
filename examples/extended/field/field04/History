@@ -1,4 +1,4 @@
-// $Id: History,v 1.12 2008/12/11 20:42:02 gum Exp $
+// $Id: History,v 1.16 2009/11/07 00:45:58 gum Exp $
 // ------------------------------------------------------------------
 
      =========================================================
@@ -15,24 +15,46 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 6th, 2009 Peter Gumplinger - fieldex04-V09-02-03
+- rewrite F04PhysicsList and F04PhysicsListMessenger and
+  use the newly available G4PhysListFactory
+
+October 30th, 2009 John Allison - fieldex04-V09-02-02
+- Introduced G4UIExecutive.
+
+June 1st, 2009 Peter Gumplinger - fieldex04-V09-02-01
+- Introduce '/rndm/autoSeed' command and changed the seeding of the
+  RanecuEngine from time(NULL). Default is autoSeed(false).
+
+May 27th, 2009 Gabriele Cosmo - fieldex04-V09-02-00
+-----------------------------
+- Commented out timing for initial seed to allow for reproducibility
+  or results ...
+
 December 11th, 2008 Peter Gumplinger - fieldex04-V09-01-06
+-----------------------------------
 - bug: now the density must be given with units before the call to
   ConstructNewMaterial
 
 November 25st, 2008 Peter Gumplinger - fieldex04-V09-01-05
+------------------------------------
 - change to AddPhysicsList("emstandard")
 
 November 21st, 2008 Peter Gumplinger - fieldex04-V09-01-04
+------------------------------------
 - changed F04PhysicsList.cc according to 
   examples/extended/hadronic/Hadr01
 
 July 3rd, 2008 Peter Gumplinger - fieldex04-V09-01-03
+-------------------------------
 - fix: setTheEngine BEFORE setTheSeed in field04.cc
 
 June 2th, 2008 Vladimir Ivanchenko - fieldex04-V09-01-02
+----------------------------------
 - removed obsolete G4HadronProcessStore from PhysicsList
 
 Mar 26th, 2008 Gunter Folger - fieldex04-V09-01-01
+----------------------------
 - final fix to avoid error log - Invalid rotation specification
   in F04DetectorConstruction::stringToRotationMatrix
 

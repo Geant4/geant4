@@ -1,4 +1,4 @@
-# $Id: berger.mac,v 1.7 2008/11/02 09:38:44 maire Exp $
+# $Id: berger.mac,v 1.8 2009/09/22 15:18:20 maire Exp $
 #
 # macro for TestEm12 : Dose Point Kernel
 # Seltzer, Appl. Radiat. Isot. 42(1991) page 917
@@ -10,7 +10,7 @@
 /testem/det/setMat G4_WATER
 /testem/det/setRadius  3 cm
 #
-/testem/phys/addPhysics  standard	# em physics
+/testem/phys/addPhysics  local	# em physics
 /testem/phys/setCuts 2 um
 #
 /run/initialize

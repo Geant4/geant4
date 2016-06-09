@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.18 2006/10/16 13:37:17 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SmoothTrajectory.cc,v 1.19 2009/11/12 09:09:56 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // ---------------------------------------------------------------
@@ -59,7 +59,7 @@ G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
 G4SmoothTrajectory::G4SmoothTrajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),
    PDGEncoding( 0 ), PDGCharge(0.0), ParticleName(""),
-   initialMomentum( G4ThreeVector() )
+   initialKineticEnergy( 0. ), initialMomentum( G4ThreeVector() )
 {;}
 
 G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
@@ -70,6 +70,7 @@ G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
    PDGEncoding = fpParticleDefinition->GetPDGEncoding();
    fTrackID = aTrack->GetTrackID();
    fParentID = aTrack->GetParentID();
+   initialKineticEnergy = aTrack->GetKineticEnergy();
    initialMomentum = aTrack->GetMomentum();
    positionRecord = new TrajectoryPointContainer();
    // Following is for the first trajectory point
@@ -87,6 +88,7 @@ G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right):G4VTrajectory
   PDGEncoding = right.PDGEncoding;
   fTrackID = right.fTrackID;
   fParentID = right.fParentID;
+  initialKineticEnergy = right.initialKineticEnergy;
   initialMomentum = right.initialMomentum;
   positionRecord = new TrajectoryPointContainer();
 
@@ -146,13 +148,18 @@ const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
     G4String PDG("PDG");
     (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Physics","","G4int");
 
+    G4String IKE("IKE");
+    (*store)[IKE] = 
+      G4AttDef(IKE, "Initial kinetic energy",
+	       "Physics","G4BestUnit","G4double");
+
     G4String IMom("IMom");
-    (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
+    (*store)[IMom] = G4AttDef(IMom, "Initial momentum",
 			      "Physics","G4BestUnit","G4ThreeVector");
 
     G4String IMag("IMag");
     (*store)[IMag] = G4AttDef
-      (IMag, "Magnitude of momentum of track at start of trajectory",
+      (IMag, "Initial momentum magnitude",
        "Physics","G4BestUnit","G4double");
 
     G4String NTP("NTP");
@@ -180,6 +187,9 @@ std::vector<G4AttValue>* G4SmoothTrajectory::CreateAttValues() const
 
   values->push_back
     (G4AttValue("PDG",G4UIcommand::ConvertToString(PDGEncoding),""));
+
+  values->push_back
+    (G4AttValue("IKE",G4BestUnit(initialKineticEnergy,"Energy"),""));
 
   values->push_back
     (G4AttValue("IMom",G4BestUnit(initialMomentum,"Energy"),""));

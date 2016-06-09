@@ -23,10 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4FTFBinaryNeutronBuilder.cc,v 1.4 2009/03/31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4FTFBinaryNeutronBuilder
+//
+// Author: 2008 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #include "G4FTFBinaryNeutronBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 
 G4FTFBinaryNeutronBuilder::
 G4FTFBinaryNeutronBuilder(G4bool quasiElastic) 
@@ -79,6 +94,7 @@ Build(G4HadronCaptureProcess * )
 void G4FTFBinaryNeutronBuilder::
 Build(G4NeutronInelasticProcess * aP)
 {
+  theModel->SetMinEnergy(theMin);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(&theXSec);  
+  aP->AddDataSet(new G4NeutronInelasticCrossSection);  
 }

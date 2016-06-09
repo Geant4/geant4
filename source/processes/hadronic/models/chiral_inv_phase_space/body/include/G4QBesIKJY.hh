@@ -24,14 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4QBesIKJY.hh,v 1.2 2006/06/29 20:05:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QBesIKJY.hh,v 1.3 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QBesIKJY ----------------
 //             by Mikhail Kossov, Sept 2000.
 //  class header for Bessel I0/I1 and K0/K1 functions in CHIPS Model
 // --------------------------------------------------------------------
-
+// Short description: CHIPS bessel functions for mass and scattering
+// integrals.
+// --------------------------------------------------------------------
 #ifndef G4QBesIKJY_h
 #define G4QBesIKJY_h 1
 

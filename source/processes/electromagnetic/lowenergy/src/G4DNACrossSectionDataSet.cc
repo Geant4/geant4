@@ -25,8 +25,8 @@
 //
 //
 
-// $Id: G4DNACrossSectionDataSet.cc,v 1.7 2007/11/09 18:06:26 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DNACrossSectionDataSet.cc,v 1.11 2009/11/12 10:05:30 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 // Code review by MGP October 2007: removed inheritance from concrete class
@@ -34,8 +34,25 @@
 //
 // History:
 // -----------
-// 30 Jun 2005  RC         Created
-// 14 Oct 2007  MGP        Removed inheritance from concrete class G4ShellEMDataSet
+// 30 Jun 2005  RC           Created
+// 14 Oct 2007  MGP          Removed inheritance from concrete class G4ShellEMDataSet
+//
+// 15 Jul 2009   N.A.Karakatsanis
+//
+//                           - LoadNonLogData method was created to load only the non-logarithmic data from G4EMLOW
+//                             dataset. It is essentially performing the data loading operations as in the past.
+//
+//                           - LoadData method was revised in order to calculate the logarithmic values of the data
+//                             It retrieves the data values from the G4EMLOW data files but, then, calculates the
+//                             respective log values and loads them to seperate data structures. 
+//
+//                           - SetLogEnergiesData method was cretaed to set logarithmic values to G4 data vectors.
+//                             The EM data sets, initialized this way, contain both non-log and log values.
+//                             These initialized data sets can enhance the computing performance of data interpolation
+//                             operations
+//
+//
+// -------------------------------------------------------------------
 
 
 #include "G4DNACrossSectionDataSet.hh"
@@ -65,7 +82,6 @@ G4DNACrossSectionDataSet::~G4DNACrossSectionDataSet()
     delete algorithm;
 }
 
-
 G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 {
   CleanUpComponents();
@@ -83,6 +99,8 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
     }
 
   std::vector<G4DataVector *> columns;
+  std::vector<G4DataVector *> log_columns;
+
   std::stringstream *stream(new std::stringstream);
   char c;
   G4bool comment(false);
@@ -109,7 +127,180 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 		      (*stream) >> value;
        
 		      while (i>=columns.size())
-			columns.push_back(new G4DataVector);
+                        {
+			 columns.push_back(new G4DataVector);
+                         log_columns.push_back(new G4DataVector);
+                        }
+      
+		      columns[i]->push_back(value);
+
+// N. A. Karakatsanis
+// A condition is applied to check if negative or zero values are present in the dataset.
+// If yes, then a near-zero value is applied to allow the computation of the logarithmic value
+// If a value is zero, this simplification is acceptable
+// If a value is negative, then it is not acceptable and the data of the particular column of
+// logarithmic values should not be used by interpolation methods.
+//
+// Therefore, G4LogLogInterpolation and G4LinLogLogInterpolation should not be used if negative values are present.
+// Instead, G4LinInterpolation is safe in every case
+// SemiLogInterpolation is safe only if the energy columns are non-negative
+// G4LinLogInterpolation is safe only if the cross section data columns are non-negative
+
+                      if (value <=0.) value = 1e-300;
+                      log_columns[i]->push_back(std::log10(value));
+       
+		      i++;
+		    }
+      
+		  delete stream;
+		  stream=new std::stringstream;
+		}
+     
+	      first=true;
+	      comment=false;
+	      space=true;
+	      break;
+     
+	    case '#':
+	      comment=true;
+	      break;
+     
+	    case '\t':
+	      c=' ';
+	    case ' ':
+	      if (space)
+		break;
+	    default:
+	      if (comment)
+		break;
+     
+	      if (c==' ')
+		space=true;
+	      else
+		{
+		  if (space && (!first))
+		    (*stream) << ' ';
+      
+		  first=false;
+		  (*stream) << c;
+		  space=false;
+		}
+	    }
+	}
+    }
+  catch(const std::ios::failure &e)
+    {
+      // some implementations of STL could throw a "failture" exception
+      // when read wants read characters after end of file
+    }
+ 
+  delete stream;
+ 
+  std::vector<G4DataVector *>::size_type maxI(columns.size());
+ 
+  if (maxI<2)
+    {
+      G4String message("G4DNACrossSectionDataSet::LoadData - data file \"");
+      message+=fullFileName;
+      message+="\" should have at least two columns";
+      G4Exception(message);
+      return false;
+    }
+ 
+  std::vector<G4DataVector*>::size_type i(1);
+  while (i<maxI)
+    {
+      G4DataVector::size_type maxJ(columns[i]->size());
+
+      if (maxJ!=columns[0]->size())
+	{
+	  G4String message("G4DNACrossSectionDataSet::LoadData - data file \"");
+	  message+=fullFileName;
+	  message+="\" has lines with a different number of columns";
+	  G4Exception(message);
+	  return false;
+	}
+
+      G4DataVector::size_type j(0);
+
+      G4DataVector *argEnergies=new G4DataVector;
+      G4DataVector *argData=new G4DataVector;
+      G4DataVector *argLogEnergies=new G4DataVector;
+      G4DataVector *argLogData=new G4DataVector;
+
+      while(j<maxJ)
+	{
+	  argEnergies->push_back(columns[0]->operator[] (j)*GetUnitEnergies());
+	  argData->push_back(columns[i]->operator[] (j)*GetUnitData());
+	  argLogEnergies->push_back(log_columns[0]->operator[] (j) + std::log10(GetUnitEnergies()));
+	  argLogData->push_back(log_columns[i]->operator[] (j) + std::log10(GetUnitData()));
+	  j++;
+	}
+
+      AddComponent(new G4EMDataSet(i-1, argEnergies, argData, argLogEnergies, argLogData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
+  
+      i++;
+    }
+
+  i=maxI;
+  while (i>0)
+    {
+      i--;
+      delete columns[i];
+      delete log_columns[i];
+    }
+
+  return true;
+}
+
+
+G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
+{
+  CleanUpComponents();
+
+  G4String fullFileName(FullFileName(argFileName));
+  std::ifstream in(fullFileName, std::ifstream::binary|std::ifstream::in);
+
+  if (!in.is_open())
+    {
+      G4String message("G4DNACrossSectionDataSet::LoadData - data file \"");
+      message+=fullFileName;
+      message+="\" not found";
+      G4Exception(message);
+      return false;
+    }
+
+  std::vector<G4DataVector *> columns;
+
+  std::stringstream *stream(new std::stringstream);
+  char c;
+  G4bool comment(false);
+  G4bool space(true);
+  G4bool first(true);
+
+  try
+    {
+      while (!in.eof())
+	{
+	  in.get(c);
+   
+	  switch (c)
+	    {
+	    case '\r':
+	    case '\n':
+	      if (!first)
+		{
+		  unsigned long i(0);
+		  G4double value;
+      
+		  while (!stream->eof())
+		    {
+		      (*stream) >> value;
+       
+		      while (i>=columns.size())
+                        {
+			 columns.push_back(new G4DataVector);
+                        }
       
 		      columns[i]->push_back(value);
        
@@ -186,6 +377,7 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 	}
 
       G4DataVector::size_type j(0);
+
       G4DataVector *argEnergies=new G4DataVector;
       G4DataVector *argData=new G4DataVector;
 
@@ -195,7 +387,7 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 	  argData->push_back(columns[i]->operator[] (j)*GetUnitData());
 	  j++;
 	}
-  
+
       AddComponent(new G4EMDataSet(i-1, argEnergies, argData, GetAlgorithm()->Clone(), GetUnitEnergies(), GetUnitData()));
   
       i++;
@@ -210,7 +402,6 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 
   return true;
 }
-
 
 
 G4bool G4DNACrossSectionDataSet::SaveData(const G4String & argFileName) const
@@ -287,7 +478,7 @@ G4String G4DNACrossSectionDataSet::FullFileName(const G4String& argFileName) con
   
   std::ostringstream fullFileName;
  
-  fullFileName << path << '/' << argFileName << ".dat";
+  fullFileName << path << "/" << argFileName << ".dat";
                       
   return G4String(fullFileName.str().c_str());
 }
@@ -343,6 +534,27 @@ void G4DNACrossSectionDataSet::SetEnergiesData(G4DataVector* argEnergies,
 
   std::ostringstream message;
   message << "G4DNACrossSectionDataSet::SetEnergiesData - component " << argComponentId << " not found";
+ 
+  G4Exception(message.str().c_str());
+}
+
+
+void G4DNACrossSectionDataSet::SetLogEnergiesData(G4DataVector* argEnergies, 
+					 G4DataVector* argData,
+                                         G4DataVector* argLogEnergies,
+                                         G4DataVector* argLogData, 
+					 G4int argComponentId)
+{
+  G4VEMDataSet * component(components[argComponentId]);
+ 
+  if (component)
+    {
+      component->SetLogEnergiesData(argEnergies, argData, argLogEnergies, argLogData, 0);
+      return;
+    }
+
+  std::ostringstream message;
+  message << "G4DNACrossSectionDataSet::SetLogEnergiesData - component " << argComponentId << " not found";
  
   G4Exception(message.str().c_str());
 }

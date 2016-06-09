@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.cc,v 1.11 2006/06/29 19:07:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VMarker.cc,v 1.12 2009/02/24 10:58:04 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 
@@ -85,7 +85,15 @@ std::ostream& operator << (std::ostream& os, const G4VMarker& marker) {
   return os;
 }
 
-const G4String& G4VMarker::GetInfo() const { return fInfo ;}
+G4VMarker::SizeType G4VMarker::GetSizeType () const {
+  SizeType type = none;
+  if (fWorldSize) type = world;
+  else if (fScreenSize) type = screen;
+  return type;
+}
 
-void G4VMarker::SetInfo( const G4String& info ){ fInfo = info ;}
-
+void G4VMarker::SetSize (SizeType sizeType, G4double size) {
+  fWorldSize = fScreenSize = 0.;
+  if (sizeType == world) fWorldSize = size;
+  else if (sizeType == screen) fScreenSize = size;
+}

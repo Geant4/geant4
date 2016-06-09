@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSDoseDeposit.cc,v 1.1 2007/07/11 01:31:02 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSDoseDeposit.cc,v 1.2 2008/12/28 20:32:00 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // G4PSDoseDeposit
 #include "G4PSDoseDeposit.hh"
 #include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -52,10 +54,24 @@ G4bool G4PSDoseDeposit::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   if ( edep == 0. ) return FALSE;
-  G4double volume  = aStep->GetPreStepPoint()->GetPhysicalVolume()
-                     ->GetLogicalVolume()->GetSolid()->GetCubicVolume();
+
+  G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid* solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
+                ->GetReplicaNumber(indexDepth);
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
+  }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+
   G4double density = aStep->GetTrack()->GetMaterial()->GetDensity();
-  G4double dose    = edep / ( density * volume );
+  G4double dose    = edep / ( density * (solid->GetCubicVolume()) );
   dose *= aStep->GetPreStepPoint()->GetWeight(); 
   G4int  index = GetIndex(aStep);
   EvtMap->add(index,dose);  

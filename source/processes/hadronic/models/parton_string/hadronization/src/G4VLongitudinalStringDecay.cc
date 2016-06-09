@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.13 2008/06/23 08:35:55 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.18 2009/08/03 13:21:25 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -70,7 +70,6 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    ClusterLoopInterrupt   =  500;
 
 // Changable Parameters below.
-   
    SigmaQT = 0.5 * GeV;
    
    StrangeSuppress  = 0.44;    //  27 % strange quarks produced, ie. u:d:s=1:1:0.27
@@ -484,9 +483,16 @@ G4VLongitudinalStringDecay::pDefPair G4VLongitudinalStringDecay::CreatePartonPai
 //    return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
 //    }
 
-G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt()
+G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt(G4double ptMax)
    {
-   G4double Pt = -std::log(G4UniformRand());
+   G4double Pt;
+   if ( ptMax < 0 ) {
+      // sample full gaussian
+      Pt = -std::log(G4UniformRand());
+   } else {
+      // sample in limited range
+      Pt = -std::log(CLHEP::RandFlat::shoot(std::exp(-sqr(ptMax)/sqr(SigmaQT)), 1.));
+   }
    Pt = SigmaQT * std::sqrt(Pt);
    G4double phi = 2.*pi*G4UniformRand();
    return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
@@ -497,11 +503,12 @@ G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt()
 void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitialStringMass, G4KineticTrackVector* Hadrons)
    {
 
-   // `yo-yo` formation time
+//   `yo-yo` formation time
 //   const G4double kappa = 1.0 * GeV/fermi/4.;      // Uzhi String tension 1.06.08
      G4double kappa = GetStringTensionParameter();
 //G4cout<<"Kappa "<<kappa<<G4endl;                   // Uzhi 20.06.08
 //G4int Uzhi; G4cin>>Uzhi;                           // Uzhi 20.06.08
+//G4cout<<"Number of hadrons "<<Hadrons->size()<<G4endl; // Vova
    for(size_t c1 = 0; c1 < Hadrons->size(); c1++)
       {
       G4double SumPz = 0; 
@@ -513,9 +520,26 @@ void G4VLongitudinalStringDecay::CalculateHadronTimePosition(G4double theInitial
          } 
       G4double HadronE  = Hadrons->operator[](c1)->Get4Momentum().e();
       G4double HadronPz = Hadrons->operator[](c1)->Get4Momentum().pz();
-      Hadrons->operator[](c1)->SetFormationTime((theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa));
-      G4ThreeVector aPosition(0, 0,     (theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa));
+      Hadrons->operator[](c1)->SetFormationTime(
+(theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa)/c_light); //Uzhi1.07.09c_light
+
+      G4ThreeVector aPosition(0, 0,     
+(theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa));
       Hadrons->operator[](c1)->SetPosition(aPosition);
+
+/*
+G4cout<<"kappa "<<kappa<<G4endl;
+G4cout<<c1<<" Partic time, position Old "<<
+(theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa)<<' '<<
+(theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa)<<G4endl;
+
+G4cout<<c1<<" Partic time, position New "<<
+(theInitialStringMass - 2.*SumPz + HadronE - HadronPz)/(2.*kappa)/c_light<<' '<<
+(theInitialStringMass - 2.*SumE  - HadronE + HadronPz)/(2.*kappa)<<G4endl;
+
+G4cout<<"fermi "<<fermi<<" 1/fermi "<<1./fermi<<' '<<"1*fermi/c "<<1.*fermi/c_light<<G4endl;
+G4int Uzhi; G4cin>>Uzhi;                           // Uzhi 20.06.08
+*/
       } 
    }
 

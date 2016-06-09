@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2007/03/30 15:25:53 gunter Exp $
+# $Id: GNUmakefile,v 1.4 2009/11/16 19:27:24 mkossov Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -23,13 +23,13 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
-	    -I$(G4BASE)/processes/hadronic/models/de_excitation/include \
-	    -I$(G4BASE)/processes/hadronic/models/management/include \
-	    -I$(G4BASE)/processes/hadronic/models/util/include \
-	    -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
-	    -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/include \
-	    -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
-	    -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
+	      -I$(G4BASE)/processes/hadronic/models/de_excitation/include \
+	      -I$(G4BASE)/processes/hadronic/models/management/include \
+	      -I$(G4BASE)/processes/hadronic/models/util/include \
+	      -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
+	      -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/include \
+	      -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
+	      -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

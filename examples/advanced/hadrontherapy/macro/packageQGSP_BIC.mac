@@ -4,34 +4,52 @@
 # ============= 
 #
 #  Geant4 Physics List: 
-#  
+#
 #   - QGSP_BIC 3.3
 #
 ##############################################################################
 
-
-####################
-# VERBOSITY LEVELS #
-####################
-
+#########################
+# Set of the verboses 
+#
 /control/verbose 1
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
 
+##########################
+# Set of the physic models
+#
+/physic/addPackage QGSP_BIC
 
-###########
-# PHYSICS #
-###########
-
-/physics/addPackage QGSP_BIC
-
-
-##############################
-# BEAM LINE SETTINGS AND RUN #
-##############################
-
+##########################
+# Initialisation procedure
+#
 /run/initialize
+
+##########################
+# Visualisation 
+#
+# Comment the rows below to
+# swich off the visualisation
+#
+#/vis/scene/create
+#/vis/open OGLIX
+#/vis/viewer/flush
+#/vis/viewer/set/viewpointThetaPhi 30 140 deg
+#/vis/viewer/zoom 1
+#/vis/viewer/pan -10  0 cm
+#/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
+#/vis/viewer/update
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+#
+/physic/setCuts 0.01 mm
+/Step/waterPhantomStepMax 0.01 mm 
+
 
 ###  IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
 ###  THE FOLLOWIG PARAMETERS
@@ -40,7 +58,15 @@
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 
-/run/beamOn 200
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle proton
+/beam/energy/meanEnergy 62 MeV
+/beam/energy/sigmaEnergy 400 keV
+/beam/position/Xposition -2700 mm
 
 
-
+/run/beamOn 20000

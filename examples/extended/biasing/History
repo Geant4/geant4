@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2007/06/22 13:20:55 ahoward Exp $
+$Id: History,v 1.37 2009/11/20 17:48:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 20, 2009  L. Desorgher - exbiasing-V09-02-00
+- Added new example ReverseMC01 demonstrating the Reverse MonteCarlo technique.
 
 June 22, 2007  A. Howard - exbiasing-V08-03-02
 - Cleaned up B01 and B02 code to be more example-like for release

@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2008/12/04 08:24:07 gcosmo Exp $
+$Id: History,v 1.6 2009/04/24 15:47:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 24th, 2009  Gabriele Cosmo - G02-V09-02-02
+- Added missing inclusion of headers after cleanup.
+
+February 5th, 2009  Gabriele Cosmo - G02-V09-02-01
+- Guarded usage of G4UITCSH with G4UI_USE_TCSH flag, to allow for compilation
+  on Windows.
+- Added visualization properties for world volume in DetectorConstruction to
+  avoid run-time warning.
+
+January 23rd, 2009  Gabriele Cosmo - G02-V09-02-00
+- Corrected loading of default geometry with assembly, resolving some
+  overlaps introduced by mistake.
 
 December 4th, 2008  Gabriele Cosmo - G02-V09-01-02
 - Updated GDML file sample to point to new GDML schema location.

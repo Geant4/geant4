@@ -55,7 +55,9 @@ class G4NuclearFermiDensity : public G4VNuclearDensity
     
     G4double GetDeriv(const G4ThreeVector & aPosition) const
     {
-      return -std::exp((aPosition.mag()-theR)/a) * sqr(GetDensity(aPosition)) / (a*Getrho0());
+      G4double currentR=aPosition.mag();
+      if (currentR > 40*theR  ) {return 0;}
+      else return -std::exp((currentR-theR)/a) * sqr(GetDensity(aPosition)) / (a*Getrho0());
     }   
    
   private:

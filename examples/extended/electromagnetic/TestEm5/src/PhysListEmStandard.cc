@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.23 2008/11/16 18:51:42 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysListEmStandard.cc,v 1.24 2009/11/15 22:10:03 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -38,21 +38,24 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4hMultipleScattering.hh"
-
+#include "G4UrbanMscModel93.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+#include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 #include "G4hBremsstrahlung.hh"
 #include "G4hPairProduction.hh"
 
 #include "G4ionIonisation.hh"
+#include "G4IonParametrisedLossModel.hh"
+#include "G4NuclearStopping.hh"
 
 #include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
@@ -89,13 +92,17 @@ void PhysListEmStandard::ConstructProcess()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
+      pmanager->AddProcess(msc,                       -1, 1, 1);      
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
 	    
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4eMultipleScattering, -1, 1, 1);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->AddEmModel(0, new G4UrbanMscModel93());
+      pmanager->AddProcess(msc,                       -1, 1, 1);            
       pmanager->AddProcess(new G4eIonisation,         -1, 2, 2);
       pmanager->AddProcess(new G4eBremsstrahlung,     -1, 3, 3);
       pmanager->AddProcess(new G4eplusAnnihilation,    0,-1, 4);
@@ -103,10 +110,10 @@ void PhysListEmStandard::ConstructProcess()
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
+      pmanager->AddProcess(new G4MuMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,         -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,     -1, 3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,     -1, 4, 4);
              
     } else if( particleName == "proton" ||
                particleName == "pi-" ||
@@ -118,12 +125,20 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3" || 
-	       particleName == "GenericIon" ) {
-      //Ions 
+	       particleName == "He3"    ) {
+      //alpha 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
-
+      pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);
+            
+    } else if( particleName == "GenericIon" ) {
+      //Ions 
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+      pmanager->AddProcess(ionIoni,                   -1, 2, 2);      
+      pmanager->AddProcess(new G4NuclearStopping,     -1, 3,-1);      
+      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {

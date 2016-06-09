@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AdjointInterpolator.cc,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 #include "G4AdjointCSMatrix.hh"
 #include "G4AdjointInterpolator.hh"
 
@@ -60,7 +63,7 @@ G4AdjointInterpolator::~G4AdjointInterpolator()
 //
 G4double G4AdjointInterpolator::LinearInterpolation(G4double& x,G4double& x1,G4double& x2,G4double& y1,G4double& y2)
 { G4double res = y1+ (x-x1)*(y2-y1)/(x2-x1);
-  //G4cout<<"Linear "<<res<<std::endl;
+  //G4cout<<"Linear "<<res<<G4endl;
   return res;	
 }
 ///////////////////////////////////////////////////////
@@ -68,10 +71,10 @@ G4double G4AdjointInterpolator::LinearInterpolation(G4double& x,G4double& x1,G4d
 G4double G4AdjointInterpolator::LogarithmicInterpolation(G4double& x,G4double& x1,G4double& x2,G4double& y1,G4double& y2)
 { if (y1<=0 || y2<=0 || x1<=0) return LinearInterpolation(x,x1,x2,y1,y2);
   G4double B=std::log(y2/y1)/std::log(x2/x1);
-  //G4cout<<"x1,x2,y1,y2 "<<x1<<'\t'<<x2<<'\t'<<y1<<'\t'<<y2<<'\t'<<std::endl;
+  //G4cout<<"x1,x2,y1,y2 "<<x1<<'\t'<<x2<<'\t'<<y1<<'\t'<<y2<<'\t'<<G4endl;
   G4double A=y1/std::pow(x1,B);
   G4double res=A*std::pow(x,B);
- // G4cout<<"Log "<<res<<std::endl;
+ // G4cout<<"Log "<<res<<G4endl;
   return res;
 }
 ///////////////////////////////////////////////////////
@@ -97,15 +100,15 @@ G4double G4AdjointInterpolator::Interpolation(G4double& x,G4double& x1,G4double&
   	return ExponentialInterpolation(x,x1,x2,y1,y2);
   }
   else {
-  	//G4cout<<"The interpolation method that you invoked does not exist!"<<std::endl; 
+  	//G4cout<<"The interpolation method that you invoked does not exist!"<<G4endl; 
 	return -1111111111.;
   }
 }
 ///////////////////////////////////////////////////////
 //
-size_t  G4AdjointInterpolator::FindPosition(G4double& x,std::vector<double>& x_vec,size_t , size_t ) //only valid if x_vec is monotically increasing
+size_t  G4AdjointInterpolator::FindPosition(G4double& x,std::vector<G4double>& x_vec,size_t , size_t ) //only valid if x_vec is monotically increasing
 {  //most rapid nethod could be used probably
-   //It is important to put std::vector<double>& such that the vector itself is used and not a copy
+   //It is important to put std::vector<G4double>& such that the vector itself is used and not a copy
   
   
   size_t ndim = x_vec.size();
@@ -148,10 +151,10 @@ size_t  G4AdjointInterpolator::FindPosition(G4double& x,std::vector<double>& x_v
 
 ///////////////////////////////////////////////////////
 //
-size_t  G4AdjointInterpolator::FindPositionForLogVector(G4double& log_x,std::vector<double>& log_x_vec) //only valid if x_vec is monotically increasing
+size_t  G4AdjointInterpolator::FindPositionForLogVector(G4double& log_x,std::vector<G4double>& log_x_vec) //only valid if x_vec is monotically increasing
 {  //most rapid nethod could be used probably
-   //It is important to put std::vector<double>& such that the vector itself is used and not a copy
-  
+   //It is important to put std::vector<G4double>& such that the vector itself is used and not a copy
+  return FindPosition(log_x, log_x_vec);
   if (log_x_vec.size()>3){ 
   	size_t ind=0;
   	G4double log_x1=log_x_vec[1];
@@ -169,17 +172,17 @@ size_t  G4AdjointInterpolator::FindPositionForLogVector(G4double& log_x,std::vec
 }
 ///////////////////////////////////////////////////////
 //
-G4double G4AdjointInterpolator::Interpolate(G4double& x,std::vector<double>& x_vec,std::vector<double>& y_vec,G4String InterPolMethod)
+G4double G4AdjointInterpolator::Interpolate(G4double& x,std::vector<G4double>& x_vec,std::vector<G4double>& y_vec,G4String InterPolMethod)
 { size_t i=FindPosition(x,x_vec);
-  //G4cout<<i<<std::endl;
-  //G4cout<<x<<std::endl;
-  //G4cout<<x_vec[i]<<std::endl; 
+  //G4cout<<i<<G4endl;
+  //G4cout<<x<<G4endl;
+  //G4cout<<x_vec[i]<<G4endl; 
   return Interpolation(	x,x_vec[i],x_vec[i+1],y_vec[i],y_vec[i+1],InterPolMethod);
 }
 
 ///////////////////////////////////////////////////////
 //
-G4double G4AdjointInterpolator::InterpolateWithIndexVector(G4double& x,std::vector<double>& x_vec,std::vector<double>& y_vec,
+G4double G4AdjointInterpolator::InterpolateWithIndexVector(G4double& x,std::vector<G4double>& x_vec,std::vector<G4double>& y_vec,
 					    std::vector<size_t>& index_vec,G4double x0, G4double dx) //only linear interpolation possible
 { size_t ind=0;
   if (x>x0) ind=int((x-x0)/dx);
@@ -201,16 +204,16 @@ G4double G4AdjointInterpolator::InterpolateWithIndexVector(G4double& x,std::vect
 
 ///////////////////////////////////////////////////////
 //
-G4double G4AdjointInterpolator::InterpolateForLogVector(G4double& log_x,std::vector<double>& log_x_vec,std::vector<double>& log_y_vec)
+G4double G4AdjointInterpolator::InterpolateForLogVector(G4double& log_x,std::vector<G4double>& log_x_vec,std::vector<G4double>& log_y_vec)
 { //size_t i=0;
   size_t i=FindPositionForLogVector(log_x,log_x_vec);
-  /*G4cout<<"In interpolate "<<std::endl;
-  G4cout<<i<<std::endl;
-  G4cout<<log_x<<std::endl;
-  G4cout<<log_x_vec[i]<<std::endl;
-  G4cout<<log_x_vec[i+1]<<std::endl;
-  G4cout<<log_y_vec[i]<<std::endl;
-  G4cout<<log_y_vec[i+1]<<std::endl;*/
+  /*G4cout<<"In interpolate "<<G4endl;
+  G4cout<<i<<G4endl;
+  G4cout<<log_x<<G4endl;
+  G4cout<<log_x_vec[i]<<G4endl;
+  G4cout<<log_x_vec[i+1]<<G4endl;
+  G4cout<<log_y_vec[i]<<G4endl;
+  G4cout<<log_y_vec[i+1]<<G4endl;*/
   
   G4double log_y=LinearInterpolation(log_x,log_x_vec[i],log_x_vec[i+1],log_y_vec[i],log_y_vec[i+1]);
   return log_y; 

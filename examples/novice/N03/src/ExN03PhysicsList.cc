@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03PhysicsList.cc,v 1.24 2008/10/31 08:40:41 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExN03PhysicsList.cc,v 1.26 2009/11/15 14:48:40 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 
@@ -142,16 +142,16 @@ void ExN03PhysicsList::ConstructProcess()
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4hMultipleScattering.hh"
-
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 
+#include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 #include "G4hBremsstrahlung.hh"
 #include "G4hPairProduction.hh"
@@ -190,7 +190,7 @@ void ExN03PhysicsList::ConstructEM()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
+      pmanager->AddProcess(new G4MuMultipleScattering,-1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1, 3, 3);
       pmanager->AddProcess(new G4MuPairProduction,   -1, 4, 4);
@@ -205,11 +205,15 @@ void ExN03PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3" || 
-	       particleName == "GenericIon" ) {
-      //Ions 
+	       particleName == "He3" )     {
+      //alpha 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
+     
+    } else if( particleName == "GenericIon" ) { 
+      //Ions 
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);     
       
       } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
@@ -257,6 +261,7 @@ void ExN03PhysicsList::SetCuts()
   SetCutValue(defaultCutValue, "gamma");
   SetCutValue(defaultCutValue, "e-");
   SetCutValue(defaultCutValue, "e+");
+  SetCutValue(defaultCutValue, "proton");
 
   if (verboseLevel>0) DumpCutValuesTable();
 }

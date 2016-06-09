@@ -1,4 +1,4 @@
-$Id: History,v 1.424 2008/11/21 22:03:51 perl Exp $
+$Id: History,v 1.460 2009/11/23 05:56:37 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,189 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+22nd November 2009  Joseph Perl (vis-V09-02-12)
+- vis-HepRep-V09-02-03
+  o Changed messenger to a singleton.
+  o Added messenger commands to HepRepFile.
+  o Render G4Tubs as polygons if G4Tubs is not at a standard angle.
+
+22nd November 2009  John Allison
+- visman-V09-02-08: /vis/scene/add/trajectories rich:
+  o Added G4RichTrajectoryPoint().GetAttDefs() to informational.
+
+18th November 2009  Gabriele Cosmo
+- visexternal-V09-02-06:
+  o Added GLOBLIBS dependencies.
+  o Re-instated fix to gl2ps.cc (always #define GL2PS_HAVE_ZLIB).
+
+17th November 2009  John Allison  (vis-V09-02-11)
+- visman-V09-02-07:
+  o Many small bug fixes.
+  o Enhanced functionality for gMocren driver:
+    . Introduced the concept of end-of-run model.
+- opengl-V09-02-10: Fixes build problem with gl2ps on Windows.
+- openinventor-V09-02-03: Fixes build problem with gl2ps on Windows.
+- Tagged for vis tag.
+- visexternal-V09-02-05:
+  o gl2ps: Added dependency on zlib if G4LIB_BUILD_ZLIB is set.
+
+17th November 2009  Laurent Garnier
+- Allow arbitrary viewer deletion (fixes crash)
+
+17th November 2009  Gabriele Cosmo
+- GNUmakefile: Added SUBLIBS += G4gl2ps for OPENGL and OI.
+
+15th November 2009  John Allison
+- raytracer-V09-02-02: Formal tag to record fixing of bugzilla Problem 1072.
+
+6th November 2009  John Allison
+- vistest-V09-02-01: test19.cc: Use G4UIExecutive.
+
+3rd November 2009  John Allison  (vis-V09-02-10, greps-V09-02-03, digits_hits-V09-02-02)
+- gMocren-V09-02-01:
+  o Entrust AddEndOfEventModel to /vis/scene/add/psHits or hits.
+  o Fix compiler warnings.
+- opengl-V09-02-09: Fix compilation problems and protect Qt3.
+
+30th October 2009  John Allison
+- visman-V09-02-06: Added /vis/scene/add/psHits.
+
+23rd October 2009  John Allison  (vis-V09-02-09, greps-V09-02-02, digits_hits-V09-02-02)
+- visman-V09-02-05: Implemented default behaviour in
+  G4VSceneHandler::AddCompound (const G4THitsMap<G4double>&).
+
+22nd October 2009  John Allison  (vis-V09-02-08, greps-V09-02-02, digits_hits-V09-02-02)
+- modeling-V09-02-05: Added G4PSHitsModel for gMocren driver.
+- gMocren-V09-02-00: G4PSHitsModel moved to modelling.
+
+21st October 2009  John Allison  (vis-V09-02-07 coworks greps-V09-02-02)
+- greps-V09-02-02 adds new pure virtual function,
+  AddCompound (const G4THitsMap<G4double>&).  The following tags
+  accomodate:
+  o modeling-V09-02-04
+  o visman-V09-02-04
+  o DAWN-V09-02-00
+  o vis-HepRep-V09-02-02
+  o opengl-V09-02-08
+  o raytracer-V09-02-01
+  o VRML-V09-02-01
+  o visXXX-V09-02-00
+
+15st October 2009 Laurent Garnier
+ - G4OpenGLViewer.cc : Fix a problem with printing.
+
+13st October 2009 Laurent Garnier
+ - G4OpenGLQtViewer.cc/G4OpenGLStoreQtViewer.cc : Fix problems with 
+   mac OS X 10.6
+
+10th October 2009 Joseph Perl (vis-V09-02-06)
+- new global tag for vis, in preparation for  addition of gMocren file driver
+
+10th October 2009  John Allison
+- modeling-V09-02-03: Added G4PhysicalVolumeModelTouchable.  Used in
+  ComputeMaterial.  Effective for nested parameterisations.
+
+29th September 2009  John Allison  (allison20090929)
+- modeling-V09-02-02: Added warning if logical volume not defined.
+- visman-V09-02-03:
+  o Allow refresh in GeomClosed as well as Idle state.
+  o Fixed uninitialised pointers.
+  o G4VisManager.cc: Considerable tidy up.
+- opengl-V09-02-07:  Tagged work by Laurent Garnier:
+  o G4OpenGLXmViewer : Fix a wrong initialization introduce by the 
+    new way of handling window size hints (January 2009)
+  o G4OpenGLQtViewer : Ensure the GL frame size will be correct
+    by setting a 0 size margin around 
+  o G4OpenGLStoredQtViewer : Remove picking to true at initialisation
+- openinventor-V09-02-02:  Tagged work by Laurent Garnier:
+  o G4OpenInventorXt/WinViewer: Fix a wrong initialization introduce by the 
+    new way of handling window size hints (January 2009)
+  o Remove Geant4_gl2ps.h gl2ps.cc gl2ps.h which were copied in external/gl2ps
+    in february but forgot to remove them from OpenInventor
+- vistest-V09-02-00: Changed main program, test19.cc, to use G4UIExecutive.
+- VRML-V09-02-00: Tagged change of disclaimer on file headings (made long ago).
+
+16 September 2009  John Allison
+- raytracer-V09-02-00: Cosmetic adjustments and tagging.
+
+19 August 2009 Laurent Garnier
+ - RayTracer : Fix an bad use of fVP parameters [bugzilla Problem 1072]
+
+18 May 2009, Joseph Perl (vis-V09-02-05)
+- opengl-V09-02-04: add missing header to G4OpenGLViewerMessenger.hh
+
+15 May 2009, Joseph Perl (vis-V09-02-04)
+- opengl-V09-02-04: Improvements to GL and Qt, printing, redraw logic,
+  debug messages and fixes for compiler warnings
+- visman-V09-02-02:Added /vis/viewer/set/targetPoint,
+  improved end of run event keeping information
+- vis-HepRep-V09-02-00:resolve compilation errors reported by gcc-4.4.0
+
+14th May 2009  Laurent Garnier
+ - opengl-V09-02-04 Added /vis/ogl/set/printSize and /vis/ogl/set/printFilename
+
+13th May 2009  John Allison
+- visman-V09-02-02: Added /vis/viewer/set/targetPoint and minor
+  wording improvements.
+
+6 May 2009, Laurent Garnier
+ - G4OpenGLQtViewer.cc: Fix compilation warning and error with gcc4.4
+
+29 April 2009, John Allison (vis-V09-02-03)
+- visexternal-V09-02-04: Fix a circular dependency to G4OpenGL.
+
+28th April 2009, Laurent Garnier
+ - printEPS is now fully functionnal for X, Xm, Qt Win viewers.   
+
+27th April 2009  John Allison (vis-V09-02-02)
+- opengl-V09-02-03: Fix compiler warnings.
+- visexternal-V09-02-03: Fix compiler warnings.
+
+6th April 2009  Joseph Perl (vis-V09-02-01)
+- opengl-V09-02-02 : Improvments in order to use GL2PS for printing
+- openinventor-V09-02-01 : Improvments in order to use GL2PS for printing
+- visexternal-V09-02-02 :  Add GL2PS library in external (it was in 
+  OpenInventor before)
+
+14th March 2009  John Allison
+- visman-V09-02-01:
+  o Introduced /vis/initialize.
+  o G4VisManager.cc: /vis/verbose and /vis/initialize instantiated in
+    constructor so that a user may set verbosity before initialisation.
+  o G4VisExecutive.icc: made methods inline.
+
+5th March 2009, Laurent Garnier
+ - Now using Gl2PS method to do PS
+ - Add flag in GNUMakefile to compile in debug mode
+ - Remplacing glBitmap by GL_POINTS to draw marker : Speed improvment
+  and gl2ps can now draw Markers.
+
+25th February 2009  John Allison
+- modeling-V09-02-01 - needs greps-V09-02-01:
+  o G4ModelApplyCommandsT: Added visManager->NotifyHandlers() after
+    application (Apply) of all commands.  Forces update of all viewers
+    after a change of model, e.g., trajectory colour, point size, etc.
+- visman-V09-02-00 - needs greps-V09-02-01:
+  o G4VisManager: Implemented NotifyHandlers.  A user may notify scene
+    handlers (G4VGraphicsScene objects) that the scene has changed so
+    that they may rebuild their graphics database, if any, and redraw
+    all views.
+
+24th February 2009  John Allison
+- modeling-V09-02-00 - needs greps-V09-02-00:
+  o Added setAux/StepPtsSizeType commands (candidates: "none world screen").
+  o Added unit to setAux/StepPtsSize for SizeType == world.
+
+16 February 2009, Laurent Garnier
+ - Creation of this gl2ps library in order to have a gl2ps for all viewers.
+ - GNUMakefile : Add the gl2ps external library
+ - Some modifications in GNUMakefile for gl2ps. Packages OpenInventor,
+   OpenGL had also been modified for gl2ps.
+
+22th January 2009  Laurent Garnier
+- Fix bug in ratio and geometry on X/Xm/Qt/Win32 viewers. Now Could 
+  pass XString like 400x600-0+0 to viewers and set position and location.
 
 21st November 2008  Joseph Perl  (vis-V09-01-06)
 - visman-V09-01-05: Trap recursive use of /vis/reviewKeptEvents.

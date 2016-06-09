@@ -37,7 +37,8 @@ public:
   G4CascadParticle(const G4InuclElementaryParticle& particle, 
 		   const std::vector<G4double>& pos,
 		   G4int izone, 
-		   G4double cpath) 
+		   G4double cpath,
+                   G4int gen) 
 
     : theParticle(particle), 
     position(pos), 
@@ -45,7 +46,8 @@ public:
     current_path(cpath) {
     current_path = cpath; 
     movingIn = true;
-    reflectionCounter = 0;   
+    reflectionCounter = 0;
+    generation = gen;
   };
 
   void updateParticleMomentum(const G4CascadeMomentum& mom) {
@@ -125,6 +127,10 @@ public:
 	   << " x " << position[0] << " y " << position[1]
 	   << " z " << position[2] << G4endl;
   };
+
+  G4int getGeneration() {
+    return generation;
+  }
    
 private: 
 
@@ -136,7 +142,7 @@ private:
   G4bool movingIn;
   G4int reflectionCounter;   
   G4bool reflected;
- 
+  G4int generation;
 };        
 
 #endif // G4CASCAD_PARTICLE_HH

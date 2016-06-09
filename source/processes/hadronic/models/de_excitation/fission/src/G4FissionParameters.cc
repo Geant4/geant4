@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionParameters.cc,v 1.5 2006/06/29 20:13:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FissionParameters.cc,v 1.7 2009/11/19 10:30:49 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
 //
-
+//J. M. Quesada (May 2009): sigma_sym (SigmaS) tuned for spallation data.
+//J. M. Quesada (30.10.09): retuning for IAEA spallation data
 
 #include "G4FissionParameters.hh"
 #include "G4HadronicException.hh"
@@ -44,47 +45,53 @@ G4FissionParameters::G4FissionParameters(const G4int A, const G4int Z, const G4d
 					 const G4double FissionBarrier)
 {
     G4double U = ExEnergy; 
-  
+    
     As = A/2.0;
-
+    
     if (A <= 235) Sigma2 = 5.6;  // MeV
     else Sigma2 = 5.6 + 0.096*(A-235); // MeV
-
+    
     Sigma1 = 0.5*Sigma2; // MeV
-
+    
     SigmaS = std::exp(0.00553*U/MeV + 2.1386); // MeV
-    if (SigmaS > 20.0) SigmaS = 20.0;
-
+    
+    //JMQ 310509 
+    //    if (SigmaS > 20.0) SigmaS = 20.0;
+    //   SigmaS*=1.3;
+    //JMQ 301009: retuning (after CEM transition prob.have been chosen as default)
+    SigmaS*=0.8;
+    //
+    
     G4double FasymAsym = 2.0*std::exp(-((A2-As)*(A2-As))/(2.0*Sigma2*Sigma2)) + 
-	std::exp(-((A1-As)*(A1-As))/(2.0*Sigma1*Sigma1));
-  
+      std::exp(-((A1-As)*(A1-As))/(2.0*Sigma1*Sigma1));
+    
     G4double FsymA1A2 = std::exp(-((As-(A1+A2)/2.0)*(As-(A1+A2)/2.0))/(2.0*SigmaS*SigmaS));
-  
-
+    
+    
     G4double wa = 0.0;
     w = 0.0;
     if (Z >= 90) {         // Z >= 90
-	if (U <= 16.25) wa = std::exp(0.5385*U/MeV-9.9564);  // U <= 16.25 MeV
-	else wa = std::exp(0.09197*U/MeV-2.7003);            // U  > 16.25 MeV
+      if (U <= 16.25) wa = std::exp(0.5385*U/MeV-9.9564);  // U <= 16.25 MeV
+      else wa = std::exp(0.09197*U/MeV-2.7003);            // U  > 16.25 MeV
     } else if (Z == 89) {  // Z == 89
-	wa = std::exp(0.09197*U-1.0808);
+      wa = std::exp(0.09197*U-1.0808);
     } else if (Z >= 82) {  //  82 <= Z <= 88
-	G4double X = FissionBarrier - 7.5*MeV;
-	if (X < 0.0) X = 0.0;
-	wa = std::exp(0.09197*(U-X)/MeV-1.0808);
+      G4double X = FissionBarrier - 7.5*MeV;
+      if (X < 0.0) X = 0.0;
+      wa = std::exp(0.09197*(U-X)/MeV-1.0808);
     } else {               // Z < 82
-	w = 1001.0;
+      w = 1001.0;
     }
-  
-    if (w == 0.0) {
-	G4double w1 = std::max(1.03*wa - FasymAsym, 0.0001);
-	G4double w2 = std::max(1.0 - FsymA1A2*wa,   0.0001);
     
-	w = w1/w2;
-
-	if (82 <= Z && Z < 89 && A < 227)  w *= std::exp(0.3*(227-A));
+    if (w == 0.0) {
+      G4double w1 = std::max(1.03*wa - FasymAsym, 0.0001);
+      G4double w2 = std::max(1.0 - FsymA1A2*wa,   0.0001);
+      
+      w = w1/w2;
+      
+      if (82 <= Z && Z < 89 && A < 227)  w *= std::exp(0.3*(227-A));
     }
-  
+    
 }
 
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.13 2008/06/23 09:17:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $ 1.8
+// $Id: G4LundStringFragmentation.cc,v 1.18 2009/10/05 12:52:48 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-03 $ 1.8
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -57,7 +57,8 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 // ------ smearinr sharp mass cut-off ---------------------------
     SmoothParam  = 0.2;                   
 
-    SetStringTensionParameter(0.25);                           // Uzhi 20 June 08
+//    SetStringTensionParameter(0.25);                           // Uzhi 20 June 08
+    SetStringTensionParameter(1.);                           // Uzhi 20 June 09
    }
 
 // --------------------------------------------------------------
@@ -195,7 +196,7 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
                                     theString.GetPosition().z()+100.*fermi);
             LeftVector->operator[](0)->SetPosition(aPosition);
 */            
-//G4cout<<"Single hadron "<<LeftVector->operator[](0)->GetPosition()<<" "<<LeftVector->operator[](0)->GetFormationTime()<<G4endl;
+//G4cout<<"Single hadron "<<LeftVector->operator[](0)->Get4Momentum()<<" "<<LeftVector->operator[](0)->Get4Momentum().mag()<<G4endl;
           } else {    // 2 hadrons created from qq-qqbar are stored
             LeftVector->operator[](0)->SetFormationTime(theString.GetTimeOfCreation());
             LeftVector->operator[](0)->SetPosition(theString.GetPosition());
@@ -292,7 +293,8 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
 
         G4double      TimeOftheStringCreation=theString.GetTimeOfCreation();
         G4ThreeVector PositionOftheStringCreation(theString.GetPosition());
-
+// Uzhi 11.07.09
+//G4cout<<" String T Pos"<<TimeOftheStringCreation<<' '<<PositionOftheStringCreation<<G4endl;
 /*  // For large formation time open *
         G4double      TimeOftheStringCreation=theString.GetTimeOfCreation()+100*fermi;
         G4ThreeVector PositionOftheStringCreation(theString.GetPosition().x(),
@@ -312,6 +314,8 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
           PositionOftheStringCreation=aPosition;
         }
 */
+
+//G4cout<<"Lund Frag # hadrons"<<LeftVector->size()<<G4endl;       // Uzhi 11.07.09
 	for(size_t C1 = 0; C1 < LeftVector->size(); C1++)
 	{
 	   G4KineticTrack* Hadron = LeftVector->operator[](C1);
@@ -321,11 +325,20 @@ G4cout<<"FragmentString Momentum"<<theString.Get4Momentum()<<theString.Get4Momen
 
 	   G4LorentzVector Coordinate(Hadron->GetPosition(), Hadron->GetFormationTime());
 	   Momentum = toObserverFrame*Coordinate;
-	   Hadron->SetFormationTime(TimeOftheStringCreation+Momentum.e());
+	   Hadron->SetFormationTime(TimeOftheStringCreation+Momentum.e()    // Uzhi 11.07.09
+                                                           -fermi/c_light); // Uzhi 11.07.09
 	   G4ThreeVector aPosition(Momentum.vect());
 //	   Hadron->SetPosition(theString.GetPosition()+aPosition);
 	   Hadron->SetPosition(PositionOftheStringCreation+aPosition);
 //G4cout<<"Hadron "<<C1<<" "<<Hadron->GetPosition()/fermi<<" "<<Hadron->GetFormationTime()/fermi<<G4endl;
+/* // Uzhi 11.07.09
+G4cout<<C1<<' '<<Hadron->GetDefinition()->GetParticleName()<<G4endl;
+G4cout<<Hadron->GetDefinition()->GetPDGMass()<<' '
+<<Hadron->Get4Momentum()<<G4endl;
+G4cout<<Hadron->GetFormationTime()<<' '
+<<Hadron->GetPosition()<<' '
+<<Hadron->GetPosition().z()/fermi<<G4endl;
+*/  // Uzhi
 	};
 
 //G4cout<<"Out FragmentString"<<G4endl;
@@ -507,8 +520,22 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double M
     else 
    {
       do                                                                      
-      {                                                                     
-         Pt=SampleQuarkPt(); Pt.setZ(0); G4double Pt2=Pt.mag2();              
+      {  
+         // GF 22-May-09, limit sampled pt to allowed range
+         
+	 G4double termD = InitialMass*InitialMass -Mass*Mass - AntiMass*AntiMass;
+	 G4double termab = 4*sqr(Mass*AntiMass);
+	 G4double termN = 2*termD + 4*Mass*Mass + 4*AntiMass*AntiMass;
+	 G4double pt2max=(termD*termD - termab )/ termN ;
+	 
+//	 G4cout << " termD, ab, N " << termD << "  " << termab << "  " << termN 
+//	        <<  "   pt2max= " << pt2max ;
+	 	                                                                          
+         Pt=SampleQuarkPt(std::sqrt(pt2max)); Pt.setZ(0); G4double Pt2=Pt.mag2();
+
+	 
+//	 G4cout << " sampled Pt2 = " << Pt2 << "  " << pt2max-Pt2 << G4endl;              
+         // end.. GF
 
 //G4cout<<"Sample4Momentum Pt x y "<<Pt.getX()<<" "<<Pt.getY()<<G4endl;
 
@@ -520,7 +547,7 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double M
          AvailablePz2= sqr(InitialMass*InitialMass - MassMt2 - AntiMassMt2) - 
                          4.*MassMt2*AntiMassMt2;                                
       }                                                                     
-      while(AvailablePz2 < 0.);                                               
+      while(AvailablePz2 < 0.);     // GF will occur only for numerical precision problem with limit in sampled pt                                               
                                                                             
       AvailablePz2 /=(4.*InitialMass*InitialMass);                            
       AvailablePz = std::sqrt(AvailablePz2);                               

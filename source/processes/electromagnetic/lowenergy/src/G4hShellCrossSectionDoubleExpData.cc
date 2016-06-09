@@ -32,8 +32,8 @@
 // 22 Apr 2004  First committed to cvs
 //
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionDoubleExpData.cc,v 1.4 2006/06/29 19:42:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4hShellCrossSectionDoubleExpData.cc,v 1.5 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #include "G4hShellCrossSectionDoubleExpData.hh"
 

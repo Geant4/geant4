@@ -1,4 +1,4 @@
-# $Id: run15.mac,v 1.15 2006/10/31 12:53:48 maire Exp $
+# $Id: run15.mac,v 1.16 2009/09/17 20:06:26 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -8,7 +8,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  local
 #
 /testem/det/setNbOfLayers 20
 /testem/det/setNbOfAbsor  2

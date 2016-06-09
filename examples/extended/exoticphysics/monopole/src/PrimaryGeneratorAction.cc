@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2007/08/16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2009/07/15 10:19:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,10 +43,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-:detector(det)					       
+  :detector(det)
 {
   particleGun  = new G4ParticleGun(1);
-  G4ParticleDefinition* particle = G4ParticleTable::GetParticleTable()->FindParticle("monopole");
+  G4ParticleDefinition* particle = 
+    G4ParticleTable::GetParticleTable()->FindParticle("monopole");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleEnergy(100 * GeV);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1., 0., 0.));
@@ -58,7 +59,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
   gunMessenger = new PrimaryGeneratorMessenger(this);  
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
@@ -66,8 +66,8 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
   delete gunMessenger;  
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event

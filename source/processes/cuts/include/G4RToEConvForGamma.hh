@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForGamma.hh,v 1.2 2006/06/29 19:29:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RToEConvForGamma.hh,v 1.3 2009/09/11 15:21:38 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // ------------------------------------------------------------
@@ -70,14 +70,10 @@ class G4RToEConvForGamma : public G4VRangeToEnergyConverter
   
   //-------------- Range Table ------------------------------------------
     virtual void BuildRangeVector( const G4Material* aMaterial,
-				   G4double       maxEnergy,
-				   G4double       aMass,
 				   G4RangeVector* rangeVector);
 
     typedef G4LossTable G4CrossSectionTable;
     void BuildAbsorptionLengthVector( const G4Material* aMaterial,
-				      G4double       maxEnergy,
-				      G4double       aMass,
 				      G4RangeVector* rangeVector);
  
     G4double ComputeCrossSection( G4double AtomicNumber,
@@ -97,11 +93,9 @@ inline
 inline 
  void G4RToEConvForGamma::BuildRangeVector(
                                 const G4Material* aMaterial,
-                                G4double       maxEnergy,     
-                                G4double       aMass,
                                 G4RangeVector* rangeVector)
 {
-  BuildAbsorptionLengthVector(aMaterial, maxEnergy, aMass, rangeVector);
+  BuildAbsorptionLengthVector(aMaterial, rangeVector);
 }
 
 

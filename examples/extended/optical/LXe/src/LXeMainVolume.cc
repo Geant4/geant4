@@ -265,10 +265,12 @@ void LXeMainVolume::SurfaceProperties(){
   
   //**Photocathode surface properties
   G4double photocath_EFF[num]={1.,1.}; //Enables 'detection' of photons
-  G4double photocath_REFL[num]={0.,0.};
+  G4double photocath_ReR[num]={1.92,1.92};
+  G4double photocath_ImR[num]={1.69,1.69};
   G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
   photocath_mt->AddProperty("EFFICIENCY",Ephoton,photocath_EFF,num);
-  photocath_mt->AddProperty("REFLECTIVITY",Ephoton,photocath_REFL,num);
+  photocath_mt->AddProperty("REALRINDEX",Ephoton,photocath_ReR,num);
+  photocath_mt->AddProperty("IMAGINARYRINDEX",Ephoton,photocath_ImR,num);
   G4OpticalSurface* photocath_opsurf= 
     new G4OpticalSurface("photocath_opsurf",glisur,polished,
 			 dielectric_metal);

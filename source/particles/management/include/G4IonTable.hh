@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.26 2008/03/20 02:23:30 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonTable.hh,v 1.28 2009/09/23 12:13:48 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -42,6 +42,7 @@
 //      Modified GetIon methods                  17 Aug. 99 H.Kurashige
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 //      Add GetNucleusEncoding according PDG 2006 9 Oct. 2006 H.Kurashige
+//      Use STL map                              30 Jul. 2009 H.Kurashige
 
 #ifndef G4IonTable_h
 #define G4IonTable_h 1
@@ -49,9 +50,12 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4ParticleTableIterator.hh"
+#include "G4Ions.hh"
 
 #include <cmath>
 #include <vector>
+#include <map>
 
 class G4ParticleTable;
 class G4VIsotopeTable; 
@@ -65,8 +69,9 @@ class G4IonTable
  //
 
  public:
-   // Use STL Vector as list of ions
-   typedef std::vector<G4ParticleDefinition*> G4IonList;
+   // Use STL map as list of ions
+   typedef  std::multimap<G4int, G4ParticleDefinition*> G4IonList;
+   typedef  std::multimap<G4int, G4ParticleDefinition*>::iterator G4IonListIterator;
 
  public:
   // constructor
@@ -110,7 +115,9 @@ class G4IonTable
    G4ParticleDefinition* GetIon(G4int encoding);
    // The ion can be get by using PDG encoding 
    // !! Only ground state can be obtained .i.e. Isomer = 0
-  
+   
+   void CreateAllIon();
+   // All ground state ions will be created
 
    // Find/Get "excited state" 
    G4ParticleDefinition* FindIon(G4int Z, G4int A, G4double E, G4int J=0);
@@ -129,7 +136,7 @@ class G4IonTable
    // This method is provided for compatibilties 
    // The third and last arguments gives no effect
 
-   static G4bool        IsIon(G4ParticleDefinition*);
+   static G4bool        IsIon(const G4ParticleDefinition*);
    // return true if the particle is ion
 
    const G4String&  GetIonName(G4int Z, G4int A, G4double E) const;
@@ -182,7 +189,7 @@ class G4IonTable
 
    G4ParticleDefinition* GetParticle(G4int index) const;
    // Return the pointer of index-th ion in the table
-
+ 
    G4bool                Contains(const G4ParticleDefinition *particle) const;
    // Return 'true' if the ion exists
 
@@ -236,13 +243,26 @@ inline G4int  G4IonTable::GetNumberOfElements() const
 {
   return numberOfElements;
 }
+
 inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
 {
-  G4IonList::iterator i;
-  for (i = fIonList->begin(); i!= fIonList->end(); ++i) {
-    if (**i==*particle) return true;
+  if (!IsIon(particle)) return false;
+
+  G4int Z = particle->GetAtomicNumber();
+  G4int A = particle->GetAtomicMass();  
+  G4int L = particle->GetQuarkContent(3);  //strangeness 
+  G4int encoding=GetNucleusEncoding(Z, A, L);
+  G4bool found = false;
+  if (encoding !=0 ) {
+    G4IonList::iterator i = fIonList->find(encoding);
+    for( ;i != fIonList->end() ; i++) {
+      if (particle == i->second ) {
+	found  = true;
+	break;
+      }
+    }
   }
-  return false;
+  return found;
 }
 
 inline G4int G4IonTable::Entries() const
@@ -257,17 +277,15 @@ inline G4int G4IonTable::size() const
 
 inline void G4IonTable::clear()
 {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>2) {
+      G4cout << "G4IonTable::Clear() : number of Ion regsitered =  "; 
+      G4cout << fIonList->size() <<  G4endl;
+    }
+#endif
   fIonList->clear();
 }
 
-inline G4ParticleDefinition*  G4IonTable::GetParticle(G4int index) const
-{
-  if ( (index >=0 ) && (index < Entries()) ){
-    return (*fIonList)[index];
-  } else {
-    return 0; 
-  } 
-}
 
 
 #endif

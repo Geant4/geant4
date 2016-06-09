@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.13 2008/09/18 16:42:07 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.14 2009/11/27 14:54:58 hbu Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,6 +107,20 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
+  ProcCounter = new ProcessesCount;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::CountProcesses(G4String procName)
+{
+  //does the process  already encounted ?
+  size_t nbProc = ProcCounter->size();
+  size_t i = 0;
+  while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
+  if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
+  
+  (*ProcCounter)[i]->Count();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,6 +129,19 @@ void RunAction::EndOfRunAction(const G4Run*)
 {
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
+  //total number of process calls
+  G4double countTot = 0.;
+  G4cout << "\n Number of process calls --->";
+  for (size_t i=0; i< ProcCounter->size();i++) {
+	G4String procName = (*ProcCounter)[i]->GetName();
+	if (procName != "Transportation") {
+	  G4int count    = (*ProcCounter)[i]->GetCounter(); 
+	  G4cout << "\t" << procName << " : " << count;
+	  countTot += count;
+	}
+  }
+  G4cout << G4endl;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

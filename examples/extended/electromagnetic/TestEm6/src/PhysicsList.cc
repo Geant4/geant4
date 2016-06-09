@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.12 2006/06/29 16:57:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.14 2009/11/27 14:54:58 hbu Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,9 @@
 
 #include "G4GammaConversionToMuons.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -66,6 +68,13 @@
 
 #include "G4StepLimiter.hh"
 
+#include "G4ProcessTable.hh"
+
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+#include "G4PhotoElectricEffect.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
@@ -73,9 +82,6 @@ PhysicsList::PhysicsList()
 {
   defaultCutValue = 1.*km;
   pMes = new PhysicsListMessenger(this);
-  theGammaToMuPairProcess = 0;
-  theAnnihiToMuPairProcess = 0;
-  eehadProcess = 0;
   SetVerboseLevel(1);
 }
 
@@ -84,9 +90,6 @@ PhysicsList::PhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete pMes;
-  delete theAnnihiToMuPairProcess;
-  delete theGammaToMuPairProcess;
-  delete eehadProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -175,12 +178,14 @@ void PhysicsList::ConstructEM()
 
     if (particleName == "gamma") {
       // gamma    allow  only   gamma -> mu+mu-
-      theGammaToMuPairProcess=new G4GammaConversionToMuons();
-      pmanager->AddDiscreteProcess(theGammaToMuPairProcess);
-
+      pmanager->AddDiscreteProcess(new G4GammaConversionToMuons);
+      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
+      pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      pmanager->AddDiscreteProcess(new G4GammaConversion);
+	  
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
       pmanager->AddProcess(new G4StepLimiter,       -1,-1,4);      
@@ -189,39 +194,37 @@ void PhysicsList::ConstructEM()
       //positron
       // to make the process of e+e- annihilation more visible,
       // do not enable the other standard processes:
-      // pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      // pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      // pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
-      // pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
-      
-      theAnnihiToMuPairProcess = new G4AnnihiToMuPair();
-      eehadProcess             = new G4eeToHadrons();
-      pmanager->AddDiscreteProcess(theAnnihiToMuPairProcess);
-      pmanager->AddDiscreteProcess(eehadProcess);
+      //pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      //pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      //pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
+      //pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
+
+      pmanager->AddDiscreteProcess(new G4AnnihiToMuPair);
+      pmanager->AddDiscreteProcess(new G4eeToHadrons);
       pmanager->AddDiscreteProcess(new G4StepLimiter);
        
     } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
       //muon
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4MuMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);
       pmanager->AddProcess(new G4StepLimiter,       -1,-1,5);            
       
     } else if( particleName == "anti_proton") {
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hhIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
 
     } else if( particleName == "GenericIon") {
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4ionIonisation,     -1, 2,2);
       pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
       
     } else if( particle->GetPDGCharge() != 0.0 && !particle->IsShortLived()
             && particleName != "chargedgeantino") {
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
     }
@@ -229,6 +232,10 @@ void PhysicsList::ConstructEM()
   
   G4EmProcessOptions opt;
   opt.SetVerbose(1);
+  opt.SetMinEnergy(100*eV);       
+  opt.SetMaxEnergy(1000*TeV);      
+  opt.SetDEDXBinning(13*7);      
+  opt.SetLambdaBinning(13*7);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -272,21 +279,30 @@ void PhysicsList::SetCuts()
 
 void PhysicsList::SetGammaToMuPairFac(G4double fac)
 {
+  G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
+  G4GammaConversionToMuons* theGammaToMuPairProcess = (G4GammaConversionToMuons*) theProcessTable->FindProcess("GammaToMuPair","gamma");
   if(theGammaToMuPairProcess) theGammaToMuPairProcess->SetCrossSecFactor(fac);
+  else G4cout << "Warning. No process GammaToMuPair found, SetGammaToMuPairFac was ignored" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetAnnihiToMuPairFac(G4double fac)
 {
+  G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
+  G4AnnihiToMuPair* theAnnihiToMuPairProcess = (G4AnnihiToMuPair*) theProcessTable->FindProcess("AnnihiToMuPair","e+");
   if(theAnnihiToMuPairProcess) theAnnihiToMuPairProcess->SetCrossSecFactor(fac);
+  else G4cout << "Warning. No process AnnihiToMuPair found, SetAnnihiToMuPairFac was ignored" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetAnnihiToHadronFac(G4double fac)
 {
+  G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
+  G4eeToHadrons* eehadProcess = (G4eeToHadrons*) theProcessTable->FindProcess("ee2hadr","e+");
   if(eehadProcess) eehadProcess->SetCrossSecFactor(fac);
+  else G4cout << "Warning. No process ee2hadr found, SetAnnihiToHadronFac was ignored" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

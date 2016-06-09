@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectory.hh,v 1.4 2006/06/29 21:15:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RichTrajectory.hh,v 1.6 2009/11/24 10:04:14 perl Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------
 //
@@ -41,6 +41,7 @@
 //   includes:
 //     4) physical volume and next physical volume;
 //     5) creator process;
+//   ...and much more.
 //
 // Contact:
 //   Questions and comments on G4Trajectory should be sent to
@@ -57,6 +58,8 @@
 #define G4RICHTRAJECTORY_HH
 
 #include "G4Trajectory.hh"
+
+#include "G4TouchableHandle.hh"
 
 typedef std::vector<G4VTrajectoryPoint*>  RichTrajectoryPointsContainer;
 
@@ -91,9 +94,13 @@ private:
 
   // Extended information (only publicly accessible through AttValues)...
   RichTrajectoryPointsContainer* fpRichPointsContainer;
-  G4VPhysicalVolume* fpInitialVolume;
-  G4VPhysicalVolume* fpInitialNextVolume;
-  const G4VProcess*  fpCreatorProcess;
+  G4TouchableHandle fpInitialVolume;
+  G4TouchableHandle fpInitialNextVolume;
+  const G4VProcess* fpCreatorProcess;
+  G4TouchableHandle fpFinalVolume;
+  G4TouchableHandle fpFinalNextVolume;
+  const G4VProcess* fpEndingProcess;
+  G4double          fFinalKineticEnergy;
 
 };
 

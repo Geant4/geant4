@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc,v 1.5 2008/12/11 10:13:41 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BrentLocator.cc,v 1.8 2009/05/15 12:55:48 tnikitin Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Class G4BrentLocator implementation
 //
@@ -153,6 +153,10 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   static G4int max_no_seen= -1; 
   static G4int trigger_substepno_print= warn_substeps - 20 ;
 
+  // Counter for restarting Bintermed
+  //
+  G4int restartB = 0;
+
   //--------------------------------------------------------------------------  
   //  Algorithm for the case if progress in founding intersection is too slow.
   //  Process is defined too slow if after N=param_substeps advances on the
@@ -163,7 +167,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   //  until 'max_depth'.
   //--------------------------------------------------------------------------
 
-  const G4int param_substeps=100; // Test value for the maximum number
+  const G4int param_substeps=50; // Test value for the maximum number
                                   // of substeps
   const G4double fraction_done=0.3;
 
@@ -370,11 +374,12 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
             //   A    <- F 
             //   E    <- H
             //
-            CurrentA_PointVelocity = ApproxIntersecPointV;
+            G4FieldTrack InterMed=ApproxIntersecPointV;
             ApproxIntersecPointV = GetChordFinderFor()->ApproxCurvePointS(
                           CurrentA_PointVelocity,CurrentB_PointVelocity,
-                          CurrentA_PointVelocity,CurrentE_Point,Point_A,PointH,
+                          InterMed,CurrentE_Point,CurrentF_Point,PointH,
                           false,GetEpsilonStepFor());
+            CurrentA_PointVelocity = InterMed;
             CurrentE_Point = PointH;
           }
           else  // not Intersects_FB
@@ -418,7 +423,14 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                 CurrentA_PointVelocity = CurrentB_PointVelocity;  // Got to B
                 CurrentB_PointVelocity = CurveEndPointVelocity;
                 SubStart_PointVelocity = CurrentA_PointVelocity;
+                ApproxIntersecPointV = GetChordFinderFor()
+                               ->ApproxCurvePointV( CurrentA_PointVelocity, 
+                                                    CurrentB_PointVelocity, 
+                                                    CurrentE_Point,
+                                                    GetEpsilonStepFor());
+
                 restoredFullEndpoint = true;
+                restartB++; // counter
               }
               else
               {
@@ -427,7 +439,13 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                 CurrentA_PointVelocity = CurrentB_PointVelocity;  // Got to B
                 CurrentB_PointVelocity =  *ptrInterMedFT[depth];
                 SubStart_PointVelocity = CurrentA_PointVelocity;
+                ApproxIntersecPointV = GetChordFinderFor()
+                               ->ApproxCurvePointV( CurrentA_PointVelocity, 
+                                                    CurrentB_PointVelocity, 
+                                                    CurrentE_Point,
+                                                    GetEpsilonStepFor());
                 restoredFullEndpoint = true;
+                restartB++; // counter
               }
             }
           } // Endif (Intersects_FB)
@@ -487,24 +505,29 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
                    << GetEpsilonStepFor() << G4endl;
           }
           G4cerr.precision(20);
-          G4cerr << " Point A (Curve start)   is " << CurveStartPointVelocity
+          G4cerr << " Point A (Curve start)     is " << CurveStartPointVelocity
                  << G4endl;
-          G4cerr << " Point B (Curve   end)   is " << CurveEndPointVelocity
+          G4cerr << " Point B (Curve   end)     is " << CurveEndPointVelocity
                  << G4endl;
-          G4cerr << " Point A (Current start) is " << CurrentA_PointVelocity
+          G4cerr << " Point A (Current start)   is " << CurrentA_PointVelocity
                  << G4endl;
-          G4cerr << " Point B (Current end)   is " << CurrentB_PointVelocity
+          G4cerr << " Point B (Current end)     is " << CurrentB_PointVelocity
                  << G4endl;
-          G4cerr << " Point S (Sub start)     is " << SubStart_PointVelocity
+          G4cerr << " Point S (Sub start)       is " << SubStart_PointVelocity
                  << G4endl;
-          G4cerr << " Point E (Trial Point)   is " << CurrentE_Point
+          G4cerr << " Point E (Trial Point)     is " << CurrentE_Point
                  << G4endl;
-          G4cerr << " Point F (Intersection)  is " << ApproxIntersecPointV
+          G4cerr << " Old Point F(Intersection) is " << CurrentF_Point
+                 << G4endl;
+          G4cerr << " New Point F(Intersection) is " << ApproxIntersecPointV
                  << G4endl;
           G4cerr << "        LocateIntersection parameters are : Substep no= "
                  << substep_no << G4endl;
           G4cerr << "        Substep depth no= "<< substep_no_p  << " Depth= "
                  << depth << G4endl;
+          G4cerr << "        Restarted no= "<< restartB  << " Epsilon= "
+                 << GetEpsilonStepFor() <<" DeltaInters= "
+                 << GetDeltaIntersectionFor() << G4endl;
 
           G4Exception("G4BrentLocator::EstimateIntersectionPoint()",
                       "FatalError", FatalException,

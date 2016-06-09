@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//$Id: G4OrlicLCrossSection.cc,v 1.5 2008/12/18 13:01:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+//$Id: G4OrlicLCrossSection.cc,v 1.6.2.2 2009/12/11 18:44:44 japost Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Haifa Ben Abdelouahed
 //         

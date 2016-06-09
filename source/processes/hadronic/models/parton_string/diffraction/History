@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2008/12/09 10:43:47 vuzhinsk Exp $
+$Id: History,v 1.29 2009/12/15 19:20:46 vuzhinsk Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,109 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+15 Dec 2009 V.Uzhinsky  (hadr-string-diff-V09-02-23)
+   Bug was fixed for Kaon + A interactions in G4DiffractiveExcitation.cc
+
+------------------------------------------------------------
+15 Dec 2009 G.Folger     (hadr-string-diff-V09-02-22)
+-  G4FTFModel: In ctor, initialise NumberOfInvolvedNucleon
+
+14 Dec. 2009 V. Uzhinsky (hadr-string-diff-V09-02-21)
+  Momentum sampling in the reggeon cascade is improved.
+  More hard restrictions on the momentum are introdused.
+  Infinite loop is erased.
+  Arithmetical bag in kinky string is fixed.
+
+--------------------------------------------------------
+10 Dec. 2009 V. Uzhinsky (hadr-string-diff-V09-02-20)
+  Crush found by Alberto with AveragePt2=0 is erased in FTF.
+  Re-tag of hadr-string-diff-V09-03-00
+-----------------------------------------------------
+9 Dec. 2009 V. Uzhinsky (hadr-string-diff-V09-03-00)
+  Crush found by Alberto with AveragePt2=0 is erased in FTF.
+--------------------------------------------------------
+6 Dec. 2009 V.Uzhinsky (hadr-string-diff-V09-02-19) 
+   Sampling of kinky string momentum is improved
+  
+25 November 2009, V. Uzhinsky (hadr-string-diff-V09-02-18)
+   Memory leak is erased in FTF at the end.
+
+29 October 2009, V. Uzhinsky (hadr-string-diff-V09-02-17)
+   Warning meassage is erased for using slc5 compilator in FTFModel.cc
+
+25 October 2009, V. Uzhinsky (hadr-string-diff-V09-02-16)  
+   Excitation energy calculation of nuclear residuals is implemenred.
+   The interface to the G4PrecompoundModelInterface is improved.
+----------------------------------------------------------
+6 October 2009, V. Uzhinsky (hadr-string-diff-V09-02-15)
+   Compilation warning are erased.
+----------------------------------------------------------
+5 October 2009, V. Uzhinsky (hadr-string-diff-V09-02-14)
+   FTFP with tuned parameters of nuclear de-excitation.
+
+-----------------------------------------------------------
+19 Sept., 2009, V. Uzhinsky (hadr-string-diff-V09-02-13)
+   I have foggoten to open quasi-elastic scattering!
+   Now it is openned.
+----------------------------------------------------------
+17 Sept., 2009, V. Uzhinsky (hadr-string-diff-V09-02-12)
+   FTF parameters have been tunned on hN-interactions.
+   Binary reactions were introduced and checked.
+   Creation of s-channel Delta's was erased.
+
+-----------------------------------------
+6 August 2009, V. Uzhinsky (hadr-string-diff-V09-02-11)
+  Kaon A interactions are improved in FTFModel.
+----------------------------------------------------------
+6 August 2009, V. Uzhinsky (hadr-string-diff-V09-02-10)
+  A warning message at FTFmodel compilation connected with Xminus
+  initialisation was erased.
+----------------------------------------------------------
+5 August 2009, V.Uzhinsky (hadr-string-diff-V09-02-09)
+  Some additional warning found by Gabriela were erased.
+------------------------------------------------------------
+5 August 2009, V. Uzhinsky (hadr-string-diff-V09-02-08)
+  Warning meassages were erased at a compilation of FTF model
+-----------------------------------------------------------
+3 August 2009, V. Uzhinsky (hadr-string-diff-V09-02-07)
+   FTF model with the reggeon cascading was complited by
+   formation time for a following coupling with the binary model.
+-----------------------------------------------------------
+31 July 2009, V. Uzhinsky (hadr-string-diff-V09-02-06)
+   Inconsistency in G4FTFModel was erased thank to Gunter.
+
+----------------------------------------------------------
+31 July 2009, V. Uzhinsky (hadr-string-diff-V09-02-05)
+   The reggeon theory inspired model of duclear desctruction is
+   implemented for a simulation of low particle cascading.
+   The code can operate with Precompound model only.
+-------------------------------------------------------------------
+
+17 July V. Uzhinsky        (hadr-string-diff-V09-02-04)
+   A Status of nuclear nucleon involved in an interaction is introdused.
+   Status: 0 - spectator, 1 - primary involved nucleon, 2 - a nucleon
+   involved in the reggeon cascading, 3 - absorbed nucleon.
+
+   A connection between a participant nucleon and a nuclear nucleon was
+   introsuced in G4InteractionContent.
+
+   All of these allow to improve FTF model for pion obsorption on nuclei.
+   These required a lot of changes.
+---------------------------------------------------------
+
+10 July V. Uzhinsky        (hadr-string-diff-V09-02-03)
+Bug was fixed in G4FTFModel.cc thank to A. Ribon
+---------------------------------------------------------
+9 July 2009 V. Uzhinsky    (hadr-string-diff-V09-02-02)
+- Charge-exchange was implemented for pn->np 
+  elastic and inelastic interactions.
+- Pion absorption by a nucleon was implemented. 
+  See comments marked by Uzhi 07.07.09
+---------------------------------------------------------
+19 December 08 V. Uzhinsky (hadr-string-diff-V09-02-01)
+---------------------------------------------------------
+ Version of FTF suted for low energies (2-10 GeV/c)
+
 9 December 08, V. Uzhinsky (hadr-string-diff-V09-01-04)
 - Improvement of delete operators in FTF
 

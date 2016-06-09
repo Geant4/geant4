@@ -2,7 +2,7 @@
    gROOT->Reset();
 
    // Draw histogram fill by Geant4 TestEm5 simulation
-   TFile f("./530um.root");
+   TFile f("./Si530um.root");
    TH1D* h1d = (TH1D*) f.Get("1");
    h1d->SetTitle("Energy deposited in 530 um of Si by 1 MeV e-");
    h1d->GetXaxis()->SetTitle("Ekine (MeV)");
@@ -43,7 +43,7 @@
 
    // Print the histograms legend
    TLegend *legend = new TLegend(0.6,0.6,0.8,0.8);
-   legend->AddEntry(h1d,"G4-9.1-ref-08++","l");
+   legend->AddEntry(h1d,"G4-9.2-ref-04 ","l");
    legend->AddEntry(h1f,"Berger data","L");
    legend->Draw();
 

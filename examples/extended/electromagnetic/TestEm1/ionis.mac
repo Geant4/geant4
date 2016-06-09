@@ -1,4 +1,4 @@
-# $Id: ionis.mac,v 1.2 2006/01/25 13:56:40 maire Exp $
+# $Id: ionis.mac,v 1.3 2009/09/15 12:51:49 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -11,7 +11,7 @@
 /testem/det/setMat Aluminium
 /testem/det/setSize 50 cm
 #
-/testem/phys/addPhysics standard
+/testem/phys/addPhysics local
 #
 /run/initialize
 #

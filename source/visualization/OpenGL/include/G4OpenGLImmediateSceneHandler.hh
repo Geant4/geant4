@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.14 2008/01/04 22:07:01 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.15 2009/02/04 16:48:40 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -36,12 +36,8 @@
 #ifndef G4OPENGLIMMEDIATESCENEHANDLER_HH
 #define G4OPENGLIMMEDIATESCENEHANDLER_HH
 
-#include "G4VSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
-#include "G4OpenGLImmediateViewer.hh"
-#include "globals.hh"
-#include "G4RotationMatrix.hh"
 #include "G4OpenGLSceneHandler.hh"
+#include "globals.hh"
 
 class G4OpenGLImmediate;
 

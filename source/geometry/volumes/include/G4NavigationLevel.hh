@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.hh,v 1.16 2006/06/29 18:57:22 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NavigationLevel.hh,v 1.18 2009/08/04 08:27:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4NavigationLevel
 //

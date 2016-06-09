@@ -24,13 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.24 2006/06/29 20:06:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QParticle.hh,v 1.25 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QParticle ----------------
 //             by Mikhail Kossov, Sept 1999.
 //  class header for Particles in the CHIPS Model
 // ---------------------------------------------------
+// Short description: The G4QParticle is a part of the CHIPS World. It is
+// characterized by the quark content, spin, mass, width and a vector of
+// the decay channels (G4QDecayCannelVector).
+// -----------------------------------------------------------------------
 
 #ifndef G4QParticle_h
 #define G4QParticle_h 1
@@ -116,10 +120,10 @@ inline G4double G4QParticle::MinMassOfFragm()
   {
     min=aDecay[0]->GetMinMass();
     if(nCh>1) for(G4int j=1; j<nCh; j++)
-	{
+    {
       G4double next=aDecay[j]->GetMinMass();
       if(next<min) min=next;
-	}
+    }
   }
   G4double w=GetWidth();
   G4double lim=m+.001;

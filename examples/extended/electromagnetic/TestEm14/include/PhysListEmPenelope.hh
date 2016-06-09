@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PhysListEmPenelope.hh,v 1.2 2006/06/29 16:45:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysListEmPenelope.hh,v 1.4 2009/11/19 10:36:37 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +40,7 @@
 class PhysListEmPenelope : public G4VPhysicsConstructor
 {
   public: 
-    PhysListEmPenelope(const G4String& name = "Penelope");
+    PhysListEmPenelope(const G4String& name = "penelope");
    ~PhysListEmPenelope();
 
   public: 

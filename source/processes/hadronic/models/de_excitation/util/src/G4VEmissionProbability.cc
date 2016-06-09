@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEmissionProbability.cc,v 1.6 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VEmissionProbability.cc,v 1.7 2009/03/04 11:05:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -35,12 +35,15 @@
 #include "G4VEmissionProbability.hh"
 #include "G4HadronicException.hh"
 
+
+G4VEmissionProbability::G4VEmissionProbability() {}
+G4VEmissionProbability::~G4VEmissionProbability() {}
+
+
 G4VEmissionProbability::G4VEmissionProbability(const G4VEmissionProbability &)
 {
     throw G4HadronicException(__FILE__, __LINE__, "G4VEmissionProbability::copy_constructor meant to not be accessable");
 }
-
-
 
 
 const G4VEmissionProbability & G4VEmissionProbability::operator=(const G4VEmissionProbability &)

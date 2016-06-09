@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSetup.cc,v 1.11 2008/07/16 15:46:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteSetup.cc,v 1.13 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4GDMLWriteSetup Implementation
 //
@@ -34,6 +34,16 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteSetup.hh"
+
+#include "G4LogicalVolume.hh"
+
+G4GDMLWriteSetup::G4GDMLWriteSetup() : G4GDMLWriteSolids()
+{
+}
+
+G4GDMLWriteSetup::~G4GDMLWriteSetup()
+{
+}
 
 void G4GDMLWriteSetup::SetupWrite(xercesc::DOMElement* gdmlElement,
                                   const G4LogicalVolume* const logvol)

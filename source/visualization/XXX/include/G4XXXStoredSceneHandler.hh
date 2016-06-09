@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXStoredSceneHandler.hh,v 1.3 2006/06/29 21:27:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4XXXStoredSceneHandler.hh,v 1.4 2009/10/21 15:28:53 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // John Allison  7th March 2006
@@ -77,6 +77,7 @@ public:
   // More optional functions...
   // void AddCompound(const G4VTrajectory&);
   // void AddCompound(const G4VHit&);
+  // void AddCompound(const G4THitsMap<G4double>&);
   void PreAddSolid(const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&);
   void PostAddSolid();

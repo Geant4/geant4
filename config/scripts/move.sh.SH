@@ -150,15 +150,6 @@ export G4DEBUG
 echo "On this machine the G4DEBUG=\$G4DEBUG"
 fi
 
-#
-# g4analysis
-#
-#+
-if [ X$g4wanalysis_use = Xy ] ; then
-G4ANALYSIS_USE=1
-export G4ANALYSIS_USE
-echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
-fi 
 
 #
 # g4ui

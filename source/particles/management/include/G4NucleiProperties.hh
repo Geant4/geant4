@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiProperties.hh,v 1.18 2008/10/28 07:12:31 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NucleiProperties.hh,v 1.20 2009/05/02 11:58:17 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -37,13 +37,14 @@
 // Added Shell-Pairing corrections to the Cameron mass 
 // excess formula by V.Lara (9 May 99)
 // 
+// 090331 Migrate to AME03 by Koi, Tatsumi 
 
 #ifndef G4NucleiProperties_h
 #define G4NucleiProperties_h 1
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4NucleiPropertiesTable.hh"
+#include "G4NucleiPropertiesTableAME03.hh"
 #include "G4NucleiPropertiesTheoreticalTable.hh"
 #include "G4ParticleTable.hh"
 
@@ -66,10 +67,12 @@ public:  // With Description
 
   // Give mass of nucleus A,Z
   static G4double GetNuclearMass(const G4double A, const G4double Z);
+  static G4double GetNuclearMass(const G4int A, const G4int Z);
 
   // return 'true' if the nucleus in the stable table 
   // (i.e.in G4NucleiPropertiesTable)
   static bool IsInStableTable(const G4double A, const G4double Z);
+  static bool IsInStableTable(const G4int A, const G4int Z);
 
   // Give binding energy 
   static G4double GetBindingEnergy(const G4int A, const G4int Z);
@@ -87,6 +90,8 @@ private:
 private:
   
   static G4double  AtomicMass(G4double A, G4double Z);
+  
+  static G4double  NuclearMass(G4double A, G4double Z);
   
   static G4double BindingEnergy(G4double A, G4double Z);
   

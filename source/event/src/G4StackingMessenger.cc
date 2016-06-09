@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackingMessenger.cc,v 1.5 2006/06/29 18:10:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4StackingMessenger.cc,v 1.6 2009/09/16 23:10:46 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // --------------------------------------------------------------------
 
@@ -56,6 +56,14 @@ G4StackingMessenger::G4StackingMessenger(G4StackManager * fCont)
   clearCmd->SetDefaultValue(0);
   clearCmd->SetRange("level>=-2&&level<=2");
   clearCmd->AvailableForStates(G4State_GeomClosed,G4State_EventProc);
+
+  verboseCmd = new G4UIcmdWithAnInteger("/event/stack/verbose",this);
+  verboseCmd->SetGuidance("Set verbose level for G4StackManager");
+  verboseCmd->SetGuidance(" 0 : Silence (default)");
+  verboseCmd->SetGuidance(" 1 : Minimum statistics");
+  verboseCmd->SetGuidance(" 2 : Detailed reports");
+  verboseCmd->SetGuidance("Note - this value is overwritten by /event/verbose command.");
+
 }
 
 G4StackingMessenger::~G4StackingMessenger()
@@ -75,7 +83,7 @@ void G4StackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     G4cout << "    Waiting stack   : " << fContainer->GetNWaitingTrack() << G4endl;
     G4cout << "    Postponed stack : " << fContainer->GetNPostponedTrack() << G4endl;
   }
-  if( command==clearCmd )
+  else if( command==clearCmd )
   {
     G4int vc = clearCmd->GetNewIntValue(newValues);
     switch (vc)
@@ -94,6 +102,10 @@ void G4StackingMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
         fContainer->ClearPostponeStack();
         break;
     }
+  }
+  else if( command==verboseCmd )
+  {
+    fContainer->SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));
   }
 }
 

@@ -23,30 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// The code was written by :
-//	*Louis Archambault louis.archambault@phy.ulaval.ca,
-//      *Luc Beaulieu beaulieu@phy.ulaval.ca
-//      +Vincent Hubert-Tremblay at tigre.2@sympatico.ca
-//
-//
-// *Centre Hospitalier Universitaire de Quebec (CHUQ),
-// Hotel-Dieu de Quebec, departement de Radio-oncologie
-// 11 cote du palais. Quebec, QC, Canada, G1R 2J6
-// tel (418) 525-4444 #6720
-// fax (418) 691 5268
-//
-// + Université Laval, Québec (QC) Canada
-//*******************************************************//
+// -------------------------------------------------------------------
+// $Id: DicomPhysicsList.hh,v 1.7 2009/10/26 11:21:01 chauvie Exp $
+// -------------------------------------------------------------------
 
 #ifndef DicomPhysicsList_h
 #define DicomPhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
-#include "globals.hh"
 
-class G4LowEnergyIonisation;
-class G4LowEnergyPhotoElectric;
-class G4LowEnergyBremsstrahlung;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class DicomPhysicsList: public G4VUserPhysicsList
 {
@@ -54,38 +40,26 @@ public:
   DicomPhysicsList();
   ~DicomPhysicsList();
 
-  // Set Cuts
-  void SetGammaCut(G4double);
-  void SetElectronCut(G4double);
-  void SetPositronCut(G4double);
- 
-protected:
-  // Construct particle and physics
-  void ConstructParticle();
-  void ConstructProcess();
-
-  void SetCuts();
-
-  // these methods Construct particles
-  void ConstructBosons();
-  void ConstructLeptons();
-
-  // these methods Construct physics processes and register them
-  void ConstructGeneral();
-  void ConstructEM();
-
 private:
-
+  
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
+  
+protected:
+  
+  void ConstructParticle();
+  void ConstructBosons();
+  void ConstructLeptons();
+  void ConstructBaryons();
 
-  G4LowEnergyIonisation*  loweIon;
-  G4LowEnergyPhotoElectric* lowePhot;
-  G4LowEnergyBremsstrahlung* loweBrem;
-
+  void ConstructProcess();
+  void ConstructEM();
+  void ConstructHad();
+  void ConstructGeneral();
+  void SetCuts();
+  
 };
-
 #endif
 
 

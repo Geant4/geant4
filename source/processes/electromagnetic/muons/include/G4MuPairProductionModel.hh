@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh,v 1.27 2008/07/22 16:11:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuPairProductionModel.hh,v 1.28 2009/02/20 14:48:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -78,7 +78,7 @@ public:
 
   virtual ~G4MuPairProductionModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
 			
   virtual G4double ComputeCrossSectionPerAtom(
@@ -99,10 +99,10 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  inline void SetLowestKineticEnergy(G4double e);
-
-  inline G4double MinEnergyCut(const G4ParticleDefinition*,
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
 			       const G4MaterialCutsCouple*);
+
+  inline void SetLowestKineticEnergy(G4double e);
 
   inline void SetParticle(const G4ParticleDefinition*);
 
@@ -119,8 +119,8 @@ protected:
 						   G4double Z,
 						   G4double pairEnergy);
 
-  inline G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				     G4double kineticEnergy);
+  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+				      G4double kineticEnergy);
 
   inline void SetCurrentElement(G4double Z);
 
@@ -192,31 +192,12 @@ inline void G4MuPairProductionModel::SetLowestKineticEnergy(G4double e)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
-                                               const G4MaterialCutsCouple* )
-{
-  return minPairEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
 void G4MuPairProductionModel::SetParticle(const G4ParticleDefinition* p)
 {
   if(!particle) {
     particle = p;
     particleMass = particle->GetPDGMass();
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4MuPairProductionModel::MaxSecondaryEnergy(
-                                 const G4ParticleDefinition*,
-    				       G4double kineticEnergy)
-{
-  G4double maxPairEnergy = kineticEnergy + particleMass*(1.0 - 0.75*sqrte*z13);
-  return maxPairEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

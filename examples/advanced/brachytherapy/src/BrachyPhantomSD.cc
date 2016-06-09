@@ -33,11 +33,13 @@
 //    *                              *
 //    ********************************
 //
-// $Id: BrachyPhantomSD.cc,v 1.13 2006/06/29 15:48:39 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: BrachyPhantomSD.cc,v 1.14 2009/02/23 17:34:26 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 #include "BrachyPhantomSD.hh"
+#ifdef G4ANALYSIS_USE
 #include "BrachyAnalysisManager.hh"
+#endif
 #include "BrachyDetectorConstruction.hh"
 #include "G4Track.hh"
 #include "G4LogicalVolume.hh"

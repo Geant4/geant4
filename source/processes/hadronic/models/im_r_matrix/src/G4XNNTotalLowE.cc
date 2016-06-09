@@ -64,25 +64,23 @@ G4XNNTotalLowE::G4XNNTotalLowE()
       it.second=ppTot[i]; pp->push_back(it);
       it.second=npTot[i]; np->push_back(it);
     }
-  theCrossSections[G4Proton::ProtonDefinition()->GetParticleName()] = pp;
-  theCrossSections[G4Neutron::NeutronDefinition()->GetParticleName()] = np;
+  theCrossSections[G4Proton::ProtonDefinition()] = pp;
+  theCrossSections[G4Neutron::NeutronDefinition()] = np;
 }
 
 
 G4XNNTotalLowE::~G4XNNTotalLowE()
 {
-  G4String name_proton = "proton";
-  G4String name_neutron = "neutron";
   
-  delete theCrossSections[name_proton];
-  delete theCrossSections[name_neutron];
+  delete theCrossSections[G4Proton::ProtonDefinition()];
+  delete theCrossSections[G4Neutron::NeutronDefinition()];
 }
 
 G4double G4XNNTotalLowE::CrossSection(const G4KineticTrack& trk1, const G4KineticTrack& trk2) const
 {
   G4double result = 0.;
   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
-  G4String key = FindKeyParticle(trk1,trk2);
+  G4ParticleDefinition * key = FindKeyParticle(trk1,trk2);
 
   if (theCrossSections.find(key)!= theCrossSections.end())
   {

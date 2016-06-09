@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.32 2008/11/21 09:32:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteSolids.hh,v 1.38 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4GDMLWriteSolids
@@ -41,45 +41,48 @@
 #ifndef _G4GDMLWRITESOLIDS_INCLUDED_
 #define _G4GDMLWRITESOLIDS_INCLUDED_
 
-#include "G4BooleanSolid.hh"
-#include "G4Box.hh"
-#include "G4Cons.hh"
-#include "G4Ellipsoid.hh"
-#include "G4EllipticalCone.hh"
-#include "G4EllipticalTube.hh"
-#include "G4ExtrudedSolid.hh"
-#include "G4Hype.hh"
-#include "G4Orb.hh"
-#include "G4Para.hh"
-#include "G4Paraboloid.hh"
-#include "G4IntersectionSolid.hh"
-#include "G4Polycone.hh"
-#include "G4Polyhedra.hh"
-#include "G4ReflectedSolid.hh"
-#include "G4Sphere.hh"
-#include "G4SubtractionSolid.hh"
-#include "G4TessellatedSolid.hh"
-#include "G4Tet.hh"
-#include "G4Torus.hh"
-#include "G4Trap.hh"
-#include "G4Trd.hh"
-#include "G4Tubs.hh"
-#include "G4TwistedBox.hh"
-#include "G4TwistedTrap.hh"
-#include "G4TwistedTrd.hh"
-#include "G4TwistedTubs.hh"
-#include "G4UnionSolid.hh"
+#include "G4Types.hh"
 
 #include "G4GDMLWriteMaterials.hh"
 
+class G4BooleanSolid;
+class G4Box;
+class G4Cons;
+class G4EllipticalCone;
+class G4Ellipsoid;
+class G4EllipticalTube;
+class G4ExtrudedSolid;
+class G4Hype;
+class G4Orb;
+class G4Para;
+class G4Paraboloid;
+class G4Polycone;
+class G4Polyhedra;
+class G4Sphere;
+class G4TessellatedSolid;
+class G4Tet;
+class G4Torus;
+class G4Trap;
+class G4Trd;
+class G4Tubs;
+class G4TwistedBox;
+class G4TwistedTrap;
+class G4TwistedTrd;
+class G4TwistedTubs;
+class G4VSolid;
+class G4OpticalSurface;
+
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials
 {
+  public:
 
- protected:
+   virtual void AddSolid(const G4VSolid* const);
+   virtual void SolidsWrite(xercesc::DOMElement*);
 
-   void AddSolid(const G4VSolid* const);
+  protected:
 
- private:
+   G4GDMLWriteSolids();
+   virtual ~G4GDMLWriteSolids();
 
    void BooleanWrite(xercesc::DOMElement*, const G4BooleanSolid* const);
    void BoxWrite(xercesc::DOMElement*, const G4Box* const);
@@ -107,12 +110,16 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void TwistedtubsWrite(xercesc::DOMElement*, const G4TwistedTubs* const);
    void ZplaneWrite(xercesc::DOMElement*, const G4double&,
                     const G4double&, const G4double&);
-   void SolidsWrite(xercesc::DOMElement*);
+   void OpticalSurfaceWrite(xercesc::DOMElement*,
+                    const G4OpticalSurface* const);
 
- private:
+  protected:
 
    std::vector<const G4VSolid*> solidList;
    xercesc::DOMElement* solidsElement;
+   static const G4int maxTransforms = 8; // Constant for limiting the number
+                                         // of displacements/reflections
+                                         // applied to a single solid
 };
 
 #endif

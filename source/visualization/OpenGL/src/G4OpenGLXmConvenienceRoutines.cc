@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.11 2006/06/29 21:19:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmConvenienceRoutines.cc,v 1.13 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -39,6 +39,14 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
+
+#include <Xm/Form.h>
+#include <Xm/ToggleB.h>
+#include <Xm/ArrowBG.h>
+#include <Xm/RowColumn.h>
+#include <Xm/TextF.h>
+#include <Xm/Separator.h>
+#include <Xm/Scale.h>
 
 void G4OpenGLXmViewer::Add_four_arrow_buttons (G4OpenGLXmViewer* pView,
 					     XtCallbackRec** arrow_callbacks,

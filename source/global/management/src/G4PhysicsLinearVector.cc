@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.cc,v 1.14 2008/09/22 14:49:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicsLinearVector.cc,v 1.15 2009/06/25 10:05:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 //--------------------------------------------------------------------
@@ -34,6 +34,7 @@
 //  G4PhysicsLinearVector.cc
 //
 //  15 Feb 1996 - K.Amako : 1st version
+//  19 Jun 2009 - V.Ivanchenko : removed hidden bin 
 //
 //--------------------------------------------------------------------
 
@@ -50,14 +51,11 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(size_t theNbin)
 {
   type = T_G4PhysicsLinearVector;
 
-  // Add extra one bin (hidden to user) to handle correctly when 
-  // Energy=theEmax in getValue. 
-  dataVector.reserve(theNbin+1);
-  binVector.reserve(theNbin+1);      
+  numberOfNodes = theNbin + 1;
+  dataVector.reserve(numberOfNodes);
+  binVector.reserve(numberOfNodes);      
 
-  numberOfBin = theNbin;
-
-  for (size_t i=0; i<=numberOfBin; i++)
+  for (size_t i=0; i<numberOfNodes; i++)
   {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
@@ -72,21 +70,18 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin,
 {
   type = T_G4PhysicsLinearVector;
 
-  // Add extra one bin (hidden to user) to handle correctly when 
-  // Energy=theEmax in getValue. 
-  dataVector.reserve(theNbin+1);
-  binVector.reserve(theNbin+1);      
+  numberOfNodes = theNbin + 1;
+  dataVector.reserve(numberOfNodes);
+  binVector.reserve(numberOfNodes);      
 
-  numberOfBin = theNbin;
-
-  for (size_t i=0; i<numberOfBin+1; i++)
+  for (size_t i=0; i<numberOfNodes; i++)
   {
     binVector.push_back( theEmin + i*dBin );
     dataVector.push_back(0.0);
   }
 
   edgeMin = binVector[0];
-  edgeMax = binVector[numberOfBin-1];
+  edgeMax = binVector[numberOfNodes-1];
 
 }  
 

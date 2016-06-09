@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.30 2007/05/23 08:49:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuIonisation.hh,v 1.31 2009/02/20 14:48:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -94,13 +94,13 @@ public:
 
   virtual ~G4MuIonisation();
 
-  G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 
-  G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-			    const G4Material*, G4double cut);
+  virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
+				    const G4Material*, G4double cut);
 
   // Print out of the class parameters
-  void PrintInfo();
+  virtual void PrintInfo();
 
 protected:
 
@@ -124,25 +124,6 @@ private:
 
   G4bool                      isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4MuIonisation::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
-						 const G4Material*,
-						 G4double cut)
-{
-  G4double x = 0.5*cut/electron_mass_c2;
-  G4double g = x*ratio + std::sqrt((1. + x)*(1. + x*ratio*ratio));
-  return mass*(g - 1.0);
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

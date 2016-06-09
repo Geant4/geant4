@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4InteractionContent.hh,v 1.4 2007/01/24 10:28:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4InteractionContent.hh,v 1.5 2009/07/17 12:36:41 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4InteractionContent_h
@@ -42,7 +42,7 @@
 #include "globals.hh"
 
 #include "G4VSplitableHadron.hh"
-
+#include "G4Nucleon.hh"                // Uzhi 16.07.09
 class G4InteractionContent 
 {
 
@@ -57,6 +57,9 @@ class G4InteractionContent
       
       G4VSplitableHadron * GetProjectile() const ;
       G4VSplitableHadron * GetTarget() const;
+
+      void                 SetTargetNucleon(G4Nucleon * aNucleon); // Uzhi 16.07.09
+      G4Nucleon          * GetTargetNucleon() const;              // Uzhi 16.07.09
 
       void SetTarget(G4VSplitableHadron *aTarget);
 
@@ -85,6 +88,7 @@ public:
 
       G4VSplitableHadron * theTarget;
       G4VSplitableHadron * theProjectile;
+      G4Nucleon          * theTargetNucleon;
       
       G4int theNumberOfHard;
       G4int theNumberOfSoft;
@@ -106,6 +110,16 @@ inline G4VSplitableHadron * G4InteractionContent::GetTarget() const
 inline void G4InteractionContent::SetTarget(G4VSplitableHadron *aTarget)
 {
 	theTarget = aTarget;
+}
+
+inline void G4InteractionContent::SetTargetNucleon(G4Nucleon * aNucleon) // Uzhi 16.07.09
+{
+        theTargetNucleon = aNucleon;
+}
+
+inline G4Nucleon * G4InteractionContent::GetTargetNucleon() const       // Uzhi 16.07.09
+{
+       return theTargetNucleon;
 }
 
 inline G4int G4InteractionContent::GetNumberOfSoftCollisions()

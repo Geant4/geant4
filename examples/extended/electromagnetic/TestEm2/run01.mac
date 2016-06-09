@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.25 2007/06/21 14:21:46 maire Exp $
+# $Id: run01.mac,v 1.27 2009/09/16 18:07:30 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -8,16 +8,16 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat PbWO4
+/testem/det/setMat G4_PbWO4
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 50 0.1
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  emstandard_opt0
 #
 /testem/phys/setCuts 1 mm
 #
 # histogram file
-/testem/histo/setFileName stand
+/testem/histo/setFileName run01
 /testem/histo/setFileType hbook
 #
 /run/initialize

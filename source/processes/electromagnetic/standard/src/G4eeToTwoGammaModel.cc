@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.14 2007/05/23 08:47:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eeToTwoGammaModel.cc,v 1.15 2009/04/09 18:41:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -101,13 +101,7 @@ void G4eeToTwoGammaModel::Initialise(const G4ParticleDefinition*,
                                      const G4DataVector&)
 {
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange =
-      reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
-
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
 

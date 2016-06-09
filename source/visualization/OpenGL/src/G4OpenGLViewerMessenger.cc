@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc,v 1.12 2008/04/04 13:32:22 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLViewerMessenger.cc,v 1.18 2009/05/14 16:38:23 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
@@ -67,6 +67,31 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
     ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
      "\nnumber, starting at 0."
      "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
+
+  fpCommandPrintSize =
+    new G4UIcommand("/vis/ogl/set/printSize", this);
+  fpCommandPrintSize->SetGuidance ("Set print size");
+  fpCommandPrintSize->SetGuidance ("Tip : -1 will mean 'print size' = 'window size'");
+  fpCommandPrintSize->SetGuidance ("       Setting size greatter than your maximum graphic card capacity , will set the size to maximum  size.");
+  G4UIparameter* parameterPrintSize;
+  parameterPrintSize = new G4UIparameter ("width", 'd', omitable = false);
+  parameterPrintSize->SetDefaultValue(-1);
+  fpCommandPrintSize->SetParameter(parameterPrintSize);
+  parameterPrintSize = new G4UIparameter ("height", 'd', omitable = false);
+  parameterPrintSize->SetDefaultValue(-1);
+  fpCommandPrintSize->SetParameter(parameterPrintSize);
+
+  fpCommandPrintFilename =
+    new G4UIcommand("/vis/ogl/set/printFilename", this);
+  fpCommandPrintFilename->SetGuidance ("Set print filename");
+  fpCommandPrintFilename->SetGuidance ("Setting 'incremental' will increment filename by one at each new print, starting at 0");
+  G4UIparameter* parameterPrintFilename;
+  parameterPrintFilename = new G4UIparameter ("name", 's', omitable = true);
+  parameterPrintFilename->SetDefaultValue("G4OpenGL");
+  fpCommandPrintFilename->SetParameter(parameterPrintFilename);
+  parameterPrintFilename = new G4UIparameter ("incremental", 'b', omitable = true);
+  parameterPrintFilename->SetDefaultValue(1);
+  fpCommandPrintFilename->SetParameter(parameterPrintFilename);
 
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
@@ -229,9 +254,9 @@ void G4OpenGLViewerMessenger::SetNewValue
 {
   G4VisManager* pVisManager = G4VisManager::GetInstance();
 
-  G4VViewer* pVViewer = pVisManager->GetCurrentViewer();
+  G4VViewer* pViewer = pVisManager->GetCurrentViewer();
 
-  if (!pVViewer) {
+  if (!pViewer) {
     G4cout <<
       "G4OpenGLViewerMessenger::SetNewValue: No current viewer."
       "\n  \"/vis/open\", or similar, to get one."
@@ -239,7 +264,7 @@ void G4OpenGLViewerMessenger::SetNewValue
     return;
   }
 
-  G4OpenGLViewer* pOGLViewer = dynamic_cast<G4OpenGLViewer*>(pVViewer);
+  G4OpenGLViewer* pOGLViewer = dynamic_cast<G4OpenGLViewer*>(pViewer);
 
   if (!pOGLViewer) {
     G4cout <<
@@ -251,33 +276,56 @@ void G4OpenGLViewerMessenger::SetNewValue
 
   if (command == fpCommandPrintEPS) 
     {
-      // Keep copy of print_string to preserve Xm behaviour...
-      char* tmp_string = new char[50];
-      strcpy (tmp_string, pOGLViewer->print_string);
-      // Make new print string...
-      static G4int file_count = 0;
-      std::ostringstream oss;
-      oss << "G4OpenGL_" << file_count++ << ".eps";
-      strcpy (pOGLViewer->print_string, oss.str().c_str());
-      // Print eps file...
-      pOGLViewer->print();
-      // Restore print_string for Xm...
-      strcpy (pOGLViewer->print_string, tmp_string);
-      delete tmp_string;
+      pOGLViewer->printEPS();
       return;
     }
 
-  G4OpenGLStoredViewer* pViewer =
-    dynamic_cast<G4OpenGLStoredViewer*>(pVViewer);
+  if (command == fpCommandPrintSize) 
+    {
+      G4int width,height;
+      std::istringstream iss(newValue);
+      iss >> width
+	  >> height;
+      pOGLViewer->setPrintSize(width,height);
+    }
 
-  if (!pViewer) {
-    G4cout <<
+  if (command == fpCommandPrintFilename) 
+    {
+      G4String name;
+      G4bool inc;
+      std::istringstream iss(newValue);
+      iss >> name
+	  >> inc;
+      pOGLViewer->setPrintFilename(name,inc);
+    }
+
+  if (command == fpCommandPrintMode)
+    {
+      if (newValue == "vectored") pOGLViewer->fVectoredPs = true;
+      if (newValue == "pixmap") pOGLViewer->fVectoredPs = false;
+      return;
+    }
+
+  if (command == fpCommandTransparency)
+    {
+      pOGLViewer->transparency_enabled = command->ConvertToBool(newValue);
+      if (pOGLViewer->fVP.IsAutoRefresh())
+	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      return;
+    }
+
+  G4OpenGLStoredViewer* pOGLSViewer =
+    dynamic_cast<G4OpenGLStoredViewer*>(pViewer);
+
+  if (!pOGLSViewer)
+    {
+      G4cout <<
   "G4OpenGLViewerMessenger::SetNewValue: Current viewer is not of type OGLS."
   "\n  The time slice viewing feature is only implemented for OGL Stored"
-  "\n  viewers at present.  Use \"/vis/viewer/select\" or \"/vis/open\"."
-           << G4endl;
-    return;
-  }
+  "\n  viewers at present.  Use \"/vis/viewer/select\" or \"/vis/open OGLS...\"."
+	     << G4endl;
+      return;
+    }
 
   if (command == fpCommandDisplayHeadTime)
     {
@@ -286,13 +334,14 @@ void G4OpenGLViewerMessenger::SetNewValue
       std::istringstream iss(newValue);
       iss >> display >> screenX >> screenY
 	  >> screenSize >> red >> green >> blue;
-      pViewer->fDisplayHeadTime = command->ConvertToBool(display);
-      pViewer->fDisplayHeadTimeX = screenX;
-      pViewer->fDisplayHeadTimeY = screenY;
-      pViewer->fDisplayHeadTimeSize = screenSize;
-      pViewer->fDisplayHeadTimeRed = red;
-      pViewer->fDisplayHeadTimeGreen = green;
-      pViewer->fDisplayHeadTimeBlue = blue;
+      pOGLSViewer->fDisplayHeadTime = command->ConvertToBool(display);
+      pOGLSViewer->fDisplayHeadTimeX = screenX;
+      pOGLSViewer->fDisplayHeadTimeY = screenY;
+      pOGLSViewer->fDisplayHeadTimeSize = screenSize;
+      pOGLSViewer->fDisplayHeadTimeRed = red;
+      pOGLSViewer->fDisplayHeadTimeGreen = green;
+      pOGLSViewer->fDisplayHeadTimeBlue = blue;
+      return;
     }
 
   if (command == fpCommandDisplayLightFront)
@@ -304,18 +353,19 @@ void G4OpenGLViewerMessenger::SetNewValue
 	  >> originX >> originY >> originZ >> unitS
 	  >> originT >> unitT
 	  >> red >> green >> blue;
-      pViewer->fDisplayLightFront = command->ConvertToBool(display);
-      pViewer->fDisplayLightFrontX =
+      pOGLSViewer->fDisplayLightFront = command->ConvertToBool(display);
+      pOGLSViewer->fDisplayLightFrontX =
 	command->ConvertToDimensionedDouble(G4String(originX + ' ' + unitS));
-      pViewer->fDisplayLightFrontY =
+      pOGLSViewer->fDisplayLightFrontY =
 	command->ConvertToDimensionedDouble(G4String(originY + ' ' + unitS));
-      pViewer->fDisplayLightFrontZ =
+      pOGLSViewer->fDisplayLightFrontZ =
 	command->ConvertToDimensionedDouble(G4String(originZ + ' ' + unitS));
-      pViewer->fDisplayLightFrontT =
+      pOGLSViewer->fDisplayLightFrontT =
 	command->ConvertToDimensionedDouble(G4String(originT + ' ' + unitT));
-      pViewer->fDisplayLightFrontRed = red;
-      pViewer->fDisplayLightFrontGreen = green;
-      pViewer->fDisplayLightFrontBlue = blue;
+      pOGLSViewer->fDisplayLightFrontRed = red;
+      pOGLSViewer->fDisplayLightFrontGreen = green;
+      pOGLSViewer->fDisplayLightFrontBlue = blue;
+      return;
     }
 
   if (command == fpCommandEndTime)
@@ -325,35 +375,23 @@ void G4OpenGLViewerMessenger::SetNewValue
       std::istringstream iss(newValue);
       iss >> end_time_string >> end_time_unit
 	  >> time_range_string >> time_range_unit;
-      pViewer->fEndTime = command->ConvertToDimensionedDouble
+      pOGLSViewer->fEndTime = command->ConvertToDimensionedDouble
 	(G4String(end_time_string + ' ' + end_time_unit));
       G4double timeRange = command->ConvertToDimensionedDouble
 	(G4String(time_range_string + ' ' + time_range_unit));
       if (timeRange > 0.) {
-	pViewer->fStartTime = pViewer->fEndTime - timeRange;
+	pOGLSViewer->fStartTime = pOGLSViewer->fEndTime - timeRange;
       }
-      if (pViewer->fVP.IsAutoRefresh())
+      if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      return;
     }
 
   if (command == fpCommandFade)
     {
-      pViewer->fFadeFactor = command->ConvertToDouble(newValue);
-      if (pViewer->fVP.IsAutoRefresh())
+      pOGLSViewer->fFadeFactor = command->ConvertToDouble(newValue);
+      if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-    }
-
-  if (command == fpCommandPrintMode)
-    {
-      if (newValue == "vectored") pViewer->vectored_ps = true;
-      if (newValue == "pixmap") {
-	pViewer->vectored_ps = false;
-	if (pVisManager->GetVerbosity() >= G4VisManager::warnings) {
-	  G4cout <<
-	    "WARNING: Only implemented for X Windows at present."
-		 << G4endl;
-	}
-      }
     }
 
   if (command == fpCommandStartTime)
@@ -363,22 +401,16 @@ void G4OpenGLViewerMessenger::SetNewValue
       std::istringstream iss(newValue);
       iss >> start_time_string >> start_time_unit
 	  >> time_range_string >> time_range_unit;
-      pViewer->fStartTime = command->ConvertToDimensionedDouble
+      pOGLSViewer->fStartTime = command->ConvertToDimensionedDouble
 	(G4String(start_time_string + ' ' + start_time_unit));
       G4double timeRange = command->ConvertToDimensionedDouble
 	(G4String(time_range_string + ' ' + time_range_unit));
       if (timeRange > 0.) {
-	pViewer->fEndTime = pViewer->fStartTime + timeRange;
+	pOGLSViewer->fEndTime = pOGLSViewer->fStartTime + timeRange;
       }
-      if (pViewer->fVP.IsAutoRefresh())
+      if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-    }
-
-  if (command == fpCommandTransparency)
-    {
-      pViewer->transparency_enabled = command->ConvertToBool(newValue);
-      if (pViewer->fVP.IsAutoRefresh())
-	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+      return;
     }
 
 }

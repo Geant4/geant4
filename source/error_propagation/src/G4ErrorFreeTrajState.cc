@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorFreeTrajState.cc,v 1.7 2007/09/24 16:25:57 arce Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ErrorFreeTrajState.cc,v 1.8 2009/05/14 13:53:06 arce Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -202,6 +202,8 @@ std::ostream& operator<<(std::ostream& out, const G4ErrorFreeTrajState& ts)
 G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
 {
   G4double stepLengthCm = aTrack->GetStep()->GetStepLength()/cm;
+  if( G4ErrorPropagatorData::GetErrorPropagatorData()->GetStage() == G4ErrorStage_Deflation ) stepLengthCm *= -1.;
+
   G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
   if( std::fabs(stepLengthCm) <= kCarTolerance/cm ) return 0;

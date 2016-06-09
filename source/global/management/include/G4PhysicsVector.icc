@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.icc,v 1.17 2008/09/22 08:26:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicsVector.icc,v 1.23 2009/11/18 11:42:03 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 //---------------------------------------------------------------
@@ -58,10 +58,18 @@ inline
 
 //---------------------------------------------------------------
 
+inline
+ G4double G4PhysicsVector::Energy(const size_t binNumber) const
+{
+  return binVector[binNumber];
+}
+
+//---------------------------------------------------------------
+
 inline 
  size_t G4PhysicsVector::GetVectorLength() const
 {
-  return numberOfBin;
+  return numberOfNodes;
 }
 
 //---------------------------------------------------------------
@@ -93,21 +101,23 @@ inline
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  if( !secDerivative ) { FillSecondDerivatives(); }
+  if(0 == secDerivative.size() ) { FillSecondDerivatives(); }
 
   // check bin value
-  G4double delta = binVector[lastBin+1] - binVector[lastBin];
+  G4double x1 = binVector[lastBin];
+  G4double x2 = binVector[lastBin+1];
+  G4double delta = x2 - x1;
 
-  G4double a = (binVector[lastBin+1] - lastEnergy)/delta;
-  G4double b = (lastEnergy - binVector[lastBin])/delta;
+  G4double a = (x2 - lastEnergy)/delta;
+  G4double b = (lastEnergy - x1)/delta;
    
   // Final evaluation of cubic spline polynomial for return   
   G4double y1 = dataVector[lastBin];
   G4double y2 = dataVector[lastBin+1];
 
   G4double res = a*y1 + b*y2 + 
-        ((a*a*a - a)*secDerivative[lastBin] +
-         (b*b*b - b)*secDerivative[lastBin+1])*delta*delta/6.0  ;
+        ( (a*a*a - a)*secDerivative[lastBin] +
+          (b*b*b - b)*secDerivative[lastBin+1] )*delta*delta/6.0;
 
   return res;
 }
@@ -116,6 +126,14 @@ inline
 
 inline
  G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) 
+{
+  return Value(theEnergy);
+}
+
+//---------------------------------------------------------------
+
+inline
+ G4double G4PhysicsVector::Value(G4double theEnergy) 
 {
   // Use cache for speed up - check if the value 'theEnergy' is same as the 
   // last call. If it is same, then use the last bin location. Also the
@@ -133,18 +151,14 @@ inline
      lastEnergy = edgeMin;
      lastValue  = dataVector[0];
 
-  } else if(theEnergy < lastEnergy && theEnergy >= binVector[lastBin-1]) {
-     lastBin--;
-     lastEnergy = theEnergy;
-     Interpolation();
-
   } else if( theEnergy >= edgeMax ){
-     lastBin = numberOfBin-1;
+     lastBin = numberOfNodes-2;
      lastEnergy = edgeMax;
-     lastValue  = dataVector[lastBin];
+     lastValue  = dataVector[numberOfNodes-1];
 
   } else {
      lastBin = FindBinLocation(theEnergy); 
+     if(lastBin >= numberOfNodes-1) {lastBin = numberOfNodes-2;} 
      lastEnergy = theEnergy;
      Interpolation();
   }
@@ -166,11 +180,6 @@ inline
  void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
 {
   dataVector[binNumber] = theValue;
-
-  // Fill the bin which is hidden to user with theValue. This is to 
-  // handle correctly when Energy=theEmax in getValue.
-
-  if(binNumber==numberOfBin-1) { dataVector[binNumber+1] = theValue; }
 }
 
 //---------------------------------------------------------------
@@ -180,7 +189,7 @@ inline
 {
   G4bool status=false;
 
-  if(numberOfBin > 0) { status=true; }
+  if(numberOfNodes > 0) { status=true; }
   return status;
 }
 

@@ -1,4 +1,4 @@
-$Id: README,v 1.26 2008/10/23 13:08:23 maire Exp $
+$Id: README,v 1.27 2009/09/16 18:07:30 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -40,16 +40,15 @@ $Id: README,v 1.26 2008/10/23 13:08:23 maire Exp $
     physics_lists subdirectory.
      
     Local physics lists:	 
-    - "standard"	standard EM physics with current 'best' options setting.
-                        these options are explicited in PhysListEmStandard
-    - "livermore"       low-energy EM physics using Livermore data
-    - "penelope"        low-energy EM physics implementing Penelope models
+    - "local"	standard EM physics with current 'best' options setting.
+                these options are explicited in PhysListEmStandard
     
     From geant4/source/physics_lists/builders:	 
-    - "emstandard"      recommended standard EM physics for LHC
+    - "emstandard_opt0" recommended standard EM physics for LHC
     - "emstandard_opt1" best CPU performance standard physics for LHC
     - "emstandard_opt2"     
-    - "emstandard_opt3" 
+    - "emstandard_opt3" best current advanced EM options. 
+                        analog to "local" above 
     
     Physics lists and options can be (re)set with UI commands
     

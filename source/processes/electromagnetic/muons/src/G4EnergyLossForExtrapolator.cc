@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc,v 1.18 2008/11/13 14:14:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EnergyLossForExtrapolator.cc,v 1.19 2009/07/09 17:04:55 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -229,7 +229,7 @@ void G4EnergyLossForExtrapolator::Initialisation()
 
   currentParticleName = "";
 
-  linLossLimit = 0.001;
+  linLossLimit = 0.01;
   emin         = 1.*MeV;
   emax         = 10.*TeV;
   nbins        = 70;
@@ -405,9 +405,9 @@ void G4EnergyLossForExtrapolator::ComputeElectronDEDX(const G4ParticleDefinition
     const G4MaterialCutsCouple* couple = couples[i];
     G4PhysicsVector* aVector = (*table)[i];
 
-    for(G4int j=0; j<nbins; j++) {
+    for(G4int j=0; j<=nbins; j++) {
         
-       G4double e = aVector->GetLowEdgeEnergy(j);
+       G4double e = aVector->Energy(j);
        G4double dedx = ioni->ComputeDEDX(couple,part,e,e) + brem->ComputeDEDX(couple,part,e,e);
        if(1<verbose) {
          G4cout << "j= " << j
@@ -453,9 +453,9 @@ void G4EnergyLossForExtrapolator::ComputeMuonDEDX(const G4ParticleDefinition* pa
       G4cout << "i= " << i << "  mat= " << mat->GetName() << G4endl;
     const G4MaterialCutsCouple* couple = couples[i];
     G4PhysicsVector* aVector = (*table)[i];
-    for(G4int j=0; j<nbins; j++) {
+    for(G4int j=0; j<=nbins; j++) {
         
-       G4double e = aVector->GetLowEdgeEnergy(j);
+       G4double e = aVector->Energy(j);
        G4double dedx = ioni->ComputeDEDX(couple,part,e,e) +
 	               pair->ComputeDEDX(couple,part,e,e) +
 	               brem->ComputeDEDX(couple,part,e,e);
@@ -498,9 +498,9 @@ void G4EnergyLossForExtrapolator::ComputeProtonDEDX(const G4ParticleDefinition* 
       G4cout << "i= " << i << "  mat= " << mat->GetName() << G4endl;
     const G4MaterialCutsCouple* couple = couples[i];
     G4PhysicsVector* aVector = (*table)[i];
-    for(G4int j=0; j<nbins; j++) {
+    for(G4int j=0; j<=nbins; j++) {
         
-       G4double e = aVector->GetLowEdgeEnergy(j);
+       G4double e = aVector->Energy(j);
        G4double dedx = ioni->ComputeDEDX(couple,part,e,e);
        aVector->PutValue(j,dedx);
        if(1<verbose) {
@@ -541,9 +541,9 @@ void G4EnergyLossForExtrapolator::ComputeTrasportXS(const G4ParticleDefinition* 
     if(1<verbose)
       G4cout << "i= " << i << "  mat= " << mat->GetName() << G4endl;
     G4PhysicsVector* aVector = (*table)[i];
-    for(G4int j=0; j<nbins; j++) {
+    for(G4int j=0; j<=nbins; j++) {
         
-       G4double e = aVector->GetLowEdgeEnergy(j);
+       G4double e = aVector->Energy(j);
        G4double xs = msc->CrossSectionPerVolume(mat,part,e);
        aVector->PutValue(j,xs);
        if(1<verbose) {

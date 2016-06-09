@@ -1,4 +1,4 @@
-# $Id: TestEm12.in,v 1.8 2008/09/23 20:48:12 maire Exp $
+# $Id: TestEm12.in,v 1.9 2009/09/22 15:18:20 maire Exp $
 #
 # limit the step size from histos 1 and 8
 #
@@ -9,7 +9,7 @@
 /testem/det/setRadius  3 cm
 /testem/det/setNbOfLayers 1
 #
-/testem/phys/addPhysics  standard	# em physics
+/testem/phys/addPhysics  local	# em physics
 #
 /run/initialize
 #

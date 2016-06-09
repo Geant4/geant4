@@ -34,6 +34,7 @@ NeutronHPCrossSections:=/home/yoshidah/G4data/G4NDL3.7
 G4LEDATA:=/home/yoshidah/G4data/G4EMLOW2.3
 G4LEVELGAMMADATA:=/home/yoshidah/G4data/PhotonEvaporation
 G4RADIOACTIVEDATA:=/home/yoshidah/G4data/RadiativeDecay
+G4REALSURFACEDATA:=/home/yoshidah/G4data/RealSurface1.0
 
 ifndef G4INSTALL
    G4INSTALL = ../../..

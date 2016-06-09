@@ -24,13 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCodeVector.hh,v 1.19 2006/06/29 20:06:25 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QPDGCodeVector.hh,v 1.20 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
 // Type defenition for Hadron definition in CHIPS model
 // ---------------------------------------------------------------
+// Short description: The PDG Code is made on the basis of the Quark
+// Content (G4QuarkContent) of the hadronic state (including nuclear
+// fragments). The PDG code of the ground state (e.g. pi, N, etc.) is
+// calculated. It includes a complicated algortithm of the G.S. mass
+// calculation for nuclear fragments (now it is synchronised with the
+// G4 nuclear massess).
+// -------------------------------------------------------------------
 
 #ifndef G4QPDGCodeVector_h
 #define G4QPDGCodeVector_h 1

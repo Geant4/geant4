@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamPhysicsList.cc,v 1.7 2008/08/20 11:08:29 sincerti Exp $
+// $Id: MicrobeamPhysicsList.cc,v 1.8 2009/04/30 10:23:57 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "G4ParticleDefinition.hh"
@@ -106,25 +106,59 @@ void MicrobeamPhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-#include "G4MultipleScattering.hh"
+// *** Processes and models
+
+// gamma
+
+#include "G4PhotoElectricEffect.hh"
+#include "G4LivermorePhotoElectricModel.hh"
+
+#include "G4ComptonScattering.hh"
+#include "G4LivermoreComptonModel.hh"
+
+#include "G4GammaConversion.hh"
+#include "G4LivermoreGammaConversionModel.hh"
+
+#include "G4RayleighScattering.hh" 
+#include "G4LivermoreRayleighModel.hh"
+
+// e-
+
+#include "G4eMultipleScattering.hh"
+#include "G4UniversalFluctuation.hh"
+
 #include "G4eIonisation.hh"
+#include "G4LivermoreIonisationModel.hh"
+
 #include "G4eBremsstrahlung.hh"
+#include "G4LivermoreBremsstrahlungModel.hh"
+
+// e+
+
 #include "G4eplusAnnihilation.hh"
+
+// mu
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyRayleigh.hh"
+// hadrons
 
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
-
-#include "G4hLowEnergyIonisation.hh"
 #include "G4hMultipleScattering.hh"
+#include "G4MscStepLimitType.hh"
+
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
+
+#include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
+#include "G4IonParametrisedLossModel.hh"
+
+//
+
+#include "G4LossTableManager.hh"
+#include "G4EmProcessOptions.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -142,72 +176,91 @@ void MicrobeamPhysicsList::ConstructEM()
     if (particleName == "gamma") {
 
 
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);     
+      G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
+      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = new G4LivermorePhotoElectricModel();
+      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      pmanager->AddDiscreteProcess(thePhotoElectricEffect);
 
-      G4LowEnergyPhotoElectric * LePeprocess = new G4LowEnergyPhotoElectric();
-      LePeprocess->ActivateAuger(true);
-      LePeprocess->SetCutForLowEnSecPhotons(0.250 * keV);
-      LePeprocess->SetCutForLowEnSecElectrons(0.250 * keV);
-      pmanager->AddDiscreteProcess(LePeprocess);
-      
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());
-      
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh());
+      G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      G4LivermoreComptonModel* theLivermoreComptonModel = new G4LivermoreComptonModel();
+      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+      pmanager->AddDiscreteProcess(theComptonScattering);
+
+      G4GammaConversion* theGammaConversion = new G4GammaConversion();
+      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = new G4LivermoreGammaConversionModel();
+      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      pmanager->AddDiscreteProcess(theGammaConversion);
+
+      G4RayleighScattering* theRayleigh = new G4RayleighScattering();
+      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
+      theRayleigh->AddEmModel(0, theRayleighModel);
+      pmanager->AddDiscreteProcess(theRayleigh);
       
       pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
-
       
     } else if (particleName == "e-") {
      
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
       
-      G4LowEnergyIonisation * LeIoprocess = new G4LowEnergyIonisation("IONI");
-      LeIoprocess->ActivateAuger(true);
-      LeIoprocess->SetCutForLowEnSecPhotons(0.1*keV);
-      LeIoprocess->SetCutForLowEnSecElectrons(0.1*keV);
-      pmanager->AddProcess(LeIoprocess, -1,  2, 2); 
-
-      G4LowEnergyBremsstrahlung * LeBrprocess = new G4LowEnergyBremsstrahlung();
-      pmanager->AddProcess(LeBrprocess, -1, -1, 3);
+      // Ionisation
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->AddEmModel(0, new G4LivermoreIonisationModel(), new G4UniversalFluctuation() );
+      eIoni->SetStepFunction(0.2, 100*um); //     
+      pmanager->AddProcess(eIoni,                 -1, 2, 2);
+      
+      // Bremsstrahlung
+      G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
+      eBrem->AddEmModel(0, new G4LivermoreBremsstrahlungModel());
+      pmanager->AddProcess(eBrem, 		  -1,-3, 3);
 
       pmanager->AddProcess(new G4StepLimiter(), -1, -1, 4);
       
     } else if (particleName == "e+") {
 
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1, 1);
+      // Identical to G4EmStandardPhysics_option3
+    
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
+      msc->SetStepLimitType(fUseDistanceToBoundary);
+      pmanager->AddProcess(msc,                   -1, 1, 1);
+
+      G4eIonisation* eIoni = new G4eIonisation();
+      eIoni->SetStepFunction(0.2, 100*um);      
+      pmanager->AddProcess(eIoni,                 -1, 2, 2);
       
-      pmanager->AddProcess(new G4eIonisation,      -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
       
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3, 3);
-      
-      pmanager->AddProcess(new G4eplusAnnihilation,  0, -1, 4);
+      pmanager->AddProcess(new G4eplusAnnihilation,0,-1, 4);
       
       pmanager->AddProcess(new G4StepLimiter(), -1, -1, 5);
 
-    } else if( particleName == "mu+" || 
-               particleName == "mu-"    ) {
+    } else if (particleName == "GenericIon") {
 
-    } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
-     
-      //pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
-      pmanager->AddProcess(new G4hMultipleScattering(),-1, 1, 1);
-      
-      G4hLowEnergyIonisation* hLowEnergyIonisation = new G4hLowEnergyIonisation();
-      pmanager->AddProcess(hLowEnergyIonisation,-1, 2, 2);
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
 
-      hLowEnergyIonisation->SetElectronicStoppingPowerModel(particle,"ICRU_R49He");
-      hLowEnergyIonisation->SetNuclearStoppingOn();
-      hLowEnergyIonisation->SetNuclearStoppingPowerModel("ICRU_R49");
-      hLowEnergyIonisation->SetFluorescence(true);
-      hLowEnergyIonisation->ActivateAugerElectronProduction(true);
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetEmModel(new G4IonParametrisedLossModel());
+      ionIoni->SetStepFunction(0.1, 20*um);
+      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
 
       pmanager->AddProcess(new G4StepLimiter(), -1, -1, 3);
 
+    } else if (particleName == "alpha" ||
+               particleName == "He3" ) {
+
+      // Identical to G4EmStandardPhysics_option3
+      
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+
+      G4ionIonisation* ionIoni = new G4ionIonisation();
+      ionIoni->SetStepFunction(0.1, 20*um);
+      pmanager->AddProcess(ionIoni,                   -1, 2, 2);
+
+      pmanager->AddProcess(new G4StepLimiter(), -1, -1, 3);
     }
 
-//end
+   //
 
   }
 }

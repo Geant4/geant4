@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.35 2006/06/29 19:42:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eLowEnergyLoss.cc,v 1.37 2009/07/23 09:15:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //  
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -272,7 +272,7 @@ void G4eLowEnergyLoss::BuildDEDXTable(
                     LowerBoundEloss, UpperBoundEloss, NbinEloss);
 
          // loop for the kinetic energy
-         for (G4int i=0; i<NbinEloss; i++)
+         for (G4int i=0; i<=NbinEloss; i++)
             {
               LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
               //here comes the sum of the different tables created by the

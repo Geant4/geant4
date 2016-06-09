@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: hadr00.cc,v 1.1 2008/07/07 16:37:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: hadr00.cc,v 1.2 2009/06/26 16:27:00 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------
 //      GEANT4 hadr00
@@ -72,7 +72,17 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new DetectorConstruction());
 
   G4PhysListFactory factory;
-  G4VModularPhysicsList* phys = factory.ReferencePhysList();
+  G4VModularPhysicsList* phys = 0;
+
+  // Physics List name defined via 2nd argument
+  if (argc==3) {
+    G4String physName = argv[2];
+    if(factory.IsReferencePhysList(physName)) 
+      phys = factory.GetReferencePhysList(physName);
+  }
+
+  // Physics List is defined via environment variable PHYSLIST
+  if(!phys) phys = factory.ReferencePhysList();
   runManager->SetUserInitialization(phys);
 
   runManager->SetUserAction(new PrimaryGeneratorAction());

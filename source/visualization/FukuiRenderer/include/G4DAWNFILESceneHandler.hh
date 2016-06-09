@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.16 2006/06/29 21:16:30 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.17 2009/10/21 14:59:17 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Satoshi TANAKA
 
@@ -96,6 +96,9 @@ public:
   }
   void AddCompound ( const G4VHit& hit) {
     G4VSceneHandler::AddCompound(hit);
+  }
+  void AddCompound ( const G4THitsMap<G4double> & hits) {
+    G4VSceneHandler::AddCompound(hits);
   }
 
   void ClearTransientStore();  // Used for triggering detector re-drawing.

@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2008/12/09 17:53:13 arce Exp $
+$Id: History,v 1.13 2009/11/25 15:36:09 gcosmo Exp $
 -------------------------------------------------------------------
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -16,11 +16,44 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-9 December, 08 P.Arce (ascii-V09-01-06)
+25 November, 09  G.Cosmo (ascii-V09-02-10)
+- Fixed compilation warnings on G4tgbVolume detected on MacOS.
+
+24 November, 09  P.Arce (ascii-V09-02-09)
+- Corrected compilation errors introduced in last tag.
+
+19 November, 09  P.Arce (ascii-V09-02-08)
+- Small additions in Get and Set methods and constructors
+- Inclusion of extruded and tessellated solids
+
+17 May, 09  P.Arce (ascii-V09-02-06)
+- Fix of GNUmakefile 
+
+15 May, 09  P.Arce (ascii-V09-02-05)
+- Added parallel world management
+- Added G4tgbPlaceParamPhantom
+
+16 February, 09  P.Arce (ascii-V09-02-04)
+- Removed deprecated class G4tgrFileOut, not used.
+
+5 February, 09  P.Arce (ascii-V09-02-03)
+- Fix in delta theta for handling of G4Sphere, and renaming 'phiTotal'
+  to 'phiDelta' for the relevant solids in G4tgbVolume implementation.
+
+26 January, 09  G.Cosmo (ascii-V09-02-02)
+- Correction for use of std:: namespace when calling standard mathematical
+  functions, introduced in previous tag.
+- Fixed compilation error introduced in previous tag.
+
+6 January, 09  P.Arce (ascii-V09-02-01)
+- Bug fix in definition of delta angle for all solids with section in Phi
+  in G4tgbVolume. Take into consideration tolerance.
+
+9 December, 08  P.Arce (ascii-V09-01-06)
 - SUBS -> SUBTRACTION, INTERS -> INTERSECTION
 - add FindG4PhysVol, delete FindLVs (declared but not defined)
 
-3 December, 08 P.Arce (ascii-V09-01-05)
+3 December, 08  P.Arce (ascii-V09-01-05)
 - Include possibility of placements inside divisions
 - Correct rotation matrix in circular parameterisations
 - Small output messages changes

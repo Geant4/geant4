@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_EMV.icc,v 1.5 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: QGSP_EMV.icc,v 1.7 2009/11/27 17:28:19 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 // Author: 2002 J.P. Wellisch
 //
 // Modified:
+// 18.05.2009 G.Folger: obsoleted
 // 23.11.2005 G.Folger: migration to non static particles 
 // 30.11.2005 G.Folger: Register EmStandard first,
 //                      Use EmStandard71 
@@ -73,6 +74,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSP_EMV<T>::TQGSP_EMV(G4int ver):  T()
 {
   G4DataQuestionaire it(photon);
@@ -80,6 +83,9 @@ template<class T> TQGSP_EMV<T>::TQGSP_EMV(G4int ver):  T()
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSP_EMV", "QGSP_BERT_EMV");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics_option1(ver));

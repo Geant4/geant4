@@ -14,6 +14,152 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09 December 2009 Gunter Folger  (hadr-deex-V09-02-23)
+-----------------------------------------------------
+- Include fixes in ablation by Pete Truscott:
+   Ablation has been updated, largely to comply with updates in
+   G4Evaporation, but also some oddities in the way G4Fragment works 
+   (or doesn't work!), and to fix a bug in fragment identification 
+   when evaporation isn't used.
+
+01 December 2009 Gabriele Cosmo (hadr-deex-V09-02-22)
+-----------------------------------------------------
+- Fixed singletons in utils sub-module to canonical form, to help preventing
+  leaks reported by Valgrind (tag hadr-deex-util-V09-02-01).
+- Corrected argument to std::pow() in G4FermiConfiguration.cc to fix
+  compilation problem on Windows VC7.
+
+27 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-21)
+----------------------------------------------------------
+- G4ExcitationHandler - cleanup the logic; reduce number internal vectors;
+                        fixed memory leak; should work bit faster
+
+24 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-20)
+----------------------------------------------------------
+- G4ExcitationHandler - fixed double deletion only on top of tag 18
+
+23 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-19)
+----------------------------------------------------------
+- G4ExcitationHandler - fixed double deletion; cleanup logic of
+                        new/delete of intermediate G4Fragments
+                        reducing number of coping
+
+22 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-18)
+----------------------------------------------------------
+- G4FissionLevelDensityParameter tuning using IAEA benchmark
+
+19 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-17)
+----------------------------------------------------------
+- G4ExcitationHandler - fixed memory leak
+
+19 November 2009 Vladimir Ivanchenko (hadr-deex-V09-02-16)
+----------------------------------------------------------
+-  J.M.Quesada retuning for IAEA spallation data fission parameters
+    in G4FissionParameters and G4FissionLevelDensityParameter
+-  J.M.Quesada improved implementation of Gamma function computation
+    in configuration weight inside G4FermiConfiguration
+-  V.Ivanchenko added a G4NeutronRadCapture model (a simple 1 gamma 
+                emission with 4-momentum balance)
+-  V.Ivanchenko return default setup of 9.2 for G4ExcitationHandler
+
+08 October 2009 Vladimir Ivanchenko (hadr-deex-V09-02-15)
+----------------------------------------------------------
+-  J.M.Quesada fixed old problem in G4GEMChannel - computation of
+        Coulomb barrier was not consistent with G4GEMProbability 
+
+25 September 2009 Vladimir Ivanchenko (hadr-deex-V09-02-14)
+----------------------------------------------------------
+-  J.M.Quesada fixed G4GEMProbability and G4GEMChannel to provide 
+   the same probability as proposed in original papers;
+   J.M.Quesada fixed G4ExitationHandler to for the case when FermiBreakUp 
+   and multi-fragmentation model are activated;
+-  V.Ivanchenko added a protection on unphysical initial state in G4GEMChannel
+
+16 September 2009 Vladimir Ivanchenko (hadr-deex-V09-02-13)
+----------------------------------------------------------
+-  J.M.Quesada updated nearly all classes of GEM sub-package by
+   introduction new classes G4GEMCoulombBarrier, G4AlphaGEMCoulombBarrier,
+   G4DeuteronGEMCoulombBarrier, G4He3GEMCoulombBarrier,
+   G4ProtonGEMCoulombBarrier, G4TritonGEMCoulombBarrier and corresponding 
+   changings in other classes of the sub-package;
+   fixed units inside G4GEMProbability computations
+
+27 July 2009 Vladimir Ivanchenko (hadr-deex-V09-02-12)
+---------------------------------------------------------
+- G4EvaporationGEMFactory - cleanup
+- G4Evaporation - added method SetCombinedCannels to define new evaporation
+                  factory G4EvaporationDefaultGEMFactory
+- G4EvaporationDefaultGEMFactory - new class proposed by J.M.Quesada in
+                    which light mesons probabilities are computed from
+                    default classes and other fragments from GEM
+- G4FissionLevelDensityParameter, G4FissionParameters - J.M.Quesada tuning
+                    to IAEA benchmark data
+
+15 July 2009 Vladimir Ivanchenko (hadr-deex-V09-02-11)
+---------------------------------------------------------
+- G4GEMProbability - J.M.Quesada fixed units (hbar_Plank -> hbarc)
+
+9 July 2009 Vladimir Ivanchenko (hadr-deex-V09-02-10)
+---------------------------------------------------------
+- G4FermiFragmentsPool - J.M.Quesada fixed units (keV -> MeV), removed
+                         wrong levels, added new levels according
+                         to  http://www.nndc.bnl.gov/chart
+
+13 March 2009 Vladimir Ivanchenko (hadr-deex-V09-02-09)
+---------------------------------------------------------
+- G4CompetitiveFission - fixed 4-momentum balance by using direct Lorentz 
+                         computations (JMQ);
+                       - use G4 units (VI).
+ 
+12 March 2009 Alexander Howard (hadr-deex-V09-02-08)
+----------------------------------------------------
+- Added Tatsumi's fixes ( G4GEMProbability.cc and G4GEMChannel.cc ) to GEM 
+  on top of patch9-02 ("hadr-deex-V09-02-07" and "hadr-deex-util-V09-02-00")
+
+04 March 2009 Gabriele Cosmo
+----------------------------
+- Fixed leaks in singleton classes in the 'util' module. Corrected wherever
+  needed inlining of constructors/destructors for base classes and usage of
+  virtual specification. Corresponds to tag "hadr-deex-util-V09-02-00".
+
+15 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-07)
+---------------------------------------------------------
+- G4EvaporationProbability - hbar_Plank substituted by hbarc (JMQ fix)
+- G4FissionProbability - fixed forgotten parenthesis (JMQ fix) 
+
+13 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-06)
+---------------------------------------------------------
+- Jose Manuel Quesada change the shape of probabilities (back to 9.2)
+  for d, t, He3, alpha near the Coulomb barrier
+
+12 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-05)
+---------------------------------------------------------
+- Jose Manuel Quesada change the shape of probabilities 
+  for d, t, He3, alpha near the Coulomb barrier
+
+11 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-04)
+---------------------------------------------------------
+- Jose Manuel Quesada set default OPT=3 back for all particles
+  and add smearing of Coloumb barriers of d, t, he3, alpha 
+
+10 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-03)
+---------------------------------------------------------
+- Exclude updated G4VGammaDeexcitation
+
+10 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-02)
+---------------------------------------------------------
+- Jose Manuel Quesada set default OPT=3 for evaporation of protons 
+  and neutrons and OPT=1 for deuterons, tritons, alpha and He3
+
+10 February 2009 Vladimir Ivanchenko (hadr-deex-V09-02-01)
+---------------------------------------------------------
+- Miguel Cortes added extra protection to G4VGammaDeexcitation
+
+27 January 2009 Vladimir Ivanchenko (hadr-deex-V09-02-00)
+--------------------------------------------------------
+- Miguel Cortes fix of Lorentz transformation in G4VGammaDeexcitation,
+  which provides Doppler broading of gamma lines
+
 09 December 2008 Alexander Howard (hadr-deex-V09-01-25)
 ----------------------------------------------------
 - further increased verbosity in G4Evaporation.cc to try to understand channel

@@ -36,8 +36,12 @@
 //
 // First implementation: 10. 11. 2008
 //
-// Modifications:
-//
+// Modifications: 03. 02. 2009 - Bug fix iterators (AL)
+//                11. 03. 2009 - Introduced new table handler (G4IonDEDXHandler)
+//                               and modified method to add/remove tables
+//                               (tables are now built in initialisation phase),
+//                               Minor bug fix in ComputeDEDXPerVolume (AL)
+//                20. 11. 2009 - Added set-method for energy loss limit (AL)
 //
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
@@ -185,7 +189,7 @@ LossTableList::iterator G4IonParametrisedLossModel::IsApplicable(
                     const G4ParticleDefinition* particle,  // Projectile (ion) 
                     const G4Material* material) {          // Target material
 
-  LossTableList::iterator iter = lossTableList.begin();
+  LossTableList::iterator iter = lossTableList.end();
   LossTableList::iterator iterTables = lossTableList.begin();
   LossTableList::iterator iterTables_end = lossTableList.end();
 
@@ -199,4 +203,15 @@ LossTableList::iterator G4IonParametrisedLossModel::IsApplicable(
   }
 
   return iter;
+}
+
+
+inline
+void G4IonParametrisedLossModel::SetEnergyLossLimit(
+                                            G4double ionEnergyLossLimit) {
+
+  if(ionEnergyLossLimit > 0 && ionEnergyLossLimit <=1) {
+
+     energyLossLimit = ionEnergyLossLimit;
+  }
 }

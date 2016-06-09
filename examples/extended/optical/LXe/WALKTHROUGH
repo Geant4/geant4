@@ -15,11 +15,14 @@
 
 #3) Run a basic event
 
-#3a)Turn on verbose output at end of event
+#3a) Run initialize - do this only once
+/run/initialize
+
+#3b)Turn on verbose output at end of event
 #   We'll leave it on for the rest of the events in the walkthrough too
 /LXe/eventVerbose 1
 
-#3b)Run
+#3c)Run
 /run/beamOn
 
 #You will see a blue trajectory representing the gamma and some green

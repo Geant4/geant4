@@ -24,14 +24,28 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.cc,v 1.13 2008/03/17 13:40:53 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CompositeEMDataSet.cc,v 1.15 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
 // 1 Aug 2001   MGP        Created
+//
+// 15 Jul 2009   Nicolas A. Karakatsanis
+//
+//                           - LoadNonLogData method was created to load only the non-logarithmic data from G4EMLOW
+//                             dataset. It is essentially performing the data loading operations as in the past.
+//
+//                           - LoadData method was revised in order to calculate the logarithmic values of the data
+//                             It retrieves the data values from the G4EMLOW data files but, then, calculates the
+//                             respective log values and loads them to seperate data structures. 
+//
+//                           - SetLogEnergiesData method was cretaed to set logarithmic values to G4 data vectors.
+//                             The EM data sets, initialized this way, contain both non-log and log values.
+//                             These initialized data sets can enhance the computing performance of data interpolation
+//                             operations
 //
 // -------------------------------------------------------------------
 
@@ -113,6 +127,27 @@ void G4CompositeEMDataSet::SetEnergiesData(G4DataVector* argEnergies, G4DataVect
   G4Exception(message.str().c_str());
 }
 
+void G4CompositeEMDataSet::SetLogEnergiesData(G4DataVector* argEnergies, 
+                                              G4DataVector* argData,
+                                              G4DataVector* argLogEnergies,
+                                              G4DataVector* argLogData, 
+                                              G4int argComponentId)
+{
+  G4VEMDataSet * component(components[argComponentId]);
+ 
+  if (component)
+    {
+      component->SetLogEnergiesData(argEnergies, argData, argLogEnergies, argLogData, 0);
+      return;
+    }
+
+  std::ostringstream message;
+  message << "G4CompositeEMDataSet::SetEnergiesData - component " << argComponentId << " not found";
+ 
+  G4Exception(message.str().c_str());
+}
+
+
 G4bool G4CompositeEMDataSet::LoadData(const G4String& argFileName)
 {
   CleanUpComponents(); 
@@ -130,6 +165,23 @@ G4bool G4CompositeEMDataSet::LoadData(const G4String& argFileName)
   return true;
 }
 
+
+G4bool G4CompositeEMDataSet::LoadNonLogData(const G4String& argFileName)
+{
+  CleanUpComponents(); 
+
+  for (G4int z(minZ); z<maxZ; z++)
+    {
+      G4VEMDataSet* component = new G4EMDataSet(z, algorithm->Clone(), unitEnergies, unitData);
+      if (!component->LoadNonLogData(argFileName))
+	{
+	  delete component;
+	  return false;
+	}
+      AddComponent(component);
+    }
+  return true;
+}
 
 
 G4bool G4CompositeEMDataSet::SaveData(const G4String& argFileName) const

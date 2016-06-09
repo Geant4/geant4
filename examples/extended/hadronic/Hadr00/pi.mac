@@ -7,6 +7,7 @@
 /tracking/verbose 0
 #
 /testhadr/TargetMat        G4_Al 
+/testhadr/targetElm        Al
 /testhadr/TargetRadius     1  cm
 /testhadr/TargetLength     10 cm
 /testhadr/PrintModulo      10
@@ -17,7 +18,7 @@
 /gun/energy 100. MeV
 /testhadr/HistoType  root
 /testhadr/HistoName  pi+al
-/testhadr/particle   pi-
+/testhadr/particle   pi+
 /testhadr/verbose 0
 /process/eLoss/verbose 0
 /run/beamOn 0

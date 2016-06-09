@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.hh,v 1.13 2008/11/06 13:43:44 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLQtViewer.hh,v 1.20 2009/10/21 08:14:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
@@ -38,11 +38,12 @@
 
 #include "globals.hh"
 
-#include "G4VViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
-
 #include <qobject.h>
+#include "G4OpenGLViewer.hh"
+
 #include <qpoint.h>
+
+class G4OpenGLSceneHandler;
 
 class QGLWidget;
 class QDialog;
@@ -72,7 +73,6 @@ public:
   virtual ~G4OpenGLQtViewer ();
   void SetView ();
   virtual void updateQWidget()=0;
-  void setupViewport(int, int);
   QString setEncoderPath(QString path);
   QString getEncoderPath();
   QString setTempFolderPath(QString path);
@@ -100,11 +100,11 @@ public:
   void saveVideo();
   bool generateMpegEncoderParameters();
   void displayRecordingStatus();
+  void drawText(const char * ,int x,int y,int z, int size);
 
 protected:
   void CreateGLQtContext ();
   virtual void CreateMainWindow (QGLWidget*,QString);
-  void G4resizeGL(int, int);
   void G4manageContextMenuEvent(QContextMenuEvent *e);
   void G4MousePressEvent(QMouseEvent *event);
   void G4MouseReleaseEvent();
@@ -119,10 +119,8 @@ protected:
 
 
 protected:
-  G4int WinSize_x;
-  G4int WinSize_y;
   QGLWidget* fWindow;
-  QDialog* GLWindow;
+  QDialog* fGLWindow;
   bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;
@@ -133,11 +131,8 @@ protected:
   float fDeltaRotationAngleY;
   float fDeltaRotationAngleZ;
 
-  bool hasToRepaint;
-  bool readyToPaint;
-  bool zoomAction;
-  QPoint beginZoom;
-  QPoint endZoom;
+  bool fHasToRepaint;
+  bool fReadyToPaint;
 
 private:
   enum mouseActions {STYLE1,STYLE2,STYLE3,STYLE4}; 
@@ -146,9 +141,7 @@ private:
   void createPopupMenu();
   void createRadioAction(QAction *,QAction *, const std::string&,unsigned int a=1);
   void rescaleImage(int, int);
-  bool generateEPS(QString,int,QImage);  
-  bool generateVectorEPS (QString,int,int,QImage);
-  bool generatePS_PDF(QString,int,QImage);  
+  bool printPDF(const std::string,int,QImage);  
   void showMovieParametersDialog();
   void initMovieParameters();
   QString createTempFolder();
@@ -156,7 +149,7 @@ private:
   void setRecordingStatus(RECORDING_STEP);
   void setRecordingInfos(QString);
   QString getProcessErrorMsg();
-
+  QWidget* getParentWidget();
 
 #if QT_VERSION < 0x040000
   QPopupMenu *fContextMenu;

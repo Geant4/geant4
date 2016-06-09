@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2008/06/11 22:34:05 maire Exp $
+$Id: History,v 1.24 2009/11/21 16:12:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-11-09 V.Ivant (testem10-V09-02-00)
+- update PhysList according to 9.3 
 
 12-06-08 mma (testem10-V09-01-01)
 - Remove AIDA from GNUmakefile 

@@ -1,4 +1,4 @@
-# $Id: electron.mac,v 1.1 2007/02/13 17:57:20 maire Exp $
+# $Id: electron.mac,v 1.2 2009/10/12 21:47:57 maire Exp $
 #
 # macro file for TestEm18.cc
 #
@@ -7,6 +7,8 @@
 #
 /testem/det/setMat Water
 /testem/det/setSize 1 cm
+#
+/testem/phys/addPhysics standard
 #
 /testem/phys/setCuts 100 um
 #

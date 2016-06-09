@@ -24,13 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasmonVector.hh,v 1.19 2006/06/29 20:06:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QuasmonVector.hh,v 1.22 2009/11/16 18:15:01 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QuasmonVector ----------------
 //             by Mikhail Kossov, Sept 1999.
 // Type definition for a Vector of Quasmons - output of CHIPS model
 // ----------------------------------------------------------------
+// Short description: If partons from the G4QPartonPair are close in
+// rapidity, they create Quasmons, but if they are far in the rapidity
+// space, they can not interact directly. Say the bottom parton (quark)
+// has rapidity 0, and the top parton (antiquark) has rapidity 8, then
+// the top quark splits in two by radiating gluon, and each part has
+// rapidity 4, then the gluon splits in quark-antiquark pair (rapidity
+// 2 each), and then the quark gadiates anothe gluon and reachs rapidity
+// 1. Now it can interact with the bottom antiquark, creating a Quasmon
+// or a hadron. The intermediate partons is the string ladder.
+// ---------------------------------------------------------------------
 
 #ifndef G4QuasmonVector_h
 #define G4QuasmonVector_h 1

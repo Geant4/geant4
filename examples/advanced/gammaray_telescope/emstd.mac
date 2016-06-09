@@ -1,16 +1,2 @@
-/process/inactivate LowEnRayleigh   gamma
-/process/inactivate LowEnPhotoElec  gamma
-/process/inactivate LowEnCompton    gamma
-/process/inactivate LowEnConversion gamma
+/physics/addPhysics Standard EM
 
-/process/activate   phot            gamma
-/process/activate   compt           gamma
-/process/activate   conv            gamma
-
-/process/inactivate LowEnergyIoni   
-/process/inactivate LowEnBrem       
-
-/process/activate   eIoni           
-/process/activate   eBrem           
-
-/process/list

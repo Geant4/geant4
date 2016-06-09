@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.13 2006/06/29 21:19:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.18 2009/10/20 12:47:45 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  16th April 1997
@@ -42,6 +42,7 @@
 #include "G4Xt.hh"
 
 #include "G4OpenGLXmViewer.hh"
+#include "G4VSceneHandler.hh"
 
 #include "G4Scene.hh"
 
@@ -159,7 +160,9 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
   
   case 1:
     {
-
+      if (!pView->GetSceneHandler()->GetScene()) {
+        break;
+      }
       if (!pView->fppanning_top) {
 	std::ostringstream pan_Name;
 	pan_Name << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId;
@@ -450,12 +453,12 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	
 	pView->fpprint_col_radio1 = new G4OpenGLXmRadioButton ("Black and white",
 							       prcol_cb_list,
-							       pView->print_colour==false ? True : False,
+							       pView->fPrintColour==false ? True : False,
 							       0);
 	
 	pView->fpprint_col_radio2 = new G4OpenGLXmRadioButton ("Colour",
 							       prcol_cb_list,
-							       pView->print_colour==true ? True : False,
+							       pView->fPrintColour==true ? True : False,
 							       1);
 	
 	pView->fpprint_col_box->AddChild (pView->fpprint_col_radio1);
@@ -472,19 +475,19 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	
 	pView->fpprint_style_radio1 = new G4OpenGLXmRadioButton ("Screen dump (pixmap)",
 								 prsty_cb_list,
-								 pView->vectored_ps==false ? True : False,
+								 pView->fVectoredPs==false ? True : False,
 								 0);
 	
 	pView->fpprint_style_radio2 = new G4OpenGLXmRadioButton ("PostScript",
 								 prsty_cb_list,
-								 pView->vectored_ps==true ? True : False,
+								 pView->fVectoredPs==true ? True : False,
 								 1);
 	
 	pView->fpprint_style_box->AddChild (pView->fpprint_style_radio1);
 	pView->fpprint_style_box->AddChild (pView->fpprint_style_radio2);
 	
 	pView->fpprint_text = new G4OpenGLXmTextField ("Name of .eps file to save",
-						       (pView->print_string));
+						       (pView->getRealPrintFilename().c_str()));
 	pView->fpprint_box->AddChild (pView->fpprint_text);	
 	
 	pView->fpprint_line = new G4OpenGLXmSeparator ();

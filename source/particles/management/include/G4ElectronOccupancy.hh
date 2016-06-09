@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronOccupancy.hh,v 1.9 2006/06/29 19:23:08 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ElectronOccupancy.hh,v 1.10 2009/10/21 12:50:31 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -61,7 +61,7 @@
 class G4ElectronOccupancy 
 {
  public:
-   enum { MaxSizeOfOrbit = 7};
+   enum { MaxSizeOfOrbit = 10};
 
  public: // With Description
    G4ElectronOccupancy( G4int sizeOrbit = MaxSizeOfOrbit   );

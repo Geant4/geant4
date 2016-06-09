@@ -53,7 +53,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif
   ifndef X11LIBS
-    X11LIBS   := -L/usr/X11R6/lib$(ARCH)  -lXmu -lXt -lXext -lX11 -lSM -lICE
+    X11LIBS   := -L/usr/X11R6/lib$(ARCH)  -lXmu -lXt -lXext -lX11 -lXi -lSM -lICE
   endif
   ifndef XMFLAGS
     XMFLAGS   := -I/usr/X11R6/include
@@ -87,29 +87,39 @@ ifeq ($(G4SYSTEM),Linux-g++)
 
   ifndef QTFLAGS
     ifeq ($(QT_VERSION),4)
-      QTFLAGS   += -I$(QTHOME)/include/qt$(QT_VERSION)
-      QTFLAGS   += -I $(QTHOME)/include/qt$(QT_VERSION)/QtCore 
-      QTFLAGS   += -I $(QTHOME)/include/qt$(QT_VERSION)/QtGui 
-      QTFLAGS   += -I $(QTHOME)/include/qt$(QT_VERSION)/QtOpenGL 
+      QTFLAGS   += -I$(QTHOME)/include
+      QTFLAGS   += -I $(QTHOME)/include/QtCore 
+      QTFLAGS   += -I $(QTHOME)/include/QtGui 
+      QTFLAGS   += -I $(QTHOME)/include/QtOpenGL 
     else
-      QTFLAGS    := -I$(QTHOME)/include/qt$(QT_VERSION)/Qt
-      QTFLAGS    += -I$(QTHOME)/include/qt$(QT_VERSION)
+      QTFLAGS := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
+
+      # If Qt is not located in the STANDARD path, try to find it in some
+      # other places.(Ex: for ubuntu 8.10)
+      QT_ALT1 := $(shell ls  $(QTHOME)/include/qt$(QT_VERSION)/*.h 2>/dev/null | wc -l )
+      QT_ALT2 := $(shell ls  $(QTHOME)/include/qt$(QT_VERSION)/Qt/*.h 2>/dev/null | wc -l )
+      ifneq ($(QT_ALT1),0)
+        QTFLAGS := -I$(QTHOME)/include/qt$(QT_VERSION)
+      endif
+      ifneq ($(QT_ALT2),0)
+        QTFLAGS := -I$(QTHOME)/include/qt$(QT_VERSION)/Qt
+      endif
     endif
   endif
   ifndef QTLIBPATH
     QT_SEARCH_LIB1 := $(shell ls  $(QTHOME)/lib/qt$(QT_VERSION)/libq* 2>/dev/null | wc -l )
     QT_SEARCH_LIB2 := $(shell ls  $(QTHOME)/lib/libq*  2>/dev/null | wc -l )
     ifneq ($(QT_SEARCH_LIB1),0)
-      QTLIBPATH   := /lib/qt$(QT_VERSION)
+      QTLIBPATH   := $(QTHOME)/lib/qt$(QT_VERSION)
     endif
     ifneq ($(QT_SEARCH_LIB2),0)
-      QTLIBPATH   := /lib
+      QTLIBPATH   := $(QTHOME)/lib
     endif
   endif
   ifndef QTLIBS
-    QTLIBS   := -L$(QTHOME)$(QTLIBPATH)
+    QTLIBS   := -L$(QTLIBPATH)
     ifeq ($(QT_VERSION),3)
-      QT3_MT  := $(shell ls  $(QTHOME)$(QTLIBPATH)/libqt-mt.* 2>/dev/null | wc -l )
+      QT3_MT  := $(shell ls  $(QTLIBPATH)/libqt-mt.* 2>/dev/null | wc -l )
       ifneq ($(QT3_MT),0)
         QTLIBS  += -lqt-mt
       else
@@ -125,7 +135,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
         # already done in QTLIBS
         #      GLQTLIBS    := $(QTLIBS)
     else
-      GLQTLIBS    := -L$(QTHOME)$(QTLIBPATH) -lQtCore -lQtGui -lQtOpenGL
+      GLQTLIBS    := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtOpenGL
     endif
   endif
 #----------------------------------------------------------------------------

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmVWidgetShell.cc,v 1.5 2006/06/29 21:20:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmVWidgetShell.cc,v 1.6 2009/01/19 16:53:42 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //Base class for all Motif shell widgets
 

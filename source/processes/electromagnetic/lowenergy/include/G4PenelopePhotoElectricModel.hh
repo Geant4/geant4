@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.hh,v 1.1 2008/10/28 08:50:21 pandola Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopePhotoElectricModel.hh,v 1.2 2009/10/21 10:47:02 pandola Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Luciano Pandola
 //
@@ -32,6 +32,8 @@
 // -----------
 // 08 Oct 2008   L. Pandola   1st implementation. Migration from EM process 
 //                            to EM model
+// 21 Oct 2009   L. Pandola   Remove un-necessary methods and variables to handle
+//                            AtomicDeexcitationFlag - now demanded to G4VEmModel
 //
 // -------------------------------------------------------------------
 //
@@ -81,9 +83,6 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  void SetUseAtomicDeexcitation(G4bool value){fUseAtomicDeexcitation = value;};		 
-  G4bool GetUseAtomicDeexcitation(){return fUseAtomicDeexcitation;};
-
   void SetVerbosityLevel(G4int lev){verboseLevel = lev;};
   G4int GetVerbosityLevel(){return verboseLevel;};
 
@@ -96,13 +95,12 @@ private:
   G4PenelopePhotoElectricModel & operator=(const G4PenelopePhotoElectricModel &right);
   G4PenelopePhotoElectricModel(const G4PenelopePhotoElectricModel&);
 
-  G4double SampleElectronDirection(G4double ene);
+  G4double SampleElectronDirection(G4double energy);
 
   //Intrinsic energy limits of the model: cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
   G4double fIntrinsicHighEnergyLimit;
 
-  G4bool fUseAtomicDeexcitation;
   G4int verboseLevel;
   G4bool isInitialised;
 

@@ -65,8 +65,9 @@ private:
   static const G4double npTot[29];
   static const G4int tableSize;
 
-  std::map <G4String, G4LowEXsection *, std::less<G4String> > theCrossSections;
-  typedef std::map <G4String, G4LowEXsection*, std::less<G4String> > LowEMap;
+  std::map <G4ParticleDefinition *, G4LowEXsection *,
+  std::less<G4ParticleDefinition *> > theCrossSections;
+  typedef std::map <G4ParticleDefinition *, G4LowEXsection*, std::less<G4ParticleDefinition *> > LowEMap;
 
 };
 

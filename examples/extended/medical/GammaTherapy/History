@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2008/06/11 15:17:57 vnivanch Exp $
+$Id: History,v 1.27 2009/11/21 16:47:07 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-11-09  V.Ivant (gtherapy-V09-02-00)
+- update EM physics according to 9.3
 
 11-06-08  V.Ivant (gtherapy-V09-01-00)
 - Remove AIDA from GNUmakefile

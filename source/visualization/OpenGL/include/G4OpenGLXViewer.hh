@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.28 2007/11/10 14:50:01 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXViewer.hh,v 1.32 2009/04/28 14:33:04 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -37,13 +37,10 @@
 #ifndef G4OPENGLXVIEWER_HH
 #define G4OPENGLXVIEWER_HH
 
-#include "G4VViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
+#include "G4OpenGLViewer.hh"
 #include "globals.hh"
 
-#include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
-#include <X11/Xmu/StdCmap.h>
 
 #include <GL/glx.h>
 
@@ -65,20 +62,11 @@ protected:
   void CreateGLXContext (XVisualInfo* vi);
   virtual void CreateMainWindow ();
   virtual void CreateFontLists ();
-  void print();
 
   static int snglBuf_RGBA[12];
   static int dblBuf_RGBA[13];
 
 //////////////////////////////Pixmap (screen dump) production functions/////
-  GLubyte* grabPixels (int inColor,
-		       unsigned int width,
-		       unsigned int height);
-  int generateEPS (char* filnam,
-		   int inColour,
-		   unsigned int width,
-		   unsigned int height);
-  GLXContext create_GL_print_context (XVisualInfo*& pvi);
 
   XWindowAttributes                 xwa;
   Display                           *dpy;
@@ -96,9 +84,7 @@ protected:
                                     errorBase,
                                     eventBase,
                                     major,
-                                    minor,
-                                    x_origin,
-                                    y_origin;
+                                    minor;
   XSizeHints                        *norm_hints;
   XWMHints                          *wm_hints;
   XClassHint                        *class_hints;
@@ -109,9 +95,11 @@ protected:
                                     iconName;
   char                              charViewName [100];
 
+
 private:
   G4OpenGLXViewer (const G4OpenGLXViewer&);
   G4OpenGLXViewer& operator = (const G4OpenGLXViewer&);
+  GLXContext                        tmp_cx;
 };
 
 #endif

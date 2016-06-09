@@ -14,7 +14,7 @@ Physics List and G4HadronicProcessStore to access cross sections.
 
                            GEOMETRY
 
-The Target volume is a cilinder placed inside the World volume. Follwoing 
+The Target volume is a cylinder placed inside the World volume. Following 
 UI commands are available to modify the geometry:
 
 /testhadr/TargetMat     G4_Pb
@@ -22,12 +22,12 @@ UI commands are available to modify the geometry:
 /testhadr/TargetRadius  10 mm
 /testhadr/TargetLength  20 cm
 
-If geometry was changed between two runs, then the follwoing command need to
+If geometry was changed between two runs, then the following command need to
 be executed:
 
 /testhadr/update
 
-By default beam direction coinsides with the target axis and is Z axis 
+By default beam direction coincides with the target axis and is Z axis 
 in the global coordinate system. The beam starts in the middle of the target.
 G4ParticleGun is used as a primary generator. The energy and the type of 
 the beam can be defined via standard UI commands
@@ -44,7 +44,7 @@ QGSP_BERT Physics List will be instantiated.
                         CROSS SECTION
 
 At the end of any run the set of cross sections is built and can be printed 
-out for a given progectile particle and a target element, which can be 
+out for a given projectile particle and a target element, which can be 
 defined via UI commands:
 
 /testhadr/particle   pi+
@@ -61,7 +61,7 @@ The energy/momentum limits and number of bins can be set via UI commands:
 /testhadr/minMomentum 1 MeV
 /testhadr/maxMOmentum 10 TeV
 
-                          VISUALISATION
+                          VISUALIZATION
 
 For interactive mode G4 visualization options and variables should be
 defined, then the example should be recompiled:
@@ -80,7 +80,7 @@ command can be used:
 
 All histograms are provided in decimal logarithmic scale (log10(E/MeV)
 and log10(p/GeV)) for one projectile particle and one target element.
-The element is taken from the Geant4 NIST datebase, natural isotope 
+The element is taken from the Geant4 NIST database, natural isotope 
 composition is assumed. 
 
 To use histograms any of implementations of AIDA interfaces should
@@ -108,7 +108,7 @@ histograms using UI command:
 The following types are available: hbook, root, aida. They will be 
 stored in the file "name.hbook", "name.root", or "name.aida". 
 
-To show the contence of a histogram ID=i the commands may be applied:
+To show the content of a histogram ID=i the commands may be applied:
 
 /testhadr/HistoPrint  i
 

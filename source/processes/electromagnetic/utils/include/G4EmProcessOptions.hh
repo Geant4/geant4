@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.hh,v 1.14 2008/04/17 10:33:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmProcessOptions.hh,v 1.16 2009/10/29 19:25:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // -------------------------------------------------------------------
@@ -106,7 +106,8 @@ public:
 
   void SetLinearLossLimit(G4double val);
 
-  void ActivateDeexcitation(G4bool val, const G4Region* r = 0);
+  void ActivateDeexcitation(const G4String& proc, G4bool val, 
+			    const G4String& reg = "");
 
   void SetMscStepLimitation(G4MscStepLimitType val);
 
@@ -125,6 +126,8 @@ public:
   void SetBremsstrahlungTh(G4double val);
 
   void SetPolarAngleLimit(G4double val);
+
+  void SetFactorForAngleLimit(G4double val);
 
 private:
 

@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4FTFPPiKBuilder.hh,v 1.4 2009/04/23 18:54:57 japost Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4FTFPPiKBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4FTFPPiKBuilder_h
 #define G4FTFPPiKBuilder_h 1
 
@@ -61,6 +75,7 @@ class G4FTFPPiKBuilder : public G4VPiKBuilder
     virtual void Build(G4KaonZeroSInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
@@ -70,8 +85,9 @@ class G4FTFPPiKBuilder : public G4VPiKBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
 
-    G4PiNuclearCrossSection thePiData;
+    G4PiNuclearCrossSection* thePiData;
     G4double theMin;
+    G4double theMax;
 
 };
 

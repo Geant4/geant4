@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.8 2006/06/29 16:57:11 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsListMessenger.cc,v 1.9 2009/11/27 14:54:58 hbu Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,38 +43,38 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
   physDir = new G4UIdirectory("/testem/phys/");
   physDir->SetGuidance("physics list commands");
  
-  GammaToMuPairFac=new G4UIcmdWithADouble
+  GammaToMuPairFacCmd=new G4UIcmdWithADouble
                                       ("/testem/phys/SetGammaToMuPairFac",this);
-  GammaToMuPairFac->SetGuidance(
+  GammaToMuPairFacCmd->SetGuidance(
          "Set factor to artificially increase the GammaToMuPair cross section");
-  GammaToMuPairFac->SetParameterName("GammaToMuPairFac",false);
-  GammaToMuPairFac->SetRange("GammaToMuPairFac>0.0");
-  GammaToMuPairFac->AvailableForStates(G4State_PreInit,G4State_Idle);
+  GammaToMuPairFacCmd->SetParameterName("GammaToMuPairFac",false);
+  GammaToMuPairFacCmd->SetRange("GammaToMuPairFac>0.0");
+  GammaToMuPairFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  AnnihiToMuPairFac=new G4UIcmdWithADouble
+  AnnihiToMuPairFacCmd=new G4UIcmdWithADouble
                                      ("/testem/phys/SetAnnihiToMuPairFac",this);
-  AnnihiToMuPairFac->SetGuidance(
+  AnnihiToMuPairFacCmd->SetGuidance(
         "Set factor to artificially increase the AnnihiToMuPair cross section");
-  AnnihiToMuPairFac->SetParameterName("AnnihiToMuPairFac",false);
-  AnnihiToMuPairFac->SetRange("AnnihiToMuPairFac>0.0");
-  AnnihiToMuPairFac->AvailableForStates(G4State_PreInit,G4State_Idle);
+  AnnihiToMuPairFacCmd->SetParameterName("AnnihiToMuPairFac",false);
+  AnnihiToMuPairFacCmd->SetRange("AnnihiToMuPairFac>0.0");
+  AnnihiToMuPairFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
-  AnnihiToHadronFac=new G4UIcmdWithADouble
+  AnnihiToHadronFacCmd=new G4UIcmdWithADouble
                                       ("/testem/phys/SetAnnihiToHadronFac",this);
-  AnnihiToHadronFac->SetGuidance(
+  AnnihiToHadronFacCmd->SetGuidance(
        "Set factor to artificially increase the AnnihiToHadrons cross section");
-  AnnihiToHadronFac->SetParameterName("AnnihiToHadFac",false);
-  AnnihiToHadronFac->SetRange("AnnihiToHadFac>0.0");
-  AnnihiToHadronFac->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  AnnihiToHadronFacCmd->SetParameterName("AnnihiToHadFac",false);
+  AnnihiToHadronFacCmd->SetRange("AnnihiToHadFac>0.0");
+  AnnihiToHadronFacCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
-  delete GammaToMuPairFac;
-  delete AnnihiToMuPairFac;
-  delete AnnihiToHadronFac;  
+  delete GammaToMuPairFacCmd;
+  delete AnnihiToMuPairFacCmd;
+  delete AnnihiToHadronFacCmd;  
   delete physDir;  
 }
 
@@ -83,17 +83,17 @@ PhysicsListMessenger::~PhysicsListMessenger()
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 { 
-  if(command == GammaToMuPairFac)
+  if(command == GammaToMuPairFacCmd)
    { physList->SetGammaToMuPairFac(
-                           GammaToMuPairFac->GetNewDoubleValue(newValue));}   
+                           GammaToMuPairFacCmd->GetNewDoubleValue(newValue));}   
 
-  if( command == AnnihiToMuPairFac)
+  if( command == AnnihiToMuPairFacCmd)
    { physList->SetAnnihiToMuPairFac(
-                          AnnihiToMuPairFac->GetNewDoubleValue(newValue));}
+                          AnnihiToMuPairFacCmd->GetNewDoubleValue(newValue));}
 			  
-  if( command == AnnihiToHadronFac)
+  if( command == AnnihiToHadronFacCmd)
    { physList->SetAnnihiToHadronFac(
-                          AnnihiToHadronFac->GetNewDoubleValue(newValue));}			     
+                          AnnihiToHadronFacCmd->GetNewDoubleValue(newValue));}			     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

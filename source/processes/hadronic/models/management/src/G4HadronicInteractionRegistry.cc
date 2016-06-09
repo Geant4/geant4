@@ -23,54 +23,80 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HadronicInteractionRegistry.cc,v 1.9 2009/12/02 15:57:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+// 23-Jan-2009 V.Ivanchenko make the class to be a singleton
+
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4HadronicInteraction.hh"
 
-G4HadronicInteractionRegistry & G4HadronicInteractionRegistry::theRegistry()
+G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::theInstance = 0;
+
+G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::Instance()
 {
-  static G4HadronicInteractionRegistry theRegistryInstance;
-  return theRegistryInstance;
+  if(0 == theInstance) {
+    static G4HadronicInteractionRegistry manager;
+    theInstance = &manager;
+  }
+  return theInstance;
+}
+
+G4HadronicInteractionRegistry::G4HadronicInteractionRegistry()
+{}
+
+G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
+{
+  Clean();
+}
+
+void G4HadronicInteractionRegistry::Clean()
+{
+  size_t nModels = allModels.size();
+  //G4cout << "G4HadronicInteractionRegistry::Clean() start " << nModels << G4endl;
+  if(0 < nModels) {
+    for (size_t i=0; i<nModels; ++i) {
+      if( allModels[i] ) {
+	//G4cout << "delete " << i << G4endl;
+        //G4cout << allModels[i]->GetModelName() << G4endl;
+	G4HadronicInteraction * model = allModels[i];
+	allModels[i] = 0;
+	delete model;
+      }
+    }
+    allModels.clear();
+  }
+  //G4cout << "G4HadronicInteractionRegistry::Clean() is done " << G4endl; 
 }
 
 void G4HadronicInteractionRegistry::
 RegisterMe(G4HadronicInteraction * aModel)
 {
-  theRegistry().AddModel(aModel);
+  if(!aModel) { return; }
+  size_t nModels = allModels.size();
+  if(nModels > 0) {
+    for (size_t i=0; i<nModels; ++i) {
+      if( aModel == allModels[i] ) { return; }
+    }
+  }
+  //G4cout << "Register model <" << aModel->GetModelName() 
+  //<< ">  " << nModels+1 << G4endl;
+  allModels.push_back(aModel);
 }
 
 void G4HadronicInteractionRegistry::
 RemoveMe(G4HadronicInteraction * aModel)
 {
-  theRegistry().allModels.erase(std::find(theRegistry().allModels.begin(),
-                                          theRegistry().allModels.end(), aModel));
-  theRegistry().nModels = theRegistry().allModels.size();
-}
-
-G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
-{
-  /*
-  while(allModels.size()!=0)
-  {
-    delete allModels.front();
-  }
-  */
-}
-
-void G4HadronicInteractionRegistry::
-AddModel(G4HadronicInteraction * aModel)
-{
-  G4bool alreadyThere = false;
-  for(G4int i=0; i<nModels; i++)
-  {
-    if(allModels[i]==aModel)
-    {
-      alreadyThere = true;
-      break;
+  if(!aModel) { return; }
+  size_t nModels = allModels.size();
+  if(0 == nModels) { return; }
+  for (size_t i=0; i<nModels; ++i) {
+    if( aModel == allModels[i] ) {
+      //G4cout << "DeRegister model <" << aModel->GetModelName() 
+      //<< ">  " << i << G4endl;
+      allModels[i] = 0;
+      if(i == nModels-1) allModels.pop_back();
+      return;
     }
-  }
-  if(!alreadyThere)
-  {
-    nModels++;
-    allModels.push_back(aModel);
   }
 }

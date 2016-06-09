@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.18 2006/11/14 14:59:54 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Scene.hh,v 1.19 2009/11/04 12:49:16 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Scene  John Allison  19th July 1996.
@@ -79,6 +79,10 @@ public: // With description
   // Contains models which are described at the end of event when the
   // scene is current.
 
+  const std::vector<G4VModel*>& GetEndOfRunModelList () const;
+  // Contains models which are described at the end of event when the
+  // scene is current.
+
   const G4VisExtent& GetExtent () const;
   // Overall extent of all objects in the scene.
 
@@ -124,10 +128,19 @@ public: // With description
   // Returns false if model is already in the list.
   // Prints warnings if warn is true.
 
+  G4bool AddEndOfRunModel (G4VModel*, G4bool warn = false);
+  // Adds models of type which are described at the end of run when
+  // the scene is current.
+  // Returns false if model is already in the list.
+  // Prints warnings if warn is true.
+
   std::vector<G4VModel*>& SetRunDurationModelList ();
   // Allows you to change the model list - do with care!
 
   std::vector<G4VModel*>& SetEndOfEventModelList ();
+  // Allows you to change the model list - do with care!
+
+  std::vector<G4VModel*>& SetEndOfRunModelList ();
   // Allows you to change the model list - do with care!
 
   void SetRefreshAtEndOfEvent(G4bool);
@@ -157,6 +170,7 @@ private:
   G4String fName;
   std::vector<G4VModel*> fRunDurationModelList;
   std::vector<G4VModel*> fEndOfEventModelList;
+  std::vector<G4VModel*> fEndOfRunModelList;
   G4VisExtent fExtent;
   G4Point3D   fStandardTargetPoint;
   G4bool      fRefreshAtEndOfEvent;

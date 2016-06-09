@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHadrNucleusHE.cc,v 1.79 2008/01/14 10:39:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ElasticHadrNucleusHE.cc,v 1.81 2009/09/22 16:21:46 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //  The generator of high energy hadron-nucleus elastic scattering
@@ -219,7 +219,8 @@ void G4ElasticData::DefineNucleusParameters(G4double A)
 //
 
 G4ElasticHadrNucleusHE::G4ElasticHadrNucleusHE()
-  :G4HadronicInteraction("G4ElasticHadrNucleusHE")
+  : G4VHadronElastic("hElasticGlauber")
+  //  :G4HadronicInteraction("G4ElasticHadrNucleusHE")
 {
   verboseLevel = 0;
   plabLowLimit = 20.0*MeV;
@@ -298,7 +299,7 @@ G4ElasticHadrNucleusHE::~G4ElasticHadrNucleusHE()
 ////////////////////////////////////////////////////////////////////
 //
 //
-
+/*
 G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
                           const  G4HadProjectile  &aTrack,
                                  G4Nucleus        &targetNucleus)
@@ -456,14 +457,15 @@ G4HadFinalState * G4ElasticHadrNucleusHE::ApplyYourself(
 
   return &theParticleChange;
 }
-
+*/
 //////////////////////////////////////////////////////////////////////////
 //
 //
 
-G4double G4ElasticHadrNucleusHE::
-                     SampleT(  const G4ParticleDefinition* p,
-                                     G4double inLabMom, G4int Z, G4int N)
+G4double 
+G4ElasticHadrNucleusHE::SampleInvariantT(const G4ParticleDefinition* p,
+					 G4double inLabMom, 
+					 G4int Z, G4int N)
 {
   G4double plab  = inLabMom/GeV;   // (GeV/c)
   G4double Q2 = 0;
@@ -541,6 +543,18 @@ G4double G4ElasticHadrNucleusHE::
 	G4cout<<" SampleT: Q2(GeV^2)= "<<Q2<< "  t/tmax= " << Q2/Q2max <<G4endl;
     }
   return  Q2*GeV2;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double 
+G4ElasticHadrNucleusHE::SampleT(const G4ParticleDefinition* p,
+				G4double inLabMom, 
+				G4int Z, G4int N)
+{
+  return SampleInvariantT(p, inLabMom, Z, N);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh,v 1.11 2008/12/11 10:23:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpticalSurface.hh,v 1.15 2009/11/20 00:57:34 gum Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -63,15 +63,44 @@ enum G4OpticalSurfaceFinish
    polished,                    // smooth perfectly polished surface
    polishedfrontpainted,        // smooth top-layer (front) paint
    polishedbackpainted,         // same is 'polished' but with a back-paint
+
    ground,                      // rough surface
    groundfrontpainted,          // rough top-layer (front) paint
-   groundbackpainted            // same as 'ground' but with a back-paint
+   groundbackpainted,           // same as 'ground' but with a back-paint
+
+   polishedlumirrorair,         // mechanically polished surface, with lumirror
+   polishedlumirrorglue,        // mechanically polished surface, with lumirror & meltmount
+   polishedair,                 // mechanically polished surface
+   polishedteflonair,           // mechanically polished surface, with teflon
+   polishedtioair,              // mechanically polished surface, with tio paint
+   polishedtyvekair,            // mechanically polished surface, with tyvek
+   polishedvm2000air,           // mechanically polished surface, with esr film
+   polishedvm2000glue,          // mechanically polished surface, with esr film & meltmount
+
+   etchedlumirrorair,           // chemically etched surface, with lumirror
+   etchedlumirrorglue,          // chemically etched surface, with lumirror & meltmount
+   etchedair,                   // chemically etched surface
+   etchedteflonair,             // chemically etched surface, with teflon
+   etchedtioair,                // chemically etched surface, with tio paint
+   etchedtyvekair,              // chemically etched surface, with tyvek
+   etchedvm2000air,             // chemically etched surface, with esr film
+   etchedvm2000glue,            // chemically etched surface, with esr film & meltmount
+
+   groundlumirrorair,           // rough-cut surface, with lumirror
+   groundlumirrorglue,          // rough-cut surface, with lumirror & meltmount
+   groundair,                   // rough-cut surface
+   groundteflonair,             // rough-cut surface, with teflon
+   groundtioair,                // rough-cut surface, with tio paint
+   groundtyvekair,              // rough-cut surface, with tyvek
+   groundvm2000air,             // rough-cut surface, with esr film
+   groundvm2000glue             // rough-cut surface, with esr film & meltmount
 };
 
 enum G4OpticalSurfaceModel
 {
    glisur,                      // original GEANT3 model
-   unified                      // UNIFIED model
+   unified,                     // UNIFIED model
+   LUT                          // Look-Up-Table model
 };
 
 class G4MaterialPropertiesTable;
@@ -83,10 +112,22 @@ class G4MaterialPropertiesTable;
 class G4OpticalSurface : public G4SurfaceProperty
 {
 
+public: // Without description
+  
+        //////////////
+        // Operators
+        //////////////
+  
+	G4OpticalSurface(const G4OpticalSurface &right);
+	const G4OpticalSurface & operator=(const G4OpticalSurface &right);
+  
+	G4int operator==(const G4OpticalSurface &right) const;
+	G4int operator!=(const G4OpticalSurface &right) const;
+
 public: // With description
 
         ////////////////////////////////
-        // Constructor
+        // Constructors and Destructor
         ////////////////////////////////
 
 	G4OpticalSurface(const G4String& name,
@@ -98,33 +139,23 @@ public: // With description
 
 public: // Without description
 
-        //////////////
-        // Constructors and destructor
-        //////////////
-
-	G4OpticalSurface();
 	virtual ~G4OpticalSurface();
-	G4OpticalSurface(const G4OpticalSurface &right);
-  
-        //////////////
-        // Operators
-        //////////////
-  
-	const G4OpticalSurface & operator=(const G4OpticalSurface &right);
-  
-	G4int operator==(const G4OpticalSurface &right) const;
-	G4int operator!=(const G4OpticalSurface &right) const;
 
 	////////////
 	// Methods
         ////////////
 
+	// public methods
+
 public: // With description
+
+        virtual void Overwrite() {G4cout << "G4OpticalSurface" << G4endl;};
+
+        void         SetType(const G4SurfaceType& type);
 
         G4OpticalSurfaceFinish GetFinish() const {return theFinish;};
         // Returns the optical surface finish.
-        void         SetFinish(const G4OpticalSurfaceFinish finish)
-						 {theFinish = finish;};
+        void         SetFinish(const G4OpticalSurfaceFinish );
         // Sets the optical surface finish.
 
         G4OpticalSurfaceModel GetModel() const {return theModel;};
@@ -156,6 +187,14 @@ public: // With description
 	void DumpInfo() const;
         // Prints information about the optical surface.
 
+        void ReadFile(void);
+        // Method to read the Look-Up-Table into array AngularDistribution
+
+        G4double GetAngularDistributionValue(G4int, G4int, G4int);
+
+        inline G4int GetThetaIndexMax(void) const { return thetaIndexMax; }
+        inline G4int GetPhiIndexMax(void) const { return phiIndexMax; } 
+
 private:
 
 // ------------------
@@ -170,10 +209,26 @@ private:
 
 	G4MaterialPropertiesTable* theMaterialPropertiesTable;
 
+        static const G4int incidentIndexMax = 91;
+        static const G4int thetaIndexMax = 45;
+        static const G4int phiIndexMax = 37;
+
+        G4float* AngularDistribution;
+
 };
 
 ////////////////////
 // Inline methods
 ////////////////////
+
+inline
+ G4double G4OpticalSurface::GetAngularDistributionValue(G4int angleIncident,
+                                                        G4int thetaIndex,
+                                                        G4int phiIndex)
+{
+  return *(AngularDistribution+angleIncident+
+                               thetaIndex*incidentIndexMax+
+                               phiIndex*thetaIndexMax*incidentIndexMax);
+}
 
 #endif /* G4OpticalSurface_h */

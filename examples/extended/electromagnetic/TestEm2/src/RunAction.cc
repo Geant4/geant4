@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.23 2008/09/13 12:16:18 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.cc,v 1.24 2009/09/16 18:07:30 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -290,7 +290,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 #ifdef G4ANALYSIS_USE
     if(tree) {
-      G4double bin = i*dLradl;
+      G4double bin = (i+0.5)*dLradl;
       histo[3]->fill(bin,MeanELongit[i]/dLradl);
       bin = (i+1)*dLradl;
       histo[4]->fill(bin,MeanELongitCumul[i]);
@@ -318,7 +318,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 #ifdef G4ANALYSIS_USE
     if(tree) {
-      G4double bin = i*dRradl;
+      G4double bin = (i+0.5)*dRradl;
       histo[6]->fill(bin,MeanERadial[i]/dRradl);
       bin = (i+1)*dRradl;
       histo[7]->fill(bin,MeanERadialCumul[i]);

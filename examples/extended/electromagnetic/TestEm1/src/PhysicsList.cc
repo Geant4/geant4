@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.11 2008/11/16 21:56:11 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.12 2009/09/15 12:51:49 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,8 +34,13 @@
 #include "PhysicsListMessenger.hh"
  
 #include "PhysListEmStandard.hh"
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
+
+#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysics_option1.hh"
+#include "G4EmStandardPhysics_option2.hh"
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 
 #include "DetectorConstruction.hh"
 
@@ -60,7 +65,7 @@ PhysicsList::PhysicsList(DetectorConstruction* p)
   SetVerboseLevel(1);
 
   // EM physics
-  emName = G4String("standard");
+  emName = G4String("local");
   emPhysicsList = new PhysListEmStandard(emName);
 
 }
@@ -209,24 +214,46 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   
   if (name == emName) return;
 
-  if (name == "standard") {
+  if (name == "local") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
- 
-  } else if (name == "livermore") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmLivermore(name);
     
-  } else if (name == "penelope") {
+  } else if (name == "emstandard_opt0") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope(name);
-        
+    emPhysicsList = new G4EmStandardPhysics();
+
+  } else if (name == "emstandard_opt1") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option1();
+
+  } else if (name == "emstandard_opt2") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option2();
+
+  } else if (name == "emstandard_opt3") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();
+
+  } else if (name == "emlivermore") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePhysics();
+    
+  } else if (name == "empenelope") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
+            
   } else {
 
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"

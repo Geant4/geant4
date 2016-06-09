@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.18 2007/05/30 10:34:54 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.20 2009/10/20 07:07:51 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 //---------------------------------------------------------------
@@ -96,6 +96,7 @@ public: // with description
     G4UIcmdWithADoubleAndUnit * setPCutCmd; 
     G4UIcmdWithADoubleAndUnit * setCutCmd; 
     G4UIcommand *               setCutRCmd;
+    G4UIcommand *               setCutForAGivenParticleCmd; 
     G4UIcmdWithAnInteger *      verboseCmd;
     G4UIcmdWithoutParameter *   dumpListCmd;
     G4UIcmdWithAString *        addProcManCmd;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.24 2008/10/22 16:25:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonFluctuations.cc,v 1.26 2009/03/31 13:24:40 toshito Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -189,16 +189,18 @@ G4double G4IonFluctuations::Dispersion(const G4Material* material,
   G4double fac = Factor(material, Z);
 
   // heavy ion correction
-  G4double f1 = 1.065e-4*chargeSquare;
-  if(beta2 > theBohrBeta2)  f1/= beta2;
-  else                      f1/= theBohrBeta2;
-  if(f1 > 2.5) f1 = 2.5;
-  fac *= (1.0 + f1);
+//  G4double f1 = 1.065e-4*chargeSquare;
+//  if(beta2 > theBohrBeta2)  f1/= beta2;
+//  else                      f1/= theBohrBeta2;
+//  if(f1 > 2.5) f1 = 2.5;
+//  fac *= (1.0 + f1);
 
   // taking into account the cut
-  if(fac > 1.0) {
-    siga *= (1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2)));
+  G4double fac_cut = 1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2));
+  if(fac_cut > 0.01 && fac > 0.01) {
+    siga *= fac_cut;
   }
+
   //G4cout << "siga(keV)= " << sqrt(siga)/keV << " fac= " << fac 
   //	 << "  f1= " << f1 << G4endl;
 
@@ -416,6 +418,21 @@ G4double G4IonFluctuations::RelativisticFactor(const G4Material* mat,
   //	 << " bf2= " << bF2 << " q^2= " << chargeSquare << G4endl;
 
   return 1.0 + f;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4IonFluctuations::SetParticleAndCharge(const G4ParticleDefinition* part,
+					     G4double q2)
+{
+  if(part != particle) {
+    particle       = part;
+    particleMass   = part->GetPDGMass();
+    charge         = part->GetPDGCharge()/eplus;
+    chargeSquare   = charge*charge;
+  }
+  effChargeSquare  = q2;
+  uniFluct.SetParticleAndCharge(part, q2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

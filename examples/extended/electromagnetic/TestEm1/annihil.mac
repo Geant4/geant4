@@ -1,4 +1,4 @@
-# $Id: annihil.mac,v 1.1 2006/01/25 13:56:40 maire Exp $
+# $Id: annihil.mac,v 1.2 2009/09/15 12:51:49 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 #
@@ -11,7 +11,7 @@
 /testem/det/setMat Aluminium
 /testem/det/setSize 20 cm
 #
-/testem/phys/addPhysics standard
+/testem/phys/addPhysics local
 #
 /run/initialize
 #

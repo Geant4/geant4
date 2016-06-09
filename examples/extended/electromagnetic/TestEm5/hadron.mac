@@ -1,4 +1,4 @@
-# $Id: hadron.mac,v 1.2 2004/11/22 15:43:39 maire Exp $
+# $Id: hadron.mac,v 1.4 2009/09/18 14:03:24 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -10,10 +10,7 @@
 /testem/det/setAbsThick 1 m
 /testem/det/setAbsYZ    1 m
 #
-/testem/phys/addPhysics  standard
-/testem/phys/addPhysics  binary
-/testem/phys/addPhysics  binary_ion
-/testem/phys/addPhysics  elastic
+/testem/phys/addPhysics  local
 #
 /testem/phys/setCuts 1 km
 #
@@ -26,5 +23,3 @@
 /tracking/verbose 1
 #
 /run/beamOn 1
-
-

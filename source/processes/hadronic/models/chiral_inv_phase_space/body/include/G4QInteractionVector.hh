@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteractionVector.hh,v 1.1 2006/10/30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QInteractionVector.hh,v 1.2 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
@@ -36,8 +36,8 @@
 #define G4QInteractionVector_h 1
 
 //
-// $Id: G4QInteractionVector.hh,v 1.1 2006/10/30 10:40:34 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QInteractionVector.hh,v 1.2 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -46,6 +46,9 @@
 //            Created by Mikhail Kossov Oct, 2006
 //   class for a storing colliding particles in PartonString Models
 // -------------------------------------------------------------------
+//  Short description: Classify the interaction in soft/hard/diffractive
+//  parts for firther treatment by the QGS algorithm.
+// ---------------------------------------------------------------------
 
 #include "G4QInteraction.hh"
 #include <vector>

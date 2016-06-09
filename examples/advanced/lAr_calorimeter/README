@@ -60,7 +60,9 @@
  4. PHYSICS
  ----------
 
- You can select between 3 Physics Lists: QGSP (default), LHEP, QGSC.
+ You can select between 4 Physics Lists: QGSP, LHEP, QGSC, QGSP_BIC_EMY.
+ The last one is set as default, so that you can test the low-energy 
+ electromagnetic.
  The selection is done simply by comment/uncomment a line in the main
  lArCal.cc  (look for the keyword  ***LOOKHERE***).
 

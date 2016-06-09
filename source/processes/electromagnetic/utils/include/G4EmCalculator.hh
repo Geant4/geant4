@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.18 2007/03/15 12:34:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmCalculator.hh,v 1.19 2009/11/11 23:59:48 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // -------------------------------------------------------------------
@@ -59,6 +59,7 @@
 #include <vector>
 #include "globals.hh"
 #include "G4DataVector.hh"
+#include "G4DynamicParticle.hh"
 
 class G4LossTableManager;
 class G4Material;
@@ -81,8 +82,10 @@ public:
 
   ~G4EmCalculator();
 
+  //==================================================================================
   // Methods to access precalculated dE/dx and cross sections
   // Materials should exist in the list of the G4MaterialCutsCouple
+  //==================================================================================
 
   G4double GetDEDX(G4double kinEnergy, const G4ParticleDefinition*, const G4Material*,
                    const G4Region* r = 0);
@@ -135,8 +138,10 @@ public:
 
   void PrintInverseRangeTable(const G4ParticleDefinition*);
 
+  //==================================================================================
   // Methods to calculate dE/dx and cross sections "on fly"
   // Existing tables and G4MaterialCutsCouples are not used
+  //==================================================================================
 
   G4double ComputeDEDX(G4double kinEnergy, const G4ParticleDefinition*,
                        const G4String& processName,  const G4Material*,
@@ -149,8 +154,10 @@ public:
   G4double ComputeElectronicDEDX(G4double kinEnergy, const G4String& part,
 				 const G4String& mat, G4double cut = DBL_MAX);
 
-  G4double ComputeNuclearDEDX(G4double kinEnergy, const G4ParticleDefinition*, const G4Material*);
-  G4double ComputeNuclearDEDX(G4double kinEnergy, const G4String& part, const G4String& mat);
+  G4double ComputeNuclearDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
+			      const G4Material*);
+  G4double ComputeNuclearDEDX(G4double kinEnergy, const G4String& part, 
+			      const G4String& mat);
 
   G4double ComputeTotalDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
 			    const G4Material*, G4double cut = DBL_MAX);
@@ -189,7 +196,13 @@ public:
                        G4double range, const G4String&,
 		       const G4String&);
 
+  //==================================================================================
+  // Methods to access particles, materials, regions
+  //==================================================================================
+
   const G4ParticleDefinition* FindParticle(const G4String&);
+
+  const G4ParticleDefinition* FindIon(G4int Z, G4int A);
 
   const G4Material* FindMaterial(const G4String&);
 
@@ -198,6 +211,10 @@ public:
   const G4MaterialCutsCouple* FindCouple(const G4Material*, const G4Region* r = 0);
 
   void SetVerbose(G4int val);
+
+  //==================================================================================
+  // Private methods 
+  //==================================================================================
 
 private:
 
@@ -239,6 +256,7 @@ private:
 
   const G4ParticleDefinition*  theGenericIon;
   G4ionEffectiveCharge*        ionEffCharge;
+  G4DynamicParticle            dynParticle;
 
   G4String                     currentName;
   G4double                     currentCut;

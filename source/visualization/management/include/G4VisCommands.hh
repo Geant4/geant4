@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.hh,v 1.7 2007/01/11 16:39:33 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommands.hh,v 1.8 2009/03/09 12:42:00 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -61,6 +61,17 @@ private:
   G4VisCommandEnable& operator = (const G4VisCommandEnable&);
   G4UIcmdWithABool* fpCommand;
   G4UIcmdWithoutParameter* fpCommand1;
+};
+
+class G4VisCommandInitialize: public G4VVisCommand {
+public:
+  G4VisCommandInitialize ();
+  virtual ~G4VisCommandInitialize ();
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandInitialize (const G4VisCommandInitialize&);
+  G4VisCommandInitialize& operator = (const G4VisCommandInitialize&);
+  G4UIcmdWithoutParameter* fpCommand;
 };
 
 class G4VisCommandList: public G4VVisCommand {

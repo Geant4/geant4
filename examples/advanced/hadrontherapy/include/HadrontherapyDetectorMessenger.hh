@@ -23,20 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorMessenger.hh; May 2005
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// (b) INFN Section of Genova, Genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyDetectorMessenger.hh;
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy//
+
 #ifndef HadrontherapyDetectorMessenger_h
 #define HadrontherapyDetectorMessenger_h 1
 
@@ -47,6 +36,7 @@ class HadrontherapyDetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWith3VectorAndUnit;
 
 class HadrontherapyDetectorMessenger: public G4UImessenger
 {
@@ -54,61 +44,20 @@ class HadrontherapyDetectorMessenger: public G4UImessenger
   HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* );
   ~HadrontherapyDetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
 private:
 
-  // Pointer to the detector component
+  // Pointer to the phantom/detector 
   HadrontherapyDetectorConstruction* hadrontherapyDetector;
-  
-  G4UIdirectory* modulatorDir; // Control of the modulator 
-  G4UIdirectory* beamLineDir;  // Control of the beam line
- 
-  G4UIdirectory* rangeShifterDir; 
-  // Control of the range shifter component of the beam line
 
-  G4UIdirectory* firstScatteringFoilDir;
-  // Control of the first scattering foil component of the beam line
-  
-  G4UIdirectory* secondScatteringFoilDir;
-  // Control of the first scattering foil component of the beam line
-  
-  G4UIdirectory* rangeStopperDir;
-  // Control of the range stopper component of the beam line
-  
-  G4UIdirectory* finalCollimatorDir;
-  // Control of the final collimator component of the beam line
-  
-  G4UIcmdWithADoubleAndUnit* modulatorAngleCmd;
-  // UI command to rotate the modulator wheel
+  G4UIdirectory *changeThePhantomDir,  *changeTheDetectorDir; 
 
-  G4UIcmdWithAString*   rangeShifterMatCmd;
-  // UI command to set the material of the rangeShifter component of 
-  // the beam line 
-
-  G4UIcmdWithADoubleAndUnit* rangeShifterXSizeCmd;
-  // UI command to set half of the X size of the rangeShifter component of 
-  // the beam line 
-
-  G4UIcmdWithADoubleAndUnit* rangeShifterXPositionCmd;
-  // UI command to change the X position of the rangeShifter component of 
-  // the beam line 
-
-  G4UIcmdWithADoubleAndUnit* firstScatteringFoilXSizeCmd;
-  // UI command to set half X size of the first scattering foil of 
-  // the beam line 
-
-  G4UIcmdWithADoubleAndUnit* secondScatteringFoilXSizeCmd;
-  // UI command to set half X size of the second scattering foil 
-  // the beam line 
-
-  G4UIcmdWithADoubleAndUnit* outerRadiusStopperCmd;
-  // UI command to set the outer radius of the range stopper component of 
-  // the beam line 
-
-  G4UIcmdWithADoubleAndUnit* innerRadiusFinalCollimatorCmd;
-  // UI command to set the inner radius of the final collimator component of 
-  // the beam line 
+  G4UIcmdWith3VectorAndUnit *changeThePhantomSizeCmd,
+			    *changeThePhantomPositionCmd, 
+			    *changeTheDetectorSizeCmd, 
+			    *changeTheDetectorToPhantomPositionCmd,
+			    *changeTheDetectorVoxelCmd;
 };
 #endif
 

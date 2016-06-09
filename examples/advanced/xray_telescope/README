@@ -1,12 +1,9 @@
-$Id: README,v 1.13 2005/11/30 19:58:30 santin Exp $
+$Id: README,v 1.14 2009/11/20 18:08:53 santin Exp $
 -------------------------------------------------------------------
 
      =========================================================
                Geant4 - X-Ray Telescope Example
      =========================================================
-
-
-NEW: May 2004: Migration to AIDA 3.2.1 - see below
 
 
 Introduction
@@ -26,8 +23,6 @@ The aim of this advanced example is to illustrate the use advanced
 GUI, visualisation, particle generation and analysis schemes available 
 in Geant4:
 
- - the simulation can be run from GAG or the command prompt
-
  - macros are provided to display the geometry and particle tracks with 
    OpenGL, DAWN Postscript or VRML visualisation
 
@@ -41,48 +36,10 @@ In order to be able to use any of these packages, prior installation is
 necessary and a number of environment variables will have to be set.
 
 
-1. Setting up the environment variables for GAG, Visualisation and 
-   Analysis options (example based on Linux at CERN)
-
-#set up GAG 
-setenv G4UI_BUILD_GAG_SESSION       1
-setenv G4UI_USE_GAG                 1
-
-#set up VRMLview
-setenv G4VIS_USE_VRML               1
-setenv G4VRMLFILE_MAX_FILE_NUM     100
-setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
-setenv G4VIS_USE_VRML               1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"  # example at CERN
-
-#set up OpenGL
-setenv G4VIS_BUILD_OPENGLX_DRIVER   1
-setenv G4VIS_USE_OPENGLX            1
-
-#set up DAWN
-setenv G4VIS_BUILD_DAWN_DRIVER      1
-setenv G4VIS_USE_DAWN               1
-
 NOTE: The geometry is refreshed on the viewer at the beginning of each run, 
       but the tracks are plotted only in case an interesting event occurs. 
       This is the case only for about 1 every 10**4 events.
 
-
-
-Sources
--------
-
-GAG can be found in:
-
-geant4/environments/MOMO
-
-DAWN can be obtained from:
-
-http://geant4.kek.jp/~tanaka/
-
-VRMLview for Linux can be obtained from:
-
-http://www.sim.no
 
 
 2. Run
@@ -118,8 +75,8 @@ XrayTelDetectorConstruction.cc
 4. Physics processes
 
 The physics processes are in XrayTelPhysicsList.cc
-The main process in this example is MultipleScattering of the protons
-on the mirror surfaces.
+The main process in this example is G4hMultipleScattering for scattering of the protons
+off the mirror surfaces.
 
 
 5. Event generation
@@ -144,14 +101,13 @@ Specifically in the GNUmakefile you find the 2 lines:
   CPPFLAGS += `aida-config --include`
   LDFLAGS += `aida-config --lib`
 
-For more information about AIDA and PI please look at:
+For more information about AIDA please look at:
 http://aida.freehep.org/
-http://www.cern.ch/PI
 
-Presently, the tools
-- PI (http://cern.ch/pi)
+Presently, tools
 - OpenScientist (http://openscientist.lal.in2p3.fr/)
 - JAS (http://jas.freehep.org/jas3/)
+- iAIDA (http://iaida.dynalias.net/Intro.html)
 provide an implementation of AIDA 3.2.1
 
 To build and execute the example on platforms where there is no

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.cc,v 1.9 2006/06/29 16:32:22 gunter Exp $
+// $Id: A01DetectorConstruction.cc,v 1.10 2009/11/21 00:22:55 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -31,10 +31,12 @@
 
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
+#include "G4Mag_UsualEqRhs.hh"
 
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4MaterialTable.hh"
+#include "G4NistManager.hh"
 
 #include "G4VSolid.hh"
 #include "G4Box.hh"
@@ -75,6 +77,7 @@ A01DetectorConstruction::A01DetectorConstruction()
 {
   messenger = new A01DetectorConstMessenger(this);
   magneticField = new A01MagneticField();
+  fieldMgr = new G4FieldManager();
   armRotation = new G4RotationMatrix();
   armRotation->rotateY(armAngle);
 }
@@ -83,6 +86,7 @@ A01DetectorConstruction::~A01DetectorConstruction()
 {
   delete armRotation;
   delete magneticField;
+  delete fieldMgr;
   delete messenger;
 
   DestroyMaterials();
@@ -110,15 +114,13 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   G4VSensitiveDetector* HadCalorimeter;
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
   ConstructMaterials();
 
-  // Magnetic field ----------------------------------------------------------
+  // Local Magnetic Field
   static G4bool fieldIsInitialized = false;
+
   if(!fieldIsInitialized)
   {
-    G4FieldManager* fieldMgr
-      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
     fieldMgr->SetDetectorField(magneticField);
     fieldMgr->CreateChordFinder(magneticField);
     fieldIsInitialized = true;
@@ -132,10 +134,18 @@ G4VPhysicalVolume* A01DetectorConstruction::Construct()
   G4VPhysicalVolume* worldPhysical
     = new G4PVPlacement(0,G4ThreeVector(),worldLogical,"worldPhysical",0,0,0);
 
-  // magnetic field region
+  // Tube with Local Magnetic field
+   
   G4VSolid* magneticSolid = new G4Tubs("magneticTubs",0.,1.*m,1.*m,0.,360.*deg);
-  G4LogicalVolume* magneticLogical
-    = new G4LogicalVolume(magneticSolid,air,"magneticLogical",0,0,0);
+  G4NistManager* man = G4NistManager::Instance();
+  G4Material* G4_Galactic = man->FindOrBuildMaterial("G4_Galactic");
+  
+   G4LogicalVolume* magneticLogical
+    = new G4LogicalVolume(magneticSolid,G4_Galactic,"magneticLogical",fieldMgr,0,0);
+  //                                                                  ********
+ 
+  // placement of Tube 
+ 
   G4RotationMatrix* fieldRot = new G4RotationMatrix();
   fieldRot->rotateX(90.*deg);
   new G4PVPlacement(fieldRot,G4ThreeVector(),magneticLogical,

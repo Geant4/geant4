@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2008/09/23 13:10:55 gcosmo Exp $
+$Id: History,v 1.138 2009/11/27 16:34:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 27, 2009  G.Cosmo                 geommng-V09-02-05
+- G4Region: added pointer to field-manager and associated accessor/modifier.
+
+November 6, 2009  G.Cosmo                  geommng-V09-02-04
+- G4VTouchable: moved inline vitual methods, constructor and destructor to
+  source, to avoid problem of memory alignment in allocation of derived objects.
+
+October 30, 2009  G.Cosmo                  geommng-V09-02-03
+- Clear possible excess capacity in node vectors in G4SmartVoxelHeader
+  BuildNodes() method. May reduce excess memory allocated in optimisation
+  in large detector setups, with slight time increase in initialisation for
+  geometry voxelisation.
+
+September 24, 2009  G.Cosmo                geommng-V09-02-02
+- Fixed implementation of G4LogicalVolume::TotalVolumeEntities() to become
+  invariant to call sequence.
+
+May 25, 2009  G.Cosmo                      geommng-V09-02-01
+- Fixed initialisation of min/max extent in method BuildReplicaVoxels() in
+  G4SmartVoxelHeader.
+
+April 16, 2009  G.Cosmo                    geommng-V09-02-00
+- Adopt 'const' references for strings as arguments/return-values in
+  G4LogicalSurface. Some minor cleanup...
 
 September 23, 2008  G. Cosmo               geommng-V09-01-08
 - G4VSolid: explicitely reserve memory for polygon vectors in clipping

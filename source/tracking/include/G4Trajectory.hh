@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.24 2006/06/29 21:15:41 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Trajectory.hh,v 1.25 2009/11/12 09:09:56 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------
 //
@@ -100,6 +100,8 @@ public: // with description
    { return PDGCharge; }
    inline G4int GetPDGEncoding() const
    { return PDGEncoding; }
+   inline G4double GetInitialKineticEnergy() const
+   { return initialKineticEnergy; }
    inline G4ThreeVector GetInitialMomentum() const
    { return initialMomentum; }
 
@@ -127,6 +129,7 @@ public: // with description
   G4int                     PDGEncoding;
   G4double                  PDGCharge;
   G4String                  ParticleName;
+  G4double                  initialKineticEnergy;
   G4ThreeVector             initialMomentum;
 
 };

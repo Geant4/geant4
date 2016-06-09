@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.2 2008/12/18 12:57:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorMessenger.cc,v 1.3 2009/04/15 13:26:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Class DetectorMessenger implementation
 //
@@ -51,6 +51,12 @@ DetectorMessenger::DetectorMessenger( DetectorConstruction* myDet )
   theReadCommand ->SetParameterName("FileRead", false);
   theReadCommand ->SetDefaultValue("color_extension.gdml");
   theReadCommand ->AvailableForStates(G4State_PreInit);
+
+  theWriteCommand = new G4UIcmdWithAString("/mydet/writeFile", this);
+  theWriteCommand ->SetGuidance("WRITE GDML file with given name");
+  theWriteCommand ->SetParameterName("FileWrite", false);
+  theWriteCommand ->SetDefaultValue("color_extension_test.gdml");
+  theWriteCommand ->AvailableForStates(G4State_PreInit);
 }
 
 // ----------------------------------------------------------------------------
@@ -58,6 +64,7 @@ DetectorMessenger::DetectorMessenger( DetectorConstruction* myDet )
 DetectorMessenger::~DetectorMessenger()
 {
   delete theReadCommand;
+  delete theWriteCommand;
   delete theDetectorDir;
 }
 
@@ -67,6 +74,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
   if ( command == theReadCommand )
   { 
-    theDetector->SetReadFile(newValue );
+    theDetector->SetReadFile(newValue);
+  }
+  if ( command == theWriteCommand )
+  { 
+    theDetector->SetWriteFile(newValue);
   }
 }

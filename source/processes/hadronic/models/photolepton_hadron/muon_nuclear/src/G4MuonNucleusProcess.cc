@@ -35,7 +35,7 @@
 //-----------------------------------------------------------------------------
     : G4LeptonHadronProcess( processName)
   {
-    theInteractionModel = chooseInteractionModel();
+    theInteractionModel = new G4MuonNucleusInteractionModel;
   }
 
 
@@ -45,17 +45,6 @@
   {
     delete theInteractionModel;
   }
-
-
-//-----------------------------------------------------------------------------
-  G4LeptonHadronInteractionModel*
-  G4MuonNucleusProcess::chooseInteractionModel()
-//-----------------------------------------------------------------------------
-  {
-    G4MuonNucleusInteractionModel* aModel = new G4MuonNucleusInteractionModel;
-    return aModel;
-  }
-
 
 //-----------------------------------------------------------------------------
   G4double

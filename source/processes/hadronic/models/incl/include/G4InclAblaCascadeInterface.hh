@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclAblaCascadeInterface.hh,v 1.6 2007/10/31 10:44:22 miheikki Exp $ 
+// $Id: G4InclAblaCascadeInterface.hh,v 1.8 2009/11/18 10:43:14 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -65,8 +65,30 @@
 using namespace std;
 
 /**
+ * <h1>INCL intra-nuclear cascade with built-in ABLA de-excitation</h1>
+ *
  * Interface for INCL/ABLA. This interface handles basic hadron
  * bullet particles (protons, neutrons, pions).
+ *
+ * Example usage in case of protons:
+ * @code
+ * G4InclAblaCascadeInterface* inclModel = new G4InclAblaCascadeInterface;
+ * inclModel -> SetMinEnergy(0.0 * MeV); // Set the energy limits
+ * inclModel -> SetMaxEnergy(3.0 * GeV);
+ *
+ * G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess(); 
+ * G4ProtonInelasticCrossSection* protonInelasticCrossSection =  new G4ProtonInelasticCrossSection(); 
+ *
+ * protonInelasticProcess -> RegisterMe(inclModel);
+ * protonInelasticProcess -> AddDataSet(protonInelasticCrossSection);
+ *
+ * particle = G4Proton::Proton();
+ * processManager = particle -> GetProcessManager();
+ * processManager -> AddDiscreteProcess(protonInelasticProcess);
+ * @endcode
+ * The same setup procedure is needed for neutron and pion inelastic processes
+ * as well.
+ *
  * @see G4InclAblaLightIonInterface
  */
 
@@ -76,7 +98,7 @@ public:
   /**
    * Basic constructor.
    */
-  G4InclAblaCascadeInterface();
+  G4InclAblaCascadeInterface(const G4String& name = "INCL/ABLA Cascade");
 
   
   G4int operator==(G4InclAblaCascadeInterface& right) {

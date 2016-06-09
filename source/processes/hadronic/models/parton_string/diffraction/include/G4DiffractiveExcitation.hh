@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.hh,v 1.2 2008/04/25 14:20:13 vuzhinsk Exp $
+// $Id: G4DiffractiveExcitation.hh,v 1.4 2009/09/17 18:24:30 vuzhinsk Exp $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1
@@ -41,7 +41,8 @@
 #include "globals.hh"
 class G4VSplitableHadron;
 class G4ExcitedString;
-#include "G4FTFParameters.hh"                            // Uzhi 19.04.08
+#include "G4FTFParameters.hh"
+#include "G4ElasticHNScattering.hh"  // Uzhi 3.09.09
 #include "G4ThreeVector.hh"
 
 class G4DiffractiveExcitation 
@@ -49,22 +50,30 @@ class G4DiffractiveExcitation
 
   public:
 
-      G4DiffractiveExcitation();                           // Uzhi
+      G4DiffractiveExcitation();
       virtual ~G4DiffractiveExcitation();
 
       virtual G4bool ExciteParticipants (G4VSplitableHadron *aPartner, 
                                          G4VSplitableHadron * bPartner,
+                                         G4FTFParameters *theParameters,
+                                         G4ElasticHNScattering *theElastic) const;
+
+      virtual void CreateStrings        (G4VSplitableHadron * aHadron, 
+                                         G4bool isProjectile,
+                                         G4ExcitedString * &FirstString, 
+                                         G4ExcitedString * &SecondString,
                                          G4FTFParameters *theParameters) const;
-
-      virtual G4ExcitedString * String(G4VSplitableHadron * aHadron, G4bool isProjectile) const;
-
   private:
 
       G4DiffractiveExcitation(const G4DiffractiveExcitation &right);
       
-      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const; // Uzhi
-      G4double ChooseP(G4double Pmin, G4double Pmax) const;                       // Uzhi
-      
+      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
+      G4double ChooseP(G4double Pmin, G4double Pmax) const;
+      G4double GetQuarkFractionOfKink(G4double zmin, G4double zmax) const;
+      void UnpackMeson( G4int IdPDG, G4int &Q1, G4int &Q2) const;  // Uzhi 7.09.09
+      void UnpackBaryon(G4int IdPDG, G4int &Q1, G4int &Q2, G4int &Q3) const; // Uzhi 7.09.09
+      G4int NewNucleonId(G4int Q1, G4int Q2, G4int Q3) const; // Uzhi 7.09.09
+
       const G4DiffractiveExcitation & operator=(const G4DiffractiveExcitation &right);
       int operator==(const G4DiffractiveExcitation &right) const;
       int operator!=(const G4DiffractiveExcitation &right) const;

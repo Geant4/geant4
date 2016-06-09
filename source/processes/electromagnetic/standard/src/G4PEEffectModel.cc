@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.cc,v 1.6 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PEEffectModel.cc,v 1.8 2009/04/09 18:41:18 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,8 @@
 // Modifications:
 //
 // 04.12.05 : SetProposedKineticEnergy(0.) for the killed photon (mma)
+// 20.02.09 : Added initialisation of deexcitation flag and method
+//            CrossSectionPerVolume instead of mfp (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -65,27 +67,60 @@ G4PEEffectModel::G4PEEffectModel(const G4ParticleDefinition*,
 {
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
+  fminimalEnergy = 1.0*eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PEEffectModel::~G4PEEffectModel()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4PEEffectModel::Initialise(const G4ParticleDefinition*,
 				 const G4DataVector&)
 {
- if (isInitialized) return;
- if (pParticleChange)
-   fParticleChange =
-                  reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-   fParticleChange = new G4ParticleChangeForGamma();
+  // always false before the run
+  SetDeexcitationFlag(false);
 
- fminimalEnergy = 1.0*eV;
+  if (isInitialized) return;
+  fParticleChange = GetParticleChangeForGamma();
+  isInitialized = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4PEEffectModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+						     G4double energy,
+						     G4double Z, G4double,
+						     G4double, G4double)
+{
+  G4double* SandiaCof = G4SandiaTable::GetSandiaCofPerAtom((G4int)Z, energy);
+
+  G4double energy2 = energy*energy;
+  G4double energy3 = energy*energy2;
+  G4double energy4 = energy2*energy2;
+
+  return SandiaCof[0]/energy  + SandiaCof[1]/energy2 +
+    SandiaCof[2]/energy3 + SandiaCof[3]/energy4;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4PEEffectModel::CrossSectionPerVolume(const G4Material* material,
+						const G4ParticleDefinition*,
+						G4double energy,
+						G4double, G4double)
+{
+  G4double* SandiaCof = 
+    material->GetSandiaTable()->GetSandiaCofForMaterial(energy);
+				
+  G4double energy2 = energy*energy;
+  G4double energy3 = energy*energy2;
+  G4double energy4 = energy2*energy2;
+	  
+  return SandiaCof[0]/energy  + SandiaCof[1]/energy2 +
+    SandiaCof[2]/energy3 + SandiaCof[3]/energy4; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

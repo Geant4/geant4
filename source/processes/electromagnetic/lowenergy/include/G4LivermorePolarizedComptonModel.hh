@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.hh,v 1.1 2008/10/30 14:16:35 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LivermorePolarizedComptonModel.hh,v 1.3 2009/05/02 15:20:52 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4LivermorePolarizedComptonModel_h
@@ -39,6 +39,7 @@
 #include "G4ShellData.hh"
 #include "G4DopplerProfile.hh"
 #include "G4ForceCondition.hh"
+#include "G4Gamma.hh"
 
 class G4LivermorePolarizedComptonModel : public G4VEmModel
 {
@@ -70,9 +71,11 @@ protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
+  /*
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
+			   */
 private:
 
   G4double lowEnergyLimit;  

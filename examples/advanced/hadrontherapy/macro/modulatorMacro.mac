@@ -12,46 +12,63 @@
 # NOTE THAT THE MODULATOR MATERIAL IS POLTMETHYLMETHACRILATE 
 # (PMMA) FOR DEFAULT. IF ONE WANT CARRY OUT A SIMULATION WITHOUT 
 # THE MODULATOR HE/SHE MUST SET "Air" the <<ModMater>> in the
-# <<GetMater>> function of the HadrontherapyModulator.cc class
 #
 # USERS SHOULD GIVE A LOOK TO THE HELP OF THE IDLE TO KNOW
 # THE ACTIVATED MESSSENGERS FOR THE GEOMETRY
 #
-# ADDITIONAL INFORMATIONS ON THE MESSENGER AVAILABLE CAN BE FOUND
-# INSIDE THE HADRONTHERAPY DOCUMENTATION (http://www.ge.infn.it/geant4/examples/).
 # 
 # ANYWAY SEND ME AN E-MAIL FOR ANY QUESTION: cirrone@lns.infn.it.   
 # --------------------------------------------------------------------------------  
-
+#########################
+# Set of the verboses 
+#
 /control/verbose 1
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
 
+##########################
+# Set of the physic models
+#
+/physic/addPhysics emstandard_opt3  # Electromagnetic model
+/physic/addPhysics elastic          # Hadronic elastic model
+/physic/addPhysics binary           # Hadronic inelastic model
+/physic/addPhysics radioactive_decay                   # Radioactive decay
+ 
+##########################
+# Initialisation procedure
+#
+/run/initialize
 
-# SETTING FOR THE PHYSICS MODELS
-/physics/addPhysics Decay
-/physics/addPhysics EM-Photon-EPDL
-/physics/addPhysics EM-Electron-EEDL
-/physics/addPhysics EM-Positron-Standard
-/physics/addPhysics EM-HadronIon-LowE
-/physics/addPhysics EM-Muon-Standard
-/physics/addPhysics HadronicEl-HadronIon-LElastic
-/physics/addPhysics HadronicInel-ProtonNeutron-LEP
-/physics/addPhysics HadronicInel-Ion-LEP
-/physics/addPhysics HadronicInel-Pion-LEP
-/physics/addPhysics HadronicAtRest-MuonMinus-Capture
-
-/run/initialize	
-
-# SET OF THE VISUALISATION CHARACTERISTICS
+##########################
+# Visualisation 
+#
 /vis/scene/create
 /vis/open OGLIX
+/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 50 130 deg
 /vis/viewer/zoom 3.5
-/vis/viewer/set/viewpointThetaPhi  50 130 deg
-/vis/viewer/pan -60 40 cm
+/vis/viewer/pan -60  40 cm
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
+/vis/viewer/update
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle proton
+
+/beam/energy/meanEnergy 62 MeV
+/beam/energy/sigmaEnergy 400 keV
+/beam/position/Xposition -270 mm
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+#
+/physic/setCuts 0.1 mm
+/Step/waterPhantomStepMax 0.01 mm 
+
 
 # IF YOU WANT A RANGE SHIFTER PLEASE CHANGE
 # THE FOLLOWIG PARAMETERS

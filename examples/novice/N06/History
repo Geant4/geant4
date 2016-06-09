@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2008/11/21 01:09:02 gum Exp $
+$Id: History,v 1.42 2009/11/10 05:20:11 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09th November 2009 Peter Gumplinger (exampleN06-V09-02-01)
+- use G4eMultipleScattering, G4MuMultipleScattering and
+  G4hMultipleScattering instead of G4MultipleScattering
+
+30th October 2009 John Allison (exampleN06-V09-02-00)
+- Introduced G4UIExecutive.
 
 20th November 2008 P. Gumplinger (exampleN06-V09-01-03)
 - add theCerenkovProcess->SetMaxBetaChangePerStep in ExN06PhysicsList

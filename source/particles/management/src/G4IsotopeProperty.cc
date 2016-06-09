@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeProperty.cc,v 1.7 2007/03/16 05:25:08 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IsotopeProperty.cc,v 1.8 2009/08/17 14:52:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -106,6 +106,7 @@ G4int G4IsotopeProperty::operator!=(const G4IsotopeProperty &right) const
 
 void G4IsotopeProperty::DumpInfo() const
 {
+#ifdef G4VERBOSE
   G4cout << "AtomicNumber: " << fAtomicNumber << G4endl;
   G4cout << "AtomicMass: " << fAtomicMass << G4endl;
   if (fISpin %2){
@@ -121,6 +122,7 @@ void G4IsotopeProperty::DumpInfo() const
   } else {
     G4cout << "Decay Table is not defined !" << G4endl;
   }
+#endif
 }
 
 

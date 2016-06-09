@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLFontBaseStore.cc,v 1.3 2006/06/29 21:18:56 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLFontBaseStore.cc,v 1.4 2009/01/19 16:53:42 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #include "G4OpenGLFontBaseStore.hh"

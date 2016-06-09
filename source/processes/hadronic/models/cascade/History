@@ -14,6 +14,93 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+1 Dec 2009 Dennis Wright (hadr-casc-V09-02-11)
+----------------------------------------------
+- G4PionSampler, G4NucleonSampler: change loop variable in ctor from i to j
+  in order to satisfy Windows compiler
+ 
+11 Nov 2009 Dennis Wright (hadr-casc-V09-02-10)
+-----------------------------------------------
+- G4CascadParticle, G4InuclElementaryParticle: add integer argument to ctor
+  to indicate which generation cascade particle belongs to.
+  Also change G4NucleiModel and G4BertiniNucleiModel to use this.
+
+ 8 Oct 2009 Dennis Wright (hadr-casc-V09-02-09)
+-----------------------------------------------
+- G4PionSampler:  use charge exchange cross section for pi0-p, go back
+   original Bertini pi0-p elastic partial cs.  Update pi0 total cross
+   section accordingly.  Improve fits to pi-p partial cs and update 
+   pi- total cross sections.
+- G4NucleiModel: update pi- and pi0 total cross sections
+
+24 Sep 2009 Dennis Wright (hadr-casc-V09-02-08)
+-----------------------------------------------
+- add class G4NucleonSampler which replaces old pp, pn, and nn partial and
+    total cross sections also modify other classes which use them
+- move large arrays which are instantiated at every call of frequently
+    used methods.  They are now initialized once in constructors.
+- G4CascadSpecialFunctions: put copy of total cross section method
+    in G4NucleiModel, also remove unneeded energy scale arrays 
+    (now replaced with a new one)
+- G4CascadeInterface: move instantiation of various collider classes
+    outside of loop, and put on stack instead of heap
+- G4ElementaryParticleCollider: re-design to use G4NucleonSampler and
+    remove instantiation of large arrays from within loops in code
+- G4NucleiModel: remove instatiation of large arrays from with loops,
+    add new total cross section sampling, remove use of all but one
+    energy scale 
+
+17 Sep 2009 Dennis Wright (hadr-casc-V09-02-07)
+-----------------------------------------------
+- G4PionSampler: remove large static arrays
+- G4FinalStateSampler: remove static array pointer to G4 particle types
+- G4ElementaryParticleCollider: clean up
+
+4 Sep 2009 Dennis Wright (hadr-casc-V09-02-06)
+----------------------------------------------
+- add assignment operator to class G4CollisionOutput
+
+31 Aug 2009 Dennis Wright (hadr-casc-V09-02-05)
+-----------------------------------------------
+- add class G4FinalStateSampler which was accidentally omitted from
+  the previous tag
+
+25 Aug 2009 Dennis Wright (hadr-casc-V09-02-04)
+-----------------------------------------------
+- correct bug in particle ordering in G4PionSampler
+- clean up dead code in G4NucleiModel and G4ElementaryParticleCollider
+
+20 Aug 2009 Dennis Wright (hadr-casc-V09-02-03)
+-----------------------------------------------
+- create class G4PionSampler: samples partial cross sections, multiplicities 
+  and final state particle types required for pi+, pi- and pi0 scattering 
+  within a nucleus.  This class uses re-evaluated pion partial cross sections
+  and includes production of strange particle pairs. 
+- G4CascadeSigmaPlusNChannel: correct sigma plus cross sections
+- G4CascadSpecialFunctions:  move pion, kaon, hyperon total cross sections 
+  to this class 
+- G4ElementaryParticleCollider: re-write to use G4PionSampler class for 
+  cross sections and multiplicities, remove method reChargering (now redundant)
+  
+15 Apr 2009 Dennis Wright (hadr-casc-V09-02-02)
+-----------------------------------------------
+- previous tag no longer used.  Bring hadr-casc-V09-02-00 back to
+  HEAD and re-tag
+
+21 Feb 2009 Dennis Wright (hadr-casc-V09-02-01)
+-----------------------------------------------
+- add printCrossSection method to G4CascadSpecialFunctions
+- in GeElementaryParticleCollider, add high energy flag to distinguish
+  "string-like" behavior
+- G4IntraNucleiCascader.cc - allow secondaries from HE interaction to 
+  leave nucleus without interacting
+- G4NucleiModel - get high_energy_interaction flag value from G4ElementaryParticleCollider
+
+11 Feb 2009 V.Ivanchenko (hadr-casc-V09-02-00)
+-----------------------------------------------
+- set absorption coefficient 1.0 instead of 0.2 inside
+  G4CascadSpecialFunctions (D.Wright)
+
 25 Nov 2008 Dennis Wright (hadr-casc-V09-01-10)
 -----------------------------------------------
 - fix multiplicity sampling in G4ElementaryParticleCollider::generateMultiplicity().

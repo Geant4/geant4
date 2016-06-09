@@ -1,0 +1,13 @@
+/physics/SetList Opt2
+/run/initialize
+/run/setCut 0.01 mm
+/primFoil/material G4_Cu
+/primFoil/thickness 0.01956 cm
+/gps/energy 13.00 MeV
+/gps/particle e-
+/gps/direction 0. 0. 1.
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/sigma_r 0.042 cm
+/gps/pos/centre 0. 0. -60.05 cm
+/run/beamOn 200000000

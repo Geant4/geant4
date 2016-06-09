@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc,v 1.25 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DynamicParticle.cc,v 1.26 2009/08/17 14:52:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -172,7 +172,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                          aParticleMomentum.z()/pModule);
     G4double totalenergy = aParticleMomentum.t();
     G4double mass2 = totalenergy*totalenergy - pModule2;
-    if(mass2 < 0.0001*MeV*MeV) {
+    if(mass2 < EnergyMomentumRelationAllowance*EnergyMomentumRelationAllowance) {
       theDynamicalMass = 0.;
       SetKineticEnergy(totalenergy);
     } else {
@@ -212,7 +212,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                          aParticleMomentum.z()/pModule);
 
     G4double mass2 = totalEnergy*totalEnergy - pModule2;
-    if(mass2 < 0.0001*MeV*MeV) {
+    if(mass2 < EnergyMomentumRelationAllowance*EnergyMomentumRelationAllowance) {
       theDynamicalMass = 0.;
       SetKineticEnergy(totalEnergy);
     } else {
@@ -308,11 +308,16 @@ void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition
 {
   // remove preassigned decay
   if (thePreAssignedDecayProducts != 0) {
-    G4cout << " G4DynamicParticle::SetDefinition()::";
-    G4cout << "!!! Pre-assigned decay products is attached !!!! " << G4endl;
-    DumpInfo(0);
-    G4cout << "!!! New Definition is " << aParticleDefinition->GetParticleName() << " !!! " << G4endl;
-    G4cout << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl;
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cout << " G4DynamicParticle::SetDefinition()::";
+      G4cout << "!!! Pre-assigned decay products is attached !!!! " << G4endl;
+      DumpInfo(0);
+      G4cout << "!!! New Definition is " << aParticleDefinition->GetParticleName() 
+	     << " !!! " << G4endl;
+      G4cout << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl;
+    }
+#endif
     delete thePreAssignedDecayProducts;
   }
   thePreAssignedDecayProducts = 0;
@@ -413,6 +418,7 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
 ////////////////////
 void G4DynamicParticle::DumpInfo(G4int mode) const
 {
+#ifdef G4VERBOSE
   if (theParticleDefinition == 0) {
     G4cout << " G4DynamicParticle::DumpInfo():: !!!Particle type not defined !!!! " << G4endl;
   } else {
@@ -437,6 +443,7 @@ void G4DynamicParticle::DumpInfo(G4int mode) const
       }
     }
   }
+#endif
 }
 
 ////////////////////////

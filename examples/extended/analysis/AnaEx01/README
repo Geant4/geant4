@@ -1,4 +1,4 @@
-$Id: README,v 1.15 2006/08/16 15:42:16 gcosmo Exp $
+$Id: README,v 1.16 2009/05/13 08:32:36 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,103 +10,71 @@ $Id: README,v 1.15 2006/08/16 15:42:16 gcosmo Exp $
 
   This example shows the usage of histogram and tuple manipulations using 
  an AIDA compliant system. In this example, all analysis manipulations 
- (hooking an AIDA implementation, histo booking, filling, etc...) are 
- concentrated in one class : AnaEx01AnalysisManager.
+ (attaching an AIDA implementation, histo booking, filling, saving 
+ histos in a file, etc...) are concentrated in one class : 
+    AnaEx01AnalysisManager.
 
-  To use an AIDA compliant analysis system with this example, the environment 
- variables :
+  To include the analysis code, the environment variable  
     G4ANALYSIS_USE
-    G4ANALYSIS_AIDA_CONFIG_CFLAGS
-    G4ANALYSIS_AIDA_CONFIG_LIBS
- must be properly set.
+ must be defined before doing "make". If not, at run time, no
+ histograms and file will be created.
 
-  The first one permits to validate/devalidate the AIDA analysis code
- in the example code. The two others permit to give the compilation 
- and link flags of the AIDA compliant system used.
+  For example, a typical session from a UNIX csh flavoured shell is :
+    csh> source <aida tool>/aida-setup.csh
+    csh> setenv G4ANALYSIS_USE 1
+    csh> make
+    csh> ${G4BIN}/${G4SYSTEM}/AnaEx01
+ After execution, a file AnaEx01.aida should have been created.
+ Someone can change the default file format by changing the
+ value of the std::string variable format in the AnaEx01AnalysisManager
+ constructor :
+    // File format :
+    std::string format("xml");
+    //std::string format("hbook");
+    //std::string format("root");
+ 
+ Working with the OpenScientist packages :
+ ---------------------------------------
+  To create the analysis file, you can install the light "osc_batch"
+ binary kit (See http://OpenScientist.lal.in2p3.fr ). For example
+ from a UNIX sh flavoured shell :
+    sh> cd /usr/local
+    sh> <arrange to be su>
+    sh> <get an osc_batch binary kit>
+    sh> unzip -q osc_batch<platform>.zip
+    sh> cd osc_batch/<version>
+    sh> ./install
+  
+  Then you build the example with :
+    <create another terminal>
+    csh> source /usr/local/osc_batch/<version>/aida-setup.csh
+    csh> <source setup Geant4>
+    csh> setenv G4ANALYSIS_USE 1
+    csh> cd <G4_install_path>/examples/extended/analysis/AnaEx01
+    csh> make
+    csh> ${G4BIN}/${G4SYSTEM}/AnaEx01
+   
+  Depending of the file format, you can visualize the produced
+ file with various interactive tools (CERN/PAW, CERN/ROOT, jas).
+ But if installing also an OpenScientist osc_vis binary kit,
+ you shall be able to visualize all formats by using
+ the osc-plot program. To install an osc_vis kit :
+    sh> cd /usr/local
+    sh> <arrange to be su>
+    sh> <get an osc_vis binary kit>
+    sh> unzip -q osc_vis<platform>.zip
+    sh> cd osc_vis/<version>
+    sh> ./install
+  Then to browse the AnaEx01.<format> file (for exa from an UNIX sh shell) :
+    <create another terminal>
+    sh> . /usr/local/osc_vis/<version>/setup.sh
+    sh> <setenv DISPLAY if needed>
+    sh> osc-plot AnaEx01.[aida,root,hbook]
 
-  The variable G4ANALYSIS_USE must be defined in the environment, and the
- the system properly configured to use one of the AIDA compliant analysis
- tools (i.e. path set to retrieve the 'aida-config' command).
+  The OpenScientist URL is : 
+    http://OpenScientist.lal.in2p3.fr.
 
- Working with the OpenScientist/Lab package :
- ------------------------------------------
-  To reconstruct this example by using the OpenScientist/Lab 
- package (assuming that OpenScientist is installed ! ) you have
- first to "setup" the environment of the Lab package and Geant4.
- The Lab package (and all OpenScientist packages) being handled 
- by the CMT tools, you may have to setup the environment
- variable "CMTSITE" to execute site specific things in the chain
- of setup files of the OpenScientist packages. Then for example at CERN :
-   csh> setenv CMTSITE CERN
-  (DOS> set CMTSITE=CERN_WIN32   (for Windows))
- When done then do :
-   csh> source <some directory>/Lab/<version>/cmt/setup.csh
-   csh> source <your Geant4 setup script>.csh
-   csh> setenv G4ANALYSIS_USE 1
-   csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
-   csh> gmake
+  Note that OpenScientist is installed on CERN/lxplus under :
+    /afs/cern.ch/sw/contrib/[osc_batch,osc_vis].
 
- To run :
-   csh> cd analyis/Lab
-   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01
-
-  It must produce an AnaEx01.aida file that contains some histograms 
- and a tuple.
-
-  To plot some histograms, spawn the Lab interactive tool with :
-   csh> onx
-  (DOS> onx     (for Windows))
- click in 'File/Open AIDA file...' to map a file chooser, 
- then choose AnaEx01.aida. The file name should appear in the left
- tree widget beside the plotting area. Use the tree widget to browse
- the file. You can visualize histos by selecting them with the mouse.
-
-  If the OpenScientist/OnX and Lab Python drivers had been
- reconstructed at installation of OpenScientist, then 
- you can also work with the OpenScientist/Lab/AIDA Python API. 
- You can execute AnaEx01.py by doing :
-    OS> python AnaEx01.py
- or : 
-    OS> python
-   (>>> import AIDA)
-    >>> import AnaEx01
-  The AnaEx01 file contains a Python script that
- does some analysis over the AnaEx01.aida file by using the AIDA interfaces.
- This script gets an histo (EAbs) and  plots it in a first drawing region.
- Then it gets the 'AnaEx01' tuple, books and fills another histo
- from the tuple colum 'EAbs' and plots it a secon drawing region.
-
-  If exporting a AnaEx01.root file (see src/AnaEx01AnalysisManager.cc),
- the AnaEx01.C file could also be used, within the ROOT tool. 
- To see a projection of the first column of the tuple contained
- in the AnaEx01.root file. For example :
-     csh> root
-     root[0] .X AnaEx01.C
-
-  The OpenScientist URL is : http://OpenScientist.lal.in2p3.fr.
- OpenScientist is installed at CERN under /afs/cern.ch/sw/contrib.
-
- Working with the Falsetto package :
- ---------------------------------
-  Falsetto is a little package containing a dummy 
- AIDA analysis factory. It permits to check compilation
- and link of some user AIDA code without embarquing a 
- full analysis system.
-
-  To reconstruct this example by using the Falsetto
- package (assuming that it is installed !), do :
-   csh> source <your Geant4 setup script>.csh
-   csh> source <some directory>/Falsetto/<version>/cmt/setup.csh
-   csh> setenv G4ANALYSIS_USE 1
-   csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
-   csh> gmake
-
- To run :
-   csh> cd analyis/Falsetto
-   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01
- At the beginning of output ;should appear :
-   AIDA analysis factory not found.
-
- The Falsetto URL is : http://www.lal.in2p3.fr/SI/Falsetto
- Falsetto is installed at CERN under /afs/cern.ch/sw/contrib.
 

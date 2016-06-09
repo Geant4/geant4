@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.51 2008/12/18 13:01:44 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmCorrections.cc,v 1.54 2009/10/29 17:56:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -686,28 +686,21 @@ G4double G4EmCorrections::EffectiveChargeCorrection(const G4ParticleDefinition* 
     }
     massFactor = proton_mass_c2/p->GetPDGMass();
     idx = -1;
-    G4int dz = 1000;
 
     for(G4int i=0; i<nIons; i++) {
-      if(materialList[i] == mat) {
-        G4int delz = currentZ - Zion[i];
-        if(delz < 0) delz = -delz;
-        if(delz < dz) {
-	  idx = i;
-          dz = delz;
-          if(0 == delz) break;
-        }
+      if(materialList[i] == mat && currentZ == Zion[i]) {
+        idx = i;
+        break;
       }
     }
-    //    G4cout << " idx= " << idx << " dz= " << dz << G4endl;
-    if(idx > 0) {
+    //    G4cout << " idx= " << idx << " dz= " << G4endl;
+    if(idx >= 0) {
       if(!ionList[idx]) BuildCorrectionVector(); 
       if(ionList[idx])  curVector = stopData[idx];
-    }
+    } else { return factor; }
   }
   if(curVector) {
-    G4bool b;
-    factor = curVector->GetValue(ekin*massFactor,b);
+    factor = curVector->Value(ekin*massFactor);
     if(verbose > 1) {
       G4cout << "E= " << ekin << " factor= " << factor << " massfactor= " 
 	     << massFactor << G4endl;
@@ -770,13 +763,12 @@ void G4EmCorrections::BuildCorrectionVector()
 	   << materialName[idx] << " Ion Z= " << Z << " A= " << A
 	   << " massRatio= " << massRatio << G4endl;
   }
-  G4bool b;
 
   G4PhysicsLogVector* vv = 
     new G4PhysicsLogVector(eCorrMin,eCorrMax,nbinCorr);
   vv->SetSpline(true);
   G4double e, eion, dedx, dedx1;
-  G4double eth0 = v->GetLowEdgeEnergy(0);
+  G4double eth0 = v->Energy(0);
   G4double escal = eth/massRatio;
   G4double qe = 
     effCharge.EffectiveChargeSquareRatio(ion, curMaterial, escal); 
@@ -789,14 +781,14 @@ void G4EmCorrections::BuildCorrectionVector()
   //G4cout << "Escal(MeV)= "<<escal<<" dedxt0= " <<dedxt 
   //	 << " dedxt1= " << dedx1t << G4endl;   
 
-  for(G4int i=0; i<nbinCorr; i++) {
-    e = vv->GetLowEdgeEnergy(i);
+  for(G4int i=0; i<=nbinCorr; i++) {
+    e = vv->Energy(i);
     escal = e/massRatio;
     eion  = escal/A;
     if(eion <= eth0) {
-      dedx = v->GetValue(eth0, b)*std::sqrt(eion/eth0);
+      dedx = v->Value(eth0)*std::sqrt(eion/eth0);
     } else {
-      dedx = v->GetValue(eion, b);
+      dedx = v->Value(eion);
     }
     qe = effCharge.EffectiveChargeSquareRatio(curParticle,curMaterial,escal); 
     if(e <= eth) {

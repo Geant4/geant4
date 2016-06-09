@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.4 2006/10/26 10:18:59 maire Exp $
+# $Id: run02.mac,v 1.5 2009/09/22 14:20:31 maire Exp $
 #
 # limit the step size by geometry
 #
@@ -10,8 +10,8 @@
 /testem/det/setSizeYZ 1 mm
 /testem/det/setNbOfLayers 100
 #
-/testem/phys/addPhysics  standard	# em physics
-###/testem/phys/addPhysics  penelope  	# em physics 
+/testem/phys/addPhysics  local	# em physics
+###/testem/phys/addPhysics  empenelope  	# em physics 
 #
 /run/initialize
 #

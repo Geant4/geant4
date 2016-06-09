@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm0.cc,v 1.4 2007/06/21 17:30:53 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: TestEm0.cc,v 1.5 2009/11/17 22:48:26 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -56,9 +56,6 @@ int main(int argc,char** argv) {
       
   // set user action classes
   runManager->SetUserAction(new RunAction(det,prim));
-   
-  //Initialize G4 kernel
-  runManager->Initialize();
   
   if (argc!=1)   // batch mode   
     {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DalitzDecayChannel.cc,v 1.8 2006/06/29 19:24:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DalitzDecayChannel.cc,v 1.9 2009/08/17 14:52:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -51,12 +51,6 @@ G4DalitzDecayChannel::G4DalitzDecayChannel(
 			   const G4String& theAntiLeptonName)
                    :G4VDecayChannel("Dalitz Decay",1)
 {
-  //#ifdef G4VERBOSE
-  //if (GetVerboseLevel()>1) {
-  //  G4cout << "G4DalitzDecayChannel:: constructor ";
-  //  G4cout << "addr[" << this << "]" << G4endl;
-  //}
-  //#endif
   // set names for daughter particles
   SetParent(theParentName);
   SetBR(theBR);
@@ -65,10 +59,6 @@ G4DalitzDecayChannel::G4DalitzDecayChannel(
   SetDaughter(idGamma, gammaName);
   SetDaughter(idLepton, theLeptonName);
   SetDaughter(idAntiLepton, theAntiLeptonName);
-  //
-  //#ifdef G4VERBOSE
-  //if (GetVerboseLevel()>1) DumpInfo();
-  //#endif
 }
 
 G4DalitzDecayChannel::~G4DalitzDecayChannel()

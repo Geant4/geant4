@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PhysicsList.cc,v 1.24 2006/06/29 16:38:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: Em10PhysicsList.cc,v 1.25 2009/11/21 16:12:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #include "Em10PhysicsList.hh"
@@ -42,13 +42,48 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-#include "G4FastSimulationManagerProcess.hh"
-
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 
 #include "G4ProductionCuts.hh"
 #include "G4EmProcessOptions.hh"
+
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+#include "G4PhotoElectricEffect.hh"
+
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
+
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation.hh"
+#include "G4PAIModel.hh"
+#include "G4PAIPhotonModel.hh"
+
+#include "G4SynchrotronRadiation.hh"
+
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
+
+#include "G4hIonisation.hh"
+
+#include "G4Decay.hh"
+
+#include "G4VXTRenergyLoss.hh"
+#include "G4RegularXTRadiator.hh"
+#include "G4TransparentRegXTRadiator.hh"
+#include "G4GammaXTRadiator.hh"
+#include "G4StrawTubeXTRadiator.hh"
+
+#include "G4XTRGammaRadModel.hh"
+#include "G4XTRRegularRadModel.hh"
+#include "G4XTRTransparentRegRadModel.hh"
+#include "Em10XTRTransparentRegRadModel.hh"
+
+#include "Em10StepCut.hh"
 
 /////////////////////////////////////////////////////////////
 //
@@ -154,9 +189,6 @@ void Em10PhysicsList::ConstructBarions()
 void Em10PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  
-// AddParameterisation();
-
   ConstructEM();
   ConstructGeneral();
 }
@@ -164,40 +196,6 @@ void Em10PhysicsList::ConstructProcess()
 /////////////////////////////////////////////////////////////////////////////
 //
 //
-
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-
-#include "G4MultipleScattering.hh"
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-#include "G4PAIModel.hh"
-#include "G4PAIPhotonModel.hh"
-
-#include "G4SynchrotronRadiation.hh"
-
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
-
-#include "G4hIonisation.hh"
-
-// #include "G4ForwardXrayTR.hh"
-#include "G4VXTRenergyLoss.hh"
-#include "G4RegularXTRadiator.hh"
-#include "G4TransparentRegXTRadiator.hh"
-#include "G4GammaXTRadiator.hh"
-#include "G4StrawTubeXTRadiator.hh"
-
-#include "G4XTRGammaRadModel.hh"
-#include "G4XTRRegularRadModel.hh"
-#include "G4XTRTransparentRegRadModel.hh"
-#include "Em10XTRTransparentRegRadModel.hh"
-
-#include "Em10StepCut.hh"
 
 void Em10PhysicsList::ConstructEM()
 {
@@ -330,7 +328,7 @@ void Em10PhysicsList::ConstructEM()
       G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
       eioni->AddEmModel(0,pai,pai,gas);
 
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4eMultipleScattering,-1,1,1);
       pmanager->AddProcess(eioni,-1,2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,-1,3,3);
       pmanager->AddDiscreteProcess(processXTR);
@@ -348,7 +346,7 @@ void Em10PhysicsList::ConstructEM()
       G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
       eioni->AddEmModel(0,pai,pai,gas);
 
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4eMultipleScattering,-1,1,1);
       pmanager->AddProcess(eioni,-1,2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,-1,3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,0,-1,4);
@@ -370,7 +368,7 @@ void Em10PhysicsList::ConstructEM()
       G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
       muioni->AddEmModel(0,pai,pai,gas);
 
-      pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+      pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1);
       pmanager->AddProcess(muioni,-1,2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,3,3);
       pmanager->AddProcess(new G4MuPairProduction(),-1,4,4);
@@ -393,7 +391,7 @@ void Em10PhysicsList::ConstructEM()
       G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
       thehIonisation->AddEmModel(0,pai,pai,gas);
 
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
+      pmanager->AddProcess(new G4hMultipleScattering,-1,1,1);
       pmanager->AddProcess(thehIonisation,-1,2,2);
       pmanager->AddProcess( thehadronStepCut,-1,-1,3);
 
@@ -403,13 +401,11 @@ void Em10PhysicsList::ConstructEM()
   opt.SetApplyCuts(true);
 }
 
-#include "G4Decay.hh"
-
 void Em10PhysicsList::ConstructGeneral()
 {
   // Add Decay Process
 
-   G4Decay* theDecayProcess = new G4Decay();
+  G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
 
   while( (*theParticleIterator)() )

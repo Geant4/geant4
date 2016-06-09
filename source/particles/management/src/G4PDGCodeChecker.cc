@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDGCodeChecker.cc,v 1.11 2008/06/08 12:43:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PDGCodeChecker.cc,v 1.12 2009/04/02 02:24:53 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -342,7 +342,7 @@ G4bool G4PDGCodeChecker::CheckCharge(G4double thePDGCharge) const
     totalCharge += (-2./3.)*eplus*theAntiQuarkContent[flavor+1];
   }
 
-  if (std::abs(totalCharge-thePDGCharge)>0.1*eplus) { 
+  if (std::fabs(totalCharge-thePDGCharge)>0.1*eplus) { 
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << " G4PDGCodeChecker::CheckCharge  : ";

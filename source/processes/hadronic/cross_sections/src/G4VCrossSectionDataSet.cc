@@ -23,10 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc,v 1.7 2006/12/29 02:05:48 dennis Exp $
-// 
+// $Id: G4VCrossSectionDataSet.cc,v 1.8 2009/01/24 11:54:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:    G4VCrossSectionDataSet
+//
+// Author  F.W. Jones, TRIUMF, 20-JAN-97
+//
+// Modifications:
+// 23.01.2009 V.Ivanchenko move constructor and destructor to source
+//
 
 #include "G4VCrossSectionDataSet.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
+
+G4VCrossSectionDataSet::G4VCrossSectionDataSet() :
+  verboseLevel(0)
+{
+  G4CrossSectionDataSetRegistry::Instance()->Register(this);
+}
+
+G4VCrossSectionDataSet::~G4VCrossSectionDataSet()
+{
+  G4CrossSectionDataSetRegistry::Instance()->DeRegister(this);
+}
 
 // Override this method to test for particle and isotope applicability
 

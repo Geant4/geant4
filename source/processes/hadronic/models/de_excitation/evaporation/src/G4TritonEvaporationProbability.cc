@@ -99,7 +99,7 @@ G4double G4TritonEvaporationProbability::CCoeficient(const G4double aZ)
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
- G4double G4TritonEvaporationProbability::CrossSection(const  G4Fragment & fragment, const  G4double K)
+G4double G4TritonEvaporationProbability::CrossSection(const  G4Fragment & fragment, const  G4double K)
 {
   theA=GetA();
   theZ=GetZ();
@@ -112,7 +112,8 @@ G4double G4TritonEvaporationProbability::CCoeficient(const G4double aZ)
 
   
   if (OPTxs==0) {std::ostringstream errOs;
-    errOs << "We should'n be here (OPT =0) at evaporation cross section calculation (tritons)!!"  <<G4endl;
+    errOs << "We should'n be here (OPT =0) at evaporation cross section calculation (tritons)!!"  
+	  <<G4endl;
     throw G4HadronicException(__FILE__, __LINE__, errOs.str());
     return 0.;}
   if( OPTxs==1 || OPTxs==2) return G4TritonEvaporationProbability::GetOpt12( K);
@@ -197,7 +198,9 @@ G4double G4TritonEvaporationProbability::GetOpt34(const  G4double K)
   
   G4double      ra=0.80;
         
-  ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+  //JMQ 13/02/09 increase of reduced radius to lower the barrier
+  // ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+  ec = 1.44 * theZ * ResidualZ / (1.7*ResidualAthrd+ra);
   ecsq = ec * ec;
   p = p0 + p1/ec + p2/ecsq;
   landa = landa0*ResidualA + landa1;
@@ -218,11 +221,11 @@ G4double G4TritonEvaporationProbability::GetOpt34(const  G4double K)
   if (cut < 0.) ecut2 = ecut - 2.;
   elab = K * FragmentA / ResidualA;
   sig = 0.;
-  
+
   if (elab <= ec) { //start for E<Ec
-    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;    
+    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
   }           //end for E<Ec
-  else {           //start for E>Ec
+  else {           //start for E>Ec  
     sig = (landa*elab+mu+nu/elab) * signor;
     geom = 0.;
     if (xnulam < flow || elab < etest) return sig;

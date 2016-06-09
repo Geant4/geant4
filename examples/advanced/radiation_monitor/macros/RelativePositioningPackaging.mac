@@ -1,6 +1,0 @@
-# Packaging thickness 1.208 mm
-# Packaging base 0.404 mm
-# Detector thickness 0.405 mm
-
-/control/alias Det-Height-Rel-Pkg     0.0065 mm
-/control/alias Det2-Height-Rel-Pkg    0.0065 mm

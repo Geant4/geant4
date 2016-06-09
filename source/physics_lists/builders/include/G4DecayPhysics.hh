@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DecayPhysics.hh,v 1.1 2006/10/31 11:35:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DecayPhysics.hh,v 1.2 2009/11/05 01:24:47 gum Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,6 +62,8 @@ class G4DecayPhysics : public G4VPhysicsConstructor
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
   virtual void ConstructProcess();
+
+  virtual G4Decay* GetDecayProcess() { return fDecayProcess; }
 
 private:
   G4Decay* fDecayProcess;

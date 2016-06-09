@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.19 2007/04/04 16:50:27 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.22 2009/05/20 13:19:09 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Class G4OpenGLStoredWin32Viewer : a class derived from G4OpenGLWin32Viewer and
@@ -69,7 +69,7 @@ void G4OpenGLStoredWin32Viewer::DrawView () {
   //Make sure current viewer is attached and clean...
   //Win32 version needed
   //  glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, WinSize_x, WinSize_y);
+  glViewport (0, 0, getWinWidth(), getWinHeight());
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
@@ -108,6 +108,9 @@ void G4OpenGLStoredWin32Viewer::DrawView () {
 	ClearView();
 	DrawDisplayLists ();
 	FinishView ();
+      } else { // ADD TO AVOID KernelVisit=1 and nothing to display
+        DrawDisplayLists ();
+        FinishView ();
       }
     }
   }

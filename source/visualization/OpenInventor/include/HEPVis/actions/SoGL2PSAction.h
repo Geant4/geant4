@@ -27,6 +27,7 @@
 #define HEPVis_SoGL2PSAction_h 
 
 #include <Inventor/actions/SoGLRenderAction.h>
+#include "G4OpenGL2PSAction.hh"
 
 /**
  *  SoGL2PSAction inherits Inventor/SoGLRenderAction.
@@ -36,26 +37,17 @@
 
 #define SoGL2PSAction Geant4_SoGL2PSAction
 
-class SoGL2PSAction : public SoGLRenderAction {
+class SoGL2PSAction : public SoGLRenderAction, public G4OpenGL2PSAction {
   SO_ACTION_HEADER(SoGL2PSAction);
 public:
   SoGL2PSAction(const SbViewportRegion&);
-  void setFileName(const char*);
-  void enableFileWriting();
-  void disableFileWriting();
-  SbBool fileWritingEnabled() const;
-  SbBool addBitmap(int,int,float=0,float=0,float=0,float=0);
-  void beginViewport();
-  void endViewport();
 public: /*SoINTERNAL*/
   static void initClass();
+  bool enableFileWriting();
+  void disableFileWriting();
+  bool addBitmap(int,int,float=0,float=0,float=0,float=0);
 protected:
   virtual void beginTraversal(SoNode*);
-private:
-  void gl2psBegin();
-private:
-  SbString fFileName;
-  FILE* fFile;
 };
 
 #endif

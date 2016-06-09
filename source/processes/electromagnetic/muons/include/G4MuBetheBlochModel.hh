@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh,v 1.17 2007/05/22 17:35:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuBetheBlochModel.hh,v 1.18 2009/02/20 14:48:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -75,10 +75,10 @@ public:
 
   virtual ~G4MuBetheBlochModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-                        const G4MaterialCutsCouple*);
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+				const G4MaterialCutsCouple*);
 			
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
@@ -112,12 +112,12 @@ public:
 
 protected:
 
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
+  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+				      G4double kinEnergy);
 
 private:
 
-  void SetParticle(const G4ParticleDefinition* p);
+  inline void SetParticle(const G4ParticleDefinition* p);
 
   // hide assignment operator
   G4MuBetheBlochModel & operator=(const  G4MuBetheBlochModel &right);
@@ -140,16 +140,16 @@ private:
   static G4double xgi[8],wgi[8];
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MuBetheBlochModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition*,
-                G4double kinEnergy) 
+inline void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
-  G4double tau  = kinEnergy/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
-                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return tmax;
+  if(!particle) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    massSquare = mass*mass;
+    ratio = electron_mass_c2/mass;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

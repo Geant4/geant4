@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.24 2007/05/23 08:47:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhotoElectricEffect.hh,v 1.25 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //------------------ G4PhotoElectricEffect physics process ------------------
@@ -90,28 +90,19 @@ public:  // with description
   virtual ~G4PhotoElectricEffect();
 
   // true for Gamma only.
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
   // Print few lines of informations about the process: validity range,
-  void PrintInfo();
+  virtual void PrintInfo();
 
 protected:
 
-  void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*);
 
 private:
 
   G4bool  isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Gamma::Gamma());
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

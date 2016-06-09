@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.hh,v 1.7 2006/06/29 21:17:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HepRepMessenger.hh,v 1.8 2009/11/23 05:42:28 perl Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 #ifndef G4HepRepMessenger_HH
@@ -39,12 +39,19 @@
 class G4HepRepMessenger : public G4UImessenger {
     
     public:
-        G4HepRepMessenger();
+		static G4HepRepMessenger* GetInstance();  // Singleton constructor.
         virtual ~G4HepRepMessenger();
 
         virtual G4String GetCurrentValue(G4UIcommand * command);
         virtual void SetNewValue(G4UIcommand * command, G4String newValue);
         
+	// Used by HepRepFile
+        virtual G4String getFileDir();
+        virtual G4String getFileName();
+        virtual G4bool getOverwrite();
+        virtual G4bool getCullInvisibles();
+	
+	// Used by HepRepXML
         virtual G4String getEventNumberSuffix();
         virtual G4bool appendGeometry();
         virtual G4bool addPointAttributes();
@@ -52,7 +59,22 @@ class G4HepRepMessenger : public G4UImessenger {
         virtual G4bool writeInvisibles();
 
     private:            
+		G4HepRepMessenger();  // Private constructor.
+		static G4HepRepMessenger* fpInstance;
+        
         G4UIdirectory* heprepDirectory;
+        
+		G4String fileDir;
+		G4UIcmdWithAString* setFileDirCommand;
+        
+		G4String fileName;
+		G4UIcmdWithAString* setFileNameCommand;
+        
+		G4bool overwrite;
+		G4UIcmdWithABool* setOverwriteCommand;
+        
+		G4bool cullInvisibles;
+		G4UIcmdWithABool* setCullInvisiblesCommand;
         
         G4String suffix;
         G4UIcmdWithAString* setEventNumberSuffixCommand;
@@ -65,7 +87,7 @@ class G4HepRepMessenger : public G4UImessenger {
 
         G4bool solids;
         G4UIcmdWithABool* useSolidsCommand;
-
+        
         G4bool invisibles;
         G4UIcmdWithABool* writeInvisiblesCommand;
 };

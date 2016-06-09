@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.hh,v 1.2 2006/06/29 19:32:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AnnihiToMuPair.hh,v 1.3 2009/11/09 18:24:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -82,7 +82,10 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
      G4double GetCrossSecFactor() {return CrossSecFactor;};
        // Get the factor to artificially increase the cross section
 
-     virtual       
+     G4double CrossSectionPerVolume(G4double PositronEnergy, 
+				    const G4Material*);
+       // Compute total cross section					 
+
      G4double ComputeCrossSectionPerAtom(G4double PositronEnergy,
                                          G4double AtomicZ);
        // Compute total cross section					 
@@ -97,7 +100,7 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
        // It is invoked by the ProcessManager of the Particle.
 
      G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                    const G4Step& aStep);
+				     const G4Step& aStep);
        // It computes the final state of the process (at end of step),
        // returned as a ParticleChange object.
        // This function overloads a virtual function of the base class.
@@ -109,10 +112,10 @@ class G4AnnihiToMuPair : public G4VDiscreteProcess
      G4AnnihiToMuPair& operator=(const G4AnnihiToMuPair &right);
      G4AnnihiToMuPair(const G4AnnihiToMuPair& );
 
-  private:
-
      G4double LowestEnergyLimit;     // Energy threshold of e+
      G4double HighestEnergyLimit;    // Limit of validity of the model
+
+     G4double CurrentSigma;          // the last value of cross section per volume 
 
      G4double CrossSecFactor;        // factor to artificially increase 
                                      // the cross section, static to make sure

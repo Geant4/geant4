@@ -24,14 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSPassageCellFlux.cc,v 1.1 2007/07/11 01:31:03 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSPassageCellFlux.cc,v 1.2 2008/12/28 20:32:00 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // G4PSPassageCellFlux
 #include "G4PSPassageCellFlux.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
 #include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 ////////////////////////////////////////////////////////////////////////////////
 // (Description)
@@ -58,9 +60,22 @@ G4bool G4PSPassageCellFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
 
   if ( IsPassed(aStep) ) {
-    fCellFlux /= 
-      aStep->GetPreStepPoint()->GetPhysicalVolume()
-      ->GetLogicalVolume()->GetSolid()->GetCubicVolume();
+    G4VPhysicalVolume* physVol = aStep->GetPreStepPoint()->GetPhysicalVolume();
+    G4VPVParameterisation* physParam = physVol->GetParameterisation();
+    G4VSolid* solid = 0;
+    if(physParam)
+    { // for parameterized volume
+      G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
+                  ->GetReplicaNumber(indexDepth);
+      solid = physParam->ComputeSolid(idx, physVol);
+      solid->ComputeDimensions(physParam,idx,physVol);
+    }
+    else
+    { // for ordinary volume
+      solid = physVol->GetLogicalVolume()->GetSolid();
+    }
+
+    fCellFlux /= solid->GetCubicVolume();
     G4int index = GetIndex(aStep);
     EvtMap->add(index,fCellFlux);
   }

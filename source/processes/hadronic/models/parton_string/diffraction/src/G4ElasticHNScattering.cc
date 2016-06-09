@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc,v 1.3 2008/05/19 12:56:36 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.cc,v 1.14 2009/12/16 17:51:13 gunter Exp $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -45,7 +45,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4VSplitableHadron.hh"
 #include "G4ExcitedString.hh"
-#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
+#include "G4FTFParameters.hh"
 //#include "G4ios.hh"
 
 G4ElasticHNScattering::G4ElasticHNScattering()          
@@ -57,42 +57,42 @@ G4bool G4ElasticHNScattering::
                               G4VSplitableHadron *target,
                               G4FTFParameters    *theParameters) const
 {
-//G4cout<<"G4ElasticHNScattering::ElasticScattering"<<G4endl;
-
+// -------------------- Projectile parameters -----------------------------------
 	   G4LorentzVector Pprojectile=projectile->Get4Momentum();
 
-// -------------------- Projectile parameters -----------------------------------
-           G4bool PutOnMassShell=0;
+           if(Pprojectile.z() < 0.)
+           {
+            target->SetStatus(2);
+            return false;
+           } 
+
+           G4bool PutOnMassShell(false);
 
 	   G4double M0projectile = Pprojectile.mag();                        
-
            if(M0projectile < projectile->GetDefinition()->GetPDGMass()) 
-             {
-              PutOnMassShell=1;
+           {
+              PutOnMassShell=true;
               M0projectile=projectile->GetDefinition()->GetPDGMass();
-             }
+           }
 
 	   G4double Mprojectile2 = M0projectile * M0projectile;
-
-//           G4double AveragePt2=theParameters->GetSlope(); // Uzhi ???
-//           AveragePt2 = AveragePt2 * GeV*GeV;
 
            G4double AveragePt2=theParameters->GetAvaragePt2ofElasticScattering();
 
 // -------------------- Target parameters ----------------------------------------------
+
   	   G4LorentzVector Ptarget=target->Get4Momentum();
 
 	   G4double M0target = Ptarget.mag();
-//G4cout<<" Mp Mt Pt2 "<<M0projectile<<" "<<M0target<<" "<<AveragePt2/GeV/GeV<<G4endl;
 
            if(M0target < target->GetDefinition()->GetPDGMass()) 
-             {
-              PutOnMassShell=1;
+           {
+              PutOnMassShell=true;
               M0target=target->GetDefinition()->GetPDGMass();
-             }
+           }
      
-   	   G4double Mtarget2 = M0target * M0target;                      //Ptarget.mag2(); 
-                                                                         // for AA-inter.
+   	   G4double Mtarget2 = M0target * M0target;                      
+
 // Transform momenta to cms and then rotate parallel to z axis;
 
 	   G4LorentzVector Psum;
@@ -102,10 +102,11 @@ G4bool G4ElasticHNScattering::
 
 	   G4LorentzVector Ptmp=toCms*Pprojectile;
 
-	   if ( Ptmp.pz() <= 0. )                                 // Uzhi ???
+	   if ( Ptmp.pz() <= 0. )                                
 	   {
 	   // "String" moving backwards in  CMS, abort collision !!
            //G4cout << " abort Collision!! " << G4endl;
+                   target->SetStatus(2);
 		   return false; 
 	   }
 	   		   
@@ -117,52 +118,73 @@ G4bool G4ElasticHNScattering::
 	   Pprojectile.transform(toCms);
 	   Ptarget.transform(toCms);
 
-// ---------------------- Sampling of transfered Pt ------------------------
-	   G4double Pt2;                                                    
-           G4double ProjMassT2, ProjMassT;                                  
-           G4double TargMassT2, TargMassT;                                  
+// ---------------------- Putting on mass-on-shell, if needed ------------------------
            G4double PZcms2, PZcms;                                          
 
            G4double S=Psum.mag2();                                          
-//           G4double SqrtS=std::sqrt(S);                                     
+//         G4double SqrtS=std::sqrt(S);                                     
 
 	   PZcms2=(S*S+Mprojectile2*Mprojectile2+Mtarget2*Mtarget2-
                                  2*S*Mprojectile2-2*S*Mtarget2-2*Mprojectile2*Mtarget2)/4./S;
-           if(PZcms2 < 0) 
-             {return false;}   // It can be in an interaction with off-shell nuclear nucleon
+
+           if(PZcms2 < 0.)
+           {  // It can be in an interaction with off-shell nuclear nucleon
+            if(M0projectile > projectile->GetDefinition()->GetPDGMass()) 
+            {  // An attempt to de-excite the projectile
+               // It is assumed that the target is in the ground state
+             M0projectile = projectile->GetDefinition()->GetPDGMass();
+             Mprojectile2=M0projectile*M0projectile;
+             PZcms2=(S*S+Mprojectile2*Mprojectile2+Mtarget2*Mtarget2-
+                    2*S*Mprojectile2 - 2*S*Mtarget2 - 2*Mprojectile2*Mtarget2)
+                    /4./S;
+             if(PZcms2 < 0.){ return false;} // Non succesful attempt after the de-excitation
+            }
+            else // if(M0projectile > projectile->GetDefinition()->GetPDGMass())
+            {
+             target->SetStatus(2);                                   
+             return false;                   // The projectile was not excited,
+                                             // but the energy was too low to put
+                                             // the target nucleon on mass-shell
+            }   // end of if(M0projectile > projectile->GetDefinition()->GetPDGMass())
+           }    // end of if(PZcms2 < 0.)
 
            PZcms = std::sqrt(PZcms2);
 
            if(PutOnMassShell)
-             {
+           {
               if(Pprojectile.z() > 0.)
-                {
+              {
                  Pprojectile.setPz( PZcms);
                  Ptarget.setPz(    -PZcms);
-                }
-              else
-                 {
+              }
+              else  // if(Pprojectile.z() > 0.)
+              {
                  Pprojectile.setPz(-PZcms);
                  Ptarget.setPz(     PZcms);
-                };
+              };
 
-               Pprojectile.setE(std::sqrt(Mprojectile2+
-                                                       Pprojectile.x()*Pprojectile.x()+
-                                                       Pprojectile.y()*Pprojectile.y()+
-                                                       PZcms2));
-               Ptarget.setE(std::sqrt(    Mtarget2    +
-                                                       Ptarget.x()*Ptarget.x()+
-                                                       Ptarget.y()*Ptarget.y()+
-                                                       PZcms2));
-             }
+              Pprojectile.setE(std::sqrt(Mprojectile2+
+                                                      Pprojectile.x()*Pprojectile.x()+
+                                                      Pprojectile.y()*Pprojectile.y()+
+                                                      PZcms2));
+              Ptarget.setE(std::sqrt(    Mtarget2    +
+                                                      Ptarget.x()*Ptarget.x()+
+                                                      Ptarget.y()*Ptarget.y()+
+                                                      PZcms2));
+           }  // end of if(PutOnMassShell)
 
            G4double maxPtSquare = PZcms2;
+
+// ------ Now we can calculate the transfered Pt --------------------------
+	   G4double Pt2;                                                    
+           G4double ProjMassT2, ProjMassT;                                  
+           G4double TargMassT2, TargMassT;
+
 	   G4LorentzVector Qmomentum;
 
 	   Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
 
 	   Pt2=G4ThreeVector(Qmomentum.vect()).mag2();                  
-//G4cout<<"Pt2 GeV^2 "<<(Pt2)/GeV/GeV<<G4endl;
 
            ProjMassT2=Mprojectile2+Pt2;                           
            ProjMassT =std::sqrt(ProjMassT2);                            
@@ -174,61 +196,30 @@ G4bool G4ElasticHNScattering::
                        TargMassT2*TargMassT2-                           
                     2.*S*ProjMassT2-2.*S*TargMassT2-                 
                     2.*ProjMassT2*TargMassT2)/4./S;                  
-           if(PZcms2 < 0 ) {PZcms2=0;};                                 
+           if(PZcms2 < 0 ) {PZcms2=0;};// to avoid the exactness problem
            PZcms =std::sqrt(PZcms2);                                    
 
-	   Pprojectile.setPz( PZcms);  // Uzhi Proj can move backward
-	   Ptarget.setPz(    -PZcms);  // Uzhi Proj can move backward
-
-//G4cout << "Qplus / Qminus " << Qplus << " / " << Qminus<<G4endl;
-//	     G4cout << "pt2" << pt2 << G4endl;
-//	     G4cout << "Qmomentum " << Qmomentum << G4endl;
-//	     G4cout << " Masses (P/T) : " << (Pprojectile+Qmomentum).mag() <<
-//	   		       " / " << (Ptarget-Qmomentum).mag() << G4endl;
+	   Pprojectile.setPz( PZcms);  
+	   Ptarget.setPz(    -PZcms); 
 
 	   Pprojectile += Qmomentum;
 	   Ptarget     -= Qmomentum;
 
-//G4cout << "Pprojectile with Q : " << Pprojectile << G4endl;
-//G4cout << "Ptarget with Q : " << Ptarget << G4endl;
-	
-//	   G4cout << "Projectile back: " << toLab * Pprojectile << G4endl;
-//	   G4cout << "Target back: " << toLab * Ptarget << G4endl;
-
 // Transform back and update SplitableHadron Participant.
 	   Pprojectile.transform(toLab);
 	   Ptarget.transform(toLab);
+/*  // Maybe it will be needed for an exact calculations--------------------
+           G4double TargetMomentum=std::sqrt(Ptarget.x()*Ptarget.x()+
+                                             Ptarget.y()*Ptarget.y()+
+                                             Ptarget.z()*Ptarget.z());
+*/
 
-//G4cout << "Pprojectile with Q M: " << Pprojectile<<" "<<  Pprojectile.mag() << G4endl;
-//G4cout << "Ptarget     with Q M: " << Ptarget    <<" "<<  Ptarget.mag()     << G4endl;
-
-//G4cout << "Target	 mass  " <<  Ptarget.mag() << G4endl;     
-	   		   
-//G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl; 
-
-           G4double ZcoordinateOfCurrentInteraction = target->GetPosition().z();
-// It is assumed that nucleon z-coordinates are ordered on increasing -----------
-
-           G4double betta_z=projectile->Get4Momentum().pz()/projectile->Get4Momentum().e();
-
-           G4double ZcoordinateOfPreviousCollision=projectile->GetPosition().z();
-           if(projectile->GetSoftCollisionCount()==0) {
-              projectile->SetTimeOfCreation(0.);
-              target->SetTimeOfCreation(0.);
-              ZcoordinateOfPreviousCollision=ZcoordinateOfCurrentInteraction;
-           }
-           
-           G4ThreeVector thePosition(projectile->GetPosition().x(),
-                                     projectile->GetPosition().y(),
-                                     ZcoordinateOfCurrentInteraction);
-           projectile->SetPosition(thePosition);
-
-           G4double TimeOfPreviousCollision=projectile->GetTimeOfCreation();
-           G4double TimeOfCurrentCollision=TimeOfPreviousCollision+ 
-                    (ZcoordinateOfCurrentInteraction-ZcoordinateOfPreviousCollision)/betta_z; 
-
-           projectile->SetTimeOfCreation(TimeOfCurrentCollision);
-           target->SetTimeOfCreation(TimeOfCurrentCollision);
+// Calculation of the creation time ---------------------
+      projectile->SetTimeOfCreation(target->GetTimeOfCreation());
+      projectile->SetPosition(target->GetPosition());
+// Creation time and position of target nucleon were determined at
+// ReggeonCascade() of G4FTFModel
+// ------------------------------------------------------
 
 	   projectile->Set4Momentum(Pprojectile);
 	   target->Set4Momentum(Ptarget);
@@ -245,10 +236,13 @@ G4bool G4ElasticHNScattering::
 G4ThreeVector G4ElasticHNScattering::GaussianPt(G4double AveragePt2, G4double maxPtSquare) const
 {            //  @@ this method is used in FTFModel as well. Should go somewhere common!
 	
-	G4double Pt2;
-        Pt2 = -AveragePt2 * std::log(1. + G4UniformRand() * 
+	G4double Pt2(0.);
+        if(AveragePt2 <= 0.) {Pt2=0.;}
+        else
+        {
+         Pt2 = -AveragePt2 * std::log(1. + G4UniformRand() * 
                 (std::exp(-maxPtSquare/AveragePt2)-1.)); 
-	
+	}
 	G4double Pt=std::sqrt(Pt2);
 	G4double phi=G4UniformRand() * twopi;
 	

@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2008/06/17 09:35:45 gcosmo Exp $
+$Id: README,v 1.15 2009/11/20 16:22:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -55,11 +55,11 @@ Extended level examples
  analysis
    - Histogramming through the AIDA interface
  biasing
-   - Examples of event biasing and scoring
+   - Examples of event biasing, scoring and reverse-MC
  electromagnetic
    - Specific EM physics simulation with histogramming
  errorpropagation
-   - Use of the error propagation utility (Geant4e).
+   - Use of the error propagation utility (Geant4e)
  eventgenerator
    - Applications using interface to HepMC
  exoticphysics
@@ -68,9 +68,6 @@ Extended level examples
    - Specific simulation setups in magnetic field
  g3tog3
    - Examples of usage of the g3tog4 converter tool
- gdml
-   - Example of import/export detector persistency through the Geometry
-     Description Markup Language (GDML)
  geometry
    - Specific geometry examples and tools: OLAP tool for detection
      of overlapping geometries
@@ -86,7 +83,7 @@ Extended level examples
  parameterisations
    - Examples for fast shower parameterisations according to specific models
  persistency
-   - Persistency of simulation outputs through Reflex tool
+   - Persistency of geometry (GDML or ASCII) and simulation output
  radioactivedecay
    - Examples to simulate the decays of radioactive isotopes and
      induced radioactivity resulted from nuclear interactions
@@ -105,9 +102,6 @@ Advanced level examples
  composite_calorimeter
    - Test-beam simulation used in CMS against real data taken
      in 1996 in a CMS Hadron calorimeter test-beam at LHC
- cosmicray_charging
-   - Simulation of electrostatic charging in the LISA mission by
-     galactic cosmic ray protons and helium nuclei
  gammaray_telescope
    - Simulation of a typical telescope for gamma ray analysis
  hadrontherapy
@@ -133,19 +127,11 @@ Advanced level examples
  purging_magnet
    - Simulation of electrons traveling through a 3D magnetic field of a
      strong purging magnet used for treatment head in a medical environment
- radiation_monitor
-   - Application to study the effects of a chip carrier on silicon radiation
-     monitoring devices used in the LHC environment
  radioprotection
    - Application for the evaluation of dose in astronauts, vehicle concepts
      and Moon surface habitat configurations, in a space radiation environment
- raredecay_calorimetry
-   - Simulation of a simplified sandwitch calorimeter to Estimate importance
-     of photonuclear reactions for photon inefficiency
  Rich
    - Rich Test Beam Simulation
- Tiara
-   - Simulation of the TIARA experiment using importance sampling
  underground_physics
    - Setup of an underground dark matter experiment
  xray_fluorescence

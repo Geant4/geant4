@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: DetectorConstruction.cc,v 1.12 2006/10/20 16:03:40 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.14 2009/09/16 18:07:30 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,6 +43,12 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+
+#include "G4NistManager.hh"
+#include "G4RunManager.hh"
+
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +61,7 @@ DetectorConstruction::DetectorConstruction()
  solidEcal(0),logicEcal(0),physiEcal(0)
 {
   DefineMaterials();
-  SetMaterial("PbWO4");
+  SetMaterial("G4_PbWO4");
   detectorMessenger = new DetectorMessenger(this);
 }
 
@@ -76,58 +82,43 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::DefineMaterials()
 {
   //
-  // define few Elements
+  // define few Elements by hand
   //
   G4double a, z;
     
   G4Element* H  = new G4Element("Hydrogen",  "H", z= 1., a=   1.01*g/mole);
-  G4Element* N  = new G4Element("Nitrogen",  "N", z= 7., a=  14.01*g/mole);
   G4Element* O  = new G4Element("Oxygen"  ,  "O", z= 8., a=  16.00*g/mole);
   G4Element* Ge = new G4Element("Germanium", "Ge",z=32., a=  72.59*g/mole);
-  G4Element* W  = new G4Element("Tungsten",  "W", z=74., a= 183.84*g/mole);
-  G4Element* Pb = new G4Element("Lead",      "Pb",z=82., a= 207.19*g/mole);
   G4Element* Bi = new G4Element("Bismuth",   "Bi",z=83., a= 208.98*g/mole);
 
   //
   // define materials
   //
   G4double density;
-  G4double fractionmass;  G4int ncomponents, natoms;
+  G4int ncomponents, natoms;
 
-  G4Material* Air = 
-  new G4Material("Air", density= 1.29*mg/cm3, ncomponents=2);
-  Air->AddElement(N, fractionmass=0.7);
-  Air->AddElement(O, fractionmass=0.3);
-
+  // water with ionisation potential 75 eV
   G4Material* H2O = 
   new G4Material("Water", density= 1.00*g/cm3, ncomponents=2);
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
   H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
 
+  // pure materails
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
-
   new G4Material("Aluminium",   z=13., a= 26.98*g/mole, density= 2.7*g/cm3);
-
-  new G4Material("Iron",        z=26., a= 55.85*g/mole, density= 7.87*g/cm3);
-  
-  new G4Material("Copper"     , z=29., a= 63.55*g/mole, density= 8.960*g/cm3);
-  
-  new G4Material("Lead",        z=82., a=207.19*g/mole, density=11.35*g/cm3);
-  
+  new G4Material("Iron",        z=26., a= 55.85*g/mole, density= 7.87*g/cm3);  
+  new G4Material("Copper",      z=29., a= 63.55*g/mole, density= 8.960*g/cm3); 
+  new G4Material("Tungsten",    z=74., a=183.84*g/mole, density=19.35*g/cm3);    
+  new G4Material("Lead",        z=82., a=207.19*g/mole, density=11.35*g/cm3);  
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
-    
+
+  // compound material
   G4Material* BGO = 
   new G4Material("BGO", density= 7.10*g/cm3, ncomponents=3);
   BGO->AddElement(O , natoms=12);
   BGO->AddElement(Ge, natoms= 3);
   BGO->AddElement(Bi, natoms= 4);
-
-  G4Material* PbWO = 
-  new G4Material("PbWO4", density= 8.28*g/cm3, ncomponents=3);
-  PbWO->AddElement(O , natoms=4);
-  PbWO->AddElement(Pb, natoms=1);
-  PbWO->AddElement(W , natoms=1);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -170,8 +161,14 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-  if (pttoMaterial) myMaterial = pttoMaterial;
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
+  if (pttoMaterial) {
+    myMaterial = pttoMaterial;
+    if(logicEcal) logicEcal->SetMaterial(myMaterial);
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -202,9 +199,6 @@ void DetectorConstruction::SetRBining(G4ThreeVector Value)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
 void DetectorConstruction::SetMagField(G4double fieldValue)
 {
   //apply a global uniform magnetic field along Z axis
@@ -224,8 +218,6 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
 
 void DetectorConstruction::UpdateGeometry()
 {

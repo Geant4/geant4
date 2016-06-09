@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistTubsSide.cc,v 1.5 2006/06/29 18:49:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TwistTubsSide.cc,v 1.6 2009/11/11 12:23:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -410,7 +410,6 @@ G4int G4TwistTubsSide::DistanceToSurface(const G4ThreeVector &gp,
            G4int maxcount = 10;
            G4int l;
            G4double      lastdeltaY = deltaY; 
-           G4ThreeVector last = deltaY; 
            for (l=0; l<maxcount; l++) {
              G4ThreeVector surfacenormal = GetNormal(xxonsurface); 
              distance[k] = DistanceToPlaneWithV(p, v, xxonsurface,

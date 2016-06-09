@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.11 2006/08/14 12:07:19 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.13 2009/05/20 09:58:10 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // OpenGLImmediateWin32 graphics system factory.
@@ -39,6 +39,7 @@
 #include "G4OpenGLImmediateWin32.hh"
 #include "G4OpenGLImmediateWin32Viewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
   G4VGraphicsSystem ("OpenGLImmediateWin32",

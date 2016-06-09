@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSSphereSurfaceCurrent.cc,v 1.2 2007/08/14 21:23:52 taso Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSSphereSurfaceCurrent.cc,v 1.4 2009/11/14 00:01:13 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // G4PSSphereSurfaceCurrent
 #include "G4PSSphereSurfaceCurrent.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
+#include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 #include "G4GeometryTolerance.hh"
 ////////////////////////////////////////////////////////////////////////////////
@@ -60,12 +63,25 @@ G4PSSphereSurfaceCurrent::~G4PSSphereSurfaceCurrent()
 G4bool G4PSSphereSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
-  G4VSolid * solid = 
-    preStep->GetPhysicalVolume()->GetLogicalVolume()->GetSolid();
-  if( solid->GetEntityType() != "G4Sphere" ){
-    G4Exception("G4PSSphereSurfaceCurrentScorer. - Solid type is not supported.");
-    return FALSE;
+  G4VPhysicalVolume* physVol = preStep->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid * solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
+                ->GetReplicaNumber(indexDepth);
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
   }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+
+//  if( solid->GetEntityType() != "G4Sphere" ){
+//    G4Exception("G4PSSphereSurfaceCurrentScorer. - Solid type is not supported.");
+//    return FALSE;
+//  }
   G4Sphere* sphereSolid = (G4Sphere*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,sphereSolid);
@@ -104,9 +120,12 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
     G4double localR2 = localpos1.x()*localpos1.x()
                       +localpos1.y()*localpos1.y()
                       +localpos1.z()*localpos1.z();
-    G4double InsideRadius2 = 
-      sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
-    if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    //G4double InsideRadius2 = 
+    //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
+    //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    G4double InsideRadius = sphereSolid->GetInsideRadius();
+    if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fCurrent_In;
     }
   }
@@ -119,9 +138,12 @@ G4int G4PSSphereSurfaceCurrent::IsSelectedSurface(G4Step* aStep, G4Sphere* spher
     G4double localR2 = localpos2.x()*localpos2.x()
                       +localpos2.y()*localpos2.y()
                       +localpos2.z()*localpos2.z();
-    G4double InsideRadius2 = 
-      sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
-    if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    //G4double InsideRadius2 = 
+    //  sphereSolid->GetInsideRadius()*sphereSolid->GetInsideRadius();
+    //if(std::fabs( localR2 - InsideRadius2 ) < kCarTolerance ){
+    G4double InsideRadius = sphereSolid->GetInsideRadius();
+    if ( localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	 &&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fCurrent_Out;
     }
   }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelCommandsT.hh,v 1.12 2006/11/01 10:34:03 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ModelCommandsT.hh,v 1.13 2009/02/24 12:00:56 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Generic model messenges. 
 //
@@ -397,44 +397,68 @@ protected:
 ////////////////////////////////////////////////////////////////////////
 // Set auxiliary points size command
 template <typename M>
-class G4ModelCmdSetAuxPtsSize : public G4ModelCmdApplyDouble<M> {
+class G4ModelCmdSetAuxPtsSize : public G4ModelCmdApplyString<M> {
   
 public:
 
   G4ModelCmdSetAuxPtsSize(M* model, const G4String& placement,
-			  const G4String& cmdName="setAuxPtsSize")
-    :G4ModelCmdApplyDouble<M>(model, placement, cmdName)
+			   const G4String& cmdName="setAuxPtsSize")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName)
   {
-    G4ModelCmdApplyDouble<M>::Command()->SetGuidance("Set auxiliary points size command");
+    G4ModelCmdApplyString<M>::Command()->SetGuidance("Set auxiliary points size command");
   }
   
 protected:
 
-   void Apply(const G4double& myDouble) {
-     G4VModelCommand<M>::Model()->SetAuxPtsSize(myDouble);
-  }
+   void Apply(const G4String& sizeString) {
+     std::istringstream iss(sizeString);
+     G4double size;
+     G4String unit;
+     iss >> size >> unit;
+     if (G4VModelCommand<M>::Model()->GetAuxPtsSizeType() == G4VMarker::world)
+       {
+	 G4double myDouble = G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(sizeString);
+	 G4VModelCommand<M>::Model()->SetAuxPtsSize(myDouble);
+       }
+     else  // none or screen
+       {
+	 G4VModelCommand<M>::Model()->SetAuxPtsSize(size);
+       }
+   }
   
 };
 
 ////////////////////////////////////////////////////////////////////////
 // Set step points size command
 template <typename M>
-class G4ModelCmdSetStepPtsSize : public G4ModelCmdApplyDouble<M> {
+class G4ModelCmdSetStepPtsSize : public G4ModelCmdApplyString<M> {
   
 public:
 
   G4ModelCmdSetStepPtsSize(M* model, const G4String& placement,
 			   const G4String& cmdName="setStepPtsSize")
-    :G4ModelCmdApplyDouble<M>(model, placement, cmdName)
+    :G4ModelCmdApplyString<M>(model, placement, cmdName)
   {
-    G4ModelCmdApplyDouble<M>::Command()->SetGuidance("Set step points size command");
+    G4ModelCmdApplyString<M>::Command()->SetGuidance("Set step points size command");
   }
   
 protected:
 
-   void Apply(const G4double& myDouble) {
-     G4VModelCommand<M>::Model()->SetStepPtsSize(myDouble);
-  }
+   void Apply(const G4String& sizeString) {
+     std::istringstream iss(sizeString);
+     G4double size;
+     G4String unit;
+     iss >> size >> unit;
+     if (G4VModelCommand<M>::Model()->GetStepPtsSizeType() == G4VMarker::world)
+       {
+	 G4double myDouble = G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(sizeString);
+	 G4VModelCommand<M>::Model()->SetStepPtsSize(myDouble);
+       }
+     else  // none or screen
+       {
+	 G4VModelCommand<M>::Model()->SetStepPtsSize(size);
+       }
+   }
   
 };
 
@@ -510,6 +534,80 @@ protected:
     }
     
     G4VModelCommand<M>::Model()->SetAuxPtsType(myType);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set step points size type command
+template <typename M>
+class G4ModelCmdSetStepPtsSizeType : public G4ModelCmdApplyString<M> {
+  
+public:
+
+  G4ModelCmdSetStepPtsSizeType(M* model, const G4String& placement,
+				const G4String& cmdName="setStepPtsSizeType")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName)
+  {
+    G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
+    cmd->SetGuidance("Set step size type.");
+    cmd->SetCandidates("none world screen");
+  }
+  
+protected:
+
+  void Apply(const G4String& type) {
+    G4VMarker::SizeType mySizeType;
+    
+    if (type == "none") {mySizeType = G4VMarker::none;}
+    else if (type == "world") {mySizeType = G4VMarker::world;}
+    else if (type == "screen") {mySizeType = G4VMarker::screen;}
+    else {
+      std::ostringstream o;
+      o << "Invalid argument. See command guidance for options.";
+      G4Exception
+	("G4ModelCmdSetStepPtsSizeType::Apply",
+	 "InvalidArgument", JustWarning, o.str().c_str());
+      return;
+    }
+    G4VModelCommand<M>::Model()->SetStepPtsSizeType(mySizeType);
+  }
+  
+};
+
+////////////////////////////////////////////////////////////////////////
+// Set auxiliary points size type command
+template <typename M>
+class G4ModelCmdSetAuxPtsSizeType : public G4ModelCmdApplyString<M> {
+  
+public:
+
+  G4ModelCmdSetAuxPtsSizeType(M* model, const G4String& placement,
+			       const G4String& cmdName="setAuxPtsSizeType")
+    :G4ModelCmdApplyString<M>(model, placement, cmdName)
+  {
+    G4UIcmdWithAString* cmd = G4ModelCmdApplyString<M>::Command();
+    cmd->SetGuidance("Set auxiliary size type.");
+    cmd->SetCandidates("none world screen");
+  }
+  
+protected:
+
+  void Apply(const G4String& type) {
+    G4VMarker::SizeType mySizeType;
+    
+    if (type == "none") {mySizeType = G4VMarker::none;}
+    else if (type == "world") {mySizeType = G4VMarker::world;}
+    else if (type == "screen") {mySizeType = G4VMarker::screen;}
+    else {
+      std::ostringstream o;
+      o << "Invalid argument. See command guidance for options.";
+      G4Exception
+	("G4ModelCmdSetAuxPtsSizeType::Apply",
+	 "InvalidArgument", JustWarning, o.str().c_str());
+      return;
+    }
+    G4VModelCommand<M>::Model()->SetAuxPtsSizeType(mySizeType);
   }
   
 };

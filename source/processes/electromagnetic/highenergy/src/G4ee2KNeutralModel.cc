@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ee2KNeutralModel.cc,v 1.1 2008/07/10 18:07:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ee2KNeutralModel.cc,v 1.2 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -71,6 +71,28 @@ G4ee2KNeutralModel::G4ee2KNeutralModel(G4eeCrossSections* cr):
 
 G4ee2KNeutralModel::~G4ee2KNeutralModel()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4ee2KNeutralModel::ThresholdEnergy() const
+{
+  return 2.0*massK;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4ee2KNeutralModel::PeakEnergy() const
+{
+  return massPhi;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4ee2KNeutralModel::ComputeCrossSection(G4double e) const
+{
+  G4double ee = std::min(HighEnergy(),e);
+  return cross->CrossSection2Kneutral(ee);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

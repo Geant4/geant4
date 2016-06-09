@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.icc,v 1.13 2008/09/22 08:26:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LPhysicsFreeVector.icc,v 1.14 2009/06/25 10:05:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------------
@@ -51,7 +51,7 @@ void G4LPhysicsFreeVector::PutValues(size_t binNumber,
    dataVector[binNumber] = dataValue;
    if(binNumber == 0)
      { edgeMin = binValue; }
-   else if( numberOfBin - 1 == binNumber)
+   else if( numberOfNodes - 1 == binNumber)
      { edgeMax = binValue; }
 }
 
@@ -83,8 +83,8 @@ inline
 size_t G4LPhysicsFreeVector::FindBinLocation(G4double theEnergy) const
 {
    G4int n1 = 0;
-   G4int n2 = numberOfBin/2;
-   G4int n3 = numberOfBin - 1;
+   G4int n2 = numberOfNodes/2;
+   G4int n3 = numberOfNodes - 1;
    while (n1 != n3 - 1)
    {
       if (theEnergy > binVector[n2])

@@ -24,19 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronNuclearProcess.cc,v 1.2 2006/06/29 21:03:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ElectronNuclearProcess.cc,v 1.3 2009/03/31 19:16:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #include "G4ElectronNuclearProcess.hh" 
 #include "G4Electron.hh"
+#include "G4ElectroNuclearCrossSection.hh"
 
 G4ElectronNuclearProcess::
 G4ElectronNuclearProcess(const G4String& processName)
   : G4HadronInelasticProcess( processName, G4Electron::Electron() )
 { 
   G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
-  theStore->AddDataSet(&theData);
+  theStore->AddDataSet(new G4ElectroNuclearCrossSection);
 } 
     
 G4ElectronNuclearProcess::~G4ElectronNuclearProcess()

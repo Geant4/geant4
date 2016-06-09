@@ -89,9 +89,9 @@ private:
     const int FILENAMESIZE;
 
     void GetInformation(G4int &, char *);
-    G4double Pixel2density(G4int pixel);
+    G4float Pixel2density(G4int pixel);
     void ReadMaterialIndices( std::ifstream& finData);
-    size_t GetMaterialIndex( G4double density );
+    unsigned int GetMaterialIndex( G4float density );
     void StoreData(std::ofstream& foutG4DCM);
 
     short compression;
@@ -111,7 +111,7 @@ private:
     short pixelRepresentation;
 
     G4int** tab;
-  std::map<G4double,G4String> fMaterialIndices;
+    std::map<G4float,G4String> fMaterialIndices;
 };
 #endif
 

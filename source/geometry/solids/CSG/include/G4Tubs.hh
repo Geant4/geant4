@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.21 2008/11/06 10:55:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Tubs.hh,v 1.22 2009/03/26 16:25:44 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -85,7 +85,7 @@ class G4Tubs : public G4CSGSolid
       //
       // Constructs a tubs with the given name and dimensions
 
-    virtual ~G4Tubs();
+   ~G4Tubs();
       //
       // Destructor
 
@@ -102,7 +102,7 @@ class G4Tubs : public G4CSGSolid
     inline void SetInnerRadius   (G4double newRMin);
     inline void SetOuterRadius   (G4double newRMax);
     inline void SetZHalfLength   (G4double newDz);
-    inline void SetStartPhiAngle (G4double newSPhi);
+    inline void SetStartPhiAngle (G4double newSPhi, G4bool trig=true);
     inline void SetDeltaPhiAngle (G4double newDPhi);
     
     // Methods for solid
@@ -158,7 +158,7 @@ class G4Tubs : public G4CSGSolid
     inline G4double GetSPhi() const;
     inline G4double GetDPhi() const;
 
-  protected:
+  private:
 
     G4ThreeVectorList*
     CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
@@ -166,22 +166,15 @@ class G4Tubs : public G4CSGSolid
       // Creates the List of transformed vertices in the format required
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections
 
-    G4double fRMin, fRMax, fDz, fSPhi, fDPhi;
-    G4bool fPhiFullTube;
-   
-      // Used by distanceToOut
-
-    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
-
-      // Used by normal
-
-    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
-
-  private:
-
     inline void Initialize();
       //
       // Reset relevant values to zero
+
+    inline void CheckSPhiAngle(G4double sPhi);
+    inline void CheckDPhiAngle(G4double dPhi);
+    inline void CheckPhiAngles(G4double sPhi, G4double dPhi);
+      //
+      // Reset relevant flags and angle values
 
     inline void InitializeTrigonometry();
       //
@@ -194,14 +187,30 @@ class G4Tubs : public G4CSGSolid
 
   private:
 
+    // Used by distanceToOut
+    //
+    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
+
+    // Used by normal
+    //
+    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
+
     G4double kRadTolerance, kAngTolerance;
       //
       // Radial and angular tolerances
 
+    G4double fRMin, fRMax, fDz, fSPhi, fDPhi;
+      //
+      // Radial and angular dimensions
+   
     G4double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
              sinSPhi, cosSPhi, sinEPhi, cosEPhi;
       //
       // Cached trigonometric values
+
+    G4bool fPhiFullTube;
+      //
+      // Flag for identification of section or full tube
 };
 
 #include "G4Tubs.icc"

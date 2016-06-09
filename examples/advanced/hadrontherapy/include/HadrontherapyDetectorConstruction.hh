@@ -23,121 +23,176 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorConstruction.hh; Version 4.0 May 2005
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// (b) INFN Section of Genova, Genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyDetectorConstruction.hh; 
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy//
 
 #ifndef HadrontherapyDetectorConstruction_H
 #define HadrontherapyDetectorConstruction_H 1
 
+#include "G4Box.hh"
 #include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
+#include "G4VisAttributes.hh"
+#include "G4LogicalVolume.hh"
+#include "G4UnitsTable.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class HadrontherapyDetectorROGeometry;
-class HadrontherapyBeamLine;
 class HadrontherapyDetectorMessenger;
-class HadrontherapyModulator;
 class HadrontherapyDetectorSD;
-class HadrontherapyMaterial;
+class HadrontherapyMatrix;
 
-class HadrontherapyDetectorConstruction : public G4VUserDetectorConstruction
+class HadrontherapyDetectorConstruction 
 {
 public:
 
-  HadrontherapyDetectorConstruction();
+  HadrontherapyDetectorConstruction(G4VPhysicalVolume*);
 
   ~HadrontherapyDetectorConstruction();
 
-  G4VPhysicalVolume* Construct();  
 
 private: 
 
-  void ConstructBeamLine();
-  // This method allows to define the beam line geometry in the
-  // experimental set-up
-
- void ConstructDetector(); 
- // This method allows to define the phantom geometry in the
- // experimental set-up
- 
- void ConstructSensitiveDetector();
-  // The sensitive detector is associated to the phantom volume
-
-public: 
-
-  void SetModulatorAngle(G4double angle);
-  // This method allows moving the modulator through UI commands
-
-  void SetRangeShifterXPosition(G4double translation);
-  // This method allows to move the Range Shifter along
-  // the X axis through UI commands
-
-  void SetRangeShifterXSize(G4double halfSize);
-  // This method allows to change the size of the range shifter along
-  // the X axis through UI command.
-
-  void SetFirstScatteringFoilSize(G4double halfSize);
-  // This method allows to change the size of the first scattering foil
-  // along the X axis through UI command.
-
-  void SetSecondScatteringFoilSize (G4double halfSize); 
-  // This method allows to change the size of the second scattering foil
-  // along the X axis through UI command.
-
-  void SetOuterRadiusStopper (G4double value); 
-  // This method allows to change the size of the outer radius of the stopper
-  // through UI command.
-
-  void SetInnerRadiusFinalCollimator (G4double value);
-  // This method allows to change the size of the inner radius of the 
-  // final collimator through UI command.
-
-  void SetRSMaterial(G4String material);
-  // This method allows to change the material 
-  // of the range shifter through UI command.
-
-  G4double ComputeVoxelSize() {return detectorSizeX/numberOfVoxelsAlongX;};
-  // Returns the size of the voxel along the X axis
- 
-private:
+  void ConstructPhantom();
+  void ConstructDetector();
+  void ConstructSensitiveDetector(G4ThreeVector position_respect_to_WORLD);
   
-  HadrontherapyDetectorSD* detectorSD; // Pointer to sensitive detector
+public: 
+// Get detector position relative to WORLD
+inline G4ThreeVector GetDetectorToWorldPosition()
+  {
+    return phantomPosition + detectorPosition;
+  }
+/////////////////////////////////////////////////////////////////////////////
+// Get displacement between phantom and detector by detector position, phantom and detector sizes
+inline G4ThreeVector GetDetectorToPhantomPosition()
+{
+    return G4ThreeVector(phantomSizeX - detectorSizeX + detectorPosition.getX(),
+                         phantomSizeY - detectorSizeY + detectorPosition.getY(),
+                         phantomSizeZ - detectorSizeZ + detectorPosition.getZ()
+		          );
+}
 
+/////////////////////////////////////////////////////////////////////////////
+// Calculate (and set) detector position by displacement, phantom and detector sizes
+inline void SetDetectorPosition()
+  {
+	  // Adjust detector position
+	  detectorPosition.setX(detectorToPhantomPosition.getX() - phantomSizeX + detectorSizeX);
+	  detectorPosition.setY(detectorToPhantomPosition.getY() - phantomSizeY + detectorSizeY);
+	  detectorPosition.setZ(detectorToPhantomPosition.getZ() - phantomSizeZ + detectorSizeZ);
+     
+      if (detectorPhysicalVolume) detectorPhysicalVolume -> SetTranslation(detectorPosition); 
+  }
+/////////////////////////////////////////////////////////////////////////////
+// Check whether detector is inside phantom
+inline bool IsInside(G4double detectorHalfX,
+		     G4double detectorHalfY,
+		     G4double detectorHalfZ,
+		     G4double phantomHalfX,
+		     G4double phantomHalfY,
+		     G4double phantomHalfZ,
+		     G4ThreeVector detectorToPhantomPosition)
+{
+// Dimensions check... X Y and Z
+// Firstly check what dimension we are modifying
+	if (detectorHalfX > 0. && phantomHalfX > 0. && detectorToPhantomPosition.getX() >=0.)
+	{
+	    if (detectorHalfX > phantomHalfX) 
+		 {
+		    G4cout << "Error: Detector X dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
+		    return false;
+		 }
+	    if ( 2*(phantomHalfX - detectorHalfX) < detectorToPhantomPosition.getX()) 
+	         {
+		    G4cout << "Error: X dimension doesn't fit with detector to phantom relative position" << G4endl;
+		    return false;
+	         }
+	}
+
+	if (detectorHalfY > 0. && phantomHalfY > 0.&& detectorToPhantomPosition.getY() >=0.)
+	{
+	    if (detectorHalfY > phantomHalfY) 
+		 {
+		    G4cout << "Error: Detector Y dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
+		    return false;
+		 }
+	    if ( 2*(phantomHalfY - detectorHalfY) < detectorToPhantomPosition.getY()) 
+	     {
+		   G4cout << "Error: Y dimension doesn't fit with detector to phantom relative position" << G4endl;
+		   return false;
+	     }
+	}			 
+
+	if (detectorHalfZ > 0. && phantomHalfZ > 0.&& detectorToPhantomPosition.getZ() >=0.)
+	{
+	    if (detectorHalfZ > phantomHalfZ) 
+		 {
+		    G4cout << "Error: Detector Z dimension must be smaller or equal to the corrispondent of the phantom" << G4endl;
+		    return false;
+		 }
+	    if ( 2*(phantomHalfZ - detectorHalfZ) < detectorToPhantomPosition.getZ()) 
+	     {
+		   G4cout << "Error: Z dimension doesn't fit with detector to phantom relative position" << G4endl;
+		   return false;
+	     }
+	}
+/*
+    G4cout << "Displacement between Phantom and Detector is: "; 
+    G4cout << "DX= "<< G4BestUnit(detectorToPhantomPosition.getX(),"Length") << 
+              "DY= "<< G4BestUnit(detectorToPhantomPosition.getY(),"Length") << 
+              "DZ= "<< G4BestUnit(detectorToPhantomPosition.getZ(),"Length") << G4endl;
+*/
+	return true;
+}
+/////////////////////////////////////////////////////////////////////////////
+
+  G4bool SetNumberOfVoxelBySize(G4double sizeX, G4double sizeY, G4double sizeZ);
+  G4bool SetDetectorSize(G4double sizeX, G4double sizeY, G4double sizeZ);
+  G4bool SetPhantomSize(G4double sizeX, G4double sizeY, G4double sizeZ);
+  G4bool SetPhantomPosition(G4ThreeVector);
+  G4bool SetDetectorToPhantomPosition(G4ThreeVector DetectorToPhantomPosition);
+  G4LogicalVolume* GetDetectorLogicalVolume(){ return detectorLogicalVolume;}
+
+
+private:
+
+  HadrontherapyDetectorMessenger* detectorMessenger; 
+
+  G4VisAttributes* skyBlue;
+  G4VisAttributes* red;
+
+  G4VPhysicalVolume* motherPhys;
+
+  HadrontherapyDetectorSD*         detectorSD; // Pointer to sensitive detector
   HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
+  HadrontherapyMatrix*             matrix;
 
-  HadrontherapyBeamLine* beamLine; // Pointer to the beam line 
-                                   // geometry component
-
-  HadrontherapyModulator* modulator; // Pointer to the modulator 
-                                     // geometry component
-
-  G4VPhysicalVolume* physicalTreatmentRoom;
-  G4VPhysicalVolume* patientPhysicalVolume;
-  G4LogicalVolume* detectorLogicalVolume;
+  G4VPhysicalVolume* phantomPhysicalVolume;
+  G4LogicalVolume*   phantomLogicalVolume; 
+  G4LogicalVolume*   detectorLogicalVolume;
   G4VPhysicalVolume* detectorPhysicalVolume;
   
-  HadrontherapyDetectorMessenger* detectorMessenger; 
-  HadrontherapyMaterial* material;
+  G4double phantomSizeX; 
+  G4double phantomSizeY; 
+  G4double phantomSizeZ;
 
   G4double detectorSizeX; 
   G4double detectorSizeY; 
   G4double detectorSizeZ;
-   
+
+  G4ThreeVector phantomPosition, detectorPosition, detectorToPhantomPosition; //  phantom center, detector center, detector to phantom relative position
+
+  G4double sizeOfVoxelAlongX; 
+  G4double sizeOfVoxelAlongY; 
+  G4double sizeOfVoxelAlongZ; 
+
   G4int numberOfVoxelsAlongX; 
   G4int numberOfVoxelsAlongY;
   G4int numberOfVoxelsAlongZ;  
+
+  G4Box* phantom;
+  G4Box* detector;
+
 };
 #endif

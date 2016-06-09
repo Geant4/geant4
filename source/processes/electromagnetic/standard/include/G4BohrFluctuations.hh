@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.hh,v 1.3 2007/09/27 13:53:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BohrFluctuations.hh,v 1.4 2009/02/19 19:17:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -78,8 +78,6 @@ public:
 
   void InitialiseMe(const G4ParticleDefinition*);
 
-protected:
-
 private:
 
   // hide assignment operator
@@ -99,27 +97,6 @@ private:
   G4double kineticEnergy;
   G4double beta2;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-inline G4double G4BohrFluctuations::Dispersion(
-                          const G4Material* material,
-                          const G4DynamicParticle* dp,
- 				G4double& tmax,
-			        G4double& length)
-{
-  if(!particle) InitialiseMe(dp->GetDefinition());
-
-  G4double electronDensity = material->GetElectronDensity();
-  kineticEnergy = dp->GetKineticEnergy();
-  G4double etot = kineticEnergy + particleMass;
-  beta2 = kineticEnergy*(kineticEnergy + 2.0*particleMass)/(etot*etot);
-  G4double siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length
-                 * electronDensity * chargeSquare;
-
-  return siga;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

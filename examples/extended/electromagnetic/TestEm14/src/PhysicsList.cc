@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: PhysicsList.cc,v 1.4 2006/10/24 16:54:16 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.6 2009/11/19 10:36:37 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,6 @@
 #include "PhysicsListMessenger.hh"
  
 #include "PhysListEmStandard.hh"
-
 #include "PhysListEmLivermore.hh"
 #include "PhysListEmPenelope.hh"
 
@@ -199,11 +198,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   if (name == emName) return;
 
   if (name == "standard") {
-
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
-       
+   
   } else if (name == "livermore") {
     emName = name;
     delete emPhysicsList;
@@ -213,7 +211,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmPenelope(name);
-            
+                    
   } else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"

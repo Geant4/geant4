@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QIsotope.cc,v 1.10 2007/11/28 14:14:36 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QIsotope.cc,v 1.13 2009/08/28 14:49:10 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QIsotope class ----------------
 //             by Mikhail Kossov, December 2003.
@@ -38,6 +38,13 @@
 //
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
+// ------------------------------------------------------------------------------
+// Short description: containes the natural abundance DB for isotops and permits
+// new artificial materials with unnatural abundance (e.g. enreached Deuterium).
+// Uses isotope cross-sections for calculation of the mean cross-sections for the
+// Element (fixed Z).
+// ------------------------------------------------------------------------------
+
 
 //#define debug
 //#define cdebug
@@ -635,7 +642,7 @@ G4QIsotope::G4QIsotope()
       a->push_back(aP);
       s->push_back(sP);
 #ifdef cdebug
-	     G4cout<<"G4QIsotope::Constructor:Element# "<<i<<", Pair # "<<j<<" is filled"<<G4endl;
+      G4cout<<"G4QIsotope::Constructor:Element# "<<i<<", Pair # "<<j<<" is filled"<<G4endl;
 #endif
     }
     natElements.push_back(a);       // Fill abundancies for the particular isotope
@@ -649,7 +656,7 @@ G4QIsotope::G4QIsotope()
       pair<G4int,G4double>* cP = new pair<G4int,G4double>((*is)[j].first,0.);
       c->push_back(cP);
 #ifdef cdebug
-	     G4cout<<"G4QIsotope::Constructor:CrosSecPair i="<<i<<", j="<<j<<" is filled"<<G4endl;
+      G4cout<<"G4QIsotope::Constructor:CrosSecPair i="<<i<<", j="<<j<<" is filled"<<G4endl;
 #endif
     }
     natIsoCrosS.push_back(c);       // FillPrototypeCrossSec's (0) for theParticularIsotope
@@ -689,29 +696,20 @@ G4QIsotope::~G4QIsotope()          // The QIsotopes are destructed only in theEn
   {
     pair<G4int, vector<pair<G4int,G4double>*>* >* nEl= newElems[j];
     G4int nEn=nEl->second->size();
-    if(nEn) for(G4int k=0; k<nEn; k++)
-    {
-      pair<G4int,G4double>* curA=(*(nEl->second))[k];
-      delete curA;                 // Delete vect<pair(N,Abundancy)*>
-    }
+    if(nEn) for(G4int k=0; k<nEn; k++) delete (*(nEl->second))[k]; // Del vect<pair(N,A)*>
+    delete nEl->second;            // Delete the vector
     delete nEl;                    // Delete vect<IndZ,vect<pair(N,Ab)*>*> newElementVector
     //
     pair<G4int, vector<pair<G4int,G4double>*>* >* nSA= newSumAb[j];
     G4int nSn=nSA->second->size();
-    if(nSn) for(G4int n=0; n<nSn; n++)
-    {
-      pair<G4int,G4double>* curS=(*(nSA->second))[n];
-      delete curS;                 // Delete vect<pair(N,SumAbund)*>
-    }
+    if(nSn) for(G4int n=0; n<nSn; n++) delete (*(nSA->second))[n]; // Del vect<pair(N,S)*>
+    delete nSA->second;            // Delete the vector
     delete nSA;                    // Delete vect<IndZ,vect<pair(N,SA)*>*> newSumAbunVector
     //
     pair<G4int, vector<pair<G4int,G4double>*>* >* nCS= newIsoCS[j];
     G4int nCn=nCS->second->size();
-    if(nCn) for(G4int m=0; m<nCn; m++)
-    {
-      pair<G4int,G4double>* curC = (*(nCS->second))[m];
-      delete curC;                 // Delete vect<pair(N,CrossSect)*>
-    }
+    if(nCn) for(G4int m=0; m<nCn; m++) delete (*(nCS->second))[m]; // Del vect<pair(N,C)*>
+    delete nCS->second;            // Delete the vector
     delete nCS;                    // Delete vect<IndZ,vect<pair(N,CS)*>*> newIsoCroSVector
     //
     if(nEn!=nCn) G4cerr<<"*G4QIsotope-WORNING-:#El="<<j<<":nE="<<nEn<<"!=nC="<<nCn<<G4endl;
@@ -876,9 +874,9 @@ G4int G4QIsotope::GetProtons(G4int A, vector<G4int>& isoV)
           return 4;
         }
         else return 3;
-	     }
+      }
       else return 2;
-	   }
+    }
     else return 1;
   }
   else return 0;
@@ -893,19 +891,19 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
   static G4int dN[nElements]=
   {
  //   n              Be                   F              Al       P
-	     1, -1, -1, -1,  5, -1, -1, -1, -1, 10, -1, 12, -1, 14, -1, 16, -1, -1, -1, -1,
+      1, -1, -1, -1,  5, -1, -1, -1, -1, 10, -1, 12, -1, 14, -1, 16, -1, -1, -1, -1,
  //      Sc              Mn      Co                      As                       Y
-	    -1, 24, -1, -1, -1, 30, -1, 32, -1, -1, -1, -1, -1, 42, -1, -1, -1, -1, -1, 50,
-	//      Nb      Tc      Rh                               I      Cs              Pr
+     -1, 24, -1, -1, -1, 30, -1, 32, -1, -1, -1, -1, -1, 42, -1, -1, -1, -1, -1, 50,
+ //      Nb      Tc      Rh                               I      Cs              Pr
      -1, 52, -1, 55, -1, 58, -1, -1, -1, -1, -1, -1, -1, 74, -1, 78, -1, -1, -1, 82,
-	//      Pm              Tb      Ho      Tm                                      Au
+ //      Pm              Tb      Ho      Tm                                      Au
      -1,-85, -1, -1, -1, 94, -1, 98, -1,100, -1, -1, -1, -1, -1, -1, -1, -1, -1,118,
-	//                      Po   At   Rn   Fr   Ra   Ac
-	    -1,  -1,  -1, 126,-125,-136,-136,-138,-138,-142,
-	//  Th   Pa    U   Np   Pu   Am   Cm   Bk   Cf   Es
+ //                      Po   At   Rn   Fr   Ra   Ac
+     -1,  -1,  -1, 126,-125,-136,-136,-138,-138,-142,
+ //  Th   Pa    U   Np   Pu   Am   Cm   Bk   Cf   Es
     142,-140,  -1,-144,-150,-148,-151,-150,-153,-153
-	//  Fm   Md   No   Lr   Rf   Db   Sg   Bh   Hs   Mt
-	  -157,-157,-157,-157,-157,-157,-157,-155,-157,-157
+ //  Fm   Md   No   Lr   Rf   Db   Sg   Bh   Hs   Mt
+   -157,-157,-157,-157,-157,-157,-157,-155,-157,-157
   };
 #ifdef debug
   G4cout<<"G4QIsotope::RandomizeNeutrons is called Z="<<i<<G4endl;
@@ -914,171 +912,171 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
   if(N==-1)
   {
     G4double rnd=G4UniformRand();
-	   if          (i<44)        // ====== H - Mo
-	   {
+    if          (i<44)        // ====== H - Mo
+    {
       if        (i<23)        // ------ H - Ti
-	     {
+      {
         if      (i<12)        // ______ H - Ne
-	       {
+        {
           if     (i<6)        // ...... H - B
-	         {
+          {
             if   (i<3)
-	           {
+            {
               if(i==1)        // H
-	             {
+              {
                 if(rnd>.00015)       N=0;
                 else                 N=1;
-	             }
+              }
               else            // He (2)
-	             {
+              {
                 if(rnd>1.37e-6)      N=2;
                 else                 N=1;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==3)        // Li
-	             {
+              {
                 if(rnd>.075)         N=4;
                 else                 N=3;
-	             }
+              }
               else            // B (5)
-	             {
+              {
                 if(rnd>.199)         N=6;
                 else                 N=5;
-	             }
+              }
             }
           }
           else                // ...... C - Ne
           {
             if   (i<8)
-	           {
+            {
               if(i==6)        // C
-	             {
+              {
                 if(rnd>.011)         N=6;
                 else                 N=7;
-	             }
+              }
               else            // N (7)
-	             {
+              {
                 if(rnd>.0037)        N=7;
                 else                 N=8;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==8)        // O
-	             {
+              {
                 if     (rnd<.9976)   N=8;
                 else if(rnd<.9996)   N=10;
                 else                 N=9;
-	             }
+              }
               else            // Ne (10)
-	             {
+              {
                 if     (rnd<.9948)   N=10;
                 else if(rnd<.9975)   N=11;
                 else                 N=12;
-	             }
+              }
             }
           }
         }
         else                  // ______ Mg - Ti
         {
           if     (i<18)       // ...... Mg - Cl
-	         {
+          {
             if   (i<16)
-	           {
+            {
               if(i==12)       // Mg
-	             {
+              {
                 if     (rnd<.7899)   N=12;
                 else if(rnd<.8899)   N=13;
                 else                 N=14;
-	             }
+              }
               else            // Si (14)
-	             {
+              {
                 if    (rnd<.9223)    N=14;
                 else if(rnd<.969)    N=15;
                 else                 N=16;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==16)       // S
-	             {
+              {
                 if     (rnd<.9502)   N=16;
                 else if(rnd<.9923)   N=18;
                 else if(rnd<.9998)   N=17;
                 else                 N=20;
-	             }
+              }
               else            // Cl (17)
-	             {
+              {
                 if     (rnd>.7577)   N=18;
                 else                 N=20;
-	             }
+              }
             }
           }
           else                // ...... Ar - Ti
           {
             if   (i<20)
-	           {
+            {
               if(i==18)       // Ar
-	             {
+              {
                 if     (rnd<.996)    N=22;
                 else if(rnd<.99937)  N=18;
                 else                 N=20;
-	             }
+              }
               else            // K (19)
-	             {
+              {
                 if     (rnd<.932581) N=20;
                 else if(rnd<.999883) N=22;
                 else                 N=21;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==20)       // Ca
-	             {
+              {
                 if     (rnd<.96941)  N=20;
                 else if(rnd<.99027)  N=24;
                 else if(rnd<.99674)  N=22;
                 else if(rnd<.99861)  N=28;
                 else if(rnd<.99996)  N=23;
                 else                 N=26;
-	             }
+              }
               else            // Ti (22)
-	             {
+              {
                 if     (rnd<.738)    N=26;
                 else if(rnd<.818)    N=24;
                 else if(rnd<.891)    N=25;
                 else if(rnd<.946)    N=27;
                 else                 N=28;
-	             }
+              }
             }
           }
-		      }
-	     }
-	     else                    // ------ V - Mo
-	     {
+        }
+      }
+      else                    // ------ V - Mo
+      {
         if     (i<32)         // ______ V - Ga
-	       {
+        {
           if     (i<28)       // ...... H - Fe
-	         {
+          {
             if   (i<26)
-	           {
+            {
               if(i==23)       // V
-	             {
+              {
                 if     (rnd<.9975)   N=28;
                 else                 N=27;
-	             }
+              }
               else            // Cr (24)
-	             {
+              {
                 if     (rnd<.8379)   N=28;
                 else if(rnd<.9329)   N=29;
                 else if(rnd<.97635)  N=26;
                 else                 N=30;
-	             }
-	           }
+              }
+            }
             else              // Fe (26)
-	           {
+            {
                 if     (rnd<.9172)   N=30;
                 else if(rnd<.9762)   N=28;
                 else if(rnd<.9972)   N=31;
@@ -1088,110 +1086,110 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
           else                // ...... Ni - Ga
           {
             if   (i<30)
-	           {
+            {
               if(i==28)       // Ni
-	             {
+              {
                 if     (rnd<.68077)  N=30;
                 else if(rnd<.943)    N=32;
                 else if(rnd<.97934)  N=34;
                 else if(rnd<.99074)  N=33;
                 else                 N=36;
-	             }
+              }
               else            // Cu (29)
-	             {
+              {
                 if     (rnd<.6917)   N=34;
                 else                 N=36;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==30)       // Zn
-	             {
+              {
                 if     (rnd<.486)    N=34;
                 else if(rnd<.765)    N=36;
                 else if(rnd<.953)    N=38;
                 else if(rnd<.994)    N=37;
                 else                 N=40;
-	             }
+              }
               else            // Ga (31)
-	             {
+              {
                 if     (rnd<.60108)  N=38;
                 else                 N=40;
-	             }
+              }
             }
           }
         }
         else                  // ______ Ge - Mo
         {
           if     (i<37)       // ...... H - B
-	         {
+          {
             if   (i<35)
-	           {
+            {
               if(i==32)       // Ge
-	             {
+              {
                 if     (rnd<.3594)  N=42;
                 else if(rnd<.6360)  N=40;
                 else if(rnd<.8484)  N=38;
                 else if(rnd<.9256)  N=41;
                 else                N=44;
-	             }
+              }
               else            // Se (34)
-	             {
+              {
                 if     (rnd>.4961)  N=46;
                 else if(rnd<.7378)  N=44;
                 else if(rnd<.8274)  N=42;
                 else if(rnd<.9148)  N=48;
                 else if(rnd<.9911)  N=43;
                 else                N=40;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==35)       // Br
-	             {
+              {
                 if     (rnd<.5069)  N=44;
                 else                N=46;
-	             }
+              }
               else            // Kr (36)
-	             {
+              {
                 if     (rnd<.57)    N=48;
                 else if(rnd<.743)   N=50;
                 else if(rnd<.859)   N=46;
                 else if(rnd<.974)   N=47;
                 else if(rnd<.9965)  N=44;
                 else                N=42;
-	             }
+              }
             }
           }
           else                // ...... Rb - Mo
           {
             if     (i<40)
-	           {
+            {
               if(i==37)       // Rb
-	             {
+              {
                 if     (rnd<.7217)  N=48;
                 else                N=50;
-	             }
+              }
               else            // SR (38)
-	             {
+              {
                 if     (rnd<.8258)  N=50;
                 else if(rnd<.9244)  N=48;
                 else if(rnd<.9944)  N=49;
                 else                N=46;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==40)       // Zr
-	             {
+              {
                 if     (rnd<.5145)  N=50;
                 else if(rnd<.6883)  N=54;
                 else if(rnd<.8598)  N=53;
                 else if(rnd<.972)   N=51;
                 else                N=56;
-	             }
+              }
               else            // Mo (42)
-	             {
+              {
                 if     (rnd<.2413)  N=56;
                 else if(rnd<.4081)  N=54;
                 else if(rnd<.5673)  N=53;
@@ -1199,24 +1197,24 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.8120)  N=58;
                 else if(rnd<.9075)  N=55;
                 else                N=52;
-	             }
+              }
             }
           }
         }
-	     }
+      }
     }
-	   else                      // ====== Ru - U
-	   {
+    else                      // ====== Ru - U
+    {
       if         (i<66)       // ------ Ru - Gd
-	     {
+      {
         if       (i<54)       // ______ Ru - Te
-	       {
+        {
           if     (i<49)       // ...... Ru - Cd
-	         {
+          {
             if   (i<47)
-	           {
+            {
               if(i==44)       // Ru
-	             {
+              {
                 if     (rnd<.316)   N=58;
                 else if(rnd<.502)   N=60;
                 else if(rnd<.673)   N=57;
@@ -1224,26 +1222,26 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.926)   N=56;
                 else if(rnd<.9814)  N=52;
                 else                N=54;
-	             }
+              }
               else            // Pd (46)
-	             {
+              {
                 if     (rnd<.2733)  N=60;
                 else if(rnd<.5379)  N=62;
                 else if(rnd<.7612)  N=59;
                 else if(rnd<.8784)  N=55;
                 else if(rnd<.9898)  N=58;
                 else                N=56;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==47)       // Ag
-	             {
+              {
                 if(rnd<.51839)      N=60;
                 else                N=62;
-	             }
+              }
               else            // Cd (48)
-	             {
+              {
                 if     (rnd<.2873)  N=66;
                 else if(rnd<.5286)  N=64;
                 else if(rnd<.6566)  N=59;
@@ -1252,20 +1250,20 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.9786)  N=68;
                 else if(rnd<.9911)  N=58;
                 else                N=60;
-	             }
+              }
             }
           }
           else                // ...... In - Te
           {
             if   (i<51)
-	           {
+            {
               if(i==49)       // In
-	             {
+              {
                 if     (rnd<.9577)  N=66;
                 else                N=64;
-	             }
+              }
               else            // Sn (50)
-	             {
+              {
                 if     (rnd<.3259)  N=70;
                 else if(rnd<.5681)  N=68;
                 else if(rnd<.7134)  N=66;
@@ -1277,17 +1275,17 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else                N=64;
                 //else if(rnd<.9964)  N=64;
                 //else                N=65;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==51)       // Sb
-	             {
+              {
                 if     (rnd<.5736)  N=70;
                 else                N=72;
-	             }
+              }
               else            // Te (52)
-	             {
+              {
                 if     (rnd<.3387)  N=78;
                 else if(rnd<.6557)  N=76;
                 else if(rnd<.8450)  N=74;
@@ -1296,18 +1294,18 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.9900)  N=70;
                 else if(rnd<.99905) N=71;
                 else                N=68;
-	             }
+              }
             }
           }
         }
         else                // ______ Xe - Gd
         {
           if     (i<60)     // ...... Xe - B
-	         {
+          {
             if   (i<57)
-	           {
+            {
               if(i==54)       // Xe
-	             {
+              {
                 if     (rnd<.269)   N=78;
                 else if(rnd<.533)   N=75;
                 else if(rnd<.745)   N=77;
@@ -1317,9 +1315,9 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.9981)  N=74;
                 else if(rnd<.9991)  N=70;
                 else                N=72;
-	             }
+              }
               else            // Ba (56)
-	             {
+              {
                 if     (rnd<.717)   N=82;
                 else if(rnd<.8293)  N=81;
                 else if(rnd<.9078)  N=80;
@@ -1327,30 +1325,30 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.99793) N=78;
                 else if(rnd<.99899) N=74;
                 else                N=76;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==57)       // La
-	             {
+              {
                 if     (rnd<.999098)N=82;
                 else                N=81;
-	             }
+              }
               else            // Ce (58)
-	             {
+              {
                 if     (rnd<.8843)  N=82;
                 else if(rnd<.9956)  N=84;
                 else if(rnd<.9981)  N=80;
                 else                N=78;
-	             }
+              }
             }
           }
           else                // ...... Nd - Gd
           {
             if   (i<63)
-	           {
+            {
               if(i==60)       // Nd
-	             {
+              {
                 if     (rnd<.2713)  N=82;
                 else if(rnd<.5093)  N=84;
                 else if(rnd<.6812)  N=86;
@@ -1358,9 +1356,9 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.8860)  N=85;
                 else if(rnd<.9436)  N=88;
                 else                N=90;
-	             }
+              }
               else            // Sm (62)
-	             {
+              {
                 if     (rnd<.267)   N=90;
                 else if(rnd<.494)   N=92;
                 else if(rnd<.644)   N=85;
@@ -1368,17 +1366,17 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.895)   N=86;
                 else if(rnd<.969)   N=88;
                 else                N=82;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==63)       // Eu
-	             {
+              {
                 if     (rnd<.522)   N=90;
                 else                N=89;
-	             }
+              }
               else            // Gd (64)
-	             {
+              {
                 if     (rnd<.2484)  N=94;
                 else if(rnd<.4670)  N=96;
                 else if(rnd<.6717)  N=92;
@@ -1386,21 +1384,21 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.9762)  N=91;
                 else if(rnd<.9980)  N=90;
                 else                N=88;
-	             }
+              }
             }
           }
         }
-	     }
-	     else                    // ------ Dy - U
-	     {
+      }
+      else                    // ------ Dy - U
+      {
         if       (i<76)       // ______ Dy - Re
-	       {
+        {
           if     (i<72)       // ...... Dy - Lu
-	         {
+          {
             if   (i<70)
-	           {
+            {
               if(i==66)       // Dy
-	             {
+              {
                 if     (rnd<.282)   N=98;
                 else if(rnd<.537)   N=96;
                 else if(rnd<.786)   N=97;
@@ -1408,21 +1406,21 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.9984)  N=94;
                 else if(rnd<.9994)  N=92;
                 else                N=90;
-	             }
+              }
               else            // Er (68)
-	             {
+              {
                 if     (rnd<.3360)  N= 98;
                 else if(rnd<.6040)  N=100;
                 else if(rnd<.8335)  N= 99;
                 else if(rnd<.9825)  N=102;
                 else if(rnd<.9986)  N= 96;
                 else                N= 94;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==70)       // Yb
-	             {
+              {
                 if     (rnd<.3180)  N=104;
                 else if(rnd<.5370)  N=102;
                 else if(rnd<.6982)  N=103;
@@ -1430,59 +1428,59 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.9682)  N=106;
                 else if(rnd<.9987)  N=100;
                 else                N= 98;
-	             }
+              }
               else            // Lu (71)
-	             {
+              {
                 if     (rnd<.9741)  N=104;
                 else                N=105;
-	             }
+              }
             }
           }
           else                // ...... Hf - Re
           {
             if   (i<74)
-	           {
+            {
               if(i==72)       // Hf
-	             {
+              {
                 if     (rnd<.35100) N=108;
                 else if(rnd<.62397) N=106;
                 else if(rnd<.81003) N=105;
                 else if(rnd<.94632) N=107;
                 else if(rnd<.99838) N=104;
                 else                N=102;
-	             }
+              }
               else            // Ta (73)
-	             {
+              {
                 if(rnd<.99988) N=108;
                 else           N=107;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==74)       // W
-	             {
+              {
                 if     (rnd<.307)   N=110;
                 else if(rnd<.593)   N=112;
                 else if(rnd<.856)   N=108;
                 else if(rnd<.9988)  N=109;
                 else                N=106;
-	             }
+              }
               else            // Re (75)
-	             {
+              {
                 if     (rnd<.626)   N=112;
                 else                N=110;
-	             }
+              }
             }
           }
         }
         else                  // ______ Os - U
         {
           if     (i<81)       // ...... Os - Hg
-	         {
+          {
             if     (i<78)
-	           {
+            {
               if(i==76)       // Os
-	             {
+              {
                 if     (rnd<.410)   N=116;
                 else if(rnd<.674)   N=114;
                 else if(rnd<.835)   N=113;
@@ -1490,26 +1488,26 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.984)   N=111;
                 else if(rnd<.9998)  N=110;
                 else                N=108;
-	             }
+              }
               else            // Ir (77)
-	             {
+              {
                 if     (rnd<.627)   N=116;
                 else                N=114;
-	             }
-	           }
+              }
+            }
             else
-	           {
+            {
               if(i==78)       // Pt
-	             {
+              {
                 if     (rnd<.338)   N=117;
                 else if(rnd<.667)   N=116;
                 else if(rnd<.920)   N=118;
                 else if(rnd<.992)   N=120;
                 else if(rnd<.9999)  N=114;
                 else                N=112;
-	             }
+              }
               else            // Hg (80)
-	             {
+              {
                 if     (rnd<.2986)  N=122;
                 else if(rnd<.5296)  N=120;
                 else if(rnd<.6983)  N=119;
@@ -1517,35 +1515,35 @@ G4int G4QIsotope::RandomizeNeutrons(G4int i)
                 else if(rnd<.9298)  N=118;
                 else if(rnd<.9985)  N=124;
                 else                N=116;
-	             }
+              }
             }
           }
           else                // ...... Tl - U
           {
             if        (i<92)
-	           {
+            {
               if     (i==81)  // Tl
-	             {
+              {
                 if     (rnd<.70476) N=124;
                 else                N=122;
-	             }
+              }
               else            // Pb (82)
-	             {
+              {
                 if     (rnd<.524)   N=126;
                 else if(rnd<.765)   N=124;
                 else if(rnd<.986)   N=125;
                 else                N=122;
-			           }
-	           }
+              }
+            }
             else              // U (92)
-	           {
+            {
                 if     (rnd<.992745)N=146;
                 else if(rnd<.999945)N=143;
                 else                N=142;
-	           }
+            }
           }
         }
-	     }
+      }
     }
   }
   else if(N<0)
@@ -1596,14 +1594,14 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
     sumAbu+=abu;
     if(j==I-1.)
     {
-	     if(fabs(sumAbu-1.)>.00001)
+      if(fabs(sumAbu-1.)>.00001)
       {
         G4cerr<<"--Worning--G4QIsotope::InitEl:maxSum="<<sumAbu<<" is fixed to 1."<<G4endl;
         abu+=1.-sumAbu;
         sumAbu=1.;
       }
       else if(sumAbu-abu>1.)
-	     {
+      {
         G4cerr<<"--Worning--G4QIsotope::InitEl:(-2)WrongAbund,Z="<<Z<<",i="<<index<<G4endl;
         for(G4int k=0; k<I-1; k++)
         {
@@ -1621,23 +1619,23 @@ G4int G4QIsotope::InitElement(G4int Z, G4int index, // Ret: -1 - Empty, -2 - Wro
 #endif
     }
     pair<G4int,G4double>* abP= new pair<G4int,G4double>(N,abu);
-    A->push_back(abP);
+    A->push_back(abP); // @@ Valgrind thinks that it is not deleted (?) (Line 703)
     pair<G4int,G4double>* saP= new pair<G4int,G4double>(N,sumAbu);
-    S->push_back(saP);
+    S->push_back(saP); // @@ Valgrind thinks that it is not deleted (?) (Line 713)
     pair<G4int,G4double>* csP= new pair<G4int,G4double>(N,0.);
-    C->push_back(csP);
+    C->push_back(csP); // @@ Valgrind thinks that it is not deleted (?) (Line 723)
 #ifdef debug
     G4cout<<"G4QIsotope::InitElement: A & S & C are filled nP="<<C->size()<<G4endl;
 #endif
   }
   pair<G4int,vector<pair<G4int,G4double>*>*>* newAP=
-	                                   new pair<G4int,vector<pair<G4int,G4double>*>*>(ZInd,A);
+                                    new pair<G4int,vector<pair<G4int,G4double>*>*>(ZInd,A);
   newElems.push_back(newAP);
   pair<G4int,vector<pair<G4int,G4double>*>*>* newSA=
-	                                   new pair<G4int,vector<pair<G4int,G4double>*>*>(ZInd,S);
+                                    new pair<G4int,vector<pair<G4int,G4double>*>*>(ZInd,S);
   newSumAb.push_back(newSA);
   pair<G4int,vector<pair<G4int,G4double>*>*>* newCP=
-	                                   new pair<G4int,vector<pair<G4int,G4double>*>*>(ZInd,C);
+                                    new pair<G4int,vector<pair<G4int,G4double>*>*>(ZInd,C);
   newIsoCS.push_back(newCP);
 #ifdef debug
   G4cout<<"G4QIsotope::InitElement: newElems & newSumAb & newIsoCS are filled "<<G4endl;
@@ -1868,7 +1866,7 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
   else if(!index)           // =========> Natural Abundancies for Isotopes of the Element
   {
 #ifdef ppdebug
-				G4cout<<"G4QIsotope::GetMeanCrossSection: Nat Abundance, Z="<<Z<<G4endl;
+    G4cout<<"G4QIsotope::GetMeanCrossSection: Nat Abundance, Z="<<Z<<G4endl;
 #endif
     ab=natElements[Z];
     cs=natIsoCrosS[Z];
@@ -1876,7 +1874,7 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
   else                      // =========> UserDefinedAbundancies for Isotopes of theElement
   {
 #ifdef ppdebug
-				G4cout<<"G4QIsotope::GetMeanCrossSection: Art Abund, Z="<<Z<<",ind="<<index<<G4endl;
+    G4cout<<"G4QIsotope::GetMeanCrossSection: Art Abund, Z="<<Z<<",ind="<<index<<G4endl;
 #endif
     // For the positive index tries to find the newUserDefinedElement
     G4bool found=false;               // Prototype of the"ZWithTheSameIndex is found" event
@@ -1912,12 +1910,12 @@ G4double G4QIsotope::GetMeanCrossSection(G4int Z, G4int index)
   {
     G4double sum=0.;
     for(G4int j=0; j<nis; j++)
-	   {
+    {
       G4double cur=(*ab)[j]->second;
       //G4double abunda=cur-last;
       //last=cur;
 #ifdef ppdebug
-						G4cout<<"G4QIsot::GetMeanCS:j="<<j<<",ab="<<cur<<",CS="<<(*cs)[j]->second<<G4endl;
+      G4cout<<"G4QIsot::GetMeanCS:j="<<j<<",ab="<<cur<<",CS="<<(*cs)[j]->second<<G4endl;
 #endif
       //sum+=abunda * (*cs)[j]->second;
       sum+=cur * (*cs)[j]->second;
@@ -1982,7 +1980,7 @@ G4int G4QIsotope::GetCSNeutrons(G4int Z, G4int index)
     G4double sum=0.;
     vector<G4double> scs(nis);
     for(G4int j=0; j<nis; j++)
-	   {
+    {
       G4double cur=(*ab)[j]->second;
       G4double abunda=cur-last;
       last=cur;

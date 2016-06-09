@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.16 2008/10/22 16:04:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UniversalFluctuation.cc,v 1.22 2009/03/20 18:11:23 urban Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -56,7 +56,9 @@
 //          regime any more (L.Urban)
 // 03-04-07 correction to get better width of eloss distr.(L.Urban)
 // 13-07-07 add protection for very small step or low-density material (VI)
-//          
+// 19-03-09 new width correction (does not depend on previous steps) (L.Urban)         
+// 20-03-09 modification in the width correction (L.Urban)
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,9 +85,6 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
   nmaxCont2(16.)
 {
   lastMaterial = 0;
-  facwidth     = 1.000/keV;
-  oldloss = 0.;
-  samestep = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,10 +118,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   // shortcut for very very small loss (out of validity of the model)
   //
   if (meanLoss < minLoss)
-  { 
-    oldloss = meanLoss;
     return meanLoss;
-  }
 
   if(!particle) InitialiseMe(dp->GetDefinition());
 
@@ -178,23 +174,23 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     ipotLogFluct = material->GetIonisation()->GetLogMeanExcEnergy();
     e0 = material->GetIonisation()->GetEnergy0fluct();
     lastMaterial = material;
+  
+    // modification of some model parameters
+    // (this part should go to materials later)
+    G4double p = 1.40;
+    f2Fluct *= p;
+    f1Fluct = 1.-f2Fluct;
+    G4double q = 1.00;
+    e2Fluct *= q;
+    e2LogFluct = log(e2Fluct);
+    e1LogFluct = (ipotLogFluct-f2Fluct*e2LogFluct)/f1Fluct;
+    e1Fluct = exp(e1LogFluct);
   }
 
   // very small step or low-density material
   if(tmax <= e0) return meanLoss;
 
   G4double a1 = 0. , a2 = 0., a3 = 0. ;
-
-  // correction to get better width even using stepmax
-  if(abs(meanLoss- oldloss) < 1.*eV)
-    samestep += 1;
-  else
-    samestep = 1.;
-  oldloss = meanLoss;
-  G4double width = 1.+samestep*facwidth*meanLoss;
-  if(width > 4.50) width = 4.50;
-  e1 = width*e1Fluct;
-  e2 = width*e2Fluct;
 
   // cut and material dependent rate 
   G4double rate = 1.0;
@@ -205,8 +201,20 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 
       rate = 0.03+0.23*log(log(tmax/ipotFluct));
       G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
-      a1 = C*f1Fluct*(w2-e1LogFluct)/e1;
-      a2 = C*f2Fluct*(w2-e2LogFluct)/e2;
+      a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
+      a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
+      // correction in order to get better FWHM values
+      // ( scale parameters a1 and e1)
+      G4double width = 1.;
+      if(meanLoss > 10.*e1Fluct)
+      {
+        width = 3.1623/sqrt(meanLoss/e1Fluct);
+        if(width < a2/a1)
+        width = a2/a1;
+      } 
+      a1 *= width;
+      e1 = e1Fluct/width;
+      e2 = e2Fluct;
     }
   }
 
@@ -302,6 +310,19 @@ G4double G4UniversalFluctuation::Dispersion(
                  * electronDensity * chargeSquare;
 
   return siga;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void 
+G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
+					     G4double q2)
+{
+  if(part != particle) {
+    particle       = part;
+    particleMass   = part->GetPDGMass();
+  }
+  chargeSquare = q2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

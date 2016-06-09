@@ -6,7 +6,7 @@
 /vis/scene/create
 
 # reading extended GDML Geometry from file
-/mydet/readFile colour_extension.gdml
+/mydet/readFile color_extension.gdml
 /run/initialize
 
 # Create a scene handler for a specific graphics system

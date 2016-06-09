@@ -1,0 +1,40 @@
+$Id: History,v 1.4 2009/12/10 13:05:09 ldesorgh Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+December 10th, 2009 L.Desorgher (ReverseMC01-V09-02-02)
+ -Update of the README file
+
+November 27th, 2009 L.Desorgher (ReverseMC01-V09-02-01)
+ -Update of the analysis code:
+	 -for registering in  Conv* ASCII files every 5000 events the computed edep with  precision.
+	 -Correction of the adjoint computed current and answer matrices by a factor n_asked/n_processed for the case 
+	  where a run is aborted because the user expected precision on e_dep has been reached. 
+ -Important update of the README file
+ -Rename g4mac files run_*_simulation.g4mac files by   run_*_simulation_electron.g4mac 
+ -Add g4mac files run_*_simulation_proton.g4mac
+
+
+November 20th, 2009 L.Desorgher (ReverseMC01-V09-02-00)
+ -Slight update of the code for unit of answer matrices.
+ -Adding draft of README file
+
+
+November 19th, 2009 L.Desorgher (no tag)
+ -First commit to the Geant4 repository
+

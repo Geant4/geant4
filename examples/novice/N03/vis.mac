@@ -1,4 +1,4 @@
-# $Id: vis.mac,v 1.6 2007/06/13 10:36:39 maire Exp $
+# $Id: vis.mac,v 1.7 2009/11/15 14:48:40 maire Exp $
 #
 # Macro file for the initialization phase of "exampleN03.cc"
 # when running in interactive mode
@@ -36,7 +36,7 @@
 #
 # Draw trajectories at end of event, showing trajectory points as
 # markers of size 2 pixels
-/vis/scene/add/trajectories
+/vis/scene/add/trajectories smooth
 /vis/modeling/trajectories/create/drawByCharge
 /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
 /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2

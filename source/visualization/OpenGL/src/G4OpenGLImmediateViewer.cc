@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateViewer.cc,v 1.8 2006/09/04 12:07:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateViewer.cc,v 1.10 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -36,6 +36,7 @@
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4OpenGLImmediateViewer.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 G4OpenGLImmediateViewer::G4OpenGLImmediateViewer (G4OpenGLImmediateSceneHandler& scene):
 G4VViewer (scene, -1),

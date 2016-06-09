@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2008/05/30 11:01:37 vnivanch Exp $
+# $Id: GNUmakefile,v 1.7 2009/11/20 10:24:28 mkossov Exp $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/lists library.  Gunter Folger 25-Oct-2006.
 # ---------------------------------------------------------------------------
@@ -47,6 +47,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/stopping/include \
             -I$(G4BASE)/processes/hadronic/management/include \
+            -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/physics_lists/builders/include \
@@ -57,6 +58,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/body/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/cross_sections/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/fragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/processes/include \
             -I$(G4BASE)/processes/hadronic/models/chiral_inv_phase_space/interface/include \
             -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
@@ -70,6 +74,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/models/high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
+            -I$(G4BASE)/processes/hadronic/models/incl/include \
             -I$(G4BASE)/processes/hadronic/models/isotope_production/include \
             -I$(G4BASE)/processes/hadronic/models/leading_particle/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \

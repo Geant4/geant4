@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteDefine.cc,v 1.18 2008/07/16 15:46:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteDefine.cc,v 1.19 2009/03/24 15:47:33 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4GDMLWriteDefine Implementation
 //
@@ -38,6 +38,14 @@
 const G4double G4GDMLWriteDefine::kRelativePrecision = DBL_EPSILON;
 const G4double G4GDMLWriteDefine::kAngularPrecision = DBL_EPSILON;
 const G4double G4GDMLWriteDefine::kLinearPrecision = DBL_EPSILON;
+
+G4GDMLWriteDefine::G4GDMLWriteDefine() : G4GDMLWrite()
+{
+}
+
+G4GDMLWriteDefine::~G4GDMLWriteDefine()
+{
+}
 
 G4ThreeVector G4GDMLWriteDefine::GetAngles(const G4RotationMatrix& mat)
 {

@@ -27,8 +27,8 @@
 #ifndef G4QParton_h
 #define G4QParton_h 1
 
-// $Id: G4QParton.hh,v 1.2 2006/12/12 11:02:22 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QParton.hh,v 1.8 2009/07/17 16:54:57 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -39,31 +39,23 @@
 //   For comparison mirror member functions are taken from G4 class:
 //   G4Parton
 // -----------------------------------------------------------------
+// Short description: The Quark-Gluon String consists of the partons, which
+// are quarks and some times gluons.
+// ------------------------------------------------------------------------
 
 #include "globals.hh"
-#include "G4ThreeVector.hh"
+#include "G4QContent.hh"
 #include "G4LorentzVector.hh"
+#include "G4ThreeVector.hh"
 #include <iostream>
-#include "G4ParticleTable.hh"
 #include "Randomize.hh"
 
 class G4QParton
 {
  public:
   // Constructors
-  G4QParton()
-  {
-    // CHIPS is working only with u, d, and s quarks (SU(3)xSU(3)) (no gluons! M.K.)
-    // Random Flavor/Colour/Spin definition for default constructor (with .3 s-suppresion)
-    PDGencoding=(G4int)(2.3*G4UniformRand())+1; //@@ What about antiquarks? (M.K.)
-   	theDefinition=G4ParticleTable::GetParticleTable()->FindParticle(PDGencoding);
-   	// random colour (1,2,3)=(R,G,B) for quarks and (-1,-2,-3)=(aR,aG,aB) for anti-quarks
-    theColour = (G4int)(3*G4UniformRand())+1;
-    if(theColour>3) theColour = 3;
-    theIsoSpinZ = theDefinition->GetPDGIsospin3();
-    theSpinZ = (G4int)(2*G4UniformRand()) - 0.5;
-  }
-		G4QParton(G4int PDGencoding);                            // Collor/Spin are still random
+  G4QParton();                                            // Default fullRandom constructor
+  G4QParton(G4int aPGG);                                  // Collor/Spin are still random
   G4QParton(const G4QParton &right);
   G4QParton(const G4QParton* right);
 
@@ -72,39 +64,39 @@ class G4QParton
 
   // Operators
   const G4QParton& operator=(const G4QParton &right);
-  G4int operator==(const G4QParton &right) const      {return this==&right;}	
-  G4int operator!=(const G4QParton &right) const      {return this!=&right;}	
+  G4int operator==(const G4QParton &right) const      {return this==&right;} 
+  G4int operator!=(const G4QParton &right) const      {return this!=&right;} 
 
   // Modifiers
+  void DefineEPz(G4LorentzVector hadr4Mom){theMomentum+=hadr4Mom*theX;} // CHIPS solution
   void DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection);
+  void SetPDGCode(G4int aPDG);
   void SetColour(G4int aColour)                       {theColour = aColour;}
   void SetX(G4double anX)                             {theX = anX;}
   void Set4Momentum(const G4LorentzVector& aMomentum) {theMomentum=aMomentum;}
   void SetPosition(const G4ThreeVector& aPosition)    {thePosition=aPosition;}
-  void SetIsoSpinZ(G4double anIsoSpinZ)               {theIsoSpinZ = anIsoSpinZ;}
   void SetSpinZ(G4double aSpinZ)                      {theSpinZ = aSpinZ;}
+  G4bool ReduceDiQADiQ(G4QParton* d1, G4QParton* d2); // Reduce DiQ-aDiQ to Q-aQ (general)
 
   // Selectors
-  G4int GetPDGCode() const                            {return PDGencoding;}
-  G4ParticleDefinition* GetDefinition()               {return theDefinition;}    
-  const G4ThreeVector& GetPosition()const             {return thePosition;}
+  G4int GetPDGCode() const                            {return PGGCode;}
+  G4QContent GetQC() const                            {return QCont;}
+  const G4ThreeVector& GetPosition() const            {return thePosition;}
   const G4LorentzVector& Get4Momentum() const         {return theMomentum;} 
   G4double GetX()                                     {return theX;}    
   G4int GetColour()                                   {return theColour;}    
   G4double GetSpinZ()                                 {return theSpinZ;}
-  G4double GetIsoSpinZ()                              {return theIsoSpinZ;}
-  G4double GetMass()                                  {return theDefinition->GetPDGMass();}
-  G4String GetParticleSubType()               {return theDefinition->GetParticleSubType();}
+  const G4int& GetType() const                        {return theType;}
  private: 
-		// Body 
-  G4int                 PDGencoding;
-  G4ParticleDefinition* theDefinition;
-  G4LorentzVector       theMomentum;
-  G4ThreeVector         thePosition;
+  // Body 
+  G4int                 PGGCode;
+  G4QContent            QCont;   // Quark Content of the parton
+  G4int                 theType; // 0 = gluon, 1 = quark-antiquark, 2 = diquark/antidiquark
   G4int                 theColour;
-  G4double              theIsoSpinZ;
   G4double              theSpinZ;
-  G4double              theX;   
+  G4double              theX;
+  G4ThreeVector         thePosition;
+  G4LorentzVector       theMomentum;
 };
 
 #endif

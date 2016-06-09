@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2008/11/20 12:06:28 alechner Exp $
+# $Id: GNUmakefile,v 1.8 2009/06/18 16:18:41 mantero Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -30,4 +30,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/materials/include
 
+
 include $(G4INSTALL)/config/common.gmk
+
+

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAGenericIonsManager.cc,v 1.5 2008/07/16 19:01:07 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DNAGenericIonsManager.cc,v 1.6 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #include "G4DNAGenericIonsManager.hh"
 #include "G4Alpha.hh"
@@ -56,24 +56,29 @@ G4ParticleDefinition * G4DNAGenericIonsManager :: GetIon(const G4String & name)
 
 G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 {
- //               name             mass          width         charge
- //             2*spin           parity  C-conjugation
- //          2*Isospin       2*Isospin3       G-parity
- //               type    lepton number  baryon number   PDG encoding
- //             stable         lifetime    decay table
-
+  //               name             mass          width         charge
+  //             2*spin           parity  C-conjugation
+  //          2*Isospin       2*Isospin3       G-parity
+  //               type    lepton number  baryon number   PDG encoding
+  //             stable         lifetime    decay table
+  //         shortlived          subType  anti_encoding
+  //         excitation   
+  
  G4Ions *helium;
  G4Ions *hydrogen;
  G4Ions *alphaPlus;
  G4Ions *positronium1s;
  G4Ions *positronium2s;
-
- helium=     new G4Ions("helium",    3.727417*GeV,       0.0*MeV,  +0.0*eplus,
-                               0,              +1,             0,
-                               0,               0,             0,
-                       "nucleus",              +2,            +4,           0,
-			true,                -1.0,             0,       false,
-			      "",               0,             0.0);
+ 
+ 
+ helium=     new G4Ions(
+			"helium",    3.727417*GeV,       0.0*MeV,  +0.0*eplus,
+			0,              +1,             0,
+			0,               0,             0,
+			"nucleus",              +2,            +4,           0,
+			true,                -1.0,             0,       
+			false,		      "",               0,             
+			0.0);
 
  alphaPlus=  new G4Ions("alpha+",    3.727417*GeV,       0.0*MeV,  +1.0*eplus,
                                1,              +1,             0,
@@ -103,12 +108,82 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 		            true,            -1.0,             0, false,
 			      "",               0,             0.0);
 
- map["helium"]=helium;
+
+ /*
+ // molechules construction
+
+ G4Ions* oxonium; // H3O -- it will become H3O+
+ G4Ions* hydroxyl; // OH -- it will produce OH- too
+ G4Ions* molHydrogen; // H2
+ //G4Ions* hydroxide; // OH-
+ G4Ions* hydroPeroxide; // H2O2
+ G4Ions* water; // H2O -- it will become also H2O+
+
+
+ G4double mass = 19.02*g/Avogadro - 11*electron_mass_c2;
+
+ oxonium = new G4Ions("H3O",        mass,             0,  +11.0*eplus,
+		      0,               0,             0,
+		      0,               0,             0,
+		      "molecule",      0,             0,           0,
+		      true,         -1.0,             0, 
+		      false,          "",             0,             
+		      0.0); 
+ 
+ mass = 17.00734*g/Avogadro - 9*electron_mass_c2;
+ 
+ hydroxyl = new G4Ions("OH",        mass,             0,  +9.0*eplus,
+		      0,               0,             0,
+		      0,               0,             0,
+		      "molecule",      0,             0,           0,
+		      true,         -1.0,             0, 
+		      false,          "",             0,             
+		      0.0); 
+
+ mass = 2.01588*g/Avogadro - 2*electron_mass_c2;
+
+ molHydrogen = new G4Ions("H2",         mass,             0,  +2.0*eplus,
+			  0,               0,             0,
+			  0,               0,             0,
+			  "molecule",      0,             0,           0,
+			  true,         -1.0,             0, 
+			  false,          "",             0,             
+			  0.0); 
+
+ mass = 34.01468*g/Avogadro - 18*electron_mass_c2;
+
+ hydroPeroxide = new G4Ions("H2O2",      mass,             0, +18.0*eplus,
+			   0,               0,             0,
+			   0,               0,             0,
+			   "molecule",      0,             0,           0,
+			   true,         -1.0,             0, 
+			   false,          "",             0,             
+			   0.0); 
+ 
+ mass = 18.015*g/Avogadro - 10*electron_mass_c2;
+
+ water = new G4Ions("H2O",        mass,             0,  +10.0*eplus,
+		    0,               0,             0,
+		    0,               0,             0,
+		    "molecule",      0,             0,           0,
+		    true,         -1.0,             0, 
+		    false,          "",             0,             
+		    0.0); 
+
+ map["H3O" ]  =oxonium;
+ map["OH"  ]  =hydroxyl;
+ map["H2"  ]  =molHydrogen;
+ map["H2O2"]  =hydroPeroxide;
+ map["H2O" ]  =water; 
+ */
+
+
+ map["helium"  ]=helium;
  map["hydrogen"]=hydrogen;
- map["alpha+"]=alphaPlus;
- map["alpha++"]=G4Alpha::Alpha();
- map["Ps-1s"]=positronium1s;
- map["Ps-2s"]=positronium2s;
+ map["alpha+"  ]=alphaPlus;
+ map["alpha++" ]=G4Alpha::Alpha();
+ map["Ps-1s"   ]=positronium1s;
+ map["Ps-2s"   ]=positronium2s;
 
 }
 

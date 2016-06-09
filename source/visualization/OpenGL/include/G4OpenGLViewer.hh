@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.23 2008/06/20 13:55:06 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLViewer.hh,v 1.32 2009/05/14 16:38:23 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -40,6 +40,7 @@
 #include "G4OpenGL.hh"
 
 class G4OpenGLSceneHandler;
+class G4OpenGL2PSAction;
 
 // Base class for various OpenGLView classes.
 class G4OpenGLViewer: virtual public G4VViewer {
@@ -63,27 +64,35 @@ protected:
   void HLRSecondPass ();
   void HLRThirdPass ();
   void InitializeGLView ();
+  void ResizeGLView();
+  void ResizeWindow(unsigned int, unsigned int);
   void Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
-  virtual void print();
   void rotateScene (G4double dx, G4double dy,G4double delta);
 //////////////////////////////Vectored PostScript production functions///
-  void printBuffer(GLint, GLfloat*);
-  GLfloat* spewPrimitiveEPS (FILE*, GLfloat*);
-  void spewSortedFeedback (FILE*, GLint, GLfloat*);
-  void spewWireframeEPS (FILE*, GLint, GLfloat*, const char*);
-  void print3DcolorVertex(GLint, GLint*, GLfloat*);
+  void printEPS();
+  // print EPS file. Depending of fVectoredPs, it will print Vectored or not
+  void setPrintSize(G4int,G4int);
+  // set the new print size. 
+  // -1 means 'print size' = 'window size'
+  // Setting size greater than max OpenGL viewport size will set the size to
+  // maximum
+  void setPrintFilename(G4String name,G4bool inc);
+  // set print filename. 
+  // if inc, then the filename will be increment by one each time
+  std::string getRealPrintFilename();
+  unsigned int getWinWidth();
+  unsigned int getWinHeight();
+  G4bool sizeHasChanged();
+  // return true if size has change since last redraw
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
-  G4float                           pointSize;
-  char                              print_string[50];
-  G4bool                            print_colour;
-  G4bool                            vectored_ps;
+  G4bool                            fPrintColour;
+  G4bool                            fVectoredPs;
 
   G4OpenGLSceneHandler& fOpenGLSceneHandler;
   G4Colour background;      //the OpenGL clear colour
-  unsigned int WinSize_x, WinSize_y;
   G4bool
     transparency_enabled,   //is alpha blending enabled?
     antialiasing_enabled,   //is antialiasing enabled?
@@ -98,6 +107,28 @@ protected:
   G4double fDisplayLightFrontX, fDisplayLightFrontY, fDisplayLightFrontZ,
     fDisplayLightFrontT;
   G4double fDisplayLightFrontRed, fDisplayLightFrontGreen, fDisplayLightFrontBlue;
+  G4OpenGL2PSAction* fGL2PSAction;
+
+private :
+  G4int                             fPrintSizeX;
+  G4int                             fPrintSizeY;
+  G4String                          fPrintFilename;
+  int                               fPrintFilenameIndex;
+  unsigned int fWinSize_x, fWinSize_y;
+  G4float                           fPointSize;
+  G4bool fSizeHasChanged;
+  // size of the OpenGL frame
+  bool printGl2PS();
+  G4int getRealPrintSizeX();
+  G4int getRealPrintSizeY();
+  GLubyte* grabPixels (int inColor,
+		       unsigned int width,
+		       unsigned int height);
+  bool printNonVectoredEPS ();
+  // print non vectored EPS files
+
+  bool printVectoredEPS();
+  // print vectored EPS files
 };
 
 typedef struct G4OpenGLViewerFeedback3Dcolor {

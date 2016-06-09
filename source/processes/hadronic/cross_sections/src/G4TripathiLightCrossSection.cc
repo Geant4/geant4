@@ -295,11 +295,13 @@ G4double G4TripathiLightCrossSection::GetIsoZACrossSection
       G4double f  = 0.95;
       G4DynamicParticle slowerProjectile = *theProjectile;
       slowerProjectile.SetKineticEnergy(f * EA * MeV);
-      G4TripathiLightCrossSection theTripathiLightCrossSection;
-      theTripathiLightCrossSection.SetLowEnergyCheck(true);
+      // G4TripathiLightCrossSection theTripathiLightCrossSection; // MHM 20090824 Not needed
+	  // theTripathiLightCrossSection.SetLowEnergyCheck(true);
+	  G4bool savelowenergy=lowEnergyCheck;
+	  SetLowEnergyCheck(true);
       G4double resultp =
-        theTripathiLightCrossSection.GetIsoZACrossSection
-        (&slowerProjectile, ZZ, AA, 0.0);
+        GetIsoZACrossSection(&slowerProjectile, ZZ, AA, 0.0);
+	  SetLowEnergyCheck(savelowenergy);
       if (resultp >result) result = 0.0;
     }
   }

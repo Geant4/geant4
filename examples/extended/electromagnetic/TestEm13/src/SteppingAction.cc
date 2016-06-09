@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.6 2007/06/24 22:26:54 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: SteppingAction.cc,v 1.7 2009/09/25 11:27:13 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

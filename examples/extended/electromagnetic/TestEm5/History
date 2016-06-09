@@ -1,5 +1,5 @@
-$Id: History,v 1.112 2008/11/16 19:13:33 maire Exp $
--------------------------------------------------------------------
+$Id: History,v 1.123 2009/11/15 22:10:03 maire Exp $
+----------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -14,6 +14,48 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+15-11-09 mma (testem5-V09-02-07)
+- PhysListEmStandard.cc (local): eMultipleScattering -> UrbanMscModel93
+- new local physics list : PhysListEmStandardGS
+- PhysicsList : remove G4EmConfigurator
+     
+18-09-09 mma (testem5-V09-02-06)
+- PhysicsList.cc :
+    renamed "standard" -> "local"; "emstandard" -> "emstandard_opt0" 
+- updated README and macro files  
+  
+26-06-09 V.Ivant (testem5-V09-02-05)
+- fixed compillation problem of the previous tag
+
+25-06-09 V.Ivant (testem5-V09-02-04)
+- PhysicsList - removed obsolete low-energy EM builders
+
+18-06-09 V.Ivant (testem5-V09-02-03)
+- RunAction - fixed output of mean scattering angle
+- PhysicsList - added "standardGS" option - use GoudsmitSaunderson
+              msc model; substitute low-energy builders by builders from
+              physics_list library        
+     
+06-03-09 mma (testem5-V09-02-02)
+- rm command "/testem/phys/cutLimit" already in /cuts/setLowEdge
+- PhysicsList::SetCuts() : rm SetEnergyRange(1*eV,100*GeV)
+     
+22-02-09 mma (testem5-V09-02-01)
+- PhysicsList: code cleanup
+
+22-01-09 V.Ivant (testem5-V09-02-00)
+- added command "/testem/phys/cutLimit" allowing to change low limit for
+  production threshold
+- added notification to G4RunManager when geometry or material are
+  modified between runs
+- added PAI models configuration to Physics List
+- extended number of runs in TestEm5.in 
+- use Opt3 Physics List in TestEm5.in
+     
+21-01-09 vi
+- PhysicsList::SetCuts() : SetEnergyRange(1*eV,100*GeV)
+- add blaha.mac
           
 16-11-08 mma (testem5-V09-01-13)
 - Em options: 20bins/decade  LinLossLimit=default=0.01

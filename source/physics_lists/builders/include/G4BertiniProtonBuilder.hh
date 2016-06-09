@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4BertiniProtonBuilder.hh,v 1.2 2009/03/31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4BertiniProtonBuilder
+//
+// Author: 2002 H.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4BertiniProtonBuilder_h
 #define G4BertiniProtonBuilder_h 
 
@@ -35,7 +49,6 @@
 #include "G4VProtonBuilder.hh"
 
 #include "G4CascadeInterface.hh"   
-#include "G4ProtonInelasticCrossSection.hh"
 
 class G4BertiniProtonBuilder : public G4VProtonBuilder
 {
@@ -51,7 +64,7 @@ class G4BertiniProtonBuilder : public G4VProtonBuilder
     void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
-    G4ProtonInelasticCrossSection theXSec;
+
     G4CascadeInterface * theModel;    
     G4double theMin;
     G4double theMax;

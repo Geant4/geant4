@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.2 2007/10/02 14:42:51 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsListMessenger.hh,v 1.3 2009/10/25 19:06:26 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,30 +32,31 @@
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
 class PhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithADouble;
-class G4UIcmdWithABool;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsListMessenger: public G4UImessenger
 {
-  public:  
+  public:
+  
     PhysicsListMessenger(PhysicsList* );
    ~PhysicsListMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
-  private:  
-    PhysicsList*        pPhysicsList;   
-    G4UIdirectory*      physDir;        
-    G4UIcmdWithADouble* csFactor;
-    G4UIcmdWithABool*   singleScat;      
-    G4UIcmdWithABool*   brem;    
+  private:
+  
+    PhysicsList*               pPhysicsList;
+    
+    G4UIdirectory*             physDir;
+    G4UIcmdWithAString*        pListCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

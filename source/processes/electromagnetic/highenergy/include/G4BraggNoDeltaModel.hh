@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggNoDeltaModel.hh,v 1.6 2006/06/29 19:32:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BraggNoDeltaModel.hh,v 1.7 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -67,12 +67,11 @@ public:
 					G4double kineticEnergy,
 					G4double cutEnergy);
 
-  virtual G4double ComputeCrossSectionPerElectron(
+  virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy,
 					 G4double maxEnergy);
-
 private:
 
   // hide assignment operator
@@ -80,24 +79,6 @@ private:
   G4BraggNoDeltaModel(const  G4BraggNoDeltaModel&);
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4BraggNoDeltaModel::ComputeDEDXPerVolume(
-                            const G4Material* material,
-			    const G4ParticleDefinition* pd,
-                            G4double kinEnergy, G4double)
-{
-  G4double dedx = G4BraggIonModel::ComputeDEDXPerVolume(material, pd, kinEnergy, DBL_MAX);
-  return dedx;
-}
-
-inline G4double G4BraggNoDeltaModel::ComputeCrossSectionPerElectron(
-			    const G4ParticleDefinition*,
-			    G4double, G4double, G4double)
-{
-  return 0.0;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

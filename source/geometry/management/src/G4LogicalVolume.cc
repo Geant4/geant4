@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.33 2008/07/10 09:40:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LogicalVolume.cc,v 1.34 2009/09/24 13:22:57 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // class G4LogicalVolume Implementation
@@ -161,17 +161,13 @@ G4LogicalVolume::IsAncestor(const G4VPhysicalVolume* aVolume) const
 //
 G4int G4LogicalVolume::TotalVolumeEntities() const
 {
-  static G4int vols = 0;
-
-  vols++;
+  G4int vols = 1;
   for (G4PhysicalVolumeList::const_iterator itDau = fDaughters.begin();
        itDau != fDaughters.end(); itDau++)
   {
     G4VPhysicalVolume* physDaughter = (*itDau);
-    for (G4int i=0; i<physDaughter->GetMultiplicity(); i++)
-    {
-      physDaughter->GetLogicalVolume()->TotalVolumeEntities();
-    }
+    vols += physDaughter->GetMultiplicity()
+           *physDaughter->GetLogicalVolume()->TotalVolumeEntities();
   }
   return vols;
 }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.20 2007/05/23 08:47:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ComptonScattering.hh,v 1.21 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
@@ -81,11 +81,10 @@ public:  // with description
   virtual ~G4ComptonScattering();
 
   // true for Gamma only.  
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
   
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo();
-
 
 protected:
 
@@ -95,15 +94,6 @@ private:
      
   G4bool       isInitialised;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4bool G4ComptonScattering::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (&p == G4Gamma::Gamma());
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   

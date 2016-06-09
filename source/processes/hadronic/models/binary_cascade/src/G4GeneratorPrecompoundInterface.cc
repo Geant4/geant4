@@ -30,6 +30,10 @@
 //
 // HPW, 10DEC 98, the decay part originally written by Gunter Folger in his FTF-test-program.
 //
+   
+    G4GeneratorPrecompoundInterface::G4GeneratorPrecompoundInterface()
+    : CaptureThreshold(80*MeV)
+    {}
       
    G4HadFinalState* G4GeneratorPrecompoundInterface::
    ApplyYourself(const G4HadProjectile &, G4Nucleus & )
@@ -50,7 +54,7 @@
      G4KineticTrackVector *result1, *secondaries, *result;
      result1=theSecondaries;
      result=new G4KineticTrackVector();
-     
+
      for (unsigned int aResult=0; aResult < result1->size(); aResult++)
      {
        G4ParticleDefinition * pdef;
@@ -100,7 +104,7 @@
 	 theNew->SetTotalEnergy(aTrack->Get4Momentum().e());
          theTotalResult->push_back(theNew);            
        }
-       else if(aTrack->Get4Momentum().t() - aTrack->Get4Momentum().mag()>80*MeV)
+       else if(aTrack->Get4Momentum().t() - aTrack->Get4Momentum().mag()>CaptureThreshold)
        {
 	 G4ReactionProduct * theNew = new G4ReactionProduct(aTrack->GetDefinition());
 	 theNew->SetMomentum(aTrack->Get4Momentum().vect());
@@ -142,7 +146,7 @@
        }
        theCurrentNucleon = theNucleus->GetNextNucleon();
      }   
-     
+ 
      if(!theDeExcitation)
      {
        // throw G4HadronicException(__FILE__, __LINE__, "Please register an evaporation phase with G4GeneratorPrecompoundInterface.");
@@ -151,10 +155,11 @@
      {
        G4double residualMass =  
                 G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(aZ ,anA);
-       residualMass += exEnergy;
+         residualMass += exEnergy;
+
        G4LorentzVector exciton4Momentum(exciton3Momentum, 
                                         std::sqrt(exciton3Momentum.mag2()+residualMass*residualMass));
-     
+    
        anInitialState.SetA(anA);
        anInitialState.SetZ(aZ);
        anInitialState.SetNumberOfParticles(numberOfEx-numberOfHoles);
@@ -166,7 +171,7 @@
      // call pre-compound
        const G4Fragment aFragment(anInitialState);
        G4ReactionProductVector * aPreResult = theDeExcitation->DeExcite(aFragment);
-//       G4ReactionProductVector * aPreResult = new G4ReactionProductVector;
+
        // fill pre-compound part into the result, and return
        for(unsigned int ll=0; ll<aPreResult->size(); ll++)
        {
@@ -185,3 +190,10 @@
      return theTotalResult;
    }
   
+G4double G4GeneratorPrecompoundInterface::SetCaptureThreshold(G4double value)
+{
+    G4double old=CaptureThreshold;
+    CaptureThreshold=value;
+    return old;
+
+}

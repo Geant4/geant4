@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadParamvol.hh,v 1.6 2008/11/20 15:33:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadParamvol.hh,v 1.8 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4GDMLReadParamvol
@@ -41,13 +41,10 @@
 #ifndef _G4GDMLREADPARAMVOL_INCLUDED_
 #define _G4GDMLREADPARAMVOL_INCLUDED_
 
-#include "G4LogicalVolume.hh"
-#include "G4PVParameterised.hh"
-#include "G4PVPlacement.hh"
-#include "G4VPhysicalVolume.hh"
-
-#include "G4GDMLParameterisation.hh"
 #include "G4GDMLReadSetup.hh"
+#include "G4GDMLParameterisation.hh"
+
+class G4LogicalVolume;
 
 class G4GDMLReadParamvol : public G4GDMLReadSetup
 {
@@ -59,6 +56,9 @@ class G4GDMLReadParamvol : public G4GDMLReadSetup
    virtual void Paramvol_contentRead(const xercesc::DOMElement* const);
 
  protected:
+
+   G4GDMLReadParamvol();
+   virtual ~G4GDMLReadParamvol();
 
    void Box_dimensionsRead(const xercesc::DOMElement* const,
                                  G4GDMLParameterisation::PARAMETER&);

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGNucleonElasticXS.hh,v 1.2 2008/12/01 16:50:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BGGNucleonElasticXS.hh,v 1.5 2009/11/19 11:41:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //

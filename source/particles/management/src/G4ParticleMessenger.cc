@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.cc,v 1.10 2008/06/08 12:43:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleMessenger.cc,v 1.11 2009/07/31 06:39:22 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //---------------------------------------------------------------
@@ -52,7 +52,9 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithoutParameter.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticlePropertyMessenger.hh"
 
@@ -74,6 +76,7 @@ G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
   selectCmd->SetGuidance("Select particle ");
   selectCmd->SetDefaultValue("none");
   selectCmd->SetParameterName("particle name", false);
+  selectCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   //Commnad   /particle/list
   listCmd = new G4UIcmdWithAString("/particle/list",this);
@@ -82,12 +85,19 @@ G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
   listCmd->SetParameterName("particle type", true);
   listCmd->SetDefaultValue("all");
   listCmd->SetCandidates("all lepton baryon meson nucleus quarks");
+  listCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   //Commnad   /particle/find 
   findCmd = new G4UIcmdWithAnInteger("/particle/find",this);
   findCmd->SetGuidance("Find particle by encoding");
   findCmd->SetDefaultValue(0);
   findCmd->SetParameterName("encoding", false);
+  findCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  //Commnad   /particle/createAllIon
+  createAllCmd = new G4UIcmdWithoutParameter("/particle/createAllIon",this);
+  createAllCmd->SetGuidance("Create All ions");
+  createAllCmd->AvailableForStates(G4State_Idle);
 
   // -- particle/property/Verbose ---
   verboseCmd = new G4UIcmdWithAnInteger("/particle/verbose",this);
@@ -113,6 +123,7 @@ G4ParticleMessenger::~G4ParticleMessenger()
   delete listCmd; 
   delete selectCmd;
   delete findCmd;
+  delete createAllCmd;
   delete verboseCmd;
 
   delete thisDirectory;
@@ -157,6 +168,7 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
     if(currentParticle == 0) {
       G4cout << "Unknown particle [" << newValues << "]. Command ignored." << G4endl;
     }   
+
   } else if( command==findCmd ){
     //Commnad   /particle/find
     G4ParticleDefinition* tmp = theParticleTable->FindParticle( findCmd->GetNewIntValue(newValues));
@@ -166,6 +178,11 @@ void G4ParticleMessenger::SetNewValue(G4UIcommand * command,G4String newValues)
       G4cout << tmp->GetParticleName() << G4endl;
       tmp->DumpTable();
     }
+
+  } else if( command==createAllCmd ) {
+    //Commnad   /particle/createAllIon
+    theParticleTable->GetIonTable()->CreateAllIon();
+
   } else if( command==verboseCmd ) {
     //Commnad   /particle/verbose
     theParticleTable->SetVerboseLevel(verboseCmd->GetNewIntValue(newValues));

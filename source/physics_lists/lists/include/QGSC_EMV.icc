@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSC_EMV.icc,v 1.4 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: QGSC_EMV.icc,v 1.5 2009/11/27 17:28:18 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -39,6 +39,7 @@
 // 26.04.2007 G.Folger  Enable quasielastic for QGS string model
 // 26.04.2007 G.Folger  Use QCaptureAtRest for muon
 // 16.05.2007 V.Ivanchenko: rename EM builders
+// 27.11.2009 G.Folger: Mark as obsolete
 //
 //----------------------------------------------------------------------------
 //
@@ -66,6 +67,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSC.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSC_EMV<T>::TQGSC_EMV(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -75,6 +78,9 @@ template<class T> TQGSC_EMV<T>::TQGSC_EMV(G4int ver):  T()
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSC_EMV", "QGSC_BERT");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics_option1(ver));

@@ -1,0 +1,57 @@
+/OnlyVisio true                                       # switch the visualization mode
+
+
+/convergence/bCompareExp true                          # if compare the data with an experiemntal file data
+/convergence/fileExperimentalData VoxelsTest.txt       # name of the experimental file 
+/convergence/minNumberOfEvents 13                      # minimum number of events in each experimental voxel
+
+/general/centrePhaseSpace 0 0 215 mm                   # position of the centre of the plane phase space
+/general/halfSizePhaseSpace 150 150 1  mm              # half size of the plane phase space
+
+/general/bSavePhaseSpace true                          # true if to save the phase space
+/general/bStopAtPhaseSpace false                       # true if to kill the particle at the phase space
+/general/bSaveROG true                                 # true if save the ROG volume
+/general/ROGOutFile ROG_Out                            # file name of the ROG volume 
+/general/PhaseSpaceOutFile PhSp_Out                    # file name of the phase space
+/general/nBeam 100000                                  # number of events to run 
+/general/nMaxParticlesInRamPlanePhaseSpace 100         # maximum particle number stored in RAM before saving - for phase space
+/general/saving_in_Selected_Voxels_every_events 1000   # maximum particle number stored before saving - for experiemntal data comparison
+/general/saving_in_ROG_Voxels_every_events 10000       # maximum particle number stored before saving - for ROG
+/general/max_N_particles_in_PhSp_File 10000            # maximum particle number stored in the phase space file
+
+/primaryParticleData/nMaxParticlesInRamPhaseSpace 1000 # maximum particle number loaded from the phase space file each time
+/primaryParticleData/nIdenticalParticles 1             # number of identical particles generated in the primary generator  
+/primaryParticleData/GunMeanEnegy 6 MeV                # mean energy of the primary particles 
+/primaryParticleData/GunStdEnegy 0.127 MeV             # std energy of the primary particles 
+/primaryParticleData/GunRadious 0.5 mm                 # radious primary particles beam
+/primaryParticleData/sourceTypeName randomTarget       # type of particle generator source
+/primaryParticleData/calculatedPhaseSpaceFileIN PhSp10.txt # file name of the phase space file to be used as particle generator
+
+/phantom/PhantomName fullWater				# phantom name to select among those implemented 
+/phantom/PhantomSpecficationsFileName phan1.mac		# macro file name containing specific setup data for the phantom chosen
+
+/accelerator/AcceleratorName acc1			# accelerator name to select among those implemented 
+/accelerator/AcceleratorSpecficationsFileName acc1.mac	# macro file name containing specific setup data for the accelerator chosen
+
+
+#/physic/addPhysics standard_opt3 			# Standard Electromagnetic models
+/physic/addPhysics LowE_Livermore  		        # Lowenergy-Livermore Electromagnetic models
+#/physic/addPackage QGSP_BIC    		        # use of the Package Physic lists
+
+####################	INFO   ######################################
+
+# All possible choices
+
+#    Particle sources
+# randomTarget // random from target
+# phaseSpace // from phase space
+
+#    Accelerators
+# acc1 // non real accelearator but working
+# 
+
+#    Phantoms
+# fullWater // water box
+# BoxInBox  // box in a box with a layer of PMMA at the exposed surface
+
+

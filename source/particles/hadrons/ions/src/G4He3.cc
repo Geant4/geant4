@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.cc,v 1.14 2007/03/11 07:17:35 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4He3.cc,v 1.15 2009/02/26 23:34:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4He3* G4He3::Definition()
   //             shortlived      subType    anti_encoding
   //             excitation 
     anInstance = new G4Ions(
-                 name,   2.80923*GeV,       0.0*MeV,  +2.0*eplus,
+                 name,    2.808391*GeV,       0.0*MeV,  +2.0*eplus,
                     1,              +1,             0,
                     0,               0,             0,
             "nucleus",               0,            +3, 1000020030,

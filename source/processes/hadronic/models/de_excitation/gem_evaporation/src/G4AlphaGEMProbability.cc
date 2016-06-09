@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4AlphaGEMProbability.cc,v 1.4 2006/06/29 20:20:21 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AlphaGEMProbability.cc,v 1.5 2009/09/15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
-
+// J.M. Quesada (July 2009) C's and k's  values according to Furihata's paper 
+// (based on notes added on proof in Dostrovskii's paper)
 
 #include "G4AlphaGEMProbability.hh"
 
@@ -85,9 +86,16 @@ G4bool G4AlphaGEMProbability::operator!=(const G4AlphaGEMProbability &) const
     return true;
 }
 
-
-G4double G4AlphaGEMProbability::CCoeficient(const G4double aZ) const
+//JMQ 190709 C's values from Furihata's paper 
+//(notes added on proof in Dostrovskii's paper) 
+G4double G4AlphaGEMProbability::CCoeficient(const G4double/* aZ*/) const
 {
+    return 0.;
+}
+
+
+//G4double G4AlphaGEMProbability::CCoeficient(const G4double aZ) const
+//{
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander
     // Physical Review, vol 116, num. 3 1959
@@ -95,18 +103,18 @@ G4double G4AlphaGEMProbability::CCoeficient(const G4double aZ) const
     // const G4int size = 5;
     // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
     //	G4double Calpha[5] = { 0.10, 0.10, 0.10, 0.08, 0.06};
-    G4double C = 0.0;
+//    G4double C = 0.0;
 	
 	
-    if (aZ <= 30) {
-        C = 0.10;
-    } else if (aZ <= 50) {
-        C = 0.1 + -((aZ-50.)/20.)*0.02;
-    } else if (aZ < 70) {
-        C = 0.08 + -((aZ-70.)/20.)*0.02;
-    } else {
-        C = 0.06;
-    }
-    return C;
-}
+//    if (aZ <= 30) {
+//        C = 0.10;
+//    } else if (aZ <= 50) {
+//        C = 0.1 + -((aZ-50.)/20.)*0.02;
+//    } else if (aZ < 70) {
+//        C = 0.08 + -((aZ-70.)/20.)*0.02;
+//    } else {
+//        C = 0.06;
+//    }
+//    return C;
+//}
 

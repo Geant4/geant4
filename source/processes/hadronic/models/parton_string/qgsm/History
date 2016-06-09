@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2008/09/19 09:54:23 gunter Exp $
+$Id: History,v 1.8 2009/05/19 12:48:42 gunter Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,6 +15,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 May 2009, G.Folger		(hadr-qgsm-V09-02-02)
+-----------------------------------------------------
+- fix in G4SPBaryon: for antibaryon, a  diquark & quark was given instead of 
+      anti-diquark & antiquark; note the reverse order, too. 
+    Fixes problems with incident anti baryons, e.g. antiproton, manifesting
+    in problems with forming hadrons.
+
+29 Apr 2009 m. Kosov       (hadr-qgsm-V09-02-01)
+------------------------------------------------
+Very important bug fix in G4QGSParticipants.cc to let QGSC working from E=0
+Added by GF (19-May-09):
+- this very important "bug" fix modifies G4G4QGSParticipants.cc and
+   G4GammaParticipants.cc:
+     changing the value of Threshold from 0.45 GeV to 0.GeV, 
+     and disables an Exception if s < sqr(total mass + Threshold)
 
 15 Sep 2008 G.Folger       (hadr-qgsm-V09-01-01)
 ------------------------------------------------

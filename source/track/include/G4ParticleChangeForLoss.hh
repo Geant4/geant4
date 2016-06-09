@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.20 2008/01/11 19:57:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleChangeForLoss.hh,v 1.22 2009/06/17 17:25:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // ------------------------------------------------------------
@@ -41,7 +41,8 @@
 //   30.01.06 V.Ivanchenko add ProposedMomentumDirection for AlongStep
 //                         and ProposeWeight for PostStep
 //   07.06.06 V.Ivanchenko RemoveProposedMomentumDirection from AlongStep
-//   28.08.06 V.Ivanchenko Add access to current track and polarizaion
+//   28.08.06 V.Ivanchenko Added access to current track and polarizaion
+//   17.06.09 V.Ivanchenko Added SetLowEnergyLimit method 
 //
 // ------------------------------------------------------------
 //
@@ -107,6 +108,8 @@ public:
 
   const G4Track* GetCurrentTrack() const;
 
+  void SetLowEnergyLimit(G4double elimit);
+
   virtual void DumpInfo() const;
 
   // for Debug
@@ -124,6 +127,9 @@ private:
 
   G4double proposedKinEnergy;
   //  The final kinetic energy of the current particle.
+
+  G4double lowEnergyLimit;
+  //  The limit kinetic energy below which particle is stopped
 
   G4double currentCharge;
   //  The final charge of the current particle.
@@ -262,7 +268,7 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
     (proposedKinEnergy - pStep->GetPreStepPoint()->GetKineticEnergy());
 
   // update kinetic energy and charge
-  if (kinEnergy < DBL_MIN) {
+  if (kinEnergy < lowEnergyLimit) {
     theLocalEnergyDeposit += kinEnergy;
     kinEnergy = 0.0;
   } else {
@@ -308,6 +314,11 @@ inline void G4ParticleChangeForLoss::AddSecondary(G4DynamicParticle* aParticle)
 
   //  add a secondary
   G4VParticleChange::AddSecondary(aTrack);
+}
+
+inline void G4ParticleChangeForLoss::SetLowEnergyLimit(G4double elimit)
+{
+  lowEnergyLimit = elimit;
 }
 
 #endif

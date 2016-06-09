@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysicsTableHelper.cc,v 1.5 2006/06/29 19:30:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicsTableHelper.cc,v 1.6 2009/08/01 07:57:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -72,6 +72,13 @@ G4PhysicsTable* G4PhysicsTableHelper::PreparePhysicsTable(G4PhysicsTable* physTa
     if ( physTable->size() < numberOfMCC) {
       // enlarge physcis table
       physTable->resize(numberOfMCC, (G4PhysicsVector*)(0));
+#ifdef G4VERBOSE  
+      if (verboseLevel>2) {
+	G4cerr << "G4PhysicsTableHelper::PreparePhysicsTable  ";
+	G4cerr << "Physics Table "<< physTable ;
+	G4cerr << " is resized to " << numberOfMCC << G4endl;
+      }
+#endif 
     } else if ( physTable->size() > numberOfMCC){
       // ERROR: this situation should not occur  
       //  size of physics table is shorter than  number of material-cuts-couple
@@ -161,7 +168,7 @@ G4bool G4PhysicsTableHelper::RetrievePhysicsTable(G4PhysicsTable* physTable,
     if (converter->IsUsed(idx)){
       size_t i = converter->GetIndex(idx);
       G4PhysicsVector* vec = (*physTable)[i];
-      if (vec !=0 ) delete vec;
+       if (vec !=0 ) delete vec;
       (*physTable)[i] =  (*tempTable)[idx];
       physTable->ClearFlag(i);
     }

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGNucleonInelastic.cc,v 1.1 2008/01/04 23:28:10 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGNucleonInelastic.cc,v 1.2 2009/05/25 19:06:03 dennis Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
  
 #include "G4RPGNucleonInelastic.hh"
@@ -69,8 +69,32 @@ G4RPGNucleonInelastic::G4RPGNucleonInelastic(const G4String& modelName)
       pNtot[k] += t0_dSigma_dMult[m][k];
     }
   }
+  
+  //  printCrossSections();
 
 }
+
+/*
+void G4RPGNucleonInelastic::printCrossSections() const
+{
+  G4cout << " pp total cross sections (mb) " << G4endl;
+  for (G4int i = 0; i < 5; i++) {
+    G4int istart = i*6;
+    G4int istop = istart + 6;
+    for (G4int t = istart; t < istop; t++) G4cout << pPtot[t] << "  " ;
+    G4cout << G4endl;
+  }
+  G4cout << G4endl;
+
+  G4cout << " pn total cross sections (mb) " << G4endl;
+  for (G4int i = 0; i < 5; i++) {
+    G4int istart = i*6;
+    G4int istop = istart + 6;
+    for (G4int t = istart; t < istop; t++) G4cout << pNtot[t] << "  " ;
+    G4cout << G4endl;
+  }
+}
+*/
 
 
 G4int G4RPGNucleonInelastic::GetMultiplicityT0(G4double KE) const

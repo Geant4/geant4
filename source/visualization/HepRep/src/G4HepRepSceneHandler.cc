@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.101 2007/11/16 20:29:04 perl Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HepRepSceneHandler.cc,v 1.102 2009/11/23 05:42:28 perl Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 /**
@@ -44,6 +44,7 @@
 
 //HepRep
 #include "HEPREP/HepRep.h"
+#include "G4HepRepMessenger.hh"
 
 //G4
 #include "G4Vector3D.hh"
@@ -89,9 +90,8 @@ G4int G4HepRepSceneHandler::sceneIdCount = 0;
 //#define SDEBUG 1
 //#define PDEBUG 1
 
-G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepMessenger& heprepMessenger, const G4String& name)
+G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name)
         : G4VSceneHandler (system, sceneIdCount++, name),
-          messenger             (heprepMessenger),
           geometryLayer         ("Geometry"),
           eventLayer            ("Event"),
           calHitLayer           ("CalHit"),
@@ -246,7 +246,10 @@ void G4HepRepSceneHandler::open(G4String name) {
         
             writeMultipleFiles = false;
             int startDigit = -1; int endDigit = -1;
-            string suffix = messenger.getEventNumberSuffix();
+
+			G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+
+            string suffix = messenger->getEventNumberSuffix();
             if (suffix != "") {
                 // look for 0000 pattern in suffix
                 endDigit = suffix.length()-1; 
@@ -330,6 +333,8 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
                  << "forgot to call /vis/viewer/update before exit. No event written." << endl;
         }
     } else {
+		
+		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 
         // add geometry to the heprep if there is an event (separate geometries are written
         // using DrawView() called from /vis/viewer/flush)
@@ -337,7 +342,8 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
             GetCurrentViewer()->DrawView();
         
             // couple geometry
-            if (messenger.appendGeometry()) {
+
+            if ( messenger->appendGeometry()) {
                 // couple geometry to event if geometry was written
                 if ((_geometryInstanceTree != NULL)) {
                     getEventInstanceTree()->addInstanceTree(getGeometryInstanceTree());
@@ -373,7 +379,7 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
         }
 
         // write out separate geometry
-        if (!messenger.appendGeometry() && (_heprepGeometry != NULL)) {
+        if (! messenger->appendGeometry() && (_heprepGeometry != NULL)) {
             if (writeMultipleFiles) {
                 char fileName[128];
                 sprintf(fileName, "%s%s%s", baseName.c_str(), "-geometry", extension.c_str());
@@ -492,8 +498,10 @@ void G4HepRepSceneHandler::AddSolid(const G4Box& box) {
 #endif
 
     if (dontWrite()) return;
+	
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 
-    if (!messenger.useSolids()) {
+    if (! messenger->useSolids()) {
         G4VSceneHandler::AddSolid(box);
         return;
     }
@@ -546,8 +554,10 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
 #endif
 
     if (dontWrite()) return;
+	
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 
-    if (!messenger.useSolids() || (cons.GetDeltaPhiAngle() < twopi)) {
+    if (! messenger->useSolids() || (cons.GetDeltaPhiAngle() < twopi)) {
         G4VSceneHandler::AddSolid(cons);
         return;
     }
@@ -608,8 +618,10 @@ void G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs) {
 #endif
 
     if (dontWrite()) return;
+	
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 
-    if (!messenger.useSolids() || (tubs.GetDeltaPhiAngle() < twopi)) {
+    if (! messenger->useSolids() || (tubs.GetDeltaPhiAngle() < twopi)) {
         G4VSceneHandler::AddSolid(tubs);
         return;
     }
@@ -665,8 +677,10 @@ void G4HepRepSceneHandler::AddSolid(const G4Trd& trd) {
     cout << "G4HepRepSceneHandler::AddSolid(const G4Trd& trd)" << endl;
 #endif
     if (dontWrite()) return;
+	
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 
-    if (!messenger.useSolids()) {
+    if (! messenger->useSolids()) {
         G4VSceneHandler::AddSolid(trd);
         return;
     }
@@ -993,8 +1007,9 @@ void G4HepRepSceneHandler::EndPrimitives () {
 }
 
 
-G4bool G4HepRepSceneHandler::dontWrite() {
-    return !(messenger.writeInvisibles() || (fpVisAttribs ? (bool)fpVisAttribs->IsVisible() : true));
+G4bool G4HepRepSceneHandler::dontWrite() {	
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+    return !( messenger->writeInvisibles() || (fpVisAttribs ? (bool)fpVisAttribs->IsVisible() : true));
 }
 
 void G4HepRepSceneHandler::setColor (HepRepAttribute *attribute,
@@ -1366,12 +1381,14 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
     
     type->addAttDef(  "PointUnit", "Length", "Physics", "");
     type->addAttValue("PointUnit", G4String("m"));
+	
+	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 
     type->addAttDef(  "UseSolids", "Use HepRep Solids rather than Geant4 Primitives", "Draw", "");
-    type->addAttValue("UseSolids", messenger.useSolids());
+    type->addAttValue("UseSolids", messenger->useSolids());
 
     type->addAttDef(  "WriteInvisibles", "Write Invisible Objects", "Draw", "");
-    type->addAttValue("WriteInvisibles", messenger.writeInvisibles());
+    type->addAttValue("WriteInvisibles", messenger->writeInvisibles());
 }           
 
 
@@ -1408,7 +1425,9 @@ HepRepInstanceTree* G4HepRepSceneHandler::getGeometryInstanceTree() {
     if (_geometryInstanceTree == NULL) {
         // Create the Geometry InstanceTree.
         _geometryInstanceTree = factory->createHepRepInstanceTree("G4GeometryData", "1.0", getGeometryTypeTree());
-        if (messenger.appendGeometry()) {
+		
+		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+        if ( messenger->appendGeometry()) {
             getHepRep()->addInstanceTree(_geometryInstanceTree);
         } else {
             getHepRepGeometry()->addInstanceTree(_geometryInstanceTree);
@@ -1475,7 +1494,9 @@ HepRepTypeTree* G4HepRepSceneHandler::getGeometryTypeTree() {
         // Create the Geometry TypeTree.
         HepRepTreeID* geometryTreeID = factory->createHepRepTreeID("G4GeometryTypes", "1.0");
         _geometryTypeTree = factory->createHepRepTypeTree(geometryTreeID);
-        if (messenger.appendGeometry()) {
+		
+		G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
+        if ( messenger->appendGeometry()) {
             getHepRep()->addTypeTree(_geometryTypeTree);
         } else {
             getHepRepGeometry()->addTypeTree(_geometryTypeTree);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.hh,v 1.22 2008/10/20 13:27:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EnergyLossMessenger.hh,v 1.24 2009/10/29 19:25:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -106,6 +106,7 @@ private:
   G4UIcmdWithABool*          SubSecCmd;
   G4UIcmdWithADouble*        MinSubSecCmd;
   G4UIcommand*               StepFuncCmd;
+  G4UIcommand*               deexCmd;
   G4UIcmdWithAString*        mscCmd;
   G4UIcmdWithADoubleAndUnit* MinEnCmd;
   G4UIcmdWithADoubleAndUnit* MaxEnCmd;
@@ -124,6 +125,7 @@ private:
   G4UIcmdWithADouble*        skinCmd;
   G4UIcmdWithADouble*        frCmd;
   G4UIcmdWithADouble*        fgCmd;
+  G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
 };
 

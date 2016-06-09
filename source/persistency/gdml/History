@@ -1,4 +1,4 @@
-$Id: History,v 1.96 2008/12/04 08:32:08 gcosmo Exp $
+$Id: History,v 1.116 2009/12/04 13:59:05 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,95 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04 Dec 2009 Gabriele Cosmo (gdml-V09-02-18)
+- Updated list of optical properties in G4GDMLReadSolid according to
+  last changes to G4OpticalSurface and G4SurfaceProperty.
+
+14 Oct 2009 Gabriele Cosmo (gdml-V09-02-17)
+- Added support for GDML 'expression' tag, implementing generic expressions
+  stored as literal constants.
+- Corrected handling of 'quantity' tag; added missing caching of evaluation. 
+
+24 Sep 2009 Gabriele Cosmo (gdml-V09-02-16)
+- Added support for the GDML 'assembly' tag, implementing assemblies of
+  simple placements through G4AssemblyVolume.
+
+12 May 2009 Gabriele Cosmo (gdml-V09-02-15)
+- Restricted usage of loops only for placement of volumes. Now correctly
+  handling most common use-case of multiple copies of the same volume/solid
+  through loop statement. Addressing problem report #1063.
+
+11 May 2009 Gabriele Cosmo (gdml-V09-02-14)
+- Allow for name stripping of volumes which are included in loops; do not
+  store appended internal counter reference.
+
+27 April 2009 Gabriele Cosmo (gdml-V09-02-13)
+- Get rid of unused parameter in G4GDMLWriteMaterials::PropertyVectorWrite().
+
+24 April 2009 Gabriele Cosmo (gdml-V09-02-12)
+- Some code cleanup: rationalised inclusion of headers, replacing them
+  with forward declarations where possible.
+
+24 April 2009 Gabriele Cosmo (gdml-V09-02-11)
+- Allow for reading/writing of constant material properties.
+- Implemented ability to write surface properties associated to volumes
+  and material properties.
+
+17 April 2009 Gabriele Cosmo (gdml-V09-02-10)
+- Defined missing copy constructor and operator=() to G4GDMLMatrix
+  internal class, to avoid cases of memory corruption when handling matrices.
+
+15 April 2009 Gabriele Cosmo (gdml-V09-02-09)
+- Completed virtual layer for allowing customisation of the writer for
+  user-extended schemas.
+
+09 April 2009 Gabriele Cosmo (gdml-V09-02-08)
+- Correction in G4GDMLWriteSolids::BooleanWrite() in order to handle
+  cases of nested displaced solids given to both operands in a Boolean
+  operation (ATLAS use case).
+- Renamed flag for maximum number of transformations applied to a solid
+  and moved to G4GDMLWriteSolids base class.
+- First virtual layer for custom writer classes G4GDMLWriteSolids and
+  G4GDMLWriteStructure.
+
+03 April 2009 Tatiana Nikitina (gdml-V09-02-07)
+- Correction in materials and solids tags for allowing parsing of
+  definitions within the tag scope; possibility foreseen by the schema.
+
+24 March 2009 Gabriele Cosmo (gdml-V09-02-06)
+- Added empty default constructor and virtual destructor to classes in the
+  inheritance chain.
+
+02 March 2009 Gabriele Cosmo (gdml-V09-02-05)
+- Fixed association of entities in nested loops for solids and materials.
+  Definitions of materials are not supposed to be included in loops being
+  therefore repeated...
+- Strip off white spaces from names G4GDMLWrite::GenerateName(), to avoid
+  parsing problems in imported files.
+
+26 February 2009 Tatiana Nikitina (gdml-V09-02-04)
+- Corrected treatment of brackets and indeces for matrices in G4GDMLEvaluator.
+  Fixes problem report #1048.
+
+24 February 2009 Gabriele Cosmo (gdml-V09-02-03)
+- Removed useless 'const' qualifier from GetAuxMap() signature.
+
+19 February 2009 Gabriele Cosmo (gdml-V09-02-02)
+- Fix in G4GDMLStructure class for missing caching of auxiliary information
+  from child modules, causing auxiliary information defined within separated
+  modules to get lost and therefore not assigned to volumes.
+  Fixes problem report #1049.
+
+23 January 2009 Gabriele Cosmo (gdml-V09-02-01)
+- Changed post-fix"_refl" to "_PV" for placements made through the
+  reflection-factory.
+
+22 January 2009 Gabriele Cosmo (gdml-V09-02-00)
+- Added possibility to check overlaps by activating/de-activating the
+  built-in surface check for placement and parameterised volumes.
+  By default the overlap check is off. To activate it, use call to the
+  parser 'SetOverlapCheck(true)' before reading the GDML file.
 
 4 December 2008 Gabriele Cosmo (gdml-V09-01-21)
 - Updated default GDML schema location in G4GDMLParser to point to new

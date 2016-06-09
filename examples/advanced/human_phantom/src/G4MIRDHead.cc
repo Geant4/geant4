@@ -32,7 +32,6 @@
 // design and code review.
 //
 #include "G4MIRDHead.hh"
-//#include "G4Processor/GDMLProcessor.h"
 #include "globals.hh"
 #include "G4HumanPhantomMaterial.hh"
 #include "G4SDManager.hh"

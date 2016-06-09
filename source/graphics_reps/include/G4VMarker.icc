@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.icc,v 1.7 2006/06/29 19:06:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VMarker.icc,v 1.8 2009/02/24 10:58:04 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 
@@ -65,6 +65,14 @@ inline void G4VMarker::SetPosition (const G4Point3D& pos) {
   fPosition = pos;
 }
 
+inline void G4VMarker::SetDiameter (SizeType sizeType, G4double size) {
+  SetSize(sizeType, size);
+}
+
+inline void G4VMarker::SetRadius (SizeType sizeType, G4double size) {
+  SetSize(sizeType, 2. * size);
+}
+
 inline void G4VMarker::SetWorldSize (G4double ws) {
   fWorldSize = ws;
 }
@@ -96,4 +104,6 @@ inline void G4VMarker::SetFillStyle (G4VMarker::FillStyle style) {
   fFillStyle = style;
 }
 
+inline const G4String& G4VMarker::GetInfo() const {return fInfo;}
 
+inline void G4VMarker::SetInfo(const G4String& info) {fInfo = info;}

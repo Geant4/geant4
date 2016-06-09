@@ -24,13 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.28 2006/06/29 20:06:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QContent.hh,v 1.31 2009/07/24 16:37:03 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QContent ----------------
 //             by Mikhail Kossov, Sept 1999.
 //  class header for Quasmon initiated Contents used by the CHIPS Model
 // ----------------------------------------------------------------------
+// Short description: This is the basic class of the CHIPS model. It
+// describes the quark content of the Quasmon, which is a generalized
+// hadronic state. All Quasmons are bags, characterized by the quark
+// Content (QContent), but the spin is not fixed and only light (u,d,s)
+// quarks are considered (SU(3)). The hadrons are the ground states for
+// the corresponding quasmons. The Chipolino (G4QChipolino) or nuclear
+// cluster are examples for another Quark Content.
+// --------------------------------------------------------------------
+// @@ In future total spin & c,b,t of the Hadron can be added @@ M.K.@@
+// --------------------------------------------------------------------
 
 #ifndef G4QContent_h
 #define G4QContent_h 1
@@ -44,6 +54,7 @@ class G4QContent
 {
 public:
   G4QContent(G4int d=0, G4int u=0, G4int s=0, G4int ad=0, G4int au=0, G4int as=0);
+  G4QContent(std::pair<G4int,G4int> PP); // Create HadronQC from two partons
   G4QContent(const G4QContent& rhs);     // Copy constructor by value
   G4QContent(G4QContent* rhs);           // Copy constructor by pointer
 
@@ -105,6 +116,9 @@ public:
   G4int GetAUAD() const;    // A#of anti-ud-di-quarks
   G4int GetADAS() const;    // A#of anti-ds-di-quarks
   G4int GetAUAS() const;    // A#of anti-us-di-quarks
+
+  std::pair<G4int,G4int> MakePartonPair() const;// Make PDG's of PartonPairs for Mes&Baryon
+  G4int AddParton(G4int pPDG) const; // Add parton with pPDG to the hadron with this QC
 
   // Modifiers
   void              Anti();

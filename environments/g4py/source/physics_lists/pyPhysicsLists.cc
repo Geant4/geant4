@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.8 2008/12/04 10:26:40 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyPhysicsLists.cc,v 1.9 2009/11/20 03:36:51 kmura Exp $
+// $Name: geant4-09-03 $
 // ====================================================================
 //   pyPhysicsLists.cc
 //
@@ -93,9 +93,23 @@
 #include "QGSP_BERT_DIF.hh"
 #endif
 
+#if G4VERSION_NUMBER >= 930
+#include "CHIPS.hh"
+#include "FTFP_BERT_EMV.hh"
+#include "FTFP_BERT_EMX.hh"
+#include "FTFP_BERT_TRV.hh"
+#include "QGSC_CHIPS.hh"
+#include "QGSC_QGSC.hh"
+#include "QGSP_BERT_EMX.hh"
+#include "QGSP_BERT_NOLEP.hh"
+#include "QGSP_BIC_EMY.hh"
+#include "QGSP_FTFP_BERT.hh"
+#include "QGSP_INCL_ABLA.hh"
+#endif
+
 // macro for adding physics lists
 #define ADD_PHYSICS_LIST(plname) \
-  class_<plname, plname*, bases<G4VUserPhysicsList> > \
+  class_<plname, plname*, bases<G4VUserPhysicsList>, boost::noncopyable> \
     (#plname, #plname " physics list") \
     ; \
   AddPhysicsList(#plname);
@@ -182,6 +196,20 @@ void export_PhysicsLists()
   ADD_PHYSICS_LIST(QGS_BIC);
   ADD_PHYSICS_LIST(QGSP_DIF);
   ADD_PHYSICS_LIST(QGSP_BERT_DIF);
+#endif
+
+#if G4VERSION_NUMBER >= 930
+  ADD_PHYSICS_LIST(CHIPS);
+  ADD_PHYSICS_LIST(FTFP_BERT_EMV);
+  ADD_PHYSICS_LIST(FTFP_BERT_EMX);
+  ADD_PHYSICS_LIST(FTFP_BERT_TRV);
+  ADD_PHYSICS_LIST(QGSC_CHIPS);
+  ADD_PHYSICS_LIST(QGSC_QGSC);
+  ADD_PHYSICS_LIST(QGSP_BERT_EMX);
+  ADD_PHYSICS_LIST(QGSP_BERT_NOLEP);
+  ADD_PHYSICS_LIST(QGSP_BIC_EMY);
+  ADD_PHYSICS_LIST(QGSP_FTFP_BERT);
+  ADD_PHYSICS_LIST(QGSP_INCL_ABLA);
 #endif
 
   // sort PL vector

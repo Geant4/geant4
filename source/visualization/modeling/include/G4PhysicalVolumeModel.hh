@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.34 2007/04/03 13:46:49 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicalVolumeModel.hh,v 1.35 2009/10/10 14:29:59 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // John Allison  31st December 1997.
@@ -48,6 +48,7 @@
 #define G4PHYSICALVOLUMEMODEL_HH
 
 #include "G4VModel.hh"
+#include "G4VTouchable.hh"
 
 #include "G4Transform3D.hh"
 #include "G4Plane3D.hh"
@@ -75,18 +76,41 @@ public: // With description
   class G4PhysicalVolumeNodeID {
   public:
     G4PhysicalVolumeNodeID
-    (G4VPhysicalVolume* pPV = 0, G4int iCopyNo = 0, G4int depth = 0):
-      fpPV(pPV), fCopyNo(iCopyNo), fNonCulledDepth(depth) {}
+    (G4VPhysicalVolume* pPV = 0,
+     G4int iCopyNo = 0,
+     G4int depth = 0,
+     const G4Transform3D& transform = G4Transform3D()):
+      fpPV(pPV),
+      fCopyNo(iCopyNo),
+      fNonCulledDepth(depth),
+      fTransform(transform) {}
     G4VPhysicalVolume* GetPhysicalVolume() const {return fpPV;}
     G4int GetCopyNo() const {return fCopyNo;}
     G4int GetNonCulledDepth() const {return fNonCulledDepth;}
+    const G4Transform3D& GetTransform() const {return fTransform;}
     G4bool operator< (const G4PhysicalVolumeNodeID& right) const;
   private:
     G4VPhysicalVolume* fpPV;
     G4int fCopyNo;
     G4int fNonCulledDepth;
+    G4Transform3D fTransform;
   };
   // Nested class for identifying physical volume nodes.
+
+  class G4PhysicalVolumeModelTouchable: public G4VTouchable {
+  public:
+    G4PhysicalVolumeModelTouchable
+    (const std::vector<G4PhysicalVolumeNodeID>& fullPVPath);
+    const G4ThreeVector& GetTranslation(G4int depth) const;
+    const G4RotationMatrix* GetRotation(G4int depth) const;
+    G4VPhysicalVolume* GetVolume(G4int depth) const;
+    G4VSolid* GetSolid(G4int depth) const;
+    G4int GetReplicaNumber(G4int depth) const;
+    G4int GetHistoryDepth() const {return fFullPVPath.size();}
+  private:
+    const std::vector<G4PhysicalVolumeNodeID>& fFullPVPath;
+  };
+  // Nested class for handling nested parameterisations.
 
   G4PhysicalVolumeModel
   (G4VPhysicalVolume*,

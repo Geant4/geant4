@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedTable.cc,v 1.16 2008/06/08 12:55:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ShortLivedTable.cc,v 1.17 2009/08/17 14:52:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -52,12 +52,6 @@ G4ShortLivedTable::~G4ShortLivedTable()
   if (fShortLivedList ==0) return;
 
   //  No need to delete here because all particles are dynamic objects
-  //   
-  // remove all contents in the short lived List and delete all particles  
-  //G4ShortLivedList::iterator i;
-  //for (i = fShortLivedList->begin(); i!= fShortLivedList->end(); ++i) {
-  //  delete (*i);
-  //}
 
   fShortLivedList->clear();
   delete fShortLivedList;

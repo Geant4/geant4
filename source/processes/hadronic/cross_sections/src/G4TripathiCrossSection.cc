@@ -34,11 +34,18 @@
 #include "G4IonTable.hh"
 #include "G4HadTmpUtil.hh"
 
+G4TripathiCrossSection::G4TripathiCrossSection() 
+{
+  //  G4cout <<"New G4TripathiCrossSection " << this << G4endl;
+}
+G4TripathiCrossSection::~G4TripathiCrossSection() 
+{}
+
 G4double G4TripathiCrossSection::
 GetIsoZACrossSection(const G4DynamicParticle* aPart, G4double ZZ, G4double AA, 
                 G4double /*temperature*/) 
 {
-  G4double result = 0;
+  G4double result = 0.;
   
   const G4double targetAtomicNumber = AA;
   const G4double nTargetProtons = ZZ;
@@ -59,7 +66,7 @@ GetIsoZACrossSection(const G4DynamicParticle* aPart, G4double ZZ, G4double AA,
   G4LorentzVector pProjectile(aPart->Get4Momentum());
   pTarget = pTarget+pProjectile;
   G4double E_cm = (pTarget.mag()-targetMass-pProjectile.m())/MeV;
-  
+  if(E_cm <= DBL_MIN) return result;  
   // done
   G4double r_rms_p = 0.6 * myNuleonRadius * 
                                    std::pow(projectileAtomicNumber, 1./3.);
@@ -77,7 +84,7 @@ GetIsoZACrossSection(const G4DynamicParticle* aPart, G4double ZZ, G4double AA,
 
   //done
   G4double B = 1.44*nProjProtons*nTargetProtons/Radius;
-  
+  if(E_cm <= B) return result; 
   // done
   G4double Energy = kineticEnergy/projectileAtomicNumber;
 
@@ -132,7 +139,7 @@ GetIsoZACrossSection(const G4DynamicParticle* aPart, G4double ZZ, G4double AA,
 	         std::pow(projectileAtomicNumber, 1./3.) + deltaE),2.) * 
                  (1-B/E_cm);
   
-  if(result < 0) result = 0;
+  if(result < 0.) result = 0.;
   return result*m2;
 
 }

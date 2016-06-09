@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.31 2008/06/08 12:43:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleDefinition.cc,v 1.34 2009/09/21 04:08:24 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -53,8 +53,10 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4DecayTable.hh"
 #include "G4PDGCodeChecker.hh"
+#include "G4StateManager.hh"
 
 G4ParticleDefinition::G4ParticleDefinition(
 		     const G4String&     aName,  
@@ -109,9 +111,8 @@ G4ParticleDefinition::G4ParticleDefinition(
                    verboseLevel(1),
   		   fApplyCutsFlag(false)
 {
-   // check name and register this particle into ParticleTable
-   theParticleTable = G4ParticleTable::GetParticleTable();
-   theParticleTable->Insert(this);
+  static G4String nucleus("nucleus");
+  theParticleTable = G4ParticleTable::GetParticleTable();
    
    //set verboseLevel equal to ParticleTable 
    verboseLevel = theParticleTable->GetVerboseLevel();
@@ -127,6 +128,32 @@ G4ParticleDefinition::G4ParticleDefinition(
      }
 #endif
    }
+
+   // check initialization is in Pre_Init state except for ions
+   G4ApplicationState currentState = G4StateManager::GetStateManager()->GetCurrentState();
+
+   if ( (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
+#ifdef G4VERBOSE
+     if (GetVerboseLevel()>0) {
+       G4cout << "G4ParticleDefintion (other than ions) should be created in Pre_Init state  "; 
+       G4cout << aName << G4endl;
+     }
+#endif
+     G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
+		  "Illegal operation", JustWarning, 
+		  "G4ParticleDefinition should be created in PreInit state");
+   }
+
+   
+   if (theParticleTable->GetIonTable()->IsIon(this)) {
+     SetAtomicNumber( G4int(GetPDGCharge()/eplus) );
+     SetAtomicMass( GetBaryonNumber() );
+   }
+  
+   
+   // check name and register this particle into ParticleTable
+   theParticleTable->Insert(this);
+
 }
 
 G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &)

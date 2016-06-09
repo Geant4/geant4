@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2008/12/04 08:27:02 gcosmo Exp $
+$Id: History,v 1.4 2009/04/24 15:54:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 24th, 2009  Gabriele Cosmo - G03-V09-02-01
+- Added missing inclusion of headers after cleanup.
+
+April 15th, 2009  Gabriele Cosmo - G03-V09-02-00
+- Extended example to show also capability to write extended schema;
+  Added custom writer class. Requires the related developments in the kernel
+  GDML library plugin.
+- Renamed translation unit for main to "gdml_ext.cc".
 
 December 4th, 2008  Gabriele Cosmo - G03-V09-01-01
 - Updated GDML schema file sample to point to new GDML schema location.

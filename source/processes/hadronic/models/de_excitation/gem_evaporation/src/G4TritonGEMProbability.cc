@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4TritonGEMProbability.cc,v 1.4 2006/06/29 20:23:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TritonGEMProbability.cc,v 1.5 2009/09/15 12:54:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
+// J.M. Quesada (July 2009) C's and k's  values according to Furihata's paper 
+// (based on notes added on proof in Dostrovskii's paper)
 
 
 #include "G4TritonGEMProbability.hh"
@@ -69,9 +71,25 @@ G4bool G4TritonGEMProbability::operator!=(const G4TritonGEMProbability &) const
     return true;
 }
 
-
+//JMQ 190709 C's values from Furihata's paper 
+//(notes added on proof in Dostrovskii's paper)
+//data = {{20, 0.}, {30, -0.06}, {40, -0.10}, {50, -0.10}};
 G4double G4TritonGEMProbability::CCoeficient(const G4double aZ) const
 {
+   G4double C = 0.0;
+	
+    if (aZ >= 50){
+      C=-0.10;     
+    } else if (aZ <= 20) {
+        C = 0.0;
+    } else C=0.123482-0.00534691*aZ-0.0000610624*aZ*aZ+5.93719*1e-7*aZ*aZ*aZ+1.95687*1e-8*aZ*aZ*aZ*aZ;	
+    return C/3.;
+	
+}
+
+
+//G4double G4TritonGEMProbability::CCoeficient(const G4double aZ) const
+//{
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander
     // Physical Review, vol 116, num. 3 1959
@@ -80,14 +98,14 @@ G4double G4TritonGEMProbability::CCoeficient(const G4double aZ) const
     // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
     // G4double Cp[5] = { 0.50, 0.28, 0.20, 0.15, 0.10};
     // C for triton is equal to C for protons divided by 3
-    G4double C = 0.0;
+//    G4double C = 0.0;
 	
-    if (aZ >= 70) {
-	C = 0.10;
-    } else {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
-    }
+//    if (aZ >= 70) {
+//	C = 0.10;
+//    } else {
+//	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375;
+//    }
 	
-    return C/3.0;
+//    return C/3.0;
 	
-}
+//}

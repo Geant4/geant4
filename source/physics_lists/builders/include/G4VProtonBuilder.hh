@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VProtonBuilder.hh,v 1.1 2006/10/31 11:35:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VProtonBuilder.hh,v 1.2 2009/03/31 11:04:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 21.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 30.03.2009 V.Ivanchenko move constructor and destructor to source
 //
 //----------------------------------------------------------------------------
 //
@@ -45,11 +46,11 @@ class G4HadronElasticProcess;
 
 class G4VProtonBuilder
 {
-  public:
-    G4VProtonBuilder() {}
-    virtual ~G4VProtonBuilder() {}
-    virtual void Build(G4HadronElasticProcess * aP) = 0;
-    virtual void Build(G4ProtonInelasticProcess * aP) = 0;
+public:
+  G4VProtonBuilder();
+  virtual ~G4VProtonBuilder();
+  virtual void Build(G4HadronElasticProcess * aP) = 0;
+  virtual void Build(G4ProtonInelasticProcess * aP) = 0;
 };
 // 2002 by J.P. Wellisch
 

@@ -24,17 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.14 2006/06/29 19:37:01 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VCrossSectionHandler.hh,v 1.15 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 16 Sep 2001   MGP           Created
-// 26 Sep 2001   V.Ivanchenko  Hide copy constructor and assignement operator
-// 18 Apr 2002   V.Ivanchenko  Move member function ValueForMaterial to public
-// 21 Jan 2003   V.Ivanchenko  Cut per region
+// 16 Sep 2001   MGP                Created
+// 26 Sep 2001   V.Ivanchenko       Hide copy constructor and assignement operator
+// 18 Apr 2002   V.Ivanchenko       Move member function ValueForMaterial to public
+// 21 Jan 2003   V.Ivanchenko       Cut per region
+// 15 Jul 2009   N.A.Karakatsanis   New methods added for loading logarithmic data
+//                                  to enhance computing performance of interpolation
 //
 // -------------------------------------------------------------------
 
@@ -95,6 +97,8 @@ public:
   G4double ValueForMaterial(const G4Material* material, G4double e) const;
 
   void LoadData(const G4String& dataFile);
+
+  void LoadNonLogData(const G4String& dataFile);
 
   void LoadShellData(const G4String& dataFile);
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.hh,v 1.1 2008/10/30 14:16:35 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LivermorePolarizedRayleighModel.hh,v 1.3 2009/05/02 15:20:52 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4LivermorePolarizedRayleighModel_h
@@ -35,6 +35,7 @@
 #include "G4CrossSectionHandler.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4CompositeEMDataSet.hh"
+#include "G4Gamma.hh"
 
 class G4LivermorePolarizedRayleighModel : public G4VEmModel
 {

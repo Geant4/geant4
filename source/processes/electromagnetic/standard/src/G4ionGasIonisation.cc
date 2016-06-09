@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionGasIonisation.cc,v 1.14 2008/09/12 16:26:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ionGasIonisation.cc,v 1.15 2009/11/10 11:50:30 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -57,6 +57,10 @@ using namespace std;
 G4ionGasIonisation::G4ionGasIonisation(const G4String& name)
   : G4ionIonisation(name)
 {
+  G4cout << G4endl;
+  G4cout << "!!! G4ionGasIonisation class is obsolete and may be removed for the next major Geant4 release !!!" << G4endl;
+  G4cout << "!!! Please use G4ionIonisation for ions !!!" << G4endl;
+  G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

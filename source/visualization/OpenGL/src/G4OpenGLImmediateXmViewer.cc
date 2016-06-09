@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXmViewer.cc,v 1.17 2006/07/03 16:38:13 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateXmViewer.cc,v 1.21 2009/04/08 16:55:44 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -35,6 +35,7 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLImmediateXmViewer.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4ios.hh"
 
@@ -89,15 +90,21 @@ void G4OpenGLImmediateXmViewer::DrawView () {
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLImmediateXmViewer::DrawView : \n");
+#endif
+
   //Make sure current viewer is attached and clean...
   glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, WinSize_x, WinSize_y);
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {
 
     HaloingFirstPass ();
     NeedKernelVisit ();
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLImmediateXmViewer::DrawView : change param\n");
+#endif
     ProcessView ();
     glFlush ();
 
@@ -105,6 +112,9 @@ void G4OpenGLImmediateXmViewer::DrawView () {
 
   }
 
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLImmediateXmViewer::DrawView : need Kernel/Process/Finish\n");
+#endif
   NeedKernelVisit ();  // Always need to visit G4 kernel.
   ProcessView ();
   FinishView ();
@@ -112,6 +122,9 @@ void G4OpenGLImmediateXmViewer::DrawView () {
 }
 
 void G4OpenGLImmediateXmViewer::FinishView () {
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLImmediateXmViewer::FinishView : \n");
+#endif
   glXWaitGL (); //Wait for effects of all previous OpenGL commands to
                 //be propogated before progressing.
   glFlush ();

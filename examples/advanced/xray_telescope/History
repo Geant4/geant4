@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2008/06/15 22:53:06 cirrone Exp $
+$Id: History,v 1.24 2009/11/20 18:18:14 santin Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.11.2009 - G.Santin, tag xraytel-V09-02-00
+             Updated and simplified physics list
+
 16.06.2008 - G.A.P.Cirrone, tag xraytel-V09-01-00
              Removed AIDA from GNUmakefiles
 

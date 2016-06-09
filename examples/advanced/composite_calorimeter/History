@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.32 2008/06/15 18:13:06 cirrone Exp $
+$Id: History,v 1.34 2009/11/12 12:46:25 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,15 @@ $Id: History,v 1.32 2008/06/15 18:13:06 cirrone Exp $
 
                       Example History file
                       ---------------------
+
+12.11.2009 - A.Ribon (ccal-V09-02-01)
+- Use QGSP_BIC_EMY as default Physics List to test the 
+  low-energy electromagnetic.
+
+22.02.2009
+ -  G.Folger;     Tag: ccal-V09-02-00
+    Fix compilation warnings in CCalRunAction.cc and CCalEndOfEventAction.cc
+
 15.06.2008 
  - G.A.P.Cirrone; Tag: ccal-V09-01-00
     Removed no more necessary AIDA commands from GNUmakefile

@@ -58,14 +58,14 @@
 #include "XrayFluoNistMaterials.hh"
 
 
-#include "G4Region.hh"
-#include "G4RegionStore.hh"
+//#include "G4Region.hh"
+//#include "G4RegionStore.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
 XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
-  : detectorType(0),sampleGranularity(false), phaseSpaceFlag(false),
+  : aNavigator(0), detectorType(0),sampleGranularity(false), phaseSpaceFlag(false),
     DeviceSizeX(0), DeviceSizeY(0),DeviceThickness(0),
     solidWorld(0),logicWorld(0),physiWorld(0),
     solidHPGe(0),logicHPGe(0),physiHPGe(0),
@@ -82,19 +82,21 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   
 { 
   materials = XrayFluoNistMaterials::GetInstance();
+
+  aNavigator = new G4Navigator();
  
   DefineDefaultMaterials();
 
   NbOfPixelRows     =  1; // should be 1
   NbOfPixelColumns  =  1; // should be 1
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  PixelSizeXY       =  std::sqrt(40.) * mm; // should be std::sqrt(40) * mm
+  PixelSizeXY       =  7 * cm;// should be std::sqrt(40) * mm
   PixelThickness = 3.5 * mm; //should be 3.5 mm
 
   G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
   G4cout << "PixelSizeXY(cm): "<< PixelSizeXY/cm << G4endl;
 
-  ContactSizeXY     = std::sqrt(40.) * mm; //std::sqrt(40) * mm; //should be the same as PixelSizeXY
+  ContactSizeXY     = PixelSizeXY; //std::sqrt(40) * mm; //should be the same as PixelSizeXY
   SampleThickness = 4 * mm;
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
@@ -131,8 +133,8 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   G4String defaultDetectorType = "sili";
   ComputeApparateParameters();
 
-  G4String regName = "SampleRegion";
-  sampleRegion = new G4Region(regName);  
+  // G4String regName = "SampleRegion";
+  //sampleRegion = new G4Region(regName);  
 
   if (!phaseSpaceFlag) SetDetectorType(defaultDetectorType);
   
@@ -204,11 +206,12 @@ void XrayFluoDetectorConstruction::DefineDefaultMaterials()
 
   //define materials of the apparate
 
-  sampleMaterial = materials->GetMaterial("Mars1");
+  sampleMaterial = materials->GetMaterial("Dolorite");
   Dia1Material = materials->GetMaterial("G4_Pb");
   Dia3Material = materials->GetMaterial("Galactic");
-  pixelMaterial = materials->GetMaterial("G4_Si");
-  OhmicPosMaterial = materials->GetMaterial("G4_Cu");
+  pixelMaterial = materials->GetMaterial("SiLi");
+  //pixelMaterial = materials->GetMaterial(detectorType->GetDetectorMaterial());
+  OhmicPosMaterial = materials->GetMaterial("Cu");
   OhmicNegMaterial = materials->GetMaterial("G4_Pb");
   defaultMaterial = materials->GetMaterial("Galactic");
 
@@ -245,7 +248,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   
   //ComputeApparateParameters();
   
-  //world
+  //world and associated navigator
   
   solidWorld = new G4Box("World",	      		        //its name
 			 WorldSizeXY/2,WorldSizeXY/2,WorldSizeZ/2);	//its size
@@ -260,6 +263,9 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 				 0,			//its mother  volume
 				 false,			//no boolean operation
 				 0);			//copy number
+
+  aNavigator->SetWorldVolume(physiWorld);
+
  
   //HPGeDetector
 
@@ -377,7 +383,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	
 	  PixelCopyNb += PixelCopyNb; 
 	  G4cout << "PixelCopyNb: " << PixelCopyNb << G4endl;
-      }
+	}
       
       }
     
@@ -610,8 +616,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   }
   // cut per region
   
-  logicSample->SetRegion(sampleRegion);
-  sampleRegion->AddRootLogicalVolume(logicSample);
+  //logicSample->SetRegion(sampleRegion);
+  //sampleRegion->AddRootLogicalVolume(logicSample);
   
 
   
@@ -757,7 +763,7 @@ void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
 {
 
 
-    G4cout << "Material Change in Progress" << newMaterial << G4endl;
+    G4cout << "Material Change in Progress " << newMaterial << G4endl;
     sampleMaterial = materials->GetMaterial(newMaterial);
     logicSample->SetMaterial(sampleMaterial);
     PrintApparateParameters();

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.51 2008/10/16 13:37:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuPairProduction.cc,v 1.52 2009/02/20 14:48:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -96,6 +96,22 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
 
 G4MuPairProduction::~G4MuPairProduction()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4MuPairProduction::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (p.GetPDGCharge() != 0.0 && p.GetPDGMass() > 10.0*MeV);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4MuPairProduction::MinPrimaryEnergy(const G4ParticleDefinition*,
+					      const G4Material*,
+					      G4double)
+{
+  return lowestKinEnergy;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

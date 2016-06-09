@@ -24,11 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmLivermore.hh,v 1.1 2007/02/13 17:57:20 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// $Id: PhysListEmLivermore.hh,v 1.2 2009/10/12 21:47:57 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #ifndef PhysListEmLivermore_h
 #define PhysListEmLivermore_h 1
@@ -40,25 +37,18 @@
 
 class PhysListEmLivermore : public G4VPhysicsConstructor
 {
-public: 
+public:
   PhysListEmLivermore(const G4String& name = "Livermore");
+
   virtual ~PhysListEmLivermore();
 
-public: 
-  // This method is dummy for physics
-  void ConstructParticle() {};
- 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type 
-  void ConstructProcess();
+  virtual void ConstructParticle() { };
+  virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 
 
 

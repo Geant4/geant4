@@ -29,7 +29,7 @@
  *  \brief Provides a factory class to avoid an infinite number of template declarations.
  *
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
- *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
+ *  \author 2005 Vanderbilt University.
  *
  * 	\version c2_factory.hh,v 1.13 2008/05/22 12:45:19 marcus Exp
  */
@@ -55,7 +55,7 @@ template <typename float_type> class c2_factory {
 public:
 
 /// make a *new object
-static c2_classic_function_p<float_type> &classic_function(const float_type (*c_func)(float_type)) 
+static c2_classic_function_p<float_type> &classic_function(float_type (*c_func)(float_type)) 
 	{ return *new c2_classic_function_p<float_type>(c_func); }
 /// make a *new object
 static c2_plugin_function_p<float_type> &plugin_function() 

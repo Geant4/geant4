@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2008/11/16 12:22:54 maire Exp $
+$Id: History,v 1.32 2009/11/16 17:51:44 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-11-09 mma (fano-V09-02-03)
+- PhysListEmStandard_option3 : use UrbanMscModel93
+     
+29-10-09 mma (fano-V09-02-02)
+- new PhysListEmStandard_GS for GoudsmitSaundersonMsc model
+       
+25-10-09 mma (fano-V09-02-01)
+- splite PhysicsList in 2, as others TestEm examples.
+- local copy of PhysListEmStandard_option0, PhysListEmStandard_option3,
+  PhysListEmStandard_SS
+- PhysicsList: add cut for proton recoil in case of Single Scattering
+     
+30-01-09 mma (fano-V09-02-00)
+- EndOfRun : error = ratio*std::sqrt(dEoverE*dEoverE + dToverT*dToverT)
      
 16-11-08 mma (fano-V09-01-06)
 - Em options: 20bins/decade  LinLossLimit=default=0.01

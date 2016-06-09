@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.4 2008/11/20 11:59:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HistoManager.cc,v 1.5 2008/12/01 17:06:52 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -216,7 +216,7 @@ void HistoManager::EndOfRun()
     xs = store->GetChargeExchangeCrossSectionPerAtom(particle,e,elm);
     if(verbose>0) G4cout << " " << std::setw(17) << xs/barn;  
     histo->fill(6, x, xs/barn);    
-    if(verbose>0) G4cout << G4endl;
+    if(verbose>0) G4cout << "  " << x << G4endl;
   }
 
   x = p1 - dp*0.5; 

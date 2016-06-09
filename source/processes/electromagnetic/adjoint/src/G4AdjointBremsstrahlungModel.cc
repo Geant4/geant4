@@ -23,467 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AdjointBremsstrahlungModel.cc,v 1.5 2009/12/16 17:50:01 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 #include "G4AdjointBremsstrahlungModel.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4Integrator.hh"
 #include "G4TrackStatus.hh"
 #include "G4ParticleChange.hh"
 #include "G4AdjointElectron.hh"
+#include "G4AdjointGamma.hh"
+#include "G4Electron.hh"
+
 #include "G4Timer.hh"
+//#include "G4PenelopeBremsstrahlungModel.hh"
+
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4AdjointBremsstrahlungModel::G4AdjointBremsstrahlungModel():
- G4VEmAdjointModel("AdjointBremModel"),
- probsup(1.0),
- MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length/pi),
- LPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
- theLPMflag(true)
-
-{ isElectron= true;
-  SetUseMatrix(true);
+ G4VEmAdjointModel("AdjointeBremModel"),
+  MigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi)
+{ 
+  SetUseMatrix(false);
   SetUseMatrixPerElement(false);
+  
+  theDirectStdBremModel = new G4eBremsstrahlungModel(G4Electron::Electron(),"TheDirecteBremModel");
+  theDirectEMModel=theDirectStdBremModel;
+ // theDirectPenelopeBremModel =0;
+ 	
   SetApplyCutInRange(true);
-  SetIsIonisation(false);
   highKinEnergy= 100.*TeV;
   lowKinEnergy = 1.0*keV;
   theTimer =new G4Timer();
   
-  theTimer->Start();
-  InitialiseParameters();
-  theTimer->Stop();
-  G4cout<<"Time elapsed in second for the initialidation of AdjointBrem "<<theTimer->GetRealElapsed()<<std::endl;
+  theAdjEquivOfDirectPrimPartDef =G4AdjointElectron::AdjointElectron();
+  theAdjEquivOfDirectSecondPartDef=G4AdjointGamma::AdjointGamma();
+  theDirectPrimaryPartDef=G4Electron::Electron();
+  second_part_of_same_type=false;
   
-  ModeldCS="MODEL1";
+  /*UsePenelopeModel=false;
+  if (UsePenelopeModel) {
+  	G4PenelopeBremsstrahlungModel* thePenelopeModel = new G4PenelopeBremsstrahlungModel(G4Electron::Electron(),"PenelopeBrem");
+	theEmModelManagerForFwdModels = new G4EmModelManager();
+  	isPenelopeModelInitialised = false;
+	G4VEmFluctuationModel* f=0;
+	G4Region* r=0;
+	theDirectEMModel=thePenelopeModel;
+	theEmModelManagerForFwdModels->AddEmModel(1, thePenelopeModel, f, r);
+  }
+  */	
   
-}
-////////////////////////////////////////////////////////////////////////////////
-//
-G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
-{;}
-////////////////////////////////////////////////////////////////////////////////
-//
-/*G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond(
-  				      const G4Material* aMaterial,
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
-				      )
-{
- 
- static const G4double
-     ah10 = 4.67733E+00, ah11 =-6.19012E-01, ah12 = 2.02225E-02,
-     ah20 =-7.34101E+00, ah21 = 1.00462E+00, ah22 =-3.20985E-02,
-     ah30 = 2.93119E+00, ah31 =-4.03761E-01, ah32 = 1.25153E-02;
 
-  static const G4double
-     bh10 = 4.23071E+00, bh11 =-6.10995E-01, bh12 = 1.95531E-02,
-     bh20 =-7.12527E+00, bh21 = 9.69160E-01, bh22 =-2.74255E-02,
-     bh30 = 2.69925E+00, bh31 =-3.63283E-01, bh32 = 9.55316E-03;
-
-  static const G4double
-     al00 =-2.05398E+00, al01 = 2.38815E-02, al02 = 5.25483E-04,
-     al10 =-7.69748E-02, al11 =-6.91499E-02, al12 = 2.22453E-03,
-     al20 = 4.06463E-02, al21 =-1.01281E-02, al22 = 3.40919E-04;
-
-  static const G4double
-     bl00 = 1.04133E+00, bl01 =-9.43291E-03, bl02 =-4.54758E-04,
-     bl10 = 1.19253E-01, bl11 = 4.07467E-02, bl12 =-1.30718E-03,
-     bl20 =-1.59391E-02, bl21 = 7.27752E-03, bl22 =-1.94405E-04;
-
-  static const G4double tlow = 1.*MeV;
   
-  G4double dCrossEprod=0.;
-  G4double Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(kinEnergyProd);
-  G4double Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(kinEnergyProd);
- 
- 
- if (kinEnergyProj>Emin_proj && kinEnergyProj<=Emax_proj){
- 	
-  	G4double cross = 0.0;
-	
-
-	
-	G4double E1=kinEnergyProd;
- 	G4double E2=kinEnergyProd*1.000000001;
- 	G4double dE=(E2-E1);
-
-  	const G4ElementVector* theElementVector = aMaterial->GetElementVector();
-  	const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-  	G4double dum=0.;
-  
-  	for (size_t i=0; i<aMaterial->GetNumberOfElements(); i++) {
-
-    		G4double fac=
-		
-		cross += theAtomNumDensityVector[i] * theDirectEMModel->ComputeCrossSectionPerAtom(G4Electron::Electron(),
-                      kinEnergyProj, (*theElementVector)[i]->GetZ(), dum,E1);
-    	
-      		
-    		
-  	} 
- 	dCrossEprod=(cross1-cross2)/dE; //first term
-	
-	//Now come the correction
-	//-----------------------
-	
-	//First compute fsig for E1
-	//-------------------------
-	
-	
-	G4double totalEnergy = kinEnergyProj+electron_mass_c2 ;
-  	G4double kp2 = MigdalConstant*totalEnergy*totalEnergy
-                                             *(aMaterial->GetElectronDensity());
-
-  	G4double fsig = 0.;
-  	G4int nmax = 100;
-  	G4double vmin=std::log(E1);
-  	G4double vmax=std::log(kinEnergyProj) ;
-  	G4int nn = (G4int)(nmax*(vmax-vmin)/(std::log(highKinEnergy)-vmin));
-  	G4double u,fac,c,v,dv,y ;
-  	if(nn > 0) {
-
-      		dv = (vmax-vmin)/nn ;
-      		v  = vmin-dv ;
-      		for(G4int n=0; n<=nn; n++) {
-
-        		v += dv;  
-        		u = std::exp(v);              
-        		fac = SupressionFunction(aMaterial, kinEnergyProj, u);
-        		y = u/kinEnergyProj;
-        		fac *= (4.-4.*y+3.*y*y)/3.;
-        		fac *= probsup*(u*u/(u*u+kp2))+1.-probsup;
-
-        		if ((n==0)||(n==nn)) c=0.5;
-        		else    c=1. ;
-
-        		fac  *= c;
-        		fsig += fac;
-      		}
-      		y = E1/kinEnergyProj ;
-      		fsig *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
-
-  	} 
-	else {
-		fsig = 1.;
-  	}
-  	if (fsig > 1.) fsig = 1.;
-	
-	dCrossEprod*=fsig;
-	//return dCrossEprod;
-	//Now we  compute dfsig 
-	//-------------------------
-	G4double dfsig = 0.;
-  	nn=20;
-	vmax=std::log(E2) ;
-	dv = (vmax-vmin)/nn ;
-      	v  = vmin-dv ;
-      	for(G4int n=0; n<=nn; n++) {
-		v += dv;  
-        	u = std::exp(v);              
-        	fac = SupressionFunction(aMaterial, kinEnergyProj, u);
-        	y = u/kinEnergyProj;
-        	fac *= (4.-4.*y+3.*y*y)/3.;
-        	fac *= probsup*(u*u/(u*u+kp2))+1.-probsup;
-
-        	if ((n==0)||(n==nn)) c=0.5;
-        	else    c=1. ;
-
-        	fac  *= c;
-        	dfsig += fac;
-      	}
-      	y = E1/kinEnergyProj;
-      	dfsig *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
-	
-	dCrossEprod+=dfsig*cross1/dE;
-	
-	
-	
-	 
-	
- }
- return dCrossEprod;
-  
-} 
-*/
-G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond(const G4Material* aMaterial,
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
-				      )
-{if (ModeldCS=="MODEL2") return  DiffCrossSectionPerVolumePrimToSecond2(aMaterial,
-                                      			         kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      			         kinEnergyProd);
- if (ModeldCS=="MODEL3") return  DiffCrossSectionPerVolumePrimToSecond3(aMaterial,
-                                      			         kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      			         kinEnergyProd);
- return  DiffCrossSectionPerVolumePrimToSecond1(aMaterial,
-                                      			         kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      			         kinEnergyProd);								 
-}				      
-////////////////////////////////////////////////////////////////////////////////
-// the one used till now
-G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond1(
-  				      const G4Material* aMaterial,
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
-				      )
-{
- G4double dCrossEprod=0.;
- G4double Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(kinEnergyProd);
- G4double Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(kinEnergyProd);
- 
- 
- if (kinEnergyProj>Emin_proj && kinEnergyProj<=Emax_proj){
- 	
-  	G4double cross1 = 0.0;
-	G4double cross2 = 0.0;
-
-	
-	G4double E1=kinEnergyProd;
- 	G4double E2=kinEnergyProd*1.01;
- 	G4double dE=(E2-E1);
-
-  	const G4ElementVector* theElementVector = aMaterial->GetElementVector();
-  	const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-  	G4double dum=0.;
-  
-  	for (size_t i=0; i<aMaterial->GetNumberOfElements(); i++) {
-
-    		cross1 += theAtomNumDensityVector[i] * theDirectEMModel->ComputeCrossSectionPerAtom(G4Electron::Electron(),
-                      kinEnergyProj, (*theElementVector)[i]->GetZ(), dum,E1);
-    	
-      		cross2 += theAtomNumDensityVector[i] * theDirectEMModel->ComputeCrossSectionPerAtom(G4Electron::Electron(),
-                     kinEnergyProj, (*theElementVector)[i]->GetZ(), dum, E2);
-    		
-  	} 
- 	dCrossEprod=(cross1-cross2)/dE; //first term
-	
-	//Now come the correction
-	//-----------------------
-	
-	//First compute fsig for E1
-	//-------------------------
-	
-	
-	G4double totalEnergy = kinEnergyProj+electron_mass_c2 ;
-  	G4double kp2 = MigdalConstant*totalEnergy*totalEnergy
-                                             *(aMaterial->GetElectronDensity());
-
-  	G4double fsig1 = 0.;
-  	G4int nmax = 100;
-  	G4double vmin=std::log(E1);
-  	G4double vmax=std::log(kinEnergyProj) ;
-  	G4int nn = (G4int)(nmax*(vmax-vmin)/(std::log(highKinEnergy)-vmin));
-  	G4double u,fac,c,v,dv,y ;
-  	if(nn > 0) {
-
-      		dv = (vmax-vmin)/nn ;
-      		v  = vmin-dv ;
-      		for(G4int n=0; n<=nn; n++) {
-
-        		v += dv;  
-        		u = std::exp(v);              
-        		fac = SupressionFunction(aMaterial, kinEnergyProj, u);
-        		y = u/kinEnergyProj;
-        		fac *= (4.-4.*y+3.*y*y)/3.;
-        		fac *= probsup*(u*u/(u*u+kp2))+1.-probsup;
-
-        		if ((n==0)||(n==nn)) c=0.5;
-        		else    c=1. ;
-
-        		fac  *= c;
-        		fsig1 += fac;
-      		}
-      		y = E1/kinEnergyProj ;
-      		fsig1 *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
-
-  	} 
-	else {
-		fsig1 = 1.;
-  	}
-  	if (fsig1 > 1.) fsig1 = 1.;
-	
-	dCrossEprod*=fsig1;
-	
-	
-	G4double fsig2 = 0.;
-  	vmin=std::log(E2);
-	nn = (G4int)(nmax*(vmax-vmin)/(std::log(highKinEnergy)-vmin));
-  	if(nn > 0) {
-
-      		dv = (vmax-vmin)/nn ;
-      		v  = vmin-dv ;
-      		for(G4int n=0; n<=nn; n++) {
-
-        		v += dv;  
-        		u = std::exp(v);              
-        		fac = SupressionFunction(aMaterial, kinEnergyProj, u);
-        		y = u/kinEnergyProj;
-        		fac *= (4.-4.*y+3.*y*y)/3.;
-        		fac *= probsup*(u*u/(u*u+kp2))+1.-probsup;
-
-        		if ((n==0)||(n==nn)) c=0.5;
-        		else    c=1. ;
-
-        		fac  *= c;
-        		fsig2 += fac;
-      		}
-      		y = E2/kinEnergyProj ;
-      		fsig2 *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
-
-  	} 
-	else {
-		fsig2 = 1.;
-  	}
-  	if (fsig2 > 1.) fsig2 = 1.;
-	
-
-	G4double dfsig=(fsig2-fsig1);
-	dCrossEprod+=dfsig*cross1/dE;
-	
-	dCrossEprod=(fsig1*cross1-fsig2*cross2)/dE;
-	
-	
-	
-	
-	
-	/*if (fsig < 1.){
-		//Now we  compute dfsig 
-		//-------------------------
-		G4double dfsig = 0.;
-  		nn=20;
-		vmax=std::log(E2) ;
-		dv = (vmax-vmin)/nn ;
-      		v  = vmin-dv ;
-      		for(G4int n=0; n<=nn; n++) {
-			v += dv;  
-        		u = std::exp(v);              
-        		fac = SupressionFunction(aMaterial, kinEnergyProj, u);
-        		y = u/kinEnergyProj;
-        		fac *= (4.-4.*y+3.*y*y)/3.;
-        		fac *= probsup*(u*u/(u*u+kp2))+1.-probsup;
-
-        		if ((n==0)||(n==nn)) c=0.5;
-        		else    c=1. ;
-
-        		fac  *= c;
-        		dfsig += fac;
-      		}
-      		y = E1/kinEnergyProj;
-      		dfsig *=dv/(-4.*std::log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y));
-		dCrossEprod+=dfsig*cross1/dE;
-		
-	}	
-	*/
-	
-	
-	
-	
-	
-	 
-	
- }
- return dCrossEprod;
-  
-} 
-
-
-////////////////////////////////////////////////////////////////////////////////
-//
-G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond2(
-  				      const G4Material* aMaterial,
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
-				      )
-{
- G4double dCrossEprod=0.;
- G4double Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(kinEnergyProd);
- G4double Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(kinEnergyProd);
- 
- 
- if (kinEnergyProj>Emin_proj && kinEnergyProj<=Emax_proj){
- 	
-  	G4double dEdX1 = 0.0;
-	G4double dEdX2 = 0.0;
-
-	
-	G4double E1=kinEnergyProd;
- 	G4double E2=kinEnergyProd*1.001;
- 	G4double dE=(E2-E1);
-  	//G4double dum=0.;
-	
-	dEdX1 = theDirectEMModel->ComputeDEDXPerVolume(aMaterial,G4Electron::Electron(),kinEnergyProj,E1); 
-	dEdX2 = theDirectEMModel->ComputeDEDXPerVolume(aMaterial,G4Electron::Electron(),kinEnergyProj,E2);
-	dCrossEprod=(dEdX2-dEdX1)/dE/E1;
-	
-	 
-	
-	
-	
-	 
-	
- }
- return dCrossEprod;
-  
-}
-////////////////////////////////////////////////////////////////////////////////
-//
-G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond3(
-  				      const G4Material* aMaterial,
-                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
-				      )
-{
- 
- return G4VEmAdjointModel::DiffCrossSectionPerVolumePrimToSecond(aMaterial,
-                                      			         kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
-                                      			         kinEnergyProd);
-  
-}
-
-////////////////////////////////////////////////////////////////////////////////
-//
-G4double G4AdjointBremsstrahlungModel::SupressionFunction(const G4Material* material,
-                                 G4double kineticEnergy, G4double gammaEnergy)
-{
-  // supression due to the LPM effect+polarisation of the medium/
-  // supression due to the polarisation alone
-
-
-  G4double totEnergy = kineticEnergy+electron_mass_c2 ;
-  G4double totEnergySquare = totEnergy*totEnergy ;
-
-  G4double LPMEnergy = LPMconstant*(material->GetRadlen()) ;
-
-  G4double gammaEnergySquare = gammaEnergy*gammaEnergy ;
-
-  G4double electronDensity = material->GetElectronDensity();
-
-  G4double sp = gammaEnergySquare/
-   (gammaEnergySquare+MigdalConstant*totEnergySquare*electronDensity);
-
-  G4double supr = 1.0;
-
-  if (theLPMflag) {
-
-    G4double s2lpm = LPMEnergy*gammaEnergy/totEnergySquare;
-
-    if (s2lpm < 1.) {
-
-      G4double LPMgEnergyLimit = totEnergySquare/LPMEnergy ;
-      G4double LPMgEnergyLimit2 = LPMgEnergyLimit*LPMgEnergyLimit;
-      G4double splim = LPMgEnergyLimit2/
-        (LPMgEnergyLimit2+MigdalConstant*totEnergySquare*electronDensity);
-      G4double w = 1.+1./splim ;
-
-      if ((1.-sp) < 1.e-6) w = s2lpm*(3.-sp);
-      else                 w = s2lpm*(1.+1./sp);
-
-      supr = (std::sqrt(w*w+4.*s2lpm)-w)/(std::sqrt(w*w+4.)-w) ;
-      supr /= sp;    
-    } 
-    
-  } 
-  return supr;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -491,59 +83,34 @@ G4double G4AdjointBremsstrahlungModel::SupressionFunction(const G4Material* mate
 void G4AdjointBremsstrahlungModel::SampleSecondaries(const G4Track& aTrack,
                        G4bool IsScatProjToProjCase,
 	               G4ParticleChange* fParticleChange)
-{ 
+{
+ if (!UseMatrix) return RapidSampleSecondaries(aTrack,IsScatProjToProjCase,fParticleChange); 
 
-  //G4cout<<"Adjoint Brem"<<std::endl;
-  const G4DynamicParticle* theAdjointPrimary =aTrack.GetDynamicParticle();
-  
-  size_t ind=0;
-  
-  if (UseMatrixPerElement ) { //Select Material
-   	std::vector<double>* CS_Vs_Element = &CS_Vs_ElementForScatProjToProjCase;
-  	if ( !IsScatProjToProjCase) CS_Vs_Element = &CS_Vs_ElementForProdToProjCase;
-  	G4double rand_var= G4UniformRand();
-  	G4double SumCS=0.;
-  	for (size_t i=0;i<CS_Vs_Element->size();i++){
- 		SumCS+=(*CS_Vs_Element)[i];
-		if (rand_var<=SumCS/lastCS){
-			ind=i;
-			break;
-		}
-  	}
-  }
-  else 	{
-  	ind = currentMaterialIndex;
-  }
+ const G4DynamicParticle* theAdjointPrimary =aTrack.GetDynamicParticle();
+ DefineCurrentMaterial(aTrack.GetMaterialCutsCouple());
  
  
- //Elastic inverse scattering modified compared to general G4VEmAdjointModel
- //---------------------------
  G4double adjointPrimKinEnergy = theAdjointPrimary->GetKineticEnergy();
  G4double adjointPrimTotalEnergy = theAdjointPrimary->GetTotalEnergy();
- //G4double adjointPrimP =theAdjointPrimary->GetTotalMomentum();
+ 
  if (adjointPrimKinEnergy>HighEnergyLimit*0.999){
  	return;
  }
- 
- //Sample secondary energy
- //-----------------------
- 
- G4double projectileKinEnergy = SampleAdjSecEnergyFromCSMatrix(ind,
- 						   adjointPrimKinEnergy,
-						   IsScatProjToProjCase);
-				   
- 
- 
- 
+  
+  G4double projectileKinEnergy = SampleAdjSecEnergyFromCSMatrix(adjointPrimKinEnergy,
+						  	IsScatProjToProjCase);
  //Weight correction
  //-----------------------					   
- CorrectPostStepWeight(fParticleChange, aTrack.GetWeight(), adjointPrimKinEnergy,projectileKinEnergy);	
+ CorrectPostStepWeight(fParticleChange, 
+ 		       aTrack.GetWeight(), 
+		       adjointPrimKinEnergy,
+		       projectileKinEnergy,
+		       IsScatProjToProjCase);	
  
  
  //Kinematic
  //---------
- 
- G4double projectileM0 = electron_mass_c2;
+ G4double projectileM0 = theAdjEquivOfDirectPrimPartDef->GetPDGMass();
  G4double projectileTotalEnergy = projectileM0+projectileKinEnergy;
  G4double projectileP2 = projectileTotalEnergy*projectileTotalEnergy - projectileM0*projectileM0;	
  G4double projectileP = std::sqrt(projectileP2);
@@ -579,86 +146,249 @@ void G4AdjointBremsstrahlungModel::SampleSecondaries(const G4Track& aTrack,
  
  
  
-  if (!IsScatProjToProjCase && CorrectWeightMode){ //kill the primary and add a secondary
+  if (!IsScatProjToProjCase ){ //kill the primary and add a secondary
  	fParticleChange->ProposeTrackStatus(fStopAndKill);
  	fParticleChange->AddSecondary(new G4DynamicParticle(theAdjEquivOfDirectPrimPartDef,projectileMomentum));
-	//G4cout<<"projectileMomentum "<<projectileMomentum<<std::endl;
   }
   else {
  	fParticleChange->ProposeEnergy(projectileKinEnergy);
 	fParticleChange->ProposeMomentumDirection(projectileMomentum.unit());
-	//G4cout<<"projectileMomentum "<<projectileMomentum<<std::endl;
+	
   }	
 } 
 ////////////////////////////////////////////////////////////////////////////////
 //
-void G4AdjointBremsstrahlungModel::DefineDirectBremModel(G4eBremsstrahlungModel* aModel)
-{theDirectBremModel=aModel;
- DefineDirectEMModel(aModel);
-} 
-////////////////////////////////////////////////////////////////////////////////
-//
-void G4AdjointBremsstrahlungModel::InitialiseParameters()
-{  
-  static const G4double
-     ah10 = 4.67733E+00, ah11 =-6.19012E-01, ah12 = 2.02225E-02,
-     ah20 =-7.34101E+00, ah21 = 1.00462E+00, ah22 =-3.20985E-02,
-     ah30 = 2.93119E+00, ah31 =-4.03761E-01, ah32 = 1.25153E-02;
+void G4AdjointBremsstrahlungModel::RapidSampleSecondaries(const G4Track& aTrack,
+                       G4bool IsScatProjToProjCase,
+	               G4ParticleChange* fParticleChange)
+{ 
 
-  static const G4double
-     bh10 = 4.23071E+00, bh11 =-6.10995E-01, bh12 = 1.95531E-02,
-     bh20 =-7.12527E+00, bh21 = 9.69160E-01, bh22 =-2.74255E-02,
-     bh30 = 2.69925E+00, bh31 =-3.63283E-01, bh32 = 9.55316E-03;
-
- /* static const G4double
-     al00 =-2.05398E+00, al01 = 2.38815E-02, al02 = 5.25483E-04,
-     al10 =-7.69748E-02, al11 =-6.91499E-02, al12 = 2.22453E-03,
-     al20 = 4.06463E-02, al21 =-1.01281E-02, al22 = 3.40919E-04;
-
-  static const G4double
-     bl00 = 1.04133E+00, bl01 =-9.43291E-03, bl02 =-4.54758E-04,
-     bl10 = 1.19253E-01, bl11 = 4.07467E-02, bl12 =-1.30718E-03,
-     bl20 =-1.59391E-02, bl21 = 7.27752E-03, bl22 =-1.94405E-04;*/
+ const G4DynamicParticle* theAdjointPrimary =aTrack.GetDynamicParticle();
+ DefineCurrentMaterial(aTrack.GetMaterialCutsCouple());
  
+ 
+ G4double adjointPrimKinEnergy = theAdjointPrimary->GetKineticEnergy();
+ G4double adjointPrimTotalEnergy = theAdjointPrimary->GetTotalEnergy();
+ 
+ if (adjointPrimKinEnergy>HighEnergyLimit*0.999){
+ 	return;
+ }
   
-  const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  FZ.clear();
-  ah1.clear();
-  ah2.clear();
-  ah3.clear();
-  
-  bh1.clear();
-  bh2.clear();
-  bh3.clear();
-  
-  al0.clear();
-  al1.clear();
-  al2.clear();
-  
-  bl0.clear();
-  bl1.clear();
-  bl2.clear();
-  SigmaPerAtom.clear(); 
-  
-  for (size_t j=0; j<theElementTable->size();j++){
+ G4double projectileKinEnergy =0.;
+ G4double gammaEnergy=0.;
+ G4double diffCSUsed=0.; 
+ if (!IsScatProjToProjCase){
+ 	gammaEnergy=adjointPrimKinEnergy;
+	G4double Emax = GetSecondAdjEnergyMaxForProdToProjCase(adjointPrimKinEnergy);
+        G4double Emin=  GetSecondAdjEnergyMinForProdToProjCase(adjointPrimKinEnergy);;
+	if (Emin>=Emax) return;
+	projectileKinEnergy=Emin*std::pow(Emax/Emin,G4UniformRand());
+	diffCSUsed=lastCZ/projectileKinEnergy;
+ 	
+ }
+ else {	G4double Emax = GetSecondAdjEnergyMaxForScatProjToProjCase(adjointPrimKinEnergy);
+	G4double Emin = GetSecondAdjEnergyMinForScatProjToProjCase(adjointPrimKinEnergy,currentTcutForDirectSecond);
+	if (Emin>=Emax) return;
+	G4double f1=(Emin-adjointPrimKinEnergy)/Emin;
+	G4double f2=(Emax-adjointPrimKinEnergy)/Emax/f1;
+	//G4cout<<"f1 and f2 "<<f1<<'\t'<<f2<<G4endl;
+	projectileKinEnergy=adjointPrimKinEnergy/(1.-f1*std::pow(f2,G4UniformRand()));
+	gammaEnergy=projectileKinEnergy-adjointPrimKinEnergy;
+	diffCSUsed=lastCZ*adjointPrimKinEnergy/projectileKinEnergy/gammaEnergy;
 	
-	G4Element* anElement=(*theElementTable)[j]; 
-	G4double lnZ = 3.*(anElement->GetIonisation()->GetlogZ3());
-  	FZ.push_back(lnZ* (4.- 0.55*lnZ));
-  	G4double ZZ = anElement->GetIonisation()->GetZZ3();
-	
-	ah1.push_back(ah10 + ZZ* (ah11 + ZZ* ah12));
-        ah2.push_back(ah20 + ZZ* (ah21 + ZZ* ah22));
-        ah3.push_back(ah30 + ZZ* (ah31 + ZZ* ah32));
+ }
+  
+  
+  
+						  	
+ //Weight correction
+ //-----------------------
+ //First w_corr is set to the ratio between adjoint total CS and fwd total CS
+ G4double w_corr=G4AdjointCSManager::GetAdjointCSManager()->GetPostStepWeightCorrection();
 
-        bh1.push_back(bh10 + ZZ* (bh11 + ZZ* bh12));
-        bh2.push_back(bh20 + ZZ* (bh21 + ZZ* bh22));
-        bh3.push_back(bh30 + ZZ* (bh31 + ZZ* bh32));
-	/*SigmaPerAtom.push_back(theDirectEMModel->ComputeCrossSectionPerAtom(
-					theDirectPrimaryPartDef,GetHighEnergyLimit()/2., 
-					anElement->GetZ(),1.,GetLowEnergyLimit(),1.e20));*/
+ //Then another correction is needed due to the fact that a biaised differential CS has been used rather than the one consistent with the direct model
+ //Here we consider the true  diffCS as the one obtained by the numericla differentiation over Tcut of the direct CS, corrected by the Migdal term.
+ //Basically any other differential CS   diffCS could be used here (example Penelope). 
+ 
+ G4double diffCS = DiffCrossSectionPerVolumePrimToSecond(currentMaterial, projectileKinEnergy, gammaEnergy);
+ w_corr*=diffCS/diffCSUsed;
+	   
+ G4double new_weight = aTrack.GetWeight()*w_corr;
+ fParticleChange->SetParentWeightByProcess(false);
+ fParticleChange->SetSecondaryWeightByProcess(false);
+ fParticleChange->ProposeParentWeight(new_weight);
+ 
+ //Kinematic
+ //---------
+ G4double projectileM0 = theAdjEquivOfDirectPrimPartDef->GetPDGMass();
+ G4double projectileTotalEnergy = projectileM0+projectileKinEnergy;
+ G4double projectileP2 = projectileTotalEnergy*projectileTotalEnergy - projectileM0*projectileM0;	
+ G4double projectileP = std::sqrt(projectileP2);
+ 
+ 
+ //Angle of the gamma direction with the projectile taken from G4eBremsstrahlungModel
+ //------------------------------------------------
+  G4double u;
+  const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
+
+  if (9./(9.+d) > G4UniformRand()) u = - std::log(G4UniformRand()*G4UniformRand())/a1;
+     else                          u = - std::log(G4UniformRand()*G4UniformRand())/a2;
+
+  G4double theta = u*electron_mass_c2/projectileTotalEnergy;
+
+  G4double sint = std::sin(theta);
+  G4double cost = std::cos(theta);
+
+  G4double phi = twopi * G4UniformRand() ;
+  
+  G4ThreeVector projectileMomentum;
+  projectileMomentum=G4ThreeVector(std::cos(phi)*sint,std::sin(phi)*sint,cost)*projectileP; //gamma frame
+  if (IsScatProjToProjCase) {//the adjoint primary is the scattered e-
+  	G4ThreeVector gammaMomentum = (projectileTotalEnergy-adjointPrimTotalEnergy)*G4ThreeVector(0.,0.,1.);
+	G4ThreeVector dirProd=projectileMomentum-gammaMomentum;
+	G4double cost1 = std::cos(dirProd.angle(projectileMomentum));
+	G4double sint1 =  std::sqrt(1.-cost1*cost1);
+	projectileMomentum=G4ThreeVector(std::cos(phi)*sint1,std::sin(phi)*sint1,cost1)*projectileP;
+  
+  }
+  
+  projectileMomentum.rotateUz(theAdjointPrimary->GetMomentumDirection());
+ 
+ 
+ 
+  if (!IsScatProjToProjCase ){ //kill the primary and add a secondary
+ 	fParticleChange->ProposeTrackStatus(fStopAndKill);
+ 	fParticleChange->AddSecondary(new G4DynamicParticle(theAdjEquivOfDirectPrimPartDef,projectileMomentum));
+  }
+  else {
+ 	fParticleChange->ProposeEnergy(projectileKinEnergy);
+	fParticleChange->ProposeMomentumDirection(projectileMomentum.unit());
 	
-	
-  	
   }	
+} 
+////////////////////////////////////////////////////////////////////////////////
+//
+G4AdjointBremsstrahlungModel::~G4AdjointBremsstrahlungModel()
+{;}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecond(const G4Material* aMaterial,
+                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
+                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
+				      )
+{/*if (UsePenelopeModel && !isPenelopeModelInitialised) {
+  	theEmModelManagerForFwdModels->Initialise(G4Electron::Electron(),G4Gamma::Gamma(),1.,0);
+	isPenelopeModelInitialised =true;
+ } 
+ */                                   			        
+ return  DiffCrossSectionPerVolumePrimToSecondApproximated2(aMaterial,
+                                      			         kinEnergyProj, 
+                                      			         kinEnergyProd);
+ /*return G4VEmAdjointModel::DiffCrossSectionPerVolumePrimToSecond(aMaterial,
+                                      			         kinEnergyProj, 
+                                      			         kinEnergyProd);*/								 								 
+}				      
+
+////////////////////////////////////////////////////////////////////////////////
+//
+G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecondApproximated1(
+  				      const G4Material* aMaterial,
+                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
+                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
+				      )
+{
+ G4double dCrossEprod=0.;
+ G4double Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(kinEnergyProd);
+ G4double Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(kinEnergyProd);
+ 
+ 
+ //In this approximation we consider that the secondary gammas are sampled with 1/Egamma energy distribution
+ //This is what is applied in the discrete standard model before the  rejection test  that make a cooerction
+ //The application of the same rejection function is not possble here.
+ //The differentiation of the CS over Ecut does not produce neither a good differential CS. That is due to the 
+ // fact that in the discrete model the differential CS and the integrated CS are both fitted but separatly and 
+ // therefore do not allow a correct numerical differentiation of the integrated CS to get the differential one. 
+ // In the future we plan to use the brem secondary spectra from the G4Penelope implementation 
+ 
+ if (kinEnergyProj>Emin_proj && kinEnergyProj<=Emax_proj){
+ 	G4double sigma=theDirectEMModel->CrossSectionPerVolume(aMaterial,theDirectPrimaryPartDef,kinEnergyProj,1.*keV);
+	dCrossEprod=sigma/kinEnergyProd/std::log(kinEnergyProj/keV);
+ }
+ return dCrossEprod;
+  
 }
+
+////////////////////////////////////////////////////////////////////////////////
+//
+G4double G4AdjointBremsstrahlungModel::DiffCrossSectionPerVolumePrimToSecondApproximated2(
+  				      const G4Material* material,
+                                      G4double kinEnergyProj,  // kinetic energy of the primary particle before the interaction 
+                                      G4double kinEnergyProd // kinetic energy of the secondary particle 
+				      )
+{
+ //In this approximation we derive the direct cross section over Tcut=gamma energy, en after apply the Migdla correction factor 
+  //used in the direct model
+ 
+ G4double dCrossEprod=0.;
+ 
+ const G4ElementVector* theElementVector = material->GetElementVector();
+ const double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
+ G4double dum=0.;
+ G4double E1=kinEnergyProd,E2=kinEnergyProd*1.001;
+ G4double dE=E2-E1;
+ for (size_t i=0; i<material->GetNumberOfElements(); i++) { 
+ 	G4double C1=theDirectEMModel->ComputeCrossSectionPerAtom(theDirectPrimaryPartDef,kinEnergyProj,(*theElementVector)[i]->GetZ(),dum ,E1);
+	G4double C2=theDirectEMModel->ComputeCrossSectionPerAtom(theDirectPrimaryPartDef,kinEnergyProj,(*theElementVector)[i]->GetZ(),dum,E2);
+	dCrossEprod += theAtomNumDensityVector[i] * (C1-C2)/dE;
+   
+ }
+ 
+ //Now the Migdal correction
+ 
+ G4double totalEnergy = kinEnergyProj+electron_mass_c2 ;
+ G4double kp2 = MigdalConstant*totalEnergy*totalEnergy
+                                             *(material->GetElectronDensity());
+  					     
+ 
+ G4double MigdalFactor = 1./(1.+kp2/(kinEnergyProd*kinEnergyProd)); // its seems that the factor used in the CS compuation i the direct
+ 								    //model is different than the one used in the secondary sampling by a
+								    //factor (1.+kp2) To be checked!
+ 
+ dCrossEprod*=MigdalFactor;
+ return dCrossEprod;
+  
+}
+////////////////////////////////////////////////////////////////////////////////
+//
+G4double G4AdjointBremsstrahlungModel::AdjointCrossSection(const G4MaterialCutsCouple* aCouple,
+				             G4double primEnergy,
+				             G4bool IsScatProjToProjCase)
+{/* if (UsePenelopeModel && !isPenelopeModelInitialised) {
+  	theEmModelManagerForFwdModels->Initialise(G4Electron::Electron(),G4Gamma::Gamma(),1.,0);
+	isPenelopeModelInitialised =true;
+  }
+  */
+  if (UseMatrix) return G4VEmAdjointModel::AdjointCrossSection(aCouple,primEnergy,IsScatProjToProjCase);
+  DefineCurrentMaterial(aCouple);
+  G4double Cross=0.;
+  lastCZ=theDirectEMModel->CrossSectionPerVolume(aCouple->GetMaterial(),theDirectPrimaryPartDef,100.*MeV,100.*MeV/std::exp(1.));//this give the constant above
+  
+  if (!IsScatProjToProjCase ){
+  	G4double Emax_proj = GetSecondAdjEnergyMaxForProdToProjCase(primEnergy);
+  	G4double Emin_proj = GetSecondAdjEnergyMinForProdToProjCase(primEnergy);
+	if (Emax_proj>Emin_proj && primEnergy > currentTcutForDirectSecond) Cross= lastCZ*std::log(Emax_proj/Emin_proj);
+  }
+  else {
+  	G4double Emax_proj = GetSecondAdjEnergyMaxForScatProjToProjCase(primEnergy);
+	G4double Emin_proj = GetSecondAdjEnergyMinForScatProjToProjCase(primEnergy,currentTcutForDirectSecond);
+	if (Emax_proj>Emin_proj) Cross= lastCZ*std::log((Emax_proj-primEnergy)*Emin_proj/Emax_proj/(Emin_proj-primEnergy));
+  	
+  }
+  return Cross;	
+}					     
+
+
+
+
+

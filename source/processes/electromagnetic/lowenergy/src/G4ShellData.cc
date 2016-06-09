@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.cc,v 1.10 2008/03/17 13:40:53 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ShellData.cc,v 1.11 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

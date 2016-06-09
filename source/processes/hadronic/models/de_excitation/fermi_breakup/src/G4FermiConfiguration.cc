@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4FermiConfiguration.cc,v 1.9 2006/06/29 20:12:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FermiConfiguration.cc,v 1.12 2009/12/16 17:51:09 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
 //
-// 
+// J.M.Quesada (12 October 2009) new implementation of Gamma function in configuration weight 
 
 
 #include "G4FermiConfiguration.hh"
@@ -112,17 +112,39 @@ G4double G4FermiConfiguration::DecayProbability(const G4int A, const G4double To
   const G4double ConstCoeff = std::pow(r0/hbarc,3.0)*Kappa*std::sqrt(2.0/pi)/3.0;
   G4double Coeff = std::pow(ConstCoeff*A,K-1);
 
-
+  //JMQ 111009 Bug fixed: gamma function for odd K was wrong  by a factor 2
+  // new implementation explicitely according to standard properties of Gamma function
   // Calculation of 1/Gamma(3(k-1)/2)
   G4double Gamma = 1.0;
-  G4double arg = 3.0*(K-1)/2.0 - 1.0;
-  while (arg > 1.1) 
-    {
-      Gamma *= arg; 
-      arg--;
-    }
-  if ((K-1)%2 == 1) Gamma *= std::sqrt(pi);
+  //  G4double arg = 3.0*(K-1)/2.0 - 1.0;
+  //  while (arg > 1.1) 
+  //    {
+  //      Gamma *= arg; 
+  //      arg--;
+  //    }
+  //  if ((K-1)%2 == 1) Gamma *= std::sqrt(pi);
 
+  if ((K-1)%2 != 1)
+
+    {
+      G4double arg = 3.0*(K-1)/2.0 - 1.0;
+      while (arg > 1.1) 
+	{
+	  Gamma *= arg; 
+	  arg--;
+	}
+    }
+  else   { 
+    G4double 	n= 3.0*K/2.0-2.0;
+    G4double arg2=2*n-1;
+    while (arg2>1.1)
+      {
+	Gamma*=arg2;
+	arg2-=2;
+      }
+    Gamma=Gamma/std::pow(2.,n)*std::sqrt(pi);
+  }
+  // end of new implementation of Gamma function
   
   
   // Permutation Factor G_n
@@ -159,7 +181,6 @@ G4FragmentVector * G4FermiConfiguration::GetFragments(const G4Fragment & theNucl
   G4FragmentVector * theResult = new G4FragmentVector;
 
   G4ThreeVector boostVector = theNucleus.GetMomentum().boostVector();  
-
 
   // Go back to the Lab Frame
   for (i = Configuration.begin(); i != Configuration.end(); ++i)

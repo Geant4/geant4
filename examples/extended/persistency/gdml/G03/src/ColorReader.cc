@@ -23,12 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ColorReader.cc,v 1.2 2008/11/20 16:29:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ColorReader.cc,v 1.4 2009/04/24 15:54:21 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // --------------------------------------------------------------------
 
 #include "ColorReader.hh"
+
+#include "G4LogicalVolume.hh"
+#include "G4VisAttributes.hh"
+
+ColorReader::ColorReader()
+  : G4GDMLReadStructure()
+{
+}
+
+ColorReader::~ColorReader()
+{
+  std::map<G4String, G4VisAttributes*>::iterator pos;
+  for (pos=attribs.begin(); pos!=attribs.end(); pos++)
+  {  delete pos->second;  }
+}
 
 void ColorReader::ExtensionRead(const xercesc::DOMElement* const extElement)
 {

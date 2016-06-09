@@ -1,4 +1,4 @@
-$Id: History,v 1.177 2008/07/10 09:27:41 gcosmo Exp $
+$Id: History,v 1.191 2009/11/18 18:02:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,51 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 18th, 2009 G.Cosmo (run-V09-02-09)
+- Fixes to "Adjoint" classes to allow build of DLLs on Windows: renamed all
+  methods and data holding "External" as keyword to "Ext".
+  Cleanup of the code: use "const G4String&" instead of "G4String" wherever
+  possible; use G4 types in consistent way; avoid usage of "isNan"; code
+  formatting cleanup; added Geant4 disclaimer.
+
+November 13, 2009 Makoto Asai (run-V09-02-08)
+- Fixing two minor bugs in G4RunManager and G4RunManagerKernel.
+
+November 6,2009 L.Desorgher (run-V09-02-07)
+- First commit of G4Adjoint classes for run category
+  New classes are G4AdjointSimManager, G4AdjointSimMessenger, G4AdjointPrimaryGeneratorAction
+
+Oct 19, 2009, Hisaya Kurashige (run-V09-02-06)
+- Add /run/setCutForAGivenParticle command in G4UserPhysicsListMessenger
+
+Makoto Asai (run-V09-02-05)
+Sep 20, 2009, Makoto Asai (run-V09-02-05)
+- G4RunManagerKernel checks G4VUserPhysicsList to confirm no particle
+  is registered when G4RunManagerKernel is instantiated. 
+
+Aug 10, 2009, Makoto Asai (run-V09-02-04)
+- G4RunManagerKernel now invokes G4VUserPhysicsList::CheckParticleList
+  just before invoking G4VUserPhysicsList::SetCuts.
+
+Aug 05, 2009, Hisaya Kurashige (run-V09-02-03)
+- Add G4VUserPhysicsList::DisableCheckParticleList method
+- Modify G4VUserPhysicsList::CheckParticleList to check existence
+   of any EM processes 
+
+Aug 03, 2009, Hisaya Kurashige (run-V09-02-02)
+- Modify G4VUserPhysicsList to fit with proton cuts 
+- Modify G4VUserPhysicsList::BuildPhysicsTable
+  to avoid problem  when ions are created in Pre-Init state 
+  
+May 22nd, 2009, Hisaya Kurashige (run-V09-02-01)
+- Add G4VUserPhysicsList::CheckParticleList() to check consistencies of 
+  list of particles before constructing processes
+- Change severity of G4Exception in G4VUserPhysicsList 
+  'FatalException' is assigned if core dump is foreseen
+
+May 21st, 2009, Hisaya Kurashige (run-V09-02-00)
+- Add check of process manager in G4VUserPhysicsList::BuildPhysicsTable
 
 July  10th, 2008, Gabriele Cosmo (run-V09-01-02)
 - G4RunManagerKernel: avoid deletion of default root-region which is now

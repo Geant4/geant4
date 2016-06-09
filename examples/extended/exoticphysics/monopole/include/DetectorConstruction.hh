@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh,v 1.1 2007/08/16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.hh,v 1.2 2009/07/15 10:19:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,53 +45,48 @@ class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
   
-    DetectorConstruction();
-   ~DetectorConstruction();
+  DetectorConstruction();
+  ~DetectorConstruction();
 
-  public:
-       
-     void SetSizeX    (G4double);
-     void SetSizeYZ   (G4double);              
-     void SetMaterial (G4String);            
-     void SetMagField (G4double);
+  void SetSizeX    (G4double);
+  void SetSizeYZ   (G4double);              
+  void SetMaterial (G4String);            
+  void SetMagField (G4double);
      
-     void SetMaxStepSize   (G4double);
+  void SetMaxStepSize   (G4double);
      
-     G4VPhysicalVolume* Construct();
-     void               UpdateGeometry();
+  G4VPhysicalVolume* Construct();
+  void               UpdateGeometry();
      
-  public:  
-                    
-     G4double     GetWorldSizeX()    {return worldSizeX;};
-     G4double     GetWorldSizeYZ()   {return worldSizeYZ;};
-     G4Material*  GetWorldMaterial() {return worldMaterial;};     
-     G4double     GetAbsorSizeX()    {return absorSizeX;};
-     G4double     GetAbsorSizeYZ()   {return absorSizeYZ;};
-     G4double     GetMaxStepSize()   {return maxStepSize;};
-     G4Material*  GetAbsorMaterial() {return absorMaterial;};
-     
-     void         PrintParameters();
+  G4double     GetWorldSizeX()    {return worldSizeX;};
+  G4double     GetWorldSizeYZ()   {return worldSizeYZ;};
+  G4Material*  GetWorldMaterial() {return worldMaterial;};     
+  G4double     GetAbsorSizeX()    {return absorSizeX;};
+  G4double     GetAbsorSizeYZ()   {return absorSizeYZ;};
+  G4double     GetMaxStepSize()   {return maxStepSize;};
+  G4Material*  GetAbsorMaterial() {return absorMaterial;};
+  
+  void         PrintParameters();
                        
-  private:
-  
-     G4double            worldSizeX;
-     G4double            worldSizeYZ;
-     G4Material*         worldMaterial;           
-     G4double            absorSizeX;
-     G4double            absorSizeYZ;
-		 G4double						 maxStepSize;
-     G4Material*         absorMaterial;
-     G4UniformMagField*  magField;
-     G4LogicalVolume*    lAbsor;
-               
-     DetectorMessenger* detectorMessenger;
+private:
 
-  private:
-    
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
+  void               DefineMaterials();
+  G4VPhysicalVolume* ConstructVolumes();     
+  
+  G4double            worldSizeX;
+  G4double            worldSizeYZ;
+  G4Material*         worldMaterial;           
+  G4double            absorSizeX;
+  G4double            absorSizeYZ;
+  G4double	      maxStepSize;
+  G4Material*         absorMaterial;
+  G4UniformMagField*  magField;
+  G4LogicalVolume*    lAbsor;
+               
+  DetectorMessenger* detectorMessenger;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

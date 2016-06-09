@@ -1,4 +1,4 @@
-# $Id: storeTables.mac,v 1.9 2008/09/14 17:14:54 vnivanch Exp $
+# $Id: storeTables.mac,v 1.10 2009/09/17 20:06:26 maire Exp $
 #
 # Macro file for "testEm3.cc"
 # 
@@ -7,8 +7,7 @@
 #
 /control/verbose 2
 #
-/testem/phys/addPhysics  emstandard
-#/testem/phys/addPhysics  standardLPM
+/testem/phys/addPhysics  emstandard_opt0
 #
 /run/initialize
 /process/eLoss/verbose 1

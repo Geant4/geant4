@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerXViewer.hh,v 1.3 2006/06/29 21:23:43 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RayTracerXViewer.hh,v 1.5 2009/09/16 16:56:52 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 // John Allison  17th March 2000
 
@@ -40,6 +40,7 @@ class G4RayTracerXViewer: public G4RayTracerViewer {
 public:
   G4RayTracerXViewer(G4VSceneHandler&,const G4String& name);
   virtual ~G4RayTracerXViewer();
+  void Initialise();
 };
 
 #endif

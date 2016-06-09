@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.16 2008/06/11 15:17:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.17 2009/11/21 16:47:07 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,13 +45,12 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "ParticlesBuilder.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 #include "G4StepLimiterBuilder.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
@@ -59,7 +58,6 @@
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4QStoppingPhysics.hh"
-//#include "PhysListEmModelPai.hh"
 
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
@@ -88,7 +86,7 @@ PhysicsList::PhysicsList()
   pMessenger = new PhysicsListMessenger(this);
 
   // Add Physics builders
-  RegisterPhysics(new ParticlesBuilder());
+  RegisterPhysics(new G4DecayPhysics());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,25 +153,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-  } else if (name == "livermore" && !emBuilderIsRegisted) {
-    RegisterPhysics(new PhysListEmLivermore());
+  } else if (name == "emlivermore" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmLivermorePhysics());
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-  } else if (name == "penelope" && !emBuilderIsRegisted) {
-    RegisterPhysics(new PhysListEmPenelope());
+  } else if (name == "empenelope" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmPenelopePhysics());
     emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
-    /*
-  } else if (name == "pai" && !emBuilderIsRegisted) {
-    RegisterPhysics(new PhysListEmModelPai());
-    emBuilderIsRegisted = true;
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
-    */
-
-  } else if (name == "decay" && !decayIsRegisted && emBuilderIsRegisted) {
-    RegisterPhysics(new G4DecayPhysics());
-    decayIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
   } else if (name == "elastic" && !helIsRegisted && emBuilderIsRegisted) {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.cc,v 1.2 2008/12/18 12:56:20 gunter Exp $
+// $Id: DetectorConstruction.cc,v 1.3 2009/08/13 11:41:04 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "DetectorConstruction.hh"
@@ -53,21 +53,11 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::DefineMaterials()
 { 
-  G4String name, symbol;             
-  G4double density;            
-  
-  G4int ncomponents, natoms;
-  
-  // Elements  
-  G4Element*   H  = new G4Element ("Hydrogen", "H", 1. ,  1.01*g/mole);
-  G4Element*   O  = new G4Element ("Oxygen"  , "O", 8. , 16.00*g/mole);
- 
-  // Water 
-  density = 1.000*g/cm3;
-  G4Material* H2O = new G4Material(name="H2O"  , density, ncomponents=2);
-  H2O->AddElement(H, natoms=2);
-  H2O->AddElement(O, natoms=1);
-  
+
+  // Water is defined from NIST material database
+  G4NistManager * man = G4NistManager::Instance();
+  G4Material * H2O = man->FindOrBuildMaterial("G4_WATER");
+
   // Default materials in setup.
   waterMaterial = H2O;
   

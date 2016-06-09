@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.32 2008/11/13 09:05:27 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HepPolyhedron.cc,v 1.34 2009/10/28 13:36:32 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 //
@@ -2254,7 +2254,6 @@ int HepPolyhedron::fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
  ***********************************************************************/
 
 #include "BooleanProcessor.src"
-static BooleanProcessor processor;
 
 HepPolyhedron HepPolyhedron::add(const HepPolyhedron & p) const 
 /***********************************************************************
@@ -2266,7 +2265,9 @@ HepPolyhedron HepPolyhedron::add(const HepPolyhedron & p) const
  *                                                                     *
  ***********************************************************************/
 {
-  return processor.execute(OP_UNION, *this, p);
+  int ierr;
+  BooleanProcessor processor;
+  return processor.execute(OP_UNION, *this, p,ierr);
 }
 
 HepPolyhedron HepPolyhedron::intersect(const HepPolyhedron & p) const 
@@ -2279,7 +2280,9 @@ HepPolyhedron HepPolyhedron::intersect(const HepPolyhedron & p) const
  *                                                                     *
  ***********************************************************************/
 {
-  return processor.execute(OP_INTERSECTION, *this, p);
+  int ierr;
+  BooleanProcessor processor;
+  return processor.execute(OP_INTERSECTION, *this, p,ierr);
 }
 
 HepPolyhedron HepPolyhedron::subtract(const HepPolyhedron & p) const 
@@ -2292,9 +2295,15 @@ HepPolyhedron HepPolyhedron::subtract(const HepPolyhedron & p) const
  *                                                                     *
  ***********************************************************************/
 {
-  return processor.execute(OP_SUBTRACTION, *this, p);
+  int ierr;
+  BooleanProcessor processor;
+  return processor.execute(OP_SUBTRACTION, *this, p,ierr);
 }
 
-bool HepPolyhedron::IsErrorBooleanProcess() const {
-  return processor.get_processor_error();
-}
+//NOTE : include the code of HepPolyhedronProcessor here
+//       since there is no BooleanProcessor.h
+
+#undef INTERSECTION
+
+#include "HepPolyhedronProcessor.src"
+

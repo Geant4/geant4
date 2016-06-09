@@ -23,24 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyProtonSteppingAction.cc; 
-// Last modified: G.A.P.Cirrone March 2008;
-// 
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
-//
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// (b) INFN Section of Genova, Genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyProtonSteppingAction.cc; 
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
@@ -55,14 +39,12 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 
-#ifdef G4ANALYSIS_USE 	
 #include "HadrontherapyAnalysisManager.hh"
-#endif
 
 #include "HadrontherapyRunAction.hh"
 
 /////////////////////////////////////////////////////////////////////////////
-HadrontherapySteppingAction::HadrontherapySteppingAction( HadrontherapyRunAction* run)
+HadrontherapySteppingAction::HadrontherapySteppingAction( HadrontherapyRunAction *run)
 {
   runAction = run;
 }
@@ -75,8 +57,57 @@ HadrontherapySteppingAction::~HadrontherapySteppingAction()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-  
+    if( aStep->GetTrack()->GetVolume()->GetName() == "NewDetectorPhys"){
+#ifdef ANALYSIS_USE
+      G4ParticleDefinition *def = aStep->GetTrack()->GetDefinition();
+      G4double secondaryParticleKineticEnergy =  aStep->GetTrack()->GetKineticEnergy();     
+      G4String particleType = def->GetParticleType(); // particle type = nucleus for d, t, He3, alpha, and heavier nuclei
+      G4String particleName = def->GetParticleName(); // e.g. for alpha: the name = "alpha" and type = "nucleus"
+      if(particleType == "nucleus") {
+	G4int A = def->GetBaryonNumber();
+	G4double Z = def->GetPDGCharge();
+	G4double posX = aStep->GetTrack()->GetPosition().x() / cm;
+	G4double posY = aStep->GetTrack()->GetPosition().y() / cm;
+	G4double posZ = aStep->GetTrack()->GetPosition().z() / cm;
+	G4double energy = secondaryParticleKineticEnergy / A / MeV;
+
+	HadrontherapyAnalysisManager* analysisMgr =  HadrontherapyAnalysisManager::getInstance();   
+	analysisMgr->fillFragmentTuple(A, Z, energy, posX, posY, posZ);
+      } else if(particleName == "proton") {   // proton (hydrogen-1) is a special case
+	G4double posX = aStep->GetTrack()->GetPosition().x() / cm ;
+	G4double posY = aStep->GetTrack()->GetPosition().y() / cm ;
+	G4double posZ = aStep->GetTrack()->GetPosition().z() / cm ;
+	G4double energy = secondaryParticleKineticEnergy * MeV;    // Hydrogen-1: A = 1, Z = 1
+	HadrontherapyAnalysisManager::getInstance()->fillFragmentTuple(1, 1.0, energy, posX, posY, posZ);
+      }
+
+      G4String secondaryParticleName =  def -> GetParticleName();  
+      //G4cout <<"Particle: " << secondaryParticleName << G4endl;
+      //G4cout <<"Energy: " << secondaryParticleKineticEnergy << G4endl;
+	HadrontherapyAnalysisManager* analysis =  HadrontherapyAnalysisManager::getInstance();   
+	//There is a bunch of stuff recorded with the energy 0, something should perhaps be done about this.
+	if(secondaryParticleName == "proton") {
+	  analysis->hydrogenEnergy(secondaryParticleKineticEnergy / MeV);
+	}
+	if(secondaryParticleName == "deuteron") {
+	  analysis->hydrogenEnergy((secondaryParticleKineticEnergy/2) / MeV);
+	}
+	if(secondaryParticleName == "triton") {
+	  analysis->hydrogenEnergy((secondaryParticleKineticEnergy/3) / MeV);
+	}
+	if(secondaryParticleName == "alpha") {
+	  analysis->heliumEnergy((secondaryParticleKineticEnergy/4) / MeV);
+	}
+	if(secondaryParticleName == "He3"){
+	  analysis->heliumEnergy((secondaryParticleKineticEnergy/3) / MeV);		
+	}
+#endif
+
+	aStep->GetTrack()->SetTrackStatus(fKillTrackAndSecondaries);
+    }
+
   // Electromagnetic and hadronic processes of primary particles in the phantom
+  //setting phantomPhys correctly will break something here fixme
   if ((aStep -> GetTrack() -> GetTrackID() == 1) &&
     (aStep -> GetTrack() -> GetVolume() -> GetName() == "PhantomPhys") &&
     (aStep -> GetPostStepPoint() -> GetProcessDefinedStep() != NULL))
@@ -102,7 +133,6 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 
  // Retrieve information about the secondaries originated in the phantom
 
-#ifdef G4ANALYSIS_USE 	
  G4SteppingManager*  steppingManager = fpSteppingManager;
   
   // check if it is alive
@@ -115,11 +145,12 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
     { 
       G4String volumeName = (*fSecondary)[lp1] -> GetVolume() -> GetName(); 
  
-      if (volumeName == "PhantomPhys")
+      if (volumeName == "phantomPhys")
 	{
+#ifdef ANALYSIS_USE   
 	  G4String secondaryParticleName =  (*fSecondary)[lp1]->GetDefinition() -> GetParticleName();  
 	  G4double secondaryParticleKineticEnergy =  (*fSecondary)[lp1] -> GetKineticEnergy();     
-   
+
 	  HadrontherapyAnalysisManager* analysis =  HadrontherapyAnalysisManager::getInstance();   
         
           if (secondaryParticleName == "e-")
@@ -147,9 +178,9 @@ void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 	      // total number of electrons in the orbitals are stored in a ntuple 
 	      analysis -> genericIonInformation(a, z, electronOccupancy, secondaryParticleKineticEnergy/MeV);
 	    }
+#endif
 	}
     }
-#endif
 }
 
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.18 2008/03/02 10:52:55 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProductionCutsTable.cc,v 1.25 2009/11/11 03:20:22 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------
@@ -46,9 +46,12 @@
 #include "G4RToEConvForElectron.hh"
 #include "G4RToEConvForGamma.hh"
 #include "G4RToEConvForPositron.hh"
+#include "G4RToEConvForProton.hh"
 #include "G4MaterialTable.hh"
 #include "G4Material.hh"
 #include "G4UnitsTable.hh"
+
+#include "G4Timer.hh"
 
 #include "G4ios.hh"
 #include <iomanip>                
@@ -57,6 +60,7 @@
 
 G4ProductionCutsTable* G4ProductionCutsTable::fG4ProductionCutsTable = 0;
 
+/////////////////////////////////////////////////////////////
 G4ProductionCutsTable* G4ProductionCutsTable::GetProductionCutsTable()
 { 
    static G4ProductionCutsTable theProductionCutsTable;
@@ -66,6 +70,7 @@ G4ProductionCutsTable* G4ProductionCutsTable::GetProductionCutsTable()
   return fG4ProductionCutsTable;
 }
 
+/////////////////////////////////////////////////////////////
 G4ProductionCutsTable::G4ProductionCutsTable()
   : firstUse(true),verboseLevel(1),fMessenger(0)
 {
@@ -84,9 +89,11 @@ G4ProductionCutsTable::G4ProductionCutsTable()
   fMessenger = new G4ProductionCutsTableMessenger(this);
 }
 
+/////////////////////////////////////////////////////////////
 G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& )
 {;}
 
+/////////////////////////////////////////////////////////////
 G4ProductionCutsTable::~G4ProductionCutsTable()
 {
   if (defaultProductionCuts !=0) {
@@ -126,6 +133,10 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
     if(G4ParticleTable::GetParticleTable()->FindParticle("e+")){
       converters[2] = new G4RToEConvForPositron(); 
       converters[2]->SetVerboseLevel(GetVerboseLevel());
+    }
+    if(G4ParticleTable::GetParticleTable()->FindParticle("proton")){
+      converters[3] = new G4RToEConvForProton(); 
+      converters[3]->SetVerboseLevel(GetVerboseLevel());
     }
     firstUse = false;
   }
@@ -216,6 +227,10 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 
   // Update RangeEnergy cuts tables
   size_t idx = 0;
+  G4Timer timer;
+  if (verboseLevel>2) {
+    timer.Start();
+  }
   for(CoupleTableIterator cItr=coupleTable.begin();
       cItr!=coupleTable.end();cItr++){
     G4ProductionCuts* aCut = (*cItr)->GetProductionCuts();
@@ -233,6 +248,12 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
       }
     }
     idx++;  
+  }
+  if (verboseLevel>2) {
+    timer.Stop();
+    std::cout << "G4ProductionCutsTable::UpdateCoupleTable "
+	      << "  elapsed time for calculation of  energy cuts " << G4endl;
+    std::cout << timer <<G4endl;
   }
 
   // resize Range/Energy cuts double vectors if new couple is made
@@ -257,10 +278,11 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 }
 
 
+/////////////////////////////////////////////////////////////
 G4double G4ProductionCutsTable::ConvertRangeToEnergy(
-						      const G4ParticleDefinition* particle,
-						      const G4Material*           material, 
-						      G4double                    range      
+				  const G4ParticleDefinition* particle,
+				  const G4Material*           material, 
+				  G4double                    range      
 						     )
 {
   // This method gives energy corresponding to range value  
@@ -271,10 +293,8 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
   if (range <=0.0) return -1.0;
 
   // check particle
-  G4int index = -1;
-  if (particle->GetParticleName() == "gamma") index = 0;
-  if (particle->GetParticleName() == "e-")    index = 1;
-  if (particle->GetParticleName() == "e+")    index = 2;
+  G4int index = G4ProductionCuts::GetIndex(particle);
+
   if (index<0) {
 #ifdef G4VERBOSE  
     if (verboseLevel >1) {
@@ -289,24 +309,35 @@ G4double G4ProductionCutsTable::ConvertRangeToEnergy(
    
 }
 
+/////////////////////////////////////////////////////////////
+void G4ProductionCutsTable::ResetConverters()
+{
+  for(size_t i=0;i< NumberOfG4CutIndex;i++){
+    if (converters[i]!=0) converters[i]->Reset();
+  }
+}
 
 
+/////////////////////////////////////////////////////////////
 void G4ProductionCutsTable::SetEnergyRange(G4double lowedge, G4double highedge)
 {
   G4VRangeToEnergyConverter::SetEnergyRange(lowedge,highedge);
 }
 
+/////////////////////////////////////////////////////////////
 G4double  G4ProductionCutsTable::GetLowEdgeEnergy() const
 {
   return G4VRangeToEnergyConverter::GetLowEdgeEnergy();
 }
 
+/////////////////////////////////////////////////////////////
 G4double G4ProductionCutsTable::GetHighEdgeEnergy() const
 {
   return G4VRangeToEnergyConverter::GetHighEdgeEnergy();
 }
  
 
+/////////////////////////////////////////////////////////////
 void G4ProductionCutsTable::ScanAndSetCouple(G4LogicalVolume* aLV,
                                              G4MaterialCutsCouple* aCouple,
                                              G4Region* aRegion)
@@ -329,6 +360,7 @@ void G4ProductionCutsTable::ScanAndSetCouple(G4LogicalVolume* aLV,
   }
 }
 
+/////////////////////////////////////////////////////////////
 void G4ProductionCutsTable::DumpCouples() const
 {
   G4cout << G4endl;
@@ -349,17 +381,19 @@ void G4ProductionCutsTable::DumpCouples() const
     G4cout << G4endl;
     G4cout << " Material : " << aCouple->GetMaterial()->GetName() << G4endl;
     G4cout << " Range cuts        : " 
-           << " gamma " << G4BestUnit(aCut->GetProductionCut("gamma"),"Length")
-           << "    e- " << G4BestUnit(aCut->GetProductionCut("e-"),"Length")
-           << "    e+ " << G4BestUnit(aCut->GetProductionCut("e+"),"Length")
+           << " gamma  " << G4BestUnit(aCut->GetProductionCut("gamma"),"Length")
+           << "    e-  " << G4BestUnit(aCut->GetProductionCut("e-"),"Length")
+           << "    e+  " << G4BestUnit(aCut->GetProductionCut("e+"),"Length")
+           << " proton " << G4BestUnit(aCut->GetProductionCut("proton"),"Length")
            << G4endl;
     G4cout << " Energy thresholds : " ;
     if(aCouple->IsRecalcNeeded()) {
       G4cout << " is not ready to print";
     } else {
-      G4cout << " gamma " << G4BestUnit((*(energyCutTable[0]))[aCouple->GetIndex()],"Energy")
-             << "    e- " << G4BestUnit((*(energyCutTable[1]))[aCouple->GetIndex()],"Energy")
-             << "    e+ " << G4BestUnit((*(energyCutTable[2]))[aCouple->GetIndex()],"Energy");
+      G4cout << " gamma  " << G4BestUnit((*(energyCutTable[0]))[aCouple->GetIndex()],"Energy")
+             << "    e-  " << G4BestUnit((*(energyCutTable[1]))[aCouple->GetIndex()],"Energy")
+             << "    e+  " << G4BestUnit((*(energyCutTable[2]))[aCouple->GetIndex()],"Energy") 
+	     << " proton " << G4BestUnit((*(energyCutTable[3]))[aCouple->GetIndex()],"Energy");
     }
     G4cout << G4endl;
 
@@ -380,6 +414,7 @@ void G4ProductionCutsTable::DumpCouples() const
 }
            
 
+/////////////////////////////////////////////////////////////
 // Store cuts and material information in files under the specified directory.
 G4bool  G4ProductionCutsTable::StoreCutsTable(const G4String& dir, 
                                               G4bool          ascii)
@@ -403,6 +438,7 @@ G4bool  G4ProductionCutsTable::StoreCutsTable(const G4String& dir,
   return true;
 }
   
+/////////////////////////////////////////////////////////////
 G4bool  G4ProductionCutsTable::RetrieveCutsTable(const G4String& dir,
                                                  G4bool          ascii)
 {
@@ -423,6 +459,7 @@ G4bool  G4ProductionCutsTable::RetrieveCutsTable(const G4String& dir,
   return true;
 }
 
+/////////////////////////////////////////////////////////////
 // check stored material and cut values are consistent
 // with the current detector setup. 
 //
@@ -443,13 +480,14 @@ G4bool
   return true;
 }
   
+/////////////////////////////////////////////////////////////
 // Store material information in files under the specified directory.
 //
 G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory, 
                                                  G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "material.dat";
-  const G4String key = "MATERIAL-V2.0";
+  const G4String key = "MATERIAL-V3.0";
   std::ofstream fOut;  
 
   // open output file //
@@ -527,12 +565,13 @@ G4bool  G4ProductionCutsTable::StoreMaterialInfo(const G4String& directory,
   return true;
 }
 
+/////////////////////////////////////////////////////////////
 // check stored material is consistent with the current detector setup. 
 G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory, 
                                                  G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "material.dat";
-  const G4String key = "MATERIAL-V2.0";
+  const G4String key = "MATERIAL-V3.0";
   std::ifstream fIn;  
 
   // open input file //
@@ -622,7 +661,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     G4Material* aMaterial = G4Material::GetMaterial(name);
     if (aMaterial ==0 ) continue;
 
-    G4double ratio = std::abs(density/aMaterial->GetDensity() );
+    G4double ratio = std::fabs(density/aMaterial->GetDensity() );
     if ((0.999>ratio) || (ratio>1.001) ){
 #ifdef G4VERBOSE
       if (verboseLevel >0) {
@@ -647,6 +686,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
 }
 
   
+/////////////////////////////////////////////////////////////
 // Store materialCutsCouple information in files under the specified directory.
 //
 G4bool
@@ -654,7 +694,7 @@ G4bool
 						    G4bool          ascii)
 {  
   const G4String fileName = directory + "/" + "couple.dat";
-  const G4String key = "COUPLE-V2.0";
+  const G4String key = "COUPLE-V3.0";
   std::ofstream fOut;  
   char temp[FixedStringLengthForStore];
 
@@ -773,6 +813,7 @@ G4bool
 }
 
 
+/////////////////////////////////////////////////////////////
 // check stored materialCutsCouple is consistent
 // with the current detector setup. 
 //
@@ -781,7 +822,7 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
                                                    G4bool          ascii )
 {
   const G4String fileName = directory + "/" + "couple.dat";
-  const G4String key = "COUPLE-V2.0";
+  const G4String key = "COUPLE-V3.0";
   std::ifstream fIn;  
 
   // open input file //
@@ -943,13 +984,14 @@ G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& directory,
 }
 
 
+/////////////////////////////////////////////////////////////
 // Store cut values information in files under the specified directory.
 //
 G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory, 
                                               G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "cut.dat";
-  const G4String key = "CUT-V2.0";
+  const G4String key = "CUT-V3.0";
   std::ofstream fOut;  
   char temp[FixedStringLengthForStore];
   
@@ -1017,13 +1059,14 @@ G4bool   G4ProductionCutsTable::StoreCutsInfo(const G4String& directory,
   return true;
 }
   
+/////////////////////////////////////////////////////////////
 // Retrieve cut values information in files under the specified directory.
 //
 G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
                                                  G4bool          ascii)
 {
   const G4String fileName = directory + "/" + "cut.dat";
-  const G4String key = "CUT-V2.0";
+  const G4String key = "CUT-V3.0";
   std::ifstream fIn;  
 
   // open input file //
@@ -1094,6 +1137,7 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   return true;
 }
 
+/////////////////////////////////////////////////////////////
 // Set Verbose Level 
 //   set same verbosity to all registered RangeToEnergyConverters  
  void G4ProductionCutsTable::SetVerboseLevel(G4int value)
@@ -1106,3 +1150,15 @@ G4bool   G4ProductionCutsTable::RetrieveCutsInfo(const G4String& directory,
   }
 }
 
+/////////////////////////////////////////////////////////////
+G4double G4ProductionCutsTable::GetMaxEnergyCut()
+{
+  return G4VRangeToEnergyConverter::GetMaxEnergyCut();
+}
+
+
+/////////////////////////////////////////////////////////////  
+void G4ProductionCutsTable::SetMaxEnergyCut(G4double value)
+{
+  G4VRangeToEnergyConverter::SetMaxEnergyCut(value);
+}

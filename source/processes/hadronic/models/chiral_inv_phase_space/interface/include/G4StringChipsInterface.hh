@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// !!! Was used in QBBC PL, NOW it is not. Must be absolete !!!
+// ============================================================
+//
 #ifndef G4StringChipsInterface_h
 #define G4StringChipsInterface_h
 

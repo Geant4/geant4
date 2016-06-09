@@ -1,4 +1,4 @@
-# $Id: dedx.mac,v 1.4 2006/03/20 12:26:03 maire Exp $
+# $Id: dedx.mac,v 1.5 2009/09/17 20:06:26 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -14,7 +14,7 @@
 /testem/det/setAbsor 1 liquidArgon 1 cm
 /testem/det/setSizeYZ 1 cm
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  local
 /testem/phys/setCuts 1 km
 #
 /run/initialize

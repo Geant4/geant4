@@ -1,4 +1,4 @@
-$Id: History,v 1.430 2008/11/24 18:28:09 vnivanch Exp $
+$Id: History,v 1.480 2009/12/03 17:28:28 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,196 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 December 09:  V.Ivant (emstand-V09-02-36)
+- G4BetheBlochModel - (A.Lechner) return back commented out CorrectionAlongStep
+                      method, returning back to normal ion ranges
+
+03 December 09:  V.Ivant (emstand-V09-02-35)
+- G4CoulombScatteringModel - (C.Consaldi) fixed relativistic formula
+
+27 November 09:  V.Ivant (emstand-V09-02-34)
+- G4ionIonisation - set linLossLimit 0.02 
+
+25 November 09:  V.Ivant (emstand-V09-02-33)
+- G4LindhardPartition - moved back to TestEm7 
+
+10 November 09:  V.Ivant (emstand-V09-02-32)
+- G4BetheBlochModel - minor speedup inside CorrectionsAlongStep method
+
+10 November 09:  V.Ivant (emstand-V09-02-31)
+- G4BetheBlochModel, G4BraggModel, G4BraggIonModel - remove computations
+                       of nuclear stopping power, some CPU speadup
+- G4NuclearStopping - updated process for computation of nuclear stopping
+- G4ICRU49NuclearStoppingModel - model providing computation of nuclear 
+                      stopping
+
+10 November 09:  V.Ivant (emstand-V09-02-30)
+- Added G4alphaIonisation process
+
+09 November 09:  V.Ivant (emstand-V09-02-29)
+- G4BetheBlochModel, G4MollerBhabhaModel - compute density effect correction
+                                           using method of G4IonisParamMat class 
+                                           applying revised parameterisation
+
+09 November 09:  V.Ivant (emstand-V09-02-28)
+- G4GoudsmitSaundersonMscModel (O.Kadri) - tuning small angle theta distributions
+                       assuming the case of lambdan<1 as single scattering regime;
+                       tuning theta sampling for theta below the screening angle 
+- G4LindhardPartition - moved from TestEm7 to the source
+
+31 October 09:  V.Ivant (emstand-V09-02-27)
+- Added G4UrbanMscModel92, G4UrbanMscModel93 - 9.2 and 9.3 versions
+                       version of the Urban model
+- Set default model G4UrbanMscModel92 for G4eMultipleScattering
+- Added warting to obsolete msc classes G4MultipleScattering, G4UrbanMscModel,
+                       G4UrbanMscMode2, G4MscModel71  
+
+28 October 09:  V.Ivant (emstand-V09-02-26)
+- G4WentzelVIModel, G4eCoulombScatteringModel, G4CoulombScatteringModel - added
+                       protection for very low energies
+
+10 October 09:  V.Ivant (emstand-V09-02-25)
+- G4WentzelVIModel and G4eCoulombScatteringModel - changed screening parameters
+
+06 October 09:  V.Ivant (emstand-V09-02-24)
+- G4GoudsmitSaundersonMscModel (O.Kadri) tuning small angle theta distributions
+                       assuming the case of lambdan<1 as single scattering regime,
+                       tuning theta sampling for theta below the screening angle
+
+02 October 09:  V.Ivant (emstand-V09-02-23)
+- G4eMultipleScattering - use as a default G4UrbanMscModel (the same as in 9.2)
+- G4CoulombScattering - fixed compillation problem 
+
+30 September 09:  V.Ivant (emstand-V09-02-22)
+- G4CoulombScattering - added cut per recoil
+- G4BohrFluctuations - change internal parameter minNumberInteractionsBohr
+                       from 10 to 2 to provide more smooth transition
+                       to Landau regime in the case of small cuts 
+- G4eCoulombScatteringModel - added effective mass factor
+
+28 August 09:  V.Ivant (emstand-V09-02-21)
+- G4PAIModel - fixed problem conneted with modifications for 
+               G4PhysicsVector (removel of hidden bin)
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - O.Kadri
+               speadup computations, in particular, by reducing of 
+               number of calls to log
+
+12 August 09:  V.Ivant (emstand-V09-02-20)
+- G4PAIModel - fixed problem for high energy connected with bin number
+- G4WentzelVIModel and G4eCoulombScatteringModel - extended low-energy 
+               cross section to 0.1 keV 
+
+27 July 09:  V.Ivant (emstand-V09-02-19)
+- G4WentzelVIModel and G4eCoulombScatteringModel - fixed typo
+
+26 July 09:  V.Ivant (emstand-V09-02-18)
+- G4WentzelVIModel and G4eCoulombScatteringModel - fixed numerical
+   problem at very high energy
+- G4PAIModel - fixed problem for the case of several materials
+- G4PAIySection - added protections for numerical exceptions
+
+22 July 09:  V.Ivant (emstand-V09-02-17)
+- G4NuclearStopping and G4ICRU49NuclearStoppingModel are added
+
+20 July 09:  V.Ivant (emstand-V09-02-16)
+- G4GoudsmitSaundersonMscModel - fixed computation of the displacement
+- G4MultipleScattering, G4eMultipleScattering, G4hMultipleScattering 
+      - moved initialisation of models to the base class
+
+9 July 09:  V.Ivant (emstand-V09-02-15)
+- G4GoudsmitSaundersonMscModel - (O.Kadri) removed extra correcting factor
+                                 for sampling in high-Z media
+- G4hMultipleScattering - removed obsolete methods
+
+19 June 09:  V.Ivant (emstand-V09-02-14)
+- G4WaterStopping - (A.Ivantchenko) added Fe ion data
+- G4GoudsmitSaundersonTable - reduce the size of the object file and 
+                              all standard library
+- G4GoudsmitSaundersonMscModel - (O.Kadri) fixed unphysical peak at 
+                              very small angles; extend model to 100 TeV
+- G4eCoulombScatteringModel, G4CoulombScatteringModel, G4WentzelVIModel, 
+                               - (C.Consolandi) fixed kinematic for ion/ion 
+                                 scattering
+ 
+19 May 09: V.Ivant (emstand-V09-02-13)
+- G4UrbanMscModel2  - (L.Urban) change in tail parameter
+
+18 May 09:  V.Ivant (emstand-V09-02-12)
+- G4UrbanMscModel2  - (L.Urban) correction in tail tuning using MuScat data
+
+15 May 09:  V.Ivant (emstand-V09-02-11)
+- G4WaterStopping  - fixed Ar data
+- G4PairProductionRelModel - (A.Schaelicke) new relativistic model for 
+                              gamma conversion
+- G4UrbanMscModel2  - (L.Urban) new version of theta0 and tail tuning
+
+10 May 09: V.Ivant (emstand-V09-02-10)
+- G4WentzelVIModel, G4eCoulombScattering, G4CoulombScattering - added relativistic
+                      factor to Reserford cross section; set default limit on
+                      kinetic energy of the recoil 100 keV
+
+28 April 09: V.Ivant (emstand-V09-02-09)
+- G4UrbanMscModel2  - (L.Urban) new tuning for the central part and for the 
+                      tail of the angular distribution using the old e- 
+                      scattering data only (Phys. Rev. 84 (1951) 634; 
+                      Phys. Rev. 61 (1942) 254) 
+                    - corrected logic in ComputeTruePathLengthLimit method 
+                      for type=fUseDistanceToBoundary
+- G4UrbanMscModel   - frozen version of G4UrbanMscModel2 of g4 9.2
+- G4WentzelVIModel, G4eCoulombScattering  - reduce low-limit from 1 keV to 0.1 keV 
+                      to provide smooth transport cross section table
+
+23 April 09: V.Ivant (emstand-V09-02-08)
+- G4BetheBlochModel - do not use pointer to GenericIon introduced in the
+                      previous tag due to problem of simple PhysLists without ions
+
+20 April 09: V.Ivant (emstand-V09-02-07)
+- G4BetheBlochModel - fixed and simplified initialisation for ions needed for
+                      the new G4IonParametrisedLossModel of low-energy package
+- G4GoudsmitSaundersonMscModel - (O.Kadri) cleanup: discarded no scattering and 
+                      single scattering theta sampling from SampleCosineTheta() 
+                      which means the splitting step into two sub-steps occur 
+                      only for msc regime  
+
+12 April 09: V.Ivant (emstand-V09-02-06)
+- Simplified initialisation of all models
+- G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel90 - use methods
+   of G4VMscModel for interface to geometry
+
+07 April 09: V.Ivant (emstand-V09-02-05)
+- G4IonFluctuations - T.Toshito removed extra phenomenological factor
+                      in fluctuation width
+- G4HeatedKleinNishinaCompton - V.Grichine added a prototype model for
+                                plasma 
+
+21 March 09: V.Ivant (emstand-V09-02-04)
+- G4UniversalFluctuation - L.Urban introduce modification in width 
+    correction, the dependence of the correction on energy deposition 
+    at previous steps is removed (addresses T2K report)
+
+20 March 09: V.Ivant (emstand-V09-02-03)
+- G4GoudsmitSaundersonMscModel fixed compillation problem
+
+12 March 09: V.Ivant (emstand-V09-02-02)
+- G4GoudsmitSaundersonMscModel fixed compillation problem
+- G4UniversalFluctuation - add temporary fix for T2K report
+
+05 March 09: V.Ivant (emstand-V09-02-01)
+- New G4GoudsmitSaundersonMscModel is added
+- G4WentzelVIModel, G4eCoulombScattringModel:
+    o substitute scaling of low-energy limit by setting 1 keV for 
+      all particles;
+    o use EGSnrc form of screening parameter (second order correction) 
+
+20 February 09: V.Ivant (emstand-V09-02-00)
+- Move all virtual methods from inline to source
+G4PEEffectModel - substitute ComputeMeanFreePath by CrossSectionPerVolume 
+                  (minor CPU speadup for compound materials)
+G4PAIModel, G4PAIPhotonModel - remove usage of random numbers at 
+                   initialisation (potential non-reproducibility)
+G4WentzelVIModel - use generic methods of G4VMscModel to access safety
+                   and other geometry information 
 
 24 November 08: V.Ivant (emstand-V09-01-45)
 G4PSTARStopping, G4ASTARStopping - fixed non-initialized variable

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionExcitationBornPartial.cc,v 1.3 2008/07/14 20:47:34 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CrossSectionExcitationBornPartial.cc,v 1.4 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #include "G4CrossSectionExcitationBornPartial.hh"
 

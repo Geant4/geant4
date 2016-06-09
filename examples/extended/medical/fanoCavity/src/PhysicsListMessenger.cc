@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.cc,v 1.2 2007/10/02 14:42:51 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsListMessenger.cc,v 1.3 2009/10/25 19:06:26 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,60 +32,39 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysicsList.hh"
-#include "MyKleinNishinaCompton.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithADouble.hh"
-#include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 :pPhysicsList(pPhys)
-{
+{ 
   physDir = new G4UIdirectory("/testem/phys/");
   physDir->SetGuidance("physics list commands");
-  
-  csFactor = new G4UIcmdWithADouble("/testem/phys/crossSectionFactor",this);
-  csFactor->SetGuidance("multiply Compton cross section");
-  csFactor->SetParameterName("factor",false);
-  csFactor->SetRange("factor>=0");
-  
-  singleScat = new G4UIcmdWithABool("/testem/phys/singleScattering",this);
-  singleScat->SetGuidance("apply single Coulomb scattering process");
-  singleScat->SetParameterName("flag",true);
-  singleScat->SetDefaultValue(true);
-  singleScat->AvailableForStates(G4State_PreInit);
-        
-  brem = new G4UIcmdWithABool("/testem/phys/registerBrem",this);
-  brem->SetGuidance("register Brems in PhysicsList");
-  brem->SetParameterName("flag",true);
-  brem->SetDefaultValue(true);
-  brem->AvailableForStates(G4State_PreInit);    
+
+  pListCmd = new G4UIcmdWithAString("/testem/phys/addPhysics",this);  
+  pListCmd->SetGuidance("Add modula physics list.");
+  pListCmd->SetParameterName("PList",false);
+  pListCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::~PhysicsListMessenger()
 {
-  delete csFactor;
-  delete singleScat;
-  delete brem;
-  delete physDir;    
+  delete pListCmd;
+  delete physDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
-{ 
-  if (command == csFactor)
-   {pPhysicsList->SetComptonCSfactor(csFactor->GetNewDoubleValue(newValue));}
-   
-  if (command == singleScat)
-   {pPhysicsList->SingleCoulombScattering(singleScat->GetNewBoolValue(newValue));}
-            
-  if (command == brem)
-   {pPhysicsList->RegisterBrem(brem->GetNewBoolValue(newValue));}      
+{           
+  if( command == pListCmd )
+   { pPhysicsList->AddPhysicsList(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.22 2008/05/29 16:59:27 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: DetectorConstruction.cc,v 1.23 2009/03/04 18:49:17 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -251,7 +251,9 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("WaterSteam", density= 1.0*mg/cm3, ncomponents=1,
                   kStateGas, temperature= 273*kelvin, pressure= 1*atmosphere);
   steam->AddMaterial(H2O, fractionmass=1.);
-
+  
+  new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
+		 kStateGas, 273.15*kelvin, 1*atmosphere);
   //
   // examples of vacuum
   //

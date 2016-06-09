@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT_TRV.cc,v 1.1 2007/05/07 14:34:29 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HadronPhysicsQGSP_BERT_TRV.cc,v 1.2 2009/11/27 17:27:38 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //           Created from HadronPhysicsQGSP_BERT
 //
 // Modified:
+//    27 Nov 2009 G.Folger : change transition energies to reduce use of LEP
 //
 //----------------------------------------------------------------------------
 //
@@ -57,31 +58,34 @@ void HadronPhysicsQGSP_BERT_TRV::CreateModels()
 {
   theNeutrons=new G4NeutronBuilder;
   theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder(QuasiElastic));
+  theQGSPNeutron->SetMinEnergy(10.0*GeV);
   theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
-  theLEPNeutron->SetMinInelasticEnergy(5.0*GeV);
-  theLEPNeutron->SetMaxInelasticEnergy(25*GeV);  
+  theLEPNeutron->SetMinInelasticEnergy(9.5*GeV);
+  theLEPNeutron->SetMaxInelasticEnergy(15*GeV);  
 
   theNeutrons->RegisterMe(theBertiniNeutron=new G4BertiniNeutronBuilder);
   theBertiniNeutron->SetMinEnergy(0.0*GeV);
-  theBertiniNeutron->SetMaxEnergy(5.4*GeV);
+  theBertiniNeutron->SetMaxEnergy(9.9*GeV);
 
   thePro=new G4ProtonBuilder;
   thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder(QuasiElastic));
+  theQGSPPro->SetMinEnergy(10.0*GeV);
   thePro->RegisterMe(theLEPPro=new G4LEPProtonBuilder);
-  theLEPPro->SetMinEnergy(5.0*GeV);
-  theLEPPro->SetMaxEnergy(25*GeV);
+  theLEPPro->SetMinEnergy(9.5*GeV);
+  theLEPPro->SetMaxEnergy(15*GeV);
 
   thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
-  theBertiniPro->SetMaxEnergy(5.4*GeV);
+  theBertiniPro->SetMaxEnergy(9.9*GeV);
   
   thePiK=new G4PiKBuilder;
   thePiK->RegisterMe(theQGSPPiK=new G4QGSPPiKBuilder(QuasiElastic));
+  theQGSPPiK->SetMinEnergy(10.0*GeV);
   thePiK->RegisterMe(theLEPPiK=new G4LEPPiKBuilder);
-  theLEPPiK->SetMaxEnergy(25*GeV);
-  theLEPPiK->SetMinEnergy(5.0*GeV);
+  theLEPPiK->SetMinEnergy(9.5*GeV);
+  theLEPPiK->SetMaxEnergy(15*GeV);
 
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
-  theBertiniPiK->SetMaxEnergy(5.4*GeV);
+  theBertiniPiK->SetMaxEnergy(9.9*GeV);
   
   theMiscLHEP=new G4MiscLHEPBuilder;
 }

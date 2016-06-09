@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QGSCPiKBuilder.hh,v 1.4 2009/03/31 11:04:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSCPiKBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4QGSCPiKBuilder_h
 #define G4QGSCPiKBuilder_h 1
 
@@ -62,7 +76,7 @@ class G4QGSCPiKBuilder : public G4VPiKBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4PiNuclearCrossSection thePiCross; 
+    G4PiNuclearCrossSection* thePiCross; 
     
     G4TheoFSGenerator * theModel;
     G4QStringChipsParticleLevelInterface * theCascade;

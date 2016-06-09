@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.hh,v 1.11 2008/06/13 08:19:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CoulombScattering.hh,v 1.13 2009/05/07 18:41:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -58,7 +58,7 @@ class G4CoulombScattering : public G4VEmProcess
 
 public:
 
-  G4CoulombScattering(const G4String& name = "eCoulombScat");
+  G4CoulombScattering(const G4String& name = "CoulombScat");
 
   virtual ~G4CoulombScattering();
 
@@ -101,13 +101,6 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4bool G4CoulombScattering::IsApplicable(const G4ParticleDefinition& p)
-{
-  return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4CoulombScattering::SetThetaMin(G4double val)

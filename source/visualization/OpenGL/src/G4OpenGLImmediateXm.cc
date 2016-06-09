@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXm.cc,v 1.13 2006/08/14 12:07:19 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateXm.cc,v 1.15 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -41,6 +41,7 @@
 #include "G4OpenGLImmediateXmViewer.hh"
 #include "G4OpenGLViewerMessenger.hh"
 #include "G4OpenGLXmViewerMessenger.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 G4OpenGLImmediateXm::G4OpenGLImmediateXm ():
   G4VGraphicsSystem ("OpenGLImmediateXm",

@@ -1,4 +1,4 @@
-# $Id: water.mac,v 1.4 2006/09/18 17:26:20 maire Exp $
+# $Id: water.mac,v 1.5 2009/09/22 14:20:31 maire Exp $
 #
 # no constraint on tracking step
 #
@@ -9,8 +9,7 @@
 /testem/det/setSizeX  3 cm
 /testem/det/setSizeYZ 3 cm
 #
-/testem/phys/addPhysics  standard	# em physics
-###/testem/phys/addPhysics  g4v52  	# em physics 
+/testem/phys/addPhysics  local	# em physics
 #
 /run/initialize
 #

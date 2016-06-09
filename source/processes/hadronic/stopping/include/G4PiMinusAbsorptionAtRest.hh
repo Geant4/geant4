@@ -74,6 +74,10 @@ public:
   G4bool IsApplicable(const G4ParticleDefinition& particle) 
     { return ( particle == *(G4PionMinus::PionMinus()) ); }
 
+  void PreparePhysicsTable(const G4ParticleDefinition&);
+
+  void BuildPhysicsTable(const G4ParticleDefinition&);
+
   G4VParticleChange* AtRestDoIt(const G4Track& aTrack, const G4Step& aStep); 
 
   void SetDeexcitationAlgorithm(G4int index);

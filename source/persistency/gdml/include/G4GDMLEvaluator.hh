@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLEvaluator.hh,v 1.16 2008/07/16 15:46:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLEvaluator.hh,v 1.17 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4GDMLEvaluator
@@ -44,7 +44,7 @@
 #include <CLHEP/Evaluator/Evaluator.h>
 #include <vector>
 
-#include "globals.hh"
+#include "G4Types.hh"
 
 class G4GDMLEvaluator
 {

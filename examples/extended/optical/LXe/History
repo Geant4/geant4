@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2008/11/21 01:24:55 gum Exp $
+$Id: History,v 1.13 2009/11/10 04:20:37 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09 November 2009 Peter Gumplinger (LXe-V09-02-01)
+- exhibit the usage of a complex index of refraction for the photo cathode
+  show usage of G4OpticalPhysics builder/messenger (instead of LXeOpticalPhysics)
+
+30 October 2009 John Allison (LXe-V09-02-00)
+- Introduced G4UIExecutive.
 
 20 November 2008 Peter Gumplinger (LXe-V09-01-01)
 - update code in LXeOpticalPhysics.cc

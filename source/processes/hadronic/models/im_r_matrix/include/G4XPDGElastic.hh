@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XPDGElastic.hh,v 1.2 2006/06/29 20:36:48 gunter Exp $ //
+// $Id: G4XPDGElastic.hh,v 1.2.2.1 2009/11/20 16:25:08 gunter Exp $ //
 // ---------------------------------------------------------------
 //      GEANT4 Class file
 //
@@ -47,7 +47,7 @@
 #include <algorithm>
 #include <map>
 
-typedef std::pair<G4String,G4String> G4StringPair;
+typedef std::pair<G4ParticleDefinition *,G4ParticleDefinition *> G4pDefPair;
 
 class G4KineticTrack;
 class G4ParticleDefinition;
@@ -95,9 +95,9 @@ private:
   static const G4double ppbarPDGFit[7];
   static const G4double npbarPDGFit[7];
 
-  std::map <G4StringPair, std::vector<G4double>, std::less<G4StringPair> > xMap;
+  std::map <G4pDefPair, std::vector<G4double>, std::less<G4pDefPair> > xMap;
 
-  typedef std::map <G4StringPair, std::vector<G4double>, std::less<G4StringPair> > PairDoubleMap;
+  typedef std::map <G4pDefPair, std::vector<G4double>, std::less<G4pDefPair> > PairDoubleMap;
 
   //  G4double pMinFit;
   //  G4double pMaxFit;

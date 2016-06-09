@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Incl.hh,v 1.13 2008/06/25 17:20:04 kaitanie Exp $ 
+// $Id: G4Incl.hh,v 1.15 2009/11/18 10:43:14 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -77,6 +77,7 @@ public:
   
   ~G4Incl(); // Destructor
 
+  void dumpParticles();
   G4double energyTest(G4int i); // Test for NaN energy of particle i.
   void dumpBl5(std::ofstream& dumpOut); // Dump the contents of G4Bl5.
   void dumpSaxw(std::ofstream& dumpOut); // Dump the contents of G4Saxw.
@@ -473,7 +474,7 @@ public: // Main INCL routines
    * @param r2 a double parameter
    * @return a double value
    */
-  G4double ref(G4double x1, G4double x2, G4double x3, G4double p1,
+  G4double ref(G4double &x1, G4double &x2, G4double &x3, G4double p1,
 		 G4double p2, G4double p3, G4double E, G4double r2);
 
   /**

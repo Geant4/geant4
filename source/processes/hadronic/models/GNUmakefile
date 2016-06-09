@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.21 2007/11/17 18:09:54 dennis Exp $
+# $Id: GNUmakefile,v 1.23 2009/11/20 11:12:04 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -11,7 +11,10 @@ SUBDIRS += cascade/evaporation
 SUBDIRS += cascade/utils
 SUBDIRS += cascade/cascade
 SUBDIRS += chiral_inv_phase_space/body
+SUBDIRS += chiral_inv_phase_space/cross_sections
+SUBDIRS += chiral_inv_phase_space/fragmentation
 SUBDIRS += chiral_inv_phase_space/interface
+SUBDIRS += chiral_inv_phase_space/processes
 SUBDIRS += coherent_elastic
 SUBDIRS += de_excitation/evaporation
 SUBDIRS += de_excitation/fermi_breakup
@@ -66,7 +69,10 @@ SUBLIBS +=  G4hadronic_hetcpp_evaporation
 SUBLIBS +=  G4hadronic_hetcpp_utils
 SUBLIBS +=  G4hadronic_incl_cascade
 SUBLIBS +=  G4hadronic_body_ci
+SUBLIBS +=  G4hadronic_crosec_ci
+SUBLIBS +=  G4hadronic_fragm_ci
 SUBLIBS +=  G4hadronic_interface_ci
+SUBLIBS +=  G4hadronic_proc_ci
 SUBLIBS +=  G4hadronic_deex_evaporation
 SUBLIBS +=  G4hadronic_deex_fermi_breakup
 SUBLIBS +=  G4hadronic_deex_fission

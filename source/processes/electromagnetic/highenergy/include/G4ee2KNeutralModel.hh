@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ee2KNeutralModel.hh,v 1.1 2008/07/10 18:07:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ee2KNeutralModel.hh,v 1.2 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -66,13 +66,13 @@ public:
 
   virtual ~G4ee2KNeutralModel();
 
-  G4double ThresholdEnergy() const;
+  virtual G4double ThresholdEnergy() const;
 
-  G4double PeakEnergy() const;
+  virtual G4double PeakEnergy() const;
 
-  G4double ComputeCrossSection(G4double) const;
+  virtual G4double ComputeCrossSection(G4double) const;
 
-  G4PhysicsVector* PhysicsVector(G4double, G4double) const;
+  virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&);
@@ -88,28 +88,6 @@ private:
   G4double massK;
   G4double massPhi;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ee2KNeutralModel::ThresholdEnergy() const
-{
-  return 2.0*massK;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ee2KNeutralModel::PeakEnergy() const
-{
-  return massPhi;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4ee2KNeutralModel::ComputeCrossSection(G4double e) const
-{
-  G4double ee = std::min(HighEnergy(),e);
-  return cross->CrossSection2Kneutral(ee);
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

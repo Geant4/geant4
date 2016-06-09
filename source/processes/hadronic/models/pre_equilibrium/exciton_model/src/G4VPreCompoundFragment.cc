@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4VPreCompoundFragment.cc,v 1.12 2009/02/10 16:01:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
-//J. M. Quesada (August 2008).  
-//Based  on previous work by V. Lara
+// J. M. Quesada (August 2008).  
+// Based  on previous work by V. Lara
 //
  
 #include "G4VPreCompoundFragment.hh"

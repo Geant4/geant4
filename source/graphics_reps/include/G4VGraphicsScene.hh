@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.11 2008/01/04 22:20:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VGraphicsScene.hh,v 1.12 2009/10/21 15:36:22 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // John Allison  19th July 1996
 //
 // Class Description:
@@ -36,6 +36,9 @@
 
 #ifndef G4VGRAPHICSSCENE_HH
 #define G4VGRAPHICSSCENE_HH
+
+#include "globals.hh"
+#include "G4Transform3D.hh"
 
 class G4VisAttributes;
 class G4VSolid;
@@ -53,6 +56,7 @@ class G4Polycone;
 class G4Polyhedra;
 class G4VTrajectory;
 class G4VHit;
+template <typename T> class G4THitsMap;
 class G4Polyline;
 class G4Scale;
 class G4Text;
@@ -61,8 +65,6 @@ class G4Square;
 class G4Polymarker;
 class G4Polyhedron;
 class G4NURBS;
-
-#include "G4Transform3D.hh"
 
 class G4VGraphicsScene {
 
@@ -111,8 +113,9 @@ public: // With description
   // use graphics-system-specific code or (d) any combination of the
   // above.
 
-  virtual void AddCompound (const G4VTrajectory&) = 0;
-  virtual void AddCompound (const G4VHit&)        = 0;
+  virtual void AddCompound (const G4VTrajectory&)        = 0;
+  virtual void AddCompound (const G4VHit&)               = 0;
+  virtual void AddCompound (const G4THitsMap<G4double>&) = 0;
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding graphics primitives to the scene handler.  A

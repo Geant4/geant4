@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.cc,v 1.9 2008/11/12 15:37:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmSaturation.cc,v 1.10 2009/09/25 09:16:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -45,14 +45,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmSaturation.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Neutron.hh"
-#include "G4Proton.hh"
 #include "G4LossTableManager.hh"
 #include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
+#include "G4Electron.hh"
+#include "G4Proton.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -65,7 +63,8 @@ G4EmSaturation::G4EmSaturation()
   curRatio = 1.0;
   curChargeSq = 1.0;
   nMaterials = 0;
-  Initialise();
+  electron = 0;
+  Initialise(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -89,8 +88,9 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
 
   if(bfactor > 0.0) { 
 
-    // atomic relaxations
-    if(p == gamma) {
+    G4int pdgCode = p->GetPDGEncoding();
+    // atomic relaxations for gamma incident
+    if(22 == pdgCode) {
       evis /= (1.0 + bfactor*edep/manager->GetRange(electron,edep,couple));
 
       // energy loss
@@ -100,7 +100,9 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
       G4double nloss = niel;
       if(nloss < 0.0) nloss = 0.0;
       G4double eloss = edep - nloss;
-      if(p == neutron || eloss < 0.0 || length <= 0.0) {
+
+      // neutrons
+      if(2112 == pdgCode || eloss < 0.0 || length <= 0.0) {
 	nloss = edep;
         eloss = 0.0;
       }
@@ -110,6 +112,7 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
  
       // non-ionizing energy loss
       if(nloss > 0.0) {
+        if(!proton) {proton = G4Proton::Proton();}
         G4double escaled = nloss*curRatio;
         G4double s = manager->GetRange(proton,escaled,couple)/curChargeSq; 
 	nloss /= (1.0 + bfactor*nloss/s);
@@ -145,6 +148,14 @@ G4double G4EmSaturation::FindG4BirksCoefficient(const G4Material* mat)
 
 G4double G4EmSaturation::FindBirksCoefficient(const G4Material* mat)
 {
+  // electron should exist in any case
+  if(!manager) {
+    manager = G4LossTableManager::Instance();
+    nist    = G4NistManager::Instance();
+    electron= G4Electron::Electron();
+    proton  = 0;
+  }
+
   if(mat == curMaterial) return curBirks;
 
   curMaterial = mat;
@@ -160,15 +171,6 @@ G4double G4EmSaturation::FindBirksCoefficient(const G4Material* mat)
       curChargeSq = effCharges[i];
       return curBirks;
     }
-  }
-
-  if(!manager) {
-    manager = G4LossTableManager::Instance();
-    nist    = G4NistManager::Instance();
-    gamma   = G4Gamma::Gamma();
-    electron= G4Electron::Electron();
-    proton  = G4Proton::Proton();
-    neutron = G4Neutron::Neutron();
   }
 
   G4String name = mat->GetName();

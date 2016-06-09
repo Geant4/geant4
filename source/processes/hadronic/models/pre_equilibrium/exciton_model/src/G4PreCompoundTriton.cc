@@ -24,52 +24,63 @@
 // ********************************************************************
 //
 //
-//J.M.Quesada (August 08). New source file
+// $Id: G4PreCompoundTriton.cc,v 1.5 2009/02/13 18:57:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
-// Modif (21 August 2008) by J. M. Quesada for external choice of inverse 
-// cross section option
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundTriton
+//
+// Author:         V.Lara
+//
+// Modified:  
+// 21.08.2008 J. M. Quesada add choice of options  
+// 10.02.2009 J. M. Quesada set default opt1  
+//
  
 #include "G4PreCompoundTriton.hh"
 
 
-  G4ReactionProduct * G4PreCompoundTriton::GetReactionProduct() const
-  {
-    G4ReactionProduct * theReactionProduct =
-      new G4ReactionProduct(G4Triton::TritonDefinition());
-    theReactionProduct->SetMomentum(GetMomentum().vect());
-    theReactionProduct->SetTotalEnergy(GetMomentum().e());
+G4ReactionProduct * G4PreCompoundTriton::GetReactionProduct() const
+{
+  G4ReactionProduct * theReactionProduct =
+    new G4ReactionProduct(G4Triton::TritonDefinition());
+  theReactionProduct->SetMomentum(GetMomentum().vect());
+  theReactionProduct->SetTotalEnergy(GetMomentum().e());
 #ifdef PRECOMPOUND_TEST
-    theReactionProduct->SetCreatorModel("G4PrecompoundModel");
+  theReactionProduct->SetCreatorModel("G4PrecompoundModel");
 #endif
-    return theReactionProduct;
-  }   
+  return theReactionProduct;
+}   
 
-   G4double G4PreCompoundTriton::FactorialFactor(const G4double N, const G4double P)
-  {
-      return 
+G4double G4PreCompoundTriton::FactorialFactor(const G4double N, const G4double P)
+{
+  return 
       (N-3.0)*(P-2.0)*(
 		       (((N-2.0)*(P-1.0))/2.0) *(
 						 (((N-1.0)*P)/3.0) 
 						 )
 		       );
-  }
+}
   
-   G4double G4PreCompoundTriton::CoalescenceFactor(const G4double A)
-  {
-     return 243.0/(A*A);
-  }    
+G4double G4PreCompoundTriton::CoalescenceFactor(const G4double A)
+{
+  return 243.0/(A*A);
+}    
 
-
-   G4double G4PreCompoundTriton::GetRj(const G4int NumberParticles, const G4int NumberCharged)
-  {
-    G4double rj = 0.0;
-    G4double denominator = NumberParticles*(NumberParticles-1)*(NumberParticles-2);
-    if(NumberCharged >= 1 && (NumberParticles-NumberCharged) >= 2) rj = 3.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged)*(NumberParticles-NumberCharged-1))/static_cast<G4double>(denominator); 
-    return rj;
+G4double G4PreCompoundTriton::GetRj(const G4int NumberParticles, const G4int NumberCharged)
+{
+  G4double rj = 0.0;
+  G4double denominator = NumberParticles*(NumberParticles-1)*(NumberParticles-2);
+  if(NumberCharged >= 1 && (NumberParticles-NumberCharged) >= 2) {
+    rj = 3.0*static_cast<G4double>(NumberCharged*(NumberParticles-NumberCharged)*(NumberParticles-NumberCharged-1))
+      /static_cast<G4double>(denominator); 
   }
-
-
-
+  return rj;
+}
 
 ////////////////////////////////////////////////////////////////////////////////////
 //J. M. Quesada (Dec 2007-June 2008): New inverse reaction cross sections 
@@ -77,7 +88,7 @@
 //OPT=1,2 Chatterjee's paramaterization 
 //OPT=3,4 Kalbach's parameterization 
 // 
- G4double G4PreCompoundTriton::CrossSection(const  G4double K)
+G4double G4PreCompoundTriton::CrossSection(const  G4double K)
 {
   ResidualA=GetRestA();
   ResidualZ=GetRestZ(); 
@@ -110,28 +121,28 @@ G4double G4PreCompoundTriton::GetOpt0(const  G4double K)
 //
 //---------
 //
-  G4double G4PreCompoundTriton::GetAlpha()
-  {
-    G4double C = 0.0;
-    G4double aZ = GetZ() + GetRestZ();
-    if (aZ >= 70) 
-      {
-	C = 0.10;
-      } 
-    else 
-      {
-	C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
-      }
+G4double G4PreCompoundTriton::GetAlpha()
+{
+  G4double C = 0.0;
+  G4double aZ = GetZ() + GetRestZ();
+  if (aZ >= 70) 
+    {
+      C = 0.10;
+    } 
+  else 
+    {
+      C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ - 0.66612e-01)*aZ + 0.98375; 
+    }
  
-    return 1.0 + C/3.0;
-  }
+  return 1.0 + C/3.0;
+}
 //
 //-------------
 //
-   G4double G4PreCompoundTriton::GetBeta() 
-  {
-      return -GetCoulombBarrier();
-  }
+G4double G4PreCompoundTriton::GetBeta() 
+{
+  return -GetCoulombBarrier();
+}
 //
 //********************* OPT=1,2 : Chatterjee's cross section ************************ 
 //(fitting to cross section from Bechetti & Greenles OM potential)
@@ -182,67 +193,65 @@ G4double G4PreCompoundTriton::GetOpt34(const  G4double K)
 {
 
   G4double landa, mu, nu, p , signor(1.),sig;
-G4double ec,ecsq,xnulam,etest(0.),a; 
-G4double b,ecut,cut,ecut2,geom,elab;
+  G4double ec,ecsq,xnulam,etest(0.),a; 
+  G4double b,ecut,cut,ecut2,geom,elab;
 
 
- G4double     flow = 1.e-18;
- G4double     spill= 1.e+18;
+  G4double     flow = 1.e-18;
+  G4double     spill= 1.e+18;
 
 
- G4double     p0 = -21.45;
- G4double     p1 = 484.7;
- G4double     p2 = -1608.;
- G4double     landa0 = 0.0186;
- G4double     landa1 = -8.90;
- G4double     mu0 = 686.3;
- G4double     mu1 = 0.325;
- G4double     nu0 = 368.9;
- G4double     nu1 = -522.2;
- G4double     nu2 = -4.998;  
+  G4double     p0 = -21.45;
+  G4double     p1 = 484.7;
+  G4double     p2 = -1608.;
+  G4double     landa0 = 0.0186;
+  G4double     landa1 = -8.90;
+  G4double     mu0 = 686.3;
+  G4double     mu1 = 0.325;
+  G4double     nu0 = 368.9;
+  G4double     nu1 = -522.2;
+  G4double     nu2 = -4.998;  
   
- G4double      ra=0.80;
+  G4double      ra=0.80;
         
- ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
- ecsq = ec * ec;
- p = p0 + p1/ec + p2/ecsq;
- landa = landa0*ResidualA + landa1;
- a = std::pow(ResidualA,mu1);
- mu = mu0 * a;
- nu = a* (nu0+nu1*ec+nu2*ecsq);  
- xnulam = nu / landa;
- if (xnulam > spill) xnulam=0.;
- if (xnulam >= flow) etest = 1.2 *std::sqrt(xnulam);
+  //JMQ 13/02/09 increase of reduced radius to lower the barrier
+  // ec = 1.44 * theZ * ResidualZ / (1.5*ResidualAthrd+ra);
+  ec = 1.44 * theZ * ResidualZ / (1.7*ResidualAthrd+ra);
+  ecsq = ec * ec;
+  p = p0 + p1/ec + p2/ecsq;
+  landa = landa0*ResidualA + landa1;
+  a = std::pow(ResidualA,mu1);
+  mu = mu0 * a;
+  nu = a* (nu0+nu1*ec+nu2*ecsq);  
+  xnulam = nu / landa;
+  if (xnulam > spill) xnulam=0.;
+  if (xnulam >= flow) etest = 1.2 *std::sqrt(xnulam);
  
- a = -2.*p*ec + landa - nu/ecsq;
- b = p*ecsq + mu + 2.*nu/ec;
- ecut = 0.;
- cut = a*a - 4.*p*b;
- if (cut > 0.) ecut = std::sqrt(cut);
- ecut = (ecut-a) / (p+p);
- ecut2 = ecut;
- if (cut < 0.) ecut2 = ecut - 2.;
- elab = K * FragmentA / ResidualA;
- sig = 0.;
+  a = -2.*p*ec + landa - nu/ecsq;
+  b = p*ecsq + mu + 2.*nu/ec;
+  ecut = 0.;
+  cut = a*a - 4.*p*b;
+  if (cut > 0.) ecut = std::sqrt(cut);
+  ecut = (ecut-a) / (p+p);
+  ecut2 = ecut;
+  if (cut < 0.) ecut2 = ecut - 2.;
+  elab = K * FragmentA / ResidualA;
+  sig = 0.;
  
- if (elab <= ec) { //start for E<Ec
-   if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;    
- }           //end for E<Ec
- else {           //start for E>Ec
-   sig = (landa*elab+mu+nu/elab) * signor;
-   geom = 0.;
-   if (xnulam < flow || elab < etest) return sig;
-   geom = std::sqrt(theA*K);
-   geom = 1.23*ResidualAthrd + ra + 4.573/geom;
-   geom = 31.416 * geom * geom;
-   sig = std::max(geom,sig);
- }           //end for E>Ec
- return sig;
+  if (elab <= ec) { //start for E<Ec
+    if (elab > ecut2)  sig = (p*elab*elab+a*elab+b) * signor;
+  }           //end for E<Ec
+  else {           //start for E>Ec
+    sig = (landa*elab+mu+nu/elab) * signor;
+    geom = 0.;
+    if (xnulam < flow || elab < etest) return sig;
+    geom = std::sqrt(theA*K);
+    geom = 1.23*ResidualAthrd + ra + 4.573/geom;
+    geom = 31.416 * geom * geom;
+    sig = std::max(geom,sig);
+  }           //end for E>Ec
+  return sig;
 
 }
 
 //   ************************** end of cross sections ******************************* 
-
-
-
-

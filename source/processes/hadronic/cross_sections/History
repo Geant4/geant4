@@ -14,7 +14,112 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-01 December 2008 Vladimir Ivantchenko (hadr-cross-V09-01-07)
+9 Dec 2009 Gunter Folger       (hadr-cross-V09-02-18)
+------------------------------------------------------------
+- G4TripathiLightCrossSection.cc modified by Macrus Mendenhall:
+   - re-enable low energy check code, but without creating new instances of 
+      G4TripathiLightCrossSection
+
+2 Dec 2009 Vladimir Ivanchenko (hadr-cross-V09-02-17)
+------------------------------------------------------------
+- G4CrossSectionDataSetRegistry - more accurate cross section deletion
+
+25 Nov 2009 Gunter Folger       (hadr-cross-V09-02-16)
+------------------------------------------------------------
+- modify upper limit of validity to 100 TeV in 
+  G4NeutronInelasticCrossSection, G4ProtonInelasticCrossSection,
+  and G4PiNuclearCrossSection
+  Use constant cross section above original range
+
+23 Nov 2009 Vladimir Ivanchenko (hadr-cross-V09-02-15)
+------------------------------------------------------------
+- fixed mistake in previous tag
+
+20 Nov 2009 Vladimir Ivanchenko (hadr-cross-V09-02-14)
+------------------------------------------------------------
+- use as a default hadron-nucleon cross section parameterisation
+  of Nikolay Starkov in G4GlauberGribovCrossSection, 
+  G4GGNuclNuclCrossSection, G4NeutronElasticXS, G4NeutronInelasticXS,
+  G4BGGNucleonElasticXS, G4BGGNucleonInelasticXS, G4BGGPionElasticXS,
+  G4BGGPionInelasticXS
+
+19 Nov 2009 Vladimir Ivanchenko (hadr-cross-V09-02-13)
+------------------------------------------------------------
+- restored head version of hadr-cross-V09-02-06 for all files, added
+  bug fixes for G4BGGXX classes and added back new G4NeutronXXXS 
+  cross sections
+
+17 Nov 2009 Mikhail Kosov (hadr-cross-V09-02-12)
+------------------------------------------------------------
+- CHIPS-cross_sections dependent classes are temporary moved to
+  source/processes/hadronic/models/chiral_inv_phase_space/xs_dependent
+  directory (till the beter place for CHIPS physics package is found)
+
+16 Nov 2009 Mikhail Kosov (hadr-cross-V09-02-11)
+------------------------------------------------------------
+- dependency on CHIPS-cross_sections
+
+12 Nov 2009 Vladimir Ivanchenko (hadr-cross-V09-02-10)
+------------------------------------------------------------
+- added G4NeutronElasticXS, G4NeutronInelasticXS, G4NeutronCaptureXS
+
+11 Nov 2009 Mikhail Kosov (hadr-cross-V09-02-09)
+------------------------------------------------------------
+- CHIPS inelastic XS implementation in a form of G4VCrossSectionDataSet
+
+4 Nov 2009 Mikhail Kosov (hadr-cross-V09-02-08)
+------------------------------------------------------------
+- Resolving of the circular dependency with CHIPS for the previous tag 
+
+23 Oct 2009 Mikhail Kosov (hadr-cross-V09-02-07)
+------------------------------------------------------------
+- in G4GlauberGribovCrossSection, G4GGNuclNuclCrossSection, G4HadronNucleonXsc
+  the CHIPS hN cross-sections are used directly instead of three times replication 
+
+12 Aug 2009 Vladimir Ivanchenko (hadr-cross-V09-02-06)
+------------------------------------------------------------
+- G4CrossSectionDataSetRegistry - return to more simple variant of
+                                  deletion, because of problem for 
+                                  specific PhysicsLists
+
+08 Aug 2009 Vladimir Ivanchenko (hadr-cross-V09-02-05)
+------------------------------------------------------------
+- G4TripathiLightIonCrossSection - add simple check that X-section is
+                              positive and remove not optimal control
+- G4TripathiCrossSection - added constructor and destructor
+- G4CrossSectionDataSetRegistry - use pure stl commands to remove elements
+                                  of stl vector
+
+21 March 2009 Vladimir Ivanchenko (hadr-cross-V09-02-04)
+------------------------------------------------------------
+- G4IonsKoxCrossSection, G4IonsShenCrossSection, G4TripathiCrossSection,
+  G4TripathiLightCrossSection - added protections against numerical 
+                                exceptions (V.Grichine)
+- G4GGNuclNuclCrossSection - Glauber-Gribov new cross section for ions 
+                             (V.Grichine)  
+
+25 February 2009 Vladimir Ivanchenko (hadr-cross-V09-02-03)
+------------------------------------------------------------
+- G4CrossSectionDataStore - added protection to the Clean method
+
+14 February 2009 Vladimir Ivanchenko (hadr-cross-V09-02-02)
+------------------------------------------------------------
+- G4CrossSectionDataStore - added Clean method
+
+06 February 2009 Vladimir Ivanchenko (hadr-cross-V09-02-01)
+------------------------------------------------------------
+
+24 January 2009 Vladimir Ivanchenko (hadr-cross-V09-02-00)
+------------------------------------------------------------
+- G4CrossSectionDataStore - moved constructor and destructor to source,
+                            added destruction of data sets, use STL
+                            vector instead of C-array
+- G4CrossSectionDataSetRegistry - new singleton to keep pointers to 
+                            cross section data sets
+- G4VCrossSectiondataSet - constructor and detructor moved to source and
+                           registration/deregistration added
+
+01 December 2008 Vladimir Ivanchenko (hadr-cross-V09-01-07)
 ------------------------------------------------------------
 G4BGGPionElasticXS, G4BGGPionInelasticXS, G4BGGNucleonInelasticXS,
 G4BGGNucleonElasticXS, G4UPiNuclearCrossSection - added proper

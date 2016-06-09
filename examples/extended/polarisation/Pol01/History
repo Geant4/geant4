@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2008/06/11 17:24:26 schaelic Exp $
+$Id: History,v 1.9 2009/11/21 16:27:40 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-11-09 V.Ivanchenko (expol01-V09-02-00)
+- Update msc processes according to 9.3 scheme
 
 11-06-08 A.Schaelicke (expol01-V09-01-00)
 - removed obsolete aida-setup in GNUmakefile

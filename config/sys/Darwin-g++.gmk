@@ -12,6 +12,7 @@
 ifeq ($(G4SYSTEM),Darwin-g++)
   CXX       := g++
   CXXFLAGS  := -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+# CXXFLAGS  += -Wunused-parameter -Winline -Wunreachable-code
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2
@@ -29,9 +30,14 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     FCFLAGS   += -pg
     CCFLAGS   += -pg
   endif
+  ifdef G4OPTDEBUG
+    CXXFLAGS  += -O2 -g
+    FCFLAGS   += -O2 -g
+    CCFLAGS   += -O2 -g
+  endif
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
-  LDFLAGS += -bind_at_load
+  LDFLAGS += -bind_at_load -arch_multiple
   FCLIBS := -lg2c -lnsl
   SHEXT   := dylib
   ifndef X11FLAGS
@@ -89,22 +95,23 @@ ifeq ($(G4SYSTEM),Darwin-g++)
     ifeq ($(QT_VERSION),4)
       QTFLAGS   := -I $(QTHOME)/QtCore.framework/Headers 
       QTFLAGS   += -I $(QTHOME)/QtGui.framework/Headers 
-      QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers 
+      QTFLAGS   += -I $(QTHOME)/QtOpenGL.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     else
       QTFLAGS   := -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
   endif
   ifndef QTLIBPATH
     ifeq ($(QT_VERSION),3)
-      QTLIBPATH   := $(shell test -d $(QTHOME)/lib/qt3/lib && echo "/lib/qt3/lib" || echo "/lib" )
+      QTLIBPATH   := $(shell test -d $(QTHOME)/lib/qt3/lib && echo "$(QTHOME)/lib/qt3/lib" || echo "$(QTHOME)/lib" )
     else
-      QTLIBPATH  := -F$(QTHOME)
+      QTLIBPATH  := -F$(QTHOME)/lib -F$(QTHOME)
     endif
   endif
   ifndef QTLIBS
     ifeq ($(QT_VERSION),3)
-      QTLIBS   := -L$(QTHOME)$(QTLIBPATH)
-      QT3_MT  := $(shell ls  $(QTHOME)$(QTLIBPATH)/libqt-mt.* 2>/dev/null | wc -l )
+      QTLIBS   := -L$(QTLIBPATH)
+      QT3_MT  := $(shell ls  $(QTLIBPATH)/libqt-mt.* 2>/dev/null | wc -l )
       ifneq ($(QT3_MT),0)
         QTLIBS  += -lqt-mt
       else
@@ -112,7 +119,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
       endif
       QTLIBS   += -lqui
     else
-      QTLIBS    :=  -framework QtCore -framework QtGui
+      QTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
     endif
   endif
   ifndef GLQTLIBS
@@ -120,7 +127,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
         # already done in QTLIBS
         #      GLQTLIBS    := $(QTLIBS)
     else
-      GLQTLIBS    := -F$(QTHOME) -framework QtCore -framework QtGui
+      GLQTLIBS    := $(QTLIBPATH) -framework QtCore -framework QtGui
       GLQTLIBS    += -framework QtOpenGL
     endif
   endif

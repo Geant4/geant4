@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ElementVector.cc,v 1.1 2008/12/04 10:31:03 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4ElementVector.cc,v 1.2 2008/12/12 03:02:30 kmura Exp $
+// $Name: geant4-09-03 $
 // ====================================================================
 //   pyG4ElementVector.cc
 //
@@ -32,7 +32,6 @@
 // ====================================================================
 #include <boost/python.hpp>
 #include "pyG4indexing.hh"
-#include "G4Element.hh"
 #include "G4ElementVector.hh"
 
 using namespace boost::python;

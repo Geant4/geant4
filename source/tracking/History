@@ -1,5 +1,5 @@
-$Id: History,v 1.126 2008/12/09 01:37:25 asaim Exp $
-$Name: geant4-09-02 $ 
+$Id: History,v 1.137 2009/11/24 10:04:14 perl Exp $
+$Name: geant4-09-03 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,49 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24 Nov 2009 Joseph Perl (tracking-V09-02-07)
+- G4RichTrajectory: add additional attributes
+- G4RichTrajectoryPoint: add additional attributes
+
+20 Nov 2009 L.Desorgher (tracking-V09-02-06)
+- Small correction in G4AdjointSteppingAction to stop the reverse tracking
+  when adjoint particles reenter the adjoint source. 
+  Reput the Nan test removed in  tracking-V09-02-05 but now as (x<0 && x>=0).
+  This Nan test is still needed in very rare case where the weight of a
+  particle goes to Nan. As such the code is stable! The reason for the Nan
+  weight is till under investigation.
+
+18 Nov 2009 G.Cosmo (tracking-V09-02-05)
+- Fixes to "Adjoint" classes to allow build of DLLs on Windows: renamed all
+  methods and data holding "External" as keyword to "Ext".
+  Cleanup of the code: use "const G4String&" instead of "G4String" wherever
+  possible; use G4 types in consistent way; avoid usage of "isNan"; code
+  formatting cleanup; added Geant4 disclaimer.
+
+12 Nov 2009 J.Allison (tracking-V09-02-04)
+- G4Trajectory, G4SmoothTrajectory, G4RichTrajectory:
+  o Added initial kinetic energy.
+- G4RichTrajectory:
+  o Added final kinetic energy.
+- G4RichTrajectoryPoint:
+  o Added "remaining energy" at each step.
+
+10 Nov 2009 L. Desorgher(tracking-V09-02-03)
+- First commit of Adjoint classes in the tracking category
+  New classes are: - G4AdjointCrossSurfChecker and G4AdjointSteppingAction
+
+24 Sep 2009 P.Gumplinger (tracking-V09-02-02)
+- Correction to G4SteppingManager::InvokeAtRestDoItProcs so G4Scintillation
+  process (with an AtRestDoIt and 'Forced') will not be set to 'NotForced' when
+  NofInactiveProc<MAXofAtRestLoops and when the user inactivated it on the fly.
+
+21 Sep 2009 T.Sasaki (tracking-V09-02-01)
+- Takashi's first iteration of the above
+
+27 Feb 2009 T.Sasaki(tracking-V09-02-00)
+- Fixing the problem in the the special cases of skipping voxel boundaries in
+G4RegularNavigation
 
 08 Doc 2008  M.Asai (tracking-V09-01-04)
 - Fixing bug of fN2ndaries variables in G4STeppingManager2.cc

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.18 2008/11/07 17:59:37 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpBoundaryProcess.hh,v 1.22 2009/11/20 01:06:45 gum Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -48,12 +48,16 @@
 //                           off a metal surface by way of a complex index
 //                           of refraction - Thanks to Sehwook Lee and John
 //                           Hauptman (Dept. of Physics - Iowa State Univ.)
+//              2009-11-10 - add capability of simulating surface reflections
+//                           with Look-Up-Tables (LUT) containing measured
+//                           optical reflectance for a variety of surface
+//                           treatments - Thanks to Martin Janecek and
+//                           William Moses (Lawrence Berkeley National Lab.)
 //
 // Author:      Peter Gumplinger
 //              adopted from work by Werner Keil - April 2/96
 // mail:        gum@triumf.ca
 //
-// CVS version tag: 
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpBoundaryProcess_h
@@ -96,7 +100,31 @@ enum G4OpBoundaryProcessStatus {  Undefined,
                                   LambertianReflection, LobeReflection,
                                   SpikeReflection, BackScattering,
                                   Absorption, Detection, NotAtBoundary,
-                                  SameMaterial, StepTooSmall, NoRINDEX };
+                                  SameMaterial, StepTooSmall, NoRINDEX,
+                                  PolishedLumirrorAirReflection,
+                                  PolishedLumirrorGlueReflection,
+                                  PolishedAirReflection,
+                                  PolishedTeflonAirReflection,
+                                  PolishedTiOAirReflection,
+                                  PolishedTyvekAirReflection,
+                                  PolishedVM2000AirReflection,
+                                  PolishedVM2000GlueReflection,
+                                  EtchedLumirrorAirReflection,
+                                  EtchedLumirrorGlueReflection,
+                                  EtchedAirReflection,
+                                  EtchedTeflonAirReflection,
+                                  EtchedTiOAirReflection,
+                                  EtchedTyvekAirReflection,
+                                  EtchedVM2000AirReflection,
+                                  EtchedVM2000GlueReflection,
+                                  GroundLumirrorAirReflection,
+                                  GroundLumirrorGlueReflection,
+                                  GroundAirReflection,
+                                  GroundTeflonAirReflection,
+                                  GroundTiOAirReflection,
+                                  GroundTyvekAirReflection,
+                                  GroundVM2000AirReflection,
+                                  GroundVM2000GlueReflection };
 
 class G4OpBoundaryProcess : public G4VDiscreteProcess
 {
@@ -149,19 +177,9 @@ public: // With description
         G4OpBoundaryProcessStatus GetStatus() const;
         // Returns the current status.
 
-	G4double GetIncidentAngle();
-        // Returns the incident angle of optical photon
-
-	G4double GetReflectivity(G4double E1_perp,
-                                 G4double E1_parl,
-                                 G4double incidentangle,
-	                         G4double RealRindex,
-                                 G4double ImaginaryRindex);
-        // Returns the Reflectivity on a metalic surface
-
-	void           SetModel(G4OpticalSurfaceModel model);
+        void SetModel(G4OpticalSurfaceModel model);
 	// Set the optical surface model to be followed
-        // (glisur || unified).
+        // (glisur || unified || LUT).
 
 private:
 
@@ -172,10 +190,25 @@ private:
 
 	void DielectricMetal();
 	void DielectricDielectric();
+        void DielectricLUT();
 
 	void ChooseReflection();
 	void DoAbsorption();
 	void DoReflection();
+
+        G4double GetIncidentAngle();
+        // Returns the incident angle of optical photon
+
+        G4double GetReflectivity(G4double E1_perp,
+                                 G4double E1_parl,
+                                 G4double incidentangle,
+                                 G4double RealRindex,
+                                 G4double ImaginaryRindex);
+        // Returns the Reflectivity on a metalic surface
+
+        void CalculateReflectivity(void);
+
+        void BoundaryProcessVerbose(void) const;
 
 private:
 
@@ -195,6 +228,10 @@ private:
 
 	G4OpticalSurface* OpticalSurface;
 
+        G4MaterialPropertyVector* PropertyPointer;
+        G4MaterialPropertyVector* PropertyPointer1;
+        G4MaterialPropertyVector* PropertyPointer2;
+
 	G4double Rindex1;
 	G4double Rindex2;
 
@@ -213,6 +250,7 @@ private:
         G4int iTE, iTM;
 
         G4double kCarTolerance;
+
 };
 
 ////////////////////
@@ -307,7 +345,11 @@ void G4OpBoundaryProcess::DoReflection()
         else if ( theFinish == ground ) {
 
 	  theStatus = LobeReflection;
-          theFacetNormal = GetFacetNormal(OldMomentum,theGlobalNormal);
+          if ( PropertyPointer1 && PropertyPointer2 ){
+          } else {
+             theFacetNormal =
+                 GetFacetNormal(OldMomentum,theGlobalNormal);
+          }
           G4double PdotN = OldMomentum * theFacetNormal;
           NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
 

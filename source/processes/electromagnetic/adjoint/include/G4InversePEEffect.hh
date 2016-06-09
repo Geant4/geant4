@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4InversePEEffect.hh,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 /////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4AdjointPEEffect.hh
+//      Module:		G4InversePEEffect.hh
 //	Author:       	L. Desorgher
-//	Date:		25 October 2007
 // 	Organisation: 	SpaceIT GmbH
+//	Contract:	ESA contract 21435/08/NL/AT
 // 	Customer:     	ESA/ESTEC
 /////////////////////////////////////////////////////////////////////////////////
 //
@@ -44,10 +47,10 @@
 #ifndef G4InversePEEffect_h
 #define G4InversePEEffect_h 1
 
-#include "G4VAdjointInverseScattering.hh"
+#include "G4VAdjointReverseReaction.hh"
 #include "globals.hh"
 class G4AdjointPhotoElectricModel;
-class G4InversePEEffect: public G4VAdjointInverseScattering
+class G4InversePEEffect: public G4VAdjointReverseReaction
 
 {
 public:

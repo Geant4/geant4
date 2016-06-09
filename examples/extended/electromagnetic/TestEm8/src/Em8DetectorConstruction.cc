@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.21 2007/10/02 10:12:47 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: Em8DetectorConstruction.cc,v 1.22 2009/11/24 17:51:58 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 
@@ -148,8 +148,7 @@ void Em8DetectorConstruction::DefineMaterials()
   // Aluminium
   a = 26.98*g/mole;
   density = 2.7*g/cm3;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-  if(Al);
+  new G4Material(name="Aluminium", z=13., a, density);
 
   // Mylar
   density = 1.39*g/cm3;
@@ -161,8 +160,7 @@ void Em8DetectorConstruction::DefineMaterials()
   // Silicon as detector material
   density = 2.330*g/cm3;
   a = 28.09*g/mole;
-  G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
-  if(Si);
+  new G4Material(name="Silicon", z=14., a, density);
 
   // Krypton as detector gas, STP
   density = 3.700*mg/cm3 ;

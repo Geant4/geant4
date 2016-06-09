@@ -26,6 +26,7 @@
 // by JPW, working, but to be cleaned up. @@@@
 // G.Folger, 29-sept-2006: extend to 1TeV, using a constant above 20GeV
 // D. Wright, 23-Dec-2006: added isotope dependence
+// G.Folger, 25-Nov-2009: extend to 100TeV, using a constant above 20GeV
 //
 
 #ifndef G4ProtonInelasticCrossSection_h
@@ -55,7 +56,7 @@ class G4ProtonInelasticCrossSection : public G4VCrossSectionDataSet
    {
      G4bool result = false;
      if(( aPart->GetDefinition()==G4Proton::Proton()) &&
-        ( aPart->GetKineticEnergy()<1*TeV) ) result = true;
+        ( aPart->GetKineticEnergy()<100*TeV) ) result = true;
      if(aEle->GetZ()<3) result = false;
      return result;
    }
@@ -65,7 +66,7 @@ class G4ProtonInelasticCrossSection : public G4VCrossSectionDataSet
    {
      G4bool result = false;
      if (( aParticle->GetDefinition() == G4Proton::Proton()) &&
-         ( aParticle->GetKineticEnergy() < 1*TeV) ) result = true;
+         ( aParticle->GetKineticEnergy() < 100*TeV) ) result = true;
      if (ZZ < 3) result = false;
      return result;
    }

@@ -47,7 +47,7 @@
 
 
 XrayFluoSiLiDetectorType::XrayFluoSiLiDetectorType():
-  detectorMaterial("Silicon"),efficiencySet(0)
+  detectorMaterial("SiLi"),efficiencySet(0)
 {
   LoadResponseData("SILIresponse");
 

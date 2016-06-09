@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -69,6 +73,7 @@ userDetector->Construct() start.
 Aluminium is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
@@ -107,7 +112,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
       RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc93 :     Emin=          0 eV         Emax=   100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -116,7 +121,6 @@ eIoni:   for  e-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -133,7 +137,6 @@ eIoni:   for  e+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :     Emin=          0 eV         Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -150,9 +153,9 @@ annihil:   for  e+    SubType= 5
 
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -163,7 +166,6 @@ hIoni:   for  proton    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hBrems:   for  proton    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -178,20 +180,19 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :     Emin=          0 eV         Emax=   100 TeV
 
 msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, skin= 3
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
       Lambda tables from threshold to 100 TeV in 240 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      Stopping Power data for 16 ion/material pairs, nuclearStopping: 1
+      Stopping Power data for 17 ion/material pairs, nuclearStopping: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -202,7 +203,6 @@ hIoni:   for  anti_proton    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   2 MeV
           BetheBloch :     Emin=          2 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -213,7 +213,6 @@ hIoni:   for  kaon+    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -224,13 +223,12 @@ hIoni:   for  kaon-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   1.05231 MeV
           BetheBloch :     Emin=    1.05231 MeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
-msc:   for mu+    SubType= 10
+muMsc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -241,7 +239,6 @@ muIoni:   for  mu+    SubType= 2
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
         MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -264,7 +261,6 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :     Emin=        200 keV        Emax=   1 GeV
         MuBetheBloch :     Emin=          1 GeV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -287,7 +283,6 @@ hIoni:   for  pi+    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hBrems:   for  pi+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -303,9 +298,9 @@ hPairProd:   for  pi+    SubType= 4
 
 msc:   for pi-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 240 bins, spline: 1
-      RangeFactor= 0.04, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   100 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -316,7 +311,6 @@ hIoni:   for  pi-    SubType= 2
                Bragg :     Emin=          0 eV         Emax=   297.504 keV
           BetheBloch :     Emin=    297.504 keV        Emax=   100 TeV
       CSDA range table up to 1 GeV in 160 bins
-      Subcutoff sampling in 1 regions
 
 hBrems:   for  pi-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 240 bins
@@ -334,14 +328,14 @@ Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Root logical volume(s) : Aluminium 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 6.88731 keV    e- 596.68 keV    e+ 568.011 keV
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -364,7 +358,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=14.32s Real=19.68s Sys=0.6s
+  User=7.58s Real=7.61s Sys=0.04s
 
  ======================== run summary ======================
 
@@ -372,29 +366,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.809 MeV
+ total energy deposit: 99.804 MeV
 
- nb tracks/event   neutral:     27.812   charged:     149.78
- nb  steps/event   neutral:     140.97   charged:     479.86
+ nb tracks/event   neutral:      27.68   charged:        148
+ nb  steps/event   neutral:     140.95   charged:     475.54
 
  nb of process calls per event: 
-            msc       eBrem       eIoni        phot       compt        conv     annihilTransportation
-         150.38      25.189      302.85      25.422      113.15       1.428      1.4285      0.9695
+            msc       eBrem       eIoni        phot       comptTransportation        conv     annihil
+         148.31      25.075      300.73      25.293      113.27      0.9665       1.425       1.425
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.166 cm    rms = 3.8689 cm 
- proj Range = 9.6994 cm    rms = 3.5848 cm 
- proj/true  = 0.86868
- transverse dispersion at end = 1.6748 cm 
-      mass true Range from simulation = 30.147 g/cm2 
-       from PhysicsTable (csda range) = 31.825 g/cm2 
+ true Range = 10.987 cm    rms = 3.8234 cm 
+ proj Range = 9.5776 cm    rms = 3.5627 cm 
+ proj/true  = 0.87176
+ transverse dispersion at end = 1.6319 cm 
+      mass true Range from simulation = 29.664 g/cm2 
+       from PhysicsTable (csda range) = 31.821 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 396477430, 588271649
+ Current couple of seeds = 1375807554, 1269164770
 ----------------------------------------
 #
 /process/eLoss/verbose 0
@@ -407,14 +401,14 @@ Region <DefaultRegionForTheWorld> -- appears in <Aluminium> world volume
  Root logical volume(s) : Aluminium 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Aluminium 
- Production cuts :  gamma 10 um     e- 10 um     e+ 10 um 
+ Production cuts :   gamma 10 um      e- 10 um      e+ 10 um  proton 0 fm 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Aluminium
- Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
- Energy thresholds :  gamma 990 eV     e- 33.887552 keV    e+ 33.472938 keV
+ Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 0 fm 
+ Energy thresholds :  gamma  990 eV     e-  34.172517 keV    e+  33.943645 keV proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -424,7 +418,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 396477430, 588271649
+ Current couple of seeds = 1375807554, 1269164770
 ----------------------------------------
 Start Run processing.
 
@@ -432,7 +426,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=26.39s Real=35.14s Sys=0.78s
+  User=13.9s Real=13.95s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -440,29 +434,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.823 MeV
+ total energy deposit: 99.81 MeV
 
- nb tracks/event   neutral:     34.919   charged:      296.8
- nb  steps/event   neutral:     144.78   charged:      913.9
+ nb tracks/event   neutral:     35.065   charged:     288.91
+ nb  steps/event   neutral:     145.41   charged:     898.27
 
  nb of process calls per event: 
-          eIoni       eBrem         msc       compt        phot        conv     annihilTransportation
-         587.48      33.136      291.89      109.86      32.597       1.381       1.381      0.9545
+          eIoni       eBrem        phot         msc       compt        conv     annihilTransportation
+         579.81      33.178      32.715      283.87      110.35       1.407       1.407      0.9465
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.19 cm    rms = 3.759 cm 
- proj Range = 9.6992 cm    rms = 3.5171 cm 
- proj/true  = 0.8668
- transverse dispersion at end = 1.703 cm 
-      mass true Range from simulation = 30.212 g/cm2 
-       from PhysicsTable (csda range) = 31.825 g/cm2 
+ true Range = 11.154 cm    rms = 3.8454 cm 
+ proj Range = 9.6831 cm    rms = 3.573 cm 
+ proj/true  = 0.86815
+ transverse dispersion at end = 1.7408 cm 
+      mass true Range from simulation = 30.115 g/cm2 
+       from PhysicsTable (csda range) = 31.821 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1906073740, 289456673
+ Current couple of seeds = 885076725, 250399748
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -475,3 +469,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+

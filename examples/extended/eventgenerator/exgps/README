@@ -39,10 +39,26 @@
   6. ANALYSIS:
 
      This example implements an AIDA-compliant analysis manager which creates histograms and ntuples. 
-     If user has an AIDA-compliant tool such as AIDAJNI, ANAPHE, or PI installed on his/her system, 
-     the analysis part of this example can be activated by: 
+     If user has an AIDA-compliant tool such as AIDAJNI, ANAPHE, OpenScientist or PI installed on his/her system. Some URLs :
+       http://aida.freehep.org/
+       http://java.freehep.org/aidajni
+       http://www.cern.ch/PI   
+       http://OpenScientist.lal.in2p3.fr
+ 
+     The analysis part of this example can be activated by doing a "source 
+     aida-setup" of the AIDA compliant tool (to activate the aida-config
+     program) and by raising some environment variabless so that the 
+     G4 GNUmakefile system can take into account the AIDA tool.
+     This can be done, for example on a UNIX under a csh like shell, with : 
+        csh> source <path_where_the_AIDA_tool_is_installed>/aida-setup.csh
+        csh> aida-config # to check that this program is up and running
+     G4 related part :
+	csh> setenv G4ANALYSIS_USE 1
+	csh> setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --include`
+        csh> setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --lib`
 
-	setenv G4ANALYSIS_USE 1
+     (It may be usefull to note that in the G4 GNUmakefile system,
+     the upper variables are used in the file config/analysis.gmk).
 
      This needs to be done before building the executable.  
 

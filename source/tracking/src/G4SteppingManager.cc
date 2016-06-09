@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.49 2008/05/06 12:52:48 tsasaki Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SteppingManager.cc,v 1.50 2009/02/27 08:09:50 tsasaki Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------
 //
@@ -312,7 +312,8 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
      fNavigator->ResetHierarchyAndLocate( fTrack->GetPosition(), 
         fTrack->GetMomentumDirection(),
 	*((G4TouchableHistory*)fTrack->GetTouchableHandle()()) );
-     if(newTopVolume != oldTopVolume ){
+//     if(newTopVolume != oldTopVolume ){
+     if(newTopVolume != oldTopVolume || oldTopVolume->GetRegularStructureId() == 1 ) { 
         fTouchableHandle = fNavigator->CreateTouchableHistory();
         fTrack->SetTouchableHandle( fTouchableHandle );
         fTrack->SetNextTouchableHandle( fTouchableHandle );

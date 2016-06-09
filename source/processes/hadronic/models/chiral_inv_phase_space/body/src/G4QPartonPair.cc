@@ -25,19 +25,25 @@
 //
 #include "G4QPartonPair.hh"
 //
-// $Id: G4QPartonPair.cc,v 1.1 2006/10/30 10:40:36 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QPartonPair.cc,v 1.2 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
 //      ---------------- G4QParton ----------------
 //             by Mikhail Kossov, Oct 2006.
-// class for PartonPair (hadron) used by Parton String Models
-// ------------------------------------------------------------
+// class for PartonPair (hadron) used by QGS Models
+// --------------------------------------------------------------
+// Short description: Each Quasmon String has a pair of partons
+// (quark/diquark-partons) on its ends. During the hadronization
+// procedure the rapidity gap between partons shrinks, but the
+// parton pair still exists, while it is converted to the final
+// meson (quaek-antiquark) or baryon (quark-diquark).
+// --------------------------------------------------------------
 
 G4QPartonPair::G4QPartonPair(G4QParton* P1, G4QParton* P2, G4int Type, G4int aDirection)
-		: Parton1(P1), Parton2(P2), CollisionType(Type), Direction(aDirection) {}
+  : Parton1(P1), Parton2(P2), CollisionType(Type), Direction(aDirection) {}
 
 G4QPartonPair::~G4QPartonPair() {}
  

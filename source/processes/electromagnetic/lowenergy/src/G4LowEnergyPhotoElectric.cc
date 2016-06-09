@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.56 2006/06/29 19:40:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.59 2009/06/11 15:47:08 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -121,6 +121,16 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
 	     << highEnergyLimit / GeV << " GeV"
 	     << G4endl;
     }
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4LowEnergyPhotoElectric is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()

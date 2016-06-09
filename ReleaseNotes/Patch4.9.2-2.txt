@@ -1,0 +1,254 @@
+
+                 Geant4 9.2 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                            28 August 2009
+
+List of fixes included in this public patch since the public release 9.2.p01:
+
+  o Configuration:
+    -------------
+    + Configure script: 
+      o Rewritten check on make/gmake on WIN32-VC systems to avoid problems
+        with cygwin and Matlab.
+      o Added check to build Qt driver only when Qt UI module is built;
+        reordered moc checks and added cross-check on moc version.
+        Added safety reset of OpenGL QT build and use variables.
+      o Commented out echo compatibility warning.
+        Addresses problem report #1067.
+    + Corrections in analysis.gmk for AIDA setup on Windows.
+    + Improved non-standard setup for Qt on Linux, Mac and Windows.
+    + Removed "-lcxa -lunwind" LOADLIBS addition in Linux-icc.gmk,
+      no longer necessary since icc version 11.0.083.
+    + Added -arch_multiple option to LDFLAGS in Darwin-g++.gmk to force more
+      diagnostics for wrong architecture errors at link stage.
+    + binmake.gmk: moved definition of TARGOBJEXT to place not dependent
+      on G4EXLIB, such that the extension is defined when no lib is present
+      (change required for upgrading exercisers in testing).
+
+  o Digits_Hits:
+    -----------
+    + Replaced usage of non-Standard calls to sprintf() with ostringstream,
+      to fix compilation errors reported by gcc-4.4.0 compiler.
+
+  o Environments:
+    ------------
+    + G4Py: updated configuration scripts and some minor fixes.
+
+  o Event:
+    -----
+    + Minor changes to G4GeneralParticleSourceMessenger to now use full range
+      of predefined units for length, energy and angle.
+    + Fixed gcc-4.4.0 compilation warning message for non-initialised variable
+      in G4SPSEneDistribution.
+
+  o Geometry:
+    --------
+    + magnetic_field:
+      o Minor enhancement in G4ChordFinder::ApproxCurvePointS() in order to
+        speedup Brent locator.
+      o Added 3rd term of BMT equation (Spin x Beta x Efield) to
+        G4EqEMFieldWithSpin, as reported in the Emfield Hypernews Forum
+        posting #155.
+      o Moved renormalization of spin from G4EqEMFieldWithSpin and
+        G4Mag_SpinEqRhs to G4ClassicalRK4 and G4SimpleHeum.
+      o Added Spin propagation errors to the criteria for 'OneGoodStep' in
+        G4MagIntegratorDriver; not added it yet to the decision logic.
+      o Some code cleanup and formatting.
+    + management:
+      o Added explicit initialisation of min/max extent in method
+        BuildReplicaVoxels() in G4SmartVoxelHeader.
+      o Adopt 'const' references for strings as arguments/return-values in
+        G4LogicalSurface. Some minor cleanup...
+    + navigation:
+      o Fix in G4Navigator::ComputeStep() for the computation of rotation of
+        the 'LocalExitNormal' in cases when DistanceToOut() returns non-valid
+        normal for optical photons in rotated solids.
+        Addresses problem report #1059.
+      o Fix in G4PathFinder: a geometry is at a boundary if its step is within
+        tolerance of the minimum step for any defined geometry.
+      o Enhancement to the 'FB_intersects' algorithm in order to speedup Brent
+        locator.
+      o Fix in the usage of the geometrical tolerance in G4VIntersectionLocator
+        in method AdjustementOfFoundIntersection().
+      o Fix in G4PropagatorInField::SetNavigator() to forward new navigator to
+        G4VIntersectionLocator.
+      o Added method BuildContainerSolid() taking a solid as argument to
+        G4PhantomParameterisation and added protection to GetMaterialIndex()
+        for zero index.
+    + solids/CSG:
+      o Introduced to DistanceToIn(p,v) splitting of the distance for point
+        very far from intersection area and big difference between solid
+        dimensions and distance to it; resolves issue observed on 64 bits
+        systems. Affected solids: G4Tubs, G4Cons, G4Sphere, G4Orb.
+        Addresses problem report #1022.
+    + solids/specific:
+      o G4Ellipsoid:
+        - Fixes in Inside(p) and in DistanceToIn(p,v) for points
+          located on the curved surface within tolerance. Final fix for issue
+          reported in problem report #1050 and concerning warnings reported by
+          grid_test.
+        - Introduced to DistanceToIn(p,v) splitting of the distance for
+          point very far from intersection area and big difference between
+          solid dimensions and distance to it; resolves issue observed on
+          64 bits problem. Also addressing problem report #1022.
+        - Fix to DistanceToIn(p,v) in the calculation of the roots of
+          the quadratic equation and in DistanceToOut(p,v) in the calculation
+          of the normal on cut surfaces. Final fix for problem report #1022.
+        - Adopt pre-computed half-tolerance values for optimisation.
+      o G4PolyconeSide: added protection in method Normal().
+        Addressing problem report #1073.
+      o Corrected typo in base implementation of GetSurfaceArea() in
+        G4VCSGfaceted, which was erroneously returning cubic volume estimation.
+        Addresses problem report #1062.
+      o Relaxed error in G4TessellatedSolid::Inside(p) to warning,
+        for excess of max trials and anomalous conditions in distance
+        calculation. Added more printout information when error condition is
+        detected.
+    + volumes:
+      o Get rid of unnecessary call to Reset() in G4NavigationHistory
+        destructor.
+      o Some code formatting.
+
+  o Global:
+    ------
+    + Some improvements to G4String and G4SubString implementation of
+      operators and comparison stub functions, to reduce generation of
+      temporaries. Removed obsolete static hash(s) method in G4String.
+    + Changed date for patch-02 to release 9.2.
+
+  o Particles:
+    ---------
+    + Ascertain that the absolute of the argument to boost is <1.0
+      in G4MuonRadiativeDecayChannelWithSpin.
+
+  o Standard Electromagnetic Processes:
+    ----------------------------------
+    + Muons: added protection against numerical problem due to negative
+      value of transfered energy in G4MuPairProductionModel.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o G4IonsKoxCrossSection, G4IonsShenCrossSection, G4TripathiCrossSection,
+        G4TripathiLightCrossSection: added protections against numerical
+        exceptions. Added simple check that cross-section is positive and
+        removed not optimal control in G4TripathiLightIonCrossSection class.
+        Added default constructor and destructor to G4TripathiCrossSection.
+      o G4GGNuclNuclCrossSection: updated Glauber-Gribov cross section for ions.
+      o G4CrossSectionDataSetRegistry: fixes for better memory management.
+    + models/neutron_hp:
+      o Fixed bug in IC electron emissions for G4NeutronHPPhotonDist and
+        G4NeutronHPInelasticCompFS.
+    + models/parton_string:
+      o Fix in G4SPBaryon for anti-baryon: a diquark & quark was given instead
+        of anti-diquark & antiquark; note the reverse order, too.
+        Fixes problems with incident anti-baryons, e.g. anti-proton,
+        manifesting in problems with forming hadrons.
+      o Changed pt sampling in G4LundStringFragmentation to avoid near endless
+        loop; this should improve overall performance slightly.
+        Addresses problem report #1066. Affected G4VLongitudinalStringDecay,
+        where SampleQuarkPt() is implemented; added new optional argument of
+        max Pt to SampleQuarkPt().
+      o Modifications in G4GammaParticipants and G4QGSParticipants for
+        applying QGSC from zero energy.
+    + models/qmd:
+      o Fixed bug in gamma (mass zero) participants in G4QMDCollision.
+      o Changed object data member to pointer in G4QMDReaction.
+    + models/rpg:
+      o Removed global variables (pointers to static particle definitions) in
+        G4RPGInelastic and replaced with local array. Fixing issues of wrong
+        order for static initialization.
+    + processes:
+      o Fix to address problem report #1056: cross section data set now are
+        created dynamically in G4PhotoNuclearProcess, G4ElectronNuclearProcess
+        and G4PositronNuclearProcess.
+      o Moved inline constructor and destructors to source in class
+        G4PositronNuclearProcess.
+
+  o Generic Processes:
+    -----------------
+    + Cuts:
+      o Added missing implementation of GetParticleType() in
+        G4VRangeToEnergyConverter.
+      o Replaced usage of std::abs() with std::fabs() where appropriate.
+    + Optical:
+      o Fix in G4OpBoundaryProcess for complex index of refraction: resample
+        the reflectivity every time for DielectricMetal, and do not re-calculate
+        normal to facet; also fixed possible infinite loop by resetting iTE and
+        iTM inside GetReflectivity().
+      o Added exception for cases where invalid normal is returned;
+        following problem report #1060.
+
+  o Persistency:
+    -----------
+    + gdml:
+      o Defined missing copy constructor and operator=() to G4GDMLMatrix
+        internal class, to avoid cases of memory corruption when handling
+        matrices.
+      o Correction in materials and solids tags for allowing parsing of
+        definitions within the tag scope; possibility foreseen by the schema.
+      o Correction in G4GDMLWriteSolids::BooleanWrite() in order to handle
+        cases of nested displaced solids given to both operands in a Boolean
+        operation (ATLAS use case).
+      o Renamed flag for maximum number of transformations applied to a solid
+        and moved to G4GDMLWriteSolids base class.
+      o First virtual layer for custom writer classes; added empty default
+        constructor and virtual destructor to classes in new inheritance chain.
+      o Restricted usage of loops only for placement of volumes. Now correctly
+        handling most common use-case of multiple copies of the same
+        volume/solid through loop statement. Addressing problem report #1063.
+
+  o Physics Lists:
+    -------------
+    + Fix to address problem report #1056: all cross section data sets are
+      created dynamically and no longer member of the class.
+      Fix in G4HadronInelasticQBBC: cross sections are created dynamically
+      not by value, fission only instantiated for HP.
+    + Inline constructor and destructors are moved to source for classes:
+      G4VNeutronBuilder, G4VPiKBuilder, G4VProtonBuilder, G4WarnPLStatus.
+
+  o Visualization:
+    -------------
+    + HepRep: added inclusion of <cstdio> in DeflateOutputStreamBuffer
+      header to resolve compilation errors reported by gcc-4.4.0.
+
+  o Examples:
+    --------
+    + Removed unnecessary AIDA setup in GNUmakefiles wherever necessary.
+    + advanced/air_shower:
+      o Updated README file.
+    + advanced/nanobeam:
+      o Fixed compilation warnings on gcc-4.3 on SLC5.
+    + advanced/radiation_monitor:
+      o Added macros reproducing run results: new results with proton at
+        254MeV, 150 Mev and 50 Mev of energy; new macros with Kapton material.
+      o Changed limits of LENeutronInelastic for 0.1 GeV in
+        RadmonPhysicsNeutronBertini and RadmonPhysicsNeutronBinary classes.
+      o Fix for compilation error in RadmonTLabelledCollection.
+    + advanced/xray_fluorescence:
+      o Reviewed physics setup and analysis.
+    + extended/analysis/AnaEx01:
+      o Corrected GNUmakefile and some cleanup.
+    + extended/field/field04:
+      o Commented out timing on initial seed for reproducibility of results.
+    + extended/persistency/gdml/G01:
+      o Modified loop.gdml to restrict multiple placements within a loop.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This is a cumulative patch and can be applied on top of relese 9.2
+     or 9.2.p01.
+  o  Technical notes distributed for release 9.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.2 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

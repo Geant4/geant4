@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.11 2008/12/08 14:16:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4String.icc,v 1.19 2009/08/10 10:30:03 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 //---------------------------------------------------------------
@@ -90,27 +90,27 @@ char  G4SubString::operator[](str_size i) const
 
 G4int G4SubString::operator!() const
 {
-  return extent==0 ? 1 : 0;
+  return (extent==0) ? 1 : 0;
 }
 
-G4bool G4SubString::operator==(G4String s) const
+G4bool G4SubString::operator==(const G4String& s) const
 {
-  return mystring->substr(mystart,extent) == s ? true:false;
+  return (mystring->find(s,mystart,extent) != std::string::npos);
 }
 
 G4bool G4SubString::operator==(const char* s) const
 {
-  return mystring->substr(mystart,extent) == std::string(s) ? true:false;
+  return (mystring->find(s,mystart,extent) != std::string::npos);
 }
 
-G4bool G4SubString::operator!=(G4String s) const
+G4bool G4SubString::operator!=(const G4String& s) const
 {
-  return mystring->substr(mystart,extent) != std::string(s) ? true:false;
+  return (mystring->find(s,mystart,extent) == std::string::npos);
 }
 
 G4bool G4SubString::operator!=(const char* s) const
 {
-  return mystring->substr(mystart,extent) != std::string(s) ? true:false;
+  return (mystring->find(s,mystart,extent) == std::string::npos);
 }
 
 str_size G4SubString::length() const
@@ -125,7 +125,7 @@ str_size G4SubString::start() const
 
 G4bool G4SubString::isNull() const
 {
-  return extent==0 ? true : false;
+  return (extent==0);
 }
 
 // **************************************************************
@@ -218,30 +218,22 @@ G4String& G4String::operator+=(const char &c)
 
 G4bool G4String::operator==(const G4String &s) const
 {
-  const std_string *a=this;
-  const std_string *b=&s;
-  return *a==*b;
+  return (std_string::compare(s) == 0);
 }
 
 G4bool G4String::operator==(const char* s) const
 {
-  const std_string *a=this;
-  const std_string b=s;
-  return *a==b;
+  return (std_string::compare(s) == 0);
 }
 
 G4bool G4String::operator!=(const G4String &s) const
 {
-  const std_string *a=this;
-  const std_string *b=&s;
-  return *a!=*b;
+  return !(*this == s);
 }
 
 G4bool G4String::operator!=(const char* s) const
 {
-  const std_string *a=this;
-  const std_string b=s;
-  return *a!=b;
+  return !(*this == s);
 }
 
 G4String::operator const char*() const
@@ -267,18 +259,14 @@ G4int G4String::strcasecompare(const char* s1, const char* s2) const
 
 G4int G4String::compareTo(const char* s, caseCompare mode)
 {
-  if(mode==exact)
-    { return strcmp(c_str(),s); }
-  else
-    { return strcasecompare(c_str(),s); }
+  return (mode==exact) ? strcmp(c_str(),s)
+                       : strcasecompare(c_str(),s);
 }
 
 G4int G4String::compareTo(const G4String& s, caseCompare mode)
 {
-  if(mode==exact)
-    { return strcmp(c_str(),s.c_str()); }
-  else
-    { return strcasecompare(c_str(),s.c_str()); }
+  return (mode==exact) ? strcmp(c_str(),s.c_str())
+                       : strcasecompare(c_str(),s.c_str());
 }
 
 G4String& G4String::prepend (const char* str)
@@ -297,12 +285,14 @@ std::istream&
 G4String::readLine (std::istream& s, G4bool skipWhite)
 {
   char tmp[1024];
-  if ( skipWhite ) {
+  if ( skipWhite )
+  {
     s >> std::ws;
     s.getline(tmp,1024);
     *this=tmp;
   }
-  else {
+  else
+  {
     s.getline(tmp,1024);    
     *this=tmp;
   } 
@@ -324,8 +314,7 @@ G4String& G4String::replace(str_size pos, str_size n, const char* s)
 
 G4String& G4String::remove(str_size n)
 {
-  if(n<size())
-    { erase(n,size()-n); }
+  if(n<size()) { erase(n,size()-n); }
   return *this;
 }
 
@@ -345,22 +334,14 @@ G4int G4String::last(char c) const
   return rfind(c);
 }
 
-G4bool G4String::contains(std::string s) const
+G4bool G4String::contains(const std::string& s) const
 {
-  G4int i=std_string::find(s);
-  if(i != G4int(std_string::npos))
-    { return true; }
-  else
-    { return false; }
+  return (std_string::find(s) != std_string::npos);
 }
 
 G4bool G4String::contains(char c) const
 {
-  G4int i=std_string::find(c);
-  if(i != G4int(std_string::npos))
-    { return true; }
-  else
-    { return false; }
+  return (std_string::find(c) != std_string::npos);
 }
 
 G4String G4String::strip (G4int strip_Type, char c)
@@ -472,9 +453,4 @@ unsigned int G4String::stlhash() const
     { h = 5*h + *s; }
 
   return str_size(h);
-}
-
-unsigned int G4String::hash(const G4String& s)
-{
-  return s.hash();
 }

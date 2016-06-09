@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2008/11/20 15:41:53 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2009/04/15 13:26:26 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := read_ext
+name := gdml_ext
 G4TARGET := $(name)
 G4EXLIB := true
 

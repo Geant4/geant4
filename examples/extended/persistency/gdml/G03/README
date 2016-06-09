@@ -1,11 +1,12 @@
-$Id: README,v 1.1 2008/11/20 15:41:53 gcosmo Exp $
+$Id: README,v 1.2 2009/04/15 13:26:26 gcosmo Exp $
 -------------------------------------------------------------------
 
- Example of use GDML extension and associated reader
- -----------------------------------------------------------
+ Example of definition of a GDML extension with associated reader and writer
+ ---------------------------------------------------------------------------
 
  In this directory you can find an example showing how to extend the GDML
- schema and plug-in a custom reader to the system for handling the extension.
+ schema and plug-in a custom reader and writer to the system for handling
+ the extension.
  For more information, please, refer to the GDML Documentation.
   
  The Geometry is a Simple Box to which it is assigned a color as
@@ -31,6 +32,8 @@ $Id: README,v 1.1 2008/11/20 15:41:53 gcosmo Exp $
  - Compile and link to generate the executable:
                % gmake
  
- - Execute the application:
-               % read_ext [macro-file.mac]
+ - Execute the application for reading and visualizing the setup:
+               % gdml_ext read_ext.mac
 
+ - Execute the application for also writing the setup:
+               % gdml_ext [write_ext.mac]

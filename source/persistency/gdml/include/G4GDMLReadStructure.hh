@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.22 2008/11/20 15:33:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadStructure.hh,v 1.28 2009/09/24 15:04:34 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4GDMLReadStructure
@@ -41,22 +41,14 @@
 #ifndef _G4GDMLREADSTRUCTURE_INCLUDED_
 #define _G4GDMLREADSTRUCTURE_INCLUDED_
 
-#include "G4AssemblyVolume.hh"
-#include "G4LogicalVolume.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4PVDivision.hh"
-#include "G4PVPlacement.hh"
-#include "G4PVReplica.hh"
-#include "G4SolidStore.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4ReflectionFactory.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalSkinSurface.hh"
-#include "G4LogicalBorderSurface.hh"
-#include "G4PVDivisionFactory.hh"
+#include "G4Types.hh"
+#include "geomdefs.hh"
 
 #include "G4GDMLReadParamvol.hh"
+
+class G4AssemblyVolume;
+class G4LogicalVolume;
+class G4VPhysicalVolume;
 
 struct G4GDMLAuxPairType
 {
@@ -66,16 +58,22 @@ struct G4GDMLAuxPairType
 
 typedef std::vector<G4GDMLAuxPairType> G4GDMLAuxListType;
 typedef std::map<const G4LogicalVolume*,G4GDMLAuxListType> G4GDMLAuxMapType;
+typedef std::map<G4String, G4AssemblyVolume*> G4GDMLAssemblyMapType;
 
 class G4GDMLReadStructure : public G4GDMLReadParamvol
 {
 
  public:
 
+   G4GDMLReadStructure();
+   virtual ~G4GDMLReadStructure();
+
    G4VPhysicalVolume* GetPhysvol(const G4String&) const;
    G4LogicalVolume* GetVolume(const G4String&) const;
+   G4AssemblyVolume* GetAssembly(const G4String&) const;
    G4GDMLAuxListType GetVolumeAuxiliaryInformation(const G4LogicalVolume* const);
    G4VPhysicalVolume* GetWorldVolume(const G4String&);
+   const G4GDMLAuxMapType* GetAuxMap() const;
 
    virtual void VolumeRead(const xercesc::DOMElement* const);
    virtual void Volume_contentRead(const xercesc::DOMElement* const);
@@ -84,20 +82,23 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
  protected:
 
    G4GDMLAuxPairType AuxiliaryRead(const xercesc::DOMElement* const);
-   void BordersurfaceRead(const xercesc::DOMElement* const);
+   void AssemblyRead(const xercesc::DOMElement* const);
    void DivisionvolRead(const xercesc::DOMElement* const);
    G4LogicalVolume* FileRead(const xercesc::DOMElement* const);
-   void PhysvolRead(const xercesc::DOMElement* const);
+   void PhysvolRead(const xercesc::DOMElement* const,
+                    G4AssemblyVolume* assembly=0);
    void ReplicavolRead(const xercesc::DOMElement* const, G4int number);
    void ReplicaRead(const xercesc::DOMElement* const replicaElement,
                     G4LogicalVolume* logvol,G4int number);
    EAxis AxisRead(const xercesc::DOMElement* const axisElement);
    G4double QuantityRead(const xercesc::DOMElement* const readElement);
-   void SkinsurfaceRead(const xercesc::DOMElement* const);
+   void BorderSurfaceRead(const xercesc::DOMElement* const);
+   void SkinSurfaceRead(const xercesc::DOMElement* const);
 
  protected:
 
    G4GDMLAuxMapType auxMap;
+   G4GDMLAssemblyMapType assemblyMap;
    G4LogicalVolume *pMotherLogical;
 
 };

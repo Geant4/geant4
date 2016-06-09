@@ -1,0 +1,33 @@
+# Specify physics list
+/physics/SetList Opt2
+#
+# Initialize the run (must be after specify physics list)
+/run/initialize
+#
+# Set range cut shared by electron, positron and gamma
+/run/setCut 0.01 mm
+#
+# Specify primary foil
+/primFoil/material G4_Au
+/primFoil/thickness 0.00485 cm
+#
+# Specify particle source
+/gps/energy 13.00 MeV
+/gps/particle e-
+/gps/direction 0. 0. 1.
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/sigma_r 0.042 cm
+/gps/pos/centre 0. 0. -60.05 cm
+#
+# Set up visualization
+/vis/open HepRepFile
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 90 90
+/vis/viewer/flush
+# only draw trajectories if doing a small run
+/vis/scene/add/trajectories
+/vis/scene/endOfEventAction accumulate
+#
+# Run
+/run/beamOn 5

@@ -23,31 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01MagneticField.cc,v 1.6 2006/06/29 16:32:57 gunter Exp $
+// $Id: A01MagneticField.cc,v 1.7 2009/11/21 00:22:55 perl Exp $
 // --------------------------------------------------------------
 //
 
 #include "A01MagneticField.hh"
 #include "A01MagneticFieldMessenger.hh"
+#include "globals.hh"
 
 A01MagneticField::A01MagneticField()
 {
   messenger = new A01MagneticFieldMessenger(this);
   By = 1.0*tesla;
-  rmax_sq = sqr(1.*m);
-  ymax = 100.*cm;
+  
 }
 
 A01MagneticField::~A01MagneticField()
 { delete messenger; }
 
-void A01MagneticField::GetFieldValue(const double Point[3],double *Bfield) const
+void A01MagneticField::GetFieldValue(const G4double [4],double *Bfield) const
 {
   Bfield[0] = 0.;
   Bfield[2] = 0.;
-  if(std::abs(Point[1])<ymax && (sqr(Point[0])+sqr(Point[2]))<rmax_sq)
-  { Bfield[1] = By; }
-  else
-  { Bfield[1] = 0.; }
+  Bfield[1] = By;
+
 }
 

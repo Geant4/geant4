@@ -23,20 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyEventAction.hh; May 2005
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, G. Candiano, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// --------------------------------------------------------------
+// HadrontherapyEventAction.hh; 
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 #ifndef HadrontherapyEventAction_h
 #define HadrontherapyEventAction_h 1
@@ -45,22 +33,34 @@
 #include "globals.hh"
 
 class HadrontherapyMatrix;
+class HadrontherapyEventActionMessenger;
 
 class HadrontherapyEventAction : public G4UserEventAction
 {
 public:
-  HadrontherapyEventAction(HadrontherapyMatrix*);
+  HadrontherapyEventAction();
   ~HadrontherapyEventAction();
 
 public:
   void BeginOfEventAction(const G4Event*);
   void EndOfEventAction(const G4Event*);
-    
+
+  void SetPrintModulo(G4int val)
+  {
+    printModulo = val;
+  };
+
+  void SetDrawFlag(G4String val)
+  {
+    drawFlag = val;
+  };
+
 private: 
   G4String drawFlag; //Visualisation flag
   G4int hitsCollectionID;
   HadrontherapyMatrix *matrix; 
-  G4int                     printModulo;  
+  G4int printModulo;  
+  HadrontherapyEventActionMessenger* pointerEventMessenger;
 };
 
 #endif

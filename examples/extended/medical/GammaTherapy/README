@@ -41,12 +41,13 @@ Following macro files are prepared for different targets used in the real
 setup: be.in (thin Be target), be_w.in (thick BeW target), cu_w.in (thick
 Cu W target).
 
-Following Physics Lists can be activated via UI commands:
+Only Physics Lists from physics_list kernal library can be activated. 
+Corresponding UI commands are following
 
-/testem/phys/addPhysics       standard
-/testem/phys/addPhysics        g4v52
-/testem/phys/addPhysics       penelope
-/testem/phys/addPhysics       lowenergy
+/testem/phys/addPhysics       emstandard
+/testem/phys/addPhysics       emstandard_opt3
+/testem/phys/addPhysics       empenelope
+/testem/phys/addPhysics       emlivermore
 
 For interactive mode G4 visualization options and variables should be
 defined, then the example should be recompiled:

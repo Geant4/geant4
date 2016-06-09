@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.hh,v 1.6 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PEEffectModel.hh,v 1.7 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +40,8 @@
 // Modifications:
 //
 // 06.02.2006 : added ComputeMeanFreePath()  (mma)
+// 20.02.2009 : move virtual inline to .cc, substitute
+//              ComputeMeanFreePath() by CrossSectionPerVolume (VI)
 //
 // Class Description:
 //
@@ -69,16 +71,17 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-                                      G4double kinEnergy,
-                                      G4double Z,
-                                      G4double A,
-                                      G4double, G4double);
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+					      G4double kinEnergy,
+					      G4double Z,
+					      G4double A,
+					      G4double, G4double);
 				      
-  G4double ComputeMeanFreePath( const G4ParticleDefinition*,
-                                      G4double kinEnergy,
-				const G4Material* material,      
-                                      G4double, G4double);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -98,45 +101,6 @@ private:
   G4double                  fminimalEnergy;
   G4bool                    isInitialized;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-inline G4double G4PEEffectModel::ComputeCrossSectionPerAtom(
-                                       const G4ParticleDefinition*,
-                                             G4double energy,
-                                             G4double Z, G4double,
-                                             G4double, G4double)
-{
- G4double* SandiaCof = G4SandiaTable::GetSandiaCofPerAtom((G4int)Z, energy);
-
- G4double energy2 = energy*energy, energy3 = energy*energy2,
-          energy4 = energy2*energy2;
-
- return SandiaCof[0]/energy  + SandiaCof[1]/energy2 +
-        SandiaCof[2]/energy3 + SandiaCof[3]/energy4;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4PEEffectModel::ComputeMeanFreePath(
-                                       const G4ParticleDefinition*,
-                                             G4double energy,
-				       const G4Material* material,
-                                             G4double, G4double)
-{
- G4double* SandiaCof = material->GetSandiaTable()
-                                ->GetSandiaCofForMaterial(energy);
-				
- G4double energy2 = energy*energy, energy3 = energy*energy2,
-          energy4 = energy2*energy2;
-	  
- G4double cross = SandiaCof[0]/energy  + SandiaCof[1]/energy2 +
-                  SandiaCof[2]/energy3 + SandiaCof[3]/energy4; 
- 
- G4double mfp = DBL_MAX;
- if (cross > 0.) mfp = 1./cross;
- return mfp;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

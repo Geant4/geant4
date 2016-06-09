@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmVWidgetObject.cc,v 1.5 2006/06/29 21:20:12 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmVWidgetObject.cc,v 1.7 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //Virtual base class for all Motif widgets.
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmVWidgetObject.hh"
+#include "G4OpenGLXmViewer.hh"
 
 G4OpenGLXmVWidgetObject::G4OpenGLXmVWidgetObject ()
 {}

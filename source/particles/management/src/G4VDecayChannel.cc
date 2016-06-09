@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc,v 1.18 2006/06/29 19:26:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VDecayChannel.cc,v 1.19 2009/08/17 14:52:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -165,9 +165,11 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
 
 G4VDecayChannel::~G4VDecayChannel()
 {
-  if (parent_name != 0) delete parent_name;
   ClearDaughtersName();
+  if (parent_name != 0) delete parent_name;
+  parent_name = 0;
   if (daughters_mass != 0) delete [] daughters_mass;
+  daughters_mass =0;
 } 
 
 void G4VDecayChannel::ClearDaughtersName()
@@ -176,8 +178,8 @@ void G4VDecayChannel::ClearDaughtersName()
     if (numberOfDaughters>0) {
 #ifdef G4VERBOSE
       if (verboseLevel>1) {
-	G4cout << "G4VDecayChannel::ClearDaughtersName ";
-	G4cout << "clear all daughters " << G4endl;
+	G4cerr << "G4VDecayChannel::ClearDaughtersName "
+	       << " for " << *parent_name << G4endl;
       }
 #endif
       for (G4int index=0; index < numberOfDaughters; index++) { 

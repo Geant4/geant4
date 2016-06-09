@@ -1,21 +1,15 @@
 #/bin/csh
 
-setenv HISTODIR 20080924
+setenv HISTODIR 20091125
 mkdir -p $HISTODIR
 
 setenv PHYSLIST LHEP
 $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
-setenv PHYSLIST QGSP
+setenv PHYSLIST QGSP_BERT_EMV
 $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
-setenv PHYSLIST QGSP_EMV
-$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST QGSP_EMX
-$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
-
-setenv PHYSLIST QGSC
+setenv PHYSLIST QGSP_BERT_EMX
 $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 setenv PHYSLIST QGSP_BERT
@@ -27,11 +21,11 @@ $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 setenv PHYSLIST QBBC
 $G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
-setenv PHYSLIST QBBCG
-#$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+setenv PHYSLIST QBBC_XGG
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
-setenv PHYSLIST QBBCF
-#$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
+setenv PHYSLIST QBBC_XGGSN
+$G4MY/hadr01 p_pb.in >& $HISTODIR/$PHYSLIST.out
 
 echo "Done!"
 #

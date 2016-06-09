@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: geotest.cc,v 1.1 2008/08/27 10:30:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: geotest.cc,v 1.2 2009/02/04 15:54:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------
@@ -76,30 +76,39 @@ int main(int argc, char** argv)
  
   visManager->Initialize();
 
-  // run initialisation macro
+  // Open a UI session: will stay there until the user types "exit"
+  //
+  G4UIsession* session = 0;
 
-  if ( argc==1 )   // Define UI session for interactive mode. 
+  if ( argc==1 )   // Automatically run default macro for writing... 
   {
-    // Open a tcsh session: will stay there until the user types "exit"
 
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);
+#ifdef G4UI_USE_TCSH
+    session = new G4UIterminal(new G4UItcsh);
+#else
+    session = new G4UIterminal();
+#endif
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
+
     UI->ApplyCommand("/control/execute vis.mac");
 
     session->SessionStart();
-    delete session;
   }
-  else             // Batch mode
+  else             // Provides macro in input
   { 
+#ifdef G4UI_USE_TCSH
+    session = new G4UIterminal(new G4UItcsh);
+#else
+    session = new G4UIterminal();
+#endif
     G4String command = "/control/execute "; 
     G4String fileName = argv[1]; 
-    G4UIsession* session = new G4UIterminal(new G4UItcsh);
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
     UI->ApplyCommand(command+fileName); 
     session->SessionStart();
-    delete session;
   }
   
+  delete session;
   delete visManager;
   
   // Job termination

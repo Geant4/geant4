@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.hh,v 1.7 2006/07/03 16:38:13 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLStoredXViewer.hh,v 1.8 2009/02/04 16:48:40 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -37,7 +37,6 @@
 #ifndef G4OPENGLSTOREDXVIEWER_HH
 #define G4OPENGLSTOREDXVIEWER_HH
 
-#include "G4VViewer.hh"
 #include "G4OpenGLStoredViewer.hh"
 #include "G4OpenGLXViewer.hh"
 

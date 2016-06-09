@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForProton.hh,v 1.2 2006/06/29 19:30:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RToEConvForProton.hh,v 1.5 2009/09/14 07:27:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // ------------------------------------------------------------
@@ -59,7 +59,15 @@ class G4RToEConvForProton : public G4VRangeToEnergyConverter
   //  destructor
   virtual ~G4RToEConvForProton();
 
+  virtual G4double Convert(G4double rangeCut, const G4Material* material);
 
+  // reset Loss Table and Range Vectors
+  virtual void Reset();
+
+  protected:
+    virtual G4double ComputeLoss(G4double AtomicNumber,
+                                 G4double KineticEnergy
+                                ) const;
 
 };
 

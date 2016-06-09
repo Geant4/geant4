@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.50 2008/11/13 17:00:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWrite.cc,v 1.55 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4GDMLWrite Implementation
 //
@@ -33,9 +33,24 @@
 //
 // --------------------------------------------------------------------
 
+#include <sys/stat.h>
+#include <iostream>
+
 #include "G4GDMLWrite.hh"
 
+#include "G4LogicalVolume.hh"
+#include "G4Transform3D.hh"
+#include "G4PVDivision.hh"
+
 G4bool G4GDMLWrite::addPointerToName = true;
+
+G4GDMLWrite::G4GDMLWrite() : extElement(0)
+{
+}
+
+G4GDMLWrite::~G4GDMLWrite()
+{
+}
 
 G4bool G4GDMLWrite::FileExists(const G4String& fname) const
 {
@@ -61,11 +76,29 @@ G4GDMLWrite::DepthMapType& G4GDMLWrite::DepthMap()
    return instance;
 }
 
+void G4GDMLWrite::AddExtension(xercesc::DOMElement*,
+                               const G4LogicalVolume* const)
+{
+   // Empty implementation. To be overwritten by user for specific extensions
+   // related to attributes associated to volumes
+}
+
+void G4GDMLWrite::ExtensionWrite(xercesc::DOMElement*)
+{
+   // Empty implementation. To be overwritten by user for specific extensions
+}
+
 G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
 {
+   G4String nameOut;
    std::stringstream stream; stream << name;
-   if (addPointerToName) { stream << ptr; }
-   return G4String(stream.str());
+   if (addPointerToName) { stream << ptr; };
+
+   nameOut=G4String(stream.str());
+   if(nameOut.contains(' '))
+   nameOut.erase(std::remove(nameOut.begin(),nameOut.end(),' '),nameOut.end());
+
+   return nameOut;
 }
 
 xercesc::DOMAttr* G4GDMLWrite::NewAttribute(const G4String& name,
@@ -152,6 +185,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
    gdml->setAttributeNode(NewAttribute("xsi:noNamespaceSchemaLocation",
                           SchemaLocation));
 
+   ExtensionWrite(gdml);
    DefineWrite(gdml);
    MaterialsWrite(gdml);
    SolidsWrite(gdml);
@@ -160,6 +194,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
 
    G4Transform3D R = TraverseVolumeTree(logvol,depth);
 
+   SurfacesWrite();
    xercesc::XMLFormatTarget *myFormTarget =
      new xercesc::LocalFileFormatTarget(fname.c_str());
 

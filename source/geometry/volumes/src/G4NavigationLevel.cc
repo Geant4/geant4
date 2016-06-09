@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.cc,v 1.4 2006/06/29 18:58:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NavigationLevel.cc,v 1.5 2009/08/03 16:13:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                    
@@ -69,8 +69,7 @@ G4NavigationLevel::G4NavigationLevel(const G4NavigationLevel& right)
 
 G4NavigationLevel::~G4NavigationLevel()
 {
-  if( fLevelRep->RemoveAReference() )
-    delete fLevelRep; 
+  if( fLevelRep->RemoveAReference() )  { delete fLevelRep; }
 }
 
 G4NavigationLevel& G4NavigationLevel::operator=(const G4NavigationLevel &right)
@@ -78,8 +77,7 @@ G4NavigationLevel& G4NavigationLevel::operator=(const G4NavigationLevel &right)
   if ( &right != this )
   {
     right.fLevelRep->AddAReference(); 
-    if( fLevelRep->RemoveAReference() )
-      delete fLevelRep; 
+    if( fLevelRep->RemoveAReference() )  { delete fLevelRep; }
     fLevelRep = right.fLevelRep;
   }
   return *this;

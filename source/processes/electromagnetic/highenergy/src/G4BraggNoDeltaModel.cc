@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggNoDeltaModel.cc,v 1.3 2006/06/29 19:32:38 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BraggNoDeltaModel.cc,v 1.4 2009/02/20 16:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -52,14 +52,36 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
 G4BraggNoDeltaModel::G4BraggNoDeltaModel(const G4ParticleDefinition*p,
 					 const G4String& nam) :
   G4BraggIonModel(p, nam)
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4BraggNoDeltaModel::~G4BraggNoDeltaModel()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4BraggNoDeltaModel::ComputeDEDXPerVolume(
+                            const G4Material* material,
+			    const G4ParticleDefinition* pd,
+                            G4double kinEnergy, G4double)
+{
+  return 
+    G4BraggIonModel::ComputeDEDXPerVolume(material, pd, kinEnergy, DBL_MAX);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4BraggNoDeltaModel::CrossSectionPerVolume(
+                            const G4Material*,
+			    const G4ParticleDefinition*,
+			    G4double, G4double, G4double)
+{
+  return 0.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

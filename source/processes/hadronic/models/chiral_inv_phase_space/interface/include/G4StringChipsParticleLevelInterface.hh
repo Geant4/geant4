@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Short description: Interface of QGSC to CHIPS (all soft hadrons) 
+// ----------------------------------------------------------------
+//
 #ifndef G4StringChipsParticleLevelInterface_h
 #define G4StringChipsParticleLevelInterface_h
 
@@ -58,7 +61,7 @@ class G4StringChipsParticleLevelInterface : public G4VIntraNuclearTransportModel
     G4int nop;
 
 #ifdef hdebug_SCPLI
-  		//Static variables for histogramming
+    //Static variables for histogramming
     static const G4int nbh;
     static       G4double bhmax;
     static       G4double bhdb;
@@ -70,9 +73,9 @@ class G4StringChipsParticleLevelInterface : public G4VIntraNuclearTransportModel
     static       G4int*   bhis;
     static       G4int*   ehis;
   public:
-  		//Static functions
-		  static void Reset()
-		  {
+    //Static functions
+    static void Reset()
+    {
       bhdb=bhmax/nbh;
       ehde=bhmax/nbh;
       toth=0.;
@@ -84,16 +87,16 @@ class G4StringChipsParticleLevelInterface : public G4VIntraNuclearTransportModel
         ehis[i]=0;
       }
     }
-		  static void SetMaxB(G4double mB) {bhmax=mB;}
-		  static void SetMaxE(G4double mE) {ehmax=mE;}
-		  static G4int GetB(G4int i){return bhis[i];}
-		  static G4int GetE(G4int i){return ehis[i];}
-		  static G4double GetTot()  {return toth;}
-		  static G4int GetNbn()     {return nbh;}
-		  static G4double GetDB()   {return bhdb;}
-		  static G4double GetDE()   {return ehde;}
-		  static G4int GetBov()     {return bover;}
-		  static G4int GetEov()     {return eover;}
+    static void SetMaxB(G4double mB) {bhmax=mB;}
+    static void SetMaxE(G4double mE) {ehmax=mE;}
+    static G4int GetB(G4int i){return bhis[i];}
+    static G4int GetE(G4int i){return ehis[i];}
+    static G4double GetTot()  {return toth;}
+    static G4int GetNbn()     {return nbh;}
+    static G4double GetDB()   {return bhdb;}
+    static G4double GetDE()   {return ehde;}
+    static G4int GetBov()     {return bover;}
+    static G4int GetEov()     {return eover;}
 #endif
 };
 #endif

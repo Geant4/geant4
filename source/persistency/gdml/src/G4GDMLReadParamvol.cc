@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc,v 1.10 2008/08/13 13:58:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadParamvol.cc,v 1.13 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4GDMLReadParamvol Implementation
 //
@@ -33,6 +33,19 @@
 // -------------------------------------------------------------------------
 
 #include "G4GDMLReadParamvol.hh"
+
+#include "G4LogicalVolume.hh"
+#include "G4PVParameterised.hh"
+#include "G4PVPlacement.hh"
+#include "G4VPhysicalVolume.hh"
+
+G4GDMLReadParamvol::G4GDMLReadParamvol() : G4GDMLReadSetup()
+{
+}
+
+G4GDMLReadParamvol::~G4GDMLReadParamvol()
+{
+}
 
 void G4GDMLReadParamvol::
 Box_dimensionsRead( const xercesc::DOMElement* const element,
@@ -626,5 +639,5 @@ ParamvolRead(const xercesc::DOMElement* const element, G4LogicalVolume* mother)
    }
    G4String pv_name = logvol->GetName() + "_param";
    new G4PVParameterised(pv_name, logvol, mother, kUndefined,
-                         parameterisation->GetSize(), parameterisation);
+                         parameterisation->GetSize(), parameterisation, check);
 }

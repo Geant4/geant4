@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.54 2008/04/04 13:40:04 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.55 2009/02/18 14:21:38 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Jeff Kallenbach 01 Aug 1996
@@ -45,7 +45,6 @@
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoLineSet.h>
 #include <Inventor/nodes/SoCube.h>
-#include <Inventor/nodes/SoSphere.h>
 #include <Inventor/nodes/SoFont.h>
 #include <Inventor/nodes/SoText2.h>
 #include <Inventor/nodes/SoFaceSet.h>

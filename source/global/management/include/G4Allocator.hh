@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.18 2006/06/29 19:01:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Allocator.hh,v 1.19 2009/10/29 16:01:28 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -98,7 +98,7 @@ class G4Allocator
     const_pointer address(const_reference r) const { return &r; }
       // Returns the address of values
 
-    pointer allocate(size_type n, void* hint = 0)
+    pointer allocate(size_type n, void* = 0)
     {
       // Allocates space for n elements of type Type, but does not initialise
       //

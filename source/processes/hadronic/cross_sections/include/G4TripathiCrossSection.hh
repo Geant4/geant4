@@ -42,6 +42,9 @@ class G4TripathiCrossSection : public G4VCrossSectionDataSet
 {
    public:
    
+  G4TripathiCrossSection();
+  ~G4TripathiCrossSection();
+
    virtual
    G4bool IsApplicable(const G4DynamicParticle* aPart, const G4Element*)
    {

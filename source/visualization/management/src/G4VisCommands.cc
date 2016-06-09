@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.23 2008/07/27 10:46:23 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommands.cc,v 1.24 2009/03/09 12:42:00 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 // /vis/ top level commands - John Allison  5th February 2001
 
@@ -96,6 +96,23 @@ void G4VisCommandEnable::SetNewValue (G4UIcommand* command,
     else fpVisManager->Disable();        // Printing is in vis manager.
   } else fpVisManager->Disable();        // Printing is in vis manager.
   // Note: Printing is in vis manager.
+}
+
+////////////// /vis/initialize ///////////////////////////////////////
+
+G4VisCommandInitialize::G4VisCommandInitialize ()
+{
+  fpCommand = new G4UIcmdWithoutParameter("/vis/initialize", this);
+  fpCommand -> SetGuidance("Initialise visualisation manager.");
+}
+
+G4VisCommandInitialize::~G4VisCommandInitialize () {
+  delete fpCommand;
+}
+
+void G4VisCommandInitialize::SetNewValue (G4UIcommand*,
+					  G4String) {
+  fpVisManager->Initialize();
 }
 
 ////////////// /vis/list ///////////////////////////////////////

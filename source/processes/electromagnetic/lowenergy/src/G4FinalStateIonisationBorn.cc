@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FinalStateIonisationBorn.cc,v 1.16 2008/12/06 13:47:12 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FinalStateIonisationBorn.cc,v 1.19 2009/06/11 15:47:08 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #include "G4FinalStateIonisationBorn.hh"
 
@@ -123,6 +123,16 @@ G4FinalStateIonisationBorn::G4FinalStateIonisationBorn()
   {
     G4Exception("G4FinalStateIonisationBorn Constructor: proton is not defined");
   }
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4FinalStateIonisationBorn is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

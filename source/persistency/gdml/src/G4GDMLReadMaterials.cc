@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc,v 1.16 2008/08/22 10:00:20 gcosmo Exp $
+// $Id: G4GDMLReadMaterials.cc,v 1.20 2009/04/24 15:34:20 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -34,6 +34,19 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadMaterials.hh"
+
+#include "G4Element.hh"
+#include "G4Isotope.hh"
+#include "G4Material.hh"
+#include "G4NistManager.hh"
+
+G4GDMLReadMaterials::G4GDMLReadMaterials() : G4GDMLReadDefine()
+{
+}
+
+G4GDMLReadMaterials::~G4GDMLReadMaterials()
+{
+}
 
 G4double
 G4GDMLReadMaterials::AtomRead(const xercesc::DOMElement* const atomElement)
@@ -496,18 +509,25 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
    }
    if (matrix.GetRows() == 0) { return; }
 
-   G4MaterialPropertiesTable* matprop = material->GetMaterialPropertiesTable();
+   G4MaterialPropertiesTable* matprop=material->GetMaterialPropertiesTable();
    if (!matprop)
    {
-     material->SetMaterialPropertiesTable(
-               matprop = new G4MaterialPropertiesTable());
+     matprop = new G4MaterialPropertiesTable();
+     material->SetMaterialPropertiesTable(matprop);
    }
-   G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector(0,0,0);
-   for (size_t i=0; i<matrix.GetRows(); i++)
+   if (matrix.GetCols() == 1)  // constant property assumed
    {
-     propvect->AddElement(matrix.Get(i,0),matrix.Get(i,1));
+     matprop->AddConstProperty(Strip(name), matrix.Get(0,0));
    }
-   matprop->AddProperty(Strip(name),propvect);
+   else  // build the material properties vector
+   {
+     G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector(0,0,0);
+     for (size_t i=0; i<matrix.GetRows(); i++)
+     {
+       propvect->AddElement(matrix.Get(i,0),matrix.Get(i,1));
+     }
+     matprop->AddProperty(Strip(name),propvect);
+   }
 }
 
 void G4GDMLReadMaterials::
@@ -523,7 +543,8 @@ MaterialsRead(const xercesc::DOMElement* const materialsElement)
       const xercesc::DOMElement* const child
             = dynamic_cast<xercesc::DOMElement*>(iter);
       const G4String tag = Transcode(child->getTagName());
-
+      
+      if (tag=="define")   { DefineRead(child);  }  else 
       if (tag=="element")  { ElementRead(child); }  else 
       if (tag=="isotope")  { IsotopeRead(child); }  else 
       if (tag=="material") { MaterialRead(child); }

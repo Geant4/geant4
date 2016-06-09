@@ -52,6 +52,7 @@
 class G4Monopole : public G4ParticleDefinition
 {
 private:
+
   static G4Monopole*  theMonopole;
 
   G4Monopole(
@@ -65,9 +66,9 @@ private:
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable );
 
-public: 
-
   virtual ~G4Monopole();
+
+public: 
   
   static G4Monopole* MonopoleDefinition(G4double mass_ = 100.*GeV, 
                                         G4int magCharge_ = 1, 

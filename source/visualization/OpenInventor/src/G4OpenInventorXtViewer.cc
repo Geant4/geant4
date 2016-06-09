@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.24 2006/06/29 21:22:26 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenInventorXtViewer.cc,v 1.25 2009/09/18 12:48:43 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
@@ -75,17 +75,35 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
 ,fHelpText(0)
 {
   G4cout << "Window name: " << fName << G4endl;
+}
 
+
+void G4OpenInventorXtViewer::Initialise() {
+  
   G4String wName = fName;
-
-#define SIZE 600
+  
   Widget parent = (Widget)fInteractorManager->GetParentInteractor ();
+  int width = 600;
+  int height = 600;
+
   if(!parent) {  
     // Check if user has specified an X-Windows-type geometry string...
     char s[32];
-    sprintf(s,"%dx%d",SIZE,SIZE);
+
     G4String sgeometry = fVP.GetXGeometryString();
-    if(sgeometry.empty()) sgeometry = s;
+    if(sgeometry.empty()) {
+      G4cout << "ERROR: Geometry string \""
+             << sgeometry	   
+             << "\" is empty.  Using \"600x600\"."
+             << G4endl;
+      width = 600;
+      height = 600;  
+      sprintf(s,"%dx%d",width,height);
+      sgeometry = s;
+    } else {
+      width = fVP.GetWindowSizeHintX();
+      height = fVP.GetWindowSizeHintX();
+    }
 
     //Create a shell window :
     G4String shellName = wName;
@@ -166,7 +184,7 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
     fViewer = new SoXtExaminerViewer(parent,wName.c_str(),TRUE);
   }
 
-  fViewer->setSize(SbVec2s(SIZE,SIZE));
+  fViewer->setSize(SbVec2s(width,height));
 
   // Have a GL2PS render action :
   const SbViewportRegion& vpRegion = fViewer->getViewportRegion();

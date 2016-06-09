@@ -32,7 +32,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     OGLFLAGS  :=
   endif
   ifndef OGLLIBS
-    OGLLIBS   := glu32.lib opengl32.lib
+    OGLLIBS   := glu32.lib opengl32.lib gdi32.lib user32.lib
   endif
   ifndef UI32LIBS
     UI32LIBS  := gdi32.lib user32.lib
@@ -58,9 +58,9 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   endif
   ifndef GLQTLIBS
     ifeq ($(QT_VERSION),QT3)
-      QTLIBS   := -L$(QTHOME)/lib -lqt-mt
+      GLQTLIBS   := -L$(QTHOME)/lib -lqt-mt
     else
-      QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib
+      GLQTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib
     endif
   endif
 

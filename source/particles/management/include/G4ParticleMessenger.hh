@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleMessenger.hh,v 1.8 2008/06/08 12:43:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleMessenger.hh,v 1.9 2009/07/31 06:39:22 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //---------------------------------------------------------------
@@ -70,6 +70,7 @@
 //    08 June 1998, H. Kurashige   : remove fProcessManagerMessenger
 //    25 Nov. 1998, H. Kurashige   : add /particle/find
 //    08 Jun. 2008, H. Kurashige   : add /particle/verbose
+//    30 Jul. 2009, H. Kurashige   : add /particle/createAllIon
 //---------------------------------------------------------------
 
 #ifndef G4ParticleMessenger_h
@@ -83,6 +84,7 @@ class G4ParticlePropertyMessenger;
 class G4UIdirectory;
 class G4UIcmdWithAString; 
 class G4UIcmdWithAnInteger; 
+class G4UIcmdWithoutParameter; 
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -107,6 +109,7 @@ class G4ParticleMessenger: public G4UImessenger
     G4UIcmdWithAString *        listCmd;
     G4UIcmdWithAString *        selectCmd;
     G4UIcmdWithAnInteger *      findCmd;
+    G4UIcmdWithoutParameter *   createAllCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
 
     G4ParticleTable* theParticleTable;

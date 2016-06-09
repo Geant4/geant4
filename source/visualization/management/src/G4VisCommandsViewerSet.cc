@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.49 2007/07/10 17:51:54 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommandsViewerSet.cc,v 1.50 2009/05/13 18:17:25 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -36,6 +36,7 @@
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADouble.hh"
+#include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UnitsTable.hh"
 #include "G4VisManager.hh"
 #include "G4Polyhedron.hh"
@@ -316,6 +317,19 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("(Hidden line drawing is controlled by \"/vis/viewer/set/hiddenEdge\".)");
   fpCommandStyle->SetParameterName ("style",omitable = false);
 
+  fpCommandTargetPoint = new G4UIcmdWith3VectorAndUnit
+    ("/vis/viewer/set/targetPoint", this);
+  fpCommandTargetPoint->SetGuidance
+    ("Set target point.");
+  fpCommandTargetPoint->SetGuidance
+    ("This sets the \"Current Target Point\" relative to the \"Standard");
+  fpCommandTargetPoint->SetGuidance
+    ("Target Point\" so that the actual target point is as requested.");
+  fpCommandTargetPoint->SetGuidance
+    ("(See G4ViewParameters.hh for an explanation of target points.)");
+  fpCommandTargetPoint->SetParameterName("x", "y", "z", omitable = false);
+  fpCommandTargetPoint->SetUnitCategory("Length");
+
   fpCommandUpThetaPhi = new G4UIcommand
     ("/vis/viewer/set/upThetaPhi", this);
   fpCommandUpThetaPhi -> SetGuidance ("Set up vector.");
@@ -400,6 +414,7 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandProjection;
   delete fpCommandSectionPlane;
   delete fpCommandStyle;
+  delete fpCommandTargetPoint;
   delete fpCommandUpThetaPhi;
   delete fpCommandUpVector;
   delete fpCommandViewpointThetaPhi;
@@ -907,6 +922,26 @@ void G4VisCommandsViewerSet::SetNewValue
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Drawing style of viewer \"" << currentViewer->GetName()
 	     << "\" set to " << vp.GetDrawingStyle()
+	     << G4endl;
+    }
+  }
+
+  else if (command == fpCommandTargetPoint) {
+    G4ThreeVector targetPoint =
+      fpCommandTargetPoint->GetNew3VectorValue(newValue);
+    const G4Point3D& standardTargetPoint =
+      currentViewer->GetSceneHandler()->GetScene()->GetStandardTargetPoint();
+    vp.SetCurrentTargetPoint(targetPoint - standardTargetPoint);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Target point set to "
+	     << fpCommandTargetPoint->ConvertToStringWithBestUnit
+	(targetPoint)
+	     << "\n\"Current Target Point\" set to  "
+	     << fpCommandTargetPoint->ConvertToStringWithBestUnit
+	(vp.GetCurrentTargetPoint())
+	     << "\n\"Standard Target Point\" is "
+	     << fpCommandTargetPoint->ConvertToStringWithBestUnit
+	(standardTargetPoint)
 	     << G4endl;
     }
   }

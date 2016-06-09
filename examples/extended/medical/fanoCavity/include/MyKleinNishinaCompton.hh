@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: MyKleinNishinaCompton.hh,v 1.3 2007/05/23 08:40:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: MyKleinNishinaCompton.hh,v 1.4 2009/10/25 19:06:26 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -35,6 +35,7 @@
 #include "G4KleinNishinaCompton.hh"
 
 class DetectorConstruction;
+class MyKleinNishinaMessenger;
 class G4ParticleChangeForGamma;
 
 class MyKleinNishinaCompton : public G4KleinNishinaCompton
@@ -65,8 +66,9 @@ public:
 
 protected:
 
-  DetectorConstruction* detector;
-  G4double              CrossSectionFactor;
+  DetectorConstruction*    detector;
+  MyKleinNishinaMessenger* pMessenger;
+  G4double  CrossSectionFactor;
 
 };
 

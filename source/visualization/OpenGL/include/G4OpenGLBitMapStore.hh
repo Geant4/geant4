@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLBitMapStore.hh,v 1.2 2007/11/15 10:14:23 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLBitMapStore.hh,v 1.4 2009/04/08 15:15:07 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // John Allison  6th January 2007
@@ -45,8 +45,11 @@
 #define G4OPENGLBITMAPSTORE_HH
 
 #include "globals.hh"
-#include "G4OpenGL.hh"
 #include <map>
+
+#include "G4OpenGL.hh"
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 namespace G4OpenGLBitMapStore {
 

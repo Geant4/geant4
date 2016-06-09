@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.cc,v 1.14 2008/01/30 11:20:03 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIcommandTree.cc,v 1.16 2009/11/06 06:16:07 kmura Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #include "G4UIcommandTree.hh"
@@ -142,7 +142,8 @@ void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
         { 
     	  tree[i_thTree]->RemoveCommand( aCommand );
     	  G4int n_commandRemain = tree[i_thTree]->GetCommandEntry();
-    	  if(n_commandRemain==0)
+        G4int n_treeRemain = tree[i_thTree]-> GetTreeEntry();
+    	  if(n_commandRemain == 0 && n_treeRemain == 0)
     	  {
     	    G4UIcommandTree * emptyTree = tree[i_thTree];
     	    tree.erase(tree.begin()+i_thTree);
@@ -218,8 +219,111 @@ G4UIcommandTree * G4UIcommandTree::FindCommandTree(const char* commandPath)
         return tree[i_thTree]->FindCommandTree( commandPath );
       }
     }
+  } else {
+    return this;
   }
   return NULL;
+}
+
+G4String G4UIcommandTree::CompleteCommandPath(const G4String aCommandPath)
+{
+  G4String pathName = aCommandPath;
+  G4String remainingPath = aCommandPath;
+  G4String empty = "";
+  G4String matchingPath = empty;
+
+  // find the tree
+  G4int jpre= pathName.last('/');
+  if(jpre != G4int(G4String::npos)) pathName.remove(jpre+1);
+  G4UIcommandTree* aTree = FindCommandTree(pathName);
+
+  if (!aTree) {
+    return empty;
+  }
+  
+  if( pathName.index( pathName ) == std::string::npos ) return empty;
+
+  std::vector<G4String> paths;
+
+  // list matched directories/commands
+  G4String strtmp;
+  G4int nMatch= 0;
+
+  int Ndir= aTree-> GetTreeEntry();
+  int Ncmd= aTree-> GetCommandEntry();
+  
+  // directory ...
+  for(G4int idir=1; idir<=Ndir; idir++) {
+    G4String fpdir= aTree-> GetTree(idir)-> GetPathName();
+    // matching test
+    if( fpdir.index(remainingPath, 0) == 0) {
+      if(nMatch==0) {
+        matchingPath = fpdir;
+      } else {
+        matchingPath = GetFirstMatchedString(fpdir,matchingPath);
+      }
+      nMatch++;
+      paths.push_back(fpdir);
+    }
+  }
+  
+  if (paths.size()>=2) {
+    G4cout << "Matching directories :" << G4endl; 
+    for( unsigned int i_thCommand = 0; i_thCommand < paths.size(); i_thCommand++ ) {
+      G4cout << paths[i_thCommand] << G4endl; 
+    }
+  }
+  
+  // command ...
+  std::vector<G4String> commands;
+
+  for(G4int icmd=1; icmd<=Ncmd; icmd++){
+    G4String fpcmd= aTree-> GetPathName() +
+                    aTree-> GetCommand(icmd) -> GetCommandName();
+    // matching test
+    if( fpcmd.index(remainingPath, 0) ==0) {
+      if(nMatch==0) {
+        matchingPath= fpcmd + " ";
+      } else {
+        strtmp= fpcmd + " ";
+        matchingPath= GetFirstMatchedString(matchingPath, strtmp);
+      }
+      nMatch++;
+      commands.push_back(fpcmd+" ");
+    }
+  }
+
+  if (commands.size()>=2) {
+    G4cout << "Matching commands :" << G4endl; 
+    for( unsigned int i_thCommand = 0; i_thCommand < commands.size(); i_thCommand++ ) {
+      G4cout << commands[i_thCommand] << G4endl; 
+    }
+  }
+
+  return matchingPath;
+}
+
+
+////////////////////////////////////////////////////////////////////
+G4String G4UIcommandTree::GetFirstMatchedString(const G4String& str1, 
+					 const G4String& str2) const
+////////////////////////////////////////////////////////////////////
+{
+  int nlen1= str1.length();
+  int nlen2= str2.length();
+
+  int nmin = nlen1<nlen2 ? nlen1 : nlen2;
+
+  G4String strMatched;
+  for(size_t i=0; G4int(i)<nmin; i++){
+    if(str1[i]==str2[i]) {
+      strMatched+= str1[i];
+    } else {
+      break;
+    }
+  }
+
+  return strMatched;
 }
 
 void G4UIcommandTree::ListCurrent()

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh,v 1.27 2007/11/06 17:17:14 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VScoringMesh.hh,v 1.29 2009/10/12 04:11:25 akimura Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4VScoringMesh_h
@@ -93,14 +93,23 @@ class G4VScoringMesh
 
   // set size of this mesh
   void SetSize(G4double size[3]);
+  // get size of this mesh
+  G4ThreeVector GetSize() const;
   // set position of center of this mesh
   void SetCenterPosition(G4double centerPosition[3]);
+  // get position of center of this mesh
+  G4ThreeVector GetTranslation() const {return fCenterPosition;}
   // set a rotation angle around the x axis
   void RotateX(G4double delta);
   // set a rotation angle around the y axis
   void RotateY(G4double delta);
   // set a rotation angle around the z axis
   void RotateZ(G4double delta);
+  // get a rotation matrix
+  G4RotationMatrix GetRotationMatrix() const {
+    if(fRotationMatrix) return *fRotationMatrix;
+    else return G4RotationMatrix::IDENTITY;
+  }
   // set number of segments of this mesh
   void SetNumberOfSegments(G4int nSegment[3]);
   // get number of segments of this mesh

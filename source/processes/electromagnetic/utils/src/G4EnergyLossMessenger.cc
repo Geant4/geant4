@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.35 2008/10/20 13:27:45 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EnergyLossMessenger.cc,v 1.38 2009/10/29 19:25:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -177,16 +177,31 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   aplCmd->SetDefaultValue(false);
   aplCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  deexCmd = new G4UIcommand("/process/em/deexcitation",this);
+  deexCmd->SetGuidance("Set deexcitation flag per process and G4Region.");
+  deexCmd->SetGuidance("  procName  : process name");
+  deexCmd->SetGuidance("  flag      : flag");
+  deexCmd->SetGuidance("  regName   : G4Region name");
+
+  G4UIparameter* pName = new G4UIparameter("pName",'s',false);
+  deexCmd->SetParameter(pName);
+
+  G4UIparameter* flag = new G4UIparameter("flag",'s',false);
+  deexCmd->SetParameter(flag);
+
+  G4UIparameter* regName = new G4UIparameter("regName",'s',false);
+  deexCmd->SetParameter(regName);
+
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for DEDX tables");
   dedxCmd->SetParameterName("binsDEDX",true);
-  dedxCmd->SetDefaultValue(120);
+  dedxCmd->SetDefaultValue(77);
   dedxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   lamCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsLambda",this);
   lamCmd->SetGuidance("Set number of bins for Lambda tables");
   lamCmd->SetParameterName("binsL",true);
-  lamCmd->SetDefaultValue(120);
+  lamCmd->SetDefaultValue(77);
   lamCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   verCmd = new G4UIcmdWithAnInteger("/process/eLoss/verbose",this);
@@ -226,7 +241,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   frCmd->SetGuidance("Set RangeFactor parameter for msc processes");
   frCmd->SetParameterName("Fr",true);
   frCmd->SetRange("Fr>0");
-  frCmd->SetDefaultValue(0.02);
+  frCmd->SetDefaultValue(0.04);
   frCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fgCmd = new G4UIcmdWithADouble("/process/msc/GeomFactor",this);
@@ -236,13 +251,20 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   fgCmd->SetDefaultValue(3.5);
   fgCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  mscfCmd = new G4UIcmdWithADouble("/process/msc/FactorForAngleLimit",this);
+  mscfCmd->SetGuidance("Set factor for computation of a limit for -t (invariant trasfer)");
+  mscfCmd->SetParameterName("Fact",true);
+  mscfCmd->SetRange("Fact>0");
+  mscfCmd->SetDefaultValue(1.);
+  mscfCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   skinCmd = new G4UIcmdWithADouble("/process/msc/Skin",this);
   skinCmd->SetGuidance("Set skin parameter for msc processes");
   skinCmd->SetParameterName("skin",true);
   skinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   angCmd = new G4UIcmdWithADoubleAndUnit("/process/msc/ThetaLimit",this);
-  angCmd->SetGuidance("Set the limit on the polar angle");
+  angCmd->SetGuidance("Set the limit on the polar angle for msc and single scattering");
   angCmd->SetParameterName("theta",true);
   angCmd->SetUnitCategory("Angle");
   angCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -258,6 +280,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete SubSecCmd;
   delete MinSubSecCmd;
   delete StepFuncCmd;
+  delete deexCmd;
   delete eLossDirectory;
   delete mscDirectory;
   delete emDirectory;
@@ -280,6 +303,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete labCmd;
   delete skinCmd;
   delete angCmd;
+  delete mscfCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -317,6 +341,15 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     v2 *= G4UIcommand::ValueOf(unt);
     G4VEnergyLoss::SetStepFunction(v1,v2);
     opt->SetStepFunction(v1,v2);
+  }
+
+  if (command == deexCmd) {
+    G4String s1 (""), s2(""), s3("");
+    G4bool b = false;
+    std::istringstream is(newValue);
+    is >> s1 >> s2 >> s3;
+    if(s2 == "true") b = true;
+    opt->ActivateDeexcitation(s1,b,s3);
   }
 
   if (command == mscCmd) {
@@ -404,6 +437,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
   if (command == fgCmd) {
     opt->SetMscGeomFactor(fgCmd->GetNewDoubleValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  }
+  if (command == mscfCmd) {
+    opt->SetFactorForAngleLimit(mscfCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   }
   if (command == angCmd) { 

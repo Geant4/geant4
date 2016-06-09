@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.83 2008/01/04 22:03:46 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VSceneHandler.cc,v 1.91 2009/11/16 13:51:08 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // John Allison  19th July 1996
@@ -73,6 +73,8 @@
 #include "G4VTrajectoryPoint.hh"
 #include "G4HitsModel.hh"
 #include "G4VHit.hh"
+#include "G4ScoringManager.hh"
+#include "G4DefaultLinearColorMap.hh"
 #include "Randomize.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
@@ -115,9 +117,11 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
 }
 
 G4VSceneHandler::~G4VSceneHandler () {
-  G4ViewerListIterator i;
-  for (i = fViewerList.begin(); i != fViewerList.end(); ++i) {
-    delete *i;
+  G4VViewer* last;
+  while( ! fViewerList.empty() ) {
+    last = fViewerList.back();
+    fViewerList.pop_back();
+    delete last;
   }
 }
 
@@ -261,7 +265,50 @@ void G4VSceneHandler::AddCompound (const G4VTrajectory& traj) {
 }
 
 void G4VSceneHandler::AddCompound (const G4VHit& hit) {
-  ((G4VHit&)hit).Draw(); // Cast to non-const because Draw is non-const!!!!
+  // Cast away const because Draw is non-const!!!!
+  const_cast<G4VHit&>(hit).Draw();
+}
+
+void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
+  //G4cout << "AddCompound: hits: " << &hits << G4endl;
+  G4bool scoreMapHits = false;
+  G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManagerIfExist();
+  if (scoringManager) {
+    size_t nMeshes = scoringManager->GetNumberOfMesh();
+    for (size_t i = 0; i < nMeshes; ++i) {
+      G4VScoringMesh* mesh = scoringManager->GetMesh(i);
+      if (mesh && mesh->IsActive()) {
+	MeshScoreMap scoreMap = mesh->GetScoreMap();
+	for(MeshScoreMap::const_iterator i = scoreMap.begin();
+	    i != scoreMap.end(); ++i) {
+	  const G4String& scoreMapName = i->first;
+	  const G4THitsMap<G4double>* foundHits = i->second;
+	  if (foundHits == &hits) {
+	    G4DefaultLinearColorMap colorMap("G4VSceneHandlerColorMap");
+	    scoreMapHits = true;
+	    mesh->DrawMesh(scoreMapName, &colorMap);
+	  }
+	}
+      }
+    }
+  }
+  if (scoreMapHits) {
+    static G4bool first = true;
+    if (first) {
+      first = false;
+      G4cout <<
+	"Scoring map drawn with default parameters."
+	"\n  To get gMocren file for gMocren browser:"
+	"\n    /vis/open gMocrenFile"
+	"\n    /vis/viewer/flush"
+	"\n  Many other options available with /score/draw... commands."
+	"\n  You might want to \"/vis/viewer/set/autoRefresh false\"."
+	     << G4endl;
+    }
+  } else {  // Not score map hits.  Just call DrawAllHits.
+    // Cast away const because DrawAllHits is non-const!!!!
+    const_cast<G4THitsMap<G4double>&>(hits).DrawAllHits();
+  }
 }
 
 void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
@@ -540,10 +587,11 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
 
   fReadyForTransients = true;
 
-  // Refresh event from end-of-event model list.  Allow only in Idle state...
+  // Refresh event from end-of-event model list.
+  // Allow only in Idle or GeomClosed state...
   G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState state = stateManager->GetCurrentState();
-  if (state == G4State_Idle) {
+  if (state == G4State_Idle || state == G4State_GeomClosed) {
 
     visManager->SetEventRefreshing(true);
 
@@ -595,6 +643,12 @@ void G4VSceneHandler::ProcessScene (G4VViewer&) {
     visManager->SetEventRefreshing(false);
   }
 
+  // Refresh end-of-run model list.
+  // Allow only in Idle or GeomClosed state...
+  if (state == G4State_Idle || state == G4State_GeomClosed) {
+    DrawEndOfRunModels();
+  }
+
   fMarkForClearingTransientStore = tmpMarkForClearingTransientStore;
 }
 
@@ -608,6 +662,26 @@ void G4VSceneHandler::DrawEvent(const G4Event* event)
     pMP->SetEvent(event);
     for (size_t i = 0; i < nModels; i++) {
       G4VModel* pModel = EOEModelList [i];
+      pModel -> SetModelingParameters(pMP);
+      SetModel (pModel);
+      pModel -> DescribeYourselfTo (*this);
+      pModel -> SetModelingParameters(0);
+    }
+    delete pMP;
+    SetModel (0);
+  }
+}
+
+void G4VSceneHandler::DrawEndOfRunModels()
+{
+  const std::vector<G4VModel*>& EORModelList =
+    fpScene -> GetEndOfRunModelList ();
+  size_t nModels = EORModelList.size();
+  if (nModels) {
+    G4ModelingParameters* pMP = CreateModelingParameters();
+    pMP->SetEvent(0);
+    for (size_t i = 0; i < nModels; i++) {
+      G4VModel* pModel = EORModelList [i];
       pModel -> SetModelingParameters(pMP);
       SetModel (pModel);
       pModel -> DescribeYourselfTo (*this);

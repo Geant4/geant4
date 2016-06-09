@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.hh,v 1.8 2006/06/29 18:57:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TouchableHistory.hh,v 1.11 2009/11/06 11:10:35 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // class G4TouchableHistory
@@ -33,7 +33,7 @@
 // Class description:
 //
 // Object representing a touchable detector element, and its history in the
-// geomtrical hierarchy, including its net resultant local->global transform.
+// geometrical hierarchy, including its net resultant local->global transform.
 
 // History:
 // - Created. Paul Kent, August 1996
@@ -44,6 +44,7 @@
 #include "G4VTouchable.hh"
 
 #include "G4NavigationHistory.hh"
+#include "G4Allocator.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
@@ -59,7 +60,7 @@ class G4TouchableHistory : public G4VTouchable
     // 'zero-depth', ie an "unphysical" and not very unusable one.
     // It is for initialisation only.  
 
-  virtual ~G4TouchableHistory();
+ ~G4TouchableHistory();
 
   inline G4VPhysicalVolume* GetVolume( G4int depth=0 ) const;
   inline G4VSolid* GetSolid( G4int depth=0 ) const;
@@ -71,8 +72,8 @@ class G4TouchableHistory : public G4VTouchable
   G4int MoveUpHistory( G4int num_levels = 1 );
     // Access methods for touchables with history
 
-  virtual void  UpdateYourself( G4VPhysicalVolume*   pPhysVol,
-                          const G4NavigationHistory* history=0 ); 
+  void  UpdateYourself( G4VPhysicalVolume*   pPhysVol,
+                        const G4NavigationHistory* history=0 ); 
     // Update methods for touchables with history
 
  public:  // without description
@@ -80,6 +81,10 @@ class G4TouchableHistory : public G4VTouchable
   inline const G4NavigationHistory* GetHistory() const;
     // Should this method be "deprecated" ?
     // it is used now in G4Navigator::LocateGlobalPointAndSetup
+
+  inline void *operator new(size_t);
+  inline void operator delete(void *aTH);
+    // Override "new" and "delete" to use "G4Allocator".
 
  private:
 

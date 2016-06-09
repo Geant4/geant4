@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AdjointCSMatrix.hh,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 /////////////////////////////////////////////////////////////////////////////////
-//      Module:		G4AdjointCSMatrix.hh
+//      Class:		G4AdjointCSMatrix.hh
 //	Author:       	L. Desorgher
-//	Date:		1st April 2007
 // 	Organisation: 	SpaceIT GmbH
+//	Contract:	ESA contract 21435/08/NL/AT
 // 	Customer:     	ESA/ESTEC
 /////////////////////////////////////////////////////////////////////////////////
 //
@@ -64,19 +67,19 @@ public:
 	G4AdjointCSMatrix(G4bool aBool);
 	~G4AdjointCSMatrix();
 
-        ////////////
-        // Methods
-	////////////
+        //////////////
+        // Methods  // 
+	//////////////
 	void Clear();
-	void AddData(G4double aPrimEnergy,G4double aCS, std::vector< G4double>* aLogSecondEnergyVector,
-	 					        std::vector< G4double>* aLogProbVector,size_t n_pro_decade=0);	
+	void AddData(G4double aPrimEnergy,G4double aCS, std::vector< double>* aLogSecondEnergyVector,
+	 					        std::vector< double>* aLogProbVector,size_t n_pro_decade=0);	
 	
-	bool GetData(unsigned int i, G4double& aPrimEnergy,G4double& aCS,G4double& log0, std::vector< G4double>*& aLogSecondEnergyVector,
-	 							      std::vector< G4double>*& aLogProbVector,
+	G4bool GetData(unsigned int i, G4double& aPrimEnergy,G4double& aCS,G4double& log0, std::vector< double>*& aLogSecondEnergyVector,
+	 							      std::vector< double>*& aLogProbVector,
 								      std::vector< size_t>*& aLogProbVectorIndex);
 	
-	inline std::vector< G4double >* GetLogPrimEnergyVector(){return &theLogPrimEnergyVector;}
-	inline std::vector< G4double >* GetLogCrossSectionvector(){return &theLogCrossSectionVector;}
+	inline std::vector< double>* GetLogPrimEnergyVector(){return &theLogPrimEnergyVector;}
+	inline std::vector< double>* GetLogCrossSectionvector(){return &theLogCrossSectionVector;}
 	inline G4double GetDlog(){return dlog;} 	
 	inline G4bool IsScatProjToProjCase(){return is_scat_proj_to_proj_case;} 
 	void Write(G4String file_name);
@@ -86,13 +89,13 @@ private:
         
 	// we did first try to use G4PhysicsOrderedVector but they are not general enough for our purpose
 	
-	std::vector< G4double > theLogPrimEnergyVector; 
-        std::vector< G4double > theLogCrossSectionVector; //Adjoint Cross sections in function of primary energy
-        std::vector< std::vector< G4double >* > theLogSecondEnergyMatrix;
-	std::vector< std::vector< G4double >* > theLogProbMatrix; //Each column represents the integrated probability of getting a secondary 
+	std::vector< double> theLogPrimEnergyVector; 
+        std::vector< double> theLogCrossSectionVector; //Adjoint Cross sections in function of primary energy
+        std::vector< std::vector< double>* > theLogSecondEnergyMatrix;
+	std::vector< std::vector< double>* > theLogProbMatrix; //Each column represents the integrated probability of getting a secondary 
 								      // in function of their energy 
-	std::vector< std::vector< size_t >* > theLogProbMatrixIndex; //index of euqidistant LogProb
-	std::vector< G4double > log0Vector;
+	std::vector< std::vector< size_t >* > theLogProbMatrixIndex; //index of equidistant LogProb
+	std::vector< double> log0Vector;
 	
 	unsigned int nb_of_PrimEnergy;
 	G4bool is_scat_proj_to_proj_case;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuNuclearInteraction.hh,v 1.6 2008/10/02 21:04:35 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuNuclearInteraction.hh,v 1.7 2009/03/04 19:09:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // $Id: 
 // ------------------------------------------------------------
@@ -65,9 +65,9 @@ public:
  
   virtual ~G4MuNuclearInteraction();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
-
   void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
+
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
 
   virtual void PreparePhysicsTable(const G4ParticleDefinition& ParticleType);
 
@@ -75,15 +75,15 @@ public:
 
   virtual void PrintInfoDefinition() ;
 
-  virtual G4double GetMeanFreePath(const G4Track& track,
-				   G4double previousStepSize,
-				   G4ForceCondition* condition ) ;
- 
   virtual G4VParticleChange *PostStepDoIt(const G4Track& track,
 					  const G4Step& Step  ) ;
 
 protected:
 
+  virtual G4double GetMeanFreePath(const G4Track& track,
+				   G4double previousStepSize,
+				   G4ForceCondition* condition ) ;
+ 
   virtual G4double ComputeMeanFreePath( const G4ParticleDefinition* ParticleType,
 					G4double KineticEnergy,
 					const G4Material* aMaterial);
@@ -141,7 +141,5 @@ private:
      
   G4ParametrizedHadronicVertex theHadronicVertex;
 };
-
-#include "G4MuNuclearInteraction.icc"
   
 #endif

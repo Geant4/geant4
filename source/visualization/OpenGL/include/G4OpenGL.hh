@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenGL.hh,v 1.7 2008/04/04 13:32:22 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGL.hh,v 1.9 2009/11/17 09:18:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // G.Barrand.
 
@@ -35,6 +35,8 @@
 
 #ifdef WIN32
 #include <windows.h>
+#undef min
+#undef max
 #endif
 
 #include <GL/gl.h>

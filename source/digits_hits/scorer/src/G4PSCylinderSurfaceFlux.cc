@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSCylinderSurfaceFlux.cc,v 1.2 2008/12/18 12:57:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PSCylinderSurfaceFlux.cc,v 1.4 2009/11/14 00:01:13 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // // G4PSCylinderSurfaceFlux
 #include "G4PSCylinderSurfaceFlux.hh"
 #include "G4StepStatus.hh"
 #include "G4Track.hh"
+#include "G4VSolid.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 #include "G4GeometryTolerance.hh"
 // ////////////////////////////////////////////////////////////////////////////////
@@ -60,12 +63,26 @@ G4bool G4PSCylinderSurfaceFlux::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4StepPoint* preStep = aStep->GetPreStepPoint();
   G4StepPoint* postStep = aStep->GetPreStepPoint();
-  G4VSolid * solid = 
-    preStep->GetPhysicalVolume()->GetLogicalVolume()->GetSolid();
-  if( solid->GetEntityType() != "G4Tubs" ){
-    G4Exception("G4PSCylinderSurfaceFluxScorer. - Solid type is not supported.");
-    return FALSE;
+
+  G4VPhysicalVolume* physVol = preStep->GetPhysicalVolume();
+  G4VPVParameterisation* physParam = physVol->GetParameterisation();
+  G4VSolid * solid = 0;
+  if(physParam)
+  { // for parameterized volume
+    G4int idx = ((G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable()))
+                ->GetReplicaNumber(indexDepth);
+    solid = physParam->ComputeSolid(idx, physVol);
+    solid->ComputeDimensions(physParam,idx,physVol);
   }
+  else
+  { // for ordinary volume
+    solid = physVol->GetLogicalVolume()->GetSolid();
+  }
+
+//  if( solid->GetEntityType() != "G4Tubs" ){
+//    G4Exception("G4PSCylinderSurfaceFluxScorer. - Solid type is not supported.");
+//    return FALSE;
+//  }
   G4Tubs* tubsSolid = (G4Tubs*)(solid);
   
   G4int dirFlag =IsSelectedSurface(aStep,tubsSolid);
@@ -126,8 +143,13 @@ G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsSoli
     G4ThreeVector localpos1 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos1);
     if ( std::fabs(localpos1.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y() ) 
-       - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())<kCarTolerance ){
+    //if(std::fabs( localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y()  
+    //   - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius()))
+    //   <kCarTolerance ){
+    G4double localR2 = localpos1.x()*localpos1.x()+localpos1.y()*localpos1.y();
+    G4double InsideRadius = tubsSolid->GetInnerRadius();
+    if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	&&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_In;
     }
   }
@@ -138,8 +160,13 @@ G4int G4PSCylinderSurfaceFlux::IsSelectedSurface(G4Step* aStep, G4Tubs* tubsSoli
     G4ThreeVector localpos2 = 
       theTouchable->GetHistory()->GetTopTransform().TransformPoint(stppos2);
     if ( std::fabs(localpos2.z()) > tubsSolid->GetZHalfLength() ) return -1;
-    if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y() ) 
-       - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())<kCarTolerance ){
+    //if(std::fabs( localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y()  
+    //   - (tubsSolid->GetInnerRadius()*tubsSolid->GetInnerRadius())) 
+    // <kCarTolerance ){
+    G4double localR2 = localpos2.x()*localpos2.x()+localpos2.y()*localpos2.y();
+    G4double InsideRadius = tubsSolid->GetInnerRadius();
+    if (localR2 > (InsideRadius-kCarTolerance)*(InsideRadius-kCarTolerance)
+	&&localR2 < (InsideRadius+kCarTolerance)*(InsideRadius+kCarTolerance)){
       return fFlux_Out;
     }
   }

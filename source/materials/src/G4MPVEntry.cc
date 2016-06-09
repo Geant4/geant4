@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MPVEntry.cc,v 1.8 2008/06/05 23:39:18 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MPVEntry.cc,v 1.9 2009/04/21 15:35:45 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -48,80 +48,72 @@
 // Class Implementation
 /////////////////////////
 
-        //////////////
-        // Operators
-        //////////////
-
 // Overload the == operator
 // ------------------------
 // Well defined == semantics required by G4RWTPtrSortedVector
 //
-G4bool G4MPVEntry::operator ==(const G4MPVEntry &right) const  
+G4bool G4MPVEntry::operator == (const G4MPVEntry &right) const  
 {
-	if (thePhotonEnergy == right.thePhotonEnergy) 
-		return true;
-	else
-		return false; 
+  if (thePhotonEnergy == right.thePhotonEnergy)
+    { return true;  }
+  else
+    { return false; }
 }
 
 // Overload the < operator
 // -----------------------
 // Well defined < semantics required by G4RWTPtrSortedVector
 //
-G4bool G4MPVEntry::operator <(const G4MPVEntry &right) const  
+G4bool G4MPVEntry::operator < (const G4MPVEntry &right) const  
 {
-	if (thePhotonEnergy < right.thePhotonEnergy) 
-		return true;
-	else
-		return false;
+  if (thePhotonEnergy < right.thePhotonEnergy)
+    { return true;  }
+  else
+    { return false; }
 }
 
 // Overload the = operator
 // -----------------------
 // Well defined = semantics required by G4RWTPtrSortedVector
 //
-G4MPVEntry& G4MPVEntry::operator =(const G4MPVEntry& right)
+G4MPVEntry& G4MPVEntry::operator = (const G4MPVEntry& right)
 {
-        if (this == &right) return *this;
-	
-        thePhotonEnergy = right.thePhotonEnergy;
-        theProperty = right.theProperty;
-        return *this;
+  if (this == &right)  { return *this; }
+
+  thePhotonEnergy = right.thePhotonEnergy;
+  theProperty = right.theProperty;
+  return *this;
 }
 
-        /////////////////
-        // Constructors
-        /////////////////
+/////////////////
+// Constructors
+/////////////////
 
 G4MPVEntry::G4MPVEntry(G4double aPhotonEnergy, G4double aProperty)
 {
-        thePhotonEnergy = aPhotonEnergy;
-        theProperty = aProperty;
+  thePhotonEnergy = aPhotonEnergy;
+  theProperty = aProperty;
 }
 
 G4MPVEntry::G4MPVEntry(const G4MPVEntry &right)
 {
-        thePhotonEnergy = right.thePhotonEnergy;
-        theProperty = right.theProperty;
+  thePhotonEnergy = right.thePhotonEnergy;
+  theProperty = right.theProperty;
 }
 
+////////////////
+// Destructor
+////////////////
 
-        ////////////////
-        // Destructors
-        ////////////////
+G4MPVEntry::~G4MPVEntry()
+{
+}
 
-G4MPVEntry::~G4MPVEntry(){}
-
-        ////////////
-        // Methods
-        ////////////
+////////////
+// Methods
+////////////
 
 void G4MPVEntry::DumpEntry()
 {
-	G4cout << "(" 
-	     << thePhotonEnergy
-	     << ", " 
-	     << theProperty
- 	     << ")" 
-	     << G4endl;	
+  G4cout << "(" << thePhotonEnergy << ", " << theProperty << ")" << G4endl;
 }

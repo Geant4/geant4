@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc,v 1.19 2008/01/29 22:35:29 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisExecutive.icc,v 1.22 2009/10/12 11:54:50 akimura Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // John Allison 24th January 1998.
@@ -46,6 +46,7 @@
 #include "G4TrajectoryModelFactories.hh"
 #include "G4VRML1File.hh"
 #include "G4VRML2File.hh"
+#include "G4GMocrenFile.hh"
 
 // Needing external packages or libraries...
 
@@ -90,9 +91,16 @@
 #include "G4VRML2.hh"
 #endif
 
-G4VisExecutive::G4VisExecutive () {}
-
-void G4VisExecutive::RegisterGraphicsSystems () {
+// The inline keyword prevents the compiler making an external
+// reference even though they cannot actually be inlined since they
+// are virtual functions.  This prevents a "multiple definition" error
+// if it is included in more than one file.  However, as explained in
+// the class description in G4VisExecutive.hh, it should never be
+// necessary to #include "G4VisExecutive.hh" in more than one file
+// since after instantiation the object can be treated as a
+// G4VisManager.
+inline void
+G4VisExecutive::RegisterGraphicsSystems () {
 
   // Graphics Systems not needing external packages or libraries...
   RegisterGraphicsSystem (new G4ASCIITree);
@@ -102,6 +110,7 @@ void G4VisExecutive::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4RayTracer);
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
+  RegisterGraphicsSystem (new G4GMocrenFile);
   // Graphics systems needing external packages or libraries...
 
 #ifdef G4VIS_USE_DAWN
@@ -147,7 +156,8 @@ void G4VisExecutive::RegisterGraphicsSystems () {
 
 }
 
-void 
+// See comments about inlining above.
+inline void 
 G4VisExecutive::RegisterModelFactories()
 {
    // Trajectory draw models

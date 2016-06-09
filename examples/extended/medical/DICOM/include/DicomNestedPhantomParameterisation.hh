@@ -23,13 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef RE02NESTEDPARAMETERISATION_HH
-#define RE02NESTEDPARAMETERISATION_HH
+// $Id: DicomNestedPhantomParameterisation.hh,v 1.5 2009/11/19 16:15:23 chauvie Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+// --------------------------------------------------------------------
+#ifndef DICOMNESTEDPARAMETERISATION_HH
+#define DICOMNESTEDPARAMETERISATION_HH
+
+#include <vector>
 
 #include "G4Types.hh"
-#include "G4VNestedParameterisation.hh" 
 #include "G4ThreeVector.hh"
-#include <vector>
+#include "G4VNestedParameterisation.hh" 
 
 class G4VPhysicalVolume;
 class G4VTouchable; 
@@ -51,80 +56,71 @@ class G4Polycone;
 class G4Polyhedra;
 class G4Hype;
 
-class DicomNestedPhantomParameterisation: public G4VNestedParameterisation
+class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
 {
-  public:  // with description
+  public:
 
     DicomNestedPhantomParameterisation(const G4ThreeVector& voxelSize,
-				      std::vector<G4Material*>& mat);
+                                       std::vector<G4Material*>& mat);
     virtual ~DicomNestedPhantomParameterisation(); 
 
-    // Methods required in derived classes
-    // -----------------------------------
-    virtual G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
-					const G4int repNo, 
-                                        const G4VTouchable *parentTouch=0
-                                        );
-  // Required method, as it is the reason for this class.
-  //   Must cope with parentTouch=0 for navigator's SetupHierarchy
+    G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
+                                const G4int repNo, 
+                                const G4VTouchable *parentTouch );
+      // Must cope with parentTouch for navigator's SetupHierarchy
 
-    virtual G4int       GetNumberOfMaterials() const;
-    virtual G4Material* GetMaterial(G4int idx) const;
+    G4int       GetNumberOfMaterials() const;
+    G4Material* GetMaterial(G4int idx) const;
       // Needed to define materials for instances of Nested Parameterisation 
-      //   Current convention: each call should return the materials 
-      //   of all instances with the same mother/ancestor volume.
-    size_t GetMaterialIndex( size_t nx, size_t ny, size_t nz) const;
-    size_t GetMaterialIndex( size_t copyNo) const;
-    void SetMaterialIndices( size_t* matInd ){
-      fMaterialIndices = matInd; }
-    void SetNoVoxel( size_t nx, size_t ny, size_t nz );
+      // Current convention: each call should return the materials 
+      // of all instances with the same mother/ancestor volume
 
-    virtual void ComputeTransformation(const G4int no,
-                                       G4VPhysicalVolume *currentPV) const;
+    unsigned int GetMaterialIndex( unsigned int nx, unsigned int ny, unsigned int nz) const;
+    unsigned int GetMaterialIndex( unsigned int copyNo) const;
+    //void SetMaterialIndices( unsigned int* matInd ) { fMaterialIndices = matInd; }
+    void SetMaterialIndices( size_t* matInd ) { fMaterialIndices = matInd; }
+    void SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz );
 
-    // Methods optional in derived classes
-    // -----------------------------------
+    void ComputeTransformation(const G4int no,
+                                     G4VPhysicalVolume *currentPV) const;
 
     // Additional standard Parameterisation methods, 
-    //   which can be optionally defined, in case solid is used.
+    // which can be optionally defined, in case solid is used.
 
-    virtual void ComputeDimensions(G4Box &,
-                                   const G4int,
-                                   const G4VPhysicalVolume *) const;
+    void ComputeDimensions(G4Box &, const G4int,
+                                    const G4VPhysicalVolume *) const;
 
-private:  // Dummy declarations to get rid of warnings ...
-  void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) 
-    const {}
-  void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*)
-    const {}
-  void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) 
-    const {}
+  private:  // Dummy declarations to get rid of warnings ...
 
-private:
-  G4double fdX,fdY,fdZ;
-  G4int fnX,fnY,fnZ;
-  
-  //
-  std::vector<G4Material*> fMaterials;
+    void ComputeDimensions (G4Trd&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trap&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Cons&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Sphere&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Orb&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Torus&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Para&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Hype&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Tubs&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polycone&, const G4int,
+                            const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polyhedra&, const G4int,
+                            const G4VPhysicalVolume*) const {}
 
-  size_t* fMaterialIndices;
-      // Index in fMaterials that correspond to each voxel.
+  private:
+
+    G4double fdX,fdY,fdZ;
+    G4int fnX,fnY,fnZ;
+    std::vector<G4Material*> fMaterials;
+    size_t* fMaterialIndices; // Index in materials corresponding to each voxel
+//    unsigned int* fMaterialIndices; // Index in materials corresponding to each voxel
 };
-
 #endif

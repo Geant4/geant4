@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.9 2006/06/29 16:57:23 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: SteppingAction.cc,v 1.10 2009/11/27 14:54:58 hbu Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,6 +59,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
  if (process == 0) return;  
  G4String processName = process->GetProcessName();
+ runAction->CountProcesses(processName); //count processes
+  
  if (processName != "GammaToMuPair") return;
  
 #ifdef G4ANALYSIS_USE

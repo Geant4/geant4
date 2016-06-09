@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.hh,v 1.6 2008/03/17 11:27:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmSaturation.hh,v 1.7 2009/09/25 09:16:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 #ifndef G4EmSaturation_h
@@ -103,9 +103,7 @@ private:
 
   void Initialise();
 
-  const G4ParticleDefinition* gamma;
   const G4ParticleDefinition* electron;
-  const G4ParticleDefinition* neutron;
   const G4ParticleDefinition* proton;
   G4LossTableManager*         manager;
   G4NistManager*              nist;

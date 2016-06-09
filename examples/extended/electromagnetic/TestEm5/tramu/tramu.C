@@ -40,7 +40,7 @@
 
    // Print the histograms legend
    TLegend* legend = new TLegend(0.2,0.55,0.45,0.70);
-   legend->AddEntry(h1d,"G4-9.1-ref-08++","l");
+   legend->AddEntry(h1d,"G4-9.2-ref-04","l");
    legend->AddEntry(h1f,"Mars14 simul ","L");
    legend->Draw();
 

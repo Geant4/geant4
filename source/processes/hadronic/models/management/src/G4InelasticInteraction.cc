@@ -23,28 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4InelasticInteraction.cc,v 1.12 2009/01/24 11:56:27 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
-//
- // Hadronic Process: Inelastic Interaction 
- // original by H.P. Wellisch
- // modified by J.L. Chuma, TRIUMF, 22-Nov-1996
- // Last modified: 27-Mar-1997
- // J.P. Wellisch: 23-Apr-97: throw G4HadronicException(__FILE__, __LINE__,  removed
- // J.P. Wellisch: 24-Apr-97: correction for SetUpPions
- // Modified by J.L. Chuma, 30-Apr-97: added originalTarget to CalculateMomenta
- //                                    since TwoBody needed to reset the target particle
- // J.L. Chuma, 20-Jun-97: Modified CalculateMomenta to correct the decision process
- //                        for whether to use GenerateXandPt or TwoCluster
- // J.L. Chuma, 06-Aug-97: added original incident particle, before Fermi motion and
- //                        evaporation effects are included, needed for calculating
- //                        self absorption and corrections for single particle spectra
- // HPW removed misunderstanding of LocalEnergyDeposit, 11.04.98.
+// Hadronic Process: Inelastic Interaction 
+// original by H.P. Wellisch
+// modified by J.L. Chuma, TRIUMF, 22-Nov-1996
+// Last modified: 27-Mar-1997
+// J.P. Wellisch: 23-Apr-97: throw G4HadronicException(__FILE__, __LINE__,  removed
+// J.P. Wellisch: 24-Apr-97: correction for SetUpPions
+// Modified by J.L. Chuma, 30-Apr-97: added originalTarget to CalculateMomenta
+//                                    since TwoBody needed to reset the target particle
+// J.L. Chuma, 20-Jun-97: Modified CalculateMomenta to correct the decision process
+//                        for whether to use GenerateXandPt or TwoCluster
+// J.L. Chuma, 06-Aug-97: added original incident particle, before Fermi motion and
+//                        evaporation effects are included, needed for calculating
+//                        self absorption and corrections for single particle spectra
+// HPW removed misunderstanding of LocalEnergyDeposit, 11.04.98.
+// 23-Jan-2009 V.Ivanchenko move constructor and destructor to the body
  
 #include "G4InelasticInteraction.hh"
 #include "Randomize.hh"
 #include "G4HadReentrentException.hh"
+
+G4InelasticInteraction::G4InelasticInteraction(const G4String& modelName) 
+  : G4HadronicInteraction(modelName)
+{ cache = 0.0;}
+    
+G4InelasticInteraction::~G4InelasticInteraction()
+{}
  
- G4double
+G4double
   G4InelasticInteraction::Pmltpc(      // used in Cascade functions
    G4int np, G4int nm, G4int nz, G4int n, G4double b, G4double c )
   {
@@ -62,7 +71,7 @@
     return std::exp(r);
   }
 
- G4bool
+G4bool
   G4InelasticInteraction::MarkLeadingStrangeParticle(
    const G4ReactionProduct &currentParticle,
    const G4ReactionProduct &targetParticle,
@@ -91,7 +100,7 @@
     return lead;
   }
  
- void
+void
   G4InelasticInteraction::SetUpPions(
    const G4int np,
    const G4int nm,
@@ -125,7 +134,7 @@
     }
   }
  
- void
+void
   G4InelasticInteraction::GetNormalizationConstant(
    const G4double energy,  // MeV,  <0 means annihilation channels
    G4double &n,
@@ -169,7 +178,7 @@
     }
   }
  
- void
+void
   G4InelasticInteraction::CalculateMomenta(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,
@@ -343,7 +352,7 @@
   }
 
  
- void G4InelasticInteraction::
+void G4InelasticInteraction::
  Rotate(G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec, G4int &vecLen)
  {
    G4double rotation = 2.*pi*G4UniformRand();
@@ -357,7 +366,7 @@
    }
  }      
 
- void
+void
   G4InelasticInteraction::SetUpChange(
    G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec,
    G4int &vecLen,

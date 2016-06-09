@@ -1,0 +1,153 @@
+$Id: README,v 1.6 2009/08/29 08:48:30 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            amsEcal
+                            -------
+	
+ 1- GEOMETRY DEFINITION
+ 
+ AMS Ecal calorimeter is described in the joined documument : ams_ecal.pdf
+
+ - A single layer is a plane of scintillating fibers within a box of 
+   absorber material.
+ - Single layers are positionned (eg. placement) within Module 
+   (called SuperLayer in the descriptive document),
+   alternatively with a relative offset of +- 0.25*distanceInterFibers.
+ - Modules are positionned within calorimeter, alternatively rotated of
+   90 deg around beam axis (X_axis).   
+   Therefore all fibers are along Y_axis or Z_axis calorimeter.
+      
+ The default geometry is constructed in DetectorConstruction class. 	
+ In addition a transverse uniform magnetic field can be applied.
+ 		    
+ 2- PHYSICS LISTS
+ 
+  Physics lists can be local (eg. in this example) or from G4 kernel
+  physics_lists subdirectory.
+     
+  - "emstandard_local standard EM physics with current 'default' options.
+                      These options are explicited in PhysListEmStandard
+    
+  From geant4/source/physics_lists/builders:	 
+    - "emstandard_opt0" standard EM physics with all default options
+    - "emstandard_opt1" best CPU performance standard physics for LHC
+    - "emstandard_opt2"     
+    - "emstandard_opt3" 
+    
+  Physics lists and options can be (re)set with UI commands
+    
+  Please, notice that options set through G4EmProcessOPtions are global, eg
+  for all particle types. In G4 builders, it is shown how to set options per
+  particle type.
+        	    
+ 3- PRIMARY GENERATOR : mono-energetic pencil beam
+ 
+  The primary kinematic is a single particle which hits the calorimeter
+  perpendicular to the input face (eg. along X_axis). 
+  The type of particle and its energy are set in the PrimaryGeneratorAction,
+  and can be changed via the G4 build-in commands of ParticleGun class 
+  (see the macros provided with this example).
+ 	
+  One can choose randomly the tranverse position of the incident particle,
+  eg. the width of the beam. The associated interactive command is built
+  in PrimaryGeneratorMessenger.
+
+ 4- DETECTOR RESPONSE
+  
+  The program computes the 'visible' energy, eg. the energy deposited
+  in scintillating fibers. The fibers are packed in pixels.
+   
+  It also computes the total energy deposited per pixel, either in absorber
+  material or in scintillator material.
+  
+  The list of pixels fired are written event per event, on an ascii file.
+  The file is created at RunAction::BeginOfRun() and filled at EndOfEvent();
+  See EventAction::WritePixels() and the format description : eventFormat.txt
+  There is also the command /ams/event/writePixels  (true/false)
+   
+  NB: visible energy can be corrected for Birk's attenuation:
+      see the function SteppingAction::BirksAttenuation() (not activated)
+   
+ 5- HISTOGRAMS and NTUPLE
+        
+  The Program contains 5 built-in 1D histograms, managed by HistoManager class 
+  and its Messenger. These histograms can be activated individually
+  with the command :
+  /ams/histo/setHisto id nbBins  valMin valMax unit 
+  where unit is the desired unit for the histo (MeV, keV, etc..)
+  (see the macros xxxx.mac).
+ 
+	1	total visible energy in calorimeter (eg. summed all pixels) 
+	2	total deposit energy in calorimeter (eg. summed all pixels) 
+	3	visible energy per subModule (eg. longitudinal profile)
+	4	deposit energy per subModule (eg. longitudinal profile)
+	5	nb of radiation length seen by geantino	
+
+  Histograms can be viewed using ROOT or PAW. See below the note on AIDA.
+ 
+  One can control the name and format of the histograms file with the command:
+  /ams/histo/setFileName  name  (default ecal)
+  /ams/histo/setFileType  type  (choice: hbook, root(default), XML)  
+   
+  It is also possible to print selected histograms on an ascii file:
+  /ams/histo/printHisto id
+  All selected histos will be written on a file name.ascii (default ecal)
+ 
+  An Ntuple is also predefined. It contains energies, visible and total,
+  per subModule and per event.
+  The Ntuple is activated with the command: /ams/histo/setNtuple 1  
+ 	
+  Note that, by default, histograms are disabled. To activate them, uncomment 
+  the flag G4ANALYSIS_USE in GNUmakefile.
+
+  Before compilation of the example it is optimal to clean up old files:
+   gmake histclean
+   gmake
+    				
+ 6- VISUALIZATION
+ 
+  Visualization Manager is set in the main().
+  Initialisation of the drawing is done via the commands :
+  /vis/... in the macro vis.mac. In interactive session:
+  PreInit or Idle > /control/execute vis.mac
+ 	
+  Default view is a longitudinal view of the calorimeter.
+ 	
+  Tracks are drawn at end of event, and erased at end of run.
+  Optionaly one can choose to draw all particles, only charged one, or none.
+  This command is defined in EventActionMessenger.
+ 	
+ 7- HOW TO START ?
+ 
+  - compile and link to generate an executable
+ 	% cd amsEcal
+ 	% gmake
+ 		
+  - execute amsEcal in 'batch' mode from macro files
+ 	% amsEcal   run1.mac
+ 		
+  - execute amsEcal in 'interactive mode' with visualization
+ 	% amsEcal
+ 	....
+ 	Idle> type your commands. For instance:
+ 	Idle> /control/execute run1.mac
+ 	....
+ 	Idle> exit
+	
+ 8- HANDLE RANDOM NUMBER SEEDS
+ 
+  The macro rndmSeed.mac shows how to create a set a random number seeds.
+  Here we save the seed at begin of each run (the number of events per run
+  is arbitrary). The seeds are stored in subdirectory random.
+   
+  Macro run2.mac shows how to start a run from one of these seeds. 
+ 	   
+ 9- USING HISTOGRAMS
+
+  To use histograms, at least one of the AIDA implementations should be 
+  available. See InstallAida.txt
+  

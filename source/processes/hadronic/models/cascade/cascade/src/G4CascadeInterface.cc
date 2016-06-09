@@ -29,12 +29,7 @@
 #include "G4DynamicParticleVector.hh"
 #include "G4IonTable.hh"
 #include "G4InuclCollider.hh"
-#include "G4IntraNucleiCascader.hh"
-#include "G4ElementaryParticleCollider.hh"
-#include "G4NonEquilibriumEvaporator.hh"
-#include "G4EquilibriumEvaporator.hh"
-#include "G4Fissioner.hh"
-#include "G4BigBanger.hh"
+// #include "G4IntraNucleiCascader.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclParticle.hh"
@@ -57,7 +52,9 @@ G4CascadeInterface::G4CascadeInterface(const G4String& nam)
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::G4CascadeInterface" << G4endl;
   }
+
 }
+
 
 G4CascadeInterface::~G4CascadeInterface()
 {}
@@ -189,15 +186,16 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   G4CollisionOutput output;
 
   // Colliders initialisation
-  G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
-  G4IntraNucleiCascader*            inc = new G4IntraNucleiCascader; // the actual cascade
-  inc->setInteractionCase(1); // Interaction type is particle with nuclei.
+  //  G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
+  //  G4IntraNucleiCascader*            inc = new G4IntraNucleiCascader; // the actual cascade
+  //  inc->setInteractionCase(1); // Interaction type is particle with nuclei.
+  inc.setInteractionCase(1); // Interaction type is particle with nuclei.
 
-  G4NonEquilibriumEvaporator*     noneq = new G4NonEquilibriumEvaporator;
-  G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
-  G4Fissioner*                     fiss = new G4Fissioner;
-  G4BigBanger*                     bigb = new G4BigBanger;
-  G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
+  //  G4NonEquilibriumEvaporator*     noneq = new G4NonEquilibriumEvaporator;
+  //  G4EquilibriumEvaporator*         eqil = new G4EquilibriumEvaporator;
+  //  G4Fissioner*                     fiss = new G4Fissioner;
+  //  G4BigBanger*                     bigb = new G4BigBanger;
+  G4InuclCollider* collider = new G4InuclCollider(&colep, &inc, &noneq, &eqil, &fiss, &bigb);
 
       G4int  maxTries = 100; // maximum tries for inelastic collision to avoid infinite loop
       G4int  nTries   = 0;  // try counter
@@ -515,12 +513,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   }
 
   delete bullet;
-  delete colep;
-  delete inc;
-  delete noneq; 
-  delete fiss;
-  delete eqil;
-  delete bigb;
+//  delete inc;
   delete collider;
 
   if(target != 0) delete target;

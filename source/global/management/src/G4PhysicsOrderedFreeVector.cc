@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.cc,v 1.12 2008/09/22 14:49:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicsOrderedFreeVector.cc,v 1.13 2009/06/25 10:05:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Implementation
@@ -42,8 +42,10 @@
 //                derived class constructors
 //              2000-11-11 by H.Kurashige
 //              > use STL vector for dataVector and binVector
-// mail:        gum@triumf.ca
+//              19 Jun. 2009-06-19 by V.Ivanchenko 
+//              > removed hidden bin 
 //
+// mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -64,19 +66,17 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
 {
         type = T_G4PhysicsOrderedFreeVector;
 
-        dataVector.reserve(VectorLength+1);
-        binVector.reserve(VectorLength+1); 
-        numberOfBin = VectorLength;
+        dataVector.reserve(VectorLength);
+        binVector.reserve(VectorLength); 
+        numberOfNodes = VectorLength;
 
         for (size_t i = 0 ; i < VectorLength ; i++)
         {
                 binVector.push_back(Energies[i]);
                 dataVector.push_back(Values[i]); 
         }
-        edgeMin = binVector.front();
-        edgeMax = binVector.back();
-	binVector.push_back ( binVector[numberOfBin-1] + 1.0 );
-	dataVector.push_back( dataVector[numberOfBin-1] );
+        edgeMin = binVector[0];
+        edgeMax = binVector[numberOfNodes-1];
 }
 
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()
@@ -100,7 +100,7 @@ G4PhysicsOrderedFreeVector::InsertValues(G4double energy, G4double value)
 {
         binVector.push_back(energy);
         dataVector.push_back(value);
-        numberOfBin++;
+        numberOfNodes++;
         edgeMin = binVector.front();
         edgeMax = binVector.back();
 
@@ -132,8 +132,8 @@ size_t
 G4PhysicsOrderedFreeVector::FindValueBinLocation(G4double aValue)
 {
    G4int n1 = 0;
-   G4int n2 = numberOfBin/2;
-   G4int n3 = numberOfBin - 1;
+   G4int n2 = numberOfNodes/2;
+   G4int n3 = numberOfNodes - 1;
    while (n1 != n3 - 1) {
       if (aValue > dataVector[n2])
          { n1 = n2; }

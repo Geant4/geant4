@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: MicrobeamEMField.cc,v 1.7 2008/10/23 11:12:12 sincerti Exp $
+// $Id: MicrobeamEMField.cc,v 1.9 2009/04/30 10:23:57 sincerti Exp $
 // -------------------------------------------------------------------
 
 #include "MicrobeamEMField.hh"
@@ -57,8 +57,9 @@ void MicrobeamEMField::GetFieldValue(const double point[4], double *Bfield ) con
 // AIFIRA SWITCHING MAGNET
 // ***********************
   
-   // MAGNETIC FIELD VALUE FOR 3 MeV ALPHAS
-  G4double switchingField = 0.0589768635 * tesla ;
+  // MAGNETIC FIELD VALUE FOR 3 MeV ALPHAS
+  //  G4double switchingField = 0.0589768635 * tesla ;
+  G4double switchingField =   0.0590201 * tesla ;
   
   // BEAM START
   G4double beamStart = -10*m;
@@ -180,7 +181,7 @@ if (
   // QUADRUPOLE CENTER COORDINATES
   G4double xoprime, zoprime;
   
-if (z>=-1400*mm & z <-200*mm)
+if (z>=-1400*mm && z <-200*mm)
 {
   Bx=0; By=0; Bz=0;
   

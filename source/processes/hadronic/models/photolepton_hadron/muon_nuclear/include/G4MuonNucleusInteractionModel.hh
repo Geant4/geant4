@@ -52,7 +52,7 @@
     public:
 
       G4MuonNucleusInteractionModel();
-      ~G4MuonNucleusInteractionModel();
+      virtual ~G4MuonNucleusInteractionModel();
 
       void makePhysicsVector();
       G4double computeMicroscopicCrossSection(const G4Track &muonTrack);

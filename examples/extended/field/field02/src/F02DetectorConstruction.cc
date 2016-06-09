@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: F02DetectorConstruction.cc,v 1.12 2006/06/29 17:17:55 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: F02DetectorConstruction.cc,v 1.13 2009/11/05 01:08:51 gum Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 
@@ -192,7 +192,7 @@ void F02DetectorConstruction::DefineMaterials()
 
   // Carbon dioxide, STP
 
-  density = 1.977*mg/cm3;
+  density = 1.842*mg/cm3;
   G4Material* CarbonDioxide = new G4Material(name="CO2", density, nel=2);
   CarbonDioxide->AddElement(elC,1);
   CarbonDioxide->AddElement(elO,2);

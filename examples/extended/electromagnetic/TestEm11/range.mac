@@ -1,4 +1,4 @@
-# $Id: range.mac,v 1.4 2007/08/19 20:52:53 maire Exp $
+# $Id: range.mac,v 1.5 2009/09/22 14:20:31 maire Exp $
 #
 # Macro file for "TestEm11.cc"
 # 
@@ -12,9 +12,9 @@
 /testem/det/setSizeX  5 mm
 /testem/det/setSizeYZ 5 mm
 #
-/testem/phys/addPhysics  standard
-###/testem/phys/addPhysics  penelope
-###/testem/phys/addPhysics  livermore
+/testem/phys/addPhysics  local
+###/testem/phys/addPhysics  empenelope
+###/testem/phys/addPhysics  emlivermore
 #
 /run/initialize
 #

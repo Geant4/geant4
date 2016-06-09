@@ -25,8 +25,8 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4PenelopeRayleigh.cc,v 1.15 2007/09/03 09:43:14 pandola Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopeRayleigh.cc,v 1.19 2009/06/11 15:47:08 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: L. Pandola (luciano.pandola@cern.ch)
 //
@@ -40,6 +40,9 @@
 // 18 Mar 2004 M.Mendenhall   Introduced SamplingTable (performance improvement)
 // 03 Sep 2007 L.Pandola      Bug fix for the filling of physics table for 
 //                            compounds defined by the mass fraction (bug #965)
+// 02 Apr 2009 L.Pandola      Bux fixed in the calculation of mfp for compound 
+//                            materials defined as fraction of mass 
+//                            (reported by Zhang Qiwei)
 // --------------------------------------------------------------------
 
 #include "G4PenelopeRayleigh.hh"
@@ -92,6 +95,16 @@ G4PenelopeRayleigh::G4PenelopeRayleigh(const G4String& processName)
 	      << highEnergyLimit / GeV << " GeV"
 	      << G4endl;
      }
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4PenelopeRayleigh is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 G4PenelopeRayleigh::~G4PenelopeRayleigh()
@@ -161,7 +174,9 @@ void G4PenelopeRayleigh::BuildPhysicsTable(const G4ParticleDefinition& )
 	  cs = cs*(ec/energyVector[bin])*(ec/energyVector[bin])*pi*classic_electr_radius*classic_electr_radius;
 	  const G4double* vector_of_atoms = material->GetVecNbOfAtomsPerVolume();
 	  const G4int* stechiometric = material->GetAtomsVector();
-	  G4double density = vector_of_atoms[iright]; //non-bound molecules (default)
+	  //cs is the cross section _per atom_ in the case of compounds, while it is 
+	  //_per molecule_ in the case of molecules
+	  G4double density = material->GetTotNbOfAtomsPerVolume();  //non-bound molecules (default)
 	  if (stechiometric)
 	    {
 	      if (stechiometric[iright])

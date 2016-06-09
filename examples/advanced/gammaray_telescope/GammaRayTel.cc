@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.16 2006/06/29 15:54:48 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: GammaRayTel.cc,v 1.17 2009/11/18 15:54:55 flongo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
@@ -86,7 +86,6 @@ int main(int argc, char** argv)
   runManager->SetUserInitialization(new GammaRayTelPhysicsList);
   //runManager->SetUserInitialization(new QGSP_BIC);
 
-  
 
   // Set mandatory user action classes
   runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction);

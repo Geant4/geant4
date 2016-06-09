@@ -24,13 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.hh,v 1.23 2006/06/29 20:06:03 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QChipolino.hh,v 1.24 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QChipolino ----------------
 //             by Mikhail Kossov, Sept 1999.
 //  class header for Chipolino (Double Hadron) in CHIPS Model
 // ----------------------------------------------------------
+// Short description: In the CHIPS model not only hadrons are considered,
+// but the di-hadrons, which can not be convereged to the quark content
+// of only one hadron (e.g. pi+pi+, K+p, Delta++p etc). This kind of
+// hadronic states, which can be easily decayed in two hadrons, is called
+// Chipolino-particle in the model.
+// ---------------------------------------------------------------------- 
 
 #ifndef G4QChipolino_h
 #define G4QChipolino_h 1
@@ -55,7 +61,7 @@ public:
   G4bool              operator!=(const G4QChipolino& right) const;
 
   // Selectors
-  G4double              GetMass();            // Get mass of the Chipolino (MinDoubleHadronMass)
+  G4double              GetMass();            // Get ChipolinoMass (MinDoubleHadronMass)
   G4double              GetMass2();           // Get mass^2 of the Chipolino
   G4QPDGCode            GetQPDG1();           // Get 1-st QPDG of the Chipolino
   G4QPDGCode            GetQPDG2();           // Get 2-nd QPDG of the Chipolino
@@ -65,14 +71,14 @@ public:
 
   // Modifiers
   void SetHadronQPDG(const G4QPDGCode& QPDG); // Set QPDG of 1-st Hadron of the Chipolino
-  void SetHadronPDGCode(const G4int& PDGCode);// Set PDGCode of 1-st Hadron of the Chipolino
-  void SetHadronQCont(const G4QContent& QC);  // Set QContent of 1-st Hadron of the Chipolino
+  void SetHadronPDGCode(const G4int& PDGCode);// Set PDGCode of 1st Hadron of the Chipolino
+  void SetHadronQCont(const G4QContent& QC);  // Set QContent of 1st Hadron of theChipolino
 
 private:  
   G4QPDGCode            theQPDG1;             // QPDG of the 1-st Hadron of the Chipolino
   G4QPDGCode            theQPDG2;             // QPDG of the 2-nd Hadron of the Chipolino
-  G4QContent            theQCont;             // Quark Content of the whole Chipolino
-  G4QContent            theQCont1;            // Quark Content of the 1-st Hadron of Chipolino
+  G4QContent            theQCont;             // QuarkContent of the whole Chipolino
+  G4QContent            theQCont1;            // QuarkCont. of the 1st Hadron of Chipolino
   G4double              minM;                 // Minimal Mass of Chipolino
 };
 

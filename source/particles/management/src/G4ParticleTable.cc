@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.33 2008/06/08 12:55:45 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleTable.cc,v 1.35 2009/08/17 14:52:19 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4ParticleTable
 //
@@ -234,7 +234,8 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
     if (contains(particle)) {
 #ifdef G4VERBOSE
       if (verboseLevel>0){
-	G4cout << "The particle has same name "<< G4endl;
+	G4cout << "The particle " << particle->GetParticleName() 
+	       << "has been already registered in the Particle Table "<< G4endl;
       }
       if (verboseLevel>1){
         FindParticle(particle) -> DumpTable();
@@ -453,8 +454,7 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
 
 void G4ParticleTable::CheckReadiness()
 {
-  if(!readyToUse)
-  {
+  if(!readyToUse) {
    G4String msg;
    msg = " Access to G4ParticleTable for finding a particle or equivalent\n";
    msg += "operation occurs before G4VUserPhysicsList is instantiated and\n";

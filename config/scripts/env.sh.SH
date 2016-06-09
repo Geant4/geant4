@@ -30,7 +30,6 @@ unset  CLHEP_INCLUDE_DIR
 unset  CLHEP_LIB
 unset  CLHEP_LIB_DIR
 
-unset  G4ANALYSIS_USE
 unset  G4DEBUG
 unset  G4INCLUDE
 unset  G4INSTALL
@@ -40,6 +39,7 @@ unset  G4LEVELGAMMADATA
 unset  G4NEUTRONHPDATA
 unset  G4RADIOACTIVEDATA
 unset  G4ABLADATA
+unset  G4REALSURFACEDATA
 
 unset  G4LIB
 unset  G4LIB_BUILD_G3TOG4
@@ -53,6 +53,7 @@ unset  G4LIB_USE_ZLIB
 
 unset  G4SYSTEM
 
+unset  G4UI_NONE
 unset  G4UI_BUILD_WIN32_SESSION
 unset  G4UI_BUILD_XAW_SESSION
 unset  G4UI_BUILD_XM_SESSION
@@ -62,6 +63,8 @@ unset  G4UI_USE_XAW
 unset  G4UI_USE_XM
 unset  G4UI_USE_QT
 
+
+unset  G4VIS_NONE
 unset  G4VIS_BUILD_DAWN_DRIVER
 unset  G4VIS_BUILD_OIWIN32_DRIVER
 unset  G4VIS_BUILD_OIX_DRIVER
@@ -184,17 +187,14 @@ echo "On this machine the G4ABLADATA=\$G4ABLADATA"
 fi
 fi
 
-
-
-
 #+
-#if [ X$g4elasticdata != X ] ; then 
-#G4ELASTICDATA="$g4elasticdata"
-#export G4ELASTICDATA
-#if [ X\$g4non_display = X ] ; then
-#echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
-#fi
-#fi
+if [ X$g4realsurfacedata != X ] ; then 
+G4REALSURFACEDATA="$g4realsurfacedata"
+export G4REALSURFACEDATA
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4REALSURFACEDATA=\$G4REALSURFACEDATA"
+fi
+fi
 
 #
 # g4clhep.U
@@ -246,21 +246,36 @@ echo "On this machine the G4DEBUG=\$G4DEBUG"
 fi
 fi
 
-#
-# g4analysis
-#
-#+
-if [ X$g4wanalysis_use = Xy ] ; then
-G4ANALYSIS_USE=1
-export G4ANALYSIS_USE
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
-fi
-fi 
 
 #
 # g4ui
 #
+#+
+if [ X$g4ui_none = Xy ] ; then
+G4UI_NONE=1
+export G4UI_NONE
+if [ X\$g4non_display = X ] ; then
+echo "On this machine, G4UI_NONE is set, so no user interfaces are available"
+fi
+fi
+
+
+# Check for Windows!
+if test "X\$G4SYSTEM" != "XWIN32-VC" -a "X\$G4SYSTEM" != "XWIN32-VC7"; then
+#+
+#
+# UI_USE_TCSH for Unix
+#
+if [ X$g4ui_none != Xy ] ; then
+G4UI_USE_TCSH=1
+export G4UI_USE_TCSH
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
+fi
+fi
+fi
+
+
 #+
 if [ X$g4ui_build_xaw_session = Xy ] ; then
 G4UI_BUILD_XAW_SESSION=1
@@ -339,6 +354,15 @@ fi
 #
 # g4vis
 #
+#+
+if [ X$g4vis_none = Xy ] ; then
+G4VIS_NONE=1
+export G4VIS_NONE
+if [ X\$g4non_display = X ] ; then
+echo "On this machine G4VIS_NONE is set, so no vis drivers are available"
+fi
+fi
+
 #+
 if [ X$g4vis_build_dawn_driver = Xy ] ; then
 G4VIS_BUILD_DAWN_DRIVER=1
@@ -714,18 +738,6 @@ echo "On this machine the G4LIB_USE_GRANULAR=\$G4LIB_USE_GRANULAR"
 fi
 fi 
 
-# Check for Windows!
-if test "X\$G4SYSTEM" != "XWIN32-VC" -a "X\$G4SYSTEM" != "XWIN32-VC7"; then
-#+
-#
-# UI_USE_TCSH for Unix
-#
-G4UI_USE_TCSH=1
-export G4UI_USE_TCSH
-if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
-fi 
-fi
 
 #####################################################################
 

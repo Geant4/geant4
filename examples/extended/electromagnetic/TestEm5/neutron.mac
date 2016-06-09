@@ -1,4 +1,4 @@
-# $Id: neutron.mac,v 1.4 2007/07/31 16:51:29 maire Exp $
+# $Id: neutron.mac,v 1.5 2009/09/18 14:03:24 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -13,8 +13,7 @@
 /testem/det/setAbsThick 20 cm
 /testem/det/setAbsYZ    20 cm
 #
-/testem/phys/addPhysics  standard
-/testem/phys/addPhysics  elastic
+/testem/phys/addPhysics  local
 #
 /testem/phys/setCuts 1 km
 #

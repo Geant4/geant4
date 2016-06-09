@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN04.cc,v 1.17 2008/05/07 10:01:53 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: exampleN04.cc,v 1.18 2009/10/30 15:08:39 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,8 +33,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
 
 #include "ExN04DetectorConstruction.hh"
 #include "QGSP.hh"
@@ -48,6 +46,10 @@
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #endif
 
 int main(int argc,char** argv)
@@ -91,34 +93,30 @@ int main(int argc,char** argv)
   G4UserSteppingAction* stepping_action = new ExN04SteppingAction;
   runManager->SetUserAction(stepping_action);
   
-  //get the pointer to the User Interface manager   
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-
-  if (argc!=1)   // batch mode  
-    {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
-    }
-    
-  else           // interactive mode : define visualization and UI terminal
-    { 
 #ifdef G4VIS_USE
       G4VisManager* visManager = new G4VisExecutive;
       visManager->Initialize();
 #endif    
      
-      G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);      
-#else
-      session = new G4UIterminal();
-#endif
+  //get the pointer to the User Interface manager   
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+
+  if (argc!=1)   // batch mode  
+    {
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);
+    }
+  else           // interactive mode : define UI session
+    { 
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
 #ifdef G4VIS_USE
-      UI->ApplyCommand("/control/execute vis.mac");     
+      UImanager->ApplyCommand("/control/execute vis.mac");     
 #endif
-      session->SessionStart();
-      delete session;
+      ui->SessionStart();
+      delete ui;
+#endif
      
 #ifdef G4VIS_USE
       delete visManager;

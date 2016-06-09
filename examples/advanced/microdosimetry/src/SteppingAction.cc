@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: SteppingAction.cc,v 1.2 2008/06/27 20:33:05 sincerti Exp $
+// $Id: SteppingAction.cc,v 1.3 2009/04/29 14:17:03 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,15 +63,24 @@ void SteppingAction::UserSteppingAction(const G4Step* s)
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha+")   flagParticle = 5;
  if (s->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "helium")   flagParticle = 6;
 
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ElasticScreenedRutherfordLE") 	flagProcess =11;
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ElasticScreenedRutherfordHE") 	flagProcess =12;
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ExcitationBorn") 		flagProcess =13;
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ExcitationEmfietzoglou") 	flagProcess =14;
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ExcitationMillerGreen") 	flagProcess =15;
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="IonisationBorn") 		flagProcess =16;
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="IonisationRudd") 		flagProcess =17;
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ChargeDecrease") 		flagProcess =18;
- if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="ChargeIncrease") 		flagProcess =19;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAElastic")		flagProcess =11;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAExcitation")		flagProcess =12;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAIonisation")		flagProcess =13;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="proton_G4DNAExcitation")	flagProcess =14;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="proton_G4DNAIonisation")	flagProcess =15;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="proton_G4DNAChargeDecrease")	flagProcess =16;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="hydrogen_G4DNAIonisation")	flagProcess =17;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="hydrogen_G4DNAChargeIncrease")	flagProcess =18;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="alpha_G4DNAExcitation")		flagProcess =19;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="alpha_G4DNAIonisation")		flagProcess =20;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="alpha_G4DNAChargeDecrease")	flagProcess =21;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="alpha+_G4DNAExcitation")	flagProcess =22;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="alpha+_G4DNAIonisation")	flagProcess =23;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="alpha+_G4DNAChargeDecrease")	flagProcess =24;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="alpha+_G4DNAChargeIncrease")	flagProcess =25;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="helium_G4DNAExcitation")	flagProcess =26;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="helium_G4DNAIonisation")	flagProcess =27;
+ if (s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="helium_G4DNAChargeIncrease")	flagProcess =28;
 
  if (
       s->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="initStep"

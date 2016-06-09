@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2008/11/16 21:13:50 maire Exp $
+$Id: History,v 1.29 2009/11/16 15:09:10 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+16-11-09 mma (testem11-V09-02-01)
+- PhysListEmStandard copied from TestEm5
+    
+22-09-09 mma (testem11-V09-02-00)
+- PhysicsList.cc :
+  - renamed "standard" -> "local"; "emstandard" -> "emstandard_opt0" 
+  - Substituted obsolete low-energy physics builders by builders from
+    the physics_list library;
+- updated README and macro files
+       
 16-11-08 mma (testem11-V09-01-07)
 - Em options: 20bins/decade  LinLossLimit=default=0.01
      

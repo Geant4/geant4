@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.17 2006/06/29 21:19:36 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.20 2009/05/20 13:19:09 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
@@ -36,6 +36,9 @@
 #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
 
 #include "G4OpenGLWin32Viewer.hh"
+#include "G4VViewer.hh"
+#include "G4VSceneHandler.hh"
+#include "G4OpenGLSceneHandler.hh"
 
 #include "G4ios.hh"
 #include "G4VisExtent.hh"
@@ -116,18 +119,19 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
     done = true;
   }  
   
-  WinSize_x = 400;
-  WinSize_y = 400;
-  if (WinSize_x < fVP.GetWindowSizeHintX ())
-    WinSize_x = fVP.GetWindowSizeHintX ();
-  if (WinSize_y < fVP.GetWindowSizeHintY ())
-    WinSize_y = fVP.GetWindowSizeHintY ();
+  ResizeWindow(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 
+  int x_res=GetSystemMetrics(SM_CXSCREEN);
+  int y_res=GetSystemMetrics(SM_CYSCREEN);
+  
+  //FIXME : NOT tested !
   fWindow = ::CreateWindow(className,fName.c_str(), 
 			   WS_OVERLAPPEDWINDOW,
 			   //WS_CHILD | WS_VISIBLE,
-			   0,0,
-			   WinSize_x,WinSize_y,
+                           //			   0,0,
+                           fVP.GetWindowAbsoluteLocationHintX(x_res),
+                           fVP.GetWindowAbsoluteLocationHintY(y_res),
+			   getWinWidth(), getWinHeight(),
 			   NULL, NULL, 
 			   ::GetModuleHandle(NULL),
 			   NULL);
@@ -210,13 +214,13 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
     EndPaint(aWindow, &ps);
 
     //FIXME : have to handle WM_RESIZE
-    //pView->WinSize_x = (G4int) width;
-    //pView->WinSize_y = (G4int) height;
+    //pView->fWinSize_x = (G4int) width;
+    //pView->fWinSize_y = (G4int) height;
     G4OpenGLWin32Viewer* This = 
       (G4OpenGLWin32Viewer*)::GetWindowLong(aWindow,GWL_USERDATA);
     if(This) {
       This->SetView();
-      glViewport(0,0,This->WinSize_x,This->WinSize_y);
+      glViewport(0,0,This->fWinSize_x,This->fWinSize_y);
       This->ClearView();
       This->DrawView();
       // WARNING : the below empty the Windows message queue...

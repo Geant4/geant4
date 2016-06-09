@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QInteraction.hh,v 1.2 2006/12/12 11:02:22 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QInteraction.hh,v 1.7 2009/08/28 14:49:10 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4QInteraction_h
@@ -40,6 +40,10 @@
 //   For comparison mirror member functions are taken from G4 class:
 //   G4InteractionContent
 // -------------------------------------------------------------------
+//  Short description: Classify the interaction in soft/hard/diffractive
+//  parts for firther treatment by the QGS algorithm. Pure data class...
+//  Except for the SplitHadrons, which can be done elsewhere (@@ M.K.)
+// ---------------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4QHadron.hh"
@@ -54,11 +58,13 @@ public:
   G4QHadron* GetProjectile() const                      {return theProjectile;}
   G4QHadron* GetTarget() const                          {return theTarget;}
   G4int GetNumberOfSoftCollisions()                     {return theNumberOfSoft;}
+  G4int GetNumberOfDINRCollisions()                     {return theNumberOfDINR;}
   G4int GetNumberOfHardCollisions()                     {return theNumberOfHard;}
   G4int GetNumberOfDiffractiveCollisions()              {return theNumberOfDiffractive;}
-  void  SetTarget(G4QHadron *aTarget)                   {theTarget = aTarget;}
-  void  SetProjectile(G4QHadron *aProjectile)           {theProjectile = aProjectile;}
+  void  SetTarget(G4QHadron* aTarget)                   {theTarget = aTarget;}
+  void  SetProjectile(G4QHadron* aProjectile)           {theProjectile = aProjectile;}
   void  SetNumberOfSoftCollisions(G4int nofSoft)        {theNumberOfSoft = nofSoft;}
+  void  SetNumberOfDINRCollisions(G4int nofDINR)        {theNumberOfDINR = nofDINR;}
   void  SetNumberOfHardCollisions(G4int nofHard)        {theNumberOfHard = nofHard;}
   void  SetNumberOfDiffractiveCollisions(G4int nofDiff) {theNumberOfDiffractive = nofDiff;}
   void  SplitHadrons()
@@ -71,11 +77,10 @@ private:
   // Body
   G4QHadron* theProjectile;
   G4QHadron* theTarget;
+  G4int theNumberOfDINR;
   G4int theNumberOfHard;
   G4int theNumberOfSoft;
   G4int theNumberOfDiffractive;
 };
 
 #endif
-
-

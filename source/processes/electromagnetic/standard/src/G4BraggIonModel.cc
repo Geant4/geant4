@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.22 2008/10/22 16:00:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BraggIonModel.cc,v 1.27 2009/11/22 18:00:23 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -113,6 +113,9 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 
   corrFactor = chargeSquare;
 
+  // always false before the run
+  SetDeexcitationFlag(false);
+
   if(!isInitialised) {
     isInitialised = true;
 
@@ -122,14 +125,7 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 
     corr = G4LossTableManager::Instance()->EmCorrections();
 
-    if(!fParticleChange) {
-      if(pParticleChange) {
-	fParticleChange = 
-	  reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-      } else {
-	fParticleChange = new G4ParticleChangeForLoss();
-      }
-    }
+    fParticleChange = GetParticleChangeForLoss();
   }
 }
 
@@ -139,6 +135,7 @@ G4double G4BraggIonModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 					       const G4Material* mat,
 					       G4double kineticEnergy)
 {
+  //G4cout << "G4BraggIonModel::GetChargeSquareRatio e= " <<  kineticEnergy << G4endl;
   // this method is called only for ions
   G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,kineticEnergy);
   corrFactor  = q2*corr->EffectiveChargeCorrection(p,mat,kineticEnergy); 
@@ -151,6 +148,7 @@ G4double G4BraggIonModel::GetParticleCharge(const G4ParticleDefinition* p,
 					    const G4Material* mat,
 					    G4double kineticEnergy)
 {
+  //G4cout << "G4BraggIonModel::GetParticleCharge e= " <<  kineticEnergy << G4endl;
   // this method is called only for ions
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }
@@ -255,7 +253,7 @@ void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 					   const G4DynamicParticle* dp,
 					   G4double& eloss,
 					   G4double&,
-					   G4double length)
+					   G4double /*length*/)
 {
   // this method is called only for ions
   const G4ParticleDefinition* p = dp->GetDefinition();
@@ -266,26 +264,11 @@ void G4BraggIonModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 
   G4double q2 = corr->EffectiveChargeSquareRatio(p,mat,e);
   GetModelOfFluctuations()->SetParticleAndCharge(p, q2);
-  eloss *= q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor; 
+  G4double qfactor = q2*corr->EffectiveChargeCorrection(p,mat,e)/corrFactor; 
+  eloss *= qfactor; 
 
-  if(nuclearStopping) {
-
-    G4double nloss = length*corr->NuclearDEDX(p,mat,e,false);
-
-    // too big energy loss
-    if(eloss + nloss > preKinEnergy) {
-      nloss *= (preKinEnergy/(eloss + nloss));
-      eloss = preKinEnergy;
-    } else {
-      eloss += nloss;
-    }
-    /*
-    G4cout << "G4ionIonisation::CorrectionsAlongStep: e= " << preKinEnergy
-    	   << " de= " << eloss << " NIEL= " << nloss 
-	   << " dynQ= " << dp->GetCharge()/eplus << G4endl;
-    */
-    fParticleChange->ProposeNonIonizingEnergyDeposit(nloss);
-  }
+  //G4cout << "G4BraggIonModel::CorrectionsAlongStep e= " <<  e 
+  //	 << " qfactor= " << qfactor << " " << p->GetParticleName() <<G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -351,6 +334,18 @@ void G4BraggIonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BraggIonModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
+					     G4double kinEnergy)
+{
+  if(pd != particle) SetParticle(pd);
+  G4double tau  = kinEnergy/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
+  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

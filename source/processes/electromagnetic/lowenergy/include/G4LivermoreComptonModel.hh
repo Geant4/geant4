@@ -23,9 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModel.hh,v 1.1 2008/10/30 14:16:34 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LivermoreComptonModel.hh,v 1.3 2009/04/17 10:29:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
+//
+// Author: Sebastien Inserti
+//         30 October 2008
+//
+// History:
+// --------
 
 #ifndef G4LivermoreComptonModel_h
 #define G4LivermoreComptonModel_h 1
@@ -39,6 +45,7 @@
 #include "G4ShellData.hh"
 #include "G4DopplerProfile.hh"
 #include "G4ForceCondition.hh"
+#include "G4Gamma.hh"
 
 class G4LivermoreComptonModel : public G4VEmModel
 {
@@ -69,9 +76,9 @@ protected:
 
   G4ParticleChangeForGamma* fParticleChange;
 
-  G4double GetMeanFreePath(const G4Track& track, 
-			   G4double previousStepSize, 
-			   G4ForceCondition* condition);
+  //G4double GetMeanFreePath(const G4Track& track, 
+  //			   G4double previousStepSize, 
+  //			   G4ForceCondition* condition);
 private:
 
   G4double lowEnergyLimit;  

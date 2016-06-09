@@ -79,21 +79,15 @@ class G4Nucleon : public G4VKineticNucleon
     inline void Boost(const G4ThreeVector & beta){ theMomentum.boost(beta); } 
            void Boost(const G4LorentzVector & aMomentum);
 
-    inline void Hit(G4VSplitableHadron * aHit) { theSplitableHadron=aHit;}
+    inline void Hit(G4VSplitableHadron *aHit) { theSplitableHadron=aHit;}
+//    inline void Hit(G4int ) { isHit=true;}    
     inline void Hit(G4int ) 
     { 
       theSplitableHadron=reinterpret_cast<G4VSplitableHadron *>(1111); 
-      // G4cout << "$%$#%@%$#@%@%%% "<<theSplitableHadron<<G4endl;
     }
     inline G4VSplitableHadron * GetSplitableHadron() const { return theSplitableHadron;}
-    
-    inline G4bool AreYouHit() const 
-    { 
-      G4bool result = true;
-      if (theSplitableHadron==NULL) result = false;
-      return result;
-    }
-  
+    inline G4bool AreYouHit() const {  return theSplitableHadron!=0;}
+
   private:
 
     G4ThreeVector thePosition;

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.hh,v 1.22 2007/04/03 13:33:16 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommandsViewerSet.hh,v 1.23 2009/05/13 18:17:25 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -41,6 +41,7 @@ class G4UIcmdWithAString;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADouble;
+class G4UIcmdWith3VectorAndUnit;
 
 class G4VisCommandsViewerSet: public G4VVisCommandViewer {
 public:
@@ -72,6 +73,7 @@ private:
   G4UIcommand*          fpCommandProjection;
   G4UIcommand*          fpCommandSectionPlane;
   G4UIcmdWithAString*   fpCommandStyle;
+  G4UIcmdWith3VectorAndUnit* fpCommandTargetPoint;
   G4UIcommand*          fpCommandUpThetaPhi;
   G4UIcommand*          fpCommandUpVector;
   G4ThreeVector         fUpVector;

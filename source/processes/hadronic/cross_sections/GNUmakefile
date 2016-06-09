@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2006/07/20 12:48:28 grichine Exp $
+# $Id: GNUmakefile,v 1.10 2009/11/17 08:55:50 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------

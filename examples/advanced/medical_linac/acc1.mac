@@ -1,0 +1,29 @@
+/accelerator/idEnergy 6
+/accelerator/aperture1X -150 mm
+/accelerator/aperture2X 150 mm
+/accelerator/aperture1Y -150 mm
+/accelerator/aperture2Y 150  mm
+/accelerator/SSD 1000 mm
+
+/accelerator/leavesA 300
+/accelerator/leavesA 300
+/accelerator/leavesA 300
+/accelerator/leavesA 300
+/accelerator/leavesA 300
+/accelerator/leavesA 300
+/accelerator/leavesA 300
+/accelerator/leavesA 300
+/accelerator/leavesA 300
+/accelerator/leavesA 300
+
+/accelerator/leavesB 400
+/accelerator/leavesB 400
+/accelerator/leavesB 400
+/accelerator/leavesB 400
+/accelerator/leavesB 400
+/accelerator/leavesB 400
+/accelerator/leavesB 400
+/accelerator/leavesB 400
+/accelerator/leavesB 400
+/accelerator/leavesB 400
+

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc,v 1.21 2008/09/22 08:26:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicsLogVector.cc,v 1.22 2009/06/25 10:05:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -41,6 +41,7 @@
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
 //    9  Mar. 2001, H.Kurashige : added PhysicsVector type and Retrieve
 //    05 Sep. 2008, V.Ivanchenko : added protections for zero-length vector
+//    19 Jun. 2009, V.Ivanchenko : removed hidden bin 
 //
 // --------------------------------------------------------------
 
@@ -57,14 +58,11 @@ G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
 {
   type = T_G4PhysicsLogVector;
 
-  // Add extra one bin (hidden to user) to handle correctly when 
-  // Energy=theEmax in getValue. 
-  dataVector.reserve(theNbin+1);
-  binVector.reserve(theNbin+1); 
+  numberOfNodes = theNbin + 1;
+  dataVector.reserve(numberOfNodes);
+  binVector.reserve(numberOfNodes);      
 
-  numberOfBin = theNbin;
-
-  for (size_t i=0; i<=numberOfBin; i++)
+  for (size_t i=0; i<numberOfNodes; i++)
   {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
@@ -78,20 +76,19 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
 {
   type = T_G4PhysicsLogVector;
 
-  // Add extra one bin (hidden to user) to handle correctly when 
-  // Energy=theEmax in getValue. 
-  dataVector.reserve(theNbin+1);
-  binVector.reserve(theNbin+1); 
+  numberOfNodes = theNbin + 1;
+  dataVector.reserve(numberOfNodes);
+  binVector.reserve(numberOfNodes);
+  static const G4double g4log10 = std::log(10.); 
 
-  numberOfBin = theNbin;
-
-  for (size_t i=0; i<numberOfBin+1; i++)
+  for (size_t i=0; i<numberOfNodes; i++)
   {
-    binVector.push_back(std::pow(10., std::log10(theEmin)+i*dBin));
+    binVector.push_back(std::exp(g4log10*(baseBin+i)*dBin));
     dataVector.push_back(0.0);
   }
+
   edgeMin = binVector[0];
-  edgeMax = binVector[numberOfBin-1];
+  edgeMax = binVector[numberOfNodes-1];
 }  
 
 G4PhysicsLogVector::~G4PhysicsLogVector()

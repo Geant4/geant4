@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.hh,v 1.9 2008/11/20 15:33:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadMaterials.hh,v 1.11 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4GDMLReadMaterials
@@ -42,12 +42,12 @@
 #ifndef _G4GDMLREADMATERIALS_INCLUDED_
 #define _G4GDMLREADMATERIALS_INCLUDED_
 
-#include "G4Element.hh"
-#include "G4Isotope.hh"
-#include "G4Material.hh"
-#include "G4NistManager.hh"
-
+#include "G4Types.hh"
 #include "G4GDMLReadDefine.hh"
+
+class G4Element;
+class G4Isotope;
+class G4Material;
 
 class G4GDMLReadMaterials : public G4GDMLReadDefine 
 {
@@ -61,6 +61,9 @@ class G4GDMLReadMaterials : public G4GDMLReadDefine
    virtual void MaterialsRead(const xercesc::DOMElement* const);
 
  protected:
+
+   G4GDMLReadMaterials();
+   virtual ~G4GDMLReadMaterials();
 
    G4double AtomRead(const xercesc::DOMElement* const);
    G4int CompositeRead(const xercesc::DOMElement* const,G4String&);

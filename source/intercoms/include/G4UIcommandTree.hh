@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh,v 1.16 2008/01/30 11:20:03 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIcommandTree.hh,v 1.17 2009/05/07 09:33:51 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4UIcommandTree_h
@@ -56,6 +56,10 @@ class G4UIcommandTree
       void RemoveCommand(G4UIcommand * aCommand);
       G4UIcommand * FindPath(const char* commandPath);
       G4UIcommandTree * FindCommandTree(const char* commandPath);
+      G4String CompleteCommandPath(const G4String commandPath);
+      // Complete most available caracters in common into command path in the command line 
+      // given
+
       void List();
       void ListCurrent();
       void ListCurrentWithNum();
@@ -64,6 +68,7 @@ class G4UIcommandTree
   private:
       G4String CreateFileName(const char* pName);
       G4String ModStr(const char* strS);
+      G4String GetFirstMatchedString(const G4String&,const G4String&) const;
 
       std::vector<G4UIcommand*> command;
       std::vector<G4UIcommandTree*> tree;

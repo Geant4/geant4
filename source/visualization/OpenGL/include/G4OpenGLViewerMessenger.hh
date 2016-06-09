@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.hh,v 1.5 2007/05/08 11:04:11 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLViewerMessenger.hh,v 1.7 2009/05/18 09:07:12 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #ifndef G4OPENGLVIEWERMESSENGER_HH
 #define G4OPENGLVIEWERMESSENGER_HH
@@ -52,6 +52,8 @@ private:
   static G4OpenGLViewerMessenger* fpInstance;
   G4UIdirectory* fpDirectory;
   G4UIcmdWithoutParameter* fpCommandPrintEPS;
+  G4UIcommand* fpCommandPrintSize;
+  G4UIcommand* fpCommandPrintFilename;
   G4UIdirectory* fpDirectorySet;
   G4UIcommand* fpCommandDisplayHeadTime;
   G4UIcommand* fpCommandDisplayLightFront;

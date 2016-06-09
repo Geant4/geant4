@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01MagneticField.hh,v 1.4 2006/06/29 16:31:27 gunter Exp $
+// $Id: A01MagneticField.hh,v 1.5 2009/11/21 00:22:55 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -40,15 +40,12 @@ class A01MagneticField : public G4MagneticField
     A01MagneticField();
     ~A01MagneticField();
 
-    virtual void GetFieldValue( const  double Point[3],
-                               double *Bfield ) const;
+    virtual void GetFieldValue(const G4double Point[4],double *Bfield ) const;
 
   private:
     A01MagneticFieldMessenger* messenger;
     G4double By;
-    G4double rmax_sq;
-    G4double ymax;
-
+   
   public:
     inline void SetField(G4double val) { By = val; }
     inline G4double GetField() const { return By; }

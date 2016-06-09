@@ -12,6 +12,125 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17-Nov-2009 M.Kosov                            (hadr-chips-V09-02-24)
+-----------------------------------------------------------------------
+Mutual tag: Migration of CHIPS-cross_section depenent files to CHIPS-xs_dep
+
+16-Nov-2009 M.Kosov                            (hadr-chips-V09-02-23)
+-----------------------------------------------------------------------
+Mutual tag: Split up of CHIPS-body in three directories (no changes in this dir)
+
+13-Nov-2009 M.Kosov                            (hadr-chips-V09-02-21)
+-----------------------------------------------------------------------
+Mutual tag: G4QDiffractionRatio lost dependence on G4QElasticCrossSection
+
+12-Nov-2009 M.Kosov                            (hadr-chips-V09-02-20)
+-----------------------------------------------------------------------
+Mutual tag: bug fix in G4QDiffractionRatio (tested by Valgrind)
+
+11-Nov-2009 M.Kosov                            (hadr-chips-V09-02-19)
+-----------------------------------------------------------------------
+Mutual tag: Bug fix in G4QSynchRad
+
+10-Nov-2009 M.Kosov                            (hadr-chips-V09-02-18)
+-----------------------------------------------------------------------
+Mutual tag: Diffraction is added to CHIPS inelastic
+
+5-Nov-2009 M.Kosov                             (hadr-chips-V09-02-17)
+-----------------------------------------------------------------------
+Mutual tag: Bug fix in XS's & migration of G4QNeutronCaptureRatio from
+            body to interface
+
+4-Nov-2009 M.Kosov                             (hadr-chips-V09-02-16)
+-----------------------------------------------------------------------
+Mutual tag: Thanks to Andrea bug fix (skip for Z=0,A=0 residual nucleus)
+            in G4QCollision class
+
+4-Nov-2009 M.Kosov                             (hadr-chips-V09-02-15)
+-----------------------------------------------------------------------
+Mutual tag: Reduction of the CHIPS-body dependency (G4QPDGToG4Particle)
+
+30-Oct-2009 M.Kosov                             (hadr-chips-V09-02-13)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for new CHIPS hA cross-sections
+- 8 new CHIPS cross-sectopn classes are added + bug is fixed in the CHIPS
+  pA cross_sections + pimA XS class is not fake now, but real
+- Because of the complain of V. Ivanchenko the MuCaptureEMCascade
+  is excluded from the G4QCaptureAtRest class (for mu-). All the atomic
+  deexcitation energy of capture is concentrated in the Energy Deposition.
+
+23-Oct-2009 M.Kosov                             (hadr-chips-V09-02-12)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the bug fix + G4QuasiFreeRatio change (needs make clean)
+
+12-Oct-2009 M.Kosov                             (hadr-chips-V09-02-11)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the bug fixes (mostly body)
+
+25-Sep-2009 M.Kosov                     (hadr-chips-inter-V09-02-10)
+------------------------------------------------------
+- Bug fix in G4QLowEnergy
+
+18-Sep-2009 M.Kosov                             (hadr-chips-V09-02-10)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the heavy fragments in LowEnergy (mostly body)
+
+2-Sep-2009 M.Kosov                              (hadr-chips-V09-02-08)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the first prototype of the CHIPS Ion-Ion Inelastic
+
+28-Aug-2009 M.Kosov                              (hadr-chips-V09-02-07)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the Valgrind induced improvement
+
+21-Aug-2009 M.Kosov                              (hadr-chips-V09-02-06)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for added photon- and lepton-nuclear CHIPS inelastic
+
+7-Aug-2009 M.Kosov                               (hadr-chips-V09-02-05)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for All-Energies-All-Hadrons pilot tag
+
+5-Aug-2009 M.Kosov                               (hadr-chips-V09-02-04)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for All-Energies-Nucleons and -Mesons (only pi+/- & K-)
+
+5-Aug-2009 M.Kosov                               (hadr-chips-V09-02-03)
+-----------------------------------------------------------------------
+Migration of the rest of the XS from interface to body and exclusion of the
+dependency of the G4NucleiPropertiesTable class (absolete by Hisaya)
+
+31-Jul-2009 M.Kosov                              (hadr-chips-V09-02-02)
+-----------------------------------------------------------------------
+Creation of the beta-version of CHIPS, covering all energies (mutual CHIPS tag)
+
+29-May-2009 M.Kosov (hadr-chips-inter-V09-02-09)
+------------------------------------------------------
+- Synchronization bug fix in pA and nA SC_in + fake piA SC is added for testing only
+
+26-May-2009 M.Kosov (hadr-chips-inter-V09-02-08)
+------------------------------------------------------
+- Correction in G4QCollision for (n,He3) pickUp (Bug fix, charge conservation)
+
+25-May-2009 M.Kosov (hadr-chips-inter-V09-02-07)
+------------------------------------------------------
+- G4QNeutronCrossSection class is implemented
+
+- G4QNeutronCaptureRatio class is implemented
+
+- neutron-nuclear interactions are implemented in the G4QCollision class
+
+23-Jan-2009 M.Kosov (hadr-chips-inter-V09-02-06)
+------------------------------------------------------
+- Change of GetNuclearMass(A-1.,Z-1.) (and similar) to GetNuclearMass(A-1,Z-1)
+  To be consistent with the new Hisaya's developments. The changes are made in
+  the G4Q(Photon,Electron,Muon,Tau)NuclearCrossSection classes
+
+23-Jan-2009 V.Ivanchenko (hadr-chips-inter-V09-02-00)
+------------------------------------------------------
+- added deregistration in destructor of G4QCaptureAtRest
+- added string decay destruction to G4ElectroNuclearReaction
+
 24-Oct-2008 Dennis Wright (hadr-chips-inter-V09-01-09)
 ------------------------------------------------------
 - replace G4NucleiPropertiesTable::IsInTable with 

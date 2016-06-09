@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.74 2008/11/13 16:48:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteStructure.cc,v 1.80 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4GDMLWriteStructure Implementation
 //
@@ -34,6 +34,26 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteStructure.hh"
+
+#include "G4Material.hh"
+#include "G4ReflectedSolid.hh"
+#include "G4DisplacedSolid.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4PVDivision.hh"
+#include "G4PVReplica.hh"
+#include "G4OpticalSurface.hh"
+#include "G4LogicalSkinSurface.hh"
+#include "G4LogicalBorderSurface.hh"
+
+G4GDMLWriteStructure::G4GDMLWriteStructure()
+  : G4GDMLWriteParamvol()
+{
+}
+
+G4GDMLWriteStructure::~G4GDMLWriteStructure()
+{
+}
 
 void
 G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
@@ -49,11 +69,11 @@ G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
 
    G4String unitString("mm");
    G4String axisString("kUndefined");
-   if (axis==kXAxis) { axisString = "kXAxis"; } else
-   if (axis==kYAxis) { axisString = "kYAxis"; } else
-   if (axis==kZAxis) { axisString = "kZAxis"; } else
-   if (axis==kRho) { axisString = "kRho";     } else
-   if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
+   if (axis==kXAxis) { axisString = "kXAxis"; }
+   else if (axis==kYAxis) { axisString = "kYAxis"; }
+   else if (axis==kZAxis) { axisString = "kZAxis"; }
+   else if (axis==kRho)   { axisString = "kRho";     }
+   else if (axis==kPhi)   { axisString = "kPhi"; unitString = "degree"; }
 
    const G4String name
          = GenerateName(divisionvol->GetName(),divisionvol);
@@ -153,16 +173,20 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    xercesc::DOMElement* volumerefElement = NewElement("volumeref");
    volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
    replicavolElement->appendChild(volumerefElement);
-
    xercesc::DOMElement* replicateElement = NewElement("replicate_along_axis");
    replicavolElement->appendChild(replicateElement);
 
    xercesc::DOMElement* dirElement = NewElement("direction");
-   if(axis==kXAxis)dirElement->setAttributeNode(NewAttribute("x","1"));
-   if(axis==kYAxis)dirElement->setAttributeNode(NewAttribute("y","1"));
-   if(axis==kZAxis)dirElement->setAttributeNode(NewAttribute("z","1"));
-   if(axis==kRho)dirElement->setAttributeNode(NewAttribute("rho","1"));
-   if(axis==kPhi)dirElement->setAttributeNode(NewAttribute("phi","1"));
+   if(axis==kXAxis)
+     { dirElement->setAttributeNode(NewAttribute("x","1")); }
+   else if(axis==kYAxis)
+     { dirElement->setAttributeNode(NewAttribute("y","1")); }
+   else if(axis==kZAxis)
+     { dirElement->setAttributeNode(NewAttribute("z","1")); }
+   else if(axis==kRho)
+     { dirElement->setAttributeNode(NewAttribute("rho","1")); }
+   else if(axis==kPhi)
+     { dirElement->setAttributeNode(NewAttribute("phi","1")); }
    replicateElement->appendChild(dirElement);
 
    xercesc::DOMElement* widthElement = NewElement("width");
@@ -176,6 +200,137 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    replicateElement->appendChild(offsetElement);
 
    volumeElement->appendChild(replicavolElement);
+}
+
+void G4GDMLWriteStructure::
+BorderSurfaceCache(const G4LogicalBorderSurface* const bsurf)
+{
+   if (!bsurf)  { return; }
+
+   const G4SurfaceProperty* psurf = bsurf->GetSurfaceProperty();
+
+   // Generate the new element for border-surface
+   //
+   xercesc::DOMElement* borderElement = NewElement("bordersurface");
+   borderElement->setAttributeNode(NewAttribute("name", bsurf->GetName()));
+   borderElement->setAttributeNode(NewAttribute("surfaceproperty",
+                                                psurf->GetName()));
+
+   const G4String volumeref1 = GenerateName(bsurf->GetVolume1()->GetName(),
+                                            bsurf->GetVolume1());
+   const G4String volumeref2 = GenerateName(bsurf->GetVolume2()->GetName(),
+                                            bsurf->GetVolume2());
+   xercesc::DOMElement* volumerefElement1 = NewElement("physvolref");
+   xercesc::DOMElement* volumerefElement2 = NewElement("physvolref");
+   volumerefElement1->setAttributeNode(NewAttribute("ref",volumeref1));
+   volumerefElement2->setAttributeNode(NewAttribute("ref",volumeref2));
+   borderElement->appendChild(volumerefElement1);
+   borderElement->appendChild(volumerefElement2);
+
+   if (FindOpticalSurface(psurf))
+   {
+     OpticalSurfaceWrite(solidsElement,
+                         dynamic_cast<const G4OpticalSurface*>(psurf));
+   }
+
+   borderElementVec.push_back(borderElement);
+}
+
+void G4GDMLWriteStructure::
+SkinSurfaceCache(const G4LogicalSkinSurface* const ssurf)
+{
+   if (!ssurf)  { return; }
+
+   const G4SurfaceProperty* psurf = ssurf->GetSurfaceProperty();
+
+   // Generate the new element for border-surface
+   //
+   xercesc::DOMElement* skinElement = NewElement("skinsurface");
+   skinElement->setAttributeNode(NewAttribute("name", ssurf->GetName()));
+   skinElement->setAttributeNode(NewAttribute("surfaceproperty",
+                                              psurf->GetName()));
+
+   const G4String volumeref = GenerateName(ssurf->GetLogicalVolume()->GetName(),
+                                           ssurf->GetLogicalVolume());
+   xercesc::DOMElement* volumerefElement = NewElement("volumeref");
+   volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
+   skinElement->appendChild(volumerefElement);
+
+   if (FindOpticalSurface(psurf))
+   {
+     OpticalSurfaceWrite(solidsElement,
+                         dynamic_cast<const G4OpticalSurface*>(psurf));
+   }
+
+   skinElementVec.push_back(skinElement);
+}
+
+G4bool G4GDMLWriteStructure::FindOpticalSurface(const G4SurfaceProperty* psurf)
+{
+   const G4OpticalSurface* osurf = dynamic_cast<const G4OpticalSurface*>(psurf);
+   std::vector<const G4OpticalSurface*>::const_iterator pos;
+   pos = std::find(opt_vec.begin(), opt_vec.end(), osurf);
+   if (pos != opt_vec.end()) { return false; }  // item already created!
+
+   opt_vec.push_back(osurf);              // cache it for future reference
+   return true;
+}
+
+const G4LogicalSkinSurface*
+G4GDMLWriteStructure::GetSkinSurface(const G4LogicalVolume* const lvol)
+{
+  G4LogicalSkinSurface* surf = 0;
+  G4int nsurf = G4LogicalSkinSurface::GetNumberOfSkinSurfaces();
+  if (nsurf)
+  {
+    const G4LogicalSkinSurfaceTable* stable =
+          G4LogicalSkinSurface::GetSurfaceTable();
+    std::vector<G4LogicalSkinSurface*>::const_iterator pos;
+    for (pos = stable->begin(); pos != stable->end(); pos++)
+    {
+      if (lvol == (*pos)->GetLogicalVolume())
+      {
+        surf = *pos; break;
+      }
+    }
+  }
+  return surf;
+}
+
+const G4LogicalBorderSurface*
+G4GDMLWriteStructure::GetBorderSurface(const G4VPhysicalVolume* const pvol)
+{
+  G4LogicalBorderSurface* surf = 0;
+  G4int nsurf = G4LogicalBorderSurface::GetNumberOfBorderSurfaces();
+  if (nsurf)
+  {
+    const G4LogicalBorderSurfaceTable* btable =
+          G4LogicalBorderSurface::GetSurfaceTable();
+    std::vector<G4LogicalBorderSurface*>::const_iterator pos;
+    for (pos = btable->begin(); pos != btable->end(); pos++)
+    {
+      if (pvol == (*pos)->GetVolume1())  // just the first in the couple 
+      {                                  // is enough
+        surf = *pos; break;
+      }
+    }
+  }
+  return surf;
+}
+
+void G4GDMLWriteStructure::SurfacesWrite()
+{
+   G4cout << "G4GDML: Writing surfaces..." << G4endl;
+
+   std::vector<xercesc::DOMElement*>::const_iterator pos;
+   for (pos = skinElementVec.begin(); pos != skinElementVec.end(); pos++)
+   {
+     structureElement->appendChild(*pos);
+   }
+   for (pos = borderElementVec.begin(); pos != borderElementVec.end(); pos++)
+   {
+     structureElement->appendChild(*pos);
+   }
 }
 
 void G4GDMLWriteStructure::StructureWrite(xercesc::DOMElement* gdmlElement)
@@ -196,11 +351,11 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    G4VSolid* solidPtr = volumePtr->GetSolid();
    G4Transform3D R,invR;
-   G4int reflected = 0;
+   G4int trans=0;
 
    while (true) // Solve possible displacement/reflection
    {            // of the referenced solid!
-      if (reflected>maxReflections)
+      if (trans>maxTransforms)
       {
         G4String ErrorMessage = "Referenced solid in volume '"
                               + volumePtr->GetName()
@@ -213,7 +368,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
       {
          R = R*refl->GetTransform3D();
          solidPtr = refl->GetConstituentMovedSolid();
-         reflected++;
+         trans++;
          continue;
       }
 
@@ -222,15 +377,16 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
          R = R*G4Transform3D(disp->GetObjectRotation(),
                              disp->GetObjectTranslation());
          solidPtr = disp->GetConstituentMovedSolid();
-         reflected++;
+         trans++;
          continue;
       }
 
       break;
    }
 
-   if (reflected>0) { invR = R.inverse(); }
-     // Only compute the inverse when necessary!
+   // Only compute the inverse when necessary!
+   //
+   if (trans>0) { invR = R.inverse(); }
 
    const G4String name
          = GenerateName(volumePtr->GetName(),volumePtr);
@@ -317,6 +473,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
          G4Transform3D P(rot,physvol->GetObjectTranslation());
          PhysvolWrite(volumeElement,physvol,invR*P*daughterR,ModuleName);
       }
+      BorderSurfaceCache(GetBorderSurface(physvol));
    }
 
    structureElement->appendChild(volumeElement);
@@ -325,10 +482,15 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    VolumeMap()[volumePtr] = R;
 
-   G4GDMLWriteMaterials::AddMaterial(volumePtr->GetMaterial());
+   AddExtension(volumeElement, volumePtr);
+     // Add any possible user defined extension attached to a volume
+
+   AddMaterial(volumePtr->GetMaterial());
      // Add the involved materials and solids!
 
-   G4GDMLWriteSolids::AddSolid(solidPtr);
+   AddSolid(solidPtr);
+
+   SkinSurfaceCache(GetSkinSurface(volumePtr));
 
    return R;
 }

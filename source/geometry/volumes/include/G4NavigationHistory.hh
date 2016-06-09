@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.hh,v 1.13 2006/06/29 18:57:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NavigationHistory.hh,v 1.14 2009/11/03 09:15:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4NavigationHistory
 //
@@ -46,6 +46,7 @@
 #include <assert.h>
 #include "geomdefs.hh"
 
+//#include "G4Allocator.hh"
 #include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4NavigationLevel.hh"
@@ -140,7 +141,8 @@ class G4NavigationHistory
 
  private:
 
-  std::vector<G4NavigationLevel>  fNavHistory;
+  std::vector<G4NavigationLevel> fNavHistory;
+  //std::vector<G4NavigationLevel, G4Allocator<G4NavigationLevel> > fNavHistory;
 
   G4int fStackDepth;
     // Depth of stack: effectively depth in geometrical tree

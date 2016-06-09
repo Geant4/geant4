@@ -16,6 +16,45 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th Nov 2009 Peter Gumplinger (op-V09-02-06)
+              change the code such that the LUT are now read in and kept
+              by G4OpticalSurface and not G4OpBoundaryProcess, reordering
+              of enumeration and set theStatus in DielectricLUT.
+
+11th Nov 2009 Peter Gumplinger (op-V09-02-05)
+              add capability of simulating surface reflections
+              with Look-Up-Tables (LUT) containing measured
+              optical reflectance for a variety of surface
+              treatments - Thanks to Martin Janecek and
+              William Moses (Lawrence Berkeley National Lab.)
+
+9th  Nov 2009 Peter Gumplinger (op-V09-02-04)
+              G4OpBoundary: initialze theReflectivity and theEfficiency
+              at the beginning of the PostStepDoIt; add method
+              BoundaryProcessVerbose which will now print the process
+              status for every call to PostStepDoIt.
+
+5th  Nov 2009 Peter Gumplinger (op-V09-02-03)
+              G4OpBoundary::PostStepDoIt - all dielectric_dielectric
+              surfaces may now have a reflectivity <1; not only
+              'frontpainted' as was the case in the past.
+
+6th  May 2009 Peter Gumplinger (op-V09-02-02)
+              G4OpBoundary::PostStepDoIt now throws an G4Exception
+              EventMustBeAborted when an invalid surface normal is returnd;
+              addresses bug report #1060
+
+23th Mar 2009 Peter Gumplinger (op-V09-02-01)
+              for complex index of refraction: (1)resample the reflectivity
+              every time in the do-while of DielectricMetal, but don't
+              re-calculate theFacetNormal (which has already been chosen
+              in CalculateReflectivity), also (2) avoid an infinite loop by
+              resetting iTE and iTM inside the do-while of GetReflectivity;
+              both are bug-fixes.
+
+14th Jan 2009 Peter Gumplinger (op-V09-02-00)
+              respond to bug report 1040 by fixing G4OpBoundaryProcess.cc 
+
 07th Nov 2008 Peter Gumplinger (op-V09-01-09)
               use new global/HEPRandom's G4RandomTools.hh
 

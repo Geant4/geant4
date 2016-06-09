@@ -1,4 +1,4 @@
-$Id: History,v 1.132 2008/12/11 10:24:18 gcosmo Exp $
+$Id: History,v 1.168 2009/12/03 11:09:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,163 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-12-09 V.Ivanchenko (materials-V09-02-24)
+- G4NIstMessenger - fixed minor memory leak at destruction
+
+01-12-09 G.Cosmo (materials-V09-02-23)
+- Use G4double in place of G4float in G4DensityEffectData.
+
+30-11-09 V.Ivanchenko (materials-V09-02-22)
+- G4IonisParamMat - fixed liquid Argon problem
+
+24-11-09 V.Ivanchenko (materials-V09-02-21)
+- G4NistMaterialBuilder - allow to use old names of G4 materials
+  G4_NYLON-6/6 and G4_NYLON-6/10 for backward compatibility
+
+19-11-09 P.Gumplinger (materials-V09-02-20)
+- change the code such that the LUT are now read in and kept by
+  G4OpticalSurface and not G4OpBoundaryProcess, reordering in
+  enumeration
+
+19-11-09 V.Ivanchenko (materials-V09-02-19)
+- G4IonisParamMat - fixed crash at destruction
+
+18-11-09 G.Cosmo (materials-V09-02-18)
+- G4IonisParamMat - fix for usage of static data to allow for build of
+  DLLs libraries on Windows.
+
+18-11-09 V.Ivanchenko (materials-V09-02-17)
+- G4IonisParamMat - fixed minor memory leak due to G4DensityEffectData
+
+10-11-09 P.Gumplinger (materials-V09-02-16)
+- increase flexibily of G4SurfaceProperty and G4OpticalSurface classes
+  to allow for Look-Up-Table boundary process simulations.
+  Thanks to Martin Janecek and William Moses from LBNL
+
+09-11-09 V.Ivanchenko (materials-V09-02-15)
+- improved comments to ICRU73 classes
+
+05-11-09 V.Ivanchenko (materials-V09-02-14)
+- G4DensityEffectData - (A.Bagulya) fixed GetIndex method for compounds
+
+04-11-09 P. Gumplinger (materials-V09-02-13)
+- cleanup of include file: G4OpticalSurface.hh (and consequent small
+  change in the imlementation .cc)
+ 
+04-11-09 V.Ivanchenko (materials-V09-02-12)
+- G4VIonDEDXTable - (A.Lechner) added new method (BuildPhysicsVector) which
+                    invoke the build process of physics vectors on demand in
+                    the initialisation phase
+- G4SimpleMaterialStoppingICRU73 - (A.Lechner) added method BuildPhysicsVector
+                    according to change in base class
+- G4MaterialStoppingICRU73 - (A.Lechner) added method BuildPhysicsVector
+                    according to change in base class, changed material name 
+                    from G4_NYLON-6/6 to G4_NYLON-6-6
+- G4IronStoppingICRU73 - (A.Lechner) added method BuildPhysicsVector
+                    according to change in base class
+- G4ExtDEDXTable - (A.Lechner) added method BuildPhysicsVector according to 
+                   change in base class
+- G4IonStoppingData - (A.Lechner) new class, which can read ion stopping power 
+                      vectors contained in G4LEDATA: Allows to include larger
+                      physics vectors than those in the ICRU 73 classes, where
+                      vectors are restricted to the maximum energy 10 MeV/nuc.
+- G4NistMaterialBuilder - (A.Lechner) changed following material names:
+                           * from G4_NYLON-6/6 to G4_NYLON-6-6
+                           * from G4_NYLON-6/10 to G4_NYLON-6-10
+                          to allow matching with ion stopping power data files,
+                          which have material name in the file name  
+- G4DensityEffectData - (A.Bagulya) added method GetIndex
+- G4IonisParamMat - (A.Bagulya) fixed density effect computation;
+                    added plasma energy computation and access to
+                    G4DensityEffectData by the atomic number
+
+01-11-09 A.Lechner (materials-V09-02-11)
+- G4MaterialStoppingICRU73 - (A.Lechner) Extended the energy range of revised
+                             ICRU 73 tables for water from 0.025 - 10 MeV/u to
+                             0.025 - 1 GeV/u. Added new function (AddPhysics-
+                             VectorFullRange) for creating the corresponding
+                             physics vectors.
+
+30-10-09 V.Ivanchenko (materials-V09-02-10)
+- G4DensityEffectData - (A.Bagulya) added data from Atom. Data Nucl. 
+                                  Data Tabl. 30 (1984) 261 accessible
+                                  via material name
+- G4NistMessenger - (A.Bagulya) added UI command to print parameters of
+                    density effect data
+- G4IonisParamMat - added new members: Eplasma, AdjustmentFactor,
+                    Delta0 parameter of density effect parameterization,
+                    and pointer to G4DensityEffectData;
+                    added new access method and method DensityCorrection;
+                    fixed copy constructor
+- G4NistMaterialBuilder - (A.Ivantchenko) changed density of G4_GRAPHITE
+                                  according to PDG'2008, added new
+                                  material G4_GRAPHITE_POROUS
+
+17-09-09 V.Ivanchenko (materials-V09-02-09)
+- G4Element - (V. Grichine) added method GetNbOfShellElectrons which
+                            returns the number of electrons on a shell 
+
+17-07-09 V.Ivanchenko (materials-V09-02-08)
+- G4NistManager, G4NistMessenger, G4NistElementBuilder - improved 
+         implementation of UI commands
+
+25-05-09 V.Ivanchenko (materials-V09-02-07)
+- Renamed G4ExternalDEDXTable class to G4ExtDEDXTable to allow for generation
+  of DLLs on WIN32-VC, where "External" is used to tag symbols in the DLLs
+  generation process.
+
+11-05-09 V.Ivanchenko (materials-V09-02-06)
+- G4ExternalDEDXTable: A.Lechner bug-fix in ClearTable function to avoid 
+                       illegal deletion of physics vectors.
+
+07-05-09 V.Ivanchenko (materials-V09-02-05)
+- G4IronStoppingICRU73: the upper limit of the data vector is extended 
+                        from 10 MeV to 1 GeV; 53 bins are used
+- G4NistMaterialBuilder: mean ionisation potential for G4_WATER is set
+                        to 78 eV according to GSI Annual Report (2008) p.373
+                        and recommendation of Prof.P.Sigmund in order to
+                        consistent with ICRU'73 tables 
+
+29-04-09 V.Ivanchenko (materials-V09-02-04)
+  Fixed ICRI'73 data provided by Prof.P.Sigmund Univ. Southern Denmark
+- G4MaterialStoppingICRU73: G4WATER, G4WATER_VAPOR, G4NYLON-6/6 
+- G4SimpleMaterialStoppingICRU73: G4_Cu
+- G4IronStoppingICRU73: G4WATER data added
+  Also fixed GetDEDX methods in these classes for E=10 MeV (upper limit) 
+
+24-04-09 G.Cosmo (materials-V09-02-03)
+- Make visible GetEntry() accessor in G4MaterialPropertyVector for use
+  restricted to persistency.
+
+20-04-09 G.Cosmo (materials-V09-02-02)
+- Use 'const' references for strings as arguments/return-values in material
+  properties tables and related classes. Inlined some methods and some minor
+  cleanup.
+- Added Entries() method to G4MaterialPropertyVector and accessors for maps
+  in G4MaterialPropertiesTable, required for internal use in persistency of
+  material properties.
+
+18-03-09 A.Lechner, V.Ivanchenko (materials-V09-02-01)
+- New interface class G4VIonDEDXTable for electronic stopping power 
+  tables for ions.
+- New utility class G4ExternalDEDXTable to handle external electronic 
+  stopping power tables for ions.
+- Migrated classes for ICRU'73 stopping power (G4IronStoppingICRU73,
+  G4MaterialStoppingICRU73, G4SimpleMaterialStoppingICRU73) to the
+  the new G4VIonDEDXTable interface:
+  o Changed access methods of physics vectors (vectors can also be
+    identified via atomic number of material if material is pure);
+  o Classes now deliver mass stopping powers instead of stopping powers per 
+    unit length;
+  o Any dependency on ICRU 73 material densities is removed (densities are
+    no longer included in the classes);
+  o Stopping power vectors are now only built on request and no longer in 
+    the constructor.
+
+19-02-09 V.Ivanchenko (materials-V09-02-00)
+- G4MaterialStoppingICRU73: added 4 forgotten materials from ICRU'73.
+- G4SimpleMaterialStoppingICRU73: fixed density of Mo and number of materials.
 
 11-12-08 G.Cosmo (materials-V09-01-20)
 - Added dummy default constructor in G4OpticalSurface and G4SurfaceProperty.

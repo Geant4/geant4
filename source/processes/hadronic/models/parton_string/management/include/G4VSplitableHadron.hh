@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.hh,v 1.4 2008/05/19 13:03:20 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VSplitableHadron.hh,v 1.6 2009/07/17 12:36:41 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4VSplitableHadron_h
@@ -80,6 +80,9 @@ class G4VSplitableHadron
       void SetPosition(const G4ThreeVector &aPosition);
       const G4ThreeVector & GetPosition() const;
 
+      void SetStatus(const G4int aStatus);             // Uzhi 17.07.09
+      G4int GetStatus();                              // Uzhi 17.07.09
+
       virtual void SplitUp() = 0;
       virtual G4Parton * GetNextParton() = 0 ;
       virtual G4Parton * GetNextAntiParton() = 0 ;
@@ -105,6 +108,7 @@ class G4VSplitableHadron
       G4ThreeVector thePosition;
       G4int theCollisionCount;
 
+      G4int  Status;             // Uzhi 17.07.09
       G4bool isSplit;
 
 };
@@ -164,6 +168,15 @@ inline const G4ThreeVector & G4VSplitableHadron::GetPosition() const
 	return thePosition;
 }
 
+inline void G4VSplitableHadron::SetStatus(G4int aStatus)          // Uzhi 17.07.09
+{
+        Status=aStatus;
+}
+
+inline G4int G4VSplitableHadron::GetStatus()                      // Uzhi 17.07.09
+{
+        return Status; 
+}
 
 
 #endif

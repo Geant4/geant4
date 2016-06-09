@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2008/11/21 09:50:20 gcosmo Exp $
+$Id: History,v 1.119 2009/11/30 10:20:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,57 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 30, 2009  V.Grichine                 geom-csg-V09-02-08
+- G4Orb: moved debug warning in DistanceToIn(p,v) within G4CSGDEBUG flag.
+
+Nov 26, 2009  T.Nikitina                 geom-csg-V09-02-07
+- G4Torus: fix in SolveNumericJT() in order to take in account the difference
+  in the value of theta for different intervals, [0:pi] or [-pi:0], and for
+  SPhi in [0:twopi] or [-twopi:0]. Addresses problem report #1086.
+
+Nov 12, 2009  T.Nikitina                 geom-csg-V09-02-06
+- G4Cons: fix to DistanceToIn(p,v), added a check on the direction in case 
+  of point on surface. Fixes a problem of stuck tracks observed in CMS, due
+  to wrong reply from the solid for points on the inner radius surface base
+  with direction along the imaginary extension of the cone.
+- Added test case to internal test testG4Cons2.
+
+Aug 07, 2009  T.Nikitina                 geom-csg-V09-02-05
+- G4Sphere: fix for the calculation of the normal in DistanceToOut()
+  to avoid cases of division by zero in specific configurations.
+  Addresses problem report #977.
+
+Jun 30, 2009  T.Nikitina                 geom-csg-V09-02-04
+- Introduced to DistanceToIn(p,v) splitting of the distance for point very far
+  from intersection area and big difference between solid dimensions and
+  distance to it; resolves issue observed on 64 bits problem. Affected solids:
+  G4Tubs, G4Cons, G4Sphere, G4Orb. Addresses problem report #1022.
+- Fixed rare cases of NaN on G4Sphere.
+
+Jun 09, 2009  G.Cosmo                    geom-csg-V09-02-03
+- Fixed case of non-initialised start-Phi value in G4Tubs and G4Cons,
+  problem introduced following modifications in tag "geom-csg-V09-02-00".
+
+May 14, 2009  T.Nikitina                 geom-csg-V09-02-02
+- G4Sphere: initialise flags for full sphere in constructor.
+
+May 14, 2009  T.Nikitina                 geom-csg-V09-02-01
+- G4Sphere: correction di DistanceToOut(p,v, ...) for phi sections for
+  rays passing though zero.
+- More minor refiniments to G4Sphere following review.
+
+May 08, 2009  G.Cosmo                    geom-csg-V09-02-00
+- G4Sphere: implemented speed improvements and corrections from joint
+  code review of G4Sphere class. Cached computation for half-tolerances
+  and use of Boolean flag for identifying if full-sphere, shell or section.
+  Implemented caching of trigonometric values, now directly computed inside
+  modifiers for Phi and Theta angles as required for parametrised cases.
+  Rationalised usage of relative radial tolerances.
+- G4Tubs, G4Cons: rationalised usage of modifiers for Phi angles and
+  simplified constructors.
+- Added new test case for relatively big spheres in unit tests testG4Orb
+  and testG4Sphere, based on problem report #1046.
 
 Nov 21, 2008  G.Cosmo                    geom-csg-V09-01-08
 - G4Sphere: defined Get/SetInnerRadius() accessors to be compliant with

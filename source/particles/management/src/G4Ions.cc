@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc,v 1.13 2008/06/08 12:43:19 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Ions.cc,v 1.16 2009/08/06 15:53:42 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -65,10 +65,10 @@ G4Ions::G4Ions(
   // initialize excitation energy/level
    theExcitationEnergy = excitation;
 
-   SetAtomicNumber( G4int(GetPDGCharge()/eplus) );
-   SetAtomicMass( GetBaryonNumber() );
-
-   //G4cout << "G4Ions::" << GetParticleName() << G4endl; 
+   if (GetAtomicNumber() == 0  ) {
+     SetAtomicNumber( G4int(GetPDGCharge()/eplus) );
+     SetAtomicMass( GetBaryonNumber() );
+   }
 }
 
 

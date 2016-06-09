@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2005/01/26 08:50:58 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2009/10/19 07:37:48 lgarnier Exp $
 # -------------------------------------------------------------
 # GNUmakefile for interfaces/common library.  John Allison, 6/7/98.
 
@@ -7,6 +7,9 @@ name := G4UIcommon
 ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
+
+# For debug mode
+# CPPFLAGS += -DG4DEBUG_INTERFACES_COMMON
 
 include $(G4INSTALL)/config/architecture.gmk
 include $(G4INSTALL)/config/G4VIS_BUILD.gmk

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreGammaConversionModel.hh,v 1.1 2008/10/30 14:16:34 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LivermoreGammaConversionModel.hh,v 1.3 2009/04/17 10:29:20 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #ifndef G4LivermoreGammaConversionModel_h
@@ -37,6 +37,7 @@
 #include "G4CrossSectionHandler.hh"
 #include "G4ForceCondition.hh"
 #include "G4CompositeEMDataSet.hh"
+#include "G4Gamma.hh"
 
 class G4LivermoreGammaConversionModel : public G4VEmModel
 {
@@ -44,7 +45,7 @@ class G4LivermoreGammaConversionModel : public G4VEmModel
 public:
 
   G4LivermoreGammaConversionModel(const G4ParticleDefinition* p = 0, 
-		     const G4String& nam = "LivermoreGammaConversion");
+		     const G4String& nam = "LivermoreConversion");
 
   virtual ~G4LivermoreGammaConversionModel();
 

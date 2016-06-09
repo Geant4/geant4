@@ -1,19 +1,159 @@
--------------------------------------------------------------------
 
-     ==========================================================
-     Geant4 - an Object-Oriented Toolkit for Physics Simulation
-     ==========================================================
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
 
-      History file for the Chiral Invariant Phase Space Model
-      -------------------------------------------------------
+History file for  hadronic/models/chiral_inv_phase_space/body  directory.
+	
+Summarize all code modifications & keep track of all tags in this file.
 
-This file should be used to summarize modifications introduced in the 
-code and to keep track of all tags.
+****************************************************************************
+*** Geant4 developers can not make changes in this directory or make the ***
+*** History records without permision of M.Kosov: Mikhail.Kossov@cern.ch ***
+****************************************************************************
 
-   ---------------------------------------------------------------
-   * Please list in reverse chronological order (last date on top)
-   ---------------------------------------------------------------
+     -----------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top) *
+     -----------------------------------------------------------------
 
-Date - Author (tag name)
-----------------------------------------------------
-  Description of change
+<<<<<<< History
+
+3-Dec-2009 M.Kosov                            (hadr-chips-V09-02-31)
+-----------------------------------------------------------------------
+Mutual tag: further CHIPS acceleration (10% slower than QGSP_BERT)
+
+3-Dec-2009 M.Kosov                            (hadr-chips-V09-02-30)
+-----------------------------------------------------------------------
+Mutual tag: Tuning of parameters to accelerate CHIPS
+
+1-Dec-2009 M.Kosov                            (hadr-chips-V09-02-29)
+-----------------------------------------------------------------------
+Mutual tag: Compilation warning fix in G4QFragmentation and G4QIonIonCollision
+
+30-Nov-2009 M.Kosov                            (hadr-chips-V09-02-28)
+-----------------------------------------------------------------------
+Mutual tag: Bug fix for the final double delete and slight change of
+parameters based on the Sunanda tests
+
+20-Nov-2009 M.Kosov                            (hadr-chips-V09-02-27)
+-----------------------------------------------------------------------
+Mutual tag: G4QHadronInelasticDataSet moved to CHIPS-interface and
+            the temporary xs_dependent directory is removed
+
+19-Nov-2009 M.Kosov                            (hadr-chips-V09-02-26)
+-----------------------------------------------------------------------
+Mutual tag: delete all XS files from xs_dependent
+
+18-Nov-2009 M.Kosov                            (hadr-chips-V09-02-25)
+-----------------------------------------------------------------------
+Mutual tag: Bug fix in G4QPhotonNuclearCrossSection
+
+17-Nov-2009 M.Kosov                            (hadr-chips-V09-02-24)
+-----------------------------------------------------------------------
+Mutual tag: Migration of CHIPS-cross_section depenent files to CHIPS-xs_dep
+
+16-Nov-2009 M.Kosov                            (hadr-chips-V09-02-23)
+-----------------------------------------------------------------------
+Mutual tag: Split up of CHIPS-body in three directories
+
+13-Nov-2009 M.Kosov                            (hadr-chips-V09-02-22)
+-----------------------------------------------------------------------
+Mutual tag: MinGamma parameter is added to G4QSynchRad
+
+13-Nov-2009 M.Kosov                            (hadr-chips-V09-02-21)
+-----------------------------------------------------------------------
+Mutual tag: G4QDiffractionRatio lost dependence on G4QElasticCrossSection
+
+12-Nov-2009 M.Kosov                            (hadr-chips-V09-02-20)
+-----------------------------------------------------------------------
+Mutual tag: bug fix in G4QDiffractionRatio (tested by Valgrind)
+
+11-Nov-2009 M.Kosov                            (hadr-chips-V09-02-19)
+-----------------------------------------------------------------------
+Mutual tag: Bug fix in G4QSynchRad
+
+10-Nov-2009 M.Kosov                            (hadr-chips-V09-02-18)
+-----------------------------------------------------------------------
+Mutual tag: Diffraction is added to CHIPS inelastic
+
+5-Nov-2009 M.Kosov                             (hadr-chips-V09-02-17)
+-----------------------------------------------------------------------
+Mutual tag: Bug fix in XS's & migration of G4QNeutronCaptureRatio from
+            body to interface
+
+4-Nov-2009 M.Kosov                             (hadr-chips-V09-02-16)
+-----------------------------------------------------------------------
+Mutual tag: Thanks to Andrea bug fix (skip for Z=0,A=0 residual nucleus)
+            in G4QCollision class
+
+4-Nov-2009 M.Kosov                             (hadr-chips-V09-02-15)
+-----------------------------------------------------------------------
+Mutual tag: Reduction of the CHIPS-body dependency + G4QNucleus bug fix
+
+3-Nov-2009 M.Kosov                             (hadr-chips-V09-02-14)
+-----------------------------------------------------------------------
+Mutual tag: G4QHadron for KL/KS and closing of K0 cross-sections worning
+
+30-Oct-2009 M.Kosov                             (hadr-chips-V09-02-13)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for new CHIPS hA cross-sections
+- 8 new CHIPS cross-sectopn classes are added + bug is fixed in the CHIPS
+  pA cross_sections + pimA XS class is not fake now, but real
+- Because of the complain of V. Ivanchenko the MuCaptureEMCascade
+  is excluded from the G4QCaptureAtRest class (for mu-). All the atomic
+  deexcitation energy of capture is concentrated in the Energy Deposition.
+
+23-Oct-2009 M.Kosov                             (hadr-chips-V09-02-12)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the bug fix + G4QuasiFreeRatio change (needs make clean)
+
+12-Oct-2009 M.Kosov                             (hadr-chips-V09-02-11)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the bug fixes (mostly body)
+
+18-Sep-2009 M.Kosov                             (hadr-chips-V09-02-10)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the heavy fragments in LowEnergy (mostly body)
+
+2-Sep-2009 M.Kosov                              (hadr-chips-V09-02-08)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the first prototype of the CHIPS Ion-Ion Inelastic
+
+28-Aug-2009 M.Kosov                              (hadr-chips-V09-02-07)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the Valgrind induced improvement
+
+=======
+8-Sep-2009 M.Kosov                              (hadr-chips-V09-02-09)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the hadron+proton improvement (mostly body)
+
+2-Sep-2009 M.Kosov                              (hadr-chips-V09-02-08)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the first prototype of the CHIPS Ion-Ion Inelastic
+
+28-Aug-2009 M.Kosov                              (hadr-chips-V09-02-07)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for the Valgrind induced improvement
+
+>>>>>>> 1.11
+21-Aug-2009 M.Kosov                              (hadr-chips-V09-02-06)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for added photon- and lepton-nuclear CHIPS inelastic
+
+7-Aug-2009 M.Kosov                               (hadr-chips-V09-02-05)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for All-Energies-All-Hadrons pilot tag
+
+5-Aug-2009 M.Kosov                               (hadr-chips-V09-02-04)
+-----------------------------------------------------------------------
+Mutual CHIPS tag for All-Energies-Nucleons and -Mesons (only pi+/- & K-)
+
+5-Aug-2009 M.Kosov                               (hadr-chips-V09-02-03)
+-----------------------------------------------------------------------
+Migration of the rest of the XS from interface to body and exclusion of the
+dependency of the G4NucleiPropertiesTable class (absolete by Hisaya)
+
+31-Jul-2009 M.Kosov                              (hadr-chips-V09-02-02)
+-----------------------------------------------------------------------
+Creation of the beta-version of CHIPS, covering all energies (mutual CHIPS tag)

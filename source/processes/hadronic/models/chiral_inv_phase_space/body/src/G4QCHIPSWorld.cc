@@ -24,12 +24,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCHIPSWorld.cc,v 1.32 2006/06/29 20:06:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QCHIPSWorld.cc,v 1.33 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCHIPSWorld ----------------
 //             by Mikhail Kossov, Sept 1999.
 //      class for the CHIPS World definition in CHIPS Model
+// -------------------------------------------------------------------
+// Short description: The CHIPS World is a world of elementary particles
+// and nuclear fragments. This class is a singletone, but without fixed
+// limits. E.g. the nuclear fragments as possible G4Candidates can be
+// initialized in the CHIPS World only up to Be8 od C12 or other bigger
+// nuclear fragment. If one need the heavy fragment production then the
+// the CHIPS World must be initialized up to these fragments (see the
+// CHIPS Manual), but the price in performans will be big, because in
+// each act of the fragmentation competition these numerous candidates
+// take place in the competition and the hadronization probability is
+// calculated each time for each of them, so the Be8 limit (Be8->alpha+
+// alpha decays very fast and contribute to the alpha-spectrum) is the
+// most optimal.
 // -------------------------------------------------------------------
 
 //#define debug
@@ -113,11 +126,11 @@ G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
       for (G4int i=curNP; i<nOfParts; i++) 
       {
 #ifdef debug
-		G4cout<<"G4QCHIPSWorld::GetParticles: Create particle QCode="<<i<<G4endl;
+        G4cout<<"G4QCHIPSWorld::GetParticles: Create particle QCode="<<i<<G4endl;
 #endif
         G4QParticle* curPart = new G4QParticle(cf,i); // Created with QCode=i
 #ifdef debug
-		G4cout<<"G4QCHIPSWorld::GetParticles: Particle QCode="<<i<<" is created."<<G4endl;
+        G4cout<<"G4QCHIPSWorld::GetParticles: Particle QCode="<<i<<" is created."<<G4endl;
 #endif
         //curPart->InitQParticle(i);             //
         //if(!i) G4cout<<"G4QCHIPSWorld::GetParticles:Pt#0="<<curPart<<G4endl;
@@ -134,8 +147,3 @@ G4QParticleVector* G4QCHIPSWorld::GetParticles(G4int nOfParts)
 #endif
   return &GetQWorld();
 }
-
-
-
-
-

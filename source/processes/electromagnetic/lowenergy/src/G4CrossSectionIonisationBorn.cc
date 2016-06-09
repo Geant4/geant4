@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionIonisationBorn.cc,v 1.4 2008/08/20 14:51:48 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4CrossSectionIonisationBorn.cc,v 1.7 2009/06/11 15:47:08 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #include "G4CrossSectionIonisationBorn.hh"
 
@@ -81,6 +81,16 @@ G4CrossSectionIonisationBorn::G4CrossSectionIonisationBorn()
   {
     G4Exception("G4CrossSectionIonisationBorn Constructor: proton is not defined");
   }
+
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The class G4CrossSectionIonisationBorn is NOT SUPPORTED ANYMORE. " << G4endl;
+   G4cout << "   It will be REMOVED with the next major release of Geant4. " << G4endl;
+   G4cout << "   Please consult: https://twiki.cern.ch/twiki/bin/view/Geant4/LoweProcesses" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

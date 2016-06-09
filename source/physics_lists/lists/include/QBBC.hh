@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QBBC.hh,v 1.2 2007/04/16 11:57:40 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: QBBC.hh,v 1.3 2009/10/04 16:05:10 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,32 +36,29 @@
 // 15.04.2007 set glauber=true (V.Ivanchenko)
 //----------------------------------------------------------------------------
 //
-#ifndef TQBBC_h
-#define TQBBC_h 1
+#ifndef QBBC_h
+#define QBBC_h 1
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "CompileTimeConstraints.hh"
 
-template<class T>
-class TQBBC: public T
+class QBBC : public G4VModularPhysicsList
 {
 public:
 
-  TQBBC(G4int ver = 1, const G4String& type = "QBBC", G4bool glauber = true);
+  QBBC(G4int ver = 1, const G4String& type = "QBBC");
 
-  virtual ~TQBBC();
-  
-public:
+  virtual ~QBBC();
 
   virtual void SetCuts();
 
 private:
-  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
-};
 
-#include "QBBC.icc"
-typedef TQBBC<G4VModularPhysicsList> QBBC;
+  // copy constructor and hide assignment operator
+  QBBC(QBBC &);
+  QBBC & operator=(const QBBC &right);
+
+};
 
 #endif
 

@@ -1,0 +1,28 @@
+#
+# Macro file for the initialization phase of wls
+#
+#/run/verbose 1
+#/control/verbose 1
+#/event/verbose 1
+#/tracking/verbose 1
+#
+/run/initialize
+#
+#/WLS/phys/verbose 1
+#
+/gps/particle opticalphoton
+/gps/ene/type Mono
+/gps/ene/mono 2.10 eV
+#
+/gps/pos/type Plane
+/gps/pos/shape Circle
+/gps/pos/radius 0.5 mm
+/gps/ang/type iso
+/gps/ang/mintheta 180.0 deg
+/gps/ang/maxtheta  90.0 deg
+/gps/pos/centre 0.0 0.0 0.0 cm
+#
+#/control/execute vis.mac
+#
+/run/beamOn 200
+#

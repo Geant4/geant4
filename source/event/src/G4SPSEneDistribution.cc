@@ -1137,6 +1137,12 @@ void G4SPSEneDistribution::ConvertEPNToEnergy()
 	  G4cout << "Those above 1024 will be ignored" << G4endl;
 	  maxcount = 1024;
 	}
+      if(maxcount < 1)
+	{
+	  G4cout << "Histogram contains less than 1 bin!" << G4endl;
+	  G4cout << "Redefine the histogram" << G4endl;
+	  return;
+	}
       for(count=0;count<maxcount;count++)
 	{
 	  // Read out

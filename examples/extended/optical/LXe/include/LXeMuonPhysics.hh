@@ -30,7 +30,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
 #include "G4MuIonisation.hh"
@@ -57,12 +57,12 @@ class LXeMuonPhysics : public G4VPhysicsConstructor
   protected:
    // Muon physics
    G4MuIonisation*         fMuPlusIonisation;
-   G4MultipleScattering*   fMuPlusMultipleScattering;
+   G4MuMultipleScattering* fMuPlusMultipleScattering;
    G4MuBremsstrahlung*     fMuPlusBremsstrahlung ;
    G4MuPairProduction*     fMuPlusPairProduction;
 
    G4MuIonisation*         fMuMinusIonisation;
-   G4MultipleScattering*   fMuMinusMultipleScattering;
+   G4MuMultipleScattering* fMuMinusMultipleScattering;
    G4MuBremsstrahlung*     fMuMinusBremsstrahlung ;
    G4MuPairProduction*     fMuMinusPairProduction;
 

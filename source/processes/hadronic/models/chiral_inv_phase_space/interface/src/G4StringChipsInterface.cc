@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// !!! Was used in QBBC PL, NOW it is not. Must be absolete !!!
+// ============================================================
 
 //#define debug
 //#define pdebug

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh,v 1.7 2008/04/25 14:20:13 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FTFModel.hh,v 1.10 2009/10/25 10:50:54 vuzhinsk Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Class Description
 // Final state production code for hadron inelastic scattering above 20 GeV
@@ -52,7 +52,7 @@
 class G4VSplitableHadron;
 class G4ExcitedString;
 
-#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
+#include "G4FTFParameters.hh"
 #include "G4FTFParticipants.hh"
 
 #include "G4ExcitedStringVector.hh"
@@ -63,8 +63,8 @@ class G4FTFModel : public G4VPartonStringModel
 {
 
   public:
-      G4FTFModel();                                          // Uzhi
-      G4FTFModel(G4double , G4double , G4double );           // Uzhi
+      G4FTFModel();
+      G4FTFModel(G4double , G4double , G4double );
       G4FTFModel(G4DiffractiveExcitation * anExcitation);
       G4FTFModel(const G4FTFModel &right);
       ~G4FTFModel();
@@ -81,18 +81,27 @@ class G4FTFModel : public G4VPartonStringModel
   protected:
   
   private:
+       void ReggeonCascade();
+       G4bool PutOnMassShell();
        G4bool ExciteParticipants();
        G4ExcitedStringVector * BuildStrings();
+       void GetResidualNucleus();                  // 23 Oct. 2009
+       G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
   
   private:     
 
        G4ReactionProduct theProjectile;       
        G4FTFParticipants theParticipants;
+       
+       G4Nucleon * TheInvolvedNucleon[250];
+       G4int NumberOfInvolvedNucleon;
 
-       G4FTFParameters  *theParameters;        // Uzhi  29.03.08
+       G4FTFParameters  *theParameters;
        G4DiffractiveExcitation * theExcitation;
-       G4ElasticHNScattering   * theElastic;   // Uzhi 29.03.08
+       G4ElasticHNScattering   * theElastic;
 
+       G4LorentzVector Residual4Momentum;
+       G4double ResidualExcitationEnergy;
 
 };
 
@@ -104,5 +113,3 @@ G4V3DNucleus * G4FTFModel::GetWoundedNucleus() const
 }
 
 #endif
-
-

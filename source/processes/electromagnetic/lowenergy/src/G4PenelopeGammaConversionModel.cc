@@ -23,14 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeGammaConversionModel.cc,v 1.2 2008/12/04 14:09:36 pandola Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopeGammaConversionModel.cc,v 1.6 2009/06/11 15:47:08 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Luciano Pandola
 //
 // History:
 // --------
 // 06 Oct 2008   L Pandola    Migration from process to model 
+// 17 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - do not apply production threshold on level of the model
+// 19 May 2009   L Pandola    Explicitely set to zero pointers deleted in 
+//                            Initialise(), since they might be checked later on
 //
 
 #include "G4PenelopeGammaConversionModel.hh"
@@ -55,7 +61,7 @@ G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleD
   fIntrinsicHighEnergyLimit = 100.0*GeV;
   fSmallEnergy = 1.1*MeV;
 
-  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
+  //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
   //
   verboseLevel= 0;
@@ -88,25 +94,12 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition*,
     {
       crossSectionHandler->Clear();
       delete crossSectionHandler;
+      crossSectionHandler = 0;
     }
   
-  //Check energy limits
-  if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
-    {
-      G4cout << "G4PenelopeGammaConversionModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << G4endl;
-      SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
-    }
-  if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
-    {
-      G4cout << "G4PenelopeGammaConversionModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" << G4endl;
-      SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
-    }
-
   //Re-initialize cross section handler
   crossSectionHandler = new G4CrossSectionHandler();
-  crossSectionHandler->Initialise(0,LowEnergyLimit(),HighEnergyLimit(),400);
+  crossSectionHandler->Initialise(0,fIntrinsicLowEnergyLimit,HighEnergyLimit(),400);
   crossSectionHandler->Clear();
   G4String crossSectionFile = "penelope/pp-cs-pen-";
   crossSectionHandler->LoadData(crossSectionFile);
@@ -116,18 +109,16 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition*,
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for PenelopeGammaConversion" << G4endl;
 
-  G4cout << "Penelope Gamma Conversion model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / MeV << " MeV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
+  if (verboseLevel > 0) { 
+    G4cout << "Penelope Gamma Conversion model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / MeV << " MeV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
 
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
 
@@ -150,12 +141,12 @@ G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4PenelopePhotoElectricModel" << G4endl;
 
   G4int iZ = (G4int) Z;
-  if (!crossSectionHandler)
-    {
-      G4cout << "G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom" << G4endl;
-      G4cout << "The cross section handler is not correctly initialized" << G4endl;
-      G4Exception();
-    }
+  //  if (!crossSectionHandler) //VI: should not be checked in run time
+  //  {
+  //    G4cout << "G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom" << G4endl;
+  //    G4cout << "The cross section handler is not correctly initialized" << G4endl;
+  //    G4Exception();
+  //  }
   G4double cs = crossSectionHandler->FindValue(iZ,energy);
 
   if (verboseLevel > 2)
@@ -166,11 +157,12 @@ G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-					      const G4MaterialCutsCouple* couple,
-					      const G4DynamicParticle* aDynamicGamma,
-					      G4double,
-					      G4double)
+void 
+G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
+						  const G4MaterialCutsCouple* couple,
+						  const G4DynamicParticle* aDynamicGamma,
+						  G4double,
+						  G4double)
 {
   //
   // Penelope model.
@@ -190,13 +182,15 @@ void G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPart
 
   G4double photonEnergy = aDynamicGamma->GetKineticEnergy();
 
-  if (photonEnergy <= LowEnergyLimit())
-  {
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
-      fParticleChange->SetProposedKineticEnergy(0.);
+  // Always kill primary
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
+  fParticleChange->SetProposedKineticEnergy(0.);
+
+  if (photonEnergy <= fIntrinsicLowEnergyLimit)
+    {
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy);
       return ;
-  }
+    }
 
   G4ParticleMomentum photonDirection = aDynamicGamma->GetMomentumDirection();
 
@@ -309,13 +303,9 @@ void G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPart
   G4double localEnergyDeposit = 0. ;
 
   //Generate explicitely the electron in the pair, only if it is > threshold
-  const G4ProductionCutsTable* theCoupleTable=
-    G4ProductionCutsTable::GetProductionCutsTable();
-  size_t indx = couple->GetIndex();
-  G4double cutE = (*(theCoupleTable->GetEnergyCutsVector(1)))[indx];
-  //G4double cutP = (*(theCoupleTable->GetEnergyCutsVector(2)))[indx];
+  //VI: applying cut here provides inconsistency 
 
-  if (electronKineEnergy > cutE)
+  if (electronKineEnergy > 0.0)
     {
       G4ThreeVector electronDirection ( dirX_el, dirY_el, dirZ_el);
       electronDirection.rotateUz(photonDirection);
@@ -332,7 +322,8 @@ void G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPart
 
   //Generate the positron. Real particle in any case, because it will annihilate. If below
   //threshold, produce it at rest
-  if (positronKineEnergy < cutE)
+  // VI: here there was a bug - positron and electron cuts are different
+  if (positronKineEnergy < 0.0)
     {
       localEnergyDeposit += positronKineEnergy;
       positronKineEnergy = 0; //produce it at rest
@@ -343,20 +334,18 @@ void G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPart
 						      positronDirection, positronKineEnergy);
   fvect->push_back(positron);
 
-  //Update the status of the primary gamma (kill it)
-  fParticleChange->SetProposedKineticEnergy(0.);
+  //Add rest of energy to the local energy deposit
   fParticleChange->ProposeLocalEnergyDeposit(localEnergyDeposit);
-  fParticleChange->ProposeTrackStatus(fStopAndKill);
-
   
- if (verboseLevel > 1)
+  if (verboseLevel > 1)
     {
       G4cout << "-----------------------------------------------------------" << G4endl;
       G4cout << "Energy balance from G4PenelopeGammaConversion" << G4endl;
       G4cout << "Incoming photon energy: " << photonEnergy/keV << " keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
       if (electronKineEnergy)
-	G4cout << "Electron (explicitely produced) " << electronKineEnergy/keV << " keV" << G4endl;
+	G4cout << "Electron (explicitely produced) " << electronKineEnergy/keV << " keV" 
+	       << G4endl;
       if (positronKineEnergy)
 	G4cout << "Positron (not at rest) " << positronKineEnergy/keV << " keV" << G4endl;
       G4cout << "Rest masses of e+/- " << 2.0*electron_mass_c2/keV << " keV" << G4endl;
@@ -372,12 +361,11 @@ void G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicPart
       G4double energyDiff = std::fabs(electronKineEnergy+positronKineEnergy+
 				      localEnergyDeposit+2.0*electron_mass_c2-photonEnergy);
       if (energyDiff > 0.05*keV)
-	G4cout << "Warning from G4PenelopeGammaConversion: problem with energy conservation: " << 
-	  (electronKineEnergy+positronKineEnergy+
-	   localEnergyDeposit+2.0*electron_mass_c2)/keV << " keV (final) vs. " << 
-	  photonEnergy/keV << " keV (initial)" << G4endl;
-    }
-  
+	G4cout << "Warning from G4PenelopeGammaConversion: problem with energy conservation: " 
+	       << (electronKineEnergy+positronKineEnergy+
+		   localEnergyDeposit+2.0*electron_mass_c2)/keV 
+	       << " keV (final) vs. " << photonEnergy/keV << " keV (initial)" << G4endl;
+    } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

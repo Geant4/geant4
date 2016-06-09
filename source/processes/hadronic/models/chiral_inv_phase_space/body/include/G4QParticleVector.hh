@@ -24,13 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticleVector.hh,v 1.19 2006/06/29 20:06:35 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QParticleVector.hh,v 1.20 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
 // Type defenition for Decay Channel Vector in CHIPS model
 // ---------------------------------------------------------------
+// Short description: The G4QParticle is a part of the CHIPS World. It is
+// characterized by the quark content, spin, mass, width and a vector of
+// the decay channels (G4QDecayCannelVector).
+// -----------------------------------------------------------------------
 
 #ifndef G4QParticleVector_h
 #define G4QParticleVector_h 1
@@ -60,7 +64,7 @@ public:
   ~G4QParticleVector() 
   {
     std::for_each(begin(),end(),DeleteQParticle());
-	clear();
+    clear();
   }
 };
 

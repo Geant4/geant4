@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.5 2008/10/02 20:40:16 dennis Exp $
+$Id: History,v 1.6 2009/03/31 19:16:38 vnivanch Exp $
 -------------------------------------------------------------------
 
      ==========================================================
@@ -15,6 +15,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+31 Mar 2009 Vladimir Ivanchenko (hadr-proc-V09-02-00)
+----------------------------------------------------
+- To fix bug #1056 cross section data set now are created by new in
+  G4PhotoNuclearProcess, G4ElectronNuclearProcess, and 
+  G4PositronNuclearProcess. For the last class inline constructor 
+  and destructors moved to source 
 
 2 Oct 2008 Dennis Wright (hadr-proc-V09-01-02)
 ----------------------------------------------

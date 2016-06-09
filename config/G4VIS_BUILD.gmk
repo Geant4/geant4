@@ -1,4 +1,4 @@
-# $Id: G4VIS_BUILD.gmk,v 1.20 2007/10/03 12:15:05 lgarnier Exp $
+# $Id: G4VIS_BUILD.gmk,v 1.22 2009/11/05 10:06:54 allison Exp $
 # -------------------------------------------------------------
 # Visualization-specific CPPFLAGS for BUILD phase.
 #   John Allison, 24th January 1998.
@@ -13,7 +13,7 @@ ifndef G4VIS_NONE
 #   variables needed)...
 # G4VIS_BUILD_ASCIITREE_DRIVER
 # G4VIS_BUILD_DAWNFILE_DRIVER
-# G4VIS_BUILD_GAGTREE_DRIVER
+# G4VIS_BUILD_GMOCRENFILE_DRIVER
 # G4VIS_BUILD_HEPREPFILE_DRIVER
 # G4VIS_BUILD_RAYTRACER_DRIVER
 # G4VIS_BUILD_VRMLFILE_DRIVER

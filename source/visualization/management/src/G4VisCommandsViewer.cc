@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.70 2008/04/30 10:07:28 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisCommandsViewer.cc,v 1.75 2009/01/19 15:47:49 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -635,44 +635,12 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  // Parse windowSizeHintString to extract first field for backwards
-  // compatibility...
-  std::istringstream issw;
-  G4int windowSizeHint;
-  size_t i;
-  for (i = 0; i < windowSizeHintString.size(); ++i) {
-    char c = windowSizeHintString[i];
-    if (c == 'x' || c == 'X' || c == '+' || c == '-') break;
-  }
-  if (i != windowSizeHintString.size()) {
-    // x or X or + or - found - must be a X-Window-type geometry string...
-    // Pick out the first field for backwards compatibility...
-    issw.str(windowSizeHintString.substr(0,i));
-    issw >> windowSizeHint;
-  } else { // ...old-style integer...
-    issw.str(windowSizeHintString);
-    if (!(issw >> windowSizeHint)) {
-      if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: Unrecognised geometry string \""
-	       << windowSizeHintString
-	       << "\".  Using 600."
-	       << G4endl;
-      }
-      windowSizeHint = 600;
-    }
-    // Reconstitute windowSizeHintString...
-    std::ostringstream ossw;
-    ossw << windowSizeHint << 'x' << windowSizeHint;
-    windowSizeHintString = ossw.str();
-  }
-  fpVisManager->SetWindowSizeHint (windowSizeHint, windowSizeHint);
-  fpVisManager->SetXGeometryString(windowSizeHintString);
   // WindowSizeHint and XGeometryString are picked up from the vis
-  // manager in the G4VViewer constructor.  They have to be held by
-  // the vis manager until the viewer is contructed - next line...
+  // manager in the G4VViewer constructor. In G4VisManager, after Viewer
+  // creation, we will store theses parameters in G4ViewParameters.
 
-  // Create viewer.
-  fpVisManager -> CreateViewer (newName);
+  fpVisManager -> CreateViewer (newName,windowSizeHintString);
+
   G4VViewer* newViewer = fpVisManager -> GetCurrentViewer ();
   if (newViewer && newViewer -> GetName () == newName) {
     if (verbosity >= G4VisManager::confirmations) {

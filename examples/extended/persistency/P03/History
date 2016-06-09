@@ -1,4 +1,3 @@
-$Id: History,v 1.5 2008/12/09 17:55:01 arce Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +13,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19 November 2009 - P Arce (exampleP03-V09-02-02)
+--------------------------
+use G4XMultipleScattering in ExTGPhysicsList.cc
+
+20 May 2009  P.Arce (exampleP03-V09-02-01)
+--------------------------
+- Small corrections in g4geom_paramPhantom.txt and g4geom_replicas.txt
+
+15 May 2009  P.Arce (exampleP03-V09-02-00)
+--------------------------
+- Added example of parallel world
+- Added example of circle parameterisation
+- Added example of phantom parameterisation
+- textGeom.cc renamed to exTextGeom.cc
+
 9 December 2008 - P Arce (exampleP03-V09-01-04)
 --------------------------
 - SUBS -> SUBTRACTION, INTERS -> INTERSECTION

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.hh,v 1.1 2008/03/31 15:34:01 vuzhinsk Exp $
+// $Id: G4ElasticHNScattering.hh,v 1.2 2009/08/03 13:14:19 vuzhinsk Exp $
 
 #ifndef G4ElasticHNScattering_h
 #define G4ElasticHNScattering_h 1
@@ -41,7 +41,7 @@
 #include "globals.hh"
 class G4VSplitableHadron;
 class G4ExcitedString;
-#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
+#include "G4FTFParameters.hh"
 #include "G4ThreeVector.hh"
 
 class G4ElasticHNScattering 
@@ -49,7 +49,7 @@ class G4ElasticHNScattering
 
   public:
 
-      G4ElasticHNScattering();                           // Uzhi
+      G4ElasticHNScattering();
       virtual ~G4ElasticHNScattering();
 
       virtual G4bool ElasticScattering (G4VSplitableHadron *aPartner, 
@@ -60,7 +60,7 @@ class G4ElasticHNScattering
 
       G4ElasticHNScattering(const G4ElasticHNScattering &right);
       
-      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;  // Uzhi
+      G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
       
       const G4ElasticHNScattering & operator=(const G4ElasticHNScattering &right);
       int operator==(const G4ElasticHNScattering &right) const;

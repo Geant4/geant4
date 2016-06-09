@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QGSBinaryPiKBuilder.cc,v 1.3 2009/03/31 11:03:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSBinaryPiKBuilder
+//
+// Author: 2006 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #include "G4QGSBinaryPiKBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -31,6 +45,8 @@
 G4QGSBinaryPiKBuilder::
 G4QGSBinaryPiKBuilder(G4bool quasiElastic) 
 {
+  thePiData = new G4PiNuclearCrossSection;
+
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator("QGSB");
 
@@ -72,7 +88,7 @@ Build(G4PionPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
-  aP->AddDataSet(&thePiData);
+  aP->AddDataSet(thePiData);
   aP->RegisterMe(theModel);
 }
 
@@ -81,7 +97,7 @@ Build(G4PionMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
-  aP->AddDataSet(&thePiData);
+  aP->AddDataSet(thePiData);
   aP->RegisterMe(theModel);
 }
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.54 2008/07/31 13:01:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VMultipleScattering.hh,v 1.62 2009/10/29 17:56:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -63,6 +63,7 @@
 // 12-02-07 Add get/set skin (V.Ivanchenko)
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 15-07-08 Reorder class members for further multi-thread development (VI)
+// 07-04-09 Moved msc methods from G4VEmModel to G4VMscModel (VI) 
 //
 
 // -------------------------------------------------------------------
@@ -79,7 +80,7 @@
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4EmModelManager.hh"
-#include "G4VEmModel.hh"
+#include "G4VMscModel.hh"
 #include "G4MscStepLimitType.hh"
 
 class G4ParticleDefinition;
@@ -125,10 +126,6 @@ public:
   // Print out of generic class parameters
   void PrintInfoDefinition();
 
-  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
-
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-
   // Store PhysicsTable in a file.
   // Return false in case of failure at I/O
   G4bool StorePhysicsTable(const G4ParticleDefinition*,
@@ -144,14 +141,10 @@ public:
                               const G4String& directory,
 			      G4bool ascii);
 
-  //------------------------------------------------------------------------
-  // Specific methods for msc processes
-  //------------------------------------------------------------------------
-
   // The function overloads the corresponding function of the base
   // class.It limits the step near to boundaries only
   // and invokes the method GetMscContinuousStepLimit at every step.
-  virtual G4double AlongStepGetPhysicalInteractionLength(
+  G4double AlongStepGetPhysicalInteractionLength(
                                             const G4Track&,
 					    G4double  previousStepSize,
 					    G4double  currentMinimalStep,
@@ -160,10 +153,16 @@ public:
 
   // The function overloads the corresponding function of the base
   // class.
-  G4double PostStepGetPhysicalInteractionLength(
+  inline G4double PostStepGetPhysicalInteractionLength(
                                             const G4Track&,
 					    G4double  previousStepSize,
 					    G4ForceCondition* condition);
+
+  // Along step actions
+  inline G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+
+  // Post step actions
+  inline G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   // This method does not used for tracking, it is intended only for tests
   inline G4double ContinuousStepLimit(const G4Track& track,
@@ -191,51 +190,67 @@ public:
 
   inline G4PhysicsTable* LambdaTable() const;
 
-  //------------------------------------------------------------------------
-  // Define and access particle type 
-  //------------------------------------------------------------------------
-
+  // access particle type 
   inline const G4ParticleDefinition* Particle() const;
-  inline void SetParticle(const G4ParticleDefinition*);
 
   //------------------------------------------------------------------------
   // Specific methods to set, access, modify models
   //------------------------------------------------------------------------
 
-  inline void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
+protected:
+  // Select model in run time
+  inline G4VEmModel* SelectModel(G4double kinEnergy);
 
+public:
+  // Select model in run time
   inline G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
 					    size_t& idxRegion) const;
 
-  // Access to models
-  inline G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
+  // Add model for region, smaller value of order defines which
+  // model will be selected for a given energy interval  
+  void AddEmModel(G4int order, G4VEmModel*, const G4Region* region = 0);
+
+  // Assign a model to a process
+  void SetModel(G4VMscModel*, G4int index = 1);
+  
+  // return the assigned model
+  G4VMscModel* Model(G4int index = 1);
+
+  // Access to models by index
+  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
 
   //------------------------------------------------------------------------
-  // Set parameters for simulation of multiple scattering
+  // Get/Set parameters for simulation of multiple scattering
   //------------------------------------------------------------------------
 
+  inline G4bool LateralDisplasmentFlag() const;
   inline void SetLateralDisplasmentFlag(G4bool val);
 
+  inline G4double Skin() const;
   inline void SetSkin(G4double val);
 
+  inline G4double RangeFactor() const;
   inline void SetRangeFactor(G4double val);
 
+  inline G4double GeomFactor() const;
   inline void SetGeomFactor(G4double val);
 
+  inline G4double PolarAngleLimit() const;
   inline void SetPolarAngleLimit(G4double val);
 
+  inline G4MscStepLimitType StepLimitType() const;
   inline void SetStepLimitType(G4MscStepLimitType val);
-
-protected:
-
-  // This method is used for tracking, it returns mean free path value
-  G4double GetMeanFreePath(const G4Track& track,
-			   G4double,
-			   G4ForceCondition* condition);
 
   //------------------------------------------------------------------------
   // Run time methods
   //------------------------------------------------------------------------
+
+protected:
+
+  // This method is not used for tracking, it returns mean free path value
+  G4double GetMeanFreePath(const G4Track& track,
+			   G4double,
+			   G4ForceCondition* condition);
 
   // This method is not used for tracking, it returns step limit
   G4double GetContinuousStepLimit(const G4Track& track,
@@ -243,45 +258,18 @@ protected:
 				  G4double currentMinimalStep,
 				  G4double& currentSafety);
 
+  // This method returns inversed transport cross section
   inline G4double GetLambda(const G4ParticleDefinition* p, 
 			    G4double& kineticEnergy);
 
-  // This method is used for tracking, it returns step limit
-  inline G4double GetMscContinuousStepLimit(const G4Track& track,
-					    G4double scaledKinEnergy,
-					    G4double currentMinimalStep,
-					    G4double& currentSafety);
-
-  inline G4VEmModel* SelectModel(G4double kinEnergy);
-  // Select concrete model
-
-  inline const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
-
-  // define current material
+  // defines current material in run time
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
 
-  //------------------------------------------------------------------------
-  // Access parameters of multiple scattering
-  //------------------------------------------------------------------------
-
-  inline G4ParticleChangeForMSC* GetParticleChange();
-
-  inline G4double Skin() const;
-
-  inline G4double RangeFactor() const;
-
-  inline G4double GeomFactor() const;
-
-  inline G4double PolarAngleLimit() const;
-
-  inline G4MscStepLimitType StepLimitType() const;
-
-  inline G4bool LateralDisplasmentFlag() const;
+  inline const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
 
 private:
 
   // hide  assignment operator
-
   G4VMultipleScattering(G4VMultipleScattering &);
   G4VMultipleScattering & operator=(const G4VMultipleScattering &right);
 
@@ -291,6 +279,8 @@ private:
   G4bool                      buildLambdaTable;
 
   // ======== Parameters of the class fixed at initialisation =======
+
+  std::vector<G4VMscModel*>   mscModels;
 
   G4PhysicsTable*             theLambdaTable;
   const G4ParticleDefinition* firstParticle;
@@ -307,6 +297,7 @@ private:
   G4int                       nBins;
 
   G4bool                      latDisplasment;
+  G4bool                      isIon;
 
   // ======== Cashed values - may be state dependent ================
 
@@ -317,7 +308,7 @@ protected:
 
 private:
 
-  G4VEmModel*                 currentModel;
+  G4VMscModel*                currentModel;
 
   // cache
   const G4ParticleDefinition* currentParticle;
@@ -329,81 +320,14 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
-void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* couple)
-{
-  if(couple != currentCouple) {
-    currentCouple   = couple;
-    currentMaterialIndex = couple->GetIndex();
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VMultipleScattering::GetMscContinuousStepLimit(
-                                          const G4Track& track,
-					  G4double scaledKinEnergy,
-					  G4double currentMinimalStep,
-					  G4double&)
-{
-  G4double x = currentMinimalStep;
-  DefineMaterial(track.GetMaterialCutsCouple());
-  currentModel = SelectModel(scaledKinEnergy);
-  if(x > 0.0 && scaledKinEnergy > 0.0) {
-    G4double tPathLength = 
-      currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, x);
-    if (tPathLength < x) valueGPILSelectionMSC = CandidateForSelection;
-    x = currentModel->ComputeGeomPathLength(tPathLength);  
-    //  G4cout << "tPathLength= " << tPathLength
-    //         << " stepLimit= " << x 
-    //        << " currentMinimalStep= " << currentMinimalStep<< G4endl;
-  }
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4VMultipleScattering::ContinuousStepLimit(
                                        const G4Track& track,
                                        G4double previousStepSize,
                                        G4double currentMinimalStep,
                                        G4double& currentSafety)
 {
-  return GetMscContinuousStepLimit(track,previousStepSize,currentMinimalStep,
-				   currentSafety);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
-					  G4double& e)
-{
-  G4double x;
-  if(theLambdaTable) {
-    G4bool b;
-    x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
-  } else {
-    x = currentModel->CrossSection(currentCouple,p,e);
-  }
-  if(x > DBL_MIN) x = 1./x;
-  else            x = DBL_MAX; 
-  return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4VEmModel* G4VMultipleScattering::SelectModel(G4double kinEnergy)
-{
-  return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4VEmModel* G4VMultipleScattering::SelectModelForMaterial(
-		   G4double kinEnergy, size_t& idxRegion) const
-{
-  return modelManager->SelectModel(kinEnergy, idxRegion);
+  return GetContinuousStepLimit(track,previousStepSize,currentMinimalStep,
+				currentSafety);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -450,6 +374,42 @@ inline G4double G4VMultipleScattering::MaxKinEnergy() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline  void G4VMultipleScattering::SetBuildLambdaTable(G4bool val)
+{
+  buildLambdaTable = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
+{
+  return theLambdaTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  const G4ParticleDefinition* G4VMultipleScattering::Particle() const
+{
+  return currentParticle;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VMultipleScattering::SelectModel(G4double kinEnergy)
+{
+  return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VMultipleScattering::SelectModelForMaterial(
+		   G4double kinEnergy, size_t& idxRegion) const
+{
+  return modelManager->SelectModel(kinEnergy, idxRegion);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline  G4bool G4VMultipleScattering::LateralDisplasmentFlag() const
 {
   return latDisplasment;
@@ -460,13 +420,6 @@ inline  G4bool G4VMultipleScattering::LateralDisplasmentFlag() const
 inline  void G4VMultipleScattering::SetLateralDisplasmentFlag(G4bool val)
 {
   latDisplasment = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4ParticleChangeForMSC* G4VMultipleScattering::GetParticleChange()
-{
-  return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -545,49 +498,76 @@ inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline  void G4VMultipleScattering::SetBuildLambdaTable(G4bool val)
+inline 
+G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
+					  G4double& e)
 {
-  buildLambdaTable = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline  const G4ParticleDefinition* G4VMultipleScattering::Particle() const
-{
-  return currentParticle;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
-{
-  return theLambdaTable;
+  G4double x;
+  if(theLambdaTable) {
+    x = ((*theLambdaTable)[currentMaterialIndex])->Value(e);
+  } else {
+    x = currentModel->CrossSection(currentCouple,p,e);
+  }
+  if(x > DBL_MIN) x = 1./x;
+  else            x = DBL_MAX; 
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
-const G4MaterialCutsCouple* G4VMultipleScattering::CurrentMaterialCutsCouple() const
+void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* couple)
+{
+  if(couple != currentCouple) {
+    currentCouple   = couple;
+    currentMaterialIndex = couple->GetIndex();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4MaterialCutsCouple* 
+G4VMultipleScattering::CurrentMaterialCutsCouple() const
 {
   return currentCouple;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VMultipleScattering::AddEmModel(G4int order, G4VEmModel* p,
-					      const G4Region* region)
+// Follwoing methods are virtual, they are inlined because they applied at
+// each simulation step and some compilers may inline these methods
+
+inline G4double 
+G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
+              const G4Track&, G4double, G4ForceCondition* condition)
 {
-  G4VEmFluctuationModel* fm = 0;
-  modelManager->AddEmModel(order, p, fm, region);
-  if(p) p->SetParticleChange(pParticleChange);
+  *condition = Forced;
+  return DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline 
-G4VEmModel* G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver)
+inline G4VParticleChange* 
+G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 {
-  return modelManager->GetModel(idx, ver);
+  if(currentModel->IsActive(track.GetKineticEnergy())) {
+    fParticleChange.ProposeTrueStepLength(currentModel->ComputeTrueStepLength(step.GetStepLength()));
+  }
+  return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VParticleChange* 
+G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step& step)
+{
+  fParticleChange.Initialize(track);
+  if(currentModel->IsActive(track.GetKineticEnergy())) {
+    currentModel->SampleScattering(track.GetDynamicParticle(),
+				   step.GetPostStepPoint()->GetSafety());
+  }
+  return &fParticleChange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

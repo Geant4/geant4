@@ -24,14 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.hh,v 1.12 2008/03/17 13:45:25 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EMDataSet.hh,v 1.13 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 31 Jul 2001   MGP        Created
+// 31 Jul 2001   MGP                 Created
+//
+// 15 Jul 2009   N.A.Karakatsanis    New methods added for loading logarithmic data
+//                                   to enhance computing performance of interpolation
 //
 // -------------------------------------------------------------------
 
@@ -68,6 +71,16 @@ public:
 	      G4double yUnit=barn,
 	      G4bool random=false);
 
+  G4EMDataSet(G4int argZ, 
+	      G4DataVector* xData, 
+	      G4DataVector* data,
+	      G4DataVector* xLogData, 
+	      G4DataVector* Logdata, 
+	      G4VDataSetAlgorithm* algo, 
+	      G4double xUnit=MeV, 
+	      G4double yUnit=barn,
+	      G4bool random=false);
+
   virtual ~G4EMDataSet();
  
   virtual G4double FindValue(G4double x, G4int componentId=0) const;
@@ -82,9 +95,20 @@ public:
 
   virtual const G4DataVector& GetEnergies(G4int /* componentId */) const { return *energies; }
   virtual const G4DataVector& GetData(G4int /* componentId */) const { return *data; }
+  virtual const G4DataVector& GetLogEnergies(G4int /* componentId */) const { return *log_energies; }
+  virtual const G4DataVector& GetLogData(G4int /* componentId */) const { return *log_data; }
+
   virtual void SetEnergiesData(G4DataVector* xData, G4DataVector* data, G4int componentId);
+  virtual void SetLogEnergiesData(G4DataVector* xData,
+                                  G4DataVector* data,
+                                  G4DataVector* xLogData, 
+                                  G4DataVector* Logdata,
+                                  G4int componentId);
+
 
   virtual G4bool LoadData(const G4String& fileName);
+  virtual G4bool LoadNonLogData(const G4String& fileName);
+
   virtual G4bool SaveData(const G4String& fileName) const;
 
   virtual G4double RandomSelect(G4int componentId = 0) const;
@@ -110,6 +134,8 @@ private:
 
   G4DataVector* energies;            // Owned pointer
   G4DataVector* data;                // Owned pointer
+  G4DataVector* log_energies;        // Owned pointer
+  G4DataVector* log_data;            // Owned pointer
 
   G4VDataSetAlgorithm* algorithm;    // Owned pointer 
   

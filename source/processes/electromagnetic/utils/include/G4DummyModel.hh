@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DummyModel.hh,v 1.3 2007/05/22 17:31:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DummyModel.hh,v 1.4 2009/04/07 18:39:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -50,9 +50,9 @@
 #define G4DummyModel_h 1
 
 #include "globals.hh"
-#include "G4VEmModel.hh"
+#include "G4VMscModel.hh"
 
-class G4DummyModel :  public G4VEmModel
+class G4DummyModel :  public G4VMscModel
 {
 
 public:

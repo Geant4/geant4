@@ -1,70 +1,71 @@
-#----------------------------------------------------------------------------
-# DEFAULT MACRO FOR THE  
-# HADRONTHERAPY EXAMPLE
+# G.A.P.Cirrone
 #
-#
-# THIS MACRO SIMPLY PERMIT TO  RUN A SIMULATION 
-# WITHOUT THE VISUALISATION  
-#
-# THE RANGE SHIFTER MATERIAL AND THICKNESS CAN BE SPECIFIED 
-#
-# NOTE THAT THE MODULATOR MATERIAL IS POLTMETHYLMETHACRILATE 
-# (PMMA) FOR DEFAULT. IF ONE WANT CARRY OUT A SIMULATION WITHOUT 
-# THE MODULATOR HE/SHE MUST SET "Air" the <<ModMater>> in the
-# <<GetMater>> function of the HadrontherapyModulator.cc class
-#
-# USERS SHOULD GIVE A LOOK TO THE HELP OF THE IDLE TO KNOW
-# THE ACTIVATED MESSSENGERS FOR THE GEOMETRY
-#
-# ADDITIONAL INFORMATIONS ON THE MESSENGER AVAILABLE CAN BE FOUND
-# INSIDE THE HADRONTHERAPY DOCUMENTATION (http://www.ge.infn.it/geant4/examples/).
+# Default macro file. It is called if no argument is provided at run
 # 
-# ANYWAY SEND ME AN E-MAIL FOR ANY QUESTION: cirrone@lns.infn.it.   
-# --------------------------------------------------------------------------------  
+# i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!> 
+#
+# This macro can be used for a proton beam in water. Both electrmagnetic and
+# hadronic models are swiched on
 
-
+#########################
+# Set of the verboses 
+#
 /control/verbose 1
 /tracking/verbose 0
-/run/verbose 0
+/run/verbose 1
 /event/verbose 0
 
-# SETTING FOR THE PHYSICS MODELS
-/physics/addPhysics Decay
-/physics/addPhysics EM-Photon-Standard
-/physics/addPhysics EM-Electron-Standard
-/physics/addPhysics EM-Positron-Standard
-/physics/addPhysics EM-HadronIon-Standard
-/physics/addPhysics EM-Muon-Standard
+##########################
+# Set of the physic models
+#
+/physic/addPhysics emstandard_opt3                     # Electromagnetic model
+/physic/addPhysics elastic                             # Hadronic elastic model
+/physic/addPhysics binary                              # Hadronic inelastic model
+/physic/addPhysics local_ion_ion_inelastic             # Hadronic inelastic model for ions (local physic list)
 
-/physics/addPhysics HadronicEl-HadronIon-LElastic
-/physics/addPhysics HadronicInel-ProtonNeutron-LEP
-/physics/addPhysics HadronicInel-Ion-LEP
-/physics/addPhysics HadronicInel-Pion-LEP
-/physics/addPhysics HadronicAtRest-MuonMinus-Capture
-
+##########################
+# Initialisation procedure
+#
 /run/initialize
 
-# FIX THE FOLLOWIG PARAMETERS
-# TO SET THE RANGE SHIFTER
-#/beamLine/RangeShifter/thickness 4 cm
-#/beamLine/RangeShifter/RSMat Water
-#/tracking/verbose 1
-# SET OF THE VISUALISATION CHARACTERISTICS
+##########################
+# Visualisation 
+#
 /vis/scene/create
+#/vis/open OGLIQt # only if QT library are installed
 /vis/open OGLIX
 /vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/vis/viewer/zoom 1
+/vis/viewer/pan -10  0 cm
 /tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
+#/vis/scene/endOfEventAction accumulate
+/vis/scene/endOfEventAction accumulate -1
 /vis/viewer/update
-/run/beamOn 300
 
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+#
+/physic/setCuts 0.01 mm
+/Step/waterPhantomStepMax 0.01 mm 
 
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+/gun/particle proton
+/beam/energy/meanEnergy 62 MeV
+/beam/energy/sigmaEnergy 400 keV
+/beam/position/Xposition -2700 mm
 
+#########################
+# Display the event number
+# during the run
+# 
+/event/printEventNumber 10
 
-
-
-
-
-
-
-
+#########################
+# Start of the run
+#
+/run/beamOn 10

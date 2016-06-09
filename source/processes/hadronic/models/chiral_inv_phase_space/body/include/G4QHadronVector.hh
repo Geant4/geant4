@@ -24,19 +24,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadronVector.hh,v 1.22 2006/11/16 11:36:09 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QHadronVector.hh,v 1.23 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidateVector ----------------
 //             by Mikhail Kossov, Sept 1999.
 // Type defenition for a Vector of Hadrons - output of CHIPS model
 // ---------------------------------------------------------------
+// Short description: In CHIPS all particles are G4QHadrons, while they
+// can be leptons, gammas or nuclei. The G4QPDGCode makes the difference.
+// In addition the 4-momentum is a basic value, so the mass can be
+// different from the GS mass (e.g. for the virtual gamma). This class
+// is made for the output list of hadrons.
+// -------------------------------------------------------------------
 
 #ifndef G4QHadronVector_h
 #define G4QHadronVector_h 1
 //
-// $Id: G4QHadronVector.hh,v 1.22 2006/11/16 11:36:09 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QHadronVector.hh,v 1.23 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file

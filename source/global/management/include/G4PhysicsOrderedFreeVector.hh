@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.hh,v 1.11 2008/09/22 14:49:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicsOrderedFreeVector.hh,v 1.12 2009/06/25 10:05:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Definition
@@ -85,7 +85,7 @@ class G4PhysicsOrderedFreeVector : public G4PhysicsVector
         // Methods
         ////////////
 
-	void InsertValues(G4double energy, G4double value); 
+  	void InsertValues(G4double energy, G4double value); 
 
 	G4double GetLowEdgeEnergy(size_t binNumber) const;
 

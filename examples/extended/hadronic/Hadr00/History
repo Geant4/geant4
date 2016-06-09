@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2008/11/20 11:59:06 vnivanch Exp $
+$Id: History,v 1.4 2009/06/26 16:27:00 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-06-09 V.Ivant (exhadr00-V09-02-00)
+- added a possibility to define Physics List as a job parameter 
+- added script for the test run of all Physics Lists 
 
 20-11-08 V.Ivant (exhadr00-V09-01-02)
 - added charge exchange cross section

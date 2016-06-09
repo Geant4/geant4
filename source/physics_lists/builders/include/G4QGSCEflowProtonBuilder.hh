@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QGSCEflowProtonBuilder.hh,v 1.3 2009/03/31 11:04:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSCEflowProtonBuilder
+//
+// Author: 2006 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4QGSCEflowProtonBuilder_h
 #define G4QGSCEflowProtonBuilder_h 
 
@@ -43,8 +57,6 @@
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
 
-#include "G4ProtonInelasticCrossSection.hh"
-
 class G4QGSCEflowProtonBuilder : public G4VProtonBuilder
 {
   public: 
@@ -58,7 +70,7 @@ class G4QGSCEflowProtonBuilder : public G4VProtonBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4ProtonInelasticCrossSection theXSec;
+
     G4TheoFSGenerator * theModel;
     G4StringChipsParticleLevelInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;

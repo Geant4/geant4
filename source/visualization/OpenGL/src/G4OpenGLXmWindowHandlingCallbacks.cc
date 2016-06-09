@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.6 2006/06/29 21:20:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmWindowHandlingCallbacks.cc,v 1.11 2009/05/13 10:28:00 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  16th June 1997
@@ -39,18 +39,9 @@
 
 void G4OpenGLXmViewer::resize_callback (Widget w, 
 				      XtPointer clientData, 
-				      XtPointer) 
+				      XtPointer x) 
 {
-  Dimension width, height;
-  G4OpenGLXmViewer* pView = (G4OpenGLXmViewer*) clientData;
-  
-  XtVaGetValues (w, 
-		 XmNwidth, &width, 
-		 XmNheight, &height, 
-		 NULL);
-  
-  pView->WinSize_x = (G4int) width;
-  pView->WinSize_y = (G4int) height;
+  expose_callback(w,clientData,x);
 }
 
 
@@ -67,12 +58,11 @@ void G4OpenGLXmViewer::expose_callback (Widget w,
 		 XmNheight, &height, 
 		 NULL);
 
-  pView->WinSize_x = (G4int) width;
-  pView->WinSize_y = (G4int) height;
+  pView->ResizeWindow(width,height);
 
   glXMakeCurrent (pView->dpy, XtWindow(pView->glxarea), pView->cx);
-  glViewport (0, 0, width, height);
 
+  pView->SetView ();
   pView->ClearView ();
   pView->DrawView ();
 }
@@ -82,7 +72,7 @@ void G4OpenGLXmViewer::print_callback (Widget,
 				    XtPointer) 
 {
   G4OpenGLXViewer* pView = (G4OpenGLXmViewer*) clientData;
-  pView->print();
+  pView->printEPS();
 }
 
 void G4OpenGLXmViewer::set_print_colour_callback (Widget w,
@@ -93,8 +83,8 @@ void G4OpenGLXmViewer::set_print_colour_callback (Widget w,
   
   G4int choice = get_int_userData (w);
   
-  pView->print_colour=(G4bool)choice;
-  G4cout << "Print colour set to " << pView->print_colour;
+  pView->fPrintColour=(G4bool)choice;
+  G4cout << "Print colour set to " << pView->fPrintColour;
   
 }
 
@@ -106,8 +96,8 @@ void G4OpenGLXmViewer::set_print_style_callback (Widget w,
   
   G4int choice = get_int_userData (w);
   
-  pView->vectored_ps=(G4bool)choice;
-  G4cout << "`Produce vectored PostScript ?' set to : " << pView->print_colour;
+  pView->fVectoredPs=(G4bool)choice;
+  G4cout << "`Produce vectored PostScript ?' set to : " << pView->fPrintColour;
   
 }
 

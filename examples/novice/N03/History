@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2008/12/01 09:45:42 gcosmo Exp $
+$Id: History,v 1.126 2009/11/15 14:48:40 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,7 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+15-11-09 mma (exampleN03-V09-02-02)
+- Use G4MuMultipleScattering for muons
+- Separate alpha from GenericIon
+ 
+30-10-09 John Allison (exampleN03-V09-02-01)
+- Introduced G4UIExecutive.
 
+20-10-09 Hisaya Kurashige (exampleN03-V09-02-00)
+- Use /run/setCut command in exo1.mac, exo2.mac
+
+17-12-08 mma
+- vis.mac : /vis/scene/add/trajectories smooth 
+ 
 24-11-08 Laurent Garnier (exampleN03-V09-01-05)
 - Removed unnecessary inclusion of qapplication.h in main().
 - Added Qt setup to vis macros.

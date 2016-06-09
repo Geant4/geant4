@@ -1,4 +1,4 @@
-# $Id: snr.mac,v 1.3 2008/05/08 11:20:50 vnivanch Exp $
+# $Id: snr.mac,v 1.4 2009/11/21 22:02:51 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -18,11 +18,10 @@
 /testem/det/tallyPosition  0.  0. 0. cm
 /testem/det/tallyPosition  5.  0. 0. cm
 #
-#/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandard_opt0
 #/testem/phys/addPhysics  emstandard_opt2
 #/testem/phys/addPhysics  emstandard_opt3  
 /testem/phys/addPhysics  standardNR	  
-#/testem/phys/addPhysics  standardIG  
 ###/testem/phys/addPhysics  binary
 #
 /run/initialize

@@ -1,4 +1,4 @@
-# $Id: dedx1.mac,v 1.5 2008/03/17 18:22:00 maire Exp $
+# $Id: dedx1.mac,v 1.6 2009/09/18 14:03:24 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -11,7 +11,7 @@
 /testem/det/setAbsThick 1 cm  
 /testem/det/setAbsYZ    1 cm
 #
-/testem/phys/addPhysics standard
+/testem/phys/addPhysics local
 #
 /testem/phys/setCuts 1 km
 #    

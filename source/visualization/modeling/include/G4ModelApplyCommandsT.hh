@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelApplyCommandsT.hh,v 1.5 2006/09/11 21:22:02 tinslay Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ModelApplyCommandsT.hh,v 1.6 2009/02/25 14:17:11 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Abstract model messenges. Derived classes should implement
 // the "Apply" method
@@ -43,7 +43,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcommand.hh"
 #include "G4VModelCommand.hh"
-#include "globals.hh"
+#include "G4VVisManager.hh"
 #include <sstream>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -151,6 +151,8 @@ void G4ModelCmdApplyStringColour<M>::SetNewValue(G4UIcommand* cmd, G4String newV
   }
 
   Apply(parameter, myColour);
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
+  if (visManager) visManager->NotifyHandlers();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -253,6 +255,8 @@ void G4ModelCmdApplyColour<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
   }
 
   Apply(myColour);
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
+  if (visManager) visManager->NotifyHandlers();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -300,6 +304,8 @@ template <typename M>
 void G4ModelCmdApplyBool<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   Apply(fpCmd->GetNewBoolValue(newValue));
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
+  if (visManager) visManager->NotifyHandlers();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -346,6 +352,8 @@ template <typename M>
 void G4ModelCmdApplyNull<M>::SetNewValue(G4UIcommand*, G4String)
 {
   Apply();
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
+  if (visManager) visManager->NotifyHandlers();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -394,6 +402,8 @@ template <typename M>
 void G4ModelCmdApplyDouble<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   Apply(fpCmd->GetNewDoubleValue(newValue));
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
+  if (visManager) visManager->NotifyHandlers();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -442,6 +452,8 @@ template <typename M>
 void G4ModelCmdApplyDoubleAndUnit<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   Apply(fpCmd->GetNewDoubleValue(newValue));
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
+  if (visManager) visManager->NotifyHandlers();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -489,6 +501,8 @@ template <typename M>
 void G4ModelCmdApplyInteger<M>::SetNewValue(G4UIcommand* cmd, G4String newValue)
 {
   Apply(fpCmd->GetNewIntValue(newValue));
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
+  if (visManager) visManager->NotifyHandlers();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -536,6 +550,8 @@ template <typename M>
 void G4ModelCmdApplyString<M>::SetNewValue(G4UIcommand*, G4String newValue)
 {
   Apply(newValue);
+  G4VVisManager* visManager = G4VVisManager::GetConcreteInstance();
+  if (visManager) visManager->NotifyHandlers();
 }
 
 #endif

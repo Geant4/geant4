@@ -14,10 +14,53 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 December 2009 - V.Ivanchenko (hadr-modman-V09-02-08)
+------------------------------------------------------
+-  G4HadronicInteractionRegistry - more accurate model deletion
+
+19 November 2009 Gunter Folger  (hadr-modman-V09-02-07)
+-  G4V3DNucleus has 2 functions to sort nucleons along +/- z
+
+2 October 2009 - V.Ivanchenko (hadr-modman-V09-02-06)
+------------------------------------------------------
+-  G4HadronicInteraction - added SetModelName method
+
+30 August 2009 - V.Ivanchenko (hadr-modman-V09-02-05)
+------------------------------------------------------
+-  G4HadronicInteraction - renamed SampleT by SampleInvariantT,
+                           added recoilEnergyThreshold parameter and Get/Set
+                           methods;
+                           use const pointers to G4Element and G4Material; 
+                           moved G4ReactionDynamics instance to parametrize
+                           model class G4InelasticInteraction,
+
+2 July 2009 - V.Ivanchenko (hadr-modman-V09-02-04)
+------------------------------------------------------
+-  G4HadronicInteraction - added virtual method SampleT and empty
+                           default implementation needed for elastic
+                           models
+
+25 February 2009 - V.Ivanchenko (hadr-modman-V09-02-03)
+------------------------------------------------------
+-  G4HadronicInteractionRegistry - added protection to the Clean method
+
+14 February 2009 - V.Ivanchenko (hadr-modman-V09-02-02)
+------------------------------------------------------
+-  G4HadronicInteractionRegistry - added Clean method
+
+06 February 2009 - V.Ivanchenko (hadr-modman-V09-02-01)
+------------------------------------------------------
+
+23 January 2009 - V.Ivanchenko (hadr-modman-V09-02-00)
+------------------------------------------------------
+-  G4HadronicInteractionRegistry - make it as real singleton
+-  G4HadronicInteraction, G4InelasticInteraction - move constructor, 
+       destructor and some header files from header to source
+
 19 June 2008 - G.Cosmo  (hadr-modman-V09-01-03)
 -----------------------------------------------
 -  included change introduced in hadr-modman-V09-01-01 and
-   discarded by imstake in the last tag ...
+   discarded by mistake in the last tag ...
 
 19 June 2008 - V.Ivanchenko (hadr-modman-V09-01-02)
 -------------------------------------------------

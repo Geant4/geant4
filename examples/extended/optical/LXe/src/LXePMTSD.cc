@@ -64,8 +64,8 @@ void LXePMTSD::Initialize(G4HCofThisEvent* HCE){
 }
 
 //_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-G4bool LXePMTSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist){
-  return ProcessHits_constStep(aStep,ROhist);
+G4bool LXePMTSD::ProcessHits(G4Step* ,G4TouchableHistory* ){
+  return false;
 }
 
 //Generates a hit and uses the postStepPoint's mother volume replica number
@@ -119,7 +119,6 @@ G4bool LXePMTSD::ProcessHits_constStep(const G4Step* aStep,
       hit->SetDrawit(true);
   }
     
-
   return true;
 }
 

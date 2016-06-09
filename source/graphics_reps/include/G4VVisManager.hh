@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisManager.hh,v 1.14 2008/01/04 22:20:59 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VVisManager.hh,v 1.15 2009/02/25 14:13:43 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // John Allison 19/Oct/1996.
 // 
 // Class Description:
@@ -187,6 +187,11 @@ public: // With description
 
   virtual void GeometryHasChanged () = 0;
   // This is used by the run manager to notify a change of geometry.
+
+  virtual void NotifyHandlers () {}
+  // Notify scene handlers (G4VGraphicsScene objects) that the scene
+  // has changed so that they may rebuild their graphics database, if
+  // any, and redraw all views.
 
   virtual void DispatchToModel(const G4VTrajectory&, G4int i_mode = 0) = 0;
   // Draw the trajectory.

@@ -24,13 +24,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.39 2007/08/09 13:07:47 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Quasmon.hh,v 1.46 2009/11/16 18:15:01 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
 //      class for a Quasmon used by the CHIPS Model
 // ------------------------------------------------------------
+// Short description: If partons from the G4QPartonPair are close in
+// rapidity, they create Quasmons, but if they are far in the rapidity
+// space, they can not interact directly. Say the bottom parton (quark)
+// has rapidity 0, and the top parton (antiquark) has rapidity 8, then
+// the top quark splits in two by radiating gluon, and each part has
+// rapidity 4, then the gluon splits in quark-antiquark pair (rapidity
+// 2 each), and then the quark gadiates anothe gluon and reachs rapidity
+// 1. Now it can interact with the bottom antiquark, creating a Quasmon
+// or a hadron. The intermediate partons is the string ladder.
+// ---------------------------------------------------------------------
 
 #ifndef G4Quasmon_h
 #define G4Quasmon_h 1
@@ -84,13 +94,18 @@ public:
   G4int             GetStrangeness()  const;
 
   //Modifiers
+  void Set4Momentum(G4LorentzVector Q4M) {q4Mom=Q4M;} // Set new value for the Quasmon 4mom
+  void SetQC(G4QContent QQC)             {valQ=QQC;}  // Set new Quark Cont for the Quasmon
+  void Boost(const G4LorentzVector& theBoost);        // Boosts hadron's 4Momentum using 4M
+  void Boost(const G4ThreeVector& B){q4Mom.boost(B);} // Boosts 4-Momentum using v/c
   // Public wrapper for HadronizeQuasmon(,)
   G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ = 1);
   G4QHadronVector*  DecayQuasmon();                   // Decay Quasmon if it's Res or Chipo
-  G4QHadronVector*  DecayQHadron(G4QHadron* hadron);  // Decay Quasmon if it's Res or Chipo
+  G4QHadronVector*  DecayQHadron(G4QHadron* hadron);  // Decay QHadron if it's Res or Chipo
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
   void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer
+  void              IncreaseBy(G4QContent& qQCont, const G4LorentzVector& q4M);
   void              ClearQuasmon();                   // Clear Quasmon (status=0)
   void              KillQuasmon();                    // Kill Quasmon (status=0)
   G4int             CalculateNumberOfQPartons(G4double qMass);
@@ -167,6 +182,12 @@ inline void G4Quasmon::IncreaseBy(const G4Quasmon* pQuasm)
 {
   valQ  += pQuasm->GetQC();
   q4Mom += pQuasm->Get4Momentum();
+  status= 3;
+}
+inline void G4Quasmon::IncreaseBy(G4QContent& qQCont, const G4LorentzVector& q4M)
+{
+  valQ  += qQCont;
+  q4Mom += q4M;
   status= 3;
 }
 

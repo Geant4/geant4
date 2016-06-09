@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="/users/guatelli/GDML/src/GDMLSchema/gdml.xsd" >
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd" >
  <define> 
   <constant name="PI" value="1.*pi" />
   <constant name="TWOPI" value="2.*pi"/>
   <constant name="HALFPI" value="0.5*pi"/>
 
   <position name="HeartRelativePos" unit="cm" x="0.0" y="0.0" z="0.0" />
-  <position name="HeartPos" unit="cm" x="0.0" y="-3.0" z="15.32" />
-  <rotation name="HeartRot" unit="degree" x="0" y="25" z="0" />
+  <position name="OrganPos" unit="cm" x="0.0" y="-3.0" z="15.32" />
+  <rotation name="OrganRot" unit="degree" x="0" y="25" z="0" />
  </define> 
 
  <materials>

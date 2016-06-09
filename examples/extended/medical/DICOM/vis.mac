@@ -2,11 +2,13 @@
 /run/verbose 2
 #visualisation
 /vis/scene/create
-/vis/open OGLIX
+#/vis/open OGLIX
+#/vis/open DAWNFILE
+/vis/open VRML2FILE
 /vis/viewer/update
 /vis/viewer/zoom 5
 /tracking/storeTrajectory 1
-/vis/scene/endOfEventAction accumulate
+/vis/scene/endOfEventAction accumulate 10
 /tracking/verbose 1
 /run/beamOn 10
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.36 2008/11/21 12:53:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.38 2009/11/21 22:02:51 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,12 +35,12 @@
 #include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
 #include "PhysListEmStandardNR.hh"
-#include "PhysListEmLivermore.hh"
-#include "PhysListEmPenelope.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
 
 #include "G4DecayPhysics.hh"
 
@@ -83,8 +83,8 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   SetVerboseLevel(1);
 
   // EM physics
+  emName = G4String("emstandard_opt0");  
   emPhysicsList = new G4EmStandardPhysics(1);
-  emName = G4String("emstandard");
 
   // Deacy physics and all particles
   decPhysicsList = new G4DecayPhysics();
@@ -118,7 +118,6 @@ void PhysicsList::ConstructProcess()
   // electromagnetic physics list
   //
   emPhysicsList->ConstructProcess();
-  em_config.AddModels();
 
   // decay physics list
   //
@@ -144,13 +143,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
   if (name == emName) return;
 
-  if (name == "standard_local") {
+  if (name == "local") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "emstandard") {
+  } else if (name == "emstandard_opt0") {
 
     emName = name;
     delete emPhysicsList;
@@ -186,26 +185,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardNR(name);
 
-  } else if (name == "standardICRU73") {
-
+  } else if (name == "emlivermore") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard(name);
-    em_config.SetExtraEmModel("GenericIon","ionIoni",
-			      new G4IonParametrisedLossModel(),
-			      "",0.0, 100.0*TeV,
-			      new G4IonFluctuations());
-    G4cout << "standardICRU73" << G4endl;
+    emPhysicsList = new G4EmLivermorePhysics();
 
-  } else if (name == "livermore") {
+  } else if (name == "empenelope") {
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmLivermore();
-
-  } else if (name == "penelope") {
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmPenelope();
+    emPhysicsList = new G4EmPenelopePhysics();
 
   } else if (name == "elastic" && !helIsRegisted) {
     hadronPhys.push_back( new G4HadronElasticPhysics());

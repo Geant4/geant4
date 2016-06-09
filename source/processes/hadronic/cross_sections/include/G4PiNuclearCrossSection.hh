@@ -47,7 +47,7 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
     if(aParticle->GetDefinition() == G4PionMinus::PionMinus()) result=true;
     if(aParticle->GetDefinition() == G4PionPlus::PionPlus())   result=true;
     if(G4lrint(anElement->GetZ()) == 1) result = false;
-    if(aParticle->GetKineticEnergy() > 999.9*GeV) result=false;
+    if(aParticle->GetKineticEnergy() > 99.9*TeV) result=false;
     return result;
   }
 
@@ -58,7 +58,7 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
     if(particle->GetDefinition() == G4PionMinus::PionMinus()) result=true;
     if(particle->GetDefinition() == G4PionPlus::PionPlus())   result=true;
     if(G4lrint(ZZ) == 1) result = false;
-    if(particle->GetKineticEnergy() > 999.9*GeV) result=false;
+    if(particle->GetKineticEnergy() > 99.9*TeV) result=false;
     return result;
   }
 

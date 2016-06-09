@@ -24,11 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc,v 1.4 2008/12/18 13:02:00 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FTFParameters.cc,v 1.13 2009/12/16 17:51:15 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #include "G4FTFParameters.hh"
+
+#include "G4ios.hh"
+#include <utility>                                        
 
 G4FTFParameters::G4FTFParameters()
 {;}
@@ -42,16 +45,18 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                                                    G4double   theA,
                                                    G4double   theZ,
                                                    G4double   s) 
-    {
+{
     G4int PDGcode = particle->GetPDGEncoding();
     G4int absPDGcode = std::abs(PDGcode);
-    G4double Elab = (s - 2*0.88*GeV*GeV)/(2*0.939*GeV)/GeV;
-    G4double Plab = std::sqrt(Elab * Elab - 0.88);
+    G4double ProjectileMass = particle->GetPDGMass();
+    G4double TargetMass     = G4Proton::Proton()->GetPDGMass();
+
+    G4double Elab = (s - ProjectileMass*ProjectileMass - TargetMass*TargetMass)/
+                     (2*TargetMass);
+    G4double Plab = std::sqrt(Elab * Elab - ProjectileMass*ProjectileMass);
 
     G4double LogPlab = std::log( Plab );
     G4double sqrLogPlab = LogPlab * LogPlab;
-
-//G4cout<<"G4FTFParameters Plab "<<Plab<<G4endl;
 
     G4int NumberOfTargetProtons  = (G4int) theZ; 
     G4int NumberOfTargetNeutrons = (G4int) theA- (G4int) theZ;
@@ -143,7 +148,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
        Xelastic        = ( NumberOfTargetProtons  * XelKP  + 
                            NumberOfTargetNeutrons * XelKN   ) / NumberOfTargetNucleons;
       }
-    else if( PDGcode == 311 )                      //------Projectile is KaonZero ------
+    else if((PDGcode == 311) || (PDGcode == 130) || (PDGcode == 310))//Projectile is KaonZero
       {
        G4double XtotKP =( 18.1 +  0. *std::pow(Plab, 0.  ) + 0.26 *sqrLogPlab - 1.0 *LogPlab +   //K+
                           32.1 +  0. *std::pow(Plab, 0.  ) + 0.66 *sqrLogPlab - 5.6 *LogPlab)/2; //K-
@@ -180,7 +185,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
       SetElastisCrossSection(Xelastic);
       SetInelasticCrossSection(Xtotal-Xelastic);
 
-//  // Interactions with elastic ans inelastic collisions
+//  // Interactions with elastic and inelastic collisions
       SetProbabilityOfElasticScatt(Xtotal, Xelastic);
       SetRadiusOfHNinteractions2(Xtotal/pi/10.);
 //
@@ -189,13 +194,9 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
       SetRadiusOfHNinteractions2((Xtotal-Xelastic)/pi/10.);
 */ //=======================================================
 
-//G4cout<<" Rnn "<<Xtotal/pi/10.<<" "<<Xtotal/pi/10.*fermi*fermi<<G4endl;
-//G4cout<<"G4FTFParameters Xt Xel MeV "<<Xtotal<<" "<<Xelastic<<" "<<GeV<<G4endl;
-
 //-----------------------------------------------------------------------------------  
       SetSlope( Xtotal*Xtotal/16./pi/Xelastic/0.3894 ); // Slope parameter of elastic scattering
                                                         //      (GeV/c)^(-2))
-//G4cout<<"G4FTFParameters Slope "<<GetSlope()<<G4endl;
 //-----------------------------------------------------------------------------------
       SetGamma0( GetSlope()*Xtotal/10./2./pi );
 
@@ -207,36 +208,45 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 //----------- Parameters of excitations ---------------------------------------------
            if( absPDGcode > 1000 )                        //------Projectile is baryon --------
              {
+              SetMagQuarkExchange(3.4); //3.8); 
+              SetSlopeQuarkExchange(1.2);
+              SetDeltaProbAtQuarkExchange(0.1); //(0.1*4.);
+
               SetProjMinDiffMass(1.1);                    // GeV
               SetProjMinNonDiffMass(1.1);                 // GeV
-              SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfProjDiff(0.76*std::pow(s/GeV/GeV,-0.35));
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
+              SetProbabilityOfTarDiff(0.76*std::pow(s/GeV/GeV,-0.35));
 
               SetAveragePt2(0.3);                         // GeV^2
              }
            else if( absPDGcode == 211 || PDGcode ==  111) //------Projectile is Pion -----------
              {
+              SetMagQuarkExchange(120.); // 210.
+              SetSlopeQuarkExchange(2.0);
+              SetDeltaProbAtQuarkExchange(0.6);
+
               SetProjMinDiffMass(0.5);                    // GeV
               SetProjMinNonDiffMass(0.3);                 // GeV
-              SetProbabilityOfProjDiff(0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
+              SetProbabilityOfProjDiff(0.*0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
 
               SetTarMinDiffMass(1.1);                     // GeV
               SetTarMinNonDiffMass(1.1);                  // GeV
-              SetProbabilityOfTarDiff(0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
 
-/*
-SetProjMinDiffMass(0.5);
-SetProjMinNonDiffMass(0.3);   // Uzhi 12.06.08
-SetProbabilityOfProjDiff(0.05); 
-SetProbabilityOfTarDiff(0.05);
-*/
+              SetProbabilityOfTarDiff(2.*0.62*std::pow(s/GeV/GeV,-0.51)); // 40/32 X-dif/X-inel
+
               SetAveragePt2(0.3);                         // GeV^2
              }
-           else if( absPDGcode == 321 || PDGcode == -311) //------Projectile is Kaon -----------
+           else if( (absPDGcode == 321) || (PDGcode == 311) || 
+                       (PDGcode == 130) || (PDGcode == 310))  //Projectile is Kaon
              {
+// Must be corrected, taken from PiN
+              SetMagQuarkExchange(120.);
+              SetSlopeQuarkExchange(2.0);
+              SetDeltaProbAtQuarkExchange(0.6);
+
               SetProjMinDiffMass(0.7);                    // GeV 1.1
               SetProjMinNonDiffMass(0.7);                 // GeV
               SetProbabilityOfProjDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
@@ -250,6 +260,10 @@ SetProbabilityOfTarDiff(0.05);
            else                                           //------Projectile is undefined,
                                                           //------Nucleon assumed
              {
+              SetMagQuarkExchange(3.5);
+              SetSlopeQuarkExchange(1.0);
+              SetDeltaProbAtQuarkExchange(0.1);
+
               SetProjMinDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
               SetProjMinNonDiffMass((particle->GetPDGMass()+160.*MeV)/GeV);
               SetProbabilityOfProjDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
@@ -259,10 +273,33 @@ SetProbabilityOfTarDiff(0.05);
               SetProbabilityOfTarDiff(0.95*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
 
               SetAveragePt2(0.3);                         // GeV^2
-             };
+             }
 
+// ---------- Set parameters of a string kink -------------------------------
+             SetPt2Kink(6.*GeV*GeV);
+             G4double Puubar(1./3.), Pddbar(1./3.), Pssbar(1./3.); // SU(3) symmetry
+//           G4double Puubar(0.41 ), Pddbar(0.41 ), Pssbar(0.18 ); // Broken SU(3) symmetry
+             SetQuarkProbabilitiesAtGluonSplitUp(Puubar, Pddbar, Pssbar);
 
-//G4cout<<"G4FTFParameters Out"<<G4endl;
+// --------- Set parameters of nuclear destruction--------------------
 
-    } 
+    if( absPDGcode < 1000 ) 
+    {
+      SetCofNuclearDestruction(1.); //1.0);                 // for meson projectile
+    } else if( theA > 20. )
+    {
+      SetCofNuclearDestruction(0.2); //2);                 // for baryon projectile and heavy target
+    } else
+    {
+      SetCofNuclearDestruction(0.2); //1.0);                 // for baryon projectile and light target
+    }
+
+    SetR2ofNuclearDestruction(1.5*fermi*fermi);
+
+    SetExcitationEnergyPerWoundedNucleon(100*MeV);
+
+    SetDofNuclearDestruction(0.4);
+    SetPt2ofNuclearDestruction(0.17*GeV*GeV);
+    SetMaxPt2ofNuclearDestruction(1.0*GeV*GeV);
+} 
 //**********************************************************************************************

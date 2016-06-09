@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4BertiniNeutronBuilder.hh,v 1.2 2009/03/31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4BertiniNeutronBuilder
+//
+// Author: 2002 H.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4BertiniNeutronBuilder_h
 #define G4BertiniNeutronBuilder_h 1
 
@@ -35,7 +49,6 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4CascadeInterface.hh"   
-#include "G4NeutronInelasticCrossSection.hh"
 
 class G4BertiniNeutronBuilder : public G4VNeutronBuilder
 {
@@ -54,7 +67,6 @@ class G4BertiniNeutronBuilder : public G4VNeutronBuilder
 
   private:
     G4CascadeInterface * theModel;    
-    G4NeutronInelasticCrossSection theXSec;
     G4double theMin;
     G4double theMax;
 

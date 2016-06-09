@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4eInverseBremsstrahlung.cc,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 #include "G4eInverseBremsstrahlung.hh"
 #include "G4VEmAdjointModel.hh"
 #include "G4AdjointBremsstrahlungModel.hh"
@@ -30,9 +33,11 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4eInverseBremsstrahlung::G4eInverseBremsstrahlung(G4bool whichScatCase,G4String process_name,G4AdjointBremsstrahlungModel* aBremAdjointModel):
-				G4VAdjointInverseScattering(process_name,whichScatCase)
+				G4VAdjointReverseReaction(process_name,whichScatCase)
 {theAdjointEMModel = aBremAdjointModel;
- theAdjointEMModel->SetSecondPartOfSameType(false); 
+ theAdjointEMModel->SetSecondPartOfSameType(false);
+ if (IsScatProjToProjCase) SetIntegralMode(true);
+ else   SetIntegralMode(false);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //

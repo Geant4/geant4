@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.hh,v 1.10 2006/06/29 21:18:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmViewer.hh,v 1.11 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -38,28 +38,9 @@
 #define G4OPENGLXMVIEWER_HH
 
 #include "G4OpenGLXViewer.hh"
-#include "G4OpenGLSceneHandler.hh"
 #include "globals.hh"
 
 #include <Xm/Xm.h>
-#include <Xm/MainW.h>
-#include <Xm/Label.h>
-#include <Xm/Form.h>
-#include <Xm/RowColumn.h>
-#include <Xm/PushB.h>
-#include <Xm/ToggleB.h>
-#include <Xm/ArrowBG.h>
-#include <Xm/CascadeB.h>
-#include <Xm/DrawingA.h>
-#include <Xm/Frame.h>
-#include <X11/keysym.h>
-#include <Xm/XmStrDefs.h>
-#include <X11/Xmu/StdCmap.h>
-#include <Xm/TextF.h>
-#include <Xm/ToggleB.h>
-#include <X11/Shell.h>
-#include <Xm/Separator.h>
-#include <Xm/Scale.h>
 
 class G4OpenGLXmTopLevelShell;
 class G4OpenGLXmRadioButton;

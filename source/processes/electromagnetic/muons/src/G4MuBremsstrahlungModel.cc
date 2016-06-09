@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc,v 1.32 2008/07/22 16:11:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuBremsstrahlungModel.cc,v 1.35 2009/04/12 17:48:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -110,6 +110,14 @@ G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
+                                               const G4MaterialCutsCouple*)
+{
+  return minThreshold;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
                                          const G4DataVector& cuts)
 {
@@ -130,7 +138,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
     G4int nc = cuts.size();
     if(nn > 0) {
       for (G4int ii=0; ii<nn; ii++){
-	G4DataVector* a=partialSumSigma[ii];
+	G4DataVector* a = partialSumSigma[ii];
 	if ( a )  delete a;    
       } 
       partialSumSigma.clear();
@@ -153,13 +161,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
   }
 
   // define pointer to G4ParticleChange
-  if(!fParticleChange) {
-    if(pParticleChange)
-      fParticleChange = 
-	reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
-    else
-      fParticleChange = new G4ParticleChangeForLoss();
-  }
+  if(!fParticleChange) fParticleChange = GetParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: hadr01.cc,v 1.9 2006/11/24 16:48:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: hadr01.cc,v 1.10 2009/11/25 19:56:36 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------
 //      GEANT4 hadr01
@@ -51,8 +51,8 @@
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "QBBC.hh"
-#include "QGSP.hh"
+#include "G4PhysListFactory.hh"
+#include "G4VModularPhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
@@ -74,10 +74,27 @@ int main(int argc,char** argv) {
   //set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction());
 
-  runManager->SetUserInitialization(new PhysicsList);
-  //runManager->SetUserInitialization(new QBBC(1,"QBEC_HP"));
-  //runManager->SetUserInitialization(new QGSP);
+  G4PhysListFactory factory;
+  G4VModularPhysicsList* phys = 0;
+  G4String physName = "";
 
+  // Physics List name defined via 2nd argument
+  if (argc==3) { physName = argv[2]; }
+
+  // Physics List name defined via environment variable
+  char* path = getenv("PHYSLIST");
+  if (path) { physName = G4String(path); }
+
+  // reference PhysicsList via its name
+  if(factory.IsReferencePhysList(physName)) {
+    phys = factory.GetReferencePhysList(physName);
+  } 
+
+  // local Physics List
+  if(!phys) { phys = new PhysicsList(); }
+
+  // define physics
+  runManager->SetUserInitialization(phys);
   runManager->SetUserAction(new PrimaryGeneratorAction());
 
   //set user action classes

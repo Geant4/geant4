@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrackStack.hh,v 1.6 2006/06/29 18:09:13 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TrackStack.hh,v 1.8 2009/09/10 21:31:41 asaim Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //  Last Modification : 09/Dec/96 M.Asai
@@ -37,6 +37,8 @@
 
 #include "G4StackedTrack.hh"
 #include "globals.hh"
+
+class G4SmartTrackStack;
 
 // class description:
 //
@@ -62,15 +64,20 @@ class G4TrackStack
       void GrabFromStack(G4StackedTrack * aStackedTrack);
       void clear();
       void TransferTo(G4TrackStack * aStack);
+      void TransferTo(G4SmartTrackStack * aStack);
 
   private:
       G4int n_stackedTrack;
       G4StackedTrack * firstStackedTrack;
       G4StackedTrack * lastStackedTrack;
+      G4int maxNTracks;
 
   public:
       inline G4int GetNTrack() const
       { return n_stackedTrack; }
+      inline G4int GetMaxNTrack() const
+      { return maxNTracks; }
+
 };
 
 #endif

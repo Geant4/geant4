@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.27 2008/10/24 14:00:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Navigator.hh,v 1.29 2009/11/30 11:59:52 japost Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4Navigator
@@ -37,7 +37,7 @@
 // or to find the physical volume containing a given point in the world
 // reference system. The navigator maintains a transformation history and
 // other information to optimise the tracking time performance.
-//
+
 // History:
 // - Created.                                  Paul Kent,     Jul 95/96
 // - Zero step protections                     J.A. / G.C.,   Nov  2004
@@ -236,10 +236,11 @@ class G4Navigator
   inline G4bool ExitedMotherVolume() const;
     // Verify if the step has exited the mother volume.
 
-  inline void  CheckMode(G4bool mode);
+  inline void   CheckMode(G4bool mode);
     // Run navigation in "check-mode", therefore using additional
     // verifications and more strict correctness conditions.
     // Is effective only with G4VERBOSE set.
+  inline G4bool IsCheckModeActive() { return fCheck; } 
 
   void PrintState() const;
     // Print the internal state of the Navigator (for debugging).

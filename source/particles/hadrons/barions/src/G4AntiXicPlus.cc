@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiXicPlus.cc,v 1.14 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AntiXicPlus.cc,v 1.15 2009/10/09 14:34:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4AntiXicPlus* G4AntiXicPlus::Definition()
   //             shortlived      subType    anti_encoding
   
    anInstance = new G4ParticleDefinition(
-                 name,      2.4680*GeV,   1.50e-9*MeV,   -1.*eplus, 
+                 name,      2.4679*GeV,   1.50e-9*MeV,   -1.*eplus, 
                     1,              +1,             0,
                     1,              -1,             0,
              "baryon",               0,            -1,       -4232,

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QEmExtraPhysics.cc,v 1.1 2007/05/23 17:38:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QEmExtraPhysics.cc,v 1.2 2009/11/16 19:12:10 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,13 +32,13 @@
 //
 // Author: 23 May 2007 V. Ivanchenko
 //
-// Modified:
+// Modified: 19 Nov 2009 M.Kosov: G4QInelastic instead of G4QCollision
 //
 //----------------------------------------------------------------------------
 //
 
 #include "G4QEmExtraPhysics.hh"
-#include "G4QCollision.hh"
+#include "G4QInelastic.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -75,7 +75,7 @@ void G4QEmExtraPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  hProcess = new G4QCollision();
+  hProcess = new G4QInelastic();
 
   G4ParticleDefinition* particle = G4Gamma::Gamma();
   G4ProcessManager* pmanager = particle->GetProcessManager();

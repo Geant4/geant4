@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel.hh,v 1.33 2008/03/10 10:39:21 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UrbanMscModel.hh,v 1.35 2009/04/29 13:30:22 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -36,46 +36,12 @@
 //
 // Author:        Laszlo Urban
 //
-// Creation date: 01.03.2001
+// Creation date: 06.03.2008
 //
 // Modifications:
 //
-// 27-03-03 Move model part from G4MultipleScattering (V.Ivanchenko)
-// 27-03-03 Rename (V.Ivanchenko)
-//
-// 05-08-03 angle distribution has been modified (L.Urban)
-// 26-11-03 new data member currentRange (L.Urban)
-// 01-03-04 changes in data members + signature changed in SampleCosineTheta
-// 11-03-04 changes in data members (L.Urban)
-// 23-04-04 changes in data members and in signature of SampleCosineTheta
-//          (L.Urban)
-// 17-08-04 name of data member facxsi changed to factail (L.Urban)
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 15-04-05 optimize internal interface - add SampleSecondaries method (V.Ivanchenko)
-// 11-08-05 computation of lateral correlation added (L.Urban)
-// 02-10-05 nuclear size correction computation removed, the correction
-//          included in the (theoretical) tabulated values (L.Urban)
-// 16-02-06 data members b and xsi have been removed (L.Urban)
-// 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
-// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
-// 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko)
-// 11-05-06 name of data member safety changed to presafety, some new data
-//          members added (frscaling1,frscaling2,tlimitminfix,nstepmax)
-//         (L.Urban)
-// 13-10-06 data member factail removed, data member tkinlimit changed
-//          to lambdalimit,
-//          new data members tgeom,tnow,skin,skindepth,Zeff,geomlimit
-//          G4double GeomLimit(const G4Track& track) changed to
-//              void GeomLimit(const G4Track& track) (L.Urban)
-// 20-10-06 parameter theta0 now computed in the (public)
-//          function ComputeTheta0,
-//          single scattering modified allowing not small
-//          angles as well (L.Urban)
-// 31-01-07 code cleaning (L.Urban)
-// 06-02-07 Move SetMscStepLimitation method into the source (VI)
-// 15-02-07 new data member : smallstep (L.Urban)
-// 10-04-07 remove navigator, smallstep, tnow (V.Ivanchenko)
-//
+// 28-04-09  move G4UrbanMscModel2 from the g49.2 to G4UrbanMscModel. 
+//           now it is frozen (V.Ivanchenk0)
 //
 // Class Description:
 //
@@ -110,19 +76,13 @@ public:
   virtual ~G4UrbanMscModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-				          
+
   G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* particle,
 				      G4double KineticEnergy,
 				      G4double AtomicNumber,
 				      G4double AtomicWeight=0., 
 				      G4double cut =0.,
 				      G4double emax=DBL_MAX);
-
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double,
-			 G4double);
 
   void SampleScattering(const G4DynamicParticle*,
 			G4double safety);
@@ -140,17 +100,19 @@ public:
 
 private:
 
+  G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
+
   G4double SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy);
 
   G4double SampleDisplacement();
 
   G4double LatCorrelation();
 
-  void GeomLimit(const G4Track& track);
-
   inline G4double GetLambda(G4double kinEnergy);
 
   inline void SetParticle(const G4ParticleDefinition*);
+
+  inline void UpdateCache();
 
   //  hide assignment operator
   G4UrbanMscModel & operator=(const  G4UrbanMscModel &right);
@@ -159,26 +121,23 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
 
-  G4SafetyHelper*             safetyHelper;
   G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
   G4LossTableManager*         theManager;
 
   G4double mass;
-  G4double charge;
-
-  G4double masslimite,masslimitmu;
+  G4double charge,ChargeSquare;
+  G4double masslimite,lambdalimit,fr;
 
   G4double taubig;
   G4double tausmall;
   G4double taulim;
   G4double currentTau;
-  G4double frscaling1,frscaling2;
   G4double tlimit;
   G4double tlimitmin;
   G4double tlimitminfix;
+  G4double tgeom;
 
-  G4double nstepmax;
   G4double geombig;
   G4double geommin;
   G4double geomlimit;
@@ -197,18 +156,27 @@ private:
 
   G4double currentKinEnergy;
   G4double currentRange; 
+  G4double rangeinit;
   G4double currentRadLength;
 
-  G4double Zeff;
+  G4double theta0max,rellossmax;
+  G4double third;
 
   G4int    currentMaterialIndex;
+
+  G4double y;
+  G4double Zold;
+  G4double Zeff,Z2,Z23,lnZ;
+  G4double coeffth1,coeffth2;
+  G4double coeffc1,coeffc2;
+  G4double scr1ini,scr2ini,scr1,scr2;
 
   G4bool   isInitialized;
   G4bool   inside;
   G4bool   insideskin;
-
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
@@ -235,10 +203,27 @@ void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
     particle = p;
     mass = p->GetPDGMass();
     charge = p->GetPDGCharge()/eplus;
+    ChargeSquare = charge*charge;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+void G4UrbanMscModel::UpdateCache()                                   
+{
+    lnZ = std::log(Zeff);
+    coeffth1 = 0.885+lnZ*(0.104-0.0170*lnZ);
+    coeffth2 = 0.028+lnZ*(0.012-0.00125*lnZ);
+    coeffc1  = 2.134-lnZ*(0.1045-0.00602*lnZ);
+    coeffc2  = 0.001126-lnZ*(0.0001089+0.0000247*lnZ);
+    Z2 = Zeff*Zeff;
+    Z23 = std::exp(2.*lnZ/3.);
+    scr1     = scr1ini*Z23;
+    scr2     = scr2ini*Z2*ChargeSquare;
+  //  lastMaterial = couple->GetMaterial();
+    Zold = Zeff;
+}
 
 #endif
 

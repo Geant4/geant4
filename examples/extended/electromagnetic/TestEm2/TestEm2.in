@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.24 2007/06/22 16:35:07 vnivanch Exp $
+# $Id: TestEm2.in,v 1.26 2009/09/16 18:07:30 maire Exp $
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
@@ -8,14 +8,14 @@
 /control/verbose 1
 /run/verbose 1
 #
-/testem/det/setMat PbWO4
+/testem/det/setMat G4_PbWO4
 /testem/det/setLbin 40 0.5
 /testem/det/setRbin 50 0.1
 #
 # Acceptance printout is activated
 /testem/run/acceptance  0.949 0.0082 3.0
 #
-/testem/phys/addPhysics  emstandard
+/testem/phys/addPhysics  emstandard_opt0
 #
 /testem/phys/setCuts 1.0 mm
 #

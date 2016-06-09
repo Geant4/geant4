@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc,v 1.16 2008/11/21 16:50:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EmStandardPhysics.cc,v 1.20 2009/10/30 18:36:15 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -53,9 +53,9 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
-#include "G4hMultipleScattering.hh"
 #include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -154,34 +154,40 @@ void G4EmStandardPhysics::ConstructProcess()
 
     } else if (particleName == "e-") {
 
-      pmanager->AddProcess(new G4eMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung(),  -1,-3, 3);
+      pmanager->AddProcess(new G4eMultipleScattering(), -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation,           -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung(),     -1,-3, 3);
 
     } else if (particleName == "e+") {
 
-      pmanager->AddProcess(new G4eMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2, 2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-3, 3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1, 4);
+      pmanager->AddProcess(new G4eMultipleScattering(), -1, 1, 1);
+      pmanager->AddProcess(new G4eIonisation,           -1, 2, 2);
+      pmanager->AddProcess(new G4eBremsstrahlung,       -1,-3, 3);
+      pmanager->AddProcess(new G4eplusAnnihilation,      0,-1, 4);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      pmanager->AddProcess(new G4hMultipleScattering,-1, 1, 1);
-      pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,   -1,-3, 3);
-      pmanager->AddProcess(new G4MuPairProduction,   -1,-4, 4);
+      pmanager->AddProcess(new G4MuMultipleScattering,-1, 1, 1);
+      pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
+      pmanager->AddProcess(new G4MuBremsstrahlung,    -1,-3, 3);
+      pmanager->AddProcess(new G4MuPairProduction,    -1,-4, 4);
 
     } else if (particleName == "alpha" ||
-               particleName == "He3" ||
-               particleName == "GenericIon") {
+               particleName == "He3") {
+
+      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
+
+    } else if (particleName == "GenericIon") {
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
       pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
 
     } else if (particleName == "pi+" ||
                particleName == "pi-" ||
+	       particleName == "kaon+" ||
+               particleName == "kaon-" ||
                particleName == "proton" ) {
 
       pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
@@ -205,8 +211,6 @@ void G4EmStandardPhysics::ConstructProcess()
                particleName == "anti_xi_c+" ||
                particleName == "anti_xi-" ||
                particleName == "deuteron" ||
-	       particleName == "kaon+" ||
-               particleName == "kaon-" ||
 	       particleName == "lambda_c+" ||
                particleName == "omega-" ||
                particleName == "sigma_c+" ||

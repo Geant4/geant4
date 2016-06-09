@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXViewer.cc,v 1.16 2006/07/03 16:38:13 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLImmediateXViewer.cc,v 1.19 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -35,6 +35,7 @@
 #ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #include "G4OpenGLImmediateXViewer.hh"
+#include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4ios.hh"
 
@@ -85,7 +86,6 @@ void G4OpenGLImmediateXViewer::DrawView () {
 
   //Make sure current viewer is attached and clean...
   glXMakeCurrent (dpy, win, cx);
-  glViewport (0, 0, WinSize_x, WinSize_y);
 
   if(style!=G4ViewParameters::hlr &&
      haloing_enabled) {

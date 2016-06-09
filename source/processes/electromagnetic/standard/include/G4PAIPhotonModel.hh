@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PAIPhotonModel.hh,v 1.12 2009/02/19 19:17:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -73,18 +75,18 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
   
-  virtual void InitialiseMe(const G4ParticleDefinition*) {};
+  virtual void InitialiseMe(const G4ParticleDefinition*);
 
-  virtual G4double ComputeDEDX(const G4MaterialCutsCouple*,
-			       const G4ParticleDefinition*,
-			       G4double kineticEnergy,
-			       G4double cutEnergy);
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+					const G4ParticleDefinition*,
+					G4double kineticEnergy,
+					G4double cutEnergy);
 
-  virtual G4double CrossSection(const G4MaterialCutsCouple*,
-				const G4ParticleDefinition*,
-				G4double kineticEnergy,
-				G4double cutEnergy,
-				G4double maxEnergy);
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
@@ -121,12 +123,10 @@ public:
   G4double GetEnergyTransfer(G4PhysicsTable*, G4int iPlace,
                              G4double position, G4int iTransfer );
 
-
-
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
+			      G4double kinEnergy);
 
 private:
 
@@ -144,8 +144,6 @@ private:
   G4int                fMeanNumber;
   G4int                fVerbose; 
   G4PhysicsLogVector*  fProtonEnergyVector ;
-
-
 
   // vectors
 
@@ -202,30 +200,6 @@ private:
 
   G4bool   isInitialised;
 };
-
-/////////////////////////////////////////////////////////////////////
-
-inline G4double G4PAIPhotonModel::MaxSecondaryEnergy( const G4ParticleDefinition* p,
-                                                      G4double kinEnergy) 
-{
-  G4double tmax = kinEnergy;
-  if(p == fElectron) tmax *= 0.5;
-  else if(p != fPositron) { 
-    G4double mass = p->GetPDGMass();
-    G4double ratio= electron_mass_c2/mass;
-    G4double gamma= kinEnergy/mass + 1.0;
-    tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
-  }
-  return tmax;
-}
-
-///////////////////////////////////////////////////////////////
-
-inline  void G4PAIPhotonModel::DefineForRegion(const G4Region* r) 
-{
-  fPAIRegionVector.push_back(r);
-}
 
 #endif
 

@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 Mar 2009 D.H. Wright for Tatsumi Koi (hadr-util-V09-02-00)
+-------------------------------------------------------------
+- G4StableIsotopes.cc - fill in missing isotope names
+
 23 Jul 2008 D.H. Wright for Vladimir Uzhinskiy (hadr-util-V09-01-01)
 --------------------------------------------------------------------
 - G4ReactionDynamics::GenerateXandPt: fixed bug in momentum bin which

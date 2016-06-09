@@ -1,4 +1,4 @@
-$Id: History,v 1.136 2008/12/11 10:47:59 gcosmo Exp $
+$Id: History,v 1.146 2009/11/12 15:05:49 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,72 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 12th,  2009 J.Apostolakis - field-V09-02-08
+-----------------------------
+- G4Nystrom:  Corrected interface method getField: array now has explicit dimension[4]
+                (Problem found by gcc 4.3 - it checked indices used in inline method! )
+
+Nov 6th,  2009 P.Gumplinger - field-V09-02-07
+---------------------------
+- bug fix in G4EqEMFieldWithSpin and G4EqEMFieldWithEDM
+  thanks to Hiromi Iinuma (KEK) see:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/161.html
+
+Nov 5th,  2009 J.Apostolakis - field-V09-02-06
+----------------------------
+- G4MagIntegratorDriver.cc : Enabled call to ComputeRightHandSide
+- G4NystromRK4.cc          : Disabled auxiliary code in Stepper (needed if
+                              ComputeRightHandSide is not called.)
+
+Nov 5th,  2009 J.Apostolakis - field-V09-02-05
+----------------------------
+- Added new virtual method CalculateRightHandSide to G4MagIntegratorStepper for use
+      in caching momentum (and field value) by G4NystromRK4
+      Default implementation in G4MagIntegratorStepper calls RightHandSide inline method.
+- G4Nystrom:  New Set/Get method for cache distance.
+              Changed private data members in G4NystromRK4.
+- G4MagIntegratorDriver:  alternative call to ComputeRightHandSide is not used (in comment)
+              As a result G4NystromRK4 operates without reusing 
+
+Nov 5th,  2009 J.Apostolakis - field-V09-02-04
+----------------------------
+- G4CachedMagneticField: New Simple class to cache value of Magnetic Field. 
+     Speeds up code when calculation of field value is complex.
+- G4NystromRK4 :         New Stepper with Nystrom for magnetic field
+     with analytic estimation of integration error.  
+     Greatly reduces number of field value per step.
+- Revised testPropagateMagField to use Cached Quadrupole field,
+     and to cover G4NystromRK4 and G4ConstRK4.
+
+Nov 4th,  2009 P.Gumplinger - field-V09-02-03
+---------------------------
+- (minor change) remove comment from G4EqEMFieldWithSpin.cc
+  add G4EqEMFieldWithEDM class: this is the RHS of EofM in a combined
+  electric and magnetic field, with spin tracking for both MDM and EDM terms.
+  Thanks to Kevin Lynch, Phys. Dept. at Boston University.
+
+May 18th, 2009 T.Nikitina - field-V09-02-02
+-------------------------
+- Enhanced algorithm G4ChordFinder::ApproxCurvePointS() in order to speedup
+  BrentLocator.
+
+March 25th, 2009 G.Cosmo - field-V09-02-01
+------------------------
+- Some code cleanup and formatting...
+
+March 6th, 2009 P.Gumplinger - field-V09-02-00
+----------------------------
+- Added 3rd term of BMT equation (Spin x Beta x Efield) to G4EqEMFieldWithSpin,
+  addresses emfields forum posting #155 (bug report). Thanks to Kevin Lynch,
+  Phys. Dept. at Boston University.
+- Moved renormalization of spin from G4EqEMFieldWithSpin and G4Mag_SpinEqRhs to
+  G4ClassicalRK4 and G4SimpleHeum.
+- Added Spin propagation errors to the criteria for 'OneGoodStep' in
+  G4MagIntegratorDriver but actually don't add it (yet) to the decision logic.
+
 November, 19th, 2008  P.Gumplinger - field-V09-01-05
 ----------------------------------
-- Renormalize the spin to ONE in G4EqEMFieldWithSpin.cc and G4Mag_SpinEqRhs.cc
+- Renormalized the spin to 1 in G4EqEMFieldWithSpin and G4Mag_SpinEqRhs.
 
 November, 7th, 2008   P.Gumplinger - field-V09-01-04
 ----------------------------------

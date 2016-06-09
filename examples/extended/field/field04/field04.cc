@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: field04.cc,v 1.8 2008/07/03 20:31:30 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: field04.cc,v 1.11 2009/10/30 10:17:43 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------
@@ -44,9 +44,6 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
 #include "Randomize.hh"
 
 #include "F04PhysicsList.hh"
@@ -64,6 +61,10 @@
 #include "G4VisExecutive.hh"
 #endif
 
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+
 // argc holds the number of arguments (including the name) on the command line
 // -> it is ONE when only the name is  given !!!
 // argv[0] is always the name of the program
@@ -71,32 +72,25 @@
 
 int main(int argc,char** argv) 
 {
-  G4bool useUItcsh = true;
-
   G4String physicsList = "QGSP_BERT";
 
-  G4int seed = 0;
+  G4int seed = 123;
   if (argc  > 2) seed = atoi(argv[argc-1]);
-  if (seed == 0) seed = time(0);
 
   // Choose the Random engine
 
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   CLHEP::HepRandom::setTheSeed(seed);
-  CLHEP::HepRandom::showEngineStatus();
 
 #ifndef WIN32
   G4int c = 0;
-  while ((c=getopt(argc,argv,"p:t")) != -1)
+  while ((c=getopt(argc,argv,"p")) != -1)
   {
      switch (c)
      {
        case 'p':
          physicsList = optarg;
          G4cout << "Physics List used is " <<  physicsList << G4endl;
-         break;
-       case 't': // Don't use a tcsh-style command line interface
-         useUItcsh = false;
          break;
        case ':':       /* -p without operand */
          fprintf(stderr, 
@@ -148,7 +142,7 @@ int main(int argc,char** argv)
 
   // Get the pointer to the User Interface manager 
 
-  G4UImanager * UI = G4UImanager::GetUIpointer();  
+  G4UImanager * UImanager = G4UImanager::GetUIpointer();  
 
 #ifndef WIN32
   G4int optmax = argc;
@@ -160,40 +154,29 @@ int main(int argc,char** argv)
      for ( ; optind < optmax; optind++)
      {
          G4String macroFilename = argv[optind];
-         UI->ApplyCommand(command+macroFilename);
+         UImanager->ApplyCommand(command+macroFilename);
      }
-  }
-  else
-  {
-     // Define (G)UI terminal for interactive mode
-     G4UIsession * session = 0;
-     if (useUItcsh)
-     {
-        // G4UIterminal is a terminal with tcsh-like control.
-        session = new G4UIterminal(new G4UItcsh);
-     }
-     else
-     {
-        // G4UIterminal is a (dumb) terminal.
-        session = new G4UIterminal();
-     }
-     session->SessionStart();
-     delete session;
   }
 #else  // Simple UI for Windows runs, no possibility of additional arguments
-  if (argc==1)   // Define UI terminal for interactive mode  
-  { 
-     G4UIsession * session = new G4UIterminal;
-     session->SessionStart();
-     delete session;
-  }
-  else           // Batch mode
+  if (argc!=1)
   { 
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+     UImanager->ApplyCommand(command+fileName);
   }
-#endif      
+#endif
+  else  {
+     // Define (G)UI terminal for interactive mode
+#ifdef G4UI_USE
+     G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+#ifdef G4VIS_USE
+     UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
+     ui->SessionStart();
+     delete ui;
+#endif
+  }
+
   // job termination
 
 #ifdef G4VIS_USE

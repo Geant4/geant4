@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History,v 1.16 2008/06/12 23:15:27 cirrone Exp $
+$Id: History,v 1.19 2009/11/12 12:43:14 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,15 @@ $Id: History,v 1.16 2008/06/12 23:15:27 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+12.11.2009 - A.Ribon (lAr_calorimeter-V09-02-01)
+             Fixed mistake in GNUmakefile, and use QGSP_BIC_EMY
+	     as default Physics List (so that it tests the
+	     low-energy electromagnetic).
+
+06.04.2009 - G.A.P.Cirrone (lAr_calorimeter-V09-02-00)
+	     GNUmakefile updated
+
 12.06.2008 - G.A.P.Cirrone (lAr_calorimeter-V09-01-00)
              Fixed a compilation error in the Analysis manager
 

@@ -40,6 +40,8 @@
 #include <map>
 
 #include "G4ThreeVector.hh"
+#include "G4RotationMatrix.hh"
+
 #include "G4GDMLRead.hh"
 
 class G4GDMLMatrix
@@ -49,7 +51,9 @@ class G4GDMLMatrix
 
    G4GDMLMatrix();
    G4GDMLMatrix(size_t rows0,size_t cols0);
-   ~G4GDMLMatrix();
+   G4GDMLMatrix(const G4GDMLMatrix& rhs);
+   G4GDMLMatrix& operator=(const G4GDMLMatrix& rhs); 
+  ~G4GDMLMatrix();
 
    void Set(size_t r,size_t c,G4double a);
    G4double Get(size_t r,size_t c) const;
@@ -79,6 +83,9 @@ class G4GDMLReadDefine : public G4GDMLRead
 
  protected:
 
+   G4GDMLReadDefine();
+   virtual ~G4GDMLReadDefine();
+
    G4RotationMatrix GetRotationMatrix(const G4ThreeVector&);
    void VectorRead(const xercesc::DOMElement* const,G4ThreeVector&);
    G4String RefRead(const xercesc::DOMElement* const);
@@ -89,7 +96,8 @@ class G4GDMLReadDefine : public G4GDMLRead
    void RotationRead(const xercesc::DOMElement* const);
    void ScaleRead(const xercesc::DOMElement* const);
    void VariableRead(const xercesc::DOMElement* const); 
-   void QuantityRead(const xercesc::DOMElement* const); 
+   void QuantityRead(const xercesc::DOMElement* const);
+   void ExpressionRead(const xercesc::DOMElement* const);
 
  protected:
 

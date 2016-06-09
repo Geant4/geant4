@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2006/06/12 08:32:16 allison Exp $
+$Id: History,v 1.17 2009/10/21 15:27:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/VRML sub-category
 ------------------------------------------------
+
+21st October 2009  John Allison  (VRML-V09-02-01 coworks greps-V09-02-02)
+- Added AddCompound (const G4THitsMap<G4double>&) methods.
+  o Prevents warnings about hiding - calls G4VSceneHandler base class.
+
+29 September 2009  John Allison (VRML-V09-02-00)
+- Tagged change of disclaimer on file headings (made long ago).
 
 12th June 2006  John Allison  (VRML-V08-00-02)
 - G4VRML1/2FileViewer.cc: Fixed rewind problem. ClearView closes and

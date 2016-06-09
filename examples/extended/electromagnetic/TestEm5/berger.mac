@@ -1,4 +1,4 @@
-# $Id: berger.mac,v 1.6 2008/10/31 11:36:46 maire Exp $
+# $Id: berger.mac,v 1.7 2009/01/21 17:49:59 maire Exp $
 #
 # macro file for TestEm5.cc    
 #
@@ -25,7 +25,7 @@
 /gun/particle e- 
 /gun/energy 1 MeV
 #
-/testem/histo/setFileName berger/530um
+/testem/histo/setFileName berger/Si530um
 /testem/histo/setFileType root
 /testem/histo/setHisto 1 105  0  1.05 MeV	#energy deposit  
 #

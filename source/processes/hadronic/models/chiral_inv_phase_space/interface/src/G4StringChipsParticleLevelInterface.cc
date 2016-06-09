@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Short description: Interface of QGSC to CHIPS (SoftHadrons) 
+// ----------------------------------------------------------------
+//
 
 //#define debug
 //#define trapdebug
@@ -174,8 +177,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     }
   }
   G4int targetPDGCode = 90000000 + 1000*resZ + (resA-resZ);    // PDG of theResidualNucleus
-  G4double targetMass = theNucleus->GetMass();                 // Its mass
-  targetMass -= hitMass; // subtract masses of knocked out nucleons (binding?! M.K.) E/M
+  G4double targetMass=mNeut;
+  if (!resZ)                                                   // Nucleus of only neutrons
+  {
+    if (resA>1) targetMass*=resA;
+  }
+  else targetMass=G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ)
+                                                                            ->GetPDGMass();
   G4double targetEnergy = std::sqrt(hitMomentum.mag2()+targetMass*targetMass);
   // !! @@ Target should be at rest: hitMomentum=(0,0,0) @@ !! M.K. (go to this system)
   G4LorentzVector targ4Mom(-1.*hitMomentum, targetEnergy);
@@ -184,20 +192,21 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   std::pair<G4double, G4double> theImpact = theNucleus->RefetchImpactXandY();
   G4double impactX = theImpact.first;
   G4double impactY = theImpact.second;
-  G4double inpactPar2 = impactX*impactX + impactY*impactY;
+  G4double impactPar2 = impactX*impactX + impactY*impactY;
   G4double radius2 = theNucleus->GetNuclearRadius(theInnerCoreDensityCut*perCent);
   //G4double radius2 = theNucleus->GetNuclearRadius(theInnerCoreDensityCut*perCent);
   radius2 *= radius2;
   G4double pathlength = 0.;
 #ifdef ppdebug
   G4cout<<"G4StringChipsParticleLevelInterface::Propagate: r="<<std::sqrt(radius2)/fermi
-        <<", b="<<std::sqrt(inpactPar2)/fermi<<", R="<<theNucleus->GetOuterRadius()/fermi
-        <<", b/r="<<std::sqrt(inpactPar2/radius2)<<G4endl; 
+        <<", b="<<std::sqrt(impactPar2)/fermi<<", R="<<theNucleus->GetOuterRadius()/fermi
+        <<", b/r="<<std::sqrt(impactPar2/radius2)<<G4endl; 
 #endif
-  if(radius2 - inpactPar2>0) pathlength = 2.*std::sqrt(radius2 - inpactPar2);
+  if(radius2 - impactPar2>0) pathlength = 2.*std::sqrt(radius2 - impactPar2);
+  //pathlength = 27.;                         // *** Only temporary *** Always CHIPS
 #ifdef hdebug_SCPLI
   toth+=1.;                                 // increment total number of measurements
-  G4double bfm=std::sqrt(inpactPar2)/fermi; // impact parameter
+  G4double bfm=std::sqrt(impactPar2)/fermi; // impact parameter
   G4double efm=pathlength/fermi;            // energy absorption length
   G4int    nbi=static_cast<G4int>(bfm/bhdb);
   G4int    nei=static_cast<G4int>(efm/ehde);
@@ -218,7 +227,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4cout<<"G4StringChipsParticleLevelInterface::Propagate: ALL STRING particles "
           << theSecondaries->operator[](secondary)->GetDefinition()->GetPDGCharge()<<" "
           << theSecondaries->operator[](secondary)->GetDefinition()->GetPDGEncoding()<<" "
-       	  << a4Mom <<G4endl; 
+          << a4Mom <<G4endl; 
 #endif
 #ifdef pdebug
     G4cout<<"G4StringChipsParticleLevelInterface::Propagate: in C="
@@ -235,12 +244,12 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     {
       if((*current).first > toSort)        // The current is smaller then existing
       {
-	       theSorted.insert(current, it);     // It shifts the others up
-	       inserted = true;
-	       break;
+        theSorted.insert(current, it);     // It shifts the others up
+        inserted = true;
+        break;
       }
     }
-    if(!inserted) theSorted.push_back(it); // It is bigger than any previous
+    if(!inserted) theSorted.push_back(it); // It is bigger than any previous (@@Check this)
   }
   
   G4LorentzVector proj4Mom(0.,0.,0.,0.);
@@ -277,11 +286,11 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout<<"G4StringChipsParticleLevelInterface::Propagate: Absorption nS="
         <<theSorted.size()<<G4endl; 
 #endif
-  
+  G4bool EscapeExists = false;
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
   {
 #ifdef pdebug
-				G4cout<<"G4StringChipsParticleLevelInterface::Propagate: nq="
+    G4cout<<"G4StringChipsParticleLevelInterface::Propagate: nq="
           <<(*current).second->GetDefinition()->GetQuarkContent(3)<<", naq="
           <<(*current).second->GetDefinition()->GetAntiQuarkContent(3)<<", PDG="
           <<(*current).second->GetDefinition()->GetPDGEncoding()<<",4M="
@@ -349,23 +358,25 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #endif
 
 #ifdef pdebug
-				G4cout<<"G4StringChipsParticleLevelInterface::Propagate: E="<<runningEnergy<<", EL="
+    G4cout<<"G4StringChipsParticleLevelInterface::Propagate: E="<<runningEnergy<<", EL="
                                                     <<theEnergyLostInFragmentation<<G4endl;
 #endif
-
-    if(runningEnergy > theEnergyLostInFragmentation) break;
-    
+    if(runningEnergy > theEnergyLostInFragmentation)
+    {
+      EscapeExists = true;
+      break;
+    }
 #ifdef CHIPSdebug
     G4cout <<"G4StringChipsParticleLevelInterface::Propagate: ABSORBED STRING particles "
            <<(*current).second->GetDefinition()->GetPDGCharge()<<" "
            << (*current).second->GetDefinition()->GetPDGEncoding()<<" "
-	          << (*current).second->Get4Momentum() <<G4endl; 
+           << (*current).second->Get4Momentum() <<G4endl; 
 #endif
 #ifdef pdebug
     G4cout<<"G4StringChipsParticleLevelInterface::Propagate:C="
           <<current->second->GetDefinition()->GetPDGCharge()<<", PDG="
           <<current->second->GetDefinition()->GetPDGEncoding()<<", 4M="
-	         <<current->second->Get4Momentum()<<G4endl; 
+          <<current->second->Get4Momentum()<<G4endl; 
 #endif
 
     // projectile 4-momentum in target rest frame needed in constructor of QHadron
@@ -427,7 +438,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       barys += baryn;                           // Collected baryon number
       stras += stran;                           // Collected strangeness
       chars += charg;                           // Collected charge
-						//empty = false;
+      //empty = false;
     }
     if(barys>pcl)                               // Split in two or more parts (to survive!)
     {
@@ -450,106 +461,106 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
         // ---> calculate proposed separated part
         //@@ Convert it to a CHIPS function (Which class? G4QH::Conctruct?)
         if(!strm)                               // --> The total strangness = 0 (n/p/pi-)
-								{
-										if(chgm<0)                            // (n/pi-)
-										{
+        {
+          if(chgm<0)                            // (n/pi-)
+          {
             prtM=(-chgm)*mPiCh+brnm*mNeut;
             prtQC=(-chgm)*PiMiQC+brnm*NeutQC;
           }
           else                                  // (n/p)
-										{
+          {
             prtM=chgm*mProt+(brnm-chgm)*mNeut;
             prtQC=chgm*ProtQC+(brnm-chgm)*NeutQC;
           }
         }
         else if(strm>=brnm)                     // ---> BigPositiveStrangeness(L/Pi+/K0/K-)
-								{
+        {
           G4int stmb=strm-brnm;
-										if(chgm<0)                            // (L/K-/K0)
-										{
+          if(chgm<0)                            // (L/K-/K0)
+          {
             prtM=(-chgm)*mKChg+brnm*mLamb+std::abs(stmb+chgm)*mKZer;
             prtQC=(-chgm)*KMinQC+brnm*LambQC;
             if(stmb>-chgm) prtQC+=(stmb+chgm)*KZerQC;
             else if(stmb<-chgm) prtQC+=(-stmb-chgm)*AKZrQC;
           }
-										else                                  // (L/K0/pi+)
-										{
+          else                                  // (L/K0/pi+)
+          {
             prtM=chgm*mPiCh+(strm-brnm)*mKZer+brnm*mLamb;
             prtQC=chgm*PiPlQC+(strm-brnm)*KZerQC+brnm*LambQC;
           }
         }
         else if(strm>0)                         // ---> PositiveStrangeness<B (L/n/p/Pi+-)
-								{
+        {
           G4int bmst=brnm-strm;
-										if(chgm<0)                            // (L/n/Pi-)
-										{
+          if(chgm<0)                            // (L/n/Pi-)
+          {
             prtM=(-chgm)*mPiCh+strm*mLamb+bmst*mNeut;
             prtQC=(-chgm)*PiMiQC+strm*LambQC+bmst*NeutQC;
           }
-										else if(chgm>=bmst)                   // (L/p/Pi+)
-										{
+          else if(chgm>=bmst)                   // (L/p/Pi+)
+          {
             prtM=(chgm-bmst)*mPiCh+strm*mLamb+bmst*mProt;
             prtQC=(chgm-bmst)*PiPlQC+strm*LambQC+bmst*ProtQC;
           }
-										else                                  // ch<bmst (L/p/n)
-										{
+          else                                  // ch<bmst (L/p/n)
+          {
             prtM=chgm*mProt+strm*mLamb+(bmst-chgm)*mNeut;
             prtQC=chgm*ProtQC+strm*LambQC+(bmst-chgm)*NeutQC;
           }
         }
         else                                    // ---> NegativeStrangeness (N/K+/aK0/Pi-)
-								{
+        {
           G4int bmst=brnm-strm;
-										if(chgm>=bmst)                        // (K+/p/Pi+)
-										{
+          if(chgm>=bmst)                        // (K+/p/Pi+)
+          {
             prtM=(-strm)*mKChg+brnm*mProt+(chgm-bmst)*mPiCh;
             prtQC=(-strm)*KPlsQC+brnm*ProtQC+(chgm-bmst)*PiPlQC;
           }
-										else if(chgm>=-strm)                  // (K+/p/n)
-										{
+          else if(chgm>=-strm)                  // (K+/p/n)
+          {
             prtM=(-strm)*mKChg+chgm*mProt+(brnm-chgm)*mNeut;
             prtQC=(-strm)*KPlsQC+chgm*ProtQC+(brnm-chgm)*NeutQC;
           }
-										else if(chgm>=0)                      // (K+/aK0/n)
-										{
+          else if(chgm>=0)                      // (K+/aK0/n)
+          {
             prtM=chgm*mKChg+(-chgm-strm)*mKZer+brnm*mNeut;
             prtQC=chgm*KPlsQC+(-chgm-strm)*AKZrQC+brnm*NeutQC;
           }
-										else                                  // ch<0 (aK0/n/Pi-)
-										{
+          else                                  // ch<0 (aK0/n/Pi-)
+          {
             prtM=(-strm)*mKChg+(-chgm)*mPiCh+brnm*mNeut;
             prtQC=(-strm)*KPlsQC+(-chgm)*PiMiQC+brnm*NeutQC;
           }
         }
         EnFlowQC-=prtQC;
-								chgm=chars-chgm;                        // Just to keep the same notation
+        chgm=chars-chgm;                        // Just to keep the same notation
         strm=stras-strm;
         brnm=curb;
         if(!strm)                               // --> The total strangness = 0 (n/p/pi-)
-								{
-										if(chgm<0) resM=(-chgm)*mPiCh+brnm*mNeut;
+        {
+          if(chgm<0) resM=(-chgm)*mPiCh+brnm*mNeut;
           else       resM=chgm*mProt+(brnm-chgm)*mNeut;
         }
         else if(strm>=brnm)                     // ---> BigPositiveStrangeness(L/Pi+/K0/K-)
-								{
+        {
           G4int stmb=strm-brnm;
-										if(chgm<0) resM=(-chgm)*mKChg+brnm*mLamb+std::abs(stmb+chgm)*mKZer;
-										else       resM=chgm*mPiCh+(strm-brnm)*mKZer+brnm*mLamb;
+          if(chgm<0) resM=(-chgm)*mKChg+brnm*mLamb+std::abs(stmb+chgm)*mKZer;
+          else       resM=chgm*mPiCh+(strm-brnm)*mKZer+brnm*mLamb;
         }
         else if(strm>0)                         // ---> PositiveStrangeness<B (L/n/p/Pi+-)
-								{
+        {
           G4int bmst=brnm-strm;
-										if     (chgm<0)     resM=(-chgm)*mPiCh+strm*mLamb+bmst*mNeut;
-										else if(chgm>=bmst) resM=(chgm-bmst)*mPiCh+strm*mLamb+bmst*mProt;
-										else                resM=chgm*mProt+strm*mLamb+(bmst-chgm)*mNeut;
+          if     (chgm<0)     resM=(-chgm)*mPiCh+strm*mLamb+bmst*mNeut;
+          else if(chgm>=bmst) resM=(chgm-bmst)*mPiCh+strm*mLamb+bmst*mProt;
+          else                resM=chgm*mProt+strm*mLamb+(bmst-chgm)*mNeut;
         }
         else                                    // ---> NegativeStrangeness (N/K+/aK0/Pi-)
-								{
+        {
           G4int bmst=brnm-strm;
-										if     (chgm>=bmst)  resM=(-strm)*mKChg+brnm*mProt+(chgm-bmst)*mPiCh;
-										else if(chgm>=-strm) resM=(-strm)*mKChg+chgm*mProt+(brnm-chgm)*mNeut;
-										else if(chgm>=0)     resM=chgm*mKChg+(-chgm-strm)*mKZer+brnm*mNeut;
-										else                 resM=(-strm)*mKChg+(-chgm)*mPiCh+brnm*mNeut;
+          if     (chgm>=bmst)  resM=(-strm)*mKChg+brnm*mProt+(chgm-bmst)*mPiCh;
+          else if(chgm>=-strm) resM=(-strm)*mKChg+chgm*mProt+(brnm-chgm)*mNeut;
+          else if(chgm>=0)     resM=chgm*mKChg+(-chgm-strm)*mKZer+brnm*mNeut;
+          else                 resM=(-strm)*mKChg+(-chgm)*mPiCh+brnm*mNeut;
         }
         G4LorentzVector prt4M=(prtM/(prtM+resM))*EnFlow4M;
         EnFlow4M-=prt4M;
@@ -583,7 +594,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     //  G4QContent curQC=theContents[hp];
     //  G4int baryn = curQC.GetBaryonNumber();
     //  if(baryn>0 && barys>0 && !empty) // New baryon and b-positive collection -> fill
-	   //  {
+    //  {
     //    G4QHadron* aHadron = new G4QHadron(EnFlowQC, EnFlow4M);
     //    projHV.push_back(aHadron);
     //    EnFlowQC = G4QContent(0,0,0,0,0,0);
@@ -619,9 +630,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       for(hp = 0; hp<hitCount; hp++)
       {
         theFinalContents[hp] +=theContents[running];
-	       *(theFinalMomenta[hp])+=*(theMomenta[running]);
-	       running++;
-	       if(running == theContents.size()) break;
+        *(theFinalMomenta[hp])+=*(theMomenta[running]);
+        running++;
+        if(running == theContents.size()) break;
       }
     }
     for(hp = 0; hp<hitCount; hp++)
@@ -639,8 +650,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
-			                         clusteringCoefficient, 
-					                       fusionToExchange);
+                            clusteringCoefficient, 
+                            fusionToExchange);
   G4Quasmon::SetParameters(temperature, halfTheStrangenessOfSee, etaToEtaPrime);
 
 #ifdef CHIPSdebug
@@ -661,6 +672,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     //  G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
     G4QCHIPSWorld::Get()->GetParticles(nop);
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
+#ifdef pdebug
+      G4cout<<"G4StringChipsParticleLevelInterface::Propagate: CHIPS fragmentation, rA="
+            <<resA<<", #AbsPt="<<particleCount<<G4endl; 
+#endif
     try
     {
       output = pan->Fragment();                 // The main fragmentation member function
@@ -675,13 +690,20 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       for(size_t i=0; i< projHV.size(); i++)
       {
         G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
-	       <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
+        <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
       }
       throw;
     }
     delete pan;
   }
-  else output = new G4QHadronVector;
+  else
+  {
+#ifdef pdebug
+    G4cout<<"G4StringChipsParticleLevelInterface::Propagate: NO CHIPS fragmentation, rA="
+          <<resA<<", #AbsPt="<<particleCount<<G4endl; 
+#endif
+    output = new G4QHadronVector;
+  }   
 
   // clean up impinging particles
   std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
@@ -689,11 +711,11 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
    
   // Fill the result.
 #ifdef CHIPSdebug
-  G4cout << "NEXT EVENT"<<endl;
+  G4cout << "NEXT EVENT, EscapeExists="<<EscapeExists<<G4endl;
 #endif
 
   // first decay and add all escaping particles.
-  for(current = firstEscape; current!=theSorted.end(); current++)
+  if (EscapeExists) for (current = firstEscape; current!=theSorted.end(); current++)
   {
     G4KineticTrack* aResult = (*current).second;
     G4ParticleDefinition* pdef=aResult->GetDefinition();
@@ -719,13 +741,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
              theSec->SetTotalEnergy(cur4Mom.t());
              theSec->SetMomentum(cur4Mom.vect());
 #ifdef trapdebug
-				         if(cdef->GetPDGEncoding()==113) G4cout
+             if(cdef->GetPDGEncoding()==113) G4cout
                 <<"G4StringChipsParticleLevelInterface::Propagate: *Rho0* QGS dec2 PDG="
                 <<cdef->GetPDGEncoding()<<",4M="<<cur4Mom<<", grandparPDG= "
                 <<pdef->GetPDGEncoding()<<", parPDG= "<<sdef->GetPDGEncoding()<<G4endl; 
 #endif
 #ifdef pdebug
-				         G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS dec2 PDG="
+             G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS dec2 PDG="
               <<sdef->GetPDGEncoding()<<",4M="<<cur4Mom<<G4endl; 
 #endif
              theResult->push_back(theSec);
@@ -741,7 +763,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
           theSec->SetTotalEnergy(current4Mom.t());
           theSec->SetMomentum(current4Mom.vect());
 #ifdef trapdebug
-				      if(sdef->GetPDGEncoding()==113)
+          if(sdef->GetPDGEncoding()==113)
             G4cout<<"G4StringChipsParticleLevelInterface::Propagate:*Rho0* QGS decay PDG="
                   <<sdef->GetPDGEncoding()<<",4M="<<current4Mom<<", parentPDG= "
                   <<pdef->GetPDGEncoding()<<G4endl; 
@@ -749,7 +771,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
         //                          "G4StringChipsParticleLevelInterface: Rho0 is found!");
 #endif
 #ifdef pdebug
-				      G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS decay PDG="
+          G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS decay PDG="
                 <<sdef->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
 #endif
           theResult->push_back(theSec);
@@ -766,12 +788,12 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       theSec->SetTotalEnergy(current4Mom.t());
       theSec->SetMomentum(current4Mom.vect());
 #ifdef trapdebug
-				  if(aResult->GetDefinition()->GetPDGEncoding()==113)
+      if(aResult->GetDefinition()->GetPDGEncoding()==113)
         G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS stable PDG="
               <<aResult->GetDefinition()->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
 #endif
 #ifdef pdebug
-				  G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS stable PDG="
+      G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* QGS stable PDG="
             <<aResult->GetDefinition()->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
 #endif
       theResult->push_back(theSec);
@@ -848,7 +870,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       theSec->SetTotalEnergy(current4Mom.t());
       theSec->SetMomentum(current4Mom.vect());
 #ifdef pdebug
-				  G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* CHIPS PDG="
+      G4cout<<"G4StringChipsParticleLevelInterface::Propagate: *OUT* CHIPS PDG="
               <<theDefinition->GetPDGEncoding()<<",4M="<<current4Mom<<G4endl; 
 #endif
       theResult->push_back(theSec);
@@ -865,10 +887,33 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 #ifdef CHIPSdebug
     G4cout <<"CHIPS particles "<<theDefinition->GetPDGCharge()<<" "
            << theDefinition->GetPDGEncoding()<<" "
-	   << output->operator[](particle)->Get4Momentum() <<G4endl; 
+    << output->operator[](particle)->Get4Momentum() <<G4endl; 
 #endif
 
     delete output->operator[](particle);
+  }
+  else
+  {
+    if(resA>0)
+    {
+      G4ParticleDefinition* theDefinition = G4Neutron::Neutron();
+      if(resA==1) // The residual nucleus at rest must be added to conserve BaryN & Charge
+      {
+        if(resZ == 1) theDefinition = G4Proton::Proton();
+      }
+      else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);
+      theSec = new G4ReactionProduct(theDefinition);
+      theSec->SetTotalEnergy(theDefinition->GetPDGMass());
+      theSec->SetMomentum(G4ThreeVector(0.,0.,0.));
+      theResult->push_back(theSec);
+      if(!resZ && resA>0) for(G4int ni=1; ni<resA; ni++) 
+      {
+        theSec = new G4ReactionProduct(theDefinition);
+        theSec->SetTotalEnergy(theDefinition->GetPDGMass());
+        theSec->SetMomentum(G4ThreeVector(0.,0.,0.));
+        theResult->push_back(theSec);
+      }
+    }
   }
   delete output;
 
@@ -877,13 +922,13 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout << G4endl;
   G4cout << "QUASMON preparation info "
          << 1./MeV*proj4Mom<<" "
-	 << 1./MeV*targ4Mom<<" "
-	 << nD<<" "<<nU<<" "<<nS<<" "<<nAD<<" "<<nAU<<" "<<nAS<<" "
-	 << hitCount<<" "
-	 << particleCount<<" "
-	 << theLow<<" "
-	 << theHigh<<" "
-	 << G4endl;
+  << 1./MeV*targ4Mom<<" "
+  << nD<<" "<<nU<<" "<<nS<<" "<<nAD<<" "<<nAU<<" "<<nAS<<" "
+  << hitCount<<" "
+  << particleCount<<" "
+  << theLow<<" "
+  << theHigh<<" "
+  << G4endl;
 #endif
 
   return theResult;

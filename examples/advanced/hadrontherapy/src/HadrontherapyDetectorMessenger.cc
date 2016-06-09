@@ -23,156 +23,119 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorMessenger.cc; May 2005
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the INFN, Catania, Italy
-// (b) INFN Section of Genova, Genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// $Id: HadrontherapyDetectorMessenger.cc; 
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+
+
 #include "HadrontherapyDetectorMessenger.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWith3VectorAndUnit.hh"
 
-HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
-							       HadrontherapyDetectorConstruction* detector)
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* detector)
   :hadrontherapyDetector(detector)
-{ 
-  modulatorDir = new G4UIdirectory("/modulator/");
-  modulatorDir -> SetGuidance("Command to rotate the modulator wheel");
-  
-  beamLineDir = new G4UIdirectory("/beamLine/");
-  beamLineDir -> SetGuidance("set specification of range shifter");  
+{
+    // Change Phantom size
+    changeThePhantomDir = new G4UIdirectory("/changePhantom/");
+    changeThePhantomDir -> SetGuidance("Command to change the Phantom Size/position");
+    changeThePhantomSizeCmd = new G4UIcmdWith3VectorAndUnit("/changePhantom/size", this);
+    changeThePhantomSizeCmd -> SetGuidance("Insert sizes X Y and Z"
+	                                   "\n   0 or negative values mean <<Don't change it!>>");
+    changeThePhantomSizeCmd -> SetParameterName("PhantomSizeAlongX", 
+						"PhantomSizeAlongY", 
+						"PhantomSizeAlongZ", false);
+    changeThePhantomSizeCmd -> SetDefaultUnit("mm");
+    changeThePhantomSizeCmd -> SetUnitCandidates("um mm cm"); 
+    changeThePhantomSizeCmd -> AvailableForStates(G4State_Idle);
 
-  rangeShifterDir = new G4UIdirectory("/beamLine/RangeShifter/");
-  rangeShifterDir -> SetGuidance("set specification of range shifter");  
 
-  firstScatteringFoilDir = new G4UIdirectory("/beamLine/ScatteringFoil1/");
-  firstScatteringFoilDir -> SetGuidance("set specification of first scattering foil");  
- 
-  secondScatteringFoilDir = new G4UIdirectory("/beamLine/ScatteringFoil2/");
-  secondScatteringFoilDir -> SetGuidance("set specification of second scattering foil");  
- 
-  rangeStopperDir = new G4UIdirectory("/beamLine/Stopper/");
-  rangeStopperDir -> SetGuidance("set specification of stopper");  
+    // Change Phantom position
+    changeThePhantomPositionCmd = new G4UIcmdWith3VectorAndUnit("/changePhantom/position", this);
+    changeThePhantomPositionCmd -> SetGuidance("Insert X Y and Z dimensions for the position of the center of the Phantom"
+						" respect to that of the \"World\""); 
+    changeThePhantomPositionCmd -> SetParameterName("PositionAlongX", 
+						    "PositionAlongY", 
+						    "PositionAlongZ", false);
+    changeThePhantomPositionCmd -> SetDefaultUnit("mm");
+    changeThePhantomPositionCmd -> SetUnitCandidates("mm cm m"); 
+    changeThePhantomPositionCmd -> AvailableForStates(G4State_Idle);
 
-  finalCollimatorDir = new G4UIdirectory("/beamLine/FinalCollimator/");
-  finalCollimatorDir -> SetGuidance("set specification of final collimator");  
 
-  modulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle",this);
-  modulatorAngleCmd -> SetGuidance("Set Modulator Angle");
-  modulatorAngleCmd -> SetParameterName("Size",false);
-  modulatorAngleCmd -> SetRange("Size>=0.");
-  modulatorAngleCmd -> SetUnitCategory("Angle");  
-  modulatorAngleCmd -> AvailableForStates(G4State_Idle);
-  
-  rangeShifterMatCmd = new G4UIcmdWithAString("/beamLine/RangeShifter/RSMat",this);
-  rangeShifterMatCmd -> SetGuidance("Set material of range shifter");
-  rangeShifterMatCmd -> SetParameterName("choice",false);
-  rangeShifterMatCmd -> AvailableForStates(G4State_Idle);
-  
-  rangeShifterXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/thickness",this);
-  rangeShifterXSizeCmd -> SetGuidance("Set half of the thickness of range shifter along X axis");
-  rangeShifterXSizeCmd -> SetParameterName("Size",false);
-  rangeShifterXSizeCmd -> SetDefaultUnit("mm");  
-  rangeShifterXSizeCmd -> SetUnitCandidates("mm cm m");  
-  rangeShifterXSizeCmd -> AvailableForStates(G4State_Idle);
-  
-  rangeShifterXPositionCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/RangeShifter/position",this);
-  rangeShifterXPositionCmd -> SetGuidance("Set position of range shifter");
-  rangeShifterXPositionCmd -> SetParameterName("Size",false);
-  rangeShifterXPositionCmd -> SetDefaultUnit("mm");  
-  rangeShifterXPositionCmd -> SetUnitCandidates("mm cm m");  
-  rangeShifterXPositionCmd -> AvailableForStates(G4State_Idle);
-  
-  firstScatteringFoilXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil1/thickness",this);
-  firstScatteringFoilXSizeCmd -> SetGuidance("Set hlaf thickness of first scattering foil");
-  firstScatteringFoilXSizeCmd -> SetParameterName("Size",false);
-  firstScatteringFoilXSizeCmd -> SetDefaultUnit("mm");  
-  firstScatteringFoilXSizeCmd -> SetUnitCandidates("mm cm m");  
-  firstScatteringFoilXSizeCmd -> AvailableForStates(G4State_Idle);
-  
-  secondScatteringFoilXSizeCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/ScatteringFoil2/thickness",this);
-  secondScatteringFoilXSizeCmd -> SetGuidance("Set half thickness of second scattering foil");
-  secondScatteringFoilXSizeCmd -> SetParameterName("Size",false);
-  secondScatteringFoilXSizeCmd -> SetDefaultUnit("mm");  
-  secondScatteringFoilXSizeCmd -> SetUnitCandidates("mm cm m");  
-  secondScatteringFoilXSizeCmd -> AvailableForStates(G4State_Idle);
-  
-  outerRadiusStopperCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/Stopper/outRadius",this);
-  outerRadiusStopperCmd -> SetGuidance("Set size of outer radius");
-  outerRadiusStopperCmd -> SetParameterName("Size",false);
-  outerRadiusStopperCmd -> SetDefaultUnit("mm");  
-  outerRadiusStopperCmd -> SetUnitCandidates("mm cm m");  
-  outerRadiusStopperCmd -> AvailableForStates(G4State_Idle);
-  
-  innerRadiusFinalCollimatorCmd = new G4UIcmdWithADoubleAndUnit("/beamLine/FinalCollimator/halfInnerRad",this);
-  innerRadiusFinalCollimatorCmd -> SetGuidance("Set size of inner radius ( max 21.5 mm)");
-  innerRadiusFinalCollimatorCmd -> SetParameterName("Size",false);
-  innerRadiusFinalCollimatorCmd -> SetDefaultUnit("mm");  
-  innerRadiusFinalCollimatorCmd -> SetUnitCandidates("mm cm m");  
-  innerRadiusFinalCollimatorCmd -> AvailableForStates(G4State_Idle);
-}
+    //  Change detector size
+    changeTheDetectorDir = new G4UIdirectory("/changeDetector/");
+    changeTheDetectorDir -> SetGuidance("Command to change the Detector's Size/position/Voxels");
+    
+    changeTheDetectorSizeCmd = new G4UIcmdWith3VectorAndUnit("/changeDetector/size",this);
+    changeTheDetectorSizeCmd -> SetGuidance("Insert sizes for X Y and Z dimensions of the Detector"
+					    "\n   0 or negative values mean <<Don't change it>>");
+    changeTheDetectorSizeCmd -> SetParameterName("DetectorSizeAlongX", "DetectorSizeAlongY", "DetectorSizeAlongZ", false);
+    changeTheDetectorSizeCmd -> SetDefaultUnit("mm");
+    changeTheDetectorSizeCmd -> SetUnitCandidates("um mm cm"); 
+    changeTheDetectorSizeCmd -> AvailableForStates(G4State_Idle);
 
+    //  Change the detector to phantom displacement
+    changeTheDetectorToPhantomPositionCmd = new G4UIcmdWith3VectorAndUnit("/changeDetector/displacement",this);
+    changeTheDetectorToPhantomPositionCmd -> SetGuidance("Insert X Y and Z displacements between Detector and Phantom"
+	                                                 "\nNegative values mean <<Don't change it!>>"); 
+    changeTheDetectorToPhantomPositionCmd -> SetParameterName("DisplacementAlongX",
+							      "DisplacementAlongY", 
+							      "DisplacementAlongZ", false);
+    changeTheDetectorToPhantomPositionCmd -> SetDefaultUnit("mm");
+    changeTheDetectorToPhantomPositionCmd -> SetUnitCandidates("um mm cm"); 
+    changeTheDetectorToPhantomPositionCmd -> AvailableForStates(G4State_Idle);
+    
+    // Change voxels by its size
+    changeTheDetectorVoxelCmd = new G4UIcmdWith3VectorAndUnit("/changeDetector/voxelSize",this);
+    changeTheDetectorVoxelCmd -> SetGuidance("Insert Voxel sizes for X Y and Z dimensions"
+		                             "\n   0 or negative values mean <<Don't change it!>>");
+    changeTheDetectorVoxelCmd -> SetParameterName("VoxelSizeAlongX", "VoxelSizeAlongY", "VoxelSizeAlongZ", false);
+    changeTheDetectorVoxelCmd -> SetDefaultUnit("mm");
+    changeTheDetectorVoxelCmd -> SetUnitCandidates("um mm cm");
+    changeTheDetectorVoxelCmd -> AvailableForStates(G4State_Idle);
+   }
+
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
-{ 
-  delete innerRadiusFinalCollimatorCmd;  
-  delete outerRadiusStopperCmd;  
-  delete secondScatteringFoilXSizeCmd; 
-  delete firstScatteringFoilXSizeCmd; 
-  delete rangeShifterXPositionCmd;
-  delete rangeShifterXSizeCmd;
-  delete rangeShifterMatCmd;
-  delete modulatorAngleCmd;
-  delete finalCollimatorDir; 
-  delete rangeStopperDir;
-  delete secondScatteringFoilDir;
-  delete firstScatteringFoilDir; 
-  delete rangeShifterDir;  
-  delete beamLineDir; 
-  delete modulatorDir;   
+{
+    delete changeThePhantomDir; 
+    delete changeThePhantomSizeCmd; 
+    delete changeThePhantomPositionCmd; 
+    delete changeTheDetectorDir; 
+    delete changeTheDetectorSizeCmd; 
+    delete changeTheDetectorToPhantomPositionCmd; 
+    delete changeTheDetectorVoxelCmd; 
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == modulatorAngleCmd )
-    { hadrontherapyDetector -> SetModulatorAngle
-           (modulatorAngleCmd -> GetNewDoubleValue(newValue));}
-
-  if( command == rangeShifterMatCmd )
-    { hadrontherapyDetector -> SetRSMaterial(newValue);}
-
-  if( command == rangeShifterXSizeCmd )
-    { hadrontherapyDetector -> SetRangeShifterXSize
-            (rangeShifterXSizeCmd -> GetNewDoubleValue(newValue));}
-
-  if( command == rangeShifterXPositionCmd )
-    { hadrontherapyDetector -> SetRangeShifterXPosition
-                  (rangeShifterXPositionCmd -> GetNewDoubleValue(newValue));}
-
-  if( command == firstScatteringFoilXSizeCmd )
-    { hadrontherapyDetector -> SetFirstScatteringFoilSize
-                  (firstScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
-
-  if( command == secondScatteringFoilXSizeCmd )
-    { hadrontherapyDetector -> SetSecondScatteringFoilSize
-                  (secondScatteringFoilXSizeCmd -> GetNewDoubleValue(newValue));}
-
-  if( command == outerRadiusStopperCmd )
-    { hadrontherapyDetector -> SetOuterRadiusStopper(
-                    outerRadiusStopperCmd -> GetNewDoubleValue(newValue));}
-
-  if( command == innerRadiusFinalCollimatorCmd )
-    { hadrontherapyDetector -> SetInnerRadiusFinalCollimator
-                  (innerRadiusFinalCollimatorCmd -> GetNewDoubleValue(newValue));}
+{
+	
+  if( command == changeThePhantomSizeCmd)
+    {
+	G4ThreeVector size = changeThePhantomSizeCmd -> GetNew3VectorValue(newValue);
+	hadrontherapyDetector -> SetPhantomSize(size.getX(),size.getY(),size.getZ());
+    }
+  else if (command == changeThePhantomPositionCmd )
+  {
+	 G4ThreeVector size = changeThePhantomPositionCmd -> GetNew3VectorValue(newValue);
+         hadrontherapyDetector -> SetPhantomPosition(size);
+  }
+  else if (command == changeTheDetectorSizeCmd)
+  {
+	G4ThreeVector size = changeTheDetectorSizeCmd  -> GetNew3VectorValue(newValue);
+        hadrontherapyDetector -> SetDetectorSize(size.getX(),size.getY(),size.getZ());
+  }
+  else if (command == changeTheDetectorToPhantomPositionCmd)
+  {
+	G4ThreeVector size = changeTheDetectorToPhantomPositionCmd-> GetNew3VectorValue(newValue);
+        hadrontherapyDetector -> SetDetectorToPhantomPosition(size);
+  }
+  else if (command == changeTheDetectorVoxelCmd)
+  {
+	G4ThreeVector size = changeTheDetectorVoxelCmd  -> GetNew3VectorValue(newValue);
+        hadrontherapyDetector -> SetNumberOfVoxelBySize(size.getX(),size.getY(),size.getZ());
+  }
 }
-

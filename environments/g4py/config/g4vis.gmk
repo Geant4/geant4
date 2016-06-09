@@ -1,4 +1,4 @@
-# $Id: g4vis.gmk,v 1.2 2006/04/25 05:53:05 kmura Exp $
+# $Id: g4vis.gmk,v 1.3 2009/11/20 03:36:51 kmura Exp $
 # ===========================================================
 #   Makefile for building Python module with Boost.Python
 #      
@@ -43,6 +43,10 @@ endif
 
 ifeq ($(Q_ENABLE_VRML), 1)
   CPPFLAGS += -DG4VIS_USE_VRML
+endif
+
+ifeq ($(Q_ENABLE_GL2PS), 1)
+  G4PY_VISLIBS  += -lG4gl2ps
 endif
 
 CPPFLAGS      += -DG4VIS_USE

@@ -29,13 +29,27 @@
 
 typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
+
 G4CollisionOutput::G4CollisionOutput()
   : verboseLevel(0) {
   
-  if (verboseLevel > 3) {
+  if (verboseLevel > 3)
     G4cout << " >>> G4CollisionOutput::G4CollisionOutput" << G4endl;
-  }
 }
+
+
+G4CollisionOutput& G4CollisionOutput::operator=(const G4CollisionOutput& right)
+{
+  if (this != &right) {
+    verboseLevel = right.verboseLevel;
+    outgoingParticles = right.outgoingParticles;
+    nucleiFragments = right.nucleiFragments; 
+    eex_rest = right.eex_rest;
+    on_shell = right.on_shell;
+  }
+  return *this;
+}
+
 
 void G4CollisionOutput::setOnShell(G4InuclParticle* bullet, 
 				   G4InuclParticle* target) {

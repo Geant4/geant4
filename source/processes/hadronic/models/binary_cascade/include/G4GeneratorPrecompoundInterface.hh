@@ -45,7 +45,7 @@
 class G4GeneratorPrecompoundInterface : public G4VIntraNuclearTransportModel 
 {
 public:
-   G4GeneratorPrecompoundInterface(){}      
+   G4GeneratorPrecompoundInterface();    
    ~G4GeneratorPrecompoundInterface(){}
 
 private:
@@ -55,9 +55,10 @@ private:
 public:
    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus );
    G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
+   G4double SetCaptureThreshold(G4double);
 
-
-private:   
+private:
+   G4double CaptureThreshold;   
 };
 
 #endif // G4GeneratorPrecompoundInterface_h

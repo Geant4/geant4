@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPiKBuilder.hh,v 1.1 2006/10/31 11:35:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VPiKBuilder.hh,v 1.2 2009/03/31 11:04:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 16.11.2005 G.Folger: don't  keep processes as data members, but new these
+// 30.03.2009 V.Ivanchenko move constructor and destructor to source
 //
 //----------------------------------------------------------------------------
 //
@@ -50,16 +51,16 @@
 
 class G4VPiKBuilder
 {
-  public:
-    G4VPiKBuilder() {}
-    virtual ~G4VPiKBuilder() {}
-    virtual void Build(G4HadronElasticProcess * aP) = 0;
-    virtual void Build(G4PionPlusInelasticProcess * aP) = 0;
-    virtual void Build(G4PionMinusInelasticProcess * aP) = 0;
-    virtual void Build(G4KaonPlusInelasticProcess * aP) = 0;
-    virtual void Build(G4KaonMinusInelasticProcess * aP) = 0;
-    virtual void Build(G4KaonZeroLInelasticProcess * aP) = 0;
-    virtual void Build(G4KaonZeroSInelasticProcess * aP) = 0;
+public:
+  G4VPiKBuilder();
+  virtual ~G4VPiKBuilder();
+  virtual void Build(G4HadronElasticProcess * aP) = 0;
+  virtual void Build(G4PionPlusInelasticProcess * aP) = 0;
+  virtual void Build(G4PionMinusInelasticProcess * aP) = 0;
+  virtual void Build(G4KaonPlusInelasticProcess * aP) = 0;
+  virtual void Build(G4KaonMinusInelasticProcess * aP) = 0;
+  virtual void Build(G4KaonZeroLInelasticProcess * aP) = 0;
+  virtual void Build(G4KaonZeroSInelasticProcess * aP) = 0;
 };
 // 2002 by J.P. Wellisch
 

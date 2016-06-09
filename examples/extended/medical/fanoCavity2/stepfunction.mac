@@ -1,7 +1,9 @@
-# $Id: stepfunction.mac,v 1.1 2007/10/15 16:29:06 maire Exp $
+# $Id: stepfunction.mac,v 1.2 2009/10/31 18:05:56 maire Exp $
 #
 /control/verbose 2
 /run/verbose 2
+#
+/testem/phys/addPhysics standard_opt3
 #
 /run/initialize
 #

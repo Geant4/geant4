@@ -23,41 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4HadronicInteractionRegistry.hh,v 1.5 2009/08/30 16:12:34 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+// 23-Jan-2009 V.Ivanchenko make the class to be a singleton
+
+// Class Description
+// This is the a singleton class to store all hadronic interactions
+// Class Description - End
+
 #ifndef G4HadronicInteractionRegistry_h
 #define G4HadronicInteractionRegistry_h 1
 
 #include <vector>
 #include "globals.hh"
+
 class G4HadronicInteraction;
 
 class G4HadronicInteractionRegistry
 {
-  public:
+public:
+
+  static G4HadronicInteractionRegistry* Instance();
+  // access 
   
   ~G4HadronicInteractionRegistry();
+
+  void Clean();
+  //delete models
   
-  static void RegisterMe(G4HadronicInteraction * aModel);
-  static void RemoveMe(G4HadronicInteraction * aModel);
+  void RegisterMe(G4HadronicInteraction * aModel);
+  //register new model
+
+  void RemoveMe(G4HadronicInteraction * aModel);
+  //deregister model
     
-  protected:
+private:
 
-  G4HadronicInteractionRegistry(G4String );
-  static G4HadronicInteractionRegistry & theRegistry();
+  G4HadronicInteractionRegistry();
 
-  private:
-
-  //  !!!  can not use "copy constructor" nor "default constructor" !!!!
-       G4HadronicInteractionRegistry(const G4HadronicInteractionRegistry &right) 
-       { nModels = right.nModels; }
-       G4HadronicInteractionRegistry() {nModels = 0;}
-
-  //  !!!  Assignment operation is forbidden !!!
-      const G4HadronicInteractionRegistry & operator=(const G4HadronicInteractionRegistry &) 
-      { return *this;}
-
-  void AddModel(G4HadronicInteraction * aModel);
+  static G4HadronicInteractionRegistry* theInstance;
   
-  G4int nModels;
   std::vector <G4HadronicInteraction *> allModels;
 
 };

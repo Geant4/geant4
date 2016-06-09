@@ -24,18 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertyVector.hh,v 1.11 2008/06/05 23:37:37 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MaterialPropertyVector.hh,v 1.14 2009/04/24 09:35:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
-// G4MaterialPropertyVector Class Definition
-////////////////////////////////////////////////////////////////////////
 //
+// class G4MaterialPropertyVector
+//
+// Class description:
+//
+// A one-to-one mapping from Photon Energy to some optical property 
+
 // File:        G4MaterialPropertyVector.hh
 //
-// Description: A one-to-one mapping from Photon Energy to some
-//              optical property 
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
@@ -57,145 +59,108 @@
 #include <vector>
 #include <functional>
 
-// Class Description:
-// A one-to-one mapping from Photon Energy to some optical property.
-// Class Description - End:
-
 /////////////////////
 // Class Definition
 /////////////////////
 
-class G4MaterialPropertyVector {
+class G4MaterialPropertyVector
+{
+  struct MPVEntry_less
+    : public std::binary_function<G4MPVEntry*, G4MPVEntry*, G4bool>
+  {
+    G4bool operator()(G4MPVEntry* x, G4MPVEntry* y) { return *x < *y; }
+  };
 
-	struct MPVEntry_less
-	  : public std::binary_function<G4MPVEntry*, G4MPVEntry*, G4bool>
-	{
-	  G4bool operator()(G4MPVEntry* x, G4MPVEntry* y) { return *x < *y; }
-	};
+  public: // Without description
 
-public: // Without description
+    //////////////
+    // Operators
+    //////////////
 
-	//////////////
-	// Operators
-	//////////////
+    inline G4bool operator ++();
+    G4MaterialPropertyVector& operator =(const G4MaterialPropertyVector &right);
 
-	G4bool operator ++();
-        G4MaterialPropertyVector&
-                   operator =(const G4MaterialPropertyVector &right);
+    /////////////////
+    // Constructors
+    /////////////////
 
-	/////////////////
-	// Constructors
-	/////////////////
+    G4MaterialPropertyVector() : MPV(0) 
+    {
+      CurrentEntry = -1;
+      NumEntries   = 0;
+    };
 
-	G4MaterialPropertyVector() : MPV(0) 
-	{
-		CurrentEntry = -1;
-		NumEntries   = 0;
-	};
+  public: // With description
+  
+    G4MaterialPropertyVector(G4double *PhotonEnergies, 
+                             G4double *PropertyValues,
+                             G4int     NumElements);
+      // Constructor of G4MaterialPropertyVector object.
 
-public: // With description
-	
-	G4MaterialPropertyVector(G4double *PhotonEnergies, 
-		  	   	 G4double *PropertyValues,
-				 G4int     NumElements);
-        // Constructor of G4MaterialPropertyVector object.
+    inline void ResetIterator();
+    inline G4int Entries() const;
 
-public: // Without description
+    inline void AddElement(G4double aPhotonEnergy, G4double aPropertyValue);
+      // Add a new element (pair of numbers) to the G4MaterialPropertyVector.
+    void RemoveElement(G4double aPhotonEnergy);
+      // Remove the element with given x-value.
 
-	G4MaterialPropertyVector(const G4MaterialPropertyVector &right);
+    G4double GetProperty(G4double aPhotonEnergy) const;
+      // Returns the y-value for given x-value (with interpolation).
+    G4double GetPhotonEnergy(G4double aProperty) const;
+      // Returns the x-value for given y-value (with interpolation).
+      // NOTE: Assumes that the y-value is an increasing function of 
+      //       the x-value. Returns the x-value corresponding to the 
+      //       y-value passed in. If several x-values correspond to 
+      //       the y-value passed in, the method returns the first 
+      //       x-value in the vector that corresponds to that value.
+      // For use with G4MaterialPropertyVector iterator: return
+      // property (or Photon Energy) at current point of iterator.
 
-        ///////////////
-        // Destructor
-        ///////////////
+    inline G4double GetProperty() const;
+    inline G4double GetPhotonEnergy() const;
+    inline G4double GetMaxProperty() const;
+    inline G4double GetMinProperty() const;
+    inline G4double GetMaxPhotonEnergy() const;
+    inline G4double GetMinPhotonEnergy() const;
+    
+  public: // Without description
 
-	~G4MaterialPropertyVector();
+    G4MaterialPropertyVector(const G4MaterialPropertyVector &right);
+   ~G4MaterialPropertyVector();
 
-        ////////////
-        // Methods
-        ////////////
+    //////////
+    // Tests
+    //////////
 
-public: // With description
+    void DumpVector();
 
-	void ResetIterator();
+    /////////////////////
+    // Helper Functions
+    /////////////////////
 
-        void AddElement(G4double aPhotonEnergy, 
-			G4double aPropertyValue);
-        // Add a new element (pair of numbers) to the G4MaterialPropertyVector.
-	void RemoveElement(G4double aPhotonEnergy);
-        // Remove the element with given x-value.
+    inline G4MPVEntry GetEntry(G4int i) const;
 
-        G4double GetProperty(G4double aPhotonEnergy) const;
-        // Returns the y-value for given x-value (with interpolation).
-	G4double GetPhotonEnergy(G4double aProperty) const;
-        // Returns the x-value for given y-value (with interpolation).
-        // NOTE: Assumes that the y-value is an increasing function of 
-        //       the x-value. Returns the x-value corresponding to the 
-        //       y-value passed in. If several x-values correspond to 
-        //       the y-value passed in, the method returns the first 
-        //       x-value in the vector that corresponds to that value.
-	// For use with G4MaterialPropertyVector iterator: return
-        // property (or Photon Energy) at current point of iterator.
+  private:
 
-	G4double GetProperty() const;
-	G4double GetPhotonEnergy() const;
+    void GetAdjacentBins(G4double aPhotonEnergy,
+                         G4int *left, G4int *right) const;
 
-	G4double GetMaxProperty() const;
-	G4double GetMinProperty() const;
-	G4double GetMaxPhotonEnergy() const;
-	G4double GetMinPhotonEnergy() const;
-		
-	//////////
-	// Tests
-	//////////
+  private:
 
-	void DumpVector();	
+    /////////////////////////
+    // Private Data Members
+    /////////////////////////
 
-private:
-
-	/////////////////////
-	// Helper Functions
-	/////////////////////
-
-	G4MPVEntry GetEntry(G4int i) const;
-
-	void GetAdjacentBins(G4double aPhotonEnergy,
-                             G4int *left,G4int *right) const;
-
-	/////////////////////////
-        // Private Data Members
-	/////////////////////////
-
-        std::vector<G4MPVEntry*> MPV;
-	G4int NumEntries;
-	G4int CurrentEntry;
+    std::vector<G4MPVEntry*> MPV;
+    G4int NumEntries;
+    G4int CurrentEntry;
 };
 
 ///////////////////
 // Inline methods
 ///////////////////
 
-inline 
-G4double G4MaterialPropertyVector::GetMaxProperty() const
-{
-  return MPV.back()->GetProperty();
-}
-
-inline
-G4double G4MaterialPropertyVector::GetMinProperty() const
-{
-  return MPV.front()->GetProperty();
-}
-
-inline
-G4double G4MaterialPropertyVector::GetMaxPhotonEnergy() const
-{
-  return MPV.back()->GetPhotonEnergy();
-}
-
-inline 
-G4double G4MaterialPropertyVector::GetMinPhotonEnergy() const
-{
-  return MPV.front()->GetPhotonEnergy();
-}
+#include "G4MaterialPropertyVector.icc"
 
 #endif /* G4MaterialPropertyVector_h */

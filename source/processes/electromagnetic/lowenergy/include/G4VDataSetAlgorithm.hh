@@ -24,14 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDataSetAlgorithm.hh,v 1.7 2006/06/29 19:37:07 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VDataSetAlgorithm.hh,v 1.8 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 31 Jul 2001   MGP        Created
+// 31 Jul 2001   MGP                 Created
+//
+// 15 Jul 2009   N.A.Karakatsanis    New calculation method added to support interpolation
+//                                   from datasets with pre-calculated logarithmic data
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -54,10 +57,15 @@ public:
 
   virtual ~G4VDataSetAlgorithm() { }
  
-
   virtual G4double Calculate(G4double point, G4int bin, 
 			     const G4DataVector& energies, 
 			     const G4DataVector& data) const = 0;
+
+  virtual G4double Calculate(G4double point, G4int bin,
+                     	     const G4DataVector& energies,
+                             const G4DataVector& data, 
+		             const G4DataVector& log_energies, 
+		             const G4DataVector& log_data) const = 0;
 
   virtual G4VDataSetAlgorithm* Clone() const = 0;
 

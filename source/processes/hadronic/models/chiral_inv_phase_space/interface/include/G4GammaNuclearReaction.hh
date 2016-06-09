@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaNuclearReaction.hh,v 1.14 2008/09/01 17:30:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GammaNuclearReaction.hh,v 1.15 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
-// GEANT4 physics class: G4GammaNuclearReaction -- header file
-// Created: J.P. Wellisch, 2000/08/18 
+// GEANT4 physics class: G4GammaNuclearReaction - header file for CHIPS
+// Created: J.P. Wellisch, following M.Kossov's algorithm. 2000/08/18 
 // The last update: J.P. Wellisch, Thu Jun  6 2002.
 // 01.09.2008 V.Ivanchenko move inline to source and define interaction name
-//
+// 17.02.2009 M.Kossov, now it is recommended to use the G4QCollision process
 
 #ifndef G4GammaNuclearReaction_h
 #define G4GammaNuclearReaction_h 1
@@ -50,7 +50,7 @@ public:
   virtual ~G4GammaNuclearReaction();
     
   virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
-					 G4Nucleus& aTargetNucleus);
+                                         G4Nucleus& aTargetNucleus);
 
 private:
 

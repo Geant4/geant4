@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: StackingAction.cc,v 1.7 2006/09/25 17:06:29 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: StackingAction.cc,v 1.8 2009/03/06 18:04:23 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,9 +78,12 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 
   //stack or delete secondaries
   G4ClassificationOfNewTrack status = fUrgent;
-  if (killSecondary) 
-    {if (killSecondary == 1) eventaction->AddEnergy(energy);  
-     status = fKill;}
+  if (killSecondary) {
+    if (killSecondary == 1) {
+     eventaction->AddEnergy(energy);
+    }  
+     status = fKill;
+  }
     
   return status;
 }

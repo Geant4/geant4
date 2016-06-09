@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.hh,v 1.42 2006/11/06 09:22:26 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HepRepSceneHandler.hh,v 1.44 2009/11/23 05:42:28 perl Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 /**
@@ -62,12 +62,10 @@
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 
-#include "G4HepRepMessenger.hh"
-
 class G4HepRepSceneHandler: public G4VSceneHandler {
 
     public:
-        G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepMessenger& messenger, const G4String& name = "");
+        G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
         virtual ~G4HepRepSceneHandler ();
 
         void AddSolid (const G4Box& box);
@@ -84,6 +82,9 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         
         void AddCompound (const G4VTrajectory&);
         void AddCompound (const G4VHit& hit);
+        void AddCompound (const G4THitsMap<G4double>& hits) {
+	  G4VSceneHandler::AddCompound(hits);
+	}
 
         void PreAddSolid (const G4Transform3D& objectTransformation, const G4VisAttributes& visAttribs);
         void PostAddSolid ();
@@ -183,7 +184,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4String getParentTypeName(int currentDepth);
 
         // initialized Member Variables
-        G4HepRepMessenger& messenger;
         G4String geometryLayer, eventLayer, calHitLayer;
         G4String trajectoryLayer, hitLayer;
         G4String rootVolumeName;

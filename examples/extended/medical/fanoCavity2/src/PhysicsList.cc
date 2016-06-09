@@ -23,55 +23,84 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PhysicsList.cc,v 1.7 2009/10/31 18:05:01 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
-// $Id: PhysicsList.cc,v 1.6 2008/11/16 12:30:43 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
-#include "DetectorConstruction.hh"
+
+#include "PhysListEmStandard_option0.hh"
+#include "PhysListEmStandard_option3.hh"
+#include "PhysListEmStandard_GS.hh"
+#include "PhysListEmStandard_SS.hh"
+
+#include "StepMax.hh"
 
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4LossTableManager.hh"
 
+// Bosons
+#include "G4ChargedGeantino.hh"
+#include "G4Geantino.hh"
+#include "G4Gamma.hh"
+
+// leptons
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+
+// Hadrons
+#include "G4Proton.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(DetectorConstruction* det)
-: G4VUserPhysicsList(), detector(det)
+: G4VModularPhysicsList(), detector(det)
 {
-  defaultCutValue = 10.*km;
-  singleScattering = false;
-  registerBrem = false;
-  pMessenger = new PhysicsListMessenger(this);
-  SetVerboseLevel(1);
+  G4LossTableManager::Instance();
+  pMessenger = new PhysicsListMessenger(this); 
+   
+  // EM physics
+  emName = G4String("standard_opt3");
+  emPhysicsList = new PhysListEmStandard_option3(emName,detector);
+      
+  defaultCutValue = 10*km;
+
+  SetVerboseLevel(1);  
   
-  G4LossTableManager::Instance();  
+  G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
-{ delete pMessenger; }
+{
+  delete emPhysicsList;
+  delete pMessenger;  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
+  // pseudo-particles
   G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition();
+  
+  // gamma
   G4Gamma::GammaDefinition();
-
+  
+  // leptons
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
 
-  G4Proton::ProtonDefinition();
+  // baryons
+  G4Proton::ProtonDefinition();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,127 +108,12 @@ void PhysicsList::ConstructParticle()
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  ConstructEM();
+  emPhysicsList->ConstructProcess();
+
   AddStepMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-
-#include "G4eMultipleScattering.hh"
-#include "G4hMultipleScattering.hh"
-#include "G4CoulombScattering.hh"
-
-#include "G4eIonisation.hh"
-#include "MyMollerBhabhaModel.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
-
-#include "G4hIonisation.hh"
-
-#include "G4EmProcessOptions.hh"
-#include "G4MscStepLimitType.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-void PhysicsList::ConstructEM()
-{
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
-    G4int iAlong = 0, iPost = 0; 
-     
-    if (particleName == "gamma") {
-                 
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);         
-      pmanager->AddDiscreteProcess(new G4GammaConversion);
-      
-    } else if (particleName == "e-") {
-
-      if (singleScattering)
-        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
-        else    
-        pmanager->AddProcess(new G4eMultipleScattering,-1, ++iAlong, ++iPost);
-      
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetEmModel(new MyMollerBhabhaModel);             
-      pmanager->AddProcess(eIoni,                      -1, ++iAlong, ++iPost);
-      
-      if (registerBrem)
-        pmanager->AddProcess(new G4eBremsstrahlung,    -1, ++iAlong, ++iPost);      
-       
-    } else if (particleName == "e+") {
-    
-      if (singleScattering)
-        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
-        else   
-        pmanager->AddProcess(new G4eMultipleScattering,-1, ++iAlong, ++iPost);
-      
-      G4eIonisation* pIoni = new G4eIonisation();
-      pIoni->SetEmModel(new MyMollerBhabhaModel);                   
-      pmanager->AddProcess(pIoni,                      -1, ++iAlong, ++iPost);
-      
-      if (registerBrem) {
-        pmanager->AddProcess(new G4eBremsstrahlung,    -1, ++iAlong, ++iPost);
-        pmanager->AddProcess(new G4eplusAnnihilation,   0, -1,       ++iPost);
-      }
-      
-    } else if (particleName == "proton") {
-    
-      if (singleScattering)
-        pmanager->AddProcess(new G4CoulombScattering,  -1, -1,       ++iPost);
-        else   
-        pmanager->AddProcess(new G4hMultipleScattering,-1, ++iAlong, ++iPost);
-	
-      pmanager->AddProcess(new G4hIonisation,          -1, ++iAlong, ++iPost);
-    }
-  }
-  
-  // Em options
-  //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(100*eV);	//default    
-  emOptions.SetMaxEnergy(10*GeV);
-  emOptions.SetDEDXBinning(8*20);	//default=8*7  
-  emOptions.SetLambdaBinning(8*20);	//default=8*7  
-  emOptions.SetSplineFlag(true);	//default
-      
-  //multiple coulomb scattering
-  //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);   //default=fUseSafety
-  emOptions.SetMscRangeFactor(0.02);	//default=0.04
-  emOptions.SetMscGeomFactor (2.5);	//default       
-  emOptions.SetSkin(3.);		//default
-      
-  //energy loss
-  //
-  emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
-  emOptions.SetLinearLossLimit(1.e-2);		//default
-   
-          
-  //build CSDA range
-  //
-  emOptions.SetBuildCSDARange(true);		//default=false
-  emOptions.SetMaxEnergyForCSDARange(10*GeV);  
-  emOptions.SetDEDXBinningForCSDARange(8*20);	//default=8*7        
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
 {
@@ -211,10 +125,51 @@ void PhysicsList::AddStepMax()
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle))
+      if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
         {
 	  pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::AddPhysicsList(const G4String& name)
+{
+  if (verboseLevel>-1) {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
+
+  if (name == emName) return;
+
+  if (name == "standard_opt0") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard_option0(name,detector);
+    
+  } else if (name == "standard_opt3") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard_option3(name,detector);
+    
+  } else if (name == "standard_GS") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard_GS(name,detector);    
+    
+  } else if (name == "standard_SS") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard_SS(name,detector);    
+  } else {
+
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
   }
 }
 
@@ -234,24 +189,7 @@ void PhysicsList::SetCuts()
   SetCutValue(defaultCutValue, "gamma");
   SetCutValue(defaultCutValue, "e-");
   SetCutValue(defaultCutValue, "e+");
+  SetCutValue(defaultCutValue, "proton");  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SingleCoulombScattering(G4bool flag)
-{
-  singleScattering = flag;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::RegisterBrem(G4bool flag)
-{
-  registerBrem = flag;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-
-

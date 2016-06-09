@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.61 2008/08/05 07:37:39 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronElastic.cc,v 1.65 2009/10/08 18:56:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // Physics model class G4HadronElastic (derived from G4LElastic)
@@ -78,6 +78,8 @@
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 
+G4VQCrossSection* G4HadronElastic::qCManager = 0;
+
 G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel) 
   : G4HadronicInteraction("G4HadronElastic"), hElastic(HModel)
 {
@@ -90,7 +92,7 @@ G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel)
   lowestEnergyLimit= 1.e-6*eV;  
   plabLowLimit     = 20.0*MeV;
 
-  qCManager   = G4QElasticCrossSection::GetPointer();
+  if(!qCManager) {qCManager = G4QElasticCrossSection::GetPointer();}
   if(!hElastic) hElastic = new G4ElasticHadrNucleusHE();
 
   theProton   = G4Proton::Proton();
@@ -100,23 +102,11 @@ G4HadronElastic::G4HadronElastic(G4ElasticHadrNucleusHE* HModel)
   thePionPlus = G4PionPlus::PionPlus();
   thePionMinus= G4PionMinus::PionMinus();
 
-  nnans = 0;
-  npos  = 0;
-  nneg  = 0;
-  neneg = 0;
 }
 
 G4HadronElastic::~G4HadronElastic()
 {
   delete hElastic;
-  if( (nnans + npos + nneg + neneg) > 0 ) {
-    G4cout << "### G4HadronElastic destructor Warnings: ";
-    if(nnans > 0) G4cout << "###          N(nans)    = " << nnans;
-    if(npos > 0)  G4cout << "###          N(cost > 1)= " << npos;
-    if(nneg > 0)  G4cout << "###          N(cost <-1)= " << nneg;
-    if(neneg > 0) G4cout << "###          N(E < 0)=    " << neneg;
-    G4cout << "###" << G4endl;
-  }
 }
 
 G4VQCrossSection* G4HadronElastic::GetCS()
@@ -233,23 +223,6 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
     t = hElastic->SampleT(theParticle,plab,Z,A);
   }
 
-  // NaN finder
-  if(!(t < 0.0 || t >= 0.0)) {
-    if (verboseLevel > 0) {
-      G4cout << "G4HadronElastic:WARNING: Z= " << Z << " N= " 
-	     << N << " pdg= " <<  projPDG
-	     << " mom(GeV)= " << plab/GeV 
-	     << " the model type " << gtype;
-      if(gtype ==  fQElastic) G4cout << " CHIPS ";
-      else if(gtype ==  fLElastic) G4cout << " LElastic ";
-      else if(gtype ==  fHElastic) G4cout << " HElastic ";
-      G4cout << " S-wave will be sampled" 
-	     << G4endl; 
-    }
-    t = 0.0;
-    nnans++;
-  }
-
   if(gtype == fSWave) t = G4UniformRand()*tmax;
 
   if(verboseLevel>1) {
@@ -262,25 +235,20 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4double sint;
 
   // problem in sampling
-  if(cost >= 1.0) {
+  if(cost > 1.0 || cost < -1.0) {
+    if(verboseLevel > 0) {
+      G4cout << "G4HadronElastic:WARNING: Z= " << Z << " N= " 
+	     << N << " " << aParticle->GetDefinition()->GetParticleName()
+	     << " mom(GeV)= " << plab/GeV 
+	     << " the model type " << gtype;
+      if(gtype ==  fQElastic) G4cout << " CHIPS ";
+      else if(gtype ==  fLElastic) G4cout << " LElastic ";
+      else if(gtype ==  fHElastic) G4cout << " HElastic ";
+      G4cout << " cost= " << cost 
+	     << G4endl; 
+    }
     cost = 1.0;
     sint = 0.0;
-    npos++;
-  } else if(cost < -1 ) {
-    /*
-    G4cout << "G4HadronElastic:WARNING: Z= " << Z << " N= " 
-	   << N << " " << aParticle->GetDefinition()->GetParticleName()
-	   << " mom(GeV)= " << plab/GeV 
-	   << " the model type " << gtype;
-    if(gtype ==  fQElastic) G4cout << " CHIPS ";
-    else if(gtype ==  fLElastic) G4cout << " LElastic ";
-    else if(gtype ==  fHElastic) G4cout << " HElastic ";
-    G4cout << " cost= " << cost 
-	   << G4endl; 
-    */
-    cost = 1.0;
-    sint = 0.0;
-    nneg++;
 
     // normal situation
   } else  {
@@ -304,7 +272,6 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   }
   if(eFinal <= lowestEnergyLimit) {
     if(eFinal < 0.0 && verboseLevel > 0) {
-      neneg++;
       G4cout << "G4HadronElastic WARNING ekin= " << eFinal
 	     << " after scattering of " 
 	     << aParticle->GetDefinition()->GetParticleName()

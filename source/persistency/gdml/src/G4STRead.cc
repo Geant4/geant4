@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4STRead.cc,v 1.3 2008/07/17 14:05:50 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4STRead.cc,v 1.4 2009/04/24 15:34:20 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4STRead Implementation
 //
@@ -32,7 +32,17 @@
 // - Created.                                  Zoltan Torzsok, November 2007
 // -------------------------------------------------------------------------
 
+#include <fstream>
+
 #include "G4STRead.hh"
+
+#include "G4Material.hh"
+#include "G4Box.hh"
+#include "G4QuadrangularFacet.hh"
+#include "G4TriangularFacet.hh"
+#include "G4TessellatedSolid.hh"
+#include "G4LogicalVolume.hh"
+#include "G4PVPlacement.hh"
 
 void G4STRead::TessellatedRead(const std::string& line)
 {

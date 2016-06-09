@@ -24,11 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.cc,v 1.3 2008/02/14 10:45:12 akimura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VScoreColorMap.cc,v 1.4 2009/05/04 15:57:33 akimura Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #include "G4VScoreColorMap.hh"
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 #include "G4VVisManager.hh"
 #include "G4VisAttributes.hh"
@@ -93,9 +96,14 @@ void G4VScoreColorMap::DrawColorChartText(G4int _nPoint) {
       fVisManager->Draw2D(line);
     }
     // text
-    char cstring[80]; 
-    std::sprintf(cstring, "%8.2e", v);
-    G4String value(cstring);
+    //char cstring[80]; 
+    //std::sprintf(cstring, "%8.2e", v);
+    //G4String value(cstring);
+    std::ostringstream oss;
+    oss << std::setw(8) << std::setprecision(1) << std::scientific << v;
+    std::string str = oss.str();
+    G4String value(str.c_str());
+
     G4Text text(value, G4Point3D(-0.9, -0.9+0.05*n, 0));
     G4double size = 12.;
     text.SetScreenSize(size);

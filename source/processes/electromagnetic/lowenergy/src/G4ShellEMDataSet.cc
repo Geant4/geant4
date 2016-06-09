@@ -24,17 +24,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.16 2008/03/10 15:07:41 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ShellEMDataSet.cc,v 1.18 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-//  1 Aug 2001   MGP        Created
-// 09.10.01   V.Ivanchenko Add case z=0
-//  9 Mar 2008   MGP        Cleaned up unreadable code modified by former developer
-//                          (Further clean-up needed) 
+//  1 Aug 2001   MGP         Created
+//
+//  09.10.01   V.Ivanchenko  Add case z=0
+//
+//  9 Mar 2008   MGP         Cleaned up unreadable code modified by former developer
+//                           (Further clean-up needed)
+//
+//  15 Jul 2009   Nicolas A. Karakatsanis
+//
+//                           - LoadNonLogData method was created to load only the non-logarithmic data from G4EMLOW
+//                             dataset. It is essentially performing the data loading operations as in the past.
+//
+//                           - LoadData method was revised in order to calculate the logarithmic values of the data
+//                             It retrieves the data values from the G4EMLOW data files but, then, calculates the
+//                             respective log values and loads them to seperate data structures. 
+//
+//                           - SetLogEnergiesData method was cretaed to set logarithmic values to G4 data vectors.
+//                             The EM data sets, initialized this way, contain both non-log and log values.
+//                             These initialized data sets can enhance the computing performance of data interpolation
+//                             operations
+// 
 //
 // -------------------------------------------------------------------
 
@@ -120,6 +137,28 @@ void G4ShellEMDataSet::SetEnergiesData(G4DataVector* energies,
 }
 
 
+void G4ShellEMDataSet::SetLogEnergiesData(G4DataVector* energies,
+                                          G4DataVector* data,
+                                          G4DataVector* log_energies,
+                                          G4DataVector* log_data,
+                                          G4int componentId)
+{
+  G4VEMDataSet* component = components[componentId];
+ 
+  if (component)
+    {
+      component->SetLogEnergiesData(energies, data, log_energies, log_data, 0);
+      return;
+    }
+
+  std::ostringstream message;
+  message << "G4ShellEMDataSet::SetLogEnergiesData - component " << componentId << " not found";
+ 
+  G4Exception(message.str().c_str());
+}
+
+
+
 G4bool G4ShellEMDataSet::LoadData(const G4String& file)
 {
   CleanUpComponents();
@@ -135,48 +174,134 @@ G4bool G4ShellEMDataSet::LoadData(const G4String& file)
       G4Exception(message);
     }
 
-  G4DataVector* energies = 0;
-  G4DataVector* data = 0;
+  G4DataVector* orig_shell_energies = 0;
+  G4DataVector* orig_shell_data = 0;
+  G4DataVector* log_shell_energies = 0;
+  G4DataVector* log_shell_data = 0;
 
   G4double a = 0.;
   G4int shellIndex = 0;
-  bool energyColumn = true;
+  G4int k = 0;
+  G4int nColumns = 2;
 
   do
     {
       in >> a;
-  
+
+      if (a==0.) a=1e-300;
+
+      // The file is organized into four columns:
+      // 1st column contains the values of energy
+      // 2nd column contains the corresponding data value
+      // The file terminates with the pattern: -1   -1
+      //                                       -2   -2
+      //
       if (a == -1)
 	{
-	  if (energyColumn && energies!=0)
+	  if ((k%nColumns == 0) && (orig_shell_energies != 0) )
 	    {
-	      AddComponent(new G4EMDataSet(shellIndex, energies, data, algorithm->Clone(), unitEnergies, unitData));
-	      energies = 0;
-	      data = 0;
+	     AddComponent(new G4EMDataSet(shellIndex, orig_shell_energies, orig_shell_data, log_shell_energies, log_shell_data, algorithm->Clone(), unitEnergies, unitData));
+	      orig_shell_energies = 0;
+	      orig_shell_data = 0;
+              log_shell_energies = 0;
+              log_shell_data = 0;
 	    }
-   
-	  energyColumn = (!energyColumn);
 	}
       else if (a != -2)
 	{
-	  if (energies == 0)
+	  if (orig_shell_energies == 0)
 	    {
-	      energies = new G4DataVector;
-	      data = new G4DataVector;
+	     orig_shell_energies = new G4DataVector;
+	     orig_shell_data = new G4DataVector;
+             log_shell_energies = new G4DataVector;
+             log_shell_data = new G4DataVector;
 	    }
-  
-	  if (energyColumn)
-	    energies->push_back(a * unitEnergies);
-	  else
-	    data->push_back(a * unitData);
-
-	  energyColumn = (!energyColumn);
+	  if (k%nColumns == 0)
+            {
+	     orig_shell_energies->push_back(a*unitEnergies);
+	     log_shell_energies->push_back(std::log10(a) + std::log10(unitEnergies));
+            }
+	  else if (k%nColumns == 1)
+            {
+	     orig_shell_data->push_back(a*unitData);
+             log_shell_data->push_back(std::log10(a) + std::log10(unitData));
+            }
+          k++;
 	}
+      else k = 1;
     }
-  while (a != -2);
+  while (a != -2);  // End of file
 
   return true;
 }
+
+
+G4bool G4ShellEMDataSet::LoadNonLogData(const G4String& file)
+{
+  CleanUpComponents();
+
+  G4String fullFileName = FullFileName(file);
+  std::ifstream in(fullFileName);
+
+  if (!in.is_open())
+    {
+      G4String message("G4ShellEMDataSet::LoadData - data file \"");
+      message += fullFileName;
+      message += "\" not found";
+      G4Exception(message);
+    }
+
+  G4DataVector* orig_shell_energies = 0;
+  G4DataVector* orig_shell_data = 0;
+
+  G4double a = 0.;
+  G4int shellIndex = 0;
+  G4int k = 0;
+  G4int nColumns = 2;
+
+  do
+    {
+      in >> a;
+
+      // The file is organized into four columns:
+      // 1st column contains the values of energy
+      // 2nd column contains the corresponding data value
+      // The file terminates with the pattern: -1   -1
+      //                                       -2   -2
+      //
+      if (a == -1)
+	{
+	  if ((k%nColumns == 0) && (orig_shell_energies != 0) )
+	    {
+	     AddComponent(new G4EMDataSet(shellIndex, orig_shell_energies, orig_shell_data, algorithm->Clone(), unitEnergies, unitData));
+	      orig_shell_energies = 0;
+	      orig_shell_data = 0;
+	    }
+	}
+      else if (a != -2)
+	{
+	  if (orig_shell_energies == 0)
+	    {
+	     orig_shell_energies = new G4DataVector;
+	     orig_shell_data = new G4DataVector;
+	    }
+	  if (k%nColumns == 0)
+            {
+	     orig_shell_energies->push_back(a*unitEnergies);
+            }
+	  else if (k%nColumns == 1)
+            {
+	     orig_shell_data->push_back(a*unitData);
+            }
+          k++;
+	}
+      else k = 1;
+    }
+  while (a != -2);  // End of file
+
+  return true;
+}
+
 
 
 G4bool G4ShellEMDataSet::SaveData(const G4String& file) const

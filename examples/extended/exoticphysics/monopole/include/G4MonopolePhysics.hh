@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4MonopolePhysics.hh,v 1.1 2007/08/16 10:32:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MonopolePhysics.hh,v 1.2 2009/07/15 10:19:47 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,11 +38,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class G4MonopolePhysicsMessenger;
+
 class G4MonopolePhysics : public G4VPhysicsConstructor
 {
 public:
-  G4MonopolePhysics(const G4String& name = "EM_monopole");
-  virtual ~G4MonopolePhysics();
+
+  G4MonopolePhysics(const G4String& nam = "Monopole Physics");
+  ~G4MonopolePhysics();
 
   // This method is dummy for physics
   virtual void ConstructParticle();
@@ -52,11 +55,21 @@ public:
   // registered to the process manager of each particle type
   virtual void ConstructProcess();
 
+  void SetMagneticCharge(G4int);
+  void SetElectricCharge(G4int);
+  void SetMonopoleMass(G4double);
+
 private:
 
   // hide assignment operator
-  G4MonopolePhysics & operator=(const G4MonopolePhysics &right);
-  G4MonopolePhysics(const G4MonopolePhysics&);
+  //  G4MonopolePhysics & operator=(const G4MonopolePhysics &right);
+  // G4MonopolePhysics(const G4MonopolePhysics&);
+
+  G4int    magCharge;
+  G4int    elCharge;
+  G4double monopoleMass;
+
+  G4MonopolePhysicsMessenger*  theMessenger;
 
 };
 

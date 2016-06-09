@@ -1,35 +1,53 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version $Name: geant4-09-02 $   (27-July-2004)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+New histogram will be booked: #10  <Energy deposit (MeV) in the traget  100  0  15  1
+New histogram will be booked: #11  <Energy deposit (MeV) in the detector  100  0  15  1
+New histogram will be booked: #12  <Total energy spectrum (MeV) of the traget and detector  100  0  15  1
+New histogram will be booked: #13  <Coincidence spectrum (MeV) between the traget and detector  100  0  15  1
+New histogram will be booked: #14  <Anti-coincidence spectrum (MeV) in the traget  100  0  15  1
+New histogram will be booked: #15  <Anti-coincidence spectrum (MeV) in the detector  100  0  15  1
+New histogram will be booked: #16  <Decay emission spectrum (MeV)  100  0  15  1
+Vacuum H 1e-25 2.73 1.87245e-14
  Material:Vacuum with formula: H added! 
      Nb of Material = 1
      Nb of Isotope =  0
      Nb of Element =  1
+Air N0.78-O0.22 0.00129 273.15 6.32421e+08
  Material:Air with formula: N0.78-O0.22 added! 
      Nb of Material = 2
      Nb of Isotope =  0
      Nb of Element =  3
+Aluminium Al 2.7 273.15 6.32421e+08
  Material:Aluminium with formula: Al added! 
      Nb of Material = 3
      Nb of Isotope =  0
      Nb of Element =  4
+Silicon Si 2.329 273.15 6.32421e+08
  Material:Silicon with formula: Si added! 
      Nb of Material = 4
      Nb of Isotope =  0
      Nb of Element =  5
+Lead Pb 11.3 273.15 6.32421e+08
  Material:Lead with formula: Pb added! 
      Nb of Material = 5
      Nb of Isotope =  0
      Nb of Element =  6
+Germanium Ge 5.323 273.15 6.32421e+08
  Material:Germanium with formula: Ge added! 
      Nb of Material = 6
      Nb of Isotope =  0
      Nb of Element =  7
+CsI Cs-I 4.51 273.15 6.32421e+08
  Material:CsI with formula: Cs-I added! 
      Nb of Material = 7
      Nb of Isotope =  0
@@ -38,168 +56,141 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
-  FukuiRenderer (DAWN)
+  ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
-  RayTracer (RayTracer)
+  gMocrenFile (gMocrenFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
 
 ----> The target has been changed to 3 cm of Lead
-
-phot:  Total cross sections from Sandia parametrisation. 
-Thank you for using G4BinaryCascade. 
-/fred/geant4/g4/data/G4NDL
-Thank you for using G4BinaryCascade. 
-Thank you for using G4BinaryCascade. 
+NeutronHP: /Elastic/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Elastic///CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Capture//CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Elastic//CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Inelastic//CrossSection/8_17_Oxygen
+/afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13
+NeutronHP: /Capture/ file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL3.13/Capture///CrossSection/8_17_Oxygen
+### exrdmPhysicsList::ConstructProcess is done
 world cuts are set
 Target cuts are set
 Detector cuts are set
-G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
-The cut in range [500 (mm)]   is too big   for material  idx=5
-The cut in energy is set1.79769e+305GeV 
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
 
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+                     Hadronic Processes for <anti_neutron>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+AntiNeutronInelastic  Models:  G4LEAntiNeutronInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                               G4HEAntiNeutronInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+                     Hadronic Processes for <anti_proton>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+ AntiProtonInelastic  Models:   G4LEAntiProtonInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                G4HEAntiProtonInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
-msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+                     Hadronic Processes for <e->
+      ElectroNuclear  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 30000
 
-eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+                     Hadronic Processes for <gamma>
+     PhotonInelastic  Models:                     CHIPS: Emin(GeV)=     0  Emax(GeV)= 3.5
+                                        TheoFSGenerator: Emin(GeV)=     3  Emax(GeV)= 100000
 
-eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+                     Hadronic Processes for <kaon+>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+   KaonPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
+                                  G4LEKaonPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
-eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
-      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+                     Hadronic Processes for <kaon->
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+  KaonMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
+                                 G4LEKaonMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
-eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Total cross sections from a parametrisation based on the EEDL data library. 
-      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+                     Hadronic Processes for <lambda>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+     LambdaInelastic  Models:       G4LELambdaInelastic: Emin(GeV)=     0  Emax(GeV)= 25
+                                    G4HELambdaInelastic: Emin(GeV)=    20  Emax(GeV)= 100000
 
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+                     Hadronic Processes for <mu->
+          muMinusCaptureAtRest
 
-msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+                     Hadronic Processes for <neutron>
+            hElastic  Models:          NeutronHPElastic: Emin(GeV)=     0  Emax(GeV)= 0.02
+                                        G4HadronElastic: Emin(GeV)= 0.0195  Emax(GeV)= 100000
+    NeutronInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
+                                   G4LENeutronInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                         Binary Cascade: Emin(GeV)= 0.0199  Emax(GeV)= 9.9
+                                     NeutronHPInelastic: Emin(GeV)=     0  Emax(GeV)= 0.02
+            nCapture  Models:                G4LCapture: Emin(GeV)= 0.0199  Emax(GeV)= 20000
+                                       NeutronHPCapture: Emin(GeV)=     0  Emax(GeV)= 0.02
+            nFission  Models:                G4LFission: Emin(GeV)= 0.0199  Emax(GeV)= 20000
+                                       NeutronHPFission: Emin(GeV)=     0  Emax(GeV)= 0.02
 
-hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
+                     Hadronic Processes for <pi+>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+   PionPlusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
+                                  G4LEPionPlusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
-msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+                     Hadronic Processes for <pi->
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+  PionMinusInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
+                                 G4LEPionMinusInelastic: Emin(GeV)=     0  Emax(GeV)= 25
 
-MuIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-
-MuBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-MuPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-### All dEdx and Range tables are built #####
-
-MuIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
-      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
-      radiative corrections for E > 1 GeV
-
-msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV  to 100 TeV in 120 bins.
-      Boundary algorithm is active with facrange= 0.199
+                     Hadronic Processes for <proton>
+            hElastic  Models:           G4HadronElastic: Emin(GeV)=     0  Emax(GeV)= 100000
+     ProtonInelastic  Models:                      QGSP: Emin(GeV)=    12  Emax(GeV)= 100000
+                                    G4LEProtonInelastic: Emin(GeV)=   9.5  Emax(GeV)= 25
+                                         Binary Cascade: Emin(GeV)=     0  Emax(GeV)= 9.9
+============================================================================================
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
- Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Lead
- Range cuts        :  gamma 10 cm     e- 10 cm     e+ 10 cm 
- Energy thresholds :  gamma 2.24888 MeV    e- 437.915 MeV    e+ 396.844 MeV
+ Range cuts        :  gamma  10 cm     e-  10 cm     e+  10 cm  proton 10 cm 
+ Energy thresholds :  gamma  2.10237 MeV    e-  430.674 MeV    e+  408.132 MeV proton 10 MeV
  Region(s) which use this couple : 
     Target
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Germanium
- Range cuts        :  gamma 50 cm     e- 50 cm     e+ 50 cm 
- Energy thresholds :  gamma 2.88022e+295 J      e- 1.91846 GeV    e+ 1.73853 GeV
+ Range cuts        :  gamma  50 cm     e-  50 cm     e+  50 cm  proton 50 cm 
+ Energy thresholds :  gamma  10 GeV    e-  1.83883 GeV    e+  1.74258 GeV proton 50 MeV
  Region(s) which use this couple : 
     Detector
 
 ====================================================================
 
-### Histo books 7 histograms 
-Loaded linked in JVM.
-Looking for already loaded JVMs...
-None found.
-Using CLASSPATH.
-classpathOption: -Djava.class.path=/fred/flei/AIDAJNI-3.2.2/lib/freehep-aidajni.jar:/fred/flei/JAIDA-3.2.2/lib/optimizers.jar:/fred/flei/JAIDA-3.2.2/lib/openide-lookup.jar:/fred/flei/JAIDA-3.2.2/lib/jel.jar:/fred/flei/JAIDA-3.2.2/lib/jas-plotter.jar:/fred/flei/JAIDA-3.2.2/lib/freehep-hep.jar:/fred/flei/JAIDA-3.2.2/lib/freehep-base.jar:/fred/flei/JAIDA-3.2.2/lib/bcel.jar:/fred/flei/JAIDA-3.2.2/lib/aida-dev.jar:/fred/flei/JAIDA-3.2.2/lib/aida.jar:
-Starting JVM...JVM Created.
-Tree store  : exrdm-proton.aida
-Creating Ntuple: Emitted Particles
-Creating Ntuple: RadioIsotopes
-Creating Ntuple: Energy Depositions
+exrdmAnalysisManager: Histograms are booked and the run has been started
 ### Run : 0
-G4AugerData for Element no. 7 are loaded
-G4AugerData for Element no. 8 are loaded
-G4AugerData for Element no. 13 are loaded
-G4AugerData for Element no. 14 are loaded
-G4AugerData for Element no. 32 are loaded
-G4AugerData for Element no. 53 are loaded
-G4AugerData for Element no. 55 are loaded
-G4AugerData for Element no. 82 are loaded
-AugerTransitionTable complete
-Closing the tree...
-Histograms and Ntuples are saved
-### Histo books 7 histograms 
-Loaded linked in JVM.
-Looking for already loaded JVMs...
-Number of jvm's returned: 1Using already loaded JVM.
-Tree store  : exrdm-f24.aida
-Creating Ntuple: Emitted Particles
-Creating Ntuple: RadioIsotopes
-Creating Ntuple: Energy Depositions
-Closing the tree...
-Histograms and Ntuples are saved
 Graphics systems deleted.
 Visualization Manager deleting...
+

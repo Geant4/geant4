@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: PhysListEmLivermore.hh,v 1.2 2006/06/29 16:44:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysListEmLivermore.hh,v 1.4 2009/11/19 17:30:25 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +40,7 @@
 class PhysListEmLivermore : public G4VPhysicsConstructor
 {
   public: 
-    PhysListEmLivermore(const G4String& name = "Livermore");
+    PhysListEmLivermore(const G4String& name = "livermore");
    ~PhysListEmLivermore();
 
   public: 

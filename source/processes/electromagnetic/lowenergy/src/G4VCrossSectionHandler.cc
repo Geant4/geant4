@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.17 2006/06/29 19:41:42 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VCrossSectionHandler.cc,v 1.19 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -36,6 +36,36 @@
 //                          + NumberOfComponents
 // 19 Jul 2002   VI         Create composite data set for material
 // 21 Jan 2003   VI         Cut per region
+//
+// 15 Jul 2009   Nicolas A. Karakatsanis
+//
+//                           - LoadNonLogData method was created to load only the non-logarithmic data from G4EMLOW
+//                             dataset. It is essentially performing the data loading operations as in the past.
+//
+//                           - LoadData method was revised in order to calculate the logarithmic values of the data
+//                             It retrieves the data values from the G4EMLOW data files but, then, calculates the
+//                             respective log values and loads them to seperate data structures.
+//                             The EM data sets, initialized this way, contain both non-log and log values.
+//                             These initialized data sets can enhance the computing performance of data interpolation
+//                             operations
+//
+//                           - BuildMeanFreePathForMaterials method was also revised in order to calculate the 
+//                             logarithmic values of the loaded data. 
+//                             It generates the data values and, then, calculates the respective log values which 
+//                             later load to seperate data structures.
+//                             The EM data sets, initialized this way, contain both non-log and log values.
+//                             These initialized data sets can enhance the computing performance of data interpolation
+//                             operations
+//                             
+//                           - LoadShellData method was revised in order to eliminate the presence of a potential
+//                             memory leak originally identified by Riccardo Capra.
+//                             Riccardo Capra Original Comment
+//                             Riccardo Capra <capra@ge.infn.it>: PLEASE CHECK THE FOLLOWING PIECE OF CODE
+//                             "energies" AND "data" G4DataVector ARE ALLOCATED, FILLED IN AND NEVER USED OR
+//                             DELETED. WHATSMORE LOADING FILE OPERATIONS WERE DONE BY G4ShellEMDataSet
+//                             EVEN BEFORE THE CHANGES I DID ON THIS FILE. SO THE FOLLOWING CODE IN MY
+//                             OPINION SHOULD BE USELESS AND SHOULD PRODUCE A MEMORY LEAK.
+//
 //
 // -------------------------------------------------------------------
 
@@ -174,64 +204,67 @@ void G4VCrossSectionHandler::LoadData(const G4String& fileName)
       ost << path << '/' << fileName << Z << ".dat";
       std::ifstream file(ost.str().c_str());
       std::filebuf* lsdp = file.rdbuf();
-      
+       
       if (! (lsdp->is_open()) )
 	{
 	  G4String excep = "G4VCrossSectionHandler - data file: " + ost.str() + " not found";
 	  G4Exception(excep);
 	}
       G4double a = 0;
-      G4int k = 1;
-      G4DataVector* energies = new G4DataVector;
-      G4DataVector* data = new G4DataVector;
+      G4int k = 0;
+      G4int nColumns = 2;
+
+      G4DataVector* orig_reg_energies = new G4DataVector;
+      G4DataVector* orig_reg_data = new G4DataVector;
+      G4DataVector* log_reg_energies = new G4DataVector;
+      G4DataVector* log_reg_data = new G4DataVector;
+
       do
 	{
 	  file >> a;
-	  G4int nColumns = 2;
-	  // The file is organized into two columns:
-	  // 1st column is the energy
-	  // 2nd column is the corresponding value
+
+          if (a==0.) a=1e-300;
+
+	  // The file is organized into four columns:
+	  // 1st column contains the values of energy
+	  // 2nd column contains the corresponding data value
 	  // The file terminates with the pattern: -1   -1
 	  //                                       -2   -2
-	  if (a == -1 || a == -2)
+          //
+	  if (a != -1 && a != -2)
 	    {
+	      if (k%nColumns == 0)
+                {
+		 orig_reg_energies->push_back(a*unit1);
+                 log_reg_energies->push_back(std::log10(a)+std::log10(unit1));
+                }
+	      else if (k%nColumns == 1)
+                {
+		 orig_reg_data->push_back(a*unit2);
+                 log_reg_data->push_back(std::log10(a)+std::log10(unit2));
+                }
+              k++;
 	    }
-	  else
-	    {
-	      if (k%nColumns != 0)
-		{	
-		  G4double e = a * unit1;
-		  energies->push_back(e);
-		  k++;
-		}
-	      else if (k%nColumns == 0)
-		{
-		  G4double value = a * unit2;
-		  data->push_back(value);
-		  k = 1;
-		}
-	    }
-	} while (a != -2); // end of file
+	} 
+      while (a != -2); // End of File
       
       file.close();
       G4VDataSetAlgorithm* algo = interpolation->Clone();
-      G4VEMDataSet* dataSet = new G4EMDataSet(Z,energies,data,algo);
+
+      G4VEMDataSet* dataSet = new G4EMDataSet(Z,orig_reg_energies,orig_reg_data,log_reg_energies,log_reg_data,algo);
+
       dataMap[Z] = dataSet;
+
     }
 }
 
-void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
+
+void G4VCrossSectionHandler::LoadNonLogData(const G4String& fileName)
 {
   size_t nZ = activeZ.size();
   for (size_t i=0; i<nZ; i++)
     {
       G4int Z = (G4int) activeZ[i];
-      
-      // Riccardo Capra <capra@ge.infn.it>: PLEASE CHECK THE FOLLOWING PIECE OF CODE
-      // "energies" AND "data" G4DataVector ARE ALLOCATED, FILLED IN AND NEVER USED OR
-      // DELETED. WHATSMORE LOADING FILE OPERATIONS WERE DONE BY G4ShellEMDataSet
-      // EVEN BEFORE THE CHANGES I DID ON THIS FILE. SO THE FOLLOWING CODE IN MY
-      // OPINION SHOULD BE USELESS AND SHOULD PRODUCE A MEMORY LEAK. 
 
       // Build the complete string identifying the file with the data set
       
@@ -243,61 +276,75 @@ void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
 	}
       
       std::ostringstream ost;
-
       ost << path << '/' << fileName << Z << ".dat";
-      
       std::ifstream file(ost.str().c_str());
       std::filebuf* lsdp = file.rdbuf();
-      
+       
       if (! (lsdp->is_open()) )
 	{
 	  G4String excep = "G4VCrossSectionHandler - data file: " + ost.str() + " not found";
 	  G4Exception(excep);
 	}
       G4double a = 0;
-      G4int k = 1;
-      G4DataVector* energies = new G4DataVector;
-      G4DataVector* data = new G4DataVector;
+      G4int k = 0;
+      G4int nColumns = 2;
+
+      G4DataVector* orig_reg_energies = new G4DataVector;
+      G4DataVector* orig_reg_data = new G4DataVector;
+
       do
 	{
 	  file >> a;
-	  G4int nColumns = 2;
-	  // The file is organized into two columns:
-	  // 1st column is the energy
-	  // 2nd column is the corresponding value
+
+	  // The file is organized into four columns:
+	  // 1st column contains the values of energy
+	  // 2nd column contains the corresponding data value
 	  // The file terminates with the pattern: -1   -1
 	  //                                       -2   -2
-	  if (a == -1 || a == -2)
+          //
+	  if (a != -1 && a != -2)
 	    {
+	      if (k%nColumns == 0)
+                {
+		 orig_reg_energies->push_back(a*unit1);
+                }
+	      else if (k%nColumns == 1)
+                {
+		 orig_reg_data->push_back(a*unit2);
+                }
+              k++;
 	    }
-	  else
-	    {
-	      if (k%nColumns != 0)
-		{	
-		  G4double e = a * unit1;
-		  energies->push_back(e);
-		  k++;
-		}
-	      else if (k%nColumns == 0)
-		{
-		  G4double value = a * unit2;
-		  data->push_back(value);
-		  k = 1;
-		}
-	    }
-	} while (a != -2); // end of file
+	} 
+      while (a != -2); // End of File
       
       file.close();
-      
-      // Riccardo Capra <capra@ge.infn.it>: END OF CODE THAT IN MY OPINION SHOULD BE
-      // REMOVED.
+      G4VDataSetAlgorithm* algo = interpolation->Clone();
+
+      G4VEMDataSet* dataSet = new G4EMDataSet(Z,orig_reg_energies,orig_reg_data,algo);
+
+      dataMap[Z] = dataSet;
+
+    }
+}
+
+void G4VCrossSectionHandler::LoadShellData(const G4String& fileName)
+{
+  size_t nZ = activeZ.size();
+  for (size_t i=0; i<nZ; i++)
+    {
+      G4int Z = (G4int) activeZ[i];
       
       G4VDataSetAlgorithm* algo = interpolation->Clone();
       G4VEMDataSet* dataSet = new G4ShellEMDataSet(Z, algo);
+
       dataSet->LoadData(fileName);
+      
       dataMap[Z] = dataSet;
     }
 }
+
+
+
 
 void G4VCrossSectionHandler::Clear()
 {
@@ -452,6 +499,9 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 
   G4DataVector* energies;
   G4DataVector* data;
+  G4DataVector* log_energies;
+  G4DataVector* log_data;
+
   
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
@@ -462,10 +512,13 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
     {
       energies = new G4DataVector;
       data = new G4DataVector;
+      log_energies = new G4DataVector;
+      log_data = new G4DataVector;
       for (G4int bin=0; bin<nBins; bin++)
 	{
 	  G4double energy = energyVector[bin];
 	  energies->push_back(energy);
+          log_energies->push_back(std::log10(energy));
 	  G4VEMDataSet* matCrossSet = (*crossSections)[m];
 	  G4double materialCrossSection = 0.0;
           G4int nElm = matCrossSet->NumberOfComponents();
@@ -476,19 +529,26 @@ G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4Data
 	  if (materialCrossSection > 0.)
 	    {
 	      data->push_back(1./materialCrossSection);
+              log_data->push_back(std::log10(1./materialCrossSection));
 	    }
 	  else
 	    {
 	      data->push_back(DBL_MAX);
+              log_data->push_back(std::log10(DBL_MAX));
 	    }
 	}
       G4VDataSetAlgorithm* algo = CreateInterpolation();
-      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.);
+
+      //G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,algo,1.,1.);
+
+      G4VEMDataSet* dataSet = new G4EMDataSet(m,energies,data,log_energies,log_data,algo,1.,1.);
+
       materialSet->AddComponent(dataSet);
     }
 
   return materialSet;
 }
+
 
 G4int G4VCrossSectionHandler::SelectRandomAtom(const G4MaterialCutsCouple* couple,
                                                      G4double e) const

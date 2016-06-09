@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RichTrajectoryPoint.cc,v 1.3 2006/09/27 20:42:52 asaim Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RichTrajectoryPoint.cc,v 1.5 2009/11/24 10:04:14 perl Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // ---------------------------------------------------------------
@@ -60,11 +60,14 @@
 #include "G4AttCheck.hh"
 #endif
 
+#include <sstream>
+
 G4Allocator<G4RichTrajectoryPoint> aRichTrajectoryPointAllocator;
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint():
   fpAuxiliaryPointVector(0),
   fTotEDep(0.),
+  fRemainingEnergy(0.),
   fpProcess(0),
   fPreStepPointGlobalTime(0),
   fPostStepPointGlobalTime(0)
@@ -74,9 +77,12 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Track* aTrack):
   G4TrajectoryPoint(aTrack->GetPosition()),
   fpAuxiliaryPointVector(0),
   fTotEDep(0.),
+  fRemainingEnergy(aTrack->GetKineticEnergy()),
   fpProcess(0),
   fPreStepPointGlobalTime(aTrack->GetGlobalTime()),
-  fPostStepPointGlobalTime(aTrack->GetGlobalTime())
+  fPostStepPointGlobalTime(aTrack->GetGlobalTime()),
+  fpPreStepPointVolume(aTrack->GetTouchableHandle()),
+  fpPostStepPointVolume(aTrack->GetNextTouchableHandle())
 {}
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Step* aStep):
@@ -86,9 +92,16 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Step* aStep):
 {
   G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
   G4StepPoint* postStepPoint = aStep->GetPostStepPoint();
+  if (aStep->GetTrack()->GetCurrentStepNumber() <= 0) {  // First step
+    fRemainingEnergy = aStep->GetTrack()->GetKineticEnergy();
+  } else {
+    fRemainingEnergy = preStepPoint->GetKineticEnergy() - fTotEDep;
+  }
   fpProcess = postStepPoint->GetProcessDefinedStep();
   fPreStepPointGlobalTime = preStepPoint->GetGlobalTime();
   fPostStepPointGlobalTime = postStepPoint->GetGlobalTime();
+  fpPreStepPointVolume = preStepPoint->GetTouchableHandle();
+  fpPostStepPointVolume = postStepPoint->GetTouchableHandle();
 
   /*
   G4cout << "fpAuxiliaryPointVector "
@@ -123,6 +136,7 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint
   G4TrajectoryPoint(right),
   fpAuxiliaryPointVector(right.fpAuxiliaryPointVector),
   fTotEDep(right.fTotEDep),
+  fRemainingEnergy(right.fRemainingEnergy),
   fpProcess(right.fpProcess),
   fPreStepPointGlobalTime(right.fPreStepPointGlobalTime),
   fPostStepPointGlobalTime(right.fPostStepPointGlobalTime)
@@ -159,6 +173,9 @@ G4RichTrajectoryPoint::GetAttDefs() const
     ID = "TED";
     (*store)[ID] = G4AttDef(ID,"Total Energy Deposit",
 			    "Physics","G4BestUnit","G4double");
+    ID = "RE";
+    (*store)[ID] = G4AttDef(ID,"Remaining Energy",
+			    "Physics","G4BestUnit","G4double");
     ID = "PDS";
     (*store)[ID] = G4AttDef(ID,"Process Defined Step",
 			    "Physics","","G4String");
@@ -171,8 +188,26 @@ G4RichTrajectoryPoint::GetAttDefs() const
     ID = "PostT";
     (*store)[ID] = G4AttDef(ID,"Post-step-point global time",
 			    "Physics","G4BestUnit","G4double");
+    ID = "PreVPath";
+    (*store)[ID] = G4AttDef(ID,"Pre-step Volume Path",
+                            "Physics","","G4String");
+    ID = "PostVPath";
+    (*store)[ID] = G4AttDef(ID,"Post-step Volume Path",
+                            "Physics","","G4String");
   }
   return store;
+}
+
+static G4String Path(const G4TouchableHandle& th)
+{
+  std::ostringstream oss;
+  G4int depth = th->GetHistoryDepth();
+  for (G4int i = depth; i >= 0; --i) {
+    oss << th->GetVolume(i)->GetName()
+	<< ':' << th->GetCopyNumber(i);
+    if (i != 0) oss << '/';
+  }
+  return oss.str();
 }
 
 std::vector<G4AttValue>* G4RichTrajectoryPoint::CreateAttValues() const
@@ -189,6 +224,8 @@ std::vector<G4AttValue>* G4RichTrajectoryPoint::CreateAttValues() const
   }
 
   values->push_back(G4AttValue("TED",G4BestUnit(fTotEDep,"Energy"),""));
+
+  values->push_back(G4AttValue("RE",G4BestUnit(fRemainingEnergy,"Energy"),""));
 
   if (fpProcess) {
     values->push_back
@@ -208,6 +245,18 @@ std::vector<G4AttValue>* G4RichTrajectoryPoint::CreateAttValues() const
 
   values->push_back
     (G4AttValue("PostT",G4BestUnit(fPostStepPointGlobalTime,"Time"),""));
+
+  if (fpPreStepPointVolume && fpPreStepPointVolume->GetVolume()) {
+    values->push_back(G4AttValue("PreVPath",Path(fpPreStepPointVolume),""));
+  } else {
+    values->push_back(G4AttValue("PreVPath","None",""));
+  }
+
+  if (fpPostStepPointVolume && fpPostStepPointVolume->GetVolume()) {
+    values->push_back(G4AttValue("PostVPath",Path(fpPostStepPointVolume),""));
+  } else {
+    values->push_back(G4AttValue("PostVPath","None",""));
+  }
 
 #ifdef G4ATTDEBUG
   G4cout << G4AttCheck(values,GetAttDefs());

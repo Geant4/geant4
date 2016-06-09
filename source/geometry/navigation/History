@@ -1,4 +1,4 @@
-$Id: History,v 1.126 2008/12/11 10:53:12 gcosmo Exp $
+$Id: History,v 1.138 2009/12/11 05:48:53 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,102 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec 11th, 2009 - J.Apostolakis (geomnav-V09-02-11)
+------------------------------
+- G4PropagatorInField
+  * Implementation field by Region 
+      - with extra checking of logical volume
+
+Nov 30th, 2009 - J.Apostolakis (geomnav-V09-02-10)
+------------------------------
+- G4VIntersectionLocator
+  * Fix problem in ReEstimateEndPoint() behaviour for very small steps.
+
+  * Corrected constructor to ensure that it initialises all data members.
+  * Labelled the methods (in header) to make noticable those that 
+      must changed at every step.
+      ( attributes: ChordFinder,  EpsilonStep,  Navigator )
+
+Nov 23rd, 2009 - J.Apostolakis 
+------------------------------
+- Fixed G4PropagatorInField.cc: 
+   * Revise condition for flagging ZeroStep to avoid fake triggering.
+     Small proposed steps (from Physics) could trigger the previous
+     simple condition for Tiny/Zero Problem steps.
+   [ This was first commited on branch geomnav-V09-02-08_branch 
+       and tagged geomnav-V09-02-80  ]
+
+Nov 12th, 2009 - J.Apostolakis (geomnav-V09-02-09)
+------------------------------
+- G4PropagatorInField: cleanup of minor methods:
+   Added new method RefreshIntersectionLocator to update the state of
+       Use this method to synchronise with IntersectionLocator.
+   Deleted long obsolete methods: SetAccuraciesWithDeltaOneStep
+	   SetDeltaIntersection,  SetDeltaOneStep
+   Revised implementation to avoid using the older methods
+           GetDeltaIntersection   GetDeltaOneStep
+
+Nov 12th, 2009 - J.Apostolakis (geomnav-V09-02-08)
+------------------------------
+- Refined G4PropagatorInField.cc: 
+   * Changed parameters for treating consecutive tiny/zero steps:
+     - the value of default decrease factor to 0.25 (from 0.1), 
+     - the value is not used when the step size falls below a certain threshold.s
+       This threshold is changed. It is expressed as a multiple of fZeroStepThreshold 
+       instead of kCarTolerance.  The reasons are:
+	 * the threshold were meant to refer to the  ZeroStepThreshold (it was kCarTolerance)
+	 * the values were now much larger than this ZeroStepThreshold.
+     - The value given to the decrease factor after the first such thresholds is changed to 0.35
+       instead of 0.25, 0.5.  
+   * Improved printing of Diagnostic message.
+
+Nov  3rd, 2009 - J.Apostolakis (geomnav-V09-02-07)
+------------------------------
+- Refined G4PropagatorInField.cc: 
+   * Added new member fZeroStepThreshold, to enable tuning of threshold for Tiny/Zero steps. 
+   * Changed default value from 0.5 * kCarTolerance 
+                          to max (100,000 * kCarTolerance, 0.1 * micron )
+   * This is first revision to address problem seen at boundary of volumes (Reports of Atlas) .
+
+June 2nd, 2009 - J.Apostolakis (geomnav-V09-02-06)
+------------------------------
+- Fix in G4PropagatorInField::SetNavigator
+   * Forward new Navigator to IntersectionLocator. 
+
+May 20th, 2009 - P.Arce (geomnav-V09-02-05)
+-----------------------
+- Added method BuildContainerSolid() taking a solid as argument to
+  G4PhantomParameterisation. Added protection to GetMaterialIndex()
+  for zero index.
+
+May 18th, 2009 - T.Nikitina (geomnav-V09-02-04)
+---------------------------
+- Enhanced algorithm for 'FB_intersects' in order to speedup BrentLocator.
+- Fix in the usage of the geometrical tolerance in G4VIntersectionLocator
+  in method AdjustementOfFoundIntersection().
+
+May 13th, 2009 - J.Apostolakis (geomnav-V09-02-03)
+------------------------------
+- Fix in G4PathFinder: A geometry is at a boundary if its step is within 
+   tolerance of the minimum step for any geometry.
+
+May 5th, 2009 - T.Nikitina (geomnav-V09-02-02)
+--------------------------
+- Fix in G4Navigator::ComputeStep() for the computation of rotation of the
+  'LocalExitNormal' in cases when DistanceToOut() returns non-valid normal
+  for optical photons in rotated solids. Addresses problem report #1059.
+
+February 26th, 2009 - T.Nikitina (geomnav-V09-02-01)
+--------------------------------
+- Fixed problem in G4BrentLocator::EstimateIntersectionPoint() responsible
+  for rare cases of negative steps.
+
+January 27th, 2009 - G.Cosmo (geomnav-V09-02-00)
+----------------------------
+- Added G4RegularNavigationHelper class, used by G4RegularNavigation for
+  counting the number of step lengths in each voxel of the regular structure
+  (by P.Arce).
+- Some code cleanup...
 
 December 11th, 2008 - T.Nikitina (geomnav-V09-01-10)
 --------------------------------

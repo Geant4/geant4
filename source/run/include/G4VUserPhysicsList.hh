@@ -24,20 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.35 2007/05/30 10:16:27 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VUserPhysicsList.hh,v 1.41 2009/08/09 14:31:46 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 // Class Description:
-//      This class is an abstruct class for
+//      This class is an abstract class for
 //      constructing particles and processes.
-//      User must implement following four virtual methods
-//      in his own concrete class derived from this class. 
+//      User must implement following three virtual methods
+//      in his/her own concrete class derived from this class. 
 //        G4VUserPhysicsList::ConstructParticle() 
 //           Construct particles
-//        G4VUserPhysicsList::constructPhysics() 
+//        G4VUserPhysicsList::ConstructProcess() 
 //           Construct procesess and register them to particles
 //        G4VUserPhysicsList::SetCuts()
 //           set cut values in range to all particles
@@ -110,7 +110,7 @@ class G4VUserPhysicsList
  
    // Each physics process will be instantiated and
    // registered to the process manager of each particle type 
-   // This method is invoked in Construct" method 
+   // This method is invoked in Construct method 
    virtual void ConstructProcess() = 0;
 
   protected: // with description
@@ -177,7 +177,7 @@ class G4VUserPhysicsList
   public: // with description
     // Request to print out information of cut values
     // Printing will be performed when all tables are made
-    void DumpCutValuesTable(G4int nParticles=3);
+    void DumpCutValuesTable(G4int nParticles=4);
 
     // The following method actually trigger the print-out requested
     // by the above method. This method must be invoked by RunManager
@@ -257,7 +257,18 @@ class G4VUserPhysicsList
     void AddProcessManager(G4ParticleDefinition* newParticle,
 			   G4ProcessManager*    newManager = 0 );
  
+   /////////////////////////////////////////////////////////////////
+  public:
+    // check consistencies of list of particles 
+
+    void CheckParticleList();
+
+    void DisableCheckParticleList();
  
+ protected: 
+ 
+    bool fDisableCheckParticleList;
+
   ////////////////////////////////////////////////////////////////////////
   protected:
     // the particle table has the complete List of existing particle types
@@ -291,6 +302,9 @@ class G4VUserPhysicsList
 
    // flag for displaying the range cuts & energy thresholds
    G4int fDisplayThreshold;
+
+  // flag for Physics Table has been built 
+   G4bool fIsPhysicsTableBuilt;
 
   private:
    enum { FixedStringLengthForStore = 32 }; 
@@ -332,6 +346,7 @@ inline void G4VUserPhysicsList::Construct()
   if (verboseLevel >1) G4cout << "Construct processes " << G4endl;  
 #endif
   ConstructProcess();
+
 }
 
 inline G4double G4VUserPhysicsList::GetDefaultCutValue() const
@@ -384,5 +399,13 @@ inline
 {
   fStoredInAscii = false;
 }
+
+inline 
+ void  G4VUserPhysicsList::DisableCheckParticleList()
+{   
+  fDisableCheckParticleList = true;
+}
+
+
 #endif
 

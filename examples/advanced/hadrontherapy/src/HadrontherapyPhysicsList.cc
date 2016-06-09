@@ -23,109 +23,135 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhysicsList.cc
-// Last modified: M.P. Russo Nov 2008;
-// 
-// See more at: http://geant4infn.wikispaces.com/
-//
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a), M.P. Russo
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyPhysicsList.cc
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
-#include "globals.hh"
-#include "G4ProcessManager.hh"
-#include "G4Region.hh"
-#include "G4RegionStore.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-
-#include "G4PhysListFactory.hh"
-#include "G4VModularPhysicsList.hh"
-#include "G4VPhysicsConstructor.hh"
+// This class provides all the physic models that can be activated inside Hadrontherapy;
+// Each model can be setted via macro commands;
+// Inside Hadrontherapy the models can be activate with three different complementar methods:
+//
+// 1. Use of the *Packages*.
+//    Packages (that are contained inside the
+//    Geant4 distribution at $G4INSTALL/source/physics_lists/lists) provide a full set
+//    of models (both electromagnetic and hadronic).
+//    The User can use this method simply add the line /physic/addPackage <nameOfPackage>
+//    in his/her macro file. No other action is required.
+//    For Hadrontherapy applications we suggest the use of the QGSP_BIC package
+//    for proton beams. The same can be used
+//    also for ligth ion beam.
+//    Example of use of package can be found in the packageQGSP_BIC.mac file.
+//
+// 2. Use of the *Physic Lists*.
+//    Physic lists are also already ready to use inside the Geant4 distribution
+//    ($G4INSTALL/source/physics_lists/builders). To use them the simple
+//    /physic/addPhysics <nameOfPhysicList> command must be used in the macro.
+//    In Hadrontherapy we provide physics list to activate Electromagnetic,
+//    Hadronic elastic and Hadronic inelastic models.
+//
+//    For Hadrontherapy we suggest the use of:
+//
+//    /physic/addPhysic/emstandard_option3 (electromagnetic model)
+//    /physic/addPhysic/QElastic (hadronic elastic model)
+//    /physic/addPhysic/binary (hadronic inelastic models for proton and neutrons)
+//    /physic/addPhysic/binary_ion (hadronic inelastic models for ions)
+//
+//    Example of the use of physics lists can be found in the macro files included in the
+//    'macro' folder .
+//
+// 3. Use of a *local* physics. In this case the models are implemented in local files
+//    contained in the Hadrontherapy folder. The use of local physic is recommended
+//    to more expert Users.
+//    We provide as local, only the LocalStandardICRU73EmPhysic.cc (an Elecromagnetic
+//    implementation containing the new ICRU73 data table for ions stopping powers)
+//    and the LocalIonIonInelasticPhysic.cc (physic list to use for the ion-ion interaction
+//    case)
+//    The *local* physics can be activated with the same /physic/addPhysic <nameOfPhysic> command;
+//
+//    While Packages approch must be used exclusively, Physics List and Local physics can
+//    be activated, if necessary, contemporaneously in the same simulation run.
+//
+//    AT MOMENT, IF ACCURATE RESULTS ARE NEDED, WE STRONGLY RECOMMEND THE USE OF THE MACROS:
+//    proton_therapy.mac: use of the built-in Geant4 physics list for proton beams)
+//    ion_therapy.mac   : use of mixed combination of native Geant4 physic lists
+//                        and local physic for ion-ion enelastic processes)
 
 #include "HadrontherapyPhysicsList.hh"
 #include "HadrontherapyPhysicsListMessenger.hh"
-#include "HadrontherapyParticles.hh"
-#include "Decay.hh"
-#include "EMPhotonStandard.hh"
-#include "EMPhotonEPDL.hh"
-#include "EMPhotonPenelope.hh"
-#include "EMElectronStandard.hh"
-#include "EMElectronEEDL.hh"
-#include "EMElectronPenelope.hh"
-#include "EMPositronStandard.hh"
-#include "EMPositronPenelope.hh"
-#include "EMMuonStandard.hh"
-#include "EMHadronIonLowEICRU49.hh"
-#include "EMHadronIonLowEZiegler1977.hh"
-#include "EMHadronIonLowEZiegler1985.hh"
-#include "EMHadronIonStandard.hh"
-#include "HIProtonNeutronPrecompound.hh"
-#include "HIProtonNeutronBertini.hh"
-#include "HIProtonNeutronBinary.hh"
-#include "HIProtonNeutronLEP.hh"
-#include "HIProtonNeutronPrecompoundGEM.hh"
-#include "HIProtonNeutronPrecompoundFermi.hh"
-#include "HIProtonNeutronPrecompoundGEMFermi.hh"
-#include "HIPionBertini.hh"
-#include "HIPionLEP.hh"
-#include "HIIonLEP.hh"
-#include "HEHadronIonLElastic.hh"
-#include "HEHadronIonBertiniElastic.hh"
-#include "HEHadronIonQElastic.hh"
-#include "HEHadronIonUElastic.hh"
-#include "HRMuonMinusCapture.hh"
+#include "HadrontherapyStepMax.hh"
+#include "G4PhysListFactory.hh"
+#include "G4VPhysicsConstructor.hh"
+
+// Local physic directly implemented in the Hadronthrapy directory
+#include "LocalIonIonInelasticPhysic.hh"             // Physic dedicated to the ion-ion inelastic processes
+#include "LocalINCLIonIonInelasticPhysic.hh"         // Physic dedicated to the ion-ion inelastic processes using INCL/ABLA
+
+// Physic lists (contained inside the Geant4 distribution)
+#include "G4EmStandardPhysics_option3.hh"
+#include "G4EmLivermorePhysics.hh"
+#include "G4EmPenelopePhysics.hh"
+#include "G4DecayPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
+#include "G4HadronDElasticPhysics.hh"
+#include "G4HadronHElasticPhysics.hh"
+#include "G4HadronQElasticPhysics.hh"
+#include "G4HadronInelasticQBBC.hh"
+#include "G4IonBinaryCascadePhysics.hh"
+#include "G4Decay.hh"
+
+#include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
+#include "G4ProcessManager.hh"
+
+#include "G4IonFluctuations.hh"
+#include "G4IonParametrisedLossModel.hh"
 #include "G4EmProcessOptions.hh"
 
+#include "G4RadioactiveDecayPhysics.hh"
 
-HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
-                                                      decayIsRegistered(false),
-						      emElectronIsRegistered(false), 
-						      emPositronIsRegistered(false), 
-						      emPhotonIsRegistered(false), 
-						      emIonIsRegistered(false),
-						      emMuonIsRegistered(false),
-						      hadrElasticHadronIonIsRegistered(false),
-                                                      hadrInelasticPionIsRegistered(false),
-                                                      hadrInelasticIonIsRegistered(false),
-                                                      hadrInelasticProtonNeutronIsRegistered(false),
-                                                      hadrAtRestMuonIsRegistered(false)
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
 {
-  // A default cut is applied to all volumes
-  // Moreover, in the HadrontherapyDetectorConstruction.cc a 
-  // spevific cut can be applied to the region where energy is collected
-  defaultCutValue = 0.01 * mm;
+  G4LossTableManager::Instance();
+  defaultCutValue = 1.*mm;
+  cutForGamma     = defaultCutValue;
+  cutForElectron  = defaultCutValue;
+  cutForPositron  = defaultCutValue;
 
-  // Messenger: it is possible to activate physics processes and models interactively 
-  messenger = new HadrontherapyPhysicsListMessenger(this);
+  helIsRegisted  = false;
+  bicIsRegisted  = false;
+  biciIsRegisted = false;
+  locIonIonInelasticIsRegistered = false;
+  radioactiveDecayIsRegisted = false;
+
+  stepMaxProcess  = 0;
+
+  pMessenger = new HadrontherapyPhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
-  // Register all the particles involved in the experimental set-up
-  RegisterPhysics( new HadrontherapyParticles("particles") );
+  // EM physics
+  emPhysicsList = new G4EmStandardPhysics_option3(1);
+  emName = G4String("emstandard_opt3");
+
+  // Deacy physics and all particles
+  decPhysicsList = new G4DecayPhysics();
 }
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
-{ 
-  delete messenger;
+{
+  delete pMessenger;
+  delete emPhysicsList;
+  delete decPhysicsList;
+  for(size_t i=0; i<hadronPhys.size(); i++) {delete hadronPhys[i];}
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyPhysicsList::AddPackage(const G4String& name)
 {
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys =factory.GetReferencePhysList(name);
-  G4int i=0; 
+  G4int i=0;
   const G4VPhysicsConstructor* elem= phys->GetPhysics(i);
   G4VPhysicsConstructor* tmp = const_cast<G4VPhysicsConstructor*> (elem);
   while (elem !=0)
@@ -136,693 +162,171 @@ void HadrontherapyPhysicsList::AddPackage(const G4String& name)
 	}
 }
 
-
-void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPhysicsList::ConstructParticle()
 {
-  // Options activated to improve accuracy and activated for the Standard EM models
-  // Usefull for a medical application
-  G4EmProcessOptions opt;
-  opt.SetStepFunction(0.2, 10*um);
-  opt.SetMinEnergy(0.1*keV);
-  opt.SetMaxEnergy(100.*GeV);
-  opt.SetDEDXBinning(360);
-  opt.SetLambdaBinning(360);
-  opt.SetLinearLossLimit(1.e-6);
-
-
-  G4cout << "Adding PhysicsList component " << name << G4endl;
-  // ****************
-  // *** A. DECAY ***
-  // ****************
-
-
-  if (name == "Decay") 
-
-    {
-      if (decayIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new Decay(name) );
-	  decayIsRegistered = true;
-	}
-    }
-
-
-  // ***************************************
-  // *** B. ELECTROMAGNETIC INTERACTIONS ***
-  // ***************************************
-
-
-  // ***************
-  // *** Photons ***
-  // ***************
-  
-  // *** Option I: Standard 
-
-  if (name == "EM-Photon-Standard") 
-    {
-      if (emPhotonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMPhotonStandard(name) );
-	  emPhotonIsRegistered = true;
-	}
-    }
-
-
-  // *** Option II: Low Energy based on the Livermore libraries
-
-  if (name == "EM-Photon-EPDL") 
-    {
-      if (emPhotonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing"
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMPhotonEPDL(name) );
-	  emPhotonIsRegistered = true;
-	}
-    } 
-
-
-  // *** Option III: Low Energy Penelope
-
-  if (name == "EM-Photon-Penelope")
-    {
-      if (emPhotonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMPhotonPenelope(name) );
-	  emPhotonIsRegistered = true;
-	}
-    }
-
-
-  // *****************
-  // *** Electrons ***
-  // *****************
-  
-  // *** Option I: Standard
-
-  if (name == "EM-Electron-Standard") 
-    {
-      if (emElectronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- electron List already existing" 
-		 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMElectronStandard(name) );	  
-	  emElectronIsRegistered = true;
-	}
-    }
-
-
-  // *** Option II: Low Energy based on the Livermore libraries
-
-  if (name == "EM-Electron-EEDL") 
-    {
-      if (emElectronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- electron List already existing"                  
-		 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMElectronEEDL(name) );
-	  emElectronIsRegistered = true;
-	}
-    } 
-
-
-  // *** Option III: Low Energy Penelope
-
-  if (name == "EM-Electron-Penelope")
-    {
-      if (emElectronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-		 << " cannot be registered ---- electron List already existing"                  
-		 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMElectronPenelope(name) );
-	  emElectronIsRegistered = true;
-	}
-    }
-
-
-  // *****************
-  // *** Positrons ***
-  // *****************
-
-  // *** Option I: Standard
-  if (name == "EM-Positron-Standard") 
-    {
-      if (emPositronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- positron List already existing"                  
-		 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMPositronStandard(name) );
-	  emPositronIsRegistered = true;
-	}
-    }
-
-
-  // *** Option II: Low Energy Penelope
-
-  if (name == "EM-Positron-Penelope") 
-    {
-      if (emPositronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- positron List already existing"   
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMPositronPenelope(name) );
-	  emPositronIsRegistered = true;
-	}
-    }
- 
-
-  // ************************
-  // *** Hadrons and Ions ***
-  // ************************
-
-  // *** Option I: Low Energy with ICRU49 stopping power parametrisation
-  
-  if (name == "EM-HadronIon-LowE") 
-    {
-      if (emIonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMHadronIonLowEICRU49(name) );
-	  emIonIsRegistered = true;
-	}
-    }
-
-
-  // *** Option II: Low Energy with Ziegler 1977 stopping power parametrisation
-
-  if (name == "EM-HadronIon-LowEZiegler1977") 
-    {
-      if (emIonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMHadronIonLowEZiegler1977(name) );
-	  emIonIsRegistered = true;
-	}
-    }
-
-
-  // *** Option III: Low Energy with Ziegler 1985 stopping power parametrisation
-
-  if (name == "EM-HadronIon-LowEZiegler1985") 
-    {
-      if (emIonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMHadronIonLowEZiegler1985(name) );
-	  emIonIsRegistered = true;
-	}
-    }
-
-
-  // *** Option IV: Standard
-
-  if (name == "EM-HadronIon-Standard") 
-    {
-      if (emIonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- ion List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMHadronIonStandard(name) );
-	  emIonIsRegistered = true;
-	}
-    }
-
-
-  // *************
-  // *** Muons ***
-  // *************
-
-  // *** Option I: Standard 
-
-  if (name == "EM-Muon-Standard") 
-    {
-      if (emMuonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new EMMuonStandard(name) );
-	  emMuonIsRegistered = true;
-	}
-    }
-
-
-  // ********************************
-  // *** C. HADRONIC INTERACTIONS ***
-  // ********************************
-
-
-  // ******************************
-  // *** C.1. ELASTIC PROCESSES ***
-  // ******************************
-
-
-  // ************************
-  // *** Hadrons and Ions ***
-  // ************************
-
-  // *** Option I: GHEISHA like LEP model
-
-  if (name == "HadronicEl-HadronIon-LElastic") 
-    {
-      if (hadrElasticHadronIonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- hadronic Elastic Scattering List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HEHadronIonLElastic(name) );
-	  hadrElasticHadronIonIsRegistered = true;
-	}
-    }
-  
-
-  // *** Option II: Bertini model
-
-  if (name == "HadronicEl-HadronIon-Bert") 
-    {
-      if (hadrElasticHadronIonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- hadronic Elastic Scattering List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HEHadronIonBertiniElastic(name) );
-	  hadrElasticHadronIonIsRegistered = true;
-	}
-    }
-
-
-  // *** Option III: Process G4QElastic
-
-  if (name == "HadronicEl-HadronIon-QElastic") 
-    {
-      if (hadrElasticHadronIonIsRegistered) 
-        {
-          G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- hadronic Elastic Scattering List already existing" 
-		 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HEHadronIonQElastic(name) );
-          hadrElasticHadronIonIsRegistered = true;
-	}
-    }
-
-
-  // *** Option III: Process G4UHadronElasticProcess
-
-  if (name == "HadronicEl-HadronIon-UElastic") 
-    {
-     if (hadrElasticHadronIonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- hadronic Elastic Scattering List already existing" 
-		 << G4endl;
-	} 
-     else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-	         << " is registered" << G4endl;
-	  RegisterPhysics( new HEHadronIonUElastic(name) );
-	  hadrElasticHadronIonIsRegistered = true;
-	}
-    }
-   
-   
-  // ********************************
-  // *** C.2. INELASTIC PROCESSES ***
-  // ********************************
-
-
-  // *************
-  // *** Pions ***
-  // *************
-
-  // *** Option I: Bertini model
-
-  if (name == "HadronicInel-Pion-Bertini") 
-    {
-      if (hadrInelasticPionIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIPionBertini(name) );
-	  hadrInelasticPionIsRegistered = true;
-	}
-    }
-
-
-  // *** Option II: GHEISHA like LEP model
-
-  if (name == "HadronicInel-Pion-LEP") 
-    {
-      if (hadrInelasticPionIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIPionLEP(name) );
-	  hadrInelasticPionIsRegistered = true;
-	}
-    }
-
-
-  // ************
-  // *** Ions ***
-  // ************
-
-  // *** Option I: GHEISHA like LEP model
-
-  if (name == "HadronicInel-Ion-LEP") 
-    {
-      if (hadrInelasticIonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIIonLEP(name) );
-	  hadrInelasticIonIsRegistered = true;
-	}
-    }
-
-
-  // *************************
-  // *** Protons, Neutrons ***
-  // *************************
-
-  // *** Option I: GHEISHA like LEP model
-
-  if (name == "HadronicInel-ProtonNeutron-LEP") 
-    {
-      if (hadrInelasticProtonNeutronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIProtonNeutronLEP(name) );
-	  hadrInelasticProtonNeutronIsRegistered = true;
-	}
-    }
-
-
-  // *** Option II: Bertini Cascade Model
-
-  if (name == "HadronicInel-ProtonNeutron-Bert") 
-    {
-      if (hadrInelasticProtonNeutronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIProtonNeutronBertini(name) );
-	  hadrInelasticProtonNeutronIsRegistered = true;
-	}
-    }
-
-
-  // *** Option III: Binary Cascade Model
-
-  if (name == "HadronicInel-ProtonNeutron-Bin") 
-    {
-      if (hadrInelasticProtonNeutronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIProtonNeutronBinary(name) );
-	  hadrInelasticProtonNeutronIsRegistered = true;
-	}
-    }
-
-
-  // *** Option IV: Precompound Model combined with Default Evaporation
-
-  if (name == "HadronicInel-ProtonNeutron-Prec") 
-    {
-      if (hadrInelasticProtonNeutronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIProtonNeutronPrecompound(name) );
-	  hadrInelasticProtonNeutronIsRegistered = true;
-	}
-    }
-
-
-  // *** Option V: Precompound Model combined with GEM Evaporation
-
-  if (name == "HadronicInel-ProtonNeutron-PrecGEM") 
-    {
-      if (hadrInelasticProtonNeutronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIProtonNeutronPrecompoundGEM(name) );
-	  hadrInelasticProtonNeutronIsRegistered = true;
-	}
-    }
-
-
-  // *** Option VI: Precompound Model combined with default Evaporation 
-  //                and Fermi Break-up model
-
-  if (name == "HadronicInel-ProtonNeutron-PrecFermi") 
-    {
-      if (hadrInelasticProtonNeutronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIProtonNeutronPrecompoundFermi(name) );
-	  hadrInelasticProtonNeutronIsRegistered = true;
-	}
-    }
-
-
-  // *** Option VII: Precompound Model combined with GEM Evaporation 
-  //                 and Fermi Break-up model
-
-  if (name == "HadronicInel-ProtonNeutron-PrecGEMFermi") 
-    {
-      if (hadrInelasticProtonNeutronIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HIProtonNeutronPrecompoundGEMFermi(name) );
-	  hadrInelasticProtonNeutronIsRegistered = true;
-	}
-    }   
-
-
-  // ******************************
-  // *** C.3. AT-REST PROCESSES ***
-  // ******************************
-
-
-  // **************
-  // *** Muons- ***
-  // **************
-
-  // *** Option I: Muon Minus Capture at Rest
-
-  if (name == "HadronicAtRest-MuonMinus-Capture") 
-    {
-      if (hadrAtRestMuonIsRegistered) 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- decay List already existing" 
-                 << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
-                 << " is registered" << G4endl;
-	  RegisterPhysics( new HRMuonMinusCapture(name) );
-	  hadrAtRestMuonIsRegistered = true;
-	}
-    }
-
+  decPhysicsList->ConstructParticle();
 }
 
-void HadrontherapyPhysicsList::SetCuts()
-{  
-  // Set the threshold of production equal to the defaultCutValue
-  // in the experimental set-up
-  G4VUserPhysicsList::SetCutsWithDefault();
-     
-  G4double lowlimit=250*eV;
-  G4ProductionCutsTable::GetProductionCutsTable() ->SetEnergyRange(lowlimit, 100.*GeV);
-  // Definition of a smaller threshold of production in the phantom region
-  // where high accuracy is required in the energy deposit calculation
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPhysicsList::ConstructProcess()
+{
+  // transportation
+  //
+  AddTransportation();
 
-  G4String regionName = "DetectorLog";
-  G4Region* region = G4RegionStore::GetInstance()->GetRegion(regionName);
-  G4ProductionCuts* cuts = new G4ProductionCuts ;
-  G4double regionCut = 0.01*mm;
-  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("gamma"));
-  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e-"));
-  cuts -> SetProductionCut(regionCut,G4ProductionCuts::GetIndex("e+"));
-  region -> SetProductionCuts(cuts);
+  // electromagnetic physics list
+  //
+  emPhysicsList->ConstructProcess();
+  em_config.AddModels();
+
+  // decay physics list
+  //
+  decPhysicsList->ConstructProcess();
+
+  // hadronic physics lists
+  for(size_t i=0; i<hadronPhys.size(); i++) {
+    hadronPhys[i]->ConstructProcess();
+  }
+
+  // step limitation (as a full process)
+  //
+  AddStepMax();
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
+{
+
+  if (verboseLevel>1) {
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+  }
+  if (name == emName) return;
+
+  /////////////////////////////////////////////////////////////////////////////
+  //   ELECTROMAGNETIC MODELS
+  /////////////////////////////////////////////////////////////////////////////
+
+  if (name == "standard_opt3") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmStandardPhysics_option3" << G4endl;
+
+  } else if (name == "LowE_Livermore") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmLivermorePhysics();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+
+  } else if (name == "LowE_Penelope") {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmPenelopePhysics();
+    G4cout << "THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics" << G4endl;
+
+    /////////////////////////////////////////////////////////////////////////////
+    //   HADRONIC MODELS
+    /////////////////////////////////////////////////////////////////////////////
+  } else if (name == "elastic" && !helIsRegisted) {
+    G4cout << "THE FOLLOWING HADRONIC ELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronElasticPhysics()" << G4endl;
+    hadronPhys.push_back( new G4HadronElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "DElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronDElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "HElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronHElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "QElastic" && !helIsRegisted) {
+    hadronPhys.push_back( new G4HadronQElasticPhysics());
+    helIsRegisted = true;
+
+  } else if (name == "binary" && !bicIsRegisted) {
+    hadronPhys.push_back(new G4HadronInelasticQBBC());
+    bicIsRegisted = true;
+    G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: G4HadronInelasticQBBC()" << G4endl;
+
+  } else if (name == "binary_ion" && !biciIsRegisted) {
+    hadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    biciIsRegisted = true;
+
+  } else if (name == "local_ion_ion_inelastic" && !locIonIonInelasticIsRegistered) {
+    hadronPhys.push_back(new LocalIonIonInelasticPhysic());
+    locIonIonInelasticIsRegistered = true;
+
+  } else if (name == "local_incl_ion_ion_inelastic" && !locIonIonInelasticIsRegistered) {
+    hadronPhys.push_back(new LocalINCLIonIonInelasticPhysic());
+    locIonIonInelasticIsRegistered = true;
+
+  } else if (name == "radioactive_decay" && !radioactiveDecayIsRegisted ) {
+    hadronPhys.push_back(new G4RadioactiveDecayPhysics());
+    radioactiveDecayIsRegisted = true;
+
+  } else {
+
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
+           << " is not defined"
+           << G4endl;
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPhysicsList::AddStepMax()
+{
+  // Step limitation seen as a process
+  stepMaxProcess = new HadrontherapyStepMax();
+
+  theParticleIterator->reset();
+  while ((*theParticleIterator)()){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (stepMaxProcess->IsApplicable(*particle) && pmanager)
+      {
+	pmanager ->AddDiscreteProcess(stepMaxProcess);
+      }
+  }
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPhysicsList::SetCuts()
+{
+
+  if (verboseLevel >0){
+    G4cout << "PhysicsList::SetCuts:";
+    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
+  }
+
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+");
 
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPhysicsList::SetCutForGamma(G4double cut)
+{
+  cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
+}
 
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPhysicsList::SetCutForElectron(G4double cut)
+{
+  cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPhysicsList::SetCutForPositron(G4double cut)
+{
+  cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
+}

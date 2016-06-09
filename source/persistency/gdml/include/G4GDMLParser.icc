@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc,v 1.7 2008/11/20 15:33:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLParser.icc,v 1.8 2009/01/22 11:02:07 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4GDMLParser inline methods
@@ -33,22 +33,22 @@
 // -------------------------------------------------------------------------
 
 inline 
-void G4GDMLParser::Read(const G4String& filename, G4bool Validate)
+void G4GDMLParser::Read(const G4String& filename, G4bool validate)
 {   
-  reader->Read(filename,Validate,false);
+  reader->Read(filename,validate,false);
 }
 
 inline 
-void G4GDMLParser::ReadModule(const G4String& filename, G4bool Validate)
+void G4GDMLParser::ReadModule(const G4String& filename, G4bool validate)
 {   
-  reader->Read(filename,Validate,true);
+  reader->Read(filename,validate,true);
 }
 
 inline
 void G4GDMLParser::Write(const G4String& filename,
                          const G4VPhysicalVolume* const pvol,
                                G4bool refs,
-                         const G4String& SchemaLocation)
+                         const G4String& schemaLocation)
 { 
   const G4int depth = 0;
   G4LogicalVolume* lvol = 0;
@@ -67,7 +67,7 @@ void G4GDMLParser::Write(const G4String& filename,
   {
     lvol = pvol->GetLogicalVolume();
   }
-  writer->Write(filename,lvol,SchemaLocation,depth,refs);
+  writer->Write(filename,lvol,schemaLocation,depth,refs);
 }
 
 inline 
@@ -148,6 +148,11 @@ inline
 void G4GDMLParser::StripNamePointers() const
 {
   reader->StripNames();
+}
+
+inline void G4GDMLParser::SetOverlapCheck(G4bool flag)
+{
+  reader->OverlapCheck(flag);
 }
 
 //

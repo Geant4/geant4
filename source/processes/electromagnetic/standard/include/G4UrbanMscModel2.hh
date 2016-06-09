@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel2.hh,v 1.11 2008/12/18 13:01:34 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UrbanMscModel2.hh,v 1.17 2009/05/15 09:26:42 urban Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,7 +39,7 @@
 // Creation date: 06.03.2008
 //
 // Modifications:
-//
+// 23.04.2009 L.Urban updated parameterization in UpdateCache method
 //
 //
 // Class Description:
@@ -83,12 +83,6 @@ public:
 				      G4double cut =0.,
 				      G4double emax=DBL_MAX);
 
-  void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
-			 const G4MaterialCutsCouple*,
-			 const G4DynamicParticle*,
-			 G4double,
-			 G4double);
-
   void SampleScattering(const G4DynamicParticle*,
 			G4double safety);
 
@@ -113,8 +107,6 @@ private:
 
   G4double LatCorrelation();
 
-  void GeomLimit(const G4Track& track);
-
   inline G4double GetLambda(G4double kinEnergy);
 
   inline void SetParticle(const G4ParticleDefinition*);
@@ -128,11 +120,9 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
 
-  G4SafetyHelper*             safetyHelper;
   G4PhysicsTable*             theLambdaTable;
   const G4MaterialCutsCouple* couple;
   G4LossTableManager*         theManager;
-
 
   G4double mass;
   G4double charge,ChargeSquare;
@@ -222,15 +212,19 @@ inline
 void G4UrbanMscModel2::UpdateCache()                                   
 {
     lnZ = std::log(Zeff);
-    coeffth1 = 0.885+lnZ*(0.104-0.0170*lnZ);
-    coeffth2 = 0.028+lnZ*(0.012-0.00125*lnZ);
-    coeffc1  = 2.134-lnZ*(0.1045-0.00602*lnZ);
-    coeffc2  = 0.001126-lnZ*(0.0001089+0.0000247*lnZ);
+    //new correction in theta0 formula
+    coeffth1 = (1.-8.7780e-2/Zeff)*(0.87+0.03*lnZ);                   
+    coeffth2 = (4.0780e-2+1.7315e-4*Zeff)*(0.87+0.03*lnZ);              
+    // tail parameters
+    G4double lnZ1 = std::log(Zeff+1.);
+    coeffc1  = 2.943-0.197*lnZ1;                  
+    coeffc2  = 0.0987-0.0143*lnZ1;                              
+    // for single scattering
     Z2 = Zeff*Zeff;
     Z23 = std::exp(2.*lnZ/3.);
     scr1     = scr1ini*Z23;
     scr2     = scr2ini*Z2*ChargeSquare;
-  //  lastMaterial = couple->GetMaterial();
+                                              
     Zold = Zeff;
 }
 

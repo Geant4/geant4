@@ -24,12 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4QCandidate.cc,v 1.34 2006/11/27 10:44:53 mkossov Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4QCandidate.cc,v 1.35 2009/02/23 09:49:24 mkossov Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //      ---------------- G4QCandidate ----------------
 //             by Mikhail Kossov, Sept 1999.
 //      class for Quasmon initiated Candidates used by CHIPS Model
+// ------------------------------------------------------------------
+// Short description: A candidate for hadronization. The candidates
+// (hadrons or nuclear fragments) are competative, each quark of a
+// Quasmon select which candidate to use for hadronization
 // ------------------------------------------------------------------
 
 //#define debug

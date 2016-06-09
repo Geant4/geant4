@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmSeparator.cc,v 1.5 2006/06/29 21:19:58 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmSeparator.cc,v 1.7 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //Separator class. Inherits from G4OpenGLXmVWidgetComponent
 
@@ -35,6 +35,8 @@
 #include "G4OpenGLXmVWidgetContainer.hh"
 #include "G4OpenGLXmSeparator.hh"
 #include <X11/Intrinsic.h>
+#include <Xm/Separator.h>
+
 #include "globals.hh"
 
 G4OpenGLXmSeparator::G4OpenGLXmSeparator (unsigned char l) 

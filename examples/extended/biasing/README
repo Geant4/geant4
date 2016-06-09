@@ -1,11 +1,10 @@
 
-                        Examples for event biasing
-                        --------------------------
+                    Examples for event biasing: B01 and B02
+                    ---------------------------------------
 
-This directory includes example applications to demonstrate the usage of
-different variance reduction techniques supported in Geant4, or possible 
-from the user applications.
-
+B01 and B02 applications demonstrate the usage of different variance
+reduction techniques supported in Geant4, or possible from the user
+applications.
 
 General remark to variance reduction
 ------------------------------------
@@ -95,3 +94,16 @@ Histograms are saved in HBOOK format.
 You need to set the following variable in your environment:
    "G4ANALYSIS_USE"
 The example stores the plot in the file b02.hbook.
+
+ ___________________________________________________________________________
+
+
+             Reverse MonteCarlo Technique example: ReverseMC01
+             -------------------------------------------------
+
+Example ReverseMC01
+===================
+
+Example illustrating the use of the Reverse Monte Carlo (RMC) mode in a Geant4
+application. See details in ReverseMC01/README.
+

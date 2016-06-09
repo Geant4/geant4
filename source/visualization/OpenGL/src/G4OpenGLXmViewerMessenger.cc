@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewerMessenger.cc,v 1.4 2006/06/29 21:20:18 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmViewerMessenger.cc,v 1.5 2009/01/19 16:53:42 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 

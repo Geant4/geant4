@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.29 2008/10/15 17:53:44 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eplusAnnihilation.cc,v 1.30 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -75,6 +75,22 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& name)
 
 G4eplusAnnihilation::~G4eplusAnnihilation()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4eplusAnnihilation::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Positron::Positron());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4eplusAnnihilation::AtRestGetPhysicalInteractionLength(
+                              const G4Track&, G4ForceCondition* condition)
+{
+  *condition = NotForced;
+  return 0.0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -14,21 +14,21 @@
 This example application is based on the application IION developed for
 simulation of proton or ion beam interaction with a water target. Different 
 aspects of beam target interaction are demonstrating in the example including 
-logitudinal profile of energy deposition, spectra of secondary  particles,
+longitudinal profile of energy deposition, spectra of secondary  particles,
 spectra of particles leaving the target. The results are presenting in a form
 of average numbers and histograms. 
 
 
                            GEOMETRY
 
-The Target volume is a cilinder placed inside Check cilindrical volume. The 
+The Target volume is a cylinder placed inside Check cylindrical volume. The 
 Check volume is placed inside the World volume. The radius and the length of
-the Check volume are 1 mm larger than the radiaus and the length of the Target.
+the Check volume are 1 mm larger than the radius and the length of the Target.
 The material of the Check volume is the same as the World material.  The World
-volume has the sizes 10 mm larger than that of the Target volume.  Any naterial
+volume has the sizes 10 mm larger than that of the Target volume.  Any material
 from the Geant4 database can be defined. The default World  material is
 G4Galactic and the default  Target material is aluminum. The Target is
-subdivided on number of equal slices. Follwoing UI commands are available to
+subdivided on number of equal slices. Following UI commands are available to
 modify the geometry:
 
 /testhadr/TargetMat     G4_Pb
@@ -37,12 +37,12 @@ modify the geometry:
 /testhadr/TargetLength  20 cm
 /testhadr/NumberDivZ    200
 
-If geometry was changed between two runs, then the follwoing command need to
+If geometry was changed between two runs, then the following command need to
 be executed:
 
 /testhadr/Update
 
-Beam direction coinsides with the target axis and is Z axis in the global
+Beam direction coincides with the target axis and is Z axis in the global
 coordinate system. The beam starts 5 mm in front of the target. G4ParticleGun
 is used as a primary generator. The energy and the type of the beam can be
 defined via standard UI commands
@@ -83,33 +83,35 @@ of printout is established.
                            PHYSICS
 
 PhysicsList of the application uses components, which are distributed with
-Geant4 in /geant4/physics_lists subdirectory. So, before compiling hadro01 it
-is necessary to compile physics_lists
+Geant4 in /geant4/physics_lists subdirectory. 
 
-The choice of the physics is provided by the UI command:
+There is a possibility directly use one of reference Physics Lists if 
+using the environment variable PHYSLIST. Alternatively the name of the reference
+Physics List can be given via parameter of the the application as following:
 
-/testhadr/Physics     QGSP
+$G4BIN/Linux++/hadr01 QGSP_BERT my.macro
 
-The command 
+Finally it is possible to use UI commands (PHYSLIST environment variable is not 
+defined). The choice of the physics is provided by the UI command:
 
-/testhadr/Physics     PHYSLIST
+/testhadr/Physics     QGSP_BIC
 
-allows allows to download a physics configuration defined by an environment
-variable PHYSLIST. 
-
-To see the list of available configurations one can use
+To see the list of available configurations with UI one can use
 
 /testhadr/ListPhysics
 
-The cuts for electromagnetic phsyics can be established via
+The cuts for electromagnetic physics can be established via
 
 /testhadr/CutsAll       1 mm
 /testhadr/CutsGamma   0.1 mm
 /testhadr/CutsEl      0.2 mm
 /testhadr/CutsPos     0.3 mm
 
+Note that testhadr UI commands are not available in the case when PHYSLIST 
+environment variable is defined. 
 
-                          VISUALISATION
+
+                          VISUALIZATION
 
 For interactive mode G4 visualization options and variables should be
 defined, then the example should be recompiled:
@@ -165,8 +167,8 @@ stored in the file "name.hbook", "name.root", or "name.aida".
 If the environment variable HISTODIR is defined, files are stored in this 
 subdirectory.
 
-To show the contence of a histogram ID=i the commands may be applied:
+To show the content of a histogram ID=i the commands may be applied:
 
 /testhadr/HistoPrint  i
 
-All histograms are normalised to the number of events.
+All histograms are normalized to the number of events.

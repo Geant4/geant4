@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.cc,v 1.14 2008/12/12 08:50:59 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LogLogInterpolation.cc,v 1.16 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //         Sebastian Incerti (incerti@cenbg.in2p3.fr)
@@ -35,6 +35,8 @@
 // 31 Jul 2001   MGP        Created
 // 27 Jun 2008   SI         Add check to avoid FPE errors
 // 08 Dec 2008   NAK        Log-Log interpolation math formula streamlined, self-test function
+// 14 Jun 2008   NAK        New implementation for log-log interpolation after directly loading
+//                          logarithmic values from G4EMLOW dataset
 // -------------------------------------------------------------------
 
 #include "G4LogLogInterpolation.hh"
@@ -57,6 +59,7 @@ G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin,
 					  const G4DataVector& points, 
 					  const G4DataVector& data) const
 {
+  //G4cout << "G4LogLogInterpolation is performed (2 arguments) " << G4endl;
   G4int nBins = data.size() - 1;
 //G4double oldresult = 0.;
   G4double value = 0.;
@@ -102,5 +105,51 @@ G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin,
     {
       value = data[nBins];
     }
+  return value;
+}
+
+
+// Nicolas A. Karakatsanis: New implementation of log-log interpolation after directly loading 
+//                          logarithmic values from G4EMLOW dataset
+
+G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin, 
+					  const G4DataVector& points,
+                                          const G4DataVector& data,
+                                          const G4DataVector& log_points, 
+					  const G4DataVector& log_data) const
+{
+  //G4cout << "G4LogLogInterpolation is performed (4 arguments) " << G4endl;
+  G4int nBins = data.size() - 1;
+  G4double value = 0.;
+  G4double log_x = std::log10(x);
+  if (x < points[0])
+    {
+      value = 0.;
+    }
+  else if (bin < nBins)
+    {
+      G4double log_e1 = log_points[bin];
+      G4double log_e2 = log_points[bin+1];
+      G4double log_d1 = log_data[bin];
+      G4double log_d2 = log_data[bin+1];
+      
+      //G4cout << "x = " << x << " , logx = " << log_x  << " , bin = " << bin << G4endl; 
+      //G4cout << "e1 = " << points[bin] << " d1 = " << data[bin] << G4endl;
+      //G4cout << "e2 = " << points[bin+1] << " d2 = " << data[bin+1] << G4endl;
+      //G4cout << "loge1 = " << log_e1 << " logd1 = " << log_d1 << G4endl;
+      //G4cout << "loge2 = " << log_e2 << " logd2 = " << log_d2 << G4endl;
+
+// Values e1, e2, d1 and d2 are the log values of the corresponding
+// original energy and data values. Simple linear interpolation performed
+// on loagarithmic data should be equivalent to log-log interpolation
+      value = log_d1 + (log_d2 - log_d1)*(log_x - log_e1)/(log_e2 - log_e1);
+
+// Delogarithmize to obtain interpolated value
+      value = std::pow(10.,value);
+   }
+ else
+   {
+     value = data[nBins];
+   }
   return value;
 }

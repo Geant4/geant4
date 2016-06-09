@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2007/05/28 13:24:26 arce Exp $
+$Id: History,v 1.5 2009/03/16 09:51:59 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 28, 2007  G.Cosmo
-- Created.
+Mar 6, 2009  G.Barrand (exerrprop-V09-02-00)
+- GNUmakefile: removed logic for setting AIDA with G4ANALYSIS_USE.
+  since it already handled in the internal configuration scripts.
+- Replaced usare of 'uint' with 'size_t' in errprop.cc (G.Cosmo).
+
 May 28, 2007  P.Arce
 - First version

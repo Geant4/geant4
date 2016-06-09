@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: DetectorConstruction.hh,v 1.1 2008/06/04 12:58:24 sincerti Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2009/08/13 11:41:04 sincerti Exp $
 // -------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -38,7 +38,7 @@
 #include "G4Box.hh"
 #include "G4Sphere.hh"
 #include "G4Material.hh"
-
+#include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4UserLimits.hh"
 #include "G4VisAttributes.hh"

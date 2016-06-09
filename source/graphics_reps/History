@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.133 2008/11/13 09:07:31 gcosmo Exp $
+cvs log $Id: History,v 1.138 2009/10/28 13:40:40 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th October 2009  John Allison  (greps-V09-02-03 coworks vis-V09-02-10)
+- HepPolyhedron:
+  o Removed static instance of BooleanProcessor.
+  o Removed IsErrorBooleanProcess.  (Use HepPolyhedronProcessor instead -
+    see, e.g., G4PhysicalVolumeModel.)
+- HepPolyhedronProcessor.src: Replaced printf with G4cout.
+
+20th October 2009  Guy Barrand  (greps-V09-02-02 coworks vis-V09-02-09)
+- HepPolyhedronProcessor : class to handle "overall shifting" in case
+  of doing multiple boolean operations. This permited to solve most
+  tricky cases in LHCb visualization.
+- HepPolyhedron : handle the ierr variable on the BooleanProcessor.execute.
+- BooleanProcessor.src : modifs coming from LHCb to "loop on shifts"
+  to attempt solving the "coplanar faces cases".
+- BooleanProcessor.src : modifs coming from LHCb to optmize the code.
+
+20th October 2009  John Allison  (greps-V09-02-02 coworks vis-V09-02-07)
+- G4VGraphicsScene: Added AddCompound (const G4THitsMap<G4double>&).
+
+25th February 2009  John Allison  (greps-V09-02-01)
+- G4VVisManager: Added NotifyHandlers.
+  Notify scene handlers (G4VGraphicsScene objects) that the scene
+  has changed so that they may rebuild their graphics database, if
+  any, and redraw all views.
+
+24th February 2009  John Allison  (greps-V09-02-00)
+- G4VMarker:
+  o Added enum SizeType {none, world, screen};
+  o Added GetSizeType and SetSize/Diameter/Radius(SizeType, G4double).
 
 13th November 2008  Gabriele Cosmo  (greps-V09-01-06)
 - HepPolyhedronHype: fixed arrays upper-bound in constructor, responsible

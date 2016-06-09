@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.hh,v 1.6 2008/06/23 08:35:54 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VLongitudinalStringDecay.hh,v 1.7 2009/05/22 16:35:47 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -115,7 +115,7 @@ protected:
 public:
 //   used by G4VKinkyStringDecy..
    G4int SampleQuarkFlavor(void);
-   G4ThreeVector SampleQuarkPt();
+   G4ThreeVector SampleQuarkPt(G4double ptMax=-1.); // -1. no limit on maxpt.
 
 protected:
 

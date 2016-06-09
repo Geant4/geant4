@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2006/11/10 21:04:51 duns Exp $
+# $Id: GNUmakefile,v 1.11 2009/03/05 09:21:30 gbarrand Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module
 # --------------------------------------------------------------
@@ -52,7 +52,3 @@ $(G4TMP)/$(G4SYSTEM)/$(name)/A01HadronPhysics.o: src/A01HadronPhysics.cc
 	@$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/A01HadronPhysics.cc
 endif
 
-ifdef G4ANALYSIS_USE
-   CPPFLAGS += `aida-config --include`
-   LDLIBS += `aida-config --lib`
-endif

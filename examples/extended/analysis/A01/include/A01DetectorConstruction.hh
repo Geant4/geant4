@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.hh,v 1.5 2006/06/29 16:30:50 gunter Exp $
+// $Id: A01DetectorConstruction.hh,v 1.6 2009/11/21 00:22:55 perl Exp $
 // --------------------------------------------------------------
 //
 
@@ -33,6 +33,7 @@
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4RotationMatrix.hh"
+#include "G4FieldManager.hh"
 
 class G4VPhysicalVolume;
 class G4Material;
@@ -60,6 +61,7 @@ class A01DetectorConstruction : public G4VUserDetectorConstruction
   private:
     A01DetectorConstMessenger* messenger;
     A01MagneticField* magneticField;
+    G4FieldManager* fieldMgr;
 
     G4Material* air;
     G4Material* argonGas;

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.3 2008/05/07 14:33:11 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsList.cc,v 1.5 2009/03/06 18:24:07 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +53,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
-  
+    
   SetVerboseLevel(1);
 }
 
@@ -184,22 +184,26 @@ void PhysicsList::ConstructProcess()
   
   //physics tables
   //
-  emOptions.SetMinEnergy(100*eV);    
-  emOptions.SetMaxEnergy(100*TeV);  
-  emOptions.SetDEDXBinning(120);  
-  emOptions.SetLambdaBinning(120);
+  emOptions.SetMinEnergy(100*eV);	//default    
+  emOptions.SetMaxEnergy(100*TeV);	//default  
+  emOptions.SetDEDXBinning(12*20);	//default=12*7  
+  emOptions.SetLambdaBinning(12*20);	//default=12*7
   emOptions.SetSplineFlag(true);  
   
   //energy loss
   //  
-  emOptions.SetStepFunction(0.2, 10*um);
-  emOptions.SetLinearLossLimit(1.e-5);
+  emOptions.SetStepFunction(0.2, 10*um);	//default=(0.2, 1*mm)   
+  emOptions.SetLinearLossLimit(1.e-2);		//default
           
   //build CSDA range
   //
   emOptions.SetBuildCSDARange(true);
   emOptions.SetMaxEnergyForCSDARange(100*TeV);  
-  emOptions.SetDEDXBinningForCSDARange(120);
+  emOptions.SetDEDXBinningForCSDARange(12*20);
+   
+  //ionization
+  //
+  emOptions.SetSubCutoff(false);	//default  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -228,7 +232,6 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-
   if (verboseLevel >0){
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;

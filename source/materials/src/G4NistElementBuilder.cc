@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.22 2008/08/11 11:53:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NistElementBuilder.cc,v 1.23 2009/07/17 18:45:57 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -202,20 +202,18 @@ void G4NistElementBuilder::PrintElement(G4int Z)
 	   << "  Aeff(amu)= " << atomicMass[i] << "  "
 	   << nc << " isotopes:"
            << G4endl;
-    if(verbose > 1) {
-      G4int j;
-      G4int idx = idxIsotopes[i];
-      G4int n0  = nFirstIsotope[i];
-      G4cout << "             N: ";
-      for(j=0; j<nc; j++) {G4cout << n0 + j << "  ";}
-      G4cout << G4endl;
-      G4cout << "          mass(amu): ";
-      for(j=0; j<nc; j++) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
-      G4cout << G4endl;
-      G4cout << "     abanbance: ";
-      for(j=0; j<nc; j++) {G4cout << relAbundance[idx + j] << " ";}
-      G4cout << G4endl;
-    }
+    G4int j;
+    G4int idx = idxIsotopes[i];
+    G4int n0  = nFirstIsotope[i];
+    G4cout << "             N: ";
+    for(j=0; j<nc; j++) {G4cout << n0 + j << "  ";}
+    G4cout << G4endl;
+    G4cout << "          mass(amu): ";
+    for(j=0; j<nc; j++) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
+    G4cout << G4endl;
+    G4cout << "     abanbance: ";
+    for(j=0; j<nc; j++) {G4cout << relAbundance[idx + j] << " ";}
+    G4cout << G4endl;
   }
 }
 
@@ -269,7 +267,14 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
     for(G4int j=0; j<nc; j++) {relAbundance[idx + j] /= ww;}
   }
 
-  if (verbose > 0) PrintElement(Z);
+  if (verbose > 1) {PrintElement(Z);}
+  else if(1 == verbose) {
+    G4cout << "Nist Element  " << elmSymbol[Z]
+           << "  Z= " << Z
+	   << "  Aeff(amu)= " << atomicMass[Z] << "  "
+	   << nIsotopes[Z] << " isotopes:"
+           << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

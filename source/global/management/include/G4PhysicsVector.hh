@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsVector.hh,v 1.18 2008/09/22 08:26:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhysicsVector.hh,v 1.25 2009/11/04 11:32:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 //---------------------------------------------------------------
@@ -50,6 +50,8 @@
 //    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
 //    09 Mar. 2001, H.Kurashige : Added G4PhysicsVectorType & Store/Retrieve()
 //    02 Apr. 2008, A.Bagulya : Added SplineInterpolation() and SetSpline()
+//    11 May  2009, V.Ivanchenko : Added ComputeSecondDerivatives
+//    19 Jun. 2009, V.Ivanchenko : Removed hidden bin 
 //
 //---------------------------------------------------------------
 
@@ -83,46 +85,80 @@ class G4PhysicsVector
     virtual ~G4PhysicsVector();
          // destructor
 
-    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange);
+    inline G4double Value(G4double theEnergy);
          // Get the cross-section/energy-loss value corresponding to the
          // given energy. An appropriate interpolation is used to calculate
          // the value. 
-         // [Note] isOutRange is not used anymore. This argument is kept
-         //        for the compatibility reason.
+
+    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange);
+         // Obolete method to get value, isOutRange is not used anymore. 
+         // This method is kept for the compatibility reason.
 
     G4int operator==(const G4PhysicsVector &right) const ;
     G4int operator!=(const G4PhysicsVector &right) const ;
+
     inline G4double operator[](const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
-         // of the dataVector. The boundary check will be Done. If you
-         // don't want this check, use the operator ().
+         // of the dataVector. The boundary check will not be done. 
+
     inline G4double operator()(const size_t binNumber) const ;
          // Returns simply the value in the bin specified by 'binNumber'
-         // of the dataVector. The boundary check will not be Done. If 
-         // you want this check, use the operator [].
+         // of the dataVector. The boundary check will not be Done. 
 
-    inline void PutValue(size_t binNumber, G4double theValue);
+    inline void PutValue(size_t index, G4double theValue);
          // Put 'theValue' into the bin specified by 'binNumber'.
-         // Take note that the 'binNumber' starts from '0'.
-         // To fill the vector, you have beforehand to Construct a vector
+         // Take note that the 'index' starts from '0'.
+         // To fill the vector, you have beforehand to construct a vector
          // by the constructor with Emin, Emax, Nbin. 'theValue' should
-         // be the crosssection/energyloss value corresponding to the low 
-         // edge energy of the bin specified by 'binNumber'. You can get
-         // the low edge energy value of a bin by GetLowEdgeEnergy().
+         // be the crosssection/energyloss value corresponding to the  
+         // energy of the index. You can get this energy by the next method
+         // or by the old method GetLowEdgeEnergy().
+
+    void ScaleVector(G4double factorE, G4double factorV);
+         // Scale all values of the vector and second derivatives
+         // by factorV, energies by vectorE. This method may be applied 
+         // for example after Retrieve a vector from an external file to 
+         // convert values into Geant4 units
+
+    inline G4double Energy(size_t index) const;
+         // Returns simply the value in the energy specified by 'index'
+         // of the energy vector. The boundary check will not be done. 
+         // Use this function when you fill physis vector by PutValue().
+
     virtual G4double GetLowEdgeEnergy(size_t binNumber) const;
+         // Obsolete method
          // Get the energy value at the low edge of the specified bin.
          // Take note that the 'binNumber' starts from '0'.
-         // This value is defined when a physics vector is constructed
-         // by a constructor of a derived class. Use this function
-         // when you fill physis vector by PutValue().
+         // This value should be defined before the call.
+         // The boundary check will not be done.
+
     inline size_t GetVectorLength() const;
          // Get the toal length (bin number) of the vector. 
+
+    void FillSecondDerivatives();
+        // Initialise second derivatives for spline keeping 
+        // 3d derivative continues - default algorithm
+
+    void ComputeSecDerivatives();
+         // Initialise second derivatives for spline using algorithm 
+         // which garantee only 1st derivative continues 
+         // Warning: this method should be called when the vector 
+         // is already filled
+
+    void ComputeSecondDerivatives(G4double firstPointDerivative, 
+                                  G4double endPointDerivative);
+         // Initialise second derivatives for spline using 
+         // user defined 1st derivatives at edge points
+         // Warning: this method should be called when the vector 
+         // is already filled
+
     inline G4bool IsFilledVectorExist() const;
          // Is non-empty physics vector already exist?
 
     inline void PutComment(const G4String& theComment);
          // Put a comment to the G4PhysicsVector. This may help to check
          // whether your are accessing to the one you want. 
+
     inline const G4String& GetComment() const;
          // Retrieve the comment of the G4PhysicsVector.
 
@@ -153,18 +189,22 @@ class G4PhysicsVector
 
     G4PhysicsVectorType type;   // The type of PhysicsVector (enumerator)
 
-    G4double edgeMin;           // Lower edge value of the lowest bin
-    G4double edgeMax;           // Lower edge value of the highest bin
-    size_t numberOfBin;
+    G4double edgeMin;           // Energy of first point
+    G4double edgeMax;           // Energy of the last point
+
+    size_t numberOfNodes;
 
     G4double lastEnergy;        // Cache the last input value
     G4double lastValue;         // Cache the last output value   
     size_t lastBin;             // Cache the last bin location
 
     G4PVDataVector dataVector;    // Vector to keep the crossection/energyloss
-    G4PVDataVector binVector;     // Vector to keep the low edge value of bin
+    G4PVDataVector binVector;     // Vector to keep energy
+    G4PVDataVector secDerivative; // Vector to keep second derivatives 
 
   private:
+
+    G4bool SplinePossible();
 
     inline G4double LinearInterpolation();
          // Linear interpolation function
@@ -172,11 +212,6 @@ class G4PhysicsVector
          // Spline interpolation function
 
     inline void Interpolation();
-
-    void FillSecondDerivatives();
-      // Initialise second derivatives for spline
-
-    G4double*  secDerivative;
 
     G4String   comment;
     G4bool     useSpline;

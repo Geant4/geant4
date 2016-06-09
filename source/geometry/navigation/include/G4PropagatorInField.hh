@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 // 
-// $Id: G4PropagatorInField.hh,v 1.17 2008/11/13 14:28:56 tnikitin Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PropagatorInField.hh,v 1.19 2009/11/13 17:34:26 japost Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // Class G4PropagatorInField 
@@ -162,16 +162,13 @@ class G4PropagatorInField
 
    inline G4VIntersectionLocator* GetIntersectionLocator();
    inline void SetIntersectionLocator(G4VIntersectionLocator *pLocator );
+     // Change or get the object which calculates the exact 
+     //  intersection point with the next boundary
  
  public:  // without description
 
    inline G4double  GetDeltaIntersection() const;
    inline G4double  GetDeltaOneStep() const;
-   inline void    SetAccuraciesWithDeltaOneStep( G4double deltaOneStep );  
-   inline void    SetDeltaIntersection( G4double deltaIntersection );
-   inline void    SetDeltaOneStep( G4double deltaOneStep );  
-     // The above 5 methods are obsolete and will not work, as they have been
-     // replaced by the same methods in G4FieldManager since Geant4 4.0 ...
 
    inline G4FieldManager*  GetCurrentFieldManager();
    inline void             SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator ); 
@@ -181,6 +178,13 @@ class G4PropagatorInField
                                        G4int noHarsh,
                                        G4int noAbandon );
    inline G4int GetThresholdNoZeroSteps( G4int i ); 
+
+   inline G4double  GetZeroStepThreshold(); 
+   inline void      SetZeroStepThreshold( G4double newLength ); 
+
+   void RefreshIntersectionLocator(); 
+     // Update the Locator with parameters from this class
+     //    and from current field manager
 
  protected:  // with description
 
@@ -242,6 +246,8 @@ class G4PropagatorInField
 
    G4double  kCarTolerance;
      // Geometrical tolerance defining surface thickness
+   G4double  fZeroStepThreshold; 
+     // Threshold for counting of tiny or 'zero' steps
 
    G4VIntersectionLocator *fIntersectionLocator;
    G4bool fAllocatedLocator;

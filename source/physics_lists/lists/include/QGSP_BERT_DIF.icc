@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_DIF.icc,v 1.2 2007/12/10 17:46:31 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: QGSP_BERT_DIF.icc,v 1.3 2009/05/18 08:54:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //               created from QGSP_BERT by J.P. Wellisch
 //
 // Modified:
+// 18.05.2009 G.Folger: obsoleted
 //
 //----------------------------------------------------------------------------
 //
@@ -74,8 +75,8 @@ template<class T> TQGSP_BERT_DIF<T>::TQGSP_BERT_DIF(G4int ver):  T()
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
 
-  G4WarnPLStatus exp;
-  exp.Experimental("QGSP_BERT_DIF");
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSP_BERT_DIF");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));

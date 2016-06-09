@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationLevelDensityParameter.hh,v 1.4 2008/09/19 13:32:54 ahoward Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EvaporationLevelDensityParameter.hh,v 1.5 2009/03/04 11:05:02 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -44,9 +44,9 @@ class G4EvaporationLevelDensityParameter : public G4VLevelDensityParameter
 {
 public:
 
-  G4EvaporationLevelDensityParameter()  {};
+  G4EvaporationLevelDensityParameter();
 
-  virtual ~G4EvaporationLevelDensityParameter() {};
+  virtual ~G4EvaporationLevelDensityParameter();
 
 private:  
 	

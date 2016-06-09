@@ -32,6 +32,7 @@
 // 22.01.07 V.Ivanchenko - add cross section interfaces with Z and A
 // 05.03.07 V.Ivanchenko - fix weight for interpolation
 // 13.03.07 V.Ivanchenko - cleanup at low energies
+// 11.09.09 V.Ivanchenko - fixed bug in interpolation
 //
 
 #include "G4UPiNuclearCrossSection.hh"
@@ -98,7 +99,6 @@ G4double G4UPiNuclearCrossSection::Interpolate(
 	 G4double Z, G4double A, G4double ekin, G4PhysicsTable* table)
 {
   G4double res = 0.0;
-  G4bool b;
   G4int idx;
   G4int iz = G4int(Z + 0.5);
   if(iz > 92) iz = 92;
@@ -106,7 +106,7 @@ G4double G4UPiNuclearCrossSection::Interpolate(
   if(idx >= NZ) idx = NZ - 1;
   G4int iz2 = theZ[idx];
 
-  G4double x2 = (((*table)[idx])->GetValue(ekin, b))*APower[iz]/APower[iz2];
+  G4double x2 = (((*table)[idx])->Value(ekin))*APower[iz]/APower[iz2];
 
   // use only one Z
   if(iz >= theZ[idx] || idx == 0) {
@@ -116,10 +116,10 @@ G4double G4UPiNuclearCrossSection::Interpolate(
   } else {
 
     G4int iz1 = theZ[idx-1];
-    G4double x1 = (((*table)[idx-1])->GetValue(ekin, b))*APower[iz]/APower[iz1];
+    G4double x1 = (((*table)[idx-1])->Value(ekin))*APower[iz]/APower[iz1];
     G4double w1 = A - theA[idx-1];
     G4double w2 = theA[idx] - A;
-    res = (w1*x1 + w2*x2)/(w1 + w2); 
+    res = (w1*x2 + w2*x1)/(w1 + w2); 
   }
   return res;
 }
@@ -131,9 +131,9 @@ void G4UPiNuclearCrossSection::AddDataSet(const G4String& p,
 					  G4int n)
 {
   G4LPhysicsFreeVector* pvin = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
-  //pvin->SetSpline(true);
+  pvin->SetSpline(true);
   G4LPhysicsFreeVector* pvel = new G4LPhysicsFreeVector(n,e[0]*GeV,e[n-1]*GeV);
-  //pvel->SetSpline(true);
+  pvel->SetSpline(true);
   for(G4int i=0; i<n; i++) { 
     pvin->PutValues(i,e[i]*GeV,in[i]*millibarn); 
     pvel->PutValues(i,e[i]*GeV,std::max(0.0,(tot[i]-in[i])*millibarn)); 

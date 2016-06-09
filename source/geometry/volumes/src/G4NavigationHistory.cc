@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc,v 1.10 2006/06/29 18:58:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NavigationHistory.cc,v 1.11 2009/08/03 16:27:37 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // G4NavigationHistory Implementation
@@ -50,7 +50,6 @@ G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
 
 G4NavigationHistory::~G4NavigationHistory()
 {
-  Reset();  // To delete all but one current entries!
 }
 
 std::ostream&

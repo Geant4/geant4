@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.13 2008/11/24 14:34:11 cirrone Exp $
+$Id: History,v 1.16 2009/11/12 13:09:56 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,20 @@ $Id: History,v 1.13 2008/11/24 14:34:11 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+12.11.2009 - A.Ribon (Rich-V09-02-01)
+             Added the possibility to use QGSP_BIC_EMY as 
+             Physics List. However, by default, the example's 
+             Physics List is used.
+
+08.04.2009 - G.A.P.Cirrone; Tag: Rich-V09-02-00
+             Tag for the next release
+
+06.03.2009 - Guy Barrand (in agreement with G.Cosmo)
+             GNUmakefile : remove the G4ANALYSIS_USE logic found in this file
+             since it is handled already in the config/analysis.gmk.
+             This avoids a duplication in the compilation and link commands
+             of the aida-config options.
 
 23.11.2008 - G.A.P.Cirrone; Tag: Rich-V09-01-01
              Fixed compilation errors on the file RichTbEventAction

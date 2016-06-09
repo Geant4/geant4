@@ -1,4 +1,4 @@
-$Id: README,v 1.21 2008/10/24 15:36:24 maire Exp $
+$Id: README,v 1.22 2009/11/21 22:02:51 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -39,7 +39,7 @@ $Id: README,v 1.21 2008/10/24 15:36:24 maire Exp $
  physics_lists subdirectory.
      
  Local physics lists:	 
- - "standard"	standard EM physics with current 'best' options setting.
+ - "local"	standard EM physics with current 'best' options setting.
                 these options are explicited in PhysListEmStandard		
  - "standardSS" standard EM physics with single Coulomb scattering 
                 instead of multiple scattering; 
@@ -52,19 +52,16 @@ $Id: README,v 1.21 2008/10/24 15:36:24 maire Exp $
                 In later Geant4 releases the process will be a part
                 of Geant4 source, currently it is released together
                 with its mathematical tool c2_functions in current 
-                example 
- - "livermore"  low-energy EM physics using Livermore data
- - "penelope"   low-energy EM physics implementing Penelope models 
+
     
  From geant4/source/physics_lists/builders:	 
- - "emstandard"      recommended standard EM physics for LHC
+ - "emstandard_opt0" recommended standard EM physics for LHC
  - "emstandard_opt1" best CPU performance standard physics for LHC
-                     option1 in physics_list library (simplified msc, 
-                     the most fast simulation, precision is limited)
- - "emstandard_opt2" option2 in physics_list library (subcutoff, 
-                     use spline, step function per particle type)
- - "emstandard_opt3" option3 in physics_list library (advanced msc, 
-                     use spline, step function per particle type) 
+ - "emstandard_opt2"     
+ - "emstandard_opt3" best current advanced EM options. 
+                     analog to "local" above  
+ - "emlivermore"  low-energy EM physics using Livermore data
+ - "empenelope"   low-energy EM physics implementing Penelope models
     
  Optional components can be added:
  - "elastic"       elastic scattering of hadrons

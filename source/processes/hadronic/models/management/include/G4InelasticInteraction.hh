@@ -24,22 +24,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4InelasticInteraction.hh,v 1.5 2007/01/11 05:30:12 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4InelasticInteraction.hh,v 1.7 2009/08/30 16:12:13 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
- // Hadronic Process: Inelastic Interaction 
- // This class is an abstract base class, since the pure virtual
- // function ApplyYourself has not been defined yet.
- // original by H.P. Wellisch
- // Modified by J.L. Chuma, TRIUMF, 22-Nov-1996
- // Modified by J.L. Chuma  27-Mar-1997
- // Modified by J.L. Chuma  30-Apr-1997
- // Modified by J.L. Chuma  05-Aug-1997  to pass the original incident particle to
- //                                      CalculateMomenta
- // Modified by J.L. Chuma  05-Jun-1998  to include quasiElastic flag to allow for
- //                                      TwoBody to be called directly, bypassing
- //                                      TwoCluster, and allowing TwoCluster to be
- //                                      called with no secondaries
+// Hadronic Process: Inelastic Interaction 
+// This class is an abstract base class, since the pure virtual
+// function ApplyYourself has not been defined yet.
+// original by H.P. Wellisch
+// Modified by J.L. Chuma, TRIUMF, 22-Nov-1996
+// Modified by J.L. Chuma  27-Mar-1997
+// Modified by J.L. Chuma  30-Apr-1997
+// Modified by J.L. Chuma  05-Aug-1997  to pass the original incident particle to
+//                                      CalculateMomenta
+// Modified by J.L. Chuma  05-Jun-1998  to include quasiElastic flag to allow for
+//                                      TwoBody to be called directly, bypassing
+//                                      TwoCluster, and allowing TwoCluster to be
+//                                      called with no secondaries
+// 23-Jan-2009 V.Ivanchenko move constructor and destructor to the body
+// 29-Aug-2009 V.Ivanchenko moveded G4ReactionDynamics instance from the based class 
  
 #ifndef G4InelasticInteraction_h
 #define G4InelasticInteraction_h 1
@@ -52,18 +54,15 @@
 #include "Randomize.hh"
 #include "G4ReactionDynamics.hh"
 
- class G4InelasticInteraction : public G4HadronicInteraction
- {
- public:
+class G4InelasticInteraction : public G4HadronicInteraction
+{
+public:
     
-    G4InelasticInteraction(const G4String& modelName = "LEInelastic") 
-     : G4HadronicInteraction(modelName)
-    { cache = 0.0;}
+    G4InelasticInteraction(const G4String& modelName = "LEInelastic"); 
     
-    virtual ~G4InelasticInteraction()
-    { }
+    virtual ~G4InelasticInteraction();
     
- protected:
+protected:
     
     G4double Pmltpc( G4int np, G4int nm, G4int nz, G4int n,
                      G4double b, G4double c );
@@ -99,12 +98,15 @@
                       G4ReactionProduct &currentParticle,
                       G4ReactionProduct &targetParticle,
                       G4bool &incidentHasChanged );
-   private:
+private:
    
       G4double cache;
       G4ThreeVector what;
 
- };
+protected:
+      G4ReactionDynamics theReactionDynamics;
+
+};
  
 #endif
  

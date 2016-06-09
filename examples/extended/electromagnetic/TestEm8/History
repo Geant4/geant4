@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2008/12/05 17:46:12 vnivanch Exp $
+$Id: History,v 1.33 2009/11/24 17:51:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-11-08 V.Ivant (testem8-V09-02-00)
+- Fixed compillation warnings at SLC5
 
 05-12-08 V.Ivant (testem8-V09-01-02)
 - Fixed typo in Physics List

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.10 2008/12/09 15:08:13 pandola Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.12 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // 
 // --------------------------------------------------------------
 //
@@ -96,8 +96,7 @@ void G4PenelopeBremsstrahlungContinuous::LoadFromFile()
  G4String name(ost.str());
  G4String dirFile = pathString + "/penelope/" + name;
  std::ifstream file(dirFile);
- std::filebuf* lsdp = file.rdbuf();
- if (!(lsdp->is_open()))
+ if (!file.is_open())
      {
       G4String excep = "G4PenelopeBremsstrahlungContinuous - data file " + name + " not found!";
       G4Exception(excep);
@@ -111,16 +110,17 @@ void G4PenelopeBremsstrahlungContinuous::LoadFromFile()
      //2) read 32 cross sections in cm2
      for (size_t j=0;j<NumberofKPoints;j++){
        file >> a1;
-       ReducedCS[i][j]=a1*cm2; //coversion present in Penelope source
+       ReducedCS[i][j]=a1*cm2; 
      }
      //3) read the total cross section, in cm2
      file >> a1;
-     TotalCS[i]=a1*cm2; //conversion present in Penelope source
+     TotalCS[i]=a1*cm2; 
      // Check closing item
      file >> a1;
      if (a1 != ((G4double) -1))
        {
-	 G4String excep = "G4PenelopeBremsstrahlungContinuous - Check the bremms data file " + name;
+	 G4String excep = "G4PenelopeBremsstrahlungContinuous - Check the bremms data file " 
+	   + name;
 	 G4Exception(excep);
        }
    }
@@ -228,7 +228,8 @@ G4double G4PenelopeBremsstrahlungContinuous::CalculateStopping(G4double energy)
   G4double Xek = Xe-Ke; 
   
   //Global x-section factor
-  G4double Fact=Zmat*Zmat*(energy+electron_mass_c2)*(energy+electron_mass_c2)/(energy*(energy+2.0*electron_mass_c2));
+  G4double Fact=Zmat*Zmat*(energy+electron_mass_c2)*(energy+electron_mass_c2)/
+    (energy*(energy+2.0*electron_mass_c2));
   Fact *= PositronCorrection(energy);
 
   //Moments of the scaled bremss x-section

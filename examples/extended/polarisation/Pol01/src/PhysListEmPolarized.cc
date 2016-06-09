@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmPolarized.cc,v 1.2 2007/11/01 17:34:53 schaelic Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysListEmPolarized.cc,v 1.3 2009/11/21 16:27:40 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -38,7 +38,7 @@
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -82,13 +82,13 @@ void PhysListEmPolarized::ConstructProcess()
       }
       else if (particleName == "e-") {
 	//electron
-	pmanager->AddProcess(new G4MultipleScattering,   -1,1,1);
-	pmanager->AddProcess(new G4ePolarizedIonisation, -1,2,2);
+	pmanager->AddProcess(new G4eMultipleScattering,   -1,1,1);
+	pmanager->AddProcess(new G4ePolarizedIonisation,  -1,2,2);
 	pmanager->AddProcess(new G4ePolarizedBremsstrahlung,      -1,3,3);
       }       
       else if (particleName == "e+") {
 	//positron
-	pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+	pmanager->AddProcess(new G4eMultipleScattering,  -1, 1,1);
 	pmanager->AddProcess(new G4ePolarizedIonisation, -1, 2,2);
 	pmanager->AddProcess(new G4ePolarizedBremsstrahlung,    -1, 3,3);
 	pmanager->AddProcess(new G4eplusPolarizedAnnihilation,   0,-1,4);
@@ -104,13 +104,13 @@ void PhysListEmPolarized::ConstructProcess()
 	pmanager->AddDiscreteProcess(new G4GammaConversion);      
       } else if (particleName == "e-") {
 	//electron
-	pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+	pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
 	pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
 	pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
       	    
       } else if (particleName == "e+") {
 	//positron
-	pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+	pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
 	pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
 	pmanager->AddProcess(new G4eBremsstrahlung,    -1, 3,3);
 	pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);

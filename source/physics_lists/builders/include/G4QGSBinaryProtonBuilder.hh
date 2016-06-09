@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QGSBinaryProtonBuilder.hh,v 1.2 2009/03/31 11:04:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSBinaryProtonBuilder
+//
+// Author: 2006 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4QGSBinaryProtonBuilder_h
 #define G4QGSBinaryProtonBuilder_h 
 
@@ -34,7 +48,6 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
@@ -44,8 +57,6 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4QuasiElasticChannel.hh"
-
-#include "G4ProtonInelasticCrossSection.hh"
 
 class G4QGSBinaryProtonBuilder : public G4VProtonBuilder
 {
@@ -60,7 +71,7 @@ class G4QGSBinaryProtonBuilder : public G4VProtonBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4ProtonInelasticCrossSection theXSec;
+
     G4TheoFSGenerator * theModel;
     G4PreCompoundModel * thePreEquilib;
     G4BinaryCascade * theCascade;

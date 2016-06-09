@@ -23,15 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4FTFPNeutronBuilder.cc,v 1.5 2009/04/23 18:54:57 japost Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4FTFPNeutronBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #include "G4FTFPNeutronBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 
 G4FTFPNeutronBuilder::
 G4FTFPNeutronBuilder(G4bool quasiElastic) 
 {
-  theMin = 4*GeV;
+  theMin =   4*GeV;
+  theMax = 100*TeV;
   theModel = new G4TheoFSGenerator("FTFP");
 
   theStringModel = new G4FTFModel;
@@ -51,6 +67,9 @@ G4FTFPNeutronBuilder(G4bool quasiElastic)
      theModel->SetQuasiElasticChannel(theQuasiElastic);
   } else 
   {  theQuasiElastic=0;}  
+
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(100*TeV);
 }
 
 G4FTFPNeutronBuilder::
@@ -82,9 +101,9 @@ void G4FTFPNeutronBuilder::
 Build(G4NeutronInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(&theXSec);  
+  aP->AddDataSet(new G4NeutronInelasticCrossSection);  
 }
 
  // 2002 by J.P. Wellisch

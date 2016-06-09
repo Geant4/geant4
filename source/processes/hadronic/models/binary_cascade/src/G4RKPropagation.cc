@@ -251,7 +251,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 				G4double timeStep)
 {
 //  reset momentum transfer to field
-    theMomentumTranfer=0;
+    theMomentumTranfer=G4ThreeVector(0,0,0);
 
 // Loop over tracks
 
@@ -261,6 +261,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
     G4double currTimeStep = timeStep;
     G4KineticTrack * kt = *i;
     G4int encoding = kt->GetDefinition()->GetPDGEncoding();
+
     std::map <G4int, G4VNuclearField*, std::less<G4int> >::iterator fieldIter= theFieldMap->find(encoding);
 
     G4VNuclearField* currentField=0;
@@ -326,9 +327,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 // 	G4double newE = mom.e()-(*theFieldMap)[encoding]->GetBarrier();
 //     GetField = Barrier + FermiPotential
 	G4double newE = kt->GetTrackingMomentum().e()-currentField->GetField(kt->GetPosition());
-//      G4cout << " enter nucleus, E out/in: " << kt->GetTrackingMomentum().e() << " / " << newE <<G4endl;
-//      G4cout << " the Field "<< currentField->GetField(kt->GetPosition()) << " "<< kt->GetPosition()<<G4endl;
-//      G4cout << " the particle "<<kt->GetDefinition()->GetParticleName()<<G4endl;
+
 	if(newE <= kt->GetActualMass())  // the particle cannot enter the nucleus
 	{
 // FixMe: should be "pushed back?"
@@ -349,14 +348,17 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	new4Mom*=G4LorentzRotation(boost);
 	kt->SetTrackingMomentum(new4Mom);
         kt->SetState(G4KineticTrack::inside);
-//     G4cout <<" Enter Nucleus - E/Field/Sum: " <<kt->GetTrackingMomentum().e() << " / "
-//    	   << (*theFieldMap)[encoding]->GetField(kt->GetPosition()) << " / "
-//	   << kt->GetTrackingMomentum().e()-currentField->GetField(kt->GetPosition())
-//	   << G4endl
-//	   << " Barrier / field just inside nucleus (0.9999*kt->GetPosition())"
-//	   << (*theFieldMap)[encoding]->GetBarrier() << " / "
-//	   << (*theFieldMap)[encoding]->GetField(0.9999*kt->GetPosition())
-//	   << G4endl;
+
+/*
+     G4cout <<" Enter Nucleus - E/Field/Sum: " <<kt->GetTrackingMomentum().e() << " / "
+    	   << (*theFieldMap)[encoding]->GetField(kt->GetPosition()) << " / "
+	   << kt->GetTrackingMomentum().e()-currentField->GetField(kt->GetPosition())
+	   << G4endl
+	   << " Barrier / field just inside nucleus (0.9999*kt->GetPosition())"
+	   << (*theFieldMap)[encoding]->GetBarrier() << " / "
+	   << (*theFieldMap)[encoding]->GetField(0.9999*kt->GetPosition())
+	   << G4endl;
+*/
        }
     }
 
@@ -395,7 +397,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
  	<< kt->GetTrackingMomentum().e() - kt->GetTrackingMomentum().mag() << " "
  	<< G4endl << currentField->GetField(kt->GetPosition())<< G4endl
  	<< kt->GetTrackingMomentum()
- //	<< G4endl;
+ 	<< G4endl
 	<< "delta p " << momold-kt->GetTrackingMomentum() << G4endl
 	<< "del pos " << posold-kt->GetPosition()
 	<< G4endl;
@@ -482,8 +484,6 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	kt->SetState(G4KineticTrack::gone_out);
       }
 
-
-
   }
 
 }
@@ -501,7 +501,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeStep)
 //----------------------------------------------------------------------------
 {
-    theMomentumTranfer=0;
+    theMomentumTranfer=G4ThreeVector(0,0,0);
 //    G4cout <<"Stepper input"<<kt->GetTrackingMomentum()<<G4endl;
 // create the integrator stepper
     //    G4Mag_EqRhs * equation = mapIter->second;
@@ -537,11 +537,11 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
       return false;
     }
 /*
- *      G4cout <<" E/Field/Sum be4 : " <<mom.e() << " / "
- *     	   << (*theFieldMap)[encoding]->GetField(pos) << " / "
- * 	   << mom.e()+(*theFieldMap)[encoding]->GetField(pos)
- * 	   << G4endl;
- */
+       G4cout <<" E/Field/Sum be4 : " <<mom.e() << " / "
+      	   << (*theFieldMap)[encoding]->GetField(pos) << " / "
+  	   << mom.e()+(*theFieldMap)[encoding]->GetField(pos)
+  	   << G4endl;
+*/
 
 // Correct for momentum ( thus energy) transfered to nucleus, boost particle into moving nuclues frame.
     G4ThreeVector MomentumTranfer = kt->GetTrackingMomentum().vect() - track.GetMomentum();

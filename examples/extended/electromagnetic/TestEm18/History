@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2008/09/26 20:26:01 maire Exp $
+$Id: History,v 1.13 2009/11/19 18:46:04 maire Exp $
 ----------------------------------------------------
 
      =========================================================
@@ -14,7 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+19-11-09 mma (testem18-V09-02-04)
+- cosmetics in low-energy physics lists  
+      
+12-10-09 mma (testem18-V09-02-03)
+- Substituted obsolete low-energy physics builders by builders from
+  the physics_list library;
+         
+06-03-09 mma (testem18-V09-02-01)
+- PhysicsList::SetCuts() : remove SetEnergyRange(1*keV,100*GeV)
+- remove command "/testem/phys/cutLimit" already in /cuts/setLowEdge
+    
+22-02-09 mma (testem18-V09-02-00)
+- PhysicsList. EmOptions : 12*20 bins; lll=1.e-2
+- PhysicsList::SetCuts() : SetEnergyRange(1*keV,100*GeV)
+- added command "/testem/phys/cutLimit" allowing to change low limit for
+  production threshold
+  
 24-09-08 mma (testem18-V09-01-04)
 - HistoManager : root as default format 
 

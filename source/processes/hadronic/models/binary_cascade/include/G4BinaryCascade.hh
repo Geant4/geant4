@@ -84,11 +84,13 @@ private:
 
   G4int GetTotalCharge(std::vector<G4KineticTrack *> & aV)
   {
+G4cout<<"GetTotalCharge(std::vector<G4KineticTrack *> & aV)"<<G4endl; // Uzhi
     G4int result = 0;
     std::vector<G4KineticTrack *>::iterator i;
     for(i = aV.begin(); i != aV.end(); ++i)
     {
        result += G4lrint((*i)->GetDefinition()->GetPDGCharge());
+G4cout<<(*i)->GetDefinition()->GetParticleName()<<" "<<(*i)->GetDefinition()->GetPDGCharge()<<G4endl; // Uzhi
     }
     return result;
   }
@@ -128,6 +130,8 @@ private:
   void PrintKTVector(G4KineticTrack* kt, std::string comment=std::string(""));
   void DebugApplyCollision(G4CollisionInitialState * collision, 
                            G4KineticTrackVector *products);
+  void DebugEpConservation(const G4HadProjectile & aTrack, G4ReactionProductVector* products);			   
+			   
 private:
   G4KineticTrackVector theProjectileList;
   G4KineticTrackVector theTargetList;

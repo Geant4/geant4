@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.27 2008/06/20 19:54:03 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4hLowEnergyLoss.cc,v 1.30 2009/07/23 09:15:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -----------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -144,7 +144,8 @@ G4bool   G4hLowEnergyLoss::EnlossFlucFlag = true ;
 G4double G4hLowEnergyLoss::LowestKineticEnergy = 10.*eV;
 G4double G4hLowEnergyLoss::HighestKineticEnergy= 100.*GeV;
 G4int    G4hLowEnergyLoss::TotBin = 360;
-G4double G4hLowEnergyLoss::RTable,G4hLowEnergyLoss::LOGRTable;
+G4double G4hLowEnergyLoss::RTable =1.1;
+G4double G4hLowEnergyLoss::LOGRTable = 1.1;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -238,7 +239,7 @@ void G4hLowEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
   //  calculate data members TotBin,LOGRTable,RTable first
-
+  //G4cout << "BuildDEDXTable for " << aParticleType.GetParticleName() << G4endl;
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
@@ -300,7 +301,7 @@ void G4hLowEnergyLoss::BuildDEDXTable(
                     LowestKineticEnergy, HighestKineticEnergy, TotBin);
 
         // loop for the kinetic energy
-        for (G4int i=0; i<TotBin; i++)
+        for (G4int i=0; i<=TotBin; i++)
         {
           LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
           Value = 0. ;
@@ -342,6 +343,7 @@ void G4hLowEnergyLoss::BuildDEDXTable(
     }
   }
   // make the energy loss and the range table available
+  //G4cout << "BuildDEDXTable done " << G4endl;
 
   G4EnergyLossTables::Register(&aParticleType,
     (Charge>0)?
@@ -366,6 +368,7 @@ void G4hLowEnergyLoss::BuildRangeTable(
                              const G4ParticleDefinition& aParticleType)
 // Build range table from the energy loss table
 {
+  //G4cout << "BuildRangeTable for " << aParticleType.GetParticleName() << G4endl;
    Mass = aParticleType.GetPDGMass();
 
    const G4ProductionCutsTable* theCoupleTable=
@@ -407,6 +410,7 @@ void G4hLowEnergyLoss::BuildRangeTable(
 void G4hLowEnergyLoss::BuildTimeTables(
                              const G4ParticleDefinition& aParticleType)
 {
+  //G4cout << "BuildTimeTable for " << aParticleType.GetParticleName() << G4endl;
 
   const G4ProductionCutsTable* theCoupleTable=
           G4ProductionCutsTable::GetProductionCutsTable();
@@ -441,7 +445,7 @@ void G4hLowEnergyLoss::BuildTimeTables(
     theProperTimepbarTable = new G4PhysicsTable(numOfCouples);
     theProperTimeTable = theProperTimepbarTable ;
   }
-
+  //G4cout << "numOfCouples= " << numOfCouples << G4endl;
   for (size_t J=0;  J<numOfCouples; J++)
   {
     G4PhysicsLogVector* aVector;
@@ -451,12 +455,14 @@ void G4hLowEnergyLoss::BuildTimeTables(
                             HighestKineticEnergy,TotBin);
 
     BuildLabTimeVector(J, aVector);
+    //G4cout << "LabTime OK " << J << G4endl;
     theLabTimeTable->insert(aVector);
 
     bVector = new G4PhysicsLogVector(LowestKineticEnergy,
                             HighestKineticEnergy,TotBin);
 
     BuildProperTimeVector(J, bVector);
+    //G4cout << "PropTime OK " << J << G4endl;
     theProperTimeTable->insert(bVector);
   }
 }
@@ -476,7 +482,7 @@ void G4hLowEnergyLoss::BuildRangeVector(G4int materialIndex,
   G4int n = 100;
   G4double del = 1.0/(G4double)n ;
 
-  for (G4int j=1; j<TotBin; j++) {
+  for (G4int j=1; j<=TotBin; j++) {
 
     G4double energy2 = rangeVector->GetLowEdgeEnergy(j);
     G4double de = (energy2 - energy1) * del ;
@@ -541,10 +547,12 @@ void G4hLowEnergyLoss::BuildLabTimeVector(G4int materialIndex,
   } while (tau<=taulim) ;
 
   i += 1 ;
-  for (G4int j=i; j<TotBin; j++)
+  //G4cout << "do is OK i= " << i << G4endl;
+  for (G4int j=i; j<=TotBin; j++)
   {
     LowEdgeEnergy = timeVector->GetLowEdgeEnergy(j);
     tau = LowEdgeEnergy/ParticleMass ;
+    //G4cout << "j= " << j << " tauold= " << tauold << " tau= " << tau << G4endl;
     ltaulow = std::log(tauold);
     ltauhigh = std::log(tau);
     Value = oldValue+LabTimeIntLog(physicsVector,nbin);
@@ -552,6 +560,7 @@ void G4hLowEnergyLoss::BuildLabTimeVector(G4int materialIndex,
     oldValue = Value ;
     tauold = tau ;
   }
+  // G4cout << "LabTime OK for  " << materialIndex << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -559,7 +568,7 @@ void G4hLowEnergyLoss::BuildLabTimeVector(G4int materialIndex,
 void G4hLowEnergyLoss::BuildProperTimeVector(G4int materialIndex,
                                              G4PhysicsLogVector* timeVector)
 //  create proper time vector for a material
-{
+{ 
   G4int nbin=100;
   G4bool isOut;
   G4double tlim=5.*keV,parlowen=0.4,ppar=0.5-parlowen ;
@@ -600,7 +609,7 @@ void G4hLowEnergyLoss::BuildProperTimeVector(G4int materialIndex,
   } while (tau<=taulim) ;
 
   i += 1 ;
-  for (G4int j=i; j<TotBin; j++)
+  for (G4int j=i; j<=TotBin; j++)
   {
     LowEdgeEnergy = timeVector->GetLowEdgeEnergy(j);
     tau = LowEdgeEnergy/ParticleMass ;
@@ -624,7 +633,7 @@ G4double G4hLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
   dtau = (tauhigh-taulow)/nbin;
   Value = 0.;
 
-  for (G4int i=0; i<=nbin; i++)
+  for (G4int i=0; i<nbin; i++)
   {
     taui = taulow + dtau*i ;
     ti = Mass*taui;
@@ -633,7 +642,7 @@ G4double G4hLowEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
       ci=0.5;
     else
     {
-      if(i<nbin)
+      if(i<nbin-1)
         ci=1.;
       else
         ci=0.5;
@@ -656,7 +665,7 @@ G4double G4hLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
   dltau = ltt/nbin;
   Value = 0.;
 
-  for (G4int i=0; i<=nbin; i++)
+  for (G4int i=0; i<nbin; i++)
   {
     ui = ltaulow+dltau*i;
     taui = std::exp(ui);
@@ -666,7 +675,7 @@ G4double G4hLowEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
       ci=0.5;
     else
     {
-      if(i<nbin)
+      if(i<nbin-1)
         ci=1.;
       else
         ci=0.5;
@@ -689,7 +698,7 @@ G4double G4hLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
   dltau = ltt/nbin;
   Value = 0.;
 
-  for (G4int i=0; i<=nbin; i++)
+  for (G4int i=0; i<nbin; i++)
   {
     ui = ltaulow+dltau*i;
     taui = std::exp(ui);
@@ -699,7 +708,7 @@ G4double G4hLowEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
       ci=0.5;
     else
     {
-      if(i<nbin)
+      if(i<nbin-1)
         ci=1.;
       else
         ci=0.5;
@@ -722,7 +731,7 @@ G4double G4hLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
   dltau = ltt/nbin;
   Value = 0.;
 
-  for (G4int i=0; i<=nbin; i++)
+  for (G4int i=0; i<nbin; i++)
   {
     ui = ltaulow+dltau*i;
     taui = std::exp(ui);
@@ -732,7 +741,7 @@ G4double G4hLowEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
       ci=0.5;
     else
     {
-      if(i<nbin)
+      if(i<nbin-1)
         ci=1.;
       else
         ci=0.5;
@@ -750,6 +759,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
 {
+  //G4cout << "BuildRangeCoeffATable for " << G4endl;
 
   G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
@@ -771,7 +781,6 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
     theRangeCoeffATable = thepbarRangeCoeffATable ;
     theRangeTable = theRangepbarTable ;
   }
- 
   G4double R2 = RTable*RTable ;
   G4double R1 = RTable+1.;
   G4double w = R1*(RTable-1.)*(RTable-1.);
@@ -788,7 +797,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
     Ti = LowestKineticEnergy ;
     G4PhysicsVector* rangeVector= (*theRangeTable)[J];
 
-    for ( G4int i=0; i<TotBin; i++)
+    for ( G4int i=0; i<=TotBin; i++)
     {
       Ri = rangeVector->GetValue(Ti,isOut) ;
       if ( i==0 )
@@ -808,7 +817,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffATable(
 	  }
         Rim = rangeVector->GetValue(Tim,isOut);
       }
-      if ( i==(TotBin-1))
+      if ( i==TotBin)
         Rip = Ri ;
       else
       {
@@ -832,6 +841,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffBTable(
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
 {
+  //G4cout << "BuildRangeCoeffBTable for " << G4endl;
 
   G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
@@ -870,7 +880,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffBTable(
     Ti = LowestKineticEnergy ;
     G4PhysicsVector* rangeVector= (*theRangeTable)[J];
    
-    for ( G4int i=0; i<TotBin; i++)
+    for ( G4int i=0; i<=TotBin; i++)
     {
       Ri = rangeVector->GetValue(Ti,isOut) ;
       if ( i==0 )
@@ -880,7 +890,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffBTable(
         if (RTable!=0) Tim = Ti/RTable ; else Tim =0;
         Rim = rangeVector->GetValue(Tim,isOut);
       }
-      if ( i==(TotBin-1))
+      if ( i==TotBin)
         Rip = Ri ;
       else
       {
@@ -903,6 +913,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffCTable(
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
 {
+  //G4cout << "BuildRangeCoeffCTable for " << G4endl;
 
   G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
@@ -941,7 +952,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffCTable(
     Ti = LowestKineticEnergy ;
     G4PhysicsVector* rangeVector= (*theRangeTable)[J];
    
-    for ( G4int i=0; i<TotBin; i++)
+    for ( G4int i=0; i<=TotBin; i++)
     {
       Ri = rangeVector->GetValue(Ti,isOut) ;
       if ( i==0 )
@@ -951,7 +962,7 @@ void G4hLowEnergyLoss::BuildRangeCoeffCTable(
         if (RTable!=0) Tim = Ti/RTable ; else Tim=0;
         Rim = rangeVector->GetValue(Tim,isOut);
       }
-      if ( i==(TotBin-1))
+      if ( i==TotBin)
         Rip = Ri ;
       else
       {
@@ -973,6 +984,7 @@ void G4hLowEnergyLoss::BuildInverseRangeTable(
                              const G4ParticleDefinition& aParticleType)
 // Build inverse table of the range table
 {
+  //G4cout << "BuildInverseRangeTable for " << aParticleType.GetParticleName() << G4endl;
   G4bool b;
 
   const G4ProductionCutsTable* theCoupleTable=
@@ -1017,10 +1029,10 @@ void G4hLowEnergyLoss::BuildInverseRangeTable(
     G4double ehigh = pv->GetLowEdgeEnergy(nbins-1);
     G4double rlow  = pv->GetValue(elow, b);
     G4double rhigh = pv->GetValue(ehigh, b);
+    //G4cout << "elow= " << elow << " ehigh= " << ehigh << " rlow= " << rlow << " rhigh= " << rhigh << G4endl;
+    //    rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
 
-    rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
-
-    G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins);
+    G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins-1);
 
     v->PutValue(0,elow);
     G4double energy1 = elow;
@@ -1061,14 +1073,15 @@ void G4hLowEnergyLoss::InvertRangeVector(G4int materialIndex,
 //  invert range vector for a material
 {
   G4double LowEdgeRange,A,B,C,discr,KineticEnergy ;
-  G4double Tbin = LowestKineticEnergy/RTable ;
+  G4double Tbin = 0;
+  if (RTable !=0.) Tbin = LowestKineticEnergy/RTable ;
   G4double rangebin = 0.0 ;
   G4int binnumber = -1 ;
   G4bool isOut ;
 
 
   //loop for range values
-  for( G4int i=0; i<TotBin; i++)
+  for( G4int i=0; i<=TotBin; i++)
   {
     LowEdgeRange = aVector->GetLowEdgeEnergy(i) ;  //i.e. GetLowEdgeValue(i)
 
@@ -1085,7 +1098,7 @@ void G4hLowEnergyLoss::InvertRangeVector(G4int materialIndex,
 
     if(binnumber == 0)
       KineticEnergy = LowestKineticEnergy ;
-    else if(binnumber == TotBin-1)
+    else if(binnumber == TotBin)
       KineticEnergy = HighestKineticEnergy ;
     else
     {

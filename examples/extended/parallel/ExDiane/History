@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.5 2005/12/06 14:53:47 gcosmo Exp $
+$Id: History,v 1.7 2009/03/16 10:02:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.5 2005/12/06 14:53:47 gcosmo Exp $
 
                       Category History file
                       ---------------------
+
+06.03.2009 - Guy Barrand (ExDiane-V09-02-00)
+- GNUmakefile: removed logic for setting AIDA with G4ANALYSIS_USE.
+  since it already handled in the internal configuration scripts.
 
 06.12.2005 - Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

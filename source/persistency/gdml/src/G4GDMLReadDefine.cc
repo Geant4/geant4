@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc,v 1.20 2008/07/16 15:46:34 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadDefine.cc,v 1.24 2009/10/14 13:10:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // class G4GDMLReadDefine Implementation
 //
@@ -35,22 +35,60 @@
 #include "G4GDMLReadDefine.hh"
 
 G4GDMLMatrix::G4GDMLMatrix()
+  : m(0), rows(0), cols(0)
 {
-   rows = 0;
-   cols = 0;
-   m = 0;
 }
 
-G4GDMLMatrix::G4GDMLMatrix(size_t rows0,size_t cols0)
+G4GDMLMatrix::G4GDMLMatrix(size_t rows0, size_t cols0)
 {   
+   if ((rows<=0) || (cols<=0))
+   {
+     G4Exception("G4GDMLMatrix::G4GDMLMatrix(r,c)", "InvalidSetup",
+                 FatalException, "Zero indeces as arguments!?");
+   }
    rows = rows0;
    cols = cols0;
    m = new G4double[rows*cols];
 }
 
+G4GDMLMatrix::G4GDMLMatrix(const G4GDMLMatrix& rhs)
+  : m(0), rows(0), cols(0)
+{
+   if (rhs.m)
+   {
+     rows = rhs.rows;
+     cols = rhs.cols;
+     m = new G4double[rows*cols];
+     for (size_t i=0; i<rows*cols; i++)  { m[i] = rhs.m[i]; }
+   }
+}
+
+G4GDMLMatrix& G4GDMLMatrix::operator=(const G4GDMLMatrix& rhs)
+{
+   // Check assignment to self
+   //
+   if (this == &rhs)  { return *this; }
+
+   // Copy data
+   //
+   rows = rhs.rows;
+   cols = rhs.cols;
+   if (rhs.m)
+   {
+     m = new G4double[rows*cols];
+     for (size_t i=0; i<rows*cols; i++)  { m[i] = rhs.m[i]; }
+   }
+   else
+   {
+     m = 0;
+   }
+
+   return *this;
+}
+
 G4GDMLMatrix::~G4GDMLMatrix()
 {
-   if (m) { delete [] m; }
+   delete [] m;
 }
 
 void G4GDMLMatrix::Set(size_t r,size_t c,G4double a)
@@ -81,6 +119,14 @@ size_t G4GDMLMatrix::GetRows() const
 size_t G4GDMLMatrix::GetCols() const
 {
    return cols;
+}
+
+G4GDMLReadDefine::G4GDMLReadDefine() : G4GDMLRead()
+{
+}
+
+G4GDMLReadDefine::~G4GDMLReadDefine()
+{
 }
 
 G4RotationMatrix
@@ -121,6 +167,36 @@ G4GDMLReadDefine::ConstantRead(const xercesc::DOMElement* const constantElement)
       if (attName=="value") { value = eval.Evaluate(attValue); }
    }
 
+   eval.DefineConstant(name,value);
+}
+
+void
+G4GDMLReadDefine::ExpressionRead(const xercesc::DOMElement* const expElement)
+{
+   G4String name  = "";
+   G4double value = 0.0;
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = expElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* node = attributes->item(attribute_index);
+
+      if (node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE) { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(node);   
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name")  { name = attValue; }
+   }
+
+   const G4String expValue = Transcode(expElement->getTextContent());
+   value = eval.Evaluate(expValue);
    eval.DefineConstant(name,value);
 }
 
@@ -327,6 +403,7 @@ void G4GDMLReadDefine::QuantityRead(const xercesc::DOMElement* const element)
    }
 
    quantityMap[name] = value*unit;
+   eval.DefineConstant(name,value*unit);
 }
 
 void
@@ -349,7 +426,8 @@ G4GDMLReadDefine::DefineRead(const xercesc::DOMElement* const defineElement)
       if (tag=="rotation") { RotationRead(child); } else
       if (tag=="scale")    { ScaleRead(child); }    else
       if (tag=="variable") { VariableRead(child); } else
-      if (tag=="quantity") { QuantityRead(child); }
+      if (tag=="quantity") { QuantityRead(child); } else
+      if (tag=="expression") { ExpressionRead(child); }
       else
       {
         G4String error_msg = "Unknown tag in define: "+tag;

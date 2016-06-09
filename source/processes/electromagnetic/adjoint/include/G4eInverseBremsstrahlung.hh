@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4eInverseBremsstrahlung.hh,v 1.4 2009/11/20 10:31:20 ldesorgh Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4eInverseBremstrahlung.hh
 //	Author:       	L. Desorgher
-//	Date:		25 October 2007
 // 	Organisation: 	SpaceIT GmbH
+//	Contract:	ESA contract 21435/08/NL/AT
 // 	Customer:     	ESA/ESTEC
 /////////////////////////////////////////////////////////////////////////////////
 //
@@ -45,11 +48,11 @@
 #ifndef G4eInverseBremsstrahlung_h
 #define G4eInverseBremsstrahlung_h 1
 
-#include "G4VAdjointInverseScattering.hh"
+#include "G4VAdjointReverseReaction.hh"
 #include "globals.hh"
 #include "G4eIonisation.hh"
 class G4AdjointBremsstrahlungModel;
-class G4eInverseBremsstrahlung: public G4VAdjointInverseScattering
+class G4eInverseBremsstrahlung: public G4VAdjointReverseReaction
 
 {
 public:

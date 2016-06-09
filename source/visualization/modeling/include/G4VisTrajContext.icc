@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisTrajContext.icc,v 1.3 2006/08/14 11:47:53 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VisTrajContext.icc,v 1.4 2009/02/24 12:00:56 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Jane Tinslay May 2006
 //
@@ -60,6 +60,9 @@ inline G4Polymarker::MarkerType G4VisTrajContext::GetAuxPtsType() const {return 
 inline void G4VisTrajContext::SetAuxPtsSize(const G4double& size) {fAuxPtsSize = size;}
 inline G4double G4VisTrajContext::GetAuxPtsSize() const {return fAuxPtsSize;}
 
+inline void G4VisTrajContext::SetAuxPtsSizeType(const G4VMarker::SizeType& sizeType) {fAuxPtsSizeType = sizeType;}
+inline G4VMarker::SizeType G4VisTrajContext::GetAuxPtsSizeType() const {return fAuxPtsSizeType;}
+
 inline void G4VisTrajContext::SetAuxPtsFillStyle(const G4VMarker::FillStyle& style) {fAuxPtsFillStyle = style;}
 inline G4VMarker::FillStyle G4VisTrajContext::GetAuxPtsFillStyle() const {return fAuxPtsFillStyle;}
 
@@ -78,6 +81,9 @@ inline G4Polymarker::MarkerType G4VisTrajContext::GetStepPtsType() const {return
 
 inline void G4VisTrajContext::SetStepPtsSize(const G4double& size) {fStepPtsSize = size;}
 inline G4double G4VisTrajContext::GetStepPtsSize() const {return fStepPtsSize;}
+
+inline void G4VisTrajContext::SetStepPtsSizeType(const G4VMarker::SizeType& sizeType) {fStepPtsSizeType = sizeType;}
+inline G4VMarker::SizeType G4VisTrajContext::GetStepPtsSizeType() const {return fStepPtsSizeType;}
 
 inline void G4VisTrajContext::SetStepPtsFillStyle(const G4VMarker::FillStyle& style) {fStepPtsFillStyle = style;}
 inline G4VMarker::FillStyle G4VisTrajContext::GetStepPtsFillStyle() const {return fStepPtsFillStyle;}

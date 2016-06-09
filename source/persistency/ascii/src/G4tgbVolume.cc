@@ -91,8 +91,12 @@
 #include "G4BREPSolidPCone.hh"
 #include "G4BREPSolidPolyhedra.hh"
 #include "G4BREPSolidOpenPCone.hh"
-#include "G4VisExtent.hh"
+#include "G4TessellatedSolid.hh"
+#include "G4TriangularFacet.hh"
+#include "G4QuadrangularFacet.hh"
+#include "G4ExtrudedSolid.hh"
 
+#include "G4VisExtent.hh"
 #include "G4Material.hh"
 #include "G4RotationMatrix.hh"
 #include "G4ReflectionFactory.hh"
@@ -201,6 +205,8 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
 //-------------------------------------------------------------------
 G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol ) 
 {
+  G4double angularTolerance = G4GeometryTolerance::GetInstance()
+                            ->GetAngularTolerance();
 
   if( sol == 0 ) { return 0; }
 
@@ -257,10 +263,10 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   else if( stype == "TUBS" )
   {
     CheckNoSolidParams( stype, 5, solParam.size() );
-    G4double phiTotal = solParam[4];
-    if( phiTotal - twopi  < 1.e-9 ) phiTotal = twopi;
+    G4double phiDelta = solParam[4];
+    if( std::fabs(phiDelta - twopi) < angularTolerance ) { phiDelta = twopi; }
     solid = new G4Tubs( sname, solParam[0], solParam[1], solParam[2],
-                        solParam[3], phiTotal );
+                        solParam[3], phiDelta );
   }
   else if( stype == "TRAP" )
   {
@@ -308,20 +314,20 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   else if( stype == "CONS" )
   {
     CheckNoSolidParams( stype, 7, solParam.size() );
-    G4double phiTotal = solParam[6];
-    if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+    G4double phiDelta = solParam[6];
+    if( std::fabs(phiDelta - twopi) < angularTolerance ) { phiDelta = twopi; }
     solid = new G4Cons( sname, solParam[0], solParam[1], solParam[2],
-                        solParam[3], solParam[4], solParam[5], phiTotal);
+                        solParam[3], solParam[4], solParam[5], phiDelta);
   }
   else if( stype == "SPHERE" )
   {
     CheckNoSolidParams( stype, 6, solParam.size() );
-    G4double phiTotal = solParam[3];
-    if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
-    G4double thetaTotal = solParam[1];
-    if( thetaTotal - twopi  < 1.e-9 ) { thetaTotal = twopi; }
+    G4double phiDelta = solParam[3];
+    if( std::fabs(phiDelta - twopi) < angularTolerance ) { phiDelta = twopi; }
+    G4double thetaDelta = solParam[5];
+    if( std::fabs(thetaDelta - pi) < angularTolerance ) { thetaDelta = pi; }
     solid = new G4Sphere( sname, solParam[0], solParam[1], solParam[2],
-                          phiTotal, solParam[4], thetaTotal);
+                          phiDelta, solParam[4], thetaDelta);
   }
   else if( stype == "ORB" )
   {
@@ -331,10 +337,10 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   else if( stype == "TORUS" )
   {
     CheckNoSolidParams( stype, 5, solParam.size() );
-    G4double phiTotal = solParam[4];
-    if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+    G4double phiDelta = solParam[4];
+    if( std::fabs(phiDelta - twopi) < angularTolerance ) { phiDelta = twopi; }
     solid = new G4Torus( sname, solParam[0], solParam[1], solParam[2],
-                         solParam[3], phiTotal );
+                         solParam[3], phiDelta );
   }
   else if( stype == "POLYCONE" )
   {
@@ -374,7 +380,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
         (*rmax_p).push_back(  solParam[3+3*ii+2] );
       }
       G4double phiTotal = solParam[1];
-      if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+      if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
       solid = new G4Polycone( sname, solParam[0], phiTotal, // start,delta-phi
                               nplanes, // sections
                               &((*z_p)[0]), &((*rmin_p)[0]), &((*rmax_p)[0]));
@@ -389,7 +395,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
         (*Z_c).push_back( solParam[3+2*ii+1] );
       }
       G4double phiTotal = solParam[1];
-      if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+      if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
       solid = new G4Polycone( sname, solParam[0], phiTotal, // start,delta-phi
                               nplanes, // sections
                               &((*R_c)[0]), &((*Z_c)[0]));
@@ -434,7 +440,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
         (*rmax_p).push_back(  solParam[4+3*ii+2] );
       }
       G4double phiTotal = solParam[1];
-      if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+      if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
       solid = new G4Polyhedra( sname, solParam[0], phiTotal,
                                G4int(solParam[2]), nplanes,
                                &((*z_p)[0]), &((*rmin_p)[0]), &((*rmax_p)[0]));
@@ -449,7 +455,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
         (*Z_c).push_back( solParam[4+2*ii+1] );
       }
       G4double phiTotal = solParam[1];
-      if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+      if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
       solid = new G4Polyhedra( sname, solParam[0], phiTotal,
                                G4int(solParam[2]), nplanes,
                                &((*R_c)[0]), &((*Z_c)[0]));
@@ -510,7 +516,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
   {
     CheckNoSolidParams( stype, 5, solParam.size() );
     G4double phiTotal = solParam[4];
-    if( phiTotal - twopi  < 1.e-9 )  { phiTotal = twopi; }
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     solid = new G4TwistedTubs( sname, solParam[0], solParam[1], solParam[2],
                                solParam[3], phiTotal);
   }
@@ -579,7 +585,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       (*rmax_p).push_back(  solParam[4+3*ii+2] );
     }
     G4double phiTotal = solParam[1];
-    if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     CheckNoSolidParams( stype, 12, solParam.size() );
     solid = new G4BREPSolidPCone( sname, solParam[0], phiTotal, // start,dph
                                   nplanes,                      // sections
@@ -601,7 +607,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       (*rmax_p).push_back(  solParam[5+3*ii+2] );
     }
     G4double phiTotal = solParam[1];
-    if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     CheckNoSolidParams( stype, 12, solParam.size() );
     solid = new G4BREPSolidPolyhedra( sname, solParam[0], phiTotal, // start,dph
                                       G4int(solParam[2]), // sides
@@ -623,13 +629,120 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       (*rmax_p).push_back(  solParam[4+3*ii+2] );
     }
     G4double phiTotal = solParam[1];
-    if( phiTotal - twopi  < 1.e-9 ) { phiTotal = twopi; }
+    if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
     CheckNoSolidParams( stype, 12, solParam.size() );
     solid = new G4BREPSolidOpenPCone( sname, solParam[0], phiTotal, // start,dph
                                       nplanes,                      // sections
                                       solParam[3],                  // z_start
                                       &((*z_p)[0]), &((*rmin_p)[0]),
                                       &((*rmax_p)[0]));
+  }
+  else if( stype == "TESSELLATED" )
+  {
+    G4int nFacets = G4int(solParam[0]);
+    G4int jj = 0;
+    solid = new G4TessellatedSolid(sname);
+    G4TessellatedSolid* solidTS = (G4TessellatedSolid*)(solid);
+    G4VFacet* facet=0;
+    
+    for( G4int ii = 0; ii < nFacets; ii++){
+      G4int nPoints = G4int(solParam[jj+1]);
+      if( G4int(solParam.size()) < jj + nPoints*3 + 2 ) {
+	G4String Err1 = "Too small number of parameters in tesselated solid, it should be at least "  + G4UIcommand::ConvertToString(jj + nPoints*3 + 2 );
+	G4String Err2 = " facet number " + G4UIcommand::ConvertToString(ii);
+	G4String Err3 = " number of parameters is " + G4UIcommand::ConvertToString(G4int(solParam.size()));
+	G4String ErrMessage = Err1 + Err2 + Err3 + " !";
+	G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
+		    "InvalidSetup", FatalException, ErrMessage);
+      }
+      
+      if( nPoints == 3 ) 
+      {
+	G4ThreeVector pt0(solParam[jj+2],solParam[jj+3],solParam[jj+4]);
+	G4ThreeVector vt1(solParam[jj+5],solParam[jj+6],solParam[jj+7]);
+	G4ThreeVector vt2(solParam[jj+8],solParam[jj+9],solParam[jj+10]);
+	G4FacetVertexType vertexType = ABSOLUTE;
+	if( solParam[jj+11] == 0 ) 
+	{
+	  vertexType = ABSOLUTE;
+	} 
+	else if( solParam[jj+11] == 0 ) 
+	{
+	  vertexType = RELATIVE;
+	} 
+	else 
+	{
+	  G4String Err1 = "Wrong number of vertex type in tesselated solid, it should be 0 =ABSOLUTE) or 1 (=RELATIVE)";
+	  G4String Err2 = " facet number " + G4UIcommand::ConvertToString(G4int(ii));
+	  G4String Err3 = " vertex type is " + G4UIcommand::ConvertToString(solParam[jj+11]);
+	  G4String ErrMessage = Err1 + Err2 + Err3 + " !";
+	  G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
+		      "InvalidSetup", FatalException, ErrMessage);
+	}
+	facet = new G4TriangularFacet( pt0, vt1, vt2, vertexType );
+      } 
+      else if( nPoints == 4 ) 
+      {
+	G4ThreeVector pt0(solParam[jj+2],solParam[jj+3],solParam[jj+4]);
+	G4ThreeVector vt1(solParam[jj+5],solParam[jj+6],solParam[jj+7]);
+	G4ThreeVector vt2(solParam[jj+8],solParam[jj+9],solParam[jj+10]);
+	G4ThreeVector vt3(solParam[jj+11],solParam[jj+12],solParam[jj+13]);
+	G4FacetVertexType vertexType = ABSOLUTE;
+	if( solParam[jj+14] == 0 ) 
+	{
+	  vertexType = ABSOLUTE;
+	}
+	else if( solParam[jj+14] == 0 ) 
+	{
+	  vertexType = RELATIVE;
+	} 
+	else 
+	{
+	  G4String Err1 = "Wrong number of vertex type in tesselated solid, it should be 0 =ABSOLUTE) or 1 (=RELATIVE)";
+	  G4String Err2 = " facet number " + G4UIcommand::ConvertToString(G4int(ii));
+	  G4String Err3 = " vertex type is " + G4UIcommand::ConvertToString(solParam[jj+14]);
+	  G4String ErrMessage = Err1 + Err2 + Err3 + " !";
+	  G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
+		      "InvalidSetup", FatalException, ErrMessage);
+	}
+	facet = new G4QuadrangularFacet( pt0, vt1, vt2, vt3, vertexType );
+      } 
+      else 
+      {
+	G4String Err1 = "Wrong number of points in tesselated solid, it should be 3 or 4";
+	G4String Err2 = " facet number " + G4UIcommand::ConvertToString(G4int(ii));
+	G4String Err3 = " number of points is " + G4UIcommand::ConvertToString(G4int(nPoints));
+	G4String ErrMessage = Err1 + Err2 + Err3 + " !";
+	G4Exception("G4tgbVolume::FindOrConstructG4Solid()",
+		    "InvalidSetup", FatalException, ErrMessage);
+      }
+      
+      solidTS->AddFacet( facet );
+      jj += nPoints*3 + 2;
+    }
+    
+  }  
+  else if( stype == "EXTRUDED" ) 
+  {
+    std::vector<G4TwoVector> polygonList;
+    std::vector<G4ExtrudedSolid::ZSection> zsectionList;
+    G4int nPolygons = G4int(solParam[0]);
+    G4int ii = 1;
+    G4int nMax = nPolygons*2+1;
+    for( ;ii < nMax; ii+=2 )
+    {
+      polygonList.push_back( G4TwoVector(solParam[ii],solParam[ii+1]) );
+    }
+    G4int nZSections = G4int(solParam[ii]);
+    nMax = nPolygons*2 + nZSections*4 + 2; 
+    ii++;
+    for( ; ii < nMax; ii+=4 )
+    {
+      G4TwoVector offset(solParam[ii+1],solParam[ii+2]);
+      zsectionList.push_back( G4ExtrudedSolid::ZSection(solParam[ii],offset,solParam[ii+3]) );
+    }
+    solid = new G4ExtrudedSolid( sname, polygonList, zsectionList );
+    
   }
   else if( stype.substr(0,7) == "Boolean" )
   {

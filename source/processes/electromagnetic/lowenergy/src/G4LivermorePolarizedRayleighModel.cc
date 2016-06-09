@@ -23,9 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedRayleighModel.cc,v 1.1 2008/10/30 14:16:35 sincerti Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LivermorePolarizedRayleighModel.cc,v 1.5 2009/05/02 15:20:53 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
+// History:
+// --------
+// 02 May 2009   S Incerti as V. Ivanchenko proposed in G4LivermoreRayleighModel.cc
+//
+// Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - remove GetMeanFreePath method and table
+//                  - remove initialisation of element selector 
+//                  - use G4ElementSelector
 
 #include "G4LivermorePolarizedRayleighModel.hh"
 
@@ -37,12 +47,12 @@ using namespace std;
 
 G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-:G4VEmModel(nam),isInitialised(false)
+:G4VEmModel(nam),isInitialised(false),crossSectionHandler(0),formFactorData(0)
 {
-  lowEnergyLimit = 250 * eV; // SI - Could be 10 eV ?
+  lowEnergyLimit = 250 * eV; 
   highEnergyLimit = 100 * GeV;
   
-  SetLowEnergyLimit(lowEnergyLimit);
+  //SetLowEnergyLimit(lowEnergyLimit);
   SetHighEnergyLimit(highEnergyLimit);
   //
   verboseLevel= 0;
@@ -53,19 +63,21 @@ G4LivermorePolarizedRayleighModel::G4LivermorePolarizedRayleighModel(const G4Par
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
-  G4cout << "Livermore Polarized Rayleigh is constructed " << G4endl
+  if(verboseLevel > 0) {
+    G4cout << "Livermore Polarized Rayleigh is constructed " << G4endl
          << "Energy range: "
-         << lowEnergyLimit / keV << " keV - "
+         << lowEnergyLimit / eV << " eV - "
          << highEnergyLimit / GeV << " GeV"
          << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermorePolarizedRayleighModel::~G4LivermorePolarizedRayleighModel()
 {  
-  delete crossSectionHandler;
-  delete formFactorData;
+  if (crossSectionHandler) delete crossSectionHandler;
+  if (formFactorData) delete formFactorData;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,23 +95,12 @@ void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* p
   if (verboseLevel > 3)
     G4cout << "Calling G4LivermorePolarizedRayleighModel::Initialise()" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
-
-  // Energy limits
+  if (crossSectionHandler)
+  {
+    crossSectionHandler->Clear();
+    delete crossSectionHandler;
+  }
   
-  if (LowEnergyLimit() < lowEnergyLimit)
-    {
-      G4cout << "G4LivermorePolarizedRayleighModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit << " eV" << G4endl;
-      SetLowEnergyLimit(lowEnergyLimit);
-    }
-  if (HighEnergyLimit() > highEnergyLimit)
-    {
-      G4cout << "G4LivermorePolarizedRayleighModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << highEnergyLimit << " GeV" << G4endl;
-      SetHighEnergyLimit(highEnergyLimit);
-    }
-    
   // Read data files for all materials
 
   crossSectionHandler = new G4CrossSectionHandler;
@@ -112,23 +113,24 @@ void G4LivermorePolarizedRayleighModel::Initialise(const G4ParticleDefinition* p
   formFactorData = new G4CompositeEMDataSet(ffInterpolation,1.,1.);
   formFactorData->LoadData(formFactorFile);
 
+  InitialiseElementSelectors(particle,cuts);
+
   //
   if (verboseLevel > 2) 
     G4cout << "Loaded cross section files for Livermore Polarized Rayleigh model" << G4endl;
 
-  G4cout << "Livermore Polarized Rayleigh model is initialized " << G4endl
+  InitialiseElementSelectors(particle,cuts);
+
+  if (verboseLevel > 0) { 
+    G4cout << "Livermore Polarized Rayleigh model is initialized " << G4endl
          << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
+         << LowEnergyLimit() / eV << " eV - "
          << HighEnergyLimit() / GeV << " GeV"
          << G4endl;
+	 }
 
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
-    
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
 
@@ -142,6 +144,8 @@ G4double G4LivermorePolarizedRayleighModel::ComputeCrossSectionPerAtom(
 {
   if (verboseLevel > 3)
     G4cout << "Calling CrossSectionPerAtom() of G4LivermorePolarizedRayleighModel" << G4endl;
+
+  if (GammaEnergy < lowEnergyLimit || GammaEnergy > highEnergyLimit) return 0.0;
 
   G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;
@@ -165,14 +169,16 @@ void G4LivermorePolarizedRayleighModel::SampleSecondaries(std::vector<G4DynamicP
       fParticleChange->ProposeTrackStatus(fStopAndKill);
       fParticleChange->SetProposedKineticEnergy(0.);
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
-      // SI - IS THE FOLLOWING RETURN NECESSARY ?
       return ;
   }
 
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
 
   // Select randomly one element in the current material
-  G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
+  // G4int Z = crossSectionHandler->SelectRandomAtom(couple,photonEnergy0);
+  const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
+  const G4Element* elm = SelectRandomAtom(couple,particle,photonEnergy0);
+  G4int Z = (G4int)elm->GetZ();
 
   G4double outcomingPhotonCosTheta = GenerateCosTheta(photonEnergy0, Z);
   G4double outcomingPhotonPhi = GeneratePhi(outcomingPhotonCosTheta);

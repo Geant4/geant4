@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonBinaryCascadePhysics.cc,v 1.1 2006/10/31 11:35:02 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4IonBinaryCascadePhysics.cc,v 1.2 2009/02/16 10:15:35 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -117,9 +117,9 @@ void G4IonBinaryCascadePhysics::AddProcess(const G4String& name,
   p_list.push_back(hadi);
   G4ProcessManager* pManager = p->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
+  hadi->AddDataSet(fShen);
   hadi->AddDataSet(fTripathi);
   hadi->AddDataSet(fTripathiLight);
-  hadi->AddDataSet(fShen);
   hmodel->SetMinEnergy(eminBIC);
   hmodel->SetMaxEnergy(emax);
   hadi->RegisterMe(hmodel);
@@ -132,7 +132,9 @@ void G4IonBinaryCascadePhysics::AddProcess(const G4String& name,
     G4cout << "Register " << hadi->GetProcessName()
 	   << " for " << p->GetParticleName()
 	   << " Binary Cascade for E(MeV)= " << eminBIC << " - " << emax;
-    if(lmodel) G4cout  << " LHEP for E(MeV)= " << emax-MeV << " - " << emaxLHEP;
+    if(lmodel) {
+      G4cout  << " LHEP for E(MeV)= " << emax-MeV << " - " << emaxLHEP;
+    }
     G4cout << G4endl;
   }
 }

@@ -1,0 +1,145 @@
+$Id: History,v 1.16 2009/09/18 17:34:54 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    amsEcal History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+18-09-09 mma (amsEcal-V09-02-11)    
+- SteppingAction: correct protection of i1Pixel calculation
+      
+07-09-09 mma  
+- BeginOfRun: suppress function clear 
+    
+26-08-09 mma (amsEcal-V09-02-10)  
+- pixels file created at BeginOfRun and appended at EndOfEvent
+     
+23-07-09 mma (amsEcal-V09-02-09)  
+- EventActionMessenger : /ams/event/writePixels G4bool
+- change names for pixels numbering : detectorConstruction, RunAction,
+  EventAction, SteppingAction
+     
+17-07-09 mma
+- EventAction : create File and write list of pixels fired 
+     
+30-06-09 mma (amsEcal-V09-02-08)  
+- DetectorConstruction : complete PrintParameters()
+       
+26-06-09 mma (amsEcal-V09-02-07) 
+- DetectorConstruction :
+ module = 10*layerThickness(1.68 mm) + 1*milledLayer(1.40 mm) 
+    
+24-06-09 mma 
+- RunAction, EventAction : modify initialisation of std::vector
+- SteppingAction : put protection on index computation
+     
+22-06-09 mma (amsEcal-V09-02-06) 
+- DetectorConstruction : layerThickness = 1.82 mm
+       
+17-06-09 mma (amsEcal-V09-02-05)
+- rename superLayer -> module
+  affected : DetectorConstruction, SteppingAction, README
+     
+16-06-09 mma (amsEcal-V09-02-04)
+      
+10-06-09 mma
+- move trigger conditions from SteppingAction to EventAction 
+     
+09-06-09 mma
+- problems with extra plates. Suppress them and put back 
+  distanceInterLayers = 1.78 mm 
+      
+08-06-09 mma (amsEcal-V09-02-03) 
+- back to distanceInterLayers = 1.68 mm (ie nominal)
+  Put in superLayer 2 extra plates of absorber, 0.5 mm each
+      
+07-06-09 mma 
+- distanceInterLayers = 1.78 mm (was 1.85 mm) --> - 1.5X0 
+       
+04-06-09 mma 
+- add histo 5 for geantino scan
+- distanceInterLayers = 1.85 mm (was 1.68 mm) --> + 3X0  
+     
+29-05-09 mma 
+- do not use GeometryReadOut.
+- Compute pixel numbering directly in SteppingAction.
+  Modify DetectorConstruction, RunAction, EventAction
+     
+26-05-09 mma 
+- add GeometryReadOut class for pixels
+     
+06-05-09 mma (amsEcal-V09-02-02)
+- scan nb of radL with geantino.
+  modifs in DetectorConstruction, SteppingAction, EventAction, RunAction 
+     
+26-04-09 mma
+- print calorimeter dimensions
+     
+24-04-09 mma (amsEcal-V09-02-01)
+- add TrackingAction class
+- compute forward, backward, lateral leakage
+     
+06-04-09 mma (amsEcal-V09-02-00)
+- rndmSeed.mac : macro to generate random seeds
+- run2.mac : add command to handle random seed
+     
+01-04-09 mma
+- complete README
+- SteppingAction. Code for trigger: kill event under given conditions 
+     
+28-03-09 mma
+- HistoManager : add Ntuple booking
+     
+27-03-09 mma
+- pass informations to EventAction and RunAction
+- modify HistoManager
+     
+26-03-09 mma 
+- modify SteppingAction: read layer and superLayer copyNumber
+                         compute Pixel index
+     
+25-03-09 mma 
+- DetectorConstruction: suppress biLayer-> put 10 layers directly in superLayer
+- numbering from 0 to n-1
+     
+24-03-09 mma 
+- DetectorConstruction: compute fiberLength coherently;
+     
+23-03-09 mma 
+- physList emstandard_local : mscStepLimitation UseSafety;
+- spline : 10 bin per decade       
+     
+22-03-09 mma 
+- fiberDiameter = 1.08 mm; distanceInterLayers = 1.68 mm 
+- fiberLength = 664 mm
+    
+19-03-09 mma 
+- PrimaryGeneratorAction & Messenger : /ams/gun/beam
+- HistoManager
+- EventAction: FillHisto
+     
+18-03-09 mma 
+- EventAction -> RunAction : totalEnergy, leakage
+     
+12-03-09 mma 
+- EventAction -> RunAction
+- rm TrackingAction
+     
+12-03-09 mma 
+- SteppingAction -> EventAction
+     
+10-03-09 mma 
+- DetectorConstruction, PhysicsList, PrimaryGeneratorAction
+     
+08-03-09 mma 
+- created from TestEm3

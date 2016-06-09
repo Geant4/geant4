@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc,v 1.24 2007/01/05 16:25:15 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VViewer.cc,v 1.26 2009/11/17 14:37:06 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // John Allison  27th March 1996
@@ -60,18 +60,11 @@ fNeedKernelVisit (true)
   }
   fShortName = fName (0, fName.find (' '));
   fShortName.strip ();
-
-  G4VisManager* pVisMan = G4VisManager::GetInstance();
-  G4int xHint, yHint;
-  pVisMan->GetWindowSizeHint(xHint, yHint);
-  const G4String& XGeometryString = pVisMan->GetXGeometryString();
-  fVP.SetWindowSizeHint(xHint,yHint);
-  fVP.SetXGeometryString(XGeometryString);
-  fDefaultVP.SetWindowSizeHint(xHint,yHint);
-  fDefaultVP.SetXGeometryString(XGeometryString);
 }
 
-G4VViewer::~G4VViewer () {}
+G4VViewer::~G4VViewer () {
+  fSceneHandler.RemoveViewerFromList(this);
+}
 
 void G4VViewer::SetName (const G4String& name) {
   fName = name;

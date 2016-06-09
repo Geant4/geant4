@@ -24,17 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.4 2008/11/21 21:17:03 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EqEMFieldWithSpin.cc,v 1.8 2009/11/06 22:31:35 gum Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //  This is the standard right-hand side for equation of motion.
 //
-//  The only case another is required is when using a moving reference
-//  frame ... or extending the class to include additional Forces,
-//  eg an electric field
-//
 //  30.08.2007 Chris Gong, Peter Gumplinger
+//  14.02.2009 Kevin Lynch
+//  06.11.2009 Hiromi Iinuma see:
+//  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/161.html
 //
 // -------------------------------------------------------------------
 
@@ -44,8 +43,8 @@
 #include "globals.hh"
 
 G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
-      : G4EquationOfMotion( emField )
-{ 
+  : G4EquationOfMotion( emField )
+{
   anomaly = 0.0011659208;
 }
 
@@ -78,8 +77,21 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
 {
 
    // Components of y:
-   //    0-2 dr/ds, 
-   //    3-5 dp/ds - momentum derivatives 
+   //    0-2 dr/ds,
+   //    3-5 dp/ds - momentum derivatives
+   //    9-11 dSpin/ds = (1/beta) dSpin/dt - spin derivatives
+
+   // The BMT equation, following J.D.Jackson, Classical
+   // Electrodynamics, Second Edition,
+   // dS/dt = (e/mc) S \cross
+   //              [ (g/2-1 +1/\gamma) B
+   //               -(g/2-1)\gamma/(\gamma+1) (\beta \cdot B)\beta
+   //               -(g/2-\gamma/(\gamma+1) \beta \cross E ]
+   // where
+   // S = \vec{s}, where S^2 = 1
+   // B = \vec{B}
+   // \beta = \vec{\beta} = \beta \vec{u} with u^2 = 1
+   // E = \vec{E}
 
    G4double pSquared = y[3]*y[3] + y[4]*y[4] + y[5]*y[5] ;
 
@@ -88,13 +100,9 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
 
    G4double pModuleInverse  = 1.0/std::sqrt(pSquared) ;
 
-   //  G4double inverse_velocity = Energy * c_light * pModuleInverse;
    G4double inverse_velocity = Energy * pModuleInverse / c_light;
 
    G4double cof1     = fElectroMagCof*pModuleInverse ;
-
-   //  G4double vDotE = y[3]*Field[3] + y[4]*Field[4] + y[5]*Field[5] ;
-
 
    dydx[0] = y[3]*pModuleInverse ;                         
    dydx[1] = y[4]*pModuleInverse ;                         
@@ -112,20 +120,25 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    dydx[7] = inverse_velocity;
    
    G4ThreeVector BField(Field[0],Field[1],Field[2]);
+   G4ThreeVector EField(Field[3],Field[4],Field[5]);
+
+   EField /= c_light;
 
    G4ThreeVector u(y[3], y[4], y[5]);
    u *= pModuleInverse;
 
    G4double udb = anomaly*beta*gamma/(1.+gamma) * (BField * u);
    G4double ucb = (anomaly+1./gamma)/beta;
+   G4double uce = anomaly + 1./(gamma+1.);
 
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
-   if (Spin.mag() > 0.) Spin = Spin.unit();
-
-   G4ThreeVector dSpin;
-
-   dSpin = ParticleCharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
+   G4ThreeVector dSpin
+     = ParticleCharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
+                               // from Jackson
+                               // -uce*Spin.cross(u.cross(EField)) );
+                               // but this form has one less operation
+                               - uce*(u*(Spin*EField) - EField*(Spin*u)) );
 
    dydx[ 9] = dSpin.x();
    dydx[10] = dSpin.y();

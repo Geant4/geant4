@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.16 2008/09/18 08:37:27 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ShortLivedConstructor.cc,v 1.18 2009/10/09 14:34:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -259,7 +259,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
    
    // anti ud0-Diquark
   particle = new G4DiQuarks(            
-   "anti_ud0_diquark",         7.2*MeV,       0.0*MeV,  -1./3.*eplus, 
+   "anti_ud0_diquark",         7.3*MeV,       0.0*MeV,  -1./3.*eplus, 
                     0,              +1,             0,          
                     0,              +0,             0,             
            "diquarks",               0,             0,        -2101,
@@ -283,7 +283,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 
     // anti sd0-Diquark
   particle = new G4DiQuarks(            
-   "anti_sd0_diquark",       108.8*MeV,       0.0*MeV,    2./3.*eplus, 
+   "anti_sd0_diquark",       108.0*MeV,       0.0*MeV,    2./3.*eplus, 
                     0,              +1,             0,          
                     1,              +1,             0,             
            "diquarks",               0,             0,        -3101,
@@ -674,7 +674,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   
   // rho0
   particle = new G4ExcitedMesons(            
-               "rho0",       775.5*MeV,     149.4*MeV,         0.0, 
+               "rho0",       775.49*MeV,    149.4*MeV,         0.0, 
                     2,              -1,            -1,          
                     2,               0,            +1,             
               "meson",               0,             0,         113,
@@ -868,7 +868,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // k_star+
   particle = new G4ExcitedMesons(            
-	    "k_star+",       891.6*MeV,      50.8*MeV,    +1.0*eplus, 
+	    "k_star+",       891.66*MeV,     50.8*MeV,    +1.0*eplus, 
                     2,              -1,             0,          
                     1,              +1,             0,             
               "meson",               0,             0,           323,
@@ -893,7 +893,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   
   // k_star0
   particle = new G4ExcitedMesons(            
-	    "k_star0",       896.0*MeV,      50.3*MeV,     0.0*eplus, 
+	    "k_star0",       896.00*MeV,     50.3*MeV,     0.0*eplus, 
                     2,              -1,             0,          
                     1,              -1,             0,             
               "meson",               0,             0,           313,
@@ -918,7 +918,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // k_star-
   particle = new G4ExcitedMesons(            
-            "k_star-",       891.6*MeV,      50.8*MeV,    -1.0*eplus, 
+            "k_star-",       891.66*MeV,     50.8*MeV,    -1.0*eplus, 
                     2,              -1,             0,          
                     1,              +1,             0,             
               "meson",               0,             0,          -323,

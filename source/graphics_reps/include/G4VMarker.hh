@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMarker.hh,v 1.12 2006/06/29 19:06:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VMarker.hh,v 1.13 2009/02/24 10:58:04 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // G4VMarker - base class for markers - circles, squares, etc.
@@ -96,6 +96,7 @@ class G4VMarker: public G4Visible {
 public: // With description
 
   enum FillStyle {noFill, hashed, filled};
+  enum SizeType {none, world, screen};
 
   //////////////////////////////////////////////////////
   // Constructors...
@@ -113,6 +114,7 @@ public: // With description
   /////////////////////////////////////////////////////
   // Get functions...
   G4Point3D GetPosition       () const;
+  SizeType  GetSizeType       () const;
   G4double  GetWorldSize      () const;
   G4double  GetWorldDiameter  () const;
   G4double  GetWorldRadius    () const;
@@ -124,6 +126,9 @@ public: // With description
   /////////////////////////////////////////////////////
   // Set functions...
   void SetPosition       (const G4Point3D&);
+  void SetSize           (SizeType, G4double);
+  void SetDiameter       (SizeType, G4double);
+  void SetRadius         (SizeType, G4double);
   void SetWorldSize      (G4double);
   void SetWorldDiameter  (G4double);
   void SetWorldRadius    (G4double);

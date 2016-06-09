@@ -24,19 +24,19 @@
 // ********************************************************************
 //
 //
-// $Id: G4DeuteronGEMChannel.hh,v 1.3 2006/06/29 20:15:33 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DeuteronGEMChannel.hh,v 1.4 2009/09/15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
 //
-
+// J. M. Quesada (July 2009) coulomb barrier striclty according to Furihata's paper
 
 #ifndef G4DeuteronGEMChannel_h
 #define G4DeuteronGEMChannel_h 1
 
 #include "G4GEMChannel.hh"
-#include "G4DeuteronCoulombBarrier.hh"
+#include "G4DeuteronGEMCoulombBarrier.hh"
 #include "G4DeuteronGEMProbability.hh"
 
 class G4DeuteronGEMChannel : public G4GEMChannel
@@ -54,6 +54,7 @@ public:
   ~G4DeuteronGEMChannel() {};
 
 private:
+
     const G4DeuteronGEMChannel & operator=(const G4DeuteronGEMChannel & right);  
     
     G4DeuteronGEMChannel(const G4DeuteronGEMChannel & right);
@@ -63,8 +64,9 @@ public:
     G4bool operator!=(const G4DeuteronGEMChannel & right) const;
     
 private:
-    
-    G4DeuteronCoulombBarrier theCoulombBarrier;
+     // JMQ 190709
+//     G4DeuteronCoulombBarrier theCoulombBarrier;    
+    G4DeuteronGEMCoulombBarrier theCoulombBarrier;
 	
     G4DeuteronGEMProbability theEvaporationProbability;
     

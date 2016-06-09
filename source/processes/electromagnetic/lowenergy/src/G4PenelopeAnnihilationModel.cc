@@ -23,15 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeAnnihilationModel.cc,v 1.2 2008/12/04 14:09:36 pandola Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PenelopeAnnihilationModel.cc,v 1.4 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Luciano Pandola
 //
 // History:
 // --------
 // 29 Oct 2008   L Pandola    Migration from process to model 
-//
+// 15 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
+//                  - apply internal high-energy limit only in constructor 
+//                  - do not apply low-energy limit (default is 0)
+//                  - do not use G4ElementSelector
 
 #include "G4PenelopeAnnihilationModel.hh"
 #include "G4ParticleDefinition.hh"
@@ -47,9 +50,9 @@ G4PenelopeAnnihilationModel::G4PenelopeAnnihilationModel(const G4ParticleDefinit
                                              const G4String& nam)
   :G4VEmModel(nam),isInitialised(false)
 {
-  fIntrinsicLowEnergyLimit = 0.0*eV;
+  fIntrinsicLowEnergyLimit = 0.0;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
-  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
+  //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
  
   //Calculate variable that will be used later on
@@ -72,38 +75,22 @@ G4PenelopeAnnihilationModel::~G4PenelopeAnnihilationModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeAnnihilationModel::Initialise(const G4ParticleDefinition* particle,
-                                       const G4DataVector& cuts)
+void G4PenelopeAnnihilationModel::Initialise(const G4ParticleDefinition*,
+					     const G4DataVector&)
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeAnnihilationModel::Initialise()" << G4endl;
 
-  InitialiseElementSelectors(particle,cuts);
-  if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
-    {
-      G4cout << "G4PenelopeAnnihilationModel: low energy limit increased from " << 
-	LowEnergyLimit()/eV << " eV to " << fIntrinsicLowEnergyLimit/eV << " eV" << G4endl;
-      SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
-    }
-  if (HighEnergyLimit() > fIntrinsicHighEnergyLimit)
-    {
-      G4cout << "G4PenelopeAnnihilationModel: high energy limit decreased from " << 
-	HighEnergyLimit()/GeV << " GeV to " << fIntrinsicHighEnergyLimit/GeV << " GeV" << G4endl;
-      SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
-    }
-
-  G4cout << "Penelope Annihilation model is initialized " << G4endl
-         << "Energy range: "
-         << LowEnergyLimit() / keV << " keV - "
-         << HighEnergyLimit() / GeV << " GeV"
-         << G4endl;
+  if(verboseLevel > 0) {
+    G4cout << "Penelope Annihilation model is initialized " << G4endl
+	   << "Energy range: "
+	   << LowEnergyLimit() / keV << " keV - "
+	   << HighEnergyLimit() / GeV << " GeV"
+	   << G4endl;
+  }
 
   if(isInitialised) return;
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForGamma*>(pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForGamma();
+  fParticleChange = GetParticleChangeForGamma();
   isInitialised = true; 
 }
 
@@ -154,8 +141,12 @@ void G4PenelopeAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticl
     G4cout << "Calling SamplingSecondaries() of G4PenelopeAnnihilationModel" << G4endl;
 
   G4double kineticEnergy = aDynamicPositron->GetKineticEnergy();
+
+  // kill primary
+  fParticleChange->SetProposedKineticEnergy(0.);
+  fParticleChange->ProposeTrackStatus(fStopAndKill);
   
-  if (kineticEnergy == 0)
+  if (kineticEnergy == 0.0)
     {
       //Old AtRestDoIt
       G4double cosTheta = -1.0+2.0*G4UniformRand();
@@ -169,8 +160,6 @@ void G4PenelopeAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticl
   
       fvect->push_back(firstGamma);
       fvect->push_back(secondGamma);
-      fParticleChange->SetProposedKineticEnergy(0.);
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
       return;
     }
 
@@ -226,8 +215,6 @@ void G4PenelopeAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticl
 							   photon2Direction,
 							   photon2Energy);
   fvect->push_back(aParticle2);
-  fParticleChange->SetProposedKineticEnergy(0.);
-  fParticleChange->ProposeTrackStatus(fStopAndKill);
 
   if (verboseLevel > 1)
     {
@@ -243,8 +230,7 @@ void G4PenelopeAnnihilationModel::SampleSecondaries(std::vector<G4DynamicParticl
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
   if (verboseLevel > 0)
-    {
-      
+    {      
       G4double energyDiff = std::fabs(totalAvailableEnergy-photon1Energy-photon2Energy);
       if (energyDiff > 0.05*keV)
 	G4cout << "Warning from G4PenelopeAnnihilation: problem with energy conservation: " << 

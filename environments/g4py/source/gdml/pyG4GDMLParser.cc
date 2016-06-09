@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4GDMLParser.cc,v 1.2 2008/12/03 06:54:39 kmura Exp $
-// $Name: geant4-09-02 $
+// $Id: pyG4GDMLParser.cc,v 1.3 2008/12/12 02:26:34 kmura Exp $
+// $Name: geant4-09-03 $
 // ====================================================================
 //   pyG4GDMLParser.cc
 //
@@ -34,6 +34,7 @@
 
 #include <boost/python.hpp>
 #include "G4GDMLParser.hh"
+#include "G4Version.hh"
 
 using namespace boost::python;
 
@@ -42,10 +43,11 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4GDMLParser {
 
+#if G4VERSION_NUMBER >= 920
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Read, Read, 1, 2);
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ReadModule, ReadModule, 1, 2);
-
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Write, Write, 1, 4);
+#endif
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetWorldVolume, 
                                        GetWorldVolume, 0, 1);
@@ -61,11 +63,15 @@ void export_G4GDMLParser()
   class_<G4GDMLParser, boost::noncopyable>
     ("G4GDMLParser", "GDML parser")
     // ---
+#if G4VERSION_NUMBNER < 920
+    .def("Read",             &G4GDMLParser::Read)
+#else
     .def("Read",             &G4GDMLParser::Read,       f_Read())
     .def("ReadModule",       &G4GDMLParser::ReadModule, f_ReadModule())
     .def("Write",            &G4GDMLParser::Write,      f_Write())
     .def("ParseST",          &G4GDMLParser::ParseST,
          return_value_policy<reference_existing_object>())
+#endif
     .def("GetWorldVolume",   &G4GDMLParser::GetWorldVolume,
          f_GetWorldVolume()
          [return_value_policy<reference_existing_object>()])

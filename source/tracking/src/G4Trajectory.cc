@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.32 2006/10/16 13:39:35 allison Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Trajectory.cc,v 1.33 2009/11/12 09:09:56 allison Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ---------------------------------------------------------------
 //
@@ -58,7 +58,7 @@ G4Allocator<G4Trajectory> aTrajectoryAllocator;
 G4Trajectory::G4Trajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),
    PDGEncoding( 0 ), PDGCharge(0.0), ParticleName(""),
-   initialMomentum( G4ThreeVector() )
+   initialKineticEnergy( 0. ), initialMomentum( G4ThreeVector() )
 {;}
 
 G4Trajectory::G4Trajectory(const G4Track* aTrack)
@@ -69,6 +69,7 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
    PDGEncoding = fpParticleDefinition->GetPDGEncoding();
    fTrackID = aTrack->GetTrackID();
    fParentID = aTrack->GetParentID();
+   initialKineticEnergy = aTrack->GetKineticEnergy();
    initialMomentum = aTrack->GetMomentum();
    positionRecord = new TrajectoryPointContainer();
    // Following is for the first trajectory point
@@ -82,6 +83,7 @@ G4Trajectory::G4Trajectory(G4Trajectory & right):G4VTrajectory()
   PDGEncoding = right.PDGEncoding;
   fTrackID = right.fTrackID;
   fParentID = right.fParentID;
+  initialKineticEnergy = right.initialKineticEnergy;
   initialMomentum = right.initialMomentum;
   positionRecord = new TrajectoryPointContainer();
 
@@ -141,13 +143,18 @@ const std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
     G4String PDG("PDG");
     (*store)[PDG] = G4AttDef(PDG,"PDG Encoding","Physics","","G4int");
 
+    G4String IKE("IKE");
+    (*store)[IKE] = 
+      G4AttDef(IKE, "Initial kinetic energy",
+	       "Physics","G4BestUnit","G4double");
+
     G4String IMom("IMom");
-    (*store)[IMom] = G4AttDef(IMom, "Momentum at start of trajectory",
+    (*store)[IMom] = G4AttDef(IMom, "Initial momentum",
 			      "Physics","G4BestUnit","G4ThreeVector");
 
     G4String IMag("IMag");
     (*store)[IMag] = 
-      G4AttDef(IMag, "Magnitude of momentum at start of trajectory",
+      G4AttDef(IMag, "Initial momentum magnitude",
 	       "Physics","G4BestUnit","G4double");
 
     G4String NTP("NTP");
@@ -174,6 +181,9 @@ std::vector<G4AttValue>* G4Trajectory::CreateAttValues() const
 
   values->push_back
     (G4AttValue("PDG",G4UIcommand::ConvertToString(PDGEncoding),""));
+
+  values->push_back
+    (G4AttValue("IKE",G4BestUnit(initialKineticEnergy,"Energy"),""));
 
   values->push_back
     (G4AttValue("IMom",G4BestUnit(initialMomentum,"Energy"),""));

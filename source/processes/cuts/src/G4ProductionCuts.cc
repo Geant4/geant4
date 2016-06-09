@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.cc,v 1.5 2006/06/29 19:30:14 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProductionCuts.cc,v 1.6 2009/08/01 07:57:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // --------------------------------------------------------------
@@ -39,6 +39,7 @@
 const G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
 const G4ParticleDefinition* G4ProductionCuts::electDef = 0;
 const G4ParticleDefinition* G4ProductionCuts::positDef = 0;
+const G4ParticleDefinition* G4ProductionCuts::protonDef = 0;
 
 G4ProductionCuts::G4ProductionCuts() :
   isModified(true)
@@ -86,11 +87,17 @@ G4int G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
 
 G4int  G4ProductionCuts::GetIndex(const G4String& name)
 {
+  static G4String gamma("gamma");
+  static G4String electron("e-");
+  static G4String positron("e+");
+  static G4String proton("proton");
+  
   G4int index;
-  if       ( name == "gamma" )        { index =  0; }
-  else  if ( name == "e-" )           { index =  1; }
-  else  if ( name == "e+" )           { index =  2; }
-  else                                { index = -1; }
+  if       ( name == gamma )        { index =  0; }
+  else  if ( name == electron )     { index =  1; }
+  else  if ( name == positron )     { index =  2; }
+  else  if ( name == proton )       { index =  3; }
+  else                              { index = -1; }
 
   return index;
 }
@@ -99,14 +106,18 @@ G4int  G4ProductionCuts::GetIndex(const G4String& name)
 G4int  G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
 { 
   if(!ptcl) return -1;
-  if(gammaDef==0 && ptcl->GetParticleName()=="gamma") { gammaDef = ptcl; }
-  if(electDef==0 && ptcl->GetParticleName()=="e-") { electDef = ptcl; }
-  if(positDef==0 && ptcl->GetParticleName()=="e+") { positDef = ptcl; }
+  // In the first call, pointers are set 
+  if(gammaDef==0  && ptcl->GetParticleName()=="gamma")  { gammaDef = ptcl; }
+  if(electDef==0  && ptcl->GetParticleName()=="e-")     { electDef = ptcl; }
+  if(positDef==0  && ptcl->GetParticleName()=="e+")     { positDef = ptcl; }
+  if(protonDef==0 && ptcl->GetParticleName()=="proton") { protonDef = ptcl; }
+
   G4int index;
-  if(ptcl==gammaDef)      { index = 0; }
-  else if(ptcl==electDef) { index = 1; }
-  else if(ptcl==positDef) { index = 2; }
-  else                    { index = -1; }
+  if(ptcl==gammaDef)       { index = 0;  }
+  else if(ptcl==electDef)  { index = 1;  }
+  else if(ptcl==positDef)  { index = 2;  }
+  else if(ptcl==protonDef) { index = 3;  }
+  else                     { index = -1; }
 
   return index;
 }

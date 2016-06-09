@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4FinalStateChargeTransferProton.cc,v 1.1 2008/03/25 15:48:21 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4FinalStateChargeTransferProton.cc,v 1.2 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

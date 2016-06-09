@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronGEMProbability.hh,v 1.4 2006/06/29 20:19:27 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4NeutronGEMProbability.hh,v 1.5 2009/09/15 12:54:16 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999) 
 //
-
+// J.M. Quesada (July 2009) alpha's and beta's  values according to Furihata's paper 
+// (based on notes added on proof in Dostrovskii's paper)
 
 
 #ifndef G4NeutronGEMProbability_h
@@ -43,39 +44,43 @@
 class G4NeutronGEMProbability : public G4GEMProbability
 {
 public:
-    // Only available constructor
-    G4NeutronGEMProbability();
-		
-    ~G4NeutronGEMProbability() {}
-private:  
-    // Copy constructor
-    G4NeutronGEMProbability(const G4NeutronGEMProbability &right);
-
-    const G4NeutronGEMProbability & operator=(const G4NeutronGEMProbability &right);
-    G4bool operator==(const G4NeutronGEMProbability &right) const;
-    G4bool operator!=(const G4NeutronGEMProbability &right) const;
+  // Only available constructor
+  G4NeutronGEMProbability();
   
-
+  ~G4NeutronGEMProbability() {}
+private:  
+  // Copy constructor
+  G4NeutronGEMProbability(const G4NeutronGEMProbability &right);
+  
+  const G4NeutronGEMProbability & operator=(const G4NeutronGEMProbability &right);
+  G4bool operator==(const G4NeutronGEMProbability &right) const;
+  G4bool operator!=(const G4NeutronGEMProbability &right) const;
+  
+  
 private:
-    
-    virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
-        {
-            return 0.76+2.2/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),1.0/3.0);
-        }
-	
-    virtual G4double CalcBetaParam(const G4Fragment & fragment) const 
-        {
-            return (2.12/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0)-0.05)*MeV/
-	      CalcAlphaParam(fragment);
-        }
-    
-    // Excitation energy levels 
-    std::vector<G4double> ExcitEnergies;
-    // Spin of excitation energy levels 
-    std::vector<G4double> ExcitSpins;
-
-    std::vector<G4double> ExcitLifetimes;
-    
+  
+  virtual G4double CalcAlphaParam(const G4Fragment & fragment) const 
+  {
+    //JMQ 190709 values according to Furihata's paper (based on notes added on proof in Dostrovskii's paper)
+    //            return 0.76+2.2/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),1.0/3.0);
+    return 0.76+1.93/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),1.0/3.0);
+  }
+  
+  virtual G4double CalcBetaParam(const G4Fragment & fragment) const 
+  {
+    //JMQ 190709 values according to Furihata's paper (based on notes added on proof in Dostrovskii's paper)
+    //            return (2.12/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0)-0.05)*MeV/
+    return (1.66/std::pow(static_cast<G4double>(fragment.GetA()-GetA()),2.0/3.0)-0.05)*MeV/
+      CalcAlphaParam(fragment);
+  }
+  
+  // Excitation energy levels 
+  std::vector<G4double> ExcitEnergies;
+  // Spin of excitation energy levels 
+  std::vector<G4double> ExcitSpins;
+  
+  std::vector<G4double> ExcitLifetimes;
+  
 };
 
 

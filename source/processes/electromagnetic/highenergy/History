@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2008/10/16 14:29:48 vnivanch Exp $
+$Id: History,v 1.34 2009/11/11 17:13:47 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 November 09: V.Ivanchenko (emhighenergy-V09-02-03)
+- G4eeTo3PiModel - fixed vector product in matrix element
+
+09 November 09: V.Ivanchenko (emhighenergy-V09-02-02)
+- G4AnnihiToMuPair added method CrossSectionPerVolume;
+                   added integral option to PostStepDoIt - more precise 
+                   simulation near cross section threshold
+
+12 April 09: V.Ivanchenko (emhighenergy-V09-02-01)
+- G4mplIonisationModel, G4eeToHadronsMultiModel - simplified initialisation
+
+20 February 09: V.Ivanchenko (emhighenergy-V09-02-00)
+- Cleanup: improved comments, move virtual methods from .hh to .cc
 
 16 October 08: V.Ivanchenko (emhighenergy-V09-01-06)
 - Updated processes enumeration and printout

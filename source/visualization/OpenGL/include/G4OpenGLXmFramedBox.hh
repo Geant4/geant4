@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmFramedBox.hh,v 1.7 2006/06/29 21:18:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpenGLXmFramedBox.hh,v 1.8 2009/02/04 16:48:41 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 //Framed box container class
@@ -36,11 +36,8 @@
 #ifndef G4OPENGLXMFRAMEDBOX_HH
 #define G4OPENGLXMFRAMEDBOX_HH
 
-#include "G4OpenGLXmVWidgetContainer.hh"
 #include "G4OpenGLXmBox.hh"
 #include "globals.hh"
-#include <Xm/Frame.h>
-#include <Xm/RowColumn.h>
 
 class G4OpenGLXmVWidgetComponent;
 class G4OpenGLXmVWidgetShell;

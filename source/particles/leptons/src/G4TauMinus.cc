@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauMinus.cc,v 1.18 2008/11/13 08:23:12 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TauMinus.cc,v 1.19 2009/10/09 14:34:02 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4TauMinus* G4TauMinus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
    anInstance = new G4ParticleDefinition(
-                 name,     1.77699*GeV,  2.280e-9*MeV,    -1.*eplus, 
+                 name,     1.77684*GeV,  2.280e-9*MeV,    -1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",               1,             0,          15,

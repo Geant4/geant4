@@ -17,6 +17,8 @@ web : thomson.phy.ulaval.ca/phys_med
 + Université Laval, Québec (QC) Canada
 
 And it has been deeply reviewed by Pedro Arce in December 2007.
+Very small changes by StÃ©phane Chauvie in January 200.
+StÃ©phane Chauvie, Oct 09: changed Physics list. changes in DICOM read. 
 
 
 --->1) Introduction
@@ -29,23 +31,23 @@ In the application the phantom is placed on a table.
 ---> 2) Installation:
 
  - A standard Geant4 example GNUmakefile is provided            
- - Compile it with 'make' 
+ - Compile it with 'make'/'gmake' 
 
 ---> 3) Run the example:
 
- - To run the environment variable G4LEDATA needs to be set, pointing to the low energy data base, G4EMLOW4.3      
+ - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base
 
  - batch mode:
    - $G4INSTALL/bin/Linux-g++/dicom run.mac 
 
  - interactive mode:
    - $G4INSTALL/bin/Linux-g++/dicom
-   the file vis.mac is read in order to visualise the phantom with OpenGL
+   the file vis.mac is read in order to visualise the phantom with OpenGL, DAWN or VRML
 
 --->4) Metadata:
 
  The file Data.dat has the following information
-  - A line with the compression value (used only to create the .g4dcm, not to read it)
+  - A line with the compression value (used only to create the .g4dcm and .g4dcmb, not to read it)
   - A line with the number of files 
   - A line for each file name (to these names it will be added the suffix .dcm to read the DICOM files in their original format, and the suffix .g4dcm to read the text files that contain the DICOM information where the Hounsfield numbers have been converted to material and densities)
 
@@ -93,7 +95,7 @@ This means that the voxels of each material will be grouped in density intervals
 
 The file Colormap.dat defines the colour that will be assigned to the voxels of each material.
 
---->8) DICOM text file format:
+--->8) DICOM file formats:
 
 The DICOM files are converted to a simple text format. You may create your own file with the following format (see e.g. 14196616.g4dcm):
 
@@ -107,6 +109,8 @@ The DICOM files are converted to a simple text format. You may create your own f
 - A number of lines containing the nVoxelX*nVoxelY*nVoxelZ material densities (one per voxel)
 
 As commented before the DICOM files (.dcm) are assumed to describe one Z slice per file, and therefore the GEANT4 text files (.g4dcm) created from them have also one unique Z slice per file. Nevertheless if you create your own .g4dcm file you may include as many Z slices as desired. In any case you have to respect the rule that the Z slices must be contiguous.
+
+The same information is also used to fill a file in binary format, that contains the same information as the text format. Its name ends in .g4dcmb, instead of .g4dcm .
 
 --->9) Choosing different parameterisation/navigation options:
 
@@ -150,3 +154,7 @@ chosen. It is triggered at the method RegularDicomDetectorConstruction::Construc
 
 SetScorer(voxel_logic);
 
+--->11) Output
+dicom.out is produced running th macro file run.mac. It has 2 columns: the first is the number of 
+voxel (ordered in x,y,z) and the second the dose there deposited (in Gy)
+It is produced, as an example, with a compression value of 32

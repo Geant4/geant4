@@ -23,63 +23,101 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyPhisicsListMessenger.cc; Nov 2008
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a), M.P. Russo
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyPhysicsListMessenger.cc
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+
 #include "HadrontherapyPhysicsListMessenger.hh"
+
 #include "HadrontherapyPhysicsList.hh"
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 
-HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList * physList)
-:physicsList(physList)
-{  
- listDir = new G4UIdirectory("/physics/");
-  // Building modular PhysicsList
+/////////////////////////////////////////////////////////////////////////////
+HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* pPhys)
+:pPhysicsList(pPhys)
+{
+  physDir = new G4UIdirectory("/physic/");
+  physDir->SetGuidance("Commands to activate physics models and set cuts");
+   
+  gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setGCut",this);  
+  gammaCutCmd->SetGuidance("Set gamma cut.");
+  gammaCutCmd->SetParameterName("Gcut",false);
+  gammaCutCmd->SetUnitCategory("Length");
+  gammaCutCmd->SetRange("Gcut>0.0");
+  gammaCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
- physicsListCmd = new G4UIcmdWithAString("/physics/addPhysics",this);  
- physicsListCmd->SetGuidance("Add chunks of PhysicsList.");
- physicsListCmd->SetParameterName("physList",false);
- physicsListCmd->AvailableForStates(G4State_PreInit);
+  electCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setECut",this);  
+  electCutCmd->SetGuidance("Set electron cut.");
+  electCutCmd->SetParameterName("Ecut",false);
+  electCutCmd->SetUnitCategory("Length");
+  electCutCmd->SetRange("Ecut>0.0");
+  electCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
+  protoCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setPCut",this);  
+  protoCutCmd->SetGuidance("Set positron cut.");
+  protoCutCmd->SetParameterName("Pcut",false);
+  protoCutCmd->SetUnitCategory("Length");
+  protoCutCmd->SetRange("Pcut>0.0");
+  protoCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 
- packageListCmd = new G4UIcmdWithAString("/physics/addPackage",this);
- packageListCmd->SetGuidance("Add physics package.");
- packageListCmd->SetParameterName("package",false);
- packageListCmd->AvailableForStates(G4State_PreInit);
+  allCutCmd = new G4UIcmdWithADoubleAndUnit("/physic/setCuts",this);  
+  allCutCmd->SetGuidance("Set cut for all.");
+  allCutCmd->SetParameterName("cut",false);
+  allCutCmd->SetUnitCategory("Length");
+  allCutCmd->SetRange("cut>0.0");
+  allCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+
+  pListCmd = new G4UIcmdWithAString("/physic/addPhysics",this);  
+  pListCmd->SetGuidance("Add physics list.");
+  pListCmd->SetParameterName("PList",false);
+  pListCmd->AvailableForStates(G4State_PreInit);  
+
+  packageListCmd = new G4UIcmdWithAString("/physic/addPackage",this);
+  packageListCmd->SetGuidance("Add physics package.");
+  packageListCmd->SetParameterName("package",false);
+  packageListCmd->AvailableForStates(G4State_PreInit);
 }
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsListMessenger::~HadrontherapyPhysicsListMessenger()
 {
-  delete physicsListCmd;
-  delete listDir;
+  delete gammaCutCmd;
+  delete electCutCmd;
+  delete protoCutCmd;
+  delete allCutCmd;
+  delete pListCmd;
+  delete physDir;    
   delete packageListCmd;
 }
 
-void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{
- if (command == physicsListCmd)
-   { physicsList->AddPhysicsList(newValue);}
- else if (command == packageListCmd)
-   { physicsList->AddPackage(newValue);}
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
+{       
+  if( command == gammaCutCmd )
+   { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
+     
+  if( command == electCutCmd )
+   { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
+     
+  if( command == protoCutCmd )
+   { pPhysicsList->SetCutForPositron(protoCutCmd->GetNewDoubleValue(newValue));}
+
+  if( command == allCutCmd )
+    {
+      G4double cut = allCutCmd->GetNewDoubleValue(newValue);
+      pPhysicsList->SetCutForGamma(cut);
+      pPhysicsList->SetCutForElectron(cut);
+      pPhysicsList->SetCutForPositron(cut);
+    } 
+
+  if( command == pListCmd )
+   { pPhysicsList->AddPhysicsList(newValue);}
+
+
+  if( command == packageListCmd )
+   { pPhysicsList->AddPackage(newValue);}
+
+
 }
-
-
-
-
-
-

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc,v 1.35 2008/03/23 14:32:13 akimura Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VScoringMesh.cc,v 1.37 2009/10/12 04:11:25 akimura Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #include "G4VScoringMesh.hh"
@@ -62,6 +62,12 @@ void G4VScoringMesh::ResetScore() {
 void G4VScoringMesh::SetSize(G4double size[3]) {
   for(int i = 0; i < 3; i++) fSize[i] = size[i];
   sizeIsSet = true;
+}
+G4ThreeVector G4VScoringMesh::GetSize() const {
+  if(sizeIsSet)
+    return G4ThreeVector(fSize[0], fSize[1], fSize[2]);
+  else
+    return G4ThreeVector(0., 0., 0.);
 }
 void G4VScoringMesh::SetCenterPosition(G4double centerPosition[3]) {
   fCenterPosition = G4ThreeVector(centerPosition[0], centerPosition[1], centerPosition[2]);

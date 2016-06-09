@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BGGPionInelasticXS.cc,v 1.3 2008/12/01 16:50:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4BGGPionInelasticXS.cc,v 1.8 2009/11/19 19:40:45 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -93,11 +93,7 @@ G4double G4BGGPionInelasticXS::GetIsoZACrossSection(const G4DynamicParticle* dp,
   } else if(iz == 1) {
 
     if( A < 1.5) {
-      //fHadron->GetHadronNucleonXscPDG(dp, G4Proton::Proton());
-      //fHadron->GetHadronNucleonXscEL(dp, G4Proton::Proton());
       fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());
-      //fHadron->GetHadronNucleonXscVU(dp, G4Proton::Proton());
-      //fHadron->GetHadronNucleonXscMK(dp, G4Proton::Proton());
       cross = fHadron->GetInelasticHadronNucleonXsc();
     } else {
       fHadron->GetHadronNucleonXscNS(dp, G4Proton::Proton());

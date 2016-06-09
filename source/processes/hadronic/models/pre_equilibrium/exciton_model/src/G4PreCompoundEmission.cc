@@ -24,9 +24,20 @@
 // ********************************************************************
 //
 //
-// Hadronic Process: Nuclear Preequilibrium
-// by V. Lara 
-
+// $Id: G4PreCompoundEmission.cc,v 1.22 2009/11/13 17:40:14 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
+//
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+//
+// File name:     G4PreCompoundEmission
+//
+// Author:         V.Lara
+//
+// Modified:  
+//
 
 #include "G4PreCompoundEmission.hh"
 #include "G4PreCompoundParameters.hh"
@@ -41,12 +52,12 @@ const G4PreCompoundEmission & G4PreCompoundEmission::operator=(const G4PreCompou
 }
 
 
-  G4bool G4PreCompoundEmission::operator==(const G4PreCompoundEmission &) const
+G4bool G4PreCompoundEmission::operator==(const G4PreCompoundEmission &) const
 {
   return false;
 }
 
-    G4bool G4PreCompoundEmission::operator!=(const G4PreCompoundEmission &) const
+G4bool G4PreCompoundEmission::operator!=(const G4PreCompoundEmission &) const
 {
   return true;
 }
@@ -94,8 +105,6 @@ void G4PreCompoundEmission::SetHETCModel()
   theFragmentsVector->ResetStage();
   return;
 }
-
-
 
 G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 {
@@ -240,6 +249,7 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
       Eav = Ef;
     }
   
+
   G4double zeta = std::max(1.0,9.3/std::sqrt(KineticEnergyOfEmittedFragment/MeV));
 	
   G4double an = 3.0*std::sqrt((ProjEnergy+Ef)*(KineticEnergyOfEmittedFragment+Bemission+Ef));
@@ -253,10 +263,31 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
     }
 			
 			
-  G4double expan = std::exp(an);
-	
-  G4double theta = std::acos(std::log(expan-G4UniformRand()*(expan-1.0/expan))/an);
-	
+//    G4double expan=std::exp(an);
+//    thetaold = std::acos(std::log(expan-random*(expan-1.0/expan))/an);
+//      exp(an) becomes large for large an
+//      1/exp(an) becomes large for large negative an
+//       take the large value out of the log depending on the sign of an to avoid FP exceptions 
+ 
+  G4double random=G4UniformRand();
+  G4double exp2an=0;
+  G4double theta;
+  if (an > 0.) {
+    if (an < 25.) { exp2an = std::exp(-2*an); } // we subtract from 1, exp(-50)~1e-21, so will not
+                                           //  change numerical result
+    theta = std::acos(1+ std::log(1-random*(1-exp2an))/an);
+  } else if ( an < 0.) {
+    if ( an > -25.) { exp2an = std::exp(2*an); } // similar to above, except we compare to rndm*1
+    theta = std::acos(std::log(exp2an-random*(exp2an-1))/an - 1.);
+  } else {   // an==0 now.	
+    theta=std::acos(1.-2*random);
+  }
+  
+  if (std::abs(an) < 50 )
+  {
+     
+  }
+
   G4double phi = twopi*G4UniformRand();
   
   // Calculate the momentum magnitude of emitted fragment 	
@@ -283,14 +314,8 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
   G4double alpha = (p*p+h*h)/(2.0*g);
   
   if ( (E-alpha) < 0 ) return 0;
-
-  G4double factp=factorial(p);
-
-  G4double facth=factorial(h);
-
-  G4double factph=factorial(p+h-1);
   
-  G4double logConst =  (p+h)*std::log(g) - std::log (factph) - std::log(factp) - std::log(facth);
+  G4double logConst =  (p+h)*std::log(g) - logfactorial(p+h-1) - logfactorial(p) - logfactorial(h);
 
 // initialise values using j=0
 
@@ -405,7 +430,35 @@ G4double G4PreCompoundEmission::factorial(G4double a) const
     
     return result;
 }
+G4double G4PreCompoundEmission::logfactorial(G4double a) const
+{
+  // Values of logs of factorial function from 0 to 60
 
+  G4double result(0.0);
+  const G4int factablesize = 61;
+  const G4double halfLn2pi = 0.918938533;      // 0.5 log(2* pi)
+  static G4double logfact[factablesize];
+  static bool needinit=true;
+  
+  if (needinit)
+  {
+      needinit=false;
+      for ( G4int n=0; n < factablesize; ++n)
+      {
+         logfact[n]=std::log(factorial(n));
+      }
+  }
+
+  G4int ia = static_cast<G4int>(a);
+  if (ia < factablesize)
+  {
+      result = logfact[ia];
+  } else {
+      result = (ia+0.5)*std::log(G4double(ia)) - ia + halfLn2pi;
+  }
+   
+  return result;
+}
 
 #ifdef debug
 void G4PreCompoundEmission::CheckConservation(const G4Fragment & theInitialState,

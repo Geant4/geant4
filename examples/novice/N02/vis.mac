@@ -25,7 +25,7 @@
 /vis/viewer/zoom 1.4
 #
 # for drawing the tracks
-/vis/scene/add/trajectories
+/vis/scene/add/trajectories smooth
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 # for drawing the hits, uncomment next line
 # /vis/scene/add/hits

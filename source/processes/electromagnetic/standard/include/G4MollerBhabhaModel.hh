@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh,v 1.19 2007/05/22 17:34:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MollerBhabhaModel.hh,v 1.20 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -73,8 +73,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double MinEnergyCut(const G4ParticleDefinition*,
-			const G4MaterialCutsCouple*);
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+				const G4MaterialCutsCouple*);
 				
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
@@ -108,10 +108,10 @@ public:
 
 protected:
 
-  G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-			      G4double kinEnergy);
+  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+				      G4double kinEnergy);
 			      
-  void SetParticle(const G4ParticleDefinition* p);			      
+  inline void SetParticle(const G4ParticleDefinition* p);			      
 
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
@@ -126,17 +126,17 @@ private:
   // hide assignment operator 
   G4MollerBhabhaModel & operator=(const  G4MollerBhabhaModel &right);
   G4MollerBhabhaModel(const  G4MollerBhabhaModel&);
+
+  G4bool   isInitialised;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MollerBhabhaModel::MaxSecondaryEnergy(
-                                                   const G4ParticleDefinition*,
-                                                         G4double kinEnergy) 
+inline void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
 {
-  G4double tmax = kinEnergy;
-  if(isElectron) tmax *= 0.5;
-  return tmax;
+  particle = p;
+  if(p != theElectron) isElectron = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

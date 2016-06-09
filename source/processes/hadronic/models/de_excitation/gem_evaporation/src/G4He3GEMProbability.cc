@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3GEMProbability.cc,v 1.4 2006/06/29 20:22:15 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4He3GEMProbability.cc,v 1.5 2009/09/15 12:54:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1999)
 //
-
+// J.M. Quesada (July 2009) C's and k's  values according to Furihata's paper 
+// (based on notes added on proof in Dostrovskii's paper)
 
 #include "G4He3GEMProbability.hh"
 
@@ -69,9 +70,16 @@ G4bool G4He3GEMProbability::operator!=(const G4He3GEMProbability &) const
     return true;
 }
 
-
-G4double G4He3GEMProbability::CCoeficient(const G4double aZ) const
+//JMQ 190709 C's values from Furihata's paper 
+//(notes added on proof in Dostrovskii's paper) 
+G4double G4He3GEMProbability::CCoeficient(const G4double/* aZ*/) const
 {
+    return 0.;
+}
+
+
+//G4double G4He3GEMProbability::CCoeficient(const G4double aZ) const
+//{
     // Data comes from 
     // Dostrovsky, Fraenkel and Friedlander
     // Physical Review, vol 116, num. 3 1959
@@ -80,18 +88,18 @@ G4double G4He3GEMProbability::CCoeficient(const G4double aZ) const
     // G4double Zlist[5] = { 10.0, 20.0, 30.0, 50.0, 70.0};
     //	G4double Calpha[5] = { 0.10, 0.10, 0.10, 0.08, 0.06};
     // C for He3 is equal to C for alpha times 4/3
-    G4double C = 0.0;
+//    G4double C = 0.0;
 	
 	
-    if (aZ <= 30) {
-        C = 0.10;
-    } else if (aZ <= 50) {
-        C = 0.1 + -((aZ-50.)/20.)*0.02;
-    } else if (aZ < 70) {
-        C = 0.08 + -((aZ-70.)/20.)*0.02;
-    } else {
-        C = 0.06;
-    }
-    return C*(4.0/3.0);
-}
+//    if (aZ <= 30) {
+//        C = 0.10;
+//    } else if (aZ <= 50) {
+//        C = 0.1 + -((aZ-50.)/20.)*0.02;
+//   } else if (aZ < 70) {
+//        C = 0.08 + -((aZ-70.)/20.)*0.02;
+//    } else {
+//        C = 0.06;
+//    }
+//    return C*(4.0/3.0);
+//}
 

@@ -1,0 +1,13 @@
+README file relative to proton experimental Bragg peaks
+
+
+Description of experimental data file provided and of the 
+corresponding simulation configuration to use for the comparison
+
+--> 62MeVInWater.root
+    Bragg peak acquired in the CATANA protontherapy facility at INFN-LNS (I).
+    It can be reproduce with the complete passive beam line of Hadrontherapy. 
+    This file contains one ntuple with two columns: 
+    the depth in water (expressed in millimiter) and the energy deposited (expressed in arbitrary units).
+    Use the proton_therapy.mac file to perform a simulation whose result can be compared with this file.
+    The .out file contains the same data in ASCII format.

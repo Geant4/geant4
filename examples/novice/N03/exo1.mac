@@ -1,4 +1,4 @@
-# $Id: exo1.mac,v 1.2 2002/12/16 16:37:25 maire Exp $
+# $Id: exo1.mac,v 1.3 2009/10/20 08:23:32 kurasige Exp $
 #
 # Macro file for "exampleN03.cc" 
 #
@@ -28,7 +28,7 @@
 /process/inactivate compt
 /process/inactivate conv
 #
-/run/particle/setCut 10 cm
+/run/setCut 10 cm
 /run/initialize
 #
 /gun/particle e+

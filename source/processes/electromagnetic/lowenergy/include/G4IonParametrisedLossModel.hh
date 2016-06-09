@@ -36,8 +36,21 @@
 //
 // First implementation: 10. 11. 2008
 //
-// Modifications:
-//
+// Modifications: 03. 02. 2009 - Bug fix iterators (AL)
+//                11. 03. 2009 - Introduced new table handler(G4IonDEDXHandler)
+//                               and modified method to add/remove tables 
+//                               (tables are now built in init. phase),
+//                               Minor bug fix in ComputeDEDXPerVolume (AL) 
+//                12. 11. 2009 - Added function for switching off scaling 
+//                               of heavy ions from ICRU 73 data
+//                20. 11. 2009 - Added set-method for energy loss limit (AL)
+//                24. 11. 2009 - Bug fix: Range calculation corrected if same 
+//                               materials appears with different cuts in diff.
+//                               regions (added UpdateRangeCache function and
+//                               modified BuildRangeVector, ComputeLossForStep
+//                               functions accordingly, added new cache param.,
+//                               changed typdef of IonMatCouple).
+//                             - Removed GetRange function (AL)  
 //
 // Class description:
 //    Model for computing the energy loss of ions by employing a 
@@ -56,8 +69,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4EmCorrections.hh"
-#include "G4IonParametrisedLossTable.hh"
-#include "G4EmCorrections.hh"
+#include "G4IonDEDXHandler.hh"
 #include <iomanip>
 #include <list>
 #include <map>
@@ -66,9 +78,14 @@
 class G4BraggIonModel;
 class G4BetheBlochModel;
 class G4ParticleChangeForLoss;
+class G4VIonDEDXTable;
+class G4VIonDEDXScalingAlgorithm;
+class G4LPhysicsFreeVector;
+class G4MaterialCutsCouple;
 
-typedef std::list<G4IonLossTableHandle*> LossTableList;
-typedef std::pair<const G4ParticleDefinition*, const G4Material*> IonMatCouple;
+typedef std::list<G4IonDEDXHandler*> LossTableList;
+typedef std::pair<const G4ParticleDefinition*, 
+                  const G4MaterialCutsCouple*> IonMatCouple;
 
 
 class G4IonParametrisedLossModel : public G4VEmModel {
@@ -112,10 +129,9 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    // stopping) for a given pre-step energy and step length by using
    // range vs energy (and energy vs range) tables  
    G4double ComputeLossForStep(
-                                 const G4Material*, // Target material
+                                 const G4MaterialCutsCouple*, // Mat-cuts couple
 				 const G4ParticleDefinition*, // Projectile
 				 G4double,  // Kinetic energy of projectile
-                                 G4double,  // Energy cut for secondary prod.
 				 G4double); // Length of current step
 
    // Function, which computes the mean energy transfer rate to delta rays 
@@ -149,30 +165,20 @@ class G4IonParametrisedLossModel : public G4VEmModel {
 				 G4double&, 
 				 G4double); // Length of current step
 
-
-   // Template function which allows to add additional stopping power tables
+   // Function which allows to add additional stopping power tables
    // in combination with a scaling algorithm, which may depend on dynamic
    // information like the current particle energy (the table and scaling 
-   // algorithm are used via a wrapper class, which performs e.g.caching or
+   // algorithm are used via a handler class, which performs e.g.caching or
    // which applies the scaling of energy and dE/dx values)
-   template <class TABLE, class SCALING_ALGO>
-   void AddDEDXTable() {
-       G4IonLossTableHandle* table =
-               new G4IonParametrisedLossTable<TABLE, SCALING_ALGO>;      
- 
-       lossTableList.push_front(table);
-   }
+   G4bool AddDEDXTable(const G4String& name,
+                     G4VIonDEDXTable* table, 
+                     G4VIonDEDXScalingAlgorithm* algorithm = 0); 
 
-   // Template function which allows to add additional stopping power tables
-   // (the table itself is used via a wrapper class, which performs e.g.
-   // caching)
-   template <class TABLE>
-   void AddDEDXTable() {
-       G4IonLossTableHandle* table =
-               new G4IonParametrisedLossTable<TABLE>;      
- 
-       lossTableList.push_front(table);
-   }
+   G4bool RemoveDEDXTable(const G4String& name); 
+
+   // Function which allows to switch off scaling of stopping powers of heavy
+   // ions from existing ICRU 73 data
+   void DeactivateICRU73Scaling();
 
    // Function checking the applicability of physics tables to ion-material
    // combinations (Note: the energy range of tables is not checked)
@@ -189,7 +195,20 @@ class G4IonParametrisedLossModel : public G4VEmModel {
                       G4double,          // Maximum energy per nucleon
                       G4int,             // Number of bins
                       G4bool);           // Logarithmic scaling of energy
+
+   // Function printing a dE/dx table for a given ion-material combination
+   // and a specified energy grid 
+   void PrintDEDXTableHandlers(
+                      const G4ParticleDefinition*,  // Projectile (ion) 
+                      const G4Material*, // Absorber material
+                      G4double,          // Minimum energy per nucleon
+                      G4double,          // Maximum energy per nucleon
+                      G4int,             // Number of bins
+                      G4bool);           // Logarithmic scaling of energy
    
+   // Function for setting energy loss limit for stopping power integration
+   void SetEnergyLossLimit(G4double ionEnergyLossLimit); 
+
  protected:
    G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 			       G4double);   // Kinetic energy of projectile
@@ -203,6 +222,13 @@ class G4IonParametrisedLossModel : public G4VEmModel {
                   const G4Material*,             // Target material
                   G4double cutEnergy);           // Energy cut
 
+   // Function which updates parameters concerning the range calculation
+   // (the parameters are only updated if the particle, the material or 
+   // the associated energy cut has changed)
+   void UpdateRangeCache(
+                  const G4ParticleDefinition*,   // Projectile (ion) 
+                  const G4MaterialCutsCouple*);  // Target material
+
    // Function, which updates parameters concering particle properties
    void UpdateCache(
                   const G4ParticleDefinition*);  // Projectile (ion) 
@@ -211,8 +237,7 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    // for a given particle, material and energy cut   
    void BuildRangeVector(
                   const G4ParticleDefinition*,   // Projectile (ion) 
-                  const G4Material*,             // Target material
-                  G4double);                     // Energy cut
+                  const G4MaterialCutsCouple*);  // Material cuts couple
 
    // Assignment operator and copy constructor are hidden:
    G4IonParametrisedLossModel & operator=(
@@ -313,13 +338,17 @@ class G4IonParametrisedLossModel : public G4VEmModel {
    G4double cacheElecMassRatio;               // Electron-mass ratio
    G4double cacheChargeSquare;                // Charge squared
 
+   // Cached parameters needed during range computations:
+   const G4ParticleDefinition* rangeCacheParticle; // Key: 1) Current ion,
+   const G4MaterialCutsCouple* rangeCacheMatCutsCouple; // 2) Mat-cuts-couple
+   G4PhysicsVector* rangeCacheEnergyRange;         // Energy vs range vector
+   G4PhysicsVector* rangeCacheRangeEnergy;         // Range vs energy vector
+
    // Cached parameters needed during dE/dx computations:
    const G4ParticleDefinition* dedxCacheParticle; // Key: 1) Current ion,
    const G4Material* dedxCacheMaterial;           //      2) material and
    G4double dedxCacheEnergyCut;                   //      3) cut energy 
    LossTableList::iterator dedxCacheIter;         // Responsible dE/dx table
-   G4PhysicsVector* dedxCacheEnergyRange;         // Energy vs range vector
-   G4PhysicsVector* dedxCacheRangeEnergy;         // Range vs energy vector
    G4double dedxCacheTransitionEnergy;      // Transition energy between
                                             // parameterization and 
                                             // Bethe-Bloch model

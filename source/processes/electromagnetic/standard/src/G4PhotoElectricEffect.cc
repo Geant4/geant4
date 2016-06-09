@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.41 2008/10/16 14:12:32 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhotoElectricEffect.cc,v 1.42 2009/02/20 12:06:37 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 //------------------ G4PhotoElectricEffect physics process ---------------------
@@ -87,6 +87,13 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
 
 G4PhotoElectricEffect::~G4PhotoElectricEffect()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition& p)
+{
+  return (&p == G4Gamma::Gamma());
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InclDataDefs.hh,v 1.5 2008/06/25 17:20:04 kaitanie Exp $ 
+// $Id: G4InclDataDefs.hh,v 1.7 2009/11/18 10:43:14 kaitanie Exp $ 
 // Translation of INCL4.2/ABLA V3 
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
@@ -322,6 +322,16 @@ public:
   G4Bl2() {};
   ~G4Bl2() {};
   
+  void dump() {
+    G4cout <<"Avatars: (number of avatars = " << k << ")" << G4endl;
+    for(G4int i = 0; i <= k; i++) {
+      G4cout <<"i = " << i << G4endl;
+      G4cout <<"crois[" << i << "] = " << crois[i] << G4endl;
+      G4cout <<"ind[" << i << "] = " << ind[i] << G4endl;
+      G4cout <<"jnd[" << i << "] = " << jnd[i] << G4endl;
+    }
+  }
+
   /**
    * 
    */

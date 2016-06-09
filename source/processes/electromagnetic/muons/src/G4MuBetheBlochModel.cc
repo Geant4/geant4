@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.24 2008/03/25 12:31:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuBetheBlochModel.cc,v 1.27 2009/11/09 19:18:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -87,6 +87,7 @@ G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
 {
   theElectron = G4Electron::Electron();
   corr = G4LossTableManager::Instance()->EmCorrections();
+  fParticleChange = 0;
 
   if(p) SetParticle(p);
 }
@@ -98,22 +99,21 @@ G4MuBetheBlochModel::~G4MuBetheBlochModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(!particle) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    massSquare = mass*mass;
-    ratio = electron_mass_c2/mass;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
                                            const G4MaterialCutsCouple* couple)
 {
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4double G4MuBetheBlochModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
+						 G4double kinEnergy) 
+{
+  G4double tau  = kinEnergy/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
+                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
+  return tmax;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,12 +122,7 @@ void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
   if(p) SetParticle(p);
-
-  if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
-                                                             (pParticleChange);
-  else
-    fParticleChange = new G4ParticleChangeForLoss();
+  if(!fParticleChange) fParticleChange = GetParticleChangeForLoss();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -224,11 +219,11 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
-  G4double cden  = material->GetIonisation()->GetCdensity();
-  G4double mden  = material->GetIonisation()->GetMdensity();
-  G4double aden  = material->GetIonisation()->GetAdensity();
-  G4double x0den = material->GetIonisation()->GetX0density();
-  G4double x1den = material->GetIonisation()->GetX1density();
+  //G4double cden  = material->GetIonisation()->GetCdensity();
+  //G4double mden  = material->GetIonisation()->GetMdensity();
+  //G4double aden  = material->GetIonisation()->GetAdensity();
+  //G4double x0den = material->GetIonisation()->GetX0density();
+  //G4double x1den = material->GetIonisation()->GetX1density();
 
   G4double eDensity = material->GetElectronDensity();
 
@@ -241,10 +236,11 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   // density correction
   G4double x = log(bg2)/twoln10;
-  if ( x >= x0den ) {
-    dedx -= twoln10*x - cden ;
-    if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
-  }
+  //if ( x >= x0den ) {
+  //  dedx -= twoln10*x - cden ;
+  //  if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
+  //}
+  dedx -= material->GetIonisation()->DensityCorrection(x);
 
   // shell correction
   dedx -= 2.0*corr->ShellCorrection(p,material,kineticEnergy);

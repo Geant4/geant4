@@ -23,55 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PhysicsList.hh,v 1.2 2009/10/31 18:05:56 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
-// $Id: PhysicsList.hh,v 1.1 2007/10/15 16:20:23 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+
+class G4VPhysicsConstructor;
 
 class DetectorConstruction;
 class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VUserPhysicsList
+class PhysicsList: public G4VModularPhysicsList
 {
-  public:
-    PhysicsList(DetectorConstruction*);
-   ~PhysicsList();
+public:
+  PhysicsList(DetectorConstruction*);
+  virtual ~PhysicsList();
 
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
+  void ConstructParticle();
+        
+  void AddPhysicsList(const G4String& name);    
+  void ConstructProcess();    
+  void AddStepMax(); 
+  
+  void SetCuts();      
     
-    // these methods Construct physics processes and register them
-    void ConstructEM();
-    void AddStepMax();
-    
-    void SingleCoulombScattering (G4bool);    
-    void RegisterBrem (G4bool);
-    
-  private:
-    DetectorConstruction*  detector;
-    G4bool                 singleScattering;        
-    G4bool                 registerBrem;    
-    PhysicsListMessenger*  pMessenger;    
+private:
+
+  DetectorConstruction* detector;
+  PhysicsListMessenger* pMessenger; 
+
+  G4String emName;
+  G4VPhysicsConstructor*  emPhysicsList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
 

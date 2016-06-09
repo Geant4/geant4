@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-17    (19-December-2008)
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -36,6 +40,9 @@
 
 /run/verbose 2
 #
+/testem/phys/addPhysics standard_opt3
+PhysicsList::AddPhysicsList: <standard_opt3>
+#
 /run/initialize
 userDetector->Construct() start.
 
@@ -47,6 +54,7 @@ userDetector->Construct() start.
 Chamber is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 10 km 
 #
@@ -54,14 +62,14 @@ PhysicsList::SetCuts:CutLength : 10 km
 #
 /run/beamOn 4000
 
+phot:   for  gamma    SubType= 12
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :     Emin=          0 eV         Emax=   10 GeV
+
 compt:   for  gamma    SubType= 13
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
      myKlein-Nishina :     Emin=          0 eV         Emax=   10 GeV
-
-phot:   for  gamma    SubType= 12
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :     Emin=          0 eV         Emax=   10 GeV
 
 conv:   for  gamma    SubType= 14
       Lambda tables from 1.022 MeV to 10 GeV in 160 bins, spline: 1
@@ -72,7 +80,7 @@ msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
       RangeFactor= 0.02, step limit type: 2, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        UrbanMscUni2 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc93 :     Emin=          0 eV         Emax=   10 GeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
@@ -90,11 +98,16 @@ eIoni:   for  e+    SubType= 2
       myMollerBhabha :     Emin=          0 eV         Emax=   10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
+annihil:   for  e+    SubType= 5
+      Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :     Emin=          0 eV         Emax=   10 GeV
+
 msc:   for proton    SubType= 10
       Lambda tables from 100 eV  to 10 GeV in 160 bins, spline: 1
-      RangeFactor= 0.02, step limit type: 2, lateralDisplacement: 1, skin= 3
+      RangeFactor= 0.02, stepLimitType: 2, latDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       UrbanMscUni90 :     Emin=          0 eV         Emax=   100 TeV
+          UrbanMsc90 :     Emin=          0 eV         Emax=   10 GeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 160 bins
@@ -110,21 +123,21 @@ Region <DefaultRegionForTheWorld> -- appears in <Wall> world volume
  Root logical volume(s) : Chamber 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
  Materials : Water Water_vapor 
- Production cuts :  gamma 10 km     e- 10 km     e+ 10 km 
+ Production cuts :   gamma 10 km      e- 10 km      e+ 10 km  proton 10 km 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Water
- Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
- Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
+ Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 10 km 
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1 TeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Water_vapor
- Range cuts        :  gamma 10 km     e- 10 km     e+ 10 km 
- Energy thresholds :  gamma 2.88022e+295 J      e- 18.4792 GeV    e+ 17.5913 GeV
+ Range cuts        :  gamma  10 km     e-  10 km     e+  10 km  proton 10 km 
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 1 TeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -143,15 +156,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70377   Tkin= 588.768 keV (0.000 %)   NbOfelec in cav= 4800   Dose/EnFluence= 30.739 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70433   Tkin= 589.545 keV (0.000 %)   NbOfelec in cav= 4694   Dose/EnFluence= 28.715 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 141330   Tkin= 589.408 keV (0.109 %)   NbOfelec in cav= 9198   Dose/EnFluence= 28.960 cm2/g (-5.788 %)
+ ---> NbofEvents= 2000   NbOfelectr= 140913   Tkin= 589.011 keV (-0.090 %)   NbOfelec in cav= 9450   Dose/EnFluence= 30.275 cm2/g (5.431 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211947   Tkin= 589.281 keV (-0.022 %)   NbOfelec in cav= 13904   Dose/EnFluence= 28.842 cm2/g (-0.407 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211040   Tkin= 588.807 keV (-0.035 %)   NbOfelec in cav= 14208   Dose/EnFluence= 29.615 cm2/g (-2.180 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=54.49s Real=54.53s Sys=0.02s
+  User=31.37s Real=31.36s Sys=0s
 
  ======================== run summary ======================
 
@@ -161,32 +174,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 282098  Transportation= 74088  msc= 2091840  eIoni= 1785707
+ Process calls frequency --->  compt= 281864  Transportation= 77067  msc= 2105246  eIoni= 1758771
 
  Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 588.9871 keV +- 0.1028 %  (--> range in wall material = 2.2156 mm )
- Mass_energy_transfer coef: 29.8956 cm2/g
+ Mean energy of secondary e- = 588.2664 keV +- 0.1029 %  (--> range in wall material = 2.2113 mm )
+ Mass_energy_transfer coef: 29.8590 cm2/g
 
- StoppingPower in wall   = 1.9712 MeV*cm2/g
-               in cavity = 1.9712 MeV*cm2/g
+ StoppingPower in wall   = 1.9724 MeV*cm2/g
+               in cavity = 1.9724 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 18341	 Energy = 9.2635 GeV
-      Exit  --> nbParticles = 18346	 Energy = 9.2681 GeV
+      Enter --> nbParticles = 19024	 Energy = 9.6069 GeV
+      Exit  --> nbParticles = 19026	 Energy = 9.6104 GeV
 
- Total edep in cavity = 12.7983 MeV +- 2.5138 %	 Total charged trackLength = 51.8440 m     (mean value = 2.8267 mm )
- Total dose in cavity = 20.3692 MeV/mg
- Dose/EnergyFluence   = 28.7963 cm2/g
+ Total edep in cavity = 13.3991 MeV +- 2.5370 %	 Total charged trackLength = 52.6161 m     (mean value = 2.7658 mm )
+ Total dose in cavity = 21.3253 MeV/mg
+ Dose/EnergyFluence   = 30.1480 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.96323 +- 0.02520
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.00968 +- 0.02564
 
- StepSize of ch. tracks in wall   = 123.8506 um  +- 122.4018 um 	 (nbSteps/track = 13.6055)
- StepSize of ch. tracks in cavity = 488.7164 um  +- 556.7261 um 	 (nbSteps/track = 5.7839)
+ StepSize of ch. tracks in wall   = 123.2201 um  +- 121.7465 um 	 (nbSteps/track = 13.5760)
+ StepSize of ch. tracks in cavity = 492.3283 um  +- 628.2962 um 	 (nbSteps/track = 5.6177)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 294565107, 973180946
+ Current couple of seeds = 506106927, 1111384621
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -199,3 +212,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+

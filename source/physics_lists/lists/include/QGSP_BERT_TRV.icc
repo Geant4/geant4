@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_BERT_TRV.icc,v 1.2 2007/05/16 11:35:36 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: QGSP_BERT_TRV.icc,v 1.3 2009/11/27 17:28:19 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 //
 // Modified:
 // 16.05.2007 V.Ivanchenko: rename EM builders
+// 27.11.2009 G.Folger: Mark as experimental
 //
 //----------------------------------------------------------------------------
 //
@@ -63,15 +64,20 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP_BERT_TRV.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSP_BERT_TRV<T>::TQGSP_BERT_TRV(G4int ver):  T()
 {
 
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_TRV 1.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: QGSP_BERT_TRV 1.1"<<G4endl;
   G4cout <<G4endl;
 
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus exp;
+  exp.Experimental("QGSP_BERT_TRV");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));

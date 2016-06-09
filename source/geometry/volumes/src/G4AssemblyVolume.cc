@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.11 2008/02/03 09:12:50 ivana Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4AssemblyVolume.cc,v 1.12 2009/09/22 13:58:48 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // Class G4AssemblyVolume - implementation
@@ -47,11 +47,24 @@ unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
 // Default constructor
 //
 G4AssemblyVolume::G4AssemblyVolume()
-: fAssemblyID( 0 )
+  : fAssemblyID( 0 )
 {
   InstanceCountPlus();
   SetAssemblyID( GetInstanceCount() );
   SetImprintsCount( 0 );
+}
+
+// Composing constructor
+//
+G4AssemblyVolume::G4AssemblyVolume( G4LogicalVolume* volume,
+                                    G4ThreeVector& translation,
+                                    G4RotationMatrix* rotation )
+  : fAssemblyID( 0 )
+{
+  InstanceCountPlus();
+  SetAssemblyID( GetInstanceCount() );
+  SetImprintsCount( 0 );
+  AddPlacedVolume(volume, translation, rotation);
 }
 
 // Destructor

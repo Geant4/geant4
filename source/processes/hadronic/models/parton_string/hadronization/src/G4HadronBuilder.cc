@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc,v 1.7 2008/04/25 14:20:14 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4HadronBuilder.cc,v 1.10 2009/05/22 16:34:31 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -146,7 +146,7 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	   G4bool IsAnti = id1 < 0; 		// quark 1 is antiquark?
 	   if( (IsUp && IsAnti ) || (!IsUp && !IsAnti ) ) 
 	      PDGEncoding = - PDGEncoding;
-	}
+ 	}
 	   
 	   
 	G4ParticleDefinition * MesonDef=

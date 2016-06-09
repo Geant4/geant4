@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.8 2007/11/21 17:41:19 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: RunAction.hh,v 1.9 2009/01/22 17:41:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,16 +51,17 @@ class HistoManager;
 
 class RunAction : public G4UserRunAction
 {
-  public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
-   ~RunAction();
 
-  public:
+public:
+
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+    virtual ~RunAction();
+
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
     void AddEnergy (G4double edep)
-                   {EnergyDeposit += edep; EnergyDeposit2 += edep*edep;};
+                 {EnergyDeposit += edep; EnergyDeposit2 += edep*edep;};
 
     void AddTrakLenCharg (G4double length)
                  {TrakLenCharged += length; TrakLenCharged2 += length*length;};

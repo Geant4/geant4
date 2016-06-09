@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.5 2006/06/29 16:56:47 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsListMessenger.hh,v 1.6 2009/11/27 14:54:58 hbu Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,9 +55,9 @@ class PhysicsListMessenger: public G4UImessenger
     PhysicsList*        physList;
     
     G4UIdirectory*      physDir;    
-    G4UIcmdWithADouble* GammaToMuPairFac;
-    G4UIcmdWithADouble* AnnihiToMuPairFac;
-    G4UIcmdWithADouble* AnnihiToHadronFac;    
+    G4UIcmdWithADouble* GammaToMuPairFacCmd;
+    G4UIcmdWithADouble* AnnihiToMuPairFacCmd;
+    G4UIcmdWithADouble* AnnihiToHadronFacCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

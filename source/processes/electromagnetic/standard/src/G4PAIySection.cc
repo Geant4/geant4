@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIySection.cc,v 1.3 2007/10/01 18:38:10 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PAIySection.cc,v 1.4 2009/07/26 15:51:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // G4PAIySection.cc -- class implementation file
@@ -40,6 +40,8 @@
 // History:
 //
 // 01.10.07, V.Ivanchenko create using V.Grichine G4PAIxSection class
+// 26.07.09, V.Ivanchenko added protection for mumerical exceptions for 
+//              low-density materials
 //
 
 #include "G4PAIySection.hh"
@@ -127,12 +129,8 @@ void G4PAIySection::Initialize( const G4Material* material,
       {
 	// G4cout<<fEnergyInterval[i]<<"\t"<<fA1[i]<<"\t"<<fA2[i]<<"\t"
 	//   <<fA3[i]<<"\t"<<fA4[i]<<"\t"<<G4endl ;
-        if(fEnergyInterval[i+1]-fEnergyInterval[i] >
+        if(fEnergyInterval[i+1]-fEnergyInterval[i] <
            1.5*fDelta*(fEnergyInterval[i+1]+fEnergyInterval[i]))
-	  {
-	    continue ;
-	  }
-        else
 	  {
 	    for(j=i;j<fIntervalNumber;j++)
 	      {
@@ -528,7 +526,8 @@ G4double G4PAIySection::DifPAIySection( G4int              i ,
    //   result *= (1-exp(-beta/betaBohr))*(1-exp(-beta/betaBohr)) ;
    //  result *= (1-exp(-be2/betaBohr2)) ;
    result *= (1-exp(-be4/betaBohr4)) ;
-   if(fDensity >= 0.1)
+   //   if(fDensity >= 0.1)
+   if(x8 > 0.)
    { 
       result /= x8 ;
    }
@@ -585,12 +584,14 @@ G4double G4PAIySection::PAIdNdxCerenkov( G4int    i ,
 
    dNdxC *= (1-exp(-be4/betaBohr4)) ;
 
-   if(fDensity >= 0.1)
-   { 
-      modul2 = (1.0 + fRePartDielectricConst[i])*(1.0 + fRePartDielectricConst[i]) + 
+   //   if(fDensity >= 0.1)
+   // { 
+   modul2 = (1.0 + fRePartDielectricConst[i])*(1.0 + fRePartDielectricConst[i]) + 
                     fImPartDielectricConst[i]*fImPartDielectricConst[i] ;
-      dNdxC /= modul2 ;
-   }
+   if(modul2 > 0.)
+     {
+       dNdxC /= modul2 ;
+     }
    return dNdxC ;
 
 } // end of PAIdNdxCerenkov 
@@ -625,12 +626,14 @@ G4double G4PAIySection::PAIdNdxPlasmon( G4int    i ,
    dNdxP *= fine_structure_const/be2/pi ;
    dNdxP *= (1-exp(-be4/betaBohr4)) ;
 
-   if( fDensity >= 0.1 )
-   { 
-     modul2 = (1 + fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) + 
-        fImPartDielectricConst[i]*fImPartDielectricConst[i] ;
-     dNdxP /= modul2 ;
-   }
+//   if( fDensity >= 0.1 )
+//   { 
+   modul2 = (1 + fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) + 
+     fImPartDielectricConst[i]*fImPartDielectricConst[i] ;
+   if(modul2 > 0.)
+     { 
+       dNdxP /= modul2 ;
+     }
    return dNdxP ;
 
 } // end of PAIdNdxPlasmon 
@@ -799,7 +802,7 @@ G4double G4PAIySection::SumOverIntervaldEdx( G4int i )
 
 G4double G4PAIySection::SumOverInterCerenkov( G4int i )
 {         
-   G4double x0,x1,y0,yy1,a,b,c,result ;
+   G4double x0,x1,y0,yy1,a,c,result ;
 
    x0  = fSplineEnergy[i] ;
    x1  = fSplineEnergy[i+1] ;
@@ -810,7 +813,8 @@ G4double G4PAIySection::SumOverInterCerenkov( G4int i )
 
    c = x1/x0;
    a = log10(yy1/y0)/log10(c) ;
-   b = y0/pow(x0,a) ;
+   G4double b = 0.0;
+   if(a < 20.) b = y0/pow(x0,a) ;
 
    a += 1.0 ;
    if(a == 0) result = b*log(c) ;
@@ -832,7 +836,7 @@ G4double G4PAIySection::SumOverInterCerenkov( G4int i )
 
 G4double G4PAIySection::SumOverInterPlasmon( G4int i )
 {         
-   G4double x0,x1,y0,yy1,a,b,c,result ;
+   G4double x0,x1,y0,yy1,a,c,result ;
 
    x0  = fSplineEnergy[i] ;
    x1  = fSplineEnergy[i+1] ;
@@ -840,8 +844,9 @@ G4double G4PAIySection::SumOverInterPlasmon( G4int i )
    yy1 = fdNdxPlasmon[i+1];
    c =x1/x0;
    a = log10(yy1/y0)/log10(c) ;
-   // b = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a) ;
+
+   G4double b = 0.0;
+   if(a < 20.) b = y0/pow(x0,a) ;
 
    a += 1.0 ;
    if(a == 0) result = b*log(x1/x0) ;
@@ -863,7 +868,7 @@ G4double G4PAIySection::SumOverInterPlasmon( G4int i )
 G4double G4PAIySection::SumOverBorder( G4int      i , 
                                        G4double en0    )
 {               
-   G4double x0,x1,y0,yy1,a,b,c,d,e0,result ;
+   G4double x0,x1,y0,yy1,a,c,d,e0,result ;
 
    e0 = en0 ;
    x0 = fSplineEnergy[i] ;
@@ -874,8 +879,9 @@ G4double G4PAIySection::SumOverBorder( G4int      i ,
    c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0) ;
-   // b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a);  // pow(10.,b) ;
+
+   G4double b = 0.0;
+   if(a < 20.) b = y0/pow(x0,a) ;
    
    a += 1 ;
    if(a == 0)
@@ -932,7 +938,7 @@ G4double G4PAIySection::SumOverBorder( G4int      i ,
 G4double G4PAIySection::SumOverBorderdEdx( G4int      i , 
                                        G4double en0    )
 {               
-   G4double x0,x1,y0,yy1,a,b,c,d,e0,result ;
+   G4double x0,x1,y0,yy1,a,c,d,e0,result ;
 
    e0 = en0 ;
    x0 = fSplineEnergy[i] ;
@@ -943,8 +949,9 @@ G4double G4PAIySection::SumOverBorderdEdx( G4int      i ,
    c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0) ;
-   // b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a);  // pow(10.,b) ;
+   
+   G4double b = 0.0;
+   if(a < 20.) b = y0/pow(x0,a) ;
    
    a += 2 ;
    if(a == 0)
@@ -963,8 +970,9 @@ G4double G4PAIySection::SumOverBorderdEdx( G4int      i ,
    c = x1/x0;
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0) ;
-   //  b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a) ;
+
+   if(a < 20.) b = y0/pow(x0,a) ;
+
    a += 2 ;
    if(a == 0) 
    {
@@ -986,7 +994,7 @@ G4double G4PAIySection::SumOverBorderdEdx( G4int      i ,
 G4double G4PAIySection::SumOverBordCerenkov( G4int      i , 
                                              G4double en0    )
 {               
-   G4double x0,x1,y0,yy1,a,b,e0,c,d,result ;
+   G4double x0,x1,y0,yy1,a,e0,c,d,result ;
 
    e0 = en0 ;
    x0 = fSplineEnergy[i] ;
@@ -995,13 +1003,14 @@ G4double G4PAIySection::SumOverBordCerenkov( G4int      i ,
    yy1 = fdNdxCerenkov[i+1] ;
 
    //  G4cout<<G4endl;
-   //  G4cout<<"SumBordC, i = "<<i<<"; en0 = "<<en0<<"; x0 ="<<x0<<"; x1 = "<<x1
+   //G4cout<<"SumBordC, i = "<<i<<"; en0 = "<<en0<<"; x0 ="<<x0<<"; x1 = "<<x1
    //     <<"; y0 = "<<y0<<"; yy1 = "<<yy1<<G4endl;
    c = x1/x0 ;
    d = e0/x0 ;
    a = log10(yy1/y0)/log10(c) ;
-   // b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a); // pow(10.,b0) ;   
+ 
+   G4double b = 0.0;
+   if(a < 20.) b = y0/pow(x0,a) ;
    
    a += 1.0 ;
    if( a == 0 ) result = b*log(x0/e0) ;
@@ -1011,32 +1020,38 @@ G4double G4PAIySection::SumOverBordCerenkov( G4int      i ,
    if( a == 0 ) fIntegralCerenkov[0] += b*log(x0/e0) ;
    else         fIntegralCerenkov[0] += y0*(x0*x0 - e0*e0*pow(d,a-2))/a ;
 
-// G4cout<<"a = "<<a<<"; b0 = "<<b0<<"; b = "<<b<<"; result = "<<result<<G4endl;
+   //G4cout<<"a = "<<a<<"; b = "<<b<<"; result = "<<result<<G4endl;
    
    x0  = fSplineEnergy[i - 1] ;
    x1  = fSplineEnergy[i - 2] ;
    y0  = fdNdxCerenkov[i - 1] ;
    yy1 = fdNdxCerenkov[i - 2] ;
 
-   // G4cout<<"x0 ="<<x0<<"; x1 = "<<x1
+   //G4cout<<"x0 ="<<x0<<"; x1 = "<<x1
    //    <<"; y0 = "<<y0<<"; yy1 = "<<yy1<<G4endl;
 
    c = x1/x0 ;
    d = e0/x0 ;
    a  = log10(yy1/y0)/log10(x1/x0) ;
-   // b0 = log10(y0) - a*log10(x0) ;
-   b  =  y0/pow(x0,a);  // pow(10.,b0) ;
+  
+   //   G4cout << "a= " << a << G4endl;
+   if(a < 20.) b = y0/pow(x0,a) ;
+
+   if(a > 20.0) b = 0.0;
+   else         b = y0/pow(x0,a);  // pow(10.,b0) ;
+
+   //G4cout << "b= " << b << G4endl;
 
    a += 1.0 ;
    if( a == 0 ) result += b*log(e0/x0) ;
    else         result += y0*(e0*pow(d,a-1) - x0 )/a ;
    a += 1.0 ;
+   //G4cout << "result= " << result << G4endl;
 
    if( a == 0 )   fIntegralCerenkov[0] += b*log(e0/x0) ;
    else           fIntegralCerenkov[0] += y0*(e0*e0*pow(d,a-2) - x0*x0)/a ;
 
-   // G4cout<<"a = "<<a<<"; b0 = "<<b0<<"; b = "
-   // <<b<<"; result = "<<result<<G4endl;    
+   //G4cout<<"a = "<<a<<"; b = "<<b<<"; result = "<<result<<G4endl;    
 
    return result ;
 
@@ -1050,7 +1065,7 @@ G4double G4PAIySection::SumOverBordCerenkov( G4int      i ,
 G4double G4PAIySection::SumOverBordPlasmon( G4int      i , 
                                              G4double en0    )
 {               
-   G4double x0,x1,y0,yy1,a,b,c,d,e0,result ;
+   G4double x0,x1,y0,yy1,a,c,d,e0,result ;
 
    e0 = en0 ;
    x0 = fSplineEnergy[i] ;
@@ -1061,8 +1076,9 @@ G4double G4PAIySection::SumOverBordPlasmon( G4int      i ,
    c = x1/x0 ;
    d = e0/x0 ;   
    a = log10(yy1/y0)/log10(c) ;
-   //  b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a); //pow(10.,b) ;
+
+   G4double b = 0.0;
+   if(a < 20.) b = y0/pow(x0,a) ;
    
    a += 1.0 ;
    if( a == 0 ) result = b*log(x0/e0) ;
@@ -1080,8 +1096,8 @@ G4double G4PAIySection::SumOverBordPlasmon( G4int      i ,
    c = x1/x0 ;
    d = e0/x0 ;
    a = log10(yy1/y0)/log10(c) ;
-   // b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a);// pow(10.,b0) ;
+ 
+   if(a < 20.) b = y0/pow(x0,a) ;
 
    a += 1.0 ;
    if( a == 0 ) result += b*log(e0/x0) ;

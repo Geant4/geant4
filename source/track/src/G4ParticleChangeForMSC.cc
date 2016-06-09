@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForMSC.cc,v 1.13 2006/06/29 21:15:09 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ParticleChangeForMSC.cc,v 1.14 2009/04/02 02:22:30 kurasige Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------
@@ -164,7 +164,7 @@ G4bool G4ParticleChangeForMSC::CheckIt(const G4Track& aTrack)
   // check
 
   // MomentumDirection should be unit vector
-  accuracy = std::abs(theMomentumDirection.mag2()-1.0);
+  accuracy = std::fabs(theMomentumDirection.mag2()-1.0);
   if (accuracy > accuracyForWarning) {
 #ifdef G4VERBOSE
     G4cout << "  G4ParticleChangeForMSC::CheckIt  : ";

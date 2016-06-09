@@ -24,14 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEMDataSet.hh,v 1.12 2008/03/17 13:45:25 pia Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VEMDataSet.hh,v 1.13 2009/09/25 07:41:34 sincerti Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 31 Jul 2001   MGP        Created
+// 31 Jul 2001   MGP                 Created
+//
+// 15 Jul 2009   N.A.Karakatsanis    New methods added for loading logarithmic data
+//                                   to enhance computing performance of interpolation
 //
 // -------------------------------------------------------------------
 
@@ -65,9 +68,19 @@ public:
  
   virtual const G4DataVector& GetEnergies(G4int componentId) const = 0;
   virtual const G4DataVector& GetData(G4int componentId) const = 0;
+  virtual const G4DataVector& GetLogEnergies(G4int componentId) const = 0;
+  virtual const G4DataVector& GetLogData(G4int componentId) const = 0;
+
   virtual void SetEnergiesData(G4DataVector* x, G4DataVector* data, G4int component=0) = 0;
+  virtual void SetLogEnergiesData(G4DataVector* x,
+                                  G4DataVector* data,
+                                  G4DataVector* Log_x, 
+                                  G4DataVector* Log_data,
+                                  G4int component=0) = 0;
  
   virtual G4bool LoadData(const G4String& fileName) = 0;
+  virtual G4bool LoadNonLogData(const G4String& fileName) = 0;
+
   virtual G4bool SaveData(const G4String& fileName) const = 0;
 
   virtual G4double RandomSelect(G4int componentId = 0) const = 0;

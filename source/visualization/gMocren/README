@@ -1,0 +1,13 @@
+//-- gMocren-file driver --//
+
+Oct. 12, 2009 : Akinori Kimura
+               Beta release.
+               It supports a geometry constructed with G4PhantomParameterisation or
+               G4VNestedParameterisation and a hits collection based on G4VHits, 
+               primitive scorer or the interactive scorer.
+
+Apr.  1, 2009 : Akinori Kimura
+
+               First version of the gMocren-file driver.
+               This is a prototype, not a release version.
+

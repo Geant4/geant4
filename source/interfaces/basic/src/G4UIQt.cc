@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc,v 1.24 2008/11/24 13:50:34 lgarnier Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UIQt.cc,v 1.29 2009/11/18 10:30:21 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // L. Garnier
 
@@ -141,7 +141,7 @@ G4UIQt::G4UIQt (
   }
   fMainWindow = new QMainWindow();
 
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::Initialise after main window creation\n");
 #endif
 #if QT_VERSION < 0x040000
@@ -154,7 +154,12 @@ G4UIQt::G4UIQt (
   fMainWindow->move(QPoint(50,100));
 #endif
 
+  QWidget *mainWidget = new QWidget(fMainWindow);
+#if QT_VERSION < 0x040000
   QSplitter *splitter = new QSplitter(Qt::Vertical,fMainWindow);
+#else
+  QSplitter *splitter = new QSplitter(Qt::Vertical,mainWidget);
+#endif
 
   // Set layouts
 
@@ -207,7 +212,7 @@ G4UIQt::G4UIQt (
   layoutTop->addWidget(clearButton);
 
 #if QT_VERSION >= 0x040000
-  topWidget->setLayout(layoutTop);
+  //  topWidget->setLayout(layoutTop);
 #endif
 
   layoutBottom->addWidget(fCommandHistoryArea);
@@ -215,13 +220,21 @@ G4UIQt::G4UIQt (
   layoutBottom->addWidget(fCommandArea);
 #if QT_VERSION >= 0x040000
 
-  bottomWidget->setLayout(layoutBottom);
+  //  bottomWidget->setLayout(layoutBottom);
+  QVBoxLayout *mainLayout = new QVBoxLayout(mainWidget);
+
   splitter->addWidget(topWidget);
   splitter->addWidget(bottomWidget);
+
+  mainLayout->addWidget(splitter);
+
 #endif
 
-
+#if QT_VERSION >= 0x040000
+  fMainWindow->setCentralWidget(mainWidget);
+#else
   fMainWindow->setCentralWidget(splitter);
+#endif
 
 #if QT_VERSION < 0x040000
 
@@ -247,17 +260,20 @@ G4UIQt::G4UIQt (
   helpMenu->addAction("Show Help", this, SLOT(ShowHelpCallback()));
 #endif
 
+  AddInteractor ("file",(G4Interactor)fileMenu);
+  AddInteractor ("help",(G4Interactor)helpMenu);
+
   // Set the splitter size. The fTextArea sould be 2/3 on the fMainWindow
 #if QT_VERSION < 0x040000
   QValueList<int> vals = splitter->sizes();
 #else
   QList<int> vals = splitter->sizes();
 #endif
-  if(vals.size()==2) {
-    vals[0] = (splitter->orientation()==Qt::Vertical ? splitter->height() : splitter->width())*3/4;
-    vals[1] = (splitter->orientation()==Qt::Vertical ? splitter->height() : splitter->width())*1/4;
-    splitter->setSizes(vals);
-  }
+//    if(vals.size()==2) {
+//      vals[0] = (splitter->orientation()==Qt::Vertical ? splitter->height() : splitter->width())*3/4;
+//      vals[1] = (splitter->orientation()==Qt::Vertical ? splitter->height() : splitter->width())*1/4;
+//      splitter->setSizes(vals);
+//    }
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 }
@@ -332,6 +348,12 @@ void G4UIQt::Prompt (
   fCommandLabel->setText((char*)aPrompt.data());
 }
 
+
+QMainWindow * G4UIQt::getMainWindow (
+)
+{
+  return fMainWindow;
+}
 
 void G4UIQt::SessionTerminate (
 )
@@ -984,10 +1006,10 @@ QString G4UIQt::GetCommandList (
 /**  Implement G4VBasicShell vurtual function
  */
 G4bool G4UIQt::GetHelpChoice(
- G4int& aInt
+ G4int&
 )
 {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::GetHelpChoice SHOULD NEVER GO HERE");
 #endif
   return true;
@@ -999,7 +1021,7 @@ G4bool G4UIQt::GetHelpChoice(
 void G4UIQt::ExitHelp(
 )
 {
-#ifdef G4DEBUG
+#ifdef G4DEBUG_INTERFACES_BASIC
   printf("G4UIQt::ExitHelp SHOULD NEVER GO HERE");
 #endif
 }
@@ -1103,6 +1125,16 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
 
         // do not pass by parent, it will disable widget tab focus !
         return true;
+#if QT_VERSION >= 0x040000
+        // L.Garnier : MetaModifier is CTRL for MAC, but I don't want to put a MAC 
+        // specific #ifdef
+      } else if (((e->modifiers () == Qt::ControlModifier) || (e->modifiers () == Qt::MetaModifier)) && (e->key() == Qt::Key_A)) {
+       fCommandArea->home(false);
+       return true;
+      } else if (((e->modifiers () == Qt::ControlModifier) || (e->modifiers () == Qt::MetaModifier)) && (e->key() == Qt::Key_E)) {
+       fCommandArea->end(false);
+       return true;
+#endif
       }
     }
   }

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LPhysicsFreeVector.cc,v 1.22 2008/09/22 08:26:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LPhysicsFreeVector.cc,v 1.23 2009/06/25 10:05:26 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // --------------------------------------------------------------------
@@ -34,11 +34,13 @@
 // This is a free vector for Low Energy Physics cross section data
 //
 // F.W. Jones, TRIUMF, 04-JUN-96
+// 
+// Modified:
+//    19 Jun. 2009, V.Ivanchenko : removed hidden bin 
 //
 // --------------------------------------------------------------------
 
 #include "G4LPhysicsFreeVector.hh"
-
 #include "G4ios.hh"
 
 // --------------------------------------------------------------------
@@ -60,10 +62,10 @@ G4LPhysicsFreeVector::G4LPhysicsFreeVector(size_t nbin,
    
    edgeMin = binmin;
    edgeMax = binmax;
-   numberOfBin = nbin;
-   binVector.reserve(nbin+1);
-   dataVector.reserve(nbin+1);
-   for (size_t i=0; i<=numberOfBin; i++)
+   numberOfNodes = nbin;
+   binVector.reserve(numberOfNodes);
+   dataVector.reserve(numberOfNodes);
+   for (size_t i=0; i<numberOfNodes; i++)
    {
      binVector.push_back(0.0);
      dataVector.push_back(0.0);
@@ -104,7 +106,7 @@ G4LPhysicsFreeVector::operator=(const G4LPhysicsFreeVector& right)
 
 void G4LPhysicsFreeVector::DumpValues()
 {
-   for (size_t i = 0; i < numberOfBin; i++)
+   for (size_t i = 0; i < numberOfNodes; i++)
    {
       G4cout << binVector[i] << "   " << dataVector[i]/millibarn << G4endl;
    }

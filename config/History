@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.344 2008/12/09 11:20:58 gcosmo Exp $
+cvs log $Id: History,v 1.372 2009/11/25 14:20:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,112 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th November 2009  Ben Morgan (config-V09-02-17)
+- Updated internal scripts for Configure.
+
+20th November 2009  Gabriele Cosmo (config-V09-02-16)
+- Removed CHIPS/xs_dependent module from include paths.
+
+18th November 2009  Gabriele Cosmo (config-V09-02-15)
+- architecture.gmk: corrected inclusion of -lz for zlib.
+- WIN32-VC.gmk: added gd32.lib to OGLLIBS.
+
+17th November 2009  Gabriele Cosmo (config-V09-02-14)
+- Added include paths to new CHIPS modules.
+
+17th November 2009  Gabriele Cosmo (config-V09-02-13)
+- G4VIS_USE.gmk: fixed dependency issues on WIN32-VC for gl2ps utility
+  library in visualization.
+- WIN32-VC.gmk: added use32.lib to OGLLIBS to fix problems of linking
+  when G4LIB_BUILD/USE_WIN32_SESSION is not set (L.Garnier).
+- binmake.gmk: corrected inclusion of G4zlib library in link list for
+  the case of global libraries.
+- Updated Configure script (Configure-V09-02-03) and internal scripts:
+  o Added new data set for G4REALSURFACEDATA variable and updated G4LEDATA
+    data set version.
+  o Fixed detection of QtCore library; addressing problem report #1079.
+  o Added flag to allow running with query options on non-interactive
+    terminal. Resolves issue reported in Hypernews Install-and-Config #1213.
+  o Corrected text for installation of g3tog4 module; cernlib is not required.
+
+5th November 2009  John Allison (config-V09-02-12)
+- Removed references to obsolete GAGTREE driver.
+
+4th November 2009  John Allison
+- Added new gMocren flags for backward compatibility.
+
+4th November 2009  Gabriele Cosmo (config-V09-02-11)
+- Added new gMocren include path to G4VIS_USE.gmk script.
+
+8th September 2009  Gabriele Cosmo (config-V09-02-10)
+- Darwin-g++.gmk: added paths to $QTHOME/include and $QTHOME/lib to
+  setup for Qt4 configuration.
+
+17th August 2009  Gabriele Cosmo (config-V09-02-09)
+- Added G4OPTDEBUG option for hybrid optimized-debug build also to
+  Darwin-g++ and WIN32-g++ configurations.
+
+3rd August 2009  Gabriele Cosmo (config-V09-02-08)
+- Darwin-g++.gmk: added -arch_multiple option to LDFLAGS to force more
+  diagnostics for wrong architecture errors at link stage.
+
+17th June 2009  Gunter Folger (config-V09-02-07)
+- binmake.gmk: moved definition of TARGOBJEXT to place not dependent
+  on G4EXLIB, such that the extension is defined when no lib is present
+  (e.g. for hadronic exercisers).
+
+27th May 2009  Ben Morgan (config-V09-02-06)
+- Configure script:
+  o Rewritten check on make/gmake on WIN32-VC systems to avoid problems
+    with cygwin and Matlab.
+  o Added check to build Qt driver only when Qt UI module is built;
+    reordered moc checks and added cross-check on moc version.
+    Added safety reset of OpenGL QT build and use variables.
+  o Commented out echo compatibility warning to address problem report #1067.
+
+27th April 2009  Gabriele Cosmo (config-V09-02-05)
+- Linux-icc.gmk: removed "-lcxa -lunwind" LOADLIBS addition, no longer
+  necessary since icc-11.0.83.
+
+20th April 2009  Laurent Garnier
+- Linux-g++.gmk: corrections to respect standard location for include
+  and lib paths for Qt. Improved setup for non-standard Qt3 location.
+
+8th March 2009  Laurent Garnier
+- Darwin-g++.gmk: bug fix for Qt non standard installation.
+- Linux-g++.gmk: changed way to fing QtLib by default.
+- WIN32-VC.gmk: bug fix for building GLQTLIBS.
+
+5th March 2009  Guy Barrand
+- analysis.gmk: arrange configuration for WIN32-VC so that what is returned
+  by `aida-config --lib` (which may have the Windows LINK.exe syntax) is
+  understood by g++ which is in fact used by CygWin for linking applications.
+  Then transforming /LIBPATH options to -libpath options and change the path
+  '\' syntax to a '/' syntax. Allowing now to use the AIDA implementation
+  coming from an osc-batch or osc-vis binary kit built for WIN32-VC, in a
+  example using AIDA built from CygWin with Geant4 built with the VisualC++
+  compiler.
+- G4UI_USE.gmk: suppressed G4UI_USE_OSC logic. From OpenScientist/16.8, the
+  osc-g4-vis program can instrument directly the GNUmakefile of an example or
+  of a user application which is a clone of some Geant4 example.
+
+27th February 2009  Gabriele Cosmo (config-V09-02-04)
+- common.gmk, globlib.gmk: added removal of moc sources in clean target.
+
+26th February 2009  Gabriele Cosmo (config-V09-02-03)
+- Linux-g++.gmk: simplified Qt setup to conform to standard Qt installation.
+
+26th January 2009  Gabriele Cosmo (config-V09-02-02)
+- architecture.gmk: restored generic name for XercesC library for WIN32-VC.
+
+20th January 2009  Gunter Folger (config-V09-02-01)
+- architecture.gmk: changed name of XercesC library for WIN32-VC.
+
+9th January 2009  Gabriele Cosmo (config-V09-02-00)
+- Added -lXi to X11LIBS for Linux-g++, Linux-icc and WIN32-g++ configurations,
+  required for correct linkage with OpenInventor Coin3D libraries (suggestion
+  by F.Jones).
 
 9th December 2008  Guy Barrand (config-V09-01-17)
 - G4UI_USE.gmk: corrected G4UI_USE_OSC to use $(shell ...) instead 

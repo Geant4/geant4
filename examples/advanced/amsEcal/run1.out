@@ -1,0 +1,214 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-09-03-ref-00    (18-December-2009)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+***** Table : Nb of materials = 4 *****
+
+ Material:     Lead     density: 11.200 g/cm3   RadL:   5.687 mm   Nucl.Int.Length:  18.492 cm   Imean: 820.000 eV 
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.20 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Scintillator     density:  1.032 g/cm3   RadL:  42.438 cm   Nucl.Int.Length:  70.639 cm   Imean:  65.013 eV 
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  92.24 %  ElmAbundance  50.00 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:   7.76 %  ElmAbundance  50.00 %
+
+ Material:      Air     density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m    Imean:  85.684 eV   temperature: 273.15 K  pressure:   1.00 atm
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material: Galactic     density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.943 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+/run/verbose 2
+#
+/ams/phys/addPhysics emstandard_local
+/ams/phys/setCuts 1 km
+#
+/run/initialize
+userDetector->Construct() start.
+
+-------------------------------------------------------------
+ ---> The calorimeter is 9 Modules
+ ---> A Module is 10 Layers + 1 milled Layer
+ ---> A Layer is 1.68 mm  thickness of Lead
+ ---> A Layer includes 490 fibers of Scintillator
+      ---> diameter : 1.08 mm 
+      ---> length   : 66.285 cm 
+      ---> distance : 1.35 mm 
+ ---> The milled Layer is 1.4 mm  thickness of Lead
+
+ ---> Module thickness 1.82 cm 
+
+ ---> Total calor thickness 16.38 cm 
+      Tranverse size        66.285 cm 
+-------------------------------------------------------------
+
+world is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 1 mm 
+#
+/ams/gun/setDefault
+/gun/particle mu+
+/gun/energy 1 GeV
+/ams/gun/beam 1 cm
+#
+/ams/event/printModulo 1000
+#
+/run/beamOn 10000
+
+Region <DefaultRegionForTheWorld> -- appears in <world> world volume
+ Root logical volume(s) : world 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Galactic Lead Scintillator 
+ Production cuts :   gamma 1 km      e- 1 km      e+ 1 km  proton 0 fm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 0 fm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Lead
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 0 fm 
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 0 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Scintillator
+ Range cuts        :  gamma  1 km     e-  1 km     e+  1 km  proton 0 fm 
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 0 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   32 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00           31k layer
+       0.00         0.00         0.00            1k module
+       0.00         0.00         0.00            1k calorimeter
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      94.74         30k         1      490        980         0.00    layer
+       3.16          1k         1       17         20         0.00    module
+       2.10          0k         1       10         18         0.00    calorimeter
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start Run processing.
+
+---> Begin Of Event: 0
+
+---> Begin Of Event: 1000
+
+---> Begin Of Event: 2000
+
+---> Begin Of Event: 3000
+
+---> Begin Of Event: 4000
+
+---> Begin Of Event: 5000
+
+---> Begin Of Event: 6000
+
+---> Begin Of Event: 7000
+
+---> Begin Of Event: 8000
+
+---> Begin Of Event: 9000
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=26.57s Real=26.79s Sys=0.23s
+
+-------------------------------------------------------------
+ ---> The calorimeter is 9 Modules
+ ---> A Module is 10 Layers + 1 milled Layer
+ ---> A Layer is 1.68 mm  thickness of Lead
+ ---> A Layer includes 490 fibers of Scintillator
+      ---> diameter : 1.08 mm 
+      ---> length   : 66.285 cm 
+      ---> distance : 1.35 mm 
+ ---> The milled Layer is 1.4 mm  thickness of Lead
+
+ ---> Module thickness 1.82 cm 
+
+ ---> Total calor thickness 16.38 cm 
+      Tranverse size        66.285 cm 
+-------------------------------------------------------------
+
+ The run was 10000 mu+ of 1 GeV through the calorimeter
+------------------------------------------------------------
+
+             visible Energy          (rms/mean)        total Energy           (rms/mean)
+
+   layer 0: 732.61 keV +-  1.93 MeV  (2.6e+02 %)     8.9055 MeV +- 5.476 MeV  ( 61 %)
+   layer 1: 742.11 keV +- 1.928 MeV  (2.6e+02 %)     9.0962 MeV +- 6.159 MeV  ( 68 %)
+   layer 2: 700.99 keV +-   1.5 MeV  (2.1e+02 %)     8.9776 MeV +- 5.436 MeV  ( 61 %)
+   layer 3:  748.4 keV +- 1.927 MeV  (2.6e+02 %)     9.0973 MeV +- 6.064 MeV  ( 67 %)
+   layer 4: 748.55 keV +-  1.95 MeV  (2.6e+02 %)     9.0366 MeV +- 5.856 MeV  ( 65 %)
+   layer 5: 715.88 keV +-  1.44 MeV  (2e+02 %)     8.9494 MeV +- 5.571 MeV  ( 62 %)
+   layer 6: 710.79 keV +- 1.107 MeV  (1.6e+02 %)     8.9548 MeV +- 5.207 MeV  ( 58 %)
+   layer 7: 731.93 keV +- 1.605 MeV  (2.2e+02 %)     9.0496 MeV +- 5.693 MeV  ( 63 %)
+   layer 8:  746.8 keV +- 1.722 MeV  (2.3e+02 %)      8.993 MeV +- 5.309 MeV  ( 59 %)
+   layer 9: 695.44 keV +- 1.104 MeV  (1.6e+02 %)     8.9305 MeV +- 5.471 MeV  ( 61 %)
+   layer 10: 714.49 keV +- 1.146 MeV  (1.6e+02 %)     8.9825 MeV +-  5.39 MeV  ( 60 %)
+   layer 11: 740.05 keV +- 1.741 MeV  (2.4e+02 %)     9.0284 MeV +- 5.927 MeV  ( 66 %)
+   layer 12: 724.77 keV +- 1.429 MeV  (2e+02 %)     8.9099 MeV +- 5.258 MeV  ( 59 %)
+   layer 13: 720.08 keV +- 1.503 MeV  (2.1e+02 %)     8.9256 MeV +- 5.244 MeV  ( 59 %)
+   layer 14: 739.52 keV +- 1.793 MeV  (2.4e+02 %)     8.9942 MeV +- 5.493 MeV  ( 61 %)
+   layer 15: 735.07 keV +- 1.754 MeV  (2.4e+02 %)     8.9093 MeV +- 5.029 MeV  ( 56 %)
+   layer 16: 724.37 keV +- 1.406 MeV  (1.9e+02 %)     8.9576 MeV +-  5.17 MeV  ( 58 %)
+   layer 17: 702.53 keV +- 1.294 MeV  (1.8e+02 %)     8.8082 MeV +- 4.696 MeV  ( 53 %)
+
+   total calor : 13.074 MeV +- 6.781 MeV  ( 52 %)     161.51 MeV +- 23.38 MeV  ( 14 %)
+------------------------------------------------------------
+
+   Leakage : 838.49 MeV +- 23.38 MeV
+   Eleak/Ebeam =83.8 %  ( forward =83.8 %;   backward =0.014 %;   lateral =0.0243 %)
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1380347255, 1399488370
+----------------------------------------
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+Units table cleared.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.
+

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.21 2005/06/04 14:53:18 gcosmo Exp $
+# $Id: GNUmakefile,v 1.26 2009/11/17 11:31:20 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -24,8 +24,13 @@ ifdef G4LIB_BUILD_ZLIB
   SUBLIBS += G4zlib
 endif
 
-# Libraries which can be used without external packages or libraries...
+# For Debug mode
+# CPPFLAGS += -DG4DEBUG_VIS_OGL
+# CPPFLAGS += -DG4DEBUG_VIS_OI
+# CPPFLAGS += -DG4DEBUG_VIS_MANAGEMENT
+
 ifdef G4VIS_BUILD
+# Drivers that can be used without external libraries...
   SUBDIRS += management
   SUBLIBS += G4vis_management
   SUBDIRS += FukuiRenderer
@@ -40,14 +45,20 @@ ifdef G4VIS_BUILD
   SUBLIBS += G4Tree
   SUBDIRS += XXX
   SUBLIBS += G4visXXX
-
+  SUBDIRS += gMocren
+  SUBLIBS += G4GMocren
+# Drivers needing external libraries...
 ifdef G4VIS_BUILD_OPENGL_DRIVER
+  SUBDIRS += externals/gl2ps
   SUBDIRS += OpenGL
   SUBLIBS += G4OpenGL
+  SUBLIBS += G4gl2ps
 endif
 ifdef G4VIS_BUILD_OI_DRIVER
+  SUBDIRS += externals/gl2ps
   SUBDIRS += OpenInventor
   SUBLIBS += G4OpenInventor
+  SUBLIBS += G4gl2ps
 endif
 endif #G4VIS_BUILD
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UrbanMscModel90.hh,v 1.4 2008/10/29 14:15:30 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UrbanMscModel90.hh,v 1.6 2009/11/01 13:04:12 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -69,7 +69,7 @@ class G4UrbanMscModel90 : public G4VMscModel
 
 public:
 
-  G4UrbanMscModel90(const G4String& nam = "UrbanMscUni90");
+  G4UrbanMscModel90(const G4String& nam = "UrbanMsc90");
 
   virtual ~G4UrbanMscModel90();
 
@@ -109,8 +109,6 @@ private:
   G4double SampleDisplacement();
 
   G4double LatCorrelation();
-
-  void GeomLimit(const G4Track& track);
 
   inline G4double GetLambda(G4double kinEnergy);
 

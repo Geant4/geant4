@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.16 2008/09/13 13:08:39 maire Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: HistoManager.cc,v 1.17 2009/03/04 18:49:17 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -240,7 +240,7 @@ void HistoManager::RemoveHisto(G4int ih)
 
 void HistoManager::PrintHisto(G4int ih)
 {
- if (ih < MaxHisto) ascii[ih] = true;
+ if (ih < MaxHisto) { ascii[ih] = true; ascii[0] = true; }
  else
     G4cout << "---> warning from HistoManager::PrintHisto() : histo " << ih
            << "does not exist" << G4endl;
@@ -253,7 +253,9 @@ void HistoManager::PrintHisto(G4int ih)
 void HistoManager::saveAscii()
 {
 #ifdef G4ANALYSIS_USE
- 
+
+ if (!ascii[0]) return;
+  
  G4String name = fileName[0] + ".ascii";
  std::ofstream File(name, std::ios::out);
  File.setf( std::ios::scientific, std::ios::floatfield );

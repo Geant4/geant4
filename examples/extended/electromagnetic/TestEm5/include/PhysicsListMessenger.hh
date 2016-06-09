@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsListMessenger.hh,v 1.7 2006/06/29 16:55:05 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PhysicsListMessenger.hh,v 1.9 2009/03/06 18:04:23 maire Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,23 +44,23 @@ class G4UIcmdWithADoubleAndUnit;
 
 class PhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
+  PhysicsListMessenger(PhysicsList* );
+  ~PhysicsListMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
-    PhysicsList* pPhysicsList;
+  PhysicsList* pPhysicsList;
     
-    G4UIdirectory*             physDir;    
-    G4UIcmdWithAString*        pListCmd;    
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;        
+  G4UIdirectory*             physDir;    
+  G4UIcmdWithAString*        pListCmd;    
+  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* electCutCmd;
+  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+  G4UIcmdWithADoubleAndUnit* allCutCmd;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

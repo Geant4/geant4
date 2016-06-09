@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: QGSP_DIF.icc,v 1.1 2007/11/13 10:20:32 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: QGSP_DIF.icc,v 1.2 2009/05/18 08:54:22 gunter Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //           created from QGSP  originally by J.P. Wellisch
 //
 // Modified:
+// 18.05.2009 G.Folger: obsoleted
 //
 //----------------------------------------------------------------------------
 //
@@ -62,6 +63,8 @@
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsQGSP.hh"
 
+#include "G4WarnPLStatus.hh"
+
 template<class T> TQGSP_DIF<T>::TQGSP_DIF(G4int ver):  T()
 {
   // default cut value  (1.0mm) 
@@ -73,6 +76,9 @@ template<class T> TQGSP_DIF<T>::TQGSP_DIF(G4int ver):  T()
 
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
+
+  G4WarnPLStatus obs;
+  obs.Unsupported("QGSP_DIF");
 
   // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(ver));

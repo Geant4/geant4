@@ -1,0 +1,29 @@
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+History file for  hadronic/models/chiral_inv_phase_space/fragmentation  directory.
+	
+Summarize all code modifications & keep track of all tags in this file.
+
+****************************************************************************
+*** Geant4 developers can not make changes in this directory or make the ***
+*** History records without permision of M.Kosov: Mikhail.Kossov@cern.ch ***
+****************************************************************************
+
+     -----------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top) *
+     -----------------------------------------------------------------
+
+1-Dec-2009 M.Kosov                             (hadr-chips-V09-02-29)
+-----------------------------------------------------------------------
+Mutual tag: Compilation warning fix in G4QFragmentation and G4QIonIonCollision
+
+17-Nov-2009 M.Kosov                            (hadr-chips-V09-02-24)
+-----------------------------------------------------------------------
+Mutual tag: Migration of CHIPS-cross_section depenent files to CHIPS-xs_dep
+
+16-Nov-2009 M.Kosov                            (hadr-chips-V09-02-23)
+-----------------------------------------------------------------------
+Mutual tag: Split up of CHIPS-body in three directories -> this

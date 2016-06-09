@@ -59,7 +59,7 @@ XrayFluoDetectorMessenger::XrayFluoDetectorMessenger(XrayFluoDetectorConstructio
   UpdateCmd->AvailableForStates(G4State_Idle);
 
   sampleCmd = new G4UIcmdWithAString("/apparate/sampleMaterial",this);
-  sampleCmd->SetGuidance("select a diferent material for the sample: materials can be: Dolorite, Anorthosite, Mars1, IceBasalt, HPGe OR choosen from Nist database (see /material/nist/listMaterials for details");
+  sampleCmd->SetGuidance("select a diferent material for the sample: materials can be: Dolorite, Anorthosite, Mars1, HawaiianWD, HawaiianRF, IceBasalt, IcelandicWD, IcelandicRF, Gabbro, GabbroWD, GabbroRF, HPGe OR choosen from Nist database (see /material/nist/listMaterials for details");
   sampleCmd->SetParameterName("material",true);
   sampleCmd->SetDefaultValue("mars1");
   sampleCmd->AvailableForStates(G4State_Idle);

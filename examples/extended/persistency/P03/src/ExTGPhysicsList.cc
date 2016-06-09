@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: ExTGPhysicsList.cc,v 1.1 2008/11/03 10:06:22 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: ExTGPhysicsList.cc,v 1.3 2009/11/19 11:34:43 arce Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // ---------------------------------------------------------------------------
 
@@ -141,7 +141,9 @@ void ExTGPhysicsList::ConstructProcess()
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
 
-#include "G4MultipleScattering.hh"
+#include "G4eMultipleScattering.hh"
+#include "G4MuMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -174,13 +176,13 @@ void ExTGPhysicsList::ConstructEM()
       
     } else if (particleName == "e-") {
       //electron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);      
 
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
@@ -188,7 +190,7 @@ void ExTGPhysicsList::ConstructEM()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4MuMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
@@ -197,7 +199,7 @@ void ExTGPhysicsList::ConstructEM()
                (particle->GetPDGCharge() != 0.0) && 
                (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4hMultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
       //step limit
       pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);         

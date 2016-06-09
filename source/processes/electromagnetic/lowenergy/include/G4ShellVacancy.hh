@@ -34,6 +34,7 @@
 //  21 Sept 2001  Elena Guardincerri   Created
 //  25 Mar  2002  V.Ivanchenko         Change AverageNOfIonisations int->double
 //  12 Apr  2003  V.Ivanchenko         Migrade to cut per region
+//  16 Apr  2009  V.Ivanchenko         Rename "set" variable
 //
 // -------------------------------------------------------------------
 
@@ -64,7 +65,7 @@ public:
 						   G4double incidentEnergy,
 						   G4double eLoss) const;
 
-  void AddXsiTable(G4VEMDataSet* set);
+  void AddXsiTable(G4VEMDataSet* p);
 
 private:
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MagIntegratorStepper.hh,v 1.12 2006/09/20 09:31:01 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MagIntegratorStepper.hh,v 1.14 2009/11/05 18:31:15 japost Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 //
 // class G4MagIntegratorStepper
@@ -74,12 +74,20 @@ class G4MagIntegratorStepper
        // Estimate the maximum distance of a chord from the true path
        // over the segment last integrated.
 
+     virtual void ComputeRightHandSide( const G4double y[], G4double dydx[] ); 
+       // Must compute the RightHandSide as in the method below
+       // Optionally can cache the input y[] and the dydx[] values computed.
+
      inline void NormaliseTangentVector( G4double vec[6] );
        // Simple utility function to (re)normalise 'unit velocity' vector.
+
+     inline void NormalisePolarizationVector( G4double vec[12] );
+       // Simple utility function to (re)normalise 'unit spin' vector.
 
      inline void RightHandSide( const double y[], double dydx[] );   
        // Utility method to supply the standard Evaluation of the
        // Right Hand side of the associated equation.
+
 
      inline G4int  GetNumberOfVariables() const;
        // Get the number of variables that the stepper will integrate over.

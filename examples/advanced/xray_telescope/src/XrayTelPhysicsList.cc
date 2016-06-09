@@ -58,6 +58,10 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
+// Hadrons
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
 
 #include "globals.hh"
 
@@ -67,9 +71,8 @@ XrayTelPhysicsList::XrayTelPhysicsList():  G4VUserPhysicsList()
 {
   // Default cut values
   defaultCutValue = 2.0*mm;
-  cutForGamma     = 1.0*micrometer;
-  cutForElectron  = 1.0*micrometer;
-  cutForProton    = 1.0*micrometer;
+  cutForGamma     = 1.0*m;
+  cutForElectron  = 1.0*m;
 
   SetVerboseLevel(1);
 }
@@ -84,6 +87,7 @@ void XrayTelPhysicsList::ConstructParticle()
   ConstructLeptons();
   ConstructMesons();
   ConstructBaryons();
+  ConstructIons();
   ConstructAllShortLiveds();
 }
 
@@ -114,14 +118,21 @@ void XrayTelPhysicsList::ConstructLeptons()
 }
 void XrayTelPhysicsList::ConstructMesons()
 {
+  // mesons
+  G4MesonConstructor mConstructor;
+  mConstructor.ConstructParticle();
 }
 void XrayTelPhysicsList::ConstructBaryons()
 {
   //  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
+  G4BaryonConstructor bConstructor;
+  bConstructor.ConstructParticle();
+}
+void XrayTelPhysicsList::ConstructIons()
+{
+  // ions
+  G4IonConstructor iConstructor;
+  iConstructor.ConstructParticle();
 }
 void XrayTelPhysicsList::ConstructAllShortLiveds()
 {
@@ -139,11 +150,23 @@ void XrayTelPhysicsList::ConstructProcess()
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+
+#include "G4eMultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
+
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
-#include "G4MultipleScattering.hh"
-#include "G4hLowEnergyIonisation.hh"
+
+#include "G4MuIonisation.hh"
+#include "G4MuBremsstrahlung.hh"
+#include "G4MuPairProduction.hh"
+
+#include "G4hIonisation.hh"
+#include "G4hBremsstrahlung.hh"
+#include "G4hPairProduction.hh"
+
+#include "G4ionIonisation.hh"
 
 void XrayTelPhysicsList::ConstructEM()
 {
@@ -165,33 +188,60 @@ void XrayTelPhysicsList::ConstructEM()
       else if (particleName == "e-")
 	{
 	  //electron
-	  pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+	  pmanager->AddProcess(new G4eMultipleScattering(),-1, 1,1);
 	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
-	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
-	}
-      else if (particleName == "e+")
-	{
+	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3,3);
+
+	} else if (particleName == "e+") {
+
 	  //positron
-	  pmanager->AddProcess(new G4MultipleScattering(),-1, 1,1);
+	  pmanager->AddProcess(new G4eMultipleScattering(),-1, 1,1);
 	  pmanager->AddProcess(new G4eIonisation(),       -1, 2,2);
-	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1,-1,3);
+	  pmanager->AddProcess(new G4eBremsstrahlung(),   -1, 3,3);
 	  pmanager->AddProcess(new G4eplusAnnihilation(),  0,-1,4);
-	}
-      else if ((!particle->IsShortLived()) &&
+
+	} else if( particleName == "mu-" || 
+		   particleName == "mu+" ) {
+
+	  //muon  
+	  pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+	  pmanager->AddProcess(new G4MuIonisation,        -1, 2, 2);
+	  pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 3, 3);
+	  pmanager->AddProcess(new G4MuPairProduction,    -1, 4, 4);
+	  
+	} else if( particleName == "pi-" ||
+		   particleName == "pi+" ) {
+
+	  //pions
+	  pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+	  pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+	  pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
+	  pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
+     
+	} else if( particleName == "proton" ) {
+
+	  //proton  
+	  pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+	  pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
+	  pmanager->AddProcess(new G4hBremsstrahlung,     -1, 3, 3);
+	  pmanager->AddProcess(new G4hPairProduction,     -1, 4, 4);       
+     
+	} else if( particleName == "alpha" || 
+		   particleName == "He3" || 
+		   particleName == "GenericIon" ) {
+
+	  //Ions 
+	  pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+	  pmanager->AddProcess(new G4ionIonisation,       -1, 2, 2);
+	  
+	} else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) &&
-	       (particle->GetParticleName() != "chargedgeantino"))
-	{
+	       (particle->GetParticleName() != "chargedgeantino")) {
+
 	  //all others charged particles except geantino
-	  pmanager->AddProcess(new G4MultipleScattering(),-1,1,1);
+	  pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+	  pmanager->AddProcess(new G4hIonisation,         -1, 2, 2);
 
-	  G4double demax = 0.05;  // try to lose at most 5% of the energy in
-	  //    a single step (in limit of large energies)
-	  G4double stmin = 1.e-9 * m;  // length of the final step: 10 angstrom
-	  // reproduced angular distribution of TRIM
-
-	  G4hLowEnergyIonisation* lowEIonisation = new G4hLowEnergyIonisation();
-	  pmanager->AddProcess( lowEIonisation, -1,2,2);
-	  lowEIonisation->SetStepFunction( demax, stmin );
 	}
     }
 }
@@ -226,10 +276,6 @@ void XrayTelPhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForElectron, "e+");
 
-  // set cut values for proton
-  SetCutValue(cutForProton, "proton"); 
-  SetCutValue(cutForProton, "anti_proton");
-
   // SetCutValueForOthers(defaultCutValue); 
  
   if (verboseLevel >1) { 
@@ -249,12 +295,6 @@ void XrayTelPhysicsList::SetCutForElectron(G4double cut)
   cutForElectron = cut;
 }
 
-void XrayTelPhysicsList::SetCutForProton(G4double cut)
-{
-  ResetCuts();
-  cutForProton = cut;
-}
-
 G4double XrayTelPhysicsList::GetCutForGamma() const
 {
   return cutForGamma;
@@ -263,11 +303,6 @@ G4double XrayTelPhysicsList::GetCutForGamma() const
 G4double XrayTelPhysicsList::GetCutForElectron() const
 {
   return cutForElectron;
-}
-
-G4double XrayTelPhysicsList::GetCutForProton() const
-{
-  return cutForProton;
 }
 
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectronNuclearProcess.hh,v 1.5 2006/06/29 21:02:17 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ElectronNuclearProcess.hh,v 1.6 2009/03/31 19:16:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // Class Description:
 //
@@ -41,20 +41,15 @@
 #define G4ElectronNuclearProcess_h 1
  
 #include "G4HadronInelasticProcess.hh"
-#include "G4ElectroNuclearCrossSection.hh"
  
-
- class G4ElectronNuclearProcess : public G4HadronInelasticProcess
- {
- public:
+class G4ElectronNuclearProcess : public G4HadronInelasticProcess
+{
+public:
     
-    G4ElectronNuclearProcess( const G4String& processName = "ElectroNuclear" );
-    ~G4ElectronNuclearProcess();
+  G4ElectronNuclearProcess( const G4String& processName = "ElectroNuclear" );
+  virtual ~G4ElectronNuclearProcess();
 
- private:
- 
-   G4ElectroNuclearCrossSection theData;
- };
+};
 
 #endif
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAGenericIonsManager.hh,v 1.3 2006/06/29 19:34:16 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4DNAGenericIonsManager.hh,v 1.4 2009/06/10 13:32:58 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 
 #ifndef   G4DNAGENERICIONSMANAGER_HH
  #define  G4DNAGENERICIONSMANAGER_HH 1
@@ -42,7 +42,7 @@
   public:
    static G4DNAGenericIonsManager *      Instance(void);
    G4ParticleDefinition *                GetIon(const G4String & name);
-   
+
   private:
                                          G4DNAGenericIonsManager();
                                         ~G4DNAGenericIonsManager();

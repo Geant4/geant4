@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2007/11/17 16:27:35 dennis Exp $
+# $Id: GNUmakefile,v 1.3 2009/11/20 23:33:38 tkoi Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -26,7 +26,13 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
 	    -I$(G4BASE)/processes/hadronic/models/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/util/include \
+	    -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
+	    -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
 	    -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
+	    -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \
+	    -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
+	    -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
+	    -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
@@ -34,7 +40,6 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
-            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

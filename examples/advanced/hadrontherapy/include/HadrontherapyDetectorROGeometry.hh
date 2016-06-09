@@ -23,24 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyDetectorROGeometry.hh; 
-// Last modified: G.A.P.Cirrone March 2008;
-// 
-// See more at: http://geant4infn.wikispaces.com/HadrontherapyExample
-//
-// ----------------------------------------------------------------------------
-//                 GEANT 4 - Hadrontherapy example
-// ----------------------------------------------------------------------------
-// Code developed by:
-//
-// G.A.P. Cirrone(a)*, F. Di Rosa(a), S. Guatelli(b), G. Russo(a)
-// 
-// (a) Laboratori Nazionali del Sud 
-//     of the National Institute for Nuclear Physics, Catania, Italy
-// (b) National Institute for Nuclear Physics Section of Genova, genova, Italy
-// 
-// * cirrone@lns.infn.it
-// ----------------------------------------------------------------------------
+// HadrontherapyDetectorROGeometry.hh; 
+// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
 
 //The detectior is devided in voxels. 
 //
@@ -54,6 +38,7 @@ class HadrontherapyDetectorROGeometry : public G4VReadOutGeometry
 {
 public:
   HadrontherapyDetectorROGeometry(G4String aString,
+		         G4ThreeVector detectorPos,
 				 G4double detectorDimX,
 				 G4double detectorDimY,
 				 G4double detectorDimZ,
@@ -67,6 +52,7 @@ private:
   G4VPhysicalVolume* Build();
 
 private:  
+  const G4ThreeVector detectorToWorldPosition; 
   const G4double detectorSizeX;
   const G4double detectorSizeY; 
   const G4double detectorSizeZ;

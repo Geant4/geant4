@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: A01HadronPhysics.hh,v 1.6 2006/06/29 16:31:14 gunter Exp $
+// $Id: A01HadronPhysics.hh,v 1.7 2009/11/21 01:00:19 perl Exp $
 // --------------------------------------------------------------
 //
 //  10-Oct-2003 Full Hadron Processes with Parameterization Model  T. Koi
@@ -35,7 +35,7 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MultipleScattering.hh"
+#include "G4hMultipleScattering.hh"
 #include "G4hIonisation.hh"
 
 // Hadronic Processes

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.74 2008/11/06 15:26:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Tubs.cc,v 1.79 2009/06/30 10:10:11 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // 
 // class G4Tubs
@@ -89,7 +89,7 @@ G4Tubs::G4Tubs( const G4String &pName,
                       G4double pRMin, G4double pRMax,
                       G4double pDz,
                       G4double pSPhi, G4double pDPhi )
-  : G4CSGSolid(pName)
+  : G4CSGSolid(pName), fSPhi(0), fDPhi(0)
 {
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
@@ -101,9 +101,9 @@ G4Tubs::G4Tubs( const G4String &pName,
   }
   else
   {
-    G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-           << "        Negative Z half-length ! - "
-           << pDz << G4endl;
+    G4cerr << "ERROR - G4Tubs()::G4Tubs()" << G4endl
+           << "        Negative Z half-length (" << pDz << ") in solid: "
+           << GetName() << G4endl;
     G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
                 "Invalid Z half-length");
   }
@@ -114,51 +114,17 @@ G4Tubs::G4Tubs( const G4String &pName,
   }
   else
   {
-    G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
+    G4cerr << "ERROR - G4Tubs()::G4Tubs()" << G4endl
+           << "        Invalid values for radii in solid " << GetName()
+           << G4endl
            << "        pRMin = " << pRMin << ", pRMax = " << pRMax << G4endl;
     G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
                 "Invalid radii.");
   }
 
-  fPhiFullTube = true;
-  if ( pDPhi >= twopi-kAngTolerance*0.5 ) // Check angles
-  {
-    fDPhi=twopi;
-    fSPhi=0;
-  }
-  else
-  {
-    fPhiFullTube = false;
-    if ( pDPhi > 0 )
-    {
-      fDPhi = pDPhi;
-    }
-    else
-    {
-      G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << pDPhi << G4endl;
-      G4Exception("G4Tubs::G4Tubs()", "InvalidSetup",
-                  FatalException, "Invalid dphi.");
-    }
+  // Check angles
 
-    // Ensure fSphi in 0-2PI or -2PI-0 range if shape crosses 0
-
-    if ( pSPhi < 0 )
-    {
-      fSPhi = twopi - std::fmod(std::fabs(pSPhi),twopi);
-    }
-    else
-    {
-      fSPhi = std::fmod(pSPhi,twopi) ;
-    }
-    if ( fSPhi+fDPhi > twopi )
-    {
-      fSPhi -= twopi ;
-    }
-  }
-  InitializeTrigonometry();
+  CheckPhiAngles(pSPhi, pDPhi);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -202,23 +168,23 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
                                       G4double&          pMax    ) const
 {
 
-  if ( !pTransform.IsRotated() && fDPhi == twopi && fRMin == 0 )
+  if ( (!pTransform.IsRotated()) && (fDPhi == twopi) && (fRMin == 0) )
   {
     // Special case handling for unrotated solid tubes
     // Compute x/y/z mins and maxs fro bounding box respecting limits,
     // with early returns if outside limits. Then switch() on pAxis,
     // and compute exact x and y limit for x/y case
       
-    G4double xoffset, xMin, xMax ;
-    G4double yoffset, yMin, yMax ;
-    G4double zoffset, zMin, zMax ;
+    G4double xoffset, xMin, xMax;
+    G4double yoffset, yMin, yMax;
+    G4double zoffset, zMin, zMax;
 
-    G4double diff1, diff2, maxDiff, newMin, newMax ;
-    G4double xoff1, xoff2, yoff1, yoff2, delta ;
+    G4double diff1, diff2, maxDiff, newMin, newMax;
+    G4double xoff1, xoff2, yoff1, yoff2, delta;
 
-    xoffset = pTransform.NetTranslation().x() ;
-    xMin = xoffset - fRMax ;
-    xMax = xoffset + fRMax ;
+    xoffset = pTransform.NetTranslation().x();
+    xMin = xoffset - fRMax;
+    xMax = xoffset + fRMax;
 
     if (pVoxelLimit.IsXLimited())
     {
@@ -229,57 +195,57 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
       }
       else
       {
-        if ( xMin < pVoxelLimit.GetMinXExtent() )
+        if (xMin < pVoxelLimit.GetMinXExtent())
         {
-          xMin = pVoxelLimit.GetMinXExtent() ;
+          xMin = pVoxelLimit.GetMinXExtent();
         }
-        if (xMax > pVoxelLimit.GetMaxXExtent() )
+        if (xMax > pVoxelLimit.GetMaxXExtent())
         {
-          xMax = pVoxelLimit.GetMaxXExtent() ;
+          xMax = pVoxelLimit.GetMaxXExtent();
         }
       }
     }
-    yoffset = pTransform.NetTranslation().y() ;
-    yMin    = yoffset - fRMax ;
-    yMax    = yoffset + fRMax ;
+    yoffset = pTransform.NetTranslation().y();
+    yMin    = yoffset - fRMax;
+    yMax    = yoffset + fRMax;
 
     if ( pVoxelLimit.IsYLimited() )
     {
       if ( (yMin > pVoxelLimit.GetMaxYExtent())
         || (yMax < pVoxelLimit.GetMinYExtent()) )
       {
-        return false ;
+        return false;
       }
       else
       {
-        if ( yMin < pVoxelLimit.GetMinYExtent() )
+        if (yMin < pVoxelLimit.GetMinYExtent())
         {
-          yMin = pVoxelLimit.GetMinYExtent() ;
+          yMin = pVoxelLimit.GetMinYExtent();
         }
-        if ( yMax > pVoxelLimit.GetMaxYExtent() )
+        if (yMax > pVoxelLimit.GetMaxYExtent())
         {
           yMax=pVoxelLimit.GetMaxYExtent();
         }
       }
     }
-    zoffset = pTransform.NetTranslation().z() ;
-    zMin    = zoffset - fDz ;
-    zMax    = zoffset + fDz ;
+    zoffset = pTransform.NetTranslation().z();
+    zMin    = zoffset - fDz;
+    zMax    = zoffset + fDz;
 
     if ( pVoxelLimit.IsZLimited() )
     {
       if ( (zMin > pVoxelLimit.GetMaxZExtent())
         || (zMax < pVoxelLimit.GetMinZExtent()) )
       {
-        return false ;
+        return false;
       }
       else
       {
-        if ( zMin < pVoxelLimit.GetMinZExtent() )
+        if (zMin < pVoxelLimit.GetMinZExtent())
         {
-          zMin = pVoxelLimit.GetMinZExtent() ;
+          zMin = pVoxelLimit.GetMinZExtent();
         }
-        if ( zMax > pVoxelLimit.GetMaxZExtent() )
+        if (zMax > pVoxelLimit.GetMaxZExtent())
         {
           zMax = pVoxelLimit.GetMaxZExtent();
         }
@@ -289,13 +255,13 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
     {
       case kXAxis :
       {
-        yoff1 = yoffset - yMin ;
-        yoff2 = yMax    - yoffset ;
+        yoff1 = yoffset - yMin;
+        yoff2 = yMax    - yoffset;
 
         if ( (yoff1 >= 0) && (yoff2 >= 0) ) // Y limits cross max/min x
         {                                   // => no change
-          pMin = xMin ;
-          pMax = xMax ;
+          pMin = xMin;
+          pMax = xMax;
         }
         else
         {
@@ -316,13 +282,13 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
       }
       case kYAxis :
       {
-        xoff1 = xoffset - xMin ;
-        xoff2 = xMax - xoffset ;
+        xoff1 = xoffset - xMin;
+        xoff2 = xMax - xoffset;
 
         if ( (xoff1 >= 0) && (xoff2 >= 0) ) // X limits cross max/min y
         {                                   // => no change
-          pMin = yMin ;
-          pMax = yMax ;
+          pMin = yMin;
+          pMax = yMax;
         }
         else
         {
@@ -333,52 +299,52 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
           diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
           delta   = fRMax*fRMax - xoff2*xoff2;
           diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff = (diff1 > diff2) ? diff1 : diff2 ;
-          newMin  = yoffset - maxDiff ;
-          newMax  = yoffset + maxDiff ;
-          pMin    = (newMin < yMin) ? yMin : newMin ;
-          pMax     =(newMax > yMax) ? yMax : newMax ;
+          maxDiff = (diff1 > diff2) ? diff1 : diff2;
+          newMin  = yoffset - maxDiff;
+          newMax  = yoffset + maxDiff;
+          pMin    = (newMin < yMin) ? yMin : newMin;
+          pMax    = (newMax > yMax) ? yMax : newMax;
         }
-        break ;
+        break;
       }
       case kZAxis:
       {
-        pMin = zMin ;
-        pMax = zMax ;
-        break ;
+        pMin = zMin;
+        pMax = zMax;
+        break;
       }
       default:
         break;
     }
-    pMin -= kCarTolerance ;
-    pMax += kCarTolerance ;
-    return true;    
+    pMin -= kCarTolerance;
+    pMax += kCarTolerance;
+    return true;
   }
   else // Calculate rotated vertex coordinates
   {
-    G4int i, noEntries, noBetweenSections4 ;
-    G4bool existsAfterClip = false ;
-    G4ThreeVectorList* vertices = CreateRotatedVertices(pTransform) ;
-    
-    pMin = +kInfinity ;
-    pMax = -kInfinity ;
+    G4int i, noEntries, noBetweenSections4;
+    G4bool existsAfterClip = false;
+    G4ThreeVectorList* vertices = CreateRotatedVertices(pTransform);
 
-    noEntries = vertices->size() ;
-    noBetweenSections4 = noEntries - 4 ;
+    pMin =  kInfinity;
+    pMax = -kInfinity;
+
+    noEntries = vertices->size();
+    noBetweenSections4 = noEntries - 4;
     
-    for (i = 0 ; i < noEntries ; i += 4 )
+    for ( i = 0 ; i < noEntries ; i += 4 )
     {
-      ClipCrossSection(vertices, i, pVoxelLimit, pAxis, pMin, pMax) ;
+      ClipCrossSection(vertices, i, pVoxelLimit, pAxis, pMin, pMax);
     }
-    for (i = 0 ; i < noBetweenSections4 ; i += 4 )
+    for ( i = 0 ; i < noBetweenSections4 ; i += 4 )
     {
-      ClipBetweenSections(vertices, i, pVoxelLimit, pAxis, pMin, pMax) ;
+      ClipBetweenSections(vertices, i, pVoxelLimit, pAxis, pMin, pMax);
     }
-    if ((pMin != kInfinity) || (pMax != -kInfinity) )
+    if ( (pMin != kInfinity) || (pMax != -kInfinity) )
     {
-      existsAfterClip = true ;
-      pMin -= kCarTolerance ; // Add 2*tolerance to avoid precision troubles
-      pMax += kCarTolerance ;
+      existsAfterClip = true;
+      pMin -= kCarTolerance; // Add 2*tolerance to avoid precision troubles
+      pMax += kCarTolerance;
     }
     else
     {
@@ -390,13 +356,13 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
       G4ThreeVector clipCentre(
              (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
              (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-             (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5 ) ;
+             (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5 );
         
       if ( Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside )
       {
-        existsAfterClip = true ;
-        pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
-        pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
+        existsAfterClip = true;
+        pMin            = pVoxelLimit.GetMinExtent(pAxis);
+        pMax            = pVoxelLimit.GetMaxExtent(pAxis);
       }
     }
     delete vertices;
@@ -807,6 +773,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
   G4double snxt = kInfinity ;      // snxt = default return value
   G4double tolORMin2, tolIRMax2 ;  // 'generous' radii squared
   G4double tolORMax2, tolIRMin2, tolODz, tolIDz ;
+  const G4double dRmax = 100.*fRMax;
 
   static const G4double halfCarTolerance = 0.5*kCarTolerance;
   static const G4double halfRadTolerance = 0.5*kRadTolerance;
@@ -907,6 +874,11 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
         s = -b - std::sqrt(d) ;
         if (s >= 0)  // If 'forwards'
         {
+          if ( s>dRmax ) // Avoid rounding errors due to precision issues on
+          {              // 64 bits systems. Split long distances and recompute
+            G4double fTerm = s-std::fmod(s,dRmax);
+            s = fTerm + DistanceToIn(p+fTerm*v,v);
+          } 
           // Check z intersection
           //
           zi = p.z() + s*v.z() ;
@@ -1021,6 +993,11 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
           // Check z intersection
           //
           if(s < 0.0)  { s = 0.0; }
+          if ( s>dRmax ) // Avoid rounding errors due to precision issues seen
+          {              // 64 bits systems. Split long distances and recompute
+            G4double fTerm = s-std::fmod(s,dRmax);
+            s = fTerm + DistanceToIn(p+fTerm*v,v);
+          } 
           zi = p.z() + s*v.z() ;
           if (std::fabs(zi) <= tolODz)
           {

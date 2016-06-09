@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.6 2008/10/22 16:04:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4UniversalFluctuation.hh,v 1.10 2009/03/19 14:15:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -69,23 +69,21 @@ public:
 
   virtual ~G4UniversalFluctuation();
 
-  G4double SampleFluctuations(const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&,
-                                G4double&);
+  virtual G4double SampleFluctuations(const G4Material*,
+				      const G4DynamicParticle*,
+				      G4double&,
+				      G4double&,
+				      G4double&);
 
-  G4double Dispersion(    const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double&,
-                                G4double&);
+  virtual G4double Dispersion(    const G4Material*,
+				  const G4DynamicParticle*,
+				  G4double&,
+				  G4double&);
 
-  void InitialiseMe(const G4ParticleDefinition*);
+  virtual void InitialiseMe(const G4ParticleDefinition*);
 
   // Initialisation prestep
-  inline void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
-
-protected:
+  virtual void SetParticleAndCharge(const G4ParticleDefinition*, G4double q2);
 
 private:
 
@@ -112,9 +110,6 @@ private:
   G4double ipotLogFluct;
   G4double e0;
 
-  G4double facwidth;
-  G4double oldloss;
-  G4double samestep;
   G4double e1,e2;
 
   G4double minNumberInteractionsBohr;
@@ -124,19 +119,6 @@ private:
   G4double nmaxCont2;
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void 
-G4UniversalFluctuation::SetParticleAndCharge(const G4ParticleDefinition* part,
-					     G4double q2)
-{
-  if(part != particle) {
-    particle       = part;
-    particleMass   = part->GetPDGMass();
-  }
-  chargeSquare = q2;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

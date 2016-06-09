@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eMultipleScattering.cc,v 1.7 2008/10/23 17:55:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eMultipleScattering.cc,v 1.10 2009/11/01 13:05:01 vnivanch Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -----------------------------------------------------------------------------
 //
@@ -44,7 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4eMultipleScattering.hh"
-#include "G4UrbanMscModel2.hh"
+#include "G4UrbanMscModel92.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -57,7 +57,6 @@ G4eMultipleScattering::G4eMultipleScattering(const G4String& processName)
   : G4VMultipleScattering(processName)
 {
   isInitialized = false;  
-  SetRangeFactor(0.04);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,36 +74,13 @@ G4bool G4eMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4eMultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
+void G4eMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
-  // Modification of parameters between runs
-  if(isInitialized) {
-    if (p->GetParticleType() != "nucleus") {
-      mscUrban->SetStepLimitType(StepLimitType());
-      mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-      mscUrban->SetSkin(Skin());
-      mscUrban->SetRangeFactor(RangeFactor());
-      mscUrban->SetGeomFactor(GeomFactor());
-    }
-    return;
-  }
-
-  // defaults for ions, which cannot be overwritten
-  if (p->GetParticleType() == "nucleus") {
-    SetStepLimitType(fMinimal);
-    SetLateralDisplasmentFlag(false);
-    SetBuildLambdaTable(false);
-  }
+  if(isInitialized) return;
 
   // initialisation of parameters - defaults for particles other
   // than ions can be overwritten by users
-  mscUrban = new G4UrbanMscModel2();
-  mscUrban->SetStepLimitType(StepLimitType());
-  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-  mscUrban->SetSkin(Skin());
-  mscUrban->SetRangeFactor(RangeFactor());
-  mscUrban->SetGeomFactor(GeomFactor());
-
+  G4VMscModel* mscUrban = new G4UrbanMscModel92();
   AddEmModel(1,mscUrban);
   isInitialized = true;
   /*

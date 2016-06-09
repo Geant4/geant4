@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.13.2.4 2006/06/29 20:40:31 gunter Exp $ //
+// $Id: G4Scatterer.cc,v 1.13.2.4.2.1 2009/11/20 16:25:08 gunter Exp $ //
 //
 
 #include "globals.hh"
@@ -125,8 +125,6 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 //	    << " pos/Lab " << pos << " " << posLab 
 //	    << G4endl;
 
-	   // global optimization
-//	   static const G4double maxCrossSection = 500*millibarn;
 	   if(pi*distance>maxCrossSection) return time;
 	   
 	   // charged particles special

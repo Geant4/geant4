@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.cc,v 1.12 2006/06/29 19:10:20 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VBasicShell.cc,v 1.14 2009/11/17 17:41:33 lgarnier Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 
 #include "G4VBasicShell.hh"
@@ -183,73 +183,8 @@ G4String G4VBasicShell::FindMatchingPath(
  G4UIcommandTree* aTree
 ,G4String aCommandPath
 )
-// From intercoms/src/G4UIcommandTree::FindPath.
 {
-  G4String empty = "";
-  if(aTree==NULL) return empty;
-  G4String pathName = aTree->GetPathName();
-  if( aCommandPath.index( pathName ) == std::string::npos ) return empty;
-  G4String remainingPath = aCommandPath;
-  remainingPath.remove(0,pathName.length());
-  size_t i = remainingPath.first('/');
-  if( i == std::string::npos ) {
-    // Look for number of matching commands :
-    std::vector<G4UIcommand*> commands;
-    G4int n_commandEntry = aTree->GetCommandEntry();
-    for( G4int i_thCommand = 1; i_thCommand <= n_commandEntry; i_thCommand++ ) {
-      G4UIcommand* cmd = aTree->GetCommand(i_thCommand);
-      G4String ss = cmd->GetCommandName();
-      ss.resize(remainingPath.length());
-      if( remainingPath == ss ) commands.push_back(cmd);
-    }
-    n_commandEntry = commands.size();
-    if(n_commandEntry==1) {
-      return (pathName + commands[0]->GetCommandName());
-    } else if (n_commandEntry>=2) {
-      G4cout << "Matching commands :" << G4endl; 
-      for( G4int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ ) {
-	G4UIcommand* cmd = commands[i_thCommand];
-	G4cout << cmd->GetCommandName() << G4endl; 
-      }
-      return empty;
-    }
-    // Look for sub tree :
-    std::vector<G4UIcommandTree*> trees;
-    G4String nextPath = pathName;
-    nextPath.append(remainingPath);
-    G4int n_treeEntry = aTree->GetTreeEntry();
-    for( G4int i_thTree = 1; i_thTree <= n_treeEntry; i_thTree++ ) {
-      G4UIcommandTree* tree = aTree->GetTree(i_thTree);
-      G4String ss = tree->GetPathName();
-      ss.resize(nextPath.length());
-      if( nextPath == ss ) trees.push_back(tree);
-    }
-    n_treeEntry = trees.size();
-    if(n_treeEntry==1) {
-      return trees[0]->GetPathName();
-    } else if (n_treeEntry>=2) {
-      G4cout << "Matching directories :" << G4endl; 
-      for( G4int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ ) {
-	G4UIcommandTree* tree = trees[i_thTree];
-	G4cout << tree->GetPathName() << G4endl; 
-      }
-      return empty;
-    } else {
-      return empty; // No match.
-    }
-  } else {
-    // Find path
-    G4String nextPath = pathName;
-    nextPath.append(remainingPath(0,i+1));
-    G4int n_treeEntry = aTree->GetTreeEntry();
-    for( G4int i_thTree = 1; i_thTree <= n_treeEntry; i_thTree++ ) {
-      G4UIcommandTree* tree = aTree->GetTree(i_thTree);
-      if( nextPath == tree->GetPathName() ) { 
-	return FindMatchingPath(tree,aCommandPath ); 
-      }
-    }
-  }
-  return empty;
+  return aTree->CompleteCommandPath(aCommandPath);
 }
 ////////////////////////////////////////////
 // Method involving an interactive G4cout //
@@ -308,11 +243,11 @@ void G4VBasicShell::ApplyShellCommand (
     G4cout << "Current Working Directory : " 
        << GetCurrentWorkingDirectory() << G4endl; 
 
-  } else if( command(0,2) == "cd" ) { 
+  } else if( command == "cd" || command(0,3) == "cd ") {
 
     ChangeDirectoryCommand ( command );
 
-  } else if( command(0,4) == "help" ) { 
+  } else if( command == "help" || command(0,5) == "help ") {
 
     TerminalHelp( command ); 
 
@@ -320,7 +255,7 @@ void G4VBasicShell::ApplyShellCommand (
 
     ShowCurrent( command );
 
-  } else if( command(0,4) == "hist" ) {
+  } else if( command == "hist" || command == "history") {
 
     G4int nh = UI->GetNumberOfHistory();
     for(G4int i=0;i<nh;i++) { 
@@ -343,7 +278,7 @@ void G4VBasicShell::ApplyShellCommand (
       G4cerr << "history " << vl << " is not found." << G4endl; 
     }
 
-  } else if( command(0,4) == "exit" ) { 
+  } else if( command == "exit" ) { 
 
     if( exitPause == false) { //In a secondary loop.
       G4cout << "You are now processing RUN." << G4endl;
@@ -354,7 +289,7 @@ void G4VBasicShell::ApplyShellCommand (
       exitSession = true;
     }
 
-  } else if( command(0,4) == "cont" ) { 
+  } else if( command == "cont" || command == "continue"){
 
     exitPause = true;
 

@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.10 2006/10/31 12:53:48 maire Exp $
+# $Id: ionC12.mac,v 1.11 2009/09/17 20:06:26 maire Exp $
 #
 # Macro file for "TestEm3.cc"
 # (can be run in batch, without graphic)
@@ -11,7 +11,7 @@
 #
 #  select EM PhysicsList
 #
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  local
 #
 /testem/phys/setCuts 1 mm
 #

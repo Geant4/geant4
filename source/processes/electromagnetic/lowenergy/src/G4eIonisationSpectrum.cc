@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.25 2006/06/29 19:42:04 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4eIonisationSpectrum.cc,v 1.27 2009/06/10 13:32:36 mantero Exp $
+// GEANT4 tag $Name: geant4-09-03 $
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +45,8 @@
 // 19.04.2002 VI            Add protection in case of energy below binding  
 // 30.05.2002 VI            Update to 24-parameters data
 // 11.07.2002 VI            Fix in integration over spectrum
+// 23.03.2009 LP            Added protection against division by zero (for 
+//                          faulty database files), Bug Report 1042
 //
 // -------------------------------------------------------------------
 //
@@ -124,7 +126,16 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
   G4double g = energy/electron_mass_c2 + 1.;
   p.push_back((2.0*g - 1.0)/(g*g));
   
-  p[iMax-1] = Function(p[3], p);
+  //Add protection against division by zero: actually in Function() 
+  //parameter p[3] appears in the denominator. Bug report 1042
+  if (p[3] > 0)
+    p[iMax-1] = Function(p[3], p);
+  else
+    {
+      G4cout << "WARNING: G4eIonisationSpectrum::Probability "
+	     << "parameter p[3] <= 0. G4LEDATA dabatase might be corrupted for Z = " 
+	     << Z << ". Please check and/or update it " << G4endl;      
+    }
 
   if(e >= 1. && e <= 0. && Z == 4) p.push_back(0.0);
 
@@ -209,7 +220,17 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
   G4double g = energy/electron_mass_c2 + 1.;
   p.push_back((2.0*g - 1.0)/(g*g));
 
-  p[iMax-1] = Function(p[3], p);
+  
+  //Add protection against division by zero: actually in Function() 
+  //parameter p[3] appears in the denominator. Bug report 1042
+  if (p[3] > 0)
+    p[iMax-1] = Function(p[3], p);
+  else
+    {
+      G4cout << "WARNING: G4eIonisationSpectrum::AverageEnergy "
+	     << "parameter p[3] <= 0. G4LEDATA dabatase might be corrupted for Z = " 
+	     << Z << ". Please check and/or update it " << G4endl;      
+    }
     
   G4double val = AverageValue(x1, x2, p);
   G4double x0  = (lowestE + bindingEnergy)/energy;
@@ -287,7 +308,17 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   G4double g = energy/electron_mass_c2 + 1.;
   p.push_back((2.0*g - 1.0)/(g*g));
 
-  p[iMax-1] = Function(p[3], p);
+  
+  //Add protection against division by zero: actually in Function() 
+  //parameter p[3] appears in the denominator. Bug report 1042
+  if (p[3] > 0)
+    p[iMax-1] = Function(p[3], p);
+  else
+    {
+      G4cout << "WARNING: G4eIonisationSpectrum::SampleSpectrum "
+	     << "parameter p[3] <= 0. G4LEDATA dabatase might be corrupted for Z = " 
+	     << Z << ". Please check and/or update it " << G4endl;      
+    }
 
   G4double aria1 = 0.0;
   G4double a1 = std::max(x1,p[1]);
