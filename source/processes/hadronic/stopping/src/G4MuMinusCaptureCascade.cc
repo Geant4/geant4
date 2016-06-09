@@ -23,27 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMinusCaptureCascade.cc,v 1.14 2007/02/13 15:25:05 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4MuMinusCaptureCascade.cc,v 1.15 2007/07/05 18:19:14 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4MuonMinusCaptureAtRest physics process --------
+//   G4MuonMinusCaptureAtRest physics process
 //                   
-//                     E-mail: Vladimir.Ivantchenko@cern.ch
+//   E-mail: Vladimir.Ivantchenko@cern.ch
 //
-// Created:   02.04.00 V.Ivanchenko
+//   Created:   02.04.00 V.Ivanchenko
 //
 // Modified:  
 // 06.04.01 V.Ivanchenko Bug in theta distribution fixed
 // 13.02.07 V.Ivanchenko Fixes in decay - add random distribution of e- 
 //                       direction; factor 2 in potential energy 
 //
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------
 
 #include "G4MuMinusCaptureCascade.hh"
 #include "G4LorentzVector.hh"

@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4QuasiFreeRatios.cc,v 1.11.2.1 2007/08/14 09:28:06 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-03-patch-01 $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 //
 // G4 Physics class: G4QuasiFreeRatios for N+A elastic cross sections

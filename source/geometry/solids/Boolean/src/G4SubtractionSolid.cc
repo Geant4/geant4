@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc,v 1.29 2006/11/07 14:05:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4SubtractionSolid.cc,v 1.29.2.1 2008/01/29 10:25:55 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -131,6 +131,8 @@ G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
 EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
 {
   EInside positionA = fPtrSolidA->Inside(p);
+  if (positionA == kOutside) return kOutside;
+
   EInside positionB = fPtrSolidB->Inside(p);
   
   if(positionA == kInside && positionB == kOutside)
@@ -144,8 +146,14 @@ EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
        ( positionA == kSurface && positionB == kSurface &&
          ( fPtrSolidA->SurfaceNormal(p) - 
            fPtrSolidB->SurfaceNormal(p) ).mag2() > 
-            1000*kRadTolerance )                            )  return kSurface;
-    else  return kOutside;
+            1000*kRadTolerance )                            )
+    {
+      return kSurface;
+    }
+    else
+    {
+      return kOutside;
+    }
   }
 }
 

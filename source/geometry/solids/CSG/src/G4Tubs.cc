@@ -24,15 +24,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.60 2006/06/29 18:45:45 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4Tubs.cc,v 1.66.2.1 2008/01/29 10:55:26 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 // 
 // class G4Tubs
 //
 // History:
 //
-//
+// 02.08.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for negative value under sqrt
+//                      for the case: p on the surface and v is tangent to the surface
+// 11.05.07 T.Nikitina: bug fixed in DistanceToOut(p,v,..) for phi < 2pi
 // 03.05.05 V.Grichine: SurfaceNormal(p) according to J. Apostolakis proposal
 // 16.03.05 V.Grichine: SurfaceNormal(p) with edges/corners for boolean
 // 20.07.01 V.Grichine: bug fixed in Inside(p)
@@ -419,59 +421,67 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
 {
   G4double r2,pPhi,tolRMin,tolRMax;
   EInside in = kOutside ;
-
+  
   if (std::fabs(p.z()) <= fDz - kCarTolerance*0.5)
   {
     r2 = p.x()*p.x() + p.y()*p.y() ;
 
-    if (fRMin) tolRMin = fRMin + kRadTolerance*0.5 ;
-    else       tolRMin = 0 ;
+    if (fRMin) { tolRMin = fRMin + kRadTolerance*0.5 ; }
+    else       { tolRMin = 0 ; }
 
     tolRMax = fRMax - kRadTolerance*0.5 ;
       
     if (r2 >= tolRMin*tolRMin && r2 <= tolRMax*tolRMax)
     {
-      //  if ( fDPhi == twopi || r2 == 0 )  in = kInside ;
-      if ( fDPhi == twopi )  in = kInside ;
+      if ( fDPhi == twopi )
+      {
+        in = kInside ;
+      }
       else
       {
         // Try inner tolerant phi boundaries (=>inside)
         // if not inside, try outer tolerant phi boundaries
 
         pPhi = std::atan2(p.y(),p.x()) ;
-
-        if ( pPhi < -kAngTolerance*0.5 ) pPhi += twopi ; // 0<=pPhi<2pi
-
-        if ( fSPhi >= 0 )
+        if ((tolRMin==0)&&(p.x()==0)&&(p.y()==0))
         {
-          if ( (std::abs(pPhi) < kAngTolerance*0.5)
-            && (std::abs(fSPhi + fDPhi - twopi) < kAngTolerance*0.5) )
-          { 
-            pPhi += twopi ; // 0 <= pPhi < 2pi
-          }
-          if ( (pPhi >= fSPhi + kAngTolerance*0.5)
-            && (pPhi <= fSPhi + fDPhi - kAngTolerance*0.5) )
-          {
-            in = kInside ;
-          }
-          else if ( (pPhi >= fSPhi - kAngTolerance*0.5)
-                 && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
-          {
-            in = kSurface ;
-          }
+          in=kSurface;
         }
-        else  // fSPhi < 0
+        else
         {
-          if ( (pPhi <= fSPhi + twopi - kAngTolerance*0.5)
-            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) ) ;
-          else if ( (pPhi <= fSPhi + twopi + kAngTolerance*0.5)
-                 && (pPhi >= fSPhi + fDPhi  - kAngTolerance*0.5) )
+          if ( pPhi < -kAngTolerance*0.5 )  { pPhi += twopi; } // 0<=pPhi<2pi
+
+          if ( fSPhi >= 0 )
           {
-            in = kSurface ;
+            if ( (std::abs(pPhi) < kAngTolerance*0.5)
+              && (std::abs(fSPhi + fDPhi - twopi) < kAngTolerance*0.5) )
+            { 
+              pPhi += twopi ; // 0 <= pPhi < 2pi
+            }
+            if ( (pPhi >= fSPhi + kAngTolerance*0.5)
+              && (pPhi <= fSPhi + fDPhi - kAngTolerance*0.5) )
+            {
+              in = kInside ;
+            }
+            else if ( (pPhi >= fSPhi - kAngTolerance*0.5)
+                   && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
+            {
+              in = kSurface ;
+            }
           }
-          else
+          else  // fSPhi < 0
           {
-            in = kInside ;
+            if ( (pPhi <= fSPhi + twopi - kAngTolerance*0.5)
+              && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) ) {;}
+            else if ( (pPhi <= fSPhi + twopi + kAngTolerance*0.5)
+                   && (pPhi >= fSPhi + fDPhi  - kAngTolerance*0.5) )
+            {
+              in = kSurface ;
+            }
+            else
+            {
+              in = kInside ;
+            }
           }
         }                    
       }
@@ -481,7 +491,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
       tolRMin = fRMin - kRadTolerance*0.5 ;
       tolRMax = fRMax + kRadTolerance*0.5 ;
 
-      if ( tolRMin < 0 ) tolRMin = 0 ;
+      if ( tolRMin < 0 )  { tolRMin = 0; }
 
       if ( (r2 >= tolRMin*tolRMin) && (r2 <= tolRMax*tolRMax) )
       {
@@ -493,7 +503,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
         {
           pPhi = std::atan2(p.y(),p.x()) ;
 
-          if ( pPhi < -kAngTolerance*0.5 ) pPhi += twopi ; // 0<=pPhi<2pi
+          if ( pPhi < -kAngTolerance*0.5 )  { pPhi += twopi; } // 0<=pPhi<2pi
           if ( fSPhi >= 0 )
           {
             if ( (std::abs(pPhi) < kAngTolerance*0.5)
@@ -510,7 +520,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
           else  // fSPhi < 0
           {
             if ( (pPhi <= fSPhi + twopi - kAngTolerance*0.5)
-              && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
+              && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) ) {;}
             else
             {
               in = kSurface ;
@@ -526,7 +536,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
     tolRMin = fRMin - kRadTolerance*0.5 ;
     tolRMax = fRMax + kRadTolerance*0.5 ;
 
-    if ( tolRMin < 0 ) tolRMin = 0 ;
+    if ( tolRMin < 0 )  { tolRMin = 0; }
 
     if ( (r2 >= tolRMin*tolRMin) && (r2 <= tolRMax*tolRMax) )
     {
@@ -538,7 +548,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
       {
         pPhi = std::atan2(p.y(),p.x()) ;
 
-        if ( pPhi < -kAngTolerance*0.5 ) pPhi += twopi ;   // 0<=pPhi<2pi
+        if ( pPhi < -kAngTolerance*0.5 )  { pPhi += twopi; }  // 0<=pPhi<2pi
         if ( fSPhi >= 0 )
         {
           if ( (std::abs(pPhi) < kAngTolerance*0.5)
@@ -555,7 +565,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
         else  // fSPhi < 0
         {
           if ( (pPhi <= fSPhi + twopi - kAngTolerance*0.5)
-            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
+            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) ) {;}
           else
           {
             in = kSurface ;
@@ -564,7 +574,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
       }
     }
   }
-  return in ;
+  return in;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -574,8 +584,7 @@ EInside G4Tubs::Inside( const G4ThreeVector& p ) const
 // - unsafe if point close to z axis a rmin=0 - no explicit checks
 
 G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
-{
-  G4int noSurfaces = 0;
+{ G4int noSurfaces = 0;
   G4double rho, pPhi;
   G4double delta   = 0.5*kCarTolerance, dAngle = 0.5*kAngTolerance;
   G4double distZ, distRMin, distRMax;
@@ -596,8 +605,8 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
     {
       pPhi = std::atan2(p.y(),p.x());
     
-      if(pPhi  < fSPhi-delta)           pPhi     += twopi;
-      else if(pPhi > fSPhi+fDPhi+delta) pPhi     -= twopi;
+      if(pPhi  < fSPhi-delta)           { pPhi += twopi; }
+      else if(pPhi > fSPhi+fDPhi+delta) { pPhi -= twopi; }
 
       distSPhi = std::fabs( pPhi - fSPhi );       
       distEPhi = std::fabs(pPhi - fSPhi - fDPhi); 
@@ -610,7 +619,7 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
     nPs = G4ThreeVector(std::sin(fSPhi),-std::cos(fSPhi),0);
     nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0);
   }
-  if ( rho > delta )   nR  = G4ThreeVector(p.x()/rho,p.y()/rho,0);
+  if ( rho > delta )   { nR = G4ThreeVector(p.x()/rho,p.y()/rho,0); }
 
   if( distRMax <= delta )
   {
@@ -638,32 +647,32 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
   if (distZ <= delta)  
   {
     noSurfaces ++;
-    if ( p.z() >= 0.)  sumnorm += nZ;
-    else               sumnorm -= nZ; 
+    if ( p.z() >= 0.)  { sumnorm += nZ; }
+    else               { sumnorm -= nZ; }
   }
   if ( noSurfaces == 0 )
   {
 #ifdef G4CSGDEBUG
-    G4Exception("G4Tube::SurfaceNormal(p)", "Notification", JustWarning, 
-                "Point p is not on surface !?" );
+    G4Exception("G4Tube::SurfaceNormal(p)", "Notification",
+                JustWarning, "Point p is not on surface !?" );
     G4cout.precision(20);
-    G4cout<<"G4Tubs::SN ( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
+    G4cout<< "G4Tubs::SN ( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "
+          << G4endl << G4endl;
 #endif 
      norm = ApproxSurfaceNormal(p);
   }
-  else if ( noSurfaces == 1 ) norm = sumnorm;
-  else                        norm = sumnorm.unit();
+  else if ( noSurfaces == 1 )  { norm = sumnorm; }
+  else                         { norm = sumnorm.unit(); }
   return norm;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 //
 // Algorithm for SurfaceNormal() following the original specification
 // for points not on the surface
 
 G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
-{
-  ENorm side ;
+{ ENorm side ;
   G4ThreeVector norm ;
   G4double rho, phi ;
   G4double distZ, distRMin, distRMax, distSPhi, distEPhi, distMin ;
@@ -704,7 +713,7 @@ G4ThreeVector G4Tubs::ApproxSurfaceNormal( const G4ThreeVector& p ) const
   {
     phi = std::atan2(p.y(),p.x()) ;
 
-    if ( phi < 0 ) phi += twopi ;
+    if ( phi < 0 )  { phi += twopi; }
 
     if ( fSPhi < 0 )
     {
@@ -868,7 +877,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
     {
       s = (std::fabs(p.z()) - fDz)/std::fabs(v.z()) ;     // Z intersect distance
 
-      if(s < 0.0) s = 0.0 ;
+      if(s < 0.0)  { s = 0.0; }
 
       xi   = p.x() + s*v.x() ;                // Intersection coords
       yi   = p.y() + s*v.y() ;
@@ -887,12 +896,15 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
           cosPsi = inum/iden ;
           if (cosPsi >= cosHDPhiIT) return s ;
         }
-        else return s ;
+        else
+        {
+          return s ;
+        }
       }
     }
     else
     {
-      if ( snxt<kCarTolerance*0.5 ) snxt=0 ;
+      if ( snxt<kCarTolerance*0.5 )  { snxt=0; }
       return snxt ;  // On/outside extent, and heading away
                      // -> cannot intersect
     }
@@ -966,7 +978,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
           inum   = p.x()*cosCPhi + p.y()*sinCPhi ;
           iden   = std::sqrt(t3) ;
           cosPsi = inum/iden ;
-          if (cosPsi >= cosHDPhiIT) return 0.0 ;
+          if (cosPsi >= cosHDPhiIT)  { return 0.0; }
         }
         else
         {
@@ -988,7 +1000,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
         {
           // Check z intersection
           //
-          if(s < 0.0) s = 0.0 ;
+          if(s < 0.0)  { s = 0.0; }
           zi = p.z() + s*v.z() ;
           if (std::fabs(zi) <= tolODz)
           {
@@ -1028,7 +1040,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
   //
   if ( seg )
   {
-    // First phi surface (`S'tarting phi)
+    // First phi surface (Starting phi)
 
     sinSPhi = std::sin(fSPhi) ;
     cosSPhi = std::cos(fSPhi) ;
@@ -1044,7 +1056,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
         if (s < snxt)
         {
-          if ( s < 0 ) s = 0.0 ;
+          if ( s < 0 )  { s = 0.0; }
           zi = p.z() + s*v.z() ;
           if ( std::fabs(zi) <= tolODz )
           {
@@ -1087,7 +1099,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
 
         if (s < snxt)
         {
-          if ( s < 0 ) s = 0 ;
+          if ( s < 0 )  { s = 0; }
           zi = p.z() + s*v.z() ;
           if ( std::fabs(zi) <= tolODz )
           {
@@ -1105,14 +1117,14 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
               // z and r intersections good
               // - check intersecting with correct half-plane
               //
-              if ( (yi*cosCPhi-xi*sinCPhi) >= 0 ) snxt = s ;
+              if ( (yi*cosCPhi-xi*sinCPhi) >= 0 )  { snxt = s; }
             }    
           }
         }
       }
     }         //  Comp < 0
   }           //  seg != 0
-  if ( snxt<kCarTolerance*0.5 ) snxt=0 ;
+  if ( snxt<kCarTolerance*0.5 )  { snxt=0; }
   return snxt ;
 }
  
@@ -1152,9 +1164,9 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p ) const
   safe2 = rho - fRMax ;
   safe3 = std::fabs(p.z()) - fDz ;
 
-  if ( safe1 > safe2 ) safe = safe1 ;
-  else                 safe = safe2 ;
-  if ( safe3 > safe )  safe = safe3 ;
+  if ( safe1 > safe2 ) { safe = safe1; }
+  else                 { safe = safe2; }
+  if ( safe3 > safe )  { safe = safe3; }
 
   if (fDPhi < twopi && rho)
   {
@@ -1179,10 +1191,10 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p ) const
         ePhi    = fSPhi + fDPhi ;
         safePhi = std::fabs(p.x()*std::sin(ePhi) - p.y()*std::cos(ePhi)) ;
       }
-      if ( safePhi > safe ) safe = safePhi ;
+      if ( safePhi > safe )  { safe = safePhi; }
     }
   }
-  if ( safe < 0 ) safe = 0 ;
+  if ( safe < 0 )  { safe = 0; }
   return safe ;
 }
 
@@ -1196,7 +1208,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
                                 const G4bool calcNorm,
                                       G4bool *validNorm,
                                       G4ThreeVector *n    ) const
-{
+{  
   ESide side = kNull , sider = kNull, sidephi = kNull ;
   G4double snxt, sr = kInfinity, sphi = kInfinity, pdist ;
   G4double deltaR, t1, t2, t3, b, c, d2, roMin2 ;
@@ -1206,7 +1218,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
   G4double sinSPhi, cosSPhi, ePhi, sinEPhi, cosEPhi ;
   G4double cPhi, sinCPhi, cosCPhi ;
   G4double pDistS, compS, pDistE, compE, sphi2, xi, yi, vphi, roi2 ;
-
+ 
   // Z plane intersection
 
   if (v.z() > 0 )
@@ -1267,8 +1279,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
   t2   = p.x()*v.x() + p.y()*v.y() ;
   t3   = p.x()*p.x() + p.y()*p.y() ;
 
-  if ( snxt > 10*(fDz+fRMax) )  roi2 = 2*fRMax*fRMax;
-  else  roi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 ; // radius^2 on +-fDz
+  if ( snxt > 10*(fDz+fRMax) )  { roi2 = 2*fRMax*fRMax; }
+  else  { roi2 = snxt*snxt*t1 + 2*snxt*t2 + t3; }        // radius^2 on +-fDz
 
   if ( t1 > 0 ) // Check not parallel
   {
@@ -1287,7 +1299,9 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
       {
         b     = t2/t1 ;
         c     = deltaR/t1 ;
-        sr    = -b + std::sqrt(b*b - c);
+        d2= b*b-c;
+        if(d2>=0.){sr    = -b + std::sqrt(d2);}
+        else{sr=0.;};
         sider = kRMax ;
       }
       else
@@ -1334,16 +1348,30 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
           }
           else
           {
-            if ( calcNorm ) *validNorm = false ; // Concave side
-            return           snxt      = 0.0 ;
+            if ( calcNorm ) { *validNorm = false; }  // Concave side
+            return snxt = 0.0;
           }
         }
         else    // No rmin intersect -> must be rmax intersect
         {
           deltaR = t3 - fRMax*fRMax ;
-          c      = deltaR/t1 ;
-          sr     = -b + std::sqrt(b*b - c) ;
-          sider  = kRMax ;
+          c     = deltaR/t1 ;
+          d2    = b*b-c;
+          if(d2>=0.)
+          {
+            sr     = -b + std::sqrt(d2) ;
+            sider  = kRMax ;
+          }
+          else // Case: On the border+t2<kRadTolerance
+               //       (v is perpendiculair to the surface)
+          {
+            if (calcNorm)
+            {
+              *n = G4ThreeVector(p.x()/fRMax,p.y()/fRMax,0) ;
+              *validNorm = true ;
+            }
+            return snxt = 0.0;
+          }
         }
       }
       else if ( roi2 > fRMax*(fRMax + kRadTolerance) )
@@ -1352,8 +1380,22 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         deltaR = t3 - fRMax*fRMax ;
         b      = t2/t1 ;
         c      = deltaR/t1;
-        sr     = -b + std::sqrt(b*b - c) ;
-        sider  = kRMax ;
+        d2     = b*b-c;
+        if(d2>=0.)
+        {
+          sr     = -b + std::sqrt(d2) ;
+          sider  = kRMax ;
+        }
+        else // Case: On the border+t2<kRadTolerance
+             //       (v is perpendiculair to the surface)
+        {
+          if (calcNorm)
+          {
+            *n = G4ThreeVector(p.x()/fRMax,p.y()/fRMax,0) ;
+            *validNorm = true ;
+          }
+          return snxt = 0.0;
+        }
       }
     }
     
@@ -1370,6 +1412,15 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
       sinCPhi = std::sin(cPhi) ;
       cosCPhi = std::cos(cPhi) ;
 
+      // add angle calculation with correction 
+      // of the difference in domain of atan2 and Sphi
+      //
+      vphi = std::atan2(v.y(),v.x()) ;
+
+      if ( vphi < fSPhi - kAngTolerance*0.5  )             { vphi += twopi; }
+      else if ( vphi > fSPhi + fDPhi + kAngTolerance*0.5 ) { vphi -= twopi; }
+
+
       if ( p.x() || p.y() )  // Check if on z axis (rho not needed later)
       {
         // pDist -ve when inside
@@ -1382,27 +1433,35 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         compS   = -sinSPhi*v.x() + cosSPhi*v.y() ;
         compE   =  sinEPhi*v.x() - cosEPhi*v.y() ;
         sidephi = kNull;
-
-        //       if ( pDistS <= 0 && pDistE <= 0 )
-
+        
         if( ( (fDPhi <= pi) && ( (pDistS <= 0.5*kCarTolerance)
                               && (pDistE <= 0.5*kCarTolerance) ) )
          || ( (fDPhi >  pi) && !((pDistS >  0.5*kCarTolerance)
                               && (pDistE >  0.5*kCarTolerance) ) )  )
         {
           // Inside both phi *full* planes
+          
           if ( compS < 0 )
           {
             sphi = pDistS/compS ;
+            
             if (sphi >= -0.5*kCarTolerance)
             {
               xi = p.x() + sphi*v.x() ;
               yi = p.y() + sphi*v.y() ;
-
+              
               // Check intersecting with correct half-plane
               // (if not -> no intersect)
               //
-              if ((yi*cosCPhi-xi*sinCPhi)>=0)
+              if((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance))
+		{ sidephi = kSPhi;
+                if (((fSPhi-0.5*kAngTolerance)<=vphi)
+                   &&((ePhi+0.5*kAngTolerance)>=vphi))
+                {
+                  sphi = kInfinity;
+                }
+              }
+              else if ((yi*cosCPhi-xi*sinCPhi)>=0)
               {
                 sphi = kInfinity ;
               }
@@ -1428,23 +1487,35 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
           if ( compE < 0 )
           {
             sphi2 = pDistE/compE ;
-
+            
             // Only check further if < starting phi intersection
             //
             if ( (sphi2 > -0.5*kCarTolerance) && (sphi2 < sphi) )
             {
               xi = p.x() + sphi2*v.x() ;
               yi = p.y() + sphi2*v.y() ;
-
-              // Check intersecting with correct half-plane 
+              
+              if ((std::abs(xi)<=kCarTolerance)&&(std::abs(yi)<=kCarTolerance))
+              {
+                // Leaving via ending phi
+                //
+                if(!(((fSPhi-0.5*kAngTolerance)<=vphi)
+                    &&((ePhi+0.5*kAngTolerance)>=vphi)))
+                {
+                  sidephi = kEPhi ;
+                  if ( pDistE <= -kCarTolerance*0.5 )  { sphi = sphi2 ; }
+                  else                                 { sphi = 0.0 ; }
+                }
+              } 
+              else    // Check intersecting with correct half-plane 
 
               if ( (yi*cosCPhi-xi*sinCPhi) >= 0)
               {
                 // Leaving via ending phi
-
+                //
                 sidephi = kEPhi ;
-                if ( pDistE <= -kCarTolerance*0.5 ) sphi = sphi2 ;
-                else                                sphi = 0.0 ;
+                if ( pDistE <= -kCarTolerance*0.5 ) { sphi = sphi2 ; }
+                else                                { sphi = 0.0 ; }
               }
             }
           }
@@ -1459,8 +1530,14 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         // On z axis + travel not || to z axis -> if phi of vector direction
         // within phi of shape, Step limited by rmax, else Step =0
 
-        vphi = std::atan2(v.y(),v.x()) ;
-        if ( (fSPhi < vphi) && (vphi < fSPhi + fDPhi) )
+        // vphi = std::atan2(v.y(),v.x()) ;//defined previosly
+        // G4cout<<"In axis vphi="<<vphi
+        //       <<" Sphi="<<fSPhi<<" Ephi="<<ePhi<<G4endl;
+        // old  if ( (fSPhi < vphi) && (vphi < fSPhi + fDPhi) )
+        // new : correction for if statement, must be '<='  
+               
+        if ( ((fSPhi-0.5*kAngTolerance) <= vphi)
+           && (vphi <=( ePhi+0.5*kAngTolerance) )) 
         {
           sphi = kInfinity ;
         }
@@ -1515,7 +1592,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
       case kEPhi:
         if (fDPhi <= pi)
         {
-          *n         = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
+          *n = G4ThreeVector(-std::sin(fSPhi+fDPhi),std::cos(fSPhi+fDPhi),0) ;
           *validNorm = true ;
         }
         else
@@ -1553,7 +1630,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         break ;
     }
   }
-  if ( snxt<kCarTolerance*0.5 ) snxt=0 ;
+  if ( snxt<kCarTolerance*0.5 )  { snxt=0 ; }
+
   return snxt ;
 }
 
@@ -1587,8 +1665,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
     safeR1 = rho   - fRMin ;
     safeR2 = fRMax - rho ;
  
-    if ( safeR1 < safeR2 ) safe = safeR1 ;
-    else                   safe = safeR2 ;
+    if ( safeR1 < safeR2 ) { safe = safeR1 ; }
+    else                   { safe = safeR2 ; }
   }
   else
   {
@@ -1596,7 +1674,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
   }
   safeZ = fDz - std::fabs(p.z()) ;
 
-  if ( safeZ < safe ) safe = safeZ ;
+  if ( safeZ < safe )  { safe = safeZ ; }
 
   // Check if phi divided, Calc distances closest phi plane
   //
@@ -1617,9 +1695,9 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p ) const
       ePhi    = fSPhi + fDPhi ;
       safePhi = (p.x()*std::sin(ePhi) - p.y()*std::cos(ePhi)) ;
     }
-    if (safePhi < safe) safe = safePhi ;
+    if (safePhi < safe)  { safe = safePhi ; }
   }
-  if ( safe < 0 ) safe = 0 ;
+  if ( safe < 0 )  { safe = 0 ; }
 
   return safe ;  
 }
@@ -1668,8 +1746,8 @@ G4Tubs::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   // If complete in phi, set start angle such that mesh will be at fRMax
   // on the x axis. Will give better extent calculations when not rotated.
 
-  if (fDPhi == pi*2.0 && fSPhi == 0 ) sAngle = -meshAngle*0.5 ;
-  else                                  sAngle =  fSPhi ;
+  if (fDPhi == pi*2.0 && fSPhi == 0 )  { sAngle = -meshAngle*0.5 ; }
+  else                                 { sAngle =  fSPhi ; }
     
   vertices = new G4ThreeVectorList();
   vertices->reserve(noCrossSections*4);

@@ -23,13 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
-// -------------------------------------------------------------------
-//      GEANT 4 class file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//
 //      File name:     G4StopTheoDeexcitation
 //
 //      Author:        Maria Grazia Pia (pia@genova.infn.it)

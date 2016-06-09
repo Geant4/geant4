@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc,v 1.10 2006/06/29 18:48:40 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolyPhiFace.cc,v 1.10.2.1 2008/01/29 11:26:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -266,6 +266,7 @@ void G4PolyPhiFace::Diagnose( G4VSolid *owner )
 //                            for usage restricted to object persistency.
 //
 G4PolyPhiFace::G4PolyPhiFace( __void__&)
+  : edges(0), corners(0)
 {
 }
 

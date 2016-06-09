@@ -23,16 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StopElementSelector.hh,v 1.9 2006/11/15 12:17:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
-//
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-// **************************************************************
-//
-// File: G4StopElementSelector
+// $Id: G4StopElementSelector.hh,v 1.10 2007/07/05 18:19:14 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 // Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
 // 
@@ -40,12 +32,10 @@
 //
 // Class Description: 
 //
-// Selection of elements for negative particle cupture
+// Selection of elements for negative particle capture
 // Selection between decay/capture for mu-
 // N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
-//
-// Class Description: End 
-//
+
 //-----------------------------------------------------------------------------
 //
 // Modifications: 

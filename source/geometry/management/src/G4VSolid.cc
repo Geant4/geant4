@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.33 2006/10/23 08:33:40 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4VSolid.cc,v 1.33.2.1 2008/01/29 09:41:51 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 // class G4VSolid
 //
@@ -559,7 +559,7 @@ G4double G4VSolid::EstimateSurfaceArea(G4int nStat, G4double ell) const
 
   // limits
 
-  if(nStat < 1000) { nStat = 100; }
+  if(nStat < 100) { nStat = 100; }
 
   G4double dX=maxX-minX;
   G4double dY=maxY-minY;

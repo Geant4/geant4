@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.hh,v 1.8 2006/06/29 18:47:16 gunter Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4PolyconeSide.hh,v 1.10.6.1 2008/01/29 11:26:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -129,8 +129,10 @@ class G4PolyconeSide : public G4VCSGface
     G4double rNormEdge[2],
              zNormEdge[2];  // Normal to edges
 
+    //(WP) 
+    int ncorners;
     G4ThreeVector *corners; // The coordinates of the corners (if phiIsOpen)
-        
+
     G4double DistanceAway( const G4ThreeVector &p, G4bool opposite,
                                  G4double &distOutside2, G4double *rzNorm=0 );
       

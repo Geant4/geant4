@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.14 2007/02/01 09:20:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4PolyconeSide.cc,v 1.17.6.1 2008/01/29 11:26:54 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -59,7 +59,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                                       G4double theDeltaPhi, 
                                       G4bool thePhiIsOpen, 
                                       G4bool isAllBehind )
-  : corners(0)
+  : ncorners(0), corners(0)
 {
   //
   // Record values
@@ -82,7 +82,8 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
     //
     // Calculate corner coordinates
     //
-    corners = new G4ThreeVector[4];
+    ncorners = 4;
+    corners = new G4ThreeVector[ncorners];
     
     corners[0] = G4ThreeVector( tail->r*std::cos(startPhi),
                                 tail->r*std::sin(startPhi), tail->z );
@@ -149,7 +150,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 //                            for usage restricted to object persistency.
 //
 G4PolyconeSide::G4PolyconeSide( __void__& )
-  : cone(0), corners(0)
+  : phiIsOpen(false), cone(0), ncorners(0), corners(0)
 {
 }
 
@@ -204,7 +205,7 @@ void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
   deltaPhi  = source.deltaPhi;
   phiIsOpen  = source.phiIsOpen;
   allBehind  = source.allBehind;
-  
+
   cone    = new G4IntersectingCone( *source.cone );
   
   rNorm    = source.rNorm;
@@ -224,7 +225,8 @@ void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
   
   if (phiIsOpen)
   {
-    corners = new G4ThreeVector[4];
+    ncorners = 4;
+    corners = new G4ThreeVector[ncorners];
     
     corners[0] = source.corners[0];
     corners[1] = source.corners[1];

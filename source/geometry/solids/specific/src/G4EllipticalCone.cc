@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc,v 1.12 2006/10/20 13:45:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EllipticalCone.cc,v 1.13.2.1.4.1 2008/01/29 11:26:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -455,9 +455,9 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
         //
         return (sigz < -halfTol) ? s : 0;
       }
-      else if (xi/(xSemiAxis*xSemiAxis)*v.x() + yi/(ySemiAxis*ySemiAxis)*v.y() >= 0)
+      else if (xi/(xSemiAxis*xSemiAxis)*v.x()
+             + yi/(ySemiAxis*ySemiAxis)*v.y() >= 0)
       {
-
         //
         // Else, if we are traveling outwards, we know
         // we must miss
@@ -495,7 +495,8 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       {
         return (sigz > -halfTol) ? s : 0;
       }
-      else if (xi/(xSemiAxis*xSemiAxis)*v.x() + yi/(ySemiAxis*ySemiAxis)*v.y() >= 0)
+      else if (xi/(xSemiAxis*xSemiAxis)*v.x()
+             + yi/(ySemiAxis*ySemiAxis)*v.y() >= 0)
       {
         //        return kInfinity;
       }
@@ -537,18 +538,20 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       }
   }
   
-  if (p.z() > zTopCut - 0.5*kCarTolerance && p.z() < zTopCut + 0.5*kCarTolerance )
+  if (p.z() > zTopCut - 0.5*kCarTolerance
+   && p.z() < zTopCut + 0.5*kCarTolerance )
   {
     if (v.z() > 0.) 
-      return kInfinity;
-    
+      { return kInfinity; }
+
     return distMin = 0.;
   }
   
-  if (p.z() < -zTopCut + 0.5*kCarTolerance && p.z() > -zTopCut - 0.5*kCarTolerance)
+  if (p.z() < -zTopCut + 0.5*kCarTolerance
+   && p.z() > -zTopCut - 0.5*kCarTolerance)
   {
     if (v.z() < 0.)
-      return distMin = kInfinity;
+      { return distMin = kInfinity; }
     
     return distMin = 0.;
   }
@@ -635,17 +638,18 @@ G4double G4EllipticalCone::DistanceToIn(const G4ThreeVector& p) const
   G4double distR, distR2, distZ, maxDim;
   G4double distRad;  
 
-  // check if the point lies either below z=-zTopCut in bottom elliptical region
-  // or on top within cut elliptical region
+  // check if the point lies either below z=-zTopCut in bottom elliptical
+  // region or on top within cut elliptical region
   //
-  if( (p.z() < -zTopCut) && (sqr(p.x()/xSemiAxis) + sqr(p.y()/ySemiAxis)
-                           < sqr(zTopCut + zheight + 0.5*kCarTolerance )) )
+  if( (p.z() <= -zTopCut) && (sqr(p.x()/xSemiAxis) + sqr(p.y()/ySemiAxis)
+                           <= sqr(zTopCut + zheight + 0.5*kCarTolerance )) )
   {  
-    return distZ = std::fabs(zTopCut - p.z());
+    //return distZ = std::fabs(zTopCut - p.z());
+     return distZ = std::fabs(zTopCut + p.z());
   } 
   
-  if( (p.z() > zTopCut) && (sqr(p.x()/xSemiAxis)+sqr(p.y()/ySemiAxis)
-                          < sqr(zheight - zTopCut + kCarTolerance/2.0 )) )
+  if( (p.z() >= zTopCut) && (sqr(p.x()/xSemiAxis)+sqr(p.y()/ySemiAxis)
+                          <= sqr(zheight - zTopCut + kCarTolerance/2.0 )) )
   {
     return distZ = std::fabs(p.z() - zTopCut);
   } 
@@ -699,9 +703,9 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
   distMin = kInfinity;
   surface = kNoSurf;
 
-#ifdef G4SPECSDEBUG    
+  #ifdef G4SPECSDEBUG    
   G4cout << "DToOut: vz < 0" << G4endl ;
-#endif
+  #endif
 
   if (v.z() < 0.0)
   {
@@ -719,9 +723,9 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
     surface = kPlaneSurf;
   }
 
-#ifdef G4SPECSDEBUG    
+  #ifdef G4SPECSDEBUG    
   G4cout << "DToOut: vz > 0" << G4endl ;
-#endif
+  #endif
 
   if (v.z() > 0.0)
   {
@@ -741,12 +745,6 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
   // if we are here then it either intersects or grazes the 
   // curved surface...
   //
-
-#ifdef G4SPECSDEBUG    
-  G4cout << " distMin = " << distMin << G4endl ;
-  G4cout << " if we are here then it either intersects or grazes the curved surface..." << G4endl ;
-#endif
-
   G4double A = sqr(v.x()/xSemiAxis) + sqr(v.y()/ySemiAxis) - sqr(v.z());
   G4double B = 2.*(v.x()*p.x()/sqr(xSemiAxis) +  
                    v.y()*p.y()/sqr(ySemiAxis) + v.z()*(zheight-p.z()));
@@ -765,18 +763,22 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
     G4double plus  = (-B+std::sqrt(discr))/(2.*A);
     G4double minus = (-B-std::sqrt(discr))/(2.*A);
 
-    if ( plus > 0.5*kCarTolerance && minus > 0.5*kCarTolerance ) { // take the shorter distance
-      lambda   = std::fabs(plus) < std::fabs(minus) ? plus:minus;
+    if ( plus > 0.5*kCarTolerance && minus > 0.5*kCarTolerance )
+    {
+      // take the shorter distance
+      //
+      lambda   = std::fabs(plus) < std::fabs(minus) ? plus : minus;
     }
-    else {         // at least one solution is close to zero or negaive -> take the longer distance
-      lambda   = std::fabs(plus) > std::fabs(minus) ? plus:minus;
+    else
+    {
+      // at least one solution is close to zero or negative
+      // so, take small positive solution or zero 
+      //
+      lambda   = plus > -0.5*kCarTolerance ? plus : 0;
     }
 
-#ifdef G4SPECSDEBUG    
-    G4cout << "plus,minus, lambda = " << plus << ", " << minus << ", " << lambda << G4endl ;
-#endif
-
-    if ( std::fabs(lambda) < distMin ) {
+    if ( std::fabs(lambda) < distMin )
+    {
       distMin  = std::fabs(lambda);
       surface  = kCurvedSurf;
     }
@@ -843,7 +845,7 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
 //
 G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
 {
-  G4double rad, distR, distZ, distMin=0.;
+  G4double rad,roo,roo1, distR, distZ, distMin=0.;
   G4double minAxis = xSemiAxis < ySemiAxis ? xSemiAxis : ySemiAxis;
 
 #ifdef G4SPECSDEBUG
@@ -868,15 +870,20 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
   if( sqr(p.x()/minAxis)+sqr(p.y()/minAxis) < sqr(zheight - p.z()) )
   {
     rad     = std::sqrt(sqr(p.x()) + sqr(p.y()));
-    distZ   = p.z() + (distMin*(rad-distMin*zheight)-p.z())/(1+sqr(distMin));
-    distR   = rad-(distMin*(zheight-distZ ));
-    distMin = std::sqrt(sqr(distR) + sqr(distZ));
-    distMin = distMin < std::fabs(p.z() + zTopCut)
-            ? distMin : std::fabs(p.z() + zTopCut);
-    distMin = distMin < std::fabs(zTopCut - p.z())
-            ? distMin : std::fabs(zTopCut - p.z());
+    roo     = minAxis*(zheight-p.z()); // radius of cone at z= p.z()
+    roo1    = minAxis*(zheight-zTopCut); // radius of cone at z=+zTopCut
+
+    distZ=zTopCut - std::fabs(p.z()) ;
+    distR=(roo-rad)/(std::sqrt(1+sqr(minAxis)));
+
+    if(rad>roo1)
+    {
+      distMin=(zTopCut-p.z())*(roo-rad)/(roo-roo1);
+      distMin=std::min(distMin,distR);
+    }      
+    distMin=std::min(distR,distZ);
   }
-  
+
   return distMin;
 }
 

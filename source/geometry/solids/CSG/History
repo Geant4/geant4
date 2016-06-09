@@ -1,4 +1,4 @@
-$Id: History,v 1.92 2006/10/19 15:34:03 gcosmo Exp $
+$Id: History,v 1.99.2.1 2008/01/29 10:55:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 23, 2007  T.Nikitina                 geom-csg-V08-03-00x
+- Fixed problem of undefined side for valid surface normal in case of Phi
+  section and direction through the center of either A G4Tubs or G4Cons shape.
+
+Oct 2, 2007  T.Nikitina
+- G4Torus:
+  o Fixed bug in CalculateExtent() for case of non-rotated full-phi
+    torus definition: added protection against negative value for sqrt()
+    and corrected formula for 'delta'. Fixes problem of NaN detected in
+    initialisation by CMS.
+  o Fixed bug in SolveNumericJT(): corrected handling of complex roots,
+    'rootsrefined' is used only if the number of refined roots is the same
+    as for primary roots. Addresses problem report #969.
+
+Aug 16, 2007  T.Nikitina
+- G4Tubs: fixed bug in DistanceToOut(p,v,..) for negative value under sqrt()
+  for the case of point p on the surface and v tangent to the surface.
+  Responsible for rare cases of NaN.
+
+May 16, 2007  T.Nikitina                 geom-csg-V08-03-00          
+- G4Tubs: fixed bug for DistanceToOut(p,v) for phi section.
+  Bug was causing segmentation fault in recursive_test (problem report #784). 
+  For v crossing the center of the tub DistanceToOut was always giving
+  Radial distance and not distance in Phi.  
+- G4Cons: fixed bug for DistanceToOut(p,v) for phi section,
+  the same as for G4Tubs. 
+- Updated unit tests.
 
 Oct 19, 2006  G.Cosmo                    geom-csg-V08-01-00
 - Added explicit computation for GetSurfaceArea() for all solids

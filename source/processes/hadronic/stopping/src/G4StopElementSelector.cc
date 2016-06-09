@@ -23,12 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StopElementSelector.cc,v 1.14 2006/11/15 12:17:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
-//
-// --------------------------------------------------------------
-//      GEANT4 class file 
-//      CERN Geneva Switzerland
+// $Id: G4StopElementSelector.cc,v 1.16 2007/10/02 18:27:43 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 // File: G4StopElementSelector
 //
@@ -36,18 +32,13 @@
 // 
 // Creation date: 2 April 2000
 //
-// Class Description: 
-//
-// Selection of elements for negative particle cupture
-// Selection between decay/capture for mu-
-// N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
-//
-//
 // Modifications: 
 // 18/08/2000  V.Ivanchenko Update description
 // 17/05/2006  V.Ivanchenko Cleanup
+// 02/10/2007  V.Ivanchenko Fixed typo in computation of Lambda-factor
+//                          proposed by Victor Pec 
 //
-//-----------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 #include "G4StopElementSelector.hh"
 #include "Randomize.hh" 
@@ -192,12 +183,13 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
   const G4double t1 = 875.e-10;
   r1 = zeff[i];
   zeff2 = r1 * r1;
-  xmu = zeff2 * 2.663e-4;
+  // ^-4 -> ^-5 suggested by user
+  xmu = zeff2 * 2.663e-5;
   a2ze = 0.5 * A / Z;
   r2 = 1.0 - xmu;
   lambda = t1 * zeff2 * zeff2 * (r2 * r2) * (1.0 - (1.0 - xmu) * .75704) *
           (a2ze * b0a + 1.0 - (a2ze - 1.0) * b0b -
-          (2.0 * (A - Z) /  Z  + std::abs(a2ze - 1.) ) * b0c / (A * 4.) );
+          (2.0 * (A - Z)  + std::abs(a2ze - 1.) ) * b0c / (A * 4.) );
 
   // == Mu capture data are taken if exist 
   for (unsigned int j = 0; j < ListZE; j++) {

@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2006/10/19 15:35:55 gcosmo Exp $
+$Id: History,v 1.64.2.1 2008/01/29 08:52:15 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22/01/2008 : T. Nikitina       breps-V08-03-00x
+- Fixed bug in G4BREPSolidPolyhedra::DistanceToOut() for cases of particle
+  passing the border of two touching surfaces.
+- G4BREPSolidBox: fixed problem in the constructor in definition of the
+  side for the normal to surface.
 
 19/10/2006 : G. Cosmo          breps-V08-01-00
 - Added GetSurfaceArea() method, accessors and modifiers to base class

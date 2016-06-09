@@ -23,19 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMinusCaptureCascade.hh,v 1.8 2006/11/15 12:17:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4MuMinusCaptureCascade.hh,v 1.10 2007/07/05 18:19:14 dennis Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file --- Copyright CERN 1998
-//      CERN Geneva Switzerland
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4MuMinusCaptureCascade physics process --------
-//                   by Vladimir Ivanchenko
-//                     E-mail: Vladimir.Ivantchenko@cern.ch
-//                            April 2000
+//   G4MuMinusCaptureCascade physics process --------
+//   Vladimir Ivanchenko, April 2000
 //
 // Modified:
 // 14.11.06 Add inline functions (V.Ivanchenko)
@@ -60,7 +52,8 @@ public:
  
   ~G4MuMinusCaptureCascade();
 
-  G4int DoCascade(G4double Z, G4double A, G4GHEKinematicsVector* Cascade);
+  G4int DoCascade(const G4double Z, const G4double A,
+                  G4GHEKinematicsVector* Cascade);
 
   void DoBoundMuonMinusDecay(G4double Z, 
 			     G4int* nCascade, G4GHEKinematicsVector* Cascade);

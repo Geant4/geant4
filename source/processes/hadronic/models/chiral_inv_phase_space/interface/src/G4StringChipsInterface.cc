@@ -257,7 +257,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4LorentzVector targ4Mom(-1.*hitMomentum, targetEnergy);
   
   // construct the quasmon
-  G4int nop = 122; // clusters up to Alpha cluster
+  // G4int nop = 122; // clusters up to Alpha cluster
+  G4int nop = 152; // V.Ivanchenko set the same parameter as for all CHIPS models
   G4double fractionOfSingleQuasiFreeNucleons = 0.5; // It is A-dependent (C=.85, U=.40)
   G4double fractionOfPairedQuasiFreeNucleons = 0.05;
   G4double clusteringCoefficient = 5.;
@@ -267,10 +268,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
-			                         clusteringCoefficient);
+			    clusteringCoefficient);
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
-			                        etaToEtaPrime);
+			   etaToEtaPrime);
 
 #ifdef CHIPSdebug
   G4cout << "G4QNucleus parameters "<< fractionOfSingleQuasiFreeNucleons << " "

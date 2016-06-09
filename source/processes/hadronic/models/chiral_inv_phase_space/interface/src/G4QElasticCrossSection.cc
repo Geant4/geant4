@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4QElasticCrossSection.cc,v 1.24 2007/03/30 10:53:31 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-03 $
+// $Id: G4QElasticCrossSection.cc,v 1.24.4.1 2008/01/30 10:22:22 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 //
 // G4 Physics class: G4QElasticCrossSection for N+A elastic cross sections
@@ -155,7 +155,8 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
         }
         lastP  =colP [i];                // Last Momentum  (A-dependent)
         lastCS =colCS[i];                // Last CrossSect (A-dependent)
-        if(std::fabs(lastP/pMom-1.)<tolerance)
+//        if(std::fabs(lastP/pMom-1.)<tolerance)
+        if(lastP == pMom)   // V.Ivanchenko safe solution
         {
 #ifdef pdebug
           G4cout<<"G4QElCS::GetCS:P="<<pMom<<",CS="<<lastCS*millibarn<<G4endl;
@@ -243,7 +244,8 @@ G4double G4QElasticCrossSection::GetCrossSection(G4bool fCS, G4double pMom, G4in
 #endif
     return 0.;                         // Momentum is below the Threshold Value -> CS=0
   }
-  else if(std::fabs(lastP/pMom-1.)<tolerance)
+//  else if(std::fabs(lastP/pMom-1.)<tolerance)
+  else if(lastP == pMom) // V.Ivanchenko safe solution
   {
 #ifdef pdebug
     G4cout<<"G4QElCS::GetCS:OldCur P="<<pMom<<"="<<pMom<<", CS="<<lastCS*millibarn<<G4endl;

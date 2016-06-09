@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh,v 1.9 2006/10/20 13:45:20 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-02 $
+// $Id: G4EllipticalCone.hh,v 1.10.2.1.4.1 2008/01/29 11:26:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-03-patch-02 $
 //
 //
 // --------------------------------------------------------------------
@@ -39,8 +39,8 @@
 //
 // Member Data:
 //
-//      xSemiAxis       semi-axis, x
-//      ySemiAxis       semi-axis, y
+//      xSemiAxis       semi-axis, x, without dimentions
+//      ySemiAxis       semi-axis, y, without dimentions
 //      zheight         height, z
 //      zTopCut         upper cut plane level, z 
 //
@@ -56,9 +56,24 @@
 // *                                                                         *
 // ***************************************************************************
 //
+// In case you want to construct G4EllipticalCone from :
+//   1. halflength in Z = zTopCut
+//   2. Dx and Dy =  halflength of ellipse axis  at  z = -zTopCut
+//   3. dx and dy =  halflength of ellipse axis  at  z =  zTopCut 
+//      ! Attention :  dx/dy=Dx/Dy 
+//
+// You need to find xSemiAxis,ySemiAxis and zheight:
+//
+//  xSemiAxis = (Dx-dx)/(2*zTopCut)  
+//  ySemiAxis = (Dy-dy)/(2*zTopCut)
+//    zheight = (Dx+dx)/(2*xSemiAxis)
+//
 // Author:
 //   Dionysios Anninos, 8.9.2005
-//
+// 
+// Revision:
+//   Lukas Lindroos, Tatiana Nikitina 20.08.2007
+//  
 // --------------------------------------------------------------------
 #ifndef G4EllipticalCone_HH
 #define G4EllipticalCone_HH
