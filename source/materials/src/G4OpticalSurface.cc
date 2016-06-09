@@ -267,11 +267,21 @@ void G4OpticalSurface::ReadFile()
   readFileHandle = fopen(readFileName,"r");
 
   if (readFileHandle) {
+     G4int ncols;
      G4int idxmax = incidentIndexMax*thetaIndexMax*phiIndexMax;
-     for (G4int i=0;i<idxmax;i++) {
-       fscanf(readFileHandle,"%6f", &AngularDistribution[i]);
+     for (G4int i = 0; i<idxmax; i++) {
+       ncols = fscanf(readFileHandle,"%6f", &AngularDistribution[i]);
+       if (ncols < 0) break;
      }
-     G4cout << "LUT - data file: " << readFileName << " read in! " << G4endl;
+     if (ncols >= 0) {
+        G4cout << "LUT - data file: " << readFileName << " read in! " << G4endl;
+     }
+     else {
+        G4String excep = "LUT - data file: "+ readFileName +" not read propery";
+        G4Exception("G4OpticalSurface::ReadFile()", "mat312",
+                    FatalException, excep);
+        return;
+     }
   }
   else {
      G4String excep = "LUT - data file: " + readFileName + " not found";

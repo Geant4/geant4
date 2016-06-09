@@ -185,15 +185,17 @@ G4int G4ErrorFreeTrajState::Update( const G4Track* aTrack )
 //------------------------------------------------------------------------
 std::ostream& operator<<(std::ostream& out, const G4ErrorFreeTrajState& ts)
 {
-  out.setf(std::ios::fixed,std::ios::floatfield);
+  std::ios::fmtflags orig_flags = out.flags();
 
+  out.setf(std::ios::fixed,std::ios::floatfield);
   
   ts.DumpPosMomError( out );
  
   out << " G4ErrorFreeTrajState: Params: " << ts.fTrajParam << G4endl;
 
-  return out;
+  out.flags(orig_flags);
 
+  return out;
 }
 
 

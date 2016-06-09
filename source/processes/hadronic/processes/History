@@ -16,6 +16,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22 February 2012 Vladimir Ivantchenko (hadr-proc-V09-04-12)
+--------------------------------------------------------
+- G4WHadronElasticProcess - fixed memory growing in run time 
+
+19 February 2012 Vladimir Ivantchenko
+--------------------------------------------------------
+- G4WHadronElasticProcess - removed typo - useless unnecessary call 
+    to ApplyYourself 
+
 6 November 2011 Vladimir Ivantchenko (hadr-proc-V09-04-11)
 --------------------------------------------------------
 - G4WHadronElasticProcess - more accurate handl of low-energy particles

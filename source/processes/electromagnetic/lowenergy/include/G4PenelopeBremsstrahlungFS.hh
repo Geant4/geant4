@@ -73,9 +73,11 @@ public:
   G4double SampleGammaEnergy(G4double energy,const G4Material*, G4double cut);
 
 private:
- 
-
-
+  //assignment operator
+  G4PenelopeBremsstrahlungFS & operator=(const G4PenelopeBremsstrahlungFS &right);
+  //copy constructor
+  G4PenelopeBremsstrahlungFS(const G4PenelopeBremsstrahlungFS&);
+  
   //Differential cross section tables
   //Table contains G4PhysicsVectors of log(XS(E,x)) vs. log(E) for a grid of 32 values in 
   //x (= reduced photon energy)

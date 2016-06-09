@@ -16,3 +16,6 @@ if(GEANT4_BUILD_GRANULAR_LIBS)
     GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
 endif()
 
+#if(GEANT4_ENABLE_TESTING)
+#  add_subdirectory(test)
+#endif()

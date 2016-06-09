@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec. 9, 2011   - H.Kurashige (procuts-V09-04-07)
+- Fix a bug in G4ProductionCutsTable::RetrieveCutsInfo 
+  (TAINED_SCALAR by Coverity)
+
 Aug. 10, 2011  -  M.Asai (procuts-V09-04-05)
 - Introducing parallel layered mass geometry.
   Material-cuts-couple is now updated for all worlds.

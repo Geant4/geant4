@@ -19,6 +19,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-12-2011 P. Mato  Tag: XrayFluo-V09-04-06
+- XrayFluoNistMaterials.cc 
+  Fixed the induced memory corruption problem only intermittently visible on MacOSX.
+  The vectors to define materials needed to be cleared properly.
+
+08-12-2011 P. Mato
+Added CMakeLists.txt file.
+
 25-11-2011 G.Folger  Tag: XrayFluo-V09-04-05
 fix compilation error on Windows.
 

@@ -30,7 +30,7 @@
 #include "G4NistManager.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
-#include <math.h>
+#include <cmath>
 #include <iostream>
 #include "G4LinLogInterpolation.hh"
 

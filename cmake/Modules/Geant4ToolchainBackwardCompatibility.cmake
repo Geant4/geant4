@@ -227,6 +227,8 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
   endif()
 
   _g4tc_setenv_ifnotset_command(GEANT4_TC_G4WORKDIR_SETUP ${SHELL_FAMILY} G4WORKDIR ${G4WORKDIR_DEFAULT})
+  _g4tc_prepend_path(GEANT4_TC_G4WORKDIR_PATH_SETUP ${SHELL_FAMILY} PATH
+  \${G4WORKDIR}/bin/\${G4SYSTEM})
 
   # - Geant4 Library build setup
   # We prefer shared libs if these are built, otherwise fall back to static

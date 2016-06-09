@@ -29,6 +29,8 @@
 /// \brief Implementation of the B4dDetectorConstruction class
 
 #include "B4dDetectorConstruction.hh"
+#include "B4dDetectorMessenger.hh"
+
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 
@@ -57,10 +59,11 @@
 
 B4dDetectorConstruction::B4dDetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fMessenger(this),
+   fMessenger(0),
    fMagField(0),
    fCheckOverlaps(true)
 {
+  fMessenger = new B4dDetectorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

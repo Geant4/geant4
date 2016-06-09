@@ -272,6 +272,7 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
 
     G4String pathString(path);
     G4String dirFile = pathString + "/msc_GS/" + filename;
+    
     FILE *infile = fopen(dirFile,"r"); 
     if (infile == 0)
       {
@@ -286,15 +287,23 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
     G4float aRead;
     for(G4int k=0 ; k<76 ;k++){
       for(G4int j=0 ; j<11 ;j++){
-        for(G4int i=0 ; i<320 ;i++){
-	  fscanf(infile,"%f\t",&aRead);
-	  G4int idx = 320*(11*k+j)+i;
-	  if(level == 0)       { PDF[idx]  = aRead; }
-	  else if (level == 1) { CPDF[idx] = aRead; }
+        for(G4int i=0 ; i<320 ;i++) {
+	  if(1 == fscanf(infile,"%f\t",&aRead)) {
+	    G4int idx = 320*(11*k+j)+i;
+	    if(level == 0)       { PDF[idx]  = aRead; }
+	    else if (level == 1) { CPDF[idx] = aRead; }
+	  } else {
+	    G4ExceptionDescription ed;
+	    ed << "Error reading <" + dirFile + "> k= " << k 
+	       << "; j= " << j << "; i= " << i << G4endl;
+	    G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()",
+			"em0003",FatalException,ed);
+	    return;
+	  }
         }
       }
     }
-      
+    
     fclose(infile);
   } //End loading PDF and CPDF parameters
 }

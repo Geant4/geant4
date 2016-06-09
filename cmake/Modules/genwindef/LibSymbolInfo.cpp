@@ -157,7 +157,11 @@ BOOL CLibSymbolInfo::IsRegularLibSymbol( PSTR pszSymbolName )
 // Filters out symbols that are not needed....
 //=============================================================================
 BOOL CLibSymbolInfo::IsFiltedSymbol( string& symbolName )
-{
+{ 
+  // Filter problematic symbols for Win64  
+  if ( symbolName.substr(0,3) == "_CT" ) return FALSE;
+  if ( symbolName.substr(0,3) == "_TI" ) return FALSE;
+  // Filter other symbols
   if ( symbolName.substr(0,2) == "__" ) 
     return FALSE;
   if ( symbolName.substr(0,3) == "??_" && symbolName[3] != '0') // Keep 'operator/='  [??_0]

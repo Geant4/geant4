@@ -241,15 +241,15 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
 G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
-  if(1 < verboseLevel) 
-    G4cout << "G4VEnergyLossProcess destruct " << GetProcessName() 
-	   << G4endl;
-  //delete vstrag;
+  if(1 < verboseLevel) {
+    G4cout << "G4VEnergyLossProcess destruct " << GetProcessName()
+	   << "  " << this << "  " << baseParticle << G4endl;
+  }
   Clean();
 
   if ( !baseParticle ) {
-    if(theDEDXTable && theRangeTableForLoss) {
-      if(theIonisationTable == theDEDXTable) theIonisationTable = 0;
+    if(theDEDXTable) {
+      if(theIonisationTable == theDEDXTable) { theIonisationTable = 0; }
       theDEDXTable->clearAndDestroy();
       delete theDEDXTable;
       if(theDEDXSubTable) {
@@ -380,9 +380,8 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::PreparePhysicsTable for "
-           << GetProcessName()
-           << " for " << part.GetParticleName()
-           << G4endl;
+           << GetProcessName() << " for " << part.GetParticleName() 
+	   << "  " << this << G4endl;
   }
 
   currentCouple = 0;
@@ -398,20 +397,19 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   G4LossTableManager* lManager = G4LossTableManager::Instance();
 
   // Are particle defined?
-  if( !particle ) {
-    particle = &part;
-    if(GetProcessName() == "ionIoni") {
-      G4String pname = particle->GetParticleName();
-      if(pname != "GenericIon" && pname != "alpha" && pname != "He3") {
-	lManager->RegisterIon(&part, this);
-	theGenericIon = G4GenericIon::GenericIon();
-	particle = theGenericIon;  
-	return;
-      }
+  if( !particle ) { particle = &part; }
+
+  if(part.GetParticleType() == "nucleus") {
+
+    // if generic ion or nucleus with Z>=2 
+    if(part.GetPDGCharge() > 1.5*eplus || 
+       part.GetParticleName() == "GenericIon") { 
+      theGenericIon = G4GenericIon::GenericIon();
+      isIon = true; 
+      // process is shared between all ions inheriting G4GenericIon
+      if(part.GetPDGCharge() > 2.5*eplus) { particle = theGenericIon; }
     }
   }
-
-  if(part.GetParticleType() == "nucleus") { isIon = true; }
 
   if( particle != &part ) {
     if(isIon) {
@@ -421,7 +419,9 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     }
     if(1 < verboseLevel) {
       G4cout << "### G4VEnergyLossProcess::PreparePhysicsTable() interrupted for "
-	     << part.GetParticleName() << G4endl;
+	     << part.GetParticleName() << "  isIon= " << isIon 
+	     << "  particle " << particle << "  GenericIon " << theGenericIon 
+	     << G4endl;
     }
     return;
   }
@@ -453,27 +453,29 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 	G4PhysicsTableHelper::PreparePhysicsTable(theDEDXunRestrictedTable);
       theCSDARangeTable = 
 	G4PhysicsTableHelper::PreparePhysicsTable(theCSDARangeTable);
-      bld->InitialiseBaseMaterials(theDEDXunRestrictedTable);
-      bld->InitialiseBaseMaterials(theCSDARangeTable);
+      //bld->InitialiseBaseMaterials(theDEDXunRestrictedTable);
+      //bld->InitialiseBaseMaterials(theCSDARangeTable);
     }
 
-    theRangeTableForLoss = 
-      G4PhysicsTableHelper::PreparePhysicsTable(theRangeTableForLoss);
-    theInverseRangeTable = 
-      G4PhysicsTableHelper::PreparePhysicsTable(theInverseRangeTable);  
     theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
-
-    bld->InitialiseBaseMaterials(theRangeTableForLoss);
-    bld->InitialiseBaseMaterials(theInverseRangeTable);
     bld->InitialiseBaseMaterials(theLambdaTable);  
+
+    if(isIonisation) {
+      theRangeTableForLoss = 
+	G4PhysicsTableHelper::PreparePhysicsTable(theRangeTableForLoss);
+      theInverseRangeTable = 
+	G4PhysicsTableHelper::PreparePhysicsTable(theInverseRangeTable);  
+      //bld->InitialiseBaseMaterials(theRangeTableForLoss);
+      //bld->InitialiseBaseMaterials(theInverseRangeTable);
+    }
 
     if (nSCoffRegions) {
       theDEDXSubTable = 
 	G4PhysicsTableHelper::PreparePhysicsTable(theDEDXSubTable);
       theSubLambdaTable = 
 	G4PhysicsTableHelper::PreparePhysicsTable(theSubLambdaTable);
-      bld->InitialiseBaseMaterials(theDEDXSubTable);  
-      bld->InitialiseBaseMaterials(theSubLambdaTable);  
+      //bld->InitialiseBaseMaterials(theDEDXSubTable);  
+      //bld->InitialiseBaseMaterials(theSubLambdaTable);  
     }
   }
 
@@ -490,9 +492,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   G4double initialMass   = particle->GetPDGMass();
 
   if (baseParticle) {
-    if(baseParticle->GetParticleName() == "GenericIon") { 
-      theGenericIon = G4GenericIon::GenericIon(); 
-    }
     massRatio = (baseParticle->GetPDGMass())/initialMass;
     G4double q = initialCharge/baseParticle->GetPDGCharge();
     chargeSqRatio = q*q;
@@ -532,11 +531,12 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     }
   }
 
-  if (1 < verboseLevel) {
+  if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::Initialise() is done "
            << " for local " << particle->GetParticleName()
-	   << " isIon= " << isIon
-           << " chargeSqRatio= " << chargeSqRatio
+	   << " isIon= " << isIon;
+    if(baseParticle) { G4cout << "; base: " << baseParticle->GetParticleName(); }
+    G4cout << " chargeSqRatio= " << chargeSqRatio
            << " massRatio= " << massRatio
            << " reduceFactor= " << reduceFactor << G4endl;
     if (nSCoffRegions) {
@@ -558,8 +558,9 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
            << GetProcessName()
            << " and particle " << part.GetParticleName()
            << "; local: " << particle->GetParticleName();
-    if(baseParticle) G4cout << "; base: " << baseParticle->GetParticleName();
-    G4cout << G4endl;
+    if(baseParticle) { G4cout << "; base: " << baseParticle->GetParticleName(); }
+    G4cout << " TablesAreBuilt= " << tablesAreBuilt
+           << " isIon= " << isIon << "  " << this << G4endl;
   }
 
   if(&part == particle) {
@@ -635,7 +636,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
            << " maxKinEnergy= " << emax
            << " nbin= " << bin
            << " EmTableType= " << tType
-           << " table= " << table
+           << " table= " << table << "  " << this 
            << G4endl;
   }
   if(!table) return table;
@@ -651,12 +652,12 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
       G4cout << "G4VEnergyLossProcess::BuildDEDXVector flagTable=  " 
 	     << table->GetFlag(i) << " Flag= " << bld->GetFlag(i) << G4endl;
     }
-    if (/*table->GetFlag(i)*/bld->GetFlag(i)) {
+    if(bld->GetFlag(i)) {
 
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
-      //bVector = static_cast<G4PhysicsLogVector*>((*table)[i]);
+      delete (*table)[i];
       if(!bVector) {
 	aVector = new G4PhysicsLogVector(minKinEnergy, emax, bin);
         bVector = aVector;
@@ -722,12 +723,12 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
 
   for(size_t i=0; i<numOfCouples; ++i) {
 
-    if (/*table->GetFlag(i)*/bld->GetFlag(i)) {
-      //    if (table->GetFlag(i)) {
+    if (bld->GetFlag(i)) {
 
       // create physics vector and fill it
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
+      delete (*table)[i];
       G4double emin = MinPrimaryEnergy(particle,couple->GetMaterial(),(*theCuts)[i]);
       if(0.0 >= emin) { emin = eV; }
       else if(maxKinEnergy <= emin) { emin = 0.5*maxKinEnergy; }
@@ -897,8 +898,12 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
 
   // initialisation of material, mass, charge, model at the beginning of the step
   const G4ParticleDefinition* currPart = track.GetParticleDefinition();
-  if(theGenericIon == particle) {
-    massRatio = proton_mass_c2/currPart->GetPDGMass();
+  if(isIon) {
+    if(baseParticle) {
+      massRatio = baseParticle->GetPDGMass()/currPart->GetPDGMass();
+    } else {
+      massRatio = proton_mass_c2/currPart->GetPDGMass();
+    }
   }  
   /*
   if(!theDensityFactor || !theDensityIdx) {

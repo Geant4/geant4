@@ -431,7 +431,6 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
 G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
                                          const G4ThreeVector& v  ) const
 {
-
   static const G4double halfTol = 0.5*kCarTolerance;
 
   G4double distMin = kInfinity;
@@ -506,7 +505,6 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   //
   // Check z = +dz planer surface
   //
-
   sigz = p.z() - zTopCut;
   
   if (sigz > -halfTol)
@@ -597,7 +595,6 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   // if we are here then it either intersects or grazes the curved surface 
   // or it does not intersect at all
   //
-
   G4double A = sqr(v.x()/xSemiAxis) + sqr(v.y()/ySemiAxis) - sqr(v.z());
   G4double B = 2*(v.x()*p.x()/sqr(xSemiAxis) + 
                   v.y()*p.y()/sqr(ySemiAxis) + v.z()*(zheight-p.z()));
@@ -646,28 +643,31 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
     lambda = minus ;
     // check normal vector   n * v < 0
     G4ThreeVector pin = p + lambda*v;
-
-    G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
-                           pin.y()/(ySemiAxis*ySemiAxis),
-                           - ( pin.z() - zheight ));
-    if ( truenorm*v < 0)
-    {   // yes, going inside the solid
-      distMin = lambda;
+    if(std::fabs(pin.z())<zTopCut+0.5*kCarTolerance)
+    {
+      G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
+                             pin.y()/(ySemiAxis*ySemiAxis),
+                             - ( pin.z() - zheight ));
+      if ( truenorm*v < 0)
+      {   // yes, going inside the solid
+        distMin = lambda;
+      }
     }
   }
-    
   if ( plus > halfTol  && plus < distMin )
   {
     lambda = plus ;
     // check normal vector   n * v < 0
     G4ThreeVector pin = p + lambda*v;
-
-    G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
-                           pin.y()/(ySemiAxis*ySemiAxis),
-                           - ( pin.z() - zheight ) );
-    if ( truenorm*v < 0)
-    {   // yes, going inside the solid
-      distMin = lambda;
+    if(std::fabs(pin.z())<zTopCut+0.5*kCarTolerance)
+    {
+      G4ThreeVector truenorm(pin.x()/(xSemiAxis*xSemiAxis),
+                             pin.y()/(ySemiAxis*ySemiAxis),
+                             - ( pin.z() - zheight ) );
+      if ( truenorm*v < 0)
+      {   // yes, going inside the solid
+        distMin = lambda;
+      }
     }
   }
   if (distMin < halfTol) distMin=0.;

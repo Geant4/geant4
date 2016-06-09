@@ -50,6 +50,11 @@ class G4Run
     G4Run();
     virtual ~G4Run();
 
+  private:
+    // These copy constructor and = operator must not be used.
+    G4Run(const G4Run &) {;}
+    G4Run& operator=(const G4Run &) { return *this; }
+
   protected:
     G4int runID;
     G4int numberOfEvent;

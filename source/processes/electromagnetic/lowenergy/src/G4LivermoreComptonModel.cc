@@ -61,7 +61,8 @@ using namespace std;
 
 G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
 						 const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),scatterFunctionData(0),
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+   scatterFunctionData(0),
    crossSectionHandler(0),fAtomDeexcitation(0)
 {
   lowEnergyLimit = 250 * eV; 

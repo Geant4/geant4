@@ -3,6 +3,9 @@ $Id: History,v 1.63 2008-11-17 08:34:11 gcosmo Exp $
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V09-04-08 14-Dec-2011 G.Cosmo
+- Fixed minor Coverity defects.
+
 g3tog4-V09-04-07 22-Nov-2011 G.Cosmo
 - Fixed compilation warnings in build DLLs on Windows when using
   internal CLHEP.

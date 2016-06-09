@@ -50,7 +50,7 @@ using namespace std;
 
 G4LivermoreRayleighModel::G4LivermoreRayleighModel(const G4ParticleDefinition*,
 						   const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),meanFreePathTable(0),
    formFactorData(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 250 * eV; 

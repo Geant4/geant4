@@ -15,6 +15,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+16 December 2011 - P.Arce (ascii-V09-04-09)
+- bug correction in G4Tesselated vertex type, in G4tbgVolume.cc
 
 10 November 2011 - G.Cosmo (ascii-V09-04-08)
 - Removed call to obsolete G4Exception format in G4tgrMaterialFactory.

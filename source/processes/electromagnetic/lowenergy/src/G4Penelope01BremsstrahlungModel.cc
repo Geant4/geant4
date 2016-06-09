@@ -57,7 +57,7 @@
 
 G4Penelope01BremsstrahlungModel::G4Penelope01BremsstrahlungModel(const G4ParticleDefinition*,
 								 const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),energySpectrum(0),
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),energySpectrum(0),
    angularData(0),stoppingPowerData(0),crossSectionHandler(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;

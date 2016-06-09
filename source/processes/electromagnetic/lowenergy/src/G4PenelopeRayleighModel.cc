@@ -51,7 +51,7 @@
 
 G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition*,
 						 const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),logAtomicCrossSection(0),   
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),logAtomicCrossSection(0),   
    atomicFormFactor(0),logFormFactorTable(0),pMaxTable(0),samplingTable(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;

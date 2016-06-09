@@ -12,6 +12,17 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
+19-Mar-2012 V.Ivanchenko                   (hadr-chips-proc-V09-04-07)
+----------------------------------------------------------------------
+G4QCaptureAtRest.cc - a counter of number of warnings is added;
+  check baryon number of final state and take into account nuclear 
+  recoil at rest which is not produced as a final particle
+
+12-Mar-2012 V.Ivanchenko                   (hadr-chips-proc-V09-04-06)
+----------------------------------------------------------------------
+G4QCaptureAtRest.cc - a check is added on 4-momentum balance, if it
+  is violated for mare than 2 GeV sampling is repeated again
+
 21-Oct-2011 D.H. Wright                    (hadr-chips-proc-V09-04-05)
 ----------------------------------------------------------------------
 G4Exception migration: forgot G4QDiscProcessMixer.cc in previous tag

@@ -34,8 +34,7 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-#include "B4aEventActionMessenger.hh"
-
+class B4aEventActionMessenger;
 class B4RunAction;
 
 /// Event action class
@@ -65,7 +64,7 @@ class B4aEventAction : public G4UserEventAction
     void SetPrintModulo(G4int value);
     
   private:
-    B4aEventActionMessenger  fMessenger;
+    B4aEventActionMessenger*  fMessenger;
     B4RunAction*  fRunAction;
    
     G4double  fEnergyAbs;

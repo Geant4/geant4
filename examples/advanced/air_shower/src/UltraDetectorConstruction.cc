@@ -130,8 +130,7 @@ World_phys   = new G4PVPlacement(0,G4ThreeVector(),"World",World_log,0,false,0);
   G4cout << "#                                                    #" << G4endl ;  
   G4cout << "#                                                    #" << G4endl ;  
 
-  G4VPhysicalVolume* chosenVolume;
-  chosenVolume = ConstructUVscope(World_phys);
+  ConstructUVscope(World_phys);
 
 
   G4cout << "#                                                    #" << G4endl ;
@@ -203,8 +202,7 @@ void UltraDetectorConstruction::ConstructTableMaterials()
 // ---------
   a = 26.98*g/mole;
   density = 2.7*g/cm3;
-  G4Material* Al ;
-  Al = new G4Material(name="Aluminum", z=13., a, density); 
+  new G4Material(name="Aluminum", z=13., a, density); 
 
 
 // Quartz
@@ -402,8 +400,8 @@ AirMirrorMPT->AddProperty("REFLECTIVITY", XX, ICEREFLECTIVITY,NUM);
 OpticalAirMirror->SetMaterialPropertiesTable(AirMirrorMPT);
 
 
-G4LogicalBorderSurface *AirMirror ;
-AirMirror = new G4LogicalBorderSurface("Air/Mirror Surface",World_phys,physMirror,OpticalAirMirror);
+
+new G4LogicalBorderSurface("Air/Mirror Surface",World_phys,physMirror,OpticalAirMirror);
 
  return physMirror  ; 
 
@@ -461,8 +459,7 @@ AirGroundMPT->AddProperty("REFLECTIVITY", XX, ICEREFLECTIVITY,NUM);
 OpticalAirGround->SetMaterialPropertiesTable(AirGroundMPT);
 
 
-G4LogicalBorderSurface *AirGround ;
-AirGround = new G4LogicalBorderSurface("Air/Ground Surface",World_phys,physGround,OpticalAirGround);
+new G4LogicalBorderSurface("Air/Ground Surface",World_phys,physGround,OpticalAirGround);
 
  return physGround  ; 
 
@@ -587,8 +584,7 @@ G4ThreeVector PMTpos = LensPosition + G4ThreeVector(0.0*cm,0.0*cm,-(LensFocalLen
 // Rotate PMT window through the axis OX by an angle = 180. degrees
 
 G4RotationMatrix *PMTrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),pi);
-G4VPhysicalVolume *physPMT ;
-physPMT  = new G4PVPlacement(PMTrot,PMTpos,"PMT1",logicalPMT,World_phys,false,0);
+new G4PVPlacement(PMTrot,PMTpos,"PMT1",logicalPMT,World_phys,false,0);
 
   if(!PMTSD)
     {
@@ -626,14 +622,11 @@ OpticalAirPaint->SetMaterialPropertiesTable(AirPaintMPT);
 
 //OpticalAirPaint->DumpInfo();
 
-G4LogicalBorderSurface *AirCylinder ;
-AirCylinder = new G4LogicalBorderSurface("Air/UVscope Cylinder Surface",World_phys,physicalUVscope,OpticalAirPaint);
+new G4LogicalBorderSurface("Air/UVscope Cylinder Surface",World_phys,physicalUVscope,OpticalAirPaint);
 
-G4LogicalBorderSurface *AirLensFrame ;
-AirLensFrame = new G4LogicalBorderSurface("Air/LensFrame Surface",World_phys,physicalLensFrame,OpticalAirPaint);
+new G4LogicalBorderSurface("Air/LensFrame Surface",World_phys,physicalLensFrame,OpticalAirPaint);
 
-G4LogicalBorderSurface *AirBackCover ;
-AirBackCover = new G4LogicalBorderSurface("Air/UVscope Back Cover Surface",World_phys,physicalUVscopeBack,OpticalAirPaint);
+new G4LogicalBorderSurface("Air/UVscope Back Cover Surface",World_phys,physicalUVscopeBack,OpticalAirPaint);
 
 
 /////////////////////////////////////////////////////////////////////////////////////

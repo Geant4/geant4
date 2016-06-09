@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-03-12  V.Ivant (exhadr02-V09-04-08)
+- G4DPMJET2_5CrossSection - return back lost line to fix compillation
+
 09-06-11  V.Ivant (exhadr02-V09-04-07)
 - IonDPMJETPhysics - fixed compillation when DPMJET is not enabled
 

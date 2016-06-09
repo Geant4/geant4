@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -342,7 +342,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.41s Real=1.41s Sys=0s
+  User=1.81s Real=3.1s Sys=0s
 
  ======================== run summary ======================
 
@@ -350,19 +350,19 @@ Run Summary
  ===========================================================
 
 
- trackLength= 1.0005 cm 	 nb of steps= 2.5101  stepSize= 3.9857 mm 
+ trackLength= 1.0005 cm 	 nb of steps= 2.5122  stepSize= 3.9824 mm 
 
- d-rays  : eLoss/primary= 246.15 keV	  nb of d-rays= 0.23321  <Tkin>= 1.0555 MeV  Tmin= 351.89 keV  Tmax= 4.964 MeV
+ d-rays  : eLoss/primary= 246.59 keV	  nb of d-rays= 0.23359  <Tkin>= 1.0556 MeV  Tmin= 351.89 keV  Tmax= 4.9902 MeV
 
- gamma   : eLoss/primary= 159.78 keV	  nb of gammas= 0.28229  <Tkin>= 566.02 keV  Tmin= 2.9421 keV  Tmax= 9.7426 MeV
+ gamma   : eLoss/primary= 160.63 keV	  nb of gammas= 0.28374  <Tkin>= 566.13 keV  Tmin= 2.942 keV  Tmax= 9.7331 MeV
 
- deposit : eLoss/primary= 1.732 MeV	 <dEcut > table= 1.7337 MeV   ---> simul/reference= 0.999
+ deposit : eLoss/primary= 1.7331 MeV	 <dEcut > table= 1.7337 MeV   ---> simul/reference= 0.99968
 
- total   : eLoss/primary= 2.1379 MeV	 <dEfull> table= 2.1404 MeV   ---> simul/reference= 0.99885
+ total   : eLoss/primary= 2.1404 MeV	 <dEfull> table= 2.1404 MeV   ---> simul/reference= 1
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 418976059, 1633463482
+ Current couple of seeds = 160931890, 1868498466
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

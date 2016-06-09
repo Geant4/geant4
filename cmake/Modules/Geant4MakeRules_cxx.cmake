@@ -58,8 +58,8 @@ endif()
 # Intel C++ Compilers - all (?) platforms
 #
 # Sufficient id on all platforms?
-if(CMAKE_CXX_COMPILER MATCHES "icpc.*")
-  set(CMAKE_CXX_FLAGS_INIT "-w1 -Wnon-virtual-dtor -Wpointer-arith -Wwrite-strings -ansi -fp-model precise")
+if(CMAKE_CXX_COMPILER MATCHES "icpc.*|icc.*")
+  set(CMAKE_CXX_FLAGS_INIT "-w1 -Wno-non-virtual-dtor -Wpointer-arith -Wwrite-strings -ansi -fp-model precise")
   set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g") 
   set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
@@ -68,6 +68,9 @@ if(CMAKE_CXX_COMPILER MATCHES "icpc.*")
   # Extra modes
   set(CMAKE_CXX_FLAGS_TESTRELEASE_INIT "-O2 -g -G4DEBUG_VERBOSE")
   set(CMAKE_CXX_FLAGS_MAINTAINER_INIT "-g")
+
+  # Linker flags 
+  set(CMAKE_EXE_LINKER_FLAGS "-i-dynamic")
 endif()
 
 

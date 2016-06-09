@@ -1,0 +1,184 @@
+
+                 Geant4 9.4 - patch-03 Release Notes
+                 -----------------------------------
+
+                                                            9 December 2011
+
+List of fixes included in this public patch since the public release 9.4.p02:
+
+  o Configuration:
+    -------------
+    + Darwin-g++.gmk: modified OGLLIBS settings for proper configuration of
+      OpenGL libraries in combination with Qt. Allow use of Qt libraries not
+      installed as Framework. Also addressing problem report #1267.
+      Removed unnecessary 'gcov' linkage for dynamic libraries.
+    + G4UI_BUILD.gmk: added setting of G4INTY_BUILD_XT for OPENGLXM and OIX.
+      Visualization drivers need Xt, so this covers the case when the user
+      does not build Xt from G4UI_BUILD flags. Addressing problem report #1250.
+
+  o Digits_Hits:
+    -----------
+    + G4THitsMap: removed the print-out of total value, to avoid inconsistency
+      caused by a class <T> which does not have += operator or cannot be
+      initilized to 0. Addressing to the problem report #1258.
+    + Fixed some Coverity defects for uninitialised pointers in
+      G4TDigiCollection and G4THitsCollection.
+
+  o Error Propagation:
+    -----------------
+    + Defined method GetTranfMat() in G4ErrorFreeTrajectoryState.
+      Addresses problem report #1248.
+
+  o Geometry:
+    --------
+    + divisions:
+      o Optimise initialization of phi angles in parameterisation for tubs
+        and cons.
+    + magnetic_field:
+      o Corrected computation of 'omegac' G4EqEMFieldWithEDM, G4Mag_SpinEqRhs
+        and G4EqEMFieldWithSpin with more coherent formula. Simplified formula
+        for computation of kinetic energy in G4FieldTrack.
+    + navigation:
+      o Fix in locator classes and navigator to address cases of tracks stuck
+        on boundary of volumes: improved the condition for accepting a
+        candidate intersection with a boundary in all locator classes, now
+        checking if the track enters in the new volume.
+        Resolves long-standing issue reported by ATLAS.
+    + solids/Boolean:
+      o Corrected protection in G4SubtractionSolid::DistanceToIn(p,v)
+        introduced previously and relaxed to not cause event abortion.
+    + solids/CSG:
+      o G4Sphere: fix for setting of relative radial tolerances when setters
+        for radiuses are explicitely called (affecting parameterisations on
+        radius for spheres).
+        Relaxed validity condition in construction for the minimum size of the
+        outer radius.
+    + solids/specific:
+      o Fix in G4TriangularFacet::Intersect() to take into account geometrical
+        tolerance and cases of zero distance from surface's facet; fixed tests
+        where square root was compared to half Cartesian tolerance; now
+        compared to kCarTolerance. Addressing problem report #1242.
+      o Fix in G4TessellatedSolid::DistanceToOut(p) and DistanceToIn(p) to
+        exactly compute distance from facet avoiding use of 'outgoing' flag
+        shortcut variant. Addressing problem report #1242.
+      o Fix in G4Paraboloid::DistanceToIn(p,v) and DistanceToIn(p) to properly
+        take into account tolerance and provide better estimation of distance
+        respectively. Addresses problem report #1234.
+      o Fix in G4EllipticalCone in DistanceToIn(p,v) to exclude imaginary
+        solution (virtual cone) when distance is calculated.
+      o Defined SetReferences() and InvertFacets() to
+        G4GenericTrap::CreatePolyhedron() for proper visualisation of Boolean
+        compositions with G4GenericTrap.
+      o Defined SetReferences() to G4TessellatedSolid::CreatePolyhedron()
+        for proper visualisation of Boolean compositions with
+        G4TessellatedSolid. Addresses problem report #1235.
+      o Fixed logic in G4VTwistSurface::GetEdgeVisibility() in treatment of
+        corners.
+    + volumes:
+      o Use WIN32 instead of G4LIB_BUILD_DLL as flag for protecting allocator
+        choice in G4NavigationHistory on Windows.
+
+  o Global:
+    ------
+    + Added missing post-const qualifier to G4String::compareTo() methods
+    + Changed date for patch-03 to release 9.4.
+
+  o Graphical Representations:
+    -------------------------
+    + G4PolyhedronArbitrary: defined SetReferences() and InvertFacets() methods
+      necessary at the end to complete the polyhedron, in particular if the
+      polyhedron suffers subsequent Boolean operations.
+    + Consistently make use of G4 types in HepPolyhedron and BooleanProcessor.
+
+  o Persistency:
+    -----------
+    + ascii:
+      * Fixed case of dereferencing null pointer in G4tgbGeometryDumper
+        DumpRotationMatrix() method.
+      * Fixed bug on the usage of units. Addressing problem report #1240.
+      * Fixed trivial compilation warning from Xcode in G4tgbVolume.
+    + gdml:
+      * Fixes in reader to properly consider units in import for G4GenericTrap,
+        G4EllipticalTube, G4TessellatedSolid and G4Tet.
+
+  o Electromagnetic Processes:
+    -------------------------
+    + HighEnergy:
+      o Removed include of unused header in G4GammaConversionToMuons.
+    + Standard:
+      o G4CoulombScatteringModel, G4eCoulombScatteringModel: increased
+        low-energy threshold from 1 eV to 1 keV, below this threshold
+        particle energy is set to zero
+      o G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93: added
+        protection for sampling of angle for very small steps and high
+        energy e-. Fixing rare cases of back-reflection.
+    + Utils:
+      o G4EmModelManager: fixed bug in algorithm to smooth cross-sections
+        between different models. Responsible for observed discrepancy in
+        lateral shower shapes reported by CMS.
+    + Xrays:
+      o G4SynchrotronRadiation, G4SynchrotronRadiationInMat: fixed length
+        of C-arrays for the interface with EM field.
+        Addressing problem report #1236.
+      o Fixed compilation warnings for variables set but not used.
+        Fixed some Coverity defects.
+
+  o Hadronic Processes:
+    ------------------
+    + cross_sections:
+      o G4ElectroNuclearCrossSection: protections to avoid FPE numerical
+        problems at low energies
+    + management:
+      o G4HadronicProcess: changed order of checks, first track status,
+        second cross-section (avoid computation of cross-section for zero
+        energy particles).
+    + models/cascade:
+      o G4CascadeInterface: added protection for proton target conservation
+        failures. These happen due to elastic scattering near threshold.
+
+  o Generic Processes:
+    -----------------
+    + Parameterisations/gflash:
+      o Fixed bug in G4FlashShowerModel::ModelTrigger() for energy condition.
+      o Fixed Coverity defects, mainly related to uninitialised static data.
+    + Transportation:
+      o Modified calcuation of 'deltaTime' for optical photons in
+        G4Transportation (and G4CoupledTtansportation). The final velocity
+        obtained by G4Track CalculateVelocityForOpticalPhoton() should be
+        used instead of the initial velocity of the step.
+        Addressing problem report #1239.
+
+  o Track:
+    -----
+    + Fix problems related to treatment of weight in G4ParticleChange.
+      Addressing problem report #1243.
+    + Use G4VelocityTable as singleton to avoid unnecessary creation of
+      G4PhysicsVector objects in the event loop.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + extended/parameterisations/gflash
+      o Fixed bug in ExGflashSensitiveDetector::Initialize() for creation of
+        new hits collection.
+    + novice/N04
+      o Optimised initialisation of Phi angles in parameterisations to avoid
+        recomputation of trigonometry.
+
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 9.4 or 9.4.p02.
+  o  Technical notes distributed for release 9.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 9.4.p03 are available
+through our "Download" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.

@@ -33,10 +33,11 @@
 
 #include "G4UserEventAction.hh"
 
-#include "B4cEventActionMessenger.hh"
 #include "B4cCalorHit.hh"
 
 #include "globals.hh"
+
+class B4cEventActionMessenger;
 
 /// Event action class
 ///
@@ -68,7 +69,7 @@ private:
                             G4double gapEdep, G4double gapTrackLength) const;
   
   // data members                   
-  B4cEventActionMessenger  fMessenger;
+  B4cEventActionMessenger*  fMessenger;
   G4int  fPrintModulo;
 };
 

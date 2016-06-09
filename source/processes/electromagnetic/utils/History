@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 March 12: V.Ivant (emutils-V09-04-52)
+- G4VEnergyLossProcess fixed crash due to apply G4hIonisation for ions;
+- G4VEnergyLossProcess, G4VEmProcess, G4LossTableBuilder - delete old 
+     G4PhysicsVectors if new vectors are built between runs
+
+29 February 12: V.Ivant
+- G4VEnergyLossProcess fixed computation of delta-electron cross section 
+    for ions and very small cuts (about 1 um), reported by Sergio Ibarmia 
+
 10 November 11: V.Ivant (emutils-V09-04-51)
 - G4LossTableManager, G4EmModelManager - fixed defects reported by 
     Coverity - private assignment operator and copy constructor added

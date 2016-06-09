@@ -68,9 +68,10 @@ class G4Mag_UsualEqRhs : public G4Mag_EqRhs
      
   private:
 
-    G4double  fInvCurrentMomentumXc;   // This extra state enables us 
-                                    // to save a square root in a
-                                    // critical method.
+    G4double  fInvCurrentMomentumXc;   // OBSOLETE:
+                            // This extra state was meant to save a square root 
+                            // in a critical method.   But its use reduced
+                            // robustness (it was unstable for large steps.)
 };
 
 #endif /* G4MAG_USUAL_EQRHS */

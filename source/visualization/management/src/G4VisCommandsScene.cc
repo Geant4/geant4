@@ -577,8 +577,8 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 		     << "\"." << G4endl;
 	    }
 	  } else {
-	    if (verbosity >= G4VisManager::warnings) {
-	      G4cout << "WARNING: The scene, \""
+	    if (verbosity >= G4VisManager::confirmations) {
+	      G4cout << "NOTE: The scene, \""
 		     << sceneName
 		     << "\", of viewer \""
 		     << aViewer -> GetName ()

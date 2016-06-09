@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -729,26 +729,29 @@ EV: 99
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.71s Real=0.7s Sys=0s
+  User=1.49s Real=0.76s Sys=0.02s
  ###### EndOfRunAction  
 =============================================================
  Number of event processed : 100
 =============================================================
  opened file dicom.out for dose output
      Voxel |   DoseDeposit  |
-    8127     6.09022e-20 Gy
-    8128     5.80323e-20 Gy
-    8255     4.46582e-20 Gy
-    8256     6.5503e-20 Gy
-    24511     6.05742e-20 Gy
-    24512     6.08991e-20 Gy
-    24639     5.88956e-20 Gy
-    24640     8.00167e-20 Gy
-    24641     3.59508e-20 Gy
-    40895     6.68925e-20 Gy
-    40896     5.97833e-20 Gy
-    41023     7.46716e-20 Gy
-    41024     8.03574e-20 Gy
+    8127     6.29502e-20 Gy
+    8128     6.05941e-20 Gy
+    8255     4.99351e-20 Gy
+    8256     5.73536e-20 Gy
+    24511     5.76784e-20 Gy
+    24512     7.69863e-20 Gy
+    24639     5.87491e-20 Gy
+    24640     9.14636e-20 Gy
+    40770     4.78443e-22 Gy
+    40771     2.49985e-21 Gy
+    40895     5.96751e-20 Gy
+    40896     7.72024e-20 Gy
+    40897     2.71319e-21 Gy
+    40898     2.05976e-21 Gy
+    41023     5.24416e-20 Gy
+    41024     6.74026e-20 Gy
 =============================================
  closed file dicom.out for dose output
 G4 kernel has come to Quit state.

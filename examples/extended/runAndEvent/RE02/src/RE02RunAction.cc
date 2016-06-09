@@ -36,6 +36,8 @@
 #include "G4THitsMap.hh"
 
 #include "G4UnitsTable.hh"
+
+#include <fstream>
 //=======================================================================
 // RE02RunAction
 //  
@@ -162,6 +164,18 @@ void RE02RunAction::EndOfRunAction(const G4Run* aRun)
   }
   G4cout << "============================================="<<G4endl;
 
+  std::ofstream  file("totED.txt");
+  for ( iz = 0; iz < fNz; iz++){   
+    for ( iy = 0; iy < fNy; iy++){ 
+      for ( ix = 0; ix < fNx; ix++){ 
+	G4double* totED = (*totEdep)[CopyNo(ix,iy,iz)];
+	if ( !totED ) totED = new G4double(0.0);
+	file << ix << " "<<iy<<" "<<iz<<" "<< *totED/MeV << G4endl;
+
+      }
+    }
+  }
+  file.close();
 }
 //
 // --

@@ -24,6 +24,35 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+10th February 2012  John Allison  (vis-V09-04-20)
+- raytracer-V09-05-01: Adopt fix proposed by jasondet@gmail.com for
+  up-vector bug #1274.  Also other small fixes.
+
+12th January 2012  John Allison  (vis-V09-04-19)
+- Patch tag.
+
+3rd January 2012  John Allison
+- G4VisCommandsScene.cc: /vis/scene/notifyHandlers:
+  o Downgraded "scene has changed" from WARNING to NOTE. 
+
+2nd January 2012  John Allison
+- G4VisManager::EndOfEvent: Removed unwarranted DrawView.  It was
+  causing two copies of the geometry to be drawn.
+
+12th December 2011  John Allison
+- G4VSceneHandler::GetMarkerSize: Bug fix:
+  o Bug: If size < 1., size = 1. for all markers.
+  o Fix: Applies only to "screen-size" markers.
+
+30th December 2011  John Allison
+- G4PhysicalVolumeModel::Validate: Searches also in parallel worlds.
+
+12th November 2011  John Allison
+- G4AttributeFilterT<T>::AddInterval and AddValue:
+  o Relaxed exception in case of already existing interval/value.
+  o Changed from Fatal to JustWarning.
+  o In that case, return with no action.
+
 15th November 2011  John Allison (vis-V09-04-18)
 - opengl-V09-04-25: Fix compiler warning + cosmetics.
 

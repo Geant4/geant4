@@ -332,6 +332,8 @@ G4ErrorMatrix & G4ErrorMatrix::operator*=(G4double t)
 
 G4ErrorMatrix & G4ErrorMatrix::operator=(const G4ErrorMatrix &m1)
 {
+   if (&m1 == this) { return *this; }
+
    if(m1.nrow*m1.ncol != size) //??fixme?? m1.size != size
    {
       size = m1.nrow * m1.ncol;

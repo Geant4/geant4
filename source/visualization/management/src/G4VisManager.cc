@@ -1383,7 +1383,17 @@ void G4VisManager::EndOfEvent ()
   const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
 
+  // We are about to draw the event (trajectories, etc.), but first we
+  // have to clear the previous event(s) if necessary.  If this event
+  // needs to be drawn afresh, e.g., the first event or any event when
+  // "accumulate" is not requested, the old event has to be cleared.
+  // We have postponed this so that, for normal viewers like OGL, the
+  // previous event(s) stay on screen until this new event comes
+  // along.  For a file-writing viewer the geometry has to be drawn.
+  // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
   ClearTransientStoreIfMarked();
+
+  // Now draw the event...
   fpSceneHandler->DrawEvent(currentEvent);
 
   G4int nEventsToBeProcessed = 0;
@@ -1401,8 +1411,10 @@ void G4VisManager::EndOfEvent ()
 
     // Unless last event (in which case wait end of run)...
     if (eventID < nEventsToBeProcessed - 1) {
+      // ShowView guarantees the view comes to the screen.  No action
+      // is taken for normal viewers like OGL, but file-writing
+      // viewers have to close the file.
       fpViewer->ShowView();
-      fpViewer->DrawView();
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     } else {  // Last event...
       // Keep, but only if user has not kept any...
@@ -1447,6 +1459,9 @@ void G4VisManager::EndOfRun ()
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
 	fpSceneHandler->DrawEndOfRunModels();
+	// ShowView guarantees the view comes to the screen.  No
+	// action is taken for normal viewers like OGL, but
+	// file-writing viewers have to close the file.
 	fpViewer->ShowView();
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }

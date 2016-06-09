@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 20, 2012 M.Asai (procscore-V09-04-06)
+- Bug fix G4ParallelWorldProcess.cc for incorrect initialization for
+  secondary tracks.
+
 November 16, 2011 B.Morgan (procscore-V09-04-05)
 - Added G4ParallelWorldProcess files to sources.cmake
 

@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24th Jan 2012 P.Gumplinger (op-V09-04-04)
+              G4OpBoundaryProcess.cc - solves Problem #1275
+              call aParticleChange.ProposeVelocity(aTrack.GetVelocity())
+              at every invocation of DoIt; for FresnelRefraction calculate
+              finalVelocity locally from Material2->
+              GetMaterialPropertiesTable()->GetProperty("GROUPVEL")
+
 28th Oct 2011 P.Gumplinger (op-V09-04-03)
               add logic for ProposeVelocity to G4OpBoundaryProcess::PostStepDoIt
 

@@ -17,6 +17,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- February 3rd, 2012 J.Apostolakis  (track-V09-04-14)
+- G4FieldTrackUpdator::Update method must reset the RestMass, 
+   because it is used to Initialise each track by ParallelWorldScoringProcess,
+   (as well as update during stepping a track.)
+    Requires tag  'field-V09-05-03' of geometry/magneticfield
+
+- January 21st, 2012 H.Kurashige
+- G4Track::CalculateVelocityForOpticalPhoton() has been reverted
+  Modification of Optical process solves Problem #1275
+
+- January 9th, 2012 H.Kurashige
+- Use GetNextMaterial instead of GetMaterial 
+  in G4Track::CalculateVelocityForOpticalPhoton()
+   (Problem #1275)
+
+- December 22nd, 2011 H.Kurashige
+- Set 'false' to SecondaryWeightByProcess in default 
+  (Problem #1273)
+
+- December 9th, 2011 H.Kurashige
+- Fix Coverity defects
+  (Modify copy constructor/assignment operator for G4VParticleChange and derived classes)
+  (Add copy constructor/assignment operator for G4VUserTrackInformation)
+
 - November 9th, 2011 H.Kurashige  (track-V09-04-13)
 - Fix Coverity defects
   (copy constructor/assignment operator for G4Step/G4StepPoint)

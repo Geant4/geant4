@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar. 6th, 2012, M.Asai (run-V09-04-28)
+- Add dummy copy constructor and = operator to G4Run.
+
+Dec. 9th, 2011, H.Kurashige
+- Fix Coverity defects in assignment operator of G4VModularPhysicsList
+
 Nov. 15th, 2011, M.Asai (run-V09-04-27)
 - Added new line to G4ExceptionHandler notification to properly flush buffer.
 

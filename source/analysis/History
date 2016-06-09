@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 23rd 2012 G.Cosmo (analysis-V09-04-16)
+- Added missing header inclusion in tools/wroot/file to allow for compilation
+  on gcc-4.7 and fixed minor compilation warnings.
+
 November 30th 2011 B.Morgan (analysis-V09-04-15)
 - CMakeLists.txt : Updated to build G4analysis in granular as well as global
   mode.

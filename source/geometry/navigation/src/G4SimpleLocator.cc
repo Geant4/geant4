@@ -168,7 +168,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
 
      G4ThreeVector  ChordAB           = Point_B - Point_A;
 
-#ifdef  DEBUG_FIELD
+#ifdef G4DEBUG_FIELD
      G4VIntersectionLocator::
        ReportTrialStep( substep_no, ChordAB, ChordEF_Vector, 
                       NewMomentumDir, NormalAtEntry, validNormalAtE ); 

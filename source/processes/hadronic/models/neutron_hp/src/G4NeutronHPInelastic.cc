@@ -45,7 +45,13 @@
   {
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
-    system("echo $G4NEUTRONHPDATA");
+
+    G4int istatus = system("echo $G4NEUTRONHPDATA");
+    if ( istatus < 0 )
+    {
+      G4cout << "Warning! system(\"echo $G4NEUTRONHPDATA\") returns error value at G4NeutronHPInelastic" << G4endl;
+    } 
+
 //    G4cout << " entering G4NeutronHPInelastic constructor"<<G4endl;
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");

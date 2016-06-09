@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-01-24 P.Gumplinger (materials-V09-04-19)
+- G4OpticalSurface.cc: remove std:: in front of fopen and fscanf
+
+12-01-17 P.Gumplinger
+- G4MaterialPropertiesTable.icc: add return statement in GetConstProperty
+  after G4Exception to keep a compiler happy
+
+12-01-12 P.Gumplinger
+- G4MaterialPropertiesTable.icc: cosmetic changes to GetProperty,
+    GetConstProperty and ConstPropertyExists methods
+- G4OpticalSurface.cc: avoid compilation warning on Ubuntu
+
 10-11-11 V.Ivanchenko (materials-V09-04-18)
 - G4SandiaTable, G4IonisParamElm, G4IonisParamMat, G4OpticalSurface
     fixed problems reported by Coverity, mainly in assignment operator

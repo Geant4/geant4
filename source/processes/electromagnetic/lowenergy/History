@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.01.2012  L. Pandola  tag emlowen-V09-04-82
+	    Fix all remaining defects reported by the Coverity 
+	    analysis
+
+11.01.2012  L. Pandola
+	    Fix defects reported by the Coverity analysis for all 
+	    Penelope-related classes
+
 25.11.2011  V.Ivanchenko tag emlowen-V09-04-81
             Minor cleanup of comments
 

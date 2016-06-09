@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 8th, 2012, M.Asai (event-V09-04-10)
+- Correct the location of G4Exception to the constructor of
+  G4UserEventAction. 
+
+March 6th, 2012, M.Asai
+- Add dummy copy constructor and = operator to G4Event. (bug report 1277)
+
+January 12th, 2012, LDesorgher
+- Correction for settings of sigmaX and sigmaY in G4SPSPosDistribution::SetBeamSigmaInR 
+  as suggested by  Guan, Fada (bug report 1278).
+  
 November 10th, 2011, M.Asai (event-V09-04-09)
 - Fixing Coverity warnings.
 

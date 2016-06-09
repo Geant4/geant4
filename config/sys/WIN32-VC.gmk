@@ -4,16 +4,16 @@
 ifeq ($(G4SYSTEM),WIN32-VC)
   CXX       := CL
   ifdef G4OPTIMISE
-    CXXFLAGS  += -Ox
+    CXXFLAGS  += -Ox -MD
   else
     ifdef G4DEBUG
-      CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
+      CXXFLAGS  += -Od -MDd -Zi -Fd$(G4LIBDIR)/lib$(name)
     endif
   endif
-  CXXFLAGS += -MD -GR -EHsc -Zm200 -nologo
+  CXXFLAGS += -GR -EHsc -Zm200 -nologo
   CXXFLAGS += -D_CONSOLE -D_WIN32 -DOS
   CPPFLAGS += -DWIN32 -DXPNET -D_CRT_SECURE_NO_DEPRECATE
-  LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll /STACK:8368128
+  LDFLAGS  += -FORCE /NODEFAULTLIB:MSVCRT.dll /STACK:12582912
 
   SHEXT := dll
   AR := LIB

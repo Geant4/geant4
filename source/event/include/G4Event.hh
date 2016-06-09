@@ -71,6 +71,11 @@ class G4Event
       // implemented. Otherwise nothing will be drawn.
 
   private:
+      // These copy constructor and = operator must not be used.
+      G4Event(const G4Event &) {;}
+      G4Event& operator=(const G4Event &) { return *this; }
+
+  private:
       // event ID
       G4int eventID;      
 

@@ -202,6 +202,8 @@ void XrayFluoNistMaterials::CreateMaterials()
    // Define Icelandic Basalt main components  0029.PP.0035 sample
   density = 3*g/cm3;
   G4Material* icelandicBasaltMain= nistMan->ConstructNewMaterial("IceBasaltMain",elements, fractionMass, density);
+  elements.clear();
+  fractionMass.clear();
 
   // Define Icelandic Basalt traces components  0029.PP.0035 sample
   density = 3*g/cm3;
@@ -263,7 +265,7 @@ void XrayFluoNistMaterials::CreateMaterials()
   G4Material* doloriteMain = nistMan->ConstructNewMaterial("Dolorite", elements, fractionMass, density);
 
   elements.clear();
-  natoms.clear();
+  fractionMass.clear();
 
   // define traces in dolorite 0055.PP.0038 sample
 

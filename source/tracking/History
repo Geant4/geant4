@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 January 2012 G.Cosmo (tracking-V09-04-07)
+- Remove not defined method GetNavigator() and moved SetNavigator() to public.
+
 23 September 2011 J.Allison (tracking-V09-04-06)
 - G4RichTrajectoryPoint: Added Pre and PostStepPointWeight.
 - Fixed bug in copy constructor (volume touchable handle was not copied).

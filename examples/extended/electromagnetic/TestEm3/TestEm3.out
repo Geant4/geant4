@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -395,33 +395,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.42s Real=3.45s Sys=0.01s
+  User=4.01s Real=7.32s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 779.93 MeV :   17.9 MeV     2.296 +- 0.2296 %      54.7 cm  +- 1.36 cm 
-   liquidArgon: 209.43 MeV :  16.92 MeV     8.077 +- 0.8077 %      1.03 m   +- 8.58 cm 
+          Lead:  780.6 MeV :  16.06 MeV     2.057 +- 0.2057 %      54.7 cm  +- 1.33 cm 
+   liquidArgon: 210.82 MeV :   15.9 MeV      7.54 +- 0.754 %      1.04 m   +- 8.22 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma  509
- Mean number of e-     872
- Mean number of e+     54.1
+ Mean number of gamma  511
+ Mean number of e-     875
+ Mean number of e+     53.1
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 779.867 MeV
-liquidArgon:	 209.492 MeV
+      Lead:	 780.506 MeV
+liquidArgon:	 210.912 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1363184189, 278834731
+ Current couple of seeds = 1114563984, 348450532
 ----------------------------------------
 #
 /process/em/setSecBiasing eIoni World 0.3 2 MeV
@@ -733,7 +733,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1363184189, 278834731
+ Current couple of seeds = 1114563984, 348450532
 ----------------------------------------
 Start Run processing.
 
@@ -743,33 +743,33 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.92s Real=2.97s Sys=0.01s
+  User=3.42s Real=6.82s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 733.27 MeV :  18.33 MeV       2.5 +-  0.25 %        52 cm  +- 1.32 cm 
-   liquidArgon:  205.4 MeV :  15.85 MeV     7.716 +- 0.7716 %      99.5 cm  +- 7.55 cm 
+          Lead: 738.52 MeV :  17.24 MeV     2.335 +- 0.2335 %      52.2 cm  +- 1.29 cm 
+   liquidArgon: 201.81 MeV :  16.94 MeV     8.396 +- 0.8396 %      97.6 cm  +- 8.03 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma  294
- Mean number of e-     559
- Mean number of e+     54.4
+ Mean number of gamma  295
+ Mean number of e-     560
+ Mean number of e+     54.1
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 777.736 MeV
-liquidArgon:	 211.676 MeV
+      Lead:	 782.428 MeV
+liquidArgon:	 208.129 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 128551846, 423407066
+ Current couple of seeds = 1789884577, 175077327
 ----------------------------------------
 #
 UserDetectorConstruction deleted.

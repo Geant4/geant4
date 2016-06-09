@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -172,37 +172,37 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
                in cavity = 1.8644 MeV*cm2/g
 Start Run processing.
 
---->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05391 Ne-_cav= 2858 doseCavity/Ebeam= 1.18472  (100*(ratio-1) = 18.47190 %)
+--->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05391 Ne-_cav= 2835 doseCavity/Ebeam= 1.16358  (100*(ratio-1) = 16.35772 %)
 
---->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.79043 Ne-_cav= 5753 doseCavity/Ebeam= 1.11758  (100*(ratio-1) = 11.75835 %)
+--->evntNb= 20000 Nwall= 19994 Ncav= 7 Ic/Iw= 1.84470 Ne-_cav= 5712 doseCavity/Ebeam= 1.17921  (100*(ratio-1) = 17.92106 %)
 
---->evntNb= 30000 Nwall= 29996 Ncav= 5 Ic/Iw= 0.87828 Ne-_cav= 8635 doseCavity/Ebeam= 1.12007  (100*(ratio-1) = 12.00654 %)
+--->evntNb= 30000 Nwall= 29989 Ncav= 12 Ic/Iw= 2.10837 Ne-_cav= 8666 doseCavity/Ebeam= 1.14535  (100*(ratio-1) = 14.53487 %)
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=6.3s Real=6.29s Sys=0s
+  User=15.48s Real=10.58s Sys=0s
 
- Process calls frequency --->  msc= 548731  eIoni= 608219  Transportation= 23258
+ Process calls frequency --->  msc= 551538  eIoni= 607327  Transportation= 23168
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11627	 Energy = 7.382 GeV
-      Exit  --> nbParticles = 11629	 Energy = 7.379 GeV
+      Enter --> nbParticles = 11582	 Energy = 7.351 GeV
+      Exit  --> nbParticles = 11586	 Energy = 7.356 GeV
 
- beamFluence in wall = 39994	 in cavity = 6	 Icav/Iwall = 0.79047	 energyFluence = 37.95067 MeV*cm2/mg
+ beamFluence in wall = 39987	 in cavity = 13	 Icav/Iwall = 1.71298	 energyFluence = 37.95067 MeV*cm2/mg
 
- Total edep in cavity = 8.74970 MeV +- 4.36868 %
- Total dose in cavity = 43.74851 MeV*cm2/mg +- 4.36868 %
+ Total edep in cavity = 8.60728 MeV +- 4.62379 %
+ Total dose in cavity = 43.03638 MeV*cm2/mg +- 4.62379 %
 
- DoseCavity/EnergyFluence = 1.15277 +- 0.05036
+ DoseCavity/EnergyFluence = 1.13401 +- 0.05243
 
- Total charged trackLength in cavity = 37.6652 m     (mean value = 3.2395 mm )
+ Total charged trackLength in cavity = 37.4366 m     (mean value = 3.2323 mm )
 
- StepSize of ch. tracks in wall   = 151.4704 um  +- 136.8916 um 	 (nbSteps/track = 29.0917)
- StepSize of ch. tracks in cavity = 2.2536 mm  +- 2.6168 mm 	 (nbSteps/track = 1.4374)
+ StepSize of ch. tracks in wall   = 151.3879 um  +- 136.4559 um 	 (nbSteps/track = 29.1414)
+ StepSize of ch. tracks in cavity = 2.2345 mm  +- 2.5502 mm 	 (nbSteps/track = 1.4466)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1551534904, 788315163
+ Current couple of seeds = 1515628767, 672743669
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

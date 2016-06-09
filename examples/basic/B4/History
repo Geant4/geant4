@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13/01/12 I. Hrivnacova (exampleB4-V09-04-06)
+- Fixed compiler warning on windows:
+  Allocating the messenger in the DetectorConstruction and EventAction classes
+  constructors in the constructor body and not in the initialization list
+  (to avoid passing 'this' in the initializer list).
+
 29/11/11 B.Morgan (exbasic-V09-04-05)
 - Fixed CMakeLists.txt to setup UI and VIS as needed, and copy all macros
   to build directory so executable is runnable directly.

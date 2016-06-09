@@ -48,7 +48,7 @@ using namespace std;
 
 G4LivermoreGammaConversionModelRC::G4LivermoreGammaConversionModelRC(const G4ParticleDefinition*,
 								 const G4String& nam)
-  :G4VEmModel(nam),smallEnergy(2.*MeV),isInitialised(false),
+  :G4VEmModel(nam),fParticleChange(0),smallEnergy(2.*MeV),isInitialised(false),
    crossSectionHandler(0),meanFreePathTable(0)
 {
   lowEnergyLimit = 2.0*electron_mass_c2;

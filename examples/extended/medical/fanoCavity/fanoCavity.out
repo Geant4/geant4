@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -161,15 +161,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70629   Tkin= 589.887 keV (0.000 %)   NbOfelec in cav= 4507   Dose/EnFluence= 26.698 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 71239   Tkin= 587.174 keV (0.000 %)   NbOfelec in cav= 4713   Dose/EnFluence= 27.716 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 141261   Tkin= 587.821 keV (-0.350 %)   NbOfelec in cav= 9354   Dose/EnFluence= 28.657 cm2/g (7.339 %)
+ ---> NbofEvents= 2000   NbOfelectr= 142206   Tkin= 587.860 keV (0.117 %)   NbOfelec in cav= 9452   Dose/EnFluence= 29.366 cm2/g (5.956 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211364   Tkin= 588.503 keV (0.116 %)   NbOfelec in cav= 14279   Dose/EnFluence= 28.415 cm2/g (-0.845 %)
+ ---> NbofEvents= 3000   NbOfelectr= 212685   Tkin= 587.850 keV (-0.002 %)   NbOfelec in cav= 14187   Dose/EnFluence= 29.496 cm2/g (0.441 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=22.68s Real=23.14s Sys=0.01s
+  User=47.3s Real=38.48s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -179,32 +179,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 281746  Transportation= 77496  msc= 2391741  eIoni= 1736347  conv= 1
+ Process calls frequency --->  compt= 282784  Transportation= 77969  msc= 2409395  eIoni= 1738390
 
- Gamma crossSections in wall material :  compt= 63.447 cm2/g  conv= 0.000 cm2/g   --> total= 63.447 cm2/g
+ Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 588.4322 keV +- 0.1029 %  (--> range in wall material = 2.2227 mm )
- Mass_energy_transfer coef: 29.8674 cm2/g
+ Mean energy of secondary e- = 587.7018 keV +- 0.1030 %  (--> range in wall material = 2.2190 mm )
+ Mass_energy_transfer coef: 29.8304 cm2/g
 
- StoppingPower in wall   = 1.9638 MeV*cm2/g
-               in cavity = 1.9638 MeV*cm2/g
+ StoppingPower in wall   = 1.9642 MeV*cm2/g
+               in cavity = 1.9642 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 18922	 Energy = 9.6466 GeV
-      Exit  --> nbParticles = 18925	 Energy = 9.6458 GeV
+      Enter --> nbParticles = 19189	 Energy = 9.7420 GeV
+      Exit  --> nbParticles = 19196	 Energy = 9.7452 GeV
 
- Total edep in cavity = 12.7069 MeV +- 2.7281 %	 Total charged trackLength = 52.1403 m     (mean value = 2.7555 mm )
- Total dose in cavity = 20.2237 MeV/mg
- Dose/EnergyFluence   = 28.5906 cm2/g
+ Total edep in cavity = 13.0222 MeV +- 3.0591 %	 Total charged trackLength = 52.5392 m     (mean value = 2.7380 mm )
+ Total dose in cavity = 20.7254 MeV/mg
+ Dose/EnergyFluence   = 29.2999 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.95725 +- 0.02613
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.98222 +- 0.03006
 
- StepSize of ch. tracks in wall   = 113.5259 um  +- 72.1812 um 	 (nbSteps/track = 14.7965)
- StepSize of ch. tracks in cavity = 1.7881 mm  +- 1.3744 mm 	 (nbSteps/track = 1.5410)
+ StepSize of ch. tracks in wall   = 113.3676 um  +- 71.9890 um 	 (nbSteps/track = 14.8133)
+ StepSize of ch. tracks in cavity = 1.7954 mm  +- 1.3657 mm 	 (nbSteps/track = 1.5250)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 841002871, 1756192487
+ Current couple of seeds = 2065514075, 1468898715
 ----------------------------------------
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

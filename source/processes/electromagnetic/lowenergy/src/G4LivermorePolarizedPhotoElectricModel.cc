@@ -39,7 +39,8 @@ using namespace std;
 
 G4LivermorePolarizedPhotoElectricModel::G4LivermorePolarizedPhotoElectricModel(const G4ParticleDefinition*,
                                              const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),crossSectionHandler(0), shellCrossSectionHandler(0)
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),
+   meanFreePathTable(0),crossSectionHandler(0), shellCrossSectionHandler(0)
 {
   lowEnergyLimit = 250 * eV; // SI - Could be 10 eV ?
   highEnergyLimit = 100 * GeV;

@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-ref-00    (2-December-2011)
+ Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0xed180f0
+ creating G4RunManagerKernel 0xab9d0c0
 
 The materials defined are : 
 
@@ -38,14 +38,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0xed84fb0G4ErrorPhysicsList:: particle process manager e+ = 0xed864b0
-0xed84da0G4ErrorPhysicsList:: particle process manager e- = 0xed87ac0
-0xed84b30G4ErrorPhysicsList:: particle process manager gamma = 0xed87cd0
-0xed851c0G4ErrorPhysicsList:: particle process manager mu+ = 0xed87f20
-0xed855f0G4ErrorPhysicsList:: particle process manager mu- = 0xed88170
-0xed85a60G4ErrorPhysicsList:: particle process manager pi+ = 0xed883c0
-0xed85e80G4ErrorPhysicsList:: particle process manager pi- = 0xed88610
-0xed862a0G4ErrorPhysicsList:: particle process manager proton = 0xed88860
+0xac09f80G4ErrorPhysicsList:: particle process manager e+ = 0xac0b480
+0xac09d70G4ErrorPhysicsList:: particle process manager e- = 0xac0ca90
+0xac09b00G4ErrorPhysicsList:: particle process manager gamma = 0xac0cca0
+0xac0a190G4ErrorPhysicsList:: particle process manager mu+ = 0xac0cef0
+0xac0a5c0G4ErrorPhysicsList:: particle process manager mu- = 0xac0d140
+0xac0aa30G4ErrorPhysicsList:: particle process manager pi+ = 0xac0d390
+0xac0ae50G4ErrorPhysicsList:: particle process manager pi- = 0xac0d5e0
+0xac0b270G4ErrorPhysicsList:: particle process manager proton = 0xac0d830
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
@@ -193,14 +193,14 @@ G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
    55 2.15e+03     33.3        0  2.23e+04   0.0337      100  2.15e+03        MUON G4ErrorStepLengthLimit
    56 2.21e+03     35.1        0  2.23e+04   0.0203     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.10136217206429,0)
- Momentum: (22433.38011369594,696.1819967942256,0)
+ Position: (2210,35.1013621720643,0)
+ Momentum: (22433.38011369594,696.1819967942263,0)
  Error: 
-   2.42226661853924e-06                       0   8.713066792134574e-07   5.944465601510621e-05                       0 
-                      0   3.517566784422332e-05                       0                       0    0.004069145419631035 
-  8.713066792134574e-07                       0   3.553011183568632e-05    0.004447277908978973                       0 
-  5.944465601510621e-05                       0    0.004447277908978973      0.6278868499590834                       0 
-                      0    0.004069145419631035                       0                       0      0.5408775310101928 
+  2.422266618539241e-06                       0   8.713066792134575e-07    5.94446560151063e-05                       0 
+                      0   3.517566784422333e-05                       0                       0    0.004069145419631037 
+  8.713066792134575e-07                       0   3.553011183568633e-05    0.004447277908978974                       0 
+   5.94446560151063e-05                       0    0.004447277908978974      0.6278868499590836                       0 
+                      0    0.004069145419631037                       0                       0      0.5408775310101931 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0  1.99e+04        0        0         0        BEAM initStep
@@ -261,14 +261,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    55 2.15e+03     33.3        0  2.23e+04   0.0337      100  2.15e+03        MUON G4ErrorStepLengthLimit
    56 2.21e+03     35.1        0  2.23e+04   0.0203     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.10136217206429,0)
- Momentum: (22433.38011369594,696.1819967942256,0)
+ Position: (2210,35.1013621720643,0)
+ Momentum: (22433.38011369594,696.1819967942263,0)
  Error: 
-   2.42226661853924e-06                       0   8.713066792134574e-07   5.944465601510621e-05                       0 
-                      0   3.517566784422332e-05                       0                       0    0.004069145419631035 
-  8.713066792134574e-07                       0   3.553011183568632e-05    0.004447277908978973                       0 
-  5.944465601510621e-05                       0    0.004447277908978973      0.6278868499590834                       0 
-                      0    0.004069145419631035                       0                       0      0.5408775310101928 
+  2.422266618539241e-06                       0   8.713066792134575e-07    5.94446560151063e-05                       0 
+                      0   3.517566784422333e-05                       0                       0    0.004069145419631037 
+  8.713066792134575e-07                       0   3.553011183568633e-05    0.004447277908978974                       0 
+   5.94446560151063e-05                       0    0.004447277908978974      0.6278868499590836                       0 
+                      0    0.004069145419631037                       0                       0      0.5408775310101931 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0  1.99e+04        0        0         0        BEAM initStep
@@ -329,13 +329,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    55 2.15e+03     33.3        0  2.23e+04   0.0337      100  2.15e+03        MUON G4ErrorStepLengthLimit
    56 2.21e+03     35.1        0  2.23e+04   0.0203     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.10136217206429,0)
- Momentum: (22433.38011369594,696.1819967942256,0)
+ Position: (2210,35.1013621720643,0)
+ Momentum: (22433.38011369594,696.1819967942263,0)
  Error: 
-   2.42226661853924e-06                       0   8.713066792134574e-07   5.944465601510621e-05                       0 
-                      0   3.517566784422332e-05                       0                       0    0.004069145419631035 
-  8.713066792134574e-07                       0   3.553011183568632e-05    0.004447277908978973                       0 
-  5.944465601510621e-05                       0    0.004447277908978973      0.6278868499590834                       0 
-                      0    0.004069145419631035                       0                       0      0.5408775310101928 
+  2.422266618539241e-06                       0   8.713066792134575e-07    5.94446560151063e-05                       0 
+                      0   3.517566784422333e-05                       0                       0    0.004069145419631037 
+  8.713066792134575e-07                       0   3.553011183568633e-05    0.004447277908978974                       0 
+   5.94446560151063e-05                       0    0.004447277908978974      0.6278868499590836                       0 
+                      0    0.004069145419631037                       0                       0      0.5408775310101931 
 
 

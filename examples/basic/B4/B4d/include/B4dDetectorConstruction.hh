@@ -34,8 +34,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-#include "B4dDetectorMessenger.hh"
-
+class B4dDetectorMessenger;
 class G4Box;
 class G4VPhysicalVolume;
 class G4UniformMagField;
@@ -81,8 +80,8 @@ class B4dDetectorConstruction : public G4VUserDetectorConstruction
   
     // data members
     //
-    B4dDetectorMessenger  fMessenger; // messenger 
-    G4UniformMagField*    fMagField;  // magnetic field
+    B4dDetectorMessenger*  fMessenger; // messenger 
+    G4UniformMagField*     fMagField;  // magnetic field
 
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps
 };

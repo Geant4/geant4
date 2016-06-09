@@ -53,6 +53,19 @@ G4ChargeState::G4ChargeState(
   fMagneticCharge= right.fMagneticCharge;
 }
 
+inline G4FieldTrack::G4ChargeState& G4FieldTrack::
+G4ChargeState::operator = ( const G4FieldTrack::G4ChargeState& right )
+{ 
+  if (&right == this) return *this;
+
+  fCharge= right.fCharge;
+  fMagn_dipole= right.fMagn_dipole; 
+  fElec_dipole= right.fElec_dipole;
+  fMagneticCharge= right.fMagneticCharge;
+
+  return *this;
+}
+
 inline void
 G4FieldTrack::InitialiseSpin( const G4ThreeVector& Spin )
 {
@@ -342,8 +355,7 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
   SetLabTimeOfFlight( rStVec.GetLabTimeOfFlight()  ); 
   SetProperTimeOfFlight( rStVec.GetProperTimeOfFlight()  ); 
   SetSpin( rStVec.GetSpin() );
-  //  SetMomentumModulus( rStVec.GetMomentumModulus());
-  SetMomentumDir( rStVec.fMomentumDir );
+  fMomentumDir= rStVec.fMomentumDir;
 
   fChargeState= rStVec.fChargeState;
   // (*fpChargeState)= *(rStVec.fpChargeState);
@@ -351,7 +363,7 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
   return *this;
 }
 
-void 
+inline void 
 G4FieldTrack::UpdateFourMomentum( G4double             kineticEnergy, 
 				  const G4ThreeVector& momentumDirection )
 {
@@ -359,12 +371,16 @@ G4FieldTrack::UpdateFourMomentum( G4double             kineticEnergy,
                             +2.0*fRestMass_c2*kineticEnergy);
   G4ThreeVector momentumVector= momentum_mag * momentumDirection; 
 
-  SetMomentum( momentumVector );     // Also sets direction (from unit)
-  fMomentumDir=   momentumDirection;
+  // SetMomentum( momentumVector );  // Set direction (from unit): used sqrt, div
+  SixVector[3] = momentumVector.x(); 
+  SixVector[4] = momentumVector.y(); 
+  SixVector[5] = momentumVector.z(); 
+
+  fMomentumDir=   momentumDirection; // Set directly to avoid inaccuracy.
   fKineticEnergy= kineticEnergy;
 }
 
-void G4FieldTrack::UpdateState( const G4ThreeVector& position, 
+inline void G4FieldTrack::UpdateState( const G4ThreeVector& position, 
 				G4double             laboratoryTimeOfFlight,
 				const G4ThreeVector& momentumDirection,
 				G4double             kineticEnergy

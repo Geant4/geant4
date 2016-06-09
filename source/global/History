@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 7, 2012 G.Cosmo (global-V09-04-25)
+- Corrected cases of variables never read in G4ConvergenceTester and
+  G4DataInterpolation.
+- Updated date and version for 9.5.p01.
+
 November 19, 2011 V.Ivantchenko (global-V09-04-24)
 - G4Pow: reduced vector for factorial from 512 to 170 (result should be
   below DBL_MAX). Fixed computation of log(factorial).

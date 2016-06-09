@@ -27,6 +27,8 @@
 #include <io.h>
 // disable the warning about the usage of "this" in the constructor.
 #pragma warning(disable:4355)
+#else
+#include <unistd.h>
 #endif
 
 namespace tools {
@@ -410,6 +412,7 @@ protected:
 #else
     return (::access(a_path.c_str(),a_mode) == 0) ? true : false;
 #endif
+    return 0;
   }
   static bool unlink(const std::string& a_path){
     // Unlink, i.e. remove, a file or directory. Returns true when succesfull,
@@ -427,6 +430,7 @@ protected:
     else
       return (::unlink(a_path.c_str())==-1 ? false : true);
 #endif
+    return 0;
   }
 
   static int _open(const char* a_name,int a_flags,unsigned int a_mode) {

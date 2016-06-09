@@ -590,34 +590,44 @@ void G4PhysicalVolumeModel::DescribeSolid
 
 G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
 {
-  G4VPhysicalVolume* world =
-    G4TransportationManager::GetTransportationManager ()
-    -> GetNavigatorForTracking () -> GetWorldVolume ();
-  // The idea now is to seek a PV with the same name and copy no
-  // in the hope it's the same one!!
-  G4PhysicalVolumeModel searchModel (world);
-  G4PhysicalVolumeSearchScene searchScene
-    (&searchModel, fTopPVName, fTopPVCopyNo);
-  G4ModelingParameters mp;  // Default modeling parameters for this search.
-  mp.SetDefaultVisAttributes(fpMP? fpMP->GetDefaultVisAttributes(): 0);
-  searchModel.SetModelingParameters (&mp);
-  searchModel.DescribeYourselfTo (searchScene);
-  G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
-  if (foundVolume) {
-    if (foundVolume != fpTopPV && warn) {
-      G4cout <<
-  "G4PhysicalVolumeModel::Validate(): A volume of the same name and"
-  "\n  copy number (\""
-	     << fTopPVName << "\", copy " << fTopPVCopyNo
-	     << ") still exists and is being used."
-  "\n  But it is not the same volume you originally specified"
-  "\n  in /vis/scene/add/."
-	     << G4endl;
+  G4TransportationManager* transportationManager =
+    G4TransportationManager::GetTransportationManager ();
+
+  size_t nWorlds = transportationManager->GetNoWorlds();
+
+  G4bool found = false;
+
+  std::vector<G4VPhysicalVolume*>::iterator iterWorld =
+    transportationManager->GetWorldsIterator();
+  for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
+    G4VPhysicalVolume* world = (*iterWorld);
+    // The idea now is to seek a PV with the same name and copy no
+    // in the hope it's the same one!!
+    G4PhysicalVolumeModel searchModel (world);
+    G4PhysicalVolumeSearchScene searchScene
+      (&searchModel, fTopPVName, fTopPVCopyNo);
+    G4ModelingParameters mp;  // Default modeling parameters for this search.
+    mp.SetDefaultVisAttributes(fpMP? fpMP->GetDefaultVisAttributes(): 0);
+    searchModel.SetModelingParameters (&mp);
+    searchModel.DescribeYourselfTo (searchScene);
+    G4VPhysicalVolume* foundVolume = searchScene.GetFoundVolume ();
+    if (foundVolume) {
+      if (foundVolume != fpTopPV && warn) {
+	G4cout <<
+	    "G4PhysicalVolumeModel::Validate(): A volume of the same name and"
+	    "\n  copy number (\""
+	       << fTopPVName << "\", copy " << fTopPVCopyNo
+	       << ") still exists and is being used."
+	    "\n  But it is not the same volume you originally specified"
+	    "\n  in /vis/scene/add/."
+	       << G4endl;
+      }
+      fpTopPV = foundVolume;
+      CalculateExtent ();
+      found = true;
     }
-    fpTopPV = foundVolume;
-    CalculateExtent ();
-    return true;
   }
+  if (found) return true;
   else {
     if (warn) {
       G4cout <<

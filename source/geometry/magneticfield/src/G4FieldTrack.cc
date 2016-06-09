@@ -56,20 +56,18 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
 			    const G4ThreeVector& Spin,
 			          G4double       magnetic_dipole_moment,
 			          G4double       curve_length )
- : fKineticEnergy(kineticEnergy),
+:  fDistanceAlongCurve(curve_length),
+   fKineticEnergy(kineticEnergy),
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(LaboratoryTimeOfFlight), 
    fProperTimeOfFlight(0.),
    // fMomentumDir(pMomentumDirection),
    fChargeState(  charge, magnetic_dipole_moment ) 
 {
-  G4double momentum  = std::sqrt(kineticEnergy*(kineticEnergy+2.0*restMass_c2));
-  G4ThreeVector pMomentum= momentum * pMomentumDirection; 
-  SetCurvePnt( pPosition, pMomentum, curve_length );
-    // Sets momentum direction as well.
+  UpdateFourMomentum( kineticEnergy, pMomentumDirection ); 
+      // Sets momentum direction as well.
 
-  fMomentumDir=pMomentumDirection; 
-    // Set the momentum direction again - keeping value from argument exactly
+  SetPosition( pPosition ); 
 
   InitialiseSpin( Spin ); 
 }
@@ -83,26 +81,21 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
                                   G4double       pLaboratoryTimeOfFlight,
                                   G4double       pProperTimeOfFlight,
                             const G4ThreeVector* pSpin)
- : fKineticEnergy(kineticEnergy),
+ : fDistanceAlongCurve(curve_length),
+   fKineticEnergy(kineticEnergy),
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(pLaboratoryTimeOfFlight), 
    fProperTimeOfFlight(pProperTimeOfFlight),
    // fMomentumDir(pMomentumDirection), 
    fChargeState( DBL_MAX ) //  charge not set 
 {
-  G4double momentum  = std::sqrt(kineticEnergy*(kineticEnergy+2.0*restMass_c2));
-  G4ThreeVector pMomentum= momentum * pMomentumDirection; 
-
-  SetCurvePnt( pPosition, pMomentum, curve_length );
-  // Sets momentum direction as well.
-
-  // Set the momentum direction again
-  //   -- to avoid numerical issues from multiplying by momentum and dividing again
-  fMomentumDir=pMomentumDirection; 
-
+  UpdateFourMomentum( kineticEnergy, pMomentumDirection ); 
+      // Sets momentum direction as well.
+    
+  SetPosition( pPosition );    
+   
   G4ThreeVector Spin(0.0, 0.0, 0.0); 
-  if( !pSpin ) Spin= G4ThreeVector(0.,0.,0.); 
-  else         Spin= *pSpin;
+  if( pSpin )   Spin= *pSpin;
   InitialiseSpin( Spin ); 
 }
 
@@ -113,6 +106,8 @@ G4FieldTrack::G4FieldTrack( char )                  //  Nothing is set !!
   G4ThreeVector Zero(0.0, 0.0, 0.0);
   SetCurvePnt( Zero, Zero, 0.0 );
   InitialiseSpin( Zero ); 
+  // fInitialMomentumMag= 0.00; // Invalid
+  // fLastMomentumMag= 0.0; 
 }
 
 void G4FieldTrack::

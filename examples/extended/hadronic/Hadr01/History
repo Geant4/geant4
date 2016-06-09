@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-01-12  V.Ivant (exhadr01-V09-04-02)
+- DetectorMessenger - fixed deletion of objects 
+
 21-04-11  V.Ivant (exhadr01-V09-04-01)
 - Added new builders for ions
 

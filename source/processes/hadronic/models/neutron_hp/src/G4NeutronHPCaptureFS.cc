@@ -107,11 +107,21 @@
         // T. K. comment out below line
         //theOne->SetDefinition( G4Gamma::Gamma() );
         G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
-        if((*i)->GetMomentum().mag() > 10*MeV) 
-                 theOne->SetDefinition( 
-                 theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
-        theOne->SetMomentum( (*i)->GetMomentum().vect() ) ;
-        theOne->SetTotalEnergy( (*i)->GetMomentum().t() );
+        if( (*i)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
+
+        //if ( (*i)->GetExcitationEnergy() > 0 )
+        if ( (*i)->GetExcitationEnergy() > 1.0e-2*eV )
+        {
+           G4double ex = (*i)->GetExcitationEnergy();
+           G4ReactionProduct* aPhoton = new G4ReactionProduct;
+           aPhoton->SetDefinition( G4Gamma::Gamma() ); 
+           aPhoton->SetMomentum( (*i)->GetMomentum().vect().unit() * ex );
+           //aPhoton->SetTotalEnergy( ex ); //will be calculated from momentum 
+           thePhotons->push_back(aPhoton);
+        }
+
+        theOne->SetMomentum( (*i)->GetMomentum().vect() * ( (*i)->GetMomentum().t() - (*i)->GetExcitationEnergy() ) / (*i)->GetMomentum().t() ) ;
+        //theOne->SetTotalEnergy( (*i)->GetMomentum().t() - (*i)->GetExcitationEnergy() ); //will be calculated from momentum 
         thePhotons->push_back(theOne);
         delete *i;
       } 
@@ -146,7 +156,8 @@
     }
 //One photon case: energy set to Q-value 
 //101203 TK
-    if ( nPhotons == 1 )
+    //if ( nPhotons == 1 )
+    if ( nPhotons == 1 && thePhotons->operator[](0)->GetDefinition()->GetBaryonNumber() == 0 )
     {
        G4ThreeVector direction = thePhotons->operator[](0)->GetMomentum().unit();
        G4double Q = G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ))->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass()
@@ -162,7 +173,8 @@
     }
     
     // Recoil, if only one gamma
-    if (1==nPhotons)
+    //if (1==nPhotons)
+    if ( nPhotons == 1 && thePhotons->operator[](0)->GetDefinition()->GetBaryonNumber() == 0 )
     {
        G4DynamicParticle * theOne = new G4DynamicParticle;
        G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
@@ -310,7 +322,7 @@
      }
 
      G4String element_name = theNames.GetName( static_cast<G4int>(Z)-1 );
-     G4String filenameMF6 = dirName+"FSMF6/"+sZ+"_"+sA+sM+"_"+element_name;
+     G4String filenameMF6 = dirName+"/FSMF6/"+sZ+"_"+sA+sM+"_"+element_name;
      std::ifstream dummyIFS(filenameMF6, std::ios::in);
      if ( dummyIFS.good() == true ) hasExactMF6=true;
 

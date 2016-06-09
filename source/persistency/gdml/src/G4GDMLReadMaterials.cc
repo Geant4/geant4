@@ -658,7 +658,7 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
    }
    else  // build the material properties vector
    {
-     G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector(0,0,0);
+     G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector();
      for (size_t i=0; i<matrix.GetRows(); i++)
      {
        propvect->InsertValues(matrix.Get(i,0),matrix.Get(i,1));

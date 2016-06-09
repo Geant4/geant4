@@ -72,7 +72,7 @@
 
 G4Penelope01PhotoElectricModel::G4Penelope01PhotoElectricModel(const G4ParticleDefinition*,
 							       const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),crossSectionHandler(0),
+  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),crossSectionHandler(0),
    shellCrossSectionHandler(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;

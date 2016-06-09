@@ -50,7 +50,8 @@
 
 G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleDefinition*,
 							       const G4String& nam)
-  :G4VEmModel(nam),logAtomicCrossSection(0),fEffectiveCharge(0),fMaterialInvScreeningRadius(0),
+  :G4VEmModel(nam),fParticleChange(0),logAtomicCrossSection(0),
+   fEffectiveCharge(0),fMaterialInvScreeningRadius(0),
    fScreeningFunction(0),isInitialised(false)
 {
   fIntrinsicLowEnergyLimit = 2.0*electron_mass_c2;

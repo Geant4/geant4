@@ -45,9 +45,10 @@
 
 B4dEventAction::B4dEventAction()
  : G4UserEventAction(),
-   fMessenger(this),
+   fMessenger(0),
    fPrintModulo(1)
 {
+  fMessenger = new B4dEventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

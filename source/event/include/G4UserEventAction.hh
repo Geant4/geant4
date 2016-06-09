@@ -52,8 +52,8 @@ class G4Event;
 class G4UserEventAction 
 {
   public:
-      G4UserEventAction() {;}
-      virtual ~G4UserEventAction() {;}
+      G4UserEventAction();
+      virtual ~G4UserEventAction();
       inline void SetEventManager(G4EventManager* value)
       { fpEventManager = value; }
   public: // with description

@@ -17,44 +17,59 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 9th, 2012 - J.Apostolakis (geomnav-V09-04-14)
+-------------------------------
+- G4MultiNavigator: fix for dealing with cases of clashing normals and
+  return Invalid normal. Replaced FatalException with Warning, issued
+  only if fVerbose > 2.
+
+January 31st, 2012 - J.Apostolakis (geomnav-V09-04-13)
+----------------------------------
+- Corrected redundant condition in G4PropagatorInField.
+  Revised threshold for decreaseFactor=0.5 from 100 to 30 times
+  the zero-step threshold.
+
+December 8th, 2011 - G.Cosmo
+----------------------------
+- Fixed left over debug flags for field check in locator classes.
+  Some code cleanup.
+
 November 24th, 2011 - J.Apostolakis (geomnav-V09-04-12)
 -----------------------------------
- G4VIntersectionLocator: Use only 'last' Normal.
-   Disable fallback of using helper Navigator, as it appears 
-   to cause problems in the presence of additional geometries.
+- G4VIntersectionLocator: Use only 'last' Normal.
+  Disable fallback of using helper Navigator, as it appears 
+  to cause problems in the presence of additional geometries.
 
 November 23rd, 2011 - J.Apostolakis (geomnav-V09-04-11)
 -----------------------------------
- G4MultiNavigator: adapt to revisions of intersection logic,
-   to provide Exit Surface Normal for step ending on boundary.
-   First implementation of methods GetGlobalExitNormal,
-     GetLocalExitNormal and GetLocalExitNormalAndCheck.
-   The Local methods are not adapted for this case - they complain:
-    - warn if one navigator  limited the step;
+- G4MultiNavigator: adapt to revisions of intersection logic,
+  to provide Exit Surface Normal for step ending on boundary.
+  First implementation of methods GetGlobalExitNormal(), GetLocalExitNormal()
+  and GetLocalExitNormalAndCheck.
+  The Local methods are not adapted for this case - they complain:
+    - warn if one navigator limited the step;
     - fail report error if multiple navigators limited the step.
-
-   Added data members to record number of Navigators which limited
-    the step in the last call to ComputeStep ( fNoLimitingStep ),
-    and the id in case of just one having limited it (fIdNavLimiting).
+  Added data members to record number of Navigators which limited
+  the step in the last call to ComputeStep ( fNoLimitingStep ),
+  and the id in case of just one having limited it (fIdNavLimiting).
 
 November 18th, 2011 - J.Apostolakis (geomnav-V09-04-10)
 -----------------------------------
- G4Navigator.cc: fixed valid flag to mean correctly 
-    'convexity' and 'have-calculated' in its two use cases.
- - ComputeStep (G4Navigator)
-   * Undid / corrected change to 'fValidExitNormal' - 
-                                   (meaning= exited solid is convex )
-    when it is recalculated for the case of exiting. 
- - Minor fix to GetLocalExitNormal (G4Navigator)
-   * Always set Valid=calculated for Local Normal
+- G4Navigator: fixed valid flag to mean correctly 
+  'convexity' and 'have-calculated' in its two use cases.
+  - G4Navigator::ComputeStep():
+    * Undid / corrected change to 'fValidExitNormal' (meaning= exited
+      solid is convex ) when it is recalculated for the case of exiting. 
+  - Minor fix to G4Navigator::GetLocalExitNormal():
+    * Always set Valid=calculated for Local Normal.
 
 November 18th, 2011 - J.Apostolakis (geomnav-V09-04-09)
 -----------------------------------
- G4SimpleLocator, G4BrentLocator & G4MultiLevelLocator.
- - Revised all Locator classes to use GetLastSurfaceNormal
-   which first calls the robust GetLastSurfaceNormal 
-   instead of calling GetLocalSurfaceNormal 
- *Corrects* ATLAS stuck track issues for hard test cases.
+- G4SimpleLocator, G4BrentLocator & G4MultiLevelLocator:
+    Revised all Locator classes to use GetLastSurfaceNormal()
+    which first calls the robust GetLastSurfaceNormal()
+    instead of calling GetLocalSurfaceNormal().
+    *Corrects* ATLAS stuck track issues for hard test cases.
 
 November 11th, 2011 - G.Cosmo (geomnav-V09-04-08)
 -----------------------------

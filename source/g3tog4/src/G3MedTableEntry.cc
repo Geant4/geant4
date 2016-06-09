@@ -55,9 +55,9 @@ G3MedTableEntry::G3MedTableEntry(const G3MedTableEntry& right)
 G3MedTableEntry::~G3MedTableEntry()
 {}
 
-const G3MedTableEntry& 
-G3MedTableEntry::operator=(const G3MedTableEntry& right)
+G3MedTableEntry& G3MedTableEntry::operator=(const G3MedTableEntry& right)
 { 
+  if (&right == this)  { return *this; }
   fID = right.GetID();
   fMaterial = right.GetMaterial();     
   fField = right.GetField();

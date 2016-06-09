@@ -34,6 +34,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
   AR := ar r
   ECHO    := /bin/echo -e
   SHEXT   := so
+  LOADLIBS += -lstdc++
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   endif

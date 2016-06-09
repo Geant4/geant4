@@ -1,13 +1,15 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-04-ref-10    (4-November-2011)
+ Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-
-<<< Geant4 Physics List engine packaging library: PACK 5.5
 <<< Geant4 Physics List simulation engine: FTFP_BERT 1.3
 
 
@@ -45,18 +47,11 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  FukuiRenderer (DAWN)
   OpenGLStoredX (OGL)
   OpenGLImmediateX (OGLI)
   OpenGLStoredX (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
-  OpenGLImmediateXm (OGLIXm)
-  OpenGLStoredXm (OGLSXm)
-  OpenInventorXt (OI)
-  OpenInventorXt (OIX)
-  VRML1 (VRML1)
-  VRML2 (VRML2)
 
 Registering model factories...
 
@@ -73,6 +68,10 @@ Registered filter factories:
   particleFilter
   originVolumeFilter
   attributeFilter
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, cyan, gray, green, grey, magenta, red, white, yellow
 
 
 phot:   for  gamma    SubType= 12
@@ -345,6 +344,10 @@ hPairProd:   for  pi-    SubType= 4
 
                                   Hadronic Processes for <anti_neutron>
                                   -----------------------------------
+          hadElastic  Models:                 hElasticLHEP: Emin(GeV)=    0  Emax(GeV)= 100000
+
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
 AntiNeutronInelastic  Models:                         FTFP: Emin(GeV)=    0  Emax(GeV)= 100000
 
 AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
@@ -502,15 +505,15 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 235.449 MeV       total track length: 16.9012 cm 
-        Gap: total energy: 2.86828 MeV       total track length: 1.51136 cm 
+   Absorber: total energy: 279.067 MeV       total track length: 20.1915 cm 
+        Gap: total energy: 8.87203 MeV       total track length: 4.32088 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 235.449 MeV rms = 0 eV 
- EGap : mean = 2.86828 MeV rms = 0 eV 
- LAbs : mean = 16.9012 cm  rms = 0 fm 
- LGap : mean = 1.51136 cm  rms = 0 fm 
+ EAbs : mean = 279.067 MeV rms = 0 eV 
+ EGap : mean = 8.87203 MeV rms = 0 eV 
+ LAbs : mean = 20.1915 cm  rms = 0 fm 
+ LGap : mean = 4.32088 cm  rms = 0 fm 
      Transportation,                msc,              hIoni,            ionIoni
               eIoni,              eBrem,            annihil,               phot
               compt,               conv,             hBrems,          hPairProd
@@ -784,15 +787,15 @@ hPairProd:   for  pi-    SubType= 4
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 282.782 MeV       total track length: 19.6538 cm 
-        Gap: total energy: 17.4619 MeV       total track length: 8.34055 cm 
+   Absorber: total energy:  284.31 MeV       total track length: 19.9558 cm 
+        Gap: total energy: 11.0546 MeV       total track length: 5.60399 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 282.782 MeV rms = 0 eV 
- EGap : mean = 17.4619 MeV rms = 0 eV 
- LAbs : mean = 19.6538 cm  rms = 0 fm 
- LGap : mean = 8.34055 cm  rms = 0 fm 
+ EAbs : mean = 284.31 MeV rms = 0 eV 
+ EGap : mean = 11.0546 MeV rms = 0 eV 
+ LAbs : mean = 19.9558 cm  rms = 0 fm 
+ LGap : mean = 5.60399 cm  rms = 0 fm 
 
 phot:   for  gamma    SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1051,14 +1054,15 @@ hPairProd:   for  pi-    SubType= 4
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 448.837 MeV       total track length: 32.6853 cm 
-        Gap: total energy: 15.7553 MeV       total track length: 7.71462 cm 
+   Absorber: total energy: 472.286 MeV       total track length: 33.1613 cm 
+        Gap: total energy: 14.9064 MeV       total track length: 7.10961 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 448.837 MeV rms = 0 eV 
- EGap : mean = 15.7553 MeV rms = 0 eV 
- LAbs : mean = 32.6853 cm  rms = 0 fm 
- LGap : mean = 7.71462 cm  rms = 0 fm 
+ EAbs : mean = 472.286 MeV rms = 0 eV 
+ EGap : mean = 14.9064 MeV rms = 0 eV 
+ LAbs : mean = 33.1613 cm  rms = 0 fm 
+ LGap : mean = 7.10961 cm  rms = 0 fm 
 Graphics systems deleted.
 Visualization Manager deleting...
+

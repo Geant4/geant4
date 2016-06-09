@@ -26,6 +26,22 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+12th January 2012  John Allison  (visman-V09-04-13)
+- Patch tag.
+
+3rd January 2012  John Allison
+- G4VisCommandsScene.cc: /vis/scene/notifyHandlers:
+  o Downgraded "scene has changed" from WARNING to NOTE. 
+
+2nd January 2012  John Allison
+- G4VisManager::EndOfEvent: Removed unwarranted DrawView.  It was
+  causing two copies of the geometry to be drawn.
+
+12th December 2011  John Allison
+- G4VSceneHandler::GetMarkerSize: Bug fix:
+  o Bug: If size < 1., size = 1. for all markers.
+  o Fix: Applies only to "screen-size" markers.
+
 12th November 2011  John Allison  (visman-V09-04-12)
 - G4VisListManager<T>::SetCurrent:
   o Changed "Fatal" to "JustWarning" for non-existent model.

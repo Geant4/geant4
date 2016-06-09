@@ -148,6 +148,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         theStatus = Undefined;
 
         aParticleChange.Initialize(aTrack);
+        aParticleChange.ProposeVelocity(aTrack.GetVelocity());
 
         G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
         G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
@@ -480,7 +481,9 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	aParticleChange.ProposePolarization(NewPolarization);
 
         if ( theStatus == FresnelRefraction ) {
-           G4double finalVelocity = aTrack.CalculateVelocityForOpticalPhoton();
+           G4MaterialPropertyVector* groupvel =
+           Material2->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
+           G4double finalVelocity = groupvel->Value(thePhotonMomentum);
            aParticleChange.ProposeVelocity(finalVelocity);
         }
 

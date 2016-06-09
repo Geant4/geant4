@@ -34,8 +34,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-#include "B4DetectorMessenger.hh"
-
+class B4DetectorMessenger;
 class G4Box;
 class G4VPhysicalVolume;
 class G4UniformMagField;
@@ -81,7 +80,7 @@ class B4DetectorConstruction : public G4VUserDetectorConstruction
   
     // data members
     //
-    B4DetectorMessenger  fMessenger; // messenger 
+    B4DetectorMessenger* fMessenger; // messenger 
     G4UniformMagField*   fMagField;  // magnetic field
     
     G4VPhysicalVolume* fAbsorberPV; // the absorber physical volume

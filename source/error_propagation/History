@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 January 2012 - G.Cosmo (error_propagation-V09-04-05)
+- Set navigator to stepping manager and field locators; fixing crash on Windows.
+
+14 December 2011 - G.Cosmo
+- Fixed minor Coverity defects.
+
 13 November 2011 - P.Arce (error_propagation-V09-04-04)
 - Add GetTranfMat in G4ErrorFreeTrajectoryState.hh
 

@@ -30,6 +30,32 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 22nd, 2012 - Pere Mato (cmake-V09-04-43)
+- genwindef/LibSymbolInfo.cpp : filter the symbols giving problems when building G4clhep for Win64
+
+March 7th, 2012 - Pere Mato
+- Modules/Geant4MakeRules_cxx.cmake : added link flag "-i-dynamic" to avoid link ICC warnings of the sort
+                                      "warning: feupdateenv is not implemented and will always fail"
+
+March 6th, 2012 - Pere Mato
+- Modules/Geant4LibraryBuildOptions.cmake : matching "icc" in addition to "icpc" to detect Intel compiler
+- Modules/Geant4MakeRules_cxx.cmake : change ICC option from -Wnon-virtual-dtor to -Wno-non-virtual-dtor 
+
+February 10th, 2012 - Pere Mato
+- Added function REFLEX_GENERATE_DICTIONARY() in FindROOT.cmake
+
+December 13th 2011 - P. mato (cmake-V09-04-42)
+- Templates/UseGeant4_internal.cmake: Avoid prepending configuration tag for existing commands
+
+December 6th 2011 - B.Morgan 
+- Modules/Geant4ToolchainBackwardCompatibility.cmake [BUGFIX #1265]: Added
+  setting of expansion variable needed to prepend path with G4WORKDIR path.
+- Templates/geant4make-skeleton.in [BUGFIX #1265] : Added expansion variable for
+  path setup to G4WORKDIR directory for executables.
+- Templates/geant4-env-skeleton.in [BUGFIX #1265] : Added needed '@' symbol 
+  to end of GEANT4_TC_SHELL_PROGRAM used as shbang.
+
+
 November 30th 2011 - B.Morgan (cmake-V09-04-41)
 - Modules/Geant4LibraryBuildOptions.cmake : Commented out
   GEANT4_BUILD_GRANULAR_LIBS option to restrict these builds for 9.5. Current

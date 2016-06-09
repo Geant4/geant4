@@ -284,6 +284,7 @@ class G4TwistedTubs : public G4VSolid
       }
       LastVector& operator=(const LastVector& r)
       {
+        if (&r == this)  { return *this; }
         p = r.p; vec = r.vec;
         delete [] surface; surface = new G4VTwistSurface*[1];
         surface[0] = r.surface[0];
@@ -307,6 +308,7 @@ class G4TwistedTubs : public G4VSolid
       LastValue(const LastValue& r) : p(r.p), value(r.value){}
       LastValue& operator=(const LastValue& r)
       {
+        if (this == &r)  { return *this; }
         p = r.p; value = r.value;
         return *this;
       }
@@ -329,6 +331,7 @@ class G4TwistedTubs : public G4VSolid
         : p(r.p), vec(r.vec), value(r.value){}
       LastValueWithDoubleVector& operator=(const LastValueWithDoubleVector& r)
       {
+        if (this == &r)  { return *this; }
         p = r.p; vec = r.vec; value = r.value;
         return *this;
       }

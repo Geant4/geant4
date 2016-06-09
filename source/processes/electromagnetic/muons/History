@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 January 2012: V.Ivant (emmuons-V09-04-03)
+- G4EnergyLossForExtrapolator fixed initialisation of transport 
+    cross section
+
 10 November 2011: V.Ivant (emmuons-V09-04-02)
 - G4ErrorEnergyLoss, G4MuIonisation, G4MuPairProduction - fixed
     defects reported by the Coverity tool

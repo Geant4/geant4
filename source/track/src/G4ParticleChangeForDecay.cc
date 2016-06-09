@@ -65,7 +65,6 @@ G4ParticleChangeForDecay::~G4ParticleChangeForDecay()
 #endif
 }
 
-// copy and assignment operators are implemented as "shallow copy"
 G4ParticleChangeForDecay::G4ParticleChangeForDecay(const G4ParticleChangeForDecay &right): G4VParticleChange(right)
 {
   theGlobalTime0 = right.theGlobalTime0;
@@ -90,10 +89,12 @@ G4ParticleChangeForDecay & G4ParticleChangeForDecay::operator=(const G4ParticleC
       }
     }
     delete theListOfSecondaries; 
-    
-    theListOfSecondaries = right.theListOfSecondaries;
-    theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
+    theListOfSecondaries =  new G4TrackFastVector();
     theNumberOfSecondaries = right.theNumberOfSecondaries;
+    for (G4int index = 0; index<theNumberOfSecondaries; index++){
+      G4Track* newTrack =  new G4Track(*((*right.theListOfSecondaries)[index] ));
+      theListOfSecondaries->SetElement(index, newTrack);			    }
+
     theStatusChange = right.theStatusChange;
     theTrueStepLength = right.theTrueStepLength;
     theLocalEnergyDeposit = right.theLocalEnergyDeposit;

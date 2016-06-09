@@ -13,15 +13,31 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-21)
-- G4AntiNuclElastic - bug is fixed, Plab/baryon was inserted
+
+26 March 2012 - V.Ivanchenko (hadr-cohe-V09-04-24)
 ------------------------------------------------------
-24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-20)
-- G4AntiNuclElastic - bug at very low energy is fixed
+- G4HadronElastic - fixed units in cout
+
+1 March 2012 - V.Ivanchenko (hadr-cohe-V09-04-23)
 ------------------------------------------------------
-31 October 2011 - A.Galoyan (hadr-cohe-V09-04-19)
--  G4AntiNuclElastic - antiProton-Proton elastic scattering is improved 
+- G4AntiNuclElastic - fixed Coverity warning
+
+30 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-22)
 --------------------------------------------------------------
+- G4AntiNuclElastic - bug is fixed, check of |cosTheta|<1 introduced.
+
+24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-21)
+--------------------------------------------------------------
+- G4AntiNuclElastic - bug is fixed, Plab/baryon was inserted
+
+24 Nov. 2011 - V. Uzhinsky (hadr-cohe-V09-04-20)
+--------------------------------------------------------------
+- G4AntiNuclElastic - bug at very low energy is fixed
+
+31 October 2011 - A.Galoyan (hadr-cohe-V09-04-19)
+--------------------------------------------------------------
+-  G4AntiNuclElastic - antiProton-Proton elastic scattering is improved 
+
 21 October 2011 - V.Ivanchenko (hadr-cohe-V09-04-18)
 ------------------------------------------------------
 - G4CHIPSElasticXS - used G4HadronicException; added cross sections for neutral

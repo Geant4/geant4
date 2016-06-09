@@ -44,13 +44,14 @@
 
 B4aEventAction::B4aEventAction()
  : G4UserEventAction(),
-   fMessenger(this),
+   fMessenger(0),
    fEnergyAbs(0.),
    fEnergyGap(0.),
    fTrackLAbs(0.),
    fTrackLGap(0.),
    fPrintModulo(1)
 {
+  fMessenger = new B4aEventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

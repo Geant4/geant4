@@ -75,8 +75,9 @@ G4TheRayTracer::G4TheRayTracer(G4VFigureFileMaker* figMaker,
   eyePosition = G4ThreeVector(1.*m,1.*m,1.*m);
   targetPosition = G4ThreeVector(0.,0.,0.);
   lightDirection = G4ThreeVector(-0.1,-0.2,-0.3).unit();
+  up = G4ThreeVector(0,1,0);
   viewSpan = 5.0*deg;
-  headAngle = 270.*deg; 
+  headAngle = 0.;
   attenuationLength = 1.0*m;
 
   distortionOn = false;
@@ -223,12 +224,18 @@ G4bool G4TheRayTracer::CreateBitMap()
       G4ThreeVector rayDirection;
       if(distortionOn)
       {
-	rayDirection = G4ThreeVector(std::tan(angleX)/std::cos(angleY),-std::tan(angleY)/std::cos(angleX),1.0);
+	rayDirection = G4ThreeVector(-std::tan(angleX)/std::cos(angleY),std::tan(angleY)/std::cos(angleX),1.0);
       }
       else
       {
-	rayDirection = G4ThreeVector(std::tan(angleX),-std::tan(angleY),1.0);
+	rayDirection = G4ThreeVector(-std::tan(angleX),std::tan(angleY),1.0);
       }
+      G4double cp = std::cos(eyeDirection.phi());
+      G4double sp = sqrt(1.-cp*cp);
+      G4double ct = std::cos(eyeDirection.theta());
+      G4double st = sqrt(1.-ct*ct);
+      G4double gamma = std::atan2(ct*cp*up.x()+ct*sp*up.y()-st*up.z(), -sp*up.x()+cp*up.y());
+      rayDirection.rotateZ(-gamma);
       rayDirection.rotateZ(headAngle);
       rayDirection.rotateUz(eyeDirection);
       G4ThreeVector rayPosition(eyePosition);
@@ -253,7 +260,7 @@ G4bool G4TheRayTracer::CreateBitMap()
 	}
       }
       if (interceptable) {
-	theRayShooter->Shoot(anEvent,rayPosition,rayDirection);
+	theRayShooter->Shoot(anEvent,rayPosition,rayDirection.unit());
 	theEventManager->ProcessOneEvent(anEvent);
 	succeeded = GenerateColour(anEvent);
 	colorR[iCoord] = (unsigned char)(int(255*rayColour.GetRed()));

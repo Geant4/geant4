@@ -66,6 +66,10 @@ class G4VUserTrackInformation
     // String is provided to indicate Type of UserTrackInfo class  
     // User is recommended to set the type of his/her class  
 
+    G4VUserTrackInformation(const  G4VUserTrackInformation&);
+    G4VUserTrackInformation& operator=(const G4VUserTrackInformation&);
+  
+
     virtual ~G4VUserTrackInformation();
 
     virtual void Print() const {};

@@ -46,6 +46,8 @@ G4RayTracerViewer::G4RayTracerViewer
 {
   theTracer = aTracer;
   if (!aTracer) theTracer = new G4TheRayTracer;
+  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
+  theTracer->SetNRow(fVP.GetWindowSizeHintY());
 }
 
 G4RayTracerViewer::~G4RayTracerViewer() {}
@@ -72,13 +74,11 @@ void G4RayTracerViewer::SetView()
     SetViewSpan(200. * frontHalfAngle / theTracer->GetNColumn());
   theTracer->SetTargetPosition(targetPoint);
   theTracer->SetEyePosition(cameraPosition);
-  theTracer->SetHeadAngle(fVP.GetViewpointDirection().phi());
+  theTracer->SetUpVector(fVP.GetUpVector());
   const G4Vector3D
     actualLightpointDirection(-fVP.GetActualLightpointDirection());
   theTracer->SetLightDirection(actualLightpointDirection);
   theTracer->SetBackgroundColour(fVP.GetBackgroundColour());
-  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
-  theTracer->SetNRow(fVP.GetWindowSizeHintY());
 }
 
 

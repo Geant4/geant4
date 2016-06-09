@@ -1,4 +1,4 @@
-#!@GEANT4_TC_SHELL_PROGRAM
+#!@GEANT4_TC_SHELL_PROGRAM@
 
 #----------------------------------------------------------------------------
 # @GEANT4_TC_SHELL_FAMILY@ environment setup script for Geant4 @Geant4_VERSION@

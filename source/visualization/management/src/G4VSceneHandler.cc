@@ -938,9 +938,8 @@ G4double G4VSceneHandler::GetMarkerSize
     // Draw in screen coordinates.
     markerSizeType = screen;
   }
-  if (size <= 1.) size = 1.;
   size *= fpViewer -> GetViewParameters().GetGlobalMarkerScale();
-  if (size <= 1.) size = 1.;
+  if (markerSizeType == screen && size < 1.) size = 1.;
   return size;
 }
 

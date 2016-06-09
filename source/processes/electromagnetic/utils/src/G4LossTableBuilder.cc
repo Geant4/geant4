@@ -162,6 +162,8 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
 
     // initialisation of a new vector
     if(npoints < 2) { npoints = 2; }
+
+    delete (*rangeTable)[i];
     G4PhysicsLogVector* v;
     if(0 == bin0) { v = new G4PhysicsLogVector(*pv); }
     else { v = new G4PhysicsLogVector(elow, ehigh, npoints-1); }
@@ -223,6 +225,7 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
     G4double rlow  = (*pv)[0];
     G4double rhigh = (*pv)[npoints-1];
       
+    delete (*invRangeTable)[i];
     G4LPhysicsFreeVector* v = new G4LPhysicsFreeVector(npoints,rlow,rhigh);
     v->SetSpline(splineFlag);
 

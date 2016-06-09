@@ -51,8 +51,12 @@
 #include "G4ExceptionSeverity.hh"
 
 G4ParticleChange::G4ParticleChange()
-  : G4VParticleChange(), theEnergyChange(0.), 
+  : G4VParticleChange(),  
+    theMomentumDirectionChange(),
+    thePolarizationChange(),
+    theEnergyChange(0.), 
     theVelocityChange(0.), isVelocityChanged(false),
+    thePositionChange(),
     theGlobalTime0(0.),    theLocalTime0(0.),
     theTimeChange(0.),     theProperTimeChange(0.), 
     theMassChange(0.), theChargeChange(0.),
@@ -115,9 +119,12 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
      }
      delete theListOfSecondaries; 
      
-     theListOfSecondaries = right.theListOfSecondaries;
-     theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
-     theNumberOfSecondaries = right.theNumberOfSecondaries;
+    theListOfSecondaries =  new G4TrackFastVector();
+    theNumberOfSecondaries = right.theNumberOfSecondaries;
+    for (G4int index = 0; index<theNumberOfSecondaries; index++){
+      G4Track* newTrack =  new G4Track(*((*right.theListOfSecondaries)[index] ));
+      theListOfSecondaries->SetElement(index, newTrack);			    }
+
      theStatusChange = right.theStatusChange;
      theCurrentTrack = right.theCurrentTrack;
      

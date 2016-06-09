@@ -17,18 +17,40 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February  2nd,  2012 J.Apostolakis - field-V09-04-07
+----------------------------------
+- G4FieldTrack: 
+    Added new (inline) method to set the Rest Mass. Needed in order to 
+       reset this - and keep reuse the same G4FieldTrack in a client
+       (across tracks.)
+    Made SetCurvePnt() method private.
+    Simplified implementation of constructors.  Gain of 1 square root and 
+       1 division per call.
+
+February  2nd,  2012 J.Apostolakis
+----------------------------------
+- G4Mag_UsualEqRhs: in SetChargeMomentumMass() method, fixed problem with
+  division by zero; stopped updating 'fInvCurrentMomentumXc' (data member
+  is obsolete).
+
+December 13th,  2011 G.Cosmo
+----------------------------
+- Fixed Coverity defects in G4SimpleRunge (removed spurious pointer
+  data member) and G4FieldTrack (missing G4ChargeState::operator=()).
+- Synchronised unit tests to trunk (new test field07 and minor updates).
+
 November 11th,  2011 J.Apostolakis - field-V09-04-06
 ----------------------------------
 - Added G4Field.cc to list of files in sources.cmake
 
 November  4th,  2011 J.Apostolakis - field-V09-04-05
 ----------------------------------
-G4Field: revised to improve ability to detect gravity field:
-- Added new data member to identify gravity field
-- Added new method IsGravityActive()  (to access this data member)
-- Created new source file - moving constructors to it.
-Changed G4UniformGravityField and G4ElectroMagneticField 
-to accomodate this refinement.
+- G4Field: revised to improve ability to detect gravity field:
+  Added new data member to identify gravity field;
+  Added new method IsGravityActive() to access this data member;
+  Created new source file: moving constructors to it.
+- Changed G4UniformGravityField and G4ElectroMagneticField 
+  to accomodate this refinement.
 
 November 2nd,  2011 P.Gumplinger - field-V09-04-04
 --------------------------------

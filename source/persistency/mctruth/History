@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 December, 11  G.Cosmo (mctruth-V09-04-04)
+- Removed fake copy-constructor. Fixing Coverity defect.
+
 15 June, 11  G.Cosmo (mctruth-V09-04-03)
 - Use cast as workaround to fix compilation error on VC2010 below...
 

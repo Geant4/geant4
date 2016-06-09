@@ -40,7 +40,8 @@ using namespace std;
 
 G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionModel(
    const G4ParticleDefinition*, const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),meanFreePathTable(0),crossSectionHandler(0)
+  :G4VEmModel(nam),fParticleChange(0),
+   isInitialised(false),meanFreePathTable(0),crossSectionHandler(0)
 {
   lowEnergyLimit = 2*electron_mass_c2;
   highEnergyLimit = 100 * GeV;

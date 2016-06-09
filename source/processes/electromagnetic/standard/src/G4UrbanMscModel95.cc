@@ -795,20 +795,28 @@ void G4UrbanMscModel95::SampleScattering(const G4DynamicParticle* dynParticle,
   G4double cth  = SampleCosineTheta(tPathLength,kineticEnergy);
 
   // protection against 'bad' cth values
-  if(std::abs(cth) > 1.) return;
+  if(std::fabs(cth) > 1.) return;
 
-  const G4double checkEnergy = GeV;
-  if(kineticEnergy > checkEnergy && cth < 0.0 
-     && tPathLength < taulim*lambda0) {
-    G4ExceptionDescription ed;
-    ed << dynParticle->GetDefinition()->GetParticleName()
-       << " E(MeV)= " << kineticEnergy/MeV
-       << " Step(mm)= " << tPathLength/mm
-       << " in " << CurrentCouple()->GetMaterial()->GetName()
-       << " scattering angle is set to zero" << G4endl;
-    G4Exception("G4UrbanMscModel90::SampleScattering","em0004",JustWarning,
-                ed,"Please, send bug report in the case of this message");
-    return;
+  // extra protection agaist high energy particles backscattered 
+  if(cth < 1.0 - 1000*tPathLength/lambda0 && kineticEnergy > 20*MeV) { 
+    //G4cout << "Warning: large scattering E(MeV)= " << kineticEnergy 
+    //	   << " s(mm)= " << tPathLength/mm
+    //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
+    // do Gaussian central scattering
+    if(kineticEnergy > GeV && cth < 0.0) {
+      G4ExceptionDescription ed;
+      ed << dynParticle->GetDefinition()->GetParticleName()
+	 << " E(MeV)= " << kineticEnergy/MeV
+	 << " Step(mm)= " << tPathLength/mm
+	 << " in " << CurrentCouple()->GetMaterial()->GetName()
+	 << " CosTheta= " << cth 
+	 << " is too big - the angle is resampled" << G4endl;
+      G4Exception("G4UrbanMscModel95::SampleScattering","em0004",
+		  JustWarning, ed,"");
+    }
+    do {
+      cth = 1.0 + 2*log(G4UniformRand())*tPathLength/lambda0;
+    } while(cth < -1.0);
   }
 
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));

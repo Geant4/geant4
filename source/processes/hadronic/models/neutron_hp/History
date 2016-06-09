@@ -14,10 +14,26 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 March 2012  Tatsumi Koi (hadr-hpn-V09-04-34)
+- Protect emission of unphysical ultra-low energy photons
+
+
+16 January 2012  Tatsumi Koi (hadr-hpn-V09-04-33)
+- Avoid warning messages
+	src/G4NeutronHPInelastic.cc
+
+
+28 November 2011  Tatsumi Koi (hadr-hpn-V09-04-32)
+-Temporal fix for Bug report 1264
+ Permanent fix should be done in Photon Evaporation Model
+	src/G4NeutronHPCaptureFS.cc
+
+
 9 November 2011  Gabriele Cosmo (hadr-hpn-V09-04-31)
 - Workaround fixes to allow compilation on Windows/VC++10
 	src/G4NeutronHPThermalScattering.cc
 	src/G4NeutronHPThermalScatteringData.cc
+
 
 3 November 2011  Tatsumi Koi (hadr-hpn-V09-04-30)
 - Fix Bug which introduced previous tag and add several administrations
@@ -247,7 +263,7 @@ Pointed out by E.Mendoza and D.Cano (CIEMAT)
         src/G4NeutronHPContAngularPar.cc
 
 9 June 2011  Tatsumi Koi (hadr-hpn-V09-04-12)
--Fix for migaration of G4NDL3.15(ENDF-VII.r0)
+-Fix for migration to G4NDL3.15(ENDF-VII.r0)
 	src/G4NeutronHPIsotropic.cc
 -Set Cross section Name in costructor 
 	src/G4NeutronHPCaptureData.cc

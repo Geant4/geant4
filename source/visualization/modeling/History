@@ -20,6 +20,18 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+12th January 2012  John Allison  (modeling-V09-04-06)
+- Patch tag.
+
+30th December 2011  John Allison
+- G4PhysicalVolumeModel::Validate: Searches also in parallel worlds.
+
+12th November 2011  John Allison
+- G4AttributeFilterT<T>::AddInterval and AddValue:
+  o Relaxed exception in case of already existing interval/value.
+  o Changed from Fatal to JustWarning.
+  o In that case, return with no action.
+
 11th November 2011  John Allison  (modeling-V09-04-05)
 - G4VTrajectoryModel.hh: Coverity fix.
 
