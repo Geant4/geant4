@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30th november Laurent Garnier  (opengl-V09-04-28)
+10th April 2012  Pere Mato (opengl-V09-04-29)
+- G4OpenGLWin32Viewer.cc: Make it work for Win64
+  replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr()
+  and GWL_USERDATA by GWLP_USERDATA.
+
+30th november 2011  Laurent Garnier (opengl-V09-04-28)
 - Fix pop up warning box at beggining
 - Fix unitialize value before Gl init
 

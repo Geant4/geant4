@@ -1,13 +1,13 @@
 
 Usage: gdml_det <intput_gdml_file:mandatory>
 
-G4GDML: Reading 'auxiliary.gdml'...
+G4GDML: Reading '/ec/build/release/geant4-09-05-patches_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
 G4GDML: Reading structure...
 G4GDML: Reading setup...
-G4GDML: Reading 'auxiliary.gdml' done!
+G4GDML: Reading '/ec/build/release/geant4-09-05-patches_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 
         ############################################
@@ -15,7 +15,7 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,11 +46,6 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -751,4 +746,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

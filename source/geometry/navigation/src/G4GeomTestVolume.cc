@@ -35,8 +35,14 @@
 // Author: D.C.Williams, UCSC (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
 
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <iomanip>
+
 #include "G4GeomTestVolume.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4GeomTestLogger.hh"
 #include "G4GeomTestVolPoint.hh"
 #include "G4GeomTestSegment.hh"
@@ -44,11 +50,6 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
-
-#include <vector>
-#include <set>
-#include <algorithm>
-#include <iomanip>
 
 //
 // Constructor

@@ -44,6 +44,8 @@
 #ifndef G4RANDOMTOOLS_HH
 #define G4RANDOMTOOLS_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4RandomDirection.hh"
@@ -80,7 +82,7 @@ inline G4ThreeVector G4PlaneVectorRand(const G4ThreeVector& normal)
   G4ThreeVector vec1 = normal.orthogonal();
   G4ThreeVector vec2 = vec1.cross(normal);
 
-  G4double phi = twopi*G4UniformRand();
+  G4double phi = CLHEP::twopi*G4UniformRand();
   G4double cosphi = std::cos(phi);
   G4double sinphi = std::sin(phi);
 

@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 September 2012 - P.Arce (error_propagation-V09-04-06)
+- Changes in G4ErrorFreeTrajState (partType -> partName) and delete code
+  not needed in G4ErrorPhysicsList.
+
+23 August 2012 - P.Arce
+- Changes in G4ErrorTrackLengthTarget and G4VErrorLimitProcess to
+  solve memory leak
+
+5 July 2012 - G.Cosmo
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+6 June 2012 - G.Cosmo
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
 17 January 2012 - G.Cosmo (error_propagation-V09-04-05)
 - Set navigator to stepping manager and field locators; fixing crash on Windows.
 

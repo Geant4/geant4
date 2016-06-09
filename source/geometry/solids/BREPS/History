@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15/05/2012 : G.Cosmo           breps-V09-04-05
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
 10/11/2011 : G.Cosmo           breps-V09-04-04
 - Fixed trivial Coverity defect on assignment operators to G4PointRat.
 

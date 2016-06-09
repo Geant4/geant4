@@ -910,7 +910,7 @@ void G4NativeScreenedCoulombCrossSection::LoadData(G4String screeningKey, G4int 
 			//Since we don't need exact sigma values, this is good enough (within a factor of 2 almost always)
 			//this rearranges to phi(x0)/(x0*eps) = 2*theta/pi - theta^2/pi^2
 			
-			c2_linear_p<G4double> &c2eps=c2.linear(0.0, 0.0, 0.0); // will store an appropriate eps inside this in loop
+			c2_linear_p<G4double> &c2eps=c2.linear(0.0, 0.0, 1.0); // will store an appropriate eps inside this in loop
 			G4_c2_ptr phiau=screen(c2.linear(0.0, 0.0, au));
 			G4_c2_ptr x0func(phiau/c2eps); // this will be phi(x)/(x*eps) when c2eps is correctly set
 			x0func->set_domain(1e-6*angstrom/au, 0.9999*screen->xmax()/au); // needed for inverse function

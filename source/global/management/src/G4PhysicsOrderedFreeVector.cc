@@ -66,17 +66,10 @@ G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
 {
   type = T_G4PhysicsOrderedFreeVector;
 
-  dataVector.reserve(VectorLength);
-  binVector.reserve(VectorLength); 
-  numberOfNodes = VectorLength;
-  
   for (size_t i = 0 ; i < VectorLength ; i++)
     {
-      binVector.push_back(Energies[i]);
-      dataVector.push_back(Values[i]); 
+      InsertValues(Energies[i], Values[i]);
     }
-  edgeMin = binVector[0];
-  edgeMax = binVector[numberOfNodes-1];
 }
 
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()
@@ -97,12 +90,19 @@ G4PhysicsOrderedFreeVector::~G4PhysicsOrderedFreeVector() {}
   
 void G4PhysicsOrderedFreeVector::InsertValues(G4double energy, G4double value)
 {
-        binVector.push_back(energy);
-        dataVector.push_back(value);
+        std::vector<G4double>::iterator binLoc =
+                 std::lower_bound(binVector.begin(), binVector.end(), energy);
+
+        size_t binIdx = binLoc - binVector.begin();	// Iterator difference!
+
+        std::vector<G4double>::iterator dataLoc = dataVector.begin() + binIdx;
+
+        binVector.insert(binLoc, energy);
+        dataVector.insert(dataLoc, value);
+
         numberOfNodes++;
         edgeMin = binVector.front();
         edgeMax = binVector.back();
-
 }
 
 G4double  G4PhysicsOrderedFreeVector::GetLowEdgeEnergy(size_t binNumber) const

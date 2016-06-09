@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -66,11 +66,6 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -94,11 +89,11 @@ Available colours:
 
 
 ----> The target has been changed to 3 cm of Lead
-/afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /afs/cern.ch/sw/geant4/releases/share/data/G4NDL4.0/Capture/CrossSection/8_17_Oxygen
+/build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.0
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.0/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.0/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.0/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/build/release/slc5-gcc43/data/G4NDL4.0/Capture/CrossSection/8_17_Oxygen
 ### exrdmPhysicsList::ConstructProcess is done
 world cuts are set
 Target cuts are set
@@ -148,7 +143,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 100000
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -315,4 +310,3 @@ exrdmAnalysisManager: Histograms are booked and the run has been started
 exrdmAnalysisManager: Histograms have been saved!
 Graphics systems deleted.
 Visualization Manager deleting...
-

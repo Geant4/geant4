@@ -122,8 +122,11 @@ void CCaloSD::getStepInfo(G4Step* aStep) {
     EdepositEHAD = weight*(aStep->GetTotalEnergyDeposit());
   }
 
-  TSlice = (PostStepPoint->GetGlobalTime() )/nanosecond;
-  TSliceID = (int) TSlice;
+  TSlice = PostStepPoint->GetGlobalTime() / nanosecond;
+
+  if ( TSlice > 1.0E9 ) TSliceID = 999999999;
+  else                  TSliceID = (int) TSlice;
+
   if (theDescription!=0) 
     UnitID = theDescription->GetUnitID(aStep);
   else

@@ -36,7 +36,9 @@
 // --------------------------------------------------------------------
 
 #include "G4GeometryTolerance.hh"
+#include "G4SystemOfUnits.hh"
 #include "globals.hh"
+
 
 // ***************************************************************************
 // Static class data

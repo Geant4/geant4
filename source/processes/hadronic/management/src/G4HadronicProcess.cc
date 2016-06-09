@@ -213,11 +213,13 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 		ed);
   }
 
-  if (GetElementCrossSection(aParticle, anElement, aMaterial) <= 0.0) {
-    // No interaction
-    //theTotalResult->Clear();
-    return theTotalResult;
-  }    
+  if(aParticle->GetDefinition()->GetPDGCharge() != 0.0) {
+    if (GetElementCrossSection(aParticle, anElement, aMaterial) <= 0.0) {
+      // No interaction
+      //theTotalResult->Clear();
+      return theTotalResult;
+    }    
+  }
 
   // Next check for illegal track status
   //

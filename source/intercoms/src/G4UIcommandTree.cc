@@ -227,21 +227,21 @@ G4UIcommandTree * G4UIcommandTree::FindCommandTree(const char* commandPath)
 
 G4String G4UIcommandTree::CompleteCommandPath(const G4String aCommandPath)
 {
-  G4String pathName = aCommandPath;
+  G4String pName = aCommandPath;
   G4String remainingPath = aCommandPath;
   G4String empty = "";
   G4String matchingPath = empty;
 
   // find the tree
-  G4int jpre= pathName.last('/');
-  if(jpre != G4int(G4String::npos)) pathName.remove(jpre+1);
-  G4UIcommandTree* aTree = FindCommandTree(pathName);
+  G4int jpre= pName.last('/');
+  if(jpre != G4int(G4String::npos)) pName.remove(jpre+1);
+  G4UIcommandTree* aTree = FindCommandTree(pName);
 
   if (!aTree) {
     return empty;
   }
   
-  if( pathName.index( pathName ) == std::string::npos ) return empty;
+  if( pName.index( pName ) == std::string::npos ) return empty;
 
   std::vector<G4String> paths;
 

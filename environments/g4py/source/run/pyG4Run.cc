@@ -42,7 +42,7 @@ using namespace boost::python;
 // ====================================================================
 void export_G4Run()
 {
-  class_<G4Run, G4Run*>("G4Run", "run class")
+  class_<G4Run, G4Run*, boost::noncopyable>("G4Run", "run class")
     // ---
     .def("GetRunID",         &G4Run::GetRunID)
     .def("SetRunID",         &G4Run::SetRunID)

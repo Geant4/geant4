@@ -2,13 +2,10 @@
 # ======================================================================
 #  A script for Geant4 packaging
 #
-#  Version 2.2 Dec 2008
+#  Version 2.3 July 2012
 #
 # ======================================================================
 export LANG=C
-
-IFS='
-	 '
 
 PATH=/bin:/usr/bin
 export PATH
@@ -39,7 +36,7 @@ Options:
 
      --with-g4system=G4SYSTEM    G4SYSTEM [\$G4SYSTEM]
      --with-g4-dir=DIR           Geant4 dir [\$G4INSTALL]
-     --with-clhep-dir=DIR        CLHEP dir [\$CLHEP_BASE_DIR]
+     --with-clhep-dir=DIR        CLHEP dir [no] [\$CLHEP_BASE_DIR]
 
      --with-lib-dir=DIR          G4 static granular libdir [lib]
      --with-glib-dir=DIR         G4 global static libdir [glib]
@@ -93,6 +90,7 @@ g4dir=${G4INSTALL:-/zzz}
 clhepdir=${CLHEP_BASE_DIR:-/zzz}
 
 install_dir=/zzz
+with_clhep=0
 
 libdir=lib
 glibdir=glib
@@ -115,7 +113,7 @@ do
     # ---------------------------------------------------------------
     --with-g4system=*)        g4system=$optarg     ;;
     --with-g4-dir=*)          g4dir=$optarg        ;;
-    --with-clhep-dir=*)       clhepdir=$optarg     ;;
+    --with-clhep-dir=*)       clhepdir=$optarg; with_clhep=1 ;;
     --with-lib-dir=*)         libdir=$optarg       ;;
     --with-glib-dir=*)        glibdir=$optarg      ;;
     --with-slib-dir=*)        slibdir=$optarg      ;;
@@ -154,13 +152,15 @@ if [ ! -d $g4dir ]; then
 fi
 echo $g4dir
 
-echo $ac_n "Checking for CLHEP dir ...$ac_c"
-if [ ! -d $clhepdir ]; then
-  echo "no"
-  echo "### $clhepdir does not exist."
-  exit -1
+if [ $with_clhep = 1 ]; then
+  echo $ac_n "Checking for CLHEP dir ...$ac_c"
+  if [ ! -d $clhepdir ]; then
+    echo "no"
+    echo "### $clhepdir does not exist."
+    exit -1
+  fi
+  echo $clhepdir
 fi
-echo $clhepdir
 
 echo $ac_n "Checking for G4SYSTEM ...$ac_c"
 if [ ! -e $g4dir/config/sys/$g4system.gmk ]; then
@@ -218,8 +218,10 @@ mkdir -p $g4packdir/include
 mkdir -p $g4packdir/lib
 
 # CLHEP
-cp -pR $clhepdir/include/CLHEP  $g4packdir/include/
-cp -pR $clhepdir/lib/libCLHEP-[12]* $g4packdir/lib/
+if [ $with_clhep = 1 ]; then
+  cp -pR $clhepdir/include/CLHEP  $g4packdir/include/
+  cp -pR $clhepdir/lib/libCLHEP-[12]* $g4packdir/lib/
+fi
 
 # Geant4
 cp -pR $g4dir/include $g4packdir/include/
@@ -227,11 +229,11 @@ mv $g4packdir/include/include $g4packdir/include/Geant4
 rm $g4packdir/include/Geant4/README
 
 if [ $enable_glib = 1 ]; then
-  cp -pR $g4dir/$glibdir/$g4system/lib* $g4packdir/lib
+  cp -pR $g4dir/$glibdir/$g4system/libG4* $g4packdir/lib
 fi
 
 if [ $enable_slib = 1 ]; then
-  cp -pR $g4dir/$slibdir/$g4system/lib* $g4packdir/lib
+  cp -pR $g4dir/$slibdir/$g4system/libG4* $g4packdir/lib
 
   if [ $g4system = Darwin-g++ ]; then
     if [ $enable_glib = 0 ]; then
@@ -245,14 +247,16 @@ if [ $enable_slib = 1 ]; then
 fi
 
 if [ $enable_lib = 1 ]; then
-  cp -pR $g4dir/$libdir/$g4system/lib* $g4packdir/lib
+  cp -pR $g4dir/$libdir/$g4system/libG4* $g4packdir/lib
 fi
 
 # CLHEP links
-pushd $g4packdir/lib > /dev/null 2>&1
-ln -s libCLHEP-*.a libCLHEP.a
-ln -s libCLHEP-*.$shlib libCLHEP.$shlib
-popd > /dev/null 2>&1
+if [ $with_clhep = 1 ]; then
+  pushd $g4packdir/lib > /dev/null 2>&1
+  ln -s libCLHEP-*.a libCLHEP.a
+  ln -s libCLHEP-*.$shlib libCLHEP.$shlib
+  popd > /dev/null 2>&1
+fi
 
 exit 0
 

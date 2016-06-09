@@ -57,6 +57,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4IonFluctuations.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Poisson.hh"
 #include "G4Material.hh"
@@ -137,37 +139,28 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
     G4double x3  = 1.0/(x*x*x);
     siga *= 0.25*(1.0 + x)*(x3 + (1.0/b2 - 0.5)/(1.0/beta2 - 0.5) );
   }
-  //       G4cout << "siga= " << siga << G4endl;
-
-  G4double sigb = siga/(meanLoss*meanLoss);
-  G4double lambda = 1.0/sigb;
+  siga = sqrt(siga);
+  G4double sn = meanLoss/siga;
+  G4double twomeanLoss = meanLoss + meanLoss;
+  //  G4cout << "siga= " << siga << "  sn= " << sn << G4endl;
   
-  if (lambda >= 5.0) {
+  // thick target case  
+  if (sn >= 2.0) {
 
-    sigb = sqrt(sigb);
     do {
-      loss = G4RandGauss::shoot(1.0,sigb);
-    } while (0.0 > loss || loss > 2.0);
+      loss = G4RandGauss::shoot(meanLoss,siga);
+    } while (0.0 > loss || twomeanLoss < loss);
+
+    // Gamma distribution
+  } else if(sn > 0.1) {
+
+    G4double neff = sn*sn;
+    loss = meanLoss*CLHEP::RandGamma::shoot(neff,1.0)/neff;
+
+    // uniform distribution for very small steps
   } else {
-
-    loss = CLHEP::RandGamma::shoot(lambda,lambda);
+    loss = twomeanLoss*G4UniformRand();
   }
-  loss *= meanLoss;  
-
-  /*
-  G4double lossmax = meanLoss+meanLoss;
-
-    if(siga > 5.0*meanLoss) {
-      loss = lossmax*G4UniformRand();
-    } else {
-    }
-  // Poisson fluctuations
-  } else {
-
-    G4double n    = (G4double)(G4Poisson(navr));
-    loss = meanLoss*n/navr;
-  }
-  */
 
   //G4cout << "meanLoss= " << meanLoss << " loss= " << loss << G4endl;
   return loss;

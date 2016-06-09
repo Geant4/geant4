@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -33,11 +33,6 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -64,4 +59,3 @@ Available colours:
 /run/beamOn 1
 Graphics systems deleted.
 Visualization Manager deleting...
-

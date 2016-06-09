@@ -16,6 +16,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04 October 2012 Vladimir Ivantchenko (hadr-proc-V09-04-13)
+--------------------------------------------------------
+- G4WHadronElasticProcess - fixed time and weight of recoil nuclear.
+- Fixed cases of variable shadowing. 
+
 22 February 2012 Vladimir Ivantchenko (hadr-proc-V09-04-12)
 --------------------------------------------------------
 - G4WHadronElasticProcess - fixed memory growing in run time 

@@ -17,7 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Dec. 9, 2011   - H.Kurashige (procuts-V09-04-07)
+Jun. 20th, 2012  - G.Cosmo (procuts-V09-04-08)
+- Fixed compilation warning in G4VRangeToEnergyConverter when
+  G4_NO_VERBOSE is set.
+
+Jun. 7th, 2012   - G.Cosmo
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
+Apr. 27, 2012   - H.Kurashige (procuts-V09-04-07)
 - Fix a bug in G4ProductionCutsTable::RetrieveCutsInfo 
   (TAINED_SCALAR by Coverity)
 

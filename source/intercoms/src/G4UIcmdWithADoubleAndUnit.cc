@@ -49,9 +49,9 @@ G4UIcmdWithADoubleAndUnit::G4UIcmdWithADoubleAndUnit
 G4int G4UIcmdWithADoubleAndUnit::DoIt(G4String parameterList)
 {
   std::vector<G4String> token_vector;
-  G4Tokenizer token(parameterList);
+  G4Tokenizer tkn(parameterList);
   G4String str;
-  while( (str = token()) != "" ) {
+  while( (str = tkn()) != "" ) {
     token_vector.push_back(str);
   }
 

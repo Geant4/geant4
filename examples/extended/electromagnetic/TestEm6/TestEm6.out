@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -110,7 +110,7 @@ hhIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 1 PeV in 91 bins
       Lambda tables from threshold to 1 PeV in 91 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
-      Delta-ray will not be produced; 
+      Delta-ray will not be produced 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggNoD :  Emin=        0 eV    Emax=        2 MeV
        BetheBlochNoD :  Emin=        2 MeV   Emax=        1 PeV
@@ -558,7 +558,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -580,4 +580,3 @@ RunManagerKernel is deleted.
 RunManager is deleting.
 ### G4eeTo3PiModel::~G4eeTo3PiModel: gmax= 1 gcash= 0
 ### G4eeTo3PiModel::~G4eeTo3PiModel: gmax= 1 gcash= 0
-

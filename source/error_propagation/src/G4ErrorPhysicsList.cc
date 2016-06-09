@@ -32,6 +32,9 @@
 
 #include "globals.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+
 #include "G4ErrorPhysicsList.hh"
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -192,7 +195,7 @@ void G4ErrorPhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess( stepLengthLimitProcess, 2 ); 
       pmanager->AddDiscreteProcess( magFieldLimitProcess, 3 );     
       
-    } else if ((!particle->IsShortLived()) &&
+      /*     } else if ((!particle->IsShortLived()) &&
                (particle->GetPDGCharge() != 0.0) && 
                (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino
@@ -216,6 +219,7 @@ void G4ErrorPhysicsList::ConstructEM()
      //   pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);
      pmanager->SetProcessOrdering(anIonisation, idxPostStep,1);
      ////pmanager->SetProcessOrdering(theUserCuts,     idxPostStep,2);
+     */
     }
   }
 }

@@ -447,7 +447,7 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
                                       const G4int replicaNo) const
 {
   G4double rmin, rmax, t1, t2, t3, deltaR;
-  G4double b, c, d2, sr;
+  G4double b, c, d2, srd;
 
   //
   // Radial Intersections
@@ -474,7 +474,7 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
   
   if ( t1>0 )        // Check not parallel
   {
-    // Calculate sr, r exit distance
+    // Calculate srd, r exit distance
     //
     if ( t2>=0 )
     {
@@ -489,14 +489,14 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
       {
         b  = t2/t1;
         c  = deltaR/t1;
-        sr = -b+std::sqrt(b*b-c);
+        srd = -b+std::sqrt(b*b-c);
       }
       else
       {
         // On tolerant boundary & heading outwards (or locally
         // perpendicular to) outer radial surface -> leaving immediately
         //
-        sr = 0;
+        srd = 0;
       }
     }
     else
@@ -515,7 +515,7 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
           // NOTE: Should use
           // rho-rmin>kRadTolerance*0.5 - [no sqrts for efficiency]
           //
-          sr = (deltaR>kRadTolerance*0.5) ? -b-std::sqrt(d2) : 0;
+          srd = (deltaR>kRadTolerance*0.5) ? -b-std::sqrt(d2) : 0;
         }
         else
         {
@@ -523,7 +523,7 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
           //
           deltaR = t3-rmax*rmax;
           c  = deltaR/t1;
-          sr = -b+std::sqrt(b*b-c);
+          srd = -b+std::sqrt(b*b-c);
         }
       }
       else
@@ -533,15 +533,15 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
         deltaR = t3-rmax*rmax;
         b  = t2/t1;
         c  = deltaR/t1;
-        sr = -b+std::sqrt(b*b-c);
+        srd = -b+std::sqrt(b*b-c);
       }
     }
   }
   else
   {
-    sr=kInfinity;
+    srd=kInfinity;
   }
-  return sr;
+  return srd;
 }
 
 // ********************************************************************
@@ -789,7 +789,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
               << G4endl;
       G4double estDistToSolid= motherSolid->DistanceToIn(localPoint); 
       message << "          Estimated isotropic distance to solid (distToIn)= " 
-              << estDistToSolid;
+              << estDistToSolid << G4endl;
       if( estDistToSolid > 100.0 * kCarTolerance )
       {
         motherSolid->DumpInfo();

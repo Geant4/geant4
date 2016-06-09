@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 4th, 2012 Witek Pokorski G01-V09-04-00
+- Added missing unit in opticalsurfaces.gdml 
+
 November 17th, 2010  Gabriele Cosmo  G01-V09-03-07
 - Added commented command for de-activating names stripping while reading.
 

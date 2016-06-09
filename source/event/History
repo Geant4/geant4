@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 2nd, 2012, L.Desorgher (event-V09-04-11)
+- Correction for orthogonalization of rotation matrix in  
+    G4SPSPosDistribution::GenerateRotationMatrices() as suggested by
+    Joaquin Phoenix (bug report 1299)
+
 March 8th, 2012, M.Asai (event-V09-04-10)
 - Correct the location of G4Exception to the constructor of
   G4UserEventAction. 

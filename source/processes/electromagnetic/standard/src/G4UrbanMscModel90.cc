@@ -405,15 +405,16 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
   lambda0 = GetLambda(currentKinEnergy);
 
   // stop here if small range particle
-  if(inside) { return tPathLength; }
+  if(inside || tPathLength < tlimitmin) { return tPathLength; }
   
   if(tPathLength > currentRange) { tPathLength = currentRange; }
 
   presafety = sp->GetSafety();
-  /*
+  /*  
   G4cout << "G4UrbanMscModel90::ComputeTruePathLengthLimit tPathLength= " 
   	 <<tPathLength<<" safety= " << presafety
-       << " range= " <<currentRange<<G4endl;
+	 << " range= " <<currentRange<<" lambda= " << lambda0<<G4endl;
+  G4cout <<"tlimitmin= "<<tlimitmin<<G4endl;
   */
   // far from geometry boundary
   if(currentRange < presafety)
@@ -554,6 +555,7 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
 	  //lower limit for tlimit
 	  tlimitmin = std::max(tlimitminfix,lambda0/nstepmax);
 	  if(tlimit < tlimitmin) tlimit = tlimitmin;
+	  G4cout << "tlimit= " << tlimit << G4endl;
 	}
 
       //if track starts far from boundaries increase tlimit!
@@ -574,7 +576,7 @@ G4double G4UrbanMscModel90::ComputeTruePathLengthLimit(
 	  if(tPathLength > tlimit) tPathLength = tlimit;
 	}
     }
-  //  G4cout << "tPathLength= " << tPathLength << "  geomlimit= " << geomlimit 
+  //G4cout << "tPathLength= " << tPathLength << "  geomlimit= " << geomlimit 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
   return tPathLength ;
 }
@@ -742,9 +744,10 @@ void G4UrbanMscModel90::SampleScattering(const G4DynamicParticle* dynParticle,
        << " E(MeV)= " << kineticEnergy/MeV
        << " Step(mm)= " << tPathLength/mm
        << " in " << CurrentCouple()->GetMaterial()->GetName()
-       << " scattering angle is set to zero" << G4endl;
-    G4Exception("G4UrbanMscModel90::SampleScattering","em0004",JustWarning,
-                ed,"Please, send bug report in the case of this message");
+       << " CosTheta= " << cth 
+       << " is too big - the angle is set to zero" << G4endl;
+    G4Exception("G4UrbanMscModel90::SampleScattering","em0004",
+                JustWarning, ed,"");
     return;
   }
 

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 14th, 2012 G.Cosmo (geombias-V09-04-02)
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
 August 11th, 2011 G.Cosmo (geombias-V09-04-01)
 - Defined scheme for warnings/errors coding:
   + 1xxx for warnings, 0xxx for errors.

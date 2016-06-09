@@ -33,10 +33,11 @@
 // 
 // --------------------------------------------------------------------
 
-#include "G4PathFinder.hh"
-
 #include <iomanip>
 
+#include "G4PathFinder.hh"
+
+#include "G4SystemOfUnits.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4Navigator.hh"
 #include "G4PropagatorInField.hh"

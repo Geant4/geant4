@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -55,11 +55,16 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
+  OpenGLStoredQt (OGL)
+  OpenGLImmediateQt (OGLI)
+  OpenGLStoredQt (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
+  OpenGLImmediateQt (OGLIQt)
+  OpenGLStoredQt (OGLSQt)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -259,7 +264,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -286,7 +291,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -378,7 +383,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 100000
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -4010,63 +4015,62 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 70
     76 hits stored in this event
 >>> Event: 71
-    467 hits stored in this event
+    539 hits stored in this event
 >>> Event: 72
-    107 hits stored in this event
+    133 hits stored in this event
 >>> Event: 73
-    44 hits stored in this event
+    85 hits stored in this event
 >>> Event: 74
-    121 hits stored in this event
+    72 hits stored in this event
 >>> Event: 75
-    92 hits stored in this event
+    91 hits stored in this event
 >>> Event: 76
-    64 hits stored in this event
+    100 hits stored in this event
 >>> Event: 77
-    74 hits stored in this event
->>> Event: 78
-    171 hits stored in this event
->>> Event: 79
-    1171 hits stored in this event
->>> Event: 80
-    73 hits stored in this event
->>> Event: 81
-    57 hits stored in this event
->>> Event: 82
-    57 hits stored in this event
->>> Event: 83
-    411 hits stored in this event
->>> Event: 84
-    79 hits stored in this event
->>> Event: 85
-    64 hits stored in this event
->>> Event: 86
-    54 hits stored in this event
->>> Event: 87
-    112 hits stored in this event
->>> Event: 88
-    69 hits stored in this event
->>> Event: 89
-    122 hits stored in this event
->>> Event: 90
     108 hits stored in this event
->>> Event: 91
-    1562 hits stored in this event
->>> Event: 92
-    213 hits stored in this event
->>> Event: 93
-    289 hits stored in this event
->>> Event: 94
-    99 hits stored in this event
->>> Event: 95
-    69 hits stored in this event
->>> Event: 96
-    75 hits stored in this event
->>> Event: 97
-    99 hits stored in this event
->>> Event: 98
+>>> Event: 78
+    53 hits stored in this event
+>>> Event: 79
+    49 hits stored in this event
+>>> Event: 80
+    82 hits stored in this event
+>>> Event: 81
+    68 hits stored in this event
+>>> Event: 82
+    168 hits stored in this event
+>>> Event: 83
+    67 hits stored in this event
+>>> Event: 84
+    763 hits stored in this event
+>>> Event: 85
     63 hits stored in this event
+>>> Event: 86
+    101 hits stored in this event
+>>> Event: 87
+    63 hits stored in this event
+>>> Event: 88
+    422 hits stored in this event
+>>> Event: 89
+    103 hits stored in this event
+>>> Event: 90
+    59 hits stored in this event
+>>> Event: 91
+    84 hits stored in this event
+>>> Event: 92
+    374 hits stored in this event
+>>> Event: 93
+    83 hits stored in this event
+>>> Event: 94
+    76 hits stored in this event
+>>> Event: 95
+    132 hits stored in this event
+>>> Event: 96
+    239 hits stored in this event
+>>> Event: 97
+    93 hits stored in this event
+>>> Event: 98
+    105 hits stored in this event
 >>> Event: 99
-    302 hits stored in this event
+    366 hits stored in this event
 Graphics systems deleted.
 Visualization Manager deleting...
-

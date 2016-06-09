@@ -33,6 +33,8 @@
 
 #include <iomanip>
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Field.hh"
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
@@ -45,7 +47,7 @@
 #include "G4ErrorMatrix.hh"
 
 //------------------------------------------------------------------------
-G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4String& partType, const G4Point3D& pos, const G4Vector3D& mom, const G4ErrorTrajErr& errmat) : G4ErrorTrajState( partType, pos, mom, errmat )
+G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4String& partName, const G4Point3D& pos, const G4Vector3D& mom, const G4ErrorTrajErr& errmat) : G4ErrorTrajState( partName, pos, mom, errmat )
 {
   fTrajParam = G4ErrorFreeTrajParam( pos, mom );
   Init();

@@ -124,9 +124,8 @@ GetMeanFreePath(const class G4Track & track, G4double, enum G4ForceCondition *)
 G4VParticleChange* G4ErrorTrackLengthTarget::
 PostStepDoIt(const G4Track& aTrack, const G4Step& )
 {
-  G4ParticleChange* aParticleChange = new G4ParticleChange;
-  aParticleChange->Initialize(aTrack);
-  return aParticleChange;
+  theParticleChange.Initialize(aTrack);
+  return &theParticleChange;
 }
 
 

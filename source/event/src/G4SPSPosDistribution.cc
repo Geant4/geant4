@@ -192,7 +192,9 @@ void G4SPSPosDistribution::GenerateRotationMatrices()
   Rotx = Rotx.unit(); // x'
   Roty = Roty.unit(); // vector in x'y' plane
   Rotz = Rotx.cross(Roty); // z'
+  Rotz = Rotz.unit();
   Roty = Rotz.cross(Rotx); // y'
+  Roty = Roty.unit();
   if(verbosityLevel == 2)
     {
       G4cout << "The new axes, x', y', z' " << Rotx << " " << Roty << " " << Rotz << G4endl;

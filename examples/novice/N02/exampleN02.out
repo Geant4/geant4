@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -45,11 +45,16 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
+  OpenGLStoredQt (OGL)
+  OpenGLImmediateQt (OGLI)
+  OpenGLStoredQt (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
+  OpenGLImmediateQt (OGLIQt)
+  OpenGLStoredQt (OGLSQt)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -2517,4 +2522,3 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     0 trajectories stored in this event.
 >>> Event 99
     0 trajectories stored in this event.
-

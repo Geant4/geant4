@@ -99,6 +99,9 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 				  const G4Step& step)
 {
   aParticleChange.Initialize(track);
+  G4double weight = track.GetWeight();
+  aParticleChange.ProposeWeight(weight);
+
   G4double kineticEnergy = track.GetKineticEnergy();
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   const G4ParticleDefinition* part = dynParticle->GetDefinition();
@@ -112,14 +115,14 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
       { return G4VDiscreteProcess::PostStepDoIt(track,step); }
 
   G4Material* material = track.GetMaterial();
-  G4Nucleus* targetNucleus = GetTargetNucleusPointer();
+  G4Nucleus* targNucleus = GetTargetNucleusPointer();
 
   // Select element
   G4Element* elm = 0;
   try
     {
       elm = GetCrossSectionDataStore()->SampleZandA(dynParticle, material, 
-						    *targetNucleus);
+						    *targNucleus);
     }
   catch(G4HadronicException & aR)
     {
@@ -138,8 +141,8 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
     {
       G4ExceptionDescription ed;
       ed << "Target element "<< elm->GetName()<<"  Z= " 
-	 << targetNucleus->GetZ_asInt() << "  A= " 
-	 << targetNucleus->GetA_asInt() << G4endl;
+	 << targNucleus->GetZ_asInt() << "  A= " 
+	 << targNucleus->GetA_asInt() << G4endl;
       DumpState(track,"ChooseHadronicInteraction",ed);
       ed << " No HadronicInteraction found out" << G4endl;
       G4Exception("G4WHadronElasticProcess::PostStepDoIt", "had005", 
@@ -153,32 +156,37 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 
   // Initialize the hadronic projectile from the track
   //  G4cout << "track " << track.GetDynamicParticle()->Get4Momentum()<<G4endl;
-  G4HadProjectile thePro(track);
+  G4HadProjectile theProj(track);
   if(verboseLevel>1) {
     G4cout << "G4WHadronElasticProcess::PostStepDoIt for " 
 	   << part->GetParticleName()
 	   << " in " << material->GetName() 
-	   << " Target Z= " << targetNucleus->GetZ_asInt() 
-	   << " A= " << targetNucleus->GetA_asInt() << G4endl; 
+	   << " Target Z= " << targNucleus->GetZ_asInt() 
+	   << " A= " << targNucleus->GetA_asInt() << G4endl; 
   }
 
   G4HadFinalState* result = 0;
   try
     {
-      result = hadi->ApplyYourself( thePro, *targetNucleus);
+      result = hadi->ApplyYourself( theProj, *targNucleus);
     }
   catch(G4HadronicException aR)
     {
       G4ExceptionDescription ed;
       ed << "Call for " << hadi->GetModelName() << G4endl;
       ed << "Target element "<< elm->GetName()<<"  Z= " 
-	 << targetNucleus->GetZ_asInt() 
-	 << "  A= " << targetNucleus->GetA_asInt() << G4endl;
+	 << targNucleus->GetZ_asInt() 
+	 << "  A= " << targNucleus->GetA_asInt() << G4endl;
       DumpState(track,"ApplyYourself",ed);
       ed << " ApplyYourself failed" << G4endl;
       G4Exception("G4WHadronElasticProcess::PostStepDoIt", "had006", 
 		  FatalException, ed);
     }
+
+  // Check the result for catastrophic energy non-conservation
+  // cannot be applied because is not guranteed that recoil 
+  // nucleus is created
+  // result = CheckResult(theProj, targNucleus, result);
 
   // directions
   G4ThreeVector indir = track.GetMomentumDirection();
@@ -224,8 +232,9 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
 
   //G4cout << "Efinal= " << efinal << "  TrackStatus= " << status << G4endl;
 
-  // recoil
   aParticleChange.SetNumberOfSecondaries(0);
+
+  // recoil
   if(result->GetNumberOfSecondaries() > 0) {
     G4DynamicParticle* p = result->GetSecondary(0)->GetParticle();
 
@@ -238,7 +247,14 @@ G4VParticleChange* G4WHadronElasticProcess::PostStepDoIt(
       pdir.rotateUz(indir);
       // G4cout << "recoil rotated " << pdir << G4endl;
       p->SetMomentumDirection(pdir);
-      aParticleChange.AddSecondary(p);
+
+      // in elastic scattering time and weight are not changed
+      G4Track* t = new G4Track(p, track.GetGlobalTime(), 
+			       track.GetPosition());
+      t->SetWeight(weight);
+      t->SetTouchableHandle(track.GetTouchableHandle());
+      aParticleChange.AddSecondary(t);
+
     } else {
       edep += p->GetKineticEnergy();
       delete p;

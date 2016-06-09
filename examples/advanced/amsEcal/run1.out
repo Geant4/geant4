@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -110,19 +110,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   32 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00           31k layer
+       0.00         0.00         0.00           31k layer
        0.00         0.00         0.00            1k module
        0.00         0.00         0.00            1k calorimeter
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      94.74         30k         1      490        980         0.01    layer
+      94.74         30k         1      490        980         0.00    layer
        3.16          1k         1       17         20         0.00    module
        2.10          0k         1       10         18         0.00    calorimeter
 ### Run 0 start.
@@ -134,6 +134,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Start Run processing.
 
 ---> Begin Of Event: 0
+tlimit= 7.21175e+61
 
 ---> Begin Of Event: 1000
 
@@ -155,7 +156,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=45.75s Real=45.83s Sys=0.58s
+  User=17.9s Real=18.73s Sys=0.27s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules
@@ -201,7 +202,7 @@ Run Summary
 ------------------------------------------------------------
 
    Leakage : 850.15 MeV +- 22.56 MeV
-   Eleak/Ebeam =  85 %  ( forward =  85 %;   backward =0.0245 %;   lateral =0.0231 %)
+   Eleak/Ebeam =  85 %  ( forward =  85 %   backward =0.0245 %   lateral =0.0231 %)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -218,4 +219,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

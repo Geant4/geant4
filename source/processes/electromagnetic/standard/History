@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 October 12: V.Ivanchenko (emstand-V09-04-60)
+- G4UrbanMscModel90 - removed debug printout
+
+04 October 12: V.Ivanchenko (emstand-V09-04-59)
+- History - recovered
+
+04 October 12: V.Ivanchenko (emstand-V09-04-58)
+- G4eplusAnnihilation - fix weight propagation for annihilation at rest
+- G4IonFluctuations - use simplified algorithm for very small steps to avoid
+    infinite loop in tracking of very low energy (~10 eV) ions
+- G4UrbanMscModel90 - added protection against very low step limit to
+    avoid infinite loop in tracking of very low energy (~10 eV) ions
+- G4UrbanMscModel92 - use more loose protection against large angle
+    scattering (1000 -> 10000)
+
+28 March 12: V.Ivanchenko (emstand-V09-04-57)
+- G4UrbanMscModel92 added to source.cmake
+
 12 March 12: V.Ivanchenko (emstand-V09-04-56)
 - G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95 - a protection
     against big scattering angles for e+- (E > 20 MeV) is added; the

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -271,7 +271,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -298,7 +298,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -372,7 +372,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  200 bins from 0 mm to 200 mm
+----> SetHisto 1: Edep (MeV/mm) along absorber  (mm)  200 bins from 0 mm to 200 mm
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -397,7 +397,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=10.52s Real=12.63s Sys=0.29s
+  User=9.24s Real=9.66s Sys=0.37s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -450,14 +450,14 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
  Initial seed (index) = 0
  Current couple of seeds = 1857485885, 307030093
 ----------------------------------------
-----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
+----> SetHisto 1: Edep (MeV/mm) along absorber  (mm)  100 bins from 0 mm to 200 mm
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.3s Real=6.54s Sys=0.04s
+  User=4.3s Real=4.35s Sys=0.02s
 
  The run consists of 1000 C12[0.0] of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -723,7 +723,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -750,7 +750,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -829,25 +829,25 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
  Initial seed (index) = 0
  Current couple of seeds = 1797571317, 1244542809
 ----------------------------------------
-----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
+----> SetHisto 1: Edep (MeV/mm) along absorber  (mm)  100 bins from 0 mm to 200 mm
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6.64s Real=3.99s Sys=0.05s
+  User=3.26s Real=3.28s Sys=0.02s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.07254 cm    rms= 1.42042 mm 
- Mean number of primary steps = 19.654
- Total energy deposit= 285.361 MeV
- niel energy deposit = 1.04433 keV
+ Projected Range= 2.07487 cm    rms= 1.24003 mm 
+ Mean number of primary steps = 19.687
+ Total energy deposit= 282.586 MeV
+ niel energy deposit = 1.10364 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1590183544, 709912622
+ Current couple of seeds = 1085732784, 463494595
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/update
@@ -1091,7 +1091,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1118,7 +1118,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1200,27 +1200,27 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1590183544, 709912622
+ Current couple of seeds = 1085732784, 463494595
 ----------------------------------------
-----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
+----> SetHisto 1: Edep (MeV/mm) along absorber  (mm)  100 bins from 0 mm to 200 mm
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.02s Real=0.21s Sys=0.01s
+  User=0s Real=0.01s Sys=0s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 324.618 um    rms= 130.822 um 
- Mean number of primary steps = 7.26
+ Projected Range= 320.761 um    rms= 138.744 um 
+ Mean number of primary steps = 6.09
  Total energy deposit= 265 eV 
- niel energy deposit = 233.991 eV 
+ niel energy deposit = 218.659 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1121503097, 1925117897
+ Current couple of seeds = 488052923, 1560126633
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/update
@@ -1464,7 +1464,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1491,7 +1491,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1573,27 +1573,27 @@ Index : 3     used in the geometry : No      recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1121503097, 1925117897
+ Current couple of seeds = 488052923, 1560126633
 ----------------------------------------
-----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  100 bins from 0 mm to 200 mm
+----> SetHisto 1: Edep (MeV/mm) along absorber  (mm)  100 bins from 0 mm to 200 mm
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.07s Real=0.05s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.42058 mm    rms= 49.6938 um 
- Mean number of primary steps = 36.44
+ Projected Range= 6.42433 mm    rms= 42.2712 um 
+ Mean number of primary steps = 36.51
  Total energy deposit= 100 MeV
- niel energy deposit = 58.2346 keV
+ niel energy deposit = 58.3944 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 701540321, 1402510590
+ Current couple of seeds = 1474591732, 1558935545
 ----------------------------------------
 /testem/det/setMat Water_1.05
 /gun/particle proton
@@ -1791,7 +1791,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1818,7 +1818,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1905,27 +1905,26 @@ Index : 4     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 701540321, 1402510590
+ Current couple of seeds = 1474591732, 1558935545
 ----------------------------------------
-----> SetHisto 1: Edep (MeV/mm) along absorber  (mm);  200 bins from 0 mm to 200 mm
+----> SetHisto 1: Edep (MeV/mm) along absorber  (mm)  200 bins from 0 mm to 200 mm
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.77s Real=1.67s Sys=0.07s
+  User=0.81s Real=0.86s Sys=0.03s
 
  The run consists of 1000 proton of 160 MeV through 20 cm  of Water_1.05 (density: 1.05 g/cm3 )
 
- Projected Range= 16.8889 cm    rms= 2.35065 mm 
- Mean number of primary steps = 177.988
+ Projected Range= 16.8945 cm    rms= 4.64127 mm 
+ Mean number of primary steps = 178.113
  Total energy deposit= 160 MeV
  niel energy deposit = 0 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1183573283, 537591955
+ Current couple of seeds = 1066975907, 820344674
 ----------------------------------------
 G4 kernel has come to Quit state.
-

@@ -43,6 +43,7 @@
 #include "G4UserSpecialCuts.hh"
 #include "G4TransportationProcessType.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
 #include "G4VParticleChange.hh"

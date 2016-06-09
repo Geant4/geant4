@@ -75,15 +75,7 @@
 class G4OpAbsorption : public G4VDiscreteProcess 
 {
 
-private:
-
-        //////////////
-        // Operators
-        //////////////
-
-        // G4OpAbsorption& operator=(const G4OpAbsorption &right);
-
-public: // Without description
+public:
 
         ////////////////////////////////
         // Constructors and Destructor
@@ -91,16 +83,23 @@ public: // Without description
 
         G4OpAbsorption(const G4String& processName = "OpAbsorption",
                                 G4ProcessType type = fOptical);
-
-        // G4OpAbsorption(const G4OpAbsorption &right);
-
 	~G4OpAbsorption();
+
+private:
+
+        G4OpAbsorption(const G4OpAbsorption &right);
+
+        //////////////
+        // Operators
+        //////////////
+
+        G4OpAbsorption& operator=(const G4OpAbsorption &right);
+
+public:
 
 	////////////
 	// Methods
         ////////////
-
-public: // With description
 
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         // Returns true -> 'is applicable' only for an optical photon.

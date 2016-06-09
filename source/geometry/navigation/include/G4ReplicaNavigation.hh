@@ -42,6 +42,8 @@
 #ifndef G4REPLICANAVIGATION_HH
 #define G4REPLICANAVIGATION_HH
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "G4Types.hh"
 #include "G4NavigationHistory.hh"
 #include "G4LogicalVolume.hh"

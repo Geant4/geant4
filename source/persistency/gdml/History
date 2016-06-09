@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 July 2012 Witek Pokorski (gdml-V09-04-12)
+- Handling of constant material properties added.
+
+5 July 2012 - Gabriele Cosmo
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+25 May 2012 - Gabriele Cosmo
+- Fixed trivial cases of variable shadowing.
+
 20 March 2012 Witek Pokorski (gdml-V09-04-11)
 - Bug fix in material properties.
 

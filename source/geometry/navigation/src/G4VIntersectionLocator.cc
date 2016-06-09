@@ -36,6 +36,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4VIntersectionLocator.hh"
 #include "G4GeometryTolerance.hh"
 
@@ -457,9 +458,10 @@ G4VIntersectionLocator::GetSurfaceNormal(const G4ThreeVector& CurrentInt_Point,
   if( validNormalLast ) 
   {
     NormalAtEntry=NormalAtEntryLast;  
-    validNormal  = validNormalLast; 
   }
-  return NormalAtEntry; 
+  validNormal  = validNormalLast;
+
+  return NormalAtEntry;
 }
 
 G4ThreeVector G4VIntersectionLocator::
@@ -501,7 +503,7 @@ GetGlobalSurfaceNormal(const G4ThreeVector& CurrentE_Point,
 }
 
 G4ThreeVector 
-G4VIntersectionLocator::GetLastSurfaceNormal( G4ThreeVector intersectPoint,
+G4VIntersectionLocator::GetLastSurfaceNormal( const G4ThreeVector& intersectPoint,
                                               G4bool& normalIsValid) const
 {
   G4ThreeVector normalVec;

@@ -565,9 +565,6 @@ void G4BREPSolidPCone::InitializePCone()
         }
         else
         {
-          // Create cylinder
-          //
-          G4Vector3D CylOrigin = G4Vector3D( LocalOrigin ); 
           SurfaceVec[b] = new G4FCylindricalSurface(CylOrigin, Axis,
                                                     RMAX[a], Length );
           SurfaceVec[b]->SetSameSense(1);

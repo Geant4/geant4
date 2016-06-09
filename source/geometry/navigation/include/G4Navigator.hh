@@ -150,6 +150,8 @@ class G4Navigator
     // the caller is certain that the new global point (position) is inside the
     // same volume as the previous position.  Usually this can be guaranteed
     // only if the point is within safety.
+    // A second use (with preserveState = true) can do this without
+    // resetting the state variables (fExiting, .. )
 
   inline void LocateGlobalPointAndUpdateTouchableHandle(
                 const G4ThreeVector&       position,
@@ -181,14 +183,15 @@ class G4Navigator
 
   virtual G4double ComputeSafety(const G4ThreeVector &globalpoint,
                                  const G4double pProposedMaxLength = DBL_MAX,
-                                 const G4bool keepState = false);
+                                 const G4bool keepState = true);
     // Calculate the isotropic distance to the nearest boundary from the
     // specified point in the global coordinate system. 
     // The globalpoint utilised must be within the current volume.
-    // The value returned is usually an underestimate.  
+    // The value returned is usually an underestimate.
     // The proposed maximum length is used to avoid volume safety
-    // calculations.  The geometry must be closed.
-
+    // calculations. The geometry must be closed.
+    // To ensure minimum side effects from the call, keepState must be true.
+  
   inline G4VPhysicalVolume* GetWorldVolume() const;
     // Return the current  world (`topmost') volume.
 
@@ -277,13 +280,6 @@ class G4Navigator
     // Values: 1 (small problem),  5 (correcting), 
     //         9 (ready to abandon), 10 (abandoned)
 
-  void SetSavedState(); 
-    // ( fValidExitNormal, fExitNormal, fExiting, fEntering, 
-    //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero); 
-  void RestoreSavedState(); 
-    // Copy aspects of the state, to enable a non-state changing
-    //  call to ComputeStep
-
   inline G4ThreeVector GetCurrentLocalCoordinate() const;
     // Return the local coordinate of the point in the reference system
     // of its containing volume that was found by LocalGlobalPointAndSetup.
@@ -298,6 +294,18 @@ class G4Navigator
 
  protected:  // with description
 
+  void SetSavedState();
+    // ( fValidExitNormal, fExitNormal, fExiting, fEntering,
+    //   fBlockedPhysicalVolume, fBlockedReplicaNo, fLastStepWasZero);
+    // Extended to include:
+    // ( fLastLocatedPointLocal, fLocatedOutsideWorld;
+    //   fEnteredDaughter, fExitedMother
+    //   fPreviousSftOrigin, sPreviousSafety)  Safety Sphere
+
+  void RestoreSavedState();
+    // Copy aspects of the state, to enable a non-state changing
+    // call to ComputeStep
+  
   inline G4ThreeVector ComputeLocalPoint(const G4ThreeVector& rGlobPoint) const;
     // Return position vector in local coordinate system, given a position
     // vector in world coordinate system.
@@ -401,7 +409,14 @@ class G4Navigator
                               // volume's coordinate system
   G4ThreeVector fGrandMotherExitNormal;  // Leaving volume normal, in its 
                                          // own coordinate system
+  G4bool  fChangedGrandMotherRefFrame;   // Whether frame is changed
 
+  G4ThreeVector fExitNormalGlobalFrame;  // Leaving volume normal, in the
+                                         // global coordinate system
+  G4bool  fCalculatedExitNormal;  // Has it been computed since
+                                  // the last call to ComputeStep
+                                  // Covers both Global and GrandMother
+   
   // Count zero steps - as one or two can occur due to changing momentum at
   //                    a boundary or at an edge common between volumes
   //                  - several are likely a problem in the geometry

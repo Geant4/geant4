@@ -39,10 +39,11 @@
 // GEANT4 tag $ Name:  $
 // ---------------------------------------------------------------------------
 
-#include "G4PropagatorInField.hh"
-#include "G4ios.hh"
 #include <iomanip>
 
+#include "G4PropagatorInField.hh"
+#include "G4ios.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ThreeVector.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Navigator.hh"

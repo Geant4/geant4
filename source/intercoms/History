@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 May, 2012 G.Cosmo (intercoms-V09-04-02)
+ - Fixed trivial cases of variable shadowing.
+
 07 November, 2011 K. Murakami (intercoms-V09-04-01)
+ - Code quality improvements by Coverity.
  - G4Exception ID is modified. (set sequential ID in UI)
 
 20 October, 2011 M. Asai (intercoms-V09-04-00)

@@ -156,8 +156,8 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
       // Point is out of sequence:
       // Test solid just before this point
       //
-      G4double s = curr->GetDistance();
-      G4ThreeVector p = p0 + s*v;
+      G4double ds = curr->GetDistance();
+      G4ThreeVector p = p0 + ds*v;
       
       G4ThreeVector p1 = p - 10*kCarTolerance*v;
       
@@ -166,7 +166,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
         // We are missing an entrance point near the current
         // point. Add one.
         //
-        curr = points.insert(curr, G4GeomTestPoint( p, s, true ) );
+        curr = points.insert(curr, G4GeomTestPoint( p, ds, true ) );
         ++curr;
         break;
       }
@@ -177,8 +177,8 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
       if (curr != points.begin()) {
         std::vector<G4GeomTestPoint>::iterator prev = curr - 1;
 
-        s = prev->GetDistance();
-        p = p0 + s*v;
+        ds = prev->GetDistance();
+        p = p0 + ds*v;
         
         p1 = p + 10*kCarTolerance*v;
         if ((solid->Inside(p1) == kOutside)||(solid->Inside(p1)== kSurface)) {
@@ -187,7 +187,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
           // We are missing an entrance point near the previous
           // point. Add one.
           //
-          curr = points.insert(curr, G4GeomTestPoint( p, s, true ) );
+          curr = points.insert(curr, G4GeomTestPoint( p, ds, true ) );
           ++curr;
           break;
         }
@@ -209,8 +209,8 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
       //
       // But is missing. Check immediately after this point.
       //
-      G4double s = curr->GetDistance();
-      G4ThreeVector p = p0 + s*v;
+      G4double ds = curr->GetDistance();
+      G4ThreeVector p = p0 + ds*v;
       G4ThreeVector p1 = p + 10*kCarTolerance*v;
       
       if (solid->Inside(p1) == kOutside) {
@@ -218,7 +218,7 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
         // We are missing an exit point near the current
         // point. Add one.
         //
-        curr = points.insert(next, G4GeomTestPoint( p, s, false ) );
+        curr = points.insert(next, G4GeomTestPoint( p, ds, false ) );
         break;
       }
       
@@ -226,15 +226,15 @@ void G4GeomTestSegment::PatchInconsistencies(  G4GeomTestLogger *logger )
         //
         // Check just before next point
         //
-        s = next->GetDistance();
-        p = p0 + s*v;
+        ds = next->GetDistance();
+        p = p0 + ds*v;
         p1 = p - 10*kCarTolerance*v;
         if (solid->Inside(p1) == kOutside) {
           //
           // We are missing an exit point before the next
           // point. Add one.
           //
-          curr = points.insert(next, G4GeomTestPoint( p, s, false ) );
+          curr = points.insert(next, G4GeomTestPoint( p, ds, false ) );
           break;
         }
       }        
@@ -271,7 +271,7 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
 
   G4ThreeVector p(p0);
   G4ThreeVector vSearch(sign*v);
-  G4double s(0);
+  G4double ds(0);
   G4bool entering;
   G4double vSurfN;
  
@@ -287,13 +287,13 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
                 "DistanceToOut(p,v) = kInfinity for point inside", p );
         return;
       }
-      s += sign*dist;
+      ds += sign*dist;
       entering = false;
       break;
     case kOutside:
       dist = solid->DistanceToIn(p,vSearch);
       if (dist >= kInfinity) return;
-      s += sign*dist;
+      ds += sign*dist;
       entering = true;
       break;
     case kSurface:
@@ -318,7 +318,7 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
     //
     // Locate point
     //
-    p = p0 + s*v;
+    p = p0 + ds*v;
     
     if (nzero > 2) {
       //
@@ -326,9 +326,9 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
       // Let's give the tool a little help with a push
       //
       G4double push = 1E-6;
-      s += sign*push;
+      ds += sign*push;
       for(;;) {
-        p = p0 + s*v;
+        p = p0 + ds*v;
         EInside inside = solid->Inside(p);
         if (inside == kInside) {
           entering = true;
@@ -345,7 +345,7 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
                   "Push fails to fix geometry inconsistency", p );
           return;
         }
-        s += sign*push;
+        ds += sign*push;
       }
     }
     else {
@@ -353,7 +353,7 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
       //
       // Record point
       //
-      points.push_back( G4GeomTestPoint( p, s, entering==forward ) );
+      points.push_back( G4GeomTestPoint( p, ds, entering==forward ) );
       
     }
     
@@ -406,14 +406,14 @@ void G4GeomTestSegment::FindSomePoints( G4GeomTestLogger *logger,
     }
     
     //
-    // Update s
+    // Update ds
     //
     if (dist <= 0) {
       nzero++; 
     }
     else {
       nzero=0;
-      s += sign*dist;
+      ds += sign*dist;
     }
   }
 }

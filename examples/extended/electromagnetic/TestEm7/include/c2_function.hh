@@ -30,9 +30,9 @@
  *  fast, flexible operations on piecewise-twice-differentiable functions
  *
  *  \author Created by R. A. Weller and Marcus H. Mendenhall on 7/9/05.
- *  \author 2005 Vanderbilt University.
+ *  \author Copyright 2005 __Vanderbilt University__. All rights reserved.
  *
- * 	\version c2_function.hh,v 1.238 2008/05/22 12:45:19 marcus Exp
+ * 	\version c2_function.hh 490 2012-04-10 19:05:40Z marcus 
  *  \see \ref c2_factory "Factory Functions" for information on constructing things in here  
  */
 
@@ -51,18 +51,13 @@
 #endif
 
 #include <cmath>
-//#ifdef __INTEL_COMPILER
-//#include <mathimf.h>
-//#else
-//#include <cmath>
-//#endif
-
 #include <vector>
 #include <utility>
 #include <string>
 #include <stdexcept>
 #include <typeinfo>
 #include <sstream>
+#include <limits> // fails under gcc-4.3 without this here, was ok in c2_function.cc before
 
 /// \brief the exception class for c2_function operations.
 class c2_exception : public std::exception {
@@ -143,7 +138,7 @@ public:
     /// \brief get versioning information for the header file
     /// \return the CVS Id string
 	const std::string cvs_header_vers() const { return 
-		"c2_function.hh,v 1.238 2008/05/22 12:45:19 marcus Exp";
+		"c2_function.hh 490 2012-04-10 19:05:40Z marcus ";
 	}
 	
     /// \brief get versioning information for the source file
@@ -549,7 +544,7 @@ public:
 		if(yprime2) *yprime2=0;
 		return func(x); 
 	}
-	~c2_classic_function_p() { }
+	virtual ~c2_classic_function_p() { }
 	
 protected:
 	/// \brief pointer to our function
@@ -573,11 +568,11 @@ public:
 	/// \brief construct the container with a pre-defined function
 	/// \param f the function to store
 	c2_const_ptr(const c2_function<float_type> &f) : func(0) 
-		{ set_function(&f); }
+		{ this->set_function(&f); }
 	/// \brief copy constructor
 	/// \param src the container to copy
 	c2_const_ptr(const c2_const_ptr<float_type> &src) : func(0)
-		{ set_function(src.get_ptr()); }
+		{ this->set_function(src.get_ptr()); }
 	/// \brief fill the container with a new function, or clear it with a null pointer
 	/// \param f the function to store, releasing any previously held function
 	void set_function(const c2_function<float_type> *f) 
@@ -589,12 +584,12 @@ public:
 	
 	/// \brief fill the container from another container
 	/// \param f the container to copy
-	void operator =(const c2_const_ptr<float_type> &f) 
-		{ set_function(f.get_ptr()); }
+	const c2_const_ptr<float_type> & operator =(const c2_const_ptr<float_type> &f) 
+		{ this->set_function(f.get_ptr()); return f; }
 	/// \brief fill the container with a function
 	/// \param f the function
-	void operator =(const c2_function<float_type> &f) 
-		{ set_function(&f); }
+	const c2_function<float_type> & operator =(const c2_function<float_type> &f) 
+		{ this->set_function(&f); return f; }
 	/// \brief release the function without destroying it, so it can be returned from a function
 	///
 	/// This is usually the very last line of a function before the return statement, so that 
@@ -609,9 +604,9 @@ public:
 	/// \brief clear the function
 	///
 	/// Any attempt to use this c2_plugin_function_p throws an exception if the saved function is cleared.
-	void unset_function(void) { set_function(0);  }
+	void unset_function(void) { this->set_function(0);  }
 	/// \brief destructor
-	~c2_const_ptr() { set_function(0); }
+	~c2_const_ptr() { this->set_function(0); }
 	
 	/// \brief get a reference to our owned function
 	inline const c2_function<float_type> &get() const throw(c2_exception) 
@@ -681,7 +676,6 @@ protected:
 /// \ingroup containers
 ///
 /// \see  c2_const_ptr and \ref memory_management "Use of c2_ptr for memory management"
-
 template <typename float_type> class c2_ptr : public c2_const_ptr<float_type >
 {
 public:
@@ -690,11 +684,11 @@ public:
 	/// \brief construct the container with a pre-defined function
 	/// \param f the function to store
 	c2_ptr(c2_function<float_type> &f) : 
-		c2_const_ptr<float_type>() { set_function(&f); } 
+		c2_const_ptr<float_type>() { this->set_function(&f); } 
 	/// \brief copy constructor
 	/// \param src the container to copy
 	c2_ptr(const c2_ptr<float_type> &src) : 
-		c2_const_ptr<float_type>() { set_function(src.get_ptr()); }
+		c2_const_ptr<float_type>() { this->set_function(src.get_ptr()); }
 	/// \brief get a checked pointer to our owned function
 	inline c2_function<float_type> &get() const throw(c2_exception) 
 		{ return *const_cast<c2_function<float_type>*>(&c2_const_ptr<float_type>::get()); }
@@ -706,17 +700,17 @@ public:
 		{ return &get(); }
 	/// \brief fill the container from another container
 	/// \param f the container to copy
-	void operator =(const c2_ptr<float_type> &f) 
-		{ set_function(f.get_ptr()); }
+	const c2_ptr<float_type> & operator =(const c2_ptr<float_type> &f) 
+		{ this->set_function(f.get_ptr()); return f; }
 	/// \brief fill the container with a function
 	/// \param f the function
-	void operator =(c2_function<float_type> &f) 
-		{ set_function(&f); }
+	c2_function<float_type> & operator =(c2_function<float_type> &f) 
+		{ this->set_function(&f); return f; }
 private:
 	/// \brief hidden non-const-safe version of operator=
-	void operator =(const c2_const_ptr<float_type> &f) { }
+	void operator =(const c2_const_ptr<float_type> &) { }
 	/// \brief hidden non-const-safe version of operator=
-	void operator =(const c2_function<float_type> &f) { }
+	void operator =(const c2_function<float_type> &) { }
 };
 
 /// \brief create a non-generic container for a c2_function which handles the reference counting.
@@ -726,7 +720,6 @@ private:
 ///
 /// \note Overuse of this class will generate massive bloat.  Use c2_ptr and c2_const_ptr if you don't _really_ need specific pointer types.
 /// \see  \ref memory_management "Use of c2_ptr for memory management"
-/*
 template <typename float_type, template <typename> class c2_class > class c2_typed_ptr : public c2_const_ptr<float_type> {
 public:
 	/// \brief construct the container with no function
@@ -756,18 +749,18 @@ public:
 	/// \brief fill the container from another container
 	/// \param f the container to copy
 	void operator =(const c2_typed_ptr<float_type, c2_class> &f) 
-		{ set_function(f.get_ptr()); }
+		{ this->set_function(f.get_ptr()); }
 	/// \brief fill the container with a function
 	/// \param f the function
 	void operator =(c2_class<float_type> &f) 
-		{ set_function(&f); }
+		{ this->set_function(&f); }
 private:
 	/// \brief hidden downcasting version of operator=
-	void operator =(const c2_const_ptr<float_type> &f) { }
+	void operator =(const c2_const_ptr<float_type> &) { }
 	/// \brief hidden downcasting version of operator=. Use an explicit dynamic_cast<c2_class<float_type>&>(f) if you need to try this.
-	void operator =(const c2_function<float_type> &f) { }
+	void operator =(const c2_function<float_type> &) { }
 };
-*/
+
 /// \brief a container into which any other c2_function can be dropped, to allow expressions
 /// with replacable components.  
 /// \ingroup containers
@@ -797,7 +790,7 @@ public:
 	void set_function(c2_function<float_type> *f) 
 		{
 			func.set_function(f);
-			if(f) set_domain(f->xmin(), f->xmax());
+			if(f) this->set_domain(f->xmin(), f->xmax());
 		}
 	/// \copydoc c2_function::value_with_derivatives
 	/// Uses the internal function pointer set by set_function().
@@ -807,7 +800,7 @@ public:
 			return func->value_with_derivatives(x, yprime, yprime2); 
 		}
 	/// \brief destructor
-	~c2_plugin_function_p() { }
+	virtual ~c2_plugin_function_p() { }
 	
 	/// \brief clear our function
 	void unset_function() { func.unset_function(); }
@@ -832,12 +825,12 @@ public:
 	c2_const_plugin_function_p() : c2_plugin_function_p<float_type>()  {}
 	/// \brief construct the container with a pre-defined function
 	c2_const_plugin_function_p(const c2_function<float_type> &f) : 
-		c2_plugin_function_p<float_type>()  { set_function(&f); }
+		c2_plugin_function_p<float_type>()  { this->set_function(&f); }
 	/// \brief fill the container with a new function, or clear it with a null pointer
 	void set_function(const c2_function<float_type> *f) 
 		{ c2_plugin_function_p<float_type>::set_function(const_cast<c2_function<float_type>*>(f)); }
 	/// \brief destructor
-	~c2_const_plugin_function_p() { }
+	virtual ~c2_const_plugin_function_p() { }
 	
 	/// \brief get a const reference to our owned function, for direct access
 	const c2_function<float_type> &get() const throw(c2_exception) 
@@ -873,7 +866,7 @@ protected:
 			const c2_function<float_type> &left,  const c2_function<float_type> &right) : 
 			c2_function<float_type>(), combine(combiner), Left(left), Right(right), stub(false)
 	{ 
-		set_domain(
+		this->set_domain(
 				   (left.xmin() > right.xmin()) ? left.xmin() : right.xmin(), 
 				   (left.xmax() < right.xmax()) ? left.xmax() : right.xmax()
 				   );
@@ -1142,7 +1135,7 @@ template <typename float_type> class c2_constant_p : public c2_function<float_ty
 public:
 	c2_constant_p(float_type x) : c2_function<float_type>(), value(x) {}
 	void reset(float_type val) { value=val; }
-	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception) 
+	virtual float_type value_with_derivatives(float_type, float_type *yprime, float_type *yprime2) const throw(c2_exception) 
 	{ if(yprime) *yprime=0; if(yprime2) *yprime2=0; return value; }
 	
 private:
@@ -1222,7 +1215,7 @@ public:
 	/// \brief constructor
 	c2_transformation_linear() : c2_transformation<float_type>(false, this->ident, this->one, this->zero, this->ident) { }
 	/// \brief destructor
-	~c2_transformation_linear() { }
+	virtual ~c2_transformation_linear() { }
 };
 /// \brief log axis transform
 /// \ingroup transforms
@@ -1231,7 +1224,7 @@ public:
 	/// \brief constructor
 	c2_transformation_log() : c2_transformation<float_type>(true, std::log, this->recip, this->recip_prime, std::exp) { }
 	/// \brief destructor
-	~c2_transformation_log() { }
+	virtual ~c2_transformation_log() { }
 };
 /// \brief reciprocal axis transform
 /// \ingroup transforms
@@ -1240,7 +1233,7 @@ public:
 	/// \brief constructor
 	c2_transformation_recip() : c2_transformation<float_type>(true, this->recip, this->recip_prime, this->recip_prime2, this->recip) { }
 	/// \brief destructor
-	~c2_transformation_recip() { }
+	virtual ~c2_transformation_recip() { }
 };
 
 /// \brief a transformation of a function in and out of a coordinate space, using 2 c2_transformations
@@ -1334,7 +1327,7 @@ public:
 	virtual ~c2_log_lin_function_transformation() { }
 };
 
-/// \brief a transformation of a function in and out of Arrhenuis (1/x vs. log(y)) space
+/// \brief a transformation of a function in and out of Arrhenius (1/x vs. log(y)) space
 ///
 /// \ingroup transforms
 template <typename float_type> class c2_arrhenius_function_transformation : 
@@ -1475,11 +1468,13 @@ public:
 	/// if \a bins .size()==\a binheights .size()+1, the edges of the bins
 	/// \param binheights a vector which describes the density of the random number distribution to be produced.
 	/// Note density... the numbers in the bins are not counts, but counts/unit bin width.
+	/// \param splined if true (default), use cubic spline, if false, use linear interpolation.
+	/// This can often be used to fix ringing if there are very sharp features in the generator.
 	/// \return an initialized interpolator, which 
 	/// if evaluated randomly with a uniform variate on [0,1] produces numbers
 	/// distributed according to \a binheights
 	interpolating_function_p<float_type> & load_random_generator_bins(
-		const std::vector<float_type> &bins, const std::vector<float_type> &binheights)
+		const std::vector<float_type> &bins, const std::vector<float_type> &binheights, bool splined=true)
 		throw(c2_exception);
 	
 	virtual float_type value_with_derivatives(float_type x, float_type *yprime, float_type *yprime2) const throw(c2_exception);
@@ -1499,6 +1494,18 @@ public:
 	/// \param [in, out] yvals the ordinates
 	void get_data(std::vector<float_type> &xvals, std::vector<float_type> &yvals) const throw() ;
 	
+    /// \brief retrieve copies of the transformed x, y and y2 tables from which this was built
+    ///
+	/// The vectors will have their sizes set correctly on return.
+	/// \param [in, out] xvals the transformed abscissas 
+	/// \param [in, out] yvals the transformed ordinates
+	/// \param [in, out] y2vals the second derivatives
+	void get_internal_data(
+        std::vector<float_type> &xvals, 
+        std::vector<float_type> &yvals, 
+        std::vector<float_type> &y2vals) const 
+        { xvals=X; yvals=F; y2vals=y2; }
+
     /// \brief enable extrapolation of the function below the tabulated data.
     ///
     /// This allows the interpolator to be extrapolated outside the bounds of the data,
@@ -1968,51 +1975,6 @@ public:
 						 bool normalize=false, bool inverse_function=false, bool drop_zeros=true);
 	
 };
-
-/**
-	\anchor inverse_integrated_density_bins
-	\brief construct from a grid of points and an std::vector of probability densities (un-normalized)
-	\see  \ref random_subsec "Arbitrary random generation"
-	\ingroup interpolators
-	 inverse_integrated_density starts with a probability density  std::vector, generates the integral, 
-	 and generates an interpolating_function_p  of the inverse function which, when evaluated using a uniform random on [0,1] returns values
-	 with a density distribution equal to the input distribution
-	 If the data are passed in reverse order (large X first), the integral is carried out from the big end.
-	 
-	\param bins if \a bins .size()==\a binheights .size(), the centers of the bins.  \n
-	if \a bins .size()==\a binheights .size()+1, the edges of the bins
-	\param binheights a vector which describes the density of the random number distribution to be produced.
-	Note density... the numbers in the bins are not counts, but counts/unit bin width.
-	\return an interpolating_function_p  of the type requested in the template which,
-	if evaluated randomly with a uniform variate on [0,1] produces numbers
-	distributed according to \a binheights
-*/
-
-template <typename float_type, typename Final> 
-interpolating_function_p<float_type> & inverse_integrated_density_bins(
-		const std::vector<float_type> &bins, const std::vector<float_type> &binheights) 
-		throw(c2_exception);
-
-/**
-\anchor inverse_integrated_density_function
-	\brief construct from a grid of points and a c2_function of probability densities (un-normalized)
-	\see  \ref random_subsec "Arbitrary random generation"
-	\ingroup interpolators 
- inverse_integrated_density starts with a probability density  std::vector, generates the integral, 
- and generates an interpolating_function_p  of the inverse function which, when evaluated using a uniform random on [0,1] returns values
- with a density distribution equal to the input distribution
- If the data are passed in reverse order (large X first), the integral is carried out from the big end.
- 
-	\param bincenters the centers of the bins. 
-	\param binheights a c2_function which describes the density of the random number distribution to be produced.
-	\return an interpolating_function_p  of the type requested in the template which,
-	if evaluated randomly with a uniform variate on [0,1] produces numbers
-	distributed according to \a binheights
- */
-template <typename float_type, typename Final> 
-interpolating_function_p<float_type>  & inverse_integrated_density_function(
-		const std::vector<float_type> &bincenters, const c2_function<float_type> &binheights)
-		throw(c2_exception);
 
 /// \brief create a c2_function which smoothly connects two other c2_functions.
 /// \ingroup parametric_functions

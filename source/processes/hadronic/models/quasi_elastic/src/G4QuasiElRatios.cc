@@ -149,7 +149,7 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
     if(nDB && lastA==A && s==lastS) return lastR;  // VI do not use tolerance
     G4bool found=false;
     G4int i=-1;
-    if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Sirch for this A in AMDB
+    if(nDB) for (i=0; i<nDB; i++) if(A==vA[i]) // Search for this A in AMDB
     {
         found=true;                         // The A value is found
         break;
@@ -213,11 +213,13 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
         lastK=vK[i];
         lastT=vT[i];
         lastL=vL[i];
-        if(s>lastM)                          // At least LinTab must be updated
+        if(s>lastH)                          // At least LinTab must be updated
         {
             G4int nextN=lastN+1;               // The next bin to be initialized
             if(lastN<nps)
             {
+	      G4double sv=lastH; // bug fix by WP
+
                 lastN = static_cast<int>(s/ds)+1;// MaxBin to be initialized
                 if(lastN>nps)
                 {
@@ -225,7 +227,7 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double s, G4int A)
                     lastH=sma;
                 }
                 else lastH = lastN*ds;           // Calculate max initialized s for LinTab
-                G4double sv=lastM;
+
                 for(G4int j=nextN; j<=lastN; j++)// Calculate LogTab values
                 {
                     sv+=ds;

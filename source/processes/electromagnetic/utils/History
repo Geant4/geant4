@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 October 12: V.Ivant (emutils-V09-04-53)
+- G4VEmProcess - fixed weight propagation from primary to secondaries
+
 5 March 12: V.Ivant (emutils-V09-04-52)
 - G4VEnergyLossProcess fixed crash due to apply G4hIonisation for ions;
 - G4VEnergyLossProcess, G4VEmProcess, G4LossTableBuilder - delete old 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -217,7 +217,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -244,7 +244,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -360,7 +360,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.06s Real=1.53s Sys=0s
+  User=1.31s Real=1.31s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
@@ -472,7 +472,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.54s Real=2.27s Sys=0s
+  User=1.91s Real=1.91s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
@@ -497,4 +497,3 @@ Beam Energy                  20 GeV
 
 #
 G4 kernel has come to Quit state.
-

@@ -2342,7 +2342,7 @@ G4Fragment * G4BinaryCascade::FindFragments()
 	}
 
 	G4int zCaptured = 0;
-	G4LorentzVector CapturedMomentum=0;
+	G4LorentzVector CapturedMomentum=G4LorentzVector(0);
 	for(i = theCapturedList.begin(); i != theCapturedList.end(); ++i)
 	{
 		CapturedMomentum += (*i)->Get4Momentum();

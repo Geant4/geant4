@@ -37,6 +37,8 @@
 // =======================================================================
 //
 
+#include <CLHEP/Units/SystemOfUnits.h>
+
 inline void
 G4Transportation::SetPropagatorInField( G4PropagatorInField* pFieldPropagator)
 {
@@ -122,7 +124,7 @@ inline void G4Transportation::ResetKilledStatistics(G4int report)
   } 
 
   fSumEnergyKilled= 0;
-  fMaxEnergyKilled= -1.0*GeV;
+  fMaxEnergyKilled= -1.0*CLHEP::GeV;
 }
      // Statistics for tracks killed (currently due to looping in field)
 

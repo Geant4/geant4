@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -40,15 +40,15 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/histo/setFileType root
 /testem/histo/setFileName testem11
 /testem/histo/setHisto 1 100 0. 1. mm
-----> SetHisto 1: Edep (MeV/mm) along absorber (mm);  100 bins from 0 mm to 1 mm
+----> SetHisto 1: Edep (MeV/mm) along absorber (mm)  100 bins from 0 mm to 1 mm
 /testem/histo/setHisto 2 102 0. 510. keV
-----> SetHisto 2: total Energy deposited in absorber (keV);  102 bins from 0 keV to 510 keV
+----> SetHisto 2: total Energy deposited in absorber (keV)  102 bins from 0 keV to 510 keV
 /testem/histo/setHisto 3 100 0. 2. mm
-----> SetHisto 3: true track length of the primary particle (mm);  100 bins from 0 mm to 2 mm
+----> SetHisto 3: true track length of the primary particle (mm)  100 bins from 0 mm to 2 mm
 /testem/histo/setHisto 4 100 0. 200. um
-----> SetHisto 4: true step size of the primary particle (um);  100 bins from 0 um to 200 um
+----> SetHisto 4: true step size of the primary particle (um)  100 bins from 0 um to 200 um
 /testem/histo/setHisto 5 100 0. 1. mm
-----> SetHisto 5: projected range of the primary particle (mm);  100 bins from 0 mm to 1 mm
+----> SetHisto 5: projected range of the primary particle (mm)  100 bins from 0 mm to 1 mm
 #
 /testem/event/printModulo 10000
 #
@@ -353,7 +353,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=24.76s Real=25.85s Sys=1.6s
+  User=9.78s Real=10.46s Sys=0.61s
 
  ======================== run summary ======================
 
@@ -388,4 +388,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

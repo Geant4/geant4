@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jul. 12th, 2011, J.Apostolakis transport-V09-04-14
+------------------------------
+- G4Transportation: corrected issues with initialisation of data members
+  reported by Coverity.
+  Renamed data member 'endpointdistance' to 'fEndPointDistance' (to conform).
+
+Jul. 5th, 2012 Gabriele Cosmo
+-----------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+Jun. 7th, 2012 Gabriele Cosmo
+-----------------------------
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
 Nov. 4th, 2011, J.Apostolakis transport-V09-04-13
 -----------------------------
 - Turned off tracking for magnetic moment - by default.

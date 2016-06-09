@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -47,11 +47,16 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
+  OpenGLStoredQt (OGL)
+  OpenGLImmediateQt (OGLI)
+  OpenGLStoredQt (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
+  OpenGLImmediateQt (OGLIQt)
+  OpenGLStoredQt (OGLSQt)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -251,7 +256,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -278,7 +283,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -370,7 +375,7 @@ AntiNeutronInelastic  Crs sctns:              AntiAGlauber: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 100000
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -707,7 +712,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -734,7 +739,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -974,7 +979,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1001,7 +1006,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1065,4 +1070,3 @@ hPairProd:   for  pi-    SubType= 4
  LGap : mean = 7.10961 cm  rms = 0 fm 
 Graphics systems deleted.
 Visualization Manager deleting...
-

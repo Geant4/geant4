@@ -330,9 +330,9 @@ G4double G4LogicalVolume::GetSmartless() const
 // ********************************************************************
 //
 inline
-void G4LogicalVolume::SetSmartless(G4double s)
+void G4LogicalVolume::SetSmartless(G4double smt)
 {
-  fSmartless = s;
+  fSmartless = smt;
 }
 
 // ********************************************************************
@@ -482,9 +482,9 @@ void G4LogicalVolume::SetVisAttributes (const G4VisAttributes* pVA)
 // ********************************************************************
 //
 inline
-void G4LogicalVolume::SetBiasWeight(G4double w)
+void G4LogicalVolume::SetBiasWeight(G4double weight)
 {
-  fBiasWeight = w;
+  fBiasWeight = weight;
 }
 
 // ********************************************************************

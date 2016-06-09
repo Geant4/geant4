@@ -64,7 +64,7 @@ class G4ErrorPropagationNavigator : public G4Navigator
 
     G4double ComputeSafety(const G4ThreeVector &globalpoint,
                            const G4double pProposedMaxLength = DBL_MAX,
-                           const G4bool keepState = false);
+                           const G4bool keepState = true);
       // Calls the navigation in the detector geometry and then checks
       // if the distance to surface is smaller than the proposed safety
 

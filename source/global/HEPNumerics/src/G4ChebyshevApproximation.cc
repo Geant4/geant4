@@ -29,6 +29,7 @@
 //
 
 #include "G4ChebyshevApproximation.hh"
+#include "G4PhysicalConstants.hh"
 
 // Constructor for initialisation of the class data members.
 // It creates the array fChebyshevCof[0,...,fNumber-1], fNumber = n ;

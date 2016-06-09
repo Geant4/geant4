@@ -2164,7 +2164,7 @@ G4QHadronVector* G4QFragmentation::Fragment()
     {
       G4QHadron* curHadr=(*theResult)[i];
       G4LorentzVector curh4M=curHadr->Get4Momentum();
-      if     ( curh4M > 0.) curHadr->SetPDGCode(22);
+      if     ( curh4M.e() > 0.) curHadr->SetPDGCode(22);
       else if( curh4M == nul4M)
       {
         G4QHadron* theLast = (*theResult)[nHd-1];
@@ -4781,8 +4781,8 @@ void G4QFragmentation::SwapPartons() // Swap string partons, if a string has neg
       G4double dE=std::sqrt(E*E+dM2)-E;
       G4double LE=cL4M.e();
       G4double RE=cR4M.e();
-      if(LE<RE) cLeft->Set4Momentum(LE+dE);
-      else      cRight->Set4Momentum(RE+dE);
+      if(LE<RE) cLeft->Set4Momentum(G4LorentzVector(LE+dE));
+      else      cRight->Set4Momentum(G4LorentzVector(RE+dE));
       cSM2=.001;                                     // Correction
     }
     if(cSM2<0.011)                                   // Parton Swapping is needed

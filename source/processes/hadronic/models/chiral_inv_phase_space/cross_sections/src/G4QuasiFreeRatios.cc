@@ -228,7 +228,7 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
 #ifdef pdebug
     G4cout<<"G4QuasiFreeRatios::GetQF2IN_Ratio: Found, s="<<s<<", lastM="<<lastM<<G4endl;
 #endif
-    if(s>lastM)                          // At least LinTab must be updated
+    if(s>lastH)                          // At least LinTab must be updated
     {
       G4int nextN=lastN+1;               // The next bin to be initialized
 #ifdef pdebug
@@ -243,7 +243,7 @@ G4double G4QuasiFreeRatios::GetQF2IN_Ratio(G4double s, G4int A)
           lastH=sma;
         }
         else lastH = lastN*ds;           // Calculate max initialized s for LinTab
-        G4double sv=lastM;
+        G4double sv=lastH;
         for(G4int j=nextN; j<=lastN; j++)// Calculate LogTab values
         {
           sv+=ds;

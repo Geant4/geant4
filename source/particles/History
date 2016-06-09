@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 21 Apr. 2012 H.Kurashige (particles-V09-04-23)
+- Fixed the bug in decay table for k_star-
+
+- 4 Apr. 2012 H.Kurashige
+- Modify G4eDecayProduct to use std::vector instead of fixed size array
+  (remove limitation of number of daughters)
+
 - 23 Nov. 2011 P.Gumplinger (particles-V09-04-22)
 - this is a correction of a comment only; credit should go to
   D. Mingming in G4MuonRadiativeDecayChannelWithSpin.hh

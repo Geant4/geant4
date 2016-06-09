@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3rd April March 2012  Pere Mato (interfaces-V09-04-15)
+- basic/src/G4UIWin32.cc : Attempt to make it work for Win64
+  replacing [Get|Set]WindowLong() by [Get|Set]WindowLongPtr()
+  and GWL_USERDATA by GWLP_USERDATA.
+
+1st February 2012  John Allison
+- Added moc to svn:ignore property in subdirectory basic.
+
 30th November 2011 Ben Morgan (interfaces-V09-04-14)
 - basic/sources.cmake : Ensure Motif libraries linked before X11 libraries to 
   prevent item 321 in the Motif FAQ regarding 'non-widget child "dsm"' errors. 

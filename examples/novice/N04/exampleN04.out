@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,11 +27,16 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
+  OpenGLStoredQt (OGL)
+  OpenGLImmediateQt (OGLI)
+  OpenGLStoredQt (OGLS)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
+  OpenGLImmediateQt (OGLIQt)
+  OpenGLStoredQt (OGLSQt)
+  RayTracerX (RayTracerX)
 
 Registering model factories...
 
@@ -234,7 +239,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -261,7 +266,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -341,7 +346,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 100000
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -535,12 +540,11 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 2
      71 hits are stored in ExN04TrackerHitsCollection.
-     28 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.56797447781716 (GeV)
+     33 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.61855354553106 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.68s Real=0.69s Sys=0.01s
+  User=0.31s Real=0.32s Sys=0s
 G4 kernel has come to Quit state.
-

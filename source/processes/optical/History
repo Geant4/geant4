@@ -16,6 +16,40 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th Oct.2012 J.Apostolakis (op-V09-04-05)
+	      Avoid the 'new' Event-abort exception, by 'protecting' 
+                 it with G4OPTICAL_DEBUG flag.
+              By default, the normal is now flipped instead 
+                 (as Geant4 9.5 and 9.5 patch 1 worked.)
+
+05th Oct.2012 J.Apostolakis
+              G4OpBoundaryProcess now uses GlobalExitNormal()
+
+04th Oct.2012 J.Apostolakis
+              Added information in printout of Exception on direction of 
+              momentum and exiting normal.
+
+03rd Oct.2012 P.Gumplinger
+              add G4Exception when theGlobalNormal points the 
+              wrong direction in G4OpBoundaryProcess
+
+10th Jul.2012 G.Cosmo
+              Explicitly use inclusion of headers for system of units and
+              physical constants, in plan to remove implicit inclusion from
+              globals.hh.
+
+7th  Jun 2012 G.Cosmo
+              Fixed trivial cases of variable shadowing in G4OpMieHG.cc
+              and G4OpWLS.cc.
+
+17th May 2012 P.Gumplinger
+              G4OpWLS.hh, G4OpRayleigh.hh, G4OpAbsorption.hh,
+              G4OpMieHG.hh and G4OpBoundaryProcess.hh -
+              more fixing Coverity warnings
+
+16th May 2012 P.Gumplinger
+              G4OpBoundaryProcess.cc - trying to fix Coverity warnings
+
 24th Jan 2012 P.Gumplinger (op-V09-04-04)
               G4OpBoundaryProcess.cc - solves Problem #1275
               call aParticleChange.ProposeVelocity(aTrack.GetVelocity())

@@ -36,16 +36,16 @@
 // --------------------------------------------------------------------
 
 inline
-G4int G4SphericalSurface::operator==( const G4SphericalSurface& s )
+G4int G4SphericalSurface::operator==( const G4SphericalSurface& surf )
 {
-  return origin  == s.origin  &&  
-  x_axis  == s.x_axis  &&
-  z_axis  == s.z_axis  &&
-  radius  == s.radius  && 
-  phi_1   == s.phi_1   &&
-  phi_2   == s.phi_2   &&
-  theta_1 == s.theta_1 &&
-  theta_2 == s.theta_2;
+  return origin  == surf.origin  &&  
+  x_axis  == surf.x_axis  &&
+  z_axis  == surf.z_axis  &&
+  radius  == surf.radius  && 
+  phi_1   == surf.phi_1   &&
+  phi_2   == surf.phi_2   &&
+  theta_1 == surf.theta_1 &&
+  theta_2 == surf.theta_2;
 }   
 
 inline

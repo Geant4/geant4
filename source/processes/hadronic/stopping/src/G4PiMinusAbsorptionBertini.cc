@@ -140,14 +140,18 @@ G4VParticleChange* G4PiMinusAbsorptionBertini::AtRestDoIt(const G4Track& track,
     G4HadFinalState* result = cascade->ApplyYourself(faketrack, targetNucleus);
     
     ClearNumberOfInteractionLengthLeft();
-    
-    
+     
+    // If Bertini couldn't absorb pion, return untouched particle for decay
+    if (result->GetStatusChange() == isAlive) {
+      result->Clear();
+      return &aParticleChange;
+    }
+
+    // Pion was absorbed, return products
     G4int ns = result->GetNumberOfSecondaries();
-    G4int nb = ns;
-    if(result->GetStatusChange() == isAlive) nb++;
-    
+
     aParticleChange.ProposeTrackStatus(fStopAndKill);
-    aParticleChange.SetNumberOfSecondaries(nb);
+    aParticleChange.SetNumberOfSecondaries(ns);
     
     for(G4int i=0; i<ns; i++) {
         G4Track* tr = new G4Track(result->GetSecondary(i)->GetParticle(),
@@ -155,19 +159,10 @@ G4VParticleChange* G4PiMinusAbsorptionBertini::AtRestDoIt(const G4Track& track,
                                   track.GetPosition());
         aParticleChange.AddSecondary(tr);
     }
-    
-    if(result->GetStatusChange() == isAlive) {
-        G4DynamicParticle* dp = new G4DynamicParticle(*(track.GetDynamicParticle()));
-        G4Track* tr = new G4Track(dp,track.GetGlobalTime(),track.GetPosition());
-        tr->SetKineticEnergy(result->GetEnergyChange());
-        tr->SetMomentumDirection(result->GetMomentumChange());
-        aParticleChange.AddSecondary(tr);
-    }
+
+    // Clean up for next cycle
     result->Clear();
-    
-    
     return &aParticleChange;
-    
 }
 
 

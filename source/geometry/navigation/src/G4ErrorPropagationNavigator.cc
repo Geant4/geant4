@@ -72,9 +72,9 @@ ComputeStep ( const G4ThreeVector &pGlobalPoint,
     const G4ErrorTarget* target = g4edata->GetTarget();
     if( target != 0 )
     {
-      G4double StepPlane(target->GetDistanceFromPoint(pGlobalPoint,pDirection));
+      G4double StepPlane=target->GetDistanceFromPoint(pGlobalPoint,pDirection);
 
-      if( StepPlane < 0. ) // Negative means target is crossed, will not be found
+      if(StepPlane < 0.) // Negative means target is crossed, will not be found
       {
         StepPlane = DBL_MAX; 
       }

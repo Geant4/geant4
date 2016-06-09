@@ -144,7 +144,7 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
 			   NULL);
   if(!fWindow) return;
 
-  ::SetWindowLong(fWindow,GWL_USERDATA,LONG(this));
+  ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG(this));
 
   // initialize OpenGL rendering :
   fHDC = ::GetDC(fWindow);
@@ -191,7 +191,7 @@ G4OpenGLWin32Viewer::~G4OpenGLWin32Viewer (
     }
     
     if(fWindow) {
-      ::SetWindowLong(fWindow,GWL_USERDATA,LONG(NULL));
+      ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG(NULL));
       if(fHDC) ::ReleaseDC(fWindow,fHDC);
       ::DestroyWindow(fWindow);
     }

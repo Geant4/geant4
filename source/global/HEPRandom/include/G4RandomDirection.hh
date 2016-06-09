@@ -47,6 +47,8 @@
 #ifndef G4RANDOMDIR_HH
 #define G4RANDOMDIR_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "Randomize.hh"
 #include "G4ThreeVector.hh"
@@ -57,7 +59,7 @@ inline G4ThreeVector G4RandomDirection()
   G4double sinTheta2 = 1. - cosTheta*cosTheta;
   if( sinTheta2 < 0.)  sinTheta2 = 0.;
   G4double sinTheta  = std::sqrt(sinTheta2); 
-  G4double phi       = twopi*G4UniformRand();
+  G4double phi       = CLHEP::twopi*G4UniformRand();
   return G4ThreeVector(sinTheta*std::cos(phi),
                        sinTheta*std::sin(phi), cosTheta).unit(); 
 }

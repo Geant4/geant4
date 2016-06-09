@@ -18,6 +18,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+envs-V09-04-02 / 23 July 2012 Koichi Murakami
+[g4py]
+ - configure script: fixed logics for specifying python include path (bug.1316)
+ - pyG4VisManager: (bug.1318))
+   added static statement for GetVerbosity.
+   fixed GetConcreteInstance returns an insufficient class pointer.
+
+21 July 2012 Koichi Murakami
+[g4py]
+ - scripts updated for internal clhep use
+ - updated for 9.5.p01 (bug.1317)
+
 envs-V09-04-01 / 10 November 2011 Koichi Murakami
 [g4py]
  - include fixes on OSX Lion

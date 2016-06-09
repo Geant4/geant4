@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 11, 2012   J.Apostolakis         geom-csg-V09-04-12
+- G4Torus: small additional changes, to reorder a few computation 
+  for better FP accuracy.
+
+October 4, 2012   J.Apostolakis
+- G4Torus: revised values of delta, to account for precision loss 
+  in calculating radius 'pt'.
+  Added printing in case of not finding normal when on surface.
+
+October 3, 2012   J.Apostolakis
+- G4Para::SurfaceNormal(): fixed calculation of sin(alpha) from cosine 
+  and tangent.
+
 November 15, 2011  G.Cosmo               geom-csg-V09-04-11
 - Correction in G4CutTubs for missing implementation of GetCubicVolume()
   and GetSurfaceArea() utility methods, to be temporarly replaced by

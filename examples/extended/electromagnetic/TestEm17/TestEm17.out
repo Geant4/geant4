@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -226,7 +226,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.23s Real=7.92s Sys=0.4s
+  User=2.91s Real=3.15s Sys=0.25s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -297,7 +297,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.12s Real=3.87s Sys=0.42s
+  User=2.77s Real=3.04s Sys=0.24s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -367,7 +367,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.76s Real=3.52s Sys=0.48s
+  User=2.52s Real=2.79s Sys=0.25s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -391,4 +391,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

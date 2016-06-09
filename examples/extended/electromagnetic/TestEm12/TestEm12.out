@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -73,18 +73,18 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/histo/setFileType root
 /testem/histo/setFileName testem12
 /testem/histo/setHisto 1 120 0. 2.4 cm
-----> SetHisto 1: dE/dr (MeV/mm) along radius (cm);  120 bins from 0 cm to 2.4 cm
+----> SetHisto 1: dE/dr (MeV/mm) along radius (cm)  120 bins from 0 cm to 2.4 cm
 /testem/histo/setHisto 2 180 0. 4.5 MeV
-----> SetHisto 2: total Energy deposited in absorber (MeV);  180 bins from 0 MeV to 4.5 MeV
+----> SetHisto 2: total Energy deposited in absorber (MeV)  180 bins from 0 MeV to 4.5 MeV
 /testem/histo/setHisto 3 100 0. 3. cm
-----> SetHisto 3: true track length of the primary particle (cm);  100 bins from 0 cm to 3 cm
+----> SetHisto 3: true track length of the primary particle (cm)  100 bins from 0 cm to 3 cm
 /testem/histo/setHisto 4 100 0. 500. um
-----> SetHisto 4: true step size of the primary particle (um);  100 bins from 0 um to 500 um
+----> SetHisto 4: true step size of the primary particle (um)  100 bins from 0 um to 500 um
 /testem/histo/setHisto 5 200 -3. 3. cm
-----> SetHisto 5: projected range of the primary particle (cm);  200 bins from -3 cm to 3 cm
+----> SetHisto 5: projected range of the primary particle (cm)  200 bins from -3 cm to 3 cm
 /testem/histo/setcsdaRange 2.037 cm
 /testem/histo/setHisto 8 120 0. 1.2 none
-----> SetHisto 8: d(E/E0)/d(r/r0) along r/r0;  120 bins from 0 none to 1.2 none
+----> SetHisto 8: d(E/E0)/d(r/r0) along r/r0  120 bins from 0 none to 1.2 none
 #
 /testem/event/printModulo 1000
 #
@@ -390,7 +390,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=17.01s Real=16.91s Sys=0.54s
+  User=7.13s Real=7.48s Sys=0.31s
 
  ======================== run summary ======================
 
@@ -422,4 +422,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

@@ -12,12 +12,17 @@ Summarize all code modifications & keep track of all tags in this file.
      * Please list in reverse chronological order (last date on top) *
      -----------------------------------------------------------------
 
-15 November V. Uzhinsky                        (hadr-chips-cs-V09-04-03)
+15-Apr-2012 M. Kosov                            (hadr-chips-cs-V09-04-04)
+-------------------------------------------------------------------------
+Fix to linear table update for quasi-elastic cross-sections, also
+responsible for event non-reproducibility.
+
+15-Nov-2011 V. Uzhinsky                         (hadr-chips-cs-V09-04-03)
 -------------------------------------------------------------------------
 Correction in G4QNeutronNuclearCrossSection and G4QProtonNuclearCrossSection
 for right reproduction of cross-sections, as in G4QuasiElasticRatios.
 
-25 October V. Uzhinsky                         (hadr-chips-cs-V09-04-01)
+25-Oct-2011 V. Uzhinsky                         (hadr-chips-cs-V09-04-01)
 -------------------------------------------------------------------------
 G4QKaonPlusElasticCrossSection.cc and G4QPionMinusNuclearCrossSection.cc 
 have been corrected for a right reproduction of K+N and Pi-N cross 

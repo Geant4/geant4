@@ -40,9 +40,9 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#include "G4OpProcessSubType.hh"
-
 #include "G4OpMieHG.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4OpProcessSubType.hh"
 
 G4OpMieHG::G4OpMieHG(const G4String& processName, G4ProcessType type)
            : G4VDiscreteProcess(processName, type)
@@ -88,13 +88,13 @@ G4OpMieHG::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 		     << aParticle->GetPolarization() << G4endl;
 	}
 
-        G4double g;
+        G4double gg;
         G4int direction;
         if (G4UniformRand()<=ForwardRatio){
-           g = forward_g;
+           gg = forward_g;
            direction = 1;
         } else {
-           g = backward_g;
+           gg = backward_g;
            direction = -1;
 	}
 
@@ -102,8 +102,8 @@ G4OpMieHG::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4double Theta;
         //sample the direction
-        if (g!=0) {
-          Theta = std::acos(2*r*(1+g)*(1+g)*(1-g+g*r)/((1-g+2*g*r)*(1-g+2*g*r)) -1);
+        if (gg!=0) {
+          Theta = std::acos(2*r*(1+gg)*(1+gg)*(1-gg+gg*r)/((1-gg+2*gg*r)*(1-gg+2*gg*r)) -1);
         } else {
           Theta = std::acos(2*r-1.);
 	}

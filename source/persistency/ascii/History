@@ -15,8 +15,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 April 2012 - G.Cosmo (ascii-V09-04-10)
+- Fixed case of conversion from size_t to G4int in G4tgrUtils in
+  function AreWordsEquivalent(), detected on win64 system.
+
 16 December 2011 - P.Arce (ascii-V09-04-09)
-- bug correction in G4Tesselated vertex type, in G4tbgVolume.cc
+- Bug correction in G4Tesselated vertex type, in G4tbgVolume.cc
 
 10 November 2011 - G.Cosmo (ascii-V09-04-08)
 - Removed call to obsolete G4Exception format in G4tgrMaterialFactory.

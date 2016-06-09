@@ -1434,7 +1434,6 @@ G4int G4BREPSolid::FinalEvaluation(register const G4Ray& rayref,
         {
           if(a+1<nb_of_surfaces)
           {
-            const G4Vector3D& Dir = rayref.GetDir();
             const G4Point3D& Hit = srf->GetClosestHit();
             const G4Vector3D& Norm = srf->SurfaceNormal(Hit);
 

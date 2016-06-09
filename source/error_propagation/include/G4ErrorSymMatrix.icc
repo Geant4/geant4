@@ -73,9 +73,9 @@ G4ErrorSymMatrix::operator()(G4int row, G4int col) const
   return (row>=col? fast(row,col) : fast(col,row));
 }
 
-inline void G4ErrorSymMatrix::assign(const G4ErrorSymMatrix &m2) 
+inline void G4ErrorSymMatrix::assign(const G4ErrorSymMatrix &mat) 
 {
-  (*this)=m2;
+  (*this)=mat;
 }
 
 inline G4ErrorSymMatrix G4ErrorSymMatrix::T() const

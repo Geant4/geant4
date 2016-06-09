@@ -87,6 +87,8 @@ class G4VErrorLimitProcess : public G4VDiscreteProcess
   G4double theStepLimit;  // limit set by the user
   G4double theStepLength; // step length extracted from the user step limit,
                           // with the algorithms of each concrete class
+
+  G4VParticleChange theParticleChange;
 };
   
 #endif

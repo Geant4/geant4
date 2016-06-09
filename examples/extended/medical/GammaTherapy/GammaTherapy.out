@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -181,7 +181,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=13.66s Real=8.3s Sys=0s
+  User=6.02s Real=6.03s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
@@ -201,4 +201,3 @@ Total gamma fluence in front of phantom      8.275 MeV
 
 
 G4 kernel has come to Quit state.
-

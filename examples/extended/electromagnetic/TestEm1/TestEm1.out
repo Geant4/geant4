@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -82,11 +82,11 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /gun/energy 100 MeV
 #
 /testem/histo/setHisto 1 100 0 50 cm
-----> SetHisto 1: total track length of primary particle (cm);  100 bins from 0 cm to 50 cm
+----> SetHisto 1: total track length of primary particle (cm)  100 bins from 0 cm to 50 cm
 /testem/histo/setHisto 2 100 0 300 none
-----> SetHisto 2: nb steps of primary particle;  100 bins from 0 none to 300 none
+----> SetHisto 2: nb steps of primary particle  100 bins from 0 none to 300 none
 /testem/histo/setHisto 3 200 0 20 mm
-----> SetHisto 3: step size of primary particle (mm);  200 bins from 0 mm to 20 mm
+----> SetHisto 3: step size of primary particle (mm)  200 bins from 0 mm to 20 mm
 #
 /testem/histo/setFileType hbook
 #
@@ -374,7 +374,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=10.83s Real=5.98s Sys=0.16s
+  User=4.91s Real=4.98s Sys=0.05s
 
  ======================== run summary ======================
 
@@ -449,7 +449,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=18.01s Real=11.21s Sys=0.18s
+  User=8.09s Real=8.17s Sys=0.04s
 
  ======================== run summary ======================
 
@@ -492,4 +492,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

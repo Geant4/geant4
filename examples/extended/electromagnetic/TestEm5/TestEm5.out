@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -47,7 +47,7 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/histo/setFileName testem5
 /testem/histo/setFileType root
 /testem/histo/setHisto 13 100 -0.25 0.25 mrad
-----> SetHisto 13: (transmit, charged) : projected angle at exit (mrad);  100 bins from -0.25 mrad to 0.25 mrad
+----> SetHisto 13: (transmit, charged) : projected angle at exit (mrad)  100 bins from -0.25 mrad to 0.25 mrad
 #
 /run/beamOn 100000
 
@@ -240,7 +240,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -267,7 +267,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -383,7 +383,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=7.81s Real=10.32s Sys=8.12s
+  User=4.54s Real=7.85s Sys=3.27s
 
  ======================== run summary ======================
 
@@ -406,7 +406,7 @@ Run Summary
  Number of steps (charged) in absorber per event = 1.217 +- 8.767e-06
  Number of steps (neutral) in absorber per event = 5e-05 +- 8.767e-06
 
- Number of secondaries per event : Gammas = 5e-05;   electrons = 0.01658;   positrons = 0
+ Number of secondaries per event : Gammas = 5e-05   electrons = 0.01658   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -417,7 +417,7 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 0.02448 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
-  central part defined as +- 0.0788 mrad;   Tail ratio = 1.545 %
+  central part defined as +- 0.0788 mrad   Tail ratio = 1.545 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -634,7 +634,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -661,7 +661,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -772,7 +772,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=6.21s Real=9.52s Sys=3.96s
+  User=3.45s Real=4.99s Sys=1.49s
 
  ======================== run summary ======================
 
@@ -795,7 +795,7 @@ Run Summary
  Number of steps (charged) in absorber per event = 5.113 +- 1.519e-05
  Number of steps (neutral) in absorber per event = 0.02924 +- 1.519e-05
 
- Number of secondaries per event : Gammas = 0.02906;   electrons = 0.02244;   positrons = 0
+ Number of secondaries per event : Gammas = 0.02906   electrons = 0.02244   positrons = 0
 
  Number of events with the primary particle transmitted = 99.99 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 99.99 %
@@ -806,7 +806,7 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 34.57 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad;   Tail ratio = 2.646 %
+  central part defined as +- 105.3 mrad   Tail ratio = 2.646 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1030,7 +1030,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1057,7 +1057,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1173,7 +1173,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=11.7s Real=7.89s Sys=4.03s
+  User=5.92s Real=7.56s Sys=1.54s
 
  ======================== run summary ======================
 
@@ -1196,7 +1196,7 @@ Run Summary
  Number of steps (charged) in absorber per event = 12.27 +- 0.0002762
  Number of steps (neutral) in absorber per event = 0.00904 +- 0.0002762
 
- Number of secondaries per event : Gammas = 0.0084;   electrons = 4.048;   positrons = 0
+ Number of secondaries per event : Gammas = 0.0084   electrons = 4.048   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -1207,7 +1207,7 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 7.304 mrad (central part only)
   computed theta0 (Highland formula)          = 7.636 mrad
-  central part defined as +- 22.91 mrad;   Tail ratio = 1.246 %
+  central part defined as +- 22.91 mrad   Tail ratio = 1.246 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1427,7 +1427,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1454,7 +1454,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1575,7 +1575,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=1.9s Real=4.55s Sys=2.14s
+  User=2.29s Real=3.65s Sys=1.34s
 
  ======================== run summary ======================
 
@@ -1598,7 +1598,7 @@ Run Summary
  Number of steps (charged) in absorber per event = 1.267 +- 0
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0;   electrons = 0.2673;   positrons = 0.00066
+ Number of secondaries per event : Gammas = 0   electrons = 0.2673   positrons = 0.00066
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -1609,7 +1609,7 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 0.02101 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02111 mrad
-  central part defined as +- 0.06333 mrad;   Tail ratio = 1.836 %
+  central part defined as +- 0.06333 mrad   Tail ratio = 1.836 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1825,7 +1825,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1852,7 +1852,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 10 eV  to 10 TeV in 240 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1978,7 +1978,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=34.51s Real=41.55s Sys=3.15s
+  User=17.82s Real=19.21s Sys=1.27s
 
  ======================== run summary ======================
 
@@ -2001,7 +2001,7 @@ Run Summary
  Number of steps (charged) in absorber per event = 47.84 +- 0.0004714
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0.04992;   electrons = 46.23;   positrons = 1.261
+ Number of secondaries per event : Gammas = 0.04992   electrons = 46.23   positrons = 1.261
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -2012,7 +2012,7 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 1.128 mrad (central part only)
   computed theta0 (Highland formula)          = 1.182 mrad
-  central part defined as +- 3.545 mrad;   Tail ratio = 0.282 %
+  central part defined as +- 3.545 mrad   Tail ratio = 0.282 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -2030,4 +2030,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -169,13 +169,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=47.3s Real=38.48s Sys=0.05s
+  User=22.73s Real=22.75s Sys=0s
 
  ======================== run summary ======================
 
  The run consists of 4000 gamma of 1.250 MeV through 2*5.000 mm  of Water (density: 1.000 g/cm3 )
 
- the cavity is 2.000 mm  of Water_vapor (density: 1.000 mg/cm3); Mass = 0.628 mg
+ the cavity is 2.000 mm  of Water_vapor (density: 1.000 mg/cm3) Mass = 0.628 mg
 
  ============================================================
 
@@ -217,4 +217,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

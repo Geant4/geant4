@@ -191,6 +191,7 @@ class G4VSolid
 
     virtual G4ThreeVector GetPointOnSurface() const;
       // Returns a random point located on the surface of the solid.
+      // Points returned are not necessarily uniformly distributed.
 
     virtual G4VSolid* Clone() const;
       // Returns a pointer of a dynamically allocated copy of the solid.

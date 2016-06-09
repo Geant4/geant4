@@ -33,11 +33,12 @@
 //      History: first implementation, Maxim Komogorov, 10-Jul-1998
 // -----------------------------------------------------------------------------
 #include "G4LundStringFragmentation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 #include "G4FragmentingString.hh"
 #include "G4DiQuarks.hh"
 #include "G4Quarks.hh"
-
-#include "Randomize.hh"
 
 // Class G4LundStringFragmentation 
 //*************************************************************************************
@@ -59,8 +60,7 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 
 //    SetStringTensionParameter(0.25);                           
     SetStringTensionParameter(1.);                         
-
-    SetDiquarkBreakProbability(0.05); //(0.05);   // Vova Aug. 22
+    SetDiquarkBreakProbability(0.05); 
 
 // For treating of small string decays
    for(G4int i=0; i<3; i++)
@@ -385,35 +385,21 @@ G4LundStringFragmentation::G4LundStringFragmentation()
    Prob_QQbar[0]=StrangeSuppress;         // Probability of ddbar production
    Prob_QQbar[1]=StrangeSuppress;         // Probability of uubar production
    Prob_QQbar[2]=StrangeSuppress/(2.+StrangeSuppress);//(1.-2.*StrangeSuppress); // Probability of ssbar production
+
+   //A.R. 25-Jul-2012 : Coverity fix.
+   for ( G4int i=0 ; i<35 ; i++ ) { 
+     FS_LeftHadron[i] = 0;
+     FS_RightHadron[i] = 0;
+     FS_Weight[i] = 0.0; 
+   }
+   NumberOf_FS = 0;
+
 }
 
 // --------------------------------------------------------------
 G4LundStringFragmentation::~G4LundStringFragmentation()
 {}
 
-// --------------------------------------------------------------
-G4LundStringFragmentation::G4LundStringFragmentation(const G4LundStringFragmentation &) : G4VLongitudinalStringDecay()
-{
-     throw G4HadronicException(__FILE__, __LINE__,"G4LundStringFragmentation::copy ctor not accessible");
-}
-
-// --------------------------------------------------------------
-
-const G4LundStringFragmentation & G4LundStringFragmentation::operator=(const G4LundStringFragmentation &)
-{
-	throw G4HadronicException(__FILE__, __LINE__, "G4LundStringFragmentation::operator= meant to not be accessable");
-	return *this;
-}
-
-int G4LundStringFragmentation::operator==(const G4LundStringFragmentation &right) const
-{
-	return !memcmp(this, &right, sizeof(G4LundStringFragmentation));
-}
-
-int G4LundStringFragmentation::operator!=(const G4LundStringFragmentation &right) const
-{
-	return memcmp(this, &right, sizeof(G4LundStringFragmentation));
-}
 
 //--------------------------------------------------------------------------------------
 void G4LundStringFragmentation::SetMinimalStringMass(const G4FragmentingString  * const string)  
@@ -878,9 +864,9 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 }
 
 //------------------------------------------------------------------------
-G4double G4LundStringFragmentation::lambda(G4double s, G4double m1_Sqr, G4double m2_Sqr)
+G4double G4LundStringFragmentation::lambda(G4double S, G4double m1_Sqr, G4double m2_Sqr)
 { 
-	G4double lam = sqr(s - m1_Sqr - m2_Sqr) - 4.*m1_Sqr*m2_Sqr;
+	G4double lam = sqr(S - m1_Sqr - m2_Sqr) - 4.*m1_Sqr*m2_Sqr;
 	return lam;
 }
 

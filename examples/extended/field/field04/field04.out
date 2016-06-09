@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -40,11 +40,6 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -112,16 +107,16 @@ G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
 G4NistMaterialBuilder: BuildMaterial #286
 New material nComponents= 1
 G4NistElementBuilder: Build Element <H>  Z= 1  A= 1.00794  with natural isotope composition
-G4Material: Mean excitation energy is changed for G4_Galactic Iold= 19.2eV; Inew= 21.8 eV;
+G4Material: Mean excitation energy is changed for G4_Galactic Iold= 19.2eV Inew= 21.8 eV
 G4NistMaterialBuilder::FindOrBuildMaterial G4_AIR
 G4NistMaterialBuilder::FindOrBuildMaterial G4_BERYLLIUM_OXIDE
 G4NistMaterialBuilder: BuildMaterial #115
 New material nComponents= 2
 G4NistElementBuilder: Build Element <Be>  Z= 4  A= 9.01218  with natural isotope composition
-G4Material: Mean excitation energy is changed for G4_BERYLLIUM_OXIDE Iold= 83.15eV; Inew= 93.2 eV;
+G4Material: Mean excitation energy is changed for G4_BERYLLIUM_OXIDE Iold= 83.15eV Inew= 93.2 eV
 G4NistMaterialBuilder::FindOrBuildMaterial Scintillator
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Scintillator> is not found out
-New material Scintillator is prepeared;  nMaterials= 314 nComponents= 806 nCurrent= 2
+New material Scintillator is prepeared  nMaterials= 314 nComponents= 806 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial #313
 New material nComponents= 2
 
@@ -192,9 +187,9 @@ F04ExtraPhysics:: Add Extra Physics Processes
 G4Cerenkov::G4Cerenkov constructor
 NOTE: this is now a G4VProcess!
 Required change in UserPhysicsList: 
-change: pmanager->AddContinuousProcess(theCerenkovProcess);
-to:     pmanager->AddProcess(theCerenkovProcess);
-        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
+change: pmanager->AddContinuousProcess(theCerenkovProcess)
+to:     pmanager->AddProcess(theCerenkovProcess)
+        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep)
 F04PhysicsList::SetCuts:CutLength : 1 mm 
 #
 #/process/inactivate msc
@@ -397,7 +392,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -424,7 +419,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -504,7 +499,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 100000
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -880,4 +875,3 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 #
 Graphics systems deleted.
 Visualization Manager deleting...
-

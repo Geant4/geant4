@@ -12,6 +12,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21-Sep-2012 Andrea Dotti                       (hadr-chips-inter-V09-04-05)
+---------------------------------------------------------------------------
+- Fixed bug in ElectroNuclearReaction. Addressing problem report #1354.
+
 04-Oct-2011 Dennis Wright                      (hadr-chips-inter-V09-04-04)
 ---------------------------------------------------------------------------
 - integer Z and A migration:  change GetZ to GetZ_asInt and GetN to

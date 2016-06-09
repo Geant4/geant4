@@ -193,9 +193,9 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
 
   //  array of solutions in distance along the Ray
   //
-  G4double s[2];
-  s[0] = -1.0; 
-  s[1] = -1.0 ;
+  G4double sol[2];
+  sol[0] = -1.0; 
+  sol[1] = -1.0 ;
 
   //  calculate the two solutions (quadratic equation)
   //
@@ -214,7 +214,7 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
     if ( B == 0.0 )
       { return 1; }
     else
-      { s[0] = -C / B; }
+      { sol[0] = -C / B; }
   }
 
   //  Normal quadratic case, no intersection if radical is less than zero
@@ -229,14 +229,14 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
     else 
     {
       G4double root = std::sqrt( radical );
-      s[0] = ( - B + root ) / ( 2. * A );
-      s[1] = ( - B - root ) / ( 2. * A );
+      sol[0] = ( - B + root ) / ( 2. * A );
+      sol[1] = ( - B - root ) / ( 2. * A );
     }
   }
 
   //  order the possible solutions by increasing distance along the Ray
   //
-  sort_double( s, isoln, maxsoln-1 );
+  sort_double( sol, isoln, maxsoln-1 );
 
   //  now loop over each positive solution, keeping the first one (smallest
   //  distance along the Ray) which is within the boundary of the sub-shape
@@ -245,14 +245,14 @@ G4int G4ConicalSurface::Intersect( const G4Ray& ry )
   //
   for ( isoln = 0; isoln < maxsoln; isoln++ ) 
   {
-    if ( s[isoln] >= 0.0 ) 
+    if ( sol[isoln] >= 0.0 ) 
     {
-      if ( s[isoln] >= kInfinity )  // quit if too large
+      if ( sol[isoln] >= kInfinity )  // quit if too large
       {
         return 1;
       }
       
-      distance = s[isoln];
+      distance = sol[isoln];
       closest_hit = ry.GetPoint( distance );
 
       //  Following line necessary to select non-reflective solutions.
@@ -499,8 +499,8 @@ G4Vector3D G4ConicalSurface::SurfaceNormal( const G4Point3D& p ) const
   //  return the Normal unit vector to the G4ConicalSurface at a point p 
   //  on (or nearly on) the G4ConicalSurface
 
-  G4Vector3D s    = G4Vector3D( p - origin );
-  G4double   smag = s.mag2();
+  G4Vector3D ss   = G4Vector3D( p - origin );
+  G4double   smag = ss.mag2();
   
   //  if the point happens to be at the origin, calculate a unit vector Normal
   //  to the axis, with zero z component
@@ -518,12 +518,12 @@ G4Vector3D G4ConicalSurface::SurfaceNormal( const G4Point3D& p ) const
   }
   else  // otherwise do the calculation of the Normal to the conical surface
   {
-    G4double l = s * axis;
-    s = s*(1/smag);
+    G4double l = ss * axis;
+    ss = ss*(1/smag);
     G4Vector3D q    = G4Vector3D( origin  +  l * axis );
     G4Vector3D v    = G4Vector3D( p - q );
     G4double   sl   = v.mag2() * std::sin( angle );
-    G4Vector3D n    = G4Vector3D( v - sl * s );
+    G4Vector3D n    = G4Vector3D( v - sl * ss );
     G4double   nmag = n.mag2(); 
 
     if ( nmag != 0.0 )

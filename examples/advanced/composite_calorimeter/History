@@ -9,6 +9,10 @@ $Id: History,v 1.37 2010-11-18 19:46:38 allison Exp $
                       Example History file
                       ---------------------
 
+07.08.2012 - A.Ribon (ccal-V09-04-01)
+- Fixed crashes due to high global times converted to integers values
+  (bug #1337).
+
 17.01.2011 - G.A.P.Cirrone (ccal-V09-04-00)
 - Physics lists updated
 

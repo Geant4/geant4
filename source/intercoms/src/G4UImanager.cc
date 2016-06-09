@@ -327,7 +327,7 @@ G4String G4UImanager::SolveAlias(const char* aCmd)
       if( ib == G4int(std::string::npos) )
       {
         G4cerr << aCommand << G4endl;
-        for(G4int iz=0;iz<ia;iz++) G4cerr << " ";
+        for(G4int i=0;i<ia;i++) G4cerr << " ";
         G4cerr << "^" << G4endl;
         G4cerr << "Unmatched alias parenthis -- command ignored" << G4endl;
         G4String nullStr;

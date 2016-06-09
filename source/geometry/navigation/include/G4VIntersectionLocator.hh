@@ -84,8 +84,8 @@ class G4VIntersectionLocator
                              G4int         step);
        // Print Method, useful mostly for debugging
 
-     inline G4bool IntersectChord( G4ThreeVector  StartPointA, 
-                                   G4ThreeVector  EndPointB,
+     inline G4bool IntersectChord( const G4ThreeVector&  StartPointA,
+                                   const G4ThreeVector&  EndPointB,
                                    G4double      &NewSafety,
                                    G4double      &PreviousSafety,    // In/Out
                                    G4ThreeVector &PreviousSftOrigin, // In/Out
@@ -179,7 +179,7 @@ class G4VIntersectionLocator
                                               G4bool &validNormal);
       // Return the SurfaceNormal of Intersecting Solid  in local coordinates
 
-    G4ThreeVector GetLastSurfaceNormal( G4ThreeVector intersectPoint, 
+    G4ThreeVector GetLastSurfaceNormal( const G4ThreeVector& intersectPoint,
                                         G4bool        &validNormal) const; 
       // Position *must* be the intersection point from last call
       // to G4Navigator's ComputeStep  (via IntersectChord )

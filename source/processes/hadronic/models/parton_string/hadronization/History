@@ -15,6 +15,23 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13-Aug-2012, Alberto Ribon              (had-hadronization-V09-04-05)
+- Fixed compilation error in G4ExcitedStringDecay.cc when the constructor
+  of the Lorentz vector is made explicit.
+
+25-Jul-2012, G.Folger
+- Fixes for coverity in G4LundStringFragmentation.cc .
+
+12-Jun-2012, G.Folger
+- fix warnings on shadowed variables, affected G4LundStringFragmentation.cc
+
+25-May-2012, G.Folger
+- make copy ctor, =, == , and != operators private without implementation, 
+   fixing coverity warnings
+
+12-Apr-2012, G.Folger
+- Changes in debugging information in src/G4ExcitedStringDecay.cc
+
 08 Nov 2011, Alberto Ribon              (had-hadronization-V09-04-03)
 - Tagged the improvements in the code structure of the class
   G4LundStringFragmentation. Results remain exactly the same

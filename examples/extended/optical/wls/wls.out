@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -37,11 +37,6 @@ Current available graphics systems are:
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
-  OpenGLStoredX (OGL)
-  OpenGLImmediateX (OGLI)
-  OpenGLStoredX (OGLS)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
 
 Registering model factories...
 
@@ -68,7 +63,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
 G4NistMaterialBuilder: BuildMaterial #286
 New material nComponents= 1
 G4NistElementBuilder: Build Element <H>  Z= 1  A= 1.00794  with natural isotope composition
-G4Material: Mean excitation energy is changed for G4_Galactic Iold= 19.2eV; Inew= 21.8 eV;
+G4Material: Mean excitation energy is changed for G4_Galactic Iold= 19.2eV Inew= 21.8 eV
 G4NistMaterialBuilder::FindOrBuildMaterial G4_AIR
 G4NistMaterialBuilder: BuildMaterial #103
 New material nComponents= 4
@@ -76,40 +71,40 @@ G4NistElementBuilder: Build Element <C>  Z= 6  A= 12.0107  with natural isotope 
 G4NistElementBuilder: Build Element <N>  Z= 7  A= 14.0068  with natural isotope composition
 G4NistElementBuilder: Build Element <O>  Z= 8  A= 15.9994  with natural isotope composition
 G4NistElementBuilder: Build Element <Ar>  Z= 18  A= 39.9477  with natural isotope composition
-G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.6689eV; Inew= 85.7 eV;
+G4Material: Mean excitation energy is changed for G4_AIR Iold= 85.6689eV Inew= 85.7 eV
 G4NistMaterialBuilder::FindOrBuildMaterial PMMA
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <PMMA> is not found out
-New material PMMA is prepeared;  nMaterials= 314 nComponents= 806 nCurrent= 3
+New material PMMA is prepeared  nMaterials= 314 nComponents= 806 nCurrent= 3
 G4NistMaterialBuilder: BuildMaterial #313
 New material nComponents= 3
 G4NistMaterialBuilder::FindOrBuildMaterial Pethylene
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Pethylene> is not found out
-New material Pethylene is prepeared;  nMaterials= 315 nComponents= 809 nCurrent= 2
+New material Pethylene is prepeared  nMaterials= 315 nComponents= 809 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial #314
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial FPethylene
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <FPethylene> is not found out
-New material FPethylene is prepeared;  nMaterials= 316 nComponents= 811 nCurrent= 2
+New material FPethylene is prepeared  nMaterials= 316 nComponents= 811 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial #315
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial Polystyrene
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Polystyrene> is not found out
-New material Polystyrene is prepeared;  nMaterials= 317 nComponents= 813 nCurrent= 2
+New material Polystyrene is prepeared  nMaterials= 317 nComponents= 813 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial #316
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial Silicone
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Silicone> is not found out
-New material Silicone is prepeared;  nMaterials= 318 nComponents= 815 nCurrent= 2
+New material Silicone is prepeared  nMaterials= 318 nComponents= 815 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial #317
 New material nComponents= 2
 G4NistMaterialBuilder::FindOrBuildMaterial G4_Al
 G4NistMaterialBuilder: BuildMaterial #12
 New material nComponents= 1
 G4NistElementBuilder: Build Element <Al>  Z= 13  A= 26.9815  with natural isotope composition
-G4Material: Mean excitation energy is changed for G4_Al Iold= 166eV; Inew= 166 eV;
+G4Material: Mean excitation energy is changed for G4_Al Iold= 166eV Inew= 166 eV
 G4NistMaterialBuilder::FindOrBuildMaterial TiO2
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <TiO2> is not found out
-New material TiO2 is prepeared;  nMaterials= 319 nComponents= 817 nCurrent= 2
+New material TiO2 is prepeared  nMaterials= 319 nComponents= 817 nCurrent= 2
 G4NistMaterialBuilder: BuildMaterial #318
 New material nComponents= 2
 G4NistElementBuilder: Build Element <Ti>  Z= 22  A= 47.8667  with natural isotope composition
@@ -119,9 +114,9 @@ WLSOpticalPhysics:: Add Optical Physics Processes
 G4Cerenkov::G4Cerenkov constructor
 NOTE: this is now a G4VProcess!
 Required change in UserPhysicsList: 
-change: pmanager->AddContinuousProcess(theCerenkovProcess);
-to:     pmanager->AddProcess(theCerenkovProcess);
-        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
+change: pmanager->AddContinuousProcess(theCerenkovProcess)
+to:     pmanager->AddProcess(theCerenkovProcess)
+        pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep)
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -300,7 +295,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -327,7 +322,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -407,7 +402,7 @@ AntiNeutronInelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Ema
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 100000
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -953,4 +948,3 @@ n_trajectories: 0
 draw all trajectories
 Graphics systems deleted.
 Visualization Manager deleting...
-

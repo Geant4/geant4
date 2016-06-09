@@ -59,7 +59,7 @@ int main(int argc,char** argv)
     tot_en = 0;
     G4cout << "Collection: " << key->GetName() << G4endl;
     G4cout << "Number of hits: " << hits->size() << G4endl;
-    for (int i=0;i!=hits->size();i++)
+    for (size_t i=0;i!=hits->size();i++)
     {
       (*hits)[i]->Print();
     }         

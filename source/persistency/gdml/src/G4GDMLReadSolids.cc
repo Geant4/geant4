@@ -82,7 +82,7 @@ BooleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
 {
    G4String name;
    G4String first;
-   G4String second;
+   G4String scnd;
    G4ThreeVector position(0.0,0.0,0.0);
    G4ThreeVector rotation(0.0,0.0,0.0);
    G4ThreeVector firstposition(0.0,0.0,0.0);
@@ -130,7 +130,7 @@ BooleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
       const G4String tag = Transcode(child->getTagName());
 
       if (tag=="first") { first = RefRead(child); } else
-      if (tag=="second") { second = RefRead(child); } else
+      if (tag=="second") { scnd = RefRead(child); } else
       if (tag=="position") { VectorRead(child,position); } else
       if (tag=="rotation") { VectorRead(child,rotation); } else
       if (tag=="positionref")
@@ -152,7 +152,7 @@ BooleanRead(const xercesc::DOMElement* const booleanElement, const BooleanOp op)
    }
 
    G4VSolid* firstSolid = GetSolid(GenerateName(first));
-   G4VSolid* secondSolid = GetSolid(GenerateName(second));
+   G4VSolid* secondSolid = GetSolid(GenerateName(scnd));
 
    G4Transform3D transform(GetRotationMatrix(rotation),position);
 

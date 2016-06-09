@@ -42,9 +42,9 @@ RootIO::RootIO():Nevents(0)
   TSystem ts;
   gSystem->Load("libClassesDict");
 
-  ROOT::Cintex::Cintex::SetDebug(2);
+  ROOT::Cintex::Cintex::SetDebug(0);
   ROOT::Cintex::Cintex::Enable();
-  gDebug = 1;
+  //gDebug = 1;
 
   fo = new TFile("hits.root","RECREATE");
 }

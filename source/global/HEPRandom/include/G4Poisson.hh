@@ -43,6 +43,8 @@
 #ifndef G4POISSON_HH
 #define G4POISSON_HH
 
+#include <CLHEP/Units/PhysicalConstants.h>
+
 #include "globals.hh"
 #include "Randomize.hh"
 
@@ -67,7 +69,7 @@ inline G4long G4Poisson(G4double mean)
 
   G4double value, t, y;
   t = std::sqrt(-2*std::log(G4UniformRand()));
-  y = twopi*G4UniformRand();
+  y = CLHEP::twopi*G4UniformRand();
   t *= std::cos(y);
   value = mean + t*std::sqrt(mean) + 0.5;
   if(value <= 0) {return 0;}

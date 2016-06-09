@@ -35,6 +35,7 @@
 // --------------------------------------------------------------------
 
 #include "G4JTPolynomialSolver.hh"
+#include "G4SystemOfUnits.hh"
 
 const G4double G4JTPolynomialSolver::base   = 2;
 const G4double G4JTPolynomialSolver::eta    = DBL_EPSILON;

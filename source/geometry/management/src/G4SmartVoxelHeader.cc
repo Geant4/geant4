@@ -1302,9 +1302,9 @@ G4bool G4SmartVoxelHeader::AllSlicesEqual() const
 // Streaming operator for debugging.
 // ***************************************************************************
 //
-std::ostream& operator << (std::ostream& s, const G4SmartVoxelHeader& h)
+std::ostream& operator << (std::ostream& os, const G4SmartVoxelHeader& h)
 {
-  s << "Axis = " << G4int(h.faxis) << G4endl;
+  os << "Axis = " << G4int(h.faxis) << G4endl;
   G4SmartVoxelProxy *collectNode=0, *collectHead=0;
   G4int collectNodeNo=0;
   G4int collectHeadNo=0;
@@ -1313,23 +1313,23 @@ std::ostream& operator << (std::ostream& s, const G4SmartVoxelHeader& h)
 
   for (i=0; i<h.fslices.size(); i++)
   {
-    s << "Slice #" << i << " = ";
+    os << "Slice #" << i << " = ";
     if (h.fslices[i]->IsNode())
     {
       if (h.fslices[i]!=collectNode)
       {
-        s << "{";
-        for (G4int j=0; j<h.fslices[i]->GetNode()->GetNoContained(); j++)
+        os << "{";
+        for (G4int k=0; k<h.fslices[i]->GetNode()->GetNoContained(); k++)
         {
-          s << " " << h.fslices[i]->GetNode()->GetVolume(j);
+          os << " " << h.fslices[i]->GetNode()->GetVolume(k);
         }
-        s << " }" << G4endl;
+        os << " }" << G4endl;
         collectNode = h.fslices[i];
         collectNodeNo = i;
       }
       else
       {
-        s << "As slice #" << collectNodeNo << G4endl;
+        os << "As slice #" << collectNodeNo << G4endl;
       }
     }
     else
@@ -1337,13 +1337,13 @@ std::ostream& operator << (std::ostream& s, const G4SmartVoxelHeader& h)
       haveHeaders=true;
       if (h.fslices[i] != collectHead)
       {
-        s << "Header" << G4endl;
+        os << "Header" << G4endl;
         collectHead = h.fslices[i];
         collectHeadNo = i;
       }
       else
       {
-        s << "As slice #" << collectHeadNo << G4endl;
+        os << "As slice #" << collectHeadNo << G4endl;
       }
     }
   }
@@ -1355,20 +1355,20 @@ std::ostream& operator << (std::ostream& s, const G4SmartVoxelHeader& h)
     {
       if (h.fslices[j]->IsHeader())
       {
-        s << "Header at Slice #" << j << " = ";
+        os << "Header at Slice #" << j << " = ";
         if (h.fslices[j] != collectHead)
         {
-          s << G4endl 
-            << (*(h.fslices[j]->GetHeader()));
+          os << G4endl 
+             << (*(h.fslices[j]->GetHeader()));
           collectHead = h.fslices[j];
           collectHeadNo = j;
         }
         else
         {
-          s << "As slice #" << collectHeadNo << G4endl;
+          os << "As slice #" << collectHeadNo << G4endl;
         }
       }
     }
   }
-  return s;
+  return os;
 }

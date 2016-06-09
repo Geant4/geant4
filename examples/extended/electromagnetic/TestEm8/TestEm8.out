@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -460,7 +460,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -489,7 +489,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -602,13 +602,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.2s Real=0.2s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents = 1000
 
-   Mean energy deposit in absorber = 14.666 +- 0.22675 keV;    RMS/Emean = 0.48893
-   Mean number of steps in absorber= 1.216;  mean number of ion-clusters = 793.76
+   Mean energy deposit in absorber = 14.666 +- 0.22675 keV    RMS/Emean = 0.48893
+   Mean number of steps in absorber= 1.216  mean number of ion-clusters = 793.76
 
  ====== Energy deposit distribution   Noverflows= 0.015 ====== 
  bin nb      Elow      entries     normalized 
@@ -646,4 +646,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

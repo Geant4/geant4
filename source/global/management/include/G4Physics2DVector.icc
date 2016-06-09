@@ -129,9 +129,9 @@ inline void G4Physics2DVector::FindBinLocationY(G4double y)
   FindBin(y, yVector, cache->lastBinY);
 }
 
-inline void G4Physics2DVector::SetVerboseLevel(G4int value)
+inline void G4Physics2DVector::SetVerboseLevel(G4int val)
 {
-   verboseLevel = value;
+   verboseLevel = val;
 }
 
 inline G4int G4Physics2DVector::GetVerboseLevel(G4int)

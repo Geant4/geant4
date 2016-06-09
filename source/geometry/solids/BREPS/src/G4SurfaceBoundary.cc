@@ -94,9 +94,9 @@ void G4SurfaceBoundary::Init(const G4CurveVector& bounds0)
       G4CompositeCurve* cc = (G4CompositeCurve*)c;
       const G4CurveVector& segments = cc->GetSegments();
      
-      for (size_t i=0; i<segments.size(); i++) 
+      for (size_t k=0; k<segments.size(); k++) 
       {
-	G4Curve* ccc = segments[i];
+	G4Curve* ccc = segments[k];
 	G4Point3D p  = ccc->GetEnd();
 	points[j]= p;
 	j++;
@@ -130,16 +130,16 @@ G4SurfaceBoundary* G4SurfaceBoundary::Project(const G4Transform3D& tr)
       {
         a = newBounds.back();
         newBounds.pop_back();
-        for (G4CurveVector::iterator i=newBounds.begin();
-                                     i!=newBounds.end();)
+        for (G4CurveVector::iterator it=newBounds.begin();
+                                     it!=newBounds.end();)
         {
-          if (*i==a)
+          if (*it==a)
           {
-	    i = newBounds.erase(i);
+	    it = newBounds.erase(it);
           }
           else
           {
-	    i--;
+	    it--;
           }
         } 
         if ( a )  { delete a; }

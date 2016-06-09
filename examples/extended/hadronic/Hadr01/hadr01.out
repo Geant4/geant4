@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -235,7 +235,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -262,7 +262,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -344,7 +344,7 @@ hPairProd:   for  pi-    SubType= 4
 
                                   Hadronic Processes for <e->
                                   -----------------------------------
-      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 30000
+      ElectroNuclear  Models:          CHIPSElectroNuclear: Emin(GeV)=    0  Emax(GeV)= 100000
 
       ElectroNuclear  Crs sctns:          ElectroNuclearXS: Emin(GeV)=    0  Emax(GeV)= 100000
                                           GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
@@ -465,35 +465,34 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.36s Real=0.69s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         64.23   RMS(MeV) 63.51
-Average number of steps              157.3
-Average number of gamma              1.65
-Average number of e-                 3.34
-Average number of e+                 0.01
-Average number of neutrons           1.04
-Average number of protons            1.03
+Average energy deposit (MeV)         60.39   RMS(MeV) 45.81
+Average number of steps              154.8
+Average number of gamma              1.82
+Average number of e-                 3.16
+Average number of e+                 0.02
+Average number of neutrons           0.95
+Average number of protons            1
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.19
-Average number of pi0                0.1
+Average number of pi+ & pi-          0.28
+Average number of pi0                0.11
 Average number of kaons              0
 Average number of muons              0.01
-Average number of deuterons+tritons  0.1
-Average number of He3+alpha          0.22
-Average number of ions               0.32
-Average number of forward neutrons   0.12
-Average number of reflected neutrons 0.83
+Average number of deuterons+tritons  0.07
+Average number of He3+alpha          0.13
+Average number of ions               0.34
+Average number of forward neutrons   0.09
+Average number of reflected neutrons 0.81
 Average number of leaked neutrons    0.01
-Average number of proton leak        0.47
-Average number of pion leak          0.16
+Average number of proton leak        0.57
+Average number of pion leak          0.24
 ========================================================
 
 #
 G4 kernel has come to Quit state.
-

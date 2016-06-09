@@ -933,10 +933,10 @@ void G4ShortLivedConstructor::ConstructMesons()
 				                    "kaon-","pi0");
   // add decay table
   decayTable->Insert(mode);
-   // create decay channel of k_star- -> anti_kaon0 + pi0
+   // create decay channel of k_star- -> anti_kaon0 + pi-
   //                                   parent    BR     #daughters
   mode  = new G4PhaseSpaceDecayChannel("k_star-",0.500, 2,
-				                    "anti_kaon0","pi+");
+				                    "anti_kaon0","pi-");
   // add decay table
   decayTable->Insert(mode);
   particle->SetDecayTable(decayTable);

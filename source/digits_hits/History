@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 17, 2012, T.Aso (digits_hits-V09-04-09)
+- G4VScoringMesh.cc : Avoid updating size and segment in command-line scoring
+  and print warning when SetSize() or SetNumberOfSegments is called more then
+  once.
+
 Oct 31, 2011, M.Asai (digits_hits-V09-04-08)
 - G4THitsMap.hh : removed the print-out of total value, avoiding the problem
   caused by a class <T> which does not have += or cannot be initilized by = 0.

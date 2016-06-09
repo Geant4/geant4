@@ -900,7 +900,7 @@ std::vector< G4QMDNucleus* > G4QMDMeanField::DoClusterJudgment()
    {
  
       //std::cout << i << " cluster has " << clusters.count( i )  << " nucleons." << std::endl;
-      sorted_cluster_map.insert ( std::multimap<G4int,G4int>::value_type ( clusters.count( i ) , i ) );
+      sorted_cluster_map.insert ( std::multimap<G4int,G4int>::value_type ( (G4int) clusters.count( i ) , i ) );
 
    }
 

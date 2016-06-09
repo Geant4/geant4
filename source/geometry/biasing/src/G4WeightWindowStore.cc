@@ -138,16 +138,16 @@ AddLowerWeights(const G4GeometryCell & gCell,
              << ")!";
     Error(err_mess.str());
   }
-  G4UpperEnergyToLowerWeightMap m;
+  G4UpperEnergyToLowerWeightMap map;
   G4int i = 0;
   for (std::set<G4double, std::less<G4double> >::iterator it = 
 	 fGeneralUpperEnergyBounds.begin(); 
        it != fGeneralUpperEnergyBounds.end();
        it++) {
-    m[*it] = lowerWeights[i];
+    map[*it] = lowerWeights[i];
     i++;
   }
-  fCellToUpEnBoundLoWePairsMap[gCell] = m;
+  fCellToUpEnBoundLoWePairsMap[gCell] = map;
 }
 
  
@@ -177,8 +177,8 @@ SetGeneralUpperEnergyBounds(const std::set<G4double,
 }
 
   
-void G4WeightWindowStore::Error(const G4String &m) const
+void G4WeightWindowStore::Error(const G4String &msg) const
 {
   G4Exception("G4WeightWindowStore::Error()",
-              "GeomBias0002", FatalException, m);
+              "GeomBias0002", FatalException, msg);
 }

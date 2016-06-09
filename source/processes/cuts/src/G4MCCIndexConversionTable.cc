@@ -49,11 +49,11 @@ G4MCCIndexConversionTable::~G4MCCIndexConversionTable()
   vecNewIndex.clear();
 }
 
-void G4MCCIndexConversionTable::Reset(size_t size)
+void G4MCCIndexConversionTable::Reset(size_t siz)
 {
   // reset conversion table 
   vecNewIndex.clear();
-  vecNewIndex.resize(size, -1);
+  vecNewIndex.resize(siz, -1);
 }
  
 

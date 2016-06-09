@@ -13,6 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+04 October 2012 Vladimir Ivanchenko (hadr-deex-V09-04-22)
+----------------------------------------------------------
+- G4DiscreteGammaTransition - fix logic of sampling of transitions allowing
+    to make direct transition to the ground state
+
 03 November 2011 Laurent Desorgher (hadr-deex-V09-04-21)
 ----------------------------------------------------------
 - Extend the use of G4PhotoEvaporation to Z>100. Note that for Z>100 at the moment the binding 

@@ -20,6 +20,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ May 9, 2012  G.Cosmo                     geom-bool-V09-04-04
+  - G4SubtractionSolid: refined protection for potential cases of
+    infinite loop in DistanceToIn(p,v); return computed distance instead
+    of zero and provide more descriptive information when issuing warning.
+
  August 25, 2011  G.Cosmo                 geom-bool-V09-04-03
   - Corrected printout stream precision settings.
 

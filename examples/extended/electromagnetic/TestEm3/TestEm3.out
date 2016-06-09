@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -56,17 +56,17 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/histo/setFileName testem3
 /testem/histo/setFileType root
 /testem/histo/setHisto 1 100 700. 1000. MeV
-----> SetHisto 1: Edep in absorber 1 (MeV);  100 bins from 700 MeV to 1000 MeV
+----> SetHisto 1: Edep in absorber 1 (MeV)  100 bins from 700 MeV to 1000 MeV
 /testem/histo/setHisto 2 100 0. 300. MeV
-----> SetHisto 2: Edep in absorber 2 (MeV);  100 bins from 0 MeV to 300 MeV
+----> SetHisto 2: Edep in absorber 2 (MeV)  100 bins from 0 MeV to 300 MeV
 /testem/histo/setHisto 11 52 0. 52. none
-----> SetHisto 11: longit. profile of Edep (MeV/event) in absorber 1;  52 bins from 0 none to 52 none
+----> SetHisto 11: longit. profile of Edep (MeV/event) in absorber 1  52 bins from 0 none to 52 none
 /testem/histo/setHisto 12 52 0. 52. none
-----> SetHisto 12: longit. profile of Edep (MeV/event) in absorber 2;  52 bins from 0 none to 52 none
+----> SetHisto 12: longit. profile of Edep (MeV/event) in absorber 2  52 bins from 0 none to 52 none
 /testem/histo/setHisto 21 102 0. 102. none
-----> SetHisto 21: energy flow (MeV/event);  102 bins from 0 none to 102 none
+----> SetHisto 21: energy flow (MeV/event)  102 bins from 0 none to 102 none
 /testem/histo/setHisto 22 102 0. 102. none
-----> SetHisto 22: lateral energy leak (MeV/event);  102 bins from 0 none to 102 none
+----> SetHisto 22: lateral energy leak (MeV/event)  102 bins from 0 none to 102 none
 #
 /testem/event/printModulo 50
 #
@@ -249,7 +249,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -276,7 +276,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -395,7 +395,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.01s Real=7.32s Sys=0.01s
+  User=3.54s Real=3.55s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
@@ -614,7 +614,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -641,7 +641,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-    SubType= 1
       Lambda tables from 100 eV  to 10 TeV in 77 bins, spline: 1
-      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -743,13 +743,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.42s Real=6.82s Sys=0s
+  User=3.02s Real=3.03s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 738.52 MeV :  17.24 MeV     2.335 +- 0.2335 %      52.2 cm  +- 1.29 cm 
-   liquidArgon: 201.81 MeV :  16.94 MeV     8.396 +- 0.8396 %      97.6 cm  +- 8.03 cm 
+          Lead: 784.48 MeV :  20.79 MeV      2.65 +- 0.265 %      52.2 cm  +- 1.29 cm 
+   liquidArgon: 206.43 MeV :   17.2 MeV     8.333 +- 0.8333 %      97.6 cm  +- 8.03 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
@@ -783,4 +783,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

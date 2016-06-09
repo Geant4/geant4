@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 10th, 2012 W.Pokorski (exampleP01-V09-04-00)
+- Removing debug printout, small fix in the iterator type
+
+March 29th, 2012 W.Pokorski
+- Fixes in GNUMakefile, CMakeLists.txt, removing G4Exception
+  from the code and adding root macro to read the hits.
+ 
 December 1th, 2010  W.Pokorski, I.Hrivnacova (exampleP01-V09-03-02)
 - Updated setup to use latest version of Root. 
 

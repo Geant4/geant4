@@ -60,6 +60,8 @@
 #include "G4Transportation.hh"
 #include "G4TransportationProcessType.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
@@ -72,20 +74,31 @@ class G4VSensitiveDetector;
 //
 // Constructor
 
-G4Transportation::G4Transportation( G4int verboseLevel )
+G4Transportation::G4Transportation( G4int verbosity )
   : G4VProcess( G4String("Transportation"), fTransportation ),
+    fTransportEndPosition( 0.0, 0.0, 0.0 ),
+    fTransportEndMomentumDir( 0.0, 0.0, 0.0 ),
+    fTransportEndKineticEnergy( 0.0 ),
+    fTransportEndSpin( 0.0, 0.0, 0.0 ),
+    fMomentumChanged(true),
+    fEnergyChanged(false),
+    fEndGlobalTimeComputed(false), 
+    fCandidateEndGlobalTime(0.0),
     fParticleIsLooping( false ),
-    fPreviousSftOrigin (0.,0.,0.),
-    fPreviousSafety    ( 0.0 ),
+    fGeometryLimitedStep(true),
+    fPreviousSftOrigin( 0.,0.,0. ),
+    fPreviousSafety( 0.0 ),
+    // fParticleChange(), 
+    fEndPointDistance( -1.0 ), 
     fThreshold_Warning_Energy( 100 * MeV ),  
     fThreshold_Important_Energy( 250 * MeV ), 
     fThresholdTrials( 10 ), 
     fUnimportant_Energy( 1 * MeV ),  // Not used
-    fNoLooperTrials(0),
+    fNoLooperTrials( 0 ),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
-    fShortStepOptimisation(false),    // Old default: true (=fast short steps)
-    fUseMagneticMoment(false),  
-    fVerboseLevel( verboseLevel )
+    fShortStepOptimisation( false ), // Old default: true (=fast short steps)
+    fUseMagneticMoment( false ),
+    fVerboseLevel( verbosity )
 {
   // set Process Sub Type
   SetProcessSubType(static_cast<int>(TRANSPORTATION));
@@ -108,8 +121,6 @@ G4Transportation::G4Transportation( G4int verboseLevel )
   static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
   fCurrentTouchableHandle = nullTouchableHandle; 
 
-  fEndGlobalTimeComputed  = false;
-  fCandidateEndGlobalTime = 0;
 
 #ifdef G4VERBOSE
   if( fVerboseLevel > 0) 
@@ -271,7 +282,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
          geometryStepLength   = currentMinimumStep ;
        }
      }
-     endpointDistance = geometryStepLength ;
+     fEndPointDistance = geometryStepLength ;
 
      // Calculate final position
      //
@@ -418,7 +429,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
      fTransportEndSpin = aFieldTrack.GetSpin();
      fParticleIsLooping = fFieldPropagator->IsParticleLooping() ;
-     endpointDistance   = (fTransportEndPosition - startPosition).mag() ;
+     fEndPointDistance   = (fTransportEndPosition - startPosition).mag() ;
   }
 
   // If we are asked to go a step length of 0, and we are on a boundary
@@ -432,7 +443,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   // Update the safety starting from the end-point,
   // if it will become negative at the end-point.
   //
-  if( currentSafety < endpointDistance ) 
+  if( currentSafety < fEndPointDistance ) 
   {
       if( particleCharge != 0.0 ) 
       {
@@ -446,14 +457,14 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 	 // Because the Stepping Manager assumes it is from the start point, 
 	 //  add the StepLength
 	 //
-	 currentSafety     += endpointDistance ;
+	 currentSafety     += fEndPointDistance ;
 
 #ifdef G4DEBUG_TRANSPORT 
 	 G4cout.precision(12) ;
 	 G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;
 	 G4cout << "  Called Navigator->ComputeSafety at " << fTransportEndPosition
 		<< "    and it returned safety=  " << endSafety << G4endl ; 
-	 G4cout << "  Adding endpoint distance   " << endpointDistance 
+	 G4cout << "  Adding endpoint distance   " << fEndPointDistance  
 		<< "    to obtain pseudo-safety= " << currentSafety << G4endl ; 
       }else{
 	 G4cout << "***G4Transportation::AlongStepGPIL ** " << G4endl  ;

@@ -33,6 +33,7 @@
 
 #include "G4ErrorFreeTrajParam.hh"
 #include "G4ThreeVector.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <iomanip>
 

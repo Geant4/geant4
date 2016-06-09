@@ -17,6 +17,111 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 16th, 2012 - J.Apostolakis  (geomnav-V09-04-15)
+------------------------------
+- G4Navigator and G4MultiNavigator: took out unintentional commit of
+  additional change that added extra argument to
+  LocateGlobalPointWithinVolume()
+
+Oct 16th, 2012 - J.Apostolakis
+------------------------------
+- G4PropagatorInField & G4VIntersectionLocator: changed first two arguments
+  of IntersectChord() to const 3-vec references (performance fix , thanks
+  to M.Asai).
+- G4VIntersectionLocator: made const the first argument of
+  GetLastSurfacenormal(). Fixed return value of validNormal of
+  GetSurfaceNormal().
+- G4Navigator, G4MultiNavigator and G4ErrorPropagationNavigator: revised
+  interface of ComputeSafety(), making 'true' default value of the 3rd
+  argument.
+- G4Navigator: changed GetSavedState() and RestoreSavedState() methods to
+  protected.
+- G4ErrorPropagationNavigator: cosmetic change to improve readability of
+  initialisation of a double.
+- G4ReplicaNavigation: small revision to printout - to improve end-of-line. 
+   
+Oct 15th, 2012 - J.Apostolakis
+------------------------------
+- G4Navigator: fixed condition in GetGlobalExitNormal().
+  Enabled calculation of normal for daughters of Replicas.
+
+Oct 15th, 2012 - J.Apostolakis
+------------------------------
+- G4Navigator: hidden exception for unsupported Exit Normal in case of
+  Replicas only available in #ifdef G4DEBUG_NAVIGATION, and made it
+  JustWarning for now.
+  Revised codes for two exceptions which can occur only in case of run-time
+  errors.
+
+Oct 11th, 2012 - J.Apostolakis
+------------------------------
+- G4Navigator::GetLocalExitNormal(): hidden Exception warning for missing
+  Exit Normal ( Note: it remains 'protected' under  #ifdef G4DEBUG_NAVIGATION).
+
+Oct 11th, 2012 - J.Apostolakis
+------------------------------
+- G4Navigator::ComputeStep(): Fixed condition for transformation of 
+  local-normal: had flipped conditions, not corrected it.
+
+Oct  2nd, 2012 - J.Apostolakis
+------------------------------
+- G4Navigator::GetGlobalExitNormal(): Added checks for non-unit surface
+  normals in cases of exiting (existing global) or entering (new local)
+  normal.
+
+Sep 21st, 2012 - J.Apostolakis
+------------------------------
+- Improved GetLocalExitNormal(). In case GrandMother is correct, 
+  it will now supply it.
+  Revised the code protected by flag G4_NAV_ALT_NORMAL (it is disactivated).
+
+Sep 20th, 2012 - J.Apostolakis
+------------------------------
+- Any client (G4 or user) that need a normal should convert to using 
+  GetGlobalExitNormal()  in place of GetLocalExitNormal().
+- G4Navigator: suppressed extra transformations for updating
+  fGrandMotherExitNormal in ComputeStep.
+  This is the only existing way to keep an update 'local' Exit Normal
+  ( potential alternative way is not implemented. )
+  It also serves as an alternative way (not needed) for the 'global'
+  Exit Normal. 
+  This changes the results of GetLocalExitNormal(G4bool* ) and
+  GetLocalExitNormalAndCheck(const G4ThreeVector&, G4bool*)
+  It now always returns 'valid'=false when Exiting.
+  A simple ERROR (not G4Exception) is generated if this case used.
+  Detailed description of change:
+    Previously it was unclear whether the (Grand Mother) normal 
+    was correct (due to potential extra changes of coordinates.)
+    In the case that the GrandMother was correct (unknown before), 
+     it is no longer available (when exiting.)
+  The suppressed updating of fGrandMotherExitNormal in ComputeStep()
+  is not needed for the Exit Normal in Global Coordinates, 
+  as that is now calculated using the Grand-Mother to Global transform
+  in the case of exiting volume.
+  Note: the suppressed code is protected by "#ifdef G4_NAV_ALT_NORMAL" 
+        in ComputeStep() and GetLocalExitNormal()
+- Commented out extra debug printing in ComputeStep() - missed earlier.
+
+Sep 19th, 2012 - J.Apostolakis
+------------------------------
+- G4Navigator: commented out debug printing in ComputeStep() and
+  GetGlobalExitNormal()
+
+July 11th, 2012 - J.Apostolakis
+-------------------------------
+- Added data member for improved Exit Normal for optical photons (and
+  potentially more uses, e.g. field )
+
+June 12th, 2012 - G.Cosmo
+-------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+May 14th, 2012 - G.Cosmo
+------------------------
+- Fixed spurious cases of hidden variable visibility, detected with
+  '-Wshadow' compilation option on gcc compiler.
+
 March 9th, 2012 - J.Apostolakis (geomnav-V09-04-14)
 -------------------------------
 - G4MultiNavigator: fix for dealing with cases of clashing normals and

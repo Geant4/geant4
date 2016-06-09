@@ -68,6 +68,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4PrimaryParticle.hh"
 
 G4Allocator<G4DynamicParticle> aDynamicParticleAllocator;
 

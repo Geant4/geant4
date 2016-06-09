@@ -118,6 +118,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   thePositron  = G4Positron::Positron();
 
   pParticleChange = &fParticleChange;
+  fParticleChange.SetSecondaryWeightByProcess(false);
   secParticles.reserve(5);
 
   preStepLambda = 0.0;
@@ -522,10 +523,9 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   if(!currentModel->IsActive(finalT)) { return &fParticleChange; }
 
   // define new weight for primary and secondaries
-  if(weightFlag) {
-    G4double weight = fParticleChange.GetParentWeight()/biasFactor;
-    fParticleChange.ProposeParentWeight(weight);
-  }
+  G4double weight = fParticleChange.GetParentWeight();
+  if(weightFlag) { weight /= biasFactor; }
+  fParticleChange.ProposeWeight(weight);
   /*  
   if(0 < verboseLevel) {
     G4cout << "G4VEmProcess::PostStepDoIt: Sample secondary; E= "

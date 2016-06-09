@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-//
-
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
 #include "G4AttDefStore.hh"
@@ -42,35 +40,41 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4Allocator<F04Trajectory> aTrajectoryAllocator;
+G4Allocator<F04Trajectory> myTrajectoryAllocator;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04Trajectory::F04Trajectory()
     : fpPointsContainer(0), fTrackID(0), fParentID(0),
-      PDGCharge(0.0), PDGEncoding(0), ParticleName(""),
-      initialMomentum(G4ThreeVector()) {;}
+      fPDGCharge(0.0), fPDGEncoding(0), fParticleName(""),
+      fInitialMomentum(G4ThreeVector()) {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04Trajectory::F04Trajectory(const G4Track* aTrack)
 {
-    G4ParticleDefinition * fpParticleDefinition = aTrack->GetDefinition();
-    ParticleName = fpParticleDefinition->GetParticleName();
-    PDGCharge = fpParticleDefinition->GetPDGCharge();
-    PDGEncoding = fpParticleDefinition->GetPDGEncoding();
+    G4ParticleDefinition * particleDefinition = aTrack->GetDefinition();
+    fParticleName = particleDefinition->GetParticleName();
+    fPDGCharge = particleDefinition->GetPDGCharge();
+    fPDGEncoding = particleDefinition->GetPDGEncoding();
     fTrackID = aTrack->GetTrackID();
     fParentID = aTrack->GetParentID();
-    initialMomentum = aTrack->GetMomentum();
+    fInitialMomentum = aTrack->GetMomentum();
     fpPointsContainer = new TrajectoryPointContainer();
     // Following is for the first trajectory point
     fpPointsContainer->push_back(new F04TrajectoryPoint(aTrack));
 }
 
-F04Trajectory::F04Trajectory(F04Trajectory & right) : G4VTrajectory() 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04Trajectory::F04Trajectory(F04Trajectory & right) : G4VTrajectory()
 {
-    ParticleName = right.ParticleName;
-    PDGCharge = right.PDGCharge;
-    PDGEncoding = right.PDGEncoding;
+    fParticleName = right.fParticleName;
+    fPDGCharge = right.fPDGCharge;
+    fPDGEncoding = right.fPDGEncoding;
     fTrackID = right.fTrackID;
     fParentID = right.fParentID;
-    initialMomentum = right.initialMomentum;
+    fInitialMomentum = right.fInitialMomentum;
     fpPointsContainer = new TrajectoryPointContainer();
 
     for(size_t i=0;i<right.fpPointsContainer->size();++i) {
@@ -79,6 +83,8 @@ F04Trajectory::F04Trajectory(F04Trajectory & right) : G4VTrajectory()
         fpPointsContainer->push_back(new F04TrajectoryPoint(*rightPoint));
     }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04Trajectory::~F04Trajectory()
 {
@@ -90,12 +96,16 @@ F04Trajectory::~F04Trajectory()
     delete fpPointsContainer;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04Trajectory::ShowTrajectory(std::ostream& os) const
 {
     // Invoke the default implementation in G4VTrajectory...
     G4VTrajectory::ShowTrajectory(os);
     // ... or override with your own code here.
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04Trajectory::DrawTrajectory() const
 {
@@ -104,6 +114,8 @@ void F04Trajectory::DrawTrajectory() const
     // ... or override with your own code here.
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04Trajectory::DrawTrajectory(G4int i_mode) const
 {
     // Invoke the default implementation in G4VTrajectory...
@@ -111,15 +123,21 @@ void F04Trajectory::DrawTrajectory(G4int i_mode) const
     // ... or override with your own code here.
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F04Trajectory::AppendStep(const G4Step* aStep)
 {
     fpPointsContainer->push_back(new F04TrajectoryPoint(aStep));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4ParticleDefinition* F04Trajectory::GetParticleDefinition()
 {
-    return (G4ParticleTable::GetParticleTable()->FindParticle(ParticleName));
+    return (G4ParticleTable::GetParticleTable()->FindParticle(fParticleName));
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F04Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 {
@@ -134,6 +152,8 @@ void F04Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
     delete (*second->fpPointsContainer)[0];
     second->fpPointsContainer->clear();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const std::map<G4String,G4AttDef>* F04Trajectory::GetAttDefs() const
 {
@@ -175,6 +195,8 @@ const std::map<G4String,G4AttDef>* F04Trajectory::GetAttDefs() const
     return store;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 std::vector<G4AttValue>* F04Trajectory::CreateAttValues() const
 {
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
@@ -185,19 +207,19 @@ std::vector<G4AttValue>* F04Trajectory::CreateAttValues() const
   values->push_back
     (G4AttValue("PID",G4UIcommand::ConvertToString(fParentID),""));
 
-  values->push_back(G4AttValue("PN",ParticleName,""));
+  values->push_back(G4AttValue("PN",fParticleName,""));
 
   values->push_back
-    (G4AttValue("Ch",G4UIcommand::ConvertToString(PDGCharge),""));
+    (G4AttValue("Ch",G4UIcommand::ConvertToString(fPDGCharge),""));
 
   values->push_back
-    (G4AttValue("PDG",G4UIcommand::ConvertToString(PDGEncoding),""));
+    (G4AttValue("PDG",G4UIcommand::ConvertToString(fPDGEncoding),""));
 
   values->push_back
-    (G4AttValue("IMom",G4BestUnit(initialMomentum,"Energy"),""));
+    (G4AttValue("IMom",G4BestUnit(fInitialMomentum,"Energy"),""));
 
   values->push_back
-    (G4AttValue("IMag",G4BestUnit(initialMomentum.mag(),"Energy"),""));
+    (G4AttValue("IMag",G4BestUnit(fInitialMomentum.mag(),"Energy"),""));
 
   values->push_back
     (G4AttValue("NTP",G4UIcommand::ConvertToString(GetPointEntries()),""));

@@ -3814,7 +3814,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         G4int outChg     = outQC.GetCharge();
         G4double outCB   = theEnvironment.CoulombBarrier(outChg,outBar);
         // Now theCoulombPotential should be taken into account //@@ How to do this ??
-        if(nucflag) rQ4Mom+=dMass;                   // Make a correction of ResidQuasmon4M
+        if(nucflag) rQ4Mom+=G4LorentzVector(dMass);  // Make a correction of ResidQuasmon4M
         G4QHadron tmpRQH(valQ+transQC,rQ4Mom);       // Tmp Hadron for the Residual Quasmon
         // Now theCoulBar reflection should be taken into account
         G4double outT    = fr4Mom.e()-fr4Mom.m(); 

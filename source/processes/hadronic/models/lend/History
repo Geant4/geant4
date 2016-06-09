@@ -15,6 +15,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+7 August 2012 Gabriele Cosmo (hadr-lend-V09-04-26)
+----------------------------------------------
+Fixed GNUmakefile for use of internal expat library, if explicitely chosen.
+
+13 June 2012 Tatsumi Koi
+----------------------------------------------
+Fix shadowing compiler warnings 
+	include/G4LENDCrossSection.hh
+	src/G4LENDModel.cc
+	src/G4LENDFission.cc
+	src/G4LENDCrossSection.cc
+
 12 January 2012 Tatsumi Koi (hadr-lend-V09-04-25)
 ----------------------------------------------
 Fix compiler worming message, proper header names, Delete unnecessary header files

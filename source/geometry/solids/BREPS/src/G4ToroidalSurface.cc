@@ -135,7 +135,7 @@ G4int G4ToroidalSurface::Intersect(const G4Ray& Ray)
   G4double   rhits[4];		      // Intersection distances
   G4double   hits[4] = {0.,0.,0.,0.}; // Ordered intersection distances
   G4double   rho, a0, b0;	      // Related constants		
-  G4double   f, l, t, g, q, m, u;     // Ray dependent terms		
+  G4double   f, l, t, g1, q, m1, u;   // Ray dependent terms		
   G4double   C[5];		      // Quartic coefficients	      
 	
   //	Transform the intersection ray					
@@ -154,25 +154,25 @@ G4int G4ToroidalSurface::Intersect(const G4Ray& Ray)
   f = 1. - DCos.y()*DCos.y();
   l = 2. * (Base.x()*DCos.x() + Base.z()*DCos.z());
   t = Base.x()*Base.x() + Base.z()*Base.z();
-  g = f + rho * DCos.y()*DCos.y();
-  q = a0 / (g*g);
-  m = (l + 2.*rho*DCos.y()*Base.y()) / g;
-  u = (t +    rho*Base.y()*Base.y() + b0) / g;
+  g1 = f + rho * DCos.y()*DCos.y();
+  q = a0 / (g1*g1);
+  m1 = (l + 2.*rho*DCos.y()*Base.y()) / g1;
+  u = (t +    rho*Base.y()*Base.y() + b0) / g1;
 	
   //	Compute the coefficients of the quartic.			
   
   C[4] = 1.0;
-  C[3] = 2. * m;
-  C[2] = m*m + 2.*u - q*f;
-  C[1] = 2.*m*u - q*l;
+  C[3] = 2. * m1;
+  C[2] = m1*m1 + 2.*u - q*f;
+  C[1] = 2.*m1*u - q*l;
   C[0] = u*u - q*t;
 	
   //	Use quartic root solver found in "Graphics Gems" by Jochen Schwarze.
   nhits = SolveQuartic (C,rhits);
   
   //	SolveQuartic returns root pairs in reversed order.		
-  m = rhits[0]; u = rhits[1]; rhits[0] = u; rhits[1] = m;
-  m = rhits[2]; u = rhits[3]; rhits[2] = u; rhits[3] = m;
+  m1 = rhits[0]; u = rhits[1]; rhits[0] = u; rhits[1] = m1;
+  m1 = rhits[2]; u = rhits[3]; rhits[2] = u; rhits[3] = m1;
 
   //  	return (*nhits != 0);
   
@@ -264,7 +264,7 @@ G4int G4ToroidalSurface::Intersect(const G4Ray& Ray)
 }
 
 
-G4int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
+G4int G4ToroidalSurface::SolveQuartic(G4double cc[], G4double ss[]  )
 {
   // From Graphics Gems I by Jochen Schwartz
   
@@ -276,10 +276,10 @@ G4int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
   
     // Normal form: x^4 + Ax^3 + Bx^2 + Cx + D = 0 
 
-  A = c[ 3 ] / c[ 4 ];
-  B = c[ 2 ] / c[ 4 ];
-  C = c[ 1 ] / c[ 4 ];
-  D = c[ 0 ] / c[ 4 ];
+  A = cc[ 3 ] / cc[ 4 ];
+  B = cc[ 2 ] / cc[ 4 ];
+  C = cc[ 1 ] / cc[ 4 ];
+  D = cc[ 0 ] / cc[ 4 ];
 
   //  substitute x = y - A/4 to eliminate cubic term:
   // x^4 + px^2 + qx + r = 0 
@@ -298,9 +298,9 @@ G4int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
     coeffs[ 2 ] = 0;
     coeffs[ 3 ] = 1;
     
-    num = SolveCubic(coeffs, s);
+    num = SolveCubic(coeffs, ss);
     
-    s[ num++ ] = 0;
+    ss[ num++ ] = 0;
   }
   else
   {
@@ -310,10 +310,10 @@ G4int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
     coeffs[ 2 ] = - 1.0/2 * p;
     coeffs[ 3 ] = 1;
     
-    (void) SolveCubic(coeffs, s);
+    (void) SolveCubic(coeffs, ss);
     
     // ... and take the one real solution ... 
-    z = s[ 0 ];
+    z = ss[ 0 ];
 
     // ... to Build two quadric equations 
     u = z * z - r;
@@ -337,13 +337,13 @@ G4int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
     coeffs[ 1 ] = q < 0 ? -v : v;
     coeffs[ 2 ] = 1;
     
-    num = SolveQuadric(coeffs, s);
+    num = SolveQuadric(coeffs, ss);
     
     coeffs[ 0 ]= z + u;
     coeffs[ 1 ] = q < 0 ? v : -v;
     coeffs[ 2 ] = 1;
     
-    num += SolveQuadric(coeffs, s + num);
+    num += SolveQuadric(coeffs, ss + num);
   }
   
   // resubstitute 
@@ -351,13 +351,13 @@ G4int G4ToroidalSurface::SolveQuartic(G4double c[], G4double s[]  )
   sub = 1.0/4 * A;
   
   for (i = 0; i < num; ++i)
-    s[ i ] -= sub;
+    ss[ i ] -= sub;
   
   return num;
 }
 
 
-G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
+G4int G4ToroidalSurface::SolveCubic(G4double cc[], G4double ss[]  )
 {
   // From Graphics Gems I bu Jochen Schwartz
   G4int     i, num;
@@ -367,9 +367,9 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
   G4double  cb_p, D;
 
   // Normal form: x^3 + Ax^2 + Bx + C = 0 
-  A = c[ 2 ] / c[ 3 ];
-  B = c[ 1 ] / c[ 3 ];
-  C = c[ 0 ] / c[ 3 ];
+  A = cc[ 2 ] / cc[ 3 ];
+  B = cc[ 1 ] / cc[ 3 ];
+  C = cc[ 0 ] / cc[ 3 ];
   
   //  substitute x = y - A/3 to eliminate quadric term:
   //	x^3 +px + q = 0 
@@ -385,14 +385,14 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
   {
     if (IsZero(q)) // one triple solution 
     {
-      s[ 0 ] = 0;
+      ss[ 0 ] = 0;
       num = 1;
     }
     else // one single and one G4double solution 
     {
       G4double u = std::pow(-q,1./3.);
-      s[ 0 ] = 2 * u;
-      s[ 1 ] = - u;
+      ss[ 0 ] = 2 * u;
+      ss[ 1 ] = - u;
       num = 2;
     }
   }
@@ -401,9 +401,9 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
     G4double phi = 1.0/3 * std::acos(-q / std::sqrt(-cb_p));
     G4double t = 2 * std::sqrt(-p);
     
-    s[ 0 ] =   t * std::cos(phi);
-    s[ 1 ] = - t * std::cos(phi + pi / 3);
-    s[ 2 ] = - t * std::cos(phi - pi / 3);
+    ss[ 0 ] =   t * std::cos(phi);
+    ss[ 1 ] = - t * std::cos(phi + pi / 3);
+    ss[ 2 ] = - t * std::cos(phi - pi / 3);
     num = 3;
   }
   else // one real solution 
@@ -412,7 +412,7 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
     G4double u = std::pow(sqrt_D - q,1./3.);
     G4double v = - std::pow(sqrt_D + q,1./3.);
     
-    s[ 0 ] = u + v;
+    ss[ 0 ] = u + v;
     num = 1;
   }
   
@@ -420,26 +420,26 @@ G4int G4ToroidalSurface::SolveCubic(G4double c[], G4double s[]  )
   sub = 1.0/3 * A;
   
   for (i = 0; i < num; ++i)
-    s[ i ] -= sub;
+    ss[ i ] -= sub;
   
   return num;
 }
 
 
-G4int G4ToroidalSurface::SolveQuadric(G4double c[], G4double s[] )
+G4int G4ToroidalSurface::SolveQuadric(G4double cc[], G4double ss[] )
 {
   // From Graphics Gems I by Jochen Schwartz
   G4double p, q, D;
   
   // Normal form: x^2 + px + q = 0 
-  p = c[ 1 ] / (2 * c[ 2 ]);
-  q = c[ 0 ] / c[ 2 ];
+  p = cc[ 1 ] / (2 * cc[ 2 ]);
+  q = cc[ 0 ] / cc[ 2 ];
   
   D = p * p - q;
   
   if (IsZero(D))
   {
-    s[ 0 ] = - p;
+    ss[ 0 ] = - p;
     return 1;
   }
   else if (D < 0)
@@ -450,8 +450,8 @@ G4int G4ToroidalSurface::SolveQuadric(G4double c[], G4double s[] )
   {
     G4double sqrt_D = std::sqrt(D);
     
-    s[ 0 ] =   sqrt_D - p;
-    s[ 1 ] = - sqrt_D - p;
+    ss[ 0 ] =   sqrt_D - p;
+    ss[ 1 ] = - sqrt_D - p;
     return 2;
   }
 

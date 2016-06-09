@@ -45,9 +45,9 @@ G4PlacedSolid::G4PlacedSolid()
 }
 
 
-G4PlacedSolid::G4PlacedSolid(G4BREPSolid* s, G4Axis2Placement3D* p)
+G4PlacedSolid::G4PlacedSolid(G4BREPSolid* sol, G4Axis2Placement3D* p)
 {
-  solid =s;
+  solid = sol;
   if(p)
   {
     G4double x,y,z;

@@ -28,6 +28,7 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4GaussChebyshevQ.hh"
+#include "G4PhysicalConstants.hh"
 
 // -----------------------------------------------------
 //

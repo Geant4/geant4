@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- August 27, 2012 H.Kurashige (track-V09-04-15)
+- Fix a bug in copy constructor of G4VUUserTrackInformation (Problem #1346)
+
 - February 3rd, 2012 J.Apostolakis  (track-V09-04-14)
 - G4FieldTrackUpdator::Update method must reset the RestMass, 
    because it is used to Initialise each track by ParallelWorldScoringProcess,

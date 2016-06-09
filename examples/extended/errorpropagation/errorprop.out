@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0xab9d0c0
+ creating G4RunManagerKernel 0x10006ff0
 
 The materials defined are : 
 
@@ -38,14 +38,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0xac09f80G4ErrorPhysicsList:: particle process manager e+ = 0xac0b480
-0xac09d70G4ErrorPhysicsList:: particle process manager e- = 0xac0ca90
-0xac09b00G4ErrorPhysicsList:: particle process manager gamma = 0xac0cca0
-0xac0a190G4ErrorPhysicsList:: particle process manager mu+ = 0xac0cef0
-0xac0a5c0G4ErrorPhysicsList:: particle process manager mu- = 0xac0d140
-0xac0aa30G4ErrorPhysicsList:: particle process manager pi+ = 0xac0d390
-0xac0ae50G4ErrorPhysicsList:: particle process manager pi- = 0xac0d5e0
-0xac0b270G4ErrorPhysicsList:: particle process manager proton = 0xac0d830
+0x1006d610G4ErrorPhysicsList:: particle process manager e+ = 0x1006eb10
+0x1006d400G4ErrorPhysicsList:: particle process manager e- = 0x10070120
+0x1006d190G4ErrorPhysicsList:: particle process manager gamma = 0x10070330
+0x1006d820G4ErrorPhysicsList:: particle process manager mu+ = 0x10070580
+0x1006dc50G4ErrorPhysicsList:: particle process manager mu- = 0x100707d0
+0x1006e0c0G4ErrorPhysicsList:: particle process manager pi+ = 0x10070a20
+0x1006e4e0G4ErrorPhysicsList:: particle process manager pi- = 0x10070c70
+0x1006e900G4ErrorPhysicsList:: particle process manager proton = 0x10070ec0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
@@ -136,206 +136,154 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
-    1       50   0.0187        0  1.99e+04   0.0167       50        50        BEAM Transportation
-    2       50   0.0187        0  1.99e+04        0        0        50        CDET Transportation
-    3      150    0.169        0  1.99e+04   0.0334      100       150        CDET G4ErrorStepLengthLimit
-    4      250    0.468        0  1.99e+04   0.0334      100       250        CDET G4ErrorStepLengthLimit
-    5      250    0.468        0  1.99e+04 1.94e-07  0.00058       250        CDET Transportation
-    6      250    0.468        0  1.99e+04        0        0       250        DVEC Transportation
-    7      350    0.918        0  2.01e+04      183      100       350        DVEC G4ErrorStepLengthLimit
-    8      350    0.918        0  2.01e+04  0.00187  0.00102       350        DVEC Transportation
-    9      350    0.918        0  2.01e+04 1.83e-09    1e-09       350        DVEC Transportation
-   10      450     1.52        0  2.03e+04      183      100       450        DVEC G4ErrorStepLengthLimit
-   11      450     1.52        0  2.03e+04  0.00328  0.00179       450        DVEC Transportation
-   12      450     1.52        0  2.03e+04 1.83e-09    1e-09       450        DVEC Transportation
-   13      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
-   14      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
-   15      550     2.26        0  2.04e+04 1.83e-09    1e-09       550        DVEC Transportation
-   16      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
-   17      650     3.15        0  2.06e+04  0.00727  0.00396       650        DVEC Transportation
-   18      650     3.15        0  2.06e+04        0        0       650        SOLN Transportation
-   19      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
-   20      750     4.18        0  2.07e+04  0.00319  0.00535       750        SOLN Transportation
-   21      750     4.18        0  2.07e+04        0        0       750        DVEH Transportation
-   22      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
-   23      850     5.36        0  2.09e+04   0.0114  0.00694       850        DVEH Transportation
-   24      850     5.36        0  2.09e+04 1.65e-09    1e-09       850        DVEH Transportation
-   25      950     6.68        0   2.1e+04      165      100       950        DVEH G4ErrorStepLengthLimit
-   26      950     6.68        0   2.1e+04   0.0144  0.00872       950        DVEH Transportation
-   27      950     6.68        0   2.1e+04 1.65e-09    1e-09       950        DVEH Transportation
-   28 1.05e+03     8.14        0  2.12e+04      165      100  1.05e+03        DVEH G4ErrorStepLengthLimit
-   29 1.05e+03     8.14        0  2.12e+04   0.0176   0.0107  1.05e+03        DVEH Transportation
-   30 1.05e+03     8.14        0  2.12e+04 1.65e-09    1e-09  1.05e+03        DVEH Transportation
-   31 1.15e+03     9.74        0  2.13e+04      165      100  1.15e+03        DVEH G4ErrorStepLengthLimit
-   32 1.15e+03     9.74        0  2.13e+04   0.0212   0.0128  1.15e+03        DVEH Transportation
-   33 1.15e+03     9.74        0  2.13e+04 1.65e-09    1e-09  1.15e+03        DVEH Transportation
-   34 1.25e+03     11.5        0  2.15e+04      165      100  1.25e+03        DVEH G4ErrorStepLengthLimit
-   35 1.25e+03     11.5        0  2.15e+04    0.025   0.0152  1.25e+03        DVEH Transportation
-   36 1.25e+03     11.5        0  2.15e+04 1.65e-09    1e-09  1.25e+03        DVEH Transportation
-   37 1.35e+03     13.4        0  2.17e+04      165      100  1.35e+03        DVEH G4ErrorStepLengthLimit
-   38 1.35e+03     13.4        0  2.17e+04   0.0292   0.0177  1.35e+03        DVEH Transportation
-   39 1.35e+03     13.4        0  2.17e+04 1.65e-09    1e-09  1.35e+03        DVEH Transportation
-   40 1.45e+03     15.4        0  2.18e+04      165      100  1.45e+03        DVEH G4ErrorStepLengthLimit
-   41 1.45e+03     15.4        0  2.18e+04   0.0336   0.0203  1.45e+03        DVEH Transportation
-   42 1.45e+03     15.4        0  2.18e+04 1.66e-09    1e-09  1.45e+03        DVEH Transportation
-   43 1.55e+03     17.5        0   2.2e+04      166      100  1.55e+03        DVEH G4ErrorStepLengthLimit
-   44 1.55e+03     17.5        0   2.2e+04   0.0384   0.0232  1.55e+03        DVEH Transportation
-   45 1.55e+03     17.5        0   2.2e+04 1.66e-09    1e-09  1.55e+03        DVEH Transportation
-   46 1.65e+03     19.8        0  2.22e+04      166      100  1.65e+03        DVEH G4ErrorStepLengthLimit
-   47 1.65e+03     19.8        0  2.22e+04   0.0434   0.0262  1.65e+03        DVEH Transportation
-   48 1.65e+03     19.8        0  2.22e+04 1.66e-09    1e-09  1.65e+03        DVEH Transportation
-   49 1.75e+03     22.2        0  2.23e+04      166      100  1.75e+03        DVEH G4ErrorStepLengthLimit
-   50 1.75e+03     22.2        0  2.23e+04   0.0486   0.0293  1.75e+03        DVEH Transportation
-   51 1.75e+03     22.2        0  2.23e+04        0        0  1.75e+03        MUON Transportation
-   52 1.85e+03     24.8        0  2.23e+04   0.0337      100  1.85e+03        MUON G4ErrorStepLengthLimit
-   53 1.95e+03     27.5        0  2.23e+04   0.0337      100  1.95e+03        MUON G4ErrorStepLengthLimit
-   54 2.05e+03     30.3        0  2.23e+04   0.0337      100  2.05e+03        MUON G4ErrorStepLengthLimit
-   55 2.15e+03     33.3        0  2.23e+04   0.0337      100  2.15e+03        MUON G4ErrorStepLengthLimit
-   56 2.21e+03     35.1        0  2.23e+04   0.0203     60.2  2.21e+03        MUON Transportation
+    1       50   0.0187        0  1.99e+04   0.0167       50        50        CDET Transportation
+    2      150    0.169        0  1.99e+04   0.0334      100       150        CDET G4ErrorStepLengthLimit
+    3      250    0.468        0  1.99e+04   0.0334      100       250        CDET G4ErrorStepLengthLimit
+    4      250    0.468        0  1.99e+04 1.94e-07  0.00058       250        DVEC Transportation
+    5      350    0.918        0  2.01e+04      183      100       350        DVEC G4ErrorStepLengthLimit
+    6      350    0.918        0  2.01e+04  0.00187  0.00102       350        DVEC Transportation
+    7      450     1.52        0  2.03e+04      183      100       450        DVEC G4ErrorStepLengthLimit
+    8      450     1.52        0  2.03e+04  0.00328  0.00179       450        DVEC Transportation
+    9      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
+   10      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
+   11      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
+   12      650     3.15        0  2.06e+04  0.00727  0.00396       650        SOLN Transportation
+   13      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
+   14      750     4.18        0  2.07e+04  0.00319  0.00535       750        DVEH Transportation
+   15      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
+   16      850     5.36        0  2.09e+04   0.0114  0.00694       850        DVEH Transportation
+   17      950     6.68        0   2.1e+04      165      100       950        DVEH G4ErrorStepLengthLimit
+   18      950     6.68        0   2.1e+04   0.0144  0.00872       950        DVEH Transportation
+   19 1.05e+03     8.14        0  2.12e+04      165      100  1.05e+03        DVEH G4ErrorStepLengthLimit
+   20 1.05e+03     8.14        0  2.12e+04   0.0176   0.0107  1.05e+03        DVEH Transportation
+   21 1.15e+03     9.74        0  2.13e+04      165      100  1.15e+03        DVEH G4ErrorStepLengthLimit
+   22 1.15e+03     9.74        0  2.13e+04   0.0212   0.0128  1.15e+03        DVEH Transportation
+   23 1.25e+03     11.5        0  2.15e+04      165      100  1.25e+03        DVEH G4ErrorStepLengthLimit
+   24 1.25e+03     11.5        0  2.15e+04    0.025   0.0152  1.25e+03        DVEH Transportation
+   25 1.35e+03     13.4        0  2.17e+04      165      100  1.35e+03        DVEH G4ErrorStepLengthLimit
+   26 1.35e+03     13.4        0  2.17e+04   0.0292   0.0177  1.35e+03        DVEH Transportation
+   27 1.45e+03     15.4        0  2.18e+04      165      100  1.45e+03        DVEH G4ErrorStepLengthLimit
+   28 1.45e+03     15.4        0  2.18e+04   0.0336   0.0203  1.45e+03        DVEH Transportation
+   29 1.55e+03     17.5        0   2.2e+04      166      100  1.55e+03        DVEH G4ErrorStepLengthLimit
+   30 1.55e+03     17.5        0   2.2e+04   0.0384   0.0232  1.55e+03        DVEH Transportation
+   31 1.65e+03     19.8        0  2.22e+04      166      100  1.65e+03        DVEH G4ErrorStepLengthLimit
+   32 1.65e+03     19.8        0  2.22e+04   0.0434   0.0262  1.65e+03        DVEH Transportation
+   33 1.75e+03     22.2        0  2.23e+04      166      100  1.75e+03        DVEH G4ErrorStepLengthLimit
+   34 1.75e+03     22.2        0  2.23e+04   0.0486   0.0293  1.75e+03        MUON Transportation
+   35 1.85e+03     24.8        0  2.23e+04   0.0337      100  1.85e+03        MUON G4ErrorStepLengthLimit
+   36 1.95e+03     27.5        0  2.23e+04   0.0337      100  1.95e+03        MUON G4ErrorStepLengthLimit
+   37 2.05e+03     30.3        0  2.23e+04   0.0337      100  2.05e+03        MUON G4ErrorStepLengthLimit
+   38 2.15e+03     33.3        0  2.23e+04   0.0337      100  2.15e+03        MUON G4ErrorStepLengthLimit
+   39 2.21e+03     35.1        0  2.23e+04   0.0203     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.1013621720643,0)
- Momentum: (22433.38011369594,696.1819967942263,0)
+ Position: (2210,35.10136217206415,0)
+ Momentum: (22433.38011369595,696.1819967942262,0)
  Error: 
-  2.422266618539241e-06                       0   8.713066792134575e-07    5.94446560151063e-05                       0 
-                      0   3.517566784422333e-05                       0                       0    0.004069145419631037 
-  8.713066792134575e-07                       0   3.553011183568633e-05    0.004447277908978974                       0 
-   5.94446560151063e-05                       0    0.004447277908978974      0.6278868499590836                       0 
-                      0    0.004069145419631037                       0                       0      0.5408775310101931 
+  2.422266618547236e-06                       0   8.713066792191244e-07   5.944465601567995e-05                       0 
+                      0   3.517566784438331e-05                       0                       0    0.004069145419663489 
+  8.713066792191244e-07                       0   3.553011183585003e-05    0.004447277909011844                       0 
+  5.944465601567995e-05                       0    0.004447277909011844      0.6278868499657203                       0 
+                      0    0.004069145419663489                       0                       0       0.540877531016414 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0  1.99e+04        0        0         0        BEAM initStep
-    1       50   0.0187        0  1.99e+04   0.0167       50        50        BEAM Transportation
-    2       50   0.0187        0  1.99e+04        0        0        50        CDET Transportation
-    3      150    0.169        0  1.99e+04   0.0334      100       150        CDET G4ErrorStepLengthLimit
-    4      250    0.468        0  1.99e+04   0.0334      100       250        CDET G4ErrorStepLengthLimit
-    5      250    0.468        0  1.99e+04 1.94e-07  0.00058       250        CDET Transportation
-    6      250    0.468        0  1.99e+04        0        0       250        DVEC Transportation
-    7      350    0.918        0  2.01e+04      183      100       350        DVEC G4ErrorStepLengthLimit
-    8      350    0.918        0  2.01e+04  0.00187  0.00102       350        DVEC Transportation
-    9      350    0.918        0  2.01e+04 1.83e-09    1e-09       350        DVEC Transportation
-   10      450     1.52        0  2.03e+04      183      100       450        DVEC G4ErrorStepLengthLimit
-   11      450     1.52        0  2.03e+04  0.00328  0.00179       450        DVEC Transportation
-   12      450     1.52        0  2.03e+04 1.83e-09    1e-09       450        DVEC Transportation
-   13      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
-   14      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
-   15      550     2.26        0  2.04e+04 1.83e-09    1e-09       550        DVEC Transportation
-   16      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
-   17      650     3.15        0  2.06e+04  0.00727  0.00396       650        DVEC Transportation
-   18      650     3.15        0  2.06e+04        0        0       650        SOLN Transportation
-   19      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
-   20      750     4.18        0  2.07e+04  0.00319  0.00535       750        SOLN Transportation
-   21      750     4.18        0  2.07e+04        0        0       750        DVEH Transportation
-   22      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
-   23      850     5.36        0  2.09e+04   0.0114  0.00694       850        DVEH Transportation
-   24      850     5.36        0  2.09e+04 1.65e-09    1e-09       850        DVEH Transportation
-   25      950     6.68        0   2.1e+04      165      100       950        DVEH G4ErrorStepLengthLimit
-   26      950     6.68        0   2.1e+04   0.0144  0.00872       950        DVEH Transportation
-   27      950     6.68        0   2.1e+04 1.65e-09    1e-09       950        DVEH Transportation
-   28 1.05e+03     8.14        0  2.12e+04      165      100  1.05e+03        DVEH G4ErrorStepLengthLimit
-   29 1.05e+03     8.14        0  2.12e+04   0.0176   0.0107  1.05e+03        DVEH Transportation
-   30 1.05e+03     8.14        0  2.12e+04 1.65e-09    1e-09  1.05e+03        DVEH Transportation
-   31 1.15e+03     9.74        0  2.13e+04      165      100  1.15e+03        DVEH G4ErrorStepLengthLimit
-   32 1.15e+03     9.74        0  2.13e+04   0.0212   0.0128  1.15e+03        DVEH Transportation
-   33 1.15e+03     9.74        0  2.13e+04 1.65e-09    1e-09  1.15e+03        DVEH Transportation
-   34 1.25e+03     11.5        0  2.15e+04      165      100  1.25e+03        DVEH G4ErrorStepLengthLimit
-   35 1.25e+03     11.5        0  2.15e+04    0.025   0.0152  1.25e+03        DVEH Transportation
-   36 1.25e+03     11.5        0  2.15e+04 1.65e-09    1e-09  1.25e+03        DVEH Transportation
-   37 1.35e+03     13.4        0  2.17e+04      165      100  1.35e+03        DVEH G4ErrorStepLengthLimit
-   38 1.35e+03     13.4        0  2.17e+04   0.0292   0.0177  1.35e+03        DVEH Transportation
-   39 1.35e+03     13.4        0  2.17e+04 1.65e-09    1e-09  1.35e+03        DVEH Transportation
-   40 1.45e+03     15.4        0  2.18e+04      165      100  1.45e+03        DVEH G4ErrorStepLengthLimit
-   41 1.45e+03     15.4        0  2.18e+04   0.0336   0.0203  1.45e+03        DVEH Transportation
-   42 1.45e+03     15.4        0  2.18e+04 1.66e-09    1e-09  1.45e+03        DVEH Transportation
-   43 1.55e+03     17.5        0   2.2e+04      166      100  1.55e+03        DVEH G4ErrorStepLengthLimit
-   44 1.55e+03     17.5        0   2.2e+04   0.0384   0.0232  1.55e+03        DVEH Transportation
-   45 1.55e+03     17.5        0   2.2e+04 1.66e-09    1e-09  1.55e+03        DVEH Transportation
-   46 1.65e+03     19.8        0  2.22e+04      166      100  1.65e+03        DVEH G4ErrorStepLengthLimit
-   47 1.65e+03     19.8        0  2.22e+04   0.0434   0.0262  1.65e+03        DVEH Transportation
-   48 1.65e+03     19.8        0  2.22e+04 1.66e-09    1e-09  1.65e+03        DVEH Transportation
-   49 1.75e+03     22.2        0  2.23e+04      166      100  1.75e+03        DVEH G4ErrorStepLengthLimit
-   50 1.75e+03     22.2        0  2.23e+04   0.0486   0.0293  1.75e+03        DVEH Transportation
-   51 1.75e+03     22.2        0  2.23e+04        0        0  1.75e+03        MUON Transportation
-   52 1.85e+03     24.8        0  2.23e+04   0.0337      100  1.85e+03        MUON G4ErrorStepLengthLimit
-   53 1.95e+03     27.5        0  2.23e+04   0.0337      100  1.95e+03        MUON G4ErrorStepLengthLimit
-   54 2.05e+03     30.3        0  2.23e+04   0.0337      100  2.05e+03        MUON G4ErrorStepLengthLimit
-   55 2.15e+03     33.3        0  2.23e+04   0.0337      100  2.15e+03        MUON G4ErrorStepLengthLimit
-   56 2.21e+03     35.1        0  2.23e+04   0.0203     60.2  2.21e+03        MUON Transportation
+    1       50   0.0187        0  1.99e+04   0.0167       50        50        CDET Transportation
+    2      150    0.169        0  1.99e+04   0.0334      100       150        CDET G4ErrorStepLengthLimit
+    3      250    0.468        0  1.99e+04   0.0334      100       250        CDET G4ErrorStepLengthLimit
+    4      250    0.468        0  1.99e+04 1.94e-07  0.00058       250        DVEC Transportation
+    5      350    0.918        0  2.01e+04      183      100       350        DVEC G4ErrorStepLengthLimit
+    6      350    0.918        0  2.01e+04  0.00187  0.00102       350        DVEC Transportation
+    7      450     1.52        0  2.03e+04      183      100       450        DVEC G4ErrorStepLengthLimit
+    8      450     1.52        0  2.03e+04  0.00328  0.00179       450        DVEC Transportation
+    9      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
+   10      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
+   11      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
+   12      650     3.15        0  2.06e+04  0.00727  0.00396       650        SOLN Transportation
+   13      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
+   14      750     4.18        0  2.07e+04  0.00319  0.00535       750        DVEH Transportation
+   15      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
+   16      850     5.36        0  2.09e+04   0.0114  0.00694       850        DVEH Transportation
+   17      950     6.68        0   2.1e+04      165      100       950        DVEH G4ErrorStepLengthLimit
+   18      950     6.68        0   2.1e+04   0.0144  0.00872       950        DVEH Transportation
+   19 1.05e+03     8.14        0  2.12e+04      165      100  1.05e+03        DVEH G4ErrorStepLengthLimit
+   20 1.05e+03     8.14        0  2.12e+04   0.0176   0.0107  1.05e+03        DVEH Transportation
+   21 1.15e+03     9.74        0  2.13e+04      165      100  1.15e+03        DVEH G4ErrorStepLengthLimit
+   22 1.15e+03     9.74        0  2.13e+04   0.0212   0.0128  1.15e+03        DVEH Transportation
+   23 1.25e+03     11.5        0  2.15e+04      165      100  1.25e+03        DVEH G4ErrorStepLengthLimit
+   24 1.25e+03     11.5        0  2.15e+04    0.025   0.0152  1.25e+03        DVEH Transportation
+   25 1.35e+03     13.4        0  2.17e+04      165      100  1.35e+03        DVEH G4ErrorStepLengthLimit
+   26 1.35e+03     13.4        0  2.17e+04   0.0292   0.0177  1.35e+03        DVEH Transportation
+   27 1.45e+03     15.4        0  2.18e+04      165      100  1.45e+03        DVEH G4ErrorStepLengthLimit
+   28 1.45e+03     15.4        0  2.18e+04   0.0336   0.0203  1.45e+03        DVEH Transportation
+   29 1.55e+03     17.5        0   2.2e+04      166      100  1.55e+03        DVEH G4ErrorStepLengthLimit
+   30 1.55e+03     17.5        0   2.2e+04   0.0384   0.0232  1.55e+03        DVEH Transportation
+   31 1.65e+03     19.8        0  2.22e+04      166      100  1.65e+03        DVEH G4ErrorStepLengthLimit
+   32 1.65e+03     19.8        0  2.22e+04   0.0434   0.0262  1.65e+03        DVEH Transportation
+   33 1.75e+03     22.2        0  2.23e+04      166      100  1.75e+03        DVEH G4ErrorStepLengthLimit
+   34 1.75e+03     22.2        0  2.23e+04   0.0486   0.0293  1.75e+03        MUON Transportation
+   35 1.85e+03     24.8        0  2.23e+04   0.0337      100  1.85e+03        MUON G4ErrorStepLengthLimit
+   36 1.95e+03     27.5        0  2.23e+04   0.0337      100  1.95e+03        MUON G4ErrorStepLengthLimit
+   37 2.05e+03     30.3        0  2.23e+04   0.0337      100  2.05e+03        MUON G4ErrorStepLengthLimit
+   38 2.15e+03     33.3        0  2.23e+04   0.0337      100  2.15e+03        MUON G4ErrorStepLengthLimit
+   39 2.21e+03     35.1        0  2.23e+04   0.0203     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.1013621720643,0)
- Momentum: (22433.38011369594,696.1819967942263,0)
+ Position: (2210,35.10136217206415,0)
+ Momentum: (22433.38011369595,696.1819967942262,0)
  Error: 
-  2.422266618539241e-06                       0   8.713066792134575e-07    5.94446560151063e-05                       0 
-                      0   3.517566784422333e-05                       0                       0    0.004069145419631037 
-  8.713066792134575e-07                       0   3.553011183568633e-05    0.004447277908978974                       0 
-   5.94446560151063e-05                       0    0.004447277908978974      0.6278868499590836                       0 
-                      0    0.004069145419631037                       0                       0      0.5408775310101931 
+  2.422266618547236e-06                       0   8.713066792191244e-07   5.944465601567995e-05                       0 
+                      0   3.517566784438331e-05                       0                       0    0.004069145419663489 
+  8.713066792191244e-07                       0   3.553011183585003e-05    0.004447277909011844                       0 
+  5.944465601567995e-05                       0    0.004447277909011844      0.6278868499657203                       0 
+                      0    0.004069145419663489                       0                       0       0.540877531016414 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0  1.99e+04        0        0         0        BEAM initStep
-    1       50   0.0187        0  1.99e+04   0.0167       50        50        BEAM Transportation
-    2       50   0.0187        0  1.99e+04        0        0        50        CDET Transportation
-    3      150    0.169        0  1.99e+04   0.0334      100       150        CDET G4ErrorStepLengthLimit
-    4      250    0.468        0  1.99e+04   0.0334      100       250        CDET G4ErrorStepLengthLimit
-    5      250    0.468        0  1.99e+04 1.94e-07  0.00058       250        CDET Transportation
-    6      250    0.468        0  1.99e+04        0        0       250        DVEC Transportation
-    7      350    0.918        0  2.01e+04      183      100       350        DVEC G4ErrorStepLengthLimit
-    8      350    0.918        0  2.01e+04  0.00187  0.00102       350        DVEC Transportation
-    9      350    0.918        0  2.01e+04 1.83e-09    1e-09       350        DVEC Transportation
-   10      450     1.52        0  2.03e+04      183      100       450        DVEC G4ErrorStepLengthLimit
-   11      450     1.52        0  2.03e+04  0.00328  0.00179       450        DVEC Transportation
-   12      450     1.52        0  2.03e+04 1.83e-09    1e-09       450        DVEC Transportation
-   13      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
-   14      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
-   15      550     2.26        0  2.04e+04 1.83e-09    1e-09       550        DVEC Transportation
-   16      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
-   17      650     3.15        0  2.06e+04  0.00727  0.00396       650        DVEC Transportation
-   18      650     3.15        0  2.06e+04        0        0       650        SOLN Transportation
-   19      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
-   20      750     4.18        0  2.07e+04  0.00319  0.00535       750        SOLN Transportation
-   21      750     4.18        0  2.07e+04        0        0       750        DVEH Transportation
-   22      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
-   23      850     5.36        0  2.09e+04   0.0114  0.00694       850        DVEH Transportation
-   24      850     5.36        0  2.09e+04 1.65e-09    1e-09       850        DVEH Transportation
-   25      950     6.68        0   2.1e+04      165      100       950        DVEH G4ErrorStepLengthLimit
-   26      950     6.68        0   2.1e+04   0.0144  0.00872       950        DVEH Transportation
-   27      950     6.68        0   2.1e+04 1.65e-09    1e-09       950        DVEH Transportation
-   28 1.05e+03     8.14        0  2.12e+04      165      100  1.05e+03        DVEH G4ErrorStepLengthLimit
-   29 1.05e+03     8.14        0  2.12e+04   0.0176   0.0107  1.05e+03        DVEH Transportation
-   30 1.05e+03     8.14        0  2.12e+04 1.65e-09    1e-09  1.05e+03        DVEH Transportation
-   31 1.15e+03     9.74        0  2.13e+04      165      100  1.15e+03        DVEH G4ErrorStepLengthLimit
-   32 1.15e+03     9.74        0  2.13e+04   0.0212   0.0128  1.15e+03        DVEH Transportation
-   33 1.15e+03     9.74        0  2.13e+04 1.65e-09    1e-09  1.15e+03        DVEH Transportation
-   34 1.25e+03     11.5        0  2.15e+04      165      100  1.25e+03        DVEH G4ErrorStepLengthLimit
-   35 1.25e+03     11.5        0  2.15e+04    0.025   0.0152  1.25e+03        DVEH Transportation
-   36 1.25e+03     11.5        0  2.15e+04 1.65e-09    1e-09  1.25e+03        DVEH Transportation
-   37 1.35e+03     13.4        0  2.17e+04      165      100  1.35e+03        DVEH G4ErrorStepLengthLimit
-   38 1.35e+03     13.4        0  2.17e+04   0.0292   0.0177  1.35e+03        DVEH Transportation
-   39 1.35e+03     13.4        0  2.17e+04 1.65e-09    1e-09  1.35e+03        DVEH Transportation
-   40 1.45e+03     15.4        0  2.18e+04      165      100  1.45e+03        DVEH G4ErrorStepLengthLimit
-   41 1.45e+03     15.4        0  2.18e+04   0.0336   0.0203  1.45e+03        DVEH Transportation
-   42 1.45e+03     15.4        0  2.18e+04 1.66e-09    1e-09  1.45e+03        DVEH Transportation
-   43 1.55e+03     17.5        0   2.2e+04      166      100  1.55e+03        DVEH G4ErrorStepLengthLimit
-   44 1.55e+03     17.5        0   2.2e+04   0.0384   0.0232  1.55e+03        DVEH Transportation
-   45 1.55e+03     17.5        0   2.2e+04 1.66e-09    1e-09  1.55e+03        DVEH Transportation
-   46 1.65e+03     19.8        0  2.22e+04      166      100  1.65e+03        DVEH G4ErrorStepLengthLimit
-   47 1.65e+03     19.8        0  2.22e+04   0.0434   0.0262  1.65e+03        DVEH Transportation
-   48 1.65e+03     19.8        0  2.22e+04 1.66e-09    1e-09  1.65e+03        DVEH Transportation
-   49 1.75e+03     22.2        0  2.23e+04      166      100  1.75e+03        DVEH G4ErrorStepLengthLimit
-   50 1.75e+03     22.2        0  2.23e+04   0.0486   0.0293  1.75e+03        DVEH Transportation
-   51 1.75e+03     22.2        0  2.23e+04        0        0  1.75e+03        MUON Transportation
-   52 1.85e+03     24.8        0  2.23e+04   0.0337      100  1.85e+03        MUON G4ErrorStepLengthLimit
-   53 1.95e+03     27.5        0  2.23e+04   0.0337      100  1.95e+03        MUON G4ErrorStepLengthLimit
-   54 2.05e+03     30.3        0  2.23e+04   0.0337      100  2.05e+03        MUON G4ErrorStepLengthLimit
-   55 2.15e+03     33.3        0  2.23e+04   0.0337      100  2.15e+03        MUON G4ErrorStepLengthLimit
-   56 2.21e+03     35.1        0  2.23e+04   0.0203     60.2  2.21e+03        MUON Transportation
+    1       50   0.0187        0  1.99e+04   0.0167       50        50        CDET Transportation
+    2      150    0.169        0  1.99e+04   0.0334      100       150        CDET G4ErrorStepLengthLimit
+    3      250    0.468        0  1.99e+04   0.0334      100       250        CDET G4ErrorStepLengthLimit
+    4      250    0.468        0  1.99e+04 1.94e-07  0.00058       250        DVEC Transportation
+    5      350    0.918        0  2.01e+04      183      100       350        DVEC G4ErrorStepLengthLimit
+    6      350    0.918        0  2.01e+04  0.00187  0.00102       350        DVEC Transportation
+    7      450     1.52        0  2.03e+04      183      100       450        DVEC G4ErrorStepLengthLimit
+    8      450     1.52        0  2.03e+04  0.00328  0.00179       450        DVEC Transportation
+    9      550     2.26        0  2.04e+04      183      100       550        DVEC G4ErrorStepLengthLimit
+   10      550     2.26        0  2.04e+04  0.00509  0.00278       550        DVEC Transportation
+   11      650     3.15        0  2.06e+04      183      100       650        DVEC G4ErrorStepLengthLimit
+   12      650     3.15        0  2.06e+04  0.00727  0.00396       650        SOLN Transportation
+   13      750     4.18        0  2.07e+04     59.6      100       750        SOLN G4ErrorStepLengthLimit
+   14      750     4.18        0  2.07e+04  0.00319  0.00535       750        DVEH Transportation
+   15      850     5.36        0  2.09e+04      165      100       850        DVEH G4ErrorStepLengthLimit
+   16      850     5.36        0  2.09e+04   0.0114  0.00694       850        DVEH Transportation
+   17      950     6.68        0   2.1e+04      165      100       950        DVEH G4ErrorStepLengthLimit
+   18      950     6.68        0   2.1e+04   0.0144  0.00872       950        DVEH Transportation
+   19 1.05e+03     8.14        0  2.12e+04      165      100  1.05e+03        DVEH G4ErrorStepLengthLimit
+   20 1.05e+03     8.14        0  2.12e+04   0.0176   0.0107  1.05e+03        DVEH Transportation
+   21 1.15e+03     9.74        0  2.13e+04      165      100  1.15e+03        DVEH G4ErrorStepLengthLimit
+   22 1.15e+03     9.74        0  2.13e+04   0.0212   0.0128  1.15e+03        DVEH Transportation
+   23 1.25e+03     11.5        0  2.15e+04      165      100  1.25e+03        DVEH G4ErrorStepLengthLimit
+   24 1.25e+03     11.5        0  2.15e+04    0.025   0.0152  1.25e+03        DVEH Transportation
+   25 1.35e+03     13.4        0  2.17e+04      165      100  1.35e+03        DVEH G4ErrorStepLengthLimit
+   26 1.35e+03     13.4        0  2.17e+04   0.0292   0.0177  1.35e+03        DVEH Transportation
+   27 1.45e+03     15.4        0  2.18e+04      165      100  1.45e+03        DVEH G4ErrorStepLengthLimit
+   28 1.45e+03     15.4        0  2.18e+04   0.0336   0.0203  1.45e+03        DVEH Transportation
+   29 1.55e+03     17.5        0   2.2e+04      166      100  1.55e+03        DVEH G4ErrorStepLengthLimit
+   30 1.55e+03     17.5        0   2.2e+04   0.0384   0.0232  1.55e+03        DVEH Transportation
+   31 1.65e+03     19.8        0  2.22e+04      166      100  1.65e+03        DVEH G4ErrorStepLengthLimit
+   32 1.65e+03     19.8        0  2.22e+04   0.0434   0.0262  1.65e+03        DVEH Transportation
+   33 1.75e+03     22.2        0  2.23e+04      166      100  1.75e+03        DVEH G4ErrorStepLengthLimit
+   34 1.75e+03     22.2        0  2.23e+04   0.0486   0.0293  1.75e+03        MUON Transportation
+   35 1.85e+03     24.8        0  2.23e+04   0.0337      100  1.85e+03        MUON G4ErrorStepLengthLimit
+   36 1.95e+03     27.5        0  2.23e+04   0.0337      100  1.95e+03        MUON G4ErrorStepLengthLimit
+   37 2.05e+03     30.3        0  2.23e+04   0.0337      100  2.05e+03        MUON G4ErrorStepLengthLimit
+   38 2.15e+03     33.3        0  2.23e+04   0.0337      100  2.15e+03        MUON G4ErrorStepLengthLimit
+   39 2.21e+03     35.1        0  2.23e+04   0.0203     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.1013621720643,0)
- Momentum: (22433.38011369594,696.1819967942263,0)
+ Position: (2210,35.10136217206415,0)
+ Momentum: (22433.38011369595,696.1819967942262,0)
  Error: 
-  2.422266618539241e-06                       0   8.713066792134575e-07    5.94446560151063e-05                       0 
-                      0   3.517566784422333e-05                       0                       0    0.004069145419631037 
-  8.713066792134575e-07                       0   3.553011183568633e-05    0.004447277908978974                       0 
-   5.94446560151063e-05                       0    0.004447277908978974      0.6278868499590836                       0 
-                      0    0.004069145419631037                       0                       0      0.5408775310101931 
-
+  2.422266618547236e-06                       0   8.713066792191244e-07   5.944465601567995e-05                       0 
+                      0   3.517566784438331e-05                       0                       0    0.004069145419663489 
+  8.713066792191244e-07                       0   3.553011183585003e-05    0.004447277909011844                       0 
+  5.944465601567995e-05                       0    0.004447277909011844      0.6278868499657203                       0 
+                      0    0.004069145419663489                       0                       0       0.540877531016414 
 

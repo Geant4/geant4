@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -160,11 +160,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
  ======================== run conditions =====================
 
- The run will be 40000 e- of 1.000 MeV through 2*5.269 mm  of Water (density: 1.000 g/cm3 ); Mass/cm2 = 1.054 g 
+ The run will be 40000 e- of 1.000 MeV through 2*5.269 mm  of Water (density: 1.000 g/cm3 ) Mass/cm2 = 1.054 g 
  csdaRange: 4.391 mm 
 
- the cavity is 2.000 mm  of Water_gas (density: 1.000 mg/cm3); Mass/cm2 = 0.200 mg --> massRatio = 0.000190
- World radius: 10.000 m  ; range in cavity: 4.391 m  
+ the cavity is 2.000 mm  of Water_gas (density: 1.000 mg/cm3) Mass/cm2 = 0.200 mg --> massRatio = 0.000190
+ World radius: 10.000 m   range in cavity: 4.391 m  
 
  ============================================================
 
@@ -180,7 +180,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=15.48s Real=10.58s Sys=0s
+  User=6.41s Real=6.42s Sys=0s
 
  Process calls frequency --->  msc= 551538  eIoni= 607327  Transportation= 23168
 
@@ -215,4 +215,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

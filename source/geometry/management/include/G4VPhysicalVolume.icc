@@ -33,9 +33,9 @@
 // --------------------------------------------------------------------
 
 inline
-G4bool G4VPhysicalVolume::operator == (const G4VPhysicalVolume& p) const
+G4bool G4VPhysicalVolume::operator == (const G4VPhysicalVolume& right) const
 {
-  return (this==&p) ? true : false;
+  return (this==&right) ? true : false;
 }
 
 inline
@@ -45,9 +45,9 @@ const G4ThreeVector& G4VPhysicalVolume::GetTranslation() const
 }
 
 inline
-void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &v)
+void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &vec)
 {
-  ftrans=v;
+  ftrans=vec;
 }
 
 inline

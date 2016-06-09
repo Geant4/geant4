@@ -63,7 +63,7 @@ public:
   G4ElectroNuclearReaction():G4HadronicInteraction("CHIPSElectroNuclear")
   {
     SetMinEnergy(0*GeV);
-    SetMaxEnergy(30*TeV);
+    SetMaxEnergy(100*TeV);
       
     theHEModel = new G4TheoFSGenerator;
     theCascade = new G4GeneratorPrecompoundInterface;

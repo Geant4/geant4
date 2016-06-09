@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-05-patch-01    (20-March-2012)
+ Geant4 version Name: geant4-09-05-patch-02    (22-October-2012)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -342,7 +342,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.81s Real=3.1s Sys=0s
+  User=1.7s Real=1.7s Sys=0s
 
  ======================== run summary ======================
 
@@ -375,4 +375,3 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
-

@@ -34,8 +34,11 @@
 // --------------------------------------------------------------------
 
 #include <sstream>
+
 #include "G4GDMLWriteMaterials.hh"
 
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Element.hh"
 #include "G4Isotope.hh"
 #include "G4Material.hh"
