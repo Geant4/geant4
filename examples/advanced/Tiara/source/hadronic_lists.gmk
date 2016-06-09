@@ -1,4 +1,4 @@
-# $Id: hadronic_lists.gmk,v 1.8 2004/12/13 15:55:02 gcosmo Exp $
+# $Id: hadronic_lists.gmk,v 1.9 2006/06/23 06:37:32 ahoward Exp $
 # --------------------------------------------------------------
 # hadronic physics-lists setup - H.P.Wellisch
 # --------------------------------------------------------------
@@ -13,8 +13,6 @@ EXTRALIBS += -lFTFC
 EXTRALIBS += -lFTFP
 EXTRALIBS += -lLBE
 EXTRALIBS += -lLHEP
-EXTRALIBS += -lLHEP_GN
-EXTRALIBS += -lLHEP_HP
 EXTRALIBS += -lLHEP_LEAD
 EXTRALIBS += -lLHEP_LEAD_HP
 EXTRALIBS += -lLHEP_PRECO
@@ -24,7 +22,6 @@ EXTRALIBS += -lQGSC
 EXTRALIBS += -lQGSC_LEAD
 EXTRALIBS += -lQGSC_LEAD_HP
 EXTRALIBS += -lQGSP
-EXTRALIBS += -lQGSP_GN
 EXTRALIBS += -lQGSP_HP
 EXTRALIBS += -lLHEP_BERT
 EXTRALIBS += -lLHEP_BIC
@@ -32,57 +29,12 @@ EXTRALIBS += -lLHEP_BIC_HP
 EXTRALIBS += -lQGSP_BIC
 EXTRALIBS += -lPackaging
 
-EXTRALIBS += -lG4hadronic_proc
-EXTRALIBS += -lG4hadronic_HE
-EXTRALIBS += -lG4hadronic_LE
-EXTRALIBS += -lG4hadronic_iso
-EXTRALIBS += -lG4had_neu_hp
-EXTRALIBS += -lG4hadronic_coherent_elastic
-EXTRALIBS += -lG4hadronic_hetcpp_evaporation
-EXTRALIBS += -lG4hadronic_hetcpp_utils
-EXTRALIBS += -lG4hadronic_bert_cascade
-EXTRALIBS += -lG4hadronic_interface_ci
-EXTRALIBS += -lG4hadronic_body_ci
-EXTRALIBS += -lG4hadronic_leading_particle
-EXTRALIBS += -lG4hadronic_stop
-EXTRALIBS += -lG4hadronic_radioactivedecay
-
-EXTRALIBS += -lG4had_theo_max 
-EXTRALIBS += -lG4hadronic_qgstring
-EXTRALIBS += -lG4had_string_diff
-EXTRALIBS += -lG4had_string_frag
-EXTRALIBS += -lG4had_string_man
-
-EXTRALIBS += -lG4hadronic_binary 
-EXTRALIBS += -lG4had_im_r_matrix 
-EXTRALIBS += -lG4had_preequ_exciton 
-EXTRALIBS += -lG4hadronic_deex_evaporation 
-EXTRALIBS += -lG4hadronic_deex_fermi_breakup
-EXTRALIBS += -lG4hadronic_deex_fission
-EXTRALIBS += -lG4hadronic_deex_gem_evaporation
-EXTRALIBS += -lG4hadronic_deex_handler
-EXTRALIBS += -lG4hadronic_deex_management
-EXTRALIBS += -lG4hadronic_deex_multifragmentation
-EXTRALIBS += -lG4hadronic_deex_photon_evaporation
-EXTRALIBS += -lG4hadronic_deex_util
-
-EXTRALIBS += -lG4had_mod_man 
-EXTRALIBS += -lG4had_mod_util
-
-EXTRALIBS += -lG4hadronic_mgt
-EXTRALIBS += -lG4hadronic_xsect
-EXTRALIBS += -lG4hadronic_util
-
-EXTRALIBS += -lG4shortlived
-
 LSTFLAGS := -I$(G4LISTS_BASE)/hadronic/FTFC/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/FTFP/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/LBE/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC/include
-LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_GN/include
-LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_HP/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BERT_HP/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_BIC_HP/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/LHEP_LEAD/include
@@ -96,7 +48,6 @@ LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSC_LEAD_HP/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BERT/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_BIC/include
-LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_GN/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_HP/include
 LSTFLAGS += -I$(G4LISTS_BASE)/hadronic/QGSP_Model/include
 

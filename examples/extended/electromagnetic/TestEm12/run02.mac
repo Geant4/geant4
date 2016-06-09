@@ -1,6 +1,6 @@
-# $Id: run02.mac,v 1.1 2005/07/22 11:08:48 maire Exp $
+# $Id: run02.mac,v 1.3 2006/04/11 13:20:37 maire Exp $
 #
-# limit the step by geometry
+# limit the step size by geometry
 #
 /control/verbose 2
 /run/verbose 2
@@ -23,6 +23,8 @@
 /testem/histo/setHisto 3 100  0.    3. cm	#true track length
 /testem/histo/setcsdaRange       2.037 cm
 /testem/histo/setHisto 8 120  0.    1.2 none	#normalized edep profile
+#
+/testem/applyStepMax false
 #
 /testem/event/printModulo 2000
 #

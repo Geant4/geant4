@@ -1,4 +1,4 @@
-$Id: README,v 1.19 2005/11/22 17:11:31 maire Exp $
+$Id: README,v 1.23 2006/05/15 14:38:40 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,14 +7,13 @@ $Id: README,v 1.19 2005/11/22 17:11:31 maire Exp $
 
                             TestEm2
                             -------
-     This example allows to do the shower development of an single primary
-     particle, and to survey the physics processes which occur,
-     with printing and visualization.
+			    
+     How to do shower profiles in an homogenous medium, with virtual
+     voxelisation.
 
  1- GEOMETRY DEFINITION
 
      The geometry consists of a cylinder of homegenous material.
-     This cylinder is replicated longitudinaly (slice) and radialy (ring).
 
      The default geometry is constructed in DetectorConstruction class,
      but all of the above parameters can be modified interactively via
@@ -22,12 +21,15 @@ $Id: README,v 1.19 2005/11/22 17:11:31 maire Exp $
 
      Material can be choosen: Air Water lAr Al Fe BGO PbWO4 Pb.
      eg: /testem/det/setMat PbWO4
-
+     
+     The cylinder is virtually sliced longitudinaly (slice) and radialy (ring).
      The size of the slices and rings are expressed in radiation length units
      and can be changed.
      eg: /testem/det/setLbin 20   1.    ---> 20 slices of 1. radl
          /testem/det/setRbin  5   0.25  --->  5 rings of 0.25 radl
          /testem/det/update             ---> rebuild the geometry
+	 
+     (MaxBin = 500 in both directions)	 
 
      An uniform magnetic field along the cylinder axis can be set.
      eg: /testem/det/setField 5 tesla 
@@ -78,6 +80,9 @@ $Id: README,v 1.19 2005/11/22 17:11:31 maire Exp $
      The threshold for producing secondaries can be changed.
      eg: /testem/phys/setCuts 100 microm
          /run/initialize
+	 
+     The shower profiles are histogramed, if histograming is activated.
+     They can be also printed with the command /testem/run/verbose 1	 
 
  6- HOW TO START ?
 
@@ -109,13 +114,9 @@ $Id: README,v 1.19 2005/11/22 17:11:31 maire Exp $
       5 : cumulated longitudinal energy profile
       6 : rms of cumulated longitudinal energy profile
 
-      7 : gamma's flux
-      8 : positron's flux
-      9 : electron's flux
-
-     10 : radial energy profile
-     11 : cumulated radial energy profile
-     12 : rms of cumulated radial energy profile
+      7 : radial energy profile
+      8 : cumulated radial energy profile
+      9 : rms of cumulated radial energy profile
 
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile. To define the output file name with

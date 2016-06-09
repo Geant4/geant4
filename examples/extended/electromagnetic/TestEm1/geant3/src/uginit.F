@@ -14,7 +14,7 @@
 * *** read data cards
       PRINT *, 'G3 > gives the filename of the data cards to be read:'
       READ (*,'(A)') filnam
-      IF (filnam.EQ.' ') filnam = 'run01.dat'
+      IF (filnam.EQ.' ') filnam = 'testem1.dat'
       OPEN (unit=5,file=filnam,status='unknown',form='formatted')
                                               
 *

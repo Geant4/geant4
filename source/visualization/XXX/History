@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2005/11/22 16:25:07 allison Exp $
+$Id: History,v 1.20 2006/05/04 15:09:14 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,24 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+4th May 2006  John Allison  (visXXX-V08-00-04)
+- Improved protection for null models and parameters.
+
+19th April 2006  John Allison  (visXXX-V08-00-03)
+- Cosmetic improvement of legibility.
+
+8th March 2006  John Allison (visXXX-V08-00-02)
+- Added G4XXXFile, G4XXXStored, G4XXXSG.
+
+8th February 2006  John Allison (visXXX-V08-00-01)
+- Improved handling of DrawnPVPath:
+  o Added G4XXXSceneHandler::Begin/EndModeling().
+  o G4XXXSceneHandler::EndModeling: Cleared stores.
+  o G4XXXSceneHandler::PreAddSolid: Tidied.
+
+26th January 2006  John Allison (visXXX-V08-00-00)
+- Added code to use volume hierarchy path.  Needs modeling-V08-00-01.
 
 22nd November 2005  John Allison (visXXX-V07-01-02)
 - Simplified guidance.

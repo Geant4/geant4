@@ -1,4 +1,4 @@
-$Id: README,v 1.14 2005/11/22 17:01:56 maire Exp $
+$Id: README,v 1.16 2006/05/30 12:36:46 maire Exp $
 -----------------------------------------------------
 
      =========================================================
@@ -7,9 +7,9 @@ $Id: README,v 1.14 2005/11/22 17:01:56 maire Exp $
 
                             TestEm5   
                             -------
- The purpose of this example is to study the transmission, absorption and
- reflexion of particles through a single, thin or thick, layer of material.
- In perticular, the effects of the multiple scattering can be easily ploted.  
+ How to study the transmission, absorption and reflexion of particles through
+ a single, thin or thick, layer of material.
+ In perticular, the effects of the multiple scattering can be ploted.  
 	
  1- GEOMETRY DEFINITION
  
@@ -115,8 +115,10 @@ $Id: README,v 1.14 2005/11/22 17:01:56 maire Exp $
  
  	      |	low energy   |	medium energy	|  high energy
 	--------------------------------------------------------
+	      | acosta.mac   |                  |
 	e-+   |	berger.mac   |	hanson.mac      |
-	      |		     |	kulchi.mac      |
+	      |	hunger.mac   |	kulchi.mac      |
+	      | tavola.mac   |			|
 	--------------------------------------------------------
 	others|	bichsel.mac  | 	vincour.mac	|  shen1.mac shen2.mac
 	      | 	     |	gottsch.mac	|  tramu.mac

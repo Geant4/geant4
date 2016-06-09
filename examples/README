@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2005/05/17 10:37:31 gcosmo Exp $
+$Id: README,v 1.9 2006/06/16 13:29:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -59,8 +59,7 @@ Extended level examples
  electromagnetic
    - Specific EM physics simulation with histogramming
  eventgenerator
-   - Applications using interface to primary event generators
-     like HepMC
+   - Applications using interface to primary event generators like HepMC
  field
    - Specific simulation setups in magnetic field
  g3tog3
@@ -71,6 +70,8 @@ Extended level examples
  geometry
    - Specific geometry examples and tools: OLAP tool for detection
      of overlapping geometries
+ hadronic
+   - Specific hadronic physics simulation with histogramming
  medical
    - Specific examples for medical physics applications
  optical
@@ -78,14 +79,18 @@ Extended level examples
  parallel
    - Examples of event-level parallelism in Geant4 using the
      TOP-C distribution, and distributed runs through DIANE
+ parameterisations
+   - Examples for fast shower parameterisations according to specific models
  persistency
-   - Persistency of simulation outputs through generic interface
+   - Persistency of simulation outputs through Reflex tool
  radioactivedecay
    - Examples to simulate the decays of radioactive isotopes and
      induced radioactivity resulted from nuclear interactions
  runAndEvent
    - Examples to demonstrate how to connect the information between
      primary particles and hits and utilize user-information classes
+ visualization
+   - Specific visualization features and graphical customisations
 
 Advanced level examples
  air_shower
@@ -109,12 +114,21 @@ Advanced level examples
  medical_linac
    - Simulation of energy deposit in a Phantom filled with water
      for a typical linac used for intensity modulated radiation therapy
+ microbeam
+   - Simulation of the cellular irradiation beam line installed on the AIFIRA
+     electrostatic accelerator facility located at CENBG, France
  purging_magnet
    - Simulation of electrons traveling through a 3D magnetic field of a
      strong purging magnet used for treatment head in a medical environment
+ radiation_monitor
+   - Application to study the effects of a chip carrier on silicon radiation
+     monitoring devices used in the LHC environment
  radioprotection
    - Application for the evaluation of dose in astronauts, vehicle concepts
      and Moon surface habitat configurations, in a space radiation environment
+ raredecay_calorimetry
+   - Simulation of a simplified sandwitch calorimeter to Estimate importance
+     of photonuclear reactions for photon inefficiency
  Rich
    - Rich Test Beam Simulation
  Tiara

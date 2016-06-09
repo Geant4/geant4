@@ -1,0 +1,21 @@
+FILE  conversion.hbook
+LIST 
+C
+C   Photon  100 MeV; gamma conversion to e+e- 
+C 
+DETECTOR   8 (Lead) 10000. (cm)
+KINE       1 (gamma) 0.1 (GeV)
+C
+*HISTO  3 (id) 200 (nbins) 0. (Emin) 100. (Emax) 1.e-3 (MeV)
+*HISTO  4 (id) 200 (nbins) 0. (cost1) +1. (cost2) 
+C
+PHOT    0
+COMP    0
+PAIR    1
+C
+CUTS    10.e-6 (cutgam)    10.e-6 (cutele)
+C
+SWIT    0 (draw)
+DEBUG   10 5 10000
+C
+TRIG    100000

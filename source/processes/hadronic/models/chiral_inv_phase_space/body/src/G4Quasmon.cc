@@ -1,31 +1,34 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.84 2005/12/14 13:57:13 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Quasmon.cc,v 1.87 2006/06/29 20:07:18 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
@@ -833,7 +836,8 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       G4double cQM=sqrt(cQM2);             // Mass of the coloured residual Quasmom
       k4Mom=zeroLV;
       cr4Mom=G4LorentzVector(0.,0.,0.,cQM);
-	     if(!G4QHadron(q4Mom).RelDecayIn2(k4Mom,cr4Mom,q4Mom,cost,cost)) //Q->ColResQ+k_parton
+      G4LorentzVector dir4M=q4Mom-G4LorentzVector(0.,0.,0.,q4Mom.e()*.01);
+	     if(!G4QHadron(q4Mom).RelDecayIn2(k4Mom,cr4Mom,dir4M,cost,cost)) //Q->ColResQ+k_parton
       {
 #ifdef debug
         G4cerr<<"*G4Q::HQ:PB,M="<<quasM<<",cM="<<cQM<<",c="<<cost<<",F="<<gintFlag<<G4endl;
@@ -2906,6 +2910,28 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
               throw G4QException("***G4Quasmon::HadronizeQuasmon: (L->n)+Pi- DecayIn2");
             }
           }
+          else if(nreM<tmM)                                           // ----> N+gamma case
+          {
+            sMass=0.;
+            sPDG=22;
+            curQ+=tmpSQC+K0QC;                     // LToN correction for curQC
+            s4Mom=G4LorentzVector(0.,0.,0.,sMass); // Switch to new hadron mass
+            reMass=nreZ;
+            rPDG=nucZ.GetPDG();
+            r4Mom=G4LorentzVector(0.,0.,0.,reMass);// Switch to other isotope mass
+            sum=reMass+sMass;
+            if(fabs(tmM-sum)<eps)
+            {
+              r4Mom=q4Mom*(reMass/sum);
+              s4Mom=q4Mom*(sMass/sum);
+            }
+            else if(tmM<sum || !G4QHadron(q4Mom).DecayIn2(r4Mom, s4Mom))
+            {
+              G4cerr<<"***G4Q::HQ: LamNGam Cor M="<<tmM<<"=>rPDG="<<rPDG<<"(rM="<<reMass
+                    <<")+sPDG="<<sPDG<<"(sM="<<sMass<<")="<<sum<<G4endl;
+              throw G4QException("***G4Quasmon::HadronizeQuasmon: (L->n)+Gamma DecayIn2");
+            }
+          }
           else
 		        {
             G4cerr<<"***G4Q::HQ: LamToN M="<<tmM<<totQC<<"=>rM="<<nucM.GetPDG()<<","
@@ -4591,7 +4617,8 @@ void G4Quasmon::CalculateHadronizationProbabilities
                         //G4double mix=nucBM+E;
                         G4double mix=boundM+E-CB;
                         ////G4double mix=nucBM+E-CB;
-                        G4double st=sqrt(mix*mix-frM2);
+                        G4double st=0.;
+                        if(mix>frM) st=sqrt(mix*mix-frM2);
                         G4double nq=1.-(dkLS-st-st)/boundM;//qi=k-sq((m+E*(M-m)/M)^2-m^2)
 #ifdef pdebug
                         if(pPrint) G4cout<<"G4Q::CHP:qi_k-st="<<nq<<",st="<<st<<",m="

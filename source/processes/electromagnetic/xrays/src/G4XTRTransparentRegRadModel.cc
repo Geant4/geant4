@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
@@ -49,7 +52,7 @@ G4XTRTransparentRegRadModel::G4XTRTransparentRegRadModel(G4LogicalVolume *anEnve
   fAlphaPlate = 10000;
   fAlphaGas   = 1000;
 
-  BuildTable();
+  //  BuildTable();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -68,8 +71,17 @@ G4double G4XTRTransparentRegRadModel::SpectralXTRdEdx(G4double energy)
   G4double result, sum = 0., tmp, cof1, cof2, cofMin, cofPHC,aMa, bMb, sigma;
   G4int k, kMax, kMin;
 
-  aMa = fPlateThick*GetPlateLinearPhotoAbs(energy);
-  bMb = fGasThick*GetGasLinearPhotoAbs(energy);
+  aMa = GetPlateLinearPhotoAbs(energy);
+  bMb = GetGasLinearPhotoAbs(energy);
+
+  if(fCompton)
+  {
+    aMa += GetPlateCompton(energy);
+    bMb += GetGasCompton(energy);
+  }
+  aMa *= fPlateThick;
+  bMb *= fGasThick;
+
   sigma = aMa + bMb;
    
   cofPHC  = 4*pi*hbarc;
@@ -95,7 +107,7 @@ G4double G4XTRTransparentRegRadModel::SpectralXTRdEdx(G4double energy)
   // kMax += kMin;
   
 
-  kMax = kMin + 19; //  9; // kMin + G4int(tmp);
+  kMax = kMin + 19; // 5; // 9; //   kMin + G4int(tmp);
 
   // tmp /= fGamma;
   // if( G4int(tmp) < kMin ) kMin = G4int(tmp);

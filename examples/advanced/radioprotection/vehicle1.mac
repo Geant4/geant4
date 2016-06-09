@@ -5,7 +5,6 @@
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-ICRU
-/process/verbose 0
 #
 #### Add Hadronic Physics, muon physics and decay
 /physics/addPhysics hadronic-bertini
@@ -36,11 +35,10 @@
 /configuration/choose vehicle
 /configuration/AddShielding On
 # Generation of primary particles
-/control/execute gcrZ=1gps.mac
-#/analysis/formatFile hbook
-# Number of events
+/gun/data gcr_min_z=1.txt
 #/tracking/verbose 1
-/run/beamOn 10
+/run/beamOn 500
+
 
 
 

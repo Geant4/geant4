@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2001/10/24 12:20:42 maire Exp $
+$Id: README,v 1.6 2006/03/31 14:02:13 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -37,7 +37,7 @@ $Id: README,v 1.5 2001/10/24 12:20:42 maire Exp $
      
      An important data member of this class is the defaultCutValue which
      defines the production threshold of secondary particles
-     (mainly Ionisation and Bremsstrahlung processes are concerned by this
+     (only Ionisation and Bremsstrahlung processes are concerned by this
      CutValue).
      Notice that the CutValue must be given in unit of length, corresponding
      to the stopping range of the particle. It is automatically converted
@@ -69,9 +69,15 @@ $Id: README,v 1.5 2001/10/24 12:20:42 maire Exp $
     It inherits from G4SteppingVerbose, and has been setup here in order
     to illustrate how to extract informations from the G4 kernel during
     the tracking of a particle.
-    	
+
+
+ 4- USER' LIMITS
+ 
+    We illustrate how to introduce tracking constraints like maximum step
+    length, minimum kinetic energy ..etc.., via G4UserLimits class.
+    See DetectorConstruction and PhysicsList.   	
 	
- 4- DETECTOR RESPONSE
+ 5- DETECTOR RESPONSE
  
      A HIT is a record, track per track (even step per step), of all the 
      informations needed to simulate and analyse the detector response.
@@ -95,7 +101,7 @@ $Id: README,v 1.5 2001/10/24 12:20:42 maire Exp $
      TrackerSD::EndOfEvent()), under the control of the command: /hits/verbose 1
 
  				
- 5- VISUALIZATION
+ 6- VISUALIZATION
  
      The Visualization Manager is set in the main().
      The initialisation of the drawing is done via a set of /vis/ commands
@@ -113,7 +119,7 @@ $Id: README,v 1.5 2001/10/24 12:20:42 maire Exp $
      (The same with DAWNFILE instead of OPENGLX)
      
      
- 6- USER INTERFACES
+ 7- USER INTERFACES
   
       The default command interface, called G4UIterminal, is done via
       standart cin/G4cout.
@@ -122,7 +128,7 @@ $Id: README,v 1.5 2001/10/24 12:20:42 maire Exp $
       compiling exampleN02.cc
  
        	
- 7- HOW TO START ?
+ 8- HOW TO START ?
  
       - compile and link to generate an executable
  	      % cd N02

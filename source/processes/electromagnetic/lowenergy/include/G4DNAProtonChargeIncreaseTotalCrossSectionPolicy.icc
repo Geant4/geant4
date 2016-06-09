@@ -1,0 +1,83 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4DNAProtonChargeIncreaseTotalCrossSectionPolicy.icc,v 1.4 2006/06/29 19:35:07 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
+//
+
+#ifdef   G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH
+#include "Randomize.hh"
+
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double G4DNAProtonChargeIncreaseTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: TotalCrossSection(G4double k, G4int z) const
+ {
+  if (k < EnergyLimitsPolicy::lowEnergyLimit)
+  {
+   if (EnergyLimitsPolicy::zeroBelowLowEnergyLimit)
+   return 0;
+
+   k=EnergyLimitsPolicy::lowEnergyLimit;
+  }
+  else if (k > EnergyLimitsPolicy::highEnergyLimit)
+  {
+   if (EnergyLimitsPolicy::zeroAboveHighEnergyLimit)
+    return 0;
+
+   k=EnergyLimitsPolicy::highEnergyLimit;
+  }
+ G4double dummy;//Only a dummy
+ dummy = z;
+
+ G4double totalCrossSection(0.);
+
+ //--------Following model is proposed by Miller and Green---------
+ /*
+ const G4double s0 = 1e-20;
+ const G4double a = 79.3*keV;
+ const G4double omega = 0.652;
+ const G4double i = 12.61*eV;
+ const G4double nu = 0.943;
+ const G4double j = 27.7*keV;
+ totalCrossSection = (s0*std::pow(10*a/keV,omega)*std::pow(k/keV-i/keV, nu)) / (std::pow(j/keV,omega+nu) + std::pow(k/keV,omega+nu));*/
+ 
+ //----------Following model is proposed by Dingfelder--------------
+ const  G4double aa=2.835;
+ const  G4double bb=0.310;
+ const  G4double cc=2.100;
+ const  G4double dd=0.760;
+ const  G4double fac=1.0e-18;
+ const  G4double rr=13.606*eV;  
+ 
+ G4double t = k / (proton_mass_c2/electron_mass_c2); 
+ G4double x = t / rr; 
+ G4double sigmal = 4.0*pi*Bohr_radius/nm*Bohr_radius/nm*fac*cc*(std::pow(x,dd));
+ G4double sigmah = 4.0*pi*Bohr_radius/nm*Bohr_radius/nm*fac*(aa*std::log(1.0+x)+bb)/x;
+ totalCrossSection = 1.0/(1.0/sigmal + 1.0/sigmah);
+
+ return totalCrossSection*m*m;
+ }
+
+#endif /* G4DNAPROTONCHARGEINCREASETOTALCROSSSECTIONPOLICY_HH */

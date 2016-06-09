@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.15 2005/09/16 01:26:19 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Scene.cc,v 1.21 2006/06/29 21:29:16 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -38,7 +41,8 @@
 G4Scene::G4Scene (const G4String& name):
   fName (name),
   fRefreshAtEndOfEvent(true),
-  fRefreshAtEndOfRun(true)
+  fRefreshAtEndOfRun(true),
+  fRecomputeTransients(false)
 {} // Note all other data members have default initial values.
 
 G4Scene::~G4Scene () {}
@@ -107,8 +111,8 @@ G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
       if (successful) {
 	if (warn) {
 	  G4cout <<
-	    "G4Scene::AddWorldIfEmpty: The scene was empty,"
-	    "\n   \"world\" has been added.";
+    "G4Scene::AddWorldIfEmpty: The scene was empty of run-duration models."
+    "\n  \"world\" has been added.";
 	  G4cout << G4endl;
 	}
       }
@@ -129,25 +133,15 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
     if (warn) {
       G4cout << "G4Scene::AddEndOfEventModel: a model \""
 	     << pModel -> GetGlobalDescription ()
-	     << "\"\n  is already in the run-duration list of scene \""
+	     << "\"\n  is already in the end-of-event list of scene \""
 	     << fName <<
 	"\".\n  The old model has been deleted; this new model replaces it."
 	     << G4endl;
     }
-    return false;
+    return true;  // Model replaced sucessfully.
   }
   fEndOfEventModelList.push_back (pModel);
   return true;
-}
-
-void G4Scene::Clear () {
-  size_t i;
-  for (i = 0; i < fRunDurationModelList.size(); ++i) {
-    delete fRunDurationModelList[i];
-  }
-  for (i = 0; i < fEndOfEventModelList.size(); ++i) {
-    delete fEndOfEventModelList[i];
-  }
 }
 
 std::ostream& operator << (std::ostream& os, const G4Scene& s) {
@@ -180,6 +174,11 @@ std::ostream& operator << (std::ostream& os, const G4Scene& s) {
   else os << "accumulate";
   os << "\"";
 
+  os << "\n  Transients action set to \"";
+  if (s.fRecomputeTransients) os << "rerun";
+  else os << "none";
+  os << "\"";
+
   return os;
 }
 
@@ -190,7 +189,8 @@ G4bool G4Scene::operator != (const G4Scene& s) const {
       (fExtent               != s.fExtent)              ||
       !(fStandardTargetPoint == s.fStandardTargetPoint) ||
       fRefreshAtEndOfEvent   != s.fRefreshAtEndOfEvent  ||
-      fRefreshAtEndOfRun     != s.fRefreshAtEndOfRun
+      fRefreshAtEndOfRun     != s.fRefreshAtEndOfRun    ||
+      fRecomputeTransients   != s.fRecomputeTransients
       ) return true;
 
   for (size_t i = 0; i < fRunDurationModelList.size (); i++) {

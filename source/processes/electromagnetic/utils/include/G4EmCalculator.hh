@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.9 2005/02/26 22:01:20 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4EmCalculator.hh,v 1.16 2006/06/29 19:54:21 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -37,7 +40,9 @@
 //
 // Modifications:
 // 17.11.2004 Change signature of methods, add new methods (V.Ivanchenko)
-//
+// 11.01.2006 Add GetCSDARange (V.Ivanchenko)
+// 26.01.2006 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
+// 22.03.2006 Add ComputeElectronicDEDX and ComputeTotalDEDX (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -82,10 +87,26 @@ public:
   G4double GetDEDX(G4double kinEnergy, const G4String& part, const G4String& mat,
                    const G4String& s = "world");
 
-  G4double GetRange(G4double kinEnergy, const G4ParticleDefinition*, const G4Material*,
-                   const G4Region* r = 0);
-  G4double GetRange(G4double kinEnergy, const G4String& part, const G4String& mat,
-                   const G4String& s = "world");
+  G4double GetRangeFromRestricteDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
+				     const G4Material*,
+				     const G4Region* r = 0);
+  G4double GetRangeFromRestricteDEDX(G4double kinEnergy, const G4String& part, 
+				     const G4String& mat,
+				     const G4String& s = "world");
+
+  G4double GetCSDARange(G4double kinEnergy, const G4ParticleDefinition*, 
+			const G4Material*,
+			const G4Region* r = 0);
+  G4double GetCSDARange(G4double kinEnergy, const G4String& part, 
+			const G4String& mat,
+			const G4String& s = "world");
+
+  G4double GetRange(G4double kinEnergy, const G4ParticleDefinition*, 
+			const G4Material*,
+			const G4Region* r = 0);
+  G4double GetRange(G4double kinEnergy, const G4String& part, 
+			const G4String& mat,
+			const G4String& s = "world");
 
   G4double GetKinEnergy(G4double range, const G4ParticleDefinition*, const G4Material*,
                    const G4Region* r = 0);
@@ -97,13 +118,6 @@ public:
                    const G4String& processName,  const G4Material*,
 		   const G4Region* r = 0);
   G4double GetCrossSectionPerVolume(
-                   G4double kinEnergy, const G4String& part, const G4String& proc,
-                   const G4String& mat, const G4String& s = "world");
-  G4double GetCrossSectionPerAtom(
-                   G4double kinEnergy, const G4ParticleDefinition*,
-                   const G4String& processName,  const G4Material*,
-		   const G4Region* r = 0);
-  G4double GetCrossSectionPerAtom(
                    G4double kinEnergy, const G4String& part, const G4String& proc,
                    const G4String& mat, const G4String& s = "world");
 
@@ -128,8 +142,18 @@ public:
   G4double ComputeDEDX(G4double kinEnergy, const G4String& part, const G4String& proc,
                        const G4String& mat, G4double cut = DBL_MAX);
 
+  G4double ComputeElectronicDEDX(G4double kinEnergy, const G4ParticleDefinition*,
+				 const G4Material* mat, G4double cut = DBL_MAX);
+  G4double ComputeElectronicDEDX(G4double kinEnergy, const G4String& part,
+				 const G4String& mat, G4double cut = DBL_MAX);
+
   G4double ComputeNuclearDEDX(G4double kinEnergy, const G4ParticleDefinition*, const G4Material*);
   G4double ComputeNuclearDEDX(G4double kinEnergy, const G4String& part, const G4String& mat);
+
+  G4double ComputeTotalDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
+			    const G4Material*, G4double cut = DBL_MAX);
+  G4double ComputeTotalDEDX(G4double kinEnergy, const G4String& part, 
+			    const G4String& mat, G4double cut = DBL_MAX);
 
   G4double ComputeCrossSectionPerVolume(
                        G4double kinEnergy, const G4ParticleDefinition*,
@@ -178,7 +202,7 @@ private:
                      const G4String& processName,
                            G4double kinEnergy);
 
-  const G4VEnergyLossProcess* FindEnergyLossProcess(const G4ParticleDefinition*);
+  G4VEnergyLossProcess* FindEnergyLossProcess(const G4ParticleDefinition*);
 
   G4EmCalculator & operator=(const  G4EmCalculator &right);
   G4EmCalculator(const  G4EmCalculator&);
@@ -201,18 +225,22 @@ private:
   const G4ParticleDefinition*  baseParticle;
   const G4PhysicsTable*        currentLambda;
         G4VEmModel*            currentModel;
+        G4VEnergyLossProcess*  currentProcess;
 
+  const G4ParticleDefinition*  theGenericIon;
   G4ionEffectiveCharge*        ionEffCharge;
 
   G4String                     currentName;
   G4double                     currentCut;
   G4double                     chargeSquare;
   G4double                     massRatio;
+  G4double                     mass;
   G4bool                       isIon;
   G4bool                       isApplicable;
 
   G4String                     currentParticleName;
   G4String                     currentMaterialName;
+  G4String                     currentProcessName;
 };
 
 //....oooOO0OOooo.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

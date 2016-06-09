@@ -1,33 +1,35 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.59 2005/11/22 17:17:37 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.65 2006/06/29 21:29:44 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 // /vis/scene commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
 
-#include "G4VisManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeModel.hh"
@@ -55,6 +57,9 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4Tokenizer.hh"
+#include "G4RunManager.hh"
+#include "G4Run.hh"
+#include "G4Event.hh"
 #include "G4ios.hh"
 #include <sstream>
 
@@ -145,6 +150,104 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 }
 
 
+////////////// /vis/scene/add/eventID ///////////////////////////////////////
+
+G4VisCommandSceneAddEventID::G4VisCommandSceneAddEventID () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/eventID", this);
+  fpCommand -> SetGuidance ("Adds eventID to current scene.");
+  fpCommand -> SetGuidance
+    ("Run and event numbers are drawn at end of event or run when"
+     "\n the scene in which they are added is current.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("size", 'i', omitable = true);
+  parameter -> SetGuidance ("Screen size of text in pixels.");
+  parameter -> SetDefaultValue (18);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("x-position", 'd', omitable = true);
+  parameter -> SetGuidance ("x screen position in range -1 < x < 1.");
+  parameter -> SetDefaultValue (-0.95);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("y-position", 'd', omitable = true);
+  parameter -> SetGuidance ("y screen position in range -1 < y < 1.");
+  parameter -> SetDefaultValue (0.9);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddEventID::~G4VisCommandSceneAddEventID () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddEventID::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddEventID::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4int size;
+  G4double x, y;
+  std::istringstream is(newValue);
+  is >> size >> x >> y;
+
+  EventID* eventID = new EventID(fpVisManager, size, x, y);
+  G4VModel* model =
+    new G4CallbackModel<G4VisCommandSceneAddEventID::EventID>(eventID);
+  model->SetGlobalDescription("EventID");
+  model->SetGlobalTag("EventID");
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddEndOfEventModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "EventID will be drawn in scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+}
+
+void G4VisCommandSceneAddEventID::EventID::operator()
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D&)
+{
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  if (runManager) {
+    const G4Run* currentRun = runManager->GetCurrentRun();
+    const G4Event* currentEvent = runManager->GetCurrentEvent();
+    if (currentRun && currentEvent) {
+      G4int runID = currentRun->GetRunID();
+      G4int eventID = currentEvent->GetEventID();
+      std::ostringstream oss;
+      if (fpVisManager->GetCurrentScene()->GetRefreshAtEndOfEvent()) {
+	oss << "Run " << runID << " Event " << eventID;
+      } else {
+	G4int nEvents = currentRun->GetNumberOfEventToBeProcessed();
+	if (eventID < nEvents - 1) return;  // Not last event.
+	else {
+	  oss << "Run " << runID << " (" << nEvents << " accumulated events)";
+	}
+      }
+      G4Text text(oss.str(), G4Point3D(fX, fY, 0.));
+      text.SetScreenSize(fSize);
+      G4VisAttributes textAtts(G4Colour(0.,1.,1));
+      text.SetVisAttributes(textAtts);
+      sceneHandler.BeginPrimitives2D();
+      sceneHandler.AddPrimitive(text);
+      sceneHandler.EndPrimitives2D();
+    }
+  }
+}
+
 ////////////// /vis/scene/add/ghosts ///////////////////////////////////////
 
 G4VisCommandSceneAddGhosts::G4VisCommandSceneAddGhosts () {
@@ -196,7 +299,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue(G4UIcommand*, G4String newValue) {
   if(newValue=="all") 
     {
       G4VFlavoredParallelWorld* CurrentFlavoredWorld = 0;
-      G4bool successful(false);
+      G4bool successful = false;
       for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
 	   iParticle++)
 	{
@@ -355,9 +458,13 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 
   G4String name;
   G4int requestedDepthOfDescent;
-  G4bool booleans, voxels, readout;
+  G4String booleansString, voxelsString, readoutString;
   std::istringstream is (newValue);
-  is >> name >> requestedDepthOfDescent >>  booleans >> voxels >> readout;
+  is >> name >> requestedDepthOfDescent
+     >>  booleansString >> voxelsString >> readoutString;
+  G4bool booleans = G4UIcommand::ConvertToBool(booleansString);
+  G4bool voxels = G4UIcommand::ConvertToBool(voxelsString);
+  G4bool readout = G4UIcommand::ConvertToBool(readoutString);
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
   int nLV = pLVStore -> size ();
@@ -370,7 +477,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
   if (iLV == nLV) {
     if (verbosity >= G4VisManager::errors) {
       G4cout << "ERROR: Logical volume " << name
-	     << " not found in logical volume Store." << G4endl;
+	     << " not found in logical volume store." << G4endl;
     }
     return;
   }
@@ -457,6 +564,7 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
   parameter->SetGuidance
     ("Automatic placement or manual placement at (xmid,ymid,zmid).");
+  parameter -> SetParameterCandidates("auto manual");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
   parameter =  new G4UIparameter ("xmid", 'd', omitable = true);
@@ -484,7 +592,7 @@ G4String G4VisCommandSceneAddLogo::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn(verbosity >= G4VisManager::warnings);
+  G4bool warn = verbosity >= G4VisManager::warnings;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
@@ -510,7 +618,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   if (direction(0) == 'y') logoDirection = G4Scale::y;
   if (direction(0) == 'z') logoDirection = G4Scale::z;
 
-  G4bool autoPlacing (false); if (auto_manual(0) == 'a') autoPlacing = true;
+  G4bool autoPlacing = false; if (auto_manual == "auto") autoPlacing = true;
   // Parameters read and interpreted.
 
   // Useful constants, etc...
@@ -528,7 +636,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   const G4double zmax = sceneExtent.GetZmax();
 
   // Test existing extent and issue warnings...
-  G4bool worried(false);
+  G4bool worried = false;
   if (sceneExtent.GetExtentRadius() == 0) {
     worried = true;
     if (verbosity >= G4VisManager::warnings) {
@@ -539,7 +647,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   // Test existing scene for room...
-  G4bool room (true);
+  G4bool room = true;
   switch (logoDirection) {
   case G4Scale::x:
     if (freeHeightFraction * (xmax - xmin) < height) room = false; break;
@@ -631,7 +739,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   G4VisAttributes visAtts(G4Colour(red, green, blue));
   visAtts.SetForceSolid(true);         // Always solid.
 
-  G4Logo* logo = new G4Logo(height,visAtts,fpVisManager);
+  G4Logo* logo = new G4Logo(height,visAtts);
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddLogo::G4Logo>(logo);
   model->SetGlobalDescription("G4Logo");
@@ -676,10 +784,9 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 }
 
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
-(G4double height, const G4VisAttributes& visAtts, G4VisManager* pVisManager):
+(G4double height, const G4VisAttributes& visAtts):
   fHeight(height),
-  fVisAtts(visAtts),
-  fpVisManager(pVisManager)
+  fVisAtts(visAtts)
  {
   const G4double& h =  height;
   const G4double h2  = 0.5 * h;   // Half height.
@@ -747,9 +854,11 @@ G4VisCommandSceneAddLogo::G4Logo::~G4Logo() {
 }
 
 void G4VisCommandSceneAddLogo::G4Logo::operator()
-  (const G4Transform3D& transform) {
-  fpVisManager->Draw(*fpG,transform);
-  fpVisManager->Draw(*fp4,transform);
+  (G4VGraphicsScene& sceneHandler, const G4Transform3D& transform) {
+  sceneHandler.BeginPrimitives(transform);
+  sceneHandler.AddPrimitive(*fpG);
+  sceneHandler.AddPrimitive(*fp4);
+  sceneHandler.EndPrimitives();
 }
 
 ////////////// /vis/scene/add/scale //////////////////////////////////
@@ -783,6 +892,7 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
   parameter->SetGuidance
     ("Automatic placement or manual placement at (xmid,ymid,zmid).");
+  parameter -> SetParameterCandidates("auto manual");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
   parameter =  new G4UIparameter ("xmid", 'd', omitable = true);
@@ -810,7 +920,7 @@ G4String G4VisCommandSceneAddScale::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn(verbosity >= G4VisManager::warnings);
+  G4bool warn = verbosity >= G4VisManager::warnings;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
@@ -840,7 +950,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   if (direction(0) == 'y') scaleDirection = G4Scale::y;
   if (direction(0) == 'z') scaleDirection = G4Scale::z;
 
-  G4bool autoPlacing (false); if (auto_manual(0) == 'a') autoPlacing = true;
+  G4bool autoPlacing = false; if (auto_manual == "auto") autoPlacing = true;
   // Parameters read and interpreted.
 
   // Useful constants, etc...
@@ -858,7 +968,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   const G4double zmax = sceneExtent.GetZmax();
 
   // Test existing extent and issue warnings...
-  G4bool worried(false);
+  G4bool worried = false;
   if (sceneExtent.GetExtentRadius() == 0) {
     worried = true;
     if (verbosity >= G4VisManager::warnings) {
@@ -869,7 +979,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   // Test existing scene for room...
-  G4bool room (true);
+  G4bool room  = true;
   switch (scaleDirection) {
   case G4Scale::x:
     if (freeLengthFraction * (xmax - xmin) < length) room = false; break;
@@ -1060,7 +1170,7 @@ G4String G4VisCommandSceneAddText::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn(verbosity >= G4VisManager::warnings);
+  G4bool warn = verbosity >= G4VisManager::warnings;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
@@ -1136,7 +1246,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
 						    G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn(verbosity >= G4VisManager::warnings);
+  G4bool warn = verbosity >= G4VisManager::warnings;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
@@ -1227,7 +1337,7 @@ void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
 						    G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn(verbosity >= G4VisManager::warnings);
+  G4bool warn = verbosity >= G4VisManager::warnings;
 
   G4VUserVisAction* visAction = fpVisManager->GetUserAction();
   if (!visAction) {
@@ -1317,6 +1427,7 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   parameter -> SetDefaultValue (G4Scene::UNLIMITED);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("clip-volume-type", 's', omitable = true);
+  parameter -> SetParameterCandidates("none box");
   parameter -> SetDefaultValue ("none");
   parameter -> SetGuidance
     ("For \"box\", the parameters are xmin,xmax,ymin,ymax,zmin,zmax."
@@ -1358,7 +1469,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 					      G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn(verbosity >= G4VisManager::warnings);
+  G4bool warn = verbosity >= G4VisManager::warnings;
 
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
@@ -1419,9 +1530,11 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     }
     else {
       if (verbosity >= G4VisManager::errors) {
-	G4cout << "ERROR: G4VisCommandSceneAddVolume::SetNewValue:"
-	       << "\n  No world - shouldn't happen if G4ApplicationState is"
-	       << " being properly noted!!" << G4endl;
+	G4cout <<
+	  "ERROR: G4VisCommandSceneAddVolume::SetNewValue:"
+	  "\n  No world.  Maybe the geometry has not yet been defined."
+	  "\n  Try \"/run/initialize\""
+	       << G4endl;
       }
       return;
     }
@@ -1430,10 +1543,10 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
  
     // Create search scene, model and modeling parameters with
     // long-enough life...
-    G4PhysicalVolumeSearchScene searchScene (name, copyNo);
     G4PhysicalVolumeModel searchModel (world);  // Default - unlimited depth.
     G4ModelingParameters mp;  // Default - no culling.
     searchModel.SetModelingParameters (&mp);
+    G4PhysicalVolumeSearchScene searchScene (&searchModel, name, copyNo);
 
     // Initiate search...
     searchModel.DescribeYourselfTo (searchScene);

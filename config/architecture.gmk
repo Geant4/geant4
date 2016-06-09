@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.104 2005/12/07 09:41:54 gcosmo Exp $
+# $Id: architecture.gmk,v 1.105 2006/06/13 15:36:30 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -227,17 +227,6 @@ endif
 ifndef VISLIBS
   VISLIBS :=
 endif
-# ------------------ X11 ---------------------
-X11FLAGS  :=
-X11LIBS   := -lXmu -lXt -lXext -lX11
-#
-# ----------------- Motif --------------------
-XMFLAGS   :=
-XMLIBS    := -lXm
-#
-# ---------------- Athena --------------------
-XAWFLAGS   :=
-XAWLIBS    := -lXaw
 #
 # ---------------- OpenGL --------------------
 # The user can define his own values of OGLFLAGS and OGLLIBS.
@@ -257,7 +246,6 @@ XAWLIBS    := -lXaw
 # if the package is installed in a location different
 # than default system directories (like... /usr or /usr/local).
 #
-
 ifndef OIVHOME
   OIVHOME  := /usr/local/Inventor
 endif

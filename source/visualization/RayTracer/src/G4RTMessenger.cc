@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4RTMessenger.cc,v 1.7 2003/09/18 11:13:25 johna Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4RTMessenger.cc,v 1.9 2006/06/29 21:23:59 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 //
@@ -37,13 +40,24 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4RayTracer.hh"
+#include "G4TheRayTracer.hh"
 #include "G4RTSteppingAction.hh"
 #include "G4ThreeVector.hh"
+#include "G4VisManager.hh"
+#include "G4RayTracerViewer.hh"
 
-G4RTMessenger::G4RTMessenger(G4RayTracer* p1,G4RTSteppingAction* p2)
+G4RTMessenger* G4RTMessenger::fpInstance = 0;
+
+G4RTMessenger* G4RTMessenger::GetInstance
+(G4TheRayTracer* p1,G4RTSteppingAction* p2)
 {
-  theTracer = p1;
+  if (!fpInstance) fpInstance = new G4RTMessenger(p1, p2);
+  return fpInstance;
+}
+
+G4RTMessenger::G4RTMessenger(G4TheRayTracer* p1,G4RTSteppingAction* p2)
+{
+  theDefaultTracer = p1;
   theSteppingAction = p2;
 
   rayDirectory = new G4UIdirectory("/vis/rayTracer/");
@@ -171,6 +185,29 @@ G4String G4RTMessenger::GetCurrentValue(G4UIcommand * command)
 
 void G4RTMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
+  G4VisManager* pVisManager = G4VisManager::GetInstance();
+
+  theTracer = theDefaultTracer;
+
+  G4VViewer* pVViewer = pVisManager->GetCurrentViewer();
+  if (pVViewer) {
+    G4RayTracerViewer* pViewer = dynamic_cast<G4RayTracerViewer*>(pVViewer);
+    if (pViewer) {
+      theTracer = pViewer->GetTracer();
+    } else {
+      G4cout <<
+	"G4RTMessenger::SetNewValue: Current viewer is not of type RayTracer."
+	"\n  Use \"/vis/viewer/select\" or \"/vis/open\"."
+	     << G4endl;
+    }
+  }
+
+  if (theTracer == theDefaultTracer) {
+    G4cout <<
+"G4RTMessenger::SetNewValue: No valid current viewer. Using default RayTracer."
+	   << G4endl;
+  }
+
   if(command==columnCmd)
   { theTracer->SetNColumn(columnCmd->GetNewIntValue(newValue)); }
   else if(command==rowCmd)

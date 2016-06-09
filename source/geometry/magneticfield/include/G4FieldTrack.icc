@@ -1,55 +1,80 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4FieldTrack.icc,v 1.12.2.1 2004/12/02 09:55:18 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4FieldTrack.icc,v 1.20 2006/06/29 18:22:22 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 
-inline
-G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition, 
-                            const G4ThreeVector& pMomentumDirection,    
-                                  G4double       curve_length, 
-                                  G4double       kineticEnergy,
-                            const G4double       restMass_c2,
-                                  G4double,   // velocity
-                                  G4double       pLaboratoryTimeOfFlight,
-                                  G4double       pProperTimeOfFlight,
-                            const G4ThreeVector* pSpin)
- : fKineticEnergy(kineticEnergy),
-   fRestMass_c2(restMass_c2),
-   fLabTimeOfFlight(pLaboratoryTimeOfFlight), 
-   fProperTimeOfFlight(pProperTimeOfFlight),
-   fMomentumDir(pMomentumDirection)
+// Implementation methods for the embedded class G4ChargeState
+//                                ----------------------------
+inline G4FieldTrack::
+G4ChargeState::G4ChargeState(G4double charge,
+			     G4double magnetic_dipole_moment,  
+			     G4double electric_dipole_moment,  
+			     G4double magnetic_charge)
 {
-  G4double momentum  = std::sqrt(kineticEnergy*kineticEnergy
-                            +2.0*restMass_c2*kineticEnergy);
+   fCharge= charge;
+   fMagn_dipole= magnetic_dipole_moment;
+   fElec_dipole= electric_dipole_moment;
+   fMagneticCharge= magnetic_charge;    
+}  
 
-  G4ThreeVector pMomentum= momentum * pMomentumDirection; 
-  // fMomentumModulus= pMomentum;
-  SetCurvePnt( pPosition, pMomentum, curve_length );
-  if(pSpin) fSpin = *pSpin;
-  else      fSpin = G4ThreeVector(0.0, 0.0, 0.0);
+inline G4FieldTrack::
+G4ChargeState::G4ChargeState( 
+  const G4FieldTrack::G4ChargeState& right )
+{ 
+  fCharge= right.fCharge;
+  fMagn_dipole= right.fMagn_dipole; 
+  fElec_dipole= right.fElec_dipole;
+  fMagneticCharge= right.fMagneticCharge;
+}
+
+inline void
+G4FieldTrack::InitialiseSpin( const G4ThreeVector& Spin )
+{
+  // static G4ThreeVector ZeroVec(0.0, 0.0, 0.0); 
+
+  fSpin = Spin;
+  // New Member ??  G4bool fHasSpin; 
+  // fHasSpin = (fSpin != ZeroVec); 
+}
+
+inline void G4FieldTrack::
+G4ChargeState::SetChargeAndMoments(G4double charge, 
+				   G4double magnetic_dipole_moment,  
+				   G4double electric_dipole_moment,
+				   G4double magnetic_charge )
+   //  Revise the charge and potentially all moments.
+   //   By default do not change mdm, edm, mag charge. 
+{
+   fCharge= charge;
+   if( magnetic_dipole_moment < DBL_MAX) fMagn_dipole= magnetic_dipole_moment;
+   if( electric_dipole_moment < DBL_MAX) fElec_dipole= electric_dipole_moment;
+   if( magnetic_charge < DBL_MAX)        fMagneticCharge= magnetic_charge;    
 }
 
 inline
@@ -61,7 +86,8 @@ G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
    fProperTimeOfFlight( rStVec.fProperTimeOfFlight ), 
    // fMomentumModulus( rStVec.fMomentumModulus ),
    fSpin( rStVec.fSpin ), 
-   fMomentumDir( rStVec.fMomentumDir )
+   fMomentumDir( rStVec.fMomentumDir ),
+   fChargeState( rStVec.fChargeState )
 {
   SixVector[0]= rStVec.SixVector[0];
   SixVector[1]= rStVec.SixVector[1];
@@ -69,20 +95,21 @@ G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
   SixVector[3]= rStVec.SixVector[3];
   SixVector[4]= rStVec.SixVector[4];
   SixVector[5]= rStVec.SixVector[5];
- // Old code:
-  // SetCurvePnt(rStVec.GetPosition(), 
-  //              rStVec.GetMomentumDir(), 
-  //               rStVec.GetCurveLength() );   // Slow, so changed it
+
+  // fpChargeState= new G4ChargeState( *rStVec.fpChargeState );
+  // Can share charge state only when using handles etc
+  //   fpChargeState = rStVec.fpChargeState;  
 }
 
 inline
 G4FieldTrack::~G4FieldTrack()
 {
+  // delete fpChargeState; 
 }
 
 inline G4FieldTrack& 
 G4FieldTrack::SetCurvePnt(const G4ThreeVector& pPosition, 
-                          const G4ThreeVector& pMomentum,  // Can be Unit
+                          const G4ThreeVector& pMomentum,  
                                 G4double       s_curve )
 {
   SixVector[0] = pPosition.x(); 
@@ -124,6 +151,12 @@ const G4ThreeVector& G4FieldTrack::GetMomentumDir() const
 } 
 
 inline
+G4ThreeVector G4FieldTrack::GetMomentumDirection() const 
+{
+   return fMomentumDir;
+} 
+
+inline
 G4double  G4FieldTrack::GetCurveLength() const 
 {
      return  fDistanceAlongCurve;  
@@ -135,13 +168,11 @@ void G4FieldTrack::SetCurveLength(G4double nCurve_s)
      fDistanceAlongCurve= nCurve_s;  
 }
 
-// #ifdef ENERGY_OK
 inline
 G4double  G4FieldTrack::GetKineticEnergy() const
 {
    return fKineticEnergy;
 }
-// #endif
 
 inline
 void G4FieldTrack::SetKineticEnergy(G4double newKinEnergy)
@@ -184,20 +215,6 @@ void G4FieldTrack::SetProperTimeOfFlight(G4double nTOF)
 {
    fProperTimeOfFlight=nTOF;
 }
-
-#ifdef  MOMENTUM_MODULUS
-inline
-G4double G4FieldTrack::GetMomentumModulus() const
-{
-   return fMomentumModulus;
-}
-
-inline
-void G4FieldTrack::SetMomentumModulus(G4double nMomentumMod)
-{
-   fMomentumModulus= nMomentumMod;         // does not modify energy
-}
-#endif
 
 inline
 void G4FieldTrack::SetMomentumDir(G4ThreeVector newMomDir)
@@ -261,8 +278,19 @@ void G4FieldTrack::DumpToArray(G4double valArr[ncompSVEC] ) const
 //   note that momentum direction must-be/is normalised
 
 inline
-void G4FieldTrack::LoadFromArray(const G4double valArr[ncompSVEC])
+void G4FieldTrack::LoadFromArray(const G4double valArrIn[ncompSVEC], G4int noVarsIntegrated)
 {
+  G4int i;
+
+  // Fill the variables not integrated with zero -- so it's clear !!
+  static G4double valArr[ncompSVEC];
+  for( i=0; i<noVarsIntegrated; i++){
+     valArr[i]= valArrIn[i];
+  }
+  for( i=noVarsIntegrated; i<ncompSVEC; i++) {
+     valArr[i]= 0.0; 
+  }
+
   SixVector[0]=valArr[0];
   SixVector[1]=valArr[1];
   SixVector[2]=valArr[2];
@@ -296,9 +324,6 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
 {
   if (&rStVec == this) return *this;
 
-  // SetCurvePnt(rStVec.GetPosition(), 
-  //             rStVec.GetMomentumDir(), 
-  //             rStVec.GetCurveLength() );
   SixVector[0]= rStVec.SixVector[0];
   SixVector[1]= rStVec.SixVector[1];
   SixVector[2]= rStVec.SixVector[2];
@@ -307,12 +332,42 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
   SixVector[5]= rStVec.SixVector[5];
   SetCurveLength( rStVec.GetCurveLength() );
 
-  SetKineticEnergy(  rStVec.fKineticEnergy );
+  fKineticEnergy= rStVec.fKineticEnergy;
   SetLabTimeOfFlight( rStVec.GetLabTimeOfFlight()  ); 
   SetProperTimeOfFlight( rStVec.GetProperTimeOfFlight()  ); 
   SetSpin( rStVec.GetSpin() );
   //  SetMomentumModulus( rStVec.GetMomentumModulus());
   SetMomentumDir( rStVec.fMomentumDir );
 
+  fChargeState= rStVec.fChargeState;
+  // (*fpChargeState)= *(rStVec.fpChargeState);
+  // fpChargeState= rStVec.fpChargeState; // Handles!!
   return *this;
+}
+
+void 
+G4FieldTrack::UpdateFourMomentum( G4double             kineticEnergy, 
+				  const G4ThreeVector& momentumDirection )
+{
+  G4double momentum_mag  = std::sqrt(kineticEnergy*kineticEnergy
+                            +2.0*fRestMass_c2*kineticEnergy);
+  G4ThreeVector momentumVector= momentum_mag * momentumDirection; 
+
+  SetMomentum( momentumVector );     // Also sets direction (from unit)
+  fMomentumDir=   momentumDirection;
+  fKineticEnergy= kineticEnergy;
+}
+
+void G4FieldTrack::UpdateState( const G4ThreeVector& position, 
+				G4double             laboratoryTimeOfFlight,
+				const G4ThreeVector& momentumDirection,
+				G4double             kineticEnergy
+			      )
+{ 
+  // SetCurvePnt( position, momentumVector, s_curve=0.0);     
+  SetPosition( position); 
+  fLabTimeOfFlight= laboratoryTimeOfFlight;
+  fDistanceAlongCurve= 0.0;
+
+  UpdateFourMomentum( kineticEnergy, momentumDirection); 
 }

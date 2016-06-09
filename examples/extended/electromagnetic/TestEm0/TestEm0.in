@@ -1,0 +1,18 @@
+# $Id: TestEm0.in,v 1.1 2006/03/18 11:02:14 maire Exp $
+#
+# Macro file for "TestEm0.cc"
+#
+/control/verbose 0
+/run/verbose 0
+#
+/testem/det/setMat Germanium
+/testem/phys/setCuts 1 mm
+/gun/particle gamma
+/gun/energy 300 keV
+/run/beamOn 
+#
+/testem/det/setMat Water
+/testem/phys/setCuts 100 um
+/gun/particle e-
+/gun/energy 10 MeV
+/run/beamOn 

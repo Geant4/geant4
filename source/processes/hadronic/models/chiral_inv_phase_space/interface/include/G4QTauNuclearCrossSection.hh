@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4QTauNuclearCrossSection.hh,v 1.2 2005/11/25 21:34:17 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4QTauNuclearCrossSection.hh,v 1.4 2006/06/29 20:08:18 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // GEANT4 physics class: G4QTauNuclearCrossSection -- header file
@@ -60,9 +63,10 @@ public:
 
   static G4VQCrossSection* GetPointer(); // Gives a pointer to this singletone
 
-  G4double ThresholdEnergy(G4int Z, G4int N);
+  G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=15);
 
-  G4double CalculateCrossSection(G4int F, G4int I, G4int Z, G4int N, G4double Momentum);
+  G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int PDG, G4int Z, G4int N,
+                                                                        G4double Momentum);
 
   G4int    GetExchangePDGCode();
 
@@ -83,6 +87,7 @@ private:
 
 // Body
 private:
+  static G4bool    onlyCS;   // flag to calculate only CS
   static G4double  lastSig;  // Last calculated cross section
   static G4int     lastL;    // Last used in the cross section TheLastBin
   static G4double  lastE;    // Last used in the cross section Energy

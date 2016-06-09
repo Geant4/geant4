@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.13 2005/12/06 11:25:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: RunAction.cc,v 1.19 2006/06/29 16:37:25 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,7 +66,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   NbOfTraks0 = NbOfTraks1 = NbOfSteps0 = NbOfSteps1 = 0;
   edep = 0.;
-  csdaRange = csdaRange2 = 0.;
+  trueRange = trueRange2 = 0.;
   projRange = projRange2 = 0.;
   transvDev = transvDev2 = 0.;    
   ProcCounter = new ProcessesCount;
@@ -89,10 +92,7 @@ void RunAction::CountProcesses(G4String procName)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(std::ios::fixed,std::ios::floatfield);
-  
+{ 
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   if (NbOfEvents == 0) return;
   G4double dNbOfEvents = double(NbOfEvents);
@@ -108,7 +108,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
    
   G4cout << "\n ======================== run summary ======================\n";
   
-  G4int prec = G4cout.precision(2);
+  G4int prec = G4cout.precision(5);
   
   G4cout << "\n The run was: " << NbOfEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
@@ -117,8 +117,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
 	 
  G4cout << "\n ============================================================\n";
-      
- G4cout.precision(3);
  
  G4cout << "\n total energy deposit: " 
         << G4BestUnit(edep/dNbOfEvents, "Energy") << G4endl;
@@ -143,11 +141,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4cout << std::setw(12) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
  G4cout << G4endl;
       
- //compute csda and projected ranges, and transverse dispersion
+ //compute true and projected ranges, and transverse dispersion
  //
- csdaRange /= NbOfEvents; csdaRange2 /= NbOfEvents;
- G4double csdaRms = csdaRange2 - csdaRange*csdaRange;        
- if (csdaRms>0.) csdaRms = std::sqrt(csdaRms); else csdaRms = 0.;
+ trueRange /= NbOfEvents; trueRange2 /= NbOfEvents;
+ G4double trueRms = trueRange2 - trueRange*trueRange;        
+ if (trueRms>0.) trueRms = std::sqrt(trueRms); else trueRms = 0.;
       
  projRange /= NbOfEvents; projRange2 /= NbOfEvents;
  G4double projRms = projRange2 - projRange*projRange;        
@@ -157,31 +155,35 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4double trvsRms = transvDev2 - transvDev*transvDev;        
  if (trvsRms>0.) trvsRms = std::sqrt(trvsRms); else trvsRms = 0.;
  
- //compare csda range with PhysicsTables
+ //compare true range with csda range from PhysicsTables
  //
  G4EmCalculator emCalculator;
  G4double rangeTable = 0.;
  if (particle->GetPDGCharge() != 0.)
-   rangeTable = emCalculator.GetRange(energy,particle,material);
+   rangeTable = emCalculator.GetCSDARange(energy,particle,material);
       
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << " Primary particle : " ;
- G4cout << "\n CSDA Range = " << G4BestUnit(csdaRange,"Length")
-        << "   rms = "        << G4BestUnit(csdaRms,  "Length");
+ G4cout << "\n true Range = " << G4BestUnit(trueRange,"Length")
+        << "   rms = "        << G4BestUnit(trueRms,  "Length");
 
  G4cout << "\n proj Range = " << G4BestUnit(projRange,"Length")
         << "   rms = "        << G4BestUnit(projRms,  "Length");
 	     
- G4cout << "\n proj/CSDA  = " << projRange/csdaRange;
+ G4cout << "\n proj/true  = " << projRange/trueRange;
       	     
  G4cout << "\n transverse dispersion at end = " 
-        << G4BestUnit(trvsRms,"Length") << G4endl;
+        << G4BestUnit(trvsRms,"Length");
 	
- G4cout << "\n mass CSDA Range from simulation = " 
-        << csdaRange*density/(g/cm2) << " g/cm2"
-	<< "\n               from PhysicsTable = " 
-        << rangeTable*density/(g/cm2) << " g/cm2";	
+ G4cout << "\n      mass true Range from simulation = " 
+        << G4BestUnit(trueRange*density, "Mass/Surface")
+	<< "\n       from PhysicsTable (csda range) = " 
+        << G4BestUnit(rangeTable*density, "Mass/Surface");	
  G4cout << "\n---------------------------------------------------------\n";
+ G4cout << G4endl;
+ 
+ // reset default precision
+ G4cout.precision(prec);
                                     
   // delete and remove all contents in ProcCounter 
   while (ProcCounter->size()>0){
@@ -191,10 +193,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   delete ProcCounter;
   
-  // reset default formats
-  G4cout.setf(mode,std::ios::floatfield);
-  G4cout.precision(prec);
- 
   //save histograms      
   histoManager->save();
   

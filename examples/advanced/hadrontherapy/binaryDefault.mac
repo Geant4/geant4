@@ -38,7 +38,8 @@
 #/beamLine/RangeShifter/RSMat Water
 #/tracking/verbose 1
 /beam/energy/meanEnergy 25 MeV
-/run/beamOn 1
+/run/beamOn 100
+
 
 
 

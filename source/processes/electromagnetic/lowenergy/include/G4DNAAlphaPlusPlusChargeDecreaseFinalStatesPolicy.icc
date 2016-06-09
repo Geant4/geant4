@@ -1,0 +1,97 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4DNAAlphaPlusPlusChargeDecreaseFinalStatesPolicy.icc,v 2005/09/14 16:12:34 Francis
+// GEANT4 tag $Name: geant4-08-01 $
+//
+
+#ifdef   G4DNAALPHAPLUSPLUSCHARGEDECREASEFINALSTATESPOLICY_HH
+ #include "Randomize.hh"
+ #include "G4DNAGenericIonsManager.hh"
+
+ template <typename EnergyLimitsPolicy>
+ G4bool                                 G4DNAAlphaPlusPlusChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: KillIncomingParticle(G4double energy) const
+ {
+  if (energy<EnergyLimitsPolicy::lowEnergyLimit)
+   return true;
+  
+  return false;
+ }
+
+ template <typename EnergyLimitsPolicy>
+ void                                   G4DNAAlphaPlusPlusChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: BuildFinalStatesData(void) const
+ {
+ }
+ 
+ template <typename EnergyLimitsPolicy>
+ G4int                                  G4DNAAlphaPlusPlusChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: NumberOfFinalStates(G4int finalStateIndex) const
+ 
+ {
+  if (finalStateIndex==0)
+   return 1;
+  
+  return 2;
+ }
+
+ template <typename EnergyLimitsPolicy>
+ G4ParticleDefinition*                  G4DNAAlphaPlusPlusChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: OutgoingParticleDefinition(G4int finalStateIndex) 
+ {
+  G4DNAGenericIonsManager * instance(G4DNAGenericIonsManager::Instance());
+
+  if (finalStateIndex==0)
+   return instance->GetIon("alpha+"); 
+  
+  return instance->GetIon("helium");    
+ }
+ 
+ template <typename EnergyLimitsPolicy>
+ G4double                               G4DNAAlphaPlusPlusChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: WaterBindingEnergyConstant(G4int finalStateIndex) const
+ {
+  // Binding energy for    W+ -> W++ + e-    10.79 eV
+  // Binding energy for    W  -> W+  + e-    10.79 eV
+  //
+  // Ionization energy of first water shell
+  // Rad. Phys. Chem. 59 p.267 by Dingf. et al.
+
+  if (finalStateIndex==0)
+   return 10.79*eV;
+  
+  return 10.79*2*eV;
+ }
+
+ template <typename EnergyLimitsPolicy>
+ G4double                               G4DNAAlphaPlusPlusChargeDecreaseFinalStatesPolicy<EnergyLimitsPolicy> :: OutgoingParticleBindingEnergyConstant(G4int finalStateIndex) const
+ {
+  // Binding energy for    He+ -> He++ + e-    54.509 eV
+  // Binding energy for    He  -> He+  + e-    24.587 eV
+
+  if (finalStateIndex==0)
+   return 54.509*eV;
+
+  return (54.509 + 24.587)*eV;
+ }
+#endif /* G4DNAALPHAPLUSPLUSCHARGEDECREASEFINALSTATESPOLICY_HH */
+

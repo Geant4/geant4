@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.57 2005/11/09 15:03:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Tubs.cc,v 1.60 2006/06/29 18:45:45 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // class G4Tubs
@@ -202,7 +205,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
     G4double zoffset, zMin, zMax ;
 
     G4double diff1, diff2, maxDiff, newMin, newMax ;
-    G4double xoff1, xoff2, yoff1, yoff2 ;
+    G4double xoff1, xoff2, yoff1, yoff2, delta ;
 
     xoffset = pTransform.NetTranslation().x() ;
     xMin = xoffset - fRMax ;
@@ -290,8 +293,10 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
           // Y limits don't cross max/min x => compute max delta x,
           // hence new mins/maxs
 
-          diff1   = std::sqrt(fRMax*fRMax - yoff1*yoff1);
-          diff2   = std::sqrt(fRMax*fRMax - yoff2*yoff2);
+          delta   = fRMax*fRMax - yoff1*yoff1;
+          diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
+          delta   = fRMax*fRMax - yoff2*yoff2;
+          diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff = (diff1 > diff2) ? diff1:diff2;
           newMin  = xoffset - maxDiff;
           newMax  = xoffset + maxDiff;
@@ -315,8 +320,10 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
           // X limits don't cross max/min y => compute max delta y,
           // hence new mins/maxs
 
-          diff1   = std::sqrt(fRMax*fRMax - xoff1*xoff1) ;
-          diff2   = std::sqrt(fRMax*fRMax - xoff2*xoff2) ;
+          delta   = fRMax*fRMax - xoff1*xoff1;
+          diff1   = (delta>0.) ? std::sqrt(delta) : 0.;
+          delta   = fRMax*fRMax - xoff2*xoff2;
+          diff2   = (delta>0.) ? std::sqrt(delta) : 0.;
           maxDiff = (diff1 > diff2) ? diff1 : diff2 ;
           newMin  = yoffset - maxDiff ;
           newMax  = yoffset + maxDiff ;
@@ -639,6 +646,8 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
 #ifdef G4CSGDEBUG
     G4Exception("G4Tube::SurfaceNormal(p)", "Notification", JustWarning, 
                 "Point p is not on surface !?" );
+    G4cout.precision(20);
+    G4cout<<"G4Tubs::SN ( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl<<G4endl;
 #endif 
      norm = ApproxSurfaceNormal(p);
   }

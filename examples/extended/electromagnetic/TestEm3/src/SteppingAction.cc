@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.22 2005/11/22 15:29:06 maire Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: SteppingAction.cc,v 1.25 2006/06/29 16:53:23 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +36,7 @@
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
-#include "G4Track.hh"
+#include "G4Step.hh"
 #include "G4Positron.hh"
 #include "G4RunManager.hh"
 
@@ -57,21 +60,20 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //track informations
   const G4StepPoint* prePoint = aStep->GetPreStepPoint();   
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  const G4Track*     track    = aStep->GetTrack();
-  const G4ParticleDefinition* particle = track->GetDefinition(); 
+  const G4ParticleDefinition* particle = aStep->GetTrack()->GetDefinition(); 
     
   //if World, return
   //
-  G4VPhysicalVolume* volume = prePoint->GetPhysicalVolume();    
+  G4VPhysicalVolume* volume = prePoint->GetTouchableHandle()->GetVolume();    
   //if sum of absorbers do not fill exactly a layer: check material, not volume.
   G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
   if (mat == detector->GetWorldMaterial()) return; 
  
   //here we are in an absorber. Locate it
   //
-  G4int absorNum  = volume->GetCopyNo();
-  G4int layerNum  = prePoint->GetTouchable()->GetReplicaNumber(1);
-       
+  G4int absorNum  = prePoint->GetTouchableHandle()->GetCopyNumber(0);
+  G4int layerNum  = prePoint->GetTouchableHandle()->GetCopyNumber(1);
+         
   // collect energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
   

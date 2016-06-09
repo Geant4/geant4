@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc,v 1.22 2005/05/12 11:06:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4eplusAnnihilation.cc,v 1.24 2006/06/29 19:53:57 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,7 +41,8 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
 // 03-05-05 suppress Integral option (mma)
-// 04-05-05, Make class to be default (V.Ivanchenko)
+// 04-05-05 Make class to be default (V.Ivanchenko)
+// 25-01-06 remove cut dependance in AtRestDoIt (mma)
 //
 
 //
@@ -111,21 +115,15 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
 {
   fParticleChange.InitializeForPostStep(aTrack);
 
-  // Below gamma production threshold
-  if (GetGammaEnergyCut() > electron_mass_c2) {
-    fParticleChange.ProposeLocalEnergyDeposit(2.0*electron_mass_c2);
-    
-  } else {   // Real gamma production 
-    fParticleChange.SetNumberOfSecondaries(2);
+  fParticleChange.SetNumberOfSecondaries(2);
 
-    G4double cosTeta = 2.*G4UniformRand()-1. , sinTeta = sqrt(1.-cosTeta*cosTeta);
-    G4double phi     = twopi * G4UniformRand();
-    G4ThreeVector direction (sinTeta*cos(phi), sinTeta*sin(phi), cosTeta);
-    fParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
+  G4double cosTeta = 2.*G4UniformRand()-1. , sinTeta = sqrt(1.-cosTeta*cosTeta);
+  G4double phi     = twopi * G4UniformRand();
+  G4ThreeVector direction (sinTeta*cos(phi), sinTeta*sin(phi), cosTeta);
+  fParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
                                             direction, electron_mass_c2) );
-    fParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
+  fParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),
                                            -direction, electron_mass_c2) );
-  }
   // Kill the incident positron
   //
   fParticleChange.ProposeTrackStatus(fStopAndKill);

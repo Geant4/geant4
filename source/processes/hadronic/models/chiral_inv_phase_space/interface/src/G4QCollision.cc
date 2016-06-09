@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCollision.cc,v 1.6 2005/12/01 17:28:18 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4QCollision.cc,v 1.11 2006/06/29 20:08:30 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //      ---------------- G4QCollision class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -140,37 +143,49 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
 #endif
   G4bool leptoNuc=false;       // By default the reaction is not lepto-nuclear
   G4VQCrossSection* CSmanager=0;
+  G4int pPDG=0;
   if(incidentParticleDefinition == G4Proton::Proton())
-                                      CSmanager=G4QProtonNuclearCrossSection::GetPointer();
+  {
+    CSmanager=G4QProtonNuclearCrossSection::GetPointer();
+    pPDG=2212;
+  }
   else if(incidentParticleDefinition == G4Gamma::Gamma())
-                                      CSmanager=G4QPhotonNuclearCrossSection::GetPointer();
+  {
+    CSmanager=G4QPhotonNuclearCrossSection::GetPointer();
+    pPDG=22;
+  }
   else if(incidentParticleDefinition == G4Electron::Electron() ||
           incidentParticleDefinition == G4Positron::Positron())
   {
     CSmanager=G4QElectronNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=11;
   }
   else if(incidentParticleDefinition == G4MuonPlus::MuonPlus() ||
           incidentParticleDefinition == G4MuonMinus::MuonMinus())
   {
     CSmanager=G4QMuonNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=13;
   }
   else if(incidentParticleDefinition == G4TauPlus::TauPlus() ||
           incidentParticleDefinition == G4TauMinus::TauMinus())
   {
     CSmanager=G4QTauNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=15;
   }
   else if(incidentParticleDefinition == G4NeutrinoMu::NeutrinoMu() )
   {
     CSmanager=G4QNuMuNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=14;
   }
   else if(incidentParticleDefinition == G4AntiNeutrinoMu::AntiNeutrinoMu() )
   {
     CSmanager=G4QANuMuNuclearCrossSection::GetPointer();
     leptoNuc=true;
+    pPDG=-14;
   }
   else G4cout<<"G4QCollision::GetMeanFreePath:Particle isn't implemented in CHIPS"<<G4endl;
   
@@ -242,7 +257,7 @@ G4double G4QCollision::GetMeanFreePath(const G4Track& aTrack,G4double,G4ForceCon
       std::pair<G4int,G4double>* curIs=(*cs)[j]; // A pointer, which is used twice
       G4int N=curIs->first;                 // #of Neuterons in the isotope j of El i
       IsN->push_back(N);                    // Remember Min N for the Element
-      G4double CSI=CSmanager->GetCrossSection(Momentum,Z,N); // CrossS(j,i) for the isotope
+      G4double CSI=CSmanager->GetCrossSection(true,Momentum,Z,N,pPDG);//CS(j,i) for isotope
       curIs->second = CSI;
       susi+=CSI;                            // Make a sum per isotopes
       SPI->push_back(susi);                 // Remember summed cross-section
@@ -419,16 +434,19 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
 		G4cout<<"G4QCollis::PostStDoIt: m="<<EPIM<<",n="<<nE<<",T="<<ElProbInMat[EPIM-1]<<G4endl;
 #endif
-  G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
   G4int i=0;
-  for(i=0; i<nE; ++i)
-		{
+  if(EPIM>1)
+  {
+    G4double rnd = ElProbInMat[EPIM-1]*G4UniformRand();
+    for(i=0; i<nE; ++i)
+		  {
 #ifdef debug
-				G4cout<<"G4QCollision::PostStepDoIt:EPM["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
+				  G4cout<<"G4QCollision::PostStepDoIt:E["<<i<<"]="<<ElProbInMat[i]<<",r="<<rnd<<G4endl;
 #endif
-    if (rnd<ElProbInMat[i]) break;
+      if (rnd<ElProbInMat[i]) break;
+    }
+    if(i>=nE) i=nE-1;                        // Top limit for the Element
   }
-  if(i>=nE) i=nE-1;                        // Top limit for the Element
   G4Element* pElement=(*theElementVector)[i];
   Z=static_cast<G4int>(pElement->GetZ());
 #ifdef debug
@@ -445,19 +463,22 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
 		G4cout<<"G4QCollis::PosStDoIt:n="<<nofIsot<<",T="<<(*SPI)[nofIsot-1]<<",r="<<rnd<<G4endl;
 #endif
-  rnd = (*SPI)[nofIsot-1]*G4UniformRand(); // Randomize the isotop of the Element
   G4int j=0;
-  for(j=0; j<nofIsot; ++j)
+  if(nofIsot>1)
   {
+    G4double rndI=(*SPI)[nofIsot-1]*G4UniformRand(); // Randomize the isotop of the Element
+    for(j=0; j<nofIsot; ++j)
+    {
 #ifdef debug
-				G4cout<<"G4QCollision::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rnd<<G4endl;
+				  G4cout<<"G4QCollision::PostStepDoIt: SP["<<j<<"]="<<(*SPI)[j]<<", r="<<rndI<<G4endl;
 #endif
-    if(rnd < (*SPI)[j]) break;
+      if(rndI < (*SPI)[j]) break;
+    }
+    if(j>=nofIsot) j=nofIsot-1;            // Top limit for the isotope
   }
-  if(j>=nofIsot) j=nofIsot-1;              // Top limit for the isotope
   G4int N =(*IsN)[j]; ;                    // Randomized number of neutrons
 #ifdef debug
-		G4cout<<"G4QCollision::PostStepDoIt: j="<<i<<", N(isotope)="<<Z<<G4endl;
+		G4cout<<"G4QCollision::PostStepDoIt: j="<<i<<", N(isotope)="<<N<<G4endl;
 #endif
   if(N<0)
   {
@@ -490,11 +511,9 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     G4ParticleMomentum dir = projHadron->GetMomentumDirection();
     G4VQCrossSection* CSmanager=G4QElectronNuclearCrossSection::GetPointer();
     if(aProjPDG== 13) CSmanager=G4QMuonNuclearCrossSection::GetPointer();
-    if(projPDG==  14) CSmanager=G4QNuMuNuclearCrossSection::GetPointer();
-    if(projPDG== -14) CSmanager=G4QANuMuNuclearCrossSection::GetPointer();
     if(aProjPDG== 15) CSmanager=G4QTauNuclearCrossSection::GetPointer();
     // @@ Probably this is not necessary any more
-    G4double xSec=CSmanager->GetCrossSection(Momentum, Z, N);// Recalculate Cross Section!
+    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N);//Recalculate CrossSection
     // @@ check a possibility to separate p, n, or alpha (!)
     G4double photonEnergy = CSmanager->GetExchangeEnergy(); // Energy of EqivExchangePart
     if(xSec <= 0.) // The cross-section iz 0 -> Do Nothing
@@ -528,8 +547,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     }
     // Update G4VParticleChange for the scattered muon
     G4VQCrossSection* thePhotonData=G4QPhotonNuclearCrossSection::GetPointer();
-    G4double sigNu=thePhotonData->GetCrossSection(photonEnergy, Z, N);// IntegratedCrossSec
-    G4double sigK =thePhotonData->GetCrossSection(W, Z, N);           // Real CrossSec
+    G4double sigNu=thePhotonData->GetCrossSection(true,photonEnergy,Z,N);// IntegratedCrSec
+    G4double sigK =thePhotonData->GetCrossSection(true, W, Z, N);        // Real CrossSect.
     G4double rndFraction = CSmanager->GetVirtualFactor(photonEnergy, photonQ2);
     if(sigNu*G4UniformRand()>sigK*rndFraction) 
     {
@@ -575,7 +594,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
     projPDG=22;
     proj4M=G4LorentzVector(photon3M,photon3M.mag()); //@@ photon is real?
   }
-		if(aProjPDG==14) // *** neutrino nuclear interactions (only nu_mu/anu_mu & only CC) ***
+		else if(aProjPDG==14)// ** neutrino nuclear interactions (only nu_mu/anu_mu & only CC) **
 		{
     G4double kinEnergy= projHadron->GetKineticEnergy();// For neutrino this is total energy
     G4double dKinE=kinEnergy+kinEnergy;  // doubled energy for s calculation
@@ -591,7 +610,7 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       scatPDG=-13;                       // secondary scattered mu+
     }
     // @@ Probably this is not necessary any more
-    G4double xSec=CSmanager->GetCrossSection(Momentum, Z, N);// Recalculate Cross Section
+    G4double xSec=CSmanager->GetCrossSection(false,Momentum,Z,N);//Recalculate CrossSection
     // @@ check a possibility to separate p, n, or alpha (!)
     if(xSec <= 0.) // The cross-section = 0 -> Do Nothing
     {
@@ -667,10 +686,10 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       G4LorentzVector c4M=t4M+proj4M;           // 4mom of the compound system
       t4M.setT(mOT);                            // now it is 4mom of the outgoing nucleon
       scat4M=G4LorentzVector(0.,0.,0.,mu);      // 4mom of the scattered muon
-      if(!G4QHadron(c4M).RelDecayIn2(scat4M, t4M, c4M, cost, cost))
+      if(!G4QHadron(c4M).RelDecayIn2(scat4M, t4M, proj4M, cost, cost))
       {
         G4cerr<<"G4QCol::PSD:c4M="<<c4M<<sqs<<",mM="<<mu<<",tM="<<mOT<<",c="<<cost<<G4endl;
-        throw G4QException("G4Quasmon::HadronizeQuasm: Can't dec QE nu,mu Compound");
+        throw G4QException("G4QCollision::HadronizeQuasm: Can't dec QE nu,mu Compound");
       }
       proj4M=t4M;                               // 4mom of the new projectile nucleon
     }
@@ -682,8 +701,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       //@@ inFuture use N=GetNPartons and directFraction=GetDirectPart, @@ W2...
       G4double r=G4UniformRand();
       G4double r1=0.5;                                  // (1-x)
-      if(r<0.5)      r1=sqrt(r+r)*(.5+.1579*(r-.5));
-      else if(r>0.5) r1=1.-sqrt(2.-r-r)*(.5+.1579*(.5-r));
+      if(r<0.5)      r1=std::sqrt(r+r)*(.5+.1579*(r-.5));
+      else if(r>0.5) r1=1.-std::sqrt(2.-r-r)*(.5+.1579*(.5-r));
       G4double xn=1.-mudM/Momentum;             // Normalization of (1-x) [x>mudM/Mom]
       G4double x1=xn*r1;                        // (1-x)
       G4double x=1.-x1;                         // x=2k/M
@@ -700,7 +719,8 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
       }
       scat4M=G4LorentzVector(0.,0.,0.,mu);      // 4mom of the scattered muon
       G4LorentzVector t4M(0.,0.,0.,-Q2);        // 4mom of the virtual W
-      if(!G4QHadron(proj4M).RelDecayIn2(scat4M, t4M, proj4M, cost, cost))
+      G4LorentzVector dir4M=proj4M-G4LorentzVector(0.,0.,0.,proj4M.e()*.1);// projDirection
+      if(!G4QHadron(proj4M).RelDecayIn2(scat4M, t4M, dir4M, cost, cost))
       {
         G4cerr<<"G4QCol::PSD:4M="<<proj4M<<",mM="<<mu<<",Q2="<<Q2<<",c="<<cost<<G4endl;
         throw G4QException("G4Quasmon::HadronizeQuasm: Can't dec nu->mu+W");
@@ -719,67 +739,67 @@ G4VParticleChange* G4QCollision::PostStepDoIt(const G4Track& track, const G4Step
 #ifdef debug
   G4cout<<"G4QCollision::PostStepDoIt: projPDG="<<projPDG<<", targPDG="<<targPDG<<G4endl;
 #endif
-  G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->--   -+
-  if(momentum<1000.) // Condition for using G4QEnvironment (not G4QuasmonString)         |
-		{ //                                                                                   |
-    G4QHadronVector projHV;                                 //                           |
-    projHV.push_back(pH);                                   // DESTROYED over 2 lines -+ |
-    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->-----+ | |
-    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<------<----+-+-+
-    projHV.clear(); // <------------<---------------<-------------------<------------+-+ .
+  G4QHadron* pH = new G4QHadron(projPDG,proj4M);                // ---> DELETED -->--  -+
+  //if(momentum<1000.) // Condition for using G4QEnvironment (not G4QuasmonString)      |
+		{ //                                                                                  |
+    G4QHadronVector projHV;                                 //                          |
+    projHV.push_back(pH);                                   // DESTROYED over 2 lines-+ |
+    G4QEnvironment* pan= new G4QEnvironment(projHV,targPDG);// ---> DELETED --->----+ | |
+    std::for_each(projHV.begin(), projHV.end(), DeleteQHadron()); // <---<------<---+-+-+
+    projHV.clear(); // <------------<---------------<-------------------<-----------+-+ .
 #ifdef debug
-    G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", mp="<<mp<<G4endl; //    |   .
+    G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", mp="<<mp<<G4endl; //   |   .
 #endif
-    try                                                           //                 |   .
-	   {                                                             //                 |   .
-	     delete output;                                              //                 |   .
-      output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |   .
-    }                                                             //                 |   .
-    catch (G4QException& error)//                                                    |   .
-	   {                                                             //                 |   .
+    try                                                           //                |   .
+	   {                                                             //                |   .
+	     delete output;                                              //                |   .
+      output = pan->Fragment();// DESTROYED in the end of the LOOP work space       |   .
+    }                                                             //                |   .
+    catch (G4QException& error)//                                                   |   .
+	   {                                                             //                |   .
 	     //#ifdef pdebug
-      G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched"<<G4endl; // |   .
+      G4cerr<<"***G4QCollision::PostStepDoIt: G4QE Exception is catched"<<G4endl;// |   .
 	     //#endif
-      G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPS Crash");//|   .
-    }                                                             //                 |   .
-    delete pan;                              // Delete the Nuclear Environment <--<--+   .
-  } //                                                                                   .
-  else               // Use G4QuasmonString                                              .
-		{ //                                                                                   ^
-    G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --+   |
-    delete pH;                                                    // --------<-------+---+
+      G4Exception("G4QCollision::PostStepDoIt:","27",FatalException,"CHIPSCrash");//|   .
+    }                                                             //                |   .
+    delete pan;                              // Delete the Nuclear Environment <-<--+   .
+  } //                                                                                  .
+  //else               // Use G4QuasmonString                                             .
+		//{ //                                                                                  ^
+  //  G4QuasmonString* pan= new G4QuasmonString(pH,false,targPDG,false);//-> DELETED --+  |
+  //  delete pH;                                                    // --------<-------+--+
 #ifdef debug
-    G4double mp=G4QPDGCode(projPDG).GetMass();   // Mass of the projectile particle  |
-    G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", pM="<<mp<<G4endl; //    |
+  //  G4double mp=G4QPDGCode(projPDG).GetMass();   // Mass of the projectile particle  |
+  //  G4cout<<"G4QCollision::PostStepDoIt: pPDG="<<projPDG<<", pM="<<mp<<G4endl; //    |
 #endif
-    //G4int tNH=0;                    // Prototype of the number of secondaries inOut|
-    try                                                           //                 |
-	   {                                                             //                 |
-				  delete output;                                            //                   |
-      output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
-      // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
-      //tNH=pan->GetNOfHadrons();     // For the test purposes of the String         |
-      //if(tNH==2)                    // At least 2 hadrons are in the Constr.Output |
-				  //{//                                                                          |
-      //  elF=true;                   // Just put a flag for the ellastic Scattering |
-	     //  delete output;              // Delete a prototype of dummy G4QHadronVector |
-      //  output = pan->GetHadrons(); // DESTROYED in the end of the LOOP work space |
-      //}//                                                                          |
-      //eWei=pan->GetWeight();        // Just an example for the weight of the event |
+  //  //G4int tNH=0;                    // Prototype of the number of secondaries inOut|
+  //  try                                                           //                 |
+	 //  {                                                             //                 |
+		//		  delete output;                                            //                   |
+  //    output = pan->Fragment();// DESTROYED in the end of the LOOP work space        |
+  //    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- Begin                 |
+  //    //tNH=pan->GetNOfHadrons();     // For the test purposes of the String         |
+  //    //if(tNH==2)                    // At least 2 hadrons are in the Constr.Output |
+		//		  //{//                                                                          |
+  //    //  elF=true;                   // Just put a flag for the ellastic Scattering |
+	 //    //  delete output;              // Delete a prototype of dummy G4QHadronVector |
+  //    //  output = pan->GetHadrons(); // DESTROYED in the end of the LOOP work space |
+  //    //}//                                                                          |
+  //    //eWei=pan->GetWeight();        // Just an example for the weight of the event |
 #ifdef debug
-      //G4cout<<"=====>>G4QCollision::PostStepDoIt: elF="<<elF<<",n="<<tNH<<G4endl;//|
+  //    //G4cout<<"=====>>G4QCollision::PostStepDoIt: elF="<<elF<<",n="<<tNH<<G4endl;//|
 #endif
-      // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
-    }                                                             //                 |
-    catch (G4QException& error)//                                                    |
-	   {                                                             //                 |
-	     //#ifdef pdebug
-      G4cerr<<"***G4QCollision::PostStepDoIt: GEN Exception is catched"<<G4endl; //  |
-	     //#endif
-      G4Exception("G4QCollision::AtRestDoIt:","27",FatalException,"QString Excep");//|
-    }                                                             //                 |
-    delete pan;                              // Delete the Nuclear Environment ---<--+
-  }
+  //    // @@@@@@@@@@@@@@ Temporary for the testing purposes --- End                   |
+  //  }                                                             //                 |
+  //  catch (G4QException& error)//                                                    |
+	 //  {                                                             //                 |
+	 //    //#ifdef pdebug
+  //    G4cerr<<"***G4QCollision::PostStepDoIt: GEN Exception is catched"<<G4endl; //  |
+	 //    //#endif
+  //    G4Exception("G4QCollision::AtRestDoIt:","27",FatalException,"QString Excep");//|
+  //  }                                                             //                 |
+  //  delete pan;                              // Delete the Nuclear Environment ---<--+
+  //}
   aParticleChange.Initialize(track);
   G4double localtime = track.GetGlobalTime();
   G4ThreeVector position = track.GetPosition();

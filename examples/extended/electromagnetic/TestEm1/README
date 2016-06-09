@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2005/11/22 17:14:07 maire Exp $
+$Id: README,v 1.21 2006/05/15 14:38:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,8 +7,10 @@ $Id: README,v 1.17 2005/11/22 17:14:07 maire Exp $
 
                             TestEm1
                             -------
-
-  This example has been setup to test individualy the electromagnetic processes.
+  How to count processes.
+  How to activate/inactivate processes.
+  How to survey the tracking, in perticular the range of charged particles.
+  How to define a maximum step size.
 	
  1 - GEOMETRY DEFINITION
  
@@ -82,14 +84,22 @@ $Id: README,v 1.17 2005/11/22 17:14:07 maire Exp $
 	Idle> type your commands
 	....
 	Idle> exit
- 	
- 7 - HISTOGRAMS
+		
+ 7 - TRACKING : StepMax
+ 
+  In order to control the accuracy of the deposition, the user can limit
+  'by hand' the maximum  step size of charged particles.
+  As an example, this limitation is implemented as a 'full' process :
+  see StepMax class and its Messenger. The 'StepMax process' is registered
+  in the Physics List. 
+  	
+ 8 - HISTOGRAMS
  
   Testem1 produces several histo which are saved as testem1.hbook by default.
   Content of these histo:  
-      1 : track length of a charged particle
-      2 : number of steps per track (charged particle)
-      3 : step length (charged particle)
+      1 : track length of primary particle
+      2 : number of steps primary particle
+      3 : step size of primary particle
 
   Note that, by default, histograms are disabled. To activate them, uncomment
   the flag G4ANALYSIS_USE in GNUmakefile.
@@ -98,12 +108,12 @@ $Id: README,v 1.17 2005/11/22 17:14:07 maire Exp $
   	gmake histclean
   	gmake 
 
- 8- USING HISTOGRAMS
+ 9 - USING HISTOGRAMS
 
   To use histograms, at least one of the AIDA implementations should be 
   available (see http://aida.freehep.org).
   
- 8a - PI 
+ 9a - PI 
 
   A package including AIDA and extended interfaces also using Python is PI, 
   available from: http://cern.ch/pi
@@ -117,7 +127,7 @@ $Id: README,v 1.17 2005/11/22 17:14:07 maire Exp $
   Before running the example the command should be issued:
   eval `aida-config --runtime csh`
 
- 8b -  OpenScientist
+ 9b -  OpenScientist
 
   OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
 

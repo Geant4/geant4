@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.16 2005/05/12 11:06:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4eBremsstrahlungModel.hh,v 1.18 2006/06/29 19:52:04 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +43,7 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 07-02-06  public function ComputeCrossSectionPerAtom() (mma)
 //
 //
 // Class Description:
@@ -77,7 +81,13 @@ public:
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
 					G4double cutEnergy);
-
+					
+  virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
+                                                  G4double tkin, 
+                                                  G4double Z,   G4double,
+                                                  G4double cut,
+						  G4double maxE = DBL_MAX);
+  
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
@@ -107,8 +117,6 @@ private:
   G4double PositronCorrFactorLoss(G4double Z, G4double tkin, G4double cut);
 
   G4double PositronCorrFactorSigma(G4double Z, G4double tkin, G4double cut);
-
-  G4double CrossSectionPerAtom(G4double tkin, G4double Z, G4double cut);
 
   G4DataVector* ComputePartialSumSigma(const G4Material* material,
                                              G4double tkin, G4double cut);

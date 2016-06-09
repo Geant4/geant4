@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForLoss.hh,v 1.15 2005/04/15 06:44:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ParticleChangeForLoss.hh,v 1.18 2006/06/29 21:14:23 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // ------------------------------------------------------------
@@ -35,6 +38,9 @@
 //   Modified:
 //   16.01.04 V.Ivanchenko update for model variant of energy loss
 //   15.04.05 V.Ivanchenko inline update methods
+//   30.01.06 V.Ivanchenko add ProposedMomentumDirection for AlongStep
+//                         and ProposeWeight for PostStep
+//   07.06.06 V.Ivanchenko RemoveProposedMomentumDirection from AlongStep
 //
 // ------------------------------------------------------------
 //
@@ -86,10 +92,6 @@ public:
   G4double GetProposedKineticEnergy() const;
   void SetProposedKineticEnergy(G4double proposedKinEnergy);
   // Get/Set the final kinetic energy of the current particle.
-
-  //  G4double GetEnergy() const;
-  //  void ProposeEnergy(G4double finalEnergy);
-  // Get/Propose the final kinetic energy of the current particle.
 
   const G4ThreeVector& GetProposedMomentumDirection() const;
   void SetProposedMomentumDirection(const G4ThreeVector& dir);
@@ -233,7 +235,7 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForAlongStep(G4Step* pStep)
   // update weight 
   // this feature is commented out, it should be overwritten in case
   // if energy loss processes will use biasing
-  // G4double newWeight = theProposedWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
+  // G4double newWeight = theParentWeight/(pPreStepPoint->GetWeight())*(pPostStepPoint->GetWeight());
   // pPostStepPoint->SetWeight( newWeight );
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   return pStep;
@@ -248,7 +250,7 @@ inline G4Step* G4ParticleChangeForLoss::UpdateStepForPostStep(G4Step* pStep)
   // update weight
   // this feature is commented out, it should be overwritten in case
   // if energy loss processes will use biasing
-  // pPostStepPoint->SetWeight( theProposedWeight );
+  pPostStepPoint->SetWeight( theParentWeight );
   pStep->AddTotalEnergyDeposit( theLocalEnergyDeposit );
   return pStep;
 }

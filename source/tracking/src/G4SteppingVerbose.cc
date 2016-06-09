@@ -1,29 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.16 2004/07/08 03:46:43 amako Exp $
-// GEANT4 tag $Name: geant4-08-00 $
-//
+// $Id: G4SteppingVerbose.cc,v 1.21 2006/06/29 21:16:07 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //---------------------------------------------------------------
 //
@@ -77,8 +79,9 @@ void G4SteppingVerbose::NewStep()
 void G4SteppingVerbose::AtRestDoItInvoked()
 //////////////////////////////////////////////////
  {
-   G4VProcess* ptProcManager;
+   if(Silent==1){ return; }
 
+   G4VProcess* ptProcManager;
    CopyState();
 
    if(verboseLevel >= 3 ){     
@@ -131,6 +134,8 @@ void G4SteppingVerbose::AtRestDoItInvoked()
 void G4SteppingVerbose::AlongStepDoItAllDone()
 /////////////////////////////////////////////////////
 {
+   if(Silent==1){ return; }
+
    G4VProcess* ptProcManager;
 
    CopyState();
@@ -178,6 +183,8 @@ void G4SteppingVerbose::AlongStepDoItAllDone()
 void G4SteppingVerbose::PostStepDoItAllDone()
 ////////////////////////////////////////////////////
 {
+   if(Silent==1){ return; }
+
    G4VProcess* ptProcManager;
 
    CopyState();
@@ -242,6 +249,9 @@ void G4SteppingVerbose::PostStepDoItAllDone()
 void G4SteppingVerbose::StepInfo()
 /////////////////////////////////////////
 {
+   if(Silent==1){ return; }
+   if(SilentStepInfo==1){ return; }
+
   CopyState();
   G4cout.precision(16); 
   G4int prec = G4cout.precision(3);
@@ -327,6 +337,7 @@ void G4SteppingVerbose::StepInfo()
 void G4SteppingVerbose::DPSLStarted()
 ////////////////////////////////////////////
 {
+   if(Silent==1){ return; }
   CopyState();
 
   if( verboseLevel > 5 ){
@@ -337,6 +348,7 @@ void G4SteppingVerbose::DPSLStarted()
 void G4SteppingVerbose::DPSLUserLimit()
 //////////////////////////////////////////////
 {
+   if(Silent==1){ return; }
   CopyState();
 
   if( verboseLevel > 5 ){
@@ -350,6 +362,7 @@ void G4SteppingVerbose::DPSLUserLimit()
 void G4SteppingVerbose::DPSLPostStep()
 /////////////////////////////////////////////
 {
+  if(Silent==1){ return; }
   CopyState();
 
   if( verboseLevel > 5 ){
@@ -373,6 +386,7 @@ void G4SteppingVerbose::DPSLPostStep()
 void G4SteppingVerbose::DPSLAlongStep()
 /////////////////////////////////////////////
 {
+  if(Silent==1){ return; }
   CopyState();
 
   if( verboseLevel > 5 ){
@@ -398,6 +412,8 @@ void G4SteppingVerbose::DPSLAlongStep()
 void G4SteppingVerbose::TrackingStarted()
 ////////////////////////////////////////////////
 {
+  if(Silent==1){ return; }
+
   CopyState();
 
   G4int prec = G4cout.precision(3);
@@ -449,6 +465,8 @@ void G4SteppingVerbose::TrackingStarted()
 void G4SteppingVerbose::AlongStepDoItOneByOne()
 //////////////////////////////////////////////////////
 { 
+  if(Silent==1){ return; }
+
   CopyState();
 
   if(verboseLevel >= 4){ 
@@ -494,6 +512,8 @@ void G4SteppingVerbose::AlongStepDoItOneByOne()
 void G4SteppingVerbose::PostStepDoItOneByOne()
 //////////////////////////////////////////////////////
 {
+  if(Silent==1){ return; }
+
   CopyState();
 
   if(verboseLevel >= 4){ 
@@ -537,6 +557,8 @@ void G4SteppingVerbose::PostStepDoItOneByOne()
 void G4SteppingVerbose::VerboseTrack()
 //////////////////////////////////////
 {
+  if(Silent==1){ return; }
+
   CopyState();
 // Show header
   G4cout << G4endl;
@@ -701,7 +723,7 @@ void G4SteppingVerbose::VerboseTrack()
 void G4SteppingVerbose::VerboseParticleChange()
 ///////////////////////////////////////////////
 {
-
+  if(Silent==1){ return; }
 // Show header
   G4cout << G4endl;
   G4cout << "    ++G4ParticleChange Information " << G4endl;
@@ -711,6 +733,7 @@ void G4SteppingVerbose::VerboseParticleChange()
 void G4SteppingVerbose::ShowStep() const
 ////////////////////////////////////////
 {
+  if(Silent==1){ return; }
    G4String volName;
 
 // Show header

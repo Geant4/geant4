@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2005/12/16 09:59:31 gunter Exp $
+$Id: History,v 1.24 2006/06/15 14:57:00 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,37 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15.05.2006, G.Folger     - hadr-lists-V08-00-05
+- Move elastic out of G4Neutron/Proton/PIK- Builder, and use
+   G4HadronElasticPhyics directly in PL
+04.05.2006, V.Ivanchenko - hadr-lists-V08-00-05
+- QBBC PL extended in order to have more options; extra builders added
+  QBBC, QBEC, QBEC_HP, QGSP, QGSP_BERT, QGSP_EL, QGSP_STP are provided
+
+02.05.2006, V.Ivanchenko - hadr-lists-V08-00-04
+- Rename G4LElasticB -> G4HadronElastic 
+
+25.04.2006, V.Ivanchenko - hadr-lists-V08-00-03
+- Fix problem in destructors of G4DecayPhysics and G4ElectroNuclearBuilder
+- Fix typo in LHEP PhysicsList
+
+24.04.2006, V.Ivanchenko - hadr-lists-V08-00-02
+- add QBBC Physics List - version of physics free of LHEP models but
+  using Binary, BinaryIon, Bertini, CHIPS, QGSC, FTFC 
+
+15.02.2006, V.Ivanchenko - hadr-lists-V08-00-01
+- fix minor typo in G4EmMessenger
+
+19.12.2005, V.Ivanchenko - hadr-lists-V08-00-00
+- rename G4EmStandardPhysics71 ->G4EmStandardPhysics72;
+- define StepFunction of e+ and e- (1.0, 1.0*mm) for G4EmStandardPhysics71
+  in order to have backward compatibility with the previous release
+
 16.12.2005, G.Folger - hadr-lists-V07-01-08
 - Add QGSP_EMV, LHEP_EMV physics lists, both using multiple scattering 71.
 
 16.12.2005, G.Folger - hadr-lists-V07-01-07
-- Add QGSP_BERT_HP physics list, used for background radiation studies for LHCb 
+- Add QGSP_BERT_HP physics list, used for background radiation studies for LHCb
 
 15.12.2005, G.Folger - hadr-lists-V07-01-06
 - Change version number for Packaging, FTFP, and QGSC.

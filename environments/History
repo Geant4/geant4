@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2004/11/27 04:10:32 hajime Exp $
+$Id: History,v 1.24 2006/06/29 06:15:06 kmura Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,58 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V08-00-09 29 June 2006 Koichi Murakami
+  [g4py]
+  - fix rpath of boost_python (config/sys/linux.gmk, linuxx8664gcc.gmk)
+  - "site-modules/primaries/MedicalBeam/MedicalMeam.cc"
+    fix a bug in calculation of cos from a sin value
+  - remove duplicated DISCLAIMER (ExN03PhysicsList.cc/hh in site-modules)
+
+envs-V08-00-08 23 June 2006 Hajime Yoshida
+   - MOMO.jar is now without Gain
+   - MomoHome/vis.mac revbised for new vis (taken from N03)
+   [g4py]
+   - sh version of configure script
+   - G4UserStackingAction: fixed for not being called
+
+envs-V08-00-07 14 June 2006  Koichi Murakami
+  [g4py]
+   - change install path of site-modules (lib/site-modules -> lib/)
+   - remove COPYING
+   - update examples/education/lesson2
+
+envs-V08-00-06 13 June 2006  Koichi Murakami
+  [g4py]
+   -  update expose of G4Track
+   -  change python calls pass-by-reference
+      (XXXUserAction::XXXAction())
+
+envs-V08-00-05 07 June 2006  Koichi Murakami
+  - [g4py] fix segmentation fault at termination
+
+envs-V08-00-04 05 June 2006  Koichi Murakami
+  - [g4py] additional moddifications of g4py for G4 8.1 (08-00-ref-05)
+
+envs-V08-00-03 05 June 2006  Koichi Murakami
+  - History file is updated. 
+  - same as the previous
+
+envs-V08-00-02 05 June 2006  Koichi Murakami
+  [g4py]
+   - modifications for new version (8.1) (08-00-ref-04)
+   - disclamer is added
+
+envs-V08-00-01 03 June 2006  Hajime Yoshida
+  - addition of new Geant4Py educational examples
+	-- g4py/examples/education/lesson1  => measurement of the mass attenuation coefficient
+	-- g4py/examples/education/lesson2 => Pythonized novice/N03
+
+envs-V08-00-00 28 February 2006 Hajime Yoshida
+ -addition of new Python environments
+    -- g4py/source : Python wrappers of geant4/sources
+    -- g4py/site-modules : some application modules using the wrappers
+    -- g4py/ associated files to configure 
 
 envs-V06-02-00 27 November 2004 Hajime Yoshida
  -old depricated files

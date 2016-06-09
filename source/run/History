@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2005/11/28 10:57:24 gcosmo Exp $
+$Id: History,v 1.144 2006/05/16 21:57:14 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 16th, 2006, Makoto Asai (run-V08-00-03)
+- Add a command in G4MatScanMessenger.
+
+May 10th, 2006, Makoto Asai (run-V08-00-02)
+- Fix GNUmakefile to avoid a loop dependency.
+
+May 6th, 2006, Makoto Asai (run-V08-00-01)
+- Store random number status to G4Run and G4Event.
+
+May 5th, 2006, Makoto Asai (run-V08-00-00)
+- Introducing the material scanner utility.
 
 November 28th, 2005, Makoto Asai (run-V07-01-08)
 - In G4RunManagerKernel.cc, changed inclusion of version.hh to G4Version.hh.

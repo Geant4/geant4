@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.6 2004/08/03 11:31:43 maire Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: RunAction.hh,v 1.8 2006/06/29 16:36:43 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +62,7 @@ class RunAction : public G4UserRunAction
     void CountProcesses(G4String);
     
     void AddEdep(G4double val)     { edep += val;}
-    void AddCsdaRange (G4double l) { csdaRange += l; csdaRange2 += l*l;};
+    void AddTrueRange (G4double l) { trueRange += l; trueRange2 += l*l;};
     void AddProjRange (G4double x) { projRange += x; projRange2 += x*x;};
     void AddTransvDev (G4double y) { transvDev += y; transvDev2 += y*y;};    
                                   
@@ -67,7 +70,7 @@ class RunAction : public G4UserRunAction
     G4int           NbOfTraks0, NbOfTraks1;
     G4int           NbOfSteps0, NbOfSteps1;
     G4double        edep;
-    G4double        csdaRange, csdaRange2;             
+    G4double        trueRange, trueRange2;             
     G4double        projRange, projRange2;
     G4double        transvDev, transvDev2;
                      

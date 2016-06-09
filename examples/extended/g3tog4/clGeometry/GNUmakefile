@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2000/07/24 11:23:40 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2006/03/14 10:13:55 vnivanch Exp $
 # ----------------------------------------------------------------
 
 name := clGeometry
@@ -11,5 +11,7 @@ endif
 
 .PHONY: all
 all: lib bin
+
+include $(G4INSTALL)/config/architecture.gmk
 
 include $(G4INSTALL)/config/binmake.gmk

@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerX.hh,v 1.2 2005/07/20 20:39:02 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4RayTracerX.hh,v 1.4 2006/06/29 21:23:41 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // John Allison  11th September 2003
@@ -35,28 +38,19 @@
 // class description:
 //
 // G4RayTracerX
-// X window version of RayTracer (also produces jpeg file - see class
-// description for G4RayTracer).
+// X window version of RayTracer - opens X window for viewing as well
+// as producing jpeg file just like G4RayTracer.
 
-#include "G4RayTracer.hh"
+#include "G4VGraphicsSystem.hh"
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-
-class G4RayTracerX : public G4RayTracer
+class G4RayTracerX : public G4VGraphicsSystem
 {
-public:
-  G4RayTracerX();
-  G4VSceneHandler* CreateSceneHandler (const G4String& );
-  G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& );
-
-  // X Window variables...
-  Display* display;
-  Window win;
-  GC gc;
-  XStandardColormap *scmap;
+  public: // with description
+    G4RayTracerX();
+    ~G4RayTracerX();
+    G4VSceneHandler* CreateSceneHandler (const G4String& );
+    G4VViewer* CreateViewer (G4VSceneHandler&, const G4String& );
 };
 
 #endif
-
 #endif

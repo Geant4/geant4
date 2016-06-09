@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.16 2005/12/07 14:41:36 guatelli Exp $
+$Id: History,v 1.18 2006/05/31 08:51:21 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,15 @@ $Id: History,v 1.16 2005/12/07 14:41:36 guatelli Exp $
 
                       Category History file
                       ---------------------
+31th May 2006 Susanna Guatelli(radioprotection-V08-00-01)
+- Added histograms
+- Added comments 
+
+15th March 2006 Susanna Guatelli(radioprotection-V08-00-00)
+- Pion absorption at rest introduced in  RemSimHadronicBinary.cc
+- Added more histograms
+- Primary particle generator can handle spectra 
+
 7th December 2005 Susanna Guatelli (radioprotection-V07-01-04)
 - Macros updated
 - Comment deleted from remsim.cc

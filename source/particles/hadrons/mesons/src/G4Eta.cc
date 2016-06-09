@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4Eta.cc,v 1.15 2005/01/14 03:49:15 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Eta.cc,v 1.17 2006/06/29 19:19:38 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -67,7 +70,7 @@ G4Eta* G4Eta::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.54730*GeV,      1.18*keV,         0.0,
+                 name,     0.54775*GeV,      1.29*keV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         221,
@@ -79,13 +82,13 @@ G4Eta* G4Eta::Definition()
  // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[4];
   // eta -> gamma + gamma
-  mode[0] = new G4PhaseSpaceDecayChannel("eta",0.393,2,"gamma","gamma");
+  mode[0] = new G4PhaseSpaceDecayChannel("eta",0.3942,2,"gamma","gamma");
   // eta -> pi0 + pi0 + pi0
-  mode[1] = new G4PhaseSpaceDecayChannel("eta",0.321,3,"pi0","pi0","pi0");
+  mode[1] = new G4PhaseSpaceDecayChannel("eta",0.3256,3,"pi0","pi0","pi0");
   // eta -> pi0 + pi+ + pi-
-  mode[2] = new G4PhaseSpaceDecayChannel("eta",0.232,3,"pi0","pi+","pi-");
+  mode[2] = new G4PhaseSpaceDecayChannel("eta",0.226,3,"pi0","pi+","pi-");
   // eta -> gamma + pi+ + pi-
-  mode[3] = new G4PhaseSpaceDecayChannel("eta",0.048,3,"gamma","pi+","pi-");
+  mode[3] = new G4PhaseSpaceDecayChannel("eta",0.0468,3,"gamma","pi+","pi-");
 
   for (G4int index=0; index <4; index++ ) table->Insert(mode[index]);
   delete [] mode;

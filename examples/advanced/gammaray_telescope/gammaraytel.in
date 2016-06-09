@@ -6,6 +6,8 @@
 /control/verbose 1
 /control/saveHistory
 /run/verbose 1
+/gun/sourceGen true
+/run/initialize
 
 /control/execute emstd.mac
 
@@ -40,6 +42,4 @@
 /gun/energy 1 GeV
 /gun/sourceType 2
 /run/beamOn 100
-
-
 

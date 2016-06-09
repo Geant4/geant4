@@ -1,4 +1,4 @@
-$Id: README,v 1.17 2005/11/22 17:04:49 maire Exp $
+$Id: README,v 1.19 2006/05/15 14:39:20 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,7 +8,7 @@ $Id: README,v 1.17 2005/11/22 17:04:49 maire Exp $
                             TestEm4
                             -------
 
-	This example has been setup to test the low energy gamma processes. 
+ Plot energy deposited by 9 MeV photon beam in an homogeneous medium.
 	
  1- GEOMETRY DEFINITION
  
@@ -49,7 +49,7 @@ $Id: README,v 1.17 2005/11/22 17:04:49 maire Exp $
  		% gmake
  		
  	- execute TestEm4 in 'batch' mode from macro files
- 		% TestEm4   run01.mac
+ 		% TestEm4   TestEm4.in
  		
  	- execute TestEm4 in 'interactive mode' with visualization
  		% TestEm4

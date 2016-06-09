@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -516,9 +519,11 @@ G4DecayProducts *G4NuclearDecayChannel::BetaDecayIt()
     daughtermomentum[0] = std::sqrt(daughterenergy[0]*daughterenergy[0] +
 			       2.0*daughterenergy[0] * daughtermass[0]);
     // the recoil neuleus is asummed to have a maximum energy of Q/daughterA/1000.
-    daughterenergy[1] = G4UniformRand() * Q/(1000.*daughterA);    
-    daughtermomentum[1] = std::sqrt(daughterenergy[1]*daughterenergy[1] +
-			       2.0*daughterenergy[1] * daughtermass[1]);
+    daughterenergy[1] = G4UniformRand() * Q/(1000.*daughterA);
+    G4double recoilmomentumsquared = daughterenergy[1]*daughterenergy[1] +
+                               2.0*daughterenergy[1] * daughtermass[1];
+    if (recoilmomentumsquared < 0.0) recoilmomentumsquared = 0.0;
+    daughtermomentum[1] = std::sqrt(recoilmomentumsquared);
     //
     //create daughter G4DynamicParticle
     G4double costheta, sintheta, phi, sinphi, cosphi;

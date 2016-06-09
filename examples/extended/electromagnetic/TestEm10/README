@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2004/06/23 11:28:44 maire Exp $
+$Id: README,v 1.5 2006/05/18 08:16:42 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,7 +9,8 @@ $Id: README,v 1.4 2004/06/23 11:28:44 maire Exp $
                             --------
 
     Test for investigation of ionisation in thin absorbers, transition 
-    and synchrotron radiations.
+    and synchrotron radiations. Default setup for "TestEm10.in" and "TestEm10.large_N.in" is 
+    the experiment for XTR with NIM A294 (1990) 465-472 (fig. 11) setup
 
 
  0- INTRODUCTION

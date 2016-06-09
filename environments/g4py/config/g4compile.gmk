@@ -1,0 +1,47 @@
+# $Id: g4compile.gmk,v 1.1 2006/04/25 05:53:05 kmura Exp $
+# ===========================================================
+#   Script for building a Boost-Python module 
+# ===========================================================
+include $(G4PY_INSTALL)/config/sys/$(Q_SYSTEM).gmk
+
+# include/lib directives started...
+INCFLAGS := -I.
+LOPT := 
+
+# Geant4
+G4PY_INCFLAGS := -I$(Q_G4_INCDIR)
+
+# CLHEP
+G4PY_INCFLAGS += -I$(Q_CLHEP_INCDIR)
+G4PY_LOPT += -L$(Q_CLHEP_LIBDIR) -l$(Q_CLHEP_LIB)
+
+# geant4 version
+G4PY_INCFLAGS += -I$(G4PY_INSTALL)/source/version
+
+# finished
+CXXFLAGS += $(INCFLAGS)
+CXXFLAGS += $(G4PY_INCFLAGS)
+LOPT += $(G4PY_LOPT)
+
+# Geant4 version
+ifdef Q_G4_VERSION
+  CXXFLAGS += -DG4VERSION_NUMBER=$(Q_G4_VERSION)
+endif
+
+# ===========================================================
+#   Script for building a module
+# ===========================================================
+headers := $(wildcard *.hh)
+sources := $(wildcard *.cc)
+objects := $(patsubst %.cc, %.o, $(sources))
+
+.PHONY: clean debug
+
+all : $(objects)
+
+clean :
+	@-rm -f $(objects)
+
+debug:
+	@echo debug...
+

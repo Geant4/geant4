@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2005/11/22 17:24:25 gcosmo Exp $
+$Id: History,v 1.76 2006/06/27 13:02:53 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-06-06 V.Ivanchenko (materials-V08-00-04)
+- G4NistMaterialBuilder - fix graphite desctription
+
+11-05-06 V.Ivanchenko (materials-V08-00-03)
+- G4NistManager and G4NistMaterialBuider - add warning flag to control cout
+- G4NistElementBuilder - do not subtract mass of electrons from NIST mass
+
+02-05-06 V.Ivanchenko (materials-V08-00-02)
+- G4NistManager and G4NistElementBuider - add G4IsotopeAbundance method
+- G4NistElementBuilder - subtract mass of electrons from NIST mass
+
+18-03-06 V.Ivanchenko (materials-V08-00-01)
+- G4NistMaterialManager - fix bug in regime of combine material definition:
+                          partially via NIST DB, partially by user 
+
+09-03-06 V.Ivanchenko (materials-V08-00-00)
+- G4NistMaterialBuilder - Add method  ConstructNewGasMaterial
+- G4Material - minor change of printout
+- G4NistManager - add method GetAtomicMassAmu(Z)
      
 22-11-05 G.Cosmo (materials-V07-01-03)
 - Additional minor changes needed for direct object persistency.

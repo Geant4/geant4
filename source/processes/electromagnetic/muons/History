@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2005/10/23 16:47:23 vnivanch Exp $
+$Id: History,v 1.91 2006/05/03 16:41:01 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 March 06: V.Ivant (emmuons-V08-00-03)
+- G4EnergyLossForExtrapolator - fix compilation warning - remove G4Material*
+                                from number of methods
+
+21 March 06: V.Ivant (emmuons-V08-00-02)
+- G4MuBremsstrahlungModel - fix problem of initialisation in the case when 
+  cuts are not defined (needed for Extrapolator and for unit tests)
+- G4EnergyLossForExtrapolator - fix bug in units, add muon tables, move
+  initialisation from the constructor to the first public call, add verbose
+  variable into constructor
+     
+13 February 06 : mma (emmuons-V08-00-01)
+- added functions G4MuBetheBlochModel::ComputeCrossSectionPerElectron/Atom()
+- added functions G4MuBremsstrahlungModel::ComputeCrossSectionPerAtom()
+                  G4MuPairProductionModel::ComputeCrossSectionPerAtom()
+		  
+10 February 06 : mma
+- G4MuIonisation52, G4MuBremsstrahlung52, G4MuPairProduction52 : the function
+  ComputeMicroscopicCrossSection() is made public.
+  
+10 January 05: V.Ivant (emmuons-V08-00-00)
+- substitute the method SetStepLimits by SetStepFunction
+- move initialisation of default values to the constructor 
 
 23 October 05: V.Ivant (emmuons-V07-01-05)
 - G4MuPairProductionModel - add protection needed for sampling of pair energy

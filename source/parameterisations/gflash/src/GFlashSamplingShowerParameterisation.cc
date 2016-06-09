@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashSamplingShowerParameterisation.cc,v 1.3 2005/11/30 19:29:44 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: GFlashSamplingShowerParameterisation.cc,v 1.6 2006/06/29 19:14:20 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // ------------------------------------------------------------
@@ -42,7 +45,7 @@
 
 GFlashSamplingShowerParameterisation::
 GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
-                                     G4double d1, G4double d2,
+                                     G4double dd1, G4double dd2,
                                      GFlashSamplingShowerTuning* aPar)
   : GVFlashShowerParameterisation()
 {  
@@ -50,8 +53,8 @@ GFlashSamplingShowerParameterisation(G4Material* aMat1, G4Material* aMat2,
   else      { thePar = aPar; }
 
   SetMaterial(aMat1,aMat2 );
-  this->d1=d1;
-  this->d2=d2;
+  d1=dd1;
+  d2=dd2;
 
   // Longitudinal Coefficients for a homogenious calo
 
@@ -222,16 +225,16 @@ GenerateLongitudinalProfile(G4double Energy)
 void
 GFlashSamplingShowerParameterisation::ComputeLongitudinalParameters(G4double y)
 {
-  AveLogTmaxh  = log(std::max(ParAveT1 +log(y),0.1));  //ok 
-  AveLogAlphah = log(std::max(ParAveA1 + (ParAveA2+ParAveA3/Zeff)*log(y),.1)); //ok
+  AveLogTmaxh  = std::log(std::max(ParAveT1 +std::log(y),0.1));  //ok 
+  AveLogAlphah = std::log(std::max(ParAveA1 + (ParAveA2+ParAveA3/Zeff)*std::log(y),.1)); //ok
   //hom  
-  SigmaLogTmaxh  = std::min(0.5,1.00/( ParSigLogT1 + ParSigLogT2*log(y)) );  //ok
-  SigmaLogAlphah = std::min(0.5,1.00/( ParSigLogA1 + ParSigLogA2*log(y)));  //ok
-  Rhoh           = ParRho1+ParRho2*log(y);//ok
+  SigmaLogTmaxh  = std::min(0.5,1.00/( ParSigLogT1 + ParSigLogT2*std::log(y)) );  //ok
+  SigmaLogAlphah = std::min(0.5,1.00/( ParSigLogA1 + ParSigLogA2*std::log(y)));  //ok
+  Rhoh           = ParRho1+ParRho2*std::log(y);//ok
   // if sampling 
-  AveLogTmax  = std::max(0.1,log(exp(AveLogTmaxh)
+  AveLogTmax  = std::max(0.1,std::log(std::exp(AveLogTmaxh)
               + ParsAveT1/Fs + ParsAveT2*(1-ehat)));  //ok
-  AveLogAlpha = std::max(0.1,log(exp(AveLogAlphah)
+  AveLogAlpha = std::max(0.1,std::log(std::exp(AveLogAlphah)
               + (ParsAveA1/Fs)));  //ok
   //
   SigmaLogTmax  = std::min(0.5,1.00/( ParsSigLogT1
@@ -247,14 +250,14 @@ void GFlashSamplingShowerParameterisation::GenerateEnergyProfile(G4double /* y *
 { 
   G4double Correlation1 = std::sqrt((1+Rho)/2);
   G4double Correlation2 = std::sqrt((1-Rho)/2);
-  G4double Correlation1h = sqrt((1+Rhoh)/2);
-  G4double Correlation2h = sqrt((1-Rhoh)/2);
+  G4double Correlation1h = std::sqrt((1+Rhoh)/2);
+  G4double Correlation2h = std::sqrt((1-Rhoh)/2);
   G4double Random1 = G4RandGauss::shoot();
   G4double Random2 = G4RandGauss::shoot();
 
-  Tmax  = std::max(1.,exp( AveLogTmax  + SigmaLogTmax  *
+  Tmax  = std::max(1.,std::exp( AveLogTmax  + SigmaLogTmax  *
   (Correlation1*Random1 + Correlation2*Random2) ));
-  Alpha = std::max(1.1,exp( AveLogAlpha + SigmaLogAlpha *
+  Alpha = std::max(1.1,std::exp( AveLogAlpha + SigmaLogAlpha *
   (Correlation1*Random1 - Correlation2*Random2) ));
   Beta  = (Alpha-1.00)/Tmax;
   //Parameters for Enenrgy Profile including correaltion and sigmas  
@@ -283,7 +286,7 @@ GFlashSamplingShowerParameterisation::
 ApplySampling(const G4double DEne, const G4double )
 {
   G4double DEneFluctuated = DEne;
-  G4double Resolution     = pow(SamplingResolution,2);
+  G4double Resolution     = std::pow(SamplingResolution,2);
 
   //       +pow(NoiseResolution,2)/  //@@@@@@@@ FIXME 
   //                         Energy*(1.*MeV)+
@@ -389,10 +392,10 @@ ComputeRadialParameters(G4double Energy, G4double Tau)
 
   // sampling calorimeter  
 
-  RadiusCore   = RadiusCore + ParsRC1*(1-ehat) + ParsRC2/Fs*exp(-Tau); //ok
+  RadiusCore   = RadiusCore + ParsRC1*(1-ehat) + ParsRC2/Fs*std::exp(-Tau); //ok
   WeightCore   = WeightCore + (1-ehat)
-                            * (ParsWC1+ParsWC2/Fs * exp(-pow((Tau-1.),2))); //ok
-  RadiusTail   = RadiusTail + (1-ehat)* ParsRT1+ ParsRT2/Fs *exp(-Tau);     //ok  
+                            * (ParsWC1+ParsWC2/Fs * std::exp(-std::pow((Tau-1.),2))); //ok
+  RadiusTail   = RadiusTail + (1-ehat)* ParsRT1+ ParsRT2/Fs *std::exp(-Tau);     //ok  
 }
 
 // ------------------------------------------------------------

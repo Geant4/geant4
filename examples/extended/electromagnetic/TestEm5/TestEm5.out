@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10,7 +10,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -22,31 +22,50 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+
+Registered models: 
+  None
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+
+Registered filters:
+  None
+
 /run/verbose 2
 #
 /testem/det/setAbsMat Silicon
-/testem/det/setAbsThick 20.5 mum
-/testem/det/setAbsYZ     1 mm
+/testem/det/setAbsThick 20 um
+/testem/det/setAbsYZ    50 um
 #
 /testem/phys/addPhysics  standard
 PhysicsList::AddPhysicsList: <standard>
 ### /testem/phys/addPhysics  g4v71
 #
 /testem/phys/setGCut 2.13 mm
-/testem/phys/setECut 7.0  mum
-/testem/phys/setPCut 7.0  mum
+/testem/phys/setECut 7.0  um
+/testem/phys/setPCut 7.0  um
 #
 /run/initialize
 userDetector->Construct() start.
 
  Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
-   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
- The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 1.2 mm 
- The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 1 mm 
+ The  WORLD   is made of 30 um  of Galactic. The transverse size (YZ) of the world is 60 um 
+ The ABSORBER is made of 20 um  of Silicon. The transverse size (YZ) is 50 um 
  X position of the middle of the absorber 0 fm 
 World is registered to the default region.
 physicsList->Construct() start.
@@ -121,13 +140,22 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -167,26 +195,40 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 Region <DefaultRegionForTheWorld> -- appears in <World> world volume
  Materials : Galactic Silicon 
- Production cuts :  gamma 2.13 mm     e- 7 mum    e+ 7 mum
+ Production cuts :  gamma 2.13 mm     e- 7 um     e+ 7 um 
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
- Range cuts        :  gamma 2.13 mm     e- 7 mum    e+ 7 mum
+ Range cuts        :  gamma 2.13 mm     e- 7 um     e+ 7 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 2.13 mm     e- 7 mum    e+ 7 mum
+ Range cuts        :  gamma 2.13 mm     e- 7 um     e+ 7 um 
  Energy thresholds :  gamma 9.93829 keV    e- 10.0803 keV    e+ 9.95695 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
@@ -228,24 +270,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=170.9s Real=857.04s Sys=84.22s
+  User=135.87s Real=450.49s Sys=134.62s
 
  ======================== run summary ======================
 
- The run was 100000 pi+ of 5 GeV through 20 mum of Silicon (density: 2.3 g/cm3 )
+ The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.475 keV +- 16.97 eV 
+ Total energy deposit in absorber per event = 6.316 keV +- 16.15 eV 
+ -----> Mean dE/dx = 3.158 MeV/cm	(1.355 MeV*cm2/g)
 
- Mean dE/dx  = 3.159 MeV/cm	 stopping Power = 1.356 MeV*cm2/g
- (from Table = 2.807 MeV/cm)	 (from Table    = 1.205 MeV*cm2/g)
+ From formulas :
+   restricted dEdx = 2.806 MeV/cm	(1.204 MeV*cm2/g)
+   full dEdx       = 4.696 MeV/cm	(2.016 MeV*cm2/g)
 
- Total track length (charged) in absorber per event = 20.85 mum +- 10.19 nm 
- Total track length (neutral) in absorber per event = 6.987 Ang +- 3.581 Ang
+ Total track length (charged) in absorber per event = 20.33 um  +- 8.292 nm 
+ Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 5.212 +- 1.01e-05
- Number of steps (neutral) in absorber per event = 4e-05 +- 1.01e-05
+ Number of steps (charged) in absorber per event = 4.339 +- 9.106e-06
+ Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 4e-05;   electrons = 0.03633;   positrons = 0
+ Number of secondaries per event : Gammas = 0;   electrons = 0.03652;   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -253,12 +297,14 @@ Run Summary
  Number of events with the primary particle reflected = 0 %
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
- MultipleScattering: rms proj angle of transmit primary particle = 0.04448 mrad 
- MultipleScattering: computed theta0 (Highland formula)          = 0.02663 mrad
+ MultipleScattering:
+  rms proj angle of transmit primary particle = 0.02813 mrad (central part only)
+  computed theta0 (Highland formula)          = 0.02627 mrad
+  central part defined as +- 0.0788 mrad;   Tail ratio = 2.927 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1142296491, 1659550969
+ Current couple of seeds = 1728014667, 1847164391
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

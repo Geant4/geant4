@@ -1,0 +1,39 @@
+$Id: History,v 1.8 2006/06/23 10:48:22 vnivanch Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    hadr01 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+23-06-06 V.Ivant (exhadr01-V08-00-06)
+- Fix compilation problem for CLHEP 2.0..; use correct em builders for EMV, EMX
+  physics lists
+
+20-06-06 V.Ivant (exhadr01-V08-00-05)
+- Modify PhysicsList according to the PhysicsList phys-lists-V08-00-10
+
+15-06-06 V.Ivant (exhadr01-V08-00-04)
+- Modify PhysicsList according to the PhysicsList phys-lists-V08-00-06
+
+13-06-06 V.Ivant (exhadr01-V08-00-03)
+- Modify PhysicsList according to the PhysicsList phys-lists-V08-00-03
+
+08-06-06 V.Ivant (exhadr01-V08-00-02)
+- Fix compilation error at SUN
+
+07-06-06 V.Ivant (exhadr01-V08-00-01)
+- cleanup output, README, visulisation, and histograms
+     
+06-06-06 V.Ivant (exhadr01-V08-00-00)
+- first release
+     

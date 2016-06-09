@@ -1,0 +1,11 @@
+# $Id: install.gmk,v 1.2 2006/04/25 05:53:05 kmura Exp $
+# ===========================================================
+#   Script for installing modules
+# ===========================================================
+G4PY_LIBDIR  := $(Q_LIBDIR)/Geant4
+
+install: $(module_name)
+	@echo ... intall $(module_name) into $(G4PY_LIBDIR)
+	@if [ ! -d $(G4PY_LIBDIR) ]; then install -d $(G4PY_LIBDIR); fi
+	@install -m 755 $(module_name) $(G4PY_LIBDIR)
+

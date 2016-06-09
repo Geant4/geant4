@@ -1,0 +1,29 @@
+# $Id: anni.mac,v 1.2 2006/05/10 11:15:33 maire Exp $
+#
+# Macro file for "TestEm14.cc"
+# (can be run in batch, without graphic)
+#
+# e+ e- ---> gamma gamma
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+#
+/run/initialize
+#
+/process/inactivate eIoni
+/process/inactivate eBrem
+#
+/gun/particle e+
+/gun/energy 100 MeV
+#
+/testem/histo/setFileName anni
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 5  210  0. 105. MeV	#energy  of gamma  
+/testem/histo/setHisto 6  200 -1. +1. none	#costeta of gamma
+#
+##/tracking/verbose 2
+##/run/beamOn 1
+#
+/run/beamOn 100000

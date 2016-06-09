@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2005/12/06 11:27:37 gcosmo Exp $
+$Id: History,v 1.19 2006/05/22 19:05:49 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 May 05: V.Ivant (testem10-V08-00-01)
+- Remove extra files
+
+19 May 05: V.Ivant (testem10-V08-00-00)
+- V.Grichine cleanup 
 
 06 Dec 05: Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

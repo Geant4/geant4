@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh,v 1.3 2005/05/12 17:29:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4NistManager.hh,v 1.8 2006/06/29 19:11:38 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -35,7 +38,8 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
-//
+// 27.02.06 V.Ivanchneko add GetAtomicMassAmu and ConstructNewGasMaterial
+// 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 //
 // Class Description:
 //
@@ -71,7 +75,7 @@ class G4NistManager
 
 public:
 
-   static G4NistManager* Instance();
+  static G4NistManager* Instance();
   ~G4NistManager();
 
  // Elements
@@ -87,14 +91,16 @@ public:
   // Find or build G4Element by symbol
   G4Element* FindOrBuildElement(const G4String& symb, G4bool isotopes=true);
 
-  size_t   GetNumberOfElements() {return nElements;};
-  G4int    GetZ (const G4String& symb);
-  G4double GetIsotopeMass (G4int Z, G4int N);
+  size_t   GetNumberOfElements() const;
+  G4int    GetZ(const G4String& symb) const;
+  G4double GetAtomicMassAmu(G4int Z) const;
+  G4double GetIsotopeMass(G4int Z, G4int N) const;
+  G4double GetIsotopeAbundance(G4int Z, G4int N) const;
 
-  void PrintElement (const G4String&);
-  void PrintElement (G4int Z);
+  void PrintElement(const G4String&);
+  void PrintElement(G4int Z);
     
-  void PrintG4Element (const G4String&);  
+  void PrintG4Element(const G4String&);  
   
 
  // Materials
@@ -106,21 +112,29 @@ public:
   
   // Find or build a G4Material by name, from the dataBase
   //
-  G4Material* FindOrBuildMaterial(const G4String& name, G4bool isotopes=true);
+  G4Material* FindOrBuildMaterial(const G4String& name, G4bool isotopes=true,
+				  G4bool warning=false);
   
   // construct a G4Material from scratch by atome count
   // 
   G4Material* ConstructNewMaterial(const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4int>& nbAtoms,
-				      G4double dens, G4bool isotopes=true);
+				   const std::vector<G4String>& elm,
+				   const std::vector<G4int>& nbAtoms,
+				   G4double dens, G4bool isotopes=true);
 				      
   // construct a G4Material from scratch by fraction mass
   // 
   G4Material* ConstructNewMaterial(const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4double>& weight,
-				      G4double dens, G4bool isotopes=true);
+				   const std::vector<G4String>& elm,
+				   const std::vector<G4double>& weight,
+				   G4double dens, G4bool isotopes=true);
+
+  // construct a gas G4Material from scratch by atome count
+  // 
+  G4Material* ConstructNewGasMaterial(const G4String& name,
+                                      const G4String& nameNist,
+				      G4double temp, G4double pres, 
+				      G4bool isotopes=true);
 
   size_t GetNumberOfMaterials() {return nMaterials;};
   
@@ -178,8 +192,16 @@ G4Element* G4NistManager::FindOrBuildElement(const G4String& symb,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+inline
+size_t G4NistManager::GetNumberOfElements() const
+{ 
+  return nElements;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 inline 
-G4int G4NistManager::GetZ(const G4String& symb)
+G4int G4NistManager::GetZ(const G4String& symb) const
 {
   return elmBuilder->GetZ(symb);
 }
@@ -187,9 +209,25 @@ G4int G4NistManager::GetZ(const G4String& symb)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
-G4double G4NistManager::GetIsotopeMass(G4int Z, G4int N)
+G4double G4NistManager::GetAtomicMassAmu(G4int Z) const
+{
+  return elmBuilder->GetA(Z);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4double G4NistManager::GetIsotopeMass(G4int Z, G4int N) const
 {
   return elmBuilder->GetIsotopeMass(Z, N);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4double G4NistManager::GetIsotopeAbundance(G4int Z, G4int N) const
+{
+  return elmBuilder->GetIsotopeAbundance(Z, N);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

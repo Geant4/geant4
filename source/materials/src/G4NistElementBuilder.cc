@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc,v 1.7 2005/09/06 08:28:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4NistElementBuilder.cc,v 1.10 2006/06/29 19:12:58 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -34,7 +37,8 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
-//
+// 02.05.2006 Subtract mass of atomic electrons from NIST mass (VI) 
+// 11.05.2006 Do not subtract mass of atomic electrons from NIST mass (VI) 
 //
 // -------------------------------------------------------------------
 //
@@ -173,7 +177,7 @@ void G4NistElementBuilder::PrintElement(G4int Z)
     G4int nc = nIsotopes[i];
     G4cout << "Nist Element: <" << elmSymbol[i]
            << ">  Z= " << i
-	   << "  A= " << atomicMass[i] << "  "
+	   << "  Aeff(amu)= " << atomicMass[i] << "  "
 	   << nc << " isotopes:"
            << G4endl;
     if(verbose > 1) {
@@ -196,8 +200,8 @@ void G4NistElementBuilder::PrintElement(G4int Z)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
-                                  const G4int& N, const G4double& A,
-		                  const G4double& sA, const G4double& W)
+				      const G4int& N, const G4double& A,
+				      const G4double& sA, const G4double& W)
 {
   if (verbose > 1) 
   G4cout << "AddElement " << name << " Z= " << Z << " nc= " << nc << G4endl;
@@ -223,10 +227,11 @@ void G4NistElementBuilder::AddElement(const G4String& name, G4int Z, G4int nc,
   G4double ww = 0.0;
   G4double www;
   size_t nm = nc;
+  //  G4double delm = G4double(Z)*electron_mass_c2/amu_c2;
 
   for(size_t i=0; i<nm; i++) {
     www = 0.01*(&W)[i];
-    massIsotopes[index] = (&A)[i];
+    massIsotopes[index] = (&A)[i]; // - delm;
     sigMass[index]      = (&sA)[i];
     relAbundance[index] = www;
 

@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 // File name:     G4PAIModel.cc
@@ -59,6 +62,7 @@ using namespace std;
 
 G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
+    fVerbose(0),
   fTotBin(200),
   fMeanNumber(20),
   fParticle(0),
@@ -255,7 +259,7 @@ G4PAIModel::BuildPAIonisationTable()
 					 fHighestKineticEnergy,
 					 fTotBin               ) ;
   Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
-  deltaLow = 0.5*eV ;
+  deltaLow = 100.*eV; // 0.5*eV ;
 
   for (G4int i = 0 ; i < fTotBin ; i++)  //The loop for the kinetic energy
   {
@@ -357,10 +361,11 @@ G4PAIModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
 					  fHighestKineticEnergy,
 					  fTotBin                ) ;
   G4double deltaCutInKineticEnergyNow = (*deltaCutInKineticEnergy)[jMatCC] ;
-
+  if(fVerbose)
+  {
   G4cout<<"PAIModel DeltaCutInKineticEnergyNow = "
         <<deltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
-
+  }
   for ( i = 0 ; i < fTotBin ; i++ )
   {
     dNdxCut = GetdNdxCut(i,deltaCutInKineticEnergyNow) ;
@@ -560,7 +565,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   fdNdxCutVector    = fdNdxCutTable[jMat];
 
   G4double tmax = min(MaxSecondaryKinEnergy(dp), maxEnergy);
-  if( tmin >= tmax )
+  if( tmin >= tmax && fVerbose)
   {
     G4cout<<"G4PAIModel::SampleSecondary: tmin >= tmax "<<G4endl;
   }
@@ -577,13 +582,15 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
 
   // G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV<<" keV "<<G4endl;
 
-  if( deltaTkin <= 0. ) 
+  if( deltaTkin <= 0. && fVerbose ) 
   {
     G4cout<<"Tkin of secondary e- <= 0."<<G4endl;
     G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
-    deltaTkin = 10*eV;
+    // deltaTkin = 10*eV;
     G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
   }
+  if( deltaTkin <= 0.) return 0;
+
   if(deltaTkin > kineticEnergy && 
      particleMass != electron_mass_c2) deltaTkin = kineticEnergy;
   if (deltaTkin > 0.5*kineticEnergy && 
@@ -593,6 +600,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   G4double totalMomentum      = sqrt(pSquare);
   G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
                                 /(deltaTotalMomentum * totalMomentum);
+
   if( costheta >= 0.99999 ) costheta = 0.99999;
   G4double sintheta, sin2 = 1. - costheta*costheta;
 
@@ -701,6 +709,8 @@ G4PAIModel::GetPostStepTransfer( G4double scaledTkin )
   } 
   // G4cout<<"PAImodel PostStepTransfer = "<<transfer/keV<<" keV"<<G4endl ; 
   if(transfer < 0.0 ) transfer = 0.0 ;
+  // if(transfer < DBL_MIN ) transfer = DBL_MIN;
+
   return transfer ;
 }
 
@@ -917,6 +927,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   } 
   // G4cout<<"PAIModel AlongStepLoss = "<<loss/keV<<" keV, on step = "<<step/mm<<" mm"<<G4endl ; 
   if(loss > Tkin) loss=Tkin;
+  if(loss < 0.  ) loss = 0.;
   return loss ;
 
 }

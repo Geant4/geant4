@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2005/12/06 11:50:01 gcosmo Exp $
+$Id: History,v 1.29 2006/05/24 13:42:00 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+24-05-06 mma (testem6-V08-00-01)
+- register G4StepLimiter in PhysicsList
+     
+16-02-06 mma (testem6-V08-00-00)
+- add command /testem/phys/SetAnnihiToHadronFac
 
 06-12-05 Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.1 2004/05/13 14:50:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ReflectionFactory.hh,v 1.3 2006/06/29 18:57:39 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // class G4ReflectionFactory
@@ -96,7 +99,8 @@ class G4ReflectionFactory
                                       G4LogicalVolume* LV,
                                       G4LogicalVolume* motherLV,
                                       G4bool isMany, 
-                                      G4int  copyNo);
+                                      G4int  copyNo,
+                                      G4bool surfCheck=false);
       // Evaluates the passed transformation; if it contains reflection
       // it performs its decomposition, creates new reflected solid and
       // logical volume (or retrieves them from a map if the reflected
@@ -187,7 +191,7 @@ class G4ReflectionFactory
  
   private:  
 
-    G4LogicalVolume*   ReflectLV(G4LogicalVolume* LV);
+    G4LogicalVolume*   ReflectLV(G4LogicalVolume* LV, G4bool surfCheck=false);
       // Gets/creates the reflected solid and logical volume
       // and copies + transforms LV daughters.
 
@@ -195,10 +199,12 @@ class G4ReflectionFactory
       // Creates the reflected solid and logical volume
       // and add the logical volumes pair in the maps.
 
-    void ReflectDaughters(G4LogicalVolume* LV, G4LogicalVolume* refLV);
+    void ReflectDaughters(G4LogicalVolume* LV,
+                          G4LogicalVolume* refLV, G4bool surfCheck=false);
       // Reflects daughters recursively.
 
-    void ReflectPVPlacement(G4VPhysicalVolume* PV, G4LogicalVolume* refLV);
+    void ReflectPVPlacement(G4VPhysicalVolume* PV,
+                            G4LogicalVolume* refLV, G4bool surfCheck=false);
       // Copies and transforms daughter of PVPlacement type of
       // a constituent volume into a reflected volume. 
 
@@ -210,7 +216,8 @@ class G4ReflectionFactory
       // Copies and transforms daughter of PVDivision type of
       // a constituent volume into a reflected volume. 
 
-    void ReflectPVParameterised(G4VPhysicalVolume* PV, G4LogicalVolume* refLV);
+    void ReflectPVParameterised(G4VPhysicalVolume* PV,
+                                G4LogicalVolume* refLV, G4bool surfCheck=false);
       // Not implemented yet.
       // Should copy and transform daughter of PVReplica type of
       // a constituent volume into a reflected volume. 

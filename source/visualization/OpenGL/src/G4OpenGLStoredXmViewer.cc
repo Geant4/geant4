@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXmViewer.cc,v 1.13 2005/10/13 17:30:08 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4OpenGLStoredXmViewer.cc,v 1.19 2006/06/29 21:19:30 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -77,20 +80,17 @@ void G4OpenGLStoredXmViewer::Initialise () {
 
 void G4OpenGLStoredXmViewer::DrawView () {
 
-  glClearColor (background.GetRed(),
-		background.GetGreen(),
-		background.GetBlue(),
-		1.);
-
   //Make sure current viewer is attached and clean...
   glXMakeCurrent (dpy, win, cx);
   glViewport (0, 0, WinSize_x, WinSize_y);
-  ClearView ();
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
   //See if things have changed from last time and remake if necessary...
-  KernelVisitDecision ();
+  // /vis/viewer/rebuild, but if not, make decision and set flag only
+  // if necessary...
+  if (!fNeedKernelVisit) KernelVisitDecision ();
+  G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
 
   if(style!=G4ViewParameters::hlr &&
@@ -102,12 +102,18 @@ void G4OpenGLStoredXmViewer::DrawView () {
 
     HaloingSecondPass ();
 
+    DrawDisplayLists ();
+    FinishView ();
+
+  } else {
+
+    // If kernel visit was needed, drawing and FinishView will already
+    // have been done, so...
+    if (!kernelVisitWasNeeded) {
+      DrawDisplayLists ();
+      FinishView ();
+    }
   }
-
-  DrawDisplayLists ();
-
-  FinishView ();
-  
 }
 
 #endif

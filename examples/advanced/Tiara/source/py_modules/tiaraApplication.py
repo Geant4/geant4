@@ -1,6 +1,6 @@
-# $Id: tiaraApplication.py,v 1.6 2005/12/15 16:23:56 ahoward Exp $
+# $Id: tiaraApplication.py,v 1.7 2006/06/26 10:13:14 ahoward Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-08-00 $
+# GEANT4 tag $Name: geant4-08-01 $
 # -------------------------------------------------------------------
 #
 import string
@@ -74,7 +74,7 @@ class TiaraApplet(object):
             print "TiaraApplet.visMode(): event action exists already"
         else:
             self.eventAction = Tiara.TiaraVisEventAction()
-            self.tiaraSim.AddVisRunAction()
+# now later            self.tiaraSim.AddVisRunAction()
             self.tiaraSim.AddTiaraEventAction(self.eventAction)
         return
 
@@ -209,6 +209,9 @@ class TiaraApplet(object):
         self.tiaraSim.SetPhysicsList(self.physicsList)
         return
 
+    def visAdd(self):
+        self.tiaraSim.AddVisRunAction()
+        return
 
     def setPrimaryGenerator(self, primGen):
         self.primGen = primGen

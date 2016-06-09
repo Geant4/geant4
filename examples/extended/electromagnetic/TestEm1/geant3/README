@@ -20,7 +20,7 @@
      
      Content of these histo:
   
-      1 : track length of a charged particle
-      2 : number of steps per track (charged particle)
-      3 : step length (charged particle)
+      1 : track length of primary particle
+      2 : number of steps of primary particle
+      3 : step size of primary particle
   

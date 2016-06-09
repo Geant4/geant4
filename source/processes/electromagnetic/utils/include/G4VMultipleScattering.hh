@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.29 2005/10/27 11:33:26 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VMultipleScattering.hh,v 1.39 2006/06/29 19:54:51 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +56,11 @@
 // 15-04-05 remove boundary flag (V.Ivanchenko)
 // 07-10-05 error in a protection in GetContinuousStepLimit corrected (L.Urban)
 // 27-10-05 introduce virtual function MscStepLimitation() (V.Ivanchenko)
+// 26-01-06 Rename GetRange -> GetRangeFromRestricteDEDX (V.Ivanchenko)
+// 17-02-06 Save table of transport cross sections not mfp (V.Ivanchenko)
+// 07-03-06 Move step limit calculation to model (V.Ivanchenko)
+// 13-05-06 Add method to access model by index (V.Ivanchenko)
+//
 
 // -------------------------------------------------------------------
 //
@@ -94,10 +102,6 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
-  virtual G4double TruePathLengthLimit(const G4Track& track,
-                                             G4double& lambda,
-                                             G4double currentMinimalStep) = 0;
-
   virtual void PrintInfo() = 0;
 
 protected:
@@ -123,9 +127,9 @@ public:
   // Generic methods common to all models
   //------------------------------------------------------------------------
 
-  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   // The function overloads the corresponding function of the base
   // class.It limits the step near to boundaries only
@@ -172,7 +176,7 @@ public:
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
   // This method does not used for tracking, it is intended only for tests
-  G4double ContinuousStepLimit(const G4Track& track,
+  virtual G4double ContinuousStepLimit(const G4Track& track,
                                      G4double previousStepSize,
                                      G4double currentMinimalStep,
                                      G4double& currentSafety);
@@ -183,13 +187,16 @@ public:
 
   void SetBuildLambdaTable(G4bool val);
 
-  const G4PhysicsTable* LambdaTable() const;
+  G4PhysicsTable* LambdaTable() const;
 
   G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
 
   // Define particle definition
   const G4ParticleDefinition* Particle() const;
   void SetParticle(const G4ParticleDefinition*);
+
+  // Access to models
+  G4VEmModel* GetModelByIndex(G4int idx = 0);
 
 protected:
 
@@ -201,23 +208,21 @@ protected:
   G4double GetLambda(const G4ParticleDefinition* p, G4double& kineticEnergy);
 
   // This method is used for tracking, it returns step limit
-  G4double GetContinuousStepLimit(const G4Track& track,
+  virtual G4double GetContinuousStepLimit(const G4Track& track,
                                         G4double previousStepSize,
                                         G4double currentMinimalStep,
                                         G4double& currentSafety);
 
-  void SelectModel(G4double& kinEnergy);
+  G4VEmModel* SelectModel(G4double kinEnergy);
   // Select concrete model
 
-  size_t CurrentMaterialCutsCoupleIndex() const {return currentMaterialIndex;};
-  // Return current index
-
-  G4double CurrentRange() const {return currentRange;};
-
-private:
+  const G4MaterialCutsCouple* CurrentMaterialCutsCouple() const; 
+  // Return current G4MaterialCutsCouple
 
   void DefineMaterial(const G4MaterialCutsCouple* couple);
   // define current material
+
+private:
 
   // hide  assignment operator
 
@@ -226,14 +231,18 @@ private:
 
   // =====================================================================
 
+protected:
+
+  G4GPILSelection             valueGPILSelectionMSC;
   G4ParticleChangeForMSC      fParticleChange;
+
+private:
+
   G4EmModelManager*           modelManager;
   G4VEmModel*                 currentModel;
-
-  // tables and vectors
   G4PhysicsTable*             theLambdaTable;
 
-  // cash
+  // cache
   const G4ParticleDefinition* firstParticle;
   const G4ParticleDefinition* currentParticle;
   const G4MaterialCutsCouple* currentCouple;
@@ -244,13 +253,6 @@ private:
   G4double                    minKinEnergy;
   G4double                    maxKinEnergy;
 
-  G4double                    trueStepLength;
-  G4double                    truePathLength;
-  G4double                    geomPathLength;
-  G4double                    lambda0;
-  G4double                    currentRange;
-
-  G4GPILSelection             valueGPILSelectionMSC;
   G4bool                      latDisplasment;
   G4bool                      buildLambdaTable;
 };
@@ -289,6 +291,7 @@ inline G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   valueGPILSelectionMSC = NotCandidateForSelection;
   G4double steplength = GetContinuousStepLimit(track,previousStepSize,
                                               currentMinimalStep,currentSafety);
+  // G4cout << "StepLimit= " << steplength << G4endl;
   // set return value for G4GPILSelection
   *selection = valueGPILSelectionMSC;
   return  steplength;
@@ -303,26 +306,13 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
                                                 G4double&)
 {
   DefineMaterial(track.GetMaterialCutsCouple());
-  G4double e = track.GetKineticEnergy();
-  SelectModel(e);
-  const G4ParticleDefinition* p = track.GetDefinition();
-  lambda0 = GetLambda(p, e);
-  currentRange = G4LossTableManager::Instance()->GetTrancatedRange(p,e,currentCouple);
-  // the next line was in error 
-  // if(currentRange < currentMinimalStep) currentRange = currentMinimalStep;
-  //  the condition/protection correctly should be
-  if(currentRange < currentMinimalStep) currentMinimalStep = currentRange;
-  truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
-  //G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
-  //       << lambda0 << " range= " << currentRange
-  //       << " currentMinStep= " << currentMinimalStep << G4endl;
-  if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
-  geomPathLength = currentModel->GeomPathLength(theLambdaTable,currentCouple,
-           p,e,lambda0,currentRange,truePathLength);
-  if(geomPathLength > lambda0) geomPathLength = lambda0;
-  return geomPathLength;
+  currentModel = SelectModel(track.GetKineticEnergy());
+  G4double tPathLength = 
+    currentModel->ComputeTruePathLengthLimit(track, theLambdaTable, currentMinimalStep);
+  if (tPathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
+  //  G4cout << "tPathLength= " << tPathLength << " currentMinimalStep= " << currentMinimalStep<< G4endl;
+  return currentModel->ComputeGeomPathLength(tPathLength);
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -344,10 +334,11 @@ inline G4double G4VMultipleScattering::GetLambda(const G4ParticleDefinition* p, 
   if(theLambdaTable) {
     G4bool b;
     x = ((*theLambdaTable)[currentMaterialIndex])->GetValue(e, b);
-
   } else {
     x = currentModel->CrossSection(currentCouple,p,e);
   }
+  if(x > DBL_MIN) x = 1./x;
+  else            x = DBL_MAX; 
   return x;
 }
 
@@ -357,12 +348,8 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
                                                         const G4Track&,
                                                         const G4Step& step)
 {
-  G4double geomStepLength = step.GetStepLength();
-  if((geomStepLength == geomPathLength) && (truePathLength <= currentRange))
-     trueStepLength = truePathLength;
-  else
-     trueStepLength = currentModel->TrueStepLength(geomStepLength);
-  fParticleChange.ProposeTrueStepLength(trueStepLength);
+  fParticleChange.ProposeTrueStepLength(
+    currentModel->ComputeTrueStepLength(step.GetStepLength()));
   return &fParticleChange;
 }
 
@@ -379,9 +366,9 @@ inline G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& tra
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VMultipleScattering::SelectModel(G4double& kinEnergy)
+inline G4VEmModel* G4VMultipleScattering::SelectModel(G4double kinEnergy)
 {
-  currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
+  return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -464,9 +451,20 @@ inline  const G4ParticleDefinition* G4VMultipleScattering::Particle() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline const G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
+inline G4PhysicsTable* G4VMultipleScattering::LambdaTable() const
 {
   return theLambdaTable;
+}
+
+inline 
+const G4MaterialCutsCouple* G4VMultipleScattering::CurrentMaterialCutsCouple() const
+{
+  return currentCouple;
+} 
+
+inline G4VEmModel* G4VMultipleScattering::GetModelByIndex(G4int idx)
+{
+  return modelManager->GetModel(idx);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,0 +1,92 @@
+$Id: History,v 1.6 2006/05/19 15:46:37 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm14 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+19-05-06 mma (testem14-V08-00-04)
+- update README
+     
+10-05-06 mma (testem14-V08-00-03)
+- added protection in DetectorConstruction::UpdateDeometry()
+     
+26-04-06 mma (testem14-V08-00-02)
+- move TestEm13 to TestEm14
+     
+26-04-06 mma (testem13-V08-00-05)
+- save time in SteppingAction: procname==Transportation
+- do not save rndm seed per event
+     
+19-04-06 mma (testem13-V08-00-04)
+- geant3 : extension to charged particles.
+     
+18-04-06 mma (testem13-V08-00-03)
+- macros renamed : allprocess -> gamma  phot -> photoelec
+     
+14-04-06 mma (testem13-V08-00-02)
+- extended to charged particles: PhysicsList, RunAction, SteppingAction.
+- new macros provided.
+- remove multipleScattering from PhysicsList 
+- plot final state only if destep is small enough.
+     
+27-01-06 mma (testem13-V08-00-01)
+- add LowEnergy PhysicsList : livermore and penelope
+- RunAction: minor changes in printout format      
+     
+06-01-06 mma
+- example PhotonProcesses renamed TestEm13 
+    
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+22-11-05 mma (photonprocesses-V07-01-01)
+- update README for OpenScientist
+     
+14-11-05 Gabriele Cosmo (photonprocesses-V07-01-00)
+- Migration to <sstream> for HistoMessenger.
+
+01-06-05 mma (photonprocesses-V07-00-02)
+- HistoManager : option "--noErrors" for hbook
+     
+10-05-05 mma (photonprocesses-V07-00-01)
+- migration v70->standard->v52 : PhysicsList and macros
+- EmCalculator in RunAction
+     
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+03-03-05 mma (photonprocesses-V07-00-00)
+- HistoManager : - put a protection for the creation of analysis factory;
+                 - file extension is fileType;
+		 
+- HistoMessenger : new command setFileOption 
+
+02 Dec 04: V.Ivant (photonprocesses-V06-02-03)
+- Migration to cmath
+     
+29-09-04 mma(photonprocesses-V06-02-02)
+- do not delete Analysisfactory (for Jaida)
+     
+13.08.04 mma (photonprocesses-V06-02-01)
+- add anni.mac
+     
+30.06.04 mma (photonprocesses-V06-02-00)
+- modifs in HistoManager and messenger to conform to testem5-V06-01-04
+     
+10.06.04 mma (photonprocesses-V06-01-01)
+- modifs in HistoManager and messenger to allow a multiruns job.
+              
+23.04.04 Michel Maire (photonprocesses-V06-01-00)
+- creation, from TestEm1
+     

@@ -1,0 +1,23 @@
+# $Id: build.gmk,v 1.2 2006/04/25 05:53:05 kmura Exp $
+# ===========================================================
+#   Script for building a module
+# ===========================================================
+headers := $(wildcard *.hh)
+sources := $(wildcard *.cc)
+objects := $(patsubst %.cc, %.o, $(sources))
+
+.PHONY: clean debug 
+
+module_name := $(MODULE).$(soext)
+$(module_name) : $(objects)
+	$(build-module)
+
+module : $(module_name)
+
+clean :
+	@-rm -f $(module_name)
+	@-rm -f $(objects)
+
+debug: 
+	@echo debug...
+

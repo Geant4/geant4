@@ -48,4 +48,4 @@
 /gui/addButton viewer "Update scene" "/vis/scene/notifyHandlers"
 #
 # To limit the output flow in the "dump" widget :
-/event/printModulo 100
+/N03/event/printModulo 100

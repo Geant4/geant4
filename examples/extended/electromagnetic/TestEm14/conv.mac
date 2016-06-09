@@ -1,0 +1,32 @@
+# $Id: conv.mac,v 1.1 2006/04/24 15:42:48 maire Exp $
+#
+# Macro file for "TestEm13.cc"
+# (can be run in batch, without graphic)
+#
+# photon 20 MeV; gamma conversion to e+e-
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Lead
+#
+#### /testem/phys/addPhysics g4v52
+#
+/run/initialize
+#
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate GammaToMuPair
+#
+/gun/particle gamma
+/gun/energy 20 MeV
+#
+/testem/histo/setFileName conv
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 3  200 0. 20. MeV	#energy  of ch. secondaries  
+/testem/histo/setHisto 4  200 0. +1.  none 	#costeta of ch. secondaries
+#
+##/tracking/verbose 2
+##/run/beamOn 1
+#
+/run/beamOn 100000

@@ -14,6 +14,57 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 June 2006 - V.Ivanchenko (hadr-cohe-V08-00-09)
+-----------------------------------------------
+  Fix - remove nan values  n scattering on deuteron (V.Ivanchenko) 
+
+17 June 2006 - V.Ivanchenko (ghad-cohe-V08-00-08)
+-----------------------------------------------
+  Use sampling of final state for n, p scattering on deuteron
+  and alpha from LElastic (V.Ivanchenko) 
+
+7 June 2006 - V.Ivanchenko (ghad-cohe-V08-00-07)
+-----------------------------------------------
+  Fix complilation warnings at WINDOWS (V.Ivanchenko) 
+
+2 June 2006 - V.Ivanchenko (ghad-cohe-V08-00-06)
+-----------------------------------------------
+  Fix complilation warnings at SUN (V.Ivanchenko) 
+
+1 June 2006 - V.Ivanchenko (ghad-cohe-V08-00-05)
+-----------------------------------------------
+  Add regime of HElastic which is not using data files (N.Starkov)
+  Cleanup (V.Ivanchenko) 
+
+30 May 2006 - V.Ivanchenko (ghad-cohe-V08-00-04)
+-----------------------------------------------
+  Add ChargeExchangeProcess, cleanup G4HadronElastic
+
+2 May 2006 - V.Ivanchenko (ghad-cohe-V08-00-03)
+-----------------------------------------------
+  Rename G4LElasticB -> G4HadronElastic
+
+25 April 2006 - V.Ivanchenko (ghad-cohe-V08-00-02)
+-------------------------------------------------
+  G4UHadronElasticProcess and G4LElasticB: use np scattering from CHIPS,
+                fix run time warnings 	
+  Rename G4LElasticB by G4HadronElastic
+  
+
+24 April 2006 - V.Ivanchenko (ghad-cohe-V08-00-01)
+-------------------------------------------------
+  G4UHadronElasticProcess - new process allows to use G4Isotopes composition
+                of elements defined by user and uses cross sections from
+                CHIPS and HP models when appropriate 
+
+13 April 2006 - V.Ivanchenko (ghad-cohe-V08-00-00)
+-------------------------------------------------
+  G4LElasticB - moved from low_energy; bug fixes - remove charge
+                exchange option, remove low limit on primary momentum;
+                add limit on secondary kinetic energy; add only s-wave
+                regime for low momentum scattering
+  GNUmakfile  - introduce dependence on chips  
+
 28 Nov 2005 - G. Cosmo (hadr-cohe-V07-01-05)
 ---------------------------------------------
   Migrated to <sstream> from G4ElasticHadrNucleusHE.

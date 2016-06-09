@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
@@ -30,8 +33,8 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.10 2004/01/08 17:25:13 silvarod Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: BrachyPhysicsList.cc,v 1.12 2006/06/29 15:48:42 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 #include "BrachyPhysicsList.hh"
 
@@ -47,6 +50,9 @@
 
 BrachyPhysicsList::BrachyPhysicsList():  G4VUserPhysicsList()
 {
+  // The production threshold is fixed to 0.1 mm for all the particles
+  // Secondary particles with a range bigger than 0.1 mm 
+  // are generated; otherwise their energy is considered deposited locally
   defaultCutValue = 0.1*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
@@ -107,37 +113,38 @@ void BrachyPhysicsList::ConstructProcess()
 void BrachyPhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
+
   while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    G4String particleName = particle->GetParticleName();
+
+    G4ParticleDefinition* particle = theParticleIterator -> value();
+    G4ProcessManager* pmanager = particle -> GetProcessManager();
+    G4String particleName = particle -> GetParticleName();
     
     //processes
     
     if (particleName == "gamma") {
-      //gamma  
-      lowePhot = new  G4LowEnergyPhotoElectric("LowEnPhotoElec");
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
-      pmanager->AddDiscreteProcess(lowePhot);
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-      pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
+      //gamma     
+      pmanager -> AddDiscreteProcess(new G4LowEnergyRayleigh);
+      pmanager -> AddDiscreteProcess(new  G4LowEnergyPhotoElectric);
+      pmanager -> AddDiscreteProcess(new G4LowEnergyCompton);
+      pmanager -> AddDiscreteProcess(new G4LowEnergyGammaConversion);
       
     } else if (particleName == "e-") {
       //electron
       loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
       loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
-      loweBrem->SetAngularGenerator("tsai");
+      loweBrem -> SetAngularGenerator("tsai");
     
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(loweIon,     -1, 2,2);
-      pmanager->AddProcess(loweBrem,    -1,-1,3);      
+      pmanager -> AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager -> AddProcess(loweIon,     -1, 2,2);
+      pmanager -> AddProcess(loweBrem,    -1,-1,3);      
       
     } else if (particleName == "e+") {
       //positron      
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);      
+      pmanager -> AddProcess(new G4MultipleScattering, -1, 1,1);
+      pmanager -> AddProcess(new G4eIonisation,        -1, 2,2);
+      pmanager -> AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+      pmanager -> AddProcess(new G4eplusAnnihilation,   0,-1,4);      
       
     }
   }  
@@ -155,61 +162,4 @@ void BrachyPhysicsList::SetCuts()
   SetCutValue(cutForPositron, "e+");
   
   if (verboseLevel>0) DumpCutValuesTable();
-}
-
-void BrachyPhysicsList::SetGammaLowLimit(G4double lowcut)
-{
-  SetGELowLimit(lowcut);
-}
-
-void BrachyPhysicsList::SetElectronLowLimit(G4double lowcut)
-{
-  SetGELowLimit(lowcut);
-}
-
-void BrachyPhysicsList::SetGELowLimit(G4double lowcut)
-{
-  if (verboseLevel >0){
-    G4cout << "BrachyPhysicsList::SetCuts:";
-    G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
-  }  
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowcut,1e5);
-}
-
-void BrachyPhysicsList::SetGammaCut(G4double val)
-{
-  ResetCuts();
-  cutForGamma = val;
-}
-
-void BrachyPhysicsList::SetElectronCut(G4double val)
-{
-  cutForElectron = val;
-}
-
-void BrachyPhysicsList::SetPositronCut(G4double val)
-{
-  cutForPositron = val;
-}
-
-void BrachyPhysicsList::SetLowEnSecPhotCut(G4double cut)
-{  
-  G4cout<<"Low energy secondary photons cut is now set to: "
-	<<cut*MeV
-        <<" (MeV)"<<G4endl;
-
-  G4cout<<"for processes LowEnergyPhotoElectric, LowEnergyBremsstrahlung, LowEnergyIonisation"<<G4endl;
-
-  lowePhot->SetCutForLowEnSecPhotons(cut);
-  loweIon->SetCutForLowEnSecPhotons(cut);
-  loweBrem->SetCutForLowEnSecPhotons(cut);
-}
-
-void BrachyPhysicsList::SetLowEnSecElecCut(G4double cut)
-{  
-  G4cout<<"Low energy secondary electrons cut is now set to: "
-        <<cut*MeV
-        <<" (MeV)"<<G4endl;
-  G4cout<<"for processes LowEnergyIonisation"<<G4endl;
-  loweIon->SetCutForLowEnSecElectrons(cut);
 }

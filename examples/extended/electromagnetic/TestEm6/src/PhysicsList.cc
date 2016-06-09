@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.9 2005/11/29 08:24:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: PhysicsList.cc,v 1.12 2006/06/29 16:57:09 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,6 +64,8 @@
 #include "G4Decay.hh"
 #include "G4EmProcessOptions.hh"
 
+#include "G4StepLimiter.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
@@ -70,8 +75,8 @@ PhysicsList::PhysicsList()
   pMes = new PhysicsListMessenger(this);
   theGammaToMuPairProcess = 0;
   theAnnihiToMuPairProcess = 0;
+  eehadProcess = 0;
   SetVerboseLevel(1);
-  verboseLevel = 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,6 +86,7 @@ PhysicsList::~PhysicsList()
   delete pMes;
   delete theAnnihiToMuPairProcess;
   delete theGammaToMuPairProcess;
+  delete eehadProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,6 +97,7 @@ void PhysicsList::ConstructParticle()
   // for all particles which you want to use.
   // This ensures that objects of these particle types will be
   // created in the program.
+  
   ConstructBosons();
   ConstructLeptons();
   ConstructHadrons();
@@ -160,13 +167,12 @@ void PhysicsList::ConstructProcess()
 
 void PhysicsList::ConstructEM()
 {
-  G4double factor = 10000.0;
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-    //    G4cout << "New Particle " << particleName << G4endl;
+
     if (particleName == "gamma") {
       // gamma    allow  only   gamma -> mu+mu-
       theGammaToMuPairProcess=new G4GammaConversionToMuons();
@@ -177,22 +183,23 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,4);      
 
     } else if (particleName == "e+") {
       //positron
       // to make the process of e+e- annihilation more visible,
       // do not enable the other standard processes:
-      //pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      //pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      // pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      // pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       // pmanager->AddProcess(new G4eBremsstrahlung,   -1, 3,3);
       // pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
-      theAnnihiToMuPairProcess=new G4AnnihiToMuPair();
-      G4eeToHadrons* eehad = new G4eeToHadrons();
-      theAnnihiToMuPairProcess->SetCrossSecFactor(factor);
-      eehad->SetCrossSecFactor(factor);
+      
+      theAnnihiToMuPairProcess = new G4AnnihiToMuPair();
+      eehadProcess             = new G4eeToHadrons();
       pmanager->AddDiscreteProcess(theAnnihiToMuPairProcess);
-      pmanager->AddDiscreteProcess(eehad);
-
+      pmanager->AddDiscreteProcess(eehadProcess);
+      pmanager->AddDiscreteProcess(new G4StepLimiter);
+       
     } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
       //muon
@@ -200,21 +207,26 @@ void PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,5);            
       
     } else if( particleName == "anti_proton") {
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hhIonisation,      -1, 2,2);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
 
     } else if( particleName == "GenericIon") {
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4ionIonisation,     -1, 2,2);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
       
     } else if( particle->GetPDGCharge() != 0.0 && !particle->IsShortLived()
             && particleName != "chargedgeantino") {
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4hIonisation,       -1, 2,2);
+      pmanager->AddProcess(new G4StepLimiter,       -1,-1,3);       
     }
   }
+  
   G4EmProcessOptions opt;
   opt.SetVerbose(1);
 }
@@ -268,6 +280,13 @@ void PhysicsList::SetGammaToMuPairFac(G4double fac)
 void PhysicsList::SetAnnihiToMuPairFac(G4double fac)
 {
   if(theAnnihiToMuPairProcess) theAnnihiToMuPairProcess->SetCrossSecFactor(fac);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysicsList::SetAnnihiToHadronFac(G4double fac)
+{
+  if(eehadProcess) eehadProcess->SetCrossSecFactor(fac);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

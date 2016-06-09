@@ -1,30 +1,32 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VSteppingVerbose.hh,v 1.15 2003/06/16 17:13:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VSteppingVerbose.hh,v 1.22 2006/06/29 21:15:49 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
-//  
 //---------------------------------------------------------------
 //
 // G4VSteppingVerbose.hh
@@ -56,7 +58,7 @@ class G4VSensitiveDetector;
 class G4ProcessVector;
 class G4SteppingManager;              // Include from 'tracking'
 class G4Track;
-#include "G4TrackVector.hh"            // Include from 'tracking'
+#include "G4TrackVector.hh"           // Include from 'tracking'
 #include "G4StepStatus.hh"            // Include from 'track'
 class G4UserSteppingAction;
 class G4StepPoint;
@@ -66,18 +68,26 @@ class G4VParticleChange;
 #include "G4GPILSelection.hh"   //enum 'track'
 
 
-class G4VSteppingVerbose{
-
+class G4VSteppingVerbose
+{
 // Constructor/Destructor
 protected:    // to force 'singleton'
   G4VSteppingVerbose();  
 public:  
   virtual ~G4VSteppingVerbose();
   //
+protected:  
+  static G4VSteppingVerbose* fInstance;// pointer to the instance 
+  static G4int Silent; //flag for verbosity
+  static G4int SilentStepInfo; //another flag for verbosity
 public:   // with description
 // static methods to set/get the object's pointer 
   static void SetInstance(G4VSteppingVerbose* Instance);
   static G4VSteppingVerbose* GetInstance();
+  static G4int GetSilent();
+  static void SetSilent(G4int fSilent);
+  static G4int GetSilentStepInfo();
+  static void SetSilentStepInfo(G4int fSilent);
 // these method are invoked in the SteppingManager 
   virtual void NewStep() = 0;
   void CopyState();
@@ -97,8 +107,6 @@ public:   // with description
   virtual void VerboseParticleChange() = 0;
   // Member data
 
-protected:  // pointer to the instance 
-  static G4VSteppingVerbose* fInstance;
 protected:
   G4SteppingManager* fManager;
   

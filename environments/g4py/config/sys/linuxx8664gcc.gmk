@@ -1,0 +1,91 @@
+# $Id: linuxx8664gcc.gmk,v 1.3 2006/06/27 06:40:14 kmura Exp $
+# $Name: geant4-08-01 $
+# ===========================================================
+#   System specific terms
+# ===========================================================
+
+# compile flags
+CXX      := g++ -m64
+
+ifdef COMPILE_WITH_BOOST
+  CXXFLAGS := -fPIC -ftemplate-depth-255 -finline-functions -Wno-inline
+  CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB  
+  ifndef DEBUG
+    CXXFLAGS += -DNDEBUG
+  endif
+else
+  CXXFLAGS := -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
+  CXXFLAFS += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
+  CXXFLAGS += -fPIC
+endif
+
+ifdef COMPILE_G4PY
+  CXXFLAGS := -fPIC -ansi -pipe
+  CXXFLAGS += -ftemplate-depth-255 -finline-functions
+  CXXFLAGS += -DBOOST_PYTHON_DYNAMIC_LIB
+  ifndef DEBUG
+    CXXFLAGS += -DNDEBUG
+  endif
+endif
+
+# extention of shared library
+soext := so
+
+# implicit rules
+%.o: %.cc
+ifdef CPPVERBOSE
+	$(CXX) -c -o $@ $(CXXFLAGS) $(CPPFLAGS) $*.cc
+else
+	@echo Compiling $< ...
+	@$(CXX) -c -o $@ $(CXXFLAGS) $(CPPFLAGS) $*.cc
+endif
+
+%.pyc: %.py;  python -c 'import py_compile; py_compile.compile( "$<" )'
+%.pyo: %.py;  python -O -c 'import py_compile; py_compile.compile( "$<" )'
+
+
+# building a shared library
+ifdef Q_BOOST_LIBDIR
+  rpath0 := $(Q_BOOST_LIBDIR)
+endif
+
+ifdef G4PY_EXLIB_LIBDIR
+  rpath1 := $(G4PY_EXLIB_LIBDIR)
+endif
+
+ifdef COMPILE_G4PY
+  #rpath2 := $(Q_G4_LIBDIR):$(Q_CLHEP_LIBDIR)
+  ifneq ($(Q_G4_LIBDIR), $(BOOST_LIBDIR))
+    rpath2 := $(Q_G4_LIBDIR)
+  endif
+  ifneq ($(Q_CLHEP_LIBDIR), $(Q_G4_LIBDIR))
+   rpath3 := :$(Q_CLHEP_LIBDIR)
+  endif
+endif
+
+rpathflag := -Wl,-rpath,$(rpath0):$(rpath1):$(rpath2):$(rpath3)
+
+ifdef CPPVERBOSE
+  define build-library
+    $(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ \
+      $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+  endef
+else
+  define build-library
+    @echo Building a library $@ ...
+    @$(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ \
+      $(foreach dir,$(SUBLIBS),$(dir)/*.o)
+  endef
+endif
+
+ifdef CPPVERBOSE
+  define build-module
+    $(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ $(objects) $(LOPT)
+  endef
+else
+  define build-module
+    @echo Building a module $@ ...
+    @$(CXX) $(rpathflag) -Wl,-soname,$@ -shared -o $@ $(objects) $(LOPT)
+  endef
+endif
+

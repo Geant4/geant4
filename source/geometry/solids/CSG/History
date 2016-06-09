@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2005/11/21 07:59:18 gcosmo Exp $
+$Id: History,v 1.91 2006/06/06 10:34:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 06, 2006  V.Grichine                 geom-csg-V08-00-01
+- G4Tubs: added protection against NaNs in CalculateExtent() to avoid
+  sqrt() of negative numbers due to round-off.
+- Updated unit tests testG4Sphere and testDistanceAccuracy.
+
+Jan 16, 2006  V.Grichine                 geom-csg-V08-00-00
+- G4Sphere: fixed bug in DistanceToOut() for theta intersections.
 
 Nov 20, 2005  V.Grichine                 geom-csg-V07-01-05
 - G4Torus: fixed bug in Inside(p) for phi sections.

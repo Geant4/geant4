@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc,v 1.78 2005/12/04 01:36:17 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VisManager.cc,v 1.98 2006/06/29 21:30:00 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -30,6 +33,8 @@
 
 #include "G4VisCommands.hh"
 #include "G4VisCommandsCompound.hh"
+#include "G4VisCommandsGeometry.hh"
+#include "G4VisCommandsGeometrySet.hh"
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
 #include "G4VisCommandsSceneHandler.hh"
@@ -57,12 +62,18 @@
 #include "G4NullModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4TransportationManager.hh"
-#include "G4VisListManager.hh"
 #include "G4VisCommandModelCreate.hh"
 #include "G4VisCommandsListManager.hh"
+#include "G4VisModelManager.hh"
 #include "G4VModelFactory.hh"
+#include "G4VisFilterManager.hh"
 #include "G4VTrajectoryModel.hh"
 #include "G4TrajectoryDrawByCharge.hh"
+#include "Randomize.hh"
+#include "G4RunManager.hh"
+#include "G4Run.hh"
+#include "G4Event.hh"
+
 #include <sstream>
 
 G4VisManager* G4VisManager::fpInstance = 0;
@@ -77,10 +88,18 @@ G4VisManager::G4VisManager ():
   fVerbosity       (warnings),
   fVerbose         (1),
   fpStateDependent (0),
-  fTrajectoryPlacement("/vis/modeling/trajectories"),
-  fpTrajectoryModelMgr(new G4TrajectoryModelManager())
+  fEventCount      (0),
+  fReprocessing (false),
+  fReprocessingLastEvent (false),
+  fLastRunID       (0),
+  fLastEventID     (0),
+  fTransientsDrawnThisRun   (false),
+  fTransientsDrawnThisEvent (false)
   // All other objects use default constructors.
 {
+  fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
+  fpTrajFilterMgr = new G4VisFilterManager<G4VTrajectory>("/vis/filtering/trajectories");
+
   VerbosityGuidanceStrings.push_back
     ("Simple graded message scheme - digit or string (1st character defines):");
   VerbosityGuidanceStrings.push_back
@@ -164,11 +183,8 @@ G4VisManager::~G4VisManager () {
     delete fDirectoryList[i];
   }
 
-  for (i = 0; i < fTrajectoryModelFactoryList.size(); ++i) {
-    delete fTrajectoryModelFactoryList[i];
-  }
-
-  delete fpTrajectoryModelMgr;
+  delete fpTrajDrawModelMgr;
+  delete fpTrajFilterMgr;
 }
 
 G4VisManager* G4VisManager::GetInstance () {
@@ -213,7 +229,7 @@ void G4VisManager::Initialise () {
 
   if (fVerbosity >= startup) {
     G4cout <<
-      "\nYou have successfully chosen to use the following graphics systems."
+      "\nYou have successfully registered the following graphics systems."
 	 << G4endl;
     PrintAvailableGraphicsSystems ();
     G4cout << G4endl;
@@ -237,6 +253,17 @@ void G4VisManager::Initialise () {
   directory -> SetGuidance ("Create trajectory models and messengers.");
   fDirectoryList.push_back (directory);
 
+  // Filtering command directory
+  directory = new G4UIdirectory ("/vis/filtering/");
+  directory -> SetGuidance ("Filtering commands.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/trajectories/");
+  directory -> SetGuidance ("Trajectory filtering commands.");
+  fDirectoryList.push_back (directory);
+  directory = new G4UIdirectory ("/vis/filtering/trajectories/create/");
+  directory -> SetGuidance ("Create trajectory filters and messengers.");
+  fDirectoryList.push_back (directory);
+
   RegisterMessengers ();
 
   if (fVerbosity >= startup) {
@@ -244,6 +271,14 @@ void G4VisManager::Initialise () {
   }
 
   RegisterModelFactories();
+
+  if (fVerbosity >= startup) {
+    G4cout <<
+      "\nYou have successfully registered the following model factories."
+	 << G4endl;
+    PrintAvailableModels ();
+    G4cout << G4endl;
+  }
 
   fInitialised = true;
 }
@@ -319,31 +354,61 @@ G4bool G4VisManager::RegisterGraphicsSystem (G4VGraphicsSystem* pSystem) {
   return happy;
 }
 
+const G4VTrajectoryModel*
+G4VisManager::CurrentTrajDrawModel() const
+{
+  assert (0 != fpTrajDrawModelMgr);
+
+  const G4VTrajectoryModel* model = fpTrajDrawModelMgr->Current();
+
+  if (0 == model) {
+    // No model was registered with the trajectory model manager.
+    // Use G4TrajectoryDrawByCharge as a default.
+    fpTrajDrawModelMgr->Register(new G4TrajectoryDrawByCharge("AutoGenerated"));
+
+    if (fVerbosity >= warnings) {
+      G4cout<<"G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model."<<G4endl;
+      G4cout<<"See commands in /vis/modeling/trajectories/ for other options."<<G4endl;
+    }
+  }
+
+  model = fpTrajDrawModelMgr->Current();
+  assert (0 != model); // Should definitely exist now
+
+  return model;
+}
+
 void G4VisManager::RegisterModel(G4VTrajectoryModel* model) 
 {
-  fpTrajectoryModelMgr->Register(model);
+  fpTrajDrawModelMgr->Register(model);
 }
 
 void
-G4VisManager::RegisterModelFactory(G4TrajectoryModelFactory* factory) 
+G4VisManager::RegisterModelFactory(G4TrajDrawModelFactory* factory) 
 {
-  // vis manager takes ownership
-  fTrajectoryModelFactoryList.push_back(factory);
+  fpTrajDrawModelMgr->Register(factory);
+}
 
-  // Create messenger for this factory
-  RegisterMessenger(new G4VisCommandModelCreate<G4TrajectoryModelFactory>(factory, fTrajectoryPlacement));
+void G4VisManager::RegisterModel(G4VFilter<G4VTrajectory>* model)
+{
+  fpTrajFilterMgr->Register(model);
+}
+
+void
+G4VisManager::RegisterModelFactory(G4TrajFilterFactory* factory)
+{
+  fpTrajFilterMgr->Register(factory);
 }
 
 void G4VisManager::SelectTrajectoryModel(const G4String& model) 
 {
-   fpTrajectoryModelMgr->SetCurrent(model);
+   fpTrajDrawModelMgr->SetCurrent(model);
 }
 
 void G4VisManager::Draw (const G4Circle& circle,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (circle);
     fpSceneHandler -> EndPrimitives ();
@@ -354,7 +419,6 @@ void G4VisManager::Draw (const G4NURBS& nurbs,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (nurbs);
     fpSceneHandler -> EndPrimitives ();
@@ -365,7 +429,6 @@ void G4VisManager::Draw (const G4Polyhedron& polyhedron,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polyhedron);
     fpSceneHandler -> EndPrimitives ();
@@ -376,7 +439,6 @@ void G4VisManager::Draw (const G4Polyline& line,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (line);
     fpSceneHandler -> EndPrimitives ();
@@ -387,7 +449,6 @@ void G4VisManager::Draw (const G4Polymarker& polymarker,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (polymarker);
     fpSceneHandler -> EndPrimitives ();
@@ -398,7 +459,6 @@ void G4VisManager::Draw (const G4Scale& scale,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (scale);
     fpSceneHandler -> EndPrimitives ();
@@ -409,7 +469,6 @@ void G4VisManager::Draw (const G4Square& square,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (square);
     fpSceneHandler -> EndPrimitives ();
@@ -420,17 +479,25 @@ void G4VisManager::Draw (const G4Text& text,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> BeginPrimitives (objectTransform);
     fpSceneHandler -> AddPrimitive (text);
     fpSceneHandler -> EndPrimitives ();
   }
 }
 
+void G4VisManager::Draw2D (const G4Text& text)
+{
+  if (IsValidView()) {
+    ClearTransientStoreIfMarked();
+    fpSceneHandler -> BeginPrimitives2D();
+    fpSceneHandler -> AddPrimitive(text);
+    fpSceneHandler -> EndPrimitives2D();
+  }
+}
+
 void G4VisManager::Draw (const G4VHit& hit) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> AddCompound (hit);
   }
 }
@@ -458,7 +525,6 @@ void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4Transform3D& objectTransform) {
   if (IsValidView ()) {
     ClearTransientStoreIfMarked();
-    CheckModel();
     fpSceneHandler -> PreAddSolid (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
     fpSceneHandler -> PostAddSolid ();
@@ -635,28 +701,34 @@ void G4VisManager::GeometryHasChanged () {
 
 }
 
+G4bool G4VisManager::FilterTrajectory(const G4VTrajectory& trajectory)
+{
+  return fpTrajFilterMgr->Accept(trajectory);
+}   
+
 void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory, G4int i_mode)
 {
-  assert (0 != fpTrajectoryModelMgr);
+  G4bool visible(true);
 
-  const G4VTrajectoryModel* model = fpTrajectoryModelMgr->Current();
+  // See if trajectory passes filter
+  G4bool passed = FilterTrajectory(trajectory);
 
-  if (0 == model) {
-    // No model was registered with the trajectory model manager. 
-    // Use G4TrajectoryDrawByCharge as a default.
-    fpTrajectoryModelMgr->Register(new G4TrajectoryDrawByCharge());
-
-    if (fVerbosity >= warnings) {
-      G4cout<<"G4VisManager: Using G4TrajectoryDrawByCharge as default trajectory model."<<G4endl;
-      G4cout<<"See commands in /vis/modeling/trajectories/ for other options."<<G4endl;
-    }
+  if (!passed) {
+    // Draw invisible trajectory if trajectory failed filter and
+    // are filtering in soft mode
+    if (fpTrajFilterMgr->GetMode() == FilterMode::Soft) visible = false;
+    else {return;}
   }
-  
-  model = fpTrajectoryModelMgr->Current();
-  assert (0 != model); // Should definitely exist now
 
-  model->Draw(trajectory, i_mode);
-}
+  // Go on to draw trajectory
+  assert (0 != fpTrajDrawModelMgr);
+
+  const G4VTrajectoryModel* model = CurrentTrajDrawModel();
+
+  assert (0 != model); // Should exist
+
+  model->Draw(trajectory, i_mode, visible);
+} 
 
 void G4VisManager::SetUserAction
 (G4VUserVisAction* pVisAction,
@@ -671,6 +743,18 @@ void G4VisManager::SetUserAction
 	     << G4endl;
     }
   }
+}
+
+void G4VisManager::SetCurrentScene (G4Scene* pScene) {
+  if (pScene != fpScene) {
+    // A change of scene.  Therefore reset transients drawn flags.  All
+    // memory of previous transient proceessing thereby erased...
+    fTransientsDrawnThisRun = false;
+    if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
+    fTransientsDrawnThisEvent = false;
+    if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
+  }
+  fpScene = pScene;
 }
 
 void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
@@ -782,15 +866,42 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
 
 void G4VisManager::RegisterMessengers () {
 
-  // Instantiate individual messengers/commands (often one command per
-  // messenger).
+  // Instantiate individual messengers/commands (often - but not
+  // always - one command per messenger).
 
   G4VVisCommand::SetVisManager (this);  // Sets shared pointer to vis manager.
 
   G4UIcommand* directory;
 
+  // Top level commands...
   RegisterMessenger(new G4VisCommandEnable);
+  RegisterMessenger(new G4VisCommandList);
   RegisterMessenger(new G4VisCommandVerbose);
+
+  // Compound commands...
+  RegisterMessenger(new G4VisCommandDrawTree);
+  RegisterMessenger(new G4VisCommandDrawView);
+  RegisterMessenger(new G4VisCommandDrawVolume);
+  RegisterMessenger(new G4VisCommandOpen);
+  RegisterMessenger(new G4VisCommandSpecify);
+
+  directory = new G4UIdirectory ("/vis/geometry/");
+  directory -> SetGuidance("Operations on vis attributes of Geant4 geometry.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandGeometryList);
+  RegisterMessenger(new G4VisCommandGeometryRestore);
+
+  directory = new G4UIdirectory ("/vis/geometry/set/");
+  directory -> SetGuidance("Set vis attributes of Geant4 geometry.");
+  fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandGeometrySetColour);
+  RegisterMessenger(new G4VisCommandGeometrySetDaughtersInvisible);
+  RegisterMessenger(new G4VisCommandGeometrySetLineStyle);
+  RegisterMessenger(new G4VisCommandGeometrySetLineWidth);
+  RegisterMessenger(new G4VisCommandGeometrySetForceAuxEdgeVisible);
+  RegisterMessenger(new G4VisCommandGeometrySetForceSolid);
+  RegisterMessenger(new G4VisCommandGeometrySetForceWireframe);
+  RegisterMessenger(new G4VisCommandGeometrySetVisibility);
 
   directory = new G4UIdirectory ("/vis/scene/");
   directory -> SetGuidance ("Operations on Geant4 scenes.");
@@ -801,11 +912,13 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneList);
   RegisterMessenger(new G4VisCommandSceneNotifyHandlers);
   RegisterMessenger(new G4VisCommandSceneSelect);
+  RegisterMessenger(new G4VisCommandSceneTransientsAction);
 
   directory = new G4UIdirectory ("/vis/scene/add/");
   directory -> SetGuidance ("Add model to current scene.");
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandSceneAddAxes);
+  RegisterMessenger(new G4VisCommandSceneAddEventID);
   RegisterMessenger(new G4VisCommandSceneAddGhosts);
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
@@ -846,18 +959,17 @@ void G4VisManager::RegisterMessengers () {
   fDirectoryList.push_back (directory);
   RegisterMessenger(new G4VisCommandsViewerSet);
 
-  // Compound commands...
-  RegisterMessenger(new G4VisCommandDrawTree);
-  RegisterMessenger(new G4VisCommandDrawView);
-  RegisterMessenger(new G4VisCommandDrawVolume);
-  RegisterMessenger(new G4VisCommandOpen);
-  RegisterMessenger(new G4VisCommandSpecify);
-
   // List manager commands
-  RegisterMessenger(new G4VisCommandListManagerList<G4TrajectoryModelManager>
-		    (fpTrajectoryModelMgr, fTrajectoryPlacement));
-  RegisterMessenger(new G4VisCommandListManagerSelect<G4TrajectoryModelManager>
-		    (fpTrajectoryModelMgr, fTrajectoryPlacement));  
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisModelManager<G4VTrajectoryModel> >
+		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));
+  RegisterMessenger(new G4VisCommandListManagerSelect< G4VisModelManager<G4VTrajectoryModel> >
+		    (fpTrajDrawModelMgr, fpTrajDrawModelMgr->Placement()));  
+
+  // Filter manager commands
+  RegisterMessenger(new G4VisCommandListManagerList< G4VisFilterManager<G4VTrajectory> >
+                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
+  RegisterMessenger(new G4VisCommandManagerMode< G4VisFilterManager<G4VTrajectory> >
+                    (fpTrajFilterMgr, fpTrajFilterMgr->Placement()));
 }
 
 void G4VisManager::PrintAvailableGraphicsSystems () const {
@@ -876,6 +988,13 @@ void G4VisManager::PrintAvailableGraphicsSystems () const {
     G4cout << "\n  NONE!!!  None registered - yet!  Mmmmm!";
   }
   G4cout << G4endl;
+}
+
+void G4VisManager::PrintAvailableModels () const
+{
+  fpTrajDrawModelMgr->Print(G4cout);
+  G4cout << G4endl;
+  fpTrajFilterMgr->Print(G4cout);
 }
 
 void G4VisManager::PrintInvalidPointers () const {
@@ -903,18 +1022,177 @@ void G4VisManager::PrintInvalidPointers () const {
   }
 }
 
-void G4VisManager::BeginOfRun () {
+/************* Event copy stuff *******************************
+#include "G4PrimaryVertex.hh"
+#include "G4PrimaryParticle.hh"
+
+G4String fLastEventRandomStatus;
+G4Event* fLastEvent;
+std::vector<G4String> fEventsRandomStatus;
+std::vector<G4Event*> fEvents;
+
+G4PrimaryParticle* CopyParticles(G4PrimaryParticle* pp)
+{
+  G4PrimaryParticle* newPP = 0;
+  G4PrimaryParticle* previousPP = 0;
+  while (pp) {
+    G4PrimaryParticle* tmpPP = new G4PrimaryParticle(*pp);
+    tmpPP->ClearNextParticlePointer();
+    G4PrimaryParticle* daughters = pp->GetDaughter();
+    G4PrimaryParticle* newDaughters = CopyParticles(daughters);
+    tmpPP->SetDaughter(newDaughters);
+    if (!newPP) newPP = tmpPP;
+    else previousPP->SetNext(tmpPP);
+    previousPP = tmpPP;
+    pp = pp->GetNext();
+  }
+  // Set user info = 0???
+  return newPP;
+}
+
+// Not needed?
+void DeleteParticles(G4PrimaryParticle* pp)
+{
+  while (pp) {
+    G4PrimaryParticle* daughters = pp->GetDaughter();
+    DeleteParticles(daughters);
+    G4PrimaryParticle* oldPP = pp;
+    pp = pp->GetNext();
+    delete oldPP;
+  }
+}
+
+G4PrimaryVertex* CopyVertices(G4PrimaryVertex* pv)
+{
+  G4PrimaryVertex* newPV = 0;
+  G4PrimaryVertex* previousPV = 0;
+  while (pv) {
+    G4PrimaryVertex* tmpPV = new G4PrimaryVertex(*pv);
+    tmpPV->ClearNextVertexPointer();
+    G4PrimaryParticle* primaryParticle = pv->GetPrimary();
+    G4PrimaryParticle* newPrimaryParticle = CopyParticles(primaryParticle);
+    tmpPV->SetPrimary(newPrimaryParticle);
+    if (!newPV) newPV = tmpPV;
+    else previousPV->SetNext(tmpPV);
+    previousPV = tmpPV;
+    pv = pv->GetNext();
+  }
+  // Set user info = 0???
+  return newPV;
+}
+
+// Not needed?
+void DeleteVertices(G4PrimaryVertex* pv)
+{
+  while (pv) {
+    G4PrimaryParticle* primaryParticle = pv->GetPrimary();
+    DeleteParticles(primaryParticle);
+    G4PrimaryVertex* oldPV = pv;
+    pv = pv->GetNext();
+    delete oldPV;
+  }
+}
+
+G4Event* CreateDeepCopy(const G4Event* event)
+{
+  G4Event* newEvent = new G4Event(*event);
+  G4PrimaryVertex* primaryVertex = event->GetPrimaryVertex();
+  G4PrimaryVertex* newPrimaryVertex = CopyVertices(primaryVertex);
+  newEvent->AddPrimaryVertex(newPrimaryVertex);
+  // Set user info = 0???
+  return newEvent;
+}
+
+// Not needed?
+void DeleteEvent(G4Event* event)
+{
+  if (event) {
+    G4PrimaryVertex* primaryVertex = event->GetPrimaryVertex();
+    DeleteVertices(primaryVertex);
+    delete event;
+  }
+}
+************ Event copy stuff ***********************************/
+
+void G4VisManager::BeginOfRun ()
+{
   //G4cout << "G4VisManager::BeginOfRun" << G4endl;
+  fEventCount = 0;
+  fTransientsDrawnThisRun = false;
+  if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
+/************* Event copy stuff *******************************
+  if (!fReprocessing) {
+    fEventsRandomStatus.clear();
+    std::vector<G4Event*>::iterator i;
+    //for (i = fEvents.begin(); i != fEvents.end(); ++i) DeleteEvent(*i);
+    for (i = fEvents.begin(); i != fEvents.end(); ++i) delete *i;
+    fEvents.clear();
+  }
+************ Event copy stuff ***********************************/
 }
 
-void G4VisManager::BeginOfEvent () {
+void G4VisManager::BeginOfEvent ()
+{
   //G4cout << "G4VisManager::BeginOfEvent" << G4endl;
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  if (runManager) {
+    if (!fEventCount) {  // First event.  Do run stuff here because,
+			 // curiously, currentRun is still zero in
+			 // BeginOfRun.
+      fBeginOfLastRunRandomStatus =
+        runManager->GetRandomNumberStatusForThisRun();
+      /*************************************************
+      std::ostringstream oss;
+      CLHEP::HepRandom::saveFullState(oss);
+      fBeginOfLastRunRandomStatus = oss.str();
+      ************************************************/
+      const G4Run* currentRun = runManager->GetCurrentRun();
+      if (currentRun) fLastRunID = currentRun->GetRunID();
+      else fLastRunID++;
+    }
+    fBeginOfLastEventRandomStatus =
+      runManager->GetRandomNumberStatusForThisEvent();
+    /*************************************************
+    std::ostringstream oss;
+    CLHEP::HepRandom::saveFullState(oss);
+    fBeginOfLastEventRandomStatus = oss.str();
+    ************************************************/
+    G4Event* currentEvent =
+      G4EventManager::GetEventManager()->GetNonconstCurrentEvent();
+    if (currentEvent) {
+      if (fReprocessingLastEvent) currentEvent->SetEventID(fLastEventID);
+      else fLastEventID = currentEvent->GetEventID();
+    }
+
+    /************* Event copy stuff *******************************
+    // If not triggered by transient re-computation in
+    // G4VSceneHandler::ProcessScene (and re-computation requested)...
+    if (!fReprocessing && fpScene && fpScene->GetRecomputeTransients()) {
+      const G4Event* event =
+	G4EventManager::GetEventManager()->GetConstCurrentEvent();
+      std::ostringstream oss;
+      CLHEP::HepRandom::saveFullState(oss);
+      fLastEventRandomStatus = oss.str();
+      fLastEvent = CreateDeepCopy(event);
+      if (!fpScene->GetRefreshAtEndOfEvent()) {
+	fEventsRandomStatus.push_back(fLastEventRandomStatus);
+	fEvents.push_back(fLastEvent);
+      }
+    }
+    ************ Event copy stuff ***********************************/
+
+  }
+  fTransientsDrawnThisEvent = false;
+  if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
 }
 
-void G4VisManager::EndOfEvent () {
+void G4VisManager::EndOfEvent ()
+{
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
+  ++fEventCount;
+
   // Don't call IsValidView unless there is a scene handler.  This
-  // avoids ERROR messages at end of event and run when the user has
+  // avoids WARNING message at end of event and run when the user has
   // not instantiated a scene handler, e.g., in batch mode.
   if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
     const std::vector<G4VModel*>& EOEModelList =
@@ -922,36 +1200,50 @@ void G4VisManager::EndOfEvent () {
     size_t nModels = EOEModelList.size();
     if (nModels) {
       ClearTransientStoreIfMarked();
-      fVisManagerModelingParameters
-	= *(fpSceneHandler -> CreateModelingParameters ());
       for (size_t i = 0; i < nModels; i++) {
 	G4VModel* pModel = EOEModelList [i];
-	pModel -> SetModelingParameters (&fVisManagerModelingParameters);
 	fpSceneHandler -> SetModel (pModel);
 	pModel -> DescribeYourselfTo (*fpSceneHandler);
       }
-      fpSceneHandler -> SetModel (0);  // Flags invalid model.
+      fpSceneHandler -> SetModel (0);
     }
     if (fpScene->GetRefreshAtEndOfEvent()) {
-      fpViewer->ShowView();  // ...for systems needing post processing.
-      fpSceneHandler->SetMarkForClearingTransientStore(true);
-    }
-  }
-}
-
-void G4VisManager::EndOfRun () {
-  //G4cout << "G4VisManager::EndOfRun" << G4endl;
-  // Don't call IsValidView unless there is a scene handler.  This
-  // avoids ERROR messages at end of event and run when the user has
-  // not instantiated a scene handler, e.g., in batch mode.
-  if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
-    if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
-      if (fpScene->GetRefreshAtEndOfRun()) {
-	fpViewer->ShowView();  // ...for systems needing post processing.
+      G4int nEvents = 0;
+      G4int eventID = -2;  // (If no run manager, triggers ShowView as normal.)
+      G4RunManager* runManager = G4RunManager::GetRunManager();
+      if (runManager) {
+	const G4Run* currentRun = runManager->GetCurrentRun();
+	const G4Event* currentEvent = runManager->GetCurrentEvent();
+	if (currentRun && currentEvent) {
+	  nEvents = currentRun->GetNumberOfEventToBeProcessed();
+	  eventID = currentEvent->GetEventID();
+	}
+      }
+      // Unless last event (in which case wait end of run)...
+      if (eventID < nEvents - 1) {
+	fpViewer->ShowView();
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
     }
   }
+}
+
+void G4VisManager::EndOfRun ()
+{
+  //G4cout << "G4VisManager::EndOfRun" << G4endl;
+  // Don't call IsValidView unless there is a scene handler.  This
+  // avoids WARNING message at end of event and run when the user has
+  // not instantiated a scene handler, e.g., in batch mode.
+  if (GetConcreteInstance() && fpSceneHandler && IsValidView()) {
+    if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
+      if (fpScene->GetRefreshAtEndOfRun()) {
+	fpViewer->ShowView();
+	fpSceneHandler->SetMarkForClearingTransientStore(true);
+      }
+    }
+  }
+  fReprocessing = false;
+  fReprocessingLastEvent = false;
 }
 
 void G4VisManager::ClearTransientStoreIfMarked(){
@@ -960,18 +1252,12 @@ void G4VisManager::ClearTransientStoreIfMarked(){
     fpSceneHandler->SetMarkForClearingTransientStore(false);
     fpSceneHandler->ClearTransientStore();
   }
-}
-
-void G4VisManager::CheckModel () {
-  G4VModel* pModel = fpSceneHandler->GetModel();
-  if (!pModel) {  // provide a null model.
-    pModel = &fVisManagerNullModel;
-    fpSceneHandler -> SetModel (pModel);
-  }
-  // Ensure modeling parameters are right for this view...
-  fVisManagerModelingParameters
-    = *(fpSceneHandler -> CreateModelingParameters ());
-  pModel->SetModelingParameters (&fVisManagerModelingParameters);
+  // Record if transients drawn.  These local flags are only set
+  // *after* ClearTransientStore.  In the code in G4VSceneHandler
+  // triggered by ClearTransientStore, use these flags so that
+  // transient reprocessing is not done too early.
+  fTransientsDrawnThisEvent = fpSceneHandler->GetTransientsDrawnThisEvent();
+  fTransientsDrawnThisRun = fpSceneHandler->GetTransientsDrawnThisRun();
 }
 
 G4String G4VisManager::ViewerShortName (const G4String& viewerName) const {
@@ -1076,11 +1362,14 @@ G4bool G4VisManager::IsValidView () {
     // not want to use graphics, e.g., in batch mode.
     if (noGSPrinting) {
       noGSPrinting = false;
-      if (fVerbosity >= errors) {
+      if (fVerbosity >= warnings) {
 	G4cout <<
-  "ERROR: G4VisManager::IsValidView(): Vis manager but no graphics system."
-  "\n  Suppress instantiation of vis manager (G4VisExecutive) or"
-  "\n  use \"/vis/open\" or \"/vis/sceneHandler/create\"."
+  "WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system"
+  "\n  has been instantiated.  Use \"/vis/open\" or \"/vis/sceneHandler/create\"."
+  "\n  Alternatively, to avoid this message, suppress instantiation of vis"
+  "\n  manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure"
+  "\n  drawing code is executed only if G4VVisManager::GetConcreteInstance()"
+  "\n  is non-zero."
 	       << G4endl;
       }
     }
@@ -1160,11 +1449,11 @@ G4bool G4VisManager::IsValidView () {
       isValid = false;
     }
     else {
-      G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/viewer/reset");
+      G4UImanager::GetUIpointer()->ApplyCommand ("/vis/scene/notifyHandlers");
       if (fVerbosity >= warnings) {
 	G4cout <<
 	  "WARNING: G4VisManager: the scene was empty, \"world\" has been"
-	  "\n  added and the view parameters have been reset.";
+	  "\n  added and the scene handlers notified.";
 	G4cout << G4endl;
       }
     }

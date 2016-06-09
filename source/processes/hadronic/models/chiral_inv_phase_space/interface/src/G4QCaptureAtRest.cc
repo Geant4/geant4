@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.1 2005/11/25 20:29:25 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4QCaptureAtRest.cc,v 1.3 2006/06/29 20:08:28 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
 //                 by Mikhail Kossov, December 2003.
@@ -302,7 +305,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     // For low energy neutrons the threshold of the capture must be checked
     G4QPDGCode QPDGbase;
     mAT=QPDGbase.GetNuclMass(Z,N,0);          // mass of the GS target nucleus
-    G4double mAR=sqrt(mAT*(mAT+totNE+totNE)+mNeut2); // Real compound mass
+    G4double mAR=std::sqrt(mAT*(mAT+totNE+totNE)+mNeut2); // Real compound mass
     G4double mAN=QPDGbase.GetNuclMass(Z,N+1,0); // mass of the GS compound nucleus
     mAP=QPDGbase.GetNuclMass(Z-1,N+1,0);      // M_GSCompoundNucleus-proton
     G4double mAA=1000000.; // Default (light nuclei) mass of the GSCompoundNucleus-alpha
@@ -315,8 +318,8 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
       if(totNE-mNeut<.0001) chargExElastic=true; // neutron is too soft -> chargeExchange
       else
 						{
-        G4double probP=sqrt(eProt*(dmProt+eProt));
-        G4double probN=sqrt(eNeut*(dmNeut+eNeut));
+        G4double probP=std::sqrt(eProt*(dmProt+eProt));
+        G4double probN=std::sqrt(eNeut*(dmNeut+eNeut));
         if((probN+probP)*G4UniformRand()<probN) neutronElastic=true; // nElastic Scattering
         else chargExElastic=true; // proton's phase space is bigger -> chargeExchange
       }

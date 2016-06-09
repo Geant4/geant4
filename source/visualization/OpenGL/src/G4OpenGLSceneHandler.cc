@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.39 2005/11/22 16:11:06 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4OpenGLSceneHandler.cc,v 1.43 2006/06/29 21:19:14 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -43,7 +46,6 @@
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLFontBaseStore.hh"
-#include "G4OpenGLViewerDataStore.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
@@ -55,6 +57,7 @@
 #include "G4VMarker.hh"
 #include "G4Polyhedron.hh"
 #include "G4VisAttributes.hh"
+#include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"
@@ -89,7 +92,6 @@ const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55
 };
 
-//Method for handling G4Polyline objects (from tracking or wireframe).
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 {
   G4int nPoints = line.size ();
@@ -103,8 +105,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   else {glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LESS);}
 
   glDisable (GL_LIGHTING);
-  glBegin (GL_LINE_STRIP);
 
+  glBegin (GL_LINE_STRIP);
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
   G4double x, y, z;
     x = line[iPoint].x(); 
@@ -382,9 +384,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   // attributes, thereby over-riding the current view parameter.
   G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
 
-  //Get colour, etc..
-  G4bool transparency_enabled =
-    G4OpenGLViewerDataStore::GetTransparencyEnabled(fpViewer);
+  //Get colour, etc...
+  G4bool transparency_enabled = true;
+  G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pViewer) transparency_enabled = pViewer->transparency_enabled;
   const G4Colour& c = GetColour (polyhedron);
   GLfloat materialColour [4];
   materialColour [0] = c.GetRed ();
@@ -505,11 +508,15 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     if (n > 4) {
       G4cerr <<
 	"G4OpenGLSceneHandler::AddPrimitive(G4Polyhedron): WARNING";
-      if (fpCurrentPV) {
+      G4PhysicalVolumeModel* pPVModel =
+	dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+      if (pPVModel) {
+	G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+	G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
 	G4cerr <<
-	"\n  Volume " << fpCurrentPV->GetName() <<
-	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
-	  " (" << fpCurrentLV->GetSolid()->GetEntityType();
+	"\n  Volume " << pCurrentPV->GetName() <<
+	", Solid " << pCurrentLV->GetSolid()->GetName() <<
+	  " (" << pCurrentLV->GetSolid()->GetEntityType();
       }
       G4cerr<<
 	"\n   G4Polyhedron facet with " << n << " edges" << G4endl;

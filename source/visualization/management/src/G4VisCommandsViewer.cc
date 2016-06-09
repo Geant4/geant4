@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.53 2005/11/22 17:00:15 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VisCommandsViewer.cc,v 1.60 2006/06/29 21:29:48 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -312,7 +315,16 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   // Refresh if appropriate...
-  if (newViewer) SetViewParameters(newViewer, newViewer->GetViewParameters());
+  if (newViewer) {
+    if (newViewer->GetViewParameters().IsAutoRefresh()) {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    }
+    else {
+      if (verbosity >= G4VisManager::confirmations) {
+	G4cout << "Issue /vis/viewer/refresh to see effect." << G4endl;
+      }
+    }
+  }
 }
 
 ////////////// /vis/viewer/dolly and dollyTo ////////////////////////////
@@ -468,7 +480,7 @@ G4VisCommandViewerList::G4VisCommandViewerList () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("verbosity", 's',
 				 omitable = true);
-  parameter -> SetDefaultValue (0);
+  parameter -> SetDefaultValue ("warnings");
   fpCommand -> SetParameter (parameter);
 }
 
@@ -693,8 +705,11 @@ void G4VisCommandViewerRebuild::SetNewValue (G4UIcommand*, G4String newValue) {
     return;
   }
 
-  viewer->SetNeedKernelVisit(true);
-  SetViewParameters(viewer, viewer->GetDefaultViewParameters());
+  viewer->NeedKernelVisit();
+
+  // Check auto-refresh and print confirmations, but without changing
+  // view paramters...
+  SetViewParameters(viewer, viewer->GetViewParameters());
 }
 
 ////////////// /vis/viewer/refresh ///////////////////////////////////////
@@ -759,27 +774,33 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand*, G4String newValue) {
     }
     return;
   }
-  G4bool successful = scene -> AddWorldIfEmpty (warn);
-  if (!successful) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout <<
-	"WARNING: Scene is empty.  Perhaps no geometry exists."
-	"\n  Try /run/initialize."
- 	     << G4endl;
-   }
-    return;
-  }
-
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
-	   << G4endl;
-  }
-  viewer -> SetView ();
-  viewer -> ClearView ();
-  viewer -> DrawView ();
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
-      "\n  (You might also need \"/vis/viewer/update\".)" << G4endl;
+  if (scene->GetRunDurationModelList().empty()) {
+    G4bool successful = scene -> AddWorldIfEmpty (warn);
+    if (!successful) {
+      if (verbosity >= G4VisManager::warnings) {
+	G4cout <<
+	  "WARNING: Scene is empty.  Perhaps no geometry exists."
+	  "\n  Try /run/initialize."
+	       << G4endl;
+      }
+      return;
+    }
+    // Scene has changed.  UpdateVisManagerScene issues
+    // /vis/scene/notifyHandlers, which does a refresh anyway, so the
+    // ordinary refresh becomes part of the else phrase...
+    UpdateVisManagerScene(scene->GetName());
+  } else {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."
+	     << G4endl;
+    }
+    viewer -> SetView ();
+    viewer -> ClearView ();
+    viewer -> DrawView ();
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Viewer \"" << viewer -> GetName () << "\"" << " refreshed."
+	"\n  (You might also need \"/vis/viewer/update\".)" << G4endl;
+    }
   }
 }
 
@@ -1033,6 +1054,8 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout << " post-processing triggered." << G4endl;
     }
     viewer -> ShowView ();
+    // Assume future need to "refresh" transients...
+    sceneHandler -> SetMarkForClearingTransientStore(true);
   }
   else {
     if (verbosity >= G4VisManager::errors) {

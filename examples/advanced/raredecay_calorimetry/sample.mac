@@ -1,0 +1,15 @@
+/control/verbose 2
+/run/initialize
+/PhotIn/verbose 1
+/run/dumpRegion
+/run/beamOn 1 
+##
+##
+#/PhotIn/numberOfLayers 4
+#/run/dumpRegion
+#/run/beamOn 1 
+##
+##
+#/PhotIn/setGapMat Water
+#/run/dumpRegion
+#/run/beamOn 1 

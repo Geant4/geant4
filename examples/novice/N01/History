@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2005/05/03 10:05:49 allison Exp $
+$Id: History,v 1.12 2006/06/16 10:24:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,34 +15,38 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-3rd May 2005  John Allison  (examples-V07-00-03)
+16 June 2006  Gabriele Cosmo (exampleN01-V08-00-00)
+- Use coherent allocation scheme for user-classes and
+  initialisation in main().
+
+3 May 2005  John Allison
 - Replaced vis manager with G4VisExecutive.
 
-October 06, 2003  mma (exampleN01-V05-02-00)
-- cosmetic cleanup in material definitions
+6 October 2003  Michel Maire (exampleN01-V05-02-00)
+- Cosmetic cleanup in material definitions.
      
-March 25, 2003  mma (exampleN01-V05-00-00)
+25 March 2003  Michel Maire (exampleN01-V05-00-00)
 - Use G4PVPlacement constructor in logical mother, even for the world.
 
-July 03, 2002  Makoto Asai (exampleN01-V04-01-00)
+3 July 2002  Makoto Asai (exampleN01-V04-01-00)
 - Correction to README.
 
-May 14, 2002  Makoto Asai (exampleN01-V04-00-01)
-- Remove UI command from ExN01PrimaryGeneratorAction and use direct method calls
+14 May 2002  Makoto Asai (exampleN01-V04-00-01)
+- Removed UI command from ExN01PrimaryGeneratorAction and
+  use direct method calls.
 
-April 26, 2002  Gabriele Cosmo  (exampleN01-V04-00-00)
+26 April 2002  Gabriele Cosmo  (exampleN01-V04-00-00)
 - Removed deletion of volumes from destructor if ExN01DetectorConstruction.
   Now volumes are automatically destructed by kernel's stores.
 
-June 17, 2000  John Allison  (exampleN01-V01-01-00)
+17 June 2000  John Allison  (exampleN01-V01-01-00)
 - Updated exampleN01.out for geant4-01-01-ref-06.
 
-16th April 1999 H.Kurashige
-- modify ExN01PhysicsList::SetCuts
+16 April 1999  Hisaya Kurashige
+- Modified ExN01PhysicsList::SetCuts().
 
-May 07, 98 M.Asai
+7 May 1998  Makoto Asai
 - First commitment of all classes.
 
-April 09, 98 G. Cosmo
-
+9 April 1998  Gabriele Cosmo
 - Created.

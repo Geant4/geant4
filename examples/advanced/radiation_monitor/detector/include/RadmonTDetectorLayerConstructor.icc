@@ -1,0 +1,126 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// File name:     RadmonTDetectorLayerConstructor.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonTDetectorLayerConstructor.icc,v 1.2.2.2 2006/06/29 16:12:20 gunter Exp $
+// Tag:           $Name: geant4-08-01 $
+//
+
+#ifndef   RADMONTDETECTORLAYERCONSTRUCTOR_HH
+ #error "RadmonTDetectorLayerConstructor.icc cannot be included directly. Please use RadmonTDetectorLayerConstructor.hh"
+#else  /* RADMONTDETECTORLAYERCONSTRUCTOR_HH */
+
+ // Include files
+ #include "RadmonDetectorLayerVolumesList.hh"
+ #include "RadmonDetectorLayerVolumeItem.hh"
+ 
+ #include "G4LogicalVolume.hh"
+ #include "G4UserLimits.hh"
+ 
+ template <class LayerVolumesComponent>
+ inline                                         RadmonTDetectorLayerConstructor<LayerVolumesComponent> :: RadmonTDetectorLayerConstructor(const G4String & label)
+ :
+  RadmonVDetectorLabelledEntityConstructor(label),
+  volumesList(0),
+  component(this)
+ {
+ }
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+ inline                                         RadmonTDetectorLayerConstructor<LayerVolumesComponent> :: ~RadmonTDetectorLayerConstructor()
+ {
+  delete volumesList;
+ }
+
+
+
+
+
+ template <class LayerVolumesComponent>
+ G4LogicalVolume *                              RadmonTDetectorLayerConstructor<LayerVolumesComponent> :: ConstructLogicalVolume(void)
+ {
+  if (volumesList)
+   G4Exception("RadmonTDetectorLayerConstructor::ConstructLogicalVolume: Called twice.");
+   
+  volumesList=component.GenerateVolumesList();
+  
+  if (volumesList==0)
+   return 0;
+   
+  G4double width(GetWidth());
+  G4double height(GetHeight());
+  G4double thickness(GetThickness());
+  
+  if (width<thickness)
+   thickness=width;
+  if (height<thickness)
+   thickness=height;
+  
+  RadmonDetectorLayerVolumeItem * item;
+  G4LogicalVolume * motherVolume(0);
+  G4LogicalVolume * volume;
+  
+  G4int n(volumesList->GetNItems());
+  
+  while (n>0)
+  {
+   n--;
+   
+   item=volumesList->GetItem(n);
+   volume=item->GetLogicalVolume();
+   
+   if (volume)
+   {
+    volume->SetUserLimits(new G4UserLimits(thickness/10.));
+    if (item->GetMotherVolumeItem()==0)
+    {
+     if (motherVolume)
+      G4Exception("RadmonTDetectorLayerConstructor::ConstructLogicalVolume: Found two mother volumes.");
+
+     motherVolume=volume;
+    }
+   }
+  }
+  
+  if (!motherVolume)
+   G4Exception("RadmonTDetectorLayerConstructor::ConstructLogicalVolume: No mother volume found.");
+  
+  return motherVolume;
+ }
+
+
+
+ template <class LayerVolumesComponent>
+ RadmonVDetectorLabelledEntityConstructor *     RadmonTDetectorLayerConstructor<LayerVolumesComponent> :: New(void) const
+ {
+  return new RadmonTDetectorLayerConstructor<LayerVolumesComponent>(GetLabel());
+ }
+#endif /* RADMONTDETECTORLAYERCONSTRUCTOR_HH */

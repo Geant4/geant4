@@ -1,0 +1,37 @@
+# $Id: g4py.gmk,v 1.2 2006/04/25 05:53:05 kmura Exp $
+# ===========================================================
+#   Makefile for building Python module with Boost.Python
+#      
+# ===========================================================
+COMPILE_G4PY := true
+
+G4PY_INCFLAGS := -I$(Q_G4_INCDIR)
+G4PY_LOPT := -L$(Q_G4_LIBDIR) \
+             -lG4readout \
+             -lG4run \
+             -lG4event \
+             -lG4tracking \
+             -lG4parmodels \
+             -lG4processes \
+             -lG4digits_hits \
+             -lG4track \
+             -lG4particles \
+             -lG4geometry \
+             -lG4materials \
+             -lG4graphics_reps \
+             -lG4intercoms \
+             -lG4interfaces \
+             -lG4global
+
+include $(G4PY_INSTALL)/config/g4vis.gmk
+G4PY_LOPT += $(G4PY_VISLIBS)
+
+G4PY_INCFLAGS += -I$(Q_CLHEP_INCDIR)
+G4PY_LOPT += -L$(Q_CLHEP_LIBDIR) -l$(Q_CLHEP_LIB)
+
+# geant4 version
+G4PY_INCFLAGS += -I$(G4PY_INSTALL)/source/version
+
+# boost patch
+G4PY_INCFLAGS += -I$(G4PY_INSTALL)/source/boost
+

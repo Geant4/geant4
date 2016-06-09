@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.14 2003/11/27 11:48:03 johna Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Scene.hh,v 1.17 2006/06/29 21:27:56 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // Scene  John Allison  19th July 1996.
@@ -92,8 +95,13 @@ public: // With description
   // "transient" objects, such as hits, at end of run.  Otherwise
   // they will be accumulated.
 
+  G4bool GetRecomputeTransients () const;
+  // If true, the visualization manager will attempt to re-run events
+  // in order to reconstruct trajectories, etc., when the viewer
+  // requests a scene traversal.
+
   //////////////////////////////////////////////
-  // Add, Set, Clear functions...
+  // Add and Set functions...
 
   G4bool AddRunDurationModel (G4VModel*, G4bool warn = false);
   // Adds models of type which are expected to last for the duration
@@ -120,9 +128,6 @@ public: // With description
   std::vector<G4VModel*>& SetEndOfEventModelList ();
   // Allows you to change the model list - do with care!
 
-  void Clear ();
-  // Clears and destroys models in all lists.
-
   void SetRefreshAtEndOfEvent(G4bool);
   // If set true, the visualization manager will request viewer to
   // refresh "transient" objects, such as hits, at end of event.
@@ -132,6 +137,14 @@ public: // With description
   // If set true, the visualization manager will request viewer to
   // refresh "transient" objects, such as hits, at end of run.
   // Otherwise they will be accumulated.
+
+  void SetRecomputeTransients(G4bool);
+  // If set true, the visualization manager will attempt to re-run
+  // events in order to reconstruct trajectories, etc., when the
+  // viewer requests a scene traversal.
+
+  //////////////////////////////////////////////
+  // Other functions...
 
   void CalculateExtent();
   // (Re-)calculates the extent from the extents of its models.
@@ -144,6 +157,7 @@ private:
   G4Point3D   fStandardTargetPoint;
   G4bool      fRefreshAtEndOfEvent;
   G4bool      fRefreshAtEndOfRun;
+  G4bool      fRecomputeTransients;
 };
 
 #include "G4Scene.icc"

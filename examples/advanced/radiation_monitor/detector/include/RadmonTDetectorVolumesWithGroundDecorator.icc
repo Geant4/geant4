@@ -1,0 +1,171 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// File name:     RadmonTDetectorVolumesWithGroundDecorator.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonTDetectorVolumesWithGroundDecorator.icc,v 1.1.2.2 2006/06/29 16:12:30 gunter Exp $
+// Tag:           $Name: geant4-08-01 $
+//
+
+#ifndef   RADMONTDETECTORVOLUMESWITHGROUNDDECORATOR_HH
+ #error "RadmonTDetectorVolumesWithGroundDecorator.icc cannot be included directly. Please use RadmonTDetectorVolumesWithGroundDecorator.hh"
+#else  /* RADMONTDETECTORVOLUMESWITHGROUNDDECORATOR_HH */
+ // Include files
+ #include "RadmonVDetectorLabelledEntityConstructor.hh"
+ #include "RadmonDetectorLayerVolumesList.hh"
+ #include "RadmonDetectorLayerVolumeItem.hh"
+ #include "G4Box.hh"
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithGroundDecorator<LayerVolumesComponent> :: RadmonTDetectorVolumesWithGroundDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor)
+ :
+  owner(constructor),
+  component(constructor),
+  box(0),
+  visAttributes(0)
+ {
+ }
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithGroundDecorator<LayerVolumesComponent> :: ~RadmonTDetectorVolumesWithGroundDecorator()
+ {
+  delete box;
+  delete visAttributes;
+ }
+ 
+ 
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+ RadmonDetectorLayerVolumesList *               RadmonTDetectorVolumesWithGroundDecorator<LayerVolumesComponent> :: GenerateVolumesList(void)
+ {
+  G4double width(owner->GetWidth());
+  if (width<0)
+   return 0;
+
+  G4double height(owner->GetHeight());
+  if (height<0)
+   return 0;
+  
+  G4double thickness(owner->GetThickness());
+  if (thickness<0)
+   return 0;
+  
+  G4double groundWidth(owner->GetAttributeAsMeasure("GroundWidth", "Length", -1.));
+  if (groundWidth<0)
+  {
+   groundWidth=owner->GetAttributeAsDouble("GroundScaleWidth", -1.);
+   
+   if (groundWidth<0)
+   {
+    G4cout << "RadmonTDetectorVolumesWithGroundDecorator::GenerateVolumesList: Neither \"GroundWidth\" nor \"GroundScaleWidth\" attributes are defined." << G4endl;
+    return 0;
+   }
+   
+   groundWidth*=width;
+  }
+  
+  if (width<groundWidth)
+  {
+   G4cout << "RadmonTDetectorVolumesWithGroundDecorator::GenerateVolumesList: Ground width exceeds layer width." << G4endl;
+   return 0;
+  }
+  
+  G4double groundHeight(owner->GetAttributeAsMeasure("GroundHeight", "Length", -1.));
+  if (groundHeight<0)
+  {
+   groundHeight=owner->GetAttributeAsDouble("GroundScaleHeight", -1.);
+   
+   if (groundHeight<0)
+   {
+    G4cout << "RadmonTDetectorVolumesWithGroundDecorator::GenerateVolumesList: Neither \"GroundHeight\" nor \"GroundScaleHeight attributes are defined." << G4endl;
+    return 0;
+   }
+   
+   groundHeight*=height;
+  }
+  
+  if (height<groundHeight)
+  {
+   G4cout << "RadmonTDetectorVolumesWithGroundDecorator::GenerateVolumesList: Ground height exceeds layer height." << G4endl;
+   return 0;
+  }
+  
+  G4Material * material(owner->GetMaterial("GroundMaterial"));
+  if (!material)
+   return 0;
+  
+  visAttributes=owner->AllocateVisAttributes("GroundVisAttributes", material);
+  
+  RadmonDetectorLayerVolumesList * list(component.GenerateVolumesList());
+  
+  if (list==0)
+   return 0;
+   
+  G4int n(list->GetNItems());
+  
+  if (n==0)
+  {
+   delete list;
+   return 0;
+  }
+  
+  RadmonDetectorLayerVolumeItem * item;
+  RadmonDetectorLayerVolumeItem * motherItem;
+  
+  while (n>0)
+  {
+   n--;
+
+   item=list->GetItem(n);
+   if (item->GetMotherVolumeItem()==0)
+   {
+    motherItem=item;
+    break;
+   }
+  }
+
+  if (!motherItem)
+   G4Exception("RadmonTDetectorVolumesWithGroundDecorator::GenerateVolumesList: No mother volume found.");
+
+  box=new G4Box("Ground", groundWidth/2., groundHeight/2., thickness/2.);
+  
+  item=list->AppendItem();
+  item->SetSolid(box);
+  item->SetAttributes(visAttributes);
+  item->SetMaterial(material);
+  item->SetName("Ground");
+  item->SetMotherVolumeItem(motherItem);
+  
+  return list;
+ }
+#endif /* RADMONTDETECTORVOLUMESWITHGROUNDDECORATOR_HH */
+ 

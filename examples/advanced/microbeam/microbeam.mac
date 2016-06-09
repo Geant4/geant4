@@ -1,0 +1,15 @@
+#/vis/scene/create
+#/vis/scene/add/volume
+#/vis/sceneHandler/create OGLIX
+
+#/vis/viewer/create
+#/vis/viewer/zoom 2000000
+#/vis/viewer/set/viewpointVector 400 0 105.79
+
+/tracking/storeTrajectory 1
+#/vis/scene/endOfEventAction accumulate
+
+/tracking/verbose 0
+/run/verbose 0
+
+/run/beamOn 10

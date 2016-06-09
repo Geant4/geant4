@@ -1,0 +1,153 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+
+                                 HADR01
+
+            A.Bagulya, I.Gudowska, V.Ivanchenko, N.Starkov
+                       CERN, Geneva, Switzerland
+            Karolinska Institute & Hospital, Stockholm, Sweden
+               Lebedev Physical Institute, Moscow, Russia
+
+
+This example application is based on the application IION developed for
+simulation of proton or ion beam interaction with a water target. Different 
+aspects of beam target interaction are demonstrating in the example including 
+logitudinal profile of energy deposition, spectra of secondary  particles,
+spectra of particles leaving the target. The results are presenting in a form
+of average numbers and histograms. 
+
+
+                           GEOMETRY
+
+The Target volume is a cilinder placed inside Check cilindrical volume. The 
+Check volume is placed inside the World volume. The radius and the length of
+the Check volume are 1 mm larger than the radiaus and the length of the Target.
+The material of the Check volume is the same as the World material.  The World
+volume has the sizes 10 mm larger than that of the Target volume.  Any naterial
+from the Geant4 database can be defined. The default World  material is
+G4Galactic and the default  Target material is aluminum. The Target is
+subdivided on number of equal slices. Follwoing UI commands are available to
+modify the geometry:
+
+/testhadr/TargetMat     G4_Pb
+/testhadr/WorldMat      G4_AIR
+/testhadr/TargetRadius  10 mm
+/testhadr/TargetLength  20 cm
+/testhadr/NumberDivZ    200
+
+If geometry was changed between two runs, then the follwoing command need to
+be executed:
+
+/testhadr/Update
+
+Beam direction coinsides with the target axis and is Z axis in the global
+coordinate system. The beam starts 5 mm in front of the target. G4ParticleGun
+is used as a primary generator. The energy and the type of the beam can be
+defined via standard UI commands
+
+/gun/energy   15 GeV
+/gun/particle proton
+ 
+                           SCORING
+
+The scoring is performed with the help of UserStackingAction class and two
+sensitive detector  classes: one associated with a target slice, another with
+the Check volume. Each secondary particle is scored by the StackingAction.  In
+the StackingAction it is also possible to kill all or one type of secondary 
+particles 
+
+/testhadr/Kill             neutron
+/testhadr/KillAllSecondaries  
+
+To control running the following options are available:
+
+/testhadr/PrintModulo      100
+/testhadr/DebugEvent       977
+
+The last command selects an events, for which "/tracking/verbose 2" level
+of printout is established.
+
+
+                           PHYSICS
+
+PhysicsList of the application uses components, which are distributed with
+Geant4 in /geant4/physics_lists subdirectory. So, before compiling hadro01 it
+is necessary to compile physics_lists
+
+The choice of the physics is provided by the UI command:
+
+/testhadr/Physics     QGSP
+
+To see the list of available configurations one can use
+
+/testhadr/ListPhysics
+
+The cuts for electromagnetic phsyics can be established via
+
+/testhadr/CutsAll       1 mm
+/testhadr/CutsGamma   0.1 mm
+/testhadr/CutsEl      0.2 mm
+/testhadr/CutsPos     0.3 mm
+
+
+                          VISUALISATION
+
+For interactive mode G4 visualization options and variables should be
+defined, then the example should be recompiled:
+
+gmake visclean
+gmake
+
+The vis.mac file can be used an example of visualization. The following command can 
+be used:
+
+/testhadr/DrawTracks  charged
+/testhadr/DrawTracks  charged+n
+/testhadr/DrawTracks  neutral
+/testhadr/DrawTracks  all
+
+
+                          HISTOGRAMS
+
+To use histograms any of implementations of AIDA interfaces should
+be available (see http://aida.freehep.org).
+
+A package including AIDA and extended interfaces also using Python
+is PI, available from: http://cern.ch/pi .
+
+Once installed PI or PI-Lite in a specified local area $PI_DIR, it is
+required to add the installation path to $PATH, i.e. for example,
+for release 1.2.1 of PI:
+
+setenv PATH ${PATH}:$PI_DIR/1.3.12/app/releases/PI/PI_1_3_12/slc3_gcc323/bin
+
+CERN users can use the PATH to the LCG area on AFS.
+
+Before compilation of the example it is optimal to clean up old 
+files:
+
+gmake histclean
+setenv G4ANALYSIS_USE 1
+gmake
+
+Before running the example the command should be issued:
+
+eval `aida-config --runtime csh`
+
+It is possible to choose the format of the output file with 
+histograms using UI command:
+
+/testhadr/HistoName   name
+/testhadr/HistoType   type
+/testhadr/HistoOption "uncompress"
+
+The following types are available: hbook, root, aida. They will be 
+stored in the file "name.hbook", "name.root", or "name.aida". 
+
+To show the contence of a histogram ID=i the commands may be applied:
+
+/testhadr/HistoPrint  i
+
+All histograms are normalised to the number of events.

@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4TauPlus.cc,v 1.12 2005/01/14 03:49:18 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4TauPlus.cc,v 1.14 2006/06/29 19:22:41 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -66,11 +69,11 @@ G4TauPlus* G4TauPlus::Definition()
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
    anInstance = new G4ParticleDefinition(
-                 name,    1.77705*GeV,  2.265e-9*MeV,     1.*eplus, 
+                 name,     1.77699*GeV,  2.265e-9*MeV,     1.*eplus, 
 		    1,               0,             0,          
 		    0,               0,             0,             
 	     "lepton",              -1,             0,         -15,
-		false,     295.6e-6*ns,          NULL,
+		false,     290.6e-6*ns,          NULL,
              false,           "tau"
               );
 
@@ -80,21 +83,21 @@ G4TauPlus* G4TauPlus::Definition()
   // create decay channels
   G4VDecayChannel* mode;
   // tau+ -> mu+ + nu_mu + anti_nu_tau
-  mode = new G4TauLeptonicDecayChannel("tau+",0.174,"mu+");
+  mode = new G4TauLeptonicDecayChannel("tau+",0.1736,"mu+");
   table->Insert(mode);
   // tau+ -> e+ + nu_e + anti_nu_tau
-  mode = new G4TauLeptonicDecayChannel("tau+",0.178,"e+");
+  mode = new G4TauLeptonicDecayChannel("tau+",0.1784,"e+");
   table->Insert(mode);
   // tau+ -> pi+ + anti_nu_tau
-  mode = new G4PhaseSpaceDecayChannel("tau+",0.113,2,"pi+","anti_nu_tau");
+  mode = new G4PhaseSpaceDecayChannel("tau+",0.1106,2,"pi+","anti_nu_tau");
   table->Insert(mode);
   // tau+ -> pi0 + pi0 + pi+ + anti_nu_tau
-  mode = new G4PhaseSpaceDecayChannel("tau+",0.252,3,"pi0","pi+","anti_nu_tau");
+  mode = new G4PhaseSpaceDecayChannel("tau+",0.2541,3,"pi0","pi+","anti_nu_tau");
   table->Insert(mode);
   // tau+ -> pi0 + pi0 + pi+ + anti_nu_tau
   mode = new G4PhaseSpaceDecayChannel();
   mode->SetParent("tau+");
-  mode->SetBR(0.093);
+  mode->SetBR(0.0917);
   mode->SetNumberOfDaughters(4);
   mode->SetDaughter(0,"pi0");
   mode->SetDaughter(1,"pi0");
@@ -104,7 +107,7 @@ G4TauPlus* G4TauPlus::Definition()
   // tau+ -> pi+ + pi+ + pi- + anti_nu_tau
   mode = new G4PhaseSpaceDecayChannel();
   mode->SetParent("tau+");
-  mode->SetBR(0.098);
+  mode->SetBR(0.0946);
   mode->SetNumberOfDaughters(4);
   mode->SetDaughter(0,"pi+");
   mode->SetDaughter(1,"pi+");

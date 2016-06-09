@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc,v 1.18 2005/01/14 03:49:11 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Neutron.cc,v 1.20 2006/06/29 19:17:04 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -53,7 +56,7 @@ G4Neutron* G4Neutron::Definition()
   const G4String name = "neutron";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  G4Ions* anInstance =  reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -65,23 +68,22 @@ G4Neutron* G4Neutron::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
-   anInstance = new G4ParticleDefinition(
+    anInstance = new G4Ions(
                  name,  0.93956563*GeV, 7.432e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            +1,        2112,
 		false,    886.7*second,          NULL,
-             false,           "neucleon"
+		false,       "nucleon",             0,
+                  0.0 
               );
-  //create Decay Table 
-  G4DecayTable* table = new G4DecayTable();
-  // create a decay channel
-  G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
-  table->Insert(mode);
-   anInstance->SetDecayTable(table);
-
-   anInstance->SetAtomicNumber(0);
-   anInstance->SetAtomicMass(1);
+    //create Decay Table 
+    G4DecayTable* table = new G4DecayTable();
+    // create a decay channel
+    G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
+    table->Insert(mode);
+    anInstance->SetDecayTable(table);
+    
   }
   theInstance = reinterpret_cast<G4Neutron*>(anInstance);
   return theInstance;

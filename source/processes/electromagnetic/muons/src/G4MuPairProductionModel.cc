@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.28 2005/10/23 16:47:23 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4MuPairProductionModel.cc,v 1.30 2006/06/29 19:49:52 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -48,10 +51,12 @@
 // 10-02-04 Update parameterisation using R.Kokoulin model (V.Ivanchenko)
 // 28-04-04 For complex materials repeat calculation of max energy for each
 //          material (V.Ivanchenko)
-// 01-11-04 Fix bug in expression inside ComputeDMicroscopicCrossSection (R.Kokoulin)
+// 01-11-04 Fix bug inside ComputeDMicroscopicCrossSection (R.Kokoulin)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 03-08-05 Add SetParticle method (V.Ivantchenko)
-// 23-10-05 Add protection in sampling of e+e- pair energy needed for low cuts (V.Ivantchenko)
+// 23-10-05 Add protection in sampling of e+e- pair energy needed for 
+//          low cuts (V.Ivantchenko)
+// 13-02-06 add ComputeCrossSectionPerAtom (mma)
 
 //
 // Class Description:
@@ -78,11 +83,14 @@
 
 // static members
 //
-G4double G4MuPairProductionModel::zdat[]={1.,4.,13.,29.,92.};
-G4double G4MuPairProductionModel::adat[]={1.01,9.01,26.98,63.55,238.03};
-G4double G4MuPairProductionModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
-G4double G4MuPairProductionModel::xgi[]={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801 };
-G4double G4MuPairProductionModel::wgi[]={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
+G4double G4MuPairProductionModel::zdat[]={1., 4., 13., 29., 92.};
+G4double G4MuPairProductionModel::adat[]={1.01, 9.01, 26.98, 63.55, 238.03};
+G4double G4MuPairProductionModel::tdat[]={1.e3, 1.e4, 1.e5, 1.e6, 1.e7, 1.e8,
+                                          1.e9, 1.e10};
+G4double G4MuPairProductionModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
+                                          0.5917, 0.7628, 0.8983, 0.9801 };
+G4double G4MuPairProductionModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
+                                          0.1813, 0.1569, 0.1112, 0.0506 };
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -128,7 +136,7 @@ G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
   return minPairEnergy;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuPairProductionModel::SetParticle(const G4ParticleDefinition* p)
 {
@@ -147,7 +155,8 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
   if (!samplingTablesAreFilled) MakeSamplingTables();
 
   if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
+                                                              (pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
 }
@@ -161,7 +170,8 @@ G4double G4MuPairProductionModel::ComputeDEDXPerVolume(
                                                     G4double cutEnergy)
 {
   G4double dedx = 0.0;
-  if (cutEnergy <= minPairEnergy || kineticEnergy <= lowestKinEnergy) return dedx;
+  if (cutEnergy <= minPairEnergy || kineticEnergy <= lowestKinEnergy)
+    return dedx;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector =
@@ -181,9 +191,8 @@ G4double G4MuPairProductionModel::ComputeDEDXPerVolume(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
-                                                   G4double tkin, G4double cutEnergy,
-						   G4double tmax)
+G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z, G4double tkin,
+                                              G4double cutEnergy, G4double tmax)
 {
   SetCurrentElement(Z);
   G4double loss = 0.0;
@@ -294,10 +303,10 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   else          { bbb = bbbtf; g1 = g1tf; g2 = g2tf; }
 
   G4double zeta = 0;
-  G4double zeta1 = 0.073 * log(totalEnergy/(particleMass+g1*z23*totalEnergy))-0.26 ;
+  G4double zeta1 = 0.073*log(totalEnergy/(particleMass+g1*z23*totalEnergy))-0.26;
   if ( zeta1 > 0.)
   {
-    G4double zeta2 = 0.058*log(totalEnergy/(particleMass+g2*z13*totalEnergy))-0.14 ;
+    G4double zeta2 = 0.058*log(totalEnergy/(particleMass+g2*z13*totalEnergy))-0.14;
     zeta  = zeta1/zeta2 ;
   }
 
@@ -367,6 +376,19 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4MuPairProductionModel::ComputeCrossSectionPerAtom(
+                                           const G4ParticleDefinition*,
+                                                 G4double kineticEnergy,
+						 G4double Z, G4double,
+                                                 G4double cutEnergy,
+                                                 G4double)
+{
+  G4double cross = ComputeMicroscopicCrossSection (kineticEnergy, Z, cutEnergy);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4MuPairProductionModel::CrossSectionPerVolume(
 					       const G4Material* material,
                                                const G4ParticleDefinition*,
@@ -380,7 +402,8 @@ G4double G4MuPairProductionModel::CrossSectionPerVolume(
   maxEnergy += particleMass;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();
+  const G4double* theAtomNumDensityVector = material->
+                                                    GetAtomicNumDensityVector();
 
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
     G4double Z = (*theElementVector)[i]->GetZ();
@@ -454,7 +477,8 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
 {
   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
   G4double totalEnergy   = kineticEnergy + particleMass ;
-  G4ParticleMomentum ParticleDirection = aDynamicParticle->GetMomentumDirection();
+  G4ParticleMomentum ParticleDirection = aDynamicParticle->
+                                                         GetMomentumDirection();
 
   G4int it;
   for(it=1; it<ntdat; it++) {if(kineticEnergy <= tdat[it]) break;}
@@ -494,8 +518,8 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
 
   G4double dz = log(currentZ/zdat[iz-1])/log(zdat[iz]/zdat[iz-1]);
 
-  G4double pmin = InterpolatedIntegralCrossSection(dt, dz, iz, it, iymin, currentZ);
-  G4double pmax = InterpolatedIntegralCrossSection(dt, dz, iz, it, iymax, currentZ);
+  G4double pmin = InterpolatedIntegralCrossSection(dt,dz,iz,it,iymin,currentZ);
+  G4double pmax = InterpolatedIntegralCrossSection(dt,dz,iz,it,iymax,currentZ);
 
   G4double p = pmin+G4UniformRand()*(pmax - pmin);
 
@@ -507,10 +531,13 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
     p2 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy, currentZ);
     if(p <= p2) break;
   }
-  // G4cout << "iy= " << iy << " iymin= " << iymin << " iymax= " << iymax << " Z= " << currentZ << G4endl;
+  // G4cout << "iy= " << iy << " iymin= " << iymin << " iymax= " 
+  //        << iymax << " Z= " << currentZ << G4endl;
   G4double y = ya[iy-1] + dy*(p - p1)/(p2 - p1);
 
-  G4double PairEnergy = minPairEnergy*exp(exp(y)*log(maxPairEnergy/minPairEnergy));
+  G4double PairEnergy = minPairEnergy*exp(exp(y)
+                       *log(maxPairEnergy/minPairEnergy));
+		       
   if(PairEnergy < minEnergy) PairEnergy = minEnergy;
   if(PairEnergy > maxEnergy) PairEnergy = maxEnergy;
 
@@ -552,7 +579,7 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   // create G4DynamicParticle object for the particle1
   G4DynamicParticle* aParticle1= new G4DynamicParticle(theElectron,
                                                        ElectDirection,
-						       ElectronEnergy - electron_mass_c2);
+				             ElectronEnergy - electron_mass_c2);
 
   G4ThreeVector PositDirection (dxPo, dyPo, dzPo);
   PositDirection.rotateUz(ParticleDirection);
@@ -560,7 +587,7 @@ vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   // create G4DynamicParticle object for the particle2
   G4DynamicParticle* aParticle2= new G4DynamicParticle(thePositron,
                                                        PositDirection,
-						       PositronEnergy - electron_mass_c2);
+				             PositronEnergy - electron_mass_c2);
 
   // primary change
   kineticEnergy -= (ElectronEnergy + PositronEnergy);
@@ -610,8 +637,8 @@ const G4Element* G4MuPairProductionModel::SelectRandomAtom(
     G4int iy = (G4int)((log(xc) - ymin)/dy);
     if(iy >= nbiny) iy = nbiny-1;
 
-    G4double sigtot = InterpolatedIntegralCrossSection(dt, dz, iz, it, nbiny, Z);
-    G4double sigcut = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy, Z);
+    G4double sigtot = InterpolatedIntegralCrossSection(dt,dz,iz,it,nbiny,Z);
+    G4double sigcut = InterpolatedIntegralCrossSection(dt,dz,iz,it,iy,   Z);
     sum += (sigtot - sigcut)*theAtomNumDensityVector[i];
     partialSum[i] = sum;
   }

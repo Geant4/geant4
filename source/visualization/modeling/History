@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2005/12/05 00:16:34 perl Exp $
+$Id: History,v 1.73 2006/06/07 22:14:04 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,106 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+7th June 2006  John Allison (modeling-V08-00-14)
+- G4PhysicalVolumeModel.cc: Added protection for zero vis atts.
+
+6th June 2006  John Allison (modeling-V08-00-13)
+- G4TrajectoryChargeFilter.cc: Added #include <sstream> for Sun compiler.
+- G4PhysicalVolumeModel::Validate: Relaxed requirement for modeling parameters.
+  (Caused crash after change of geometry.)
+
+2nd June 2006 Joseph Perl (modeling-V08-00-12)
+- G4VisTrajContext: change default of point sizes from 0 to 2
+
+30th May 2006 Jane Tinslay
+- Add G4TrajectoryChargeFilter and G4TrajectoryOriginVolumeFilter
+
+25th May 2006  John Allison  (modeling-V08-00-11)
+- G4VModelFactory.hh: Indent printing of models.
+- G4ModelApplyCommandsT.hh: Fix trivial compiler warnings.
+
+22nd May 2006  John Allison  (modeling-V08-00-10)
+- Remove dependency on Run.
+- G4ModelingParameters.cc: Protect operator<< for zero fpDefaultVisAttributes.
+
+12th May 2006  John Allison  (modeling-V08-00-09)
+- G4TrajectoriesModel and G4HitsModel: Removed dependency on G4RunManager.
+  Uses G4RunManagerKernel.  Needs event-V08-00-01.
+- G4CallbackModel: Added G4VGraphicsScene argument to operator().
+
+4th May 2006  Joseph Perl  (modeling-V08-00-08)
+- Add missing assert to G4VTrajectoryModel needed by Windows.
+
+4th May 2006  John Allison
+- Improved protection for null models and parameters.
+
+2nd May 2006 Jane Tinslay
+- Add context to trajectory drawers. Intended to replace imode. 
+  Allows to configure default drawing style for lines, step and 
+  auxiliary points. For example, colours, visibility, point sizes, 
+  fill styles..
+- Add generic drawer, G4TrajectoryGenericDrawer. Draws all trajectories 
+  in the same style, based on its default context.
+- Update generic commands
+- Add verbose to drawers
+
+21st April 2006 Jane Tinslay  (modeling-V08-00-07)
+- Get rid of some warning messages from G4ModelCommandsT 
+  when compiling on Linux
+- Add Print method to G4VModelFactory
+
+19th April 2006  John Allison  (modeling-V08-00-06 - needs greps-V08-00-02)
+- G4BoundingSphereScene.hh, G4PhysicalVolumeMassScene.hh and
+  G4PhysicalVolumeSearchScene.hh;  Added dummy Begin/EndPrimitives2D
+  for greps-V08-00-02.
+- G4PhysicalVolumeModel.cc: Improved legibility and efficiency of
+  culling algorithm.
+
+28th March 2006 Jane Tinslay (jst28032006)
+- Add G4TrajectoryFilterFactories and G4TrajectoryParticleFilter
+  for trajectory filtering. 
+- Add more generic commands to G4ModelCommandsT
+
+28th March 2006  John Allison (modeling-V08-00-05)
+- G4PhysicalVolumeMassScene and G4PhysicalVolumeSearchScene:
+  o Removed EstablishSpecials.
+- G4PhysicalVolumeModel:
+  o GetTopPhysicalVolume, GetCurrentPV, GetCurrentLV,
+    GetCurrentMaterial: return non-const pointers.  (It has proved
+    impossibly difficult to deal with const pointers.)
+  o Modified for new G4PhysicalVolumeSearchScene constructor.
+- G4BoundingSphereScene: Removed use of GetG4PhysicalVolumeModel (uses
+  dynamic cast instead).
+
+24th March 2006 Jane Tinslay (jst24032006)
+- Add G4bool visibility parameter to trajectory draw 
+  models "Draw" method.
+ 
+16th March 2006 Jane Tinslay (jst16032006)
+- Template commands and colour map used in trajectory models
+- Introduce G4TrajectoryDrawByOriginVolume
+
+14th March 2006  John Allison (modeling-V08-00-04)
+- G4PhysicalVolumeModel::G4PhysicalVolumeNodeID: Added output operator<<.
+
+16th February 2006  John Allison (modeling-V08-00-03)
+- G4PhysicalVolumeModel: Minor enhancements to facilitate future
+  removal of Establish/DecommisionSpecials.
+
+8th February 2006  John Allison (modeling-V08-00-02)
+- Added DrawingStyle to G4ModelingParameters.
+- G4PhysicalVolumeModel: Fixed bug in culling of covered daughters and
+  improved readability of culling algorithm.
+
+26th January 2006  John Allison (modeling-V08-00-01)
+- G4PhysicalVolumeModel: Added capability of maintaining path of the
+  current drawn (non-culled) volume in terms of drawn (non-culled)
+  ancesters.  See G4PhysicalVolumeModel.hh for detailed description.
+- Removed some unnecessary data members and other small tidying.
+
+11th January 2006  John Allison (modeling-V08-00-00)
+- G4NullModel.cc: Changed G4Transform3D::Identity to G4Transform3D().
 
 2nd December 2005  Joseph Perl (modeling-V07-01-07)
 - Change "G4String inline" to "inline G4String" to correct compiler

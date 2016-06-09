@@ -1,4 +1,4 @@
-# $Id: dedx1.mac,v 1.2 2004/08/02 11:30:05 maire Exp $
+# $Id: dedx1.mac,v 1.4 2006/03/28 15:03:08 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -7,12 +7,14 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setAbsMat Graphite   
-/testem/det/setAbsThick 10 mum  
-/testem/det/setAbsYZ    10 mum
+/testem/det/setAbsMat Silicon   
+/testem/det/setAbsThick 1 mm  
+/testem/det/setAbsYZ    1 mm
 #
-###/testem/phys/addPhysics g4v52
 /testem/phys/addPhysics standard
+###/testem/phys/addPhysics livermore
+###/testem/phys/addPhysics penelope
+#
 /testem/phys/setCuts 1 km
 #    
 /run/initialize
@@ -26,4 +28,4 @@
 #
 /tracking/verbose 1
 #
-/run/beamOn 2
+/run/beamOn 5

@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2005/12/05 00:15:38 perl Exp $
+$Id: History,v 1.62 2006/06/08 20:02:39 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,200 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+8th June 2006 John Allison  (visman-V08-00-23)
+- Fixed bug in /vis/scene/endOfRunAction introduced in visman-V08-00-14
+  that made it ineffective.
+
+7th June 2006 John Allison  (visman-V08-00-22)
+- G4VSceneHandler.cc: Zeroed modeling parameters pointer after use.
+
+6th June 2006 John Allison  (visman-V08-00-21)
+- G4VisCommandsViewer: /vis/viewer/create: Fixed view params copy to self.
+
+4th June 2006 Joseph Perl (visman-V08-00-20)
+- This tag includes all the changes below.
+
+2nd June 2006 Jane Tinslay
+- Add accessor for current trajectory drawing model
+- Make G4HepRepFileSceneHandler a friend of G4VisManager
+
+1st June 2006 Jane Tinslay
+- Add accessor in G4VisListManager
+
+30th May 2006 Jane Tinslay
+- Add G4TrajectoryChargeFilterFactory and G4TrajectoryOriginVolumeFilterFactory
+  to G4VisExecutive
+
+25th May 2006 John Allison  (visman-V08-00-19)
+- G4Scene.cc: Changed default fRecomputeTransients to false.
+- G4VisCommandsViewerSet.cc: /vis/viewer/set/style - remove candidates.
+  Use first letter only (so "/vis/viewer/set/style wire" works, for example.)
+- G4VisFilter/List/ModelManager.hh: Indent printing of models.
+- G4VUserVisAction.hh: Add forward declaration of class G4VGraphicsScene.
+
+22nd May 2006 John Allison  (visman-V08-00-18)
+- G4VisManager:
+  o Added SetReprocessing (for transients).
+  o Reduce dependency on Run (get event from event manager).
+  o (Includes some event copying stuff - commented out.)
+- G4VSceneHandler.cc: Require Idle state for transient re-computation.
+- G4Scene:
+  o Remove Clear().  (Not used.)
+  o Add printing and testing for fRecomputeTransients.  (Forgot in
+    visman-V08-00-08.)
+- /vis/.../list commands: Default verbosity "warnings".
+
+13th May 2006 John Allison  (visman-V08-00-17)
+- Provided identity transformation for 2D drawing.  A temporary
+  expedient until all drivers can implement 2D drawing.
+
+12th May 2006  John Allison  (visman-V08-00-16)
+- Added /vis/list.
+- Added /vis/scene/add/eventID.
+- Final refinements for event/run reprocessing (re-computation of
+  transients):
+  o Pick up random number status from run manager.
+  o Run and event numbers reset.
+  o Protect against non-instantiation of run manager.
+- Followed G4CallbackModel change (see modeling-V08-00-09).
+- G4VisCommandsScene.cc, G4VisCommandsSceneHandler.cc, G4VisCommandsViewer.cc:
+  Corrected SetDefaultValue for verbosity string parameter (changed 0 to "0").
+
+4th May 2006  John Allison  (visman-V08-00-15)
+- Improved protection for null models and parameters.
+
+2nd May 2006 Jane Tinslay 
+- Add G4TrajectoryGenericDrawerFactory to G4VisExecutive
+- Add FilterTrajectory method to G4VisManager
+
+28th April 2006  John Allison (visman-V08-00-14)
+- G4VSceneHandler.cc: Added call to FinishView after run-duration
+  model computation and before end-of-event and transients
+  re-computation to get good buffer swapping behaviour for double
+  buffer drivers.
+- G4VisCommandsScene.cc: Added protection in
+  /vis/scene/endOfRunAction.  Error for accumulate if end of event
+  action is not also accumulate.
+- G4VisManager: To get good refresh bahaviour when re-computing
+  transients in OpenGL*Xm and similar drivers, postpone ShowView to
+  end of run for last event in a run.  This ensures G4 is in Idle
+  state.
+- GNUmakefile: Added includes for access to run manager for above.
+
+22nd April 2006  John Allison (visman-V08-00-13)
+- Bug fix (workaround) for memory leak in CheckModel (bug #861).
+- Implement PrintAvailableModels using improvement below.
+
+21st April 2006 Jane Tinslay
+- Improve printout for trajectory drawing and filtering
+
+19th April 2006  John Allison (visman-V08-00-12 - needs greps-V08-00-02)
+- G4VisManager:
+  o Implemented Draw2D(const G4Text&).
+  o Added PrintAvailableModels (but awaiting implementation).
+  o Fixed directory names (trailing '/').
+- G4VSceneHandler:
+  o Implemented Begin/EndPrimitives2D.
+  o Migrated to direct access to G4PhysicalVolumeModel.
+
+28th March 2006 Jane Tinslay (jst28032006)
+- Introduce G4VisFilterManager.hh to manager filtering
+- Additions to G4VisCommandsListManager, G4VisExecutive, G4VisManager
+  to support filtering
+
+28th March 2006  John Allison  (visman-V08-00-11)
+- Corrects logic of transients re-computation:
+  o G4VisManager and G4VSceneHandler: Improved logic of TransientsDrawn flags.
+  o G4VSceneHandler: Improved logic of transients re-computation.
+  o G4VViewer: Improved logic of fNeedKernelVisit.
+- Unified treatment of bools in commands.
+
+24th March 2006 Jane Tinslay (jst24032006)
+- Introduce trajectory drawing manager which is used by
+  G4VisManager. No change in overall functionality.
+
+16th March 2006 Jane Tinslay (jst16032006)
+- Add G4TrajectoryDrawByOriginVolumeFactory to G4VisExecutive
+
+13th March 2006  John Allison  (visman-V08-00-10)
+- Fixes recomputation of transients when changing drivers.
+- G4VisManager: Added fTransientsDrawnThisEvent/Run.
+- G4VSceneHandler:
+  o Removed fTransientsDrawn (now in G4VisManager).
+  o Added fProcessingSolid.
+  o Fixed recomputation of transients.
+
+8th March 2006  John Allison  (visman-V08-00-09)
+- G4VisManager.cc: Fix bug that causes crash when no current scene handler.
+
+6th March 2006  John Allison  (visman-V08-00-08)
+- Added /vis/scene/transientsAction, a feature for recomputing
+  transients (trajectories, hits, user drawing, etc.) when needed by
+  the viewer.  Thus, transients are "remembered" and may be copied
+  between graphics systems.
+
+9th February 2006  John Allison  (visman-V08-00-07)
+- First implementation of refresh end-of-event models (trajectories, etc.).
+
+8th February 2006  John Allison  (visman-V08-00-06)
+- Needs modeling-V08-00-02.
+- G4VSceneHandler.cc: Made use of G4ModelingParameters::DrawingStyle.
+- G4VisCommandsSceneAdd.cc: Removed unnecessary #include.
+
+3rd February 2006  John Allison  (visman-V08-00-05)
+- Introduced /vis/geometry/... for editing vis attributes of geometry volumes.
+- Very minor printing and comments improvements.
+
+26th January 2006  John Allison  (visman-V08-00-04)
+- G4VViewer: Removed fModified.  It was used to flag a change of view
+  parameters but it was only ever used negatively, i.e., to *prevent*
+  its effect of invoking SetView.  So it has been removed and the
+  responsibility for calling SetView after a change of view parameters
+  rests with the user (e.g., the vis commands).  Only used by OpenGL
+  and OpenInventor; now works with opengl-V08-00-01 and
+  openinventor-V08-00-00.
+- G4VSceneHandler.hh: Improved comments.
+- G4VisListManager.hh: Prevent crash on attempt to Print when nothing
+  registered.
+- G4VisManager.hh: Extended friendship to G4XXXSceneHandler.
+
+25th January 2006  John Allison  (visman-V08-00-03)
+- Retro tag: visman-V08-00-00 + friend status for Ray Tracer.
+
+11th January 2006  John Allison  (visman-V08-00-02)
+- G4VisExecutive.icc: protected with G4VISEXECUTIVE_ICC.
+- G4VisManager.hh: prepared for RayTracer reorganisation (friend status).
+- G4VisCommandsScene.cc: /vis/scene/create: simplified registration of
+  scene to avoid recursive invocation of /vis/scene/notifyHandlers/.
+- G4VisCommandsSceneAdd.cc: Improved message when world not available.
+- G4VisCommandsViewer.cc: /vis/viewer/refresh: When world added, delegate
+  to /vis/scene/notifyHandlers.  Avoids double refresh.
+- G4VisManager.cc: Changed ERROR to WARNING when user calls Draw with
+  invalid view.
+
+9th January 2006  John Allison  (visman-V08-00-01)
+- This tag includes all the changes below.
+
+9th January 2006  John Allison  (visman-V08-00-00)
+- This tag is geant4-08-00-ref-00 + change of 5th January only.
+
+5th January 2006  John Allison
+- G4VSceneHandler.cc: Reversed change of 22nd November 2005:
+  fMarkForClearingTransientStore(true) initially now.  This is so that
+  at end of event or run, the view is refreshed and the scene
+  (detector geometry, etc.) is drawn or written to file.
+
+14th December 2005  John Allison
+- Improved /vis/scene/notifyHandlers so that it forces a rebuild of the
+  graphical database, if any.  Particularly relevant for Open Inventor.
+- G4Scene.cc, G4VSceneHandler.cc: Improved warning messages.
+- G4VisManager.cc: Apply "/vis/scene/notifyHandlers" if world has been added
+  to an empty scene.
+- G4VisCommandsViewer.cc: "/vis/viewer/refresh": if world is added to
+  an empty scene, invoke UpdateVisManagerScene, which applies
+  "/vis/scene/notifyHandlers", which now forces a rebuild.
+- G4VisCommandsViewer.cc: Fix bug in "/vis/viewer/rebuild".
+
 4th December  John Allison (visman-V07-01-10)
 - G4Vismanager.cc: Prevent ERROR messages at end of event and run when
   user has not instantiated a scene handler, e.g., in batch mode.
@@ -38,10 +232,10 @@ History file for visualization management sub-category
 23rd November 2005  Joseph Perl  (visman-V07-01-09)
 - Tagged in preparation for Geant4 8.0
 
-23rd November 2005 Jane Tinslay
+23rd November 2005  Jane Tinslay
 - Enhanced trajectory implementation
 
-22nd November John Allison
+22nd November 2005  John Allison
 - Added /vis/viewer/rebuild (forces visit of kernel).
 - Changed G4Transform3D::Identity to G4Transform3D().
 - Tidied initial printing.

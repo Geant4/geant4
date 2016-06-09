@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadronPhysicsQGSP_BERT.hh,v 1.2 2005/11/29 17:02:23 gunter Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: HadronPhysicsQGSP_BERT.hh,v 1.4 2006/06/29 18:03:54 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -31,6 +34,7 @@
 //
 // Modified:
 // 23.11.2005 G.Folger: migration to non static particles
+// 08.06.2006 V.Ivanchenko: remove stopping
 //
 //----------------------------------------------------------------------------
 //
@@ -41,7 +45,6 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4StoppingHadronBuilder.hh"
 #include "G4MiscLHEPBuilder.hh"
 
 #include "G4PiKBuilder.hh"
@@ -58,6 +61,7 @@
 #include "G4LEPNeutronBuilder.hh"
 #include "G4QGSPNeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
+
 class HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
 {
   public: 
@@ -86,10 +90,7 @@ class HadronPhysicsQGSP_BERT : public G4VPhysicsConstructor
     G4BertiniProtonBuilder * theBertiniPro;
     
     G4MiscLHEPBuilder * theMiscLHEP;
-    G4StoppingHadronBuilder * theStoppingHadron;
 };
-
-// 2002 by J.P. Wellisch
 
 #endif
 

@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4QNuMuNuclearCrossSection.cc,v 1.6 2005/12/01 17:28:18 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4QNuMuNuclearCrossSection.cc,v 1.9 2006/06/29 20:08:40 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // G4 Physics class: G4QNuMuNuclearCrossSection for gamma+A cross sections
@@ -45,6 +48,7 @@
 #include "G4QNuMuNuclearCrossSection.hh"
 
 // Initialization of the
+G4bool    G4QNuMuNuclearCrossSection::onlyCS=true;// Flag to calculate only CS (not QE)
 G4double  G4QNuMuNuclearCrossSection::lastSig=0.;// Last calculated total cross section
 G4double  G4QNuMuNuclearCrossSection::lastQEL=0.;// Last calculated quasi-el. cross section
 G4int     G4QNuMuNuclearCrossSection::lastL=0;   // Last used in cross section TheLastBin
@@ -61,7 +65,7 @@ G4VQCrossSection* G4QNuMuNuclearCrossSection::GetPointer()
 }
 
 // Gives the threshold energy = the same for all nuclei (@@ can be reduced for hevy nuclei)
-G4double G4QNuMuNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
+G4double G4QNuMuNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
 {
   //static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1.,0.)/GeV;
   //static const G4double mProt = G4NucleiProperties::GetNuclearMass(1.,1.)/GeV;
@@ -80,10 +84,10 @@ G4double G4QNuMuNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 }
 
 // The main member function giving the gamma-A cross section (E_kin in MeV, CS in mb)
-G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4int targZ,
-                                                           G4int targN, G4double Momentum)
+G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
+                                        G4int, G4int targZ, G4int targN, G4double Momentum)
 {
-  static const G4double mb38=1.E-11*millibarn;// Conversion 10^-38 cm^2 to mb=10^-27 cm^2
+  static const G4double mb38=1.E-11;// Conversion 10^-38 cm^2 to mb=10^-27 cm^2
   static const G4int nE=33;   // !! If change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
   static const G4double mN=.931494043;// Nucleon mass (inside nucleus, AtomicMassUnit, GeV)
@@ -100,15 +104,16 @@ G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
   // *** End of Static Definitions (Associative Memory) ***
   //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Muon
   //G4double TotEnergy2=Momentum;
-  lastE=Momentum/GeV;                // Kinetic energy of the muon neutrino (in GeV!)
-  if (lastE<=EMi)                    // Energy is below the minimum energy in the table
+  onlyCS=CS;                            // Flag to calculate only CS (not TX & QE)
+  lastE=Momentum/GeV;                   // Kinetic energy of the muon neutrino (in GeV!)
+  if (lastE<=EMi)                       // Energy is below the minimum energy in the table
   {
     lastE=0.;
     lastSig=0.;
     return 0.;
   }
-  G4int Z=targZ;                     // New Z, which can change the sign
-  if(F<=0)                           // This isotope was not the last used isotop
+  G4int Z=targZ;                        // New Z, which can change the sign
+  if(F<=0)                              // This isotope was not the last used isotop
   {
     if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
 				{
@@ -158,15 +163,18 @@ G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
     G4double lowE=lastEN[sep];
     G4double highE=lastEN[sep+1];
     G4double lowTX=lastTX[sep];
-    G4double lowQE=lastQE[sep];
     if(lastE<lowE||sep>=mL||lastE>highE)
       G4cerr<<"*Warn*G4NuMuNuclearCS::CalcCS:Bin! "<<lowE<<" < "<<lastE<<" < "<<highE
             <<", sep="<<sep<<", mL="<<mL<<G4endl;
     lastSig=lastE*(lastE-lowE)*(lastTX[sep+1]-lowTX)/(highE-lowE)+lowTX; // Recover *E
-    lastQEL=(lastE-lowE)*(lastQE[sep+1]-lowQE)/(highE-lowE)+lowQE;
+    if(!onlyCS)                       // Skip the differential cross-section parameters
+    {
+      G4double lowQE=lastQE[sep];
+      lastQEL=(lastE-lowE)*(lastQE[sep+1]-lowQE)/(highE-lowE)+lowQE;
 #ifdef pdebug
-    G4cout<<"G4NuMuNuclearCS::CalcCS: T="<<lastSig<<", Q="<<lastQEL<<", E="<<lastE<<G4endl;
+      G4cout<<"G4NuMuNuclearCS::CalcCS: T="<<lastSig<<",Q="<<lastQEL<<",E="<<lastE<<G4endl;
 #endif
+    }
   }
   else
   {
@@ -177,7 +185,7 @@ G4double G4QNuMuNuclearCrossSection::CalculateCrossSection(G4int F, G4int I, G4i
   if(lastSig<0.) lastSig = 0.;
   // The cross-sections are expected to be in mb
   lastSig*=mb38;
-  lastQEL*=mb38;
+  if(!onlyCS) lastQEL*=mb38;
   return lastSig;
 }
 
@@ -291,8 +299,8 @@ G4double G4QNuMuNuclearCrossSection::GetQEL_ExchangeQ2()
   G4double rhm2E=hmmu2/Enu2;
   G4double Q2mi=(Enu2+Enu2)*(rmin-rhm2E-std::sqrt(rmin*rmin-rhm2E-rhm2E)); // Q2_min(E_nu)
   G4double Q2ma=dME*ymax;                                                  // Q2_max(E_nu)
-  G4double Xma=pow((1.+Q2mi),power);  // X_max(E_nu)
-  G4double Xmi=pow((1.+Q2ma),power);  // X_min(E_nu)
+  G4double Xma=std::pow((1.+Q2mi),power);  // X_max(E_nu)
+  G4double Xmi=std::pow((1.+Q2ma),power);  // X_min(E_nu)
   // Find the integral values integ(Xmi) & integ(Xma) using the direct table
   G4double rXi=(Xmi-Xmin)/dX;
   G4int    iXi=static_cast<int>(rXi);
@@ -317,7 +325,7 @@ G4double G4QNuMuNuclearCrossSection::GetQEL_ExchangeQ2()
   G4double dint=intx-intc;
   G4double mX=Xl[intc];
   G4double X=mX+dint*(Xl[intc+1]-mX);
-  G4double Q2=pow(X,pconv)-1.;
+  G4double Q2=std::pow(X,pconv)-1.;
   return Q2*GeV*GeV;
 }
 
@@ -508,10 +516,10 @@ G4double G4QNuMuNuclearCrossSection::GetNQE_ExchangeQ2()
   if(Q2ma>Q2nq) Q2ma=Q2nq;            // Correction for Non Quasi Elastic
   // --- now r_min=Q2mi/Q2ma and r_max=1.; when r is randomized -> Q2=r*Q2ma ---
   G4double Rmi=Q2mi/Q2ma;
-  G4double shift=1.+.9673/(1.+.323/Enu/Enu)/pow(Enu,.78); //@@ different for anti-nu
+  G4double shift=1.+.9673/(1.+.323/Enu/Enu)/std::pow(Enu,.78); //@@ different for anti-nu
   // --- E-interpolation must be done in a log scale ---
-  G4double Xmi=pow((shift-Rmi),power);// X_min(E_nu)
-  G4double Xma=pow((shift-1.),power); // X_max(E_nu)
+  G4double Xmi=std::pow((shift-Rmi),power);// X_min(E_nu)
+  G4double Xma=std::pow((shift-1.),power); // X_max(E_nu)
   // Find the integral values integ(Xmi) & integ(Xma) using the direct table
   G4double idX=dX[fE]+dE*(dX[sE]-dX[fE]); // interpolated X step
   G4double iXmi=Xmin[fE]+dE*(Xmin[sE]-Xmin[fE]); // interpolated X minimum
@@ -548,7 +556,7 @@ G4double G4QNuMuNuclearCrossSection::GetNQE_ExchangeQ2()
   G4double mXr=Xl[sE][intc];
   G4double Xrb=mXr+dint*(Xl[sE][intc+1]-mXr);
   G4double X=Xlb+dE*(Xrb-Xlb);        // interpolated X value
-  G4double R=shift-pow(X,pconv);
+  G4double R=shift-std::pow(X,pconv);
   G4double Q2=R*Q2ma;
   return Q2*GeV*GeV;
 }
@@ -559,7 +567,7 @@ G4double G4QNuMuNuclearCrossSection::GetDirectPart(G4double Q2)
   G4double f=Q2/4.62;
   G4double ff=f*f;
   G4double r=ff*ff;
-  G4double s=pow((1.+.6/Q2),(-1.-(1.+r)/(12.5+r/.3)));
+  G4double s=std::pow((1.+.6/Q2),(-1.-(1.+r)/(12.5+r/.3)));
   //@@ It is the same for nu/anu, but for nu it is a bit less, and for anu a bit more (par)
   return 1.-s*(1.-s/2);
 }

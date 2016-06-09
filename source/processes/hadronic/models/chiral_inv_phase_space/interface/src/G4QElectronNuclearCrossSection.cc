@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4QElectronNuclearCrossSection.cc,v 1.2 2005/11/25 21:34:17 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4QElectronNuclearCrossSection.cc,v 1.8 2006/06/29 20:08:36 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // G4 Physics class: G4QElectronNuclearCrossSection for gamma+A cross sections
@@ -31,7 +34,7 @@
 // 
 //================================================================================
 
-///#define debug
+//#define debug
 #define edebug
 //#define pdebug
 //#define ppdebug
@@ -41,6 +44,7 @@
 #include "G4QElectronNuclearCrossSection.hh"
 
 // Initialization of the
+G4bool    G4QElectronNuclearCrossSection::onlyCS=true;// Flag to calculate only CS
 G4double  G4QElectronNuclearCrossSection::lastSig=0.;// Last value of the Cross Section
 G4int     G4QElectronNuclearCrossSection::lastL=0; // LastUsed in CrossSections TheLastBin
 G4double  G4QElectronNuclearCrossSection::lastE=0.;// LastUsed in CrossSections TheEnergy
@@ -64,13 +68,14 @@ G4VQCrossSection* G4QElectronNuclearCrossSection::GetPointer()
 // *** (nu,l) reactions the mass value of the final state lepton must be added ***
 // ***@@ IT IS REASONABLE TO MAKE ADDITIONAL VIRTUAL CLASS FOR LEPTO-NUCLEAR @@***
 // *******************************************************************************
-G4double G4QElectronNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
+G4double G4QElectronNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N, G4int)
 {
   // CHIPS - Direct GEANT
   //static const G4double mNeut = G4QPDGCode(2112).GetMass();
   //static const G4double mProt = G4QPDGCode(2212).GetMass();
   static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1,0)/MeV;
   static const G4double mProt = G4NucleiProperties::GetNuclearMass(1,1)/MeV;
+  static const G4double mAlph = G4NucleiProperties::GetNuclearMass(4,2)/MeV;
   // ---------
   static const G4double infEn = 9.e27;
 
@@ -87,22 +92,31 @@ G4double G4QElectronNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   G4double mP= infEn;
   //if(Z) mP= G4QPDGCode(111).GetNuclMass(Z-1,N,0);
   if(Z&&G4NucleiPropertiesTable::IsInTable(Z-1,A-1))
-                                        mP=G4NucleiProperties::GetNuclearMass(A-1,Z-1)/MeV;
-  else return infEn;
+     	    mP=G4NucleiProperties::GetNuclearMass(A-1.,Z-1.)/MeV; // ResNucMass for a proton
   G4double mN= infEn;
   //if(N) mN= G4QPDGCode(111).GetNuclMass(Z,N-1,0);
   if(N&&G4NucleiPropertiesTable::IsInTable(Z,A-1))
-                                         mN=G4NucleiProperties::GetNuclearMass(A-1,Z)/MeV;
-  else return infEn;
-  G4double dP= mP+mProt-mT;
-  G4double dN= mN+mNeut-mT;
+    	    mN=G4NucleiProperties::GetNuclearMass(A-1.,Z-0.)/MeV;  // ResNucMass for a neutron
+
+  G4double mA= infEn;
+  if(N>1&&Z>1&&G4NucleiPropertiesTable::IsInTable(Z-2,A-4))
+     	    mA=G4NucleiProperties::GetNuclearMass(A-4.,Z-2.)/MeV; // ResNucMass for an alpha
+
+  G4double dP= mP +mProt - mT;
+  G4double dN= mN +mNeut - mT;
+  G4double dA= mA +mAlph - mT;
+#ifdef pdebug
+		G4cout<<"G4QElectronNucCS::ThreshEn: mP="<<mP<<",dP="<<dP<<",mN="<<mN<<",dN="<<dN<<",mA="
+        <<mA<<",dA="<<dA<<",mT="<<mT<<",A="<<A<<",Z="<<Z<<G4endl;
+#endif
   if(dP<dN)dN=dP;
+  if(dA<dN)dN=dA;
   return dN;
 }
 
 // The main member function giving the gamma-A cross section (E in GeV, CS in mb)
-G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4int F,G4int I,G4int targZ,
-                                                            G4int targN, G4double Momentum)
+G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4bool CS, G4int F, G4int I,
+                                        G4int, G4int targZ, G4int targN, G4double Momentum)
 {
   static const G4int nE=336; // !!  If change this, change it in GetFunctions() (*.hh) !!
   static const G4int mL=nE-1;
@@ -121,22 +135,38 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4int F,G4int I,G
   static std::vector <G4double*> J1;   // Vector of pointers to the J1 tabulated functions
   static std::vector <G4double*> J2;   // Vector of pointers to the J2 tabulated functions
   static std::vector <G4double*> J3;   // Vector of pointers to the J3 tabulated functions
+#ifdef pdebug
+		G4cout<<"G4QElectronNucCrossSection::CalculateCrossSection: ***Called*** "<<J3.size();
+  if(J3.size()) G4cout<<", p="<<J3[0];
+  G4cout<<G4endl;
+  //if(F==-27) return 0.;
+#endif
   // *** End of Static Definitions (Associative Memory) ***
+  //const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the Electron
+  onlyCS=CS;                           // Flag to calculate only CS (not Si/Bi)
   G4double TotEnergy2=Momentum*Momentum+mel2;
   G4double TotEnergy=std::sqrt(TotEnergy2); // Total energy of the electron
   lastE=TotEnergy-mel;                 // Kinetic energy of the electron
-  if (lastE<=EMi)                      // Energy is below the minimum energy in the table
-  {
-    lastE=0.;
-    lastG=0.;
-    lastSig=0.;
-    return 0.;
-  }
+#ifdef pdebug
+		G4cout<<"G4QElectronNucCS::CalcCS: P="<<Momentum<<", F="<<F<<", I="<<I<<", Z="<<targZ;
+  if(J3.size()) G4cout<<", p="<<J3[0];
+  G4cout<<", N="<<targN<<", onlyCS="<<CS<<",E="<<lastE<<",th="<<EMi<<G4endl;
+#endif
   G4double A=targN+targZ;            // New A (can differ from G4double targetAtomicNumber)
   if(F<=0)                           // This isotope was not the last used isotop
   {
     if(F<0)                          // This isotope was found in DAMDB =========> RETRIEVE
-				{
+				{                                // ...........................................========
+      if (lastE<=EMi)                // Energy is below the minimum energy in the table
+      {
+        lastE=0.;
+        lastG=0.;
+        lastSig=0.;
+#ifdef pdebug
+				    G4cout<<"G4QElectronNucCS::CalcCS: Old CS=0 as lastE="<<lastE<<" < "<<EMi<<G4endl;
+#endif
+        return 0.;
+      }
       lastJ1 =J1[I];                 // Pointer to the prepared J1 function
       lastJ2 =J2[I];                 // Pointer to the prepared J2 function
       lastJ3 =J3[I];                 // Pointer to the prepared J3 function
@@ -151,11 +181,13 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4int F,G4int I,G
       lastF   = GetFunctions(A,lastJ1,lastJ2,lastJ3);//newZeroPos and J-functions filling
       lastH   = alop*A*(1.-.072*std::log(A)); // like lastSP of G4PhotonuclearCrossSection
 #ifdef pdebug
-      G4cout<<"G4QElectronNuclearCS::CalculateCrossSection: lH="<<lastH<<",A="<<A<<G4endl;
+      G4cout<<"==>G4QElNCS::CalcCS:lJ1="<<lastJ1<<",lJ2="<<lastJ2<<",lJ3="<<lastJ3;
+      if(J3.size()) G4cout<<", p="<<J3[0];
+      G4cout<<G4endl;
 #endif
       // *** The synchronization check ***
       G4int sync=J1.size();
-      if(sync!=I) G4cerr<<"***G4QEleNuclearCS::CalcCrossSect:Sync="<<sync<<"#"<<I<<G4endl;
+      if(sync!=I) G4cerr<<"***G4QElectNuclearCS::CalcCS: PDG=11 ,S="<<sync<<"#"<<I<<G4endl;
       J1.push_back(lastJ1);
       J2.push_back(lastJ2);
       J3.push_back(lastJ3);
@@ -164,21 +196,28 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4int F,G4int I,G
 	   } // End of creation of the new set of parameters
   } // End of parameters udate
   // ============================== NOW Calculate the Cross Section =====================
-  if (lastE<=lastTH)                 // Check that muKiE is higher than ThreshE
+  if (lastE<=lastTH || lastE<=EMi)   // Check that muKiE is higher than ThreshE
   {
     lastE=0.;
     lastG=0.;
     lastSig=0.;
+#ifdef pdebug
+				G4cout<<"G4QElectronNucCS::CalcCS:CS=0 as T="<<lastE<<"<"<<EMi<<" || "<<lastTH<<G4endl;
+#endif
     return 0.;
   }
   G4double lE=std::log(lastE);       // log(muE) (it is necessary for the fit)
   lastG=lE-lmel;                     // Gamma of the electron (used to recover log(muE))
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
-  if(lE<lEMa) // Linear fit is made explicitly to fix the last bin for the randomization
+  if(lE<lEMa) // Log fit is made explicitly to fix the last bin for the randomization
   {
     G4double shift=(lE-lEMi)/dlnE;
     G4int    blast=static_cast<int>(shift);
+#ifdef pdebug
+    G4cout<<"-->G4QElectronNuclearCS::CalcCrossSect:LOGfit b="<<blast<<",max="<<mL<<",lJ1="
+						    <<lastJ1<<",lJ2="<<lastJ2<<",lJ3="<<lastJ3<<G4endl;
+#endif
     if(blast<0)   blast=0;
     if(blast>=mL) blast=mL-1;
     shift-=blast;
@@ -190,27 +229,35 @@ G4double G4QElectronNuclearCrossSection::CalculateCrossSection(G4int F,G4int I,G
     lastSig= YNi+shift*(YNj-YNi);
     if(lastSig>YNj)lastSig=YNj;
 #ifdef pdebug
-    G4cout<<"G4QENCS::CalcCS:S="<<lastSig<<",E="<<lE<<",Yi="<<YNi<<",Yj="<<YNj<<",M="<<lEMa
-          <<G4endl;
-    G4cout<<"G4QENCS::CalcCS:s="<<shift<<",Jb="<<lastJ1[blast]<<",J="<<lastJ1[lastL]<<",b="
-          <<blast<<G4endl;
+    G4cout<<"G4QElectNucCS::CalcCS:S="<<lastSig<<",E="<<lE<<",Yi="<<YNi<<",Yj="<<YNj<<",M="
+          <<lEMa<<G4endl;
+    G4cout<<"G4QElectNucCS::CalcCS:s="<<shift<<",Jb="<<lastJ1[blast]<<",J="<<lastJ1[lastL];
+    if(J3.size()) G4cout<<", p="<<J3[0];
+    G4cout<<",b="<<blast<<G4endl;
 #endif
   }
   else
   {
+#ifdef pdebug
+    G4cout<<"->G4QElecNucCS::CCS:LOGex="<<lastJ1<<",lJ2="<<lastJ2<<",lJ3="<<lastJ3<<G4endl;
+#endif
     lastL=mL;
     G4double term1=lastJ1[mL]+lastH*HighEnergyJ1(lE);
     G4double term2=lastJ2[mL]+lastH*HighEnergyJ2(lE);
     G4double term3=lastJ3[mL]+lastH*HighEnergyJ3(lE);
     lastSig=dlg1*term1-lgoe*(term2+term2-term3/lastE);
 #ifdef pdebug
-    G4cout<<"G4QENucCS::CalculateCrossSection:S="<<lastSig<<",lE="<<lE<<",J1="
-          <<lastH*HighEnergyJ1(lE)<<",Pm="<<lastJ1[mL]<<",Fm="<<lastJ2[mL]<<",Fh="
-          <<lastH*HighEnergyJ2(lE)<<",EM="<<lEMa<<G4endl;
+    G4cout<<"G4QElNucCS::CalculateCrossSection:S="<<lastSig<<",lE="<<lE<<",J1="
+          <<lastH*HighEnergyJ1(lE)<<",Pm="<<lastJ1[mL]<<",Fm="<<lastJ2[mL]<<",Fh=";
+    if(J3.size()) G4cout<<", p="<<J3[0];
+    G4cout<<lastH*HighEnergyJ2(lE)<<",EM="<<lEMa<<G4endl;
 #endif
   }
   if(lastSig<0.) lastSig = 0.;
-  return lastSig*millibarn;
+#ifdef pdebug
+  if(J3.size()) G4cout<<">>>>>>>>>>G4QElNucCS::CalculateCrossSection: p="<<J3[0]<<G4endl;
+#endif
+  return lastSig;
 }
 
 // Calculate the functions for the log(A)

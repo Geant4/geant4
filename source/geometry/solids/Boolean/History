@@ -1,5 +1,5 @@
 
-$Id: History,v 1.55 2005/11/09 15:00:43 gcosmo Exp $
+$Id: History,v 1.56 2006/05/03 10:33:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 03, 2006  V.Grichine                 geom-bool-V08-00-00
+  - Fix in G4IntersectionSolid::CalculateExtent() for the correctly handling
+    extent computation for nested intersections and always respect the rule
+    pMax > pMin.
 
  Nov 09, 2005  G.Cosmo                    geom-bool-V07-01-01
   - Added fake default constructor for concrete solids types and relevant

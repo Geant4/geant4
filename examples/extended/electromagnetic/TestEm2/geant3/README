@@ -27,14 +27,15 @@
       4 : longitudinal energy profile
       5 : cumulated longitudinal energy profile
       6 : rms of cumulated longitudinal energy profile
-      
-      7 : gamma's flux
-      8 : positron's flux
-      9 : electron's flux
                       
-     10 : radial energy profile    
-     11 : cumulated radial energy profile
-     12 : rms of cumulated radial energy profile  
+      7 : radial energy profile    
+      8 : cumulated radial energy profile
+      9 : rms of cumulated radial energy profile  
 
      21 : edep distrib as function of kine energy of contributing particle
      22 : cumulative distrib of 21 
+
+ It is possible to set the max allowed step size STEMAX,
+ via the data card:
+ STEPMX  stepmax (in cm)
+ (However this value will be taken into account only if auto=0)

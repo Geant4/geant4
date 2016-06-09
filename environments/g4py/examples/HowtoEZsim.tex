@@ -1,0 +1,258 @@
+\documentclass{article}
+\title{How to EZsim using the site-modules of Geant4Py?}
+\author{ H. Yoshida \and K. Murakami}
+
+\begin{document}
+\maketitle
+\section{g4py/site-modules}
+
+Currently site-modules have the following wrapper modules:
+\begin{itemize}
+  \item EZsim
+        \begin{itemize}
+         \item EZgeom : main topic of this document
+        \begin{itemize}
+          \item ezgeom
+        \end{itemize}
+        \end{itemize}
+  \item  geometries : examples of wrapping
+        \begin{itemize}
+        \item  ExN01geom
+        \item ExN03geom
+        \end{itemize}
+  \item materials : pre-defined materials
+        \begin{itemize}
+        \item NISTmaterials
+        \end{itemize}
+  \item physics\_lists : examples of wrapping
+        \begin{itemize}
+        \item EMSTDpl
+        \item ExN01pl
+        \item ExN03pl
+        \item (GenericPhysicsList)
+        \end{itemize}
+  \item primaries : pre-defined particle guns
+        \begin{itemize}
+        \item MedicalBeam
+        \item ParticleGun
+        \end{itemize}
+\end{itemize}
+
+\section{The levels of Python wrapping}
+
+ The application of these site modules are stored in
+  \begin{itemize}
+  \item tests : many test examples
+  \item examples/demos/water\_phantom : voxelized water phantom and scoring
+  \item examples/education
+        \begin{itemize}
+        \item lesson1 : measurement of the mass attenuation coefficients
+        \item lesson2 : exampleN03
+        \end{itemize}
+  \end{itemize}
+ In general, Python wrapping can be applied in various levels.
+This can be seen, for example, in the above examples which demonstrate how the 
+geometries are constructed. We cite two examples how site modules can be used,
+and how existing C++ classes can be wrapped to co-work within the framework of
+Geant4Py.
+
+\subsection{Full Python case}
+ The script examples/education/lesson1/Lesson1.py uses the Phtyon modules of 
+EZgeom. It defines a simple absorber box, using EZgeom module. Its material, 
+dimensions, colors etc. are modifiable by using Python methods.
+
+\subsection{Wrapping an existing C++ geometry}
+ The script examples/education/lesson2/ExN03.py uses the geometry of
+ exampleN03 as it is (ExN03DetectorConstruction).
+The modules in site-modules/geometries/ExN03geom wrap these C++ classes and 
+their methods like  exposes its methods like "SetAbsorberMaterial", 
+"SetAbsorberThickness", "GeometryUpdated" etc..  
+It also used wrapped "ExN03PhysicsList".
+ So, ExN03.py script do nothing for the geometry and physics list. It simply
+initialized them.
+
+\section{Closer look: Full Python case}
+
+ Exposed modules by the EZgeom module are following:
+\begin{itemize}
+ \item Construct() : 
+ \item SetWorldMaterial(material)
+ \item SetWorldVisibility(bool)
+ \item ResizeWorld(dx, dy, dz)
+ \item ResetWorld(dx, dy, dz)
+\end{itemize}
+Also exposed are modules in the G4EzVolume class. 
+\begin{itemize}
+ \item CreateBoxVolume,   Tube/Cone/Sphere/Orb
+ \item Set(Get)Sold
+ \item Set(Get)Material
+ \item Set(Get)Color
+ \item Set(Get)Visibility
+ \item
+ \item Placeit()
+ \item ReplicateIt()
+ \item VoxelizeIt()
+ \item
+ \item SetSensitiveDetector
+\end{itemize}
+ In addition, you can use global names like gMaterialTable etc. which are
+defined in the g4py/source and exposed in the widest name space under 
+Boost-python. You can easily get the list of all g* modules from ipython
+shell, once you import Geant4 modules. 
+
+ Let us explain how to use the above modules, taking the script in 
+examples/education/lesson1/Leson1.py as an example.
+
+It starts by lines to import modules:
+
+\begin{verbatim}
+1:  from Geant4 import *
+2:  import NISTmaterials
+3:  from  EZsim import EZgeom
+4:  from EZsim.EZgeom import G4EzVolume
+5:  import EMSTDpl
+6:  import ParticleGun
+7:  from time import *
+8:  import sys
+\end{verbatim}
+
+In line 1 you import all exposed modules of Geant4.
+From the line 2 to 6, you import relevant site-modules. Lines 7 and 8 is to
+import generic Python modules.
+
+Then you define a Python class "Configure" for initialization.
+
+\begin{verbatim}
+def Configure():
+  NISTmaterials.Construct()  # NIST materials predefined in g4py
+  EZgeom.Construct()  # initialize
+  EMSTDpl.Construct() # initialize the physics list
+  ParticleGun.Construct()  # initialize the particle gun
+  gControlExecute("gun.mac")  # this is one of the globals
+\end{verbatim}
+
+Now you define the concrete geometry.
+
+\begin{verbatim}
+def ConstructGeom():
+  print "* Constructing geometry..."
+  # materils 
+  galactic = G4Material.GetMaterial("G4_Galactic", 1)
+  water = G4Material.GetMaterial("G4_WATER", 1)
+  # world
+  EZgeom.SetWorldMaterial(galactic)
+  EZgeom.ResizeWorld(120.*cm, 120.*cm, 100.*cm)
+  # water phantom ; logical and physical volumes
+  global water_phantom, water_phantom_pv
+  water_phantom= G4EzVolume("WaterPhantom")
+  water_phantom.CreateBoxVolume(water, 110.*cm, 110.*cm, 10.*cm)
+  #Place the water phantom in the vacuum!!
+  water_phantom_pv = water_phantom.PlaceIt(G4ThreeVector(0.,0.,0.*cm))
+\end{verbatim}
+
+ Here water\_phantom is the logical volume, while water\_phantom\_pv is the
+physical volume. These variables are defined as global for later use.
+
+ If you want to change the material of the water\_phantom with the lead, for
+example, you define lead by makinging its instance from the pre-defined list
+and SetMaterial(). 
+
+\begin{verbatim}
+   lead = G4Material.GetMaterial("G4_Pb", 1)
+   water_phantom.SetMaterial(lead)
+\end{verbatim}
+
+To print out the name of the materialof the logical volume,
+\begin{verbatim} 
+   print water_phantom.Getmaterial().GetName()
+\end{verbatim}
+ If you want to change the dimensions of the water\_phantom, you have to get 
+its instance of the solid, and then SetZHalfLength().
+\begin{verbatim}
+  solid = EZgeom.G4EzVolume.GetSold(water_phantom)
+  solid.SetZHalfLength(thickness * mm/2.0)
+\end{verbatim}
+If you want to relocate the water phantom, i.e., water\_phantom\_pv, 
+\begin{verbatim}
+  water_phantom_pv.SetTransformation(G4TreeVector(, ,))
+\end{verbatim}
+
+ You can use any Geant4 commands with gApplyUICommand() method.
+You simply provide it with  strings, as seen in the next code fragment.
+\begin{verbatim}
+      eventNum = self.eventVar.get()
+      for i in range(eventNum):
+        gunYZpos = str(i-eventNum/2) + ". -20. cm"
+        gApplyUICommand("/gun/position 0. " + gunYZpos)
+        gRunManager.BeamOn(1)
+        sleep(0.01)
+\end{verbatim}
+With the above code fragment, you use "eventVar" which is supplied by the
+"Scale" widget. You repeat gRunManager.BeamOn(1), after a sleep of every
+o.o1 second. You use gApplyUICommand() to change the gun's YZ position before
+every shoot.
+ 
+  
+\section{Closer study: wrapped C++ classes case}
+
+ The script file in g4py/examples/education/lesson2/ExN03.py is an example.
+The C++ classes of geometry and physics list of exampleN03 are exposed with
+mo modifications. To expose them,  wrapper classes, pyExN03geom.cc and 
+pyExN03pl.cc are created and stored in ExN03geom/ and ExN03pl/  respectively. 
+They are pre-compiled and shared libraries; ExN03geom.so, and ExN03pl.so are
+stored in the g4py/lib/site-modules library repository.
+
+
+ ExN03geom exposes all the methods defined in ExN03DetectorConstruction.
+ExN03.py in lesson2 initializes the geometry and physics list by simply using 
+the exposed classes;
+\begin{verbatim}
+from Geant4 import *
+import NISTmaterials
+import ExN03geom
+import ExN03pl
+
+
+exN03geom = ExN03geom.ExN03DetectorConstruction()
+gRunManager.SetUserInitialization(exN03geom)
+exN03PL = ExN03pl.ExN03PhysicsList()
+gRunManager.SetUserInitialization(exN03PL)
+\end{verbatim}
+
+ExN03.py provides the widgets to choose a material with the Checkbutton,
+to set the thickness with the Scale widget etc. It provides a "Run" button
+to do /run/beamOn equivalent.
+
+Just before "beamOn", the geometry is modified like; 
+\begin{verbatim}
+  def cmd_beamOn(self):
+      exN03geom.SetAbsorberMaterial(self.materialVar.get())
+      exN03geom.SetAbsorberThickness(self.thickVar.get()  * mm/2.0)
+      exN03geom.UpdateGeometry()
+      exN03PL.SetDefaultCutValue(self.cutVar.get() * mm)
+      exN03PL.SetCutsWithDefault()
+      exN03geom.SetMagField(self.magVar.get() * tesla)
+\end{verbatim}
+Here, self.xxxVar.get() are the values (String or Double) supplied by the
+Checkbutton or Scale widgets.
+
+The on/off of each process is done using the global name gProcessTable.
+\begin{verbatim}
+  def cmd_setProcess(self):
+    for i in self.processList:
+      if self.processVar[i].get() == 0:
+         gProcessTable.SetProcessActivation(i, 0)
+         print "Process " + i + " inactivated"
+      else:
+         gProcessTable.SetProcessActivation(i, 1)
+         print "Process " + i + " activated"
+\end{verbatim}
+Here "processList" is a list of the names of processes like below and 
+"processVar" contains the on/off values of the Checkbuttons for respective 
+processes.
+\begin{verbatim}
+self.processList = ["phot", "compt", "conv", "msc", "eIoni", "eBrem", "annih
+il","muIoni", "muBrems"]
+\end{verbatim}
+
+\end{document}

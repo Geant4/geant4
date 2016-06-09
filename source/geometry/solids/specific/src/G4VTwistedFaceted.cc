@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.10 2005/12/06 09:22:13 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VTwistedFaceted.cc,v 1.13 2006/06/29 18:49:36 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // --------------------------------------------------------------------
@@ -1261,16 +1264,19 @@ G4ThreeVector G4VTwistedFaceted::GetPointOnSurface() const
 
 G4Polyhedron* G4VTwistedFaceted::CreatePolyhedron () const 
 {
-
-  const G4int m = 8  ;  // number of meshes
-  const G4int n = 20  ;
+  // number of meshes
+  const G4int m =
+    G4int(G4Polyhedron::GetNumberOfRotationSteps() * fPhiTwist / twopi) + 2;
+  const G4int n = m;
 
   const G4int nnodes = 4*(m-1)*(n-2) + 2*m*m ;
   const G4int nfaces = 4*(m-1)*(n-1) + 2*(m-1)*(m-1) ;
 
   G4Polyhedron *ph=new G4Polyhedron;
-  G4double xyz[nnodes ][3];         // number of nodes 
-  G4int  faces[nfaces][4] ; // number of faces
+  typedef G4double G4double3[3];
+  typedef G4int G4int4[4];
+  G4double3* xyz = new G4double3[nnodes];  // number of nodes 
+  G4int4*  faces = new G4int4[nfaces] ;    // number of faces
 
   fLowerEndcap->GetFacets(m,m,xyz,faces,0) ;
   fUpperEndcap->GetFacets(m,m,xyz,faces,1) ;
@@ -1282,6 +1288,4 @@ G4Polyhedron* G4VTwistedFaceted::CreatePolyhedron () const
   ph->createPolyhedron(nnodes,nfaces,xyz,faces);
 
   return ph;
-
 }
-

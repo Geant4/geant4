@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc,v 1.7 2005/10/31 11:35:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4NistMaterialBuilder.cc,v 1.14 2006/06/29 19:13:02 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // -------------------------------------------------------------------
@@ -35,8 +38,10 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
-// 31-10-2005 Add chemical effect and gas properties (V.Ivanchenko)
-//
+// 31-10-05 Add chemical effect and gas properties (V.Ivanchenko)
+// 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
+// 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
+// 27.06.06 V.Ivanchneko fix graphite description
 //
 // -------------------------------------------------------------------
 //
@@ -75,7 +80,8 @@ G4NistMaterialBuilder::~G4NistMaterialBuilder()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
-                                                       G4bool isotopes)
+                                                       G4bool isotopes,
+						       G4bool warning)
 {
   if(first) {
     if(verbose > 0) {
@@ -111,7 +117,7 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& name,
              << name << " is available"
 	     << G4endl;
   } else {
-    if( verbose > 0) 
+    if( (verbose == 1 && warning) || verbose > 1) 
       G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial WARNING:"
 	     << " material <" << name
 	     << "> is not found out" << G4endl;
@@ -135,7 +141,8 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(const G4String& name,
   for (G4int i=0; i<nMaterials; i++) {
     if (name == names[i]) {
       G4int nc = components[i];
-      mat = new G4Material(names[i],densities[i],nc,states[i],temperatures[i], presures[i]);
+      mat = new G4Material(names[i],densities[i],nc,
+                                    states[i],temperatures[i], presures[i]);
 
       if (verbose>1) G4cout << "New material nComponents= " << nc << G4endl;
       if (nc > 0) {
@@ -199,11 +206,17 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
 {
   G4int Z;
   G4int nm = elm.size();
+  if(nm == 0) { 
+    G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+           << "  WARNING: empty list of elements"
+	   << G4endl;
+    return 0;
+  } 
   if (nm == 1) {
     Z = G4int((elmBuilder->FindOrBuildElement(elm[0]))->GetZ());
     AddMaterial(name,dens,Z);
-  }
-  else if (nm > 1) {
+
+  } else {
     AddMaterial(name,dens,0,0.0,nm);
     for (G4int i=0; i<nm; i++) {
       Z = G4int((elmBuilder->FindOrBuildElement(elm[i]))->GetZ());
@@ -213,6 +226,79 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
   
   return BuildMaterial(name, isotopes);    
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* G4NistMaterialBuilder::ConstructNewGasMaterial(
+				      const G4String& name,
+				      const G4String& nameNist,
+				      G4double temp, G4double pres, 
+				      G4bool isotopes)
+{
+  G4int idx = -1;
+  for (G4int i=0; i<nMaterials; i++) {
+    if (name == names[i]) {
+      G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+	     << "  WARNING: the Name <" << name 
+	     << "> is already in the DB idx= " << i
+	     << " no new gas will be constructed"
+	     << G4endl;
+      return 0;
+    } else {
+      if (nameNist == names[i]) {
+        if(states[i] != kStateGas) {
+	  G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+		 << "  WARNING:  <" << nameNist 
+		 << "> is not gas -  no new gas will be constructed"
+		 << G4endl;
+          return 0;
+	}
+	idx = i;
+      }
+    }
+  } 
+
+  if(idx == -1) { 
+    G4cout << "G4NistMaterialBuilder::ConstructNewMaterial:"
+           << "  WARNING: no material in the DB with the name <" << nameNist
+	   << "> - new gas is not constructed"
+	   << G4endl;
+    return 0;
+  } 
+
+  G4int nc = components[idx];
+  G4double dens = densities[idx]*pres*STP_Temperature/(temp*STP_Pressure);
+  G4Material* mat = new G4Material(name,dens,nc,kStateGas,temp, pres);
+
+  if (verbose>1) G4cout << "New material <" << name 
+			<< " density(g/cm3)= " << dens*cm3/g
+			<< " T(K)= " << temp/kelvin
+			<< " P(atm)= " << pres/atmosphere
+                        << ">   nComponents= " << nc << G4endl;
+			
+  if (nc > 0) {
+    G4int k = indexes[idx];
+    for (G4int j=0; j<nc; j++) {
+      G4int Z = elements[k+j];
+      G4Element* elm = elmBuilder->FindOrBuildElement(Z, isotopes);
+      mat->AddElement(elm,fractions[k+j]);
+    }
+  }
+
+  if (chFormulas[idx] != "") {
+    mat->SetChemicalFormula(chFormulas[idx]);
+    G4double exc = mat->GetIonisation()
+                                   ->FindMeanExcitationEnergy(chFormulas[idx]);
+    mat->GetIonisation()->SetMeanExcitationEnergy(exc);
+  }
+
+  if (ionPotentials[idx] != 0.0)
+    mat->GetIonisation()->SetMeanExcitationEnergy(ionPotentials[idx]);
+
+  if (matManager) matManager->RegisterMaterial(mat);
+  return mat;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::SetVerbose(G4int val)
@@ -240,38 +326,38 @@ void G4NistMaterialBuilder::ListMaterials(const G4String& list)
 
 void G4NistMaterialBuilder::ListNistSimpleMaterials()
 {
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
   G4cout << "###   Simple Materials from the NIST Data Base   ###" << G4endl;
-  G4cout << "========================================================" << G4endl;
-  G4cout << " Z Name  ChFormula        density(g/cm^3)  I(eV)        " << G4endl;
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << " Z Name  ChFormula        density(g/cm^3)  I(eV)       " << G4endl;
+  G4cout << "=======================================================" << G4endl;
   for (G4int i=0; i<nElementary; i++) {DumpElm(i);}
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::ListNistCompoundMaterials()
 {
-  G4cout << "###    Compound Materials from the NIST Data Base    ###" << G4endl;
-  G4cout << "========================================================" << G4endl;
-  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)    " << G4endl;
-  G4cout << "========================================================" << G4endl;
+  G4cout << "###    Compound Materials from the NIST Data Base    ##" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
+  G4cout << "=======================================================" << G4endl;
   for (G4int i=nElementary; i<nNIST; i++) {DumpMix(i);}
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::ListHepMaterials()
 {
-  G4cout << "========================================================" << G4endl;
-  G4cout << "###           HEP & Nuclear Materials                ###" << G4endl;
-  G4cout << "========================================================" << G4endl;
-  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)    " << G4endl;
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << "###           HEP & Nuclear Materials                ##" << G4endl;
+  G4cout << "=======================================================" << G4endl;
+  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
+  G4cout << "=======================================================" << G4endl;
   for (G4int i=nNIST; i<nMaterials; i++) {DumpMix(i);}
-  G4cout << "========================================================" << G4endl;
+  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -304,7 +390,9 @@ void G4NistMaterialBuilder::DumpMix(G4int i)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
-                             G4int Z, G4double pot, G4int ncomp, G4State state)
+					G4int Z, G4double pot, 
+					G4int ncomp, G4State state, 
+					G4double temp, G4double pres)
 {
   if (nCurrent != 0) {
     G4cout
@@ -322,8 +410,8 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   states.push_back(state);
   components.push_back(ncomp);
   indexes.push_back(nComponents);
-  temperatures.push_back(STP_Temperature);
-  presures.push_back(STP_Pressure);
+  temperatures.push_back(temp);
+  presures.push_back(pres);
 
   if (ncomp == 1) {
     elements.push_back(Z);
@@ -352,7 +440,7 @@ void G4NistMaterialBuilder::AddChemicalFormula(const G4String& nameMat,
 {
   if (nCurrent != 0) {
     G4cout
-    << "WARNING: G4NistMaterialBuilder::AddChemicalFormula problem: previous mixture "
+    << "WARNING: G4NistMaterialBuilder::AddChemicalFormula : previous mixture "
     << nMaterials << " " << names[nMaterials] << " is not yet complete!"
     << G4endl;
   }
@@ -368,14 +456,15 @@ void G4NistMaterialBuilder::AddChemicalFormula(const G4String& nameMat,
       }
     }
   }
-  G4cout << "WARNING: G4NistMaterialBuilder::AddChemicalFormula problem: there is no "
+  G4cout << "WARNING: G4NistMaterialBuilder::AddChemicalFormula : there is no "
     << nameMat << " in the list of materials; ch=" << ch
     << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::AddGas(const G4String& nameMat, G4double t, G4double p)
+void G4NistMaterialBuilder::AddGas(const G4String& nameMat, G4double t,
+                                                            G4double p)
 {
   if (nCurrent != 0) {
     G4cout
@@ -398,8 +487,8 @@ void G4NistMaterialBuilder::AddGas(const G4String& nameMat, G4double t, G4double
     }
   }
   G4cout << "WARNING: G4NistMaterialBuilder::AddGas problem: there is no "
-    << nameMat << " in the list of materials;"
-    << G4endl;
+	 << nameMat << " in the list of materials;"
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -1581,7 +1670,7 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 1, 0.094935);
   AddElementByWeightFraction( 6, 0.905065);
 
-  AddMaterial("G4_GRAPHITE", 1.7, 0, 78., 1);
+  AddMaterial("G4_GRAPHITE", 1.7, 6, 78.);
   nNIST = nMaterials;
   AddChemicalFormula("G4_GRAPHITE","Graphite");
 }

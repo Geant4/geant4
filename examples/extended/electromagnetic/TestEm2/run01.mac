@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.20 2005/11/22 17:11:31 maire Exp $
+# $Id: run01.mac,v 1.23 2006/04/12 15:25:38 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -6,11 +6,11 @@
 # PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
 #
 /control/verbose 2
-/run/verbose 1
+/run/verbose 2
 #
 /testem/det/setMat PbWO4
-/testem/det/setLbin 20  1.
-/testem/det/setRbin 20 0.25
+/testem/det/setLbin 40 0.5
+/testem/det/setRbin 50 0.1
 #
 /testem/phys/addPhysics  standard
 #### /testem/phys/addPhysics  g4v71
@@ -26,6 +26,7 @@
 /gun/particle e-
 /gun/energy 5 GeV
 #
-/testem/event/printModulo 10
+/testem/event/printModulo 20
+/testem/run/verbose 1
 #
 /run/beamOn 500

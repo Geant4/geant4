@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.109 2005/12/12 09:08:21 gcosmo Exp $
+# $Id: binmake.gmk,v 1.112 2006/04/24 10:54:18 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -174,15 +174,18 @@ endif
 #
 ifndef USER_DEFINED_LDLIBS
 
-# TARGETLIB is the library generated for the final user application...
+# TARGETLIB is the library generated for the final user application;
+# TARGOBJEXT defines the target object extension
 #
 ifdef G4EXLIB
   ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   # Unix
-    TARGETLIB := -l$(G4TARGET)
+    TARGETLIB  := -l$(G4TARGET)
+    TARGOBJEXT := o
   else
   # Windows
-    TARGETLIB := lib$(G4TARGET).a   
+    TARGETLIB  := lib$(G4TARGET).a   
+    TARGOBJEXT := OBJ   
   endif
 endif
 
@@ -294,7 +297,7 @@ include $(G4INSTALL)/config/sys/$(G4SYSTEM)-runpath.gmk
 endif
 	
 sources := $(wildcard $(G4TARGET).cc)
-objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.o,$(sources))
+objects := $(patsubst %.cc,$(G4TMPDIR)/exe/%.$(TARGOBJEXT),$(sources))
 dependencies := $(patsubst %.cc,$(G4TMPDIR)/exe/%.d,$(sources))
 
 LINK_DEPENDENCIES := $(G4TMPDIR)/exe/obj.last $(EXTRA_LINK_DEPENDENCIES)
@@ -334,6 +337,8 @@ else
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
 	  -o $(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
+	@if [ \( -f $(G4BINDIR)/$(G4TARGET) \) ]; then \
+	  echo "... Done!"; fi
 endif
 
 # Touch the versioning file
@@ -344,15 +349,15 @@ $(G4TMPDIR)/exe/obj.last: $(objects)
 endif
 	@touch $@
 
-# Make the $(G4TARGET).o file.
-$(G4TMPDIR)/exe/$(G4TARGET).o : $(G4TARGET).cc
+# Make the $(G4TARGET).$(TARGOBJEXT) file.
+$(G4TMPDIR)/exe/$(G4TARGET).$(TARGOBJEXT) : $(G4TARGET).cc
 ifdef CPPVERBOSE
 	$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(APPFLAGS) \
-	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).o $(G4TARGET).cc
+	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).$(TARGOBJEXT) $(G4TARGET).cc
 else
 	@echo Compiling $(G4TARGET).cc ...
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) $(APPFLAGS) \
-	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).o $(G4TARGET).cc
+	 -c $(OUT_OBJ)$(G4TMPDIR)/exe/$(G4TARGET).$(TARGOBJEXT) $(G4TARGET).cc
 endif
 
 GPPFLAGS := "-M"
@@ -384,7 +389,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@echo Making dependency for file $< ...
 	@set -e;\
 	g++ $(GPPFLAGS) $(CPPFLAGS) -w $< |\
-	sed 's!$(G4TARGET)\.o!$(G4TMPDIR)/exe/& $@!' >$@;\
+	sed 's!$(G4TARGET)\.$(TARGOBJEXT)!$(G4TMPDIR)/exe/& $@!' >$@;\
 	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
 -include $(dependencies)

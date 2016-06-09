@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.6 2005/10/31 11:35:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4NistElementBuilder.hh,v 1.9 2006/06/29 19:11:21 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1
@@ -33,9 +36,11 @@
 // Description: Utility class to hold and manipulate G4Elements defined from
 //              Nist data base
 //
-// Author:      V.Ivanchenko 21-11-2004
+// Author:      V.Ivanchenko 21.11.2004
 //
 // Modifications:
+// 27.02.06 V.Ivanchenko Return m=0 if Z&N combination is out of NIST  
+// 27.02.06 V.Ivanchneko add GetAtomicMassAmu 
 //
 //----------------------------------------------------------------------------
 //
@@ -60,11 +65,13 @@ class G4NistElementBuilder
 {
 public:
   G4NistElementBuilder(G4int vb);
- ~G4NistElementBuilder();
+  ~G4NistElementBuilder();
 
   G4int    GetZ           (const G4String& symb);
   G4double GetA           (G4int Z);
   G4double GetIsotopeMass (G4int Z, G4int N);
+
+  G4double GetIsotopeAbundance (G4int Z, G4int N);
 
   G4int    GetMaxNumElements() {return maxNumElements-1;};
 
@@ -129,11 +136,20 @@ inline G4double G4NistElementBuilder::GetA(G4int Z)
 
 inline G4double G4NistElementBuilder::GetIsotopeMass(G4int Z, G4int N)
 {
+  G4double m = 0.0;
   G4int i = N - nFirstIsotope[Z];
-  if(i < 0) i = 0;
-  else if(i >= nIsotopes[Z]) i = nIsotopes[Z] -1;
-  i += idxIsotopes[Z];
-  return massIsotopes[i];
+  if(i >= 0 && i <nIsotopes[Z]) m = massIsotopes[i + idxIsotopes[Z]]; 
+  return m;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistElementBuilder::GetIsotopeAbundance(G4int Z, G4int N)
+{
+  G4double x = 0.0;
+  G4int i = N - nFirstIsotope[Z];
+  if(i >= 0 && i <nIsotopes[Z]) x = relAbundance[i + idxIsotopes[Z]]; 
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,26 +1,30 @@
+//
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisListManager.hh,v 1.3 2005/11/23 20:25:22 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VisListManager.hh,v 1.8 2006/06/29 21:29:04 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
@@ -46,14 +50,18 @@ public: // With description
 
   virtual ~G4VisListManager();
 
-  void Register(T* ptr);
   // Register ptr. Manager assumes ownership and
   // ptr becomes current
+  void Register(T* ptr);
 
   void SetCurrent(const G4String& name);
+
+  // Accessors
   const T* Current() const {return fpCurrent;}
-  
-  void Print(std::ostream& ostr, const G4String& name) const;
+  const std::map<G4String, T*>& Map() const;
+
+  // Print configuration
+  void Print(std::ostream& ostr, const G4String& name="") const;
 
 private:
 
@@ -120,7 +128,12 @@ template <typename T>
 void
 G4VisListManager<T>::Print(std::ostream& ostr, const G4String& name) const
 {
-  ostr<<"Current: "<<fpCurrent->Name()<<std::endl;
+  if (0 == fMap.size()) {
+    G4cout<<"  None"<<std::endl;
+    return;
+  }
+    
+  ostr<<"  Current: "<<fpCurrent->Name()<<std::endl;
 
   if (!name.isNull()) {
     // Print out specified object
@@ -137,10 +150,17 @@ G4VisListManager<T>::Print(std::ostream& ostr, const G4String& name) const
     typename std::map<G4String, T*>::const_iterator iter = fMap.begin();
     while (iter != fMap.end()) {
       iter->second->Print(ostr);
-      ostr<<G4endl;
+      ostr<<std::endl;
       iter++;
     }
   }
+}
+
+template <typename T>
+const std::map<G4String, T*>&
+G4VisListManager<T>::Map() const
+{
+  return fMap;
 }
 
 #endif

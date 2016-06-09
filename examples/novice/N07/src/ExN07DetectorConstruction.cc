@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorConstruction.cc,v 1.5 2005/11/22 22:20:55 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: ExN07DetectorConstruction.cc,v 1.7 2006/06/29 17:54:55 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 
@@ -56,7 +59,8 @@
 
 ExN07DetectorConstruction::ExN07DetectorConstruction()
 :constructed(false),worldMaterial(0),absorberMaterial(0),gapMaterial(0),
- layerSolid(0),gapSolid(0),worldLogical(0),worldPhysical(0),serial(false)
+ layerSolid(0),gapSolid(0),worldLogical(0),worldPhysical(0),serial(false),
+ verboseLevel(1)
 {
   numberOfLayers = 40;
   totalThickness = 2.0*m;
@@ -90,6 +94,9 @@ G4VPhysicalVolume* ExN07DetectorConstruction::Construct()
     DefineMaterials();
     SetupGeometry();
     SetupDetectors();
+  }
+  if (GetVerboseLevel()>0) {
+    PrintCalorParameters();
   }
   return worldPhysical;
 }
@@ -183,7 +190,9 @@ void ExN07DetectorConstruction::DefineMaterials()
   G4Material* Vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole,
                                     density,kStateGas,temperature,pressure);
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  if (GetVerboseLevel()>1) {
+    G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  }
 
   //default materials of the calorimeter
   worldMaterial    = Vacuum;
@@ -268,7 +277,6 @@ void ExN07DetectorConstruction::SetupGeometry()
     gapLogical[i]->SetVisAttributes(simpleBoxVisAtt);
   }
   
-  PrintCalorParameters();
 }
 
 void ExN07DetectorConstruction::SetupDetectors()
@@ -362,6 +370,10 @@ void ExN07DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
       calorLogical[i]->SetMaterial(absorberMaterial);
       layerLogical[i]->SetMaterial(absorberMaterial);
     }
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+    if (GetVerboseLevel()>1) {
+      PrintCalorParameters();
+    }
   }
   else
   { G4cerr << materialChoice << " is not defined. - Command is ignored." << G4endl; }
@@ -378,8 +390,12 @@ void ExN07DetectorConstruction::SetGapMaterial(G4String materialChoice)
   {
     gapMaterial = pttoMaterial;
     if(constructed) for(size_t i=0;i<3;i++)
-    { gapLogical[i]->SetMaterial(absorberMaterial); }
-  }
+    { gapLogical[i]->SetMaterial(gapMaterial); }
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+    if (GetVerboseLevel()>1) {
+      PrintCalorParameters();
+    }
+   }
   else
   { G4cerr << materialChoice << " is not defined. - Command is ignored." << G4endl; }
 }
@@ -424,3 +440,34 @@ void ExN07DetectorConstruction::SetNumberOfLayers(G4int nl)
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
+void   ExN07DetectorConstruction::AddMaterial()
+{
+  static G4bool isAdded = false;   
+
+  if( isAdded ) return;
+
+  G4String name, symbol;             //a=mass of a mole;
+  G4double a, z, density;            //z=mean number of protons;  
+
+  G4int ncomponents, natoms;
+
+  //
+  // define simple materials
+  //
+
+  new G4Material(name="Copper", z=29., a=63.546*g/mole, density=8.96*g/cm3);
+  new G4Material(name="Tungsten", z=74., a=183.84*g/mole, density=19.3*g/cm3);
+
+  G4Element* C = G4Element::GetElement("Carbon");
+  G4Element* O = G4Element::GetElement("Oxygen");
+  
+
+  G4Material* CO2 = 
+    new G4Material("CarbonicGas", density= 27.*mg/cm3, ncomponents=2,
+		   kStateGas, 325.*kelvin, 50.*atmosphere);
+  CO2->AddElement(C, natoms=1);
+  CO2->AddElement(O, natoms=2);
+
+  isAdded = true;
+
+}

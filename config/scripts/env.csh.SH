@@ -283,6 +283,48 @@ setenv OGLHOME "$g4vis_oglhome"
 echo "On this machine the OGLHOME=\$OGLHOME"
 endif 
 
+#+
+if ( X$g4vis_oivhome != X )  then
+setenv OIVHOME "$g4vis_oivhome"
+echo "On this machine the OIVHOME=\$OIVHOME"
+endif 
+
+#+
+if ( X$g4vis_build_openglxm_driver != X )  then
+setenv XMFLAGS "$g4vis_xmflags"
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+endif 
+
+#+
+if ( X$g4vis_build_openglxm_driver != X )  then
+setenv XMLIBS "$g4vis_xmlibs"
+echo "On this machine the XMLIBS=\$XMLIBS"
+endif 
+
+#+
+if ( X$g4ui_build_xm_session != X )  then
+setenv XMFLAGS "$g4vis_xmflags"
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+endif 
+
+#+
+if ( X$g4ui_build_xm_session != X )  then
+setenv XMLIBS "$g4vis_xmlibs"
+echo "On this machine the XMLIBS=\$XMLIBS"
+endif 
+
+#+
+if ( X$g4ui_build_xaw_session != X )  then
+setenv XAWFLAGS "$g4ui_xawflags"
+echo "On this machine the XAWFLAGS=\$XAWFLAGS"
+endif 
+
+#+
+if ( X$g4ui_build_xaw_session != X )  then
+setenv XAWLIBS "$g4ui_xawlibs"
+echo "On this machine the XAWLIBS=\$XAWLIBS"
+endif 
+
 #
 # Use G3TOG4 module
 #
@@ -336,7 +378,7 @@ echo "On this machine the G4LIB_USE_GRANULAR=\$G4LIB_USE_GRANULAR"
 endif
 
 # Check for Windows!
-if ( "X$G4SYSTEM" != "XWIN32-VC" && "X$G4SYSTEM" != "XWIN32-VC7" ) then
+if ( "X\$G4SYSTEM" != "XWIN32-VC" && "X\$G4SYSTEM" != "XWIN32-VC7" ) then
 setenv G4UI_USE_TCSH 1
 echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
 endif
@@ -347,6 +389,7 @@ endif
 
 : In the following dollars and backticks do not need the extra backslash.
 $spitshell >>env.csh <<'!NO!SUBS!'
+
 
 #+
 #
@@ -368,6 +411,22 @@ setenv G4WORKDIR $HOME/geant4
 
 endif
 endif
+
+#
+# Shared libraries
+#
+if ( ${?G4LIB_BUILD_SHARED} ) then
+if ( ${?LD_LIBRARY_PATH} )  then
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4LIB}/${G4SYSTEM}
+else
+setenv LD_LIBRARY_PATH ${G4LIB}/${G4SYSTEM}
+endif
+endif
+
+#
+# For BIN
+#
+setenv PATH ${PATH}:${G4WORKDIR}/bin/${G4SYSTEM}
 
 !NO!SUBS!
 chmod 755 env.csh

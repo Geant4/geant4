@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -109,7 +112,6 @@ public:
     return particleType <= 2; 
   };
 
-#ifdef G4BERTINI_KAON
   G4bool baryon() const { 
     return (particleType == 1  ||
             particleType == 2  ||
@@ -120,7 +122,6 @@ public:
             particleType == 29 ||
             particleType == 31 );
   };
-#endif
 
   G4bool pion() const { 
 
@@ -160,8 +161,6 @@ public:
     case 10: // photon
       mass = 0.0;
       break;
-
-#ifdef G4BERTINI_KAON
     case 11: // k+
       mass = 0.49368;
       break;
@@ -192,8 +191,6 @@ public:
     case 31: // xi-
       mass = 1.3213;
       break;
-#endif
-
     case 111: // PP
       mass = 0.93827 + 0.93827;
       break;
@@ -234,8 +231,6 @@ public:
     case 10: // photon
       charge = 0.0;
       break;
-
-#ifdef G4BERTINI_KAON
     case 11: // k+
       charge = 1.0;
       break;
@@ -266,8 +261,6 @@ public:
     case 31: // xi-
       charge = -1.0;
       break;
-#endif
-
     case 111: // PP
       charge = 2.0;
       break;
@@ -286,7 +279,6 @@ public:
   };
 
 
-#ifdef G4BERTINI_KAON
   G4double getStrangeness(G4int type) const {
 
     G4double strangeness;
@@ -356,7 +348,7 @@ public:
         
     return strangeness;
   };
-#endif 
+
 
   G4double getParticleMass(G4int type) const {
 
@@ -381,8 +373,6 @@ public:
     case 10: // photon
       mass = 0.0;
       break;
-
-#ifdef G4BERTINI_KAON
     case 11: // k+
       mass = 0.49368;
       break;
@@ -413,8 +403,6 @@ public:
     case 31: // xi-
       mass = 1.3213;
       break;
-#endif
-
     case 111: // PP
       mass = 0.93827 + 0.93827;
       break;

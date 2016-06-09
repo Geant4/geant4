@@ -1,0 +1,319 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// File name:     RadmonTDetectorCarvedVolumesDecorator.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonTDetectorCarvedVolumesDecorator.icc,v 1.2.2.2 2006/06/29 16:12:15 gunter Exp $
+// Tag:           $Name: geant4-08-01 $
+//
+
+#ifndef   RADMONTDETECTORCARVEDVOLUMESDECORATOR_HH
+ #error "RadmonTDetectorCarvedVolumesDecorator.icc cannot be included directly. Please use RadmonTDetectorCarvedVolumesDecorator.hh"
+#else  /* RADMONTDETECTORCARVEDVOLUMESDECORATOR_HH */
+ // Include files
+ #include "RadmonVDetectorLabelledEntityConstructor.hh"
+ #include "RadmonDetectorLayerVolumesList.hh"
+ #include "RadmonDetectorLayerVolumeItem.hh"
+ #include "G4VisAttributes.hh"
+ #include "G4DisplacedSolid.hh"
+ #include "G4UnionSolid.hh"
+ #include "G4Tubs.hh"
+ #include "G4UIcommand.hh"
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorCarvedVolumesDecorator<LayerVolumesComponent> :: RadmonTDetectorCarvedVolumesDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor)
+ :
+  owner(constructor),
+  component(constructor),
+  visAttributes(0),
+  subtraction(RadmonDetectorLayerVolumeItemSubtraction::rightMinusLeft)
+ {
+ }
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorCarvedVolumesDecorator<LayerVolumesComponent> :: ~RadmonTDetectorCarvedVolumesDecorator()
+ {
+  while (! ownedSolids.empty())
+  {
+   delete ownedSolids.top();
+   ownedSolids.pop();
+  }
+
+  delete visAttributes;
+ }
+ 
+ 
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+ RadmonDetectorLayerVolumesList *               RadmonTDetectorCarvedVolumesDecorator<LayerVolumesComponent> :: GenerateVolumesList(void)
+ {
+  G4double width(owner->GetWidth());
+  if (width<0)
+   return 0;
+
+  G4double height(owner->GetHeight());
+  if (height<0)
+   return 0;
+  
+  G4double thickness(owner->GetThickness());
+  if (thickness<0)
+   return 0;
+  
+  G4int holesAlongWidth(owner->GetAttributeAsInteger("HolesAlongWidth", -1));
+  if (holesAlongWidth<0)
+  {
+   G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: \"HolesAlongWidth\" attribute not defined." << G4endl;
+   return 0;
+  }
+
+  G4int holesAlongHeight(owner->GetAttributeAsInteger("HolesAlongHeight", -1));
+  if (holesAlongHeight<0)
+  {
+   G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: \"HolesAlongHeight\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  if ((holesAlongWidth+holesAlongHeight)<=0)
+  {
+   G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: Both \"HolesAlongHeight\" and \"HolesAlongHeight\" attributes are 0." << G4endl;
+   return 0;
+  }
+
+  G4double holesRadius(owner->GetAttributeAsMeasure("HolesRadius", "Length", -1.));
+  if (holesRadius<0)
+  {
+   G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: \"HolesRadius\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  G4double holesStep(owner->GetAttributeAsMeasure("HolesStep", "Length", -1.));
+  if (holesStep<0)
+  {
+   G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: \"HolesStep\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  G4double fullHolesStep(holesRadius*2.+holesStep);
+  
+  if (fullHolesStep*static_cast<G4double>(holesAlongWidth-1)>width || fullHolesStep>width)
+  {
+   G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: Holes parameters does not fit along width." << G4endl;
+   return 0;
+  }
+  
+  if (fullHolesStep*static_cast<G4double>(holesAlongHeight-1)>height || fullHolesStep>height)
+  {
+   G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: Holes parameters does not fit along height." << G4endl;
+   return 0;
+  }
+  
+  G4Material * material(0);
+  G4double depositOnHolesThickness(owner->GetAttributeAsMeasure("DepositOnHolesThickness", "Length", -1.));
+  if (depositOnHolesThickness>0)
+  {
+   if (depositOnHolesThickness>=holesRadius)
+   {
+    G4cout << "RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: \"DepositOnHolesThickness\" >= \"HolesRadius\"." << G4endl;
+    return 0;
+   }
+  
+   if (depositOnHolesThickness>0)
+   {
+    material=owner->GetMaterial("DepositOnHolesMaterial");
+    if (!material)
+      return 0;
+                                                                                                                                                                                                                                 
+    visAttributes=owner->AllocateVisAttributes("DepositOnHolesVisAttributes", material);
+   }
+  }                                                                                                                                                                                                                                
+  else
+   depositOnHolesThickness=0*mm;
+  
+  RadmonDetectorLayerVolumesList * list(component.GenerateVolumesList());
+  
+  if (list==0)
+   return 0;
+   
+  G4int nItems(list->GetNItems());
+  
+  if (nItems==0)
+  {
+   delete list;
+   return 0;
+  }
+  
+  G4Tubs * holeCylinder(new G4Tubs("SingleHole", 0, holesRadius-depositOnHolesThickness, (thickness/2.)*1.01, 0, 360.*deg));
+  ownedSolids.push(holeCylinder);
+  
+  G4ThreeVector offset((fullHolesStep/2.)*static_cast<G4double>(holesAlongWidth-1), height/2., 0);
+  G4VSolid * displacedHole(0);
+  G4VSolid * holes(0);
+  G4int i(holesAlongWidth);
+  
+  identity=G4RotationMatrix::IDENTITY;
+  
+  G4int index(0);
+  G4String indexStr;
+  
+  while (i>0)
+  {
+   index++;
+   indexStr=G4UIcommand::ConvertToString(index);
+  
+   displacedHole=new G4DisplacedSolid("DisplacedSingleHole"+indexStr, holeCylinder, &identity, offset);
+   ownedSolids.push(displacedHole);
+   
+   if (holes)
+   {
+    holes=new G4UnionSolid("DisplacedHoles"+indexStr, holes, displacedHole);
+    ownedSolids.push(holes);
+   }
+   else
+    holes=displacedHole;
+    
+   offset.setY(-offset.getY());
+   if (offset.getY()>=0)
+   {
+    offset.setX(offset.getX()-fullHolesStep);
+    i--;
+   }
+  }
+    
+  offset.setX(width/2.);
+  offset.setY((fullHolesStep/2.)*static_cast<G4double>(holesAlongHeight-1));
+  i=holesAlongHeight;
+  
+  while (i>0)
+  {
+   index++;
+   indexStr=G4UIcommand::ConvertToString(index);
+  
+   displacedHole=new G4DisplacedSolid("DisplacedSingleHole"+indexStr, holeCylinder, &identity, offset);
+   ownedSolids.push(displacedHole);
+   
+   if (holes)
+   {
+    holes=new G4UnionSolid("DisplacedHoles"+indexStr, holes, displacedHole);
+    ownedSolids.push(holes);
+   }
+   else
+    holes=displacedHole;
+    
+   offset.setX(-offset.getX());
+   if (offset.getX()>=0)
+   {
+    offset.setY(offset.getY()-fullHolesStep);
+    i--;
+   }
+  }
+
+  RadmonDetectorLayerVolumeItem * item;
+  RadmonDetectorLayerVolumeItem * motherItem;
+  subtraction.Initialize(holes, false);
+
+  while (nItems>0)
+  {
+   nItems--;
+
+   item=list->GetItem(nItems);
+   
+   if (item->GetMotherVolumeItem()==0)
+    motherItem=item;
+    
+   subtraction.ApplyTo(item);
+  }
+
+  if (!motherItem)
+   G4Exception("RadmonTDetectorCarvedVolumesDecorator::GenerateVolumesList: No mother volume found.");
+
+  if (material)
+  {
+   intersection.Initialize(motherItem);
+   
+   G4Tubs * depositTub(new G4Tubs("SingleDeposit", holesRadius-depositOnHolesThickness, holesRadius, thickness/2., 0, 360.*deg));
+   ownedSolids.push(depositTub);
+   
+   offset.setX((fullHolesStep/2.)*static_cast<G4double>(holesAlongWidth-1));
+   offset.setY(height/2.);
+   offset.setZ(0.);
+   
+   i=holesAlongWidth;
+   index=0;
+ 
+   while (i>0)
+   {
+    index++;
+    indexStr=G4UIcommand::ConvertToString(index);
+
+    item=list->AppendItem();
+    item->SetSolid(intersection.ApplyTo(depositTub, offset, false, true));
+    item->SetAttributes(visAttributes);
+    item->SetMaterial(material);
+    item->SetName("DepositOnHole"+indexStr);
+    item->SetMotherVolumeItem(motherItem);
+
+    offset.setY(-offset.getY());
+    if (offset.getY()>=0)
+    {
+     offset.setX(offset.getX()-fullHolesStep);
+     i--;
+    }
+   }
+
+   offset.setX(width/2.);
+   offset.setY((fullHolesStep/2.)*static_cast<G4double>(holesAlongHeight-1));
+   i=holesAlongHeight;
+
+   while (i>0)
+   {
+    index++;
+    indexStr=G4UIcommand::ConvertToString(index);
+
+    item=list->AppendItem();
+    item->SetSolid(intersection.ApplyTo(depositTub, offset, false, true));
+    item->SetAttributes(visAttributes);
+    item->SetMaterial(material);
+    item->SetName("DepositOnHole"+indexStr);
+    item->SetMotherVolumeItem(motherItem);
+
+    offset.setX(-offset.getX());
+    if (offset.getX()>=0)
+    {
+     offset.setY(offset.getY()-fullHolesStep);
+     i--;
+    }
+   }
+  }
+  
+  return list;
+ }
+#endif /* RADMONTDETECTORCARVEDVOLUMESDECORATOR_HH */

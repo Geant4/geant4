@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.12 2004/02/13 05:54:07 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ShortLivedConstructor.cc,v 1.14 2006/06/29 19:27:18 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -120,7 +123,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
 		 true,            -1.0,          NULL);
   // t-quark
   particle = new G4Quarks(            
-	    "t_quark",       174.0*GeV,       0.0*MeV,  +2./3.*eplus, 
+	    "t_quark",       174.3*GeV,       0.0*MeV,  +2./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,           6,
@@ -566,7 +569,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   // vector mesons
   // omega
   particle = new G4ExcitedMesons(            
-	      "omega",      782.57*MeV,      8.44*MeV,    +0.0*eplus, 
+	      "omega",      782.57*MeV,      8.49*MeV,    +0.0*eplus, 
                     2,              -1,            -1,          
                     0,              +0,            -1,             
               "meson",               0,             0,           223,
@@ -578,15 +581,29 @@ void G4ShortLivedConstructor::ConstructMesons()
   decayTable =  new G4DecayTable();
   // create decay channel of omega -> pi+ + pi- + pi0
   //                                   parent    BR     #daughters
-  mode  = new G4PhaseSpaceDecayChannel("omega",0.888, 3,
+  mode  = new G4PhaseSpaceDecayChannel("omega",0.891, 3,
 				                    "pi+","pi-","pi0");
+  // add decay table
+  decayTable->Insert(mode);
+
+  // create decay channel of omega -> gamma + pi0
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("omega",0.0890, 2,
+				                    "gamma","pi0");
+  // add decay table
+  decayTable->Insert(mode);
+
+  // create decay channel of omega -> pi+ + pi- 
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("omega",0.0170, 2,
+				                    "pi+","pi-");
   // add decay table
   decayTable->Insert(mode);
   particle->SetDecayTable(decayTable);
 
   // phi
   particle = new G4ExcitedMesons(            
-	        "phi",      1019.4*MeV,      4.26*MeV,    +0.0*eplus, 
+	        "phi",     1019.46*MeV,      4.26*MeV,    +0.0*eplus, 
                     2,              -1,            -1,          
                     0,              +0,            -1,             
               "meson",               0,             0,           333,
@@ -598,18 +615,18 @@ void G4ShortLivedConstructor::ConstructMesons()
   decayTable =  new G4DecayTable();
   // create decay channel of phi -> kaon+ + kaon-
   //                                   parent    BR     #daughters
-  mode  = new G4PhaseSpaceDecayChannel("phi",0.491, 2,
+  mode  = new G4PhaseSpaceDecayChannel("phi",0.492, 2,
 				                    "kaon+","kaon-");
   decayTable->Insert(mode);
    // create decay channel of phi -> kaon0S + kaon0L
   //                                   parent    BR     #daughters
-  mode  = new G4PhaseSpaceDecayChannel("phi",0.343, 2,
+  mode  = new G4PhaseSpaceDecayChannel("phi",0.340, 2,
 				                   "kaon0S","kaon0L");
   // add decay table
   decayTable->Insert(mode);
   // create decay channel of phi -> rho0 + pi0
   //                                   parent    BR     #daughters
-  mode  = new G4PhaseSpaceDecayChannel("phi",0.129, 2,
+  mode  = new G4PhaseSpaceDecayChannel("phi",0.153, 2,
 				                   "rho0","pi0");
   // add decay table
   decayTable->Insert(mode);
@@ -617,7 +634,7 @@ void G4ShortLivedConstructor::ConstructMesons()
  
   // rho+
   particle = new G4ExcitedMesons(            
-	       "rho+",       769.9*MeV,     151.2*MeV,    +1.0*eplus, 
+	       "rho+",       775.8*MeV,     150.3*MeV,    +1.0*eplus, 
                     2,              -1,            -1,          
                     2,              +2,            +1,             
               "meson",               0,             0,           213,
@@ -636,7 +653,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // rho-
   particle = new G4ExcitedMesons(            
-	       "rho-",       769.9*MeV,     151.2*MeV,    -1.0*eplus, 
+	       "rho-",       775.8*MeV,     150.3*MeV,    -1.0*eplus, 
                     2,              -1,            -1,          
                     2,              -2,            +1,             
               "meson",               0,             0,          -213,
@@ -655,7 +672,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   
   // rho0
   particle = new G4ExcitedMesons(            
-               "rho0",       771.1*MeV,     149.2*MeV,         0.0, 
+               "rho0",       775.8*MeV,     150.3*MeV,         0.0, 
                     2,              -1,            -1,          
                     2,               0,            +1,             
               "meson",               0,             0,         113,

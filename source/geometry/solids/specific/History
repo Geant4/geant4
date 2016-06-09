@@ -1,4 +1,4 @@
-$Id: History,v 1.78 2005/12/08 15:02:28 gcosmo Exp $
+$Id: History,v 1.94 2006/06/20 10:09:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,64 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-Jun-2006, G.Cosmo (geom-specific-V08-00-10)
+- Added accessor method GetVertices() in G4Tet to return the list of
+  vertices composing the solid. Required for GDML persistency.
+
+06-Jun-2006, G.Cosmo (geom-specific-V08-00-09)
+- Added protection against NaNs in G4PolyconeSide::Normal() for points at
+  the origin.
+
+19-May-2006, G.Cosmo (geom-specific-V08-00-08)
+- Fix in G4Ellipsoid::SetZCuts() and G4EllipticalTube::SetZCut() for usage
+  of uninitialised variables.
+
+08-May-2006, G.Cosmo (geom-specific-V08-00-07)
+- Cleared compilation warning on SUN-CC in G4TriangularFacet.cc.
+
+04-May-2006, G.Cosmo (geom-specific-V08-00-06)
+- Use different names for unit tests to avoid confusing liblist ...
+
+03-May-2006, G.Cosmo (geom-specific-V08-00-05)
+- Added four unit tests for G4TessellatedSolid.
+
+24-Mar-2006, G.Cosmo (geom-specific-V08-00-04)
+- G4TwistedTubs: defined exact estimation for GetCubicVolume(),
+  similar to the one adopted for G4Tubs.
+
+03-Mar-2006, G.Cosmo (geom-specific-V08-00-03)
+- Corrected boolean condition in G4TriangularFacet::Intersect().
+  Use '&&' operator in condition. Allows for porting on WIN32-VC.
+
+01-Mar-2006, G.Cosmo (geom-specific-V08-00-02)
+- Introducing first implementation of a tessellated solid, contribution
+  of P.R.Truscott (QinetiQ Ltd, UK).
+  New classes: G4QuadrangularFacet, G4TessellatedSolid, G4TriangularFacet
+  and G4VFacet.
+- Requires tag "greps-V08-00-00".
+
+12-Jan-2006, J.Allison (geom-specific-V08-00-01)
+- G4TwistedTubs and G4VTwistedFaceted::CreatePolyhedron():
+  parameterised polyhedron mesh approximation in terms of
+  G4Polyhedron::GetNumberOfRotationSteps().
+  This is (a) more economical and (b) amenable to user control.
+
+19-Dec-2005, O.Link (geom-specific-V08-00-00)
+- Fixes in G4EllipticalCone:
+  o Changed GetPointOnSurface(), which was not uniform in endcaps.
+  o Bug fix in Inside(), which was not correct for the elliptic mantel.
+    Made test similar as in G4EllipticTube.
+  o Several fixes in DistanceToIn/Out(): for looping events (shortest
+    distance was taken, even if 0); now comparing the distance to the endcap
+    and to the mantel and decide afterwards which distance is shortest;
+    added check n*v.
+  o The code is now "good" at 90%. Still 10% wrong reconstructed events.
+    e.g there is a problem is DistanceToOut(): missed the intersection
+    (reconstruction took the encap instead of the mantel).
+
+09-Dec-2005, O.Link
+- Fixed visibility of soft edges on the twisted solids.
 
 08-Dec-2005, O.Link (geom-specific-V07-01-14)
 - Fixed bug in G4VTwistSurface::ComputeLocalPoint(p) for point coordinate

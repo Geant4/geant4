@@ -1,38 +1,40 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: exampleN05.cc,v 1.12 2005/12/04 00:10:37 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: exampleN05.cc,v 1.14 2006/06/29 17:52:11 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // --------------------------------------------------------------
 //      GEANT 4 - exampleN05
-//
 // --------------------------------------------------------------
 // Comments
 //
-// * Example of a main program making use of parameterisation
-//   ie "Fast Simulation".
+// Example of a main program making use of parameterisation
+// i.e. "Fast Simulation"
 //-------------------------------------------------------------------
 
 //------------------------------
@@ -69,9 +71,8 @@
 
 #include "G4ios.hh"
 
-
-int main(int argc, char** argv) {
-
+int main(int argc, char** argv)
+{
   //-------------------------------
   // Initialization of Run manager
   //-------------------------------
@@ -79,23 +80,35 @@ int main(int argc, char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   // Detector geometry
-  ExN05DetectorConstruction* Detector = new ExN05DetectorConstruction();
-  runManager->SetUserInitialization(Detector);
+  G4VUserDetectorConstruction* detector = new ExN05DetectorConstruction();
+  runManager->SetUserInitialization(detector);
 
-  // PhysicsList: (including G4FastSimulationManagerProcess)
-  runManager->SetUserInitialization(new ExN05PhysicsList);
+  // PhysicsList (including G4FastSimulationManagerProcess)
+  G4VUserPhysicsList* physics = new ExN05PhysicsList;
+  runManager->SetUserInitialization(physics);
 
-  // UserAction classes.
-  runManager->SetUserAction(new ExN05RunAction);
-  runManager->SetUserAction(new ExN05PrimaryGeneratorAction);
-  runManager->SetUserAction(new ExN05EventAction);
-  runManager->SetUserAction(new ExN05SteppingAction);
+  //-------------------------------
+  // UserAction classes
+  //-------------------------------
+  G4UserRunAction* run_action = new ExN05RunAction;
+  runManager->SetUserAction(run_action);
+  //
+  G4VUserPrimaryGeneratorAction* gen_action = new ExN05PrimaryGeneratorAction;
+  runManager->SetUserAction(gen_action);
+  //
+  G4UserEventAction* event_action = new ExN05EventAction;
+  runManager->SetUserAction(event_action);
+  //
+  G4UserSteppingAction* stepping_action = new ExN05SteppingAction;
+  runManager->SetUserAction(stepping_action);
 
   // Inizialize Run manager
+  //
   runManager->Initialize();
 
-  // Close the "fast simulation": will
-  // trigger the ghost geomtries construction:
+  // Close the "fast simulation"
+  // Will trigger the ghost geometries construction
+  //
   G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()->
     CloseFastSimulation();
 
@@ -109,7 +122,8 @@ int main(int argc, char** argv) {
   visManager -> Initialize ();
 #endif
 
-  //Setup commandes:
+  // Setup commands
+  //
   G4UImanager * UI = G4UImanager::GetUIpointer();
   UI->ApplyCommand("/Step/Verbose 0");
   UI->ApplyCommand("/tracking/Verbose 1");
@@ -124,7 +138,8 @@ int main(int argc, char** argv) {
     //--------------------------
     // Define (G)UI
     //--------------------------
-    // G4UIterminal is a (dumb) terminal.
+    // G4UIterminal is a (dumb) terminal
+    //
     G4UIsession* session = new G4UIterminal;
     session->SessionStart();
     delete session;
@@ -140,9 +155,14 @@ int main(int argc, char** argv) {
     UImanager->ApplyCommand(command+fileName);
   }
 
+  // Free the store: user actions, physics_list and detector_description are
+  //                 owned and deleted by the run manager, so they should not
+  //                 be deleted in the main() program !
+
 #ifdef G4VIS_USE
   delete visManager;
 #endif
   delete runManager;
-  return EXIT_SUCCESS;
+
+  return 0;
 }

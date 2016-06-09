@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc,v 1.2 2005/05/12 17:29:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4NistManager.cc,v 1.6 2006/06/29 19:13:00 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -35,7 +38,9 @@
 // Creation date: 23.12.2004
 //
 // Modifications:
-//
+// 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
+// 18.04.06 V.Ivanchneko add combined creation of materials (NIST + user)
+// 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 //
 // -------------------------------------------------------------------
 //
@@ -167,18 +172,16 @@ void G4NistManager::DeRegisterMaterial(G4Material* mat)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4NistManager::FindOrBuildMaterial(const G4String& name,
-                                                       G4bool isotopes)
+					       G4bool isotopes,
+					       G4bool warning)
 {
   if (verbose>1) G4cout << "G4NistManager::FindMaterial " << name 
                         << G4endl;
-			
-  G4Material* mat = 0;
-  if (nMaterials > 0) {  
-    for (size_t i=0; i<nMaterials; i++) {
-       if (name == (materials[i])->GetName()) { mat = materials[i]; break; }
-    }
-  }
-  if (!mat) mat = matBuilder->FindOrBuildMaterial(name, isotopes);  
+
+  // search the material in the list of user 
+  G4Material* mat =  G4Material::GetMaterial(name, warning);
+
+  if (!mat) mat = matBuilder->FindOrBuildMaterial(name, isotopes, warning);  
   return mat;
 }
 
@@ -206,6 +209,18 @@ G4Material* G4NistManager::ConstructNewMaterial(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4Material* G4NistManager::ConstructNewGasMaterial(
+				      const G4String& name,
+                                      const G4String& nameNist,
+				      G4double temp, G4double pres, 
+				      G4bool isotopes)
+{
+  return matBuilder->ConstructNewGasMaterial(name,nameNist,
+					     temp,pres,isotopes);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void G4NistManager::ListMaterials(const G4String& list)
 {
   matBuilder->ListMaterials(list);
@@ -221,6 +236,9 @@ void G4NistManager::PrintG4Material(const G4String& name)
       return;
     }
   }
+  // search the material in the list of user 
+  G4Material* mat =  G4Material::GetMaterial(name, true);
+  if(mat) G4cout << *mat << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

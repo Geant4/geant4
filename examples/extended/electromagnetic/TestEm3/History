@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2005/12/06 11:41:55 gcosmo Exp $
+$Id: History,v 1.93 2006/06/02 10:46:26 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+     
+02-06-06 mma (testem3-V08-00-04)
+- SteppingAction: replace Touchable by TouchableHandle
+    
+19-05-06 mma (testem3-V08-00-03)
+- SteppingAction: prePoint->GetTouchable->GetVolume()
+                  prePoint->GetTouchable->GetCopyNumber(depth)
+     
+19-05-06 mma (testem3-V08-00-02)
+- update README
+
+16-04-06 V.Ivant (testem3-V08-00-01) 
+- add extra material and use G4 NIST element DB
+- fix compilation warnings in HistoManager
+- add Livermore and Penelope PhysicsLists
+
+20-03-06 mma (testem3-V08-00-00)
+- migration mum -> um in many macros
 
 06-12-05 Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

@@ -1,6 +1,6 @@
-# $Id: run01.mac,v 1.1 2005/07/22 11:08:48 maire Exp $
+# $Id: run01.mac,v 1.4 2006/04/11 13:20:37 maire Exp $
 #
-# limit the step size
+# limit the step size from histos 1 and 8
 #
 /control/verbose 2
 /run/verbose 2
@@ -23,7 +23,7 @@
 /testem/histo/setcsdaRange       2.037 cm
 /testem/histo/setHisto 8 120  0.    1.2 none	#normalized edep profile
 #
-/testem/stepMax 50 mum
+/testem/applyStepMax true
 #
 /testem/event/printModulo 2000
 #

@@ -1,0 +1,264 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// File name:     RadmonTDetectorVolumesWithTracksDecorator.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonTDetectorVolumesWithTracksDecorator.icc,v 1.1.2.2 2006/06/29 16:12:50 gunter Exp $
+// Tag:           $Name: geant4-08-01 $
+//
+
+#ifndef   RADMONTDETECTORVOLUMESWITHTRACKSDECORATOR_HH
+ #error "RadmonTDetectorVolumesWithTracksDecorator.icc cannot be included directly. Please use RadmonTDetectorVolumesWithTracksDecorator.hh"
+#else  /* RADMONTDETECTORVOLUMESWITHTRACKSDECORATOR_HH */
+ // Include files
+ #include "RadmonVDetectorLabelledEntityConstructor.hh"
+ #include "RadmonDetectorLayerVolumesList.hh"
+ #include "RadmonDetectorLayerVolumeItem.hh"
+ #include "G4Trap.hh"
+ #include "G4UIcommand.hh"
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithTracksDecorator<LayerVolumesComponent> :: RadmonTDetectorVolumesWithTracksDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor)
+ :
+  owner(constructor),
+  component(constructor),
+  visAttributes(0)
+ {
+ }
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithTracksDecorator<LayerVolumesComponent> :: ~RadmonTDetectorVolumesWithTracksDecorator()
+ {
+  delete visAttributes;
+ }
+ 
+ 
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+ RadmonDetectorLayerVolumesList *               RadmonTDetectorVolumesWithTracksDecorator<LayerVolumesComponent> :: GenerateVolumesList(void)
+ {
+  G4double width(owner->GetWidth());
+  if (width<0)
+   return 0;
+
+  G4double height(owner->GetHeight());
+  if (height<0)
+   return 0;
+  
+  G4double thickness(owner->GetThickness());
+  if (thickness<0)
+   return 0;
+  
+  G4int holesAlongWidth(owner->GetAttributeAsInteger("HolesAlongWidth", -1));
+  if (holesAlongWidth<0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithTracksDecorator::GenerateVolumesList: \"HolesAlongWidth\" attribute not defined." << G4endl;
+   return 0;
+  }
+
+  G4int holesAlongHeight(owner->GetAttributeAsInteger("HolesAlongHeight", -1));
+  if (holesAlongHeight<0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithTracksDecorator::GenerateVolumesList: \"HolesAlongHeight\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  if ((holesAlongWidth+holesAlongHeight)<=0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithTracksDecorator::GenerateVolumesList: Both \"HolesAlongHeight\" and \"HolesAlongHeight\" attributes are 0." << G4endl;
+   return 0;
+  }
+
+  G4double holesRadius(owner->GetAttributeAsMeasure("HolesRadius", "Length", -1.));
+  if (holesRadius<0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithTracksDecorator::GenerateVolumesList: \"HolesRadius\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  G4double holesStep(owner->GetAttributeAsMeasure("HolesStep", "Length", -1.));
+  if (holesStep<0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithTracksDecorator::GenerateVolumesList: \"HolesStep\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  G4double fullHolesStep(holesRadius*2.+holesStep);
+  
+  if (fullHolesStep*static_cast<G4double>(holesAlongWidth-1)>width || fullHolesStep>width)
+  {
+   G4cout << "RadmonTDetectorVolumesWithTracksDecorator::GenerateVolumesList: Holes parameters does not fit along width." << G4endl;
+   return 0;
+  }
+  
+  if (fullHolesStep*static_cast<G4double>(holesAlongHeight-1)>height || fullHolesStep>height)
+  {
+   G4cout << "RadmonTDetectorVolumesWithTracksDecorator::GenerateVolumesList: Holes parameters does not fit along height." << G4endl;
+   return 0;
+  }
+  
+  G4Material * material(owner->GetMaterial("TracksMaterial"));
+  if (!material)
+   return 0;
+  
+  visAttributes=owner->AllocateVisAttributes("TracksVisAttributes", material);
+  
+  RadmonDetectorLayerVolumesList * list(component.GenerateVolumesList());
+  
+  if (list==0)
+   return 0;
+   
+  G4int n(list->GetNItems());
+  
+  if (n==0)
+  {
+   delete list;
+   return 0;
+  }
+  
+  RadmonDetectorLayerVolumeItem * item;
+  RadmonDetectorLayerVolumeItem * motherItem;
+  
+  while (n>0)
+  {
+   n--;
+
+   item=list->GetItem(n);
+   if (item->GetMotherVolumeItem()==0)
+   {
+    motherItem=item;
+    break;
+   }
+  }
+
+  if (!motherItem)
+   G4Exception("RadmonTDetectorVolumesWithTracksDecorator::GenerateVolumesList: No mother volume found.");
+   
+  intersection.Initialize(motherItem);
+
+  const G4double heightFraction(.999);
+
+  G4int index(0);
+  G4String indexStr;
+  fullHolesStep/=2;
+  G4double angle;
+  const G4double pDx2(holesRadius);
+  const G4double pDx1(pDx2*(1.-heightFraction));
+  G4Trap * trap;
+  G4ThreeVector offset((fullHolesStep/2.)*static_cast<G4double>(holesAlongWidth-1), height/4.*(2.-heightFraction), 0);
+  G4int i(holesAlongWidth);
+  
+  while (i>0)
+  {
+   index++;
+   indexStr=G4UIcommand::ConvertToString(index);
+   
+   if (offset.getY()>=0)
+   {
+    angle=90.*deg-offset.getPhi();
+    //                                pDz           pTheta  pPhi    pDy1                      pDx1  pDx2  pAlp1
+    trap=new G4Trap("Track"+indexStr, thickness/2., 0.*deg, 0.*deg, height/4.*heightFraction, pDx1, pDx2, angle,
+    //                                                              pDy2                      pDx3  pDx4  pAlp2
+                                                                    height/4.*heightFraction, pDx1, pDx2, angle);
+   }
+   else
+   {
+    angle=-90*deg-offset.getPhi();
+    //                                pDz           pTheta  pPhi    pDy1                      pDx1  pDx2  pAlp1
+    trap=new G4Trap("Track"+indexStr, thickness/2., 0.*deg, 0.*deg, height/4.*heightFraction, pDx2, pDx1, angle,
+    //                                                              pDy2                      pDx3  pDx4  pAlp2
+                                                                    height/4.*heightFraction, pDx2, pDx1, angle);
+   }
+
+   item=list->AppendItem();
+   item->SetSolid(intersection.ApplyTo(trap, offset, true, true));
+   item->SetAttributes(visAttributes);
+   item->SetMaterial(material);
+   item->SetName("Track"+indexStr);
+   item->SetMotherVolumeItem(motherItem);
+
+   offset.setY(-offset.getY());
+   if (offset.getY()>=0)
+   {
+    offset.setX(offset.getX()-fullHolesStep);
+    i--;
+   }
+  }
+
+  G4RotationMatrix rotation(G4RotationMatrix::IDENTITY);
+  rotation.setDelta(90*deg);
+
+  offset.setX(width/4.*(2.-heightFraction));
+  offset.setY((fullHolesStep/2.)*static_cast<G4double>(holesAlongHeight-1));
+  i=holesAlongHeight;
+  
+  while (i>0)
+  {
+   index++;
+   indexStr=G4UIcommand::ConvertToString(index);
+   
+   if (offset.getX()>=0)
+   {
+    angle=-offset.getPhi();
+    //                                pDz           pTheta  pPhi    pDy1                     pDx1  pDx2  pAlp1
+    trap=new G4Trap("Track"+indexStr, thickness/2., 0.*deg, 0.*deg, width/4.*heightFraction, pDx1, pDx2, angle,
+    //                                                              pDy2                     pDx3  pDx4  pAlp2
+                                                                    width/4.*heightFraction, pDx1, pDx2, angle);
+   }
+   else
+   {
+    angle=-offset.getPhi();
+    //                                pDz           pTheta  pPhi    pDy1                     pDx1  pDx2  pAlp1
+    trap=new G4Trap("Track"+indexStr, thickness/2., 0.*deg, 0.*deg, width/4.*heightFraction, pDx2, pDx1, angle,
+    //                                                              pDy2                     pDx3  pDx4  pAlp2
+                                                                    width/4.*heightFraction, pDx2, pDx1, angle);
+   }
+
+   item=list->AppendItem();
+   item->SetSolid(intersection.ApplyTo(trap, rotation, offset, true, true));
+   item->SetAttributes(visAttributes);
+   item->SetMaterial(material);
+   item->SetName("Track"+indexStr);
+   item->SetMotherVolumeItem(motherItem);
+
+   offset.setX(-offset.getX());
+   if (offset.getX()>=0)
+   {
+    offset.setY(offset.getY()-fullHolesStep);
+    i--;
+   }
+  }
+  
+  return list;
+ }
+#endif /* RADMONTDETECTORVOLUMESWITHTRACKSDECORATOR_HH */
+ 

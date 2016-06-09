@@ -1,0 +1,143 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4VDNAProcessInWater.icc,v 1.4 2006/06/29 19:37:05 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
+
+#ifdef    G4VDNAPROCESSINWATER_HH
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy> 
+ G4VParticleChange *                      G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
+ {
+  ValidateInWater(aTrack);
+  
+  G4double k=aTrack.GetDynamicParticle()->GetKineticEnergy();
+
+  if (FinalStatesPolicy::KillIncomingParticle(k))
+  {
+   G4int n(aParticleChange.GetNumberOfSecondaries());
+   while (n>0)
+   {
+    n--;
+    delete aParticleChange.GetSecondary(n);
+   }
+   aParticleChange.Clear();
+ 
+   aParticleChange.Initialize(aTrack);
+
+   aParticleChange.ProposeLocalEnergyDeposit(k);
+   aParticleChange.ProposeTrackStatus(fStopAndKill);
+   aParticleChange.ProposeEnergy(0.); 
+  }
+
+  return G4VLowEnergyTestableDiscreteProcess::PostStepDoIt(aTrack, aStep);
+ }
+
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy> 
+ void                                     G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: BuildPhysicsTable(const G4ParticleDefinition & /* aParticleDefinition */)
+ {
+  TotalCrossSectionPolicy::BuildTotalCrossSection();
+  FinalStatesPolicy::BuildFinalStatesData();
+ }
+ 
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy> 
+ G4bool                                   G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: IsApplicable(const G4ParticleDefinition & aParticleDefinition)
+ {
+  return (&aParticleDefinition)==TotalCrossSectionPolicy::IncomingParticleDefinition();
+ }
+
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy> 
+ void                                     G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: ValidateInWater(const G4Track & aTrack) const
+ {
+  G4Material * theMaterial(aTrack.GetMaterial());
+  
+  // Water validation consists in checking that density is 1. and that Oxigen and Hydrogen are the only two elements of the material
+
+  if (std::fabs(theMaterial->GetDensity()*cm3/g-1.)<0.1)
+   if (theMaterial->GetNumberOfElements()==2)
+   {
+    const G4Element * element1(theMaterial->GetElement(0));
+    const G4Element * element2(theMaterial->GetElement(1));
+
+    if ((element1->GetZ()==1. && element2->GetZ()==8.) ||
+        (element1->GetZ()==8. && element2->GetZ()==1.))
+     return;
+   }
+   
+  G4String message;
+  message="G4VDNAProcessInWater::ValidateInWater - Process ";
+  message+=GetProcessName();
+  message+=" happened in material ";
+  message+=theMaterial->GetName();
+   
+  G4Exception(message);
+ }
+
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy> 
+ G4double                                 G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: GetMeanFreePath(const G4Track & aTrack, G4double /* previousStepSize */, G4ForceCondition * /* condition */)
+ {
+  const G4int z(10); // H2O number of electrons
+  G4double k=aTrack.GetDynamicParticle()->GetKineticEnergy();
+
+  // We suppose we are in water, one of the elements must be oxygen
+  G4Material * theMaterial(aTrack.GetMaterial());
+  size_t i(theMaterial->GetNumberOfElements());   
+  while (i>0)
+  { 
+   i--;
+
+   const G4Element * element(theMaterial->GetElement(i));
+  
+   if (element->GetZ()==8.)
+   {
+    // Number of oxigens per volume = number of water molecules per volume
+    G4double density;
+    density=theMaterial->GetAtomicNumDensityVector()[i];
+  
+    if (density<=0.)
+     return DBL_MAX;
+
+    G4double sigma_el;
+    sigma_el=TotalCrossSectionPolicy::TotalCrossSection(k, z);
+    
+    if (sigma_el<=0.)
+     return DBL_MAX;
+  
+    return 1./(density*sigma_el);
+   }
+  }
+  
+  G4String message;
+  message="G4VDNAProcessInWater::GetMeanFreePath - ";
+  message+=theMaterial->GetName();
+  message+=" is not a water material";
+    
+  G4Exception(message);
+  
+  return DBL_MAX;
+ }
+#endif /* G4VDNAPROCESSINWATER_HH */
+
+

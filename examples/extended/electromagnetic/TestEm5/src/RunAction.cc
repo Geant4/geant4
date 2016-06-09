@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.20 2005/12/06 11:46:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: RunAction.cc,v 1.23 2006/06/29 16:56:14 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,10 +67,13 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   nbStepsCharged = nbStepsCharged2 = 0.;
   nbStepsNeutral = nbStepsNeutral2 = 0.;
   MscProjecTheta = MscProjecTheta2 = 0.;
+  MscThetaCentral = 3*ComputeMscHighland();
 
   nbGamma = nbElect = nbPosit = 0;
 
   Transmit[0] = Transmit[1] = Reflect[0] = Reflect[1] = 0;
+  
+  MscEntryCentral = 0;
 
   histoManager->book();
 
@@ -122,11 +128,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   reflect[0] = 100.*Reflect[0]/TotNbofEvents;
   reflect[1] = 100.*Reflect[1]/TotNbofEvents;
 
-  G4double rmsMsc = 0.;
-  if (Transmit[1] > 0) {
-    MscProjecTheta /= (2*Transmit[1]); MscProjecTheta2 /= (2*Transmit[1]);
+  G4double rmsMsc = 0., tailMsc = 0.;
+  if (MscEntryCentral > 0) {
+    MscProjecTheta /= MscEntryCentral; MscProjecTheta2 /= MscEntryCentral;
     rmsMsc = MscProjecTheta2 - MscProjecTheta*MscProjecTheta;
     if (rmsMsc > 0.) rmsMsc = std::sqrt(rmsMsc);
+    tailMsc = 100.- (100.*MscEntryCentral)/(2*Transmit[1]);
+    
   }
   
   //Stopping Power from input Table.
@@ -141,12 +149,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
 
   G4EmCalculator emCalculator;
-  G4double dEdxTable = 0.;
+  G4double dEdxTable = 0., dEdxFull = 0.;
   if (particle->GetPDGCharge()!= 0.) { 
     dEdxTable = emCalculator.GetDEDX(energy,particle,material);
+    dEdxFull  = emCalculator.ComputeTotalDEDX(energy,particle,material);    
   }
   G4double stopTable = dEdxTable/density;
-  
+  G4double stopFull  = dEdxFull /density; 
+   
   //Stopping Power from simulation.
   //    
   G4double meandEdx  = EnergyDeposit/length;
@@ -154,7 +164,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "\n ======================== run summary ======================\n";
 
-  G4int prec = G4cout.precision(2);
+  G4int prec = G4cout.precision(3);
   
   G4cout << "\n The run was " << TotNbofEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
@@ -168,14 +178,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << G4BestUnit(rmsEdep,      "Energy") 
          << G4endl;
 	 
-  G4cout << "\n Mean dE/dx  = " << meandEdx/(MeV/cm) << " MeV/cm"
-         << "\t stopping Power = " << stopPower/(MeV*cm2/g) << " MeV*cm2/g"
-	 << G4endl;
-	 	 
-  G4cout << " (from Table = " << dEdxTable/(MeV/cm) << " MeV/cm)"
-         << "\t (from Table    = " << stopTable/(MeV*cm2/g) << " MeV*cm2/g)"
+  G4cout << " -----> Mean dE/dx = " << meandEdx/(MeV/cm) << " MeV/cm"
+         << "\t(" << stopPower/(MeV*cm2/g) << " MeV*cm2/g)"
 	 << G4endl;
 	 
+  G4cout << "\n From formulas :" << G4endl; 
+  G4cout << "   restricted dEdx = " << dEdxTable/(MeV/cm) << " MeV/cm"
+         << "\t(" << stopTable/(MeV*cm2/g) << " MeV*cm2/g)"
+	 << G4endl;
+	 
+  G4cout << "   full dEdx       = " << dEdxFull/(MeV/cm) << " MeV/cm"
+         << "\t(" << stopFull/(MeV*cm2/g) << " MeV*cm2/g)"
+	 << G4endl;
+	 	 
   G4cout << "\n Total track length (charged) in absorber per event = "
          << G4BestUnit(TrakLenCharged,"Length") << " +- "
          << G4BestUnit(rmsTLCh,       "Length") << G4endl;
@@ -209,11 +224,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // compute width of the Gaussian central part of the MultipleScattering
   //
   if (histoManager->HistoExist(6)) {
-    G4cout << "\n MultipleScattering: rms proj angle of transmit primary particle = "
-         << rmsMsc/mrad << " mrad " << G4endl;
+    G4cout << "\n MultipleScattering:" 
+           << "\n  rms proj angle of transmit primary particle = "
+           << rmsMsc/mrad << " mrad (central part only)" << G4endl;
 
-    G4cout << " MultipleScattering: computed theta0 (Highland formula)          = "
- 	 << ComputeMscHighland()/mrad << " mrad" << G4endl;
+    G4cout << "  computed theta0 (Highland formula)          = "
+ 	   << ComputeMscHighland()/mrad << " mrad" << G4endl;
+	   
+    G4cout << "  central part defined as +- "
+ 	   << MscThetaCentral/mrad << " mrad; " 
+	   << "  Tail ratio = " << tailMsc << " %" << G4endl;	   
   }	 
 
   G4cout.precision(prec);

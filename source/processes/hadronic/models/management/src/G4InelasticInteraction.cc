@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
@@ -182,10 +185,13 @@
   {
     cache = 0;
     what = originalIncident->Get4Momentum().vect();
+
+
     theReactionDynamics.ProduceStrangeParticlePairs( vec, vecLen,
                                                      modifiedOriginal, originalTarget,
                                                      currentParticle, targetParticle,
                                                      incidentHasChanged, targetHasChanged );
+
     if( quasiElastic )
     {
       theReactionDynamics.TwoBody( vec, vecLen,
@@ -216,17 +222,15 @@
       if( ek > 1.0*GeV )ekcor = 1./(ek/GeV);
       const G4double atomicWeight = targetNucleus.GetN();
       ek = 2*tarmas + ek*(1.+ekcor/atomicWeight);
-      
-      G4double tkin = targetNucleus.Cinema( ek );
+      G4double tkin = targetNucleus.Cinema(ek);
       ek += tkin;
       ekOrg += tkin;
-      modifiedOriginal.SetKineticEnergy( ekOrg );
-      
+      //      modifiedOriginal.SetKineticEnergy( ekOrg );
       //
       // evaporation --  re-calculate black track energies
       //                 this was Done already just before the cascade
       //
-      tkin = targetNucleus.EvaporationEffects( ek );
+      tkin = targetNucleus.AnnihilationEvaporationEffects(ek, ekOrg);
       ekOrg -= tkin;
       ekOrg = std::max( 0.0001*GeV, ekOrg );
       modifiedOriginal.SetKineticEnergy( ekOrg );
@@ -248,6 +252,13 @@
     const G4double twsup[] = { 1.0, 0.7, 0.5, 0.3, 0.2, 0.1 };
     G4double rand1 = G4UniformRand();
     G4double rand2 = G4UniformRand();
+
+    // Cache current, target, and secondaries
+    G4ReactionProduct saveCurrent = currentParticle;
+    G4ReactionProduct saveTarget = targetParticle;
+    std::vector<G4ReactionProduct> savevec;
+    for (G4int i = 0; i < vecLen; i++) savevec.push_back(*vec[i]);
+
     if( annihilation || (vecLen >= 6) ||
         (modifiedOriginal.GetKineticEnergy()/GeV >= 1.0) &&
         (((originalIncident->GetDefinition() == G4KaonPlus::KaonPlus() ||
@@ -259,6 +270,7 @@
         theReactionDynamics.GenerateXandPt( vec, vecLen,
                                             modifiedOriginal, originalIncident,
                                             currentParticle, targetParticle,
+                                            originalTarget,
                                             targetNucleus, incidentHasChanged,
                                             targetHasChanged, leadFlag,
                                             leadingStrangeParticle );
@@ -267,6 +279,7 @@
       Rotate(vec, vecLen);
       return;
     }
+
     G4bool finishedTwoClu = false;
     if( modifiedOriginal.GetTotalMomentum()/MeV < 1.0 )
     {
@@ -275,18 +288,36 @@
     }
     else
     {
+      // Occaisionally, GenerateXandPt will fail in the annihilation channel.
+      // Restore current, target and secondaries to pre-GenerateXandPt state
+      // before trying annihilation in TwoCluster
+
+      if (!finishedGenXPt && annihilation) {
+        currentParticle = saveCurrent;
+        targetParticle = saveTarget;
+        for (G4int i = 0; i < vecLen; i++) delete vec[i];
+        vecLen = 0;
+        vec.Initialize( 0 );
+        for (G4int i = 0; i < G4int(savevec.size()); i++) {
+          G4ReactionProduct* p = new G4ReactionProduct;
+          *p = savevec[i];
+          vec.SetElement( vecLen++, p );
+        }
+      }
+
       theReactionDynamics.SuppressChargedPions( vec, vecLen,
-                                                modifiedOriginal, currentParticle,
-                                                targetParticle, targetNucleus,
-                                                incidentHasChanged, targetHasChanged );
+                                      modifiedOriginal, currentParticle,
+                                      targetParticle, targetNucleus,
+                                      incidentHasChanged, targetHasChanged );
       try
       {
       finishedTwoClu = theReactionDynamics.TwoCluster( vec, vecLen,
-                                                       modifiedOriginal, originalIncident,
-                                                       currentParticle, targetParticle,
-                                                       targetNucleus, incidentHasChanged,
-                                                       targetHasChanged, leadFlag,
-                                                       leadingStrangeParticle );
+                                      modifiedOriginal, originalIncident,
+                                      currentParticle, targetParticle,
+                                      originalTarget,
+                                      targetNucleus, incidentHasChanged,
+                                      targetHasChanged, leadFlag,
+                                      leadingStrangeParticle );
        }
        catch(G4HadReentrentException aC)
        {
@@ -294,36 +325,19 @@
 	 throw G4HadReentrentException(__FILE__, __LINE__, "Failing to calculate momenta");
        }
     }
+
     if( finishedTwoClu )
     {
       Rotate(vec, vecLen);
       return;
     }
-    //
-    // PNBlackTrackEnergy is the kinetic energy available for
-    //   proton/neutron black track particles [was enp(1) in fortran code]
-    // DTABlackTrackEnergy is the kinetic energy available for
-    //   deuteron/triton/alpha particles      [was enp(3) in fortran code]
-    //const G4double pnCutOff = 0.1;
-    //const G4double dtaCutOff = 0.1;
-    //if( (targetNucleus.GetN() >= 1.5)
-    //    && !(incidentHasChanged || targetHasChanged)
-    //    && (targetNucleus.GetPNBlackTrackEnergy()/MeV <= pnCutOff)
-    //    && (targetNucleus.GetDTABlackTrackEnergy()/MeV <= dtaCutOff) )
-    //{
-    // the atomic weight of the target nucleus is >= 1.5            AND
-    //   neither the incident nor the target particles have changed  AND
-    //     there is no kinetic energy available for either proton/neutron
-    //     or for deuteron/triton/alpha black track particles
-    // For diffraction scattering on heavy nuclei use elastic routines instead
-    //G4cerr << "*** Error in G4InelasticInteraction::CalculateMomenta" << G4endl;
-    //G4cerr << "*** the elastic scattering would be better here ***" <<G4endl;
-    //}
+
     theReactionDynamics.TwoBody( vec, vecLen,
                                  modifiedOriginal, originalTarget,
                                  currentParticle, targetParticle,
                                  targetNucleus, targetHasChanged );
   }
+
  
  void G4InelasticInteraction::
  Rotate(G4FastVector<G4ReactionProduct,GHADLISTSIZE> &vec, G4int &vecLen)
@@ -408,6 +422,7 @@
       if (std::fabs(aE)<.1*eV) aE=.1*eV;
       theParticleChange.SetEnergyChange( aE );
     }
+
     if( targetParticle.GetMass() > 0.0 )  // targetParticle can be eliminated in TwoBody
     {
       G4DynamicParticle *p1 = new G4DynamicParticle;
@@ -417,6 +432,7 @@
       p1->SetMomentum( momentum );
       theParticleChange.AddSecondary( p1 );
     }
+
     G4DynamicParticle *p;
     for( i=0; i<vecLen; ++i )
     {

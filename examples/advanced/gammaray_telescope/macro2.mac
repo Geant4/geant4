@@ -12,6 +12,8 @@
 /control/verbose 2
 /control/saveHistory
 /run/verbose 2
+/gun/sourceGen true
+/run/initialize
 
 /control/execute emlowe.mac
 

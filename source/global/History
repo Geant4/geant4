@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2005/12/02 15:11:23 gcosmo Exp $
+$Id: History,v 1.161 2006/06/14 08:44:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,25 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 03, 2006  G.Cosmo (global-V08-00-04)
+- Updated date for release 8.1 in G4Version.hh.
+
+May 03, 2006  G.Cosmo (global-V08-00-03)
+- Clear entries in table in destructor of G4UnitDefinition.
+
+May 03, 2006  G.Cosmo (global-V08-00-02)
+- Added G4VNotifier class, renamed from G4VStoreNotifier implemented inside
+  the geometry module. The class is a simple abstract class allowing for
+  implementation of user notifiers to be activated for example at
+  registration/deregistration of objects in stores.
+
+Feb 15, 2006  M.Maire (global-V08-00-01)
+- G4UnitsTable: added GeV/cm, MeV/cm, keV/cm, eV/cm (Energy/Length)
+  g/cm2 ("Mass/Surface") and MeV*cm2/g ..etc.. ("Energy*Surface/Mass").     
+
+Jan 30, 2006  M.Maire (global-V08-00-00)
+- G4UnitsTable.cc: added Symbol um for micrometer.
 
 Dec 02, 2005  G.Cosmo (global-V07-01-06)
 - templates.hh: get rid of hard-coded numbers for DBL_MIN, FLT_MIN, DBL_DIG,

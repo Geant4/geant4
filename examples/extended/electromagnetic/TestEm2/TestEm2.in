@@ -1,33 +1,29 @@
-# $Id: TestEm2.in,v 1.18 2005/11/22 17:11:31 maire Exp $
+# $Id: TestEm2.in,v 1.21 2006/06/10 14:29:08 maire Exp $
 #
 # Macro file for "TestEm2.cc"
 # (can be run in batch, without graphic)
 #
-# H2O L = 9.97 radl  R = 0.665 radl; electron 1 GeV
-#
-#  Experimental results: Electron-induced cascade showers
-#                        J&H Crannel - Phys. Rev. 184-2 - August69
+# PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
 #
 /control/verbose 2
-/run/verbose 1
+/run/verbose 2
 #
-/testem/det/setMat Water
-/testem/det/setLbin 9 1.11
-/testem/det/setRbin 6 0.111
+/testem/det/setMat PbWO4
+/testem/det/setLbin 40 0.5
+/testem/det/setRbin 50 0.1
 #
 # Acceptance printout is activated
-/testem/run/acceptance  0.9412 0.0491 3.0
+/testem/run/acceptance  0.9450 0.0096 3.0
 #
 /testem/phys/addPhysics  standard
 #### /testem/phys/addPhysics  g4v52
 #
-/testem/phys/setCuts 5.0 mm
+/testem/phys/setCuts 1.0 mm
 #
 /run/initialize
-/testem/phys/verbose  0
 #
 /gun/particle e-
-/gun/energy 1 GeV
+/gun/energy 5 GeV
 #
 /testem/event/printModulo 20
 #

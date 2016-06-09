@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.14 2005/05/04 16:16:12 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4PolarizedComptonScattering.cc,v 1.16 2006/06/29 19:53:30 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 //---------- G4PolarizedComptonScattering physics process ----------------------
@@ -36,6 +39,7 @@
 // 13-07-01, DoIt: suppression of production cut for the electron (mma)
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 04-05-05, Inheritance from ComptonScattering52 (V.Ivanchenko)
+// 30-01-06, DoIt : return G4ComptonScattering52::PostStepDoIt(aTrack,aStep) mma
 //
 // -----------------------------------------------------------------------------
 
@@ -71,7 +75,7 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    G4ThreeVector GammaPolarization0 = aDynamicGamma->GetPolarization();
 
    if (std::abs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
-      G4ComptonScattering52::PostStepDoIt(aTrack,aStep);
+      return G4ComptonScattering52::PostStepDoIt(aTrack,aStep);
        
    G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
    G4double E0_m = GammaEnergy0 / electron_mass_c2;

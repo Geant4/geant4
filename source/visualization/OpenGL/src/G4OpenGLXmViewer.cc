@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.21 2005/11/22 16:03:23 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4OpenGLXmViewer.cc,v 1.23 2006/06/29 21:20:16 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -34,7 +37,6 @@
 #include "globals.hh"
 
 #include "G4OpenGLXmViewer.hh"
-#include "G4OpenGLXmViewerMessenger.hh"
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
@@ -625,18 +627,13 @@ fpzoom_slider (0),
 fpdolly_slider (0),
 fpsetting_top (0),
 fpmiscellany_top (0),
-fpprint_top (0),
-fpMessenger (0)
+fpprint_top (0)
 {
-
-  fpMessenger = new G4OpenGLXmViewerMessenger(this, fShortName);
-
   WinSize_x = 100;
   WinSize_y = 100;
   
   GetXmConnection ();
   if (fViewId < 0) return;
-
 }
 
 G4OpenGLXmViewer::~G4OpenGLXmViewer ()
@@ -664,7 +661,6 @@ G4OpenGLXmViewer::~G4OpenGLXmViewer ()
   }
 ******************************/
 
-  delete fpMessenger;
 }
 
 #endif

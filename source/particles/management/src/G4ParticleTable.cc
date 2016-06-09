@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc,v 1.24 2005/11/15 23:18:40 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ParticleTable.cc,v 1.27 2006/06/29 19:26:05 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // class G4ParticleTable
 //
@@ -41,8 +44,8 @@
 //      modified destructor for STL interface 18 May 1999
 //      fixed  some improper codings     08 Apr., 99 H.Kurashige
 //      modified FindIon/GetIon methods  17 AUg., 99 H.Kurashige
-//      implement new version for using STL map instaed of RW PtrHashedDictionary
-//                                       28 ct., 99  H.Kurashige
+//      implement new version for using STL map instaed of 
+//      RW PtrHashedDictionary           28 ct., 99  H.Kurashige
 
 
 #include "G4ios.hh"
@@ -55,8 +58,10 @@
 
 
 ////////////////////
-G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0),noName(" "),
-readyToUse(false)
+G4ParticleTable::G4ParticleTable()
+     :verboseLevel(0),fParticleMessenger(0),
+      noName(" "),
+      readyToUse(false)
 {
   fDictionary = new G4PTblDictionary();
   fIterator   = new G4PTblDicIterator( *fDictionary );
@@ -73,12 +78,16 @@ readyToUse(false)
 ////////////////////
 G4ParticleTable::~G4ParticleTable()
 {
-  // delete Short Lived table and contents
+  
+   // remove all items from G4ParticleTable
+   RemoveAllParticles();
+
+  // delete Short Lived table 
   if (fShortLivedTable!=0) delete fShortLivedTable;
   fShortLivedTable =0;
 
 
-  //delete Ion Table and contents
+  //delete Ion Table 
   if (fIonTable!=0) delete fIonTable;
   fIonTable =0;
 
@@ -101,6 +110,7 @@ G4ParticleTable::~G4ParticleTable()
   fParticleMessenger =0;
 
   fgParticleTable =0;
+
 }
 
 ////////////////////
@@ -146,7 +156,8 @@ void G4ParticleTable::DeleteMessenger()
     delete fParticleMessenger;
     fParticleMessenger= 0;
     // remove all items from G4ParticleTable
-    RemoveAllParticles();
+    // temporaly comment out 
+    // RemoveAllParticles();
   }
 }
 
@@ -159,6 +170,12 @@ void G4ParticleTable::RemoveAllParticles()
     G4cout << "G4ParticleTable::RemoveAllParticles() " << G4endl;
   }
 #endif
+  // delete all particles 
+  G4PTblDicIterator *piter = fIterator; 
+  piter -> reset();
+  while( (*piter)() ){
+    delete (piter->value());
+  }
 
   //delete Ion Table and contents
   if (fIonTable!=0) {

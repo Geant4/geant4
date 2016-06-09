@@ -1,4 +1,4 @@
-$Id: README,v 1.26 2005/11/22 15:29:06 maire Exp $
+$Id: README,v 1.27 2006/05/15 14:39:01 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,8 +7,10 @@ $Id: README,v 1.26 2005/11/22 15:29:06 maire Exp $
 
                             TestEm3
                             -------
-
-	This example simulates a simple Sampling Calorimeter setup.
+  
+ How to collect energy deposition in a sampling calorimeter.
+ How to survey energy flow.
+ how to print stopping power. 
 	
  1- GEOMETRY DEFINITION
  

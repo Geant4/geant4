@@ -17,6 +17,8 @@ ifeq ($(G4SYSTEM),SUN-CC)
     FCFLAGS  += -KPIC
     CCFLAGS  += -KPIC
   endif
+  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
+  CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
   G4RUNPATHOPTION := -R
   FC     := f77
   SHEXT  := so
@@ -24,24 +26,32 @@ ifeq ($(G4SYSTEM),SUN-CC)
   ECHO   := /bin/echo
   GREP   := /usr/xpg4/bin/grep
   FCLIBS := -lM77 -lF77 -lsunmath
-  X11FLAGS  := -I/usr/openwin/include/X11/extensions -I/usr/openwin/include/X11
-  X11FLAGS  += -I/usr/openwin/include
-  X11LIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib
-  X11LIBS   += -R/usr/openwin/lib -lXmu -lX11 -lXext 
-  XMLIBS    := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib
-  XMLIBS    += -R/usr/openwin/lib -lXt -lXm -lX11
-  XAWFLAGS  := -I/usr/openwin/include/X11
-  XAWLIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib
-  XAWLIBS   += -R/usr/openwin/lib -lXaw -lXmu -lXt -lX11 -lXext
+  ifndef X11FLAGS
+    X11FLAGS  := -I/usr/openwin/include/X11/extensions -I/usr/openwin/include/X11
+    X11FLAGS  += -I/usr/openwin/include
+  endif
+  ifndef X11LIBS
+    X11LIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib
+    X11LIBS   += -R/usr/openwin/lib -lXmu -lX11 -lXext
+  endif
+  ifndef XMLIBS
+    XMLIBS    := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib
+    XMLIBS    += -R/usr/openwin/lib -lXt -lXm -lX11
+  endif
+  ifndef XAWFLAGS
+    XAWFLAGS  := -I/usr/openwin/include/X11
+  endif
+  ifndef XAWLIBS
+    XAWLIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib
+    XAWLIBS   += -R/usr/openwin/lib -lXaw -lXmu -lXt -lX11 -lXext
+  endif
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
-  CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   LOADLIBS += -lsunmath -lsocket -lnsl
-  CPPFLAGS += -DG4NOT_ISO_DELETES -DG4NO_ISO_VECDIST
 
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \

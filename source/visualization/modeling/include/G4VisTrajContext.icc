@@ -1,0 +1,111 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4VisTrajContext.icc,v 1.2 2006/06/29 21:32:36 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
+//
+// Jane Tinslay May 2006
+//
+#ifndef G4VISTRAJ_CONTEXT_ICC
+#define G4VISTRAJ_CONTEXT_ICC
+
+inline G4String G4VisTrajContext::Name() const {return fName;}
+
+inline void G4VisTrajContext::SetVisible(const G4bool& visible) 
+{
+  SetLineVisible(visible);
+  SetAuxPtsVisible(visible);
+  SetStepPtsVisible(visible);
+}
+
+// Line
+inline void G4VisTrajContext::SetLineColour(const G4Colour& colour) {fLineColour = colour;}
+inline G4Colour G4VisTrajContext::GetLineColour() const {return fLineColour;}
+
+inline void G4VisTrajContext::SetDrawLine(const G4bool& draw) {fDrawLine = draw;}
+inline G4bool G4VisTrajContext::GetDrawLine() const {return fDrawLine;}
+
+inline void G4VisTrajContext::SetLineVisible(const G4bool& visible) {fLineVisible = visible;}
+inline G4bool G4VisTrajContext::GetLineVisible() const {return fLineVisible;}
+
+// Auxiliary points
+inline void G4VisTrajContext::SetDrawAuxPts(const G4bool& draw) {fDrawAuxPts = draw;}
+inline G4bool G4VisTrajContext::GetDrawAuxPts() const {return fDrawAuxPts;}
+
+inline void G4VisTrajContext::SetAuxPtsType(const G4Polymarker::MarkerType& marker) {fAuxPtsType = marker;}
+inline G4Polymarker::MarkerType G4VisTrajContext::GetAuxPtsType() const {return fAuxPtsType;}
+
+inline void G4VisTrajContext::SetAuxPtsSize(const G4double& size) {fAuxPtsSize = size;}
+inline G4double G4VisTrajContext::GetAuxPtsSize() const {return fAuxPtsSize;}
+
+inline void G4VisTrajContext::SetAuxPtsFillStyle(const G4VMarker::FillStyle& style) {fAuxPtsFillStyle = style;}
+inline G4VMarker::FillStyle G4VisTrajContext::GetAuxPtsFillStyle() const {return fAuxPtsFillStyle;}
+
+inline void G4VisTrajContext::SetAuxPtsColour(const G4Colour& colour) {fAuxPtsColour = colour;}
+inline G4Colour G4VisTrajContext::GetAuxPtsColour() const {return fAuxPtsColour;}
+
+inline void G4VisTrajContext::SetAuxPtsVisible(const G4bool& visible) {fAuxPtsVisible = visible;}
+inline G4bool G4VisTrajContext::GetAuxPtsVisible() const {return fAuxPtsVisible;}
+
+// Step points
+inline void G4VisTrajContext::SetDrawStepPts(const G4bool& draw) {fDrawStepPts = draw;}
+inline G4bool G4VisTrajContext::GetDrawStepPts() const {return fDrawStepPts;}
+
+inline void G4VisTrajContext::SetStepPtsType(const G4Polymarker::MarkerType& marker) {fStepPtsType = marker;}
+inline G4Polymarker::MarkerType G4VisTrajContext::GetStepPtsType() const {return fStepPtsType;}
+
+inline void G4VisTrajContext::SetStepPtsSize(const G4double& size) {fStepPtsSize = size;}
+inline G4double G4VisTrajContext::GetStepPtsSize() const {return fStepPtsSize;}
+
+inline void G4VisTrajContext::SetStepPtsFillStyle(const G4VMarker::FillStyle& style) {fStepPtsFillStyle = style;}
+inline G4VMarker::FillStyle G4VisTrajContext::GetStepPtsFillStyle() const {return fStepPtsFillStyle;}
+
+inline void G4VisTrajContext::SetStepPtsColour(const G4Colour& colour) {fStepPtsColour = colour;}
+inline G4Colour G4VisTrajContext::GetStepPtsColour() const {return fStepPtsColour;}
+
+inline void G4VisTrajContext::SetStepPtsVisible(const G4bool& visible) {fStepPtsVisible = visible;}
+inline G4bool G4VisTrajContext::GetStepPtsVisible() const {return fStepPtsVisible;}
+
+inline void G4VisTrajContext::Print(std::ostream& ostr) const 
+{
+  ostr<<"Name:                       "<<Name()<<G4endl;
+  ostr<<"Line colour                 "<<GetLineColour()<<G4endl;
+  ostr<<"Draw line ?                 "<<GetDrawLine()<<G4endl;
+  ostr<<"Line visibile ?             "<<GetLineVisible()<<G4endl;
+  ostr<<"Draw auxiliary points ?     "<<GetDrawAuxPts()<<G4endl;
+  ostr<<"Auxiliary points type       "<<GetAuxPtsType()<<G4endl;
+  ostr<<"Auxiliary points size       "<<GetAuxPtsSize()<<G4endl;
+  ostr<<"Auxiliary points fill style "<<GetAuxPtsFillStyle()<<G4endl;
+  ostr<<"Auxiliary points colour     "<<GetAuxPtsColour()<<G4endl;
+  ostr<<"Auxiliary points visible ?  "<<GetAuxPtsVisible()<<G4endl;
+  ostr<<"Draw step points ?          "<<GetDrawStepPts()<<G4endl;
+  ostr<<"Step points type            "<<GetStepPtsType()<<G4endl;
+  ostr<<"Step points size            "<<GetStepPtsSize()<<G4endl;
+  ostr<<"Step points fill style      "<<GetStepPtsFillStyle()<<G4endl;
+  ostr<<"Step points colour          "<<GetStepPtsColour()<<G4endl;
+  ostr<<"Step points visible ?       "<<GetStepPtsVisible()<<G4endl;
+}
+
+#endif

@@ -1,29 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.25 2005/09/21 09:49:15 tsasaki Exp $
-// GEANT4 tag $Name: geant4-08-00 $
-//
+// $Id: G4SteppingManager2.cc,v 1.29 2006/06/29 21:16:05 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //---------------------------------------------------------------
 //
@@ -40,6 +42,8 @@
 //
 //---------------------------------------------------------------
 
+//#define debug
+
 #include "G4UImanager.hh"
 #include "G4ForceCondition.hh"
 #include "G4GPILSelection.hh"
@@ -53,29 +57,52 @@
 void G4SteppingManager::GetProcessNumber()
 /////////////////////////////////////////////////
 {
+#ifdef debug
+  G4cout<<"G4SteppingManager::GetProcessNumber: is called track="<<fTrack<<G4endl;
+#endif
 
   G4ProcessManager* pm= fTrack->GetDefinition()->GetProcessManager();
+		if(!pm)
+  {
+    G4cout<<"G4SteppingManager::GetProcessNumber: ProcessManager=0 for particle="
+          <<fTrack->GetDefinition()->GetParticleName()<<", PDG_code="
+          <<fTrack->GetDefinition()->GetPDGEncoding()<<G4endl;
+				G4Exception("G4SteppingManager::GetProcessNumber: Process Manager is not found.");
+  }
 
 // AtRestDoits
    MAXofAtRestLoops =        pm->GetAtRestProcessVector()->entries();
    fAtRestDoItVector =       pm->GetAtRestProcessVector(typeDoIt);
    fAtRestGetPhysIntVector = pm->GetAtRestProcessVector(typeGPIL);
+#ifdef debug
+  G4cout<<"G4SteppingManager::GetProcessNumber: #ofAtRest="<<MAXofAtRestLoops<<G4endl;
+#endif
 
 // AlongStepDoits
    MAXofAlongStepLoops = pm->GetAlongStepProcessVector()->entries();
    fAlongStepDoItVector = pm->GetAlongStepProcessVector(typeDoIt);
    fAlongStepGetPhysIntVector = pm->GetAlongStepProcessVector(typeGPIL);
+#ifdef debug
+			G4cout<<"G4SteppingManager::GetProcessNumber:#ofAlongStp="<<MAXofAlongStepLoops<<G4endl;
+#endif
 
 // PostStepDoits
    MAXofPostStepLoops = pm->GetPostStepProcessVector()->entries();
    fPostStepDoItVector = pm->GetPostStepProcessVector(typeDoIt);
    fPostStepGetPhysIntVector = pm->GetPostStepProcessVector(typeGPIL);
+#ifdef debug
+			G4cout<<"G4SteppingManager::GetProcessNumber: #ofPostStep="<<MAXofPostStepLoops<<G4endl;
+#endif
 
-   if (SizeOfSelectedDoItVector<MAXofAtRestLoops ||
-       SizeOfSelectedDoItVector<MAXofAlongStepLoops  ||
-       SizeOfSelectedDoItVector<MAXofPostStepLoops  ) {
-     G4Exception("G4SteppingManager::GetProcessNumber : The array size is small than the actutal number of processes. Chnage G4SteppingManager.hh and recompile is needed. " );
-
+   if (SizeOfSelectedDoItVector<MAXofAtRestLoops    ||
+       SizeOfSelectedDoItVector<MAXofAlongStepLoops ||
+       SizeOfSelectedDoItVector<MAXofPostStepLoops  )
+			{
+			  G4cout<<"G4SteppingManager::GetProcessNumber: SizeOfSelectedDoItVector="
+           <<SizeOfSelectedDoItVector<<" is smaller then one of MAXofAtRestLoops="
+           <<MAXofAtRestLoops<<" or MAXofAlongStepLoops="<<MAXofAlongStepLoops
+           <<" or MAXofPostStepLoops="<<MAXofPostStepLoops<<G4endl;
+					G4Exception("G4SteppingManager::GetProcessNumber: The array size is smaller than the actutal number of processes. Chnage G4SteppingManager.hh and recompile is needed.");
    }
 }
 
@@ -210,7 +237,12 @@ void G4SteppingManager::GetProcessNumber()
        }
 
     	  // Transportation is assumed to be the last process in the vector
-       if(kp == MAXofAlongStepLoops-1) fStepStatus = fGeomBoundary;
+       if(kp == MAXofAlongStepLoops-1) {
+	   if (fTrack->GetNextVolume() != 0)
+	       fStepStatus = fGeomBoundary;
+	   else
+	       fStepStatus = fWorldBoundary;	
+       }
      }
 
      // Make sure to check the safety, even if Step is not limited 

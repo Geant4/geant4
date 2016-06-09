@@ -1,6 +1,6 @@
-# $Id: TestEm12.in,v 1.2 2005/07/22 11:48:23 maire Exp $
+# $Id: TestEm12.in,v 1.6 2006/05/19 15:35:15 maire Exp $
 #
-# no constraint on tracking step
+# limit the step size from histos 1 and 8
 #
 /control/verbose 2
 /run/verbose 2
@@ -14,18 +14,17 @@
 #
 /run/initialize
 #
-/process/eLoss/integral 0
-/testem/phys/setCuts 1 mum
+/testem/phys/setCuts 1 um
 #
 /gun/particle e-
 /gun/energy 4 MeV
 #
 /testem/histo/setFileType hbook
-/testem/histo/setFileName noint.v71
+/testem/histo/setFileName testem12
 /testem/histo/setHisto 1 120  0.   2.4 cm	#edep profile
 /testem/histo/setHisto 2 180  0.   4.5 MeV	#total Edep
 /testem/histo/setHisto 3 100  0.    3. cm	#true track length
-/testem/histo/setHisto 4 100  0.  500. mum	#true step length
+/testem/histo/setHisto 4 100  0.  500. um	#true step length
 /testem/histo/setHisto 5 200 -3.    3. cm	#proj range
 /testem/histo/setcsdaRange       2.037 cm
 /testem/histo/setHisto 8 120  0.   1.2 none	#normalized edep profile

@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2005/11/30 16:16:34 gcosmo Exp $
+$Id: History,v 1.85 2006/06/05 08:10:53 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,62 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+4th June 2006 Joseph Perl (openinventor-V08-00-05)
+- This tag includes all the changes below.
+
+2 June 2006  Guy Barrand :
+- G4OpenInvenot, G4OpenInvenotXt, G4OpenInvenotWin : have an Initialize 
+  method in order to init Xt and Inventor only is really used 
+  (when creating a viewer or a scene handler).
+
+19th April 2006  Gabriele Cosmo  (openinventor-V08-00-04)
+- Use cmath instead of math.h.
+
+28th March John Allison  (openinventor-V08-00-03)
+- Cosmetic.
+
+21st March John Allison  (openinventor-V08-00-02)
+- Rationalised G4OpenInventorSceneHandler:
+  o Introduced GeneratePrerequisites.
+  o Uses dynamic_cast<G4PhysicalVolumeModel*>(fpModel) instead
+    of fpCurrentPV, etc.
+  o Uses G4VSceneHandler utility functions,
+    GetApplicableVisAttributes, GetColour, GetTextColour,
+    GetMarkerSize, GetDrawingStyle, GetAuxEdgeVisible, where possible.
+  o Revision 1.43: messy version with original code commented out.
+  o Revision 1.44 (.cc) and 1.28 (.hh) (tagged): tidied versions.
+- Investigated G4OpenInventorViewer:
+  o Changed: DrawDetector and UpdateScene.  No noticeable effect!
+
+20th March John Allison
+- G4OpenInventorSceneHandler:
+  o Bug fix for transient solids.
+  o Replaced some code in AddPrimitive(const G4Polymarker&) by GetMarkerSize.
+  o Attempt to finish AddPrimitive (const G4Text&) - still draws at origin.
+
+30th January 2006  John Allison  (openinventor-V08-00-01)
+- Implemented drawn volume path.  Needs modeling-V08-00-01.  Scene
+  graph now corresponds to drawn, i.e., non-culled geometry.
+  Inability to find (drawn) mothers shouldn't happen now, and it
+  triggers an error message.
+
+26th January 2006  John Allison  (openinventor-V08-00-00)
+- Coworks with visman-V08-00-04 (removed fModified).
+- Removed references to fModified.
+
+20th December 2005  Guy Barrand
+- SoAlternateRepAction.cc : add the #ifdef G4VIS_BUILD_OI_DRIVER.
+
+12th December 2005  John Allison
+- G4OpenInventorSceneHandler.cc: Pick up colour and transformation
+  correctly for non-physical-volume solids.
+  o G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron&):
+    Added code to pick up colour if LV and PV pointers are zero.
+  o G4OpenInventorSceneHandler::BeginPrimitives: Pick up
+    transformation if LV and PV pointers are zero.
+  o G4OpenInventorSceneHandler::PreAddSolid: Added code to pick up
+    colour if LV and PV pointers are zero and removed return statement
+    so that transformation is picked up too.
 
 30th November 2005  Gabriele Cosmo (openinventor-V07-01-04)
 - Trivial fix to SoPolyhedron for support of CLHEP-2.0.X series.

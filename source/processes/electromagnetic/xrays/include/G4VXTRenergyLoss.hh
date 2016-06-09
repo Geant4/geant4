@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.12 2005/10/07 16:19:14 grichine Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VXTRenergyLoss.hh,v 1.18 2006/06/29 19:55:55 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -68,7 +71,7 @@
 
 
 class G4VParticleChange;
-
+class G4PhysicsFreeVector;
 
 class G4XTRenergyLoss : public G4VDiscreteProcess  // G4VContinuousProcess
 {
@@ -103,10 +106,12 @@ public:
   G4double GetMeanFreePath(const G4Track& aTrack,
                            G4double previousStepSize,
                            G4ForceCondition* condition);
- 
+
+  void BuildPhysicsTable(const G4ParticleDefinition&);
   void BuildTable() ;
   void BuildEnergyTable() ;
   void BuildAngleTable() ;
+  void BuildGlobalAngleTable() ;
 
   G4complex OneInterfaceXTRdEdx( G4double energy, 
                                 G4double gamma,
@@ -142,22 +147,29 @@ public:
 
   // Auxiliary functions for plate/gas material parameters
 
-  G4double  GetPlateFormationZone(G4double,G4double,G4double) ;
-  G4complex GetPlateComplexFZ(G4double,G4double,G4double) ;
-  void      ComputePlatePhotoAbsCof() ;
-  G4double  GetPlateLinearPhotoAbs(G4double) ;
+  G4double  GetPlateFormationZone(G4double,G4double,G4double);
+  G4complex GetPlateComplexFZ(G4double,G4double,G4double);
+  void      ComputePlatePhotoAbsCof();
+  G4double  GetPlateLinearPhotoAbs(G4double);
   void      GetPlateZmuProduct() ;
-  G4double  GetPlateZmuProduct(G4double,G4double,G4double) ;
+  G4double  GetPlateZmuProduct(G4double,G4double,G4double);
 
-  G4double  GetGasFormationZone(G4double,G4double,G4double) ;
-  G4complex GetGasComplexFZ(G4double,G4double,G4double) ;
-  void      ComputeGasPhotoAbsCof() ;
-  G4double  GetGasLinearPhotoAbs(G4double) ;
-  void      GetGasZmuProduct() ;
-  G4double  GetGasZmuProduct(G4double,G4double,G4double) ;
+  G4double  GetGasFormationZone(G4double,G4double,G4double);
+  G4complex GetGasComplexFZ(G4double,G4double,G4double);
+  void      ComputeGasPhotoAbsCof();
+  G4double  GetGasLinearPhotoAbs(G4double);
+  void      GetGasZmuProduct();
+  G4double  GetGasZmuProduct(G4double,G4double,G4double);
 
-  G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin ) ;
+  G4double GetPlateCompton(G4double);
+  G4double GetGasCompton(G4double);
+  G4double GetComptonPerAtom(G4double,G4double);
+
+  G4double GetXTRrandomEnergy( G4double scaledTkin, G4int iTkin );
   G4double GetXTRenergy( G4int iPlace, G4double position, G4int iTransfer  );
+
+  G4double GetRandomAngle( G4double energyXTR, G4int iTkin );
+  G4double GetAngleXTR(G4int iTR,G4double position,G4int iAngle);
 
   G4double GetGamma()   {return fGamma;}; 
   G4double GetEnergy()  {return fEnergy;};                
@@ -166,11 +178,14 @@ public:
   void SetGamma(G4double gamma)      {fGamma    = gamma;}; 
   void SetEnergy(G4double energy)    {fEnergy   = energy;};                
   void SetVarAngle(G4double varAngle){fVarAngle = varAngle;};               
+  void SetAngleRadDistr(G4bool pAngleRadDistr){fAngleRadDistr=pAngleRadDistr;};               
+  void SetCompton(G4bool pC){fCompton=pC;};               
+  void SetVerboseLevel(G4int verbose){fVerbose=verbose;};
 
 
   static G4PhysicsLogVector* GetProtonVector(){ return fProtonEnergyVector;};
   static G4int GetTotBin(){return fTotBin;};           
-
+  G4PhysicsFreeVector* GetAngleVector(G4double energy, G4int n);
 protected:
 
   G4ParticleDefinition* fPtrGamma ;  // pointer to TR photon
@@ -182,6 +197,7 @@ protected:
   G4PhysicsTable* fEnergyDistrTable ;
 
   static G4PhysicsLogVector* fProtonEnergyVector ;
+  static G4PhysicsLogVector* fXTREnergyVector ;
 
 
   static G4double fTheMinEnergyTR;            //  static min TR energy
@@ -206,6 +222,8 @@ protected:
 
 
   G4bool fExitFlux;
+  G4bool fAngleRadDistr;
+  G4bool fCompton;
   G4double fSigma1, fSigma2 ;               // plasma energy Sq of matter1/2
 
   G4int fMatIndex1, fMatIndex2 ;
@@ -222,6 +240,10 @@ protected:
   G4double fAlphaPlate, fAlphaGas ;
 
   G4ParticleChange fParticleChange;
+
+  G4PhysicsTable*                    fAngleForEnergyTable;
+  std::vector<G4PhysicsTable*>       fAngleBank;
+  G4int fVerbose;
 };
 
 typedef G4XTRenergyLoss G4VXTRenergyLoss;

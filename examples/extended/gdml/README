@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2004/12/07 08:17:44 gcosmo Exp $
+$Id: README,v 1.8 2006/06/19 09:48:18 witoldp Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,8 +29,9 @@ HOW TO BUILD THE EXAMPLE ?
 - Install the GDML package with Geant4 extensions and Xerces.
   See: http://cern.ch/gdml.
 
-- Set the environment variable GDML_BASE to point to the area where
-  GDML is installed. Specify the system architecture with SCRAM_ARCH.
+- Set the environment variable GDML_INC to point to the directory where
+  GDML includes are installed and GDML_LIB to point to the directory
+  where GDML libraries are installed. 
   Set XERCESCROOT to point to place where Xerces is installed.
   You can also edit the GNUmakefile provided with the example and
   customise it for your specific setup.
@@ -41,7 +42,13 @@ HOW TO BUILD THE EXAMPLE ?
 
 - Compile and link to generate an executable:
  	      % gmake
+  Note: new version of GDML (after GDML_2_5_0) have one additional
+  library called G4Evaluator. If you are compiling with older version
+  of GDML, you should remove that library from the makefile.
  		
 - Execute the application:
  	      % g4_gdml_read_write
+  Note: if you are using dynamic libraries, you should add $GDML_LIB
+  and $XERCESCROOT/lib paths to the LD_LIBRARY_PATH directory (or
+  equivalent on your system).
 

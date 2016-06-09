@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2005/11/30 19:17:08 gcosmo Exp $
+$Id: History,v 1.9 2006/05/08 12:28:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 28th, 2005 J.Weng (gflash-V07-01-02)
+May 8th, 2005 G.Cosmo (gflash-V08-00-00)
 ---------------------
-- Design iteration. Added concrete sampling shower parameterisation
-  and tuning classes.
+- Fix compilation warning on SUN-CC in GFlashSamplingShowerParameterisation.cc.
 
 Nov 28th, 2005 G.Cosmo (gflash-V07-01-01)
 ----------------------

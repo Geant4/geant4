@@ -1,0 +1,16 @@
+# $Id: site-install.gmk,v 1.4 2006/06/14 08:23:12 kmura Exp $
+# ===========================================================
+#   Script for installing modules
+# ===========================================================
+
+ifndef PACKAGE
+  PACKAGE := .
+endif
+
+install_dir := $(Q_LIBDIR)/$(PACKAGE)
+
+install: $(module_name)
+	@echo ... intall $(module_name) into $(install_dir)
+	@if [ ! -d $(install_dir) ]; then install -d $(install_dir); fi
+	@install -m 755 $(module_name) $(install_dir)
+

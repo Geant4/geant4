@@ -1,0 +1,16 @@
+LIST
+C
+C       e- 100 MeV; all processes
+C 
+CALOR   5 (Al) 1000. (cm) 0. (field)
+TRIG    2000
+KINE    3 (electron)   0.1 (GeV)  1. (xBeam)
+DEBUG   10  5 1000
+SWIT    0 (draw) 0 (save)
+C
+CUTS    10.e-6 (cutgam)    10.e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.e-6 (bcute/m) 2*10.e-6 (dcute/m)   10.e-3 (ppcutm)
+LOSS    1
+C
+ABAN    0
+TIME    2=1.

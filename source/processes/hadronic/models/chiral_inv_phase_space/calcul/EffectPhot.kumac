@@ -1,0 +1,92 @@
+macro run que=513-2-asd
+* Start the G4PhotoNuclearCrossSectionTest (Is geant4/bin in the PATH? Did you rehash?)
+  shell G4PhotoNuclearCrossSectionTest
+  pi/del *
+* pln=4 - portret, pln=5 - landscape
+  pln = 4
+* npx - subdivision of the screan in X direction, npy - in Y direction
+  npx=2
+  npy=3
+* define the range of the assembling pictures in memory
+  first=1
+  last=6
+* define the file name for the output
+  for/fil 99 photonuclear.ps
+* define the metafile type to assemble the pictures
+  ***************meta -99 -[npx][npy][pln]
+  meta 99 -112
+****  zone 2 2
+  zone 2 2
+*           TITLE         NAME   NTH NEX XMIN XMAX YMIN YMAX XTXT YTXT
+  exec phot e+^1!H(1GeV)  h1_epl 100 326   0. 1.e3   1. 1.e7 5.e2 4.e5
+  exec phot e+^1!H(10TeV) h1_eph 100 310   0. 1.e7   1. 1.e7 5.e6 4.e5
+  exec phot e+Al(1GeV)    cu_epl 100 396   0. 1.e3   1. 1.e7 5.e2 4.e5
+  exec phot e+Al(10GeV)   cu_eph 100 303   0. 1.e4   1. 1.e7 5.e3 4.e5
+print:
+  meta 0
+  for/clo 99
+  mess '*** PhotoNucl.kumac is printing photonuclear.ps file on: '//[que]
+  shell xprint -h -P [que] photonuclear.ps
+return
+
+macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
+           xmax=4.e7 ymin=0.03 ymax=700 xt=8. yt=10.
+*
+******  dir = ./
+  hi/del *
+  ve/del *
+  ve/cr de(999) R 999*0.
+*****  clr
+*****  opt zfl
+*****  swi gz
+  opt utit
+* Switch to high quality picture
+  gr/opt ndat
+  gr/set pass 5
+  igset  lwid 5.
+  gr/set bwid 5.
+  gr/set fwid 3.
+  gr/set hwid 3.
+  gr/set pwid 5.
+*
+  title 'E?[g]! (MeV)' u
+  title 'Energy distribution of the interacting effective photons'
+  opt date
+**  opt logx
+  opt linx
+  opt logy
+***  opt liny
+  null [xmin] [xmax] [ymin] [ymax]
+* Switch to standard quality picture
+*  set pass 1
+*  igset lwid 1.
+*  set bwid 1.
+*  set fwid 1.
+*  set hwid 1.
+*
+  ****atitle ' ' '[s]?abs! (mb)'
+  title ' ' u
+  ****title ' '
+  set dmod 3
+  igset MTYP 20
+  SET TXFP -20
+  SET LTYP 1
+*  ve/re eg,ex,er [file].dat
+*  igset PMCI 1
+*  igset PLCI 1
+*  gra/hp/errors eg ex de er [nex] 20 .1 1
+  SET CHHE .5
+  igset txci 1
+  itx [xt] [yt]  [targ]
+  ve/re e,ap [file].out
+  igset PLCI 1
+  igset LWID 1
+  gra/prim/graph [nth] e ap C 
+  igset LWID 1
+return
+
+
+
+
+
+

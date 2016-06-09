@@ -1,0 +1,8 @@
+/control/execute macros/DefaultOptions.mac
+/control/execute macros/DefaultPhysics.mac
+/run/initialize
+/control/execute macros/DefaultBeam.mac
+/control/execute macros/DefaultMaterials.mac
+#/control/execute macros/DefaultView.mac
+/control/execute macros/DefaultGeometry.mac
+/control/execute macros/DefaultAnalysis.mac

@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2005/11/18 21:07:35 asaim Exp $
+$Id: History,v 1.131 2006/04/28 06:33:52 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,40 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+- Apr. 28  , 2006  H.Kurashige (particles-V08-00-05)
+-  Fix memory leak in G4MuonDecayChannel.cc 
+
+- Apr. 3 , 2006  H.Kurashige (particles-V08-00-04)
+-  Update mass/width for resonance particle
+-  G4ParticleTable::RemoveAllParticles() is invoked in the destructor of G4ParticleTable
+
+- Mar. 29, 2006  H.Kurashige (particles-V08-00-03)
+- The name N(2090) is named back to N(2080) to avoid inconsistency  
+   with the  im_r_matrix model
+ 
+- Mar. 26, 2006  H.Kurashige (particles-V08-00-02)
+- G4Ions is defined as the base class of all nuclei
+   - G4GenericIon and all light ion classes (including proton and neutron)
+      are derived from G4Ions
+   - GetAtomicMass() and GetAtomicNumber() of G4ParticleDefinition 
+      is changed to non-virtual 
+   - AtomicMass and AtomicNumber() are set in G4Ions Constructor
+- All particles are deleted in G4ParticleTable::RemoveAllParticles()
+- Update particles to match with PDG2005
+  - Update name and PDG code for some resonaces
+  - Update mass/width for resonance particle 
+  - Update mass/width/life for heavy flavor particle 
+  - Update mass/life/decay modes for tau+- 
+
+- Feb 24, 2006  H.Kurashige (particles-V08-00-01)
+- AtomicNumber and AtomicMass are defined for G4GenericIon
+   (this modification is the bug fix for registration of G4RadioactiveDecay
+   to G4GenericIon )
+
+- Jan 1, 2006  M.Asai (particles-V08-00-00)
+- Bug fix in G4ParticleDefinition.
 
 - Nov 18, 2005  M.Asai (particles-V07-01-04)
 - Migration to <sstream>.

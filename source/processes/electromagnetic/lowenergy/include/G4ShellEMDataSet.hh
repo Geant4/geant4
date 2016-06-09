@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.hh,v 1.5 2003/06/16 16:59:49 gunter Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ShellEMDataSet.hh,v 1.8 2006/06/29 19:36:55 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -40,72 +43,58 @@
 
 // -------------------------------------------------------------------
 
-#ifndef G4SHELLEMDATASET_HH
-#define G4SHELLEMDATASET_HH 1
+#ifndef   G4SHELLEMDATASET_HH
+ #define  G4SHELLEMDATASET_HH 1
 
-#include "globals.hh"
-#include "G4DataVector.hh"
-#include "G4VEMDataSet.hh"
-#include <vector>
+ #include "globals.hh"
+ #include "G4VEMDataSet.hh"
+ #include <vector>
 
-class G4EMDataSet;
-class G4VDataSetAlgorithm;
+ class G4VDataSetAlgorithm;
 
-class G4ShellEMDataSet : public G4VEMDataSet 
-{ 
-public:
-
-  G4ShellEMDataSet(G4int Z, 
-		       const G4VDataSetAlgorithm* interpolation,
-		       G4double unitE = MeV, G4double unitData = barn);
-
-  G4ShellEMDataSet(G4int Z, 
-		       const G4String& dataFile,
-		       const G4VDataSetAlgorithm* interpolation,
-		       G4double unitE = MeV, G4double unitData = barn);
-
-  ~G4ShellEMDataSet();
+ class G4ShellEMDataSet : public G4VEMDataSet 
+ { 
+  public:
+                                                G4ShellEMDataSet(G4int argZ, G4VDataSetAlgorithm* argAlgorithm, G4double argUnitEnergies=MeV, G4double argUnitData=barn);
+   virtual                                     ~G4ShellEMDataSet();
  
-  G4double FindValue(G4double e, G4int id = 0) const;
-
-  const G4VEMDataSet* GetComponent(G4int i) const { return components[i]; }
-
-  void AddComponent(G4VEMDataSet* component);
+   virtual G4double                             FindValue(G4double argEnergy, G4int argComponentId=0) const;
   
-  size_t NumberOfComponents() const { return nComponents; }
+   virtual void                                 PrintData(void) const;
 
-  void PrintData() const;
+   virtual const G4VEMDataSet *                 GetComponent(G4int argComponentId) const { return components[argComponentId]; }
+   virtual void                                 AddComponent(G4VEMDataSet * argDataSet) { components.push_back(argDataSet); }
+   virtual size_t                               NumberOfComponents(void) const { return components.size(); }
 
-  const G4DataVector& GetEnergies(G4int i) const;
-  const G4DataVector& GetData(G4int i) const;
+   virtual const G4DataVector &                 GetEnergies(G4int argComponentId) const { return GetComponent(argComponentId)->GetEnergies(0); }
+   virtual const G4DataVector &                 GetData(G4int argComponentId) const { return GetComponent(argComponentId)->GetData(0); }
+   virtual void                                 SetEnergiesData(G4DataVector * argEnergies, G4DataVector * argData, G4int argComponentId);
 
-private:
+   virtual G4bool                               LoadData(const G4String & argFileName);
+   virtual G4bool                               SaveData(const G4String & argFileName) const;
+   
+  protected:
+   G4double                                     GetUnitEnergies() const { return unitEnergies; }
+   G4double                                     GetUnitData() const { return unitData; }
+   const G4VDataSetAlgorithm *                  GetAlgorithm() const { return algorithm; }
+   
+   void                                         CleanUpComponents(void);
 
-  // Hide copy constructor and assignment operator 
-  G4ShellEMDataSet& operator=(const G4ShellEMDataSet& right);
-  G4ShellEMDataSet(const G4ShellEMDataSet&);
+  private:
+   G4String                                     FullFileName(const G4String & argFileName) const;
+  
+   // Hide copy constructor and assignment operator 
+                                                G4ShellEMDataSet();
+                                                G4ShellEMDataSet(const G4ShellEMDataSet & copy);
+   G4ShellEMDataSet &                           operator=(const G4ShellEMDataSet & right);
 
-  void LoadData(const G4String& fileName);
+   std::vector<G4VEMDataSet *>                  components;          // Owned pointers
 
-  G4int z;
+   G4int                                        z;
 
-  const G4VDataSetAlgorithm* algorithm; // Not owned pointer 
-
-  // std::map<G4int,G4VEMDataSet*,std::less<G4int> > componentsMap;
-  std::vector<G4VEMDataSet*> components;
-  size_t nComponents;
-
-  G4double unit1;
-  G4double unit2;
-};
- 
-#endif
-
-
-
-
-
-
-
-
-
+   G4VDataSetAlgorithm *                        algorithm;           // Owned pointer 
+  
+   G4double                                     unitEnergies;
+   G4double                                     unitData;
+ };
+#endif /* G4SHELLEMDATASET_HH */

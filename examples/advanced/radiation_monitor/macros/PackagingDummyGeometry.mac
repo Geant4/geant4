@@ -1,0 +1,83 @@
+/control/execute macros/PackagingParameters.mac
+
+/radmon/detector/CreateMultilayer        MIL-STD-105D
+/radmon/detector/SetMultilayerWidth      MIL-STD-105D     {Pkg-Width}
+/radmon/detector/SetMultilayerHeight     MIL-STD-105D     {Pkg-Height}
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly1
+/radmon/detector/SetLayerType            MIL-STD-105D ly1 FlatVolume
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly1 {Pkg-Tracks-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 VisAttributes '1. 1. 1.'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly2
+/radmon/detector/SetLayerType            MIL-STD-105D ly2 FlatVolume
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly2 {Pkg-Metalization-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly2 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly2 VisAttributes '1. 1. 1.'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly3
+/radmon/detector/SetLayerType            MIL-STD-105D ly3 FlatVolume
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly3 {Pkg-Layers-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 VisAttributes '1. 1. 1.'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly4
+/radmon/detector/SetLayerType            MIL-STD-105D ly4 FlatVolume
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly4 {Pkg-Metalization-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly4 VisAttributes '1. 1. 1.'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly5
+/radmon/detector/SetLayerType            MIL-STD-105D ly5 FlatVolume
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly5 {Pkg-Tracks-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly5 VisAttributes '1. 1. 1.'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly6
+/radmon/detector/SetLayerType            MIL-STD-105D ly6 FlatVolumeWithHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly6 {Pkg-Layers-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 HoleWidth '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 HoleHeight '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly6 VisAttributes '.8 .8 .8'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly7
+/radmon/detector/SetLayerType            MIL-STD-105D ly7 FlatVolumeWithHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly7 {Pkg-Metalization-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 HoleWidth '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 HoleHeight '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly7 VisAttributes '.8 .8 .8'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly8
+/radmon/detector/SetLayerType            MIL-STD-105D ly8 FlatVolumeWithHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly8 {Pkg-Tracks-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly8 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly8 HoleWidth '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly8 HoleHeight '{Pkg-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly8 VisAttributes '.8 .8 .8'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly9
+/radmon/detector/SetLayerType            MIL-STD-105D ly9 FlatVolumeWithHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly9 {Pkg-Layers-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly9 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly9 HoleWidth '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly9 HoleHeight '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly9 VisAttributes '.6 .6 .6'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly10
+/radmon/detector/SetLayerType            MIL-STD-105D ly10 FlatVolumeWithHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly10 {Pkg-Metalization-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly10 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly10 HoleWidth '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly10 HoleHeight '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly10 VisAttributes '.6 .6 .6'
+
+/radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly11
+/radmon/detector/SetLayerType            MIL-STD-105D ly11 FlatVolumeWithHole
+/radmon/detector/SetLayerThickness       MIL-STD-105D ly11 {Pkg-Tracks-Thickness}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly11 Material {Pkg-Material}
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly11 HoleWidth '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly11 HoleHeight '{Pkg-AC-Cavity-Length}'
+/radmon/detector/SetLayerAttribute       MIL-STD-105D ly11 VisAttributes '.6 .6 .6'

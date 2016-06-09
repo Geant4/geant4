@@ -1,9 +1,10 @@
-# $Id: tramu.mac,v 1.5 2005/03/02 17:17:57 maire Exp $
+# $Id: tramu.mac,v 1.6 2006/05/19 14:35:29 maire Exp $
 #
 # macro file for TestEm5.cc
 #
 # 1 TeV mu+, transmitted through 3 m of iron
 # Rev. of Particle Physics Eur. Phys. Jour. C (2000) page 172.
+# Rev. of Particle Physics Letters B 592 (2004) page 251.
 #
 /control/verbose 2
 /run/verbose 2
@@ -24,7 +25,7 @@
 #
 /testem/histo/setFileName tramu
 /testem/histo/setFileType hbook
-/testem/histo/setHisto 4  80  920 1000 GeV	#energy at exit  
+/testem/histo/setHisto 4  50  950 1000 GeV	#energy at exit  
 #
 /testem/stack/killSecondaries
 #

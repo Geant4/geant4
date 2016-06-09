@@ -25,4 +25,3 @@
 /gun/particle gamma
 /gun/energy 500 MeV
 /run/beamOn 1
-exit

@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc,v 1.22 2005/08/18 15:05:13 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4MollerBhabhaModel.cc,v 1.26 2006/06/29 19:53:06 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -44,6 +47,8 @@
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 25-07-05 Add protection in calculation of recoil direction for the case 
 //          of complete energy transfer from e+ to e- (V.Ivanchenko)
+// 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 15-05-06 Fix MinEnergyCut (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -52,8 +57,8 @@
 //
 // -------------------------------------------------------------------
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MollerBhabhaModel.hh"
 #include "G4Electron.hh"
@@ -61,7 +66,7 @@
 #include "Randomize.hh"
 #include "G4ParticleChangeForLoss.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
@@ -77,12 +82,12 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
   theElectron = G4Electron::Electron();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MollerBhabhaModel::~G4MollerBhabhaModel()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
 {
@@ -90,27 +95,112 @@ void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
   if(p != theElectron) isElectron = false;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition*,
                                            const G4MaterialCutsCouple* couple)
 {
-  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
+  G4double electronDensity = couple->GetMaterial()->GetElectronDensity();
+  G4double Zeff  = electronDensity/couple->GetMaterial()->GetTotNbOfAtomsPerVolume();
+  return 0.25*sqrt(Zeff)*keV;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
 {
   if(!particle) SetParticle(p);
   if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
+                                                     (pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MollerBhabhaModel::ComputeCrossSectionPerElectron(
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+                                                 G4double cutEnergy,
+                                                 G4double maxEnergy)
+{
+  if(!particle) SetParticle(p);
+
+  G4double cross = 0.0;
+  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
+  tmax = min(maxEnergy, tmax);
+
+  if(cutEnergy < tmax) {
+
+    G4double xmin  = cutEnergy/kineticEnergy;
+    G4double xmax  = tmax/kineticEnergy;
+    G4double gam   = kineticEnergy/electron_mass_c2 + 1.0;
+    G4double gamma2= gam*gam;
+    G4double beta2 = 1.0 - 1.0/gamma2;
+
+    //Moller (e-e-) scattering
+    if (isElectron) {
+
+      G4double g     = (2.0*gam - 1.0)/gamma2;
+      cross = ((xmax - xmin)*(1.0 - g + 1.0/(xmin*xmax)
+			      + 1.0/((1.0-xmin)*(1.0 - xmax)))
+            - g*log( xmax*(1.0 - xmin)/(xmin*(1.0 - xmax)) ) ) / beta2;
+
+    //Bhabha (e+e-) scattering
+    } else {
+
+      G4double y   = 1.0/(1.0 + gam);
+      G4double y2  = y*y;
+      G4double y12 = 1.0 - 2.0*y;
+      G4double b1  = 2.0 - y2;
+      G4double b2  = y12*(3.0 + y2);
+      G4double y122= y12*y12;
+      G4double b4  = y122*y12;
+      G4double b3  = b4 + y122;
+
+      cross = (xmax - xmin)*(1.0/(beta2*xmin*xmax) + b2
+            - 0.5*b3*(xmin + xmax)
+	    + b4*(xmin*xmin + xmin*xmax + xmax*xmax)/3.0)
+            - b1*log(xmax/xmin);
+    }
+
+    cross *= twopi_mc2_rcl2/kineticEnergy;
+  }
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MollerBhabhaModel::ComputeCrossSectionPerAtom(
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+						 G4double Z, G4double,
+                                                 G4double cutEnergy,
+                                                 G4double maxEnergy)
+{
+  G4double cross = Z*ComputeCrossSectionPerElectron
+                                         (p,kineticEnergy,cutEnergy,maxEnergy);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MollerBhabhaModel::CrossSectionPerVolume(
+					   const G4Material* material,
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+                                                 G4double cutEnergy,
+                                                 G4double maxEnergy)
+{
+  G4double eDensity = material->GetElectronDensity();
+  G4double cross = eDensity*ComputeCrossSectionPerElectron
+                                         (p,kineticEnergy,cutEnergy,maxEnergy);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 					  const G4Material* material,
@@ -190,61 +280,7 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
   return dedx;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4MollerBhabhaModel::CrossSectionPerVolume(
-					   const G4Material* material,
-                                           const G4ParticleDefinition* p,
-                                                 G4double kineticEnergy,
-                                                 G4double cutEnergy,
-                                                 G4double maxEnergy)
-{
-  if(!particle) SetParticle(p);
-
-  G4double cross = 0.0;
-  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  tmax = min(maxEnergy, tmax);
-
-  if(cutEnergy < tmax) {
-
-    G4double xmin  = cutEnergy/kineticEnergy;
-    G4double xmax  = tmax/kineticEnergy;
-    G4double gam   = kineticEnergy/electron_mass_c2 + 1.0;
-    G4double gamma2= gam*gam;
-    G4double beta2 = 1.0 - 1.0/gamma2;
-
-    //Moller (e-e-) scattering
-    if (isElectron) {
-
-      G4double g     = (2.0*gam - 1.0)/gamma2;
-      cross = ((xmax - xmin)*(1.0 - g + 1.0/(xmin*xmax)
-			      + 1.0/((1.0-xmin)*(1.0 - xmax)))
-            - g*log( xmax*(1.0 - xmin)/(xmin*(1.0 - xmax)) ) ) / beta2;
-
-    //Bhabha (e+e-) scattering
-    } else {
-
-      G4double y   = 1.0/(1.0 + gam);
-      G4double y2  = y*y;
-      G4double y12 = 1.0 - 2.0*y;
-      G4double b1  = 2.0 - y2;
-      G4double b2  = y12*(3.0 + y2);
-      G4double y122= y12*y12;
-      G4double b4  = y122*y12;
-      G4double b3  = b4 + y122;
-
-      cross = (xmax - xmin)*(1.0/(beta2*xmin*xmax) + b2
-            - 0.5*b3*(xmin + xmax)
-	    + b4*(xmin*xmin + xmin*xmax + xmax*xmax)/3.0)
-            - b1*log(xmax/xmin);
-    }
-
-    cross *= twopi_mc2_rcl2*(material->GetElectronDensity())/kineticEnergy;
-  }
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
@@ -360,9 +396,9 @@ std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
   // create G4DynamicParticle object for delta ray
   std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
-						   deltaDirection,deltaKinEnergy);
+						 deltaDirection,deltaKinEnergy);
   vdp->push_back(delta);
   return vdp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

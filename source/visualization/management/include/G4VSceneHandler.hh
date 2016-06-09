@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh,v 1.25 2005/09/02 12:58:18 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VSceneHandler.hh,v 1.33 2006/06/29 21:28:08 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // John Allison  19th July 1996.
@@ -97,7 +100,7 @@ public: // With description
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
   // void MyXXXSceneHandler::PostAddSolid () {
   //   ...
-  //   G4VSceneHandler::PostAddSolid (objectTransformation, visAttribs);
+  //   G4VSceneHandler::PostAddSolid ();
   // }
 
   virtual void AddSolid (const G4Box&);
@@ -125,27 +128,19 @@ public: // With description
   virtual void AddCompound (const G4VTrajectory&);
   virtual void AddCompound (const G4VHit&);
 
-  ///////////////////////////////////////////////////////////////
-  // Other inherited functions.
-
-  virtual void EstablishSpecials (G4PhysicalVolumeModel&);
-  // Used to establish any special relationships between scene and this
-  // particular type of model - non-pure, i.e., no requirement to
-  // implement.  See G4PhysicalVolumeModel.hh for details.
-
   //////////////////////////////////////////////////////////////
   // Functions for adding primitives.
 
   virtual void BeginModeling ();
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::BeginModeling () {
+  // void MyXXXSceneHandler::BeginModeling () {
   //   G4VSceneHandler::BeginModeling ();
   //   ...
   // }
 
   virtual void EndModeling ();
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::EndModeling () {
+  // void MyXXXSceneHandler::EndModeling () {
   //   ...
   //   G4VSceneHandler::EndModeling ();
   // }
@@ -166,6 +161,24 @@ public: // With description
   //   G4VSceneHandler::EndPrimitives ();
   // }
 
+  virtual void BeginPrimitives2D ();
+  // The x,y coordinates of the primitives passed to AddPrimitive are
+  // intrepreted as screen coordinates, -1 < x,y < 1.  The
+  // z-coordinate is ignored.
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::BeginPrimitives2D
+  // (const G4Transform3D& objectTransformation) {
+  //   G4VSceneHandler::BeginPrimitives2D ();
+  //   ...
+  // }
+
+  virtual void EndPrimitives2D ();
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::EndPrimitives2D () {
+  //   ...
+  //   G4VSceneHandler::EndPrimitives2D ();
+  // }
+
   virtual void AddPrimitive (const G4Polyline&)   = 0;
   virtual void AddPrimitive (const G4Scale&);
   // Default implementation in this class but can be over-ridden.
@@ -177,10 +190,17 @@ public: // With description
   virtual void AddPrimitive (const G4Polyhedron&) = 0;  
   virtual void AddPrimitive (const G4NURBS&)      = 0;       
 
+  ///////////////////////////////////////////////////////////////
+  // Other inherited functions.
+
+  virtual void EstablishSpecials (G4PhysicalVolumeModel&);
+  // Used to establish any special relationships between scene handler and this
+  // particular type of model - non-pure, i.e., no requirement to
+  // implement.  See G4PhysicalVolumeModel.hh for details.
+
   //////////////////////////////////////////////////////////////
   // Access functions.
   const G4String&     GetName           () const;
-  void                SetName           (const G4String&);
   G4int               GetSceneHandlerId () const;
   G4int               GetViewCount      () const;
   G4VGraphicsSystem*  GetGraphicsSystem () const;
@@ -189,13 +209,20 @@ public: // With description
   G4VModel*           GetModel          () const;
   G4VViewer*          GetCurrentViewer  () const;
   G4bool              GetMarkForClearingTransientStore () const;
+  G4bool              IsReadyForTransients () const;
+  G4bool              GetTransientsDrawnThisEvent () const;
+  G4bool              GetTransientsDrawnThisRun   () const;
+  void          SetName          (const G4String&);
   void          SetCurrentViewer (G4VViewer*);
   void          SetScene         (G4Scene*);
   G4ViewerList& SetViewerList    ();  // Non-const so you can change.
   void          SetModel         (G4VModel*);
   void          SetMarkForClearingTransientStore (G4bool);
   // Sets flag which will cause transient store to be cleared at the
-  // next call to BeginPrimitives().
+  // next call to BeginPrimitives().  Maintained by vis manager.
+  void          SetTransientsDrawnThisEvent      (G4bool);
+  void          SetTransientsDrawnThisRun        (G4bool);
+  // Maintained by vis manager.
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -230,7 +257,7 @@ public: // With description
   // GetMarkerSize / 2.
 
   G4ModelingParameters* CreateModelingParameters ();
-  // Only the scene and view know what the Modeling Parameters should
+  // Only the scene handler and view know what the Modeling Parameters should
   // be.  For historical reasons, the GEANT4 Visualization Environment
   // maintains its own Scene Data and View Parameters, which must be
   // converted, when needed, to Modeling Parameters.
@@ -271,30 +298,31 @@ protected:
   //////////////////////////////////////////////////////////////
   // Data members
 
-  G4VGraphicsSystem&     fSystem;          // Graphics system.
-  const G4int            fSceneHandlerId;  // Id of this instance.
-  G4String               fName;
-  G4int                  fViewCount;       // To determine view ids.
-  G4ViewerList           fViewerList;      // Viewers.
-  G4VViewer*             fpViewer;         // Current viewer.
-  G4Scene*               fpScene;          // Scene for this scene handler.
-  G4bool                 fMarkForClearingTransientStore;
-  G4bool                 fSecondPassRequested;
-  G4bool                 fSecondPass;      // ...in process.
-
-  //////////////////////////////////////////////////////////////
-  // Workspace...
-
-  G4bool fReadyForTransients;           // I.e., not processing scene.
-  G4VModel*              fpModel;       // Current model.
-  const G4Transform3D*   fpObjectTransformation;  // Current
-					// accumulated object transformation.
-  G4int                  fNestingDepth; // For Begin/EndPrimitives.
+  G4VGraphicsSystem& fSystem;          // Graphics system.
+  const G4int        fSceneHandlerId;  // Id of this instance.
+  G4String           fName;
+  G4int              fViewCount;       // To determine view ids.
+  G4ViewerList       fViewerList;      // Viewers.
+  G4VViewer*         fpViewer;         // Current viewer.
+  G4Scene*           fpScene;          // Scene for this scene handler.
+  G4bool             fMarkForClearingTransientStore;
+  G4bool             fReadyForTransients;  // I.e., not processing the
+			                   // run-duration part of scene.
+  G4bool             fTransientsDrawnThisEvent;  // Maintained by vis
+  G4bool             fTransientsDrawnThisRun;    // manager.
+  G4bool             fProcessingSolid; // True if within Pre/PostAddSolid.
+  G4bool             fSecondPassRequested;
+  G4bool             fSecondPass;    // ...in process.
+  G4VModel*          fpModel;        // Current model.
+  const G4Transform3D* fpObjectTransformation; // Current accumulated
+					       // object transformation.
+  G4int              fNestingDepth; // For Begin/EndPrimitives.
   const G4VisAttributes* fpVisAttribs;  // Working vis attributes.
-  G4int                  fCurrentDepth; // Current depth of geom. hierarchy.
-  G4VPhysicalVolume*     fpCurrentPV;   // Current physical volume.
-  G4LogicalVolume*       fpCurrentLV;   // Current logical volume.
-  G4Material*       fpCurrentMaterial;  // Current material.
+  G4int              fCurrentDepth; // Current depth of geom. hierarchy.
+  G4VPhysicalVolume* fpCurrentPV;   // Current physical volume.
+  G4LogicalVolume*   fpCurrentLV;   // Current logical volume.
+  G4Material*        fpCurrentMaterial; // Current material.
+  const G4Transform3D fIdentityTransformation;
 
 private:
 

@@ -1,0 +1,58 @@
+/control/verbose 2
+/run/particle/verbose 1
+/run/initialize
+#
+#
+#
+/run/setCutForRegion Calor-A 0.1 mm
+/run/setCutForRegion Calor-B 1 mm
+/run/setCutForRegion Calor-C 1 cm
+/run/beamOn 10
+/run/dumpRegion
+/run/dumpCouples
+# store physice table
+#  set store format : 0 binary   1 ascii
+/run/particle/setStoredInAscii 0 
+/control/shell mkdir -p physTableBinary
+/run/particle/storePhysicsTable physTableBinary
+#
+#
+#
+/run/setCutForRegion Calor-A 0.2 mm
+/run/setCutForRegion Calor-B 2 mm
+/run/setCutForRegion Calor-C 2 cm
+/run/beamOn 10
+/run/dumpRegion
+/run/dumpCouples
+# store physice table
+#  set store format : 0 binary   1 ascii
+/run/particle/setStoredInAscii 1 
+/control/shell mkdir -p physTableAscii
+/run/particle/storePhysicsTable physTableAscii
+#
+#
+#
+/run/setCutForRegion Calor-A 0.1 mm
+/run/setCutForRegion Calor-B 1 mm
+/run/setCutForRegion Calor-C 1 cm
+/run/particle/setStoredInAscii 0
+/run/particle/retrievePhysicsTable physTableBinary
+/run/beamOn 10
+/run/dumpRegion
+/run/dumpCouples
+#
+#
+#
+/run/setCutForRegion Calor-A 0.2 mm
+/run/setCutForRegion Calor-B 2 mm
+/run/setCutForRegion Calor-C 2 cm
+/run/particle/setStoredInAscii 1
+/run/particle/retrievePhysicsTable physTableAscii
+/run/beamOn 10
+/run/dumpRegion
+/run/dumpCouples
+#
+#
+#
+/control/shell rm -rf physTableBinary physTableAscii
+#

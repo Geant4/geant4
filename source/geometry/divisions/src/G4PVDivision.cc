@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.13 2005/11/16 19:27:06 japost Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4PVDivision.cc,v 1.20 2006/06/29 18:18:31 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // class G4PVDivision Implementation file
 //
@@ -52,11 +55,26 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
     fcopyNo(-1)
 {
-  if (pMotherLogical) pMotherLogical->AddDaughter(this);
-  SetParameterisation( pMotherLogical, pAxis, nDivs,
-                       width, offset, DivNDIVandWIDTH );
+  if (!pMotherLogical)
+  {
+    G4String message_1 =
+      "NULL pointer specified as mother,\n for volume: " + pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                FatalException, message_1);
+  }
+  if (pLogical == pMotherLogical)
+  {
+    G4String message_2 =
+      "Cannot place a volume inside itself! Volume: " + pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                FatalException, message_2);
+  }
+  pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
+  SetParameterisation(pMotherLogical, pAxis, nDivs,
+                      width, offset, DivNDIVandWIDTH);
   CheckAndSetParameters (pAxis, nDivs, width, offset,
-                         DivNDIVandWIDTH, pMotherLogical );
+                         DivNDIVandWIDTH, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -69,9 +87,24 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
     fcopyNo(-1)
 {
-  if (pMotherLogical) pMotherLogical->AddDaughter(this);
-  SetParameterisation( pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV );
-  CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical );
+  if (!pMotherLogical)
+  {
+    G4String message_1 =
+      "NULL pointer specified as mother! Volume: " + pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                FatalException, message_1);
+  }
+  if (pLogical == pMotherLogical)
+  {
+    G4String message_2 =
+      "Cannot place a volume inside itself! Volume: " + pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                FatalException, message_2);
+  }
+  pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
+  SetParameterisation(pMotherLogical, pAxis, nDivs, 0., offset, DivNDIV);
+  CheckAndSetParameters (pAxis, nDivs, 0., offset, DivNDIV, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -84,9 +117,24 @@ G4PVDivision::G4PVDivision(const G4String& pName,
   : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0),
     fcopyNo(-1)
 {
-  if (pMotherLogical) pMotherLogical->AddDaughter(this);
-  SetParameterisation( pMotherLogical, pAxis, 0, width, offset, DivWIDTH );
-  CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical );
+  if (!pMotherLogical)
+  {
+    G4String message_1 =
+      "NULL pointer specified as mother! Volume: " + pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                FatalException, message_1);
+  }
+  if (pLogical == pMotherLogical)
+  {
+    G4String message_2 =
+      "Cannot place a volume inside itself! Volume: " + pName;
+    G4Exception("G4PVDivision::G4PVDivision()", "InvalidSetup",
+                FatalException, message_2);
+  }
+  pMotherLogical->AddDaughter(this);
+  SetMotherLogical(pMotherLogical);
+  SetParameterisation(pMotherLogical, pAxis, 0, width, offset, DivWIDTH);
+  CheckAndSetParameters (pAxis, 0, width, offset, DivWIDTH, pMotherLogical);
 }
 
 //--------------------------------------------------------------------------
@@ -126,8 +174,9 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
                 FatalException, "Width must be positive!");
   }
   
-  foffset=offset;
-  
+  foffset = offset;
+  fdivAxis = pAxis;
+
   //!!!!! axis has to be x/y/z in G4VoxelLimits::GetMinExtent
   //
   if( pAxis == kRho || pAxis == kRadial3D || pAxis == kPhi )
@@ -170,15 +219,11 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
   G4String dsolType = GetLogicalVolume()->GetSolid()->GetEntityType();
   if( msolType != dsolType )
   {
-    G4cerr << "ERROR - G4PVDivision::CheckAndSetParameters()"
-           << G4endl
-           << "        Incorrect solid type in call to G4PVDivision of volume "
-           << GetName() << G4endl
-           << "        It is: " << msolType
-           << ", while it should be: " << dsolType << "." << G4endl;
+    G4String message =
+      "Incorrect solid type for division of volume " + GetName()
+    + "    It is: " + msolType + ", while it should be: " + dsolType;
     G4Exception("G4VDivisionParameterisation::CheckAndSetParameters()",
-                "IllegalConstruct", FatalException,
-                "Incorrect solid type for division !");
+                "IllegalConstruct", FatalException, message );
   }
 }
 
@@ -186,6 +231,12 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
 G4PVDivision::~G4PVDivision()
 {
   delete GetRotation();
+}
+
+//--------------------------------------------------------------------------
+EAxis G4PVDivision::GetDivisionAxis() const
+{
+  return fdivAxis;
 }
 
 //--------------------------------------------------------------------------
@@ -422,8 +473,9 @@ void G4PVDivision::SetParameterisation( G4LogicalVolume* motherLogical,
     G4cerr << "ERROR - G4PVDivision::SetParameterisation()" << G4endl
            << "        Divisions for " << mSolidType
            << " not implemented." << G4endl;
+    G4String message = "Solid type not supported: " + mSolidType;
     G4Exception("G4PVDivision::SetParameterisation()", "IllegalConstruct",
-                FatalException, "Solid type not supported.");
+                FatalException, message);
   }
 }
 

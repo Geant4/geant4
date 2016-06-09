@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.20 2005/08/18 14:38:55 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4MuBetheBlochModel.cc,v 1.22 2006/06/29 19:49:36 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,9 +43,10 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 27-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
-// 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
+// 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.I)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 12-04-05 Add usage of G4EmCorrections (V.Ivanchenko)
+// 13-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 //
 
 //
@@ -50,8 +54,8 @@
 //
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MuBetheBlochModel.hh"
 #include "Randomize.hh"
@@ -60,10 +64,13 @@
 #include "G4EmCorrections.hh"
 #include "G4ParticleChangeForLoss.hh"
 
-G4double G4MuBetheBlochModel::xgi[]={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801 };
-G4double G4MuBetheBlochModel::wgi[]={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
+G4double G4MuBetheBlochModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083, 0.5917,
+                                      0.7628, 0.8983, 0.9801 };
+				      
+G4double G4MuBetheBlochModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813, 0.1813,
+                                      0.1569, 0.1112, 0.0506 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
@@ -84,12 +91,12 @@ G4MuBetheBlochModel::G4MuBetheBlochModel(const G4ParticleDefinition* p,
   if(p) SetParticle(p);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MuBetheBlochModel::~G4MuBetheBlochModel()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
@@ -101,7 +108,7 @@ void G4MuBetheBlochModel::SetParticle(const G4ParticleDefinition* p)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
                                            const G4MaterialCutsCouple* couple)
@@ -109,7 +116,7 @@ G4double G4MuBetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
                                      const G4DataVector&)
@@ -117,17 +124,96 @@ void G4MuBetheBlochModel::Initialise(const G4ParticleDefinition* p,
   if(p) SetParticle(p);
 
   if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
+                                                             (pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MuBetheBlochModel::ComputeCrossSectionPerElectron(
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+                                                 G4double cutEnergy,
+                                                 G4double maxKinEnergy)
+{
+  G4double cross = 0.0;
+  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
+  G4double maxEnergy = min(tmax,maxKinEnergy);
+  if(cutEnergy < maxEnergy) {
+
+    G4double totEnergy = kineticEnergy + mass;
+    G4double energy2   = totEnergy*totEnergy;
+    G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
+
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax
+          + 0.5*(maxEnergy - cutEnergy)/energy2;
+
+    // radiative corrections of R. Kokoulin
+    if (maxEnergy > limitKinEnergy) {
+
+      G4double logtmax = log(maxEnergy);
+      G4double logtmin = log(max(cutEnergy,limitKinEnergy));
+      G4double logstep = logtmax - logtmin;
+      G4double dcross  = 0.0;
+
+      for (G4int ll=0; ll<8; ll++)
+      {
+        G4double ep = exp(logtmin + xgi[ll]*logstep);
+        G4double a1 = log(1.0 + 2.0*ep/electron_mass_c2);
+        G4double a3 = log(4.0*totEnergy*(totEnergy - ep)/massSquare);
+        dcross += wgi[ll]*(1.0/ep - beta2/tmax + 0.5*ep/energy2)*a1*(a3 - a1);
+      }
+
+      cross += dcross*logstep*alphaprime;
+    }
+
+    cross *= twopi_mc2_rcl2/beta2;
+
+  }
+
+  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax
+  //         << " cross= " << cross << G4endl;
+  
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MuBetheBlochModel::ComputeCrossSectionPerAtom(
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+						 G4double Z, G4double,
+                                                 G4double cutEnergy,
+                                                 G4double maxEnergy)
+{
+  G4double cross = Z*ComputeCrossSectionPerElectron
+                                         (p,kineticEnergy,cutEnergy,maxEnergy);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4MuBetheBlochModel::CrossSectionPerVolume(
+					   const G4Material* material,
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+                                                 G4double cutEnergy,
+                                                 G4double maxEnergy)
+{
+  G4double eDensity = material->GetElectronDensity();
+  G4double cross = eDensity*ComputeCrossSectionPerElectron
+                                         (p,kineticEnergy,cutEnergy,maxEnergy);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
-						   const G4ParticleDefinition* p,
-						   G4double kineticEnergy,
-						   G4double cut)
+						  const G4ParticleDefinition* p,
+						  G4double kineticEnergy,
+						  G4double cut)
 {
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double tau   = kineticEnergy/mass;
@@ -146,7 +232,8 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   G4double eDensity = material->GetElectronDensity();
 
-  G4double dedx = log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)-(1.0 + cutEnergy/tmax)*beta2;
+  G4double dedx = log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)
+                 -(1.0 + cutEnergy/tmax)*beta2;
 
   G4double totEnergy = kineticEnergy + mass;
   G4double del = 0.5*cutEnergy/totEnergy;
@@ -192,55 +279,7 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   return dedx;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4MuBetheBlochModel::CrossSectionPerVolume(const G4Material* material,
-						    const G4ParticleDefinition* p,
-						    G4double kineticEnergy,
-						    G4double cutEnergy,
-						    G4double maxKinEnergy)
-{
-  G4double cross = 0.0;
-  G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = min(tmax,maxKinEnergy);
-  if(cutEnergy < maxEnergy) {
-
-    G4double totEnergy = kineticEnergy + mass;
-    G4double energy2   = totEnergy*totEnergy;
-    G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax
-          + 0.5*(maxEnergy - cutEnergy)/energy2;
-
-    // radiative corrections of R. Kokoulin
-    if (maxEnergy > limitKinEnergy) {
-
-      G4double logtmax = log(maxEnergy);
-      G4double logtmin = log(max(cutEnergy,limitKinEnergy));
-      G4double logstep = logtmax - logtmin;
-      G4double dcross  = 0.0;
-
-      for (G4int ll=0; ll<8; ll++)
-      {
-        G4double ep = exp(logtmin + xgi[ll]*logstep);
-        G4double a1 = log(1.0 + 2.0*ep/electron_mass_c2);
-        G4double a3 = log(4.0*totEnergy*(totEnergy - ep)/massSquare);
-        dcross += wgi[ll]*(1.0/ep - beta2/tmax + 0.5*ep/energy2)*a1*(a3 - a1);
-      }
-
-      cross += dcross*logstep*alphaprime;
-    }
-
-    cross *= twopi_mc2_rcl2*(material->GetElectronDensity())/beta2;
-
-  }
-
-  //  G4cout << "tmin= " << cutEnergy << " tmax= " << tmax
-  //       << " cross= " << cross << G4endl;
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
@@ -268,10 +307,12 @@ vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
   // sampling follows ...
   do {
     G4double q = G4UniformRand();
-    deltaKinEnergy = minKinEnergy*maxKinEnergy/(minKinEnergy*(1.0 - q) + maxKinEnergy*q);
+    deltaKinEnergy = minKinEnergy*maxKinEnergy
+                    /(minKinEnergy*(1.0 - q) + maxKinEnergy*q);
 
 
-    f = 1.0 - beta2*deltaKinEnergy/tmax + 0.5*deltaKinEnergy*deltaKinEnergy/etot2;
+    f = 1.0 - beta2*deltaKinEnergy/tmax 
+            + 0.5*deltaKinEnergy*deltaKinEnergy/etot2;
 
     if(deltaKinEnergy > limitKinEnergy) {
       G4double a1 = log(1.0 + 2.0*deltaKinEnergy/electron_mass_c2);
@@ -313,11 +354,11 @@ vector<G4DynamicParticle*>* G4MuBetheBlochModel::SampleSecondaries(
 
   // create G4DynamicParticle object for delta ray
   G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
-                                                   deltaDirection,deltaKinEnergy);
+                                                 deltaDirection,deltaKinEnergy);
   vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   vdp->push_back(delta);
 
   return vdp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

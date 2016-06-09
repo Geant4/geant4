@@ -1,29 +1,48 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.12 2005/11/11 23:28:56 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4EnergyLossMessenger.cc,v 1.20 2006/06/29 19:55:07 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
+// -------------------------------------------------------------------
+//
+// GEANT4 Class file
+//
+// File name:     G4EnergyLossMessenger
+//
+// Author:        Michel Maire
+//
+// Creation date: 22-06-2000
+//
+// Modifications:
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
+// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
+// 10-05-06 Add command MscStepLimit (V.Ivantchenko) 
+//
+// -------------------------------------------------------------------
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -91,7 +110,8 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   G4UIparameter* unitPrm = new G4UIparameter("unit",'s',true);
   unitPrm->SetGuidance("unit of finalRange");
   unitPrm->SetDefaultValue("mm");
-  G4String unitCandidates = G4UIcommand::UnitsList(G4UIcommand::CategoryOf("mm"));
+  G4String unitCandidates = 
+    G4UIcommand::UnitsList(G4UIcommand::CategoryOf("mm"));
   unitPrm->SetParameterCandidates(unitCandidates);
 
   StepFuncCmd->SetParameter(unitPrm);
@@ -115,17 +135,38 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   IntegCmd->SetDefaultValue(true);
   IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  rangeCmd = new G4UIcmdWithABool("/process/eLoss/preciseRange",this);
+  rangeCmd = new G4UIcmdWithABool("/process/eLoss/CSDARange",this);
   rangeCmd->SetGuidance("Switch true/false the precise range calculation.");
   rangeCmd->SetParameterName("range",true);
   rangeCmd->SetDefaultValue(true);
   rangeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  lpmCmd = new G4UIcmdWithABool("/process/eLoss/LPM",this);
+  lpmCmd->SetGuidance("Switch true/false the LPM effect calculation.");
+  lpmCmd->SetParameterName("lpm",true);
+  lpmCmd->SetDefaultValue(true);
+  lpmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   verCmd = new G4UIcmdWithAnInteger("/process/eLoss/verbose",this);
   verCmd->SetGuidance("Set verbose level for EM physics.");
   verCmd->SetParameterName("verb",true);
   verCmd->SetDefaultValue(true);
   verCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  mscCmd = new G4UIcommand("/process/eLoss/MscStepLimit",this);
+  mscCmd->SetGuidance("Set msc step limit flag and facRange value.");
+
+  G4UIparameter* facRange = new G4UIparameter("facRange",'d',false);
+  facRange->SetGuidance("msc parameter facRange");
+  facRange->SetParameterRange("facRange>0.");
+  mscCmd->SetParameter(facRange);
+
+  G4UIparameter* msc = new G4UIparameter("algMsc",'s',true);
+  msc->SetGuidance("msc step algorithm flag");
+  msc->SetDefaultValue("true");
+  mscCmd->SetParameter(msc);
+
+  mscCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -142,7 +183,9 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete MaxEnCmd;
   delete IntegCmd;
   delete rangeCmd;
+  delete lpmCmd;
   delete verCmd;
+  delete mscCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -166,7 +209,8 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    }
 
   if (command == MinSubSecCmd)
-   { G4VEnergyLoss::SetMinDeltaCutInRange(MinSubSecCmd->GetNewDoubleValue(newValue));
+   { G4VEnergyLoss::SetMinDeltaCutInRange(
+		    MinSubSecCmd->GetNewDoubleValue(newValue));
    }
 
   if (command == StepFuncCmd)
@@ -177,7 +221,18 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      is >> v1 >> v2 >> unt;
      v2 *= G4UIcommand::ValueOf(unt);
      G4VEnergyLoss::SetStepFunction(v1,v2);
-     lossTables->SetStepLimits(v1,v2);
+     lossTables->SetStepFunction(v1,v2);
+   }
+
+  if (command == mscCmd)
+   {
+     G4double f;
+     G4bool a = true;
+     G4String s;
+     std::istringstream is(newValue);
+     is >> f >> s;
+     if(s == "false" || s == "0" || s == "no") a = false; 
+     lossTables->SetMscStepLimitation(a,f);
    }
 
   if (command == MinEnCmd) {
@@ -191,7 +246,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     lossTables->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
   }
   if (command == rangeCmd) {
-    lossTables->SetBuildPreciseRange(rangeCmd->GetNewBoolValue(newValue));
+    lossTables->SetBuildCSDARange(rangeCmd->GetNewBoolValue(newValue));
+  }
+  if (command == lpmCmd) {
+    lossTables->SetLPMFlag(lpmCmd->GetNewBoolValue(newValue));
   }
   if (command == verCmd) {
     lossTables->SetVerbose(verCmd->GetNewIntValue(newValue));

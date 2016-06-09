@@ -1,0 +1,112 @@
+
+*************************************************************
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+***** Table : Nb of materials = 14 *****
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material: H2liquid     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.923 m  
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
+
+ Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
+   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  ElmMassFraction:  17.48 %  ElmAbundance  15.79 %
+   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  ElmMassFraction:  67.10 %  ElmAbundance  21.05 %
+
+ Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
+   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
+   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.55 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Germanium     density:  5.323 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   2.301 cm 
+   --->  Element: Germanium ( )   Z = 32.0   N =  72.6   A =  72.61 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:   Silver     density: 10.500 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.543 mm 
+   --->  Element: Silver ( )   Z = 47.0   N = 107.9   A = 107.87 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
+   --->  Element: Tungsten ( )   Z = 74.0   N = 183.8   A = 183.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
+   --->  Element: Uranium ( )   Z = 92.0   N = 238.0   A = 238.03 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Germanium
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.6936 keV    e- 863.242 keV    e+ 821.764 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+
+ gamma (300 keV) in Germanium (density: 5.323 g/cm3 ;   radiation length: 2.30121 cm )
+
+  processes :                	         phot		        compt		         conv		        total
+ 
+  cross section per atom   : 	      1.71686 barn  	      11.0976 barn  	            0 pbarn 	      12.8145 barn  
+
+ 
+  cross section per volume : 	     0.075796 cm^-1	     0.490629 cm^-1	            0 cm^-1	     0.566426 cm^-1
+  cross section per mass   : 	    0.0142393 cm2/g	    0.0921716 cm2/g	            0 cm2/g	     0.106411 cm2/g
+ 
+  mean free path           : 	      13.1933 cm 	       2.0382 cm 	 5.82593e+288 pc 	      1.76546 cm 
+        (g/cm2)            : 	       70.228 g/cm2 	      10.8493 g/cm2 	 2.88022e+285 kg/cm2	      9.39753 g/cm2 
+
+-------------------------------------------------------------
+
+ e- (10 MeV) in Water (density: 1 g/cm3 ;   radiation length: 36.0925 cm )
+
+  Range cuts : 	 gamma      100 um 	 e-      100 um 
+ Energy cuts : 	 gamma  1.09571 keV	 e-  84.2696 keV
+
+  processes :                	        eIoni		        eBrem		        total
+ 
+  cross section per volume : 	      1.00476 cm^-1	     0.349696 cm^-1	      1.35446 cm^-1
+  cross section per mass   : 	      1.00476 cm2/g	     0.349696 cm2/g	      1.35446 cm2/g
+ 
+  mean free path           : 	      9.95258 mm 	      2.85962 cm 	      7.38301 mm 
+        (g/cm2)            : 	      995.258 mg/cm2	      2.85962 g/cm2 	      738.301 mg/cm2
+
+ 
+  restricted dE/dx         : 	      1.61451 MeV/cm	      21.1997 eV/cm 	      1.61454 MeV/cm
+      (MeV/g/cm2)          : 	      1.61451 MeV*cm2/g	      21.1997  eV*cm2/g	      1.61454 MeV*cm2/g
+ 
+  range from restrict dE/dx: 	 6.06069 cm  ( 6.06069 g/cm2 )
+  range from full dE/dx    : 	 4.90255 cm  ( 4.90255 g/cm2 )
+ 
+  transport mean free path : 	 27.9107 cm  ( 27.9107 g/cm2 )
+ 
+  critical energy (Rossi)  : 	 78.7733 MeV
+  Moliere radius           : 	0.269193 X0 =  9.71583 cm 
+-------------------------------------------------------------
+

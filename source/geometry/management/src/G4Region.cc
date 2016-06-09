@@ -1,39 +1,43 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.17 2005/11/09 14:54:03 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Region.cc,v 1.20 2006/06/29 18:33:38 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // class G4Region Implementation
 //
 // --------------------------------------------------------------------
 
+#include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4Region.hh"
-#include "G4VPVParameterisation.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4VNestedParameterisation.hh"
 #include "G4VUserRegionInformation.hh"
 
 // *******************************************************************
@@ -112,16 +116,10 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     G4Exception("G4Region::ScanVolumeTree()", "SetupError",
                 FatalException, errmsg);
   }
-  G4MaterialList::iterator pos;
   if (region)
   {
     currentRegion = this;
-    pos = std::find(fMaterials.begin(),fMaterials.end(),volMat);
-    if (pos == fMaterials.end())
-    {
-      fMaterials.push_back(volMat);
-      fRegionMod = true;
-    }
+    AddMaterial(volMat);
   }
 
   // Set the LV region to be either the current region or NULL,
@@ -140,29 +138,47 @@ void G4Region::ScanVolumeTree(G4LogicalVolume* lv, G4bool region)
     // where parameterisation involves a new material scan
     //
     G4VPVParameterisation* pParam = daughterPVol->GetParameterisation();
-    size_t repNo = daughterPVol->GetMultiplicity();
-    for (register size_t rep=0; rep<repNo; rep++)
+
+    if (pParam->IsNested())
     {
-      volMat = pParam->ComputeMaterial(rep, daughterPVol);
-      if(!volMat)
+      size_t matNo = pParam->GetMaterialScanner()->GetNumberOfMaterials();
+      for (register size_t mat=0; mat<matNo; mat++)
       {
-        G4String errmsg = "The parameterisation for the physical volume <";
-        errmsg += daughterPVol->GetName();
-        errmsg += ">\n does not return a valid material pointer.\n";
-        errmsg += "A volume belonging to the (tracking) world volume must have ";
-        errmsg += "a valid material.\nCheck your parameterisation.";
-        G4Exception("G4Region::ScanVolumeTree()",
-                    "SetupError", FatalException, errmsg);
-      }
-      pos = std::find(fMaterials.begin(),fMaterials.end(),volMat);
-      if (pos == fMaterials.end())
-      {
-        fMaterials.push_back(volMat);
-        fRegionMod = true;
+        volMat = pParam->GetMaterialScanner()->GetMaterial(mat);
+        if(!volMat)
+        {
+          G4String errmsg = "The parameterisation for the physical volume <";
+          errmsg += daughterPVol->GetName();
+          errmsg += ">\n does not return a valid material pointer.\n";
+          errmsg += "A volume belonging to the (tracking) world volume must ";
+          errmsg += "have a valid material.\nCheck your parameterisation.";
+          G4Exception("G4Region::ScanVolumeTree()",
+                      "SetupError", FatalException, errmsg);
+        }
+        AddMaterial(volMat);
       }
     }
-    G4LogicalVolume* daughterLVol = daughterPVol->GetLogicalVolume();
-    ScanVolumeTree(daughterLVol, region);
+    else
+    {
+      size_t repNo = daughterPVol->GetMultiplicity();
+      for (register size_t rep=0; rep<repNo; rep++)
+      {
+        volMat = pParam->ComputeMaterial(rep, daughterPVol);
+        if(!volMat)
+        {
+          G4String errmsg = "The parameterisation for the physical volume <";
+          errmsg += daughterPVol->GetName();
+          errmsg += ">\n does not return a valid material pointer.\n";
+          errmsg += "A volume belonging to the (tracking) world volume must ";
+          errmsg += "have a valid material.\nCheck your parameterisation.";
+          G4Exception("G4Region::ScanVolumeTree()",
+                      "SetupError", FatalException, errmsg);
+        }
+        AddMaterial(volMat);
+      }
+      G4LogicalVolume* daughterLVol = daughterPVol->GetLogicalVolume();
+      ScanVolumeTree(daughterLVol, region);
+    }
   }
   else
   {
@@ -296,17 +312,15 @@ void G4Region::SetWorld(G4VPhysicalVolume* wp)
 // 
 G4bool G4Region::BelongsTo(G4VPhysicalVolume* thePhys) const
 {
-  if(thePhys->GetLogicalVolume()->GetRegion()==this) return true;
+  G4LogicalVolume* currLog = thePhys->GetLogicalVolume();
+  if (currLog->GetRegion()==this) {return true;}
 
+  G4int nDaughters = currLog->GetNoDaughters();
+  while (nDaughters--)
   {
-    G4int nDaughters = thePhys->GetLogicalVolume()->GetNoDaughters();
-    while((nDaughters--)>0)
-    {
-      G4VPhysicalVolume* aPhys = thePhys->GetLogicalVolume()->GetDaughter(nDaughters);
-      if(aPhys->GetLogicalVolume()->GetRegion()==this) return true;
-      if(BelongsTo(aPhys)) return true;
-    }
+    if (BelongsTo(currLog->GetDaughter(nDaughters))) {return true;}
   }
+
   return false;
 }
 
@@ -318,50 +332,69 @@ G4bool G4Region::BelongsTo(G4VPhysicalVolume* thePhys) const
 //
 void G4Region::ClearFastSimulationManager()
 {
-  G4Region* parent = GetParentRegion();
+  G4bool isUnique;
+  G4Region* parent = GetParentRegion(isUnique);
   if(parent)
-  { fFastSimulationManager = parent->GetFastSimulationManager(); }
+  {
+    if (isUnique)
+    {
+      fFastSimulationManager = parent->GetFastSimulationManager();
+    }
+    else
+    {
+      G4cout << "WARNING - G4Region::GetParentRegion()" << G4endl
+             << "          Region <" << fName << "> belongs to more than"
+             << " one parent region !" << G4endl;
+      G4String message =
+           "A region (" + fName + ") cannot belong to more than one \n"
+         + "direct parent region, to have fast-simulation assigned.";
+      G4Exception("G4Region::ClearFastSimulationManager()",
+                  "InvalidSetup", JustWarning, message);
+      fFastSimulationManager = 0;
+    }
+  }
   else
-  { fFastSimulationManager = 0; }
+  {
+    fFastSimulationManager = 0;
+  }
 }
 
 // *******************************************************************
 // GetParentRegion:
-//  - Returns a region that contains this region. Otherwise null
-//    returned.
+//  - Returns a region that contains this region.
+//    Otherwise null is returned.
 // *******************************************************************
-#include "G4LogicalVolumeStore.hh"
 // 
-G4Region* G4Region::GetParentRegion() const
+G4Region* G4Region::GetParentRegion(G4bool& unique) const
 {
-  G4Region* parent = 0;
+  G4Region* parent = 0; unique = true;
   G4LogicalVolumeStore* lvStore = G4LogicalVolumeStore::GetInstance();
   G4LogicalVolumeStore::iterator lvItr;
-  for(lvItr=lvStore->begin();lvItr!=lvStore->end();lvItr++)
+
+  // Loop over all logical volumes in the store
+  //
+  for(lvItr=lvStore->begin(); lvItr!=lvStore->end(); lvItr++)
   {
     G4int nD = (*lvItr)->GetNoDaughters();
-    for(G4int iD=0;iD<nD;iD++)
+    G4Region* aR = (*lvItr)->GetRegion();
+
+    // Loop over all daughters of each logical volume
+    //
+    for(G4int iD=0; iD<nD; iD++)
     {
       if((*lvItr)->GetDaughter(iD)->GetLogicalVolume()->GetRegion()==this)
       { 
-        G4Region* aR = (*lvItr)->GetRegion();
         if(parent)
         {
-          if(parent!=aR)
-          {
-            G4cerr << "Region <" << fName << "> belongs to more than one parent regions" << G4endl;
-            G4cerr << " --- Regions found that directly contains this region are : "
-                   << parent->GetName() << ", " << aR->GetName() << G4endl;
-            G4Exception("G4Region::GetParentRegion","MoreThanOneParent",FatalException,
-                        "A region must not belong to more than one direct parent region.");
-          }
+          if(parent!=aR) { unique = false; }
         }
-        else
-        { parent = aR; }
+        else  // Cache LV parent region which includes a daughter volume
+              // with the same associated region as the current one
+        {
+          parent = aR;
+        }
       }
     }
   }
   return parent;
 }
-
-

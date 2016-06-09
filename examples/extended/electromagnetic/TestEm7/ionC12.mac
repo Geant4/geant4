@@ -1,4 +1,4 @@
-# $Id: ionC12.mac,v 1.13 2005/12/02 16:54:45 vnivanch Exp $
+# $Id: ionC12.mac,v 1.14 2006/01/30 10:35:33 maire Exp $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -29,9 +29,12 @@
 /gun/particle ion
 /gun/ion 6 12 6
 /gun/energy 3.5 GeV
+# beam size
 /testem/gun/rndm 2 mm
 #
+# step linit
 /testem/stepMax 1 mm
+#
 /testem/event/printModulo 1000
 #
 /run/beamOn 10000

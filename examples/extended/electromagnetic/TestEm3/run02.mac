@@ -1,4 +1,4 @@
-# $Id: run02.mac,v 1.13 2005/03/01 17:55:19 maire Exp $
+# $Id: run02.mac,v 1.14 2006/03/20 12:26:03 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -16,7 +16,7 @@
 /testem/det/setAbsor 1 Tungsten 2 mm
 /testem/det/setAbsor 2 Silicon 0.3 mm
 #
-/testem/phys/setCuts 100 mum
+/testem/phys/setCuts 100 um
 #
 /run/initialize
 #

@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.45 2005/12/11 08:34:18 urban Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4MultipleScattering.cc,v 1.53 2006/06/29 19:53:10 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -----------------------------------------------------------------------------
 // 16/05/01 value of cparm changed , L.Urban
@@ -89,6 +92,15 @@
 // 08-12-05 world is now: navigator->GetWorldVolume() L.Urban
 // 11-12-05 data member rangecut removed, steplimit does not depend
 //          on cut any more (L.Urban)
+// 17-01-06 value of data member factail changed (1. --> 0.75),
+//          value of facgeom is 3.5 instead of 4 (L.Urban)
+// 19-01-07 tlimitmin = facrange*50*micrometer, i.e. it depends on the
+//          value of facrange (L.Urban) 
+// 16-02-06 value of factail changed, samplez = true (L.Urban)
+// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
+// 10-05-06 SetMscStepLimitation at initialisation (V.Ivantchenko)
+// 11-05-06 values of data members tkinlimit, factail have been 
+//          changed (L.Urban) 
 //
 // -----------------------------------------------------------------------------
 //
@@ -96,7 +108,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4MultipleScattering.hh"
-#include "G4MscModel.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4TransportationManager.hh"
 #include "G4Navigator.hh"
 
@@ -111,21 +123,14 @@ G4MultipleScattering::G4MultipleScattering(const G4String& processName)
   highKineticEnergy = 100.*TeV;
   totBins           = 120;
 
-  Tkinlimit        = 2.*MeV;
-  facrange         = 0.02;
-  tlimit           = 1.e10*mm;
-  tlimitmin        = 1.e-3*mm;            
-  geombig          = 1.e50*mm;
-  geommin          = 5.e-6*mm;
-  facgeom          = 4.;
-  safety           = 0.*mm;
-  facsafety        = 0.20;
-  dtrl             = 0.05;
-  factail          = 1.0;
+  facrange          = 0.02;
+  dtrl              = 0.05;
+  tkinlimit         = 1.*MeV;
+  facgeom           = 3.5;
+  factail           = 0.85; 
   
   steppingAlgorithm = true;
-  samplez           = false;  
-  boundary          = true;
+  samplez           = true ;  
   isInitialized     = false;  
 
   SetBinning(totBins);
@@ -162,143 +167,39 @@ void G4MultipleScattering::MscStepLimitation(G4bool algorithm, G4double factor)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MultipleScattering::InitialiseProcess
-                                         (const G4ParticleDefinition* particle)
+void G4MultipleScattering::InitialiseProcess(const G4ParticleDefinition* p)
 {
-  if(isInitialized) return;
+  if(isInitialized) {
+    mscUrban->SetMscStepLimitation(steppingAlgorithm, facrange);
+    return;
+  }
 
-  if (particle->GetParticleType() == "nucleus") {
-    boundary = false;
+  if (p->GetParticleType() == "nucleus") {
+    //    steppingAlgorithm = false;
     SetLateralDisplasmentFlag(false);
     SetBuildLambdaTable(false);
   } else {
     SetBuildLambdaTable(true);
   }
   // compute Tlimit for particle
-  Tlimit = Tkinlimit*electron_mass_c2/particle->GetPDGMass();
-  G4MscModel* em = new G4MscModel(dtrl,factail,samplez);
-  em->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-  em->SetLowEnergyLimit(lowKineticEnergy);
-  em->SetHighEnergyLimit(highKineticEnergy);
-  AddEmModel(1, em);
+  mscUrban = new G4UrbanMscModel(facrange,dtrl,tkinlimit,
+                                 facgeom,factail,
+                                 samplez,steppingAlgorithm);
+  mscUrban->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+  mscUrban->SetLowEnergyLimit(lowKineticEnergy);
+  mscUrban->SetHighEnergyLimit(highKineticEnergy);
+  AddEmModel(1,mscUrban);
   isInitialized = true;
-  navigator = G4TransportationManager::GetTransportationManager()
-    ->GetNavigatorForTracking();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4MultipleScattering::TruePathLengthLimit(const G4Track&  track,
-                                                   G4double& lambda,
-                                                   G4double  currentMinimalStep)
-{
-  G4double tPathLength = currentMinimalStep;
-  G4double range = CurrentRange() ;
-
-  // standard  version
-  //
-  if (steppingAlgorithm)
-  {
-    safety = track.GetStep()->GetPreStepPoint()->GetSafety() ;
-    if((track.GetStep()->GetPreStepPoint()->GetStepStatus() ==
-                                                 fGeomBoundary)
-       || (track.GetCurrentStepNumber() == 1))
-    {
-      // not so strong step restriction above Tlimit
-      G4double facr = facrange;
-      if(track.GetKineticEnergy() > Tlimit)
-        facr *= track.GetKineticEnergy()/Tlimit;
-
-      // constraint from the physics
-      if (range > lambda) tlimit = facr*range;
-      else                tlimit = facr*lambda;
-
-      G4double geomlimit = GeomLimit(track);
-      // constraint from the geometry (if tlimit above is too big)
-      if ((geomlimit > geommin) && (tlimit > geomlimit/facgeom))
-      {
-        if(track.GetStep()->GetPreStepPoint()->GetStepStatus() ==
-                                                    fGeomBoundary)
-          tlimit = geomlimit/facgeom;
-        else
-          tlimit = 2.*geomlimit/facgeom;
-      }
-
-      //lower limit for tlimit
-      if(tlimit < tlimitmin) tlimit = tlimitmin;
-    }
-    if(track.GetCurrentStepNumber() == 1)
-    {
-      // range <= safety ---> particle is not able to leave volume
-      if(range <= safety)
-        return currentMinimalStep;
-
-      //if track starts far from boundaries increase tlimit!
-      if(tlimit < facsafety*safety)
-        tlimit = facsafety*safety ;
-    }
-    // range <= safety ---> particle is not able to leave volume
-    if(range <= safety)
-      return currentMinimalStep;
-
-    if(tPathLength > tlimit) tPathLength = tlimit;
-  }
-  
-  // version similar to 7.1 (needed for some experiments)
-  //
-  else
-  {
-    if(track.GetCurrentStepNumber() == 1)
-      tlimit = geombig;
-    if (track.GetStep()->GetPreStepPoint()->GetStepStatus() ==
-                                                 fGeomBoundary)
-    {
-      if (range > lambda) tlimit = facrange*range;
-      else                tlimit = facrange*lambda;
-
-      if(tlimit < tlimitmin) tlimit = tlimitmin;
-    }
-    if(tPathLength > tlimit) tPathLength = tlimit;
-  }
-
-  return tPathLength ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4MultipleScattering::GeomLimit(const G4Track&  track)
-{
-  G4double geomlimit = geombig;
-
-  // no geomlimit for the World volume
-  if((track.GetVolume() != 0) &&
-     (track.GetVolume() != navigator->GetWorldVolume()))  
-  {
-    const G4double cstep = geombig;
-    navigator->LocateGlobalPointWithinVolume(
-                  track.GetStep()->GetPreStepPoint()->GetPosition());
-    geomlimit = navigator->ComputeStep(
-                  track.GetStep()->GetPreStepPoint()->GetPosition(),
-                  track.GetMomentumDirection(),
-                  cstep,
-                  safety);
-
-    if(geomlimit < geommin) geomlimit = geommin;
-  }
-
-  return geomlimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4MultipleScattering::PrintInfo()
 {
-  if(boundary) {
-    G4cout << "      Boundary/stepping algorithm is active with facrange= "
-           << facrange
-           << "  Step limitation " << steppingAlgorithm
-           << G4endl;
-  }
+  G4cout << "      Boundary/stepping algorithm is active with facrange= "
+	 << facrange
+	 << "  Step limitation " << steppingAlgorithm
+	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

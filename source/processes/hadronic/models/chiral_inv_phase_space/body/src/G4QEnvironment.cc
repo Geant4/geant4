@@ -1,31 +1,34 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.110 2005/05/31 08:23:52 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4QEnvironment.cc,v 1.112 2006/06/29 20:06:57 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //      ---------------- G4QEnvironment ----------------
 //             by Mikhail Kossov, August 2000.
@@ -1929,12 +1932,16 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 						                    {                   // @@ Only two particles PS is used         ^
                             G4double dd2=ddMass*ddMass; // Squared free energy            ^
                             G4double sma=mLamb+mLamb; // Lambda+Lambda sum                ^
-                            G4double pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Lamb PS         ^
+                            G4double pr1=0.;          // Prototype to avoid sqrt(-)       ^
+                            if(ddMass>sma) pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Lamb PS   ^
                             sma=mLamb+mSigZ;          // Lambda+Sigma0 sum                ^
                             G4double smi=mSigZ-mLamb; // Sigma0-Lambda difference         ^
-                            G4double pr2=pr1+sqrt((dd2-sma*sma)*(dd2-smi*smi));//+L+S0 PS ^
+                            G4double pr2=pr1;         // Prototype of +L+S0 PS            ^
+																												if(ddMass>sma&&ddMass>smi) //                                 ^
+																													 pr2+=sqrt((dd2-sma*sma)*(dd2-smi*smi)); //                  ^
                             sma=mSigZ+mSigZ;          // Sigma0+Sigma0 sum                ^
-                            G4double pr3=pr2+sqrt((dd2-sma*sma)*dd2);// +Sigma0+Sigma0 PS ^
+                            G4double pr3=pr2;         // Prototype of +Sigma0+Sigma0 PS   ^
+                            if(ddMass>sma) pr3+=sqrt((dd2-sma*sma)*dd2); //               ^
                             G4double hhRND=pr3*G4UniformRand(); // Randomize PS           ^
                             if(hhRND>pr2)     // --> "ENnv+Sigma0+Sigma0" case            ^
                             {                 //                                          ^
@@ -1953,10 +1960,13 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 						                    {                   // @@ Only two particles PS is used         ^
                             G4double dd2=ddMass*ddMass; // Squared free energy            ^
                             G4double sma=mLamb+mLamb; // Lambda+Lambda sum                ^
-                            G4double pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Lamb PS         ^
+                            G4double pr1=0.;          // Prototype to avoid sqrt(-)       ^
+                            if(ddMass>sma) pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Lamb PS   ^
                             sma=mLamb+mSigZ;          // Lambda+Sigma0 sum                ^
                             G4double smi=mSigZ-mLamb; // Sigma0-Lambda difference         ^
-                            G4double pr2=pr1+sqrt((dd2-sma*sma)*(dd2-smi*smi));//+L+S0 PS ^
+                            G4double pr2=pr1;         //+L+S0 PS                          ^
+                            if(ddMass>sma && ddMass>smi) //                               ^
+																														pr2+=sqrt((dd2-sma*sma)*(dd2-smi*smi)); //                  ^
                             if(pr2*G4UniformRand()>pr1) // --> "ENnv+Sigma0+Lambda" case  ^
                             {                 //                                          ^
                               h1QPDG=s0QPDG;  // QPDG of the first hadron                 ^
@@ -3292,12 +3302,15 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 			           {                                  // @@ Only two particles PS is used
                 G4double dd2=ddMass*ddMass;      // Squared free energy
                 G4double sma=mLamb+mLamb;        // Lambda+Lambda sum
-                G4double pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Lamb PS
+                G4double pr1=0.;                 // Prototype to avoid sqrt(-)
+                if(ddMass>sma) pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Lamb PS
                 sma=mLamb+mSigZ;                 // Lambda+Sigma0 sum
                 G4double smi=mSigZ-mLamb;        // Sigma0-Lambda difference
-                G4double pr2=pr1+sqrt((dd2-sma*sma)*(dd2-smi*smi));//+L+S0 PS
+                G4double pr2=pr1;                // Prototype of +L+S0 PS
+                if(ddMass>sma && ddMass>smi) pr2+=sqrt((dd2-sma*sma)*(dd2-smi*smi));
                 sma=mSigZ+mSigZ;                 // Sigma0+Sigma0 sum
-                G4double pr3=pr2+sqrt((dd2-sma*sma)*dd2);// +Sigma0+Sigma0 PS
+                G4double pr3=pr2;                // Prototype of +Sigma0+Sigma0 PS
+                if(ddMass>sma) pr3+=sqrt((dd2-sma*sma)*dd2);
                 G4double hhRND=pr3*G4UniformRand(); // Randomize PS
                 if(hhRND>pr2)                    // --> "ENnv+Sigma0+Sigma0" case
                 {                                //
@@ -3316,10 +3329,12 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 			           {                                  // @@ Only two particles PS is used
                 G4double dd2=ddMass*ddMass;      // Squared free energy
                 G4double sma=mLamb+mLamb;        // Lambda+Lambda sum
-                G4double pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Lamb PS
+                G4double pr1=0.;                 // Prototype to avoid sqrt(-)
+                if(ddMass>sma) pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Lamb PS
                 sma=mLamb+mSigZ;                 // Lambda+Sigma0 sum
                 G4double smi=mSigZ-mLamb;        // Sigma0-Lambda difference
-                G4double pr2=pr1+sqrt((dd2-sma*sma)*(dd2-smi*smi));//+L+S0 PS
+                G4double pr2=pr1;                // Prototype of +L+S0 PS
+                if(ddMass>sma && ddMass>smi) pr2+=sqrt((dd2-sma*sma)*(dd2-smi*smi));
                 if(pr2*G4UniformRand()>pr1)      // --> "ENnv+Sigma0+Lambda" case
                 {                                //
                   h1QPDG=s0QPDG;                 // QPDG of the first hadron
@@ -5462,10 +5477,12 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           G4double ddMass=hM-mPi;          // Free CM energy
           G4double dd2=ddMass*ddMass;      // Squared free energy
           G4double sma=mLamb+mNeut;        // Neutron+Lambda sum
-          G4double pr1=sqrt((dd2-sma*sma)*dd2); // Neut+Lamb PS
+          G4double pr1=0.;                 // Prototype to avoid sqrt(-)
+          if(ddMass>sma) pr1=sqrt((dd2-sma*sma)*dd2); // Neut+Lamb PS
           sma=mNeut+mSigZ;                 // Neutron+Sigma0 sum
           G4double smi=mSigZ-mNeut;        // Sigma0-Neutron difference
-          G4double pr2=pr1+sqrt((dd2-sma*sma)*(dd2-smi*smi));//+L+S0 PS
+          G4double pr2=pr1;                // Prototype of +N+S0 PS
+          if(ddMass>sma && ddMass>smi) pr2+=sqrt((dd2-sma*sma)*(dd2-smi*smi));
           if(pr2*G4UniformRand()>pr1)      // --> "ENnv+Sigma0+Lambda" case
           {
             barPDG = 3212;     // Substitute Sigma0 for the second n
@@ -5500,10 +5517,12 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           G4double ddMass=hM-mPi;          // Free CM energy
           G4double dd2=ddMass*ddMass;      // Squared free energy
           G4double sma=mLamb+mProt;        // Lambda+Proton sum
-          G4double pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Lamb PS
+          G4double pr1=0.;                 // Prototype to avoid sqrt(-)
+          if(ddMass>sma) pr1=sqrt((dd2-sma*sma)*dd2); // Lamb+Prot PS
           sma=mProt+mSigZ;                 // Proton+Sigma0 sum
           G4double smi=mSigZ-mProt;        // Sigma0-Proton difference
-          G4double pr2=pr1+sqrt((dd2-sma*sma)*(dd2-smi*smi));//+L+S0 PS
+          G4double pr2=pr1;                // Prototype of +P+S0 PS
+          if(ddMass>sma && ddMass>smi) pr2+=sqrt((dd2-sma*sma)*(dd2-smi*smi));
           if(pr2*G4UniformRand()>pr1)      // --> "ENnv+Sigma0+Lambda" case
           {
             barPDG = 3212;     // Substitute Sigma0 for the second n
@@ -6055,12 +6074,15 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               if(sM>mSigZ+mSigZ)             // Sigma0+Sigma0 is possible
 			           {                                  // @@ Only two particles PS is used
                 G4double sma=mLamb+mLamb;        // Lambda+Lambda sum
-                G4double pr1=sqrt((sM2-sma*sma)*sM2); // Lamb+Lamb PS
+                G4double pr1=0.;                 // Prototype to avoid sqrt(-)
+                if(sM>sma) pr1=sqrt((sM2-sma*sma)*sM2); // Lamb+Lamb PS
                 sma=mLamb+mSigZ;                 // Lambda+Sigma0 sum
                 G4double smi=mSigZ-mLamb;        // Sigma0-Lambda difference
-                G4double pr2=pr1+sqrt((sM2-sma*sma)*(sM2-smi*smi));//+L+S0 PS
+                G4double pr2=pr1;                // Prototype of +L +S0 PS
+                if(sM>sma && sM>smi) pr2+=sqrt((sM2-sma*sma)*(sM2-smi*smi));
                 sma=mSigZ+mSigZ;                 // Sigma0+Sigma0 sum
-                G4double pr3=pr2+sqrt((sM2-sma*sma)*sM2);// +Sigma0+Sigma0 PS
+                G4double pr3=pr2;                // Prototype of +Sigma0+Sigma0 PS
+                if(sM>sma) pr3+=sqrt((sM2-sma*sma)*sM2);
                 G4double hhRND=pr3*G4UniformRand(); // Randomize PS
                 if(hhRND>pr2)                    // --> "ENnv+Sigma0+Sigma0" case
                 {                                //
@@ -6078,10 +6100,12 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
               else if(sM>mSigZ+mLamb)            // Lambda+Sigma0 is possible
 			           {                                  // @@ Only two particles PS is used
                 G4double sma=mLamb+mLamb;        // Lambda+Lambda sum
-                G4double pr1=sqrt((sM2-sma*sma)*sM2); // Lamb+Lamb PS
+                G4double pr1=0.;                 // Prototype to avoid sqrt(-)
+                if(sM>sma) pr1=sqrt((sM2-sma*sma)*sM2); // Lamb+Lamb PS
                 sma=mLamb+mSigZ;                 // Lambda+Sigma0 sum
                 G4double smi=mSigZ-mLamb;        // Sigma0-Lambda difference
-                G4double pr2=pr1+sqrt((sM2-sma*sma)*(sM2-smi*smi));//+L+S0 PS
+                G4double pr2=pr1;                // Prototype of +L +S0 PS
+                if(sM>sma && sM>smi) pr2+=sqrt((sM2-sma*sma)*(sM2-smi*smi));
                 if(pr2*G4UniformRand()>pr1)      // --> "ENnv+Sigma0+Lambda" case
                 {                                //
                   fQPDG=s0QPDG;

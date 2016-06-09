@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.10 2005/11/17 07:36:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4OpenGLStoredWin32Viewer.cc,v 1.17 2006/06/29 21:19:22 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // Class G4OpenGLStoredWin32Viewer : a class derived from G4OpenGLWin32Viewer and
@@ -63,21 +66,19 @@ void G4OpenGLStoredWin32Viewer::Initialise () {
 
 void G4OpenGLStoredWin32Viewer::DrawView () {
 
-  glClearColor (background.GetRed(),
-                background.GetGreen(),
-                background.GetBlue(),
-                1.);
-
   //Make sure current viewer is attached and clean...
   //Win32 version needed
   //  glXMakeCurrent (dpy, win, cx);
   glViewport (0, 0, WinSize_x, WinSize_y);
-  ClearView ();
 
   G4ViewParameters::DrawingStyle style = GetViewParameters().GetDrawingStyle();
 
   //See if things have changed from last time and remake if necessary...
-  KernelVisitDecision ();
+  // The fNeedKernelVisit flag might have been set by the user in
+  // /vis/viewer/rebuild, but if not, make decision and set flag only
+  // if necessary...
+  if (!fNeedKernelVisit) KernelVisitDecision ();
+  G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
 
   if(style!=G4ViewParameters::hlr &&
@@ -89,12 +90,37 @@ void G4OpenGLStoredWin32Viewer::DrawView () {
 
     HaloingSecondPass ();
 
+    DrawDisplayLists ();
+    FinishView ();
+
+  } else {
+
+    // If kernel visit was needed, drawing and FinishView will already
+    // have been done, so...
+    if (!kernelVisitWasNeeded) {
+      DrawDisplayLists ();
+      FinishView ();
+    }
   }
+}
 
-  DrawDisplayLists ();
+//////////////////////////////////////////////////////////////////////////////
+void G4OpenGLStoredWin32Viewer::FinishView (
+) 
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  if(!fHDC) return;
 
-  FinishView ();
-  
+  glFlush ();
+  ::SwapBuffers(fHDC);
+
+  // Empty the Windows message queue :
+  MSG event;
+  while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
+    ::TranslateMessage(&event);
+    ::DispatchMessage (&event);
+  }
 }
 
 #endif

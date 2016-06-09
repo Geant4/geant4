@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2005/10/13 17:19:55 allison Exp $
+$Id: History,v 1.25 2006/06/12 08:24:09 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,26 @@ committal in the CVS repository !
 
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
+
+12th June 2006  John Allison  (DAWN-V08-00-04)
+- Fixed rewind problem:
+  o G4FRofstream.hh: Removed rewind (badly implemented).
+  o G4DAWNFILEViewer.cc: ClearView closes and re-opens file.
+- G4DAWNFILESceneHandler.cc: Fixed file closure on exit:
+
+2nd June 2006  John Allison  (DAWN-V08-00-03)
+- G4DAWNFILESceneHandler.cc: Close file in destructor if required.
+- G4FRSceneFunc.icc: Improve behaviour when no model exists.
+
+4th May 2006  John Allison  (DAWN-V08-00-02)
+- Improved protection for null models and parameters.
+
+19th April 2006  John Allison  (DAWN-V08-00-01)
+- G4FRSceneFunc.icc: Migrated to direct access to G4PhysicalVolumeModel.
+
+23rd January 2006  John Allison  (DAWN-V08-00-00)
+- Implemented G4FRofstream::Rewind.  Used in ClearView.  Avoids
+  duplicate geomtries in output file.
 
 13th October 2005  John Allison  (DAWN-V07-01-00)
 - Migrated to <sstream>.

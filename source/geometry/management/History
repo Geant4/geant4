@@ -1,4 +1,4 @@
-$Id: History,v 1.95 2005/11/24 18:16:54 japost Exp $
+$Id: History,v 1.101 2006/05/03 10:03:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,18 +17,51 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 19, 2005  J. Apostolakis          geommng-V07-01-05
-- Revised G4VPVParameterisation
-   Changed signature of ComputeMaterial, adding parent touchable pointer
-   -> this refinement enables easy use of nested parameterisations
-   Additional methods allow nested parameterisation to be identified
-     G4bool IsNested() const;
-   and to provide their material via new interface class
-     G4VVolumeMaterialScanner* GetMaterialScanner(); 
-   [ As a result is that G4PhysicalTouchable in volumes is not needed 
-     in the implementation (and is supressed.)
+May 3, 2006  G.Cosmo                       geommng-V08-00-05
+- Modified G4VStoreNotifier class to be now a typedef of G4VNotifier which
+  is moved in the 'global' module. Adapted stores to the new configuration.
+- Requires tag "global-V08-00-02".
 
-November 11, 2005  J. Apostolakis          geommng-V07-01-04
+May 2, 2006  G.Cosmo                       geommng-V08-00-04
+- Moved G4AssemblyTriplet class to 'volumes' module.
+- Requires tag "geomvol-V08-00-03".
+
+May 1, 2006  G.Cosmo                       geommng-V08-00-03
+- G4Region:
+  o Added inclusion of <algorithm> to resolve compilation error on WIN32-VC.
+  o Fixed compilation warning for unused variable.
+
+April 28, 2006  G.Cosmo                    geommng-V08-00-02
+- G4VPhysicalVolume: return 'const G4String&' for GetName() instead of a
+  string copy.
+
+April 4, 2006  G.Cosmo                     geommng-V08-00-01
+- G4Region:
+  + Support material scanning for nested parameterisations. Moved classes
+    G4VNestedParameterisation and G4VVolumeMaterialScanner from 'volumes'
+    module.
+  + Fixed implementation of utility method GetParentRegion() to return a
+    boolean flag as argument, to identify if parent region is unique or not.
+  + Simplified implementation of method BelongsTo(PV*).
+- Requires tag "geomvol-V08-00-02".
+
+April 3, 2006  G.Cosmo                     geommng-V08-00-00
+- Fix in G4SmartVoxelHeader::BuildNodes() to avoid rare cases of negative
+  extent returned by volumes due to malformed geometries or inaccurate
+  extent calculation.
+
+November 19, 2005  J.Apostolakis           geommng-V07-01-05
+- Revised G4VPVParameterisation:
+  + Changed signature of ComputeMaterial(), adding parent touchable pointer.
+    This refinement enables easy use of nested parameterisations.
+  + Additional methods allow nested parameterisation to be identified:
+      G4bool IsNested() const;
+    and to provide their material via new interface class:
+      G4VVolumeMaterialScanner* GetMaterialScanner(); 
+  + Suppressed temporary G4PhysicalTouchable class in volumes, not needed 
+    in the implementation any longer.
+
+November 11, 2005  J.Apostolakis           geommng-V07-01-04
 - Added methods to identify  Regular Structures in  Physical volume 
   New pure virtual methods:
     - IsRegularStructure()     ,  returns boolean 

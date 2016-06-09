@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc,v 1.7 2005/03/15 12:56:29 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ModelingParameters.cc,v 1.10 2006/06/29 21:32:48 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -32,9 +35,11 @@
 
 #include "G4ios.hh"
 #include "G4VisAttributes.hh"
+#include "G4ExceptionSeverity.hh"
 
 G4ModelingParameters::G4ModelingParameters ():
   fpDefaultVisAttributes (0),
+  fDrawingStyle          (wf),
   fRepStyle              (polyhedron),
   fCulling               (false),
   fCullInvisible         (false),
@@ -58,6 +63,7 @@ G4ModelingParameters::G4ModelingParameters
  G4int noOfSides
  ):
   fpDefaultVisAttributes (pDefaultVisAttributes),
+  fDrawingStyle   (wf),
   fRepStyle       (repStyle),
   fCulling        (isCulling),
   fCullInvisible  (isCullingInvisible),
@@ -84,6 +90,60 @@ G4ModelingParameters::G4ModelingParameters
  G4bool isViewDigis
  ):
   fpDefaultVisAttributes (pDefaultVisAttributes),
+  fDrawingStyle   (wf),
+  fRepStyle       (repStyle),
+  fCulling        (isCulling),
+  fCullInvisible  (isCullingInvisible),
+  fDensityCulling (isDensityCulling),
+  fVisibleDensity (visibleDensity),
+  fCullCovered    (isCullingCovered),
+  fNoOfSides      (noOfSides),
+  fViewGeom       (isViewGeom),
+  fViewHits       (isViewHits),
+  fViewDigis      (isViewDigis)
+{}
+
+G4ModelingParameters::G4ModelingParameters
+(const G4VisAttributes* pDefaultVisAttributes,
+ G4ModelingParameters::DrawingStyle drawingStyle,
+ G4ModelingParameters::RepStyle repStyle,
+ G4bool isCulling,
+ G4bool isCullingInvisible,
+ G4bool isDensityCulling,
+ G4double visibleDensity,
+ G4bool isCullingCovered,
+ G4int noOfSides
+ ):
+  fpDefaultVisAttributes (pDefaultVisAttributes),
+  fDrawingStyle   (drawingStyle),
+  fRepStyle       (repStyle),
+  fCulling        (isCulling),
+  fCullInvisible  (isCullingInvisible),
+  fDensityCulling (isDensityCulling),
+  fVisibleDensity (visibleDensity),
+  fCullCovered    (isCullingCovered),
+  fNoOfSides      (noOfSides),
+  fViewGeom       (true),
+  fViewHits       (true),
+  fViewDigis      (true)
+{}
+
+G4ModelingParameters::G4ModelingParameters
+(const G4VisAttributes* pDefaultVisAttributes,
+ G4ModelingParameters::DrawingStyle drawingStyle,
+ G4ModelingParameters::RepStyle repStyle,
+ G4bool isCulling,
+ G4bool isCullingInvisible,
+ G4bool isDensityCulling,
+ G4double visibleDensity,
+ G4bool isCullingCovered,
+ G4int noOfSides,
+ G4bool isViewGeom,
+ G4bool isViewHits,
+ G4bool isViewDigis
+ ):
+  fpDefaultVisAttributes (pDefaultVisAttributes),
+  fDrawingStyle   (drawingStyle),
   fRepStyle       (repStyle),
   fCulling        (isCulling),
   fCullInvisible  (isCullingInvisible),
@@ -132,6 +192,7 @@ void G4ModelingParameters::PrintDifferences
 
   if (
       (fpDefaultVisAttributes != that.fpDefaultVisAttributes) ||
+      (fDrawingStyle          != that.fDrawingStyle)          ||
       (fRepStyle              != that.fRepStyle)              ||
       (fCulling               != that.fCulling)               ||
       (fCullInvisible         != that.fCullInvisible)         ||
@@ -148,7 +209,23 @@ void G4ModelingParameters::PrintDifferences
 std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp) {
   os << "Modeling parameters and options:";
 
-  os << "\n  Default vis. attributes: " << *mp.fpDefaultVisAttributes;
+  const G4VisAttributes* va = mp.fpDefaultVisAttributes;
+  os << "\n  Default vis. attributes: ";
+  if (va) os << *va;
+  else os << "none";
+
+  os << "\n  Current requested drawing style: ";
+  switch (mp.fDrawingStyle) {
+  case G4ModelingParameters::wf:
+    os << "wireframe"; break;
+  case G4ModelingParameters::hlr:
+    os << "hidden line removal (hlr)"; break;
+  case G4ModelingParameters::hsr:
+    os << "surface (hsr)"; break;
+  case G4ModelingParameters::hlhsr:
+    os << "surface and edges (hlhsr)"; break;
+  default: os << "unrecognised"; break;
+  }
 
   os << "\n  Representation style for graphics reps, if needed: ";
   switch (mp.fRepStyle) {
@@ -203,6 +280,7 @@ G4bool G4ModelingParameters::operator !=
 
   if (
       (*fpDefaultVisAttributes != *mp.fpDefaultVisAttributes) ||
+      (fDrawingStyle           != mp.fDrawingStyle)           ||
       (fRepStyle               != mp.fRepStyle)               ||
       (fCulling                != mp.fCulling)                ||
       (fCullInvisible          != mp.fCullInvisible)          ||

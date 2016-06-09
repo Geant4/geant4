@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering71.hh,v 1.1 2005/10/03 01:09:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4MultipleScattering71.hh,v 1.4 2006/06/29 19:50:38 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 //------------- G4MultipleScattering71 physics process --------------------------
@@ -50,11 +53,12 @@
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 15-04-05 optimize internal interfaces (V.Ivanchenko)
 // 03-10-05 Process is freezed with the name 71 (V.Ivanchenko)
+// 07-03-06 Create G4UrbanMscModel and move there step limit calculation (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering71.hh,v 1.1 2005/10/03 01:09:57 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4MultipleScattering71.hh,v 1.4 2006/06/29 19:50:38 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 
 // class description
 //
@@ -70,6 +74,7 @@
 #define G4MultipleScattering71_h 1
 
 #include "G4VMultipleScattering.hh"
+#include "G4MscModel71.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -84,6 +89,10 @@ public:    // with description
 
   // returns true for charged particles, false otherwise
   G4bool IsApplicable (const G4ParticleDefinition& p);
+
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
   G4double TruePathLengthLimit(const G4Track&  track,
 			       G4double& lambda,
@@ -116,6 +125,12 @@ protected:
   // This function initialise models
   void InitialiseProcess(const G4ParticleDefinition*);
 
+  // This method is used for tracking, it returns step limit
+  virtual G4double GetContinuousStepLimit(const G4Track& track,
+                                        G4double previousStepSize,
+                                        G4double currentMinimalStep,
+                                        G4double& currentSafety);
+
 private:
 
   //  hide assignment operator as  private
@@ -124,9 +139,16 @@ private:
 
 private:        // data members
 
+  G4MscModel71* model;
+
   G4double lowKineticEnergy;
   G4double highKineticEnergy;
   G4int    totBins;
+
+  G4double truePathLength;
+  G4double geomPathLength;
+  G4double trueStepLength;
+  G4double range;
 
   G4double facrange;
   G4double tlimit;
@@ -153,6 +175,59 @@ private:        // data members
 inline G4bool G4MultipleScattering71::IsApplicable (const G4ParticleDefinition& p)
 {
   return (p.GetPDGCharge() != 0.0 && !p.IsShortLived());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4MultipleScattering71::GetContinuousStepLimit(
+                                          const G4Track& track,
+                                                G4double,
+                                                G4double currentMinimalStep,
+                                                G4double&)
+{
+  DefineMaterial(track.GetMaterialCutsCouple());
+  const G4MaterialCutsCouple* couple = CurrentMaterialCutsCouple();
+  G4double e = track.GetKineticEnergy();
+  model = dynamic_cast<G4MscModel71*>(SelectModel(e));
+  const G4ParticleDefinition* p = track.GetDefinition();
+  G4double lambda0 = GetLambda(p, e);
+  range =  G4LossTableManager::Instance()->GetRangeFromRestricteDEDX(p,e,couple);
+  if(range < currentMinimalStep) currentMinimalStep = range;
+  truePathLength = TruePathLengthLimit(track,lambda0,currentMinimalStep);
+  //  G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
+  //       << lambda0 << " range= " << currentRange
+  //       << " currentMinStep= " << currentMinimalStep << G4endl;
+  if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
+  geomPathLength = model->GeomPathLength(LambdaTable(),couple,
+           p,e,lambda0,range,truePathLength);
+  if(geomPathLength > lambda0) geomPathLength = lambda0;
+  return geomPathLength;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VParticleChange* G4MultipleScattering71::AlongStepDoIt(
+                                                        const G4Track&,
+                                                        const G4Step& step)
+{
+  G4double geomStepLength = step.GetStepLength();
+  if((geomStepLength == geomPathLength) && (truePathLength <= range))
+     trueStepLength = truePathLength;
+  else
+     trueStepLength = model->TrueStepLength(geomStepLength);
+  fParticleChange.ProposeTrueStepLength(trueStepLength);
+  return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VParticleChange* G4MultipleScattering71::PostStepDoIt(const G4Track& track,
+							       const G4Step& step)
+{
+  fParticleChange.Initialize(track);
+  model->SampleSecondaries(CurrentMaterialCutsCouple(),track.GetDynamicParticle(),
+		    step.GetStepLength(),step.GetPostStepPoint()->GetSafety());
+  return &fParticleChange;
 }
 
 // geom. step length distribution should be sampled or not

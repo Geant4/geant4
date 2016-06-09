@@ -1,0 +1,48 @@
+# $Id: brems.mac,v 1.3 2006/04/10 10:22:41 vnivanch Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# Bremsstrahlung only
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+/testem/det/setSize 50 cm
+#
+/testem/phys/addPhysics standard
+#
+/run/initialize
+#
+# prevent any e- ionisation production
+/testem/phys/setECut  1 km
+#
+# no multiple scattering
+/process/inactivate msc
+#
+# set cut for gamma bremsstrahlung
+/testem/phys/setGCut  1 mm
+#
+# no gamma interaction
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+#
+/testem/gun/setDefault
+/gun/particle e-
+/gun/energy 200 MeV
+#
+/testem/histo/setFileName brems
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 1 100 0   50 cm		#track length of primary
+/testem/histo/setHisto 2 100 0  100 none	#nb steps of primary
+/testem/histo/setHisto 3 200 0   50 mm		#step size of primary
+#
+/testem/event/printModulo 2000
+#
+/process/eLoss/verbose 0
+/process/inactivate eIoni
+/run/physicsModified
+/run/beamOn 10000
+#

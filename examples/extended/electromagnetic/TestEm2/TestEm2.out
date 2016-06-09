@@ -1,70 +1,50 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 13 *****
+***** Table : Nb of materials = 8 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
-   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
 
  Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction:  11.21 %  ElmAbundance  66.67 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  88.79 %  ElmAbundance  33.33 %
 
  Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
-   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:   Nickel     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.415 cm 
-   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.435 cm 
-   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.41 %  Abundance  63.16 %
-   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  fractionMass:  17.48 %  Abundance  15.79 %
-   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  fractionMass:  67.10 %  Abundance  21.05 %
-
- Material:    PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  14.07 %  Abundance  66.67 %
-   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
-
- Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
-
- Material: FCal2Slugs     density: 18.600 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.689 mm 
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  97.00 %  Abundance  91.03 %
-   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass:   1.00 %  Abundance   3.09 %
-   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole  fractionMass:   2.00 %  Abundance   5.88 %
-
- Material: FCal2Abs     density: 10.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   7.568 mm 
-   --->  Element: Copper ( )   Z = 29.0   N =  63.5   A =  63.54 g/mole  fractionMass:  20.00 %  Abundance  40.43 %
-   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  77.60 %  Abundance  54.22 %
-   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass:   0.80 %  Abundance   1.84 %
-   --->  Element: Nickel ( )   Z = 28.0   N =  58.7   A =  58.69 g/mole  fractionMass:   1.60 %  Abundance   3.50 %
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
-   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Element: Lead ( )   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:      BGO     density:  7.100 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.123 cm 
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  15.41 %  ElmAbundance  63.16 %
+   --->  Element: Germanium (Ge)   Z = 32.0   N =  72.6   A =  72.59 g/mole  ElmMassFraction:  17.48 %  ElmAbundance  15.79 %
+   --->  Element: Bismuth (Bi)   Z = 83.0   N = 209.0   A = 208.98 g/mole  ElmMassFraction:  67.10 %  ElmAbundance  21.05 %
+
+ Material:    PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  14.07 %  ElmAbundance  66.67 %
+   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
 
 
 Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -76,46 +56,209 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
-/run/verbose 1
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+
+Registered models: 
+  None
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+
+Registered filters:
+  None
+
+/run/verbose 2
 #
-/testem/det/setMat Water
-/testem/det/setLbin 9 1.11
-/testem/det/setRbin 6 0.111
+/testem/det/setMat PbWO4
+/testem/det/setLbin 40 0.5
+/testem/det/setRbin 50 0.1
 #
 # Acceptance printout is activated
-/testem/run/acceptance  0.9412 0.0491 3.0
+/testem/run/acceptance  0.9450 0.0096 3.0
 #
 /testem/phys/addPhysics  standard
-PhysicsList::AddPhysicsList <standard>
+PhysicsList::AddPhysicsList: <standard>
 #### /testem/phys/addPhysics  g4v52
 #
-/testem/phys/setCuts 5.0 mm
+/testem/phys/setCuts 1.0 mm
 #
 /run/initialize
-Absorber is 3.60564 m   of Water
- Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
-/testem/phys/verbose  0
+userDetector->Construct() start.
+Absorber is 17.848 cm  of PbWO4
+ Material:    PbWO4     density:  8.280 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.924 mm 
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  14.07 %  ElmAbundance  66.67 %
+   --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole  ElmMassFraction:  45.53 %  ElmAbundance  16.67 %
+   --->  Element: Tungsten (W)   Z = 74.0   N = 183.8   A = 183.84 g/mole  ElmMassFraction:  40.40 %  ElmAbundance  16.67 %
+Ecal is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 1 mm 
 #
 /gun/particle e-
-/gun/energy 1 GeV
+/gun/energy 5 GeV
 #
 /testem/event/printModulo 20
 #
 /run/beamOn 100
 
+phot:  Total cross sections from Sandia parametrisation. 
+
+compt:  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
+      Sampling according Klein-Nishina model
+      tables are built for  gamma
+      Lambda tables from 100 eV  to 100 GeV in 90 bins.
+
+conv:  Total cross sections has a good parametrisation from 1.5 MeV to 100 GeV for all Z;
+      sampling secondary e+e- according to the Bethe-Heitler model
+      tables are built for  gamma
+      Lambda tables from 1.022 MeV to 100 GeV in 100 bins.
+
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+eIoni:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+eIoni:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+eBrem:   tables are built for  e+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Total cross sections from a parametrisation based on the EEDL data library. 
+      Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+
+annihil:       Heilter model of formula of annihilation into 2 photons
+      tables are built for  e+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+ionIoni:   tables are built for  GenericIon
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
+      Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+muIoni:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muIoni:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+muBrems:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+muPairProd:   tables are built for  mu-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Parametrised model 
+
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
+Region <DefaultRegionForTheWorld> -- appears in <Ecal> world volume
+ Materials : PbWO4 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 5 mm     e- 5 mm     e+ 5 mm 
- Energy thresholds :  gamma 5.78478 keV    e- 1.15997 MeV    e+ 1.10423 MeV
+ Material : PbWO4
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 84.7768 keV    e- 1.13176 MeV    e+ 1.06419 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -136,49 +279,35 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=75.19s Real=80.12s Sys=4.01s
-                 LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
+  User=166.46s Real=215.27s Sys=47.3s
 
-        bin              Mean         rms                 bin            Mean      rms 
+ SUMMARY 
 
-    0.00-> 1.11 radl:   13.80%       5.17%             0-> 1.11 radl:   13.80%     5.17% 
-    1.11-> 2.22 radl:   25.15%       9.32%             0-> 2.22 radl:   38.95%    11.64% 
-    2.22-> 3.33 radl:   22.41%       8.61%             0-> 3.33 radl:   61.36%    13.79% 
-    3.33-> 4.44 radl:   14.23%       7.09%             0-> 4.44 radl:   75.60%    13.32% 
-    4.44-> 5.55 radl:    8.69%       6.14%             0-> 5.55 radl:   84.29%    11.30% 
-    5.55-> 6.66 radl:    4.85%       5.53%             0-> 6.66 radl:   89.14%     7.59% 
-    6.66-> 7.77 radl:    2.95%       4.05%             0-> 7.77 radl:   92.09%     5.85% 
-    7.77-> 8.88 radl:    0.94%       1.48%             0-> 8.88 radl:   93.02%     5.56% 
-    8.88-> 9.99 radl:    0.83%       2.09%             0-> 9.99 radl:   93.85%     4.83% 
+ energy deposit :   94.73 % E0 +-    1.01 % E0
+ charged traklen:  481.00 radl +-    5.31 radl
+ neutral traklen: 4480.68 radl +-  124.78 radl
 
-
-
-                  RADIAL PROFILE                         CUMULATIVE  RADIAL PROFILE
-
-        bin              Mean         rms                 bin            Mean      rms 
-
-    0.00-> 0.11 radl:   61.79%      10.22%             0-> 0.11 radl:   61.79%    10.22% 
-    0.11-> 0.22 radl:   17.45%       6.00%             0-> 0.22 radl:   79.24%     8.55% 
-    0.22-> 0.33 radl:    7.11%       3.87%             0-> 0.33 radl:   86.36%     7.32% 
-    0.33-> 0.44 radl:    4.03%       3.07%             0-> 0.44 radl:   90.38%     6.18% 
-    0.44-> 0.56 radl:    2.26%       1.87%             0-> 0.56 radl:   92.65%     5.34% 
-    0.56-> 0.67 radl:    1.21%       1.62%             0-> 0.67 radl:   93.85%     4.83% 
-
-                              SUMMARY
-                         energy deposit :   93.85 % E0 +-    4.83 % E0
-                         charged traklen:   13.66 radl +-    0.70 radl
-                         neutral traklen:  195.69 radl +-   20.60 radl
+ 90.00 % confinement: radius = 3.11 radl  (2.78 cm )
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 838615949, 391507846
+ Current couple of seeds = 883291145, 1147291742
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.93853143  delEdep= -0.0026685677 nrms= -0.54349647
-Erms: 0.04828026  delErms= -0.00081973999 nrms= -0.16695316
+Edep: 0.94734711  delEdep= 0.0023471143 nrms= 2.4449107
+Erms: 0.010138023  delErms= 0.00053802299 nrms= 0.56044062
 <<<<END>>>>   IS ACCEPTED
 
 Graphics systems deleted.
 Visualization Manager deleting...
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.

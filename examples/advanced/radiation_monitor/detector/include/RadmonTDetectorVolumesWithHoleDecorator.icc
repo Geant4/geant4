@@ -1,0 +1,148 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// File name:     RadmonTDetectorVolumesWithHoleDecorator.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonTDetectorVolumesWithHoleDecorator.icc,v 1.4 2006/06/29 16:12:34 gunter Exp $
+// Tag:           $Name: geant4-08-01 $
+//
+
+#ifndef   RADMONTDETECTORVOLUMESWITHHOLEDECORATOR_HH
+ #error "RadmonTDetectorVolumesWithHoleDecorator.icc cannot be included directly. Please use RadmonTDetectorVolumesWithHoleDecorator.hh"
+#else  /* RADMONTDETECTORVOLUMESWITHHOLEDECORATOR_HH */
+ // Include files
+ #include "RadmonVDetectorLabelledEntityConstructor.hh"
+ #include "RadmonDetectorLayerVolumesList.hh"
+ #include "RadmonDetectorLayerVolumeItem.hh"
+ #include "RadmonDetectorLayerVolumeItemSubtraction.hh"
+ #include "G4Box.hh"
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithHoleDecorator<LayerVolumesComponent> :: RadmonTDetectorVolumesWithHoleDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor)
+ :
+  owner(constructor),
+  component(constructor),
+  operation(RadmonDetectorLayerVolumeItemSubtraction::rightMinusLeft)
+ {
+ }
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithHoleDecorator<LayerVolumesComponent> :: ~RadmonTDetectorVolumesWithHoleDecorator()
+ {
+ }
+ 
+ 
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+ RadmonDetectorLayerVolumesList *               RadmonTDetectorVolumesWithHoleDecorator<LayerVolumesComponent> :: GenerateVolumesList(void)
+ {
+  G4double width(owner->GetWidth());
+  if (width<0)
+   return 0;
+
+  G4double height(owner->GetHeight());
+  if (height<0)
+   return 0;
+  
+  G4double thickness(owner->GetThickness());
+  if (thickness<0)
+   return 0;
+  
+  G4double holeWidth(owner->GetAttributeAsMeasure("HoleWidth", "Length", -1.));
+  if (holeWidth<0)
+  {
+   holeWidth=owner->GetAttributeAsDouble("HoleScaleWidth", -1.);
+   
+   if (holeWidth<0)
+   {
+    G4cout << "RadmonTDetectorVolumesWithHoleDecorator::GenerateVolumesList: Neither \"HoleWidth\" nor \"HoleScaleWidth\" attributes are defined." << G4endl;
+    return 0;
+   }
+   
+   holeWidth*=width;
+  }
+  
+  if (width<holeWidth)
+  {
+   G4cout << "RadmonTDetectorVolumesWithHoleDecorator::GenerateVolumesList: Hole width exceeds layer width." << G4endl;
+   return 0;
+  }
+  
+  G4double holeHeight(owner->GetAttributeAsMeasure("HoleHeight", "Length", -1.));
+  if (holeHeight<0)
+  {
+   holeHeight=owner->GetAttributeAsDouble("HoleScaleHeight", -1.);
+   
+   if (holeHeight<0)
+   {
+    G4cout << "RadmonTDetectorVolumesWithHoleDecorator::GenerateVolumesList: Neither \"HoleHeight\" nor \"HoleScaleHeight attributes are defined." << G4endl;
+    return 0;
+   }
+   
+   holeHeight*=height;
+  }
+  
+  if (height<holeHeight)
+  {
+   G4cout << "RadmonTDetectorVolumesWithHoleDecorator::GenerateVolumesList: Hole height exceeds layer height." << G4endl;
+   return 0;
+  }
+  
+  RadmonDetectorLayerVolumesList * list(component.GenerateVolumesList());
+  
+  if (list==0)
+   return 0;
+   
+  G4int n(list->GetNItems());
+  
+  if (n==0)
+  {
+   delete list;
+   return 0;
+  }
+  
+  RadmonDetectorLayerVolumeItem * item;
+  G4Box * hole(new G4Box("Hole", holeWidth/2., holeHeight/2., (thickness/2.)*1.01));
+  operation.Initialize(hole);
+  
+  while (n>0)
+  {
+   n--;
+
+   item=list->GetItem(n);
+   operation.ApplyTo(item);
+  }
+  
+  return list;
+ }
+#endif /* RADMONTDETECTORVOLUMESWITHHOLEDECORATOR_HH */
+ 

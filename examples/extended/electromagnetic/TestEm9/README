@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2004/06/23 11:28:55 maire Exp $
+$Id: README,v 1.7 2006/05/15 14:40:51 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,9 +7,9 @@ $Id: README,v 1.6 2004/06/23 11:28:55 maire Exp $
 
                             TestEm9
                             -------
-     This test is intended to test cut-per-region approach and to demonstrate
-     electromagnetic physics in crystal calorimeter
-
+     Demonstrate electromagnetic physics in crystal calorimeters.
+     How to define cut-per-region.
+     
  1- GEOMETRY DEFINITION
 
      The geometry consists of the vertex detector (VD), the electromagnetic

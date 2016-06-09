@@ -1,4 +1,4 @@
-# $Id: TestEm1.in,v 1.19 2005/02/01 11:34:00 maire Exp $
+# $Id: TestEm1.in,v 1.24 2006/02/16 13:54:26 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -6,32 +6,31 @@
 # electron 100 MeV; all processes
 #
 /control/verbose 2
-/tracking/verbose 0
+/run/verbose 2
 #
-/testem/phys/setGCut 2.20 mm
-/testem/phys/setECut 6.05 mum
-/testem/phys/setPCut 6.05 mum
+/testem/det/setMat Aluminium 
+/testem/det/setSize 10 m
 #
 /run/initialize
 #
-/process/eLoss/StepFunction 0.183 1.70 micrometer
-#
-/run/verbose 2
-#
+/testem/gun/setDefault 
 /gun/particle e-
 /gun/energy 100 MeV
 #
-/testem/histo/setHisto 1 100 0 50 cm
-/testem/histo/setHisto 2 100 0 100
-/testem/histo/setHisto 3 100 0 10 mm
+/testem/histo/setHisto 1 100 0   50 cm		#track length of primary
+/testem/histo/setHisto 2 100 0  300 none	#nb steps of primary
+/testem/histo/setHisto 3 200 0   20 mm		#step size of primary
 #
 /testem/histo/setFileType hbook	
 ###/testem/histo/setFileType root
 ###/testem/histo/setFileType XML
 #
-/testem/histo/setFileName run0 
-/run/beamOn 200
-#
 /testem/phys/setCuts 1 mm
+/testem/histo/setFileName run0 
+/run/beamOn 2000
+#
+/process/eLoss/verbose 0
+#
+/testem/phys/setCuts 10 um
 /testem/histo/setFileName run1
-/run/beamOn 200
+/run/beamOn 2000

@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: ExN07DetectorMessenger.cc,v 1.4 2005/11/22 22:20:55 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: ExN07DetectorMessenger.cc,v 1.6 2006/06/29 17:54:57 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 
 #include "ExN07DetectorMessenger.hh"
@@ -72,6 +75,18 @@ ExN07DetectorMessenger::ExN07DetectorMessenger(
   SerialCmd->SetParameterName("serialize",false);
   SerialCmd->AvailableForStates(G4State_Idle);
 
+  verboseCmd = new G4UIcmdWithAnInteger("/N07/verbose",this);
+  verboseCmd->SetGuidance("Set verbosity level");
+  verboseCmd->SetParameterName("verbose",false);
+  verboseCmd->AvailableForStates(G4State_Idle);
+  verboseCmd->SetRange("verbose>=0");
+ 
+  AddMatCmd = new G4UIcmdWithABool("/N07/AddMaterial",this);
+  AddMatCmd->SetGuidance("Add materials ");
+  AddMatCmd->SetParameterName("dummy",true);
+  AddMatCmd->AvailableForStates(G4State_Idle);
+
+
 }
 
 ExN07DetectorMessenger::~ExN07DetectorMessenger()
@@ -96,22 +111,57 @@ void ExN07DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   } else if( command == SerialCmd ) {
     ExN07Detector->SetSerialGeometry(SerialCmd->GetNewBoolValue(newValue));
+
+  } else if( command == verboseCmd ) {
+    ExN07Detector->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue));
+
+  } else if( command == AddMatCmd ) {
+    ExN07Detector->AddMaterial();
+    UpdateMaterialList(); 
   }
 }
 
 G4String ExN07DetectorMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String ans;
-  if( command == AbsMaterCmd )
-  { ans=ExN07Detector->GetAbsorberMaterial(); }
-  else if( command == GapMaterCmd )
-  { ans=ExN07Detector->GetGapMaterial(); }
-  else if( command == numLayerCmd )
-  { ans=numLayerCmd->ConvertToString(ExN07Detector->GetNumberOfLayers()); }
-  else if( command == SerialCmd )
-  { ans=SerialCmd->ConvertToString(ExN07Detector->IsSerial()); }
+  if( command == AbsMaterCmd ){
+    ans=ExN07Detector->GetAbsorberMaterial(); 
+
+  } else if( command == GapMaterCmd ){ 
+    ans=ExN07Detector->GetGapMaterial(); 
+
+  } else if( command == numLayerCmd ) {
+    ans=numLayerCmd->ConvertToString(ExN07Detector->GetNumberOfLayers()); 
+
+  } else if( command == SerialCmd ){
+    ans=SerialCmd->ConvertToString(ExN07Detector->IsSerial()); 
+
+  } else if( command == SerialCmd ) {
+    ans=SerialCmd->ConvertToString(ExN07Detector->IsSerial()); 
+  
+  } else if( command == verboseCmd ) {
+    ans=verboseCmd->ConvertToString(ExN07Detector->GetVerboseLevel()); 
+ 
+  }
   return ans;
 }
 
+void    ExN07DetectorMessenger::UpdateMaterialList() 
+{
+  G4String matList;
+  const G4MaterialTable* matTbl = G4Material::GetMaterialTable();
+  for(size_t i=0;i<G4Material::GetNumberOfMaterials();i++)
+  {
+    matList += (*matTbl)[i]->GetName();
+    matList += " ";
+  }
+
+  if(AbsMaterCmd !=0) {
+    AbsMaterCmd->SetCandidates(matList);
+  }
+  if (GapMaterCmd !=0) {
+    GapMaterCmd->SetCandidates(matList);
+  }
+}
 
 

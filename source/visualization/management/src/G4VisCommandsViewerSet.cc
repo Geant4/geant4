@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.38 2005/11/13 15:37:24 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VisCommandsViewerSet.cc,v 1.41 2006/06/29 21:29:50 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -74,6 +77,29 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandAuxEdge->SetParameterName("edge",omitable = true);
   fpCommandAuxEdge->SetDefaultValue(false);
 
+  fpCommandBackground = new G4UIcommand
+    ("/vis/viewer/set/background",this);
+  fpCommandBackground->SetGuidance
+    ("Set background colour and transparency (default black and opaque).");
+  fpCommandBackground->SetGuidance
+    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
+     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
+     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
+     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
+     "\n    e.g. \"! ! ! 0.\" for a transparent background.");
+  parameter = new G4UIparameter("red_or_string", 's', omitable = true);
+  parameter -> SetDefaultValue ("0.");
+  fpCommandBackground -> SetParameter (parameter);
+  parameter = new G4UIparameter("green", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommandBackground -> SetParameter (parameter);
+  parameter = new G4UIparameter ("blue", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommandBackground -> SetParameter (parameter);
+  parameter = new G4UIparameter ("opacity", 'd', omitable = true);
+  parameter -> SetDefaultValue (1.);
+  fpCommandBackground -> SetParameter (parameter);
+
   fpCommandCulling = new G4UIcommand("/vis/viewer/set/culling",this);
   fpCommandCulling->SetGuidance ("Set culling options.");
   fpCommandCulling->SetGuidance
@@ -97,7 +123,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("global coveredDaughters invisible density");
   fpCommandCulling->SetParameter(parameter);
   parameter = new G4UIparameter("action",'b',omitable = true);
-  parameter->SetDefaultValue("true");
+  parameter->SetDefaultValue(1);
   fpCommandCulling->SetParameter(parameter);
   parameter = new G4UIparameter("density-threshold",'d',omitable = true);
   parameter->SetDefaultValue("0.01");
@@ -108,7 +134,6 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandCulling->SetParameter(parameter);
 
   fpCommandEdge = new G4UIcmdWithABool("/vis/viewer/set/edge",this);
-  fpCommandEdge->SetGuidance("  default: true");
   fpCommandEdge->SetGuidance
     ("Edges become visible/invisible in surface mode.");
   fpCommandEdge->SetParameterName("edge",omitable = true);
@@ -235,11 +260,11 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandSectionPlane->SetParameter(parameter);
 
   fpCommandStyle = new G4UIcmdWithAString ("/vis/viewer/set/style",this);
-  fpCommandStyle->SetGuidance ("Set style of drawing.");
+  fpCommandStyle->SetGuidance
+    ("Set style of drawing - w[ireframe] or s[urface].");
   fpCommandStyle->SetGuidance 
     ("(Hidden line drawing is controlled by \"/vis/viewer/set/hiddenEdge\".)");
   fpCommandStyle->SetParameterName ("style",omitable = false);
-  fpCommandStyle->SetCandidates("w wireframe s surface");
 
   fpCommandUpThetaPhi = new G4UIcommand
     ("/vis/viewer/set/upThetaPhi", this);
@@ -302,35 +327,13 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   parameter = new G4UIparameter ("z", 'd', omitable = true);
   parameter -> SetDefaultValue (1.);
   fpCommandViewpointVector -> SetParameter (parameter);
-
-  fpCommandBackground = new G4UIcommand
-    ("/vis/viewer/set/background",this);
-  fpCommandBackground->SetGuidance
-    ("Set background colour and transparency (default black and opaque).");
-  fpCommandBackground->SetGuidance
-    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
-     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
-     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
-     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
-     "\n    e.g. \"! ! ! 0.\" for a transparent background.");
-  parameter = new G4UIparameter("red_or_string", 's', omitable = true);
-  parameter -> SetDefaultValue ("0.");
-  fpCommandBackground -> SetParameter (parameter);
-  parameter = new G4UIparameter("green", 'd', omitable = true);
-  parameter -> SetDefaultValue (0.);
-  fpCommandBackground -> SetParameter (parameter);
-  parameter = new G4UIparameter ("blue", 'd', omitable = true);
-  parameter -> SetDefaultValue (0.);
-  fpCommandBackground -> SetParameter (parameter);
-  parameter = new G4UIparameter ("opacity", 'd', omitable = true);
-  parameter -> SetDefaultValue (1.);
-  fpCommandBackground -> SetParameter (parameter);
 }
 
 G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandAll;
   delete fpCommandAuxEdge;
   delete fpCommandAutoRefresh;
+  delete fpCommandBackground;
   delete fpCommandCulling;
   delete fpCommandEdge;
   delete fpCommandGlobalMarkerScale;
@@ -347,7 +350,6 @@ G4VisCommandsViewerSet::~G4VisCommandsViewerSet() {
   delete fpCommandUpVector;
   delete fpCommandViewpointThetaPhi;
   delete fpCommandViewpointVector;
-  delete fpCommandBackground;
 }
 
 G4String G4VisCommandsViewerSet::GetCurrentValue(G4UIcommand*) {
@@ -424,13 +426,35 @@ void G4VisCommandsViewerSet::SetNewValue
     }
   }
 
+  else if (command == fpCommandBackground) {
+    G4String redOrString;
+    G4double green, blue, opacity;
+    std::istringstream iss(newValue);
+    iss >> redOrString >> green >> blue >> opacity;
+    G4Colour colour(0.,0.,0.);  // Default black and opaque.
+    const size_t iPos0 = 0;
+    if (std::isalpha(redOrString[iPos0])) {
+      G4Colour::GetColour(redOrString, colour); // Remains default (black) if
+						// not found.
+    } else {
+      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
+    }
+    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+    vp.SetBackgroundColour(colour);
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Background colour "
+	     << vp.GetBackgroundColour()
+	     << " requested."
+	     << G4endl;
+    }
+  }
+
   else if (command == fpCommandCulling) {
     G4String cullingOption, stringFlag, unit;
     G4double density;
-    G4bool boolFlag;
     std::istringstream is (newValue);
     is >> cullingOption >> stringFlag >> density >> unit;
-    boolFlag = G4UIcommand::ConvertToBool(stringFlag);
+    G4bool boolFlag = G4UIcommand::ConvertToBool(stringFlag);
     if (cullingOption == "global") {
       vp.SetCulling(boolFlag);
       if (verbosity >= G4VisManager::confirmations) {
@@ -831,29 +855,6 @@ void G4VisCommandsViewerSet::SetNewValue
 	G4cout << "Lightpoint direction set to "
 	       << vp.GetActualLightpointDirection () << G4endl;
       }
-    }
-  }
-
-  else if (command == fpCommandBackground) {
-    G4String redOrString;
-    G4double green, blue, opacity;
-    std::istringstream iss(newValue);
-    iss >> redOrString >> green >> blue >> opacity;
-    G4Colour colour(0.,0.,0.);  // Default black and opaque.
-    const size_t iPos0 = 0;
-    if (std::isalpha(redOrString[iPos0])) {
-      G4Colour::GetColour(redOrString, colour); // Remains default (black) if
-						// not found.
-    } else {
-      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
-    }
-    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
-    vp.SetBackgroundColour(colour);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Background colour "
-	     << vp.GetBackgroundColour()
-	     << " requested."
-	     << G4endl;
     }
   }
 

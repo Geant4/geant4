@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.94 2005/10/29 21:07:46 duns Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4HepRepSceneHandler.cc,v 1.97 2006/06/29 21:17:32 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 
 /**
@@ -44,7 +47,7 @@
 
 //G4
 #include "G4Vector3D.hh"
-#include "G4RunManagerKernel.hh"
+#include "G4Version.hh"
 #include "G4Types.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
@@ -549,20 +552,30 @@ void G4HepRepSceneHandler::AddSolid(const G4Cons& cons) {
         return;
     }
 
+    G4PhysicalVolumeModel* pPVModel =
+      dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    if (!pPVModel) {
+      G4VSceneHandler::AddSolid(cons);
+        return;
+    }
+
+    G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+    G4int currentDepth = pPVModel->GetCurrentDepth();
+
     G4Point3D vertex1(G4Point3D( 0., 0., cons.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-cons.GetZHalfLength()));
 
     vertex1 = (transform) * vertex1;
     vertex2 = (transform) * vertex2;
 
-    HepRepInstance* instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
+    HepRepInstance* instance = getGeometryInstance(pCurrentLV, currentDepth);
     setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, cons);
     setLine(instance, cons);
     setColor(instance, getColorFor(cons));
 
-    HepRepType* type = getGeometryType(fpCurrentLV->GetName(), fCurrentDepth);
+    HepRepType* type = getGeometryType(pCurrentLV->GetName(), currentDepth);
 
     // Outer cylinder.
     HepRepInstance* outer = factory->createHepRepInstance(instance, type);
@@ -600,20 +613,30 @@ void G4HepRepSceneHandler::AddSolid(const G4Tubs& tubs) {
         return;
     }
     
+    G4PhysicalVolumeModel* pPVModel =
+      dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    if (!pPVModel) {
+      G4VSceneHandler::AddSolid(tubs);
+        return;
+    }
+
+    G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+    G4int currentDepth = pPVModel->GetCurrentDepth();
+
     G4Point3D vertex1(G4Point3D( 0., 0., tubs.GetZHalfLength()));
     G4Point3D vertex2(G4Point3D( 0., 0.,-tubs.GetZHalfLength()));
 
     vertex1 = (transform) * vertex1;
     vertex2 = (transform) * vertex2;
 
-    HepRepInstance* instance = getGeometryInstance(fpCurrentLV, fCurrentDepth);
+    HepRepInstance* instance = getGeometryInstance(pCurrentLV, currentDepth);
     setAttribute(instance, "DrawAs", G4String("Cylinder"));
         
     setVisibility(instance, tubs);
     setLine(instance, tubs);
     setColor(instance, getColorFor(tubs));
 
-    HepRepType* type = getGeometryType(fpCurrentLV->GetName(), fCurrentDepth);
+    HepRepType* type = getGeometryType(pCurrentLV->GetName(), currentDepth);
 
     // Outer cylinder.
     HepRepInstance* outer = factory->createHepRepInstance(instance, type);
@@ -829,13 +852,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 
     setVisibility(instance, polyhedron);
 	
+    G4int currentDepth = 0;
+    G4PhysicalVolumeModel* pPVModel =
+      dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    if (pPVModel) currentDepth = pPVModel->GetCurrentDepth();
+
     G4bool notLastFace;
     do {
         HepRepInstance* face;
         if (isEventData()) {
             face = factory->createHepRepInstance(instance, getCalHitFaceType());
         } else {
-            face = getGeometryInstance("*Face", fCurrentDepth+1);
+            face = getGeometryInstance("*Face", currentDepth+1);
             setAttribute(face, "PickParent", true);
             setAttribute(face, "DrawAs", G4String("Polygon"));
         }
@@ -1299,7 +1327,9 @@ void G4HepRepSceneHandler::addAttVals(HepRepAttribute* attribute, const map<G4St
 
 
 bool G4HepRepSceneHandler::isEventData () {
-    return !fpCurrentPV || fReadyForTransients || currentHit || currentTrack;
+    G4PhysicalVolumeModel* pPVModel =
+      dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+    return !pPVModel || fReadyForTransients || currentHit || currentTrack;
 }
 
 void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
@@ -1309,7 +1339,10 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
     type->addAttValue("Generator", G4String("Geant4"));
 
     type->addAttDef(  "GeneratorVersion", "Version of the Generator", "General", "");
-    type->addAttValue("GeneratorVersion", G4RunManagerKernel::GetRunManagerKernel()->GetVersionString());
+    G4String versionString = G4Version;
+    versionString = versionString.substr(1,versionString.size()-2);
+    versionString = " Geant4 version " + versionString + "   " + G4Date;
+    type->addAttValue("GeneratorVersion", versionString);
     
     const G4ViewParameters parameters = GetCurrentViewer()->GetViewParameters();
     const G4Vector3D& viewPointDirection = parameters.GetViewpointDirection();    
@@ -1344,8 +1377,15 @@ void G4HepRepSceneHandler::addTopLevelAttributes(HepRepType* type) {
 
 
 HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* type) {
-    return isEventData() ? factory->createHepRepInstance(getEventInstance(), type)
-                         : getGeometryInstance(fpCurrentLV, fCurrentDepth);
+    if (isEventData()) {
+      return factory->createHepRepInstance(getEventInstance(), type);
+    } else {
+      G4PhysicalVolumeModel* pPVModel =
+	dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+      G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
+      G4int currentDepth = pPVModel->GetCurrentDepth();
+      return getGeometryInstance(pCurrentLV, currentDepth);
+    }
 }
 
 HepRep* G4HepRepSceneHandler::getHepRep() {

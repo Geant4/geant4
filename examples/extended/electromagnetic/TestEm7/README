@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2005/11/22 16:56:14 maire Exp $
+$Id: README,v 1.13 2006/05/15 14:40:24 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,13 +7,10 @@ $Id: README,v 1.12 2005/11/22 16:56:14 maire Exp $
 
                             TestEm7 
                             -------
-     This example is devoted to the energy deposited by particles which
-     are absorbed in a given material (Bragg peak).
-     
-     Also it computes the dose deposited in small 'test volumes' called tallies.
-     
-     In addition, it illustrates how to use the concept of 'process' in order 
-     to implement a constraint on the step size of the particle trajectories.
+
+     How to produce a Bragg curve in a water phantom.
+     How to compute the dose in small 'test volumes' called tallies.
+     How to define a maximum step size.
 	
  1- GEOMETRY DEFINITION
  

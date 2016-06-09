@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.15 2005/11/22 12:47:35 guatelli Exp $
+$Id: History,v 1.18 2006/05/30 12:32:16 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,19 @@ $Id: History,v 1.15 2005/11/22 12:47:35 guatelli Exp $
 
                       Category History file
                       ---------------------
+
+30th May 2006 Susanna Guatelli (brachy-V08-00-02)
+- Deleted a warning during compilation
+
+15th May 2006 Susanna Guatelli (brachy-V08-00-01)
+- Added comments, deleted a warning during compilation
+
+15th May 2006 Susanna Guatelli (brachy-V08-00-00)
+- Hit collection deleted. The energy deposit and position are stored directly
+  in histograms and ntuples in the BrachyPhantomSD
+- Iteration in the management of the primary particles
+- More comments explain the code 
+- README updated
 
 22th November 2005 Susanna Guatelli (brachy-V07-01-00)
 - Deleted bug in the RunAction. The results of the simulation 

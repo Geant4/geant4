@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -16,7 +16,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -28,6 +28,25 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+
+Registered models: 
+  None
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+
+Registered filters:
+  None
+
 /run/verbose 1
 #/tracking/verbose 1
 #
@@ -54,46 +73,46 @@ PhysicsList::AddPhysicsList: <standard>
  Material:   G4_AIR     density:  1.205 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.921 m  
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
    --->  Isotope:     C   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  fractionMass:   0.01 %  Abundance   0.02 %
+   --->  Isotope:     C   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %  ElmMassFraction:   0.01 %  ElmAbundance   0.02 %
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
    --->  Isotope:     N   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
-   --->  Isotope:     N   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  fractionMass:  75.53 %  Abundance  78.44 %
+   --->  Isotope:     N   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %  ElmMassFraction:  75.53 %  ElmAbundance  78.44 %
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
    --->  Isotope:     O   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
    --->  Isotope:     O   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
-   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  fractionMass:  23.18 %  Abundance  21.07 %
+   --->  Isotope:     O   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %  ElmMassFraction:  23.18 %  ElmAbundance  21.07 %
    --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
    --->  Isotope:    Ar   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
    --->  Isotope:    Ar   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-   --->  Isotope:    Ar   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  fractionMass:   1.28 %  Abundance   0.47 %
+   --->  Isotope:    Ar   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %  ElmMassFraction:   1.28 %  ElmAbundance   0.47 %
 
  Material:    G4_Al     density:  2.699 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.896 cm 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
-   --->  Isotope:    Al   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Isotope:    Al   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Si     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.366 cm 
    --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
    --->  Isotope:    Si   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
    --->  Isotope:    Si   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-   --->  Isotope:    Si   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Isotope:    Si   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material:    G4_Fe     density:  7.874 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.757 cm 
    --->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
    --->  Isotope:    Fe   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
    --->  Isotope:    Fe   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
    --->  Isotope:    Fe   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-   --->  Isotope:    Fe   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  fractionMass: 100.00 %  Abundance 100.00 %
+   --->  Isotope:    Fe   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
 
  Material: G4_CESIUM_IODIDE     density:  4.510 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.860 cm 
    --->  Element: I (I)   Z = 53.0   N = 127.0   A = 126.90 g/mole
-   --->  Isotope:     I   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.00 %  fractionMass:  48.85 %  Abundance  50.00 %
+   --->  Isotope:     I   Z = 53   N = 127   A = 126.90 g/mole   abundance: 100.00 %  ElmMassFraction:  48.85 %  ElmAbundance  50.00 %
    --->  Element: Cs (Cs)   Z = 55.0   N = 133.0   A = 132.91 g/mole
-   --->  Isotope:    Cs   Z = 55   N = 133   A = 132.91 g/mole   abundance: 100.00 %  fractionMass:  51.15 %  Abundance  50.00 %
+   --->  Isotope:    Cs   Z = 55   N = 133   A = 132.91 g/mole   abundance: 100.00 %  ElmMassFraction:  51.15 %  ElmAbundance  50.00 %
 
 
 Ecal is 36 cm  of G4_CESIUM_IODIDE
 Absorber is 2 mm  of G4_Al
-Vertex is 3 cm  of 3 layers of Si of 100 mum npads= 601
+Vertex is 3 cm  of 3 layers of Si of 100 um  npads= 601
 ### New geometry is constructed
 PhysicsList: world cuts are set cutG= 0.3 mm    cutE= 0.3 mm 
 Vertex cuts are set
@@ -161,13 +180,22 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
 
 ionIoni:   tables are built for  GenericIon
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Scaling relation is used to proton dE/dx and range
       Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for alpha particles below.
+      Stopping Power data for 8 ion/material pairs are used.
       Step function: finalRange(mm)= 0.1, dRoverRange= 0.1, integral: 1
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -207,50 +235,64 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma 300 mum    e- 300 mum    e+ 300 mum
+ Range cuts        :  gamma 300 um     e- 300 um     e+ 300 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_CESIUM_IODIDE
- Range cuts        :  gamma 300 mum    e- 300 mum    e+ 300 mum
+ Range cuts        :  gamma 300 um     e- 300 um     e+ 300 um 
  Energy thresholds :  gamma 18.1187 keV    e- 288.607 keV    e+ 278.143 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
- Range cuts        :  gamma 300 mum    e- 300 mum    e+ 300 mum
+ Range cuts        :  gamma 300 um     e- 300 um     e+ 300 um 
  Energy thresholds :  gamma 3.89739 keV    e- 258.339 keV    e+ 252.056 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : G4_AIR
- Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
  Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 4     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
- Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
  Energy thresholds :  gamma 990 eV     e- 33.8876 keV    e+ 33.4729 keV
  Region(s) which use this couple : 
     VertexDetector
 
 Index : 5     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
- Range cuts        :  gamma 10 mum    e- 10 mum    e+ 10 mum
+ Range cuts        :  gamma 10 um     e- 10 um     e+ 10 um 
  Energy thresholds :  gamma 990 eV     e- 31.4747 keV    e+ 31.0896 keV
  Region(s) which use this couple : 
     VertexDetector
@@ -280,28 +322,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=113.19s Real=122.87s Sys=9.65s
+  User=51.51s Real=58.97s Sys=7.09s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Number of events             100
 Average number of e-         1325
-Average number of gamma      701.4
-Average number of e+         48.36
-Average number of steps      5267
-Edep 1x1 =                   0.8256 +- 0.003038  res=  3.679 %
-Edep 3x3 =                   0.9565 +- 0.001559  res=  1.63 %
-Edep 5x5 =                   0.9782 +- 0.001325  res=  1.354 %
+Average number of gamma      703.1
+Average number of e+         48.11
+Average number of steps      4606
+Edep 1x1 =                   0.8291 +- 0.003254  res=  3.925 %
+Edep 3x3 =                   0.9555 +- 0.001635  res=  1.711 %
+Edep 5x5 =                   0.978 +- 0.00107  res=  1.094 %
 ========================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8256  delEdep1x1= -0.0004101 nrms= -0.1168
-Erms1x1: 0.03038  delErms1x1= -0.004723 nrms= -1.346
-Edep3x3: 0.9565  delEdep3x3= 8.504e-05 nrms= 0.05315
-Erms3x3: 0.01559  delErms3x3= -0.0004063 nrms= -0.2539
-Edep5x5: 0.9782  delEdep5x5= -0.0008222 nrms= -0.6909
-Erms5x5: 0.01325  delErms5x5= 0.001349 nrms= 1.134
+Edep1x1: 0.8291  delEdep1x1= 0.00309 nrms= 0.8803
+Erms1x1: 0.03254  delErms1x1= -0.002562 nrms= -0.7298
+Edep3x3: 0.9555  delEdep3x3= -0.0009376 nrms= -0.586
+Erms3x3: 0.01635  delErms3x3= 0.0003471 nrms= 0.2169
+Edep5x5: 0.978  delEdep5x5= -0.0009607 nrms= -0.8073
+Erms5x5: 0.0107  delErms5x5= -0.001201 nrms= -1.009
 <<<<<END>>>>>   IS ACCEPTED
 
 /vis/viewer/update

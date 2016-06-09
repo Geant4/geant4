@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedNucleonConstructor.cc,v 1.7 2004/02/13 05:54:07 kurasige Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ExcitedNucleonConstructor.cc,v 1.11 2006/06/29 19:27:08 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // --------------------------------------------------------------
@@ -536,7 +539,9 @@ G4DecayTable*  G4ExcitedNucleonConstructor::AddLambdaKMode(
   return decayTable;
 }
 
-
+// PDG2005
+//  N(2090) is renamed to N(2080) 
+//   but keep unchanged temporalily Apr 06
 
 const char* G4ExcitedNucleonConstructor::name[] = {
    "N(1440)", "N(1520)", "N(1535)", "N(1650)", "N(1675)",
@@ -545,15 +550,15 @@ const char* G4ExcitedNucleonConstructor::name[] = {
 };
 
 const G4double G4ExcitedNucleonConstructor::mass[] = {
-  1.440*GeV, 1.520*GeV, 1.535*GeV, 1.650*GeV,  1.675*GeV, 
-  1.680*GeV, 1.700*GeV, 1.710*GeV, 1.720*GeV,  1.850*GeV, 
-  1.950*GeV, 2.000*GeV, 2.190*GeV, 2.220*GeV,  2.250*GeV
+  1.440*GeV, 1.520*GeV, 1.535*GeV, 1.655*GeV,  1.675*GeV, 
+  1.685*GeV, 1.700*GeV, 1.710*GeV, 1.720*GeV,  1.900*GeV, 
+  1.950*GeV, 2.080*GeV, 2.190*GeV, 2.250*GeV,  2.275*GeV
 };
 
 const G4double G4ExcitedNucleonConstructor::width[] = {
-  350.0*MeV, 120.0*MeV, 150.0*MeV, 150.0*MeV, 150.0*MeV,
-  130.0*MeV, 100.0*MeV, 100.0*MeV, 150.0*MeV, 500.0*MeV,
-  550.0*MeV, 350.0*MeV, 450.0*MeV, 550.0*MeV, 470.0*MeV
+  300.0*MeV, 115.0*MeV, 150.0*MeV, 165.0*MeV, 150.0*MeV,
+  130.0*MeV, 100.0*MeV, 100.0*MeV, 200.0*MeV, 500.0*MeV,
+  555.0*MeV, 350.0*MeV, 500.0*MeV, 400.0*MeV, 500.0*MeV
 };
 
 const G4int G4ExcitedNucleonConstructor::iSpin[] = {

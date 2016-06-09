@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectModel.hh,v 1.3 2005/05/12 11:06:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4PEEffectModel.hh,v 1.5 2006/06/29 19:50:46 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -35,6 +38,8 @@
 // Creation date: 21.04.2005
 //
 // Modifications:
+//
+// 06.02.2006 : added ComputeMeanFreePath()  (mma)
 //
 // Class Description:
 //
@@ -64,13 +69,16 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
+  G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
                                       G4double kinEnergy,
                                       G4double Z,
                                       G4double A,
-                                      G4double cut,
-                                      G4double emax);
+                                      G4double, G4double);
+				      
+  G4double ComputeMeanFreePath( const G4ParticleDefinition*,
+                                      G4double kinEnergy,
+				const G4Material* material,      
+                                      G4double, G4double);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -106,6 +114,28 @@ inline G4double G4PEEffectModel::ComputeCrossSectionPerAtom(
 
  return SandiaCof[0]/energy  + SandiaCof[1]/energy2 +
         SandiaCof[2]/energy3 + SandiaCof[3]/energy4;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4PEEffectModel::ComputeMeanFreePath(
+                                       const G4ParticleDefinition*,
+                                             G4double energy,
+				       const G4Material* material,
+                                             G4double, G4double)
+{
+ G4double* SandiaCof = material->GetSandiaTable()
+                                ->GetSandiaCofForMaterial(energy);
+				
+ G4double energy2 = energy*energy, energy3 = energy*energy2,
+          energy4 = energy2*energy2;
+	  
+ G4double cross = SandiaCof[0]/energy  + SandiaCof[1]/energy2 +
+                  SandiaCof[2]/energy3 + SandiaCof[3]/energy4; 
+ 
+ G4double mfp = DBL_MAX;
+ if (cross > 0.) mfp = 1./cross;
+ return mfp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

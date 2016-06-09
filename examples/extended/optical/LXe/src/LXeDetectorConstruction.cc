@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 #include "LXeDetectorConstruction.hh"
@@ -154,7 +157,7 @@ void LXeDetectorConstruction::DefineMaterials(){
     
   G4double RIndexPstyrene[WLS_NUMENTRIES]={ 1.5, 1.5, 1.5, 1.5};
   G4double Absorption1[WLS_NUMENTRIES]={2.*cm, 2.*cm, 2.*cm, 2.*cm};
-  G4double ScintilFast[WLS_NUMENTRIES]={1.00, 1.00, 0.00, 0.00}; 
+  G4double ScintilFast[WLS_NUMENTRIES]={0.00, 0.00, 1.00, 1.00};
   MPTPStyrene = new G4MaterialPropertiesTable();
   MPTPStyrene->AddProperty("RINDEX",WLS_Energy,RIndexPstyrene,WLS_NUMENTRIES);
   MPTPStyrene->AddProperty("ABSLENGTH",WLS_Energy,Absorption1,WLS_NUMENTRIES);
@@ -167,7 +170,7 @@ void LXeDetectorConstruction::DefineMaterials(){
 
   G4double RefractiveIndexFiber[WLS_NUMENTRIES]={ 1.60, 1.60, 1.60, 1.60};
   G4double AbsFiber[WLS_NUMENTRIES]={9.00*m,9.00*m,0.1*mm,0.1*mm};
-  G4double EmissionFib[WLS_NUMENTRIES]={0.0, 0.0,1.0, 1.0};
+  G4double EmissionFib[WLS_NUMENTRIES]={1.0, 1.0, 0.0, 0.0};
   G4MaterialPropertiesTable* MPTFiber = new G4MaterialPropertiesTable();
   MPTFiber->AddProperty("RINDEX",WLS_Energy,RefractiveIndexFiber,
 			WLS_NUMENTRIES);

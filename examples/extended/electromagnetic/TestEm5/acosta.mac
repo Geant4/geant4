@@ -1,0 +1,30 @@
+# $Id: acosta.mac,v 1.1 2006/05/30 12:28:57 maire Exp $
+#
+# macro file for TestEm5.cc    
+#
+# Back x-ray emission by 20 keV electrons in Silver.
+# E. Acosta et al. Journal of Applied Physics 83(11) 1998 page 6038
+# Fig. 4-5-6
+#    		    
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Silver      
+/testem/det/setAbsThick 1 cm
+/testem/det/setAbsYZ    1 cm
+#
+/run/initialize
+#
+/testem/gun/setDefault
+/gun/particle e- 
+/gun/energy 20 keV
+#
+/testem/histo/setFileName acosta
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 14 40 0 20 keV	#energy at exit. (reflect,neutral)
+#
+/testem/phys/setGCut 1 um
+#
+/testem/event/printModulo 100000
+# 
+/run/beamOn 5000000

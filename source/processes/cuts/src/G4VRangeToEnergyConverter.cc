@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.4 2005/11/18 21:20:13 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.7 2006/06/29 19:30:32 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // --------------------------------------------------------------
@@ -55,7 +58,11 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConve
 G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeToEnergyConverter &right)
 {
   if (this == &right) return *this;
-  if (theLossTable) delete theLossTable;
+  if (theLossTable) {
+    theLossTable->clearAndDestroy();
+    delete theLossTable;
+    theLossTable=0;
+ }
 
   NumberOfElements = right.NumberOfElements;
   TotBin = right.TotBin;
@@ -81,7 +88,11 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
 
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 { 
-  if (theLossTable) delete  theLossTable;
+  if (theLossTable) {  
+    theLossTable->clearAndDestroy();
+    delete theLossTable;
+  }
+  theLossTable=0;
 }
 
 G4int G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const
@@ -101,12 +112,11 @@ G4int G4VRangeToEnergyConverter::operator!=(const G4VRangeToEnergyConverter &rig
 G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut, 
 					    const G4Material* material) 
 {
-  //???????????? G4double Charge = theParticle->GetPDGCharge();
   G4double Mass   = theParticle->GetPDGMass();
   G4double theKineticEnergyCuts = 0.;
  
   // Build the energy loss table
-  if (theLossTable ==0) BuildLossTable();
+  BuildLossTable();
   
   // Build range vector for every material, convert cut into energy-cut,
   // fill theKineticEnergyCuts and delete the range vector
@@ -127,6 +137,7 @@ G4double G4VRangeToEnergyConverter::Convert(G4double rangeCut,
     }
     delete rangeVector;
   }
+
   return theKineticEnergyCuts;
 }
 
@@ -246,7 +257,10 @@ void G4VRangeToEnergyConverter::BuildLossTable()
 {
    //  Build dE/dx tables for elements
   if (size_t(NumberOfElements) != G4Element::GetNumberOfElements()) {
-    if (theLossTable!=0) delete theLossTable;
+    if (theLossTable!=0) {
+      theLossTable->clearAndDestroy();
+      delete theLossTable;
+    }
     theLossTable =0; 
     NumberOfElements = 0;
   }
@@ -262,20 +276,21 @@ void G4VRangeToEnergyConverter::BuildLossTable()
       G4cout << " NumberOfElements=" << NumberOfElements <<G4endl;
     }
 #endif
-  }
+ 
 
-  // fill the loss table
-  for (size_t j=0; j<size_t(NumberOfElements); j++){
-    G4double Value;
-    G4LossVector* aVector= new
-            G4LossVector(LowestEnergy, HighestEnergy, TotBin);
-    for (size_t i=0; i<size_t(TotBin); i++) {
-      Value = ComputeLoss(  (*G4Element::GetElementTable())[j]->GetZ(),
-                            aVector->GetLowEdgeEnergy(i)
-                          );
-      aVector->PutValue(i,Value);
+    // fill the loss table
+    for (size_t j=0; j<size_t(NumberOfElements); j++){
+      G4double Value;
+      G4LossVector* aVector= new
+	G4LossVector(LowestEnergy, HighestEnergy, TotBin);
+      for (size_t i=0; i<size_t(TotBin); i++) {
+	Value = ComputeLoss(  (*G4Element::GetElementTable())[j]->GetZ(),
+			      aVector->GetLowEdgeEnergy(i)
+			      );
+	aVector->PutValue(i,Value);
+      }
+      theLossTable->insert(aVector);
     }
-    theLossTable->insert(aVector);
   }
 }
 

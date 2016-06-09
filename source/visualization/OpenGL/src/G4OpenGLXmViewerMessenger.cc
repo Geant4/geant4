@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewerMessenger.cc,v 1.2 2005/11/24 10:23:43 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4OpenGLXmViewerMessenger.cc,v 1.4 2006/06/29 21:20:18 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
@@ -37,61 +40,55 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithADouble.hh"
 
-G4OpenGLXmViewerMessenger::G4OpenGLXmViewerMessenger
-(G4OpenGLXmViewer* viewer, const G4String& viewerShortName):
-  fpViewer(viewer),
-  fViewerShortName(viewerShortName)
+#include "G4VisManager.hh"
+
+G4OpenGLXmViewerMessenger* G4OpenGLXmViewerMessenger::fpInstance = 0;
+
+G4OpenGLXmViewerMessenger* G4OpenGLXmViewerMessenger::GetInstance()
 {
-  G4String directoryName;
-  G4String guidance;
-  G4String commandName;
+  if (!fpInstance) fpInstance = new G4OpenGLXmViewerMessenger;
+  return fpInstance;
+}
+
+G4OpenGLXmViewerMessenger::G4OpenGLXmViewerMessenger()
+{
   G4bool omitable;
 
-  directoryName = "/vis/oglxm-" + fViewerShortName + '/';
-  fpDirectory = new G4UIdirectory(directoryName);
-  guidance = "G4OpenGLXmViewer \"" + fViewerShortName + "\" commands.";
-  fpDirectory -> SetGuidance(guidance);
+  fpDirectory = new G4UIdirectory("/vis/oglxm/");
+  fpDirectory->SetGuidance("G4OpenGLXmViewer commands.");
 
-  directoryName = directoryName + "set/";
-  fpDirectorySet = new G4UIdirectory (directoryName);
-  guidance = "G4OpenGLXmViewer \"" + fViewerShortName + "\" set commands.";
-  fpDirectorySet -> SetGuidance(guidance);
+  fpDirectorySet = new G4UIdirectory ("/vis/oglxm/set/");
+  fpDirectorySet->SetGuidance("G4OpenGLXmViewer set commands.");
 
-  commandName = directoryName + "dolly-high";
-  fpCommandSetDollyHigh = new G4UIcmdWithADoubleAndUnit
-  (commandName, this);
-  fpCommandSetDollyHigh -> SetGuidance("Higher limit of dolly slider.");
-  fpCommandSetDollyHigh -> SetParameterName("dolly-high", omitable = false);
+  fpCommandSetDollyHigh =
+    new G4UIcmdWithADoubleAndUnit("/vis/oglxm/set/dolly-high", this);
+  fpCommandSetDollyHigh->SetGuidance("Higher limit of dolly slider.");
+  fpCommandSetDollyHigh->SetParameterName("dolly-high", omitable = false);
 
-  commandName = directoryName + "dolly-low";
-  fpCommandSetDollyLow = new G4UIcmdWithADoubleAndUnit
-  (commandName, this);
-  fpCommandSetDollyLow -> SetGuidance("Lower limit of dolly slider.");
-  fpCommandSetDollyLow -> SetParameterName("dolly-low", omitable = false);
+  fpCommandSetDollyLow =
+    new G4UIcmdWithADoubleAndUnit("/vis/oglxm/set/dolly-low", this);
+  fpCommandSetDollyLow->SetGuidance("Lower limit of dolly slider.");
+  fpCommandSetDollyLow->SetParameterName("dolly-low", omitable = false);
 
-  commandName = directoryName + "pan-high";
-  fpCommandSetPanHigh = new G4UIcmdWithADoubleAndUnit
-  (commandName, this);
-  fpCommandSetPanHigh -> SetGuidance("Higher limit of pan slider.");
-  fpCommandSetPanHigh -> SetParameterName("pan-high", omitable = false);
+  fpCommandSetPanHigh =
+    new G4UIcmdWithADoubleAndUnit("/vis/oglxm/set/pan-high", this);
+  fpCommandSetPanHigh->SetGuidance("Higher limit of pan slider.");
+  fpCommandSetPanHigh->SetParameterName("pan-high", omitable = false);
 
-  commandName = directoryName + "rotation-high";
-  fpCommandSetRotationHigh = new G4UIcmdWithADoubleAndUnit
-  (commandName, this);
-  fpCommandSetRotationHigh -> SetGuidance("Higher limit of rotation slider.");
-  fpCommandSetRotationHigh -> SetParameterName("rotation-high", omitable = false);
+  fpCommandSetRotationHigh =
+    new G4UIcmdWithADoubleAndUnit("/vis/oglxm/set/rotation-high", this);
+  fpCommandSetRotationHigh->SetGuidance("Higher limit of rotation slider.");
+  fpCommandSetRotationHigh->SetParameterName("rotation-high", omitable = false);
 
-  commandName = directoryName + "zoom-high";
-  fpCommandSetZoomHigh = new G4UIcmdWithADouble
-  (commandName, this);
-  fpCommandSetZoomHigh -> SetGuidance("Higher limit of zoom slider.");
-  fpCommandSetZoomHigh -> SetParameterName("zoom-high", omitable = false);
+  fpCommandSetZoomHigh =
+    new G4UIcmdWithADouble("/vis/oglxm/set/zoom-high", this);
+  fpCommandSetZoomHigh->SetGuidance("Higher limit of zoom slider.");
+  fpCommandSetZoomHigh->SetParameterName("zoom-high", omitable = false);
 
-  commandName = directoryName + "zoom-low";
-  fpCommandSetZoomLow = new G4UIcmdWithADouble
-  (commandName, this);
-  fpCommandSetZoomLow -> SetGuidance("Lower limit of zoom slider.");
-  fpCommandSetZoomLow -> SetParameterName("zoom-low", omitable = false);
+  fpCommandSetZoomLow =
+    new G4UIcmdWithADouble("/vis/oglxm/set/zoom-low", this);
+  fpCommandSetZoomLow->SetGuidance("Lower limit of zoom slider.");
+  fpCommandSetZoomLow->SetParameterName("zoom-low", omitable = false);
 }
 
 G4OpenGLXmViewerMessenger::~G4OpenGLXmViewerMessenger ()
@@ -109,24 +106,46 @@ G4OpenGLXmViewerMessenger::~G4OpenGLXmViewerMessenger ()
 void G4OpenGLXmViewerMessenger::SetNewValue
 (G4UIcommand* command, G4String newValue)
 {
+  G4VisManager* pVisManager = G4VisManager::GetInstance();
+
+  G4VViewer* pVViewer = pVisManager->GetCurrentViewer();
+
+  if (!pVViewer) {
+    G4cout <<
+      "G4OpenGLXmViewerMessenger::SetNewValue: No current viewer."
+      "\n  \"/vis/open\", or similar, to get one."
+           << G4endl;
+    return;
+  }
+
+  G4OpenGLXmViewer* pViewer = dynamic_cast<G4OpenGLXmViewer*>(pVViewer);
+
+  if (!pViewer) {
+    G4cout <<
+      "G4OpenGLXmViewerMessenger::SetNewValue: Current viewer is not of type"
+      "\n  OGLIXm or OGLSXm.  Use \"/vis/viewer/select\" or \"/vis/open\"."
+           << G4endl;
+    return;
+  }
+
   G4bool panningControlPanel = true;
   G4bool rotationControlPanel = true;
 
   if (command == fpCommandSetDollyHigh)
     {
-      if (fpViewer->fpdolly_slider)
+      if (pViewer->fpdolly_slider)
 	{
-	  fpViewer->dolly_high =
+	  pViewer->dolly_high =
 	    fpCommandSetDollyHigh->GetNewDoubleValue(newValue);
-	  fpViewer->fpdolly_slider->SetMaxValue (fpViewer->dolly_high);
-	  if (fpViewer->fVP.GetDolly() > fpViewer->dolly_high)
+	  pViewer->fpdolly_slider->SetMaxValue (pViewer->dolly_high);
+	  if (pViewer->fVP.GetDolly() > pViewer->dolly_high)
 	    {
-	      fpViewer->fpdolly_slider->SetInitialValue (fpViewer->dolly_high);
-	      fpViewer->fVP.SetDolly(fpViewer->dolly_high);
+	      pViewer->fpdolly_slider->SetInitialValue (pViewer->dolly_high);
+	      pViewer->fVP.SetDolly(pViewer->dolly_high);
 	    }
 	  else
 	    {
-	      fpViewer->fpdolly_slider->SetInitialValue (fpViewer->fVP.GetDolly());
+	      pViewer->fpdolly_slider->SetInitialValue (pViewer->fVP.GetDolly());
 	    }
 	}
       else
@@ -137,19 +156,19 @@ void G4OpenGLXmViewerMessenger::SetNewValue
 
   else if (command == fpCommandSetDollyLow)
     {
-      if (fpViewer->fpdolly_slider)
+      if (pViewer->fpdolly_slider)
 	{
-	  fpViewer->dolly_low =
+	  pViewer->dolly_low =
 	    fpCommandSetDollyLow->GetNewDoubleValue(newValue);
-	  fpViewer->fpdolly_slider->SetMinValue (fpViewer->dolly_low);
-	  if (fpViewer->fVP.GetDolly() < fpViewer->dolly_low)
+	  pViewer->fpdolly_slider->SetMinValue (pViewer->dolly_low);
+	  if (pViewer->fVP.GetDolly() < pViewer->dolly_low)
 	    {
-	      fpViewer->fpdolly_slider->SetInitialValue (fpViewer->dolly_low);
-	      fpViewer->fVP.SetDolly(fpViewer->dolly_low);
+	      pViewer->fpdolly_slider->SetInitialValue (pViewer->dolly_low);
+	      pViewer->fVP.SetDolly(pViewer->dolly_low);
 	    }
 	  else
 	    {
-	      fpViewer->fpdolly_slider->SetInitialValue (fpViewer->fVP.GetDolly());
+	      pViewer->fpdolly_slider->SetInitialValue (pViewer->fVP.GetDolly());
 	    }
 	}
       else
@@ -160,12 +179,12 @@ void G4OpenGLXmViewerMessenger::SetNewValue
 
   else if (command == fpCommandSetPanHigh)
     {
-      if (fpViewer->fppanning_slider)
+      if (pViewer->fppanning_slider)
 	{
-	  fpViewer->pan_sens_limit =
+	  pViewer->pan_sens_limit =
 	    fpCommandSetPanHigh->GetNewDoubleValue(newValue);
-	  fpViewer->fppanning_slider->SetMaxValue (fpViewer->pan_sens_limit);
-	  fpViewer->fppanning_slider->SetInitialValue (fpViewer->pan_sens_limit / 2.);
+	  pViewer->fppanning_slider->SetMaxValue (pViewer->pan_sens_limit);
+	  pViewer->fppanning_slider->SetInitialValue (pViewer->pan_sens_limit / 2.);
 	}
       else
 	{
@@ -175,13 +194,13 @@ void G4OpenGLXmViewerMessenger::SetNewValue
 
   else if (command == fpCommandSetRotationHigh)
     {
-      if (fpViewer->fprotation_slider)
+      if (pViewer->fprotation_slider)
 	{
 	  // Internally in OpenGLXm, it's in degrees...
-	  fpViewer->rot_sens_limit =
+	  pViewer->rot_sens_limit =
 	    fpCommandSetRotationHigh->GetNewDoubleValue(newValue) / deg;
-	  fpViewer->fprotation_slider->SetMaxValue (fpViewer->rot_sens_limit);
-	  fpViewer->fprotation_slider->SetInitialValue (fpViewer->rot_sens_limit / 2.);
+	  pViewer->fprotation_slider->SetMaxValue (pViewer->rot_sens_limit);
+	  pViewer->fprotation_slider->SetInitialValue (pViewer->rot_sens_limit / 2.);
 	}
       else
 	{
@@ -191,20 +210,20 @@ void G4OpenGLXmViewerMessenger::SetNewValue
 
   else if (command == fpCommandSetZoomHigh)
     {
-      if (fpViewer->fpzoom_slider)
+      if (pViewer->fpzoom_slider)
 	{
-	  fpViewer->zoom_high =
+	  pViewer->zoom_high =
 	    fpCommandSetZoomHigh->GetNewDoubleValue(newValue);
-	  fpViewer->fpzoom_slider->SetMaxValue (fpViewer->zoom_high);
-	  fpViewer->fpzoom_slider->SetInitialValue (fpViewer->fVP.GetZoomFactor());
-	  if (fpViewer->fVP.GetZoomFactor() > fpViewer->zoom_high)
+	  pViewer->fpzoom_slider->SetMaxValue (pViewer->zoom_high);
+	  pViewer->fpzoom_slider->SetInitialValue (pViewer->fVP.GetZoomFactor());
+	  if (pViewer->fVP.GetZoomFactor() > pViewer->zoom_high)
 	    {
-	      fpViewer->fpzoom_slider->SetInitialValue (fpViewer->zoom_high);
-	      fpViewer->fVP.SetZoomFactor(fpViewer->zoom_high);
+	      pViewer->fpzoom_slider->SetInitialValue (pViewer->zoom_high);
+	      pViewer->fVP.SetZoomFactor(pViewer->zoom_high);
 	    }
 	  else
 	    {
-	      fpViewer->fpzoom_slider->SetInitialValue (fpViewer->fVP.GetZoomFactor());
+	      pViewer->fpzoom_slider->SetInitialValue (pViewer->fVP.GetZoomFactor());
 	    }
 	}
       else
@@ -215,20 +234,20 @@ void G4OpenGLXmViewerMessenger::SetNewValue
 
   else if (command == fpCommandSetZoomLow)
     {
-      if (fpViewer->fpzoom_slider)
+      if (pViewer->fpzoom_slider)
 	{
-	  fpViewer->zoom_low =
+	  pViewer->zoom_low =
 	    fpCommandSetZoomLow->GetNewDoubleValue(newValue);
-	  fpViewer->fpzoom_slider->SetMinValue (fpViewer->zoom_low);
-	  fpViewer->fpzoom_slider->SetInitialValue (fpViewer->fVP.GetZoomFactor());
-	  if (fpViewer->fVP.GetZoomFactor() < fpViewer->zoom_low)
+	  pViewer->fpzoom_slider->SetMinValue (pViewer->zoom_low);
+	  pViewer->fpzoom_slider->SetInitialValue (pViewer->fVP.GetZoomFactor());
+	  if (pViewer->fVP.GetZoomFactor() < pViewer->zoom_low)
 	    {
-	      fpViewer->fpzoom_slider->SetInitialValue (fpViewer->zoom_low);
-	      fpViewer->fVP.SetZoomFactor(fpViewer->zoom_low);
+	      pViewer->fpzoom_slider->SetInitialValue (pViewer->zoom_low);
+	      pViewer->fVP.SetZoomFactor(pViewer->zoom_low);
 	    }
 	  else
 	    {
-	      fpViewer->fpzoom_slider->SetInitialValue (fpViewer->fVP.GetZoomFactor());
+	      pViewer->fpzoom_slider->SetInitialValue (pViewer->fVP.GetZoomFactor());
 	    }
 	}
       else
@@ -240,8 +259,8 @@ void G4OpenGLXmViewerMessenger::SetNewValue
   if (!panningControlPanel)
     {
 	  G4cout << 
-	    "*** G4OpenGLXmViewerMessenger::SetNewValue: pull down panning"
-	    "\n*** control panel and re-issue command."
+	    "G4OpenGLXmViewerMessenger::SetNewValue: pull down panning"
+	    "\n  control panel and re-issue command."
 		 << G4endl;
 	  return;
     }
@@ -249,8 +268,8 @@ void G4OpenGLXmViewerMessenger::SetNewValue
   if (!rotationControlPanel)
     {
 	  G4cout << 
-	    "*** G4OpenGLXmViewerMessenger::SetNewValue: pull down rotation"
-	    "\n*** control panel and re-issue command."
+	    "G4OpenGLXmViewerMessenger::SetNewValue: pull down rotation"
+	    "\n  control panel and re-issue command."
 		 << G4endl;
 	  return;
     }

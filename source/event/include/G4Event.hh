@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.10 2004/06/11 14:11:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Event.hh,v 1.12 2006/06/29 18:08:27 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 
 #ifndef G4Event_h
@@ -91,6 +94,10 @@ class G4Event
       // UserEventInformation (optional)
       G4VUserEventInformation* userInfo;
 
+      // Initial random number engine status
+      G4String randomNumberStatus;
+      G4bool validRandomNumberStatus;
+
   public:
       inline void SetEventID(G4int i)
       { eventID =  i; }
@@ -102,6 +109,11 @@ class G4Event
       { trajectoryContainer = value; }
       inline void SetEventAborted()
       { eventAborted = true; }
+      inline void SetRandomNumberStatus(G4String st)
+      {
+        randomNumberStatus = st;
+        validRandomNumberStatus = true;
+      }
   public: // with description
       inline G4int GetEventID() const
       { return eventID; }
@@ -153,6 +165,12 @@ class G4Event
       inline void SetUserInformation(G4VUserEventInformation* anInfo) { userInfo = anInfo; }
       inline G4VUserEventInformation* GetUserInformation() const { return userInfo; }
       //  Set and Get method of G4VUserEventInformation
+      inline const G4String& GetRandomNumberStatus() const 
+      {
+        if(!validRandomNumberStatus)
+        { G4Exception("Random number status is not available for this event."); }
+        return randomNumberStatus;
+      }
 };
 
 #if defined G4EVENT_ALLOC_EXPORT

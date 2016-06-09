@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
@@ -34,8 +37,8 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.8 2005/06/27 15:27:18 gunter Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: BrachyPrimaryGeneratorActionI.cc,v 1.10 2006/06/29 15:48:48 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
 
@@ -48,7 +51,7 @@
 #include "Randomize.hh"  
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-#include "G4IonTable.hh"
+//#include "G4IonTable.hh"
 #include "G4UImanager.hh"
 #include "G4RunManager.hh"
 
@@ -59,6 +62,7 @@ BrachyPrimaryGeneratorActionI::BrachyPrimaryGeneratorActionI()
   particleGun = new G4ParticleGun(numberParticles);
   
   // Gamma energy spectrum ...
+  // Fill a vector with the energy probabilities
   energySpectrum.push_back(0.783913);
   energySpectrum.push_back(0.170416);
   energySpectrum.push_back(0.045671); 
@@ -76,11 +80,12 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
 #endif
 
+  // Define the primary particle type
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String ParticleName = "gamma";
-  G4ParticleDefinition* particle = particleTable->FindParticle(ParticleName);
+  G4ParticleDefinition* particle = particleTable -> FindParticle(ParticleName);
 
-  particleGun->SetParticleDefinition(particle);
+  particleGun -> SetParticleDefinition(particle);
 
   //  Random generation of gamma source point inside the Iodium core ...
   G4double x,y,z;
@@ -95,7 +100,7 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
   z = (G4UniformRand()-0.5)*1.75*mm/0.5 ;
 
   G4ThreeVector position(x,y,z);
-  particleGun->SetParticlePosition(position);
+  particleGun -> SetParticlePosition(position);
 
   // Random generation of the impulse direction of primary particles ...
   G4double a,b,c;
@@ -112,8 +117,9 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
   c /= n;
 
   G4ThreeVector direction(a,b,c);
-  particleGun->SetParticleMomentumDirection(direction);
+  particleGun -> SetParticleMomentumDirection(direction);
  
+  // Generate the primary particles with a defined energy spectrum
   G4double random = G4UniformRand();
   G4double sum = 0;
   G4int i = 0;
@@ -126,12 +132,13 @@ void BrachyPrimaryGeneratorActionI::GeneratePrimaries(G4Event* anEvent)
     if(i==2){primaryParticleEnergy = 31.4*keV;}
     else {primaryParticleEnergy = 35.5*keV;}}
 
-  particleGun->SetParticleEnergy(primaryParticleEnergy);
+  particleGun -> SetParticleEnergy(primaryParticleEnergy);
 
   // Fill 1D histogram with gamma energy spectrum ...
 #ifdef G4ANALYSIS_USE    
-  analysis-> PrimaryParticleEnergySpectrum(primaryParticleEnergy);
+  analysis -> PrimaryParticleEnergySpectrum(primaryParticleEnergy);
 #endif  
+
   // generate primary particle
   particleGun->GeneratePrimaryVertex(anEvent);
 }

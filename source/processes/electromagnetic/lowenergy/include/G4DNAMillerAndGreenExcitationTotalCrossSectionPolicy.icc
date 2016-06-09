@@ -1,0 +1,185 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4DNAMillerAndGreenExcitationTotalCrossSectionPolicy.icc,v 1.2 2006/06/29 19:34:49 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
+//
+
+#ifdef   G4DNAMILLERANDGREENEXCITATIONTOTALCROSSSECTIONPOLICY_HH
+ #include "Randomize.hh"
+
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                               G4DNAMillerAndGreenExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: TotalCrossSection(G4double k, G4int z ) const
+ {
+  if (k < EnergyLimitsPolicy::lowEnergyLimit)
+  {
+   if (EnergyLimitsPolicy::zeroBelowLowEnergyLimit)
+    return 0;
+  
+   k=EnergyLimitsPolicy::lowEnergyLimit;
+  }
+  else if (k > EnergyLimitsPolicy::highEnergyLimit)
+  {
+   if (EnergyLimitsPolicy::zeroAboveHighEnergyLimit)
+    return 0;
+    
+   k=EnergyLimitsPolicy::highEnergyLimit;
+  }
+
+  G4int i(5);
+  G4double totalCrossSection(0.);
+  
+  while (i>0)
+  {
+   i--;
+   totalCrossSection+=PartialCrossSection(k, z, i);
+  }
+
+  return totalCrossSection;
+ }
+ 
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4int                                  G4DNAMillerAndGreenExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: RandomizePartialCrossSection(G4double k, G4int z) const
+ {
+  G4int i(5);
+  G4double values[5];
+  G4double value(0);
+  
+  while (i>0)
+  {
+   i--;
+   values[i]=PartialCrossSection(k, z, i);
+   value+=values[i];
+  }
+  
+  value*=G4UniformRand();
+  
+  i=5;
+  while (i>0)
+  {
+   i--;
+   
+   if (values[i]>value)
+    return i;
+  
+   value-=values[i];
+  }
+  
+  return 0;
+ }
+ 
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                               G4DNAMillerAndGreenExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: EnergyConstant(G4int excitationLevelIndex) const
+ {
+  const G4double ej[]={8.17*eV, 10.13*eV, 11.31*eV, 12.91*eV, 14.50*eV};
+  
+  return ej[excitationLevelIndex];
+ }
+
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                               G4DNAMillerAndGreenExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: PartialCrossSection(G4double t, G4int z, G4int excitationLevelIndex) const
+ {
+  //                               ( ( z * aj ) ^ omegaj ) * ( t - ej ) ^ nu
+  // sigma(t) = zEff^2 * sigma0 * --------------------------------------------
+  //                               jj ^ ( omegaj + nu ) + t ^ ( omegaj + nu )
+  //
+  // where t is the kinetic energy corrected by Helium mass over proton mass for Helium ions
+  //
+  // zEff is:
+  //  1 for protons
+  //  2 for alpha++
+  //  and  2 - c1 S_1s - c2 S_2s - c3 S_2p for alpha+ and He
+  //
+  // Dingfelder et al., RPC 59 p. 266 (2000) from Miller and Green (1973)
+  
+  const G4double sigma0(1.E+8 * barn);
+  const G4double nu(1.);
+  const G4double aj[]={876.*eV, 2084.*eV, 1373.*eV, 692.*eV, 900.*eV};
+  const G4double jj[]={19820.*eV, 23490.*eV, 27770.*eV, 30830.*eV, 33080.*eV};
+  const G4double omegaj[]={0.85, 0.88, 0.88, 0.78, 0.78};
+  
+  G4double tCorrected;
+  tCorrected=t*IncomingParticlePolicy::kineticEnergyCorrection;
+  
+  G4double numerator;
+  numerator=std::pow(z*aj[excitationLevelIndex], omegaj[excitationLevelIndex]) * std::pow(tCorrected - EnergyConstant(excitationLevelIndex), nu);
+  
+  G4double power;
+  power=omegaj[excitationLevelIndex]+nu;
+
+  G4double denominator;
+  denominator=std::pow(jj[excitationLevelIndex], power) + std::pow(tCorrected, power);
+
+  G4ParticleDefinition const * particle(IncomingParticlePolicy::IncomingParticleDefinition());
+  G4double zEff=particle->GetPDGCharge()/eplus+particle->GetLeptonNumber();
+  
+  zEff-=( IncomingParticlePolicy::sCoefficient[0]*S_1s(t, EnergyConstant(excitationLevelIndex), IncomingParticlePolicy::slaterEffectiveCharge[0], 1.) +
+          IncomingParticlePolicy::sCoefficient[1]*S_2s(t, EnergyConstant(excitationLevelIndex), IncomingParticlePolicy::slaterEffectiveCharge[1], 2.) +
+          IncomingParticlePolicy::sCoefficient[2]*S_2p(t, EnergyConstant(excitationLevelIndex), IncomingParticlePolicy::slaterEffectiveCharge[2], 2.) );
+
+  return sigma0 * zEff * zEff * numerator / denominator;
+ }
+   
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                               G4DNAMillerAndGreenExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: S_1s(G4double t, G4double energyTransferred, G4double slaterEffectiveCharge, G4double shellNumber) const
+ {
+  // 1 - e^(-2r) * ( 1 + 2 r + 2 r^2)
+ 
+  G4double r(R(t, energyTransferred, slaterEffectiveCharge, shellNumber));
+  
+  return 1.-std::exp(-2*r) * ( ( 2. * r + 2. ) * r + 1. );
+ }
+ 
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                               G4DNAMillerAndGreenExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: S_2s(G4double t, G4double energyTransferred, G4double slaterEffectiveCharge, G4double shellNumber) const
+ {
+  // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 2 r^4)
+
+  G4double r(R(t, energyTransferred, slaterEffectiveCharge, shellNumber));
+
+  return 1.-std::exp(-2*r) * ( ( ( 2. * r * r + 2. ) * r + 2. ) * r + 1. );
+ }
+ 
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                               G4DNAMillerAndGreenExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: S_2p(G4double t, G4double energyTransferred, G4double slaterEffectiveCharge, G4double shellNumber) const
+ {
+  // 1 - e^(-2 r) * ( 1 + 2 r + 2 r^2 + 4/3 r^3 + 2/3 r^4)
+
+  G4double r(R(t, energyTransferred, slaterEffectiveCharge, shellNumber));
+
+  return 1.-std::exp(-2*r) * ( ( ( ( 2./3. * r + 4./3. ) * r + 2. ) * r + 2. ) * r  + 1. );
+ }
+
+ template <typename IncomingParticlePolicy, typename EnergyLimitsPolicy>
+ G4double                               G4DNAMillerAndGreenExcitationTotalCrossSectionPolicy<IncomingParticlePolicy, EnergyLimitsPolicy> :: R(G4double t, G4double energyTransferred, G4double slaterEffectiveCharge, G4double shellNumber) const
+ {
+  // tElectron = m_electron / m_alpha * t
+
+  G4double tElectron = 0.511/3728 * t;
+  
+  return 2.*tElectron*slaterEffectiveCharge/(energyTransferred*shellNumber);
+ }
+#endif /* G4DNAMILLERANDGREENEXCITATIONTOTALCROSSSECTIONPOLICY_HH */

@@ -1,4 +1,4 @@
-$Id: History,v 1.275 2005/12/12 09:15:17 gcosmo Exp $
+$Id: History,v 1.278 2006/06/13 15:37:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13th June 2006  Gabriele Cosmo (config-V08-00-02)
+- Removed defaults for X11, XM, XAW flags in architecture.gmk and added
+  explicit settings in sys/*.gmk setups protected by ifndef statements for
+  optional customisation.
+- Upgraded Configure internal scripts.
+
+24th April 2006  Gabriele Cosmo (config-V08-00-01)
+- binmake.gmk: fixed old-standing warning on WIN32-VC for file extension of
+  target object file. Defined TARGOBJEXT internal variable defining the
+  actual extension: .o for UNIX, .OBJ for Windows platforms.
+
+6th April 2006  Gabriele Cosmo (config-V08-00-00)
+- Darwin-g++: corrected linker options for generation of dynamic libraries.
+  Now dynamic libraries on MacOSX finally work. Tested on MacOS 10.4.5 with
+  gcc-4.0.1.
 
 12th December 2005  Gabriele Cosmo (config-V07-01-07)
 - binmake.gmk: added workaround to allow for physics-lists to link

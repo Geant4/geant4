@@ -1,4 +1,4 @@
-$Id: History,v 1.97 2005/12/06 10:48:08 gcosmo Exp $
+$Id: History,v 1.104 2006/06/16 10:18:05 gcosmo Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,29 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+16-06-06 Gabriele Cosmo (exampleN03-V08-00-06)
+- Use coherent allocation scheme for user-classes and
+  initialisation in main().
+
+15-06-06 Gabriele Cosmo (exampleN03-V08-00-05)
+- Separate instantiation of the user-stepping-verbose class from
+  initialisation of the G4VSteppingVerbose singleton.
+
+06-06-06 mma (exampleN03-V08-00-04)
+- gui.mac : /N03/event/printModulo
+     
+02-06-06 mma (exampleN03-V08-00-03)
+- stepping action: replace Touchable by TouchableHandle
+     
+29-05-06 mma (exampleN03-V08-00-02)
+- stepping action: prePoint->GetTouchable()->GetVolume()
+     
+24-05-06 mma (exampleN03-V08-00-01)
+- cosmetic in stepping action
+
+23-05-06 Vladimir Ivanchenko (exampleN03-V08-00-00)
+- use PrePoint in stepping action
      
 06-12-05 Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

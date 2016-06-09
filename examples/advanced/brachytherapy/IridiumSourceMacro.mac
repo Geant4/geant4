@@ -1,5 +1,8 @@
+# The iridium source is the default option
 /control/verbose 1
 /run/verbose 0
 /event/verbose 0
-/run/initialize
-/run/beamOn  5000
+/run/beamOn  20000
+
+
+

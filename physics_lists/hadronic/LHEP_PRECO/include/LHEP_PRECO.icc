@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LHEP_PRECO.icc,v 1.7 2005/12/05 18:25:06 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: LHEP_PRECO.icc,v 1.11 2006/06/29 17:57:29 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,6 +35,8 @@
 // Modified:
 // 25.11.2005 G.Folger: migration to non static particles
 // 30.11.2005 G.Folger: Register EmStandard first, split Em Standard and Extra
+// 08.06.2006 V.Ivanchenko: migration to CHIPS stopping
+// 14.06.2006 G.Folger: Migrate to HadronElasticPhysics using G4LElastic
 //
 //----------------------------------------------------------------------------
 //
@@ -53,6 +58,8 @@
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4QStoppingPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
 
 #include "G4DataQuestionaire.hh"
 #include "HadronPhysicsLHEP_PRECO.hh"
@@ -62,7 +69,7 @@ template<class T> TLHEP_PRECO<T>::TLHEP_PRECO(G4int ver):  T()
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
   G4DataQuestionaire it(photon);
-  G4cout << "<<< Geant4 Physics List simulation engine: LHEP_PRECO 3.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: LHEP_PRECO 3.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*mm;  
   this->SetVerboseLevel(ver);
@@ -76,8 +83,14 @@ template<class T> TLHEP_PRECO<T>::TLHEP_PRECO(G4int ver):  T()
   // Decays
   this->RegisterPhysics( new G4DecayPhysics("decay",ver) );
 
+   // Hadron Elastic scattering
+  this-> RegisterPhysics( new G4HadronElasticPhysics("LElastic",ver,false));
+
    // Hadron Physics
   this->RegisterPhysics(  new HadronPhysicsLHEP_PRECO("hadron"));
+
+  // Stopping Physics
+  this->RegisterPhysics( new G4QStoppingPhysics("stopping"));
 
   // Ion Physics
   this->RegisterPhysics( new G4IonPhysics("ion"));

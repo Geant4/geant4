@@ -1,0 +1,31 @@
+# $Id: hunger.mac,v 1.2 2006/05/30 12:28:57 maire Exp $
+#
+# macro file for TestEm5.cc    
+#
+# Back scattering of  41 keV electrons.
+# H.J. Hunger and L. Kuchler Phys. Stat. Sol.(a) 56, K45 (1979)
+#     		    
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Silver      
+/testem/det/setAbsThick 50 um
+/testem/det/setAbsYZ    60 um
+#
+/run/initialize
+#
+/testem/phys/setCuts 1 mm
+#
+/testem/gun/setDefault
+/gun/particle e- 
+/gun/energy 41 keV
+#
+/testem/histo/setFileName hunger
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 11  50 0.0 50 keV	#energy reflected_charged
+#
+###/testem/stepMax 1 um
+#
+/testem/event/printModulo 10000
+# 
+/run/beamOn 100000

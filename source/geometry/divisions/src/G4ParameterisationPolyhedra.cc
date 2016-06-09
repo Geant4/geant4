@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.11 2005/11/02 16:06:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.15 2006/06/29 18:18:46 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // class G4ParameterisationPolyhedra Implementation file
 //
@@ -48,11 +51,13 @@ G4VParameterisationPolyhedra( EAxis axis, G4int nDiv, G4double width,
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
   G4Polyhedra* msol = (G4Polyhedra*)(msolid);
-  if (msol->IsGeneric())
+  if ((msolid->GetEntityType() != "G4ReflectedSolid") && (msol->IsGeneric()))
   {
+    G4String message =
+         "Sorry, generic construct for G4Polyhedra NOT supported.\n Solid: "
+         + msol->GetName();
     G4Exception("G4VParameterisationPolyhedra::G4VParameterisationPolyhedra()",
-                "NotSupported", FatalException,
-                "Sorry, generic construct for G4Polyhedra NOT supported.");
+                "NotSupported", FatalException, message);
   }
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {

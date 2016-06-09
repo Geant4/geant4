@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VStoreNotifier.hh,v 1.1 2004/09/02 07:48:58 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VStoreNotifier.hh,v 1.3 2006/06/29 18:33:02 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // class G4VStoreNotifier
 //
@@ -31,6 +34,7 @@
 // Simple abstract class allowing for implementation of user notifiers
 // to be activated at registration/deregistration of objects in the
 // volume, solid and region stores.
+// See G4VNotifier for the details.
 
 // Author:
 // 01.09.04 G.Cosmo Initial version
@@ -38,18 +42,8 @@
 #ifndef G4VSTORENOTIFIER_HH
 #define G4VSTORENOTIFIER_HH
 
-class G4VStoreNotifier
-{
-  public:  // with description
+#include "G4VNotifier.hh"
 
-    G4VStoreNotifier();
-    virtual ~G4VStoreNotifier();
-      // Constructor and destructor.
-
-    virtual void NotifyRegistration() = 0;
-      // Notification of object registration.
-    virtual void NotifyDeRegistration() = 0;
-      // Notification of object deregistration.
-};
+typedef G4VNotifier G4VStoreNotifier;
 
 #endif

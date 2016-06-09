@@ -1,30 +1,34 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc,v 1.10 2005/06/02 17:43:46 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4FRSceneFunc.icc,v 1.14 2006/06/29 21:16:40 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 
+#include "G4PhysicalVolumeModel.hh"
 #include "G4LogicalVolume.hh"
 
 //========== AddPrimitive() functions ==========//
@@ -307,10 +311,12 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Polyhedron& polyhedron )
 		default:
 			G4cerr <<
 	"ERROR G4FRSCENEHANDLER::AddPrimitive(G4Polyhedron)\n";
-       if (fpCurrentPV) G4cerr <<
-	"Volume " << fpCurrentPV->GetName() <<
-	", Solid " << fpCurrentLV->GetSolid()->GetName() <<
-	" (" << fpCurrentLV->GetSolid()->GetEntityType();
+      G4PhysicalVolumeModel* pPVModel =
+        dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+      if (pPVModel) G4cerr <<
+	"Volume " << pPVModel->GetCurrentPV()->GetName() <<
+	", Solid " << pPVModel->GetCurrentLV()->GetSolid()->GetName() <<
+	" (" << pPVModel->GetCurrentLV()->GetSolid()->GetEntityType();
                         G4cerr <<
 	"\nG4Polyhedron facet with " << i << " edges" << G4endl;	
 		}
@@ -335,15 +341,15 @@ void G4FRSCENEHANDLER::SendNdiv ( void )
 	G4int	num_division = FR_DEFALUT_NDIV_VALUE ;
 
 		//-----  number used for dividing a curved surface, Ndiv
-	if ( GetModel() ) {
-	   num_division = GetModel()->GetModelingParameters()->GetNoOfSides();
-	} else {
+	// if ( GetModel() ) {  ?? Why test for model.  Can be zero.  JA ??
+	   num_division = fpViewer->GetViewParameters().GetNoOfSides();
+	// } else {
 #if defined DEBUG_FR_SCENE
 	   G4cerr << "WARNING: GetNoOfSides() failed. " ;
 	   G4cerr << "The default value " << num_division ;
 	   G4cerr << " is assigned." << G4endl;
 #endif
-	}
+	//}
 
 		//---------- Error recovery for too small Ndiv
 	num_division = ( num_division < 3 ? 3 : num_division ); 
@@ -994,11 +1000,15 @@ void  G4FRSCENEHANDLER::SendPhysVolName ( void )
 	const G4VModel* pv_model  = GetModel();
 	if (!pv_model) { return ; } 
 
+        G4PhysicalVolumeModel* pPVModel =
+          dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+        if (!pPVModel) { return ; }
+
 	// Current Physical volume name 
-	G4String  pv_name  = pv_model->GetCurrentTag() ;
+	G4String  pv_name  = pPVModel->GetCurrentTag() ;
 
 	// Current depth of volume
-	G4int& cur_depth = fCurrentDepth;
+	G4int cur_depth = pPVModel->GetCurrentDepth() ;
 
 	// Make a string to be sent
 	// e.g. experimental_Hall.1, where "1" is the copy number

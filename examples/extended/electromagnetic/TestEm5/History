@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2005/12/06 11:46:46 gcosmo Exp $
+$Id: History,v 1.75 2006/06/02 13:32:48 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,32 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+02-06-06 mma (testem5-V08-00-04)
+- SteppingAction. prePoint->GetTouchableHandle()->GetVolume()
+     
+30-05-06 mma (testem5-V08-00-03)
+- SteppingAction. prePoint->GetTouchable()->GetVolume()
+- RunAction. Msc proj angle : compute rms of central part only
+- new macros for e- backscattering : acosta.mac tavora.mac 
+     
+19-05-06 mma (testem5-V08-00-02)
+- update README
+- count energy of killed secondaries
+- print full dEdx
+     
+29-03-06 mma (testem5-V08-00-01)
+- TrackingAction: more precise definition of transmit and reflect
+     
+28-03-06 mma (testem5-V08-00-00)
+- add livermore physicsList
+
+20-03-06 mma
+- migration mum -> um in many macros
+- complete penelope physicsList
+       
+09-12-05 mma
+- TestEm5.in : change Si sizes (20mum * 50mum) to better drawing
 
 06-12-05 Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

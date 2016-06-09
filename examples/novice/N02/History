@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2005/06/01 17:41:45 allison Exp $
+$Id: History,v 1.47 2006/06/16 10:19:30 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,16 +15,30 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-01-06-05  John Allison  (exampleN02-V07-00-03)
+16-06-06 G.Cosmo (exampleN02-V08-00-03)
+- Use coherent allocation scheme for user-classes and
+  initialisation in main().
+
+15-06-06 G.Cosmo (exampleN02-V08-00-02)
+- Separate instantiation of the user-stepping-verbose class from
+  initialisation of the G4VSteppingVerbose singleton.
+
+02-06-06 mma (exampleN02-V08-00-01)
+- ExN02TrackerSD.cc: replace Touchable by TouchableHandle
+          
+31-03-06 mma (exampleN02-V08-00-00)
+- Add a sentence in README for G4UserLimits and G4StepLimiter.
+     
+01-06-05 J.Allison  (exampleN02-V07-00-03)
 - ExN02TrackerHit.cc: Changed screen size to 2 pixels.
      
 31-05-05 mma (exampleN02-V07-00-02)
 - G4UserLimits + G4StepLimiter become uncommented
      
-30th May 2005  John Allison  (exampleN02-V07-00-01)
+30-05-05  J.Allison  (exampleN02-V07-00-01)
 - Completed replacement of vis manager with G4VisExecutive.
 
-3rd May 2005  John Allison  (examples-V07-00-03)
+3rd May 2005 J.Allison  (examples-V07-00-03)
 - Replaced vis manager with G4VisExecutive.
 
 28-01-05 mma (exampleN02-V07-00-00)

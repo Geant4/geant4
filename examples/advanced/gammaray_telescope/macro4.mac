@@ -1,0 +1,14 @@
+/run/verbose 1
+/tracking/storeTrajectory 1
+/gun/sourceGen false
+/run/initialize
+/gps/particle e-
+/gps/direction 0 0 -1
+/gps/pos/type Plane
+/gps/pos/radius 10.5 cm
+/gps/pos/centre 0. 0. 0. cm
+/gps/ang/type cos
+/gps/ang/maxtheta 1. deg
+/gps/ene/type Mono
+/gps/ene/mono 0.5 GeV
+/run/beamOn 10

@@ -1,4 +1,4 @@
-$Id: History,v 1.99 2005/11/09 14:51:07 gcosmo Exp $
+$Id: History,v 1.111 2006/06/22 10:38:08 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,67 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 22nd, 2006  J.Apostolakis - field-V08-00-07
+-----------------------------
+- G4ExactHelixStepper: reintroduced corrected class 
+    --> testPropagateMagField now tests it also (added)
+- G4MagHelicalStepper: made Stepper virtual (for now) 
+             to enable G4ExactHelixStepper to override it
+
+June 21st, 2006  J.Apostolakis - field-V08-00-06
+-----------------------------
+- G4ExactHelixStepper: taking out class 
+   (provisional tag in case of difficulties with class, revisions)
+
+June 21st, 2006  J.Apostolakis - field-V08-01-00
+-----------------------------
+- G4MagIntegratorStepper
+Added SetEquationOfMotion method - needed for Geant4e
+
+May 27th, 2006  J.Apostolakis - field-V08-00-05
+-----------------------------
+- G4FieldTrack: Fix for simple compilation error on Sun.
+
+May 23rd, 2006  J.Apostolakis - field-V08-00-04
+-----------------------------
+- G4FieldTrack: Fix for memory leak for ChargeState
+   Made G4ChargeState a data member (has an instance)
+
+May 18th, 2006  J.Apostolakis - field-V08-00-03
+-----------------------------
+- G4FieldTrack: Fix for issue with gcc 4.0  (mac)
+
+May 16th, 2006  J.Apostolakis - field-V08-00-02
+-----------------------------
+- G4ExactHelixStepper
+   Taken out alpha version - it was included in error 
+
+May 11th, 2006  J.Apostolakis - field-V08-00-01
+-----------------------------
+- G4FieldTrack
+   Significant, provisional change:
+     * Added charge and moments to FieldTrack 
+         (SetMethods,  and pointer to embedded class G4ChargeState)
+   Technical revisions:
+     * New constructor, with charge and without velocity
+     * New almost-default constructor (taking a character)
+   Also: 
+     * New constructor to take const reference to Spin
+     * New implementation method UpdateFourMomentum
+     * Streaming operator takes const reference, 
+         and outputs momentum magnitude & direction magn.
+
+- G4ExactHelixStepper
+   Included in error 
+
+Apr 6th, 2006  J.Apostolakis - field-V08-00-00
+----------------------------
+- In G4FieldManager
+ Added missing  const GetChordFinder() method -- Problem report #847 
+ Corrected description (at top of include file hh):
+  - It is possible to set the field manager of a logical volume (since long)
+
 
 Nov 9th, 2005  G.Cosmo - field-V07-01-00
 ----------------------

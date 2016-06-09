@@ -1,64 +1,119 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.2 2003/11/03 17:15:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4TransportationManager.icc,v 1.6 2006/06/29 18:36:26 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 // ------------------------------------------------------------
 //  GEANT 4  inlined function members implementation
 // ------------------------------------------------------------
 //
-// Created:  10 March 1997, J. Apostolakis
+// Created :  10 March 1997, J. Apostolakis
+// Reviewed:  26 April 2006, G. Cosmo
 //  
-// --------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
+// ----------------------------------------------------------------------------
+// GetNavigatorForTracking()
+//
+// Utility method to return the active navigator for tracking, always
+// the first in the collection of registered navigators.
+//
 inline
 G4Navigator* G4TransportationManager::GetNavigatorForTracking() const
 {
-   return fNavigatorForTracking;
+   return fNavigators[0];
 }
 
+// ----------------------------------------------------------------------------
+// SetNavigatorForTracking()
+//
+// Set the active navigator for tracking, always
+// the first in the collection of registered navigators.
+//
+inline
+void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
+{
+   fNavigators[0] = newNavigator;
+}
+
+// ----------------------------------------------------------------------------
+// GetPropagatorInField()
+//
+// Return the associated propagator in field.
+//
 inline
 G4PropagatorInField* G4TransportationManager::GetPropagatorInField() const
 {
    return fPropagatorInField;
 }
 
+// ----------------------------------------------------------------------------
+// SetPropagatorInField()
+//
+// Set the associated propagator in field.
+//
+inline
+void G4TransportationManager::
+SetPropagatorInField( G4PropagatorInField* newFieldPropagator )
+{
+   fPropagatorInField = newFieldPropagator;
+}
+
+// ----------------------------------------------------------------------------
+// GetFieldManager()
+//
+// Return the associated field manager.
+//
 inline
 G4FieldManager* G4TransportationManager::GetFieldManager() const
 {
    return fFieldManager;
 }
 
+// ----------------------------------------------------------------------------
+// GetNoActiveNavigators()
+//
+// Return an iterator to the list of active navigators.
+//
 inline
-void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
+size_t G4TransportationManager::GetNoActiveNavigators() const
 {
-   fNavigatorForTracking = newNavigator;
+   return fActiveNavigators.size();
 }
 
+// ----------------------------------------------------------------------------
+// GetActiveNavigatorsIterator()
+//
+// Return an iterator to the list of active navigators.
+//
 inline
-void G4TransportationManager::SetPropagatorInField( 
-           G4PropagatorInField* newFieldPropagator )
+std::vector<G4Navigator*>::iterator
+G4TransportationManager::GetActiveNavigatorsIterator()
 {
-   fPropagatorInField = newFieldPropagator;
+   std::vector<G4Navigator*>::iterator iterator
+     = std::vector<G4Navigator*>::iterator(fActiveNavigators.begin());
+   return iterator;
 }
-

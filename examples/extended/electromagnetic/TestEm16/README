@@ -1,0 +1,112 @@
+$Id: README,v 1.2 2006/05/24 12:58:49 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm16
+                            --------
+      Simulate synchrotron radiation
+	
+ 1- GEOMETRY DEFINITION
+
+     The geometry consists of a single block of a homogenous material.
+
+     Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+     The default is 500 m of vacuum.
+
+     A transverse uniform magnetic field can be applied.
+ 
+     The default geometry is constructed in DetectorConstruction class,
+     but all of the above parameters can be changed interactively via
+     the commands defined in the DetectorMessenger class.
+ 
+ 2- PHYSICS LIST
+
+     The particle list is the one of novice/exampleN03 and TestEm6
+     with in addition synchrotron radiation.
+     To make the synchrotron radiation easily visible, a very low
+     pressure "vaccuum" and a magnetic field of by default 1 Tesla
+     in z-direction is used.
+ 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+
+     The primary kinematic consists of a single particle which hits the
+     block perpendicular to the input face. The type of the particle
+     and its energy are set in the PrimaryGeneratorAction class, and can
+     changed via the G4 build-in commands of ParticleGun class (see
+     the macros provided with this example).
+     The default is an positron of 10 GeV.
+     	
+     In addition one can choose randomly the impact point of the incident
+     particle. The corresponding interactive command is built in
+     PrimaryGeneratorMessenger class.
+	 	
+     A RUN is a set of events.
+
+
+ 4- VISUALIZATION
+
+     The Visualization Manager is set in the main().
+     The initialisation of the drawing is done via the command
+     > /control/execute vis.mac
+     > /run/beamOn 1
+ 
+     The detector has a default view which is a longitudinal view of the box.
+ 
+     The tracks are drawn at the end of event, and erased at the end of run.
+     Optionaly one can choose to draw all particles, only the charged one,
+     or none. This command is defined in EventActionMessenger class.
+
+ 5- PHYSICS DEMO
+
+     The particle's type and the physic processes which will be available
+     in this example are set in PhysicsList class.
+
+     In addition a build-in interactive command (/process/inactivate proname)
+     allows to activate/inactivate the processes one by one.
+
+     The threshold for producing secondaries can be changed.
+     eg: /run/particle/setCut 100 micrometer
+         /run/initialize
+	
+     To visualize the Synchrotron radiation :
+	 /control/execute vis.mac
+		  	
+ 6- HOW TO START ?
+
+     - compile and link to generate an executable
+	% cd geant4/examples/extended/electromagnetic/TestEm16
+ 	% make
+ 
+     - execute Test  in 'batch' mode from macro files
+ 	% TestEm16    run01.mac
+ 
+     - execute Test  in 'interactive mode' with visualization
+ 	% TestEm16
+ 		....
+ 	Idle> type your commands
+ 		....
+ 	Idle> exit
+
+7- HISTOGRAMS
+
+  TestEm16 produces 3 histograms which illustrate synchrotron radiation.
+  The photon energy spectrum (photons / energy bin) and the power spectrum
+  (photon spectrum weighted with the photon energy) and a histogram
+  of the path length between photon radiation is produced.
+
+  By default the histograms are not activated. To activate histograms
+  the environment variable G4ANALYSIS_USE should be defined. For instance
+  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
+
+  Before compilation of the example it is optimal to clean up old files:
+	make histclean
+	make
+
+  By default the histograms are saved as testem16.hbook
+  It is possible to choose the format of the histogram file (hbook, root, XML):
+  comment/uncomment 1 line in the constructor of RunAction.

@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2005/11/09 15:02:11 gcosmo Exp $
+$Id: History,v 1.63 2005/12/21 17:37:50 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21/12/2005 : G. Cosmo          breps-V08-00-00
+- Use explicit 'HepGeom' namespace for 'Identity', to allow for porting
+  on Windows/VC++ when using CLHEP-2.0.X.
 
 09/11/2005 : G. Cosmo          breps-V07-01-01
 - Added fake default constructor for concrete solids and G4BREPSolid,

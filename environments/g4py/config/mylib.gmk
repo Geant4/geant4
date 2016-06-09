@@ -1,0 +1,16 @@
+# $Id: mylib.gmk,v 1.2 2006/04/25 05:53:05 kmura Exp $
+# ===========================================================
+#   Script for building my libray
+# ===========================================================
+include $(G4PY_INSTALL)/config/sys/$(Q_SYSTEM).gmk
+
+# include/lib directives started...
+INCFLAGS := -I.
+LOPT := 
+
+# finished
+CXXFLAGS += $(INCFLAGS)
+
+# ok, building...
+include $(G4PY_INSTALL)/config/build.gmk
+

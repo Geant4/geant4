@@ -1,0 +1,55 @@
+$Id: History,v 1.14 2006/06/29 02:04:49 kmura Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                       Geant4Py History file
+                       ---------------------
+
+Geant4Py is a Geant4-Python bridge.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+29 June 2006 K.Murakami
+ - "site-modules/primaries/MedicalBeam/MedicalMeam.cc"
+   fix a bug in calculation of cos from a sin value
+ - remove duplicated DISCLAIMER (ExN03PhysicsList.cc/hh in site-modules)
+
+27 June 2006 K.Murakami
+ - fix rpath of boost_python (config/sys/linux.gmk, linuxx8664gcc.gmk)
+
+21 June 2006 K.Murakami
+ - sh version of configure script
+ - G4UserStackingAction: fixed for not being called
+
+14 June 2006 K.Murakami
+ - update 00README
+ - update expose of G4Track
+ - change python calls pass-by-reference
+   (XXXUserAction::XXXAction())
+ - change install path of site-modules (lib/site-modules -> lib/)
+ - remove COPYING
+ - update examples/education/lesson2
+
+07 June 2006 K.Murakami
+ - fix segmentation fault at termination
+   (XXUserAction-s, GraphicSystem-s)
+
+05 June 2006 K.Murakami
+ - add disclaimer for .cc/.hh files
+ - some modifications for 08-00-ref-05
+   (G4FieldManager/G4EmCalculator/G4VPhysicalVolume/G4ParticleDefinition)
+
+25 April 2006 K.Murakami
+ - update to a revised version (local tag: g4py-weekly-23-Apr-06)
+ - Directory structure is slightly modified.
+ - some classes are newly exposed.
+ - some new examples are added.
+
+27 February 2006 K.Murakami
+ - commit the first version (local tag: g4py-27-feb-06)
+

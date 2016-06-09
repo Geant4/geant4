@@ -66,7 +66,7 @@ idle> exit
                                                                         |
 3) Iodium  source:
 idle>/source/switch Iodium                                              |
-idle>/run/energy Iodium
+idle>/primary/energy Iodium
 idle>/run/beamOn NumberOfEvents     ...and then                         |
 idle>exit
                                                                         |
@@ -103,4 +103,4 @@ a macro is provided ad example of visualisation:  VisualisationMacro.mac|
 for comments, advices, doubts and questions: guatelli@ge.infn.it
 for more info http://www.ge.infn.it/geant4/examples/index.html
 
-last modified: Susanna Guatelli 30/5/2005
+last modified: Susanna Guatelli 15/5/2006

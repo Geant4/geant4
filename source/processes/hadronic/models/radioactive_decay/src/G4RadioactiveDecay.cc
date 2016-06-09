@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -44,6 +47,8 @@
 //
 // CHANGE HISTORY
 // --------------
+// 16 February 2006, V.Ivanchenko fix problem in IsApplicable connected with
+//            8.0 particle design
 // 18 October 2002, F. Lei
 //            in the case of beta decay, added a check of the end-energy 
 //            to ensure it is > 0.
@@ -194,11 +199,9 @@ G4bool G4RadioactiveDecay::IsApplicable( const G4ParticleDefinition &
   //
   // All particles, other than G4Ions, are rejected by default.
   //
-  if (!(aParticle.GetParticleType() == "nucleus")) {return false;}
-  else if (aParticle.GetPDGLifeTime() < 0. &&
-	   aParticle.GetParticleName() != "GenericIon") {
-    return false;
-  }
+  if (aParticle.GetParticleName() == "GenericIon")      {return true;}
+  else if (!(aParticle.GetParticleType() == "nucleus") || aParticle.GetPDGLifeTime() < 0. ) {return false;}
+
   //
   //
   // Determine whether the nuclide falls into the correct A and Z range.

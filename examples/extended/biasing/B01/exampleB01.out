@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -156,6 +156,14 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for GenericIon
+      Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  anti_proton
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 2 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 
 msc:  Model variant of multiple scattering for mu+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -195,30 +203,44 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+hIoni:   tables are built for  pi+
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
+
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary/stepping algorithm is active with facrange= 0.02  Step limitation 1
+
+hIoni:   tables are built for  pi-
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
+      Lambda tables from threshold to 100 TeV in 120 bins.
+      Scaling relation is used to proton dE/dx and range
+      Bether-Bloch model for Escaled > 0.297504 MeV, ICRU49 parametrisation for protons below.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 1
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         111 |         134 |         131 |         131 |   7.7860235 |   9.1470607 |           1 |
-cell_02_rep:0............ |           2 |          89 |         173 |         191 |        95.5 |   6.5725833 |   8.4009087 |           1 |
-cell_03_rep:0............ |           4 |          94 |         198 |         195 |       48.75 |   8.1266652 |   8.7051742 |           1 |
-cell_04_rep:0............ |           8 |         121 |         249 |         258 |       32.25 |   6.2161377 |   8.2818871 |           1 |
-cell_05_rep:0............ |          16 |         158 |         327 |         404 |       25.25 |   5.7902782 |   7.8825536 |           1 |
-cell_06_rep:0............ |          32 |         172 |         381 |         422 |     13.1875 |   5.7466488 |   7.8354734 |           1 |
-cell_07_rep:0............ |          64 |         192 |         394 |         578 |     9.03125 |  0.27715221 |   6.8450076 |           1 |
-cell_08_rep:0............ |         128 |         216 |         445 |         649 |   5.0703125 |   5.0240389 |   6.7365735 |           1 |
-cell_09_rep:0............ |         256 |         246 |         521 |         825 |   3.2226562 |   4.6137525 |   6.3768025 |           1 |
-cell_10_rep:0............ |         512 |         244 |         548 |         781 |   1.5253906 |   5.1560281 |   6.6650097 |           1 |
-cell_11_rep:0............ |        1024 |         277 |         555 |         770 |  0.75195312 |  0.63315862 |   6.4423602 |           1 |
-cell_12_rep:0............ |        2048 |         319 |         653 |         952 |  0.46484375 |   4.6419804 |   6.6177668 |           1 |
-cell_13_rep:0............ |        4096 |         326 |         688 |        1044 |  0.25488281 |   3.8347969 |   6.3132198 |           1 |
-cell_14_rep:0............ |        8192 |         315 |         654 |         998 |  0.12182617 |  0.23732449 |   6.1765661 |           1 |
-cell_15_rep:0............ |       16384 |         307 |         623 |        1032 | 0.062988281 |   3.2698756 |   5.8998212 |           1 |
-cell_16_rep:0............ |       32768 |         313 |         644 |        1035 | 0.031585693 |  0.13643685 |   5.8093517 |           1 |
-cell_17_rep:0............ |       65536 |         345 |         722 |        1123 |  0.01713562 |  0.08543507 |   5.8104435 |           1 |
-cell_18_rep:0............ |      131072 |         304 |         723 |        1168 |0.0089111328 |  0.82062282 |   5.6784205 |           1 |
-rest_rep:0............... |      131072 |         346 |         346 |           0 |           0 |           0 |           0 |           0 |
-shieldWorld_rep:0........ |           1 |           4 |         104 |           0 |           0 |          10 |          10 |           1 |
+cell_01_rep:0............ |           1 |         113 |         133 |         113 |         113 |   8.4732787 |   9.1010333 |           1 |
+cell_02_rep:0............ |           2 |          72 |         163 |         200 |         100 |    4.323174 |    8.705577 |           1 |
+cell_03_rep:0............ |           4 |          85 |         178 |         221 |       55.25 |   5.7181907 |   8.1739911 |           1 |
+cell_04_rep:0............ |           8 |         104 |         214 |         250 |       31.25 |   6.2701176 |   8.0477481 |           1 |
+cell_05_rep:0............ |          16 |         111 |         235 |         288 |          18 |   6.2358927 |   7.7232756 |           1 |
+cell_06_rep:0............ |          32 |         122 |         255 |         283 |     8.84375 |   6.5801742 |   7.7215434 |           1 |
+cell_07_rep:0............ |          64 |         130 |         280 |         375 |    5.859375 |    5.651861 |   7.0303223 |           1 |
+cell_08_rep:0............ |         128 |         130 |         267 |         335 |   2.6171875 |   5.6877812 |   7.0891822 |           1 |
+cell_09_rep:0............ |         256 |         144 |         297 |         475 |   1.8554688 |   4.9052988 |   6.4262423 |           1 |
+cell_10_rep:0............ |         512 |         156 |         327 |         464 |     0.90625 |   4.9657552 |   6.5502973 |           1 |
+cell_11_rep:0............ |        1024 |         189 |         373 |         541 |  0.52832031 | 0.036775942 |   6.4250402 |           1 |
+cell_12_rep:0............ |        2048 |         202 |         443 |         596 |  0.29101562 |   4.9093467 |   6.3738032 |           1 |
+cell_13_rep:0............ |        4096 |         226 |         459 |         636 |  0.15527344 |   3.7290047 |   5.8188979 |           1 |
+cell_14_rep:0............ |        8192 |         269 |         554 |         935 |  0.11413574 |   4.0605216 |   5.6795257 |           1 |
+cell_15_rep:0............ |       16384 |         300 |         614 |        1095 | 0.066833496 | 0.089155765 |   5.1283107 |           1 |
+cell_16_rep:0............ |       32768 |         371 |         749 |        1427 | 0.043548584 | 0.042230138 |    4.713344 |           1 |
+cell_17_rep:0............ |       65536 |         382 |         779 |        1549 | 0.023635864 |   2.7935776 |   4.1630758 |           1 |
+cell_18_rep:0............ |      131072 |         312 |         719 |        1516 | 0.011566162 |  0.14353462 |   4.1215867 |           1 |
+rest_rep:0............... |      131072 |         333 |         333 |           0 |           0 |           0 |           0 |           0 |
+shieldWorld_rep:0........ |           1 |          15 |         114 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: MassImportanceProcess, will be removed!
   The initial Vectors: 

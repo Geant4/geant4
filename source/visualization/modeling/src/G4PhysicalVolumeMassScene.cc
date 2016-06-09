@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.cc,v 1.4 2005/01/26 16:48:56 johna Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4PhysicalVolumeMassScene.cc,v 1.6 2006/06/29 21:32:52 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // John Allison  10th August 1998.
@@ -39,28 +42,18 @@
 #include "G4VPVParameterisation.hh"
 #include "G4UnitsTable.hh"
 
-G4PhysicalVolumeMassScene::G4PhysicalVolumeMassScene ():
+G4PhysicalVolumeMassScene::G4PhysicalVolumeMassScene
+(G4PhysicalVolumeModel* pPVModel):
+  fpPVModel (pPVModel),
   fVolume (0.),
   fMass (0.),
   fpLastPV (0),
   fPVPCount (0),
   fLastDepth (0),
-  fLastDensity (0.),
-  fCurrentDepth (0),
-  fpCurrentPV (0),
-  fpCurrentLV (0),
-  fpCurrentMaterial (0)
+  fLastDensity (0.)
 {}
 
 G4PhysicalVolumeMassScene::~G4PhysicalVolumeMassScene () {}
-
-void G4PhysicalVolumeMassScene::EstablishSpecials
-(G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
-					&fpCurrentPV,
-					&fpCurrentLV,
-					&fpCurrentMaterial);
-}
 
 void G4PhysicalVolumeMassScene::Reset ()
 {
@@ -71,32 +64,33 @@ void G4PhysicalVolumeMassScene::Reset ()
   fLastDepth = 0;
   fLastDensity = 0.;
   fDensityStack.clear();
-  fCurrentDepth = 0;
-  fpCurrentPV = 0;
-  fpCurrentLV = 0;
-  fpCurrentMaterial = 0;
 }
 
 void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
 {
-  if (fpCurrentPV != fpLastPV) {
-    fpLastPV = fpCurrentPV;
+  G4int currentDepth = fpPVModel->GetCurrentDepth();
+  G4VPhysicalVolume* pCurrentPV = fpPVModel->GetCurrentPV();
+  //G4LogicalVolume* pCurrentLV = fpPVModel->GetCurrentLV();
+  G4Material* pCurrentMaterial = fpPVModel->GetCurrentMaterial();
+
+  if (pCurrentPV != fpLastPV) {
+    fpLastPV = pCurrentPV;
     fPVPCount = 0;
   }
 
   G4double currentVolume = ((G4VSolid&)solid).GetCubicVolume();
-  G4double currentDensity = fpCurrentMaterial->GetDensity();
+  G4double currentDensity = pCurrentMaterial->GetDensity();
   /* Using G4Polyhedron... (gives slightly different answers on Tubs, e.g.).
   G4Polyhedron* pPolyhedron = solid.GetPolyhedron();
   if (pPolyhedron) {
     G4Material* pMaterial;
-    G4VPVParameterisation* pP = fpCurrentPV->GetParameterisation();
+    G4VPVParameterisation* pP = pCurrentPV->GetParameterisation();
     if (pP) {
-      pMaterial = pP -> ComputeMaterial (fPVPCount++, fpCurrentPV);
+      pMaterial = pP -> ComputeMaterial (fPVPCount++, pCurrentPV);
     } else {
-      pMaterial = fpCurrentLV->GetMaterial();
+      pMaterial = pCurrentLV->GetMaterial();
     }
-    assert(pMaterial == fpCurrentMaterial);
+    assert(pMaterial == pCurrentMaterial);
     currentVolume = pPolyhedron->GetVolume();
     currentDensity = pMaterial->GetDensity();
   } else {
@@ -112,17 +106,17 @@ void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
   }
   */
 
-  if (fCurrentDepth == 0) fVolume = currentVolume;
+  if (currentDepth == 0) fVolume = currentVolume;
 
-  if (fCurrentDepth > fLastDepth) {
+  if (currentDepth > fLastDepth) {
     fDensityStack.push_back (fLastDensity);
-  } else if (fCurrentDepth < fLastDepth) {
+  } else if (currentDepth < fLastDepth) {
     fDensityStack.pop_back();
   }
-  fLastDepth = fCurrentDepth;
+  fLastDepth = currentDepth;
   fLastDensity = currentDensity;
   G4double motherDensity = 0.;
-  if (fCurrentDepth > 0) motherDensity = fDensityStack.back();
+  if (currentDepth > 0) motherDensity = fDensityStack.back();
 
   G4double subtractedMass = currentVolume * motherDensity;
   G4double addedMass = currentVolume * currentDensity;
@@ -145,9 +139,9 @@ void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
     G4cout <<
       "G4PhysicalVolumeMassScene::AccrueMass: WARNING:"
       "\n  Mass going negative for \""
-	   << fpCurrentPV->GetName() <<
+	   << pCurrentPV->GetName() <<
       "\", copy "
-	   << fpCurrentPV->GetCopyNo() <<
+	   << pCurrentPV->GetCopyNo() <<
       ".  Larger than mother?"
 	   << G4endl;
   }

@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2005/12/05 06:44:10 perl Exp $
+$Id: History,v 1.46 2006/05/12 12:43:43 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,8 +21,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-History file for visualization category
+History file for Ray Tracer category
 ---------------------------------------
+
+12th May 2006  John Allison  (raytracer-V08-00-04)
+- SetRecomputeTransients(false).
+
+10th May 2006  Makoto Asai (raytracer-V08-00-03)
+- Remove G4RayShooter class to Event category.
+
+21st April 2006  John Allison  (raytracer-V08-00-02)
+- Relies on improved protection for null models and parameters.
+
+26th January 2006  John Allison  (raytracer-V08-00-01)
+- G4RayTracerSceneHandler: Improved handling of dummy scene.
+- G4TheRayTracer: Advance work for possible inclusion of
+  anti-aliasing.  Currently no change of functionality.
+
+11th January 2006  John Allison  (raytracer-V08-00-00)
+- Reorganisation (needs visman-V08-00-02):
+  o Allowed multiple ray tracers.
+  o Separated out the original ray tracer into G4TheRayTracer, to be
+    used by viewers.
+  o Made G4RTMessenger a smart singleton that queries the vis manager
+    for tracers.
+  o Caused G4RayTracer to instantiate a default ray tracer if the user
+    wants to use /vis/rayTracer commands without the benefit of the
+    vis system (scene handlers and viewers).
 
 4th December 2005  Makoto Asai (raytracer-V07-01-08)
 - Correct initialization of G4RTTrackingAction and G4RTSteppingAction

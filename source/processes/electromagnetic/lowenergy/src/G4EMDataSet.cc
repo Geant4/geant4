@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.9.2.1 2005/11/30 16:35:15 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4EMDataSet.cc,v 1.12 2006/06/29 19:39:44 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
@@ -37,196 +40,277 @@
 #include <fstream>
 #include <sstream>
 
-// Constructor
-
-G4EMDataSet::G4EMDataSet(G4int Z,
-			 G4DataVector* points, 
-			 G4DataVector* values,
-			 const G4VDataSetAlgorithm* interpolation,
-			 G4double unitE, G4double unitData)
-  :z(Z), energies(points), data(values), algorithm(interpolation)
+                                                 G4EMDataSet :: G4EMDataSet(G4int argZ, G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
+:
+ z(argZ),
+ energies(0),
+ data(0),
+ algorithm(argAlgorithm),
+ unitEnergies(argUnitEnergies),
+ unitData(argUnitData)
 {
-  numberOfBins = energies->size();
-  unit1 = unitE;
-  unit2 = unitData;
-  if (interpolation == 0) 
-    G4Exception("G4EMDataSet::G4EMDataSet - interpolation algorithm = 0");
+ if (algorithm == 0) 
+  G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
 }
 
-G4EMDataSet:: G4EMDataSet(G4int Z, 
-			  const G4String& dataFile,
-			  const G4VDataSetAlgorithm* interpolation,
-			  G4double unitE, G4double unitData)
-      :z(Z), algorithm(interpolation)
-{
-  energies = new G4DataVector;
-  data = new G4DataVector;
-  unit1 = unitE;
-  unit2 = unitData;  
-  LoadData(dataFile);
-  numberOfBins = energies->size();
-  if (interpolation == 0) 
-    G4Exception("G4EMDataSet::G4EMDataSet - interpolation algorithm = 0");
 
+
+                                                 G4EMDataSet :: G4EMDataSet(G4int argZ, G4DataVector * argEnergies, G4DataVector * argData, G4VDataSetAlgorithm * argAlgorithm, G4double argUnitEnergies, G4double argUnitData)
+:
+ z(argZ),
+ energies(argEnergies),
+ data(argData),
+ algorithm(argAlgorithm),
+ unitEnergies(argUnitEnergies),
+ unitData(argUnitData)
+{
+ if (algorithm==0) 
+  G4Exception("G4EMDataSet::G4EMDataSet - interpolation == 0");
+
+ if ((energies==0) ^ (data==0))
+  G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data (zero case)");
+
+ if (energies==0)
+  return;
+  
+ if (energies->size()!=data->size())
+  G4Exception("G4EMDataSet::G4EMDataSet - different size for energies and data");
 }
 
-// Destructor
 
-G4EMDataSet::~G4EMDataSet()
+
+                                                 G4EMDataSet :: ~G4EMDataSet()
 { 
-  delete algorithm;
+ delete algorithm;
+ 
+ if (energies)
   delete energies;
+
+ if (data)
   delete data;
 }
 
 
-G4double G4EMDataSet::FindValue(G4double e, G4int) const
+
+
+
+G4double                                        G4EMDataSet :: FindValue(G4double argEnergy, G4int /* argComponentId */) const
 {
-  G4double value = 0.;
-  if ( !(energies->empty()) )
-    {
-      G4double e0 = (*energies)[0];
-      // Protections
-      size_t bin = FindBinLocation(e);
-      if (bin == numberOfBins)
-	{
-	  //      G4cout << "WARNING - G4EMDataSet::FindValue: energy outside upper boundary"
-	  //     << G4endl;
-	  value = (*data)[bin];
-	}
-      else if (e <= e0)
-	{
-	  //     G4cout << "WARNING - G4EMDataSet::FindValue: energy outside lower boundary"
-	  //     << G4endl;
-	  value = (*data)[0];
-	}
-      else
-	{
-	  if (algorithm == 0) G4Exception("G4EMDataSet::FindValue - interpolation algorithm = 0");
-	  value = algorithm->Calculate(e,bin,*energies,*data);
-	}
-    }
-  return value;
+ if (!energies)
+  G4Exception("G4EMDataSet::FindValue - energies == 0");
+  
+ if (energies->empty())
+  return 0;
+
+ if (argEnergy <= (*energies)[0])
+  return (*data)[0];
+
+ size_t i(energies->size()-1);
+
+ if (argEnergy >= (*energies)[i])
+  return (*data)[i];
+
+ return algorithm->Calculate(argEnergy, FindLowerBound(argEnergy), *energies, *data);
 }
 
-G4int G4EMDataSet::FindBinLocation(G4double energy) const
-{
-  // Protection against call outside allowed range
-  G4double e0 = (*energies)[0];
-  if (energy < e0)
-    {
-      //  G4cout << z
-      //     << " - WARNING - G4EMDataSet::FindBinLocation called with argument " 
-      //     << energy 
-      //    << " outside lower limit " 
-      //   << e0
-      //   << "; replaced with lower limit" 
-      //  << G4endl;
-      energy = e0;
-    }
 
-  size_t lowerBound = 0;
-  size_t upperBound = numberOfBins - 1;
+
+
+
+void                                            G4EMDataSet :: PrintData(void) const
+{
+ if (!energies)
+ {
+  G4cout << "Data not available." << G4endl;
+  return;
+ }
   
-  // Binary search
-  while (lowerBound <= upperBound) 
-    {
-      size_t midBin = (lowerBound + upperBound)/2;
-      if ( energy < (*energies)[midBin] ) upperBound = midBin-1;
-      else lowerBound = midBin+1;
+ size_t size = energies->size();
+ 
+ for (size_t i(0); i<size; i++)
+  G4cout << "Point: " << ((*energies)[i]/unitEnergies)
+	 << " - Data value : " << ((*data)[i]/unitData) << G4endl; 
+}
+
+
+
+
+
+void                                            G4EMDataSet :: SetEnergiesData(G4DataVector * argEnergies, G4DataVector * argData, G4int /* argComponentId */)
+{
+ if (energies)
+  delete energies;
+ energies=argEnergies;
+
+ if (data)
+  delete data;
+ data=argData;
+ 
+ if ((energies==0) ^ (data==0))
+  G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data (zero case)");
+
+ if (energies==0)
+  return;
+  
+ if (energies->size()!=data->size())
+  G4Exception("G4EMDataSet::SetEnergiesData - different size for energies and data");
+}
+
+
+
+
+
+G4bool                                          G4EMDataSet :: LoadData(const G4String & argFileName)
+{
+ // The file is organized into two columns:
+ // 1st column is the energy
+ // 2nd column is the corresponding value
+ // The file terminates with the pattern: -1   -1
+ //                                       -2   -2
+ 
+ G4String fullFileName(FullFileName(argFileName));
+ std::ifstream in(fullFileName);
+
+ if (!in.is_open())
+ {
+  G4String message("G4EMDataSet::LoadData - data file \"");
+  message+=fullFileName;
+  message+="\" not found";
+  G4Exception(message);
+ }
+
+ G4DataVector * argEnergies=new G4DataVector;
+ G4DataVector * argData=new G4DataVector;
+
+ G4double a;
+ bool energyColumn(true);
+
+ do
+ {
+  in >> a;
+  
+  if (a!=-1 && a!=-2)
+  {
+   if (energyColumn)
+    argEnergies->push_back(a*unitEnergies);
+   else
+    argData->push_back(a*unitData);
+   energyColumn=(!energyColumn);
   }
-  
-  return upperBound;
+ }
+ while (a != -2);
+ 
+ SetEnergiesData(argEnergies, argData, 0);
+ 
+ return true;
 }
 
-void G4EMDataSet::LoadData(const G4String& fileName)
+
+
+G4bool                                          G4EMDataSet :: SaveData(const G4String & argFileName) const
 {
-  // Build the complete string identifying the file with the data set
-  
-  std::ostringstream ost;
-  
-  ost << fileName << z << ".dat";
-  
-  G4String name(ost.str());
-  
-  char* path = getenv("G4LEDATA");
-  if (!path)
-    { 
-      G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
-      G4Exception(excep);
-    }
-  
-  G4String pathString(path);
-  G4String separator("/");
+ // The file is organized into two columns:
+ // 1st column is the energy
+ // 2nd column is the corresponding value
+ // The file terminates with the pattern: -1   -1
+ //                                       -2   -2
+ 
+ G4String fullFileName(FullFileName(argFileName));
+ std::ofstream out(fullFileName);
 
-  G4String dirFile = pathString + separator + name;
-  std::ifstream file(dirFile);
-  std::filebuf* lsdp = file.rdbuf();
+ if (!out.is_open())
+ {
+  G4String message("G4EMDataSet::SaveData - cannot open \"");
+  message+=fullFileName;
+  message+="\"";
+  G4Exception(message);
+ }
+ 
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
   
-  if (! (lsdp->is_open()) )
-	{
-	  G4String s1("G4EMDataSet - data file: ");
-          G4String s2(" not found");
-	  G4String excep = s1 + dirFile + s2;
-	  G4Exception(excep);
-	}
-  G4double a = 0;
-  G4int k = 1;
+ if (energies!=0 && data!=0)
+ {
+  G4DataVector::const_iterator i(energies->begin());
+  G4DataVector::const_iterator endI(energies->end());
+  G4DataVector::const_iterator j(data->begin());
+  
+  while (i!=endI)
+  {
+   out.precision(10);
+   out.width(15);
+   out.setf(std::ofstream::left);
+   out << ((*i)/unitEnergies) << ' ';
 
-  do
-    {
-      file >> a;
-      G4int nColumns = 2;
-      // The file is organized into two columns:
-      // 1st column is the energy
-      // 2nd column is the corresponding value
-      // The file terminates with the pattern: -1   -1
-      //                                       -2   -2
-      if (a == -1 || a == -2)
-	{
-	}
-      else
-	{
-	  if (k%nColumns != 0)
-	    {	
-	      G4double e = a * unit1;
-	      energies->push_back(e);
-	      k++;
-	    }
-	  else if (k%nColumns == 0)
-	    {
-	      G4double value = a * unit2;
-	      data->push_back(value);
-	      k = 1;
-	    }
-	}
-      
-    } while (a != -2); // end of file
-  
-  file.close();
+   out.precision(10);
+   out.width(15);
+   out.setf(std::ofstream::left);
+   out << ((*j)/unitData) << std::endl;
+
+   i++;
+   j++;
+  }
+ }
+ 
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -1.f << ' ';
+
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -1.f << std::endl;
+
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -2.f << ' ';
+
+ out.precision(10);
+ out.width(15);
+ out.setf(std::ofstream::left);
+ out << -2.f << std::endl;
+
+ return true;
 }
 
-void G4EMDataSet::PrintData() const
+
+
+
+
+size_t                                          G4EMDataSet :: FindLowerBound(G4double argEnergy) const
 {
-  size_t size = numberOfBins;
-  for (size_t i=0; i<size; i++)
-    {
-      G4double e = (*energies)[i]  / unit1;
-      G4double sigma = (*data)[i] / unit2 ;
-      G4cout << "Point: "
-	     << e
-	     << " - Data value : "
-	     << sigma 
-	     << G4endl; 
-    }
+ size_t lowerBound(0);
+ size_t upperBound(energies->size() - 1);
+  
+ while (lowerBound <= upperBound) 
+ {
+  size_t midBin((lowerBound + upperBound)/2);
+
+  if (argEnergy < (*energies)[midBin])
+   upperBound = midBin-1;
+  else
+   lowerBound = midBin+1;
+ }
+  
+ return upperBound;
 }
 
 
-const G4VEMDataSet* G4EMDataSet::GetComponent(G4int) const 
-{ return 0; }
 
-void G4EMDataSet::AddComponent(G4VEMDataSet*) 
-{ }
 
-size_t G4EMDataSet::NumberOfComponents() const 
-{ return 0; }
+
+G4String                                        G4EMDataSet :: FullFileName(const G4String & argFileName) const
+{
+ char* path = getenv("G4LEDATA");
+ if (!path)
+  G4Exception("G4EMDataSet::FullFileName - G4LEDATA environment variable not set");
+  
+ std::ostringstream fullFileName;
+ 
+ fullFileName << path << '/' << argFileName << z << ".dat";
+                      
+ return G4String(fullFileName.str().c_str());
+}

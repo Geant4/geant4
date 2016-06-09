@@ -1,24 +1,28 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
 // $Id: HadrontherapyPhysicsList.cc,v 1.0
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
@@ -58,6 +62,7 @@
 #include "HadrontherapyProtonPrecompoundFermi.hh"
 #include "HadrontherapyProtonPrecompoundGEM.hh"
 #include "HadrontherapyProtonPrecompoundGEMFermi.hh"
+#include "HadrontherapyProtonBertini.hh"
 #include "HadrontherapyProtonBinary.hh"
 #include "HadrontherapyMuonStandard.hh"
 #include "HadrontherapyDecay.hh"
@@ -74,13 +79,21 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList(): G4VModularPhysicsList(),
 						      muonIsRegistered(false),
 						      decayIsRegistered(false)
 {
+  //
   // The threshold of production of secondaries is fixed to 10. mm
   // for all the particles, in all the experimental set-up
+  // The phantom is defined as a Geant4 Region. Here the cut is fixed to 0.001 * mm.
+  //
+ 
   defaultCutValue = 10. * mm;
-  messenger = new HadrontherapyPhysicsListMessenger(this);
-  SetVerboseLevel(1);
-  RegisterPhysics( new HadrontherapyParticles("particles") );
 
+  // Messenger: it is possible to activate interactively physics processes and models
+  messenger = new HadrontherapyPhysicsListMessenger(this);
+
+  SetVerboseLevel(1);
+
+  // Register all the particles involved in the experimental set-up
+  RegisterPhysics( new HadrontherapyParticles("particles") );
 }
 
 HadrontherapyPhysicsList::~HadrontherapyPhysicsList()
@@ -92,13 +105,16 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 {
   G4cout << "Adding PhysicsList component " << name << G4endl;
   
-  //
-  // Electromagnetic physics. 
+  //*************************//
+  // Electromagnetic physics //
+  //*************************//
   //
   // The user can choose three alternative approaches:
   // Standard, Low Energy based on the Livermore libraries and Low Energy Penelope
   //
 
+  // ******** PHOTONS ********//
+  
   // Register standard processes for photons
   if (name == "photon-standard") 
     {
@@ -152,6 +168,8 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  photonIsRegistered = true;
 	}
     }
+
+   // ******** Electrons ********//
 
   // Register standard processes for electrons
   if (name == "electron-standard") 
@@ -207,6 +225,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
+  // ******** Positrons ********//
   // Register standard processes for positrons
   if (name == "positron-standard") 
     {
@@ -240,7 +259,8 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 	  positronIsRegistered = true;
 	}
     }
-  
+ 
+  // ******** HADRONS AND IONS ********//
   // Register Low Energy  processes for protons and ions
   // Stopping power parameterisation: ICRU49 (default model)
   
@@ -377,7 +397,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
  
 
 //--------------------------------------------------------------------------------------------
-//Begin Hadronic Precompound models
+// Begin Hadronic Precompound models
 //--------------------------------------------------------------------------------------------
 //
 // Register the hadronic physics for protons, neutrons, ions
@@ -492,7 +512,31 @@ if (name == "proton-precompound-binary")
     }
 
 //--------------------------------------------------------------------------------------------
-// End Hadronic Binary models
+// Begin Hadronic Bertini model
+//--------------------------------------------------------------------------------------------
+
+//  Bertini model for protons, pions and neutrons
+
+if (name == "proton-bertini") 
+    {
+      if (protonHadronicIsRegistered) 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "HadrontherapyPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new HadrontherapyProtonBertini(name) );
+	  protonHadronicIsRegistered = true;
+	}
+
+    }
+
+//--------------------------------------------------------------------------------------------
+// End Hadronic models
 //--------------------------------------------------------------------------------------------
   
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered &&

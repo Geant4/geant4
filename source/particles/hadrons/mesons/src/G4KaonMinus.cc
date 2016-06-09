@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinus.cc,v 1.12 2005/01/14 03:49:16 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4KaonMinus.cc,v 1.14 2006/06/29 19:19:45 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -72,7 +75,7 @@ G4KaonMinus* G4KaonMinus::Definition()
                     0,              -1,             0,
                     1,              -1,             0,
               "meson",               0,             0,        -321,
-                false,       12.371*ns,          NULL,
+                false,       12.3785*ns,          NULL,
                 false,       "kaon");
 
  //create Decay Table
@@ -81,17 +84,17 @@ G4KaonMinus* G4KaonMinus::Definition()
  // create decay channels
   G4VDecayChannel** mode = new G4VDecayChannel*[6];
   // kaon- -> mu- + anti_nu_mu
-  mode[0] = new G4PhaseSpaceDecayChannel("kaon-",0.635,2,"mu-","anti_nu_mu");
+  mode[0] = new G4PhaseSpaceDecayChannel("kaon-",0.6339,2,"mu-","anti_nu_mu");
   // kaon- -> pi- + pi0
-  mode[1] = new G4PhaseSpaceDecayChannel("kaon-",0.212,2,"pi-","pi0");
+  mode[1] = new G4PhaseSpaceDecayChannel("kaon-",0.2103,2,"pi-","pi0");
   // kaon- -> pi- + pi+ + pi-
-  mode[2] = new G4PhaseSpaceDecayChannel("kaon-",0.056,3,"pi-","pi+","pi-");
+  mode[2] = new G4PhaseSpaceDecayChannel("kaon-",0.0559,3,"pi-","pi+","pi-");
   // kaon- -> pi- + pi0 + pi0
-  mode[3] = new G4PhaseSpaceDecayChannel("kaon-",0.017,3,"pi-","pi0","pi0");
+  mode[3] = new G4PhaseSpaceDecayChannel("kaon-",0.01757,3,"pi-","pi0","pi0");
   // kaon- -> pi0 + e- + anti_nu_e (Ke3)
-  mode[4] = new G4KL3DecayChannel("kaon-",0.048,"pi0","e-","anti_nu_e");
+  mode[4] = new G4KL3DecayChannel("kaon-",0.0493,"pi0","e-","anti_nu_e");
   // kaon- -> pi0 + mu- + anti_nu_mu (Kmu3)
-  mode[5] = new G4KL3DecayChannel("kaon-",0.032,"pi0","mu-","anti_nu_mu");
+  mode[5] = new G4KL3DecayChannel("kaon-",0.0330,"pi0","mu-","anti_nu_mu");
 
   for (G4int index=0; index <6; index++ ) table->Insert(mode[index]);
   delete [] mode;

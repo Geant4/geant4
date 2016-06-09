@@ -1,0 +1,18 @@
+FILE  photoelec.hbook
+LIST 
+C
+C   gamma 100 keV
+C 
+DETECTOR   6 (Iron) 10000. (cm)
+KINE       1 (gamma) 0.0001 (GeV)
+C
+PHOT    1
+COMP    0
+PAIR    0
+C
+CUTS    10.e-6 (cutgam)    10.e-6 (cutele)
+C
+SWIT    0 (draw)
+DEBUG   10 5 10000
+C
+TRIG    100000

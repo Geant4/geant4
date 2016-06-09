@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.12 2005/06/03 13:27:55 flongo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.15 2006/06/29 15:56:22 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -59,6 +62,8 @@
 #include "G4Colour.hh"
 
 #include "G4ios.hh"
+#include "G4RegionStore.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -78,6 +83,7 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
    solidCALDetectorY(0),logicCALDetectorY(0),physiCALDetectorY(0),
    solidPlane(0),logicPlane(0),physiPlane(0),
    solidConverter(0),logicConverter(0),physiConverter(0),
+   trackerSD(0),calorimeterSD(0),anticoincidenceSD(0),
    aTKRRegion(0), aCALRegion(0)
 {
   // default parameter values of the payload
@@ -709,13 +715,13 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
       SDman->AddNewDetector( trackerSD );		
     }
 
+
   G4String ROgeometryName = "TrackerROGeom";
   G4VReadOutGeometry* trackerRO = 
     new GammaRayTelTrackerROGeometry(ROgeometryName);
   
   trackerRO->BuildROGeometry();
   trackerSD->SetROgeometry(trackerRO);
-
 
   if (logicTKRActiveTileX)
     logicTKRActiveTileX->SetSensitiveDetector(trackerSD); // ActiveTileX
@@ -929,6 +935,10 @@ void GammaRayTelDetectorConstruction::UpdateGeometry()
 {
   //  delete payloadSD;
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructPayload());
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  G4RegionStore::GetInstance()->UpdateMaterialList(physiWorld);
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

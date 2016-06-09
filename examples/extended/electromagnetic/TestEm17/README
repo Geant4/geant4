@@ -1,0 +1,167 @@
+$Id: README,v 1.1 2006/05/09 16:22:19 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm17
+                            --------
+        This example is intended to check implementation of the processes 
+        of muon interactions: ionization, direct (e+,e-) production,
+	bremsstrahlung, mu-nuclear interaction.
+	It allows to compute differential cross sections (as function of the
+	energy tranfered to secondaries), total cross sections and to compare
+	with analytic calculations.
+	
+ 1- GEOMETRY DEFINITION
+ 
+ 	It is a single box of homogeneous medium.
+ 	Two parameters define the geometry :
+ 	- the material of the box,
+	- the (full) size of the box.
+ 	
+ 	The default geometry (1 m of Iron) is constructed in 
+	DetectorConstruction, but the above parameters can be changed 
+	interactively via the commands defined in DetectorMessenger.
+ 	
+ 2- PHYSICS LIST
+ 
+ 	The physics list contains only electromagnetic processes for muon,
+	adding G4MuNuclearInteraction and seting of upper energy range limit 
+	to 1000 PeV).
+	 
+        Standard (default) and g4v52 (frozen at the release Geant4 v.5.2) 
+	physics can be choosen.
+	 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+ 	The primary kinematic consists of a single particle starting at the edge
+	of the box. The type of the particle and its energy are set in 
+	PrimaryGeneratorAction (mu+ 10 TeV), and can be changed via the G4 
+ 	build-in commands of ParticleGun class (see the macros provided with 
+ 	this example).
+ 	
+ 4- PHYSICS
+ 
+	The incident particle is a muon. During the tracking, secondary
+	particles are killed.
+	
+	The number of interactions are plotted as a function of the energy 
+	transfered to the secondaries.
+	The total number of interactions is recorded, and the total crossSection
+	computed from this.  
+
+        At EndOfRun, the above results are compared with analytic calculations.
+	The functions which compute the theoritical crossSections have been
+	provided by the G4 MEPhI group, and grouped in MuCrossSection class.
+
+ 5- HISTOGRAMS
+         
+	The test contains 4 built-in 1D histograms, which are managed by the
+	HistoManager class and its Messenger.
+
+        1 Monte-Carlo relative transferred energy distribution histo
+            (log10(eps/Emu kin) for knock-on electrons (ionization)
+        2  -"- direct (e+,e-) pair production
+        3  -"- bremsstrahlung
+        4  -"- nuclear interaction
+	
+	The histos can be activated individually with the command :
+	/testem/histo/setHisto id nbBins  valMin valMax : min and max values of 
+                                                          log10(eps/Emu kin).
+	
+	At EndOfRun the corresponding histos for analytic calculations are
+	automatically created anf filled (histo 6 to 9), and the comparison
+	(G4 divided by theory) is done in histos 11 to 14.
+							  
+ 	One can control the name and the type of the histograms file with 
+	the commands:
+ 	/testem/histo/setFileName  name  (default testem17)
+   	/testem/histo/setFileType  name  (default hbook)
+
+	Note that, by default, histograms are disabled. To activate them, 
+	uncomment the flag G4ANALYSIS_USE in GNUmakefile. 	
+ 	 				
+ 6- VISUALIZATION
+ 
+ 	The Visualization Manager is set in the main().
+ 	The initialisation of the drawing is done via the commands
+ 	/vis/... in the macro vis.mac. To get visualisation:
+ 	> /control/execute vis.mac
+ 	
+ 	The detector has a default view which is a longitudinal view of the 
+ 	box.
+ 	
+ 	The tracks are drawn at the end of event, and erased at the end of run.
+	
+ 7- HOW TO START ?
+ 
+	compile and link to generate an executable
+ 		% cd geant4/examples/extended/electromagnetic/TestEm17
+ 		% gmake
+ 		
+	execute TestEm17 in 'batch' mode from macro files :
+ 		% TestEm17   allproc.mac
+ 		
+	execute TestEm17 in 'interactive mode' with visualization :
+ 		% TestEm17
+		Idle> control/execute vis.mac
+ 		....
+ 		Idle> type your commands
+ 		....
+ 		Idle> exit
+
+  8- USING HISTOGRAMS
+ 
+  By default the histograms are not activated. To activate histograms
+  the environment variable G4ANALYSIS_USE should be defined. For instance
+  uncomment the flag G4ANALYSIS_USE in GNUmakefile.
+  
+  Before compilation of the example it is optimal to clean up old files:
+  	gmake histclean
+  	gmake
+	 
+  To use histograms, at least one of the AIDA implementations should be 
+  available (see http://aida.freehep.org).
+  
+ 8a - PI 
+
+  A package including AIDA and extended interfaces also using Python is PI, 
+  available from: http://cern.ch/pi
+
+  Once installed PI or PI-Lite in a specified local area $MYPY, it is required 
+  to add the installation path to $PATH, i.e. for example, for release 1.2.1 of 
+  PI:
+  setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
+
+  CERN users can use the PATH to the LCG area on AFS.
+  Before running the example the command should be issued:
+  eval `aida-config --runtime csh`
+
+ 8b -  OpenScientist
+
+  OpenScientist is available at http://OpenScientist.lal.in2p3.fr.
+
+  You have to "setup" the OpenScientist AIDA implementation before compiling
+  (then with G4ANALYSIS_USE set) and running your Geant4 application.
+
+ On UNIX you setup, with a csh flavoured shell : 
+	csh> source <<OpenScientist install path>/aida-setup.csh 
+        or with a sh flavoured shell : 
+	sh> . <<OpenScientist install path>/aida-setup.sh
+ On Windows : 
+	DOS> call <<OpenScientist install path>/aida-setup.bat 
+
+  You can use various file formats for writing (AIDA-XML, hbook, root).
+  These formats are readable by the Lab onx interactive program
+  or the OpenPAW application. See the web pages.
+
+
+  With OpenPAW, on a run.hbook file, one can view the histograms
+  with something like :
+	OS> opaw 
+        opaw> h/file 1 run.hbook  ( or opaw> h/file 1 run.aida or run.root)  
+	opaw> zone 2 2 
+	opaw> h/plot 1 
+	opaw> h/plot 2

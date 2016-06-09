@@ -8,6 +8,25 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 
                       Category History file
                       ---------------------
+
+30.05.2006  S. Guatelli (hadrontherapy-V08-00-04)
+         - Bug deleted in all the hadronic phsyics lists; the hadronic
+           processes are not activated for He3 at the moment.
+
+17.05.2006  S. Guatelli (hadrontherapy-V08-00-02)
+         - Bug deleted with He3 in the HadrontherapyProtonPrecompound physics
+           list
+
+16.05.2006  S. Guatelli (hadrontherapy-V08-00-01)
+         - Comments in the primary particle component and in the physics component
+
+18.04.2006 G.A.P. Cirrone (hadrontherapy-V07-08-01)
+         - Improved the random generator;
+         - Corrected a bug in the primary generator action
+           on SetParticleMomentum();
+         - Changed the beam line according with a modification in the real beam line
+           considered as model (the CATANA proton therapy beam line at LNS-INFN, Catania (I));
+
 06.12.2005 S. Guatelli (hadrontherapy-V07-01-05)
          - Particles updated
          - Updated macros
@@ -27,8 +46,7 @@ $Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
 	 - Analisys with AIDA 3.2.1 and PI 1.3.3;
 	 - Corrected bug in the modulator wheel; 
 	 - Added the hadronic physic list for proton and ion;
-	 - Code review
-	
+	 - Code review	
 
 18.05.2005 Susanna Guatelli (hadrontherapy-V07-00-03)
 	- Delete public variables

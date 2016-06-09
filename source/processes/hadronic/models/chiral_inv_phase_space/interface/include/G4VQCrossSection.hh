@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VQCrossSection.hh,v 1.3 2005/11/30 16:26:42 mkossov Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VQCrossSection.hh,v 1.6 2006/06/29 20:08:24 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // GEANT4 virtual class: G4VQCrossSection -- header file
@@ -87,41 +90,44 @@ protected:
                          // used (and inside use a separate instance of G4Q*CrossSection)
 
 public:
-  virtual ~G4VQCrossSection() {;}// for each particle a separate instance of G4QCollision
+  virtual ~G4VQCrossSection() {;}// for each particle separate instance of G4QXCrossSection
   //@@ can be improved in future)// should be used and inside a separate istance of CS's
 
-  virtual G4double GetCrossSection(G4double Momentum, G4int Z, G4int N);
-
-  //virtual static G4VQCrossSection* GetPointer()=0; // Gives a pointer to the singletone
+  // At present momentum (pMom) must be in GeV (@@ Units)
+  virtual G4double GetCrossSection(G4bool fCS, G4double pMom, G4int tgZ, G4int tgN,
+                                                                             G4int pPDG=0);
 
   static void setTolerance(G4double tol); // Set NewTolerance for TheSameCroSec
 
-  virtual G4double ThresholdEnergy(G4int Z, G4int N); // Gives 0 by default
+  virtual G4double ThresholdEnergy(G4int Z, G4int N, G4int PDG=0); // Gives 0 by default
 
-  // Define in the derived class, F=0 - create DAMDB, F=-1 - read DAMDB, F=1 - update DAMDB
-  virtual G4double CalculateCrossSection(G4int F, G4int I, G4int Z, G4int N, G4double P)=0;
+  // Define in the derived class, F=0 - create AMDB, F=-1 - read AMDB, F=1 - update AMDB
+  virtual G4double CalculateCrossSection(G4bool CS, G4int F, G4int I, G4int PDG, G4int tgZ,
+                                         G4int tgN, G4double pMom)=0;//*** PURE VIRTUAL ***
 
-  virtual G4double GetLastTOTCS(); // Get the last calculated total cross-section
+  virtual G4double GetLastTOTCS(); // LastCalculated total cross-section (total elastic)
 
-  virtual G4double GetLastQELCS(); // Get the last calculated quasi-elastic cross-section
+  virtual G4double GetLastQELCS(); // LastCalculated quasielastic cross-section (quasifree)
 
-  virtual G4double GetDirectPart(G4double Q2); // Direct interaction with quark-partons
+  virtual G4double GetDirectPart(G4double Q2); // DirectInteraction with QuarkPartons (nuA)
 
-  virtual G4double GetNPartons(G4double Q2); // #of quark-partons in non-perturbative PhSp
+  virtual G4double GetNPartons(G4double Q2); // #ofQuarkPartons in nonPerturbatPhaseSp(nuA)
 
   // Subroutines for the t-chanel processes with a leader (DIS, Elastic, Quasielastic etc.)
 
   virtual G4double GetExchangeEnergy(); // Returns energy of the t-chanel particle (gam,pi)
 
-  virtual G4double GetExchangeQ2(G4double nu); // Returns mass (-t or Q2) of the exchange
+  virtual G4double GetExchangeT(G4int tZ, G4int tN, G4int pPDG); // -t=Q2 for hadronic
 
-  virtual G4double GetVirtualFactor(G4double nu, G4double Q2); // Returns a ReductionFactor
+  virtual G4double GetExchangeQ2(G4double nu=0); // Q2 for lepto-nuclear reactions
+
+  virtual G4double GetVirtualFactor(G4double nu, G4double Q2); // ReductionFactor (leptA)
 
   virtual G4double GetQEL_ExchangeQ2(); // Get randomized Q2 for quasi-elastic scattering
 
   virtual G4double GetNQE_ExchangeQ2(); // Get randomized Q2 for non quasi-elastic scat.
 
-  virtual G4int GetExchangePDGCode(); // PDGCode of the Exchange Particle
+  virtual G4int GetExchangePDGCode(); // PDGCode of the Exchange Particle (Pi0 by default)
 
   // Body: Basic Parameters of DAMDB (each derived class can add it's own values)
   // -----------------------------------------------------------------------------
@@ -162,23 +168,16 @@ protected:
 
   G4double EquLinearFit(G4double X, G4int N, G4double X0, G4double DX, G4double* Y);
 protected:
+  static G4int     lastPDG;  // The last projectile PDG
   static G4int     lastN;    // The last N of calculated nucleus
   static G4int     lastZ;    // The last Z of calculated nucleus
   static G4double  lastP;    // Last used in the cross section Momentum
   static G4double  lastTH;   // Last value of the Momentum Threshold
   static G4double  lastCS;   // Last value of the Cross Section
-  //static G4int     lastF1;   // Last used in the cross section TheFirstBin in Tab.1
-  //static G4int     lastL1;   // Last used in the cross section TheLastBin in Tab.1
-  //static G4int     lastN1;   // Last used in the cross section TheLastBin in Tab.1
-  //static G4int     lastF2;   // Last used in the cross section TheFirstBin in Tab.2
-  //static G4int     lastL2;   // Last used in the cross section TheLastBin in Tab.2
-  //static G4int     lastN2;   // Last used in the cross section TheLastBin in Tab.2
-  //static G4double  lastBP;   // Last value of the Boundary Momentum
-  //static G4double  lastMP;   // Last value of the Maximum Momentum
+  static G4int     lastI;    // The last position in the DAMDB
 
 private:
-  static G4int     lastI;      // The last position in the DAMDB
-  static G4double  tolerance;  // relative tolerance in momentum to get old CroSec
+  static G4double  tolerance;// relative tolerance in momentum to get old CroSec
 };
 
 #endif

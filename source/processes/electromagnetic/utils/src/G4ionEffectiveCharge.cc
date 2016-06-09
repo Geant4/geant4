@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.10 2005/02/27 18:07:33 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ionEffectiveCharge.cc,v 1.13 2006/06/29 19:55:27 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +40,8 @@
 // Modifications:
 // 12.09.2004 Set low energy limit to 1 keV (V.Ivanchenko) 
 // 25.01.2005 Add protection - min Charge 0.1 eplus (V.Ivanchenko) 
+// 28.04.2006 Set upper energy limit to 50 MeV (V.Ivanchenko) 
+// 23.05.2006 Set upper energy limit to Z*10 MeV (V.Ivanchenko) 
 //
 
 // -------------------------------------------------------------------
@@ -84,7 +89,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Vol.1, Pergamon Press, 1985
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/mass ;
-  if( reducedEnergy > energyHighLimit || Zi < 1.5 ) return charge;
+  if( reducedEnergy > Zi*energyHighLimit || Zi < 1.5 ) return charge;
 
   static G4double vFermi[92] = {
     1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,
@@ -168,14 +173,14 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
 
     // Heavy ion case
   } else {
-
+    
     G4double z23  = std::pow(z, 0.666667);
     G4double zi13 = std::pow(Zi, 0.33333);
     G4double zi23 = zi13*zi13;
-    reducedEnergy = std::max(reducedEnergy,energyBohr/z23);
+    G4double e = std::max(reducedEnergy,energyBohr/z23);
    
     // v1 is ion velocity in vF unit
-    G4double v1 = std::sqrt( reducedEnergy / energyBohr )/ vF ;
+    G4double v1 = std::sqrt( e / energyBohr )/ vF ;
     G4double y ;
 
     // Faster than Fermi velocity
@@ -191,10 +196,12 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     //    G4cout << "y= " << y << " y3= " << y3 << " v1= " << v1 << " vF= " << vF << G4endl; 
     q = 1.0 - std::exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
 
+    //    q = 1.0 - std::exp(-0.95*std::sqrt(reducedEnergy/energyBohr)/zi23);
+
     G4double qmin = minCharge/Zi;
 
     if(q < qmin) q = qmin;
-
+    
     G4double tq = 7.6 - std::log(reducedEnergy/keV);
     G4double sq = 1.0 + ( 0.18 + 0.0015 * z ) * std::exp( -tq*tq )/ (Zi*Zi);
     //    G4cout << "sq= " << sq << G4endl;
@@ -205,6 +212,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
 
     G4double lambda = 10.0 * vF * std::pow(1.0-q, 0.6667) / (zi13 * (6.0 + q)) ;
     chargeCorrection = sq * (1.0 + (0.5/q - 0.5)*std::log(1.0 + lambda*lambda)/(vF*vF) );
+    
   }
   //  G4cout << "G4ionEffectiveCharge: charge= " << charge << " q= " << q 
   //         << " chargeCor= " << chargeCorrection 

@@ -1,33 +1,39 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 // CLASS DESCRIPTION
-// G4ElasticCascadeInterface defines an interface to INUCL 
-// models of an medium energy (~ 0.5 - 10 GeV) intra-nuclear transport.
-// Elastic reaction is forced in this interface
+// G4CascadeInterface defines an interface to HETC and INUCL 
+// models of an medium energy (~ 0.5 - 5 GeV) intra-nuclear transport.
 // If you have any questions, please contact 
-// package writer aatos.heikkinen@cern.ch., 
-// Also coded by Pekka Kaitataniemi, Helsinki Institute of Physics
+// package writer aatos.heikkinen@cern.ch.
 // --------------------------------------------------------------------
+
+// This file is based on G4CascadeInterface.hh
+// Modifications by: Pekka Kaitaniemi (kaitanie@cc.helsinki.fi)
+// Helsinki Institute of Physics
+
 #ifndef G4ELASTICCASCADEINTERFACE_H
 #define G4ELASTICCASCADEINTERFACE_H 1
 
@@ -40,13 +46,9 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 
-#include "G4HadronicInteraction.hh"
 
-//class G4CascadeInterface : public G4VIntraNuclearTransportModel {
+class G4ElasticCascadeInterface : public G4VIntraNuclearTransportModel {
 
-//class G4ElasticCascadeInterface : public G4HadronElastic {
-
-class G4ElasticCascadeInterface : public G4HadronicInteraction {
 public:
 
   G4ElasticCascadeInterface();

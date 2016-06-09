@@ -32,7 +32,7 @@
 /physics/addPhysics decay
 
 # SETTING FOR THE PARTICULAR HADRONIC MODEL
-#/physics/addPhysics proton-precompound
+/physics/addPhysics proton-precompound
 
 /run/initialize
 
@@ -42,7 +42,11 @@
 #/beamLine/RangeShifter/thickness 4 cm
 #/beamLine/RangeShifter/RSMat Water
 
-/run/beamOn 10
+/run/beamOn 200
+
+
+
+
 
 
 

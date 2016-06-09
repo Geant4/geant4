@@ -17,7 +17,9 @@
 /run/initialize
 ##############################
 # Geometrical configuration
+# Choose inflatable vehicle 
 /configuration/choose vehicle
+# Add 10 cm water shielding
 /configuration/AddShielding On
 ################
 ## Visualisation
@@ -32,8 +34,9 @@
 /vis/viewer/zoom 2
 /tracking/storeTrajectory 1
 ################
-#Primary particles
-/control/execute gcrZ=1gps.mac
+# Define the primary particles
+# Galactic cosmic protons
+/gun/data gcr_min_z=1.txt
 /run/beamOn 10
 
 

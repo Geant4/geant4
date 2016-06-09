@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.12 2005/08/18 16:52:52 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ProductionCutsTable.cc,v 1.15 2006/06/29 19:30:16 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // --------------------------------------------------------------
@@ -54,8 +57,10 @@ G4ProductionCutsTable* G4ProductionCutsTable::fG4ProductionCutsTable = 0;
 
 G4ProductionCutsTable* G4ProductionCutsTable::GetProductionCutsTable()
 { 
-  if(!fG4ProductionCutsTable)
-  { fG4ProductionCutsTable = new G4ProductionCutsTable(); }
+   static G4ProductionCutsTable theProductionCutsTable;
+   if(!fG4ProductionCutsTable){
+     fG4ProductionCutsTable = &theProductionCutsTable;
+   }
   return fG4ProductionCutsTable;
 }
 
@@ -79,23 +84,29 @@ G4ProductionCutsTable::G4ProductionCutsTable(const G4ProductionCutsTable& )
 
 G4ProductionCutsTable::~G4ProductionCutsTable()
 {
-  for(CoupleTableIterator itr=coupleTable.begin();itr!=coupleTable.end();itr++)
-  { delete (*itr); }
+  if (defaultProductionCuts !=0) {
+    delete defaultProductionCuts;
+    defaultProductionCuts =0;
+  }
+
+  for(CoupleTableIterator itr=coupleTable.begin();itr!=coupleTable.end();itr++){
+    delete (*itr); 
+  }
   coupleTable.clear();
-  for(size_t i=0;i< NumberOfG4CutIndex;i++)
-  {
+
+  for(size_t i=0;i< NumberOfG4CutIndex;i++){
     delete rangeCutTable[i];
     delete energyCutTable[i];
     delete converters[i];
     if(rangeDoubleVector[i]!=0) delete [] rangeDoubleVector[i];
     if(energyDoubleVector[i]!=0) delete [] energyDoubleVector[i];
   }
+  fG4ProductionCutsTable =0;
 }
 
 void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 {
-  if(firstUse)
-  {
+  if(firstUse){
     if(G4ParticleTable::GetParticleTable()->FindParticle("gamma"))
     { converters[0] = new G4RToEConvForGamma(); }
     if(G4ParticleTable::GetParticleTable()->FindParticle("e-"))
@@ -107,7 +118,8 @@ void G4ProductionCutsTable::UpdateCoupleTable(G4VPhysicalVolume* currentWorld)
 
   // Reset "used" flags of all couples
   for(CoupleTableIterator CoupleItr=coupleTable.begin();
-      CoupleItr!=coupleTable.end();CoupleItr++){ 
+        CoupleItr!=coupleTable.end();CoupleItr++) 
+  {
     (*CoupleItr)->SetUseFlag(false); 
   }
 

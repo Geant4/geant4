@@ -1,0 +1,160 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4AssemblyTriplet.icc,v 1.2 2006/06/29 18:56:49 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
+//
+// 
+// Class G4AssemblyTriplet - inline implementation
+//
+// ----------------------------------------------------------------------
+
+inline
+G4AssemblyTriplet::G4AssemblyTriplet()
+  : fVolume( 0 ), fRotation( 0 ), fAssembly(0), fIsReflection(false)
+{
+  G4ThreeVector v(0.,0.,0.);
+  fTranslation = v;
+}
+
+inline
+G4AssemblyTriplet::G4AssemblyTriplet( G4LogicalVolume* pVolume,
+                                      G4ThreeVector& translation,
+                                      G4RotationMatrix* pRotation,
+                                      G4bool isReflection )
+  : fVolume( pVolume ), fTranslation( translation ), fRotation( pRotation ),
+    fAssembly( 0 ), fIsReflection(isReflection)
+{
+}
+
+inline
+G4AssemblyTriplet::G4AssemblyTriplet( G4AssemblyVolume* pAssembly,
+                                      G4ThreeVector& translation,
+                                      G4RotationMatrix* pRotation,
+                                      G4bool isReflection )
+  : fVolume( 0 ), fTranslation( translation ), fRotation( pRotation ),
+    fAssembly( pAssembly ), fIsReflection(isReflection) 
+{
+}
+
+inline
+G4AssemblyTriplet::G4AssemblyTriplet( const G4AssemblyTriplet& second )
+{
+  fVolume       = second.GetVolume();
+  fRotation     = second.GetRotation();
+  fTranslation  = second.GetTranslation();
+  fAssembly     = second.GetAssembly();
+  fIsReflection = second.IsReflection();
+}
+
+inline
+G4AssemblyTriplet::~G4AssemblyTriplet()
+{
+}
+
+inline
+G4LogicalVolume* G4AssemblyTriplet::GetVolume() const
+{
+  return fVolume;
+}
+
+inline
+void G4AssemblyTriplet::SetVolume( G4LogicalVolume* pVolume )
+{
+  if ( fAssembly ) 
+  {
+    G4Exception("G4AssemblyTriplet::SetVolume()",
+                "IllegalCall", JustWarning,
+                "There is an assembly already set, it will be ignored.");
+  }
+  fVolume = pVolume;
+  fAssembly = 0;
+}
+
+inline
+G4AssemblyVolume* G4AssemblyTriplet::GetAssembly() const
+{
+  return fAssembly;
+}
+
+inline
+void G4AssemblyTriplet::SetAssembly( G4AssemblyVolume* pAssembly )
+{
+  if ( fVolume ) 
+  {
+    G4Exception("G4AssemblyTriplet::SetAssembly()",
+                "IllegalCall", JustWarning,
+                "There is a volume already set, it will be ignored.");
+  }
+  fAssembly = pAssembly;
+  fVolume = 0;
+}
+
+inline
+G4ThreeVector G4AssemblyTriplet::GetTranslation() const
+{
+  return fTranslation;
+}
+
+inline
+void G4AssemblyTriplet::SetTranslation( G4ThreeVector& translation )
+{
+  fTranslation = translation;
+}
+
+inline
+G4RotationMatrix* G4AssemblyTriplet::GetRotation() const
+{
+  return fRotation;
+}
+
+inline
+void G4AssemblyTriplet::SetRotation( G4RotationMatrix* pRotation )
+{
+  fRotation = pRotation;
+}
+
+inline
+G4bool G4AssemblyTriplet::IsReflection() const
+{
+  return fIsReflection;
+}  
+
+inline
+G4AssemblyTriplet&
+G4AssemblyTriplet::operator=( const G4AssemblyTriplet& second )
+{
+  if( this != &second )
+  {
+    fVolume       = second.GetVolume();
+    fRotation     = second.GetRotation();
+    fTranslation  = second.GetTranslation();
+    fAssembly     = second.GetAssembly();
+    fIsReflection = second.IsReflection();
+  }
+  
+  return *this;
+}

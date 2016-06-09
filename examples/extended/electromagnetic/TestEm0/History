@@ -1,0 +1,31 @@
+$Id: History,v 1.7 2006/06/19 10:32:27 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm1 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+17-06-06 mma (testem0-V08-00-04)
+- compute e- critical energy and Moliere radius
+    
+19-05-06 mma (testem0-V08-00-03)
+- modify binning for CSDA range table
+
+18-04-06 V.Ivant (testem0-V08-00-02)
+- fix compilation warning, improve cout
+     
+05-04-06 mma (testem0-V08-00-01)
+- add transport mean free path (for multiple scattering)
+     
+21-03-06 mma (testem0-V08-00-00)
+- creation

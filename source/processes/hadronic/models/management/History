@@ -1,0 +1,33 @@
+-------------------------------------------------------------------
+
+       ==========================================================
+       Geant4 - an Object-Oriented Toolkit for Physics Simulation
+       ==========================================================
+
+              History file for Model Management directory
+              -------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+30 May 2006 - D.H. Wright (hadr-modman-V08-00-02)
+-------------------------------------------------
+  G4InelasticInteraction: fix memory leak in method CalculateMomenta
+     where target, projetcile and secondaries are cached.
+
+02 May 2006 - D.H. Wright (hadr-modman-V08-00-01)
+-------------------------------------------------
+  G4InelasticInteraction: in method CalculateMomenta, save current, target
+     and secondaries in case annihilation fails in GenerateXandPt, then
+     restore them for use in TwoCluster
+   
+07 Apr 2006 - D.H. Wright (hadr-modman-V08-00-00)
+-------------------------------------------------
+  G4InelasticInteraction: in method CalculateMomenta, correct excess
+     energy problem by doing two calculations of nuclear evaporation, 
+     one for the annihilation case and one for non-annihilation. 
+     Previously one value was applied to both cases.

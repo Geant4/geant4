@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2005/06/27 23:08:24 gum Exp $
+$Id: History,v 1.7 2006/05/12 01:12:11 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 May 2006 Peter Gumplinger (LXe-V08-00-01)
+- thanks to Andreia Trindade and Pedro Rodrigues, the WLS time delay
+  can now be a delta function or exponential.
+
+15 March 2006 Peter Gumplinger (LXe-V08-00-00)
+- reinstate the logic between scintillator and fiber: scintillate at
+  short wavelength and WLS to long wavelength. This fixes log. error
+  introduced with LXe-V07-00-00
 
 27 June 2005 Peter Gumplinger (LXe-V07-00-00)
 - Fix material dependent input for AbsFiber

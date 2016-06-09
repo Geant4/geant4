@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc,v 1.2 2005/11/29 08:13:48 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4hhIonisation.cc,v 1.4 2006/06/29 19:32:52 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -35,6 +38,7 @@
 // Creation date: 30.09.2005
 //
 // Modifications:
+// 10-01-06 SetStepLimits -> SetStepFunction (V.Ivantchenko)
 //
 //
 // -------------------------------------------------------------------
@@ -63,7 +67,8 @@ G4hhIonisation::G4hhIonisation(const G4String& name)
   SetLambdaBinning(120);
   SetMinKinEnergy(minKinEnergy);
   SetMaxKinEnergy(100.0*TeV);
-  SetVerboseLevel(2);
+  SetStepFunction(0.1, 0.1*mm);
+  SetVerboseLevel(1);
   mass = 0.0;
   ratio = 0.0;
 }
@@ -107,9 +112,8 @@ void G4hhIonisation::InitialiseEnergyLossProcess(const G4ParticleDefinition* par
   em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(nm, em1, flucModel);
 
-  SetStepLimits(0.1, 0.1*mm);
-
-  G4cout << "G4hhIonisation is initialised: nm= " << nm << G4endl;
+  if(verboseLevel>0)
+    G4cout << "G4hhIonisation is initialised: Nmodels= " << nm << G4endl;
 
   isInitialised = true;
 }

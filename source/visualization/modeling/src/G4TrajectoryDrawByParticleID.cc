@@ -1,44 +1,68 @@
+//
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawByParticleID.cc,v 1.4 2005/11/23 20:24:15 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4TrajectoryDrawByParticleID.cc,v 1.8 2006/06/29 21:33:10 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 
 #include "G4TrajectoryDrawByParticleID.hh"
-#include "G4Polyline.hh"
-#include "G4Polymarker.hh"
 #include "G4TrajectoryDrawerUtils.hh"
-#include "G4VisAttributes.hh"
+#include "G4VisTrajContext.hh"
 #include "G4VTrajectory.hh"
-#include "G4VVisManager.hh"
 #include <sstream>
 
-G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name)
-  :G4VTrajectoryModel(name)
-  ,fDefault(G4Color::Grey())
+G4TrajectoryDrawByParticleID::G4TrajectoryDrawByParticleID(const G4String& name, G4VisTrajContext* context)
+  :G4VTrajectoryModel(name, context)
+  ,fDefault(G4Colour::Grey())
 {}
 
 G4TrajectoryDrawByParticleID::~G4TrajectoryDrawByParticleID() {}
+
+void
+G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, const G4int& i_mode, const G4bool& visible) const
+{
+  G4Colour colour(fDefault);
+  G4String particle = traj.GetParticleName();
+
+  fMap.GetColour(particle, colour);
+
+  G4VisTrajContext myContext(GetContext());
+  
+  myContext.SetLineColour(colour);
+  myContext.SetVisible(visible);
+  
+  if (GetVerbose()) {
+    G4cout<<"G4TrajectoryDrawByParticleID drawer named "<<Name();
+    G4cout<<", drawing trajectory with particle type, "<<particle<<G4endl;
+    G4cout<<", with configuration:"<<G4endl;
+    myContext.Print(G4cout);
+  }
+
+  G4TrajectoryDrawerUtils::DrawLineAndPoints(traj, myContext, i_mode);
+}
 
 void
 G4TrajectoryDrawByParticleID::SetDefault(const G4String& colour)
@@ -66,88 +90,13 @@ G4TrajectoryDrawByParticleID::SetDefault(const G4Colour& colour)
 void
 G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colour)
 {
-  G4Colour myColour(fDefault);
-
-  // Will not modify myColour if colour key does not exist  
-  
-  if (!G4Colour::GetColour(colour, myColour)) {
-    std::ostringstream o;
-    o << "G4Colour with key "<<colour<<" does not exist ";
-    G4Exception
-      ("G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colour)",
-       "NonExistentColour", JustWarning, o.str().c_str());
-  }
-
-  Set(particle, myColour);
+  fMap.Set(particle, colour);
 }
 
 void
 G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4Colour& colour)
 {
-  std::map<G4String, G4Colour>::iterator iter = fMap.find(particle);
-  
-  if (iter == fMap.end()) {
-    fMap[particle] = colour;
-  }
-  else {
-    std::ostringstream o;
-    o << "Particle "<<particle<<" already has colour "<<colour<<" assigned.";
-    G4Exception
-      ("G4TrajectoryDrawByParticleID::Set(const G4String& particle, const G4String& colour)",
-       "ParticleColourExists", JustWarning, o.str().c_str());
-  }
-}
-
-void
-G4TrajectoryDrawByParticleID::Draw(const G4VTrajectory& traj, G4int i_mode) const
-{
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if (0 == pVVisManager) return;
-
-  const G4double markerSize = std::abs(i_mode)/1000;
-  G4bool lineRequired (i_mode >= 0);
-  G4bool markersRequired (markerSize > 0.);   
-
-  //Return if don't need to do anything
-  if (!lineRequired && !markersRequired) return;
-
-  //Get points to draw
-  G4Polyline trajectoryLine;
-  G4Polymarker stepPoints;
-  G4Polymarker auxiliaryPoints;
-  
-  G4TrajectoryDrawerUtils::GetPoints(traj, trajectoryLine, 
-				     auxiliaryPoints, stepPoints);
-  
-  if (lineRequired) {
-    G4Colour colour(fDefault);
-    G4String particle = traj.GetParticleName();
-
-    map<G4String, G4Colour>::const_iterator iter = fMap.find(particle);
-    if (iter != fMap.end()) colour = iter->second;
-
-    G4VisAttributes trajectoryLineAttribs(colour);
-    trajectoryLine.SetVisAttributes(&trajectoryLineAttribs);
-    pVVisManager->Draw(trajectoryLine);
-  }
-
-  if (markersRequired) {
-    auxiliaryPoints.SetMarkerType(G4Polymarker::squares);
-    auxiliaryPoints.SetScreenSize(markerSize);
-    auxiliaryPoints.SetFillStyle(G4VMarker::filled);
-    G4VisAttributes auxiliaryPointsAttribs(G4Colour(0.,1.,1.));  // Magenta
-    auxiliaryPoints.SetVisAttributes(&auxiliaryPointsAttribs);
-    pVVisManager->Draw(auxiliaryPoints);
-    
-    stepPoints.SetMarkerType(G4Polymarker::circles);
-    stepPoints.SetScreenSize(markerSize);
-    stepPoints.SetFillStyle(G4VMarker::filled);  
-    G4VisAttributes stepPointsAttribs(G4Colour(1.,1.,0.));  // Yellow.
-    stepPoints.SetVisAttributes(&stepPointsAttribs);
-    pVVisManager->Draw(stepPoints);
-  }
-  
-  return;
+  fMap[particle] = colour;
 }
 
 void
@@ -155,12 +104,10 @@ G4TrajectoryDrawByParticleID::Print(std::ostream& ostr) const
 {
   ostr<<"G4TrajectoryDrawByParticleID model "<< Name() <<" colour scheme: "<<std::endl;
   
-  ostr<<"Default : "<<fDefault<<G4endl;
+  ostr<<"Default colour: "<<fDefault<<G4endl;
 
-  std::map<G4String, G4Colour>::const_iterator iter = fMap.begin();
-  
-  while (iter != fMap.end()) {
-    ostr<<iter->first <<" : "<< iter->second <<G4endl;
-    iter++;
-  }
+  fMap.Print(ostr);
+
+  ostr<<"Default configuration:"<<G4endl;
+  GetContext().Print(G4cout);
 }

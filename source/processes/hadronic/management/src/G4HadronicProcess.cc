@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
@@ -232,6 +235,9 @@ const G4DynamicParticle *aParticle, const G4Material *aMaterial )
       }
       delete [] running;
     }
+    // Check for Z > 92)
+    if (currentZ > 92) G4Exception("G4HadronicProcess", "008", FatalException, "Z > 92 not allowed");
+
     targetNucleus.SetParameters(currentN, currentZ);
     return (*theElementVector)[0];
   }
@@ -314,6 +320,8 @@ struct G4Nancheck{ bool operator()(G4double aV){return (!(aV<1))&&(!(aV>-1));}};
 G4VParticleChange *G4HadronicProcess::GeneralPostStepDoIt(
 const G4Track &aTrack, const G4Step &)
 {
+  // Debugging stuff
+
   bool G4HadronicProcess_debug_flag = false;
   if(getenv("G4HadronicProcess_debug")) G4HadronicProcess_debug_flag = true;
   if(G4HadronicProcess_debug_flag) std::cout << "@@@@ hadronic process start "<< std::endl;
@@ -321,7 +329,8 @@ const G4Track &aTrack, const G4Step &)
   #ifndef G4HadSignalHandler_off
   G4HadSignalHandler aHandler(G4HadronicProcess_local::G4HadronicProcessHandler_1);
   #endif
-  if(aTrack.GetTrackStatus() != fAlive) 
+
+  if(aTrack.GetTrackStatus() != fAlive && aTrack.GetTrackStatus() != fSuspend) 
   {
     G4cerr << "G4HadronicProcess: track in unusable state - "
     <<aTrack.GetTrackStatus()<<G4endl;
@@ -331,10 +340,14 @@ const G4Track &aTrack, const G4Step &)
     theTotalResult->Initialize(aTrack);
     return theTotalResult;
   }
+
   const G4DynamicParticle *aParticle = aTrack.GetDynamicParticle();
   G4Material *aMaterial = aTrack.GetMaterial();
   G4double originalEnergy = aParticle->GetKineticEnergy();
   G4double kineticEnergy = originalEnergy;
+
+  // More debugging
+
   G4Nancheck go_wild;
   if(go_wild(originalEnergy) ||
     go_wild(aParticle->Get4Momentum().x()) ||
@@ -348,10 +361,15 @@ const G4Track &aTrack, const G4Step &)
     theTotalResult->Initialize(aTrack);
     return theTotalResult;
   }
+
+
+  // Get kinetic energy per nucleon for ions
+
   if(aParticle->GetDefinition()->GetBaryonNumber()>1.5)
   {
     kineticEnergy/=aParticle->GetDefinition()->GetBaryonNumber();
   }
+
   G4Element * anElement = 0;
   try
   {
@@ -383,6 +401,9 @@ const G4Track &aTrack, const G4Step &)
     G4Exception("G4HadronicProcess", "007", FatalException,
     "ChooseHadronicInteraction failed.");
   }
+
+  // Initialize the hadronic projectile from the track
+
   G4HadProjectile thePro(aTrack);
   
   G4HadFinalState *result = 0;
@@ -391,6 +412,8 @@ const G4Track &aTrack, const G4Step &)
   {
     try
     {
+      // Call the interaction
+
       G4HadronicInteractionWrapper aW;
       result = aW.ApplyInteraction(thePro, targetNucleus, theInteraction);
     }
@@ -422,17 +445,26 @@ const G4Track &aTrack, const G4Step &)
     }
   }
   while(!result);
+
+
   if(!ModelingState && !getenv("BypassAllSafetyChecks") ) 
   {
     G4cout << "ERROR IN EXECUTION -- HADRONIC PROCESS STATE NOT VALID"<<G4endl;
     G4cout << "Result will be of undefined quality."<<G4endl;
   }
+
+  // NOT USED ?? Projectile particle has changed character during interaction
+
   if(result->GetStatusChange() == isAlive && thePro.GetDefinition() != aTrack.GetDefinition())
   {
     G4DynamicParticle * aP = const_cast<G4DynamicParticle *>(aTrack.GetDynamicParticle());
     aP->SetDefinition(const_cast<G4ParticleDefinition *>(thePro.GetDefinition()));
   }
+
   result->SetTrafoToLab(thePro.GetTrafoToLab());
+
+  // Loop over charged ion secondaries
+
   for(G4int i=0; i<result->GetNumberOfSecondaries(); i++)
   {
     G4DynamicParticle* aSecTrack = result->GetSecondary(i)->GetParticle();
@@ -463,6 +495,7 @@ const G4Track &aTrack, const G4Step &)
     << targetNucleus.GetZ()<<" "
     << G4endl;
   }
+
   ClearNumberOfInteractionLengthLeft();
   if(isoIsOnAnyway!=-1)
   {
@@ -481,10 +514,14 @@ const G4Track &aTrack, const G4Step &)
       result = theBias[i]->Bias(result);
     }
   }
+
+  // Put hadronic final state particles into G4ParticleChange
+
   FillTotalResult(result, aTrack);
   if(G4HadronicProcess_debug_flag) std::cout << "@@@@ hadronic process end "<< std::endl;
   return theTotalResult;
 }
+
 
 G4HadFinalState * G4HadronicProcess::
 DoIsotopeCounting(G4HadFinalState * aResult,
@@ -594,13 +631,6 @@ XBiasSecondaryWeight()
 
 void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 {
-  //          G4cout << "############# Entry debug "
-  //	         <<GetProcessName()<<" "
-  //		 <<aT.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "
-  //		 <<aT.GetDynamicParticle()<<" "
-  //                <<aScaleFactor<<" "
-  //		 <<aT.GetWeight()<<" "
-  //		 <<G4endl;
   G4Nancheck go_wild;
   theTotalResult->Clear();
   theTotalResult->ProposeLocalEnergyDeposit(0.);
@@ -642,7 +672,10 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
         G4Exception("G4HadronicProcess", "007", FatalException,
         "Cannot cross-section bias a process that suspends tracks.");
       }
+    } else if (aT.GetKineticEnergy() == 0) {
+      theTotalResult->ProposeTrackStatus(fStopButAlive);
     }
+
     if(xBiasOn && G4UniformRand()<XBiasSurvivalProbability())
     {
       theTotalResult->ProposeParentWeight( XBiasSurvivalProbability()*aT.GetWeight() );

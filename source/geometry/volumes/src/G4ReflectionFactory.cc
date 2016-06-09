@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.3 2004/12/02 09:31:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ReflectionFactory.cc,v 1.5 2006/06/29 18:58:17 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // Class G4ReflectionFactory Implementation
@@ -106,7 +109,8 @@ G4ReflectionFactory::Place( const G4Transform3D& transform3D,
                                   G4LogicalVolume* LV,
                                   G4LogicalVolume* motherLV,
                                   G4bool  isMany, 
-                                  G4int   copyNo)
+                                  G4int   copyNo,
+                                  G4bool  surfCheck)
 {
   // Evaluates the passed transformation; if it contains reflection
   // it performs its decomposition, creates new reflected solid and
@@ -149,7 +153,8 @@ G4ReflectionFactory::Place( const G4Transform3D& transform3D,
       G4cout << "Scale positive" << G4endl;
 
     G4VPhysicalVolume* pv1
-      =  new G4PVPlacement(pureTransform3D, LV, name, motherLV, isMany, copyNo);
+      =  new G4PVPlacement(pureTransform3D, LV, name,
+                           motherLV, isMany, copyNo, surfCheck);
  
     G4VPhysicalVolume* pv2 = 0;
     if (G4LogicalVolume* reflMotherLV = GetReflectedLV(motherLV))
@@ -158,7 +163,8 @@ G4ReflectionFactory::Place( const G4Transform3D& transform3D,
       // reflect this LV and place it in reflected mother
       
       pv2 = new G4PVPlacement(fScale * (pureTransform3D * fScale.inverse()),
-                              ReflectLV(LV),name,reflMotherLV,isMany,copyNo);
+                              ReflectLV(LV, surfCheck), name, reflMotherLV,
+                              isMany, copyNo, surfCheck);
     }
     
     return G4PhysicalVolumesPair(pv1, pv2);            
@@ -172,8 +178,8 @@ G4ReflectionFactory::Place( const G4Transform3D& transform3D,
     G4cout << "scale negative" << G4endl;
 
   G4VPhysicalVolume* pv1
-    = new G4PVPlacement(pureTransform3D, 
-                        ReflectLV(LV), name, motherLV, isMany, copyNo);
+    = new G4PVPlacement(pureTransform3D, ReflectLV(LV, surfCheck), name,
+                        motherLV, isMany, copyNo, surfCheck);
 
   G4VPhysicalVolume* pv2 = 0;
   if (G4LogicalVolume* reflMotherLV = GetReflectedLV(motherLV))
@@ -183,8 +189,8 @@ G4ReflectionFactory::Place( const G4Transform3D& transform3D,
     // place the refLV consituent in reflected mother
 
     pv2 =  new G4PVPlacement(fScale * (pureTransform3D * fScale.inverse()),
-                             LV, name, reflMotherLV, isMany, copyNo);
-  }         
+                             LV, name, reflMotherLV, isMany, copyNo, surfCheck);
+  }
 
   return G4PhysicalVolumesPair(pv1, pv2);  
 }           
@@ -359,7 +365,8 @@ G4ReflectionFactory::Divide(const G4String& name,
 
 //_____________________________________________________________________________
 
-G4LogicalVolume* G4ReflectionFactory::ReflectLV(G4LogicalVolume* LV) 
+G4LogicalVolume* G4ReflectionFactory::ReflectLV(G4LogicalVolume* LV,
+                                                G4bool surfCheck) 
 {
   // Gets/creates the reflected solid and logical volume
   // and copies + transforms LV daughters.
@@ -376,7 +383,7 @@ G4LogicalVolume* G4ReflectionFactory::ReflectLV(G4LogicalVolume* LV)
         
     // process daughters  
     //
-    ReflectDaughters(LV, refLV);
+    ReflectDaughters(LV, refLV, surfCheck);
 
     // check if to be set as root region
     //
@@ -437,7 +444,8 @@ G4LogicalVolume* G4ReflectionFactory::CreateReflectedLV(G4LogicalVolume* LV)
 //_____________________________________________________________________________
 
 void G4ReflectionFactory::ReflectDaughters(G4LogicalVolume* LV, 
-                                           G4LogicalVolume* refLV)
+                                           G4LogicalVolume* refLV,
+                                           G4bool surfCheck)
 {
   // Reflects daughters recursively.
   // ---
@@ -454,7 +462,7 @@ void G4ReflectionFactory::ReflectDaughters(G4LogicalVolume* LV,
     
     if (! dPV->IsReplicated())
     {
-      ReflectPVPlacement(dPV, refLV); 
+      ReflectPVPlacement(dPV, refLV, surfCheck); 
     }  
     else if (! dPV->GetParameterisation())
     {
@@ -467,7 +475,7 @@ void G4ReflectionFactory::ReflectDaughters(G4LogicalVolume* LV,
     }  
     else
     {
-      ReflectPVParameterised(dPV, refLV); 
+      ReflectPVParameterised(dPV, refLV, surfCheck); 
     }
   }
 }
@@ -475,7 +483,8 @@ void G4ReflectionFactory::ReflectDaughters(G4LogicalVolume* LV,
 //_____________________________________________________________________________
 
 void G4ReflectionFactory::ReflectPVPlacement(G4VPhysicalVolume* dPV, 
-                                             G4LogicalVolume* refLV)
+                                             G4LogicalVolume* refLV,
+                                             G4bool surfCheck)
 {
   // Copies and transforms daughter of PVPlacement type of
   // a constituent volume into a reflected volume. 
@@ -510,14 +519,14 @@ void G4ReflectionFactory::ReflectPVPlacement(G4VPhysicalVolume* dPV,
   
       // recursive call
       //
-      ReflectDaughters(dLV, refDLV);   
+      ReflectDaughters(dLV, refDLV, surfCheck);   
     }  
 
     // create new daughter physical volume
     // with updated transformation
 
     new G4PVPlacement(dt, refDLV, dPV->GetName(), refLV, 
-                      dPV->IsMany(), dPV->GetCopyNo()); 
+                      dPV->IsMany(), dPV->GetCopyNo(), surfCheck); 
 
   } 
   else
@@ -528,7 +537,7 @@ void G4ReflectionFactory::ReflectPVPlacement(G4VPhysicalVolume* dPV,
     refDLV = GetConstituentLV(dLV); 
 
     new G4PVPlacement(dt, refDLV, dPV->GetName(), refLV, 
-                      dPV->IsMany(), dPV->GetCopyNo()); 
+                      dPV->IsMany(), dPV->GetCopyNo(), surfCheck); 
   }       
 }    
 
@@ -655,7 +664,7 @@ void G4ReflectionFactory::ReflectPVDivision(G4VPhysicalVolume* dPV,
 //_____________________________________________________________________________
 
 void G4ReflectionFactory::ReflectPVParameterised(G4VPhysicalVolume* dPV, 
-                                                 G4LogicalVolume*)
+                                                 G4LogicalVolume*, G4bool)
 {
   // Not implemented.
   // Should copy and transform daughter of PVReplica type of

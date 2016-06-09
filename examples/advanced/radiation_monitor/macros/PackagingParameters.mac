@@ -1,0 +1,24 @@
+/control/alias Pkg-Width              9.38 mm
+/control/alias Pkg-Height             10.39 mm
+/control/alias Pkg-Layers-Thickness   0.4 mm
+
+/control/alias Pkg-Material              Alumina
+/control/alias Pkg-Metalization-Material Tungsten
+/control/alias Pkg-Tracks-Material       Gold
+
+/control/alias Pkg-SealRing-Length    8.88 mm
+/control/alias Pkg-AC-Cavity-Length   7.11 mm
+/control/alias Pkg-Cavity-Length      5.80 mm
+/control/alias Pkg-Ground-Length      7.11 mm
+
+/control/alias Pkg-Metalization-Thickness .001 mm
+/control/alias Pkg-Tracks-Thickness   .003 mm
+
+/control/alias Pkg-Holes-Along-Width  10
+/control/alias Pkg-Holes-Along-Height 8
+/control/alias Pkg-Holes-Radius       0.25 mm
+/control/alias Pkg-Holes-Separation   0.5 mm
+
+/control/alias Pkg-Pins-Length        1 mm
+/control/alias Pkg-Pin-Marked         11
+/control/alias Pkg-Pin-Marked-Length  1.25 mm

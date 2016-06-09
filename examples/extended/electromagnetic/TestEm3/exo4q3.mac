@@ -1,4 +1,4 @@
-# $Id: exo4q3.mac,v 1.6 2004/10/20 14:32:27 maire Exp $
+# $Id: exo4q3.mac,v 1.7 2006/03/20 12:26:03 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 #
@@ -11,7 +11,7 @@
 /testem/det/setAbsor 1 Aluminium 1 cm
 /testem/det/setSizeYZ 1 cm
 #
-/testem/phys/setCuts 10 mum
+/testem/phys/setCuts 10 um
 #
 /run/initialize
 #

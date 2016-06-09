@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 
@@ -350,8 +353,6 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
       28.1,27.5, 31.0, 27.7, 27.8, 26.1, 25.2, 6.92, 6.70, 0.  , 25.7}}
   };
 
-#ifdef G4BERTINI_KAON
-
   G4int mul = 0;
   G4int l = is;
 
@@ -407,69 +408,53 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
 
   } else {   // non-strange particle branch
 
-#endif
+    const G4double large_cut = 4.0;
+    std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
+    G4int ik = iksk.first;
+    G4double sk = iksk.second;
 
-  const G4double large_cut = 4.0;
-  std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
-  G4int ik = iksk.first;
-  G4double sk = iksk.second;
+    l = is;
+    if (l == 4) l = 1; 
+    if (l == 10) l = 3; 
+    if (l == 5 || l == 6) l = 4; 
 
-#ifdef G4BERTINI_KAON
-  l = is;
-#else
-  G4int l = is;
-#endif
+    std::vector<G4double> sigm(5);
+    G4double stot = 0.0;
 
-  if (l == 4) l = 1; 
-  if (l == 10) l = 3; 
-  if (l == 5 || l == 6) l = 4; 
+    if (l == 7 || l == 14) { // pi0 P or pi0 N
 
-  std::vector<G4double> sigm(5);
-  G4double stot = 0.0;
+      for (G4int j = 0; j < 5; j++) {
+        sigm[j] = std::fabs(0.5 * (asig[2][j][ik - 1] + asig[3][j][ik - 1] +
+	  		    sk * (asig[2][j][ik] + asig[3][j][ik] - 
+		  		  asig[2][j][ik - 1] - asig[3][j][ik - 1])));
+        stot += sigm[j];
+      };
 
-  if (l == 7 || l == 14) { // pi0 P or pi0 N
+    } else {
 
-    for (G4int j = 0; j < 5; j++) {
-      sigm[j] = std::fabs(0.5 * (asig[2][j][ik - 1] + asig[3][j][ik - 1] +
-			    sk * (asig[2][j][ik] + asig[3][j][ik] - 
-				  asig[2][j][ik - 1] - asig[3][j][ik - 1])));
-      stot += sigm[j];
-    };
-
-  } else {
-
-    for (G4int j = 0; j < 5; j++) {
-      sigm[j] = std::fabs(asig[l - 1][j][ik - 1] + sk * (asig[l - 1][j][ik] 
+      for (G4int j = 0; j < 5; j++) {
+        sigm[j] = std::fabs(asig[l - 1][j][ik - 1] + sk * (asig[l - 1][j][ik] 
 						    - asig[l - 1][j][ik - 1]));
-      stot += sigm[j];
+        stot += sigm[j];
+      };
     };
-  };
 
-  G4double sl = inuclRndm();
-  G4double ptot = 0.0;
+    G4double sl = inuclRndm();
+    G4double ptot = 0.0;
 
-#ifdef G4BERTINI_KAON
-  mul = 0;
-#else
-  G4int mul = 0;
-#endif
+    mul = 0;
+    for (G4int i = 0; i < 5; i++) {
+      ptot += sigm[i] / stot;
 
-  for (G4int i = 0; i < 5; i++) {
-    ptot += sigm[i] / stot;
+      if (sl <= ptot) {
+        mul = i;
+        break;
+      }; 
+    };
 
-    if (sl <= ptot) {
-      mul = i;
+    if(ekin > large_cut && mul == 1) mul = 2;
 
-      break;
-    }; 
- 
-  };
-
-  if(ekin > large_cut && mul == 1) mul = 2;
-
-#ifdef G4BERTINI_KAON
   }  // strange, non-strange
-#endif
 
   if(verboseLevel > 3){
     G4cout << " multiplicity " << mul + 2 << G4endl; 
@@ -520,8 +505,6 @@ generateSCMfinalState(G4double ekin,
 
     if(multiplicity == 2) { // 2 -> 2
       G4int kw;
-
-#ifdef G4BERTINI_KAON
       kw = 1;
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
         particle_kinds =
@@ -530,52 +513,46 @@ generateSCMfinalState(G4double ekin,
         G4int finaltype = particle_kinds[0]*particle_kinds[1];
         if (finaltype != is) kw = 2;  // Charge or strangeness exchange
       } else {
-#endif
 
-      if(reChargering(ekin, is)) { // rechargering
-	kw = 2;
+        if(reChargering(ekin, is)) { // rechargering
+	  kw = 2;
 
-	switch (is) {
+	  switch (is) {
 
-	case 6: // pi+ N -> pi0 P
-	  particle_kinds.push_back(7);
-	  particle_kinds.push_back(1);
-	  break;    
+          case 6: // pi+ N -> pi0 P
+            particle_kinds.push_back(7);
+	    particle_kinds.push_back(1);
+	    break;    
 
-	case 5: // pi- P -> pi0 N
-	  particle_kinds.push_back(7);
-	  particle_kinds.push_back(2);
-	  break;    
+          case 5: // pi- P -> pi0 N
+	    particle_kinds.push_back(7);
+	    particle_kinds.push_back(2);
+	    break;    
 
-	case 7: // pi0 P -> pi+ N
-	  particle_kinds.push_back(3);
-	  particle_kinds.push_back(2);
-	  break;    
+          case 7: // pi0 P -> pi+ N
+	    particle_kinds.push_back(3);
+	    particle_kinds.push_back(2);
+	    break;    
 
-	case 14: // pi0 N -> pi- P
-	  particle_kinds.push_back(5);
-	  particle_kinds.push_back(1);
-	  break;    
+          case 14: // pi0 N -> pi- P
+	    particle_kinds.push_back(5);
+	    particle_kinds.push_back(1);
+	    break;    
 
-	default: 
-	  G4cout << " strange recharge: " << is << G4endl;
+	  default: 
+	    G4cout << " strange recharge: " << is << G4endl;
+            particle_kinds.push_back(type1);
+            particle_kinds.push_back(type2);
+            kw = 1;
+          };
 
-	  particle_kinds.push_back(type1);
-	  particle_kinds.push_back(type2);
-	  kw = 1;
-	};
+        } else { // just elastic
 
-      } else { // just elastic
-
-	kw = 1;
-	particle_kinds.push_back(type1);
-	particle_kinds.push_back(type2);       
-      };
-
-#ifdef G4BERTINI_KAON
+          kw = 1;
+          particle_kinds.push_back(type1);
+          particle_kinds.push_back(type2);       
+        };
       }
-      G4int outgoing_product = particle_kinds[0]*particle_kinds[1];
-#endif
 
       std::vector<G4double> mom;
 
@@ -586,19 +563,10 @@ generateSCMfinalState(G4double ekin,
 	m2 *= m2;	 
 	G4double a = 0.5 * (etot_scm * etot_scm - m1 - m2);
 	G4double np = std::sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
-#ifdef G4BERTINI_KAON
-	mom = particleSCMmomentumFor2to2(is, kw, ekin, np, outgoing_product);
-
-      } else {
-
-	mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm, outgoing_product);
-#else
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, np);
 
       } else {
-
 	mom = particleSCMmomentumFor2to2(is, kw, ekin, pscm);
-#endif
       };
 
       if (verboseLevel > 3){
@@ -622,18 +590,12 @@ generateSCMfinalState(G4double ekin,
 
     } else { // 2 -> many
 
-#ifdef G4BERTINI_KAON
       if ( (is > 10 && is < 14) || (is > 14 && is < 63) ) {
         particle_kinds =
             generateStrangeChannelPartTypes(is, multiplicity, ekin);
       } else {
-#endif
-
-      particle_kinds = generateOutgoingKindsFor2toMany(is, multiplicity, ekin);
-
-#ifdef G4BERTINI_KAON
+        particle_kinds = generateOutgoingKindsFor2toMany(is, multiplicity, ekin);
       }
-#endif
 
       G4int itry = 0;
       G4bool bad = true;
@@ -1325,7 +1287,7 @@ generateOutgoingKindsFor2toMany(
   return kinds;
 }	
 
-#ifdef G4BERTINI_KAON
+
 std::vector<G4int> G4ElementaryParticleCollider::
 generateStrangeChannelPartTypes(G4int is, G4int mult, G4double ekin) const
 {
@@ -1381,7 +1343,7 @@ generateStrangeChannelPartTypes(G4int is, G4int mult, G4double ekin) const
 
   return kinds;
 }
-#endif
+
 
 G4double G4ElementaryParticleCollider::getMomModuleFor2toMany( 
 							      G4int is, 
@@ -1815,22 +1777,12 @@ adjustIntervalForElastic(
   return std::pair<G4double, G4double>(a, b);
 }  
 
-#ifdef G4BERTINI_KAON
-std::vector<G4double> G4ElementaryParticleCollider::
-particleSCMmomentumFor2to2(
-			   G4int is, 
-			   G4int kw, 
-			   G4double ekin, 
-			   G4double pscm,
-                           G4int outgoing_product ) const {
-#else
 std::vector<G4double> G4ElementaryParticleCollider::
 particleSCMmomentumFor2to2(
 			   G4int is, 
 			   G4int kw, 
 			   G4double ekin, 
 			   G4double pscm) const {
-#endif
 
   if (verboseLevel > 3) {
     G4cout << " >>> G4ElementaryParticleCollider::particleSCMmomentumFor2to2" << G4endl;

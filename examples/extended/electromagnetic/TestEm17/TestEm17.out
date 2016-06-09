@@ -1,0 +1,168 @@
+
+*************************************************************
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+***** Table : Nb of materials = 6 *****
+
+ Material: galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
+   --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole  ElmMassFraction:  70.00 %  ElmAbundance  72.71 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  30.00 %  ElmAbundance  27.29 %
+
+ Material:    CaCO3     density:  2.800 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.581 cm 
+   --->  Element: Calcium (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole  ElmMassFraction:  40.04 %  ElmAbundance  20.00 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  12.00 %  ElmAbundance  20.00 %
+   --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole  ElmMassFraction:  47.96 %  ElmAbundance  60.00 %
+
+ Material:   Carbon     density:  2.265 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.850 cm 
+   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element: Iron ( )   Z = 26.0   N =  55.9   A =  55.85 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+ Material:      Tin     density:  7.310 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.206 cm 
+   --->  Element: Tin ( )   Z = 50.0   N = 118.7   A = 118.70 g/mole  ElmMassFraction: 100.00 %  ElmAbundance 100.00 %
+
+
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+
+Registered models: 
+  None
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+
+Registered filters:
+  None
+
+/run/verbose 2
+#
+/testem/det/setMat Iron
+/testem/det/setSize 1 m
+#
+/testem/phys/addPhysics standard
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+userDetector->Construct() start.
+
+ The Box is 1 m   of Iron
+Iron is registered to the default region.
+physicsList->Construct() start.
+physicsList->Construct() start.
+physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 1 mm 
+#
+/gun/particle mu+
+/gun/energy 10 TeV
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000
+
+Region <DefaultRegionForTheWorld> -- appears in <Iron> world volume
+ Materials : Iron 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Iron
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 20.8323 keV    e- 1.28002 MeV    e+ 1.21851 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start Run processing.
+
+---> Begin of Event: 0
+
+---> Begin of Event: 1000
+
+---> Begin of Event: 2000
+
+---> Begin of Event: 3000
+
+---> Begin of Event: 4000
+
+---> Begin of Event: 5000
+
+---> Begin of Event: 6000
+
+---> Begin of Event: 7000
+
+---> Begin of Event: 8000
+
+---> Begin of Event: 9000
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=76.37s Real=105.83s Sys=12.11s
+
+ The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
+
+ Number of process calls --->	muIoni : 469540	muPairProd : 63243	muBrems : 645
+
+ Simulation: total CrossSection = 0.53343 /cm	 MeanFreePath = 1.8747 cm 	 massicCrossSection = 0.06778 cm2/g
+ Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1519165414, 739182601
+----------------------------------------
+Graphics systems deleted.
+Visualization Manager deleting...
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.

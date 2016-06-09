@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.15 2005/03/01 17:55:19 maire Exp $
+# $Id: run01.mac,v 1.16 2006/03/20 12:26:03 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -9,9 +9,10 @@
 /run/verbose 2
 #
 ###/testem/phys/addPhysics  g4v52
-/testem/phys/addPhysics  standard
+/testem/phys/addPhysics  g4v71
+###/testem/phys/addPhysics  standard
 #
-/testem/phys/setCuts 0.5 mm
+/testem/phys/setCuts 0.1 um
 #
 /run/initialize
 #
@@ -23,6 +24,6 @@
 /testem/histo/setHisto 1 100 700. 1000. MeV
 /testem/histo/setHisto 2 100   0.  300. MeV
 #
-/testem/event/printModulo 50
+/testem/event/printModulo 100
 #
 /run/beamOn 1000

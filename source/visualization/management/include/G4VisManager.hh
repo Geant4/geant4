@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.45 2005/11/29 22:23:01 tinslay Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VisManager.hh,v 1.59 2006/06/29 21:29:06 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 
@@ -98,13 +101,15 @@ class G4UImessenger;
 class G4VisStateDependent;
 class G4VTrajectoryModel;
 class G4VUserVisAction;
-template <typename T> class G4VisListManager;
+template <typename T> class G4VFilter;
+template <typename T> class G4VisFilterManager;
+template <typename T> class G4VisModelManager;
 template <typename T> class G4VModelFactory;
 
 namespace {
-  // Typedef's for trajectory drawing
-  typedef G4VModelFactory<G4VTrajectoryModel> G4TrajectoryModelFactory;
-  typedef G4VisListManager<G4VTrajectoryModel> G4TrajectoryModelManager;
+  // Useful typedef's
+  typedef G4VModelFactory<G4VTrajectoryModel> G4TrajDrawModelFactory;
+  typedef G4VModelFactory< G4VFilter<G4VTrajectory> > G4TrajFilterFactory;
 }
 
 class G4VisManager: public G4VVisManager {
@@ -116,9 +121,14 @@ class G4VisManager: public G4VVisManager {
   // G4VVisManager::GetConcreteInstance (), always testing for
   // non-zero.
 
-  // Odd friends that need access to various methods of the G4VisManager...
+  // Odd friends that need access to the G4VisManager...
   friend class G4RTSteppingAction;
   friend class G4RayTrajectory;
+  friend class G4RayTracerSceneHandler;
+  friend class G4RTMessenger;
+  friend class G4OpenGLXmViewerMessenger;
+  friend class G4XXXSceneHandler;
+  friend class G4HepRepFileSceneHandler;
 
   // Management friends...
   friend class G4VSceneHandler;
@@ -131,6 +141,8 @@ class G4VisManager: public G4VVisManager {
   (std::ostream &, const G4VSceneHandler &);
 
   friend class G4VisStateDependent;
+
+  friend class G4VisCommandList;
 
 public: // With description
 
@@ -179,11 +191,17 @@ public: // With description
   // a sub-class implementation of the protected virtual function,
   // RegisterGraphicsSystems.  See, e.g., G4VisExecutive.icc.
 
-  void RegisterModelFactory(G4TrajectoryModelFactory* factory);
-  // Register trajectory model factory. Assumes ownership of factory.
+  void RegisterModelFactory(G4TrajDrawModelFactory* factory);
+  // Register trajectory draw model factory. Assumes ownership of factory.
 
   void RegisterModel(G4VTrajectoryModel* model);
   // Register trajectory model. Assumes ownership of model.
+
+  void RegisterModelFactory(G4TrajFilterFactory* factory);
+  // Register trajectory filter model factory. Assumes ownership of factory.
+
+  void RegisterModel(G4VFilter<G4VTrajectory>* filter);
+  // Register trajectory filter model. Assumes ownership of model.
 
   void SelectTrajectoryModel(const G4String& model);
   // Set default trajectory model. Useful for use in compiled code
@@ -220,6 +238,8 @@ public: // With description
   void Draw (const G4Text&,
     const G4Transform3D& objectTransformation = G4Transform3D());
 
+  void Draw2D (const G4Text&);
+
   ////////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of
   // G4VVisManager for drawing a GEANT4 object.  Note that the
@@ -253,6 +273,8 @@ public: // With description
   void DispatchToModel(const G4VTrajectory&, G4int i_mode);
   // Draw the trajectory.
 
+  G4bool FilterTrajectory(const G4VTrajectory&);
+
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
 
@@ -284,6 +306,8 @@ public: // With description
   void Disable();
   // Global enable/disable functions.
 
+  const G4VTrajectoryModel* CurrentTrajDrawModel() const;
+
   G4VUserVisAction*            GetUserAction               () const;
   G4VisExtent                  GetUserActionExtent         () const;
   G4VGraphicsSystem*           GetCurrentGraphicsSystem    () const;
@@ -307,6 +331,12 @@ public: // With description
   // it contains more information.  (The size information in
   // GetXGeometryString and GetWindowSizeHint is guaranteed to be
   // identical.)
+  G4int                        GetEventCount                   () const;
+  const G4String&              GetBeginOfLastRunRandomStatus   () const;
+  const G4String&              GetBeginOfLastEventRandomStatus () const;
+  G4int                        GetLastRunID                    () const;
+  G4bool                       GetTransientsDrawnThisRun       () const;
+  G4bool                       GetTransientsDrawnThisEvent     () const;
 
   void SetUserAction (G4VUserVisAction* pVisAction,
 		      const G4VisExtent& = G4VisExtent::NullExtent);
@@ -322,6 +352,8 @@ public: // With description
   void              SetVerboseLevel             (Verbosity);
   void              SetWindowSizeHint           (G4int xHint, G4int yHint);
   void              SetXGeometryString          (const G4String&);
+  void              SetReprocessing             (G4bool);
+  void              SetReprocessingLastEvent    (G4bool);
 
 
   /////////////////////////////////////////////////////////////////////
@@ -359,14 +391,13 @@ protected:
 
   void RegisterMessengers              ();   // Command messengers.
   void PrintAvailableGraphicsSystems   () const;
+  void PrintAvailableModels            () const;
   void PrintInvalidPointers            () const;
   G4bool IsValidView ();
   // True if view is valid.  Prints messages and sanitises various data.
   void ClearTransientStoreIfMarked();
   // Clears transient store of current scene handler if it is marked
   // for clearing.  Assumes view is valid.
-  void CheckModel ();
-  // If a scene handler has no model, provides a null model.
 
   static G4VisManager*  fpInstance;         // Pointer to single instance.
   G4bool                fInitialised;
@@ -390,17 +421,25 @@ protected:
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
   G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer...
   G4String fXGeometryString;                // ...construction.
-  G4NullModel fVisManagerNullModel;         // As a default.
   G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
-  G4ModelingParameters fVisManagerModelingParameters;  // Useful memory.
+  G4int fEventCount;
+  G4String fBeginOfLastRunRandomStatus;
+  G4String fBeginOfLastEventRandomStatus;
+  G4bool fReprocessing;
+  G4bool fReprocessingLastEvent;
+  G4int fLastRunID;
+  G4int fLastEventID;
+  G4bool fTransientsDrawnThisRun;
+  G4bool fTransientsDrawnThisEvent;
 
 private:
 
-  // Trajectory model related data members
-  G4String fTrajectoryPlacement; // Placement for trajectory model commands
-  G4TrajectoryModelManager* fpTrajectoryModelMgr; // Trajectory model manager
-  std::vector<G4TrajectoryModelFactory*> fTrajectoryModelFactoryList; // Trajectory model factories
+  // Trajectory draw model manager
+  G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;
   
+  // Trajectory filter model manager
+  G4VisFilterManager<G4VTrajectory>* fpTrajFilterMgr;
+
 };
 
 #include "G4VisManager.icc"

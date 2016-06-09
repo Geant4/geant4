@@ -1,4 +1,4 @@
-$Id: History,v 1.319 2005/12/05 06:43:50 perl Exp $
+$Id: History,v 1.361 2006/06/12 08:35:10 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,261 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+---------------------------------------------
+12th June 2006  John Allison  (vis-V08-00-13)
+- DAWN-V08-00-04: Fixed rewind and file closure on exit.
+- VRML-V08-00-02: Fixed rewind and file closure on exit.
+
+------------------------------------------
+8th June 2006 John Allison (vis-V08-00-12)
+- visman-V08-00-23: Fixed bug in /vis/scene/endOfRunAction.
+
+-------------------------------------------
+7th June 2006  John Allison (vis-V08-00-11)
+- modeling-V08-00-14: Added protection for zero vis atts.
+- visman-V08-00-22: Zeroed modeling parameters pointer after use.
+
+-------------------------------------------
+6th June 2006  John Allison (vis-V08-00-10)
+- modeling-V08-00-13: Fixes for Sun and bug fix in G4PhysicalVolumeModel.
+- visman-V08-00-21: /vis/viewer/create: Fixed view params copy to self.
+
+------------------------------------------
+4th June 2005  Joseph Perl (vis-V08-00-09)
+- Global tag for Geant4 release 8.1
+- Corresponds to the following subdirectory tags:
+- DAWN-V08-00-03
+- vis-HepRep-V08-00-04
+- visman-V08-00-20
+- modeling-V08-00-12
+- opengl-V08-00-08
+- openinventor-V08-00-05
+- raytracer-V08-00-04
+- vistest-V08-00-08
+- vistree-V08-00-04
+- VRML-V08-00-01
+- visXXX-V08-00-04
+
+2nd June 2006  Joseph Perl
+- vis-HepRep-V08-00-03: Improvements to HepRepFile.
+
+2nd June 2006  John Allison
+- DAWN-V08-00-03: Handle file closing in DAWNFILE destructor.
+- VRML-V08-00-01: Protect zero model pointer.
+
+30th May 2006  Joseph Perl
+- opengl-V08-00-08: Fixed buffering problem in Win32.
+
+--------------------------------------------
+25th May 2006  John Allison  (vis-V08-00-08)
+- visman-V08-00-19:
+  o Changed re-computation of transients default to "off".
+  o Indent printing of models plus other minor improvements.
+- modeling-V08-00-11: Indent printing of models, fix trivial compiler warnings.
+- vistest-V08-00-07: Removed standalone - moved to
+  examples/extended/visualization.
+
+22nd May 2006  John Allison
+- modeling-V08-00-10:
+  o Remove dependency on Run.
+  o Protect zero pointer in output of G4ModelingParameters.
+- visman-V08-00-18:
+  o Remove G4Scene:Clear().  (Not used.)
+  o Require Idle state for transient re-computation.
+  o Reduce dependency on Run.  (Still used for transient re-computation.)
+  o /vis/.../list commands: Default verbosity changed to "warnings".
+- vis-HepRep-V08-00-02: Remove dependency on Run.
+
+--------------------------------------------
+12th May 2006  John Allison  (vis-V08-00-07)
+- Needs run-V08-00-02 and event-V08-00-03.
+- Main features:
+  o Protect against non-instantiation of run manager.
+  o Final refinements for re-computation of transients.
+  o G4OpenGLWin32Viewer: Fixed buffer swapping behaviour.
+- visman-V08-00-16:
+  o Added /vis/list and /vis/scene/add/eventID.
+  o Final refinements for event/run reprocessing (re-computation of
+    transients).
+- modeling-V08-00-09:
+  o Removed dependency on G4RunManager.
+  o G4CallbackModel: Added G4VGraphicsScene argument to operator().
+- opengl-V08-00-06: G4OpenGLWin32Viewer: Fixed buffer swapping behaviour.
+- raytracer-V08-00-04: SetRecomputeTransients(false).
+- raytracer-V08-00-03: Moved G4RayShooter class to Event category.
+- vistest-V08-00-06: Uses /vis/scene/add/eventID.
+
+----------------------------------------------
+21st April 2006  John Allison  (vis-V08-00-06)
+- Main features:
+  o Improved protection for null models and parameters.
+  o Improved trajectory drawing.
+  o Improved re-computation of transients in OpenGL.
+- modeling-V08-00-08:
+  o Improved protection for null models and parameters.
+  o Add context to trajectory drawers.
+  o Add generic drawer, G4TrajectoryGenericDrawer.
+- visman-V08-00-15: Improved protection for null models and parameters.
+- DAWN-V08-00-02: Improved protection for null models and parameters.
+- vis-HepRep-V08-00-01: Improved protection for null models and parameters.
+- raytracer-V08-00-02): 
+  o Relies on improved protection for null models and parameters.
+- vistree-V08-00-04: Improved protection for null models and parameters.
+- visXXX-V08-00-04: Improved protection for null models and parameters.
+- vistest-V08-00-05: Tidied.
+
+28th April 2006  John Allison
+- Co-working tags:
+  o opengl-V08-00-05: Fixes re-computation of transients in stored viewers.
+  o visman-V08-00-14: Includes changes that improve behaviour of
+    double buffered and interactive viewers when recomputing
+    transients.
+
+----------------------------------------------
+24th April 2006  John Allison  (vis-V08-00-05)
+- visman-V08-00-13:
+  o Fix bug #861.
+  o Print available models on initialisation.
+- modeling-V08-00-07:
+  o Add Print method to G4VModelFactory.
+  o Fix warnings on Linux.
+- opengl-V08-00-04: Fixed compilation problem on Windows.
+
+---------------------------------------------------------------------
+19th April 2006  John Allison (vis-V08-00-04 - needs greps-V08-00-02)
+- Main features:
+  o Implementation of 2D text in base classes and concrete implementation
+    of same in OpenGL.
+  o Continued migration to direct access to G4PhysicalVolumeModel.
+  o Addition of Trajectory Filter Models (Jane Tinslay).
+- visman-V08-00-12 (needs greps-V08-00-02):
+  o Implemented Draw2D(const G4Text&).
+  o Implemented Begin/EndPrimitives2D.
+  o Migrated to direct access to G4PhysicalVolumeModel.
+  o Introduced G4VisFilterManager.hh to manager filtering
+- modeling-V08-00-06:
+  o Upgrade to greps-V08-00-02 and minor improvements.
+  o Added G4TrajectoryFilterFactories and G4TrajectoryParticleFilter
+- DAWN-V08-00-01: Migrated to direct access to G4PhysicalVolumeModel.
+- vis-HepRep-V08-00-00: Migrated to direct access to G4PhysicalVolumeModel.
+- opengl-V08-00-03:
+  o Implemented Begin/EndPrimitives2D.
+  o Migrated to direct access to G4PhysicalVolumeModel.
+- vistree-V08-00-03:
+  o G4GAGTreeSceneHandler: Migration to direct access to G4PhysicalVolumeModel.
+- visXXX-V08-00-03: Improvement of legibility.
+- openinventor-V08-00-04: Use cmath instead of math.h.
+- vistest-V08-00-04: Added drawing of 2D text.
+
+----------------------------------------------
+28th March 2006  John Allison  (vis-V08-00-03)
+- visman-V08-00-11:
+  o Introduces trajectory drawing manager.
+  o G4VisExecutive: Adds G4TrajectoryDrawByOriginVolumeFactory.
+  o Corrects logic of transients re-computation:
+  o Unifies treatment of bools in commands.
+- modeling-V08-00-05:
+  o Introduces G4TrajectoryDrawByOriginVolume.
+  o Part migration away from EstablishSpecials mechanism.
+- vistree-V08-00-02 (needs modeling-V08-00-05):
+  o Made compatible with modeling-V08-00-05. 
+  o Migration away from EstablishSpecials mechanism.
+- openinventor-V08-00-03: Much improvement in logic.
+- visXXX-V08-00-02: Added G4XXXFile, G4XXXStored, G4XXXSG.
+- vistest-V08-00-03: Modernised and improved.
+
+----------------------------------------------
+14th March 2006  John Allison  (vis-V08-00-02)
+- opengl-V08-00-02: Refinement of display list handling.
+- vistree-V08-00-01: G4VTree and G4ASCIITree: Minor improvements to
+  readability of code.
+- modeling-V08-00-04: Added output operator<< for PVNodeID.
+
+13th March 2006  John Allison
+- visman-V08-00-10: Fixes recomputation of transients when changing drivers.
+
+---------------------------------------------
+8th March 2006  John Allison  (vis-V08-00-01)
+- visman-V08-00-09: Small bug fix to vis-V08-00-00.
+
+6th March 2006  John Allison  (vis-V08-00-00)
+- Collected tags below.  Main features since Release 8.0:
+  o Added /vis/scene/transientsAction.  The default is "rerun", i.e.,
+    when the viewer requests, the previous event or run will be
+    processed again with the original random number seed so that
+    transients (trajectories, hits, user drawing, etc.) are
+    reconstructed.  Thus, transients are "remembered" and may be
+    copied between graphics systems.  Turn off with
+    "/vis/scene/transientsAction none".
+  o Introduced /vis/geometry/... for editing vis attributes of
+    geometry volumes.
+  o For developers:
+    * Migration from use of Establish/DecommisionSpecials.
+    * Drawn path available.
+
+6th March 2006  John Allison
+- visman-V08-00-08: Added /vis/scene/transientsAction.
+
+3rd March 2006  John Allison
+- vistest-V08-00-02: Added test of transient handling.
+
+16th February 2006  John Allison
+- modeling-V08-00-03: For future removal of Establish/DecommisionSpecials.
+
+9th February 2006  John Allison
+- visman-V08-00-07: First implementation of refresh end-of-event.
+
+8th February 2006  John Allison
+- modeling-V08-00-02: Added DrawingStyle to G4ModelingParameters and fixed
+  bug in culling of covered daughters
+- visman-V08-00-06 (needs modeling-V08-00-02): Made use of
+  G4ModelingParameters::DrawingStyle.
+- vistree-V08-00-00: Fixed bug in treatment of repeated replicas.
+- visXXX-V08-00-01: Improved handling of DrawnPVPath.
+
+3rd February 2006  John Allison
+- visman-V08-00-05: Introduced /vis/geometry/...
+
+30th January 2006  John Allison
+- openinventor-V08-00-01: Implemented drawn volume path.
+
+26th January 2006  John Allison
+- raytracer-V08-00-01: Minor improvements.
+- vistest-V08-00-01: Improved ray tracer; commented about voxelisation crash.
+- modeling-V08-00-01: G4PhysicalVolumeModel: Added drawn volume path
+  capability.
+- visXXX-V08-00-00: Uses drawn volume path.  Needs modeling-V08-00-01
+  and visman-V08-00-04.
+- 3 co-working tags due to removal of fModified:
+  o visman-V08-00-04: Removed fModified plus minor improvements.
+  o opengl-V08-00-01: Removed fModified plus tidying.
+  o openinventor-V08-00-00: Removed fModified.
+
+----------------------------------------------------------------------
+The tags below since Release 8.0 were collected in geant4-08-00-ref-01
+and geant4-08-00-ref-02.
+
+23rd January 2006  John Allison
+- DAWN-V08-00-00: Rewind output file in ClearView.  Avoids duplicate
+  geometries in output file.
+- VRML-V08-00-00: As above.
+
+11th January 2006  John Allison
+- vistest-V08-00-00: Added twisted solids and improved Perspective example.
+- visman-V08-00-02: Minor improvements.
+- raytracer-V08-00-00: Reorganisation (needs visman-V08-00-02).
+- opengl-V08-00-00: Improved efficiency; made G4OpenGLXmViewerMessenger smart.
+- modeling-V08-00-00: Changed last remaining G4Transform3D::Identity to
+  G4Transform3D().
+
+9th January 2006  John Allison
+- visman-V08-00-00: geant4-08-00-ref-00 + reversal of change of 22nd
+  November 2005: fMarkForClearingTransientStore(true) initially now.
+- visman-V08-00-01: Improved /vis/scene/notifyHandlers, improved warning
+  messages and some bug fixes, including visman-V08-00-00.
+
+----------------------------------------------
 4th December 2005  Joseph Perl (vis-V07-01-10)
 - Global tag for Geant4 release 8.0
 - Corresponds to the following subdirectory tags:

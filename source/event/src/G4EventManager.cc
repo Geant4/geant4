@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc,v 1.22 2005/11/21 23:45:48 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4EventManager.cc,v 1.25 2006/06/29 18:09:40 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 //
@@ -103,6 +106,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
                 "Geometry is not closed : cannot process an event.");
     return;
   }
+  currentEvent = anEvent;
   stateManager->SetNewState(G4State_EventProc);
 
   // Reseting Navigator has been moved to G4Eventmanager, so that resetting
@@ -112,7 +116,6 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
       G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   navigator->LocateGlobalPointAndSetup(center,0,false);
                                                                                       
-  currentEvent = anEvent;
   G4Track * track;
   G4TrackStatus istop;
 
@@ -250,9 +253,9 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   { sdManager->TerminateCurrentEvent(currentEvent->GetHCofThisEvent()); }
 
   if(userEventAction) userEventAction->EndOfEventAction(currentEvent);
-  currentEvent = 0;
 
   stateManager->SetNewState(G4State_GeomClosed);
+  currentEvent = 0;
   abortRequested = false;
 }
 
@@ -324,6 +327,8 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
   DoProcessing(anEvent);
 }
 
+#include "Randomize.hh"
+
 #ifdef CLHEP_HepMC         // Temporarly disabled
 #include "G4HepMCInterface.hh"
 void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* anEvent)
@@ -334,6 +339,9 @@ void G4EventManager::ProcessOneEvent(const HepMC::GenEvent* hepmcevt,G4Event* an
   {
     anEvent = new G4Event();
     tempEvent = true;
+    std::ostringstream oss;
+    CLHEP::HepRandom::saveFullState(oss);
+    anEvent->SetRandomNumberStatus(oss.str());
   }
   G4HepMCInterface::HepMC2G4(hepmcevt,anEvent);
   DoProcessing(anEvent);
@@ -350,6 +358,9 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent
   {
     anEvent = new G4Event();
     tempEvent = true;
+    std::ostringstream oss;
+    CLHEP::HepRandom::saveFullState(oss);
+    anEvent->SetRandomNumberStatus(oss.str());
   }
   StackTracks(trackVector,false);
   DoProcessing(anEvent);

@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
@@ -105,12 +108,20 @@
     G4double Cinema( G4double kineticEnergy );
     
     G4double EvaporationEffects( G4double kineticEnergy );
+
+    G4double AnnihilationEvaporationEffects(G4double kineticEnergy, G4double ekOrg);
     
     inline G4double GetPNBlackTrackEnergy() const
     { return pnBlackTrackEnergy; }
     
     inline G4double GetDTABlackTrackEnergy() const
     { return dtaBlackTrackEnergy; }
+    
+    inline G4double GetAnnihilationPNBlackTrackEnergy() const
+    { return pnBlackTrackEnergyfromAnnihilation; }
+    
+    inline G4double GetAnnihilationDTABlackTrackEnergy() const
+    { return dtaBlackTrackEnergyfromAnnihilation; }
     
 // ******************  methods introduced by ChV ***********************    
    // return fermi momentum
@@ -147,9 +158,15 @@
     G4double zEff;  // effective atomic number
     
     G4double pnBlackTrackEnergy;  // the kinetic energy available for
-    //                               proton/neutron black track particles
+                                  // proton/neutron black track particles
     G4double dtaBlackTrackEnergy; // the kinetic energy available for
-    //                               deuteron/triton/alpha particles
+                                  // deuteron/triton/alpha particles
+    G4double pnBlackTrackEnergyfromAnnihilation;
+                     // kinetic energy available for proton/neutron black 
+                     // track particles based on baryon annihilation 
+    G4double dtaBlackTrackEnergyfromAnnihilation;
+                     // kinetic energy available for deuteron/triton/alpha 
+                     // black track particles based on baryon annihilation 
 
 
 // ************************** member variables by ChV *******************

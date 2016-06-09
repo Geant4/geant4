@@ -2,6 +2,5 @@
 /run/verbose 0
 /event/verbose 0
 /source/switch Iodium
-/run/energy Iodium                                              
-/run/initialize
-/run/beamOn  5000
+/primary/energy Iodium                                              
+/run/beamOn  20000

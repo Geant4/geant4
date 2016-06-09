@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.6 2005/07/28 22:28:20 gum Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4OpWLS.cc,v 1.8 2006/06/29 21:08:56 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -35,6 +38,7 @@
 // Author:      John Paul Archambault
 //              (Adaptation of G4Scintillation and G4OpAbsorption)
 // Updated:     2005-07-28 - add G4ProcessType to constructor
+//              2006-05-07 - add G4VWLSTimeGeneratorProfile
 // mail:        gum@triumf.ca
 //              jparcham@phys.ualberta.ca
 //
@@ -42,6 +46,8 @@
 
 #include "G4ios.hh"
 #include "G4OpWLS.hh"
+#include "G4WLSTimeGeneratorProfileDelta.hh"
+#include "G4WLSTimeGeneratorProfileExponential.hh"
 
 /////////////////////////
 // Class Implementation
@@ -59,7 +65,10 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created " << G4endl;
   }
-  
+
+  WLSTimeGeneratorProfile = 
+       new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
+
   BuildThePhysicsTable();
 }
 
@@ -73,6 +82,7 @@ G4OpWLS::~G4OpWLS()
     theIntegralTable->clearAndDestroy();
     delete theIntegralTable;
   }
+  delete WLSTimeGeneratorProfile;
 }
 
 ////////////
@@ -192,8 +202,9 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     // Generate new G4Track object:
     
     // Must give position of WLS optical photon
-  
-    G4double aSecondaryTime = (pPostStepPoint->GetGlobalTime()) + WLSTime;
+
+    G4double TimeDelay = WLSTimeGeneratorProfile->GenerateTime(WLSTime);
+    G4double aSecondaryTime = (pPostStepPoint->GetGlobalTime()) + TimeDelay;
 
     G4ThreeVector aSecondaryPosition = pPostStepPoint->GetPosition();
 
@@ -349,4 +360,24 @@ G4double G4OpWLS::GetMeanFreePath(const G4Track& aTrack,
   }
   
   return AttenuationLength;
+}
+
+void G4OpWLS::UseTimeProfile(const G4String name)
+{
+  if (name == "delta")
+    {
+      delete WLSTimeGeneratorProfile;
+      WLSTimeGeneratorProfile = 
+             new G4WLSTimeGeneratorProfileDelta("delta");
+    }
+  else if (name == "exponential")
+    {
+      delete WLSTimeGeneratorProfile;
+      WLSTimeGeneratorProfile =
+             new G4WLSTimeGeneratorProfileExponential("exponential");
+    }
+  else
+    {
+      G4Exception("G4OpWLS::UseTimeProfile - generator does not exist");
+    }
 }

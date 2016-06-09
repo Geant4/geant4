@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2005/10/18 18:09:14 allison Exp $
+$Id: History,v 1.2 2006/05/30 16:53:31 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,5 +16,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+        examples/extended/visualization/userVisAction History file
+        ----------------------------------------------------------
+
+25th May 2006  John Allison  (exam-ext-vis-V08-00-00)
+- userVisAction:
+  o Improved vis.mac.
+  o UVA_VisAction.cc: Follow changes in G4Colour statics.
+- perspective: First perspective example.
+
 18th October 2005 (exam-ext-vis-V07-01-00)
 - First userVisAction and standalone examples.

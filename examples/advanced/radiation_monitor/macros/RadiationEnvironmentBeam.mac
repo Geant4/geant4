@@ -1,0 +1,14 @@
+/radmon/generator/InsertSource Environment
+/radmon/generator/SetRelativeSourceIntensity  Environment 1.
+/radmon/generator/AppendSourceAlgorithm       Environment Particle
+/radmon/generator/SetSourceAlgorithmType      Environment Particle  FixedParticle
+/radmon/generator/SetSourceAlgorithmAttribute Environment Particle  Particle       proton
+/radmon/generator/AppendSourceAlgorithm       Environment Energy  
+/radmon/generator/SetSourceAlgorithmType      Environment Energy    FixedEnergy
+/radmon/generator/SetSourceAlgorithmAttribute Environment Energy    Energy         '250 MeV'
+/radmon/generator/AppendSourceAlgorithm       Environment Direction
+/radmon/generator/SetSourceAlgorithmType      Environment Direction FixedDirection
+/radmon/generator/SetSourceAlgorithmAttribute Environment Direction Direction      '90. 0. 180. deg'
+/radmon/generator/AppendSourceAlgorithm       Environment Sphere
+/radmon/generator/SetSourceAlgorithmType      Environment Sphere    UniformSphere
+/radmon/generator/SetSourceAlgorithmAttribute Environment Sphere    Radius         '2 cm'

@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.10 2005/03/15 12:56:29 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4ModelingParameters.hh,v 1.12 2006/06/29 21:30:26 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // John Allison  31st December 1997.
@@ -47,6 +50,14 @@ public: // With description
 
   friend std::ostream& operator << (std::ostream& os, const G4ModelingParameters&);
 
+  enum DrawingStyle {
+    wf,         // Draw edges    - no hidden line removal (wireframe).
+    hlr,        // Draw edges    - hidden lines removed.
+    hsr,        // Draw surfaces - hidden surfaces removed.
+    hlhsr       // Draw surfaces and edges - hidden removed.
+  };
+  // Currently requested drawing style.
+
   enum RepStyle {
     wireframe,  // Use G4Wireframe.
     polyhedron, // Use G4Polyhedron.
@@ -56,6 +67,33 @@ public: // With description
   // if required.
 
   G4ModelingParameters ();
+
+  G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
+			DrawingStyle drawingStyle,
+			RepStyle repStyle,
+			G4bool isCulling,
+			G4bool isCullingInvisible,
+			G4bool isDensityCulling,
+			G4double visibleDensity,
+			G4bool isCullingCovered,
+			G4int noOfSides);
+  // noOfSides is suggested no. of sides per circle in case a
+  // polygonal representation is produced.
+
+  G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
+			DrawingStyle drawingStyle,
+			RepStyle repStyle,
+			G4bool isCulling,
+			G4bool isCullingInvisible,
+			G4bool isDensityCulling,
+			G4double visibleDensity,
+			G4bool isCullingCovered,
+			G4int noOfSides,
+			G4bool isViewGeom,
+			G4bool isViewHits,
+			G4bool isViewDigis);
+  // noOfSides is suggested no. of sides per circle in case a
+  // polygonal representation is produced.
 
   G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,
 			RepStyle repStyle,
@@ -90,6 +128,7 @@ public: // With description
 
   // Get and Is functions...
   const G4VisAttributes* GetDefaultVisAttributes () const;
+  DrawingStyle     GetDrawingStyle               () const;
   RepStyle         GetRepStyle                   () const;
   G4bool           IsCulling                     () const;
   G4bool           IsCullingInvisible            () const;
@@ -103,6 +142,7 @@ public: // With description
 
   // Set functions...
   void SetDefaultVisAttributes (const G4VisAttributes* pDefaultVisAttributes);
+  void SetDrawingStyle         (DrawingStyle);
   void SetRepStyle             (RepStyle);
   void SetCulling              (G4bool);
   void SetCullingInvisible     (G4bool);
@@ -124,16 +164,17 @@ private:
 
   // Data members...
   const G4VisAttributes* fpDefaultVisAttributes;
-  RepStyle    fRepStyle;        // Representation style.
-  G4bool      fCulling;         // Culling requested.
-  G4bool      fCullInvisible;   // Cull (don't Draw) invisible objects.
-  G4bool      fDensityCulling;  // Density culling requested.  If so...
-  G4double    fVisibleDensity;  // ...density lower than this not drawn.
-  G4bool      fCullCovered;     // Cull daughters covered by opaque mothers.
-  G4int       fNoOfSides;       // ...if polygon approximates circle.
-  G4bool      fViewGeom;        // View geometry objects.
-  G4bool      fViewHits;        // View hits, if any.
-  G4bool      fViewDigis;       // View digis, if any.
+  DrawingStyle fDrawingStyle;    // Drawing style.
+  RepStyle     fRepStyle;        // Representation style.
+  G4bool       fCulling;         // Culling requested.
+  G4bool       fCullInvisible;   // Cull (don't Draw) invisible objects.
+  G4bool       fDensityCulling;  // Density culling requested.  If so...
+  G4double     fVisibleDensity;  // ...density lower than this not drawn.
+  G4bool       fCullCovered;     // Cull daughters covered by opaque mothers.
+  G4int        fNoOfSides;       // ...if polygon approximates circle.
+  G4bool       fViewGeom;        // View geometry objects.
+  G4bool       fViewHits;        // View hits, if any.
+  G4bool       fViewDigis;       // View digis, if any.
 
 };
 

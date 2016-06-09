@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.cc,v 1.10 2005/11/29 07:58:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4BraggIonModel.cc,v 1.14 2006/06/29 19:52:44 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +40,8 @@
 // Modifications:
 // 11-05-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 29-11-05 Do not use G4Alpha class (V.Ivantchenko)
+// 15-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 25-04-06 Add stopping data from ASTAR (V.Ivanchenko)
 //
 
 // Class Description:
@@ -48,19 +53,20 @@
 //
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4BraggIonModel.hh"
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4ParticleChangeForLoss.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
 
-G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p, const G4String& nam)
+G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p,
+                                 const G4String& nam)
   : G4VEmModel(nam),
   particle(0),
   iMolecula(0),
@@ -70,19 +76,19 @@ G4BraggIonModel::G4BraggIonModel(const G4ParticleDefinition* p, const G4String& 
   highKinEnergy    = 2.0*MeV;
   lowKinEnergy     = 0.0*MeV;
   lowestKinEnergy  = 1.0*keV;
-  HeMass           = 3.72742*GeV;
+  HeMass           = 3.727417*GeV;
   rateMassHe2p     = HeMass/proton_mass_c2;
   massFactor       = 1000.*amu_c2/HeMass;
   theZieglerFactor = eV*cm2*1.0e-15;
   theElectron      = G4Electron::Electron();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BraggIonModel::~G4BraggIonModel()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggIonModel::MinEnergyCut(const G4ParticleDefinition*,
                                        const G4MaterialCutsCouple* couple)
@@ -90,7 +96,7 @@ G4double G4BraggIonModel::MinEnergyCut(const G4ParticleDefinition*,
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
                                  const G4DataVector&)
@@ -101,13 +107,70 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
      pname != "deuteron" && pname != "triton") isIon = true;
 
   if(pParticleChange)
-    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>(pParticleChange);
+    fParticleChange = reinterpret_cast<G4ParticleChangeForLoss*>
+                                                              (pParticleChange);
   else
     fParticleChange = new G4ParticleChangeForLoss();
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BraggIonModel::ComputeCrossSectionPerElectron(
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+                                                 G4double cutEnergy,
+                                                 G4double maxKinEnergy)
+{
+
+  G4double cross     = 0.0;
+  G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
+  G4double maxEnergy = min(tmax,maxKinEnergy);
+  if(cutEnergy < tmax) {
+
+    G4double energy  = kineticEnergy + mass;
+    G4double energy2 = energy*energy;
+    G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
+
+    cross *= twopi_mc2_rcl2*chargeSquare/beta2;
+  }
+ //   G4cout << "BR: e= " << kineticEnergy << " tmin= " << cutEnergy 
+ //          << " tmax= " << tmax << " cross= " << cross << G4endl;
+ 
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BraggIonModel::ComputeCrossSectionPerAtom(
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+						 G4double Z, G4double,
+                                                 G4double cutEnergy,
+                                                 G4double maxEnergy)
+{
+  G4double cross = Z*ComputeCrossSectionPerElectron
+                                         (p,kineticEnergy,cutEnergy,maxEnergy);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4BraggIonModel::CrossSectionPerVolume(
+					   const G4Material* material,
+                                           const G4ParticleDefinition* p,
+                                                 G4double kineticEnergy,
+                                                 G4double cutEnergy,
+                                                 G4double maxEnergy)
+{
+  G4double eDensity = material->GetElectronDensity();
+  G4double cross = eDensity*ComputeCrossSectionPerElectron
+                                         (p,kineticEnergy,cutEnergy,maxEnergy);
+  return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
 					       const G4ParticleDefinition* p,
@@ -139,39 +202,14 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
 
   dedx *= chargeSquare;
 
-  //G4cout << " tkin(MeV)= " << tkin/MeV << " dedx(MeVxcm^2/g)= " << dedx*gram/(MeV*cm2*material->GetDensity()) 
-  //       << " q2= " << chargeSquare <<  G4endl;
+  //G4cout << " tkin(MeV) = " << tkin/MeV << " dedx(MeVxcm^2/g) = " 
+  //       << dedx*gram/(MeV*cm2*material->GetDensity()) 
+  //       << " q2 = " << chargeSquare <<  G4endl;
 
   return dedx;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4BraggIonModel::CrossSectionPerVolume(const G4Material* material,
-						const G4ParticleDefinition* p,
-						G4double kineticEnergy,
-						G4double cutEnergy,
-						G4double maxKinEnergy)
-{
-
-  G4double cross     = 0.0;
-  G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = min(tmax,maxKinEnergy);
-  if(cutEnergy < tmax) {
-
-    G4double energy  = kineticEnergy + mass;
-    G4double energy2 = energy*energy;
-    G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
-
-    cross *= twopi_mc2_rcl2*chargeSquare*material->GetElectronDensity()/beta2;
-  }
- //   G4cout << "BR: e= " << kineticEnergy << " tmin= " << cutEnergy << " tmax= " << tmax
- //        << " cross= " << cross << G4endl;
-  return cross;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 std::vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
@@ -238,7 +276,7 @@ std::vector<G4DynamicParticle*>* G4BraggIonModel::SampleSecondaries(
   return vdp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4BraggIonModel::HasMaterial(const G4Material* material)
 {
@@ -263,7 +301,7 @@ G4bool G4BraggIonModel::HasMaterial(const G4Material* material)
   return false ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggIonModel::StoppingPower(const G4Material* material,
 					G4double kineticEnergy) 
@@ -314,7 +352,8 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
 	 G4cout << "## " << i << ". T= " << T << " slow= " << slow
 	 << " a0= " << a[i][0] << " a1= " << a[i][1] 
 	 << " shigh= " << shigh 
-	 << " dedx= " << ionloss << " q^2= " <<  HeEffChargeSquare(z, T*MeV) << G4endl;
+	 << " dedx= " << ionloss << " q^2= " <<  HeEffChargeSquare(z, T*MeV)
+	 << G4endl;
        */
     }
     if ( ionloss < 0.0) ionloss = 0.0 ;
@@ -332,7 +371,7 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
   return ionloss;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
                                                   G4double kineticEnergy) const
@@ -472,7 +511,8 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
     G4cout << "## " << i << ". T= " << T << " slow= " << slow
            << " a0= " << a[i][0] << " a1= " << a[i][1] 
            << " shigh= " << shigh 
-           << " dedx= " << ionloss << " q^2= " <<  HeEffChargeSquare(z, T*MeV) << G4endl;
+           << " dedx= " << ionloss << " q^2= " <<  HeEffChargeSquare(z, T*MeV) 
+	   << G4endl;
     */
   }
   if ( ionloss < 0.0) ionloss = 0.0 ;
@@ -483,7 +523,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
   return ionloss;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4BraggIonModel::DEDX(const G4Material* material,
                                      G4double kineticEnergy)
@@ -494,7 +534,14 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
                                  material->GetAtomicNumDensityVector();
 
   // compaund material with parametrisation
-  if( HasMaterial(material) ) {
+  G4int iNist = astar.GetIndex(material);
+
+  if( iNist >= 0 ) {
+    G4double T = kineticEnergy*rateMassHe2p;
+    return astar.GetElectronicDEDX(iNist, T)*material->GetDensity()/
+      HeEffChargeSquare(astar.GetEffectiveZ(iNist), T/MeV);
+
+  } else if( HasMaterial(material) ) {
 
     eloss = StoppingPower(material, kineticEnergy)*
       material->GetDensity()/amu;
@@ -522,9 +569,10 @@ G4double G4BraggIonModel::DEDX(const G4Material* material,
   return eloss*theZieglerFactor;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4BraggIonModel::HeEffChargeSquare(G4double z, G4double kinEnergyHeInMeV) const
+G4double G4BraggIonModel::HeEffChargeSquare(G4double z, 
+                                            G4double kinEnergyHeInMeV) const
 {
   // The aproximation of He effective charge from:
   // J.F.Ziegler, J.P. Biersack, U. Littmark
@@ -532,9 +580,9 @@ G4double G4BraggIonModel::HeEffChargeSquare(G4double z, G4double kinEnergyHeInMe
   // Vol.1, Pergamon Press, 1985
 
   static G4double c[6] = {0.2865,  0.1266, -0.001429,
-                          0.02402,-0.01135, 0.001475} ;
+                          0.02402,-0.01135, 0.001475};
 
-  G4double e = log( max( 1.0, kinEnergyHeInMeV*massFactor));
+  G4double e = log( max( 1.0, kinEnergyHeInMeV*massFactor)) ;
   G4double x = c[0] ;
   G4double y = 1.0 ;
   for (G4int i=1; i<6; i++) {
@@ -549,5 +597,5 @@ G4double G4BraggIonModel::HeEffChargeSquare(G4double z, G4double kinEnergyHeInMe
   return w;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -1,23 +1,26 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
@@ -36,12 +39,16 @@
  // M.G. Pia, 2 Oct 1998: modified GetFermiMomentum to avoid memory leaks
  
 #include "G4Nucleus.hh"
+#include "G4NucleiProperties.hh"
 #include "Randomize.hh"
 #include "G4HadronicException.hh"
  
 G4Nucleus::G4Nucleus()
 {
-  pnBlackTrackEnergy = dtaBlackTrackEnergy = 0.0;
+  pnBlackTrackEnergy = 0.0;
+  dtaBlackTrackEnergy = 0.0;
+  pnBlackTrackEnergyfromAnnihilation = 0.0;
+  dtaBlackTrackEnergyfromAnnihilation = 0.0;
   excitationEnergy = 0.0;
   momentum = G4ThreeVector(0.,0.,0.);
   fermiMomentum = 1.52*hbarc/fermi;
@@ -51,7 +58,10 @@ G4Nucleus::G4Nucleus()
 G4Nucleus::G4Nucleus( const G4double A, const G4double Z )
 {
   SetParameters( A, Z );
-  pnBlackTrackEnergy = dtaBlackTrackEnergy = 0.0;
+  pnBlackTrackEnergy = 0.0;
+  dtaBlackTrackEnergy = 0.0;
+  pnBlackTrackEnergyfromAnnihilation = 0.0;
+  dtaBlackTrackEnergyfromAnnihilation = 0.0;
   excitationEnergy = 0.0;
   momentum = G4ThreeVector(0.,0.,0.);
   fermiMomentum = 1.52*hbarc/fermi;
@@ -61,7 +71,10 @@ G4Nucleus::G4Nucleus( const G4double A, const G4double Z )
 G4Nucleus::G4Nucleus( const G4Material *aMaterial )
 {
   ChooseParameters( aMaterial );
-  pnBlackTrackEnergy = dtaBlackTrackEnergy = 0.0;
+  pnBlackTrackEnergy = 0.0;
+  dtaBlackTrackEnergy = 0.0;
+  pnBlackTrackEnergyfromAnnihilation = 0.0;
+  dtaBlackTrackEnergyfromAnnihilation = 0.0;
   excitationEnergy = 0.0;
   momentum = G4ThreeVector(0.,0.,0.);
   fermiMomentum = 1.52*hbarc/fermi;
@@ -171,50 +184,8 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
  G4double
   G4Nucleus::AtomicMass( const G4double A, const G4double Z ) const
   {
-    // derived from original FORTRAN code ATOMAS by H. Fesefeldt (2-Dec-1986)
-    //
-    // Computes atomic mass in MeV
-    // units for A example:  A = material->GetA()/(g/mole);
-    //
-    // Note:  can't just use aEff and zEff since the Nuclear Reaction
-    //        function needs to calculate atomic mass for various values of A and Z
-
-    const G4double electron_mass = G4Electron::Electron()->GetPDGMass()/MeV;
-    const G4double proton_mass = G4Proton::Proton()->GetPDGMass()/MeV;
-    const G4double neutron_mass = G4Neutron::Neutron()->GetPDGMass()/MeV;
-    const G4double deuteron_mass = G4Deuteron::Deuteron()->GetPDGMass()/MeV;
-    const G4double alpha_mass = G4Alpha::Alpha()->GetPDGMass()/MeV;
-    
-    G4int myZ = G4int(Z + 0.5);
-    G4int myA = G4int(A + 0.5);
-    if( myA <= 0 )return DBL_MAX;
-    if( myZ > myA)return DBL_MAX;
-    if( myA == 1 )
-    {
-      if( myZ == 0 )return neutron_mass*MeV;
-      if( myZ == 1 )return proton_mass*MeV + electron_mass*MeV;   // hydrogen
-    }
-    else if( myA == 2 && myZ == 1 )
-    {
-      return deuteron_mass*MeV;
-    }
-    else if( myA == 4 && myZ == 2 )
-    {
-      return alpha_mass*MeV;
-    }
-    //
-    // Weitzsaecker's Mass formula
-    //
-    G4double mass =
-      (A-Z)*neutron_mass + Z*proton_mass + Z*electron_mass
-      - 15.67*A                                          // nuclear volume
-      + 17.23*std::pow(A,2./3.)                               // surface energy
-      + 93.15*std::pow(A/2.-Z,2.)/A                           // asymmetry
-      + 0.6984523*std::pow(Z,2.)*std::pow(A,-1./3.);               // coulomb
-    G4int ipp = (myA - myZ)%2;            // pairing
-    G4int izz = myZ%2;
-    if( ipp == izz )mass += (ipp+izz-1) * 12.0 * std::pow(A,-0.5);
-    return mass*MeV;
+    // Now returns (atomic mass - electron masses) 
+    return G4NucleiProperties::GetNuclearMass(A, Z);
   }
  
  G4double
@@ -265,8 +236,6 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     
     if( G4int(zEff+0.1) != 82 )
     { 
-      //G4double ran1 = G4RandGauss::shoot();
-      //G4double ran2 = G4RandGauss::shoot();
       G4double ran1 = -6.0;
       G4double ran2 = -6.0;
       for( G4int i=0; i<12; ++i )
@@ -287,6 +256,50 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
 //    G4cout << "EvaporationEffects "<<kineticEnergy<<" "
 //           <<pnBlackTrackEnergy+dtaBlackTrackEnergy<<endl;
     return (pnBlackTrackEnergy+dtaBlackTrackEnergy)*GeV;
+  }
+ 
+ G4double G4Nucleus::AnnihilationEvaporationEffects(G4double kineticEnergy, G4double ekOrg)
+  {
+    // Nuclear evaporation as a function of atomic number and kinetic 
+    // energy (MeV) of primary particle.  Modified for annihilation effects. 
+    //
+    if( aEff < 1.5 || ekOrg < 0.)
+    {
+      pnBlackTrackEnergyfromAnnihilation = 0.0;
+      dtaBlackTrackEnergyfromAnnihilation = 0.0;
+      return 0.0;
+    }
+    G4double ek = kineticEnergy/GeV;
+    G4float ekin = std::min( 4.0, std::max( 0.1, ek ) );
+    const G4float atno = std::min( 120., aEff ); 
+    const G4float gfa = 2.0*((aEff-1.0)/70.)*std::exp(-(aEff-1.0)/70.);
+
+    G4float cfa = std::max( 0.15, 0.35 + ((0.35-0.05)/2.3)*std::log(ekin) );
+    G4float exnu = 7.716 * cfa * std::exp(-cfa)
+      * ((atno-1.0)/120.)*std::exp(-(atno-1.0)/120.);
+    G4float fpdiv = std::max( 0.5, 1.0-0.25*ekin*ekin );
+
+    pnBlackTrackEnergyfromAnnihilation = exnu*fpdiv;
+    dtaBlackTrackEnergyfromAnnihilation = exnu*(1.0-fpdiv);
+    
+    G4double ran1 = -6.0;
+    G4double ran2 = -6.0;
+    for( G4int i=0; i<12; ++i ) {
+      ran1 += G4UniformRand();
+      ran2 += G4UniformRand();
+    }
+    pnBlackTrackEnergyfromAnnihilation *= 1.0 + ran1*gfa;
+    dtaBlackTrackEnergyfromAnnihilation *= 1.0 + ran2*gfa;
+
+    pnBlackTrackEnergyfromAnnihilation = std::max( 0.0, pnBlackTrackEnergyfromAnnihilation);
+    dtaBlackTrackEnergyfromAnnihilation = std::max( 0.0, dtaBlackTrackEnergyfromAnnihilation);
+    G4double blackSum = pnBlackTrackEnergyfromAnnihilation+dtaBlackTrackEnergyfromAnnihilation;
+    if (blackSum >= ekOrg/GeV) {
+      pnBlackTrackEnergyfromAnnihilation *= ekOrg/GeV/blackSum;
+      dtaBlackTrackEnergyfromAnnihilation *= ekOrg/GeV/blackSum;
+    }
+
+    return (pnBlackTrackEnergyfromAnnihilation+dtaBlackTrackEnergyfromAnnihilation)*GeV;
   }
  
  G4double 
@@ -334,15 +347,14 @@ G4ReactionProduct G4Nucleus::GetThermalNucleus(G4double targetMass, G4double tem
     G4double ranmax = (ranflat1>ranflat2? ranflat1: ranflat2);
     ranmax = (ranmax>ranflat3? ranmax : ranflat3);
     
-    // - random decay angle
-    G4double theta=pi*G4UniformRand();  // isotropic decay angle theta
-    G4double phi  =CLHEP::RandFlat::shoot((G4double)0.,(G4double)2*pi);
-                                        // isotropic decay angle phi
+    // Isotropic momentum distribution
+    G4double costheta = 2.*G4UniformRand() - 1.0;
+    G4double sintheta = std::sqrt(1.0 - costheta*costheta);
+    G4double phi = 2.0*pi*G4UniformRand();
     
-    // - setup ThreeVector
-    G4double pz=std::cos(theta)*ranmax;
-    G4double px=std::sin(theta)*std::cos(phi)*ranmax;
-    G4double py=std::sin(theta)*std::sin(phi)*ranmax;
+    G4double pz=costheta*ranmax;
+    G4double px=sintheta*std::cos(phi)*ranmax;
+    G4double py=sintheta*std::sin(phi)*ranmax;
     G4ThreeVector p(px,py,pz);
     return p;
   }

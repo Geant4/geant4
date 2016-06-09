@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmProcessOptions.cc,v 1.11 2005/12/05 12:13:07 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4EmProcessOptions.cc,v 1.18 2006/06/29 19:55:05 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +40,9 @@
 // Modifications:
 // 30-06-04 G4EmProcess is pure discrete (V.Ivanchenko)
 // 24-03-05 Add ApplyCuts and RandomStep (V.Ivanchenko)
+// 10-01-06 PreciseRange -> CSDARange (V.Ivantchenko)
+// 10-05-06 Add command MscStepLimit to G4LossTableManager (V.Ivantchenko) 
+// 22-05-06 Add SetBremsstrahlungTh (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -173,14 +179,14 @@ void G4EmProcessOptions::SetMaxEnergy(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetMaxEnergyForPreciseRange(G4double val)
+void G4EmProcessOptions::SetMaxEnergyForCSDARange(G4double val)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetMaxKinEnergyForPreciseRange(val);
+    if(p) p->SetMaxKinEnergyForCSDARange(val);
   }
 }
 
@@ -238,14 +244,14 @@ void G4EmProcessOptions::SetDEDXBinning(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetDEDXBinningForPreciseRange(G4int val)
+void G4EmProcessOptions::SetDEDXBinningForCSDARange(G4int val)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
   std::vector<G4VEnergyLossProcess*>::const_iterator itr;
   for(itr = v.begin(); itr != v.end(); itr++) {
     G4VEnergyLossProcess* p = *itr;
-    if(p) p->SetDEDXBinningForPreciseRange(val);
+    if(p) p->SetDEDXBinningForCSDARange(val);
   }
 }
 
@@ -278,7 +284,7 @@ void G4EmProcessOptions::SetLambdaBinning(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetStepLimits(G4double v1, G4double v2)
+void G4EmProcessOptions::SetStepFunction(G4double v1, G4double v2)
 {
   const std::vector<G4VEnergyLossProcess*>& v =
         theManager->GetEnergyLossProcessVector();
@@ -317,9 +323,9 @@ void G4EmProcessOptions::SetApplyCuts(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetBuildPreciseRange(G4bool val)
+void G4EmProcessOptions::SetBuildCSDARange(G4bool val)
 {
-  theManager->SetBuildPreciseRange(val);
+  theManager->SetBuildCSDARange(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -400,15 +406,24 @@ void G4EmProcessOptions::ActivateDeexcitation(G4bool val, const G4Region* r)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm, G4double factor)
+void G4EmProcessOptions::SetMscStepLimitation(G4bool algorithm, 
+					      G4double factor)
 {
-  const std::vector<G4VMultipleScattering*>& u =
-        theManager->GetMultipleScatteringVector();
-  std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
-    G4VMultipleScattering* s = *itm;
-    if(s) s->MscStepLimitation(algorithm, factor);
-  }
+  theManager->SetMscStepLimitation(algorithm, factor);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetLPMFlag(G4bool val)
+{
+  theManager->SetLPMFlag(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetBremsstrahlungTh(G4double val)
+{
+  theManager->SetBremsstrahlungTh(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

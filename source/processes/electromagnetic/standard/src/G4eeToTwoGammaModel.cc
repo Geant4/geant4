@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.8 2005/04/29 18:02:35 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4eeToTwoGammaModel.cc,v 1.10 2006/06/29 19:53:55 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +40,7 @@
 // Modifications:
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 18-04-05 Compute CrossSectionPerVolume (V.Ivantchenko)
+// 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
 //
 //
 // Class Description:
@@ -90,31 +94,56 @@ G4eeToTwoGammaModel::~G4eeToTwoGammaModel()
 void G4eeToTwoGammaModel::Initialise(const G4ParticleDefinition*,
                                      const G4DataVector&)
 {}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToTwoGammaModel::CrossSectionPerVolume(const G4Material* material,
-						    const G4ParticleDefinition*,
-						    G4double kineticEnergy,
-						    G4double,
-						    G4double)
+G4double G4eeToTwoGammaModel::ComputeCrossSectionPerElectron(
+                                       const G4ParticleDefinition*,
+                                       G4double kineticEnergy,
+				       G4double, G4double)
 {
-  // Calculates the cross section per atom of annihilation into two photons
+  // Calculates the cross section per electron of annihilation into two photons
   // from the Heilter formula.
-  G4double eDensity = material->GetElectronDensity();
-
+  
   G4double tau   = kineticEnergy/electron_mass_c2;
   G4double gam   = tau + 1.0;
   G4double gamma2= gam*gam;
   G4double bg2   = tau * (tau+2.0);
   G4double bg    = sqrt(bg2);
 
-  G4double cross = pi_rcl2*eDensity*((gamma2+4*gam+1.)*log(gam+bg) - (gam+3.)*bg)
+  G4double cross = pi_rcl2*((gamma2+4*gam+1.)*log(gam+bg) - (gam+3.)*bg)
                  / (bg2*(gam+1.));
+  return cross;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eeToTwoGammaModel::ComputeCrossSectionPerAtom(
+                                    const G4ParticleDefinition* p,
+                                    G4double kineticEnergy, G4double Z,
+				    G4double, G4double, G4double)
+{
+  // Calculates the cross section per atom of annihilation into two photons
+  
+  G4double cross = Z*ComputeCrossSectionPerElectron(p,kineticEnergy);
+  return cross;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4eeToTwoGammaModel::CrossSectionPerVolume(
+					const G4Material* material,
+					const G4ParticleDefinition* p,
+					      G4double kineticEnergy,
+					      G4double, G4double)
+{
+  // Calculates the cross section per volume of annihilation into two photons
+  
+  G4double eDensity = material->GetElectronDensity();
+  G4double cross = eDensity*ComputeCrossSectionPerElectron(p,kineticEnergy);
   return cross;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,

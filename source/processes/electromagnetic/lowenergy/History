@@ -1,4 +1,4 @@
-$Id: History,v 1.244 2005/11/30 16:34:11 gcosmo Exp $
+$Id: History,v 1.251 2006/05/31 07:48:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,50 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31.05.2006   G.Cosmo, tag emlowen-V08-00-06
+             Added missing migration to std namespace for mathematical
+             functions. Also required for allowing compilation on Windows
+             platform.
+
+25.05.2006   MGP, tag emlowen-V08-00-05
+             Improved design and implementation of photoelectric angular 
+             distribution models (related to atomic deexcitation)
+
+25.05.2006   MGP, tag emlowen-V08-00-04
+             Various fixes to the DNA processes to allow compilation with
+             gcc 3.4.5. Some of the fixes are dummy implementations, or
+             do not make sense physically; they should be revised in 
+             a future dummy implementation. The present version of the
+             DNA processes is meant as a first beta release, and is not
+             suitable for physics application yet.
+
+15.05.2006   MGP, tag emlowen-V08-00-03
+             Improved design and implementation of photoelectric angular 
+             distribution models
+
+12.05.2006   MGP, tag emlowen-V08-00-02
+             Same as emlowen-V08-00-00, with updated History
+
+12.05.2006   MGP, tag emlowen-V08-00-01
+             New developments: photoelectric angular distribution models
+             The photoelectric angular distribution models have some
+             temporary design features (function arguments passed
+             by value etc.), and preliminary code implementation,
+             (subset of the previous tag emlowen-V08-00-00 for
+              incremental testing)
+
+12.05.2006   MGP, tag emlowen-V08-00-00
+             New developments: photoelectric angular distribution models
+                               Geant4-DNA very lowE physics processes in water
+             The photoelectric angular distribution models have some
+             temporary design features (function arguments passed
+             by value etc.), and preliminary code implementation
+             The Geant4-DNA processes are in a beta-release status
+
+20.12.2005   R.Capra, tag emlowen-V08-00-RC
+             * Internal tag with latest developments in the DNA processes
+               - Tested for build, run and plots verified
 
 30.11.2005   G.Cosmo, tag emlowen-V07-01-14
              * Fixes for migration to <sstream> from obsolete <strstream>.

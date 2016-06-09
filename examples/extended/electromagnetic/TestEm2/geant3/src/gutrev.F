@@ -6,7 +6,7 @@
 *                                                                     
 #include "celoss.inc"                                                                     
 *                                                                          
-      CALL VZERO(DEDL,5*NBIN)                                                                                                         
+      CALL VZERO(DEDL,2*NBIN)                                                                                                         
       STRCH = 0. 
       STRNE = 0.                                                              
 *                                                                               

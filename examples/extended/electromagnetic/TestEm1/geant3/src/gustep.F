@@ -26,7 +26,6 @@
       IF (CHARGE.NE.0.) THEN
            NSTEP1 = NSTEP1 + 1
 	   NSTRK1 = NSTRK1 + 1
-	   CALL HFILL (3,STEP*10,0.,1.)
       ELSE 
            NSTEP0 = NSTEP0 + 1
 	   NSTRK0 = NSTRK0 + 1
@@ -40,5 +39,8 @@
           IF (IPROC.LE.12) NBCALL(IPROC) = NBCALL(IPROC)+1
         ENDDO
       ENDIF
-         
+*
+* *** step size of primary particle
+      IF ((ITRA.EQ.1).AND.(ISTAK.EQ.0)) CALL HFILL (3,STEP*10,0.,1.)
+*                
       END                                                                       

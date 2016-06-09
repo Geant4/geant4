@@ -1,0 +1,25 @@
+$Id: History,v 1.11 2006/05/19 15:43:35 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm13 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+19-05-06 mma (testem13-V08-00-08)
+- update README
+     
+10-05-06 mma (testem13-V08-00-07)
+- added protection in DetectorConstruction::UpdateDeometry()
+          
+26-04-06 mma (testem13-V08-00-06)
+- creation, from previous TestEm13 which is renamed TestEm14

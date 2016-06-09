@@ -1,0 +1,335 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// File name:     RadmonTDetectorVolumesWithPinsDecorator.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonTDetectorVolumesWithPinsDecorator.icc,v 1.1.2.2 2006/06/29 16:12:46 gunter Exp $
+// Tag:           $Name: geant4-08-01 $
+//
+
+#ifndef   RADMONTDETECTORVOLUMESWITHPINSDECORATOR_HH
+ #error "RadmonTDetectorVolumesWithPinsDecorator.icc cannot be included directly. Please use RadmonTDetectorVolumesWithPinsDecorator.hh"
+#else  /* RADMONTDETECTORVOLUMESWITHPINSDECORATOR_HH */
+ // Include files
+ #include "RadmonVDetectorLabelledEntityConstructor.hh"
+ #include "RadmonDetectorLayerVolumesList.hh"
+ #include "RadmonDetectorLayerVolumeItem.hh"
+ #include "G4Trap.hh"
+ #include "G4Box.hh"
+ #include "G4UIcommand.hh"
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithPinsDecorator<LayerVolumesComponent> :: RadmonTDetectorVolumesWithPinsDecorator(const RadmonVDetectorLabelledEntityConstructor * constructor)
+ :
+  owner(constructor),
+  component(constructor),
+  visAttributes(0)
+ {
+ }
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+                                                RadmonTDetectorVolumesWithPinsDecorator<LayerVolumesComponent> :: ~RadmonTDetectorVolumesWithPinsDecorator()
+ {
+  delete visAttributes;
+ }
+ 
+ 
+ 
+ 
+ 
+ template <class LayerVolumesComponent>
+ RadmonDetectorLayerVolumesList *               RadmonTDetectorVolumesWithPinsDecorator<LayerVolumesComponent> :: GenerateVolumesList(void)
+ {
+  G4double width(owner->GetWidth());
+  if (width<0)
+   return 0;
+
+  G4double height(owner->GetHeight());
+  if (height<0)
+   return 0;
+  
+  G4double thickness(owner->GetThickness());
+  if (thickness<0)
+   return 0;
+  
+  G4int holesAlongWidth(owner->GetAttributeAsInteger("HolesAlongWidth", -1));
+  if (holesAlongWidth<0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: \"HolesAlongWidth\" attribute not defined." << G4endl;
+   return 0;
+  }
+
+  G4int holesAlongHeight(owner->GetAttributeAsInteger("HolesAlongHeight", -1));
+  if (holesAlongHeight<0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: \"HolesAlongHeight\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  if ((holesAlongWidth+holesAlongHeight)<=0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: Both \"HolesAlongHeight\" and \"HolesAlongHeight\" attributes are 0." << G4endl;
+   return 0;
+  }
+
+  G4double holesRadius(owner->GetAttributeAsMeasure("HolesRadius", "Length", -1.));
+  if (holesRadius<0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: \"HolesRadius\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  G4double pinLength(owner->GetAttributeAsMeasure("PinLength", "Length", -1.));
+  if (pinLength<0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: \"PinLength\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  if (pinLength>=width/2 || pinLength>=height/2)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: \"PinLength\" exceeds half width or height." << G4endl;
+   return 0;
+  }
+  
+  G4double holesStep(owner->GetAttributeAsMeasure("HolesStep", "Length", -1.));
+  if (holesStep<0)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: \"HolesStep\" attribute not defined." << G4endl;
+   return 0;
+  }
+  
+  G4double fullHolesStep(holesRadius*2.+holesStep);
+  
+  if (fullHolesStep*static_cast<G4double>(holesAlongWidth-1)>width || fullHolesStep>width)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: Holes parameters does not fit along width." << G4endl;
+   return 0;
+  }
+  
+  if (fullHolesStep*static_cast<G4double>(holesAlongHeight-1)>height || fullHolesStep>height)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: Holes parameters does not fit along height." << G4endl;
+   return 0;
+  }
+  
+  G4int markedPin(owner->GetAttributeAsInteger("MarkedPin", 0));
+  
+  if (markedPin<0 || markedPin>(holesAlongWidth+holesAlongHeight)*2)
+  {
+   G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: Marked pin outside the range." << G4endl;
+   return 0;
+  }
+  
+  G4double markedPinLength(0.);
+  if (markedPin>0)
+  {
+   markedPinLength=owner->GetAttributeAsMeasure("MarkedPinLength", "Length", -1.);
+
+   if (markedPinLength<0.)
+   {
+    G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: \"MarkedPinLength\" attribute not defined." << G4endl;
+    return 0;
+   }
+   
+   if (markedPinLength<=pinLength)
+   {
+    G4cout << "RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: \"MarkedPinLength\" <= \"PinLength\"." << G4endl;
+    return 0;
+   }
+  }
+  
+  G4Material * material(owner->GetMaterial("PinsMaterial"));
+  if (!material)
+   return 0;
+  
+  visAttributes=owner->AllocateVisAttributes("PinsVisAttributes", material);
+  
+  RadmonDetectorLayerVolumesList * list(component.GenerateVolumesList());
+  
+  if (list==0)
+   return 0;
+   
+  G4int n(list->GetNItems());
+  
+  if (n==0)
+  {
+   delete list;
+   return 0;
+  }
+  
+  RadmonDetectorLayerVolumeItem * item;
+  RadmonDetectorLayerVolumeItem * motherItem;
+  
+  while (n>0)
+  {
+   n--;
+
+   item=list->GetItem(n);
+   if (item->GetMotherVolumeItem()==0)
+   {
+    motherItem=item;
+    break;
+   }
+  }
+
+  if (!motherItem)
+   G4Exception("RadmonTDetectorVolumesWithPinsDecorator::GenerateVolumesList: No mother volume found.");
+
+  intersection.Initialize(motherItem);
+  
+  G4Box * singlePin(new G4Box("SinglePin", holesRadius, pinLength/2., thickness/2.));
+  
+  G4ThreeVector offset;
+  
+  offset.setX((fullHolesStep/2.)*static_cast<G4double>(holesAlongWidth-1));
+  offset.setY(height/2.-pinLength/2.);
+  offset.setZ(0.);
+  
+  G4int i(holesAlongWidth);
+  G4int index(0);
+  G4String indexStr;
+
+  const G4double heightFraction(.999);
+  const G4double pDx2(holesRadius);
+  const G4double pDx1(pDx2*(1.-heightFraction));
+  const G4double pDy1((markedPinLength-pinLength)*heightFraction/2.);
+ 
+  while (i>0)
+  {
+   index++;
+   indexStr=G4UIcommand::ConvertToString(index);
+
+   item=list->AppendItem();
+   item->SetSolid(intersection.ApplyTo(singlePin, offset, index==1, true));
+   item->SetAttributes(visAttributes);
+   item->SetMaterial(material);
+   item->SetName("Pin"+indexStr);
+   item->SetMotherVolumeItem(motherItem);
+   
+   if (index==markedPin)
+   {
+    G4Trap * trap;
+    
+    G4ThreeVector offset2(offset);
+    if (offset2.getY()<0)
+    {
+     offset2.setY(offset2.getY()+pDy1+pinLength/2);
+     //                                pDz           pTheta  pPhi    pDy1  pDx1  pDx2  pAlp1
+     trap=new G4Trap("Track"+indexStr, thickness/2., 0.*deg, 0.*deg, pDy1, pDx2, pDx1, 0*deg,
+     //                                                              pDy2  pDx3  pDx4  pAlp2
+                                                                     pDy1, pDx2, pDx1, 0*deg);
+    }
+    else
+    {
+     offset2.setY(offset2.getY()-pDy1-pinLength/2);
+     //                                pDz           pTheta  pPhi    pDy1  pDx1  pDx2  pAlp1
+     trap=new G4Trap("Track"+indexStr, thickness/2., 0.*deg, 0.*deg, pDy1, pDx1, pDx2, 0*deg,
+     //                                                              pDy2  pDx3  pDx4  pAlp2
+                                                                     pDy1, pDx1, pDx2, 0*deg);
+    }
+
+    item=list->AppendItem();
+    item->SetSolid(intersection.ApplyTo(trap, offset2, true, true));
+    item->SetAttributes(visAttributes);
+    item->SetMaterial(material);
+    item->SetName("MarkedPin");
+    item->SetMotherVolumeItem(motherItem);
+   }
+
+   offset.setY(-offset.getY());
+   if (offset.getY()>=0)
+   {
+    offset.setX(offset.getX()-fullHolesStep);
+    i--;
+   }
+  }
+
+  offset.setX(width/2.-pinLength/2.);
+  offset.setY((fullHolesStep/2.)*static_cast<G4double>(holesAlongHeight-1));
+  i=holesAlongHeight;
+
+  G4RotationMatrix rotation(G4RotationMatrix::IDENTITY);
+  rotation.setDelta(90*deg);
+
+  while (i>0)
+  {
+   index++;
+   indexStr=G4UIcommand::ConvertToString(index);
+
+   item=list->AppendItem();
+   item->SetSolid(intersection.ApplyTo(singlePin, rotation, offset, index==1, true));
+   item->SetAttributes(visAttributes);
+   item->SetMaterial(material);
+   item->SetName("Pin"+indexStr);
+   item->SetMotherVolumeItem(motherItem);
+
+   if (index==markedPin)
+   {
+    G4Trap * trap;
+    
+    G4ThreeVector offset2(offset);
+    if (offset2.getX()<0)
+    {
+     offset2.setX(offset2.getX()+pDy1+pinLength/2);
+     //                                pDz           pTheta  pPhi    pDy1  pDx1  pDx2  pAlp1
+     trap=new G4Trap("Track"+indexStr, thickness/2., 0.*deg, 0.*deg, pDy1, pDx2, pDx1, 0*deg,
+     //                                                              pDy2  pDx3  pDx4  pAlp2
+                                                                     pDy1, pDx2, pDx1, 0*deg);
+    }
+    else
+    {
+     offset2.setX(offset2.getX()-pDy1-pinLength/2);
+     //                                pDz           pTheta  pPhi    pDy1  pDx1  pDx2  pAlp1
+     trap=new G4Trap("Track"+indexStr, thickness/2., 0.*deg, 0.*deg, pDy1, pDx1, pDx2, 0*deg,
+     //                                                              pDy2  pDx3  pDx4  pAlp2
+                                                                     pDy1, pDx1, pDx2, 0*deg);
+    }
+
+    item=list->AppendItem();
+    item->SetSolid(intersection.ApplyTo(trap, rotation, offset2, true, true));
+    item->SetAttributes(visAttributes);
+    item->SetMaterial(material);
+    item->SetName("MarkedPin");
+    item->SetMotherVolumeItem(motherItem);
+   }
+
+   offset.setX(-offset.getX());
+   if (offset.getX()>=0)
+   {
+    offset.setY(offset.getY()-fullHolesStep);
+    i--;
+   }
+  }
+
+  return list;
+ }
+#endif /* RADMONTDETECTORVOLUMESWITHPINSDECORATOR_HH */
+ 

@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.cc,v 1.10 2005/01/14 03:49:13 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4GenericIon.cc,v 1.13 2006/06/29 19:17:55 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // ----------------------------------------------------------------------
@@ -48,7 +51,7 @@ G4GenericIon* G4GenericIon::Definition()
   const G4String name = "GenericIon";
   // search in particle table]
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  G4Ions* anInstance = reinterpret_cast<G4Ions*>(pTable->FindParticle(name));
   if (anInstance ==0)
   {
   // create particle
@@ -60,19 +63,22 @@ G4GenericIon* G4GenericIon::Definition()
   //               type    lepton number  baryon number   PDG encoding
   //             stable         lifetime    decay table
   //             shortlived      subType    anti_encoding
+  //             excitation   
 //!!!!
 //!!!! this particle should not be used for tracking
 //!!!! all properties except name and type are meaningless
 //!!!!
-   anInstance = new G4ParticleDefinition(
+   anInstance = new G4Ions(
                  name,   0.9382723*GeV,       0.0*MeV,       eplus,
                     1,              +1,             0,          
                     1,              +1,             0,             
 	    "nucleus",               0,            +1,           0,
 		 true,            -1.0,          NULL,
-             false,           "generic"
+		 false,      "generic",             0,
+		 0.0 
               );
   }
+
   theInstance = reinterpret_cast<G4GenericIon*>(anInstance);
   return theInstance;
 }

@@ -1,24 +1,28 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
 // $Id: HadrontherapyPositronPrimaryGeneratorAction.cc; May 2005
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
@@ -34,7 +38,6 @@
 // * cirrone@lns.infn.it
 // ----------------------------------------------------------------------------
 #include "HadrontherapyPrimaryGeneratorAction.hh"
-#include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyPrimaryGeneratorMessenger.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -44,14 +47,18 @@
 
 HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction()
 {
+  // Define the messenger
   gunMessenger = new HadrontherapyPrimaryGeneratorMessenger(this);
+
   particleGun  = new G4ParticleGun();
+
   SetDefaultPrimaryParticle();  
 }  
 
 HadrontherapyPrimaryGeneratorAction::~HadrontherapyPrimaryGeneratorAction()
 {
   delete particleGun;
+
   delete gunMessenger;
 }
   
@@ -61,17 +68,22 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   // Default primary particle
   // ****************************
   
+  // Define primary particles: protons
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("proton");
-  particleGun->SetParticleDefinition(particle); 
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  G4ParticleDefinition* particle = particleTable -> FindParticle("proton");
+  particleGun -> SetParticleDefinition(particle); 
 
-  G4double defaultMeanKineticEnergy = 63.450 *MeV;
+  // Define the energy of primary particles:
+  // gaussian distribution with mean energy = 63.450 *MeV
+  // and sigma = 400.0 *keV
+  G4double defaultMeanKineticEnergy = 63.50 *MeV;
   meanKineticEnergy = defaultMeanKineticEnergy;
 
   G4double defaultsigmaEnergy = 400.0 *keV;
   sigmaEnergy = defaultsigmaEnergy;
 
+  // Define the parameters of the initial position: 
+  // the y, z coordinates have a gaussian distribution
   G4double defaultX0 = -3248.59 *mm;  
   X0 = defaultX0;
 
@@ -87,6 +99,8 @@ void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
   G4double defaultsigmaZ = 1 *mm;  
   sigmaZ = defaultsigmaZ;
 
+  // Define the parameters of the momentum of primary particles: 
+  // The momentum along the y and z axis has a gaussian distribution
   G4double defaultsigmaMomentumY = 0.0001;  
   sigmaMomentumY = defaultsigmaMomentumY;
 
@@ -127,6 +141,7 @@ void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun -> SetParticleEnergy ( kineticEnergy );
 
   // Set the direction of the primary particles
+  G4double momentumX = 1.0;
   G4double momentumY = 0.0;
   G4double momentumZ = 0.0;
 
@@ -139,35 +154,35 @@ void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       momentumZ += G4RandGauss::shoot( 0., sigmaMomentumZ );
     }
  
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(1,momentumY,momentumZ));
+  particleGun -> SetParticleMomentumDirection( G4ThreeVector(momentumX,momentumY,momentumZ) );
+
   // Generate a primary particle
   particleGun -> GeneratePrimaryVertex( anEvent ); 
 } 
 
-
-void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetmeanKineticEnergy (G4double val )  
 { meanKineticEnergy = val;} 
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaEnergy (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaEnergy (G4double val )  
 { sigmaEnergy = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetXposition (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetXposition (G4double val )  
 { X0 = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetYposition (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetYposition (G4double val )  
 { Y0 = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetZposition (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetZposition (G4double val )  
 { Z0 = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaY (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaY (G4double val )  
 { sigmaY = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaZ (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaZ (G4double val )  
 { sigmaZ = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumY (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumY (G4double val )  
 { sigmaMomentumY = val;}
 
-void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumZ (G4double  val )  
+void HadrontherapyPrimaryGeneratorAction::SetsigmaMomentumZ (G4double val )  
 { sigmaMomentumZ = val;}

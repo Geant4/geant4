@@ -1,8 +1,8 @@
 -------------------------------------------------------------------
 
-          ==================================================
-          Geant4 - an Object-Oriented Toolkit for Simulation
-          ==================================================
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
 
             History file for hadronic/management directory
             ----------------------------------------------
@@ -13,6 +13,48 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+13 Mar 2006 Dennis Wright (hadr-man-V08-00-03)
+----------------------------------------------
+- G4HadronicProcess::ChooseAandZ() : throw fatal exception if
+       Z > 92 is chosen
+
+- G4HadronicProcess::GeneralPostStepDoIt() : for suspended tracks, allow 
+       PostStep action to occur at end of step, but maintain suspended 
+       track status.  Remove warning for suspended tracks.
+
+
+17 Jan 2006 Dennis Wright (hadr-man-V08-00-02)
+----------------------------------------------
+- G4HadronicProcess.cc: add comments
+
+12 Jan 2006 Dennis Wright for Mikhail Kossov (hadr-man-V08-00-01)
+-----------------------------------------------------------------
+- G4EnergyRangeManager.cc: in method GetHadronicInteraction, case 2,
+                         print out some diagnostic information for
+                         exception of two fully overlapping models.
+
+16 Dec 2005 Dennis Wright for Mikhail Kossov (hadr-man-V08-00-00)
+-----------------------------------------------------------------
+- G4HadronicProcess.hh:  in method ChooseHadronicInteraction, check
+                         G4HadronicInteractionCounter for error - if so
+                         print out
+
+- G4EnergyRangeManager.hh: make method GetHadronicInteractionCounter public 
+- G4EnergyRangeManager.cc: in method GetHadronicInteraction, case 0, print out 
+                           diagnostic information for exception when no model
+                           is found.
+                         
+15 Dec 2005 Dennis Wright
+-------------------------
+- G4HadronicProcess.cc: fixed bug # 611 - problems caused when hadronic interactions
+                        reset stopButAlive particle to Alive
+                        solution: In method FillTotalResult add lines
+
+                             } else if (aT.GetKineticEnergy() == 0) {
+                               theTotalResult->ProposeTrackStatus(fStopButAlive);
+                             }
+
 
 18 Nov 2005 Dennis Wright (hadr-man-V07-01-00)
 ----------------------------------------------

@@ -22,14 +22,27 @@
 *
 * *** volumes and bins definition                                               
       CALL FFKEY('BINS',NLTOT,4,'MIXED')
+*      
+* *** max allowed step size       
+      CALL FFKEY('STEPMX',stepmax,1,'REAL')      
 *                                                         
 * *** read data cards                                                           
       CALL GFFGO 
-                                                                     
+*
+* *** check size of arrays
+      if (NLTOT.gt.NBIN) then
+        write (6,51) NLTOT, NBIN
+	NLTOT = NBIN
+      endif
+      if (NRTOT.gt.NBIN) then
+        write (6,52) NRTOT, NBIN
+	NRTOT = NBIN
+      endif      	
+51    FORMAT (/,5x,'warning (uginit): NLTOT= ',I3,' truncated to ',I3)
+52    FORMAT (/,5x,'warning (uginit): NRTOT= ',I3,' truncated to ',I3)
+*                                                                     
 * *** achieve initialization                                                    
-      NLTOT = MIN(NLTOT,NBIN)                                                   
-      NRTOT = MIN(NRTOT,NBIN)                                                   
-      CALL VZERO(SEL1,13*NBIN+8)                                                  
+      CALL VZERO(SEL1,10*NBIN+8)                                                  
 *                                                                               
       CALL GZINIT                                                               
       CALL GPART 

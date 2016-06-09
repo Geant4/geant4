@@ -49,19 +49,11 @@
          SER2C(I) = SER2C(I) + DRC**2
 	 
          BIN = (FLOAT(I)-0.5)*DRX0
-         CALL HFILL(10,BIN,100*DEDR(I)/(DRX0*PKINE(3)),1.)
+         CALL HFILL(7,BIN,100*DEDR(I)/(DRX0*PKINE(3)),1.)
          BIN = FLOAT(I)*DRX0
-         CALL HFILL(11,BIN,100*DRC    /PKINE(3),1.)                                                  
+         CALL HFILL(8,BIN,100*DRC    /PKINE(3),1.)                                                  
    3  CONTINUE                                                                  
-
-*     particle flux
-*                                                                                
-      DO 14 IPAT = 1,3                                                          
-      DO 14 NPL  = 1,NLTOT
-         BIN = FLOAT(NPL)*DLX0
-         CALL HFILL(6+IPAT,BIN,FNPAT(NPL,IPAT),1.)                                                   
-   14 CONTINUE                                                                  
-
+*
 *     energy deposited and track length
 *                                                                                
       ESEEN = 100.*DLC/PKINE(3)                                                 

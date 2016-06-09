@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh,v 1.4 2005/05/12 11:06:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4BraggIonModel.hh,v 1.7 2006/06/29 19:50:06 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -37,6 +40,9 @@
 // Modifications:
 // 09-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 11-05-05 Major optimisation of internal interfaces (V.Ivantchenko)
+// 15-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 25-04-06 Add stopping data from ASTAR (V.Ivanchenko)
+
 //
 // Class Description:
 //
@@ -50,6 +56,7 @@
 #define G4BraggIonModel_h 1
 
 #include "G4VEmModel.hh"
+#include "G4ASTARStopping.hh"
 
 class G4ParticleChangeForLoss;
 
@@ -58,7 +65,8 @@ class G4BraggIonModel : public G4VEmModel
 
 public:
 
-  G4BraggIonModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BraggIon");
+  G4BraggIonModel(const G4ParticleDefinition* p = 0,
+                  const G4String& nam = "BraggIon");
 
   virtual ~G4BraggIonModel();
 
@@ -66,17 +74,30 @@ public:
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
 			const G4MaterialCutsCouple*);
-
-  virtual G4double ComputeDEDXPerVolume(const G4Material*,
-					const G4ParticleDefinition*,
-					G4double kineticEnergy,
-					G4double cutEnergy);
-
+			
+  virtual G4double ComputeCrossSectionPerElectron(
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 
+  virtual G4double ComputeCrossSectionPerAtom(
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double Z, G4double A,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 				 
   virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy,
-					 G4double maxEnergy);
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 
+  virtual G4double ComputeDEDXPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -115,6 +136,8 @@ private:
   G4ParticleDefinition*       theElectron;
   G4ParticleChangeForLoss*    fParticleChange;
 
+  G4ASTARStopping             astar;
+
   G4double mass;
   G4double spin;
   G4double chargeSquare;
@@ -132,7 +155,7 @@ private:
   G4bool   isIon;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4BraggIonModel::MaxSecondaryEnergy(
           const G4ParticleDefinition* pd,
@@ -145,7 +168,7 @@ inline G4double G4BraggIonModel::MaxSecondaryEnergy(
   return tmax;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void G4BraggIonModel::SetParticle(const G4ParticleDefinition* p)
 {
@@ -158,6 +181,6 @@ inline void G4BraggIonModel::SetParticle(const G4ParticleDefinition* p)
   ratio        = electron_mass_c2/mass;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

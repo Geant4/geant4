@@ -1,5 +1,5 @@
-$Id: History,v 1.98 2005/11/27 17:54:39 perl Exp $
-$Name: geant4-08-00 $ 
+$Id: History,v 1.105 2006/06/15 15:42:45 gcosmo Exp $
+$Name: geant4-08-01 $ 
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,17 +17,33 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Last checked in at $Date: 2005/11/27 17:54:39 $ by $Author: perl $ 
+
+15 June 2006 G. Cosmo (tracking-V08-00-04)
+- Fixed implementation of static methods in G4VSteppingVerbose to be
+  NOT inline. Required also to allow DLL working on Windows !
+
+02 June 2006 G. Cosmo (tracking-V08-00-03)
+- Restored original CVS headers to files...
+
+30 May 2006 G. Cosmo (tracking-V08-00-02)
+- Fixed online implementation of SetSilent() and SetSilentStepInfo()
+  in G4VSteppingVerbose.
+
+24 May 2006 T. Sasaki (tracking-V08-00-01)
+- New flags are introduced in G4VSteppingVerbose to give more control
+24 May 2006 T. Sasaki
+- a bug fix for StepStatus when the track is outside of WorldBoundary 
+- New header was inserted to all of the files to check the last update 
+09 March 2006 T. Sasaki
+- Added Silent and SilentStepInfo member to G4VStepverbose
 
 24 November 2005 J. Allison (tracking-V07-01-05)
 - Added G4RichTrajectory and G4RichTrajectoryPoint.
 - Updated comments in G4VTrajectory.hh and G4VTrajectoryPoint.hh
-
 22 November 2005 M. Asai (tracking-V07-01-04)
 - Put G4Exception to the constructors of G4UsertrackingAction and G4UserSteppingAction
   to protect against their instantiation before G4VUserPhysicsList is instantiated and set to
   G4RunManager.
-
 21 November 2005 M. Asai (tracking-V07-01-03)
 - Migration to sstream.
 

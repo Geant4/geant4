@@ -1,0 +1,408 @@
+#! /bin/sh -
+#$Id: configure,v 1.3 2006/06/20 09:35:06 kmura Exp $
+# ======================================================================
+#  A configure script for Geant4Py
+# ======================================================================
+export LANG=C
+
+IFS='
+ 	'
+PATH=/bin:/usr/bin
+export PATH
+
+# ======================================================================
+# help message
+# ======================================================================
+show_help() {
+cat <<EOF
+\`configure' configures Geant4Py to adapt to many kinds of systems.
+
+Usage:  ./configure SYSTEM [OPTION]... [VAR=VALUE]...
+
+SYSTEM: System type (see Supported Arhitectures)
+
+Options:
+  -h, --help                Display this help and exit
+
+Installation directories:
+  --prefix=PREFIX           Installation prefix  [./]
+  --libdir=DIR              Python modules installaion dir [PREFIX/lib]
+  --incdir=DIR              Header installaion dir [PREFIX/include]
+
+Fine tuning of the library path:
+  --with-g4-incdir=DIR      Geant4 header dir [\$G4INCLUDE]
+  --with-g4-libdir=DIR      Geant4 library dir [\$G4LIB/\$G4SYSTEM]
+  --with-g4-version=NUM     Geant4 version (700/701/710/711)
+                            Not required after ver.8.0
+
+  --with-clhep-incdir=DIR   CLHEP header dir [\$CLHEP_INCLUDE_DIR]
+  --with-clhep-libdir=DIR   CLHEP library dir [\$CLHEP_LIB_DIR]
+  --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|\$CLHEP_LIB]
+
+  --with-python-incdir=DIR  Python header dir [/usr/include/python],
+                            (location of pyconfig.h)
+  --with-python-libdir=DIR  Python library dir [/usr/lib]
+
+  --with-boost-incdir=DIR   BOOST-C++ header dir [/usr/include],
+                            (location of boost/)
+  --with-boost-libdir=DIR   BOOST-C++ library dir [/usr/lib]
+  --with-boost-python-lib=LIB library name of libboost_python.so [boost_python]
+
+  --with-package-dir=DIR    Geant4 Package dir
+
+Enable/disable options: prefix with either --enable- or --disable-
+  openglx      OpenGLX support    [auto]
+  openglxm     OpenGLXm support   [disable, \$G4VIS_USE_OPENGLXM]
+  raytracerx   RayTracerX support [disable, \$G4VIS_USE_RAYTRACERX]
+
+Supported Architectures:
+  linux           for Linux gcc 3.x and 4.x
+  linuxx8664gcc   for AMD Opteron and Intel EM64T Linux gcc 3.x and 4.x
+  macosx          for MacOS X with gcc (test)
+
+EOF
+}
+
+# ======================================================================
+# main
+# ======================================================================
+# input
+arguments="$@"
+
+# default values
+prefix=`pwd`
+current_dir=`pwd`
+
+g4_incdir=${G4INCLUDE:-/zzz}
+g4_libdir=${G4LIB:+$G4LIB/$G4SYSTEM}
+g4_libdir=${g4_libdir:-/zzz}
+g4_version=${G4VERSION_NUMBER:-auto}
+
+clhep_incdir=${CLHEP_INCLUDE_DIR:-/zzz}
+clhep_libdir=${CLHEP_LIB_DIR:-/zzz}
+clhep_lib=${CLHEP_LIB:-CLHEP}
+
+python_incdir=/usr/include/python
+boost_incdir=/usr/include
+boost_python_lib=boost_python
+
+enable_openglx=1
+enable_openglxm=${G4VIS_USE_OPENGLXM:+1}
+enable_openglxm=${enable_openglxm:-0}
+enable_raytracerx=${G4VIS_USE_RAYTRACERX:+1}
+enable_raytracerx=${enable_raytracerx:-0}
+
+
+# checking system
+case $1 in
+  linux|linuxx8664gcc|macosx)
+    system=$1
+    echo -n "Checking for system type ... "
+    if [ ! -e "config/sys/$system.gmk" ]; then
+      echo "no"
+      echo -n "### Invalid system type. "
+      echo "Please taka a look in config/sys/."
+      exit -1
+    fi
+    echo "$system"
+    ;;
+  --help|-h)
+    show_help
+    exit 0
+    ;;
+  *)
+    echo "Error: System type is not specified or more than one system type. "
+    echo ""
+    echo "Usage:  ./configure SYSTEM [OPTION]... [VAR=VALUE]..."
+    echo ""
+    exit -1
+    ;;
+esac
+shift
+
+# parsing options
+while test $# -gt 0
+do
+  case $1 in
+    -*=*) optarg=`echo "$1" | sed 's/[-_a-zA-Z0-9]*=//'` ;;
+    *) optarg= ;;
+  esac
+
+  case $1 in
+    --help|-h) show_help;  exit 0 ;;
+    # ---------------------------------------------------------------
+    --prefix=*)                prefix=$optarg                    ;;
+    --libdir=*)                libdir=$optarg                    ;;
+    --with-package-dir=*)      g4_incdir=$optarg/include/Geant4
+                               g4_libdir=$optarg/lib
+                               clhep_incdir=$optarg/include
+                               clhep_libdir=$optarg/lib          ;;
+    --with-g4-incdir=*)        g4_incdir=$optarg                 ;;
+    --with-g4-libdir=*)        g4_libdir=$optarg                 ;;
+    --with-g4-version=*)       g4_version=$optarg                ;;
+    --with-clhep-incdir=*)     clhep_incdir=$optarg              ;;
+    --with-clhep-libdir=*)     clhep_libdir=$optarg              ;;
+    --with-clhep-lib=*)        clhep_lib=$optarg                 ;;
+    --with-python-incdir=*)    python_incdir=$optarg             ;;
+    --with-python-libdir=*)    python_libdir=$optarg             ;;
+    --with-boost-incdir=*)     boost_incdir=$optarg              ;;
+    --with-boost-libdir=*)     boost_libdir=$optarg              ;;
+    --with-boost-python-lib=*) boost_python_lib=$optarg          ;;
+    # ---------------------------------------------------------------
+    --enable-openglx )         enable_openglx=1                  ;;
+    --disable-openglx )        enable_openglx=0                  ;;
+    --enable-openglxm )        enable_openglxm=1                 ;;
+    --disable-openglxm )       enable_openglxm=0                 ;;
+    --enable-raytracerx )      enable_raytracerx=1               ;;
+    --disable-raytracerx )     enable_raytracerx=0               ;;
+    # ---------------------------------------------------------------
+    -*)
+      echo "Unrecognized option: $1"
+      exit -1
+      ;;    
+    *)
+      echo "Invalid argument: $1"
+      exit -1
+      ;;    
+  esac
+  shift
+done
+
+# check variables
+arch=32
+if [ $system == linuxx8664gcc ]; then
+  arch=64
+fi
+
+echo -n "Checking for prefix ... "
+echo $prefix
+
+echo -n "Checking for lib dir ... "
+
+libdir=${libdir:-$prefix/lib}
+echo $libdir
+
+echo -n "Checking for include dir ... "
+incdir=${incdir:-$prefix/include}
+echo $libdir
+
+echo -n "Checking for G4 include dir ... "
+if [ ! -d "$g4_incdir" ]; then
+  echo "no"
+  echo -n "### $g4_incdir (g4-incdir) does not exist. "
+  echo "Try --with-g4-incdir option."
+  exit -1
+fi
+echo "$g4_incdir"
+
+echo -n "Checking for G4 lib dir ... "
+if [ ! -d "$g4_libdir" ]; then
+  echo "no"
+  echo -n "### $g4_libdir (g4-libdir) does not exist. "
+  echo "Try --with-g4-libdir option."
+  exit -1
+fi
+echo "$g4_libdir"
+
+echo -n "Checking for G4 version ... "
+case $g4_version in
+  auto|700|701|710|711)
+    echo "$g4_version"
+    ;;
+  *)
+    echo "no"
+    echo "### $g4_version (g4-version) is invalid (700/701/710/711)."
+    exit -1
+    ;;
+esac
+
+if [ "$g4_version" = "auto" ]; then
+  if [ ! -f "$g4_incdir"/G4Version.hh ]; then
+    echo "### G4Version.hh does not exist. Try --with-g4-version option."
+    exit -1
+  fi
+fi
+
+# ---
+echo -n "Checking for CLHEP include dir ... "
+if [ ! -d "$clhep_incdir" ]; then
+  echo "no"
+  echo -n "### $clhep_incdir (clhep-incdir) does not exist. "
+  echo "Try --with-clhep-incdir option."
+  exit -1
+fi
+echo "$clhep_incdir"
+
+echo -n "Checking for CLHEP lib dir ... "
+if [ ! -d "$clhep_libdir" ]; then
+  echo "no"
+  echo -n "### $clhep_libdir (clhep-libdir) does not exist. "
+  echo "Try --with-clhep-libdir option."
+  exit -1
+fi
+echo "$clhep_libdir"
+
+echo -n "Checking for CLHEP lib name ... "
+if [ ! -f "$clhep_libdir"/lib${clhep_lib}.so ]; then
+  echo "no"
+  echo -n "### lib${clhep_lib}.so (clhep-lib) does not exist. "
+  echo "Try --with-clhep-lib option."
+  exit -1
+fi
+echo "lib${clhep_lib}.so"
+
+# ---
+echo -n "Checking for Python include dir (pyconfig.h) ... "
+if [ ! -f "$python_incdir"/pyconfig.h ]; then
+  echo "no"
+  echo -n "### $python_incdir (python-incdir) is invalid. "
+  echo "Try --with-python-incdir option."
+  exit -1
+fi
+echo "$python_incdir"
+
+echo -n "Checking for Python lib dir ... "
+if [ ! $python_libdir ]; then
+  if [ $arch == 64 ]; then
+    python_libdir=/usr/lib64
+  else
+    python_libdir=/usr/lib
+  fi
+fi
+if [ ! -d "$python_libdir" ]; then
+  echo "no"
+  echo -n "### $python_libdir (python-libdir) does not exist. "
+  echo "Try --with-python-libdir option."
+  exit -1
+fi
+echo "$python_libdir"
+
+# ---
+echo -n "Checking for Boost include dir (boost/python.hpp) ... "
+if [ ! -f "$boost_incdir"/boost/python.hpp ]; then
+  echo "no"
+  echo -n "### $boost_incdir (boost-incdir) is invalid. "
+  echo "Try --with-boost-incdir option."
+  exit -1
+fi
+echo "$boost_incdir"
+
+echo -n "Checking for Boost lib dir ... "
+if [ ! $boost_libdir ]; then
+  if [ $arch == 64 ]; then
+    boost_libdir=/usr/lib64
+  else
+    boost_libdir=/usr/lib
+  fi
+fi
+if [ ! -d "$boost_libdir" ]; then
+  echo "no"
+  echo -n "### $boost_libdir (boost-libdir) does not exist. "
+  echo "Try --with-boost-libdir option."
+  exit -1
+fi
+echo "$boost_libdir"
+
+echo -n "Checking for Boost Python lib name ... "
+if [ ! -f "$boost_libdir"/lib${boost_python_lib}.so ]; then
+  echo "no"
+  echo -n "### lib${boost_python_lib}.so (boost-python-lib) does not exist. "
+  echo "Try --with-boost-libdir option."
+  exit -1
+fi
+echo "lib${boost_python_lib}.so"
+
+# ---
+echo -n "Checking for OpenGL support ..."
+if [ -f "$g4_libdir"/libG4OpenGL.so ]; then
+  if [ $enable_openglx == 0 ]; then
+    echo "disabled"
+  else
+    echo "yes"
+  fi
+else
+  echo "no"
+  enable_openglx=0
+fi
+
+# ---
+echo -n "Writing config.gmk ... "
+
+make_config=config/config.gmk
+
+cat > $make_config <<EOF
+# config.gmk
+#
+# Automatically generated by configure script
+#
+# Makefile definitions included by the top Makefile
+
+G4PY_INSTALL          := $current_dir
+
+Q_SYSTEM              := $system
+
+Q_PREFIX              := $prefix
+Q_LIBDIR              := $libdir
+Q_INCDIR              := $incdir
+
+Q_G4_INCDIR           := $g4_incdir
+Q_G4_LIBDIR           := $g4_libdir
+EOF
+
+if [ $g4_version != auto ]; then
+cat >> $make_config <<EOF
+Q_G4_VERSION          := $g4_version
+EOF
+fi
+
+cat >> $make_config <<EOF
+
+Q_CLHEP_INCDIR        := $clhep_incdir
+Q_CLHEP_LIBDIR        := $clhep_libdir
+Q_CLHEP_LIB           := $clhep_lib
+
+Q_PYTHON_INCDIR       := $python_incdir
+Q_PYTHON_LIBDIR       := $python_libdir
+Q_BOOST_INCDIR        := $boost_incdir
+Q_BOOST_LIBDIR        := $boost_libdir
+Q_BOOST_PYTHON_LIB    := $boost_python_lib
+
+Q_ENABLE_OPENGLX      := $enable_openglx
+Q_ENABLE_OPENGLXM     := $enable_openglxm
+Q_ENABLE_RAYTRACERX   := $enable_raytracerx
+
+EOF
+echo "done"
+echo -n "Writing config.status ... "
+echo $arguments > config.status
+echo "done"
+
+# ---
+echo ""
+echo -n "Enabled support for"
+if [ $enable_openglx = 1 ]; then
+  echo -n " openglx"
+fi
+
+if [ $enable_openglxm = 1 ]; then
+  echo -n " openglxm"
+fi
+
+if [ $enable_raytracerx = 1 ]; then
+  echo -n " raytracerx"
+fi
+
+echo "."
+
+# ---
+echo ""
+echo "To build Geant4Py type:"
+echo ""
+echo "  make"
+echo "  make install"
+echo ""
+
+exit 0
+
+
+

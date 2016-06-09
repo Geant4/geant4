@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2005/12/06 15:40:33 gcosmo Exp $
+$Id: History,v 1.11 2006/06/16 12:37:52 gcosmo Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 16th, 2006  Witold Pokorski (persistencyEx-V08-00-00)
+- Archived old PersEx01 example based on CINT dictionary.
+- Introduced new example P01 for persistency using the Reflex tool.
 
 Dec 6th, 2005  Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.

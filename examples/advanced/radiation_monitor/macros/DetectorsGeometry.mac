@@ -1,0 +1,45 @@
+/control/execute macros/DetectorsParameters.mac
+
+/radmon/detector/CreateMultilayer        REM-TOT-500
+/radmon/detector/SetMultilayerWidth      REM-TOT-500      {Det-Width}
+/radmon/detector/SetMultilayerHeight     REM-TOT-500      {Det-Height}
+
+/radmon/detector/AppendLayerToMultilayer REM-TOT-500  ly1
+/radmon/detector/SetLayerType            REM-TOT-500  ly1 FlatVolume
+/radmon/detector/SetLayerThickness       REM-TOT-500  ly1 {Det-Layer-Thickness}
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly1 Material {Det-Material}
+
+/radmon/detector/AppendLayerToMultilayer REM-TOT-500  ly2
+/radmon/detector/SetLayerType            REM-TOT-500  ly2 FlatVolumeWithPads
+/radmon/detector/SetLayerThickness       REM-TOT-500  ly2 {Det-Pads-Thickness}
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 Material {Det-Material}
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsPosition_1 '(0.315 mm, 0.315 mm) (0.105 mm, 0.315 mm) (-0.105 mm, 0.315 mm) (-0.315 mm, 0.315 mm)'
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsPosition_2 '(0.315 mm, 0.105 mm) (0.315 mm, -0.105 mm) (0.315 mm, -0.315 mm) (0.105 mm, -0.315 mm)'
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsPosition_3 '(-0.105 mm, -0.315 mm) (-0.315 mm, -0.315 mm) (-0.315 mm, -0.105 mm) (-0.315 mm, 0.105 mm) (0 mm, 0.165 mm)'
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsWidth_1    '{Det-Pads-Length}'
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsHeight_1   '{Det-Pads-Length}'
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsMaterial_1  {Det-Pads-Material}
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsWidth_2    '{Det-Pads-Length}'
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsHeight_2   '{Det-Pads-Length}'
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsMaterial_2  {Det-Pads-Material}
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsWidth_3    '{Det-Pads-Length}'
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsHeight_3   '{Det-Pads-Length}'
+/radmon/detector/SetLayerAttribute       REM-TOT-500  ly2 PadsMaterial_3  {Det-Pads-Material}
+
+/radmon/detector/CreateMultilayer        LAAS       
+/radmon/detector/SetMultilayerWidth      LAAS             {Det2-Width}
+/radmon/detector/SetMultilayerHeight     LAAS             {Det2-Height}
+
+/radmon/detector/AppendLayerToMultilayer LAAS         ly1
+/radmon/detector/SetLayerType            LAAS         ly1 FlatVolume
+/radmon/detector/SetLayerThickness       LAAS         ly1 {Det2-Layer-Thickness}
+/radmon/detector/SetLayerAttribute       LAAS         ly1 Material {Det2-Material}
+
+/radmon/detector/AppendLayerToMultilayer LAAS         ly2
+/radmon/detector/SetLayerType            LAAS         ly2 FlatVolumeWithPads
+/radmon/detector/SetLayerThickness       LAAS         ly2 {Det2-Pads-Thickness}
+/radmon/detector/SetLayerAttribute       LAAS         ly2 Material {Det2-Material}
+/radmon/detector/SetLayerAttribute       LAAS         ly2 PadsPosition_1 '(0 mm, -0.8 mm) (0 mm, 0.8 mm) (0.24 mm, 0.78 mm) (-0.24 mm, 0.78 mm)'
+/radmon/detector/SetLayerAttribute       LAAS         ly2 PadsWidth_1    '{Det2-Pads-Length}'
+/radmon/detector/SetLayerAttribute       LAAS         ly2 PadsHeight_1   '{Det2-Pads-Length}'
+/radmon/detector/SetLayerAttribute       LAAS         ly2 PadsMaterial_1  {Det2-Pads-Material}

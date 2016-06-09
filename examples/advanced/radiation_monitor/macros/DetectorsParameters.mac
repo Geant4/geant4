@@ -1,0 +1,19 @@
+/control/alias Det-Width              .95 mm
+/control/alias Det-Height             .95 mm
+/control/alias Det-Layer-Thickness    0.4 mm
+
+/control/alias Det-Material           EpoxyGlass
+/control/alias Det-Pads-Material      Aluminum
+
+/control/alias Det-Pads-Thickness     .005 mm
+/control/alias Det-Pads-Length        .120 mm
+
+/control/alias Det2-Width             1.9 mm
+/control/alias Det2-Height            1.9 mm
+/control/alias Det2-Layer-Thickness   0.4 mm
+
+/control/alias Det2-Material          EpoxyGlass
+/control/alias Det2-Pads-Material     Aluminum
+
+/control/alias Det2-Pads-Thickness    .005 mm
+/control/alias Det2-Pads-Length       .120 mm

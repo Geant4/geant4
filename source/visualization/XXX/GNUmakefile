@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2004/06/03 11:40:15 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2006/03/28 17:16:41 allison Exp $
 
 name := G4visXXX
 
@@ -27,5 +27,9 @@ CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
+
+ifdef G4VIS_BUILD_XXXSG_DRIVER
+  CPPFLAGS += -DG4VIS_BUILD_XXXSG_DRIVER
+endif
 
 include $(G4INSTALL)/config/common.gmk

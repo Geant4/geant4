@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.23 2005/05/30 07:05:47 asaim Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4PrimaryTransformer.cc,v 1.27 2006/06/29 18:09:58 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -35,6 +38,7 @@
 #include "G4DecayProducts.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
+#include "Randomize.hh"
 
 G4PrimaryTransformer::G4PrimaryTransformer()
 :verboseLevel(0),trackID(0),unknown(0),unknownParticleDefined(false)
@@ -101,6 +105,10 @@ void G4PrimaryTransformer::GenerateSingleTrack
      (G4PrimaryParticle* primaryParticle,
       G4double x0,G4double y0,G4double z0,G4double t0,G4double wv)
 {
+  static G4ParticleDefinition* optPhoton = 0;
+  static G4int nWarn = 0;
+  if(!optPhoton) optPhoton = particleTable->FindParticle("opticalphoton");
+
   G4ParticleDefinition* partDef = GetDefinition(primaryParticle);
   if(!IsGoodForTrack(partDef))
   // The particle cannot be converted to G4Track, check daughters
@@ -134,9 +142,35 @@ void G4PrimaryTransformer::GenerateSingleTrack
 #endif
     G4DynamicParticle* DP = 
       new G4DynamicParticle(partDef,primaryParticle->GetMomentum());
-    DP->SetPolarization(primaryParticle->GetPolX(),
-                        primaryParticle->GetPolY(),
-                        primaryParticle->GetPolZ());
+    if(partDef==optPhoton && primaryParticle->GetPolarization().mag2()==0.)
+    {
+      if(nWarn<10)
+      {
+        G4Exception("G4PrimaryTransformer::GenerateSingleTrack","ZeroPolarization",JustWarning,
+                    "Polarization of the optical photon is null. Random polarization is assumed.");
+        G4cerr << "This warning message is issued up to 10 times." << G4endl;
+        nWarn++;
+      }
+
+      G4double angle = G4UniformRand() * 360.0*deg;
+      G4ThreeVector normal (1., 0., 0.);
+      G4ThreeVector kphoton = DP->GetMomentumDirection();
+      G4ThreeVector product = normal.cross(kphoton);
+      G4double modul2       = product*product;
+
+      G4ThreeVector e_perpend (0., 0., 1.);
+      if (modul2 > 0.) e_perpend = (1./std::sqrt(modul2))*product;
+      G4ThreeVector e_paralle    = e_perpend.cross(kphoton);
+
+      G4ThreeVector polar = std::cos(angle)*e_paralle + std::sin(angle)*e_perpend;
+      DP->SetPolarization(polar.x(),polar.y(),polar.z());
+    }
+    else
+    {
+      DP->SetPolarization(primaryParticle->GetPolX(),
+                          primaryParticle->GetPolY(),
+                          primaryParticle->GetPolZ());
+    }
     if(primaryParticle->GetProperTime()>0.0)
     { DP->SetPreAssignedDecayProperTime(primaryParticle->GetProperTime()); }
     // Set Charge if it is specified

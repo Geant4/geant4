@@ -1,4 +1,4 @@
-$Id: History,v 1.219 2005/12/05 12:13:07 vnivanch Exp $
+$Id: History,v 1.253 2006/06/07 17:09:59 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,109 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 June 06: V.Ivant (emutils-V08-00-20)
+- G4VEnergyLossProcess - Do not change particle momentum AlongStep
+
+02 June 06: V.Ivant (emutils-V08-00-19)
+- G4EmCorrections - fix compilation warnings at SUN
+
+22 May 06: V.Ivant (emutils-V08-00-18)
+- G4EmProcessOptions, G4LossTableManager - add Get/SetBremsstrahlungTh
+  method requested by CMS
+- G4ionEffectiveCharge make upper limit of the model proportional to Z
+
+14 May 06: V.Ivant (emutils-V08-00-17)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - add
+  NumberOfModels method
+- G4VEnergyLossProces - add random step sampling and minor fix subcut 
+
+13 May 06: V.Ivant (emutils-V08-00-16)
+- G4EmCalculator and G4EmCorrections - add correction from user data 
+  on stopping power
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - add
+  GetModelByIndex method
+
+10 May 06: V.Ivant (emutils-V08-00-15)
+- G4LossTableMessenger - add command MscStepLimitation 
+- G4LOssTableManager - add methods SetMscStepLimitation, FacRange,
+  and MscFlag
+
+04 May 06: V.Ivant (emutils-V08-00-14)
+- G4EmCorrections - fix compilation warning at SUN 
+
+28 April 06: V.Ivant (emutils-V08-00-13)
+- G4EmCalculator - remove debug output 
+- G4EmCorrections - add finite size correction, cleanup other
+- G4ionEffectiveCharge - extend upper limit to 50 MeV
+
+18 April 06: V.Ivant (emutils-V08-00-12)
+- G4EmCalculator - fix GetCrossSectionPerVolume problem for gamma
+
+10 April 06: V.Ivant (emutils-V08-00-11)
+- Add flag of LPM effect to G4LossTableMessenger, G4LossTableManager and 
+  G4EmProcessOptions
+- fix problem of activate/desactvate in G4LossTableManager 
+
+29 March 06: V.Ivant (emutils-V08-00-10)
+- G4LossTableBuilder fix compilation warning at g++3.4.4
+
+28 March 06: V.Ivant (emutils-V08-00-09)
+- G4VEnergyLossProcess - add store energy loss tables for bremsstrahlung
+- G4LossTableBuilder & G4LossTableManager - fix logic to ensure rebuild PhysicsTable 
+	in the regime activate/desactivate processes
+- G4VEmProcess - fix printout
+
+23 March 06: V.Ivant (emutils-V08-00-08)
+- G4VEnergyLossProcess add SetDynamicMassCharge (used by ionIonisation)
+  use flag isIonisation AlongStep, PrintInfo, and StoreTables     
+- G4LossTableManager set flag isIonisation for processes
+- G4EmCalculator add public methods ComputeTotalDEDX, ComputeElectronicDEDX
+  update GetDEDX for ions
+
+14 March 06 (mma) (emutils-V08-00-07)
+- corrections in G4EmCalculator::GetCrossSectionPerVolume,
+  GetCrossSectionPerAtom, ComputeCrossSectionPerAtom 
+
+07 March 06: V.Ivant (emutils-V08-00-06)
+- Complete design iteration for msc (V.Ivanchenko)
+- Add G4DummyModel (V.Ivanchenko)
+
+07 March 06: V.Ivant (emutils-V08-00-05)
+- Optimize interfaces to Msc model (G4VEmModel and G4VMultipleScattering)
+
+17 February 06: V.Ivant (emutils-V08-00-04)
+- G4VmultipleScattering - Lambda table keep cross section not mfp
+- remove obsolete interface G4VSCProcessor.hh
+     
+06 February 06 mma  (emutils-V08-00-03)
+- Added function G4VEmModel::ComputeMeanFreePath() (mma)
+     
+01 February 06
+- G4VEmProcess::ComputeCrossSectionPerAtom(): put default value A=0,
+  G4VEmModel::ComputeCrossSectionPerAtom(): put default value A=0,
+  to keep compatibility with v5.2 (mma)
+   
+26 January 06: V.Ivant (emutils-V08-00-02)
+- add method GetRangeFromRestricteDEDX for later replacement of GetRange(VI)
+- G4VEnergyLossProcess - improve cout (VI) 
+- G4VEnergyLossProcess - Fix subcutoff simulation (VI) 
+
+20 January 06: V.Ivant (emutils-V08-00-01)
+- Add G4EmTableType.hh enumerator (VI)
+- Use G4EmTableType to reduce methods with practically identical code (VI)
+- G4VEnergyLossProcess - recalculation of presafety for subcutoff 
+                         update energy constrain for subcutoff
+                         add energy correction to subcutoff (VI)
+
+11 January 06: V.Ivant (emutils-V08-00-00)
+- G4VEnergyLossProcess - simplify subcutoff calculation (VI)
+- G4EmCalculator - add GetCSDARange (VI)
+- G4VEmProcess - remove dependence on G4NistManager (VI)
+- Substitute PreciseRange -> CSDARange (VI)
+- Substitute SetStepLimits -> SetStepFunction (VI)
+- G4VEnergyLossProcess - remove minStepLimit member and use finalRange (VI)
+- G4VEnergyLossProcess - reset currentCouple when StepFunction is changed (VI)
 
 05 December 05: V.Ivant (emutils-V07-01-13)
 - G4EmProcessOptions - fix verbosity definition for energy loss processes

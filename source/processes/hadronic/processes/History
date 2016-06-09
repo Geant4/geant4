@@ -1,0 +1,23 @@
+-------------------------------------------------------------------
+$Id: History,v 1.1 2006/06/02 08:06:08 gcosmo Exp $
+-------------------------------------------------------------------
+
+     ==========================================================
+     Geant4 - an Object-Oriented Toolkit for Physics Simulation
+     ==========================================================
+
+            History file for hadronic/processes directory
+            ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+2 Jun 2006 Gabriele Cosmo (hadr-proc-V08-00-00)
+-----------------------------------------------
+- Moved constructor and destructor for G4ElectronNuclearProcess and
+  G4PhotoNuclearProcess to be not inline.
+- Created History file.

@@ -1,4 +1,4 @@
-# $Id: TestEm6.in,v 1.7 2005/11/23 19:23:36 vnivanch Exp $
+# $Id: TestEm6.in,v 1.8 2006/02/16 16:52:33 maire Exp $
 #
 # Macro file for "TestEm6.cc"
 # (can be run in batch, without graphic)
@@ -21,6 +21,10 @@
 #
 /gun/particle e+
 /gun/energy 1 TeV
+#
+/testem/phys/SetAnnihiToMuPairFac 10000
+/testem/phys/SetAnnihiToHadronFac 10000
+#
 /run/beamOn 5
 #
 /gun/particle anti_proton

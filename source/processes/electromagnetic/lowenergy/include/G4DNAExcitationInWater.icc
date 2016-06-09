@@ -1,0 +1,52 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4DNAExcitationInWater.icc,v 1.3 2006/06/29 19:34:14 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
+//
+
+#ifdef    G4DNAEXCITATIONINWATER_HH
+ template<typename TotalCrossSectionPolicy, typename FinalStatesPolicy>
+ G4VParticleChange *                      G4DNAExcitationInWater<TotalCrossSectionPolicy, FinalStatesPolicy> :: PostStepDoIt(const G4Track & aTrack, const G4Step & aStep)
+ {
+  const G4int z(10); // H2O number of electrons
+  
+  this->aParticleChange.Initialize(aTrack);
+  
+  G4double k;
+  k=aTrack.GetDynamicParticle()->GetKineticEnergy();
+  
+  G4int excitationLevel(this->RandomizePartialCrossSection(k, z));
+  G4double excitationEnergy(this->EnergyConstant(excitationLevel));
+  
+  this->aParticleChange.ProposeEnergy(k-excitationEnergy);
+  this->aParticleChange.ProposeLocalEnergyDeposit(excitationEnergy);
+  this->aParticleChange.ProposeMomentumDirection(aTrack.GetDynamicParticle()->GetMomentumDirection());
+  this->aParticleChange.SetNumberOfSecondaries(0);
+  
+  return G4VDNAProcessInWater<TotalCrossSectionPolicy, FinalStatesPolicy>::PostStepDoIt(aTrack, aStep);
+ }
+#endif /* G4DNAEXCITATIONINWATER_HH */

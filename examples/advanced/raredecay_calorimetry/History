@@ -1,0 +1,18 @@
+$Id: History,v 1.1 2005/05/11 10:37:19 mkossov Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+         Advanced Example Photon_inefficiency History file
+         -------------------------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+May. 10, 2005 Mikhail Kosov (example-PhotIn-V07-03-00)
+- Created as a copy of the Novice Example N07

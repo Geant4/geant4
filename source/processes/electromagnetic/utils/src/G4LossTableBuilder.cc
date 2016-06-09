@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.17 2005/04/12 18:13:04 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4LossTableBuilder.cc,v 1.20 2006/06/29 19:55:11 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -40,6 +43,7 @@
 // 21-07-04 V.Ivanchenko Fix problem of range for dedx=0
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 07-12-04 Fix of BuildDEDX table (V.Ivantchenko)
+// 27-03-06 Add bool options isIonisation (V.Ivantchenko)
 //
 // Class Description:
 //
@@ -52,6 +56,16 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsTableHelper.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4LossTableBuilder::G4LossTableBuilder() 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4LossTableBuilder::~G4LossTableBuilder() 
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -86,7 +100,8 @@ void G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
-                                               G4PhysicsTable* rangeTable)
+					 G4PhysicsTable* rangeTable,
+					 G4bool isIonisation)
 // Build range table from the energy loss table
 {
   size_t n_vectors = dedxTable->length();
@@ -98,7 +113,7 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
 
   for (size_t i=0; i<n_vectors; i++) {
 
-    if (rangeTable->GetFlag(i)) {
+    if (rangeTable->GetFlag(i) || !isIonisation) {
       G4PhysicsVector* pv = (*dedxTable)[i];
       size_t nbins = pv->GetVectorLength();
       size_t bin0  = 0;
@@ -156,7 +171,8 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable,
-                                                      G4PhysicsTable* invRangeTable)
+						G4PhysicsTable* invRangeTable,
+						G4bool isIonisation)
 // Build inverse range table from the energy loss table
 {
   size_t n_vectors = rangeTable->length();
@@ -165,7 +181,7 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
 
   for (size_t i=0; i<n_vectors; i++) {
 
-    if (invRangeTable->GetFlag(i)) {
+    if (invRangeTable->GetFlag(i) || !isIonisation) {
       G4PhysicsVector* pv = (*rangeTable)[i];
       size_t nbins   = pv->GetVectorLength();
       G4double elow  = pv->GetLowEdgeEnergy(0);

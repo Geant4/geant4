@@ -14,6 +14,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 May 2006 Dennis Wright (radioactive_decay-V08-00-03)
+   (tagging change by Fan Lei on 17 Feb 2006)
+-  G4RadioactiveDecay.cc : in method IsApplicable() add test for negative 
+   lifetime 
+
+16 February 2006 Vladimir Ivanchenko (radioactive_decay-V08-00-02)
+-  G4RadioactiveDecay::IsApplicable - fix problem connected with
+   8.0 particle design
+
+16 December 2005 Dennis Wright (radioactive_decay-V08-00-01)
+- G4NuclearDecayChannel::BetaDecayIt() : check for negative sqrt argument in
+  daughtermomentum[1]. Response to Bug report #822.
+
 24 November 2005 Dennis Wright (radioactive_decay-V07-01-02)
 - more <sstream> migration: replace istrstream with istringstream in
    G4RIsotopeTable.cc, G4UIcmdWithNucleusLimits.cc

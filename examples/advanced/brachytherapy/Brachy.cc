@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
 // $Id: Brachy.cc
-// GEANT4 tag $Name: geant4-08-00 $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // --------------------------------------------------------------
 //                 GEANT 4 - Brachytherapy example
@@ -38,15 +41,7 @@
 //    *                             *
 //    *******************************
 //
-// Brachytherapy simulates the energy deposition in a cubic (30*cm)
 //
-// brachytherapy source.
-//
-// Simplified gamma generation is used.
-// Source axis is oriented along Z axis. The source is in the centre
-//of the box.
-
-//default source Ir-192
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -65,7 +60,7 @@
 #include "BrachyDetectorConstruction.hh"
 #include "BrachyPhysicsList.hh"
 #include "BrachyPhantomSD.hh"
-#include "BrachyPrimaryGeneratorActionIr.hh"
+#include "BrachyPrimaryGeneratorAction.hh"
 #include "G4SDManager.hh"
 #include "BrachyRunAction.hh"
 #include "Randomize.hh"  
@@ -85,18 +80,32 @@ int main(int argc ,char ** argv)
 
   G4String sensitiveDetectorName = "Phantom";
 
+  // Initialize the physics component
+  pRunManager -> SetUserInitialization(new BrachyPhysicsList);
+
+  // Initialize the detector component
   BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction(sensitiveDetectorName);
+  pRunManager -> SetUserInitialization(pDetectorConstruction);
 
-  pRunManager->SetUserInitialization(pDetectorConstruction);
-  pRunManager->SetUserInitialization(new BrachyPhysicsList);
+  // Initialize the primary particles
+  BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction();
+  pRunManager -> SetUserAction(primary);
 
+  // Initialize Optional User Action
+  BrachyEventAction *pEventAction = new BrachyEventAction();
+  pRunManager -> SetUserAction(pEventAction );
+
+  BrachyRunAction *pRunAction = new BrachyRunAction();
+  pRunManager -> SetUserAction(pRunAction);
+
+  //// Initialize the Visualization component 
 #ifdef G4VIS_USE
-  // visualization manager
+  // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
   
-  // output environment variables:
+  // Output environment variables concerning the analysis:
 #ifdef G4ANALYSIS_USE
   G4cout << G4endl << G4endl << G4endl 
 	 << " User Environment " << G4endl
@@ -108,17 +117,12 @@ int main(int argc ,char ** argv)
 	 << G4endl;
 #endif
   
+  // Initialize the interactive session 
   G4UIsession* session = 0;
   if (argc == 1)   // Define UI session for interactive mode.
     {
       session = new G4UIterminal();
     }
-
-  BrachyEventAction *pEventAction = new BrachyEventAction();
-  pRunManager -> SetUserAction(pEventAction );
-
-  BrachyRunAction *pRunAction = new BrachyRunAction();
-  pRunManager -> SetUserAction(pRunAction);
 
   //Initialize G4 kernel
   pRunManager -> Initialize();
@@ -139,6 +143,9 @@ int main(int argc ,char ** argv)
       UI -> ApplyCommand(command+fileName);
     }  
 
+  // Close the output file containing histograms and n-tuple with the 
+  // results of the simulation.
+  // Finish the analysis.
 #ifdef G4ANALYSIS_USE
   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
   analysis -> finish();

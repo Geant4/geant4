@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.10 2004/11/24 08:27:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4Navigator.hh,v 1.14 2006/06/29 18:36:01 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // class G4Navigator
@@ -35,55 +38,12 @@
 // reference system. The navigator maintains a transformation history and
 // other information to optimise the tracking time performance.
 //
-// NOTES:
-//
-// The following methods provide detailed information when a Step has
-// arrived at a geometrical boundary.  They distinguish between the different
-// causes that can result in the track leaving its current volume.
-//
-// Four cases are possible:
-//
-// 1) The particle has reached a boundary of a daughter of the current volume:
-//     (this could cause the relocation to enter the daughter itself
-//     or a potential granddaughter or further descendant)
-//     
-// 2) The particle has reached a boundary of the current
-//     volume, exiting into a mother (regardless the level
-//     at which it is located in the tree):
-//
-// 3) The particle has reached a boundary of the current
-//     volume, exiting into a volume which is not in its
-//     parental hierarchy:
-//
-// 4) The particle is not on a boundary between volumes:
-//     the function returns an exception, and the caller is
-//     reccomended to compare the G4touchables associated
-//     to the preStepPoint and postStepPoint to handle this case.
-//
-//   G4bool        EnteredDaughterVolume()
-//   G4bool        IsExitNormalValid()
-//   G4ThreeVector GetLocalExitNormal()
-//
-// The expected usefulness of these methods is to allow the caller to
-// determine how to compute the surface normal at the volume boundary. The two
-// possibilities are to obtain the normal from:
-//
-//   i) the solid associated with the volume of the initial point of the Step.
-//      This is valid for cases 2 and 3.  
-//      (Note that the initial point is generally the PreStepPoint of a Step).
-//   or
-// 
-//  ii) the solid of the final point, ie of the volume after the relocation.
-//      This is valid for case 1.
-//      (Note that the final point is generally the PreStepPoint of a Step).
-//
-// This way the caller can always get a valid normal, pointing outside
-// the solid for which it is computed, that can be used at his own
-// discretion.
-
 // History:
-// - Created. Paul Kent,         July 95/96
-// ********************************************************************
+// - Created.                                  Paul Kent,     Jul 95/96
+// - Zero step protections                     J.A. / G.C.,   Nov  2004
+// - Added check mode                          G. Cosmo,      Mar  2004
+// - Made Navigator Abstract                   G. Cosmo,      Nov  2003
+// *********************************************************************
 
 #ifndef G4NAVIGATOR_HH
 #define G4NAVIGATOR_HH
@@ -250,6 +210,11 @@ class G4Navigator
     // Get/Set Verbose(ness) level.
     // [if level>0 && G4VERBOSE, printout can occur]
 
+  inline G4bool IsActive() const;
+    // Verify if the navigator is active.
+  inline void  Activate(G4bool flag);
+    // Activate/inactivate the navigator.
+
   inline void  CheckMode(G4bool mode);
     // Run navigation in "check-mode", therefore using additional
     // verifications and more strict correctness conditions.
@@ -325,6 +290,9 @@ class G4Navigator
   //
   // BEGIN State information
   //
+
+  G4bool fActive;
+    // States if the navigator is activated or not.
 
   G4ThreeVector fLastLocatedPointLocal;
     // Position of the last located point relative to its containing volume.
@@ -430,3 +398,50 @@ class G4Navigator
 #include "G4Navigator.icc"
 
 #endif
+
+
+// NOTES:
+//
+// The following methods provide detailed information when a Step has
+// arrived at a geometrical boundary.  They distinguish between the different
+// causes that can result in the track leaving its current volume.
+//
+// Four cases are possible:
+//
+// 1) The particle has reached a boundary of a daughter of the current volume:
+//     (this could cause the relocation to enter the daughter itself
+//     or a potential granddaughter or further descendant)
+//     
+// 2) The particle has reached a boundary of the current
+//     volume, exiting into a mother (regardless the level
+//     at which it is located in the tree):
+//
+// 3) The particle has reached a boundary of the current
+//     volume, exiting into a volume which is not in its
+//     parental hierarchy:
+//
+// 4) The particle is not on a boundary between volumes:
+//     the function returns an exception, and the caller is
+//     reccomended to compare the G4touchables associated
+//     to the preStepPoint and postStepPoint to handle this case.
+//
+//   G4bool        EnteredDaughterVolume()
+//   G4bool        IsExitNormalValid()
+//   G4ThreeVector GetLocalExitNormal()
+//
+// The expected usefulness of these methods is to allow the caller to
+// determine how to compute the surface normal at the volume boundary. The two
+// possibilities are to obtain the normal from:
+//
+//   i) the solid associated with the volume of the initial point of the Step.
+//      This is valid for cases 2 and 3.  
+//      (Note that the initial point is generally the PreStepPoint of a Step).
+//   or
+// 
+//  ii) the solid of the final point, ie of the volume after the relocation.
+//      This is valid for case 1.
+//      (Note that the final point is generally the PreStepPoint of a Step).
+//
+// This way the caller can always get a valid normal, pointing outside
+// the solid for which it is computed, that can be used at his own
+// discretion.

@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.5 2005/05/12 11:06:42 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4BetheBlochModel.hh,v 1.8 2006/06/29 19:50:00 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -43,6 +46,8 @@
 // 24-03-05 Add G4EmCorrections (V.Ivanchenko)
 // 11-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 11-04-04 Move MaxSecondaryEnergy to models (V.Ivanchenko)
+// 11-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+
 //
 // Class Description:
 //
@@ -65,7 +70,8 @@ class G4BetheBlochModel : public G4VEmModel
 
 public:
 
-  G4BetheBlochModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BetheBloch");
+  G4BetheBlochModel(const G4ParticleDefinition* p = 0,
+                    const G4String& nam = "BetheBloch");
 
   virtual ~G4BetheBlochModel();
 
@@ -73,17 +79,30 @@ public:
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
 			const G4MaterialCutsCouple*);
-
+			
+  virtual G4double ComputeCrossSectionPerElectron(
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 
+  virtual G4double ComputeCrossSectionPerAtom(
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double Z, G4double A,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 				 
+  virtual G4double CrossSectionPerVolume(const G4Material*,
+				 const G4ParticleDefinition*,
+				 G4double kineticEnergy,
+				 G4double cutEnergy,
+				 G4double maxEnergy);
+				 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
 					G4double cutEnergy);
-
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-					 const G4ParticleDefinition*,
-					 G4double kineticEnergy,
-					 G4double cutEnergy,
-					 G4double maxEnergy);
 
   virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
@@ -144,7 +163,7 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
     G4double q = particle->GetPDGCharge()/eplus;
     chargeSquare = q*q;
     ratio = electron_mass_c2/mass;
-    tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
+    if(mass > 120.*MeV) tlimit = 51.2*GeV*std::pow(proton_mass_c2/mass,0.66667);
   }
 }
 

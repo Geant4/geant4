@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.17 2003/06/16 16:46:25 gunter Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: GammaRayTelEventAction.cc,v 1.19 2006/06/29 15:56:39 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -77,7 +80,7 @@ GammaRayTelEventAction::GammaRayTelEventAction()
   anticoincidenceCollID(-1), drawFlag("all")
 { 
   G4DigiManager * fDM = G4DigiManager::GetDMpointer();
-  GammaRayTelDigitizer * myDM = new GammaRayTelDigitizer( "TrackerDigitizer" );
+  GammaRayTelDigitizer * myDM = new GammaRayTelDigitizer( "GammaRayTelDigitizer" );
   fDM->AddNewModule(myDM);
 }
 
@@ -135,109 +138,110 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	(HCE->GetHC(calorimeterCollID));
       AHC = (GammaRayTelAnticoincidenceHitsCollection*)
 	(HCE->GetHC(anticoincidenceCollID));
-    }
-  
-  if (THC)
-    {
-      int n_hit = THC->entries();
-      G4cout << "Number of tracker hits in this event =  " << n_hit << G4endl;
-      G4double ESil=0;
-      G4int NStrip, NPlane, IsX;
       
-      // This is a cycle on all the tracker hits of this event
-      
-      for (int i=0;i<n_hit;i++) 
+      if (THC)
 	{
-	  // Here we put the hit data in a an ASCII file for 
-	  // later analysis 
-	  ESil = (*THC)[i]->GetEdepSil();
-	  NStrip = (*THC)[i]->GetNStrip();
-	  NPlane = (*THC)[i]->GetNSilPlane();
-	  IsX = (*THC)[i]->GetPlaneType();
+	  int n_hit = THC->entries();
+	  G4cout << "Number of tracker hits in this event =  " << n_hit << G4endl;
+	  G4double ESil=0;
+	  G4int NStrip, NPlane, IsX;
 	  
+	  // This is a cycle on all the tracker hits of this event
+	  
+	  for (int i=0;i<n_hit;i++) 
+	    {
+	      // Here we put the hit data in a an ASCII file for 
+	      // later analysis 
+	      ESil = (*THC)[i]->GetEdepSil();
+	      NStrip = (*THC)[i]->GetNStrip();
+	      NPlane = (*THC)[i]->GetNSilPlane();
+	      IsX = (*THC)[i]->GetPlaneType();
+	      
 #ifdef G4STORE_DATA
-	  outFile << std::setw(7) << event_id << " " << 
-	    ESil/keV << " " << NStrip << 
-	    " " << NPlane << " " << IsX << " " <<
-	    (*THC)[i]->GetPos().x()/mm <<" "<<
-	    (*THC)[i]->GetPos().y()/mm <<" "<<
-	    (*THC)[i]->GetPos().z()/mm <<" "<<
-	    G4endl;
+	      outFile << std::setw(7) << event_id << " " << 
+		ESil/keV << " " << NStrip << 
+		" " << NPlane << " " << IsX << " " <<
+		(*THC)[i]->GetPos().x()/mm <<" "<<
+		(*THC)[i]->GetPos().y()/mm <<" "<<
+		(*THC)[i]->GetPos().z()/mm <<" "<<
+		G4endl;
 #else 	  
-	  G4cout << std::setw(7) << event_id << " " << 
-	    ESil/keV << " " << NStrip << 
-	    " " << NPlane << " " << IsX << " " <<
-	    (*THC)[i]->GetPos().x()/mm <<" "<<
-	    (*THC)[i]->GetPos().y()/mm <<" "<<
-	    (*THC)[i]->GetPos().z()/mm <<" "<<
-	    G4endl;
+	      G4cout << std::setw(7) << event_id << " " << 
+		ESil/keV << " " << NStrip << 
+		" " << NPlane << " " << IsX << " " <<
+		(*THC)[i]->GetPos().x()/mm <<" "<<
+		(*THC)[i]->GetPos().y()/mm <<" "<<
+		(*THC)[i]->GetPos().z()/mm <<" "<<
+		G4endl;
 #endif
-
+	      
 #ifdef G4ANALYSIS_USE
-
-	  // Here we fill the histograms of the Analysis manager
-	  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-
-	  if(IsX) 
-	    {
-	      if (analysis->GetHisto2DMode()=="position")
-		analysis->InsertPositionXZ((*THC)[i]->GetPos().x()/mm,(*THC)[i]->GetPos().z()/mm);
-	      else
-		analysis->InsertPositionXZ(NStrip, NPlane);  	      
-	      if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
-	      analysis->InsertHits(NPlane);
-	    } 
-	  else 
-	    {
-	      if (analysis->GetHisto2DMode()=="position")
-		analysis->InsertPositionYZ((*THC)[i]->GetPos().y()/mm,(*THC)[i]->GetPos().z()/mm);  
+	      
+	      // Here we fill the histograms of the Analysis manager
+	      GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
+	      
+	      if(IsX) 
+		{
+		  if (analysis->GetHisto2DMode()=="position")
+		    analysis->InsertPositionXZ((*THC)[i]->GetPos().x()/mm,(*THC)[i]->GetPos().z()/mm);
+		  else
+		    analysis->InsertPositionXZ(NStrip, NPlane);  	      
+		  if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
+		  analysis->InsertHits(NPlane);
+		} 
 	      else 
-		analysis->InsertPositionYZ(NStrip, NPlane);  	      
-	      if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
-	      analysis->InsertHits(NPlane);
-	    }
-	  
+		{
+		  if (analysis->GetHisto2DMode()=="position")
+		    analysis->InsertPositionYZ((*THC)[i]->GetPos().y()/mm,(*THC)[i]->GetPos().z()/mm);  
+		  else 
+		    analysis->InsertPositionYZ(NStrip, NPlane);  	      
+		  if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
+		  analysis->InsertHits(NPlane);
+		}
+	      
 #ifdef G4ANALYSIS_USE
-	  analysis->setNtuple( ESil/keV, NPlane, (*THC)[i]->GetPos().x()/mm,
-			       (*THC)[i]->GetPos().y()/mm,
-			       (*THC)[i]->GetPos().z()/mm);
+	      analysis->setNtuple( ESil/keV, NPlane, (*THC)[i]->GetPos().x()/mm,
+				   (*THC)[i]->GetPos().y()/mm,
+				   (*THC)[i]->GetPos().z()/mm);
+#endif
+	      
 #endif
 	  
+	    }
+	  // Here we call the analysis manager function for visualization
+#ifdef G4ANALYSIS_USE
+	  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
+	  analysis->EndOfEvent(n_hit);
 #endif
 	  
 	}
-      // Here we call the analysis manager function for visualization
-#ifdef G4ANALYSIS_USE
-      GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-      analysis->EndOfEvent(n_hit);
-#endif
-    }
-  
-  GammaRayTelDigitizer * myDM = 
-    (GammaRayTelDigitizer*)fDM->FindDigitizerModule( "TrackerDigitizer" );
-  myDM->Digitize();
-  
-  G4int myDigiCollID = fDM->GetDigiCollectionID("DigitsCollection");
-
-  // G4cout << "digi collecion" << myDigiCollID << G4endl;
-  
-  GammaRayTelDigitsCollection * DC = (GammaRayTelDigitsCollection*)fDM->GetDigiCollection( myDigiCollID );
-  
-  if(DC) {
-    //    G4cout << "Total Digits " << DC->entries() << G4endl;
-    G4int n_digi =  DC->entries();
-    G4int NStrip, NPlane, IsX;
-    for (G4int i=0;i<n_digi;i++) {
-      // Here we put the digi data in a an ASCII file for 
-      // later analysis
-      NStrip = (*DC)[i]->GetStripNumber();
-      NPlane = (*DC)[i]->GetPlaneNumber();
-      IsX = (*DC)[i]->GetPlaneType();
       
-      //      outFile << std::setw(7) << event_id << " " << NStrip << 
-      //	" " << NPlane << " " << IsX << " " << G4endl;	
+      GammaRayTelDigitizer * myDM = 
+	(GammaRayTelDigitizer*)fDM->FindDigitizerModule( "GammaRayTelDigitizer" );
+      myDM->Digitize();
+      
+      G4int myDigiCollID = fDM->GetDigiCollectionID("DigitsCollection");
+      
+      // G4cout << "digi collecion" << myDigiCollID << G4endl;
+      
+      GammaRayTelDigitsCollection * DC = (GammaRayTelDigitsCollection*)fDM->GetDigiCollection( myDigiCollID );
+      
+      if(DC) {
+	//    G4cout << "Total Digits " << DC->entries() << G4endl;
+	G4int n_digi =  DC->entries();
+	G4int NStrip, NPlane, IsX;
+	for (G4int i=0;i<n_digi;i++) {
+	  // Here we put the digi data in a an ASCII file for 
+	  // later analysis
+	  NStrip = (*DC)[i]->GetStripNumber();
+	  NPlane = (*DC)[i]->GetPlaneNumber();
+	  IsX = (*DC)[i]->GetPlaneType();
+	  
+	  //      outFile << std::setw(7) << event_id << " " << NStrip << 
+	  //	" " << NPlane << " " << IsX << " " << G4endl;	
+	}
+      }
     }
-  }
   
   if(G4VVisManager::GetConcreteInstance()) {
     for(G4int i=0; i<n_trajectories; i++) { 

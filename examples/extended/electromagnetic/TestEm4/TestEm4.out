@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-00-cand-01    (16-December-2005)
+ Geant4 version Name: global-V08-00-04    (30-June-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10,7 +10,7 @@ Visualization Manager instantiating...
 Visualization Manager initialising...
 Registering graphics systems...
 
-You have successfully chosen to use the following graphics systems.
+You have successfully registered the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
@@ -22,10 +22,32 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
 
 Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+
+Registered models: 
+  None
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+
+Registered filters:
+  None
+
  Material: FluorCarbonate     density:  1.610 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  22.435 cm 
-   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  38.74 %  Abundance  50.00 %
-   --->  Element: Fluorine (N)   Z =  9.0   N =  19.0   A =  18.99 g/mole  fractionMass:  61.26 %  Abundance  50.00 %
+   --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole  ElmMassFraction:  38.74 %  ElmAbundance  50.00 %
+   --->  Element: Fluorine (N)   Z =  9.0   N =  19.0   A =  18.99 g/mole  ElmMassFraction:  61.26 %  ElmAbundance  50.00 %
 PhysicsList::SetCuts:CutLength : 1 (mm)
+/run/verbose 2
+#
+/run/beamOn 100000
 
 phot:  Total cross sections from Sandia parametrisation. 
 
@@ -71,17 +93,26 @@ annihil:       Heilter model of formula of annihilation into 2 photons
       tables are built for  e+
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
 
+Region <DefaultRegionForTheWorld> -- appears in <C6F6> world volume
+ Materials : FluorCarbonate 
+ Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : FluorCarbonate
  Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
- Energy thresholds :  gamma 3.61165 keV    e- 429.199 keV    e+ 416.986 keV
+ Energy thresholds :  gamma 3.62751 keV    e- 427.947 keV    e+ 412.431 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -99,15 +130,34 @@ Start Run processing.
 ---> Begin of Event: 30000
 
 ---> Begin of Event: 40000
+
+---> Begin of Event: 50000
+
+---> Begin of Event: 60000
+
+---> Begin of Event: 70000
+
+---> Begin of Event: 80000
+
+---> Begin of Event: 90000
 Run terminated.
 Run Summary
-  Number of events processed : 50000
-  User=48.41s Real=462.73s Sys=36.57s
+  Number of events processed : 100000
+  User=93.58s Real=383.02s Sys=118.87s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 510209146, 254172231
+ Current couple of seeds = 759153061, 381217352
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
 G4 kernel has come to Quit state.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted.
+RunManager is deleting.

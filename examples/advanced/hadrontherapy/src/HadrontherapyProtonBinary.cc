@@ -1,24 +1,28 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
 // $Id: HadrontherapyProtonBinary.cc; May 2005
 // ----------------------------------------------------------------------------
 //                 GEANT 4 - Hadrontherapy example
@@ -61,12 +65,12 @@
 
 // BINARY + PRECOMPOUND PHYSICS LIST
 //
-// BINARY + PRECOMPOUND + EVAPORATION(DEFAULT EVAPORATION) NO FERMI BREAK-UP FOR PROTONS, NEUTRONS AND PIONS
+// BINARY + PRECOMPOUND + EVAPORATION(DEFAULT EVAPORATION) FOR PROTONS, NEUTRONS AND PIONS
 // 
 // LEP MODEL UP TO 100 MEV AND BINARY ION MODEL BETWEEN 80 MEV AND 40. GEV 
 // FOR  DEUTERON, TRITON, HE3, ALPHA
 // 
-//FISSION AND HADRON CAPTURE FOR NEUTRONS BETWEEN 0. MEV AND 100. TEV
+// FISSION AND HADRON CAPTURE FOR NEUTRONS BETWEEN 0. MEV AND 100. TEV
 //
 HadrontherapyProtonBinary::HadrontherapyProtonBinary(const G4String& name): 
   G4VPhysicsConstructor(name)
@@ -77,7 +81,7 @@ HadrontherapyProtonBinary::HadrontherapyProtonBinary(const G4String& name):
   LEPHighLimit = 100.*MeV;
 
   // Energy limits for protons, neutrons and pions
-  precompoundLowLimit = 100.*MeV;
+  precompoundLowLimit = 0.*MeV;
   precompoundHighLimit = 300.*MeV;
   neutronLowLimit = 0.*TeV;
   neutronHighLimit = 100.*TeV;
@@ -250,16 +254,16 @@ void HadrontherapyProtonBinary::ConstructProcess()
 
   /////////////////////////////////////////////////////////////////////////////
   // He3
-  particle = G4He3::He3();
-  pmanager = particle->GetProcessManager();
-  G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
-  G4HadronInelasticProcess* theIPHe3 =
-    new G4HadronInelasticProcess("He3Inelastic",particle);
-  theIPHe3 -> AddDataSet(TripathiCrossSection);
-  theIPHe3 -> AddDataSet(aShen);
-  theIPHe3 -> RegisterMe(theGenIonBC);
-  pmanager -> AddDiscreteProcess(theIPHe3);
-  pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
+ //  particle = G4He3::He3();
+//   pmanager = particle->GetProcessManager();
+//   G4BinaryLightIonReaction * theGenIonBC= new G4BinaryLightIonReaction;
+//   G4HadronInelasticProcess* theIPHe3 =
+//     new G4HadronInelasticProcess("He3Inelastic",particle);
+//   theIPHe3 -> AddDataSet(TripathiCrossSection);
+//   theIPHe3 -> AddDataSet(aShen);
+//   theIPHe3 -> RegisterMe(theGenIonBC);
+//   pmanager -> AddDiscreteProcess(theIPHe3);
+//   pmanager -> AddDiscreteProcess(elastic); //ELASTIC SCATTERING
   
   
 }

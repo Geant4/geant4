@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.89 2005/11/10 21:30:13 tinslay Exp $
+cvs log $Id: History,v 1.98 2006/05/04 15:18:38 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+2nd May 2006 Jane Tinslay (greps-V08-00-03)
+- Add FilterTrajectory method to G4VVisManager
+
+19th April 2006  John Allison  (greps-V08-00-02 - needs vis-V08-00-04)
+- G4VGraphicsScene: Added Begin/EndPrimitives2D.
+- G4VVisManager: Added Draw2d(const G4Text&).
+
+28th March 2006 Jane Tinslay (jst28032006)
+- Add G4VFilter and G4SmartFilter
+
+13th March 2006  John Allison  (greps-V08-00-01)
+- Added operator<< for G4Text, G4Circle, G4Square, G4Polyhedron.
+- Improved/tidied operator<< for G4Polyline, G4VMarker, G4VisAttributes.
+- Improved comments in G4VVisManager.
+
+13th January 2006  John Allison  (greps-V08-00-00)
+- Added G4PolyhedronArbitrary:
+  o Moved from geometry/solids/specific, where it was part of a
+    development by Peter Truscott and Fan Lei of QinetiQ.
+    G4PolyhedronArbitrary is a way of creating arbitrary G4Polyhedron
+    objects out of vertices and indices.
+  o Removed unnecessary operator= functions.
+
+23rd November 2005  Jane Tinslay 
+- Update documentation in G4Colour
 
 10th November 2005  Jane Tinslay (greps-V07-01-09)
 - G4VVisManager: Fix Dispatch method name to "DispatchToModel".

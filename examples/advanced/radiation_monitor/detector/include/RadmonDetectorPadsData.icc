@@ -1,0 +1,104 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// File name:     RadmonDetectorPadsData.icc
+// Creation date: Sep 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonDetectorPadsData.icc,v 1.3 2006/06/29 16:12:11 gunter Exp $
+// Tag:           $Name: geant4-08-01 $
+//
+
+#ifndef   RADMONDETECTORPADSDATA_HH
+ #error "RadmonDetectorPadsData.icc cannot be included directly. Please use RadmonDetectorPadsData.hh"
+#else  /* RADMONDETECTORPADSDATA_HH */
+ inline                                         RadmonDetectorPadsData :: RadmonDetectorPadsData()
+ :
+  padWidth(0.),
+  padHeight(0.),
+  padMaterial(0)
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonDetectorPadsData :: ~RadmonDetectorPadsData()
+ {
+ }
+
+
+
+
+
+ inline G4double                                RadmonDetectorPadsData :: GetWidth(void) const
+ {
+  return padWidth;
+ }
+
+
+
+ inline G4double                                RadmonDetectorPadsData :: GetHeight(void) const
+ {
+  return padHeight;
+ }
+
+
+
+ inline G4Material *                            RadmonDetectorPadsData :: GetMaterial(void) const
+ {
+  return padMaterial;
+ }
+
+
+
+
+
+ inline void                                    RadmonDetectorPadsData :: SetWidth(G4double width)
+ {
+  padWidth=width;
+ }
+
+
+
+ inline void                                    RadmonDetectorPadsData :: SetHeight(G4double height)
+ {
+  padHeight=height;
+ }
+
+
+
+ inline void                                    RadmonDetectorPadsData :: SetMaterial(G4Material * material)
+ {
+  padMaterial=material;
+ }
+
+
+
+ inline void                                     RadmonDetectorPadsData :: AppendPosition(const G4ThreeVector & position)
+ {
+  AppendPositionAndRotation(position, G4RotationMatrix::IDENTITY);
+ }
+#endif /* RADMONDETECTORPADSDATA_HH */

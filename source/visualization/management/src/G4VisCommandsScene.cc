@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.44 2005/11/22 17:14:44 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VisCommandsScene.cc,v 1.54 2006/06/29 21:29:42 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -97,17 +100,17 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout << "WARNING: Scene \"" << newName << "\" already exists."
 	     << G4endl;
     }
-  }
-  else {
+  } else {
 
-    sceneList.push_back (new G4Scene (newName));
-    // Adds empty scene data object to list.
+    // Add empty scene data object to list...
+    G4Scene* pScene = new G4Scene (newName);
+    sceneList.push_back (pScene);
+    fpVisManager -> SetCurrentScene (pScene);
 
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "New empty scene \"" << newName << "\" created." << G4endl;
     }
   }
-  UpdateVisManagerScene (newName);
 }
 
 ////////////// /vis/scene/endOfEventAction ////////////////////////////
@@ -238,7 +241,17 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   }
 
   if (action == "accumulate") {
-    pScene->SetRefreshAtEndOfRun(false);
+    if (pScene->GetRefreshAtEndOfEvent()) {
+      if (verbosity >= G4VisManager::errors) {
+	G4cout <<
+	  "ERROR: Cannot accumulate runs unless events accumulate too."
+	  "\n  Use \"/vis/scene/endOfEventAction accumulate\"."
+	       << G4endl;
+      }
+    }
+    else {
+      pScene->SetRefreshAtEndOfRun(false);
+    }
   }
   else if (action == "refresh") {
     pScene->SetRefreshAtEndOfRun(true);
@@ -274,7 +287,7 @@ G4VisCommandSceneList::G4VisCommandSceneList () {
   parameter -> SetDefaultValue ("all");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("verbosity", 's', omitable = true);
-  parameter -> SetDefaultValue (0);
+  parameter -> SetDefaultValue ("warnings");
   fpCommand -> SetParameter (parameter);
 }
 
@@ -376,7 +389,7 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
   parameter = new G4UIparameter ("refresh-flush", 's',
 				 omitable = true);
   parameter -> SetDefaultValue("refresh");
-  parameter -> SetParameterCandidates("refresh flush");
+  parameter -> SetParameterCandidates("r refresh f flush");
   fpCommand -> SetParameter (parameter);
 }
 
@@ -396,7 +409,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   G4String sceneName, refresh_flush;
   std::istringstream is (newValue);
   is >> sceneName >> refresh_flush;
-  G4bool flush(false);
+  G4bool flush = false;
   if (refresh_flush(0) == 'f') flush = true;
 
   const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
@@ -440,7 +453,8 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
       const G4String& aSceneName = aScene -> GetName ();
       if (sceneName == aSceneName) {
 	// Clear store and force a rebuild of graphical database...
-	aSceneHandler -> ClearStore ();
+	//aSceneHandler -> ClearStore (); // Not nec??  Done below
+	//with NeedKernelVisit and DrawView.  JA.
 	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
 	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
@@ -450,8 +464,10 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
 	  fpVisManager -> SetCurrentViewer(aViewer);
 	  fpVisManager -> SetCurrentSceneHandler(aSceneHandler);
 	  fpVisManager -> SetCurrentScene(aScene);
+	  // Re-draw, forcing rebuild of graphics database, if any...
+	  aViewer -> NeedKernelVisit();
 	  aViewer -> SetView ();
-	  //??aViewer -> ClearView ();
+	  aViewer -> ClearView ();
 	  aViewer -> DrawView ();
 	  if (flush) aViewer -> ShowView ();
 	  if (verbosity >= G4VisManager::confirmations) {
@@ -544,4 +560,75 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand*, G4String newValue) {
   }
   UpdateVisManagerScene (selectName);
 
+}
+
+////////////// /vis/scene/transientsAction ////////////////////////////
+
+G4VisCommandSceneTransientsAction::G4VisCommandSceneTransientsAction () {
+  G4bool omitable;
+  fpCommand = new G4UIcmdWithAString ("/vis/scene/transientsAction", this);
+  fpCommand -> SetGuidance
+    ("Rerun events to get transienst (trajectories, etc.), when needed.");
+  fpCommand -> SetGuidance
+    ("Note: ineffective in absence of instantiated run manager.");
+  fpCommand -> SetParameterName ("action", omitable = true);
+  fpCommand -> SetCandidates ("rerun none");
+  fpCommand -> SetDefaultValue ("rerun");
+
+}
+
+G4VisCommandSceneTransientsAction::~G4VisCommandSceneTransientsAction () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneTransientsAction::GetCurrentValue(G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneTransientsAction::SetNewValue (G4UIcommand*,
+						     G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String action;
+  std::istringstream is (newValue);
+  is >> action;
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
+  if (!pSceneHandler) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  if (action == "rerun") {
+    pScene->SetRecomputeTransients(true);
+  }
+  else if (action == "none") {
+    pScene->SetRecomputeTransients(false);
+  }
+  else {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: unrecognised parameter \"" << action << "\"."
+             << G4endl;
+    }
+    return;
+  }
+
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Transients action set to \"";
+    if (pScene->GetRecomputeTransients()) G4cout << "rerun";
+    else G4cout << "none";
+    G4cout << "\"" << G4endl;
+  }
 }

@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th May 2006 Peter Gumplinger (op-V08-00-01)
+              thanks to Andreia Trindade and Pedro Rodrigues, the WLS time
+              delay can now be a delta function or exponential. New classes:
+              G4VWLSTimeGeneratorProfile, G4WLSTimeGeneratorProfileDelta and
+              G4WLSTimeGeneratorProfileExponential
+
+17th Feb 2006 Peter Gumplinger (op-V08-00-00)
+              fix default behaviour for unified model of dielectric_metal
+
 28th July 2005 Peter Gumplinger (op-V07-01-00)
                add G4ProcessType to all constructors
 

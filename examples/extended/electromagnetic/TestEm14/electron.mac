@@ -1,0 +1,34 @@
+# $Id: electron.mac,v 1.2 2006/05/10 11:15:33 maire Exp $
+#
+# Macro file for "TestEm14.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+#
+/run/initialize
+#
+/testem/phys/setCuts 100 um
+
+###/process/inactivate eIoni
+/process/inactivate eBrem
+#
+/gun/particle e-
+/gun/energy 100 MeV
+#
+/testem/histo/setFileName eioni
+### /testem/histo/setFileName ebrem
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 1  100 0.  100 MeV	#energy  of primary  
+/testem/histo/setHisto 2  100 0.5   +1. none	#costeta of primary
+/testem/histo/setHisto 3  100 0.  100 MeV	#energy  of ch. secondary  
+/testem/histo/setHisto 4  100 0.   +1. none	#costeta of ch. secondary
+###/testem/histo/setHisto 5  100 0.  100 MeV	#energy  of ne. secondary  
+###/testem/histo/setHisto 6  100 0.99  +1. none	#costeta of ne. secondary
+#
+###/tracking/verbose 2
+###/run/beamOn 1
+#
+/run/beamOn 100000

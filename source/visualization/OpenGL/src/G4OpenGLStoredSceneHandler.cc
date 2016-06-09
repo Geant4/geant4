@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.23 2005/09/29 14:27:03 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.28 2006/06/29 21:19:16 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -40,7 +43,7 @@
 
 #include "G4OpenGLStoredSceneHandler.hh"
 
-#include "G4OpenGLViewerDataStore.hh"
+#include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
@@ -104,9 +107,71 @@ void G4OpenGLStoredSceneHandler::EndPrimitives () {
   G4VSceneHandler::EndPrimitives ();
 }
 
+void G4OpenGLStoredSceneHandler::BeginPrimitives2D()
+{
+  G4VSceneHandler::BeginPrimitives2D();
+
+  if (fMemoryForDisplayLists) {
+    fDisplayListId = glGenLists (1);
+    if (!fDisplayListId) {  // Could pre-allocate?
+      G4cout << "********************* WARNING! ********************\n"
+	   <<"Unable to allocate any more display lists in OpenGL.\n "
+	   << "      Continuing drawing in IMMEDIATE MODE.\n"
+	   << "***************************************************" << G4endl;
+      fMemoryForDisplayLists = false;
+    }
+  }
+  if (fMemoryForDisplayLists) {
+    if (fReadyForTransients) {
+      fTODLList.push_back (fDisplayListId);
+      fTODLTransformList.push_back (G4Transform3D());  // Identity (ignored).
+      glDrawBuffer (GL_FRONT);
+      glNewList (fDisplayListId, GL_COMPILE_AND_EXECUTE);
+    }
+    else {
+      fPODLList.push_back (fDisplayListId);
+      fPODLTransformList.push_back (G4Transform3D());  // Identity (ignored).
+      glNewList (fDisplayListId, GL_COMPILE);
+    }
+  } else {
+    glDrawBuffer (GL_FRONT);
+  }
+  // Push current 3D world matrices and load identity to define screen
+  // coordinates...
+  glMatrixMode (GL_PROJECTION);
+  glPushMatrix();
+  glLoadIdentity();
+  glOrtho (-1., 1., -1., 1., -DBL_MAX, DBL_MAX);
+  glMatrixMode (GL_MODELVIEW);
+  glPushMatrix();
+  glLoadIdentity();
+}
+
+void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
+{
+  // Pop current 3D world matrices back again...
+  glMatrixMode (GL_PROJECTION);
+  glPopMatrix();
+  glMatrixMode (GL_MODELVIEW);
+  glPopMatrix();
+
+  if (fMemoryForDisplayLists) {
+    glEndList();
+  }
+  if (fReadyForTransients || !fMemoryForDisplayLists) {
+    glFlush ();
+    glDrawBuffer (GL_BACK);
+  }
+  G4VSceneHandler::EndPrimitives2D ();
+}
+
 void G4OpenGLStoredSceneHandler::BeginModeling () {
   G4VSceneHandler::BeginModeling();
   ClearStore();  // ...and all that goes with it.
+  /* Debug...
+  fDisplayListId = glGenLists (1);
+  G4cout << "OGL::fDisplayListId (start): " << fDisplayListId << G4endl;
+  */
 }
 
 void G4OpenGLStoredSceneHandler::EndModeling () {
@@ -119,7 +184,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
 	   << G4endl;
   }
   else {
-    glNewList (fTopPODL, GL_COMPILE); {
+    glNewList (fTopPODL, GL_COMPILE_AND_EXECUTE); {
       for (size_t i = 0; i < fPODLList.size (); i++) {
 	glPushMatrix();
 	G4OpenGLTransform3D oglt (fPODLTransformList [i]);
@@ -132,6 +197,11 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   }
 
   G4VSceneHandler::EndModeling ();
+
+  /* Debug...
+  fDisplayListId = glGenLists (1);
+  G4cout << "OGL::fDisplayListId (end): " << fDisplayListId << G4endl;
+  */
 }
 
 void G4OpenGLStoredSceneHandler::ClearStore () {
@@ -196,46 +266,66 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore () {
   }
 }
 
-void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
+void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid)
+{
   if (fReadyForTransients) {
     // Always draw transient solids, e.g., hits represented as solids.
     // (As we have no control over the order of drawing of transient
     // objects, we cannot do anything about transparent ones, as
     // below, so always draw them.)
     G4VSceneHandler::RequestPrimitives (solid);
+    return;
   }
-  else {
 
-    // For non-transient (run-duration) objects, ensure transparent
-    // objects are drawn last.  The problem of
-    // blending/transparency/alpha is quite a tricky one - see History
-    // of opengl-V07-01-01/2/3.
-    // Get vis attributes - pick up defaults if none.
-    const G4VisAttributes* pVA =
-      fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
-    const G4Colour& c = pVA -> GetColour ();
-    G4double opacity = c.GetAlpha ();
-    if (!fSecondPass) {
-      G4bool transparency_enabled =
-	G4OpenGLViewerDataStore::GetTransparencyEnabled(fpViewer);
-      if (transparency_enabled && opacity < 1.) {
-	// On first pass, transparent objects are not drawn, but flag is set...
-	fSecondPassRequested = true;
-	return;
-      }
+  // For non-transient (run-duration) objects, ensure transparent
+  // objects are drawn last.  The problem of
+  // blending/transparency/alpha is quite a tricky one - see History
+  // of opengl-V07-01-01/2/3.
+  // Get vis attributes - pick up defaults if none.
+  const G4VisAttributes* pVA =
+    fpViewer -> GetApplicableVisAttributes(fpVisAttribs);
+  const G4Colour& c = pVA -> GetColour ();
+  G4double opacity = c.GetAlpha ();
+
+  if (!fSecondPass) {
+    G4bool transparency_enabled = true;
+    G4OpenGLViewer* pViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+    if (pViewer) transparency_enabled = pViewer->transparency_enabled;
+    if (transparency_enabled && opacity < 1.) {
+      // On first pass, transparent objects are not drawn, but flag is set...
+      fSecondPassRequested = true;
+      return;
     }
-    // On second pass, opaque objects are not drwan...
-    if (fSecondPass && opacity >= 1.) return;
+  }
 
-    // If a display list already exists for this solid, re-use it if
-    // possible.  We could be smarter, and recognise repeated branches
-    // of the geometry hierarchy, for example.  But this a;gorithm
-    // should be secure, I think...
+  // On second pass, opaque objects are not drwan...
+  if (fSecondPass && opacity >= 1.) return;
+
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+ 
+  if (pPVModel) {
+    // If part of the geometry hierarchy, i.e., from a
+    // G4PhysicalVolumeModel, check if a display list already exists for
+    // this solid, re-use it if possible.  We could be smarter, and
+    // recognise repeated branches of the geometry hierarchy, for
+    // example.  But this algorithm should be secure, I think...
     const G4VSolid* pSolid = &solid;
-    if (fpCurrentPV &&
-	// Provided it is not replicated (because if so, the solid's
-	// parameters might have been changed)...
-	!(fpCurrentPV -> IsReplicated ()) &&
+    EAxis axis = kRho;
+    G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
+    if (pCurrentPV -> IsReplicated ()) {
+      G4int nReplicas;
+      G4double width;
+      G4double offset;
+      G4bool consuming;
+      pCurrentPV->GetReplicationData(axis,nReplicas,width,offset,consuming);
+    }
+    // Provided it is not parametrised (because if so, the
+    // solid's parameters might have been changed)...
+    if (!(pCurrentPV -> IsParameterised ()) &&
+	// Provided it is not replicated radially (because if so, the
+	// solid's parameters will have been changed)...
+	!(pCurrentPV -> IsReplicated () && axis == kRho) &&
 	// ...and if the solid has already been rendered...
 	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
       fDisplayListId = fSolidMap [pSolid];
@@ -246,7 +336,11 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
       G4VSceneHandler::RequestPrimitives (solid);
       fSolidMap [pSolid] = fDisplayListId;
     }
+    return;
   }
+
+  // Otherwise invoke base class method...
+  G4VSceneHandler::RequestPrimitives (solid);
 }
 
 G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;

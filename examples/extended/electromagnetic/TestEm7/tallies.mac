@@ -1,0 +1,37 @@
+# $Id: tallies.mac,v 1.1 2006/01/30 10:35:33 maire Exp $
+#
+# Macro file for "TestEm7.cc"
+# (can be run in batch, without graphic)
+# It shows how to introduce simple tallies
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSizeX  20 cm
+/testem/det/setSizeYZ 20 cm
+#
+/testem/det/tallyMat Water
+/testem/det/tallySize 2. 2. 2. mm
+/testem/det/tallyPosition -9.9 0. 0. cm
+/testem/det/tallyPosition -5.  0. 0. cm
+/testem/det/tallyPosition  0.  0. 0. cm
+/testem/det/tallyPosition  5.  0. 0. cm
+#
+/testem/phys/addPhysics  standard	# em physics  
+#
+/run/initialize
+#
+/gun/particle proton
+/gun/energy 160 MeV
+#
+# beam size
+/testem/gun/rndm 3 mm
+#
+# limit the step size
+/testem/stepMax 1 mm
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 10000

@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2005/12/06 11:34:42 gcosmo Exp $
+$Id: History,v 1.10 2006/05/19 15:35:15 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+19-05-06 mma (testem12-V08-00-02)
+- update README
+
+11-04-06 mma (testem12-V08-00-01)
+- HistoManager : compute stepMax from histos 1 and 8 (stepMax <= binWidth)
+- RunAction : pass stepMax from HistoManager to StepMax process
+- StepMax : boolean flag : apply
+- SteppingAction : edep randomly distribued along step
+     
+28-03-06 mma (testem12-V08-00-00) 
+- add PhysListEmLivermore and PhysListEmPenelope
+- RunAction : G4EmCalculator::GetCSDARange()
+     
+16-02-06 mma
+- migration mum -> um in several macros 
+    
 06-12-05 Gabriele Cosmo
 - Trivial changes for support of CLHEP-2.0.X series.
 

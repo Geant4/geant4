@@ -1,0 +1,39 @@
+# $Id: ionis.mac,v 1.2 2006/01/25 13:56:40 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# Ionisation only
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+/testem/det/setSize 50 cm
+#
+/testem/phys/addPhysics standard
+#
+/run/initialize
+#
+# prevent any gamma production
+/testem/phys/setGCut  1 km
+#
+# no multiple scattering
+/process/inactivate msc
+#
+# set cut for ionisation
+/testem/phys/setECut  1 mm
+#
+/testem/gun/setDefault
+/gun/particle e-
+/gun/energy 200 MeV
+#
+/testem/histo/setFileName ionis
+/testem/histo/setFileType hbook
+/testem/histo/setHisto 1 100 0   50 cm		#track length of primary
+/testem/histo/setHisto 2 100 0  100 none	#nb steps of primary
+/testem/histo/setHisto 3 200 0   50 mm		#step size of primary
+#
+/testem/event/printModulo 2000
+#
+/run/beamOn 10000

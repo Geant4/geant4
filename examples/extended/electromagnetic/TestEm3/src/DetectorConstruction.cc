@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.14 2005/10/07 16:26:07 maire Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: DetectorConstruction.cc,v 1.17 2006/06/29 16:52:23 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,6 +32,7 @@
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
 
+#include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -88,22 +92,25 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
 void DetectorConstruction::DefineMaterials()
 {
- //This function illustrates the possible ways to define materials
-
+  // This function illustrates the possible ways to define materials using 
+  // G4 database on G4Elements
+  G4NistManager* manager = G4NistManager::Instance();
+  manager->SetVerbose(0);
   //
   // define Elements
   //
   G4double z,a;
 
-  G4Element* H  = new G4Element("Hydrogen",  "H" , z= 1.,  a= 1.008*g/mole);
-  G4Element* C  = new G4Element("Carbon",    "C" , z= 6.,  a= 12.01*g/mole);
-  G4Element* N  = new G4Element("Nitrogen",  "N" , z= 7.,  a= 14.01*g/mole);
-  G4Element* O  = new G4Element("Oxygen",    "O" , z= 8.,  a= 16.00*g/mole);
-  G4Element* Si = new G4Element("Silicon",   "Si", z= 14., a= 28.09*g/mole);
-  G4Element* Ge = new G4Element("Germanium", "Ge", z= 32., a= 72.59*g/mole);
-  G4Element* I  = new G4Element("Iodine",    "I" , z= 53., a= 126.90*g/mole);
-  G4Element* Cs = new G4Element("Cesium",    "Cs", z= 55., a= 132.90*g/mole);
-  G4Element* Bi = new G4Element("Bismuth",   "Bi", z= 83., a= 208.98*g/mole);
+  G4Element* H  = manager->FindOrBuildElement(1);
+  G4Element* C  = manager->FindOrBuildElement(6);
+  G4Element* O  = manager->FindOrBuildElement(8);
+  G4Element* Si = manager->FindOrBuildElement(14);
+  G4Element* Ge = manager->FindOrBuildElement(32);
+  G4Element* Sb = manager->FindOrBuildElement(51);
+  G4Element* I  = manager->FindOrBuildElement(53);
+  G4Element* Cs = manager->FindOrBuildElement(55);
+  G4Element* Pb = manager->FindOrBuildElement(82);
+  G4Element* Bi = manager->FindOrBuildElement(83);
 
   //
   // define an Element from isotopes, by relative abundance
@@ -127,13 +134,11 @@ void DetectorConstruction::DefineMaterials()
 
   new G4Material("liquidH2",    z=1.,  a= 1.008*g/mole,  density= 70.8*mg/cm3);
   new G4Material("Aluminium",   z=13., a= 26.98*g/mole,  density= 2.700*g/cm3);
-  new G4Material("liquidArgon", z=18., a= 39.95*g/mole,  density= 1.390*g/cm3);
   new G4Material("Titanium",    z=22., a= 47.867*g/mole, density= 4.54*g/cm3);
   new G4Material("Iron",        z=26., a= 55.85*g/mole,  density= 7.870*g/cm3);
   new G4Material("Copper",      z=29., a= 63.55*g/mole,  density= 8.960*g/cm3);
   new G4Material("Tungsten",    z=74., a= 183.85*g/mole, density= 19.30*g/cm3);
   new G4Material("Gold",        z=79., a= 196.97*g/mole, density= 19.32*g/cm3);
-  new G4Material("Lead",        z=82., a= 207.19*g/mole, density= 11.35*g/cm3);
   new G4Material("Uranium",     z=92., a= 238.03*g/mole, density= 18.95*g/cm3);
 
   //
@@ -167,6 +172,10 @@ void DetectorConstruction::DefineMaterials()
   SiO2->AddElement(Si, natoms=1);
   SiO2->AddElement(O , natoms=2);
 
+  //
+  // define a material from elements.   case 2: compounds
+  //
+
   G4Material* G10 = 
   new G4Material("NemaG10", density= 1.700*g/cm3, ncomponents=4);
   G10->AddElement(Si, natoms=1);
@@ -187,27 +196,29 @@ void DetectorConstruction::DefineMaterials()
   BGO->AddElement(Bi, natoms= 4);
 
   //
-  // define a material from elements.   case 2: mixture by fractional mass
+  // define gaseous materials using G4 NIST database 
   //
   G4double fractionmass;
   
-  G4Material* Air = 
-  new G4Material("Air", density= 1.290*mg/cm3, ncomponents=2);
-  Air->AddElement(N, fractionmass=0.7);
-  Air->AddElement(O, fractionmass=0.3);
+  G4Material* Air = manager->FindOrBuildMaterial("G4_AIR");
+  manager->ConstructNewGasMaterial("Air20","G4_AIR",293.*kelvin, 1.*atmosphere);
 
-  G4Material* Air20 = 
-  new G4Material("Air20", density= 1.205*mg/cm3, ncomponents=2,
-                          kStateGas, 293.*kelvin, 1.*atmosphere);
-  Air20->AddElement(N, fractionmass=0.7);
-  Air20->AddElement(O, fractionmass=0.3);
+  G4Material* lAr = manager->FindOrBuildMaterial("G4_lAr");
+  G4Material* lArEm3 = new G4Material("liquidArgon", density= 1.390*g/cm3, ncomponents=1);
+  lArEm3->AddMaterial(lAr, fractionmass=1.0);
 
   //
   // define a material from elements and others materials (mixture of mixtures)
   //
 
-  G4Material* Aerog = 
-  new G4Material("Aerogel", density= 0.200*g/cm3, ncomponents=3);
+  G4Material* Lead = new G4Material("Lead", density= 11.35*g/cm3, ncomponents=1);
+  Lead->AddElement(Pb, fractionmass=1.0);
+
+  G4Material* LeadSb = new G4Material("LeadSb", density= 11.35*g/cm3, ncomponents=2);
+  LeadSb->AddElement(Sb, fractionmass=4.*perCent);
+  LeadSb->AddElement(Pb, fractionmass=96.*perCent);
+
+  G4Material* Aerog = new G4Material("Aerogel", density= 0.200*g/cm3, ncomponents=3);
   Aerog->AddMaterial(SiO2, fractionmass=62.5*perCent);
   Aerog->AddMaterial(H2O , fractionmass=37.4*perCent);
   Aerog->AddElement (C   , fractionmass= 0.1*perCent);
@@ -245,6 +256,8 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Beam", density, ncomponents=1,
                          kStateGas,temperature,pressure);
   beam->AddMaterial(Air, fractionmass=1.);
+
+  //  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -252,12 +265,12 @@ void DetectorConstruction::DefineMaterials()
 void DetectorConstruction::ComputeCalorParameters()
 {
   // Compute derived parameters of the calorimeter
-     LayerThickness = 0.;
-     for (G4int iAbs=1; iAbs<=NbOfAbsor; iAbs++)
-     LayerThickness += AbsorThickness[iAbs];
-     CalorThickness = NbOfLayers*LayerThickness;
-     
-     WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
+  LayerThickness = 0.;
+  for (G4int iAbs=1; iAbs<=NbOfAbsor; iAbs++) {
+    LayerThickness += AbsorThickness[iAbs];
+  }
+  CalorThickness = NbOfLayers*LayerThickness;     
+  WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -341,17 +354,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   //
 
   G4double xfront = -0.5*LayerThickness;
-  for (G4int k=1; k<=NbOfAbsor; k++)
-     { solidAbsor[k] = new G4Box("Absorber",		//its name
-                          AbsorThickness[k]/2,CalorSizeYZ/2,CalorSizeYZ/2);
+  for (G4int k=1; k<=NbOfAbsor; k++) {
+    solidAbsor[k] = new G4Box("Absorber",		//its name
+			      AbsorThickness[k]/2,CalorSizeYZ/2,CalorSizeYZ/2);
 
-      logicAbsor[k] = new G4LogicalVolume(solidAbsor[k],    //its solid
-      			                  AbsorMaterial[k], //its material
-      			                  AbsorMaterial[k]->GetName());
+    logicAbsor[k] = new G4LogicalVolume(solidAbsor[k],    //its solid
+					AbsorMaterial[k], //its material
+					AbsorMaterial[k]->GetName());
 
-      G4double xcenter = xfront+0.5*AbsorThickness[k];
-      xfront += AbsorThickness[k];
-      physiAbsor[k] = new G4PVPlacement(0,		   //no rotation
+    G4double xcenter = xfront+0.5*AbsorThickness[k];
+    xfront += AbsorThickness[k];
+    physiAbsor[k] = new G4PVPlacement(0,		   //no rotation
       		    	G4ThreeVector(xcenter,0.,0.),      //its position
                         logicAbsor[k],     		   //its logical volume	
                     	AbsorMaterial[k]->GetName(),	   //its name
@@ -359,8 +372,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                         false,             		   //no boulean operat
                         k);               		   //copy number
 
-     }
-     
+  }
+
+
   PrintCalorParameters();
 
   //always return the physical World
@@ -390,10 +404,11 @@ void DetectorConstruction::PrintCalorParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetWorldMaterial(G4String material)
+void DetectorConstruction::SetWorldMaterial(const G4String& material)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(material);
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(material);
   if (pttoMaterial) defaultMaterial = pttoMaterial;
 }
 
@@ -428,17 +443,18 @@ void DetectorConstruction::SetNbOfAbsor(G4int ival)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetAbsorMaterial(G4int ival,G4String material)
+void DetectorConstruction::SetAbsorMaterial(G4int ival, const G4String& material)
 {
   // search the material by its name
   //
-  if (ival > NbOfAbsor)
+  if (ival > NbOfAbsor || ival <= 0)
     { G4cout << "\n --->warning from SetAbsorMaterial: absor number "
              << ival << " out of range. Command refused" << G4endl;
       return;
     }
 
-  G4Material* pttoMaterial = G4Material::GetMaterial(material);
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(material);
   if (pttoMaterial) AbsorMaterial[ival] = pttoMaterial;
 }
 
@@ -448,7 +464,7 @@ void DetectorConstruction::SetAbsorThickness(G4int ival,G4double val)
 {
   // change Absorber thickness
   //
-  if (ival > NbOfAbsor)
+  if (ival > NbOfAbsor || ival <= 0)
     { G4cout << "\n --->warning from SetAbsorThickness: absor number "
              << ival << " out of range. Command refused" << G4endl;
       return;

@@ -1,4 +1,4 @@
-.$Id: History,v 1.103 2005/10/31 18:52:59 duns Exp $
+.$Id: History,v 1.117 2006/06/05 07:58:10 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,40 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+4 June 2006 Joseph Perl  (vis-HepRep-V08-00-04)
+- G4HepRepFileSceneHandler: Bring trajectory points under control of filtering.
+- G4HepRepFileSceneHandler: Correct direction of G4Cons and G4Tubs.
+- G4HepRepFileSceneHandler: Use GetMarkerSize for marks and text.
+- G4HepRepFileSceneHandler: Apply correct units for Density and Radlen.
+- G4HepRepFileSceneHandler: Use BeginPrimitives2D and EndPrimitives2D to be able to cleanly
+  reject cases that don't apply to HepRep: 3D text and 2D lines and markers.
+- G4HepRepFileSceneHandler: Improve handling for case of culled volumes.
+
+2 June 2006 Joseph Perl  (vis-HepRep-V08-00-03)
+- G4HepRepFileSceneHandler: Support 2D Text.
+- G4HepRepFileSceneHandler: Avoid creating Traj or Hit instances if they
+  have no primitives due to filtering.
+- G4HepRepFileSceneHandler: Assign Hits to various HepRepTypes depending on
+  attribute HitType.
+- G4HepRepFileSceneHandler: Support G4VisTrajContext.
+- G4HepRepFileSceneHandler: Include G4Version attribute in HepRep file.
+- G4HepRepFileSceneHandler: Handle Axes and other primitives that are neither
+  transients nor geometry.
+- G4HepRepFileViewer: Call ShowView from destructor to assure file is
+  properly terminated.
+
+22nd May 2006 John Allison (vis-HepRep-V08-00-02)
+- Removed dependency on Run.  (G4HepRepSceneHandler.cc: Version string
+  now obtained directly from G4Version.hh.)
+
+4th May 2006 John Allison (vis-HepRep-V08-00-01)
+- Improved protection for null models and parameters.
+
+19 April 2006 John Allison (vis-HepRep-V08-00-00)
+- G4HepRepSceneHandler and G4HepRepFileSceneHandler: Migrated to direct
+  access to G4PhysicalVolumeModel.
+
 31 October 2005 Mark Donszelmann (vis-HepRep-V07-01-04)
 - Further fix for GEANT-61.
 

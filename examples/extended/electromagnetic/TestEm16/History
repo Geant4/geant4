@@ -1,0 +1,25 @@
+$Id: History,v 1.4 2006/05/24 13:03:05 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm16 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+     
+24-05-06 mma (testem16-V08-00-01)
+- remove PrimaryGeneratorMessenger
+     
+23-05-06 V.Ivant (testem16-V08-00-00)
+- first tag
+     
+20-05-06 
+- created by Helmut Burkhardt

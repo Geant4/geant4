@@ -324,6 +324,69 @@ export OGLHOME
 echo "On this machine the OGLHOME=\$OGLHOME"
 fi 
 
+#+
+if [ X$g4vis_oivhome != X ] ; then
+OIVHOME="$g4vis_oivhome"
+export OIVHOME
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the OIVHOME=\$OIVHOME"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_openglxm_driver != X ] ; then
+XMFLAGS="$g4vis_xmflags"
+export XMFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_openglxm_driver != X ] ; then
+XMLIBS="$g4vis_xmlibs"
+export XMLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMLIBS=\$XMLIBS"
+fi
+fi 
+
+#+
+if [ X$g4ui_build_xm_session != X ] ; then
+XMFLAGS="$g4vis_xmflags"
+export XMFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMFLAGS=\$XMFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4vis_build_xm_session != X ] ; then
+XMLIBS="$g4vis_xmlibs"
+export XMLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XMLIBS=\$XMLIBS"
+fi
+fi 
+
+#+
+if [ X$g4ui_build_xaw_session != X ] ; then
+XAWFLAGS="$g4ui_xawflags"
+export XAWFLAGS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XAWFLAGS=\$XAWFLAGS"
+fi
+fi 
+
+#+
+if [ X$g4ui_build_xaw_session != X ] ; then
+XAWLIBS="$g4ui_xawlibs"
+export XAWLIBS
+if [ X\$g4non_display = X ] ; then
+echo "On this machine the XAWLIBS=\$XAWLIBS"
+fi
+fi 
+
 #
 # Use G3TOG4 module
 #

@@ -1,0 +1,17 @@
+LIST
+C
+C       csda range of the primary particle
+C 
+CALOR   3 (water) 10. (cm) 0. (field)
+TRIG    20000
+KINE    14 (proton)   0.1 (GeV)  1. (xBeam)
+DEBUG   10  5 2000
+SWIT    0 (draw) 0 (save)
+C
+CUTS    10.e-6 (cutgam)    10.e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.e+3 (bcute/m) 2*10.e+3 (dcute/m)   10.e-3 (ppcutm)
+MULS    0
+LOSS    4
+C
+ABAN    0
+TIME    2=1.

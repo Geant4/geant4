@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.22 2005/06/02 17:43:46 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.29 2006/06/29 21:17:08 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 //
 // Joseph Perl  27th January 2002
@@ -52,6 +55,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4ModelingParameters;
+class G4VisTrajContext;
 
 class G4HepRepFileSceneHandler: public G4VSceneHandler {
 
@@ -74,7 +78,9 @@ public:
   void AddSolid(const G4Polyhedra&);
   void AddSolid(const G4VSolid&);
   void AddCompound (const G4VTrajectory&);
+  void InitTrajectory();
   void AddCompound (const G4VHit&);
+  void InitHit();
   // void PreAddSolid(const G4Transform3D& objectTransformation,
   //                 const G4VisAttributes&);
   // void PostAddSolid();
@@ -107,6 +113,9 @@ public:
 
   void BeginModeling();
   void EndModeling();
+  
+  void BeginPrimitives2D();
+  void EndPrimitives2D();
 
   //////////////////////////////////////////////////////////////
   // Administration functions.
@@ -133,9 +142,22 @@ private:
   G4bool fileOverwrite;
   G4bool cullInvisibleObjects;
   G4bool haveVisible;
+  G4bool inPrimitives2D;
+  G4bool warnedAbout3DText;
+  G4bool warnedAbout2DMarkers;
   G4bool drawingTraj;
+  G4bool doneInitTraj;
+  G4bool drawTrajPts;
   G4bool drawingHit;
-
+  G4bool doneInitHit;
+  
+  const G4VisTrajContext* trajContext;
+  
+  std::vector<G4AttValue>* trajAttValues;
+  std::map<G4String,G4AttDef>* trajAttDefs;
+  std::vector<G4AttValue>* hitAttValues;
+  std::map<G4String,G4AttDef>* hitAttDefs;
+  
 #ifdef G4HEPREPFILEDEBUG
   void PrintThings();
 #endif

@@ -365,9 +365,9 @@ INPUT                  = include \
                          src \
                          ../modeling/include \
                          ../modeling/src \
-                         ../../intercoms/include/G4VGraphicsScene.hh \
-                         ../../intercoms/include/G4VVisManager.hh \
-                         ../../intercoms/src/G4VVisManager.cc
+                         ../../graphics_reps/include/G4VGraphicsScene.hh \
+                         ../../graphics_reps/include/G4VVisManager.hh \
+                         ../../graphics_reps/src/G4VVisManager.cc
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 

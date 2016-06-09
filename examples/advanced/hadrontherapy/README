@@ -171,13 +171,12 @@ to visualise the experimental set-up with OpenGL
 
 Both electromagnetic and hadronic physic processes are activated for the particles of the
 experimental set-up.
-Different physics models can b activated by the user.
+Different physics models can be activated by the user interactively.
 Examples of activation are provided in the macro files.
 - protonEMLowEnergy.mac: example to activate e.m. low energy physics with different 
 stopping power models for protons
-- protonEMStandard.mac: example to activate the e.m. standard physics.
+- protonEMStandard.mac: example to activate the e.m. standard physics
 
-	
 ---->6. SIMULATION OUTPUT                                    
 
 The output is an .hbk file (hadrontherapy.hbk) produced 
@@ -189,7 +188,7 @@ by the proton beam (in MeV) versus the depth in water (in mm).
 The n-tuple contains the total 3D energy deposit in the phantom; the information
 is energy deposit in each voxel with respect to the position of the voxel.
 
-Setup for analysis: AIDA 3.2.1, PI 1.3.3.                                
+Setup for analysis: AIDA 3.2.1, PI 1.3.8.  
 
 Users can download the analysis tools from:  
 http://aida.freehep.org/
@@ -204,5 +203,5 @@ a different format.
 for comments, advices, doubts and questions please contact: 
 cirrone@lns.infn.it, giorgiorusso@lns.infn.it
 
-last modified: G.A.P. Cirrone, 3/06/2005
+last modified: S. Guatelli, 30/05/2006
 

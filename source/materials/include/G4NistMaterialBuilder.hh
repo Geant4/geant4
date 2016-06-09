@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.hh,v 1.4 2005/10/31 11:35:25 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4NistMaterialBuilder.hh,v 1.8 2006/06/29 19:12:00 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 
 #ifndef G4NistMaterialBuilder_h
 #define G4NistMaterialBuilder_h 1
@@ -32,11 +35,12 @@
 //
 // Description: Utility class to hold and manipulate G4Materials
 //
-// Author:      V.Ivanchenko 21-11-2004
+// Author:      V.Ivanchenko 21.11.2004
 //
 // Modifications:
-// 31-10-2005 Add chemical effect and gas properties (V.Ivanchenko)
-//
+// 31.10.05 Add chemical effect and gas properties (V.Ivanchenko)
+// 27.02.06 V.Ivanchneko add ConstructNewGasMaterial
+// 11.05.06 V.Ivanchneko add warning flag to FindMaterial method
 //
 //----------------------------------------------------------------------------
 //
@@ -64,25 +68,33 @@ public:
   G4NistMaterialBuilder(G4NistManager* mm=0, G4NistElementBuilder* eb=0,
                         G4int verb=0);
 			
- ~G4NistMaterialBuilder();
+  ~G4NistMaterialBuilder();
  
   // Find or build a G4Material by name, from dataBase
   //
-  G4Material* FindOrBuildMaterial (const G4String& name, G4bool isotopes=true);
+  G4Material* FindOrBuildMaterial (const G4String& name, G4bool isotopes=true,
+				   G4bool warning=false);
 					    
   // construct a G4Material from scratch by atome count
   // 
   G4Material* ConstructNewMaterial (const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4int>& nbAtoms,
-				      G4double dens, G4bool isotopes=true);
+				    const std::vector<G4String>& elm,
+				    const std::vector<G4int>& nbAtoms,
+				    G4double dens, G4bool isotopes=true);
 				      
   // construct a G4Material from scratch by fraction mass
   //
   G4Material* ConstructNewMaterial (const G4String& name,
-                                      const std::vector<G4String>& elm,
-                                      const std::vector<G4double>& weight,
-				      G4double dens, G4bool isotopes=true);
+				    const std::vector<G4String>& elm,
+				    const std::vector<G4double>& weight,
+				    G4double dens, G4bool isotopes=true);
+
+  // construct a gas G4Material from scratch by atome count
+  // 
+  G4Material* ConstructNewGasMaterial(const G4String& name, 
+				      const G4String& nameNist,
+				      G4double temp, G4double pres, 
+				      G4bool isotopes=true);
 
   void SetVerbose(G4int val);
   void ListMaterials(const G4String&);
@@ -99,7 +111,9 @@ private:
 
   void AddMaterial(const G4String& nameMat, G4double dens, G4int Z=0,
                          G4double pot=0.0, G4int ncomp=1,
-                         G4State=kStateSolid);
+                         G4State=kStateSolid,
+                         G4double temp=STP_Temperature,
+                         G4double pres=STP_Pressure);
 
   void AddChemicalFormula(const G4String& nameMat, const G4String& ch);
   void AddGas(const G4String& nameMat, G4double t=STP_Temperature,

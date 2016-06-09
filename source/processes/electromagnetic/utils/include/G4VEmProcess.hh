@@ -1,27 +1,30 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.29 2005/10/25 11:38:15 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4VEmProcess.hh,v 1.33 2006/06/29 19:54:45 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // -------------------------------------------------------------------
 //
@@ -39,11 +42,14 @@
 // 09-08-04 optimise integral option (V.Ivanchenko)
 // 11-08-04 add protected methods to access cuts (V.Ivanchenko)
 // 09-09-04 Bug fix for the integral mode with 2 peaks (V.Ivanchneko)
-// 16-09-04 Add flag for LambdaTable and method RecalculateLambda (V.Ivanchneko)
+// 16-09-04 Add flag for LambdaTable and method RecalculateLambda (VI)
 // 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
-// 09-05-05 Fix problem in logic when path boundary between materials (V.Ivantchenko)
+// 09-05-05 Fix problem in logic when path boundary between materials (VI)
+// 11-01-06 add A to parameters of ComputeCrossSectionPerAtom (VI)
+// 01-02-06 put default value A=0. to keep compatibility with v5.2 (mma)
+// 13-05-06 Add method to access model by index (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -167,7 +173,8 @@ public:
                              const G4MaterialCutsCouple* couple);
   // It returns the cross section of the process for energy/ material
 
-  G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, G4double Z);
+  G4double ComputeCrossSectionPerAtom(G4double kineticEnergy, 
+				      G4double Z, G4double A=0.);
   // It returns the cross section of the process per atom
 
   G4double MeanFreePath(     const G4Track& track,
@@ -179,12 +186,16 @@ public:
 
   void ActivateDeexcitation(G4bool, const G4Region* r = 0);
 
-  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
+  G4VEmModel* SelectModelForMaterial(G4double kinEnergy, 
+				     size_t& idxRegion) const;
 
   void SetIntegral(G4bool val);
   G4bool IsIntegral() const;
 
   void SetApplyCuts(G4bool val);
+
+  // Access to models
+  G4VEmModel* GetModelByIndex(G4int idx = 0);
   
 protected:
 
@@ -449,6 +460,13 @@ inline G4double G4VEmProcess::GetElectronEnergyCut()
 inline void G4VEmProcess::SetLambdaFactor(G4double val)
 {
   if(val > 0.0 && val <= 1.0) lambdaFactor = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx)
+{
+  return modelManager->GetModel(idx);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.13 2005/01/27 20:06:37 johna Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.17 2006/06/29 21:30:36 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // John Allison  10th August 1998.
@@ -50,7 +53,9 @@ class G4PhysicalVolumeSearchScene: public G4VGraphicsScene {
 
 public:
   G4PhysicalVolumeSearchScene
-  (const G4String& requiredPhysicalVolumeName, G4int requiredCopyNo);
+  (G4PhysicalVolumeModel*,
+   const G4String& requiredPhysicalVolumeName,
+   G4int requiredCopyNo);
   virtual ~G4PhysicalVolumeSearchScene ();
   void PreAddSolid (const G4Transform3D& objectTransformation,
 		    const G4VisAttributes&);
@@ -68,7 +73,6 @@ public:
   void AddSolid (const G4VSolid& s) {FindVolume (s);}
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
-  void EstablishSpecials (G4PhysicalVolumeModel&);
   G4int                GetFoundDepth          () const;
   G4VPhysicalVolume*   GetFoundVolume         () const;
   const G4Transform3D& GetFoundTransformation () const;
@@ -78,6 +82,8 @@ public:
 
   virtual void BeginPrimitives (const G4Transform3D&) {}
   virtual void EndPrimitives () {}
+  virtual void BeginPrimitives2D () {}
+  virtual void EndPrimitives2D () {}
   virtual void AddPrimitive (const G4Polyline&)   {}
   virtual void AddPrimitive (const G4Scale&)       {}
   virtual void AddPrimitive (const G4Text&)       {}
@@ -89,12 +95,9 @@ public:
 
 private:
   void FindVolume (const G4VSolid&);
+  const G4PhysicalVolumeModel* fpPVModel;
   G4String             fRequiredPhysicalVolumeName;
   G4int                fRequiredCopyNo;
-  G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
-  G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
-  G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
-  G4Material*      fpCurrentMaterial;  // Current material.
   const G4Transform3D* fpCurrentObjectTransformation;
   G4int                fFoundDepth;                  // Found depth.
   G4VPhysicalVolume*   fpFoundPV;                    // Found physical volume.

@@ -1,30 +1,33 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.28 2005/08/12 13:36:47 maire Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4UnitsTable.cc,v 1.34 2006/06/29 19:04:32 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // 17-05-98: first version, M.Maire
 // 05-08-98: angstrom,microbarn,picobarn,petaelectronvolt, M.Maire
@@ -33,9 +36,13 @@
 // 06-03-01: migration to STL vectors, G.Cosmo
 // 06-05-02: BestUnit operator<<  flux instead of G4cout (mma)
 // 12-08-05: cm2/g ("Surface/Mass")  (mma)
+// 30-06-05: um for micrometer (mma)
+// 07-02-06: GeV/cm MeV/cm keV/cm eV/cm ("Energy/Length")  (mma)
+// 15-02-06: g/cm2 ("Mass/Surface")
+//           MeV*cm2/g ..etc.. ("Energy*Surface/Mass")
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
  
 #include "G4UnitsTable.hh"
@@ -45,9 +52,10 @@
 
 G4UnitsTable G4UnitDefinition::theUnitsTable;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4UnitDefinition::G4UnitDefinition(const G4String& name, const G4String& symbol,
+G4UnitDefinition::G4UnitDefinition(const G4String& name,
+                                   const G4String& symbol,
                                    const G4String& category, G4double value)
   : Name(name),SymbolName(symbol),Value(value)   
 {
@@ -68,7 +76,7 @@ G4UnitDefinition::G4UnitDefinition(const G4String& name, const G4String& symbol,
     theUnitsTable[i]->UpdateSymbMxLen((G4int)symbol.length());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition::~G4UnitDefinition()
 {
@@ -76,16 +84,17 @@ G4UnitDefinition::~G4UnitDefinition()
   {
     delete theUnitsTable[i];
   }
+  theUnitsTable.clear();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition::G4UnitDefinition(const G4UnitDefinition& right)
 {
     *this = right;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition& G4UnitDefinition::operator=(const G4UnitDefinition& right)
 {
@@ -99,28 +108,28 @@ G4UnitDefinition& G4UnitDefinition::operator=(const G4UnitDefinition& right)
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4int G4UnitDefinition::operator==(const G4UnitDefinition& right) const
 {
   return (this == (G4UnitDefinition *) &right);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4int G4UnitDefinition::operator!=(const G4UnitDefinition &right) const
 {
   return (this != (G4UnitDefinition *) &right);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitsTable& G4UnitDefinition::GetUnitsTable()
 {
   return theUnitsTable;
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4double G4UnitDefinition::GetValueOf(const G4String& str)
 {
@@ -142,7 +151,7 @@ G4double G4UnitDefinition::GetValueOf(const G4String& str)
   return 0.;             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4String G4UnitDefinition::GetCategory(const G4String& str)
 {
@@ -165,7 +174,7 @@ G4String G4UnitDefinition::GetCategory(const G4String& str)
   return name;             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4UnitDefinition::PrintDefinition()
 {
@@ -175,7 +184,7 @@ void G4UnitDefinition::PrintDefinition()
          << std::setw(symbL) << SymbolName << ") = " << Value << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4UnitDefinition::BuildUnitsTable()
 {
@@ -185,7 +194,7 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition(     "meter","m"       ,"Length",meter);
  new G4UnitDefinition("centimeter","cm"      ,"Length",centimeter); 
  new G4UnitDefinition("millimeter","mm"      ,"Length",millimeter);
- //new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
+ new G4UnitDefinition("micrometer","um"      ,"Length",micrometer);
  new G4UnitDefinition("micrometer","mum"     ,"Length",micrometer);
  new G4UnitDefinition( "nanometer","nm"      ,"Length",nanometer);
  new G4UnitDefinition(  "angstrom","Ang"     ,"Length",angstrom);    
@@ -239,6 +248,12 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("petaelectronvolt","PeV","Energy",petaelectronvolt);
  new G4UnitDefinition(           "joule","J"  ,"Energy",joule);
  
+ // Energy/Length
+ new G4UnitDefinition( "GeV/cm", "GeV/cm","Energy/Length", GeV/cm);
+ new G4UnitDefinition( "MeV/cm", "MeV/cm","Energy/Length", MeV/cm);
+ new G4UnitDefinition( "keV/cm", "keV/cm","Energy/Length", keV/cm);
+ new G4UnitDefinition(  "eV/cm",  "eV/cm","Energy/Length",  eV/cm); 
+  
  //Mass
  new G4UnitDefinition("milligram","mg","Mass",milligram);
  new G4UnitDefinition(     "gram","g" ,"Mass",gram);
@@ -249,9 +264,20 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("mg/cm3","mg/cm3","Volumic Mass",mg/cm3);
  new G4UnitDefinition("kg/m3", "kg/m3", "Volumic Mass",kg/m3);
  
- //Surface/Mass
+ // Mass/Surface
+ new G4UnitDefinition(  "g/cm2",  "g/cm2","Mass/Surface",  g/cm2);
+ new G4UnitDefinition( "mg/cm2", "mg/cm2","Mass/Surface", mg/cm2);
+ new G4UnitDefinition( "kg/cm2", "kg/cm2","Mass/Surface", kg/cm2);
+   
+ // Surface/Mass
  new G4UnitDefinition( "cm2/g", "cm2/g","Surface/Mass", cm2/g);
-  
+ 
+ // Energy.Surface/Mass
+ new G4UnitDefinition( "eV*cm2/g", " eV*cm2/g","Energy*Surface/Mass", eV*cm2/g);
+ new G4UnitDefinition("keV*cm2/g", "keV*cm2/g","Energy*Surface/Mass",keV*cm2/g);
+ new G4UnitDefinition("MeV*cm2/g", "MeV*cm2/g","Energy*Surface/Mass",MeV*cm2/g);
+ new G4UnitDefinition("GeV*cm2/g", "GeV*cm2/g","Energy*Surface/Mass",GeV*cm2/g);
+     
  //Power
  new G4UnitDefinition("watt","W","Power",watt);
  
@@ -296,7 +322,7 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("gray","Gy","Dose",gray);                          
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4UnitDefinition::PrintUnitsTable()
 {
@@ -307,27 +333,27 @@ void G4UnitDefinition::PrintUnitsTable()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
    
 G4UnitsCategory::G4UnitsCategory(const G4String& name)
   : Name(name),UnitsList(),NameMxLen(0),SymbMxLen(0)
 {
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitsCategory::~G4UnitsCategory()
 {
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitsCategory::G4UnitsCategory(const G4UnitsCategory& right)
 {
   *this = right;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitsCategory& G4UnitsCategory::operator=(const G4UnitsCategory& right)
 {
@@ -341,21 +367,21 @@ G4UnitsCategory& G4UnitsCategory::operator=(const G4UnitsCategory& right)
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4int G4UnitsCategory::operator==(const G4UnitsCategory& right) const
 {
   return (this == (G4UnitsCategory *) &right);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4int G4UnitsCategory::operator!=(const G4UnitsCategory &right) const
 {
   return (this != (G4UnitsCategory *) &right);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4UnitsCategory::PrintCategory()
 {
@@ -364,7 +390,7 @@ void G4UnitsCategory::PrintCategory()
     { UnitsList[i]->PrintDefinition(); }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
        
 G4BestUnit::G4BestUnit(G4double value, const G4String& category)
   : nbOfVals(1)
@@ -388,7 +414,7 @@ G4BestUnit::G4BestUnit(G4double value, const G4String& category)
     IndexOfCategory = i;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
        
 G4BestUnit::G4BestUnit(const G4ThreeVector& value, const G4String& category)
   : nbOfVals(3)
@@ -411,12 +437,12 @@ G4BestUnit::G4BestUnit(const G4ThreeVector& value, const G4String& category)
     Value[2] = value.z();
     IndexOfCategory = i;
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4BestUnit::~G4BestUnit()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4BestUnit::operator G4String () const
 {
@@ -425,7 +451,7 @@ G4BestUnit::operator G4String () const
   return oss.str();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
 {
@@ -474,4 +500,4 @@ std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
   return flux;
 }       
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

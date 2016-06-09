@@ -1,59 +1,54 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4XXXSceneHandler.cc,v 1.25 2005/11/22 16:25:07 allison Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4XXXSceneHandler.cc,v 1.31 2006/06/29 21:27:44 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // 
 // John Allison  5th April 2001
-// A base class for a scene handler to dump geometry hierarchy.
-// Based on a provisional G4XXXGraphicsScene (was in modeling).
+// A template for a simplest possible graphics driver.
+//?? Lines or sections marked like this require specialisation for your driver.
 
 #include "G4XXXSceneHandler.hh"
 
-#include "G4Box.hh"
-#include "G4Cons.hh"
-#include "G4Tubs.hh"
-#include "G4Trd.hh"
-#include "G4Trap.hh"
-#include "G4Sphere.hh"
-#include "G4Para.hh"
-#include "G4Torus.hh"
-#include "G4Polycone.hh"
-#include "G4Polyhedra.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-#include "G4ModelingParameters.hh"
 #include "G4Polyline.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
+/*
 #include "G4NURBS.hh"
 #include "G4VTrajectory.hh"
 #include "G4AttDef.hh"
 #include "G4AttValue.hh"
+*/
+#include "G4UnitsTable.hh"
 
 G4int G4XXXSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
@@ -69,269 +64,56 @@ G4XXXSceneHandler::~G4XXXSceneHandler() {}
 void G4XXXSceneHandler::PrintThings() {
   G4cout <<
     "  with transformation "
-	 << (void*)fpObjectTransformation
-	 << " from " << fpModel->GetCurrentDescription()
-	 << " (tag " << fpModel->GetCurrentTag()
-	 << ')';
-  if (fpCurrentPV) {
+         << (void*)fpObjectTransformation;
+  if (fpModel) {
+    G4cout << " from " << fpModel->GetCurrentDescription()
+	   << " (tag " << fpModel->GetCurrentTag()
+	   << ')';
+  } else {
+    G4cout << "(not from a model)";
+  }
+  G4PhysicalVolumeModel* pPVModel =
+    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+  if (pPVModel) {
     G4cout <<
       "\n  current physical volume: "
-	   << fpCurrentPV->GetName() <<
+           << pPVModel->GetCurrentPV()->GetName() <<
       "\n  current logical volume: "
-	   << fpCurrentLV->GetName() <<
+           << pPVModel->GetCurrentLV()->GetName() <<
       "\n  current depth of geometry tree: "
-	   << fCurrentDepth;
+           << pPVModel->GetCurrentDepth();
   }
   G4cout << G4endl;
 }
 #endif
 
-#include <vector>
-std::vector<std::pair<G4VPhysicalVolume*, G4int> > fPVPath;
-typedef
-std::vector<std::pair<G4VPhysicalVolume*, G4int> >::const_iterator
-PVPath_const_iterator;
-
-void G4XXXSceneHandler::PreAddSolid
-(const G4Transform3D&, const G4VisAttributes&) {
-  using namespace std;
-  G4cout <<
-    "Current PV/LV/depth: "
-	 << fpCurrentPV->GetName() <<
-    "/"
-	 << fpCurrentLV->GetName() <<
-    "/"
-	 << fCurrentDepth
-	 << G4endl;
-  // How to establish a tree (even when some volumes have been
-  // culled)...
-  static G4int lastDepth = 0;
-  static G4LogicalVolume* lastMotherLV = 0;
-  G4int copyNo = fpCurrentPV->GetCopyNo();
-  if (fCurrentDepth > lastDepth) {
-    while (fCurrentDepth > lastDepth++) {
-      fPVPath.push_back(make_pair((G4VPhysicalVolume*)0,0));
-    }
-    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
-  } else if (fCurrentDepth == lastDepth) {
-    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
-  } else {
-    while (fCurrentDepth < lastDepth--) {
-      fPVPath.pop_back();
-    }
-    fPVPath.back() = make_pair(fpCurrentPV,copyNo);
-  }
-  lastDepth = fCurrentDepth;
-  lastMotherLV = fpCurrentPV->GetMotherLogical();
-
-  // Debug printing...
-  for (PVPath_const_iterator i = fPVPath.begin(); i != fPVPath.end(); ++i) {
-    if ((*i).first) {
-    G4cout << '/' << (*i).first->GetName();
-    } else {
-      G4cout << 0;
-    }
-    G4cout << ':' << (*i).second;
-  }
-  G4cout << G4endl;
-
-  /***********************************************
-  fLVSet.insert(fpCurrentLV);
-  G4LogicalVolume* motherLV = fpCurrentPV->GetMotherLogical();
-  if (motherLV) {
-    if (fLVSet.find(motherLV) == fLVSet.end()) {
-      // Mother not previously encountered - must have been culled.
-      G4cout << "Mother LV \"" << motherLV->GetName()
-	     << "\" not found." << G4endl;
-      // Search back up hierarchy...
-      do {
-	G4LogicalVolume* possibleMotherLV = 0;
-	G4LogicalVolumeStore* Store = G4LogicalVolumeStore::GetInstance();
-	for ( size_t LV=0; LV < Store->size(); LV++ ) {
-	  G4LogicalVolume* aLogVol = (*Store)[LV];
-	  if(aLogVol != this) {  // Don't look for it inside itself!
-	    for (G4int daughter=0; daughter < aLogVol->GetNoDaughters(); daughter++ ) {
-		  if( aLogVol->GetDaughter(daughter)->GetLogicalVolume()==this )
-		    { 
-		      // aLogVol is the mother !!!
-		      //
-		      motherLogVol = aLogVol;
-		      break;
-		    }
-		}
-	    }
-	}
-	motherLV = motherLV->GetPhysicalVolume()->GetMotherLogical(); 	
-      } while (motherLV && fLVSet.find(motherLV) == fLVSet.end());
-      G4cout << "Mother LV \"" << motherLV->GetName()
-	     << "\" found." << G4endl;
-    }
-  }
-  ****************************************/
-
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Box& box) {
+void G4XXXSceneHandler::AddPrimitive(const G4Polyline&
 #ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Box& box) called for "
-	 << box.GetName()
-	 << G4endl;
-  PrintThings();
+ polyline
 #endif
-  G4VSceneHandler::AddSolid(box);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Cons& cons) {
+) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Cons& cons) called for "
-	 << cons.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(cons);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Tubs& tubs) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Tubs& tubs) called for "
-	 << tubs.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(tubs);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Trd& trd) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Trd& trd) called for "
-	 << trd.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(trd);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Trap& trap) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Trap& trap) called for "
-	 << trap.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(trap);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Sphere& sphere) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Sphere& sphere) called for "
-	 << sphere.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(sphere);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Para& para) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Para& para) called for "
-	 << para.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(para);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Torus& torus) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Torus& torus) called for "
-	 << torus.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(torus);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Polycone& polycone) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Polycone& polycone) called for "
-	 << polycone.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(polycone);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4Polyhedra& polyhedra) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Polyhedra& polyhedra) called for "
-	 << polyhedra.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(polyhedra);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddSolid(const G4VSolid& solid) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddSolid(const G4Solid& solid) called for "
-	 << solid.GetName()
-	 << G4endl;
-  PrintThings();
-#endif
-  G4VSceneHandler::AddSolid(solid);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddCompound(const G4VTrajectory& traj) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddCompound(const G4VTrajectory& traj) called."
-	 << G4endl;
-#endif
-
-  G4VSceneHandler::AddCompound(traj);  // Draw trajectory in good old way for now.
-
-  traj.ShowTrajectory();
-  G4cout << G4endl;
-}
-
-void G4XXXSceneHandler::AddCompound(const G4VHit& hit) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddCompound(const G4VHit& hit) called."
-	 << G4endl;
-#endif
-  G4VSceneHandler::AddCompound(hit);  // Invoke default action.
-}
-
-void G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) {
-#ifdef G4XXXDEBUG
-  G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) called:"
-    "\n  polyline: " << polyline
+    "G4XXXSceneHandler::AddPrimitive(const G4Polyline& polyline) called.\n"
+	 << polyline
 	 << G4endl;
   PrintThings();
 #endif
   // Get vis attributes - pick up defaults if none.
   //const G4VisAttributes* pVA =
   //  fpViewer -> GetApplicableVisAttributes (polyline.GetVisAttributes ());
+  //?? Process polyline.
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
+void G4XXXSceneHandler::AddPrimitive(const G4Text&
+#ifdef G4XXXDEBUG
+ text
+#endif
+) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Text& text) called:"
-    "\n  text: " << text.GetText()
+    "G4XXXSceneHandler::AddPrimitive(const G4Text& text) called.\n"
+	 << text
 	 << G4endl;
   PrintThings();
 #endif
@@ -340,12 +122,19 @@ void G4XXXSceneHandler::AddPrimitive(const G4Text& text) {
   // specified independent of default vis attributes of other types of
   // visible objects.
   //const G4Colour& c = GetTextColour (text);  // Picks up default if none.
+  //?? Process text.
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
+void G4XXXSceneHandler::AddPrimitive(const G4Circle&
+#ifdef G4XXXDEBUG
+ circle
+#endif
+) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) called:\n  ";
+    "G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) called.\n"
+	 << circle
+	 << G4endl;
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (circle, sizeType);
   switch (sizeType) {
@@ -365,12 +154,19 @@ void G4XXXSceneHandler::AddPrimitive(const G4Circle& circle) {
   // Get vis attributes - pick up defaults if none.
   //const G4VisAttributes* pVA =
   //  fpViewer -> GetApplicableVisAttributes (circle.GetVisAttributes ());
+  //?? Process circle.
 }
 
-void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
+void G4XXXSceneHandler::AddPrimitive(const G4Square&
+#ifdef G4XXXDEBUG
+ square
+#endif
+) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Square& square) called:\n  ";
+    "G4XXXSceneHandler::AddPrimitive(const G4Square& square) called.\n"
+	 << square
+	 << G4endl;
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (square, sizeType);
   switch (sizeType) {
@@ -390,16 +186,18 @@ void G4XXXSceneHandler::AddPrimitive(const G4Square& square) {
   // Get vis attributes - pick up defaults if none.
   //const G4VisAttributes* pVA =
   //  fpViewer -> GetApplicableVisAttributes (square.GetVisAttributes ());
+  //?? Process square.
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 #ifdef G4XXXDEBUG
   G4cout <<
-    "G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) called."
+    "G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) called.\n"
+	 << polyhedron
 	 << G4endl;
   PrintThings();
 #endif
-
+  //?? Process polyhedron.  Here are some ideas...
   //Assume all facets are convex quadrilaterals.
   //Draw each G4Facet individually
   
@@ -438,12 +236,11 @@ void G4XXXSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
     }     
   }
 
-  //Loop through all the facets...
+  // Loop through all the facets...
 
   // Look at G4OpenGLSceneHandler::AddPrimitive(const G4Polyhedron&)
   // for an example of how to get facets out of a G4Polyhedron,
   // including how to cope with triangles if that's a problem.
-
 }
 
 void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
@@ -453,20 +250,5 @@ void G4XXXSceneHandler::AddPrimitive(const G4NURBS&) {
 	 << G4endl;
   PrintThings();
 #endif
-  // Get vis attributes - pick up defaults if none.
-  //const G4VisAttributes* pVA =
-  //  fpViewer -> GetApplicableVisAttributes (nurbs.GetVisAttributes ());
-}
-
-void G4XXXSceneHandler::ClearTransientStore () {
-  G4VSceneHandler::ClearTransientStore ();
-  // This is typically called after an update and before drawing hits
-  // of the next event.  To simulate the clearing of "transients"
-  // (hits, etc.) in a system without a graphical database, the
-  // detector is redrawn...
-  if (fpViewer) {
-    fpViewer -> SetView ();
-    fpViewer -> ClearView ();
-    fpViewer -> DrawView ();
-  }
+  //?? Don't bother implementing this.  NURBS are not functional.
 }

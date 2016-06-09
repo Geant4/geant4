@@ -22,6 +22,9 @@
 * History                  
 * -------                                            
 *
+*  11-01-06 : suppress divisions. suppress particle flux calculation.
+              histo 10->12 moved to 7->9
+	      change binning of run01.dat
 *  27-08-01 : added histo 21 and 22 : edep distribution
 *  08-02-99 : adapted for Geant4 comparison: electromagnetic/test/TestEm2
 *  17-02-98 : adapted to Unix + interactive + graphic

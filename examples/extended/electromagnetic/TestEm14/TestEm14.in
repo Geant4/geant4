@@ -1,0 +1,27 @@
+# $Id: TestEm14.in,v 1.3 2006/05/10 11:15:33 maire Exp $
+#
+# Macro file for "TestEm14.cc"
+# (can be run in batch, without graphic)
+#
+# all processes
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+#### /testem/det/setSize 100 m
+#
+#### /testem/phys/addPhysics livermore
+#### /testem/phys/addPhysics penelope
+#
+/run/initialize
+#
+/gun/particle gamma
+/gun/energy 100 keV
+#
+/run/beamOn 100000
+#
+/gun/particle e-
+/gun/energy 100 MeV
+#
+/run/beamOn 100000

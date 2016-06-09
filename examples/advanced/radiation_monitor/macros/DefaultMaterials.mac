@@ -1,0 +1,78 @@
+/radmon/materials/CreateElement  Hydrogen H  1.  1.01   g/mole
+/radmon/materials/CreateElement  Carbon   C  6.  12.01  g/mole
+/radmon/materials/CreateElement  Nitrogen N  7.  14.01  g/mole
+/radmon/materials/CreateElement  Oxygen   O  8.  16.00  g/mole
+/radmon/materials/CreateElement  Sodium   Na 11. 22.99  g/mole
+/radmon/materials/CreateElement  Aluminum Al 13. 26.98  g/mole
+/radmon/materials/CreateElement  Silicon  Si 14. 28.09  g/mole
+/radmon/materials/CreateElement  Argon    Ar 18. 39.95  g/mole
+/radmon/materials/CreateElement  Calcium  Ca 20. 40.08  g/mole
+/radmon/materials/CreateElement  Iron     Fe 26. 55.85  g/mole
+/radmon/materials/CreateElement  Copper   Cu 29  63.55  g/mole
+/radmon/materials/CreateElement  Tungsten W  74. 183.84 g/mole
+/radmon/materials/CreateElement  Gold     Au 79. 196.97 g/mole
+/radmon/materials/CreateElement  Lead     Pb 82. 207.20 g/mole
+
+/radmon/materials/CreateMaterial Aluminum 2.700 g/cm3 1
+/radmon/materials/AddComponentByFraction Aluminum Aluminum 1
+/radmon/materials/SetMaterialColor Aluminum .7 .7 .7
+/radmon/materials/SetMaterialTrasparency Aluminum 1.
+/radmon/materials/SetMaterialVisibility Aluminum visible
+/radmon/materials/SetMaterialStyle Aluminum solid
+
+/radmon/materials/CreateMaterial Tungsten 18.82 g/cm3 1
+/radmon/materials/AddComponentByFraction Tungsten Tungsten 1
+/radmon/materials/SetMaterialColor Tungsten .4 .4 .4
+/radmon/materials/SetMaterialTrasparency Tungsten 1.
+/radmon/materials/SetMaterialVisibility Tungsten visible
+/radmon/materials/SetMaterialStyle Tungsten solid
+
+/radmon/materials/CreateMaterial Copper 8.960 g/cm3 1
+/radmon/materials/AddComponentByFraction Copper Copper 1
+/radmon/materials/SetMaterialColor Copper .8 .4 .0
+/radmon/materials/SetMaterialTrasparency Copper 1.
+/radmon/materials/SetMaterialVisibility Copper visible
+/radmon/materials/SetMaterialStyle Copper solid
+
+/radmon/materials/CreateMaterial Gold 19.32 g/cm3 1
+/radmon/materials/AddComponentByFraction Gold Gold 1
+/radmon/materials/SetMaterialColor Gold .8 .6 .2
+/radmon/materials/SetMaterialTrasparency Gold 1.
+/radmon/materials/SetMaterialVisibility Gold visible
+/radmon/materials/SetMaterialStyle Gold solid
+
+/radmon/materials/CreateMaterial Water 1.000 g/cm3 2
+/radmon/materials/AddComponentByAtoms Water Hydrogen 2
+/radmon/materials/AddComponentByAtoms Water Oxygen 1
+
+/radmon/materials/CreateMaterial EpoxyGlass 1.82 g/cm3 7
+/radmon/materials/AddComponentByFraction EpoxyGlass Oxygen   0.392
+/radmon/materials/AddComponentByFraction EpoxyGlass Silicon  0.231
+/radmon/materials/AddComponentByFraction EpoxyGlass Carbon   0.112
+/radmon/materials/AddComponentByFraction EpoxyGlass Copper   0.10
+/radmon/materials/AddComponentByFraction EpoxyGlass Sodium   0.077
+/radmon/materials/AddComponentByFraction EpoxyGlass Calcium  0.074
+/radmon/materials/AddComponentByFraction EpoxyGlass Hydrogen 0.014
+/radmon/materials/SetMaterialColor EpoxyGlass 0. .6 .1
+/radmon/materials/SetMaterialTrasparency EpoxyGlass .5
+/radmon/materials/SetMaterialVisibility EpoxyGlass visible
+/radmon/materials/SetMaterialStyle EpoxyGlass solid
+
+/radmon/materials/CreateMaterial Air 1.290 mg/cm3 2
+/radmon/materials/AddComponentByFraction Air Nitrogen 0.7
+/radmon/materials/AddComponentByFraction Air Oxygen 0.3
+/radmon/materials/SetMaterialColor Air .3 .9 1.
+/radmon/materials/SetMaterialTrasparency Air 1.
+/radmon/materials/SetMaterialVisibility Air visible
+/radmon/materials/SetMaterialStyle Air wireframe
+
+/radmon/materials/CreateMaterial Alumina 3.970 g/cm3 2
+/radmon/materials/AddComponentByAtoms Alumina Aluminum 1
+/radmon/materials/AddComponentByAtoms Alumina Oxygen 3
+/radmon/materials/SetMaterialColor Alumina 1. .9 .7
+#/radmon/materials/SetMaterialTrasparency Alumina .6
+/radmon/materials/SetMaterialTrasparency Alumina 1.
+/radmon/materials/SetMaterialVisibility Alumina visible
+/radmon/materials/SetMaterialStyle Alumina solid
+
+#/radmon/materials/Dump

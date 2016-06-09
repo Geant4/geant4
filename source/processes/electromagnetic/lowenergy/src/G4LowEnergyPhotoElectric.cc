@@ -1,28 +1,31 @@
 //
 // ********************************************************************
-// * DISCLAIMER                                                       *
+// * License and Disclaimer                                           *
 // *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.53 2004/11/18 12:08:52 pia Exp $
-// GEANT4 tag $Name: geant4-08-00 $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.56 2006/06/29 19:40:23 gunter Exp $
+// GEANT4 tag $Name: geant4-08-01 $
 //
 // Author: A. Forti
 //         Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -57,14 +60,16 @@
 // 14.06.2002 V.Ivanchenko     By default do not cheak range of e-
 // 21.01.2003 V.Ivanchenko     Cut per region
 // 10.05.2004 P.Rodrigues      Changes to accommodate new angular generators
+// 20.01.2006 A.Trindade       Changes to accommodate polarized angular generator
 //
 // --------------------------------------------------------------
 
 #include "G4LowEnergyPhotoElectric.hh"
 
 #include "G4VPhotoElectricAngularDistribution.hh"
-#include "G4PhotoElectricAngularGenerator462.hh"
-#include "G4PhotoElectricAngularGeneratorStandard.hh"
+#include "G4PhotoElectricAngularGeneratorSimple.hh"
+#include "G4PhotoElectricAngularGeneratorSauterGavrila.hh"
+#include "G4PhotoElectricAngularGeneratorPolarized.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4Track.hh"
@@ -105,7 +110,7 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   meanFreePathTable = 0;
   rangeTest = new G4RangeNoTest;
   generatorName = "geant4.6.2";
-  ElectronAngularGenerator = new G4PhotoElectricAngularGenerator462("GEANT462Generator");              // default generator
+  ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANTSimpleGenerator");              // default generator
 
 
   if (verboseLevel > 0)
@@ -162,7 +167,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
     }
  
-  G4ParticleMomentum photonDirection = incidentPhoton->GetMomentumDirection();
+  G4ThreeVector photonDirection = incidentPhoton->GetMomentumDirection(); // Returns the normalized direction of the momentum
 
   // Select randomly one element in the current material
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
@@ -198,7 +203,8 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	{
 
 	  // Calculate direction of the photoelectron
-	  G4ThreeVector electronDirection = ElectronAngularGenerator->GetPhotoElectronDirection(photonDirection,eKineticEnergy);
+	  G4ThreeVector gammaPolarization = incidentPhoton->GetPolarization();
+	  G4ThreeVector electronDirection = ElectronAngularGenerator->GetPhotoElectronDirection(photonDirection,eKineticEnergy,gammaPolarization,shellId);
 
 	  // The electron is created ...
 	  G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),
@@ -362,13 +368,19 @@ void G4LowEnergyPhotoElectric::SetAngularGenerator(const G4String& name)
   if (name == "default") 
     {
       delete ElectronAngularGenerator;
-      ElectronAngularGenerator = new G4PhotoElectricAngularGenerator462("GEANT462Generator");
+      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSimple("GEANT4LowEnergySimpleGenerator");
       generatorName = name;
     }
   else if (name == "standard")
     {
       delete ElectronAngularGenerator;
-      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorStandard("GEANT4StandardEMPhysics");
+      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorSauterGavrila("GEANT4SauterGavrilaGenerator");
+      generatorName = name;
+    }
+  else if (name == "polarized")
+    {
+      delete ElectronAngularGenerator;
+      ElectronAngularGenerator = new G4PhotoElectricAngularGeneratorPolarized("GEANT4LowEnergyPolarizedGenerator");
       generatorName = name;
     }
   else

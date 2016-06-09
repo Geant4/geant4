@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2004/06/09 15:04:35 daquinog Exp $
+# $Id: GNUmakefile,v 1.7 2006/06/23 13:15:34 ahoward Exp $
 # --------------------------------------------------------------
 # GNUmakefile   Michael Dressel
 # --------------------------------------------------------------
@@ -18,6 +18,7 @@ SWIGFLAGS = -I./ \
 	-I${G4INSTALL}/source/digits_hits/detector/include \
 	-I${G4INSTALL}/source/event/include \
 	-I${G4INSTALL}/source/processes/transportation/include \
+	-I${G4INSTALL}/source/visualization/management/include \
 	-I${TIARA_BASE}/source/CLHEPWrapper/include \
 	-I${CLHEP_BASE_DIR}/include
 
