@@ -1,4 +1,4 @@
-$Id: History,v 1.254 2006/07/05 17:44:51 vnivanch Exp $
+$Id: History,v 1.255 2006/08/15 16:21:39 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 June 06: V.Ivant (emutils-V08-01-01)
+- G4VEnergyLossProcess - make protected LambdaPhysicsVector method
+- G4ionEffectiveCharge - add protection for NULL pointer to material
+
 05 July 06: V.Ivant (emutils-V08-01-00)
-- G$LossTableManager - do not clear loss table map to avoid crash for
+- G4LossTableManager - do not clear loss table map to avoid crash for
                        activate/desactivate regime with ion gun, 
                        propagate 'RandomStep' flag to processes
 

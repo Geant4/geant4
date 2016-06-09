@@ -25,7 +25,7 @@
 //
 //
 // $Id: hepmcEx02-clhep.cc,v 1.4 2006/07/05 11:41:21 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // 
 // --------------------------------------------------------------

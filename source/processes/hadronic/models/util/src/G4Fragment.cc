@@ -201,6 +201,7 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 
 G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) const
 {
+	static G4int errCount(0);
 	G4double theMaxGroundStateMass = theZ*G4Proton::Proton()->GetPDGMass()+
 	                       (theA-theZ)*G4Neutron::Neutron()->GetPDGMass();
 	G4double U = value.m() - std::min(theMaxGroundStateMass, GetGroundStateMass());
@@ -209,8 +210,15 @@ G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) cons
 			U = 0.0;
 		else 
 		{
-			G4cerr << "G4Fragment::G4Fragment Excitation Energy ="
+			if ( errCount < 10 ) 
+			{
+			    G4cerr << "G4Fragment::CalculateExcitationEnergy(): Excitation Energy ="
 			       <<U << " for A = "<<theA<<" and Z= "<<theZ<<G4endl;
+			    errCount++;
+			    if (errCount == 10 ) G4cerr << "G4Fragment::CalculateExcitationEnergy():" 
+			    			<< " further warnings on negative excitation will be supressed" << G4endl;
+			}  
+     
 			U=0.0;
 		}
 	return U;

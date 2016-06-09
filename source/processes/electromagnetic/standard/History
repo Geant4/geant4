@@ -1,4 +1,4 @@
-$Id: History,v 1.239 2006/05/22 18:22:00 vnivanch Exp $
+$Id: History,v 1.245 2006/08/29 20:24:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30 Aug 06: V.Ivanchenko (emstand-V08-01-03)
+- Provide changings required for new processes/models with  polarization:
+  G4KleinNishinaCompton - make some members protected
+  G4MollerBhabhaModel - make some members protected
+  G4eBremsstrahlungModel - reorganize SelectRandomAom method and make 
+	some members protected
+
+29 Aug 06: V.Ivanchenko (emstand-V08-01-02)
+- Fix problem of positron zero incident energy in G4eeToTwoGammaModel
+- Add extra protection inside G4BetheBlochModel
+
+19 Aug 06: V.Ivanchenko (emstand-V08-01-01)
+- Fix energy non-conservation in G4PAIModel for positrons (V.Grichine)
+
+08 Aug 06: V.Ivanchenko (emstand-V08-01-00)
+- Fix problems and add comments in the classes prototype Coulomb 
+  elastic scattering:  G4CoulombScattering,  G4CoulombScatteringModel,
+  G4eCoulombScatteringModel
+- Set default limit on scattering angle to zero 
 
 22 May 06: V.Ivanchenko (emstand-V08-00-25)
 - G4eBremsstrahlung - use gammaThreshold from G4LossTableManager for

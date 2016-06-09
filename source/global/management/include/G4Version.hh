@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Version.hh,v 1.5 2006/07/20 16:02:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// $Id: G4Version.hh,v 1.6 2006/11/02 15:00:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // Version information
 //
@@ -46,18 +46,18 @@
 //     |--> patch number
 
 #ifndef G4VERSION_NUMBER
-#define G4VERSION_NUMBER  811
+#define G4VERSION_NUMBER  812
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-08-01-patch-01 $"
+#define G4VERSION_TAG "$Name: geant4-08-01-patch-02 $"
 #endif
 
 // as variables
 
 #include "G4String.hh"
 
-static const G4String G4Version = "$Name: geant4-08-01-patch-01 $";
-static const G4String G4Date    = "(27-July-2006)";
+static const G4String G4Version = "$Name: geant4-08-01-patch-02 $";
+static const G4String G4Date    = "(10-November-2006)";
 
 #endif

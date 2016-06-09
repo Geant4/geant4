@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id: FCALPrimaryGeneratorAction.cc,v 1.9 2006/07/21 08:19:33 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // 
 

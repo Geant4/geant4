@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.17 2006/06/29 19:27:04 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.18 2006/09/26 16:44:13 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -388,34 +388,34 @@ G4DecayTable*  G4ExcitedMesonConstructor::AddKTwoPiMode(
   if (iIso3 == +1) {
     if (iType == TK) {    
       mode = new G4PhaseSpaceDecayChannel(nameParent, br/3., 2,
-					   "k2(1770)+","pi0");
+					   "k2_star(1430)+","pi0");
       decayTable->Insert(mode);
       mode = new G4PhaseSpaceDecayChannel(nameParent, br*2./3., 2,
-					   "k2(1770)0","pi+");
+					   "k2_star(1430)0","pi+");
       decayTable->Insert(mode);
     }else if (iType==TAntiK) {
       mode = new G4PhaseSpaceDecayChannel(nameParent, br/3., 2,
-					   "anti_k2(1770)0","pi0");
+					   "anti_k2_star(1430)0","pi0");
       decayTable->Insert(mode);
       mode = new G4PhaseSpaceDecayChannel(nameParent, br*2./3., 2,
-					   "k2(1770)-","pi+");
+					   "k2_star(1430)-","pi+");
       decayTable->Insert(mode);
    }
   } else if (iIso3 == -1) {
     if (iType == TK) {    
       mode = new G4PhaseSpaceDecayChannel(nameParent, br/3., 2,
-					   "k2(1770)0","pi0");
+					   "k2_star(1430)0","pi0");
       decayTable->Insert(mode);
       mode = new G4PhaseSpaceDecayChannel(nameParent, br*2./3., 2,
-					   "k2(1770)+","pi-");
+					   "k2_star(1430)+","pi-");
       decayTable->Insert(mode);
  
     }else if (iType==TAntiK) {
       mode = new G4PhaseSpaceDecayChannel(nameParent, br/3., 2,
-					   "k2(1770)-","pi0");
+					   "k2_star(1430)-","pi0");
       decayTable->Insert(mode);
       mode = new G4PhaseSpaceDecayChannel(nameParent, br*2./3., 2,
-					   "anti_k2(1770)0","pi-");
+					   "anti_k2_star(1430)0","pi-");
       decayTable->Insert(mode);
     }
   }

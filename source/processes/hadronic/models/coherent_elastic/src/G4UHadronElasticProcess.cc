@@ -23,16 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UHadronElasticProcess.cc,v 1.18 2006/07/12 17:15:41 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// $Id: G4UHadronElasticProcess.cc,v 1.27 2006/10/26 08:44:25 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
 // Created 21 April 2006 V.Ivanchenko
 //  
 // Modified:
-// 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
-// 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
+// 24.04.06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
+// 07.06.06 V.Ivanchenko fix problem of rotation of final state
+// 25.07.06 V.Ivanchenko add 19 MeV low energy for CHIPS
+// 26.09.06 V.Ivanchenko add lowestEnergy
+// 20.10.06 V.Ivanchenko initialise lowestEnergy=0 for neitrals, eV for charged
 //
 //
 
@@ -48,16 +51,14 @@
 #include "G4IsotopeVector.hh"
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
-#include "G4NeutronHPElasticData.hh"
 #include "G4HadronElastic.hh"
  
-G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4bool fl)
-  : G4HadronicProcess(pName), flagHP(fl), first(true)
+G4UHadronElasticProcess::G4UHadronElasticProcess(const G4String& pName, G4double elow)
+  : G4HadronicProcess(pName), thEnergy(elow), lowestEnergy(0.0), first(true)
 {
   AddDataSet(new G4HadronElasticDataSet);
   theProton = G4Proton::Proton();
   theNeutron = G4Neutron::Neutron();
-  thEnergy = 1.*keV;
   verboseLevel= 1;
   qCManager = 0;
 }
@@ -79,15 +80,22 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
     if(!qCManager) qCManager = G4QElasticCrossSection::GetPointer();
     theParticle = &aParticleType;
     pPDG = theParticle->GetPDGEncoding();
-    if(theParticle == theNeutron && flagHP) 
-      AddDataSet(new G4NeutronHPElasticData());
 
     store = G4HadronicProcess::GetCrossSectionDataStore();
+
+    // defined lowest threshold for the projectile
+    if(theParticle->GetPDGCharge() != 0.0) lowestEnergy = eV;
      
-    if(verboseLevel>1) 
+    if(verboseLevel>1 || 
+       (verboseLevel==1 && theParticle == theNeutron)) {
+      G4cout << G4endl;
       G4cout << "G4UHadronElasticProcess for " 
-	     << theParticle->GetParticleName() 
-	     << G4endl; 
+	     << theParticle->GetParticleName()
+             << " PDGcode= " << pPDG
+	     << "  Elow(MeV)= " << thEnergy/MeV 
+	     << "  Elowest(eV)= " << lowestEnergy/eV 
+	     << G4endl;
+    } 
   }
   store->BuildPhysicsTable(aParticleType);
 }
@@ -102,16 +110,11 @@ G4double G4UHadronElasticProcess::GetMeanFreePath(const G4Track& track,
   cross = 0.0;
   G4double x = DBL_MAX;
 
-  // The process is effective only above the threshold
-  //  if(dp->GetKineticEnergy() < thEnergy) return x;
-
   // Compute cross sesctions
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
   G4double temp = material->GetTemperature();
   G4int nelm   = material->GetNumberOfElements();
-  xsecH[0] = 0.0;
-  xsecH[1] = 0.0;
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess get mfp for " 
 	   << theParticle->GetParticleName() 
@@ -145,42 +148,41 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
   G4int iz = G4int(elm->GetZ());
   G4double x = 0.0;
   // CHIPS cross sections
-  if(iz <= 2 && (theParticle == theProton || theParticle == theNeutron)) {
+  if(iz <= 2 && dp->GetKineticEnergy() > thEnergy && 
+     (theParticle == theProton || theParticle == theNeutron)) {
     G4double momentum = dp->GetTotalMomentum();
-    if(iz == 1) {
-      G4IsotopeVector* isv = elm->GetIsotopeVector(); 
-      G4int ni = 0;
-      if(isv) ni = isv->size();
-      if(ni > 0) {
-	G4double* ab = elm->GetRelativeAbundanceVector();
-	x = 0.0;
-	for(G4int j=0; j<ni; j++) {
-	  G4int N = elm->GetIsotope(j)->GetN() - 1;
-	  if(N == 0 || N == 1) {
-	    if(verboseLevel>1) 
-	      G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= " 
-		     << N << " pdg= " << pPDG 
-		     << " mom(GeV)= " << momentum/GeV 
-		     << "  " << qCManager << G4endl; 
-	    G4double y = ab[j]*
-	      qCManager->GetCrossSection(false,momentum,1,N,pPDG);
-	    xsecH[N] += y;
-	    x += y;
-	  }
+    G4IsotopeVector* isv = elm->GetIsotopeVector(); 
+    G4int ni = 0;
+    if(isv) ni = isv->size();
+    //    if(iz == 1) {
+    if(ni > 0) {
+      G4double* ab = elm->GetRelativeAbundanceVector();
+      x = 0.0;
+      for(G4int j=0; j<ni; j++) {
+	G4int N = elm->GetIsotope(j)->GetN() - iz;
+	if(iz == 1) {
+	  if(N > 1) N = 1;
+	} else {
+	  N = 2;
 	}
-      } else {
 	if(verboseLevel>1) 
-	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 1, N= 0" 
-		 << " pdg= " << pPDG 
-		 << " mom(GeV)= " << momentum/GeV << "  " << qCManager << G4endl; 
-	x = qCManager->GetCrossSection(false,momentum,1,0,pPDG);
-	xsecH[0] = x;
+	  G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
+		 << " N= "  << N << " pdg= " << pPDG 
+		 << " mom(GeV)= " << momentum/GeV 
+		 << "  " << qCManager << G4endl; 
+	G4double y = ab[j]*qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
+	x += y;
+	xsecH[j] = x;
       }
     } else {
+      G4int N = 0;
+      if(iz == 2) N = 2;
       if(verboseLevel>1) 
-	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= 2, N=2 " 
+	G4cout << "G4UHadronElasticProcess compute CHIPS CS for Z= " << iz
+	       << " N= " << N 
+               << " pdg= " << pPDG
 	       << G4endl; 
-      x = qCManager->GetCrossSection(false,momentum,2,2,pPDG);
+      x = qCManager->GetCrossSection(false,momentum,iz,N,pPDG);
     }
   } else {
     if(verboseLevel>1) 
@@ -189,6 +191,19 @@ G4double G4UHadronElasticProcess::GetMicroscopicCrossSection(
 	     << G4endl; 
     x = store->GetCrossSection(dp, elm, temp);
   }
+  // NaN finder
+  if(!(x < 0.0 || x >= 0.0)) {
+    if (verboseLevel > 1) {
+      G4cout << "G4UHadronElasticProcess:WARNING: Z= " << iz  
+	     << " pdg= " <<  pPDG
+	     << " mom(GeV)= " << dp->GetTotalMomentum()/GeV 
+	     << " cross= " << x 
+	     << " set to zero"
+	     << G4endl; 
+    }
+    x = 0.0;
+  }
+
   if(verboseLevel>1) 
     G4cout << "G4UHadronElasticProcess cross(mb)= " << x/millibarn 
            << "  E(MeV)= " << dp->GetKineticEnergy()
@@ -205,10 +220,13 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
 {
   G4ForceCondition   cn;
   aParticleChange.Initialize(track);
-  G4double mfp = GetMeanFreePath(track, 0.0, &cn);
-  if(mfp == DBL_MAX) return G4VDiscreteProcess::PostStepDoIt(track,step);
-
   G4double kineticEnergy = track.GetKineticEnergy();
+  if(kineticEnergy <= lowestEnergy) 
+    return G4VDiscreteProcess::PostStepDoIt(track,step);
+  G4double mfp = GetMeanFreePath(track, 0.0, &cn);
+  if(mfp == DBL_MAX) 
+    return G4VDiscreteProcess::PostStepDoIt(track,step);
+
   G4Material* material = track.GetMaterial();
 
   // Select element
@@ -231,22 +249,28 @@ G4VParticleChange* G4UHadronElasticProcess::PostStepDoIt(
   if(isv) ni = isv->size();
   if(ni == 1) { 
     A = G4double(elm->GetIsotope(0)->GetN());
+  } else if(ni == 0) {
+    A = elm->GetN();
   } else if(ni > 1) {
-    if(iz == 1 && theParticle == theProton) {
-      A = 1.;
-      if(G4UniformRand()*(xsecH[0] + xsec[1]) > xsec[0]) A = 2.;
+
+    G4int j = -1;
+    ni--;
+    // Special treatment of hydrogen and helium for CHIPS
+    if(iz <= 2 && (theParticle == theProton || theParticle == theNeutron)) {
+      G4double x = G4UniformRand()*xsecH[ni];
+      do {j++;} while (x > xsecH[j] && j < ni);
+
+      // Abandance vector
     } else {
       G4double* ab = elm->GetRelativeAbundanceVector();
       G4double y = G4UniformRand();
-      G4int j = -1;
-      ni--;
       do {
 	j++;
 	y -= ab[j];
       } while (y > 0.0 && j < ni);
-      A = G4double(elm->GetIsotope(j)->GetN());
     }
-  }
+    A = G4double(elm->GetIsotope(j)->GetN());
+  } 
   G4HadronicInteraction* hadi = 
     ChooseHadronicInteraction( kineticEnergy, material, elm);
 

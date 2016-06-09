@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2006/06/07 17:18:11 vnivanch Exp $
+$Id: History,v 1.86.2.1 2006/11/02 15:10:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 31, 06 G.Cosmo (track-V08-00-03a)
+- Made operator=() inline.
 
 June 07, 06 V.Ivanchenko (track-V08-00-03)
 -  G4ParticleChangeForLoss - remove momentum change AlongStep

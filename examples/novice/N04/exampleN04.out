@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -160,6 +160,8 @@ muPairProd:   tables are built for  mu-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
+G4UHadronElasticProcess for neutron PDGcode= 2112  Elow(MeV)= 0  Elowest(eV)= 0
+
 hIoni:   tables are built for  pi+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
@@ -245,7 +247,7 @@ Stage 1->2 : 0 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.03s Real=1.18s Sys=0.04s
+  User=1.2s Real=2.44s Sys=0.05s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

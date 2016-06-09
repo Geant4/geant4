@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2006/07/26 09:45:25 vnivanch Exp $
+$Id: History,v 1.28.2.1 2006/11/03 11:39:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15.08.2006, V.Ivanchenko - phys-lists-V08-01-03a
+- G4HadronElasticPhysics - added includes from .cc to .hh
 
 26.07.2006, V.Ivanchenko - phys-lists-V08-01-03
 - Return pLimit= 20 MeV/c

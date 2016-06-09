@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4UHadronElasticProcess.hh,v 1.5 2006/06/29 20:09:17 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4UHadronElasticProcess.hh,v 1.9 2006/10/20 15:22:24 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
 // 
 // Created 21 April 2006 V.Ivanchenko
 //  
 // Modified:
+// 26.09.06 V.Ivanchenko add lowestEnergy
 //
 
 // Class Description
@@ -54,7 +55,7 @@ class G4UHadronElasticProcess : public G4HadronicProcess
 {
 public:
 
-  G4UHadronElasticProcess(const G4String& procName = "hElastic", G4bool fl = true);
+  G4UHadronElasticProcess(const G4String& procName = "hElastic", G4double elow = 19.*MeV);
 
   virtual ~G4UHadronElasticProcess();
  
@@ -86,12 +87,12 @@ private:
   G4Nucleus                targetNucleus;
 
   G4double        xsec[40];
-  G4double        xsecH[2];
+  G4double        xsecH[4];
   G4double        cross;
   G4double        thEnergy;
+  G4double        lowestEnergy;
 
   G4int    pPDG;
-  G4bool   flagHP;
   G4bool   first;
 };
 

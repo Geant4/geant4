@@ -25,7 +25,7 @@
 //
 //
 // $Id: H02PhysicsList.hh,v 1.3 2006/07/05 11:41:23 gcosmo Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

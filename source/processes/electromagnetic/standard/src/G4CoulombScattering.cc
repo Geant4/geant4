@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.cc,v 1.2 2006/06/29 19:52:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4CoulombScattering.cc,v 1.6 2006/08/10 08:43:56 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,6 +38,8 @@
 // Creation date: 22.08.2004
 //
 // Modifications:
+// 01.08.06 V.Ivanchenko add choice between G4eCoulombScatteringModel and
+//          G4CoulombScatteringModel
 //
 
 //
@@ -55,11 +57,13 @@
 using namespace std;
 
 G4CoulombScattering::G4CoulombScattering(const G4String& name)
-  : G4VEmProcess(name),thetaMin(0.5),thetaMax(pi),q2Max(DBL_MAX),isInitialised(false)
+  : G4VEmProcess(name),thetaMin(0.0),thetaMax(pi),q2Max(DBL_MAX),
+    isInitialised(false)
 {
   SetLambdaBinning(80);
   SetMinKinEnergy(1.0*keV);
   SetMaxKinEnergy(100.0*GeV);
+  buildTableFlag = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -74,17 +78,26 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialised) {
     isInitialised = true;
     //    SetVerboseLevel(3);
-    SetBuildTableFlag(true);
+    //    SetBuildTableFlag(buildTableFlag);
+    SetBuildTableFlag(false);
     SetStartFromNullFlag(false);
     SetLambdaFactor(0.8);
     SetSecondaryParticle(0);
     G4double emin = MinKinEnergy();
     G4double emax = MaxKinEnergy();
-    G4CoulombScatteringModel* model = 
-      new G4CoulombScatteringModel(thetaMin,thetaMax,true,q2Max);
-    model->SetLowEnergyLimit(emin);
-    model->SetHighEnergyLimit(emax);
-    AddEmModel(1, model);
+    if(GetProcessName() == "eCoulombScat") {
+      G4eCoulombScatteringModel* model = 
+	new G4eCoulombScatteringModel(thetaMin,thetaMax,buildTableFlag,q2Max);
+      model->SetLowEnergyLimit(emin);
+      model->SetHighEnergyLimit(emax);
+      AddEmModel(1, model);
+    } else {
+      G4CoulombScatteringModel* model = 
+	new G4CoulombScatteringModel(thetaMin,thetaMax,buildTableFlag,q2Max);
+      model->SetLowEnergyLimit(emin);
+      model->SetHighEnergyLimit(emax);
+      AddEmModel(1, model);
+    }
   }
 }
 
@@ -93,7 +106,7 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition*)
 void G4CoulombScattering::PrintInfo()
 {
   G4cout << "      Coulomb scattering with ThetaMin(degree)= " << thetaMin/degree
-	 << "; ThetaMax(degree)= " << thetaMin/degree
+	 << "; ThetaMax(degree)= " << thetaMax/degree
          << "; q2Max(GeV^2)= " << q2Max/(GeV*GeV)
          << G4endl;
 }

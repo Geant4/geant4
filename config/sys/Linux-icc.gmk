@@ -1,13 +1,13 @@
 #
-# ------ GNU/LINUX ------     !!! not supported !!!
-#                                 Intel icc 8.0
+# ------ GNU/LINUX ------         Intel icc 9.1
+#
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
   CXXFLAGS  := -ansi -mp -no-gcc -w1
   ifdef G4OPTIMISE
-    CXXFLAGS  += -O
-    FCFLAGS   := -O
-    CCFLAGS   := -O
+    CXXFLAGS  += -O2
+    FCFLAGS   := -O2
+    CCFLAGS   := -O2
   else
     ifdef G4DEBUG
       CXXFLAGS  += -g
@@ -25,12 +25,12 @@ ifeq ($(G4SYSTEM),Linux-icc)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
-  G4RUNPATHOPTION := -Xlinker -rpath 
+  G4RUNPATHOPTION := -Wl,-rpath -Wl,
   CC := gcc
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
-  AR := xiar r
+  AR := ar r
   ECHO    := /bin/echo -e
   SHEXT   := so
   ifndef X11FLAGS
@@ -52,6 +52,7 @@ ifeq ($(G4SYSTEM),Linux-icc)
     XAWLIBS    := -lXaw
   endif
   DLDLIBS   := -ldl
+  LOADLIBS  += -lcxa -lunwind
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif

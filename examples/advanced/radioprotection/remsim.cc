@@ -25,7 +25,7 @@
 //
 //
 // $Id: remsim.cc,v 1.14 2006/07/24 09:53:27 guatelli Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"

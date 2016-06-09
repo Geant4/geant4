@@ -288,9 +288,10 @@ void G4Fancy3DNucleus::ChoosePositions()
 	   if (G4UniformRand() < density)
 	   {
 	      freeplace= true;
-	      for( int j=0; j<i && freeplace; j++)
+	      std::vector<G4ThreeVector>::iterator iplace;
+	      for( iplace=places.begin(); iplace!=places.end() && freeplace;++iplace)
 	      {
-	        delta = places[j] - aPos;
+	        delta = *iplace - aPos;
 		freeplace= delta.mag2() > nd2;
 	      }
 	      
@@ -310,7 +311,7 @@ void G4Fancy3DNucleus::ChoosePositions()
 	      if ( freeplace )
 	      {
 		  theNucleons[i].SetPosition(aPos);
-		  places[i]=aPos;
+		  places.push_back(aPos);
 		  ++i;
 	      }
 	   }
@@ -397,11 +398,11 @@ void G4Fancy3DNucleus::ChooseFermiMomenta()
     	{
     		return Vector;
     	}
-    	const G4double size() const
+    	G4double size() const
     	{
     		return Size;
     	}
-    	const G4int index() const
+    	G4int index() const
     	{
     		return anInt;
     	}

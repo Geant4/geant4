@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.9 2005/12/07 16:26:39 guatelli Exp $
+$Id: History,v 1.10 2006/10/13 10:09:10 ahoward Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.9 2005/12/07 16:26:39 guatelli Exp $
 
                       Category History file
                       ---------------------
+13.10.2006 - A. Howard (DMX-V08-01-00)
+	     Removed uninitialized UserLimitsForXenon (bug)
+
 07.12.2005 - S. Guatelli (DMX-V07-01-02)
              Compiles with CLHEP 2.0.2.2
 

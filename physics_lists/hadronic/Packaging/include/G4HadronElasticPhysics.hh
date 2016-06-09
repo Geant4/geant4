@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.hh,v 1.6 2006/07/05 16:12:43 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// $Id: G4HadronElasticPhysics.hh,v 1.7 2006/08/15 14:19:32 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +45,8 @@
 #include "G4VPhysicsConstructor.hh"
 #include "G4UHadronElasticProcess.hh"
 #include "G4HadronElastic.hh"
+#include "G4NeutronHPElastic.hh"
+#include "G4NeutronHPElasticData.hh"
 #include <vector>
 
 class G4HadronElasticPhysics : public G4VPhysicsConstructor

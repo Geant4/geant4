@@ -1,4 +1,4 @@
-$Id: History,v 1.162 2006/07/20 16:04:21 gcosmo Exp $
+$Id: History,v 1.166.2.1 2006/11/02 15:01:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 02, 2006  G.Cosmo (global-V08-01-02a)
+- Changed date for release 8.1.p02.
+
+Sep 15, 2006  G.Cosmo (global-V08-01-02)
+- Corrected inclusion of CLHEP headers in wrapper files
+  G4SystemOfUnits.hh and G4PhysicalConstants.hh
+
 Jul 20, 2006  G.Cosmo (global-V08-01-00)
 - Changed date for release 8.1.p01.
+
+Jun 13, 2006  V.Grichine
+- Extended unit test G4IntegratorTest in HEPNumerics.
 
 May 03, 2006  G.Cosmo (global-V08-00-04)
 - Updated date for release 8.1 in G4Version.hh.

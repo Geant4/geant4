@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4ElasticHadrNucleusHE.cc,v 1.34 2006/07/06 18:11:11 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //G4ElasticHadrNucleusHE.cc
 //
 //

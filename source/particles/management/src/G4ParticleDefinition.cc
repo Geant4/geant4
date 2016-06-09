@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.27 2006/06/29 19:25:52 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ParticleDefinition.cc,v 1.28 2006/09/05 01:15:11 kurasige Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // 
 // --------------------------------------------------------------
@@ -114,14 +114,14 @@ G4ParticleDefinition::G4ParticleDefinition(
    if (anti_encoding !=0) theAntiPDGEncoding = anti_encoding;
 
    // check quark contents
-#ifdef G4VERBOSE
    if (this->FillQuarkContents() != thePDGEncoding) {
+#ifdef G4VERBOSE
      if (verboseLevel>0) {
        // Using G4cerr expecting that it is available in construction of static objects 
        G4cerr << "Particle " << aName << " has a strange PDGEncoding " <<G4endl;
      }
-   }
 #endif
+   }
 }
 
 G4ParticleDefinition::G4ParticleDefinition(const G4ParticleDefinition &)

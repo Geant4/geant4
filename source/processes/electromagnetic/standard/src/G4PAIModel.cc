@@ -62,7 +62,9 @@ using namespace std;
 
 G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
-    fVerbose(0),
+  fVerbose(0),
+  fLowestGamma(1.005),
+  fHighestGamma(10000.),
   fTotBin(200),
   fMeanNumber(20),
   fParticle(0),
@@ -73,11 +75,16 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   fTaulim(8.4146e-3)
 {
   if(p) SetParticle(p);
-  fLowestKineticEnergy  = LowEnergyLimit();
-  fHighestKineticEnergy = HighEnergyLimit();
-  fProtonEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
-							   fHighestKineticEnergy,
-							   fTotBin);
+  
+  // fLowestKineticEnergy  = LowEnergyLimit();
+  // fHighestKineticEnergy = HighEnergyLimit();
+
+  fLowestKineticEnergy  = fMass*fLowestGamma;
+  fHighestKineticEnergy = fMass*fHighestGamma;
+
+  fParticleEnergyVector = new G4PhysicsLogVector(fLowestKineticEnergy,
+						 fHighestKineticEnergy,
+						 fTotBin                );
   fPAItransferTable  = 0;
   fPAIdEdxTable      = 0;
   fSandiaPhotoAbsCof = 0;
@@ -90,7 +97,7 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
 
 G4PAIModel::~G4PAIModel()
 {
-  if(fProtonEnergyVector) delete fProtonEnergyVector;
+  if(fParticleEnergyVector) delete fParticleEnergyVector;
   if(fdEdxVector)         delete fdEdxVector ;
   if ( fLambdaVector)     delete fLambdaVector;
   if ( fdNdxCutVector)    delete fdNdxCutVector;
@@ -167,7 +174,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       fMatIndex = iMatGlob;
 
       ComputeSandiaPhotoAbsCof();
-      BuildPAIonisationTable();
+      BuildPAIonisationTable(p);
 
       fPAIxscBank.push_back(fPAItransferTable);
       fPAIdEdxBank.push_back(fPAIdEdxTable);
@@ -233,7 +240,7 @@ void G4PAIModel::ComputeSandiaPhotoAbsCof()
 //                           *********
 
 void
-G4PAIModel::BuildPAIonisationTable()
+G4PAIModel::BuildPAIonisationTable(const G4ParticleDefinition* p)
 {
   G4double LowEdgeEnergy , ionloss ;
   G4double massRatio, tau, Tmax, Tmin, Tkin, deltaLow, gamma, bg2 ;
@@ -263,14 +270,28 @@ G4PAIModel::BuildPAIonisationTable()
 
   for (G4int i = 0 ; i < fTotBin ; i++)  //The loop for the kinetic energy
   {
-    LowEdgeEnergy = fProtonEnergyVector->GetLowEdgeEnergy(i) ;
-    tau = LowEdgeEnergy/proton_mass_c2 ;
+    LowEdgeEnergy = fParticleEnergyVector->GetLowEdgeEnergy(i) ;
+    tau = LowEdgeEnergy/fMass ;
     //    if(tau < 0.01)  tau = 0.01 ;
     gamma = tau +1. ;
     // G4cout<<"gamma = "<<gamma<<endl ;
-    bg2 = tau*(tau + 2. ) ;
-    massRatio = electron_mass_c2/proton_mass_c2 ;
-    Tmax = 2.*electron_mass_c2*bg2/(1.+2.*gamma*massRatio+massRatio*massRatio) ;
+    bg2 = tau*( tau + 2. );
+
+    if(p->GetParticleName() == "e-")
+    {
+      Tmax = 0.5*LowEdgeEnergy;
+    }
+    else if(p->GetParticleName() == "e+")
+    {
+      Tmax = LowEdgeEnergy;   // Unclear??
+    }
+    else
+    {
+      massRatio = electron_mass_c2/fMass ;
+      Tmax = 2.*electron_mass_c2*bg2/(1. + 2.*gamma*massRatio+massRatio*massRatio);
+    }
+
+
     // G4cout<<"proton Tkin = "<<LowEdgeEnergy/MeV<<" MeV"
     // <<" Tmax = "<<Tmax/MeV<<" MeV"<<G4endl;
     // Tkin = DeltaCutInKineticEnergyNow ;
@@ -472,7 +493,7 @@ G4double G4PAIModel::ComputeDEDX(const G4MaterialCutsCouple* matCC,
 {
   G4int iTkin,iPlace;
   size_t jMat;
-  G4double massRatio  = proton_mass_c2/p->GetPDGMass();
+  G4double massRatio  = fMass/p->GetPDGMass();
   G4double scaledTkin = kineticEnergy*massRatio;
   G4double charge     = p->GetPDGCharge();
   G4double charge2    = charge*charge, dEdx;
@@ -487,7 +508,7 @@ G4double G4PAIModel::ComputeDEDX(const G4MaterialCutsCouple* matCC,
   fdEdxVector = fdEdxTable[jMat];
   for(iTkin = 0 ; iTkin < fTotBin ; iTkin++)
   {
-    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) break ;    
+    if(scaledTkin < fParticleEnergyVector->GetLowEdgeEnergy(iTkin)) break ;    
   }
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
@@ -508,7 +529,7 @@ G4double G4PAIModel::CrossSection( const G4MaterialCutsCouple* matCC,
   G4int iTkin,iPlace;
   size_t jMat;
   G4double tmax = min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
-  G4double massRatio  = proton_mass_c2/p->GetPDGMass();
+  G4double massRatio  = fMass/p->GetPDGMass();
   G4double scaledTkin = kineticEnergy*massRatio;
   G4double charge     = p->GetPDGCharge();
   G4double charge2    = charge*charge, cross, cross1, cross2;
@@ -523,7 +544,7 @@ G4double G4PAIModel::CrossSection( const G4MaterialCutsCouple* matCC,
 
   for(iTkin = 0 ; iTkin < fTotBin ; iTkin++)
   {
-    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin)) break ;    
+    if(scaledTkin < fParticleEnergyVector->GetLowEdgeEnergy(iTkin)) break ;    
   }
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
@@ -573,7 +594,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   G4double particleMass  = dp->GetMass();
   G4double kineticEnergy = dp->GetKineticEnergy();
 
-  G4double massRatio     = proton_mass_c2/particleMass;
+  G4double massRatio     = fMass/particleMass;
   G4double scaledTkin    = kineticEnergy*massRatio;
   G4double totalEnergy   = kineticEnergy + particleMass;
   G4double pSquare       = kineticEnergy*(totalEnergy+particleMass);
@@ -586,6 +607,7 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   {
     G4cout<<"Tkin of secondary e- <= 0."<<G4endl;
     G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
+    G4cout<<"G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
     // deltaTkin = 10*eV;
     G4cout<<"Set G4PAIModel::SampleSecondary::deltaTkin = "<<deltaTkin<<G4endl;
   }
@@ -594,7 +616,8 @@ G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* matCC,
   if(deltaTkin > kineticEnergy && 
      particleMass != electron_mass_c2) deltaTkin = kineticEnergy;
   if (deltaTkin > 0.5*kineticEnergy && 
-     dp->GetDefinition()->GetParticleName() == "e-") deltaTkin = 0.5*kineticEnergy;
+     (dp->GetDefinition()->GetParticleName() == "e-" || 
+     dp->GetDefinition()->GetParticleName() == "e+")    ) deltaTkin = 0.5*kineticEnergy;
 
   G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
   G4double totalMomentum      = sqrt(pSquare);
@@ -650,7 +673,7 @@ G4PAIModel::GetPostStepTransfer( G4double scaledTkin )
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)
   {
-    if(scaledTkin < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))  break ;
+    if(scaledTkin < fParticleEnergyVector->GetLowEdgeEnergy(iTkin))  break ;
   }
   iPlace = iTkin - 1 ;
   // G4cout<<"from search, iPlace = "<<iPlace<<G4endl ;
@@ -687,8 +710,8 @@ G4PAIModel::GetPostStepTransfer( G4double scaledTkin )
     } 
     else // general case: Tkin between two vectors of the material
     {
-      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+      E1 = fParticleEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = fParticleEnergyVector->GetLowEdgeEnergy(iTkin)     ;
       W  = 1.0/(E2 - E1) ;
       W1 = (E2 - scaledTkin)*W ;
       W2 = (scaledTkin - E1)*W ;
@@ -782,16 +805,17 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   G4double position, E1, E2, W1, W2, W, dNdxCut1, dNdxCut2, meanNumber;
   G4bool numb = true;
   G4double Tkin       = aParticle->GetKineticEnergy() ;
-  G4double MassRatio  = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
+  G4double MassRatio  = fMass/aParticle->GetDefinition()->GetPDGMass() ;
   G4double charge     = aParticle->GetDefinition()->GetPDGCharge() ;
   charge2             = charge*charge ;
   G4double TkinScaled = Tkin*MassRatio ;
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)
   {
-    if(TkinScaled < fProtonEnergyVector->GetLowEdgeEnergy(iTkin))   break ;
+    if(TkinScaled < fParticleEnergyVector->GetLowEdgeEnergy(iTkin))   break ;
   }
   iPlace = iTkin - 1 ; 
+  if(iPlace < 0) iPlace = 0;
   //  G4cout<<"from search, iPlace = "<<iPlace<<G4endl ;
   dNdxCut1 = (*fdNdxCutVector)(iPlace) ;  
   //  G4cout<<"dNdxCut1 = "<<dNdxCut1<<G4endl ;
@@ -871,8 +895,8 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
     } 
     else // general case: Tkin between two vectors of the material
     {
-      E1 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
-      E2 = fProtonEnergyVector->GetLowEdgeEnergy(iTkin)     ;
+      E1 = fParticleEnergyVector->GetLowEdgeEnergy(iTkin - 1) ; 
+      E2 = fParticleEnergyVector->GetLowEdgeEnergy(iTkin)     ;
        W = 1.0/(E2 - E1) ;
       W1 = (E2 - TkinScaled)*W ;
       W2 = (TkinScaled - E1)*W ;

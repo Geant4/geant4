@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SIunits.hh,v 1.4 2006/06/29 19:02:56 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4SIunits.hh,v 1.5 2006/09/15 08:16:10 gcosmo Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 // 
 // ----------------------------------------------------------------------
 //
@@ -66,8 +66,6 @@
 
 #ifndef G4UNITSTEST_HH
 #define G4UNITSTEST_HH
-
-#include <CLHEP/config/CLHEP.h>
 
 // 
 // Length [L]

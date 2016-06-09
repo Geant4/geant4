@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.10 2006/06/29 19:53:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4eeToTwoGammaModel.cc,v 1.11 2006/08/29 20:02:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,9 +38,10 @@
 // Creation date: 02.08.2004
 //
 // Modifications:
-// 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
-// 18-04-05 Compute CrossSectionPerVolume (V.Ivantchenko)
+// 08-04-05 Major optimisation of internal interfaces (V.Ivanchenko)
+// 18-04-05 Compute CrossSectionPerVolume (V.Ivanchenko)
 // 06-02-06 ComputeCrossSectionPerElectron, ComputeCrossSectionPerAtom (mma)
+// 29-06-06 Fix problem for zero energy incident positron (V.Ivanchenko) 
 //
 //
 // Class Description:
@@ -151,66 +152,96 @@ vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
                                    G4double,
                                    G4double)
 {
-  G4double PositKinEnergy = dp->GetKineticEnergy();
-  G4ThreeVector PositDirection = dp->GetMomentumDirection();
-
-  G4double tau     = PositKinEnergy/electron_mass_c2;
-  G4double gam     = tau + 1.0;
-  G4double tau2    = tau + 2.0;
-  G4double sqgrate = sqrt(tau/tau2)*0.5;
-  G4double sqg2m1  = sqrt(tau*tau2);
-
-  // limits of the energy sampling
-  G4double epsilmin = 0.5 - sqgrate;
-  G4double epsilmax = 0.5 + sqgrate;
-  G4double epsilqot = epsilmax/epsilmin;
-
-  //
-  // sample the energy rate of the created gammas
-  //
-  G4double epsil, greject;
-
-  do {
-     epsil = epsilmin*pow(epsilqot,G4UniformRand());
-     greject = 1. - epsil + (2.*gam*epsil-1.)/(epsil*tau2*tau2);
-  } while( greject < G4UniformRand() );
-
-  //
-  // scattered Gamma angles. ( Z - axis along the parent positron)
-  //
-
-  G4double cost = (epsil*tau2-1.)/(epsil*sqg2m1);
-  G4double sint = sqrt((1.+cost)*(1.-cost));
-  G4double phi  = twopi * G4UniformRand();
-
-  G4double dirx = sint*cos(phi) , diry = sint*sin(phi) , dirz = cost;
-
-  //
-  // kinematic of the created pair
-  //
-
-  G4double TotalAvailableEnergy = PositKinEnergy + 2.0*electron_mass_c2;
-  G4double Phot1Energy = epsil*TotalAvailableEnergy;
-
   vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
+  G4double PositKinEnergy = dp->GetKineticEnergy();
 
-  G4ThreeVector Phot1Direction (dirx, diry, dirz);
-  Phot1Direction.rotateUz(PositDirection);
-  G4DynamicParticle* aParticle1 = new G4DynamicParticle (G4Gamma::Gamma(),
-                                                 Phot1Direction, Phot1Energy);
-  vdp->push_back(aParticle1);
+  // Case at rest
+  if(PositKinEnergy == 0.0) {
+    G4double cost = 2.*G4UniformRand()-1.;
+    G4double sint = sqrt((1. - cost)*(1. + cost));
+    G4double phi  = twopi * G4UniformRand();
+    G4ThreeVector dir (sint*cos(phi), sint*sin(phi), cost);
+    G4DynamicParticle* aGamma1 = new G4DynamicParticle(G4Gamma::Gamma(),
+						       dir, electron_mass_c2);
+    G4DynamicParticle* aGamma2 = new G4DynamicParticle(G4Gamma::Gamma(),
+						       -dir, electron_mass_c2);
+    vdp->push_back(aGamma1);
+    vdp->push_back(aGamma2);
 
-  G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy;
-  G4double Eratio= Phot1Energy/Phot2Energy;
-  G4double PositP= sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
-  G4ThreeVector Phot2Direction (-dirx*Eratio, -diry*Eratio,
-                                    (PositP-dirz*Phot1Energy)/Phot2Energy);
-  Phot2Direction.unit();
-  Phot2Direction.rotateUz(PositDirection);
-  // create G4DynamicParticle object for the particle2
-  G4DynamicParticle* aParticle2= new G4DynamicParticle (G4Gamma::Gamma(),
-                                                 Phot2Direction, Phot2Energy);
-  vdp->push_back(aParticle2);
+  } else {
+
+    G4ThreeVector PositDirection = dp->GetMomentumDirection();
+
+    G4double tau     = PositKinEnergy/electron_mass_c2;
+    G4double gam     = tau + 1.0;
+    G4double tau2    = tau + 2.0;
+    G4double sqgrate = sqrt(tau/tau2)*0.5;
+    G4double sqg2m1  = sqrt(tau*tau2);
+
+    // limits of the energy sampling
+    G4double epsilmin = 0.5 - sqgrate;
+    G4double epsilmax = 0.5 + sqgrate;
+    G4double epsilqot = epsilmax/epsilmin;
+
+    //
+    // sample the energy rate of the created gammas
+    //
+    G4double epsil, greject;
+
+    do {
+      epsil = epsilmin*pow(epsilqot,G4UniformRand());
+      greject = 1. - epsil + (2.*gam*epsil-1.)/(epsil*tau2*tau2);
+    } while( greject < G4UniformRand() );
+
+    //
+    // scattered Gamma angles. ( Z - axis along the parent positron)
+    //
+
+    G4double cost = (epsil*tau2-1.)/(epsil*sqg2m1);
+    if(std::abs(cost) > 1.0) {
+      G4cout << "### G4eeToTwoGammaModel WARNING cost= " << cost
+	     << " positron Ekin(MeV)= " << PositKinEnergy
+	     << " gamma epsil= " << epsil
+	     << G4endl;
+      if(cost > 1.0) cost = 1.0;
+      else cost = -1.0; 
+    }
+    G4double sint = sqrt((1.+cost)*(1.-cost));
+    G4double phi  = twopi * G4UniformRand();
+
+    G4double dirx = sint*cos(phi) , diry = sint*sin(phi) , dirz = cost;
+
+    //
+    // kinematic of the created pair
+    //
+
+    G4double TotalAvailableEnergy = PositKinEnergy + 2.0*electron_mass_c2;
+    G4double Phot1Energy = epsil*TotalAvailableEnergy;
+
+    G4ThreeVector Phot1Direction (dirx, diry, dirz);
+    Phot1Direction.rotateUz(PositDirection);
+    G4DynamicParticle* aGamma1 = new G4DynamicParticle (G4Gamma::Gamma(),
+							Phot1Direction, Phot1Energy);
+    vdp->push_back(aGamma1);
+
+    G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy;
+    G4double PositP= sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
+    G4ThreeVector dir = PositDirection*PositP - Phot1Direction*Phot1Energy;
+    G4ThreeVector Phot2Direction = dir.unit();
+
+    // create G4DynamicParticle object for the particle2
+    G4DynamicParticle* aGamma2= new G4DynamicParticle (G4Gamma::Gamma(),
+						       Phot2Direction, Phot2Energy);
+    vdp->push_back(aGamma2);
+    /*
+      G4cout << "Annihilation in fly: e0= " << PositKinEnergy
+      << " m= " << electron_mass_c2
+      << " e1= " << Phot1Energy 
+      << " e2= " << Phot2Energy << " dir= " <<  dir 
+      << " -> " << Phot1Direction << " " 
+      << Phot2Direction << G4endl;
+    */
+  }
   return vdp;
 }
 

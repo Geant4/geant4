@@ -15,6 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 August, 06  G.Cosmo (persistency-V08-01-00)
+- Get Rid of useless forward declarations in G4MCTEvent and G4MCTGenParticle
+  header files. Clearing compilation warnings on icc-9.X compilers.
+
 28 June, 05  G.Cosmo (persistency-V07-01-01)
 - Trivial fixes to G4MCTSimParticle and G4MCTSimVertex to support for
   CLHEP-2.0.X series.

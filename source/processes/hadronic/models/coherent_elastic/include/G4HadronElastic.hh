@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElastic.hh,v 1.11 2006/06/29 20:09:03 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4HadronElastic.hh,v 1.15 2006/08/10 15:59:38 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 //
 // G4 Model: Low energy elastic scattering with 4-momentum balance 
@@ -35,6 +35,7 @@
 // Modified:
 // 14-Dec-05 V.Ivanchenko rename the class
 // 13-Apr-06 V.Ivanchenko move to coherent_elastic 
+// 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
 //
 //
 // Class Description
@@ -66,8 +67,8 @@ class G4HadronElastic : public G4HadronicInteraction
 {
 public:
 
-  G4HadronElastic(G4double elim = 100.*keV, 
-		  G4double plow = 20.*MeV, 
+  G4HadronElastic(G4double plow = 20.0*MeV,
+                  G4double elim = 100.*keV, 
 		  G4double ehigh= DBL_MAX);
 
   virtual ~G4HadronElastic();
@@ -79,7 +80,11 @@ public:
 
   G4ElasticHadrNucleusHE* GetHElastic();
 
-  void SetMomentumLow(G4double value);
+  void SetIonKinEnergyLimit(G4double value);
+
+  void SetPlabLow(G4double value);
+
+  void SetKinEnergyLow(G4double value);
 
   void SetKinEnergyHigh(G4double value);
 
@@ -107,15 +112,29 @@ private:
   const G4ParticleDefinition* theNeutron;
   const G4ParticleDefinition* theDeuteron;
   const G4ParticleDefinition* theAlpha;
+  const G4ParticleDefinition* thePionPlus;
+  const G4ParticleDefinition* thePionMinus;
 
-  G4double ekinlim;  // in MeV
-  G4double plablow;  // in MeV/c
-  G4double ekinhigh;  // in MeV/c
+  G4double ekinIon;  
+  G4double ekinlow;  
+  G4double ekinhigh;  
+  G4double ekinpi;  
+  G4double plablow;
 };
 
-inline void G4HadronElastic::SetMomentumLow(G4double value)
+inline void G4HadronElastic::SetIonKinEnergyLimit(G4double value)
+{
+  ekinIon = value;
+}
+
+inline void G4HadronElastic::SetPlabLow(G4double value)
 {
   plablow = value;
+}
+
+inline void G4HadronElastic::SetKinEnergyLow(G4double value)
+{
+  ekinlow = value;
 }
 
 inline void G4HadronElastic::SetKinEnergyHigh(G4double value)

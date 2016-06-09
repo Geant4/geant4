@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-08-01-patch-01-ref    (27-July-2006)
+ Geant4 version Name: geant4-08-01-patch-02-ref    (10-November-2006)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -288,47 +288,47 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.36s Real=3.41s Sys=0.03s
+  User=1.83s Real=4.01s Sys=0.12s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=23.6512 +- 0.214181  mm  
+    mean charged track length   in absorber=23.6036 +- 0.221755  mm  
 
-            mean energy deposit in absorber=0.0161746 +- 0.000367275  MeV 
+            mean energy deposit in absorber=0.0158001 +- 0.000280482  MeV 
 
- mean number of steps in absorber (charged) =0.344 +- 0.11522      
+ mean number of steps in absorber (charged) =0.272 +- 0.129174      
  mean number of steps in absorber (neutral) =0.001 +- 0.0009995      
 
-   mean number of charged secondaries = 0.015 +- 0.00384383
+   mean number of charged secondaries = 0.012 +- 0.00344325
 
    mean number of neutral secondaries = 0.001 +- 0.0009995
 
-   mean number of e-s =0.015  and e+s =0
+   mean number of e-s =0.012  and e+s =0
 
-(number) transmission coeff=0.497  reflection coeff=0
+(number) transmission coeff=0.503  reflection coeff=0
 
  energy deposit distribution 
-#entries=1000    #underflows=0    #overflows=11
+#entries=1000    #underflows=0    #overflows=7
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           4       0.004
-    2         6          92       0.092
-    3         9         260        0.26
+    1         3           3       0.003
+    2         6          99       0.099
+    3         9         257       0.257
     4        12         264       0.264
-    5        15         145       0.145
-    6        18          79       0.079
-    7        21          46       0.046
-    8        24          31       0.031
-    9        27          17       0.017
-   10        30          18       0.018
-   11        33          10        0.01
-   12        36           8       0.008
-   13        39           4       0.004
-   14        42           3       0.003
+    5        15         150        0.15
+    6        18          72       0.072
+    7        21          47       0.047
+    8        24          32       0.032
+    9        27          18       0.018
+   10        30          15       0.015
+   11        33          12       0.012
+   12        36           7       0.007
+   13        39           5       0.005
+   14        42           4       0.004
    15        45           1       0.001
-   16        48           0           0
-   17        51           4       0.004
+   16        48           1       0.001
+   17        51           2       0.002
    18        54           1       0.001
-   19        57           2       0.002
+   19        57           3       0.003
 
  Emp =           0.012   width=          0.006  MeV 
 
@@ -337,7 +337,7 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 946924133, 1481012020
+ Current couple of seeds = 1356166741, 1119662032
 ----------------------------------------
 #
 Graphics systems deleted.

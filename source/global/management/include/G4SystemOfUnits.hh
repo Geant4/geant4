@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 
-#include "CLHEP/Units/SystemOfUnits.h"
+#include <CLHEP/Units/SystemOfUnits.h>
 
 using CLHEP::millimeter;
 using CLHEP::millimeter2;

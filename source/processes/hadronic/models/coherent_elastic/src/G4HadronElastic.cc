@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElastic.cc,v 1.20 2006/07/06 17:44:46 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// $Id: G4HadronElastic.cc,v 1.30 2006/10/31 18:36:04 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 //
 // Physics model class G4HadronElastic (derived from G4LElastic)
@@ -49,6 +49,11 @@
 //           add s-wave regim below some momentum        
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 // 07-Jun-06 V.Ivanchenko fix problem of rotation
+// 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
+// 02-Aug-06 V.Ivanchenko introduce energy cut on the aria of S-wave for pions
+// 24-Aug-06 V.Ivanchenko switch on G4ElasticHadrNucleusHE
+// 31-Aug-06 V.Ivanchenko do not sample sacttering for particles with kinetic 
+//                        energy below 10 keV
 //
 
 #include "G4HadronElastic.hh"
@@ -63,16 +68,21 @@
 #include "G4Neutron.hh"
 #include "G4Deuteron.hh"
 #include "G4Alpha.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
 
-G4HadronElastic::G4HadronElastic(G4double elim, G4double plow, G4double ehigh) 
+G4HadronElastic::G4HadronElastic(G4double plow, G4double elim, G4double ehigh) 
   : G4HadronicInteraction()
 {
   SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( DBL_MAX );
+  SetMaxEnergy( 100.*TeV );
   verboseLevel= 0;
-  plablow     = plow;
+  ekinIon     = elim;
   ekinhigh    = ehigh;
-  ekinlim     = elim;
+  ekinlow     = 19.*MeV;
+  ekinpi      = MeV;
+  plablow     = plow;
+
   qCManager   = G4QElasticCrossSection::GetPointer();
   hElastic    = new G4ElasticHadrNucleusHE();
 
@@ -80,6 +90,8 @@ G4HadronElastic::G4HadronElastic(G4double elim, G4double plow, G4double ehigh)
   theNeutron  = G4Neutron::Neutron();
   theDeuteron = G4Deuteron::Deuteron();
   theAlpha    = G4Alpha::Alpha();
+  thePionPlus = G4PionPlus::PionPlus();
+  thePionMinus= G4PionMinus::PionMinus();
 }
 
 G4HadronElastic::~G4HadronElastic()
@@ -101,14 +113,19 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 		 const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 {
   theParticleChange.Clear();
+
   const G4HadProjectile* aParticle = &aTrack;
+  G4double ekin = aParticle->GetKineticEnergy();
+  if(ekin <= 10.0*keV) {
+    theParticleChange.SetEnergyChange(ekin);
+    theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    return &theParticleChange;
+  }
+
   G4double aTarget = targetNucleus.GetN();
   G4double zTarget = targetNucleus.GetZ();
 
-  // Elastic scattering off Hydrogen
-
   G4double plab = aParticle->GetTotalMomentum();
-  G4double ekin = aParticle->GetKineticEnergy();
   if (verboseLevel >1) 
     G4cout << "G4HadronElastic::DoIt: Incident particle plab=" 
 	   << plab/GeV << " GeV/c " 
@@ -131,7 +148,7 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   G4ParticleDefinition * theDef = 0;
 
-  if(Z == 1 && A == 1) theDef = G4Proton::Proton();
+  if(Z == 1 && A == 1)       theDef = G4Proton::Proton();
   else if (Z == 1 && A == 2) theDef = G4Deuteron::Deuteron();
   else if (Z == 1 && A == 3) theDef = G4Triton::Triton();
   else if (Z == 2 && A == 3) theDef = G4He3::He3();
@@ -140,12 +157,11 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
  
   G4double m2 = theDef->GetPDGMass();
   G4LorentzVector lv1 = aParticle->Get4Momentum();
-  G4LorentzVector lv0(0.0,0.0,0.0,m2);   
-  G4LorentzVector lv  = lv0 + lv1;
+  G4LorentzVector lv(0.0,0.0,0.0,m2);   
+  lv += lv1;
 
   G4ThreeVector bst = lv.boostVector();
   lv1.boost(-bst);
-  lv0.boost(-bst);
 
   G4ThreeVector p1 = lv1.vect();
   G4double ptot = p1.mag();
@@ -154,13 +170,22 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 
   // Choose generator
   G4ElasticGenerator gtype = fLElastic;
-  if ((theParticle == theProton || theParticle == theNeutron) && Z == 1
-    && N == 0) {
+
+  // CHIPS Elastic
+  if ((theParticle == theProton || theParticle == theNeutron) && 
+      Z <= 2 && ekin > ekinlow) {
     gtype = fQElastic;
-  } else if(ekin >= ekinhigh) {
-    gtype = fHElastic;
-  } else if(plab <= plablow) {
-    gtype = fSWave;
+  } else {
+
+    // High energy elastic 
+    if(ekin >= ekinhigh && A != 2 && A != 3 && A < 238) gtype = fHElastic;
+
+    // Simplification - s-wave
+    else if((theParticle == thePionPlus || 
+	     theParticle == thePionMinus) && 
+	    (ekin <= ekinpi) ) 
+      gtype = fSWave;
+    else if(plab <= plablow) gtype = fSWave;
   }
 
   // Sample t
@@ -169,9 +194,11 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
       G4cout << "G4HadronElastic: Z= " << Z << " N= " 
 	     << N << " pdg= " <<  projPDG
 	     << " mom(GeV)= " << plab/GeV << "  " << qCManager << G4endl; 
+    if(Z == 1 && N == 2) N = 1;
+    else if(Z == 2 && N == 1) N = 2;
     G4double cs = qCManager->GetCrossSection(false,plab,Z,N,projPDG);
     if(cs > 0.0) t = qCManager->GetExchangeT(Z,N,projPDG);
-    else gtype = fSWave;
+    else gtype = fLElastic;
   }
 
   if(gtype == fLElastic) {
@@ -182,6 +209,22 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   if(gtype == fHElastic) {
     t = hElastic->SampleT(theParticle,plab,Z,A);
     if(t > tmax) gtype = fSWave;
+  }
+
+  // NaN finder
+  if(!(t < 0.0 || t >= 0.0)) {
+    if (verboseLevel > 0) {
+      G4cout << "G4HadronElastic:WARNING: Z= " << Z << " N= " 
+	     << N << " pdg= " <<  projPDG
+	     << " mom(GeV)= " << plab/GeV 
+	     << " the model type " << gtype;
+      if(gtype ==  fQElastic) G4cout << " CHIPS ";
+      else if(gtype ==  fLElastic) G4cout << " LElastic ";
+      else if(gtype ==  fHElastic) G4cout << " HElastic ";
+      G4cout << " S-wave will be sampled" 
+	     << G4endl; 
+    }
+    gtype = fSWave;
   }
 
   if(gtype == fSWave) t = G4UniformRand()*tmax;
@@ -202,17 +245,14 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
   G4ThreeVector v1(sint*std::cos(phi),sint*std::sin(phi),cost);
   v1 *= ptot;
   G4LorentzVector nlv1(v1.x(),v1.y(),v1.z(),std::sqrt(ptot*ptot + m1*m1));
-  G4LorentzVector nlv0 = lv0 + lv1 - nlv1;
 
-  nlv0.boost(bst);
   nlv1.boost(bst); 
 
   G4double eFinal = nlv1.e() - m1;
   if (verboseLevel > 1) 
-    G4cout << " P0= "<< nlv0 << "   P1= "
-	   << nlv1<<" m= " << m1 << " ekin0= " << eFinal 
-	   << " ekin1= " << nlv0.e() - m2
-	   << " 4-mom " << lv1 
+    G4cout << "Scattered: "
+	   << nlv1<<" m= " << m1 << " ekin(MeV)= " << eFinal 
+	   << " Proj: 4-mom " << lv1 
 	   <<G4endl;
   if(eFinal < 0.0) {
     G4cout << "G4HadronElastic WARNING ekin= " << eFinal
@@ -222,16 +262,24 @@ G4HadFinalState* G4HadronElastic::ApplyYourself(
 	   << " on " << theDef->GetParticleName()
 	   << G4endl;
     eFinal = 0.0;
+    nlv1.setE(m1);
   }
 
   theParticleChange.SetMomentumChange(nlv1.vect().unit());
   theParticleChange.SetEnergyChange(eFinal);
   
+  G4LorentzVector nlv0 = lv - nlv1;
   G4double erec =  nlv0.e() - m2;
-  if(erec > ekinlim) {
+  if (verboseLevel > 1) 
+    G4cout << "Recoil: "
+	   << nlv0<<" m= " << m2 << " ekin(MeV)= " << erec 
+	   <<G4endl;
+
+  if(erec > ekinIon) {
     G4DynamicParticle * aSec = new G4DynamicParticle(theDef, nlv0);
     theParticleChange.AddSecondary(aSec);
   } else {
+    if(erec < 0.0) erec = 0.0;
     theParticleChange.SetLocalEnergyDeposit(erec);
   }
 

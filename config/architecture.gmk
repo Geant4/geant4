@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.105 2006/06/13 15:36:30 gcosmo Exp $
+# $Id: architecture.gmk,v 1.106 2006/10/03 13:45:37 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -267,13 +267,25 @@ G4TREP := $(G4TMP)/$(G4TEMPLATE_REPOSITORY)
 #
 AR := ar r
 
-# Default echo used with makedepend. Changed for SUN-CC, Linux-g++.
+# Default echo used with makedepend. Changed for SUN-CC, Linux-g++, WIN32.
 #
 ECHO:= echo
 
-# Default grep used with source/GNUmakfile.  Changed for SUN-CC.
+# Default grep used with source/GNUmakefile.  Changed for SUN-CC.
 #
 GREP := grep
+
+# Default cut used with source/GNUmakefile.  Changed for WIN32.
+#
+CUT := cut
+
+# Default cat used with source/GNUmakefile.  Changed for WIN32.
+#
+CAT := cat
+
+# Default sed used with source/GNUmakefile.  Changed for WIN32.
+#
+SED := sed
 
 # Include architecture dependent setups...
 #

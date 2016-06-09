@@ -1,4 +1,4 @@
-$Id: History,v 1.278 2006/06/13 15:37:35 gcosmo Exp $
+$Id: History,v 1.285.2.1 2006/11/02 12:21:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th October 2006  Gabriele Cosmo (config-V08-01-05a)
+- Darwin-g++.gmk: use standard -echo- command.
+  Removed ECHO overloaded variable.
+
+5th October 2006  Gabriele Cosmo (config-V08-01-04)
+- liblist.c: added .dylib search for list of libraries.
+  Addressing problem report #885.
+
+3rd October 2006  Gabriele Cosmo (config-V08-01-03)
+- architecture.gmk: added variables for commands: echo, cat, cut, sed;
+  to be eventually overloaded in system dependent configurations.
+- WIN32-VC.gmk: overload commands [echo, grep, cat, cut, sed], to force
+  usage of the original CygWin built-in commands.
+
+18th August 2006  Gabriele Cosmo (config-V08-01-01)
+- Linux-icc: corrected G4RUNPATHOPTION flag to allow linking of applications
+  with shared libraries.
+
+18th August 2006  Gabriele Cosmo (config-V08-01-00)
+- Linux-icc: updated setup to support icc-9.X series.
 
 13th June 2006  Gabriele Cosmo (config-V08-00-02)
 - Removed defaults for X11, XM, XAW flags in architecture.gmk and added

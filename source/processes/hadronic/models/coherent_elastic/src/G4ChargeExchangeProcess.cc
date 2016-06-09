@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchangeProcess.cc,v 1.5 2006/07/06 18:11:08 vnivanch Exp $
-// GEANT4 tag $Name: geant4-08-01-patch-01 $
+// $Id: G4ChargeExchangeProcess.cc,v 1.7 2006/08/10 15:44:28 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 //
 // Geant4 Hadron Elastic Scattering Process -- header file
@@ -35,6 +35,7 @@
 // Modified:
 // 24-Apr-06 V.Ivanchenko add neutron scattering on hydrogen from CHIPS
 // 07-Jun-06 V.Ivanchenko fix problem of rotation of final state
+// 25-Jul-06 V.Ivanchenko add 19 MeV low energy for CHIPS
 //
 //
 
@@ -56,7 +57,7 @@
 G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
   : G4HadronicProcess(procName), first(true)
 {
-  thEnergy = 1.*keV;
+  thEnergy = 19.*MeV;
   verboseLevel= 1;
   qCManager = 0;
   AddDataSet(new G4HadronElasticDataSet);
@@ -188,7 +189,8 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
   if(iz == 1) return x;
   // CHIPS cross sections
   G4double momentum = dp->GetTotalMomentum();
-  if(iz <= -2 && (theParticle == theProton || theParticle == theNeutron)) {
+  if(iz == 2 && dp->GetKineticEnergy() > thEnergy &&
+     (theParticle == theProton || theParticle == theNeutron)) {
     G4double momentum = dp->GetTotalMomentum();
     if(verboseLevel>1)
       G4cout << "G4ChargeExchangeProcess compute CHIPS CS for Z= 2, N=2 "
@@ -202,6 +204,20 @@ G4double G4ChargeExchangeProcess::GetMicroscopicCrossSection(
 	     << G4endl;
     x = store->GetCrossSection(dp, elm, temp);
   }
+
+  // NaN finder
+  if(!(x < 0.0 || x >= 0.0)) {
+    if (verboseLevel > -1) {
+      G4cout << "G4ChargeExchangeProcess WARNING: Z= " << iz  
+	     << " pdg= " <<  pPDG
+	     << " mom(GeV)= " << dp->GetTotalMomentum()/GeV 
+	     << " cross= " << x 
+	     << " set to zero"
+	     << G4endl; 
+    }
+    x = 0.0;
+  }
+
   if(verboseLevel>1)
     G4cout << "G4ChargeExchangeProcess cross(mb)= " << x/millibarn
            << "  E(MeV)= " << dp->GetKineticEnergy()

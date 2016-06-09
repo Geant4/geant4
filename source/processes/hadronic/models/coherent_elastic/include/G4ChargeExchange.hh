@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChargeExchange.hh,v 1.2 2006/06/29 20:08:55 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4ChargeExchange.hh,v 1.3 2006/08/02 10:55:54 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 //
 // G4 Model: Charge and strangness exchange based on G4LightMedia model
 //           28 May 2006 V.Ivanchenko
 //
 // Modified:
+// 25-Jul-06 V.Ivanchenko add 19 MeV low energy, below which S-wave is sampled
 //
 //
 
@@ -58,7 +59,6 @@ public:
 
   G4ChargeExchange(G4HadronElastic* hel = 0,
                    G4double elim = 100.*keV,
-	           G4double plow = 200.*MeV,
 		   G4double ehigh= GeV);
 
   virtual ~G4ChargeExchange();
@@ -67,7 +67,7 @@ public:
                    const G4HadProjectile & aTrack,
                    G4Nucleus & targetNucleus);
 
-  void SetMomentumLow(G4double value);
+  void SetKinEnergyLow(G4double value);
 
   void SetKinEnergyHigh(G4double value);
 
@@ -108,14 +108,14 @@ private:
   G4ParticleDefinition* theA;
   G4ParticleDefinition* theHe3;
 
-  G4double ekinlim;  // in MeV
-  G4double plablow;  // in MeV/c
-  G4double ekinhigh;  // in MeV/c
+  G4double ekinlim;  
+  G4double ekinlow;  
+  G4double ekinhigh;  
 };
 
-inline void G4ChargeExchange::SetMomentumLow(G4double value)
+inline void G4ChargeExchange::SetKinEnergyLow(G4double value)
 {
-  plablow = value;
+  ekinlow = value;
 }
 
 inline void G4ChargeExchange::SetKinEnergyHigh(G4double value)

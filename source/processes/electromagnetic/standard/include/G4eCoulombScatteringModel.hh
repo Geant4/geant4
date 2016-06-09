@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh,v 1.2 2006/06/29 19:52:06 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4eCoulombScatteringModel.hh,v 1.4 2006/08/09 09:47:17 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -38,12 +38,18 @@
 // Creation date: 19.02.2006
 //
 // Modifications:
+// 01.08.06 V.Ivanchenko extend upper limit of table to TeV and review the
+//          logic of building - only elements from G4ElementTable
+// 08.08.06 V.Ivanchenko build internal table in ekin scale, introduce faclim
 //
 // Class Description:
 //
 // Implementation of eCoulombScattering of pointlike charge particle 
 // on Atomic Nucleus for interval of scattering anles in Lab system 
-// thetaMin - ThetaMax, nucleus recoil is neglected
+// thetaMin - ThetaMax, nucleus recoil is neglected.
+//   The model based on analysis of J.M.Fernandez-Varea et al. 
+// NIM B73(1993)447 originated from G.Wentzel Z.Phys. 40(1927)590 with 
+// screening parameter from H.A.Bethe Phys. Rev. 89 (1953) 1256.
 // 
 
 // -------------------------------------------------------------------
@@ -54,6 +60,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
+#include "globals.hh"
 
 class G4ParticleChangeForGamma;
 
@@ -101,12 +108,15 @@ private:
   G4double                  a0;
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
-  G4double                  lowMomentum;
-  G4double                  highMomentum;
+  G4double                  lowKEnergy;
+  G4double                  highKEnergy;
   G4double                  q2Limit;
+  G4double                  alpha2;
+  G4double                  faclim;
 
   G4int                     nbins;
   G4int                     nmax;
+  G4int                     index[100];
 
   G4bool                    buildTable;             
   G4bool                    isInitialised;             
@@ -121,15 +131,12 @@ inline G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
                                              G4double, G4double)
 {
   G4double x;
+  G4bool b;
   if(theCrossSectionTable) {
-    G4bool b;
-    G4double mass = p->GetPDGMass();
-    G4double momentum2 = kinEnergy*(kinEnergy + 2.0*mass);
-    G4double e     = kinEnergy + mass;
-    G4double beta2 = momentum2/(e*e);
-    x = (((*theCrossSectionTable)[G4int(Z)]))->GetValue(momentum2, b)
-      / (momentum2*beta2);
+    x = std::exp((((*theCrossSectionTable)[index[G4int(Z)]]))->GetValue(kinEnergy, b));
   } else x = CalculateCrossSectionPerAtom(p, kinEnergy, Z);
+
+  //  G4cout << "G4eCoulombScatteringModel: e= " << kinEnergy << "  cs= " << x << G4endl;
   return x;
 }
 

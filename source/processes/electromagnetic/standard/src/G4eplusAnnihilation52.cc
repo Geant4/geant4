@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation52.cc,v 1.2 2006/06/29 19:53:59 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01 $
+// $Id: G4eplusAnnihilation52.cc,v 1.3 2006/10/16 15:26:50 vnivanch Exp $
+// GEANT4 tag $Name: geant4-08-01-patch-02 $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -298,7 +298,8 @@ G4VParticleChange* G4eplusAnnihilation52::PostStepDoIt(const G4Track& aTrack,
 
    // Do not make anything if particle is stopped, the Annihilation52 then
    // should be performed by the AtRestDoIt!
-   if (aTrack.GetTrackStatus() == fStopButAlive) return &aParticleChange;
+   if (aTrack.GetTrackStatus() == fStopButAlive || PositKinEnergy == 0.0) 
+     return &aParticleChange;
 
    G4double gamam1 = PositKinEnergy/electron_mass_c2;
    G4double gama   = gamam1+1. , gamap1 = gamam1+2.;
@@ -493,6 +494,8 @@ void G4eplusAnnihilation52::PrintInfoDefinition()
 	           << G4BestUnit(LowestEnergyLimit ,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
          << " in " << NumbBinTable << " bins. \n";
+  G4cout << "        WARNING: This process is obsolete and will be soon removed" 
+	 << G4endl;
 }         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

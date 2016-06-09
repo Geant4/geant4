@@ -1,0 +1,112 @@
+
+                 Geant4 8.1 - patch-02 Release Notes
+                 -----------------------------------
+
+                                                           10 November 2006
+
+List of fixes included in this public patch since the public release 8.1.p01:
+
+  o Geometry:
+    --------
+    + management
+      o Added empty virtual method CheckOverlaps() to G4VPhysicalVolume to
+        allow for proper overloading from subclasses. Implementation returns
+        always 'false', which is the case for replicas.
+
+  o Global:
+    ------
+    + Corrected inclusion of CLHEP headers in wrapper files
+      G4SystemOfUnits.hh and G4PhysicalConstants.hh.
+
+  o Electromagnetic processes:
+    -------------------------
+    + standard:
+      o Fixed energy non-conservation in G4PAIModel for positrons. Fix also
+        concerning 'Tmax' for electrons and positrons: 'Tmax' is defined
+        now for each particle independently.
+      o Fixed problem of positron zero incident energy in G4eeToTwoGammaModel.
+      o Added extra protection inside G4BetheBlochModel.
+      o Fixed problems and add comments in the classes prototype Coulomb
+        elastic scattering: G4CoulombScattering, G4CoulombScatteringModel,
+        G4eCoulombScatteringModel. Set default limit on scattering angle to
+        zero.
+    + utils:
+      o G4VEnergyLossProcess: made LambdaPhysicsVector() method protected.
+      o G4ionEffectiveCharge: added protection for NULL pointer to material.
+
+  o Hadronic Processes:
+    ------------------
+    + models/coherent_elastic:
+      o Introduced NaN check inside G4HadronElastic, G4ChargeExchange, and
+        G4UHadronElasticProcess.
+      o Removed HP data from G4UHadronElasticProcess (it is set in physics
+        lists); added low energy threshold of 20 MeV in G4HadronElastic for
+        QElastic. For any particle with kinetic energy below 10 KeV, the
+        primary particle is returned unchanged and no scattering is sampled.
+        This prevents situations of low-energy neutrons scattering forever,
+        and reduces precision in computing scattering for low-energy hadrons.
+    + models/utils:
+      o Reduced warning output from G4Fragment on negative excitation energy;
+        a maximum of 10 warnings is printed now.
+      o G4Fancy3DNucleus:ChoosePositions(): correctly use std::vector.
+        Correction addressing problem report #887 on WIN32/VC8.
+      o Removed meaningless 'const' qualifier from return type of method
+        G4Fancy3DNucleusHelper().
+
+  o Particles:
+    ---------
+    + Fixed bug in G4ParticleDefinition constructor causing not filling quark
+      contents when G4VERBOSE is not set.
+    + Fixed bug in k2(1770) decay. Addresses problem report #894.
+
+  o Persistency:
+    -----------
+    + Get Rid of useless forward declarations in G4MCTEvent and
+      G4MCTGenParticle header files. Clearing compilation warnings on
+      icc-9.X compilers.
+
+  o Track:
+    -----
+    + Made G4StepPoint::operator=() inline for optimisation.
+
+  o Physics Lists:
+    -------------
+    + G4HadronElasticPhysics: added explicit inclusions of data headers
+      in the header file.
+
+  o Configuration:
+    -------------
+    + Linux-icc: updated setup to support Intel icc compiler 9.X series.
+    + liblist.c: added .dylib search for list of libraries.
+      Addressing problem report #885.
+    + architecture.gmk: added variables for commands: echo, cat, cut, sed;
+      to be eventually overloaded in system dependent configurations.
+      Overloaded variables for WIN32-VC to force usage of the original
+      CygWin built-in commands. Use standard 'echo' command for Darwin-g++.
+      Replaced system commands with variables defined at architecture level
+      in source/GNUmakefile.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/underground_physics
+      o Fixed bug: removed uninitialized 'UserLimitsForXenon'.
+    + extended/analysis/AnaEx01
+      o Corrected text in README for AIDA setup.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 8.1.p01
+  o  Technical notes distributed for release 8.1 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 8.1.p02 are available
+through our "Source Code" Web page:
+   http://cern.ch/geant4/support/download.shtml
+
+Please refer to the Geant4 User Documentation:
+   http://cern.ch/geant4/support/userdocuments.shtml
+for further information about using Geant4.
