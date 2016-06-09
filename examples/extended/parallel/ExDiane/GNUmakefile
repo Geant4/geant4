@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2004/05/25 12:46:46 guatelli Exp $
+# $Id: GNUmakefile,v 1.3.4.1 2009/08/11 15:26:35 gcosmo Exp $
 # --------------------------------------------------------------
 
 name := Brachy
@@ -21,10 +21,4 @@ all: lib bin
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
-ifdef G4ANALYSIS_USE  
- CPPFLAGS += `aida-config --include`
- LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib` 
-endif
-
 

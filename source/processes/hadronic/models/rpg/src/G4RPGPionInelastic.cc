@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPionInelastic.cc,v 1.1 2008/01/05 00:15:12 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGPionInelastic.cc,v 1.1.2.1 2009/08/11 12:57:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
  
 #include "G4RPGPionInelastic.hh"
@@ -70,7 +70,32 @@ G4RPGPionInelastic::G4RPGPionInelastic(const G4String& modelName)
     }
   }
 
+  //  printCrossSections();
+
 }
+
+
+/*
+void G4RPGPionInelastic::printCrossSections() const
+{
+  G4cout << " pi+ p total cross sections (mb) " << G4endl;
+  for (G4int i = 0; i < 5; i++) {
+    G4int istart = i*6;
+    G4int istop = istart + 6;
+    for (G4int t = istart; t < istop; t++) G4cout << pipPtot[t] << "  " ;
+    G4cout << G4endl;
+  }
+  G4cout << G4endl;
+
+  G4cout << " pi- p total cross sections (mb) " << G4endl;
+  for (G4int i = 0; i < 5; i++) {
+    G4int istart = i*6;
+    G4int istop = istart + 6;
+    for (G4int t = istart; t < istop; t++) G4cout << pimPtot[t] << "  " ;
+    G4cout << G4endl;
+  }
+}
+*/
 
 
 G4int G4RPGPionInelastic::GetMultiplicityT12(G4double KE) const

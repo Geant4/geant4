@@ -23,13 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSCNeutronBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+// $Id: G4QGSCNeutronBuilder.cc,v 1.4.2.1 2009/08/11 15:11:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSCNeutronBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
+#include "G4QGSCNeutronBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 
- G4QGSCNeutronBuilder::
- G4QGSCNeutronBuilder(G4bool quasiElastic) 
+G4QGSCNeutronBuilder::
+G4QGSCNeutronBuilder(G4bool quasiElastic) 
  {
    theMin = 8*GeV;
    theModel = new G4TheoFSGenerator("QGSC");
@@ -50,8 +65,7 @@
    {  theQuasiElastic=0;}  
  }
 
- G4QGSCNeutronBuilder::
- ~G4QGSCNeutronBuilder() 
+G4QGSCNeutronBuilder::~G4QGSCNeutronBuilder() 
  {
    delete theStringDecay;
    delete theStringModel;
@@ -60,13 +74,13 @@
    delete theModel;
  }
 
- void G4QGSCNeutronBuilder::
- Build(G4NeutronInelasticProcess * aP)
+void G4QGSCNeutronBuilder::
+Build(G4NeutronInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
-   aP->AddDataSet(&theXSec);  
+   aP->AddDataSet(new G4NeutronInelasticCrossSection);  
  }
 
  // 2002 by J.P. Wellisch

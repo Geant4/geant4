@@ -28,30 +28,22 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayout.cc,v 1.3.2.2 2006/06/29 16:13:59 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonDetectorLayout.cc,v 1.3.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
 #include "RadmonDetectorLayout.hh"
 
-
-
-                                                RadmonDetectorLayout :: RadmonDetectorLayout()
+RadmonDetectorLayout :: RadmonDetectorLayout()
 {
 }
 
-
-
-                                                RadmonDetectorLayout :: ~RadmonDetectorLayout()
+RadmonDetectorLayout :: ~RadmonDetectorLayout()
 {
 }
 
-
-
-
-
-void                                            RadmonDetectorLayout :: EnableEnvironment(void)
+void RadmonDetectorLayout :: EnableEnvironment(void)
 {
  if (environment.IsEnabled())
   return;
@@ -60,9 +52,7 @@ void                                            RadmonDetectorLayout :: EnableEn
  NotifyChange();
 }
 
-
-
-void                                            RadmonDetectorLayout :: DisableEnvironment(void)
+void RadmonDetectorLayout :: DisableEnvironment(void)
 {
  if (!environment.IsEnabled())
   return;
@@ -71,18 +61,12 @@ void                                            RadmonDetectorLayout :: DisableE
  NotifyChange();
 }
 
-
-
-G4bool                                          RadmonDetectorLayout :: IsEnabledEnvironment(void) const
+G4bool RadmonDetectorLayout :: IsEnabledEnvironment(void) const
 {
  return environment.IsEnabled();
 }
 
-
-
-
-
-void                                            RadmonDetectorLayout :: SetEnvironmentType(const G4String & type)
+void RadmonDetectorLayout :: SetEnvironmentType(const G4String & type)
 {
  if (environment.GetType()==type)
   return;
@@ -93,30 +77,22 @@ void                                            RadmonDetectorLayout :: SetEnvir
   NotifyChange();
 }
 
-
-
-const G4String &                                RadmonDetectorLayout :: GetEnvironmentType() const
+const G4String &  RadmonDetectorLayout :: GetEnvironmentType() const
 {
  return environment.GetType();
 }
 
-
-
-G4int                                           RadmonDetectorLayout :: GetEnvironmentNAttributes(void) const
+G4int RadmonDetectorLayout :: GetEnvironmentNAttributes(void) const
 {
  return environment.GetNAttributes();
 }
 
-
-
-const G4String &                                RadmonDetectorLayout :: GetEnvironmentAttributeName(G4int index) const
+const G4String & RadmonDetectorLayout :: GetEnvironmentAttributeName(G4int index) const
 {
  return environment.GetAttributeName(index);
 }
 
-
-
-void                                            RadmonDetectorLayout :: SetEnvironmentAttribute(const G4String & attributeName, const G4String & attributeValue)
+void RadmonDetectorLayout :: SetEnvironmentAttribute(const G4String & attributeName, const G4String & attributeValue)
 {
  if (attributeName=="")
  {
@@ -133,16 +109,12 @@ void                                            RadmonDetectorLayout :: SetEnvir
   NotifyChange();
 }
 
-
-
-const G4String                                  RadmonDetectorLayout :: GetEnvironmentAttribute(const G4String & attributeName, const G4String & defaultAttributeValue) const
+const G4String RadmonDetectorLayout :: GetEnvironmentAttribute(const G4String & attributeName, const G4String & defaultAttributeValue) const
 {
  return environment.GetAttribute(attributeName, defaultAttributeValue);
 }
 
-
-
-void                                            RadmonDetectorLayout :: ClearEnvironmentAttribute(const G4String & attributeName)
+void RadmonDetectorLayout :: ClearEnvironmentAttribute(const G4String & attributeName)
 {
  if (!environment.ExistsAttribute(attributeName))
  {
@@ -156,12 +128,9 @@ void                                            RadmonDetectorLayout :: ClearEnv
   NotifyChange();
 }
 
-
-
-
-
-void                                            RadmonDetectorLayout :: CreateMultilayer(const G4String & multilayerLabel)
+void RadmonDetectorLayout :: CreateMultilayer(const G4String & multilayerLabel)
 {
+  // Check if the multilayer exists
  if (multilayersCollection.ExistsMultilayerByLabel(multilayerLabel))
  {
   G4cout << "RadmonDetectorLayout::CreateMultilayer: Multilayer \"" << multilayerLabel << "\" just exists." << G4endl;
@@ -172,9 +141,7 @@ void                                            RadmonDetectorLayout :: CreateMu
  multilayer.SetLabel(multilayerLabel);
 }
 
-
-
-void                                            RadmonDetectorLayout :: RemoveMultilayer(const G4String & multilayerLabel)
+void RadmonDetectorLayout :: RemoveMultilayer(const G4String & multilayerLabel)
 {
  if (IsPlaced(multilayerLabel))
  {
@@ -191,9 +158,7 @@ void                                            RadmonDetectorLayout :: RemoveMu
  multilayersCollection.RemoveMultilayersByLabel(multilayerLabel);
 }
 
-
-
-void                                            RadmonDetectorLayout :: SetMultilayerWidth(const G4String & multilayerLabel, G4double width)
+void RadmonDetectorLayout :: SetMultilayerWidth(const G4String & multilayerLabel, G4double width)
 {
  RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
  
@@ -209,9 +174,7 @@ void                                            RadmonDetectorLayout :: SetMulti
   NotifyChange();
 }
 
-
-
-G4double                                        RadmonDetectorLayout :: GetMultilayerWidth(const G4String & multilayerLabel) const
+G4double RadmonDetectorLayout :: GetMultilayerWidth(const G4String & multilayerLabel) const
 {
  const RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
  
@@ -222,8 +185,7 @@ G4double                                        RadmonDetectorLayout :: GetMulti
 }
 
 
-
-void                                            RadmonDetectorLayout :: SetMultilayerHeight(const G4String & multilayerLabel, G4double height)
+void RadmonDetectorLayout :: SetMultilayerHeight(const G4String & multilayerLabel, G4double height)
 {
  RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
  
@@ -239,9 +201,7 @@ void                                            RadmonDetectorLayout :: SetMulti
   NotifyChange();
 }
 
-
-
-G4double                                        RadmonDetectorLayout :: GetMultilayerHeight(const G4String & multilayerLabel) const
+G4double  RadmonDetectorLayout :: GetMultilayerHeight(const G4String & multilayerLabel) const
 {
  const RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
 
@@ -251,9 +211,7 @@ G4double                                        RadmonDetectorLayout :: GetMulti
  return multilayer->GetHeight();
 }
 
-
-
-G4double                                        RadmonDetectorLayout :: GetMultilayerTotalThickness(const G4String & multilayerLabel) const
+G4double RadmonDetectorLayout :: GetMultilayerTotalThickness(const G4String & multilayerLabel) const
 {
  const RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
 
@@ -263,11 +221,7 @@ G4double                                        RadmonDetectorLayout :: GetMulti
  return multilayer->GetTotalThickness();
 }
 
-
-
-
-
-void                                            RadmonDetectorLayout :: AppendLayerToMultilayer(const G4String & multilayerLabel, const G4String & layerLabel)
+void RadmonDetectorLayout :: AppendLayerToMultilayer(const G4String & multilayerLabel, const G4String & layerLabel)
 {
  RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
  
@@ -288,9 +242,7 @@ void                                            RadmonDetectorLayout :: AppendLa
   NotifyChange();
 }
 
-
-
-void                                            RadmonDetectorLayout :: RemoveLayerFromMultilayer(const G4String & multilayerLabel, const G4String & layerLabel)
+void RadmonDetectorLayout :: RemoveLayerFromMultilayer(const G4String & multilayerLabel, const G4String & layerLabel)
 {
  RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
  
@@ -309,9 +261,7 @@ void                                            RadmonDetectorLayout :: RemoveLa
   NotifyChange();
 }
 
-
-
-void                                            RadmonDetectorLayout :: RemoveAllLayersFromMultilayer(const G4String & multilayerLabel)
+void RadmonDetectorLayout :: RemoveAllLayersFromMultilayer(const G4String & multilayerLabel)
 {
  RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
  
@@ -324,9 +274,7 @@ void                                            RadmonDetectorLayout :: RemoveAl
   NotifyChange();
 }
 
-
-
-G4int                                           RadmonDetectorLayout :: GetMultilayerNLayers(const G4String & multilayerLabel) const
+G4int RadmonDetectorLayout :: GetMultilayerNLayers(const G4String & multilayerLabel) const
 {
  const RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
  
@@ -336,9 +284,7 @@ G4int                                           RadmonDetectorLayout :: GetMulti
  return multilayer->GetNLayers();
 }
 
-
-
-const G4String &                                RadmonDetectorLayout :: GetMultilayerLayerLabel(const G4String & multilayerLabel, G4int index) const
+const G4String & RadmonDetectorLayout :: GetMultilayerLayerLabel(const G4String & multilayerLabel, G4int index) const
 {
  const RadmonDetectorMultilayerLayout * multilayer(FindMultilayer(multilayerLabel));
  
@@ -348,11 +294,7 @@ const G4String &                                RadmonDetectorLayout :: GetMulti
  return multilayer->GetLayer(index).GetLabel();
 }
 
-
-
-
-
-void                                            RadmonDetectorLayout :: SetLayerThickness(const G4String & multilayerLabel, const G4String & layerLabel, G4double thickness)
+void RadmonDetectorLayout :: SetLayerThickness(const G4String & multilayerLabel, const G4String & layerLabel, G4double thickness)
 {
  RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
  
@@ -368,9 +310,7 @@ void                                            RadmonDetectorLayout :: SetLayer
   NotifyChange();
 }
 
-
-
-G4double                                        RadmonDetectorLayout :: GetLayerThickness(const G4String & multilayerLabel, const G4String & layerLabel) const
+G4double RadmonDetectorLayout :: GetLayerThickness(const G4String & multilayerLabel, const G4String & layerLabel) const
 {
  const RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
  
@@ -380,9 +320,7 @@ G4double                                        RadmonDetectorLayout :: GetLayer
  return layer->GetThickness();
 }
 
-
-
-void                                            RadmonDetectorLayout :: SetLayerType(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & type)
+void RadmonDetectorLayout :: SetLayerType(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & type)
 {
  RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
  
@@ -410,11 +348,7 @@ const G4String &                                RadmonDetectorLayout :: GetLayer
  return layer->GetType();
 }
 
-
-
-
-
-G4int                                           RadmonDetectorLayout :: GetLayerNAttributes(const G4String & multilayerLabel, const G4String & layerLabel) const
+G4int RadmonDetectorLayout :: GetLayerNAttributes(const G4String & multilayerLabel, const G4String & layerLabel) const
 {
  const RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
  
@@ -424,9 +358,7 @@ G4int                                           RadmonDetectorLayout :: GetLayer
  return layer->GetNAttributes();
 }
 
-
-
-const G4String &                                RadmonDetectorLayout :: GetLayerAttributeName(const G4String & multilayerLabel, const G4String & layerLabel, G4int index) const
+const G4String & RadmonDetectorLayout :: GetLayerAttributeName(const G4String & multilayerLabel, const G4String & layerLabel, G4int index) const
 {
  const RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
  
@@ -436,9 +368,7 @@ const G4String &                                RadmonDetectorLayout :: GetLayer
  return layer->GetAttributeName(index);
 }
 
-
-
-void                                            RadmonDetectorLayout :: SetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & attributeValue)
+void  RadmonDetectorLayout :: SetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & attributeValue)
 {
  if (attributeName=="")
  {
@@ -460,9 +390,7 @@ void                                            RadmonDetectorLayout :: SetLayer
   NotifyChange();
 }
 
-
-
-const G4String                                  RadmonDetectorLayout :: GetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & defaultAttributeValue) const
+const G4String RadmonDetectorLayout :: GetLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName, const G4String & defaultAttributeValue) const
 {
  const RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
  
@@ -472,9 +400,7 @@ const G4String                                  RadmonDetectorLayout :: GetLayer
  return layer->GetAttribute(attributeName, defaultAttributeValue);
 }
 
-
-
-void                                            RadmonDetectorLayout :: ClearLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName)
+void RadmonDetectorLayout :: ClearLayerAttribute(const G4String & multilayerLabel, const G4String & layerLabel, const G4String & attributeName)
 {
  RadmonDetectorLayerLayout * layer(FindLayer(multilayerLabel, layerLabel));
  
@@ -493,11 +419,7 @@ void                                            RadmonDetectorLayout :: ClearLay
   NotifyChange();
 }
 
-
-
-
-
-void                                            RadmonDetectorLayout :: CreatePlacement(const G4String & placementLabel, const G4String & multilayerName)
+void RadmonDetectorLayout :: CreatePlacement(const G4String & placementLabel, const G4String & multilayerName)
 {
  if (multilayerPlacementsCollection.ExistsPlacementByLabel(placementLabel))
  {
@@ -512,23 +434,17 @@ void                                            RadmonDetectorLayout :: CreatePl
  NotifyChange();
 }
 
-
-
-G4int                                           RadmonDetectorLayout :: GetNPlacements() const
+G4int RadmonDetectorLayout :: GetNPlacements() const
 {
  return multilayerPlacementsCollection.GetNPlacements();
 }
 
-
-
-const G4String &                                RadmonDetectorLayout :: GetPlacementLabel(G4int index) const
+const G4String & RadmonDetectorLayout :: GetPlacementLabel(G4int index) const
 {
  return multilayerPlacementsCollection.GetPlacement(index).GetLabel();
 }
 
-
-
-void                                            RadmonDetectorLayout :: RemovePlacement(const G4String & placementLabel)
+void RadmonDetectorLayout :: RemovePlacement(const G4String & placementLabel)
 {
  if (!multilayerPlacementsCollection.ExistsPlacementByLabel(placementLabel))
  {
@@ -540,11 +456,7 @@ void                                            RadmonDetectorLayout :: RemovePl
  NotifyChange();
 }
 
-
-
-
-
-const G4String &                                RadmonDetectorLayout :: GetPlacementMultilayerType(const G4String & placementLabel) const
+const G4String & RadmonDetectorLayout :: GetPlacementMultilayerType(const G4String & placementLabel) const
 {
  const RadmonDetectorMultilayerPlacementLayout * placement(FindPlacement(placementLabel));
 

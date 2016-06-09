@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSurface.icc,v 1.9 2006/06/29 18:30:52 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4LogicalSurface.icc,v 1.9.6.1 2009/08/11 13:36:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 ////////////////////////////////////////////////////////////////////////
 // Surface Class Inline Methods
@@ -50,7 +50,7 @@ G4LogicalSurface::SetSurfaceProperty(G4SurfaceProperty* ptrSurfaceProperty)
         theSurfaceProperty = ptrSurfaceProperty;
 } 
 
-inline G4String
+inline const G4String&
 G4LogicalSurface::GetName() const
 {
         return theName;
@@ -109,8 +109,7 @@ G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
 
 inline G4LogicalSurface::G4LogicalSurface(const G4String&         name,
                                          G4SurfaceProperty* surfaceProperty) 
-                : theName(name),
-                  theSurfaceProperty(surfaceProperty)
+  : theName(name), theSurfaceProperty(surfaceProperty)
 {
 }
 

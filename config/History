@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.344.2.1 2009/03/03 11:13:05 gcosmo Exp $
+cvs log $Id: History,v 1.344.2.3 2009/08/11 09:07:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,50 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd August 2009 Gabriele Cosmo (config-V09-01-19)
+- Darwin-g++.gmk: added -arch_multiple option to LDFLAGS to force more
+  diagnostics for wrong architecture errors at link stage.
+
+17th June 2009 Gunter Folger
+- binmake.gmk: moved definition of TARGOBJEXT to place not dependent
+  on G4EXLIB, such that the extension is defined when no lib is present
+  (e.g. for hadronic exercisers).
+
+27th May 2009  Ben Morgan
+- Configure script:
+  o Rewritten check on make/gmake on WIN32-VC systems to avoid problems
+    with cygwin and Matlab.
+  o Added check to build Qt driver only when Qt UI module is built;
+    reordered moc checks and added cross-check on moc version.
+    Added safety reset of OpenGL QT build and use variables.
+  o Commented out echo compatibility warning to address problem report #1067.
+
+27th April 2009  Gabriele Cosmo
+- Linux-icc.gmk: removed "-lcxa -lunwind" LOADLIBS addition, no longer
+  necessary since icc-11.0.83.
+
+20th April 2009  Laurent Garnier
+- Linux-g++.gmk: corrections to respect standard location for include
+  and lib paths for Qt. Improved setup for non-standard Qt3 location.
+
+8th March 2009  Laurent Garnier
+- Darwin-g++.gmk: bug fix for Qt non standard installation.
+- Linux-g++.gmk: changed way to fing QtLib by default.
+- WIN32-VC.gmk: bug fix for building GLQTLIBS.
+
+5th March 2009  Guy Barrand
+- analysis.gmk: arrange configuration for WIN32-VC so that what is returned
+  by `aida-config --lib` (which may have the Windows LINK.exe syntax) is
+  understood by g++ which is in fact used by CygWin for linking applications.
+  Then transforming /LIBPATH options to -libpath options and change the path
+  '\' syntax to a '/' syntax. Allowing now to use the AIDA implementation
+  coming from an osc-batch or osc-vis binary kit built for WIN32-VC, in a
+  example using AIDA built from CygWin with Geant4 built with the VisualC++
+  compiler.
+- G4UI_USE.gmk: suppressed G4UI_USE_OSC logic. From OpenScientist/16.8, the
+  osc-g4-vis program can instrument directly the GNUmakefile of an example or
+  of a user application which is a clone of some Geant4 example.
 
 27th February 2009  Gabriele Cosmo (config-V09-01-18)
 - common.gmk, globlib.gmk: added removal of moc sources in clean target.

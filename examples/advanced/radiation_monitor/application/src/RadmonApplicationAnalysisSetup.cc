@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationAnalysisSetup.cc,v 1.3.2.2 2006/06/29 16:08:31 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonApplicationAnalysisSetup.cc,v 1.3.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -50,7 +50,7 @@
                                                 }                                                                                        \
                                                 factory->AppendDataAnalysisWithLabel(constructor)
 
- G4bool                                         RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * factory)
+ G4bool RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * factory)
  {
   RadmonVDataAnalysisWithLabel * constructor;
 
@@ -59,7 +59,7 @@
   return true;
  }
 #else  /* G4ANALYSIS_USE */
- G4bool                                         RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * /* factory */)
+ G4bool RadmonApplicationAnalysisSetup :: CreateDataAnalysis(RadmonDataAnalysisWithLabelFactory * /* factory */)
  {
   return false;
  }

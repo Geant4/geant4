@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2007/05/03 22:10:54 gunter Exp $
+$Id: History,v 1.5.4.1 2009/08/11 13:05:47 gcosmo Exp $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,6 +15,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22-May-2009   Gunter Folger             (had-hadronization-V09-01-00)
+---------------------------------------------------------------------
+- change pt sampling in G4LundStringFragmentation to avoid near endless
+  loop; this should improve overall performance slightly.
+  Affected G4VLongitudinalStringDecay, where SampleQuarkPt() is 
+  implemented; affected .hh and .cc for new optional argument of max Pt 
+  to SampleQuarkPt()
+
 2-May 2007    Gunter Folger             (had-hadronization-V08-02-03)
 ---------------------------------------------------------------------
 -  G4ExcitedStringDecay.hh: protect againt divide by 0 when KTsum1.e() 
@@ -24,7 +32,6 @@ code and to keep track of all tags.
 ---------------------------------------------------------------------
 -  Seperate FTF and QGS fragmentation dir methods where V.Uzhinsky
     modified the algorithm for FTF. 
-    
 
 2-March 2007 G.Folger                   (had-hadronization-V08-02-01)
 ---------------------------------------------------------------------

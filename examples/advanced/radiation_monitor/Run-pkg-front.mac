@@ -1,0 +1,8 @@
+# Front con backaging
+
+/radmon/application/DisableEventsDump
+/radmon/generator/SetSourceAlgorithmAttribute Environment Direction Direction      '90. 0. 180. deg'
+/radmon/generator/SetSourceAlgorithmAttribute Environment Position  Position       '0. 0. 2. cm'
+/radmon/analysis/SetOutputFileName analysis-front-pkg.hbook
+/run/beamOn 217440
+

@@ -87,6 +87,7 @@ The introduced user interface commands are:
 /radmon/application/DisableEventsDump
 /radmon/application/EnableTracksVisualisation
 /radmon/application/DisableTracksVisualisation
+/radmon/application/SetSeed
 /radmon/detectorFactory/Dump
 /radmon/detector/EnableEnvironment
 /radmon/detector/DisableEnvironment
@@ -182,28 +183,32 @@ Parameters:  [none]
 Description: Enables the print out of the run number at the begin of the run
 
 Command:     /radmon/application/DisableRunsDump
-Parameters   [none]
+Parameters:  [none]
 Description: Disables the print out of the run number
 
 Command:     /radmon/application/DumpEventsEvery
-Parameters   <n> [integer]
+Parameters:  <n> [integer]
 Description: Enables the print out of the event number at the beginning of
              the event (1 out of <n> events)
 
 Command:     /radmon/application/DisableEventsDump
-Parameters   [none]
+Parameters:  [none]
 Description: Disables the print out of the event number
 
 Command:     /radmon/application/EnableTracksVisualisation
-Parameters   [none]
+Parameters:  [none]
 Description: Enables the display of the tracks at the end of the run
 Requires:    G4VIS_USE environment variable at build time
 See also:    /vis/scene/endOfEventAction [Geant4 built-in UI command]
 
 Command:     /radmon/application/DisableTracksVisualisation
-Parameters   [none]
+Parameters:  [none]
 Description: Disables the display of the tracks
 Requires:    G4VIS_USE environment variable at build time
+
+Command:     /radmon/application/SetSeed
+Parameters:  <n> [integer]
+Description: Sets the random seed to <n>
 
 
 
@@ -785,15 +790,15 @@ Attributes:  [none]
 
 Module:      NeutronBinary
 Description: Neutron processes. HadronElasticProcess, LCapture, LFission and
-             NeutronInelasticProcess based on BinaryCascade up to 10 GeV,
-             LENeutronInelastic between 8 and 25 GeV and QGSModel between 20
+             NeutronInelasticProcess based on BinaryCascade up to 0.1 GeV,
+             LENeutronInelastic between 0.1 and 25 GeV and QGSModel between 20
              GeV and 100 TeV
 Attributes:  [none]
 
 Module:      NeutronBertini
 Description: Neutron processes. HadronElasticProcess, LCapture, LFission and
-             NeutronInelasticProcess based on CascadeInterface up to 3.2 GeV,
-             LENeutronInelastic between 2.8 and 25 GeV and QGSModel between 20
+             NeutronInelasticProcess based on CascadeInterface up to 20.0 GeV,
+             LENeutronInelastic between 0.1 and 25 GeV and QGSModel between 20
              GeV and 100 TeV
 Attributes:  [none]
 
@@ -850,7 +855,7 @@ radiation environment.
 
 8.1 SOURCES
 
-Each source is a copletely different particle generator. (with different
+Each source is a completely different particle generator. (with different
 geometry, energy distribution, particle type etc). Usually in simple
 radiation environment no more than a source will be needed.
 

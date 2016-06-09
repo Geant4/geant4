@@ -1,4 +1,4 @@
-$Id: History,v 1.96.2.1 2009/03/03 10:55:46 gcosmo Exp $
+$Id: History,v 1.96.2.2 2009/08/11 08:27:49 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,36 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 May 2009 Gabriele Cosmo (gdml-V09-01-23)
+- Restricted usage of loops only for placement of volumes. Now correctly
+  handling most common use-case of multiple copies of the same volume/solid
+  through loop statement. Addressing problem report #1063.
+
+17 April 2009 Gabriele Cosmo
+- Defined missing copy constructor and operator=() to G4GDMLMatrix
+  internal class, to avoid cases of memory corruption when handling matrices.
+
+15 April 2009 Gabriele Cosmo
+- Completed virtual layer for allowing customisation of the writer for
+  user-extended schemas.
+
+09 April 2009 Gabriele Cosmo
+- Correction in G4GDMLWriteSolids::BooleanWrite() in order to handle
+  cases of nested displaced solids given to both operands in a Boolean
+  operation (ATLAS use case).
+- Renamed flag for maximum number of transformations applied to a solid
+  and moved to G4GDMLWriteSolids base class.
+- First virtual layer for custom writer classes G4GDMLWriteSolids and
+  G4GDMLWriteStructure.
+
+03 April 2009 Tatiana Nikitina
+- Correction in materials and solids tags for allowing parsing of
+  definitions within the tag scope; possibility foreseen by the schema.
+
+24 March 2009 Gabriele Cosmo
+- Added empty default constructor and virtual destructor to classes in the
+  inheritance chain.
 
 02 March 2009 Gabriele Cosmo (gdml-V09-01-22)
 - Fixed association of entities in nested loops for solids and materials.

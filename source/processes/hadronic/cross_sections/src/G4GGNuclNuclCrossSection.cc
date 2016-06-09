@@ -41,7 +41,7 @@
 
 G4GGNuclNuclCrossSection::G4GGNuclNuclCrossSection() 
 : fUpperLimit( 100000 * GeV ),
-  fLowerLimit( 0.1 * GeV ),
+  fLowerLimit( 0.1 * MeV ),
   fRadiusConst( 1.08*fermi )  // 1.1, 1.3 ?
 {
   theProton   = G4Proton::Proton();
@@ -114,7 +114,7 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 G4double G4GGNuclNuclCrossSection::
 GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double tA, G4double)
 {
-  G4double xsection, sigma, cofInelastic = 2.4, cofTotal = 2.0, nucleusSquare, ratio;
+  G4double xsection, sigma, cofInelastic = 2.4, cofTotal = 2.0, nucleusSquare, cB, ratio;
 
   G4double pZ = aParticle->GetDefinition()->GetPDGCharge();
   G4double pA = aParticle->GetDefinition()->GetBaryonNumber();
@@ -131,38 +131,96 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double tZ, G4double t
   G4double tR = GetNucleusRadius(tA);  
   G4double pR = GetNucleusRadius(pA); 
 
-  sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
+  cB = GetCoulombBarier(aParticle, tZ, tA, pR, tR);
+
+  if(cB > 0.)
+  {
+
+    sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscNS(theProton, pTkin, theProton) +
           (pZ*tN+pN*tZ)*GetHadronNucleonXscNS(theProton, pTkin, theNeutron);
 
-  nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
+    nucleusSquare = cofTotal*pi*( pR*pR + tR*tR );   // basically 2piRR
 
-  ratio = sigma/nucleusSquare;
+    ratio = sigma/nucleusSquare;
 
-  xsection =  nucleusSquare*std::log( 1. + ratio );
+    xsection =  nucleusSquare*std::log( 1. + ratio );
 
-  fTotalXsc = xsection;
+    fTotalXsc = xsection;
 
-  fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+    fTotalXsc *= cB;
 
-  fElasticXsc   = fTotalXsc - fInelasticXsc;
-    
-  G4double difratio = ratio/(1.+ratio);
+    fInelasticXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
-  fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
+    fInelasticXsc *= cB;
 
-  // production to be checked !!! edit MK xsc
+    fElasticXsc   = fTotalXsc - fInelasticXsc;
 
-  sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscMK(theProton, pTkin, theProton) +
+    // if (fElasticXsc < DBL_MIN) fElasticXsc = DBL_MIN;
+    /*    
+    G4double difratio = ratio/(1.+ratio);
+
+    fDiffractionXsc = 0.5*nucleusSquare*( difratio - std::log( 1. + difratio ) );
+    */
+    // production to be checked !!! edit MK xsc
+
+    sigma = (pZ*tZ+pN*tN)*GetHadronNucleonXscMK(theProton, pTkin, theProton) +
           (pZ*tN+pN*tZ)*GetHadronNucleonXscMK(theProton, pTkin, theNeutron);
  
-  ratio = sigma/nucleusSquare;
+    ratio = sigma/nucleusSquare;
 
-  fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
+    fProductionXsc = nucleusSquare*std::log( 1. + cofInelastic*ratio )/cofInelastic;
 
-  if (fElasticXsc < 0.) fElasticXsc = 0.;
-
-  return xsection; 
+    if (fElasticXsc < 0.) fElasticXsc = 0.;
+  }
+  else
+  {
+    fInelasticXsc  = 0.;
+    fTotalXsc      = 0.;
+    fElasticXsc    = 0.;
+    fProductionXsc = 0.;
+  }
+  return fInelasticXsc;   // xsection; 
 }
+
+////////////////////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4GGNuclNuclCrossSection::
+GetCoulombBarier(const G4DynamicParticle* aParticle, G4double tZ, G4double tA, G4double pR, G4double tR)
+{
+  G4double ratio;
+  G4double pZ = aParticle->GetDefinition()->GetPDGCharge();
+
+
+  G4double pTkin = aParticle->GetKineticEnergy();
+  // G4double pPlab = aParticle->GetTotalMomentum();
+  G4double pM    = aParticle->GetDefinition()->GetPDGMass();
+  // G4double tM    = tZ*proton_mass_c2 + (tA-tZ)*neutron_mass_c2; // ~ 1% accuracy
+  G4double tM    = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( G4int(tZ), G4int(tA) );
+  G4double pElab = pTkin + pM;
+  G4double totEcm  = std::sqrt(pM*pM + tM*tM + 2.*pElab*tM);
+  // G4double pPcm  = pPlab*tM/totEcm;
+  // G4double pTcm  = std::sqrt(pM*pM + pPcm*pPcm) - pM;
+  G4double totTcm  = totEcm - pM -tM;
+
+  G4double bC    = fine_structure_const*hbarc*pZ*tZ;
+           bC   /= pR + tR;
+           bC   /= 2.;  // 4., 2. parametrisation cof ??? vmg
+
+	   // G4cout<<"pTkin = "<<pTkin/GeV<<"; pPlab = "
+	   // <<pPlab/GeV<<"; bC = "<<bC/GeV<<"; pTcm = "<<pTcm/GeV<<G4endl;
+
+  if( totTcm <= bC ) ratio = 0.;
+  else             ratio = 1. - bC/totTcm;
+
+  // if(ratio < DBL_MIN) ratio = DBL_MIN;
+  if( ratio < 0.) ratio = 0.;
+
+  // G4cout <<"ratio = "<<ratio<<G4endl;
+  return ratio;
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //

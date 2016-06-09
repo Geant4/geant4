@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.hh,v 1.12.4.1 2009/03/03 11:48:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// $Id: G4VCrossSectionDataSet.hh,v 1.12.4.2 2009/08/13 09:16:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // -------------------------------------------------------------------
 //

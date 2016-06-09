@@ -14,6 +14,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 Aug 2009 Vladimir Ivanchenko (hadr-cross-V09-01-09)
+------------------------------------------------------
+- G4TripathiLightIonCrossSection - added simple check that X-section is
+  positive and removed not optimal control.
+- G4TripathiCrossSection - added constructor and destructor.
+- G4CrossSectionDataSetRegistry - use STL commands to remove elements in vector.
+
+21 March 2009 Vladimir Ivanchenko
+---------------------------------
+- G4IonsKoxCrossSection, G4IonsShenCrossSection, G4TripathiCrossSection,
+  G4TripathiLightCrossSection - added protections against numerical 
+                                exceptions (V.Grichine)
+- G4GGNuclNuclCrossSection - Glauber-Gribov new cross section for ions 
+                             (V.Grichine)  
+
 25 February 2009 Vladimir Ivanchenko (hadr-cross-V09-01-08)
 -----------------------------------------------------------
 - G4CrossSectionDataStore - added protection to the Clean method

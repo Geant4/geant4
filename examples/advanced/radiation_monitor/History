@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2005/12/06 19:39:09 capra Exp $
+$Id: History,v 1.16.4.1 2009/08/11 14:20:35 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08 Apr 2009 - radmon-V09-01-00 - G.A.P.Cirrone
+- Tagged.
+
+6 March 2009 Guy Barrand
+- RadmonTLabelledCollection.icc : 
+  in RadmonTLabelledCollection<LabelledObject>::InsertItemAfter(G4int index)
+  have InsertItemBefore, instead of the InsertBefore that does not compile
+  with a g++-4.x
+
+6 March 2009 Guy Barrand
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file
+  since it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
+
+07 Mar 2006  - radmon-V08-00-02 - S. Fonseca - Change limits of the  LENeutronInelastic 
+for 0.1 GeV in RadmonPhysicsNeutronBertini and RadmonPhysicsNeutronBinary class.
+
+05 Mar 2006 - radmon-V08-00-01 - S. Fonseca - Introduced new results with proton  of 254MeV, 
+150 Mev and 50 Mev of energy. New macros added with new material Kapton(It still was not tested)
+
+03 Jan 2006 - radmon-V08-00-00-RC - R. Capra - Few macros added in order to
+                        reproduce first run results
 
 06 Dec 2005 - radmon-V07-01-14 - R. Capra - Documentation extended README
                         file now covers all the aspects of the application

@@ -23,14 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4FTFPPiKBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+// $Id: G4FTFPPiKBuilder.cc,v 1.3.2.1 2009/08/11 15:11:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4FTFPPiKBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
+#include "G4FTFPPiKBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
 
- G4FTFPPiKBuilder::
- G4FTFPPiKBuilder(G4bool quasiElastic) 
+G4FTFPPiKBuilder::
+G4FTFPPiKBuilder(G4bool quasiElastic) 
  {
+   thePiData = new G4PiNuclearCrossSection;
    theMin = 4*GeV;
    theModel = new G4TheoFSGenerator("FTFP");
 
@@ -51,10 +66,11 @@
    {  theQuasiElastic=0;}  
 
    theModel->SetTransport(theCascade);
+   theModel->SetMinEnergy(theMin);
+   theModel->SetMaxEnergy(100*TeV);
  }
 
- G4FTFPPiKBuilder::
- ~G4FTFPPiKBuilder() 
+G4FTFPPiKBuilder:: ~G4FTFPPiKBuilder() 
  {
    delete theCascade;
    delete theStringDecay;
@@ -63,56 +79,50 @@
    if ( theQuasiElastic ) delete theQuasiElastic;
  }
 
- void G4FTFPPiKBuilder::
- Build(G4HadronElasticProcess * ) {}
+void G4FTFPPiKBuilder::
+Build(G4HadronElasticProcess * ) {}
 
- void G4FTFPPiKBuilder::
- Build(G4PionPlusInelasticProcess * aP)
+void G4FTFPPiKBuilder::
+Build(G4PionPlusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->AddDataSet(&thePiData);
+   aP->AddDataSet(thePiData);
    aP->RegisterMe(theModel);
  }
 
- void G4FTFPPiKBuilder::
- Build(G4PionMinusInelasticProcess * aP)
+void G4FTFPPiKBuilder::
+Build(G4PionMinusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
-   aP->AddDataSet(&thePiData);
+   aP->AddDataSet(thePiData);
    aP->RegisterMe(theModel);
  }
 
- void G4FTFPPiKBuilder::
- Build(G4KaonPlusInelasticProcess * aP)
+void G4FTFPPiKBuilder::
+Build(G4KaonPlusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
  }
 
- void G4FTFPPiKBuilder::
- Build(G4KaonMinusInelasticProcess * aP)
+void G4FTFPPiKBuilder::
+Build(G4KaonMinusInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
  }
 
- void G4FTFPPiKBuilder::
- Build(G4KaonZeroLInelasticProcess * aP)
+void G4FTFPPiKBuilder::
+Build(G4KaonZeroLInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
  }
 
- void G4FTFPPiKBuilder::
- Build(G4KaonZeroSInelasticProcess * aP)
+void G4FTFPPiKBuilder::
+Build(G4KaonZeroSInelasticProcess * aP)
  {
    theModel->SetMinEnergy(theMin);
-   theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
  }
 

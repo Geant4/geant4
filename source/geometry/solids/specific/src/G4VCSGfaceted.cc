@@ -29,8 +29,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.25 2008/05/22 10:22:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VCSGfaceted.cc,v 1.25.2.1 2009/08/11 09:20:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -549,7 +549,7 @@ G4double G4VCSGfaceted::GetCubicVolume()
 G4double G4VCSGfaceted::GetSurfaceArea()
 {
   if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = EstimateCubicVolume(fStatistics,fAreaAccuracy); }
+  else   { fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy); }
   return fSurfaceArea;
 }
 

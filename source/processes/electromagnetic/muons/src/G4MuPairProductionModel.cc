@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.39 2008/07/22 16:11:34 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MuPairProductionModel.cc,v 1.39.2.1 2009/08/12 07:57:43 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -377,9 +377,9 @@ G4double G4MuPairProductionModel::ComputeCrossSectionPerAtom(
   if (kineticEnergy <= lowestKinEnergy) return cross;
 
   SetCurrentElement(Z);
-  G4double tmax = std::min(maxEnergy, kineticEnergy);
-  G4double cut  = std::min(cutEnergy, kineticEnergy);
-  if(cut < minPairEnergy) cut = minPairEnergy;
+  G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
+  G4double tmax = std::min(maxEnergy, maxPairEnergy);
+  G4double cut  = std::max(cutEnergy, minPairEnergy);
   if (cut >= tmax) return cross;
 
   cross = ComputeMicroscopicCrossSection (kineticEnergy, Z, cut);
@@ -597,7 +597,6 @@ const G4Element* G4MuPairProductionModel::SelectRandomAtom(
   }
 
   const G4double* theAtomNumDensityVector=material->GetAtomicNumDensityVector();
-
   G4double sum = 0.0;
 
   size_t i;
@@ -607,25 +606,29 @@ const G4Element* G4MuPairProductionModel::SelectRandomAtom(
     G4double maxPairEnergy = MaxSecondaryEnergy(particle,kinEnergy);
     G4double minEnergy     = std::max(tmin, minPairEnergy);
 
-    G4int iz;
-    for(iz=1; iz<nzdat; iz++) {if(Z <= zdat[iz]) break;}
-    if(iz == nzdat) iz--;
-    G4double dz = log(Z/zdat[iz-1])/log(zdat[iz]/zdat[iz-1]);
+    G4double dl = 0.0;
+    if(minEnergy < maxPairEnergy) {
 
-    G4double sigcut;
-    if(minEnergy <= minPairEnergy)
-      sigcut = 0.;
-    else
-    {
-      G4double xc = log(minEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
-      G4int iy = (G4int)((log(xc) - ymin)/dy);
-      if(iy < 0) iy = 0;
-      if(iy >= nbiny) iy = nbiny-1;
-      sigcut = InterpolatedIntegralCrossSection(dt,dz,iz,it,iy,   Z);
+      G4int iz;
+      for(iz=1; iz<nzdat; iz++) {if(Z <= zdat[iz]) break;}
+      if(iz == nzdat) iz--;
+      G4double dz = log(Z/zdat[iz-1])/log(zdat[iz]/zdat[iz-1]);
+
+      G4double sigcut;
+      if(minEnergy <= minPairEnergy)
+	sigcut = 0.;
+      else
+	{
+	  G4double xc = log(minEnergy/minPairEnergy)/log(maxPairEnergy/minPairEnergy);
+	  G4int iy = (G4int)((log(xc) - ymin)/dy);
+	  if(iy < 0) iy = 0;
+	  if(iy >= nbiny) iy = nbiny-1;
+	  sigcut = InterpolatedIntegralCrossSection(dt,dz,iz,it,iy,   Z);
+	}
+
+      G4double sigtot = InterpolatedIntegralCrossSection(dt,dz,iz,it,nbiny,Z);
+      dl = (sigtot - sigcut)*theAtomNumDensityVector[i];
     }
-
-    G4double sigtot = InterpolatedIntegralCrossSection(dt,dz,iz,it,nbiny,Z);
-    G4double dl = (sigtot - sigcut)*theAtomNumDensityVector[i];
 
     // protection
     if(dl < 0.0) dl = 0.0;

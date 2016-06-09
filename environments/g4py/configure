@@ -1,5 +1,5 @@
 #! /bin/sh -
-#$Id: configure,v 1.15 2008/12/03 07:48:55 kmura Exp $
+#$Id: configure,v 1.15.2.1 2009/08/11 15:48:46 gcosmo Exp $
 # ======================================================================
 #  A configure script for Geant4Py
 # ======================================================================
@@ -43,10 +43,10 @@ Installation directories:
   --libdir=DIR              Python modules dir [PREFIX/lib]
 
 Fine tuning of the library path:
-  --with-g4-incdir=DIR      Geant4 header dir [\$G4INCLUDE]
-  --with-g4-libdir=DIR      Geant4 library dir [\$G4LIB/\$G4SYSTEM]
-  --with-clhep-incdir=DIR   CLHEP header dir [\$CLHEP_INCLUDE_DIR]
-  --with-clhep-libdir=DIR   CLHEP library dir [\$CLHEP_LIB_DIR]
+  --with-g4-incdir=DIR      Geant4 header dir [\$G4INSTALL/include]
+  --with-g4-libdir=DIR      Geant4 library dir [\$G4INSTALL/lib/\$G4SYSTEM]
+  --with-clhep-incdir=DIR   CLHEP header dir [\$CLHEP_BASE_DIR/include]
+  --with-clhep-libdir=DIR   CLHEP library dir [\$CLHEP_BASE_DIR/lib]
   --with-clhep-lib=LIB      library name of libCLHEP.so [CLHEP|\$CLHEP_LIB]
 
   --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
@@ -89,12 +89,11 @@ arguments="$@"
 prefix=`pwd`
 current_dir=`pwd`
 
-g4_incdir=${G4INCLUDE:-/zzz}
-g4_libdir=${G4LIB:+$G4LIB/$G4SYSTEM}
-g4_libdir=${g4_libdir:-/zzz}
+g4_incdir=/zzz
+g4_libdir=/zzz
 
-clhep_incdir=${CLHEP_INCLUDE_DIR:-/zzz}
-clhep_libdir=${CLHEP_LIB_DIR:-/zzz}
+clhep_incdir=/zzz
+clhep_libdir=/zzz
 clhep_lib=${CLHEP_LIB:-CLHEP}
 
 python_incdir=/zzz
@@ -221,6 +220,17 @@ libdir=${libdir:-$prefix/lib}
 echo $libdir
 
 echo $ac_n "Checking for G4 include dir ... $ac_c"
+g4_incdir1=${G4INSTALL:+$G4INSTALL/include}
+g4_incdir2=${G4INCLUDE:+$G4INCLUDE}
+set $g4_incdir $g4_incdir1 $g4_incdir2
+for adir in $*
+do
+  if [ -d "$adir" ]; then
+    g4_incdir=$adir
+    break
+  fi
+done
+
 if [ ! -d "$g4_incdir" ]; then
   echo "no"
   echo $ac_n "### $g4_incdir (g4-incdir) does not exist. $ac_c"
@@ -229,7 +239,19 @@ if [ ! -d "$g4_incdir" ]; then
 fi
 echo "$g4_incdir"
 
+# ---
 echo $ac_n "Checking for G4 lib dir ... $ac_c"
+g4_libdir1=${G4INSTALL:+$G4INSTALL/lib/$G4SYSTEM}
+g4_libdir2=${G4LIB:+$G4LIB/$G4SYSTEM}
+set $g4_libdir/$G4SYSTEM $g4_libdir $g4_libdir1 $g4_libdir2
+for adir in $*
+do
+  if [ -d "$adir" ]; then
+    g4_libdir=$adir
+    break
+  fi
+done
+
 if [ ! -d "$g4_libdir" ]; then
   echo "no"
   echo $ac_n "### $g4_libdir (g4-libdir) does not exist. $ac_c"
@@ -238,7 +260,27 @@ if [ ! -d "$g4_libdir" ]; then
 fi
 echo "$g4_libdir"
 
+echo $ac_n "Checking for G4 libs are shared libraray ... $ac_c"
+if [ ! -f ${g4_libdir}/libG4run.${shlib} ]; then
+  echo "no"
+  echo $ac_n "### G4 libray must be global and shared. $ac_c"
+  echo "Recompile with global and shared mode."
+  exit -1
+fi
+echo "ok"
+
 # ---
+clhep_incdir1=${CLHEP_INCLUDE_DIR:-/zzz}
+clhep_incdir2=${CLHEP_BASE_DIR:+$CLHEP_BASE_DIR/include}
+set $clhep_incdir $clhep_incdir1 $clhep_incdir2
+for adir in $*
+do
+  if [ -d "$adir" ]; then
+    clhep_incdir=$adir
+    break
+  fi
+done
+
 echo $ac_n "Checking for CLHEP include dir ... $ac_c"
 if [ ! -d "$clhep_incdir" ]; then
   echo "no"
@@ -247,6 +289,18 @@ if [ ! -d "$clhep_incdir" ]; then
   exit -1
 fi
 echo "$clhep_incdir"
+
+# ---
+clhep_libdir1=${CLHEP_LIB_DIR:-/zzz}
+clhep_libdir2=${CLHEP_BASE_DIR:+$CLHEP_BASE_DIR/lib}
+set $clhep_libdir $clhep_libdir1 $clhep_libdir2
+for adir in $*
+do
+  if [ -d "$adir" ]; then
+    clhep_libdir=$adir
+    break
+  fi
+done
 
 echo $ac_n "Checking for CLHEP lib dir ... $ac_c"
 if [ ! -d "$clhep_libdir" ]; then
@@ -269,10 +323,10 @@ echo "lib${clhep_lib}.${shlib}"
 # ---
 echo $ac_n "Checking for Python include dir (pyconfig.h) ... $ac_c"
 # check version
-set python python2.5 python2.4 python2.3 python2.2
+set python python2.6 python2.5 python2.4 python2.3 python2.2
 for aincdir in $*
 do
-  if [ -d /usr/include/$aincdir ]; then
+  if [ -d /usr/include/"$aincdir" ]; then
     python_incdir=/usr/include/$aincdir
     break
   fi
@@ -331,7 +385,7 @@ int main() {
     return 1;
 }
 EOF
-g++ -o conftest conftest.cc > /dev/null 2>&1
+g++ -I$boost_incdir -o conftest conftest.cc > /dev/null 2>&1
 ./conftest
 q_boost_version=$?
 rm conftest.cc conftest

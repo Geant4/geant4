@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4FinalStateProduct.hh,v 1.4.4.1 2009/03/05 08:50:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 // 
 // Contact Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //

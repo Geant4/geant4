@@ -28,8 +28,8 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsNeutronBertini.cc,v 1.1.2.2 2006/06/29 16:19:14 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonPhysicsNeutronBertini.cc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 #include "RadmonPhysicsNeutronBertini.hh"
@@ -41,7 +41,10 @@
 #include "G4HadronElasticProcess.hh"
 #include "G4LElastic.hh"
 #include "G4CascadeInterface.hh"
+
 #include "G4LENeutronInelastic.hh"
+
+
 #include "G4TheoFSGenerator.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4PreCompoundModel.hh"
@@ -84,13 +87,17 @@ void                                            RadmonPhysicsNeutronBertini :: C
  manager->AddDiscreteProcess(elasticProcess);
 
 
-
  G4CascadeInterface * bertiniCascadeModel(new G4CascadeInterface());
- bertiniCascadeModel->SetMaxEnergy(3.2*GeV);
+ // bertiniCascadeModel->SetMaxEnergy(3.2*GeV);
+ bertiniCascadeModel->SetMaxEnergy(20.0*GeV);
+
 
  G4LENeutronInelastic * lepModel(new G4LENeutronInelastic());
- lepModel->SetMinEnergy(2.8*GeV);
+ lepModel->SetMinEnergy(0.1*GeV); //thermal neutrons ( 100 MeV)
+ // lepModel->SetMinEnergy(2.8*GeV); old setup
  lepModel->SetMaxEnergy(25.*GeV);
+
+
 
  G4TheoFSGenerator * qgspModel(new G4TheoFSGenerator());
  G4GeneratorPrecompoundInterface * cascade(new G4GeneratorPrecompoundInterface());

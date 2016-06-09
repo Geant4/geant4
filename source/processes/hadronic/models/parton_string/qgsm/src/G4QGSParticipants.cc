@@ -35,15 +35,16 @@
 G4int G4QGSParticipants_NPart = 0;
 
 G4QGSParticipants::G4QGSParticipants() : theDiffExcitaton(), //0.7*GeV, 250*MeV, 250*MeV),
-                                         nCutMax(7),ThersholdParameter(0.45*GeV),
-                                         QGSMThershold(3*GeV),theNucleonRadius(1.5*fermi)
+                                         //nCutMax(7),ThresholdParameter(0.45*GeV),
+                                         nCutMax(7),ThresholdParameter(0.000*GeV),
+                                         QGSMThreshold(3*GeV),theNucleonRadius(1.5*fermi)
                                          
 {
 }
 
 G4QGSParticipants::G4QGSParticipants(const G4QGSParticipants &right)
-: G4VParticipants(), nCutMax(right.nCutMax),ThersholdParameter(right.ThersholdParameter),
-  QGSMThershold(right.QGSMThershold),theNucleonRadius(right.theNucleonRadius)
+: G4VParticipants(), nCutMax(right.nCutMax),ThresholdParameter(right.ThresholdParameter),
+  QGSMThreshold(right.QGSMThreshold),theNucleonRadius(right.theNucleonRadius)
 {
 }
 
@@ -90,11 +91,12 @@ G4VSplitableHadron* G4QGSParticipants::SelectInteractions(const G4ReactionProduc
   G4double s = (aPrimaryMomentum + pNucleon->Get4Momentum()).mag2();
   G4double ThresholdMass = thePrimary.GetMass() + pNucleon->GetDefinition()->GetPDGMass(); 
   ModelMode = SOFT;
-  if (sqr(ThresholdMass + ThersholdParameter) > s)
+  if (sqr(ThresholdMass + ThresholdParameter) > s)
   {
-    throw G4HadronicException(__FILE__, __LINE__, "Initial energy is too low. The 4-vectors of the input are inconsistant with the particle masses.");
+    ModelMode = DIFFRACTIVE;
+    //throw G4HadronicException(__FILE__, __LINE__, "Initial energy is too low. The 4-vectors of the input are inconsistant with the particle masses.");
   }
-  if (sqr(ThresholdMass + QGSMThershold) > s) // thus only diffractive in cascade!
+  if (sqr(ThresholdMass + QGSMThreshold) > s) // thus only diffractive in cascade!
   {
     ModelMode = DIFFRACTIVE;
   }

@@ -46,8 +46,7 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double ZZ,
    if ( ke_per_N > 10*GeV ) ke_per_N = 10*GeV;
 
 // Apply energy check, if less than lower limit then 0 value is returned
-   if (  ke_per_N < lowerLimit )
-      return xsection;
+   // if (  ke_per_N < lowerLimit ) return xsection;
 
    G4int At = G4int(AA);
    G4int Zt = G4int(ZZ);
@@ -62,9 +61,14 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double ZZ,
 
    G4double r = Rt + Rp + 3.2;   // in fm
    G4double b = 1.0;   // in MeV/fm
+   G4double targ_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( Zt , At );
+   G4double proj_mass = aParticle->GetMass();
+   G4double proj_momentum = aParticle->GetMomentum().mag();
+
+   G4double Ecm = calEcmValue ( proj_mass , targ_mass , proj_momentum ); 
 
    G4double B = 1.44 * Zt * Zp / r - b * Rt * Rp / ( Rt + Rp ); 
-
+   if(Ecm <= B) return xsection;
    //G4double ke_per_N = aParticle->GetKineticEnergy() / Ap; 
 
    G4double c = calCeValue ( ke_per_N / MeV  );  
@@ -73,11 +77,6 @@ GetIsoZACrossSection(const G4DynamicParticle* aParticle, G4double ZZ,
 
    G4double R2 = 1.0 * ( At - 2 * Zt ) * Zp / ( Ap * At );
 
-   G4double targ_mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( Zt , At );
-   G4double proj_mass = aParticle->GetMass();
-   G4double proj_momentum = aParticle->GetMomentum().mag();
-
-   G4double Ecm = calEcmValue ( proj_mass , targ_mass , proj_momentum ); 
 
    G4double R3 = 0.176 / std::pow ( G4double(Ecm) , G4double(one_third) ) * cubicrAt * cubicrAp / ( cubicrAt + cubicrAp );
 

@@ -23,10 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QGSCEflowNeutronBuilder.cc,v 1.3.2.1 2009/08/11 15:11:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSCEflowNeutronBuilder
+//
+// Author: 2006 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #include "G4QGSCEflowNeutronBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4NeutronInelasticCrossSection.hh"
 
 G4QGSCEflowNeutronBuilder::
 G4QGSCEflowNeutronBuilder(G4bool quasiElastic) 
@@ -66,7 +81,7 @@ Build(G4NeutronInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(&theXSec);  
+  aP->AddDataSet(new G4NeutronInelasticCrossSection);  
 }
 
 // 2006 G.Folger

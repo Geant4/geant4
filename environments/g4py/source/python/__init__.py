@@ -8,7 +8,7 @@
 #  Hava A Fun!
 # ==================================================================
 """
-# $Id: __init__.py,v 1.19 2008/12/03 07:01:22 kmura Exp $
+# $Id: __init__.py,v 1.19.2.1 2009/08/11 15:48:46 gcosmo Exp $
 __version__ ='9.2.0'
 __date__ = '1/Dec/2008'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
@@ -214,8 +214,8 @@ def _list_material(self):
             (j+1, elementVec[j].GetName(), elementVec[j].GetSymbol(),
              elementVec[j].GetZ(),
              elementVec[j].GetN(),
-             fractionVec[j]/HEPUnit.perCent,
-             abundanceVec[j]/totNAtoms/HEPUnit.perCent)
+             fractionVec[j]/hepunit.perCent,
+             abundanceVec[j]/totNAtoms/hepunit.perCent)
 
   print " +------------------------------------------------------------------"
 

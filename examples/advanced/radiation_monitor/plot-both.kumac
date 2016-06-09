@@ -1,0 +1,33 @@
+* Per eseguire scrivere exec <nome macro>
+
+* Apre un file e gli dice di identificarlo come 1 (in altri posti sara' LUN1)
+* Se ci metti 0 sceglie il primo id libero
+h/fil 1 analysis-no-pkg.hbook
+h/fil 2 analysis-pkg.hbook
+* Crea un istogramma vuoto con id 100, titolo ..., 100 bin da 0. a 1. 
+h/cr/1d 100 'Energy deposit per event' 100 0. 1.
+h/cr/1d 101 'Energy deposit per event' 100 0. 1.
+* Setta l'opzione di vedere le informazioni statische degli istogrammi quando vengono plottati
+opt stat
+* Setta l'opzionie di disegnare i plot con la griglia degli assi
+opt grid
+* Dice che le operazioni di disegno devono essere tenute in memoria (solo ragruppate con l'id Pippo)
+p/cr Pippo
+* Plotta l'istogramma (e le operazioni grafiche saranno salvate in Pippo)
+* Plotta una colonna di una n-tupla presa dal file 1 (LUN1) dalla n-tupla con id 1 e dalla colonna con il nome ....
+* Segue la condizione sulle righe da plottare (deposito energia > 0) se omesso plotta tutte le righe
+* IDH=... significa di usare l'istogramma con id 100. Se omesso si crea lui un istogramma con un range che faccia vedere tutte le
+* entries e con un binning che e' 100
+* OPTION=N dice di non plottarlo ma solo di riempire gli istogrammi
+nt/plot //LUN1/1.SD_da1_EnergyDeposit SD_da1_EnergyDeposit.gt.0 IDH=100 OPTION=N
+nt/plot //LUN2/1.SD_da1_EnergyDeposit SD_da1_EnergyDeposit.gt.0 IDH=101 OPTION=N
+* Dice di colorare di nero
+set hcol 1
+* Dice di plottare l'istogramma 100
+h/plot 100
+* Dice di colorare di rosso
+set hcol 2
+* 'S' dice di plottare il secondo istogramma sovrapposto al primo
+h/plot 101 S
+* Usa le operazioni grafiche salvate per fare un postscript
+p/print analysis-both.ps

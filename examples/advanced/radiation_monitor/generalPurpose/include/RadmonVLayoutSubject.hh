@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVLayoutSubject.hh,v 1.2.2.2 2006/06/29 16:14:41 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonVLayoutSubject.hh,v 1.2.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 // Description:   Subject class of the observer-subjectmodel for the detector
 //                layout
@@ -62,6 +62,8 @@
    RadmonVLayoutSubject &                       operator=(const RadmonVLayoutSubject & copy);
 
   // Private attributes
+  // List of pointers to RadmonVLayoutObserver
+  // set does not care of the order of the elements inside the list
    typedef std::set<RadmonVLayoutObserver *>    ObserversSet;
    ObserversSet                                 observersSet;
  };

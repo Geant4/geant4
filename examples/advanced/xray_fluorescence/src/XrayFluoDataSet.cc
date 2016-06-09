@@ -130,8 +130,8 @@ G4int XrayFluoDataSet::FindBinLocation(G4double energy) const
 }
 
 
-void XrayFluoDataSet::LoadData(const G4String& fileName)
-{
+G4bool XrayFluoDataSet::LoadData(const G4String& fileName) {
+
   // Build the complete string identifying the file with the data set
   
 
@@ -198,6 +198,7 @@ void XrayFluoDataSet::LoadData(const G4String& fileName)
     } while (a != -2); // end of file
   
   file.close();
+  return true;
 }
 void XrayFluoDataSet::PrintData() const
 {

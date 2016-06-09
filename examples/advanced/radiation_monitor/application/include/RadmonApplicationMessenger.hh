@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationMessenger.hh,v 1.1.2.2 2006/06/29 16:08:15 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonApplicationMessenger.hh,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 // Description:   UI commands for managing application level options
 //
@@ -71,5 +71,6 @@
    RADMON_DECLARE_COMMAND(DisableEventsDump);
    RADMON_DECLARE_COMMAND(EnableTracksVisualisation);
    RADMON_DECLARE_COMMAND(DisableTracksVisualisation);
+   RADMON_DECLARE_COMMAND(SetSeed);
  };
 #endif /* RADMONAPPLICATIONMESSENGER_HH */

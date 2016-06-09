@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc,v 1.4 2008/01/22 15:02:36 gcosmo Exp $
+// $Id: G4PhantomParameterisation.cc,v 1.4.4.1 2009/08/11 13:31:19 gcosmo Exp $
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation
@@ -69,6 +69,18 @@ void G4PhantomParameterisation::
 BuildContainerSolid( G4VPhysicalVolume *pMotherPhysical )
 {
   fContainerSolid = pMotherPhysical->GetLogicalVolume()->GetSolid();
+  fContainerWallX = fNoVoxelX * fVoxelHalfX;
+  fContainerWallY = fNoVoxelY * fVoxelHalfY;
+  fContainerWallZ = fNoVoxelZ * fVoxelHalfZ;
+
+  // CheckVoxelsFillContainer();
+}
+
+//------------------------------------------------------------------
+void G4PhantomParameterisation::
+BuildContainerSolid( G4VSolid *pMotherSolid )
+{
+  fContainerSolid = pMotherSolid;
   fContainerWallX = fNoVoxelX * fVoxelHalfX;
   fContainerWallY = fNoVoxelY * fVoxelHalfY;
   fContainerWallZ = fNoVoxelZ * fVoxelHalfZ;
@@ -133,6 +145,7 @@ GetMaterialIndex( size_t copyNo ) const
 {
   CheckCopyNo( copyNo );
 
+  if( !fMaterialIndices ) { return 0; }
   return *(fMaterialIndices+copyNo);
 }
 

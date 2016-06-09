@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.24 2007/05/18 07:38:01 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Orb.cc,v 1.24.4.1 2009/08/18 15:46:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // class G4Orb
 //
@@ -359,6 +359,8 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
   G4double rad2, pDotV3d, tolORMax2, tolIRMax2 ;
   G4double c, d2, s = kInfinity ;
 
+  const G4double dRmax = 100.*fRmax;
+
   // General Precalcs
 
   rad2    = p.x()*p.x() + p.y()*p.y() + p.z()*p.z() ;
@@ -396,8 +398,15 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
     {
       s = -pDotV3d - std::sqrt(d2) ;
 
-      if (s >= 0 ) return snxt = s;
-           
+      if (s >= 0 )
+      {
+        if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
+        {              // 64 bits systems. Split long distances and recompute
+          G4double fTerm = s-std::fmod(s,dRmax);
+          s = fTerm + DistanceToIn(p+fTerm*v,v);
+        } 
+        return snxt = s;
+      }
     }
     else    // No intersection with G4Orb
     {

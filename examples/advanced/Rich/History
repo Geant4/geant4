@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.13 2008/11/24 14:34:11 cirrone Exp $
+$Id: History,v 1.13.2.1 2009/08/11 14:09:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,15 @@ $Id: History,v 1.13 2008/11/24 14:34:11 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+08.04.2009 - G.A.P.Cirrone; Tag: Rich-V09-01-02
+             Tagged.
+
+06.03.2009 - Guy Barrand
+             GNUmakefile : remove the G4ANALYSIS_USE logic found in this file
+             since it is handled already in the config/analysis.gmk.
+             This avoids a duplication in the compilation and link commands
+             of the aida-config options.
 
 23.11.2008 - G.A.P.Cirrone; Tag: Rich-V09-01-01
              Fixed compilation errors on the file RichTbEventAction

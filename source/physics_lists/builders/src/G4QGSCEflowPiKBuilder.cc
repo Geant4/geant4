@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QGSCEflowPiKBuilder.cc,v 1.3.2.1 2009/08/11 15:11:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSCEflowPiKBuilder
+//
+// Author: 2006 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #include "G4QGSCEflowPiKBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -31,6 +45,7 @@
 G4QGSCEflowPiKBuilder::
 G4QGSCEflowPiKBuilder(G4bool quasiElastic) 
 {
+  thePiCross = new G4PiNuclearCrossSection; 
   theMin = 8*GeV;
   theModel = new G4TheoFSGenerator("QGSCEflow");
   
@@ -68,7 +83,7 @@ Build(G4PionPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
-  aP->AddDataSet(&thePiCross);
+  aP->AddDataSet(thePiCross);
   aP->RegisterMe(theModel);
 }
 
@@ -77,7 +92,7 @@ Build(G4PionMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(100*TeV);
-  aP->AddDataSet(&thePiCross);
+  aP->AddDataSet(thePiCross);
   aP->RegisterMe(theModel);
 }
 

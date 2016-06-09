@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc,v 1.13 2008/06/23 09:17:10 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $ 1.8
+// $Id: G4LundStringFragmentation.cc,v 1.13.2.1 2009/08/11 13:05:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $ 1.8
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -507,8 +507,22 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double M
     else 
    {
       do                                                                      
-      {                                                                     
-         Pt=SampleQuarkPt(); Pt.setZ(0); G4double Pt2=Pt.mag2();              
+      {  
+         // GF 22-May-09, limit sampled pt to allowed range
+         
+	 G4double termD = InitialMass*InitialMass -Mass*Mass - AntiMass*AntiMass;
+	 G4double termab = 4*sqr(Mass*AntiMass);
+	 G4double termN = 2*termD + 4*Mass*Mass + 4*AntiMass*AntiMass;
+	 G4double pt2max=(termD*termD - termab )/ termN ;
+	 
+//	 G4cout << " termD, ab, N " << termD << "  " << termab << "  " << termN 
+//	        <<  "   pt2max= " << pt2max ;
+	 	                                                                          
+         Pt=SampleQuarkPt(sqrt(pt2max)); Pt.setZ(0); G4double Pt2=Pt.mag2();
+
+	 
+//	 G4cout << " sampled Pt2 = " << Pt2 << "  " << pt2max-Pt2 << G4endl;              
+         // end.. GF
 
 //G4cout<<"Sample4Momentum Pt x y "<<Pt.getX()<<" "<<Pt.getY()<<G4endl;
 
@@ -520,7 +534,7 @@ void G4LundStringFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double M
          AvailablePz2= sqr(InitialMass*InitialMass - MassMt2 - AntiMassMt2) - 
                          4.*MassMt2*AntiMassMt2;                                
       }                                                                     
-      while(AvailablePz2 < 0.);                                               
+      while(AvailablePz2 < 0.);     // GF will occur only for numerical precision problem with limit in sampled pt                                               
                                                                             
       AvailablePz2 /=(4.*InitialMass*InitialMass);                            
       AvailablePz = std::sqrt(AvailablePz2);                               

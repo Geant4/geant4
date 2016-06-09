@@ -152,6 +152,9 @@ G4double G4TripathiLightCrossSection::GetIsoZACrossSection
   G4LorentzVector pP(theProjectile->Get4Momentum());
   pT = pT + pP;
   G4double E_cm = (pT.mag()-mT-pP.m())/MeV;
+  if(E_cm <= DBL_MIN) return result;  
+
+
 //
 //
 // Determine nuclear radii.  Note that the r_p and r_T are defined differently
@@ -168,7 +171,8 @@ G4double G4TripathiLightCrossSection::GetIsoZACrossSection
     std::pow(E_cm, third);
 
   G4double B = 1.44 * ZP * ZT / Radius;
-//
+  if(E_cm <= B) return result; 
+
 //
 // Now determine other parameters associated with the parametric
 // formula, depending upon the projectile and target.
@@ -286,10 +290,11 @@ G4double G4TripathiLightCrossSection::GetIsoZACrossSection
   result = pi * r_0*r_0 *
            std::pow((std::pow(AT,third) + std::pow(AP,third) + deltaE),2.0) *
            (1.0 - R_c*B/E_cm) * X_m;
+  if(result < 0.0) result = 0.0;
+  /*
   if (!lowEnergyCheck)
   {
-    if (result < 0.0)
-      result = 0.0;
+    if (result < 0.0)  result = 0.0;
     else if (E < 6.0*MeV)
     {
       G4double f  = 0.95;
@@ -303,7 +308,7 @@ G4double G4TripathiLightCrossSection::GetIsoZACrossSection
       if (resultp >result) result = 0.0;
     }
   }
-
+  */
   return result;
 }
 

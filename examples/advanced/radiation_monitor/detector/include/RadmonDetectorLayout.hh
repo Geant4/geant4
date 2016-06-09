@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayout.hh,v 1.4.2.2 2006/06/29 16:10:37 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonDetectorLayout.hh,v 1.4.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 // Description:   Class to keep track of the configured detector layout
 //
@@ -104,7 +104,7 @@
 
    virtual G4bool                               Load(std::istream & in);
    virtual G4bool                               Save(std::ostream & out) const;
-
+                    
 
   private:
    inline bool                                  IsPlaced(const G4String & multilayerLabel);

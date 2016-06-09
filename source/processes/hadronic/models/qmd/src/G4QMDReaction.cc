@@ -30,6 +30,8 @@
 // 081107 Add UnUseGEM (then use the default channel of G4Evaporation)
 //            UseFrag (chage criterion of a inelastic reaction)
 //        Fix bug in nucleon projectiles  by T. Koi    
+// 090122 Be8 -> Alpha + Alpha 
+// 090331 Change member shenXS and genspaXS object to pointer 
 //
 #include "G4QMDReaction.hh"
 #include "G4QMDNucleus.hh"
@@ -44,6 +46,10 @@ G4QMDReaction::G4QMDReaction()
 , gem ( true )
 , frag ( false )
 {
+
+   //090331
+   shenXS = new G4IonsShenCrossSection();
+   //genspaXS = new G4GeneralSpaceNNCrossSection();
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
 
@@ -98,8 +104,9 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
      const G4Element* targ_ele =  nistMan->FindOrBuildElement( targ_Z ); 
      G4double aTemp = projectile.GetMaterial()->GetTemperature();
 
-     //G4double xs_0 = shenXS.GetCrossSection ( proj_dp , targ_ele , aTemp );
-     G4double xs_0 = genspaXS.GetCrossSection ( proj_dp , targ_ele , aTemp );
+     //090331
+     G4double xs_0 = shenXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
+     //G4double xs_0 = genspaXS->GetCrossSection ( proj_dp , targ_ele , aTemp );
      G4double bmax_0 = std::sqrt( xs_0 / pi );
      //std::cout << "bmax_0 in fm (fermi) " <<  bmax_0/fermi << std::endl;
 
@@ -469,12 +476,44 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
           notBreak = false;
           // Secondary from this nucleus (*it) 
           G4ParticleDefinition* pd = (*itt)->GetDefinition();
+
           G4LorentzVector p4 ( (*itt)->GetMomentum()/GeV , (*itt)->GetTotalEnergy()/GeV );  //in nucleus(*it) rest system
           G4LorentzVector p4_CM = CLHEP::boostOf( p4 , -nucleus_p4CM.findBoostToCM() );  // Back to CM
           G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB ); // Back to LAB  
 
-          G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
-          theParticleChange.AddSecondary( dp ); 
+
+//090122
+          //theParticleChange.AddSecondary( dp ); 
+          if ( !( pd->GetAtomicNumber() == 4 && pd->GetAtomicMass() == 8 ) )
+          {
+             G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
+             theParticleChange.AddSecondary( dp ); 
+          }
+          else
+          {
+             //Be8 -> Alpha + Alpha + Q
+             G4ThreeVector randomized_direction( G4UniformRand() , G4UniformRand() , G4UniformRand() );
+             randomized_direction = randomized_direction.unit();
+             G4double q_decay = (*itt)->GetMass() - 2*G4Alpha::Alpha()->GetPDGMass();
+             G4double p_decay = std::sqrt ( std::pow(G4Alpha::Alpha()->GetPDGMass()+q_decay/2,2) - std::pow(G4Alpha::Alpha()->GetPDGMass() , 2 ) ); 
+             G4LorentzVector p4_a1 ( p_decay*randomized_direction , G4Alpha::Alpha()->GetPDGMass()+q_decay/2 );  //in Be8 rest system
+             
+             G4LorentzVector p4_a1_Be8 = CLHEP::boostOf ( p4_a1/GeV , -p4.findBoostToCM() );
+             G4LorentzVector p4_a1_CM = CLHEP::boostOf ( p4_a1_Be8 , -nucleus_p4CM.findBoostToCM() );
+             G4LorentzVector p4_a1_LAB = CLHEP::boostOf ( p4_a1_CM , boostBackToLAB );
+
+             G4LorentzVector p4_a2 ( -p_decay*randomized_direction , G4Alpha::Alpha()->GetPDGMass()+q_decay/2 );  //in Be8 rest system
+             
+             G4LorentzVector p4_a2_Be8 = CLHEP::boostOf ( p4_a2/GeV , -p4.findBoostToCM() );
+             G4LorentzVector p4_a2_CM = CLHEP::boostOf ( p4_a2_Be8 , -nucleus_p4CM.findBoostToCM() );
+             G4LorentzVector p4_a2_LAB = CLHEP::boostOf ( p4_a2_CM , boostBackToLAB );
+             
+             G4DynamicParticle* dp1 = new G4DynamicParticle( G4Alpha::Alpha() , p4_a1_LAB*GeV );  
+             G4DynamicParticle* dp2 = new G4DynamicParticle( G4Alpha::Alpha() , p4_a2_LAB*GeV );  
+             theParticleChange.AddSecondary( dp1 ); 
+             theParticleChange.AddSecondary( dp2 ); 
+          }
+//090122
 
 /*
           std::cout
@@ -697,4 +736,3 @@ void G4QMDReaction::setEvaporationCh()
       evaporation->SetDefaultChannel();
 
 }
-

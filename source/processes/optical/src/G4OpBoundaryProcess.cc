@@ -177,8 +177,12 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         }
         else {
           G4cerr << " G4OpBoundaryProcess/PostStepDoIt(): "
-               << " The Navigator reports that it returned an invalid normal"
-               << G4endl;
+                 << " The Navigator reports that it returned an invalid normal"
+                 << G4endl;
+          G4Exception("G4OpBoundaryProcess::PostStepDoIt",
+                      "Invalid Surface Normal",
+                      EventMustBeAborted,
+                      "Geometry must return valid surface normal");
         }
 
         theGlobalNormal = theNavigator->GetLocalToGlobalTransform().
@@ -281,10 +285,6 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                   }
               }
 
-              G4MaterialPropertyVector* PropertyPointer;
-              G4MaterialPropertyVector* PropertyPointer1;
-              G4MaterialPropertyVector* PropertyPointer2;
-
               PropertyPointer =
                       aMaterialPropertiesTable->GetProperty("REFLECTIVITY");
               PropertyPointer1 =
@@ -302,57 +302,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
               } else if (PropertyPointer1 && PropertyPointer2) {
 
-                 G4double RealRindex =
-                          PropertyPointer1->GetProperty(thePhotonMomentum);
-                 G4double ImaginaryRindex =
-                          PropertyPointer2->GetProperty(thePhotonMomentum);
-
-                 // calculate FacetNormal
-                 if ( theFinish == ground ) {
-                    theFacetNormal =
-                              GetFacetNormal(OldMomentum, theGlobalNormal);
-                 } else {
-                    theFacetNormal = theGlobalNormal;
-                 }
-
-                 G4double PdotN = OldMomentum * theFacetNormal;
-                 cost1 = -PdotN;
-
-                 if (std::abs(cost1) < 1.0 - kCarTolerance) {
-                    sint1 = std::sqrt(1. - cost1*cost1);
-                 } else {
-                    sint1 = 0.0;
-                 }
-
-                 G4ThreeVector A_trans, A_paral, E1pp, E1pl;
-                 G4double E1_perp, E1_parl;
-
-                 if (sint1 > 0.0 ) {
-                    A_trans = OldMomentum.cross(theFacetNormal);
-                    A_trans = A_trans.unit();
-                    E1_perp = OldPolarization * A_trans;
-                    E1pp    = E1_perp * A_trans;
-                    E1pl    = OldPolarization - E1pp;
-                    E1_parl = E1pl.mag();
-                 }
-                 else {
-                    A_trans  = OldPolarization;
-                    // Here we Follow Jackson's conventions and we set the
-                    // parallel component = 1 in case of a ray perpendicular
-                    // to the surface
-                    E1_perp  = 0.0;
-                    E1_parl  = 1.0;
-                 }
-
-                 //calculate incident angle
-                 G4double incidentangle = GetIncidentAngle();
-
-                 //calculate the reflectivity depending on incident angle,
-                 //polarization and complex refractive
-
-                 theReflectivity =
-                            GetReflectivity(E1_perp, E1_parl, incidentangle,
-                                                 RealRindex, ImaginaryRindex);
+                 CalculateReflectivity();
 
               } else {
                  theReflectivity = 1.0;
@@ -600,6 +550,16 @@ void G4OpBoundaryProcess::DielectricMetal()
            }
            else {
 
+             if (PropertyPointer1 && PropertyPointer2) {
+                if ( n > 1 ) {
+                   CalculateReflectivity();
+                   if ( !G4BooleanRand(theReflectivity) ) {
+                      DoAbsorption();
+                      break;
+                   }
+                }
+             }
+
              if ( theModel == glisur || theFinish == polished ) {
 
                 DoReflection();
@@ -617,8 +577,13 @@ void G4OpBoundaryProcess::DielectricMetal()
                 }
                 else {
 
-                   if(theStatus==LobeReflection)theFacetNormal =
-                             GetFacetNormal(OldMomentum,theGlobalNormal);
+                   if(theStatus==LobeReflection){
+                     if ( PropertyPointer1 && PropertyPointer2 ){
+                     } else {
+                        theFacetNormal =
+                            GetFacetNormal(OldMomentum,theGlobalNormal);
+                     }
+                   }
 
                    G4double PdotN = OldMomentum * theFacetNormal;
                    NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
@@ -961,10 +926,67 @@ G4double G4OpBoundaryProcess::GetReflectivity(G4double E1_perp,
   Reflectivity    = Reflectivity_TE + Reflectivity_TM;
 
   do {
-     if(G4UniformRand()*real(Reflectivity) > real(Reflectivity_TE))iTE = -1;
-     if(G4UniformRand()*real(Reflectivity) > real(Reflectivity_TM))iTM = -1;
+     if(G4UniformRand()*real(Reflectivity) > real(Reflectivity_TE))
+       {iTE = -1;}else{iTE = 1;}
+     if(G4UniformRand()*real(Reflectivity) > real(Reflectivity_TM))
+       {iTM = -1;}else{iTM = 1;}
   } while(iTE<0&&iTM<0);
 
   return real(Reflectivity);
 
+}
+
+void G4OpBoundaryProcess::CalculateReflectivity()
+{
+  G4double RealRindex =
+           PropertyPointer1->GetProperty(thePhotonMomentum);
+  G4double ImaginaryRindex =
+           PropertyPointer2->GetProperty(thePhotonMomentum);
+
+  // calculate FacetNormal
+  if ( theFinish == ground ) {
+     theFacetNormal =
+               GetFacetNormal(OldMomentum, theGlobalNormal);
+  } else {
+     theFacetNormal = theGlobalNormal;
+  }
+
+  G4double PdotN = OldMomentum * theFacetNormal;
+  cost1 = -PdotN;
+
+  if (std::abs(cost1) < 1.0 - kCarTolerance) {
+     sint1 = std::sqrt(1. - cost1*cost1);
+  } else {
+     sint1 = 0.0;
+  }
+
+  G4ThreeVector A_trans, A_paral, E1pp, E1pl;
+  G4double E1_perp, E1_parl;
+
+  if (sint1 > 0.0 ) {
+     A_trans = OldMomentum.cross(theFacetNormal);
+     A_trans = A_trans.unit();
+     E1_perp = OldPolarization * A_trans;
+     E1pp    = E1_perp * A_trans;
+     E1pl    = OldPolarization - E1pp;
+     E1_parl = E1pl.mag();
+  }
+  else {
+     A_trans  = OldPolarization;
+     // Here we Follow Jackson's conventions and we set the
+     // parallel component = 1 in case of a ray perpendicular
+     // to the surface
+     E1_perp  = 0.0;
+     E1_parl  = 1.0;
+  }
+
+  //calculate incident angle
+  G4double incidentangle = GetIncidentAngle();
+
+  //calculate the reflectivity depending on incident angle,
+  //polarization and complex refractive
+
+  theReflectivity =
+             GetReflectivity(E1_perp, E1_parl, incidentangle,
+                                                 RealRindex, ImaginaryRindex);
 }

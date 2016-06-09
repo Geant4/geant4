@@ -1,4 +1,4 @@
-$Id: History,v 1.124 2008/11/13 14:14:07 vnivanch Exp $
+$Id: History,v 1.124.2.1 2009/08/12 07:57:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 August 09: V.Ivant (emmuons-V09-01-16)
+G4MuPairProductionModel - added protection against numerical problem
+                          due to negative value of transfered energy 
 
 12 November 08: V.Ivant (emmuons-V09-01-15)
 G4EnergyLossForExtrapolator - added method TrueStepLength; fixed initialisation

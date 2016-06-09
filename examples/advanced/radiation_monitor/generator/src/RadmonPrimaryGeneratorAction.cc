@@ -28,8 +28,8 @@
 // Creation date: Oct 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPrimaryGeneratorAction.cc,v 1.2.2.2 2006/06/29 16:16:41 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonPrimaryGeneratorAction.cc,v 1.2.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -41,14 +41,20 @@
 #include "G4Geantino.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4Event.hh"
+#include "G4GeneralParticleSource.hh"
 
-                                                RadmonPrimaryGeneratorAction :: RadmonPrimaryGeneratorAction(RadmonVGeneratorLayout * layout, RadmonVGeneratorsFactory * factory)
+
+RadmonPrimaryGeneratorAction :: RadmonPrimaryGeneratorAction(RadmonVGeneratorLayout * layout, RadmonVGeneratorsFactory * factory)
 :
  particlesGun(1),
  generatorLayout(layout),
  generatorsFactory(factory),
  needUpdate(true)
 {
+ 
+  ParticleGunSource = new G4GeneralParticleSource();
+
  if (layout==0)
   G4Exception("RadmonPrimaryGeneratorAction::RadmonPrimaryGeneratorAction: layout==0.");
 
@@ -57,23 +63,19 @@
 
  layout->AttachObserver(this);
 }
- 
- 
- 
-                                                RadmonPrimaryGeneratorAction :: ~RadmonPrimaryGeneratorAction()
+
+RadmonPrimaryGeneratorAction :: ~RadmonPrimaryGeneratorAction()
 {
  generatorLayout->DetachObserver(this);
   
  CleanUp();
 
  delete generatorsFactory;
+ delete ParticleGunSource;
+
 }
 
-
-
-
-
-void                                            RadmonPrimaryGeneratorAction :: GeneratePrimaries(G4Event * anEvent)
+void RadmonPrimaryGeneratorAction :: GeneratePrimaries(G4Event * anEvent)
 {
  if (needUpdate)
  {
@@ -146,6 +148,10 @@ void                                            RadmonPrimaryGeneratorAction :: 
 // G4cout << G4BestUnit(particlesGun.GetParticlePosition(), "Length") << ", " << particlesGun.GetParticleDefinition()->GetParticleName() << ", " << G4BestUnit(particlesGun.GetParticleMomentumDirection()*particlesGun.GetParticleEnergy(), "Energy") << G4endl;
 
  particlesGun.GeneratePrimaryVertex(anEvent);
+ 
+ ParticleGunSource->GeneratePrimaryVertex(anEvent);
+
+
 }
 
 

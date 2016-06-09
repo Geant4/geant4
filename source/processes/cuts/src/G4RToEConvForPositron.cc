@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4RToEConvForPositron.cc,v 1.5 2006/06/29 19:30:28 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RToEConvForPositron.cc,v 1.5.4.1 2009/08/11 12:45:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // --------------------------------------------------------------
@@ -75,7 +75,7 @@ G4double G4RToEConvForPositron::ComputeLoss(G4double AtomicNumber,
 
   G4double Mass = theParticle->GetPDGMass();       
   //  calculate dE/dx for electrons
-  if( std::abs(AtomicNumber-Z)>0.1 ) {
+  if( std::fabs(AtomicNumber-Z)>0.1 ) {
     Z = AtomicNumber;
     taul = Tlow/Mass;
     ionpot = 1.6e-5*MeV*std::exp(0.9*std::log(Z))/Mass;

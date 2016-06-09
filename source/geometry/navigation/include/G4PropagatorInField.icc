@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.13 2008/10/29 14:31:55 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PropagatorInField.icc,v 1.13.2.1 2009/08/11 13:31:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // 
 // ------------------------------------------------------------------------
@@ -258,7 +258,12 @@ inline
 void G4PropagatorInField::
 SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator )
 {
-  if(SimpleOrMultiNavigator)  { fNavigator= SimpleOrMultiNavigator; }
+  if(SimpleOrMultiNavigator)  { 
+     fNavigator= SimpleOrMultiNavigator; 
+     if( fIntersectionLocator ) {
+	 fIntersectionLocator->SetNavigatorFor( SimpleOrMultiNavigator );
+     }
+  }
 }
 
 inline

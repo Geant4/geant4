@@ -49,11 +49,12 @@ G4VSplitableHadron* G4GammaParticipants::SelectInteractions(const G4ReactionProd
   G4double s = (aPrimaryMomentum + theTargetNuc[0]->Get4Momentum()).mag2();
   G4double ThresholdMass = thePrimary.GetMass() + theTargetNuc[0]->GetDefinition()->GetPDGMass(); 
   ModelMode = SOFT;
-  if (sqr(ThresholdMass + ThersholdParameter) > s)
+  if (sqr(ThresholdMass + ThresholdParameter) > s)
   {
-    throw G4HadronicException(__FILE__, __LINE__, "Initial energy is too low. The 4-vectors of the input are inconsistant with the particle masses.");
+    ModelMode = DIFFRACTIVE;
+    //throw G4HadronicException(__FILE__, __LINE__, "Initial energy is too low. The 4-vectors of the input are inconsistant with the particle masses.");
   }
-  if (sqr(ThresholdMass + QGSMThershold) > s) // thus only diffractive in cascade!
+  if (sqr(ThresholdMass + QGSMThreshold) > s) // thus only diffractive in cascade!
   {
     ModelMode = DIFFRACTIVE;
   }

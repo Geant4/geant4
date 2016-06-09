@@ -49,7 +49,9 @@ class G4GDMLMatrix
 
    G4GDMLMatrix();
    G4GDMLMatrix(size_t rows0,size_t cols0);
-   ~G4GDMLMatrix();
+   G4GDMLMatrix(const G4GDMLMatrix& rhs);
+   G4GDMLMatrix& operator=(const G4GDMLMatrix& rhs); 
+  ~G4GDMLMatrix();
 
    void Set(size_t r,size_t c,G4double a);
    G4double Get(size_t r,size_t c) const;
@@ -78,6 +80,9 @@ class G4GDMLReadDefine : public G4GDMLRead
    virtual void DefineRead(const xercesc::DOMElement* const);
 
  protected:
+
+   G4GDMLReadDefine();
+   virtual ~G4GDMLReadDefine();
 
    G4RotationMatrix GetRotationMatrix(const G4ThreeVector&);
    void VectorRead(const xercesc::DOMElement* const,G4ThreeVector&);

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh,v 1.56.2.1 2009/03/03 10:55:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// $Id: G4GDMLParser.hh,v 1.56.2.2 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4GDMLParser
@@ -53,6 +53,7 @@ class G4GDMLParser
 
    G4GDMLParser();
    G4GDMLParser(G4GDMLReadStructure*);
+   G4GDMLParser(G4GDMLReadStructure*, G4GDMLWriteStructure*);
   ~G4GDMLParser();
      //
      // Parser constructors & destructor
@@ -112,7 +113,7 @@ class G4GDMLParser
 
    G4GDMLReadStructure* reader;
    G4GDMLWriteStructure* writer;
-   G4bool ucode;
+   G4bool urcode, uwcode;
 
 };
 

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.18 2008/11/07 17:59:37 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4OpBoundaryProcess.hh,v 1.18.2.1 2009/08/11 12:53:17 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,6 @@
 //              adopted from work by Werner Keil - April 2/96
 // mail:        gum@triumf.ca
 //
-// CVS version tag: 
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4OpBoundaryProcess_h
@@ -159,7 +158,9 @@ public: // With description
                                  G4double ImaginaryRindex);
         // Returns the Reflectivity on a metalic surface
 
-	void           SetModel(G4OpticalSurfaceModel model);
+        void CalculateReflectivity(void);
+
+        void SetModel(G4OpticalSurfaceModel model);
 	// Set the optical surface model to be followed
         // (glisur || unified).
 
@@ -194,6 +195,10 @@ private:
 	G4Material* Material2;
 
 	G4OpticalSurface* OpticalSurface;
+
+        G4MaterialPropertyVector* PropertyPointer;
+        G4MaterialPropertyVector* PropertyPointer1;
+        G4MaterialPropertyVector* PropertyPointer2;
 
 	G4double Rindex1;
 	G4double Rindex2;
@@ -307,7 +312,11 @@ void G4OpBoundaryProcess::DoReflection()
         else if ( theFinish == ground ) {
 
 	  theStatus = LobeReflection;
-          theFacetNormal = GetFacetNormal(OldMomentum,theGlobalNormal);
+          if ( PropertyPointer1 && PropertyPointer2 ){
+          } else {
+             theFacetNormal =
+                 GetFacetNormal(OldMomentum,theGlobalNormal);
+          }
           G4double PdotN = OldMomentum * theFacetNormal;
           NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
 

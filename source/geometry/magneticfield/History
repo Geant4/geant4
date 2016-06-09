@@ -1,4 +1,4 @@
-$Id: History,v 1.136 2008/12/11 10:47:59 gcosmo Exp $
+$Id: History,v 1.136.2.1 2009/08/11 13:44:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 18th, 2009 T.Nikitina - field-V09-01-06
+-------------------------
+- Enhanced algorithm G4ChordFinder::ApproxCurvePointS() in order to speedup
+  BrentLocator.
+
+March 25th, 2009 G.Cosmo
+------------------------
+- Some code cleanup and formatting...
+
+March 6th, 2009 P.Gumplinger
+----------------------------
+- Added 3rd term of BMT equation (Spin x Beta x Efield) to G4EqEMFieldWithSpin,
+  addresses emfields forum posting #155 (bug report). Thanks to Kevin Lynch,
+  Phys. Dept. at Boston University.
+- Moved renormalization of spin from G4EqEMFieldWithSpin and G4Mag_SpinEqRhs to
+  G4ClassicalRK4 and G4SimpleHeum.
+- Added Spin propagation errors to the criteria for 'OneGoodStep' in
+  G4MagIntegratorDriver but actually don't add it (yet) to the decision logic.
+
 November, 19th, 2008  P.Gumplinger - field-V09-01-05
 ----------------------------------
-- Renormalize the spin to ONE in G4EqEMFieldWithSpin.cc and G4Mag_SpinEqRhs.cc
+- Renormalized the spin to 1 in G4EqEMFieldWithSpin and G4Mag_SpinEqRhs.
 
 November, 7th, 2008   P.Gumplinger - field-V09-01-04
 ----------------------------------

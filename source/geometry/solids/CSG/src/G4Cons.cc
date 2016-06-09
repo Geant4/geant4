@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.60 2008/11/06 15:26:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Cons.cc,v 1.60.2.1 2009/08/18 15:46:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4Cons
@@ -704,7 +704,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
                                const G4ThreeVector& v   ) const
 {
   G4double snxt = kInfinity ;      // snxt = default return value
-
+  const G4double dRmax = 100*std::min(fRmax1,fRmax2);
   static const G4double halfCarTolerance=kCarTolerance*0.5;
   static const G4double halfRadTolerance=kRadTolerance*0.5;
 
@@ -886,6 +886,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
         }
         if ( s > 0 )  // If 'forwards'. Check z intersection
         {
+          if ( s>dRmax ) // Avoid rounding errors due to precision issues on
+          {              // 64 bits systems. Split long distances and recompute
+            G4double fTerm = s-std::fmod(s,dRmax);
+            s = fTerm + DistanceToIn(p+fTerm*v,v);
+          } 
           zi = p.z() + s*v.z() ;
 
           if (std::fabs(zi) <= tolODz)
@@ -992,6 +997,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
           if ( s >= 0 )   // > 0
           {
+            if ( s>dRmax ) // Avoid rounding errors due to precision issues on
+            {              // 64 bits systems. Split long distance and recompute
+              G4double fTerm = s-std::fmod(s,dRmax);
+              s = fTerm + DistanceToIn(p+fTerm*v,v);
+            } 
             zi = p.z() + s*v.z() ;
 
             if ( std::fabs(zi) <= tolODz )
@@ -1031,6 +1041,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
           {
             if ( (s >= 0) && (std::fabs(zi) <= tolODz) )  // s > 0
             {
+              if ( s>dRmax ) // Avoid rounding errors due to precision issues
+              {              // seen on 64 bits systems. Split and recompute
+                G4double fTerm = s-std::fmod(s,dRmax);
+                s = fTerm + DistanceToIn(p+fTerm*v,v);
+              } 
               if ( !fPhiFullCone )
               {
                 xi     = p.x() + s*v.x() ;
@@ -1050,6 +1065,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
             if ( (s >= 0) && (ri > 0) && (std::fabs(zi) <= tolODz) ) // s>0
             {
+              if ( s>dRmax ) // Avoid rounding errors due to precision issues
+              {              // seen on 64 bits systems. Split and recompute
+                G4double fTerm = s-std::fmod(s,dRmax);
+                s = fTerm + DistanceToIn(p+fTerm*v,v);
+              } 
               if ( !fPhiFullCone )
               {
                 xi     = p.x() + s*v.x() ;
@@ -1106,6 +1126,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
                 if ( (s >= 0) && (std::fabs(zi) <= tolODz) )  // s>0
                 {
+                  if ( s>dRmax ) // Avoid rounding errors due to precision issue
+                  {              // seen on 64 bits systems. Split and recompute
+                    G4double fTerm = s-std::fmod(s,dRmax);
+                    s = fTerm + DistanceToIn(p+fTerm*v,v);
+                  } 
                   if ( !fPhiFullCone )
                   {
                     xi     = p.x() + s*v.x() ;
@@ -1135,6 +1160,11 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 
             if ( (s >= 0) && (std::fabs(zi) <= tolODz) )  // s>0
             {
+              if ( s>dRmax ) // Avoid rounding errors due to precision issues
+              {              // seen on 64 bits systems. Split and recompute
+                G4double fTerm = s-std::fmod(s,dRmax);
+                s = fTerm + DistanceToIn(p+fTerm*v,v);
+              } 
               if ( !fPhiFullCone )
               {
                 xi     = p.x() + s*v.x();

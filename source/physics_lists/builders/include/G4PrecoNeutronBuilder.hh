@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4PrecoNeutronBuilder.hh,v 1.1.6.1 2009/08/11 15:11:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4PrecoNeutronBuilder
+//
+// Author: 2002 J.P. Wellisch
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4PrecoNeutronBuilder_h
 #define G4PrecoNeutronBuilder_h 1
 
@@ -54,7 +68,6 @@ class G4PrecoNeutronBuilder : public G4VNeutronBuilder
 
   private:
     G4PreCompoundModel * theModel;   
-    G4NeutronInelasticCrossSection theXSec;
     G4double theMin;
     G4double theMax;
 

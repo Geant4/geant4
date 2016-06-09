@@ -28,14 +28,14 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorFlatVolumeComponent.icc,v 1.1.2.2 2006/06/29 16:09:29 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonDetectorFlatVolumeComponent.icc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 #ifndef   RADMONDETECTORFLATVOLUMECOMPONENT_HH
  #error "RadmonDetectorFlatVolumeComponent.icc cannot be included directly. Please use RadmonDetectorFlatVolumeComponent.hh"
 #else  /* RADMONDETECTORFLATVOLUMECOMPONENT_HH */
- inline                                         RadmonDetectorFlatVolumeComponent :: RadmonDetectorFlatVolumeComponent(const RadmonVDetectorLabelledEntityConstructor * constructor)
+ inline RadmonDetectorFlatVolumeComponent :: RadmonDetectorFlatVolumeComponent(const RadmonVDetectorLabelledEntityConstructor * constructor)
  :
   owner(constructor),
   box(0),

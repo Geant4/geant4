@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2005/11/24 02:33:32 capra Exp $
+# $Id: GNUmakefile,v 1.1.4.1 2009/08/11 14:20:35 gcosmo Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -43,9 +43,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I../sensitivity/include \
             -I../userActions/include
 
-CPPFLAGS += `aida-config --include`
-CPPFLAGS += -DG4ANALYSIS_USE
-LDFLAGS  += `aida-config --lib`
-LOADLIBS += `aida-config --lib`
+
+include $(G4INSTALL)/config/analysis.gmk
 
 include $(G4INSTALL)/config/common.gmk

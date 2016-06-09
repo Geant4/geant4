@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.hh,v 1.4 2008/01/22 15:02:36 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhantomParameterisation.hh,v 1.4.4.1 2009/08/11 13:31:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4PhantomParameterisation
@@ -112,6 +112,7 @@ class G4PhantomParameterisation : public G4VPVParameterisation
                             const G4VPhysicalVolume*) const {}
   
     void BuildContainerSolid( G4VPhysicalVolume *pPhysicalVol );
+    void BuildContainerSolid( G4VSolid *pMotherSolid );
       // Save as container solid the parent of the voxels. Check that the
       // voxels fill it completely.
 

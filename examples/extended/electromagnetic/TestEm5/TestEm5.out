@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-19    (13-March-2009)
+ Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -338,7 +342,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.51s Real=211.81s Sys=16.74s
+  User=4.28s Real=6.52s Sys=2.24s
 
  ======================== run summary ======================
 
@@ -389,3 +393,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+

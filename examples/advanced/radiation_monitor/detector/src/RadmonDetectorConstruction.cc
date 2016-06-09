@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorConstruction.cc,v 1.4.2.2 2006/06/29 16:13:28 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonDetectorConstruction.cc,v 1.4.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -46,9 +46,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
-
-
-                                                RadmonDetectorConstruction :: RadmonDetectorConstruction(RadmonVDetectorLayout * layout, RadmonVDetectorEntitiesConstructorsFactory * factory)
+RadmonDetectorConstruction::RadmonDetectorConstruction(RadmonVDetectorLayout * layout, RadmonVDetectorEntitiesConstructorsFactory * factory)
 :
  detectorLayout(layout),
  constructorsFactory(factory),
@@ -63,30 +61,28 @@
  if (factory==0)
   G4Exception("RadmonDetectorConstruction::RadmonDetectorConstruction: factory==0.");
  
+ // Detector is Observer of Layout
+ // Layout contains all the data
+ // Everytime the layout is changed, the change is notified to the detector component
  detectorLayout->AttachObserver(this);
 }
 
-
-
-                                                RadmonDetectorConstruction :: ~RadmonDetectorConstruction()
+RadmonDetectorConstruction :: ~RadmonDetectorConstruction()
 {
- detectorLayout->DetachObserver(this);
+ detectorLayout -> DetachObserver(this);
 
  Destruct();
  
  delete constructorsFactory;
 }
 
-
-
-
-
-G4VPhysicalVolume *                             RadmonDetectorConstruction :: Construct(void)
+G4VPhysicalVolume* RadmonDetectorConstruction :: Construct(void)
 {
  // This method will not change the detector layout
  RadmonVDetectorLayout const * const & const_detectorLayout(detectorLayout);
 
- if (const_detectorLayout->IsEnabledEnvironment())
+ // Define the world volume
+ if (const_detectorLayout -> IsEnabledEnvironment())
   BuildEnvironmentFromType(const_detectorLayout->GetEnvironmentType());
  else
   BuildEnvironmentSphere();
@@ -103,20 +99,14 @@ G4VPhysicalVolume *                             RadmonDetectorConstruction :: Co
  return environmentPhysicalVolume;
 }
 
-
-
-
-
-void                                            RadmonDetectorConstruction :: OnLayoutChange(void)
+void RadmonDetectorConstruction :: OnLayoutChange(void)
 {
+  // When an element of the geometry is changed, all the geometry physics components are destroyed.
  Destruct();
  G4RunManager::GetRunManager()->DefineWorldVolume(Construct(), true);
 }
 
-
-
-
-void                                            RadmonDetectorConstruction :: Destruct(void)
+void RadmonDetectorConstruction :: Destruct(void)
 {
  // Layers destruction
  LayerItem item;
@@ -151,11 +141,7 @@ void                                            RadmonDetectorConstruction :: De
  environmentLogicalVolume=0;
 }
 
-
-
-
-
-void                                            RadmonDetectorConstruction :: BuildEnvironmentFromType(const G4String & type)
+void RadmonDetectorConstruction :: BuildEnvironmentFromType(const G4String & type)
 {
  environmentConstructor=constructorsFactory->CreateEntityConstructor(type);
  
@@ -192,9 +178,7 @@ void                                            RadmonDetectorConstruction :: Bu
  }
 }
 
-
-
-void                                            RadmonDetectorConstruction :: BuildEnvironmentSphere(void)
+void RadmonDetectorConstruction :: BuildEnvironmentSphere(void)
 {
  // This method will not change the detector layout
  RadmonVDetectorLayout const * const & const_detectorLayout(detectorLayout);
@@ -231,9 +215,7 @@ void                                            RadmonDetectorConstruction :: Bu
  environmentLogicalVolume=new G4LogicalVolume(environmentSolid, &vacuum, "worldLV", 0, 0, 0);
 }
 
-
-
-void                                            RadmonDetectorConstruction :: BuildMultilayer(G4int index)
+void RadmonDetectorConstruction :: BuildMultilayer(G4int index)
 {
  // This method will not change the detector layout
  RadmonVDetectorLayout const * const & const_detectorLayout(detectorLayout);

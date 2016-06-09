@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorFlatVolumeComponent.cc,v 1.2.2.2 2006/06/29 16:13:32 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonDetectorFlatVolumeComponent.cc,v 1.2.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -42,15 +42,13 @@
 #include "G4VisAttributes.hh"
 #include "globals.hh"
  
-                                                RadmonDetectorFlatVolumeComponent :: ~RadmonDetectorFlatVolumeComponent()
+RadmonDetectorFlatVolumeComponent :: ~RadmonDetectorFlatVolumeComponent()
 {
  delete visAttributes;
  delete box;
 }
 
-
-   
-RadmonDetectorLayerVolumesList *                RadmonDetectorFlatVolumeComponent :: GenerateVolumesList(void) 
+RadmonDetectorLayerVolumesList * RadmonDetectorFlatVolumeComponent :: GenerateVolumesList(void) 
 {
  G4double width(owner->GetWidth());
  if (width<0)

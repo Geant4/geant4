@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2008/12/10 18:07:33 cirrone Exp $
+$Id: History,v 1.20.2.1 2009/08/11 09:53:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,12 +7,16 @@ $Id: History,v 1.20 2008/12/10 18:07:33 cirrone Exp $
 
                            History file
                            ------------
+15.05.2009 -- B. Tome, Tag: air_shower-V09-01-06
+              Updated README file.
+              Tested example with Geant4 tag geant4-09-02-ref-04 and iAIDA-1.0.14
+
 10.12.2008 -- G.A.P.Cirrone, Tag: air_shower-V09-01-05
               Updated README file;
-03.07.2008 -- B. Tomé;  Tag air_shower-V09-01-04
+03.07.2008 -- B. Tome;  Tag air_shower-V09-01-04
               Access to private data members of UltraDetectorConstruction through Get functions.
 
-03.07.2008 -- B. Tomé;  Tag air_shower-V09-01-03
+03.07.2008 -- B. Tome;  Tag air_shower-V09-01-03
               Adjusted range of optical properties tables in UltraDetectorConstruction;
               Added check of optical photon energy in UltraPrimaryGeneratorAction;
               Cerenkov process attached to all applicable particles;

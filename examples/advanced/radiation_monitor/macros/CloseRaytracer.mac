@@ -1,0 +1,4 @@
+/vis/viewer/zoom 6
+/vis/scene/add/volume worldPV
+/vis/sceneHandler/attach DefaultScene
+/vis/viewer/set/viewpointThetaPhi 30 20

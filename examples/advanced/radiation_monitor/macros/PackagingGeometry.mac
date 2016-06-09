@@ -4,10 +4,12 @@
 /radmon/detector/SetMultilayerWidth      MIL-STD-105D     {Pkg-Width}
 /radmon/detector/SetMultilayerHeight     MIL-STD-105D     {Pkg-Height}
 
+# First layer
 /radmon/detector/AppendLayerToMultilayer MIL-STD-105D ly1
 /radmon/detector/SetLayerType            MIL-STD-105D ly1 CarvedFlatVolumeWithPins
 /radmon/detector/SetLayerThickness       MIL-STD-105D ly1 {Pkg-Tracks-Thickness}
 /radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 Material {Pkg-Material}
+# Holes along the border of the surface
 /radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 HolesAlongWidth {Pkg-Holes-Along-Width}
 /radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 HolesAlongHeight {Pkg-Holes-Along-Height}
 /radmon/detector/SetLayerAttribute       MIL-STD-105D ly1 HolesRadius '{Pkg-Holes-Radius}'
@@ -42,6 +44,7 @@
 /radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 HolesAlongHeight {Pkg-Holes-Along-Height}
 /radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 HolesRadius '{Pkg-Holes-Radius}'
 /radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 HolesStep '{Pkg-Holes-Separation}'
+# Golden emisphere in the hole
 /radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 DepositOnHolesMaterial {Pkg-Tracks-Material}
 /radmon/detector/SetLayerAttribute       MIL-STD-105D ly3 DepositOnHolesThickness '{Pkg-Tracks-Thickness}'
 

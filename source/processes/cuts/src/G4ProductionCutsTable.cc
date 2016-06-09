@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.18 2008/03/02 10:52:55 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4ProductionCutsTable.cc,v 1.18.2.1 2009/08/11 12:45:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // --------------------------------------------------------------
@@ -622,7 +622,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     G4Material* aMaterial = G4Material::GetMaterial(name);
     if (aMaterial ==0 ) continue;
 
-    G4double ratio = std::abs(density/aMaterial->GetDensity() );
+    G4double ratio = std::fabs(density/aMaterial->GetDensity() );
     if ((0.999>ratio) || (ratio>1.001) ){
 #ifdef G4VERBOSE
       if (verboseLevel >0) {

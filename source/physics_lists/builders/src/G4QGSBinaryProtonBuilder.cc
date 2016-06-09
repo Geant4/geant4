@@ -23,13 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4QGSBinaryProtonBuilder.hh"
- #include "G4ParticleDefinition.hh"
- #include "G4ParticleTable.hh"
- #include "G4ProcessManager.hh"
+// $Id: G4QGSBinaryProtonBuilder.cc,v 1.2.2.1 2009/08/11 15:11:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSBinaryProtonBuilder
+//
+// Author: 2006 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
+#include "G4QGSBinaryProtonBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProtonInelasticCrossSection.hh"
 
- G4QGSBinaryProtonBuilder::
- G4QGSBinaryProtonBuilder(G4bool quasiElastic) 
+G4QGSBinaryProtonBuilder::
+G4QGSBinaryProtonBuilder(G4bool quasiElastic) 
  {
    theMin = 12*GeV;
    theModel = new G4TheoFSGenerator("QGSB");
@@ -52,23 +67,22 @@
    {  theQuasiElastic=0;}  
  }
 
- void G4QGSBinaryProtonBuilder::
- Build(G4ProtonInelasticProcess * aP)
+void G4QGSBinaryProtonBuilder::
+Build(G4ProtonInelasticProcess * aP)
  {
 // G4cout << "adding inelastic Proton in QGSBinary" << G4endl;
-   aP->AddDataSet(&theXSec);  
+   aP->AddDataSet(new G4ProtonInelasticCrossSection);  
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
  }
 
- void G4QGSBinaryProtonBuilder::
- Build(G4HadronElasticProcess * )
+void G4QGSBinaryProtonBuilder::
+Build(G4HadronElasticProcess * )
  {
  }
 
- G4QGSBinaryProtonBuilder::
- ~G4QGSBinaryProtonBuilder() 
+G4QGSBinaryProtonBuilder::~G4QGSBinaryProtonBuilder() 
  {
    delete thePreEquilib;
    delete theCascade;

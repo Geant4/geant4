@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc,v 1.50.2.1 2009/03/03 10:55:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// $Id: G4GDMLWrite.cc,v 1.50.2.2 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // class G4GDMLWrite Implementation
 //
@@ -36,6 +36,14 @@
 #include "G4GDMLWrite.hh"
 
 G4bool G4GDMLWrite::addPointerToName = true;
+
+G4GDMLWrite::G4GDMLWrite() : extElement(0)
+{
+}
+
+G4GDMLWrite::~G4GDMLWrite()
+{
+}
 
 G4bool G4GDMLWrite::FileExists(const G4String& fname) const
 {
@@ -59,6 +67,18 @@ G4GDMLWrite::DepthMapType& G4GDMLWrite::DepthMap()
 {
    static DepthMapType instance;
    return instance;
+}
+
+void G4GDMLWrite::AddExtension(xercesc::DOMElement*,
+                               const G4LogicalVolume* const)
+{
+   // Empty implementation. To be overwritten by user for specific extensions
+   // related to attributes associated to volumes
+}
+
+void G4GDMLWrite::ExtensionWrite(xercesc::DOMElement*)
+{
+   // Empty implementation. To be overwritten by user for specific extensions
 }
 
 G4String G4GDMLWrite::GenerateName(const G4String& name, const void* const ptr)
@@ -158,6 +178,7 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
    gdml->setAttributeNode(NewAttribute("xsi:noNamespaceSchemaLocation",
                           SchemaLocation));
 
+   ExtensionWrite(gdml);
    DefineWrite(gdml);
    MaterialsWrite(gdml);
    SolidsWrite(gdml);

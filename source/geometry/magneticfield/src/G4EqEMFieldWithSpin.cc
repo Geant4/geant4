@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4EqEMFieldWithSpin.cc,v 1.4 2008/11/21 21:17:03 gum Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4EqEMFieldWithSpin.cc,v 1.4.2.1 2009/08/11 13:44:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 //  This is the standard right-hand side for equation of motion.
@@ -35,6 +35,7 @@
 //  eg an electric field
 //
 //  30.08.2007 Chris Gong, Peter Gumplinger
+//  14.02.2009 Kevin Lynch
 //
 // -------------------------------------------------------------------
 
@@ -44,8 +45,8 @@
 #include "globals.hh"
 
 G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
-      : G4EquationOfMotion( emField )
-{ 
+  : G4EquationOfMotion( emField )
+{
   anomaly = 0.0011659208;
 }
 
@@ -78,8 +79,21 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
 {
 
    // Components of y:
-   //    0-2 dr/ds, 
-   //    3-5 dp/ds - momentum derivatives 
+   //    0-2 dr/ds,
+   //    3-5 dp/ds - momentum derivatives
+   //    9-11 dSpin/ds = (1/beta) dSpin/dt - spin derivatives
+
+   // The BMT equation, following J.D.Jackson, Classical
+   // Electrodynamics, Second Edition,
+   // dS/dt = (e/mc) S \cross
+   //              [ (g/2-1 +1/\gamma) B
+   //               -(g/-1)\gamma/(\gamma+1) (\beta \cdot B)\beta
+   //               -(g/2-\gamma/(\gamma+1) \beta \cross E ]
+   // where
+   // S = \vec{s}, where S^2 = 1
+   // B = \vec{B}
+   // \beta = \vec{\beta} = \beta \vec{u} with u^2 = 1
+   // E = \vec{E} 
 
    G4double pSquared = y[3]*y[3] + y[4]*y[4] + y[5]*y[5] ;
 
@@ -112,20 +126,23 @@ G4EqEMFieldWithSpin::EvaluateRhsGivenB(const G4double y[],
    dydx[7] = inverse_velocity;
    
    G4ThreeVector BField(Field[0],Field[1],Field[2]);
+   G4ThreeVector EField(Field[3],Field[4],Field[5]);
 
    G4ThreeVector u(y[3], y[4], y[5]);
    u *= pModuleInverse;
 
    G4double udb = anomaly*beta*gamma/(1.+gamma) * (BField * u);
    G4double ucb = (anomaly+1./gamma)/beta;
+   G4double uce = anomaly + 1./(gamma+1.);
 
    G4ThreeVector Spin(y[9],y[10],y[11]);
 
-   if (Spin.mag() > 0.) Spin = Spin.unit();
-
-   G4ThreeVector dSpin;
-
-   dSpin = ParticleCharge*omegac*(ucb*(Spin.cross(BField))-udb*(Spin.cross(u)));
+   G4ThreeVector dSpin
+     = ParticleCharge*omegac*( ucb*(Spin.cross(BField))-udb*(Spin.cross(u))
+                               // from Jackson
+                               // -uce*Spin.cross(u.cross(EField)) );
+                               // but this form has one less operation
+                               - uce*(u*(Spin*EField) - EField*(Spin*u)) );
 
    dydx[ 9] = dSpin.x();
    dydx[10] = dSpin.y();

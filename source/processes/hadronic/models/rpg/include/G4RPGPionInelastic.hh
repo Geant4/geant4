@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGPionInelastic.hh,v 1.1 2008/01/05 00:14:03 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGPionInelastic.hh,v 1.1.2.1 2009/08/11 12:57:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // Author: D. H. Wright
 // Date:   15 August 2007
@@ -47,6 +47,8 @@
    G4RPGPionInelastic(const G4String& modelName = "RPGPionInelastic");
     
    ~G4RPGPionInelastic() { }
+
+   //   void printCrossSections() const;
     
  protected:
 

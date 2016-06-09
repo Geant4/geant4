@@ -1,4 +1,4 @@
-$Id: History,v 1.36.2.1 2009/03/03 14:03:04 gcosmo Exp $
+$Id: History,v 1.36.2.2 2009/08/11 13:47:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 06, 2009, M.Asai (digits_hits-V09-01-04)
+- Replaced usage of non-Standard calls to 'sprintf' with ostringstream,
+  to fix compilation errors reported by gcc-4.4.0 compiler.
 
 Dec 28, 2008, M.Asai (digits_hits-V09-01-03)
 - Fixing incorrect volume size for cylindrical parameterized volume used in

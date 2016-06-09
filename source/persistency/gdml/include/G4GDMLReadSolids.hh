@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh,v 1.12 2008/11/21 09:32:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadSolids.hh,v 1.12.2.1 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4GDMLReadSolids
@@ -90,6 +90,9 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    virtual void SolidsRead(const xercesc::DOMElement* const);
 
  protected:
+
+   G4GDMLReadSolids();
+   virtual ~G4GDMLReadSolids();
 
    void BooleanRead(const xercesc::DOMElement* const,const BooleanOp);
    void BoxRead(const xercesc::DOMElement* const);

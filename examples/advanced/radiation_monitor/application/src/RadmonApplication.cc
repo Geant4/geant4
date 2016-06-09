@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -28,8 +29,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplication.cc,v 1.12.2.2 2006/06/29 16:08:29 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonApplication.cc,v 1.12.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -72,9 +73,7 @@
  #include "G4VisExecutive.hh"
 #endif /* G4VIS_USE */
 
-
-
-                                                RadmonApplication :: RadmonApplication(const RadmonApplicationOptions & options)
+RadmonApplication :: RadmonApplication(const RadmonApplicationOptions & options)
 :
  RadmonApplicationDetectorSetup(options),
  RadmonApplicationGeneratorSetup(options),
@@ -120,8 +119,7 @@
   return;
  }
  
- 
- // Construct the detector layout
+  // Construct the detector layout
  detectorLayout=new RadmonDetectorLayout;
  
  if (detectorLayout==0)

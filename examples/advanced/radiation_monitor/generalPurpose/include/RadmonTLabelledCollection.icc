@@ -28,8 +28,10 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTLabelledCollection.icc,v 1.6 2006/06/29 16:14:31 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonTLabelledCollection.icc,v 1.6.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
+// Id:            $Id: RadmonTLabelledCollection.icc,v 1.6.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 #ifndef   RADMONTLABELLEDCOLLECTION_HH
@@ -185,7 +187,8 @@
  template <typename LabelledObject>
  LabelledObject &                               RadmonTLabelledCollection<LabelledObject> :: InsertItemAfter(G4int index)
  {
-  return InsertBefore(index+1);
+  //G.Barrand : return InsertBefore(index+1);
+  return InsertItemBefore(index+1); //G.Barrand
  }
  
  

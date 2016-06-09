@@ -1,4 +1,4 @@
-$Id: History,v 1.162.2.2 2009/03/04 15:22:43 gcosmo Exp $
+$Id: History,v 1.162.2.3 2009/08/11 13:21:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- May  05 2009      P.Gumplinger (particles-V09-01-15)
+- Ascertain that the absolute of the argument to boost is <1.0
+  in G4MuonRadiativeDecayChannelWithSpin.cc
 
 - Feb. 27 2009      H.Kurashige  (particles-V09-01-14)
 - Update masses of light ions

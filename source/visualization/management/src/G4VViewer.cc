@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4VViewer.cc,v 1.24.6.1 2009/03/13 09:02:57 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // 
 // John Allison  27th March 1996

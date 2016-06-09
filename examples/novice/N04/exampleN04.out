@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-19    (13-March-2009)
+ Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -362,5 +366,6 @@ Stage 1->2 : 1 isolated muon found.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=1.41s Real=1.43s Sys=0s
+  User=1.46s Real=1.47s Sys=0s
 G4 kernel has come to Quit state.
+

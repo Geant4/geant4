@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.4 2006/06/29 19:30:06 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.4.4.1 2009/08/11 12:45:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // ------------------------------------------------------------
@@ -174,6 +174,11 @@ inline
 }
 
 
+inline 
+ const G4ParticleDefinition* G4VRangeToEnergyConverter::GetParticleType() const
+{
+   return theParticle;
+}
 #endif
 
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc,v 1.14 2007/05/18 07:39:56 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Ellipsoid.cc,v 1.14.8.1 2009/08/11 09:20:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // class G4Ellipsoid
 //
@@ -384,38 +384,38 @@ EInside G4Ellipsoid::Inside(const G4ThreeVector& p) const
            rad2oi;  // outside surface inner tolerance
   EInside in;
 
+  static const G4double halfRadTolerance=kRadTolerance*0.5;
+
   // check this side of z cut first, because that's fast
   //
-  if (p.z() < zBottomCut-kRadTolerance/2.0)
-    { return in=kOutside; }
-  if (p.z() > zTopCut+kRadTolerance/2.0)
-    { return in=kOutside; }
+  if (p.z() < zBottomCut-halfRadTolerance) { return in=kOutside; }
+  if (p.z() > zTopCut+halfRadTolerance)    { return in=kOutside; }
 
-  rad2oo= sqr(p.x()/(xSemiAxis+kRadTolerance/2.))
-        + sqr(p.y()/(ySemiAxis+kRadTolerance/2.))
-        + sqr(p.z()/(zSemiAxis+kRadTolerance/2.));
+  rad2oo= sqr(p.x()/(xSemiAxis+halfRadTolerance))
+        + sqr(p.y()/(ySemiAxis+halfRadTolerance))
+        + sqr(p.z()/(zSemiAxis+halfRadTolerance));
 
-  if (rad2oo > 1.0)
-    { return in=kOutside; }
+  if (rad2oo > 1.0)  { return in=kOutside; }
     
-  rad2oi= sqr(p.x()*(1.0+kRadTolerance/2./xSemiAxis)/xSemiAxis)
-      + sqr(p.y()*(1.0+kRadTolerance/2./ySemiAxis)/ySemiAxis)
-      + sqr(p.z()*(1.0+kRadTolerance/2./zSemiAxis)/zSemiAxis);
+  rad2oi= sqr(p.x()*(1.0+halfRadTolerance/xSemiAxis)/xSemiAxis)
+      + sqr(p.y()*(1.0+halfRadTolerance/ySemiAxis)/ySemiAxis)
+      + sqr(p.z()*(1.0+halfRadTolerance/zSemiAxis)/zSemiAxis);
 
   // Check radial surfaces
   //  sets `in' (already checked for rad2oo > 1.0)
   //
   if (rad2oi < 1.0)
   {
-    in = ( (p.z() < zBottomCut+kRadTolerance/2.0)
-        || (p.z() > zTopCut-kRadTolerance/2.0) ) ? kSurface : kInside;
+    in = ( (p.z() < zBottomCut+halfRadTolerance)
+        || (p.z() > zTopCut-halfRadTolerance) ) ? kSurface : kInside;
+    if ( rad2oi > 1.0-halfRadTolerance )  { in=kSurface; }
   }
   else 
   {
     in = kSurface;
   }
-
   return in;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -459,30 +459,35 @@ G4ThreeVector G4Ellipsoid::SurfaceNormal( const G4ThreeVector& p) const
 G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
                                     const G4ThreeVector& v  ) const
 {
-  G4double distMin;
-  
+  static const G4double halfCarTolerance=kCarTolerance*0.5;
+  static const G4double halfRadTolerance=kRadTolerance*0.5;
+
+  G4double distMin = std::min(xSemiAxis,ySemiAxis);
+  const G4double dRmax = 100.*std::min(distMin,zSemiAxis);
   distMin= kInfinity;
 
   // check to see if Z plane is relevant
-  if (p.z() < zBottomCut) {
-    if (v.z() <= 0.0)
-      return distMin;
+  if (p.z() <= zBottomCut+halfCarTolerance)
+  {
+    if (v.z() <= 0.0) { return distMin; }
     G4double distZ = (zBottomCut - p.z()) / v.z();
-    if (distZ > kRadTolerance/2.0 && Inside(p+distZ*v) != kOutside )
-      {
-        // early exit since can't intercept curved surface if we reach here
-        return distMin= distZ;
-      }
+
+    if ( (distZ >- halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
+    {
+      // early exit since can't intercept curved surface if we reach here
+      return distMin= distZ;
+    }
+
   }
-  if (p.z() > zTopCut) {
-    if (v.z() >= 0.0)
-      return distMin;
+  if (p.z() >= zTopCut-halfCarTolerance)
+  {
+    if (v.z() >= 0.0) { return distMin;}
     G4double distZ = (zTopCut - p.z()) / v.z();
-    if (distZ > kRadTolerance/2.0 && Inside(p+distZ*v) != kOutside )
-      {
-        // early exit since can't intercept curved surface if we reach here
-        return distMin= distZ;
-      }
+    if ( (distZ > -halfRadTolerance) && (Inside(p+distZ*v) != kOutside) )
+    {
+      // early exit since can't intercept curved surface if we reach here
+      return distMin= distZ;
+    }
   }
   // if fZCut1 <= p.z() <= fZCut2, then must hit curved surface
 
@@ -491,33 +496,40 @@ G4double G4Ellipsoid::DistanceToIn( const G4ThreeVector& p,
 
   A= sqr(v.x()/xSemiAxis) + sqr(v.y()/ySemiAxis) + sqr(v.z()/zSemiAxis);
   C= sqr(p.x()/xSemiAxis) + sqr(p.y()/ySemiAxis) + sqr(p.z()/zSemiAxis) - 1.0;
-  B= 2.0 * ( p.x()*v.x()/(xSemiAxis*xSemiAxis) + p.y()*v.y()/(ySemiAxis*ySemiAxis)
-             + p.z()*v.z()/(zSemiAxis*zSemiAxis) );
+  B= 2.0 * ( p.x()*v.x()/(xSemiAxis*xSemiAxis)
+           + p.y()*v.y()/(ySemiAxis*ySemiAxis)
+           + p.z()*v.z()/(zSemiAxis*zSemiAxis) );
 
   C= B*B - 4.0*A*C;
   if (C > 0.0)
-    {
-      G4double distR= (-B - std::sqrt(C) ) / (2.0*A);
-      G4double intZ= p.z()+distR*v.z();
-      if (distR > kRadTolerance/2.0
-          && intZ >= zBottomCut-kRadTolerance/2.0
-          && intZ <= zTopCut+kRadTolerance/2.0)
-        {
-          distMin = distR;
-        }
-      else
-        {
-          distR= (-B + std::sqrt(C) ) / (2.0*A);
-          intZ= p.z()+distR*v.z();
-          if (distR > kRadTolerance/2.0
-              && intZ >= zBottomCut-kRadTolerance/2.0
-              && intZ <= zTopCut+kRadTolerance/2.0)
-            {
-              distMin = distR;
-            }
-        }
+  {    
+    G4double distR= (-B - std::sqrt(C)) / (2.0*A);
+    G4double intZ = p.z()+distR*v.z();
+    if ( (distR >- halfRadTolerance)
+      && (intZ >= zBottomCut-halfRadTolerance)
+      && (intZ <= zTopCut+halfRadTolerance) )
+    { 
+      distMin = distR;
     }
-
+    else
+    {
+      distR= (-B + std::sqrt(C)) / (2.0*A);
+      intZ = p.z()+distR*v.z();
+      if ( (distR >- halfRadTolerance)
+        && (intZ >= zBottomCut-halfRadTolerance)
+        && (intZ <= zTopCut+halfRadTolerance) )
+      {
+        if (p.dot(v)<0.) { distMin = distR; }
+      }
+    }
+    if ( distMin>dRmax ) // Avoid rounding errors due to precision issues on
+    {                    // 64 bits systems. Split long distances and recompute
+      G4double fTerm = distMin-std::fmod(distMin,dRmax);
+      distMin = fTerm + DistanceToIn(p+fTerm*v,v);
+    }
+  }
+  
+  if (std::abs(distMin)<halfRadTolerance) { distMin=0.; }
   return distMin;
 } 
 
@@ -650,7 +662,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
       switch (surface)
       {
         case kPlaneSurf:
-          *n= G4ThreeVector(0.,0.,(v.z() > 1.0 ? 1. : -1.));
+          *n= G4ThreeVector(0.,0.,(v.z() > 0.0 ? 1. : -1.));
           break;
         case kCurvedSurf:
         {
@@ -682,6 +694,7 @@ G4double G4Ellipsoid::DistanceToOut(const G4ThreeVector& p,
       }
     }
   }
+   
   return distMin;
 }
 
@@ -904,11 +917,11 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
 
   max1  = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
   max1  = max1 > zSemiAxis ? max1 : zSemiAxis;
-  if(max1 == xSemiAxis){max2 = ySemiAxis; max3 = zSemiAxis;}
-  else if(max1 == ySemiAxis){max2 = xSemiAxis; max3 = zSemiAxis;}
-  else {max2 = xSemiAxis; max3 = ySemiAxis; }
+  if (max1 == xSemiAxis)      { max2 = ySemiAxis; max3 = zSemiAxis; }
+  else if (max1 == ySemiAxis) { max2 = xSemiAxis; max3 = zSemiAxis; }
+  else                        { max2 = xSemiAxis; max3 = ySemiAxis; }
 
-  phi   = RandFlat::shoot(0.,2.*pi);
+  phi   = RandFlat::shoot(0.,twopi);
   theta = RandFlat::shoot(0.,pi);
   
   cosphi = std::cos(phi);   sinphi = std::sin(phi);

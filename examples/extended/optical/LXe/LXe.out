@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-01-ref-06    (4-July-2008)
+ Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -21,8 +25,6 @@ Current available graphics systems are:
   VRML2FILE (VRML2FILE)
   OpenGLImmediateX (OGLIX)
   OpenGLStoredX (OGLSX)
-  OpenGLImmediateXm (OGLIXm)
-  OpenGLStoredXm (OGLSXm)
 
 Registering model factories...
 
@@ -61,7 +63,7 @@ conv:   for  gamma    SubType= 14
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Bethe-Heitler :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for e-
+msc:   for e-    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -77,6 +79,7 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -91,6 +94,7 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV in 84 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                eBrem :     Emin=          0 eV         Emax=   1 GeV
             eBremRel :     Emin=          1 GeV        Emax=   100 TeV
@@ -100,7 +104,7 @@ annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :     Emin=          0 eV         Emax=   100 TeV
 
-msc:   for mu+
+msc:   for mu+    SubType= 10
       Lambda tables from 100 eV  to 100 TeV in 84 bins, spline: 1
       RangeFactor= 0.02, step limit type: 1, lateralDisplacement: 1, skin= 3, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -154,32 +158,42 @@ muPairProd:   for  mu-    SubType= 4
           muMinusCaptureAtRest
 ============================================================================================
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for LXe  0.126 mm/MeV
-	Energy weighted position of hits in LXe : (0.0853858,0.0206655,-103.358)
+	Energy weighted position of hits in LXe : (0.109136,-0.0161951,-103.483)
 	Total energy deposition in scintillator : 511 (keV)
-	Number of photons that hit PMTs in this event : 0
-	Number of PMTs above threshold(1) : 0
-	Number of photons produced by scintillation in this event : 5764
+	Reconstructed position of hits in LXe : (-0.484517,-3.25539,-14.318)
+WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
+  has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
+  Alternatively, to avoid this message, suppress instantiation of vis
+  manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
+  drawing code is executed only if G4VVisManager::GetConcreteInstance()
+  is non-zero.
+	Number of photons that hit PMTs in this event : 1932
+	Number of PMTs above threshold(1) : 32
+	Number of photons produced by scintillation in this event : 5566
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3802
-	Number of photons absorbed at boundaries (OpBoundary) in this event : 1962
+	Number of photons absorbed (OpAbsorption) in this event : 3634
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (24.1653,-30.2471,-67.2517)
+	Energy weighted position of hits in LXe : (-0.731399,-3.99088,-91.4639)
 	Total energy deposition in scintillator : 511 (keV)
-	Number of photons that hit PMTs in this event : 0
-	Number of PMTs above threshold(1) : 0
-	Number of photons produced by scintillation in this event : 5445
+	Reconstructed position of hits in LXe : (-0.551177,-2.39032,-18.6545)
+	Number of photons that hit PMTs in this event : 1865
+	Number of PMTs above threshold(1) : 32
+	Number of photons produced by scintillation in this event : 5384
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3460
-	Number of photons absorbed at boundaries (OpBoundary) in this event : 1985
+	Number of photons absorbed (OpAbsorption) in this event : 3519
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (4.35176,5.63524,-24.2161)
+	Energy weighted position of hits in LXe : (0.876089,0.424067,-89.837)
 	Total energy deposition in scintillator : 511 (keV)
-	Number of photons that hit PMTs in this event : 0
-	Number of PMTs above threshold(1) : 0
-	Number of photons produced by scintillation in this event : 5674
-	Number of photons produced by cerenkov in this event : 1
-	Number of photons absorbed (OpAbsorption) in this event : 3683
-	Number of photons absorbed at boundaries (OpBoundary) in this event : 1992
+	Reconstructed position of hits in LXe : (2.86324,0.639759,-24.72)
+	Number of photons that hit PMTs in this event : 1885
+	Number of PMTs above threshold(1) : 32
+	Number of photons produced by scintillation in this event : 5429
+	Number of photons produced by cerenkov in this event : 0
+	Number of photons absorbed (OpAbsorption) in this event : 3544
+	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
 Graphics systems deleted.
 Visualization Manager deleting...
+

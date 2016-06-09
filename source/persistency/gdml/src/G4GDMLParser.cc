@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc,v 1.13 2008/11/20 15:33:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLParser.cc,v 1.13.2.1 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4GDMLParser Implementation
@@ -35,24 +35,33 @@
 #include "G4GDMLParser.hh"
 
 G4GDMLParser::G4GDMLParser()
-  : ucode(false)
+  : urcode(false), uwcode(false)
 {
   reader = new G4GDMLReadStructure;
   writer = new G4GDMLWriteStructure;
   xercesc::XMLPlatformUtils::Initialize();
 }
 
-G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* ext)
-  : ucode(true)
+G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* extr)
+  : urcode(true), uwcode(false)
 {
-  reader = ext;
+  reader = extr;
   writer = new G4GDMLWriteStructure;
+  xercesc::XMLPlatformUtils::Initialize();
+}
+
+G4GDMLParser::G4GDMLParser(G4GDMLReadStructure* extr,
+                           G4GDMLWriteStructure* extw)
+  : urcode(true), uwcode(true)
+{
+  reader = extr;
+  writer = extw;
   xercesc::XMLPlatformUtils::Initialize();
 }
 
 G4GDMLParser::~G4GDMLParser()
 {
   xercesc::XMLPlatformUtils::Terminate();
-  delete writer;
-  if (!ucode) { delete reader; }
+  if (!urcode) { delete reader; }
+  if (!uwcode) { delete writer; }
 }

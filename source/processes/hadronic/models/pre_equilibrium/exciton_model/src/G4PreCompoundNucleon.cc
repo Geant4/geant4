@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4PreCompoundNucleon.cc,v 1.10.2.1 2009/03/03 13:17:04 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // -------------------------------------------------------------------
 //

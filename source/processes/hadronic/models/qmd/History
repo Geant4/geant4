@@ -13,6 +13,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31-March-2009 Tatsumi Koi (hadr-qmd-V09-01-10)
+- Fix bug in gamma(mass zero) partiticpants
+	src/G4QMDCollision.cc  
+- Chnage meber object to pointer
+	include/G4QMDReaction.hh  
+	src/G4QMDReaction.cc  
+
+28-February-2009 Tatsumi Koi
+- Fix bug in Absorption 
+	src/G4QMDCollision.cc  
+- Add Be8 -> Alpha Alpha including opening angle by Q value  
+	src/G4QMDReaction.cc  
+
 20-November-2008 Tatsumi Koi (hadr-qmd-V09-01-08)
 - Add Update 
 	include/G4QMDMeanField.hh

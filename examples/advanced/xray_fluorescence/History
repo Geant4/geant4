@@ -1,6 +1,6 @@
-# $Id: History,v 1.6 2005/11/15 15:57:47 gcosmo Exp $
+# $Id: History,v 1.6.4.1 2009/08/11 14:05:47 gcosmo Exp $
 # -------------------------------------------------------------------
-# GEANT4 tag $Name: geant4-09-02 $
+# GEANT4 tag $Name: geant4-09-02-patch-02 $
 # -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-04-2009 G.A.P.Cirrone, Tag: XrayFluo-V09-01-00
+- Reviewed physics setup and analysis.
+
+6-03-2009 Guy Barrand
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file
+  since it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
 
 15-11-2004 Gabriele Cosmo: XrayFluo-V07-01-00
 - Migration to <sstream> from deprecated <strstream>.

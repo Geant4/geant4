@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataSetRegistry.hh,v 1.2.2.2 2009/03/03 11:48:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// $Id: G4CrossSectionDataSetRegistry.hh,v 1.2.2.3 2009/08/11 15:23:23 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -75,7 +75,6 @@ private:
 
   static G4CrossSectionDataSetRegistry* theInstance;
   
-  G4int nxs;
   std::vector <G4VCrossSectionDataSet*> xSections;
 
 };

@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-19    (13-March-2009)
+ Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -322,7 +326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.26s Real=2.26s Sys=0s
+  User=2.3s Real=2.3s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 =================================================================
@@ -357,3 +361,4 @@ Erms5x5: 0.008514  delErms5x5= -0.0003259 nrms= -0.3686
 
 #
 G4 kernel has come to Quit state.
+

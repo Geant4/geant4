@@ -29,7 +29,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAnalysisManager.hh,v 1.11 2006/06/29 16:22:04 gunter Exp $
+// $Id: RemSimAnalysisManager.hh,v 1.11.4.1 2009/08/11 14:17:04 gcosmo Exp $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -52,7 +52,7 @@ namespace AIDA
   class ITupleFactory;
   class ITuple;
   class ITreeFactory;
-};
+}
 
 class RemSimAnalysisMessenger;
 class RemSimAnalysisManager { 

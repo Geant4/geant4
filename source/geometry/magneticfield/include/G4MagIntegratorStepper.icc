@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MagIntegratorStepper.icc,v 1.10 2006/09/20 09:31:46 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MagIntegratorStepper.icc,v 1.10.6.1 2009/08/11 13:44:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 
 inline
@@ -36,7 +36,8 @@ G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion()
 inline void
  G4MagIntegratorStepper::SetEquationOfMotion(G4EquationOfMotion* newEquation)
 {
-  if( newEquation != 0 ) {
+  if( newEquation != 0 )
+  {
     fEquation_Rhs= newEquation;
   }
 } 
@@ -54,12 +55,6 @@ G4int G4MagIntegratorStepper::GetNumberOfStateVariables() const
   return fNoStateVariables;
 }
 
-// inline
-// void G4MagIntegratorStepper::SetNumberOfVariables(G4int newNo)
-// {
-//   fNumberOfVariables = newNo;
-// }
-
 inline
 void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] )   
 {
@@ -69,11 +64,26 @@ void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] )
 inline
 void G4MagIntegratorStepper::NormaliseTangentVector( G4double vec[6] )
 {
-   double drds2 = vec[3]*vec[3]+vec[4]*vec[4]+vec[5]*vec[5];
+  G4double drds2 = vec[3]*vec[3]+vec[4]*vec[4]+vec[5]*vec[5];
 
-   if( std::fabs(drds2 - 1.0) > 1.e-14 ){
-      double normx = 1.0 / std::sqrt(drds2);
-      for(int i=0;i<3;i++) 
-	 vec[i+3] *= normx;   
-   }
+  if( std::fabs(drds2 - 1.0) > 1.e-14 )
+  {
+    G4double normx = 1.0 / std::sqrt(drds2);
+    for(G4int i=3;i<6;i++) { vec[i] *= normx; }
+  }
+}
+
+inline
+void G4MagIntegratorStepper::NormalisePolarizationVector( G4double vec[12] )
+{
+  G4double drds2 = vec[9]*vec[9]+vec[10]*vec[10]+vec[11]*vec[11];
+
+  if( drds2 > 0. )
+  {
+    if( std::fabs(drds2 - 1.0) > 1.e-14 )
+    {
+      G4double normx = 1.0 / std::sqrt(drds2);
+      for(G4int i=9;i<12;i++)  { vec[i] *= normx; }
+    }
+  }
 }

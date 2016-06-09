@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc,v 1.52.2.1 2009/03/03 10:55:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// $Id: G4GDMLReadStructure.cc,v 1.52.2.2 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // class G4GDMLReadStructure Implementation
 //
@@ -33,6 +33,14 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLReadStructure.hh"
+
+G4GDMLReadStructure::G4GDMLReadStructure() : G4GDMLReadParamvol()
+{
+}
+
+G4GDMLReadStructure::~G4GDMLReadStructure()
+{
+}
 
 G4GDMLAuxPairType G4GDMLReadStructure::
 AuxiliaryRead(const xercesc::DOMElement* const auxiliaryElement)
@@ -495,7 +503,7 @@ VolumeRead(const xercesc::DOMElement* const volumeElement)
       if (tag=="auxiliary")
         { auxList.push_back(AuxiliaryRead(child)); } else
       if (tag=="materialref")
-        { materialPtr = GetMaterial(GenerateUniqueName(RefRead(child),true)); } else
+        { materialPtr = GetMaterial(GenerateName(RefRead(child),true)); } else
       if (tag=="solidref")
         { solidPtr = GetSolid(GenerateName(RefRead(child))); }
    }

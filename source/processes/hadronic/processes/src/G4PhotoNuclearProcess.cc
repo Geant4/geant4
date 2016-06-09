@@ -25,19 +25,20 @@
 //
 //
 //
-// $Id: G4PhotoNuclearProcess.cc,v 1.2 2006/06/29 21:03:54 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PhotoNuclearProcess.cc,v 1.2.4.1 2009/08/11 14:36:30 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 
 #include "G4PhotoNuclearProcess.hh"
 #include "G4Gamma.hh"
+#include "G4PhotoNuclearCrossSection.hh"
 
 G4PhotoNuclearProcess::
 G4PhotoNuclearProcess(const G4String& processName)
   : G4HadronInelasticProcess( processName, G4Gamma::Gamma() )
 { 
   G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
-  theStore->AddDataSet(&theData);
+  theStore->AddDataSet(new G4PhotoNuclearCrossSection);
 } 
     
 G4PhotoNuclearProcess::~G4PhotoNuclearProcess()

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.74 2008/11/06 15:26:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Tubs.cc,v 1.74.2.1 2009/08/18 15:46:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // 
 // class G4Tubs
@@ -807,6 +807,7 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
   G4double snxt = kInfinity ;      // snxt = default return value
   G4double tolORMin2, tolIRMax2 ;  // 'generous' radii squared
   G4double tolORMax2, tolIRMin2, tolODz, tolIDz ;
+  const G4double dRmax = 100.*fRMax;
 
   static const G4double halfCarTolerance = 0.5*kCarTolerance;
   static const G4double halfRadTolerance = 0.5*kRadTolerance;
@@ -907,6 +908,11 @@ G4double G4Tubs::DistanceToIn( const G4ThreeVector& p,
         s = -b - std::sqrt(d) ;
         if (s >= 0)  // If 'forwards'
         {
+          if ( s>dRmax ) // Avoid rounding errors due to precision issues on
+          {              // 64 bits systems. Split long distances and recompute
+            G4double fTerm = s-std::fmod(s,dRmax);
+            s = fTerm + DistanceToIn(p+fTerm*v,v);
+          } 
           // Check z intersection
           //
           zi = p.z() + s*v.z() ;

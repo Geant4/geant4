@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh,v 1.32 2008/11/21 09:32:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteSolids.hh,v 1.32.2.1 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4GDMLWriteSolids
@@ -74,12 +74,15 @@
 
 class G4GDMLWriteSolids : public G4GDMLWriteMaterials
 {
+  public:
 
- protected:
+   virtual void AddSolid(const G4VSolid* const);
+   virtual void SolidsWrite(xercesc::DOMElement*);
 
-   void AddSolid(const G4VSolid* const);
+  protected:
 
- private:
+   G4GDMLWriteSolids();
+   virtual ~G4GDMLWriteSolids();
 
    void BooleanWrite(xercesc::DOMElement*, const G4BooleanSolid* const);
    void BoxWrite(xercesc::DOMElement*, const G4Box* const);
@@ -107,12 +110,14 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void TwistedtubsWrite(xercesc::DOMElement*, const G4TwistedTubs* const);
    void ZplaneWrite(xercesc::DOMElement*, const G4double&,
                     const G4double&, const G4double&);
-   void SolidsWrite(xercesc::DOMElement*);
 
- private:
+  protected:
 
    std::vector<const G4VSolid*> solidList;
    xercesc::DOMElement* solidsElement;
+   static const G4int maxTransforms = 8; // Constant for limiting the number
+                                         // of displacements/reflections
+                                         // applied to a single solid
 };
 
 #endif

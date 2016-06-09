@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.139 2008/12/03 13:35:36 gcosmo Exp $
+# $Id: binmake.gmk,v 1.139.2.1 2009/08/11 09:06:57 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -195,11 +195,9 @@ ifdef G4EXLIB
   ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   # Unix
     TARGETLIB  := -l$(G4TARGET)
-    TARGOBJEXT := o
   else
   # Windows
     TARGETLIB  := lib$(G4TARGET).a   
-    TARGOBJEXT := OBJ   
   endif
 endif
 
@@ -308,10 +306,12 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
     LDLIBS = $(TARGETLIB) $(patsubst -l%,lib%.a,$(WIN32TMP2))
   endif
   OUT   := /Fe
+  TARGOBJEXT := OBJ   
 else
   # Unix
   LDLIBS = $(TARGETLIB) $(LDLIBS_PREFINAL)
   OUT   := -o 
+  TARGOBJEXT := o   
 endif
 
 ifdef transform-RPath
@@ -356,7 +356,7 @@ ifdef CPPVERBOSE
 	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)
 else
-	@echo Linking $(G4TARGET) ...
+	@echo Linking $(G4TARGET)
 	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) \
 	  $(OUT)$(G4BINDIR)/$(G4TARGET) $(objects) $(LDFLAGS) \
 	  $(LDLIBS)

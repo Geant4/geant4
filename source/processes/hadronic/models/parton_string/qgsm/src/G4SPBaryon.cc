@@ -103,8 +103,8 @@ SampleQuarkAndDiquark(G4int & quark, G4int & diQuark) const
     {
       if (theDefinition->GetPDGEncoding() < 0)
       {
-	quark = -(*i)->GetDiQuark();
-	diQuark = -(*i)->GetQuark();                   
+	quark = (*i)->GetDiQuark();
+	diQuark = (*i)->GetQuark();                   
       }
       else
       {

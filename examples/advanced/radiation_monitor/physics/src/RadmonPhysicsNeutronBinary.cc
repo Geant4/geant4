@@ -28,8 +28,8 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonPhysicsNeutronBinary.cc,v 1.2.2.2 2006/06/29 16:19:29 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonPhysicsNeutronBinary.cc,v 1.2.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 #include "RadmonPhysicsNeutronBinary.hh"
@@ -41,7 +41,9 @@
 #include "G4HadronElasticProcess.hh"
 #include "G4LElastic.hh"
 #include "G4BinaryCascade.hh"
+// Neutrons Inelastic with low energy
 #include "G4LENeutronInelastic.hh"
+//++++++++++++++++++++++++++
 #include "G4TheoFSGenerator.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4PreCompoundModel.hh"
@@ -56,6 +58,9 @@
 #include "G4HadronCaptureProcess.hh"
 #include "G4LFission.hh"
 #include "G4HadronFissionProcess.hh"
+
+
+
 
 
 
@@ -77,21 +82,21 @@ void                                            RadmonPhysicsNeutronBinary :: Co
 {
  G4ProcessManager * manager(G4Neutron::NeutronDefinition()->GetProcessManager());
 
-
-
  G4HadronElasticProcess * elasticProcess(new G4HadronElasticProcess());
  elasticProcess->RegisterMe(new G4LElastic());
  manager->AddDiscreteProcess(elasticProcess);
 
-
-
+ //Binary model
  G4BinaryCascade * binaryCascadeModel(new G4BinaryCascade());
  binaryCascadeModel->SetMaxEnergy(10.*GeV);
 
+  //Inelastic neutrons with low energy **
  G4LENeutronInelastic * lepModel(new G4LENeutronInelastic());
- lepModel->SetMinEnergy(8.*GeV);
+ lepModel->SetMinEnergy(0.1*GeV);// thermal neutrons (100 MeV) **
+ // lepModel->SetMinEnergy(8.*GeV); old setup **
  lepModel->SetMaxEnergy(25.*GeV);
 
+ 
  G4TheoFSGenerator * qgspModel(new G4TheoFSGenerator());
  G4GeneratorPrecompoundInterface * cascade(new G4GeneratorPrecompoundInterface());
  cascade->SetDeExcitation(new G4PreCompoundModel(new G4ExcitationHandler()));

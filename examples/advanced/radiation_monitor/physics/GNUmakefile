@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2005/12/06 19:36:23 capra Exp $
+# $Id: GNUmakefile,v 1.5.4.1 2009/08/11 14:20:35 gcosmo Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for exaple subpackage
 # R. Capra, 09 Sep 2005
@@ -22,6 +22,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/particles/hadrons/mesons/include \
+            -I$(G4BASE)/particles/shortlived/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
@@ -40,6 +41,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
             -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/qgsm/include \

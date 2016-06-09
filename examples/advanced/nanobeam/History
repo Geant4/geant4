@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4.2.1 2009/03/03 11:17:12 gcosmo Exp $
+$Id: History,v 1.4.2.2 2009/08/11 15:34:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.4.2.1 2009/03/03 11:17:12 gcosmo Exp $
 
                        Package History file
                        --------------------
+
+2-March 2009 - tag nanobeam-V09-01-13 - G.Folger
+- correct for gcc4.3/slc5 warning 
 
 26 February 2009 - tag nanobeam-V09-01-12 - G.Folger
 - Correct TabulatedField3D.cc to use logical AND (&&) in few if()

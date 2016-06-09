@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.20 2007/06/06 19:15:06 pia Exp $
+$Id: History,v 1.20.4.1 2009/08/11 14:17:04 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,8 +9,17 @@ $Id: History,v 1.20 2007/06/06 19:15:06 pia Exp $
                       Category History file
                       ---------------------
 
+08.04.2009 G.A.P.Cirrone, tag radioprotection-V09-01-00
+- Tagged
+
+6 March 2009 Guy Barrand
+- GNUmakefile : remove the G4ANALYSIS_USE logic found in this file
+  since it is handled already in the config/analysis.gmk.
+  This avoids a duplication in the compilation and link commands
+  of the aida-config options.
+
 06.06.2007 MGP tag radioprotection-V08-03-00
-               Minor documentation update
+           Minor documentation update
 
 15th November 2006 Susanna Guatelli (radioprotection-V08-01-00)
 - The hadronic physics lists are more clear.

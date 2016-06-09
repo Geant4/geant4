@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.hh,v 1.10 2008/08/13 13:58:53 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteParamvol.hh,v 1.10.2.1 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4GDMLWriteParamvol
@@ -49,11 +49,17 @@
 class G4GDMLWriteParamvol : public G4GDMLWriteSetup
 {
 
+ public:
+
+   virtual void ParamvolWrite(xercesc::DOMElement*,
+                              const G4VPhysicalVolume* const);
+   virtual void ParamvolAlgorithmWrite(xercesc::DOMElement* paramvolElement,
+                              const G4VPhysicalVolume* const paramvol);
+
  protected:
 
-   void ParamvolWrite(xercesc::DOMElement*, const G4VPhysicalVolume* const);
-
- private:
+   G4GDMLWriteParamvol();
+   virtual ~G4GDMLWriteParamvol();
 
    void Box_dimensionsWrite(xercesc::DOMElement*, const G4Box* const);
    void Trd_dimensionsWrite(xercesc::DOMElement*, const G4Trd* const);
@@ -67,8 +73,6 @@ class G4GDMLWriteParamvol : public G4GDMLWriteSetup
    void Hype_dimensionsWrite(xercesc::DOMElement*, const G4Hype* const);
    void ParametersWrite(xercesc::DOMElement*,
                         const G4VPhysicalVolume* const, const G4int&);
-   void ParamvolAlgorithmWrite(xercesc::DOMElement* paramvolElement,
-                               const G4VPhysicalVolume* const paramvol);
 
 };
 

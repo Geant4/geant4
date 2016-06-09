@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc,v 1.4 2008/11/14 18:26:35 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VIntersectionLocator.cc,v 1.4.2.1 2009/08/11 13:31:19 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // Class G4VIntersectionLocator implementation
 //
@@ -341,7 +341,7 @@ AdjustmentOfFoundIntersection( const G4ThreeVector &CurrentA_Point,
   // Intersection between Line and Plane
   //
   G4double n_d_m = Normal.dot(MomentumDir);
-  if ( std::abs(n_d_m)<kCarTolerance )
+  if ( std::abs(n_d_m)>kCarTolerance )
   {
     if ( fVerboseLevel>1 )
     {

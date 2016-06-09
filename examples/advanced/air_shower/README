@@ -48,12 +48,7 @@ processes is made.                                                      |
 ------------------------------------------------------------------------|
 ----> SET-UP 
                                                                         |
- -example enviroment with the compiler 3.4.6                              
- -a standard Geant4 example GNUmakefile is provided                     |
-
-setup with:                                                             |
-compiler = gcc-3.4.6
-G4SYSTEM = linux-g++                                                    |
+A standard Geant4 example GNUmakefile is provided                     |
 
 The following environment variables can be set:                         |
 
@@ -64,28 +59,25 @@ setenv ULTRA_VERBOSE
 setenv ULTRA_MIRROR_USE 1 : A specular reflecting surface is used.
 setenv ULTRA_GROUND_USE 1 : A diffusive reflecting surface is used. 
 
-Setup for analysis with AIDA 3.2.1, PI 1.3.3.
-The download instructions for the PI UltraLite+Hbook version 
-can be found at: 
-	http://cern.ch/pi/pi-ultraLite-133.html
+------------------------------------------------------------------------
 
-Definition of environment variables (assuming you used the directory 
-"PiUltraLite-1.3.3" in your home directory):
+Setup for analysis with iAIDA : for details, see Appendix 2 of the Users Guide for Application Developers
 
-setenv PI_VERSION 1_3_3
-setenv PI_DIR ${HOME}/PiUltraLite-1.3.3
-setenv PATH ${PATH}:"${HOME}/PiUltraLite-1.3.3/bin"
+Definition of environment variables (assuming AIDA_INSTALL is the directory where you installed iAIDA):
+
+setenv PATH ${PATH}:"$AIDA_INSTALL/bin"
 eval `aida-config -r csh`                                                        |
-------------------------------------------------------------
-The following keywords can be used in order to produce HBOOK, AIDA or ROOT 
-histograms
+
+The following keywords can be used in UltraAnalysisManager.cc, 
+in order to produce HBOOK, AIDA or ROOT histograms.
+
 "hbook" for HBOOK histograms
 "xml" for AIDA histograms
 "root" for ROOT histograms
 
-For more information on the analysis tools:
+For more information on the AIDA interface:
 http://aida.freehep.org
-http://www.cern.ch/PI  
+
 
 -
 
@@ -116,4 +108,5 @@ to run it :  $G4WORKDIR/bin/Linux-g++/Ultra Visualisation.mac
 for comments and questions: bernardo@lip.pt
 for more info http://www.ge.infn.it/geant4/examples/
 
-last modified: B. Tome and M.C. Espirito Santo 20/05/2004
+last modified:  B. Tome 15/05/2009
+created by   :  B. Tome and M.C. Espirito Santo 20/05/2004

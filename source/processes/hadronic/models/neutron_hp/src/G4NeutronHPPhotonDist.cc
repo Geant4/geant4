@@ -35,6 +35,9 @@
 // 080801 fix memory leaking by T. Koi
 // 080801 Correcting data disorder which happened when both InitPartial 
 //        and InitAnglurar methods was called in a same instance by T. Koi
+// 090514 Fix bug in IC electron emission case 
+//        Contribution from Chao Zhang (Chao.Zhang@usd.edu) and Dongming Mei(Dongming.Mei@usd.edu)
+//        But it looks like never cause real effect in G4NDL3.13 (at least Natural elements) TK
 //
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
 
@@ -47,9 +50,11 @@
 
 G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
 {
+
   G4bool result = true;
   if(aDataFile >> repFlag)
   {
+
     aDataFile >> targetMass;
     if(repFlag==1)
     {
@@ -72,6 +77,7 @@ G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
        aDataFile >> theBaseEnergy;
        theBaseEnergy*=eV;
        aDataFile >> theInternalConversionFlag;
+       // theInternalConversionFlag == 1 No IC, theInternalConversionFlag == 2 with IC 
        aDataFile >> nGammaEnergies;
        theLevelEnergies = new G4double[nGammaEnergies];
        theTransitionProbabilities = new G4double[nGammaEnergies];
@@ -117,6 +123,7 @@ void G4NeutronHPPhotonDist::InitAngular(std::ifstream & aDataFile)
   aDataFile >> isoFlag;
   if (isoFlag != 1)
   {
+if ( repFlag == 2 ) G4cout << "TKDB repFlag == 2 && isoFlag !=1  " << G4endl;
     aDataFile >> tabulationType >> nDiscrete2 >> nIso;
 //080731
       if ( theGammas != NULL && nDiscrete2 != nDiscrete ) G4cout << "080731c G4NeutronHPPhotonDist nDiscrete2 != nDiscrete, It looks like something wrong in your NDL files. Please update the latest. If you still have this messages after the update, then please report to Geant4 Hyper News." << G4endl;
@@ -546,15 +553,21 @@ G4int maxEnergyIndex = 0;
     if(theInternalConversionFlag==2 && random>thePhotonTransitionFraction[it])
     {
       theOne->SetDefinition(G4Electron::Electron());
+      //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
+      //But never enter at least with G4NDL3.13
+      totalEnergy += G4Electron::Electron()->GetPDGMass(); //proposed correction: add this line for electron
     }
     theOne->SetTotalEnergy(totalEnergy);
-    if( isoFlag == 1)
+    if( isoFlag == 1 )
     {
       G4double costheta = 2.*G4UniformRand()-1;
       G4double theta = std::acos(costheta);
       G4double phi = twopi*G4UniformRand();
       G4double sinth = std::sin(theta);
-      G4double en = theOne->GetTotalEnergy();
+      //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
+      //G4double en = theOne->GetTotalEnergy();
+      G4double en = theOne->GetTotalMomentum();
+      //But never cause real effect at least with G4NDL3.13 TK
       G4ThreeVector temp(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
       theOne->SetMomentum( temp ) ;
     }
@@ -568,11 +581,17 @@ G4int maxEnergyIndex = 0;
       if(ii==nDiscrete2) ii--; // fix for what seems an (file12 vs file 14) inconsistancy found in the ENDF 7N14 data. @@
       if(ii<nIso)
       {
+        //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
         // isotropic distribution
-        G4double theta = pi*G4UniformRand();
+        //G4double theta = pi*G4UniformRand();
+        G4double theta = std::acos(2.*G4UniformRand()-1.);
+        //But this is alos never cause real effect at least with G4NDL3.13 TK  not repFlag == 2 AND isoFlag != 1
         G4double phi = twopi*G4UniformRand();
         G4double sinth = std::sin(theta);
-        G4double en = theOne->GetTotalEnergy();
+        //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
+        //G4double en = theOne->GetTotalEnergy();
+        G4double en = theOne->GetTotalMomentum();
+        //But never cause real effect at least with G4NDL3.13 TK
         G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
         theOne->SetMomentum( tempVector ) ;
       }
@@ -593,7 +612,10 @@ G4int maxEnergyIndex = 0;
         G4double theta = std::acos(cosTh);
         G4double phi = twopi*G4UniformRand();
         G4double sinth = std::sin(theta);
-        G4double en = theOne->GetTotalEnergy();
+        //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
+        //G4double en = theOne->GetTotalEnergy();
+        G4double en = theOne->GetTotalMomentum();
+        //But never cause real effect at least with G4NDL3.13 TK
         G4ThreeVector tempVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*std::cos(theta) );
         theOne->SetMomentum( tempVector ) ;
       }
@@ -611,7 +633,10 @@ G4int maxEnergyIndex = 0;
         G4double theta = std::acos(costh);
         G4double phi = twopi*G4UniformRand();
         G4double sinth = std::sin(theta);
-        G4double en = theOne->GetTotalEnergy();
+        //Bug reported Chao Zhang (Chao.Zhang@usd.edu), Dongming Mei(Dongming.Mei@usd.edu) Feb. 25, 2009 
+        //G4double en = theOne->GetTotalEnergy();
+        G4double en = theOne->GetTotalMomentum();
+        //But never cause real effect at least with G4NDL3.13 TK
         G4ThreeVector tmpVector(en*sinth*std::cos(phi), en*sinth*std::sin(phi), en*costh );
         theOne->SetMomentum( tmpVector ) ;
       }

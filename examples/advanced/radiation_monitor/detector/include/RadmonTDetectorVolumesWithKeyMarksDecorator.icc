@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorVolumesWithKeyMarksDecorator.icc,v 1.1.2.2 2006/06/29 16:12:38 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonTDetectorVolumesWithKeyMarksDecorator.icc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 #ifndef   RADMONTDETECTORVOLUMESWITHKEYMARKSDECORATOR_HH
@@ -141,8 +141,8 @@
    return 0;
   }
   
-  G4double markedPinRadius;
-  G4double markedPinStep;
+  G4double markedPinRadius(0);
+  G4double markedPinStep(0);
   
   if (markedPin>0)
   {
@@ -221,7 +221,7 @@
   }
   
   RadmonDetectorLayerVolumeItem * item;
-  RadmonDetectorLayerVolumeItem * motherItem;
+  RadmonDetectorLayerVolumeItem * motherItem(0);
   
   while (n>0)
   {

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadStructure.hh,v 1.22.2.1 2009/03/03 10:55:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// $Id: G4GDMLReadStructure.hh,v 1.22.2.2 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4GDMLReadStructure
@@ -71,6 +71,9 @@ class G4GDMLReadStructure : public G4GDMLReadParamvol
 {
 
  public:
+
+   G4GDMLReadStructure();
+   virtual ~G4GDMLReadStructure();
 
    G4VPhysicalVolume* GetPhysvol(const G4String&) const;
    G4LogicalVolume* GetVolume(const G4String&) const;

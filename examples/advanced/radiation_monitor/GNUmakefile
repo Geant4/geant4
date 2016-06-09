@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2005/11/24 02:34:48 capra Exp $
+# $Id: GNUmakefile,v 1.6.4.1 2009/08/11 14:20:35 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples with internal subpackages
 # R. Capra, 09 Sep 2005
@@ -24,13 +24,6 @@ all: makesub lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
 
-ifdef G4ANALYSIS_USE  
- CPPFLAGS += `aida-config --include`
- CPPFLAGS += -DG4ANALYSIS_USE
- LDFLAGS  += `aida-config --lib`
- LOADLIBS += `aida-config --lib`
-endif
-
 CPPFLAGS += -I./detector/include \
             -I./generalPurpose/include \
             -I./application/include
@@ -41,7 +34,7 @@ makesub:
 		cd $$dir; \
 		$(MAKE) obj );\
 	done
-        
+
 clean:: cleansub
 
 cleansub:

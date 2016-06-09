@@ -1,0 +1,24 @@
+//
+// File name:     RadmonPhysicsParticles.icc
+// Creation date: Nov 2005
+// Main author:   Riccardo Capra <capra@ge.infn.it>
+//
+// Id:            $Id: RadmonPhysicsParticles.icc,v 1.2.2.2 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
+//
+
+#ifndef   RADMONPHYSICSPARTICLES_HH
+ #error "RadmonPhysicsParticles.icc cannot be included directly. Please use RadmonPhysicsParticles.hh"
+#else  /* RADMONPHYSICSPARTICLES_HH */
+ inline                                         RadmonPhysicsParticles :: RadmonPhysicsParticles()
+ :
+  RadmonVSubPhysicsListWithLabel("PhysicsParticles")
+ {
+ }
+ 
+ 
+ 
+ inline                                         RadmonPhysicsParticles :: ~RadmonPhysicsParticles()
+ {
+ }
+#endif /* RADMONPHYSICSPARTICLES_HH */

@@ -28,8 +28,8 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonEventAction.cc,v 1.1.2.2 2006/06/29 16:21:56 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonEventAction.cc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -37,22 +37,17 @@
 #include "RadmonEventActionObserver.hh"
 #include "G4RunManager.hh"
 
-void                                            RadmonEventAction :: AttachObserver(RadmonEventActionObserver * observer)
+void RadmonEventAction :: AttachObserver(RadmonEventActionObserver * observer)
 {
  observersSet.insert(observer);
 }
 
-
-
-void                                            RadmonEventAction :: DetachObserver(RadmonEventActionObserver * observer)
+void RadmonEventAction :: DetachObserver(RadmonEventActionObserver * observer)
 {
  observersSet.erase(observer);
 }
 
-
-
-
-void                                            RadmonEventAction :: BeginOfEventAction(const G4Event * event)
+void RadmonEventAction :: BeginOfEventAction(const G4Event * event)
 {
  ObserversSet::iterator i(observersSet.begin());
  const ObserversSet::iterator end(observersSet.end());
@@ -64,9 +59,7 @@ void                                            RadmonEventAction :: BeginOfEven
  }
 }
 
-
-
-void                                            RadmonEventAction :: EndOfEventAction(const G4Event * event)
+void RadmonEventAction :: EndOfEventAction(const G4Event * event)
 {
  ObserversSet::iterator i(observersSet.begin());
  const ObserversSet::iterator end(observersSet.end());
@@ -78,18 +71,11 @@ void                                            RadmonEventAction :: EndOfEventA
  }
 }   
 
-
-
-
-
-                                                RadmonEventAction :: RadmonEventAction()
+RadmonEventAction :: RadmonEventAction()
 {
  G4RunManager * runManager(G4RunManager::GetRunManager());
  
  runManager->SetUserAction(this);
 }
 
-
-
-
-RadmonEventAction *                             RadmonEventAction :: instance(0);
+RadmonEventAction*  RadmonEventAction :: instance(0);

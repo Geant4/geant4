@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RPGInelastic.cc,v 1.6 2008/03/22 00:03:24 dennis Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4RPGInelastic.cc,v 1.6.2.1 2009/08/11 12:57:01 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 
 #include "G4RPGInelastic.hh"
@@ -33,7 +33,32 @@
 #include "G4RPGStrangeProduction.hh"
 #include "G4RPGTwoBody.hh"
 
- 
+
+G4RPGInelastic::G4RPGInelastic(const G4String& modelName)
+  : G4HadronicInteraction(modelName)
+{
+  cache = 0.0;
+  particleDef[0] = G4PionZero::PionZero();
+  particleDef[1] = G4PionPlus::PionPlus();
+  particleDef[2] = G4PionMinus::PionMinus();
+  particleDef[3] = G4KaonPlus::KaonPlus();
+  particleDef[4] = G4KaonMinus::KaonMinus();
+  particleDef[5] = G4KaonZero::KaonZero();
+  particleDef[6] = G4AntiKaonZero::AntiKaonZero();
+  particleDef[7] = G4Proton::Proton();
+  particleDef[8] = G4Neutron::Neutron();
+  particleDef[9] = G4Lambda::Lambda();
+  particleDef[10] = G4SigmaPlus::SigmaPlus();
+  particleDef[11] = G4SigmaZero::SigmaZero();
+  particleDef[12] = G4SigmaMinus::SigmaMinus();
+  particleDef[13] = G4XiZero::XiZero();
+  particleDef[14] = G4XiMinus::XiMinus();
+  particleDef[15] = G4OmegaMinus::OmegaMinus();
+  particleDef[16] = G4AntiProton::AntiProton();
+  particleDef[17] = G4AntiNeutron::AntiNeutron();
+}
+
+
 G4double G4RPGInelastic::Pmltpc(G4int np, G4int nm, G4int nz, 
                                 G4int n, G4double b, G4double c)
 {
@@ -567,27 +592,5 @@ const G4double G4RPGInelastic::energyScale[30] = {
   0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
   2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
 
-G4ParticleDefinition* p0 = G4PionZero::PionZero();
-G4ParticleDefinition* p1 = G4PionPlus::PionPlus();
-G4ParticleDefinition* p2 = G4PionMinus::PionMinus();
-G4ParticleDefinition* p3 = G4KaonPlus::KaonPlus();
-G4ParticleDefinition* p4 = G4KaonMinus::KaonMinus();
-G4ParticleDefinition* p5 = G4KaonZero::KaonZero();
-G4ParticleDefinition* p6 = G4AntiKaonZero::AntiKaonZero();
-G4ParticleDefinition* p7 = G4Proton::Proton();
-G4ParticleDefinition* p8 = G4Neutron::Neutron();
-G4ParticleDefinition* p9 = G4Lambda::Lambda();
-G4ParticleDefinition* p10 = G4SigmaPlus::SigmaPlus();
-G4ParticleDefinition* p11 = G4SigmaZero::SigmaZero();
-G4ParticleDefinition* p12 = G4SigmaMinus::SigmaMinus();
-G4ParticleDefinition* p13 = G4XiZero::XiZero();
-G4ParticleDefinition* p14 = G4XiMinus::XiMinus();
-G4ParticleDefinition* p15 = G4OmegaMinus::OmegaMinus();
-G4ParticleDefinition* p16 = G4AntiProton::AntiProton();
-G4ParticleDefinition* p17 = G4AntiNeutron::AntiNeutron();
-
-G4ParticleDefinition* G4RPGInelastic::particleDef[18] = {
-  p0, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, 
-  p15, p16, p17 };
 
 /* end of file */

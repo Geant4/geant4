@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-19    (13-March-2009)
+ Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -10536,3 +10540,4 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     0 trajectories stored in this event.
 >>> Event 99
     0 trajectories stored in this event.
+

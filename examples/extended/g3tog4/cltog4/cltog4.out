@@ -1,18 +1,22 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-19    (13-March-2009)
+ Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "../data/testmodel.dat"
 /run/verbose 1
 /tracking/verbose 1
 /tracking/storeTrajectory 1
 /run/initialize
 Instantiated unit rotation matrix irot=0
-Reading the call List file /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
+Reading the call List file ../data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -58,7 +62,7 @@ Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visib
   time range: (-1.79769e+308,1.79769e+308)
   G4AttValue pointer is zero, G4AttDef pointer is zero
 G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
-/control/execute /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/tests/test602/test602.in
+/control/execute cltog4.in
 /control/verbose 1
 /tracking/verbose 1
 /run/initialize
@@ -345,3 +349,4 @@ Run Summary
   Number of events processed : 10
   User=0s Real=0s Sys=0s
 G4 kernel has come to Quit state.
+

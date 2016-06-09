@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc,v 1.61 2008/11/13 12:59:26 gcosmo Exp $
+// $Id: G4PathFinder.cc,v 1.61.2.1 2009/08/11 13:31:19 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -1051,8 +1051,9 @@ void G4PathFinder::WhichLimited()
 
     G4double step= fCurrentStepSize[num]; 
 
-    limitedStep = ( step == fMinStep ) && ( step != kInfinity); 
-   
+    limitedStep = ( std::fabs(step - fMinStep) < kCarTolerance ) 
+                 && ( step != kInfinity); 
+
     fLimitTruth[ num ] = limitedStep; 
     if( limitedStep )
     {

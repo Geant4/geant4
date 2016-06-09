@@ -28,8 +28,8 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationPhysicsSetup.cc,v 1.4.2.2 2006/06/29 16:08:45 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonApplicationPhysicsSetup.cc,v 1.4.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -53,6 +53,7 @@
 #include "RadmonPhysicsHadronsBertini.hh"
 #include "RadmonPhysicsICRUIonization.hh"
 #include "RadmonPhysicsProductionCuts.hh"
+#include "RadmonPhysicsParticles.hh"
 
 #define DECLARE_SUBPHYSICS_LIST(name)           subPhysicsList=new name();                                                               \
                                                 if (subPhysicsList==0)                                                                   \
@@ -81,6 +82,7 @@ G4bool                                          RadmonApplicationPhysicsSetup ::
  DECLARE_SUBPHYSICS_LIST(RadmonPhysicsHadronsBertini);
  DECLARE_SUBPHYSICS_LIST(RadmonPhysicsICRUIonization);
  DECLARE_SUBPHYSICS_LIST(RadmonPhysicsProductionCuts);
+ DECLARE_SUBPHYSICS_LIST(RadmonPhysicsParticles);
 
  return true;
 }

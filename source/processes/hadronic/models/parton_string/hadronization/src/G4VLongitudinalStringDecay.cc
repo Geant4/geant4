@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc,v 1.13 2008/06/23 08:35:55 vuzhinsk Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VLongitudinalStringDecay.cc,v 1.13.2.1 2009/08/11 13:05:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -484,9 +484,16 @@ G4VLongitudinalStringDecay::pDefPair G4VLongitudinalStringDecay::CreatePartonPai
 //    return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);
 //    }
 
-G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt()
+G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt(G4double ptMax)
    {
-   G4double Pt = -std::log(G4UniformRand());
+   G4double Pt;
+   if ( ptMax < 0 ) {
+      // sample full gaussian
+      Pt = -std::log(G4UniformRand());
+   } else {
+      // sample in limited range
+      Pt = -std::log(CLHEP::RandFlat::shoot(exp(-sqr(ptMax)/sqr(SigmaQT)), 1.));
+   }
    Pt = SigmaQT * std::sqrt(Pt);
    G4double phi = 2.*pi*G4UniformRand();
    return G4ThreeVector(Pt * std::cos(phi),Pt * std::sin(phi),0);

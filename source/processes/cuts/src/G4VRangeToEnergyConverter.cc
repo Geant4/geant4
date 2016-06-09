@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.cc,v 1.9 2008/03/02 10:52:56 kurasige Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4VRangeToEnergyConverter.cc,v 1.9.2.1 2009/08/11 12:45:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // --------------------------------------------------------------
@@ -312,7 +312,7 @@ G4double G4VRangeToEnergyConverter::ComputeLoss(G4double AtomicNumber,
   z2Particle *=  z2Particle;
   if (z2Particle < 0.1) return 0.0;
 
-  if( std::abs(AtomicNumber-Z)>0.1 ){
+  if( std::fabs(AtomicNumber-Z)>0.1 ){
     // recalculate constants
     Z = AtomicNumber;
     G4double Z13 = std::exp(std::log(Z)/3.);
@@ -469,7 +469,7 @@ G4double G4VRangeToEnergyConverter::ConvertCutToKineticEnergy(
   G4double T2 = Tmax ;
   G4double T3 = std::sqrt(T1*T2);
   G4double r3 = rangeVector->GetValue(T3,isOut);
-  while ( std::abs(1.-r3/theCutInLength)>epsilon ) {
+  while ( std::fabs(1.-r3/theCutInLength)>epsilon ) {
     if ( theCutInLength <= r3 ) {
       T2 = T3;
     } else {

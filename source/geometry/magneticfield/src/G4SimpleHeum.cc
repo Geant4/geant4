@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleHeum.cc,v 1.8 2006/06/29 18:24:51 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4SimpleHeum.cc,v 1.8.6.1 2009/08/11 13:44:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //  Simple Heum:
 //        x_1 = x_0 + h *
@@ -74,14 +74,11 @@ G4SimpleHeum::~G4SimpleHeum()
 
 void
 G4SimpleHeum::DumbStepper( const G4double  yIn[],
-			   const G4double  dydx[],
-			         G4double  h,
-			 	 G4double  yOut[])
+                           const G4double  dydx[],
+                                 G4double  h,
+                                 G4double  yOut[])
 {
-  //  const G4int nvar = 6 ;
-
   G4int i;
-
   for( i = 0; i < fNumberOfVariables; i++ ) 
   {
     yTemp[i] = yIn[i] + (1.0/3.0) * h *  dydx[i] ;
@@ -98,9 +95,8 @@ G4SimpleHeum::DumbStepper( const G4double  yIn[],
 
   for( i = 0; i < fNumberOfVariables; i++ ) 
   {
-    yOut[i] = yIn[i] + h * ( 0.25 * dydx[i] +
-			     0.75 * dydxTemp2[i]);
+    yOut[i] = yIn[i] + h * (0.25 * dydx[i] + 0.75 * dydxTemp2[i]);
   }
       
-  // NormaliseTangentVector( yOut );           
+  if ( fNumberOfVariables == 12 ) { NormalisePolarizationVector( yOut ); }
 }  

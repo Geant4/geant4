@@ -1,12 +1,16 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: global-V09-01-19    (13-March-2009)
+ Geant4 version Name: geant4-09-02-patch-02-ref    (28-August-2009)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "../data/testmodel.dat"
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 Visualization Manager instantiating...
 Visualization Manager initialising...
@@ -45,7 +49,7 @@ Registered filter factories:
 /tracking/storeTrajectory 1
 /run/initialize
 Instantiated unit rotation matrix irot=0
-Reading the call List file /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat...
+Reading the call List file ../data/testmodel.dat...
 G4ggclos: setting top-level VolTableEntry
 Dump of VTD - 26 entries:
 Instantiated 26 volume table entries 
@@ -93,7 +97,7 @@ Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visib
 G4VUserPhysicsList::Construct()
 Construct processes 
 G3toG4PhysicsList::SetCuts:CutLength : 2 mm 
-/control/execute /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/tests/test601/test601.in
+/control/execute clGeometry.in
 /run/verbose 2
 /process/eLoss/verbose 1
 /gun/position 0. -1.5 0. mm
@@ -632,3 +636,4 @@ Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
 RunManager is deleting.
+

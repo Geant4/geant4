@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History,v 1.16 2008/06/12 23:15:27 cirrone Exp $
+$Id: History,v 1.16.2.1 2009/08/11 14:29:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.16 2008/06/12 23:15:27 cirrone Exp $
 
                       Category History file
                       ---------------------
+
+06.04.2009 - G.A.P.Cirrone (lAr_calorimeter-V09-01-01)
+	     GNUmakefile updated
+
 12.06.2008 - G.A.P.Cirrone (lAr_calorimeter-V09-01-00)
              Fixed a compilation error in the Analysis manager
 

@@ -28,8 +28,8 @@
 // Creation date: Oct 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonGeneratorLayout.cc,v 1.1.2.2 2006/06/29 16:16:25 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonGeneratorLayout.cc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -351,6 +351,9 @@ const G4String &                                 RadmonGeneratorLayout :: GetSou
  const RadmonGeneratorSourceAlgorithmLayout & algorithm(source.FindAlgorithmByLabel(algorithmLabel));
  return algorithm.GetAttributeName(index);
 }
+
+
+// Generation according to a spectrum(Look here!!!!!!!!!!!!!!!!)
 
 
 

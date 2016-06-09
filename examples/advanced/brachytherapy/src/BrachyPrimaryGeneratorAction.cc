@@ -38,7 +38,7 @@
 //    ********************************************
 //
 // $Id: BrachyPrimaryGeneratorAction.cc,v 1.18.4.1 2009/03/03 11:54:09 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 #include "globals.hh"
 #include "BrachyPrimaryGeneratorAction.hh"

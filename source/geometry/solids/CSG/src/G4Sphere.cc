@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.68 2008/07/07 09:35:16 grichine Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4Sphere.cc,v 1.68.2.1 2009/08/18 15:46:31 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // class G4Sphere
 //
@@ -884,6 +884,7 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
   G4double tolIRMin2, tolORMin2, tolORMax2, tolIRMax2 ;
   G4double tolSTheta=0., tolETheta=0. ;
+  const G4double dRmax = 100.*fRmax;
 
   // Intersection point
 
@@ -995,6 +996,11 @@ G4double G4Sphere::DistanceToIn( const G4ThreeVector& p,
 
       if (s >= 0 )
       {
+        if ( s>dRmax ) // Avoid rounding errors due to precision issues seen on
+        {              // 64 bits systems. Split long distances and recompute
+          G4double fTerm = s-std::fmod(s,dRmax);
+          s = fTerm + DistanceToIn(p+fTerm*v,v);
+        } 
         xi   = p.x() + s*v.x() ;
         yi   = p.y() + s*v.y() ;
         rhoi = std::sqrt(xi*xi + yi*yi) ;

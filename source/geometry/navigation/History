@@ -1,4 +1,4 @@
-$Id: History,v 1.126.2.1 2009/03/03 11:21:16 gcosmo Exp $
+$Id: History,v 1.126.2.2 2009/08/11 13:31:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 2nd, 2009 - J.Apostolakis (geomnav-V09-01-12)
+------------------------------
+- Fix in G4PropagatorInField::SetNavigator() to forward new navigator
+  to G4IntersectionLocator.
+
+May 20th, 2009 - P.Arce
+-----------------------
+- Added method BuildContainerSolid() taking a solid as argument to
+  G4PhantomParameterisation. Added protection to GetMaterialIndex()
+  for zero index.
+
+May 18th, 2009 - T.Nikitina
+---------------------------
+- Enhanced algorithm for 'FB_intersects' in order to speedup BrentLocator.
+- Fix in the usage of the geometrical tolerance in G4VIntersectionLocator
+  in method AdjustementOfFoundIntersection().
+
+May 13th, 2009 - J.Apostolakis
+------------------------------
+- Fix in G4PathFinder: A geometry is at a boundary if its step is within 
+  tolerance of the minimum step for any geometry.
+
+May 5th, 2009 - T.Nikitina
+--------------------------
+- Fix in G4Navigator::ComputeStep() for the computation of rotation of the
+  'LocalExitNormal' in cases when DistanceToOut() returns non-valid normal
+  for optical photons in rotated solids. Addresses problem report #1059.
 
 February 26th, 2009 - T.Nikitina (geomnav-V09-01-11)
 --------------------------------

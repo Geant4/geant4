@@ -56,8 +56,8 @@
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
 
-#include "G4Region.hh"
-#include "G4RegionStore.hh"
+//#include "G4Region.hh"
+//#include "G4RegionStore.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -68,7 +68,7 @@ XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoDetectorConstruction* p)
 {
   pDet = p;
 
-  //  SetGELowLimit(250*eV);
+  SetGELowLimit(250*eV);
 
   defaultCutValue = 10e-6*mm;
 
@@ -78,6 +78,7 @@ XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoDetectorConstruction* p)
   SetVerboseLevel(1);
   physicsListMessenger = new XrayFluoPhysicsListMessenger(this);
 
+  /*
   G4String regName = "SampleRegion";
   G4double cutValue = 0.000001 * mm;  
   G4Region* reg = G4RegionStore::GetInstance()->GetRegion(regName);
@@ -85,7 +86,7 @@ XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoDetectorConstruction* p)
   G4ProductionCuts* cuts = new G4ProductionCuts;
   cuts->SetProductionCut(cutValue);
   reg->SetProductionCuts(cuts);
-
+  */
 
 
 }
@@ -221,8 +222,8 @@ void XrayFluoPhysicsList::ConstructEM()
       LePeprocess = new G4LowEnergyPhotoElectric();
 
       LePeprocess->ActivateAuger(true);
-      LePeprocess->SetCutForLowEnSecPhotons(0.250 * keV);
-      LePeprocess->SetCutForLowEnSecElectrons(0.250 * keV);
+      LePeprocess->SetCutForLowEnSecPhotons(0.010 * keV);
+      LePeprocess->SetCutForLowEnSecElectrons(0.010 * keV);
 
       pmanager->AddDiscreteProcess(LePeprocess);
 
@@ -235,8 +236,8 @@ void XrayFluoPhysicsList::ConstructEM()
       LeIoprocess = new G4LowEnergyIonisation("IONI");
       LeIoprocess->ActivateAuger(true);
       //eIoProcess = new G4eIonisation("stdIONI");
-      LeIoprocess->SetCutForLowEnSecPhotons(0.1*keV);
-      LeIoprocess->SetCutForLowEnSecElectrons(0.1*keV);
+      LeIoprocess->SetCutForLowEnSecPhotons(0.01*keV);
+      LeIoprocess->SetCutForLowEnSecElectrons(0.01*keV);
       pmanager->AddProcess(LeIoprocess, -1,  2, 2); 
 
       LeBrprocess = new G4LowEnergyBremsstrahlung();
@@ -331,12 +332,14 @@ void XrayFluoPhysicsList::SetElectronCut(G4double val)
 
 void XrayFluoPhysicsList::SetCuts(){
 
-   SetCutValue(cutForGamma,"gamma");
-   SetCutValue(cutForElectron,"e-");
-   SetCutValue(cutForElectron,"e+");
-   SetCutValue(cutForProton, "proton");
-   //SetCutValueForOthers(cutForProton);
-   if (verboseLevel>0) DumpCutValuesTable();
+  G4double lowlimit=20*eV;
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(lowlimit, 100.*GeV);
+  SetCutValue(cutForGamma,"gamma");
+  SetCutValue(cutForElectron,"e-");
+  SetCutValue(cutForElectron,"e+");
+  SetCutValue(cutForProton, "proton");
+  //SetCutValueForOthers(cutForProton);
+  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -396,9 +399,9 @@ void XrayFluoPhysicsList::SetCutsByEnergy(G4double val)
   cut = G4EnergyLossTables::GetRange(part,val,currMat);
   SetCutValue(cut, "proton");
  
-//   part = theXrayFluoParticleTable->FindParticle("gamma");
-//   cut = G4EnergyLossTables::GetRange(part,val,currMat);
-//   SetCutValue(cut, "gamma");
+  part = theXrayFluoParticleTable->FindParticle("gamma");
+  cut = G4EnergyLossTables::GetRange(part,val,currMat);
+  SetCutValue(cut, "gamma");
 
 }
 

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MagIntegratorStepper.hh,v 1.12 2006/09/20 09:31:01 japost Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4MagIntegratorStepper.hh,v 1.12.6.1 2009/08/11 13:44:36 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4MagIntegratorStepper
@@ -76,6 +76,9 @@ class G4MagIntegratorStepper
 
      inline void NormaliseTangentVector( G4double vec[6] );
        // Simple utility function to (re)normalise 'unit velocity' vector.
+
+     inline void NormalisePolarizationVector( G4double vec[12] );
+       // Simple utility function to (re)normalise 'unit spin' vector.
 
      inline void RightHandSide( const double y[], double dydx[] );   
        // Utility method to supply the standard Evaluation of the

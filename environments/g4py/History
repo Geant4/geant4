@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2008/12/04 10:30:04 kmura Exp $
+$Id: History,v 1.45.2.1 2009/08/11 15:48:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,10 @@ Geant4Py is a Geant4-Python bridge.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+14 May 2009 K. Murakami (tagged)
+ - fixes on configure script and config/module.gmk
+ - change default search paths for G4/CLHEP include and lib
+
 3  December 2008 K.Murakami (tagged)
  - modified for the 9.2 releaase.
  * G4Material, G4Isotope, G4Element

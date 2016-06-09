@@ -32,8 +32,8 @@
 //    *                                  *
 //    ************************************
 //
-// $Id: PurgMagAnalysisManager.hh,v 1.3 2006/06/29 16:05:49 gunter Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: PurgMagAnalysisManager.hh,v 1.3.4.1 2009/08/11 14:22:47 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 
 #ifdef G4ANALYSIS_USE
@@ -55,7 +55,7 @@ namespace AIDA
   class ITupleFactory;
   class ITuple;
   class ITreeFactory;
-};
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 class PurgMagAnalysisManager

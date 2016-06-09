@@ -28,20 +28,18 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonVDataAnalysisFactory.icc,v 1.1.2.2 2006/06/29 16:07:21 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonVDataAnalysisFactory.icc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 #ifndef   RADMONVDATAANALYSISFACTORY_HH
  #error "RadmonVDataAnalysisFactory.icc cannot be included directly. Please use RadmonVDataAnalysisFactory.hh"
 #else  /* RADMONVDATAANALYSISFACTORY_HH */
- inline                                         RadmonVDataAnalysisFactory :: ~RadmonVDataAnalysisFactory()
+ inline RadmonVDataAnalysisFactory :: ~RadmonVDataAnalysisFactory()
  {
  }
 
-
-
- inline                                         RadmonVDataAnalysisFactory :: RadmonVDataAnalysisFactory()
+ inline RadmonVDataAnalysisFactory :: RadmonVDataAnalysisFactory()
  {
  }
 #endif /* RADMONVDATAANALYSISFACTORY_HH */

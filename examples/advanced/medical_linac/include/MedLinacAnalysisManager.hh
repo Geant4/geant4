@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // 
-// $Id: MedLinacAnalysisManager.hh,v 1.6 2006/06/29 16:03:31 gunter Exp $
+// $Id: MedLinacAnalysisManager.hh,v 1.6.4.1 2009/08/11 14:24:38 gcosmo Exp $
 //
 //
 // Code developed by: M. Piergentili
@@ -47,7 +47,7 @@ namespace AIDA{
   class IHistogramFactory;
   class IAnalysisFactory;
   class ITreeFactory;
-};
+}
 
 class MedLinacAnalysisManager
 {

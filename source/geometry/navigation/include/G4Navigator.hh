@@ -25,7 +25,7 @@
 //
 //
 // $Id: G4Navigator.hh,v 1.27.2.1 2009/03/03 11:21:16 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4Navigator

@@ -1,26 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
+// * DISCLAIMER                                                       *
 // *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
+// * use.                                                             *
 // *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
@@ -31,6 +28,7 @@
 //
 // History:
 // -----------
+// 20 Jul 2007 A.Mantero, code cleaning and update. Replaced histos with tuple
 // 11 Jul 2003 A.Mantero, code cleaning / Plotter-XML addiction
 //    Sep 2002 A.Mantero, AIDA3.0 Migration
 // 06 Dec 2001 A.Pfeiffer updated for singleton
@@ -45,6 +43,8 @@
 #include "G4ios.hh"
 #include "XrayFluoAnalysisManager.hh"
 #include "G4Step.hh"
+#include "XrayFluoDetectorConstruction.hh"
+#include "G4VPhysicalVolume.hh"
 
 XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 
@@ -52,7 +52,7 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 
 XrayFluoAnalysisManager::XrayFluoAnalysisManager()
   :outputFileName("xrayfluo"), visPlotter(false), phaseSpaceFlag(false), physicFlag (false), persistencyType("xml"), 
-   deletePersistencyFile(true), gunParticleEnergies(0), gunParticleTypes(0), analysisFactory(0), tree(0),histogramFactory(0), plotter(0)
+   deletePersistencyFile(true), gunParticleEnergies(0), gunParticleTypes(0), analysisFactory(0), tree(0), treeDet(0), histogramFactory(0), plotter(0)
 {
   //creating the messenger
   analisysMessenger = new XrayFluoAnalysisMessenger(this);
@@ -196,11 +196,14 @@ void XrayFluoAnalysisManager::book()
 
     // Book tuple
     std::vector<std::string> columnNames;
-    columnNames.push_back("Particle");
-    columnNames.push_back("Energies");
+    columnNames.push_back("particle");
+    columnNames.push_back("energies");
     columnNames.push_back("momentumTheta");
     columnNames.push_back("momentumPhi");
-    columnNames.push_back("Processes");
+    columnNames.push_back("processes");
+    columnNames.push_back("material");
+    columnNames.push_back("origin");
+    columnNames.push_back("depth");
 
     std::vector<std::string> columnTypes;
     columnTypes.push_back("int");
@@ -208,7 +211,9 @@ void XrayFluoAnalysisManager::book()
     columnTypes.push_back("double");
     columnTypes.push_back("double");
     columnTypes.push_back("int"); // useful for hbk
-
+    columnTypes.push_back("int"); // useful for hbk
+    columnTypes.push_back("int"); 
+    columnTypes.push_back("double");
 
     tupleFluo = tupleFactory->create("10", "Total Tuple", columnNames, columnTypes, "");
     assert(tupleFluo);
@@ -261,17 +266,32 @@ void XrayFluoAnalysisManager::LoadGunData(G4String fileName, G4bool raileighFlag
   gunParticleEnergies = new std::vector<G4double>;
   gunParticleTypes = new std::vector<G4String>;
 
+  // dal punto di vista della programmazione e' un po' una porcata.....
+
   AIDA::ITreeFactory* treeDataFactory = analysisFactory->createTreeFactory();
-  AIDA::ITree* treeData = treeDataFactory->create(fileName,persistencyType,true,false); // input file
+  AIDA::ITree* treeData = treeDataFactory->create(fileName,persistencyType,false, false); // input file
   AIDA::IManagedObject* mo = treeData->find("10");
+  assert(mo);
+  G4cout <<"mo Name:" << mo->name()<< G4endl;
   AIDA::ITuple* tupleData = dynamic_cast<AIDA::ITuple*>(mo);
+
+  //AIDA::ITuple* tupleData = (AIDA::ITuple*) treeData->find("10");
+
+  assert(tupleData);
+  // da riscrivere un pochino melgio. Del resto serve per pochissmo, poi non serve piu'
+
+
   tupleData->start();
+  G4int processesIndex = tupleData->findColumn("processes");
+  G4int energyIndex = tupleData->findColumn("energies");
+  G4int particleIndex = tupleData->findColumn("particle");
 
   while (tupleData->next()) {
-    if (raileighFlag ^ (!raileighFlag && (tupleData->getInt(4)) ) ) {
-      gunParticleEnergies->push_back(tupleData->getDouble(1));
-      if (tupleData->getInt(0) == 1 ) gunParticleTypes->push_back("gamma");
-      if (tupleData->getInt(0) == 0 ) gunParticleTypes->push_back("e-");
+    if (raileighFlag ^ (!raileighFlag && (tupleData->getInt(processesIndex) == 1 || 
+					  tupleData->getInt(processesIndex) == 2)) )  {
+      gunParticleEnergies->push_back(tupleData->getDouble(energyIndex)*MeV);
+      if (tupleData->getInt(particleIndex) == 1 ) gunParticleTypes->push_back("gamma");
+      if (tupleData->getInt(particleIndex) == 0 ) gunParticleTypes->push_back("e-");
     }
 
   }
@@ -343,11 +363,17 @@ void XrayFluoAnalysisManager::PlotCurrentResults()
 {
   if(plotter) {
     if (phaseSpaceFlag){
+
+
+      // altra porcata di programmazione e cmq mi serve un istogramma. Da rivedere il tutto.
       // Plotting the spectrum of Gamma exiting the sample - cloud1
       AIDA::ICloud1D& cloud = *cloud_1;
       AIDA::IFilter* filterGamma = tupleFactory->createFilter(
                                               " Particle == std::string(\"gamma\") ");
       AIDA::IEvaluator* evaluatorEnergy = tupleFactory->createEvaluator("Energies");
+
+      // di nuovo, del resto serve solo per un attimo.. da correggere cmq.
+
       filterGamma->initialize(*tupleFluo); 
       evaluatorEnergy->initialize(*tupleFluo);
       tupleFluo->project(cloud,*evaluatorEnergy,*filterGamma);  
@@ -395,11 +421,37 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
     G4String parentProcess="";
     G4ThreeVector momentum=0;
     G4double particleEnergy=0;
-    
-    // Select volume from wich the step starts
+    G4String sampleMaterial="";
+    G4double particleDepth=0;
+    G4int isBornInTheSample=0;
+    XrayFluoDetectorConstruction* detector = XrayFluoDetectorConstruction::GetInstance();    
+
+    // Select volume from which the step starts
     if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Sample"){
-      // Select volume in wich the step ends
-      if (physicFlag ^ (!physicFlag && (aStep->GetTrack()->GetNextVolume()->GetName() == "World" ))) { 
+      G4ThreeVector creationPos = aStep->GetTrack()->GetVertexPosition();
+      // qua serve ancora una selezione: deve essere interno al sample
+      //codice "a mano" per controllare il volume di orgine della traccia
+      /*
+      G4Double sampleXplus  = detector->GetSampleXplusFaceCoord();
+      G4Double sampleXminus = detector->GetSampleXminusFaceCoord();
+      G4Double sampleYplus  = detector->GetSampleYplusFaceCoord();
+      G4Double sampleYminus = detector->GetSampleYminusFaceCoord();
+      G4Double sampleZplus  = detector->GetSampleYplusFaceCoord();
+      G4Double sampleZminus = detector->GetSampleYminusFaceCoord();
+
+      G4bool ZsampleCheck = (creationPos.z()<=sampleZminus) && (creationPos.z() >= sampleZplus);
+      G4bool XsampleCheck = (creationPos.x()<=sampleZminus) && (creationPos.x() >= sampleXplus);
+      G4bool YsampleCheck = (creationPos.y()<=sampleZminus) && (creationPos.y() >= sampleYplus);
+      */
+      G4VPhysicalVolume* creationPosVolume = detector->GetGeometryNavigator()->LocateGlobalPointAndSetup(creationPos);
+
+      // if physicflag is on, I record all the data of all the particle born in the sample. 
+      // If it is off (but phase space production is on) I record data 
+      // only for particles creted inside the sample and exiting it.  
+      if (physicFlag ^ (!physicFlag && 
+			(aStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary) 
+			//ZsampleCheck && XsampleCheck && YsampleCheck)) { 
+			) ) {
 	//
 	//
 	//	G4cout << "physicFlag: "<< physicFlag << G4endl
@@ -409,27 +461,53 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 	particleType = aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName();
 	momentum = aStep->GetTrack()->GetDynamicParticle()->GetMomentum();
 	particleEnergy = aStep->GetPreStepPoint()->GetKineticEnergy();
+	if (creationPosVolume->GetName() == "Sample" ) {
+	  isBornInTheSample = 1;
+	  particleDepth = creationPosVolume->GetLogicalVolume()->GetSolid()->DistanceToOut(creationPos, G4ThreeVector(0,0,-1));
+	}
+	else {
+	  particleDepth = -1;
+	}
+	// metodo per ottenere la profondita' "a mano"
+	//	particleDepth = std::abs(creationPos.z() - detector->GetSampleIlluminatedFaceCoord()); 
+
 	G4int parent;
 	if(aStep->GetTrack()->GetCreatorProcess()){
 	  parentProcess = aStep->GetTrack()->GetCreatorProcess()->GetProcessName();
-	  parent = 1;
+	  parent = 5;
+	  // hack for HBK
+	  if (parentProcess == "") parent = 0;
+	  if (parentProcess == "IONI") parent = 1;
+	  if (parentProcess == "LowEnPhotoElec") parent = 2;
+	  if (parentProcess == "Transportation") parent = 3;// should never happen
+	  if (parentProcess == "initStep") parent = 4;// should never happen
 	}	
 	else {
-	  parentProcess = "Not Known";
-	  parent = 0;
+	  parentProcess = "Not Known -- (primary generator + Rayleigh)";
+	  parent = 5;
 	}
+	G4int sampleMat=0;
+	if(aStep->GetTrack()){
+	  sampleMaterial = aStep->GetTrack()->GetMaterial()->GetName();
+	  if (sampleMaterial == ("Dolorite" || "Anorthosite" || "Mars1" || "IceBasalt" || "HPGe")) sampleMat=1;
+	    }
 	// filling tuple 
 	
 	//	G4cout<< particleType << G4endl;
-	G4int part = 2 ;
+	G4int part = -1 ;
 	if (particleType == "gamma") part =1; 
 	if (particleType == "e-") part = 0;
+	if (particleType == "proton") part = 2;
 	
+
 	tupleFluo->fill(0,part);
 	tupleFluo->fill(1,particleEnergy);
 	tupleFluo->fill(2,momentum.theta());
 	tupleFluo->fill(3,momentum.phi());
-	tupleFluo->fill(4,parent); //hacked to be useful for hbk
+	tupleFluo->fill(4,parent); //hacked to be used with hbk
+	tupleFluo->fill(5,sampleMat); //hacked to be used with hbk
+	tupleFluo->fill(6,isBornInTheSample); 
+	tupleFluo->fill(7,particleDepth); 
 	
 	tupleFluo->addRow();
       }
@@ -677,10 +755,9 @@ void XrayFluoAnalysisManager::ExtractData(){
     //    AIDA::IFilter* filterEminus = tupleFactory->createFilter(" Particle == std::string(\"e-\")");
     
     
-    AIDA::IFilter* filterAngle = tupleFactory->createFilter("(momentumPhi   >= (220. * (3.1415926/180.) )) && 
-                                                             (momentumPhi   <= (230. * (3.1415926/180.) )) && 
-                                                             (momentumTheta >= (130. * (3.1415926/180.) )) && 
-                                                             (momentumTheta <= (140. * (3.1415926/180.) )) " );
+    AIDA::IFilter* filterAngle = tupleFactory->createFilter(
+
+"(momentumPhi   >= (220. * (3.1415926/180.) )) && (momentumPhi   <= (230. * (3.1415926/180.) )) && (momentumTheta >= (130. * (3.1415926/180.) )) && (momentumTheta <= (140. * (3.1415926/180.) ))" );
     
     
     //    filterGamma  ->initialize(*tupleFluo); 
@@ -742,11 +819,3 @@ void XrayFluoAnalysisManager::SetOutputFileType(G4String newType)
 }
 
 #endif
-
-
-
-
-
-
-
-

@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc,v 1.74 2008/11/13 16:48:19 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteStructure.cc,v 1.74.2.1 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // class G4GDMLWriteStructure Implementation
 //
@@ -34,6 +34,14 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteStructure.hh"
+
+G4GDMLWriteStructure::G4GDMLWriteStructure() : G4GDMLWriteParamvol()
+{
+}
+
+G4GDMLWriteStructure::~G4GDMLWriteStructure()
+{
+}
 
 void
 G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
@@ -49,11 +57,11 @@ G4GDMLWriteStructure::DivisionvolWrite(xercesc::DOMElement* volumeElement,
 
    G4String unitString("mm");
    G4String axisString("kUndefined");
-   if (axis==kXAxis) { axisString = "kXAxis"; } else
-   if (axis==kYAxis) { axisString = "kYAxis"; } else
-   if (axis==kZAxis) { axisString = "kZAxis"; } else
-   if (axis==kRho) { axisString = "kRho";     } else
-   if (axis==kPhi) { axisString = "kPhi"; unitString = "degree"; }
+   if (axis==kXAxis) { axisString = "kXAxis"; }
+   else if (axis==kYAxis) { axisString = "kYAxis"; }
+   else if (axis==kZAxis) { axisString = "kZAxis"; }
+   else if (axis==kRho)   { axisString = "kRho";     }
+   else if (axis==kPhi)   { axisString = "kPhi"; unitString = "degree"; }
 
    const G4String name
          = GenerateName(divisionvol->GetName(),divisionvol);
@@ -153,16 +161,20 @@ void G4GDMLWriteStructure::ReplicavolWrite(xercesc::DOMElement* volumeElement,
    xercesc::DOMElement* volumerefElement = NewElement("volumeref");
    volumerefElement->setAttributeNode(NewAttribute("ref",volumeref));
    replicavolElement->appendChild(volumerefElement);
-
    xercesc::DOMElement* replicateElement = NewElement("replicate_along_axis");
    replicavolElement->appendChild(replicateElement);
 
    xercesc::DOMElement* dirElement = NewElement("direction");
-   if(axis==kXAxis)dirElement->setAttributeNode(NewAttribute("x","1"));
-   if(axis==kYAxis)dirElement->setAttributeNode(NewAttribute("y","1"));
-   if(axis==kZAxis)dirElement->setAttributeNode(NewAttribute("z","1"));
-   if(axis==kRho)dirElement->setAttributeNode(NewAttribute("rho","1"));
-   if(axis==kPhi)dirElement->setAttributeNode(NewAttribute("phi","1"));
+   if(axis==kXAxis)
+     { dirElement->setAttributeNode(NewAttribute("x","1")); }
+   else if(axis==kYAxis)
+     { dirElement->setAttributeNode(NewAttribute("y","1")); }
+   else if(axis==kZAxis)
+     { dirElement->setAttributeNode(NewAttribute("z","1")); }
+   else if(axis==kRho)
+     { dirElement->setAttributeNode(NewAttribute("rho","1")); }
+   else if(axis==kPhi)
+     { dirElement->setAttributeNode(NewAttribute("phi","1")); }
    replicateElement->appendChild(dirElement);
 
    xercesc::DOMElement* widthElement = NewElement("width");
@@ -196,11 +208,11 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    G4VSolid* solidPtr = volumePtr->GetSolid();
    G4Transform3D R,invR;
-   G4int reflected = 0;
+   G4int trans=0;
 
    while (true) // Solve possible displacement/reflection
    {            // of the referenced solid!
-      if (reflected>maxReflections)
+      if (trans>maxTransforms)
       {
         G4String ErrorMessage = "Referenced solid in volume '"
                               + volumePtr->GetName()
@@ -213,7 +225,7 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
       {
          R = R*refl->GetTransform3D();
          solidPtr = refl->GetConstituentMovedSolid();
-         reflected++;
+         trans++;
          continue;
       }
 
@@ -222,15 +234,16 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
          R = R*G4Transform3D(disp->GetObjectRotation(),
                              disp->GetObjectTranslation());
          solidPtr = disp->GetConstituentMovedSolid();
-         reflected++;
+         trans++;
          continue;
       }
 
       break;
    }
 
-   if (reflected>0) { invR = R.inverse(); }
-     // Only compute the inverse when necessary!
+   // Only compute the inverse when necessary!
+   //
+   if (trans>0) { invR = R.inverse(); }
 
    const G4String name
          = GenerateName(volumePtr->GetName(),volumePtr);
@@ -325,10 +338,13 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    VolumeMap()[volumePtr] = R;
 
-   G4GDMLWriteMaterials::AddMaterial(volumePtr->GetMaterial());
+   AddExtension(volumeElement, volumePtr);
+     // Add any possible user defined extension attached to a volume
+
+   AddMaterial(volumePtr->GetMaterial());
      // Add the involved materials and solids!
 
-   G4GDMLWriteSolids::AddSolid(solidPtr);
+   AddSolid(solidPtr);
 
    return R;
 }

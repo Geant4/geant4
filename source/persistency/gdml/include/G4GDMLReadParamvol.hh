@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadParamvol.hh,v 1.6 2008/11/20 15:33:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadParamvol.hh,v 1.6.2.1 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4GDMLReadParamvol
@@ -59,6 +59,9 @@ class G4GDMLReadParamvol : public G4GDMLReadSetup
    virtual void Paramvol_contentRead(const xercesc::DOMElement* const);
 
  protected:
+
+   G4GDMLReadParamvol();
+   virtual ~G4GDMLReadParamvol();
 
    void Box_dimensionsRead(const xercesc::DOMElement* const,
                                  G4GDMLParameterisation::PARAMETER&);

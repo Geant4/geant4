@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4BertiniNeutronBuilder.cc,v 1.1.6.1 2009/08/11 15:11:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4BertiniNeutronBuilder
+//
+// Author: 2002 H.P. Wellisch
+//
+// Modified:
+// 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible 
+//
+//----------------------------------------------------------------------------
+//
 #include "G4BertiniNeutronBuilder.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -42,13 +56,11 @@ Build(G4NeutronInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(&theXSec);  
 }
 
 G4BertiniNeutronBuilder::
 ~G4BertiniNeutronBuilder() 
 {
-  delete theModel;
 }
 
 void G4BertiniNeutronBuilder::

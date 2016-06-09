@@ -1,4 +1,4 @@
-$Id: History,v 1.150.2.2 2009/03/03 11:06:55 gcosmo Exp $
+$Id: History,v 1.150.2.3 2009/08/11 09:20:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-Aug-2009  T.Nikitina (geom-specific-V09-01-21)
+- G4Ellipsoid:
+  o Fixes in Inside(p) and in DistanceToIn(p,v) for points
+    located on the curved surface within tolerance. Final fix for issue
+    reported in problem report #1050 and concerning warnings reported by
+    grid_test.
+  o Adopt pre-computed half-tolerance values for optimisation.
+
+23-Jul-2009  T.Nikitina
+- G4Ellipsoid: fix to DistanceToIn(p,v) in the calculation of the roots of
+  the quadratic equation and in DistanceToOut(p,v) in the calculation of the
+  normal on cut surfaces. Final fix for problem report #1022 and #1050.
+- G4PolyconeSide: added protection in method Normal(), addressing problem
+  report #1073.
+
+30-Jun-2009  T.Nikitina
+- G4Ellipsoid: introduced to DistanceToIn(p,v) splitting of the distance for
+  point very far from intersection area and big difference between solid
+  dimensions and distance to it; resolves issue observed on 64 bits problem.
+  Also addressing problem report #1022.
+
+08-May-2009, G.Cosmo
+- Corrected typo in base implementation of G4VCSGfaceted::GetSurfaceArea(),
+  which was erroneously returning cubic volume estimation.
+  Addresses problem report #1062.
+
+27-Apr-2009, G.Cosmo
+- Relaxed error condition in G4TessellatedSolid::Inside(p) to warning, for
+  excess of max trials and anomalous conditions in distance calculation.
+  Added more printout information when error condition is detected.
 
 27-Feb-2009, T.Nikitina (geom-specific-V09-01-20)
 - Fix in G4Paraboloid::DistanceToOut(p,v,..) for the computation of normal

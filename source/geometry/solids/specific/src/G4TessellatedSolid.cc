@@ -24,8 +24,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc,v 1.18 2008/03/13 11:58:28 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4TessellatedSolid.cc,v 1.18.2.1 2009/08/11 09:20:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -519,6 +519,7 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
       } while (!nearParallel && ++f!=facets.end());
     } while (nearParallel && m!=maxTries);
 
+#ifdef G4VERBOSE
     if (m == maxTries)
     {
 //
@@ -527,10 +528,20 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
 // low (nTries <= 0.5*maxTries) then this would indicate that there is
 // something wrong with geometry.
 //
+      G4cout.precision(16) ;
+      G4cout << G4endl ;
+      G4cout << "Solid name       = " << GetName()  << G4endl;
+      G4cout << "Geometry Type    = " << geometryType  << G4endl;
+      G4cout << "Number of facets = " << facets.size() << G4endl;
+      G4cout << "Position:"  << G4endl << G4endl ;
+      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
       G4Exception("G4TessellatedSolid::Inside()",
-                "UnknownInsideOutside", FatalException,
+                "UnknownInsideOutside-MaxTries", JustWarning,
                 "Cannot determine whether point is inside or outside volume!");
     }
+#endif
 //
 //
 // In the next if-then-elseif string the logic is as follows:
@@ -549,7 +560,8 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
     else if (distOut <= distIn - kCarTolerance*0.5)
       locationprime = kInside;
 
-    if (i == 0) location = locationprime;
+    if (i == 0)  { location = locationprime; }
+#ifdef G4VERBOSE
     else if (locationprime != location)
     {
 //
@@ -557,10 +569,20 @@ EInside G4TessellatedSolid::Inside (const G4ThreeVector &p) const
 // Different ray directions result in different answer.  Seems like the
 // geometry is not constructed correctly.
 //
+      G4cout.precision(16) ;
+      G4cout << G4endl ;
+      G4cout << "Solid name       = " << GetName()  << G4endl;
+      G4cout << "Geometry Type    = " << geometryType  << G4endl;
+      G4cout << "Number of facets = " << facets.size() << G4endl;
+      G4cout << "Position:"  << G4endl << G4endl ;
+      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
+      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
+      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
       G4Exception("G4TessellatedSolid::Inside()",
-                "UnknownInsideOutside", FatalException,
+                "UnknownInsideOutside", JustWarning,
                 "Cannot determine whether point is inside or outside volume!");
     }
+#endif
   }
 
   return location;

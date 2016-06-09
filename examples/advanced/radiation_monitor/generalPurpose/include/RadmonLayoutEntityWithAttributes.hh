@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.3.2.2 2006/06/29 16:14:19 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonLayoutEntityWithAttributes.hh,v 1.3.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 // Description:   Provides attributes to other detector classes
 //
@@ -80,6 +80,7 @@
    void                                         CopyFrom(const RadmonLayoutEntityWithAttributes & copy);
    
   // Private attributes
+  // AttributeItem is the pair: attribute name, value
    typedef std::pair<G4String, G4String>        AttributeItem;
    typedef std::vector<AttributeItem>           AttributesVector;
    AttributesVector                             attributesVector;

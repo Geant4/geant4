@@ -28,14 +28,14 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorCarvedFlatVolumeConstructor.icc,v 1.1.2.2 2006/06/29 16:08:51 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonDetectorCarvedFlatVolumeConstructor.icc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 #ifndef   RADMONDETECTORCARVEDFLATVOLUMECONSTRUCTOR_HH
  #error "RadmonDetectorCarvedFlatVolumeConstructor.icc cannot be included directly. Please use RadmonDetectorCarvedFlatVolumeConstructor.hh"
 #else  /* RADMONDETECTORCARVEDFLATVOLUMECONSTRUCTOR_HH */
- inline                                         RadmonDetectorCarvedFlatVolumeConstructor :: RadmonDetectorCarvedFlatVolumeConstructor()
+ inline RadmonDetectorCarvedFlatVolumeConstructor :: RadmonDetectorCarvedFlatVolumeConstructor()
  :
   RadmonTDetectorLayerConstructor<RadmonTDetectorCarvedVolumesDecorator<RadmonDetectorFlatVolumeComponent> >("CarvedFlatVolume")
  {

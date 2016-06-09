@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc,v 1.10.2.1 2009/03/03 10:55:46 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// $Id: G4GDMLReadParamvol.cc,v 1.10.2.2 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // class G4GDMLReadParamvol Implementation
 //
@@ -33,6 +33,14 @@
 // -------------------------------------------------------------------------
 
 #include "G4GDMLReadParamvol.hh"
+
+G4GDMLReadParamvol::G4GDMLReadParamvol() : G4GDMLReadSetup()
+{
+}
+
+G4GDMLReadParamvol::~G4GDMLReadParamvol()
+{
+}
 
 void G4GDMLReadParamvol::
 Box_dimensionsRead( const xercesc::DOMElement* const element,

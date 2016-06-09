@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationDetectorSetup.cc,v 1.1.2.2 2006/06/29 16:08:33 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonApplicationDetectorSetup.cc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -66,7 +66,7 @@
                                                 }                                                                                        \
                                                 factory->AppendLabelledEntityConstructor(constructor)
 
-G4bool                                          RadmonApplicationDetectorSetup :: CreateDetectorEntityConstructors(RadmonDetectorLabelledEntitiesConstructorsFactory * factory)
+G4bool RadmonApplicationDetectorSetup :: CreateDetectorEntityConstructors(RadmonDetectorLabelledEntitiesConstructorsFactory * factory)
 {
  RadmonVDetectorLabelledEntityConstructor * constructor;
  

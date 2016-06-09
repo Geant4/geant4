@@ -42,13 +42,30 @@ XrayFluoNistMaterials::XrayFluoNistMaterials()
 
 XrayFluoNistMaterials::~XrayFluoNistMaterials()
 {
-  delete    dolorite;
-  delete    HPGe;
-  delete    mars1;
-  delete    galactic;
-  delete    madaBasalt;
-  delete    icelandicBasalt;
-  delete    GaAs;
+  delete    dolorite;        
+  delete    HPGe;            
+  delete    SiLi;            
+  delete    mars1;           
+  delete    anorthosite;     
+  delete    basalt;          
+  delete    gabbro;
+  delete    gabbroWD;
+  delete    gabbroRF;
+  delete    Air;             
+  delete    Sci;             
+  delete    Vacuum;          
+  delete    madaBasalt;      
+  delete    icelandicBasalt; 
+  delete    icelandicWD; 
+  delete    icelandicRF; 
+  delete    GaAs;            
+  delete    galactic;        
+  delete    copper; 
+  delete    hawaiianRF;
+  delete    hawaiianWD;         
+
+
+
 }
 XrayFluoNistMaterials* XrayFluoNistMaterials::instance = 0;
 
@@ -164,9 +181,9 @@ void XrayFluoNistMaterials::CreateMaterials()
 
 
 
-  ///////////////////////
-  // Iceland    Basalt //
-  ///////////////////////
+  ///////////////////////////////////////////
+  // Iceland    Basalt 0029.PP.0035 sample //
+  ///////////////////////////////////////////
 
   elements.push_back("Si");  fractionMass.push_back(0.2313); 
   elements.push_back("Ti");  fractionMass.push_back(0.0127); 
@@ -336,6 +353,143 @@ void XrayFluoNistMaterials::CreateMaterials()
   mars1->AddMaterial(tracesOfMars1, 0.0044963163);
   mars1->AddMaterial(mars1Main, 0.9955036837);
 
+  /////////////////////////////////
+  //  Hawaiian -- WD coposition  //
+  /////////////////////////////////
+
+  density = 3*g/cm3;
+
+  elements.push_back("Fe");    fractionMass.push_back(1.1819860E-01);  
+  elements.push_back("Ti");    fractionMass.push_back(2.2781000E-02); 
+  elements.push_back("Ca");    fractionMass.push_back(4.5026100E-02); 
+  elements.push_back("Si");    fractionMass.push_back(2.0518860E-01);  
+  elements.push_back("Al");    fractionMass.push_back(1.3285430E-01);  
+  elements.push_back("Mg");    fractionMass.push_back(2.4120000E-03); 
+  elements.push_back("Na");    fractionMass.push_back(2.2257000E-02); 
+  elements.push_back("K");     fractionMass.push_back(4.9812000E-03);
+  elements.push_back("O");     fractionMass.push_back(4.4630120E-01);
+
+  hawaiianWD = nistMan->ConstructNewMaterial("HawaiianWD", elements, fractionMass, density);
+
+  elements.clear();
+  fractionMass.clear();
+
+  //////////////////////////////////
+  //  Hawaiian -- RF composition  //
+  //////////////////////////////////
+
+  density = 3*g/cm3;
+
+
+  elements.push_back("Fe");    fractionMass.push_back(1.1120460E-01);  
+  elements.push_back("Ti");    fractionMass.push_back(2.1582000E-02); 
+  elements.push_back("Ca");    fractionMass.push_back(4.3596700E-02); 
+  elements.push_back("Si");    fractionMass.push_back(2.1313440E-01);  
+  elements.push_back("Al");    fractionMass.push_back(1.0374280E-01);  
+  elements.push_back("Mg");    fractionMass.push_back(1.9296000E-02); 
+  elements.push_back("Na");    fractionMass.push_back(2.8192200E-02); 
+  elements.push_back("K");     fractionMass.push_back(5.8114000E-03);
+  elements.push_back("P");     fractionMass.push_back(4.8004000E-03);
+  elements.push_back("Mn");    fractionMass.push_back(2.3235000E-03);
+  elements.push_back("O");     fractionMass.push_back(4.4531600E-01);
+
+  hawaiianRF = nistMan->ConstructNewMaterial("HawaiianRF", elements, fractionMass, density);
+
+  elements.clear();
+  fractionMass.clear();
+
+  //////////////////////////////////
+  //  Icelandic -- WD composition  //
+  //////////////////////////////////
+
+  density = 3*g/cm3;
+
+
+  elements.push_back("Si");    fractionMass.push_back(2.2949340E-01);    
+  elements.push_back("Ti");    fractionMass.push_back(1.1990000E-02); 
+  elements.push_back("Al");    fractionMass.push_back(7.0396900E-02);  
+  elements.push_back("Fe");    fractionMass.push_back(1.1330280E-01);  
+  elements.push_back("Mg");    fractionMass.push_back(3.4974000E-02); 
+  elements.push_back("Ca");    fractionMass.push_back(7.5758200E-02); 
+  elements.push_back("Na");    fractionMass.push_back(1.8547500E-02);  
+  elements.push_back("K");     fractionMass.push_back(3.3208000E-03);
+  elements.push_back("O");     fractionMass.push_back(4.4121640E-01);
+  
+  icelandicWD = nistMan->ConstructNewMaterial("IcelandicWD", elements, fractionMass, density);
+  
+  elements.clear();
+  fractionMass.clear();
+
+
+  //////////////////////////////////
+  //  Icelandic -- RF composition  //
+  //////////////////////////////////
+
+  density = 3*g/cm3;
+
+
+  elements.push_back("Si");    fractionMass.push_back(2.4304800E-01);    
+  elements.push_back("Ti");    fractionMass.push_back(1.3788500E-02); 
+  elements.push_back("Al");    fractionMass.push_back(6.5103900E-02);  
+  elements.push_back("Fe");    fractionMass.push_back(1.1819860E-01);  
+  elements.push_back("Mn");    fractionMass.push_back(2.3235000E-03);
+  elements.push_back("Mg");    fractionMass.push_back(2.3517000E-02); 
+  elements.push_back("Ca");    fractionMass.push_back(8.2190500E-02); 
+  elements.push_back("K");     fractionMass.push_back(3.3208000E-03);
+  elements.push_back("P");     fractionMass.push_back(1.3092000E-03);
+  elements.push_back("O");     fractionMass.push_back(4.4620000E-01);
+  
+  icelandicRF = nistMan->ConstructNewMaterial("IcelandicRF", elements, fractionMass, density);
+  
+  elements.clear();
+  fractionMass.clear();
+
+  //////////////////////////////////
+  //  Gabbro -- WD composition  //
+  //////////////////////////////////
+
+  density = 3*g/cm3;
+
+  elements.push_back("Si");    fractionMass.push_back(1.8696000E-01);    
+  elements.push_back("Ti");    fractionMass.push_back(2.3380500E-02); 
+  elements.push_back("Al");    fractionMass.push_back(4.6049100E-02);  
+  elements.push_back("Fe");    fractionMass.push_back(1.2239500E-01);  
+  elements.push_back("Mg");    fractionMass.push_back(8.3817000E-02); 
+  elements.push_back("Ca");    fractionMass.push_back(1.0720500E-01); 
+  elements.push_back("Na");    fractionMass.push_back(5.9352000E-03);  
+  elements.push_back("K");     fractionMass.push_back(1.6604000E-03);
+  elements.push_back("O");     fractionMass.push_back(4.2259780E-01);
+  
+  gabbroWD = nistMan->ConstructNewMaterial("GabbroWD", elements, fractionMass, density);
+  
+  elements.clear();
+  fractionMass.clear();
+
+  //////////////////////////////////
+  //  Gabbro -- RF composition  //
+  //////////////////////////////////
+
+  density = 3*g/cm3;
+
+
+  elements.push_back("Si");    fractionMass.push_back(1.6826400E-01);    
+  elements.push_back("Ti");    fractionMass.push_back(2.2781000E-02); 
+  elements.push_back("Al");    fractionMass.push_back(5.8223000E-02);  
+  elements.push_back("Fe");    fractionMass.push_back(1.2729080E-01);  
+  elements.push_back("Mn");    fractionMass.push_back(1.5490000E-03);
+  elements.push_back("Mg");    fractionMass.push_back(8.3817000E-02); 
+  elements.push_back("Ca");    fractionMass.push_back(1.1721080E-01); 
+  elements.push_back("Na");    fractionMass.push_back(0.0000000E+00);  
+  elements.push_back("K");     fractionMass.push_back(1.6604000E-03);
+  elements.push_back("P");     fractionMass.push_back(1.7456000E-03);
+  elements.push_back("O");     fractionMass.push_back(4.1845840E-01);
+  
+  gabbroRF = nistMan->ConstructNewMaterial("GabbroRF", elements, fractionMass, density);
+  
+  elements.clear();
+  fractionMass.clear();
+
+
   ///////////////////////
   //     Anorthosite   //
   ///////////////////////
@@ -370,6 +524,30 @@ void XrayFluoNistMaterials::CreateMaterials()
   elements.clear();
   fractionMass.clear();
 
+  ////////////////////////////////////////
+  //     Gabbro       0059.PP.0048      //
+  ////////////////////////////////////////
+
+
+  density = 3.0*g/cm3;
+
+  elements.push_back("Si");    fractionMass.push_back(1.8284688E-01);  
+  elements.push_back("Ti");    fractionMass.push_back(2.2601150E-02);  
+  elements.push_back("Al");    fractionMass.push_back(4.4831710E-02);  
+  elements.push_back("Fe");    fractionMass.push_back(1.2578402E-01);  
+  elements.push_back("Mn");    fractionMass.push_back(1.3166500E-03);  
+  elements.push_back("Mg");    fractionMass.push_back(8.1706500E-02);  
+  elements.push_back("Ca");    fractionMass.push_back(1.0506090E-01);  
+  elements.push_back("Na");    fractionMass.push_back(5.4900600E-03);  
+  elements.push_back("K");     fractionMass.push_back(1.4943600E-03);  
+  elements.push_back("P");     fractionMass.push_back(3.4912000E-04);  
+  elements.push_back("O");     fractionMass.push_back(4.0651865E-01);
+
+  gabbro = nistMan->ConstructNewMaterial("Gabbro", elements, fractionMass, density);
+
+  elements.clear();
+  fractionMass.clear();
+
   //define gallium arsenide
 
   elements.push_back("Ga");     natoms.push_back(1);  
@@ -381,17 +559,21 @@ void XrayFluoNistMaterials::CreateMaterials()
   elements.clear();
   natoms.clear();
 
-
+  /*
   // define germanium
   
   density = 5.32 * g/cm3;
  
   elements.push_back("Ge");     natoms.push_back(1); 
-  HPGe = nistMan->ConstructNewMaterial("HPGe",elements, natoms, density);
+
+  G4cout << elements[1] <<", "<<natoms[1] <<", " << elements.size() << ", " << natoms.size() << G4endl;
+  
+
+  HPGe = nistMan->ConstructNewMaterial("High Purity Germanium",elements, natoms, density);
 
   elements.clear();
   natoms.clear();
-  
+  */
   //define scintillator
 
   elements.push_back("C");     natoms.push_back(9);  
@@ -411,6 +593,9 @@ void XrayFluoNistMaterials::CreateMaterials()
   Vacuum = new G4Material("Galactic", 1., 1.01*g/mole, density,
 				       kStateGas,temperature,pressure);
 
+  elements.clear();
+  natoms.clear();
+
   //define basalt
   density = 3.*g/cm3;
 
@@ -421,10 +606,40 @@ void XrayFluoNistMaterials::CreateMaterials()
   elements.push_back("Al");     fractionMass.push_back(0.0710); 
   elements.push_back("Mg");     fractionMass.push_back(0.0590);   
   elements.push_back("O");      fractionMass.push_back(0.4430); 
-
-
  
   basalt = nistMan->ConstructNewMaterial("Basalt", elements, fractionMass, density);
+
+  elements.clear();
+  fractionMass.clear();
+
+  
+  // define silicon
+
+  density = 2330*kg/m3;
+
+  // workaround for a problem in nistMan: it doesn't like material with a single element.
+
+  elements.push_back("Si");       natoms.push_back(1); 
+  elements.push_back("Si");       natoms.push_back(1); 
+  
+  SiLi = nistMan->ConstructNewMaterial("SiLi",elements, natoms, density);
+
+  elements.clear();
+  natoms.clear();
+ 
+
+  // define copper
+
+  density = 8920*kg/m3;
+
+  // workaround for a problem in nistMan: it doesn't like material with a single element.
+  elements.push_back("Cu");       natoms.push_back(1); 
+  elements.push_back("Cu");       natoms.push_back(1); 
+
+  copper = nistMan->ConstructNewMaterial("Cu",elements, natoms, density);
+
+  elements.clear();
+  natoms.clear();
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }

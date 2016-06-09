@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonApplicationMessenger.cc,v 1.1.2.2 2006/06/29 16:08:41 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonApplicationMessenger.cc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Messenger commands path
@@ -42,6 +42,7 @@
 #include "RadmonApplicationRunNumbering.hh"
 #include "RadmonEventAction.hh"
 #include "RadmonRunAction.hh"
+#include "Randomize.hh"
 
 
 
@@ -56,7 +57,8 @@
  RADMON_INITIALIZE_COMMAND(DumpEventsEvery),
  RADMON_INITIALIZE_COMMAND(DisableEventsDump),
  RADMON_INITIALIZE_COMMAND(EnableTracksVisualisation),
- RADMON_INITIALIZE_COMMAND(DisableTracksVisualisation)
+ RADMON_INITIALIZE_COMMAND(DisableTracksVisualisation),
+ RADMON_INITIALIZE_COMMAND(SetSeed)
 {
  RadmonEventAction * eventAction(RadmonEventAction::Instance());
  eventAction->AttachObserver(eventNumbering);
@@ -74,12 +76,16 @@
   RADMON_CREATE_COMMAND_0ARGS(EnableTracksVisualisation,  "Enables the tracks plotting at the end of the event");
   RADMON_CREATE_COMMAND_0ARGS(DisableTracksVisualisation, "Disables the tracks plotting at the end of the event");
  #endif /* G4VIS_USE */
+
+ RADMON_CREATE_COMMAND_1ARG (SetSeed,                     "Sets the seed of the random generator", "seed");
 }
 
 
 
                                                 RadmonApplicationMessenger :: ~RadmonApplicationMessenger()
 {
+ RADMON_DESTROY_COMMAND(SetSeed);
+
  #ifdef    G4VIS_USE
   RADMON_DESTROY_COMMAND(DisableTracksVisualisation);
   RADMON_DESTROY_COMMAND(EnableTracksVisualisation);
@@ -123,6 +129,7 @@ void                                            RadmonApplicationMessenger :: Se
   RADMON_SET_COMMAND(DisableEventsDump)
   RADMON_SET_COMMAND(EnableTracksVisualisation)
   RADMON_SET_COMMAND(DisableTracksVisualisation)
+  RADMON_SET_COMMAND(SetSeed)
  RADMON_END_LIST_SET_COMMANDS
 }
 
@@ -182,4 +189,16 @@ void                                            RadmonApplicationMessenger :: On
 void                                            RadmonApplicationMessenger :: OnDisableTracksVisualisation(const G4String & /* value */)
 {
  eventTracks->Disable();
+}
+
+
+
+void                                            RadmonApplicationMessenger :: OnSetSeed(const G4String & value)
+{
+ G4String args;
+
+ if (!ProcessArguments(value, 1, & args))
+  return; 
+
+ CLHEP::HepRandom::setTheSeed(G4UIcommand::ConvertToInt(args));
 }

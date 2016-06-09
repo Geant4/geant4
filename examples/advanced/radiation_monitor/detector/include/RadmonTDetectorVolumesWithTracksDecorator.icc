@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonTDetectorVolumesWithTracksDecorator.icc,v 1.1.2.2 2006/06/29 16:12:50 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonTDetectorVolumesWithTracksDecorator.icc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 #ifndef   RADMONTDETECTORVOLUMESWITHTRACKSDECORATOR_HH
@@ -146,7 +146,7 @@
   }
   
   RadmonDetectorLayerVolumeItem * item;
-  RadmonDetectorLayerVolumeItem * motherItem;
+  RadmonDetectorLayerVolumeItem * motherItem(0);
   
   while (n>0)
   {

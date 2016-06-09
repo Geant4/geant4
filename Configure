@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.110.2.1 2009/03/03 13:59:55 gcosmo Exp $
+# $Id: Configure,v 1.110.2.2 2009/08/11 09:09:47 gcosmo Exp $
 #
-# Generated on Thu Jan 22 14:06:57 GMT 2009 [metaconfig 3.0 PL70]
+# Generated on Tue May 26 18:39:05 BST 2009 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -303,6 +303,9 @@ g4ui_use_qt='n'
 g4vis_build_openglqt_driver='n'
 g4vis_use_openglqt='n'
 #END QT VIS DRIVER OPTIONS
+#INITIALIZE G4MAKE
+g4make=""
+#END G4MAKE INITIALIZATION
 
 : Find the basic shell for Bourne shell scripts
 case "$sh" in
@@ -1263,15 +1266,18 @@ echo)
 		'-n') n='' c='\c';;
 		*) n='-n' c='';;
 		esac
-		cat <<FOO
-They are not compatible!  You are probably running ksh on a non-USG system.
-I'll have to use $echo instead of the builtin, since Bourne shell doesn't
-have echo built in and we may have to run some Bourne shell scripts.  That
-means I'll have to use '$n$c' to suppress newlines now.
-
-FOO
-		$echo $n "The star should be here-->$c"
-		$echo "*"
+#We suppress the following message to avoid problems where the system points
+#sh to dash (Ubuntu). If you have problems with echo, uncomment the cat and
+#two $echo s to see if you're warned!!
+#		cat <<FOO
+#They are not compatible!  You are probably running ksh on a non-USG system.
+#I'll have to use $echo instead of the builtin, since Bourne shell doesn't
+#have echo built in and we may have to run some Bourne shell scripts.  That
+#means I'll have to use '$n$c' to suppress newlines now.
+#
+#FOO
+#		$echo $n "The star should be here-->$c"
+#		$echo "*"
 	fi
 	$rm -f foo1 foo2
 	;;
@@ -2531,19 +2537,96 @@ if test "x\$g4_qt_is_configured" = "x" ; then
 
         #
         # Finally, we need to search for moc
+	# We use prior knowledge of the detected Qt version to
+	# try and grab the correct moc straight off.
         #
         g4_qt_bin_dir=\$g4_qt_dir/bin
         g4_qtmoc=no
-        if test -x "\$g4_qt_bin_dir/moc" ; then
-           g4_qtmoc="\$g4_qt_bin_dir/moc"
-        elif test -x "\$g4_qt_bin_dir/moc-qt4" ; then
-           g4_qtmoc="\$g4_qt_bin_dir/moc-qt4"
-        elif test -x "\$g4_qt_bin_dir/qt4-moc" ; then
-           g4_qtmoc="\$g4_qt_bin_dir/qt4-moc"
-        else
-            g4_havegoodqt=no
+	g4_qt_cross_check_moc=no
+
+	if test "x\$g4_is_qt4" = "xyes" ; then
+	    # Try the qt4 variants first...
+	    if test -x "\$g4_qt_bin_dir/moc-qt4" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/moc-qt4"
+	    elif test -x "\$g4_qt_bin_dir/qt4-moc" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/qt4-moc"
+	    elif test -x "\$g4_qt_bin_dir/moc" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/moc"
+		g4_qt_cross_check_moc=yes
+	    else
+		g4_havegoodqt=no
+	    fi
+	else
+	    # We've probably got Qt3, so check for
+	    # the qt3 variants first
+	    if test -x "\$g4_qt_bin_dir/moc-qt3" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/moc-qt3"
+	    elif test -x "\$g4_qt_bin_dir/qt3-moc" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/qt3-moc"
+	    elif test -x "\$g4_qt_bin_dir/moc" ; then
+		g4_qtmoc="\$g4_qt_bin_dir/moc"
+		g4_qt_cross_check_moc=yes
+	    else
+		g4_havegoodqt=no
+	    fi
         fi
         echo "checking for moc... \$g4_qtmoc"
+
+	#
+	# If pure 'moc' was found, cross check its version
+	# against previously detected Qt major version
+	#
+	if test "x\$g4_qt_cross_check_moc" = "xyes" ; then
+	    $echo $n "Checking \$g4_qtmoc major version is \$g4_qt_major_ver... $c"
+	    # Grab version of found moc
+	    g4_qt_found_moc_major_version=\`\$g4_qtmoc -v 2>&1 | sed -s 's/^.*(Qt \([0-9]\)\..*/\1/'\`
+	    if test "x\$g4_qt_found_moc_major_version" != "x\$g4_qt_major_ver" ; then
+		# We need to ask the user where correct moc is
+		$echo "no"
+		promptend="no"
+		user_moc="\$g4_qtmoc"
+
+		while test "x\$promptend" = "xno" ; do
+		    echo " "
+		    g4message=\`cat << EOM
+Qt moc was found as \$user_moc and has major version \$g4_qt_found_moc_major_version. 
+This does not match the version of the detected Qt install 
+which is \$g4_qt_major_ver.
+Please enter the full path to the moc program which matches this Qt
+version, or type '-' to CANCEL the Qt checks.
+EOM\`
+		    dflt="\$user_moc"
+		    rp=\$g4message
+                    . ./myread
+
+		    # Check for user cancellation
+                    if test "x\$ans" = "x-" ; then
+			g4_havegoodqt="no"
+			g4_qtmoc=""
+			promptend="yes"
+                    else
+                        user_moc="\$ans"
+			if test -x "\$user_moc" ; then
+			    g4_qt_found_moc_major_version=\`\$user_moc -v 2>&1 | sed -s 's/^.*(Qt \([0-9]\)\..*/\1/'\`
+			    if test "x\$g4_qt_found_moc_major_version" != "x\$g4_qt_major_ver" ; then
+			        echo "Checking if \$user_moc version is \$g4_qt_major_ver... no"
+			    else
+			        echo "Checking if \$user_moc version is \$g4_qt_major_ver... yes"
+				g4_qtmoc=\$user_moc
+				promptend=yes
+                            fi
+			else
+			    echo "warning: \$user_moc is not executable."
+			    user_moc="<null>"
+                            g4_qt_found_moc_major_version="<null>"
+			fi
+                    fi
+		# We need to ask the user where correct moc is
+		done
+            else
+                $echo "yes"
+            fi
+	fi
 
         ## THIS IS POINT AT WHICH TO DO FALLBACK TESTS I.E DOES
         ## COMPILATION OF SMALL TEST PROGRAM WORK - THEN HEADERS AND
@@ -3171,7 +3254,7 @@ esac
 g4data_alllibs="$g4data_photonevaporation_version $g4data_radioactivedecay_version $g4data_g4emlow_version $g4data_g4ndl_version $g4data_g4abla_version"
 
 g4message=`cat <<EOM
-Specify the path where are the Geant4 data libraries 
+Specify the path where the Geant4 data libraries 
 
 $g4data_alllibs 
 
@@ -6161,10 +6244,13 @@ fi # if platform (Unix vs Win)
 # BEGIN QTVIS/QT PROBE
 #
 # Because the vis driver only works with UI, only probe if g4ui_none is
-# NOT set AND also that g4vis_none is NOT set
+# NOT set AND g4vis_none is NOT set.
+# Also, Qt vis driver has dependency on Qt UI module - so only ask if
+# build is required IF Qt UI was selected.
 #
 if test "x$g4ui_none" = "xn" -a "x$g4vis_none" = "xn" ; then
-    # Query the user to see if build of Qt UI module is needed
+if test "x$g4ui_build_qt_session" = "xy" ; then
+    # Query the user to see if build of Qt GL module is needed
     g4message=`cat <<EOM
 
     G4UI_BUILD_OPENGLQT_DRIVER
@@ -6248,6 +6334,12 @@ EOM`
             done #END while promptend=no (for user input of Qt install)
         fi #END TEST g4_havegoodqt = no (for user prompt)
     fi #END TEST g4vis_build_openglqt_driver (whether to build at all)
+else # TEST g4ui_build_qt_session
+    # Because we can 'drop through' this test on repeat
+    # running Configure, force build and use to n
+    g4vis_build_openglqt_driver=n
+    g4vis_use_openglqt=n
+fi #END TEST g4ui_build_qt_session (dependency on Qt UI module)
 fi #END TEST g4ui_none = n AND g4vis_none=n
 
 #
@@ -6377,95 +6469,114 @@ fi #END XERCES PROBE
 
 #END OF GDML/XERCES PROBE
 
+#
+# Configure which make to use...
+# On WIN32, we have to watch for cygwin/Matlab clash
+# Here, cygwin supplies make, Matlab 'gmake', but we must select
+# cygwin make.
+#
+# Yes, we could use Loc's built in make, but want full control
+# for now....
+#
+
 echo " "
 
-case "$g4make" in
-'')
-	g4make=gmake
-	;;
-esac
+g4_make_loc="no"
+g4_gmake_loc="no"
 
-echo ""
+g4_make_program=make
+g4_gmake_program=gmake
 
-	g4_gmake_version=`(gmake -v) 2>/dev/null` 
-				case $g4_gmake_version in
-				GNU*) 
-				g4_gmake=y				
-				;;
-				*) 
-				g4_gmake=n
-				;;
-				esac				
+g4_check_make_msg="Checking for $g4_make_program..."
+g4_check_gmake_msg="Checking for $g4_gmake_program..."
 
-	g4_make_version=`(make -v) 2>/dev/null`
-				case $g4_make_version in
-				GNU*) 
-				g4_make=y				
-				;;
-				*) 
-				g4_make=n
-				;;
-				esac				
+g4_make_isgnu="no"
+g4_gmake_isgnu="no"
 
-if  [ $g4_gmake = y ] ; then
+g4_make_dirs=`echo $PATH | sed 's/\:/ /g'`
 
-g4make=gmake
+# Check for 'make' on all systems
+g4_make_loc=`./loc $g4_make_program no $g4_make_dirs`
+echo "$g4_check_make_msg $g4_make_loc"
 
-g4message=`cat << EOM
 
-  G4MAKE
+# On anything but Windows, check for gmake as well
+if test "x$g4osname" != "xWIN32" ; then
+    g4_gmake_loc=`./loc $g4_gmake_program no $g4_make_dirs`
+    echo "$g4_check_gmake_msg $g4_gmake_loc"
+fi
+ 
 
-You have GNU make which could be used to build GEANT4.
-You can select your own 'make' program if you want.
-EOM`
+# Now see if make/gmake are GNU make.
+if test "x$g4_make_loc" != "xno" ; then
+    g4_make_version=`$g4_make_loc -v 2>/dev/null`
 
+    case $g4_make_version in
+	GNU*)
+	    g4_make_isgnu=yes
+	    ;;
+	*)
+	    g4_make_isgnu=no
+	    ;;
+    esac
+    echo "Checking if make is GNU make... $g4_make_isgnu"
 fi
 
-if [ $g4_gmake = n ] && [ $g4_make = y ] ; then
+if test "x$g4osname" != "xWIN32" ; then
+    if test "x$g4_gmake_loc" != "xno" ; then
+	g4_gmake_version=`$g4_gmake_loc -v 2>/dev/null`
 
-g4make=make
-
-g4message=`cat << EOM
-
-  G4MAKE
-
-You have GNU make which could be used to build GEANT4.
-You can select your own 'make' program if you want.
-EOM`
-
-fi
-
-if [ $g4_gmake = n ] && [ $g4_make = n ] ; then
-
-g4make=none
-
-g4message=`cat << EOM
-
-  G4MAKE
-
-You have NO GNU make which could be used to build GEANT4.
-Please select your own 'make' program compatible with GNU make.
-EOM`
-
-dflt=$g4make
-rp=$g4message
-
-
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	'') 
-		g4make=$dflt
-		;;
-	*) 
-		g4make=$gans
+	case $g4_gmake_version in
+	    GNU*)
+		g4_gmake_isgnu=yes
+	    	;;
+	    *)
+		g4_gmake_isgnu=no
 		;;
 	esac
-
+	echo "Checking if gmake is GNU make... $g4_gmake_isgnu"
+    fi
 fi
 
+# Now perform selection on following logic
+# 1) If we have gmake AND it's GNU make, use that
+# 2) If we have make AND it's GNU make, use that
+# 3) If none of the above, prompt user for path to make program
+if test "x$g4_gmake_loc" != "xno" -a "x$g4_gmake_isgnu" = "xyes" ; then
+    g4make=$g4_gmake_loc
+elif test "x$g4_make_loc" != "xno" -a "x$g4_make_isgnu" = "xyes" ; then
+    g4make=$g4_make_loc
+else
+    g4_got_user_make="no"
+    while test "x$g4_got_user_make" = "xno"; do
+        g4message=`cat << EOM
+
+    G4MAKE
+
+A GNU make program could not be located on your system.
+Please enter the full path to the GNU make program you
+want to use:
+EOM`
+        dflt=$g4make
+        rp=$g4message
+        . ./myread
+        gans=$ans
+
+        #Check if this is GNU make...
+        g4_user_make_version=`$gans -v 2>/dev/null`
+
+        case $g4_user_make_version in
+	    "GNU Make"*)
+		echo "Checking that $gans is GNU Make... yes"
+	        g4make=$gans
+                g4_got_user_make=yes
+		;;
+	    *)
+	        echo "Checking that $gans is GNU Make... no"
+		;;
+	esac
+    done
+fi
 
 
 

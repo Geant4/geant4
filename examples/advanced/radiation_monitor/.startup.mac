@@ -3,6 +3,9 @@
 /run/initialize
 /control/execute macros/DefaultBeam.mac
 /control/execute macros/DefaultMaterials.mac
+#/control/execute macros/OpenRaytracer.mac
 #/control/execute macros/DefaultView.mac
 /control/execute macros/DefaultGeometry.mac
+#/control/execute Geometry-Al2O3-260um.mac
+#/control/execute macros/CloseRaytracer.mac
 /control/execute macros/DefaultAnalysis.mac

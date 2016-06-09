@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.hh,v 1.9 2008/11/20 15:33:52 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLReadMaterials.hh,v 1.9.2.1 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 //
 // class G4GDMLReadMaterials
@@ -61,6 +61,9 @@ class G4GDMLReadMaterials : public G4GDMLReadDefine
    virtual void MaterialsRead(const xercesc::DOMElement* const);
 
  protected:
+
+   G4GDMLReadMaterials();
+   virtual ~G4GDMLReadMaterials();
 
    G4double AtomRead(const xercesc::DOMElement* const);
    G4int CompositeRead(const xercesc::DOMElement* const,G4String&);

@@ -37,7 +37,7 @@
 
 
 #include "XrayFluoSimulation.hh"
-;
+
 int main(int argc, char* argv[]){
 
   XrayFluoSimulation * simulation = new XrayFluoSimulation(0);  

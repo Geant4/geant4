@@ -23,6 +23,20 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4QGSBinaryPiKBuilder.hh,v 1.1.4.1 2009/08/11 15:11:24 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSBinaryPiKBuilder
+//
+// Author: 2006 G.Folger
+//
+// Modified:
+// 30.03.2009 V.Ivanchenko create cross section by new
+//
+//----------------------------------------------------------------------------
+//
 #ifndef G4QGSBinaryPiKBuilder_h
 #define G4QGSBinaryPiKBuilder_h 1
 
@@ -64,7 +78,7 @@ class G4QGSBinaryPiKBuilder : public G4VPiKBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
 
   private:
-    G4PiNuclearCrossSection thePiData;
+    G4PiNuclearCrossSection* thePiData;
     G4TheoFSGenerator * theModel;
     G4PreCompoundModel * thePreEquilib;
     G4BinaryCascade * theCascade;

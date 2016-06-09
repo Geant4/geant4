@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.19 2008/05/15 11:41:59 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4PolyconeSide.cc,v 1.19.2.1 2009/08/11 09:20:32 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // 
 // --------------------------------------------------------------------
@@ -469,7 +469,8 @@ G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector &p,
   *bestDistance = std::sqrt( dFrom*dFrom + dOut2 );
   
   G4double rad = p.perp();
-  return G4ThreeVector( rNorm*p.x()/rad, rNorm*p.y()/rad, zNorm );
+  if (rad!=0.) { return G4ThreeVector(rNorm*p.x()/rad,rNorm*p.y()/rad,zNorm); }
+  return G4ThreeVector( 0.,0., zNorm ).unit();
 }
 
 

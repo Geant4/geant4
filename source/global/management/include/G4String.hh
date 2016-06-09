@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.10 2008/12/08 14:16:05 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4String.hh,v 1.10.2.1 2009/08/11 15:41:53 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // 
 //---------------------------------------------------------------
@@ -77,9 +77,9 @@ public:
 
   inline G4int operator!() const;
 
-  inline G4bool operator==(G4String) const;
+  inline G4bool operator==(const G4String&) const;
   inline G4bool operator==(const char*) const;
-  inline G4bool operator!=(G4String) const;
+  inline G4bool operator!=(const G4String&) const;
   inline G4bool operator!=(const char*) const;
 
   inline str_size length() const;
@@ -137,7 +137,6 @@ public:
   inline G4bool operator!=(const G4String&) const;
   inline G4bool operator!=(const char*) const;
 
-  //inline G4String operator () (unsigned int, unsigned int);
   inline operator const char*() const;
   inline G4SubString operator()(str_size, str_size);
 
@@ -159,7 +158,7 @@ public:
   inline G4int first(char) const;
   inline G4int last(char) const;
 
-  inline G4bool contains(std::string) const;
+  inline G4bool contains(const std::string&) const;
   inline G4bool contains(char) const;
 
   // stripType = 0 beginning
@@ -183,11 +182,6 @@ public:
 
   inline unsigned int hash( caseCompare cmp = exact ) const;
   inline unsigned int stlhash() const;
-
-  // useful for supplying hash functions to template hash collection ctors
-  //
-  static inline unsigned int hash(const G4String&);
-
 };
 
 #include "G4String.icc"

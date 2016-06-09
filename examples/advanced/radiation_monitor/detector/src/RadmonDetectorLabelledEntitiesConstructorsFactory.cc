@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLabelledEntitiesConstructorsFactory.cc,v 1.2.2.2 2006/06/29 16:13:34 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonDetectorLabelledEntitiesConstructorsFactory.cc,v 1.2.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -38,7 +38,7 @@
 #include "RadmonVDetectorLabelledEntityConstructor.hh"
 
 
-                                                RadmonDetectorLabelledEntitiesConstructorsFactory :: ~RadmonDetectorLabelledEntitiesConstructorsFactory()
+RadmonDetectorLabelledEntitiesConstructorsFactory :: ~RadmonDetectorLabelledEntitiesConstructorsFactory()
 {
  EntityConstructorsList::iterator i(entityConstructorsList.begin());
  EntityConstructorsList::iterator end(entityConstructorsList.end());

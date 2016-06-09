@@ -52,7 +52,6 @@ ifeq ($(G4SYSTEM),Linux-icc)
     XAWLIBS    := -lXaw
   endif
   DLDLIBS   := -ldl
-  LOADLIBS  += -lcxa -lunwind
   ifndef OGLFLAGS
     OGLFLAGS  := -I$(OGLHOME)/include 
   endif

@@ -28,8 +28,8 @@
 // Creation date: Nov 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDataAnalysisLayout.cc,v 1.1.2.2 2006/06/29 16:07:45 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonDataAnalysisLayout.cc,v 1.1.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -39,9 +39,7 @@
 
 #include <iomanip>
 
-
-
-void                                            RadmonDataAnalysisLayout :: DumpLayout(std::ostream & out, const G4String & indent) const
+void RadmonDataAnalysisLayout :: DumpLayout(std::ostream & out, const G4String & indent) const
 {
  G4int width(RADMONDUMP_INDENT_WIDTH-indent.length());
  if (width<0)

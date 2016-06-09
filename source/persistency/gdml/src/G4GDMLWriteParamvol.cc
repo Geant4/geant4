@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteParamvol.cc,v 1.23 2008/08/20 08:56:32 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02 $
+// $Id: G4GDMLWriteParamvol.cc,v 1.23.2.1 2009/08/11 08:27:49 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // class G4GDMLParamVol Implementation
 //
@@ -35,6 +35,16 @@
 
 #include "G4GDMLWriteParamvol.hh"
 #include <sstream>
+
+G4GDMLWriteParamvol::
+G4GDMLWriteParamvol() : G4GDMLWriteSetup()
+{
+}
+
+G4GDMLWriteParamvol::
+~G4GDMLWriteParamvol()
+{
+}
 
 void G4GDMLWriteParamvol::
 Box_dimensionsWrite(xercesc::DOMElement* parametersElement,

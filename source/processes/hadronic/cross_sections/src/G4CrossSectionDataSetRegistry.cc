@@ -24,8 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc,v 1.3.2.2 2009/03/03 11:48:00 gcosmo Exp $
-// GEANT4 tag $Name: geant4-09-02-patch-01 $
+// $Id: G4CrossSectionDataSetRegistry.cc,v 1.3.2.4 2009/08/13 09:16:18 gcosmo Exp $
+// GEANT4 tag $Name: geant4-09-02-patch-02 $
 //
 // -------------------------------------------------------------------
 //
@@ -54,9 +54,7 @@ G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::Instance()
 }
 
 G4CrossSectionDataSetRegistry::G4CrossSectionDataSetRegistry()
-{
-  nxs = 0;
-}
+{}
 
 G4CrossSectionDataSetRegistry::~G4CrossSectionDataSetRegistry()
 {
@@ -65,33 +63,36 @@ G4CrossSectionDataSetRegistry::~G4CrossSectionDataSetRegistry()
 
 void G4CrossSectionDataSetRegistry::Clean()
 {
-  if(0 == nxs) return;
-  for (G4int i=0; i<nxs; i++) {
-    if( xSections[i] ) {
-      delete xSections[i];
-      xSections[i] = 0;
+  size_t n = xSections.size(); 
+  if(n > 0) {
+    for (size_t i=0; i<n; ++i) {
+      if(xSections[i]) delete xSections[i];
     }
+    xSections.clear();
   }
-  nxs = 0;
 }
 
 void G4CrossSectionDataSetRegistry::Register(G4VCrossSectionDataSet* p)
 {
-  if(nxs > 0) {
-    for (G4int i=0; i<nxs; i++) {
-      if( p == xSections[i] ) return;
+  if(!p) return;
+  size_t n = xSections.size(); 
+  if(n > 0) {
+    for (size_t i=0; i<n; ++i) {
+      if(xSections[i] == p) return;
     }
   }
   xSections.push_back(p);
-  nxs++;
 }
 
 void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
 {
-  if(nxs > 0) {
-    for (G4int i=0; i<nxs; i++) {
-      if( p == xSections[i] ) {
-	xSections[i] = 0;
+  if(!p) return;
+  size_t n = xSections.size(); 
+  if(n > 0) {
+    for (size_t i=0; i<n; ++i) {
+      if(xSections[i] == p) {
+        xSections[i] = 0;
+	if(i == n-1) xSections.pop_back();
 	return;
       }
     }

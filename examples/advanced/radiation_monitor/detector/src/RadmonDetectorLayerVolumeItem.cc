@@ -28,8 +28,8 @@
 // Creation date: Sep 2005
 // Main author:   Riccardo Capra <capra@ge.infn.it>
 //
-// Id:            $Id: RadmonDetectorLayerVolumeItem.cc,v 1.2.2.2 2006/06/29 16:13:44 gunter Exp $
-// Tag:           $Name: geant4-09-02 $
+// Id:            $Id: RadmonDetectorLayerVolumeItem.cc,v 1.2.2.2.4.1 2009/08/11 14:20:35 gcosmo Exp $
+// Tag:           $Name: geant4-09-02-patch-02 $
 //
 
 // Include files
@@ -40,7 +40,7 @@
 #include "G4Material.hh"
 #include "G4SDManager.hh"
 
-                                                RadmonDetectorLayerVolumeItem :: ~RadmonDetectorLayerVolumeItem()
+RadmonDetectorLayerVolumeItem :: ~RadmonDetectorLayerVolumeItem()
 {
  if (volumePhysical)
  {
@@ -63,11 +63,7 @@
  }
 }
 
-
-
-
-
-G4LogicalVolume *                               RadmonDetectorLayerVolumeItem :: GetLogicalVolume(void)
+G4LogicalVolume * RadmonDetectorLayerVolumeItem :: GetLogicalVolume(void)
 {
  if (! volumeLogical)
  {
